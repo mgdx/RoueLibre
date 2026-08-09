@@ -36,6 +36,17 @@
     <string name="station_out_of_service">Hors service</string>
     <string name="station_availability_unknown">Disponibilité inconnue</string>
 
+    <!-- Champ de recherche au-dessus de la liste. Il filtre les stations par
+         leur nom ; la recherche d'adresses est un autre écran (SPEC §4.3). -->
+    <string name="search_stations_hint">Chercher une station</string>
+    <string name="search_stations_clear">Effacer la recherche</string>
+
+    <!-- Liste vide parce que la recherche ne correspond à rien.
+         %1$s est ce que l'utilisateur a tapé. -->
+    <string name="stations_no_match_title">Aucune station trouvée</string>
+    <string name="stations_no_match_message">Rien ne correspond à « %1$s ». Vérifie l\'orthographe, ou efface la recherche.</string>
+    <string name="action_clear_search">Effacer la recherche</string>
+
     <!-- Bascule entre emprunter un vélo et rendre un vélo (SPEC §7.1). -->
     <string name="mode_bikes">Vélos</string>
     <string name="mode_docks">Places</string>

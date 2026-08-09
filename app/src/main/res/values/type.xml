@@ -83,6 +83,22 @@
     </style>
 
     <!--
+        Champ de recherche. Comme la bascule, il porte ses propres couleurs
+        plutôt que de détourner des rôles Material pour tout le thème.
+    -->
+    <style name="Widget.RoueLibre.SearchField"
+        parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/field_stroke</item>
+        <item name="boxStrokeWidth">@dimen/stroke</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxBackgroundColor">@color/surface</item>
+        <item name="hintTextColor">@color/signal</item>
+        <item name="android:textColorHint">@color/encre_douce</item>
+        <item name="endIconTint">@color/encre_douce</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.RoueLibre</item>
+    </style>
+
+    <!--
         Le chiffre de l'indicateur de disponibilité n'a pas de style ici : la
         vue qui le dessine peint directement sur le canevas, sans TextView, et
         lit sa taille dans @dimen/text_indicator. Un TextAppearance de plus

@@ -42,6 +42,35 @@
         app:layout_constraintTop_toBottomOf="@id/title"
         tools:text="Mis à jour il y a 12 secondes" />
 
+    <!--
+        Filtre la liste par nom de station. À ne pas confondre avec la
+        recherche d'adresses du SPEC §4.3, qui interroge l'index hors ligne.
+    -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_field"
+        style="@style/Widget.RoueLibre.SearchField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_m"
+        android:layout_marginEnd="@dimen/space_l"
+        android:hint="@string/search_stations_hint"
+        app:endIconContentDescription="@string/search_stations_clear"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/freshness">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <!-- Bascule « vélos » / « places » (SPEC §7.1). -->
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/mode_toggle"
@@ -52,7 +81,7 @@
         android:layout_marginEnd="@dimen/space_l"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/freshness"
+        app:layout_constraintTop_toBottomOf="@id/search_field"
         app:selectionRequired="true"
         app:singleSelection="true">
 
@@ -113,26 +142,28 @@
         tools:visibility="visible">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/empty_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/stations_empty_title"
-            android:textAppearance="@style/TextAppearance.RoueLibre.Title" />
+            android:textAppearance="@style/TextAppearance.RoueLibre.Title"
+            tools:text="Aucune station chargée" />
 
         <TextView
+            android:id="@+id/empty_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_s"
             android:gravity="center"
-            android:text="@string/stations_empty_message"
-            android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
+            android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+            tools:text="Tire la liste vers le bas pour récupérer les stations du réseau." />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/empty_refresh"
+            android:id="@+id/empty_action"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/touch_target_min"
             android:layout_marginTop="@dimen/space_l"
-            android:text="@string/action_refresh" />
+            tools:text="Rafraîchir" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

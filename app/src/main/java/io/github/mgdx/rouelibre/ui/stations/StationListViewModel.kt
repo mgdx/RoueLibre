@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
+import io.github.mgdx.rouelibre.core.station.filterStations
 import io.github.mgdx.rouelibre.data.StationRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +21,9 @@ import java.time.Instant
 /**
  * État de l'écran listant les stations.
  *
- * @property stations les stations connues et leur dernier état.
+ * @property stations les stations retenues par la recherche, prêtes à être
+ *   affichées.
+ * @property query ce que l'utilisateur a tapé dans le champ de recherche.
  * @property isRefreshing une récupération est en cours.
  * @property fetchedAt date de la dernière récupération réussie, ou `null`.
  *   L'ancienneté qui en découle est recalculée par la vue à chaque battement,
@@ -30,13 +33,37 @@ import java.time.Instant
  */
 data class StationListUiState(
     val stations: List<StationWithAvailability> = emptyList(),
+    val query: String = "",
     val isRefreshing: Boolean = false,
     val fetchedAt: Instant? = null,
     val hasLoadedOnce: Boolean = false,
 ) {
-    /** Vrai quand il n'y a rien à montrer et rien à attendre. */
-    val isEmpty: Boolean
-        get() = hasLoadedOnce && stations.isEmpty() && !isRefreshing
+    /**
+     * Pourquoi la liste est vide, s'il y a lieu.
+     *
+     * Les deux cas appellent des mots et des gestes différents : un cache vide
+     * invite à rafraîchir, une recherche infructueuse invite à l'effacer.
+     * Les confondre reviendrait à dire à l'utilisateur que le réseau n'a
+     * aucune station parce qu'il a fait une faute de frappe.
+     */
+    val emptiness: Emptiness
+        get() = when {
+            !hasLoadedOnce || isRefreshing || stations.isNotEmpty() -> Emptiness.None
+            query.isNotBlank() -> Emptiness.NoMatch
+            else -> Emptiness.NothingLoaded
+        }
+}
+
+/** Ce que l'écran doit dire quand la liste ne montre rien. */
+enum class Emptiness {
+    /** Il y a des stations à l'écran. */
+    None,
+
+    /** Le cache est vide : aucune station n'a jamais été récupérée. */
+    NothingLoaded,
+
+    /** Des stations existent, mais aucune ne répond à la recherche. */
+    NoMatch,
 }
 
 /**
@@ -63,16 +90,43 @@ class StationListViewModel(private val repository: StationRepository) : ViewMode
     /** Flux des échecs à présenter à l'utilisateur. */
     val errors: Flow<DataError> = errorChannel.receiveAsFlow()
 
+    /**
+     * Les stations telles que le dépôt les fournit, avant filtrage.
+     *
+     * Gardées à part pour que changer la recherche ne demande pas de relire le
+     * cache, et pour qu'effacer le champ retrouve la liste entière.
+     */
+    private var allStations: List<StationWithAvailability> = emptyList()
+
     init {
         viewModelScope.launch {
             repository.observeStations().collect { snapshot ->
+                allStations = snapshot.stations
                 mutableState.update { current ->
                     current.copy(
-                        stations = snapshot.stations,
+                        stations = filterStations(allStations, current.query),
                         fetchedAt = snapshot.fetchedAt,
                         hasLoadedOnce = true,
                     )
                 }
+            }
+        }
+    }
+
+    /**
+     * Prend en compte une nouvelle saisie de recherche.
+     *
+     * Le filtrage a lieu à chaque frappe, sans anti-rebond : il parcourt
+     * quelques centaines d'entrées déjà en mémoire. C'est la recherche
+     * d'adresses du SPEC §4.3, portant sur des centaines de milliers de
+     * numéros, qui en demandera un.
+     */
+    fun onQueryChanged(query: String) {
+        mutableState.update { current ->
+            if (current.query == query) {
+                current
+            } else {
+                current.copy(query = query, stations = filterStations(allStations, query))
             }
         }
     }

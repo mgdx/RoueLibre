@@ -32,6 +32,8 @@ Développement initial. Rien n'est encore publié.
   embarquées, échelle d'espacement et rayon uniques.
 - **Écran de liste des stations** avec l'indicateur de disponibilité, la
   bascule vélos/places, le tirer-pour-rafraîchir et l'âge de la donnée.
+- **Filtre de la liste par nom de station**, insensible à la casse et aux
+  accents, tolérant à l'ordre des mots, cherchant aussi le code postal.
 
 ### Vérifié
 

@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -71,7 +74,23 @@ class StationListFragment : Fragment() {
         views.stations.setHasFixedSize(true)
 
         views.swipeRefresh.setOnRefreshListener { viewModel.refresh(force = true) }
-        views.emptyRefresh.setOnClickListener { viewModel.refresh(force = true) }
+
+        // Filtrage à chaque frappe : quelques centaines d'entrées déjà en
+        // mémoire, aucun anti-rebond n'est justifié ici.
+        views.searchInput.doAfterTextChanged { text ->
+            viewModel.onQueryChanged(text?.toString().orEmpty())
+        }
+        views.searchInput.setOnEditorActionListener { view, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                // La liste est déjà filtrée ; il ne reste qu'à rendre l'écran
+                // au regard en repliant le clavier.
+                view.clearFocus()
+                hideKeyboard(view)
+                true
+            } else {
+                false
+            }
+        }
 
         views.modeBikes.contentDescription = getString(R.string.mode_bikes_description)
         views.modeDocks.contentDescription = getString(R.string.mode_docks_description)
@@ -104,7 +123,7 @@ class StationListFragment : Fragment() {
                     val views = binding ?: return@collectLatest
                     adapter.submitList(state.stations)
                     views.swipeRefresh.isRefreshing = state.isRefreshing
-                    views.emptyState.isVisible = state.isEmpty
+                    showEmptyState(state)
                     showFreshness(state.fetchedAt)
                 }
             }
@@ -146,6 +165,41 @@ class StationListFragment : Fragment() {
                 }
             }
         }
+    }
+
+    /**
+     * Montre, s'il y a lieu, pourquoi la liste ne contient rien.
+     *
+     * Deux situations, deux gestes : un cache vide se rafraîchit, une
+     * recherche infructueuse s'efface. Proposer « Rafraîchir » à quelqu'un qui
+     * a fait une faute de frappe l'enverrait chercher une panne inexistante.
+     */
+    private fun showEmptyState(state: StationListUiState) {
+        val views = binding ?: return
+        views.emptyState.isVisible = state.emptiness != Emptiness.None
+        when (state.emptiness) {
+            Emptiness.None -> Unit
+
+            Emptiness.NothingLoaded -> {
+                views.emptyTitle.setText(R.string.stations_empty_title)
+                views.emptyMessage.setText(R.string.stations_empty_message)
+                views.emptyAction.setText(R.string.action_refresh)
+                views.emptyAction.setOnClickListener { viewModel.refresh(force = true) }
+            }
+
+            Emptiness.NoMatch -> {
+                views.emptyTitle.setText(R.string.stations_no_match_title)
+                views.emptyMessage.text =
+                    getString(R.string.stations_no_match_message, state.query)
+                views.emptyAction.setText(R.string.action_clear_search)
+                views.emptyAction.setOnClickListener { views.searchInput.text?.clear() }
+            }
+        }
+    }
+
+    private fun hideKeyboard(view: View) {
+        val manager = requireContext().getSystemService(InputMethodManager::class.java)
+        manager?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     /**
