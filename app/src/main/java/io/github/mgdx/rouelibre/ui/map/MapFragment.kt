@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +27,8 @@ import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
 import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
+import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
+import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.prefersReducedMotion
 import io.github.mgdx.rouelibre.ui.stations.StationDetailSheet
 import io.github.mgdx.rouelibre.ui.stations.StationListFragment
@@ -156,6 +159,7 @@ class MapFragment : Fragment() {
         views.openList.setOnClickListener { show(StationListFragment()) }
         views.openSearch.setOnClickListener { openAddressSearch() }
         views.locateMe.setOnClickListener { onLocateMeClicked() }
+        views.openJourney.setOnClickListener { show(JourneySearchFragment()) }
         views.modeToggle.setOnClickListener { toggleMode() }
         views.pickedPlace.setOnClickListener { showPickedPlace(null) }
         applyModeLabel()
@@ -163,6 +167,7 @@ class MapFragment : Fragment() {
         views.missingTilesStorage.setOnClickListener { show(StorageFragment()) }
         views.missingTilesList.setOnClickListener { show(StationListFragment()) }
 
+        applyPickingMode(views)
         restorePickedPlace(savedInstanceState)
         listenForPickedAddress()
         applySystemInsets(views)
@@ -221,11 +226,15 @@ class MapFragment : Fragment() {
 
         val tiles = container.datasetStore.fileOf(DatasetKind.Tiles)
         views.missingTiles.isVisible = tiles == null
-        views.modeToggle.isVisible = tiles != null
         views.attribution.isVisible = tiles != null
+        // Les commandes de l'écran principal ne réapparaissent pas quand la
+        // carte sert à désigner un point : on est venu viser, pas consulter.
+        val showsControls = tiles != null && !isPicking()
+        views.modeToggle.isVisible = showsControls
         // Sans fond de carte, une adresse trouvée n'aurait rien où se poser :
         // la recherche s'ouvre depuis la carte, elle en suppose une.
-        views.openSearch.isVisible = tiles != null
+        views.openSearch.isVisible = showsControls
+        views.openJourney.isVisible = showsControls
         if (tiles == null) return
 
         val configuration = container.cityConfiguration
@@ -364,9 +373,59 @@ class MapFragment : Fragment() {
 
         val stationId = touched.getStringProperty(StationMarkers.STATION_ID_PROPERTY)
             ?: return false
+        // En mode « choisir un point », ouvrir une feuille de station
+        // détournerait le geste de ce que l'utilisateur est venu faire.
+        if (isPicking()) return false
         StationDetailSheet.newInstance(stationId)
             .show(parentFragmentManager, StationDetailSheet.TAG)
         return true
+    }
+
+    // ------------------------------------------- choisir un point (§7.3) --
+
+    /**
+     * Prépare l'écran quand il sert à désigner un point.
+     *
+     * Les commandes qui n'ont rien à y faire disparaissent : on est venu
+     * choisir un endroit, pas consulter des disponibilités. La mire, elle,
+     * reste fixe au centre — c'est la carte que l'on déplace dessous, ce qui
+     * laisse voir ce que l'on vise, contrairement à un doigt posé dessus.
+     */
+    private fun applyPickingMode(views: FragmentMapBinding) {
+        if (!isPicking()) return
+        views.pickCrosshair.isVisible = true
+        views.pickConfirm.isVisible = true
+        views.openList.isVisible = false
+        views.openStorage.isVisible = false
+        views.openSearch.isVisible = false
+        views.openJourney.isVisible = false
+        views.modeToggle.isVisible = false
+        views.pickConfirm.setOnClickListener { confirmPickedPoint() }
+    }
+
+    private fun isPicking(): Boolean = arguments?.getBoolean(ARGUMENT_PICKING) == true
+
+    /**
+     * Rend le point visé, avec son adresse quand l'index la connaît.
+     *
+     * Un libellé lisible plutôt que deux nombres : « 12 Rue Nationale » se
+     * relit sur l'écran de recherche, « 50,63 / 3,06 » non.
+     */
+    private fun confirmPickedPoint() {
+        val map = mapLibreMap ?: return
+        val target = map.cameraPosition.target ?: return
+        val point = Coordinates(target.latitude, target.longitude)
+        viewLifecycleOwner.lifecycleScope.launch {
+            val address = container.addressIndex.nearestAddress(point)
+            val label = address?.streetName ?: getString(R.string.journey_picked_point)
+            setFragmentResult(
+                PICK_REQUEST_KEY,
+                Bundle().apply {
+                    JourneyEndpoint(label, point).writeTo(this, PICK_RESULT_PREFIX)
+                },
+            )
+            parentFragmentManager.popBackStack()
+        }
     }
 
     // ------------------------------------------------------- localisation --
@@ -651,7 +710,20 @@ class MapFragment : Fragment() {
         super.onDestroyView()
     }
 
-    private companion object {
+    companion object {
+        /** Clé sous laquelle le point choisi sur la carte est rendu. */
+        const val PICK_REQUEST_KEY: String = "point-choisi-sur-la-carte"
+
+        /** Préfixe des clés du point rendu. */
+        const val PICK_RESULT_PREFIX: String = "point"
+
+        private const val ARGUMENT_PICKING = "mode-choix"
+
+        /** Ouvre la carte pour y désigner un point (SPEC §7.3). */
+        fun forPicking(): MapFragment = MapFragment().apply {
+            arguments = Bundle().apply { putBoolean(ARGUMENT_PICKING, true) }
+        }
+
         /** Zoom auquel la carte se pose sur une adresse trouvée : la rue. */
         const val PICKED_PLACE_ZOOM = 16.0
 

@@ -109,6 +109,63 @@
     <string name="map_needs_tiles_title">La carte a besoin du fond de carte</string>
     <string name="map_needs_tiles_message">Installe le fond de carte depuis l\'écran de stockage. En attendant, la liste des stations reste utilisable.</string>
 
+    <!-- Recherche d'itinéraire (SPEC §7.3). -->
+    <string name="journey_title">Itinéraire</string>
+    <string name="journey_open">Chercher un itinéraire</string>
+    <string name="journey_origin_empty">Partir d\'où ?</string>
+    <string name="journey_destination_empty">Aller où ?</string>
+    <string name="journey_choose_origin">Partir d\'où ?</string>
+    <string name="journey_choose_destination">Aller où ?</string>
+    <string name="journey_swap">Intervertir le départ et l\'arrivée</string>
+    <string name="journey_hint">Le trajet est calculé sur l\'appareil : marche jusqu\'à une station, vélo, puis marche jusqu\'au bout.</string>
+    <string name="journey_compute">Calculer l\'itinéraire</string>
+
+    <!-- Les quatre façons de désigner un point (SPEC §7.3). -->
+    <string name="journey_source_my_position">Ma position</string>
+    <string name="journey_source_address">Une adresse</string>
+    <string name="journey_source_favourite">Une station favorite</string>
+    <string name="journey_source_on_map">Un point sur la carte</string>
+    <string name="journey_no_favourite">Aucune station en favori pour l\'instant. Ouvre une station et touche l\'étoile pour l\'ajouter.</string>
+    <string name="journey_pick_crosshair">Point visé</string>
+    <string name="journey_pick_confirm">Choisir ce point</string>
+    <string name="journey_picked_point">Point sur la carte</string>
+
+    <!-- Résultat d'itinéraire (SPEC §7.4). -->
+    <string name="journey_result_title">Trajet</string>
+    <!-- %1$s est la durée à pied, %2$s celle à vélo, %3$s la distance totale. -->
+    <string name="journey_summary">dont %1$s à pied et %2$s à vélo · %3$s</string>
+    <string name="journey_alternatives">Couples de stations</string>
+    <!-- %1$s est la station de départ, %2$s celle d\'arrivée. -->
+    <string name="journey_alternative_stations">%1$s → %2$s</string>
+    <!-- %1$s est un nombre de vélos, %2$s un nombre de places. -->
+    <string name="journey_alternative_detail">%1$s au départ · %2$s à l\'arrivée</string>
+    <string name="journey_recompute">Recalculer</string>
+    <!-- %1$s est le nom de la station. -->
+    <string name="journey_step_to_station">Marcher jusqu\'à %1$s</string>
+    <string name="journey_step_ride">Pédaler jusqu\'à %1$s</string>
+    <string name="journey_step_to_destination">Marcher jusqu\'à l\'arrivée</string>
+    <string name="journey_step_walk_all">Marcher jusqu\'à l\'arrivée</string>
+    <!-- Le SPEC §6 impose de le dire quand le vélo ne fait pas gagner de temps.
+         %1$s est la durée à pied. -->
+    <string name="journey_walking_is_faster">À pied, tu y serais plus vite : %1$s.</string>
+    <!-- %1$s est la distance à pied. -->
+    <string name="journey_walk_only">à pied, sur %1$s — aucun trajet à vélo n\'est possible ici.</string>
+
+    <!-- Pourquoi aucun trajet à vélo n'a été retenu (SPEC §6). Chaque cas dit
+         ce qui s'est passé, jamais un code technique. -->
+    <string name="journey_none_title">Pas de trajet</string>
+    <string name="journey_no_bike_nearby">Aucune station avec un vélo près du départ. Réessaie plus tard, ou pars d\'un autre point.</string>
+    <string name="journey_no_dock_nearby">Aucune station avec une place libre près de l\'arrivée. Réessaie plus tard, ou vise un autre point.</string>
+    <string name="journey_no_route">Aucun chemin praticable entre ces deux points.</string>
+    <string name="journey_graph_missing">Le graphe de routage n\'est pas installé. Ajoute-le depuis l\'écran de stockage.</string>
+    <string name="journey_outside_coverage">Ce point est hors de la zone couverte par les données installées.</string>
+    <string name="journey_no_stations">Aucune station connue. Rafraîchis la liste des stations, puis réessaie.</string>
+
+    <!-- Durées, formatées par les API de localisation (SPEC §9).
+         %1$d est un nombre de minutes ; %1$d h et %2$02d min pour les heures. -->
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d h %2$02d</string>
+
     <!-- Détail d'une station (SPEC §7.2). -->
     <plurals name="docks_total">
         <item quantity="one">%1$d point d\'attache</item>

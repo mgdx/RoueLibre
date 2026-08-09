@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Recherche d'itinéraire (SPEC §7.3).
+
+    Deux champs, un bouton d'inversion entre eux, et rien d'autre : c'est un
+    écran de saisie, pas un tableau de bord. Le bouton de calcul reste en bas,
+    à portée du pouce.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/journey_title"
+        app:titleTextAppearance="@style/TextAppearance.RoueLibre.Title" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/origin"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_l"
+        android:gravity="start|center_vertical"
+        android:minHeight="@dimen/touch_target_min"
+        android:text="@string/journey_origin_empty"
+        app:layout_constraintEnd_toStartOf="@id/swap"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/destination"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_s"
+        android:gravity="start|center_vertical"
+        android:minHeight="@dimen/touch_target_min"
+        android:text="@string/journey_destination_empty"
+        app:layout_constraintEnd_toEndOf="@id/origin"
+        app:layout_constraintStart_toStartOf="@id/origin"
+        app:layout_constraintTop_toBottomOf="@id/origin" />
+
+    <!-- Inversion départ / arrivée (SPEC §7.3), entre les deux champs et à
+         leur droite : la position dit ce que le bouton échange. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/swap"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginStart="@dimen/space_s"
+        android:layout_marginEnd="@dimen/space_l"
+        android:contentDescription="@string/journey_swap"
+        app:icon="@drawable/ic_swap"
+        app:iconTint="@color/encre"
+        app:layout_constraintBottom_toBottomOf="@id/destination"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/origin" />
+
+    <TextView
+        android:id="@+id/hint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
+        android:text="@string/journey_hint"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/destination" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/compute"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
+        android:layout_marginBottom="@dimen/space_l"
+        android:enabled="false"
+        android:text="@string/journey_compute"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:enabled="true" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

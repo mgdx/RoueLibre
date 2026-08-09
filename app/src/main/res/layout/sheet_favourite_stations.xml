@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Choix d'une station favorite comme départ ou arrivée (SPEC §7.3). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/space_l"
+    android:paddingBottom="@dimen/space_l">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
+        android:layout_marginBottom="@dimen/space_m"
+        android:text="@string/journey_source_favourite"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Title" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/stations"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="360dp"
+        android:scrollbars="vertical"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_station" />
+
+    <!-- Écran vide : une invitation à agir, pas un constat (SPEC §7). -->
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
+        android:text="@string/journey_no_favourite"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+</LinearLayout>

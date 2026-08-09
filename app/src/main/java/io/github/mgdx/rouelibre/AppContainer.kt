@@ -11,6 +11,11 @@ import io.github.mgdx.rouelibre.core.address.AddressNormalizerReader
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.CityConfigurationReader
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
+import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.journey.JourneyPlanner
+import io.github.mgdx.rouelibre.core.journey.Router
+import io.github.mgdx.rouelibre.core.routing.RouteResult
+import io.github.mgdx.rouelibre.core.routing.TravelMode
 import io.github.mgdx.rouelibre.data.AppPreferences
 import io.github.mgdx.rouelibre.data.StationRepository
 import io.github.mgdx.rouelibre.data.addresses.AddressIndex
@@ -145,6 +150,25 @@ class AppContainer(private val context: Context) {
      */
     val addressIndex: AddressIndex by lazy {
         AddressIndex(datasetStore, addressNormalizer, Dispatchers.IO)
+    }
+
+    /**
+     * L'algorithme de trajet, branché sur le moteur de l'appareil.
+     *
+     * L'adaptateur existe pour que l'algorithme reste en Kotlin pur : il ne
+     * connaît qu'une interface à deux points et un mode, jamais BRouter
+     * (SPEC §14).
+     */
+    val journeyPlanner: JourneyPlanner by lazy {
+        JourneyPlanner(
+            object : Router {
+                override suspend fun route(
+                    from: Coordinates,
+                    to: Coordinates,
+                    mode: TravelMode,
+                ): RouteResult = router.route(from, to, mode)
+            },
+        )
     }
 
     /** Source unique des stations et de leur disponibilité. */

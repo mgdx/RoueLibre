@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Deux flèches opposées : intervertir le départ et l'arrivée. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:tint="@color/encre"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M7.5,3L4,6.5 5.4,7.9 6.5,6.8V17h2V6.8l1.1,1.1L11,6.5 7.5,3zM17.5,21L21,17.5 19.6,16.1 18.5,17.2V7h-2v10.2l-1.1,-1.1L14,17.5 17.5,21z" />
+</vector>

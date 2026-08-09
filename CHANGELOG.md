@@ -50,6 +50,22 @@ Développement initial. Rien n'est encore publié.
   validé, puis mis en place — et un fichier refusé dit pourquoi.
 - **Filtre de la liste par nom de station**, insensible à la casse et aux
   accents, tolérant à l'ordre des mots, cherchant aussi le code postal.
+- **Recherche d'itinéraire** (§7.3) : deux points à désigner et un bouton pour
+  les intervertir. Les quatre façons du SPEC sont là — sa position, une
+  adresse, une station favorite, un point choisi sur la carte. Ce dernier se
+  vise sous une mire fixe, la carte se déplaçant dessous, et le point rendu
+  porte le nom de la voie que l'index reconnaît plutôt que ses coordonnées.
+- **Résultat d'itinéraire** (§7.4) : le tracé en trois segments visuellement
+  distincts — les marches en pointillé fin, le vélo en trait plein large, la
+  forme portant l'information autant que la couleur. Dessous, le temps total,
+  sa répartition, la distance, les trois étapes avec leurs stations et leurs
+  disponibilités, les autres couples de stations, et un bouton de recalcul :
+  les disponibilités changent, le trajet retenu il y a cinq minutes peut ne
+  plus tenir.
+  - Quand aucun trajet à vélo n'est possible, l'écran dit lequel des cinq cas
+    du §6 s'applique, plutôt que de proposer un trajet impossible.
+  - Quand la marche directe va plus vite, il le dit, comme l'exige le §6.
+- **Favoris** conservés dans DataStore et choisissables comme point de trajet.
 - **Localisation** (§7.1, §10) : bouton « me localiser » sur la carte, qui
   demande la permission au moment de l'usage et jamais au lancement. Un refus
   ne bloque rien et ne déclenche aucune relance. La position vient du
@@ -100,6 +116,14 @@ Développement initial. Rien n'est encore publié.
     postal à l'appui : « Rue Danton, 59160 Lomme ».
 
 ### Corrigé
+
+- **L'écran de recherche d'itinéraire perdait son premier point.** Passer par
+  la recherche d'adresse ne détruit que la *vue* du fragment, pas le fragment ;
+  relire l'état depuis un paquet d'instance absent effaçait donc les champs
+  déjà remplis, et le second point venait écraser le premier. Trouvé en
+  essayant l'écran sur un appareil, pas en le relisant.
+- **Le test de la recherche d'adresses effaçait l'index installé** sur
+  l'appareil qui l'exécutait. Il le met désormais de côté et le rend à la fin.
 
 - **L'import manuel du graphe de routage produisait un fichier inutilisable.**
   Le fichier était renommé `routing.rd5`, alors que BRouter déduit le nom du

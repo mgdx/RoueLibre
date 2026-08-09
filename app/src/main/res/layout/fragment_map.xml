@@ -87,6 +87,22 @@
         app:layout_constraintBottom_toTopOf="@id/attribution"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Recherche d'itinéraire (SPEC §7.3), la fonction que l'application
+         existe pour rendre : elle est donc la plus grande des commandes. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/open_journey"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_s"
+        android:contentDescription="@string/journey_open"
+        app:backgroundTint="@color/signal"
+        app:icon="@drawable/ic_bike"
+        app:iconTint="@color/surface_on_signal"
+        app:layout_constraintBottom_toTopOf="@id/locate_me"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- Me localiser (SPEC §7.1). La permission n'est demandée qu'ici, au
          moment où l'utilisateur en comprend la raison (SPEC §10). -->
     <com.google.android.material.button.MaterialButton
@@ -158,6 +174,38 @@
         app:layout_constraintBottom_toTopOf="@id/attribution"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Vélos" />
+
+    <!--
+        Mode « choisir un point » (SPEC §7.3) : la carte se déplace sous une
+        mire fixe, plutôt que d'attendre un appui précis du doigt. On vise en
+        déplaçant la carte, ce qui laisse voir ce que l'on vise.
+    -->
+    <ImageView
+        android:id="@+id/pick_crosshair"
+        android:layout_width="@dimen/space_xxl"
+        android:layout_height="@dimen/space_xxl"
+        android:contentDescription="@string/journey_pick_crosshair"
+        android:src="@drawable/ic_crosshair"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/pick_confirm"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
+        android:layout_marginBottom="@dimen/space_l"
+        android:text="@string/journey_pick_confirm"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/attribution"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
     <!--
         Sans fond de carte installé, l'écran explique et propose les deux
