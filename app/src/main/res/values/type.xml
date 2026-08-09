@@ -64,6 +64,25 @@
     </style>
 
     <!--
+        Bascule vélos / places. Le style Material par défaut colore l'état
+        actif avec `colorSecondaryContainer`, un rôle que le jeu de jetons du
+        projet n'utilise pas : plutôt que de détourner ce rôle pour tout le
+        thème, la bascule porte ses propres listes d'états.
+    -->
+    <style name="Widget.RoueLibre.Toggle" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="backgroundTint">@color/toggle_background</item>
+        <item name="strokeColor">@color/signal</item>
+        <item name="android:textColor">@color/toggle_text</item>
+        <item name="iconTint">@color/toggle_text</item>
+        <item name="android:textAppearance">@style/TextAppearance.RoueLibre.Body</item>
+        <!-- Material arrondit ses boutons en gélule via un rôle de forme à
+             part, que la redéfinition globale du rayon n'atteint pas. Sans
+             cela, la bascule serait le second élément rond de l'interface et
+             volerait la vedette à l'indicateur. -->
+        <item name="shapeAppearance">@style/ShapeAppearance.RoueLibre</item>
+    </style>
+
+    <!--
         Le chiffre de l'indicateur de disponibilité n'a pas de style ici : la
         vue qui le dessine peint directement sur le canevas, sans TextView, et
         lit sa taille dans @dimen/text_indicator. Un TextAppearance de plus

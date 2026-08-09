@@ -45,7 +45,19 @@
     <color name="dispo_moyenne_encre">#0E1519</color>
     <color name="dispo_bonne_encre">#FFFFFF</color>
 
+    <!-- Encre posée sur un aplat de la teinte de signal : bouton actif,
+         indicateur bien fourni. S'inverse d'un thème à l'autre. -->
+    <color name="surface_on_signal">#FAFCFD</color>
+
     <!-- Traits de séparation, contours de champs. -->
     <color name="trait">#CCD5DA</color>
 
+    <!-- Teinte de signal éclaircie, pour les surfaces inversées — bandeau d'alerte notamment, dont le fond est sombre même en thème clair. -->
+    <color name="signal_inverse">#3FBFCE</color>
+
+    <!-- Fond des surfaces inversées. -->
+    <color name="surface_inverse">#0E1519</color>
+
+    <!-- Encre posée sur une surface inversée. -->
+    <color name="encre_inverse">#FAFCFD</color>
 </resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Texte des boutons de bascule. Sur le mode actif il se pose sur la teinte de
+    signal, d'où l'inversion : contraste mesuré 6,97:1 en thème clair et
+    8,44:1 en thème sombre.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/surface_on_signal" android:state_checked="true" />
+    <item android:color="@color/signal" />
+</selector>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Fond des boutons de bascule : plein quand le mode est actif, transparent
+    sinon. Material propose ses propres rôles de couleur pour cet état, mais
+    ils ramèneraient une teinte étrangère au jeu de jetons du projet.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/signal" android:state_checked="true" />
+    <item android:color="@android:color/transparent" />
+</selector>

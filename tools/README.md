@@ -86,6 +86,26 @@ du zoom 15, en représentent à elles seules **21,5 Mo sur 35**. C'est le premie
 levier à actionner si le budget devait être dépassé sur une autre ville —
 monter leur `minZoom` à 16, ou retirer la couche.
 
+## Régénérer les polices embarquées
+
+Bricolage Grotesque est distribuée en police variable, mais
+`fontVariationSettings` n'existe qu'à partir de l'API 28 alors que
+l'application vise l'API 26 : sur un Android 8, les graisses demandées
+seraient ignorées et les titres s'afficheraient maigres. Deux instances
+statiques sont donc figées aux seules graisses utilisées.
+
+```bash
+pip install fonttools
+python3 -m fontTools.varLib.instancer BricolageGrotesque.ttf \
+    wght=700 wdth=100 opsz=24 -o bricolage_bold.ttf
+python3 -m fontTools.varLib.instancer BricolageGrotesque.ttf \
+    wght=600 wdth=100 opsz=24 -o bricolage_semibold.ttf
+```
+
+Les deux fichiers pèsent 182 ko au total, contre 408 ko pour la police
+variable complète : la contrainte de compatibilité a aussi allégé l'APK.
+Atkinson Hyperlegible est déjà statique et s'embarque telle quelle.
+
 ## Sources et licences
 
 | Source | Usage | Licence |

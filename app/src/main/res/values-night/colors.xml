@@ -26,6 +26,17 @@
     <color name="dispo_moyenne_encre">#E7EDF1</color>
     <color name="dispo_bonne_encre">#0E1418</color>
 
+    <!-- Encre posée sur un aplat de la teinte de signal. -->
+    <color name="surface_on_signal">#0E1418</color>
+
     <color name="trait">#2A363F</color>
 
+    <!-- Teinte de signal assombrie, pour les surfaces inversées. -->
+    <color name="signal_inverse">#00636F</color>
+
+    <!-- Fond des surfaces inversées. -->
+    <color name="surface_inverse">#E7EDF1</color>
+
+    <!-- Encre posée sur une surface inversée. -->
+    <color name="encre_inverse">#0E1418</color>
 </resources>

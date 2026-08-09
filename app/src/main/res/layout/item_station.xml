@@ -34,6 +34,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!--
+        Le compte complémentaire : les places quand l'indicateur montre les
+        vélos, et l'inverse. Les deux chiffres comptent — l'un pour partir,
+        l'autre pour arriver — mais un seul mérite l'indicateur.
+
+        Chiffre et étiquette forment un bloc, pour que le texte de gauche
+        s'arrête au plus large des deux. Contraints séparément, l'étiquette
+        « PLACES », plus large que le chiffre, passait sous le nom de la
+        station.
+    -->
+    <LinearLayout
+        android:id="@+id/counterpart_block"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_m"
+        android:gravity="end"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/counterpart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:fontFamily="@font/bricolage_semibold"
+            android:fontFeatureSettings="tnum"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+            android:textColor="@color/encre_douce"
+            tools:text="21" />
+
+        <TextView
+            android:id="@+id/counterpart_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Label"
+            tools:text="places" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/name"
         android:layout_width="0dp"
@@ -42,7 +83,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textAppearance="@style/TextAppearance.RoueLibre.Body"
-        app:layout_constraintEnd_toStartOf="@id/counterpart"
+        app:layout_constraintEnd_toStartOf="@id/counterpart_block"
         app:layout_constraintStart_toEndOf="@id/indicator"
         app:layout_constraintTop_toTopOf="@id/indicator"
         tools:text="Gare Lille Flandres" />
@@ -58,33 +99,5 @@
         app:layout_constraintStart_toStartOf="@id/name"
         app:layout_constraintTop_toBottomOf="@id/name"
         tools:text="59000 · 40 points d'attache" />
-
-    <!--
-        Le compte complémentaire : les places quand l'indicateur montre les
-        vélos, et l'inverse. Les deux chiffres comptent — l'un pour partir,
-        l'autre pour arriver — mais un seul mérite l'indicateur.
-    -->
-    <TextView
-        android:id="@+id/counterpart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_m"
-        android:fontFamily="@font/bricolage_semibold"
-        android:fontFeatureSettings="tnum"
-        android:gravity="end"
-        android:textAppearance="@style/TextAppearance.RoueLibre.Body"
-        android:textColor="@color/encre_douce"
-        app:layout_constraintBaseline_toBaselineOf="@id/name"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="21" />
-
-    <TextView
-        android:id="@+id/counterpart_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.RoueLibre.Label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/counterpart"
-        tools:text="places" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,6 +21,12 @@
         <item name="colorSurfaceVariant">@color/surface</item>
         <item name="colorOnSurfaceVariant">@color/encre_douce</item>
         <item name="colorOutline">@color/trait</item>
+        <!-- Surfaces inversées : le bandeau d'alerte s'affiche sur un fond
+             opposé à celui de l'écran. Sans ces trois rôles, Material y
+             ramènerait son violet par défaut. -->
+        <item name="colorSurfaceInverse">@color/surface_inverse</item>
+        <item name="colorOnSurfaceInverse">@color/encre_inverse</item>
+        <item name="colorPrimaryInverse">@color/signal_inverse</item>
 
         <item name="android:statusBarColor">@color/papier</item>
         <item name="android:navigationBarColor">@color/papier</item>
