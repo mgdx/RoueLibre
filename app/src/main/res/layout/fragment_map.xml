@@ -87,6 +87,51 @@
         app:layout_constraintBottom_toTopOf="@id/attribution"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Recherche d'adresses (SPEC §4.3), à portée du pouce comme les autres
+         commandes principales. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/open_search"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_s"
+        android:contentDescription="@string/address_search_title"
+        app:backgroundTint="@color/surface"
+        app:icon="@drawable/ic_search"
+        app:iconTint="@color/encre"
+        app:layout_constraintBottom_toTopOf="@id/open_list"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!--
+        Le point trouvé par la recherche. Il porte son libellé plutôt que ses
+        coordonnées : « 12 bis Rue Nationale » se relit, « 50,63 / 3,06 » non.
+        Un appui l'efface.
+    -->
+    <TextView
+        android:id="@+id/picked_place"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_m"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_m"
+        android:background="@drawable/pill_surface"
+        android:drawablePadding="@dimen/space_s"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:minHeight="@dimen/touch_target_min"
+        android:paddingStart="@dimen/space_m"
+        android:paddingEnd="@dimen/space_m"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+        android:visibility="gone"
+        app:drawableStartCompat="@drawable/ic_pin"
+        app:layout_constraintBottom_toTopOf="@id/mode_toggle"
+        app:layout_constraintEnd_toStartOf="@id/open_search"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="12 bis Rue Nationale"
+        tools:visibility="visible" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mode_toggle"
         style="@style/Widget.RoueLibre.Toggle"

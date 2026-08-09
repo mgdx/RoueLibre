@@ -48,7 +48,7 @@ Le projet suit la progression du `SPEC.md` §16.
 | 3. Carte vectorielle et marqueurs | ✅ fait |
 | 4. Moteur de routage hors ligne | ✅ fait |
 | 5. Algorithme de trajet optimisé | ✅ fait |
-| 6. Recherche d'adresses locale | à faire |
+| 6. Recherche d'adresses locale | ✅ fait |
 | 7. Écrans restants | à faire |
 | 8. Finitions et métadonnées F-Droid | à faire |
 
@@ -79,6 +79,10 @@ compilateur plutôt que par la discipline.
 │  gbfs/       analyse des flux, tolérante GBFS 2.x et 3.0    │
 │  station/    modèle métier, échelle de disponibilité,       │
 │              fraîcheur de la donnée                         │
+│  address/    normalisation des noms de voies, distance      │
+│              d'édition, classement, interpolation des       │
+│              numéros                                        │
+│  journey/    algorithme du trajet marche → vélo → marche    │
 │  geo/        coordonnées, emprise, distances                │
 │  config/     lecture de la configuration de ville           │
 │  Outcome     types de résultat, jamais d'exception muette   │
@@ -119,8 +123,8 @@ adb install -r app/build/outputs/apk/debug/app-universal-debug.apk
 Il faut un JDK 17 ou plus et le SDK Android (compileSdk 37). Aucune clé, aucun
 compte, aucun service tiers n'est nécessaire pour compiler.
 
-Taille de l'APK de release mesurée le 9 août 2026, carte comprise :
-**7,15 Mo en arm64-v8a** et 6,61 Mo en armeabi-v7a, pour un plafond de 12 Mo
+Taille de l'APK de release, carte, routage et recherche d'adresses compris :
+**7,55 Mo en arm64-v8a** et 6,98 Mo en armeabi-v7a, pour un plafond de 12 Mo
 par architecture. Les bibliothèques natives de MapLibre sont empaquetées
 compressées — sans quoi le même APK pèserait 14,87 Mo.
 

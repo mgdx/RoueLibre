@@ -18,9 +18,12 @@ import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.data.DatasetKind
+import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
+import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
+import io.github.mgdx.rouelibre.ui.prefersReducedMotion
 import io.github.mgdx.rouelibre.ui.stations.StationListFragment
 import io.github.mgdx.rouelibre.ui.stations.StationsViewModel
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
@@ -30,6 +33,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraPosition
+import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.Style
@@ -54,7 +58,36 @@ class MapFragment : Fragment() {
     private var binding: FragmentMapBinding? = null
     private var mapLibreMap: MapLibreMap? = null
     private var stationSource: GeoJsonSource? = null
+    private var pickedPlaceSource: GeoJsonSource? = null
     private var styleLoaded = false
+
+    /**
+     * L'adresse trouvée par la recherche, tant qu'elle n'est pas effacée.
+     *
+     * Un point désigné, jamais un historique : le SPEC §8 interdit de
+     * conserver une destination, et celle-ci ne survit pas à l'écran.
+     */
+    private var pickedPlace: PickedPlace? = null
+
+    /**
+     * Le cadrage à retrouver quand la vue est reconstruite.
+     *
+     * Passer par la liste, le stockage ou la recherche détruit la vue de la
+     * carte sans détruire le fragment : sans cela, revenir ramenait le cadrage
+     * d'ouverture, et l'utilisateur perdait l'endroit qu'il regardait.
+     */
+    private var lastCamera: CameraPosition? = null
+
+    /**
+     * Un point où la caméra doit se rendre dès que la carte existe.
+     *
+     * L'adresse choisie est rendue par l'écran de recherche **avant** que la
+     * carte ne soit reconstruite : le déplacement doit donc attendre.
+     */
+    private var pendingCameraTarget: LatLng? = null
+
+    /** Un point trouvé par la recherche d'adresses, et son libellé. */
+    private data class PickedPlace(val position: LatLng, val label: String)
 
     private val viewModel: StationsViewModel by viewModels {
         StationsViewModel.Factory(
@@ -89,12 +122,16 @@ class MapFragment : Fragment() {
         views.map.onCreate(savedInstanceState)
         views.openStorage.setOnClickListener { show(StorageFragment()) }
         views.openList.setOnClickListener { show(StationListFragment()) }
+        views.openSearch.setOnClickListener { openAddressSearch() }
         views.modeToggle.setOnClickListener { toggleMode() }
+        views.pickedPlace.setOnClickListener { showPickedPlace(null) }
         applyModeLabel()
 
         views.missingTilesStorage.setOnClickListener { show(StorageFragment()) }
         views.missingTilesList.setOnClickListener { show(StationListFragment()) }
 
+        restorePickedPlace(savedInstanceState)
+        listenForPickedAddress()
         applySystemInsets(views)
         views.map.getMapAsync(::onMapReady)
 
@@ -153,6 +190,9 @@ class MapFragment : Fragment() {
         views.missingTiles.isVisible = tiles == null
         views.modeToggle.isVisible = tiles != null
         views.attribution.isVisible = tiles != null
+        // Sans fond de carte, une adresse trouvée n'aurait rien où se poser :
+        // la recherche s'ouvre depuis la carte, elle en suppose une.
+        views.openSearch.isVisible = tiles != null
         if (tiles == null) return
 
         val configuration = container.cityConfiguration
@@ -165,7 +205,7 @@ class MapFragment : Fragment() {
         // disponibles. Laisser un cran permet de s'approcher un peu sans que
         // le texte devienne illisible.
         map.setMaxZoomPreference(configuration.map.maxZoom.toDouble() + 1)
-        map.cameraPosition = openingCamera(configuration)
+        map.cameraPosition = lastCamera ?: openingCamera(configuration)
 
         map.setStyle(
             Style.Builder().fromJson(MapStyleLoader.load(requireContext(), tiles)),
@@ -173,6 +213,12 @@ class MapFragment : Fragment() {
             styleLoaded = true
             addStationLayers(style)
             publishStations()
+            // Une adresse choisie pendant que la carte n'existait pas : c'est
+            // maintenant qu'elle peut être rejointe.
+            pendingCameraTarget?.let { target ->
+                pendingCameraTarget = null
+                moveCameraTo(target)
+            }
         }
     }
 
@@ -217,6 +263,18 @@ class MapFragment : Fragment() {
         style.addLayer(StationMarkers.countLayer(context))
         style.addLayer(StationMarkers.clusterLayer(context))
         style.addLayer(StationMarkers.clusterCountLayer(context))
+
+        // Le point cherché est posé APRÈS les stations : c'est lui que
+        // l'utilisateur vient de demander, il passe donc devant.
+        val picked = GeoJsonSource(
+            PickedPlaceMarker.SOURCE_ID,
+            PickedPlaceMarker.featureFor(null),
+        )
+        pickedPlaceSource = picked
+        style.addSource(picked)
+        PickedPlaceMarker.registerImage(context, style)
+        style.addLayer(PickedPlaceMarker.layer())
+        publishPickedPlace()
     }
 
     private fun publishStations() {
@@ -224,6 +282,107 @@ class MapFragment : Fragment() {
         source.setGeoJson(
             StationMarkers.toFeatureCollection(viewModel.state.value.stations, mode),
         )
+    }
+
+    // ------------------------------------------------ recherche d'adresse --
+
+    /** Ouvre la recherche d'adresses (SPEC §4.3). */
+    private fun openAddressSearch() {
+        // Le centre de la carte sert de point de référence au classement : il
+        // dit assez bien où l'utilisateur regarde, et l'obtenir ne demande
+        // aucune permission de localisation (SPEC §10).
+        val centre = mapLibreMap?.cameraPosition?.target?.let {
+            Coordinates(it.latitude, it.longitude)
+        }
+        show(AddressSearchFragment.newInstance(centre))
+    }
+
+    /** Recueille l'adresse choisie par l'écran de recherche. */
+    private fun listenForPickedAddress() {
+        parentFragmentManager.setFragmentResultListener(
+            AddressSearchFragment.REQUEST_KEY,
+            viewLifecycleOwner,
+        ) { _, result ->
+            showPickedPlace(
+                PickedPlace(
+                    position = LatLng(
+                        result.getDouble(AddressSearchFragment.RESULT_LATITUDE),
+                        result.getDouble(AddressSearchFragment.RESULT_LONGITUDE),
+                    ),
+                    label = result.getString(AddressSearchFragment.RESULT_LABEL).orEmpty(),
+                ),
+            )
+        }
+    }
+
+    /**
+     * Pose le point trouvé sur la carte, ou l'efface.
+     *
+     * @param place l'adresse choisie, ou `null` pour retirer le marqueur.
+     */
+    private fun showPickedPlace(place: PickedPlace?) {
+        pickedPlace = place
+        publishPickedPlace()
+        showPickedPlaceLabel(place)
+        if (place != null) moveCameraTo(place.position)
+    }
+
+    /**
+     * Affiche l'étiquette du point trouvé.
+     *
+     * Le libellé fait partie de ce qu'un lecteur d'écran doit entendre :
+     * remplacer le texte par la seule action « effacer » ferait disparaître
+     * l'adresse pour qui n'a que la voix.
+     */
+    private fun showPickedPlaceLabel(place: PickedPlace?) {
+        val pill = binding?.pickedPlace ?: return
+        pill.isVisible = place != null
+        pill.text = place?.label.orEmpty()
+        pill.contentDescription = place?.let {
+            getString(R.string.map_picked_place_description, it.label)
+        }
+    }
+
+    private fun publishPickedPlace() {
+        pickedPlaceSource?.setGeoJson(
+            PickedPlaceMarker.featureFor(
+                pickedPlace?.let { Coordinates(it.position.latitude, it.position.longitude) },
+            ),
+        )
+    }
+
+    /**
+     * Amène la carte sur un point.
+     *
+     * Le déplacement est animé pour que l'on comprenne d'où l'on vient — sauf
+     * si l'appareil demande de réduire les animations, auquel cas la carte
+     * saute directement à destination (SPEC §7).
+     */
+    private fun moveCameraTo(target: LatLng) {
+        val map = mapLibreMap
+        if (map == null || !styleLoaded) {
+            pendingCameraTarget = target
+            return
+        }
+        val update = CameraUpdateFactory.newLatLngZoom(target, PICKED_PLACE_ZOOM)
+        if (requireContext().prefersReducedMotion()) {
+            map.moveCamera(update)
+        } else {
+            map.animateCamera(update, CAMERA_ANIMATION_MILLIS)
+        }
+    }
+
+    private fun restorePickedPlace(savedInstanceState: Bundle?) {
+        val saved = savedInstanceState ?: return
+        if (!saved.containsKey(STATE_PICKED_LATITUDE)) return
+        pickedPlace = PickedPlace(
+            position = LatLng(
+                saved.getDouble(STATE_PICKED_LATITUDE),
+                saved.getDouble(STATE_PICKED_LONGITUDE),
+            ),
+            label = saved.getString(STATE_PICKED_LABEL).orEmpty(),
+        )
+        showPickedPlaceLabel(pickedPlace)
     }
 
     private fun toggleMode() {
@@ -328,6 +487,13 @@ class MapFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding?.map?.onSaveInstanceState(outState)
+        // Le point choisi survit à une rotation, et à rien d'autre : il n'est
+        // écrit nulle part sur le disque (SPEC §8).
+        pickedPlace?.let { place ->
+            outState.putDouble(STATE_PICKED_LATITUDE, place.position.latitude)
+            outState.putDouble(STATE_PICKED_LONGITUDE, place.position.longitude)
+            outState.putString(STATE_PICKED_LABEL, place.label)
+        }
     }
 
     override fun onLowMemory() {
@@ -336,8 +502,10 @@ class MapFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        lastCamera = mapLibreMap?.cameraPosition
         binding?.map?.onDestroy()
         stationSource = null
+        pickedPlaceSource = null
         mapLibreMap = null
         styleLoaded = false
         binding = null
@@ -345,6 +513,16 @@ class MapFragment : Fragment() {
     }
 
     private companion object {
+        /** Zoom auquel la carte se pose sur une adresse trouvée : la rue. */
+        const val PICKED_PLACE_ZOOM = 16.0
+
+        /** Durée du déplacement de caméra, assez brève pour ne pas faire attendre. */
+        const val CAMERA_ANIMATION_MILLIS = 600
+
+        const val STATE_PICKED_LATITUDE = "point-choisi-latitude"
+        const val STATE_PICKED_LONGITUDE = "point-choisi-longitude"
+        const val STATE_PICKED_LABEL = "point-choisi-libelle"
+
         /**
          * Rayon de regroupement, en pixels. Cinquante laisse les stations du
          * centre de Lille distinctes dès qu'on s'en approche, sans faire

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Recherche d'adresses (SPEC §4.3).
+
+    Le champ est en haut parce que le clavier est en bas : la liste pousse ses
+    résultats vers le pouce à mesure qu'ils arrivent, sans que la main quitte
+    la zone de frappe.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/address_search_title"
+        app:titleTextAppearance="@style/TextAppearance.RoueLibre.Title" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_field"
+        style="@style/Widget.RoueLibre.SearchField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_s"
+        android:layout_marginEnd="@dimen/space_l"
+        android:hint="@string/address_search_hint"
+        app:endIconContentDescription="@string/address_search_clear"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionSearch"
+            android:inputType="textPostalAddress"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Rappel de ce que la recherche fait, et surtout de ce qu'elle ne fait
+         pas : rien ne sort de l'appareil, pas même pendant la frappe. -->
+    <TextView
+        android:id="@+id/privacy_note"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_s"
+        android:layout_marginEnd="@dimen/space_l"
+        android:text="@string/address_search_privacy"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_field" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/results"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/space_m"
+        android:background="?attr/colorSurface"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/privacy_note"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_address" />
+
+    <!-- Écran vide : une invitation à agir, pas un constat (SPEC §7). -->
+    <LinearLayout
+        android:id="@+id/empty_state"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_xxl"
+        android:layout_marginEnd="@dimen/space_xxl"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/results"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/results"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/empty_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Title"
+            tools:text="Aucune adresse trouvée" />
+
+        <TextView
+            android:id="@+id/empty_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_s"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+            tools:text="Rien ne correspond à « rue de la lune »." />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/empty_action"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/touch_target_min"
+            android:layout_marginTop="@dimen/space_l"
+            android:visibility="gone"
+            tools:text="Gérer les données hors ligne"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

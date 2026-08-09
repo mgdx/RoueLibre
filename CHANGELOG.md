@@ -50,6 +50,36 @@ Développement initial. Rien n'est encore publié.
   validé, puis mis en place — et un fichier refusé dit pourquoi.
 - **Filtre de la liste par nom de station**, insensible à la casse et aux
   accents, tolérant à l'ordre des mots, cherchant aussi le code postal.
+- **Recherche d'adresses hors ligne** (§4.3) : index SQLite interrogé sur
+  l'appareil, sans le moindre appel réseau, y compris pendant la frappe.
+  - Deux étages : index plein texte FTS4 par préfixe, puis rattrapage par
+    distance de Damerau-Levenshtein quand le premier rend moins de trois
+    résultats. Une faute de frappe, une lettre oubliée ou deux lettres
+    interverties retrouvent la rue.
+  - Normalisation **partagée avec le script d'indexation** : un seul fichier de
+    règles, et un test qui rejoue les cas de référence produits par le script
+    pour prouver que les deux implémentations concordent.
+  - Numéro de voirie reconnu dans les deux ordres d'écriture, avec son indice
+    (« 12 bis rue X » comme « rue X 12 bis »). Un numéro absent de l'index est
+    **interpolé entre ses voisins de même parité**, jamais ramené au centre de
+    la rue.
+  - Classement par qualité de correspondance, la proximité départageant à
+    correspondance égale.
+  - Écran de recherche avec anti-rebond de 150 ms, chaque frappe annulant le
+    calcul précédent ; l'adresse choisie se pose sur la carte.
+  - **Communes absorbées** : la Base Adresse Nationale rattache Lomme et
+    Hellemmes à Lille, alors que leurs habitants tapent le nom de leur commune.
+    L'index porte désormais ce nom — 450 voies concernées — et l'affiche, code
+    postal à l'appui : « Rue Danton, 59160 Lomme ».
+
+### Modifié
+
+- **Version de format des jeux de données portée à 2**, l'index d'adresses
+  ayant gagné les colonnes des communes absorbées. Un index en version 1 est
+  refusé en le disant, plutôt qu'en échouant à la première recherche.
+- La carte **retient son cadrage** quand on la quitte pour un autre écran :
+  revenir ramenait jusqu'ici le cadrage d'ouverture, ce qui annulait au passage
+  le déplacement vers une adresse trouvée.
 
 ### Vérifié
 
@@ -66,6 +96,25 @@ Développement initial. Rien n'est encore publié.
 - La compilation de release avec R8 produit **2,82 Mo par architecture** et
   fonctionne : les règles de conservation de kotlinx.serialization sont
   correctes, ce qui ne se voit qu'en release.
+- **Tolérance aux fautes de frappe** (§11.11), mesurée sur un Fairphone 5 avec
+  l'index réel de 10 591 voies : 300 saisies fautives produites au hasard — une
+  lettre retirée, deux lettres interverties — sur 150 rues tirées au sort.
+  **98,3 %** ramènent la rue demandée dans les trois premiers résultats, et
+  **100 %** quand la commune est saisie. Aucune saisie ne reste sans résultat.
+- **Temps de réponse de la recherche d'adresses**, même appareil : première
+  recherche **102 ms**, chargement du corpus compris ; recherches suivantes
+  **2 à 9 ms** quand l'index plein texte répond ; **61 ms de médiane et 81 ms au
+  95ᵉ centile** quand le parcours flou se déclenche, pour un maximum de 154 ms.
+- **FTS4 et le *tokenizer* `simple`** fonctionnent sur l'appareil, ce que le
+  `SPEC.md` §4.3 demandait de vérifier plutôt que de supposer.
+- **Précision du placement des numéros** (§11.10), mesurée sur l'index réel par
+  validation croisée : un numéro est retiré de sa voie, interpolé depuis ses
+  voisins, puis comparé à la position que la Base Adresse Nationale lui donne.
+  Sur 3 933 numéros tirés au hasard dans 8 524 voies : **erreur médiane 3,3 m**,
+  95ᵉ centile 41,4 m, **96,5 % sous les 50 m** exigés. Le repli sur le centre de
+  la voie, que l'interpolation existe pour éviter, donnerait 30,7 m de médiane
+  et 204 m au 95ᵉ centile. Un numéro **présent** dans l'index, lui, est rendu
+  exactement.
 
 ### Notes techniques
 

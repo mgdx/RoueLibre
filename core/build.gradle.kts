@@ -25,6 +25,16 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+// Les règles de normalisation des noms de voies vivent à la racine du dépôt :
+// c'est le même fichier que lit le script d'indexation, et le test vérifie
+// justement que les deux implémentations en tirent le même résultat (SPEC §4.3).
+tasks.withType<Test>().configureEach {
+    systemProperty(
+        "rouelibre.normalizationRules",
+        rootProject.file("config/address_normalization.json").absolutePath,
+    )
+}
+
 dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.core)

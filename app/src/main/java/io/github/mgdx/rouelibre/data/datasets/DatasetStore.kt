@@ -389,8 +389,14 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         /** Longueur au-delà de laquelle un détail technique devient du bruit. */
         const val MAX_REJECTION_DETAIL = 200
 
-        /** Version de l'index d'adresses que cette version sait lire. */
-        const val SUPPORTED_ADDRESS_FORMAT_VERSION = 1
+        /**
+         * Version de l'index d'adresses que cette version sait lire.
+         *
+         * Passée à 2 quand l'index s'est mis à porter le nom des communes
+         * absorbées : l'application interroge cette colonne, un index plus
+         * ancien n'est donc pas lisible et doit être refusé en le disant.
+         */
+        const val SUPPORTED_ADDRESS_FORMAT_VERSION = 2
 
         /** Les seize premiers octets de tout fichier SQLite. */
         val SQLITE_MAGIC: ByteArray = "SQLite format 3 ".toByteArray(Charsets.US_ASCII)

@@ -6,11 +6,14 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import io.github.mgdx.rouelibre.core.Outcome
+import io.github.mgdx.rouelibre.core.address.AddressNormalizer
+import io.github.mgdx.rouelibre.core.address.AddressNormalizerReader
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.CityConfigurationReader
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
 import io.github.mgdx.rouelibre.data.AppPreferences
 import io.github.mgdx.rouelibre.data.StationRepository
+import io.github.mgdx.rouelibre.data.addresses.AddressIndex
 import io.github.mgdx.rouelibre.data.datasets.DatasetStore
 import io.github.mgdx.rouelibre.data.local.StationDatabase
 import io.github.mgdx.rouelibre.data.network.GbfsRemoteSource
@@ -101,6 +104,39 @@ class AppContainer(private val context: Context) {
         OfflineRouter(context, datasetStore, Dispatchers.Default)
     }
 
+    /**
+     * Les règles de normalisation des noms de voies, partagées avec le script
+     * qui construit l'index (SPEC §4.3).
+     *
+     * Le fichier est copié dans l'APK au moment du build depuis
+     * `config/address_normalization.json`, source unique des deux côtés : une
+     * divergence rendrait des rues introuvables.
+     *
+     * @throws IllegalStateException si le fichier est absent ou illisible —
+     *   défaut de fabrication de l'APK, pas situation utilisateur.
+     */
+    val addressNormalizer: AddressNormalizer by lazy {
+        val document = context.assets.open(NORMALIZATION_RULES_ASSET)
+            .bufferedReader()
+            .use { it.readText() }
+        when (val outcome = AddressNormalizerReader.read(document)) {
+            is Outcome.Success -> outcome.value
+            is Outcome.Failure -> error(
+                "Règles de normalisation illisibles dans l'APK : ${outcome.error}",
+            )
+        }
+    }
+
+    /**
+     * Recherche d'adresses hors ligne.
+     *
+     * Sur le répartiteur des entrées-sorties : la première recherche ouvre le
+     * fichier et en lit le corpus, les suivantes le parcourent.
+     */
+    val addressIndex: AddressIndex by lazy {
+        AddressIndex(datasetStore, addressNormalizer, Dispatchers.IO)
+    }
+
     /** Source unique des stations et de leur disponibilité. */
     val stationRepository: StationRepository by lazy {
         StationRepository(
@@ -131,6 +167,7 @@ class AppContainer(private val context: Context) {
 
     private companion object {
         const val CITY_CONFIGURATION_ASSET = "city.json"
+        const val NORMALIZATION_RULES_ASSET = "address_normalization.json"
         const val REPOSITORY_URL = "https://github.com/mgdx/RoueLibre"
         val CONNECT_TIMEOUT: Duration = Duration.ofSeconds(10)
         val READ_TIMEOUT: Duration = Duration.ofSeconds(20)

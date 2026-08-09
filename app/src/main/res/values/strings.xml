@@ -103,6 +103,53 @@
     <string name="map_needs_tiles_title">La carte a besoin du fond de carte</string>
     <string name="map_needs_tiles_message">Installe le fond de carte depuis l\'écran de stockage. En attendant, la liste des stations reste utilisable.</string>
 
+    <!-- Recherche d'adresses dans l'index hors ligne (SPEC §4.3). À ne pas
+         confondre avec le champ qui filtre la liste des stations. -->
+    <string name="address_search_title">Chercher une adresse</string>
+    <string name="address_search_hint">Numéro, rue, commune</string>
+    <string name="address_search_clear">Effacer la recherche</string>
+    <string name="address_search_privacy">Tout se cherche sur l\'appareil. Rien n\'est envoyé, pas même pendant la frappe.</string>
+
+    <!-- Une adresse trouvée. Le numéro et le nom de la voie sont assemblés par
+         ressource, jamais par concaténation : l'ordre change d'une langue à
+         l'autre (SPEC §9).
+         %1$s est le numéro (« 12 », « 12 bis »), %2$s le nom de la voie. -->
+    <string name="address_with_number">%1$s %2$s</string>
+    <!-- %1$d est le numéro, %2$s son indice de répétition (« bis », « ter »). -->
+    <string name="address_number_with_suffix">%1$d %2$s</string>
+    <!-- %1$s est un code postal, %2$s une commune. -->
+    <string name="address_locality">%1$s %2$s</string>
+    <!-- %1$s est le lieu, %2$s une distance déjà formatée. -->
+    <string name="address_detail">%1$s · %2$s</string>
+    <!-- Dit quand le numéro cherché n'est pas dans l'index et qu'un voisin a
+         servi de repère. %1$s est la ligne de détail. -->
+    <string name="address_detail_approximate">%1$s · position approchée</string>
+    <!-- Lu par les lecteurs d'écran sur une ligne de résultat.
+         %1$s est l'adresse, %2$s son contexte. -->
+    <string name="address_content_description">%1$s, %2$s</string>
+
+    <!-- Écran de recherche vide : chaque situation appelle un geste différent. -->
+    <string name="address_search_prompt_title">Où vas-tu ?</string>
+    <string name="address_search_prompt_message">Tape un nom de rue, avec ou sans numéro. Les gares, universités et grandes places se cherchent aussi.</string>
+    <string name="address_no_match_title">Aucune adresse trouvée</string>
+    <!-- %1$s est ce que l'utilisateur a tapé. -->
+    <string name="address_no_match_message">Rien ne correspond à « %1$s ». Essaie le nom de la rue seul, ou ajoute la commune.</string>
+    <string name="address_needs_index_title">La recherche a besoin de l\'index d\'adresses</string>
+    <string name="address_needs_index_message">Installe l\'index depuis l\'écran de stockage. Il reste sur l\'appareil et ne part jamais sur le réseau.</string>
+    <string name="address_unreadable_title">Index d\'adresses illisible</string>
+
+    <!-- Point trouvé, posé sur la carte. Lu par les lecteurs d'écran :
+         l'adresse d'abord, l'action ensuite. %1$s est l'adresse trouvée. -->
+    <string name="map_picked_place_description">%1$s. Appuyer pour effacer ce point.</string>
+
+    <!-- Distances, formatées par les API de localisation (SPEC §9).
+         %1$d est un nombre de mètres, %1$s un nombre de kilomètres déjà écrit
+         dans la langue de l'interface. -->
+    <string name="distance_metres">%1$d m</string>
+    <string name="distance_kilometres">%1$s km</string>
+
+    <string name="action_back">Revenir</string>
+
     <!-- Écran « stockage » : ce que l'application occupe, et comment le
          reprendre (SPEC §4.4). -->
     <string name="storage_title">Stockage</string>

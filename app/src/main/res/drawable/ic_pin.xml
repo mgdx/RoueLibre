@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Point choisi sur la carte : une goutte pleine, posée par sa pointe.
+
+    Volontairement d'une autre FORME que les marqueurs de stations, qui sont
+    des disques : sur une carte qui en porte deux cent soixante-huit, le point
+    cherché doit se distinguer sans dépendre de sa seule couleur (SPEC §7).
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="40dp"
+    android:viewportWidth="24"
+    android:viewportHeight="30">
+    <!-- Liseré clair, pour que la goutte tienne aussi sur un fond sombre. -->
+    <path
+        android:fillColor="@color/surface"
+        android:pathData="M12,0C6.48,0 2,4.48 2,10c0,7.5 10,20 10,20s10,-12.5 10,-20C22,4.48 17.52,0 12,0z" />
+    <path
+        android:fillColor="@color/signal"
+        android:pathData="M12,1.6C7.36,1.6 3.6,5.36 3.6,10c0,6.4 8.4,17.4 8.4,17.4s8.4,-11 8.4,-17.4C20.4,5.36 16.64,1.6 12,1.6z" />
+    <path
+        android:fillColor="@color/surface"
+        android:pathData="M12,6.4c-2,0 -3.6,1.6 -3.6,3.6s1.6,3.6 3.6,3.6 3.6,-1.6 3.6,-3.6S14,6.4 12,6.4z" />
+</vector>

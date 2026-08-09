@@ -92,6 +92,10 @@ class Street:
     city: str
     postcode: str
     kind: int
+    # Nom de la commune absorbée, quand il diffère de la commune actuelle :
+    # « Lomme », « Hellemmes » pour des adresses que la BAN rattache à Lille.
+    # C'est ce nom-là que l'habitant emploie et tape dans une recherche.
+    former_city: str = ""
     latitudes: list[float] = field(default_factory=list)
     longitudes: list[float] = field(default_factory=list)
     # (number, suffix) -> every position BAN gives for it. Usually exactly one;
@@ -187,11 +191,16 @@ def read_ban_files(
 
                 street = streets.get(key)
                 if street is None:
+                    city = (row["nom_commune"] or "").strip()
+                    former_city = (row.get("nom_ancienne_commune") or "").strip()
                     street = Street(
                         display_name=street_name,
-                        city=(row["nom_commune"] or "").strip(),
+                        city=city,
                         postcode=(row["code_postal"] or "").strip(),
                         kind=KIND_STREET,
+                        # La colonne répète souvent la commune actuelle : ne
+                        # retenir que ce qu'elle apprend réellement.
+                        former_city=former_city if former_city != city else "",
                     )
                     streets[key] = street
 
@@ -312,6 +321,11 @@ CREATE TABLE street(
     normalized_type  TEXT,              -- "rue", "boulevard"… or NULL
     city             TEXT    NOT NULL,
     normalized_city  TEXT    NOT NULL,
+    -- Commune absorbée, quand elle diffère de la commune actuelle. La BAN
+    -- rattache Lomme et Hellemmes à Lille ; sans ce champ, personne n'y
+    -- trouverait sa rue en tapant le nom de sa commune.
+    former_city      TEXT,
+    normalized_former_city TEXT,
     postcode         TEXT,
     latitude         REAL    NOT NULL,  -- representative point
     longitude        REAL    NOT NULL,
@@ -387,16 +401,21 @@ def build_database(
         longitude = statistics.median(street.longitudes)
         split = normalizer.analyse(street.display_name)
         normalized_city = normalizer.normalize(street.city)
+        normalized_former_city = (
+            normalizer.normalize(street.former_city) if street.former_city else ""
+        )
 
         street_rows.append((
             street_id, street.display_name, split.proper_name, split.street_type,
-            street.city, normalized_city, street.postcode or None,
-            latitude, longitude, street.kind,
+            street.city, normalized_city,
+            street.former_city or None, normalized_former_city or None,
+            street.postcode or None, latitude, longitude, street.kind,
         ))
         search_rows.append((
             street_id,
             " ".join(part for part in (split.street_type, split.proper_name,
-                                       normalized_city) if part),
+                                       normalized_city, normalized_former_city)
+                     if part),
         ))
 
         for (number, suffix), positions in street.numbers.items():
@@ -410,7 +429,7 @@ def build_database(
             number_rows.append((street_id, number, suffix, delta_lat, delta_lon))
 
     connection.executemany(
-        "INSERT INTO street VALUES (?,?,?,?,?,?,?,?,?,?)", street_rows
+        "INSERT INTO street VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", street_rows
     )
     connection.executemany(
         "INSERT INTO street_search(docid, terms) VALUES (?,?)", search_rows
@@ -483,7 +502,9 @@ def write_normalization_fixtures(normalizer: AddressNormalizer,
             "name": split.proper_name,
         })
 
-    destination = (REPO_ROOT / "app" / "src" / "test" / "resources"
+    # Dans :core, où vit le normalisateur Kotlin : la logique de recherche est
+    # du Kotlin pur, testable sur la JVM sans émulateur (SPEC §14).
+    destination = (REPO_ROOT / "core" / "src" / "test" / "resources"
                    / "normalization_fixtures.json")
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(

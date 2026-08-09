@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Une ligne de résultat de recherche d'adresse.
+
+    Même grammaire que la ligne de station : séparation tonale, trait d'un
+    pixel, jamais de carte à ombre portée (SPEC §7). L'icône ne fait que
+    distinguer une voie d'un point de repère ; elle ne porte aucune information
+    que le texte ne donne pas.
+
+    `start`/`end` partout, jamais `left`/`right` (SPEC §9).
+
+    L'effet d'appui est posé en `foreground` et non en `background` : la liste
+    peint déjà son fond, et le repeindre par ligne ferait dessiner deux fois le
+    même aplat.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
+    android:minHeight="@dimen/touch_target_min"
+    android:paddingStart="@dimen/space_l"
+    android:paddingTop="@dimen/space_m"
+    android:paddingEnd="@dimen/space_l"
+    android:paddingBottom="@dimen/space_m">
+
+    <ImageView
+        android:id="@+id/kind_icon"
+        android:layout_width="@dimen/space_xl"
+        android:layout_height="@dimen/space_xl"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/encre_douce"
+        tools:src="@drawable/ic_search" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/kind_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="12 bis Rue Nationale" />
+
+    <TextView
+        android:id="@+id/detail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        app:layout_constraintEnd_toEndOf="@id/title"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        tools:text="59800 Lille · 250 m" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

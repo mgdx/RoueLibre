@@ -62,9 +62,12 @@
     "$comment": [
       "URL par défaut du manifeste décrivant le jeu de données publié (§4.4).",
       "Modifiable dans les réglages, et contournable par import manuel :",
-      "l'hébergeur ne doit jamais être un point de défaillance unique."
+      "l'hébergeur ne doit jamais être un point de défaillance unique.",
+      "formatVersion 2 : l'index d'adresses porte désormais le nom des communes",
+      "absorbées (Lomme, Hellemmes…), sans lequel leurs habitants ne trouvaient",
+      "pas leur rue en tapant le nom de leur commune."
     ],
     "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest.json",
-    "formatVersion": 1
+    "formatVersion": 2
   }
 }
