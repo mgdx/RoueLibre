@@ -128,9 +128,9 @@ adb install -r app/build/outputs/apk/debug/app-universal-debug.apk
 Il faut un JDK 17 ou plus et le SDK Android (compileSdk 37). Aucune clé, aucun
 compte, aucun service tiers n'est nécessaire pour compiler.
 
-Taille de l'APK de release, carte, routage et recherche d'adresses compris :
-**7,55 Mo en arm64-v8a** et 6,98 Mo en armeabi-v7a, pour un plafond de 12 Mo
-par architecture. Les bibliothèques natives de MapLibre sont empaquetées
+Taille de l'APK de release, carte, routage, recherche d'adresses et
+itinéraire compris : **7,67 Mo en arm64-v8a** et 7,10 Mo en armeabi-v7a, pour
+un plafond de 12 Mo par architecture. Les bibliothèques natives de MapLibre sont empaquetées
 compressées — sans quoi le même APK pèserait 14,87 Mo.
 
 ## Générer les jeux de données hors ligne
