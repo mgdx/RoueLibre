@@ -1,0 +1,177 @@
+# Liste blanche des objets retenus dans le fond de carte — SPEC.md §4.2
+#
+# Le filtrage se fait À LA GÉNÉRATION, pas seulement dans le style : ce qui
+# n'est pas retenu ici ne pèse rien dans le fichier de tuiles. C'est le
+# principal levier de taille après le niveau de zoom.
+#
+# Choix de conception assumé : la carte est un DÉCOR, les stations sont le
+# SUJET. Tous les points d'intérêt commerciaux sont donc écartés — commerces,
+# restaurants, bars, cafés, hôtels, banques, distributeurs, coiffeurs,
+# agences, bureaux, stations-service, parkings privés. Ne pas les réintroduire
+# sans revenir sur le §4.2.
+#
+# Format de chaque couche :
+#   filters      expressions de sélection au format « osmium tags-filter »
+#                (n/ = nœud, w/ = chemin, r/ = relation, a/ = surface)
+#   geometry     point | linestring | polygon
+#   keepTags     attributs conservés dans les tuiles ; tout le reste est jeté
+#   minZoom      zoom à partir duquel la couche existe
+#   maxZoom      zoom maximal (défaut : maxZoom global)
+#
+# Les couches partageant le même minZoom sont produites en un seul appel à
+# tippecanoe, puis assemblées par tile-join.
+
+globalMaxZoom: 16
+
+layers:
+
+  # ---------------------------------------------------------------- eau ----
+  water:
+    description: Plans d'eau, bassins, étangs — surfaces.
+    filters: ["a/natural=water", "a/landuse=reservoir,basin", "a/waterway=riverbank"]
+    geometry: polygon
+    keepTags: [name]
+    minZoom: 10
+
+  waterway:
+    description: Cours d'eau et canaux — la Deûle et la Marque structurent la métropole.
+    filters: ["w/waterway=river,canal", "w/waterway=stream"]
+    geometry: linestring
+    keepTags: [name, waterway]
+    minZoom: 12
+
+  # ------------------------------------------------------------ végétal ----
+  landcover:
+    description: Parcs, espaces verts, bois, cimetières — repères visuels majeurs.
+    filters:
+      - "a/leisure=park,garden,nature_reserve,pitch,recreation_ground"
+      - "a/landuse=forest,grass,meadow,cemetery,allotments,village_green"
+      - "a/natural=wood,scrub,heath"
+    geometry: polygon
+    keepTags: [name, leisure, landuse, natural]
+    minZoom: 11
+
+  # -------------------------------------------------------------- voirie ----
+  # Séparée en deux couches par importance : afficher toute la voirie dès le
+  # zoom 10 produirait des tuiles énormes et illisibles.
+  road_major:
+    description: Autoroutes et axes structurants, visibles dès le zoom éloigné.
+    filters: ["w/highway=motorway,trunk,primary,secondary,motorway_link,trunk_link,primary_link,secondary_link"]
+    geometry: linestring
+    keepTags: [name, highway, ref, tunnel, bridge]
+    minZoom: 10
+
+  road_minor:
+    description: >
+      Voirie de desserte et voies cyclables. Porte les noms de rues, exigés
+      par le §4.2. Arrive au zoom 13 : plus tôt, elle noierait la carte.
+    filters:
+      - "w/highway=tertiary,residential,unclassified,living_street,pedestrian,tertiary_link"
+      - "w/highway=service,footway,path,cycleway,steps,track"
+    geometry: linestring
+    keepTags: [name, highway, tunnel, bridge]
+    minZoom: 13
+
+  railway:
+    description: Voies ferrées, y compris métro et tramway.
+    filters: ["w/railway=rail,subway,light_rail,tram,narrow_gauge"]
+    geometry: linestring
+    keepTags: [name, railway, tunnel]
+    minZoom: 11
+
+  # ---------------------------------------------------------- bâtiments ----
+  building:
+    description: >
+      Empreintes de bâtiments, en aplat discret. Zoom 15 minimum : c'est
+      habituellement la couche la plus lourde d'un jeu de tuiles vectorielles.
+      Si le budget de taille est dépassé, c'est le PREMIER levier à actionner
+      (§4.2) — monter son minZoom à 16, ou la retirer entièrement.
+    filters: ["a/building"]
+    geometry: polygon
+    keepTags: []
+    minZoom: 15
+
+  # ------------------------------------------------------------- limites ----
+  boundary:
+    description: >
+      Limites communales — la métropole compte 95 communes. Exportée en
+      POLYGONES, pas en lignes : les lignes d'une relation de limite sont ses
+      chemins membres, c'est-à-dire les rues qui longent la frontière, pas le
+      contour de la commune. Le style ne dessine que le trait de bordure.
+    filters: ["r/boundary=administrative"]
+    geometry: polygon
+    keepTags: [name, admin_level, boundary]
+    minZoom: 10
+    onlyAdminLevels: ["8"]
+
+  place:
+    description: Noms de communes, de quartiers et de lieux-dits.
+    filters: ["n/place=city,town,village,suburb,neighbourhood,quarter,hamlet"]
+    geometry: point
+    keepTags: [name, place, population]
+    minZoom: 10
+
+  # ---------------------------------------------------------- transports ----
+  transit:
+    description: >
+      Stations de métro et de tramway, gares ferroviaires. Visibles à tous les
+      zooms : ce sont les repères d'orientation les plus utiles en ville, et
+      les correspondances naturelles d'un trajet à vélo.
+    filters:
+      - "n/railway=station,halt,subway_entrance"
+      - "a/railway=station"
+      - "n/station=subway,light_rail"
+      - "n/public_transport=station"
+    geometry: point
+    keepTags: [name, railway, station, public_transport, subway, light_rail, train]
+    minZoom: 10
+
+  busstop:
+    description: >
+      Arrêts de bus, en points discrets et SANS étiquette. Zoom 15 minimum :
+      la métropole en compte plusieurs milliers, les afficher plus tôt
+      noierait la carte et les stations de vélos avec (§4.2).
+    filters: ["n/highway=bus_stop", "n/public_transport=platform"]
+    geometry: point
+    keepTags: []
+    minZoom: 15
+
+  # ------------------------------------------- équipements et repères ----
+  poi:
+    description: >
+      Équipements publics et repères visuels, et rien d'autre. La liste est
+      close : tout ajout doit se justifier par le repérage, jamais par
+      l'exhaustivité.
+    filters:
+      # équipements publics
+      - "n/amenity=townhall,school,college,university,hospital,clinic,post_office,library,police,fire_station"
+      - "a/amenity=townhall,school,college,university,hospital,clinic,post_office,library,police,fire_station"
+      - "n/amenity=place_of_worship,theatre,arts_centre,community_centre"
+      - "a/amenity=place_of_worship,theatre,arts_centre,community_centre"
+      - "a/landuse=cemetery"
+      - "n/leisure=sports_centre,swimming_pool,stadium"
+      - "a/leisure=sports_centre,swimming_pool,stadium"
+      # repères visuels
+      - "n/tourism=museum,attraction,artwork,viewpoint"
+      - "a/tourism=museum,attraction"
+      - "n/historic=monument,memorial,castle,tower,building"
+      - "a/historic=monument,memorial,castle,building"
+      - "n/man_made=tower,water_tower,windmill"
+      - "a/man_made=tower,windmill"
+    geometry: point
+    keepTags: [name, amenity, leisure, tourism, historic, man_made, religion, landuse]
+    minZoom: 13
+
+# Objets explicitement écartés (§4.2). Cette liste ne sert pas au filtrage —
+# la liste blanche ci-dessus suffit — mais documente le choix pour qu'il ne
+# soit pas défait par inadvertance.
+excludedOnPurpose:
+  - shop=*            # commerces de toute nature
+  - amenity=restaurant, fast_food, cafe, bar, pub, biergarten
+  - tourism=hotel, hostel, guest_house, motel
+  - amenity=bank, atm, bureau_de_change
+  - amenity=fuel, charging_station
+  - amenity=parking    # y compris les parkings privés
+  - office=*           # bureaux d'entreprises et agences
+  - craft=*            # artisans, coiffeurs
+  - healthcare=*       # cabinets privés (les hôpitaux passent par amenity)

@@ -1,0 +1,65 @@
+{
+  "$comment": [
+    "Configuration de ville — SPEC.md §15.",
+    "Ce fichier est la SEULE source des données propres à une agglomération.",
+    "Aucune URL, coordonnée ou nom de réseau ne doit apparaître ailleurs dans le code.",
+    "Le bloc 'boundingBox' est RECALCULÉ automatiquement par tools/compute_bbox.py",
+    "à chaque régénération des données (§4) — ne pas l'éditer à la main.",
+    "Pour porter l'application vers une autre ville, copier ce fichier et n'ajuster",
+    "que 'network', 'gbfsDiscoveryUrl', 'map' et 'dataRelease'. Voir README.md."
+  ],
+  "configVersion": 1,
+  "network": {
+    "id": "vlille",
+    "displayName": "V'lille",
+    "operator": "Métropole Européenne de Lille",
+    "defaultLanguage": "fr"
+  },
+  "gbfs": {
+    "$comment": [
+      "URL du fichier d'auto-découverte, et lui seul (§4.1).",
+      "Vérifiée par requête réelle le 2026-08-09 : HTTP 200, GBFS 2.3.",
+      "Source croisée : catalogue MobilityData systems.csv, et fiche",
+      "transport.data.gouv.fr 'ilevia-vlille-disponibilite-en-temps-reel'",
+      "dont la ressource redirige (302) vers cette même URL.",
+      "Les URL de station_information et station_status ne sont JAMAIS écrites",
+      "en dur : elles sont lues dans ce fichier d'auto-découverte.",
+      "Le flux annonce ttl=0, valeur inexploitable : l'application applique",
+      "sa propre politique de rafraîchissement (§4.1)."
+    ],
+    "discoveryUrl": "https://media.ilevia.fr/opendata/gbfs.json",
+    "attribution": "Données V'lille — Ilevia / Métropole Européenne de Lille, licence ODbL",
+    "attributionUrl": "https://transport.data.gouv.fr/datasets/ilevia-vlille-disponibilite-en-temps-reel"
+  },
+  "boundingBox": {
+    "$comment": [
+      "Emprise de référence partagée par les trois jeux de données (§4).",
+      "Dérivée du rectangle englobant des stations, élargi de 3 km.",
+      "Généré par tools/compute_bbox.py — NE PAS ÉDITER À LA MAIN."
+    ],
+    "generatedAt": "2026-08-09T10:53:29Z",
+    "marginMeters": 3000.0,
+    "stationCount": 268,
+    "south": 50.576061,
+    "west": 2.941358,
+    "north": 50.763769,
+    "east": 3.241396
+  },
+  "map": {
+    "$comment": "Centre et zoom d'ouverture quand la position n'est pas disponible.",
+    "defaultCenterLatitude": 50.633333,
+    "defaultCenterLongitude": 3.066667,
+    "defaultZoom": 12.5,
+    "minZoom": 10,
+    "maxZoom": 16
+  },
+  "dataRelease": {
+    "$comment": [
+      "URL par défaut du manifeste décrivant le jeu de données publié (§4.4).",
+      "Modifiable dans les réglages, et contournable par import manuel :",
+      "l'hébergeur ne doit jamais être un point de défaillance unique."
+    ],
+    "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest.json",
+    "formatVersion": 1
+  }
+}

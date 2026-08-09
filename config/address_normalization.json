@@ -1,0 +1,117 @@
+{
+  "$comment": [
+    "Règles de normalisation des noms de voies — SPEC.md §4.3.",
+    "",
+    "Ce fichier est la SOURCE UNIQUE de ces règles. Il est lu par le script de",
+    "génération de l'index (tools/build_address_index.py) ET embarqué dans",
+    "l'APK, où le moteur de recherche le relit. Une divergence entre les deux",
+    "rendrait des rues introuvables : « boulevard » indexé d'un côté, « bd »",
+    "cherché de l'autre, et aucun résultat. D'où le fichier commun plutôt que",
+    "deux listes recopiées.",
+    "",
+    "La normalisation est appliquée à l'identique à l'index et à la saisie :",
+    "minuscules, accents et ponctuation supprimés, abréviations développées.",
+    "",
+    "tools/build_address_index.py produit également un jeu de cas de",
+    "référence que le test Kotlin rejoue, pour prouver que les deux",
+    "implémentations donnent le même résultat."
+  ],
+
+  "rulesVersion": 1,
+
+  "abbreviations": {
+    "$comment": [
+      "Développées lors de la normalisation, sur des mots entiers uniquement.",
+      "Une abréviation d'une seule lettre n'est développée qu'en tête de nom,",
+      "sinon « r » transformerait « Jean R Dupont » en « Jean rue Dupont »."
+    ],
+    "anywhere": {
+      "st": "saint",
+      "ste": "sainte",
+      "sts": "saints",
+      "stes": "saintes",
+      "bd": "boulevard",
+      "bld": "boulevard",
+      "blvd": "boulevard",
+      "av": "avenue",
+      "ave": "avenue",
+      "fbg": "faubourg",
+      "fg": "faubourg",
+      "gal": "general",
+      "gen": "general",
+      "gnl": "general",
+      "mal": "marechal",
+      "mar": "marechal",
+      "dr": "docteur",
+      "pr": "professeur",
+      "prof": "professeur",
+      "pdt": "president",
+      "pst": "president",
+      "cdt": "commandant",
+      "cne": "capitaine",
+      "cap": "capitaine",
+      "mgr": "monseigneur",
+      "me": "maitre",
+      "gde": "grande",
+      "gd": "grand",
+      "pte": "petite",
+      "pt": "petit",
+      "nde": "notre dame",
+      "sq": "square",
+      "imp": "impasse",
+      "rte": "route",
+      "chem": "chemin",
+      "res": "residence",
+      "lot": "lotissement",
+      "pl": "place",
+      "crs": "cours",
+      "qu": "quai",
+      "sen": "sentier",
+      "rpt": "rond point"
+    },
+    "leadingOnly": {
+      "r": "rue",
+      "a": "allee",
+      "b": "boulevard",
+      "c": "chemin",
+      "p": "place"
+    }
+  },
+
+  "streetTypes": {
+    "$comment": [
+      "Type de voie stocké dans un champ DISTINCT du nom propre (§4.3) :",
+      "« gambetta » doit trouver « rue Gambetta », et « rue de la gare » ne",
+      "doit pas être pénalisé par l'ordre des mots.",
+      "Reconnu seulement en tête de nom, et par correspondance la plus longue :",
+      "« rond point » avant « rond ». « drève » et « courée » sont propres au",
+      "Nord et absentes des listes génériques.",
+      "Écrits sous leur forme déjà normalisée (sans accent, en minuscules)."
+    ],
+    "types": [
+      "rond point", "grand rue", "grande rue", "petite rue",
+      "avenue", "boulevard", "chemin", "impasse", "allee", "allees",
+      "place", "placette", "parvis", "esplanade", "square", "jardin",
+      "quai", "cours", "passage", "passerelle", "sentier", "sente",
+      "route", "rue", "ruelle", "venelle", "voie", "chaussee",
+      "montee", "descente", "digue", "levee", "berge",
+      "residence", "lotissement", "hameau", "lieu dit", "clos", "cite",
+      "domaine", "enclos", "cour", "couree", "dreve", "drave",
+      "carrefour", "rocade", "peripherique", "autoroute", "bretelle",
+      "pont", "tunnel", "traverse", "raccourci", "promenade", "mail",
+      "boucle", "rampe", "escalier", "galerie", "porte", "barriere",
+      "faubourg", "grand place"
+    ]
+  },
+
+  "punctuationReplacedBySpace": "'’`-–—_.,;:!?()[]{}/\\\"«»",
+
+  "stopWords": {
+    "$comment": [
+      "Mots vides ignorés au CLASSEMENT — jamais à l'indexation, sinon",
+      "« rue de la gare » perdrait la moitié de son contenu. Ils servent à ne",
+      "pas récompenser une correspondance qui ne porte que sur « de » ou « la »."
+    ],
+    "words": ["de", "du", "des", "la", "le", "les", "l", "d", "au", "aux", "a", "et", "en", "sur", "sous"]
+  }
+}
