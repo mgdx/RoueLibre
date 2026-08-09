@@ -32,6 +32,9 @@ Développement initial. Rien n'est encore publié.
   embarquées, échelle d'espacement et rayon uniques.
 - **Écran de liste des stations** avec l'indicateur de disponibilité, la
   bascule vélos/places, le tirer-pour-rafraîchir et l'âge de la donnée.
+- **Algorithme de trajet optimisé** (§6) : choisit le meilleur couple de
+  stations plutôt que la plus proche, pénalise les stations peu fournies,
+  propose trois alternatives et signale les trajets où la marche va plus vite.
 - **Moteur de routage hors ligne** (§5) : BRouter intégré comme sous-module
   Git, avec deux profils écrits pour ce projet — piéton urbain et vélo de
   libre-service. Le graphe est lu depuis le fichier installé, les profils sont
@@ -55,6 +58,9 @@ Développement initial. Rien n'est encore publié.
   installé, ce qu'exige le critère d'acceptation §11.1.
 - En mode avion, les dernières disponibilités connues restent affichées et
   l'application le dit, sans erreur bloquante.
+- Un trajet complet marche → vélo → marche est composé en **1,2 s** sur
+  l'émulateur, avec les 268 stations réelles et le vrai graphe — pour un budget
+  de 3 s (§11.4). L'enchaînement séquentiel demandait 2,4 s.
 - La carte s'affiche, se déplace et se zoome **sans aucune requête réseau** :
   tuiles lues sur le disque, glyphes dans l'APK.
 - La compilation de release avec R8 produit **2,82 Mo par architecture** et

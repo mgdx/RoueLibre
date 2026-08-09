@@ -47,7 +47,7 @@ Le projet suit la progression du `SPEC.md` §16.
 | 2. Scripts de génération des données hors ligne | ✅ fait |
 | 3. Carte vectorielle et marqueurs | ✅ fait |
 | 4. Moteur de routage hors ligne | ✅ fait |
-| 5. Algorithme de trajet optimisé | à faire |
+| 5. Algorithme de trajet optimisé | ✅ fait |
 | 6. Recherche d'adresses locale | à faire |
 | 7. Écrans restants | à faire |
 | 8. Finitions et métadonnées F-Droid | à faire |
