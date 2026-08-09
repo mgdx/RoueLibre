@@ -161,12 +161,6 @@ class StationRepository(
         return Duration.between(last, now) >= STATION_INFORMATION_MAXIMUM_AGE
     }
 
-    /** Âge à partir duquel l'état affiché doit être signalé comme périmé. */
-    fun isStale(fetchedAt: Instant?): Boolean {
-        if (fetchedAt == null) return true
-        return Duration.between(fetchedAt, clock.instant()) > STALE_THRESHOLD
-    }
-
     private companion object {
         /**
          * Le flux est produit toutes les minutes ; demander plus souvent ne
@@ -180,13 +174,6 @@ class StationRepository(
          * d'une station, soit quelques fois par an.
          */
         val STATION_INFORMATION_MAXIMUM_AGE: Duration = Duration.ofDays(1)
-
-        /**
-         * Au-delà, l'utilisateur regarde une photographie et non un état :
-         * il faut le lui dire. Cinq minutes laissent passer un rafraîchissement
-         * manqué sans crier au loup.
-         */
-        val STALE_THRESHOLD: Duration = Duration.ofMinutes(5)
     }
 }
 

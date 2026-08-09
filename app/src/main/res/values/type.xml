@@ -17,38 +17,26 @@
     Les deux sont embarquées dans l'APK : aucune police n'est téléchargée, ce
     qui passerait par un service tiers (SPEC §2, C2 et C3).
 
+    Bricolage est distribuée en police variable, mais `fontVariationSettings`
+    n'existe qu'à partir de l'API 28 : sur un Android 8, les graisses
+    demandées seraient ignorées et les titres s'afficheraient maigres. Deux
+    instances statiques sont donc figées à la génération, aux seules graisses
+    utilisées. Elles pèsent 182 ko à elles deux, contre 408 ko pour la police
+    variable complète — la contrainte de compatibilité a aussi allégé l'APK.
+    Voir tools/README.md pour la commande de régénération.
+
     Les chiffres sont réglés en chasse fixe (« tnum ») partout où ils
     s'alignent en colonne, pour que la liste ne tressaute pas à chaque
     rafraîchissement.
 -->
-<resources>
-
-    <!-- Grand nombre, écran de détail. -->
-    <style name="TextAppearance.RoueLibre.Display" parent="TextAppearance.Material3.HeadlineMedium">
-        <item name="android:fontFamily">@font/bricolage_grotesque</item>
-        <item name="android:fontVariationSettings">\'wght\' 700, \'wdth\' 100, \'opsz\' 36</item>
-        <item name="android:textSize">@dimen/text_display</item>
-        <item name="android:textColor">@color/encre</item>
-        <item name="android:fontFeatureSettings">tnum</item>
-        <item name="android:letterSpacing">-0.02</item>
-    </style>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
 
     <!-- Titre d'écran et de section. -->
     <style name="TextAppearance.RoueLibre.Title" parent="TextAppearance.Material3.TitleLarge">
-        <item name="android:fontFamily">@font/bricolage_grotesque</item>
-        <item name="android:fontVariationSettings">\'wght\' 650, \'wdth\' 100, \'opsz\' 24</item>
+        <item name="android:fontFamily">@font/bricolage_semibold</item>
         <item name="android:textSize">@dimen/text_title</item>
         <item name="android:textColor">@color/encre</item>
         <item name="android:letterSpacing">-0.01</item>
-    </style>
-
-    <!-- Le chiffre de l'indicateur de disponibilité : l'élément signature. -->
-    <style name="TextAppearance.RoueLibre.Indicator" parent="TextAppearance.Material3.TitleLarge">
-        <item name="android:fontFamily">@font/bricolage_grotesque</item>
-        <item name="android:fontVariationSettings">\'wght\' 700, \'wdth\' 100, \'opsz\' 24</item>
-        <item name="android:textSize">@dimen/text_indicator</item>
-        <item name="android:fontFeatureSettings">tnum</item>
-        <item name="android:letterSpacing">-0.03</item>
     </style>
 
     <!-- Corps de texte, noms de stations. -->
@@ -74,5 +62,12 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:letterSpacing">0.08</item>
     </style>
+
+    <!--
+        Le chiffre de l'indicateur de disponibilité n'a pas de style ici : la
+        vue qui le dessine peint directement sur le canevas, sans TextView, et
+        lit sa taille dans @dimen/text_indicator. Un TextAppearance de plus
+        serait un jeton que rien ne pourrait appliquer.
+    -->
 
 </resources>

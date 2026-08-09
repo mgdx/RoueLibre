@@ -247,15 +247,6 @@ class StationRepositoryTest {
         assertTrue(outcome is Outcome.Failure)
         assertTrue((outcome as Outcome.Failure).error is DataError.MalformedResponse)
     }
-
-    @Test
-    fun `un etat plus vieux que cinq minutes est signale comme perime`() {
-        val repository = repository()
-
-        assertTrue(!repository.isStale(now.minusSeconds(60)))
-        assertTrue(repository.isStale(now.minusSeconds(600)))
-        assertTrue(repository.isStale(null))
-    }
 }
 
 /** Cache en mémoire, pour éprouver la politique sans base de données. */

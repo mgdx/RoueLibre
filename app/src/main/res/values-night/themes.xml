@@ -4,7 +4,7 @@
     values-night/colors.xml ; il ne reste ici que ce qui ne peut pas l'être
     par une simple ressource de couleur.
 -->
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="Theme.RoueLibre" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/signal</item>
@@ -25,7 +25,7 @@
         <item name="android:statusBarColor">@color/papier</item>
         <item name="android:navigationBarColor">@color/papier</item>
         <!-- Icônes de la barre d'état en clair sur fond sombre. -->
-        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:windowLightStatusBar">false</item>
 
         <item name="android:textAppearance">@style/TextAppearance.RoueLibre.Body</item>
         <item name="textAppearanceTitleLarge">@style/TextAppearance.RoueLibre.Title</item>

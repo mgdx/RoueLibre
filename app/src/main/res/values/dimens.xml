@@ -11,8 +11,12 @@
     plutôt que par surenchère de couleur. C'est aussi ce qui éloigne
     l'application de l'empilement de cartes très arrondies que produit un
     thème Material par défaut.
+
+    L'échelle est déclarée en entier même si tous ses barreaux ne servent pas
+    encore : c'est ce qui en fait un système. Piocher une valeur au cas par cas
+    quand le besoin se présente est exactement ce qu'une échelle empêche.
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
 
     <!-- Échelle d'espacement, base 4. -->
     <dimen name="space_xs">4dp</dimen>
@@ -37,7 +41,6 @@
     <dimen name="indicator_ring">4dp</dimen>
 
     <!-- Échelle typographique. -->
-    <dimen name="text_display">34sp</dimen>
     <dimen name="text_title">22sp</dimen>
     <dimen name="text_indicator">24sp</dimen>
     <dimen name="text_body">16sp</dimen>

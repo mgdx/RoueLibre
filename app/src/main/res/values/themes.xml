@@ -7,7 +7,7 @@
     couleur du projet. Le thème sombre est décrit dans values-night/ et reçoit
     le même soin, ce n'est pas une inversion automatique.
 -->
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="Theme.RoueLibre" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- La teinte de signal porte l'interaction comme la disponibilité :
@@ -29,7 +29,7 @@
 
         <item name="android:statusBarColor">@color/papier</item>
         <item name="android:navigationBarColor">@color/papier</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightStatusBar">true</item>
 
         <item name="android:textAppearance">@style/TextAppearance.RoueLibre.Body</item>
         <item name="textAppearanceTitleLarge">@style/TextAppearance.RoueLibre.Title</item>

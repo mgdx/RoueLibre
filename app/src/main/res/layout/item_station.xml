@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Une ligne de station.
+
+    Séparation tonale et trait d'un pixel plutôt que carte à ombre portée : la
+    liste doit se lire comme un tableau, pas comme un empilement d'objets
+    flottants (SPEC §7).
+
+    `start`/`end` partout, jamais `left`/`right` : les mises en page doivent
+    tenir dans une langue écrite de droite à gauche (SPEC §9).
+
+    La ligne ne peint pas son fond : c'est la liste qui le fait, une fois pour
+    toutes. Le repeindre à chaque ligne ferait redessiner le même aplat deux
+    fois par pixel.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/touch_target_min"
+    android:paddingStart="@dimen/space_l"
+    android:paddingTop="@dimen/space_m"
+    android:paddingEnd="@dimen/space_l"
+    android:paddingBottom="@dimen/space_m">
+
+    <io.github.mgdx.rouelibre.ui.stations.AvailabilityIndicatorView
+        android:id="@+id/indicator"
+        android:layout_width="@dimen/indicator_size"
+        android:layout_height="@dimen/indicator_size"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+        app:layout_constraintEnd_toStartOf="@id/counterpart"
+        app:layout_constraintStart_toEndOf="@id/indicator"
+        app:layout_constraintTop_toTopOf="@id/indicator"
+        tools:text="Gare Lille Flandres" />
+
+    <TextView
+        android:id="@+id/detail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        app:layout_constraintEnd_toEndOf="@id/name"
+        app:layout_constraintStart_toStartOf="@id/name"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        tools:text="59000 · 40 points d'attache" />
+
+    <!--
+        Le compte complémentaire : les places quand l'indicateur montre les
+        vélos, et l'inverse. Les deux chiffres comptent — l'un pour partir,
+        l'autre pour arriver — mais un seul mérite l'indicateur.
+    -->
+    <TextView
+        android:id="@+id/counterpart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_m"
+        android:fontFamily="@font/bricolage_semibold"
+        android:fontFeatureSettings="tnum"
+        android:gravity="end"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+        android:textColor="@color/encre_douce"
+        app:layout_constraintBaseline_toBaselineOf="@id/name"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="21" />
+
+    <TextView
+        android:id="@+id/counterpart_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/counterpart"
+        tools:text="places" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

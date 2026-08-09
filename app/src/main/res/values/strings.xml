@@ -36,6 +36,25 @@
     <string name="station_out_of_service">Hors service</string>
     <string name="station_availability_unknown">Disponibilité inconnue</string>
 
+    <!-- Bascule entre emprunter un vélo et rendre un vélo (SPEC §7.1). -->
+    <string name="mode_bikes">Vélos</string>
+    <string name="mode_docks">Places</string>
+    <string name="mode_bikes_description">Afficher les vélos disponibles</string>
+    <string name="mode_docks_description">Afficher les places libres</string>
+
+    <!-- Étiquette du compte secondaire, sous le chiffre de droite. -->
+    <string name="counterpart_bikes">vélos</string>
+    <string name="counterpart_docks">places</string>
+    <!-- Affiché à la place du compte quand la station ne rend pas le service. -->
+    <string name="counterpart_none">—</string>
+
+    <!-- Ligne de détail sous le nom d'une station.
+         %1$s est un code postal, %2$d le nombre de points d'attache. -->
+    <plurals name="station_detail_with_capacity">
+        <item quantity="one">%1$s · %2$d point d\'attache</item>
+        <item quantity="other">%1$s · %2$d points d\'attache</item>
+    </plurals>
+
     <!-- Âge de la donnée affichée (SPEC §4.1). -->
     <string name="freshness_just_now">à l\'instant</string>
     <plurals name="freshness_seconds">

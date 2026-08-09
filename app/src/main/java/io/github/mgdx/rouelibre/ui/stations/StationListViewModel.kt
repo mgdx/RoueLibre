@@ -23,8 +23,8 @@ import java.time.Instant
  * @property stations les stations connues et leur dernier état.
  * @property isRefreshing une récupération est en cours.
  * @property fetchedAt date de la dernière récupération réussie, ou `null`.
- * @property isStale l'état affiché est trop vieux pour être présenté comme
- *   courant ; l'interface doit le signaler (SPEC §4.1).
+ *   L'ancienneté qui en découle est recalculée par la vue à chaque battement,
+ *   sinon un état vieillissant à l'écran resterait marqué comme frais.
  * @property hasLoadedOnce vrai dès que le cache a été lu, ce qui distingue
  *   « en cours de chargement » de « réellement vide ».
  */
@@ -32,7 +32,6 @@ data class StationListUiState(
     val stations: List<StationWithAvailability> = emptyList(),
     val isRefreshing: Boolean = false,
     val fetchedAt: Instant? = null,
-    val isStale: Boolean = true,
     val hasLoadedOnce: Boolean = false,
 ) {
     /** Vrai quand il n'y a rien à montrer et rien à attendre. */
@@ -71,7 +70,6 @@ class StationListViewModel(private val repository: StationRepository) : ViewMode
                     current.copy(
                         stations = snapshot.stations,
                         fetchedAt = snapshot.fetchedAt,
-                        isStale = repository.isStale(snapshot.fetchedAt),
                         hasLoadedOnce = true,
                     )
                 }
