@@ -1,0 +1,31 @@
+{
+  "last_updated": "2026-08-09T10:02:00Z",
+  "ttl": 60,
+  "version": "3.0",
+  "data": {
+    "stations": [
+      {
+        "station_id": "v3-1",
+        "num_vehicles_available": 7,
+        "vehicle_types_available": [
+          { "vehicle_type_id": "bike", "count": 5 },
+          { "vehicle_type_id": "ebike", "count": 2 }
+        ],
+        "num_docks_available": 17,
+        "is_installed": true,
+        "is_renting": true,
+        "is_returning": true,
+        "last_reported": "2026-08-09T10:01:45Z"
+      },
+      {
+        "station_id": "v3-2",
+        "num_vehicles_available": 0,
+        "num_docks_available": 40,
+        "is_installed": true,
+        "is_renting": false,
+        "is_returning": true,
+        "last_reported": "2026-08-09T10:01:30Z"
+      }
+    ]
+  }
+}

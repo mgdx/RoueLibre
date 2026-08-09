@@ -1,0 +1,38 @@
+# Formatage automatique, appliqué par ktlint (SPEC §14).
+# `./gradlew ktlintFormat` corrige, `./gradlew ktlintCheck` vérifie.
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{kt,kts}]
+# Le style « ktlint_official » impose des retours à la ligne sur toute
+# expression multiligne, y compris là où la forme compacte se lit mieux.
+# Le style IntelliJ reste strict sur l'essentiel — indentation, imports,
+# espaces — sans réécrire la mise en forme des expressions.
+ktlint_code_style = intellij_idea
+max_line_length = 100
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+# Les noms de tests sont des phrases françaises entre accents graves : c'est
+# ce qui rend le rapport d'exécution lisible sans ouvrir le code.
+ktlint_function_naming_ignore_when_annotated_with = Test
+
+[*.{json,yaml,yml}]
+indent_size = 2
+
+[*.xml]
+indent_size = 4
+
+[*.py]
+indent_size = 4
+max_line_length = 88
+
+[*.md]
+trim_trailing_whitespace = false

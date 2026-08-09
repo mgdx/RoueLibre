@@ -1,0 +1,35 @@
+{
+  "last_updated": "2026-08-09T10:02:00Z",
+  "ttl": 60,
+  "version": "3.0",
+  "data": {
+    "stations": [
+      {
+        "station_id": "v3-1",
+        "name": [
+          { "text": "Place du Théâtre", "language": "fr" },
+          { "text": "Theatre Square", "language": "en" }
+        ],
+        "lat": 50.638,
+        "lon": 3.064,
+        "capacity": 24,
+        "address": "Place du Théâtre",
+        "rental_methods": ["creditcard", "key"]
+      },
+      {
+        "station_id": "v3-2",
+        "name": [{ "text": "Gare Lille Flandres", "language": "fr" }],
+        "lat": 50.636,
+        "lon": 3.071,
+        "capacity": 40
+      },
+      {
+        "station_id": "v3-invalid-coordinates",
+        "name": [{ "text": "Station sans position", "language": "fr" }],
+        "lat": 0,
+        "lon": 0,
+        "capacity": 10
+      }
+    ]
+  }
+}

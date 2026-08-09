@@ -1,3 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Français par défaut (SPEC §9). Aucune chaîne n'est écrite dans le code
+    Kotlin ni dans un layout.
+
+    Règles pour les contributeurs :
+      · placeholders positionnels (%1$s, %2$d), jamais de concaténation :
+        l'ordre des mots change d'une langue à l'autre ;
+      · <plurals> pour tout ce qui s'accorde ;
+      · un commentaire au-dessus de chaque chaîne ambiguë.
+    Voir CONTRIBUTING.md pour proposer une traduction.
+-->
 <resources>
+
     <string name="app_name">Roue Libre</string>
+
+    <!-- Écran principal : liste des stations. -->
+    <string name="stations_title">Stations</string>
+
+    <!-- Nombre de vélos empruntables dans une station. -->
+    <plurals name="bikes_available">
+        <item quantity="one">%1$d vélo</item>
+        <item quantity="other">%1$d vélos</item>
+    </plurals>
+
+    <!-- Nombre de places libres pour rendre un vélo. -->
+    <plurals name="docks_available">
+        <item quantity="one">%1$d place</item>
+        <item quantity="other">%1$d places</item>
+    </plurals>
+
+    <!-- Lu par les lecteurs d'écran sur l'indicateur d'une station.
+         Exemple : « Rue Nationale, 6 vélos, 26 places ». -->
+    <string name="station_content_description">%1$s, %2$s, %3$s</string>
+
+    <string name="station_out_of_service">Hors service</string>
+    <string name="station_availability_unknown">Disponibilité inconnue</string>
+
+    <!-- Âge de la donnée affichée (SPEC §4.1). -->
+    <string name="freshness_just_now">à l\'instant</string>
+    <plurals name="freshness_seconds">
+        <item quantity="one">il y a %1$d seconde</item>
+        <item quantity="other">il y a %1$d secondes</item>
+    </plurals>
+    <plurals name="freshness_minutes">
+        <item quantity="one">il y a %1$d minute</item>
+        <item quantity="other">il y a %1$d minutes</item>
+    </plurals>
+    <plurals name="freshness_hours">
+        <item quantity="one">il y a %1$d heure</item>
+        <item quantity="other">il y a %1$d heures</item>
+    </plurals>
+    <string name="freshness_long_ago">il y a plus d\'un jour</string>
+    <!-- Accolé à l'âge quand la donnée n'est plus à jour.
+         Exemple : « Données figées · il y a 12 minutes ». -->
+    <string name="freshness_stale">Données figées · %1$s</string>
+    <string name="freshness_fresh">Mis à jour %1$s</string>
+    <string name="freshness_never">Jamais mis à jour</string>
+
+    <!-- Écran vide : une invitation à agir, pas un constat (SPEC §7). -->
+    <string name="stations_empty_title">Aucune station chargée</string>
+    <string name="stations_empty_message">Tire la liste vers le bas pour récupérer les stations du réseau.</string>
+
+    <!-- Actions. Un même geste porte le même nom du bouton à la confirmation. -->
+    <string name="action_refresh">Rafraîchir</string>
+    <string name="action_retry">Réessayer</string>
+
+    <!-- Messages d'erreur : ce qui s'est passé, et quoi faire. Sans excuses,
+         sans code technique (SPEC §7 et §14). -->
+    <string name="error_offline">Pas de connexion. Les dernières disponibilités connues restent affichées.</string>
+    <string name="error_timeout">Le serveur du réseau met trop de temps à répondre. Réessaie dans un moment.</string>
+    <!-- %1$d est le code HTTP renvoyé par le serveur. -->
+    <string name="error_server_refused">Le serveur du réseau a renvoyé une erreur (%1$d). Réessaie plus tard.</string>
+    <string name="error_malformed">Les données reçues sont illisibles. Vérifie l\'adresse du flux dans les réglages.</string>
+    <!-- %1$s est le nom d'un flux GBFS, par exemple « station_status ». -->
+    <string name="error_feed_unavailable">Le réseau ne publie pas le flux « %1$s ». Vérifie l\'adresse du flux dans les réglages.</string>
+    <!-- %1$s est un numéro de version, par exemple « 4.0 ». -->
+    <string name="error_unsupported_version">Ce réseau publie ses données en version %1$s, que cette version de l\'application ne sait pas lire. Mets l\'application à jour.</string>
+    <string name="error_local_storage">Impossible de lire les données enregistrées sur l\'appareil.</string>
+
 </resources>

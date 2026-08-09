@@ -1,0 +1,34 @@
+plugins {
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ktlint)
+}
+
+// Module de logique métier pur : analyse des flux GBFS, algorithme de trajet,
+// résolution d'adresses. Aucune dépendance Android, donc testable sur la JVM
+// sans émulateur (SPEC §14).
+//
+// La compatibilité binaire vise Java 11, celle du module applicatif, pour que
+// le même code s'exécute sur un appareil à l'API 26.
+kotlin {
+    jvmToolchain(17)
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        // Le code métier est audité ; un avertissement non traité y est une
+        // dette, pas une nuisance acceptable (SPEC §14).
+        allWarningsAsErrors.set(true)
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+dependencies {
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.coroutines.core)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+}

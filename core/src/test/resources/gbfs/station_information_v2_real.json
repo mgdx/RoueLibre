@@ -1,0 +1,284 @@
+{
+  "ttl": 0,
+  "version": "2.3",
+  "data": {
+    "stations": [
+      {
+        "name": "Metropole Europeenne de Lille (CB)",
+        "capacity": 36,
+        "station_id": "1",
+        "lat": 50.641926,
+        "lon": 3.075992,
+        "post_code": "59000",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Rihour",
+        "capacity": 32,
+        "station_id": "10",
+        "lat": 50.63589,
+        "lon": 3.062471,
+        "post_code": "59000",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Saint Maur",
+        "capacity": 24,
+        "station_id": "100",
+        "lat": 50.651638,
+        "lon": 3.081625,
+        "post_code": "59110",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Mons Sarts",
+        "capacity": 24,
+        "station_id": "101",
+        "lat": 50.6423,
+        "lon": 3.099291,
+        "post_code": "59370",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Mairie de Mons",
+        "capacity": 16,
+        "station_id": "102",
+        "lat": 50.64218,
+        "lon": 3.109699,
+        "post_code": "59370",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Lacordaire",
+        "capacity": 16,
+        "station_id": "103",
+        "lat": 50.639828,
+        "lon": 3.106677,
+        "post_code": "59370",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Mendes France",
+        "capacity": 18,
+        "station_id": "104",
+        "lat": 50.64584,
+        "lon": 3.112744,
+        "post_code": "59370",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Lavoisier",
+        "capacity": 12,
+        "station_id": "107",
+        "lat": 50.636105,
+        "lon": 3.106438,
+        "post_code": "59370",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "General de Gaulle",
+        "capacity": 20,
+        "station_id": "108",
+        "lat": 50.645267,
+        "lon": 3.100516,
+        "post_code": "59370",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Nouveau siecle",
+        "capacity": 32,
+        "station_id": "11",
+        "lat": 50.63734,
+        "lon": 3.060977,
+        "post_code": "59000",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Rue Bonte-Pollet",
+        "capacity": 16,
+        "station_id": "110",
+        "lat": 50.62487,
+        "lon": 3.034234,
+        "post_code": "59000",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Hellemmes Cimetiere",
+        "capacity": 12,
+        "station_id": "111",
+        "lat": 50.62486,
+        "lon": 3.116677,
+        "post_code": "59260",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Avenue de Mormal",
+        "capacity": 18,
+        "station_id": "113",
+        "lat": 50.651337,
+        "lon": 3.08945,
+        "post_code": "59000",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Bois Habite",
+        "capacity": 17,
+        "station_id": "114",
+        "lat": 50.62651,
+        "lon": 3.079211,
+        "post_code": "59000",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "De Gaulle",
+        "capacity": 18,
+        "station_id": "115",
+        "lat": 50.651497,
+        "lon": 3.072316,
+        "post_code": "59110",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Botanique",
+        "capacity": 16,
+        "station_id": "116",
+        "lat": 50.64891,
+        "lon": 3.078336,
+        "post_code": "59110",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Hippodrome",
+        "capacity": 21,
+        "station_id": "117",
+        "lat": 50.641617,
+        "lon": 3.031375,
+        "post_code": "59130",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Lomme-Lambersart",
+        "capacity": 18,
+        "station_id": "119",
+        "lat": 50.640957,
+        "lon": 3.018803,
+        "post_code": "59130",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Opera",
+        "capacity": 25,
+        "station_id": "12",
+        "lat": 50.637486,
+        "lon": 3.065902,
+        "post_code": "59000",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Lomme Mairie",
+        "capacity": 18,
+        "station_id": "120",
+        "lat": 50.63899,
+        "lon": 3.01154,
+        "post_code": "59160",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Pont superieur",
+        "capacity": 16,
+        "station_id": "121",
+        "lat": 50.644855,
+        "lon": 3.013238,
+        "post_code": "59160",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Piscine de Marcq",
+        "capacity": 16,
+        "station_id": "122",
+        "lat": 50.666033,
+        "lon": 3.087591,
+        "post_code": "59700",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Rue de l'Eglise",
+        "capacity": 17,
+        "station_id": "123",
+        "lat": 50.665348,
+        "lon": 3.075792,
+        "post_code": "59700",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Clemenceau Hippodrome",
+        "capacity": 18,
+        "station_id": "124",
+        "lat": 50.6618,
+        "lon": 3.096235,
+        "post_code": "59700",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      },
+      {
+        "name": "Fort de Mons",
+        "capacity": 20,
+        "station_id": "125",
+        "lat": 50.64208,
+        "lon": 3.119232,
+        "post_code": "59370",
+        "parking_type": "street_parking",
+        "parking_hoop": true,
+        "is_virtual_station": false
+      }
+    ]
+  },
+  "last_updated": 1786264981
+}

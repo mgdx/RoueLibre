@@ -1,0 +1,27 @@
+{
+  "ttl": 0,
+  "version": "2.3",
+  "data": {
+    "en": {
+      "feeds": [
+        {
+          "name": "station_status",
+          "url": "https://media.ilevia.fr/opendata/station_status.json"
+        },
+        {
+          "name": "vehicle_types",
+          "url": "https://media.ilevia.fr/opendata/vehicle_types.json"
+        },
+        {
+          "name": "station_information",
+          "url": "https://media.ilevia.fr/opendata/station_information.json"
+        },
+        {
+          "name": "system_information",
+          "url": "https://media.ilevia.fr/opendata/system_information.json"
+        }
+      ]
+    }
+  },
+  "last_updated": 1786264920
+}
