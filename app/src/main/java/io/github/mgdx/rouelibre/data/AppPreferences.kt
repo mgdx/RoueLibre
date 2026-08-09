@@ -5,7 +5,10 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import java.time.Instant
 
 /**
@@ -56,9 +59,42 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
         }
     }
 
+    /**
+     * Les stations mises en favori, par leur identifiant (SPEC §8).
+     *
+     * Des identifiants de stations, et rien d'autre : ce ne sont pas des
+     * lieux de l'utilisateur mais des points publics du réseau, et la
+     * contrainte C3 interdit d'enregistrer quoi que ce soit d'un déplacement.
+     *
+     * Un flux plutôt qu'une lecture : l'étoile d'une station doit se mettre à
+     * jour partout où elle s'affiche, sans que les écrans se préviennent.
+     */
+    val favouriteStationIds: Flow<Set<String>> =
+        dataStore.data.map { it[FAVOURITE_STATION_IDS].orEmpty() }
+
+    /**
+     * Ajoute ou retire une station des favoris.
+     *
+     * @return vrai si la station est désormais en favori.
+     */
+    suspend fun toggleFavourite(stationId: String): Boolean {
+        var isFavourite = false
+        dataStore.edit { preferences ->
+            val current = preferences[FAVOURITE_STATION_IDS].orEmpty()
+            isFavourite = stationId !in current
+            preferences[FAVOURITE_STATION_IDS] = if (isFavourite) {
+                current + stationId
+            } else {
+                current - stationId
+            }
+        }
+        return isFavourite
+    }
+
     private companion object {
         val STATION_INFORMATION_FETCHED_AT =
             longPreferencesKey("station_information_fetched_at")
         val GBFS_DISCOVERY_URL = stringPreferencesKey("gbfs_discovery_url")
+        val FAVOURITE_STATION_IDS = stringSetPreferencesKey("favourite_station_ids")
     }
 }

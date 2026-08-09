@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Détail d'une station (SPEC §7.2), en feuille glissante depuis le bas.
+
+    Les deux comptes sont montrés côte à côte, chacun avec son indicateur :
+    partir demande un vélo, arriver demande une place, et l'utilisateur qui
+    ouvre cette feuille peut chercher l'un ou l'autre. C'est la seule vue de
+    l'application qui donne les deux d'un même regard.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/space_l"
+    android:paddingTop="@dimen/space_m"
+    android:paddingEnd="@dimen/space_l"
+    android:paddingBottom="@dimen/space_l">
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Title"
+        app:layout_constraintEnd_toStartOf="@id/favourite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Gare Lille Flandres" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/favourite"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        app:icon="@drawable/ic_favourite"
+        app:iconTint="@color/signal"
+        app:layout_constraintBottom_toBottomOf="@id/name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/name" />
+
+    <!-- Adresse déduite de l'index hors ligne : le flux du réseau n'en publie
+         pas. Masquée quand l'index est absent ou ne connaît rien d'assez
+         proche — mieux vaut ne rien dire qu'annoncer la mauvaise rue. -->
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        tools:text="12 Rue Nationale · 59800 Lille"
+        tools:visibility="visible" />
+
+    <!-- Bandeau d'état, montré seulement quand la station ne rend pas son
+         service : une station qui marche n'a pas à s'annoncer. -->
+    <TextView
+        android:id="@+id/service_state"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_m"
+        android:background="@drawable/pill_surface"
+        android:paddingStart="@dimen/space_m"
+        android:paddingTop="@dimen/space_s"
+        android:paddingEnd="@dimen/space_m"
+        android:paddingBottom="@dimen/space_s"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+        android:textColor="@color/alerte"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/address"
+        tools:text="Hors service"
+        tools:visibility="visible" />
+
+    <io.github.mgdx.rouelibre.ui.stations.AvailabilityIndicatorView
+        android:id="@+id/bikes_indicator"
+        android:layout_width="@dimen/indicator_size"
+        android:layout_height="@dimen/indicator_size"
+        android:layout_marginTop="@dimen/space_l"
+        android:importantForAccessibility="no"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/service_state" />
+
+    <TextView
+        android:id="@+id/bikes_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_m"
+        android:text="@string/counterpart_bikes"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Label"
+        app:layout_constraintBottom_toBottomOf="@id/bikes_indicator"
+        app:layout_constraintStart_toEndOf="@id/bikes_indicator"
+        app:layout_constraintTop_toTopOf="@id/bikes_indicator" />
+
+    <io.github.mgdx.rouelibre.ui.stations.AvailabilityIndicatorView
+        android:id="@+id/docks_indicator"
+        android:layout_width="@dimen/indicator_size"
+        android:layout_height="@dimen/indicator_size"
+        android:layout_marginStart="@dimen/space_xl"
+        android:importantForAccessibility="no"
+        app:layout_constraintStart_toEndOf="@id/bikes_label"
+        app:layout_constraintTop_toTopOf="@id/bikes_indicator" />
+
+    <TextView
+        android:id="@+id/docks_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_m"
+        android:text="@string/counterpart_docks"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Label"
+        app:layout_constraintBottom_toBottomOf="@id/docks_indicator"
+        app:layout_constraintStart_toEndOf="@id/docks_indicator"
+        app:layout_constraintTop_toTopOf="@id/docks_indicator" />
+
+    <TextView
+        android:id="@+id/capacity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_m"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bikes_indicator"
+        tools:text="40 points d'attache · mis à jour il y a 12 secondes" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/open_in_navigation"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginTop="@dimen/space_l"
+        android:text="@string/station_open_in_navigation"
+        app:icon="@drawable/ic_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/capacity" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

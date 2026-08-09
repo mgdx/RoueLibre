@@ -50,6 +50,20 @@ Développement initial. Rien n'est encore publié.
   validé, puis mis en place — et un fichier refusé dit pourquoi.
 - **Filtre de la liste par nom de station**, insensible à la casse et aux
   accents, tolérant à l'ordre des mots, cherchant aussi le code postal.
+- **Détail d'une station** (§7.2), en feuille glissante depuis le bas, ouverte
+  d'un toucher sur la carte comme sur une ligne de la liste : nom, adresse,
+  vélos, places, points d'attache, état de service et âge de la donnée. La
+  feuille reste vivante tant qu'elle est ouverte — les comptes suivent le
+  rafraîchissement plutôt que d'être figés à l'ouverture.
+  - **L'adresse vient de l'index hors ligne** : le flux du réseau n'en publie
+    pas. En deçà de cinquante mètres l'adresse est nommée avec son numéro,
+    au-delà seule la voie est citée comme un voisinage — une station posée au
+    milieu d'un rond-point n'a pas d'adresse. Mesuré sur les stations réelles :
+    la moitié sont à moins de quinze mètres d'une adresse connue.
+  - **Favoris** conservés dans DataStore, par identifiant de station et rien
+    d'autre (§8).
+  - Un toucher sur un amas de stations rapproche la carte, ce qui finit par le
+    résoudre en marqueurs distincts.
 - **Recherche d'adresses hors ligne** (§4.3) : index SQLite interrogé sur
   l'appareil, sans le moindre appel réseau, y compris pendant la frappe.
   - Deux étages : index plein texte FTS4 par préfixe, puis rattrapage par

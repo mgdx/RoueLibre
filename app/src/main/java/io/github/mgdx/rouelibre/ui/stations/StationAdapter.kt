@@ -19,7 +19,7 @@ import io.github.mgdx.rouelibre.databinding.ItemStationBinding
  * changer de mode redessine tout, ce que `ListAdapter` ne devinerait pas
  * puisque les stations, elles, n'ont pas changé.
  */
-class StationAdapter :
+class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
     ListAdapter<StationWithAvailability, StationAdapter.StationViewHolder>(DIFF) {
 
     /** Ce que l'indicateur compte : les vélos, ou les places. */
@@ -36,7 +36,7 @@ class StationAdapter :
             parent,
             false,
         )
-        return StationViewHolder(binding)
+        return StationViewHolder(binding, onOpen)
     }
 
     override fun onBindViewHolder(holder: StationViewHolder, position: Int) {
@@ -44,8 +44,10 @@ class StationAdapter :
     }
 
     /** Une ligne de station. */
-    class StationViewHolder(private val binding: ItemStationBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class StationViewHolder(
+        private val binding: ItemStationBinding,
+        private val onOpen: (StationWithAvailability) -> Unit,
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         /**
          * Remplit la ligne.
@@ -116,6 +118,7 @@ class StationAdapter :
                     "${entry.station.name}, $spokenState"
                 else -> spokenState
             }
+            binding.root.setOnClickListener { onOpen(entry) }
         }
     }
 

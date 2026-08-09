@@ -1,5 +1,6 @@
 package io.github.mgdx.rouelibre.ui.map
 
+import android.graphics.RectF
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,7 @@ import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
 import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
 import io.github.mgdx.rouelibre.ui.prefersReducedMotion
+import io.github.mgdx.rouelibre.ui.stations.StationDetailSheet
 import io.github.mgdx.rouelibre.ui.stations.StationListFragment
 import io.github.mgdx.rouelibre.ui.stations.StationsViewModel
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
@@ -207,6 +209,8 @@ class MapFragment : Fragment() {
         map.setMaxZoomPreference(configuration.map.maxZoom.toDouble() + 1)
         map.cameraPosition = lastCamera ?: openingCamera(configuration)
 
+        map.addOnMapClickListener(::onMapClicked)
+
         map.setStyle(
             Style.Builder().fromJson(MapStyleLoader.load(requireContext(), tiles)),
         ) { style ->
@@ -284,6 +288,45 @@ class MapFragment : Fragment() {
         )
     }
 
+    /**
+     * Ouvre le détail de la station touchée, ou rapproche un amas.
+     *
+     * La zone sensible est élargie autour du doigt : un marqueur fait une
+     * quinzaine de pixels de diamètre, soit moins que la pulpe d'un pouce.
+     * Sans cette marge, il faudrait viser.
+     *
+     * @return vrai si le geste a été consommé, pour que la carte ne le traite
+     *   pas à son tour.
+     */
+    private fun onMapClicked(point: LatLng): Boolean {
+        val map = mapLibreMap ?: return false
+        val screenPoint = map.projection.toScreenLocation(point)
+        val touchArea = RectF(
+            screenPoint.x - TOUCH_SLOP_PIXELS,
+            screenPoint.y - TOUCH_SLOP_PIXELS,
+            screenPoint.x + TOUCH_SLOP_PIXELS,
+            screenPoint.y + TOUCH_SLOP_PIXELS,
+        )
+        val touched = map.queryRenderedFeatures(
+            touchArea,
+            StationMarkers.STATION_CIRCLE_LAYER,
+            StationMarkers.CLUSTER_CIRCLE_LAYER,
+        ).firstOrNull() ?: return false
+
+        // Un amas ne décrit aucune station en particulier : le toucher
+        // rapproche, ce qui finit par le résoudre en marqueurs distincts.
+        if (touched.hasProperty(CLUSTER_COUNT_PROPERTY)) {
+            moveCameraTo(point, map.cameraPosition.zoom + CLUSTER_ZOOM_STEP)
+            return true
+        }
+
+        val stationId = touched.getStringProperty(StationMarkers.STATION_ID_PROPERTY)
+            ?: return false
+        StationDetailSheet.newInstance(stationId)
+            .show(parentFragmentManager, StationDetailSheet.TAG)
+        return true
+    }
+
     // ------------------------------------------------ recherche d'adresse --
 
     /** Ouvre la recherche d'adresses (SPEC §4.3). */
@@ -358,13 +401,13 @@ class MapFragment : Fragment() {
      * si l'appareil demande de réduire les animations, auquel cas la carte
      * saute directement à destination (SPEC §7).
      */
-    private fun moveCameraTo(target: LatLng) {
+    private fun moveCameraTo(target: LatLng, zoom: Double = PICKED_PLACE_ZOOM) {
         val map = mapLibreMap
         if (map == null || !styleLoaded) {
             pendingCameraTarget = target
             return
         }
-        val update = CameraUpdateFactory.newLatLngZoom(target, PICKED_PLACE_ZOOM)
+        val update = CameraUpdateFactory.newLatLngZoom(target, zoom)
         if (requireContext().prefersReducedMotion()) {
             map.moveCamera(update)
         } else {
@@ -515,6 +558,18 @@ class MapFragment : Fragment() {
     private companion object {
         /** Zoom auquel la carte se pose sur une adresse trouvée : la rue. */
         const val PICKED_PLACE_ZOOM = 16.0
+
+        /**
+         * Marge autour du doigt lors d'un toucher, en pixels. Un marqueur
+         * mesure une quinzaine de pixels : sans cette marge, il faudrait viser.
+         */
+        const val TOUCH_SLOP_PIXELS = 32f
+
+        /** De combien un toucher sur un amas rapproche la carte. */
+        const val CLUSTER_ZOOM_STEP = 2.0
+
+        /** Propriété que MapLibre ajoute aux amas qu'il forme lui-même. */
+        const val CLUSTER_COUNT_PROPERTY = "point_count"
 
         /** Durée du déplacement de caméra, assez brève pour ne pas faire attendre. */
         const val CAMERA_ANIMATION_MILLIS = 600

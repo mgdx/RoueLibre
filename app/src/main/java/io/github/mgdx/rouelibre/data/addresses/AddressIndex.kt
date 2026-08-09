@@ -17,6 +17,7 @@ import io.github.mgdx.rouelibre.core.address.rankStreets
 import io.github.mgdx.rouelibre.core.address.resolveHouseNumber
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.geo.distanceInMetresTo
 import io.github.mgdx.rouelibre.data.datasets.DatasetStore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
@@ -115,6 +116,86 @@ class AddressIndex(
                 DataError.LocalStorageFailure(error.message ?: "recherche impossible"),
             )
         }
+    }
+
+    /**
+     * L'adresse la plus proche d'un point, s'il y en a une (SPEC §7.2).
+     *
+     * Le flux GBFS du réseau lillois ne publie pas d'adresse de station : il
+     * donne un nom et un code postal. L'index, lui, sait où sont les numéros —
+     * autant s'en servir plutôt que de laisser la feuille de détail muette.
+     *
+     * La recherche part des voies dont le point représentatif est dans un
+     * rayon large, puis descend à leurs numéros. Ce détour est nécessaire :
+     * le point d'une voie est sa médiane, et sur une artère d'un kilomètre il
+     * peut être très loin du point cherché alors que la voie passe juste à
+     * côté.
+     *
+     * @param point l'endroit dont on cherche l'adresse.
+     * @return l'adresse retenue, ou `null` si rien d'assez proche n'est connu —
+     *   mieux vaut ne rien afficher qu'annoncer la mauvaise rue.
+     */
+    suspend fun nearestAddress(point: Coordinates): AddressResult? = withContext(ioDispatcher) {
+        val index = try {
+            open() ?: return@withContext null
+        } catch (_: RuntimeException) {
+            return@withContext null
+        }
+        try {
+            index.nearestAddressTo(point)
+        } catch (_: RuntimeException) {
+            close()
+            null
+        }
+    }
+
+    private fun OpenIndex.nearestAddressTo(point: Coordinates): AddressResult? {
+        val candidates = streets
+            .filter { it.position.distanceInMetresTo(point) <= CANDIDATE_STREET_RADIUS_METRES }
+            .sortedBy { it.position.distanceInMetresTo(point) }
+            .take(MAX_REVERSE_CANDIDATES)
+        if (candidates.isEmpty()) return null
+
+        var best: Pair<SearchableStreet, KnownHouseNumber?>? = null
+        var bestDistance = Double.MAX_VALUE
+        for (street in candidates) {
+            val numbers = readHouseNumbers(street.id, street.position)
+            val nearestNumber = numbers.minByOrNull { it.position.distanceInMetresTo(point) }
+            // Une voie sans numéro n'est pas écartée : son point reste une
+            // indication, à condition d'être vraiment proche.
+            val distance = nearestNumber?.position?.distanceInMetresTo(point)
+                ?: street.position.distanceInMetresTo(point)
+            if (distance < bestDistance) {
+                bestDistance = distance
+                best = street to nearestNumber
+            }
+        }
+
+        val (street, number) = best ?: return null
+        if (bestDistance > NEAREST_ADDRESS_LIMIT_METRES) return null
+
+        // Au-delà de quelques mètres, le numéro n'est plus celui du point : le
+        // dire reviendrait à désigner un immeuble voisin. La voie, elle, reste
+        // une indication juste — « à proximité de la rue Chanzy » vaut mieux
+        // que rien, et mieux qu'un numéro faux.
+        val isAtTheAddress = bestDistance <= NUMBERED_ADDRESS_LIMIT_METRES
+        val row = readStreetRow(street.id)
+        return AddressResult(
+            streetId = street.id,
+            houseNumber = number?.number?.takeIf { isAtTheAddress },
+            houseNumberSuffix = if (isAtTheAddress) number?.suffix.orEmpty() else "",
+            streetName = row.displayName,
+            city = row.city,
+            postcode = row.postcode,
+            kind = row.kind,
+            position = number?.position ?: street.position,
+            precision = if (number == null || !isAtTheAddress) {
+                PositionPrecision.StreetOnly
+            } else {
+                PositionPrecision.Exact
+            },
+            distanceInMetres = bestDistance,
+        )
     }
 
     /**
@@ -377,5 +458,36 @@ class AddressIndex(
 
         /** Cent-millièmes de degré, ce qu'écrit le script de génération. */
         const val DEFAULT_DELTA_SCALE = 100_000.0
+
+        /**
+         * Rayon dans lequel une voie est examinée pour un géocodage inverse.
+         *
+         * Large à dessein : c'est le point *représentatif* de la voie qui est
+         * comparé, et la médiane d'une artère d'un kilomètre peut se trouver
+         * loin d'un point qu'elle longe pourtant.
+         */
+        const val CANDIDATE_STREET_RADIUS_METRES = 900.0
+
+        /** Au-delà, lire les numéros de voies supplémentaires n'apprend plus rien. */
+        const val MAX_REVERSE_CANDIDATES = 40
+
+        /**
+         * Distance en deçà de laquelle le numéro trouvé est bien celui du
+         * point. Cinquante mètres, c'est la largeur d'un carrefour.
+         *
+         * Mesuré sur les stations réelles du réseau : la moitié d'entre elles
+         * sont à moins de quinze mètres d'une adresse connue, neuf sur dix à
+         * moins de quarante.
+         */
+        const val NUMBERED_ADDRESS_LIMIT_METRES = 50.0
+
+        /**
+         * Distance au-delà de laquelle plus rien n'est dit.
+         *
+         * Entre les deux seuils, seule la voie est nommée, et comme un
+         * voisinage : une station posée au milieu d'un rond-point n'a pas
+         * d'adresse, mais dire de quelle rue elle est proche aide quand même.
+         */
+        const val NEAREST_ADDRESS_LIMIT_METRES = 150.0
     }
 }

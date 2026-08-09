@@ -103,6 +103,22 @@
     <string name="map_needs_tiles_title">La carte a besoin du fond de carte</string>
     <string name="map_needs_tiles_message">Installe le fond de carte depuis l\'écran de stockage. En attendant, la liste des stations reste utilisable.</string>
 
+    <!-- Détail d'une station (SPEC §7.2). -->
+    <plurals name="docks_total">
+        <item quantity="one">%1$d point d\'attache</item>
+        <item quantity="other">%1$d points d\'attache</item>
+    </plurals>
+    <!-- %1$s est le nombre de points d'attache, %2$s l'âge de la donnée. -->
+    <string name="station_capacity_and_age">%1$s · %2$s</string>
+    <!-- Une station sans adresse propre — au milieu d'un rond-point, d'une
+         place — est située par rapport à la voie la plus proche.
+         %1$s est un nom de voie. -->
+    <string name="station_address_nearby">À proximité de %1$s</string>
+    <string name="station_favourite_add">Mettre en favori</string>
+    <string name="station_favourite_remove">Retirer des favoris</string>
+    <string name="station_open_in_navigation">Ouvrir dans une appli de navigation</string>
+    <string name="station_no_navigation_app">Aucune application de cartographie n\'est installée sur cet appareil.</string>
+
     <!-- Recherche d'adresses dans l'index hors ligne (SPEC §4.3). À ne pas
          confondre avec le champ qui filtre la liste des stations. -->
     <string name="address_search_title">Chercher une adresse</string>

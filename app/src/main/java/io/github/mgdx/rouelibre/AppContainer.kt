@@ -72,7 +72,8 @@ class AppContainer(private val context: Context) {
             .build()
     }
 
-    private val preferences: AppPreferences by lazy {
+    /** Réglages et favoris, partagés par les écrans qui les lisent. */
+    val preferences: AppPreferences by lazy {
         AppPreferences(context.preferencesDataStore)
     }
 

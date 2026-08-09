@@ -49,7 +49,10 @@ class StationListFragment : Fragment() {
         )
     }
 
-    private val adapter = StationAdapter()
+    private val adapter = StationAdapter { entry ->
+        StationDetailSheet.newInstance(entry.station.id)
+            .show(parentFragmentManager, StationDetailSheet.TAG)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
