@@ -49,8 +49,13 @@ Le projet suit la progression du `SPEC.md` §16.
 | 4. Moteur de routage hors ligne | ✅ fait |
 | 5. Algorithme de trajet optimisé | ✅ fait |
 | 6. Recherche d'adresses locale | ✅ fait |
-| 7. Écrans restants | à faire |
+| 7. Écrans restants | en cours — détail d'une station, itinéraire et résultat sont faits |
 | 8. Finitions et métadonnées F-Droid | à faire |
+
+Une première version installable, **0.1.0-alpha**, existe : elle affiche la
+carte et les disponibilités, cherche une adresse hors ligne et calcule un
+itinéraire porte-à-porte. Les jeux de données s'y installent encore à la main,
+et plusieurs écrans manquent — voir le [CHANGELOG](CHANGELOG.md).
 
 ## Architecture
 

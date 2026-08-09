@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     // AGP 9 embarque le support Kotlin : appliquer en plus
     // « org.jetbrains.kotlin.android » est désormais une erreur.
@@ -21,7 +23,11 @@ android {
         minSdk = 26
         targetSdk = 37
         versionCode = 1
-        versionName = "0.1.0"
+        // Alpha : l'application fait le tour de son sujet — carte, recherche
+        // d'adresses, itinéraire porte-à-porte — mais les écrans de réglages,
+        // de favoris et d'accueil manquent, et les jeux de données s'installent
+        // encore à la main. Voir CHANGELOG.md.
+        versionName = "0.1.0-alpha"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -45,6 +51,33 @@ android {
         buildConfig = true
     }
 
+    /**
+     * Signature des compilations de release faites ici.
+     *
+     * F-Droid recompile et signe lui-même : cette clé ne sert donc jamais à ce
+     * qui sera publié là-bas. Elle ne sert qu'aux versions que l'on installe
+     * soi-même pour les essayer, comme cette alpha.
+     *
+     * Le fichier `keystore.properties` est ignoré par Git et n'existe
+     * généralement pas. Sans lui, la release est signée par la clé de debug —
+     * suffisant pour installer un essai, et surtout **aucune clé n'est
+     * inventée en douce** : le jour où le projet aura sa clé de publication,
+     * ce sera une décision prise, pas un fichier apparu tout seul.
+     */
+    val signingProperties = rootProject.file("keystore.properties")
+    signingConfigs {
+        create("selfSigned") {
+            if (signingProperties.exists()) {
+                val values = Properties()
+                signingProperties.inputStream().use { values.load(it) }
+                storeFile = rootProject.file(values.getProperty("storeFile"))
+                storePassword = values.getProperty("storePassword")
+                keyAlias = values.getProperty("keyAlias")
+                keyPassword = values.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -53,6 +86,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            signingConfig = if (signingProperties.exists()) {
+                signingConfigs.getByName("selfSigned")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
         debug {
             applicationIdSuffix = ".debug"

@@ -21,3 +21,9 @@ __pycache__/
 *.pyc
 /core/build
 /tools/node_modules
+
+# Clé de signature des essais installés à la main. Jamais dans le dépôt : une
+# clé versionnée n'est plus une clé (voir app/build.gradle.kts).
+keystore.properties
+*.jks
+*.keystore

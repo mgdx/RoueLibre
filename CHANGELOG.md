@@ -8,9 +8,21 @@ Les notes destinées aux utilisateurs vivent dans
 les développeurs. Ce fichier-ci s'adresse aux contributeurs et retient aussi ce
 qui n'a aucun effet visible.
 
-## [Non publié]
+## [0.1.0-alpha]
 
-Développement initial. Rien n'est encore publié.
+Première version installable. Elle fait le tour de son sujet — carte hors
+ligne, disponibilités en direct, recherche d'adresses, itinéraire
+porte-à-porte — mais **ce n'est pas encore une version complète** :
+
+- les jeux de données s'installent **à la main**, depuis l'écran de stockage ;
+  leur téléchargement depuis un manifeste (§4.4) n'existe pas encore ;
+- les écrans **réglages** (§7.6), **à propos** (§7.7), **favoris** (§7.5),
+  **premier lancement** (§7.9) et **nouveautés** (§7.10) manquent ;
+- l'ouverture depuis une autre application (§7.8) n'est pas déclarée ;
+- l'attribution complète, obligatoire au §4.5, n'est portée que par la carte.
+
+Elle est signée par une clé d'essai, jamais par une clé de publication : ce
+qui sortira sur F-Droid sera recompilé et signé là-bas.
 
 ### Ajouté
 
