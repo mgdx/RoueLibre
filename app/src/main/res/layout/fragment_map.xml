@@ -87,6 +87,22 @@
         app:layout_constraintBottom_toTopOf="@id/attribution"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Me localiser (SPEC §7.1). La permission n'est demandée qu'ici, au
+         moment où l'utilisateur en comprend la raison (SPEC §10). -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/locate_me"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_s"
+        android:contentDescription="@string/map_locate_me"
+        app:backgroundTint="@color/surface"
+        app:icon="@drawable/ic_my_location"
+        app:iconTint="@color/encre"
+        app:layout_constraintBottom_toTopOf="@id/open_search"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- Recherche d'adresses (SPEC §4.3), à portée du pouce comme les autres
          commandes principales. -->
     <com.google.android.material.button.MaterialButton

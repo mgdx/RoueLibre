@@ -10,6 +10,20 @@
     -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--
+        Localisation : demandée au moment de l'usage, sur appui du bouton « me
+        localiser », et jamais au lancement. Son refus ne bloque aucun écran —
+        l'utilisateur désigne alors ses points à la main (SPEC §10).
+        La position est obtenue du fournisseur du système, jamais des services
+        de localisation fusionnés de Google, et ne quitte pas l'appareil.
+        L'application n'est PAS déclarée exigeante en localisation : elle doit
+        s'installer sur un appareil sans GPS.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
 
     <application
         android:name=".RoueLibreApplication"

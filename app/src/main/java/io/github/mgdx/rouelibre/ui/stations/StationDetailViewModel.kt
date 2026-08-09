@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.github.mgdx.rouelibre.core.address.AddressResult
+import io.github.mgdx.rouelibre.core.geo.distanceInMetresTo
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.data.AppPreferences
 import io.github.mgdx.rouelibre.data.StationRepository
 import io.github.mgdx.rouelibre.data.addresses.AddressIndex
+import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,12 +24,15 @@ import java.time.Instant
  *   cache n'a pas été lu.
  * @property address l'adresse de la station, déduite de l'index hors ligne, ou
  *   `null` si l'index est absent ou ne connaît rien d'assez proche.
+ * @property distanceInMetres distance à vol d'oiseau depuis la position de
+ *   l'utilisateur, ou `null` s'il ne l'a pas partagée.
  * @property isFavourite la station figure parmi les favoris.
  * @property fetchedAt date de la dernière récupération réussie.
  */
 data class StationDetailUiState(
     val entry: StationWithAvailability? = null,
     val address: AddressResult? = null,
+    val distanceInMetres: Double? = null,
     val isFavourite: Boolean = false,
     val fetchedAt: Instant? = null,
 )
@@ -46,6 +51,7 @@ class StationDetailViewModel(
     private val repository: StationRepository,
     private val preferences: AppPreferences,
     private val addressIndex: AddressIndex,
+    private val deviceLocation: DeviceLocation,
     private val stationId: String,
 ) : ViewModel() {
 
@@ -55,13 +61,17 @@ class StationDetailViewModel(
     val state: StateFlow<StationDetailUiState> = mutableState.asStateFlow()
 
     private var addressResolved = false
+    private var distanceResolved = false
 
     init {
         viewModelScope.launch {
             repository.observeStations().collect { snapshot ->
                 val entry = snapshot.stations.firstOrNull { it.station.id == stationId }
                 mutableState.update { it.copy(entry = entry, fetchedAt = snapshot.fetchedAt) }
-                if (entry != null) resolveAddressOnce(entry)
+                if (entry != null) {
+                    resolveAddressOnce(entry)
+                    showDistanceOnce(entry)
+                }
             }
         }
         viewModelScope.launch {
@@ -85,6 +95,22 @@ class StationDetailViewModel(
         mutableState.update { it.copy(address = address) }
     }
 
+    /**
+     * Calcule la distance depuis la position, si elle est déjà connue.
+     *
+     * **Aucune permission n'est demandée ici** : ouvrir le détail d'une
+     * station n'est pas le moment de réclamer la localisation, et une
+     * distance manquante ne prive de rien (SPEC §10). Seule la dernière
+     * position connue est lue, ce qui n'allume aucun capteur.
+     */
+    private fun showDistanceOnce(entry: StationWithAvailability) {
+        if (distanceResolved) return
+        distanceResolved = true
+        val here = deviceLocation.lastKnown() ?: return
+        val distance = here.distanceInMetresTo(entry.station.position)
+        mutableState.update { it.copy(distanceInMetres = distance) }
+    }
+
     /** Met la station en favori, ou l'en retire (SPEC §7.2). */
     fun toggleFavourite() {
         viewModelScope.launch { preferences.toggleFavourite(stationId) }
@@ -95,6 +121,7 @@ class StationDetailViewModel(
         private val repository: StationRepository,
         private val preferences: AppPreferences,
         private val addressIndex: AddressIndex,
+        private val deviceLocation: DeviceLocation,
         private val stationId: String,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -106,6 +133,7 @@ class StationDetailViewModel(
                 repository,
                 preferences,
                 addressIndex,
+                deviceLocation,
                 stationId,
             ) as T
         }

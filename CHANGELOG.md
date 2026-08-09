@@ -50,6 +50,19 @@ Développement initial. Rien n'est encore publié.
   validé, puis mis en place — et un fichier refusé dit pourquoi.
 - **Filtre de la liste par nom de station**, insensible à la casse et aux
   accents, tolérant à l'ordre des mots, cherchant aussi le code postal.
+- **Localisation** (§7.1, §10) : bouton « me localiser » sur la carte, qui
+  demande la permission au moment de l'usage et jamais au lancement. Un refus
+  ne bloque rien et ne déclenche aucune relance. La position vient du
+  fournisseur du système — **jamais des services de localisation fusionnés de
+  Google**, interdits par la contrainte C2 — et n'est ni écrite, ni envoyée, ni
+  conservée d'une session à l'autre.
+  - Tous les fournisseurs disponibles sont interrogés **en même temps**, le
+    premier relevé l'emportant : le GPS est le plus précis mais reste muet en
+    intérieur, où le réseau répond en une seconde. Éprouvé sur appareil — la
+    première version, qui n'interrogeait que le GPS, attendait dix secondes
+    pour ne rien rendre.
+  - La distance depuis la position apparaît dans le détail d'une station dès
+    qu'une position est connue, sans jamais la réclamer à cette occasion.
 - **Détail d'une station** (§7.2), en feuille glissante depuis le bas, ouverte
   d'un toucher sur la carte comme sur une ligne de la liste : nom, adresse,
   vélos, places, points d'attache, état de service et âge de la donnée. La

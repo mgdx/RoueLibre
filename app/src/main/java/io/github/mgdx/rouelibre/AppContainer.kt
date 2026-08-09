@@ -16,6 +16,7 @@ import io.github.mgdx.rouelibre.data.StationRepository
 import io.github.mgdx.rouelibre.data.addresses.AddressIndex
 import io.github.mgdx.rouelibre.data.datasets.DatasetStore
 import io.github.mgdx.rouelibre.data.local.StationDatabase
+import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.data.network.GbfsRemoteSource
 import io.github.mgdx.rouelibre.data.routing.OfflineRouter
 import kotlinx.coroutines.Dispatchers
@@ -127,6 +128,14 @@ class AppContainer(private val context: Context) {
             )
         }
     }
+
+    /**
+     * Position de l'appareil, demandée au moment de l'usage seulement.
+     *
+     * Sans état : chaque appel interroge le système. Rien n'est mis en cache,
+     * donc rien ne survit à la session (SPEC §2, C3).
+     */
+    val deviceLocation: DeviceLocation by lazy { DeviceLocation(context) }
 
     /**
      * Recherche d'adresses hors ligne.

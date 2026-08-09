@@ -26,6 +26,7 @@ import io.github.mgdx.rouelibre.core.station.displayFor
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.databinding.SheetStationDetailBinding
 import io.github.mgdx.rouelibre.ui.address.toTitle
+import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -51,6 +52,7 @@ class StationDetailSheet : BottomSheetDialogFragment() {
             repository = container.stationRepository,
             preferences = container.preferences,
             addressIndex = container.addressIndex,
+            deviceLocation = container.deviceLocation,
             stationId = requireArguments().getString(ARGUMENT_STATION_ID).orEmpty(),
         )
     }
@@ -91,16 +93,22 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         views.name.text = entry.station.name
         views.bikesIndicator.display = entry.displayFor(AvailabilityMode.Bikes)
         views.docksIndicator.display = entry.displayFor(AvailabilityMode.Docks)
-        showAddress(state.address)
+        showAddress(state.address, state.distanceInMetres)
         showServiceState(state)
         showCapacityAndFreshness(entry.station, state.fetchedAt)
         showFavourite(state.isFavourite)
     }
 
-    private fun showAddress(address: AddressResult?) {
+    private fun showAddress(address: AddressResult?, distanceInMetres: Double?) {
         val views = binding ?: return
-        views.address.isGone = address == null
-        if (address == null) return
+        val distance = distanceInMetres?.let { requireContext().formatDistance(it) }
+        views.address.isGone = address == null && distance == null
+        if (address == null) {
+            // Sans adresse mais avec une position connue, la distance vaut
+            // encore d'être dite : elle situe la station par rapport à soi.
+            views.address.text = distance.orEmpty()
+            return
+        }
         val place = if (address.postcode.isNullOrBlank()) {
             address.city
         } else {
@@ -113,7 +121,10 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         } else {
             address.toTitle(requireContext())
         }
-        views.address.text = getString(R.string.address_detail, what, place)
+        val located = getString(R.string.address_detail, what, place)
+        views.address.text = distance
+            ?.let { getString(R.string.address_detail, located, it) }
+            ?: located
     }
 
     /**

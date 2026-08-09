@@ -100,6 +100,12 @@
     <!-- Attribution portée par la carte elle-même (SPEC §4.5). Tient sur une
          ligne ; l'attribution complète du réseau est dans « À propos ». -->
     <string name="map_attribution">© les contributeurs OpenStreetMap</string>
+    <!-- Bouton « me localiser » et ce qu'il peut répondre (SPEC §7.1, §10).
+         Le refus ne relance jamais : il est constaté, pas discuté. -->
+    <string name="map_locate_me">Me localiser</string>
+    <string name="map_location_denied">Sans localisation, désigne ton point de départ sur la carte ou par une adresse.</string>
+    <string name="map_location_unavailable">Position introuvable. Vérifie que la localisation est activée, puis réessaie.</string>
+
     <string name="map_needs_tiles_title">La carte a besoin du fond de carte</string>
     <string name="map_needs_tiles_message">Installe le fond de carte depuis l\'écran de stockage. En attendant, la liste des stations reste utilisable.</string>
 

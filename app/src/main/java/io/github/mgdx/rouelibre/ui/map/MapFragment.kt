@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -22,6 +23,7 @@ import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.freshnessOf
+import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
 import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
 import io.github.mgdx.rouelibre.ui.prefersReducedMotion
@@ -91,6 +93,34 @@ class MapFragment : Fragment() {
     /** Un point trouvé par la recherche d'adresses, et son libellé. */
     private data class PickedPlace(val position: LatLng, val label: String)
 
+    private var userPositionSource: GeoJsonSource? = null
+
+    /**
+     * La dernière position affichée, gardée en mémoire le temps de la session.
+     *
+     * Elle survit à une reconstruction de la vue — passer par la liste et
+     * revenir ne doit pas faire disparaître le point — et à rien d'autre :
+     * elle n'est écrite nulle part (SPEC §2, C3).
+     */
+    private var lastKnownPosition: Coordinates? = null
+
+    /**
+     * Demande les permissions de localisation, et n'insiste jamais.
+     *
+     * Le SPEC §10 est explicite : le refus ne doit ni bloquer un écran, ni
+     * déclencher de relance. L'utilisateur qui dit non garde une application
+     * entièrement utilisable, où il désigne ses points à la main.
+     */
+    private val requestLocationPermission = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions(),
+    ) { granted ->
+        if (granted.values.any { it }) {
+            locateMe()
+        } else {
+            showMessage(R.string.map_location_denied)
+        }
+    }
+
     private val viewModel: StationsViewModel by viewModels {
         StationsViewModel.Factory(
             (requireActivity().application as RoueLibreApplication)
@@ -125,6 +155,7 @@ class MapFragment : Fragment() {
         views.openStorage.setOnClickListener { show(StorageFragment()) }
         views.openList.setOnClickListener { show(StationListFragment()) }
         views.openSearch.setOnClickListener { openAddressSearch() }
+        views.locateMe.setOnClickListener { onLocateMeClicked() }
         views.modeToggle.setOnClickListener { toggleMode() }
         views.pickedPlace.setOnClickListener { showPickedPlace(null) }
         applyModeLabel()
@@ -279,6 +310,17 @@ class MapFragment : Fragment() {
         PickedPlaceMarker.registerImage(context, style)
         style.addLayer(PickedPlaceMarker.layer())
         publishPickedPlace()
+
+        val userPosition = GeoJsonSource(
+            UserPositionMarker.SOURCE_ID,
+            UserPositionMarker.featureFor(null),
+        )
+        userPositionSource = userPosition
+        style.addSource(userPosition)
+        style.addLayer(UserPositionMarker.layer(context))
+        // La position connue est réaffichée après une reconstruction de la vue,
+        // sans nouvelle demande au système.
+        lastKnownPosition?.let { userPosition.setGeoJson(UserPositionMarker.featureFor(it)) }
     }
 
     private fun publishStations() {
@@ -325,6 +367,59 @@ class MapFragment : Fragment() {
         StationDetailSheet.newInstance(stationId)
             .show(parentFragmentManager, StationDetailSheet.TAG)
         return true
+    }
+
+    // ------------------------------------------------------- localisation --
+
+    /**
+     * Répond au bouton « me localiser » (SPEC §7.1).
+     *
+     * C'est ici, et nulle part ailleurs, que la permission de localisation est
+     * demandée : au moment où l'utilisateur vient de l'appeler de ses vœux
+     * (SPEC §10).
+     */
+    private fun onLocateMeClicked() {
+        val location = container.deviceLocation
+        when {
+            !location.isPermitted() ->
+                requestLocationPermission.launch(DeviceLocation.PERMISSIONS)
+
+            !location.isAvailable() -> showMessage(R.string.map_location_unavailable)
+
+            else -> locateMe()
+        }
+    }
+
+    /**
+     * Cherche la position et y amène la carte.
+     *
+     * La position n'est ni conservée ni écrite : elle sert à cadrer la carte,
+     * puis vit dans la source d'affichage le temps de la session (SPEC §2, C3).
+     */
+    private fun locateMe() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            // Un premier relevé peut demander plusieurs secondes en intérieur.
+            // Éteindre le bouton pendant ce temps évite de laisser croire que
+            // l'appui s'est perdu — et évite d'en empiler plusieurs.
+            binding?.locateMe?.isEnabled = false
+            val position = try {
+                container.deviceLocation.current()
+            } finally {
+                binding?.locateMe?.isEnabled = true
+            }
+            if (position == null) {
+                showMessage(R.string.map_location_unavailable)
+                return@launch
+            }
+            lastKnownPosition = position
+            userPositionSource?.setGeoJson(UserPositionMarker.featureFor(position))
+            moveCameraTo(LatLng(position.latitude, position.longitude), USER_POSITION_ZOOM)
+        }
+    }
+
+    private fun showMessage(message: Int) {
+        val views = binding ?: return
+        Snackbar.make(views.root, message, Snackbar.LENGTH_LONG).show()
     }
 
     // ------------------------------------------------ recherche d'adresse --
@@ -549,6 +644,7 @@ class MapFragment : Fragment() {
         binding?.map?.onDestroy()
         stationSource = null
         pickedPlaceSource = null
+        userPositionSource = null
         mapLibreMap = null
         styleLoaded = false
         binding = null
@@ -564,6 +660,9 @@ class MapFragment : Fragment() {
          * mesure une quinzaine de pixels : sans cette marge, il faudrait viser.
          */
         const val TOUCH_SLOP_PIXELS = 32f
+
+        /** Zoom auquel la carte se pose sur la position de l'utilisateur. */
+        const val USER_POSITION_ZOOM = 16.0
 
         /** De combien un toucher sur un amas rapproche la carte. */
         const val CLUSTER_ZOOM_STEP = 2.0
