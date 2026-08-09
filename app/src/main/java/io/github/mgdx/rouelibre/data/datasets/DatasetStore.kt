@@ -3,6 +3,7 @@ package io.github.mgdx.rouelibre.data.datasets
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
+import android.provider.OpenableColumns
 import io.github.mgdx.rouelibre.core.data.DatasetImportResult
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.data.DatasetRejection
@@ -48,6 +49,9 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
     private val directory: File
         get() = File(context.filesDir, DIRECTORY_NAME).apply { mkdirs() }
 
+    /** Le répertoire d'un jeu de données, créé au besoin. */
+    fun directoryOf(kind: DatasetKind): File = File(directory, kind.id).apply { mkdirs() }
+
     private val indexFile: File
         get() = File(directory, INDEX_FILE_NAME)
 
@@ -63,8 +67,10 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
      * ouvrent le leur eux-mêmes, et recopier trente-cinq mégaoctets en mémoire
      * n'aurait aucun sens.
      */
-    fun fileOf(kind: DatasetKind): File? =
-        File(directory, kind.fileName).takeIf { it.isFile && it.length() > 0 }
+    fun fileOf(kind: DatasetKind): File? {
+        val name = kind.fileName ?: return null
+        return File(directoryOf(kind), name).takeIf { it.isFile && it.length() > 0 }
+    }
 
     /**
      * Installe un fichier choisi par l'utilisateur.
@@ -85,7 +91,11 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         source: Uri,
         expectedSha256: String? = null,
     ): DatasetImportResult = withContext(ioDispatcher) {
-        val staged = File(directory, "${kind.fileName}$STAGING_SUFFIX")
+        val targetName = kind.fileName ?: displayNameOf(source)
+            ?: return@withContext DatasetImportResult.Rejected(
+                DatasetRejection.TransferFailed("nom du fichier introuvable"),
+            )
+        val staged = File(directoryOf(kind), "$targetName$STAGING_SUFFIX")
         try {
             val digest = try {
                 context.contentResolver.openInputStream(source)?.use { stream ->
@@ -134,7 +144,7 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             }
 
             // Le remplacement n'a lieu qu'ici, une fois tout vérifié.
-            val target = File(directory, kind.fileName)
+            val target = File(directoryOf(kind), targetName)
             target.delete()
             if (!staged.renameTo(target)) {
                 return@withContext rejected(
@@ -145,7 +155,8 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
 
             val record = InstalledDataset(
                 kind = kind,
-                sizeBytes = target.length(),
+                sizeBytes = directoryOf(kind).walkTopDown().filter { it.isFile }
+                    .sumOf { it.length() },
                 sha256 = digest,
                 installedAt = Instant.now(),
                 formatVersion = formatVersion,
@@ -159,9 +170,21 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
 
     /** Supprime un jeu installé. L'utilisateur doit pouvoir reprendre la place. */
     suspend fun delete(kind: DatasetKind): Unit = withContext(ioDispatcher) {
-        File(directory, kind.fileName).delete()
+        directoryOf(kind).deleteRecursively()
         writeIndex(mutableInstalled.value - kind)
     }
+
+    /**
+     * Nom du document choisi dans le sélecteur.
+     *
+     * Nécessaire pour les jeux dont les fichiers gardent leur nom d'origine :
+     * le graphe de routage, dont BRouter déduit le nom des coordonnées.
+     */
+    private fun displayNameOf(source: Uri): String? =
+        context.contentResolver.query(source, null, null, null, null)?.use { cursor ->
+            val column = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            if (column >= 0 && cursor.moveToFirst()) cursor.getString(column) else null
+        }?.substringAfterLast('/')?.takeIf { it.isNotBlank() }
 
     /** Somme occupée par les jeux installés, affichée dans l'écran stockage. */
     fun occupiedBytes(): Long = mutableInstalled.value.values.sumOf { it.sizeBytes }
@@ -339,7 +362,7 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
                 .mapNotNull { it.toDomain() }
                 // Un fichier disparu — vidage du cache, restauration partielle
                 // — ne doit pas laisser une entrée fantôme dans l'écran.
-                .filter { File(directory, it.kind.fileName).isFile }
+                .filter { directoryOf(it.kind).listFiles()?.isNotEmpty() == true }
                 .associateBy { it.kind }
         } catch (_: Exception) {
             emptyMap()

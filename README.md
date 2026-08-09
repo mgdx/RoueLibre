@@ -46,7 +46,7 @@ Le projet suit la progression du `SPEC.md` §16.
 | 1. Récupération et affichage des données GBFS en liste | ✅ fait |
 | 2. Scripts de génération des données hors ligne | ✅ fait |
 | 3. Carte vectorielle et marqueurs | ✅ fait |
-| 4. Moteur de routage hors ligne | à faire |
+| 4. Moteur de routage hors ligne | ✅ fait |
 | 5. Algorithme de trajet optimisé | à faire |
 | 6. Recherche d'adresses locale | à faire |
 | 7. Écrans restants | à faire |
@@ -99,6 +99,15 @@ seule couche qui les met en mots français est l'interface. Le module métier n'
 pas le droit de contenir une chaîne affichable.
 
 ## Compiler
+
+Le dépôt contient un sous-module. Le cloner sans lui donnerait une
+compilation qui échoue sur le moteur de routage :
+
+```bash
+git clone --recurse-submodules https://github.com/mgdx/RoueLibre.git
+# ou, sur un dépôt déjà cloné :
+git submodule update --init
+```
 
 ```bash
 ./gradlew assembleDebug     # compilation
@@ -181,6 +190,7 @@ Le `SPEC.md` §4 impose de justifier chaque ajout. Rien n'entre sans raison.
 | **DataStore** | réglages | Quelques valeurs isolées ; Room serait disproportionné. |
 | **Coroutines** | asynchrone | Standard du langage. |
 | **Material Components** | socle de l'interface | Composants accessibles éprouvés. Aucune de ses couleurs par défaut ne subsiste. |
+| **BRouter** | calcul d'itinéraires hors ligne | Moteur éprouvé, orienté cyclisme, profils paramétrables. Intégré comme **sous-module Git** épinglé sur une étiquette : l'artefact Maven `org.btools:brouter-core` que l'on trouve mentionné n'est publié nulle part. MIT, compatible GPLv3, avis de licence conservé dans les mentions de l'application. |
 | **MapLibre Native** | carte vectorielle hors ligne | Seule dépendance native du projet, et seule entorse assumée à la contrainte de taille : c'est le prix du hors-ligne. Lit le MBTiles directement sur le disque, sans serveur de tuiles. BSD-2-Clause, minSdk 23. |
 | **AndroidX** *(core, appcompat, fragment, lifecycle, recyclerview, swiperefreshlayout, constraintlayout)* | briques d'interface | Base d'une application à vues XML. |
 | **Atkinson Hyperlegible** | police de texte | Dessinée par le Braille Institute pour la basse vision : le 0 se distingue du O, le 1 du l. Pour une application lue en marchant, c'est fonctionnel. SIL OFL. |

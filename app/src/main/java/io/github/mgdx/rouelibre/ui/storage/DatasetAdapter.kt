@@ -133,6 +133,9 @@ fun formatBytes(bytes: Long, locale: Locale): String = when {
  * Chaque refus dit ce qui ne va pas et ce qu'il faut faire, jamais un code
  * technique (SPEC §14).
  */
+/** Ce que les scripts de génération produisent pour le graphe de routage. */
+private const val EXPECTED_ROUTING_FILE = "*.rd5"
+
 fun StorageMessage.toText(context: Context): String = when (this) {
     is StorageMessage.Installed ->
         context.getString(R.string.dataset_imported, context.getString(kind.nameResource()))
@@ -143,7 +146,10 @@ fun StorageMessage.toText(context: Context): String = when (this) {
     is StorageMessage.Rejected -> when (val cause = reason) {
         DatasetRejection.Empty -> context.getString(R.string.dataset_rejected_empty)
         is DatasetRejection.WrongFormat ->
-            context.getString(R.string.dataset_rejected_format, kind.fileName)
+            context.getString(
+                R.string.dataset_rejected_format,
+                kind.fileName ?: EXPECTED_ROUTING_FILE,
+            )
         is DatasetRejection.UnsupportedFormatVersion ->
             context.getString(
                 R.string.dataset_rejected_version,

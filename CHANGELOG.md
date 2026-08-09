@@ -32,6 +32,10 @@ Développement initial. Rien n'est encore publié.
   embarquées, échelle d'espacement et rayon uniques.
 - **Écran de liste des stations** avec l'indicateur de disponibilité, la
   bascule vélos/places, le tirer-pour-rafraîchir et l'âge de la donnée.
+- **Moteur de routage hors ligne** (§5) : BRouter intégré comme sous-module
+  Git, avec deux profils écrits pour ce projet — piéton urbain et vélo de
+  libre-service. Le graphe est lu depuis le fichier installé, les profils sont
+  dans l'APK, rien ne sort sur le réseau.
 - **Carte vectorielle hors ligne** (§7.1) : fond de carte lu depuis le fichier
   MBTiles installé, style sobre et désaturé piloté par les jetons de couleur du
   projet, glyphes de texte embarqués dans l'APK. Marqueurs de stations reprenant
@@ -58,6 +62,13 @@ Développement initial. Rien n'est encore publié.
   correctes, ce qui ne se voit qu'en release.
 
 ### Notes techniques
+
+- L'artefact Maven `org.btools:brouter-core` mentionné par le cahier des
+  charges **n'existe pas** : zéro résultat sur Maven Central. BRouter est donc
+  consommé comme build composite depuis un sous-module épinglé sur v1.7.10.
+- BRouter déduit le nom de son fichier de segment des coordonnées cherchées —
+  `E0_N50.rd5` pour Lille. Le graphe conserve donc son nom d'origine à
+  l'installation, contrairement aux deux autres jeux de données.
 
 - L'URL du flux GBFS a été relevée dans le catalogue MobilityData et recoupée
   avec le Point d'Accès National, dont la ressource redirige vers la même

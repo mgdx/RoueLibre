@@ -1,0 +1,86 @@
+# Profil piéton urbain — Roue Libre
+#
+# Sert les deux trajets d'accès d'un itinéraire marche → vélo → marche
+# (SPEC.md §5). Il est écrit pour la ville : trottoirs, traversées, passages
+# couverts. Ce n'est pas un profil de randonnée — ni pente technique, ni
+# sac_scale, ni sentier de montagne.
+#
+# Les facteurs de coût multiplient la distance. Un facteur de 2 signifie
+# qu'on acceptera un détour allant jusqu'au double de la longueur pour éviter
+# ce type de voie. Ils traduisent un CONFORT, pas une vitesse : la vitesse de
+# marche est appliquée par l'application, uniformément.
+#
+# Licence : GPLv3, comme le reste du projet.
+
+---context:global
+
+assign validForFoot = true
+
+# Aucune instruction vocale : la navigation guidée est hors périmètre (§13).
+assign turnInstructionMode = 0
+
+# Terrain plat. La métropole lilloise culmine à une cinquantaine de mètres,
+# et à pied une côte de cette ampleur ne justifie aucun détour.
+assign downhillcost = 0
+assign uphillcost = 0
+
+---context:way
+
+# Un piéton tourne sans y perdre de temps : ni coût de virage, ni coût
+# d'entrée dans une voie.
+assign turncost = 0
+assign initialcost = 0
+
+# --- accès ---------------------------------------------------------------
+
+# Le piéton est explicitement refusé.
+assign foot_refused = foot=no|private|use_sidepath
+
+# Voie interdite à tous, sans autorisation piétonne explicite.
+assign closed_to_all =
+  and access=no|private not foot=yes|designated|permissive
+
+# Voies rapides. Elles sont légalement interdites aux piétons et n'ont pas de
+# trottoir ; y envoyer quelqu'un serait dangereux, pas seulement désagréable.
+assign motorway_like = highway=motorway|motorway_link|trunk|trunk_link
+
+assign is_forbidden = or foot_refused or closed_to_all motorway_like
+
+# --- confort -------------------------------------------------------------
+
+# Voies faites pour marcher, ou dont la voiture est absente.
+assign pedestrian_way =
+  highway=footway|pedestrian|path|steps|corridor|platform|living_street
+
+# Voies calmes où le trottoir est la règle.
+assign quiet_way = highway=residential|service|track|unclassified|road
+
+assign costfactor
+
+  switch is_forbidden 100000
+
+  # Les marches ralentissent et excluent poussettes et fauteuils ; elles
+  # restent praticables, d'où une pénalité modérée plutôt qu'un refus.
+  switch highway=steps 1.4
+
+  switch pedestrian_way 1.0
+
+  switch quiet_way 1.1
+
+  # Les axes ont des trottoirs mais du bruit, des carrefours et des
+  # traversées longues. La pénalité croît avec le trafic.
+  switch highway=tertiary|tertiary_link 1.3
+  switch highway=secondary|secondary_link 1.7
+  switch highway=primary|primary_link 2.2
+
+  # Une voie sans type reconnu mais autorisée reste empruntable en dernier
+  # recours.
+  2.5
+
+---context:node
+
+# Les obstacles qui bloquent réellement le passage. Une barrière franchissable
+# — chicane, potelet — ne coûte rien à un piéton, contrairement à un vélo.
+assign initialcost =
+  switch or barrier=gate|lift_gate|swing_gate access=no|private 300
+  0

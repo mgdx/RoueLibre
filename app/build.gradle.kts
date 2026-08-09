@@ -185,6 +185,8 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
     implementation(libs.maplibre)
+    implementation(libs.brouter.core)
+    implementation(libs.brouter.mapaccess)
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)

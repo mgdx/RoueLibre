@@ -14,6 +14,7 @@ import io.github.mgdx.rouelibre.data.StationRepository
 import io.github.mgdx.rouelibre.data.datasets.DatasetStore
 import io.github.mgdx.rouelibre.data.local.StationDatabase
 import io.github.mgdx.rouelibre.data.network.GbfsRemoteSource
+import io.github.mgdx.rouelibre.data.routing.OfflineRouter
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import java.time.Duration
@@ -88,6 +89,16 @@ class AppContainer(private val context: Context) {
      */
     val datasetStore: DatasetStore by lazy {
         DatasetStore(context, Dispatchers.IO)
+    }
+
+    /**
+     * Calcul d'itinéraires sur l'appareil.
+     *
+     * Le calcul est purement processeur : il tourne sur le répartiteur prévu
+     * pour cela, pas sur celui des entrées-sorties.
+     */
+    val router: OfflineRouter by lazy {
+        OfflineRouter(context, datasetStore, Dispatchers.Default)
     }
 
     /** Source unique des stations et de leur disponibilité. */
