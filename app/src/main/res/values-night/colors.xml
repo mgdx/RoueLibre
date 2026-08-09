@@ -39,4 +39,22 @@
 
     <!-- Encre posée sur une surface inversée. -->
     <color name="encre_inverse">#0E1418</color>
+
+    <!-- Palette du fond de carte, thème sombre. Même désaturation, valeurs
+         inversées : la carte reste un décor sous les marqueurs. -->
+    <color name="map_land">#11171C</color>
+    <color name="map_water">#16232B</color>
+    <color name="map_greenery">#17211C</color>
+    <color name="map_building">#1A222A</color>
+    <color name="map_building_edge">#222C35</color>
+    <color name="map_road_major">#2A343C</color>
+    <color name="map_road_major_edge">#3A464F</color>
+    <color name="map_road_minor">#1D262D</color>
+    <color name="map_rail">#39454D</color>
+    <color name="map_boundary">#33404A</color>
+    <color name="map_label">#93A3AD</color>
+    <color name="map_label_strong">#C9D6DE</color>
+    <color name="map_label_halo">#11171C</color>
+    <color name="map_marker_minor">#5A6A75</color>
+
 </resources>

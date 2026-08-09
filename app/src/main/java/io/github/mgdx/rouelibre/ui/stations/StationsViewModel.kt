@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 
 /**
- * État de l'écran listant les stations.
+ * État des écrans qui montrent les stations.
  *
  * @property stations les stations retenues par la recherche, prêtes à être
  *   affichées.
@@ -31,7 +31,7 @@ import java.time.Instant
  * @property hasLoadedOnce vrai dès que le cache a été lu, ce qui distingue
  *   « en cours de chargement » de « réellement vide ».
  */
-data class StationListUiState(
+data class StationsUiState(
     val stations: List<StationWithAvailability> = emptyList(),
     val query: String = "",
     val isRefreshing: Boolean = false,
@@ -67,17 +67,21 @@ enum class Emptiness {
 }
 
 /**
- * Présente la liste des stations et pilote son rafraîchissement.
+ * Présente les stations et pilote leur rafraîchissement.
+ *
+ * Partagé par la carte et par la liste : les deux écrans montrent les mêmes
+ * stations, avec la même politique de fraîcheur. Seule la liste se sert du
+ * champ de recherche.
  *
  * Le modèle ne connaît ni vue ni ressource : il expose un état et des
  * événements, la vue choisit comment les montrer.
  */
-class StationListViewModel(private val repository: StationRepository) : ViewModel() {
+class StationsViewModel(private val repository: StationRepository) : ViewModel() {
 
-    private val mutableState = MutableStateFlow(StationListUiState())
+    private val mutableState = MutableStateFlow(StationsUiState())
 
     /** L'état courant de l'écran. */
-    val state: StateFlow<StationListUiState> = mutableState.asStateFlow()
+    val state: StateFlow<StationsUiState> = mutableState.asStateFlow()
 
     /**
      * Les échecs à signaler, une seule fois chacun.
@@ -154,10 +158,10 @@ class StationListViewModel(private val repository: StationRepository) : ViewMode
     class Factory(private val repository: StationRepository) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            require(modelClass.isAssignableFrom(StationListViewModel::class.java)) {
+            require(modelClass.isAssignableFrom(StationsViewModel::class.java)) {
                 "modèle inattendu : ${modelClass.name}"
             }
-            return StationListViewModel(repository) as T
+            return StationsViewModel(repository) as T
         }
     }
 }

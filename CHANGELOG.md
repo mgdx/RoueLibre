@@ -32,6 +32,11 @@ Développement initial. Rien n'est encore publié.
   embarquées, échelle d'espacement et rayon uniques.
 - **Écran de liste des stations** avec l'indicateur de disponibilité, la
   bascule vélos/places, le tirer-pour-rafraîchir et l'âge de la donnée.
+- **Carte vectorielle hors ligne** (§7.1) : fond de carte lu depuis le fichier
+  MBTiles installé, style sobre et désaturé piloté par les jetons de couleur du
+  projet, glyphes de texte embarqués dans l'APK. Marqueurs de stations reprenant
+  l'échelle de disponibilité, regroupés aux zooms éloignés, attribution
+  OpenStreetMap portée par la carte elle-même.
 - **Écran « stockage »** (§4.4) : les trois jeux de données hors ligne avec
   leur taille et leur date, import manuel par le sélecteur de documents,
   suppression. L'installation est atomique — le fichier est écrit à côté,
@@ -46,6 +51,8 @@ Développement initial. Rien n'est encore publié.
   installé, ce qu'exige le critère d'acceptation §11.1.
 - En mode avion, les dernières disponibilités connues restent affichées et
   l'application le dit, sans erreur bloquante.
+- La carte s'affiche, se déplace et se zoome **sans aucune requête réseau** :
+  tuiles lues sur le disque, glyphes dans l'APK.
 - La compilation de release avec R8 produit **2,82 Mo par architecture** et
   fonctionne : les règles de conservation de kotlinx.serialization sont
   correctes, ce qui ne se voit qu'en release.

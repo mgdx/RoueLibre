@@ -45,7 +45,7 @@ Le projet suit la progression du `SPEC.md` §16.
 |---|---|
 | 1. Récupération et affichage des données GBFS en liste | ✅ fait |
 | 2. Scripts de génération des données hors ligne | ✅ fait |
-| 3. Carte vectorielle et marqueurs | à faire |
+| 3. Carte vectorielle et marqueurs | ✅ fait |
 | 4. Moteur de routage hors ligne | à faire |
 | 5. Algorithme de trajet optimisé | à faire |
 | 6. Recherche d'adresses locale | à faire |
@@ -110,8 +110,10 @@ adb install -r app/build/outputs/apk/debug/app-universal-debug.apk
 Il faut un JDK 17 ou plus et le SDK Android (compileSdk 37). Aucune clé, aucun
 compte, aucun service tiers n'est nécessaire pour compiler.
 
-Taille de l'APK de release mesurée le 9 août 2026, avant l'intégration de la
-carte : **2,82 Mo par architecture**, pour un plafond de 12 Mo.
+Taille de l'APK de release mesurée le 9 août 2026, carte comprise :
+**7,15 Mo en arm64-v8a** et 6,61 Mo en armeabi-v7a, pour un plafond de 12 Mo
+par architecture. Les bibliothèques natives de MapLibre sont empaquetées
+compressées — sans quoi le même APK pèserait 14,87 Mo.
 
 ## Générer les jeux de données hors ligne
 
@@ -179,6 +181,7 @@ Le `SPEC.md` §4 impose de justifier chaque ajout. Rien n'entre sans raison.
 | **DataStore** | réglages | Quelques valeurs isolées ; Room serait disproportionné. |
 | **Coroutines** | asynchrone | Standard du langage. |
 | **Material Components** | socle de l'interface | Composants accessibles éprouvés. Aucune de ses couleurs par défaut ne subsiste. |
+| **MapLibre Native** | carte vectorielle hors ligne | Seule dépendance native du projet, et seule entorse assumée à la contrainte de taille : c'est le prix du hors-ligne. Lit le MBTiles directement sur le disque, sans serveur de tuiles. BSD-2-Clause, minSdk 23. |
 | **AndroidX** *(core, appcompat, fragment, lifecycle, recyclerview, swiperefreshlayout, constraintlayout)* | briques d'interface | Base d'une application à vues XML. |
 | **Atkinson Hyperlegible** | police de texte | Dessinée par le Braille Institute pour la basse vision : le 0 se distingue du O, le 1 du l. Pour une application lue en marchant, c'est fonctionnel. SIL OFL. |
 | **Bricolage Grotesque** | police des chiffres | Les nombres de vélos sont l'information centrale ; ils méritent une lettre reconnaissable de loin. Figée en deux instances statiques de 91 ko. SIL OFL. |

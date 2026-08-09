@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.databinding.ActivityMainBinding
-import io.github.mgdx.rouelibre.ui.stations.StationListFragment
+import io.github.mgdx.rouelibre.ui.map.MapFragment
 
 /**
  * L'unique activité de l'application (SPEC §3).
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         // restauré par le système ; le replacer effacerait son état.
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.content, StationListFragment())
+                .replace(R.id.content, MapFragment())
                 .commit()
         }
     }

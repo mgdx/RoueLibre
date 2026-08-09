@@ -41,8 +41,8 @@ class StationListFragment : Fragment() {
 
     private var binding: FragmentStationListBinding? = null
 
-    private val viewModel: StationListViewModel by viewModels {
-        StationListViewModel.Factory(
+    private val viewModel: StationsViewModel by viewModels {
+        StationsViewModel.Factory(
             (requireActivity().application as RoueLibreApplication)
                 .container
                 .stationRepository,
@@ -176,7 +176,7 @@ class StationListFragment : Fragment() {
      * recherche infructueuse s'efface. Proposer « Rafraîchir » à quelqu'un qui
      * a fait une faute de frappe l'enverrait chercher une panne inexistante.
      */
-    private fun showEmptyState(state: StationListUiState) {
+    private fun showEmptyState(state: StationsUiState) {
         val views = binding ?: return
         views.emptyState.isVisible = state.emptiness != Emptiness.None
         when (state.emptiness) {

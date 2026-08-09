@@ -95,6 +95,14 @@
     <string name="action_refresh">Rafraîchir</string>
     <string name="action_retry">Réessayer</string>
 
+    <!-- Écran carte (SPEC §7.1). -->
+    <string name="map_open_list">Voir la liste des stations</string>
+    <!-- Attribution portée par la carte elle-même (SPEC §4.5). Tient sur une
+         ligne ; l'attribution complète du réseau est dans « À propos ». -->
+    <string name="map_attribution">© les contributeurs OpenStreetMap</string>
+    <string name="map_needs_tiles_title">La carte a besoin du fond de carte</string>
+    <string name="map_needs_tiles_message">Installe le fond de carte depuis l\'écran de stockage. En attendant, la liste des stations reste utilisable.</string>
+
     <!-- Écran « stockage » : ce que l'application occupe, et comment le
          reprendre (SPEC §4.4). -->
     <string name="storage_title">Stockage</string>

@@ -86,6 +86,14 @@ android {
     }
 
     packaging {
+        jniLibs {
+            // Compresse les bibliothèques natives dans l'APK. Android les
+            // extrait alors à l'installation, ce qui occupe un peu plus de
+            // place sur l'appareil mais divise par deux le téléchargement —
+            // treize mégaoctets de MapLibre en arm64. Sur un dépôt comme
+            // F-Droid, c'est le poids du téléchargement qui compte.
+            useLegacyPackaging = true
+        }
         resources {
             excludes += setOf(
                 "/META-INF/{AL2.0,LGPL2.1}",
@@ -176,6 +184,7 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
+    implementation(libs.maplibre)
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)

@@ -1,0 +1,275 @@
+{
+  "version": 8,
+  "name": "Roue Libre",
+  "metadata": {
+    "roue-libre:comment": [
+      "Style du fond de carte — SPEC.md §4.2 et §7.",
+      "",
+      "Tout ce qui est entre doubles accolades est remplacé au chargement :",
+      "les couleurs viennent des jetons de res/values/colors.xml, et le chemin",
+      "des tuiles n'est connu qu'à l'exécution, puisque le fichier est installé",
+      "dans le stockage privé de l'application.",
+      "",
+      "Aucune URL distante. Les tuiles sont lues sur le disque, les glyphes sont",
+      "dans l'APK : afficher la carte ne fait sortir aucune requête (§2, C3).",
+      "",
+      "Pas de feuille de sprites : les repères sont dessinés en cercles plutôt",
+      "qu'en icônes. C'est plus sobre, et cela évite d'embarquer une planche",
+      "d'images pour une poignée de symboles."
+    ]
+  },
+  "glyphs": "asset://glyphs/{fontstack}/{range}.pbf",
+  "sources": {
+    "vecteur": {
+      "type": "vector",
+      "url": "mbtiles://{{tilesPath}}"
+    }
+  },
+  "layers": [
+    {
+      "id": "fond",
+      "type": "background",
+      "paint": { "background-color": "{{map_land}}" }
+    },
+    {
+      "id": "vegetation",
+      "type": "fill",
+      "source": "vecteur",
+      "source-layer": "landcover",
+      "paint": { "fill-color": "{{map_greenery}}" }
+    },
+    {
+      "id": "eau",
+      "type": "fill",
+      "source": "vecteur",
+      "source-layer": "water",
+      "paint": { "fill-color": "{{map_water}}" }
+    },
+    {
+      "id": "cours-d-eau",
+      "type": "line",
+      "source": "vecteur",
+      "source-layer": "waterway",
+      "paint": {
+        "line-color": "{{map_water}}",
+        "line-width": ["interpolate", ["linear"], ["zoom"], 12, 0.8, 16, 4]
+      }
+    },
+    {
+      "id": "limites-communales",
+      "type": "line",
+      "source": "vecteur",
+      "source-layer": "boundary",
+      "paint": {
+        "line-color": "{{map_boundary}}",
+        "line-width": 1,
+        "line-dasharray": [3, 3]
+      }
+    },
+    {
+      "id": "batiments",
+      "type": "fill",
+      "source": "vecteur",
+      "source-layer": "building",
+      "minzoom": 15,
+      "paint": {
+        "fill-color": "{{map_building}}",
+        "fill-outline-color": "{{map_building_edge}}",
+        "fill-opacity": ["interpolate", ["linear"], ["zoom"], 15, 0, 15.6, 1]
+      }
+    },
+    {
+      "id": "voirie-secondaire",
+      "type": "line",
+      "source": "vecteur",
+      "source-layer": "road_minor",
+      "minzoom": 13,
+      "layout": { "line-cap": "round", "line-join": "round" },
+      "paint": {
+        "line-color": "{{map_road_minor}}",
+        "line-width": ["interpolate", ["linear"], ["zoom"], 13, 0.6, 16, 6]
+      }
+    },
+    {
+      "id": "voirie-principale-contour",
+      "type": "line",
+      "source": "vecteur",
+      "source-layer": "road_major",
+      "layout": { "line-cap": "round", "line-join": "round" },
+      "paint": {
+        "line-color": "{{map_road_major_edge}}",
+        "line-width": ["interpolate", ["linear"], ["zoom"], 10, 1.4, 16, 12]
+      }
+    },
+    {
+      "id": "voirie-principale",
+      "type": "line",
+      "source": "vecteur",
+      "source-layer": "road_major",
+      "layout": { "line-cap": "round", "line-join": "round" },
+      "paint": {
+        "line-color": "{{map_road_major}}",
+        "line-width": ["interpolate", ["linear"], ["zoom"], 10, 0.6, 16, 9]
+      }
+    },
+    {
+      "id": "voies-ferrees",
+      "type": "line",
+      "source": "vecteur",
+      "source-layer": "railway",
+      "paint": {
+        "line-color": "{{map_rail}}",
+        "line-width": ["interpolate", ["linear"], ["zoom"], 11, 0.5, 16, 2],
+        "line-dasharray": [4, 3]
+      }
+    },
+    {
+      "id": "arrets-de-bus",
+      "type": "circle",
+      "source": "vecteur",
+      "source-layer": "busstop",
+      "minzoom": 15,
+      "paint": {
+        "circle-radius": ["interpolate", ["linear"], ["zoom"], 15, 1.2, 16, 2],
+        "circle-color": "{{map_marker_minor}}",
+        "circle-opacity": 0.7
+      }
+    },
+    {
+      "id": "reperes",
+      "type": "circle",
+      "source": "vecteur",
+      "source-layer": "poi",
+      "minzoom": 13.5,
+      "paint": {
+        "circle-radius": 2.4,
+        "circle-color": "{{map_marker_minor}}"
+      }
+    },
+    {
+      "id": "transports",
+      "type": "circle",
+      "source": "vecteur",
+      "source-layer": "transit",
+      "paint": {
+        "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 1.8, 16, 4.5],
+        "circle-color": "{{map_label_strong}}",
+        "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 12, 0, 14, 1.5],
+        "circle-stroke-color": "{{map_label_halo}}"
+      }
+    },
+    {
+      "id": "noms-de-rues",
+      "type": "symbol",
+      "source": "vecteur",
+      "source-layer": "road_minor",
+      "minzoom": 15,
+      "filter": ["has", "name"],
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": ["get", "name"],
+        "text-font": ["Atkinson Hyperlegible Regular"],
+        "text-size": 11,
+        "text-letter-spacing": 0.02,
+        "text-max-angle": 35,
+        "symbol-spacing": 260
+      },
+      "paint": {
+        "text-color": "{{map_label}}",
+        "text-halo-color": "{{map_label_halo}}",
+        "text-halo-width": 1.4
+      }
+    },
+    {
+      "id": "noms-d-axes",
+      "type": "symbol",
+      "source": "vecteur",
+      "source-layer": "road_major",
+      "minzoom": 13,
+      "filter": ["has", "name"],
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": ["get", "name"],
+        "text-font": ["Atkinson Hyperlegible Regular"],
+        "text-size": 12,
+        "text-max-angle": 35,
+        "symbol-spacing": 300
+      },
+      "paint": {
+        "text-color": "{{map_label}}",
+        "text-halo-color": "{{map_label_halo}}",
+        "text-halo-width": 1.4
+      }
+    },
+    {
+      "id": "noms-de-transports",
+      "type": "symbol",
+      "source": "vecteur",
+      "source-layer": "transit",
+      "minzoom": 13,
+      "filter": ["has", "name"],
+      "layout": {
+        "text-field": ["get", "name"],
+        "text-font": ["Atkinson Hyperlegible Regular"],
+        "text-size": 11,
+        "text-anchor": "left",
+        "text-offset": [0.7, 0],
+        "text-optional": true
+      },
+      "paint": {
+        "text-color": "{{map_label}}",
+        "text-halo-color": "{{map_label_halo}}",
+        "text-halo-width": 1.4
+      }
+    },
+    {
+      "id": "noms-de-reperes",
+      "type": "symbol",
+      "source": "vecteur",
+      "source-layer": "poi",
+      "minzoom": 14.5,
+      "filter": ["has", "name"],
+      "layout": {
+        "text-field": ["get", "name"],
+        "text-font": ["Atkinson Hyperlegible Regular"],
+        "text-size": 10.5,
+        "text-anchor": "top",
+        "text-offset": [0, 0.5],
+        "text-max-width": 8,
+        "text-optional": true
+      },
+      "paint": {
+        "text-color": "{{map_label}}",
+        "text-halo-color": "{{map_label_halo}}",
+        "text-halo-width": 1.4
+      }
+    },
+    {
+      "id": "noms-de-communes",
+      "type": "symbol",
+      "source": "vecteur",
+      "source-layer": "place",
+      "layout": {
+        "text-field": ["get", "name"],
+        "text-font": ["Atkinson Hyperlegible Bold"],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          10,
+          ["case", ["==", ["get", "place"], "city"], 14, 10],
+          14,
+          ["case", ["==", ["get", "place"], "city"], 20, 13]
+        ],
+        "text-letter-spacing": 0.06,
+        "text-max-width": 9,
+        "text-transform": "uppercase"
+      },
+      "paint": {
+        "text-color": "{{map_label_strong}}",
+        "text-halo-color": "{{map_label_halo}}",
+        "text-halo-width": 1.8
+      }
+    }
+  ]
+}

@@ -60,4 +60,31 @@
 
     <!-- Encre posée sur une surface inversée. -->
     <color name="encre_inverse">#FAFCFD</color>
+
+    <!--
+        Palette du fond de carte (SPEC §7).
+
+        Volontairement DÉSATURÉE : la carte est un décor, les stations sont le
+        sujet. Chaque teinte est tirée vers le gris pour que les marqueurs
+        pétrole ressortent sans avoir à crier.
+
+        Ces jetons sont injectés dans assets/map/style.json au chargement : le
+        style ne contient aucune couleur en dur, et le thème sombre ne change
+        que ces valeurs, jamais la structure des couches.
+    -->
+    <color name="map_land">#EEF1F3</color>
+    <color name="map_water">#C9D7DD</color>
+    <color name="map_greenery">#DCE4DC</color>
+    <color name="map_building">#E2E7EB</color>
+    <color name="map_building_edge">#D3DADF</color>
+    <color name="map_road_major">#FFFFFF</color>
+    <color name="map_road_major_edge">#D2D9DE</color>
+    <color name="map_road_minor">#F8FAFB</color>
+    <color name="map_rail">#BAC4CA</color>
+    <color name="map_boundary">#C0CAD1</color>
+    <color name="map_label">#4B5A63</color>
+    <color name="map_label_strong">#28353D</color>
+    <color name="map_label_halo">#EEF1F3</color>
+    <color name="map_marker_minor">#93A1A9</color>
+
 </resources>

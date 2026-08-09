@@ -46,10 +46,15 @@
     "east": 3.241396
   },
   "map": {
-    "$comment": "Centre et zoom d'ouverture quand la position n'est pas disponible.",
+    "$comment": [
+      "Centre et zoom d'ouverture quand la position n'est pas disponible.",
+      "MapLibre compte en tuiles de 512 pixels : son zoom est décalé d'environ",
+      "un cran par rapport à la convention des tuiles de 256. Le zoom 11,2 y",
+      "cadre l'ensemble de l'agglomération."
+    ],
     "defaultCenterLatitude": 50.633333,
     "defaultCenterLongitude": 3.066667,
-    "defaultZoom": 12.5,
+    "defaultZoom": 11.2,
     "minZoom": 10,
     "maxZoom": 16
   },
