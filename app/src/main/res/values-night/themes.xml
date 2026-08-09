@@ -1,7 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Thème sombre. Les couleurs elles-mêmes sont redéfinies dans
+    values-night/colors.xml ; il ne reste ici que ce qui ne peut pas l'être
+    par une simple ressource de couleur.
+-->
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.RoueLibre" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+    <style name="Theme.RoueLibre" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/signal</item>
+        <item name="colorOnPrimary">@color/papier</item>
+        <item name="colorSecondary">@color/encre_douce</item>
+        <item name="colorOnSecondary">@color/papier</item>
+        <item name="colorError">@color/alerte</item>
+        <item name="colorOnError">@color/papier</item>
+
+        <item name="android:colorBackground">@color/papier</item>
+        <item name="colorOnBackground">@color/encre</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/encre</item>
+        <item name="colorSurfaceVariant">@color/surface</item>
+        <item name="colorOnSurfaceVariant">@color/encre_douce</item>
+        <item name="colorOutline">@color/trait</item>
+
+        <item name="android:statusBarColor">@color/papier</item>
+        <item name="android:navigationBarColor">@color/papier</item>
+        <!-- Icônes de la barre d'état en clair sur fond sombre. -->
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+
+        <item name="android:textAppearance">@style/TextAppearance.RoueLibre.Body</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.RoueLibre.Title</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.RoueLibre.Body</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.RoueLibre.Secondary</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.RoueLibre.Label</item>
+
+        <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.RoueLibre</item>
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.RoueLibre</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.RoueLibre</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.RoueLibre</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.RoueLibre</item>
     </style>
+
 </resources>

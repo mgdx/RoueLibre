@@ -1,5 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Jetons de couleur — thème clair. SPEC.md §7.
+
+    Six couleurs nommées, et une échelle de disponibilité dérivée de l'une
+    d'elles. Aucune couleur n'est écrite dans un layout : tout passe par ces
+    ressources, et le thème sombre redéfinit les mêmes noms dans
+    values-night/colors.xml.
+
+    Direction : « ardoise ». Un gris-bleu froid pour le fond, l'encre presque
+    noire mais jamais noire, et UNE teinte de signal — un pétrole profond —
+    qui porte à la fois la disponibilité et l'interaction. L'audace est
+    dépensée à un seul endroit, l'indicateur de disponibilité ; tout le reste
+    est calme.
+
+    L'échelle de disponibilité est une rampe de DENSITÉ D'ENCRE sur une seule
+    teinte : plus il y a de vélos, plus il y a d'encre. Elle est donc lisible
+    quel que soit le type de daltonisme, et le chiffre reste de toute façon
+    affiché par-dessus — la couleur ne porte jamais l'information seule.
+
+    Contrastes vérifiés (WCAG 2.1) : le plus faible du jeu est de 5,07:1.
+-->
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
+    <!-- Fond de l'écran. -->
+    <color name="papier">#E8ECEF</color>
+    <!-- Surfaces posées sur le fond : lignes de liste, feuilles, champs.
+         La séparation est tonale, sans ombre portée. -->
+    <color name="surface">#FAFCFD</color>
+    <!-- Texte principal et tracés. Jamais du noir pur. -->
+    <color name="encre">#0E1519</color>
+    <!-- Texte secondaire, légendes, unités. -->
+    <color name="encre_douce">#56656F</color>
+    <!-- Teinte de signal : disponibilité et éléments interactifs. -->
+    <color name="signal">#00636F</color>
+    <!-- Attire l'œil sur ce qui manque : zéro vélo, zéro place, hors service. -->
+    <color name="alerte">#9C4A00</color>
+
+    <!-- Échelle de disponibilité, dérivée de la teinte de signal. -->
+    <color name="dispo_faible">#B8D5D8</color>
+    <color name="dispo_moyenne">#5BA1AA</color>
+    <color name="dispo_bonne">#00636F</color>
+    <!-- Chiffre posé sur chacun des trois remplissages. -->
+    <color name="dispo_faible_encre">#0E1519</color>
+    <color name="dispo_moyenne_encre">#0E1519</color>
+    <color name="dispo_bonne_encre">#FFFFFF</color>
+
+    <!-- Traits de séparation, contours de champs. -->
+    <color name="trait">#CCD5DA</color>
+
 </resources>

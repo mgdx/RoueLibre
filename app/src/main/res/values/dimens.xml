@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Jetons d'espacement et de forme — SPEC.md §7.
+
+    Une seule échelle d'espacement, un seul rayon d'arrondi, appliqués partout.
+    Aucune taille n'est écrite dans un layout.
+
+    Le rayon est volontairement petit : dans cette interface, le SEUL élément
+    parfaitement rond est l'indicateur de disponibilité. Tout le reste est
+    presque droit, ce qui fait ressortir l'indicateur par contraste de forme
+    plutôt que par surenchère de couleur. C'est aussi ce qui éloigne
+    l'application de l'empilement de cartes très arrondies que produit un
+    thème Material par défaut.
+-->
+<resources>
+
+    <!-- Échelle d'espacement, base 4. -->
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_s">8dp</dimen>
+    <dimen name="space_m">12dp</dimen>
+    <dimen name="space_l">16dp</dimen>
+    <dimen name="space_xl">24dp</dimen>
+    <dimen name="space_xxl">32dp</dimen>
+    <dimen name="space_xxxl">48dp</dimen>
+
+    <!-- Rayon d'arrondi unique. -->
+    <dimen name="radius">4dp</dimen>
+    <!-- Épaisseur des traits de séparation et des contours. -->
+    <dimen name="stroke">1dp</dimen>
+
+    <!-- Cible tactile minimale, imposée par le SPEC §7. -->
+    <dimen name="touch_target_min">48dp</dimen>
+
+    <!-- Indicateur de disponibilité : l'élément signature. Sa taille est
+         calibrée pour rester lisible à bout de bras, en marchant. -->
+    <dimen name="indicator_size">52dp</dimen>
+    <dimen name="indicator_ring">4dp</dimen>
+
+    <!-- Échelle typographique. -->
+    <dimen name="text_display">34sp</dimen>
+    <dimen name="text_title">22sp</dimen>
+    <dimen name="text_indicator">24sp</dimen>
+    <dimen name="text_body">16sp</dimen>
+    <dimen name="text_secondary">14sp</dimen>
+    <dimen name="text_label">12sp</dimen>
+
+</resources>

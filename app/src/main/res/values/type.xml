@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Jetons typographiques — SPEC.md §7.
+
+    Deux familles, chacune choisie pour une raison précise.
+
+    · Bricolage Grotesque (SIL OFL) porte les chiffres et les titres. Les
+      nombres de vélos sont l'information centrale de l'application ; ils
+      méritent une lettre qui ait du caractère, et cette grotesque en a — des
+      chiffres larges, ouverts, reconnaissables de loin.
+
+    · Atkinson Hyperlegible (SIL OFL, Braille Institute of America) porte tout
+      le reste. Elle a été dessinée pour la basse vision : le zéro barré, le
+      « 1 » à empattement, le « l » recourbé sont distincts les uns des
+      autres. Pour une application lue en marchant, ce n'est pas un ornement.
+
+    Les deux sont embarquées dans l'APK : aucune police n'est téléchargée, ce
+    qui passerait par un service tiers (SPEC §2, C2 et C3).
+
+    Les chiffres sont réglés en chasse fixe (« tnum ») partout où ils
+    s'alignent en colonne, pour que la liste ne tressaute pas à chaque
+    rafraîchissement.
+-->
+<resources>
+
+    <!-- Grand nombre, écran de détail. -->
+    <style name="TextAppearance.RoueLibre.Display" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:fontFamily">@font/bricolage_grotesque</item>
+        <item name="android:fontVariationSettings">\'wght\' 700, \'wdth\' 100, \'opsz\' 36</item>
+        <item name="android:textSize">@dimen/text_display</item>
+        <item name="android:textColor">@color/encre</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+        <item name="android:letterSpacing">-0.02</item>
+    </style>
+
+    <!-- Titre d'écran et de section. -->
+    <style name="TextAppearance.RoueLibre.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">@font/bricolage_grotesque</item>
+        <item name="android:fontVariationSettings">\'wght\' 650, \'wdth\' 100, \'opsz\' 24</item>
+        <item name="android:textSize">@dimen/text_title</item>
+        <item name="android:textColor">@color/encre</item>
+        <item name="android:letterSpacing">-0.01</item>
+    </style>
+
+    <!-- Le chiffre de l'indicateur de disponibilité : l'élément signature. -->
+    <style name="TextAppearance.RoueLibre.Indicator" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">@font/bricolage_grotesque</item>
+        <item name="android:fontVariationSettings">\'wght\' 700, \'wdth\' 100, \'opsz\' 24</item>
+        <item name="android:textSize">@dimen/text_indicator</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+        <item name="android:letterSpacing">-0.03</item>
+    </style>
+
+    <!-- Corps de texte, noms de stations. -->
+    <style name="TextAppearance.RoueLibre.Body" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:fontFamily">@font/atkinson</item>
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textColor">@color/encre</item>
+    </style>
+
+    <!-- Informations d'appui : distance, code postal, âge de la donnée. -->
+    <style name="TextAppearance.RoueLibre.Secondary" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">@font/atkinson</item>
+        <item name="android:textSize">@dimen/text_secondary</item>
+        <item name="android:textColor">@color/encre_douce</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+    </style>
+
+    <!-- Étiquettes courtes, en capitales espacées. -->
+    <style name="TextAppearance.RoueLibre.Label" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:fontFamily">@font/atkinson</item>
+        <item name="android:textSize">@dimen/text_label</item>
+        <item name="android:textColor">@color/encre_douce</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.08</item>
+    </style>
+
+</resources>

@@ -1,9 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Thème de l'application — SPEC.md §7.
+
+    Material Components sert de socle technique, mais aucune de ses couleurs
+    par défaut ne subsiste : tous les rôles pointent vers les jetons de
+    couleur du projet. Le thème sombre est décrit dans values-night/ et reçoit
+    le même soin, ce n'est pas une inversion automatique.
+-->
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.RoueLibre" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <style name="Theme.RoueLibre" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- La teinte de signal porte l'interaction comme la disponibilité :
+             l'audace est dépensée à un seul endroit. -->
+        <item name="colorPrimary">@color/signal</item>
+        <item name="colorOnPrimary">@color/surface</item>
+        <item name="colorSecondary">@color/encre_douce</item>
+        <item name="colorOnSecondary">@color/surface</item>
+        <item name="colorError">@color/alerte</item>
+        <item name="colorOnError">@color/surface</item>
+
+        <item name="android:colorBackground">@color/papier</item>
+        <item name="colorOnBackground">@color/encre</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/encre</item>
+        <item name="colorSurfaceVariant">@color/papier</item>
+        <item name="colorOnSurfaceVariant">@color/encre_douce</item>
+        <item name="colorOutline">@color/trait</item>
+
+        <item name="android:statusBarColor">@color/papier</item>
+        <item name="android:navigationBarColor">@color/papier</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+
+        <item name="android:textAppearance">@style/TextAppearance.RoueLibre.Body</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.RoueLibre.Title</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.RoueLibre.Body</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.RoueLibre.Secondary</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.RoueLibre.Label</item>
+
+        <!-- Un seul rayon, appliqué à toutes les familles de formes. -->
+        <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.RoueLibre</item>
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.RoueLibre</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.RoueLibre</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.RoueLibre</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.RoueLibre</item>
     </style>
 
-    <style name="Theme.RoueLibre" parent="Base.Theme.RoueLibre" />
+    <style name="ShapeAppearance.RoueLibre" parent="ShapeAppearance.Material3.Corner.None">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/radius</item>
+    </style>
+
 </resources>

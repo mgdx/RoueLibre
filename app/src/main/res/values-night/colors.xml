@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Jetons de couleur — thème sombre. SPEC.md §7.
+
+    Mêmes noms qu'en thème clair, valeurs redéfinies. Ce n'est pas une
+    inversion : le fond est une ardoise bleutée et non du noir, la teinte de
+    signal est éclaircie pour tenir sur fond sombre, et l'échelle de
+    disponibilité s'inverse en luminance — sur fond sombre, « plus d'encre »
+    devient « plus de lumière ».
+
+    Contrastes vérifiés : le plus faible du jeu est de 4,84:1.
+-->
+<resources>
+
+    <color name="papier">#0E1418</color>
+    <color name="surface">#172027</color>
+    <color name="encre">#E7EDF1</color>
+    <color name="encre_douce">#93A3AD</color>
+    <color name="signal">#3FBFCE</color>
+    <color name="alerte">#E0913F</color>
+
+    <color name="dispo_faible">#1B3D44</color>
+    <color name="dispo_moyenne">#22707C</color>
+    <color name="dispo_bonne">#3FBFCE</color>
+    <color name="dispo_faible_encre">#E7EDF1</color>
+    <color name="dispo_moyenne_encre">#E7EDF1</color>
+    <color name="dispo_bonne_encre">#0E1418</color>
+
+    <color name="trait">#2A363F</color>
+
+</resources>
