@@ -21,6 +21,7 @@ import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.databinding.FragmentStationListBinding
+import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
 import kotlinx.coroutines.delay
@@ -73,6 +74,7 @@ class StationListFragment : Fragment() {
         // de mise en page à chaque rafraîchissement, sur 268 stations.
         views.stations.setHasFixedSize(true)
 
+        views.openStorage.setOnClickListener { openStorage() }
         views.swipeRefresh.setOnRefreshListener { viewModel.refresh(force = true) }
 
         // Filtrage à chaque frappe : quelques centaines d'entrées déjà en
@@ -195,6 +197,14 @@ class StationListFragment : Fragment() {
                 views.emptyAction.setOnClickListener { views.searchInput.text?.clear() }
             }
         }
+    }
+
+    /** Ouvre l'écran de gestion des données hors ligne (SPEC §4.4). */
+    private fun openStorage() {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.content, StorageFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun hideKeyboard(view: View) {

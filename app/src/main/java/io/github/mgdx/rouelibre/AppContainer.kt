@@ -11,6 +11,7 @@ import io.github.mgdx.rouelibre.core.config.CityConfigurationReader
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
 import io.github.mgdx.rouelibre.data.AppPreferences
 import io.github.mgdx.rouelibre.data.StationRepository
+import io.github.mgdx.rouelibre.data.datasets.DatasetStore
 import io.github.mgdx.rouelibre.data.local.StationDatabase
 import io.github.mgdx.rouelibre.data.network.GbfsRemoteSource
 import kotlinx.coroutines.Dispatchers
@@ -77,6 +78,16 @@ class AppContainer(private val context: Context) {
             StationDatabase::class.java,
             StationDatabase.FILE_NAME,
         ).build()
+    }
+
+    /**
+     * Les jeux de données hors ligne installés sur l'appareil.
+     *
+     * Créé tôt et partagé : la carte, le routage et la recherche d'adresses y
+     * liront tous le fichier dont ils dépendent.
+     */
+    val datasetStore: DatasetStore by lazy {
+        DatasetStore(context, Dispatchers.IO)
     }
 
     /** Source unique des stations et de leur disponibilité. */

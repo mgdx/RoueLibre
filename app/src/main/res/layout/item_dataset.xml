@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Une ligne de l'écran stockage : un jeu de données, son état, ses actions. -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/space_l"
+    android:paddingTop="@dimen/space_l"
+    android:paddingEnd="@dimen/space_l"
+    android:paddingBottom="@dimen/space_m">
+
+    <TextView
+        android:id="@+id/dataset_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Fond de carte" />
+
+    <TextView
+        android:id="@+id/dataset_purpose"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dataset_name"
+        tools:text="Affiche la carte sans réseau" />
+
+    <TextView
+        android:id="@+id/dataset_state"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_s"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dataset_purpose"
+        tools:text="35,0 Mo · 9 août 2026" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/dataset_import"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginTop="@dimen/space_m"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dataset_state"
+        tools:text="Importer" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/dataset_delete"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginStart="@dimen/space_s"
+        android:text="@string/dataset_delete"
+        android:textColor="@color/alerte"
+        app:layout_constraintBottom_toBottomOf="@id/dataset_import"
+        app:layout_constraintStart_toEndOf="@id/dataset_import"
+        app:layout_constraintTop_toTopOf="@id/dataset_import" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

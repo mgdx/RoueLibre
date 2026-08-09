@@ -95,6 +95,43 @@
     <string name="action_refresh">Rafraîchir</string>
     <string name="action_retry">Réessayer</string>
 
+    <!-- Écran « stockage » : ce que l'application occupe, et comment le
+         reprendre (SPEC §4.4). -->
+    <string name="storage_title">Stockage</string>
+    <string name="storage_open">Gérer les données hors ligne</string>
+    <string name="storage_intro">La carte, le calcul d\'itinéraire et la recherche d\'adresses fonctionnent sans réseau. Ils demandent trois jeux de données, à installer une fois.</string>
+    <!-- %1$s est une taille déjà formatée, par exemple « 42,5 Mo ». -->
+    <string name="storage_total">%1$s occupés sur cet appareil</string>
+    <string name="storage_nothing_installed">Aucune donnée installée</string>
+
+    <string name="dataset_tiles">Fond de carte</string>
+    <string name="dataset_tiles_purpose">Affiche la carte sans réseau</string>
+    <string name="dataset_routing">Graphe de routage</string>
+    <string name="dataset_routing_purpose">Calcule les itinéraires sur l\'appareil</string>
+    <string name="dataset_addresses">Index d\'adresses</string>
+    <string name="dataset_addresses_purpose">Cherche les rues sans rien envoyer</string>
+
+    <string name="dataset_absent">Pas installé</string>
+    <!-- %1$s est une taille, %2$s une date. Exemple : « 35,0 Mo · 9 août 2026 ». -->
+    <string name="dataset_installed">%1$s · %2$s</string>
+    <string name="dataset_import">Importer</string>
+    <string name="dataset_replace">Remplacer</string>
+    <string name="dataset_delete">Supprimer</string>
+    <!-- %1$s est le nom du jeu de données. -->
+    <string name="dataset_delete_description">Supprimer %1$s</string>
+    <!-- %1$s est le nom du jeu de données. -->
+    <string name="dataset_imported">%1$s installé</string>
+    <string name="dataset_deleted">%1$s supprimé</string>
+
+    <!-- Refus d'importation : chaque cas dit quoi faire. -->
+    <string name="dataset_rejected_empty">Le fichier choisi est vide.</string>
+    <!-- %1$s est le nom attendu du fichier, par exemple « tiles.mbtiles ». -->
+    <string name="dataset_rejected_format">Ce fichier n\'est pas celui attendu. Choisis le fichier « %1$s » produit par les scripts de génération.</string>
+    <!-- %1$d est la version trouvée, %2$d celle que l'application sait lire. -->
+    <string name="dataset_rejected_version">Ce fichier est en version de format %1$d, et cette version de l\'application lit la version %2$d. Mets l\'application à jour.</string>
+    <string name="dataset_rejected_checksum">Le fichier ne correspond pas à son empreinte : il est incomplet ou abîmé. Retélécharge-le.</string>
+    <string name="dataset_rejected_transfer">La copie du fichier a échoué. Vérifie l\'espace libre et réessaie.</string>
+
     <!-- Messages d'erreur : ce qui s'est passé, et quoi faire. Sans excuses,
          sans code technique (SPEC §7 et §14). -->
     <string name="error_offline">Pas de connexion. Les dernières disponibilités connues restent affichées.</string>

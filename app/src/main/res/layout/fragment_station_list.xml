@@ -22,12 +22,26 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_l"
         android:layout_marginTop="@dimen/space_l"
-        android:layout_marginEnd="@dimen/space_l"
         android:text="@string/stations_title"
         android:textAppearance="@style/TextAppearance.RoueLibre.Title"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/open_storage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Accès à la gestion des données hors ligne. Il rejoindra les réglages
+         de l'écran carte (SPEC §7.1) quand celui-ci existera. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/open_storage"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginEnd="@dimen/space_s"
+        android:contentDescription="@string/storage_open"
+        app:icon="@drawable/ic_storage"
+        app:iconTint="@color/encre"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/title" />
 
     <!-- Âge de la donnée, exigé par le SPEC §4.1. -->
     <TextView

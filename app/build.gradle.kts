@@ -29,6 +29,15 @@ android {
         manifestPlaceholders["allowBackup"] = "false"
     }
 
+    androidResources {
+        // Déclare le français comme seule langue fournie. Sans cela, Android
+        // ne sait pas quelle langue contient `values/` : sur un appareil en
+        // anglais il servait les textes français avec des dates anglaises.
+        // Élague au passage les traductions des bibliothèques, qui pèsent
+        // plus que les nôtres.
+        localeFilters += listOf("fr")
+    }
+
     buildFeatures {
         viewBinding = true
         // Pas de Compose : son poids est incompatible avec la contrainte de
