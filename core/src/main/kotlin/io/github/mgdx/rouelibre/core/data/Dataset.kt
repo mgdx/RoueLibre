@@ -11,14 +11,23 @@ import java.time.Instant
  *
  * @property id identifiant tel qu'il apparaît dans le manifeste.
  * @property fileName nom sous lequel le fichier est rangé sur l'appareil,
- *   indépendant de celui qu'il portait à la source.
+ *   indépendant de celui qu'il portait à la source. `null` pour un jeu dont le
+ *   nom d'origine porte une information que l'on n'a pas le droit d'effacer.
  */
-public enum class DatasetKind(public val id: String, public val fileName: String) {
+public enum class DatasetKind(public val id: String, public val fileName: String?) {
     /** Fond de carte vectoriel, au format MBTiles. */
     Tiles("tiles", "tiles.mbtiles"),
 
-    /** Graphe de routage, au format BRouter rd5. */
-    Routing("routing", "routing.rd5"),
+    /**
+     * Graphe de routage, au format BRouter rd5.
+     *
+     * **Le fichier garde son nom d'origine**, et c'est indispensable : BRouter
+     * déduit le nom du segment des coordonnées cherchées — `E0_N50.rd5` pour
+     * Lille — puis l'ouvre directement dans le répertoire des segments. Un
+     * graphe renommé serait invisible pour le moteur, qui répondrait « aucun
+     * itinéraire » sans que rien n'indique la cause.
+     */
+    Routing("routing", null),
 
     /** Index d'adresses, base SQLite. */
     Addresses("addresses", "addresses.sqlite"),

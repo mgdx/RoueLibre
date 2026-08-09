@@ -179,12 +179,21 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
      *
      * Nécessaire pour les jeux dont les fichiers gardent leur nom d'origine :
      * le graphe de routage, dont BRouter déduit le nom des coordonnées.
+     *
+     * Le repli sur le dernier segment de l'URI n'est pas décoratif : tous les
+     * fournisseurs de documents ne publient pas `DISPLAY_NAME`, et un fichier
+     * désigné par une URI `file:` n'a pas de fournisseur du tout.
      */
     private fun displayNameOf(source: Uri): String? =
+        (queriedDisplayNameOf(source) ?: source.lastPathSegment)
+            ?.substringAfterLast('/')
+            ?.takeIf { it.isNotBlank() }
+
+    private fun queriedDisplayNameOf(source: Uri): String? =
         context.contentResolver.query(source, null, null, null, null)?.use { cursor ->
             val column = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
             if (column >= 0 && cursor.moveToFirst()) cursor.getString(column) else null
-        }?.substringAfterLast('/')?.takeIf { it.isNotBlank() }
+        }
 
     /** Somme occupée par les jeux installés, affichée dans l'écran stockage. */
     fun occupiedBytes(): Long = mutableInstalled.value.values.sumOf { it.sizeBytes }

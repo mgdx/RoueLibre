@@ -51,7 +51,8 @@ class AddressIndexTest {
         val target = InstrumentationRegistry.getInstrumentation().targetContext
         datasets = DatasetStore(target, Dispatchers.IO)
         indexFile = datasets.directoryOf(DatasetKind.Addresses)
-            .resolve(DatasetKind.Addresses.fileName)
+            // L'index a un nom canonique, contrairement au graphe de routage.
+            .resolve(checkNotNull(DatasetKind.Addresses.fileName))
         indexFile.delete()
         writeIndex(indexFile)
         index = AddressIndex(datasets, normalizer(target), Dispatchers.IO)

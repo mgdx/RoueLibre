@@ -72,6 +72,19 @@ Développement initial. Rien n'est encore publié.
     L'index porte désormais ce nom — 450 voies concernées — et l'affiche, code
     postal à l'appui : « Rue Danton, 59160 Lomme ».
 
+### Corrigé
+
+- **L'import manuel du graphe de routage produisait un fichier inutilisable.**
+  Le fichier était renommé `routing.rd5`, alors que BRouter déduit le nom du
+  segment des coordonnées cherchées — `E0_N50.rd5` pour Lille — et l'ouvre
+  directement. Le graphe restait donc sur le disque sans jamais être lu, et le
+  moteur répondait « aucun itinéraire » sans que rien n'indique la cause. Le
+  cas était prévu dans le code, mais la branche était devenue inatteignable en
+  rendant le nom de fichier non-nullable ; le compilateur le signalait, l'avis
+  n'avait pas été suivi.
+- Le nom du document importé est désormais retrouvé même quand le fournisseur
+  ne publie pas `DISPLAY_NAME`, ce qui est le cas d'une URI `file:`.
+
 ### Modifié
 
 - **Version de format des jeux de données portée à 2**, l'index d'adresses
