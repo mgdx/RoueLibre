@@ -108,6 +108,10 @@
 
     <string name="map_needs_tiles_title">La carte a besoin du fond de carte</string>
     <string name="map_needs_tiles_message">Installe le fond de carte depuis l\'écran de stockage. En attendant, la liste des stations reste utilisable.</string>
+    <!-- Même écran, mais avant même d'avoir désigné une ville : ce n'est pas
+         un fichier qui manque, c'est le cadre de tout le reste (SPEC §15.1). -->
+    <string name="map_needs_city_title">Quelle ville ?</string>
+    <string name="map_needs_city_message">Choisis l\'agglomération que tu veux consulter. Ses données se téléchargent ensuite, une fois pour toutes.</string>
 
     <!-- Premier lancement (SPEC §7.9). On explique un fonctionnement, on ne
          vend rien : phrases courtes, voix active, aucun jargon. -->
@@ -115,8 +119,8 @@
     <string name="welcome_hello_body">Cette application montre les vélos en libre-service sur une carte, et calcule un trajet porte-à-porte : marche jusqu\'à une station, vélo, puis marche jusqu\'au bout.\n\nElle est libre et ouverte. Pas de compte, pas de publicité, pas de mouchard.</string>
     <string name="welcome_privacy_title">Rien ne sort d\'ici</string>
     <string name="welcome_privacy_body">Les itinéraires sont calculés sur ce téléphone. Les adresses que tu cherches ne sont envoyées à personne, pas même pendant la frappe.\n\nAucun historique n\'est conservé : ni tes trajets, ni tes positions, ni tes destinations.\n\nLa seule requête qui part en usage courant demande combien de vélos sont disponibles.</string>
-    <string name="welcome_data_title">Un téléchargement, une fois</string>
-    <string name="welcome_data_body">La carte, les rues et le calcul d\'itinéraire vivent sur l\'appareil. C\'est ce qui les rend utilisables sans réseau — et cela suppose de les télécharger une fois.\n\nTu peux aussi le faire plus tard : en attendant, la liste des stations et leurs disponibilités restent utilisables.</string>
+    <string name="welcome_data_title">Une ville, un téléchargement</string>
+    <string name="welcome_data_body">La carte, les rues et le calcul d\'itinéraire vivent sur l\'appareil. C\'est ce qui les rend utilisables sans réseau — et cela suppose de télécharger les données de ta ville, une fois.\n\nCommence donc par la choisir. Compte quelques dizaines de mégaoctets pour une agglomération de taille moyenne, davantage pour une capitale ; la taille est annoncée avant le téléchargement.\n\nTu peux aussi le faire plus tard : en attendant, la liste des stations et leurs disponibilités restent utilisables.</string>
     <!-- Position dans la séquence : « 1 sur 3 ». Ce n'est pas un accord de
          nombre mais un repère de progression — le second nombre ne varie pas
          avec le premier — d'où l'absence de pluriel.
@@ -124,7 +128,7 @@
     <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d sur %2$d</string>
     <string name="welcome_continue">Continuer</string>
     <string name="welcome_skip">Passer</string>
-    <string name="welcome_download">Télécharger les données</string>
+    <string name="welcome_choose_city">Choisir ma ville</string>
     <string name="welcome_later">Plus tard</string>
     <string name="welcome_open">Revoir la présentation</string>
 

@@ -7,12 +7,17 @@ Tout fonctionne sur l'appareil : la carte, la recherche d'adresses et le calcul 
 • Aucun service Google : ni Play Services, ni Firebase, ni Maps SDK. Elle tourne sur un système sans GApps.
 • Aucune télémétrie, aucun mouchard, aucun identifiant unique, aucun compte.
 • Aucune donnée de trajet conservée : ni historique, ni positions, ni destinations. Ce que vous cherchez ne quitte pas le téléphone.
+• Aucune ville n'est imposée : plusieurs agglomérations cohabitent sur l'appareil, et l'on supprime les données de l'une sans toucher aux autres.
 • L'itinéraire optimise le <i>couple</i> de stations — départ et arrivée — plutôt que de retenir la plus proche, et tient compte du risque qu'une station peu fournie se vide pendant que vous marchez.
 
 <b>À savoir avant d'installer</b>
 
-La carte, le graphe de routage et l'index d'adresses ne sont pas dans l'application : ils se téléchargent une fois, depuis l'écran de stockage, ou s'installent à la main depuis des fichiers que vous produisez vous-même. Comptez une quarantaine de mégaoctets.
+La carte, le graphe de routage et l'index d'adresses ne sont pas dans l'application : ils se téléchargent une fois, depuis l'écran de stockage, ou s'installent à la main depuis des fichiers que vous produisez vous-même. Leur poids suit la ville — quelques dizaines de mégaoctets pour une agglomération de taille moyenne, davantage pour une capitale — et il est annoncé avant le téléchargement.
 
-L'application n'est liée à aucun réseau particulier : l'adresse du flux GBFS se change dans les réglages.
+<b>Les villes servies</b>
+
+Trois réseaux pour l'instant : V'lille pour la métropole de Lille, Vélo'v pour celle de Lyon, Vélib' Métropole pour Paris et sa couronne. L'application propose la vôtre d'après votre position, si vous le lui demandez, et vous pouvez en garder plusieurs installées et passer de l'une à l'autre.
+
+Elle n'est liée à aucun réseau en particulier : la liste des villes se met à jour d'elle-même, et l'adresse du flux GBFS se change dans les réglages, ce qui la rend utilisable avec n'importe quel réseau GBFS du monde.
 
 Logiciel libre sous licence GNU GPL v3.

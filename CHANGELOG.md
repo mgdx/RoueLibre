@@ -8,7 +8,7 @@ Les notes destinées aux utilisateurs vivent dans
 les développeurs. Ce fichier-ci s'adresse aux contributeurs et retient aussi ce
 qui n'a aucun effet visible.
 
-## [Non publié]
+## [0.2.0-alpha]
 
 ### Ajouté
 

@@ -86,17 +86,19 @@
     <string name="map_location_unavailable">Position unavailable. Check that location is switched on, then try again.</string>
     <string name="map_needs_tiles_title">The map needs its offline tiles</string>
     <string name="map_needs_tiles_message">Install the map data from the storage screen. In the meantime, the station list stays usable.</string>
+    <string name="map_needs_city_title">Which city?</string>
+    <string name="map_needs_city_message">Pick the conurbation you want to use. Its data is downloaded afterwards, once and for all.</string>
 
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">This app shows shared bikes on a map and works out a door-to-door trip: walk to a station, ride, then walk the rest of the way.\n\nIt is free and open source. No account, no adverts, no tracker.</string>
     <string name="welcome_privacy_title">Nothing leaves this phone</string>
     <string name="welcome_privacy_body">Journeys are computed on this phone. The addresses you look up are sent to nobody, not even while you type.\n\nNo history is kept: not your trips, not your positions, not your destinations.\n\nThe only request that goes out in everyday use asks how many bikes are available.</string>
-    <string name="welcome_data_title">One download, once</string>
-    <string name="welcome_data_body">The map, the streets and the routing engine live on the device. That is what makes them work with no network — and it means downloading them once.\n\nYou can also do it later: until then, the station list and its availability stay usable.</string>
+    <string name="welcome_data_title">One city, one download</string>
+    <string name="welcome_data_body">The map, the streets and the route calculation live on the device. That is what makes them work without a network — and it means downloading your city\'s data once.\n\nSo start by choosing it. Expect around forty megabytes for a medium-sized conurbation, more for a capital; the size is announced before the download.\n\nYou can also do it later: in the meantime, the station list and their availability remain usable.</string>
     <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d of %2$d</string>
     <string name="welcome_continue">Continue</string>
     <string name="welcome_skip">Skip</string>
-    <string name="welcome_download">Download the data</string>
+    <string name="welcome_choose_city">Choose my city</string>
     <string name="welcome_later">Later</string>
     <string name="welcome_open">Read the introduction again</string>
 

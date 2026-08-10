@@ -249,9 +249,13 @@ class MapFragment : Fragment() {
         // l'agglomération : proposer d'installer des tuiles n'aurait aucun sens
         // tant qu'on ne sait pas celles de quelle ville.
         if (configuration == null) {
+            views.missingTilesTitle.setText(R.string.map_needs_city_title)
+            views.missingTilesMessage.setText(R.string.map_needs_city_message)
             views.missingTilesStorage.setText(R.string.city_choose)
             views.missingTilesStorage.setOnClickListener { show(CityFragment()) }
         } else {
+            views.missingTilesTitle.setText(R.string.map_needs_tiles_title)
+            views.missingTilesMessage.setText(R.string.map_needs_tiles_message)
             views.missingTilesStorage.setText(R.string.storage_open)
             views.missingTilesStorage.setOnClickListener { show(StorageFragment()) }
         }

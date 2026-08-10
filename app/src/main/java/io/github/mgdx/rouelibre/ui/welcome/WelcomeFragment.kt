@@ -144,7 +144,7 @@ class WelcomeFragment : Fragment() {
             Page(
                 title = R.string.welcome_data_title,
                 body = R.string.welcome_data_body,
-                next = R.string.welcome_download,
+                next = R.string.welcome_choose_city,
                 skip = R.string.welcome_later,
             ),
         )

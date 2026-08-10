@@ -22,12 +22,13 @@ android {
         // (SPEC §3).
         minSdk = 26
         targetSdk = 37
-        versionCode = 1
+        versionCode = 2
         // Alpha : l'application fait le tour de son sujet — carte, recherche
-        // d'adresses, itinéraire porte-à-porte — mais les écrans de réglages,
-        // de favoris et d'accueil manquent, et les jeux de données s'installent
-        // encore à la main. Voir CHANGELOG.md.
-        versionName = "0.1.0-alpha"
+        // d'adresses, itinéraire porte-à-porte, et trois agglomérations au
+        // choix — mais rien n'a encore été publié à télécharger, et les écrans
+        // du premier lancement n'ont jamais tourné sur un appareil.
+        // Voir CHANGELOG.md.
+        versionName = "0.2.0-alpha"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
