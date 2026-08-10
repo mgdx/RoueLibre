@@ -4,22 +4,21 @@ import android.os.Bundle
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 
 /**
- * Un bout de trajet désigné par l'utilisateur : départ ou arrivée.
+ * One end of a journey designated by the user: origin or destination.
  *
- * Porte son libellé avec lui, parce que c'est ce que l'écran affiche : « ma
- * position », « 12 Rue Nationale », le nom d'une station favorite. Des
- * coordonnées brutes ne se relisent pas.
+ * It carries its own label, because that is what the screen shows: "my
+ * position", "12 Rue Nationale", a favourite station's name. Raw coordinates do
+ * not read back.
  *
- * Ce type ne va jamais sur le disque. Le SPEC §8 interdit de conserver une
- * destination : ces valeurs vivent dans l'état d'un écran, et disparaissent
- * avec lui.
+ * This type never reaches the disk. SPEC §8 forbids keeping a destination:
+ * these values live in a screen's state, and vanish with it.
  *
- * @property label ce que l'utilisateur lit.
- * @property position l'endroit désigné.
+ * @property label what the user reads.
+ * @property position the place designated.
  */
 data class JourneyEndpoint(val label: String, val position: Coordinates) {
 
-    /** Écrit le point dans un paquet, sous des clés préfixées. */
+    /** Writes the point into a bundle, under prefixed keys. */
     fun writeTo(bundle: Bundle, prefix: String) {
         bundle.putString("$prefix$LABEL_KEY", label)
         bundle.putDouble("$prefix$LATITUDE_KEY", position.latitude)
@@ -31,7 +30,7 @@ data class JourneyEndpoint(val label: String, val position: Coordinates) {
         private const val LATITUDE_KEY = "-latitude"
         private const val LONGITUDE_KEY = "-longitude"
 
-        /** Relit un point écrit par [writeTo], ou `null` s'il n'y en a pas. */
+        /** Reads back a point written by [writeTo], or `null` if there is none. */
         fun readFrom(bundle: Bundle?, prefix: String): JourneyEndpoint? {
             if (bundle == null || !bundle.containsKey("$prefix$LATITUDE_KEY")) return null
             return JourneyEndpoint(

@@ -21,10 +21,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 /**
- * Choisit une station favorite comme départ ou arrivée (SPEC §7.3).
+ * Picks a favourite station as origin or destination (SPEC §7.3).
  *
- * Les disponibilités y sont montrées comme partout ailleurs : choisir sa
- * station de départ sans voir combien elle a de vélos n'aurait pas de sens.
+ * Availability is shown here as everywhere else: choosing one's departure
+ * station without seeing how many bikes it holds would make no sense.
  */
 class FavouriteStationSheet : BottomSheetDialogFragment() {
 
@@ -74,8 +74,8 @@ class FavouriteStationSheet : BottomSheetDialogFragment() {
                 viewModel.favourites.collectLatest { favourites ->
                     val current = binding ?: return@collectLatest
                     adapter.submitList(favourites)
-                    // Un écran vide est une invitation à agir, pas un constat :
-                    // il dit comment on met une station en favori.
+                    // An empty screen is an invitation to act, not a statement
+                    // of fact: it says how one marks a station as a favourite.
                     current.empty.isVisible = favourites.isEmpty()
                     current.stations.isVisible = favourites.isNotEmpty()
                 }
@@ -90,21 +90,21 @@ class FavouriteStationSheet : BottomSheetDialogFragment() {
     }
 
     companion object {
-        /** Clé sous laquelle la station choisie est rendue. */
+        /** The key the chosen station is returned under. */
         const val REQUEST_KEY: String = "chosen-favourite-station"
 
-        /** Préfixe des clés du point rendu. */
+        /** The prefix of the returned point's keys. */
         const val RESULT_PREFIX: String = "point"
 
-        /** Vrai si le choix portait sur le départ. */
+        /** True if the choice was for the origin. */
         const val RESULT_IS_ORIGIN: String = "is-origin"
 
-        /** Étiquette sous laquelle la feuille est ajoutée au gestionnaire. */
+        /** The tag the sheet is added to the manager under. */
         const val TAG: String = "favoris"
 
         private const val ARGUMENT_IS_ORIGIN = "is-origin"
 
-        /** Ouvre la feuille pour le départ ou pour l'arrivée. */
+        /** Opens the sheet for the origin or for the destination. */
         fun newInstance(isOrigin: Boolean): FavouriteStationSheet = FavouriteStationSheet().apply {
             arguments = Bundle().apply { putBoolean(ARGUMENT_IS_ORIGIN, isOrigin) }
         }

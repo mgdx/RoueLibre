@@ -13,16 +13,16 @@ import io.github.mgdx.rouelibre.core.station.displayFor
 import io.github.mgdx.rouelibre.databinding.ItemStationBinding
 
 /**
- * Affiche les stations en liste.
+ * Shows the stations as a list.
  *
- * Le mode — vélos ou places — fait partie de l'identité visuelle d'une ligne :
- * changer de mode redessine tout, ce que `ListAdapter` ne devinerait pas
- * puisque les stations, elles, n'ont pas changé.
+ * The mode — bikes or docks — is part of a row's visual identity: changing mode
+ * redraws everything, which `ListAdapter` would not guess since the stations
+ * themselves have not changed.
  */
 class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
     ListAdapter<StationWithAvailability, StationAdapter.StationViewHolder>(DIFF) {
 
-    /** Ce que l'indicateur compte : les vélos, ou les places. */
+    /** What the indicator counts: the bikes, or the docks. */
     var mode: AvailabilityMode = AvailabilityMode.Bikes
         set(value) {
             if (field == value) return
@@ -43,17 +43,17 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
         holder.bind(getItem(position), mode)
     }
 
-    /** Une ligne de station. */
+    /** One station row. */
     class StationViewHolder(
         private val binding: ItemStationBinding,
         private val onOpen: (StationWithAvailability) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         /**
-         * Remplit la ligne.
+         * Fills the row.
          *
-         * @param entry la station et son dernier état connu.
-         * @param mode ce que l'indicateur doit compter.
+         * @param entry the station and its last known state.
+         * @param mode what the indicator is to count.
          */
         fun bind(entry: StationWithAvailability, mode: AvailabilityMode) {
             val context = binding.root.context
@@ -75,8 +75,8 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
                 ?: entry.station.postalCode.orEmpty()
             binding.detail.isGone = binding.detail.text.isNullOrBlank()
 
-            // Le compte complémentaire : places quand l'indicateur montre les
-            // vélos, et l'inverse.
+            // The counterpart count: docks when the indicator shows bikes, and
+            // the other way round.
             val counterpart = entry.availability?.let {
                 when (mode) {
                     AvailabilityMode.Bikes -> it.docksAvailable
@@ -92,8 +92,8 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
                 },
             )
 
-            // Un lecteur d'écran doit entendre la même chose qu'un œil voit :
-            // le nom, puis les deux comptes, jamais une couleur (SPEC §7).
+            // A screen reader must hear the same thing an eye sees: the name,
+            // then both counts, never a colour (SPEC §7).
             val availability = entry.availability
             val spokenState = when {
                 display.isOutOfService -> context.getString(R.string.station_out_of_service)

@@ -13,12 +13,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 /**
- * Les stations mises en favori, avec leur disponibilité en direct (SPEC §7.5).
+ * The favourite stations, with their live availability (SPEC §7.5).
  *
- * L'ordre est celui que l'utilisateur a choisi, pas celui du réseau : c'est ce
- * que la réorganisation du §7.5 veut dire. Une station favorite que le flux ne
- * publie plus disparaît de la liste sans faire de bruit — le réseau en retire
- * de temps à autre.
+ * The order is the one the user chose, not the network's: that is what the
+ * reordering of §7.5 means. A favourite station the feed no longer publishes
+ * drops out of the list quietly — the network withdraws one now and then.
  */
 class FavouriteStationsViewModel(
     repository: StationRepository,
@@ -27,12 +26,12 @@ class FavouriteStationsViewModel(
 
     private val mutableFavourites = MutableStateFlow<List<StationWithAvailability>>(emptyList())
 
-    /** Les stations favorites connues, dans l'ordre d'affichage. */
+    /** The known favourite stations, in display order. */
     val favourites: StateFlow<List<StationWithAvailability>> = mutableFavourites.asStateFlow()
 
     private val mutableHasLoaded = MutableStateFlow(false)
 
-    /** Vrai dès que le cache a été lu, ce qui distingue « vide » de « en cours ». */
+    /** True once the cache has been read, telling "empty" from "still loading". */
     val hasLoaded: StateFlow<Boolean> = mutableHasLoaded.asStateFlow()
 
     init {
@@ -51,17 +50,17 @@ class FavouriteStationsViewModel(
     }
 
     /**
-     * Enregistre l'ordre après un déplacement à la main (SPEC §7.5).
+     * Saves the order after a manual move (SPEC §7.5).
      *
-     * L'ordre porte sur les identifiants et non sur les stations affichées :
-     * une station absente du flux au moment du glissement ne doit pas être
-     * retirée des favoris pour autant.
+     * The order is over identifiers and not over the stations displayed: a
+     * station absent from the feed at the moment of the drag must not be
+     * dropped from the favourites because of it.
      */
     fun reorder(stationIds: List<String>) {
         viewModelScope.launch { preferences.setFavouriteOrder(stationIds) }
     }
 
-    /** Fabrique le modèle avec ses dépendances, sans framework d'injection. */
+    /** Builds the model with its dependencies, without an injection framework. */
     class Factory(
         private val repository: StationRepository,
         private val preferences: AppPreferences,

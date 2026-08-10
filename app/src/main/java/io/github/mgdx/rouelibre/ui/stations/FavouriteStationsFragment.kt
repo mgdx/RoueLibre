@@ -22,15 +22,15 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 /**
- * Les stations mises en favori (SPEC §7.5).
+ * The stations marked as favourites (SPEC §7.5).
  *
- * Réorganisable par glissement : l'ordre est le seul réglage de cet écran, et
- * il vaut mieux qu'un tri automatique — la station qu'on veut voir en premier
- * est celle de son quartier, pas la première par ordre alphabétique.
+ * Reorderable by dragging: the order is this screen's only setting, and it
+ * beats an automatic sort — the station one wants to see first is the one in
+ * one's neighbourhood, not the first alphabetically.
  *
- * Les disponibilités y sont en direct, comme partout : une liste de favoris
- * qui n'afficherait pas les vélos obligerait à ouvrir chaque station pour
- * savoir laquelle vaut le détour.
+ * Availability is live here, as everywhere: a favourites list that did not show
+ * the bikes would force one to open every station to learn which is worth the
+ * detour.
  */
 class FavouriteStationsFragment : Fragment() {
 
@@ -48,7 +48,7 @@ class FavouriteStationsFragment : Fragment() {
             .show(parentFragmentManager, StationDetailSheet.TAG)
     }
 
-    /** L'ordre affiché, qui suit les glissements avant d'être enregistré. */
+    /** The displayed order, which follows the drags before being saved. */
     private var shown: MutableList<StationWithAvailability> = mutableListOf()
 
     override fun onCreateView(
@@ -94,25 +94,25 @@ class FavouriteStationsFragment : Fragment() {
         super.onDestroyView()
     }
 
-    /** Suit le doigt : la liste se réordonne pendant le glissement. */
+    /** Follows the finger: the list reorders during the drag. */
     private fun onMoved(from: Int, to: Int) {
         if (from !in shown.indices || to !in shown.indices) return
         shown.add(to, shown.removeAt(from))
         adapter.submitList(shown.toList())
     }
 
-    /** Enregistre l'ordre une fois le doigt levé, pas à chaque pixel parcouru. */
+    /** Saves the order once the finger lifts, not on every pixel travelled. */
     private fun onDropped() {
         viewModel.reorder(shown.map { it.station.id })
     }
 
     /**
-     * Le glissement vertical, et lui seul.
+     * Vertical dragging, and that alone.
      *
-     * Pas de balayage latéral pour supprimer : retirer un favori se fait par
-     * l'étoile de la station, là où on l'a mis. Un geste qui supprime sans
-     * confirmation, sur une liste que l'on manipule justement pour la
-     * réorganiser, se déclencherait par accident.
+     * No swipe-to-delete: removing a favourite is done through the station's
+     * star, where it was added. A gesture that deletes without confirmation, on
+     * a list one is handling precisely in order to reorder it, would fire by
+     * accident.
      */
     private class DragToReorder(
         private val onMoved: (Int, Int) -> Unit,

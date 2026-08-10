@@ -10,15 +10,15 @@ import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.databinding.SheetEndpointChooserBinding
 
 /**
- * Comment désigner un départ ou une arrivée (SPEC §7.3).
+ * How to designate an origin or a destination (SPEC §7.3).
  *
- * Quatre façons, et le SPEC les veut toutes : sa position, un favori, un point
- * choisi sur la carte, une adresse. Elles ne se valent pas selon le moment —
- * on connaît son adresse d'arrivée mais rarement celle de son point de départ,
- * où l'on est déjà.
+ * Four ways, and the specification wants them all: one's position, a favourite,
+ * a point picked on the map, an address. They are not equally useful at any
+ * given moment — one knows the address one is going to, but rarely the address
+ * one is standing at.
  *
- * La feuille ne fait que rendre le choix ; c'est l'écran de recherche qui sait
- * quoi en faire.
+ * The sheet only returns the choice; it is the search screen that knows what to
+ * do with it.
  */
 class EndpointChooserSheet : BottomSheetDialogFragment() {
 
@@ -69,33 +69,33 @@ class EndpointChooserSheet : BottomSheetDialogFragment() {
     }
 
     companion object {
-        /** Clé sous laquelle la façon choisie est rendue. */
+        /** The key the chosen way is returned under. */
         const val REQUEST_KEY: String = "source-point"
 
-        /** La façon retenue, l'une des quatre constantes `SOURCE_`. */
+        /** The way chosen, one of the four `SOURCE_` constants. */
         const val RESULT_SOURCE: String = "source"
 
-        /** Vrai si le choix portait sur le départ. */
+        /** True if the choice was for the origin. */
         const val RESULT_IS_ORIGIN: String = "is-origin"
 
-        /** Se placer là où l'on est. */
+        /** Use where one is. */
         const val SOURCE_MY_POSITION: String = "ma-position"
 
-        /** Choisir une station mise en favori. */
+        /** Pick a station marked as a favourite. */
         const val SOURCE_FAVOURITE: String = "favori"
 
-        /** Désigner un point sur la carte. */
+        /** Designate a point on the map. */
         const val SOURCE_ON_MAP: String = "carte"
 
-        /** Chercher une adresse dans l'index hors ligne. */
+        /** Look up an address in the offline index. */
         const val SOURCE_ADDRESS: String = "adresse"
 
-        /** Étiquette sous laquelle la feuille est ajoutée au gestionnaire. */
+        /** The tag the sheet is added to the manager under. */
         const val TAG: String = "choix-point"
 
         private const val ARGUMENT_IS_ORIGIN = "is-origin"
 
-        /** Ouvre la feuille pour le départ ou pour l'arrivée. */
+        /** Opens the sheet for the origin or for the destination. */
         fun newInstance(isOrigin: Boolean): EndpointChooserSheet = EndpointChooserSheet().apply {
             arguments = Bundle().apply { putBoolean(ARGUMENT_IS_ORIGIN, isOrigin) }
         }
