@@ -10,6 +10,9 @@ import android.os.Looper
 import androidx.core.content.ContextCompat
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeout
 import java.time.Duration
@@ -102,6 +105,76 @@ class DeviceLocation(private val context: Context) {
     }
 
     /**
+     * The position as it moves, for as long as somebody collects it.
+     *
+     * Used by the screens that draw the user on a map: a point frozen where it
+     * was when the screen opened says less than no point at all, since one
+     * believes it.
+     *
+     * The subscription lives and dies with the collection: nothing runs in the
+     * background, and nothing is written down (SPEC §2, C3). The flow completes
+     * without emitting when the permission is missing or every provider is off
+     * — the caller then simply shows nothing.
+     *
+     * @return the last known position first, when there is a fresh one, then
+     *   every fix the system reports.
+     */
+    fun positions(): Flow<Coordinates> = callbackFlow {
+        val manager = locationManager
+        val providers = manager
+            ?.takeIf { isPermitted() }
+            ?.let { available ->
+                USABLE_PROVIDERS.filter { provider ->
+                    runCatching { available.isProviderEnabled(provider) }.getOrDefault(false)
+                }
+            }
+            .orEmpty()
+        if (manager == null || providers.isEmpty()) {
+            close()
+            return@callbackFlow
+        }
+
+        // What the system already holds, straight away: waiting for the first
+        // fix would leave the map without a point for several seconds while
+        // one is perfectly well known.
+        lastKnown()?.let(::trySend)
+
+        val listener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                trySend(location.toCoordinates())
+            }
+
+            override fun onProviderEnabled(provider: String) = Unit
+
+            override fun onProviderDisabled(provider: String) = Unit
+
+            @Deprecated("Removed in API 29, but required by the interface before it.")
+            override fun onStatusChanged(
+                provider: String?,
+                status: Int,
+                extras: android.os.Bundle?,
+            ) = Unit
+        }
+
+        try {
+            providers.forEach { provider ->
+                manager.requestLocationUpdates(
+                    provider,
+                    FOLLOW_INTERVAL.toMillis(),
+                    FOLLOW_DISTANCE_METRES,
+                    listener,
+                    Looper.getMainLooper(),
+                )
+            }
+        } catch (_: SecurityException) {
+            manager.removeUpdates(listener)
+            close()
+            return@callbackFlow
+        }
+        awaitClose { manager.removeUpdates(listener) }
+    }
+
+    /**
      * Waits for the first fix to arrive, and unsubscribes whatever happens.
      *
      * **Every available provider is queried at once**, and the first to answer
@@ -185,5 +258,21 @@ class DeviceLocation(private val context: Context) {
 
         /** The delay past which we give up on obtaining a fix. */
         private val REQUEST_TIMEOUT: Duration = Duration.ofSeconds(10)
+
+        /**
+         * How often at most a followed position is refreshed.
+         *
+         * Two seconds: a point that moves under the eye without the radio
+         * being asked for more than a walker's pace produces.
+         */
+        private val FOLLOW_INTERVAL: Duration = Duration.ofSeconds(2)
+
+        /**
+         * How far one must move for a new fix to be reported, in metres.
+         *
+         * Five: below that the point would jitter on the spot, GPS accuracy in
+         * a street being what it is.
+         */
+        private const val FOLLOW_DISTANCE_METRES = 5f
     }
 }

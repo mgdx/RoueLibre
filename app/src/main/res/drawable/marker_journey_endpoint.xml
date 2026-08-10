@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    A journey's end on the map: where one sets off and where one arrives, on
+    foot.
+
+    Outlined where the stations are filled, with the walking figure inside —
+    the same distinction the "journey" illustration draws
+    (illustration_journey): a station is waiting for you, an end of the journey
+    is only where you happen to be.
+
+    The disc is filled with the surface colour rather than left transparent, as
+    it is in the illustration: on a map, a see-through disc would take the
+    colour of whatever lies beneath and the figure would stop reading.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="36dp"
+    android:height="36dp"
+    android:viewportWidth="36"
+    android:viewportHeight="36">
+
+    <path
+        android:fillColor="@color/surface"
+        android:pathData="M18,3a15,15 0 1,0 0.1,0z"
+        android:strokeColor="@color/ink_soft"
+        android:strokeWidth="2" />
+
+    <!-- The walking figure of ic_walk, at the scale the illustration uses. -->
+    <group
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:translateX="9.6"
+        android:translateY="9.6">
+        <path
+            android:fillColor="@color/ink"
+            android:pathData="M13.5,5.5c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM9.8,8.9L7,23h2.1l1.8,-8 2.1,2v6h2v-7.5l-2.1,-2 0.6,-3C14.8,12 16.8,13 19,13v-2c-1.9,0 -3.5,-1 -4.3,-2.4l-1,-1.6c-0.4,-0.6 -1,-1 -1.7,-1 -0.3,0 -0.5,0.1 -0.8,0.1L6,8.3V13h2V9.6l1.8,-0.7" />
+    </group>
+</vector>

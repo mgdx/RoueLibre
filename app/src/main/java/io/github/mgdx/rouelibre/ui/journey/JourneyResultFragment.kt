@@ -13,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.data.DatasetKind
+import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
 import io.github.mgdx.rouelibre.core.journey.NoBikeJourney
@@ -22,6 +23,7 @@ import io.github.mgdx.rouelibre.databinding.ItemJourneyStepBinding
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.formatDuration
 import io.github.mgdx.rouelibre.ui.map.MapStyleLoader
+import io.github.mgdx.rouelibre.ui.map.UserPositionMarker
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.maplibre.android.MapLibre
@@ -48,18 +50,35 @@ class JourneyResultFragment : Fragment() {
     private var mapLibreMap: MapLibreMap? = null
     private var walkSource: GeoJsonSource? = null
     private var rideSource: GeoJsonSource? = null
+    private var markerSource: GeoJsonSource? = null
+    private var userPositionSource: GeoJsonSource? = null
     private var styleLoaded = false
+
+    /**
+     * The last position shown, held for the life of the screen only.
+     *
+     * It survives a rebuild of the view — a rotation must not make the point
+     * vanish until the next fix — and nothing else: it is written nowhere
+     * (SPEC §2, C3).
+     */
+    private var lastKnownPosition: Coordinates? = null
 
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
 
-    private val viewModel: JourneyViewModel by viewModels {
-        val origin = checkNotNull(JourneyEndpoint.readFrom(arguments, ARGUMENT_ORIGIN)) {
+    /** Where the journey sets off from, as the screen was opened with it. */
+    private val origin: JourneyEndpoint
+        get() = checkNotNull(JourneyEndpoint.readFrom(arguments, ARGUMENT_ORIGIN)) {
             "origin point missing"
         }
-        val destination = checkNotNull(JourneyEndpoint.readFrom(arguments, ARGUMENT_DESTINATION)) {
+
+    /** Where it goes. */
+    private val destination: JourneyEndpoint
+        get() = checkNotNull(JourneyEndpoint.readFrom(arguments, ARGUMENT_DESTINATION)) {
             "destination point missing"
         }
+
+    private val viewModel: JourneyViewModel by viewModels {
         JourneyViewModel.Factory(
             router = container.journeyRouter,
             repository = container.stationRepository,
@@ -91,6 +110,8 @@ class JourneyResultFragment : Fragment() {
         views.map.onCreate(savedInstanceState)
         views.map.getMapAsync(::onMapReady)
 
+        followUserPosition()
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collectLatest(::show)
@@ -119,8 +140,49 @@ class JourneyResultFragment : Fragment() {
             style.addSource(ride)
             style.addLayer(JourneyLines.rideLayer(requireContext()))
             style.addLayer(JourneyLines.walkLayer(requireContext()))
+
+            // The four points come after the tracks: a marker sitting under
+            // the line it belongs to would be half hidden by it.
+            val markers = GeoJsonSource(JourneyMarkers.SOURCE_ID)
+            markerSource = markers
+            style.addSource(markers)
+            JourneyMarkers.registerImages(requireContext(), style)
+            style.addLayer(JourneyMarkers.layer())
+
+            // The user's position comes last of all, and therefore on top:
+            // where one IS beats what one has planned, and the two coincide
+            // often enough at the start of a journey for the order to matter.
+            val userPosition = GeoJsonSource(UserPositionMarker.SOURCE_ID)
+            userPositionSource = userPosition
+            style.addSource(userPosition)
+            style.addLayer(UserPositionMarker.layer(requireContext()))
+            userPosition.setGeoJson(UserPositionMarker.featureFor(lastKnownPosition))
+
             styleLoaded = true
             drawJourney(viewModel.state.value)
+        }
+    }
+
+    /**
+     * Follows the position and moves the point on the map (SPEC §7.4).
+     *
+     * Only if the permission has already been granted: this screen shows a
+     * journey, it is not the moment to ask for anything (SPEC §10). Without the
+     * permission, or with location switched off, no point is shown and nothing
+     * says otherwise.
+     *
+     * The subscription stops with the screen, and the position is written
+     * nowhere: it lives in the display source, for as long as it is displayed
+     * (SPEC §2, C3).
+     */
+    private fun followUserPosition() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                container.deviceLocation.positions().collect { position ->
+                    lastKnownPosition = position
+                    userPositionSource?.setGeoJson(UserPositionMarker.featureFor(position))
+                }
+            }
         }
     }
 
@@ -310,6 +372,12 @@ class JourneyResultFragment : Fragment() {
         val walk = walkSource ?: return
         val ride = rideSource ?: return
 
+        // The two ends are drawn even when no journey was composed: they say
+        // what was asked for, which is worth showing when the answer is empty.
+        markerSource?.setGeoJson(
+            JourneyMarkers.featuresFor(origin.position, destination.position, option),
+        )
+
         if (option == null) {
             val directWalk = (state.plan as? JourneyPlan.WalkOnly)?.directWalk
             walk.setGeoJson(JourneyLines.featuresOf(directWalk))
@@ -372,6 +440,8 @@ class JourneyResultFragment : Fragment() {
         binding?.map?.onDestroy()
         walkSource = null
         rideSource = null
+        markerSource = null
+        userPositionSource = null
         mapLibreMap = null
         styleLoaded = false
         binding = null
