@@ -25,27 +25,17 @@ import kotlin.time.Duration.Companion.seconds
  *
  * @property plan what the algorithm composed, or `null` while it computes.
  * @property isComputing a computation is under way.
- * @property chosenIndex the option shown: 0 for the best, then the alternatives
- *   in order.
  * @property hasStations false when no station is known: the network has to be
  *   fetched first, which is not the same thing as an impossible journey.
  */
 data class JourneyUiState(
     val plan: JourneyPlan? = null,
     val isComputing: Boolean = true,
-    val chosenIndex: Int = 0,
     val hasStations: Boolean = true,
 ) {
-    /** The options, best first. */
-    val options: List<JourneyOption>
-        get() = when (val current = plan) {
-            is JourneyPlan.Found -> listOf(current.best) + current.alternatives
-            else -> emptyList()
-        }
-
-    /** The option currently shown. */
+    /** The journey shown, or `null` when none could be composed. */
     val chosen: JourneyOption?
-        get() = options.getOrNull(chosenIndex)
+        get() = (plan as? JourneyPlan.Found)?.best
 }
 
 /**
@@ -92,7 +82,7 @@ class JourneyViewModel(
         // asks of the algorithm.
         computation?.cancel()
         computation = viewModelScope.launch {
-            mutableState.update { it.copy(isComputing = true, chosenIndex = 0) }
+            mutableState.update { it.copy(isComputing = true) }
             val stations = repository.observeStations().first().stations
             if (stations.isEmpty()) {
                 mutableState.update {
@@ -115,13 +105,6 @@ class JourneyViewModel(
             mutableState.update {
                 it.copy(plan = plan, isComputing = false, hasStations = true)
             }
-        }
-    }
-
-    /** Shows another option, without recomputing anything. */
-    fun choose(index: Int) {
-        mutableState.update { current ->
-            if (index in current.options.indices) current.copy(chosenIndex = index) else current
         }
     }
 

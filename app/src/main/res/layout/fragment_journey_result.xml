@@ -122,22 +122,15 @@
                 android:layout_marginTop="@dimen/space_l"
                 android:orientation="vertical" />
 
-            <TextView
-                android:id="@+id/alternatives_title"
+            <!-- The whole journey at a glance, distances under each stroke.
+                 It repeats what the steps above say, so a screen reader must
+                 not read it a second time. -->
+            <io.github.mgdx.rouelibre.ui.journey.JourneyShapeView
+                android:id="@+id/shape"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_l"
-                android:text="@string/journey_alternatives"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label"
-                android:visibility="gone"
-                tools:visibility="visible" />
-
-            <LinearLayout
-                android:id="@+id/alternatives"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_s"
-                android:orientation="vertical" />
+                android:importantForAccessibility="no" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/recompute"

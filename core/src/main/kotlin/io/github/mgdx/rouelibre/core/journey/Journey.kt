@@ -72,17 +72,18 @@ public sealed interface JourneyPlan {
     /**
      * A bike journey was found.
      *
-     * @property best the best option.
-     * @property alternatives up to three other station pairs, in order. SPEC §6
-     *   requires them: the user must be able to prefer a better-stocked station
-     *   to the fastest one.
+     * One journey and one only: the pair the algorithm proved best (SPEC §6).
+     * The runners-up are not carried, because they are not offered — a second
+     * list of station pairs asked the user to arbitrate a choice the risk
+     * penalty has already made for them.
+     *
+     * @property best the chosen option.
      * @property directWalk the direct walk, when it could be computed.
      * @property walkingIsFaster true when walking all the way is quicker than
      *   the bike journey. SPEC §6 requires saying so.
      */
     public data class Found(
         public val best: JourneyOption,
-        public val alternatives: List<JourneyOption>,
         public val directWalk: RouteLeg?,
         public val walkingIsFaster: Boolean,
     ) : JourneyPlan

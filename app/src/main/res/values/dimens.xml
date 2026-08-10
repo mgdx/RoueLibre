@@ -40,6 +40,15 @@
     <dimen name="indicator_size">52dp</dimen>
     <dimen name="indicator_ring">4dp</dimen>
 
+    <!-- The shape of a journey: discs, strokes and their dashes. The disc is
+         the marker of the journey map, at the size a row of four holds on the
+         narrowest screen. -->
+    <dimen name="journey_shape_node">32dp</dimen>
+    <dimen name="journey_shape_walk_stroke">2dp</dimen>
+    <dimen name="journey_shape_ride_stroke">3dp</dimen>
+    <dimen name="journey_shape_dash">2dp</dimen>
+    <dimen name="journey_shape_dash_gap">5dp</dimen>
+
     <!-- Typographic scale. -->
     <dimen name="text_title">22sp</dimen>
     <dimen name="text_indicator">24sp</dimen>

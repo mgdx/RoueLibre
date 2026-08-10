@@ -210,8 +210,26 @@ class JourneyResultFragment : Fragment() {
         )
         showNotice(state)
         showSteps(option)
-        showAlternatives(state)
+        showShape(option)
     }
+
+    /**
+     * Draws the journey's shape, with how far each of its legs runs.
+     *
+     * The step list above reads one line at a time; this is the whole journey
+     * seen at once, in the drawing the search screen uses for it.
+     */
+    private fun showShape(option: JourneyOption) {
+        val views = binding ?: return
+        views.shape.legs = listOf(
+            JourneyShapeView.Leg(isRide = false, distance = distanceOf(option.walkToStation)),
+            JourneyShapeView.Leg(isRide = true, distance = distanceOf(option.ride)),
+            JourneyShapeView.Leg(isRide = false, distance = distanceOf(option.walkToDestination)),
+        )
+    }
+
+    private fun distanceOf(leg: RouteLeg): String =
+        requireContext().formatDistance(leg.distanceMetres.toDouble())
 
     /**
      * Says what is missing when no bike journey could be composed.
@@ -222,8 +240,6 @@ class JourneyResultFragment : Fragment() {
     private fun showWithoutJourney(state: JourneyUiState) {
         val views = binding ?: return
         views.steps.removeAllViews()
-        views.alternatives.removeAllViews()
-        views.alternativesTitle.isVisible = false
 
         val plan = state.plan
         val walk = (plan as? JourneyPlan.WalkOnly)?.directWalk
@@ -239,6 +255,11 @@ class JourneyResultFragment : Fragment() {
             else -> reasonOf(plan)
         }
         views.notice.isVisible = false
+        // One dotted stroke between two ends: the journey there is, with no
+        // station on the way.
+        views.shape.legs = walk
+            ?.let { listOf(JourneyShapeView.Leg(isRide = false, distance = distanceOf(it))) }
+            .orEmpty()
         if (walk != null) {
             addStep(R.drawable.ic_walk, getString(R.string.journey_step_walk_all), null, walk)
         }
@@ -321,48 +342,6 @@ class JourneyResultFragment : Fragment() {
             ?.let { getString(R.string.address_detail, distance, it) }
             ?: distance
         views.steps.addView(step.root)
-    }
-
-    /**
-     * The other station pairs (SPEC §6).
-     *
-     * They exist because the fastest is not always the best: a station slightly
-     * further away but better stocked can be worth the minute it costs.
-     */
-    private fun showAlternatives(state: JourneyUiState) {
-        val views = binding ?: return
-        views.alternatives.removeAllViews()
-        val options = state.options
-        views.alternativesTitle.isVisible = options.size > 1
-        if (options.size <= 1) return
-
-        options.forEachIndexed { index, option ->
-            val step = ItemJourneyStepBinding.inflate(layoutInflater, views.alternatives, false)
-            step.modeIcon.setImageResource(
-                if (index == state.chosenIndex) R.drawable.ic_place else R.drawable.ic_bike,
-            )
-            step.label.text = getString(
-                R.string.journey_alternative_stations,
-                option.departureStation.name,
-                option.arrivalStation.name,
-            )
-            step.detail.text = getString(
-                R.string.journey_alternative_detail,
-                resources.getQuantityString(
-                    R.plurals.bikes_available,
-                    option.bikesAtDeparture,
-                    option.bikesAtDeparture,
-                ),
-                resources.getQuantityString(
-                    R.plurals.docks_available,
-                    option.docksAtArrival,
-                    option.docksAtArrival,
-                ),
-            )
-            step.duration.text = requireContext().formatDuration(option.travelTime)
-            step.root.setOnClickListener { viewModel.choose(index) }
-            views.alternatives.addView(step.root)
-        }
     }
 
     /** Draws the chosen option and frames the map on it. */

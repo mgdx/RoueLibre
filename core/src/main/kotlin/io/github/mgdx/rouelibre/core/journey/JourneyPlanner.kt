@@ -62,8 +62,7 @@ public class JourneyPlanner(
      * @param origin departure point.
      * @param destination arrival point.
      * @param stations the known stations and their last state.
-     * @return the chosen journey and its alternatives, or what prevented it
-     *   from being composed.
+     * @return the chosen journey, or what prevented it from being composed.
      */
     public suspend fun plan(
         origin: Coordinates,
@@ -127,12 +126,9 @@ public class JourneyPlanner(
             return giveUp(origin, destination, NoBikeJourney.NoRouteBetweenStations)
         }
 
-        val ranked = options.sortedBy { it.rankingTime }
-        val best = ranked.first()
+        val best = options.minBy { it.rankingTime }
         return JourneyPlan.Found(
             best = best,
-            // Three alternatives, as SPEC §6 asks for.
-            alternatives = ranked.drop(1).take(ALTERNATIVE_COUNT),
             directWalk = directWalk,
             walkingIsFaster = directWalk != null && directWalk.duration < best.travelTime,
         )
@@ -226,15 +222,15 @@ public class JourneyPlanner(
      * independent legs on a device with several cores have no reason to wait
      * for one another.
      *
-     * The first wave does not always settle the matter. A leg can fail — two
-     * stations can be separated by an obstacle a bike does not cross — and
-     * leave too few options; and the ranking is only a bound: a pair left
-     * uncomputed whose bound beats the best journey found could still be the
-     * true optimum. Further waves therefore compute exactly the pairs that
-     * keep one of those two possibilities alive, within the extra budget of
-     * [JourneySettings.extraRideEvaluations]. When no computable pair remains
-     * — the usual outcome — the best option returned is provably the best of
-     * all the pairs, at a fraction of their cost.
+     * The first wave does not always settle the matter. Every one of its legs
+     * can fail — two stations can be separated by an obstacle a bike does not
+     * cross — leaving no journey at all; and the ranking is only a bound: a
+     * pair left uncomputed whose bound beats the best journey found could
+     * still be the true optimum. Further waves therefore compute exactly the
+     * pairs that keep one of those two possibilities alive, within the extra
+     * budget of [JourneySettings.extraRideEvaluations]. When no computable
+     * pair remains — the usual outcome — the option returned is provably the
+     * best of all the pairs, at a fraction of their cost.
      */
     private suspend fun evaluate(pairs: List<Pair>): List<JourneyOption> {
         val waiting = ArrayDeque(pairs)
@@ -247,7 +243,7 @@ public class JourneyPlanner(
             while (
                 wave.size < minOf(waveLimit, budget) &&
                 waiting.isNotEmpty() &&
-                deservesComputing(waiting.first(), options, wave.size)
+                deservesComputing(waiting.first(), options)
             ) {
                 wave += waiting.removeFirst()
             }
@@ -264,26 +260,17 @@ public class JourneyPlanner(
     /**
      * Whether a pair's bike leg is still worth computing.
      *
-     * Before the first option exists, every pair is. Afterwards a pair earns
-     * its computation on one of two grounds: its lower bound beats the best
-     * journey found — discarding it unseen could discard the optimum — or
-     * failed legs have left fewer options than the best-plus-three SPEC §6
-     * asks to offer.
+     * As long as no option exists, every pair is worth computing: failed legs
+     * would otherwise leave the user without a journey while computable pairs
+     * waited. Once one is found, a pair earns its computation by beating it on
+     * the lower bound — discarding it unseen could discard the optimum.
      *
-     * Pairs arrive in bound order, so the first refusal on both grounds ends
-     * the wave: nothing behind it can do better.
-     *
-     * @param planned pairs already picked for the current wave, counted so a
-     *   refill stops at the number of options actually missing.
+     * Pairs arrive in bound order, so the first refusal ends the wave: nothing
+     * behind it can do better.
      */
-    private fun deservesComputing(
-        pair: Pair,
-        options: List<JourneyOption>,
-        planned: Int,
-    ): Boolean {
+    private fun deservesComputing(pair: Pair, options: List<JourneyOption>): Boolean {
         val best = options.minOfOrNull { it.rankingTime } ?: return true
-        return pair.lowerBound < best ||
-            options.size + planned < 1 + ALTERNATIVE_COUNT
+        return pair.lowerBound < best
     }
 
     /** Computes one wave of bike legs concurrently, dropping the failures. */
@@ -391,9 +378,6 @@ public class JourneyPlanner(
     )
 
     private companion object {
-        /** How many alternatives are offered besides the best journey. */
-        const val ALTERNATIVE_COUNT = 3
-
         /**
          * The speed used for the lower bound, in metres per second —
          * twenty-five kilometres an hour.

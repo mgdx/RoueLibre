@@ -282,21 +282,6 @@ class JourneyPlannerTest {
         assertTrue(!plan.walkingIsFaster)
     }
 
-    // ------------------------------------------------------ alternatives --
-
-    @Test
-    fun `offers up to three alternatives, in order`() = runTest {
-        val stations = (0 until 5).map { station("depart-$it", at(it * 60.0, 150.0)) } +
-            (0 until 5).map { station("arrivee-$it", at(it * 60.0, 3900.0)) }
-        val planner = JourneyPlanner(FakeRouter())
-
-        val plan = planner.plan(origin, destination, stations) as JourneyPlan.Found
-
-        assertTrue("too many alternatives: ${plan.alternatives.size}", plan.alternatives.size <= 3)
-        val times = listOf(plan.best) + plan.alternatives
-        assertEquals(times.sortedBy { it.rankingTime }, times)
-    }
-
     // -------------------------------------------------------------- cost --
 
     @Test
@@ -321,11 +306,11 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `replaces failed rides to keep offering alternatives`() = runTest {
+    fun `replaces a failed ride rather than giving up`() = runTest {
         // The nearest arrival station is on an island the bike cannot reach:
-        // every pair leaning on it fails. The budget freed must go to the
-        // pairs behind, so the user still gets a best journey and the three
-        // alternatives of SPEC §6 — not a shortened list.
+        // every pair of the first wave leaning on it fails. The budget freed
+        // must go to the pairs behind, so the user still gets a journey rather
+        // than "no route between these stations".
         val departures = (0 until 3).map { station("depart-$it", at(it * 60.0, 150.0)) }
         val island = station("ile", at(0.0, 3950.0))
         val arrivals = listOf(
@@ -341,7 +326,6 @@ class JourneyPlannerTest {
         val plan = planner.plan(origin, destination, departures + arrivals) as JourneyPlan.Found
 
         assertTrue("the island must not be reachable", plan.best.arrivalStation.id != "ile")
-        assertEquals(3, plan.alternatives.size)
     }
 
     @Test

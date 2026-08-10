@@ -203,7 +203,7 @@ This is the application's business core. To be implemented in an isolated, testa
 2. Select the **M candidate arrival stations** (M = 5 by default) among those nearest the arrival point with `num_docks_available ≥ 1` and in service.
 3. For every (departure, arrival) pair, compute: walking time to the departure station + biking time between stations + walking time to the destination.
 4. Add a **fixed time for taking and returning the bike**, configurable: 2 min to take one, 1 min to return it. The two gestures are not the same — taking means finding a working bike, unlocking it and adjusting the saddle; returning means pushing it into a dock and waiting for the beep.
-5. Keep the pair with the smallest total time, and offer the user **the 3 best alternatives**.
+5. Keep the pair with the smallest total time, and offer **that one alone**. The application proposes a single journey, the one it has proved best. A list of runner-up pairs asked the user to arbitrate a choice the risk penalty of the rules below has already made for them, on figures they cannot weigh better than the algorithm: it was a way of not deciding. What the interface owes them instead is the availability of the stations chosen, so they can judge the risk they are taking (see below).
 
 **Reliability — important rules:**
 
@@ -266,7 +266,8 @@ A sheet sliding up from the bottom: name, address, bikes available, free docks, 
 - The journey's **four points** are marked: the two stations, and the two ends of the journey. Shape carries the meaning as much as colour: a station is a filled disc bearing a bike, an end of the journey an outlined disc bearing a walking figure — the drawing of the search screen's illustration, at marker size.
 - The **user's position** is shown and follows the device while the screen is open, **above every other marker**. Only if the permission is already granted: this screen shows a journey, it is not the moment to ask for one (§10).
 - Summary: total time, of which walking and biking, distance, departure station (with its bike count), arrival station (with its dock count).
-- List of steps, and access to the 3 alternatives.
+- List of steps, one line per leg.
+- The **shape of the journey** under them, in the drawing of the search screen — outlined disc bearing a walking figure at either end, filled disc bearing a bike at each station, dotted stroke for a walk and unbroken for the ride — with **the distance of each leg written under its stroke**. The steps read one at a time; this is the whole journey seen at once.
 - A recompute button (availability may have changed).
 
 ### 7.5 Favourites

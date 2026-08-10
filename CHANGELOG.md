@@ -65,6 +65,20 @@ also records what has no visible effect.
 
 ### Changed
 
+- **One journey, the one proved best.** The list of runner-up station pairs is
+  gone, and with it the choice it handed back to the user: the risk penalty of
+  `SPEC.md` §6 already weighs a well-stocked station against a nearer one, and
+  showing four candidates asked them to arbitrate that on figures they cannot
+  weigh better than the algorithm. The availability of the two stations chosen
+  stays on screen, which is what lets them judge the risk. `JourneyPlan.Found`
+  no longer carries alternatives, and the planner stops computing extra pairs
+  to fill a list nobody reads — it computes only what could still beat the best.
+
+- **The shape of the journey replaces that list.** The drawing of the search
+  screen, carrying the journey actually computed: a disc per station and per
+  end, a dotted stroke per walk, an unbroken one for the ride, and under each
+  stroke how far it runs, in metres or kilometres.
+
 - **A journey's field opens the address search straight away.** The sheet of
   four ways in between is gone: one nearly always knows the address, and the
   three other ways of `SPEC.md` §7.3 — one's position first, always — now head
