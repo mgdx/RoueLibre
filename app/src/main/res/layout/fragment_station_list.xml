@@ -23,9 +23,14 @@
         android:layout_marginTop="@dimen/space_l"
         android:text="@string/stations_title"
         android:textAppearance="@style/TextAppearance.RoueLibre.Title"
-        app:layout_constraintEnd_toStartOf="@id/open_storage"
+        app:layout_constraintEnd_toStartOf="@id/open_favourites"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- The title stops at the innermost icon, not at the outermost: the two
+         icons sit side by side, and a title box running under the first of
+         them only looks harmless while the text is left-aligned. In Arabic it
+         is right-aligned, and "Stations" was printed under the star. -->
 
     <!-- Access to offline data management. It will join the map screen's
          settings (SPEC §7.1) once that screen exists. -->

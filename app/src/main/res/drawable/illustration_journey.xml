@@ -13,9 +13,14 @@
     The intrinsic size is smaller than the drawing space: the view stretches it
     to the width available, and past 200 dp lint rightly asks what an icon that
     large is doing in a drawable.
+
+    Mirrored in right-to-left languages: the drawing tells a sequence, and a
+    sequence is read in the direction of the text around it. Left unmirrored,
+    it had an Arabic reader starting at the end.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="180dp"
+    android:autoMirrored="true"
     android:height="30dp"
     android:viewportWidth="240"
     android:viewportHeight="40">

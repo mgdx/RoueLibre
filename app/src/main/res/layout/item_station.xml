@@ -40,12 +40,16 @@
         Figure and label form one block, so the text on the left stops at the
         wider of the two. Constrained separately, the label "PLACES", wider than
         the figure, slid under the station's name.
+
+        The gap between the two is carried by the name's end margin, not by
+        this block's start margin: a margin on a side that carries no
+        constraint is ignored, which showed up in Arabic, where name and label
+        ended up flush against one another.
     -->
     <LinearLayout
         android:id="@+id/counterpart_block"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_m"
         android:gravity="end"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -77,6 +81,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_m"
         android:ellipsize="end"
         android:maxLines="1"
         android:textAppearance="@style/TextAppearance.RoueLibre.Body"

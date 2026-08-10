@@ -25,11 +25,11 @@ which has no language qualifier: it is what Android serves when nothing else
 matches, so it is always complete. French, in `values-fr/`, is a translation
 like the others.
 
-**Six languages are already started** — German, Spanish, Italian, Dutch,
-Polish, Portuguese. Their files exist under `values-de/`, `values-es/` and so
-on, but every string in them still holds its English text: they are a starting
-point, not a translation. Open the one for your language and translate it in
-place.
+**Eight languages are already started** — Arabic, German, Spanish, Italian,
+Dutch, Polish, Portuguese, Chinese. Their files exist under `values-ar/`,
+`values-de/` and so on, but every string in them still holds its English text:
+they are a starting point, not a translation. Open the one for your language
+and translate it in place.
 
 For a language that has no file yet:
 
@@ -42,7 +42,9 @@ For a language that has no file yet:
    drops the folder from the APK and nobody ever sees the translation.
 4. **Check the layouts.** Switch the system to your language and walk through
    every screen. German and Dutch lengthen labels appreciably; that is where
-   layouts break.
+   layouts break. A right-to-left language mirrors them, which is another
+   thing entirely: the screens are built for it, but each addition deserves a
+   walk through in Arabic before it is called done.
 
 While a string is left untranslated, that is the English text its readers
 get — the same thing they would have got with no file at all. Translating half
@@ -67,10 +69,10 @@ to another.
 (`one`, `other`), Polish four, Arabic six. Provide the ones for your language,
 listed in the
 [CLDR plural rules](https://cldr.unicode.org/index/cldr-spec/plural-rules). The started
-files already carry the categories their language needs — Polish has four,
-Spanish, Italian and Portuguese three — each holding the English plural for
-want of better. Do not remove one: Android Lint requires them, and it is right
-to.
+files already carry the categories their language needs — Arabic six, Polish
+four, Spanish, Italian and Portuguese three, Chinese one — each holding the
+English plural for want of better. Do not remove one, and do not add one
+either: Android Lint checks both ways, and it is right to.
 
 **Watch what `one` covers.** In French it takes 0 as well as 1 — "0 vélo", in
 the singular — where English writes "0 bikes". Every language draws that line

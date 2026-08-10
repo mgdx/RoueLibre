@@ -14,11 +14,13 @@
         keep it. Remove a folder from this list when its translation lands.
     -->
     <issue id="Typos">
+        <ignore path="src/main/res/values-ar/strings.xml" />
         <ignore path="src/main/res/values-de/strings.xml" />
         <ignore path="src/main/res/values-es/strings.xml" />
         <ignore path="src/main/res/values-it/strings.xml" />
         <ignore path="src/main/res/values-nl/strings.xml" />
         <ignore path="src/main/res/values-pl/strings.xml" />
         <ignore path="src/main/res/values-pt/strings.xml" />
+        <ignore path="src/main/res/values-zh/strings.xml" />
     </issue>
 </lint>

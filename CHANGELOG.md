@@ -59,10 +59,11 @@ also records what has no visible effect.
   "about". That screen keeps the credit of the city being served; the others,
   including cities not installed, are one labelled tap away, each with the
   address its feed is published at.
-- **Six languages are started** — German, Spanish, Italian, Dutch, Polish,
-  Portuguese. Their files hold the English text until somebody translates
-  them, so contributing a translation means editing a file rather than
-  creating one. Cost: 52 kB of APK.
+- **Eight languages are started** — Arabic, German, Spanish, Italian, Dutch,
+  Polish, Portuguese, Chinese. Their files hold the English text until somebody
+  translates them, so contributing a translation means editing a file rather
+  than creating one. Arabic carries the six plural categories it needs, Chinese
+  the single one it uses. Cost: 69 kB of APK, all eight together.
 - **The interface speaks English by default.** `values/` holds English —
   what Android serves when no translation matches — and French moved to
   `values-fr/`, a translation like the others, kept complete. An application

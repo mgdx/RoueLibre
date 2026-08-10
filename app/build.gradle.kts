@@ -43,7 +43,7 @@ android {
         // strings are still the English ones. Listing them here is what makes
         // a device set to German serve `values-de/` — without it the folder
         // would be dropped from the APK and the file would be dead weight.
-        localeFilters += listOf("fr", "en", "de", "es", "it", "nl", "pl", "pt")
+        localeFilters += listOf("en", "fr", "ar", "de", "es", "it", "nl", "pl", "pt", "zh")
     }
 
     buildFeatures {
