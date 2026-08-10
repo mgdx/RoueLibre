@@ -30,6 +30,7 @@ import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.prefersReducedMotion
+import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
 import io.github.mgdx.rouelibre.ui.stations.StationDetailSheet
 import io.github.mgdx.rouelibre.ui.stations.StationListFragment
 import io.github.mgdx.rouelibre.ui.stations.StationsViewModel
@@ -155,7 +156,7 @@ class MapFragment : Fragment() {
         val views = checkNotNull(binding)
 
         views.map.onCreate(savedInstanceState)
-        views.openStorage.setOnClickListener { show(StorageFragment()) }
+        views.openSettings.setOnClickListener { show(SettingsFragment()) }
         views.openList.setOnClickListener { show(StationListFragment()) }
         views.openSearch.setOnClickListener { openAddressSearch() }
         views.locateMe.setOnClickListener { onLocateMeClicked() }
@@ -194,7 +195,7 @@ class MapFragment : Fragment() {
             views.freshness.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = insets.top + baseMargin
             }
-            views.openStorage.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            views.openSettings.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = insets.top + baseMargin
             }
             views.attribution.updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -396,7 +397,7 @@ class MapFragment : Fragment() {
         views.pickCrosshair.isVisible = true
         views.pickConfirm.isVisible = true
         views.openList.isVisible = false
-        views.openStorage.isVisible = false
+        views.openSettings.isVisible = false
         views.openSearch.isVisible = false
         views.openJourney.isVisible = false
         views.modeToggle.isVisible = false

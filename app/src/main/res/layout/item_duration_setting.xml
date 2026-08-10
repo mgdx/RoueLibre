@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Un réglage de durée : un libellé, une valeur, et deux boutons pour la
+    changer. Des boutons plutôt qu'un champ de saisie : la valeur se règle par
+    pas d'une minute entre zéro et un quart d'heure, et ouvrir un clavier pour
+    cela serait disproportionné.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/touch_target_min">
+
+    <TextView
+        android:id="@+id/label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/decrease"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Prendre le vélo" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/decrease"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        app:icon="@drawable/ic_minus"
+        app:iconTint="@color/encre"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/value"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/value"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bricolage_semibold"
+        android:fontFeatureSettings="tnum"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/increase"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2 min" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/increase"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        app:icon="@drawable/ic_plus"
+        app:iconTint="@color/encre"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

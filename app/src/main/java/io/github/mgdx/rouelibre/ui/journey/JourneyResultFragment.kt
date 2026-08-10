@@ -61,8 +61,9 @@ class JourneyResultFragment : Fragment() {
             "point d'arrivée absent"
         }
         JourneyViewModel.Factory(
-            planner = container.journeyPlanner,
+            router = container.journeyRouter,
             repository = container.stationRepository,
+            preferences = container.preferences,
             origin = origin.position,
             destination = destination.position,
         )

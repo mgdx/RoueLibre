@@ -12,7 +12,6 @@ import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.CityConfigurationReader
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
 import io.github.mgdx.rouelibre.core.geo.Coordinates
-import io.github.mgdx.rouelibre.core.journey.JourneyPlanner
 import io.github.mgdx.rouelibre.core.journey.Router
 import io.github.mgdx.rouelibre.core.routing.RouteResult
 import io.github.mgdx.rouelibre.core.routing.TravelMode
@@ -153,22 +152,24 @@ class AppContainer(private val context: Context) {
     }
 
     /**
-     * L'algorithme de trajet, branché sur le moteur de l'appareil.
+     * Le moteur de l'appareil, vu par l'algorithme de trajet.
      *
-     * L'adaptateur existe pour que l'algorithme reste en Kotlin pur : il ne
+     * Cet adaptateur existe pour que l'algorithme reste en Kotlin pur : il ne
      * connaît qu'une interface à deux points et un mode, jamais BRouter
      * (SPEC §14).
+     *
+     * Le planificateur, lui, n'est pas construit ici : ses réglages — les
+     * temps forfaitaires du §6 — dépendent de ce que l'utilisateur a choisi, et
+     * changent donc entre deux calculs.
      */
-    val journeyPlanner: JourneyPlanner by lazy {
-        JourneyPlanner(
-            object : Router {
-                override suspend fun route(
-                    from: Coordinates,
-                    to: Coordinates,
-                    mode: TravelMode,
-                ): RouteResult = router.route(from, to, mode)
-            },
-        )
+    val journeyRouter: Router by lazy {
+        object : Router {
+            override suspend fun route(
+                from: Coordinates,
+                to: Coordinates,
+                mode: TravelMode,
+            ): RouteResult = router.route(from, to, mode)
+        }
     }
 
     /** Source unique des stations et de leur disponibilité. */

@@ -61,14 +61,14 @@
         tools:text="Mis à jour il y a 12 secondes" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/open_storage"
+        android:id="@+id/open_settings"
         style="@style/Widget.Material3.Button.IconButton.Filled"
         android:layout_width="@dimen/touch_target_min"
         android:layout_height="@dimen/touch_target_min"
         android:layout_margin="@dimen/space_m"
-        android:contentDescription="@string/storage_open"
+        android:contentDescription="@string/settings_open"
         app:backgroundTint="@color/surface"
-        app:icon="@drawable/ic_storage"
+        app:icon="@drawable/ic_settings"
         app:iconTint="@color/encre"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

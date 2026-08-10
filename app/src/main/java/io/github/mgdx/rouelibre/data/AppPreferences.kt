@@ -3,6 +3,7 @@ package io.github.mgdx.rouelibre.data
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
@@ -10,6 +11,36 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.time.Instant
+
+/**
+ * Le thème dont l'utilisateur veut que l'application s'habille (SPEC §7.6).
+ *
+ * @property id valeur écrite sur le disque, stable d'une version à l'autre.
+ */
+enum class AppTheme(val id: String) {
+    /** Celui du système, et c'est le défaut. */
+    System("systeme"),
+
+    /** Toujours clair. */
+    Light("clair"),
+
+    /** Toujours sombre. */
+    Dark("sombre"),
+    ;
+
+    companion object {
+        /** Relit un thème enregistré ; une valeur inconnue rend [System]. */
+        fun fromId(id: String?): AppTheme = entries.firstOrNull { it.id == id } ?: System
+    }
+}
+
+/**
+ * Les deux temps forfaitaires du trajet, en secondes (SPEC §6).
+ *
+ * @property pickupSeconds temps de prise du vélo à la station de départ.
+ * @property dropoffSeconds temps de dépose à la station d'arrivée.
+ */
+data class HandlingTimes(val pickupSeconds: Int, val dropoffSeconds: Int)
 
 /**
  * Réglages et état persistant de l'application (SPEC §8).
@@ -91,10 +122,79 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
         return isFavourite
     }
 
+    /**
+     * Thème choisi : clair, sombre, ou celui du système (SPEC §7.6).
+     *
+     * Le défaut suit le système, seul choix qui respecte un réglage que
+     * l'utilisateur a déjà exprimé ailleurs.
+     */
+    val theme: Flow<AppTheme> = dataStore.data.map { preferences ->
+        AppTheme.fromId(preferences[THEME])
+    }
+
+    /** Enregistre le thème choisi. */
+    suspend fun setTheme(theme: AppTheme) {
+        dataStore.edit { it[THEME] = theme.id }
+    }
+
+    /**
+     * Temps forfaitaires de prise et de dépose du vélo (SPEC §6).
+     *
+     * Réglables parce qu'ils dépendent de la personne et de la station : deux
+     * minutes pour qui connaît le geste, davantage avec un antivol récalcitrant
+     * ou une borne capricieuse. Ils pèsent sur le choix des stations autant que
+     * sur le temps annoncé.
+     */
+    val handlingTimes: Flow<HandlingTimes> = dataStore.data.map { preferences ->
+        HandlingTimes(
+            pickupSeconds = preferences[PICKUP_SECONDS] ?: DEFAULT_HANDLING_SECONDS,
+            dropoffSeconds = preferences[DROPOFF_SECONDS] ?: DEFAULT_HANDLING_SECONDS,
+        )
+    }
+
+    /** Enregistre les temps forfaitaires, bornés à des valeurs plausibles. */
+    suspend fun setHandlingTimes(times: HandlingTimes) {
+        dataStore.edit { preferences ->
+            preferences[PICKUP_SECONDS] = times.pickupSeconds.coerceIn(0, MAX_HANDLING_SECONDS)
+            preferences[DROPOFF_SECONDS] = times.dropoffSeconds.coerceIn(0, MAX_HANDLING_SECONDS)
+        }
+    }
+
+    /**
+     * URL du manifeste des jeux de données choisie par l'utilisateur.
+     *
+     * `null` tant qu'elle n'a pas été modifiée. Ce réglage existe pour que
+     * l'hébergeur par défaut ne soit jamais un point de défaillance unique
+     * (SPEC §4.4).
+     */
+    suspend fun dataManifestUrlOverride(): String? =
+        dataStore.data.first()[DATA_MANIFEST_URL]?.takeIf { it.isNotBlank() }
+
+    /** Remplace l'URL du manifeste, ou rétablit celle de la configuration. */
+    suspend fun setDataManifestUrlOverride(url: String?) {
+        dataStore.edit { preferences ->
+            if (url.isNullOrBlank()) {
+                preferences.remove(DATA_MANIFEST_URL)
+            } else {
+                preferences[DATA_MANIFEST_URL] = url
+            }
+        }
+    }
+
     private companion object {
         val STATION_INFORMATION_FETCHED_AT =
             longPreferencesKey("station_information_fetched_at")
         val GBFS_DISCOVERY_URL = stringPreferencesKey("gbfs_discovery_url")
         val FAVOURITE_STATION_IDS = stringSetPreferencesKey("favourite_station_ids")
+        val THEME = stringPreferencesKey("theme")
+        val PICKUP_SECONDS = intPreferencesKey("pickup_seconds")
+        val DROPOFF_SECONDS = intPreferencesKey("dropoff_seconds")
+        val DATA_MANIFEST_URL = stringPreferencesKey("data_manifest_url")
+
+        /** Deux minutes, la valeur par défaut du SPEC §6. */
+        const val DEFAULT_HANDLING_SECONDS = 120
+
+        /** Un quart d'heure pour prendre un vélo n'est plus un forfait. */
+        const val MAX_HANDLING_SECONDS = 900
     }
 }

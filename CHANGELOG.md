@@ -62,6 +62,24 @@ qui sortira sur F-Droid sera recompilé et signé là-bas.
   validé, puis mis en place — et un fichier refusé dit pourquoi.
 - **Filtre de la liste par nom de station**, insensible à la casse et aux
   accents, tolérant à l'ordre des mots, cherchant aussi le code postal.
+- **Réglages** (§7.6) : accès aux données hors ligne, thème clair / sombre /
+  système appliqué immédiatement, temps forfaitaires de prise et de dépose du
+  vélo, adresses du flux de disponibilité et du manifeste des données. Écrits à
+  la main plutôt qu'avec `androidx.preference`, dont la grammaire visuelle
+  aurait ensuite dû être combattue par les jetons du projet.
+  - Les temps forfaitaires sont **relus à chaque calcul d'itinéraire** : les
+    changer se voit au recalcul suivant, sans redémarrer.
+  - Les deux adresses vidées rétablissent celles de la configuration de ville,
+    dont l'invite de saisie montre alors la valeur.
+- **« À propos »** (§7.7) : version, politique de confidentialité en clair,
+  attributions du §4.5 — dont celle du réseau, lue dans la configuration de
+  ville et non écrite dans le code — licence de l'application, lien vers le
+  dépôt, et **textes complets des licences embarquées**. Ce dernier point n'est
+  pas une courtoisie : le §5 impose de conserver l'avis de copyright et le
+  texte MIT de BRouter dans les mentions légales, et la SIL Open Font License
+  des deux polices demande la même chose. Le dossier des licences est parcouru
+  plutôt qu'énuméré dans le code, pour qu'ajouter une dépendance et sa licence
+  ne demande pas de penser à modifier cet écran.
 - **Recherche d'itinéraire** (§7.3) : deux points à désigner et un bouton pour
   les intervertir. Les quatre façons du SPEC sont là — sa position, une
   adresse, une station favorite, un point choisi sur la carte. Ce dernier se

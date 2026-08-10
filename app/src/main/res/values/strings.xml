@@ -109,6 +109,47 @@
     <string name="map_needs_tiles_title">La carte a besoin du fond de carte</string>
     <string name="map_needs_tiles_message">Installe le fond de carte depuis l\'écran de stockage. En attendant, la liste des stations reste utilisable.</string>
 
+    <!-- Réglages (SPEC §7.6). -->
+    <string name="settings_title">Réglages</string>
+    <string name="settings_open">Réglages</string>
+    <string name="settings_data_title">Données hors ligne</string>
+    <string name="settings_theme_title">Thème</string>
+    <string name="settings_theme_system">Système</string>
+    <string name="settings_theme_light">Clair</string>
+    <string name="settings_theme_dark">Sombre</string>
+    <string name="settings_handling_title">Temps de prise et de dépose</string>
+    <string name="settings_handling_explanation">Ajoutés au trajet, et pris en compte dans le choix des stations.</string>
+    <string name="settings_pickup">Prendre le vélo</string>
+    <string name="settings_dropoff">Rendre le vélo</string>
+    <string name="settings_sources_title">Sources des données</string>
+    <string name="settings_gbfs_url">Adresse du flux de disponibilité</string>
+    <string name="settings_manifest_url">Adresse du manifeste des données</string>
+    <string name="settings_sources_explanation">Laisse ces champs vides pour employer les adresses fournies avec l\'application. Les changer permet de servir un autre réseau, ou de te passer de l\'hébergeur par défaut.</string>
+    <string name="settings_reset_default">Rétablir l\'adresse par défaut</string>
+
+    <!-- « À propos » (SPEC §7.7). Les attributions y sont dues, pas offertes :
+         les producteurs de données et les bibliothèques employées l'exigent. -->
+    <string name="about_title">À propos</string>
+    <string name="about_open">À propos</string>
+    <!-- %1$s est le numéro de version, par exemple « 0.1.0-alpha ». -->
+    <string name="about_version">Version %1$s</string>
+
+    <string name="about_privacy_title">Vie privée</string>
+    <string name="about_privacy_body">Aucun compte, aucune publicité, aucun mouchard, aucun identifiant unique. Rien de ce que tu cherches ou de ce que tu calcules ne quitte ce téléphone : les adresses, les itinéraires et ta position restent ici, et ne sont pas conservés. La seule requête qui part en usage courant récupère la disponibilité des vélos. Les jeux de données ne sont téléchargés que sur ta demande.</string>
+
+    <string name="about_attributions_title">Sources des données</string>
+    <string name="about_attribution_osm">Fond de carte, itinéraires et points de repère : © les contributeurs OpenStreetMap, licence ODbL.</string>
+    <string name="about_attribution_ban">Adresses et numéros de voirie : Base Adresse Nationale, licence ODbL.</string>
+    <string name="about_attribution_brouter">Calcul d\'itinéraire : BRouter, licence MIT, sur des données OpenStreetMap.</string>
+    <string name="about_attribution_maplibre">Affichage de la carte : MapLibre Native, licence BSD à deux clauses.</string>
+
+    <string name="about_licence_title">Licence</string>
+    <string name="about_licence_body">Roue Libre est un logiciel libre, publié sous licence GNU GPL version 3. Tu peux l\'utiliser, l\'étudier, le modifier et le redistribuer.</string>
+    <string name="about_open_repository">Voir le code source</string>
+    <string name="about_open_licences">Licences des composants</string>
+    <string name="about_licences_title">Licences</string>
+    <string name="about_no_browser">Aucun navigateur n\'est installé sur cet appareil.</string>
+
     <!-- Recherche d'itinéraire (SPEC §7.3). -->
     <string name="journey_title">Itinéraire</string>
     <string name="journey_open">Chercher un itinéraire</string>
