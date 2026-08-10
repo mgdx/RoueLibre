@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Un réglage de durée : un libellé, une valeur, et deux boutons pour la
-    changer. Des boutons plutôt qu'un champ de saisie : la valeur se règle par
-    pas d'une minute entre zéro et un quart d'heure, et ouvrir un clavier pour
-    cela serait disproportionné.
+    A duration setting: a label, a value, and two buttons to change it. Buttons
+    rather than a text field: the value moves in one-minute steps between zero
+    and a quarter of an hour, and opening a keyboard for that would be out of
+    proportion.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"

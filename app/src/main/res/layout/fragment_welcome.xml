@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Premier lancement (SPEC §7.9).
+    First launch (SPEC §7.9).
 
-    Un écran, pas une boîte de dialogue : le contenu est trop dense pour une
-    fenêtre modale, et il doit pouvoir être relu depuis « À propos ».
+    A screen, not a dialog: the content is too dense for a modal window, and it
+    must be readable again from "about".
 
-    Le texte est court et la sortie toujours possible : « Plus tard » ne cache
-    rien, il reporte. On explique un fonctionnement, on ne vend rien.
+    The text is short and the way out always available: "later" hides nothing,
+    it postpones. We explain how something works, we are not selling anything.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"

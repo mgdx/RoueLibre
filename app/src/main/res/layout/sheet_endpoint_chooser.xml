@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Comment désigner un point de trajet (SPEC §7.3).
+    How to designate a journey point (SPEC §7.3).
 
-    Quatre entrées, alignées, toutes de la même taille : aucune n'est le
-    « bon » choix par défaut, cela dépend de ce que l'utilisateur sait de
-    l'endroit qu'il vise.
+    Four entries, aligned, all the same size: none is the "right" default
+    choice, it depends on what the user knows about the place they are after.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

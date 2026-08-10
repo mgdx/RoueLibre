@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Une ligne de résultat de recherche d'adresse.
+    One row of address search results.
 
-    Même grammaire que la ligne de station : séparation tonale, trait d'un
-    pixel, jamais de carte à ombre portée (SPEC §7). L'icône ne fait que
-    distinguer une voie d'un point de repère ; elle ne porte aucune information
-    que le texte ne donne pas.
+    The same grammar as the station row: tonal separation, a one-pixel rule,
+    never a drop-shadowed card (SPEC §7). The icon only tells a street from a
+    landmark; it carries no information the text does not give.
 
-    `start`/`end` partout, jamais `left`/`right` (SPEC §9).
+    `start`/`end` throughout, never `left`/`right` (SPEC §9).
 
-    L'effet d'appui est posé en `foreground` et non en `background` : la liste
-    peint déjà son fond, et le repeindre par ligne ferait dessiner deux fois le
-    même aplat.
+    The press effect sits in `foreground` and not in `background`: the list
+    already paints its own, and repainting per row would draw the same flat
+    twice.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    « À propos » (SPEC §7.7).
+    The "about" screen (SPEC §7.7).
 
-    Trois choses y sont dues, pas offertes : les attributions du §4.5, la
-    politique de confidentialité en clair, et la licence de l'application. Le
-    reste est du contexte.
+    Three things are owed here, not offered: the attributions of §4.5, the
+    privacy policy in plain words, and the application's licence. The rest is
+    context.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -70,8 +70,8 @@
                 android:text="@string/about_attributions_title"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
 
-            <!-- Attribution du réseau servi : elle vient de la configuration de
-                 ville, jamais du code (SPEC §15). -->
+            <!-- The served network's attribution: it comes from the city
+                 configuration, never from the code (SPEC §15). -->
             <TextView
                 android:id="@+id/network_attribution"
                 android:layout_width="match_parent"

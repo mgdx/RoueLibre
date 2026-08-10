@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Une ligne de station.
+    One station row.
 
-    Séparation tonale et trait d'un pixel plutôt que carte à ombre portée : la
-    liste doit se lire comme un tableau, pas comme un empilement d'objets
-    flottants (SPEC §7).
+    Tonal separation and a one-pixel rule rather than a drop-shadowed card: the
+    list must read as a table, not as a stack of floating objects (SPEC §7).
 
-    `start`/`end` partout, jamais `left`/`right` : les mises en page doivent
-    tenir dans une langue écrite de droite à gauche (SPEC §9).
+    `start`/`end` throughout, never `left`/`right`: the layouts must hold in a
+    right-to-left language (SPEC §9).
 
-    La ligne ne peint pas son fond : c'est la liste qui le fait, une fois pour
-    toutes. Le repeindre à chaque ligne ferait redessiner le même aplat deux
-    fois par pixel.
+    The row does not paint its own background: the list does it, once and for
+    all. Repainting it per row would draw the same flat twice per pixel.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -35,14 +33,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!--
-        Le compte complémentaire : les places quand l'indicateur montre les
-        vélos, et l'inverse. Les deux chiffres comptent — l'un pour partir,
-        l'autre pour arriver — mais un seul mérite l'indicateur.
+        The counterpart count: the docks when the indicator shows bikes, and
+        the other way round. Both figures matter — one to leave, one to arrive —
+        but only one deserves the indicator.
 
-        Chiffre et étiquette forment un bloc, pour que le texte de gauche
-        s'arrête au plus large des deux. Contraints séparément, l'étiquette
-        « PLACES », plus large que le chiffre, passait sous le nom de la
-        station.
+        Figure and label form one block, so the text on the left stops at the
+        wider of the two. Constrained separately, the label "PLACES", wider than
+        the figure, slid under the station's name.
     -->
     <LinearLayout
         android:id="@+id/counterpart_block"

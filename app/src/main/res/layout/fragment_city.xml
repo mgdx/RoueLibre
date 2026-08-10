@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Écran « ville » (SPEC §15) : quelle agglomération l'application sert.
+    The city screen (SPEC §15): which conurbation the application serves.
 
-    Le bouton de localisation vient avant la liste : c'est le chemin court, et
-    la liste reste là pour qui refuse la permission ou prépare un voyage.
+    The locate button comes before the list: it is the short path, and the list
+    stays there for whoever refuses the permission or is planning a trip.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"

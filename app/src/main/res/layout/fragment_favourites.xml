@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Favoris (SPEC §7.5).
+    Favourites (SPEC §7.5).
 
-    Les mêmes lignes que la liste des stations : ce sont les mêmes stations, et
-    apprendre deux mises en page pour un même objet serait du travail demandé à
-    l'utilisateur.
+    The same rows as the station list: they are the same stations, and learning
+    two layouts for one object would be work asked of the user.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -51,7 +50,7 @@
         tools:itemCount="4"
         tools:listitem="@layout/item_station" />
 
-    <!-- Écran vide : une invitation à agir, pas un constat (SPEC §7). -->
+    <!-- An empty screen: an invitation to act, not a statement (SPEC §7). -->
     <TextView
         android:id="@+id/empty"
         android:layout_width="0dp"

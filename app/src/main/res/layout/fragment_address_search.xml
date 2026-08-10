@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Recherche d'adresses (SPEC §4.3).
+    Address search (SPEC §4.3).
 
-    Le champ est en haut parce que le clavier est en bas : la liste pousse ses
-    résultats vers le pouce à mesure qu'ils arrivent, sans que la main quitte
-    la zone de frappe.
+    The field is at the top because the keyboard is at the bottom: the list
+    pushes its results towards the thumb as they arrive, without the hand
+    leaving the typing area.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -50,8 +50,8 @@
             android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Rappel de ce que la recherche fait, et surtout de ce qu'elle ne fait
-         pas : rien ne sort de l'appareil, pas même pendant la frappe. -->
+    <!-- A reminder of what the search does, and above all of what it does
+         not: nothing leaves the device, not even while typing. -->
     <TextView
         android:id="@+id/privacy_note"
         android:layout_width="0dp"
@@ -80,7 +80,7 @@
         tools:itemCount="4"
         tools:listitem="@layout/item_address" />
 
-    <!-- Écran vide : une invitation à agir, pas un constat (SPEC §7). -->
+    <!-- An empty screen: an invitation to act, not a statement (SPEC §7). -->
     <LinearLayout
         android:id="@+id/empty_state"
         android:layout_width="0dp"

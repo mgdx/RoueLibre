@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Une ville du catalogue : son nom, son réseau, ce que ses données pèsent.
+    A city from the catalogue: its name, its network, what its data weighs.
 
-    La ligne ne peint pas son fond, comme celle des stations : c'est la liste
-    qui le fait, une fois pour toutes.
+    The row does not paint its own background, like the station row: the list
+    does it, once and for all.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"

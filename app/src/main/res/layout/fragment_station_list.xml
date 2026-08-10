@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Écran principal provisoire : la liste des stations.
+    The provisional main screen: the station list.
 
-    Étape (1) du SPEC §16 — « récupération et affichage des données GBFS en
-    liste ». La carte prendra sa place à l'étape (3) ; cette liste restera
-    accessible, notamment quand les jeux de données hors ligne ne sont pas
-    encore installés et que l'application se limite aux disponibilités
-    (SPEC §4.4).
+    Stage (1) of SPEC §16 — "fetching and displaying GBFS data as a list". The
+    map takes its place at stage (3); this list stays reachable, notably when
+    the offline datasets are not installed yet and the application is limited to
+    availability (SPEC §4.4).
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -28,8 +27,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Accès à la gestion des données hors ligne. Il rejoindra les réglages
-         de l'écran carte (SPEC §7.1) quand celui-ci existera. -->
+    <!-- Access to offline data management. It will join the map screen's
+         settings (SPEC §7.1) once that screen exists. -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/open_storage"
         style="@style/Widget.Material3.Button.IconButton"
@@ -43,8 +42,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/title" />
 
-    <!-- Favoris (SPEC §7.5) : à côté de la liste complète, puisque c'en est
-         un extrait. -->
+    <!-- Favourites (SPEC §7.5): beside the complete list, since they are an
+         extract of it. -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/open_favourites"
         style="@style/Widget.Material3.Button.IconButton"
@@ -57,7 +56,7 @@
         app:layout_constraintEnd_toStartOf="@id/open_storage"
         app:layout_constraintTop_toTopOf="@id/title" />
 
-    <!-- Âge de la donnée, exigé par le SPEC §4.1. -->
+    <!-- The data's age, required by SPEC §4.1. -->
     <TextView
         android:id="@+id/freshness"
         android:layout_width="0dp"
@@ -71,8 +70,8 @@
         tools:text="Mis à jour il y a 12 secondes" />
 
     <!--
-        Filtre la liste par nom de station. À ne pas confondre avec la
-        recherche d'adresses du SPEC §4.3, qui interroge l'index hors ligne.
+        Filters the list by station name. Not to be confused with the address
+        search of SPEC §4.3, which queries the offline index.
     -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_field"
@@ -99,7 +98,7 @@
             android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Bascule « vélos » / « places » (SPEC §7.1). -->
+    <!-- The "bikes" / "docks" toggle (SPEC §7.1). -->
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/mode_toggle"
         android:layout_width="0dp"
@@ -152,7 +151,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <!--
-        Écran vide : une invitation à agir, pas un constat (SPEC §7).
+        An empty screen: an invitation to act, not a statement (SPEC §7).
     -->
     <LinearLayout
         android:id="@+id/empty_state"

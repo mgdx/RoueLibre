@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Une étape du trajet (SPEC §7.4).
+    One step of the journey (SPEC §7.4).
 
-    L'icône dit le mode, le texte dit quoi faire et où, la durée reste alignée
-    à droite pour que les trois étapes se comparent d'un regard.
+    The icon says the mode, the text says what to do and where, the duration
+    stays right-aligned so the three steps compare at a glance.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"

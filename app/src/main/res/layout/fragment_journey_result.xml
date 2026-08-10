@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Résultat d'itinéraire (SPEC §7.4).
+    Journey result (SPEC §7.4).
 
-    La carte occupe le haut, le détail se lit dessous : on regarde d'abord où
-    l'on va, on lit ensuite combien de temps. Le tout défile, parce que la
-    liste des étapes et les alternatives ne tiennent pas toujours à l'écran.
+    The map fills the top, the detail reads underneath: one first looks at where
+    one is going, then reads how long it takes. The whole thing scrolls, because
+    the step list and the alternatives do not always fit on screen.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -81,7 +81,7 @@
             android:paddingEnd="@dimen/space_l"
             android:paddingBottom="@dimen/space_l">
 
-            <!-- Le temps total, l'information qu'on vient chercher. -->
+            <!-- The total time, the information one comes for. -->
             <TextView
                 android:id="@+id/total_time"
                 android:layout_width="match_parent"
@@ -98,7 +98,7 @@
                 android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
                 tools:text="dont 9 min à pied et 13 min à vélo · 4,1 km" />
 
-            <!-- Averti quand la marche directe va plus vite (SPEC §6). -->
+            <!-- Warns when walking straight there is faster (SPEC §6). -->
             <TextView
                 android:id="@+id/notice"
                 android:layout_width="match_parent"
@@ -114,7 +114,7 @@
                 tools:text="À pied, tu y serais plus vite : 18 min."
                 tools:visibility="visible" />
 
-            <!-- Les trois étapes, dans l'ordre où on les vit. -->
+            <!-- The three steps, in the order one lives them. -->
             <LinearLayout
                 android:id="@+id/steps"
                 android:layout_width="match_parent"

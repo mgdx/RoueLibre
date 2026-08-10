@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Recherche d'itinéraire (SPEC §7.3).
+    Journey search (SPEC §7.3).
 
-    Deux champs, un bouton d'inversion entre eux, et rien d'autre : c'est un
-    écran de saisie, pas un tableau de bord. Le bouton de calcul reste en bas,
-    à portée du pouce.
+    Two fields, a swap button between them, and nothing else: this is an entry
+    screen, not a dashboard. The compute button stays at the bottom, within
+    thumb reach.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -53,8 +53,8 @@
         app:layout_constraintStart_toStartOf="@id/origin"
         app:layout_constraintTop_toBottomOf="@id/origin" />
 
-    <!-- Inversion départ / arrivée (SPEC §7.3), entre les deux champs et à
-         leur droite : la position dit ce que le bouton échange. -->
+    <!-- Origin / destination swap (SPEC §7.3), between the two fields and
+         to their right: the position says what the button exchanges. -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/swap"
         style="@style/Widget.Material3.Button.IconButton"

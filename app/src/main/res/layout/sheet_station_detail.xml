@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Détail d'une station (SPEC §7.2), en feuille glissante depuis le bas.
+    A station's detail (SPEC §7.2), in a sheet sliding up from the bottom.
 
-    Les deux comptes sont montrés côte à côte, chacun avec son indicateur :
-    partir demande un vélo, arriver demande une place, et l'utilisateur qui
-    ouvre cette feuille peut chercher l'un ou l'autre. C'est la seule vue de
-    l'application qui donne les deux d'un même regard.
+    Both counts are shown side by side, each with its indicator: leaving needs a
+    bike, arriving needs a dock, and whoever opens this sheet may be after
+    either. It is the application's only view that gives both at one glance.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -39,9 +38,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/name" />
 
-    <!-- Adresse déduite de l'index hors ligne : le flux du réseau n'en publie
-         pas. Masquée quand l'index est absent ou ne connaît rien d'assez
-         proche — mieux vaut ne rien dire qu'annoncer la mauvaise rue. -->
+    <!-- The address derived from the offline index: the network's feed
+         publishes none. Hidden when the index is absent or knows nothing near
+         enough — better to say nothing than to name the wrong street. -->
     <TextView
         android:id="@+id/address"
         android:layout_width="0dp"
@@ -54,8 +53,8 @@
         tools:text="12 Rue Nationale · 59800 Lille"
         tools:visibility="visible" />
 
-    <!-- Bandeau d'état, montré seulement quand la station ne rend pas son
-         service : une station qui marche n'a pas à s'annoncer. -->
+    <!-- A state banner, shown only when the station does not provide its
+         service: a station that works has no need to announce itself. -->
     <TextView
         android:id="@+id/service_state"
         android:layout_width="0dp"
@@ -127,8 +126,9 @@
         tools:text="40 points d'attache · mis à jour il y a 12 secondes" />
 
     <!--
-        Départ et arrivée côte à côte : ce sont les deux faces d'un même geste,
-        et les séparer ferait chercher la seconde ailleurs (SPEC §7.2).
+        Origin and destination side by side: they are two faces of one
+        gesture, and separating them would send the user looking for the second
+        elsewhere (SPEC §7.2).
     -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/set_as_origin"

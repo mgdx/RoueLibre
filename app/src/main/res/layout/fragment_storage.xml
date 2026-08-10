@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Écran « stockage » (SPEC §4.4) : ce que l'application occupe, et de quoi le
-    reprendre. L'utilisateur doit toujours savoir ce qui est installé et
-    pouvoir le supprimer.
+    The storage screen (SPEC §4.4): what the application occupies, and the
+    means to reclaim it. The user must always know what is installed and be able
+    to delete it.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -63,9 +63,9 @@
         tools:listitem="@layout/item_dataset" />
 
     <!--
-        Ce que le téléchargement en cours est en train de faire (SPEC §4.4).
-        Une barre déterminée, parce que la taille est connue d'avance : une
-        barre indéterminée sur quarante mégaoctets serait une non-information.
+        What the download in progress is doing (SPEC §4.4). A determinate bar,
+        because the size is known in advance: an indeterminate bar over forty
+        megabytes would be a non-information.
     -->
     <TextView
         android:id="@+id/download_state"

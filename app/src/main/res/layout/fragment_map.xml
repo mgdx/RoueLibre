@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Écran principal : la carte (SPEC §7.1).
+    The main screen: the map (SPEC §7.1).
 
-    Les commandes sont en bas, à portée du pouce : le SPEC §7 demande une
-    interface utilisable à une main.
+    The controls are at the bottom, within thumb reach: SPEC §7 asks for an
+    interface usable one-handed.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -22,9 +22,9 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!--
-        Attribution, obligatoire et visible sur la carte elle-même (SPEC §4.5).
-        Un texte plutôt qu'un bouton d'information : « visible » veut dire lu
-        sans avoir à ouvrir quoi que ce soit.
+        Attribution, mandatory and visible on the map itself (SPEC §4.5).
+        Text rather than an info button: "visible" means read without having to
+        open anything.
     -->
     <TextView
         android:id="@+id/attribution"
@@ -44,7 +44,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Âge de la donnée, exigé par le SPEC §4.1, posé sur la carte. -->
+    <!-- The data's age, required by SPEC §4.1, laid over the map. -->
     <TextView
         android:id="@+id/freshness"
         android:layout_width="wrap_content"
@@ -87,8 +87,8 @@
         app:layout_constraintBottom_toTopOf="@id/attribution"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Recherche d'itinéraire (SPEC §7.3), la fonction que l'application
-         existe pour rendre : elle est donc la plus grande des commandes. -->
+    <!-- Journey search (SPEC §7.3), the function the application exists to
+         provide: it is therefore the largest of the controls. -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/open_journey"
         style="@style/Widget.Material3.Button.IconButton.Filled"
@@ -103,8 +103,8 @@
         app:layout_constraintBottom_toTopOf="@id/locate_me"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Me localiser (SPEC §7.1). La permission n'est demandée qu'ici, au
-         moment où l'utilisateur en comprend la raison (SPEC §10). -->
+    <!-- Locate me (SPEC §7.1). The permission is requested here alone, at
+         the moment the user understands why (SPEC §10). -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/locate_me"
         style="@style/Widget.Material3.Button.IconButton.Filled"
@@ -119,8 +119,8 @@
         app:layout_constraintBottom_toTopOf="@id/open_search"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Recherche d'adresses (SPEC §4.3), à portée du pouce comme les autres
-         commandes principales. -->
+    <!-- Address search (SPEC §4.3), within thumb reach like the other main
+         controls. -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/open_search"
         style="@style/Widget.Material3.Button.IconButton.Filled"
@@ -136,9 +136,9 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!--
-        Le point trouvé par la recherche. Il porte son libellé plutôt que ses
-        coordonnées : « 12 bis Rue Nationale » se relit, « 50,63 / 3,06 » non.
-        Un appui l'efface.
+        The point found by the search. It carries its label rather than its
+        coordinates: "12 bis Rue Nationale" reads back, "50.63 / 3.06" does
+        not. A tap clears it.
     -->
     <TextView
         android:id="@+id/picked_place"
@@ -176,9 +176,9 @@
         tools:text="Vélos" />
 
     <!--
-        Mode « choisir un point » (SPEC §7.3) : la carte se déplace sous une
-        mire fixe, plutôt que d'attendre un appui précis du doigt. On vise en
-        déplaçant la carte, ce qui laisse voir ce que l'on vise.
+        The "pick a point" mode (SPEC §7.3): the map moves under a fixed
+        crosshair, rather than waiting for a precise tap. One aims by moving the
+        map, which leaves what is being aimed at visible.
     -->
     <ImageView
         android:id="@+id/pick_crosshair"
@@ -208,9 +208,9 @@
         tools:visibility="visible" />
 
     <!--
-        Sans fond de carte installé, l'écran explique et propose les deux
-        suites possibles : installer, ou se contenter de la liste. Le SPEC
-        §4.4 en fait un mode dégradé assumé, pas une panne.
+        Without a base map installed, the screen explains and offers the two
+        ways on: install, or make do with the list. SPEC §4.4 makes it an
+        accepted degraded mode, not a breakdown.
     -->
     <LinearLayout
         android:id="@+id/missing_tiles"
