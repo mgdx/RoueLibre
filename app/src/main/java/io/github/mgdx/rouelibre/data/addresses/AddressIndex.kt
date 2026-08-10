@@ -28,27 +28,26 @@ import java.io.File
 import kotlin.coroutines.coroutineContext
 
 /**
- * Recherche d'adresses dans l'index hors ligne (SPEC §4.3).
+ * Address search in the offline index (SPEC §4.3).
  *
- * **Rien ne sort de l'appareil, jamais, pas même pendant la frappe.** C'est la
- * donnée la plus sensible de l'application : elle révèle où va l'utilisateur.
- * Aucun géocodeur en ligne n'est appelé, il n'y en a pas dans le projet.
+ * **Nothing leaves the device, ever, not even while typing.** This is the
+ * application's most sensitive data: it reveals where the user is going. No
+ * online geocoder is called; there is none in the project.
  *
- * La recherche se fait en deux étages, comme le prescrit le SPEC :
+ * The search runs in two stages, as the specification prescribes:
  *
- * 1. **Index plein texte** sur les noms de voies, interrogé par préfixe, ce qui
- *    couvre la frappe en cours. C'est ce qui rend l'ensemble viable : les
- *    numéros, eux, ne sont jamais cherchés en texte.
- * 2. **Rattrapage par distance d'édition** quand le premier étage rend trop peu
- *    de résultats, parcouru en Kotlin sur les noms normalisés tenus en mémoire.
- *    Le *tokenizer* trigramme de SQLite aurait pu s'en charger, mais il est
- *    absent des SQLite embarqués dans les Android les plus anciens que vise
- *    l'application.
+ * 1. **Full-text index** on street names, queried by prefix, which covers
+ *    typing in progress. It is what makes the whole thing viable: house
+ *    numbers, for their part, are never searched as text.
+ * 2. **Edit-distance fallback** when the first stage returns too few results,
+ *    scanned in Kotlin over the normalised names held in memory. SQLite's
+ *    trigram tokenizer could have handled it, but it is absent from the SQLite
+ *    versions embedded in the oldest Android releases the application targets.
  *
- * @property datasetStore où trouver le fichier d'index installé.
- * @property normalizer les règles partagées avec le script d'indexation.
- * @property ioDispatcher contexte d'exécution : la lecture du fichier comme le
- *   parcours flou sont trop longs pour le fil principal.
+ * @property datasetStore where to find the installed index file.
+ * @property normalizer the rules shared with the indexing script.
+ * @property ioDispatcher the execution context: reading the file and the fuzzy
+ *   scan are both too long for the main thread.
  */
 class AddressIndex(
     private val datasetStore: DatasetStore,
@@ -57,10 +56,11 @@ class AddressIndex(
 ) {
 
     /**
-     * Base ouverte et corpus chargé, pour un fichier donné.
+     * An open database and a loaded corpus, for a given file.
      *
-     * Gardés d'une recherche à l'autre : rouvrir la base et relire vingt mille
-     * lignes à chaque frappe coûterait plus que la recherche elle-même.
+     * Kept from one search to the next: reopening the database and re-reading
+     * twenty thousand rows on every keystroke would cost more than the search
+     * itself.
      */
     private class OpenIndex(
         val signature: String,
@@ -72,20 +72,19 @@ class AddressIndex(
     private val openMutex = Mutex()
     private var opened: OpenIndex? = null
 
-    /** Vrai si l'index est installé sur l'appareil. */
+    /** True if the index is installed on the device. */
     fun isInstalled(): Boolean = datasetStore.fileOf(DatasetKind.Addresses) != null
 
     /**
-     * Cherche une adresse.
+     * Looks up an address.
      *
-     * @param rawQuery la saisie, telle que tapée. Un numéro de voirie y est
-     *   reconnu dans les deux ordres d'écriture.
-     * @param origin point de référence pour classer les résultats par
-     *   proximité — position de l'utilisateur ou centre de la carte. `null` si
-     *   aucun n'est connu.
-     * @param limit nombre de résultats souhaités.
-     * @return les adresses trouvées, la meilleure d'abord ; une liste vide si
-     *   la saisie ne désigne rien ; un échec si l'index est absent ou illisible.
+     * @param rawQuery the query as typed. A house number is recognised in it in
+     *   either writing order.
+     * @param origin the reference point for ranking results by proximity — the
+     *   user's position or the centre of the map. `null` if neither is known.
+     * @param limit how many results are wanted.
+     * @return the addresses found, best first; an empty list if the query
+     *   designates nothing; a failure if the index is absent or unreadable.
      */
     suspend fun search(
         rawQuery: String,
@@ -97,11 +96,11 @@ class AddressIndex(
 
         val index = try {
             open() ?: return@withContext Outcome.Failure(
-                DataError.LocalStorageFailure("index d'adresses absent"),
+                DataError.LocalStorageFailure("address index absent"),
             )
         } catch (error: RuntimeException) {
             return@withContext Outcome.Failure(
-                DataError.LocalStorageFailure(error.message ?: "index d'adresses illisible"),
+                DataError.LocalStorageFailure(error.message ?: "address index unreadable"),
             )
         }
 
@@ -109,31 +108,31 @@ class AddressIndex(
             val ranked = rank(index, query, origin, limit)
             Outcome.Success(ranked.map { scored -> index.toResult(scored, query) })
         } catch (error: RuntimeException) {
-            // Un index corrompu ne doit pas faire tomber l'écran : il se
-            // réimporte depuis l'écran de stockage.
+            // A corrupted index must not bring the screen down: it can be
+            // imported again from the storage screen.
             close()
             Outcome.Failure(
-                DataError.LocalStorageFailure(error.message ?: "recherche impossible"),
+                DataError.LocalStorageFailure(error.message ?: "search impossible"),
             )
         }
     }
 
     /**
-     * L'adresse la plus proche d'un point, s'il y en a une (SPEC §7.2).
+     * The address nearest a point, if there is one (SPEC §7.2).
      *
-     * Le flux GBFS du réseau lillois ne publie pas d'adresse de station : il
-     * donne un nom et un code postal. L'index, lui, sait où sont les numéros —
-     * autant s'en servir plutôt que de laisser la feuille de détail muette.
+     * The Lille network's GBFS feed publishes no station address: it gives a
+     * name and a postcode. The index, for its part, knows where the house
+     * numbers are — better to use it than to leave the detail sheet silent.
      *
-     * La recherche part des voies dont le point représentatif est dans un
-     * rayon large, puis descend à leurs numéros. Ce détour est nécessaire :
-     * le point d'une voie est sa médiane, et sur une artère d'un kilomètre il
-     * peut être très loin du point cherché alors que la voie passe juste à
-     * côté.
+     * The search starts from the streets whose representative point lies within
+     * a wide radius, then descends to their house numbers. That detour is
+     * necessary: a street's point is its median, and on a kilometre-long
+     * thoroughfare it can be very far from the point sought even though the
+     * street runs right past it.
      *
-     * @param point l'endroit dont on cherche l'adresse.
-     * @return l'adresse retenue, ou `null` si rien d'assez proche n'est connu —
-     *   mieux vaut ne rien afficher qu'annoncer la mauvaise rue.
+     * @param point the place whose address we are after.
+     * @return the address retained, or `null` if nothing near enough is known —
+     *   better to show nothing than to announce the wrong street.
      */
     suspend fun nearestAddress(point: Coordinates): AddressResult? = withContext(ioDispatcher) {
         val index = try {
@@ -161,8 +160,8 @@ class AddressIndex(
         for (street in candidates) {
             val numbers = readHouseNumbers(street.id, street.position)
             val nearestNumber = numbers.minByOrNull { it.position.distanceInMetresTo(point) }
-            // Une voie sans numéro n'est pas écartée : son point reste une
-            // indication, à condition d'être vraiment proche.
+            // A street without house numbers is not discarded: its point is
+            // still an indication, provided it is genuinely close.
             val distance = nearestNumber?.position?.distanceInMetresTo(point)
                 ?: street.position.distanceInMetresTo(point)
             if (distance < bestDistance) {
@@ -174,10 +173,10 @@ class AddressIndex(
         val (street, number) = best ?: return null
         if (bestDistance > NEAREST_ADDRESS_LIMIT_METRES) return null
 
-        // Au-delà de quelques mètres, le numéro n'est plus celui du point : le
-        // dire reviendrait à désigner un immeuble voisin. La voie, elle, reste
-        // une indication juste — « à proximité de la rue Chanzy » vaut mieux
-        // que rien, et mieux qu'un numéro faux.
+        // Beyond a few metres the number is no longer the point's own: saying
+        // it would designate a neighbouring building. The street, though,
+        // remains a sound indication — "near rue Chanzy" beats nothing, and
+        // beats a wrong number.
         val isAtTheAddress = bestDistance <= NUMBERED_ADDRESS_LIMIT_METRES
         val row = readStreetRow(street.id)
         return AddressResult(
@@ -199,11 +198,11 @@ class AddressIndex(
     }
 
     /**
-     * Classe les voies candidates, en passant par le rattrapage flou au besoin.
+     * Ranks the candidate streets, going through the fuzzy fallback if needed.
      *
-     * Le second étage n'est tenté que si le premier rend peu de choses : il
-     * parcourt tout le corpus, ce qui ne se justifie pas quand l'index plein
-     * texte a déjà répondu.
+     * The second stage is only attempted when the first returns little: it
+     * scans the whole corpus, which is not warranted once the full-text index
+     * has already answered.
      */
     private suspend fun rank(
         index: OpenIndex,
@@ -219,15 +218,14 @@ class AddressIndex(
         return rankStreets(index.streets, query, normalizer.stopWords, origin, limit)
     }
 
-    // ------------------------------------------------------ premier étage --
+    // -------------------------------------------------------- first stage --
 
     /**
-     * Les voies dont un mot commence par chacun des mots saisis.
+     * The streets one of whose words starts with each of the words typed.
      *
-     * Les mots vides sont écartés de l'interrogation lorsqu'il reste autre
-     * chose : demander à l'index toutes les voies contenant « de » reviendrait
-     * à en parcourir la moitié pour ne rien apprendre. Ils comptent en
-     * revanche au classement, lui.
+     * Stop words are dropped from the query when something else remains: asking
+     * the index for every street containing "de" would mean walking through
+     * half of it to learn nothing. They do count in the ranking, however.
      */
     private fun OpenIndex.matchingFullText(query: AddressQuery): List<SearchableStreet> {
         val meaningful = query.terms.filterNot { it in normalizer.stopWords }
@@ -245,9 +243,9 @@ class AddressIndex(
         return streets.filter { it.id in matched }
     }
 
-    // ------------------------------------------------------ mise en forme --
+    // ------------------------------------------------------------ shaping --
 
-    /** Complète une voie retenue par ce qui ne sert qu'à l'affichage. */
+    /** Completes a retained street with what only the display needs. */
     private fun OpenIndex.toResult(scored: ScoredStreet, query: AddressQuery): AddressResult {
         val row = readStreetRow(scored.street.id)
         val requested = query.houseNumber
@@ -264,9 +262,9 @@ class AddressIndex(
 
         return AddressResult(
             streetId = scored.street.id,
-            // Un numéro que la voie ne permet pas de placer n'est pas affiché :
-            // écrire « 12 rue X » en pointant le milieu de la rue serait une
-            // promesse que la position ne tient pas.
+            // A number the street cannot place is not shown: writing "12 rue
+            // X" while pointing at the middle of the street would be a promise
+            // the position does not keep.
             houseNumber = requested.takeIf {
                 resolved != null && resolved.precision != PositionPrecision.StreetOnly
             },
@@ -293,13 +291,13 @@ class AddressIndex(
         arrayOf(streetId.toString()),
     ).use { cursor ->
         if (!cursor.moveToFirst()) {
-            error("voie $streetId absente de l'index")
+            error("street $streetId absent from the index")
         }
         StreetRow(
-            // La commune absorbée prime à l'affichage quand il y en a une :
-            // une adresse de Lomme s'écrit « 59160 Lomme », même si la Base
-            // Adresse Nationale la rattache administrativement à Lille. Le
-            // code postal qui l'accompagne est d'ailleurs celui de Lomme.
+            // The absorbed municipality wins on display when there is one: an
+            // address in Lomme is written "59160 Lomme", even though the Base
+            // Adresse Nationale attaches it administratively to Lille. The
+            // postcode that goes with it is Lomme's, for that matter.
             displayName = cursor.getString(0),
             city = cursor.getStringOrNull(2) ?: cursor.getString(1),
             postcode = cursor.getStringOrNull(3),
@@ -308,11 +306,11 @@ class AddressIndex(
     }
 
     /**
-     * Les numéros d'une voie, coordonnées reconstituées.
+     * A street's house numbers, coordinates reconstituted.
      *
-     * Toute la voie est lue d'un coup plutôt que ses seuls voisins immédiats :
-     * une voie porte quelques dizaines de numéros, et cette lecture unique
-     * évite de raisonner en SQL sur la parité et l'encadrement.
+     * The whole street is read at once rather than only the immediate
+     * neighbours: a street carries a few dozen numbers, and this single read
+     * avoids reasoning in SQL about parity and bracketing.
      */
     private fun OpenIndex.readHouseNumbers(
         streetId: Long,
@@ -337,16 +335,17 @@ class AddressIndex(
         numbers
     }
 
-    // ------------------------------------------------------- ouverture --
+    // --------------------------------------------------------- opening --
 
     /**
-     * Ouvre l'index, ou rend celui déjà ouvert.
+     * Opens the index, or returns the one already open.
      *
-     * Le fichier est identifié par son chemin, sa taille et sa date : une
-     * réimportation depuis l'écran de stockage doit être prise en compte sans
-     * redémarrer l'application.
+     * The file is identified by its path, its size and its date: a re-import
+     * from the storage screen must be picked up without restarting the
+     * application. Since the path carries the city identifier, changing city
+     * changes the signature too.
      *
-     * @return `null` si l'index n'est pas installé.
+     * @return `null` if the index is not installed.
      */
     private suspend fun open(): OpenIndex? {
         val file = datasetStore.fileOf(DatasetKind.Addresses) ?: run {
@@ -363,10 +362,10 @@ class AddressIndex(
                 file.path,
                 null,
                 SQLiteDatabase.OPEN_READONLY,
-                // Le gestionnaire par défaut SUPPRIME le fichier qu'il juge
-                // corrompu. Un index de six mégaoctets ne disparaît pas sur un
-                // doute : l'utilisateur le réimportera s'il le faut.
-                { /* ne rien supprimer */ },
+                // The default handler DELETES the file it judges corrupted. A
+                // six-megabyte index does not vanish on a suspicion: the user
+                // will import it again if need be.
+                { /* delete nothing */ },
             )
             OpenIndex(
                 signature = signature,
@@ -377,7 +376,7 @@ class AddressIndex(
         }
     }
 
-    /** Referme l'index ouvert, s'il y en a un. */
+    /** Closes the open index, if there is one. */
     fun close() {
         opened?.database?.close()
         opened = null
@@ -386,11 +385,11 @@ class AddressIndex(
     private fun File.signature(): String = "$path:${length()}:${lastModified()}"
 
     /**
-     * Charge en mémoire ce que le rattrapage flou doit parcourir.
+     * Loads into memory what the fuzzy fallback has to scan.
      *
-     * Les noms d'origine, les communes affichées et les codes postaux restent
-     * sur le disque : seuls les huit résultats retenus en ont l'usage, et les
-     * garder tripleraient l'empreinte de ce corpus.
+     * The original names, the displayed municipalities and the postcodes stay
+     * on disk: only the eight retained results ever use them, and keeping them
+     * would triple this corpus's footprint.
      */
     private fun SQLiteDatabase.readCorpus(): List<SearchableStreet> = rawQuery(
         "SELECT id, normalized_type, normalized_name, normalized_city, " +
@@ -414,11 +413,10 @@ class AddressIndex(
     }
 
     /**
-     * L'unité dans laquelle les coordonnées des numéros sont stockées.
+     * The unit the house numbers' coordinates are stored in.
      *
-     * Lue dans le fichier plutôt que fixée dans le code : c'est le script de
-     * génération qui la décide, et un index produit avec une autre unité doit
-     * rester lisible.
+     * Read from the file rather than fixed in the code: the generation script
+     * decides it, and an index produced with another unit must stay readable.
      */
     private fun SQLiteDatabase.readDeltaScale(): Double = rawQuery(
         "SELECT value FROM metadata WHERE key = ?",
@@ -434,59 +432,58 @@ class AddressIndex(
     private companion object {
         const val SEARCH_TABLE = "street_search"
 
-        /** Nombre de résultats montrés par défaut : ce qui tient sous le clavier. */
+        /** How many results are shown by default: what fits above the keyboard. */
         const val DEFAULT_RESULT_COUNT = 8
 
         /**
-         * En dessous de ce nombre de résultats, le second étage se déclenche.
+         * Below this many results, the second stage fires.
          *
-         * Trois lignes, c'est le moment où l'utilisateur commence à se demander
-         * si sa rue existe. C'est donc là qu'il faut aller la chercher malgré
-         * une faute de frappe, et pas avant : le parcours complet coûte des
-         * dizaines de millisecondes qu'une recherche fructueuse n'a pas à payer.
+         * Three rows is the moment the user starts wondering whether their
+         * street exists. That is where it must be fetched despite a typo, and
+         * not before: the full scan costs tens of milliseconds that a fruitful
+         * search has no business paying.
          */
         const val MINIMUM_PREFIX_RESULTS = 3
 
         /**
-         * Plafond de lignes rendues par l'index plein texte.
+         * The ceiling on rows returned by the full-text index.
          *
-         * Une saisie courte — « rue » — peut correspondre à la moitié de
-         * l'index. Le classement, lui, ne montre que huit lignes : au-delà de
-         * ce plafond, lire davantage ne changerait que le temps de réponse.
+         * A short query — "rue" — can match half the index. The ranking, for
+         * its part, only shows eight rows: past this ceiling, reading more
+         * would change nothing but the response time.
          */
         const val MAX_FULL_TEXT_ROWS = 400
 
-        /** Cent-millièmes de degré, ce qu'écrit le script de génération. */
+        /** Hundred-thousandths of a degree, what the generation script writes. */
         const val DEFAULT_DELTA_SCALE = 100_000.0
 
         /**
-         * Rayon dans lequel une voie est examinée pour un géocodage inverse.
+         * The radius within which a street is examined for reverse geocoding.
          *
-         * Large à dessein : c'est le point *représentatif* de la voie qui est
-         * comparé, et la médiane d'une artère d'un kilomètre peut se trouver
-         * loin d'un point qu'elle longe pourtant.
+         * Wide on purpose: it is the street's *representative* point that is
+         * compared, and the median of a kilometre-long thoroughfare can lie far
+         * from a point it nonetheless runs past.
          */
         const val CANDIDATE_STREET_RADIUS_METRES = 900.0
 
-        /** Au-delà, lire les numéros de voies supplémentaires n'apprend plus rien. */
+        /** Past this, reading further streets' numbers teaches nothing more. */
         const val MAX_REVERSE_CANDIDATES = 40
 
         /**
-         * Distance en deçà de laquelle le numéro trouvé est bien celui du
-         * point. Cinquante mètres, c'est la largeur d'un carrefour.
+         * The distance within which the number found really is the point's own.
+         * Fifty metres is the width of a junction.
          *
-         * Mesuré sur les stations réelles du réseau : la moitié d'entre elles
-         * sont à moins de quinze mètres d'une adresse connue, neuf sur dix à
-         * moins de quarante.
+         * Measured on the network's real stations: half of them sit within
+         * fifteen metres of a known address, nine in ten within forty.
          */
         const val NUMBERED_ADDRESS_LIMIT_METRES = 50.0
 
         /**
-         * Distance au-delà de laquelle plus rien n'est dit.
+         * The distance beyond which nothing at all is said.
          *
-         * Entre les deux seuils, seule la voie est nommée, et comme un
-         * voisinage : une station posée au milieu d'un rond-point n'a pas
-         * d'adresse, mais dire de quelle rue elle est proche aide quand même.
+         * Between the two thresholds only the street is named, and as a
+         * neighbourhood: a station standing in the middle of a roundabout has
+         * no address, but saying which street it is near still helps.
          */
         const val NEAREST_ADDRESS_LIMIT_METRES = 150.0
     }
