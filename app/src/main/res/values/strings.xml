@@ -264,6 +264,10 @@
     <string name="station_address_nearby">À proximité de %1$s</string>
     <string name="station_favourite_add">Mettre en favori</string>
     <string name="station_favourite_remove">Retirer des favoris</string>
+    <!-- Actions de la feuille de station : préparer un itinéraire depuis
+         cette station, ou vers elle (SPEC §7.2). -->
+    <string name="station_as_origin">Partir d\'ici</string>
+    <string name="station_as_destination">Aller ici</string>
     <string name="station_open_in_navigation">Ouvrir dans une appli de navigation</string>
     <string name="station_no_navigation_app">Aucune application de cartographie n\'est installée sur cet appareil.</string>
 

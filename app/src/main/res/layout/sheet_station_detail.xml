@@ -126,16 +126,44 @@
         app:layout_constraintTop_toBottomOf="@id/bikes_indicator"
         tools:text="40 points d'attache · mis à jour il y a 12 secondes" />
 
+    <!--
+        Départ et arrivée côte à côte : ce sont les deux faces d'un même geste,
+        et les séparer ferait chercher la seconde ailleurs (SPEC §7.2).
+    -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/set_as_origin"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginTop="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_s"
+        android:text="@string/station_as_origin"
+        app:layout_constraintEnd_toStartOf="@id/set_as_destination"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/capacity" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/set_as_destination"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginStart="@dimen/space_s"
+        android:text="@string/station_as_destination"
+        app:layout_constraintBottom_toBottomOf="@id/set_as_origin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/set_as_origin"
+        app:layout_constraintTop_toTopOf="@id/set_as_origin" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/open_in_navigation"
         style="@style/Widget.RoueLibre.Toggle"
         android:layout_width="0dp"
         android:layout_height="@dimen/touch_target_min"
-        android:layout_marginTop="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_s"
         android:text="@string/station_open_in_navigation"
         app:icon="@drawable/ic_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/capacity" />
+        app:layout_constraintTop_toBottomOf="@id/set_as_origin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

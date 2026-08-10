@@ -27,6 +27,8 @@ import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.databinding.SheetStationDetailBinding
 import io.github.mgdx.rouelibre.ui.address.toTitle
 import io.github.mgdx.rouelibre.ui.formatDistance
+import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
+import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -72,6 +74,8 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         val views = checkNotNull(binding)
 
         views.favourite.setOnClickListener { viewModel.toggleFavourite() }
+        views.setAsOrigin.setOnClickListener { prepareJourney(asOrigin = true) }
+        views.setAsDestination.setOnClickListener { prepareJourney(asOrigin = false) }
         views.openInNavigation.setOnClickListener { openInNavigationApp() }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -167,6 +171,37 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         views.favourite.contentDescription = getString(
             if (isFavourite) R.string.station_favourite_remove else R.string.station_favourite_add,
         )
+    }
+
+    /**
+     * Ouvre la recherche d'itinéraire avec cette station déjà placée (SPEC §7.2).
+     *
+     * Une station est un point comme un autre pour l'algorithme de trajet : ce
+     * n'est pas elle qu'on rejoindra forcément à vélo, seulement l'endroit d'où
+     * l'on part ou celui où l'on va. Le choix de la station de prise et de
+     * dépose reste celui du §6.
+     *
+     * La feuille se referme : la laisser ouverte par-dessus l'écran de
+     * recherche masquerait le champ qu'on vient de remplir.
+     */
+    private fun prepareJourney(asOrigin: Boolean) {
+        val station = viewModel.state.value.entry?.station ?: return
+        val endpoint = JourneyEndpoint(station.name, station.position)
+        // Le gestionnaire est retenu avant la fermeture : après elle, la
+        // feuille n'est plus rattachée à son activité.
+        val manager = requireActivity().supportFragmentManager
+        dismiss()
+        manager.beginTransaction()
+            .replace(
+                R.id.content,
+                if (asOrigin) {
+                    JourneySearchFragment.newInstance(origin = endpoint)
+                } else {
+                    JourneySearchFragment.newInstance(destination = endpoint)
+                },
+            )
+            .addToBackStack(null)
+            .commit()
     }
 
     /**

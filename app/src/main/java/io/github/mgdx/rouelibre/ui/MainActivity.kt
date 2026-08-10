@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity() {
         val found = (outcome as? Outcome.Success)?.value?.firstOrNull()
         if (found == null) {
             showMessage(getString(R.string.incoming_address_not_found, text)) {
-                show(JourneySearchFragment.newInstance(null))
+                show(JourneySearchFragment.newInstance())
             }
             return null
         }
@@ -189,7 +189,7 @@ class MainActivity : AppCompatActivity() {
         // l'utilisateur n'a pas ouvert l'application, on la lui a ouverte.
         val here = container.deviceLocation.lastKnown()
         if (here == null) {
-            show(JourneySearchFragment.newInstance(destination))
+            show(JourneySearchFragment.newInstance(destination = destination))
             return
         }
         show(

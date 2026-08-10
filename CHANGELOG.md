@@ -24,6 +24,11 @@ qui n'a aucun effet visible.
   - Les jeux de données sont **rangés par ville** : deux villes cohabitent sans
     se mélanger, et les données de l'une se suppriment sans toucher à l'autre.
 
+- **Partir d'une station, ou aller à une station.** La feuille de détail
+  proposait de mettre en favori et d'ouvrir un guidage externe, mais pas de
+  préparer un itinéraire — la seule action du `SPEC.md` §7.2 qui manquait
+  depuis que l'écran de recherche existe.
+
 ### Modifié
 
 - **L'application ne suppose plus de ville par défaut.** Elle en servait une,

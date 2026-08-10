@@ -75,10 +75,14 @@ class JourneySearchFragment : Fragment() {
             origin = JourneyEndpoint.readFrom(savedInstanceState, STATE_ORIGIN)
             destination = JourneyEndpoint.readFrom(savedInstanceState, STATE_DESTINATION)
             awaitingOrigin = savedInstanceState.getBoolean(STATE_AWAITING_ORIGIN, true)
-        } else if (destination == null) {
-            // Arrivée reçue d'une autre application (SPEC §7.8) : il ne reste
-            // à l'utilisateur qu'à dire d'où il part.
-            destination = JourneyEndpoint.readFrom(arguments, ARGUMENT_DESTINATION)
+        } else {
+            // Point reçu d'ailleurs : d'une autre application (SPEC §7.8) ou
+            // d'une station qu'on vient de consulter (SPEC §7.2). Il ne reste
+            // à remplir que l'autre extrémité.
+            if (origin == null) origin = JourneyEndpoint.readFrom(arguments, ARGUMENT_ORIGIN)
+            if (destination == null) {
+                destination = JourneyEndpoint.readFrom(arguments, ARGUMENT_DESTINATION)
+            }
         }
 
         views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
@@ -236,18 +240,24 @@ class JourneySearchFragment : Fragment() {
         private const val STATE_DESTINATION = "arrivee"
         private const val STATE_AWAITING_ORIGIN = "champ-attendu"
         private const val ARGUMENT_DESTINATION = "arrivee-recue"
+        private const val ARGUMENT_ORIGIN = "depart-recu"
 
         /**
-         * Ouvre la recherche, éventuellement avec l'arrivée déjà connue.
+         * Ouvre la recherche, éventuellement avec une extrémité déjà connue.
          *
-         * @param destination le point reçu d'une autre application, ou `null`
-         *   pour un écran vierge.
+         * @param origin le point d'où l'on part, s'il est déjà désigné.
+         * @param destination le point où l'on va, s'il est déjà désigné.
+         *   Les deux nuls donnent un écran vierge.
          */
-        fun newInstance(destination: JourneyEndpoint?): JourneySearchFragment =
-            JourneySearchFragment().apply {
-                arguments = destination?.let {
-                    Bundle().apply { it.writeTo(this, ARGUMENT_DESTINATION) }
-                }
+        fun newInstance(
+            origin: JourneyEndpoint? = null,
+            destination: JourneyEndpoint? = null,
+        ): JourneySearchFragment = JourneySearchFragment().apply {
+            if (origin == null && destination == null) return@apply
+            arguments = Bundle().apply {
+                origin?.writeTo(this, ARGUMENT_ORIGIN)
+                destination?.writeTo(this, ARGUMENT_DESTINATION)
             }
+        }
     }
 }
