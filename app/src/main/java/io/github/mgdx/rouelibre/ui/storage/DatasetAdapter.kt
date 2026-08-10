@@ -17,7 +17,6 @@ import io.github.mgdx.rouelibre.ui.toUserMessage
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.Locale
 
 /** Shows the three datasets and their actions. */
 class DatasetAdapter(
@@ -62,7 +61,7 @@ class DatasetAdapter(
 
                 else -> context.getString(
                     R.string.dataset_installed,
-                    formatBytes(installed.sizeBytes, context.textLocale()),
+                    formatBytes(context, installed.sizeBytes),
                     dateFormatFor(context)
                         .format(installed.installedAt.atZone(ZoneId.systemDefault())),
                 )
@@ -123,14 +122,21 @@ fun DatasetKind.purposeResource(): Int = when (this) {
  * Base 1000 and not 1024: that is the unit sizes are announced in to the user
  * everywhere else, the system included.
  *
- * The language decides the decimal separator — "35,0 Mo" in French — and must
- * therefore be the displayed text's, not the system's.
+ * Both the number and its unit come from the displayed language, not the
+ * system's: the decimal separator differs — "35,0 Mo" in French — and so does
+ * the unit itself, which is why it is a string resource rather than a literal.
  */
-fun formatBytes(bytes: Long, locale: Locale): String = when {
-    bytes < 1_000 -> "$bytes o"
-    bytes < 1_000_000 -> String.format(locale, "%.0f ko", bytes / 1_000.0)
-    bytes < 1_000_000_000 -> String.format(locale, "%.1f Mo", bytes / 1_000_000.0)
-    else -> String.format(locale, "%.2f Go", bytes / 1_000_000_000.0)
+fun formatBytes(context: Context, bytes: Long): String {
+    val locale = context.textLocale()
+    val (unit, value) = when {
+        bytes < 1_000 -> R.string.size_bytes to String.format(locale, "%d", bytes)
+        bytes < 1_000_000 ->
+            R.string.size_kilobytes to String.format(locale, "%.0f", bytes / 1_000.0)
+        bytes < 1_000_000_000 ->
+            R.string.size_megabytes to String.format(locale, "%.1f", bytes / 1_000_000.0)
+        else -> R.string.size_gigabytes to String.format(locale, "%.2f", bytes / 1_000_000_000.0)
+    }
+    return context.getString(unit, value)
 }
 
 /**

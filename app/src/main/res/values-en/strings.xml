@@ -256,6 +256,11 @@
     <string name="city_none_nearby">No known network near here. Pick a city from the list.</string>
     <string name="action_cancel">Cancel</string>
 
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
+
     <string name="storage_title">Storage</string>
     <string name="storage_open">Manage offline data</string>
     <string name="storage_intro">The map, the journey planner and the address search work with no network. They need three datasets, installed once.</string>

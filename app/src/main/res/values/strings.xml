@@ -352,6 +352,13 @@
     <string name="city_none_nearby">Aucun réseau connu près d\'ici. Choisis une ville dans la liste.</string>
     <string name="action_cancel">Annuler</string>
 
+    <!-- Unités de taille de fichier. Base 1000, comme partout ailleurs dans
+         le système. %1$s est un nombre déjà écrit dans la langue affichée. -->
+    <string name="size_bytes">%1$s o</string>
+    <string name="size_kilobytes">%1$s ko</string>
+    <string name="size_megabytes">%1$s Mo</string>
+    <string name="size_gigabytes">%1$s Go</string>
+
     <!-- The storage screen: what the application occupies, and how to reclaim
          it (SPEC §4.4). -->
     <string name="storage_title">Stockage</string>

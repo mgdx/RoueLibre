@@ -63,12 +63,12 @@ class CityAdapter(
                     R.plurals.city_detail,
                     stations,
                     stations,
-                    formatBytes(size, locale),
+                    formatBytes(context, size),
                 )
 
                 size != null -> context.getString(
                     R.string.city_detail_size_only,
-                    formatBytes(size, locale),
+                    formatBytes(context, size),
                 )
 
                 // A listed city whose data is not published: say so, rather
@@ -79,7 +79,7 @@ class CityAdapter(
             binding.cityInstalled.isVisible = row.installedBytes > 0
             binding.cityInstalled.text = context.getString(
                 R.string.city_installed,
-                formatBytes(row.installedBytes, locale),
+                formatBytes(context, row.installedBytes),
             )
             binding.cityDelete.isVisible = row.installedBytes > 0
             binding.cityDelete.contentDescription =

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Debug builds only: allows plain HTTP to the loopback address.
+
+    It exists so a release of data can be served from the development machine
+    over `adb reverse`, which is the only way to exercise the download screen of
+    §4.4 before anything is actually published. Nothing else is opened up, and
+    the release manifest does not reference this file at all.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">127.0.0.1</domain>
+    </domain-config>
+</network-security-config>

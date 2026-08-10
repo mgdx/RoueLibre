@@ -188,7 +188,7 @@ class StorageFragment : Fragment() {
                     if (state.manifest != null && state.outdated.isNotEmpty()) {
                         views.checkUpdates.text = getString(
                             R.string.storage_download_pending,
-                            formatBytes(state.pendingBytes, requireContext().textLocale()),
+                            formatBytes(requireContext(), state.pendingBytes),
                         )
                     }
                     views.checkUpdates.isEnabled =
@@ -198,7 +198,7 @@ class StorageFragment : Fragment() {
                         ?.let {
                             getString(
                                 R.string.storage_total,
-                                formatBytes(it, requireContext().textLocale()),
+                                formatBytes(requireContext(), it),
                             )
                         }
                         ?: getString(R.string.storage_nothing_installed)
@@ -238,8 +238,8 @@ class StorageFragment : Fragment() {
         views.downloadState.text = getString(
             R.string.storage_downloading,
             progress.fileName,
-            formatBytes(progress.downloadedBytes, locale),
-            formatBytes(progress.totalBytes, locale),
+            formatBytes(requireContext(), progress.downloadedBytes),
+            formatBytes(requireContext(), progress.totalBytes),
         )
         views.downloadProgress.isIndeterminate = progress.totalBytes <= 0
         if (progress.totalBytes > 0) {

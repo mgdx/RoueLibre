@@ -185,12 +185,17 @@ class CityFragment : Fragment() {
      *
      * Nothing is downloaded here: the storage screen announces the weight first
      * and waits for a press (SPEC §4.4).
+     *
+     * The storage screen joins the back stack. Without that, choosing a city
+     * left no way back: the first press of Back did nothing, and the second
+     * left the application altogether.
      */
     private fun choose(city: CityEntry) {
         viewLifecycleOwner.lifecycleScope.launch {
             container.switchToCity(city.id)
             parentFragmentManager.beginTransaction()
                 .replace(R.id.content, StorageFragment.checkingForUpdates())
+                .addToBackStack(null)
                 .commit()
         }
     }
