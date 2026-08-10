@@ -78,6 +78,12 @@ class StationListFragment : Fragment() {
         views.stations.setHasFixedSize(true)
 
         views.openStorage.setOnClickListener { openStorage() }
+        views.openFavourites.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.content, FavouriteStationsFragment())
+                .addToBackStack(null)
+                .commit()
+        }
         views.swipeRefresh.setOnRefreshListener { viewModel.refresh(force = true) }
 
         // Filtrage à chaque frappe : quelques centaines d'entrées déjà en

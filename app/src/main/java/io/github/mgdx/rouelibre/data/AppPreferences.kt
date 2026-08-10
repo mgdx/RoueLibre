@@ -91,35 +91,60 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
     }
 
     /**
-     * Les stations mises en favori, par leur identifiant (SPEC §8).
+     * Les stations mises en favori, **dans l'ordre choisi** (SPEC §7.5).
      *
-     * Des identifiants de stations, et rien d'autre : ce ne sont pas des
-     * lieux de l'utilisateur mais des points publics du réseau, et la
-     * contrainte C3 interdit d'enregistrer quoi que ce soit d'un déplacement.
+     * Des identifiants de stations, et rien d'autre : ce ne sont pas des lieux
+     * de l'utilisateur mais des points publics du réseau, et la contrainte C3
+     * interdit d'enregistrer quoi que ce soit d'un déplacement.
+     *
+     * Une liste ordonnée, et non un ensemble : le §7.5 veut que la liste soit
+     * réorganisable, et un ensemble n'a pas d'ordre à réorganiser. Les
+     * identifiants sont joints par un saut de ligne, caractère qu'aucun
+     * identifiant GBFS ne contient.
      *
      * Un flux plutôt qu'une lecture : l'étoile d'une station doit se mettre à
      * jour partout où elle s'affiche, sans que les écrans se préviennent.
      */
-    val favouriteStationIds: Flow<Set<String>> =
-        dataStore.data.map { it[FAVOURITE_STATION_IDS].orEmpty() }
+    val favouriteStationIds: Flow<List<String>> = dataStore.data.map(::readFavourites)
 
     /**
-     * Ajoute ou retire une station des favoris.
+     * Ajoute une station aux favoris, ou l'en retire.
+     *
+     * Une station ajoutée va en fin de liste : c'est là qu'on s'attend à
+     * trouver ce que l'on vient de faire.
      *
      * @return vrai si la station est désormais en favori.
      */
     suspend fun toggleFavourite(stationId: String): Boolean {
         var isFavourite = false
         dataStore.edit { preferences ->
-            val current = preferences[FAVOURITE_STATION_IDS].orEmpty()
+            val current = readFavourites(preferences)
             isFavourite = stationId !in current
-            preferences[FAVOURITE_STATION_IDS] = if (isFavourite) {
-                current + stationId
-            } else {
-                current - stationId
-            }
+            val updated = if (isFavourite) current + stationId else current - stationId
+            preferences[FAVOURITE_STATION_IDS_ORDERED] = updated.joinToString(SEPARATOR)
         }
         return isFavourite
+    }
+
+    /** Enregistre un nouvel ordre des favoris (SPEC §7.5). */
+    suspend fun setFavouriteOrder(stationIds: List<String>) {
+        dataStore.edit { preferences ->
+            preferences[FAVOURITE_STATION_IDS_ORDERED] = stationIds.joinToString(SEPARATOR)
+        }
+    }
+
+    /**
+     * Relit les favoris, en reprenant ceux d'une version antérieure.
+     *
+     * Les premières versions les gardaient dans un ensemble, sans ordre. Les
+     * perdre à la mise à jour serait une petite trahison pour un utilisateur
+     * qui en avait rangé vingt.
+     */
+    private fun readFavourites(preferences: Preferences): List<String> {
+        preferences[FAVOURITE_STATION_IDS_ORDERED]?.let { stored ->
+            return stored.split(SEPARATOR).filter { it.isNotBlank() }
+        }
+        return preferences[FAVOURITE_STATION_IDS].orEmpty().sorted()
     }
 
     /**
@@ -185,7 +210,13 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
         val STATION_INFORMATION_FETCHED_AT =
             longPreferencesKey("station_information_fetched_at")
         val GBFS_DISCOVERY_URL = stringPreferencesKey("gbfs_discovery_url")
+
+        /** Les favoris d'avant la version ordonnée, repris à la première lecture. */
         val FAVOURITE_STATION_IDS = stringSetPreferencesKey("favourite_station_ids")
+        val FAVOURITE_STATION_IDS_ORDERED = stringPreferencesKey("favourite_station_ids_ordered")
+
+        /** Aucun identifiant GBFS ne contient de saut de ligne. */
+        const val SEPARATOR = "\n"
         val THEME = stringPreferencesKey("theme")
         val PICKUP_SECONDS = intPreferencesKey("pickup_seconds")
         val DROPOFF_SECONDS = intPreferencesKey("dropoff_seconds")

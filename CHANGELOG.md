@@ -62,6 +62,17 @@ qui sortira sur F-Droid sera recompilé et signé là-bas.
   validé, puis mis en place — et un fichier refusé dit pourquoi.
 - **Filtre de la liste par nom de station**, insensible à la casse et aux
   accents, tolérant à l'ordre des mots, cherchant aussi le code postal.
+- **Favoris** (§7.5) : la liste des stations mises en favori, avec leur
+  disponibilité en direct, **réorganisable par glissement**. L'ordre est le
+  seul réglage de cet écran, et il vaut mieux qu'un tri automatique — la
+  station qu'on veut voir en premier est celle de son quartier, pas la
+  première par ordre alphabétique.
+  - Les favoris passent d'un ensemble à une **liste ordonnée** : un ensemble
+    n'a pas d'ordre à réorganiser. Ceux enregistrés par une version antérieure
+    sont repris plutôt que perdus.
+  - Pas de balayage pour supprimer : on retire un favori par l'étoile de la
+    station, là où on l'a mis. Un geste destructeur sur une liste que l'on
+    manipule pour la réorganiser se déclencherait par accident.
 - **Réglages** (§7.6) : accès aux données hors ligne, thème clair / sombre /
   système appliqué immédiatement, temps forfaitaires de prise et de dépose du
   vélo, adresses du flux de disponibilité et du manifeste des données. Écrits à

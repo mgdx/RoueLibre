@@ -15,12 +15,15 @@ import kotlinx.coroutines.launch
 /**
  * Les stations mises en favori, avec leur disponibilité en direct (SPEC §7.5).
  *
- * L'ordre suit celui des stations du réseau, pas celui des ajouts : les
- * identifiants sont conservés dans un ensemble, qui n'a pas d'ordre. La
- * réorganisation demandée par le §7.5 viendra avec l'écran dédié.
+ * L'ordre est celui que l'utilisateur a choisi, pas celui du réseau : c'est ce
+ * que la réorganisation du §7.5 veut dire. Une station favorite que le flux ne
+ * publie plus disparaît de la liste sans faire de bruit — le réseau en retire
+ * de temps à autre.
  */
-class FavouriteStationsViewModel(repository: StationRepository, preferences: AppPreferences) :
-    ViewModel() {
+class FavouriteStationsViewModel(
+    repository: StationRepository,
+    private val preferences: AppPreferences,
+) : ViewModel() {
 
     private val mutableFavourites = MutableStateFlow<List<StationWithAvailability>>(emptyList())
 
@@ -38,12 +41,24 @@ class FavouriteStationsViewModel(repository: StationRepository, preferences: App
                 repository.observeStations(),
                 preferences.favouriteStationIds,
             ) { snapshot, favouriteIds ->
-                snapshot.stations.filter { it.station.id in favouriteIds }
+                val known = snapshot.stations.associateBy { it.station.id }
+                favouriteIds.mapNotNull(known::get)
             }.collect { stations ->
                 mutableFavourites.value = stations
                 mutableHasLoaded.value = true
             }
         }
+    }
+
+    /**
+     * Enregistre l'ordre après un déplacement à la main (SPEC §7.5).
+     *
+     * L'ordre porte sur les identifiants et non sur les stations affichées :
+     * une station absente du flux au moment du glissement ne doit pas être
+     * retirée des favoris pour autant.
+     */
+    fun reorder(stationIds: List<String>) {
+        viewModelScope.launch { preferences.setFavouriteOrder(stationIds) }
     }
 
     /** Fabrique le modèle avec ses dépendances, sans framework d'injection. */
