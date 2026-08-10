@@ -7,6 +7,63 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
+## [Unreleased]
+
+### Added
+
+- **Every French bike-share network that publishes its stations** — 69 of them,
+  against three. `SPEC.md` §15 asks that serving another conurbation be a
+  configuration file and never a code change; this is that promise spent.
+  - `tools/discover_networks.py` reads the two catalogues §4.1 accepts — the
+    national access point and MobilityData's `systems.csv` — **calls every
+    address they publish**, and judges each network on what its feed answered.
+    The eligibility rules are the application's own: stations with real docks,
+    a fleet holding bicycles and no car, at least ten stations so §6 has a pair
+    to optimise, a box small enough to be a conurbation, and no key to hold.
+    Of 269 distinct French systems, 69 pass; the 200 others are free-floating
+    scooters, car-sharing, or parking areas published as stations.
+  - The reasoned list, **rejections and their reasons included**, is
+    [`docs/networks-france.md`](docs/networks-france.md).
+  - `tools/add_city.py` writes a configuration from a surveyed network:
+    verified feed address, network and authority names, licence, reference box
+    recomputed against the live feed, opening framing. It leaves an existing
+    configuration alone — the first three were settled by hand.
+  - The catalogue now lists a city whose data is not generated yet, saying so.
+    The interface already handled that case; nothing had exercised it.
+
+- **A city configuration says where its data is cut from.** A new
+  `dataSources` block carries the OpenStreetMap extracts and the Base Adresse
+  Nationale departments the reference box reaches, both read from the stations
+  rather than from an administrative boundary — Vélib's box spans eight
+  departments, Avignon's three. `tools/generate_all.sh` reads them, so
+  generating a conurbation is `--city` and nothing else, and merges the
+  extracts where a box straddles two of Geofabrik's regions.
+
+### Changed
+
+- **Street-name normalisation covers France, not Lille.** The shared rules
+  (`config/address_normalization.json`) gained the DGFiP's way-type codes as
+  the address base actually writes them — `ALL`, `CHE`, `MTE`, `RLE`, `LD`,
+  `TRA`, `PRV`, `VLGE` and their kin — and the vocabulary of the regions now
+  served: *traverse* and *vallon* in Marseille, *montée* and *traboule* in
+  Lyon, *venelle* and *hent* in Brittany, *cavée* in Normandy, *carriera* and
+  *cami* in the Occitan south, *ravine*, *morne* and *habitation* in Guadeloupe
+  and Réunion. A region whose vocabulary is missing loses the type/name split,
+  and with it the ability to find a street by its proper name alone.
+  `tools/refresh_normalization_fixtures.py` recomputes the reference cases the
+  Kotlin test replays, without rebuilding an index.
+
+### Fixed
+
+- **A station at latitude zero no longer stretches a city's data across the
+  Atlantic.** Naolib publishes one; the Nantes bounding box measured 888,100 km²
+  instead of 150, and the three datasets §4 cuts from that box would have
+  followed. Positions outside the world, or within a hundred metres of Null
+  Island, are now ignored and counted out loud.
+- Non-breaking spaces are normalised as word breaks. Python treats them as
+  whitespace and Kotlin's `\s` does not: a street name holding one was indexed
+  as two words and searched as one.
+
 ## [0.2.0-alpha]
 
 ### Added

@@ -8,8 +8,13 @@ rather than the nearest one.
 
 It serves **any conurbation whose network publishes its stations as open data**
 in the GBFS format, and several of them can live side by side on the same
-device. Three are generated today — Lille, Lyon and Paris — and adding a fourth
-is a configuration file and a data generation run, never a code change (see
+device. **69 French networks are configured** — every one whose stations are
+published and whose docks the journey algorithm can rely on, from Vélib' to
+Auch's ten stations, by way of Marseille, Toulouse, Strasbourg, Pointe-à-Pitre
+and Saint-Pierre de La Réunion. The list, and what was set aside and why, is in
+[`docs/networks-france.md`](docs/networks-france.md); three of them have their
+offline data generated so far. Adding a network is a configuration file and a
+data generation run, never a code change (see
 [Adding a city](#adding-a-city)). No city is a default: the application
 proposes one from your position, and you choose.
 
@@ -171,23 +176,37 @@ No data specific to a conurbation exists in the code: no URL, no bounding box,
 no centring coordinate, no network name. Each city fits in one file under
 `config/cities/`, and the catalogue indexes them.
 
-1. **Copy a city configuration.** Start from
-   [`config/cities/lille.json`](config/cities/lille.json) and adjust only the
-   `network` block, the `gbfs.json` URL and the map's centring. Leave the
-   `boundingBox` block alone: it is recomputed automatically.
-2. **Find the GBFS feed URL.** Never guess it: take it from the
+**In France, both steps are already done.** The survey below re-reads the two
+catalogues, calls every feed, applies the eligibility rules and writes the
+configurations of the networks it kept:
+
+```bash
+python3 tools/discover_networks.py    # calls every French feed, writes the list
+python3 tools/add_city.py --list      # what it would add
+python3 tools/add_city.py --all       # writes config/cities/*.json
+```
+
+By hand, or for a network outside France:
+
+1. **Find the GBFS feed URL.** Never guess it: take it from the
    [MobilityData catalogue](https://github.com/MobilityData/gbfs/blob/master/systems.csv)
    or, in France, from [transport.data.gouv.fr](https://transport.data.gouv.fr/),
    then verify it with a real request.
-3. **Generate the data** with the matching OpenStreetMap region and
-   departments:
+2. **Copy a city configuration.** Start from
+   [`config/cities/lille.json`](config/cities/lille.json) and adjust only the
+   `network` block, the `gbfs.json` URL and the map's centring. Leave the
+   `boundingBox` block alone: it is recomputed automatically.
+3. **Generate the data.** The OpenStreetMap extract and the address-base
+   departments come from the configuration's `dataSources` block, so the
+   command carries nothing but the city:
    ```bash
-   tools/generate_all.sh --city config/cities/<city>.json \
-                         --region europe/france/<region> \
-                         --departments 35
+   tools/generate_all.sh --city config/cities/<city>.json
    ```
-   The bounding box is derived from the network's stations, then widened by
-   3 km; it therefore follows extensions of the network by itself.
+   `--region` and `--departments` override them where a box reaches a sliver of
+   a neighbouring department the sampling missed. The bounding box is derived
+   from the network's stations, then widened by 3 km; it therefore covers the
+   whole conurbation — Vélib's box reaches into eight departments, Avignon's
+   into three — and follows extensions of the network by itself.
 4. **Regenerate the catalogue**, which tells the application what exists and
    what it weighs:
    ```bash

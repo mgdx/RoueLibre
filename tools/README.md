@@ -9,17 +9,39 @@ manual import in the application.
 ## In one command
 
 ```bash
-tools/generate_all.sh
+tools/generate_all.sh --city config/cities/rennes.json
 ```
 
-For another conurbation, it is enough to change the city configuration file and
-the source region:
+That is the whole command for any of the configured conurbations. The
+OpenStreetMap extract and the address-base departments come from the
+configuration's `dataSources` block, derived from the reference box;
+`--region` and `--departments` override them where a box reaches a sliver of a
+neighbouring department the sampling missed.
+
+## Finding the networks in the first place
+
+`config/cities/` holds one file per network served, and those files are not
+written by hand:
 
 ```bash
-tools/generate_all.sh --city config/cities/rennes.json \
-                      --region europe/france/bretagne \
-                      --departments 35
+python3 tools/discover_networks.py    # calls every French feed, writes the list
+python3 tools/add_city.py --list      # what it would add, and under what name
+python3 tools/add_city.py --all       # writes the configurations
+python3 tools/build_catalogue.py      # re-derives the catalogue from them
 ```
+
+`discover_networks.py` reads the two catalogues `SPEC.md` §4.1 accepts —
+MobilityData's `systems.csv` and the national access point — calls every
+address they publish, and keeps only what this application can actually serve:
+stations with real docks, a fleet holding bicycles and no car, at least ten
+stations, a feed needing no key. The reasoned list it produces, rejections
+included, is [`docs/networks-france.md`](../docs/networks-france.md); the same
+survey in machine-readable form lands in `data/networks-fr.json`.
+
+`add_city.py` turns each surveyed network into a configuration: verified feed
+address, network and authority names, licence, reference box recomputed against
+the live feed, opening framing, and the sources a generation run needs. It
+never touches a configuration that already exists unless told to.
 
 ## Prerequisites
 
@@ -39,12 +61,15 @@ machine, most of which is downloading the sources.
 
 | Script | Role |
 |---|---|
+| `discover_networks.py` | Surveys every French GBFS feed, keeps the docked bike networks, writes `docs/networks-france.md` |
+| `add_city.py` | Turns a surveyed network into a `config/cities/*.json` |
 | `compute_bbox.py` | Computes the reference bounding box from the GBFS feed's stations and writes it into the city configuration |
 | `build_tiles.py` | Produces `tiles.mbtiles` from an OpenStreetMap extract |
 | `build_routing.py` | Produces the BRouter `*.rd5` graph |
 | `build_address_index.py` | Produces `addresses.sqlite` from the Base Adresse Nationale and OpenStreetMap |
 | `build_manifest.py` | Describes the release: sizes, SHA-256 digests, URLs |
 | `build_catalogue.py` | Derives the catalogue of served cities from their configurations |
+| `refresh_normalization_fixtures.py` | Recomputes the normalisation reference cases after the shared rules change |
 
 Shared modules: `city_config.py` (reading the city configuration and the box's
 geometry) and `address_normalization.py` (street-name normalisation, applied by
@@ -54,9 +79,37 @@ the application too).
 
 | File | Contents |
 |---|---|
-| `config/cities/<city>.json` | Everything specific to a conurbation: network, GBFS feed URL, bounding box, centring. **The only place** these values exist |
+| `config/cities/<city>.json` | Everything specific to a conurbation: network, GBFS feed URL, bounding box, centring, the extracts its data is cut from. **The only place** these values exist |
+| `config/catalogue.json` | The index of those configurations, derived from them |
 | `tools/map_features.yaml` | The allowlist of objects kept in the base map, and the list of those deliberately excluded |
 | `config/address_normalization.json` | Street-name normalisation rules, shared with the application |
+
+## Street-name normalisation, and why it is national
+
+`config/address_normalization.json` is what makes a typed street meet an
+indexed one: it lowercases, strips accents and punctuation, expands
+abbreviations, and splits a leading way type off the proper name so that
+"gambetta" finds "rue Gambetta".
+
+Its content covers the whole French address base, not one city. Two reasons:
+
+* the Base Adresse Nationale carries the DGFiP's way-type codes — `ALL`, `CHE`,
+  `MTE`, `RLE`, `LD`, `TRA`, `PRV` — and a code left unexpanded is a street
+  nobody finds by typing its name in full;
+* a conurbation names its ways in its own words. *Traverse* and *vallon* are
+  Marseille, *montée* and *traboule* Lyon, *courée* and *drève* the North,
+  *venelle* and *hent* Brittany, *cavée* Normandy, *carriera* and *cami* the
+  Occitan south, *ravine*, *morne* and *habitation* Guadeloupe and Réunion.
+  Leaving a region's vocabulary out costs its inhabitants the type/name split.
+
+After editing the rules, recompute the reference cases the Kotlin test replays:
+
+```bash
+python3 tools/refresh_normalization_fixtures.py   # --check to see without writing
+```
+
+Read its diff. A case that moves is a street whose split has changed, and
+whether that is an improvement is a judgement no script can make.
 
 ## The reference bounding box
 
