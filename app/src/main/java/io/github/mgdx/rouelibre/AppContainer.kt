@@ -34,40 +34,37 @@ private val Context.preferencesDataStore: DataStore<Preferences> by preferencesD
 )
 
 /**
- * Assemble les dépendances de l'application, à la main.
+ * Assembles the application's dependencies, by hand.
  *
- * Pas de Hilt ni de Koin (SPEC §3) : l'arbre de dépendances tient sur un
- * écran, et un conteneur explicite se lit sans connaître de framework — ce qui
- * compte pour un projet destiné à être audité et repris.
+ * No Hilt and no Koin (SPEC §3): the dependency tree fits on one screen, and an
+ * explicit container reads without knowing any framework — which counts for a
+ * project meant to be audited and taken over.
  *
- * Tout est construit paresseusement : rien n'est initialisé tant qu'aucun
- * écran n'en a besoin.
+ * Everything is built lazily: nothing is initialised until a screen needs it.
  */
 class AppContainer(private val context: Context) {
 
-    /**
-     * Le catalogue des villes servies et leurs configurations (SPEC §15).
-     */
+    /** The catalogue of cities served and their configurations (SPEC §15). */
     val cityCatalogueSource: CityCatalogueSource by lazy {
         CityCatalogueSource(context, httpClient, userAgent(), Dispatchers.IO)
     }
 
     /**
-     * La configuration de la ville active, ou `null` si aucune n'est choisie.
+     * The active city's configuration, or `null` if none is chosen.
      *
-     * L'application ne suppose aucune agglomération par défaut : tant que
-     * l'accueil n'en a pas proposé une et qu'on ne l'a pas acceptée, il n'y a
-     * ni carte à cadrer ni flux à interroger.
+     * The application assumes no default conurbation: until the welcome screen
+     * has proposed one and it has been accepted, there is neither a map to
+     * frame nor a feed to query.
      *
-     * Le résultat est gardé en mémoire, la clé étant l'identifiant lu dans les
-     * réglages : changer de ville invalide donc le cache de lui-même, sans
-     * qu'un écran ait à penser à le vider.
+     * The result is held in memory, keyed by the identifier read from the
+     * settings: changing city therefore invalidates the cache by itself,
+     * without any screen having to remember to clear it.
      */
     suspend fun activeCity(): CityConfiguration? {
         val identifier = preferences.activeCityId()
-        // Mis en service ici plutôt qu'au seul suivi du réglage : un écran qui
-        // demande la ville puis lit ses fichiers dans la foulée ne doit pas
-        // dépendre de l'ordre dans lequel deux coroutines s'exécutent.
+        // Put into service here rather than only by watching the setting: a
+        // screen that asks for the city and then reads its files in the same
+        // breath must not depend on the order two coroutines happen to run in.
         datasetStore.useCity(identifier)
         if (identifier == null) return null
         cachedCity?.let { (cachedId, configuration) ->
@@ -79,15 +76,15 @@ class AppContainer(private val context: Context) {
     }
 
     /**
-     * Change de ville servie.
+     * Changes the city served.
      *
-     * Le cache des stations est vidé du même mouvement : les stations d'une
-     * agglomération n'ont rien à faire sur la carte d'une autre, et hors ligne
-     * rien ne viendrait les remplacer. Les jeux de données, eux, restent où ils
-     * sont — chaque ville a son répertoire, et revenir en arrière ne doit rien
-     * faire retélécharger.
+     * The station cache is emptied in the same movement: one conurbation's
+     * stations have no business on another's map, and offline nothing would
+     * come to replace them. The datasets, for their part, stay where they are —
+     * every city has its own directory, and coming back must not make anything
+     * download again.
      *
-     * @param id identifiant du réseau, ou `null` pour n'en servir aucun.
+     * @param id the network's identifier, or `null` to serve none.
      */
     suspend fun switchToCity(id: String?) {
         if (preferences.activeCityId() == id) return
@@ -98,10 +95,10 @@ class AppContainer(private val context: Context) {
     }
 
     /**
-     * La ville active au dernier appel d'[activeCity].
+     * The active city as of the last call to [activeCity].
      *
-     * `@Volatile` parce que la lecture vient du fil principal et l'écriture du
-     * répartiteur des entrées-sorties.
+     * `@Volatile` because the read comes from the main thread and the write
+     * from the IO dispatcher.
      */
     @Volatile
     private var cachedCity: Pair<String, CityConfiguration>? = null
@@ -110,14 +107,14 @@ class AppContainer(private val context: Context) {
         OkHttpClient.Builder()
             .connectTimeout(CONNECT_TIMEOUT)
             .readTimeout(READ_TIMEOUT)
-            // Aucun cache disque : la politique de fraîcheur est celle du
-            // dépôt (SPEC §4.1), et un cache HTTP par-dessus la rendrait
-            // impossible à raisonner.
+            // No disk cache: the freshness policy is the repository's
+            // (SPEC §4.1), and an HTTP cache on top would make it impossible to
+            // reason about.
             .cache(null)
             .build()
     }
 
-    /** Réglages et favoris, partagés par les écrans qui les lisent. */
+    /** Settings and favourites, shared by the screens that read them. */
     val preferences: AppPreferences by lazy {
         AppPreferences(context.preferencesDataStore)
     }
@@ -131,35 +128,35 @@ class AppContainer(private val context: Context) {
     }
 
     /**
-     * Les jeux de données hors ligne installés sur l'appareil.
+     * The offline datasets installed on the device.
      *
-     * Créé tôt et partagé : la carte, le routage et la recherche d'adresses y
-     * liront tous le fichier dont ils dépendent.
+     * Created early and shared: the map, the routing and the address search
+     * will all read from it the file they depend on.
      */
     val datasetStore: DatasetStore by lazy {
         DatasetStore(context, Dispatchers.IO)
     }
 
     /**
-     * Calcul d'itinéraires sur l'appareil.
+     * Route computation on the device.
      *
-     * Le calcul est purement processeur : il tourne sur le répartiteur prévu
-     * pour cela, pas sur celui des entrées-sorties.
+     * The computation is purely processor-bound: it runs on the dispatcher
+     * meant for that, not on the IO one.
      */
     val router: OfflineRouter by lazy {
         OfflineRouter(context, datasetStore, Dispatchers.Default)
     }
 
     /**
-     * Les règles de normalisation des noms de voies, partagées avec le script
-     * qui construit l'index (SPEC §4.3).
+     * The street-name normalisation rules, shared with the script that builds
+     * the index (SPEC §4.3).
      *
-     * Le fichier est copié dans l'APK au moment du build depuis
-     * `config/address_normalization.json`, source unique des deux côtés : une
-     * divergence rendrait des rues introuvables.
+     * The file is copied into the APK at build time from
+     * `config/address_normalization.json`, the single source on both sides: a
+     * divergence would make streets impossible to find.
      *
-     * @throws IllegalStateException si le fichier est absent ou illisible —
-     *   défaut de fabrication de l'APK, pas situation utilisateur.
+     * @throws IllegalStateException if the file is absent or unreadable — a
+     *   manufacturing defect of the APK, not a user situation.
      */
     val addressNormalizer: AddressNormalizer by lazy {
         val document = context.assets.open(NORMALIZATION_RULES_ASSET)
@@ -168,60 +165,59 @@ class AppContainer(private val context: Context) {
         when (val outcome = AddressNormalizerReader.read(document)) {
             is Outcome.Success -> outcome.value
             is Outcome.Failure -> error(
-                "Règles de normalisation illisibles dans l'APK : ${outcome.error}",
+                "Normalisation rules unreadable in the APK: ${outcome.error}",
             )
         }
     }
 
     /**
-     * Téléchargement des jeux de données publiés (SPEC §4.4).
+     * Downloading of the published datasets (SPEC §4.4).
      *
-     * Jamais appelé de lui-même : seul l'écran de stockage le déclenche, sur
-     * action explicite.
+     * Never called of its own accord: only the storage screen triggers it, on
+     * an explicit action.
      */
     val datasetDownloader: DatasetDownloader by lazy {
         DatasetDownloader(httpClient, userAgent(), Dispatchers.IO)
     }
 
-    /** Où déposer ce qui est en cours de téléchargement, avant vérification. */
+    /** Where to drop what is being downloaded, before verification. */
     val downloadWorkDirectory: File
-        get() = File(context.cacheDir, "telechargements")
+        get() = File(context.cacheDir, "downloads")
 
     /**
-     * L'adresse du manifeste : celle qu'a choisie l'utilisateur, sinon celle de
-     * la ville active (SPEC §4.4). `null` s'il n'y a pas encore de ville.
+     * The manifest's address: the one the user chose, otherwise the active
+     * city's (SPEC §4.4). `null` if there is no city yet.
      */
     suspend fun dataManifestUrl(): String? = preferences.dataManifestUrlOverride()
         ?: activeCity()?.dataRelease?.manifestUrl
 
     /**
-     * Position de l'appareil, demandée au moment de l'usage seulement.
+     * The device's position, asked for at the moment of use only.
      *
-     * Sans état : chaque appel interroge le système. Rien n'est mis en cache,
-     * donc rien ne survit à la session (SPEC §2, C3).
+     * Stateless: every call queries the system. Nothing is cached, so nothing
+     * survives the session (SPEC §2, C3).
      */
     val deviceLocation: DeviceLocation by lazy { DeviceLocation(context) }
 
     /**
-     * Recherche d'adresses hors ligne.
+     * Offline address search.
      *
-     * Sur le répartiteur des entrées-sorties : la première recherche ouvre le
-     * fichier et en lit le corpus, les suivantes le parcourent.
+     * On the IO dispatcher: the first search opens the file and reads its
+     * corpus, the following ones walk through it.
      */
     val addressIndex: AddressIndex by lazy {
         AddressIndex(datasetStore, addressNormalizer, Dispatchers.IO)
     }
 
     /**
-     * Le moteur de l'appareil, vu par l'algorithme de trajet.
+     * The device's engine, as the journey algorithm sees it.
      *
-     * Cet adaptateur existe pour que l'algorithme reste en Kotlin pur : il ne
-     * connaît qu'une interface à deux points et un mode, jamais BRouter
-     * (SPEC §14).
+     * This adapter exists so the algorithm stays in pure Kotlin: it knows only
+     * an interface taking two points and a mode, never BRouter (SPEC §14).
      *
-     * Le planificateur, lui, n'est pas construit ici : ses réglages — les
-     * temps forfaitaires du §6 — dépendent de ce que l'utilisateur a choisi, et
-     * changent donc entre deux calculs.
+     * The planner itself is not built here: its settings — the fixed handling
+     * times of §6 — depend on what the user chose, and therefore change between
+     * two computations.
      */
     val journeyRouter: Router by lazy {
         object : Router {
@@ -233,7 +229,7 @@ class AppContainer(private val context: Context) {
         }
     }
 
-    /** Source unique des stations et de leur disponibilité. */
+    /** The single source of the stations and their availability. */
     val stationRepository: StationRepository by lazy {
         StationRepository(
             remote = GbfsRemoteSource(
@@ -244,9 +240,9 @@ class AppContainer(private val context: Context) {
             ),
             dao = database.stationDao(),
             refreshTimestamps = preferences,
-            // Le réglage utilisateur prime sur la configuration livrée ; il
-            // est relu à chaque appel pour qu'un changement prenne effet sans
-            // redémarrage (SPEC §4.1).
+            // The user setting wins over the shipped configuration; it is
+            // re-read on every call so a change takes effect without a restart
+            // (SPEC §4.1).
             discoveryUrlProvider = {
                 preferences.gbfsDiscoveryUrlOverride()
                     ?: activeCity()?.gbfs?.discoveryUrl
@@ -255,9 +251,8 @@ class AppContainer(private val context: Context) {
     }
 
     /**
-     * Identifie l'application et sa version auprès des producteurs de données,
-     * sans aucun identifiant propre à l'utilisateur ou à l'appareil
-     * (SPEC §4.4).
+     * Identifies the application and its version to the data producers, with no
+     * identifier specific to the user or the device (SPEC §4.4).
      */
     private fun userAgent(): String = "RoueLibre/${BuildConfig.VERSION_NAME} (+$REPOSITORY_URL)"
 
