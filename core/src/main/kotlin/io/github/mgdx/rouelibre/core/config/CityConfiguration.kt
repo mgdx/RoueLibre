@@ -9,29 +9,29 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 
 /**
- * Tout ce qui est propre à une agglomération, et rien d'autre.
+ * Everything specific to one conurbation, and nothing else.
  *
- * Aucune de ces valeurs n'est écrite dans le code : ni URL, ni emprise, ni
- * coordonnée de centrage, ni nom de réseau. Servir une autre ville se fait en
- * remplaçant ce fichier, sans recompiler autre chose (SPEC §15).
+ * None of these values is written in the code: no URL, no bounding box, no
+ * centring coordinate, no network name. Serving another city is done by
+ * replacing this file, without recompiling anything else (SPEC §15).
  */
 public data class CityConfiguration(
     public val configVersion: Int,
     public val network: NetworkDescription,
     public val gbfs: GbfsSettings,
     /**
-     * Emprise de référence partagée par les trois jeux de données hors ligne.
+     * The reference bounding box shared by the three offline datasets.
      *
-     * Nulle tant que les données n'ont jamais été générées. L'application doit
-     * alors se limiter à la liste des stations et le dire, plutôt que de
-     * laisser croire que la carte va s'afficher (SPEC §4.4).
+     * Null as long as the data has never been generated. The application must
+     * then limit itself to the station list and say so, rather than letting the
+     * user believe the map is about to appear (SPEC §4.4).
      */
     public val boundingBox: BoundingBox?,
     public val map: MapDefaults,
     public val dataRelease: DataReleaseSettings,
 )
 
-/** Identité du réseau servi. */
+/** The identity of the network served. */
 public data class NetworkDescription(
     public val id: String,
     public val displayName: String,
@@ -39,18 +39,18 @@ public data class NetworkDescription(
     public val defaultLanguage: String,
 )
 
-/** Accès au flux temps réel. */
+/** Access to the real-time feed. */
 public data class GbfsSettings(
     /**
-     * URL du document d'auto-découverte, et lui seul. Les URL des flux
-     * individuels en sont déduites, jamais écrites en dur (SPEC §4.1).
+     * The URL of the auto-discovery document, and of that alone. The individual
+     * feed URLs are derived from it, never hard-coded (SPEC §4.1).
      */
     public val discoveryUrl: String,
     public val attribution: String,
     public val attributionUrl: String?,
 )
 
-/** Cadrage de la carte à l'ouverture, faute de position connue. */
+/** How the map is framed on opening, for want of a known position. */
 public data class MapDefaults(
     public val centre: Coordinates,
     public val defaultZoom: Double,
@@ -58,33 +58,33 @@ public data class MapDefaults(
     public val maxZoom: Int,
 )
 
-/** Où trouver les jeux de données à télécharger. */
+/** Where to find the datasets to download. */
 public data class DataReleaseSettings(
     public val manifestUrl: String,
     /**
-     * Version de format que l'application sait lire. Un manifeste annonçant
-     * autre chose doit produire une invitation à mettre à jour, pas un échec
-     * à l'ouverture d'un fichier (SPEC §4.4).
+     * The format version the application can read. A manifest announcing
+     * anything else must produce an invitation to update, not a failure when
+     * opening a file (SPEC §4.4).
      */
     public val formatVersion: Int,
 )
 
 /**
- * Lit un fichier de configuration de ville.
+ * Reads a city configuration file.
  *
- * Le format est du JSON ordinaire, enrichi de clés `$comment` qui documentent
- * le fichier pour la personne qui le portera vers une autre ville. Elles sont
- * ignorées ici comme tout champ inconnu.
+ * The format is ordinary JSON, enriched with `$comment` keys documenting the
+ * file for whoever ports it to another city. They are ignored here like any
+ * unknown field.
  */
 public object CityConfigurationReader {
 
     private val json = Json { ignoreUnknownKeys = true }
 
     /**
-     * Analyse le contenu d'un fichier de configuration de ville.
+     * Parses the contents of a city configuration file.
      *
-     * @param document contenu brut du fichier `city.json`.
-     * @return la configuration, ou l'erreur qui empêche de la lire.
+     * @param document the raw contents of the `city.json` file.
+     * @return the configuration, or the error preventing it from being read.
      */
     public fun read(document: String): Outcome<CityConfiguration> = try {
         val parsed = json.decodeFromString(CityConfigurationDocument.serializer(), document)
@@ -92,13 +92,13 @@ public object CityConfigurationReader {
     } catch (error: SerializationException) {
         Outcome.Failure(
             DataError.MalformedResponse(
-                error.message ?: "configuration de ville illisible",
+                error.message ?: "unreadable city configuration",
             ),
         )
     } catch (error: IllegalArgumentException) {
         Outcome.Failure(
             DataError.MalformedResponse(
-                error.message ?: "configuration de ville incohérente",
+                error.message ?: "inconsistent city configuration",
             ),
         )
     }
@@ -163,8 +163,8 @@ private data class BoundingBoxDocument(
     val east: Double? = null,
 ) {
     fun toDomain(): BoundingBox? {
-        // Les quatre bornes sont nulles tant que compute_bbox.py n'a jamais
-        // tourné. Un quart de rectangle n'a pas de sens : on exige les quatre.
+        // All four bounds are null until compute_bbox.py has ever run. A
+        // quarter of a rectangle means nothing: all four are required.
         val southValue = south ?: return null
         val westValue = west ?: return null
         val northValue = north ?: return null

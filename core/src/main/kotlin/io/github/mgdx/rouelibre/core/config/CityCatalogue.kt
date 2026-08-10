@@ -10,61 +10,61 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 
 /**
- * Les villes que l'application sait servir.
+ * The cities the application knows how to serve.
  *
- * Un index de quelques kilo-octets, dérivé des configurations de ville par
- * `tools/build_catalogue.py`. Il tient en mémoire, se télécharge en une requête
- * et suffit à répondre aux deux questions du premier lancement : quelles villes
- * existent, et laquelle correspond à l'endroit où l'on se trouve.
+ * An index of a few kilobytes, derived from the city configurations by
+ * `tools/build_catalogue.py`. It fits in memory, downloads in one request, and
+ * is enough to answer the two questions of a first launch: which cities exist,
+ * and which one matches where we are.
  *
- * Le catalogue ne remplace pas la configuration d'une ville : il la référence.
- * Les réglages complets — cadrage, attribution, versions de format — arrivent
- * avec les données téléchargées (SPEC §15).
+ * The catalogue does not replace a city's configuration: it references it. The
+ * complete settings — framing, attribution, format versions — arrive with the
+ * downloaded data (SPEC §15).
  */
 public data class CityCatalogue(
     public val catalogueVersion: Int,
-    /** Date de production, telle que publiée. Sert à dater ce qui est affiché. */
+    /** When it was produced, as published. Used to date what is shown. */
     public val generatedAt: String?,
     /**
-     * Adresse à laquelle se retélécharge le catalogue.
+     * The address the catalogue re-downloads itself from.
      *
-     * Portée par le document plutôt qu'écrite dans le code : c'est ce qui
-     * permet à un dérivé de publier son propre catalogue en le régénérant, sans
-     * toucher au Kotlin (SPEC §15). `null` sur un catalogue produit sans
-     * adresse de publication ; il n'y a alors rien à rafraîchir.
+     * Carried by the document rather than written in the code: that is what
+     * lets a derivative publish its own catalogue by regenerating it, without
+     * touching the Kotlin (SPEC §15). `null` on a catalogue produced without a
+     * publication address; there is then nothing to refresh.
      */
     public val catalogueUrl: String?,
     public val cities: List<CityEntry>,
 ) {
 
-    /** La ville d'identifiant [id], ou `null` si le catalogue l'ignore. */
+    /** The city with identifier [id], or `null` if the catalogue ignores it. */
     public fun entry(id: String): CityEntry? = cities.firstOrNull { it.id == id }
 
     /**
-     * Les villes classées par proximité avec [position].
+     * The cities ranked by proximity to [position].
      *
-     * Celles dont l'emprise contient le point viennent d'abord, la plus
-     * resserrée en tête : deux réseaux peuvent se recouvrir, et c'est alors
-     * celui dont on est le plus près du centre qui est le plus plausible.
-     * Viennent ensuite les autres, par distance croissante à leur emprise.
+     * Those whose box contains the point come first, the tightest at the head:
+     * two networks can overlap, and the more plausible one is then the one
+     * whose centre we are nearest. The others follow, by growing distance to
+     * their box.
      */
     public fun rank(position: Coordinates): List<CityEntry> = cities
         .sortedWith(
             compareBy(
                 { it.boundingBox.distanceOutsideInMetres(position) },
                 { it.centre.distanceInMetresTo(position) },
-                // À égalité, un ordre stable plutôt que celui du fichier.
+                // On a tie, a stable order rather than the file's own.
                 { it.displayName },
             ),
         )
 
     /**
-     * La ville à proposer pour [position], s'il y en a une de plausible.
+     * The city to propose for [position], if there is a plausible one.
      *
-     * Proposer la ville la plus proche quoi qu'il arrive donnerait Lille à
-     * quelqu'un qui se trouve à Marseille : au-delà de [SUGGESTION_RADIUS_METRES]
-     * du réseau le plus proche, mieux vaut ne rien proposer et laisser
-     * choisir dans la liste.
+     * Proposing the nearest city whatever happens would give Lille to somebody
+     * standing in Marseille: beyond [SUGGESTION_RADIUS_METRES] from the nearest
+     * network, it is better to propose nothing and let the user pick from the
+     * list.
      */
     public fun suggestionFor(position: Coordinates): CityEntry? =
         rank(position).firstOrNull { entry ->
@@ -73,29 +73,29 @@ public data class CityCatalogue(
 
     public companion object {
         /**
-         * Distance au-delà de laquelle une ville n'est plus proposée, en mètres.
+         * The distance beyond which a city is no longer proposed, in metres.
          *
-         * Cinquante kilomètres : de quoi couvrir la couronne périurbaine d'une
-         * métropole — on habite Seclin et on prend le V'lille à Lille — sans
-         * atteindre l'agglomération suivante, qui aurait alors son propre
-         * réseau et sa propre entrée dans le catalogue.
+         * Fifty kilometres: enough to cover a metropolis's outer ring — one
+         * lives in Seclin and takes the V'lille in Lille — without reaching the
+         * next conurbation, which would then have its own network and its own
+         * entry in the catalogue.
          */
         public const val SUGGESTION_RADIUS_METRES: Double = 50_000.0
     }
 }
 
 /**
- * Une ville du catalogue.
+ * A city of the catalogue.
  *
- * Ne porte que ce qui permet de la présenter et de la situer. Tout le reste est
- * dans sa configuration, livrée avec ses données.
+ * It carries only what allows presenting and locating it. Everything else is in
+ * its configuration, delivered with its data.
  */
 public data class CityEntry(
-    /** Identifiant du réseau, qui nomme aussi son répertoire de données. */
+    /** The network's identifier, which also names its data directory. */
     public val id: String,
     public val displayName: String,
     public val operator: String,
-    /** Code pays ISO 3166-1 alpha-2, pour regrouper la liste. */
+    /** ISO 3166-1 alpha-2 country code, used to group the list. */
     public val country: String,
     public val boundingBox: BoundingBox,
     public val centre: Coordinates,
@@ -103,41 +103,41 @@ public data class CityEntry(
     public val gbfsDiscoveryUrl: String,
     public val manifestUrl: String,
     /**
-     * Poids total des données hors ligne, en octets, ou `null` si elles n'ont
-     * pas encore été produites.
+     * The total weight of the offline data, in bytes, or `null` if it has not
+     * been produced yet.
      *
-     * Le SPEC §11.9 exige que la taille soit annoncée avant le téléchargement.
-     * Une ville sans taille connue est une ville qu'on ne peut pas installer :
-     * elle reste listée, mais l'interface doit le dire.
+     * SPEC §11.9 requires the size to be announced before downloading. A city
+     * with no known size is a city one cannot install: it stays listed, but the
+     * interface must say so.
      */
     public val dataSizeBytes: Long?,
     public val releaseTag: String?,
 ) {
-    /** Vrai si les données de cette ville sont publiées et téléchargeables. */
+    /** True if this city's data is published and downloadable. */
     public val isAvailable: Boolean
         get() = dataSizeBytes != null && dataSizeBytes > 0
 }
 
-/** Lit un catalogue de villes. */
+/** Reads a catalogue of cities. */
 public object CityCatalogueReader {
 
     private val json = Json { ignoreUnknownKeys = true }
 
     /**
-     * Analyse le contenu d'un catalogue.
+     * Parses the contents of a catalogue.
      *
-     * Une entrée dont l'emprise est absurde est écartée sans faire échouer le
-     * reste : le catalogue est téléchargé, donc produit ailleurs et plus tard
-     * que l'application qui le lit. Un catalogue entièrement vide, en revanche,
-     * est un échec — il n'y aurait rien à choisir.
+     * An entry whose box is absurd is dropped without failing the rest: the
+     * catalogue is downloaded, therefore produced elsewhere and later than the
+     * application reading it. An entirely empty catalogue, on the other hand,
+     * is a failure — there would be nothing to choose.
      *
-     * @param document contenu brut du fichier `catalogue.json`.
+     * @param document the raw contents of the `catalogue.json` file.
      */
     public fun read(document: String): Outcome<CityCatalogue> = try {
         val parsed = json.decodeFromString(CityCatalogueDocument.serializer(), document)
         val cities = parsed.cities.mapNotNull { it.toDomainOrNull() }
         if (cities.isEmpty()) {
-            Outcome.Failure(DataError.MalformedResponse("catalogue sans aucune ville lisible"))
+            Outcome.Failure(DataError.MalformedResponse("catalogue with no readable city"))
         } else {
             Outcome.Success(
                 CityCatalogue(
@@ -150,7 +150,7 @@ public object CityCatalogueReader {
         }
     } catch (error: SerializationException) {
         Outcome.Failure(
-            DataError.MalformedResponse(error.message ?: "catalogue de villes illisible"),
+            DataError.MalformedResponse(error.message ?: "unreadable city catalogue"),
         )
     }
 }
@@ -180,7 +180,7 @@ private data class CityEntryDocument(
 ) {
     fun toDomainOrNull(): CityEntry? {
         val box = boundingBox?.toDomainOrNull() ?: return null
-        // Le centrage par défaut peut manquer : celui de l'emprise le vaut.
+        // The default centring may be missing: the box's own centre will do.
         val latitude = centreLatitude
         val longitude = centreLongitude
         val centre = if (latitude != null && longitude != null) {
@@ -211,8 +211,8 @@ private data class CatalogueBoundingBoxDocument(
     val north: Double,
     val east: Double,
 ) {
-    // `BoundingBox` refuse un rectangle inversé ; ici cela écarte l'entrée au
-    // lieu de faire tomber la lecture de tout le catalogue.
+    // `BoundingBox` refuses an inverted rectangle; here that drops the entry
+    // instead of bringing down the reading of the whole catalogue.
     fun toDomainOrNull(): BoundingBox? = runCatching { BoundingBox(south, west, north, east) }
         .getOrNull()
         ?.takeIf { it.isUsable }
