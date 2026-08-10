@@ -25,15 +25,14 @@ import io.github.mgdx.rouelibre.ui.textLocale
 import kotlinx.coroutines.launch
 
 /**
- * Écran « stockage » (SPEC §4.4).
+ * The storage screen (SPEC §4.4).
  *
- * Liste les trois jeux de données hors ligne avec leur taille et leur date, et
- * permet de les installer ou de les supprimer. L'utilisateur doit toujours
- * savoir ce que l'application occupe et pouvoir le reprendre.
+ * Lists the three offline datasets with their size and their date, and allows
+ * installing or deleting them. The user must always know what the application
+ * occupies and be able to reclaim it.
  *
- * L'import se fait par le sélecteur de documents du système, ce qui ne demande
- * aucune permission de stockage et laisse l'utilisateur maître du fichier
- * qu'il désigne.
+ * Importing goes through the system's document chooser, which requires no
+ * storage permission and leaves the user in charge of the file they designate.
  */
 class StorageFragment : Fragment() {
 
@@ -52,7 +51,7 @@ class StorageFragment : Fragment() {
         )
     }
 
-    /** Le jeu dont on attend un fichier, entre l'appui et le retour du sélecteur. */
+    /** The set awaiting a file, between the press and the chooser's return. */
     private var awaitingImportFor: DatasetKind? = null
 
     private val pickDocument = registerForActivityResult(
@@ -96,9 +95,9 @@ class StorageFragment : Fragment() {
 
         views.checkUpdates.setOnClickListener { onUpdateButtonClicked() }
 
-        // Ouvert depuis l'accueil, l'écran consulte d'emblée : l'utilisateur
-        // vient d'appuyer sur « Télécharger les données », lui redemander de
-        // le confirmer ici serait une porte de plus.
+        // Opened from the welcome screen, this one checks straight away: the
+        // user has just pressed the download button, and asking them to confirm
+        // it again here would be one more door.
         if (savedInstanceState == null && arguments?.getBoolean(ARGUMENT_CHECK_ON_OPEN) == true) {
             viewModel.checkForUpdates()
         }
@@ -108,11 +107,11 @@ class StorageFragment : Fragment() {
     }
 
     /**
-     * Le même bouton consulte puis télécharge.
+     * The same button checks, then downloads.
      *
-     * Deux boutons distincts obligeraient à comprendre la différence avant
-     * d'agir. Ici, la première pression demande ce qui est publié, la seconde
-     * — dont le libellé annonce alors la taille — le prend.
+     * Two separate buttons would force the user to understand the difference
+     * before acting. Here the first press asks what is published, and the
+     * second — whose label then announces the size — fetches it.
      */
     private fun onUpdateButtonClicked() {
         val state = viewModel.state.value
@@ -125,10 +124,10 @@ class StorageFragment : Fragment() {
     }
 
     /**
-     * Avertit si l'on n'est pas en Wi-Fi (SPEC §4.4).
+     * Warns if we are not on Wi-Fi (SPEC §4.4).
      *
-     * Un avertissement, pas un obstacle : quelqu'un qui a un forfait généreux
-     * n'a pas à demander la permission à son application.
+     * A warning, not an obstacle: somebody on a generous data plan does not
+     * have to ask their application for permission.
      */
     private fun warnIfNotOnWifi() {
         val manager = requireContext().getSystemService(ConnectivityManager::class.java) ?: return
@@ -146,11 +145,11 @@ class StorageFragment : Fragment() {
     }
 
     /**
-     * Ouvre le sélecteur de documents.
+     * Opens the document chooser.
      *
-     * Le type MIME reste générique : ni MBTiles, ni rd5, ni SQLite n'en ont un
-     * qui soit reconnu, et restreindre sur l'extension masquerait les fichiers
-     * légitimes au lieu d'aider. La validation a lieu à l'import.
+     * The MIME type stays generic: neither MBTiles, nor rd5, nor SQLite has a
+     * recognised one, and filtering on the extension would hide legitimate
+     * files instead of helping. Validation happens on import.
      */
     private fun requestImport(kind: DatasetKind) {
         awaitingImportFor = kind
@@ -161,10 +160,10 @@ class StorageFragment : Fragment() {
         private const val ARGUMENT_CHECK_ON_OPEN = "check-on-open"
 
         /**
-         * Ouvre l'écran en consultant aussitôt le manifeste (SPEC §7.9).
+         * Opens the screen and checks the manifest immediately (SPEC §7.9).
          *
-         * Réservé à l'enchaînement depuis l'écran d'accueil : ailleurs, la
-         * consultation reste déclenchée par un appui.
+         * Reserved for the sequence coming from the welcome screen: elsewhere,
+         * the check stays triggered by a press.
          */
         fun checkingForUpdates(): StorageFragment = StorageFragment().apply {
             arguments = Bundle().apply { putBoolean(ARGUMENT_CHECK_ON_OPEN, true) }
@@ -209,11 +208,11 @@ class StorageFragment : Fragment() {
     }
 
     /**
-     * Nomme la ville dont cet écran gère les données.
+     * Names the city whose data this screen manages.
      *
-     * Les jeux sont rangés par ville : sans ce sous-titre, « 42,5 Mo occupés »
-     * laisserait croire que c'est tout ce que l'application occupe, alors que
-     * d'autres villes peuvent en occuper autant à côté (SPEC §11.9).
+     * The sets are stored per city: without this subtitle, "42.5 MB occupied"
+     * would suggest that is all the application occupies, when other cities may
+     * occupy as much beside it (SPEC §11.9).
      */
     private fun showServedCity(views: FragmentStorageBinding) {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -222,15 +221,15 @@ class StorageFragment : Fragment() {
         }
     }
 
-    /** Montre ce que le transfert en cours a déjà reçu. */
+    /** Shows what the transfer in progress has already received. */
     private fun showDownload(state: StorageUiState) {
         val views = binding ?: return
         val progress = state.downloading
         views.downloadState.isVisible = progress != null || state.isChecking
         views.downloadProgress.isVisible = progress != null
         if (state.isChecking) {
-            // Une consultation ne dure qu'un instant, mais elle passe par le
-            // réseau : le dire évite de croire que l'appui s'est perdu.
+            // A check lasts only a moment, but it goes over the network:
+            // saying so avoids the impression that the press was lost.
             views.downloadState.setText(R.string.storage_checking)
         }
         if (progress == null) return

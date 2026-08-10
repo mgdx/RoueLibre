@@ -30,12 +30,12 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 
 /**
- * Liste des stations et de leur disponibilité.
+ * The list of stations and their availability.
  *
- * Le rafraîchissement n'a lieu que tant que l'écran est visible, et jamais en
- * arrière-plan : c'est la contrainte C3 du SPEC §2 autant que la politique du
- * §4.1. Une boucle liée au cycle de vie s'arrête d'elle-même quand l'écran
- * passe en arrière-plan.
+ * Refreshing only happens while the screen is visible, and never in the
+ * background: that is constraint C3 of SPEC §2 as much as the policy of §4.1. A
+ * loop tied to the lifecycle stops by itself when the screen goes to the
+ * background.
  */
 class StationListFragment : Fragment() {
 
@@ -73,8 +73,8 @@ class StationListFragment : Fragment() {
         views.stations.addItemDecoration(
             DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL),
         )
-        // Les lignes ne changent jamais de taille : le dire épargne un calcul
-        // de mise en page à chaque rafraîchissement, sur 268 stations.
+        // The rows never change size: saying so saves a layout pass on every
+        // refresh, across 268 stations.
         views.stations.setHasFixedSize(true)
 
         views.openStorage.setOnClickListener { openStorage() }
@@ -86,15 +86,15 @@ class StationListFragment : Fragment() {
         }
         views.swipeRefresh.setOnRefreshListener { viewModel.refresh(force = true) }
 
-        // Filtrage à chaque frappe : quelques centaines d'entrées déjà en
-        // mémoire, aucun anti-rebond n'est justifié ici.
+        // Filtering on every keystroke: a few hundred entries already in
+        // memory, no debounce is warranted here.
         views.searchInput.doAfterTextChanged { text ->
             viewModel.onQueryChanged(text?.toString().orEmpty())
         }
         views.searchInput.setOnEditorActionListener { view, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                // La liste est déjà filtrée ; il ne reste qu'à rendre l'écran
-                // au regard en repliant le clavier.
+                // The list is already filtered; all that remains is to give
+                // the screen back to the eye by folding the keyboard away.
                 view.clearFocus()
                 hideKeyboard(view)
                 true
@@ -120,8 +120,8 @@ class StationListFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        // Le RecyclerView survit à la vue par son adaptateur ; le détacher
-        // évite de retenir la vue détruite.
+        // The RecyclerView outlives the view through its adapter; detaching it
+        // avoids holding on to the destroyed view.
         binding?.stations?.adapter = null
         binding = null
         super.onDestroyView()
@@ -160,11 +160,11 @@ class StationListFragment : Fragment() {
     }
 
     /**
-     * Rafraîchit tant que l'écran est visible, et réécrit l'âge affiché.
+     * Refreshes while the screen is visible, and rewrites the displayed age.
      *
-     * Le dépôt applique lui-même le délai minimal d'une minute ; la boucle
-     * repasse plus souvent pour tenir à jour le « il y a 12 secondes », qui
-     * vieillirait sinon à l'écran sans que rien ne le corrige.
+     * The repository applies the one-minute minimum delay itself; the loop
+     * comes round more often to keep "12 seconds ago" current, which would
+     * otherwise age on screen with nothing to correct it.
      */
     private fun keepAvailabilityFresh() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -179,11 +179,11 @@ class StationListFragment : Fragment() {
     }
 
     /**
-     * Montre, s'il y a lieu, pourquoi la liste ne contient rien.
+     * Shows, where applicable, why the list holds nothing.
      *
-     * Deux situations, deux gestes : un cache vide se rafraîchit, une
-     * recherche infructueuse s'efface. Proposer « Rafraîchir » à quelqu'un qui
-     * a fait une faute de frappe l'enverrait chercher une panne inexistante.
+     * Two situations, two gestures: an empty cache is refreshed, a fruitless
+     * search is cleared. Offering "Refresh" to somebody who made a typo would
+     * send them looking for a breakdown that does not exist.
      */
     private fun showEmptyState(state: StationsUiState) {
         val views = binding ?: return
@@ -208,7 +208,7 @@ class StationListFragment : Fragment() {
         }
     }
 
-    /** Ouvre l'écran de gestion des données hors ligne (SPEC §4.4). */
+    /** Opens the offline data management screen (SPEC §4.4). */
     private fun openStorage() {
         parentFragmentManager.beginTransaction()
             .replace(R.id.content, StorageFragment())
@@ -222,11 +222,11 @@ class StationListFragment : Fragment() {
     }
 
     /**
-     * Réécrit la ligne d'âge, obsolescence comprise.
+     * Rewrites the age line, staleness included.
      *
-     * Recalculée à chaque battement et non figée dans l'état : sans cela, un
-     * écran laissé ouvert continuerait d'annoncer « mis à jour à l'instant »
-     * une demi-heure plus tard.
+     * Recomputed on every tick rather than frozen into the state: without that,
+     * a screen left open would go on announcing "updated just now" half an hour
+     * later.
      */
     private fun showFreshness(fetchedAt: Instant?) {
         val views = binding ?: return
@@ -239,9 +239,9 @@ class StationListFragment : Fragment() {
 
     private companion object {
         /**
-         * Cadence de la boucle. Assez courte pour que l'âge affiché reste
-         * juste, assez longue pour ne rien coûter : le dépôt, lui, ne
-         * contactera le réseau qu'une fois par minute.
+         * The loop's cadence. Short enough for the displayed age to stay
+         * truthful, long enough to cost nothing: the repository, for its part,
+         * will only contact the network once a minute.
          */
         const val FRESHNESS_TICK_MILLIS = 10_000L
     }
