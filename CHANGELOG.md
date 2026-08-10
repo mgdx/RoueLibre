@@ -62,6 +62,24 @@ qui sortira sur F-Droid sera recompilé et signé là-bas.
   validé, puis mis en place — et un fichier refusé dit pourquoi.
 - **Filtre de la liste par nom de station**, insensible à la casse et aux
   accents, tolérant à l'ordre des mots, cherchant aussi le code postal.
+- **Ouverture depuis une autre application** (§7.8) : l'application apparaît
+  dans le sélecteur d'Android pour les schémas `geo:` et `google.navigation:`,
+  et pour le partage de texte brut — le cas le plus fréquent en pratique, une
+  adresse reçue par messagerie. Toutes les formes du §7.8 sont acceptées, y
+  compris `geo:0,0?q=…` dont le point de tête est une convention, et les
+  libellés entre parenthèses.
+  - L'analyse vit dans le module métier, en Kotlin pur : quatorze tests sur la
+    JVM couvrent les écritures que l'on rencontre réellement.
+  - **Aucune requête réseau** n'est déclenchée par une intention entrante : une
+    adresse en toutes lettres est résolue par l'index local. Un lien raccourci
+    n'est donc pas reconnu — suivre sa redirection apprendrait à un tiers où va
+    l'utilisateur.
+  - Un point hors de l'emprise couverte est montré sur la carte, sans qu'aucun
+    itinéraire ne soit tenté, et l'application dit pourquoi.
+  - Les liens web cartographiques sont déclarés mais **non vérifiés
+    automatiquement** : les domaines n'appartiennent pas au projet. La
+    manipulation à faire dans les paramètres d'Android est expliquée dans « À
+    propos » et dans le `README.md`.
 - **Favoris** (§7.5) : la liste des stations mises en favori, avec leur
   disponibilité en direct, **réorganisable par glissement**. L'ordre est le
   seul réglage de cet écran, et il vaut mieux qu'un tri automatique — la

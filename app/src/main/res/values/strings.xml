@@ -109,6 +109,14 @@
     <string name="map_needs_tiles_title">La carte a besoin du fond de carte</string>
     <string name="map_needs_tiles_message">Installe le fond de carte depuis l\'écran de stockage. En attendant, la liste des stations reste utilisable.</string>
 
+    <!-- Lieu reçu d'une autre application (SPEC §7.8). -->
+    <string name="incoming_place_default_label">Lieu reçu</string>
+    <string name="incoming_show_me">Voir</string>
+    <string name="incoming_needs_index">Cette adresse doit être cherchée dans l\'index hors ligne, qui n\'est pas installé.</string>
+    <!-- %1$s est le texte reçu de l'autre application. -->
+    <string name="incoming_address_not_found">« %1$s » ne correspond à aucune adresse de la zone couverte.</string>
+    <string name="incoming_outside_coverage">Ce lieu est hors de la zone couverte par les données installées : aucun itinéraire ne peut y mener.</string>
+
     <!-- Favoris (SPEC §7.5). -->
     <string name="favourites_title">Favoris</string>
     <string name="favourites_open">Voir les favoris</string>
@@ -147,6 +155,12 @@
     <string name="about_attribution_ban">Adresses et numéros de voirie : Base Adresse Nationale, licence ODbL.</string>
     <string name="about_attribution_brouter">Calcul d\'itinéraire : BRouter, licence MIT, sur des données OpenStreetMap.</string>
     <string name="about_attribution_maplibre">Affichage de la carte : MapLibre Native, licence BSD à deux clauses.</string>
+
+    <!-- Liens web cartographiques (SPEC §7.8) : Android ne les confie à
+         l'application que si l'utilisateur l'autorise, et le dire évite de
+         faire passer ce comportement pour un défaut. -->
+    <string name="about_links_title">Ouvrir un lieu depuis une autre application</string>
+    <string name="about_links_body">Les liens « geo: » et les adresses partagées en texte arrivent directement ici : choisis Roue Libre dans le sélecteur d\'Android. Les liens de sites de cartographie, eux, demandent une autorisation : Paramètres → Applications → Roue Libre → Ouvrir par défaut → Ajouter un lien.</string>
 
     <string name="about_licence_title">Licence</string>
     <string name="about_licence_body">Roue Libre est un logiciel libre, publié sous licence GNU GPL version 3. Tu peux l\'utiliser, l\'étudier, le modifier et le redistribuer.</string>

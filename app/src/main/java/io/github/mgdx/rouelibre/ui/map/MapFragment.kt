@@ -170,6 +170,7 @@ class MapFragment : Fragment() {
 
         applyPickingMode(views)
         restorePickedPlace(savedInstanceState)
+        showRequestedPlace(savedInstanceState)
         listenForPickedAddress()
         applySystemInsets(views)
         views.map.getMapAsync(::onMapReady)
@@ -570,6 +571,24 @@ class MapFragment : Fragment() {
         }
     }
 
+    /**
+     * Pose le point reçu d'une autre application, s'il y en a un (SPEC §7.8).
+     *
+     * Seulement au premier affichage : après une rotation, c'est l'état
+     * enregistré qui fait foi, et reposer le point effacerait ce que
+     * l'utilisateur a fait entre-temps.
+     */
+    private fun showRequestedPlace(savedInstanceState: Bundle?) {
+        if (savedInstanceState != null) return
+        val requested = JourneyEndpoint.readFrom(arguments, ARGUMENT_SHOWN_PLACE) ?: return
+        showPickedPlace(
+            PickedPlace(
+                position = LatLng(requested.position.latitude, requested.position.longitude),
+                label = requested.label,
+            ),
+        )
+    }
+
     private fun restorePickedPlace(savedInstanceState: Bundle?) {
         val saved = savedInstanceState ?: return
         if (!saved.containsKey(STATE_PICKED_LATITUDE)) return
@@ -719,10 +738,21 @@ class MapFragment : Fragment() {
         const val PICK_RESULT_PREFIX: String = "point"
 
         private const val ARGUMENT_PICKING = "mode-choix"
+        private const val ARGUMENT_SHOWN_PLACE = "point-a-montrer"
 
         /** Ouvre la carte pour y désigner un point (SPEC §7.3). */
         fun forPicking(): MapFragment = MapFragment().apply {
             arguments = Bundle().apply { putBoolean(ARGUMENT_PICKING, true) }
+        }
+
+        /**
+         * Ouvre la carte posée sur un point, sans rien calculer.
+         *
+         * Sert aux lieux reçus hors de l'emprise couverte : la carte les
+         * montre si elle le peut, mais aucun itinéraire n'est tenté (§7.8).
+         */
+        fun showing(place: JourneyEndpoint): MapFragment = MapFragment().apply {
+            arguments = Bundle().apply { place.writeTo(this, ARGUMENT_SHOWN_PLACE) }
         }
 
         /** Zoom auquel la carte se pose sur une adresse trouvée : la rue. */

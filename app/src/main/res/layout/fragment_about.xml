@@ -112,6 +112,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_l"
+                android:text="@string/about_links_title"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:text="@string/about_links_body"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
                 android:text="@string/about_licence_title"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
 

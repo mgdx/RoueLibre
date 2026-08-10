@@ -44,6 +44,61 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!--
+                Ouverture d'un lieu depuis une autre application (SPEC §7.8).
+                L'application apparaît dans le sélecteur d'Android et peut y
+                être retenue par défaut — mais elle ne se déclare jamais
+                elle-même comme gestionnaire : ce choix appartient à
+                l'utilisateur.
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="geo" />
+            </intent-filter>
+
+            <!-- Encore émis par de nombreuses applications. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="google.navigation" />
+            </intent-filter>
+
+            <!--
+                Liens web cartographiques. Ils NE SONT PAS vérifiés
+                automatiquement — les domaines n'appartiennent pas au projet —
+                donc depuis Android 12 ils ne parviennent à l'application que
+                si l'utilisateur l'autorise dans les paramètres du système.
+                La marche à suivre est expliquée dans l'écran « À propos » et
+                dans le README, faute de quoi le comportement passerait pour un
+                défaut.
+            -->
+            <intent-filter android:autoVerify="false">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Un attribut par balise : Android les combine entre elles,
+                     et les mélanger ferait accepter des adresses qu'on ne
+                     croyait pas déclarer. -->
+                <data android:scheme="https" />
+                <data android:host="www.openstreetmap.org" />
+                <data android:host="openstreetmap.org" />
+                <data android:host="maps.google.com" />
+            </intent-filter>
+
+            <!--
+                Partage de texte : le cas le plus fréquent en pratique, une
+                adresse reçue par messagerie. Le texte est analysé sur
+                l'appareil, et résolu par l'index d'adresses local.
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
     </application>
 

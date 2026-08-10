@@ -222,6 +222,24 @@ aucun prétexte.
 | [BRouter](https://github.com/abrensch/brouter) | moteur et générateur de routage | MIT |
 | SRTM via [terrain-tiles](https://registry.opendata.aws/terrain-tiles/) | altimétrie du graphe | domaine public |
 
+## Ouvrir un lieu depuis une autre application
+
+Les liens `geo:` et `google.navigation:`, ainsi que les adresses partagées en
+texte brut, arrivent directement dans Roue Libre : il suffit de la choisir dans
+le sélecteur d'Android.
+
+Les liens de sites de cartographie — `openstreetmap.org`, `google.com/maps` —
+ne peuvent **pas** être vérifiés automatiquement, ces domaines n'appartenant
+pas au projet. Depuis Android 12, ils ne parviennent donc à l'application que
+si vous l'y autorisez :
+
+**Paramètres → Applications → Roue Libre → Ouvrir par défaut → Ajouter un
+lien**, puis cochez les domaines voulus.
+
+Un lien raccourci n'est pas reconnu : le lieu n'y apparaît qu'après
+redirection, et la suivre ferait sortir une requête vers un tiers à qui l'on
+apprendrait où vous allez.
+
 ## Vie privée
 
 En usage courant, **la seule requête réseau qui part est celle du flux GBFS**.

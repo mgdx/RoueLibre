@@ -75,6 +75,10 @@ class JourneySearchFragment : Fragment() {
             origin = JourneyEndpoint.readFrom(savedInstanceState, STATE_ORIGIN)
             destination = JourneyEndpoint.readFrom(savedInstanceState, STATE_DESTINATION)
             awaitingOrigin = savedInstanceState.getBoolean(STATE_AWAITING_ORIGIN, true)
+        } else if (destination == null) {
+            // Arrivée reçue d'une autre application (SPEC §7.8) : il ne reste
+            // à l'utilisateur qu'à dire d'où il part.
+            destination = JourneyEndpoint.readFrom(arguments, ARGUMENT_DESTINATION)
         }
 
         views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
@@ -227,9 +231,23 @@ class JourneySearchFragment : Fragment() {
         Snackbar.make(views.root, message, Snackbar.LENGTH_LONG).show()
     }
 
-    private companion object {
-        const val STATE_ORIGIN = "depart"
-        const val STATE_DESTINATION = "arrivee"
-        const val STATE_AWAITING_ORIGIN = "champ-attendu"
+    companion object {
+        private const val STATE_ORIGIN = "depart"
+        private const val STATE_DESTINATION = "arrivee"
+        private const val STATE_AWAITING_ORIGIN = "champ-attendu"
+        private const val ARGUMENT_DESTINATION = "arrivee-recue"
+
+        /**
+         * Ouvre la recherche, éventuellement avec l'arrivée déjà connue.
+         *
+         * @param destination le point reçu d'une autre application, ou `null`
+         *   pour un écran vierge.
+         */
+        fun newInstance(destination: JourneyEndpoint?): JourneySearchFragment =
+            JourneySearchFragment().apply {
+                arguments = destination?.let {
+                    Bundle().apply { it.writeTo(this, ARGUMENT_DESTINATION) }
+                }
+            }
     }
 }
