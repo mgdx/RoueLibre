@@ -96,21 +96,54 @@ def load_stations(discovery_url: str | None, stations_file: Path | None) -> list
     return document["data"]["stations"]
 
 
+def has_usable_position(station: dict) -> bool:
+    """True if a station carries a position that can be believed.
+
+    Feeds do publish stations at latitude and longitude zero — a field left
+    empty rather than omitted. Nantes's has one. A single such station stretches
+    the reference box from the conurbation down to the Gulf of Guinea, and with
+    it the three datasets §4 cuts out of that box: the Naolib box measured
+    888,100 km² before this check, against 39.
+    """
+    latitude, longitude = station.get("lat"), station.get("lon")
+    if latitude is None or longitude is None:
+        return False
+    if not (-90.0 <= latitude <= 90.0 and -180.0 <= longitude <= 180.0):
+        return False
+    # No bike-share station stands within a hundred metres of Null Island.
+    return abs(latitude) > 0.0001 or abs(longitude) > 0.0001
+
+
+def positioned_stations(stations: list[dict]) -> list[dict]:
+    """The stations that can be placed on a map, the others said out loud.
+
+    A feed losing positions is a feed whose next regeneration deserves a look,
+    so the count is printed rather than swallowed.
+
+    Raises:
+        ValueError: if not one station carries a usable position.
+    """
+    positioned = [station for station in stations if has_usable_position(station)]
+    if not positioned:
+        raise ValueError("No usable station in station_information.")
+    dropped = len(stations) - len(positioned)
+    if dropped:
+        print(f"Stations without a usable position, ignored: {dropped}")
+    return positioned
+
+
 def bounding_box_of_stations(stations: list[dict]) -> BoundingBox:
-    """Compute the tight rectangle enclosing every station.
+    """Compute the tight rectangle enclosing every positioned station.
 
     Raises:
         ValueError: if the list is empty or holds no usable coordinates.
     """
-    latitudes = [station["lat"] for station in stations if "lat" in station]
-    longitudes = [station["lon"] for station in stations if "lon" in station]
-    if not latitudes or not longitudes:
-        raise ValueError("No usable station in station_information.")
+    positioned = positioned_stations(stations)
     return BoundingBox(
-        south=min(latitudes),
-        west=min(longitudes),
-        north=max(latitudes),
-        east=max(longitudes),
+        south=min(station["lat"] for station in positioned),
+        west=min(station["lon"] for station in positioned),
+        north=max(station["lat"] for station in positioned),
+        east=max(station["lon"] for station in positioned),
     )
 
 
@@ -151,7 +184,9 @@ def main() -> int:
         else config.bounding_box_margin_metres
     )
 
-    stations = load_stations(config.gbfs_discovery_url, arguments.stations_file)
+    stations = positioned_stations(
+        load_stations(config.gbfs_discovery_url, arguments.stations_file)
+    )
     tight_box = bounding_box_of_stations(stations)
     reference_box = tight_box.expanded_by_metres(margin)
 
