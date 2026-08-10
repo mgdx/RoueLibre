@@ -25,11 +25,11 @@ import java.time.Instant
 import java.time.ZoneOffset
 
 /**
- * Tests de la politique de rafraîchissement (SPEC §4.1).
+ * Tests of the refresh policy (SPEC §4.1).
  *
- * Un vrai serveur HTTP local plutôt qu'une source simulée : cela couvre aussi
- * le client OkHttp et le décodage des réponses, c'est-à-dire tout le chemin
- * qu'emprunte réellement une actualisation.
+ * A real local HTTP server rather than a fake source: that also covers the
+ * OkHttp client and the decoding of responses, which is to say the whole path a
+ * refresh actually travels.
  */
 class StationRepositoryTest {
 
@@ -123,8 +123,8 @@ class StationRepositoryTest {
 
     @Test
     fun `changing city leaves none of the previous city's stations`() = runTest {
-        // Elles n'ont rien à faire sur la carte d'une autre agglomération, et
-        // hors ligne rien ne viendrait les remplacer (SPEC §15.1).
+        // They have no business on another conurbation's map, and offline
+        // nothing would come to replace them (SPEC §15.1).
         enqueueDiscovery()
         enqueueInformation()
         enqueueStatus(bikesAtFirstStation = 7)
@@ -177,8 +177,8 @@ class StationRepositoryTest {
         enqueueStatus(bikesAtFirstStation = 2)
         repository.refresh(force = true)
 
-        // La découverte et les données stables ne sont pas redemandées, seul
-        // l'état l'est : une seule requête de plus.
+        // Discovery and static data are not asked for again, only the state
+        // is: a single extra request.
         assertEquals(4, server.requestCount)
         assertEquals(2, dao.availabilities.value.single().bikesAvailable)
     }
@@ -217,8 +217,8 @@ class StationRepositoryTest {
 
     @Test
     fun `a failure on static data does not prevent refreshing the state`() = runTest {
-        // Le cache contient déjà les stations : leur indisponibilité passagère
-        // ne doit pas priver l'utilisateur d'une disponibilité fraîche.
+        // The cache already holds the stations: their momentary unavailability
+        // must not deprive the user of fresh availability.
         dao.stations.value = listOf(
             StationEntity("1", "Rue Nationale", 50.633, 3.053, 20, "59000"),
         )
@@ -265,7 +265,7 @@ class StationRepositoryTest {
     }
 }
 
-/** Cache en mémoire, pour éprouver la politique sans base de données. */
+/** An in-memory cache, to exercise the policy without a database. */
 private class FakeStationDao : StationDao {
     val stations = MutableStateFlow<List<StationEntity>>(emptyList())
     val availabilities = MutableStateFlow<List<StationAvailabilityEntity>>(emptyList())

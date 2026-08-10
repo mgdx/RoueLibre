@@ -19,12 +19,12 @@ import java.nio.file.Files
 import java.security.MessageDigest
 
 /**
- * Tests du téléchargement des jeux de données (SPEC §4.4).
+ * Tests of dataset downloading (SPEC §4.4).
  *
- * Un vrai serveur HTTP local plutôt qu'une source simulée : ce qui compte ici
- * — la reprise par en-tête `Range`, le refus d'un fichier dont l'empreinte ne
- * correspond pas — se joue précisément dans les échanges HTTP, qu'une source
- * simulée ne reproduirait pas.
+ * A real local HTTP server rather than a fake source: what matters here — the
+ * resumption through a `Range` header, the refusal of a file whose digest does
+ * not match — happens precisely in the HTTP exchanges, which a fake source
+ * would not reproduce.
  */
 class DatasetDownloaderTest {
 
@@ -32,7 +32,7 @@ class DatasetDownloaderTest {
     private lateinit var downloader: DatasetDownloader
     private lateinit var workDirectory: File
 
-    /** Le contenu servi, assez gros pour occuper plusieurs tampons. */
+    /** The content served, large enough to fill several buffers. */
     private val content = ByteArray(200_000) { (it % 251).toByte() }
 
     @Before
@@ -59,7 +59,8 @@ class DatasetDownloaderTest {
 
         val outcome = downloader.download(datasetOf(sha256 = sha256Of(content)), workDirectory)
 
-        val files = (outcome as? Outcome.Success)?.value ?: throw AssertionError("échec : $outcome")
+        val files = (outcome as? Outcome.Success)?.value
+            ?: throw AssertionError("failure: $outcome")
         assertEquals(1, files.size)
         assertEquals(content.size.toLong(), files.first().length())
         assertTrue("le fichier partiel doit avoir disparu", partialFiles().isEmpty())
@@ -67,20 +68,20 @@ class DatasetDownloaderTest {
 
     @Test
     fun `refuses a file whose digest does not match`() = runTest {
-        // Le SPEC §4.4 l'exige : un fichier qui ne correspond pas au manifeste
-        // est rejeté, et l'ancienne version conservée.
+        // SPEC §4.4 requires it: a file that does not match the manifest is
+        // rejected, and the previous version kept.
         server.enqueue(MockResponse.Builder().code(200).body(okio.Buffer().write(content)).build())
 
         val outcome = downloader.download(datasetOf(sha256 = "00".repeat(32)), workDirectory)
 
-        assertTrue("refus attendu, obtenu : $outcome", outcome is Outcome.Failure)
+        assertTrue("expected a refusal, got: $outcome", outcome is Outcome.Failure)
         assertTrue("rien ne doit rester à installer", workDirectory.listFiles().orEmpty().isEmpty())
     }
 
     @Test
     fun `resumes an interrupted transfer where it stopped`() = runTest {
-        // Une coupure au bout de trente mégaoctets ne doit pas obliger à tout
-        // reprendre : la requête suivante demande la suite.
+        // A cut after thirty megabytes must not force starting over: the next
+        // request asks for the remainder.
         val alreadyReceived = 120_000
         File(workDirectory, "$FILE_NAME.partial").writeBytes(
             content.copyOfRange(0, alreadyReceived),
@@ -94,21 +95,23 @@ class DatasetDownloaderTest {
 
         val outcome = downloader.download(datasetOf(sha256 = sha256Of(content)), workDirectory)
 
-        val files = (outcome as? Outcome.Success)?.value ?: throw AssertionError("échec : $outcome")
+        val files = (outcome as? Outcome.Success)?.value
+            ?: throw AssertionError("failure: $outcome")
         assertEquals(content.size.toLong(), files.first().length())
         assertEquals("bytes=$alreadyReceived-", server.takeRequest().headers["Range"])
     }
 
     @Test
     fun `starts over if the server ignores the resumption`() = runTest {
-        // Un serveur qui répond 200 renvoie le fichier entier : l'ajouter à la
-        // suite de ce qu'on avait produirait un fichier corrompu.
+        // A server answering 200 returns the whole file: appending it to what
+        // we already had would produce a corrupted file.
         File(workDirectory, "$FILE_NAME.partial").writeBytes(content.copyOfRange(0, 120_000))
         server.enqueue(MockResponse.Builder().code(200).body(okio.Buffer().write(content)).build())
 
         val outcome = downloader.download(datasetOf(sha256 = sha256Of(content)), workDirectory)
 
-        val files = (outcome as? Outcome.Success)?.value ?: throw AssertionError("échec : $outcome")
+        val files = (outcome as? Outcome.Success)?.value
+            ?: throw AssertionError("failure: $outcome")
         assertEquals(content.size.toLong(), files.first().length())
     }
 
@@ -140,7 +143,7 @@ class DatasetDownloaderTest {
         val outcome = downloader.fetchManifest(server.url("/manifest.json").toString())
 
         val manifest = (outcome as? Outcome.Success)?.value
-            ?: throw AssertionError("échec : $outcome")
+            ?: throw AssertionError("failure: $outcome")
         assertEquals("data-2026-08", manifest.releaseTag)
         assertEquals(1, manifest.datasets.size)
     }

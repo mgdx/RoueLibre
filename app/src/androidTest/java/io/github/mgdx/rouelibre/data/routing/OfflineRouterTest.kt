@@ -66,7 +66,7 @@ class OfflineRouterTest {
         val result = router.route(lilleCentre, roubaixCentre, TravelMode.Cycling)
 
         val leg = (result as? RouteResult.Success)?.leg
-            ?: throw AssertionError("échec inattendu : $result")
+            ?: throw AssertionError("unexpected failure: $result")
 
         assertEquals(TravelMode.Cycling, leg.mode)
         // À vol d'oiseau il y a environ 10 km ; un trajet praticable fait
@@ -85,9 +85,9 @@ class OfflineRouterTest {
         val onBike = router.route(lilleCentre, roubaixCentre, TravelMode.Cycling)
 
         val walking = (onFoot as? RouteResult.Success)?.leg
-            ?: throw AssertionError("échec à pied : $onFoot")
+            ?: throw AssertionError("walking failure: $onFoot")
         val cycling = (onBike as? RouteResult.Success)?.leg
-            ?: throw AssertionError("échec à vélo : $onBike")
+            ?: throw AssertionError("cycling failure: $onBike")
 
         assertTrue(
             "la marche devrait être plus lente que le vélo",
@@ -99,7 +99,7 @@ class OfflineRouterTest {
     fun the_track_really_starts_at_the_origin_and_ends_at_the_destination() = runBlocking {
         val result = router.route(lilleCentre, roubaixCentre, TravelMode.Cycling)
         val leg = (result as? RouteResult.Success)?.leg
-            ?: throw AssertionError("échec inattendu : $result")
+            ?: throw AssertionError("unexpected failure: $result")
 
         // Le moteur accroche les extrémités au nœud praticable le plus proche ;
         // quelques dizaines de mètres d'écart sont normales, pas des
@@ -121,10 +121,10 @@ class OfflineRouterTest {
 
         val result = router.route(lilleCentre, outside, TravelMode.Cycling)
 
-        assertTrue("échec attendu, obtenu : $result", result is RouteResult.Failure)
+        assertTrue("expected a failure, got: $result", result is RouteResult.Failure)
         val reason = (result as RouteResult.Failure).reason
         assertTrue(
-            "cause inattendue : $reason",
+            "unexpected cause: $reason",
             reason is RoutingFailure.OutsideCoverage ||
                 reason is RoutingFailure.NoRouteFound ||
                 reason is RoutingFailure.EngineFailure,

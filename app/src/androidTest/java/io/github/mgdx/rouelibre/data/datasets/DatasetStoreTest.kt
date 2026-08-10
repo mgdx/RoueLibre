@@ -72,7 +72,7 @@ class DatasetStoreTest {
 
         val result = store.importFrom(DatasetKind.Routing, Uri.fromFile(source))
 
-        assertTrue("refus attendu, obtenu : $result", result is DatasetImportResult.Rejected)
+        assertTrue("expected a refusal, got: $result", result is DatasetImportResult.Rejected)
         assertTrue(store.directoryOf(DatasetKind.Routing)?.listFiles().orEmpty().isEmpty())
     }
 
