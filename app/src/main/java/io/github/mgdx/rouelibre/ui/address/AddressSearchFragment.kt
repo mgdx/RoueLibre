@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.mgdx.rouelibre.R
@@ -52,6 +53,8 @@ class AddressSearchFragment : Fragment() {
 
     private val adapter = AddressAdapter(::pick)
 
+    private val shortcutAdapter = SearchShortcutAdapter(::pick)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -68,9 +71,17 @@ class AddressSearchFragment : Fragment() {
 
         views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
         views.toolbar.navigationContentDescription = getString(R.string.action_back)
+        titleResource()?.let(views.toolbar::setTitle)
 
         views.results.layoutManager = LinearLayoutManager(requireContext())
-        views.results.adapter = adapter
+        views.results.adapter = if (showsShortcuts()) {
+            shortcutAdapter.submitList(SearchShortcut.entries)
+            // The shortcuts head the list, and the addresses follow: two
+            // adapters rather than one, so neither knows about the other.
+            ConcatAdapter(shortcutAdapter, adapter)
+        } else {
+            adapter
+        }
         views.results.addItemDecoration(
             DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL),
         )
@@ -111,7 +122,9 @@ class AddressSearchFragment : Fragment() {
                 viewModel.state.collectLatest { state ->
                     val views = binding ?: return@collectLatest
                     adapter.submitList(state.results)
-                    views.results.isVisible = state.results.isNotEmpty()
+                    // The shortcuts are part of the list: it therefore has
+                    // something to show even before a single letter is typed.
+                    views.results.isVisible = state.results.isNotEmpty() || showsShortcuts()
                     showEmptyState(state)
                 }
             }
@@ -159,6 +172,11 @@ class AddressSearchFragment : Fragment() {
                     getString(R.string.address_no_match_message, state.query)
             }
 
+            // Nothing typed yet. With the shortcuts on screen, the list is not
+            // empty and there is nothing to invite: the invitation would land
+            // on top of the very rows that answer it.
+            showsShortcuts() -> views.emptyState.isVisible = false
+
             else -> {
                 views.emptyTitle.setText(R.string.address_search_prompt_title)
                 views.emptyMessage.setText(R.string.address_search_prompt_message)
@@ -178,6 +196,37 @@ class AddressSearchFragment : Fragment() {
         )
         binding?.searchInput?.let(::hideKeyboard)
         parentFragmentManager.popBackStack()
+    }
+
+    /**
+     * Returns the chosen shortcut to the screen that opened this one.
+     *
+     * The screen does not act on it itself: designating a point through the
+     * position, a favourite or the map are three journeys of their own, and
+     * they belong to the search screen that knows which field is waiting.
+     */
+    private fun pick(shortcut: SearchShortcut) {
+        setFragmentResult(
+            SHORTCUT_REQUEST_KEY,
+            Bundle().apply { putString(RESULT_SHORTCUT, shortcut.name) },
+        )
+        binding?.searchInput?.let(::hideKeyboard)
+        parentFragmentManager.popBackStack()
+    }
+
+    /** True when the screen serves to fill a journey's end (SPEC §7.3). */
+    private fun showsShortcuts(): Boolean = arguments?.containsKey(ARGUMENT_IS_ORIGIN) == true
+
+    /**
+     * The screen's title.
+     *
+     * Filling a journey's end, the title says which of the two is being
+     * designated: the field one left is no longer on screen to say it.
+     */
+    private fun titleResource(): Int? = when {
+        !showsShortcuts() -> null
+        arguments?.getBoolean(ARGUMENT_IS_ORIGIN) == true -> R.string.journey_choose_origin
+        else -> R.string.journey_choose_destination
     }
 
     private fun openStorage() {
@@ -226,8 +275,15 @@ class AddressSearchFragment : Fragment() {
         /** The label to show for this point, already put into words. */
         const val RESULT_LABEL = "label"
 
+        /** The key a chosen shortcut is returned under. */
+        const val SHORTCUT_REQUEST_KEY = "chosen-shortcut"
+
+        /** The chosen shortcut, as the name of a [SearchShortcut]. */
+        const val RESULT_SHORTCUT = "shortcut"
+
         private const val ARGUMENT_ORIGIN_LATITUDE = "origin-latitude"
         private const val ARGUMENT_ORIGIN_LONGITUDE = "origin-longitude"
+        private const val ARGUMENT_IS_ORIGIN = "is-origin"
 
         /**
          * Opens the search.
@@ -238,12 +294,31 @@ class AddressSearchFragment : Fragment() {
          */
         fun newInstance(origin: Coordinates?): AddressSearchFragment =
             AddressSearchFragment().apply {
-                arguments = origin?.let {
-                    Bundle().apply {
-                        putDouble(ARGUMENT_ORIGIN_LATITUDE, it.latitude)
-                        putDouble(ARGUMENT_ORIGIN_LONGITUDE, it.longitude)
-                    }
+                arguments = origin?.let { Bundle().apply { putOrigin(it) } }
+            }
+
+        /**
+         * Opens the search to fill one end of a journey (SPEC §7.3).
+         *
+         * The field of the search screen leads straight here rather than
+         * through a menu of ways: one nearly always knows the address, and the
+         * other three ways head the list, where a press reaches them just as
+         * fast.
+         *
+         * @param isOrigin true for the point one leaves from.
+         * @param origin the reference point for ranking results by proximity.
+         */
+        fun forJourneyEndpoint(isOrigin: Boolean, origin: Coordinates?): AddressSearchFragment =
+            AddressSearchFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(ARGUMENT_IS_ORIGIN, isOrigin)
+                    origin?.let { putOrigin(it) }
                 }
             }
+
+        private fun Bundle.putOrigin(origin: Coordinates) {
+            putDouble(ARGUMENT_ORIGIN_LATITUDE, origin.latitude)
+            putDouble(ARGUMENT_ORIGIN_LONGITUDE, origin.longitude)
+        }
     }
 }

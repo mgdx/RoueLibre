@@ -14,6 +14,7 @@ import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentJourneySearchBinding
 import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
+import io.github.mgdx.rouelibre.ui.address.SearchShortcut
 import io.github.mgdx.rouelibre.ui.map.MapFragment
 import kotlinx.coroutines.launch
 
@@ -108,29 +109,33 @@ class JourneySearchFragment : Fragment() {
         super.onDestroyView()
     }
 
+    /**
+     * Opens what fills a field (SPEC §7.3).
+     *
+     * Straight to the address search, without a menu of ways in between: one
+     * nearly always knows the address one is going to, and the three other ways
+     * — one's position first — head the result list, a press away.
+     */
     private fun chooseEndpoint(isOrigin: Boolean) {
         awaitingOrigin = isOrigin
-        EndpointChooserSheet.newInstance(isOrigin)
-            .show(parentFragmentManager, EndpointChooserSheet.TAG)
+        openAddressSearch(isOrigin)
     }
 
     /**
-     * Collects what the three designation screens return.
+     * Collects what the designation screens return.
      *
      * Each returns a point under its own key; here is where they meet the field
      * that was waiting for them.
      */
     private fun listenForChoices() {
         parentFragmentManager.setFragmentResultListener(
-            EndpointChooserSheet.REQUEST_KEY,
+            AddressSearchFragment.SHORTCUT_REQUEST_KEY,
             viewLifecycleOwner,
         ) { _, result ->
-            awaitingOrigin = result.getBoolean(EndpointChooserSheet.RESULT_IS_ORIGIN, true)
-            when (result.getString(EndpointChooserSheet.RESULT_SOURCE)) {
-                EndpointChooserSheet.SOURCE_MY_POSITION -> askForMyPosition()
-                EndpointChooserSheet.SOURCE_ADDRESS -> openAddressSearch()
-                EndpointChooserSheet.SOURCE_ON_MAP -> openMapPicker()
-                EndpointChooserSheet.SOURCE_FAVOURITE -> openFavourites()
+            when (result.getString(AddressSearchFragment.RESULT_SHORTCUT)) {
+                SearchShortcut.MyPosition.name -> askForMyPosition()
+                SearchShortcut.OnMap.name -> openMapPicker()
+                SearchShortcut.Favourite.name -> openFavourites()
             }
         }
 
@@ -189,8 +194,20 @@ class JourneySearchFragment : Fragment() {
         }
     }
 
-    private fun openAddressSearch() {
-        show(AddressSearchFragment.newInstance(origin?.position ?: destination?.position))
+    /**
+     * Opens the address search for the field being filled.
+     *
+     * The other end, when it is already known, ranks the results by proximity:
+     * looking for a destination, the streets near the departure point come
+     * first, and that is usually the right guess.
+     */
+    private fun openAddressSearch(isOrigin: Boolean) {
+        show(
+            AddressSearchFragment.forJourneyEndpoint(
+                isOrigin = isOrigin,
+                origin = if (isOrigin) destination?.position else origin?.position,
+            ),
+        )
     }
 
     private fun openMapPicker() {
