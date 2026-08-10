@@ -53,6 +53,23 @@
     "minZoom": 10,
     "maxZoom": 16
   },
+  "dataSources": {
+    "$comment": [
+      "What tools/generate_all.sh needs in order to produce this",
+      "city's data in one command: the OpenStreetMap extract to cut",
+      "the box out of, and the Base Adresse Nationale departments the",
+      "box reaches. Both are read from the stations themselves, not",
+      "from an administrative boundary — a network routinely spills",
+      "into a neighbouring department."
+    ],
+    "osmRegions": [
+      "europe/france/rhone-alpes"
+    ],
+    "banDepartments": [
+      "01",
+      "69"
+    ]
+  },
   "dataRelease": {
     "$comment": [
       "Default URL of the manifest describing the published dataset (§4.4).",

@@ -4,11 +4,17 @@
 # SPEC.md §15: "Producing the data of another city must be a single command."
 #
 # Usage:
-#   tools/generate_all.sh [--city config/cities/lille.json]
-#                         [--region europe/france/nord-pas-de-calais]
-#                         [--departments 59,62]
+#   tools/generate_all.sh --city config/cities/rennes.json
+#                         [--region europe/france/bretagne]
+#                         [--departments 35]
 #                         [--release-tag data-AAAA-MM]
 #                         [--skip-download]
+#
+# The OpenStreetMap extract and the Base Adresse Nationale departments are
+# read from the city configuration's "dataSources" block, which
+# tools/discover_networks.py derives from the reference box. Passing --region
+# or --departments overrides them, for a box that reaches a sliver of a
+# neighbouring department the sampling missed.
 #
 # The source downloads (OSM extract, BAN extracts) are kept in data/ and
 # reused from one run to the next.
@@ -19,8 +25,8 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 
 CITY_CONFIG="config/cities/lille.json"
-OSM_REGION="europe/france/nord-pas-de-calais"
-DEPARTMENTS="59,62"
+OSM_REGION=""
+DEPARTMENTS=""
 RELEASE_TAG="data-$(date -u +%Y-%m)"
 SKIP_DOWNLOAD=0
 
@@ -55,12 +61,40 @@ for tool in osmium tippecanoe tile-join java curl; do
   }
 done
 
-OSM_FILE="data/osm/$(basename "$OSM_REGION")-latest.osm.pbf"
+# Where a city's data comes from is part of its configuration (§15), so that
+# generating another conurbation stays a single command. The flags above win
+# when they are given.
+read_from_config() {
+  "$PYTHON" -c "
+import json, sys
+sources = json.load(open(sys.argv[1])).get('dataSources') or {}
+print(','.join(sources.get(sys.argv[2]) or []))" "$CITY_CONFIG" "$1"
+}
+
+[[ -n "$OSM_REGION"  ]] || OSM_REGION="$(read_from_config osmRegions)"
+[[ -n "$DEPARTMENTS" ]] || DEPARTMENTS="$(read_from_config banDepartments)"
+
+if [[ -z "$OSM_REGION" || -z "$DEPARTMENTS" ]]; then
+  echo "Error: $CITY_CONFIG carries no \"dataSources\" block." >&2
+  echo "         Pass --region and --departments, or regenerate the" >&2
+  echo "         configuration: python3 tools/add_city.py --network <id>" >&2
+  exit 1
+fi
+
+# A reference box straddling two of Geofabrik's regions needs both, merged:
+# Avignon's reaches into Languedoc-Roussillon, Tarbes's into Aquitaine.
+IFS=',' read -ra REGIONS <<< "$OSM_REGION"
+if [[ "${#REGIONS[@]}" -eq 1 ]]; then
+  OSM_FILE="data/osm/$(basename "${REGIONS[0]}")-latest.osm.pbf"
+else
+  OSM_FILE="data/osm/$(IFS=+; echo "${REGIONS[*]##*/}")-latest.osm.pbf"
+fi
 
 echo "════════════════════════════════════════════════════════════"
 echo " Roue Libre — generating the offline datasets"
 echo " city       : $CITY_CONFIG"
 echo " OSM region : $OSM_REGION"
+echo " BAN        : $DEPARTMENTS"
 echo " release    : $RELEASE_TAG"
 echo "════════════════════════════════════════════════════════════"
 
@@ -69,9 +103,20 @@ if [[ "$SKIP_DOWNLOAD" -eq 0 ]]; then
   echo "── Sources ──"
   mkdir -p data/osm data/ban
   if [[ ! -f "$OSM_FILE" ]]; then
-    echo "Downloading the OpenStreetMap extract…"
-    curl -fSL --retry 3 -o "$OSM_FILE" \
-      "https://download.geofabrik.de/${OSM_REGION}-latest.osm.pbf"
+    PARTS=()
+    for region in "${REGIONS[@]}"; do
+      part="data/osm/$(basename "$region")-latest.osm.pbf"
+      if [[ ! -f "$part" ]]; then
+        echo "Downloading the OpenStreetMap extract: $region…"
+        curl -fSL --retry 3 -o "$part" \
+          "https://download.geofabrik.de/${region}-latest.osm.pbf"
+      fi
+      PARTS+=("$part")
+    done
+    if [[ "${#PARTS[@]}" -gt 1 ]]; then
+      echo "Merging ${#PARTS[@]} extracts…"
+      osmium merge --overwrite -o "$OSM_FILE" "${PARTS[@]}"
+    fi
   else
     echo "OSM extract already present: $OSM_FILE"
   fi
