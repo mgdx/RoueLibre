@@ -11,6 +11,7 @@ import io.github.mgdx.rouelibre.core.journey.JourneySettings
 import io.github.mgdx.rouelibre.core.journey.Router
 import io.github.mgdx.rouelibre.data.AppPreferences
 import io.github.mgdx.rouelibre.data.StationRepository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -67,6 +68,9 @@ class JourneyViewModel(
 
     private val mutableState = MutableStateFlow(JourneyUiState())
 
+    /** The computation under way, so a new request can replace it. */
+    private var computation: Job? = null
+
     /** The screen's current state. */
     val state: StateFlow<JourneyUiState> = mutableState.asStateFlow()
 
@@ -82,7 +86,12 @@ class JourneyViewModel(
      * starts again from the most recent station state the repository holds.
      */
     fun compute() {
-        viewModelScope.launch {
+        // The previous computation, still running, would race this one for the
+        // same state: were it to finish last, the older result would overwrite
+        // the fresher one. Cancelling it is also the cancellability SPEC §6
+        // asks of the algorithm.
+        computation?.cancel()
+        computation = viewModelScope.launch {
             mutableState.update { it.copy(isComputing = true, chosenIndex = 0) }
             val stations = repository.observeStations().first().stations
             if (stations.isEmpty()) {

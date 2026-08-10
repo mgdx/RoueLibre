@@ -22,12 +22,18 @@ import kotlin.time.Duration.Companion.minutes
  *   swallow everything the bike could have saved. Without this bound the
  *   algorithm serenely proposes walking four kilometres to fetch a bike, for
  *   want of anything better.
- * @property maxRideEvaluations the maximum number of bike legs actually
- *   computed. This is what BOUNDS the response time required by SPEC §6:
- *   pruning by lower bound does most of the work, but it depends on the
- *   geometry and guarantees nothing on its own. Since pairs are examined from
- *   the most promising to the least, stopping at the sixth almost never costs
- *   the optimum.
+ * @property maxRideEvaluations how many bike legs the first wave computes,
+ *   taken from the top of the ranking by lower bound. Pruning by lower bound
+ *   does most of the work, but it depends on the geometry and guarantees
+ *   nothing on its own; since pairs are examined from the most promising to
+ *   the least, six almost always contain the optimum.
+ * @property extraRideEvaluations how many more bike legs may be computed after
+ *   the first wave, and only on demonstrated need: to replace a leg the engine
+ *   could not trace, or to compute a pair whose lower bound still beats the
+ *   best journey found — leaving that pair unexamined could mean returning a
+ *   second-best. As many as the first wave: the worst case doubles but stays
+ *   bounded, and together the two budgets are what hold the response time
+ *   required by SPEC §6.
  * @property directWalkThresholdMetres the straight-line distance beyond which
  *   the direct walk is no longer computed up front. Three kilometres: on foot
  *   that is already three quarters of an hour, where the same trip by bike
@@ -49,6 +55,7 @@ public data class JourneySettings(
     public val arrivalCandidates: Int = 5,
     public val maxWalkToStationMetres: Double = 1_200.0,
     public val maxRideEvaluations: Int = 6,
+    public val extraRideEvaluations: Int = 6,
     public val directWalkThresholdMetres: Double = 3_000.0,
     public val pickupTime: Duration = 2.minutes,
     public val dropoffTime: Duration = 1.minutes,
@@ -60,6 +67,7 @@ public data class JourneySettings(
         require(arrivalCandidates > 0) { "at least one arrival station is needed" }
         require(maxWalkToStationMetres > 0) { "the walking distance must be positive" }
         require(maxRideEvaluations > 0) { "at least one ride must be evaluated" }
+        require(extraRideEvaluations >= 0) { "the extra ride budget cannot be negative" }
         require(bikeTurnoverPerMinute >= 0) { "a turnover rate cannot be negative" }
     }
 

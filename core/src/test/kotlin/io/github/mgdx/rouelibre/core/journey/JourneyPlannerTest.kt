@@ -32,9 +32,13 @@ class JourneyPlannerTest {
      * A fake router: straight-line distance, raised by a constant detour.
      *
      * The 25 % detour matches what one observes in town between the straight
-     * line and the real path.
+     * line and the real path. A ride listed in [slowRides] keeps its distance
+     * but takes three times longer — roadworks the lower bound cannot see.
      */
-    private class FakeRouter(private val unreachable: Set<String> = emptySet()) : Router {
+    private class FakeRouter(
+        private val unreachable: Set<String> = emptySet(),
+        private val slowRides: Set<String> = emptySet(),
+    ) : Router {
         var cyclingCalls = 0
             private set
         var walkingCalls = 0
@@ -57,11 +61,16 @@ class JourneyPlannerTest {
                 TravelMode.Walking -> WALKING_METRES_PER_SECOND
                 TravelMode.Cycling -> CYCLING_METRES_PER_SECOND
             }
+            val slowdown = if (mode == TravelMode.Cycling && key(from, to) in slowRides) {
+                SLOW_FACTOR
+            } else {
+                1
+            }
             return RouteResult.Success(
                 RouteLeg(
                     mode = mode,
                     distanceMetres = metres,
-                    duration = (metres / speed).roundToInt().seconds,
+                    duration = (metres / speed).roundToInt().seconds * slowdown,
                     ascentMetres = 0,
                     geometry = listOf(from, to),
                 ),
@@ -72,6 +81,7 @@ class JourneyPlannerTest {
             const val DETOUR = 1.25
             const val WALKING_METRES_PER_SECOND = 1.25
             const val CYCLING_METRES_PER_SECOND = 3.6
+            const val SLOW_FACTOR = 3
 
             fun key(from: Coordinates, to: Coordinates) = "%.4f,%.4f>%.4f,%.4f".format(
                 from.latitude,
@@ -245,7 +255,7 @@ class JourneyPlannerTest {
 
     @Test
     fun `reports that walking is faster on a very short journey`() = runTest {
-        // Two hundred metres to cover, with four minutes of fixed handling:
+        // Two hundred metres to cover, with three minutes of fixed handling:
         // taking a bike makes no sense, and SPEC §6 requires saying so.
         val closeDestination = at(0.0, 200.0)
         val stations = listOf(
@@ -296,16 +306,87 @@ class JourneyPlannerTest {
         val stations = (0 until 6).map { station("depart-$it", at(it * 80.0, 150.0)) } +
             (0 until 6).map { station("arrivee-$it", at(it * 80.0, 3900.0)) }
         val router = FakeRouter()
-        val planner = JourneyPlanner(router)
+        val settings = JourneySettings()
+        val planner = JourneyPlanner(router, settings)
 
         planner.plan(origin, destination, stations)
 
-        // The settings cap guarantees six computations at most, whatever the
-        // geometry. It is what holds the time budget of SPEC §6.
+        // The hard budget — a first wave, then only pairs that could still
+        // change the answer — caps the computations whatever the geometry.
+        // It is what holds the time budget of SPEC §6.
         assertTrue(
             "too many bike legs computed: ${router.cyclingCalls}",
-            router.cyclingCalls <= 6,
+            router.cyclingCalls <= settings.maxRideEvaluations + settings.extraRideEvaluations,
         )
+    }
+
+    @Test
+    fun `replaces failed rides to keep offering alternatives`() = runTest {
+        // The nearest arrival station is on an island the bike cannot reach:
+        // every pair leaning on it fails. The budget freed must go to the
+        // pairs behind, so the user still gets a best journey and the three
+        // alternatives of SPEC §6 — not a shortened list.
+        val departures = (0 until 3).map { station("depart-$it", at(it * 60.0, 150.0)) }
+        val island = station("ile", at(0.0, 3950.0))
+        val arrivals = listOf(
+            island,
+            station("arrivee-1", at(0.0, 3650.0)),
+            station("arrivee-2", at(0.0, 3350.0)),
+        )
+        val unreachable = departures.map {
+            FakeRouter.key(it.station.position, island.station.position)
+        }.toSet()
+        val planner = JourneyPlanner(FakeRouter(unreachable = unreachable))
+
+        val plan = planner.plan(origin, destination, departures + arrivals) as JourneyPlan.Found
+
+        assertTrue("the island must not be reachable", plan.best.arrivalStation.id != "ile")
+        assertEquals(3, plan.alternatives.size)
+    }
+
+    @Test
+    fun `computes a pair beyond the first wave when it can still win`() = runTest {
+        // Roadworks slow every ride the first wave can try: same distance,
+        // three times slower. The lower bound cannot see that, but after the
+        // first wave the remaining pairs' bounds still beat everything found:
+        // they must be computed, and one of them is the true optimum.
+        val d0 = at(0.0, 100.0)
+        val d1 = at(0.0, 300.0)
+        val a0 = at(0.0, 3900.0)
+        val a1 = at(0.0, 3750.0)
+        val a2 = at(0.0, 3600.0)
+        val a3 = at(0.0, 3450.0)
+        val stations = listOf(
+            station("depart-0", d0),
+            station("depart-1", d1),
+            station("arrivee-0", a0),
+            station("arrivee-1", a1),
+            station("arrivee-2", a2),
+            station("arrivee-3", a3),
+        )
+        // Every pair is slow except (depart-1, arrivee-2) and
+        // (depart-1, arrivee-3), which the bound ranks seventh and eighth.
+        val slow = listOf(d0, d1).flatMap { from ->
+            listOf(a0, a1, a2, a3).map { to -> FakeRouter.key(from, to) }
+        }.toSet() - FakeRouter.key(d1, a2) - FakeRouter.key(d1, a3)
+        val router = FakeRouter(slowRides = slow)
+        val settings = JourneySettings()
+        val planner = JourneyPlanner(router, settings)
+
+        val plan = planner.plan(origin, destination, stations) as JourneyPlan.Found
+
+        assertTrue(
+            "the planner must have looked beyond the first wave",
+            router.cyclingCalls > settings.maxRideEvaluations,
+        )
+        assertEquals("depart-1", plan.best.departureStation.id)
+        assertEquals("arrivee-2", plan.best.arrivalStation.id)
+    }
+
+    @Test
+    fun `the default allowances are those of the specification`() {
+        // SPEC §6: two minutes to take a bike, one to return it.
+        assertEquals(3.minutes, JourneySettings().handlingTime)
     }
 
     @Test

@@ -36,8 +36,12 @@ import kotlin.time.Duration.Companion.seconds
  * It first **ranks** the pairs by a lower bound on the total time — the
  * straight-line distance covered at a speed nobody reaches in town. No real
  * journey can beat that, so the pairs at the top of that ranking are the only
- * ones that can win. Only the first [JourneySettings.maxRideEvaluations] are
- * then computed for real: six instead of twenty-five.
+ * ones that can win. The first [JourneySettings.maxRideEvaluations] are
+ * computed for real; a pair further down is only computed when its bound still
+ * beats the best journey found, or when a failed leg left options missing —
+ * within the hard extra budget of [JourneySettings.extraRideEvaluations]. In
+ * the usual case the answer is thus a proven optimum, for a fraction of the
+ * twenty-five pairs' cost.
  *
  * It then computes them **in parallel**. Those six legs are independent, and a
  * phone has several cores; chaining them would only add up their durations.
@@ -79,36 +83,38 @@ public class JourneyPlanner(
             countOf = { it.availability?.takeIf { state -> state.canAcceptBike }?.docksAvailable },
         )
 
-        // The direct walk is only computed up front if it stands a chance of
-        // winning. Over eight kilometres it cannot, and computing it cost a
-        // fifth of the time budget for a result we knew we would discard.
-        val couldWalkAllTheWay = origin.distanceInMetresTo(destination) <=
-            settings.directWalkThresholdMetres
-        val directWalk = if (couldWalkAllTheWay) {
-            legOrNull(origin, destination, TravelMode.Walking)
-        } else {
-            null
-        }
-
         if (departures.isEmpty()) return giveUp(origin, destination, NoBikeJourney.NoBikeNearby)
         if (arrivals.isEmpty()) return giveUp(origin, destination, NoBikeJourney.NoDockNearby)
 
+        // The direct walk is only computed if it stands a chance of winning.
+        // Over three kilometres it cannot, and computing it would cost a fifth
+        // of the time budget for a result we knew we would discard.
+        val couldWalkAllTheWay = origin.distanceInMetresTo(destination) <=
+            settings.directWalkThresholdMetres
+
         // The access walks are short and few; every pair uses them, so all of
-        // them are computed — but concurrently, for the same reason as the
-        // bike legs.
-        val walksToStation = coroutineScope {
-            departures.map { candidate ->
-                candidate to async {
-                    legOrNull(origin, candidate.station.position, TravelMode.Walking)
+        // them are computed. A single scope carries them all, the direct walk
+        // included: these legs are independent, and every one kept out of the
+        // scope would add its full duration to the critical path.
+        val (directWalk, walksToStation, walksToDestination) = coroutineScope {
+            val direct = async {
+                if (couldWalkAllTheWay) {
+                    legOrNull(origin, destination, TravelMode.Walking)
+                } else {
+                    null
                 }
-            }.associate { (candidate, deferred) -> candidate to deferred.await() }
-        }
-        val walksToDestination = coroutineScope {
-            arrivals.map { candidate ->
-                candidate to async {
-                    legOrNull(candidate.station.position, destination, TravelMode.Walking)
-                }
-            }.associate { (candidate, deferred) -> candidate to deferred.await() }
+            }
+            val toStation = departures.associateWith { candidate ->
+                async { legOrNull(origin, candidate.station.position, TravelMode.Walking) }
+            }
+            val toDestination = arrivals.associateWith { candidate ->
+                async { legOrNull(candidate.station.position, destination, TravelMode.Walking) }
+            }
+            Triple(
+                direct.await(),
+                toStation.mapValues { entry -> entry.value.await() },
+                toDestination.mapValues { entry -> entry.value.await() },
+            )
         }
 
         val pairs = buildPairs(departures, arrivals, walksToStation, walksToDestination)
@@ -138,6 +144,11 @@ public class JourneyPlanner(
      * A station out of service, or empty on the side we need, is not a
      * candidate: proposing a journey that leans on it would be proposing an
      * impossible journey.
+     *
+     * Nearness is judged as the crow flies. A station across a river can
+     * therefore edge out one that is nearer on foot — accepted: measuring the
+     * real walk to every station in town would cost more route computations
+     * than the journey itself.
      */
     private fun candidates(
         stations: List<StationWithAvailability>,
@@ -210,42 +221,99 @@ public class JourneyPlanner(
     /**
      * Computes the most promising pairs for real.
      *
-     * Pairs arrive sorted by lower bound; only the first ones can win, and they
-     * are the only ones computed. They are computed concurrently: six
+     * Pairs arrive sorted by lower bound. A first wave computes the
+     * [JourneySettings.maxRideEvaluations] best-ranked ones concurrently: six
      * independent legs on a device with several cores have no reason to wait
      * for one another.
      *
-     * A pair whose bike leg fails is simply dropped — two stations can be
-     * separated by an obstacle a bike does not cross.
+     * The first wave does not always settle the matter. A leg can fail — two
+     * stations can be separated by an obstacle a bike does not cross — and
+     * leave too few options; and the ranking is only a bound: a pair left
+     * uncomputed whose bound beats the best journey found could still be the
+     * true optimum. Further waves therefore compute exactly the pairs that
+     * keep one of those two possibilities alive, within the extra budget of
+     * [JourneySettings.extraRideEvaluations]. When no computable pair remains
+     * — the usual outcome — the best option returned is provably the best of
+     * all the pairs, at a fraction of their cost.
      */
-    private suspend fun evaluate(pairs: List<Pair>): List<JourneyOption> = coroutineScope {
-        pairs.take(settings.maxRideEvaluations)
-            .map { pair ->
-                async {
-                    val ride = legOrNull(
-                        pair.departure.station.position,
-                        pair.arrival.station.position,
-                        TravelMode.Cycling,
-                    ) ?: return@async null
+    private suspend fun evaluate(pairs: List<Pair>): List<JourneyOption> {
+        val waiting = ArrayDeque(pairs)
+        val options = mutableListOf<JourneyOption>()
+        var budget = settings.maxRideEvaluations + settings.extraRideEvaluations
+        var waveLimit = settings.maxRideEvaluations
 
-                    JourneyOption(
-                        departureStation = pair.departure.station,
-                        arrivalStation = pair.arrival.station,
-                        bikesAtDeparture = pair.departure.count,
-                        docksAtArrival = pair.arrival.count,
-                        walkToStation = pair.walkToStation,
-                        ride = ride,
-                        walkToDestination = pair.walkToDestination,
-                        handlingTime = settings.handlingTime,
-                        riskPenalty = riskOf(
-                            pair.departure,
-                            pair.arrival,
-                            pair.walkToStation.duration,
-                            ride.duration,
-                        ),
-                    )
-                }
+        while (budget > 0 && waiting.isNotEmpty()) {
+            val wave = mutableListOf<Pair>()
+            while (
+                wave.size < minOf(waveLimit, budget) &&
+                waiting.isNotEmpty() &&
+                deservesComputing(waiting.first(), options, wave.size)
+            ) {
+                wave += waiting.removeFirst()
             }
+            if (wave.isEmpty()) break
+            budget -= wave.size
+            options += computeWave(wave)
+            // The later waves may spend whatever budget remains: they only
+            // ever hold pairs that can still change the answer.
+            waveLimit = budget
+        }
+        return options
+    }
+
+    /**
+     * Whether a pair's bike leg is still worth computing.
+     *
+     * Before the first option exists, every pair is. Afterwards a pair earns
+     * its computation on one of two grounds: its lower bound beats the best
+     * journey found — discarding it unseen could discard the optimum — or
+     * failed legs have left fewer options than the best-plus-three SPEC §6
+     * asks to offer.
+     *
+     * Pairs arrive in bound order, so the first refusal on both grounds ends
+     * the wave: nothing behind it can do better.
+     *
+     * @param planned pairs already picked for the current wave, counted so a
+     *   refill stops at the number of options actually missing.
+     */
+    private fun deservesComputing(
+        pair: Pair,
+        options: List<JourneyOption>,
+        planned: Int,
+    ): Boolean {
+        val best = options.minOfOrNull { it.rankingTime } ?: return true
+        return pair.lowerBound < best ||
+            options.size + planned < 1 + ALTERNATIVE_COUNT
+    }
+
+    /** Computes one wave of bike legs concurrently, dropping the failures. */
+    private suspend fun computeWave(wave: List<Pair>): List<JourneyOption> = coroutineScope {
+        wave.map { pair ->
+            async {
+                val ride = legOrNull(
+                    pair.departure.station.position,
+                    pair.arrival.station.position,
+                    TravelMode.Cycling,
+                ) ?: return@async null
+
+                JourneyOption(
+                    departureStation = pair.departure.station,
+                    arrivalStation = pair.arrival.station,
+                    bikesAtDeparture = pair.departure.count,
+                    docksAtArrival = pair.arrival.count,
+                    walkToStation = pair.walkToStation,
+                    ride = ride,
+                    walkToDestination = pair.walkToDestination,
+                    handlingTime = settings.handlingTime,
+                    riskPenalty = riskOf(
+                        pair.departure,
+                        pair.arrival,
+                        pair.walkToStation.duration,
+                        ride.duration,
+                    ),
+                )
+            }
+        }
             .awaitAll()
             .filterNotNull()
     }
