@@ -11,17 +11,16 @@ import org.junit.Test
 import java.time.Instant
 
 /**
- * Tests de l'analyse des flux GBFS (SPEC §14).
+ * Tests of GBFS feed parsing (SPEC §14).
  *
- * Les cas nommés « réels » s'appuient sur des captures de flux en production,
- * structure intacte, seule la liste des stations ayant été réduite : le réseau
- * lillois en GBFS 2.3, et Vélib' Métropole en GBFS 1.0. Les cas « v3 » sont
- * synthétiques : aucun réseau en GBFS 3.0 n'est nécessaire pour vérifier qu'on
- * sait le lire.
+ * The cases called "real" rest on captures of production feeds, structure
+ * intact, only the station list having been shortened: the Lille network in
+ * GBFS 2.3, and Vélib' Métropole in GBFS 1.0. The "v3" cases are synthetic: no
+ * network on GBFS 3.0 is needed to check that we can read it.
  *
- * Deux réseaux plutôt qu'un, parce que la promesse du SPEC §4.1 — « l'appli
- * fonctionne avec n'importe quel réseau GBFS du monde sans modification de
- * code » — ne se vérifie pas sur un seul producteur.
+ * Two networks rather than one, because the promise of SPEC §4.1 — "the
+ * application works with any GBFS network in the world without a code change" —
+ * cannot be verified against a single producer.
  */
 class GbfsParserTest {
 
@@ -34,15 +33,15 @@ class GbfsParserTest {
 
     private fun <T> assertSuccess(outcome: Outcome<T>): T = when (outcome) {
         is Outcome.Success -> outcome.value
-        is Outcome.Failure -> throw AssertionError("échec inattendu : ${outcome.error}")
+        is Outcome.Failure -> throw AssertionError("unexpected failure: ${outcome.error}")
     }
 
-    // ---------------------------------------------------------- découverte --
+    // ----------------------------------------------------------- discovery --
 
     @Test
     fun `reads a GBFS 2 auto-discovery document despite its language key`() {
-        // Le flux lillois imbrique ses flux sous « en » bien qu'il serve un
-        // réseau français : la langue ne doit jamais être supposée.
+        // The Lille feed nests its feeds under "en" although it serves a French
+        // network: the language must never be assumed.
         val discovery = assertSuccess(parser.parseDiscovery(fixture("discovery_v2_real.json")))
 
         assertEquals("2.3", discovery.version)
@@ -127,8 +126,8 @@ class GbfsParserTest {
 
     @Test
     fun `drops a station without a position rather than rejecting the whole feed`() {
-        // Une seule entrée fautive chez le producteur ne doit pas priver
-        // l'utilisateur de toutes les autres.
+        // A single faulty entry on the producer's side must not deprive the
+        // user of all the others.
         val feed = assertSuccess(
             parser.parseStationInformation(fixture("station_information_v3.json")),
         )
@@ -150,7 +149,7 @@ class GbfsParserTest {
         assertEquals(Instant.parse("2026-08-09T10:02:00Z"), fromText.lastUpdated)
     }
 
-    // --------------------------------------------------------- disponibilité --
+    // ------------------------------------------------------- availability --
 
     @Test
     fun `reads the station state of the real feed`() {
@@ -170,7 +169,7 @@ class GbfsParserTest {
 
     @Test
     fun `reads the field GBFS 3 renamed`() {
-        // GBFS 3.0 remplace num_bikes_available par num_vehicles_available.
+        // GBFS 3.0 replaces num_bikes_available with num_vehicles_available.
         val feed = assertSuccess(parser.parseStationStatus(fixture("station_status_v3.json")))
 
         assertEquals(7, feed.availabilities.first { it.stationId == "v3-1" }.bikesAvailable)
@@ -206,7 +205,7 @@ class GbfsParserTest {
 
     @Test
     fun `brings a negative count back to zero`() {
-        // Afficher « -1 vélo » serait pire que d'afficher zéro.
+        // Showing "-1 bike" would be worse than showing zero.
         val document = """
             {"version":"2.3","data":{"stations":[
               {"station_id":"a","num_bikes_available":-1,"num_docks_available":-4,
@@ -233,8 +232,8 @@ class GbfsParserTest {
 
     @Test
     fun `ignores the unknown fields of an enriched feed`() {
-        // Les producteurs ajoutent régulièrement des champs ; cela ne doit
-        // jamais faire échouer la lecture.
+        // Producers add fields regularly; that must never make the read
+        // fail.
         val document = """
             {"version":"2.3","data":{"stations":[
               {"station_id":"a","num_bikes_available":2,"num_docks_available":2,
@@ -260,8 +259,8 @@ class GbfsParserTest {
 
     @Test
     fun `an empty feed stays a success and not an error`() {
-        // Réseau en maintenance : zéro station est une information, pas une
-        // panne. L'interface doit pouvoir le dire calmement.
+        // A network under maintenance: zero stations is information, not a
+        // breakdown. The interface must be able to say so calmly.
         val outcome = parser.parseStationInformation("""{"version":"2.3","data":{"stations":[]}}""")
 
         assertEquals(emptyList<Any>(), outcome.valueOrNull()?.stations)
@@ -279,9 +278,9 @@ class GbfsParserTest {
 
     @Test
     fun `accepts a station identifier published as a number`() {
-        // Vélib' publie « "station_id": 213688169 » là où le format impose une
-        // chaîne. Le refuser rendrait le plus grand réseau de France — mille
-        // cinq cents stations — entièrement inexploitable.
+        // Vélib' publishes "station_id": 213688169 where the format mandates a
+        // string. Refusing it would make the largest network in France —
+        // fifteen hundred stations — entirely unusable.
         val information = assertSuccess(
             parser.parseStationInformation(fixture("station_information_v1_velib.json")),
         )
@@ -306,9 +305,9 @@ class GbfsParserTest {
 
     @Test
     fun `Velib's two feeds meet on the same identifier`() {
-        // Ce qui compte n'est pas de lire chaque flux, mais que la jointure
-        // tienne : un identifiant lu « 213688169 » d'un côté et « 2.13688169E8 »
-        // de l'autre ne rapprocherait aucune station de son état.
+        // What matters is not reading each feed but that the join holds: an
+        // identifier read as "213688169" on one side and "2.13688169E8" on the
+        // other would bring no station together with its state.
         val information = assertSuccess(
             parser.parseStationInformation(fixture("station_information_v1_velib.json")),
         )

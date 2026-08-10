@@ -18,21 +18,21 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * Tests de l'algorithme de trajet (SPEC.md §6).
+ * Tests of the journey algorithm (SPEC.md §6).
  *
- * Le moteur d'itinéraire est simulé : ce qui est éprouvé ici est le CHOIX du
- * couple de stations, pas la qualité d'un tracé. Le routeur simulé compte ses
- * appels, ce qui permet de vérifier que l'élagage tient — un algorithme juste
- * mais qui calculerait les vingt-cinq couples raterait le budget de trois
- * secondes du cahier des charges.
+ * The routing engine is faked: what is exercised here is the CHOICE of the
+ * station pair, not the quality of a track. The fake router counts its calls,
+ * which allows checking that the pruning holds — an algorithm that were correct
+ * but computed all twenty-five pairs would miss the specification's three-second
+ * budget.
  */
 class JourneyPlannerTest {
 
     /**
-     * Routeur simulé : distance à vol d'oiseau, majorée d'un détour constant.
+     * A fake router: straight-line distance, raised by a constant detour.
      *
-     * Le détour de 25 % correspond à ce qu'on observe en ville entre la ligne
-     * droite et le chemin réel.
+     * The 25 % detour matches what one observes in town between the straight
+     * line and the real path.
      */
     private class FakeRouter(private val unreachable: Set<String> = emptySet()) : Router {
         var cyclingCalls = 0
@@ -82,7 +82,7 @@ class JourneyPlannerTest {
         }
     }
 
-    /** Un degré de latitude vaut environ 111 km ; 0,001 ° font donc ~111 m. */
+    /** A degree of latitude is about 111 km; 0.001° is therefore ~111 m. */
     private fun at(northMetres: Double, eastMetres: Double) = Coordinates(
         latitude = 50.6300 + northMetres / 111_320.0,
         longitude = 3.0600 + eastMetres / (111_320.0 * 0.635),
@@ -112,12 +112,12 @@ class JourneyPlannerTest {
     private val origin = at(0.0, 0.0)
     private val destination = at(0.0, 4000.0)
 
-    // ------------------------------------------------------ choix du couple --
+    // ---------------------------------------------------- choice of pair --
 
     @Test
     fun `optimises the pair and not the station nearest the origin`() = runTest {
-        // La station A est la plus proche du départ, mais elle mène à une
-        // arrivée très mal placée. B est un peu plus loin et dessert bien.
+        // Station A is the nearest to the origin, but it leads to a very badly
+        // placed arrival. B is slightly further and serves well.
         val stations = listOf(
             station("A-proche", at(0.0, 100.0)),
             station("B-loin", at(0.0, 400.0)),
@@ -133,8 +133,8 @@ class JourneyPlannerTest {
 
     @Test
     fun `prefers a well-stocked station to one with a single bike`() = runTest {
-        // La station à un vélo est plus proche, mais le risque qu'elle soit
-        // vide à l'arrivée justifie de marcher un peu plus (SPEC §6).
+        // The one-bike station is nearer, but the risk of finding it empty on
+        // arrival justifies walking a little further (SPEC §6).
         val stations = listOf(
             station("un-seul-velo", at(0.0, 200.0), bikes = 1),
             station("bien-fournie", at(0.0, 320.0), bikes = 12),
@@ -149,8 +149,8 @@ class JourneyPlannerTest {
 
     @Test
     fun `the risk penalty does not overturn a clear margin`() = runTest {
-        // Un vélo à deux cents mètres contre douze à un kilomètre et demi :
-        // le risque ne doit pas faire préférer la marche interminable.
+        // One bike two hundred metres away against twelve a kilometre and a
+        // half away: the risk must not make the endless walk preferable.
         val stations = listOf(
             station("un-seul-velo", at(0.0, 200.0), bikes = 1),
             station("bien-fournie-tres-loin", at(1500.0, 200.0), bikes = 12),
@@ -163,7 +163,7 @@ class JourneyPlannerTest {
         assertEquals("un-seul-velo", plan.best.departureStation.id)
     }
 
-    // --------------------------------------------------------- disponibilité --
+    // ------------------------------------------------------- availability --
 
     @Test
     fun `never keeps a station without a bike at the origin`() = runTest {
@@ -211,7 +211,7 @@ class JourneyPlannerTest {
 
     @Test
     fun `says so when no nearby station has a bike`() = runTest {
-        // Le SPEC §6 l'exige : ne pas proposer un trajet impossible.
+        // SPEC §6 requires it: do not propose an impossible journey.
         val stations = listOf(
             station("vide-1", at(0.0, 100.0), bikes = 0),
             station("vide-2", at(0.0, 300.0), bikes = 0),
@@ -221,7 +221,7 @@ class JourneyPlannerTest {
 
         val plan = planner.plan(origin, destination, stations)
 
-        assertTrue("attendu WalkOnly, obtenu $plan", plan is JourneyPlan.WalkOnly)
+        assertTrue("expected WalkOnly, got $plan", plan is JourneyPlan.WalkOnly)
         assertEquals(NoBikeJourney.NoBikeNearby, (plan as JourneyPlan.WalkOnly).reason)
     }
 
@@ -241,12 +241,12 @@ class JourneyPlannerTest {
         )
     }
 
-    // ------------------------------------------------------------ marche --
+    // -------------------------------------------------------------- walk --
 
     @Test
     fun `reports that walking is faster on a very short journey`() = runTest {
-        // Deux cents mètres à parcourir, avec des forfaits de quatre minutes :
-        // prendre un vélo n'a aucun sens, et le SPEC §6 impose de le dire.
+        // Two hundred metres to cover, with four minutes of fixed handling:
+        // taking a bike makes no sense, and SPEC §6 requires saying so.
         val closeDestination = at(0.0, 200.0)
         val stations = listOf(
             station("depart", at(0.0, 150.0)),
@@ -256,7 +256,7 @@ class JourneyPlannerTest {
 
         val plan = planner.plan(origin, closeDestination, stations) as JourneyPlan.Found
 
-        assertTrue("la marche devrait être annoncée plus rapide", plan.walkingIsFaster)
+        assertTrue("walking should be announced as faster", plan.walkingIsFaster)
     }
 
     @Test
@@ -282,17 +282,17 @@ class JourneyPlannerTest {
 
         val plan = planner.plan(origin, destination, stations) as JourneyPlan.Found
 
-        assertTrue("trop d'alternatives : ${plan.alternatives.size}", plan.alternatives.size <= 3)
+        assertTrue("too many alternatives: ${plan.alternatives.size}", plan.alternatives.size <= 3)
         val times = listOf(plan.best) + plan.alternatives
         assertEquals(times.sortedBy { it.rankingTime }, times)
     }
 
-    // -------------------------------------------------------------- coût --
+    // -------------------------------------------------------------- cost --
 
     @Test
     fun `evaluates only a fraction of the pairs thanks to the pruning`() = runTest {
-        // Cinq départs et cinq arrivées font vingt-cinq couples. Les calculer
-        // tous coûterait dix secondes sur un vrai graphe.
+        // Five origins and five destinations make twenty-five pairs. Computing
+        // them all would cost ten seconds on a real graph.
         val stations = (0 until 6).map { station("depart-$it", at(it * 80.0, 150.0)) } +
             (0 until 6).map { station("arrivee-$it", at(it * 80.0, 3900.0)) }
         val router = FakeRouter()
@@ -300,18 +300,18 @@ class JourneyPlannerTest {
 
         planner.plan(origin, destination, stations)
 
-        // Le plafond de réglage garantit six calculs au plus, quelle que soit
-        // la géométrie. C'est lui qui tient le budget de temps du SPEC §6.
+        // The settings cap guarantees six computations at most, whatever the
+        // geometry. It is what holds the time budget of SPEC §6.
         assertTrue(
-            "trop de trajets à vélo calculés : ${router.cyclingCalls}",
+            "too many bike legs computed: ${router.cyclingCalls}",
             router.cyclingCalls <= 6,
         )
     }
 
     @Test
     fun `the announced time excludes the risk penalty`() = runTest {
-        // La pénalité sert à classer, jamais à être annoncée : l'utilisateur
-        // verrait une durée qu'il n'observera pas.
+        // The penalty serves to rank, never to be announced: the user would
+        // see a duration they will not experience.
         val stations = listOf(
             station("depart", at(0.0, 200.0), bikes = 1),
             station("arrivee", at(0.0, 3900.0), docks = 1),
@@ -348,6 +348,6 @@ class JourneyPlannerTest {
 
         val plan = planner.plan(origin, destination, stations)
 
-        assertTrue("attendu un repli à pied, obtenu $plan", plan is JourneyPlan.WalkOnly)
+        assertTrue("expected a walking fallback, got $plan", plan is JourneyPlan.WalkOnly)
     }
 }

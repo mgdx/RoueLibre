@@ -9,14 +9,13 @@ import org.junit.Test
 import java.io.File
 
 /**
- * Tests de la normalisation des noms de voies.
+ * Tests of street-name normalisation.
  *
- * Le plus important est celui qui rejoue les cas de référence produits par le
- * script d'indexation : le script Python et l'application appliquent le même
- * fichier de règles, mais rien ne garantirait qu'ils l'appliquent de la même
- * façon. Une divergence rendrait des rues introuvables — « boulevard » indexé
- * d'un côté, « bd » cherché de l'autre — sans qu'aucun autre test ne s'en
- * aperçoive.
+ * The most important is the one that replays the reference cases produced by
+ * the indexing script: the Python script and the application apply the same
+ * rules file, but nothing would guarantee they apply it the same way. A
+ * divergence would make streets impossible to find — "boulevard" indexed on one
+ * side, "bd" searched on the other — without any other test noticing.
  */
 class AddressNormalizerTest {
 
@@ -25,12 +24,12 @@ class AddressNormalizerTest {
     @Test
     fun `the indexing script's reference cases are reproduced`() {
         val files = fixtureFiles()
-        assertTrue("aucun jeu de cas de référence trouvé", files.isNotEmpty())
+        assertTrue("no set of reference cases found", files.isNotEmpty())
 
         var checked = 0
         files.forEach { file ->
             val fixtures = json.decodeFromString(FixtureFile.serializer(), file.readText())
-            assertTrue("cas de référence vides dans ${file.name}", fixtures.cases.isNotEmpty())
+            assertTrue("empty reference cases in ${file.name}", fixtures.cases.isNotEmpty())
             fixtures.cases.forEach { case ->
                 assertEquals(
                     "normalisation de « ${case.input} » (${file.name})",
@@ -51,7 +50,7 @@ class AddressNormalizerTest {
                 checked++
             }
         }
-        println("cas de référence rejoués : $checked, sur ${files.size} réseaux")
+        println("reference cases replayed: $checked, across ${files.size} networks")
     }
 
     @Test
@@ -72,7 +71,7 @@ class AddressNormalizerTest {
 
     @Test
     fun `a single-letter abbreviation is only expanded in leading position`() {
-        // Sinon « Jean R Dupont » deviendrait « Jean rue Dupont ».
+        // Otherwise "Jean R Dupont" would become "Jean rue Dupont".
         assertEquals("rue nationale", normalizer.normalize("R. Nationale"))
         assertEquals("place jean r dupont", normalizer.normalize("Place Jean R Dupont"))
     }
@@ -86,7 +85,7 @@ class AddressNormalizerTest {
 
     @Test
     fun `a type is only recognised at the head of a name`() {
-        // Dans « rue de la Place », « place » fait partie du nom.
+        // In "rue de la Place", "place" is part of the name.
         val split = normalizer.analyse("Rue de la Place")
         assertEquals("rue", split.streetType)
         assertEquals("de la place", split.properName)
@@ -99,7 +98,7 @@ class AddressNormalizerTest {
 
     @Test
     fun `a name reduced to its type keeps it as its proper name`() {
-        // « Grand Place » ne doit pas devenir introuvable faute de nom propre.
+        // "Grand Place" must not become unfindable for want of a proper name.
         val split = normalizer.analyse("Grand Place")
         assertEquals(null, split.streetType)
         assertEquals("grand place", split.properName)
@@ -127,16 +126,16 @@ class AddressNormalizerTest {
         val json = Json { ignoreUnknownKeys = true }
 
         /**
-         * Les jeux de cas, un par réseau généré.
+         * The case sets, one per generated network.
          *
-         * Le répertoire est désigné par le build : chaque ville produite
-         * ajoute son fichier, et le test les rejoue tous. La preuve
-         * s'étend donc à chaque nouveau producteur, dont les noms de voies
-         * ne s'écrivent pas comme ceux du précédent.
+         * The directory is named by the build: every city produced adds its
+         * file, and the test replays them all. The proof therefore extends to
+         * each new producer, whose street names are not written like the
+         * previous one's.
          */
         fun fixtureFiles(): List<File> {
             val path = checkNotNull(System.getProperty("rouelibre.normalizationFixtures")) {
-                "répertoire des cas de référence non fourni par le build"
+                "reference-case directory not supplied by the build"
             }
             return File(path).listFiles().orEmpty()
                 .filter { it.isFile && it.extension == "json" }

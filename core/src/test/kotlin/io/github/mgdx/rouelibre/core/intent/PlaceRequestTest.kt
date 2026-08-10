@@ -6,15 +6,15 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 /**
- * Tests de l'analyse des lieux reçus d'une autre application (SPEC §7.8).
+ * Tests of parsing places received from another application (SPEC §7.8).
  *
- * Les formes éprouvées ici ne sont pas imaginées : ce sont celles qu'émettent
- * réellement les applications de cartographie, de messagerie et d'annuaire.
- * Le critère d'acceptation 12 en dépend.
+ * The forms exercised here are not invented: they are the ones mapping,
+ * messaging and directory applications actually emit. Acceptance criterion 12
+ * depends on them.
  */
 class PlaceRequestTest {
 
-    /** Grand-Place de Lille. */
+    /** The Grand-Place in Lille. */
     private val lille = Coordinates(50.6371, 3.0630)
 
     @Test
@@ -24,14 +24,14 @@ class PlaceRequestTest {
 
     @Test
     fun `the zoom parameter is ignored`() {
-        // Il dit comment regarder, pas où aller.
+        // It says how to look, not where to go.
         assertEquals(PlaceRequest.Point(lille), parsePlaceUri("geo:50.6371,3.0630?z=17"))
     }
 
     @Test
     fun `the query wins over the conventional point`() {
-        // « geo:0,0 » veut dire « le lieu est dans la requête » ; le prendre au
-        // pied de la lettre enverrait au large du golfe de Guinée.
+        // "geo:0,0" means "the place is in the query"; taking it literally
+        // would send the user out into the Gulf of Guinea.
         assertEquals(
             PlaceRequest.Point(lille),
             parsePlaceUri("geo:0,0?q=50.6371,3.0630"),
@@ -64,7 +64,7 @@ class PlaceRequestTest {
 
     @Test
     fun `the google navigation scheme is accepted`() {
-        // Encore émis par de nombreuses applications (SPEC §7.8).
+        // Still emitted by many applications (SPEC §7.8).
         assertEquals(
             PlaceRequest.Point(lille),
             parsePlaceUri("google.navigation:q=50.6371,3.0630"),
@@ -85,8 +85,8 @@ class PlaceRequestTest {
 
     @Test
     fun `a web map link is recognised when the place appears in it`() {
-        // Ces liens ne parviennent à l'application que si l'utilisateur
-        // l'autorise dans les paramètres du système (SPEC §7.8).
+        // These links only reach the application if the user allows it in the
+        // system settings (SPEC §7.8).
         assertEquals(
             PlaceRequest.Point(lille),
             parsePlaceUri("https://www.google.com/maps/@50.6371,3.0630,17z"),
@@ -103,8 +103,8 @@ class PlaceRequestTest {
 
     @Test
     fun `a web link without a readable place returns nothing`() {
-        // Un lien raccourci ne dit où il mène qu'après redirection, et la
-        // suivre ferait sortir une requête vers un tiers.
+        // A shortened link only says where it leads after a redirect, and
+        // following it would send a request out to a third party.
         assertNull(parsePlaceUri("https://maps.app.goo.gl/AbCdEf"))
     }
 
@@ -126,7 +126,7 @@ class PlaceRequestTest {
 
     @Test
     fun `shared text without coordinates is treated as an address`() {
-        // Le cas le plus fréquent : une adresse reçue par messagerie.
+        // The commonest case: an address received over a messaging app.
         assertEquals(
             PlaceRequest.Search("12 rue Nationale, Lille"),
             findPlaceInText("  12 rue Nationale, Lille  "),
@@ -140,8 +140,8 @@ class PlaceRequestTest {
 
     @Test
     fun `two integers separated by a comma are not coordinates`() {
-        // « 12,50 » est un prix, pas une position. La notation décimale à
-        // virgule est indistinguable d'un couple d'entiers, donc écartée.
+        // "12,50" is a price, not a position. The decimal-comma notation is
+        // indistinguishable from a pair of integers, and so is ruled out.
         assertEquals(
             PlaceRequest.Search("Ça coûte 12,50 euros"),
             findPlaceInText("Ça coûte 12,50 euros"),
