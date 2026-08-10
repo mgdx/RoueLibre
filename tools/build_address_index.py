@@ -474,12 +474,17 @@ def build_database(
 
 
 def write_normalization_fixtures(normalizer: AddressNormalizer,
-                                 streets: list[tuple[str, Street]]) -> Path:
+                                 streets: list[tuple[str, Street]],
+                                 network_id: str) -> Path:
     """Record normalisation results for the Kotlin test to reproduce.
 
     The Python script and the Android application apply the same rule file, but
     nothing would catch a difference in how each one *applies* it. These cases,
     replayed by a unit test, do.
+
+    One file per network: generating a city must add coverage, never replace
+    another city's. Producers spell street names differently, and that variety
+    is exactly what makes the check worth running.
     """
     handpicked = [
         "Rue Gambetta", "Boulevard de la Liberté", "Av. des Flandres",
@@ -504,8 +509,12 @@ def write_normalization_fixtures(normalizer: AddressNormalizer,
 
     # Dans :core, où vit le normalisateur Kotlin : la logique de recherche est
     # du Kotlin pur, testable sur la JVM sans émulateur (SPEC §14).
+    # Un fichier par réseau : générer une ville doit AJOUTER de la couverture,
+    # pas remplacer celle d'une autre. Chaque producteur écrit ses noms de
+    # voies à sa façon, et c'est précisément cette diversité qui éprouve la
+    # concordance entre le script et l'application.
     destination = (REPO_ROOT / "core" / "src" / "test" / "resources"
-                   / "normalization_fixtures.json")
+                   / "normalization_fixtures" / f"{network_id}.json")
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(
         json.dumps({"cases": cases}, ensure_ascii=False, indent=2) + "\n",
@@ -565,7 +574,7 @@ def main() -> int:
         counts = build_database(
             arguments.output, ordered, normalizer, config, generated_at
         )
-        fixtures = write_normalization_fixtures(normalizer, ordered)
+        fixtures = write_normalization_fixtures(normalizer, ordered, config.network_id)
 
         size = arguments.output.stat().st_size
         elapsed = time.monotonic() - started

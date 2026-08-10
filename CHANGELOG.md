@@ -78,6 +78,11 @@ qui sortira sur F-Droid sera recompilé et signé là-bas.
 - **Métadonnées F-Droid** : description courte, description longue, notes de
   version et six captures d'écran, rédigées pour l'utilisateur et non pour le
   développeur.
+- **Deux réseaux de plus, générés et mesurés** : Vélib' Métropole (1 518
+  stations, 994 km², **142,8 Mo**) et Vélo'v Lyon (465 stations, 575 km²,
+  **42,3 Mo**), à comparer aux 42,5 Mo de Lille. Le graphe de routage de Lyon
+  s'étend sur deux segments BRouter, ce qui éprouve pour la première fois un
+  jeu de données à plusieurs fichiers.
 - **Traduction anglaise complète** dans `values-en/`, l'exemple que réclame le
   §9. Elle montre à un traducteur à quoi ressemble une traduction achevée, et
   permet de vérifier qu'un basculement de langue ne casse aucune mise en page.
@@ -210,6 +215,17 @@ qui sortira sur F-Droid sera recompilé et signé là-bas.
     postal à l'appui : « Rue Danton, 59160 Lomme ».
 
 ### Corrigé
+
+- **La génération écrivait toutes les villes au même endroit.** Produire Paris
+  effaçait Lille. Chaque ville a désormais son répertoire de sortie, nommé
+  d'après l'identifiant de réseau de sa configuration.
+- **Les cas de référence de normalisation étaient remplacés** à chaque
+  génération, si bien que la dernière ville produite effaçait la preuve
+  apportée par la précédente. Ils s'accumulent maintenant, un fichier par
+  réseau, et le test les rejoue tous : 54 cas sur deux producteurs.
+- **Le calcul d'emprise ne lisait pas le GBFS 3.0** : il cherchait la liste des
+  flux sous une clé de langue, que cette version a supprimée. L'outil n'avait
+  jamais vu que Lille.
 
 - **Les flux GBFS 1.0 étaient illisibles**, dont celui de Vélib' Métropole —
   mille cinq cents stations, le plus grand réseau de France. Ces flux publient

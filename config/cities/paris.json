@@ -34,7 +34,7 @@
       "Généré par tools/compute_bbox.py — NE PAS ÉDITER À LA MAIN."
     ],
     "marginMeters": 3000.0,
-    "generatedAt": "2026-08-10T08:23:47Z",
+    "generatedAt": "2026-08-10T08:43:31Z",
     "stationCount": 1518,
     "south": 48.716436,
     "west": 2.124587,
@@ -46,7 +46,8 @@
       "Centre et zoom d'ouverture quand la position n'est pas disponible.",
       "MapLibre compte en tuiles de 512 pixels : son zoom est décalé d'environ",
       "un cran par rapport à la convention des tuiles de 256. Le zoom 11,2 y",
-      "cadre l'ensemble de l'agglomération."
+      "cadre l'ensemble de l'agglomération.",
+      "budget est dépassé — elle passe donc au zoom 16 pour cette ville."
     ],
     "defaultCenterLatitude": 48.8566,
     "defaultCenterLongitude": 2.3522,

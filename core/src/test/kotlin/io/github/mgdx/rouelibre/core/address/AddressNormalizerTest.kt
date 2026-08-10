@@ -6,6 +6,7 @@ import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.io.File
 
 /**
  * Tests de la normalisation des noms de voies.
@@ -23,19 +24,34 @@ class AddressNormalizerTest {
 
     @Test
     fun `les cas de reference du script d'indexation sont reproduits`() {
-        val fixtures = json.decodeFromString(FixtureFile.serializer(), readFixtures())
+        val files = fixtureFiles()
+        assertTrue("aucun jeu de cas de référence trouvé", files.isNotEmpty())
 
-        assertTrue("les cas de référence sont vides", fixtures.cases.isNotEmpty())
-        fixtures.cases.forEach { case ->
-            assertEquals(
-                "normalisation de « ${case.input} »",
-                case.normalized,
-                normalizer.normalize(case.input),
-            )
-            val split = normalizer.analyse(case.input)
-            assertEquals("type de « ${case.input} »", case.type, split.streetType)
-            assertEquals("nom propre de « ${case.input} »", case.name, split.properName)
+        var checked = 0
+        files.forEach { file ->
+            val fixtures = json.decodeFromString(FixtureFile.serializer(), file.readText())
+            assertTrue("cas de référence vides dans ${file.name}", fixtures.cases.isNotEmpty())
+            fixtures.cases.forEach { case ->
+                assertEquals(
+                    "normalisation de « ${case.input} » (${file.name})",
+                    case.normalized,
+                    normalizer.normalize(case.input),
+                )
+                val split = normalizer.analyse(case.input)
+                assertEquals(
+                    "type de « ${case.input} » (${file.name})",
+                    case.type,
+                    split.streetType,
+                )
+                assertEquals(
+                    "nom propre de « ${case.input} » (${file.name})",
+                    case.name,
+                    split.properName,
+                )
+                checked++
+            }
         }
+        println("cas de référence rejoués : $checked, sur ${files.size} réseaux")
     }
 
     @Test
@@ -110,11 +126,21 @@ class AddressNormalizerTest {
 
         val json = Json { ignoreUnknownKeys = true }
 
-        fun readFixtures(): String = checkNotNull(
-            AddressNormalizerTest::class.java
-                .getResourceAsStream("/normalization_fixtures.json"),
-        ) {
-            "cas de référence absents : relance tools/build_address_index.py"
-        }.bufferedReader().use { it.readText() }
+        /**
+         * Les jeux de cas, un par réseau généré.
+         *
+         * Le répertoire est désigné par le build : chaque ville produite
+         * ajoute son fichier, et le test les rejoue tous. La preuve
+         * s'étend donc à chaque nouveau producteur, dont les noms de voies
+         * ne s'écrivent pas comme ceux du précédent.
+         */
+        fun fixtureFiles(): List<File> {
+            val path = checkNotNull(System.getProperty("rouelibre.normalizationFixtures")) {
+                "répertoire des cas de référence non fourni par le build"
+            }
+            return File(path).listFiles().orEmpty()
+                .filter { it.isFile && it.extension == "json" }
+                .sortedBy { it.name }
+        }
     }
 }

@@ -33,6 +33,12 @@ tasks.withType<Test>().configureEach {
         "rouelibre.normalizationRules",
         rootProject.file("config/address_normalization.json").absolutePath,
     )
+    // Les cas de référence, un fichier par ville générée : le test les rejoue
+    // tous, ce qui étend la preuve à chaque nouveau réseau.
+    systemProperty(
+        "rouelibre.normalizationFixtures",
+        file("src/test/resources/normalization_fixtures").absolutePath,
+    )
 }
 
 dependencies {

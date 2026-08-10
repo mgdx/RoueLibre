@@ -90,6 +90,16 @@ if [[ "$SKIP_DOWNLOAD" -eq 0 ]]; then
   done
 fi
 
+# Chaque ville a son répertoire de sortie : générer Paris ne doit pas effacer
+# Lille. Le nom vient de l'identifiant de réseau de la configuration, seul
+# endroit où il est écrit (§15).
+NETWORK_ID="$("$PYTHON" -c "
+import json, sys
+print(json.load(open(sys.argv[1]))['network']['id'])" "$CITY_CONFIG")"
+OUT_DIR="data/out/$NETWORK_ID"
+mkdir -p "$OUT_DIR"
+echo " sortie     : $OUT_DIR"
+
 # L'emprise vient en premier : les trois jeux suivants la prennent en entrée.
 echo
 echo "── 1/4 · Emprise de référence ──"
@@ -97,11 +107,13 @@ echo "── 1/4 · Emprise de référence ──"
 
 echo
 echo "── 2/4 · Fond de carte ──"
-"$PYTHON" tools/build_tiles.py --config "$CITY_CONFIG" --osm-extract "$OSM_FILE"
+"$PYTHON" tools/build_tiles.py --config "$CITY_CONFIG" --osm-extract "$OSM_FILE" \
+  --output "$OUT_DIR/tiles.mbtiles"
 
 echo
 echo "── 3/4 · Graphe de routage ──"
-"$PYTHON" tools/build_routing.py --config "$CITY_CONFIG" --osm-extract "$OSM_FILE"
+"$PYTHON" tools/build_routing.py --config "$CITY_CONFIG" --osm-extract "$OSM_FILE" \
+  --output-dir "$OUT_DIR/routing"
 
 echo
 echo "── 4/4 · Index d'adresses ──"
@@ -111,12 +123,14 @@ for dept in "${DEPTS[@]}"; do
   BAN_ARGS+=(--ban-csv "data/ban/adresses-${dept}.csv.gz")
 done
 "$PYTHON" tools/build_address_index.py --config "$CITY_CONFIG" \
-  "${BAN_ARGS[@]}" --osm-extract "$OSM_FILE"
+  "${BAN_ARGS[@]}" --osm-extract "$OSM_FILE" \
+  --output "$OUT_DIR/addresses.sqlite"
 
 echo
 echo "── Manifeste ──"
 "$PYTHON" tools/build_manifest.py --config "$CITY_CONFIG" \
+  --data-dir "$OUT_DIR" --output "$OUT_DIR/manifest.json" \
   --release-tag "$RELEASE_TAG"
 
 echo
-echo "Terminé. Les fichiers à publier sont dans data/out/."
+echo "Terminé. Les fichiers à publier sont dans $OUT_DIR/."

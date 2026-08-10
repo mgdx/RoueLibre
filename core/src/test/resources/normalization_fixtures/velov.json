@@ -1,0 +1,160 @@
+{
+  "cases": [
+    {
+      "input": "Rue Gambetta",
+      "normalized": "rue gambetta",
+      "type": "rue",
+      "name": "gambetta"
+    },
+    {
+      "input": "Boulevard de la Liberté",
+      "normalized": "boulevard de la liberte",
+      "type": "boulevard",
+      "name": "de la liberte"
+    },
+    {
+      "input": "Av. des Flandres",
+      "normalized": "avenue des flandres",
+      "type": "avenue",
+      "name": "des flandres"
+    },
+    {
+      "input": "Bd Victor Hugo",
+      "normalized": "boulevard victor hugo",
+      "type": "boulevard",
+      "name": "victor hugo"
+    },
+    {
+      "input": "R. Nationale",
+      "normalized": "rue nationale",
+      "type": "rue",
+      "name": "nationale"
+    },
+    {
+      "input": "St-André",
+      "normalized": "saint andre",
+      "type": null,
+      "name": "saint andre"
+    },
+    {
+      "input": "Rue de l'Hôpital Militaire",
+      "normalized": "rue de l hopital militaire",
+      "type": "rue",
+      "name": "de l hopital militaire"
+    },
+    {
+      "input": "Place du Général de Gaulle",
+      "normalized": "place du general de gaulle",
+      "type": "place",
+      "name": "du general de gaulle"
+    },
+    {
+      "input": "Chemin des Écoliers",
+      "normalized": "chemin des ecoliers",
+      "type": "chemin",
+      "name": "des ecoliers"
+    },
+    {
+      "input": "Grand Place",
+      "normalized": "grand place",
+      "type": null,
+      "name": "grand place"
+    },
+    {
+      "input": "Rond-Point de l'Europe",
+      "normalized": "rond point de l europe",
+      "type": "rond point",
+      "name": "de l europe"
+    },
+    {
+      "input": "Impasse Sainte-Cécile",
+      "normalized": "impasse sainte cecile",
+      "type": "impasse",
+      "name": "sainte cecile"
+    },
+    {
+      "input": "Drève du Château",
+      "normalized": "dreve du chateau",
+      "type": "dreve",
+      "name": "du chateau"
+    },
+    {
+      "input": "rue jean-baptiste lebas",
+      "normalized": "rue jean baptiste lebas",
+      "type": "rue",
+      "name": "jean baptiste lebas"
+    },
+    {
+      "input": "FAUBOURG DE ROUBAIX",
+      "normalized": "faubourg de roubaix",
+      "type": "faubourg",
+      "name": "de roubaix"
+    },
+    {
+      "input": "Allée Père Damien",
+      "normalized": "allee pere damien",
+      "type": "allee",
+      "name": "pere damien"
+    },
+    {
+      "input": "Allee de la Muriere",
+      "normalized": "allee de la muriere",
+      "type": "allee",
+      "name": "de la muriere"
+    },
+    {
+      "input": "Impasse Pont",
+      "normalized": "impasse pont",
+      "type": "impasse",
+      "name": "pont"
+    },
+    {
+      "input": "Rue Noel André",
+      "normalized": "rue noel andre",
+      "type": "rue",
+      "name": "noel andre"
+    },
+    {
+      "input": "Impasse Février",
+      "normalized": "impasse fevrier",
+      "type": "impasse",
+      "name": "fevrier"
+    },
+    {
+      "input": "Impasse Presle",
+      "normalized": "impasse presle",
+      "type": "impasse",
+      "name": "presle"
+    },
+    {
+      "input": "Cours de la République",
+      "normalized": "cours de la republique",
+      "type": "cours",
+      "name": "de la republique"
+    },
+    {
+      "input": "Rue Paul Verlaine",
+      "normalized": "rue paul verlaine",
+      "type": "rue",
+      "name": "paul verlaine"
+    },
+    {
+      "input": "Chemin de Chantemerle",
+      "normalized": "chemin de chantemerle",
+      "type": "chemin",
+      "name": "de chantemerle"
+    },
+    {
+      "input": "Rue de la Monnaie",
+      "normalized": "rue de la monnaie",
+      "type": "rue",
+      "name": "de la monnaie"
+    },
+    {
+      "input": "Impasse Berchet",
+      "normalized": "impasse berchet",
+      "type": "impasse",
+      "name": "berchet"
+    }
+  ]
+}
