@@ -4,19 +4,19 @@ import io.github.mgdx.rouelibre.core.Outcome
 import java.io.File
 
 /**
- * Le normalisateur construit à partir du **vrai** fichier de règles du dépôt.
+ * The normaliser built from the repository's **real** rules file.
  *
- * Les tests ne se donnent pas un jeu de règles à eux : ce qu'ils vérifient,
- * c'est le comportement de celui qui sera embarqué dans l'APK et lu par le
- * script d'indexation. Le chemin est fourni par le build (voir
- * `core/build.gradle.kts`), pour ne pas dépendre du répertoire d'exécution.
+ * The tests do not give themselves a rule set of their own: what they verify is
+ * the behaviour of the one that will ship in the APK and be read by the
+ * indexing script. The path is supplied by the build (see
+ * `core/build.gradle.kts`), so as not to depend on the working directory.
  */
 internal fun testNormalizer(): AddressNormalizer {
     val path = checkNotNull(System.getProperty("rouelibre.normalizationRules")) {
-        "chemin des règles de normalisation non fourni par le build"
+        "normalisation rules path not supplied by the build"
     }
     return when (val outcome = AddressNormalizerReader.read(File(path).readText())) {
         is Outcome.Success -> outcome.value
-        is Outcome.Failure -> error("règles de normalisation illisibles : ${outcome.error}")
+        is Outcome.Failure -> error("unreadable normalisation rules: ${outcome.error}")
     }
 }

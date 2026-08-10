@@ -6,11 +6,10 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 /**
- * Tests du rapprochement entre données stables et état temps réel.
+ * Tests of bringing static data together with real-time state.
  *
- * Le cas limite n'est pas théorique : le flux du réseau lillois publiait, le
- * 9 août 2026, 268 stations dans `station_information` et 267 dans
- * `station_status`.
+ * The edge case is not theoretical: on 9 August 2026 the Lille network's feed
+ * published 268 stations in `station_information` and 267 in `station_status`.
  */
 class StationJoinTest {
 
@@ -95,7 +94,7 @@ class StationJoinTest {
 
     @Test
     fun `a station that only receives stays in service`() {
-        // Elle rend encore un service réel : y déposer un vélo.
+        // It still provides a real service: returning a bike to it.
         val joined = joinStationsWithAvailability(
             listOf(station("1")),
             listOf(availability("1", renting = false)),
@@ -106,7 +105,7 @@ class StationJoinTest {
 
     @Test
     fun `an empty station stays in service`() {
-        // Zéro vélo n'est pas une panne : c'est une information à afficher.
+        // Zero bikes is not a breakdown: it is information to display.
         val joined = joinStationsWithAvailability(
             listOf(station("1")),
             listOf(availability("1", bikes = 0)),

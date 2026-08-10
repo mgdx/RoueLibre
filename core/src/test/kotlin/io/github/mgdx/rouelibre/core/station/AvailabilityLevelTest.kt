@@ -6,7 +6,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** Tests de l'échelle de disponibilité et de ce que l'indicateur affiche. */
+/** Tests of the availability scale and of what the indicator shows. */
 class AvailabilityLevelTest {
 
     private fun station(capacity: Int? = 20) = Station(
@@ -79,7 +79,7 @@ class AvailabilityLevelTest {
 
     @Test
     fun `a station that no longer rents is out of service for bikes only`() {
-        // Elle rend encore un service réel : y déposer un vélo.
+        // It still provides a real service: returning a bike to it.
         val entry = StationWithAvailability(
             station(),
             availability(bikes = 4, docks = 8, renting = false),

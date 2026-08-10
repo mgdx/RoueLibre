@@ -6,17 +6,17 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * Tests du classement des voies candidates.
+ * Tests of candidate street ranking.
  *
- * Le critère d'acceptation 11 du SPEC est vérifié ici : une recherche
- * comportant une faute de frappe ou une lettre manquante retrouve la rue visée
- * dans les trois premiers résultats.
+ * Acceptance criterion 11 of the specification is verified here: a search
+ * containing a typo or a missing letter finds the intended street in the first
+ * three results.
  */
 class AddressRankingTest {
 
     private val normalizer = testNormalizer()
 
-    /** Le centre de Lille, qui sert de point de référence aux tests. */
+    /** The centre of Lille, which serves as the tests' reference point. */
     private val centre = Coordinates(50.6370, 3.0630)
 
     private var nextId = 1L
@@ -54,9 +54,9 @@ class AddressRankingTest {
     @Test
     fun `the proper name is enough to find the street`() {
         val gambetta = street("Rue Gambetta")
-        val autres = listOf(street("Rue Nationale"), street("Boulevard de la Liberté"))
+        val others = listOf(street("Rue Nationale"), street("Boulevard de la Liberté"))
 
-        assertEquals(listOf(gambetta.id), rank("gambetta", autres + gambetta))
+        assertEquals(listOf(gambetta.id), rank("gambetta", others + gambetta))
     }
 
     @Test
@@ -67,17 +67,17 @@ class AddressRankingTest {
 
     @Test
     fun `the name that stops where the query stops comes first`() {
-        val exacte = street("Rue Gambetta")
-        val prolongee = street("Rue Gambetta Prolongée")
+        val exact = street("Rue Gambetta")
+        val extended = street("Rue Gambetta Prolongée")
 
-        assertEquals(exacte.id, rank("rue gambetta", listOf(prolongee, exacte)).first())
+        assertEquals(exact.id, rank("rue gambetta", listOf(extended, exact)).first())
     }
 
     @Test
     fun `a typo still finds the street in the first three results`() {
-        // Critère d'acceptation 11 du SPEC.
-        val visee = street("Rue Nationale")
-        val bruit = listOf(
+        // Acceptance criterion 11 of the specification.
+        val target = street("Rue Nationale")
+        val noise = listOf(
             street("Rue Nationale", city = "Roubaix"),
             street("Rue Nicolas Leblanc"),
             street("Rue de Turenne"),
@@ -85,24 +85,24 @@ class AddressRankingTest {
             street("Avenue Nationale", city = "Tourcoing"),
         )
 
-        val fautes = listOf(
-            "rue natinale", // lettre manquante
-            "rue natioanle", // deux lettres interverties
-            "rue nationnale", // lettre en trop
+        val typos = listOf(
+            "rue natinale", // a missing letter
+            "rue natioanle", // two letters transposed
+            "rue nationnale", // a letter too many
         )
-        fautes.forEach { faute ->
-            val classement = rank(faute, bruit + visee)
+        typos.forEach { typo ->
+            val ranking = rank(typo, noise + target)
             assertTrue(
-                "« $faute » : la rue visée doit figurer dans les trois premiers",
-                visee.id in classement.take(3),
+                "\"$typo\": the intended street must be in the first three",
+                target.id in ranking.take(3),
             )
         }
     }
 
     @Test
     fun `word order carries no penalty`() {
-        // Le type de voie étant stocké à part, « gare de la rue » et « rue de
-        // la gare » atteignent la même entrée (SPEC §4.3).
+        // The street type being stored separately, "gare de la rue" and "rue
+        // de la gare" reach the same entry (SPEC §4.3).
         val gare = street("Rue de la Gare")
         assertEquals(listOf(gare.id), rank("gare rue", listOf(gare)))
     }
@@ -120,7 +120,7 @@ class AddressRankingTest {
 
     @Test
     fun `a better match wins over proximity`() {
-        // La proximité départage à l'intérieur d'un palier, jamais entre deux.
+        // Proximity decides inside a tier, never across two.
         val voisineMaisAutre = street("Rue Nicolas Leblanc", position = centre)
         val exacteMaisLoin = street(
             "Rue Gambetta",
@@ -143,8 +143,8 @@ class AddressRankingTest {
 
     @Test
     fun `the absorbed municipality is searched like the current one`() {
-        // La Base Adresse Nationale rattache Lomme à Lille ; son habitant, lui,
-        // tape « Lomme ».
+        // The national address base attaches Lomme to Lille; its resident, for
+        // their part, types "Lomme".
         val lomme = street("Rue du Chemin de Fer", city = "Lille", formerCity = "Lomme")
         val lille = street("Rue du Chemin de Fer", city = "Lille")
 
@@ -159,10 +159,10 @@ class AddressRankingTest {
 
     @Test
     fun `a mistake in a two-letter word does not make the street vanish`() {
-        // Mesuré sur l'index réel : « Re de la Paix » et « Rue ed la Paix » ne
-        // rendaient AUCUN résultat, le fragment de deux lettres écartant à lui
-        // seul toutes les voies. C'est pourtant la faute la plus banale, et le
-        // reste de la saisie désignait la voie sans ambiguïté.
+        // Measured on the real index: "Re de la Paix" and "Rue ed la Paix"
+        // returned NO result at all, the two-letter fragment ruling out every
+        // street on its own. That is the most ordinary mistake there is, and
+        // the rest of the query designated the street unambiguously.
         val paix = street("Rue de la Paix")
 
         assertEquals(listOf(paix.id), rank("re de la paix", listOf(paix)))
@@ -171,7 +171,7 @@ class AddressRankingTest {
 
     @Test
     fun `a stop word alone is not enough to bring a street up`() {
-        // « de » ne doit pas ramener la moitié de l'index.
+        // "de" must not bring back half the index.
         val liberte = street("Boulevard de la Liberté")
         val gambetta = street("Rue Gambetta")
 

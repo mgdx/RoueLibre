@@ -5,7 +5,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.Instant
 
-/** Tests de l'âge affiché de la donnée (SPEC §4.1). */
+/** Tests of the displayed age of the data (SPEC §4.1). */
 class FreshnessTest {
 
     private val now: Instant = Instant.parse("2026-08-09T12:00:00Z")
@@ -36,8 +36,8 @@ class FreshnessTest {
 
     @Test
     fun `a clock going backwards does not produce a negative age`() {
-        // Correction NTP ou changement d'heure : mieux vaut « à l'instant »
-        // que « il y a -3 secondes ».
+        // An NTP correction or a clock change: "just now" beats "-3 seconds
+        // ago".
         assertEquals(Freshness.JustNow, freshnessOf(now.plusSeconds(30), now))
     }
 

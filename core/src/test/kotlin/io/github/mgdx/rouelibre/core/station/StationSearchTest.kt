@@ -4,7 +4,7 @@ import io.github.mgdx.rouelibre.core.geo.Coordinates
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-/** Tests du filtrage de la liste des stations par leur nom. */
+/** Tests of filtering the station list by name. */
 class StationSearchTest {
 
     private fun entry(name: String, postalCode: String? = "59000") = StationWithAvailability(
@@ -37,7 +37,7 @@ class StationSearchTest {
 
     @Test
     fun `a query made of punctuation alone returns the list untouched`() {
-        // Effacer un champ de recherche doit tout ramener, pas tout masquer.
+        // Clearing a search field must bring everything back, not hide it.
         assertEquals(stations.size, filterStations(stations, "---").size)
     }
 
@@ -48,8 +48,8 @@ class StationSearchTest {
 
     @Test
     fun `an accented query finds a name published without accents`() {
-        // Le flux lillois publie « Metropole Europeenne » sans accents, mais
-        // personne ne tape comme ça.
+        // The Lille feed publishes "Metropole Europeenne" without accents, but
+        // nobody types like that.
         assertEquals(
             listOf("Metropole Europeenne de Lille (CB)"),
             names("métropole européenne"),

@@ -5,7 +5,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** Tests du démontage d'une saisie en numéro de voirie et mots de recherche. */
+/** Tests of taking a query apart into a house number and search words. */
 class AddressQueryTest {
 
     private val normalizer = testNormalizer()
@@ -23,7 +23,7 @@ class AddressQueryTest {
 
     @Test
     fun `a house number at the end of the query is recognised too`() {
-        // Les deux ordres d'écriture se pratiquent.
+        // Both writing orders are in use.
         val query = parse("rue Nationale 12")
 
         assertEquals(12, query.houseNumber)
@@ -39,8 +39,8 @@ class AddressQueryTest {
 
     @Test
     fun `a bare number does not become an empty search`() {
-        // Sans mots, il n'y a aucune voie à chercher : mieux vaut traiter le
-        // nombre comme un mot ordinaire que de chercher « rien ».
+        // Without words there is no street to search for: better to treat the
+        // number as an ordinary word than to search for "nothing".
         val query = parse("12")
 
         assertNull(query.houseNumber)
@@ -49,7 +49,7 @@ class AddressQueryTest {
 
     @Test
     fun `an implausible number is not a house number`() {
-        // 59000 est un code postal, pas un numéro.
+        // 59000 is a postcode, not a house number.
         val query = parse("59000 rue Nationale")
 
         assertNull(query.houseNumber)
@@ -57,8 +57,8 @@ class AddressQueryTest {
 
     @Test
     fun `a postcode is removed from the searched words`() {
-        // L'index n'indexe pas les codes postaux en texte intégral : le
-        // garder ferait échouer une saisie par ailleurs juste.
+        // The index does not hold postcodes in full text: keeping it would
+        // fail an otherwise sound query.
         val query = parse("rue Nationale 59800 Lille")
 
         assertEquals(listOf("rue", "nationale", "lille"), query.terms)

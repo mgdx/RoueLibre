@@ -7,22 +7,23 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * Tests du placement d'un numéro dans une voie.
+ * Tests of placing a house number along a street.
  *
- * Le critère d'acceptation 10 du SPEC demande qu'une adresse avec numéro dans
- * une longue artère soit localisée à moins de cinquante mètres. Les rues de ce
- * test sont donc de vraies longueurs : une artère d'un kilomètre, où retomber
- * sur le centre coûterait plusieurs centaines de mètres.
+ * Acceptance criterion 10 of the specification asks that an address with a
+ * house number in a long thoroughfare be located within fifty metres. The
+ * streets in this test are therefore of real lengths: a kilometre-long
+ * thoroughfare, where falling back on the middle would cost several hundred
+ * metres.
  */
 class HouseNumberResolutionTest {
 
-    /** Point de départ de l'artère de test, au sud de Lille. */
+    /** The starting point of the test thoroughfare, south of Lille. */
     private val streetStart = Coordinates(50.6200, 3.0600)
 
     /**
-     * Une artère rectiligne d'environ un kilomètre vers le nord, numérotée à
-     * la française : impairs d'un côté, pairs de l'autre, décalés de vingt
-     * mètres — la largeur de la chaussée.
+     * A straight thoroughfare about a kilometre long running north, numbered
+     * the French way: odds on one side, evens on the other, offset by twenty
+     * metres — the width of the roadway.
      */
     private fun straightStreet(numbers: IntRange): List<KnownHouseNumber> = numbers.map { number ->
         val progress = number / 100.0
@@ -59,13 +60,13 @@ class HouseNumberResolutionTest {
         val truth = complete.first { it.number == 51 }.position
 
         assertEquals(PositionPrecision.Interpolated, resolved.precision)
-        // Interpoler entre le 49 et le 53 doit tomber à quelques mètres du 51.
+        // Interpolating between 49 and 53 must land within metres of 51.
         assertTrue(
-            "interpolation à ${resolved.coordinates.distanceInMetresTo(truth)} m",
+            "interpolated ${resolved.coordinates.distanceInMetresTo(truth)} m away",
             resolved.coordinates.distanceInMetresTo(truth) < 15.0,
         )
-        // Et surtout : bien mieux que le centre de la rue, qui est le repli
-        // que cette interpolation existe pour éviter.
+        // And above all: far better than the middle of the street, which is
+        // the fallback this interpolation exists to avoid.
         assertTrue(
             resolved.coordinates.distanceInMetresTo(truth) <
                 streetCentre.distanceInMetresTo(truth),
@@ -74,8 +75,8 @@ class HouseNumberResolutionTest {
 
     @Test
     fun `the interpolation stays on the right side of the roadway`() {
-        // Les impairs sont d'un côté, les pairs de l'autre : interpoler le 51
-        // entre le 50 et le 52 le placerait sur le trottoir d'en face.
+        // Odds are on one side, evens on the other: interpolating 51 between
+        // 50 and 52 would put it on the opposite pavement.
         val known = straightStreet(1..100).filterNot { it.number == 51 }
         val resolved = resolveHouseNumber(51, "", known, streetCentre)
         val oddSideLongitude = streetStart.longitude
@@ -94,8 +95,8 @@ class HouseNumberResolutionTest {
 
     @Test
     fun `a neighbour too far away is useless and leaves the street's point`() {
-        // Rendre la position du 9 pour un 500 laisserait croire à une
-        // précision qui n'existe pas.
+        // Returning number 9's position for a 500 would suggest a precision
+        // that does not exist.
         val resolved = resolveHouseNumber(500, "", straightStreet(1..10), streetCentre)
 
         assertEquals(PositionPrecision.StreetOnly, resolved.precision)

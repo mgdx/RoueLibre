@@ -8,11 +8,11 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * Tests de la lecture d'un manifeste de publication (SPEC §4.4).
+ * Tests of reading a release manifest (SPEC §4.4).
  *
- * Le document éprouvé est celui que `tools/build_manifest.py` produit
- * réellement : une divergence entre le script et cette lecture rendrait les
- * mises à jour impossibles sans que rien ne le signale.
+ * The document exercised is the one `tools/build_manifest.py` actually
+ * produces: a divergence between the script and this reader would make updates
+ * impossible with nothing to signal it.
  */
 class DataManifestTest {
 
@@ -85,9 +85,8 @@ class DataManifestTest {
 
     @Test
     fun `an unknown set is ignored rather than fatal`() {
-        // Une publication plus récente peut décrire un jeu que cette version
-        // ne connaît pas ; cela ne doit pas empêcher de mettre à jour les
-        // autres.
+        // A more recent release may describe a set this version does not know;
+        // that must not prevent updating the others.
         val withUnknown = document.replace("\"id\": \"routing\"", "\"id\": \"meteo\"")
         val manifest = DataManifestReader.read(withUnknown).valueOrNull()
 
@@ -109,8 +108,8 @@ class DataManifestTest {
 
     @Test
     fun `a set whose digest has not changed is not downloaded again`() {
-        // C'est tout l'intérêt du manifeste : rafraîchir l'index d'adresses ne
-        // doit pas imposer de reprendre trente-cinq mégaoctets de tuiles.
+        // That is the whole point of the manifest: refreshing the address
+        // index must not force thirty-five megabytes of tiles to come again.
         val states = compareWithInstalled(
             manifest(),
             installedFingerprints = mapOf(
@@ -135,9 +134,8 @@ class DataManifestTest {
 
     @Test
     fun `the digest of a multi-file set does not depend on their order`() {
-        // Le graphe de routage peut compter plusieurs segments ; l'ordre dans
-        // lequel le manifeste les liste ne doit pas provoquer un
-        // retéléchargement inutile.
+        // The routing graph may hold several segments; the order the manifest
+        // lists them in must not cause a needless re-download.
         val files = listOf(
             ManifestFile("b.rd5", "https://example.org/b", 1, "bbbb"),
             ManifestFile("a.rd5", "https://example.org/a", 1, "aaaa"),

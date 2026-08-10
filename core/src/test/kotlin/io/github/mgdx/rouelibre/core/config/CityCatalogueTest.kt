@@ -10,12 +10,12 @@ import org.junit.Test
 import java.io.File
 
 /**
- * Tests du catalogue des villes.
+ * Tests of the city catalogue.
  *
- * Le premier rejoue le catalogue réellement produit par
- * `tools/build_catalogue.py`, et non un exemple écrit pour l'occasion : ce qui
- * est vérifié est que le générateur et le lecteur s'accordent, et qu'une
- * position dans chacune des villes servies désigne bien la bonne.
+ * The first replays the catalogue `tools/build_catalogue.py` actually produces,
+ * and not an example written for the occasion: what is verified is that the
+ * generator and the reader agree, and that a position in each served city
+ * designates the right one.
  */
 class CityCatalogueTest {
 
@@ -23,23 +23,23 @@ class CityCatalogueTest {
     fun `the catalogue the generator produces is readable`() {
         val catalogue = publishedCatalogue()
 
-        assertTrue("catalogue vide", catalogue.cities.isNotEmpty())
-        assertNotNull("adresse de rafraîchissement absente", catalogue.catalogueUrl)
+        assertTrue("empty catalogue", catalogue.cities.isNotEmpty())
+        assertNotNull("refresh address missing", catalogue.catalogueUrl)
         catalogue.cities.forEach { city ->
-            assertTrue("emprise inutilisable pour ${city.id}", city.boundingBox.isUsable)
-            assertTrue("centre hors emprise pour ${city.id}", city.centre in city.boundingBox)
-            assertTrue("flux GBFS absent pour ${city.id}", city.gbfsDiscoveryUrl.isNotBlank())
+            assertTrue("unusable bounding box for ${city.id}", city.boundingBox.isUsable)
+            assertTrue("centre outside the box for ${city.id}", city.centre in city.boundingBox)
+            assertTrue("GBFS feed missing for ${city.id}", city.gbfsDiscoveryUrl.isNotBlank())
         }
     }
 
     @Test
     fun `every published city announces the weight of its data`() {
-        // Le SPEC §11.9 exige que la taille soit annoncée avant le
-        // téléchargement : une ville dont les données sont générées mais dont
-        // le poids manque ferait mentir cet écran.
+        // SPEC §11.9 requires the size to be announced before downloading: a
+        // city whose data is generated but whose weight is missing would make
+        // that screen lie.
         publishedCatalogue().cities.forEach { city ->
             assertTrue(
-                "poids des données inconnu pour ${city.id}",
+                "data weight unknown for ${city.id}",
                 city.isAvailable,
             )
         }
@@ -56,8 +56,8 @@ class CityCatalogueTest {
 
     @Test
     fun `a municipality on the outskirts designates the metropolis's network`() {
-        // Seclin est hors de l'emprise du V'lille mais dans sa couronne : la
-        // proposition doit tenir, sans quoi elle ne servirait qu'au centre-ville.
+        // Seclin is outside the V'lille box but inside its ring: the proposal
+        // must hold, otherwise it would only serve the city centre.
         assertEquals("vlille", publishedCatalogue().suggestionFor(SECLIN)?.id)
     }
 
@@ -108,7 +108,7 @@ class CityCatalogueTest {
 
     private companion object {
 
-        /** Lille, Grand-Place. */
+        /** Lille, the Grand-Place. */
         val GRAND_PLACE_DE_LILLE = Coordinates(50.6371, 3.0630)
 
         /** Lyon, place Bellecour. */
@@ -117,22 +117,22 @@ class CityCatalogueTest {
         /** Paris, Notre-Dame. */
         val NOTRE_DAME_DE_PARIS = Coordinates(48.8530, 2.3499)
 
-        /** Seclin, à une quinzaine de kilomètres au sud de Lille. */
+        /** Seclin, some fifteen kilometres south of Lille. */
         val SECLIN = Coordinates(50.5496, 3.0284)
 
         val MARSEILLE = Coordinates(43.2965, 5.3698)
         val REYKJAVIK = Coordinates(64.1466, -21.9426)
 
         /**
-         * Le catalogue tel qu'il sera publié.
+         * The catalogue as it will be published.
          *
-         * Le chemin vient du build : c'est le fichier que produit le
-         * générateur, pas une copie faite pour le test — une copie finirait par
-         * décrire un état que plus personne ne publie.
+         * The path comes from the build: it is the file the generator produces,
+         * not a copy made for the test — a copy would end up describing a state
+         * nobody publishes any more.
          */
         fun publishedCatalogue(): CityCatalogue {
             val path = checkNotNull(System.getProperty("rouelibre.cityCatalogue")) {
-                "chemin du catalogue non fourni par le build"
+                "catalogue path not supplied by the build"
             }
             val outcome = CityCatalogueReader.read(File(path).readText())
             return (outcome as Outcome.Success).value
