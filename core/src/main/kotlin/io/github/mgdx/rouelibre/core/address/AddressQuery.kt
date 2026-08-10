@@ -1,56 +1,56 @@
 package io.github.mgdx.rouelibre.core.address
 
 /**
- * Ce qu'une saisie veut dire, une fois démontée.
+ * What a query means, once taken apart.
  *
- * @property houseNumber le numéro de voirie reconnu dans la saisie, ou `null`.
- * @property houseNumberSuffix l'indice qui l'accompagne — « bis », « ter »,
- *   « a » — ou une chaîne vide.
- * @property terms les mots restants, normalisés, qui désignent la voie. Vides
- *   si la saisie ne contient rien de cherchable.
+ * @property houseNumber the house number recognised in the query, or `null`.
+ * @property houseNumberSuffix the repetition mark that goes with it — "bis",
+ *   "ter", "a" — or an empty string.
+ * @property terms the remaining words, normalised, that designate the street.
+ *   Empty if the query holds nothing searchable.
  */
 public data class AddressQuery(
     public val houseNumber: Int?,
     public val houseNumberSuffix: String,
     public val terms: List<String>,
 ) {
-    /** Vrai s'il n'y a rien à chercher : champ vide, ou numéro seul. */
+    /** True if there is nothing to search for: empty field, or a bare number. */
     public val isEmpty: Boolean
         get() = terms.isEmpty()
 }
 
 /**
- * Indices de répétition écrits en toutes lettres.
+ * Repetition marks spelled out in full.
  *
- * Une lettre isolée est également acceptée comme indice ; la liste ne sert
- * qu'aux formes que l'on ne peut pas deviner à leur longueur.
+ * A lone letter is accepted as a mark too; this list only covers the forms that
+ * cannot be guessed from their length.
  */
 private val WRITTEN_SUFFIXES = setOf("bis", "ter", "quater", "quinquies")
 
 /**
- * Numéro de voirie le plus élevé que l'on accepte de reconnaître.
+ * The highest house number we agree to recognise.
  *
- * Les numéros de la Base Adresse Nationale tiennent tous en dessous ; au-delà,
- * un nombre saisi est presque toujours autre chose — un code postal, une
- * année, une ligne de bus — et le prendre pour un numéro ferait chercher une
- * adresse qui n'existe pas.
+ * Every number in the Base Adresse Nationale falls below it; past that, a
+ * number typed is almost always something else — a postcode, a year, a bus
+ * route — and taking it for a house number would send us looking for an address
+ * that does not exist.
  */
 private const val HIGHEST_PLAUSIBLE_HOUSE_NUMBER = 9_999
 
-/** Longueur d'un code postal français. */
+/** The length of a French postcode. */
 private const val POSTCODE_LENGTH = 5
 
 /**
- * Démonte une saisie en numéro de voirie et mots de recherche.
+ * Takes a query apart into a house number and search words.
  *
- * Les deux ordres d'écriture sont acceptés, parce que les deux se pratiquent :
- * « 12 bis rue Nationale » comme « rue Nationale 12 bis ».
+ * Both writing orders are accepted, because both are used: "12 bis rue
+ * Nationale" as well as "rue Nationale 12 bis".
  *
- * Un code postal saisi est retiré des mots cherchés plutôt que gardé : l'index
- * ne l'indexe pas en texte intégral, et le laisser dans la recherche ferait
- * échouer une saisie par ailleurs juste.
+ * A postcode typed in is removed from the searched words rather than kept: the
+ * index does not hold it in full text, and leaving it in the search would fail
+ * an otherwise sound query.
  *
- * @param raw la saisie brute, telle que tapée.
+ * @param raw the query as typed.
  */
 public fun AddressNormalizer.parseQuery(raw: String): AddressQuery {
     val words = normalize(raw).split(' ').filter { it.isNotEmpty() }
@@ -73,20 +73,20 @@ public fun AddressNormalizer.parseQuery(raw: String): AddressQuery {
     )
 }
 
-/** Un numéro reconnu et le nombre de mots qu'il a consommés. */
+/** A recognised number and how many words it consumed. */
 private data class RecognizedNumber(val number: Int, val suffix: String, val consumedWords: Int)
 
-/** « 12 bis rue Nationale » : le numéro ouvre la saisie. */
+/** "12 bis rue Nationale": the number opens the query. */
 private fun readLeadingNumber(words: List<String>): RecognizedNumber? {
     val number = words.first().toHouseNumberOrNull() ?: return null
-    // Un numéro seul ne désigne aucune voie : il vaut mieux le traiter comme
-    // un mot ordinaire, quitte à ne rien trouver, que de chercher « rien ».
+    // A bare number designates no street: better to treat it as an ordinary
+    // word, even if that finds nothing, than to search for "nothing".
     if (words.size == 1) return null
     val suffix = words.getOrNull(1)?.takeIf { isSuffix(it) && words.size > 2 }
     return RecognizedNumber(number, suffix.orEmpty(), if (suffix == null) 1 else 2)
 }
 
-/** « rue Nationale 12 bis » : le numéro ferme la saisie. */
+/** "rue Nationale 12 bis": the number closes the query. */
 private fun readTrailingNumber(words: List<String>): RecognizedNumber? {
     val last = words.last()
     if (isSuffix(last) && words.size > 2) {
@@ -105,8 +105,8 @@ private fun String.toHouseNumberOrNull(): Int? {
 }
 
 /**
- * Un mot est un indice de répétition s'il est écrit en toutes lettres, ou
- * réduit à une seule lettre — « 12 A », « 3 b ».
+ * A word is a repetition mark if it is spelled out in full, or reduced to a
+ * single letter — "12 A", "3 b".
  */
 private fun isSuffix(word: String): Boolean =
     word in WRITTEN_SUFFIXES || (word.length == 1 && word[0].isLetter())

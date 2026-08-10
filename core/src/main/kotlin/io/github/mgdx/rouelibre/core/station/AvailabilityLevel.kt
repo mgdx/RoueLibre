@@ -1,44 +1,43 @@
 package io.github.mgdx.rouelibre.core.station
 
 /**
- * Niveau de disponibilité, tel que l'indicateur le représente (SPEC §7.1).
+ * The availability level, as the indicator shows it (SPEC §7.1).
  *
- * Le découpage n'est pas cosmétique : il reprend le raisonnement de fiabilité
- * du SPEC §6. Une station peut se vider — ou se remplir — pendant qu'on marche
- * vers elle, et la probabilité que cela arrive dépend beaucoup plus du
- * franchissement des premiers vélos que des suivants.
+ * The banding is not cosmetic: it carries over the reliability reasoning of
+ * SPEC §6. A station can empty — or fill — while one walks towards it, and the
+ * likelihood of that happening depends far more on the first few bikes than on
+ * the ones after.
  */
 public enum class AvailabilityLevel {
-    /** Rien du tout. Le trajet proposé serait impossible. */
+    /** Nothing at all. The journey proposed would be impossible. */
     None,
 
     /**
-     * Un ou deux. Une station à un seul vélo peut être vide à l'arrivée : c'est
-     * le cas que le SPEC §6 demande de pénaliser, et il doit se voir.
+     * One or two. A station with a single bike may be empty on arrival: that is
+     * the case SPEC §6 asks to penalise, and it must be visible.
      */
     Low,
 
-    /** De trois à cinq. Le risque devient faible sans être nul. */
+    /** Three to five. The risk becomes small without being nil. */
     Medium,
 
-    /** Six ou plus. Au-delà, un vélo de plus ne change plus la décision. */
+    /** Six or more. Beyond that, one more bike no longer changes the decision. */
     Good,
 }
 
-/** Seuil sous lequel une station est jugée à risque de se vider. */
+/** The threshold below which a station is judged at risk of emptying. */
 private const val LOW_THRESHOLD = 3
 
-/** Seuil au-delà duquel un compte supplémentaire ne change plus rien. */
+/** The threshold beyond which one more unit changes nothing. */
 private const val GOOD_THRESHOLD = 6
 
 /**
- * Classe un nombre de vélos ou de places dans l'échelle de l'indicateur.
+ * Places a count of bikes or docks on the indicator's scale.
  *
- * Les mêmes seuils s'appliquent aux vélos et aux places : la question posée
- * est la même des deux côtés — « est-ce que ce sera encore vrai quand
- * j'arriverai ? ».
+ * The same thresholds apply to bikes and to docks: the question asked is the
+ * same on both sides — "will this still be true when I get there?".
  *
- * @param count nombre de vélos disponibles ou de places libres.
+ * @param count the number of bikes available or of free docks.
  */
 public fun availabilityLevelOf(count: Int): AvailabilityLevel = when {
     count <= 0 -> AvailabilityLevel.None
@@ -47,24 +46,24 @@ public fun availabilityLevelOf(count: Int): AvailabilityLevel = when {
     else -> AvailabilityLevel.Good
 }
 
-/** Ce que l'utilisateur cherche : emprunter un vélo, ou en rendre un. */
+/** What the user is after: borrowing a bike, or returning one. */
 public enum class AvailabilityMode {
-    /** Compter les vélos empruntables. */
+    /** Count the bikes that can be borrowed. */
     Bikes,
 
-    /** Compter les places libres. */
+    /** Count the free docks. */
     Docks,
 }
 
 /**
- * Ce qu'il faut afficher pour une station, dans le mode demandé.
+ * What is to be shown for a station, in the requested mode.
  *
- * @property count nombre à écrire dans l'indicateur, ou `null` si inconnu.
- * @property level niveau correspondant, ou `null` si inconnu.
- * @property isOutOfService la station ne rend pas le service demandé.
- * @property filledFraction part de la capacité occupée par ce compte, entre 0
- *   et 1, ou `null` si la capacité n'est pas publiée. Alimente l'arc de
- *   l'indicateur : le chiffre dit combien, l'arc dit sur combien.
+ * @property count the number to write in the indicator, or `null` if unknown.
+ * @property level the matching level, or `null` if unknown.
+ * @property isOutOfService the station does not provide the service asked for.
+ * @property filledFraction the share of the capacity this count occupies,
+ *   between 0 and 1, or `null` if the capacity is not published. It feeds the
+ *   indicator's arc: the figure says how many, the arc says out of how many.
  */
 public data class AvailabilityDisplay(
     public val count: Int?,
@@ -74,9 +73,9 @@ public data class AvailabilityDisplay(
 )
 
 /**
- * Traduit l'état d'une station en ce que l'indicateur doit montrer.
+ * Turns a station's state into what the indicator must show.
  *
- * @param mode selon que l'utilisateur cherche un vélo ou une place.
+ * @param mode according to whether the user is after a bike or a dock.
  */
 public fun StationWithAvailability.displayFor(mode: AvailabilityMode): AvailabilityDisplay {
     val current = availability
@@ -87,8 +86,8 @@ public fun StationWithAvailability.displayFor(mode: AvailabilityMode): Availabil
             filledFraction = null,
         )
 
-    // « Hors service » vaut pour le service demandé, pas pour la station en
-    // bloc : une station qui n'accepte plus de retour peut encore prêter.
+    // "Out of service" applies to the service asked for, not to the station as
+    // a whole: a station that no longer takes returns can still lend.
     val serviceRefused = when (mode) {
         AvailabilityMode.Bikes -> !current.isInstalled || !current.isRenting
         AvailabilityMode.Docks -> !current.isInstalled || !current.isReturning
@@ -106,8 +105,8 @@ public fun StationWithAvailability.displayFor(mode: AvailabilityMode): Availabil
         AvailabilityMode.Bikes -> current.bikesAvailable
         AvailabilityMode.Docks -> current.docksAvailable
     }
-    // La capacité publiée est préférée à la somme vélos + places, qui varie
-    // quand un vélo est en cours de retrait ; à défaut, la somme fait office.
+    // The published capacity is preferred to the sum of bikes plus docks, which
+    // varies while a bike is being taken out; failing that, the sum stands in.
     val total = station.capacity?.takeIf { it > 0 }
         ?: (current.bikesAvailable + current.docksAvailable).takeIf { it > 0 }
 

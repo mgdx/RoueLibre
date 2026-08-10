@@ -8,34 +8,35 @@ import io.github.mgdx.rouelibre.core.station.Station
 import kotlin.time.Duration
 
 /**
- * Calcule des itinéraires. Abstrait ici pour que l'algorithme de trajet reste
- * en Kotlin pur, testable sans moteur ni graphe (SPEC §14).
+ * Computes routes. Abstracted here so the journey algorithm stays in pure
+ * Kotlin, testable without an engine or a graph (SPEC §14).
  */
 public interface Router {
 
     /**
-     * Trace un itinéraire entre deux points.
+     * Traces a route between two points.
      *
-     * @return le tracé, ou la raison de l'échec. Ne lève jamais.
+     * @return the track, or the reason for the failure. Never throws.
      */
     public suspend fun route(from: Coordinates, to: Coordinates, mode: TravelMode): RouteResult
 }
 
 /**
- * Un trajet complet marche → vélo → marche.
+ * A complete walk → bike → walk journey.
  *
- * @property departureStation station où l'on prend le vélo.
- * @property arrivalStation station où on le rend.
- * @property bikesAtDeparture vélos disponibles au moment du calcul. Toujours
- *   affiché, pour que l'utilisateur juge lui-même du risque (SPEC §6).
- * @property docksAtArrival places libres au moment du calcul.
- * @property walkToStation marche d'accès à la station de départ.
- * @property ride trajet à vélo entre les deux stations.
- * @property walkToDestination marche de la station d'arrivée à la destination.
- * @property handlingTime temps forfaitaire de prise et de dépose.
- * @property riskPenalty pénalité de fiabilité, exprimée en temps. Elle sert à
- *   classer les propositions, jamais à être annoncée comme une durée : le
- *   temps affiché à l'utilisateur est [travelTime].
+ * @property departureStation the station where the bike is picked up.
+ * @property arrivalStation the station where it is returned.
+ * @property bikesAtDeparture bikes available when the journey was computed.
+ *   Always shown, so the user can judge the risk for themselves (SPEC §6).
+ * @property docksAtArrival free docks when the journey was computed.
+ * @property walkToStation the access walk to the departure station.
+ * @property ride the bike leg between the two stations.
+ * @property walkToDestination the walk from the arrival station to the
+ *   destination.
+ * @property handlingTime the fixed pick-up and drop-off time.
+ * @property riskPenalty the reliability penalty, expressed in time. It serves
+ *   to rank the options, never to be announced as a duration: the time shown to
+ *   the user is [travelTime].
  */
 public data class JourneyOption(
     public val departureStation: Station,
@@ -48,36 +49,36 @@ public data class JourneyOption(
     public val handlingTime: Duration,
     public val riskPenalty: Duration,
 ) {
-    /** Durée réellement attendue, forfaits compris et pénalité exclue. */
+    /** The duration actually expected, fixed handling included, penalty excluded. */
     public val travelTime: Duration
         get() = walkToStation.duration + ride.duration +
             walkToDestination.duration + handlingTime
 
-    /** Durée servant au classement : le temps attendu, majoré du risque. */
+    /** The duration used for ranking: the expected time, raised by the risk. */
     public val rankingTime: Duration
         get() = travelTime + riskPenalty
 
-    /** Distance totale parcourue, marche comprise. */
+    /** The total distance covered, walking included. */
     public val distanceMetres: Int
         get() = walkToStation.distanceMetres + ride.distanceMetres +
             walkToDestination.distanceMetres
 }
 
 /**
- * Ce que l'algorithme rend pour un trajet demandé.
+ * What the algorithm returns for a requested journey.
  */
 public sealed interface JourneyPlan {
 
     /**
-     * Un trajet à vélo a été trouvé.
+     * A bike journey was found.
      *
-     * @property best la meilleure proposition.
-     * @property alternatives jusqu'à trois autres couples de stations, dans
-     *   l'ordre. Le SPEC §6 les exige : l'utilisateur doit pouvoir préférer
-     *   une station mieux fournie à la plus rapide.
-     * @property directWalk marche directe, quand elle a pu être calculée.
-     * @property walkingIsFaster vrai quand marcher tout du long va plus vite
-     *   que le trajet à vélo. Le SPEC §6 impose de le dire.
+     * @property best the best option.
+     * @property alternatives up to three other station pairs, in order. SPEC §6
+     *   requires them: the user must be able to prefer a better-stocked station
+     *   to the fastest one.
+     * @property directWalk the direct walk, when it could be computed.
+     * @property walkingIsFaster true when walking all the way is quicker than
+     *   the bike journey. SPEC §6 requires saying so.
      */
     public data class Found(
         public val best: JourneyOption,
@@ -87,37 +88,37 @@ public sealed interface JourneyPlan {
     ) : JourneyPlan
 
     /**
-     * Aucun trajet à vélo n'est possible, mais la marche directe l'est.
+     * No bike journey is possible, but the direct walk is.
      *
-     * @property reason ce qui a manqué.
+     * @property reason what was missing.
      */
     public data class WalkOnly(public val directWalk: RouteLeg, public val reason: NoBikeJourney) :
         JourneyPlan
 
-    /** Rien n'a pu être calculé. */
+    /** Nothing could be computed. */
     public data class Impossible(public val reason: NoBikeJourney) : JourneyPlan
 }
 
 /**
- * Pourquoi aucun trajet à vélo n'a été retenu.
+ * Why no bike journey was retained.
  *
- * Le SPEC §6 est explicite : quand aucune station proche n'a de vélo,
- * l'application doit le dire, pas proposer un trajet impossible.
+ * SPEC §6 is explicit: when no nearby station has a bike, the application must
+ * say so, not propose an impossible journey.
  */
 public sealed interface NoBikeJourney {
 
-    /** Aucune station en service avec au moins un vélo près du départ. */
+    /** No station in service with at least one bike near the departure point. */
     public data object NoBikeNearby : NoBikeJourney
 
-    /** Aucune station en service avec au moins une place près de l'arrivée. */
+    /** No station in service with at least one dock near the arrival point. */
     public data object NoDockNearby : NoBikeJourney
 
-    /** Des stations existent, mais aucun itinéraire ne les relie. */
+    /** Stations exist, but no route joins them. */
     public data object NoRouteBetweenStations : NoBikeJourney
 
-    /** Le graphe de routage n'est pas installé. */
+    /** The routing graph is not installed. */
     public data object GraphMissing : NoBikeJourney
 
-    /** Un des deux points est hors de l'emprise couverte. */
+    /** One of the two points lies outside the covered area. */
     public data object OutsideCoverage : NoBikeJourney
 }
