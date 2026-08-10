@@ -1,76 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Jetons de couleur — thème clair. SPEC.md §7.
+    Colour tokens — light theme. SPEC.md §7.
 
-    Six couleurs nommées, et une échelle de disponibilité dérivée de l'une
-    d'elles. Aucune couleur n'est écrite dans un layout : tout passe par ces
-    ressources, et le thème sombre redéfinit les mêmes noms dans
-    values-night/colors.xml.
+    Six named colours, and an availability scale derived from one of them. No
+    colour is written into a layout: everything goes through these resources,
+    and the dark theme redefines the same names in values-night/colors.xml.
 
-    Direction : « ardoise ». Un gris-bleu froid pour le fond, l'encre presque
-    noire mais jamais noire, et UNE teinte de signal — un pétrole profond —
-    qui porte à la fois la disponibilité et l'interaction. L'audace est
-    dépensée à un seul endroit, l'indicateur de disponibilité ; tout le reste
-    est calme.
+    Direction: "slate". A cool blue-grey for the background, ink almost black
+    but never black, and ONE signal hue — a deep teal — carrying both
+    availability and interaction. The boldness is spent in a single place, the
+    availability indicator; everything else is calm.
 
-    L'échelle de disponibilité est une rampe de DENSITÉ D'ENCRE sur une seule
-    teinte : plus il y a de vélos, plus il y a d'encre. Elle est donc lisible
-    quel que soit le type de daltonisme, et le chiffre reste de toute façon
-    affiché par-dessus — la couleur ne porte jamais l'information seule.
+    The availability scale is a ramp of INK DENSITY over a single hue: the more
+    bikes there are, the more ink there is. It is therefore legible whatever
+    the form of colour blindness, and the figure is shown on top in any case —
+    colour never carries the information alone.
 
-    Contrastes vérifiés (WCAG 2.1) : le plus faible du jeu est de 5,07:1.
+    Contrasts verified (WCAG 2.1): the lowest in the set is 5.07:1.
 -->
 <resources>
 
-    <!-- Fond de l'écran. -->
+    <!-- The screen's background. -->
     <color name="papier">#E8ECEF</color>
-    <!-- Surfaces posées sur le fond : lignes de liste, feuilles, champs.
-         La séparation est tonale, sans ombre portée. -->
+    <!-- Surfaces laid on the background: list rows, sheets, fields. The
+         separation is tonal, without a drop shadow. -->
     <color name="surface">#FAFCFD</color>
-    <!-- Texte principal et tracés. Jamais du noir pur. -->
+    <!-- Main text and strokes. Never pure black. -->
     <color name="encre">#0E1519</color>
-    <!-- Texte secondaire, légendes, unités. -->
+    <!-- Secondary text, captions, units. -->
     <color name="encre_douce">#56656F</color>
-    <!-- Teinte de signal : disponibilité et éléments interactifs. -->
+    <!-- The signal hue: availability and interactive elements. -->
     <color name="signal">#00636F</color>
-    <!-- Attire l'œil sur ce qui manque : zéro vélo, zéro place, hors service. -->
+    <!-- Draws the eye to what is missing: no bike, no dock, out of service. -->
     <color name="alerte">#9C4A00</color>
 
-    <!-- Échelle de disponibilité, dérivée de la teinte de signal. -->
+    <!-- The availability scale, derived from the signal hue. -->
     <color name="dispo_faible">#B8D5D8</color>
     <color name="dispo_moyenne">#5BA1AA</color>
     <color name="dispo_bonne">#00636F</color>
-    <!-- Chiffre posé sur chacun des trois remplissages. -->
+    <!-- The figure laid on each of the three fills. -->
     <color name="dispo_faible_encre">#0E1519</color>
     <color name="dispo_moyenne_encre">#0E1519</color>
     <color name="dispo_bonne_encre">#FFFFFF</color>
 
-    <!-- Encre posée sur un aplat de la teinte de signal : bouton actif,
-         indicateur bien fourni. S'inverse d'un thème à l'autre. -->
+    <!-- Ink laid on a flat of the signal hue: active button, well-stocked
+         indicator. It inverts from one theme to the other. -->
     <color name="surface_on_signal">#FAFCFD</color>
 
-    <!-- Traits de séparation, contours de champs. -->
+    <!-- Separator strokes, field outlines. -->
     <color name="trait">#CCD5DA</color>
 
-    <!-- Teinte de signal éclaircie, pour les surfaces inversées — bandeau d'alerte notamment, dont le fond est sombre même en thème clair. -->
+    <!-- The signal hue lightened, for inverted surfaces — the alert bar in particular, whose background is dark even in the light theme. -->
     <color name="signal_inverse">#3FBFCE</color>
 
-    <!-- Fond des surfaces inversées. -->
+    <!-- The background of inverted surfaces. -->
     <color name="surface_inverse">#0E1519</color>
 
-    <!-- Encre posée sur une surface inversée. -->
+    <!-- Ink laid on an inverted surface. -->
     <color name="encre_inverse">#FAFCFD</color>
 
     <!--
-        Palette du fond de carte (SPEC §7).
+        The base map's palette (SPEC §7).
 
-        Volontairement DÉSATURÉE : la carte est un décor, les stations sont le
-        sujet. Chaque teinte est tirée vers le gris pour que les marqueurs
-        pétrole ressortent sans avoir à crier.
+        Deliberately DESATURATED: the map is scenery, the stations are the
+        subject. Every hue is pulled towards grey so the teal markers stand out
+        without having to shout.
 
-        Ces jetons sont injectés dans assets/map/style.json au chargement : le
-        style ne contient aucune couleur en dur, et le thème sombre ne change
-        que ces valeurs, jamais la structure des couches.
+        These tokens are injected into assets/map/style.json at load time: the
+        style holds no hard-coded colour, and the dark theme changes only these
+        values, never the layers' structure.
     -->
     <color name="map_land">#EEF1F3</color>
     <color name="map_water">#C9D7DD</color>

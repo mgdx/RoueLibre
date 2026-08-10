@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Jetons d'espacement et de forme — SPEC.md §7.
+    Spacing and shape tokens — SPEC.md §7.
 
-    Une seule échelle d'espacement, un seul rayon d'arrondi, appliqués partout.
-    Aucune taille n'est écrite dans un layout.
+    One spacing scale, one corner radius, applied everywhere. No size is
+    written into a layout.
 
-    Le rayon est volontairement petit : dans cette interface, le SEUL élément
-    parfaitement rond est l'indicateur de disponibilité. Tout le reste est
-    presque droit, ce qui fait ressortir l'indicateur par contraste de forme
-    plutôt que par surenchère de couleur. C'est aussi ce qui éloigne
-    l'application de l'empilement de cartes très arrondies que produit un
-    thème Material par défaut.
+    The radius is deliberately small: in this interface the ONLY perfectly
+    round element is the availability indicator. Everything else is nearly
+    straight, which makes the indicator stand out through contrast of shape
+    rather than through louder colour. It is also what keeps the application
+    away from the stack of heavily rounded cards a default Material theme
+    produces.
 
-    L'échelle est déclarée en entier même si tous ses barreaux ne servent pas
-    encore : c'est ce qui en fait un système. Piocher une valeur au cas par cas
-    quand le besoin se présente est exactement ce qu'une échelle empêche.
+    The scale is declared in full even though not all its rungs are used yet:
+    that is what makes it a system. Picking a value case by case as the need
+    arises is exactly what a scale prevents.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
 
-    <!-- Échelle d'espacement, base 4. -->
+    <!-- Spacing scale, base 4. -->
     <dimen name="space_xs">4dp</dimen>
     <dimen name="space_s">8dp</dimen>
     <dimen name="space_m">12dp</dimen>
@@ -27,20 +27,20 @@
     <dimen name="space_xxl">32dp</dimen>
     <dimen name="space_xxxl">48dp</dimen>
 
-    <!-- Rayon d'arrondi unique. -->
+    <!-- The single corner radius. -->
     <dimen name="radius">4dp</dimen>
-    <!-- Épaisseur des traits de séparation et des contours. -->
+    <!-- The thickness of separator strokes and outlines. -->
     <dimen name="stroke">1dp</dimen>
 
-    <!-- Cible tactile minimale, imposée par le SPEC §7. -->
+    <!-- The minimum touch target, imposed by SPEC §7. -->
     <dimen name="touch_target_min">48dp</dimen>
 
-    <!-- Indicateur de disponibilité : l'élément signature. Sa taille est
-         calibrée pour rester lisible à bout de bras, en marchant. -->
+    <!-- The availability indicator: the signature element. Its size is
+         calibrated to stay legible at arm's length, while walking. -->
     <dimen name="indicator_size">52dp</dimen>
     <dimen name="indicator_ring">4dp</dimen>
 
-    <!-- Échelle typographique. -->
+    <!-- Typographic scale. -->
     <dimen name="text_title">22sp</dimen>
     <dimen name="text_indicator">24sp</dimen>
     <dimen name="text_body">16sp</dimen>

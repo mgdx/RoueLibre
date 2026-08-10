@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Jetons typographiques — SPEC.md §7.
+    Typographic tokens — SPEC.md §7.
 
-    Deux familles, chacune choisie pour une raison précise.
+    Two families, each chosen for a precise reason.
 
-    · Bricolage Grotesque (SIL OFL) porte les chiffres et les titres. Les
-      nombres de vélos sont l'information centrale de l'application ; ils
-      méritent une lettre qui ait du caractère, et cette grotesque en a — des
-      chiffres larges, ouverts, reconnaissables de loin.
+    · Bricolage Grotesque (SIL OFL) carries the figures and the titles. Bike
+      counts are the application's central information; they deserve letters
+      with character, and this grotesque has it — wide, open figures,
+      recognisable from a distance.
 
-    · Atkinson Hyperlegible (SIL OFL, Braille Institute of America) porte tout
-      le reste. Elle a été dessinée pour la basse vision : le zéro barré, le
-      « 1 » à empattement, le « l » recourbé sont distincts les uns des
-      autres. Pour une application lue en marchant, ce n'est pas un ornement.
+    · Atkinson Hyperlegible (SIL OFL, Braille Institute of America) carries
+      everything else. It was drawn for low vision: the slashed zero, the
+      serifed "1" and the curved "l" are distinct from one another. For an
+      application read while walking, that is not an ornament.
 
-    Les deux sont embarquées dans l'APK : aucune police n'est téléchargée, ce
-    qui passerait par un service tiers (SPEC §2, C2 et C3).
+    Both are embedded in the APK: no font is downloaded, which would go
+    through a third-party service (SPEC §2, C2 and C3).
 
-    Bricolage est distribuée en police variable, mais `fontVariationSettings`
-    n'existe qu'à partir de l'API 28 : sur un Android 8, les graisses
-    demandées seraient ignorées et les titres s'afficheraient maigres. Deux
-    instances statiques sont donc figées à la génération, aux seules graisses
-    utilisées. Elles pèsent 182 ko à elles deux, contre 408 ko pour la police
-    variable complète — la contrainte de compatibilité a aussi allégé l'APK.
-    Voir tools/README.md pour la commande de régénération.
+    Bricolage is distributed as a variable font, but `fontVariationSettings`
+    only exists from API 28 on: on an Android 8 the requested weights would be
+    ignored and the titles would show thin. Two static instances are therefore
+    frozen at generation time, at the only weights used. Together they weigh
+    182 kB against 408 kB for the complete variable font — the compatibility
+    constraint also lightened the APK. See tools/README.md for the
+    regeneration command.
 
-    Les chiffres sont réglés en chasse fixe (« tnum ») partout où ils
-    s'alignent en colonne, pour que la liste ne tressaute pas à chaque
-    rafraîchissement.
+    The figures are set in fixed pitch ("tnum") wherever they line up in a
+    column, so the list does not jitter on every refresh.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
 
-    <!-- Titre d'écran et de section. -->
+    <!-- Screen and section titles. -->
     <style name="TextAppearance.RoueLibre.Title" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:fontFamily">@font/bricolage_semibold</item>
         <item name="android:textSize">@dimen/text_title</item>
@@ -39,14 +38,14 @@
         <item name="android:letterSpacing">-0.01</item>
     </style>
 
-    <!-- Corps de texte, noms de stations. -->
+    <!-- Body text, station names. -->
     <style name="TextAppearance.RoueLibre.Body" parent="TextAppearance.Material3.BodyLarge">
         <item name="android:fontFamily">@font/atkinson</item>
         <item name="android:textSize">@dimen/text_body</item>
         <item name="android:textColor">@color/encre</item>
     </style>
 
-    <!-- Informations d'appui : distance, code postal, âge de la donnée. -->
+    <!-- Supporting information: distance, postcode, age of the data. -->
     <style name="TextAppearance.RoueLibre.Secondary" parent="TextAppearance.Material3.BodyMedium">
         <item name="android:fontFamily">@font/atkinson</item>
         <item name="android:textSize">@dimen/text_secondary</item>
@@ -54,7 +53,7 @@
         <item name="android:fontFeatureSettings">tnum</item>
     </style>
 
-    <!-- Étiquettes courtes, en capitales espacées. -->
+    <!-- Short labels, in spaced capitals. -->
     <style name="TextAppearance.RoueLibre.Label" parent="TextAppearance.Material3.LabelMedium">
         <item name="android:fontFamily">@font/atkinson</item>
         <item name="android:textSize">@dimen/text_label</item>
@@ -64,10 +63,10 @@
     </style>
 
     <!--
-        Bascule vélos / places. Le style Material par défaut colore l'état
-        actif avec `colorSecondaryContainer`, un rôle que le jeu de jetons du
-        projet n'utilise pas : plutôt que de détourner ce rôle pour tout le
-        thème, la bascule porte ses propres listes d'états.
+        The bikes / docks toggle. The default Material style colours the
+        active state with `colorSecondaryContainer`, a role the project's token
+        set does not use: rather than divert that role for the whole theme, the
+        toggle carries its own state lists.
     -->
     <style name="Widget.RoueLibre.Toggle" parent="Widget.Material3.Button.OutlinedButton">
         <item name="backgroundTint">@color/toggle_background</item>
@@ -75,16 +74,16 @@
         <item name="android:textColor">@color/toggle_text</item>
         <item name="iconTint">@color/toggle_text</item>
         <item name="android:textAppearance">@style/TextAppearance.RoueLibre.Body</item>
-        <!-- Material arrondit ses boutons en gélule via un rôle de forme à
-             part, que la redéfinition globale du rayon n'atteint pas. Sans
-             cela, la bascule serait le second élément rond de l'interface et
-             volerait la vedette à l'indicateur. -->
+        <!-- Material rounds its buttons into pills through a separate shape
+             role, which the global radius override does not reach. Without
+             this, the toggle would be the interface's second round element and
+             would steal the indicator's thunder. -->
         <item name="shapeAppearance">@style/ShapeAppearance.RoueLibre</item>
     </style>
 
     <!--
-        Champ de recherche. Comme la bascule, il porte ses propres couleurs
-        plutôt que de détourner des rôles Material pour tout le thème.
+        The search field. Like the toggle, it carries its own colours rather
+        than diverting Material roles for the whole theme.
     -->
     <style name="Widget.RoueLibre.SearchField"
         parent="Widget.Material3.TextInputLayout.OutlinedBox">
@@ -99,10 +98,10 @@
     </style>
 
     <!--
-        Le chiffre de l'indicateur de disponibilité n'a pas de style ici : la
-        vue qui le dessine peint directement sur le canevas, sans TextView, et
-        lit sa taille dans @dimen/text_indicator. Un TextAppearance de plus
-        serait un jeton que rien ne pourrait appliquer.
+        The availability indicator's figure has no style here: the view that
+        draws it paints straight onto the canvas, without a TextView, and reads
+        its size from @dimen/text_indicator. One more TextAppearance would be a
+        token nothing could apply.
     -->
 
 </resources>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Jetons de couleur — thème sombre. SPEC.md §7.
+    Colour tokens — dark theme. SPEC.md §7.
 
-    Mêmes noms qu'en thème clair, valeurs redéfinies. Ce n'est pas une
-    inversion : le fond est une ardoise bleutée et non du noir, la teinte de
-    signal est éclaircie pour tenir sur fond sombre, et l'échelle de
-    disponibilité s'inverse en luminance — sur fond sombre, « plus d'encre »
-    devient « plus de lumière ».
+    The same names as in the light theme, with redefined values. This is not an
+    inversion: the background is a blued slate rather than black, the signal
+    hue is lightened to hold on a dark background, and the availability scale
+    inverts in luminance — on a dark background, "more ink" becomes "more
+    light".
 
-    Contrastes vérifiés : le plus faible du jeu est de 4,84:1.
+    Contrasts verified: the lowest in the set is 4.84:1.
 -->
 <resources>
 
@@ -26,22 +26,22 @@
     <color name="dispo_moyenne_encre">#E7EDF1</color>
     <color name="dispo_bonne_encre">#0E1418</color>
 
-    <!-- Encre posée sur un aplat de la teinte de signal. -->
+    <!-- Ink laid on a flat of the signal hue. -->
     <color name="surface_on_signal">#0E1418</color>
 
     <color name="trait">#2A363F</color>
 
-    <!-- Teinte de signal assombrie, pour les surfaces inversées. -->
+    <!-- The signal hue darkened, for inverted surfaces. -->
     <color name="signal_inverse">#00636F</color>
 
-    <!-- Fond des surfaces inversées. -->
+    <!-- The background of inverted surfaces. -->
     <color name="surface_inverse">#E7EDF1</color>
 
-    <!-- Encre posée sur une surface inversée. -->
+    <!-- Ink laid on an inverted surface. -->
     <color name="encre_inverse">#0E1418</color>
 
-    <!-- Palette du fond de carte, thème sombre. Même désaturation, valeurs
-         inversées : la carte reste un décor sous les marqueurs. -->
+    <!-- The base map's palette, dark theme. The same desaturation with
+         inverted values: the map stays scenery under the markers. -->
     <color name="map_land">#11171C</color>
     <color name="map_water">#16232B</color>
     <color name="map_greenery">#17211C</color>
