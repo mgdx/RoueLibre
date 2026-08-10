@@ -273,7 +273,8 @@ class MapFragment : Fragment() {
         // disponibles. Laisser un cran permet de s'approcher un peu sans que
         // le texte devienne illisible.
         map.setMaxZoomPreference(configuration.map.maxZoom.toDouble() + 1)
-        map.cameraPosition = lastCamera ?: openingCamera(configuration)
+        map.cameraPosition = lastCamera?.takeIf { it.suits(configuration) }
+            ?: openingCamera(configuration)
 
         map.addOnMapClickListener(::onMapClicked)
 
@@ -290,6 +291,20 @@ class MapFragment : Fragment() {
                 moveCameraTo(target)
             }
         }
+    }
+
+    /**
+     * Dit si un cadrage retenu vaut encore pour cette ville.
+     *
+     * La caméra survit à la destruction de la vue, pour qu'un aller-retour vers
+     * un autre écran ne fasse pas tout perdre. Mais elle survit aussi à un
+     * changement de ville : reprise telle quelle, elle rouvrirait la carte de
+     * Paris sur Lille, hors des tuiles, sur un écran gris que rien n'explique.
+     */
+    private fun CameraPosition.suits(configuration: CityConfiguration): Boolean {
+        val box = configuration.boundingBox ?: return true
+        val centre = target ?: return false
+        return Coordinates(centre.latitude, centre.longitude) in box
     }
 
     /**

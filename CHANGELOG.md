@@ -41,6 +41,11 @@ qui n'a aucun effet visible.
 
 ### Corrigé
 
+- **La carte rouvrait sur le cadrage de la ville précédente.** Le cadrage
+  survit à la destruction de la vue pour qu'un aller-retour ne fasse rien
+  perdre ; il survivait aussi au changement de ville, et ouvrait Paris sur
+  Lille, hors des tuiles, sur un écran gris. Il n'est repris que s'il tombe
+  dans l'emprise de la ville servie.
 - **Les stations d'une ville restaient affichées après en avoir changé.**
   Le cache des stations ne connaissait pas la ville ; hors ligne, rien ne
   venait les remplacer, et la carte de Paris montrait les stations de Lille.
