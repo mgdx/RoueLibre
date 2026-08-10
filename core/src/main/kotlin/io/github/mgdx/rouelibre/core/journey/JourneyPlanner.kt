@@ -17,37 +17,35 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * Choisit le meilleur couple de stations pour un trajet porte-à-porte.
+ * Chooses the best pair of stations for a door-to-door journey.
  *
- * C'est le cœur métier de l'application (SPEC.md §6). Le principe tient en une
- * phrase : **ne jamais se contenter de la station la plus proche**. La station
- * la plus proche du départ peut n'avoir qu'un vélo, ou obliger à un détour à
- * l'arrivée ; c'est le couple entier qu'il faut optimiser.
+ * This is the application's business core (SPEC.md §6). The principle fits in
+ * one sentence: **never settle for the nearest station**. The station nearest
+ * the departure point may hold a single bike, or force a detour at the far end;
+ * it is the whole pair that must be optimised.
  *
- * ## Tenir les trois secondes
+ * ## Staying under three seconds
  *
- * Cinq stations au départ et cinq à l'arrivée font vingt-cinq trajets à vélo à
- * évaluer. Mesuré sur le graphe lillois, un trajet de dix kilomètres demande
- * quatre dixièmes de seconde : les calculer tous prendrait dix secondes, très
- * au-delà du budget du SPEC §6.
+ * Five departure stations and five arrival stations make twenty-five bike legs
+ * to evaluate. Measured on the Lille graph, a ten-kilometre leg takes four
+ * tenths of a second: computing them all would take ten seconds, far beyond the
+ * budget of SPEC §6.
  *
- * L'algorithme s'y prend en deux temps.
+ * The algorithm goes about it in two steps.
  *
- * Il **classe** d'abord les couples par une borne inférieure du temps total —
- * la distance à vol d'oiseau parcourue à une vitesse que personne n'atteint en
- * ville. Aucun trajet réel ne peut faire mieux, si bien que les couples en tête
- * de ce classement sont les seuls à pouvoir gagner. Seuls les
- * [JourneySettings.maxRideEvaluations] premiers sont ensuite calculés pour de
- * bon : six au lieu de vingt-cinq.
+ * It first **ranks** the pairs by a lower bound on the total time — the
+ * straight-line distance covered at a speed nobody reaches in town. No real
+ * journey can beat that, so the pairs at the top of that ranking are the only
+ * ones that can win. Only the first [JourneySettings.maxRideEvaluations] are
+ * then computed for real: six instead of twenty-five.
  *
- * Il les calcule ensuite **en parallèle**. Ces six trajets sont indépendants,
- * et un téléphone a plusieurs cœurs ; les enchaîner ne servirait qu'à
- * additionner leurs durées. Mesuré sur l'émulateur, l'enchaînement demandait
- * 2,4 s là où le budget du SPEC §6 est de 3 s — une marge qui n'aurait pas
- * survécu à un appareil milieu de gamme.
+ * It then computes them **in parallel**. Those six legs are independent, and a
+ * phone has several cores; chaining them would only add up their durations.
+ * Measured on the emulator, chaining took 2.4 s against the 3 s budget of
+ * SPEC §6 — a margin that would not have survived a mid-range device.
  *
- * @property router accès au moteur d'itinéraire.
- * @property settings réglages de l'algorithme.
+ * @property router access to the routing engine.
+ * @property settings the algorithm's settings.
  */
 public class JourneyPlanner(
     private val router: Router,
@@ -55,13 +53,13 @@ public class JourneyPlanner(
 ) {
 
     /**
-     * Compose le meilleur trajet entre deux points.
+     * Composes the best journey between two points.
      *
-     * @param origin point de départ.
-     * @param destination point d'arrivée.
-     * @param stations les stations connues et leur dernier état.
-     * @return le trajet retenu et ses alternatives, ou ce qui a empêché de le
-     *   composer.
+     * @param origin departure point.
+     * @param destination arrival point.
+     * @param stations the known stations and their last state.
+     * @return the chosen journey and its alternatives, or what prevented it
+     *   from being composed.
      */
     public suspend fun plan(
         origin: Coordinates,
@@ -81,10 +79,9 @@ public class JourneyPlanner(
             countOf = { it.availability?.takeIf { state -> state.canAcceptBike }?.docksAvailable },
         )
 
-        // La marche directe n'est calculée d'emblée que si elle a une chance
-        // de gagner. Sur un trajet de huit kilomètres, elle ne peut pas, et la
-        // calculer coûtait un cinquième du budget de temps pour un résultat
-        // qu'on savait d'avance ne pas retenir.
+        // The direct walk is only computed up front if it stands a chance of
+        // winning. Over eight kilometres it cannot, and computing it cost a
+        // fifth of the time budget for a result we knew we would discard.
         val couldWalkAllTheWay = origin.distanceInMetresTo(destination) <=
             settings.directWalkThresholdMetres
         val directWalk = if (couldWalkAllTheWay) {
@@ -96,9 +93,9 @@ public class JourneyPlanner(
         if (departures.isEmpty()) return giveUp(origin, destination, NoBikeJourney.NoBikeNearby)
         if (arrivals.isEmpty()) return giveUp(origin, destination, NoBikeJourney.NoDockNearby)
 
-        // Les marches d'accès sont courtes et peu nombreuses ; elles servent à
-        // chaque couple, donc on les calcule toutes — mais de front, pour la
-        // même raison que les trajets à vélo.
+        // The access walks are short and few; every pair uses them, so all of
+        // them are computed — but concurrently, for the same reason as the
+        // bike legs.
         val walksToStation = coroutineScope {
             departures.map { candidate ->
                 candidate to async {
@@ -128,7 +125,7 @@ public class JourneyPlanner(
         val best = ranked.first()
         return JourneyPlan.Found(
             best = best,
-            // Trois alternatives, comme le demande le SPEC §6.
+            // Three alternatives, as SPEC §6 asks for.
             alternatives = ranked.drop(1).take(ALTERNATIVE_COUNT),
             directWalk = directWalk,
             walkingIsFaster = directWalk != null && directWalk.duration < best.travelTime,
@@ -136,11 +133,11 @@ public class JourneyPlanner(
     }
 
     /**
-     * Retient les stations les plus proches qui rendent réellement le service.
+     * Keeps the nearest stations that actually provide the service.
      *
-     * Une station hors service, ou vide du côté où on en a besoin, n'est pas
-     * une candidate : proposer un trajet qui s'appuie dessus serait proposer
-     * un trajet impossible.
+     * A station out of service, or empty on the side we need, is not a
+     * candidate: proposing a journey that leans on it would be proposing an
+     * impossible journey.
      */
     private fun candidates(
         stations: List<StationWithAvailability>,
@@ -156,19 +153,18 @@ public class JourneyPlanner(
                 straightLineMetres = near.distanceInMetresTo(entry.station.position),
             )
         }
-        // Une station hors de portée de marche n'est pas une candidate, même
-        // s'il n'y en a pas d'autre : mieux vaut annoncer qu'aucune station
-        // n'est utilisable que proposer trois kilomètres à pied pour aller
-        // chercher un vélo.
+        // A station out of walking range is not a candidate, even if there is
+        // no other: announcing that no station is usable beats proposing three
+        // kilometres on foot to go and fetch a bike.
         .filter { it.straightLineMetres <= settings.maxWalkToStationMetres }
         .sortedBy { it.straightLineMetres }
         .take(limit)
 
     /**
-     * Prépare les couples exploitables, chacun avec sa borne inférieure.
+     * Prepares the usable pairs, each with its lower bound.
      *
-     * Un couple dont une des marches n'a pas pu être calculée est écarté :
-     * sans elle, on ne saurait pas composer le trajet complet.
+     * A pair whose walking legs could not both be computed is dropped: without
+     * one of them, the complete journey cannot be composed.
      */
     private fun buildPairs(
         departures: List<Candidate>,
@@ -191,12 +187,11 @@ public class JourneyPlanner(
     }.sortedBy { it.lowerBound }
 
     /**
-     * Borne inférieure du temps de classement d'un couple.
+     * Lower bound on a pair's ranking time.
      *
-     * Elle doit être **optimiste** : si elle surestimait, on écarterait
-     * peut-être le meilleur trajet sans jamais le calculer. Le trajet à vélo
-     * est donc supposé rectiligne et parcouru à une vitesse que personne
-     * n'atteint réellement en ville.
+     * It must be **optimistic**: were it to overestimate, we might discard the
+     * best journey without ever computing it. The bike leg is therefore assumed
+     * to be a straight line ridden at a speed nobody really reaches in town.
      */
     private fun lowerBoundOf(
         departure: Candidate,
@@ -213,16 +208,15 @@ public class JourneyPlanner(
     }
 
     /**
-     * Calcule pour de bon les couples les plus prometteurs.
+     * Computes the most promising pairs for real.
      *
-     * Les couples arrivent triés par borne inférieure ; seuls les premiers
-     * peuvent gagner, et ce sont les seuls calculés. Ils le sont de front :
-     * six trajets indépendants sur un appareil qui a plusieurs cœurs n'ont
-     * aucune raison d'attendre les uns après les autres.
+     * Pairs arrive sorted by lower bound; only the first ones can win, and they
+     * are the only ones computed. They are computed concurrently: six
+     * independent legs on a device with several cores have no reason to wait
+     * for one another.
      *
-     * Un couple dont le trajet à vélo échoue est simplement écarté — deux
-     * stations peuvent être séparées par un obstacle que le vélo ne franchit
-     * pas.
+     * A pair whose bike leg fails is simply dropped — two stations can be
+     * separated by an obstacle a bike does not cross.
      */
     private suspend fun evaluate(pairs: List<Pair>): List<JourneyOption> = coroutineScope {
         pairs.take(settings.maxRideEvaluations)
@@ -257,12 +251,11 @@ public class JourneyPlanner(
     }
 
     /**
-     * Pénalité de fiabilité du couple (SPEC §6).
+     * The pair's reliability penalty (SPEC §6).
      *
-     * Au départ, le risque est celui de trouver la station vide après la
-     * marche d'accès. À l'arrivée, celui de la trouver pleine — et l'exposition
-     * est plus longue, puisqu'on y parvient après la marche, la prise du vélo
-     * et le trajet.
+     * At the departure end, the risk is finding the station empty after the
+     * access walk. At the arrival end, finding it full — and the exposure is
+     * longer, since one gets there after the walk, the pick-up and the ride.
      */
     private fun riskOf(
         departure: Candidate,
@@ -293,11 +286,11 @@ public class JourneyPlanner(
     }
 
     /**
-     * Rend la marche directe à défaut de trajet à vélo.
+     * Returns the direct walk when no bike journey is possible.
      *
-     * Elle est calculée ici même si la distance la rendait inutile pour la
-     * comparaison : faute de vélo, c'est la seule réponse qu'on puisse donner,
-     * et la donner vaut le temps qu'elle coûte.
+     * It is computed here even if the distance made it useless for comparison:
+     * without a bike it is the only answer we can give, and giving it is worth
+     * the time it costs.
      */
     private suspend fun giveUp(
         origin: Coordinates,
@@ -313,14 +306,14 @@ public class JourneyPlanner(
         }
     }
 
-    /** Une station retenue, avec ce qui la qualifie. */
+    /** A retained station, with what qualifies it. */
     private data class Candidate(
         val station: Station,
         val count: Int,
         val straightLineMetres: Double,
     )
 
-    /** Un couple de stations, avec ses marches et sa borne inférieure. */
+    /** A pair of stations, with its walking legs and its lower bound. */
     private data class Pair(
         val departure: Candidate,
         val arrival: Candidate,
@@ -330,28 +323,26 @@ public class JourneyPlanner(
     )
 
     private companion object {
-        /** Nombre d'alternatives proposées en plus du meilleur trajet. */
+        /** How many alternatives are offered besides the best journey. */
         const val ALTERNATIVE_COUNT = 3
 
         /**
-         * Vitesse servant à la borne inférieure, en mètres par seconde —
-         * vingt-cinq kilomètres à l'heure.
+         * The speed used for the lower bound, in metres per second —
+         * twenty-five kilometres an hour.
          *
-         * Délibérément inatteignable sur un vélo de libre-service en ville, où
-         * la moyenne tourne autour de treize. La borne doit rester optimiste :
-         * une vitesse réaliste risquerait d'écarter le meilleur couple avant
-         * même de l'avoir calculé.
+         * Deliberately unreachable on a share bike in town, where the average
+         * hovers around thirteen. The bound must stay optimistic: a realistic
+         * speed would risk discarding the best pair before ever computing it.
          */
         const val OPTIMISTIC_CYCLING_METRES_PER_SECOND = 7.0
     }
 }
 
 /**
- * Traduit un échec du moteur en cause exploitable par l'algorithme.
+ * Translates an engine failure into a cause the algorithm can use.
  *
- * Utilisé par la couche appelante quand aucun itinéraire n'a pu être tracé :
- * un graphe absent et une destination hors emprise n'appellent pas le même
- * message.
+ * Used by the calling layer when no route could be traced: a missing graph and
+ * a destination outside the covered area do not call for the same message.
  */
 public fun RoutingFailure.toNoBikeJourney(): NoBikeJourney = when (this) {
     RoutingFailure.GraphMissing -> NoBikeJourney.GraphMissing

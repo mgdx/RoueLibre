@@ -3,23 +3,23 @@ package io.github.mgdx.rouelibre.core.intent
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 
 /**
- * Un lieu reçu d'une autre application (SPEC §7.8).
+ * A place received from another application (SPEC §7.8).
  *
- * Deux formes seulement, parce qu'elles appellent deux suites différentes :
- * un point est déjà placé, une recherche doit encore être résolue par l'index
- * d'adresses — sur l'appareil, sans qu'aucune requête ne parte.
+ * Two forms only, because they call for two different follow-ups: a point is
+ * already located, a search still has to be resolved by the address index — on
+ * the device, without a single request going out.
  */
 public sealed interface PlaceRequest {
 
-    /** Le libellé reçu, s'il y en avait un. */
+    /** The label received, if there was one. */
     public val label: String?
 
     /**
-     * Un point désigné par ses coordonnées.
+     * A point designated by its coordinates.
      *
-     * @property coordinates l'endroit visé.
-     * @property label ce que l'expéditeur en a dit, à afficher plutôt que des
-     *   coordonnées brutes.
+     * @property coordinates the place aimed at.
+     * @property label what the sender said about it, to be shown rather than
+     *   raw coordinates.
      */
     public data class Point(
         public val coordinates: Coordinates,
@@ -27,9 +27,9 @@ public sealed interface PlaceRequest {
     ) : PlaceRequest
 
     /**
-     * Un lieu décrit en toutes lettres, à chercher dans l'index.
+     * A place described in words, to be looked up in the index.
      *
-     * @property text ce que l'expéditeur a écrit.
+     * @property text what the sender wrote.
      */
     public data class Search(public val text: String) : PlaceRequest {
         override val label: String? get() = text
@@ -37,10 +37,9 @@ public sealed interface PlaceRequest {
 }
 
 /**
- * Analyse une URI `geo:` ou `google.navigation:` (SPEC §7.8).
+ * Parses a `geo:` or `google.navigation:` URI (SPEC §7.8).
  *
- * Toutes les formes rencontrées en pratique sont acceptées, parce qu'aucune
- * n'est rare :
+ * Every form met in practice is accepted, because none of them is rare:
  *
  * ```
  * geo:50.6371,3.0630
@@ -51,12 +50,12 @@ public sealed interface PlaceRequest {
  * google.navigation:q=50.6371,3.0630
  * ```
  *
- * Le `geo:0,0` d'en-tête est un usage établi : il veut dire « le point est
- * dans la requête, pas ici ». Le prendre au pied de la lettre enverrait
- * l'utilisateur au large du golfe de Guinée.
+ * The leading `geo:0,0` is an established convention: it means "the point is in
+ * the query, not here". Taking it literally would send the user out into the
+ * Gulf of Guinea.
  *
- * @param uri l'URI reçue, telle quelle.
- * @return le lieu demandé, ou `null` si l'URI ne décrit rien d'exploitable.
+ * @param uri the URI received, as it came.
+ * @return the place requested, or `null` if the URI describes nothing usable.
  */
 public fun parsePlaceUri(uri: String): PlaceRequest? {
     val trimmed = uri.trim()
@@ -73,16 +72,15 @@ public fun parsePlaceUri(uri: String): PlaceRequest? {
 }
 
 /**
- * Extrait un lieu d'un lien web cartographique (SPEC §7.8).
+ * Extracts a place from a web map link (SPEC §7.8).
  *
- * Ces liens ne peuvent pas être vérifiés automatiquement : les domaines
- * concernés n'appartiennent pas au projet, et depuis Android 12 ils ne
- * parviennent à l'application que si l'utilisateur l'autorise dans les
- * paramètres du système. La marche à suivre est expliquée dans l'écran « À
- * propos » et dans le `README.md`, faute de quoi le comportement passerait
- * pour un défaut.
+ * These links cannot be verified automatically: the domains involved do not
+ * belong to the project, and since Android 12 they only reach the application
+ * if the user allows it in the system settings. The procedure is explained in
+ * the "about" screen and in the `README.md`, failing which the behaviour would
+ * look like a defect.
  *
- * Trois écritures couvrent l'essentiel de ce qui circule :
+ * Three spellings cover most of what circulates:
  *
  * ```
  * https://www.google.com/maps/@50.6371,3.0630,17z
@@ -90,10 +88,10 @@ public fun parsePlaceUri(uri: String): PlaceRequest? {
  * https://www.openstreetmap.org/#map=17/50.6371/3.0630
  * ```
  *
- * Rien n'est téléchargé pour les résoudre : un lien raccourci, dont le lieu
- * n'apparaît qu'après redirection, n'est donc pas reconnu. Suivre la
- * redirection ferait sortir une requête vers un tiers — et lui dirait où va
- * l'utilisateur, ce que la contrainte C3 interdit.
+ * Nothing is downloaded to resolve them: a shortened link, whose place only
+ * appears after a redirect, is therefore not recognised. Following the redirect
+ * would send a request to a third party — and tell it where the user is going,
+ * which constraint C3 forbids.
  */
 private fun parseWebMapLink(uri: String): PlaceRequest? {
     AT_COORDINATES.find(uri)?.let { match ->
@@ -104,15 +102,15 @@ private fun parseWebMapLink(uri: String): PlaceRequest? {
         parseCoordinates("${match.groupValues[1]},${match.groupValues[2]}")
             ?.let { return PlaceRequest.Point(it) }
     }
-    // Un « q= » de lien web porte parfois des coordonnées, parfois une
-    // adresse ; les deux se résolvent comme ailleurs.
+    // A web link's "q=" sometimes carries coordinates, sometimes an address;
+    // both resolve as they do elsewhere.
     return parseQuery(parametersOf(uri.substringAfter("://"))["q"])
 }
 
-/** « /@50.6371,3.0630 » — l'écriture de Google Maps. */
+/** "/@50.6371,3.0630" — the Google Maps spelling. */
 private val AT_COORDINATES = Regex("""@(-?\d{1,3}\.\d+),(-?\d{1,3}\.\d+)""")
 
-/** « #map=17/50.6371/3.0630 » — celle d'OpenStreetMap. */
+/** "#map=17/50.6371/3.0630" — the OpenStreetMap one. */
 private val OSM_HASH_COORDINATES =
     Regex("""#map=[\d.]+/(-?\d{1,3}\.\d+)/(-?\d{1,3}\.\d+)""")
 
@@ -120,17 +118,17 @@ private fun parseGeoBody(body: String): PlaceRequest? {
     val path = body.substringBefore('?')
     val parameters = parametersOf(body)
 
-    // La requête prime sur le chemin : quand les deux sont là, le chemin ne
-    // porte que le « 0,0 » de convention.
+    // The query wins over the path: when both are present, the path only
+    // carries the conventional "0,0".
     parseQuery(parameters["q"])?.let { return it }
     return parseCoordinates(path)?.let { PlaceRequest.Point(it) }
 }
 
 /**
- * Analyse la valeur d'un paramètre `q`.
+ * Parses the value of a `q` parameter.
  *
- * Elle porte soit des coordonnées, éventuellement suivies d'un libellé entre
- * parenthèses, soit une adresse en toutes lettres.
+ * It carries either coordinates, possibly followed by a label in parentheses,
+ * or an address in words.
  */
 private fun parseQuery(rawQuery: String?): PlaceRequest? {
     val query = rawQuery?.let(::decodeUriComponent)?.trim()?.takeIf { it.isNotEmpty() }
@@ -147,11 +145,11 @@ private fun parseQuery(rawQuery: String?): PlaceRequest? {
 }
 
 /**
- * Lit un couple « latitude,longitude ».
+ * Reads a "latitude,longitude" pair.
  *
- * @return les coordonnées, ou `null` si le texte n'en est pas un couple
- *   plausible. Une valeur hors des bornes terrestres est refusée plutôt que
- *   ramenée de force : elle trahit une autre convention, pas une position.
+ * @return the coordinates, or `null` if the text is not a plausible pair. A
+ *   value outside the earth's bounds is refused rather than clamped: it betrays
+ *   another convention, not a position.
  */
 private fun parseCoordinates(text: String): Coordinates? {
     val parts = text.split(',')
@@ -159,16 +157,16 @@ private fun parseCoordinates(text: String): Coordinates? {
     val latitude = parts[0].trim().toDoubleOrNull() ?: return null
     val longitude = parts[1].trim().toDoubleOrNull() ?: return null
     if (latitude !in -90.0..90.0 || longitude !in -180.0..180.0) return null
-    // « geo:0,0 » est l'en-tête conventionnel d'une URI dont le lieu est dans
-    // la requête ; ce n'est pas une destination au milieu de l'Atlantique.
+    // "geo:0,0" is the conventional header of a URI whose place is in the
+    // query; it is not a destination in the middle of the Atlantic.
     if (latitude == 0.0 && longitude == 0.0) return null
     return Coordinates(latitude, longitude)
 }
 
 private fun parametersOf(body: String): Map<String, String> {
-    // « geo: » sépare ses paramètres par un point d'interrogation, mais
-    // « google.navigation: » les met directement dans le corps : les deux
-    // formes se rencontrent, et la seconde n'a pas de séparateur à chercher.
+    // "geo:" separates its parameters with a question mark, but
+    // "google.navigation:" puts them straight in the body: both forms occur,
+    // and the second has no separator to look for.
     val query = if ('?' in body) body.substringAfter('?') else body
     if (query.isEmpty()) return emptyMap()
     return query.split('&').mapNotNull { parameter ->
@@ -179,12 +177,11 @@ private fun parametersOf(body: String): Map<String, String> {
 }
 
 /**
- * Décode les échappements d'une URI, sans dépendre d'Android.
+ * Decodes URI escapes, without depending on Android.
  *
- * Le module métier ne connaît pas `Uri.decode` ; il doit rester compilable et
- * testable sur la JVM (SPEC §14). Le `+` vaut espace, comme dans une requête
- * HTTP — c'est ainsi que les applications de cartographie écrivent leurs
- * adresses.
+ * The business module does not know `Uri.decode`; it must stay compilable and
+ * testable on the JVM (SPEC §14). A `+` means a space, as in an HTTP query —
+ * that is how mapping applications write their addresses.
  */
 private fun decodeUriComponent(value: String): String {
     val builder = StringBuilder(value.length)
@@ -218,22 +215,21 @@ private fun decodeUriComponent(value: String): String {
 }
 
 /**
- * Cherche un lieu dans un texte partagé (SPEC §7.8).
+ * Looks for a place inside shared text (SPEC §7.8).
  *
- * C'est le cas d'usage le plus fréquent en pratique : une adresse reçue par
- * messagerie, que l'on partage vers l'application. Le texte peut être une
- * adresse, un couple de coordonnées, une URI `geo:` collée, ou tout cela noyé
- * dans une phrase.
+ * This is the commonest case in practice: an address received over a messaging
+ * application, then shared into this one. The text may be an address, a
+ * coordinate pair, a pasted `geo:` URI, or any of those buried in a sentence.
  *
- * @param text le texte partagé, tel quel.
- * @return le lieu reconnu, ou `null` si le texte est vide.
+ * @param text the shared text, as it came.
+ * @return the place recognised, or `null` if the text is empty.
  */
 public fun findPlaceInText(text: String): PlaceRequest? {
     val trimmed = text.trim()
     if (trimmed.isEmpty()) return null
 
-    // Une URI collée dans le texte reste une URI : la reconnaître évite de
-    // chercher « geo:50.6371,3.0630 » dans l'index d'adresses.
+    // A URI pasted into the text is still a URI: recognising it avoids looking
+    // up "geo:50.6371,3.0630" in the address index.
     URI_IN_TEXT.find(trimmed)?.let { match ->
         parsePlaceUri(match.value)?.let { return it }
     }
@@ -253,15 +249,15 @@ public fun findPlaceInText(text: String): PlaceRequest? {
     return PlaceRequest.Search(trimmed)
 }
 
-/** Une URI `geo:` ou `google.navigation:` posée au milieu d'un texte. */
+/** A `geo:` or `google.navigation:` URI sitting in the middle of a text. */
 private val URI_IN_TEXT = Regex("""(?:geo|google\.navigation):\S+""", RegexOption.IGNORE_CASE)
 
 /**
- * Un couple de coordonnées décimales dans un texte.
+ * A pair of decimal coordinates inside a text.
  *
- * Le séparateur admet la virgule seule ou suivie d'espaces : les deux
- * s'écrivent, et une messagerie ajoute volontiers l'espace. La notation
- * française à virgule décimale — « 50,6371 » — n'est pas reconnue : elle est
- * indistinguable d'un couple de deux entiers.
+ * The separator accepts a comma alone or followed by spaces: both are written,
+ * and a messaging application readily adds the space. The French decimal-comma
+ * notation — "50,6371" — is not recognised: it is indistinguishable from a pair
+ * of two integers.
  */
 private val COORDINATES_IN_TEXT = Regex("""(-?\d{1,3}\.\d{3,})\s*,\s*(-?\d{1,3}\.\d{3,})""")

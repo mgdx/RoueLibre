@@ -22,39 +22,39 @@ import java.time.Instant
 import java.time.format.DateTimeParseException
 
 /*
- * Représentation des documents GBFS tels qu'ils arrivent sur le réseau.
+ * GBFS documents as they arrive over the network.
  *
- * Ces types collent au format publié et ne sortent pas de ce paquetage : le
- * reste de l'application manipule le modèle métier de `core.station`.
+ * These types stick to the published format and never leave this package: the
+ * rest of the application works with the domain model of `core.station`.
  *
- * Deux révisions de GBFS coexistent en production et sont toutes deux lues
- * ici. C'est la contrepartie nécessaire de la promesse du SPEC §4.1 — l'URL du
- * flux est réglable, donc « l'appli fonctionne avec n'importe quel réseau GBFS
- * du monde sans modification de code » — et une bonne part des réseaux sont
- * passés en 3.0 pendant que d'autres, dont le réseau lillois, restent en 2.x.
+ * Two revisions of GBFS coexist in production and both are read here. It is the
+ * necessary price of the promise of SPEC §4.1 — the feed URL is configurable,
+ * therefore "the application works with any GBFS network in the world without a
+ * code change" — and a good share of networks have moved to 3.0 while others,
+ * the Lille one among them, remain on 2.x.
  *
- * Les écarts absorbés :
+ * The differences absorbed:
  *
  * | | GBFS 2.x | GBFS 3.0 |
  * |---|---|---|
- * | liste des flux | `data.<langue>.feeds` | `data.feeds` |
- * | horodatage | entier POSIX | chaîne RFC 3339 |
- * | nom de station | chaîne | tableau `{text, language}` |
- * | vélos disponibles | `num_bikes_available` | `num_vehicles_available` |
+ * | feed list | `data.<language>.feeds` | `data.feeds` |
+ * | timestamp | POSIX integer | RFC 3339 string |
+ * | station name | string | `{text, language}` array |
+ * | bikes available | `num_bikes_available` | `num_vehicles_available` |
  *
- * Les flux d'avant GBFS 2.0 ajoutent deux libertés que le format interdit
- * depuis : un identifiant de station publié en nombre, et des drapeaux publiés
- * en `0` et `1`. Les refuser rendrait Vélib' Métropole — mille cinq cents
- * stations, le plus grand réseau de France — entièrement inexploitable pour
- * des écarts sans conséquence sur le sens.
+ * Feeds predating GBFS 2.0 add two liberties the format has since forbidden: a
+ * station identifier published as a number, and flags published as `0` and `1`.
+ * Refusing them would make Vélib' Métropole — fifteen hundred stations, the
+ * largest network in France — entirely unusable over differences that carry no
+ * consequence for meaning.
  */
 
 /**
- * Lit un horodatage GBFS, quel que soit son encodage.
+ * Reads a GBFS timestamp, whatever its encoding.
  *
- * GBFS 2.x publie un entier de secondes POSIX, GBFS 3.0 une chaîne RFC 3339.
- * Un producteur peut aussi ne rien publier du tout — le champ est alors absent
- * et la propriété reste nulle.
+ * GBFS 2.x publishes an integer of POSIX seconds, GBFS 3.0 an RFC 3339 string.
+ * A producer may also publish nothing at all — the field is then absent and the
+ * property stays null.
  */
 internal object FlexibleInstantSerializer : KSerializer<Instant> {
     override val descriptor: SerialDescriptor =
@@ -69,7 +69,7 @@ internal object FlexibleInstantSerializer : KSerializer<Instant> {
             Instant.parse(primitive.content)
         } catch (_: DateTimeParseException) {
             throw GbfsFormatException(
-                "horodatage illisible : « ${primitive.content} »",
+                "unreadable timestamp: \"${primitive.content}\"",
             )
         }
     }
@@ -80,12 +80,11 @@ internal object FlexibleInstantSerializer : KSerializer<Instant> {
 }
 
 /**
- * Lit un nom de station, qu'il soit une chaîne ou une liste traduite.
+ * Reads a station name, whether it is a string or a translated list.
  *
- * GBFS 3.0 a rendu les libellés multilingues. Aucune préférence de langue
- * n'est appliquée : la première traduction publiée est retenue, faute d'un
- * critère qui vaudrait mieux et parce qu'un nom de station est un toponyme,
- * rarement traduit en pratique.
+ * GBFS 3.0 made labels multilingual. No language preference is applied: the
+ * first translation published is kept, for want of a better criterion and
+ * because a station name is a place name, rarely translated in practice.
  */
 internal object FlexibleTextSerializer : KSerializer<String> {
     override val descriptor: SerialDescriptor =
@@ -100,9 +99,9 @@ internal object FlexibleTextSerializer : KSerializer<String> {
                 ?.get("text")
                 ?.jsonPrimitive
                 ?.content
-                ?: throw GbfsFormatException("libellé traduit vide")
+                ?: throw GbfsFormatException("empty translated label")
             is JsonObject -> element["text"]?.jsonPrimitive?.content
-                ?: throw GbfsFormatException("libellé sans champ « text »")
+                ?: throw GbfsFormatException("label without a \"text\" field")
         }
     }
 
@@ -112,12 +111,11 @@ internal object FlexibleTextSerializer : KSerializer<String> {
 }
 
 /**
- * Lit un drapeau que certains producteurs publient en entier plutôt qu'en
- * booléen.
+ * Reads a flag that some producers publish as an integer rather than a boolean.
  *
- * Le format impose un booléen, mais des flux réels envoient `0` et `1` ; les
- * refuser rendrait toutes les stations inexploitables pour un écart sans
- * conséquence sur le sens.
+ * The format mandates a boolean, but real feeds send `0` and `1`; refusing them
+ * would make every station unusable over a difference that carries no
+ * consequence for meaning.
  */
 internal object LenientBooleanSerializer : KSerializer<Boolean> {
     override val descriptor: SerialDescriptor =
@@ -128,7 +126,7 @@ internal object LenientBooleanSerializer : KSerializer<Boolean> {
         val primitive = jsonDecoder.decodeJsonElement().jsonPrimitive
         primitive.booleanOrNull?.let { return it }
         primitive.longOrNull?.let { return it != 0L }
-        throw GbfsFormatException("drapeau illisible : « ${primitive.content} »")
+        throw GbfsFormatException("unreadable flag: \"${primitive.content}\"")
     }
 
     override fun serialize(encoder: Encoder, value: Boolean) {
@@ -137,18 +135,17 @@ internal object LenientBooleanSerializer : KSerializer<Boolean> {
 }
 
 /**
- * Lit un identifiant de station, qu'il soit publié en chaîne ou en nombre.
+ * Reads a station identifier, whether published as a string or as a number.
  *
- * Le format impose une chaîne, et la plupart des producteurs la respectent.
- * Les flux d'avant GBFS 2.0 publient souvent un entier — c'est le cas de
- * Vélib' Métropole, le plus grand réseau de France avec ses mille cinq cents
- * stations, dont les identifiants ressemblent à `213688169`.
+ * The format mandates a string, and most producers respect it. Feeds predating
+ * GBFS 2.0 often publish an integer — that is the case of Vélib' Métropole, the
+ * largest network in France with its fifteen hundred stations, whose
+ * identifiers look like `213688169`.
  *
- * La conversion prend le texte brut du nombre, sans passer par un entier : un
- * identifiant est une étiquette, pas une quantité, et rien ne garantit qu'il
- * tienne dans un `Long`. C'est aussi ce qui garantit que les deux flux —
- * `station_information` et `station_status` — produisent la même clé de
- * jointure pour la même station.
+ * The conversion takes the number's raw text, without going through an integer:
+ * an identifier is a label, not a quantity, and nothing guarantees it fits in a
+ * `Long`. It is also what guarantees that both feeds — `station_information`
+ * and `station_status` — produce the same join key for the same station.
  */
 internal object FlexibleIdSerializer : KSerializer<String> {
     override val descriptor: SerialDescriptor =
@@ -158,7 +155,7 @@ internal object FlexibleIdSerializer : KSerializer<String> {
         val jsonDecoder = decoder as? JsonDecoder ?: return decoder.decodeString()
         val primitive = jsonDecoder.decodeJsonElement().jsonPrimitive
         return primitive.content.takeIf { it.isNotBlank() }
-            ?: throw GbfsFormatException("identifiant de station vide")
+            ?: throw GbfsFormatException("empty station identifier")
     }
 
     override fun serialize(encoder: Encoder, value: String) {
@@ -166,30 +163,29 @@ internal object FlexibleIdSerializer : KSerializer<String> {
     }
 }
 
-/** Enveloppe commune à tous les documents GBFS. */
+/** The envelope common to every GBFS document. */
 @Serializable
 internal data class GbfsEnvelope<T>(
     @SerialName("last_updated")
     @Serializable(with = FlexibleInstantSerializer::class)
     val lastUpdated: Instant? = null,
     /**
-     * Durée de validité annoncée, en secondes.
+     * The announced validity period, in seconds.
      *
-     * Elle n'est pas suivie aveuglément : le réseau lillois publie `ttl: 0`,
-     * ce qui signifierait « ne jamais mettre en cache » et conduirait à
-     * interroger le serveur en continu. La politique de rafraîchissement de
-     * l'application (SPEC §4.1) prime.
+     * It is not followed blindly: the Lille network publishes `ttl: 0`, which
+     * would mean "never cache" and would lead to polling the server
+     * continuously. The application's refresh policy (SPEC §4.1) prevails.
      */
     val ttl: Int? = null,
     val version: String? = null,
     val data: T,
 )
 
-/** Un flux annoncé par le document d'auto-découverte. */
+/** A feed announced by the auto-discovery document. */
 @Serializable
 internal data class GbfsFeedReference(val name: String, val url: String)
 
-/** Une station telle que publiée par `station_information`. */
+/** A station as published by `station_information`. */
 @Serializable
 internal data class GbfsStationInformation(
     @SerialName("station_id")
@@ -202,14 +198,14 @@ internal data class GbfsStationInformation(
     @SerialName("post_code") val postCode: String? = null,
 )
 
-/** L'état d'une station tel que publié par `station_status`. */
+/** The state of a station as published by `station_status`. */
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
 internal data class GbfsStationStatus(
     @SerialName("station_id")
     @Serializable(with = FlexibleIdSerializer::class)
     val stationId: String,
-    // GBFS 3.0 a renommé le champ ; les deux noms sont acceptés.
+    // GBFS 3.0 renamed the field; both names are accepted.
     @SerialName("num_bikes_available")
     @JsonNames("num_vehicles_available")
     val bikesAvailable: Int = 0,
@@ -228,20 +224,20 @@ internal data class GbfsStationStatus(
     val lastReported: Instant? = null,
 )
 
-/** Contenu de `station_information`. */
+/** The contents of `station_information`. */
 @Serializable
 internal data class GbfsStationInformationData(
     val stations: List<GbfsStationInformation> = emptyList(),
 )
 
-/** Contenu de `station_status`. */
+/** The contents of `station_status`. */
 @Serializable
 internal data class GbfsStationStatusData(val stations: List<GbfsStationStatus> = emptyList())
 
 /**
- * Signale un document GBFS qui n'a pas la forme attendue.
+ * Signals a GBFS document that does not have the expected shape.
  *
- * Interne au paquetage : l'analyseur la convertit en `DataError`, seule forme
- * d'échec que le reste de l'application connaît (SPEC §14).
+ * Internal to the package: the parser turns it into a `DataError`, the only
+ * form of failure the rest of the application knows (SPEC §14).
  */
 internal class GbfsFormatException(message: String) : IllegalArgumentException(message)

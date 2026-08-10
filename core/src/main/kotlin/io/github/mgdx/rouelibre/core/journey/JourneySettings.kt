@@ -4,45 +4,45 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
 /**
- * Réglages de l'algorithme de trajet (SPEC.md §6).
+ * Settings of the journey algorithm (SPEC.md §6).
  *
- * Les valeurs par défaut sont celles du cahier des charges. Chacune est
- * justifiée sur sa propriété : ce sont des choix, pas des nombres trouvés par
- * tâtonnement, et quiconque les modifie doit savoir ce qu'il déplace.
+ * The default values are those of the specification. Each is justified on its
+ * own property: they are choices, not numbers found by trial and error, and
+ * whoever changes one should know what they are moving.
  *
- * @property departureCandidates nombre de stations examinées au départ. Cinq :
- *   au-delà, les stations retenues sont si éloignées du point de départ que la
- *   marche d'accès mange tout le bénéfice, et chaque candidate supplémentaire
- *   multiplie le nombre de couples à évaluer.
- * @property arrivalCandidates nombre de stations examinées à l'arrivée, pour
- *   les mêmes raisons.
- * @property maxWalkToStationMetres distance au-delà de laquelle une station
- *   cesse d'être une candidate. Douze cents mètres, soit un quart d'heure de
- *   marche : au-delà, la marche d'accès et les quatre minutes de forfait
- *   engloutissent tout ce que le vélo pouvait faire gagner. Sans cette borne,
- *   l'algorithme propose sereinement de marcher quatre kilomètres pour aller
- *   chercher un vélo, faute de mieux.
- * @property maxRideEvaluations nombre maximal de trajets à vélo réellement
- *   calculés. C'est ce qui BORNE le temps de réponse, exigé par le SPEC §6 :
- *   l'élagage par borne inférieure fait l'essentiel du travail, mais il dépend
- *   de la géométrie et ne garantit rien à lui seul. Les couples étant examinés
- *   du plus prometteur au moins prometteur, s'arrêter au sixième ne coûte à peu
- *   près jamais l'optimum.
- * @property directWalkThresholdMetres distance à vol d'oiseau au-delà de
- *   laquelle la marche directe n'est plus calculée d'emblée. Trois kilomètres :
- *   à pied c'est déjà trois quarts d'heure, quand le même trajet à vélo en
- *   demande vingt, forfaits compris. La marche ne peut plus gagner, et la
- *   calculer coûtait à elle seule un cinquième du budget de temps. Elle reste
- *   calculée, quelle que soit la distance, lorsqu'aucun trajet à vélo n'est
- *   possible : c'est alors la seule réponse à donner.
- * @property pickupTime temps forfaitaire pour déverrouiller et sortir un vélo.
- * @property dropoffTime temps forfaitaire pour ranger et verrouiller un vélo.
- * @property fallbackPenalty temps perdu si la station retenue s'avère
- *   inutilisable à l'arrivée : il faut rejoindre la suivante à pied. Sert à
- *   convertir un risque en minutes, donc à le rendre comparable à un détour.
- * @property bikeTurnoverPerMinute vitesse à laquelle une station se vide ou se
- *   remplit, en vélos par minute. Un vélo toutes les huit minutes environ aux
- *   heures actives ; c'est ce qui donne son échelle à la pénalité de risque.
+ * @property departureCandidates how many stations are examined at the departure
+ *   end. Five: beyond that, the stations kept are so far from the departure
+ *   point that the access walk eats the whole benefit, and every extra
+ *   candidate multiplies the number of pairs to evaluate.
+ * @property arrivalCandidates how many stations are examined at the arrival
+ *   end, for the same reasons.
+ * @property maxWalkToStationMetres the distance beyond which a station stops
+ *   being a candidate. Twelve hundred metres, about a quarter of an hour on
+ *   foot: past that, the access walk and the four minutes of fixed handling
+ *   swallow everything the bike could have saved. Without this bound the
+ *   algorithm serenely proposes walking four kilometres to fetch a bike, for
+ *   want of anything better.
+ * @property maxRideEvaluations the maximum number of bike legs actually
+ *   computed. This is what BOUNDS the response time required by SPEC §6:
+ *   pruning by lower bound does most of the work, but it depends on the
+ *   geometry and guarantees nothing on its own. Since pairs are examined from
+ *   the most promising to the least, stopping at the sixth almost never costs
+ *   the optimum.
+ * @property directWalkThresholdMetres the straight-line distance beyond which
+ *   the direct walk is no longer computed up front. Three kilometres: on foot
+ *   that is already three quarters of an hour, where the same trip by bike
+ *   takes twenty minutes, fixed handling included. Walking can no longer win,
+ *   and computing it cost a fifth of the time budget by itself. It is still
+ *   computed, whatever the distance, when no bike journey is possible: it is
+ *   then the only answer to give.
+ * @property pickupTime fixed time to unlock and pull out a bike.
+ * @property dropoffTime fixed time to rack and lock a bike.
+ * @property fallbackPenalty the time lost if the chosen station turns out to be
+ *   unusable on arrival: one has to reach the next one on foot. It converts a
+ *   risk into minutes, and so makes it comparable to a detour.
+ * @property bikeTurnoverPerMinute the rate at which a station empties or fills,
+ *   in bikes per minute. About one bike every eight minutes during busy hours;
+ *   it is what gives the risk penalty its scale.
  */
 public data class JourneySettings(
     public val departureCandidates: Int = 5,
@@ -56,36 +56,38 @@ public data class JourneySettings(
     public val bikeTurnoverPerMinute: Double = 0.12,
 ) {
     init {
-        require(departureCandidates > 0) { "il faut au moins une station de départ" }
-        require(arrivalCandidates > 0) { "il faut au moins une station d'arrivée" }
-        require(maxWalkToStationMetres > 0) { "la distance de marche doit être positive" }
-        require(maxRideEvaluations > 0) { "il faut évaluer au moins un trajet" }
-        require(bikeTurnoverPerMinute >= 0) { "une rotation ne peut pas être négative" }
+        require(departureCandidates > 0) { "at least one departure station is needed" }
+        require(arrivalCandidates > 0) { "at least one arrival station is needed" }
+        require(maxWalkToStationMetres > 0) { "the walking distance must be positive" }
+        require(maxRideEvaluations > 0) { "at least one ride must be evaluated" }
+        require(bikeTurnoverPerMinute >= 0) { "a turnover rate cannot be negative" }
     }
 
-    /** Temps forfaitaire total, aux deux extrémités du trajet à vélo. */
+    /** Total fixed handling time, at both ends of the bike leg. */
     public val handlingTime: Duration
         get() = pickupTime + dropoffTime
 }
 
 /**
- * Convertit une disponibilité faible en minutes de pénalité (SPEC.md §6).
+ * Turns low availability into minutes of penalty (SPEC.md §6).
  *
- * Le cahier des charges demande qu'une station à un seul vélo soit moins
- * attractive qu'une station à huit, même un peu plus loin. Encore faut-il
- * pouvoir comparer un risque à un détour : la pénalité est donc exprimée en
- * temps, la même unité que le reste du calcul.
+ * The specification asks that a station with a single bike be less attractive
+ * than a station with eight, even slightly further away. That requires being
+ * able to compare a risk with a detour: the penalty is therefore expressed in
+ * time, the same unit as the rest of the computation.
  *
- * Le raisonnement tient en une phrase : pendant qu'on marche vers la station,
- * d'autres personnes s'y servent ; si elles épuisent le stock avant l'arrivée,
- * il faut rejoindre la station suivante, ce qui coûte [JourneySettings.fallbackPenalty].
- * Le risque croît donc avec le temps d'exposition et décroît avec le stock.
+ * The reasoning fits in one sentence: while we walk towards the station, other
+ * people are helping themselves; if they exhaust the stock before we arrive, we
+ * have to reach the next station, which costs
+ * [JourneySettings.fallbackPenalty]. The risk therefore grows with the exposure
+ * time and shrinks with the stock.
  *
- * Ce n'est pas un modèle probabiliste : c'est une heuristique monotone,
- * assumée comme telle, dont les deux constantes sont réglables.
+ * This is not a probabilistic model: it is a monotonic heuristic, accepted as
+ * such, whose two constants are configurable.
  *
- * @param count vélos disponibles au départ, ou places libres à l'arrivée.
- * @param exposure temps qui s'écoule avant qu'on n'atteigne cette station.
+ * @param count bikes available at the departure end, or free docks at the
+ *   arrival end.
+ * @param exposure the time that elapses before we reach that station.
  */
 public fun availabilityRiskPenalty(
     count: Int,
