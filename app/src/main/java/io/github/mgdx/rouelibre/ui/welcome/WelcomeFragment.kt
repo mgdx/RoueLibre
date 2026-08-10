@@ -16,17 +16,16 @@ import io.github.mgdx.rouelibre.ui.map.MapFragment
 import kotlinx.coroutines.launch
 
 /**
- * Écran d'accueil au tout premier démarrage (SPEC §7.9).
+ * The welcome screen on the very first start (SPEC §7.9).
  *
- * Un écran et non une boîte de dialogue : le contenu est trop dense pour une
- * fenêtre modale, et il doit pouvoir être relu depuis « À propos ».
+ * A screen and not a dialog: the content is too dense for a modal window, and
+ * it must be readable again from "about".
  *
- * Trois pages au maximum, chacune contournable, et la dernière enchaîne
- * directement sur le téléchargement des données — une seule séquence, pas deux
- * murs de texte successifs.
+ * Three pages at most, each skippable, and the last leads straight into
+ * obtaining the data — a single sequence, not two successive walls of text.
  *
- * Le ton est celui du §7 : phrases courtes, voix active, aucun jargon. On
- * explique un fonctionnement, on ne vend rien.
+ * The tone is §7's: short sentences, active voice, no jargon. We explain how
+ * something works, we are not selling anything.
  */
 class WelcomeFragment : Fragment() {
 
@@ -75,8 +74,8 @@ class WelcomeFragment : Fragment() {
         views.step.text = getString(R.string.welcome_step, page + 1, PAGES.size)
         views.next.setText(current.next)
         views.skip.setText(current.skip)
-        // La toute dernière page propose le téléchargement ; les précédentes
-        // n'ont rien à reporter, seulement à être passées.
+        // The very last page offers the download; the earlier ones have
+        // nothing to postpone, only to be skipped.
         views.skip.isVisible = true
         views.bodyContainer.scrollTo(0, 0)
     }
@@ -87,8 +86,8 @@ class WelcomeFragment : Fragment() {
             showPage()
             return
         }
-        // Dernière page : on choisit d'abord la ville, puisque c'est elle qui
-        // détermine les données à chercher. L'écran suivant enchaîne dessus.
+        // Last page: the city is chosen first, since it determines which data
+        // to fetch. The next screen follows on from it.
         finish(CityFragment())
     }
 
@@ -98,16 +97,16 @@ class WelcomeFragment : Fragment() {
             showPage()
             return
         }
-        // « Plus tard » : l'application reste utilisable en mode dégradé, avec
-        // la liste des stations et leurs disponibilités (SPEC §4.4).
+        // "Later": the application stays usable in degraded mode, with the
+        // station list and their availability (SPEC §4.4).
         finish(MapFragment())
     }
 
     /**
-     * Referme l'accueil et retient qu'il a été vu.
+     * Closes the welcome screen and remembers it has been seen.
      *
-     * La version est retenue ici, et non au lancement : quelqu'un qui quitte
-     * l'application au milieu de la séquence doit la revoir.
+     * The version is remembered here, not at launch: somebody who leaves the
+     * application in the middle of the sequence must see it again.
      */
     private fun finish(next: Fragment) {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -118,15 +117,15 @@ class WelcomeFragment : Fragment() {
         }
     }
 
-    /** Une page de l'accueil. */
+    /** One page of the welcome screen. */
     private data class Page(val title: Int, val body: Int, val next: Int, val skip: Int)
 
     private companion object {
         const val STATE_PAGE = "page"
 
         /**
-         * Les trois pages, dans l'ordre : ce qu'est l'application, ce qu'elle
-         * ne fait pas de vos données, ce dont elle a besoin pour fonctionner.
+         * The three pages, in order: what the application is, what it does not
+         * do with your data, and what it needs in order to work.
          */
         val PAGES = listOf(
             Page(

@@ -21,15 +21,14 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
- * Réglages (SPEC §7.6).
+ * Settings (SPEC §7.6).
  *
- * Écrit à la main plutôt qu'avec `androidx.preference` : cette bibliothèque
- * apporte sa propre grammaire visuelle, que les jetons de conception du projet
- * devraient ensuite combattre, pour une dizaine de réglages qui tiennent sur
- * un écran.
+ * Written by hand rather than with `androidx.preference`: that library brings
+ * its own visual grammar, which the project's design tokens would then have to
+ * fight, for a dozen settings that fit on one screen.
  *
- * Chaque changement est enregistré immédiatement. Il n'y a pas de bouton
- * « valider » : un réglage qu'on a changé est un réglage qu'on veut.
+ * Every change is saved immediately. There is no "apply" button: a setting one
+ * has changed is a setting one wants.
  */
 class SettingsFragment : Fragment() {
 
@@ -41,7 +40,7 @@ class SettingsFragment : Fragment() {
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
 
-    /** Vrai pendant qu'un champ est rempli par le code, pour ne pas le réécrire. */
+    /** True while a field is being filled by the code, so as not to rewrite it. */
     private var isFilling = false
 
     override fun onCreateView(
@@ -83,8 +82,8 @@ class SettingsFragment : Fragment() {
                 else -> AppTheme.System
             }
             viewLifecycleOwner.lifecycleScope.launch { preferences.setTheme(theme) }
-            // Appliqué tout de suite : un thème qu'on choisit doit se voir, pas
-            // attendre le prochain lancement.
+            // Applied at once: a theme one chooses must show, not wait for the
+            // next launch.
             applyTheme(theme)
         }
 
@@ -148,12 +147,11 @@ class SettingsFragment : Fragment() {
     }
 
     /**
-     * Les deux adresses de source.
+     * The two source addresses.
      *
-     * Vidées, elles rétablissent celles de la configuration de ville : c'est
-     * ce que fait la croix du champ, et l'invite de saisie montre alors la
-     * valeur par défaut. L'hébergeur par défaut ne doit jamais être un point
-     * de défaillance unique (SPEC §4.4).
+     * Emptied, they restore the city configuration's own: that is what the
+     * field's cross does, and the hint then shows the default value. The
+     * default host must never be a single point of failure (SPEC §4.4).
      */
     private fun setUpSources(views: FragmentSettingsBinding) {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -161,8 +159,8 @@ class SettingsFragment : Fragment() {
             views.gbfsUrl.setText(preferences.gbfsDiscoveryUrlOverride().orEmpty())
             views.manifestUrl.setText(preferences.dataManifestUrlOverride().orEmpty())
             isFilling = false
-            // Les adresses par défaut sont celles de la ville active : sans
-            // ville, il n'y en a pas, et le champ reste simplement vide.
+            // The default addresses are the active city's: without a city
+            // there are none, and the field simply stays empty.
             val city = container.activeCity()
             views.gbfsField.placeholderText = city?.gbfs?.discoveryUrl
             views.manifestField.placeholderText = city?.dataRelease?.manifestUrl

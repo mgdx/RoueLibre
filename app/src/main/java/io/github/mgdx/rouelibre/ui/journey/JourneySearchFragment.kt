@@ -18,14 +18,14 @@ import io.github.mgdx.rouelibre.ui.map.MapFragment
 import kotlinx.coroutines.launch
 
 /**
- * Recherche d'itinéraire : d'où à où (SPEC §7.3).
+ * Journey search: from where to where (SPEC §7.3).
  *
- * Deux points à désigner, chacun de quatre façons, et un bouton pour les
- * intervertir. Rien n'est calculé ici : l'écran ne fait que rassembler ce
- * qu'il faut au calcul, qui a lieu sur l'écran de résultat.
+ * Two points to designate, each in four ways, and a button to swap them.
+ * Nothing is computed here: the screen only gathers what the computation needs,
+ * and that happens on the result screen.
  *
- * Aucune de ces désignations ne quitte l'appareil, et aucune n'est conservée :
- * le SPEC §8 interdit de garder une destination.
+ * None of these designations leaves the device, and none is kept: SPEC §8
+ * forbids holding on to a destination.
  */
 class JourneySearchFragment : Fragment() {
 
@@ -34,7 +34,7 @@ class JourneySearchFragment : Fragment() {
     private var origin: JourneyEndpoint? = null
     private var destination: JourneyEndpoint? = null
 
-    /** Le champ que la façon choisie doit remplir, le temps de l'aller-retour. */
+    /** The field the chosen way is to fill, for the length of the round trip. */
     private var awaitingOrigin = true
 
     private val container
@@ -46,8 +46,8 @@ class JourneySearchFragment : Fragment() {
         if (granted.values.any { it }) {
             useMyPosition()
         } else {
-            // Le refus n'est pas discuté : les trois autres façons de désigner
-            // un point restent entières (SPEC §10).
+            // The refusal is not argued with: the other three ways of
+            // designating a point remain whole (SPEC §10).
             showMessage(getString(R.string.map_location_denied))
         }
     }
@@ -66,19 +66,19 @@ class JourneySearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val views = checkNotNull(binding)
 
-        // Uniquement quand l'écran est reconstruit après avoir été détruit —
-        // rotation, retour depuis l'arrière-plan. Passer par la recherche
-        // d'adresse ne détruit que la VUE : les champs déjà remplis vivent
-        // toujours dans le fragment, et les relire d'un paquet absent les
-        // effaçait. Le second point venait alors écraser le premier.
+        // Only when the screen is rebuilt after being destroyed — rotation, a
+        // return from the background. Going through the address search destroys
+        // the VIEW alone: the fields already filled still live in the fragment,
+        // and re-reading them from an absent bundle erased them. The second
+        // point then overwrote the first.
         if (savedInstanceState != null) {
             origin = JourneyEndpoint.readFrom(savedInstanceState, STATE_ORIGIN)
             destination = JourneyEndpoint.readFrom(savedInstanceState, STATE_DESTINATION)
             awaitingOrigin = savedInstanceState.getBoolean(STATE_AWAITING_ORIGIN, true)
         } else {
-            // Point reçu d'ailleurs : d'une autre application (SPEC §7.8) ou
-            // d'une station qu'on vient de consulter (SPEC §7.2). Il ne reste
-            // à remplir que l'autre extrémité.
+            // A point received from elsewhere: from another application
+            // (SPEC §7.8) or from a station just consulted (SPEC §7.2). Only
+            // the other end remains to be filled.
             if (origin == null) origin = JourneyEndpoint.readFrom(arguments, ARGUMENT_ORIGIN)
             if (destination == null) {
                 destination = JourneyEndpoint.readFrom(arguments, ARGUMENT_DESTINATION)
@@ -115,10 +115,10 @@ class JourneySearchFragment : Fragment() {
     }
 
     /**
-     * Recueille ce que rendent les trois écrans de désignation.
+     * Collects what the three designation screens return.
      *
-     * Chacun rend un point sous sa propre clé ; c'est ici qu'ils rejoignent le
-     * champ qui les attendait.
+     * Each returns a point under its own key; here is where they meet the field
+     * that was waiting for them.
      */
     private fun listenForChoices() {
         parentFragmentManager.setFragmentResultListener(
@@ -243,11 +243,11 @@ class JourneySearchFragment : Fragment() {
         private const val ARGUMENT_ORIGIN = "received-origin"
 
         /**
-         * Ouvre la recherche, éventuellement avec une extrémité déjà connue.
+         * Opens the search, possibly with one end already known.
          *
-         * @param origin le point d'où l'on part, s'il est déjà désigné.
-         * @param destination le point où l'on va, s'il est déjà désigné.
-         *   Les deux nuls donnent un écran vierge.
+         * @param origin the point one leaves from, if it is already designated.
+         * @param destination the point one goes to, if it is already
+         *   designated. Both null gives a blank screen.
          */
         fun newInstance(
             origin: JourneyEndpoint? = null,

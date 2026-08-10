@@ -33,14 +33,14 @@ import org.maplibre.android.maps.Style
 import org.maplibre.android.style.sources.GeoJsonSource
 
 /**
- * Résultat d'un trajet marche → vélo → marche (SPEC §7.4).
+ * The result of a walk → bike → walk journey (SPEC §7.4).
  *
- * Le tracé occupe le haut de l'écran en trois segments distincts, le détail se
- * lit dessous : on regarde d'abord où l'on va, on lit ensuite combien de temps
- * et par quelles stations.
+ * The track fills the top of the screen in three distinct legs, the detail
+ * reads underneath: one first looks at where one is going, then reads how long
+ * it takes and through which stations.
  *
- * Rien n'est enregistré. Le trajet vit en mémoire le temps de l'écran, comme
- * l'exige le SPEC §8.
+ * Nothing is stored. The journey lives in memory for the life of the screen, as
+ * SPEC §8 requires.
  */
 class JourneyResultFragment : Fragment() {
 
@@ -104,8 +104,8 @@ class JourneyResultFragment : Fragment() {
         map.uiSettings.isAttributionEnabled = false
         map.uiSettings.isLogoEnabled = false
         map.uiSettings.isRotateGesturesEnabled = false
-        // Sans fond de carte, le tracé reste dessiné sur un fond vide : c'est
-        // moins parlant, mais l'itinéraire est calculé et le détail se lit.
+        // Without a base map the track is still drawn on an empty background:
+        // less telling, but the route is computed and the detail reads.
         if (tiles == null) return
 
         map.setStyle(
@@ -152,10 +152,10 @@ class JourneyResultFragment : Fragment() {
     }
 
     /**
-     * Dit ce qui manque quand aucun trajet à vélo n'a pu être composé.
+     * Says what is missing when no bike journey could be composed.
      *
-     * Le SPEC §6 l'exige : quand aucune station proche n'a de vélo, il faut le
-     * dire, pas proposer un trajet impossible.
+     * SPEC §6 requires it: when no nearby station has a bike, that has to be
+     * said, not an impossible journey proposed.
      */
     private fun showWithoutJourney(state: JourneyUiState) {
         val views = binding ?: return
@@ -200,7 +200,7 @@ class JourneyResultFragment : Fragment() {
         )
     }
 
-    /** Prévient quand la marche directe va plus vite que le vélo (SPEC §6). */
+    /** Warns when walking straight there beats the bike (SPEC §6). */
     private fun showNotice(state: JourneyUiState) {
         val views = binding ?: return
         val fasterOnFoot = (state.plan as? JourneyPlan.Found)
@@ -215,7 +215,7 @@ class JourneyResultFragment : Fragment() {
         }
     }
 
-    /** Les trois étapes, dans l'ordre où on les vit. */
+    /** The three steps, in the order one lives them. */
     private fun showSteps(option: JourneyOption) {
         val views = binding ?: return
         views.steps.removeAllViews()
@@ -262,11 +262,10 @@ class JourneyResultFragment : Fragment() {
     }
 
     /**
-     * Les autres couples de stations (SPEC §6).
+     * The other station pairs (SPEC §6).
      *
-     * Ils existent parce que le plus rapide n'est pas toujours le meilleur :
-     * une station un peu plus loin mais mieux fournie peut valoir la minute
-     * qu'elle coûte.
+     * They exist because the fastest is not always the best: a station slightly
+     * further away but better stocked can be worth the minute it costs.
      */
     private fun showAlternatives(state: JourneyUiState) {
         val views = binding ?: return
@@ -304,7 +303,7 @@ class JourneyResultFragment : Fragment() {
         }
     }
 
-    /** Trace la proposition retenue et cadre la carte dessus. */
+    /** Draws the chosen option and frames the map on it. */
     private fun drawJourney(state: JourneyUiState) {
         if (!styleLoaded) return
         val option = state.chosen
@@ -329,7 +328,7 @@ class JourneyResultFragment : Fragment() {
         )
     }
 
-    /** Cadre la carte sur l'ensemble du tracé, avec une marge confortable. */
+    /** Frames the map on the whole track, with a comfortable margin. */
     private fun frameOn(points: List<LatLng>) {
         val map = mapLibreMap ?: return
         if (points.size < 2) return
@@ -337,7 +336,7 @@ class JourneyResultFragment : Fragment() {
         map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, FRAME_PADDING_PIXELS))
     }
 
-    // ------------------------------------------------- cycle de vie carte --
+    // ---------------------------------------------------- map lifecycle --
 
     override fun onStart() {
         super.onStart()
@@ -383,10 +382,10 @@ class JourneyResultFragment : Fragment() {
         private const val ARGUMENT_ORIGIN = "origin"
         private const val ARGUMENT_DESTINATION = "destination"
 
-        /** Marge autour du tracé, en pixels, pour qu'il ne touche pas les bords. */
+        /** The margin around the track, in pixels, so it does not touch the edges. */
         private const val FRAME_PADDING_PIXELS = 80
 
-        /** Ouvre le résultat pour un couple de points déjà désignés. */
+        /** Opens the result for a pair of points already designated. */
         fun newInstance(
             origin: JourneyEndpoint,
             destination: JourneyEndpoint,

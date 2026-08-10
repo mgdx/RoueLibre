@@ -16,15 +16,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * Ce qui a changé depuis la version précédemment installée (SPEC §7.10).
+ * What has changed since the previously installed version (SPEC §7.10).
  *
- * Les notes sont **embarquées dans l'APK**, jamais téléchargées : cet écran ne
- * doit déclencher aucune requête.
+ * The notes are **embedded in the APK**, never downloaded: this screen must
+ * trigger no request at all.
  *
- * Leur source unique est `fastlane/metadata/android/fr/changelogs/`, converti
- * en ressource au moment du build. F-Droid et l'application montrent ainsi
- * exactement le même texte, sans double saisie — et sans risque que la seconde
- * copie finisse par mentir.
+ * Their single source is `fastlane/metadata/android/fr/changelogs/`, converted
+ * into a resource at build time. F-Droid and the application therefore show
+ * exactly the same text, without double entry — and without the risk of the
+ * second copy ending up lying.
  */
 class WhatsNewFragment : Fragment() {
 
@@ -66,10 +66,10 @@ class WhatsNewFragment : Fragment() {
     }
 
     /**
-     * Referme l'écran et retient la version vue.
+     * Closes the screen and remembers the version seen.
      *
-     * Retenue ici, à la fermeture : quelqu'un qui quitte l'application sans
-     * lire doit retrouver les notes au lancement suivant.
+     * Remembered here, on closing: somebody who leaves the application without
+     * reading must find the notes again on the next launch.
      */
     private fun close() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -83,22 +83,22 @@ class WhatsNewFragment : Fragment() {
         private const val NOTES_DIRECTORY = "changelogs"
 
         /**
-         * Ouvre l'écran des nouveautés.
+         * Opens the what's-new screen.
          *
-         * @param since dernier code de version vu. Toutes les notes publiées
-         *   depuis sont montrées, de la plus récente à la plus ancienne : une
-         *   mise à jour peut couvrir plusieurs versions, et les sauter
-         *   reviendrait à cacher ce qui a changé.
+         * @param since the last version code seen. Every note published since
+         *   is shown, from the most recent to the oldest: an update can span
+         *   several versions, and skipping them would amount to hiding what
+         *   changed.
          */
         fun since(since: Int): WhatsNewFragment = WhatsNewFragment().apply {
             arguments = Bundle().apply { putInt(ARGUMENT_SINCE, since) }
         }
 
         /**
-         * Vrai s'il y a des notes à montrer pour cet intervalle.
+         * True if there are notes to show for this range.
          *
-         * Consulté avant d'ouvrir l'écran : une version publiée sans note ne
-         * doit pas produire un écran vide au lancement.
+         * Checked before opening the screen: a release published without notes
+         * must not produce an empty screen on launch.
          */
         fun hasNotes(context: Context, since: Int, until: Int): Boolean =
             versionsToShow(context, since, until).isNotEmpty()
@@ -109,7 +109,7 @@ class WhatsNewFragment : Fragment() {
                 .filter { it in (since + 1)..until }
                 .sortedDescending()
 
-        /** Les notes des versions concernées, de la plus récente à la plus ancienne. */
+        /** The notes of the versions concerned, most recent first. */
         private fun readNotes(context: Context, since: Int, until: Int): String =
             versionsToShow(context, since, until).joinToString(separator = "\n\n") { version ->
                 val text = context.assets.open("$NOTES_DIRECTORY/$version.txt")
