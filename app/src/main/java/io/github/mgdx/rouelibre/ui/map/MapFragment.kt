@@ -1,5 +1,6 @@
 package io.github.mgdx.rouelibre.ui.map
 
+import android.graphics.PointF
 import android.graphics.RectF
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -49,6 +50,7 @@ import org.maplibre.android.maps.Style
 import org.maplibre.android.style.sources.GeoJsonOptions
 import org.maplibre.android.style.sources.GeoJsonSource
 import org.maplibre.geojson.FeatureCollection
+import org.maplibre.geojson.Point
 import java.time.Instant
 
 /**
@@ -320,8 +322,30 @@ class MapFragment : Fragment() {
      * therefore opens on the centre declared in the city configuration, never
      * on a position obtained without the user's knowledge.
      */
-    private fun openingCamera(configuration: CityConfiguration): CameraPosition =
-        CameraPosition.Builder()
+    /**
+     * How the map is framed when nothing is remembered.
+     *
+     * On the user's position when it is already known, since that is what they
+     * came to see: the stations around them, not the middle of the
+     * conurbation. Only what the system already holds is read — no fix is
+     * requested and no permission is asked for (SPEC §10). Without a position,
+     * or with one outside the served city, the configured centring stands.
+     */
+    private fun openingCamera(configuration: CityConfiguration): CameraPosition {
+        val here = container.deviceLocation
+            .takeIf { it.isPermitted() }
+            ?.lastKnown()
+            ?.takeIf { position -> configuration.boundingBox?.let { position in it } == true }
+        if (here != null) {
+            // Shown as well as framed: a map centred on nothing would leave the
+            // user guessing which point it settled on.
+            lastKnownPosition = here
+            return CameraPosition.Builder()
+                .target(LatLng(here.latitude, here.longitude))
+                .zoom(USER_POSITION_ZOOM)
+                .build()
+        }
+        return CameraPosition.Builder()
             .target(
                 LatLng(
                     configuration.map.centre.latitude,
@@ -330,6 +354,7 @@ class MapFragment : Fragment() {
             )
             .zoom(configuration.map.defaultZoom)
             .build()
+    }
 
     /**
      * Installs the station source and its four layers.
@@ -423,9 +448,30 @@ class MapFragment : Fragment() {
         // In "pick a point" mode, opening a station sheet would divert the
         // gesture from what the user came to do.
         if (isPicking()) return false
+        (touched.geometry() as? Point)?.let { centreOnStation(map, it) }
         StationDetailSheet.newInstance(stationId)
             .show(parentFragmentManager, StationDetailSheet.TAG)
         return true
+    }
+
+    /**
+     * Brings the touched station to the middle of what stays visible.
+     *
+     * Not to the middle of the map: the detail sheet rises over the lower part
+     * of the screen, and a station centred there would be behind it. The camera
+     * therefore aims a little below the marker, which leaves the marker in the
+     * visible half — the eye follows what it has just touched.
+     *
+     * The zoom is left alone. Touching a marker says "show me this one", not
+     * "take me closer", and a zoom that changed under the finger would lose the
+     * neighbouring stations one was comparing.
+     */
+    private fun centreOnStation(map: MapLibreMap, station: Point) {
+        val target = LatLng(station.latitude(), station.longitude())
+        val height = binding?.map?.height ?: return
+        val onScreen = map.projection.toScreenLocation(target)
+        val below = PointF(onScreen.x, onScreen.y + height * SHEET_CLEARANCE_FRACTION)
+        moveCameraTo(map.projection.fromScreenLocation(below), map.cameraPosition.zoom)
     }
 
     // ------------------------------------------------ picking a point (§7.3) --
@@ -815,6 +861,13 @@ class MapFragment : Fragment() {
 
         /** How much a touch on a cluster zooms the map in. */
         const val CLUSTER_ZOOM_STEP = 2.0
+
+        /**
+         * How far below a touched station the camera aims, as a fraction of the
+         * map's height. A quarter puts the marker halfway up the part the
+         * detail sheet leaves visible.
+         */
+        const val SHEET_CLEARANCE_FRACTION = 0.25f
 
         /** The property MapLibre adds to the clusters it forms itself. */
         const val CLUSTER_COUNT_PROPERTY = "point_count"
