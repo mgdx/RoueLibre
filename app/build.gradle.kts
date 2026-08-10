@@ -41,7 +41,7 @@ android {
         // anglais il servait les textes français avec des dates anglaises.
         // Élague au passage les traductions des bibliothèques, qui pèsent
         // plus que les nôtres.
-        localeFilters += listOf("fr")
+        localeFilters += listOf("fr", "en")
     }
 
     buildFeatures {

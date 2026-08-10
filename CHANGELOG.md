@@ -75,8 +75,12 @@ qui sortira sur F-Droid sera recompilé et signé là-bas.
     (`fastlane/metadata/android/fr/changelogs/`), converties en ressource
     embarquée au moment du build : F-Droid et l'application affichent
     exactement le même texte, sans double saisie. Rien n'est téléchargé.
-- **Métadonnées F-Droid** : description courte, description longue et notes de
-  version, rédigées pour l'utilisateur et non pour le développeur.
+- **Métadonnées F-Droid** : description courte, description longue, notes de
+  version et six captures d'écran, rédigées pour l'utilisateur et non pour le
+  développeur.
+- **Traduction anglaise complète** dans `values-en/`, l'exemple que réclame le
+  §9. Elle montre à un traducteur à quoi ressemble une traduction achevée, et
+  permet de vérifier qu'un basculement de langue ne casse aucune mise en page.
 - **Téléchargement des jeux de données** (§4.4) : consultation du manifeste
   publié, comparaison des empreintes, et transfert de ce qui a changé — et de
   cela seulement. Rafraîchir l'index d'adresses n'impose donc pas de reprendre
@@ -261,6 +265,10 @@ qui sortira sur F-Droid sera recompilé et signé là-bas.
   95ᵉ centile** quand le parcours flou se déclenche, pour un maximum de 154 ms.
 - **FTS4 et le *tokenizer* `simple`** fonctionnent sur l'appareil, ce que le
   `SPEC.md` §4.3 demandait de vérifier plutôt que de supposer.
+- **Le build est reproductible** (§11.15) : deux compilations de release
+  successives, précédées d'un `clean`, produisent un APK d'empreinte
+  identique — `2c25d5fa38fd6715…`. Vérifié sur une même machine ; la
+  reproductibilité d'une machine à l'autre est ce que contrôlera F-Droid.
 - **Précision du placement des numéros** (§11.10), mesurée sur l'index réel par
   validation croisée : un numéro est retiré de sa voie, interpolé depuis ses
   voisins, puis comparé à la position que la Base Adresse Nationale lui donne.

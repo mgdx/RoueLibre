@@ -18,7 +18,7 @@ import java.util.Locale
  * `build.gradle.kts` — sinon les dates et les nombres de la nouvelle langue
  * continueraient d'être formatés en français.
  */
-private val TRANSLATED_LANGUAGES = setOf("fr")
+private val TRANSLATED_LANGUAGES = setOf("fr", "en")
 
 /** Langue de `res/values/`, servie à défaut de traduction correspondante. */
 private val BASE_LOCALE: Locale = Locale.FRENCH
