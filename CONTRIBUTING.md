@@ -1,76 +1,76 @@
-# Contribuer à Roue Libre
+# Contributing to Roue Libre
 
-Merci de l'intérêt que vous portez au projet. Toute contribution est
-bienvenue : traduction, correction, relecture, portage vers une autre
-agglomération.
+Thank you for the interest you are taking in the project. Every contribution is
+welcome: translation, fixes, review, adding another conurbation.
 
-Les échanges se font en français, le code en anglais.
+The code and the documentation are in English; the application's interface is in
+French, because that is the language of the users it serves.
 
-## Avant de commencer
+## Before you start
 
-Lisez [`SPEC.md`](SPEC.md). C'est le cahier des charges complet et la source de
-vérité du projet. Plusieurs décisions qui paraissent arbitraires y sont
-justifiées — l'absence de Jetpack Compose, le refus des points d'intérêt
-commerciaux sur la carte, la granularité au numéro de voirie. Si une
-proposition contredit le `SPEC.md`, ouvrez d'abord une *issue* pour en
-discuter : ces décisions ont été prises après réflexion, pas par défaut.
+Read [`SPEC.md`](SPEC.md). It is the complete specification and the project's
+source of truth. Several decisions that look arbitrary are justified there — the
+absence of Jetpack Compose, the refusal of commercial points of interest on the
+map, the house-number granularity. If a proposal contradicts `SPEC.md`, open an
+issue first to discuss it: those decisions were taken after thought, not by
+default.
 
-## Traduire l'application
+## Translating the application
 
-C'est la contribution la plus utile si vous ne codez pas.
+This is the most useful contribution if you do not write code.
 
-L'application est écrite en français. Toutes les chaînes vivent dans un seul
-fichier : [`app/src/main/res/values/strings.xml`](app/src/main/res/values/strings.xml).
+The application is written in French. Every string lives in a single file:
+[`app/src/main/res/values/strings.xml`](app/src/main/res/values/strings.xml).
 
-1. **Créez le dossier de votre langue** : `app/src/main/res/values-<code>/`,
-   où `<code>` est le code ISO 639-1 — `en`, `nl`, `de`, `es`…
-   Pour une variante régionale, `values-pt-rBR`.
-2. **Copiez-y `strings.xml`** et traduisez le contenu des balises, jamais leur
-   attribut `name`.
-3. **Vérifiez la mise en page.** Passez le système dans votre langue et
-   parcourez chaque écran. L'allemand et le néerlandais allongent notablement
-   les libellés ; c'est là que les mises en page cassent.
+1. **Create your language's folder**: `app/src/main/res/values-<code>/`, where
+   `<code>` is the ISO 639-1 code — `en`, `nl`, `de`, `es`… For a regional
+   variant, `values-pt-rBR`.
+2. **Copy `strings.xml` into it** and translate the tags' contents, never their
+   `name` attribute.
+3. **Check the layouts.** Switch the system to your language and walk through
+   every screen. German and Dutch lengthen labels appreciably; that is where
+   layouts break.
 
-### Règles à respecter
+### Rules to respect
 
-**Les placeholders sont positionnels et gardent leur numéro.** `%1$s` reste
-`%1$s`, mais son emplacement dans la phrase peut changer :
+**Placeholders are positional and keep their number.** `%1$s` stays `%1$s`, but
+its place in the sentence may change:
 
 ```xml
-<!-- français -->
+<!-- French -->
 <string name="freshness_fresh">Mis à jour %1$s</string>
-<!-- une langue où l'ordre diffère -->
+<!-- a language where the order differs -->
 <string name="freshness_fresh">%1$s aktualisiert</string>
 ```
 
-Ne concaténez jamais deux chaînes dans le code : l'ordre des mots change d'une
-langue à l'autre.
+Never concatenate two strings in the code: word order changes from one language
+to another.
 
-**Les pluriels passent par `<plurals>`, et les catégories varient.** Le
-français en utilise deux (`one`, `other`), le polonais quatre, l'arabe six.
-Fournissez celles de votre langue, listées dans les
-[règles de pluriel CLDR](https://cldr.unicode.org/index/cldr-spec/plural-rules).
+**Plurals go through `<plurals>`, and the categories vary.** French uses two
+(`one`, `other`), Polish four, Arabic six. Provide the ones for your language,
+listed in the
+[CLDR plural rules](https://cldr.unicode.org/index/cldr-spec/plural-rules).
 
-**Attention à la catégorie `one` en français.** Elle couvre 0 et 1 : on écrit
-« 0 vélo », au singulier. Toutes les langues ne font pas ce choix.
+**Watch the `one` category in French.** It covers 0 as well as 1: one writes
+"0 vélo", in the singular. Not every language makes that choice.
 
-**Les apostrophes s'échappent** : `l\'instant`, jamais `l'instant`.
+**Apostrophes are escaped**: `l\'instant`, never `l'instant`.
 
-**Les commentaires au-dessus des chaînes vous sont destinés.** Ils précisent ce
-que remplace chaque placeholder et dans quel contexte la phrase apparaît.
-Conservez-les, complétez-les si une ambiguïté vous a fait hésiter.
+**The comments above the strings are meant for you.** They say what each
+placeholder stands for and in what context the sentence appears. Keep them, and
+extend them if an ambiguity made you hesitate.
 
-**Le ton.** Phrases courtes, voix active, aucun jargon. Un message d'erreur dit
-ce qui s'est passé et quoi faire, sans s'excuser ni rester vague. Un écran vide
-invite à agir, il ne constate pas. Une action porte le même nom du bouton
-jusqu'à la confirmation.
+**Tone.** Short sentences, active voice, no jargon. An error message says what
+happened and what to do, without apologising or staying vague. An empty screen
+invites action, it does not state a fact. An action keeps the same name from the
+button through to the confirmation.
 
-**Le vocabulaire reste générique** : « station », « vélo », « réseau ». Le nom
-d'un réseau particulier n'apparaît que dans la configuration de ville.
+**The vocabulary stays generic**: "station", "bike", "network". A particular
+network's name appears only in the city configuration.
 
-## Contribuer au code
+## Contributing code
 
-### Mettre en place
+### Setting up
 
 ```bash
 git clone https://github.com/mgdx/RoueLibre.git
@@ -78,77 +78,71 @@ cd RoueLibre
 ./gradlew test
 ```
 
-Il faut un JDK 17 ou plus et le SDK Android. Aucune clé ni aucun compte n'est
-nécessaire.
+You need a JDK 17 or later and the Android SDK. No key and no account is
+required.
 
-### Avant d'ouvrir une pull request
+### Before opening a pull request
 
 ```bash
-./gradlew ktlintFormat            # formate
-./gradlew test lint ktlintCheck   # doit passer sans le moindre avertissement
+./gradlew ktlintFormat            # formats
+./gradlew test lint ktlintCheck   # must pass without a single warning
 ```
 
-L'analyse statique ne tolère aucun avertissement. Ce n'est pas une coquetterie :
-le projet est destiné à être audité par des relecteurs F-Droid, et un
-avertissement laissé traîner en cache un autre.
+The static analysis tolerates no warning. This is not fussiness: the project is
+meant to be audited by F-Droid reviewers, and one warning left lying around
+hides the next.
 
-### Ce que la relecture regardera
+### What the review will look at
 
-- **La séparation des couches.** La logique métier va dans `:core`, qui n'a le
-  droit à aucun import Android. Le compilateur le vérifie ; c'est ce qui rend
-  cette logique testable sur la JVM sans émulateur.
-- **Aucune chaîne en dur**, ni dans le Kotlin, ni dans un layout. Aucune
-  couleur ni taille en dur non plus : tout passe par les ressources.
-- **Les commentaires expliquent le *pourquoi*.** Un commentaire qui paraphrase
-  le code est du bruit qui se périmera. En revanche, documentez systématiquement
-  les choix non évidents, les compromis acceptés, les contournements de
-  limitations de bibliothèques, et chaque coefficient de l'algorithme
-  d'itinéraire.
-- **Du KDoc** sur tout ce qui est public : rôle, paramètres, valeur de retour,
-  cas d'erreur.
-- **Des tests.** Obligatoires sur l'algorithme de trajet, l'analyse des flux
-  GBFS, la résolution d'adresses et l'interpolation des numéros. Toute
-  correction de bogue s'accompagne du test qui l'aurait détectée.
-- **Des erreurs explicites.** Des types de résultat, pas des exceptions
-  silencieuses, et pour chaque échec un message français qui dit quoi faire.
-- **Pas de code mort, pas d'abstraction anticipée.** Les seules généralisations
-  demandées sont celles du portage vers une autre ville.
+- **Layer separation.** Business logic goes into `:core`, which is allowed no
+  Android import at all. The compiler enforces it; that is what makes the logic
+  testable on the JVM without an emulator.
+- **Not a single hard-coded string**, neither in the Kotlin nor in a layout. No
+  hard-coded colour or size either: everything goes through the resources.
+- **Comments explain the *why*.** A comment that paraphrases the code is noise
+  that will go stale. Do document systematically, however: non-obvious choices,
+  accepted trade-offs, workarounds for library limitations, and every
+  coefficient of the journey algorithm.
+- **KDoc** on everything public: role, parameters, return value, error cases.
+- **Tests.** Mandatory on the journey algorithm, GBFS feed parsing, address
+  resolution and house-number interpolation. Every bug fix comes with the test
+  that would have caught it.
+- **Explicit errors.** Result types, not silent exceptions, and for every
+  failure a French message saying what to do.
+- **No dead code, no anticipated abstraction.** The only generalisations asked
+  for are those of serving another city.
 
 ### Commits
 
-Atomiques, avec un message qui décrit l'**intention** plutôt que la
-manipulation. « Corrige la station de départ choisie quand deux stations sont à
-égalité de temps » vaut mieux que « modifie RouteFinder.kt ».
+Atomic, with a message describing the **intent** rather than the manipulation.
+"Fix the departure station chosen when two stations tie on time" beats "change
+RouteFinder.kt". Commit messages are in English, like the rest of the
+repository.
 
-### Ajouter une dépendance
+### Adding a dependency
 
-Elle doit être :
+It must be:
 
-1. **justifiée dans le `README.md`**, avec la raison de ce choix plutôt qu'un
-   autre ;
-2. **compatible GPLv3** — vérifiez avant d'intégrer ;
-3. **exempte de tout service Google** : ni Play Services, ni Firebase, ni Maps
-   SDK, ni ML Kit, ni Crashlytics. L'application doit fonctionner sur LineageOS
-   sans GApps ;
-4. **exempte de télémétrie.** L'analyse Exodus Privacy ne doit détecter aucun
-   pisteur.
+1. **justified in `README.md`**, with the reason for choosing it over another;
+2. **GPLv3-compatible** — check before integrating;
+3. **free of any Google service**: no Play Services, no Firebase, no Maps SDK,
+   no ML Kit, no Crashlytics. The application must work on LineageOS without
+   GApps;
+4. **free of telemetry.** The Exodus Privacy analysis must detect no tracker.
 
-Si l'une de ces contraintes empêche une fonctionnalité que vous jugez utile,
-dites-le dans une *issue* et proposez une alternative — ne la contournez pas en
-silence.
+If one of those constraints stands in the way of a feature you find useful, say
+so in an issue and propose an alternative — do not work around it in silence.
 
-## Signaler un bogue
+## Reporting a bug
 
-Indiquez le modèle et la version d'Android, ce que vous attendiez, ce qui s'est
-produit, et comment le reproduire. Si le problème concerne une station ou une
-adresse précise, nommez-la : c'est souvent la donnée elle-même qui est en
-cause, et la distinction se fait vite.
+Give the device model and Android version, what you expected, what happened, and
+how to reproduce it. If the problem concerns a specific station or address, name
+it: the data itself is often the cause, and the distinction is quick to make.
 
-Aucun journal n'est envoyé nulle part par l'application. Si vous en joignez un,
-c'est votre décision — relisez-le avant, une trace peut contenir une adresse
-que vous avez cherchée.
+The application sends no log anywhere. If you attach one, that is your decision
+— read it through first, a trace can contain an address you searched for.
 
 ## Licence
 
-En contribuant, vous acceptez que votre travail soit publié sous
-[GPLv3](LICENSE), comme le reste du projet.
+By contributing, you agree that your work be published under
+[GPLv3](LICENSE), like the rest of the project.
