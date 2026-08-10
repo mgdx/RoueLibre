@@ -113,6 +113,22 @@ class AppContainer(private val context: Context) {
     }
 
     /**
+     * Says whether the city [id] may still be proposed, and notes that it was.
+     *
+     * The application offers the network of the conurbation one happens to be
+     * in (SPEC §15.1). Offering it again at every screen, once refused, would
+     * turn an offer into insistence.
+     *
+     * In memory and for the session alone: nothing about the cities one passes
+     * through is written to disk (SPEC §2, C3).
+     *
+     * @return true the first time this city is proposed, false afterwards.
+     */
+    fun rememberCityProposal(id: String): Boolean = proposedCityIds.add(id)
+
+    private val proposedCityIds = mutableSetOf<String>()
+
+    /**
      * The active city as of the last call to [activeCity].
      *
      * `@Volatile` because the read comes from the main thread and the write

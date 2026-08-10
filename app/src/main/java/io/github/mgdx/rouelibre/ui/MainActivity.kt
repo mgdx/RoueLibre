@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.BuildConfig
 import io.github.mgdx.rouelibre.R
@@ -86,20 +87,96 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val lastSeen = container.preferences.lastSeenVersionCode()
             when {
-                lastSeen == NEVER_LAUNCHED -> replaceWith(WelcomeFragment())
+                lastSeen == NEVER_LAUNCHED -> {
+                    replaceWith(WelcomeFragment())
+                    return@launch
+                }
 
                 lastSeen < BuildConfig.VERSION_CODE &&
                     WhatsNewFragment.hasNotes(
                         this@MainActivity,
                         lastSeen,
                         BuildConfig.VERSION_CODE,
-                    ) -> show(WhatsNewFragment.since(lastSeen))
+                    ) -> {
+                    show(WhatsNewFragment.since(lastSeen))
+                    return@launch
+                }
 
                 // Nothing to show, but the version seen is updated: a release
                 // published without notes must not bring the previous
                 // release's notes back on the next launch.
                 lastSeen < BuildConfig.VERSION_CODE ->
                     container.preferences.setLastSeenVersionCode(BuildConfig.VERSION_CODE)
+            }
+            proposeCityHere()
+        }
+    }
+
+    /**
+     * Offers the network of the conurbation one happens to be in (SPEC §15.1).
+     *
+     * Someone who travels arrives in a city the catalogue serves, with the data
+     * of the one they left installed: the map is then blank and nothing says
+     * that the city they are standing in is one press away.
+     *
+     * What is read here is **what the system already holds**: no permission is
+     * requested, no fix is asked for, and nothing happens at all if location is
+     * denied or off (SPEC §10). The position serves that single question, is
+     * compared against the catalogue shipped in the APK — no request goes out —
+     * and is written nowhere (SPEC §2, C3).
+     *
+     * The proposal is an offer, never an action: nothing is downloaded and no
+     * city changes until the user says so. Declined, it is not repeated for the
+     * rest of the session.
+     */
+    private suspend fun proposeCityHere() {
+        // The application was opened for a place, not by its user: they came
+        // for that journey, and a dialog about another city would be in the
+        // way.
+        if (intent.toPlaceRequest() != null) return
+        // Before the first city is chosen, it is the welcome screen's job to
+        // propose one: two proposals in a row would be one too many.
+        val servedCityId = container.preferences.activeCityId() ?: return
+        val position = container.deviceLocation.lastKnown() ?: return
+
+        val catalogue = container.cityCatalogueSource.catalogue()
+        val here = catalogue.suggestionFor(position) ?: return
+        if (here.id == servedCityId) return
+        // A city whose data is not published yet is not worth proposing:
+        // accepting would lead to a download that has nothing to fetch.
+        if (!here.isAvailable) return
+        if (!container.rememberCityProposal(here.id)) return
+
+        val installed = container.datasetStore.occupiedBytesOf(here.id) > 0
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.city_here_title)
+            .setMessage(
+                getString(
+                    if (installed) R.string.city_here_installed_body else R.string.city_here_body,
+                    cityLabel(here.displayName, here.mainCity),
+                ),
+            )
+            .setPositiveButton(
+                if (installed) R.string.city_here_use else R.string.city_here_install,
+            ) { _, _ -> switchTo(here.id, installed) }
+            .setNegativeButton(R.string.action_cancel, null)
+            .show()
+    }
+
+    /**
+     * Serves the accepted city.
+     *
+     * Its data already there, the map has everything it needs and reopens on
+     * it. Otherwise the storage screen takes over: it announces the weight
+     * before fetching anything (SPEC §4.4).
+     */
+    private fun switchTo(cityId: String, installed: Boolean) {
+        lifecycleScope.launch {
+            container.switchToCity(cityId)
+            if (installed) {
+                replaceWith(MapFragment())
+            } else {
+                show(StorageFragment.checkingForUpdates())
             }
         }
     }
