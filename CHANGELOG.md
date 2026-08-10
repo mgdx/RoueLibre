@@ -63,6 +63,15 @@ also records what has no visible effect.
   holds: no permission is requested, no fix asked for, and no request goes out
   (the catalogue shipped in the APK answers). See `SPEC.md` §15.1.
 
+- **Something to watch while the journey is worked out.** The spinner over a
+  half-drawn map is replaced by a screen of its own: the bike of the stations
+  crosses from one edge to the other, comes back along a higher line facing the
+  way it is going, and goes round again, under "Working out the best journey".
+  It is the only moment the application makes anybody wait — three seconds at
+  most (`SPEC.md` §6) — and a turning circle said nothing about what was
+  happening. Motion in the service of understanding, which is the only kind
+  §7 accepts: a device asking for reduced animations gets the drawing still.
+
 ### Changed
 
 - **One journey, the one proved best.** The list of runner-up station pairs is

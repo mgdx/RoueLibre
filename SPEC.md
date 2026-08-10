@@ -262,6 +262,7 @@ A sheet sliding up from the bottom: name, address, bikes available, free docks, 
 
 ### 7.4 Journey result
 
+- **While it is being worked out**, the screen shows the wait rather than an empty result: the bike of the stations crosses from one edge to the other, comes back along a higher line, and goes round again, under a sentence saying what is happening. A device asking for reduced animations gets the drawing still (§7).
 - Drawn on the map as three visually distinct legs: walk, bike, walk.
 - The journey's **four points** are marked: the two stations, and the two ends of the journey. Shape carries the meaning as much as colour: a station is a filled disc bearing a bike, an end of the journey an outlined disc bearing a walking figure — the drawing of the search screen's illustration, at marker size.
 - The **user's position** is shown and follows the device while the screen is open, **above every other marker**. Only if the permission is already granted: this screen shows a journey, it is not the moment to ask for one (§10).

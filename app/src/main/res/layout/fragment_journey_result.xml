@@ -52,16 +52,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/computing"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/map"
-        app:layout_constraintEnd_toEndOf="@id/map"
-        app:layout_constraintStart_toStartOf="@id/map"
-        app:layout_constraintTop_toTopOf="@id/map" />
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/detail"
         android:layout_width="0dp"
@@ -141,5 +131,44 @@
                 android:text="@string/journey_recompute" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <!--
+        The wait, while the journey is worked out.
+
+        Declared last so it covers the map and the detail: what is underneath
+        belongs to the previous journey, or to none, and showing it half-built
+        under a spinner would be showing an answer that is not one yet.
+    -->
+    <LinearLayout
+        android:id="@+id/computing"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/colorSurface"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <io.github.mgdx.rouelibre.ui.journey.ComputingBikeView
+            android:id="@+id/computing_bike"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="no" />
+
+        <TextView
+            android:id="@+id/computing_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_xxl"
+            android:layout_marginTop="@dimen/space_xl"
+            android:layout_marginEnd="@dimen/space_xxl"
+            android:gravity="center"
+            android:text="@string/journey_computing"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
