@@ -135,6 +135,24 @@ class StationRepository(
     }
 
     /**
+     * Oublie tout ce qui est connu des stations.
+     *
+     * Appelé au changement de ville : les stations d'une agglomération n'ont
+     * rien à faire sur la carte d'une autre, et hors ligne rien ne viendrait
+     * les remplacer. Le document d'auto-découverte s'en va aussi, puisqu'il
+     * décrit les flux du réseau qu'on quitte.
+     */
+    suspend fun forget(): Unit = refreshLock.withLock {
+        dao.clearAvailabilities()
+        dao.clearStations()
+        cachedDiscovery = null
+        cachedDiscoveryUrl = null
+        lastStatusRefresh = null
+        // La date du dernier relevé n'a pas à être réécrite : un cache vide
+        // rend le rafraîchissement dû de toute façon.
+    }
+
+    /**
      * Le document d'auto-découverte, relu seulement si l'URL a changé.
      */
     private suspend fun discovery(): Outcome<GbfsDiscovery> {

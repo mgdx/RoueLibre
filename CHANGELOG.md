@@ -41,6 +41,10 @@ qui n'a aucun effet visible.
 
 ### Corrigé
 
+- **Les stations d'une ville restaient affichées après en avoir changé.**
+  Le cache des stations ne connaissait pas la ville ; hors ligne, rien ne
+  venait les remplacer, et la carte de Paris montrait les stations de Lille.
+  Changer de ville vide ce cache.
 - **Un appareil qui avait déjà des données installées ne les retrouve pas.**
   Elles étaient rangées sans ville ; il n'y a pas moyen de deviner laquelle, et
   les rattacher au hasard ferait afficher la carte d'une ville sous le nom

@@ -79,6 +79,25 @@ class AppContainer(private val context: Context) {
     }
 
     /**
+     * Change de ville servie.
+     *
+     * Le cache des stations est vidé du même mouvement : les stations d'une
+     * agglomération n'ont rien à faire sur la carte d'une autre, et hors ligne
+     * rien ne viendrait les remplacer. Les jeux de données, eux, restent où ils
+     * sont — chaque ville a son répertoire, et revenir en arrière ne doit rien
+     * faire retélécharger.
+     *
+     * @param id identifiant du réseau, ou `null` pour n'en servir aucun.
+     */
+    suspend fun switchToCity(id: String?) {
+        if (preferences.activeCityId() == id) return
+        preferences.setActiveCityId(id)
+        cachedCity = null
+        datasetStore.useCity(id)
+        stationRepository.forget()
+    }
+
+    /**
      * La ville active au dernier appel d'[activeCity].
      *
      * `@Volatile` parce que la lecture vient du fil principal et l'écriture du

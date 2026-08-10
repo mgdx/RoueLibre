@@ -122,6 +122,22 @@ class StationRepositoryTest {
     }
 
     @Test
+    fun `changer de ville ne laisse pas les stations de la precedente`() = runTest {
+        // Elles n'ont rien à faire sur la carte d'une autre agglomération, et
+        // hors ligne rien ne viendrait les remplacer (SPEC §15.1).
+        enqueueDiscovery()
+        enqueueInformation()
+        enqueueStatus(bikesAtFirstStation = 7)
+        val repository = repository()
+        repository.refresh()
+
+        repository.forget()
+
+        assertEquals(0, dao.stations.value.size)
+        assertEquals(0, dao.availabilities.value.size)
+    }
+
+    @Test
     fun `l'entete User-Agent nomme l'application sans identifiant d'appareil`() = runTest {
         enqueueDiscovery()
         enqueueInformation()
@@ -279,6 +295,10 @@ private class FakeStationDao : StationDao {
 
     override suspend fun clearAvailabilities() {
         availabilities.value = emptyList()
+    }
+
+    override suspend fun clearStations() {
+        stations.value = emptyList()
     }
 }
 

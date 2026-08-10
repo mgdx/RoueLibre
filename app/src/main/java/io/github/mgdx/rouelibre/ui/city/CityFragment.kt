@@ -187,7 +187,7 @@ class CityFragment : Fragment() {
      */
     private fun choose(city: CityEntry) {
         viewLifecycleOwner.lifecycleScope.launch {
-            container.preferences.setActiveCityId(city.id)
+            container.switchToCity(city.id)
             parentFragmentManager.beginTransaction()
                 .replace(R.id.content, StorageFragment.checkingForUpdates())
                 .commit()
@@ -218,7 +218,7 @@ class CityFragment : Fragment() {
             // servir aucune : la garder active laisserait une carte vide sans
             // que rien n'explique pourquoi.
             if (container.preferences.activeCityId() == city.id) {
-                container.preferences.setActiveCityId(null)
+                container.switchToCity(null)
             }
             showMessage(getString(R.string.city_deleted, city.displayName))
             catalogue?.let { publish(it) }

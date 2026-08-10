@@ -81,6 +81,9 @@ interface StationDao {
     @Query("DELETE FROM station_availability")
     suspend fun clearAvailabilities()
 
+    @Query("DELETE FROM station")
+    suspend fun clearStations()
+
     /**
      * Remplace la liste des stations par celle reçue.
      *

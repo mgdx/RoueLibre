@@ -87,6 +87,7 @@ class StorageFragment : Fragment() {
         views.toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
         }
+        showServedCity(views)
         views.datasets.layoutManager = LinearLayoutManager(requireContext())
         views.datasets.adapter = adapter
         views.datasets.addItemDecoration(
@@ -204,6 +205,20 @@ class StorageFragment : Fragment() {
                         ?: getString(R.string.storage_nothing_installed)
                 }
             }
+        }
+    }
+
+    /**
+     * Nomme la ville dont cet écran gère les données.
+     *
+     * Les jeux sont rangés par ville : sans ce sous-titre, « 42,5 Mo occupés »
+     * laisserait croire que c'est tout ce que l'application occupe, alors que
+     * d'autres villes peuvent en occuper autant à côté (SPEC §11.9).
+     */
+    private fun showServedCity(views: FragmentStorageBinding) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            views.toolbar.subtitle = container.activeCity()?.network?.displayName
+                ?: getString(R.string.storage_no_city)
         }
     }
 
