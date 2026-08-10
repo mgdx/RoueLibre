@@ -256,12 +256,15 @@ A sheet sliding up from the bottom: name, address, bikes available, free docks, 
 ### 7.3 Journey search
 
 - Two fields: departure and arrival. Each accepts: my position, a favourite, a point picked on the map, an address.
+- A field **opens the address search directly**, without a menu of ways in between: one nearly always knows the address one is going to. The three other ways head the result list, where they stay whatever is typed — **my position first**, since that is what somebody setting off means by "from here".
 - Address search queries the **local index** described in §4.3. No network call, no suggestion sent to a third party, including while typing.
 - A swap button for departure and arrival.
 
 ### 7.4 Journey result
 
 - Drawn on the map as three visually distinct legs: walk, bike, walk.
+- The journey's **four points** are marked: the two stations, and the two ends of the journey. Shape carries the meaning as much as colour: a station is a filled disc bearing a bike, an end of the journey an outlined disc bearing a walking figure — the drawing of the search screen's illustration, at marker size.
+- The **user's position** is shown and follows the device while the screen is open, **above every other marker**. Only if the permission is already granted: this screen shows a journey, it is not the moment to ask for one (§10).
 - Summary: total time, of which walking and biking, distance, departure station (with its bike count), arrival station (with its dock count).
 - List of steps, and access to the 3 alternatives.
 - A recompute button (availability may have changed).
@@ -426,6 +429,8 @@ Serving one city without recompiling is not enough: a single application must be
 - There is **one city configuration per network served**, and a **catalogue** indexing them. The catalogue is derived from the configurations, never written by hand: it carries, for each city, its bounding box, its centre, its station count and **the weight of its data**.
 - The catalogue is **downloadable**, so that a new city appears without publishing a release. A copy ships in the APK as a fallback: a first launch without a network must show a list, not an empty screen.
 - The application **assumes no default city**. On first launch it **proposes one from the user's position**, on a button press and never by itself (§10); beyond fifty kilometres or so from the nearest network, it proposes nothing rather than anything.
+- Afterwards, and once a city is in service, the application **offers the network of the conurbation it finds itself in** when that is not the one being served: someone who travels arrives with another city's data installed, on a blank map that says nothing about the network under their feet. Strictly bounded: it reads only **a position the system already holds** — no permission requested, no fix asked for, nothing at all if location is denied or off (§10) — it compares it against the catalogue **already on the device**, so no request goes out, it **offers** and never acts, and a refusal is not repeated for the rest of the session. Nothing about the cities one passes through is written down (§2, C3).
+- The catalogue is **searchable by name**, network or conurbation: past a few dozen entries a list is scrolled rather than read.
 - Datasets are **stored per city**. Two cities therefore coexist on the device without mixing, and one city's data can be deleted without touching the other (§11.9).
 - The street-name normalisation rules (§4.3) are country-specific. They must be able to travel with a city's data rather than being frozen into the application.
 

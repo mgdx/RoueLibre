@@ -39,7 +39,36 @@ also records what has no visible effect.
   generating a conurbation is `--city` and nothing else, and merges the
   extracts where a box straddles two of Geofabrik's regions.
 
+- **The journey screen draws its four points.** The track said the shape of a
+  journey but not where it changes mode: the two stations now carry the filled
+  bike disc of the search screen's illustration, and the two ends the outlined
+  walking one. The same drawing on both screens, so the journey is recognised
+  from one to the other.
+
+- **The position moves on the journey map.** A disc follows the device for as
+  long as the screen is open, above every other marker: where one *is* beats
+  what one has planned, and the two coincide at the start of a journey. Read
+  from the system only if the permission is already granted — this screen asks
+  for nothing (`SPEC.md` §10) — and written nowhere.
+
+- **A search field over the catalogue of cities.** Sixty-nine networks make a
+  list one scrolls rather than reads. The search folds accents and the
+  apostrophes networks write and nobody types: "velov" finds Vélo'v, "vlille"
+  finds V'Lille (`core/config/CitySearch.kt`, tested on the JVM).
+
+- **The network of the conurbation one is in, offered on opening.** Someone who
+  travels arrives with another city's data installed, on a blank map that says
+  nothing about the network under their feet. The application now offers it —
+  once per session, refusable, and only from a position the system already
+  holds: no permission is requested, no fix asked for, and no request goes out
+  (the catalogue shipped in the APK answers). See `SPEC.md` §15.1.
+
 ### Changed
+
+- **A journey's field opens the address search straight away.** The sheet of
+  four ways in between is gone: one nearly always knows the address, and the
+  three other ways of `SPEC.md` §7.3 — one's position first, always — now head
+  the result list, a press away and no further than they were.
 
 - **Street-name normalisation covers France, not Lille.** The shared rules
   (`config/address_normalization.json`) gained the DGFiP's way-type codes as
