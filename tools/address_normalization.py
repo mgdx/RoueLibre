@@ -129,3 +129,33 @@ class AddressNormalizer:
 @lru_cache(maxsize=1)
 def default_normalizer() -> AddressNormalizer:
     return AddressNormalizer.load()
+
+
+# Names written out on purpose, replayed by the Kotlin test against every
+# generated network (see tools/build_address_index.py). They exist because the
+# real street names sampled from a city's own address base only ever cover that
+# city's vocabulary: the first block is what any French address base holds, the
+# second is what a single region holds and the others do not. A rule added for
+# Marseille or for Saint-Denis de La Réunion is worth nothing if no test ever
+# reads a name written the way people write it there.
+REFERENCE_STREET_NAMES = [
+    # Everywhere, and the abbreviations the Base Adresse Nationale carries.
+    "Rue Gambetta", "Boulevard de la Liberté", "Av. des Flandres",
+    "Bd Victor Hugo", "R. Nationale", "St-André", "Rue de l'Hôpital Militaire",
+    "Place du Général de Gaulle", "Chemin des Écoliers", "Grand Place",
+    "Rond-Point de l'Europe", "Impasse Sainte-Cécile", "Drève du Château",
+    "rue jean-baptiste lebas", "FAUBOURG DE ROUBAIX", "Allée Père Damien",
+    "ALL DES TILLEULS", "CHE DE LA FONTAINE", "MTE DU CALVAIRE",
+    "RLE DES QUATRE VENTS", "LD LES GRANDES TERRES", "TRA DE LA GARE",
+    "PRV Notre-Dame", "ESP Charles de Gaulle", "VLGE DE HAUT",
+    "Rte Départementale 6", "Chemin Rural n°4", "Terre-Plein Central",
+    # One region each, in the words that region uses.
+    "Traverse de la Bonne Mère", "Vallon des Auffes", "Calanque de Sormiou",
+    "Montée de la Grande-Côte", "Traboule des Voraces", "Quai Saint-Antoine",
+    "Venelle du Puits", "Hent ar Mor", "Ru du Moulin",
+    "Cavée Saint-Gilles", "Côte des Deux Amants",
+    "Carriera Nòstra Dama", "Cami de la Ribera", "Androne des Frères",
+    "Ravine des Cabris", "Morne à l'Eau", "Habitation Beauséjour",
+    "Îlet à Cochons", "Section Malecon",
+    "Corniche du Pharo", "Digue des Alliés", "Front de Mer Sud",
+]

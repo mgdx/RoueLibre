@@ -14,16 +14,34 @@
     "",
     "tools/build_address_index.py also produces a set of reference cases that",
     "the Kotlin test replays, to prove that the two implementations give the",
-    "same result."
+    "same result. tools/refresh_normalization_fixtures.py recomputes them",
+    "whenever these rules change, without rebuilding the indexes.",
+    "",
+    "SCOPE. The rules cover the whole of the French address base, mainland and",
+    "overseas: the application serves every conurbation publishing its stations",
+    "(§1), and a rule set written for one city leaves the others' streets",
+    "unfindable. The vocabulary of a Marseille traverse, a Lyon montée, a Breton",
+    "venelle and a Réunion ravine is as necessary here as the rue and the",
+    "boulevard. Per §15.1 these rules are country-specific: another country's",
+    "would replace this file, not extend it."
   ],
 
-  "rulesVersion": 1,
+  "rulesVersion": 2,
 
   "abbreviations": {
     "$comment": [
       "Expanded during normalisation, on whole words only.",
       "A single-letter abbreviation is expanded only at the head of a name,",
-      "otherwise \"r\" would turn \"Jean R Dupont\" into \"Jean rue Dupont\"."
+      "otherwise \"r\" would turn \"Jean R Dupont\" into \"Jean rue Dupont\".",
+      "",
+      "The bulk of the list is the DGFiP's table of way types, the one the",
+      "Base Adresse Nationale inherits from FANTOIR: those codes are what the",
+      "source data actually holds, so expanding them is what makes an indexed",
+      "name and a typed name meet.",
+      "",
+      "Deliberately absent: \"col\", which is a mountain pass far more often",
+      "than it is a colonel, and \"m\", \"mr\", \"mme\", too common inside a name",
+      "to be safely rewritten."
     ],
     "anywhere": {
       "st": "saint",
@@ -33,8 +51,11 @@
       "bd": "boulevard",
       "bld": "boulevard",
       "blvd": "boulevard",
+      "bvd": "boulevard",
+      "boul": "boulevard",
       "av": "avenue",
       "ave": "avenue",
+      "avn": "avenue",
       "fbg": "faubourg",
       "fg": "faubourg",
       "gal": "general",
@@ -42,6 +63,9 @@
       "gnl": "general",
       "mal": "marechal",
       "mar": "marechal",
+      "amal": "amiral",
+      "lt": "lieutenant",
+      "sgt": "sergent",
       "dr": "docteur",
       "pr": "professeur",
       "prof": "professeur",
@@ -52,29 +76,60 @@
       "cap": "capitaine",
       "mgr": "monseigneur",
       "me": "maitre",
+      "vve": "veuve",
       "gde": "grande",
       "gd": "grand",
       "pte": "petite",
       "pt": "petit",
       "nde": "notre dame",
+      "nd": "notre dame",
       "sq": "square",
       "imp": "impasse",
       "rte": "route",
       "chem": "chemin",
+      "che": "chemin",
+      "chs": "chaussee",
       "res": "residence",
       "lot": "lotissement",
       "pl": "place",
       "crs": "cours",
       "qu": "quai",
       "sen": "sentier",
-      "rpt": "rond point"
+      "rpt": "rond point",
+      "rdpt": "rond point",
+      "all": "allee",
+      "car": "carrefour",
+      "cor": "corniche",
+      "dsc": "descente",
+      "eca": "ecart",
+      "esp": "esplanade",
+      "espl": "esplanade",
+      "ham": "hameau",
+      "hle": "halle",
+      "ld": "lieu dit",
+      "mte": "montee",
+      "pas": "passage",
+      "pln": "plaine",
+      "plt": "plateau",
+      "pro": "promenade",
+      "prom": "promenade",
+      "prv": "parvis",
+      "qua": "quartier",
+      "rle": "ruelle",
+      "roc": "rocade",
+      "tpl": "terre plein",
+      "tra": "traverse",
+      "vla": "villa",
+      "vlge": "village",
+      "vge": "village"
     },
     "leadingOnly": {
       "r": "rue",
       "a": "allee",
       "b": "boulevard",
       "c": "chemin",
-      "p": "place"
+      "p": "place",
+      "q": "quai"
     }
   },
 
@@ -84,27 +139,54 @@
       "(§4.3): \"gambetta\" must find \"rue Gambetta\", and \"rue de la gare\" must",
       "not be penalised by word order.",
       "Recognised only at the head of a name, and by longest match: \"rond",
-      "point\" before \"rond\". \"drève\" and \"courée\" belong to the North of",
-      "France and are absent from generic lists.",
-      "Written in their already normalised form (no accent, lower case)."
+      "point\" before \"rond\", \"chemin rural\" before \"chemin\".",
+      "Written in their already normalised form (no accent, lower case).",
+      "",
+      "The list is national on purpose. A conurbation names its ways in its own",
+      "words, and the application serves any of them: \"traverse\" and \"vallon\"",
+      "are Marseille, \"montee\" and \"traboule\" are Lyon, \"couree\" and \"dreve\"",
+      "are the North, \"venelle\" and \"hent\" are Brittany, \"cavee\" is Normandy,",
+      "\"carriera\" and \"cami\" are the Occitan south, \"ravine\", \"morne\" and",
+      "\"habitation\" are the West Indies and Réunion. Leaving a region's",
+      "vocabulary out costs its inhabitants the type/name split, and with it",
+      "the ability to find a street by its proper name alone."
     ],
     "types": [
-      "rond point", "grand rue", "grande rue", "petite rue",
+      "rond point", "grand rue", "grande rue", "petite rue", "grand place",
+      "terre plein", "lieu dit", "front de mer",
+      "chemin rural", "chemin vicinal", "chemin departemental",
+      "route departementale", "route nationale", "route forestiere",
+      "voie communale", "ancienne route", "vieille route", "vieux chemin",
+
       "avenue", "boulevard", "chemin", "impasse", "allee", "allees",
       "place", "placette", "parvis", "esplanade", "square", "jardin",
       "quai", "cours", "passage", "passerelle", "sentier", "sente",
       "route", "rue", "ruelle", "venelle", "voie", "chaussee",
       "montee", "descente", "digue", "levee", "berge",
-      "residence", "lotissement", "hameau", "lieu dit", "clos", "cite",
+      "residence", "lotissement", "hameau", "clos", "cite",
       "domaine", "enclos", "cour", "couree", "dreve", "drave",
       "carrefour", "rocade", "peripherique", "autoroute", "bretelle",
       "pont", "tunnel", "traverse", "raccourci", "promenade", "mail",
       "boucle", "rampe", "escalier", "galerie", "porte", "barriere",
-      "faubourg", "grand place"
+      "faubourg",
+
+      "quartier", "village", "bourg", "villa", "ecart", "halle", "marche",
+      "parc", "plaine", "plateau", "port", "terrasse", "rempart", "fosse",
+      "zone", "chalet", "combe", "vallon", "val", "cote", "colline",
+      "campagne", "calanque", "anse", "plage", "corniche", "mole", "jetee",
+      "estacade", "cavee", "chasse", "traboule", "lice", "lices",
+      "carriera", "carrieira", "cami", "androne", "hent", "straed", "ru",
+      "ravine", "morne", "habitation", "section", "ilet", "savane"
     ]
   },
 
-  "punctuationReplacedBySpace": "'’`-–—_.,;:!?()[]{}/\\\"«»",
+  "$punctuationComment": [
+    "Turned into word breaks on both sides of the search. The non-breaking",
+    "spaces are here rather than left to the whitespace split: Python treats",
+    "them as whitespace and Kotlin's \\s does not, so a name holding one would",
+    "be indexed as two words and searched as one."
+  ],
+  "punctuationReplacedBySpace": "'’`-–—‑_.,;:!?()[]{}/\\\"«»&+*#@%=<>|~$^§°…   ",
 
   "stopWords": {
     "$comment": [
@@ -112,6 +194,6 @@
       "\"rue de la gare\" would lose half its content. They serve not to reward",
       "a match that only bears on \"de\" or \"la\"."
     ],
-    "words": ["de", "du", "des", "la", "le", "les", "l", "d", "au", "aux", "a", "et", "en", "sur", "sous"]
+    "words": ["de", "du", "des", "la", "le", "les", "l", "d", "au", "aux", "a", "et", "en", "sur", "sous", "lez", "par"]
   }
 }

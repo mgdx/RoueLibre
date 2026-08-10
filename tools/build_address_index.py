@@ -47,7 +47,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from address_normalization import AddressNormalizer
+from address_normalization import REFERENCE_STREET_NAMES, AddressNormalizer
 from city_config import DEFAULT_CITY_CONFIG, BoundingBox, CityConfig
 
 TOOLS_DIR = Path(__file__).resolve().parent
@@ -543,19 +543,12 @@ def write_normalization_fixtures(normalizer: AddressNormalizer,
     another city's. Producers spell street names differently, and that variety
     is exactly what makes the check worth running.
     """
-    handpicked = [
-        "Rue Gambetta", "Boulevard de la Liberté", "Av. des Flandres",
-        "Bd Victor Hugo", "R. Nationale", "St-André", "Rue de l'Hôpital Militaire",
-        "Place du Général de Gaulle", "Chemin des Écoliers", "Grand Place",
-        "Rond-Point de l'Europe", "Impasse Sainte-Cécile", "Drève du Château",
-        "rue jean-baptiste lebas", "FAUBOURG DE ROUBAIX", "Allée Père Damien",
-    ]
     # A slice of real names as well, so the fixture covers what the data
     # actually contains rather than only what we thought to imagine.
     sampled = [street.display_name for _, street in streets[::997]][:120]
 
     cases = []
-    for raw in handpicked + sampled:
+    for raw in REFERENCE_STREET_NAMES + sampled:
         split = normalizer.analyse(raw)
         cases.append({
             "input": raw,
