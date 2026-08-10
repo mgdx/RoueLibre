@@ -21,23 +21,21 @@ import java.time.Duration
 import java.time.Instant
 
 /**
- * Source unique des stations et de leur disponibilité.
+ * The single source of the stations and their availability.
  *
- * Elle applique la politique de rafraîchissement du SPEC §4.1, qui tient en
- * trois règles : les données stables au plus une fois par jour, l'état temps
- * réel au plus une fois par minute, et **jamais rien en arrière-plan**. Aucune
- * tâche périodique n'est planifiée : chaque appel vient d'un écran affiché ou
- * d'un geste de l'utilisateur.
+ * It applies the refresh policy of SPEC §4.1, which fits in three rules: static
+ * data at most once a day, real-time state at most once a minute, and **never
+ * anything in the background**. No periodic task is scheduled: every call comes
+ * from a screen on display or from a user's gesture.
  *
- * @property remote accès aux flux GBFS.
- * @property dao cache local.
- * @property refreshTimestamps mémorise la date du dernier rafraîchissement des
- *   données stables, qui doit survivre au redémarrage de l'application.
- * @property discoveryUrlProvider donne l'URL du document d'auto-découverte, ou
- *   `null` si aucune ville n'est choisie. C'est une fonction et non une valeur
- *   parce que ce réglage est modifiable par l'utilisateur (SPEC §4.1) et change
- *   avec la ville active.
- * @property clock horloge, injectée pour rendre la politique testable.
+ * @property remote access to the GBFS feeds.
+ * @property dao the local cache.
+ * @property refreshTimestamps remembers when the static data was last
+ *   refreshed, which must survive a restart of the application.
+ * @property discoveryUrlProvider gives the auto-discovery document's URL, or
+ *   `null` if no city is chosen. It is a function and not a value because the
+ *   setting is user-editable (SPEC §4.1) and changes with the active city.
+ * @property clock the clock, injected to keep the policy testable.
  */
 class StationRepository(
     private val remote: GbfsRemoteSource,
@@ -48,26 +46,26 @@ class StationRepository(
 ) {
 
     /**
-     * Le document d'auto-découverte de la session.
+     * The session's auto-discovery document.
      *
-     * Gardé en mémoire pour ne pas le redemander à chaque rafraîchissement de
-     * l'état : il ne change qu'exceptionnellement, et le relire toutes les
-     * minutes doublerait le trafic pour rien.
+     * Held in memory so it is not asked for again on every state refresh: it
+     * changes only exceptionally, and re-reading it every minute would double
+     * the traffic for nothing.
      */
     private var cachedDiscovery: GbfsDiscovery? = null
     private var cachedDiscoveryUrl: String? = null
 
-    /** Sérialise les rafraîchissements : deux écrans peuvent en demander un. */
+    /** Serialises refreshes: two screens can ask for one. */
     private val refreshLock = Mutex()
 
     private var lastStatusRefresh: Instant? = null
 
     /**
-     * Les stations et leur dernier état connu, réémis à chaque changement.
+     * The stations and their last known state, re-emitted on every change.
      *
-     * Émet immédiatement le contenu du cache, y compris hors ligne. Un cache
-     * vide donne une liste vide, ce que l'interface présente comme une
-     * invitation à rafraîchir et non comme une erreur.
+     * Emits the cache's contents immediately, offline included. An empty cache
+     * gives an empty list, which the interface presents as an invitation to
+     * refresh rather than as an error.
      */
     fun observeStations(): Flow<StationsSnapshot> = combine(
         dao.observeStations(),
@@ -84,13 +82,13 @@ class StationRepository(
     }
 
     /**
-     * Met à jour les données depuis le réseau si la politique l'autorise.
+     * Updates the data from the network if the policy allows it.
      *
-     * @param force ignore le délai minimal entre deux états. Réservé au geste
-     *   de tirer-pour-rafraîchir : l'utilisateur qui le demande explicitement
-     *   ne doit pas se voir opposer un cache.
-     * @return succès si les données ont été mises à jour ou étaient déjà
-     *   fraîches, sinon la cause de l'échec.
+     * @param force ignores the minimum delay between two states. Reserved for
+     *   the pull-to-refresh gesture: a user who asks explicitly must not be
+     *   answered with a cache.
+     * @return success if the data was updated or was already fresh, otherwise
+     *   the cause of the failure.
      */
     suspend fun refresh(force: Boolean = false): Outcome<Unit> = refreshLock.withLock {
         val now = clock.instant()
@@ -104,13 +102,14 @@ class StationRepository(
             is Outcome.Success -> outcome.value
         }
 
-        // Les données stables d'abord : sans elles, un état temps réel n'a
-        // aucune station à décrire.
+        // Static data first: without it, a real-time state has no station to
+        // describe.
         if (stationInformationRefreshIsDue(now)) {
             when (val outcome = remote.fetchStationInformation(discovery)) {
                 is Outcome.Failure -> {
-                    // Un échec ici n'est fatal que si le cache est vide : sinon
-                    // les stations connues suffisent à afficher un état frais.
+                    // A failure here is only fatal if the cache is empty:
+                    // otherwise the known stations are enough to show a fresh
+                    // state.
                     if (dao.stationCount() == 0) return@withLock outcome
                 }
 
@@ -135,12 +134,12 @@ class StationRepository(
     }
 
     /**
-     * Oublie tout ce qui est connu des stations.
+     * Forgets everything known about the stations.
      *
-     * Appelé au changement de ville : les stations d'une agglomération n'ont
-     * rien à faire sur la carte d'une autre, et hors ligne rien ne viendrait
-     * les remplacer. Le document d'auto-découverte s'en va aussi, puisqu'il
-     * décrit les flux du réseau qu'on quitte.
+     * Called when the city changes: one conurbation's stations have no business
+     * on another's map, and offline nothing would come to replace them. The
+     * auto-discovery document goes too, since it describes the feeds of the
+     * network being left.
      */
     suspend fun forget(): Unit = refreshLock.withLock {
         dao.clearAvailabilities()
@@ -148,16 +147,16 @@ class StationRepository(
         cachedDiscovery = null
         cachedDiscoveryUrl = null
         lastStatusRefresh = null
-        // La date du dernier relevé n'a pas à être réécrite : un cache vide
-        // rend le rafraîchissement dû de toute façon.
+        // The date of the last fetch need not be rewritten: an empty cache
+        // makes the refresh due anyway.
     }
 
     /**
-     * Le document d'auto-découverte, relu seulement si l'URL a changé.
+     * The auto-discovery document, re-read only if the URL has changed.
      */
     private suspend fun discovery(): Outcome<GbfsDiscovery> {
-        // Pas d'URL : aucune ville n'est choisie. Il n'y a rien à réessayer, et
-        // le dire ainsi évite d'afficher une panne de réseau qui n'existe pas.
+        // No URL: no city is chosen. There is nothing to retry, and saying so
+        // this way avoids showing a network failure that does not exist.
         val url = discoveryUrlProvider() ?: return Outcome.Failure(DataError.NoCityChosen)
         cachedDiscovery?.let { cached ->
             if (cachedDiscoveryUrl == url) return Outcome.Success(cached)
@@ -185,26 +184,25 @@ class StationRepository(
 
     private companion object {
         /**
-         * Le flux est produit toutes les minutes ; demander plus souvent ne
-         * rapporterait aucune donnée nouvelle et ne ferait que charger le
-         * serveur du producteur (SPEC §4.1).
+         * The feed is produced every minute; asking more often would bring back
+         * no new data and would only load the producer's server (SPEC §4.1).
          */
         val STATUS_MINIMUM_INTERVAL: Duration = Duration.ofSeconds(60)
 
         /**
-         * Les données stables ne changent qu'à l'ouverture ou à la fermeture
-         * d'une station, soit quelques fois par an.
+         * The static data only changes when a station opens or closes, which
+         * happens a few times a year.
          */
         val STATION_INFORMATION_MAXIMUM_AGE: Duration = Duration.ofDays(1)
     }
 }
 
 /**
- * Un instantané de ce que l'application sait des stations.
+ * A snapshot of what the application knows about the stations.
  *
- * @property stations les stations connues et leur dernier état.
- * @property fetchedAt date à laquelle cet état a été récupéré, ou `null` si
- *   aucun état n'a jamais été reçu.
+ * @property stations the known stations and their last state.
+ * @property fetchedAt when that state was fetched, or `null` if no state has
+ *   ever been received.
  */
 data class StationsSnapshot(val stations: List<StationWithAvailability>, val fetchedAt: Instant?)
 
