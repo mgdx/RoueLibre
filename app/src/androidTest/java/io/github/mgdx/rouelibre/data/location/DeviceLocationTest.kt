@@ -31,17 +31,23 @@ import java.time.Duration
  * device happens to be, nor wait for it to see the sky. The injected position
  * is in the centre of Lille, inside the data's bounding box.
  *
- * Mocking a position needs two permissions, and both are conditions of the
- * device rather than of the code:
+ * Mocking a position is a condition of the device rather than of the code, and
+ * it takes three things — verified on a Fairphone 5 under Android 16:
  *
  * ```
  * adb shell appops set io.github.mgdx.rouelibre.debug android:mock_location allow
+ * adb shell pm grant io.github.mgdx.rouelibre.debug android.permission.ACCESS_FINE_LOCATION
+ * adb shell am instrument -w -e class …DeviceLocationTest \
+ *     io.github.mgdx.rouelibre.debug.test/androidx.test.runner.AndroidJUnitRunner
  * ```
  *
- * then, in the developer options, **"Mock location app" → Roue Libre**. Proven
- * on an Android 16: without that second setting the system accepts
- * `addTestProvider` and `setTestProviderLocation` without error, but delivers
- * the position to nobody. The test then abstains rather than failing.
+ * The last line matters as much as the first two: `connectedAndroidTest`
+ * reinstalls the application before every run, and installing resets the app
+ * op. Run through Gradle, these tests will keep abstaining however carefully
+ * the device was prepared.
+ *
+ * Without the app op, `addTestProvider` throws and the test abstains rather
+ * than failing: it is the environment that is missing something, not the code.
  */
 @RunWith(AndroidJUnit4::class)
 class DeviceLocationTest {
@@ -90,8 +96,8 @@ class DeviceLocationTest {
         // location app" in the developer options.
         manager.setTestProviderLocation(LocationManager.GPS_PROVIDER, lille)
         assumeTrue(
-            "désigne Roue Libre comme application de position fictive " +
-                "dans les options pour développeurs",
+            "name Roue Libre as the mock location app " +
+                "in the developer options",
             manager.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null,
         )
     }

@@ -1,7 +1,7 @@
 {
   "catalogueVersion": 1,
   "catalogueUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/catalogue.json",
-  "generatedAt": "2026-08-10T09:23:51Z",
+  "generatedAt": "2026-08-10T16:11:37Z",
   "cities": [
     {
       "id": "vlille",
@@ -18,7 +18,7 @@
       "centreLatitude": 50.633333,
       "centreLongitude": 3.066667,
       "gbfsDiscoveryUrl": "https://media.ilevia.fr/opendata/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-vlille.json",
+      "manifestUrl": "http://localhost:8000/manifest-vlille.json",
       "dataSizeBytes": 42607102,
       "releaseTag": "data-2026-08"
     },
