@@ -4,38 +4,37 @@ import kotlin.math.abs
 import kotlin.math.min
 
 /**
- * Nombre de fautes admises pour un mot de cette longueur (SPEC §4.3).
+ * How many mistakes are allowed for a word of this length (SPEC §4.3).
  *
- * Une faute en dessous de huit caractères, deux au-delà : sur un mot court,
- * deux fautes changent tellement le mot que le rattrapage ramènerait plus de
- * bruit que de service — « gare » est à deux fautes de « gard », « care »,
- * « gaz », et d'une bonne partie du dictionnaire.
+ * One mistake below eight characters, two beyond: on a short word, two mistakes
+ * change it so much that the fallback would bring back more noise than service
+ * — "gare" is two mistakes away from "gard", "care", "gaz", and from a good
+ * part of the dictionary.
  */
 public fun toleratedMistakes(word: String): Int = if (word.length < 8) 1 else 2
 
 /**
- * Distance d'édition entre deux mots, plafonnée.
+ * The edit distance between two words, capped.
  *
- * Variante de **Damerau-Levenshtein** : aux insertions, suppressions et
- * substitutions elle ajoute l'**interversion de deux lettres voisines**, faute
- * la plus courante au clavier tactile, que la distance de Levenshtein simple
- * compterait pour deux.
+ * A variant of **Damerau-Levenshtein**: on top of insertions, deletions and
+ * substitutions it adds the **transposition of two neighbouring letters**, the
+ * commonest mistake on a touch keyboard, which plain Levenshtein would count as
+ * two.
  *
- * C'est la variante dite « par alignement optimal » : elle n'autorise pas une
- * lettre déjà intervertie à subir une autre modification. Le cas est
- * pathologique sur des noms de rues, et l'écarter tient l'algorithme en deux
- * lignes de tableau au lieu d'une matrice complète et d'un dictionnaire de
- * dernières occurrences.
+ * This is the so-called "optimal string alignment" variant: it does not allow a
+ * letter already transposed to undergo another edit. That case is pathological
+ * on street names, and ruling it out keeps the algorithm to two rows of a table
+ * instead of a full matrix and a dictionary of last occurrences.
  *
- * Le plafond n'est pas un confort : il permet d'abandonner une comparaison dès
- * que la ligne courante dépasse le seuil, ce qui écarte l'écrasante majorité
- * des vingt mille entrées de l'index en quelques caractères.
+ * The cap is not a comfort: it allows abandoning a comparison as soon as the
+ * current row exceeds the threshold, which rules out the overwhelming majority
+ * of the index's twenty thousand entries within a few characters.
  *
- * @param source premier mot, déjà normalisé.
- * @param target second mot, déjà normalisé.
- * @param maximum distance au-delà de laquelle le résultat n'a plus d'intérêt.
- * @return la distance exacte si elle vaut au plus [maximum], sinon une valeur
- *   strictement supérieure à [maximum] dont seule cette propriété est garantie.
+ * @param source the first word, already normalised.
+ * @param target the second word, already normalised.
+ * @param maximum the distance beyond which the result no longer matters.
+ * @return the exact distance if it is at most [maximum], otherwise a value
+ *   strictly greater than [maximum], of which only that property is guaranteed.
  */
 public fun boundedDamerauLevenshteinDistance(source: String, target: String, maximum: Int): Int {
     val beyond = maximum + 1
@@ -44,8 +43,8 @@ public fun boundedDamerauLevenshteinDistance(source: String, target: String, max
     if (source.isEmpty()) return target.length.coerceAtMost(beyond)
     if (target.isEmpty()) return source.length.coerceAtMost(beyond)
 
-    // Trois lignes suffisent : la courante, la précédente, et celle d'avant —
-    // la seule dont l'interversion a besoin.
+    // Three rows are enough: the current one, the previous one, and the one
+    // before that — the only one transposition needs.
     var beforePrevious = IntArray(target.length + 1)
     var previous = IntArray(target.length + 1) { it }
     var current = IntArray(target.length + 1)
@@ -58,7 +57,7 @@ public fun boundedDamerauLevenshteinDistance(source: String, target: String, max
                 if (source[sourceIndex - 1] == target[targetIndex - 1]) 0 else 1
             var best = min(
                 current[targetIndex - 1] + 1, // insertion
-                previous[targetIndex] + 1, // suppression
+                previous[targetIndex] + 1, // deletion
             )
             best = min(best, previous[targetIndex - 1] + substitutionCost)
             val isTransposition = sourceIndex > 1 &&
@@ -71,8 +70,8 @@ public fun boundedDamerauLevenshteinDistance(source: String, target: String, max
             current[targetIndex] = best
             rowMinimum = min(rowMinimum, best)
         }
-        // Une ligne entièrement au-dessus du plafond ne peut plus redescendre :
-        // les lignes suivantes ne font que croître.
+        // A row entirely above the cap can never come back down: the rows that
+        // follow only grow.
         if (rowMinimum > maximum) return beyond
 
         val recycled = beforePrevious
