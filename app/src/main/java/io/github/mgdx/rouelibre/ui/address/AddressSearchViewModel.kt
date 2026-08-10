@@ -18,14 +18,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
- * État de l'écran de recherche d'adresses.
+ * The state of the address search screen.
  *
- * @property query ce qui est tapé, brut.
- * @property results les adresses trouvées, la meilleure d'abord.
- * @property isSearching une recherche est en cours.
- * @property isIndexInstalled faux tant que l'index d'adresses n'est pas sur
- *   l'appareil : l'écran explique alors quoi faire au lieu de ne rien trouver.
- * @property error l'échec de lecture à signaler, s'il y en a un.
+ * @property query what is typed, raw.
+ * @property results the addresses found, best first.
+ * @property isSearching a search is under way.
+ * @property isIndexInstalled false until the address index is on the device:
+ *   the screen then explains what to do instead of finding nothing.
+ * @property error the read failure to report, if there is one.
  */
 data class AddressSearchUiState(
     val query: String = "",
@@ -34,7 +34,7 @@ data class AddressSearchUiState(
     val isIndexInstalled: Boolean = true,
     val error: DataError? = null,
 ) {
-    /** Vrai quand la saisie ne ramène rien, une fois la recherche terminée. */
+    /** True when the query brings nothing back, once the search is done. */
     val hasNoMatch: Boolean
         get() = isIndexInstalled &&
             error == null &&
@@ -44,23 +44,23 @@ data class AddressSearchUiState(
 }
 
 /**
- * Pilote la recherche d'adresses hors ligne (SPEC §4.3).
+ * Drives the offline address search (SPEC §4.3).
  *
- * Deux règles gouvernent ce modèle.
+ * Two rules govern this model.
  *
- * **Aucune recherche sur le fil principal.** Le parcours flou porte sur des
- * dizaines de milliers d'entrées ; il vit dans [AddressIndex], sur le
- * répartiteur des entrées-sorties.
+ * **No search on the main thread.** The fuzzy scan covers tens of thousands of
+ * entries; it lives in [AddressIndex], on the IO dispatcher.
  *
- * **Chaque frappe annule la précédente.** Un anti-rebond laisse passer une
- * pause de frappe avant de chercher, et `collectLatest` abandonne le calcul en
- * cours dès qu'une lettre s'ajoute. Sans quoi une saisie de quinze caractères
- * lancerait quinze parcours complets dont quatorze seraient jetés.
+ * **Every keystroke cancels the previous one.** A debounce lets a pause in
+ * typing go by before searching, and `collectLatest` abandons the running
+ * computation as soon as another letter arrives. Without that, a fifteen-letter
+ * query would launch fifteen full scans, fourteen of which would be thrown
+ * away.
  *
- * @property index l'index hors ligne interrogé.
- * @property origin point de référence du classement par proximité — le centre
- *   de la carte au moment où l'écran s'ouvre. Aucune permission de localisation
- *   n'est demandée pour cela (SPEC §10).
+ * @property index the offline index queried.
+ * @property origin the reference point for proximity ranking — the map's centre
+ *   at the moment the screen opens. No location permission is requested for
+ *   that (SPEC §10).
  */
 class AddressSearchViewModel(private val index: AddressIndex, private val origin: Coordinates?) :
     ViewModel() {
@@ -69,22 +69,22 @@ class AddressSearchViewModel(private val index: AddressIndex, private val origin
         AddressSearchUiState(isIndexInstalled = index.isInstalled()),
     )
 
-    /** L'état courant de l'écran. */
+    /** The screen's current state. */
     val state: StateFlow<AddressSearchUiState> = mutableState.asStateFlow()
 
     private val typed = MutableStateFlow("")
 
     init {
         viewModelScope.launch {
-            // `debounce` reste marqué en aperçu par kotlinx.coroutines alors
-            // qu'il est stable d'usage depuis des années ; l'anti-rebond de
-            // 150 ms est une exigence du SPEC §4.3, pas un choix de confort.
+            // `debounce` is still marked as preview by kotlinx.coroutines
+            // although it has been stable in practice for years; the 150 ms
+            // debounce is a requirement of SPEC §4.3, not a comfort choice.
             @OptIn(FlowPreview::class)
             typed.debounce(TYPING_PAUSE_MILLIS).collectLatest(::search)
         }
     }
 
-    /** Prend en compte une nouvelle saisie. */
+    /** Takes a new query into account. */
     fun onQueryChanged(query: String) {
         if (mutableState.value.query == query) return
         mutableState.update { it.copy(query = query, error = null) }
@@ -115,7 +115,7 @@ class AddressSearchViewModel(private val index: AddressIndex, private val origin
         }
     }
 
-    /** Fabrique le modèle avec ses dépendances, sans framework d'injection. */
+    /** Builds the model with its dependencies, without an injection framework. */
     class Factory(private val index: AddressIndex, private val origin: Coordinates?) :
         ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -129,11 +129,11 @@ class AddressSearchViewModel(private val index: AddressIndex, private val origin
 
     private companion object {
         /**
-         * Pause de frappe avant de chercher, en millisecondes.
+         * The pause in typing before searching, in milliseconds.
          *
-         * Cent cinquante millisecondes, comme le demande le SPEC §4.3 : assez
-         * court pour que la liste suive la frappe, assez long pour qu'une
-         * saisie continue ne déclenche qu'une recherche.
+         * A hundred and fifty, as SPEC §4.3 asks: short enough for the list to
+         * follow the typing, long enough that continuous typing triggers only
+         * one search.
          */
         const val TYPING_PAUSE_MILLIS = 150L
     }

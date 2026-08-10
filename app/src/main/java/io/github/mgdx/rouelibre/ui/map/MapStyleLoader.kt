@@ -7,16 +7,16 @@ import io.github.mgdx.rouelibre.R
 import java.io.File
 
 /**
- * Compose le style de la carte à partir du modèle embarqué dans l'APK.
+ * Composes the map style from the template embedded in the APK.
  *
- * Deux choses ne peuvent pas être écrites dans le fichier de style.
+ * Two things cannot be written into the style file.
  *
- * **Les couleurs**, parce qu'elles appartiennent au jeu de jetons du projet et
- * changent avec le thème (SPEC §7). Les inscrire dans le style obligerait à
- * maintenir deux fichiers presque identiques, qui divergeraient.
+ * **The colours**, because they belong to the project's token set and change
+ * with the theme (SPEC §7). Writing them into the style would mean maintaining
+ * two nearly identical files, which would diverge.
  *
- * **Le chemin des tuiles**, parce que le fichier est installé dans le stockage
- * privé de l'application et que son emplacement n'est connu qu'à l'exécution.
+ * **The tiles' path**, because the file is installed in the application's
+ * private storage and its location is only known at run time.
  */
 object MapStyleLoader {
 
@@ -24,10 +24,10 @@ object MapStyleLoader {
     private const val TILES_PLACEHOLDER = "{{tilesPath}}"
 
     /**
-     * Jetons de couleur injectés dans le style.
+     * The colour tokens injected into the style.
      *
-     * Le nom de la clé est celui de la ressource : un jeton oublié saute aux
-     * yeux, dans le style comme ici.
+     * The key's name is the resource's own: a forgotten token stands out, in
+     * the style as much as here.
      */
     private val COLOUR_TOKENS: Map<String, Int> = mapOf(
         "map_land" to R.color.map_land,
@@ -47,13 +47,13 @@ object MapStyleLoader {
     )
 
     /**
-     * Rend le style prêt à être passé à MapLibre.
+     * Returns the style ready to be handed to MapLibre.
      *
-     * @param context sert à lire l'asset et à résoudre les couleurs du thème
-     *   courant ; il doit donc être celui d'une vue, pas celui de
-     *   l'application, sinon le thème sombre serait ignoré.
-     * @param tilesFile le fichier MBTiles installé.
-     * @return le style complet, en JSON.
+     * @param context used to read the asset and to resolve the current theme's
+     *   colours; it must therefore be a view's context, not the application's,
+     *   otherwise the dark theme would be ignored.
+     * @param tilesFile the installed MBTiles file.
+     * @return the complete style, as JSON.
      */
     fun load(context: Context, tilesFile: File): String {
         var style = context.assets.open(STYLE_ASSET)
@@ -63,17 +63,17 @@ object MapStyleLoader {
         for ((token, colourResource) in COLOUR_TOKENS) {
             style = style.replace("{{$token}}", hexOf(context, colourResource))
         }
-        // MapLibre lit le MBTiles directement sur le disque : aucune requête
-        // de tuile ne part sur le réseau (SPEC §4.2).
+        // MapLibre reads the MBTiles straight from disk: no tile request goes
+        // out on the network (SPEC §4.2).
         return style.replace(TILES_PLACEHOLDER, tilesFile.absolutePath)
     }
 
     /**
-     * Convertit une couleur de ressource en notation hexadécimale.
+     * Converts a resource colour into hexadecimal notation.
      *
-     * Le format `#rrggbb` plutôt que `#aarrggbb` : la spécification des styles
-     * suit la notation CSS, où l'alpha se place en dernier. Toutes les
-     * couleurs du fond de carte sont opaques, l'alpha n'a donc pas à voyager.
+     * The `#rrggbb` form rather than `#aarrggbb`: the style specification
+     * follows CSS notation, where alpha comes last. Every base-map colour is
+     * opaque, so alpha has no need to travel.
      */
     private fun hexOf(context: Context, @ColorRes colourResource: Int): String {
         val colour = ContextCompat.getColor(context, colourResource)

@@ -27,13 +27,13 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 /**
- * Une ligne de l'écran stockage.
+ * One row of the storage screen.
  *
- * @property kind le jeu décrit.
- * @property installed ce qui est installé, ou `null`.
- * @property update ce que le manifeste en dit, une fois consulté.
- * @property publishedSizeBytes taille annoncée par le manifeste, montrée avant
- *   de demander confirmation (SPEC §4.4).
+ * @property kind the set described.
+ * @property installed what is installed, or `null`.
+ * @property update what the manifest says about it, once consulted.
+ * @property publishedSizeBytes the size the manifest announces, shown before
+ *   asking for confirmation (SPEC §4.4).
  */
 data class DatasetRow(
     val kind: DatasetKind,
@@ -43,12 +43,12 @@ data class DatasetRow(
 )
 
 /**
- * État de l'écran stockage.
+ * The state of the storage screen.
  *
- * @property totalBytes place occupée, ou `null` si rien n'est installé.
- * @property isChecking une consultation du manifeste est en cours.
- * @property manifest la publication annoncée, une fois consultée.
- * @property downloading le transfert en cours, s'il y en a un.
+ * @property totalBytes the space occupied, or `null` if nothing is installed.
+ * @property isChecking a manifest check is under way.
+ * @property manifest the announced release, once checked.
+ * @property downloading the transfer in progress, if there is one.
  */
 data class StorageUiState(
     val datasets: List<DatasetRow> = DatasetKind.entries.map { DatasetRow(it, null) },
@@ -58,49 +58,49 @@ data class StorageUiState(
     val manifest: DataManifest? = null,
     val downloading: DownloadProgress? = null,
 ) {
-    /** Les jeux que le manifeste annonce comme absents ou périmés. */
+    /** The sets the manifest announces as absent or out of date. */
     val outdated: List<DatasetRow>
         get() = datasets.filter {
             it.update == DatasetUpdate.Missing ||
                 it.update == DatasetUpdate.Outdated
         }
 
-    /** Ce qu'il y aurait à télécharger, en octets. */
+    /** What there would be to download, in bytes. */
     val pendingBytes: Long
         get() = outdated.sumOf { it.publishedSizeBytes ?: 0L }
 }
 
-/** Ce que l'écran doit annoncer après une action. */
+/** What the screen must announce after an action. */
 sealed interface StorageMessage {
-    /** La consultation du manifeste a échoué. */
+    /** Checking the manifest failed. */
     data class CheckFailed(val error: DataError) : StorageMessage
 
-    /** Le manifeste annonce un format que cette version ne sait pas lire. */
+    /** The manifest announces a format this build cannot read. */
     data class UnsupportedFormat(val found: Int, val supported: Int) : StorageMessage
 
-    /** Tout est déjà à jour. */
+    /** Everything is already up to date. */
     data object AlreadyUpToDate : StorageMessage
 
-    /** Un téléchargement a échoué. */
+    /** A download failed. */
     data class DownloadFailed(val kind: DatasetKind, val error: DataError) : StorageMessage
 
-    /** Un jeu vient d'être installé. */
+    /** A set has just been installed. */
     data class Installed(val kind: DatasetKind) : StorageMessage
 
-    /** Un jeu vient d'être supprimé. */
+    /** A set has just been deleted. */
     data class Deleted(val kind: DatasetKind) : StorageMessage
 
-    /** Le fichier proposé a été refusé, pour la raison donnée. */
+    /** The file offered was refused, for the reason given. */
     data class Rejected(val kind: DatasetKind, val reason: DatasetRejection) : StorageMessage
 }
 
 /**
- * Pilote l'installation, la mise à jour et la suppression des jeux de données
- * hors ligne (SPEC §4.4).
+ * Drives the installation, updating and deletion of the offline datasets
+ * (SPEC §4.4).
  *
- * **La vérification n'est jamais automatique.** Elle a lieu sur action
- * explicite, depuis cet écran : une requête périodique dessinerait un profil
- * d'usage de l'application, ce que la contrainte C3 exclut.
+ * **The check is never automatic.** It happens on an explicit action, from this
+ * screen: a periodic request would draw a usage profile of the application,
+ * which constraint C3 rules out.
  */
 class StorageViewModel(
     private val store: DatasetStore,
@@ -112,12 +112,12 @@ class StorageViewModel(
 
     private val mutableState = MutableStateFlow(StorageUiState())
 
-    /** L'état courant de l'écran. */
+    /** The screen's current state. */
     val state: StateFlow<StorageUiState> = mutableState.asStateFlow()
 
     private val messageChannel = Channel<StorageMessage>(Channel.BUFFERED)
 
-    /** Les issues d'action à annoncer, une seule fois chacune. */
+    /** The outcomes to announce, once each. */
     val messages: Flow<StorageMessage> = messageChannel.receiveAsFlow()
 
     init {
@@ -144,9 +144,9 @@ class StorageViewModel(
     }
 
     /**
-     * Installe le fichier désigné comme le jeu [kind].
+     * Installs the designated file as the [kind] set.
      *
-     * @param source document choisi dans le sélecteur du système.
+     * @param source the document picked from the system chooser.
      */
     fun import(kind: DatasetKind, source: Uri) {
         if (mutableState.value.isImporting) return
@@ -165,17 +165,17 @@ class StorageViewModel(
     }
 
     /**
-     * Consulte le manifeste publié (SPEC §4.4).
+     * Checks the published manifest (SPEC §4.4).
      *
-     * Une seule requête, sur appui, et rien n'est téléchargé à cette occasion :
-     * l'utilisateur voit d'abord ce qui a changé et ce que cela pèse.
+     * A single request, on a press, and nothing is downloaded on that occasion:
+     * the user first sees what changed and what it weighs.
      */
     fun checkForUpdates() {
         if (mutableState.value.isChecking) return
         viewModelScope.launch {
             mutableState.update { it.copy(isChecking = true) }
-            // Sans ville active il n'y a pas de manifeste à consulter : le dire
-            // vaut mieux qu'interroger une adresse choisie au hasard.
+            // Without an active city there is no manifest to check: saying so
+            // beats querying an address picked at random.
             val url = manifestUrl()
             if (url == null) {
                 mutableState.update { it.copy(isChecking = false) }
@@ -192,11 +192,10 @@ class StorageViewModel(
     }
 
     /**
-     * Prend acte d'un manifeste lu.
+     * Takes note of a manifest that has been read.
      *
-     * Un format que l'application ne sait pas lire est dit tel quel, avec une
-     * invitation à mettre à jour : le SPEC §4.4 refuse qu'on échoue plus tard,
-     * à l'ouverture d'un fichier.
+     * A format the application cannot read is said as much, with an invitation
+     * to update: SPEC §4.4 refuses a failure later, when opening a file.
      */
     private suspend fun acceptManifest(manifest: DataManifest) {
         val supported = supportedFormatVersion() ?: return
@@ -213,10 +212,10 @@ class StorageViewModel(
     }
 
     /**
-     * Télécharge et installe ce que le manifeste annonce de neuf.
+     * Downloads and installs whatever the manifest announces as new.
      *
-     * Les jeux déjà à jour ne sont pas repris : c'est tout l'intérêt de
-     * comparer les empreintes.
+     * Sets already up to date are not fetched again: that is the whole point of
+     * comparing digests.
      */
     fun downloadPending() {
         val manifest = mutableState.value.manifest ?: return
@@ -261,7 +260,7 @@ class StorageViewModel(
         }
     }
 
-    /** Recroise l'état installé avec le manifeste consulté. */
+    /** Cross-checks the installed state against the manifest read. */
     private fun StorageUiState.withManifestApplied(): StorageUiState {
         val manifest = manifest ?: return this
         val states = compareWithInstalled(
@@ -280,7 +279,7 @@ class StorageViewModel(
         )
     }
 
-    /** Supprime un jeu installé. */
+    /** Deletes an installed set. */
     fun delete(kind: DatasetKind) {
         viewModelScope.launch {
             store.delete(kind)
@@ -288,7 +287,7 @@ class StorageViewModel(
         }
     }
 
-    /** Fabrique le modèle avec ses dépendances, sans framework d'injection. */
+    /** Builds the model with its dependencies, without an injection framework. */
     class Factory(
         private val store: DatasetStore,
         private val downloader: DatasetDownloader,

@@ -18,16 +18,16 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 
 /**
- * État de la feuille de détail d'une station.
+ * The state of a station's detail sheet.
  *
- * @property entry la station et son dernier état connu, ou `null` tant que le
- *   cache n'a pas été lu.
- * @property address l'adresse de la station, déduite de l'index hors ligne, ou
- *   `null` si l'index est absent ou ne connaît rien d'assez proche.
- * @property distanceInMetres distance à vol d'oiseau depuis la position de
- *   l'utilisateur, ou `null` s'il ne l'a pas partagée.
- * @property isFavourite la station figure parmi les favoris.
- * @property fetchedAt date de la dernière récupération réussie.
+ * @property entry the station and its last known state, or `null` until the
+ *   cache has been read.
+ * @property address the station's address, derived from the offline index, or
+ *   `null` if the index is absent or knows nothing near enough.
+ * @property distanceInMetres the straight-line distance from the user's
+ *   position, or `null` if they have not shared it.
+ * @property isFavourite the station is among the favourites.
+ * @property fetchedAt when the last successful fetch happened.
  */
 data class StationDetailUiState(
     val entry: StationWithAvailability? = null,
@@ -38,14 +38,13 @@ data class StationDetailUiState(
 )
 
 /**
- * Alimente la feuille de détail d'une station (SPEC §7.2).
+ * Feeds a station's detail sheet (SPEC §7.2).
  *
- * La feuille reste vivante tant qu'elle est ouverte : les disponibilités
- * qu'elle montre suivent le flux du dépôt, elles ne sont pas figées à
- * l'ouverture. C'est ce qui évite de proposer une station qui s'est vidée
- * pendant qu'on la regardait.
+ * The sheet stays alive while it is open: the availability it shows follows the
+ * repository's stream, it is not frozen at opening time. That is what avoids
+ * offering a station that emptied while one was looking at it.
  *
- * @property stationId la station décrite.
+ * @property stationId the station described.
  */
 class StationDetailViewModel(
     private val repository: StationRepository,
@@ -57,7 +56,7 @@ class StationDetailViewModel(
 
     private val mutableState = MutableStateFlow(StationDetailUiState())
 
-    /** L'état courant de la feuille. */
+    /** The sheet's current state. */
     val state: StateFlow<StationDetailUiState> = mutableState.asStateFlow()
 
     private var addressResolved = false
@@ -82,11 +81,11 @@ class StationDetailViewModel(
     }
 
     /**
-     * Cherche l'adresse de la station, une seule fois.
+     * Looks up the station's address, once only.
      *
-     * Le flux du dépôt réémet à chaque rafraîchissement des disponibilités,
-     * toutes les minutes ; or la position d'une station ne bouge pas, et la
-     * recherche parcourt des milliers de numéros.
+     * The repository's stream re-emits on every availability refresh, every
+     * minute; a station's position, however, does not move, and the lookup
+     * walks through thousands of house numbers.
      */
     private suspend fun resolveAddressOnce(entry: StationWithAvailability) {
         if (addressResolved) return
@@ -96,12 +95,12 @@ class StationDetailViewModel(
     }
 
     /**
-     * Calcule la distance depuis la position, si elle est déjà connue.
+     * Computes the distance from the position, if it is already known.
      *
-     * **Aucune permission n'est demandée ici** : ouvrir le détail d'une
-     * station n'est pas le moment de réclamer la localisation, et une
-     * distance manquante ne prive de rien (SPEC §10). Seule la dernière
-     * position connue est lue, ce qui n'allume aucun capteur.
+     * **No permission is requested here**: opening a station's detail is not
+     * the moment to demand location, and a missing distance deprives the user
+     * of nothing (SPEC §10). Only the last known position is read, which turns
+     * on no sensor.
      */
     private fun showDistanceOnce(entry: StationWithAvailability) {
         if (distanceResolved) return
@@ -111,12 +110,12 @@ class StationDetailViewModel(
         mutableState.update { it.copy(distanceInMetres = distance) }
     }
 
-    /** Met la station en favori, ou l'en retire (SPEC §7.2). */
+    /** Marks the station as a favourite, or takes it out (SPEC §7.2). */
     fun toggleFavourite() {
         viewModelScope.launch { preferences.toggleFavourite(stationId) }
     }
 
-    /** Fabrique le modèle avec ses dépendances, sans framework d'injection. */
+    /** Builds the model with its dependencies, without an injection framework. */
     class Factory(
         private val repository: StationRepository,
         private val preferences: AppPreferences,

@@ -20,15 +20,14 @@ import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * État de l'écran de résultat d'itinéraire.
+ * The state of the journey result screen.
  *
- * @property plan ce que l'algorithme a composé, ou `null` tant qu'il calcule.
- * @property isComputing un calcul est en cours.
- * @property chosenIndex la proposition affichée : 0 pour la meilleure, puis
- *   les alternatives dans l'ordre.
- * @property hasStations faux quand aucune station n'est connue : il faut
- *   d'abord récupérer le réseau, ce qui n'est pas la même chose qu'un trajet
- *   impossible.
+ * @property plan what the algorithm composed, or `null` while it computes.
+ * @property isComputing a computation is under way.
+ * @property chosenIndex the option shown: 0 for the best, then the alternatives
+ *   in order.
+ * @property hasStations false when no station is known: the network has to be
+ *   fetched first, which is not the same thing as an impossible journey.
  */
 data class JourneyUiState(
     val plan: JourneyPlan? = null,
@@ -36,27 +35,27 @@ data class JourneyUiState(
     val chosenIndex: Int = 0,
     val hasStations: Boolean = true,
 ) {
-    /** Les propositions, la meilleure d'abord. */
+    /** The options, best first. */
     val options: List<JourneyOption>
         get() = when (val current = plan) {
             is JourneyPlan.Found -> listOf(current.best) + current.alternatives
             else -> emptyList()
         }
 
-    /** La proposition actuellement montrée. */
+    /** The option currently shown. */
     val chosen: JourneyOption?
         get() = options.getOrNull(chosenIndex)
 }
 
 /**
- * Compose le trajet demandé et le tient à jour (SPEC §6, §7.4).
+ * Composes the requested journey and keeps it current (SPEC §6, §7.4).
  *
- * Le calcul a lieu hors du fil principal, dans l'algorithme du module métier,
- * et il est annulable : quitter l'écran pendant qu'il tourne l'interrompt avec
- * le modèle.
+ * The computation happens off the main thread, inside the business module's
+ * algorithm, and it is cancellable: leaving the screen while it runs interrupts
+ * it along with the model.
  *
- * Rien n'est conservé : ni le trajet, ni ses points. Le SPEC §8 veut que les
- * itinéraires calculés vivent en mémoire, le temps de la session.
+ * Nothing is kept: neither the journey nor its points. SPEC §8 wants computed
+ * routes to live in memory, for the session only.
  */
 class JourneyViewModel(
     private val router: Router,
@@ -68,7 +67,7 @@ class JourneyViewModel(
 
     private val mutableState = MutableStateFlow(JourneyUiState())
 
-    /** L'état courant de l'écran. */
+    /** The screen's current state. */
     val state: StateFlow<JourneyUiState> = mutableState.asStateFlow()
 
     init {
@@ -76,11 +75,11 @@ class JourneyViewModel(
     }
 
     /**
-     * Recalcule le trajet (SPEC §7.4).
+     * Recomputes the journey (SPEC §7.4).
      *
-     * Le bouton de recalcul existe parce que les disponibilités changent : la
-     * station retenue il y a cinq minutes peut s'être vidée. Le calcul repart
-     * donc de l'état des stations le plus récent qu'ait le dépôt.
+     * The recompute button exists because availability changes: the station
+     * chosen five minutes ago may have emptied. The computation therefore
+     * starts again from the most recent station state the repository holds.
      */
     fun compute() {
         viewModelScope.launch {
@@ -92,9 +91,9 @@ class JourneyViewModel(
                 }
                 return@launch
             }
-            // Les temps forfaitaires sont relus à chaque calcul : les changer
-            // dans les réglages doit se voir au recalcul suivant, sans
-            // redémarrer l'application (SPEC §7.6).
+            // The fixed handling times are re-read on every computation:
+            // changing them in the settings must show on the next recompute,
+            // without restarting the application (SPEC §7.6).
             val handling = preferences.handlingTimes.first()
             val planner = JourneyPlanner(
                 router,
@@ -110,14 +109,14 @@ class JourneyViewModel(
         }
     }
 
-    /** Montre une autre proposition, sans rien recalculer. */
+    /** Shows another option, without recomputing anything. */
     fun choose(index: Int) {
         mutableState.update { current ->
             if (index in current.options.indices) current.copy(chosenIndex = index) else current
         }
     }
 
-    /** Fabrique le modèle avec ses dépendances, sans framework d'injection. */
+    /** Builds the model with its dependencies, without an injection framework. */
     class Factory(
         private val router: Router,
         private val repository: StationRepository,
