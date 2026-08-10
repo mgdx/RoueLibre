@@ -81,18 +81,22 @@ class DatasetStoreTest {
         // Two cities coexist on the device: moving from one to the other must
         // neither mix their files nor suggest the second is installed because
         // the first is (SPEC §11.9).
+        // The graph is looked for in its directory rather than through
+        // `fileOf`: it is the one set with no canonical name, so `fileOf`
+        // returns null for it by design.
         store.importFrom(DatasetKind.Routing, Uri.fromFile(fileNamed("E0_N50.rd5", "segment")))
-        assertTrue(store.fileOf(DatasetKind.Routing) != null)
+        assertEquals(listOf("E0_N50.rd5"), installedSegments())
 
         store.useCity(OTHER_TEST_CITY)
         try {
-            assertEquals(null, store.fileOf(DatasetKind.Routing))
+            assertEquals(emptyList<String>(), installedSegments())
             assertTrue(store.installed.value.isEmpty())
 
             store.useCity(TEST_CITY)
-            assertTrue(
-                "la ville d'origine a perdu ses données",
-                store.fileOf(DatasetKind.Routing) != null,
+            assertEquals(
+                "the original city lost its data",
+                listOf("E0_N50.rd5"),
+                installedSegments(),
             )
         } finally {
             store.deleteCity(OTHER_TEST_CITY)
@@ -107,9 +111,13 @@ class DatasetStoreTest {
         store.deleteCity(TEST_CITY)
 
         assertEquals(0L, store.occupiedBytesOf(TEST_CITY))
-        assertEquals(null, store.fileOf(DatasetKind.Routing))
+        assertEquals(emptyList<String>(), installedSegments())
         assertTrue(store.installed.value.isEmpty())
     }
+
+    /** The routing segments of the city in service, by name. */
+    private fun installedSegments(): List<String> =
+        store.directoryOf(DatasetKind.Routing)?.listFiles().orEmpty().map { it.name }.sorted()
 
     private fun fileNamed(name: String, content: String): File =
         File(incoming, name).apply { writeText(content) }
