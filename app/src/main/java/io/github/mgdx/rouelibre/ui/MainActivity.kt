@@ -25,11 +25,10 @@ import io.github.mgdx.rouelibre.ui.welcome.WhatsNewFragment
 import kotlinx.coroutines.launch
 
 /**
- * L'unique activité de l'application (SPEC §3).
+ * The application's single activity (SPEC §3).
  *
- * Elle héberge les fragments, et accueille les lieux que d'autres
- * applications lui envoient (SPEC §7.8). Toute la logique vit dans les
- * fragments et dans les modèles de vue.
+ * It hosts the fragments, and receives the places other applications send it
+ * (SPEC §7.8). All the logic lives in the fragments and the view models.
  */
 class MainActivity : AppCompatActivity() {
 
@@ -40,17 +39,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Le contenu passe sous les barres système, que le thème colore comme
-        // le fond : l'écran se lit d'un seul tenant.
+        // The content runs under the system bars, which the theme colours like
+        // the background: the screen reads as one piece.
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         val created = ActivityMainBinding.inflate(layoutInflater)
         binding = created
         setContentView(created.root)
 
-        // Sur recréation — rotation, changement de thème — les fragments sont
-        // restaurés par le système ; les replacer effacerait leur état, et
-        // rejouer l'intention rouvrirait un écran que l'utilisateur a quitté.
+        // On recreation — rotation, theme change — the fragments are restored
+        // by the system; replacing them would erase their state, and replaying
+        // the intent would reopen a screen the user has left.
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.content, MapFragment())
@@ -72,16 +71,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Montre l'accueil ou les nouveautés, s'il y a lieu (SPEC §7.9, §7.10).
+     * Shows the welcome or the what's-new screen, if either applies
+     * (SPEC §7.9, §7.10).
      *
-     * Le dernier code de version vu tranche entre les trois cas : jamais
-     * lancée, mise à jour depuis, ou rien de neuf. Les deux écrans sont
-     * exclusifs — les nouveautés ne s'affichent **jamais** à une première
-     * installation, où c'est l'accueil qui s'applique.
+     * The last version code seen decides between the three cases: never
+     * launched, updated since, or nothing new. The two screens are exclusive —
+     * what's-new is **never** shown on a first installation, where the welcome
+     * applies instead.
      *
-     * La lecture est asynchrone : une lecture bloquante du disque retarderait
-     * le premier dessin pour un réglage qui, la plupart du temps, ne demande
-     * rien.
+     * The read is asynchronous: a blocking disk read would delay the first draw
+     * for a setting that, most of the time, asks for nothing.
      */
     private fun openFirstScreen() {
         lifecycleScope.launch {
@@ -96,9 +95,9 @@ class MainActivity : AppCompatActivity() {
                         BuildConfig.VERSION_CODE,
                     ) -> show(WhatsNewFragment.since(lastSeen))
 
-                // Rien à montrer, mais la version vue se met à jour : une
-                // version publiée sans note ne doit pas faire réapparaître les
-                // notes de la précédente au lancement suivant.
+                // Nothing to show, but the version seen is updated: a release
+                // published without notes must not bring the previous
+                // release's notes back on the next launch.
                 lastSeen < BuildConfig.VERSION_CODE ->
                     container.preferences.setLastSeenVersionCode(BuildConfig.VERSION_CODE)
             }
@@ -112,10 +111,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Prend en charge un lieu reçu d'une autre application (SPEC §7.8).
+     * Takes in a place received from another application (SPEC §7.8).
      *
-     * Rien n'est envoyé sur le réseau à cette occasion : une adresse en toutes
-     * lettres est résolue par l'index local, comme partout ailleurs.
+     * Nothing is sent over the network on that occasion: an address in words is
+     * resolved by the local index, as everywhere else.
      */
     private fun welcome(intent: Intent) {
         val request = intent.toPlaceRequest() ?: return
@@ -126,16 +125,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Transforme la demande reçue en point nommé.
+     * Turns the request received into a named point.
      *
-     * @return le point, ou `null` si l'on n'a pas pu le placer — auquel cas
-     *   l'utilisateur a déjà été informé de ce qui manquait.
+     * @return the point, or `null` if it could not be placed — in which case
+     *   the user has already been told what was missing.
      */
     private suspend fun resolve(request: PlaceRequest): JourneyEndpoint? = when (request) {
         is PlaceRequest.Point -> JourneyEndpoint(
             label = request.label?.takeIf { it.isNotBlank() }
-                // Un point sans libellé reçoit celui de la voie la plus
-                // proche : « Rue Nationale » se relit, « 50,63 / 3,06 » non.
+                // A point without a label gets the nearest street's: "Rue
+                // Nationale" reads back, "50.63 / 3.06" does not.
                 ?: container.addressIndex.nearestAddress(request.coordinates)?.streetName
                 ?: getString(R.string.incoming_place_default_label),
             position = request.coordinates,
@@ -145,10 +144,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Cherche dans l'index l'adresse reçue en toutes lettres.
+     * Looks up in the index the address received in words.
      *
-     * Sans index, il faut le dire et proposer de l'installer plutôt que
-     * d'échouer (SPEC §7.8).
+     * Without an index, that has to be said, with an offer to install one,
+     * rather than failing (SPEC §7.8).
      */
     private suspend fun searchAddress(text: String): JourneyEndpoint? {
         if (!container.addressIndex.isInstalled()) {
@@ -170,11 +169,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Ouvre l'écran qui convient au point reçu.
+     * Opens the screen that suits the point received.
      *
-     * Hors de l'emprise couverte, aucun itinéraire n'est tenté : la carte
-     * montre le point si elle le peut, et l'application dit pourquoi elle
-     * s'arrête là (SPEC §4, §7.8).
+     * Outside the covered area no route is attempted: the map shows the point
+     * if it can, and the application says why it stops there (SPEC §4, §7.8).
      */
     private suspend fun openFor(destination: JourneyEndpoint) {
         val boundingBox = container.activeCity()?.boundingBox
@@ -184,9 +182,9 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        // Le départ est la position courante quand elle est déjà connue. La
-        // demander à cette occasion serait une relance que le SPEC §10 exclut :
-        // l'utilisateur n'a pas ouvert l'application, on la lui a ouverte.
+        // The departure is the current position when it is already known.
+        // Asking for it on this occasion would be the prompt SPEC §10 rules
+        // out: the user did not open the application, it was opened for them.
         val here = container.deviceLocation.lastKnown()
         if (here == null) {
             show(JourneySearchFragment.newInstance(destination = destination))
@@ -201,11 +199,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Point de référence du classement des adresses, faute de position.
+     * The reference point for ranking addresses, for want of a position.
      *
-     * Le centre de la ville active, qui n'est pas une position de l'utilisateur
-     * mais un point fixe de la configuration. Sans ville, il n'y a pas d'index
-     * d'adresses non plus : l'appelant n'arrive jamais jusqu'ici.
+     * The active city's centre, which is not a position of the user's but a
+     * fixed point of the configuration. Without a city there is no address
+     * index either: the caller never gets this far.
      */
     private suspend fun defaultOrigin(): Coordinates? = container.deviceLocation.lastKnown()
         ?: container.activeCity()?.map?.centre

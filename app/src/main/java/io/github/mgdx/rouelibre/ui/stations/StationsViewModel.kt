@@ -19,17 +19,16 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 
 /**
- * État des écrans qui montrent les stations.
+ * The state of the screens that show stations.
  *
- * @property stations les stations retenues par la recherche, prêtes à être
- *   affichées.
- * @property query ce que l'utilisateur a tapé dans le champ de recherche.
- * @property isRefreshing une récupération est en cours.
- * @property fetchedAt date de la dernière récupération réussie, ou `null`.
- *   L'ancienneté qui en découle est recalculée par la vue à chaque battement,
- *   sinon un état vieillissant à l'écran resterait marqué comme frais.
- * @property hasLoadedOnce vrai dès que le cache a été lu, ce qui distingue
- *   « en cours de chargement » de « réellement vide ».
+ * @property stations the stations the search kept, ready to be displayed.
+ * @property query what the user typed into the search field.
+ * @property isRefreshing a fetch is under way.
+ * @property fetchedAt when the last successful fetch happened, or `null`. The
+ *   age that follows from it is recomputed by the view on every tick, otherwise
+ *   a state ageing on screen would stay marked as fresh.
+ * @property hasLoadedOnce true as soon as the cache has been read, which tells
+ *   "still loading" apart from "genuinely empty".
  */
 data class StationsUiState(
     val stations: List<StationWithAvailability> = emptyList(),
@@ -39,12 +38,12 @@ data class StationsUiState(
     val hasLoadedOnce: Boolean = false,
 ) {
     /**
-     * Pourquoi la liste est vide, s'il y a lieu.
+     * Why the list is empty, if it is.
      *
-     * Les deux cas appellent des mots et des gestes différents : un cache vide
-     * invite à rafraîchir, une recherche infructueuse invite à l'effacer.
-     * Les confondre reviendrait à dire à l'utilisateur que le réseau n'a
-     * aucune station parce qu'il a fait une faute de frappe.
+     * The two cases call for different words and different gestures: an empty
+     * cache invites a refresh, a fruitless search invites clearing it.
+     * Conflating them would amount to telling the user the network has no
+     * stations because they made a typo.
      */
     val emptiness: Emptiness
         get() = when {
@@ -54,51 +53,50 @@ data class StationsUiState(
         }
 }
 
-/** Ce que l'écran doit dire quand la liste ne montre rien. */
+/** What the screen must say when the list shows nothing. */
 enum class Emptiness {
-    /** Il y a des stations à l'écran. */
+    /** There are stations on screen. */
     None,
 
-    /** Le cache est vide : aucune station n'a jamais été récupérée. */
+    /** The cache is empty: no station has ever been fetched. */
     NothingLoaded,
 
-    /** Des stations existent, mais aucune ne répond à la recherche. */
+    /** Stations exist, but none answers the search. */
     NoMatch,
 }
 
 /**
- * Présente les stations et pilote leur rafraîchissement.
+ * Presents the stations and drives their refreshing.
  *
- * Partagé par la carte et par la liste : les deux écrans montrent les mêmes
- * stations, avec la même politique de fraîcheur. Seule la liste se sert du
- * champ de recherche.
+ * Shared by the map and the list: both screens show the same stations, with the
+ * same freshness policy. Only the list uses the search field.
  *
- * Le modèle ne connaît ni vue ni ressource : il expose un état et des
- * événements, la vue choisit comment les montrer.
+ * The model knows neither view nor resource: it exposes a state and events, and
+ * the view chooses how to show them.
  */
 class StationsViewModel(private val repository: StationRepository) : ViewModel() {
 
     private val mutableState = MutableStateFlow(StationsUiState())
 
-    /** L'état courant de l'écran. */
+    /** The screen's current state. */
     val state: StateFlow<StationsUiState> = mutableState.asStateFlow()
 
     /**
-     * Les échecs à signaler, une seule fois chacun.
+     * The failures to report, once each.
      *
-     * Un canal plutôt qu'un champ d'état : une erreur est un événement, et la
-     * réafficher à chaque rotation de l'écran serait un défaut.
+     * A channel rather than a state field: an error is an event, and showing it
+     * again on every rotation of the screen would be a defect.
      */
     private val errorChannel = Channel<DataError>(Channel.BUFFERED)
 
-    /** Flux des échecs à présenter à l'utilisateur. */
+    /** The stream of failures to present to the user. */
     val errors: Flow<DataError> = errorChannel.receiveAsFlow()
 
     /**
-     * Les stations telles que le dépôt les fournit, avant filtrage.
+     * The stations as the repository supplies them, before filtering.
      *
-     * Gardées à part pour que changer la recherche ne demande pas de relire le
-     * cache, et pour qu'effacer le champ retrouve la liste entière.
+     * Kept apart so that changing the search does not require re-reading the
+     * cache, and so that clearing the field brings the whole list back.
      */
     private var allStations: List<StationWithAvailability> = emptyList()
 
@@ -118,12 +116,11 @@ class StationsViewModel(private val repository: StationRepository) : ViewModel()
     }
 
     /**
-     * Prend en compte une nouvelle saisie de recherche.
+     * Takes a new search query into account.
      *
-     * Le filtrage a lieu à chaque frappe, sans anti-rebond : il parcourt
-     * quelques centaines d'entrées déjà en mémoire. C'est la recherche
-     * d'adresses du SPEC §4.3, portant sur des centaines de milliers de
-     * numéros, qui en demandera un.
+     * Filtering happens on every keystroke, without debouncing: it walks a few
+     * hundred entries already in memory. It is the address search of SPEC §4.3,
+     * over hundreds of thousands of house numbers, that will need one.
      */
     fun onQueryChanged(query: String) {
         mutableState.update { current ->
@@ -136,11 +133,11 @@ class StationsViewModel(private val repository: StationRepository) : ViewModel()
     }
 
     /**
-     * Demande une mise à jour des disponibilités.
+     * Asks for the availability to be updated.
      *
-     * @param force ignore le délai minimal entre deux appels. Réservé au geste
-     *   de tirer-pour-rafraîchir : une demande explicite ne doit jamais se
-     *   voir opposer un cache.
+     * @param force ignores the minimum delay between two calls. Reserved for
+     *   the pull-to-refresh gesture: an explicit request must never be answered
+     *   with a cache.
      */
     fun refresh(force: Boolean = false) {
         if (mutableState.value.isRefreshing) return
@@ -154,7 +151,7 @@ class StationsViewModel(private val repository: StationRepository) : ViewModel()
         }
     }
 
-    /** Fabrique le modèle avec ses dépendances, sans framework d'injection. */
+    /** Builds the model with its dependencies, without an injection framework. */
     class Factory(private val repository: StationRepository) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

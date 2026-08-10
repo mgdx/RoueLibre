@@ -15,26 +15,25 @@ import io.github.mgdx.rouelibre.core.station.AvailabilityDisplay
 import io.github.mgdx.rouelibre.core.station.AvailabilityLevel
 
 /**
- * L'indicateur de disponibilité d'une station — l'élément signature (SPEC §7).
+ * A station's availability indicator — the signature element (SPEC §7).
  *
- * Trois informations dans un seul glyphe :
+ * Three pieces of information in a single glyph:
  *
- *  · **le chiffre** dit combien de vélos, ou de places ;
- *  · **la densité du disque** donne le niveau sans qu'on ait à lire ;
- *  · **l'arc** montre quelle part de la station est occupée.
+ *  · **the figure** says how many bikes, or docks;
+ *  · **the disc's density** gives the level without one having to read;
+ *  · **the arc** shows what share of the station is occupied.
  *
- * La couleur ne porte jamais l'information seule : le chiffre est toujours
- * présent, et chaque état a sa propre forme — anneau plein, anneau ouvert,
- * anneau tireté barré, anneau pointillé. Un daltonien y lit la même chose que
- * tout le monde, ce qu'exige le SPEC §7.1.
+ * Colour never carries the information alone: the figure is always there, and
+ * every state has its own shape — filled ring, open ring, dashed ring with a
+ * stroke through it, dotted ring. A colour-blind reader takes the same meaning
+ * from it as anyone else, which SPEC §7.1 requires.
  *
- * L'échelle de couleur est une rampe d'une seule teinte, et non un rouge vers
- * vert : ce couple est le pire choix possible pour la forme la plus répandue
- * de daltonisme. Ici, plus il y a de vélos, plus il y a d'encre.
+ * The colour scale is a ramp of a single hue, not a red-to-green: that pair is
+ * the worst possible choice for the commonest form of colour blindness. Here,
+ * the more bikes there are, the more ink there is.
  *
- * Dessiné à la main plutôt qu'assemblé de vues : le glyphe apparaît une fois
- * par ligne de liste et une fois par marqueur de carte, où il s'en affiche
- * plusieurs centaines.
+ * Drawn by hand rather than assembled from views: the glyph appears once per
+ * list row and once per map marker, where several hundred of them show at once.
  */
 class AvailabilityIndicatorView @JvmOverloads constructor(
     context: Context,
@@ -56,23 +55,23 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
         textAlign = Paint.Align.CENTER
         typeface = ResourcesCompat.getFont(context, R.font.bricolage_bold)
             ?: Typeface.DEFAULT_BOLD
-        // Chasse fixe : sans elle, la colonne d'indicateurs tressaute d'un
-        // rafraîchissement à l'autre selon les chiffres affichés.
+        // Fixed pitch: without it the column of indicators jitters from one
+        // refresh to the next depending on the figures shown.
         fontFeatureSettings = "tnum"
     }
 
     private val ringBounds = RectF()
 
-    // Préalloués : `onDraw` est appelé à chaque défilement de la liste, et sur
-    // la carte pour chacun des marqueurs visibles. Y créer un objet est le
-    // moyen le plus sûr de faire saccader le défilement.
+    // Preallocated: `onDraw` is called on every scroll of the list, and on the
+    // map for each visible marker. Creating an object in it is the surest way
+    // to make the scrolling stutter.
     private val outOfServiceDashes = DashPathEffect(OUT_OF_SERVICE_DASHES, 0f)
     private val unknownDashes = DashPathEffect(UNKNOWN_DASHES, 0f)
 
-    /** Épaisseur de l'anneau et de l'arc. */
+    /** The thickness of the ring and of the arc. */
     private val ringWidth = resources.getDimension(R.dimen.indicator_ring)
 
-    /** Ce que l'indicateur montre. Le redessin est déclenché à l'affectation. */
+    /** What the indicator shows. Assignment triggers the redraw. */
     var display: AvailabilityDisplay = UNKNOWN
         set(value) {
             if (field == value) return
@@ -81,8 +80,7 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
         }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        // Toujours carré, pour que le disque reste un cercle quel que soit le
-        // conteneur.
+        // Always square, so the disc stays a circle whatever the container.
         val preferred = resources.getDimensionPixelSize(R.dimen.indicator_size)
         val width = resolveSize(preferred, widthMeasureSpec)
         val height = resolveSize(preferred, heightMeasureSpec)
@@ -118,7 +116,7 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
         if (fraction != null && fraction > 0f && !display.isOutOfService) {
             arcPaint.color = palette.inkColour
             arcPaint.strokeWidth = ringWidth
-            // Départ à midi, sens horaire : la lecture d'un cadran.
+            // Starting at twelve o'clock, clockwise: read like a dial.
             canvas.drawArc(ringBounds, START_ANGLE_DEGREES, fraction * FULL_TURN, false, arcPaint)
         }
 
@@ -139,8 +137,8 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
         val label = display.count?.toString() ?: UNKNOWN_LABEL
         textPaint.color = palette.inkColour
         textPaint.textSize = resources.getDimension(R.dimen.text_indicator)
-        // Centrage optique : `descent` et `ascent` encadrent la hauteur réelle
-        // du texte, dont on ramène le milieu sur le centre du disque.
+        // Optical centring: `descent` and `ascent` bracket the text's real
+        // height, whose middle is brought onto the disc's centre.
         val metrics = textPaint.fontMetrics
         val baseline = centreY - (metrics.ascent + metrics.descent) / 2f
         canvas.drawText(label, centreX, baseline, textPaint)
@@ -164,8 +162,8 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
             )
 
             AvailabilityLevel.None -> IndicatorPalette(
-                // Anneau ouvert, sans remplissage : l'absence se voit à ce que
-                // le disque est vide, pas seulement à ce que le chiffre est 0.
+                // An open ring, unfilled: the absence shows in the disc being
+                // empty, not only in the figure being 0.
                 fillColour = null,
                 ringColour = colour(R.color.alerte),
                 inkColour = colour(R.color.alerte),
@@ -197,7 +195,7 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
 
     private fun colour(resource: Int) = ContextCompat.getColor(context, resource)
 
-    /** Les quatre couleurs d'un état, et le pointillé éventuel de l'anneau. */
+    /** A state's four colours, and the ring's dash pattern if it has one. */
     private data class IndicatorPalette(
         val fillColour: Int?,
         val ringColour: Int,
@@ -206,19 +204,19 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
     )
 
     private companion object {
-        /** Départ de l'arc à midi. */
+        /** The arc starts at twelve o'clock. */
         const val START_ANGLE_DEGREES = -90f
         const val FULL_TURN = 360f
 
-        /** Longueur de la barre oblique, en fraction du rayon. */
+        /** The length of the diagonal stroke, as a fraction of the radius. */
         const val SLASH_REACH = 0.6f
 
         const val UNKNOWN_LABEL = "?"
 
-        /** Tirets longs : la station est connue mais ne rend pas le service. */
+        /** Long dashes: the station is known but does not provide the service. */
         val OUT_OF_SERVICE_DASHES = floatArrayOf(14f, 10f)
 
-        /** Pointillés serrés : on ne sait rien de cette station. */
+        /** Tight dots: nothing is known about this station. */
         val UNKNOWN_DASHES = floatArrayOf(3f, 9f)
 
         val UNKNOWN = AvailabilityDisplay(
