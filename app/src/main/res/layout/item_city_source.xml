@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    One city's credit: the network with its conurbation, the notice its
+    configuration declares, and the address the feed is published at.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/space_l"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/city_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Label"
+        tools:text="V'lille — Lille" />
+
+    <TextView
+        android:id="@+id/attribution"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_xs"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+        tools:text="Données V'lille — Ilevia / MEL, licence ODbL" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/open_source"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginTop="@dimen/space_s"
+        android:text="@string/sources_open" />
+
+</LinearLayout>

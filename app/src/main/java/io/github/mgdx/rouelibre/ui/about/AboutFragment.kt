@@ -61,6 +61,7 @@ class AboutFragment : Fragment() {
             views.networkAttribution.isVisible = !attribution.isNullOrBlank()
             views.networkAttribution.text = attribution.orEmpty()
         }
+        views.openSources.setOnClickListener { show(DataSourcesFragment()) }
         views.openRepository.setOnClickListener { openRepository() }
         views.openLicences.setOnClickListener { show(LicencesFragment()) }
         // Both first-launch screens stay readable afterwards: SPEC §7.9 and

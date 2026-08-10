@@ -200,7 +200,13 @@
     <string name="about_licence_title">Licence</string>
     <string name="about_licence_body">Roue Libre est un logiciel libre, publié sous licence GNU GPL version 3. Tu peux l\'utiliser, l\'étudier, le modifier et le redistribuer.</string>
     <string name="about_open_repository">Voir le code source</string>
+    <string name="about_open_sources">Sources ville par ville</string>
     <string name="about_open_licences">Licences des composants</string>
+
+    <!-- The page crediting the feed producers of every city served (SPEC §4.5). -->
+    <string name="sources_title">Sources des données</string>
+    <string name="sources_intro">La disponibilité vient du réseau de chaque ville, en données ouvertes. Voici qui les produit, y compris pour les villes que tu n\'as pas installées.</string>
+    <string name="sources_open">Voir la source</string>
     <string name="about_licences_title">Licences</string>
     <string name="about_no_browser">Aucun navigateur n\'est installé sur cet appareil.</string>
 
