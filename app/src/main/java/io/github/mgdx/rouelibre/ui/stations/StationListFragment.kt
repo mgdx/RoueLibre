@@ -42,10 +42,10 @@ class StationListFragment : Fragment() {
     private var binding: FragmentStationListBinding? = null
 
     private val viewModel: StationsViewModel by viewModels {
+        val container = (requireActivity().application as RoueLibreApplication).container
         StationsViewModel.Factory(
-            (requireActivity().application as RoueLibreApplication)
-                .container
-                .stationRepository,
+            container.stationRepository,
+            positionForOrdering = { container.positionInsideActiveCity() },
         )
     }
 
@@ -114,6 +114,11 @@ class StationListFragment : Fragment() {
             }
         }
 
+        // The nearest station first, when the position allows it (SPEC §7.2).
+        // Asked for once per appearance: a list reordering itself under the
+        // finger would be worse than one ordered a moment late.
+        viewModel.orderByProximity()
+
         observeState()
         observeErrors()
         keepAvailabilityFresh()
@@ -132,6 +137,7 @@ class StationListFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collectLatest { state ->
                     val views = binding ?: return@collectLatest
+                    adapter.origin = state.orderingOrigin
                     adapter.submitList(state.stations)
                     views.swipeRefresh.isRefreshing = state.isRefreshing
                     showEmptyState(state)

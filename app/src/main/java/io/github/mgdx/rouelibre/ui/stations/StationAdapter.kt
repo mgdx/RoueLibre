@@ -7,10 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.mgdx.rouelibre.R
+import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.geo.distanceInMetresTo
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.displayFor
 import io.github.mgdx.rouelibre.databinding.ItemStationBinding
+import io.github.mgdx.rouelibre.ui.formatDistance
 
 /**
  * Shows the stations as a list.
@@ -30,6 +33,19 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
             notifyItemRangeChanged(0, itemCount)
         }
 
+    /**
+     * Where distances are measured from, or `null` to show none.
+     *
+     * Set when the list is ordered by proximity: an order that is not
+     * alphabetical must say what it rests on, otherwise it reads as a defect.
+     */
+    var origin: Coordinates? = null
+        set(value) {
+            if (field == value) return
+            field = value
+            notifyItemRangeChanged(0, itemCount)
+        }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StationViewHolder {
         val binding = ItemStationBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -40,7 +56,7 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: StationViewHolder, position: Int) {
-        holder.bind(getItem(position), mode)
+        holder.bind(getItem(position), mode, origin)
     }
 
     /** One station row. */
@@ -54,8 +70,9 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
          *
          * @param entry the station and its last known state.
          * @param mode what the indicator is to count.
+         * @param origin where to measure the distance from, or `null`.
          */
-        fun bind(entry: StationWithAvailability, mode: AvailabilityMode) {
+        fun bind(entry: StationWithAvailability, mode: AvailabilityMode, origin: Coordinates?) {
             val context = binding.root.context
             val resources = context.resources
             val display = entry.displayFor(mode)
@@ -63,16 +80,23 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
             binding.indicator.display = display
             binding.name.text = entry.station.name
 
+            // Where the station is: its distance when we know where the user
+            // stands, its postcode otherwise. Never both — the line has room
+            // for two facts, and a postcode says nothing to somebody fifty
+            // metres away.
+            val whereabouts = origin
+                ?.let { context.formatDistance(entry.station.position.distanceInMetresTo(it)) }
+                ?: entry.station.postalCode.orEmpty()
             binding.detail.text = entry.station.capacity
                 ?.let {
                     resources.getQuantityString(
                         R.plurals.station_detail_with_capacity,
                         it,
-                        entry.station.postalCode.orEmpty(),
+                        whereabouts,
                         it,
                     )
                 }
-                ?: entry.station.postalCode.orEmpty()
+                ?: whereabouts
             binding.detail.isGone = binding.detail.text.isNullOrBlank()
 
             // The counterpart count: docks when the indicator shows bikes, and

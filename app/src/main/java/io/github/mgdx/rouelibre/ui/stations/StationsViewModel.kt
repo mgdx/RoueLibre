@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.Outcome
+import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.filterStations
+import io.github.mgdx.rouelibre.core.station.orderStations
 import io.github.mgdx.rouelibre.data.StationRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -29,6 +31,9 @@ import java.time.Instant
  *   a state ageing on screen would stay marked as fresh.
  * @property hasLoadedOnce true as soon as the cache has been read, which tells
  *   "still loading" apart from "genuinely empty".
+ * @property orderingOrigin where the distances are measured from when the list
+ *   is ordered by proximity, `null` when it is alphabetical. The rows show it,
+ *   so that an order that is not alphabetical says what it rests on.
  */
 data class StationsUiState(
     val stations: List<StationWithAvailability> = emptyList(),
@@ -36,6 +41,7 @@ data class StationsUiState(
     val isRefreshing: Boolean = false,
     val fetchedAt: Instant? = null,
     val hasLoadedOnce: Boolean = false,
+    val orderingOrigin: Coordinates? = null,
 ) {
     /**
      * Why the list is empty, if it is.
@@ -74,7 +80,10 @@ enum class Emptiness {
  * The model knows neither view nor resource: it exposes a state and events, and
  * the view chooses how to show them.
  */
-class StationsViewModel(private val repository: StationRepository) : ViewModel() {
+class StationsViewModel(
+    private val repository: StationRepository,
+    private val positionForOrdering: suspend () -> Coordinates? = { null },
+) : ViewModel() {
 
     private val mutableState = MutableStateFlow(StationsUiState())
 
@@ -100,13 +109,22 @@ class StationsViewModel(private val repository: StationRepository) : ViewModel()
      */
     private var allStations: List<StationWithAvailability> = emptyList()
 
+    /**
+     * Where the user is, when that orders the list (SPEC §7.2).
+     *
+     * Read once, when the screen asks for it, and not on every refresh: a list
+     * that reorders itself while being read is worse than one ordered a little
+     * late.
+     */
+    private var orderingPosition: Coordinates? = null
+
     init {
         viewModelScope.launch {
             repository.observeStations().collect { snapshot ->
                 allStations = snapshot.stations
                 mutableState.update { current ->
                     current.copy(
-                        stations = filterStations(allStations, current.query),
+                        stations = visibleStations(current.query),
                         fetchedAt = snapshot.fetchedAt,
                         hasLoadedOnce = true,
                     )
@@ -114,6 +132,29 @@ class StationsViewModel(private val repository: StationRepository) : ViewModel()
             }
         }
     }
+
+    /**
+     * Orders the list by proximity, if the position allows it.
+     *
+     * Called by the screen when it appears. Without a usable position — unknown,
+     * too old, not permitted, or outside the served city — the alphabetical
+     * order stays, and nothing is asked of the user.
+     */
+    fun orderByProximity() {
+        viewModelScope.launch {
+            orderingPosition = positionForOrdering()
+            mutableState.update { current ->
+                current.copy(
+                    stations = visibleStations(current.query),
+                    orderingOrigin = orderingPosition,
+                )
+            }
+        }
+    }
+
+    /** The stations to show: those the search keeps, in the order that suits. */
+    private fun visibleStations(query: String): List<StationWithAvailability> =
+        orderStations(filterStations(allStations, query), orderingPosition)
 
     /**
      * Takes a new search query into account.
@@ -127,7 +168,7 @@ class StationsViewModel(private val repository: StationRepository) : ViewModel()
             if (current.query == query) {
                 current
             } else {
-                current.copy(query = query, stations = filterStations(allStations, query))
+                current.copy(query = query, stations = visibleStations(query))
             }
         }
     }
@@ -152,13 +193,16 @@ class StationsViewModel(private val repository: StationRepository) : ViewModel()
     }
 
     /** Builds the model with its dependencies, without an injection framework. */
-    class Factory(private val repository: StationRepository) : ViewModelProvider.Factory {
+    class Factory(
+        private val repository: StationRepository,
+        private val positionForOrdering: suspend () -> Coordinates? = { null },
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass.isAssignableFrom(StationsViewModel::class.java)) {
                 "unexpected model: ${modelClass.name}"
             }
-            return StationsViewModel(repository) as T
+            return StationsViewModel(repository, positionForOrdering) as T
         }
     }
 }

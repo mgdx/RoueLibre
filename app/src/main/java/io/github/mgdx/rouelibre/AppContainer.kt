@@ -95,6 +95,24 @@ class AppContainer(private val context: Context) {
     }
 
     /**
+     * The user's position, but only if it falls inside the city served.
+     *
+     * Used to order the station list by proximity. It reads what the system
+     * already holds and never asks for a fix: ordering a list is not worth
+     * waking the GPS, and a screen that opened faster than a fix arrives would
+     * reorder itself under the finger.
+     *
+     * @return the position, or `null` if it is unknown, too old, not permitted,
+     *   or outside the served conurbation — cases where the alphabet serves
+     *   better than a distance to somewhere else.
+     */
+    suspend fun positionInsideActiveCity(): Coordinates? {
+        val position = deviceLocation.lastKnown() ?: return null
+        val box = activeCity()?.boundingBox ?: return null
+        return position.takeIf { it in box }
+    }
+
+    /**
      * The active city as of the last call to [activeCity].
      *
      * `@Volatile` because the read comes from the main thread and the write

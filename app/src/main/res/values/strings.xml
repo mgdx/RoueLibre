@@ -49,13 +49,13 @@
 
     <!-- Toggle between borrowing a bike and returning one (SPEC §7.1). -->
     <string name="mode_bikes">Vélos</string>
-    <string name="mode_docks">Places</string>
+    <string name="mode_docks">Places libres</string>
     <string name="mode_bikes_description">Afficher les vélos disponibles</string>
     <string name="mode_docks_description">Afficher les places libres</string>
 
     <!-- The secondary count's label, under the figure on the right. -->
     <string name="counterpart_bikes">vélos</string>
-    <string name="counterpart_docks">places</string>
+    <string name="counterpart_docks">places libres</string>
     <!-- Shown instead of the count when the station does not provide the service. -->
     <string name="counterpart_none">—</string>
 
