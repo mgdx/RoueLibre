@@ -4,7 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +20,7 @@ import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.config.CityCatalogue
 import io.github.mgdx.rouelibre.core.config.CityEntry
+import io.github.mgdx.rouelibre.core.config.filterCities
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentCityBinding
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
@@ -36,6 +42,12 @@ class CityFragment : Fragment() {
     private var binding: FragmentCityBinding? = null
 
     private var catalogue: CityCatalogue? = null
+
+    /** The catalogue's cities, in display order, before the search narrows it. */
+    private var rows: List<CityRow> = emptyList()
+
+    /** What is typed in the search field, raw. */
+    private var query: String = ""
 
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
@@ -78,6 +90,25 @@ class CityFragment : Fragment() {
         views.cities.adapter = adapter
         views.locateMe.setOnClickListener { onLocateMeClicked() }
 
+        // Filtering on every keystroke: a few hundred entries already in
+        // memory, no debounce is warranted here.
+        views.searchInput.doAfterTextChanged { text ->
+            query = text?.toString().orEmpty()
+            showRows()
+        }
+        views.searchInput.setOnEditorActionListener { field, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                // The list is already filtered; all that remains is to give the
+                // screen back to the eye by folding the keyboard away.
+                field.clearFocus()
+                hideKeyboard(field)
+                true
+            } else {
+                false
+            }
+        }
+        views.emptyAction.setOnClickListener { views.searchInput.text?.clear() }
+
         showCatalogue()
     }
 
@@ -108,7 +139,7 @@ class CityFragment : Fragment() {
         catalogue = loaded
         val activeId = container.preferences.activeCityId()
         val store = container.datasetStore
-        val rows = loaded.cities
+        rows = loaded.cities
             .map { city ->
                 CityRow(
                     entry = city,
@@ -123,7 +154,26 @@ class CityFragment : Fragment() {
                     .thenByDescending { it.installedBytes > 0 }
                     .thenBy { it.entry.displayName },
             )
-        adapter.submitList(rows)
+        showRows()
+    }
+
+    /**
+     * Shows the catalogue as the search field narrows it.
+     *
+     * The order stays the one [publish] settled: a search filters the list, it
+     * does not rearrange it.
+     */
+    private fun showRows() {
+        val views = binding ?: return
+        val byIdentifier = rows.associateBy { it.entry.id }
+        val shown = filterCities(rows.map { it.entry }, query)
+            .mapNotNull { byIdentifier[it.id] }
+        adapter.submitList(shown)
+
+        // Only once the catalogue has arrived: an empty list before that is a
+        // screen still loading, and there would be nothing to clear.
+        views.emptyState.isVisible = rows.isNotEmpty() && shown.isEmpty()
+        views.emptyMessage.text = getString(R.string.city_no_match_message, query)
     }
 
     // ----------------------------------------------------------- location --
@@ -234,5 +284,17 @@ class CityFragment : Fragment() {
     private fun showMessage(message: String) {
         val views = binding ?: return
         Snackbar.make(views.root, message, Snackbar.LENGTH_LONG).show()
+    }
+
+    /**
+     * Folds the keyboard away.
+     *
+     * Goes through the window rather than the view: the shortcut that takes
+     * only a view is deprecated, and the window is the only thing that reliably
+     * finds itself.
+     */
+    private fun hideKeyboard(view: View) {
+        WindowCompat.getInsetsController(requireActivity().window, view)
+            .hide(WindowInsetsCompat.Type.ime())
     }
 }

@@ -377,6 +377,10 @@
     <string name="city_delete_body">Toutes les données hors ligne de %1$s seront effacées. Il faudra les retélécharger pour t\'en servir à nouveau.</string>
     <string name="city_delete_confirm">Supprimer</string>
     <string name="city_deleted">Données de %1$s supprimées</string>
+    <string name="city_search_hint">Chercher une ville</string>
+    <string name="city_search_clear">Effacer la recherche</string>
+    <string name="city_no_match_title">Aucune ville trouvée</string>
+    <string name="city_no_match_message">Rien ne correspond à « %1$s ». Vérifie l\'orthographe, ou efface la recherche.</string>
     <string name="city_proposal_title">Ta ville</string>
     <string name="city_proposal_body">Tu sembles être dans la zone couverte par %1$s. On part là-dessus ?</string>
     <string name="city_proposal_accept">Oui</string>

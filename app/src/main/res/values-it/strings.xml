@@ -264,6 +264,10 @@
     <string name="city_delete_body">All offline data for %1$s will be erased. You will have to download it again to use it.</string>
     <string name="city_delete_confirm">Delete</string>
     <string name="city_deleted">Data for %1$s deleted</string>
+    <string name="city_search_hint">Search for a city</string>
+    <string name="city_search_clear">Clear the search</string>
+    <string name="city_no_match_title">No city found</string>
+    <string name="city_no_match_message">Nothing matches “%1$s”. Check the spelling, or clear the search.</string>
     <string name="city_proposal_title">Your city</string>
     <string name="city_proposal_body">You seem to be in the area covered by %1$s. Shall we go with that?</string>
     <string name="city_proposal_accept">Yes</string>
