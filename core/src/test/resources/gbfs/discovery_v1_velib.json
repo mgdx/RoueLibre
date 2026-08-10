@@ -1,0 +1,26 @@
+{
+  "lastUpdatedOther": 1786349639,
+  "ttl": 3600,
+  "data": {
+    "en": {
+      "feeds": [
+        {
+          "name": "gbfs",
+          "url": "https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/gbfs.json"
+        },
+        {
+          "name": "system_information",
+          "url": "https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/system_information.json"
+        },
+        {
+          "name": "station_information",
+          "url": "https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/station_information.json"
+        },
+        {
+          "name": "station_status",
+          "url": "https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/station_status.json"
+        }
+      ]
+    }
+  }
+}

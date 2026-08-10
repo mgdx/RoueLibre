@@ -211,6 +211,14 @@ qui sortira sur F-Droid sera recompilé et signé là-bas.
 
 ### Corrigé
 
+- **Les flux GBFS 1.0 étaient illisibles**, dont celui de Vélib' Métropole —
+  mille cinq cents stations, le plus grand réseau de France. Ces flux publient
+  l'identifiant de station en nombre là où le format impose une chaîne. La
+  conversion prend le texte brut du nombre plutôt que de passer par un entier :
+  un identifiant est une étiquette, pas une quantité, et c'est ce qui garantit
+  que les deux flux se rejoignent sur la même clé. Éprouvé sur des captures
+  réelles du flux de Vélib'.
+
 - **L'écran de recherche d'itinéraire perdait son premier point.** Passer par
   la recherche d'adresse ne détruit que la *vue* du fragment, pas le fragment ;
   relire l'état depuis un paquet d'instance absent effaçait donc les champs

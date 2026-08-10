@@ -41,6 +41,12 @@ import java.time.format.DateTimeParseException
  * | horodatage | entier POSIX | chaîne RFC 3339 |
  * | nom de station | chaîne | tableau `{text, language}` |
  * | vélos disponibles | `num_bikes_available` | `num_vehicles_available` |
+ *
+ * Les flux d'avant GBFS 2.0 ajoutent deux libertés que le format interdit
+ * depuis : un identifiant de station publié en nombre, et des drapeaux publiés
+ * en `0` et `1`. Les refuser rendrait Vélib' Métropole — mille cinq cents
+ * stations, le plus grand réseau de France — entièrement inexploitable pour
+ * des écarts sans conséquence sur le sens.
  */
 
 /**
@@ -130,6 +136,36 @@ internal object LenientBooleanSerializer : KSerializer<Boolean> {
     }
 }
 
+/**
+ * Lit un identifiant de station, qu'il soit publié en chaîne ou en nombre.
+ *
+ * Le format impose une chaîne, et la plupart des producteurs la respectent.
+ * Les flux d'avant GBFS 2.0 publient souvent un entier — c'est le cas de
+ * Vélib' Métropole, le plus grand réseau de France avec ses mille cinq cents
+ * stations, dont les identifiants ressemblent à `213688169`.
+ *
+ * La conversion prend le texte brut du nombre, sans passer par un entier : un
+ * identifiant est une étiquette, pas une quantité, et rien ne garantit qu'il
+ * tienne dans un `Long`. C'est aussi ce qui garantit que les deux flux —
+ * `station_information` et `station_status` — produisent la même clé de
+ * jointure pour la même station.
+ */
+internal object FlexibleIdSerializer : KSerializer<String> {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("GbfsIdentifier", PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder): String {
+        val jsonDecoder = decoder as? JsonDecoder ?: return decoder.decodeString()
+        val primitive = jsonDecoder.decodeJsonElement().jsonPrimitive
+        return primitive.content.takeIf { it.isNotBlank() }
+            ?: throw GbfsFormatException("identifiant de station vide")
+    }
+
+    override fun serialize(encoder: Encoder, value: String) {
+        encoder.encodeString(value)
+    }
+}
+
 /** Enveloppe commune à tous les documents GBFS. */
 @Serializable
 internal data class GbfsEnvelope<T>(
@@ -156,7 +192,9 @@ internal data class GbfsFeedReference(val name: String, val url: String)
 /** Une station telle que publiée par `station_information`. */
 @Serializable
 internal data class GbfsStationInformation(
-    @SerialName("station_id") val stationId: String,
+    @SerialName("station_id")
+    @Serializable(with = FlexibleIdSerializer::class)
+    val stationId: String,
     @Serializable(with = FlexibleTextSerializer::class) val name: String,
     val lat: Double,
     val lon: Double,
@@ -168,7 +206,9 @@ internal data class GbfsStationInformation(
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
 internal data class GbfsStationStatus(
-    @SerialName("station_id") val stationId: String,
+    @SerialName("station_id")
+    @Serializable(with = FlexibleIdSerializer::class)
+    val stationId: String,
     // GBFS 3.0 a renommé le champ ; les deux noms sont acceptés.
     @SerialName("num_bikes_available")
     @JsonNames("num_vehicles_available")

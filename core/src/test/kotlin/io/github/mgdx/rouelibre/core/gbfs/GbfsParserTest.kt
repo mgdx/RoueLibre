@@ -13,10 +13,15 @@ import java.time.Instant
 /**
  * Tests de l'analyse des flux GBFS (SPEC §14).
  *
- * Les cas nommés « réels » s'appuient sur des captures du flux du réseau
- * lillois prises le 9 août 2026, structure intacte, seule la liste des
- * stations ayant été réduite. Les cas « v3 » sont synthétiques : aucun réseau
- * en GBFS 3.0 n'est nécessaire pour vérifier qu'on sait le lire.
+ * Les cas nommés « réels » s'appuient sur des captures de flux en production,
+ * structure intacte, seule la liste des stations ayant été réduite : le réseau
+ * lillois en GBFS 2.3, et Vélib' Métropole en GBFS 1.0. Les cas « v3 » sont
+ * synthétiques : aucun réseau en GBFS 3.0 n'est nécessaire pour vérifier qu'on
+ * sait le lire.
+ *
+ * Deux réseaux plutôt qu'un, parce que la promesse du SPEC §4.1 — « l'appli
+ * fonctionne avec n'importe quel réseau GBFS du monde sans modification de
+ * code » — ne se vérifie pas sur un seul producteur.
  */
 class GbfsParserTest {
 
@@ -260,5 +265,59 @@ class GbfsParserTest {
         val outcome = parser.parseStationInformation("""{"version":"2.3","data":{"stations":[]}}""")
 
         assertEquals(emptyList<Any>(), outcome.valueOrNull()?.stations)
+    }
+
+    // ------------------------------------------------- GBFS 1.0, Vélib' --
+
+    @Test
+    fun `lit le document d'auto-decouverte de Velib en GBFS 1 point 0`() {
+        val discovery = assertSuccess(parser.parseDiscovery(fixture("discovery_v1_velib.json")))
+
+        assertNotNull(discovery.feedUrlsByName["station_information"])
+        assertNotNull(discovery.feedUrlsByName["station_status"])
+    }
+
+    @Test
+    fun `accepte un identifiant de station publie en nombre`() {
+        // Vélib' publie « "station_id": 213688169 » là où le format impose une
+        // chaîne. Le refuser rendrait le plus grand réseau de France — mille
+        // cinq cents stations — entièrement inexploitable.
+        val information = assertSuccess(
+            parser.parseStationInformation(fixture("station_information_v1_velib.json")),
+        )
+
+        assertEquals(3, information.stations.size)
+        assertEquals("213688169", information.stations.first().id)
+        assertEquals("Benjamin Godard - Victor Hugo", information.stations.first().name)
+        assertEquals(35, information.stations.first().capacity)
+    }
+
+    @Test
+    fun `accepte des drapeaux publies en zero et un`() {
+        val status = assertSuccess(
+            parser.parseStationStatus(fixture("station_status_v1_velib.json")),
+        )
+
+        val first = status.availabilities.first { it.stationId == "213688169" }
+        assertTrue(first.isInstalled)
+        assertTrue(first.isRenting)
+        assertTrue(first.isReturning)
+    }
+
+    @Test
+    fun `les deux flux de Velib se rejoignent sur le meme identifiant`() {
+        // Ce qui compte n'est pas de lire chaque flux, mais que la jointure
+        // tienne : un identifiant lu « 213688169 » d'un côté et « 2.13688169E8 »
+        // de l'autre ne rapprocherait aucune station de son état.
+        val information = assertSuccess(
+            parser.parseStationInformation(fixture("station_information_v1_velib.json")),
+        )
+        val status = assertSuccess(
+            parser.parseStationStatus(fixture("station_status_v1_velib.json")),
+        )
+
+        val connues = information.stations.map { it.id }.toSet()
+        val etats = status.availabilities.map { it.stationId }.toSet()
+        assertEquals(connues, etats)
     }
 }
