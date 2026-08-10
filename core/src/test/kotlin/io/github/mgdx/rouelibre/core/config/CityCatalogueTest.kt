@@ -33,16 +33,30 @@ class CityCatalogueTest {
     }
 
     @Test
-    fun `every published city announces the weight of its data`() {
-        // SPEC §11.9 requires the size to be announced before downloading: a
-        // city whose data is generated but whose weight is missing would make
-        // that screen lie.
-        publishedCatalogue().cities.forEach { city ->
-            assertTrue(
-                "data weight unknown for ${city.id}",
-                city.isAvailable,
-            )
+    fun `a city either announces the weight of its data or none at all`() {
+        // SPEC §11.9 requires the size to be announced before downloading. The
+        // catalogue lists every network whose feed the survey verified, and
+        // most of them have no data produced yet: those carry no weight, and
+        // the interface says so rather than offering a download that would
+        // fail. What must never happen is a weight of zero, which would read as
+        // "nothing to download".
+        val cities = publishedCatalogue().cities
+        cities.forEach { city ->
+            val size = city.dataSizeBytes
+            assertTrue("data weight of zero for ${city.id}", size == null || size > 0)
         }
+        assertTrue(
+            "no city has its data published",
+            cities.any { it.isAvailable },
+        )
+    }
+
+    @Test
+    fun `no two cities share an identifier`() {
+        // The identifier names a city's data directory and its manifest: two
+        // cities sharing one would have the second overwrite the first's data.
+        val identifiers = publishedCatalogue().cities.map { it.id }
+        assertEquals(identifiers.size, identifiers.toSet().size)
     }
 
     @Test
@@ -63,8 +77,19 @@ class CityCatalogueTest {
 
     @Test
     fun `no city is proposed far from every network`() {
-        assertNull(publishedCatalogue().suggestionFor(MARSEILLE))
+        assertNull(publishedCatalogue().suggestionFor(MIDDLE_OF_THE_MORVAN))
         assertNull(publishedCatalogue().suggestionFor(REYKJAVIK))
+    }
+
+    @Test
+    fun `a conurbation outside the three first served has its own network`() {
+        // The catalogue grew from three networks to every French one whose
+        // stations are published: a position in Marseille or in Toulouse must
+        // now find its own, not the nearest of the first three.
+        val catalogue = publishedCatalogue()
+
+        assertEquals("levelo", catalogue.suggestionFor(VIEUX_PORT_DE_MARSEILLE)?.id)
+        assertEquals("velotoulouse", catalogue.suggestionFor(CAPITOLE_DE_TOULOUSE)?.id)
     }
 
     @Test
@@ -120,7 +145,20 @@ class CityCatalogueTest {
         /** Seclin, some fifteen kilometres south of Lille. */
         val SECLIN = Coordinates(50.5496, 3.0284)
 
-        val MARSEILLE = Coordinates(43.2965, 5.3698)
+        /** Marseille, the Vieux-Port. */
+        val VIEUX_PORT_DE_MARSEILLE = Coordinates(43.2951, 5.3740)
+
+        /** Toulouse, place du Capitole. */
+        val CAPITOLE_DE_TOULOUSE = Coordinates(43.6045, 1.4442)
+
+        /**
+         * Deep in the Morvan, some fifty kilometres from any network.
+         *
+         * The point has to be chosen with care now that the catalogue lists
+         * every French network: the country's empty quarters are what is left.
+         */
+        val MIDDLE_OF_THE_MORVAN = Coordinates(47.1300, 4.0300)
+
         val REYKJAVIK = Coordinates(64.1466, -21.9426)
 
         /**

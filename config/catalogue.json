@@ -1,8 +1,808 @@
 {
   "catalogueVersion": 1,
   "catalogueUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/catalogue.json",
-  "generatedAt": "2026-08-10T17:41:54Z",
+  "generatedAt": "2026-08-10T21:26:21Z",
   "cities": [
+    {
+      "id": "aqta",
+      "displayName": "AQTA",
+      "operator": "Veloc'Ouest / Auray Quiberon Terre Atlantique",
+      "mainCity": "Auray",
+      "country": "FR",
+      "stationCount": 12,
+      "boundingBox": {
+        "south": 47.637486,
+        "west": -3.048912,
+        "north": 47.709289,
+        "east": -2.919058
+      },
+      "centreLatitude": 47.673388,
+      "centreLongitude": -2.983985,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/auray-quiberon/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-aqta.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "altervelo",
+      "displayName": "Altervélo",
+      "operator": "Ecovelo",
+      "mainCity": "Saint-Pierre",
+      "country": "FR",
+      "stationCount": 35,
+      "boundingBox": {
+        "south": -21.385975,
+        "west": 55.306185,
+        "north": -21.235822,
+        "east": 55.554483
+      },
+      "centreLatitude": -21.310899,
+      "centreLongitude": 55.430334,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/altervelo/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-altervelo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "auch-velo-c",
+      "displayName": "Auch-Vélo’c",
+      "operator": "Ecovelo",
+      "mainCity": "Auch",
+      "country": "FR",
+      "stationCount": 10,
+      "boundingBox": {
+        "south": 43.604516,
+        "west": 0.539601,
+        "north": 43.680939,
+        "east": 0.633924
+      },
+      "centreLatitude": 43.642727,
+      "centreLongitude": 0.586763,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/auchveloc/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-auch-velo-c.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "auxr-m-le-velo",
+      "displayName": "AuxR_M le vélo",
+      "operator": "fifteen / Communauté d'Agglomération de l'Auxerrois",
+      "mainCity": "Auxerre",
+      "country": "FR",
+      "stationCount": 55,
+      "boundingBox": {
+        "south": 47.672981,
+        "west": 3.377376,
+        "north": 47.912699,
+        "east": 3.744404
+      },
+      "centreLatitude": 47.79284,
+      "centreLongitude": 3.56089,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/auxerre/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-auxr-m-le-velo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "brennus-a-velo",
+      "displayName": "Brennus à Vélo",
+      "operator": "Mobil'éco / Communauté d'Agglomération du Grand Sénonais INTERCOM",
+      "mainCity": "Sens",
+      "country": "FR",
+      "stationCount": 18,
+      "boundingBox": {
+        "south": 48.056461,
+        "west": 3.207027,
+        "north": 48.245049,
+        "east": 3.345073
+      },
+      "centreLatitude": 48.150755,
+      "centreLongitude": 3.27605,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/sens/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-brennus-a-velo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "c-velo",
+      "displayName": "C Vélo",
+      "operator": "Clermont Auvergne Métropole",
+      "mainCity": "Clermont-Ferrand",
+      "country": "FR",
+      "stationCount": 82,
+      "boundingBox": {
+        "south": 45.692644,
+        "west": 3.028181,
+        "north": 45.83861,
+        "east": 3.25574
+      },
+      "centreLatitude": 45.765627,
+      "centreLongitude": 3.141961,
+      "gbfsDiscoveryUrl": "https://clermontferrand.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-c-velo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "cyclolibre",
+      "displayName": "CYCLOlibre",
+      "operator": "Carcassonne Agglo",
+      "mainCity": "Carcassonne",
+      "country": "FR",
+      "stationCount": 11,
+      "boundingBox": {
+        "south": 43.173307,
+        "west": 2.309509,
+        "north": 43.257799,
+        "east": 2.403815
+      },
+      "centreLatitude": 43.215553,
+      "centreLongitude": 2.356662,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/cyclolibre/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-cyclolibre.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "calivelo",
+      "displayName": "Calivélo",
+      "operator": "Nouvelle-Aquitaine Mobilités",
+      "mainCity": "Libourne",
+      "country": "FR",
+      "stationCount": 71,
+      "boundingBox": {
+        "south": 44.790976,
+        "west": -0.429633,
+        "north": 45.096747,
+        "east": 0.037249
+      },
+      "centreLatitude": 44.943861,
+      "centreLongitude": -0.196192,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/calivelo/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-calivelo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "cap-cotentin-velo",
+      "displayName": "Cap Cotentin Vélo",
+      "operator": "Communauté d'agglomération Le Cotentin",
+      "mainCity": "Cherbourg-en-Cotentin",
+      "country": "FR",
+      "stationCount": 52,
+      "boundingBox": {
+        "south": 49.476662,
+        "west": -1.779113,
+        "north": 49.705445,
+        "east": -1.421795
+      },
+      "centreLatitude": 49.591054,
+      "centreLongitude": -1.600454,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/capcotentin/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-cap-cotentin-velo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "choletbus-2-roues",
+      "displayName": "Choletbus 2 Roues",
+      "operator": "Transports Publics du Choletais",
+      "mainCity": "Cholet",
+      "country": "FR",
+      "stationCount": 16,
+      "boundingBox": {
+        "south": 47.004302,
+        "west": -0.956061,
+        "north": 47.102044,
+        "east": -0.798525
+      },
+      "centreLatitude": 47.053173,
+      "centreLongitude": -0.877293,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/choletbus/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-choletbus-2-roues.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "compte-mobilite",
+      "displayName": "Compte Mobilité",
+      "operator": "Compte Mobilité",
+      "mainCity": "Mulhouse",
+      "country": "FR",
+      "stationCount": 26,
+      "boundingBox": {
+        "south": 47.705956,
+        "west": 7.268356,
+        "north": 47.783414,
+        "east": 7.392383
+      },
+      "centreLatitude": 47.744685,
+      "centreLongitude": 7.330369,
+      "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/mulhouse/gbfs/v3/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-compte-mobilite.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "cycl-am",
+      "displayName": "Cycl'AM",
+      "operator": "Cycl'AM",
+      "mainCity": "Charleville-Mézières",
+      "country": "FR",
+      "stationCount": 34,
+      "boundingBox": {
+        "south": 49.648671,
+        "west": 4.634175,
+        "north": 49.8413,
+        "east": 5.018781
+      },
+      "centreLatitude": 49.744985,
+      "centreLongitude": 4.826478,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/cyclam/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-cycl-am.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "cyclovis",
+      "displayName": "Cyclovis",
+      "operator": "Cyclovis",
+      "mainCity": "Soissons",
+      "country": "FR",
+      "stationCount": 31,
+      "boundingBox": {
+        "south": 49.306121,
+        "west": 3.233834,
+        "north": 49.428111,
+        "east": 3.426484
+      },
+      "centreLatitude": 49.367116,
+      "centreLongitude": 3.330159,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/cyclovis/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-cyclovis.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "donkey-republic",
+      "displayName": "Donkey Republic",
+      "operator": "Donkey Republic",
+      "mainCity": "Valenciennes",
+      "country": "FR",
+      "stationCount": 40,
+      "boundingBox": {
+        "south": 50.293115,
+        "west": 3.457939,
+        "north": 50.391365,
+        "east": 3.573762
+      },
+      "centreLatitude": 50.34224,
+      "centreLongitude": 3.515851,
+      "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/valenciennes/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "graoulib",
+      "displayName": "GraouLib'",
+      "operator": "Fifteen / Eurométropole de Metz",
+      "mainCity": "Metz",
+      "country": "FR",
+      "stationCount": 57,
+      "boundingBox": {
+        "south": 49.033241,
+        "west": 6.088235,
+        "north": 49.178349,
+        "east": 6.284795
+      },
+      "centreLatitude": 49.105795,
+      "centreLongitude": 6.186515,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/metz/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-graoulib.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "idecycle",
+      "displayName": "IDEcycle",
+      "operator": "Fifteen / Pau Béarn Pyrénées Mobilités",
+      "mainCity": "Pau",
+      "country": "FR",
+      "stationCount": 40,
+      "boundingBox": {
+        "south": 43.253151,
+        "west": -0.475535,
+        "north": 43.363359,
+        "east": -0.262415
+      },
+      "centreLatitude": 43.308255,
+      "centreLongitude": -0.368975,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/pau/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-idecycle.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "impulsyon",
+      "displayName": "Impulsyon",
+      "operator": "La Roche-sur-Yon Agglomération",
+      "mainCity": "La Roche-sur-Yon",
+      "country": "FR",
+      "stationCount": 31,
+      "boundingBox": {
+        "south": 46.623816,
+        "west": -1.488717,
+        "north": 46.727515,
+        "east": -1.364728
+      },
+      "centreLatitude": 46.675666,
+      "centreLongitude": -1.426722,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/impulsyon/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-impulsyon.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "karu-velo",
+      "displayName": "Karu'vélo",
+      "operator": "Ecovelo",
+      "mainCity": "Les Abymes",
+      "country": "FR",
+      "stationCount": 17,
+      "boundingBox": {
+        "south": 16.17926,
+        "west": -61.616622,
+        "north": 16.296192,
+        "east": -61.24183
+      },
+      "centreLatitude": 16.237726,
+      "centreLongitude": -61.429226,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/karu/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-karu-velo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "le-marcel",
+      "displayName": "Le Marcel",
+      "operator": "Le Marcel",
+      "mainCity": "Troyes",
+      "country": "FR",
+      "stationCount": 29,
+      "boundingBox": {
+        "south": 48.241917,
+        "west": 3.987098,
+        "north": 48.357216,
+        "east": 4.144611
+      },
+      "centreLatitude": 48.299566,
+      "centreLongitude": 4.065855,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/lemarcel/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-le-marcel.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "le-velo-baulois",
+      "displayName": "Le Vélo Baulois",
+      "operator": "CapAtlantique La Baule-Guérande Agglo",
+      "mainCity": "La Baule-Escoublac",
+      "country": "FR",
+      "stationCount": 14,
+      "boundingBox": {
+        "south": 47.244711,
+        "west": -2.463358,
+        "north": 47.321499,
+        "east": -2.294494
+      },
+      "centreLatitude": 47.283105,
+      "centreLongitude": -2.378926,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/labaule/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-le-velo-baulois.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "le-velo-tbm",
+      "displayName": "Le Vélo TBM",
+      "operator": "Bordeaux Métropole",
+      "mainCity": "Bordeaux",
+      "country": "FR",
+      "stationCount": 230,
+      "boundingBox": {
+        "south": 44.754793,
+        "west": -0.697835,
+        "north": 44.924795,
+        "east": -0.472526
+      },
+      "centreLatitude": 44.839794,
+      "centreLongitude": -0.58518,
+      "gbfsDiscoveryUrl": "https://bdx.mecatran.com/utw/ws/gbfs/bordeaux/v3/gbfs.json?apiKey=opendata-bordeaux-metropole-flux-gtfs-rt",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-le-velo-tbm.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "levelo",
+      "displayName": "LeVélo",
+      "operator": "levélo / Métropole d'Aix-Marseille-Provence",
+      "mainCity": "Marseille",
+      "country": "FR",
+      "stationCount": 229,
+      "boundingBox": {
+        "south": 43.184861,
+        "west": 5.309004,
+        "north": 43.368303,
+        "east": 5.520888
+      },
+      "centreLatitude": 43.276582,
+      "centreLongitude": 5.414946,
+      "gbfsDiscoveryUrl": "https://gbfs.omega.fifteen.eu/gbfs/2.2/marseille/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-levelo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "les-petites-reines",
+      "displayName": "Les petites reines",
+      "operator": "Ecovelo",
+      "mainCity": "Les Sables-d'Olonne",
+      "country": "FR",
+      "stationCount": 17,
+      "boundingBox": {
+        "south": 46.450032,
+        "west": -1.83569,
+        "north": 46.561014,
+        "east": -1.699353
+      },
+      "centreLatitude": 46.505523,
+      "centreLongitude": -1.767521,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/petitesreines/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-les-petites-reines.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "libelo",
+      "displayName": "Libélo",
+      "operator": "Valence Romans Mobilités",
+      "mainCity": "Valence",
+      "country": "FR",
+      "stationCount": 68,
+      "boundingBox": {
+        "south": 44.848791,
+        "west": 4.803053,
+        "north": 45.08337,
+        "east": 5.098374
+      },
+      "centreLatitude": 44.966081,
+      "centreLongitude": 4.950713,
+      "gbfsDiscoveryUrl": "https://valence.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-libelo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "lovelo",
+      "displayName": "Lovélo",
+      "operator": "CITYBIKE Normandie - groupe INURBA Mobility / Métropole Rouen Normandie",
+      "mainCity": "Rouen",
+      "country": "FR",
+      "stationCount": 114,
+      "boundingBox": {
+        "south": 49.365289,
+        "west": 0.992658,
+        "north": 49.478451,
+        "east": 1.204984
+      },
+      "centreLatitude": 49.42187,
+      "centreLongitude": 1.098821,
+      "gbfsDiscoveryUrl": "https://gbfs.urbansharing.com/lovelolibreservice.fr/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-lovelo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "montenvelo",
+      "displayName": "MontenVélo",
+      "operator": "Fifteen / Communauté de communes Pays du Mont-Blanc",
+      "mainCity": "Sallanches",
+      "country": "FR",
+      "stationCount": 23,
+      "boundingBox": {
+        "south": 45.785021,
+        "west": 6.533101,
+        "north": 45.969579,
+        "east": 6.765469
+      },
+      "centreLatitude": 45.8773,
+      "centreLongitude": 6.649285,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/mont_blanc/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-montenvelo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "naolib",
+      "displayName": "Naolib",
+      "operator": "Nantes Métropole",
+      "mainCity": "Nantes",
+      "country": "FR",
+      "stationCount": 120,
+      "boundingBox": {
+        "south": 47.157542,
+        "west": -1.634566,
+        "north": 47.273247,
+        "east": -1.480806
+      },
+      "centreLatitude": 47.215395,
+      "centreLongitude": -1.557686,
+      "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/nantes/gbfs/v3/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-naolib.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "naolib-micromob",
+      "displayName": "Naolib Micromob'",
+      "operator": "Nantes Métropole",
+      "mainCity": "Nantes",
+      "country": "FR",
+      "stationCount": 17,
+      "boundingBox": {
+        "south": 47.189371,
+        "west": -1.690285,
+        "north": 47.320698,
+        "east": -1.461882
+      },
+      "centreLatitude": 47.255035,
+      "centreLongitude": -1.576083,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/chantrerie/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-naolib-micromob.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "nemovelo",
+      "displayName": "NemoVélo",
+      "operator": "Ecovelo",
+      "mainCity": "Nîmes",
+      "country": "FR",
+      "stationCount": 52,
+      "boundingBox": {
+        "south": 43.782799,
+        "west": 4.28116,
+        "north": 43.89548,
+        "east": 4.459389
+      },
+      "centreLatitude": 43.83914,
+      "centreLongitude": 4.370274,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/nemovelo/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nemovelo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "ogalo",
+      "displayName": "Ogalo",
+      "operator": "Ecovelo",
+      "mainCity": "Saumur",
+      "country": "FR",
+      "stationCount": 25,
+      "boundingBox": {
+        "south": 47.210714,
+        "west": -0.139817,
+        "north": 47.305101,
+        "east": 0.016973
+      },
+      "centreLatitude": 47.257908,
+      "centreLongitude": -0.061422,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/ogalo/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-ogalo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "optymo",
+      "displayName": "Optymo",
+      "operator": "RTTB / Optymo - Belfort",
+      "mainCity": "Belfort",
+      "country": "FR",
+      "stationCount": 32,
+      "boundingBox": {
+        "south": 47.561331,
+        "west": 6.778092,
+        "north": 47.694939,
+        "east": 6.918978
+      },
+      "centreLatitude": 47.628135,
+      "centreLongitude": 6.848535,
+      "gbfsDiscoveryUrl": "https://data.optymo.fr/vls/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-optymo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "rlv-lib",
+      "displayName": "RLV'Lib",
+      "operator": "RLV'Lib",
+      "mainCity": "Riom",
+      "country": "FR",
+      "stationCount": 15,
+      "boundingBox": {
+        "south": 45.851605,
+        "west": 3.032393,
+        "north": 45.94656,
+        "east": 3.176316
+      },
+      "centreLatitude": 45.899083,
+      "centreLongitude": 3.104354,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/rlvlib/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-rlv-lib.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "rubis-velo",
+      "displayName": "Rubis'Vélo",
+      "operator": "Grand Bourg Agglomération",
+      "mainCity": "Bourg-en-Bresse",
+      "country": "FR",
+      "stationCount": 46,
+      "boundingBox": {
+        "south": 46.153881,
+        "west": 5.152428,
+        "north": 46.280149,
+        "east": 5.311491
+      },
+      "centreLatitude": 46.217015,
+      "centreLongitude": 5.23196,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/beb/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-rubis-velo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "star",
+      "displayName": "STAR",
+      "operator": "STAR",
+      "mainCity": "Rennes",
+      "country": "FR",
+      "stationCount": 57,
+      "boundingBox": {
+        "south": 48.06036,
+        "west": -1.745457,
+        "north": 48.156861,
+        "east": -1.593515
+      },
+      "centreLatitude": 48.10861,
+      "centreLongitude": -1.669486,
+      "gbfsDiscoveryUrl": "https://eu.ftp.opendatasoft.com/star/gbfs/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-star.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "semo",
+      "displayName": "Semo",
+      "operator": "Communauté d'Agglomération Seine Eure",
+      "mainCity": "Louviers",
+      "country": "FR",
+      "stationCount": 40,
+      "boundingBox": {
+        "south": 49.112811,
+        "west": 1.099968,
+        "north": 49.347335,
+        "east": 1.398989
+      },
+      "centreLatitude": 49.230073,
+      "centreLongitude": 1.249478,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/semo/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-semo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "tlp-mobilites",
+      "displayName": "TLP Mobilites",
+      "operator": "TLP Mobilités",
+      "mainCity": "Tarbes",
+      "country": "FR",
+      "stationCount": 19,
+      "boundingBox": {
+        "south": 43.056909,
+        "west": -0.114974,
+        "north": 43.268086,
+        "east": 0.134288
+      },
+      "centreLatitude": 43.162498,
+      "centreLongitude": 0.009657,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/tlpmobilites/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-tlp-mobilites.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "tanlib",
+      "displayName": "Tanlib",
+      "operator": "réseau tanlib",
+      "mainCity": "Niort",
+      "country": "FR",
+      "stationCount": 58,
+      "boundingBox": {
+        "south": 46.258802,
+        "west": -0.554487,
+        "north": 46.392498,
+        "east": -0.323379
+      },
+      "centreLatitude": 46.32565,
+      "centreLongitude": -0.438933,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/tanlib/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-tanlib.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "tempo-velo",
+      "displayName": "Tempo Vélo",
+      "operator": "Tempo Vélo",
+      "mainCity": "Agen",
+      "country": "FR",
+      "stationCount": 16,
+      "boundingBox": {
+        "south": 44.157433,
+        "west": 0.565823,
+        "north": 44.258675,
+        "east": 0.718641
+      },
+      "centreLatitude": 44.208054,
+      "centreLongitude": 0.642232,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/tempovelo/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-tempo-velo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "ti-velo",
+      "displayName": "Ti Vélo",
+      "operator": "Ville de Landerneau / Pays de Landerneau-Daoulas",
+      "mainCity": "Landerneau",
+      "country": "FR",
+      "stationCount": 14,
+      "boundingBox": {
+        "south": 48.400981,
+        "west": -4.356195,
+        "north": 48.510719,
+        "east": -4.191841
+      },
+      "centreLatitude": 48.45585,
+      "centreLongitude": -4.274018,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/landerneau/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-ti-velo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "twisto-velolib",
+      "displayName": "Twisto Vélolib",
+      "operator": "Vélogik",
+      "mainCity": "Caen",
+      "country": "FR",
+      "stationCount": 76,
+      "boundingBox": {
+        "south": 49.113441,
+        "west": -0.482081,
+        "north": 49.329589,
+        "east": -0.216289
+      },
+      "centreLatitude": 49.221515,
+      "centreLongitude": -0.349185,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/caen/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-twisto-velolib.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
     {
       "id": "vlille",
       "displayName": "V'lille",
@@ -22,6 +822,206 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-vlille.json",
       "dataSizeBytes": 42607102,
       "releaseTag": "data-2026-08"
+    },
+    {
+      "id": "vel-in",
+      "displayName": "Vel'in",
+      "operator": "Transdev / Syndicat Intercommunal des Transports urbains de l’Agglomération du Calaisis",
+      "mainCity": "Calais",
+      "country": "FR",
+      "stationCount": 80,
+      "boundingBox": {
+        "south": 50.838387,
+        "west": 1.704084,
+        "north": 51.009377,
+        "east": 2.009943
+      },
+      "centreLatitude": 50.923882,
+      "centreLongitude": 1.857014,
+      "gbfsDiscoveryUrl": "https://stce.transdev-hdf.fr/gbfs/",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-vel-in.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velonecy",
+      "displayName": "Velonecy",
+      "operator": "Mobil'éco / GRAND ANNECY Agglomération",
+      "mainCity": "Annecy",
+      "country": "FR",
+      "stationCount": 79,
+      "boundingBox": {
+        "south": 45.737796,
+        "west": 5.933894,
+        "north": 46.064669,
+        "east": 6.285456
+      },
+      "centreLatitude": 45.901232,
+      "centreLongitude": 6.109675,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/annecy/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velonecy.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velopop",
+      "displayName": "Velopop’",
+      "operator": "velogik et fifteen / Grand Avignon",
+      "mainCity": "Avignon",
+      "country": "FR",
+      "stationCount": 29,
+      "boundingBox": {
+        "south": 43.885191,
+        "west": 4.738545,
+        "north": 43.990129,
+        "east": 4.928165
+      },
+      "centreLatitude": 43.93766,
+      "centreLongitude": 4.833355,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/avignon/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velopop.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "vertuose",
+      "displayName": "Vertuose",
+      "operator": "Ecovelo",
+      "mainCity": "Longwy",
+      "country": "FR",
+      "stationCount": 39,
+      "boundingBox": {
+        "south": 49.417022,
+        "west": 5.642585,
+        "north": 49.570962,
+        "east": 5.971694
+      },
+      "centreLatitude": 49.493992,
+      "centreLongitude": 5.807139,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/vertuose/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-vertuose.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "viavelo",
+      "displayName": "Viavélo",
+      "operator": "Viavélo",
+      "mainCity": "Villefranche-sur-Saône",
+      "country": "FR",
+      "stationCount": 23,
+      "boundingBox": {
+        "south": 45.948183,
+        "west": 4.655665,
+        "north": 46.05437,
+        "east": 4.796059
+      },
+      "centreLatitude": 46.001277,
+      "centreLongitude": 4.725862,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/viavelo/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-viavelo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "vivolt",
+      "displayName": "Vivolt",
+      "operator": "Communauté d’Agglomération d’Épinal",
+      "mainCity": "Épinal",
+      "country": "FR",
+      "stationCount": 106,
+      "boundingBox": {
+        "south": 47.954221,
+        "west": 6.207564,
+        "north": 48.405349,
+        "east": 6.608716
+      },
+      "centreLatitude": 48.179785,
+      "centreLongitude": 6.40814,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/epinal/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-vivolt.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velostan-lib",
+      "displayName": "VélOstan’lib",
+      "operator": "Métropole du Grand Nancy",
+      "mainCity": "Nancy",
+      "country": "FR",
+      "stationCount": 40,
+      "boundingBox": {
+        "south": 48.635407,
+        "west": 6.114088,
+        "north": 48.734136,
+        "east": 6.245556
+      },
+      "centreLatitude": 48.684771,
+      "centreLongitude": 6.179822,
+      "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/nancy/gbfs/v3/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velostan-lib.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velam",
+      "displayName": "Vélam",
+      "operator": "Amiens Métropole - Communauté d'Agglomération",
+      "mainCity": "Amiens",
+      "country": "FR",
+      "stationCount": 45,
+      "boundingBox": {
+        "south": 49.843974,
+        "west": 2.213605,
+        "north": 49.937165,
+        "east": 2.363023
+      },
+      "centreLatitude": 49.89057,
+      "centreLongitude": 2.288314,
+      "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/amiens/gbfs/v3/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velam.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velhop",
+      "displayName": "Vélhop",
+      "operator": "Strasbourg Mobilités Vélo / Eurométropole de Strasbourg",
+      "mainCity": "Strasbourg",
+      "country": "FR",
+      "stationCount": 39,
+      "boundingBox": {
+        "south": 48.494273,
+        "west": 7.58731,
+        "north": 48.692505,
+        "east": 7.865718
+      },
+      "centreLatitude": 48.593389,
+      "centreLongitude": 7.726514,
+      "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ae/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velhop.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velivert",
+      "displayName": "VéliVert",
+      "operator": "Fifteen / Saint-Etienne Métropole",
+      "mainCity": "Saint-Étienne",
+      "country": "FR",
+      "stationCount": 100,
+      "boundingBox": {
+        "south": 45.357551,
+        "west": 4.212426,
+        "north": 45.569219,
+        "east": 4.665765
+      },
+      "centreLatitude": 45.463385,
+      "centreLongitude": 4.439096,
+      "gbfsDiscoveryUrl": "https://api.saint-etienne-metropole.fr/velivert/api/gbfs/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velivert.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
     },
     {
       "id": "velib",
@@ -44,6 +1044,146 @@
       "releaseTag": "data-2026-08"
     },
     {
+      "id": "velibleu",
+      "displayName": "Vélibleu",
+      "operator": "Green On",
+      "mainCity": "Châtellerault",
+      "country": "FR",
+      "stationCount": 13,
+      "boundingBox": {
+        "south": 46.736051,
+        "west": 0.288232,
+        "north": 46.964529,
+        "east": 0.851414
+      },
+      "centreLatitude": 46.85029,
+      "centreLongitude": 0.569823,
+      "gbfsDiscoveryUrl": "https://www.mobility-parc.net/gbfs/v3/CHATELLERAULT/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velibleu.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velibeo",
+      "displayName": "Vélibéo",
+      "operator": "Nouvelle-Aquitaine Mobilités",
+      "mainCity": "Brive-la-Gaillarde",
+      "country": "FR",
+      "stationCount": 26,
+      "boundingBox": {
+        "south": 45.109748,
+        "west": 1.407316,
+        "north": 45.213906,
+        "east": 1.624165
+      },
+      "centreLatitude": 45.161827,
+      "centreLongitude": 1.51574,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/velibeo/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velibeo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velo-modalis",
+      "displayName": "Vélo Modalis",
+      "operator": "Fifteen / Nouvelle-Aquitaine Mobilités",
+      "mainCity": "Angoulême",
+      "country": "FR",
+      "stationCount": 57,
+      "boundingBox": {
+        "south": 45.485021,
+        "west": -0.027151,
+        "north": 45.812049,
+        "east": 0.394681
+      },
+      "centreLatitude": 45.648535,
+      "centreLongitude": 0.183765,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/angouleme/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velo-modalis.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velo-modalis-royan",
+      "displayName": "Vélo Modalis",
+      "operator": "Fifteen",
+      "mainCity": "Royan",
+      "country": "FR",
+      "stationCount": 10,
+      "boundingBox": {
+        "south": 45.594521,
+        "west": -1.127351,
+        "north": 45.703049,
+        "east": -0.886649
+      },
+      "centreLatitude": 45.648785,
+      "centreLongitude": -1.007,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/modalis-royan/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velo-modalis-royan.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velo-modalis-saintes",
+      "displayName": "Vélo Modalis",
+      "operator": "Fifteen",
+      "mainCity": "Saintes",
+      "country": "FR",
+      "stationCount": 10,
+      "boundingBox": {
+        "south": 45.693751,
+        "west": -0.70097,
+        "north": 45.775749,
+        "east": -0.57589
+      },
+      "centreLatitude": 45.73475,
+      "centreLongitude": -0.63843,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/saintes/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velo-modalis-saintes.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velo-baie",
+      "displayName": "Vélo'Baie",
+      "operator": "Saint-Brieuc Armor Agglomération",
+      "mainCity": "Saint-Brieuc",
+      "country": "FR",
+      "stationCount": 12,
+      "boundingBox": {
+        "south": 48.463121,
+        "west": -2.830976,
+        "north": 48.550051,
+        "east": -2.690912
+      },
+      "centreLatitude": 48.506586,
+      "centreLongitude": -2.760944,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/saintbrieuc/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velo-baie.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velo-cite",
+      "displayName": "Vélo'Cité",
+      "operator": "Ecovelo",
+      "mainCity": "Laon",
+      "country": "FR",
+      "stationCount": 19,
+      "boundingBox": {
+        "south": 49.497173,
+        "west": 3.511509,
+        "north": 49.606963,
+        "east": 3.725043
+      },
+      "centreLatitude": 49.552068,
+      "centreLongitude": 3.618276,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/velocite/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velo-cite.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
       "id": "velov",
       "displayName": "Vélo'v",
       "operator": "JCDecaux / Métropole de Lyon",
@@ -62,6 +1202,186 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velov.json",
       "dataSizeBytes": 42311488,
       "releaseTag": "data-2026-08"
+    },
+    {
+      "id": "velocite-besancon",
+      "displayName": "VéloCité",
+      "operator": "Ville de Besancon",
+      "mainCity": "Besançon",
+      "country": "FR",
+      "stationCount": 33,
+      "boundingBox": {
+        "south": 47.204239,
+        "west": 5.947235,
+        "north": 47.275835,
+        "east": 6.076114
+      },
+      "centreLatitude": 47.240037,
+      "centreLongitude": 6.011674,
+      "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/besancon/gbfs/v3/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velocite-besancon.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velocite",
+      "displayName": "VéloCité",
+      "operator": "nextbike France / Mulhouse Alsace Agglomération",
+      "mainCity": "Mulhouse",
+      "country": "FR",
+      "stationCount": 62,
+      "boundingBox": {
+        "south": 47.690446,
+        "west": 7.256761,
+        "north": 47.842915,
+        "east": 7.448493
+      },
+      "centreLatitude": 47.766681,
+      "centreLongitude": 7.352627,
+      "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_af/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velocite.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velomodalis",
+      "displayName": "VéloModalis",
+      "operator": "fifteen",
+      "mainCity": "Cognac",
+      "country": "FR",
+      "stationCount": 13,
+      "boundingBox": {
+        "south": 45.571471,
+        "west": -0.389631,
+        "north": 45.726949,
+        "east": -0.005039
+      },
+      "centreLatitude": 45.64921,
+      "centreLongitude": -0.197335,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/velo-modalis/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velomodalis.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velomoove",
+      "displayName": "VéloMoove",
+      "operator": "CCBP / Bassin de Pompey",
+      "mainCity": "Champigneulles",
+      "country": "FR",
+      "stationCount": 28,
+      "boundingBox": {
+        "south": 48.700171,
+        "west": 6.016456,
+        "north": 48.827789,
+        "east": 6.239574
+      },
+      "centreLatitude": 48.76398,
+      "centreLongitude": 6.128015,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/pompey/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velomoove.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velozef",
+      "displayName": "VéloZef",
+      "operator": "vélogik / Brest métropole",
+      "mainCity": "Brest",
+      "country": "FR",
+      "stationCount": 47,
+      "boundingBox": {
+        "south": 48.333451,
+        "west": -4.661555,
+        "north": 48.477499,
+        "east": -4.309575
+      },
+      "centreLatitude": 48.405475,
+      "centreLongitude": -4.485565,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/brest/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velozef.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velomagg",
+      "displayName": "Vélomagg",
+      "operator": "TaM / Montpellier Méditerranée Métropole",
+      "mainCity": "Montpellier",
+      "country": "FR",
+      "stationCount": 52,
+      "boundingBox": {
+        "south": 43.531402,
+        "west": 3.790986,
+        "north": 43.666068,
+        "east": 4.000625
+      },
+      "centreLatitude": 43.598735,
+      "centreLongitude": 3.895805,
+      "gbfsDiscoveryUrl": "https://gbfs.theta.fifteen.eu/gbfs/montpellier/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velomagg.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velotoulouse",
+      "displayName": "VélôToulouse",
+      "operator": "Toulouse métropole",
+      "mainCity": "Toulouse",
+      "country": "FR",
+      "stationCount": 466,
+      "boundingBox": {
+        "south": 43.512267,
+        "west": 0.962959,
+        "north": 43.694456,
+        "east": 1.554249
+      },
+      "centreLatitude": 43.603362,
+      "centreLongitude": 1.258604,
+      "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/toulouse/gbfs/v3/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velotoulouse.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "zebullo",
+      "displayName": "Zébullo",
+      "operator": "Zébullo",
+      "mainCity": "Reims",
+      "country": "FR",
+      "stationCount": 66,
+      "boundingBox": {
+        "south": 49.176995,
+        "west": 3.936678,
+        "north": 49.314679,
+        "east": 4.137633
+      },
+      "centreLatitude": 49.245837,
+      "centreLongitude": 4.037156,
+      "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/zebullo/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-zebullo.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
+    },
+    {
+      "id": "velo2",
+      "displayName": "vélO2",
+      "operator": "vélO2",
+      "mainCity": "Cergy",
+      "country": "FR",
+      "stationCount": 45,
+      "boundingBox": {
+        "south": 48.984267,
+        "west": 1.961403,
+        "north": 49.079734,
+        "east": 2.151564
+      },
+      "centreLatitude": 49.032,
+      "centreLongitude": 2.056483,
+      "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/cergy/gbfs/v3/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velo2.json",
+      "dataSizeBytes": null,
+      "releaseTag": null
     }
   ]
 }
