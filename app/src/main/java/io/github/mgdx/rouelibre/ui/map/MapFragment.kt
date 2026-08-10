@@ -778,13 +778,13 @@ class MapFragment : Fragment() {
 
     companion object {
         /** The key the point picked on the map is returned under. */
-        const val PICK_REQUEST_KEY: String = "point-choisi-sur-la-carte"
+        const val PICK_REQUEST_KEY: String = "point-picked-on-map"
 
         /** The prefix of the returned point's keys. */
         const val PICK_RESULT_PREFIX: String = "point"
 
-        private const val ARGUMENT_PICKING = "mode-choix"
-        private const val ARGUMENT_SHOWN_PLACE = "point-a-montrer"
+        private const val ARGUMENT_PICKING = "picking-mode"
+        private const val ARGUMENT_SHOWN_PLACE = "place-to-show"
 
         /** Opens the map to designate a point on it (SPEC §7.3). */
         fun forPicking(): MapFragment = MapFragment().apply {
@@ -822,9 +822,9 @@ class MapFragment : Fragment() {
         /** The camera move's duration, short enough not to keep anyone waiting. */
         const val CAMERA_ANIMATION_MILLIS = 600
 
-        const val STATE_PICKED_LATITUDE = "point-choisi-latitude"
-        const val STATE_PICKED_LONGITUDE = "point-choisi-longitude"
-        const val STATE_PICKED_LABEL = "point-choisi-libelle"
+        const val STATE_PICKED_LATITUDE = "picked-latitude"
+        const val STATE_PICKED_LONGITUDE = "picked-longitude"
+        const val STATE_PICKED_LABEL = "picked-label"
 
         /**
          * The clustering radius, in pixels. Fifty keeps the stations of central

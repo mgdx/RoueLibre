@@ -214,7 +214,7 @@ class AddressSearchFragment : Fragment() {
 
     companion object {
         /** Clé sous laquelle l'adresse choisie est rendue. */
-        const val REQUEST_KEY = "adresse-choisie"
+        const val REQUEST_KEY = "chosen-address"
 
         /** Latitude du point choisi, en degrés décimaux. */
         const val RESULT_LATITUDE = "latitude"
@@ -223,10 +223,10 @@ class AddressSearchFragment : Fragment() {
         const val RESULT_LONGITUDE = "longitude"
 
         /** Libellé à afficher pour ce point, déjà mis en mots. */
-        const val RESULT_LABEL = "libelle"
+        const val RESULT_LABEL = "label"
 
-        private const val ARGUMENT_ORIGIN_LATITUDE = "origine-latitude"
-        private const val ARGUMENT_ORIGIN_LONGITUDE = "origine-longitude"
+        private const val ARGUMENT_ORIGIN_LATITUDE = "origin-latitude"
+        private const val ARGUMENT_ORIGIN_LONGITUDE = "origin-longitude"
 
         /**
          * Ouvre la recherche.

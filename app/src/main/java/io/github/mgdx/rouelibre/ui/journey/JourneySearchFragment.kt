@@ -236,11 +236,11 @@ class JourneySearchFragment : Fragment() {
     }
 
     companion object {
-        private const val STATE_ORIGIN = "depart"
-        private const val STATE_DESTINATION = "arrivee"
-        private const val STATE_AWAITING_ORIGIN = "champ-attendu"
-        private const val ARGUMENT_DESTINATION = "arrivee-recue"
-        private const val ARGUMENT_ORIGIN = "depart-recu"
+        private const val STATE_ORIGIN = "origin"
+        private const val STATE_DESTINATION = "destination"
+        private const val STATE_AWAITING_ORIGIN = "awaited-field"
+        private const val ARGUMENT_DESTINATION = "received-destination"
+        private const val ARGUMENT_ORIGIN = "received-origin"
 
         /**
          * Ouvre la recherche, éventuellement avec une extrémité déjà connue.

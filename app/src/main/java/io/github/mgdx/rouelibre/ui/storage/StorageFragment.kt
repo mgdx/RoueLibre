@@ -158,7 +158,7 @@ class StorageFragment : Fragment() {
     }
 
     companion object {
-        private const val ARGUMENT_CHECK_ON_OPEN = "consulter-a-l-ouverture"
+        private const val ARGUMENT_CHECK_ON_OPEN = "check-on-open"
 
         /**
          * Ouvre l'écran en consultant aussitôt le manifeste (SPEC §7.9).

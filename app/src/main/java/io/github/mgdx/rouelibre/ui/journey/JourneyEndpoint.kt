@@ -27,7 +27,7 @@ data class JourneyEndpoint(val label: String, val position: Coordinates) {
     }
 
     companion object {
-        private const val LABEL_KEY = "-libelle"
+        private const val LABEL_KEY = "-label"
         private const val LATITUDE_KEY = "-latitude"
         private const val LONGITUDE_KEY = "-longitude"
 

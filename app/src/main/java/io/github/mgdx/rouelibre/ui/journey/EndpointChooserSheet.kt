@@ -76,7 +76,7 @@ class EndpointChooserSheet : BottomSheetDialogFragment() {
         const val RESULT_SOURCE: String = "source"
 
         /** Vrai si le choix portait sur le départ. */
-        const val RESULT_IS_ORIGIN: String = "est-depart"
+        const val RESULT_IS_ORIGIN: String = "is-origin"
 
         /** Se placer là où l'on est. */
         const val SOURCE_MY_POSITION: String = "ma-position"
@@ -93,7 +93,7 @@ class EndpointChooserSheet : BottomSheetDialogFragment() {
         /** Étiquette sous laquelle la feuille est ajoutée au gestionnaire. */
         const val TAG: String = "choix-point"
 
-        private const val ARGUMENT_IS_ORIGIN = "est-depart"
+        private const val ARGUMENT_IS_ORIGIN = "is-origin"
 
         /** Ouvre la feuille pour le départ ou pour l'arrivée. */
         fun newInstance(isOrigin: Boolean): EndpointChooserSheet = EndpointChooserSheet().apply {

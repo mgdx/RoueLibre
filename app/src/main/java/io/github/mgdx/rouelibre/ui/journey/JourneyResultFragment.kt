@@ -380,8 +380,8 @@ class JourneyResultFragment : Fragment() {
     }
 
     companion object {
-        private const val ARGUMENT_ORIGIN = "depart"
-        private const val ARGUMENT_DESTINATION = "arrivee"
+        private const val ARGUMENT_ORIGIN = "origin"
+        private const val ARGUMENT_DESTINATION = "destination"
 
         /** Marge autour du tracé, en pixels, pour qu'il ne touche pas les bords. */
         private const val FRAME_PADDING_PIXELS = 80

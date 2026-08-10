@@ -23,12 +23,12 @@ import org.maplibre.geojson.Point
 object PickedPlaceMarker {
 
     /** Identifiant de la source GeoJSON portant le point choisi. */
-    const val SOURCE_ID: String = "point-choisi"
+    const val SOURCE_ID: String = "picked-point"
 
     /** Couche du marqueur. */
-    const val LAYER_ID: String = "point-choisi-marqueur"
+    const val LAYER_ID: String = "picked-point-marker"
 
-    private const val IMAGE_ID = "point-choisi-goutte"
+    private const val IMAGE_ID = "picked-point-pin"
 
     /**
      * Enregistre l'image du marqueur dans le style.

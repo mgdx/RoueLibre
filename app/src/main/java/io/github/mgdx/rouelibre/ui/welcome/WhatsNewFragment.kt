@@ -79,7 +79,7 @@ class WhatsNewFragment : Fragment() {
     }
 
     companion object {
-        private const val ARGUMENT_SINCE = "depuis-version"
+        private const val ARGUMENT_SINCE = "since-version"
         private const val NOTES_DIRECTORY = "changelogs"
 
         /**

@@ -91,18 +91,18 @@ class FavouriteStationSheet : BottomSheetDialogFragment() {
 
     companion object {
         /** Clé sous laquelle la station choisie est rendue. */
-        const val REQUEST_KEY: String = "station-favorite-choisie"
+        const val REQUEST_KEY: String = "chosen-favourite-station"
 
         /** Préfixe des clés du point rendu. */
         const val RESULT_PREFIX: String = "point"
 
         /** Vrai si le choix portait sur le départ. */
-        const val RESULT_IS_ORIGIN: String = "est-depart"
+        const val RESULT_IS_ORIGIN: String = "is-origin"
 
         /** Étiquette sous laquelle la feuille est ajoutée au gestionnaire. */
         const val TAG: String = "favoris"
 
-        private const val ARGUMENT_IS_ORIGIN = "est-depart"
+        private const val ARGUMENT_IS_ORIGIN = "is-origin"
 
         /** Ouvre la feuille pour le départ ou pour l'arrivée. */
         fun newInstance(isOrigin: Boolean): FavouriteStationSheet = FavouriteStationSheet().apply {

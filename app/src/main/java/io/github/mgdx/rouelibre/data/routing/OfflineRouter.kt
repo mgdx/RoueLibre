@@ -73,7 +73,7 @@ class OfflineRouter(
             )
 
         val routingContext = RoutingContext().apply { localFunction = profile.absolutePath }
-        val waypoints = listOf(waypointOf(from, "depart"), waypointOf(to, "arrivee"))
+        val waypoints = listOf(waypointOf(from, "origin"), waypointOf(to, "destination"))
 
         val engine = try {
             RoutingEngine(null, null, segments, waypoints, routingContext)
