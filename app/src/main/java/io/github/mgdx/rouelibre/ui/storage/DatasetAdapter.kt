@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 
-/** Affiche les trois jeux de données et leurs actions. */
+/** Shows the three datasets and their actions. */
 class DatasetAdapter(
     private val onImport: (DatasetKind) -> Unit,
     private val onDelete: (DatasetKind) -> Unit,
@@ -36,14 +36,14 @@ class DatasetAdapter(
         holder.bind(getItem(position))
     }
 
-    /** Une ligne de jeu de données. */
+    /** One dataset row. */
     class DatasetViewHolder(
         private val binding: ItemDatasetBinding,
         private val onImport: (DatasetKind) -> Unit,
         private val onDelete: (DatasetKind) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        /** Remplit la ligne à partir de l'état d'un jeu. */
+        /** Fills the row from a set's state. */
         fun bind(row: DatasetRow) {
             val context = binding.root.context
             val name = context.getString(row.kind.nameResource())
@@ -55,8 +55,8 @@ class DatasetAdapter(
             binding.datasetState.text = when {
                 installed == null -> context.getString(R.string.dataset_absent)
 
-                // Le manifeste a été consulté et annonce autre chose : le dire
-                // sur la ligne concernée, plutôt qu'en bloc (SPEC §4.4).
+                // The manifest has been checked and announces something else:
+                // say so on the row concerned, rather than in bulk (SPEC §4.4).
                 row.update == DatasetUpdate.Outdated ->
                     context.getString(R.string.dataset_update_available)
 
@@ -68,8 +68,8 @@ class DatasetAdapter(
                 )
             }
 
-            // Le libellé dit ce qui va se passer : installer là où il n'y a
-            // rien, remplacer là où il y a déjà quelque chose.
+            // The label says what will happen: install where there is nothing,
+            // replace where something is already there.
             binding.datasetImport.setText(
                 if (installed == null) R.string.dataset_import else R.string.dataset_replace,
             )
@@ -82,11 +82,10 @@ class DatasetAdapter(
         }
 
         /**
-         * Formate la date dans la langue que l'application sert réellement.
+         * Formats the date in the language the application actually serves.
          *
-         * La langue du système ne convient pas : sur un appareil en anglais,
-         * elle produisait « August 9, 2026 » au milieu d'une interface
-         * française.
+         * The system language will not do: on a device set to English it
+         * produced "August 9, 2026" in the middle of a French interface.
          */
         private fun dateFormatFor(context: Context): DateTimeFormatter =
             DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
@@ -104,14 +103,14 @@ class DatasetAdapter(
     }
 }
 
-/** Nom affiché d'un jeu de données. */
+/** A dataset's displayed name. */
 fun DatasetKind.nameResource(): Int = when (this) {
     DatasetKind.Tiles -> R.string.dataset_tiles
     DatasetKind.Routing -> R.string.dataset_routing
     DatasetKind.Addresses -> R.string.dataset_addresses
 }
 
-/** Ce à quoi sert un jeu de données, en une ligne. */
+/** What a dataset is for, in one line. */
 fun DatasetKind.purposeResource(): Int = when (this) {
     DatasetKind.Tiles -> R.string.dataset_tiles_purpose
     DatasetKind.Routing -> R.string.dataset_routing_purpose
@@ -119,13 +118,13 @@ fun DatasetKind.purposeResource(): Int = when (this) {
 }
 
 /**
- * Formate une taille de fichier pour l'affichage.
+ * Formats a file size for display.
  *
- * Base 1000 et non 1024 : c'est l'unité dans laquelle les tailles sont
- * annoncées à l'utilisateur partout ailleurs, y compris par le système.
+ * Base 1000 and not 1024: that is the unit sizes are announced in to the user
+ * everywhere else, the system included.
  *
- * La langue décide du séparateur décimal — « 35,0 Mo » en français — et doit
- * donc être celle du texte affiché, pas celle du système.
+ * The language decides the decimal separator — "35,0 Mo" in French — and must
+ * therefore be the displayed text's, not the system's.
  */
 fun formatBytes(bytes: Long, locale: Locale): String = when {
     bytes < 1_000 -> "$bytes o"
@@ -135,12 +134,12 @@ fun formatBytes(bytes: Long, locale: Locale): String = when {
 }
 
 /**
- * Met en mots l'issue d'une action de l'écran stockage.
+ * Puts the outcome of a storage-screen action into words.
  *
- * Chaque refus dit ce qui ne va pas et ce qu'il faut faire, jamais un code
- * technique (SPEC §14).
+ * Every refusal says what is wrong and what to do, never a technical code
+ * (SPEC §14).
  */
-/** Ce que les scripts de génération produisent pour le graphe de routage. */
+/** What the generation scripts produce for the routing graph. */
 private const val EXPECTED_ROUTING_FILE = "*.rd5"
 
 fun StorageMessage.toText(context: Context): String = when (this) {

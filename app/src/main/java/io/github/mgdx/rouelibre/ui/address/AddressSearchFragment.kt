@@ -29,15 +29,15 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 /**
- * Recherche d'une adresse dans l'index hors ligne (SPEC §4.3, §7.3).
+ * Searching for an address in the offline index (SPEC §4.3, §7.3).
  *
- * L'écran rend l'adresse choisie à celui qui l'a ouvert, plutôt que d'agir
- * lui-même : la carte y centre son point, et la recherche d'itinéraire y
- * prendra son départ ou son arrivée.
+ * The screen returns the chosen address to whoever opened it, rather than
+ * acting itself: the map centres its point on it, and the journey search takes
+ * its origin or its destination from it.
  *
- * **Aucun appel réseau n'a lieu ici, y compris pendant la frappe.** C'est la
- * donnée la plus sensible de l'application : ce que quelqu'un cherche dit où
- * il va.
+ * **No network call happens here, including while typing.** This is the
+ * application's most sensitive data: what somebody searches for says where they
+ * are going.
  */
 class AddressSearchFragment : Fragment() {
 
@@ -80,8 +80,8 @@ class AddressSearchFragment : Fragment() {
         }
         views.searchInput.setOnEditorActionListener { field, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                // La liste se met à jour d'elle-même ; valider ne fait que
-                // rendre l'écran au regard en repliant le clavier.
+                // The list updates by itself; confirming only gives the screen
+                // back to the eye by folding the keyboard away.
                 field.clearFocus()
                 hideKeyboard(field)
                 true
@@ -90,7 +90,7 @@ class AddressSearchFragment : Fragment() {
             }
         }
 
-        // Le clavier s'ouvre avec l'écran : on n'arrive ici que pour taper.
+        // The keyboard opens with the screen: one only comes here to type.
         if (savedInstanceState == null) {
             views.searchInput.requestFocus()
             views.searchInput.post { insetsController(views.searchInput).show(ime()) }
@@ -119,19 +119,20 @@ class AddressSearchFragment : Fragment() {
     }
 
     /**
-     * Montre ce qu'il y a à dire quand la liste est vide.
+     * Shows what there is to say when the list is empty.
      *
-     * Quatre situations, quatre gestes différents : installer l'index, effacer
-     * une saisie infructueuse, taper quelque chose, ou réimporter un fichier
-     * illisible. Les confondre enverrait chercher une panne inexistante.
+     * Four situations, four different gestures: install the index, clear a
+     * fruitless query, type something, or import an unreadable file again.
+     * Conflating them would send the user looking for a breakdown that does not
+     * exist.
      */
     private fun showEmptyState(state: AddressSearchUiState) {
         val views = binding ?: return
         views.emptyState.isVisible = state.results.isEmpty()
         if (state.results.isNotEmpty()) return
-        // Pendant une recherche, le message précédent reste : le remplacer par
-        // « Où vas-tu ? » à chaque frappe ferait clignoter l'écran entre deux
-        // saisies qui, elles, se suivent sans à-coup.
+        // While a search runs, the previous message stays: replacing it with
+        // the opening prompt on every keystroke would make the screen flicker
+        // between two queries that themselves follow one another smoothly.
         if (state.isSearching && state.query.isNotBlank()) return
         views.emptyAction.isVisible = false
 
@@ -165,7 +166,7 @@ class AddressSearchFragment : Fragment() {
         }
     }
 
-    /** Rend l'adresse choisie à l'écran qui a ouvert celui-ci. */
+    /** Returns the chosen address to the screen that opened this one. */
     private fun pick(result: AddressResult) {
         setFragmentResult(
             REQUEST_KEY,
@@ -191,18 +192,18 @@ class AddressSearchFragment : Fragment() {
     }
 
     /**
-     * De quoi ouvrir et replier le clavier.
+     * The means of opening and folding away the keyboard.
      *
-     * Passe par la fenêtre plutôt que par la vue : le raccourci qui ne prend
-     * qu'une vue est déprécié, et lui seul sait retrouver la fenêtre à coup
-     * sûr.
+     * Goes through the window rather than the view: the shortcut that takes
+     * only a view is deprecated, and the window is the only thing that reliably
+     * finds itself.
      */
     private fun insetsController(view: View): WindowInsetsControllerCompat =
         WindowCompat.getInsetsController(requireActivity().window, view)
 
     private fun ime(): Int = WindowInsetsCompat.Type.ime()
 
-    /** Le point de référence du classement, s'il en a été fourni un. */
+    /** The ranking's reference point, if one was supplied. */
     private fun readOrigin(): Coordinates? {
         val arguments = arguments ?: return null
         if (!arguments.containsKey(ARGUMENT_ORIGIN_LATITUDE)) return null
@@ -213,27 +214,27 @@ class AddressSearchFragment : Fragment() {
     }
 
     companion object {
-        /** Clé sous laquelle l'adresse choisie est rendue. */
+        /** The key the chosen address is returned under. */
         const val REQUEST_KEY = "chosen-address"
 
-        /** Latitude du point choisi, en degrés décimaux. */
+        /** The chosen point's latitude, in decimal degrees. */
         const val RESULT_LATITUDE = "latitude"
 
-        /** Longitude du point choisi, en degrés décimaux. */
+        /** The chosen point's longitude, in decimal degrees. */
         const val RESULT_LONGITUDE = "longitude"
 
-        /** Libellé à afficher pour ce point, déjà mis en mots. */
+        /** The label to show for this point, already put into words. */
         const val RESULT_LABEL = "label"
 
         private const val ARGUMENT_ORIGIN_LATITUDE = "origin-latitude"
         private const val ARGUMENT_ORIGIN_LONGITUDE = "origin-longitude"
 
         /**
-         * Ouvre la recherche.
+         * Opens the search.
          *
-         * @param origin point de référence pour classer les résultats par
-         *   proximité — le centre de la carte, faute de position connue. Aucune
-         *   permission n'est demandée pour l'obtenir (SPEC §10).
+         * @param origin the reference point for ranking results by proximity —
+         *   the map's centre, for want of a known position. No permission is
+         *   requested to obtain it (SPEC §10).
          */
         fun newInstance(origin: Coordinates?): AddressSearchFragment =
             AddressSearchFragment().apply {

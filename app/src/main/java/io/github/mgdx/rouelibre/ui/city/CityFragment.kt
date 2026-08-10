@@ -21,15 +21,15 @@ import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import kotlinx.coroutines.launch
 
 /**
- * Choix de la ville servie (SPEC §15).
+ * Choosing the city served (SPEC §15).
  *
- * L'application ne suppose aucune agglomération : elle en propose une d'après
- * la position, et retient celle qu'on désigne. C'est le seul endroit d'où l'on
- * change de ville, et le seul d'où l'on supprime toutes les données de l'une
- * d'elles (SPEC §11.9).
+ * The application assumes no conurbation: it proposes one from the user's
+ * position, and keeps the one they designate. This is the only place a city is
+ * changed, and the only one from which all of a city's data is deleted
+ * (SPEC §11.9).
  *
- * La position n'est demandée que sur appui du bouton prévu pour cela : personne
- * n'a besoin de dire où il est pour parcourir une liste de villes (SPEC §10).
+ * The position is only asked for on a press of the button meant for it: nobody
+ * needs to say where they are to browse a list of cities (SPEC §10).
  */
 class CityFragment : Fragment() {
 
@@ -43,10 +43,10 @@ class CityFragment : Fragment() {
     private val adapter = CityAdapter(onChoose = ::choose, onDelete = ::confirmDelete)
 
     /**
-     * Demande la permission de localisation, et n'insiste jamais.
+     * Requests location permission, and never insists.
      *
-     * Un refus laisse l'écran entièrement utilisable : la liste est là, et
-     * choisir sa ville à la main n'a rien d'un mode dégradé (SPEC §10).
+     * A refusal leaves the screen entirely usable: the list is there, and
+     * choosing one's city by hand is in no way a degraded mode (SPEC §10).
      */
     private val requestLocationPermission = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions(),
@@ -88,12 +88,12 @@ class CityFragment : Fragment() {
     }
 
     /**
-     * Affiche les villes connues, puis retélécharge le catalogue.
+     * Shows the known cities, then downloads the catalogue again.
      *
-     * Le catalogue livré s'affiche d'abord : la liste est là immédiatement, y
-     * compris hors ligne. La requête qui suit est la seule de cet écran, et
-     * elle a lieu parce qu'on vient de l'ouvrir pour savoir quelles villes
-     * existent — jamais en arrière-plan (SPEC §4.1).
+     * The shipped catalogue shows first: the list is there immediately, offline
+     * included. The request that follows is this screen's only one, and it
+     * happens because the screen has just been opened to learn which cities
+     * exist — never in the background (SPEC §4.1).
      */
     private fun showCatalogue() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -116,8 +116,8 @@ class CityFragment : Fragment() {
                     installedBytes = store.occupiedBytesOf(city.id),
                 )
             }
-            // La ville en service en tête, puis celles dont les données sont
-            // déjà là : ce sont les lignes sur lesquelles on revient.
+            // The city in service at the head, then those whose data is
+            // already there: these are the rows one comes back to.
             .sortedWith(
                 compareByDescending<CityRow> { it.isActive }
                     .thenByDescending { it.installedBytes > 0 }
@@ -126,7 +126,7 @@ class CityFragment : Fragment() {
         adapter.submitList(rows)
     }
 
-    // ------------------------------------------------------- localisation --
+    // ----------------------------------------------------------- location --
 
     private fun onLocateMeClicked() {
         val location = container.deviceLocation
@@ -141,11 +141,12 @@ class CityFragment : Fragment() {
     }
 
     /**
-     * Propose la ville qui correspond à l'endroit où l'on se trouve.
+     * Proposes the city that matches where one happens to be.
      *
-     * La position sert à cette seule question et n'est écrite nulle part
-     * (SPEC §2, C3). Loin de tout réseau servi, le catalogue ne propose rien :
-     * il vaut mieux le dire que de désigner une ville à l'autre bout du pays.
+     * The position serves that single question and is written nowhere
+     * (SPEC §2, C3). Far from every network served, the catalogue proposes
+     * nothing: better to say so than to name a city at the other end of the
+     * country.
      */
     private fun proposeFromPosition() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -177,13 +178,13 @@ class CityFragment : Fragment() {
             .show()
     }
 
-    // -------------------------------------------------------------- choix --
+    // ------------------------------------------------------------ choice --
 
     /**
-     * Retient la ville choisie et enchaîne sur ses données.
+     * Keeps the chosen city and moves on to its data.
      *
-     * Rien n'est téléchargé ici : l'écran de stockage annonce d'abord le poids
-     * et attend un appui (SPEC §4.4).
+     * Nothing is downloaded here: the storage screen announces the weight first
+     * and waits for a press (SPEC §4.4).
      */
     private fun choose(city: CityEntry) {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -194,13 +195,13 @@ class CityFragment : Fragment() {
         }
     }
 
-    // ---------------------------------------------------------- effacement --
+    // ---------------------------------------------------------- deletion --
 
     /**
-     * Demande confirmation avant de supprimer les données d'une ville.
+     * Asks for confirmation before deleting a city's data.
      *
-     * Des dizaines de mégaoctets qu'il faudra retélécharger : c'est un geste
-     * qui mérite qu'on s'assure de l'avoir voulu.
+     * Tens of megabytes that will have to be downloaded again: it is a gesture
+     * worth making sure of.
      */
     private fun confirmDelete(city: CityEntry) {
         MaterialAlertDialogBuilder(requireContext())
@@ -214,9 +215,9 @@ class CityFragment : Fragment() {
     private fun delete(city: CityEntry) {
         viewLifecycleOwner.lifecycleScope.launch {
             container.datasetStore.deleteCity(city.id)
-            // Supprimer les données de la ville en service, c'est ne plus en
-            // servir aucune : la garder active laisserait une carte vide sans
-            // que rien n'explique pourquoi.
+            // Deleting the data of the city in service means serving none:
+            // keeping it active would leave an empty map with nothing to
+            // explain why.
             if (container.preferences.activeCityId() == city.id) {
                 container.switchToCity(null)
             }

@@ -35,12 +35,11 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 
 /**
- * Détail d'une station, en feuille glissante depuis le bas (SPEC §7.2).
+ * A station's detail, in a sheet sliding up from the bottom (SPEC §7.2).
  *
- * Ouverte depuis la carte comme depuis la liste : c'est la même station, elle
- * mérite le même écran. La feuille reste vivante tant qu'elle est affichée —
- * les comptes suivent le rafraîchissement, ils ne sont pas figés à
- * l'ouverture.
+ * Opened from the map as from the list: it is the same station, it deserves the
+ * same screen. The sheet stays alive while it is shown — the counts follow the
+ * refreshing, they are not frozen at opening time.
  */
 class StationDetailSheet : BottomSheetDialogFragment() {
 
@@ -108,8 +107,8 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         val distance = distanceInMetres?.let { requireContext().formatDistance(it) }
         views.address.isGone = address == null && distance == null
         if (address == null) {
-            // Sans adresse mais avec une position connue, la distance vaut
-            // encore d'être dite : elle situe la station par rapport à soi.
+            // With no address but a known position, the distance is still
+            // worth saying: it places the station relative to oneself.
             views.address.text = distance.orEmpty()
             return
         }
@@ -118,8 +117,8 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         } else {
             getString(R.string.address_locality, address.postcode, address.city)
         }
-        // Une station posée au milieu d'un rond-point n'a pas d'adresse : on
-        // nomme alors la rue voisine, en disant que c'est un voisinage.
+        // A station standing in the middle of a roundabout has no address: the
+        // neighbouring street is named instead, said to be a neighbourhood.
         val what = if (address.houseNumber == null) {
             getString(R.string.station_address_nearby, address.streetName)
         } else {
@@ -132,11 +131,11 @@ class StationDetailSheet : BottomSheetDialogFragment() {
     }
 
     /**
-     * Ne dit l'état que lorsqu'il fait obstacle.
+     * Says the state only when it stands in the way.
      *
-     * Une station qui fonctionne n'a pas à s'annoncer : ce sont ses chiffres
-     * qui parlent. En revanche, une station hors service doit le dire avant
-     * que l'utilisateur ne s'y rende.
+     * A station that works has no need to announce itself: its figures speak.
+     * A station out of service, on the other hand, must say so before the user
+     * walks over to it.
      */
     private fun showServiceState(state: StationDetailUiState) {
         val views = binding ?: return
@@ -174,21 +173,21 @@ class StationDetailSheet : BottomSheetDialogFragment() {
     }
 
     /**
-     * Ouvre la recherche d'itinéraire avec cette station déjà placée (SPEC §7.2).
+     * Opens the journey search with this station already placed (SPEC §7.2).
      *
-     * Une station est un point comme un autre pour l'algorithme de trajet : ce
-     * n'est pas elle qu'on rejoindra forcément à vélo, seulement l'endroit d'où
-     * l'on part ou celui où l'on va. Le choix de la station de prise et de
-     * dépose reste celui du §6.
+     * A station is a point like any other to the journey algorithm: it is not
+     * necessarily the one that will be reached by bike, only the place one
+     * leaves from or goes to. The choice of pick-up and drop-off stations
+     * remains §6's own.
      *
-     * La feuille se referme : la laisser ouverte par-dessus l'écran de
-     * recherche masquerait le champ qu'on vient de remplir.
+     * The sheet closes: leaving it open over the search screen would hide the
+     * very field that has just been filled.
      */
     private fun prepareJourney(asOrigin: Boolean) {
         val station = viewModel.state.value.entry?.station ?: return
         val endpoint = JourneyEndpoint(station.name, station.position)
-        // Le gestionnaire est retenu avant la fermeture : après elle, la
-        // feuille n'est plus rattachée à son activité.
+        // The manager is captured before dismissing: after that, the sheet is
+        // no longer attached to its activity.
         val manager = requireActivity().supportFragmentManager
         dismiss()
         manager.beginTransaction()
@@ -205,11 +204,11 @@ class StationDetailSheet : BottomSheetDialogFragment() {
     }
 
     /**
-     * Confie la station à une application de guidage (SPEC §7.2).
+     * Hands the station over to a navigation application (SPEC §7.2).
      *
-     * L'URI `geo:` porte le nom de la station en plus de ses coordonnées :
-     * l'application qui reçoit l'intention affiche ainsi un repère nommé
-     * plutôt qu'un point anonyme.
+     * The `geo:` URI carries the station's name alongside its coordinates: the
+     * application receiving the intent then shows a named landmark rather than
+     * an anonymous point.
      */
     private fun openInNavigationApp() {
         val station = viewModel.state.value.entry?.station ?: return
@@ -221,8 +220,8 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         try {
             startActivity(Intent(Intent.ACTION_VIEW, uri))
         } catch (_: ActivityNotFoundException) {
-            // Sur un appareil sans aucune application de cartographie, le dire
-            // vaut mieux que de ne rien faire du tout.
+            // On a device with no mapping application at all, saying so beats
+            // doing nothing whatsoever.
             val views = binding ?: return
             Snackbar.make(
                 views.root,
@@ -235,10 +234,10 @@ class StationDetailSheet : BottomSheetDialogFragment() {
     companion object {
         private const val ARGUMENT_STATION_ID = "station-id"
 
-        /** Étiquette sous laquelle la feuille est ajoutée au gestionnaire. */
+        /** The tag the sheet is added to the manager under. */
         const val TAG: String = "detail-station"
 
-        /** Ouvre la feuille pour la station donnée. */
+        /** Opens the sheet for the given station. */
         fun newInstance(stationId: String): StationDetailSheet = StationDetailSheet().apply {
             arguments = Bundle().apply { putString(ARGUMENT_STATION_ID, stationId) }
         }
