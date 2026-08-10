@@ -52,15 +52,15 @@ import org.maplibre.geojson.FeatureCollection
 import java.time.Instant
 
 /**
- * Carte des stations — l'écran principal (SPEC §7.1).
+ * The station map — the main screen (SPEC §7.1).
  *
- * Le fond de carte est lu depuis un fichier MBTiles installé sur l'appareil et
- * les glyphes sont dans l'APK : afficher, déplacer ou zoomer la carte ne fait
- * sortir aucune requête. Seules les disponibilités viennent du réseau.
+ * The base map is read from an MBTiles file installed on the device and the
+ * glyphs are in the APK: showing, panning or zooming the map sends out no
+ * request at all. Only availability comes from the network.
  *
- * Cet écran suppose que le fond de carte est installé. C'est à l'appelant de
- * le vérifier — sans quoi il n'y a rien à afficher, et la liste des stations
- * reste le mode dégradé prévu par le SPEC §4.4.
+ * This screen assumes the base map is installed. Checking that falls to the
+ * caller — without it there is nothing to show, and the station list remains
+ * the degraded mode SPEC §4.4 provides for.
  */
 class MapFragment : Fragment() {
 
@@ -71,50 +71,51 @@ class MapFragment : Fragment() {
     private var styleLoaded = false
 
     /**
-     * L'adresse trouvée par la recherche, tant qu'elle n'est pas effacée.
+     * The address found by the search, until it is cleared.
      *
-     * Un point désigné, jamais un historique : le SPEC §8 interdit de
-     * conserver une destination, et celle-ci ne survit pas à l'écran.
+     * A designated point, never a history: SPEC §8 forbids keeping a
+     * destination, and this one does not outlive the screen.
      */
     private var pickedPlace: PickedPlace? = null
 
     /**
-     * Le cadrage à retrouver quand la vue est reconstruite.
+     * The framing to restore when the view is rebuilt.
      *
-     * Passer par la liste, le stockage ou la recherche détruit la vue de la
-     * carte sans détruire le fragment : sans cela, revenir ramenait le cadrage
-     * d'ouverture, et l'utilisateur perdait l'endroit qu'il regardait.
+     * Going through the list, the storage screen or the search destroys the
+     * map's view without destroying the fragment: without this, coming back
+     * brought the opening framing, and the user lost the place they were
+     * looking at.
      */
     private var lastCamera: CameraPosition? = null
 
     /**
-     * Un point où la caméra doit se rendre dès que la carte existe.
+     * A point the camera must reach as soon as the map exists.
      *
-     * L'adresse choisie est rendue par l'écran de recherche **avant** que la
-     * carte ne soit reconstruite : le déplacement doit donc attendre.
+     * The chosen address is returned by the search screen **before** the map is
+     * rebuilt: the move therefore has to wait.
      */
     private var pendingCameraTarget: LatLng? = null
 
-    /** Un point trouvé par la recherche d'adresses, et son libellé. */
+    /** A point found by the address search, and its label. */
     private data class PickedPlace(val position: LatLng, val label: String)
 
     private var userPositionSource: GeoJsonSource? = null
 
     /**
-     * La dernière position affichée, gardée en mémoire le temps de la session.
+     * The last position shown, held in memory for the session only.
      *
-     * Elle survit à une reconstruction de la vue — passer par la liste et
-     * revenir ne doit pas faire disparaître le point — et à rien d'autre :
-     * elle n'est écrite nulle part (SPEC §2, C3).
+     * It survives a rebuild of the view — going through the list and coming
+     * back must not make the point vanish — and nothing else: it is written
+     * nowhere (SPEC §2, C3).
      */
     private var lastKnownPosition: Coordinates? = null
 
     /**
-     * Demande les permissions de localisation, et n'insiste jamais.
+     * Requests the location permissions, and never insists.
      *
-     * Le SPEC §10 est explicite : le refus ne doit ni bloquer un écran, ni
-     * déclencher de relance. L'utilisateur qui dit non garde une application
-     * entièrement utilisable, où il désigne ses points à la main.
+     * SPEC §10 is explicit: a refusal must neither block a screen nor trigger a
+     * second prompt. A user who says no keeps a fully usable application, in
+     * which they designate their points by hand.
      */
     private val requestLocationPermission = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions(),
@@ -144,8 +145,8 @@ class MapFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        // Obligatoire avant que la vue de carte ne soit gonflée : MapLibre
-        // charge ses bibliothèques natives à ce moment-là.
+        // Mandatory before the map view is inflated: MapLibre loads its native
+        // libraries at that moment.
         MapLibre.getInstance(requireContext())
         val created = FragmentMapBinding.inflate(inflater, container, false)
         binding = created
@@ -166,8 +167,8 @@ class MapFragment : Fragment() {
         views.pickedPlace.setOnClickListener { showPickedPlace(null) }
         applyModeLabel()
 
-        // La cible dépend de ce qui manque, et elle est fixée avec le libellé,
-        // au moment où l'on sait s'il y a une ville — voir loadTilesFor.
+        // The target depends on what is missing, and it is set together with
+        // the label, once we know whether there is a city — see loadTilesFor.
         views.missingTilesList.setOnClickListener { show(StationListFragment()) }
 
         applyPickingMode(views)
@@ -183,12 +184,12 @@ class MapFragment : Fragment() {
     }
 
     /**
-     * Écarte les commandes des barres système.
+     * Keeps the controls clear of the system bars.
      *
-     * La carte occupe tout l'écran, barres comprises — c'est ce qui lui donne
-     * son ampleur. Les commandes posées dessus, elles, doivent rester
-     * atteignables : sans cette marge, l'étiquette de fraîcheur passait sous
-     * l'heure et le bouton de liste sous la barre de navigation.
+     * The map fills the whole screen, bars included — that is what gives it its
+     * sweep. The controls laid on top, however, must stay reachable: without
+     * this inset, the freshness label slid under the clock and the list button
+     * under the navigation bar.
      */
     private fun applySystemInsets(views: FragmentMapBinding) {
         ViewCompat.setOnApplyWindowInsetsListener(views.root) { _, windowInsets ->
@@ -217,15 +218,16 @@ class MapFragment : Fragment() {
     }
 
     /**
-     * Charge le style si le fond de carte est là, sinon montre l'explication.
+     * Loads the style if the base map is there, otherwise shows the
+     * explanation.
      *
-     * Appelée aussi au retour à l'écran : l'utilisateur peut être parti
-     * installer les tuiles entre-temps, et la carte doit alors apparaître
-     * sans qu'il ait à relancer l'application.
+     * Called on returning to the screen too: the user may have gone off to
+     * install the tiles in the meantime, and the map must then appear without
+     * their having to restart the application.
      */
     private fun loadTilesIfInstalled() {
-        // La ville active se lit sur le disque : la carte se dessine donc au
-        // retour de cette lecture, et non pendant.
+        // The active city is read from disk: the map is therefore drawn when
+        // that read returns, not during it.
         viewLifecycleOwner.lifecycleScope.launch {
             loadTilesFor(container.activeCity())
         }
@@ -236,8 +238,8 @@ class MapFragment : Fragment() {
         val map = mapLibreMap ?: return
         if (styleLoaded) return
 
-        // Sans ville choisie, il n'y a pas de fond de carte à charger : c'est
-        // le même écran que sans tuiles installées, qui invite à en obtenir.
+        // Without a chosen city there is no base map to load: that is the same
+        // screen as without installed tiles, inviting the user to get some.
         val tiles = if (configuration == null) {
             null
         } else {
@@ -245,9 +247,9 @@ class MapFragment : Fragment() {
         }
         views.missingTiles.isVisible = tiles == null
         views.attribution.isVisible = tiles != null
-        // Sans ville, ce ne sont pas des données qui manquent mais le choix de
-        // l'agglomération : proposer d'installer des tuiles n'aurait aucun sens
-        // tant qu'on ne sait pas celles de quelle ville.
+        // Without a city it is not data that is missing but the choice of
+        // conurbation: offering to install tiles would make no sense while we
+        // do not know whose tiles they would be.
         if (configuration == null) {
             views.missingTilesTitle.setText(R.string.map_needs_city_title)
             views.missingTilesMessage.setText(R.string.map_needs_city_message)
@@ -259,12 +261,12 @@ class MapFragment : Fragment() {
             views.missingTilesStorage.setText(R.string.storage_open)
             views.missingTilesStorage.setOnClickListener { show(StorageFragment()) }
         }
-        // Les commandes de l'écran principal ne réapparaissent pas quand la
-        // carte sert à désigner un point : on est venu viser, pas consulter.
+        // The main screen's controls do not reappear when the map is being
+        // used to designate a point: one came to aim, not to browse.
         val showsControls = tiles != null && !isPicking()
         views.modeToggle.isVisible = showsControls
-        // Sans fond de carte, une adresse trouvée n'aurait rien où se poser :
-        // la recherche s'ouvre depuis la carte, elle en suppose une.
+        // Without a base map, an address found would have nowhere to land: the
+        // search opens from the map, and presumes one.
         views.openSearch.isVisible = showsControls
         views.openJourney.isVisible = showsControls
         if (tiles == null || configuration == null) return
@@ -273,9 +275,9 @@ class MapFragment : Fragment() {
         map.uiSettings.isLogoEnabled = false
         map.uiSettings.isRotateGesturesEnabled = false
         map.setMinZoomPreference(configuration.map.minZoom.toDouble())
-        // Au-delà du zoom maximal des tuiles, MapLibre agrandit les dernières
-        // disponibles. Laisser un cran permet de s'approcher un peu sans que
-        // le texte devienne illisible.
+        // Past the tiles' maximum zoom, MapLibre scales up the last ones it
+        // has. Allowing one step lets the user come a little closer without the
+        // text turning illegible.
         map.setMaxZoomPreference(configuration.map.maxZoom.toDouble() + 1)
         map.cameraPosition = lastCamera?.takeIf { it.suits(configuration) }
             ?: openingCamera(configuration)
@@ -288,8 +290,8 @@ class MapFragment : Fragment() {
             styleLoaded = true
             addStationLayers(style)
             publishStations()
-            // Une adresse choisie pendant que la carte n'existait pas : c'est
-            // maintenant qu'elle peut être rejointe.
+            // An address chosen while the map did not exist: now is when it
+            // can be reached.
             pendingCameraTarget?.let { target ->
                 pendingCameraTarget = null
                 moveCameraTo(target)
@@ -298,12 +300,12 @@ class MapFragment : Fragment() {
     }
 
     /**
-     * Dit si un cadrage retenu vaut encore pour cette ville.
+     * Says whether a remembered framing still holds for this city.
      *
-     * La caméra survit à la destruction de la vue, pour qu'un aller-retour vers
-     * un autre écran ne fasse pas tout perdre. Mais elle survit aussi à un
-     * changement de ville : reprise telle quelle, elle rouvrirait la carte de
-     * Paris sur Lille, hors des tuiles, sur un écran gris que rien n'explique.
+     * The camera survives the destruction of the view, so a trip to another
+     * screen does not lose everything. But it also survives a change of city:
+     * taken as is, it would reopen the map of Paris over Lille, outside the
+     * tiles, on a grey screen that nothing explains.
      */
     private fun CameraPosition.suits(configuration: CityConfiguration): Boolean {
         val box = configuration.boundingBox ?: return true
@@ -312,11 +314,11 @@ class MapFragment : Fragment() {
     }
 
     /**
-     * Cadrage d'ouverture, faute de position connue.
+     * The opening framing, for want of a known position.
      *
-     * La permission de localisation n'est pas demandée au lancement (SPEC
-     * §10) : la carte s'ouvre donc sur le centre déclaré dans la configuration
-     * de ville, jamais sur une position obtenue à l'insu de l'utilisateur.
+     * Location permission is not requested at launch (SPEC §10): the map
+     * therefore opens on the centre declared in the city configuration, never
+     * on a position obtained without the user's knowledge.
      */
     private fun openingCamera(configuration: CityConfiguration): CameraPosition =
         CameraPosition.Builder()
@@ -330,10 +332,10 @@ class MapFragment : Fragment() {
             .build()
 
     /**
-     * Installe la source des stations et ses quatre couches.
+     * Installs the station source and its four layers.
      *
-     * Le regroupement est confié à MapLibre (SPEC §7.1) : au-delà du zoom
-     * indiqué, les stations proches fusionnent en un amas portant leur nombre.
+     * Clustering is left to MapLibre (SPEC §7.1): past the zoom given, nearby
+     * stations merge into a cluster bearing their count.
      */
     private fun addStationLayers(style: Style) {
         val source = GeoJsonSource(
@@ -353,8 +355,8 @@ class MapFragment : Fragment() {
         style.addLayer(StationMarkers.clusterLayer(context))
         style.addLayer(StationMarkers.clusterCountLayer(context))
 
-        // Le point cherché est posé APRÈS les stations : c'est lui que
-        // l'utilisateur vient de demander, il passe donc devant.
+        // The searched point is laid down AFTER the stations: it is what the
+        // user has just asked for, so it goes in front.
         val picked = GeoJsonSource(
             PickedPlaceMarker.SOURCE_ID,
             PickedPlaceMarker.featureFor(null),
@@ -372,8 +374,8 @@ class MapFragment : Fragment() {
         userPositionSource = userPosition
         style.addSource(userPosition)
         style.addLayer(UserPositionMarker.layer(context))
-        // La position connue est réaffichée après une reconstruction de la vue,
-        // sans nouvelle demande au système.
+        // The known position is shown again after the view is rebuilt, without
+        // asking the system afresh.
         lastKnownPosition?.let { userPosition.setGeoJson(UserPositionMarker.featureFor(it)) }
     }
 
@@ -385,14 +387,14 @@ class MapFragment : Fragment() {
     }
 
     /**
-     * Ouvre le détail de la station touchée, ou rapproche un amas.
+     * Opens the detail of the station touched, or zooms into a cluster.
      *
-     * La zone sensible est élargie autour du doigt : un marqueur fait une
-     * quinzaine de pixels de diamètre, soit moins que la pulpe d'un pouce.
-     * Sans cette marge, il faudrait viser.
+     * The sensitive area is widened around the finger: a marker is some fifteen
+     * pixels across, which is less than the pad of a thumb. Without this
+     * margin, one would have to aim.
      *
-     * @return vrai si le geste a été consommé, pour que la carte ne le traite
-     *   pas à son tour.
+     * @return true if the gesture was consumed, so the map does not handle it
+     *   in turn.
      */
     private fun onMapClicked(point: LatLng): Boolean {
         val map = mapLibreMap ?: return false
@@ -409,8 +411,8 @@ class MapFragment : Fragment() {
             StationMarkers.CLUSTER_CIRCLE_LAYER,
         ).firstOrNull() ?: return false
 
-        // Un amas ne décrit aucune station en particulier : le toucher
-        // rapproche, ce qui finit par le résoudre en marqueurs distincts.
+        // A cluster describes no station in particular: touching it zooms in,
+        // which eventually resolves it into distinct markers.
         if (touched.hasProperty(CLUSTER_COUNT_PROPERTY)) {
             moveCameraTo(point, map.cameraPosition.zoom + CLUSTER_ZOOM_STEP)
             return true
@@ -418,23 +420,23 @@ class MapFragment : Fragment() {
 
         val stationId = touched.getStringProperty(StationMarkers.STATION_ID_PROPERTY)
             ?: return false
-        // En mode « choisir un point », ouvrir une feuille de station
-        // détournerait le geste de ce que l'utilisateur est venu faire.
+        // In "pick a point" mode, opening a station sheet would divert the
+        // gesture from what the user came to do.
         if (isPicking()) return false
         StationDetailSheet.newInstance(stationId)
             .show(parentFragmentManager, StationDetailSheet.TAG)
         return true
     }
 
-    // ------------------------------------------- choisir un point (§7.3) --
+    // ------------------------------------------------ picking a point (§7.3) --
 
     /**
-     * Prépare l'écran quand il sert à désigner un point.
+     * Prepares the screen when it serves to designate a point.
      *
-     * Les commandes qui n'ont rien à y faire disparaissent : on est venu
-     * choisir un endroit, pas consulter des disponibilités. La mire, elle,
-     * reste fixe au centre — c'est la carte que l'on déplace dessous, ce qui
-     * laisse voir ce que l'on vise, contrairement à un doigt posé dessus.
+     * The controls that have no business there disappear: one came to choose a
+     * place, not to browse availability. The crosshair stays fixed at the
+     * centre — it is the map that moves underneath, which leaves what is being
+     * aimed at visible, unlike a finger placed on top of it.
      */
     private fun applyPickingMode(views: FragmentMapBinding) {
         if (!isPicking()) return
@@ -451,10 +453,10 @@ class MapFragment : Fragment() {
     private fun isPicking(): Boolean = arguments?.getBoolean(ARGUMENT_PICKING) == true
 
     /**
-     * Rend le point visé, avec son adresse quand l'index la connaît.
+     * Returns the point aimed at, with its address when the index knows it.
      *
-     * Un libellé lisible plutôt que deux nombres : « 12 Rue Nationale » se
-     * relit sur l'écran de recherche, « 50,63 / 3,06 » non.
+     * A readable label rather than two numbers: "12 Rue Nationale" reads back
+     * on the search screen, "50.63 / 3.06" does not.
      */
     private fun confirmPickedPoint() {
         val map = mapLibreMap ?: return
@@ -473,14 +475,13 @@ class MapFragment : Fragment() {
         }
     }
 
-    // ------------------------------------------------------- localisation --
+    // ----------------------------------------------------------- location --
 
     /**
-     * Répond au bouton « me localiser » (SPEC §7.1).
+     * Answers the "locate me" button (SPEC §7.1).
      *
-     * C'est ici, et nulle part ailleurs, que la permission de localisation est
-     * demandée : au moment où l'utilisateur vient de l'appeler de ses vœux
-     * (SPEC §10).
+     * Here, and nowhere else, is where location permission is requested: at the
+     * moment the user has just asked for it (SPEC §10).
      */
     private fun onLocateMeClicked() {
         val location = container.deviceLocation
@@ -495,16 +496,16 @@ class MapFragment : Fragment() {
     }
 
     /**
-     * Cherche la position et y amène la carte.
+     * Looks for the position and brings the map to it.
      *
-     * La position n'est ni conservée ni écrite : elle sert à cadrer la carte,
-     * puis vit dans la source d'affichage le temps de la session (SPEC §2, C3).
+     * The position is neither kept nor written: it serves to frame the map,
+     * then lives in the display source for the session (SPEC §2, C3).
      */
     private fun locateMe() {
         viewLifecycleOwner.lifecycleScope.launch {
-            // Un premier relevé peut demander plusieurs secondes en intérieur.
-            // Éteindre le bouton pendant ce temps évite de laisser croire que
-            // l'appui s'est perdu — et évite d'en empiler plusieurs.
+            // A first fix can take several seconds indoors. Disabling the
+            // button meanwhile avoids suggesting the press was lost — and
+            // avoids stacking several of them.
             binding?.locateMe?.isEnabled = false
             val position = try {
                 container.deviceLocation.current()
@@ -526,20 +527,20 @@ class MapFragment : Fragment() {
         Snackbar.make(views.root, message, Snackbar.LENGTH_LONG).show()
     }
 
-    // ------------------------------------------------ recherche d'adresse --
+    // ---------------------------------------------------- address search --
 
-    /** Ouvre la recherche d'adresses (SPEC §4.3). */
+    /** Opens the address search (SPEC §4.3). */
     private fun openAddressSearch() {
-        // Le centre de la carte sert de point de référence au classement : il
-        // dit assez bien où l'utilisateur regarde, et l'obtenir ne demande
-        // aucune permission de localisation (SPEC §10).
+        // The map's centre serves as the ranking's reference point: it says
+        // well enough where the user is looking, and obtaining it needs no
+        // location permission at all (SPEC §10).
         val centre = mapLibreMap?.cameraPosition?.target?.let {
             Coordinates(it.latitude, it.longitude)
         }
         show(AddressSearchFragment.newInstance(centre))
     }
 
-    /** Recueille l'adresse choisie par l'écran de recherche. */
+    /** Collects the address chosen by the search screen. */
     private fun listenForPickedAddress() {
         parentFragmentManager.setFragmentResultListener(
             AddressSearchFragment.REQUEST_KEY,
@@ -558,9 +559,9 @@ class MapFragment : Fragment() {
     }
 
     /**
-     * Pose le point trouvé sur la carte, ou l'efface.
+     * Lays the point found on the map, or clears it.
      *
-     * @param place l'adresse choisie, ou `null` pour retirer le marqueur.
+     * @param place the chosen address, or `null` to remove the marker.
      */
     private fun showPickedPlace(place: PickedPlace?) {
         pickedPlace = place
@@ -570,11 +571,11 @@ class MapFragment : Fragment() {
     }
 
     /**
-     * Affiche l'étiquette du point trouvé.
+     * Shows the label of the point found.
      *
-     * Le libellé fait partie de ce qu'un lecteur d'écran doit entendre :
-     * remplacer le texte par la seule action « effacer » ferait disparaître
-     * l'adresse pour qui n'a que la voix.
+     * The label is part of what a screen reader must speak: replacing the text
+     * with the "clear" action alone would make the address vanish for anyone
+     * who only has the voice.
      */
     private fun showPickedPlaceLabel(place: PickedPlace?) {
         val pill = binding?.pickedPlace ?: return
@@ -594,11 +595,11 @@ class MapFragment : Fragment() {
     }
 
     /**
-     * Amène la carte sur un point.
+     * Brings the map onto a point.
      *
-     * Le déplacement est animé pour que l'on comprenne d'où l'on vient — sauf
-     * si l'appareil demande de réduire les animations, auquel cas la carte
-     * saute directement à destination (SPEC §7).
+     * The move is animated so one understands where one came from — unless the
+     * device asks for reduced animations, in which case the map jumps straight
+     * to the destination (SPEC §7).
      */
     private fun moveCameraTo(target: LatLng, zoom: Double = PICKED_PLACE_ZOOM) {
         val map = mapLibreMap
@@ -615,11 +616,12 @@ class MapFragment : Fragment() {
     }
 
     /**
-     * Pose le point reçu d'une autre application, s'il y en a un (SPEC §7.8).
+     * Lays down the point received from another application, if there is one
+     * (SPEC §7.8).
      *
-     * Seulement au premier affichage : après une rotation, c'est l'état
-     * enregistré qui fait foi, et reposer le point effacerait ce que
-     * l'utilisateur a fait entre-temps.
+     * On the first display only: after a rotation it is the saved state that
+     * prevails, and laying the point down again would erase what the user did
+     * in the meantime.
      */
     private fun showRequestedPlace(savedInstanceState: Bundle?) {
         if (savedInstanceState != null) return
@@ -655,8 +657,8 @@ class MapFragment : Fragment() {
     }
 
     private fun applyModeLabel() {
-        // Le bouton porte le nom de ce qui est AFFICHÉ, pas de ce qu'un appui
-        // ferait : c'est une étiquette d'état, comme la bascule de la liste.
+        // The button is named after what is SHOWN, not after what a press
+        // would do: it is a state label, like the list's own toggle.
         binding?.modeToggle?.setText(
             when (mode) {
                 AvailabilityMode.Bikes -> R.string.mode_bikes
@@ -694,7 +696,7 @@ class MapFragment : Fragment() {
         }
     }
 
-    /** Rafraîchit et réécrit l'âge affiché tant que la carte est visible. */
+    /** Refreshes and rewrites the displayed age while the map is visible. */
     private fun keepAvailabilityFresh() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -720,8 +722,9 @@ class MapFragment : Fragment() {
             .commit()
     }
 
-    // ------------------------------------------------- cycle de vie carte --
-    // MapLibre gère un contexte graphique natif : sans ces relais, il fuit.
+    // ------------------------------------------------- map lifecycle --
+    // MapLibre manages a native graphics context: without these relays, it
+    // leaks.
 
     override fun onStart() {
         super.onStart()
@@ -747,8 +750,8 @@ class MapFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding?.map?.onSaveInstanceState(outState)
-        // Le point choisi survit à une rotation, et à rien d'autre : il n'est
-        // écrit nulle part sur le disque (SPEC §8).
+        // The chosen point survives a rotation, and nothing else: it is
+        // written nowhere on disk (SPEC §8).
         pickedPlace?.let { place ->
             outState.putDouble(STATE_PICKED_LATITUDE, place.position.latitude)
             outState.putDouble(STATE_PICKED_LONGITUDE, place.position.longitude)
@@ -774,49 +777,49 @@ class MapFragment : Fragment() {
     }
 
     companion object {
-        /** Clé sous laquelle le point choisi sur la carte est rendu. */
+        /** The key the point picked on the map is returned under. */
         const val PICK_REQUEST_KEY: String = "point-choisi-sur-la-carte"
 
-        /** Préfixe des clés du point rendu. */
+        /** The prefix of the returned point's keys. */
         const val PICK_RESULT_PREFIX: String = "point"
 
         private const val ARGUMENT_PICKING = "mode-choix"
         private const val ARGUMENT_SHOWN_PLACE = "point-a-montrer"
 
-        /** Ouvre la carte pour y désigner un point (SPEC §7.3). */
+        /** Opens the map to designate a point on it (SPEC §7.3). */
         fun forPicking(): MapFragment = MapFragment().apply {
             arguments = Bundle().apply { putBoolean(ARGUMENT_PICKING, true) }
         }
 
         /**
-         * Ouvre la carte posée sur un point, sans rien calculer.
+         * Opens the map resting on a point, computing nothing.
          *
-         * Sert aux lieux reçus hors de l'emprise couverte : la carte les
-         * montre si elle le peut, mais aucun itinéraire n'est tenté (§7.8).
+         * Used for places received from outside the covered area: the map shows
+         * them if it can, but no route is attempted (§7.8).
          */
         fun showing(place: JourneyEndpoint): MapFragment = MapFragment().apply {
             arguments = Bundle().apply { place.writeTo(this, ARGUMENT_SHOWN_PLACE) }
         }
 
-        /** Zoom auquel la carte se pose sur une adresse trouvée : la rue. */
+        /** The zoom the map settles at on a found address: the street. */
         const val PICKED_PLACE_ZOOM = 16.0
 
         /**
-         * Marge autour du doigt lors d'un toucher, en pixels. Un marqueur
-         * mesure une quinzaine de pixels : sans cette marge, il faudrait viser.
+         * The margin around the finger on a touch, in pixels. A marker is some
+         * fifteen pixels across: without this margin, one would have to aim.
          */
         const val TOUCH_SLOP_PIXELS = 32f
 
-        /** Zoom auquel la carte se pose sur la position de l'utilisateur. */
+        /** The zoom the map settles at on the user's position. */
         const val USER_POSITION_ZOOM = 16.0
 
-        /** De combien un toucher sur un amas rapproche la carte. */
+        /** How much a touch on a cluster zooms the map in. */
         const val CLUSTER_ZOOM_STEP = 2.0
 
-        /** Propriété que MapLibre ajoute aux amas qu'il forme lui-même. */
+        /** The property MapLibre adds to the clusters it forms itself. */
         const val CLUSTER_COUNT_PROPERTY = "point_count"
 
-        /** Durée du déplacement de caméra, assez brève pour ne pas faire attendre. */
+        /** The camera move's duration, short enough not to keep anyone waiting. */
         const val CAMERA_ANIMATION_MILLIS = 600
 
         const val STATE_PICKED_LATITUDE = "point-choisi-latitude"
@@ -824,13 +827,13 @@ class MapFragment : Fragment() {
         const val STATE_PICKED_LABEL = "point-choisi-libelle"
 
         /**
-         * Rayon de regroupement, en pixels. Cinquante laisse les stations du
-         * centre de Lille distinctes dès qu'on s'en approche, sans faire
-         * grouiller la vue d'ensemble.
+         * The clustering radius, in pixels. Fifty keeps the stations of central
+         * Lille distinct as soon as one comes near, without making the overview
+         * swarm.
          */
         const val CLUSTER_RADIUS = 50
 
-        /** Au-delà, chaque station reprend son marqueur propre. */
+        /** Past this, every station takes back its own marker. */
         const val CLUSTER_MAX_ZOOM = 13
 
         const val FRESHNESS_TICK_MILLIS = 10_000L
