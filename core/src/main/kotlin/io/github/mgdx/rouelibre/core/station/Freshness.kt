@@ -4,40 +4,40 @@ import java.time.Duration
 import java.time.Instant
 
 /**
- * Âge de la donnée affichée, en tranches lisibles (SPEC §4.1).
+ * The age of the displayed data, in readable bands (SPEC §4.1).
  *
- * Le SPEC impose d'afficher cet âge — « il y a 12 s ». Le découpage est fait
- * ici, en Kotlin pur et donc testable ; la mise en mots revient à la couche
- * interface, seule autorisée à contenir du français (SPEC §9).
+ * The specification requires showing that age — "12 s ago". The banding happens
+ * here, in pure Kotlin and therefore testable; putting it into words falls to
+ * the interface layer, the only one allowed to hold French (SPEC §9).
  */
 public sealed interface Freshness {
 
-    /** Trop récent pour qu'un décompte ait du sens. */
+    /** Too recent for a countdown to mean anything. */
     public data object JustNow : Freshness
 
-    /** Moins d'une minute. */
+    /** Under a minute. */
     public data class Seconds(public val value: Int) : Freshness
 
-    /** Moins d'une heure. */
+    /** Under an hour. */
     public data class Minutes(public val value: Int) : Freshness
 
-    /** Moins d'un jour. */
+    /** Under a day. */
     public data class Hours(public val value: Int) : Freshness
 
-    /** Au-delà d'un jour, le décompte exact n'apprend plus rien. */
+    /** Beyond a day, the exact count teaches nothing more. */
     public data object LongAgo : Freshness
 
-    /** Aucune donnée n'a jamais été reçue. */
+    /** No data has ever been received. */
     public data object Never : Freshness
 
     /**
-     * Vrai quand l'état affiché ne peut plus passer pour courant et doit être
-     * signalé comme figé (SPEC §4.1).
+     * True when the displayed state can no longer pass for current and must be
+     * flagged as frozen (SPEC §4.1).
      *
-     * Cinq minutes : le flux est produit toutes les minutes, donc au-delà de
-     * cinq c'est qu'au moins quatre rafraîchissements ont été manqués — on
-     * n'est plus devant un retard, mais devant une photographie. En deçà, le
-     * dire alarmerait pour un simple rafraîchissement raté.
+     * Five minutes: the feed is produced every minute, so beyond five at least
+     * four refreshes have been missed — we are no longer looking at a delay but
+     * at a photograph. Below that, saying so would alarm over a single missed
+     * refresh.
      */
     public val isStale: Boolean
         get() = when (this) {
@@ -50,23 +50,23 @@ public sealed interface Freshness {
         }
 }
 
-/** Ancienneté, en minutes, au-delà de laquelle l'état est dit figé. */
+/** The age, in minutes, beyond which the state is called frozen. */
 private const val STALE_AFTER_MINUTES = 5
 
-/** En deçà, afficher un décompte en secondes serait du bruit. */
+/** Below this, showing a count in seconds would be noise. */
 private const val JUST_NOW_SECONDS = 5
 
 /**
- * Calcule l'âge d'une donnée.
+ * Computes the age of a piece of data.
  *
- * @param fetchedAt date de récupération, ou `null` si rien n'a jamais été reçu.
- * @param now instant de référence, injecté pour rendre le calcul testable.
+ * @param fetchedAt when it was fetched, or `null` if nothing was ever received.
+ * @param now the reference instant, injected to keep the computation testable.
  */
 public fun freshnessOf(fetchedAt: Instant?, now: Instant): Freshness {
     if (fetchedAt == null) return Freshness.Never
     val elapsed = Duration.between(fetchedAt, now)
-    // Une horloge qui recule — changement de fuseau, correction NTP — ne doit
-    // pas produire « il y a -3 secondes ».
+    // A clock that goes backwards — a time-zone change, an NTP correction —
+    // must not produce "-3 seconds ago".
     if (elapsed.isNegative) return Freshness.JustNow
 
     val seconds = elapsed.seconds

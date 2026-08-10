@@ -1,35 +1,34 @@
 package io.github.mgdx.rouelibre.core
 
 /**
- * Résultat d'une opération pouvant échouer.
+ * The result of an operation that can fail.
  *
- * Le SPEC §14 impose des types de résultat plutôt que des exceptions
- * silencieuses. Les échecs remontent donc comme des valeurs, que l'appelant ne
- * peut pas ignorer par inadvertance.
+ * SPEC §14 mandates result types rather than silent exceptions. Failures
+ * therefore travel back as values, which the caller cannot ignore by accident.
  *
- * Aucune variante ne porte de texte destiné à l'utilisateur : le module métier
- * n'a pas le droit de contenir de chaîne de caractères affichable (SPEC §9).
- * C'est la couche Android qui traduit chaque erreur en message français.
+ * No variant carries text meant for the user: the business module is not
+ * allowed to hold a displayable string (SPEC §9). It is the Android layer that
+ * turns each error into a French message.
  */
 public sealed interface Outcome<out T> {
 
-    /** L'opération a abouti et porte sa valeur. */
+    /** The operation succeeded and carries its value. */
     public data class Success<out T>(public val value: T) : Outcome<T>
 
-    /** L'opération a échoué pour la raison décrite par [error]. */
+    /** The operation failed for the reason described by [error]. */
     public data class Failure(public val error: DataError) : Outcome<Nothing>
 
     public companion object {
-        /** Raccourci de construction, pour alléger les appels. */
+        /** Construction shorthand, to lighten call sites. */
         public fun <T> success(value: T): Outcome<T> = Success(value)
 
-        /** Raccourci de construction, pour alléger les appels. */
+        /** Construction shorthand, to lighten call sites. */
         public fun failure(error: DataError): Outcome<Nothing> = Failure(error)
     }
 }
 
 /**
- * Applique [transform] à la valeur portée, en propageant l'échec inchangé.
+ * Applies [transform] to the value carried, propagating failure unchanged.
  */
 public inline fun <T, R> Outcome<T>.map(transform: (T) -> R): Outcome<R> = when (this) {
     is Outcome.Success -> Outcome.Success(transform(value))
@@ -37,7 +36,7 @@ public inline fun <T, R> Outcome<T>.map(transform: (T) -> R): Outcome<R> = when 
 }
 
 /**
- * Enchaîne une opération elle-même faillible, en propageant l'échec inchangé.
+ * Chains an operation that can itself fail, propagating failure unchanged.
  */
 public inline fun <T, R> Outcome<T>.flatMap(transform: (T) -> Outcome<R>): Outcome<R> =
     when (this) {
@@ -45,57 +44,57 @@ public inline fun <T, R> Outcome<T>.flatMap(transform: (T) -> Outcome<R>): Outco
         is Outcome.Failure -> this
     }
 
-/** La valeur portée, ou `null` en cas d'échec. */
+/** The value carried, or `null` on failure. */
 public fun <T> Outcome<T>.valueOrNull(): T? = (this as? Outcome.Success)?.value
 
 /**
- * Cause d'un échec de récupération ou de lecture de données.
+ * The cause of a failure to fetch or read data.
  *
- * Chaque variante correspond à une conduite à tenir différente pour
- * l'utilisateur, et donc à un message distinct — c'est le critère qui a guidé
- * ce découpage, pas la nature technique de la panne.
+ * Each variant corresponds to different conduct for the user, and therefore to
+ * a distinct message — that is the criterion that guided this split, not the
+ * technical nature of the breakdown.
  */
 public sealed interface DataError {
 
-    /** L'appareil n'a pas de connexion. Le dernier état connu reste affichable. */
+    /** The device has no connection. The last known state stays displayable. */
     public data object Offline : DataError
 
-    /** La requête a abouti mais le serveur a répondu par une erreur. */
+    /** The request went through but the server answered with an error. */
     public data class ServerRefused(public val statusCode: Int) : DataError
 
-    /** La requête n'a pas abouti dans le délai imparti. */
+    /** The request did not complete within the allotted time. */
     public data object Timeout : DataError
 
     /**
-     * La réponse n'a pas la forme attendue.
+     * The response does not have the expected shape.
      *
-     * @property detail description technique, destinée au journal et au
-     *   rapport de bogue, jamais à l'écran.
+     * @property detail a technical description, meant for the log and the bug
+     *   report, never for the screen.
      */
     public data class MalformedResponse(public val detail: String) : DataError
 
     /**
-     * Le flux d'auto-découverte ne publie pas le flux demandé.
+     * The auto-discovery feed does not publish the feed asked for.
      *
-     * @property feedName nom du flux GBFS manquant.
+     * @property feedName the name of the missing GBFS feed.
      */
     public data class FeedUnavailable(public val feedName: String) : DataError
 
     /**
-     * Le producteur annonce une version de GBFS que l'application ne sait pas
-     * lire. Il faut le dire et inviter à mettre à jour, pas échouer en silence.
+     * The producer announces a GBFS version the application cannot read. It has
+     * to be said, with an invitation to update, not fail in silence.
      */
     public data class UnsupportedFeedVersion(public val version: String) : DataError
 
-    /** Les données locales sont absentes ou illisibles. */
+    /** The local data is absent or unreadable. */
     public data class LocalStorageFailure(public val detail: String) : DataError
 
     /**
-     * Aucune ville n'est choisie.
+     * No city is chosen.
      *
-     * Distincte d'une panne : il n'y a rien à réessayer, seulement une ville à
-     * désigner. C'est l'état d'un premier lancement, et celui d'un appareil
-     * dont on vient de supprimer les données de la dernière ville installée.
+     * Distinct from a breakdown: there is nothing to retry, only a city to
+     * designate. It is the state of a first launch, and that of a device whose
+     * last installed city's data has just been deleted.
      */
     public data object NoCityChosen : DataError
 }

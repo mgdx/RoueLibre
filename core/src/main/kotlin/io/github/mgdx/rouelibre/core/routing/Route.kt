@@ -4,26 +4,27 @@ import io.github.mgdx.rouelibre.core.geo.Coordinates
 import kotlin.time.Duration
 
 /**
- * Les deux modes de déplacement d'un trajet porte-à-porte (SPEC.md §5).
+ * The two travel modes of a door-to-door journey (SPEC.md §5).
  *
- * @property profileName nom du fichier de profil BRouter, sans extension.
+ * @property profileName the name of the BRouter profile file, without its
+ *   extension.
  */
 public enum class TravelMode(public val profileName: String) {
-    /** Trajets d'accès, à pied. */
+    /** Access legs, on foot. */
     Walking("urban-walk"),
 
-    /** Trajet principal, sur un vélo de libre-service. */
+    /** The main leg, on a share bike. */
     Cycling("city-bike"),
 }
 
 /**
- * Un segment d'itinéraire calculé.
+ * One computed leg of a route.
  *
- * @property mode à pied ou à vélo.
- * @property distanceMetres longueur du tracé.
- * @property duration durée estimée par le moteur pour ce mode.
- * @property ascentMetres dénivelé positif cumulé.
- * @property geometry le tracé, du départ à l'arrivée.
+ * @property mode on foot or by bike.
+ * @property distanceMetres the length of the track.
+ * @property duration the duration the engine estimates for this mode.
+ * @property ascentMetres the cumulative climb.
+ * @property geometry the track, from start to finish.
  */
 public data class RouteLeg(
     public val mode: TravelMode,
@@ -34,51 +35,51 @@ public data class RouteLeg(
 )
 
 /**
- * Pourquoi un calcul d'itinéraire n'a pas abouti.
+ * Why a route computation did not succeed.
  *
- * Chaque cas appelle une conduite différente, et donc un message distinct :
- * c'est ce qui a guidé ce découpage, pas la nature technique de l'échec
+ * Each case calls for different conduct, and therefore a distinct message: that
+ * is what guided this split, not the technical nature of the failure
  * (SPEC §14).
  */
 public sealed interface RoutingFailure {
 
-    /** Le graphe de routage n'est pas installé sur l'appareil. */
+    /** The routing graph is not installed on the device. */
     public data object GraphMissing : RoutingFailure
 
     /**
-     * Un des points est hors de l'emprise couverte par le graphe.
+     * One of the points lies outside the area the graph covers.
      *
-     * Le SPEC §4 l'exige : hors emprise, l'application doit le dire clairement
-     * et jamais échouer en silence.
+     * SPEC §4 requires it: outside the box, the application must say so clearly
+     * and never fail in silence.
      */
     public data object OutsideCoverage : RoutingFailure
 
     /**
-     * Aucun chemin praticable entre les deux points pour ce mode.
+     * No usable path between the two points for this mode.
      *
-     * Arrive légitimement : une station de l'autre côté d'un canal sans pont
-     * proche, ou une zone piétonne fermée à la circulation cycliste.
+     * This happens legitimately: a station on the far side of a canal with no
+     * bridge nearby, or a pedestrian zone closed to bicycles.
      */
     public data object NoRouteFound : RoutingFailure
 
-    /** Le calcul a dépassé le temps imparti. */
+    /** The computation ran past its allotted time. */
     public data object Timeout : RoutingFailure
 
     /**
-     * Le moteur a échoué pour une raison qui lui est propre.
+     * The engine failed for a reason of its own.
      *
-     * @property detail message du moteur, destiné au journal et au rapport de
-     *   bogue, jamais à l'écran.
+     * @property detail the engine's message, meant for the log and the bug
+     *   report, never for the screen.
      */
     public data class EngineFailure(public val detail: String) : RoutingFailure
 }
 
-/** Issue d'un calcul d'itinéraire. */
+/** The outcome of a route computation. */
 public sealed interface RouteResult {
 
-    /** Le tracé demandé. */
+    /** The requested track. */
     public data class Success(public val leg: RouteLeg) : RouteResult
 
-    /** Le calcul n'a pas abouti. */
+    /** The computation did not succeed. */
     public data class Failure(public val reason: RoutingFailure) : RouteResult
 }

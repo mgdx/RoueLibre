@@ -3,33 +3,33 @@ package io.github.mgdx.rouelibre.core.station
 import java.text.Normalizer
 
 /**
- * Filtrage de la liste des stations par leur nom.
+ * Filtering of the station list by name.
  *
- * À ne pas confondre avec la recherche d'adresses du SPEC §4.3, qui interroge
- * un index hors ligne de centaines de milliers de numéros de voirie. Ici il
- * s'agit seulement de retrouver une station parmi les quelques centaines déjà
- * en mémoire, ce qui ne demande ni index ni anti-rebond : le parcours est
- * immédiat et peut avoir lieu à chaque frappe.
+ * Not to be confused with the address search of SPEC §4.3, which queries an
+ * offline index of hundreds of thousands of house numbers. Here it is only a
+ * matter of finding a station among the few hundred already in memory, which
+ * needs neither an index nor debouncing: the scan is immediate and can happen
+ * on every keystroke.
  */
 
 /**
- * Réduit un texte à sa forme comparable.
+ * Reduces a text to its comparable form.
  *
- * Le flux du réseau lillois publie ses noms sans accents — « Metropole
- * Europeenne de Lille » — alors que l'utilisateur, lui, les tape. Sans ce
- * repli, chercher « théâtre » ne trouverait pas « Theatre ».
+ * The Lille network's feed publishes its names without accents — "Metropole
+ * Europeenne de Lille" — while the user types them. Without this folding,
+ * searching for "théâtre" would not find "Theatre".
  */
 public fun foldForSearch(text: String): String {
     val decomposed = Normalizer.normalize(text, Normalizer.Form.NFD)
     val builder = StringBuilder(decomposed.length)
     for (character in decomposed) {
         when {
-            // Les marques diacritiques disparaissent avec leur lettre de base
-            // déjà séparée par la décomposition.
+            // Diacritical marks vanish, their base letter having already been
+            // separated out by the decomposition.
             character.isMarkCharacter() -> Unit
             character.isLetterOrDigit() -> builder.append(character.lowercaseChar())
-            // Tirets, apostrophes et points deviennent des séparations de mots,
-            // pour que « Saint-André » se cherche aussi bien en deux mots.
+            // Hyphens, apostrophes and dots become word separators, so that
+            // "Saint-André" can just as well be searched as two words.
             else -> builder.append(' ')
         }
     }
@@ -45,15 +45,15 @@ private fun Char.isMarkCharacter(): Boolean = Character.getType(this).let {
 }
 
 /**
- * Indique si une station répond à la saisie.
+ * Tells whether a station answers the query.
  *
- * Chaque mot de la saisie doit préfixer un mot du texte cherché, dans
- * n'importe quel ordre : « gare lille » trouve « Gare Lille Flandres », et
- * « flandres gare » aussi. La correspondance par préfixe couvre la frappe en
- * cours, pendant laquelle le dernier mot est toujours incomplet.
+ * Every word of the query must prefix a word of the text searched, in any
+ * order: "gare lille" finds "Gare Lille Flandres", and so does "flandres gare".
+ * Prefix matching covers typing in progress, during which the last word is
+ * always incomplete.
  *
- * Le code postal fait partie du texte cherché : il est affiché sur la ligne,
- * donc l'utilisateur peut légitimement s'attendre à pouvoir le taper.
+ * The postcode is part of the text searched: it is shown on the row, so the
+ * user may legitimately expect to be able to type it.
  */
 internal fun stationMatches(entry: StationWithAvailability, foldedQuery: String): Boolean {
     if (foldedQuery.isEmpty()) return true
@@ -67,13 +67,13 @@ internal fun stationMatches(entry: StationWithAvailability, foldedQuery: String)
 }
 
 /**
- * Ne conserve que les stations répondant à la saisie.
+ * Keeps only the stations that answer the query.
  *
- * @param stations les stations connues, dans leur ordre d'affichage.
- * @param query ce que l'utilisateur a tapé, brut.
- * @return les stations retenues, dans le même ordre. Une saisie vide ou faite
- *   de seule ponctuation rend la liste intacte, plutôt que vide : effacer un
- *   champ de recherche doit tout ramener.
+ * @param stations the known stations, in their display order.
+ * @param query what the user typed, raw.
+ * @return the retained stations, in the same order. A query that is empty or
+ *   made of punctuation alone returns the list untouched rather than empty:
+ *   clearing a search field must bring everything back.
  */
 public fun filterStations(
     stations: List<StationWithAvailability>,
