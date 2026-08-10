@@ -3,21 +3,20 @@ package io.github.mgdx.rouelibre.data
 import java.time.Instant
 
 /**
- * Mémorise quand les données stables des stations ont été récupérées.
+ * Remembers when the stations' static data was fetched.
  *
- * Cette date doit survivre au redémarrage de l'application, sinon la règle
- * « au plus une fois par jour » du SPEC §4.1 ne tiendrait pas : chaque
- * lancement retéléchargerait la liste complète des stations.
+ * That date must survive a restart of the application, otherwise the "at most
+ * once a day" rule of SPEC §4.1 would not hold: every launch would download the
+ * complete station list again.
  *
- * L'interface existe pour que la politique de rafraîchissement soit testable
- * sur la JVM sans DataStore ni appareil. `AppPreferences` en est la seule mise
- * en œuvre livrée.
+ * The interface exists so the refresh policy can be tested on the JVM without
+ * DataStore or a device. `AppPreferences` is the only implementation shipped.
  */
 interface RefreshTimestampStore {
 
-    /** Date du dernier rafraîchissement réussi, ou `null` s'il n'y en a jamais eu. */
+    /** When the last successful refresh happened, or `null` if there was none. */
     suspend fun stationInformationFetchedAt(): Instant?
 
-    /** Enregistre la date d'un rafraîchissement réussi. */
+    /** Stores the date of a successful refresh. */
     suspend fun setStationInformationFetchedAt(instant: Instant)
 }

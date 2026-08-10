@@ -12,11 +12,11 @@ import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Données stables d'une station, mises en cache (SPEC §8).
+ * A station's static data, cached (SPEC §8).
  *
- * Ce cache est ce qui permet à l'application de montrer quelque chose hors
- * ligne. Il ne contient que ce que le producteur publie : rien qui vienne de
- * l'utilisateur, aucun trajet, aucune position.
+ * This cache is what lets the application show anything offline. It holds only
+ * what the producer publishes: nothing coming from the user, no journey, no
+ * position.
  */
 @Entity(tableName = "station")
 data class StationEntity(
@@ -29,13 +29,12 @@ data class StationEntity(
 )
 
 /**
- * Dernier état connu d'une station (SPEC §8).
+ * A station's last known state (SPEC §8).
  *
- * Conservé pour être affiché hors ligne, clairement marqué comme périmé
- * (SPEC §4.1). [fetchedAtEpochSeconds] est la date de récupération par
- * l'application, distincte de [reportedAtEpochSeconds] qui est celle déclarée
- * par le producteur : c'est la première qui dit à l'utilisateur depuis quand
- * il regarde une donnée figée.
+ * Kept to be shown offline, clearly marked as stale (SPEC §4.1).
+ * [fetchedAtEpochSeconds] is when the application fetched it, distinct from
+ * [reportedAtEpochSeconds] which is the date the producer declared: it is the
+ * former that tells the user how long they have been looking at frozen data.
  */
 @Entity(tableName = "station_availability")
 data class StationAvailabilityEntity(
@@ -49,23 +48,23 @@ data class StationAvailabilityEntity(
     val fetchedAtEpochSeconds: Long,
 )
 
-/** Accès en lecture et en écriture au cache des stations. */
+/** Read and write access to the station cache. */
 @Dao
 interface StationDao {
 
-    /** Les stations connues, réémises à chaque modification du cache. */
+    /** The known stations, re-emitted whenever the cache changes. */
     @Query("SELECT * FROM station ORDER BY name")
     fun observeStations(): Flow<List<StationEntity>>
 
-    /** Le dernier état connu de chaque station. */
+    /** The last known state of each station. */
     @Query("SELECT * FROM station_availability")
     fun observeAvailabilities(): Flow<List<StationAvailabilityEntity>>
 
-    /** Date de récupération la plus récente, ou `null` si le cache est vide. */
+    /** The most recent fetch date, or `null` if the cache is empty. */
     @Query("SELECT MAX(fetchedAtEpochSeconds) FROM station_availability")
     suspend fun mostRecentFetchTime(): Long?
 
-    /** Nombre de stations en cache, pour savoir s'il faut les télécharger. */
+    /** How many stations are cached, to know whether to download them. */
     @Query("SELECT COUNT(*) FROM station")
     suspend fun stationCount(): Int
 
@@ -85,10 +84,10 @@ interface StationDao {
     suspend fun clearStations()
 
     /**
-     * Remplace la liste des stations par celle reçue.
+     * Replaces the station list with the one received.
      *
-     * En une transaction, pour qu'une interruption ne laisse jamais un cache
-     * à moitié écrit — la liste doit être cohérente à tout instant.
+     * In a single transaction, so that an interruption never leaves a
+     * half-written cache — the list must be consistent at every instant.
      */
     @Transaction
     suspend fun replaceStations(stations: List<StationEntity>) {
@@ -99,11 +98,11 @@ interface StationDao {
     }
 
     /**
-     * Remplace l'état de toutes les stations.
+     * Replaces the state of every station.
      *
-     * L'ancien état est effacé plutôt que fusionné : une station absente du
-     * nouveau flux n'a plus d'état connu, et présenter un état vieux d'une
-     * heure comme s'il était frais serait trompeur.
+     * The old state is cleared rather than merged: a station absent from the
+     * new feed no longer has a known state, and presenting an hour-old state as
+     * though it were fresh would mislead.
      */
     @Transaction
     suspend fun replaceAvailabilities(availabilities: List<StationAvailabilityEntity>) {
@@ -112,7 +111,7 @@ interface StationDao {
     }
 }
 
-/** Base locale des stations et de leur dernier état connu. */
+/** The local database of stations and their last known state. */
 @Database(
     entities = [StationEntity::class, StationAvailabilityEntity::class],
     version = 1,
@@ -122,7 +121,7 @@ abstract class StationDatabase : RoomDatabase() {
     abstract fun stationDao(): StationDao
 
     companion object {
-        /** Nom du fichier de base, unique pour toute l'application. */
+        /** The database file name, single for the whole application. */
         const val FILE_NAME: String = "stations.db"
     }
 }

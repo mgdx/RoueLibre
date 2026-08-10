@@ -17,17 +17,17 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 /**
- * Récupère les flux GBFS sur le réseau.
+ * Fetches the GBFS feeds over the network.
  *
- * La seule requête qui part en usage courant est celle de ces flux (SPEC
- * §11.7). Rien n'est déclenché en arrière-plan : chaque appel vient d'une
- * action de l'utilisateur ou de l'affichage d'un écran.
+ * The only request that goes out in ordinary use is for these feeds
+ * (SPEC §11.7). Nothing is triggered in the background: every call comes from a
+ * user action or from a screen being shown.
  *
- * @property client client HTTP partagé, pour réutiliser les connexions.
- * @property parser analyseur des documents reçus.
- * @property userAgent identifie l'application et sa version, sans aucun
- *   identifiant propre à l'utilisateur ni à l'appareil (SPEC §4.4).
- * @property ioDispatcher contexte d'exécution des entrées-sorties.
+ * @property client the shared HTTP client, to reuse connections.
+ * @property parser the parser for the documents received.
+ * @property userAgent identifies the application and its version, with no
+ *   identifier specific to the user or the device (SPEC §4.4).
+ * @property ioDispatcher the execution context for the IO.
  */
 class GbfsRemoteSource(
     private val client: OkHttpClient,
@@ -37,20 +37,20 @@ class GbfsRemoteSource(
 ) {
 
     /**
-     * Lit le document d'auto-découverte à l'URL donnée.
+     * Reads the auto-discovery document at the given URL.
      *
-     * @param discoveryUrl URL du `gbfs.json`, issue de la configuration de
-     *   ville ou du réglage utilisateur.
+     * @param discoveryUrl the `gbfs.json` URL, from the city configuration or
+     *   from the user setting.
      */
     suspend fun fetchDiscovery(discoveryUrl: String): Outcome<GbfsDiscovery> =
         fetchText(discoveryUrl).flatMap(parser::parseDiscovery)
 
     /**
-     * Lit les données stables des stations.
+     * Reads the stations' static data.
      *
-     * L'URL du flux vient toujours du document d'auto-découverte, jamais d'une
-     * constante : c'est le principe de GBFS et cela protège d'un déplacement
-     * de flux côté producteur (SPEC §4.1).
+     * The feed's URL always comes from the auto-discovery document, never from
+     * a constant: that is the principle of GBFS and it shields us from a feed
+     * being moved on the producer's side (SPEC §4.1).
      */
     suspend fun fetchStationInformation(
         discovery: GbfsDiscovery,
@@ -58,17 +58,17 @@ class GbfsRemoteSource(
         .flatMap { fetchText(it) }
         .flatMap(parser::parseStationInformation)
 
-    /** Lit l'état temps réel des stations. */
+    /** Reads the stations' real-time state. */
     suspend fun fetchStationStatus(discovery: GbfsDiscovery): Outcome<StationStatusFeed> =
         discovery.urlOf(GbfsFeedNames.STATION_STATUS)
             .flatMap { fetchText(it) }
             .flatMap(parser::parseStationStatus)
 
     /**
-     * Exécute un GET et rend le corps de la réponse.
+     * Runs a GET and returns the response body.
      *
-     * Les pannes réseau sont converties en [DataError] plutôt que propagées :
-     * l'appelant doit choisir un message, pas rattraper une exception
+     * Network breakdowns are converted into a [DataError] rather than
+     * propagated: the caller has to choose a message, not catch an exception
      * (SPEC §14).
      */
     private suspend fun fetchText(url: String): Outcome<String> = withContext(ioDispatcher) {
@@ -79,10 +79,10 @@ class GbfsRemoteSource(
                 .get()
                 .build()
         } catch (_: IllegalArgumentException) {
-            // Une URL invalide vient forcément du réglage utilisateur : la
-            // configuration livrée est vérifiée.
+            // An invalid URL can only come from the user setting: the shipped
+            // configuration is verified.
             return@withContext Outcome.Failure(
-                DataError.MalformedResponse("URL invalide : $url"),
+                DataError.MalformedResponse("invalid URL: $url"),
             )
         }
 
@@ -96,7 +96,7 @@ class GbfsRemoteSource(
                 val body = response.body.string()
                 if (body.isBlank()) {
                     return@withContext Outcome.Failure(
-                        DataError.MalformedResponse("réponse vide"),
+                        DataError.MalformedResponse("empty response"),
                     )
                 }
                 Outcome.Success(body)
@@ -104,11 +104,11 @@ class GbfsRemoteSource(
         } catch (_: SocketTimeoutException) {
             Outcome.Failure(DataError.Timeout)
         } catch (_: UnknownHostException) {
-            // Nom impossible à résoudre : en pratique, pas de connexion.
+            // A name that cannot be resolved: in practice, no connection.
             Outcome.Failure(DataError.Offline)
         } catch (error: IOException) {
             Outcome.Failure(
-                DataError.MalformedResponse(error.message ?: "échec réseau"),
+                DataError.MalformedResponse(error.message ?: "network failure"),
             )
         }
     }
