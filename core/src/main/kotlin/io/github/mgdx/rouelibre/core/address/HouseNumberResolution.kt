@@ -4,20 +4,20 @@ import io.github.mgdx.rouelibre.core.geo.Coordinates
 import kotlin.math.abs
 
 /**
- * Place un numéro dans une voie (SPEC §4.3).
+ * Places a house number along a street (SPEC §4.3).
  *
- * Certaines artères lilloises dépassent le kilomètre : retomber sur le centre
- * de la rue quand le numéro demandé n'est pas dans l'index produirait une
- * erreur de plusieurs centaines de mètres — assez pour désigner la mauvaise
- * station de départ, et donc pour calculer un itinéraire faux. D'où
- * l'interpolation, qui ramène l'erreur à la longueur de quelques immeubles.
+ * Some Lille thoroughfares run over a kilometre: falling back on the middle of
+ * the street when the requested number is absent from the index would produce
+ * an error of several hundred metres — enough to designate the wrong departure
+ * station, and therefore to compute a wrong journey. Hence the interpolation,
+ * which brings the error down to the length of a few buildings.
  *
- * @param requestedNumber le numéro cherché.
- * @param requestedSuffix son indice — « bis », « a » — ou une chaîne vide.
- * @param knownNumbers les numéros que l'index rattache à cette voie, dans
- *   n'importe quel ordre.
- * @param streetPosition le point représentatif de la voie, dernier recours.
- * @return la position retenue et la façon dont elle a été obtenue.
+ * @param requestedNumber the number looked for.
+ * @param requestedSuffix its repetition mark — "bis", "a" — or an empty string.
+ * @param knownNumbers the numbers the index attaches to this street, in any
+ *   order.
+ * @param streetPosition the street's representative point, the last resort.
+ * @return the position retained and how it was obtained.
  */
 public fun resolveHouseNumber(
     requestedNumber: Int,
@@ -33,10 +33,10 @@ public fun resolveHouseNumber(
         return ResolvedPosition(match.position, PositionPrecision.Exact)
     }
 
-    // Les numéros pairs et impairs se font face de part et d'autre de la
-    // chaussée : interpoler le 13 entre le 12 et le 14 le placerait sur le
-    // trottoir d'en face, et à un carrefour, dans la rue perpendiculaire. On
-    // cherche donc d'abord des voisins de même parité.
+    // Even and odd numbers face each other across the roadway: interpolating 13
+    // between 12 and 14 would put it on the opposite pavement, and at a
+    // junction, in the perpendicular street. Neighbours of the same parity are
+    // therefore looked for first.
     val sameParity = knownNumbers.filter { it.number % 2 == requestedNumber % 2 }
     return interpolateAmong(requestedNumber, sameParity)
         ?: interpolateAmong(requestedNumber, knownNumbers)
@@ -44,11 +44,11 @@ public fun resolveHouseNumber(
 }
 
 /**
- * Le numéro demandé s'il figure tel quel.
+ * The requested number if it appears as such.
  *
- * Un numéro saisi sans indice accepte le premier indice connu : quelqu'un qui
- * tape « 12 » dans une rue qui n'a qu'un « 12 bis » cherche cet immeuble-là,
- * pas le centre de la rue.
+ * A number typed without a repetition mark accepts the first known one:
+ * somebody typing "12" in a street that only has a "12 bis" is looking for that
+ * building, not for the middle of the street.
  */
 private fun exactMatch(
     number: Int,
@@ -62,9 +62,9 @@ private fun exactMatch(
 }
 
 /**
- * Interpole entre les deux voisins les plus proches, s'ils encadrent le numéro.
+ * Interpolates between the two nearest neighbours, if they bracket the number.
  *
- * @return `null` si la liste ne fournit aucun voisin exploitable.
+ * @return `null` if the list provides no usable neighbour.
  */
 private fun interpolateAmong(
     requestedNumber: Int,
@@ -88,20 +88,20 @@ private fun interpolateAmong(
         )
     }
 
-    // Un seul côté connu : on ne prolonge pas la droite au-delà du dernier
-    // numéro, faute de savoir où la voie continue — ni même si elle continue.
-    // Le voisin le plus proche est une approximation honnête ; une
-    // extrapolation serait une invention.
+    // Only one side known: the line is not extended past the last number, for
+    // want of knowing where the street continues — or even whether it does. The
+    // nearest neighbour is an honest approximation; an extrapolation would be
+    // an invention.
     val nearest = (below ?: above) ?: return null
     return ResolvedPosition(nearest.position, PositionPrecision.NearestKnown)
         .takeIf { abs(nearest.number - requestedNumber) <= FAR_NEIGHBOUR_LIMIT }
 }
 
 /**
- * Écart au-delà duquel un voisin unique ne dit plus rien.
+ * The gap beyond which a lone neighbour no longer says anything.
  *
- * Quarante numéros valent en gros deux cents mètres de façade. Au-delà, rendre
- * la position de ce voisin laisserait croire à une précision qui n'existe pas ;
- * le point représentatif de la voie est alors plus honnête.
+ * Forty numbers amount to roughly two hundred metres of frontage. Past that,
+ * returning that neighbour's position would suggest a precision that does not
+ * exist; the street's representative point is then more honest.
  */
 private const val FAR_NEIGHBOUR_LIMIT = 40

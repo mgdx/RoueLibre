@@ -3,53 +3,53 @@ package io.github.mgdx.rouelibre.core.data
 import java.time.Instant
 
 /**
- * Les trois jeux de données hors ligne (SPEC.md §4.4).
+ * The three offline datasets (SPEC.md §4.4).
  *
- * Ils sont publiés ensemble, versionnés ensemble, mais installés séparément :
- * rafraîchir l'index d'adresses ne doit jamais imposer de reprendre les
- * dizaines de mégaoctets du fond de carte.
+ * They are published together and versioned together, but installed
+ * separately: refreshing the address index must never force the tens of
+ * megabytes of base map to come down again.
  *
- * @property id identifiant tel qu'il apparaît dans le manifeste.
- * @property fileName nom sous lequel le fichier est rangé sur l'appareil,
- *   indépendant de celui qu'il portait à la source. `null` pour un jeu dont le
- *   nom d'origine porte une information que l'on n'a pas le droit d'effacer.
+ * @property id the identifier as it appears in the manifest.
+ * @property fileName the name the file is stored under on the device,
+ *   independent of the one it bore at the source. `null` for a set whose
+ *   original name carries information we are not allowed to erase.
  */
 public enum class DatasetKind(public val id: String, public val fileName: String?) {
-    /** Fond de carte vectoriel, au format MBTiles. */
+    /** The vector base map, in MBTiles format. */
     Tiles("tiles", "tiles.mbtiles"),
 
     /**
-     * Graphe de routage, au format BRouter rd5.
+     * The routing graph, in BRouter's rd5 format.
      *
-     * **Le fichier garde son nom d'origine**, et c'est indispensable : BRouter
-     * déduit le nom du segment des coordonnées cherchées — `E0_N50.rd5` pour
-     * Lille — puis l'ouvre directement dans le répertoire des segments. Un
-     * graphe renommé serait invisible pour le moteur, qui répondrait « aucun
-     * itinéraire » sans que rien n'indique la cause.
+     * **The file keeps its original name**, and that is indispensable: BRouter
+     * derives the segment's name from the coordinates it is looking for —
+     * `E0_N50.rd5` for Lille — then opens it directly in the segment directory.
+     * A renamed graph would be invisible to the engine, which would answer "no
+     * route" with nothing to point at the cause.
      */
     Routing("routing", null),
 
-    /** Index d'adresses, base SQLite. */
+    /** The address index, a SQLite database. */
     Addresses("addresses", "addresses.sqlite"),
 
     ;
 
     public companion object {
-        /** Retrouve un jeu par son identifiant de manifeste, ou `null`. */
+        /** Finds a set by its manifest identifier, or `null`. */
         public fun fromId(id: String): DatasetKind? = entries.firstOrNull { it.id == id }
     }
 }
 
 /**
- * Un jeu de données présent sur l'appareil.
+ * A dataset present on the device.
  *
- * @property kind lequel des trois.
- * @property sizeBytes taille du fichier installé.
- * @property sha256 empreinte du fichier installé. Elle sert à décider, face à
- *   un manifeste, s'il y a lieu de retélécharger (SPEC §4.4).
- * @property installedAt date d'installation, affichée dans l'écran stockage.
- * @property formatVersion version de format lue dans le fichier lui-même,
- *   quand il la porte.
+ * @property kind which of the three.
+ * @property sizeBytes the size of the installed file.
+ * @property sha256 the digest of the installed file. It decides, faced with a
+ *   manifest, whether re-downloading is called for (SPEC §4.4).
+ * @property installedAt when it was installed, shown in the storage screen.
+ * @property formatVersion the format version read from the file itself, when it
+ *   carries one.
  */
 public data class InstalledDataset(
     public val kind: DatasetKind,
@@ -60,50 +60,50 @@ public data class InstalledDataset(
 )
 
 /**
- * Pourquoi un fichier proposé à l'installation a été refusé.
+ * Why a file offered for installation was refused.
  *
- * Aucun de ces cas n'est une panne : ce sont des situations que l'utilisateur
- * peut corriger, à condition qu'on lui dise laquelle (SPEC §14).
+ * None of these cases is a breakdown: they are situations the user can put
+ * right, provided they are told which one (SPEC §14).
  */
 public sealed interface DatasetRejection {
 
-    /** Le fichier n'a pas la forme attendue pour ce jeu de données. */
+    /** The file does not have the shape expected for this dataset. */
     public data class WrongFormat(public val detail: String) : DatasetRejection
 
     /**
-     * Le fichier est d'une version de format que cette version de
-     * l'application ne sait pas lire. Il faut le dire et inviter à mettre à
-     * jour l'application, pas échouer à l'ouverture (SPEC §4.4).
+     * The file is of a format version this version of the application cannot
+     * read. It has to be said, with an invitation to update the application,
+     * not fail when opening it (SPEC §4.4).
      *
-     * @property found version trouvée dans le fichier.
-     * @property supported version que l'application sait lire.
+     * @property found the version found in the file.
+     * @property supported the version the application can read.
      */
     public data class UnsupportedFormatVersion(public val found: Int, public val supported: Int) :
         DatasetRejection
 
-    /** L'empreinte ne correspond pas à celle annoncée par le manifeste. */
+    /** The digest does not match the one announced by the manifest. */
     public data class ChecksumMismatch(public val expected: String, public val actual: String) :
         DatasetRejection
 
-    /** Le fichier n'a pas pu être lu ou écrit. */
+    /** The file could not be read or written. */
     public data class TransferFailed(public val detail: String) : DatasetRejection
 
-    /** Le fichier est vide. */
+    /** The file is empty. */
     public data object Empty : DatasetRejection
 }
 
 /**
- * Issue d'une tentative d'installation.
+ * The outcome of an installation attempt.
  *
- * Un type à part plutôt que le `DataError` des échecs réseau : les causes
- * n'ont rien de commun, et les fondre ensemble obligerait chaque écran à
- * traiter des cas qui ne le concernent pas.
+ * A separate type rather than the `DataError` of network failures: the causes
+ * have nothing in common, and merging them would force every screen to handle
+ * cases that do not concern it.
  */
 public sealed interface DatasetImportResult {
 
-    /** Le fichier a été validé et mis en place. */
+    /** The file was validated and put in place. */
     public data class Installed(public val dataset: InstalledDataset) : DatasetImportResult
 
-    /** Le fichier a été refusé ; l'installation précédente est intacte. */
+    /** The file was refused; the previous installation is untouched. */
     public data class Rejected(public val reason: DatasetRejection) : DatasetImportResult
 }
