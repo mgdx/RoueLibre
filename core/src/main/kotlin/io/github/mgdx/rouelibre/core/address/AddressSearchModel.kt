@@ -3,27 +3,26 @@ package io.github.mgdx.rouelibre.core.address
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 
 /**
- * Nature d'une entrée de l'index d'adresses.
+ * The nature of an entry in the address index.
  *
- * Les points de repère — gares, universités, hôpitaux, grandes places — sont
- * indexés comme des voies (SPEC §4.3) : ils se cherchent de la même façon, et
- * seul l'affichage les distingue.
+ * Landmarks — railway stations, universities, hospitals, major squares — are
+ * indexed as streets (SPEC §4.3): they are searched the same way, and only the
+ * display tells them apart.
  */
 public enum class AddressEntryKind {
-    /** Une voie, à laquelle des numéros peuvent être rattachés. */
+    /** A street, to which house numbers may be attached. */
     Street,
 
-    /** Un point de repère extrait d'OpenStreetMap, sans numéro. */
+    /** A landmark extracted from OpenStreetMap, with no house number. */
     Landmark,
     ;
 
     public companion object {
         /**
-         * Traduit le code stocké dans l'index.
+         * Translates the code stored in the index.
          *
-         * @return la nature correspondante, ou [Street] pour un code inconnu :
-         *   un index plus récent qui introduirait une catégorie ne doit pas
-         *   rendre ses entrées invisibles.
+         * @return the matching nature, or [Street] for an unknown code: a newer
+         *   index introducing a category must not make its entries invisible.
          */
         public fun fromCode(code: Int): AddressEntryKind =
             if (code == LANDMARK_CODE) Landmark else Street
@@ -33,23 +32,23 @@ public enum class AddressEntryKind {
 }
 
 /**
- * Une entrée de l'index réduite à ce que la recherche a besoin de comparer.
+ * An index entry reduced to what the search needs to compare.
  *
- * Volontairement sans texte affichable : les vingt mille entrées sont tenues
- * en mémoire pour le rattrapage flou (SPEC §4.3), et y garder les noms
- * d'origine, les communes et les codes postaux tripleraient cette empreinte
- * pour des champs dont seuls les huit résultats retenus ont l'usage.
+ * Deliberately without displayable text: the twenty thousand entries are held
+ * in memory for the fuzzy fallback (SPEC §4.3), and keeping the original names,
+ * the municipalities and the postcodes there would triple that footprint for
+ * fields only the eight retained results ever use.
  *
- * @property id identifiant de la voie dans l'index, qui sert à retrouver la
- *   ligne complète et ses numéros.
- * @property normalizedType type de voie normalisé, ou `null`.
- * @property normalizedName nom propre normalisé, sans le type.
- * @property normalizedCity commune normalisée.
- * @property normalizedFormerCity commune absorbée, normalisée, ou `null`. Un
- *   habitant de Lomme ou d'Hellemmes tape le nom de sa commune, que la Base
- *   Adresse Nationale rattache pourtant à Lille : sans ce champ, il ne
- *   trouverait pas sa rue.
- * @property position point représentatif de la voie.
+ * @property id the street's identifier in the index, used to fetch the full row
+ *   and its house numbers.
+ * @property normalizedType the normalised street type, or `null`.
+ * @property normalizedName the normalised proper name, without the type.
+ * @property normalizedCity the normalised municipality.
+ * @property normalizedFormerCity the normalised absorbed municipality, or
+ *   `null`. Someone living in Lomme or Hellemmes types the name of their own
+ *   municipality, which the Base Adresse Nationale nevertheless attaches to
+ *   Lille: without this field, they would not find their street.
+ * @property position the street's representative point.
  */
 public data class SearchableStreet(
     public val id: Long,
@@ -61,12 +60,12 @@ public data class SearchableStreet(
 )
 
 /**
- * Un numéro connu de l'index, rattaché à une voie.
+ * A house number known to the index, attached to a street.
  *
- * @property number le numéro lui-même.
- * @property suffix indice de répétition normalisé — « bis », « ter », « a » —
- *   ou une chaîne vide.
- * @property position position exacte du numéro.
+ * @property number the number itself.
+ * @property suffix the normalised repetition mark — "bis", "ter", "a" — or an
+ *   empty string.
+ * @property position the number's exact position.
  */
 public data class KnownHouseNumber(
     public val number: Int,
@@ -75,12 +74,12 @@ public data class KnownHouseNumber(
 )
 
 /**
- * Une voie retenue par la recherche, avec ce qui l'a placée là.
+ * A street retained by the search, with what placed it there.
  *
- * @property street la voie.
- * @property matchQuality qualité de la correspondance, de 0 à 1.
- * @property distanceInMetres distance au point de référence, ou `null` si
- *   aucun n'était connu.
+ * @property street the street.
+ * @property matchQuality the match quality, from 0 to 1.
+ * @property distanceInMetres the distance to the reference point, or `null` if
+ *   none was known.
  */
 public data class ScoredStreet(
     public val street: SearchableStreet,
@@ -88,26 +87,26 @@ public data class ScoredStreet(
     public val distanceInMetres: Double?,
 )
 
-/** Ce qui a permis de placer un point : à distinguer pour ne pas surpromettre. */
+/** How a point was placed: distinguished so as not to overpromise. */
 public enum class PositionPrecision {
-    /** Le numéro demandé figure tel quel dans l'index. */
+    /** The requested number appears as such in the index. */
     Exact,
 
-    /** Le numéro a été interpolé entre deux numéros connus de la voie. */
+    /** The number was interpolated between two known numbers of the street. */
     Interpolated,
 
-    /** Un seul voisin était connu : sa position sert de repli. */
+    /** Only one neighbour was known: its position serves as a fallback. */
     NearestKnown,
 
-    /** La voie ne porte aucun numéro : seul son point représentatif existe. */
+    /** The street carries no number at all: only its representative point. */
     StreetOnly,
 }
 
 /**
- * Une position déduite pour un numéro dans une voie.
+ * A position derived for a number in a street.
  *
- * @property coordinates le point retenu.
- * @property precision comment il a été obtenu.
+ * @property coordinates the point retained.
+ * @property precision how it was obtained.
  */
 public data class ResolvedPosition(
     public val coordinates: Coordinates,
@@ -115,22 +114,22 @@ public data class ResolvedPosition(
 )
 
 /**
- * Une adresse trouvée, prête à être affichée puis désignée sur la carte.
+ * An address found, ready to be displayed and then pointed at on the map.
  *
- * Aucun champ ne porte de texte destiné à l'écran : le nom et la commune sont
- * des données, et c'est la couche Android qui les compose avec les ressources
- * de chaînes (SPEC §9).
+ * No field carries text meant for the screen: the name and the municipality are
+ * data, and it is the Android layer that composes them with the string
+ * resources (SPEC §9).
  *
- * @property streetId identifiant de la voie dans l'index.
- * @property houseNumber le numéro demandé, s'il y en avait un.
- * @property houseNumberSuffix son indice, ou une chaîne vide.
- * @property streetName le nom de la voie tel qu'il s'écrit, accents compris.
- * @property city la commune.
- * @property postcode le code postal, s'il est connu.
- * @property kind voie ou point de repère.
- * @property position le point retenu pour cette adresse.
- * @property precision ce qui a permis de le placer.
- * @property distanceInMetres distance au point de référence, ou `null`.
+ * @property streetId the street's identifier in the index.
+ * @property houseNumber the number asked for, if there was one.
+ * @property houseNumberSuffix its repetition mark, or an empty string.
+ * @property streetName the street's name as it is written, accents included.
+ * @property city the municipality.
+ * @property postcode the postcode, if known.
+ * @property kind street or landmark.
+ * @property position the point retained for this address.
+ * @property precision what allowed it to be placed.
+ * @property distanceInMetres the distance to the reference point, or `null`.
  */
 public data class AddressResult(
     public val streetId: Long,

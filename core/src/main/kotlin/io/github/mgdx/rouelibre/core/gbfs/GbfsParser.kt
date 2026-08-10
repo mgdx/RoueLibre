@@ -13,48 +13,47 @@ import kotlinx.serialization.json.jsonObject
 import java.time.Instant
 
 /**
- * Analyse les trois documents GBFS dont l'application a besoin.
+ * Parses the three GBFS documents the application needs.
  *
- * Rien ici ne touche au réseau : l'analyseur reçoit du texte et rend des
- * objets métier, ce qui le rend intégralement testable sur la JVM à partir de
- * captures réelles des flux (SPEC §14).
+ * Nothing here touches the network: the parser takes text and returns domain
+ * objects, which makes it entirely testable on the JVM from real captures of
+ * the feeds (SPEC §14).
  */
 public class GbfsParser {
 
     private val json = Json {
-        // Les producteurs enrichissent régulièrement leurs flux ; un champ
-        // inconnu ne doit jamais faire échouer la lecture.
+        // Producers regularly enrich their feeds; an unknown field must never
+        // make the read fail.
         ignoreUnknownKeys = true
-        // Certains flux omettent des champs pourtant obligatoires. Les valeurs
-        // par défaut déclarées sur les modèles prennent alors le relais.
+        // Some feeds omit fields that are nevertheless mandatory. The default
+        // values declared on the models then take over.
         explicitNulls = false
         coerceInputValues = true
     }
 
     /**
-     * Lit le document d'auto-découverte et renvoie les flux qu'il publie.
+     * Reads the auto-discovery document and returns the feeds it publishes.
      *
-     * Passer par ce document plutôt que de deviner les URL est le principe
-     * même de GBFS, et met l'application à l'abri d'un déplacement de flux
-     * côté producteur (SPEC §4.1).
+     * Going through this document rather than guessing the URLs is the very
+     * principle of GBFS, and shields the application from a feed being moved on
+     * the producer's side (SPEC §4.1).
      *
-     * @param document contenu brut de `gbfs.json`.
-     * @return les URL par nom de flux, ou l'erreur rencontrée.
+     * @param document the raw contents of `gbfs.json`.
+     * @return the URLs by feed name, or the error encountered.
      */
     public fun parseDiscovery(document: String): Outcome<GbfsDiscovery> = parsing {
         val root = json.parseToJsonElement(document).jsonObject
         val version = (root["version"] as? JsonPrimitive)?.content?.takeIf { it.isNotBlank() }
         val data = root["data"]?.jsonObject
-            ?: throw GbfsFormatException("le document n'a pas de champ « data »")
+            ?: throw GbfsFormatException("the document has no \"data\" field")
 
-        // GBFS 3.0 place la liste des flux directement sous « data ». Les
-        // versions antérieures l'imbriquent dans une clé de langue, dont le
-        // nom n'est pas normalisé : le flux lillois publie « en » bien qu'il
-        // serve un réseau français. La première langue présente est donc
-        // retenue, plutôt qu'une langue supposée.
+        // GBFS 3.0 puts the feed list directly under "data". Earlier versions
+        // nest it inside a language key whose name is not standardised: the
+        // Lille feed publishes "en" although it serves a French network. The
+        // first language present is therefore taken, rather than an assumed one.
         val feedsElement = data["feeds"]
             ?: data.values.firstOrNull()?.jsonObject?.get("feeds")
-            ?: throw GbfsFormatException("aucune liste de flux dans « data »")
+            ?: throw GbfsFormatException("no feed list inside \"data\"")
 
         val feeds = feedsElement.jsonArray.associate { element ->
             val feed = json.decodeFromJsonElement(
@@ -64,19 +63,19 @@ public class GbfsParser {
             feed.name to feed.url
         }
         if (feeds.isEmpty()) {
-            throw GbfsFormatException("la liste des flux est vide")
+            throw GbfsFormatException("the feed list is empty")
         }
         GbfsDiscovery(version = version, feedUrlsByName = feeds)
     }
 
     /**
-     * Lit `station_information` et renvoie les stations du réseau.
+     * Reads `station_information` and returns the network's stations.
      *
-     * Une station dont les coordonnées sont absurdes est écartée plutôt que de
-     * faire échouer tout le flux : une seule entrée fautive chez le producteur
-     * ne doit pas priver l'utilisateur des 267 autres.
+     * A station whose coordinates are absurd is dropped rather than failing the
+     * whole feed: a single faulty entry on the producer's side must not deprive
+     * the user of the other 267.
      *
-     * @param document contenu brut de `station_information.json`.
+     * @param document the raw contents of `station_information.json`.
      */
     public fun parseStationInformation(document: String): Outcome<StationInformationFeed> =
         parsing {
@@ -102,9 +101,9 @@ public class GbfsParser {
         }
 
     /**
-     * Lit `station_status` et renvoie l'état courant des stations.
+     * Reads `station_status` and returns the current state of the stations.
      *
-     * @param document contenu brut de `station_status.json`.
+     * @param document the raw contents of `station_status.json`.
      */
     public fun parseStationStatus(document: String): Outcome<StationStatusFeed> = parsing {
         val envelope = json.decodeFromString(
@@ -114,8 +113,8 @@ public class GbfsParser {
         val availabilities = envelope.data.stations.map { entry ->
             StationAvailability(
                 stationId = entry.stationId,
-                // Un compte négatif n'a pas de sens ; on le ramène à zéro
-                // plutôt que d'afficher « -1 vélo ».
+                // A negative count makes no sense; it is brought back to zero
+                // rather than displaying "-1 bike".
                 bikesAvailable = entry.bikesAvailable.coerceAtLeast(0),
                 docksAvailable = entry.docksAvailable.coerceAtLeast(0),
                 isInstalled = entry.isInstalled,
@@ -132,31 +131,31 @@ public class GbfsParser {
     }
 
     /**
-     * Exécute [block] en convertissant tout échec d'analyse en [DataError].
+     * Runs [block], converting any parsing failure into a [DataError].
      *
-     * Les bibliothèques de sérialisation signalent leurs problèmes par des
-     * exceptions ; le reste de l'application, lui, ne connaît que des valeurs
-     * de résultat (SPEC §14). La conversion a lieu ici, à la frontière.
+     * Serialization libraries report their problems through exceptions; the
+     * rest of the application, for its part, knows only result values
+     * (SPEC §14). The conversion happens here, at the boundary.
      */
     private inline fun <T> parsing(block: () -> T): Outcome<T> = try {
         Outcome.Success(block())
     } catch (error: GbfsFormatException) {
-        Outcome.Failure(DataError.MalformedResponse(error.message ?: "format inattendu"))
+        Outcome.Failure(DataError.MalformedResponse(error.message ?: "unexpected format"))
     } catch (error: SerializationException) {
         Outcome.Failure(
-            DataError.MalformedResponse(error.message ?: "JSON illisible"),
+            DataError.MalformedResponse(error.message ?: "unreadable JSON"),
         )
     } catch (error: IllegalArgumentException) {
         Outcome.Failure(
-            DataError.MalformedResponse(error.message ?: "valeur hors bornes"),
+            DataError.MalformedResponse(error.message ?: "value out of bounds"),
         )
     }
 
     /**
-     * Construit un point, ou `null` si le couple est inexploitable.
+     * Builds a point, or `null` if the pair is unusable.
      *
-     * Le point (0, 0) est traité comme absent : il tombe dans le golfe de
-     * Guinée et signale, en pratique, une coordonnée non renseignée.
+     * The point (0, 0) is treated as absent: it falls in the Gulf of Guinea
+     * and, in practice, signals a coordinate that was never filled in.
      */
     private fun coordinatesOrNull(latitude: Double, longitude: Double): Coordinates? {
         if (!latitude.isFinite() || !longitude.isFinite()) return null
@@ -167,45 +166,45 @@ public class GbfsParser {
 }
 
 /**
- * Ce que publie le document d'auto-découverte.
+ * What the auto-discovery document publishes.
  *
- * @property version révision de GBFS annoncée, si le producteur la publie.
- * @property feedUrlsByName URL de chaque flux, indexées par leur nom GBFS.
+ * @property version the GBFS revision announced, if the producer publishes it.
+ * @property feedUrlsByName the URL of each feed, keyed by its GBFS name.
  */
 public data class GbfsDiscovery(
     public val version: String?,
     public val feedUrlsByName: Map<String, String>,
 ) {
     /**
-     * URL du flux nommé [feedName].
+     * The URL of the feed named [feedName].
      *
-     * @return l'URL, ou un échec décrivant le flux manquant — ce qui permet
-     *   d'expliquer précisément ce que le producteur ne publie pas.
+     * @return the URL, or a failure describing the missing feed — which allows
+     *   saying precisely what the producer does not publish.
      */
     public fun urlOf(feedName: String): Outcome<String> = feedUrlsByName[feedName]
         ?.let { Outcome.Success(it) }
         ?: Outcome.Failure(DataError.FeedUnavailable(feedName))
 }
 
-/** Contenu utile de `station_information`. */
+/** The useful contents of `station_information`. */
 public data class StationInformationFeed(
     public val stations: List<Station>,
     public val lastUpdated: Instant?,
     public val version: String?,
 )
 
-/** Contenu utile de `station_status`. */
+/** The useful contents of `station_status`. */
 public data class StationStatusFeed(
     public val availabilities: List<StationAvailability>,
     public val lastUpdated: Instant?,
     public val version: String?,
 )
 
-/** Noms normalisés des flux GBFS utilisés par l'application. */
+/** The standard names of the GBFS feeds the application uses. */
 public object GbfsFeedNames {
-    /** Données stables des stations. */
+    /** Static station data. */
     public const val STATION_INFORMATION: String = "station_information"
 
-    /** État temps réel des stations. */
+    /** Real-time station state. */
     public const val STATION_STATUS: String = "station_status"
 }

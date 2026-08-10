@@ -8,22 +8,22 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 
 /**
- * Ce qu'une publication de données annonce (SPEC §4.4).
+ * What a data release announces (SPEC §4.4).
  *
- * Le manifeste pèse quelques kilooctets et décrit les trois jeux : leur
- * version, leur adresse, leur taille et leur empreinte. C'est lui qui permet
- * de ne retélécharger **que ce qui a changé** — rafraîchir l'index d'adresses
- * ne doit jamais imposer de reprendre les trente-cinq mégaoctets de tuiles.
+ * The manifest weighs a few kilobytes and describes all three sets: their
+ * version, their address, their size and their digest. It is what allows
+ * re-downloading **only what changed** — refreshing the address index must never
+ * force the thirty-five megabytes of tiles to come down again.
  *
- * @property formatVersion version de format des fichiers décrits. Une version
- *   que l'application ne sait pas lire doit produire une invitation à mettre à
- *   jour, pas un échec à l'ouverture d'un fichier.
- * @property releaseTag étiquette de la publication, par exemple `data-2026-08`.
- * @property generatedAt date de génération, telle qu'écrite par le script.
- * @property network identifiant du réseau servi, qui doit correspondre à celui
- *   de la configuration de ville.
- * @property boundingBox emprise couverte par ces données.
- * @property datasets les jeux publiés.
+ * @property formatVersion the format version of the files described. A version
+ *   the application cannot read must produce an invitation to update, not a
+ *   failure when opening a file.
+ * @property releaseTag the release's tag, `data-2026-08` for instance.
+ * @property generatedAt the generation date, as the script wrote it.
+ * @property network the identifier of the network served, which must match the
+ *   one in the city configuration.
+ * @property boundingBox the area this data covers.
+ * @property datasets the published sets.
  */
 public data class DataManifest(
     public val formatVersion: Int,
@@ -33,52 +33,53 @@ public data class DataManifest(
     public val boundingBox: BoundingBox?,
     public val datasets: List<ManifestDataset>,
 ) {
-    /** Taille totale annoncée, tous jeux confondus. */
+    /** The total announced size, all sets taken together. */
     public val totalSizeBytes: Long
         get() = datasets.sumOf { it.sizeBytes }
 
-    /** Le jeu décrit pour cette catégorie, s'il figure au manifeste. */
+    /** The set described for this category, if the manifest lists it. */
     public fun datasetFor(kind: DatasetKind): ManifestDataset? =
         datasets.firstOrNull { it.kind == kind }
 }
 
 /**
- * Un jeu de données publié.
+ * A published dataset.
  *
- * @property kind lequel des trois.
- * @property description ce que le producteur en dit, en une ligne.
- * @property files les fichiers qui le composent. Le graphe de routage peut en
- *   compter plusieurs, les deux autres n'en ont qu'un.
+ * @property kind which of the three.
+ * @property description what the producer says about it, in one line.
+ * @property files the files it is made of. The routing graph may have several,
+ *   the other two have only one.
  */
 public data class ManifestDataset(
     public val kind: DatasetKind,
     public val description: String,
     public val files: List<ManifestFile>,
 ) {
-    /** Taille annoncée de ce jeu. */
+    /** The announced size of this set. */
     public val sizeBytes: Long
         get() = files.sumOf { it.sizeBytes }
 
     /**
-     * Empreinte de l'ensemble du jeu.
+     * The digest of the set as a whole.
      *
-     * Les empreintes des fichiers, dans l'ordre de leurs noms : c'est ce que
-     * l'application conserve après installation, et ce qu'elle compare au
-     * manifeste suivant pour décider s'il y a lieu de retélécharger. Un jeu
-     * d'un seul fichier a donc pour empreinte celle de ce fichier, ce qui rend
-     * la comparaison juste même après un import manuel.
+     * The files' digests, in the order of their names: this is what the
+     * application keeps after installing, and what it compares against the next
+     * manifest to decide whether re-downloading is called for. A set of a single
+     * file therefore has that file's digest, which keeps the comparison sound
+     * even after a manual import.
      */
     public val fingerprint: String
         get() = files.sortedBy { it.name }.joinToString(separator = ",") { it.sha256 }
 }
 
 /**
- * Un fichier à télécharger.
+ * A file to download.
  *
- * @property name nom sous lequel il est publié, et sous lequel il sera rangé.
- * @property url où le prendre.
- * @property sizeBytes taille annoncée, affichée avant de demander confirmation.
- * @property sha256 empreinte, revérifiée après téléchargement (SPEC §4.4).
+ * @property name the name it is published under, and the name it will be stored
+ *   under.
+ * @property url where to get it.
+ * @property sizeBytes the announced size, shown before asking for confirmation.
+ * @property sha256 the digest, re-verified after download (SPEC §4.4).
  */
 public data class ManifestFile(
     public val name: String,
@@ -88,30 +89,29 @@ public data class ManifestFile(
 )
 
 /**
- * Ce qu'il y a lieu de faire d'un jeu, face à un manifeste.
+ * What is to be done with a set, faced with a manifest.
  */
 public enum class DatasetUpdate {
-    /** Absent de l'appareil : il faut le télécharger pour s'en servir. */
+    /** Absent from the device: it must be downloaded to be of any use. */
     Missing,
 
-    /** Installé, mais le manifeste en annonce une autre version. */
+    /** Installed, but the manifest announces another version. */
     Outdated,
 
-    /** Installé et à jour : ne rien retélécharger. */
+    /** Installed and current: re-download nothing. */
     UpToDate,
 }
 
 /**
- * Compare ce qui est installé à ce qui est publié (SPEC §4.4).
+ * Compares what is installed with what is published (SPEC §4.4).
  *
- * La comparaison porte sur les empreintes, jamais sur les dates : une date de
- * publication plus récente ne dit pas que le contenu a changé, et un fichier
- * régénéré à l'identique ne doit pas être retéléchargé.
+ * The comparison is on digests, never on dates: a more recent release date does
+ * not say the content changed, and a file regenerated identically must not be
+ * downloaded again.
  *
- * @param manifest la publication annoncée.
- * @param installedFingerprints l'empreinte de chaque jeu présent sur
- *   l'appareil.
- * @return l'état de chacun des jeux du manifeste.
+ * @param manifest the announced release.
+ * @param installedFingerprints the digest of every set present on the device.
+ * @return the state of each of the manifest's sets.
  */
 public fun compareWithInstalled(
     manifest: DataManifest,
@@ -125,27 +125,27 @@ public fun compareWithInstalled(
     }
 }
 
-/** Lit un manifeste de publication de données. */
+/** Reads a data release manifest. */
 public object DataManifestReader {
 
     private val json = Json { ignoreUnknownKeys = true }
 
     /**
-     * Analyse le contenu d'un manifeste.
+     * Parses the contents of a manifest.
      *
-     * @param document contenu brut du fichier `manifest.json`.
-     * @return le manifeste, ou l'erreur qui empêche de le lire. Un jeu dont
-     *   l'identifiant est inconnu est ignoré plutôt que fatal : une
-     *   publication plus récente peut en décrire d'autres, et cela ne doit pas
-     *   empêcher de mettre à jour ceux que l'on connaît.
+     * @param document the raw contents of the `manifest.json` file.
+     * @return the manifest, or the error preventing it from being read. A set
+     *   whose identifier is unknown is ignored rather than fatal: a more recent
+     *   release may describe others, and that must not stand in the way of
+     *   updating the ones we do know.
      */
     public fun read(document: String): Outcome<DataManifest> = try {
         val parsed = json.decodeFromString(ManifestDocument.serializer(), document)
         Outcome.Success(parsed.toDomain())
     } catch (error: SerializationException) {
-        Outcome.Failure(DataError.MalformedResponse(error.message ?: "manifeste illisible"))
+        Outcome.Failure(DataError.MalformedResponse(error.message ?: "unreadable manifest"))
     } catch (error: IllegalArgumentException) {
-        Outcome.Failure(DataError.MalformedResponse(error.message ?: "manifeste incohérent"))
+        Outcome.Failure(DataError.MalformedResponse(error.message ?: "inconsistent manifest"))
     }
 }
 

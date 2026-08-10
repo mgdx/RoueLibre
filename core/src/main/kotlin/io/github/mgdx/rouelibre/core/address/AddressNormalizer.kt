@@ -7,31 +7,31 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import java.text.Normalizer
 
-/** Un nom de voie séparé en son type et son nom propre. */
+/** A street name split into its type and its proper name. */
 public data class SplitName(
-    /** « rue », « boulevard »… ou `null` si le nom n'en porte pas. */
+    /** "rue", "boulevard"… or `null` if the name carries none. */
     public val streetType: String?,
-    /** Ce qui reste du nom une fois le type retiré, déjà normalisé. */
+    /** What remains of the name once the type is removed, already normalised. */
     public val properName: String,
 ) {
-    /** Le nom normalisé complet, type compris. */
+    /** The complete normalised name, type included. */
     public val full: String
         get() = if (streetType == null) properName else "$streetType $properName".trim()
 }
 
 /**
- * Réduit noms de voies et saisies à une forme comparable (SPEC §4.3).
+ * Reduces street names and queries to a comparable form (SPEC §4.3).
  *
- * Les règles appliquées ici ne sont pas écrites dans ce fichier : elles vivent
- * dans `config/address_normalization.json`, lu à la fois par le script qui
- * construit l'index et par l'application. Une divergence entre les deux
- * rendrait des rues introuvables — « boulevard » indexé d'un côté, « bd »
- * cherché de l'autre — d'où la source unique.
+ * The rules applied here are not written in this file: they live in
+ * `config/address_normalization.json`, read both by the script that builds the
+ * index and by the application. A divergence between the two would make streets
+ * impossible to find — "boulevard" indexed on one side, "bd" searched on the
+ * other — hence the single source.
  *
- * Le traitement, identique aux deux bouts :
+ * The treatment, identical at both ends:
  * ```
  * "Bd. de l'Hôpital Militaire"  →  "boulevard de l hopital militaire"
- *                               →  type « boulevard », nom « de l hopital militaire »
+ *                               →  type "boulevard", name "de l hopital militaire"
  * ```
  */
 public class AddressNormalizer internal constructor(
@@ -39,21 +39,21 @@ public class AddressNormalizer internal constructor(
     private val leadingAbbreviations: Map<String, String>,
     private val punctuation: Set<Char>,
     /**
-     * Mots vides, ignorés au **classement** et jamais à l'indexation : sans
-     * eux « rue de la gare » perdrait la moitié de son contenu.
+     * Stop words, ignored when **ranking** and never when indexing: without
+     * them "rue de la gare" would lose half its content.
      */
     public val stopWords: Set<String>,
     private val streetTypes: List<List<String>>,
 ) {
 
     /**
-     * Réduit un texte brut à sa forme comparable.
+     * Reduces a raw text to its comparable form.
      *
-     * Minuscules, accents retirés, ponctuation transformée en séparation de
-     * mots, abréviations développées, espaces réduits à un seul.
+     * Lowercase, accents removed, punctuation turned into word separation,
+     * abbreviations expanded, whitespace collapsed to a single space.
      *
-     * @param text un nom de voie ou une saisie, tel qu'il se présente.
-     * @return la forme normalisée, éventuellement vide.
+     * @param text a street name or a query, as it comes.
+     * @return the normalised form, possibly empty.
      */
     public fun normalize(text: String): String {
         val folded = StringBuilder(text.length)
@@ -65,8 +65,9 @@ public class AddressNormalizer internal constructor(
         val expanded = ArrayList<String>(words.size)
         words.forEachIndexed { position, word ->
             val replacement = anywhereAbbreviations[word]
-                // Une abréviation d'une seule lettre n'est développée qu'en
-                // tête, sinon « Jean R Dupont » deviendrait « Jean rue Dupont ».
+                // A single-letter abbreviation is only expanded in leading
+                // position, otherwise "Jean R Dupont" would become "Jean rue
+                // Dupont".
                 ?: leadingAbbreviations[word].takeIf { position == 0 }
             if (replacement == null) {
                 expanded.add(word)
@@ -78,12 +79,12 @@ public class AddressNormalizer internal constructor(
     }
 
     /**
-     * Sépare un type de voie en tête du nom propre.
+     * Separates a leading street type from the proper name.
      *
-     * Seul un type **en tête** est reconnu : dans « rue de la Place »,
-     * « place » fait partie du nom, ce n'est pas le type de la voie.
+     * Only a **leading** type is recognised: in "rue de la Place", "place" is
+     * part of the name, it is not the street's type.
      *
-     * @param normalized un nom déjà passé par [normalize].
+     * @param normalized a name already passed through [normalize].
      */
     public fun splitStreetType(normalized: String): SplitName {
         val words = normalized.split(WHITESPACE).filter { it.isNotEmpty() }
@@ -91,8 +92,9 @@ public class AddressNormalizer internal constructor(
             if (words.size < candidate.size) continue
             if (words.subList(0, candidate.size) != candidate) continue
             val remainder = words.subList(candidate.size, words.size).joinToString(" ")
-            // Un nom qui se réduit à son type — « la Grand Place » — garde le
-            // type pour nom propre, faute de quoi il deviendrait introuvable.
+            // A name that reduces to its own type — "la Grand Place" — keeps
+            // the type as its proper name, failing which it would become
+            // impossible to find.
             return if (remainder.isEmpty()) {
                 SplitName(null, candidate.joinToString(" "))
             } else {
@@ -102,18 +104,18 @@ public class AddressNormalizer internal constructor(
         return SplitName(null, normalized)
     }
 
-    /** Normalise un nom brut et en détache le type de voie, en une fois. */
+    /** Normalises a raw name and detaches its street type, in one go. */
     public fun analyse(rawName: String): SplitName = splitStreetType(normalize(rawName))
 
     private companion object {
         val WHITESPACE = Regex("\\s+")
 
         /**
-         * Retire les diacritiques en gardant les lettres de base.
+         * Removes diacritics while keeping the base letters.
          *
-         * Décomposer puis écarter les marques traite d'un coup tout le
-         * répertoire latin, ce qui compte pour les noms d'origine flamande
-         * fréquents autour de Lille.
+         * Decomposing then dropping the marks handles the whole Latin
+         * repertoire at once, which matters for the Flemish-rooted names that
+         * abound around Lille.
          */
         fun stripAccents(text: String): String {
             val decomposed = Normalizer.normalize(text, Normalizer.Form.NFD)
@@ -129,20 +131,20 @@ public class AddressNormalizer internal constructor(
 }
 
 /**
- * Lit le fichier de règles partagé avec le script d'indexation.
+ * Reads the rules file shared with the indexing script.
  *
- * Le format est du JSON ordinaire, enrichi de clés `$comment` qui documentent
- * les règles ; elles sont ignorées ici comme tout champ inconnu.
+ * The format is ordinary JSON, enriched with `$comment` keys documenting the
+ * rules; they are ignored here like any unknown field.
  */
 public object AddressNormalizerReader {
 
     private val json = Json { ignoreUnknownKeys = true }
 
     /**
-     * Analyse le contenu de `address_normalization.json`.
+     * Parses the contents of `address_normalization.json`.
      *
-     * @param document contenu brut du fichier embarqué dans l'APK.
-     * @return le normalisateur, ou l'erreur qui empêche de le construire.
+     * @param document the raw contents of the file embedded in the APK.
+     * @return the normaliser, or the error preventing it from being built.
      */
     public fun read(document: String): Outcome<AddressNormalizer> = try {
         val rules = json.decodeFromString(NormalizationRulesDocument.serializer(), document)
@@ -150,13 +152,13 @@ public object AddressNormalizerReader {
     } catch (error: SerializationException) {
         Outcome.Failure(
             DataError.MalformedResponse(
-                error.message ?: "règles de normalisation illisibles",
+                error.message ?: "unreadable normalisation rules",
             ),
         )
     } catch (error: IllegalArgumentException) {
         Outcome.Failure(
             DataError.MalformedResponse(
-                error.message ?: "règles de normalisation incohérentes",
+                error.message ?: "inconsistent normalisation rules",
             ),
         )
     }
@@ -175,18 +177,18 @@ private data class NormalizationRulesDocument(
         leadingAbbreviations = abbreviations.leadingOnly.withoutComments(),
         punctuation = punctuationReplacedBySpace.toSet(),
         stopWords = stopWords.words.toSet(),
-        // Les types les plus longs d'abord, pour que « rond point » l'emporte
-        // sur « rond » et « grand rue » sur « rue ».
+        // Longest types first, so that "rond point" wins over "rond" and
+        // "grand rue" over "rue".
         streetTypes = streetTypes.types
             .map { it.split(' ').filter(String::isNotEmpty) }
             .sortedByDescending { it.size },
     )
 
     /**
-     * Les clés de documentation ne sont pas des abréviations.
+     * Documentation keys are not abbreviations.
      *
-     * Elles cohabitent avec les règles dans le même objet JSON, faute de quoi
-     * le fichier ne pourrait pas se commenter lui-même.
+     * They live alongside the rules in the same JSON object, failing which the
+     * file could not comment itself.
      */
     private fun Map<String, String>.withoutComments(): Map<String, String> =
         filterKeys { !it.startsWith('$') }
