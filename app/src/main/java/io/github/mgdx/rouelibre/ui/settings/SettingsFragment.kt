@@ -81,10 +81,17 @@ class SettingsFragment : Fragment() {
                 R.id.theme_dark -> AppTheme.Dark
                 else -> AppTheme.System
             }
-            viewLifecycleOwner.lifecycleScope.launch { preferences.setTheme(theme) }
-            // Applied at once: a theme one chooses must show, not wait for the
-            // next launch.
-            applyTheme(theme)
+            viewLifecycleOwner.lifecycleScope.launch {
+                // Written BEFORE being applied, and in that order. Applying a
+                // theme has the activity rebuilt, which cancels this scope: the
+                // write, started first and awaited nowhere, never reached the
+                // disk, and coming back to this screen showed the old choice
+                // ticked under the new theme.
+                preferences.setTheme(theme)
+                // Applied at once: a theme one chooses must show, not wait for
+                // the next launch.
+                applyTheme(theme)
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
