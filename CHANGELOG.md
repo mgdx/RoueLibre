@@ -63,6 +63,15 @@ also records what has no visible effect.
   Portuguese. Their files hold the English text until somebody translates
   them, so contributing a translation means editing a file rather than
   creating one. Cost: 52 kB of APK.
+- **The interface speaks English by default.** `values/` holds English —
+  what Android serves when no translation matches — and French moved to
+  `values-fr/`, a translation like the others, kept complete. An application
+  that serves whatever city publishes its data had no business announcing one
+  country in its interface.
+- **The release notes follow the language displayed.** The F-Droid metadata
+  gained an `en-US` folder, the default the store falls back on, and the
+  "what's new" screen reads the notes of the language it is speaking rather
+  than the French ones whatever happens.
 - **The application no longer assumes a default city.** It used to serve one
   compiled into the APK; it now serves the one it has been given, and says so
   until it has been.

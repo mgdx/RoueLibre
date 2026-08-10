@@ -28,7 +28,7 @@ The application is a personal tool, plain and fast. It is not a booking applicat
 | C3 | **Privacy** | No telemetry, no tracker, no unique identifier, no account. The user's position never leaves the device |
 | C4 | **Lightness** | Target APK **under 15 MB** (**under 12 MB** per architecture), excluding downloaded data. Every dependency added must be justified in the README |
 | C5 | **Complete offline operation** | Map, address search and route computation all work **with no network at all**. Only real-time station availability needs a connection |
-| C6 | **French by default, translatable** | See §9 |
+| C6 | **English by default, translatable** | See §9 |
 
 The application must pass the **F-Droid / Exodus Privacy** scan with no tracker detected.
 
@@ -332,14 +332,17 @@ After a new version is installed, a **what's new** screen appears **once only**,
 
 ## 9. Internationalisation
 
-- **Not a single hard-coded string** in the Kotlin code or the layouts. Everything in `res/values/strings.xml`, which constitutes the **default language: French**. The interface serves French-speaking users; the code and its documentation are in English (§14), the interface is not.
+- **Not a single hard-coded string** in the Kotlin code or the layouts. Everything in `res/values/strings.xml`, which constitutes the **default language: English** — what Android serves when no translation matches the device, and therefore what most of the world reads. The application is not addressed to one country: it serves whatever conurbation publishes its stations as open data (§1), and the language of its interface must not say otherwise.
+- **French is a translation like any other**, in `res/values-fr/`. It was the source language while the project was a Lille one, and the interface's tone was set in it; that history shows in the writing, not in the resource that has no qualifier.
+- **Dates, numbers and distances follow the language actually displayed**, which is not always the system's: a device set to a language the application does not speak reads English text, and must read English figures with it. That correspondence is held in one place (`ui/Locales.kt`), where every new translation is declared.
 - Use `<plurals>` for everything that agrees ("1 bike available" / "3 bikes available").
 - Use **positional placeholders** (`%1$s`, `%2$d`) and never string concatenation: word order changes from one language to another.
 - Add `<!-- -->` comments above ambiguous strings, for future translators.
-- Provide `res/values-en/`, translated in full: it is both the worked example and the file a new translation is copied from. Provide as well a **started file for the most widely spoken languages**, holding the English text until somebody translates it, so that contributing means editing a file rather than creating one. Every language supplied must be declared in `localeFilters`, without which its folder is dropped from the APK.
+- Provide a **started file for the most widely spoken languages**, holding the English text until somebody translates it, so that contributing means editing a file rather than creating one. Every language supplied must be declared in `localeFilters`, without which its folder is dropped from the APK.
 - Format dates, times, distances and durations through the localisation APIs, not by hand.
 - Layouts compatible with right-to-left languages (`start`/`end` rather than `left`/`right`).
 - Provide a `CONTRIBUTING.md` explaining how to submit a translation.
+- The **F-Droid metadata** follows the same rule: `en-US` is the default the store falls back on, other languages sit beside it. The application's "what's new" screen reads those very files (§7.10), and shows the notes of the language it is speaking.
 
 ## 10. Permissions
 
@@ -369,14 +372,14 @@ Every criterion must be verifiable:
 10. An address with a house number in a long thoroughfare is located within 50 m of its real position.
 11. A search containing a typo or a missing letter finds the intended street in the first three results.
 12. A `geo:` link opened from another application offers this application in the chooser and pre-fills the destination.
-13. Switching the system to English breaks no layout (with the test `values-en/`).
+13. Switching the system between English and French breaks no layout, and a language with no translation of its own falls back on English text with English figures.
 14. Every attribution is present.
 15. The build is reproducible: two successive compilations produce the same APK.
 
 ## 12. Deliverables
 
 - A Git repository with a clean, atomic commit history
-- `README.md`: **bilingual by header**. It opens on a short paragraph **in French** — three or four sentences — explaining what the application is, that its interface is in French because it serves French-speaking users, and that the rest of the document is therefore written in English. Everything else is **entirely in English**: description, screenshots, architecture and layer diagram, build instructions, dataset generation, justification of every dependency, procedure for adding a city (§15). That French header keeps the repository intelligible to the audience the application serves, without imposing a full translation to maintain in duplicate.
+- `README.md`: **entirely in English**, like the interface it describes — description, screenshots, architecture and layer diagram, build instructions, dataset generation, justification of every dependency, procedure for adding a city (§15). It explains the name, which is a French phrase and does not travel by itself.
 - `CONTRIBUTING.md` including the translation procedure
 - A licence file
 - F-Droid metadata (`fastlane/metadata/android/fr/`): short description, long description, release notes, screenshots
@@ -392,14 +395,14 @@ Not to be implemented, even if the opportunity arises: notifications, home-scree
 
 This project is meant to live a long time, to be taken over by contributors and to be audited by F-Droid reviewers. Readability beats cleverness.
 
-- **The code and everything written around it are in English**: identifiers, comments, KDoc, documentation and commit messages. The exception is the user interface and its error messages, which are in French (§9), and the F-Droid metadata that goes with it.
+- **The code and everything written around it are in English**: identifiers, comments, KDoc, documentation and commit messages — as is the interface and the F-Droid metadata that goes with it (§9). Other languages arrive as translations, never as the source.
 - **Explicit naming**, without obscure abbreviations. A long clear name beats a short one you have to decipher.
 - **Short functions**, single responsibility. If a function needs a comment to explain what it does, it usually needs splitting.
 - **Comments: explain the *why*, not the *what*.** A comment that paraphrases the code is noise that will go stale. Do document systematically, however: non-obvious choices, accepted trade-offs, workarounds for library limitations, and business formulas — in particular all of §6, where every coefficient must be justified.
 - **KDoc** on every public class and function: role, parameters, return value, error cases.
 - **Strict layer separation.** Business logic (§6, feed parsing, address resolution) must be in pure Kotlin, with no Android import, hence testable on the JVM without an emulator.
 - **No dead code, no anticipated feature.** Do not build an abstraction "just in case": the only generalisations asked for are those of §15.
-- **Explicit error handling**: result types rather than silent exceptions, and for every failure a French user-facing message saying what to do, not a technical code.
+- **Explicit error handling**: result types rather than silent exceptions, and for every failure a user-facing message saying what to do, not a technical code.
 - **Unit tests are mandatory** on the §6 algorithm, GBFS parsing, address resolution and house-number interpolation. Every bug fix comes with the test that would have caught it.
 - **Automatic formatting** (ktlint or equivalent) and **static analysis** (Android Lint, detekt) wired into the build, with no warning tolerated in release.
 - **Atomic commits**, explicit messages describing intent.

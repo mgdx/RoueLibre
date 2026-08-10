@@ -26,7 +26,8 @@ real-time availability.
 5. **Nothing specific to a city hard-coded**: URLs, bounding box, centring and
    network name all live in the city configuration. See `SPEC.md` §15.
 6. **Not a single hard-coded string.** Everything in `res/values/strings.xml`,
-   French by default, `plurals` for agreement, positional placeholders.
+   English by default, `plurals` for agreement, positional placeholders. Other
+   languages are translations, `res/values-fr/` included.
 7. **GPLv3.** Check licence compatibility before adding a dependency.
 
 ## Coding conventions
@@ -81,7 +82,8 @@ top.
 
 ## Language
 
-The code, its comments and the documentation are in English. **The application
-interface and its error messages are in French** (`SPEC.md` §9): the users
-served are French-speaking, and English is only a test translation. Our
-exchanges are in French.
+Everything written in this repository is in English: the code, its comments,
+the documentation, the commit messages, **and the interface** (`SPEC.md` §9) —
+the application serves whatever city publishes its data, not one country.
+French is a translation, in `res/values-fr/`, kept complete. Our exchanges are
+in French.

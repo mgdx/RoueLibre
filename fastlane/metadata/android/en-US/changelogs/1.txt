@@ -1,0 +1,8 @@
+First installable version.
+
+• The station map works with no network, once the data is installed. Only bike availability needs a connection.
+• Address search happens on the phone: nothing is sent, not even while typing. It tolerates typos and finds absorbed municipalities under their own name.
+• The route computation composes a walk → bike → walk journey by choosing the best pair of stations, not the nearest one, and offers other pairs.
+• A place shared from another application opens straight into a journey.
+
+Still missing: the what's-new screen you are reading exists, but the data still has to be downloaded from the storage screen.

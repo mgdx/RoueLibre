@@ -1,0 +1,23 @@
+Roue Libre shows bike-share stations on a map and computes a door-to-door journey combining walking and cycling.
+
+Everything runs on the device: the map, the address search and the route computation need no connection at all. Only real-time bike availability goes out on the network.
+
+<b>What sets it apart</b>
+
+• No Google service: no Play Services, no Firebase, no Maps SDK. It runs on a system without GApps.
+• No telemetry, no tracker, no unique identifier, no account.
+• No journey data kept: no history, no positions, no destinations. What you search for does not leave the phone.
+• No city is imposed: several conurbations coexist on the device, and one city's data can be deleted without touching the others.
+• The journey optimises the <i>pair</i> of stations — departure and arrival — rather than settling for the nearest, and weighs the risk of a poorly stocked station emptying while you walk to it.
+
+<b>Worth knowing before installing</b>
+
+The map, the routing graph and the address index are not in the application: they are downloaded once, from the storage screen, or installed by hand from files you produce yourself. Their weight follows the city — a few tens of megabytes for a medium-sized conurbation, more for a capital — and it is announced before downloading.
+
+<b>The cities served</b>
+
+Three networks so far: V'lille for the Lille metropolis, Vélo'v for Lyon, Vélib' Métropole for Paris and its ring. The application proposes yours from your position, if you ask it to, and you can keep several installed and switch between them.
+
+It is tied to no network in particular: the list of cities updates itself, and the address of the GBFS feed can be changed in the settings, which makes it usable with any GBFS network in the world.
+
+Free software under the GNU GPL v3 licence.

@@ -7,21 +7,24 @@ import java.util.Locale
 /**
  * The languages the interface actually exists in.
  *
- * `res/values/` carries French without a language qualifier, as SPEC §9
+ * `res/values/` carries English without a language qualifier, as SPEC §9
  * requires. Android then treats those resources as a default valid for any
- * language and has no way of knowing they are French: on a device set to
- * English it therefore serves French text under a configuration announced as
- * English.
+ * language and has no way of knowing which language they are in: on a device
+ * set to German it serves them under a configuration announced as German.
  *
  * This list restores the truth. **Add every new translation to it**, at the
  * same time as the `values-<language>/` folder and `localeFilters` in
  * `build.gradle.kts` — otherwise the new language's dates and numbers would go
- * on being formatted in French.
+ * on being formatted in English while its text is finally translated.
+ *
+ * The languages whose file exists but still holds the English text are
+ * deliberately absent: as long as one reads English, one is owed English
+ * dates.
  */
-private val TRANSLATED_LANGUAGES = setOf("fr", "en")
+private val TRANSLATED_LANGUAGES = setOf("en", "fr")
 
 /** The language of `res/values/`, served when no matching translation exists. */
-private val BASE_LOCALE: Locale = Locale.FRENCH
+private val BASE_LOCALE: Locale = Locale.ENGLISH
 
 /**
  * The language the application speaks on this device.

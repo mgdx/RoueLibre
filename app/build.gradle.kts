@@ -199,16 +199,18 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
     abstract val normalizationRules: RegularFileProperty
 
     /**
-     * The release notes from the F-Droid metadata.
+     * The F-Droid metadata, whose release notes the application reads.
      *
      * They are the SINGLE SOURCE of what the "what's new" screen shows
      * (SPEC §7.10): copying them into the resources would make two versions to
-     * keep, and the second would end up lying. The folder may be absent from a
+     * keep, and the second would end up lying. Every locale published there is
+     * carried into the assets, so the screen can show its notes in the
+     * language the interface is speaking. The folder may be absent from a
      * partial clone, in which case the screen simply has nothing to show.
      */
     @get:InputDirectory
     @get:Optional
-    abstract val changelogs: DirectoryProperty
+    abstract val storeMetadata: DirectoryProperty
 
     @get:OutputDirectory
     abstract val outputDirectory: DirectoryProperty
@@ -238,12 +240,22 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
         normalizationRules.get().asFile
             .copyTo(target.resolve("address_normalization.json"), overwrite = true)
 
+        // One folder per locale published — changelogs/en-US, changelogs/fr —
+        // keeping the store's own directory names, which is what lets the
+        // screen match them against the device's language.
         val notes = target.resolve("changelogs")
         notes.deleteRecursively()
         notes.mkdirs()
-        changelogs.orNull?.asFile?.listFiles()
-            ?.filter { it.isFile && it.extension == "txt" }
-            ?.forEach { it.copyTo(notes.resolve(it.name), overwrite = true) }
+        storeMetadata.orNull?.asFile?.listFiles()
+            ?.filter { it.isDirectory }
+            ?.forEach { locale ->
+                val published = locale.resolve("changelogs").listFiles()
+                    .orEmpty()
+                    .filter { it.isFile && it.extension == "txt" }
+                if (published.isEmpty()) return@forEach
+                val target = notes.resolve(locale.name).apply { mkdirs() }
+                published.forEach { it.copyTo(target.resolve(it.name), overwrite = true) }
+            }
     }
 }
 
@@ -255,8 +267,8 @@ androidComponents {
             cityConfigurations.set(rootProject.file("config/cities"))
             cityCatalogue.set(rootProject.file("config/catalogue.json"))
             normalizationRules.set(rootProject.file("config/address_normalization.json"))
-            val notes = rootProject.file("fastlane/metadata/android/fr/changelogs")
-            if (notes.isDirectory) changelogs.set(notes)
+            val metadata = rootProject.file("fastlane/metadata/android")
+            if (metadata.isDirectory) storeMetadata.set(metadata)
         }
         variant.sources.assets?.addGeneratedSourceDirectory(
             copyTask,

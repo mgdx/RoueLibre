@@ -3,8 +3,8 @@
 Thank you for the interest you are taking in the project. Every contribution is
 welcome: translation, fixes, review, adding another conurbation.
 
-The code and the documentation are in English; the application's interface is in
-French, because that is the language of the users it serves.
+Everything here is in English: the code, the documentation and the interface.
+Other languages arrive as translations.
 
 ## Before you start
 
@@ -19,8 +19,11 @@ default.
 
 This is the most useful contribution if you do not write code.
 
-The application is written in French. Every string lives in a single file:
-[`app/src/main/res/values/strings.xml`](app/src/main/res/values/strings.xml).
+The application is written in English. Every string lives in a single file:
+[`app/src/main/res/values/strings.xml`](app/src/main/res/values/strings.xml),
+which has no language qualifier: it is what Android serves when nothing else
+matches, so it is always complete. French, in `values-fr/`, is a translation
+like the others.
 
 **Six languages are already started** — German, Spanish, Italian, Dutch,
 Polish, Portuguese. Their files exist under `values-de/`, `values-es/` and so
@@ -32,7 +35,7 @@ For a language that has no file yet:
 
 1. **Create its folder**: `app/src/main/res/values-<code>/`, where `<code>` is
    the ISO 639-1 code. For a regional variant, `values-pt-rBR`.
-2. **Copy `values-en/strings.xml` into it** — the English file, which is
+2. **Copy `values/strings.xml` into it** — the English file, which is always
    complete — and translate the tags' contents, never their `name` attribute.
 3. **Declare the language** in `localeFilters`, in
    [`app/build.gradle.kts`](app/build.gradle.kts). Without that line Android
@@ -41,9 +44,9 @@ For a language that has no file yet:
    every screen. German and Dutch lengthen labels appreciably; that is where
    layouts break.
 
-While a string is left in English, that is what the users of that language
-read. Translating half a file is useful; leaving it entirely untouched only
-turns French into English for them.
+While a string is left untranslated, that is the English text its readers
+get — the same thing they would have got with no file at all. Translating half
+a file is already worth doing.
 
 ### Rules to respect
 
@@ -51,8 +54,8 @@ turns French into English for them.
 its place in the sentence may change:
 
 ```xml
-<!-- French -->
-<string name="freshness_fresh">Mis à jour %1$s</string>
+<!-- source -->
+<string name="freshness_fresh">Updated %1$s</string>
 <!-- a language where the order differs -->
 <string name="freshness_fresh">%1$s aktualisiert</string>
 ```
@@ -60,7 +63,7 @@ its place in the sentence may change:
 Never concatenate two strings in the code: word order changes from one language
 to another.
 
-**Plurals go through `<plurals>`, and the categories vary.** French uses two
+**Plurals go through `<plurals>`, and the categories vary.** English uses two
 (`one`, `other`), Polish four, Arabic six. Provide the ones for your language,
 listed in the
 [CLDR plural rules](https://cldr.unicode.org/index/cldr-spec/plural-rules). The started
@@ -69,8 +72,9 @@ Spanish, Italian and Portuguese three — each holding the English plural for
 want of better. Do not remove one: Android Lint requires them, and it is right
 to.
 
-**Watch the `one` category in French.** It covers 0 as well as 1: one writes
-"0 vélo", in the singular. Not every language makes that choice.
+**Watch what `one` covers.** In French it takes 0 as well as 1 — "0 vélo", in
+the singular — where English writes "0 bikes". Every language draws that line
+where it draws it; do not copy the source's.
 
 **Apostrophes are escaped**: `l\'instant`, never `l'instant`.
 
@@ -126,7 +130,7 @@ hides the next.
   resolution and house-number interpolation. Every bug fix comes with the test
   that would have caught it.
 - **Explicit errors.** Result types, not silent exceptions, and for every
-  failure a French message saying what to do.
+  failure a message saying what to do.
 - **No dead code, no anticipated abstraction.** The only generalisations asked
   for are those of serving another city.
 

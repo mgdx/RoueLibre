@@ -1,14 +1,5 @@
 # Roue Libre
 
-**Roue Libre** est une application Android libre pour les réseaux de vélos en
-libre-service. Elle affiche la disponibilité des stations sur une carte et
-calcule un itinéraire porte-à-porte combinant la marche et le vélo, dans
-n'importe quelle agglomération dont le réseau publie ses stations en données
-ouvertes. Son interface est en français, parce que ce sont des francophones
-qu'elle sert ; **la suite de ce document est en anglais**, comme le code.
-
----
-
 ## What it is
 
 A free Android application that shows bike-share stations and computes a
@@ -22,8 +13,24 @@ is a configuration file and a data generation run, never a code change (see
 [Adding a city](#adding-a-city)). No city is a default: the application
 proposes one from your position, and you choose.
 
-The name plays on the double meaning of *libre* in French: self-service and free
-software.
+The interface is in English, and translations are welcome — see
+[CONTRIBUTING.md](CONTRIBUTING.md).
+
+## The name
+
+*Roue libre* is French for **freewheel**: the ratchet that lets a bicycle carry
+on rolling while the pedals stand still. To ride *en roue libre* is to coast —
+to be carried by what you have already put in, without pushing.
+
+The phrase is doing three things at once, and all three are the project:
+
+- **the freewheel** itself, the part that makes a bike a bike;
+- ***libre-service***, French for self-service — a bike-share bike is a *vélo
+  en libre-service*, which is what this application is about;
+- ***logiciel libre***, free software. Not free of charge: free as in free to
+  use, study, change and pass on. This one is under the GPL.
+
+One word, and it says: a bicycle, shared, and free.
 
 ## What sets it apart
 
@@ -105,7 +112,7 @@ network directly.
 
 **Error handling.** No exception crosses a layer boundary. Failures are values —
 `Outcome.Failure(DataError.Offline)` — and the only layer that puts them into
-French words is the interface. The business module is not allowed to hold a
+words is the interface. The business module is not allowed to hold a
 displayable string.
 
 ## Building
