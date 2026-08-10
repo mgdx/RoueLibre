@@ -157,7 +157,7 @@
         android:paddingEnd="@dimen/space_m"
         android:textAppearance="@style/TextAppearance.RoueLibre.Body"
         android:visibility="gone"
-        app:drawableStartCompat="@drawable/ic_pin"
+        app:drawableStartCompat="@drawable/ic_place"
         app:layout_constraintBottom_toTopOf="@id/mode_toggle"
         app:layout_constraintEnd_toStartOf="@id/open_search"
         app:layout_constraintStart_toStartOf="parent"

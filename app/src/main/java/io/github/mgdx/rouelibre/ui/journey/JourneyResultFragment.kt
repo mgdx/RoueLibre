@@ -277,7 +277,7 @@ class JourneyResultFragment : Fragment() {
         options.forEachIndexed { index, option ->
             val step = ItemJourneyStepBinding.inflate(layoutInflater, views.alternatives, false)
             step.modeIcon.setImageResource(
-                if (index == state.chosenIndex) R.drawable.ic_pin else R.drawable.ic_bike,
+                if (index == state.chosenIndex) R.drawable.ic_place else R.drawable.ic_bike,
             )
             step.label.text = getString(
                 R.string.journey_alternative_stations,

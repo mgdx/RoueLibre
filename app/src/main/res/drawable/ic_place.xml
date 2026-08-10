@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    A place, as a line icon: for lists and buttons, alongside the magnifier and
+    the star.
+
+    The map's pin (ic_pin) is a different drawing on purpose. It is two-tone and
+    32 by 40, sized to be legible over the base map; set next to 24 dp icons it
+    towered over them and read as more important than the entries beside it.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M12,2c-3.87,0 -7,3.13 -7,7 0,5.25 7,13 7,13s7,-7.75 7,-13c0,-3.87 -3.13,-7 -7,-7zM12,4c2.76,0 5,2.24 5,5 0,3.35 -3.2,8.14 -5,10.34 -1.8,-2.2 -5,-6.99 -5,-10.34 0,-2.76 2.24,-5 5,-5zM12,6.5c-1.38,0 -2.5,1.12 -2.5,2.5s1.12,2.5 2.5,2.5 2.5,-1.12 2.5,-2.5 -1.12,-2.5 -2.5,-2.5z" />
+</vector>

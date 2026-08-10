@@ -47,7 +47,7 @@ class AddressAdapter(private val onPick: (AddressResult) -> Unit) :
             binding.kindIcon.setImageResource(
                 when (result.kind) {
                     AddressEntryKind.Street -> R.drawable.ic_search
-                    AddressEntryKind.Landmark -> R.drawable.ic_pin
+                    AddressEntryKind.Landmark -> R.drawable.ic_place
                 },
             )
             // A screen reader hears the same thing an eye sees: the address,

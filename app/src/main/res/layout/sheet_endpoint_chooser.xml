@@ -61,6 +61,6 @@
         android:layout_marginTop="@dimen/space_s"
         android:gravity="start|center_vertical"
         android:text="@string/journey_source_on_map"
-        app:icon="@drawable/ic_pin" />
+        app:icon="@drawable/ic_place" />
 
 </LinearLayout>

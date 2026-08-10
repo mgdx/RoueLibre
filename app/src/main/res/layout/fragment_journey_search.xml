@@ -39,12 +39,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
+    <!-- No start margin here: this field's edges are those of the one above.
+         A margin, applied on top of a constraint that already carries it,
+         shifted this field sixteen density-independent pixels to the right. -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/destination"
         style="@style/Widget.RoueLibre.Toggle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_l"
         android:layout_marginTop="@dimen/space_s"
         android:gravity="start|center_vertical"
         android:minHeight="@dimen/touch_target_min"
@@ -81,6 +83,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/destination" />
+
+    <!-- The shape of a journey, under the sentence that describes it. Purely
+         decorative: it repeats what the text says, so a screen reader must not
+         read it a second time. -->
+    <ImageView
+        android:id="@+id/shape"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
+        android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
+        android:src="@drawable/illustration_journey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hint" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/compute"
