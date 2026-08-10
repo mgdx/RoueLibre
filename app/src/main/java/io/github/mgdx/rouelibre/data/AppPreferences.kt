@@ -13,59 +13,59 @@ import kotlinx.coroutines.flow.map
 import java.time.Instant
 
 /**
- * Le thème dont l'utilisateur veut que l'application s'habille (SPEC §7.6).
+ * The theme the user wants the application dressed in (SPEC §7.6).
  *
- * @property id valeur écrite sur le disque, stable d'une version à l'autre.
+ * @property id the value written to disk, stable from one release to the next.
  */
 enum class AppTheme(val id: String) {
-    /** Celui du système, et c'est le défaut. */
+    /** The system's own, and that is the default. */
     System("systeme"),
 
-    /** Toujours clair. */
+    /** Always light. */
     Light("clair"),
 
-    /** Toujours sombre. */
+    /** Always dark. */
     Dark("sombre"),
     ;
 
     companion object {
-        /** Relit un thème enregistré ; une valeur inconnue rend [System]. */
+        /** Reads a stored theme back; an unknown value returns [System]. */
         fun fromId(id: String?): AppTheme = entries.firstOrNull { it.id == id } ?: System
     }
 }
 
 /**
- * Les deux temps forfaitaires du trajet, en secondes (SPEC §6).
+ * The journey's two fixed handling times, in seconds (SPEC §6).
  *
- * @property pickupSeconds temps de prise du vélo à la station de départ.
- * @property dropoffSeconds temps de dépose à la station d'arrivée.
+ * @property pickupSeconds time to take the bike at the departure station.
+ * @property dropoffSeconds time to return it at the arrival station.
  */
 data class HandlingTimes(val pickupSeconds: Int, val dropoffSeconds: Int)
 
-/** Aucune version vue : l'application n'a encore jamais été lancée. */
+/** No version seen: the application has never been launched. */
 const val NEVER_LAUNCHED: Int = 0
 
 /**
- * Réglages et état persistant de l'application (SPEC §8).
+ * The application's settings and persistent state (SPEC §8).
  *
- * DataStore, et non Room, parce qu'il ne s'agit que de quelques valeurs
- * isolées. Rien de ce qui est écrit ici ne décrit un déplacement : ni
- * historique, ni position, ni destination (SPEC §2, C3).
+ * DataStore rather than Room, because these are only a few isolated values.
+ * Nothing written here describes a journey: no history, no position, no
+ * destination (SPEC §2, C3).
  */
 class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTimestampStore {
 
     /**
-     * Date du dernier rafraîchissement des données stables des stations.
+     * When the stations' static data was last refreshed.
      *
-     * Persistée parce que la règle « au plus une fois par jour » (SPEC §4.1)
-     * doit survivre au redémarrage de l'application : sinon chaque lancement
-     * retéléchargerait la liste complète des stations.
+     * Persisted because the "at most once a day" rule (SPEC §4.1) must survive
+     * a restart of the application: otherwise every launch would download the
+     * complete station list again.
      */
     override suspend fun stationInformationFetchedAt(): Instant? =
         dataStore.data.first()[STATION_INFORMATION_FETCHED_AT]
             ?.let(Instant::ofEpochSecond)
 
-    /** Enregistre la date du dernier rafraîchissement des données stables. */
+    /** Stores when the static data was last refreshed. */
     override suspend fun setStationInformationFetchedAt(instant: Instant) {
         dataStore.edit { preferences ->
             preferences[STATION_INFORMATION_FETCHED_AT] = instant.epochSecond
@@ -73,16 +73,16 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
     }
 
     /**
-     * URL du document d'auto-découverte GBFS choisie par l'utilisateur.
+     * The GBFS auto-discovery URL chosen by the user.
      *
-     * `null` tant qu'elle n'a pas été modifiée : c'est alors celle de la
-     * configuration de ville qui s'applique. Ce réglage est ce qui rend
-     * l'application utilisable avec n'importe quel réseau GBFS (SPEC §4.1).
+     * `null` until it has been changed: the city configuration's own applies
+     * then. This setting is what makes the application usable with any GBFS
+     * network at all (SPEC §4.1).
      */
     suspend fun gbfsDiscoveryUrlOverride(): String? =
         dataStore.data.first()[GBFS_DISCOVERY_URL]?.takeIf { it.isNotBlank() }
 
-    /** Remplace l'URL du flux, ou rétablit celle de la configuration si `null`. */
+    /** Replaces the feed URL, or restores the configuration's own if `null`. */
     suspend fun setGbfsDiscoveryUrlOverride(url: String?) {
         dataStore.edit { preferences ->
             if (url.isNullOrBlank()) {
@@ -94,29 +94,28 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
     }
 
     /**
-     * Les stations mises en favori, **dans l'ordre choisi** (SPEC §7.5).
+     * The stations marked as favourites, **in the chosen order** (SPEC §7.5).
      *
-     * Des identifiants de stations, et rien d'autre : ce ne sont pas des lieux
-     * de l'utilisateur mais des points publics du réseau, et la contrainte C3
-     * interdit d'enregistrer quoi que ce soit d'un déplacement.
+     * Station identifiers, and nothing else: these are not the user's own
+     * places but public points of the network, and constraint C3 forbids
+     * recording anything about a journey.
      *
-     * Une liste ordonnée, et non un ensemble : le §7.5 veut que la liste soit
-     * réorganisable, et un ensemble n'a pas d'ordre à réorganiser. Les
-     * identifiants sont joints par un saut de ligne, caractère qu'aucun
-     * identifiant GBFS ne contient.
+     * An ordered list rather than a set: §7.5 wants the list to be reorderable,
+     * and a set has no order to rearrange. The identifiers are joined by a
+     * newline, a character no GBFS identifier contains.
      *
-     * Un flux plutôt qu'une lecture : l'étoile d'une station doit se mettre à
-     * jour partout où elle s'affiche, sans que les écrans se préviennent.
+     * A flow rather than a read: a station's star must update everywhere it is
+     * shown, without the screens having to tell one another.
      */
     val favouriteStationIds: Flow<List<String>> = dataStore.data.map(::readFavourites)
 
     /**
-     * Ajoute une station aux favoris, ou l'en retire.
+     * Adds a station to the favourites, or takes it out.
      *
-     * Une station ajoutée va en fin de liste : c'est là qu'on s'attend à
-     * trouver ce que l'on vient de faire.
+     * A station added goes to the end of the list: that is where one expects to
+     * find what one has just done.
      *
-     * @return vrai si la station est désormais en favori.
+     * @return true if the station is now a favourite.
      */
     suspend fun toggleFavourite(stationId: String): Boolean {
         var isFavourite = false
@@ -129,7 +128,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
         return isFavourite
     }
 
-    /** Enregistre un nouvel ordre des favoris (SPEC §7.5). */
+    /** Stores a new order for the favourites (SPEC §7.5). */
     suspend fun setFavouriteOrder(stationIds: List<String>) {
         dataStore.edit { preferences ->
             preferences[FAVOURITE_STATION_IDS_ORDERED] = stationIds.joinToString(SEPARATOR)
@@ -137,11 +136,10 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
     }
 
     /**
-     * Relit les favoris, en reprenant ceux d'une version antérieure.
+     * Reads the favourites back, picking up those of an earlier version.
      *
-     * Les premières versions les gardaient dans un ensemble, sans ordre. Les
-     * perdre à la mise à jour serait une petite trahison pour un utilisateur
-     * qui en avait rangé vingt.
+     * The first versions kept them in a set, without order. Losing them on an
+     * update would be a small betrayal of a user who had filed twenty of them.
      */
     private fun readFavourites(preferences: Preferences): List<String> {
         preferences[FAVOURITE_STATION_IDS_ORDERED]?.let { stored ->
@@ -151,27 +149,27 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
     }
 
     /**
-     * Thème choisi : clair, sombre, ou celui du système (SPEC §7.6).
+     * The chosen theme: light, dark, or the system's (SPEC §7.6).
      *
-     * Le défaut suit le système, seul choix qui respecte un réglage que
-     * l'utilisateur a déjà exprimé ailleurs.
+     * The default follows the system, the only choice that respects a
+     * preference the user has already expressed elsewhere.
      */
     val theme: Flow<AppTheme> = dataStore.data.map { preferences ->
         AppTheme.fromId(preferences[THEME])
     }
 
-    /** Enregistre le thème choisi. */
+    /** Stores the chosen theme. */
     suspend fun setTheme(theme: AppTheme) {
         dataStore.edit { it[THEME] = theme.id }
     }
 
     /**
-     * Temps forfaitaires de prise et de dépose du vélo (SPEC §6).
+     * Fixed times for taking and returning the bike (SPEC §6).
      *
-     * Réglables parce qu'ils dépendent de la personne et de la station : deux
-     * minutes pour qui connaît le geste, davantage avec un antivol récalcitrant
-     * ou une borne capricieuse. Ils pèsent sur le choix des stations autant que
-     * sur le temps annoncé.
+     * Configurable because they depend on the person and on the station: two
+     * minutes for someone who knows the motion, more with a stubborn lock or a
+     * temperamental dock. They weigh on the choice of stations as much as on
+     * the time announced.
      */
     val handlingTimes: Flow<HandlingTimes> = dataStore.data.map { preferences ->
         HandlingTimes(
@@ -180,7 +178,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
         )
     }
 
-    /** Enregistre les temps forfaitaires, bornés à des valeurs plausibles. */
+    /** Stores the fixed times, clamped to plausible values. */
     suspend fun setHandlingTimes(times: HandlingTimes) {
         dataStore.edit { preferences ->
             preferences[PICKUP_SECONDS] = times.pickupSeconds.coerceIn(0, MAX_HANDLING_SECONDS)
@@ -189,34 +187,27 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
     }
 
     /**
-     * URL du manifeste des jeux de données choisie par l'utilisateur.
+     * The city the application is serving right now.
      *
-     * `null` tant qu'elle n'a pas été modifiée. Ce réglage existe pour que
-     * l'hébergeur par défaut ne soit jamais un point de défaillance unique
-     * (SPEC §4.4).
-     */
-    /**
-     * La ville que l'application sert en ce moment.
-     *
-     * `null` tant qu'aucune n'a été choisie : l'application ne suppose pas
-     * d'agglomération par défaut, et c'est l'écran d'accueil qui en propose une
-     * (SPEC §15). Seul l'identifiant est retenu — pas une position, pas un
-     * historique de villes visitées (SPEC §2, C3).
+     * `null` until one has been chosen: the application assumes no default
+     * conurbation, and it is the welcome screen that proposes one (SPEC §15).
+     * Only the identifier is kept — not a position, not a history of cities
+     * visited (SPEC §2, C3).
      */
     suspend fun activeCityId(): String? =
         dataStore.data.first()[ACTIVE_CITY_ID]?.takeIf { it.isNotBlank() }
 
-    /** Suit la ville active, pour que les écrans se remettent à jour. */
+    /** Follows the active city, so the screens bring themselves up to date. */
     val activeCityIdFlow: Flow<String?> =
         dataStore.data.map { it[ACTIVE_CITY_ID]?.takeIf { id -> id.isNotBlank() } }
 
     /**
-     * Change de ville active.
+     * Changes the active city.
      *
-     * Les réglages qui désignaient l'ancienne — URL du flux et du manifeste —
-     * sont effacés du même mouvement : gardés, ils feraient afficher les
-     * stations d'une ville sur la carte d'une autre, et rien dans l'interface
-     * n'expliquerait pourquoi.
+     * The settings that designated the previous one — the feed and manifest
+     * URLs — are cleared in the same movement: kept, they would show one city's
+     * stations on another's map, and nothing in the interface would explain
+     * why.
      */
     suspend fun setActiveCityId(id: String?) {
         dataStore.edit { preferences ->
@@ -230,10 +221,16 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
         }
     }
 
+    /**
+     * The dataset manifest URL chosen by the user.
+     *
+     * `null` until it has been changed. This setting exists so that the default
+     * host is never a single point of failure (SPEC §4.4).
+     */
     suspend fun dataManifestUrlOverride(): String? =
         dataStore.data.first()[DATA_MANIFEST_URL]?.takeIf { it.isNotBlank() }
 
-    /** Remplace l'URL du manifeste, ou rétablit celle de la configuration. */
+    /** Replaces the manifest URL, or restores the configuration's own. */
     suspend fun setDataManifestUrlOverride(url: String?) {
         dataStore.edit { preferences ->
             if (url.isNullOrBlank()) {
@@ -245,17 +242,16 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
     }
 
     /**
-     * Le dernier code de version que l'utilisateur a vu (SPEC §7.9, §7.10).
+     * The last version code the user has seen (SPEC §7.9, §7.10).
      *
-     * Zéro veut dire « jamais lancée » : c'est l'écran d'accueil qui
-     * s'applique alors, jamais celui des nouveautés. Une valeur inférieure à
-     * la version installée veut dire « mise à jour depuis » : les notes des
-     * versions intermédiaires sont alors montrées, une seule fois.
+     * Zero means "never launched": the welcome screen applies then, never the
+     * what's-new one. A value below the installed version means "updated
+     * since": the notes of the intermediate versions are shown, once.
      */
     suspend fun lastSeenVersionCode(): Int =
         dataStore.data.first()[LAST_SEEN_VERSION_CODE] ?: NEVER_LAUNCHED
 
-    /** Retient la version que l'utilisateur vient de voir. */
+    /** Remembers the version the user has just seen. */
     suspend fun setLastSeenVersionCode(versionCode: Int) {
         dataStore.edit { it[LAST_SEEN_VERSION_CODE] = versionCode }
     }
@@ -265,11 +261,11 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
             longPreferencesKey("station_information_fetched_at")
         val GBFS_DISCOVERY_URL = stringPreferencesKey("gbfs_discovery_url")
 
-        /** Les favoris d'avant la version ordonnée, repris à la première lecture. */
+        /** The favourites from before the ordered version, picked up on first read. */
         val FAVOURITE_STATION_IDS = stringSetPreferencesKey("favourite_station_ids")
         val FAVOURITE_STATION_IDS_ORDERED = stringPreferencesKey("favourite_station_ids_ordered")
 
-        /** Aucun identifiant GBFS ne contient de saut de ligne. */
+        /** No GBFS identifier contains a newline. */
         const val SEPARATOR = "\n"
         val THEME = stringPreferencesKey("theme")
         val PICKUP_SECONDS = intPreferencesKey("pickup_seconds")
@@ -278,10 +274,10 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
         val ACTIVE_CITY_ID = stringPreferencesKey("active_city_id")
         val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
 
-        /** Deux minutes, la valeur par défaut du SPEC §6. */
+        /** Two minutes, the default value of SPEC §6. */
         const val DEFAULT_HANDLING_SECONDS = 120
 
-        /** Un quart d'heure pour prendre un vélo n'est plus un forfait. */
+        /** A quarter of an hour to take a bike is no longer a fixed time. */
         const val MAX_HANDLING_SECONDS = 900
     }
 }
