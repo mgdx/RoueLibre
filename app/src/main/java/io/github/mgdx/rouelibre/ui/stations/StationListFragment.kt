@@ -235,7 +235,7 @@ class StationListFragment : Fragment() {
     }
 
     private fun requireBinding(): FragmentStationListBinding =
-        checkNotNull(binding) { "vue non créée" }
+        checkNotNull(binding) { "view not created" }
 
     private companion object {
         /**

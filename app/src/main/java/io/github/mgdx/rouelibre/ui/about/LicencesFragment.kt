@@ -13,13 +13,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * Les licences des œuvres embarquées dans l'application.
+ * The licences of the works embedded in the application.
  *
- * Ce n'est pas une courtoisie : le SPEC §5 impose de **conserver l'avis de
- * copyright et le texte de la licence MIT de BRouter** dans les mentions
- * légales, et les polices sont sous SIL Open Font License, qui demande la même
- * chose. Les textes vivent dans les ressources de l'APK et sont lus tels
- * quels — les reformuler serait les altérer.
+ * This is not a courtesy: SPEC §5 requires **keeping BRouter's copyright notice
+ * and MIT licence text** in the legal notices, and the fonts are under the SIL
+ * Open Font License, which asks the same. The texts live in the APK's resources
+ * and are read as they are — rewording them would alter them.
  */
 class LicencesFragment : Fragment() {
 
@@ -53,12 +52,12 @@ class LicencesFragment : Fragment() {
     }
 
     /**
-     * Lit les textes de licence embarqués, dans l'ordre alphabétique de leurs
-     * fichiers.
+     * Reads the embedded licence texts, in the alphabetical order of their
+     * files.
      *
-     * Le dossier est parcouru plutôt qu'énuméré dans le code : ajouter une
-     * dépendance et sa licence ne doit pas demander de penser à modifier cet
-     * écran, car on n'y penserait pas.
+     * The folder is walked rather than enumerated in the code: adding a
+     * dependency and its licence must not require remembering to edit this
+     * screen, because nobody would remember.
      */
     private fun readLicences(): String {
         val assets = requireContext().assets

@@ -7,15 +7,15 @@ import io.github.mgdx.rouelibre.core.address.PositionPrecision
 import io.github.mgdx.rouelibre.ui.formatDistance
 
 /**
- * Met une adresse trouvée en mots.
+ * Puts a found address into words.
  *
- * Le module métier rend des champs — un numéro, un nom, une commune — et
- * jamais une phrase : c'est ici qu'ils se composent, par des ressources de
- * chaînes à placeholders positionnels, parce que l'ordre des mots d'une
- * adresse change d'une langue à l'autre (SPEC §9).
+ * The business module returns fields — a number, a name, a municipality — and
+ * never a sentence: here is where they are composed, through string resources
+ * with positional placeholders, because the word order of an address changes
+ * from one language to another (SPEC §9).
  */
 
-/** La ligne principale : « 12 bis Rue Nationale », ou le nom seul. */
+/** The main line: "12 bis Rue Nationale", or the name alone. */
 fun AddressResult.toTitle(context: Context): String {
     val number = houseNumber ?: return streetName
     val written = if (houseNumberSuffix.isEmpty()) {
@@ -27,10 +27,11 @@ fun AddressResult.toTitle(context: Context): String {
 }
 
 /**
- * La ligne d'appui : commune, distance, et l'aveu d'une position approchée.
+ * The supporting line: municipality, distance, and the admission of an
+ * approximate position.
  *
- * Le SPEC §7 demande qu'un écran dise ce qu'il sait ; annoncer un numéro placé
- * au jugé sans le signaler serait une promesse que la position ne tient pas.
+ * SPEC §7 asks that a screen say what it knows; announcing a number placed by
+ * estimate without flagging it would be a promise the position does not keep.
  */
 fun AddressResult.toDetail(context: Context): String {
     val place = if (postcode.isNullOrBlank()) {

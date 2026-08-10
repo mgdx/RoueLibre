@@ -5,14 +5,13 @@ import io.github.mgdx.rouelibre.R
 import kotlin.time.Duration
 
 /**
- * Met une durée de trajet en mots.
+ * Puts a journey duration into words.
  *
- * Arrondie à la minute : une estimation d'itinéraire ne vaut pas mieux que
- * cela, et afficher des secondes promettrait une exactitude que le calcul n'a
- * pas. Une minute au moins, même pour cinquante mètres — « 0 min » se lirait
- * comme une erreur.
+ * Rounded to the minute: a route estimate is worth no better than that, and
+ * showing seconds would promise an exactness the computation does not have. One
+ * minute at least, even for fifty metres — "0 min" would read as a fault.
  *
- * @return une durée prête à afficher, par exemple « 14 min » ou « 1 h 05 ».
+ * @return a duration ready to show, "14 min" or "1 h 05" for instance.
  */
 fun Context.formatDuration(duration: Duration): String {
     val totalMinutes = duration.inWholeSeconds

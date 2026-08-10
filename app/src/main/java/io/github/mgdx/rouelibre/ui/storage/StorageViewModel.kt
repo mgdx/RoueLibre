@@ -298,7 +298,7 @@ class StorageViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass.isAssignableFrom(StorageViewModel::class.java)) {
-                "modèle inattendu : ${modelClass.name}"
+                "unexpected model: ${modelClass.name}"
             }
             return StorageViewModel(
                 store,

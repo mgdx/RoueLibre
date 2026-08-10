@@ -126,7 +126,7 @@ class StationDetailViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass.isAssignableFrom(StationDetailViewModel::class.java)) {
-                "modèle inattendu : ${modelClass.name}"
+                "unexpected model: ${modelClass.name}"
             }
             return StationDetailViewModel(
                 repository,

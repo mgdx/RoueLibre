@@ -13,15 +13,15 @@ import io.github.mgdx.rouelibre.ui.storage.formatBytes
 import io.github.mgdx.rouelibre.ui.textLocale
 
 /**
- * Une ville telle que l'écran la présente.
+ * A city as the screen presents it.
  *
- * @property entry la ville du catalogue.
- * @property isActive vrai si c'est celle que l'application sert.
- * @property installedBytes place que ses données occupent déjà, `0` si aucune.
+ * @property entry the city from the catalogue.
+ * @property isActive true if it is the one the application serves.
+ * @property installedBytes the space its data already occupies, `0` if none.
  */
 data class CityRow(val entry: CityEntry, val isActive: Boolean, val installedBytes: Long)
 
-/** Affiche les villes du catalogue, celle en service en premier. */
+/** Shows the catalogue's cities, the one in service first. */
 class CityAdapter(
     private val onChoose: (CityEntry) -> Unit,
     private val onDelete: (CityEntry) -> Unit,
@@ -38,14 +38,14 @@ class CityAdapter(
         holder.bind(getItem(position))
     }
 
-    /** Une ligne de ville. */
+    /** One city row. */
     class CityViewHolder(
         private val binding: ItemCityBinding,
         private val onChoose: (CityEntry) -> Unit,
         private val onDelete: (CityEntry) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        /** Remplit la ligne à partir de l'état d'une ville. */
+        /** Fills the row from a city's state. */
         fun bind(row: CityRow) {
             val context = binding.root.context
             val locale = context.textLocale()
@@ -55,8 +55,8 @@ class CityAdapter(
             binding.cityActive.isVisible = row.isActive
 
             val stations = city.stationCount
-            // Le poids annoncé avant tout téléchargement, comme l'exige le
-            // SPEC §11.9 : c'est le seul endroit où on le voit avant de choisir.
+            // The weight announced before any download, as SPEC §11.9
+            // requires: this is the only place it is seen before choosing.
             val size = city.dataSizeBytes
             binding.cityDetail.text = when {
                 stations != null && size != null -> context.resources.getQuantityString(
@@ -71,8 +71,8 @@ class CityAdapter(
                     formatBytes(size, locale),
                 )
 
-                // Une ville listée dont les données ne sont pas publiées : le
-                // dire, plutôt que de laisser un téléchargement échouer.
+                // A listed city whose data is not published: say so, rather
+                // than letting a download fail.
                 else -> context.getString(R.string.city_data_unavailable)
             }
 

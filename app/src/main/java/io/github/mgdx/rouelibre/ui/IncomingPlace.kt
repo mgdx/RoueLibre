@@ -6,20 +6,20 @@ import io.github.mgdx.rouelibre.core.intent.findPlaceInText
 import io.github.mgdx.rouelibre.core.intent.parsePlaceUri
 
 /**
- * Ce qu'une intention entrante demande, s'il y a lieu (SPEC §7.8).
+ * What an incoming intent asks for, if anything (SPEC §7.8).
  *
- * L'analyse elle-même vit dans le module métier, testable sur la JVM : ici, il
- * ne reste qu'à savoir où lire, selon que le lieu arrive par une URI ou par du
- * texte partagé.
+ * The parsing itself lives in the business module, testable on the JVM: all
+ * that remains here is knowing where to read, depending on whether the place
+ * arrives through a URI or through shared text.
  *
- * @return le lieu demandé, ou `null` si cette intention n'en porte pas.
+ * @return the place requested, or `null` if this intent carries none.
  */
 fun Intent.toPlaceRequest(): PlaceRequest? = when (action) {
     Intent.ACTION_VIEW -> data?.toString()?.let(::parsePlaceUri)
 
     Intent.ACTION_SEND -> {
-        // Le sujet porte parfois le lieu et le corps un commentaire ; on prend
-        // le premier des deux qui donne quelque chose d'exploitable.
+        // The subject sometimes carries the place and the body a comment; we
+        // take the first of the two that yields something usable.
         val body = getStringExtra(Intent.EXTRA_TEXT)
         val subject = getStringExtra(Intent.EXTRA_SUBJECT)
         listOfNotNull(body, subject)

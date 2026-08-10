@@ -14,28 +14,27 @@ import org.maplibre.geojson.FeatureCollection
 import org.maplibre.geojson.Point
 
 /**
- * Le point désigné par une recherche d'adresse, posé sur la carte.
+ * The point designated by an address search, laid on the map.
  *
- * Une **goutte**, quand les stations sont des **disques** : sur une carte qui
- * en porte deux cent soixante-huit, le point cherché doit se reconnaître à sa
- * forme et pas seulement à sa couleur (SPEC §7).
+ * A **pin**, where stations are **discs**: on a map carrying two hundred and
+ * sixty-eight of them, the point searched for must be recognisable by its shape
+ * and not only by its colour (SPEC §7).
  */
 object PickedPlaceMarker {
 
-    /** Identifiant de la source GeoJSON portant le point choisi. */
+    /** The identifier of the GeoJSON source carrying the picked point. */
     const val SOURCE_ID: String = "picked-point"
 
-    /** Couche du marqueur. */
+    /** The marker's layer. */
     const val LAYER_ID: String = "picked-point-marker"
 
     private const val IMAGE_ID = "picked-point-pin"
 
     /**
-     * Enregistre l'image du marqueur dans le style.
+     * Registers the marker's image in the style.
      *
-     * MapLibre ne dessine que des images matricielles : le vecteur est donc
-     * rendu une fois, à la densité de l'écran, plutôt que livré en cinq
-     * tailles dans l'APK.
+     * MapLibre only draws raster images: the vector is therefore rendered once,
+     * at the screen's density, rather than shipped in five sizes in the APK.
      */
     fun registerImage(context: Context, style: Style) {
         val drawable = checkNotNull(AppCompatResources.getDrawable(context, R.drawable.ic_pin)) {
@@ -44,18 +43,18 @@ object PickedPlaceMarker {
         style.addImage(IMAGE_ID, drawable.toBitmap())
     }
 
-    /** La couche du marqueur, ancrée par sa pointe sur le point exact. */
+    /** The marker's layer, anchored by its tip on the exact point. */
     fun layer(): SymbolLayer = SymbolLayer(LAYER_ID, SOURCE_ID)
         .withProperties(
             PropertyFactory.iconImage(IMAGE_ID),
             PropertyFactory.iconAnchor(Property.ICON_ANCHOR_BOTTOM),
-            // Le point cherché prime sur tout le reste : il ne doit jamais
-            // être écarté par le placement automatique des étiquettes.
+            // The searched point takes precedence over everything else: it
+            // must never be pushed aside by automatic label placement.
             PropertyFactory.iconAllowOverlap(true),
             PropertyFactory.iconIgnorePlacement(true),
         )
 
-    /** Le contenu de la source : un point, ou rien. */
+    /** The source's contents: one point, or nothing. */
     fun featureFor(position: Coordinates?): FeatureCollection {
         if (position == null) return FeatureCollection.fromFeatures(emptyList())
         return FeatureCollection.fromFeatures(

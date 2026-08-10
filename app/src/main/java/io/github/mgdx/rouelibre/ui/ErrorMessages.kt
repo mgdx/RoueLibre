@@ -5,13 +5,13 @@ import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.DataError
 
 /**
- * Traduit un échec métier en phrase française destinée à l'utilisateur.
+ * Turns a business failure into a French sentence meant for the user.
  *
- * C'est ici, et nulle part ailleurs, que les erreurs prennent des mots : le
- * module métier n'a pas le droit de contenir de texte affichable (SPEC §9), et
- * chaque échec doit dire ce qui s'est passé et quoi faire (SPEC §14).
+ * Here, and nowhere else, is where errors take words: the business module is
+ * not allowed to hold displayable text (SPEC §9), and every failure must say
+ * what happened and what to do (SPEC §14).
  *
- * @return une phrase complète, prête à être affichée.
+ * @return a complete sentence, ready to be shown.
  */
 fun DataError.toUserMessage(context: Context): String = when (this) {
     DataError.Offline -> context.getString(R.string.error_offline)
@@ -19,8 +19,8 @@ fun DataError.toUserMessage(context: Context): String = when (this) {
     is DataError.ServerRefused ->
         context.getString(R.string.error_server_refused, statusCode)
     is DataError.MalformedResponse ->
-        // Le détail technique reste dans la valeur, pour le journal et le
-        // rapport de bogue ; l'utilisateur reçoit une consigne, pas une trace.
+        // The technical detail stays in the value, for the log and the bug
+        // report; the user gets an instruction, not a trace.
         context.getString(R.string.error_malformed)
     is DataError.FeedUnavailable ->
         context.getString(R.string.error_feed_unavailable, feedName)

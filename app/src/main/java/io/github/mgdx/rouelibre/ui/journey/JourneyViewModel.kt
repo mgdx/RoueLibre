@@ -127,7 +127,7 @@ class JourneyViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass.isAssignableFrom(JourneyViewModel::class.java)) {
-                "modèle inattendu : ${modelClass.name}"
+                "unexpected model: ${modelClass.name}"
             }
             return JourneyViewModel(router, repository, preferences, origin, destination) as T
         }

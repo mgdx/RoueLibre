@@ -4,15 +4,14 @@ import android.content.Context
 import android.provider.Settings
 
 /**
- * Indique si l'appareil demande à ce que les animations soient réduites.
+ * Tells whether the device asks for animations to be reduced.
  *
- * Le SPEC §7 en fait une contrainte non négociable. Android n'expose pas de
- * préférence « réduire les animations » en tant que telle : c'est l'échelle de
- * durée des animations, mise à zéro, qui porte cette demande — que ce soit
- * depuis les options pour développeurs ou depuis les réglages d'accessibilité
- * du constructeur.
+ * SPEC §7 makes it a non-negotiable constraint. Android exposes no "reduce
+ * animations" preference as such: it is the animation duration scale, set to
+ * zero, that carries the request — whether from the developer options or from
+ * the manufacturer's accessibility settings.
  *
- * @return vrai si tout mouvement doit être remplacé par un changement immédiat.
+ * @return true if every movement must be replaced by an immediate change.
  */
 fun Context.prefersReducedMotion(): Boolean {
     val scale = Settings.Global.getFloat(

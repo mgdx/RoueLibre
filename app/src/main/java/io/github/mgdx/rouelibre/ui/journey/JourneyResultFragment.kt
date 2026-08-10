@@ -55,10 +55,10 @@ class JourneyResultFragment : Fragment() {
 
     private val viewModel: JourneyViewModel by viewModels {
         val origin = checkNotNull(JourneyEndpoint.readFrom(arguments, ARGUMENT_ORIGIN)) {
-            "point de départ absent"
+            "origin point missing"
         }
         val destination = checkNotNull(JourneyEndpoint.readFrom(arguments, ARGUMENT_DESTINATION)) {
-            "point d'arrivée absent"
+            "destination point missing"
         }
         JourneyViewModel.Factory(
             router = container.journeyRouter,

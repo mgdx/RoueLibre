@@ -5,9 +5,10 @@ import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.station.Freshness
 
 /**
- * Met en mots l'âge de la donnée affichée (SPEC §4.1).
+ * Puts the displayed data's age into words (SPEC §4.1).
  *
- * @return une expression du type « il y a 12 secondes », sans phrase autour.
+ * @return an expression of the form "12 seconds ago", with no sentence around
+ *   it.
  */
 fun Freshness.toRelativeText(context: Context): String = when (this) {
     Freshness.JustNow -> context.getString(R.string.freshness_just_now)
@@ -22,13 +23,13 @@ fun Freshness.toRelativeText(context: Context): String = when (this) {
 }
 
 /**
- * Compose la ligne d'âge affichée sous le titre de l'écran.
+ * Composes the age line shown under the screen's title.
  *
- * Hors ligne ou après un rafraîchissement manqué, la donnée doit être
- * explicitement marquée comme figée : présenter un état vieux d'une heure
- * comme s'il était courant serait un mensonge (SPEC §4.1).
+ * Offline, or after a missed refresh, the data must be explicitly marked as
+ * frozen: presenting an hour-old state as though it were current would be a lie
+ * (SPEC §4.1).
  *
- * @param isStale vrai quand l'état est trop vieux pour passer pour courant.
+ * @param isStale true when the state is too old to pass for current.
  */
 fun Freshness.toStatusLine(context: Context, isStale: Boolean): String = when {
     this is Freshness.Never -> context.getString(R.string.freshness_never)

@@ -8,16 +8,15 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 /**
- * Point d'entrée de l'application.
+ * The application's entry point.
  *
- * Ne fait rien d'autre que porter le conteneur de dépendances et appliquer le
- * thème choisi. Aucune initialisation de bibliothèque tierce, aucun
- * enregistrement de service : l'application ne doit rien émettre au lancement
- * (SPEC §2, C3).
+ * It does nothing beyond holding the dependency container and applying the
+ * chosen theme. No third-party library initialisation, no service
+ * registration: the application must emit nothing at launch (SPEC §2, C3).
  */
 class RoueLibreApplication : Application() {
 
-    /** Conteneur de dépendances, partagé par tous les écrans. */
+    /** The dependency container, shared by every screen. */
     lateinit var container: AppContainer
         private set
 
@@ -29,11 +28,11 @@ class RoueLibreApplication : Application() {
     }
 
     /**
-     * Met en service les données de la ville active, et suit ses changements.
+     * Puts the active city's data into service, and follows its changes.
      *
-     * Les jeux de données sont rangés par ville : sans cela, le magasin ne
-     * saurait pas dans quel répertoire lire. Le suivi vaut pour tout l'écran de
-     * stockage, qui observe l'inventaire sans jamais demander de ville.
+     * The datasets are stored per city: without this, the store would not know
+     * which directory to read from. The watching matters for the storage
+     * screen, which observes the inventory without ever asking for a city.
      */
     private fun followActiveCity() {
         CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate).launch {
@@ -42,12 +41,12 @@ class RoueLibreApplication : Application() {
     }
 
     /**
-     * Applique le thème enregistré, et suit ses changements.
+     * Applies the stored theme, and follows its changes.
      *
-     * Lu de façon asynchrone : une lecture bloquante du disque au démarrage
-     * retarderait le premier dessin pour un réglage que la plupart des gens
-     * laissent sur « système ». Le thème choisi s'applique donc juste après,
-     * en recréant l'écran — visible au tout premier lancement seulement.
+     * Read asynchronously: a blocking disk read at start-up would delay the
+     * first draw for a setting most people leave on "system". The chosen theme
+     * therefore applies just afterwards, by recreating the screen — visible on
+     * the very first launch only.
      */
     private fun applyChosenTheme() {
         CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate).launch {

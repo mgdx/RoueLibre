@@ -12,9 +12,9 @@ import io.github.mgdx.rouelibre.core.address.AddressResult
 import io.github.mgdx.rouelibre.databinding.ItemAddressBinding
 
 /**
- * Affiche les adresses trouvées.
+ * Shows the addresses found.
  *
- * @property onPick appelé quand une ligne est choisie.
+ * @property onPick called when a row is chosen.
  */
 class AddressAdapter(private val onPick: (AddressResult) -> Unit) :
     ListAdapter<AddressResult, AddressAdapter.AddressViewHolder>(DIFF) {
@@ -32,13 +32,13 @@ class AddressAdapter(private val onPick: (AddressResult) -> Unit) :
         holder.bind(getItem(position))
     }
 
-    /** Une ligne de résultat. */
+    /** One result row. */
     class AddressViewHolder(
         private val binding: ItemAddressBinding,
         private val onPick: (AddressResult) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        /** Remplit la ligne avec une adresse trouvée. */
+        /** Fills the row with an address found. */
         fun bind(result: AddressResult) {
             val context = binding.root.context
             binding.title.text = result.toTitle(context)
@@ -50,8 +50,8 @@ class AddressAdapter(private val onPick: (AddressResult) -> Unit) :
                     AddressEntryKind.Landmark -> R.drawable.ic_pin
                 },
             )
-            // Un lecteur d'écran entend la même chose qu'un œil voit : l'adresse
-            // puis son contexte, dans cet ordre.
+            // A screen reader hears the same thing an eye sees: the address,
+            // then its context, in that order.
             binding.root.contentDescription = context.getString(
                 R.string.address_content_description,
                 binding.title.text,

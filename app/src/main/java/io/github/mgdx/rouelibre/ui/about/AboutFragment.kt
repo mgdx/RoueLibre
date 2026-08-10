@@ -21,15 +21,15 @@ import io.github.mgdx.rouelibre.ui.welcome.WhatsNewFragment
 import kotlinx.coroutines.launch
 
 /**
- * « À propos » (SPEC §7.7).
+ * The "about" screen (SPEC §7.7).
  *
- * Trois choses y sont **dues** : les attributions du §4.5, la politique de
- * confidentialité en clair, et la licence de l'application. Elles ne sont pas
- * là par politesse — les données affichées viennent de producteurs qui
- * l'exigent, et les bibliothèques employées aussi.
+ * Three things are **owed** here: the attributions of §4.5, the privacy policy
+ * in plain words, and the application's licence. They are not there out of
+ * politeness — the data shown comes from producers who require them, and so do
+ * the libraries used.
  *
- * L'attribution du réseau vient de la configuration de ville : servir une
- * autre agglomération ne doit pas demander de toucher à cet écran (SPEC §15).
+ * The network's attribution comes from the city configuration: serving another
+ * conurbation must not require touching this screen (SPEC §15).
  */
 class AboutFragment : Fragment() {
 
@@ -53,9 +53,9 @@ class AboutFragment : Fragment() {
         views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
         views.toolbar.navigationContentDescription = getString(R.string.action_back)
         views.version.text = getString(R.string.about_version, BuildConfig.VERSION_NAME)
-        // L'attribution est celle du producteur du flux, donc de la ville
-        // active : sans ville, il n'y a personne à créditer et la ligne est
-        // masquée plutôt que vide.
+        // The attribution is the feed producer's, hence the active city's:
+        // without a city there is nobody to credit, and the line is hidden
+        // rather than left blank.
         viewLifecycleOwner.lifecycleScope.launch {
             val attribution = container.activeCity()?.gbfs?.attribution
             views.networkAttribution.isVisible = !attribution.isNullOrBlank()
@@ -63,8 +63,8 @@ class AboutFragment : Fragment() {
         }
         views.openRepository.setOnClickListener { openRepository() }
         views.openLicences.setOnClickListener { show(LicencesFragment()) }
-        // Les deux écrans du premier lancement restent lisibles ensuite : le
-        // SPEC §7.9 et §7.10 l'exigent tous les deux.
+        // Both first-launch screens stay readable afterwards: SPEC §7.9 and
+        // §7.10 each require it.
         views.openWelcome.setOnClickListener { show(WelcomeFragment()) }
         views.openWhatsNew.setOnClickListener {
             show(WhatsNewFragment.since(NEVER_LAUNCHED))
@@ -77,10 +77,10 @@ class AboutFragment : Fragment() {
     }
 
     /**
-     * Ouvre le dépôt dans le navigateur.
+     * Opens the repository in the browser.
      *
-     * C'est la seule sortie vers le réseau de tout cet écran, et elle est
-     * explicite : rien ne part sans que l'utilisateur ait appuyé.
+     * It is this whole screen's only way out to the network, and it is
+     * explicit: nothing leaves without the user having pressed.
      */
     private fun openRepository() {
         try {

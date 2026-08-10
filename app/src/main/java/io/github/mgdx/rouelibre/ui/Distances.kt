@@ -6,19 +6,18 @@ import java.text.NumberFormat
 import kotlin.math.roundToInt
 
 /**
- * Met une distance en mots, dans la langue de l'interface.
+ * Puts a distance into words, in the interface's language.
  *
- * Le formatage passe par les API de localisation, jamais par une construction
- * à la main (SPEC §9) : la virgule décimale française et le point anglais ne
- * s'écrivent pas de la même façon.
+ * Formatting goes through the localisation APIs, never through a hand-built
+ * string (SPEC §9): the French decimal comma and the English point are not
+ * written the same way.
  *
- * Les valeurs sont arrondies à ce que l'affichage peut honnêtement promettre :
- * la position d'une adresse est connue à quelques mètres près, celle de
- * l'utilisateur à bien moins. Écrire « 437 m » laisserait croire à une
- * précision qui n'existe pas.
+ * Values are rounded to what the display can honestly promise: an address's
+ * position is known to within a few metres, the user's to far less. Writing
+ * "437 m" would suggest a precision that does not exist.
  *
- * @param metres la distance à écrire.
- * @return une distance prête à afficher, par exemple « 250 m » ou « 1,4 km ».
+ * @param metres the distance to write.
+ * @return a distance ready to show, "250 m" or "1,4 km" for instance.
  */
 fun Context.formatDistance(metres: Double): String {
     if (metres < METRES_PER_KILOMETRE) {
@@ -37,5 +36,5 @@ fun Context.formatDistance(metres: Double): String {
 
 private const val METRES_PER_KILOMETRE = 1_000.0
 
-/** En dessous du kilomètre, la distance s'arrondit à la dizaine de mètres. */
+/** Below a kilometre, the distance rounds to the nearest ten metres. */
 private const val METRE_ROUNDING = 10

@@ -11,24 +11,24 @@ import org.maplibre.geojson.FeatureCollection
 import org.maplibre.geojson.Point
 
 /**
- * La position de l'utilisateur sur la carte.
+ * The user's position on the map.
  *
- * Un disque cerclé de blanc, la convention que tout le monde reconnaît. Il ne
- * porte ni chiffre, contrairement aux marqueurs de stations, ni pointe,
- * contrairement au point cherché : les trois se distinguent d'un coup d'œil.
+ * A disc ringed in white, the convention everyone recognises. It carries no
+ * figure, unlike the station markers, and no tip, unlike the searched point:
+ * the three tell themselves apart at a glance.
  *
- * Ce point ne quitte jamais l'appareil et n'est écrit nulle part : il vit dans
- * la source GeoJSON le temps de l'affichage (SPEC §2, C3).
+ * This point never leaves the device and is written nowhere: it lives in the
+ * GeoJSON source for as long as it is displayed (SPEC §2, C3).
  */
 object UserPositionMarker {
 
-    /** Identifiant de la source GeoJSON portant la position. */
+    /** The identifier of the GeoJSON source carrying the position. */
     const val SOURCE_ID: String = "position-utilisateur"
 
-    /** Couche du disque de position. */
+    /** The position disc's layer. */
     const val LAYER_ID: String = "position-utilisateur-disque"
 
-    /** Le disque, posé au-dessus des stations. */
+    /** The disc, laid above the stations. */
     fun layer(context: Context): CircleLayer = CircleLayer(LAYER_ID, SOURCE_ID)
         .withProperties(
             PropertyFactory.circleRadius(7f),
@@ -37,7 +37,7 @@ object UserPositionMarker {
             PropertyFactory.circleStrokeColor(ContextCompat.getColor(context, R.color.surface)),
         )
 
-    /** Le contenu de la source : la position, ou rien. */
+    /** The source's contents: the position, or nothing. */
     fun featureFor(position: Coordinates?): FeatureCollection {
         if (position == null) return FeatureCollection.fromFeatures(emptyList())
         return FeatureCollection.fromFeatures(

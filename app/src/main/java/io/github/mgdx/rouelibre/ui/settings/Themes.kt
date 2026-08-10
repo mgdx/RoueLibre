@@ -4,11 +4,11 @@ import androidx.appcompat.app.AppCompatDelegate
 import io.github.mgdx.rouelibre.data.AppTheme
 
 /**
- * Applique le thème choisi à toute l'application (SPEC §7.6).
+ * Applies the chosen theme to the whole application (SPEC §7.6).
  *
- * `AppCompatDelegate` recrée les activités concernées : le changement se voit
- * immédiatement, sans redémarrer l'application. C'est ce qui permet de juger
- * un thème au moment où on le choisit.
+ * `AppCompatDelegate` recreates the activities concerned: the change shows
+ * immediately, without restarting the application. That is what allows judging
+ * a theme at the moment one chooses it.
  */
 fun applyTheme(theme: AppTheme) {
     AppCompatDelegate.setDefaultNightMode(

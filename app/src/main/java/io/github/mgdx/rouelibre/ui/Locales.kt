@@ -5,30 +5,30 @@ import androidx.core.os.ConfigurationCompat
 import java.util.Locale
 
 /**
- * Langues dans lesquelles l'interface existe réellement.
+ * The languages the interface actually exists in.
  *
- * `res/values/` porte le français sans qualificatif de langue, comme l'exige
- * le SPEC §9. Android considère alors ces ressources comme un défaut valable
- * pour n'importe quelle langue et n'a aucun moyen de savoir qu'elles sont
- * françaises : sur un appareil configuré en anglais, il sert donc des textes
- * français dans une configuration annoncée anglaise.
+ * `res/values/` carries French without a language qualifier, as SPEC §9
+ * requires. Android then treats those resources as a default valid for any
+ * language and has no way of knowing they are French: on a device set to
+ * English it therefore serves French text under a configuration announced as
+ * English.
  *
- * Cette liste rétablit la vérité. **Y ajouter chaque nouvelle traduction**, en
- * même temps que le dossier `values-<langue>/` et que `localeFilters` dans
- * `build.gradle.kts` — sinon les dates et les nombres de la nouvelle langue
- * continueraient d'être formatés en français.
+ * This list restores the truth. **Add every new translation to it**, at the
+ * same time as the `values-<language>/` folder and `localeFilters` in
+ * `build.gradle.kts` — otherwise the new language's dates and numbers would go
+ * on being formatted in French.
  */
 private val TRANSLATED_LANGUAGES = setOf("fr", "en")
 
-/** Langue de `res/values/`, servie à défaut de traduction correspondante. */
+/** The language of `res/values/`, served when no matching translation exists. */
 private val BASE_LOCALE: Locale = Locale.FRENCH
 
 /**
- * La langue dans laquelle l'application s'exprime pour cet appareil.
+ * The language the application speaks on this device.
  *
- * À utiliser partout où l'on formate une date, une heure, une distance ou une
- * durée : ces valeurs doivent s'accorder au texte qui les entoure, pas à un
- * réglage système que l'application ne suit pas.
+ * To be used wherever a date, a time, a distance or a duration is formatted:
+ * these values must agree with the text around them, not with a system setting
+ * the application does not follow.
  */
 fun Context.textLocale(): Locale {
     val preferred = ConfigurationCompat.getLocales(resources.configuration)[0]

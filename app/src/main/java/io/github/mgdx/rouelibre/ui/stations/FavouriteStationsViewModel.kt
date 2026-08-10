@@ -68,7 +68,7 @@ class FavouriteStationsViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass.isAssignableFrom(FavouriteStationsViewModel::class.java)) {
-                "modèle inattendu : ${modelClass.name}"
+                "unexpected model: ${modelClass.name}"
             }
             return FavouriteStationsViewModel(repository, preferences) as T
         }
