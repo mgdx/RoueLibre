@@ -81,6 +81,10 @@ def describe(config_path: Path, data_dir: Path) -> dict:
         "id": network["id"],
         "displayName": network["displayName"],
         "operator": network["operator"],
+        # The conurbation's own name. A network name says nothing about where
+        # it runs to whoever has never been there: "Vélo'v" is Lyon, and only
+        # the two together say so.
+        "mainCity": network.get("city"),
         "country": document.get("country", "FR"),
         "stationCount": box.get("stationCount"),
         "boundingBox": {

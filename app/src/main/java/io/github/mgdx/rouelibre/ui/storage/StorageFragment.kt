@@ -21,6 +21,7 @@ import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.databinding.FragmentStorageBinding
+import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.textLocale
 import kotlinx.coroutines.launch
 
@@ -216,7 +217,9 @@ class StorageFragment : Fragment() {
      */
     private fun showServedCity(views: FragmentStorageBinding) {
         viewLifecycleOwner.lifecycleScope.launch {
-            views.toolbar.subtitle = container.activeCity()?.network?.displayName
+            views.toolbar.subtitle = container.activeCity()?.network?.let {
+                requireContext().cityLabel(it.displayName, it.city)
+            }
                 ?: getString(R.string.storage_no_city)
         }
     }

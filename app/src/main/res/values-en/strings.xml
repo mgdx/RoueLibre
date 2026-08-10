@@ -241,9 +241,14 @@
         <item quantity="one">%1$d station · %2$s to download</item>
         <item quantity="other">%1$d stations · %2$s to download</item>
     </plurals>
+    <plurals name="city_stations">
+        <item quantity="one">%1$d station</item>
+        <item quantity="other">%1$d stations</item>
+    </plurals>
     <string name="city_detail_size_only">%1$s to download</string>
     <string name="city_data_unavailable">Data not published yet</string>
     <string name="city_installed">%1$s installed on the device</string>
+    <string name="city_label">%1$s — %2$s</string>
     <string name="city_delete">Delete</string>
     <string name="city_delete_description">Delete the data for %1$s</string>
     <string name="city_delete_title">Delete this data?</string>

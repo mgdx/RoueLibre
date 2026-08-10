@@ -156,6 +156,7 @@ class CityCatalogueTest {
             return CityEntry(
                 id = id,
                 displayName = id,
+                mainCity = null,
                 operator = "",
                 country = "FR",
                 boundingBox = box,

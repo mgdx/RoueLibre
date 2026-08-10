@@ -94,6 +94,15 @@ public data class CityEntry(
     /** The network's identifier, which also names its data directory. */
     public val id: String,
     public val displayName: String,
+    /**
+     * The conurbation the network runs in, when its configuration names it.
+     *
+     * A network name locates nothing for whoever has never been there:
+     * "Vélo'v" is Lyon, and only the two together say so. `null` on a
+     * catalogue produced before this field existed — the interface then shows
+     * the network name alone rather than an empty dash.
+     */
+    public val mainCity: String?,
     public val operator: String,
     /** ISO 3166-1 alpha-2 country code, used to group the list. */
     public val country: String,
@@ -167,6 +176,7 @@ private data class CityCatalogueDocument(
 private data class CityEntryDocument(
     val id: String,
     val displayName: String,
+    val mainCity: String? = null,
     val operator: String = "",
     val country: String = "FR",
     val boundingBox: CatalogueBoundingBoxDocument? = null,
@@ -191,6 +201,7 @@ private data class CityEntryDocument(
         return CityEntry(
             id = id.takeIf { it.isNotBlank() } ?: return null,
             displayName = displayName.takeIf { it.isNotBlank() } ?: return null,
+            mainCity = mainCity?.takeIf { it.isNotBlank() },
             operator = operator,
             country = country,
             boundingBox = box,

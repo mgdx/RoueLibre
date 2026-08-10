@@ -35,6 +35,8 @@ public data class CityConfiguration(
 public data class NetworkDescription(
     public val id: String,
     public val displayName: String,
+    /** The conurbation served, when the configuration names it. */
+    public val city: String?,
     public val operator: String,
     public val defaultLanguage: String,
 )
@@ -118,6 +120,7 @@ private data class CityConfigurationDocument(
         network = NetworkDescription(
             id = network.id,
             displayName = network.displayName,
+            city = network.city?.takeIf { it.isNotBlank() },
             operator = network.operator,
             defaultLanguage = network.defaultLanguage,
         ),
@@ -144,6 +147,7 @@ private data class CityConfigurationDocument(
 private data class NetworkDocument(
     val id: String,
     val displayName: String,
+    val city: String? = null,
     val operator: String,
     val defaultLanguage: String = "fr",
 )

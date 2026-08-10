@@ -1,12 +1,13 @@
 {
   "catalogueVersion": 1,
   "catalogueUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/catalogue.json",
-  "generatedAt": "2026-08-10T16:38:40Z",
+  "generatedAt": "2026-08-10T17:41:54Z",
   "cities": [
     {
       "id": "vlille",
       "displayName": "V'lille",
       "operator": "Métropole Européenne de Lille",
+      "mainCity": "Lille",
       "country": "FR",
       "stationCount": 268,
       "boundingBox": {
@@ -26,6 +27,7 @@
       "id": "velib",
       "displayName": "Vélib' Métropole",
       "operator": "Smovengo / Syndicat Autolib' Vélib' Métropole",
+      "mainCity": "Paris",
       "country": "FR",
       "stationCount": 1518,
       "boundingBox": {
@@ -45,6 +47,7 @@
       "id": "velov",
       "displayName": "Vélo'v",
       "operator": "JCDecaux / Métropole de Lyon",
+      "mainCity": "Lyon",
       "country": "FR",
       "stationCount": 465,
       "boundingBox": {

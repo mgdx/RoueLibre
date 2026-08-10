@@ -335,10 +335,20 @@
         <item quantity="one">%1$d station · %2$s à télécharger</item>
         <item quantity="other">%1$d stations · %2$s à télécharger</item>
     </plurals>
+    <!-- Same row, once the data is installed: the weight is then announced by
+         city_installed just below, and saying "to download" would contradict
+         it. -->
+    <plurals name="city_stations">
+        <item quantity="one">%1$d station</item>
+        <item quantity="other">%1$d stations</item>
+    </plurals>
     <string name="city_detail_size_only">%1$s à télécharger</string>
     <string name="city_data_unavailable">Données pas encore publiées</string>
     <!-- %1$s is an already formatted size, "42,5 Mo" for instance. -->
     <string name="city_installed">%1$s installés sur l\'appareil</string>
+    <!-- A network and the conurbation it serves, "V'lille — Lille".
+         %1$s is the network, %2$s the city. -->
+    <string name="city_label">%1$s — %2$s</string>
     <string name="city_delete">Supprimer</string>
     <!-- %1$s is a city's name. -->
     <string name="city_delete_description">Supprimer les données de %1$s</string>

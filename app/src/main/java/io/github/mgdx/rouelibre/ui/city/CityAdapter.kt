@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.config.CityEntry
 import io.github.mgdx.rouelibre.databinding.ItemCityBinding
+import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.storage.formatBytes
 import io.github.mgdx.rouelibre.ui.textLocale
 
@@ -51,14 +52,24 @@ class CityAdapter(
             val locale = context.textLocale()
             val city = row.entry
 
-            binding.cityName.text = city.displayName
+            binding.cityName.text = context.cityLabel(city.displayName, city.mainCity)
             binding.cityActive.isVisible = row.isActive
 
             val stations = city.stationCount
             // The weight announced before any download, as SPEC §11.9
             // requires: this is the only place it is seen before choosing.
             val size = city.dataSizeBytes
+            val installed = row.installedBytes > 0
             binding.cityDetail.text = when {
+                // Once the data is installed, the line below announces its
+                // weight; still offering it "to download" here would
+                // contradict it.
+                stations != null && installed -> context.resources.getQuantityString(
+                    R.plurals.city_stations,
+                    stations,
+                    stations,
+                )
+
                 stations != null && size != null -> context.resources.getQuantityString(
                     R.plurals.city_detail,
                     stations,
@@ -66,17 +77,22 @@ class CityAdapter(
                     formatBytes(context, size),
                 )
 
-                size != null -> context.getString(
+                size != null && !installed -> context.getString(
                     R.string.city_detail_size_only,
                     formatBytes(context, size),
                 )
+
+                // Installed, but the catalogue says nothing about it: the line
+                // below already says what it weighs here.
+                installed -> ""
 
                 // A listed city whose data is not published: say so, rather
                 // than letting a download fail.
                 else -> context.getString(R.string.city_data_unavailable)
             }
+            binding.cityDetail.isVisible = binding.cityDetail.text.isNotEmpty()
 
-            binding.cityInstalled.isVisible = row.installedBytes > 0
+            binding.cityInstalled.isVisible = installed
             binding.cityInstalled.text = context.getString(
                 R.string.city_installed,
                 formatBytes(context, row.installedBytes),
