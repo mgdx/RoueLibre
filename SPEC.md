@@ -336,7 +336,7 @@ After a new version is installed, a **what's new** screen appears **once only**,
 - Use `<plurals>` for everything that agrees ("1 bike available" / "3 bikes available").
 - Use **positional placeholders** (`%1$s`, `%2$d`) and never string concatenation: word order changes from one language to another.
 - Add `<!-- -->` comments above ambiguous strings, for future translators.
-- Provide `res/values-en/`, empty or translated as an example, to show the way.
+- Provide `res/values-en/`, translated in full: it is both the worked example and the file a new translation is copied from. Provide as well a **started file for the most widely spoken languages**, holding the English text until somebody translates it, so that contributing means editing a file rather than creating one. Every language supplied must be declared in `localeFilters`, without which its folder is dropped from the APK.
 - Format dates, times, distances and durations through the localisation APIs, not by hand.
 - Layouts compatible with right-to-left languages (`start`/`end` rather than `left`/`right`).
 - Provide a `CONTRIBUTING.md` explaining how to submit a translation.

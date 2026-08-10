@@ -55,6 +55,14 @@ also records what has no visible effect.
   the data is and where it comes from, in GBFS, indexed on
   transport.data.gouv.fr. The producer's credit follows it, as the ODbL licence
   of the feeds requires (`SPEC.md` §4.5).
+- **A page credits the feed producer of every city served**, reached from
+  "about". That screen keeps the credit of the city being served; the others,
+  including cities not installed, are one labelled tap away, each with the
+  address its feed is published at.
+- **Six languages are started** — German, Spanish, Italian, Dutch, Polish,
+  Portuguese. Their files hold the English text until somebody translates
+  them, so contributing a translation means editing a file rather than
+  creating one. Cost: 52 kB of APK.
 - **The application no longer assumes a default city.** It used to serve one
   compiled into the APK; it now serves the one it has been given, and says so
   until it has been.

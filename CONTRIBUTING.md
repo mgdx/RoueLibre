@@ -22,14 +22,28 @@ This is the most useful contribution if you do not write code.
 The application is written in French. Every string lives in a single file:
 [`app/src/main/res/values/strings.xml`](app/src/main/res/values/strings.xml).
 
-1. **Create your language's folder**: `app/src/main/res/values-<code>/`, where
-   `<code>` is the ISO 639-1 code — `en`, `nl`, `de`, `es`… For a regional
-   variant, `values-pt-rBR`.
-2. **Copy `strings.xml` into it** and translate the tags' contents, never their
-   `name` attribute.
-3. **Check the layouts.** Switch the system to your language and walk through
+**Six languages are already started** — German, Spanish, Italian, Dutch,
+Polish, Portuguese. Their files exist under `values-de/`, `values-es/` and so
+on, but every string in them still holds its English text: they are a starting
+point, not a translation. Open the one for your language and translate it in
+place.
+
+For a language that has no file yet:
+
+1. **Create its folder**: `app/src/main/res/values-<code>/`, where `<code>` is
+   the ISO 639-1 code. For a regional variant, `values-pt-rBR`.
+2. **Copy `values-en/strings.xml` into it** — the English file, which is
+   complete — and translate the tags' contents, never their `name` attribute.
+3. **Declare the language** in `localeFilters`, in
+   [`app/build.gradle.kts`](app/build.gradle.kts). Without that line Android
+   drops the folder from the APK and nobody ever sees the translation.
+4. **Check the layouts.** Switch the system to your language and walk through
    every screen. German and Dutch lengthen labels appreciably; that is where
    layouts break.
+
+While a string is left in English, that is what the users of that language
+read. Translating half a file is useful; leaving it entirely untouched only
+turns French into English for them.
 
 ### Rules to respect
 
@@ -49,7 +63,11 @@ to another.
 **Plurals go through `<plurals>`, and the categories vary.** French uses two
 (`one`, `other`), Polish four, Arabic six. Provide the ones for your language,
 listed in the
-[CLDR plural rules](https://cldr.unicode.org/index/cldr-spec/plural-rules).
+[CLDR plural rules](https://cldr.unicode.org/index/cldr-spec/plural-rules). The started
+files already carry the categories their language needs — Polish has four,
+Spanish, Italian and Portuguese three — each holding the English plural for
+want of better. Do not remove one: Android Lint requires them, and it is right
+to.
 
 **Watch the `one` category in French.** It covers 0 as well as 1: one writes
 "0 vélo", in the singular. Not every language makes that choice.

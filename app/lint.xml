@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Lint tolerates no warning in this project (SPEC §14). The exceptions
+    below are the ones that would otherwise punish a deliberate state.
+-->
+<lint>
+    <!--
+        The started translation files still hold their English text, which a
+        per-language spellchecker reads as a string of misspellings — "area"
+        offered as "área" in the Spanish file, and so on for every word.
+
+        The check is switched off for those files only, and comes back the
+        moment a language is really translated: `values/` and `values-en/`
+        keep it. Remove a folder from this list when its translation lands.
+    -->
+    <issue id="Typos">
+        <ignore path="src/main/res/values-de/strings.xml" />
+        <ignore path="src/main/res/values-es/strings.xml" />
+        <ignore path="src/main/res/values-it/strings.xml" />
+        <ignore path="src/main/res/values-nl/strings.xml" />
+        <ignore path="src/main/res/values-pl/strings.xml" />
+        <ignore path="src/main/res/values-pt/strings.xml" />
+    </issue>
+</lint>

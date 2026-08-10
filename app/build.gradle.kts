@@ -38,7 +38,12 @@ android {
         // know what language `values/` holds: on an English device it served
         // the French texts with English dates. It also prunes the libraries'
         // translations along the way, which weigh more than ours.
-        localeFilters += listOf("fr", "en")
+        //
+        // The languages beyond French and English are started files, whose
+        // strings are still the English ones. Listing them here is what makes
+        // a device set to German serve `values-de/` — without it the folder
+        // would be dropped from the APK and the file would be dead weight.
+        localeFilters += listOf("fr", "en", "de", "es", "it", "nl", "pl", "pt")
     }
 
     buildFeatures {
