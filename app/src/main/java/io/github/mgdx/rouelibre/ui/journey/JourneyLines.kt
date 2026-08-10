@@ -51,7 +51,7 @@ object JourneyLines {
     /** The walks' stroke: thin and dotted, like one step after another. */
     fun walkLayer(context: Context): LineLayer = LineLayer(WALK_LAYER_ID, WALK_SOURCE_ID)
         .withProperties(
-            PropertyFactory.lineColor(ContextCompat.getColor(context, R.color.encre)),
+            PropertyFactory.lineColor(ContextCompat.getColor(context, R.color.ink)),
             PropertyFactory.lineWidth(3f),
             PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
             // A tight dot pattern: on a phone screen, wide dashes get confused

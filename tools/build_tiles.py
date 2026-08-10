@@ -56,9 +56,9 @@ def check_executables() -> None:
     missing = [name for name in REQUIRED_EXECUTABLES if shutil.which(name) is None]
     if missing:
         raise GenerationError(
-            "Outils manquants : "
+            "Missing tools: "
             + ", ".join(missing)
-            + ".\nInstalle-les avec : sudo apt install osmium-tool tippecanoe"
+            + ".\nInstall them with: sudo apt install osmium-tool tippecanoe"
         )
 
 
@@ -68,18 +68,18 @@ def run(command: list[str], step: str) -> None:
     completed = subprocess.run(command, capture_output=True, text=True)
     if completed.returncode != 0:
         raise GenerationError(
-            f"Échec de l'étape « {step} » (code {completed.returncode}).\n"
+            f"Step \"{step}\" failed (code {completed.returncode}).\n"
             f"{completed.stderr.strip()[:2000]}"
         )
 
 
 def human_size(path: Path) -> str:
     size = path.stat().st_size
-    for unit in ("o", "ko", "Mo", "Go"):
-        if size < 1024 or unit == "Go":
-            return f"{size:.1f} {unit}" if unit != "o" else f"{size} {unit}"
+    for unit in ("B", "kB", "MB", "GB"):
+        if size < 1024 or unit == "GB":
+            return f"{size:.1f} {unit}" if unit != "B" else f"{size} {unit}"
         size /= 1024
-    return f"{size:.1f} Go"
+    return f"{size:.1f} GB"
 
 
 def load_layers() -> tuple[dict, int]:
@@ -103,9 +103,9 @@ def cut_to_bounding_box(
     """
     area_extract = work_dir / "area.osm.pbf"
     if area_extract.exists():
-        print(f"[1/5] Découpe déjà faite : {area_extract} ({human_size(area_extract)})")
+        print(f"[1/5] Cut already done: {area_extract} ({human_size(area_extract)})")
         return area_extract
-    print(f"[1/5] Découpe de l'extrait régional sur l'emprise…")
+    print("[1/5] Cutting the regional extract down to the box…")
     run(
         [
             "osmium", "extract",
@@ -196,7 +196,7 @@ def apply_property_filter(exported: Path, layer: dict) -> Path:
                 kept += 1
             else:
                 dropped += 1
-    print(f"      filtre admin_level : {kept} gardés, {dropped} écartés")
+    print(f"      admin_level filter: {kept} kept, {dropped} dropped")
     return filtered
 
 
@@ -270,14 +270,14 @@ def join_groups(group_files: list[Path], output: Path) -> None:
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--osm-extract", type=Path, required=True,
-                        help="extrait OpenStreetMap régional au format .osm.pbf")
+                        help="regional OpenStreetMap extract in .osm.pbf format")
     parser.add_argument("--config", type=Path, default=DEFAULT_CITY_CONFIG)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--work-dir", type=Path, default=DEFAULT_WORK_DIR)
     parser.add_argument("--keep-intermediate", action="store_true",
-                        help="conserver les fichiers de travail pour inspection")
+                        help="keep the working files for inspection")
     parser.add_argument("--only-layers", nargs="*", default=None,
-                        help="ne traiter que ces couches (mise au point)")
+                        help="process only these layers (for debugging)")
     return parser.parse_args()
 
 
@@ -287,8 +287,8 @@ def main() -> int:
         check_executables()
         if not arguments.osm_extract.exists():
             raise GenerationError(
-                f"Extrait OSM introuvable : {arguments.osm_extract}\n"
-                "Télécharge-le depuis https://download.geofabrik.de/"
+                f"OSM extract not found: {arguments.osm_extract}\n"
+                "Download it from https://download.geofabrik.de/"
             )
 
         config = CityConfig.load(arguments.config)
@@ -300,15 +300,15 @@ def main() -> int:
         arguments.work_dir.mkdir(parents=True, exist_ok=True)
         started = time.monotonic()
 
-        print(f"Emprise : {bounding_box}")
-        print(f"Zooms   : {config.document['map']['minZoom']} à {global_max_zoom}")
-        print(f"Couches : {', '.join(layers)}\n")
+        print(f"Box     : {bounding_box}")
+        print(f"Zooms   : {config.document['map']['minZoom']} to {global_max_zoom}")
+        print(f"Layers  : {', '.join(layers)}\n")
 
         area_extract = cut_to_bounding_box(
             arguments.osm_extract, bounding_box, arguments.work_dir
         )
 
-        print(f"\n[2/5] et [3/5] Filtrage et export des {len(layers)} couches…")
+        print(f"\n[2/5] and [3/5] Filtering and exporting the {len(layers)} layers…")
         by_zoom: dict[int, list[tuple[str, Path]]] = defaultdict(list)
         feature_counts: dict[str, int] = {}
         for name, layer in layers.items():
@@ -318,16 +318,16 @@ def main() -> int:
             exported = apply_property_filter(exported, layer)
             count = count_features(exported)
             feature_counts[name] = count
-            print(f"      {count} objets, {human_size(exported)}")
+            print(f"      {count} features, {human_size(exported)}")
             if count == 0:
-                print(f"      (couche vide, ignorée)")
+                print("      (empty layer, skipped)")
                 continue
             by_zoom[int(layer["minZoom"])].append((name, exported))
 
         if not by_zoom:
-            raise GenerationError("Aucune couche non vide : rien à produire.")
+            raise GenerationError("No non-empty layer: nothing to produce.")
 
-        print(f"\n[4/5] Construction des tuiles ({len(by_zoom)} groupes de zoom)…")
+        print(f"\n[4/5] Building the tiles ({len(by_zoom)} zoom groups)…")
         group_files = [
             build_zoom_group(
                 zoom, files, global_max_zoom, layers, bounding_box, arguments.work_dir
@@ -335,27 +335,27 @@ def main() -> int:
             for zoom, files in sorted(by_zoom.items())
         ]
 
-        print(f"\n[5/5] Assemblage…")
+        print("\n[5/5] Joining…")
         join_groups(group_files, arguments.output)
 
         elapsed = time.monotonic() - started
         print(f"\n{'':=<60}")
-        print(f"Fichier produit : {arguments.output}")
-        print(f"Taille          : {human_size(arguments.output)}")
-        print(f"Durée           : {elapsed / 60:.1f} min")
+        print(f"File produced : {arguments.output}")
+        print(f"Size            : {human_size(arguments.output)}")
+        print(f"Duration        : {elapsed / 60:.1f} min")
         print(f"{'':=<60}")
-        print("Objets par couche :")
+        print("Features per layer:")
         for name, count in sorted(feature_counts.items(), key=lambda item: -item[1]):
             print(f"  {name:14} {count:>9}")
 
         if not arguments.keep_intermediate:
             shutil.rmtree(arguments.work_dir, ignore_errors=True)
-            print(f"\nFichiers de travail supprimés "
-                  f"(--keep-intermediate pour les garder).")
+            print("\nWorking files removed "
+                  "(--keep-intermediate to keep them).")
         return 0
 
     except GenerationError as error:
-        print(f"\nErreur : {error}", file=sys.stderr)
+        print(f"\nError: {error}", file=sys.stderr)
         return 1
 
 

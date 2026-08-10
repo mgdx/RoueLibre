@@ -248,7 +248,7 @@ class GbfsParserTest {
     @Test
     fun `refuses an unreadable timestamp`() {
         val document = """
-            {"last_updated":"pas une date","version":"2.3","data":{"stations":[]}}
+            {"last_updated":"not a date","version":"2.3","data":{"stations":[]}}
         """.trimIndent()
 
         val outcome = parser.parseStationStatus(document)

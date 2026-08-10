@@ -113,11 +113,11 @@ class JourneyPlannerOnDeviceTest {
         val plan = planner.plan(lilleCentre, roubaix, stations) as JourneyPlan.Found
 
         assertTrue(
-            "station de départ sans vélo : ${plan.best.bikesAtDeparture}",
+            "departure station with no bike: ${plan.best.bikesAtDeparture}",
             plan.best.bikesAtDeparture >= 1,
         )
         assertTrue(
-            "station d'arrivée sans place : ${plan.best.docksAtArrival}",
+            "arrival station with no dock: ${plan.best.docksAtArrival}",
             plan.best.docksAtArrival >= 1,
         )
     }
@@ -132,7 +132,7 @@ class JourneyPlannerOnDeviceTest {
         assertTrue(TravelMode.Walking == best.walkToDestination.mode)
         // The access walks must stay access walks.
         assertTrue(
-            "marche d'accès démesurée : ${best.walkToStation.distanceMetres} m",
+            "access walk out of all proportion: ${best.walkToStation.distanceMetres} m",
             best.walkToStation.distanceMetres < 2_000,
         )
         assertTrue("empty bike leg", best.ride.distanceMetres > 500)

@@ -48,9 +48,9 @@ class Dataset:
 
 
 DATASETS = (
-    Dataset("tiles", "Fond de carte vectoriel", "tiles.mbtiles"),
-    Dataset("routing", "Graphe de routage", "routing", single_file=False),
-    Dataset("addresses", "Index d'adresses", "addresses.sqlite"),
+    Dataset("tiles", "Vector base map", "tiles.mbtiles"),
+    Dataset("routing", "Routing graph", "routing", single_file=False),
+    Dataset("addresses", "Address index", "addresses.sqlite"),
 )
 
 
@@ -83,14 +83,14 @@ def describe(dataset: Dataset, data_dir: Path, base_url: str,
     if dataset.single_file:
         if not source.is_file():
             raise ManifestError(
-                f"Jeu de données « {dataset.identifier} » absent : {source}\n"
-                "Lance d'abord le script de génération correspondant."
+                f"Dataset \"{dataset.identifier}\" missing: {source}\n"
+                "Run the matching generation script first."
             )
         files = [source]
     else:
         if not source.is_dir() or not any(source.iterdir()):
             raise ManifestError(
-                f"Jeu de données « {dataset.identifier} » absent : {source}"
+                f"Dataset \"{dataset.identifier}\" missing: {source}"
             )
         files = sorted(path for path in source.iterdir() if path.is_file())
 
@@ -112,8 +112,7 @@ def describe(dataset: Dataset, data_dir: Path, base_url: str,
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--release-tag", required=True,
-                        help="étiquette de la release de données, "
-                             "par exemple data-2026-08")
+                        help="tag of the data release, for example data-2026-08")
     parser.add_argument("--config", type=Path, default=DEFAULT_CITY_CONFIG)
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
     parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
@@ -156,16 +155,16 @@ def main() -> int:
         total = sum(
             file["sizeBytes"] for entry in entries for file in entry["files"]
         )
-        print(f"Manifeste écrit : {arguments.output}")
+        print(f"Manifest written: {arguments.output}")
         for entry in entries:
             size = sum(file["sizeBytes"] for file in entry["files"])
-            print(f"  {entry['id']:10} {size / 1e6:>7.1f} Mo  "
-                  f"({len(entry['files'])} fichier(s))")
-        print(f"  {'total':10} {total / 1e6:>7.1f} Mo")
+            print(f"  {entry['id']:10} {size / 1e6:>7.1f} MB  "
+                  f"({len(entry['files'])} file(s))")
+        print(f"  {'total':10} {total / 1e6:>7.1f} MB")
         return 0
 
     except ManifestError as error:
-        print(f"\nErreur : {error}", file=sys.stderr)
+        print(f"\nError: {error}", file=sys.stderr)
         return 1
 
 

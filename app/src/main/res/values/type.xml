@@ -34,7 +34,7 @@
     <style name="TextAppearance.RoueLibre.Title" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:fontFamily">@font/bricolage_semibold</item>
         <item name="android:textSize">@dimen/text_title</item>
-        <item name="android:textColor">@color/encre</item>
+        <item name="android:textColor">@color/ink</item>
         <item name="android:letterSpacing">-0.01</item>
     </style>
 
@@ -42,14 +42,14 @@
     <style name="TextAppearance.RoueLibre.Body" parent="TextAppearance.Material3.BodyLarge">
         <item name="android:fontFamily">@font/atkinson</item>
         <item name="android:textSize">@dimen/text_body</item>
-        <item name="android:textColor">@color/encre</item>
+        <item name="android:textColor">@color/ink</item>
     </style>
 
     <!-- Supporting information: distance, postcode, age of the data. -->
     <style name="TextAppearance.RoueLibre.Secondary" parent="TextAppearance.Material3.BodyMedium">
         <item name="android:fontFamily">@font/atkinson</item>
         <item name="android:textSize">@dimen/text_secondary</item>
-        <item name="android:textColor">@color/encre_douce</item>
+        <item name="android:textColor">@color/ink_soft</item>
         <item name="android:fontFeatureSettings">tnum</item>
     </style>
 
@@ -57,7 +57,7 @@
     <style name="TextAppearance.RoueLibre.Label" parent="TextAppearance.Material3.LabelMedium">
         <item name="android:fontFamily">@font/atkinson</item>
         <item name="android:textSize">@dimen/text_label</item>
-        <item name="android:textColor">@color/encre_douce</item>
+        <item name="android:textColor">@color/ink_soft</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:letterSpacing">0.08</item>
     </style>
@@ -92,8 +92,8 @@
         <item name="boxStrokeWidthFocused">2dp</item>
         <item name="boxBackgroundColor">@color/surface</item>
         <item name="hintTextColor">@color/signal</item>
-        <item name="android:textColorHint">@color/encre_douce</item>
-        <item name="endIconTint">@color/encre_douce</item>
+        <item name="android:textColorHint">@color/ink_soft</item>
+        <item name="endIconTint">@color/ink_soft</item>
         <item name="shapeAppearance">@style/ShapeAppearance.RoueLibre</item>
     </style>
 

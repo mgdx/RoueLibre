@@ -14,16 +14,16 @@
 .cxx
 local.properties
 
-# Jeux de données générés et sources téléchargées (voir tools/README.md).
-# Rien de tout cela n'a sa place dans le dépôt : les scripts les reproduisent.
+# Generated datasets and downloaded sources (see tools/README.md). None of it
+# belongs in the repository: the scripts reproduce them.
 /data/
 __pycache__/
 *.pyc
 /core/build
 /tools/node_modules
 
-# Clé de signature des essais installés à la main. Jamais dans le dépôt : une
-# clé versionnée n'est plus une clé (voir app/build.gradle.kts).
+# Signing key for hand-installed trial builds. Never in the repository: a
+# versioned key is no longer a key (see app/build.gradle.kts).
 keystore.properties
 *.jks
 *.keystore

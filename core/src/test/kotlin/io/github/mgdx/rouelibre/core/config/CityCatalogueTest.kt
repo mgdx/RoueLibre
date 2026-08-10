@@ -71,10 +71,10 @@ class CityCatalogueTest {
     fun `between two overlapping networks, the nearer one wins`() {
         val catalogue = catalogueOf(
             entry("large", south = 48.0, west = 2.0, north = 49.0, east = 3.0),
-            entry("proche", south = 48.8, west = 2.3, north = 48.9, east = 2.4),
+            entry("near", south = 48.8, west = 2.3, north = 48.9, east = 2.4),
         )
 
-        assertEquals("proche", catalogue.rank(NOTRE_DAME_DE_PARIS).first().id)
+        assertEquals("near", catalogue.rank(NOTRE_DAME_DE_PARIS).first().id)
     }
 
     @Test
@@ -82,12 +82,12 @@ class CityCatalogueTest {
         val document = """
             {
               "cities": [
-                { "id": "cassee", "displayName": "Cassée",
+                { "id": "broken", "displayName": "Broken",
                   "gbfsDiscoveryUrl": "https://example.org/gbfs.json",
                   "manifestUrl": "https://example.org/manifest.json",
                   "boundingBox": { "south": 49.0, "west": 2.0,
                                    "north": 48.0, "east": 3.0 } },
-                { "id": "saine", "displayName": "Saine",
+                { "id": "sound", "displayName": "Sound",
                   "gbfsDiscoveryUrl": "https://example.org/gbfs.json",
                   "manifestUrl": "https://example.org/manifest.json",
                   "boundingBox": { "south": 48.0, "west": 2.0,
@@ -97,12 +97,12 @@ class CityCatalogueTest {
         """.trimIndent()
 
         val catalogue = (CityCatalogueReader.read(document) as Outcome.Success).value
-        assertEquals(listOf("saine"), catalogue.cities.map { it.id })
+        assertEquals(listOf("sound"), catalogue.cities.map { it.id })
     }
 
     @Test
     fun `an unreadable catalogue returns a failure, not an exception`() {
-        assertTrue(CityCatalogueReader.read("{ pas du json") is Outcome.Failure)
+        assertTrue(CityCatalogueReader.read("{ not json") is Outcome.Failure)
         assertTrue(CityCatalogueReader.read("""{"cities": []}""") is Outcome.Failure)
     }
 

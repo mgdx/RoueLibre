@@ -23,16 +23,16 @@ import org.maplibre.geojson.Point
 object UserPositionMarker {
 
     /** The identifier of the GeoJSON source carrying the position. */
-    const val SOURCE_ID: String = "position-utilisateur"
+    const val SOURCE_ID: String = "user-position"
 
     /** The position disc's layer. */
-    const val LAYER_ID: String = "position-utilisateur-disque"
+    const val LAYER_ID: String = "user-position-disc"
 
     /** The disc, laid above the stations. */
     fun layer(context: Context): CircleLayer = CircleLayer(LAYER_ID, SOURCE_ID)
         .withProperties(
             PropertyFactory.circleRadius(7f),
-            PropertyFactory.circleColor(ContextCompat.getColor(context, R.color.encre)),
+            PropertyFactory.circleColor(ContextCompat.getColor(context, R.color.ink)),
             PropertyFactory.circleStrokeWidth(3f),
             PropertyFactory.circleStrokeColor(ContextCompat.getColor(context, R.color.surface)),
         )

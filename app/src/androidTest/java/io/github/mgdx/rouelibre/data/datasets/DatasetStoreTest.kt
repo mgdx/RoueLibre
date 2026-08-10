@@ -49,7 +49,7 @@ class DatasetStoreTest {
 
     @Test
     fun the_routing_graph_keeps_the_name_brouter_will_look_for() = runBlocking {
-        val source = fileNamed("E0_N50.rd5", "ceci n'est pas une base SQLite")
+        val source = fileNamed("E0_N50.rd5", "this is not an SQLite database")
 
         val result = store.importFrom(DatasetKind.Routing, Uri.fromFile(source))
 

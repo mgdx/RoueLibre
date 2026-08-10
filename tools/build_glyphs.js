@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 /*
- * Produit les glyphes de texte du fond de carte — SPEC.md §4.2.
+ * Produces the base map's text glyphs — SPEC.md §4.2.
  *
- * MapLibre ne dessine pas les étiquettes avec une police système : il lui faut
- * des glyphes précalculés en champ de distance signée, découpés en plages de
- * 256 caractères. Sans eux, la carte s'affiche mais reste muette — ni noms de
- * rues, ni noms de communes.
+ * MapLibre does not draw labels with a system font: it needs glyphs
+ * precomputed as signed distance fields, cut into ranges of 256 characters.
+ * Without them the map draws but stays mute — no street names, no municipality
+ * names.
  *
- * Ils sont EMBARQUÉS DANS L'APK, jamais téléchargés : un style qui va chercher
- * ses glyphes sur un serveur de polices ferait sortir une requête à chaque
- * déplacement de la carte, ce que la contrainte C3 du SPEC §2 exclut.
+ * They are EMBEDDED IN THE APK, never downloaded: a style that fetches its
+ * glyphs from a font server would send a request out on every pan of the map,
+ * which constraint C3 of SPEC §2 rules out.
  *
- * Les polices sont celles de l'application. La carte et l'interface parlent
- * ainsi la même langue typographique, et l'on n'embarque pas une famille de
- * plus pour le seul usage de la carte.
+ * The fonts are the application's own. The map and the interface then speak
+ * the same typographic language, and no extra family is embedded for the map
+ * alone.
  *
- * Usage :
- *   node tools/build_glyphs.js [répertoire de sortie]
+ * Usage:
+ *   node tools/build_glyphs.js [output directory]
  */
 
 const fs = require('fs');
@@ -28,18 +28,17 @@ const FONT_DIRECTORY = path.join(REPO_ROOT, 'app/src/main/res/font');
 const DEFAULT_OUTPUT = path.join(REPO_ROOT, 'app/src/main/assets/glyphs');
 
 /*
- * Les plages retenues, et pourquoi celles-là seulement.
+ * The ranges kept, and why only those.
  *
- *   0–255      latin de base et supplément latin-1 : tout le français courant,
- *              accents et guillemets « » compris.
- *   256–511    latin étendu A : le œ de « Cœur », le ł et le ż des noms
- *              d'origine polonaise, nombreux dans le bassin minier du Nord.
- *   8192–8447  ponctuation générale : l'apostrophe typographique ’, que la
- *              Base Adresse Nationale et OpenStreetMap emploient tous deux.
+ *   0–255      basic Latin and Latin-1 supplement: all everyday French,
+ *              accents and « » quotation marks included.
+ *   256–511    Latin Extended-A: the œ of "Cœur", the ł and ż of names of
+ *              Polish origin, common in the mining basin of the North.
+ *   8192–8447  general punctuation: the typographic apostrophe ’, which the
+ *              Base Adresse Nationale and OpenStreetMap both use.
  *
- * Chaque plage supplémentaire pèse quelques dizaines de kilooctets par
- * graisse. Les caractères absents s'affichent en blanc : mieux vaut vérifier
- * qu'ajouter par précaution.
+ * Every extra range weighs a few tens of kilobytes per weight. Missing
+ * characters draw blank: better to check than to add as a precaution.
  */
 const TEXT_RANGES = [
   [0, 255],
@@ -48,19 +47,19 @@ const TEXT_RANGES = [
 ];
 
 /*
- * Les marqueurs de stations n'affichent que des chiffres, tous dans la
- * première plage. Embarquer les accents et la ponctuation d'une police qui ne
- * sert qu'à cela coûterait cinquante kilooctets pour rien.
+ * The station markers show digits only, all in the first range. Embedding the
+ * accents and punctuation of a font used for nothing else would cost fifty
+ * kilobytes for nothing.
  */
 const DIGIT_RANGES = [[0, 255]];
 
 /*
- * Les noms de pile doivent correspondre exactement au `text-font` du style.
- * MapLibre demande alors `glyphs/<nom>/<début>-<fin>.pbf`.
+ * The stack names must match the style's `text-font` exactly. MapLibre then
+ * asks for `glyphs/<name>/<start>-<end>.pbf`.
  *
- * Bricolage porte les chiffres des marqueurs, comme il porte ceux de
- * l'indicateur dans la liste : l'élément signature doit se ressembler d'un
- * écran à l'autre.
+ * Bricolage carries the markers' digits, as it carries the indicator's in the
+ * list: the signature element must look the same from one screen to the
+ * next.
  */
 const FONT_STACKS = [
   {
@@ -88,7 +87,7 @@ async function main() {
   for (const { file } of FONT_STACKS) {
     const fontPath = path.join(FONT_DIRECTORY, file);
     if (!fs.existsSync(fontPath)) {
-      console.error(`Police introuvable : ${fontPath}`);
+      console.error(`Font not found: ${fontPath}`);
       process.exit(1);
     }
   }
@@ -110,7 +109,7 @@ async function main() {
       const target = path.join(stackDirectory, `${start}-${end}.pbf`);
       fs.writeFileSync(target, data);
       console.log(
-        `  ${stack} ${start}-${end} : ${(data.length / 1024).toFixed(1)} ko`,
+        `  ${stack} ${start}-${end}: ${(data.length / 1024).toFixed(1)} kB`,
       );
     }
   }
@@ -121,8 +120,8 @@ async function main() {
     ),
   ).reduce((sum, size) => sum + size, 0);
 
-  console.log(`\nGlyphes écrits dans ${outputDirectory}`);
-  console.log(`Total : ${(totalBytes / 1024).toFixed(0)} ko embarqués dans l'APK`);
+  console.log(`\nGlyphs written to ${outputDirectory}`);
+  console.log(`Total: ${(totalBytes / 1024).toFixed(0)} kB embedded in the APK`);
 }
 
 main().catch((error) => {

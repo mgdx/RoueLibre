@@ -139,7 +139,7 @@ class DeviceLocationTest {
         // The device's other providers may well stay active: what is verified
         // here is that a provider switched off is not read.
         assertNull(
-            "un fournisseur éteint ne doit rien rendre",
+            "a provider switched off must return nothing",
             runCatching { manager.getLastKnownLocation(LocationManager.GPS_PROVIDER) }.getOrNull(),
         )
     }

@@ -2,7 +2,7 @@
   "name": "roue-libre-tools",
   "version": "1.0.0",
   "private": true,
-  "description": "Outils de génération des glyphes du fond de carte. Voir tools/README.md.",
+  "description": "Tools generating the base map glyphs. See tools/README.md.",
   "license": "GPL-3.0-or-later",
   "scripts": {
     "glyphs": "node build_glyphs.js"

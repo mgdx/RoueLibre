@@ -32,16 +32,16 @@ object StationMarkers {
     const val SOURCE_ID: String = "stations"
 
     /** The layer of the discs of individual stations. */
-    const val STATION_CIRCLE_LAYER: String = "stations-disque"
+    const val STATION_CIRCLE_LAYER: String = "stations-disc"
 
     /** The layer of the figures of individual stations. */
-    const val STATION_COUNT_LAYER: String = "stations-nombre"
+    const val STATION_COUNT_LAYER: String = "stations-count"
 
     /** The cluster layer, at distant zooms. */
-    const val CLUSTER_CIRCLE_LAYER: String = "stations-amas"
+    const val CLUSTER_CIRCLE_LAYER: String = "stations-cluster"
 
     /** The layer of the count a cluster carries. */
-    const val CLUSTER_COUNT_LAYER: String = "stations-amas-nombre"
+    const val CLUSTER_COUNT_LAYER: String = "stations-cluster-count"
 
     /** The property carrying the number shown: bikes or docks per the mode. */
     const val COUNT_PROPERTY: String = "count"
@@ -55,12 +55,12 @@ object StationMarkers {
     /** The property carrying the name, spoken by screen readers. */
     const val NAME_PROPERTY: String = "name"
 
-    private const val LEVEL_NONE = "aucun"
-    private const val LEVEL_LOW = "faible"
-    private const val LEVEL_MEDIUM = "moyen"
-    private const val LEVEL_GOOD = "bon"
-    private const val LEVEL_OUT_OF_SERVICE = "hors-service"
-    private const val LEVEL_UNKNOWN = "inconnu"
+    private const val LEVEL_NONE = "none"
+    private const val LEVEL_LOW = "low"
+    private const val LEVEL_MEDIUM = "medium"
+    private const val LEVEL_GOOD = "good"
+    private const val LEVEL_OUT_OF_SERVICE = "out-of-service"
+    private const val LEVEL_UNKNOWN = "unknown"
 
     /** The figures' typeface, the same as the list indicator's. */
     private val DIGIT_FONT = arrayOf("Bricolage Grotesque Bold")
@@ -175,7 +175,7 @@ object StationMarkers {
             ),
             PropertyFactory.circleColor(colour(context, R.color.surface)),
             PropertyFactory.circleStrokeWidth(2f),
-            PropertyFactory.circleStrokeColor(colour(context, R.color.encre)),
+            PropertyFactory.circleStrokeColor(colour(context, R.color.ink)),
             PropertyFactory.circleOpacity(0.92f),
         )
         .withFilter(Expression.has("point_count"))
@@ -187,7 +187,7 @@ object StationMarkers {
                 PropertyFactory.textField(Expression.get("point_count_abbreviated")),
                 PropertyFactory.textFont(DIGIT_FONT),
                 PropertyFactory.textSize(14f),
-                PropertyFactory.textColor(colour(context, R.color.encre)),
+                PropertyFactory.textColor(colour(context, R.color.ink)),
                 PropertyFactory.textAllowOverlap(true),
                 PropertyFactory.textIgnorePlacement(true),
             )
@@ -198,9 +198,12 @@ object StationMarkers {
         Expression.get(LEVEL_PROPERTY),
         Expression.color(colour(context, R.color.map_marker_minor)),
         Expression.stop(LEVEL_NONE, Expression.color(colour(context, R.color.surface))),
-        Expression.stop(LEVEL_LOW, Expression.color(colour(context, R.color.dispo_faible))),
-        Expression.stop(LEVEL_MEDIUM, Expression.color(colour(context, R.color.dispo_moyenne))),
-        Expression.stop(LEVEL_GOOD, Expression.color(colour(context, R.color.dispo_bonne))),
+        Expression.stop(LEVEL_LOW, Expression.color(colour(context, R.color.availability_low))),
+        Expression.stop(
+            LEVEL_MEDIUM,
+            Expression.color(colour(context, R.color.availability_medium)),
+        ),
+        Expression.stop(LEVEL_GOOD, Expression.color(colour(context, R.color.availability_good))),
         Expression.stop(
             LEVEL_OUT_OF_SERVICE,
             Expression.color(colour(context, R.color.map_marker_minor)),
@@ -214,19 +217,19 @@ object StationMarkers {
     /** The figure's colour, chosen to contrast with its disc. */
     private fun inkExpression(context: Context): Expression = Expression.match(
         Expression.get(LEVEL_PROPERTY),
-        Expression.color(colour(context, R.color.encre)),
-        Expression.stop(LEVEL_NONE, Expression.color(colour(context, R.color.alerte))),
+        Expression.color(colour(context, R.color.ink)),
+        Expression.stop(LEVEL_NONE, Expression.color(colour(context, R.color.alert))),
         Expression.stop(
             LEVEL_LOW,
-            Expression.color(colour(context, R.color.dispo_faible_encre)),
+            Expression.color(colour(context, R.color.availability_low_ink)),
         ),
         Expression.stop(
             LEVEL_MEDIUM,
-            Expression.color(colour(context, R.color.dispo_moyenne_encre)),
+            Expression.color(colour(context, R.color.availability_medium_ink)),
         ),
         Expression.stop(
             LEVEL_GOOD,
-            Expression.color(colour(context, R.color.dispo_bonne_encre)),
+            Expression.color(colour(context, R.color.availability_good_ink)),
         ),
     )
 

@@ -14,27 +14,27 @@
              boldness is spent in a single place. -->
         <item name="colorPrimary">@color/signal</item>
         <item name="colorOnPrimary">@color/surface</item>
-        <item name="colorSecondary">@color/encre_douce</item>
+        <item name="colorSecondary">@color/ink_soft</item>
         <item name="colorOnSecondary">@color/surface</item>
-        <item name="colorError">@color/alerte</item>
+        <item name="colorError">@color/alert</item>
         <item name="colorOnError">@color/surface</item>
 
-        <item name="android:colorBackground">@color/papier</item>
-        <item name="colorOnBackground">@color/encre</item>
+        <item name="android:colorBackground">@color/paper</item>
+        <item name="colorOnBackground">@color/ink</item>
         <item name="colorSurface">@color/surface</item>
-        <item name="colorOnSurface">@color/encre</item>
-        <item name="colorSurfaceVariant">@color/papier</item>
-        <item name="colorOnSurfaceVariant">@color/encre_douce</item>
-        <item name="colorOutline">@color/trait</item>
+        <item name="colorOnSurface">@color/ink</item>
+        <item name="colorSurfaceVariant">@color/paper</item>
+        <item name="colorOnSurfaceVariant">@color/ink_soft</item>
+        <item name="colorOutline">@color/outline</item>
         <!-- Inverted surfaces: the alert bar shows on a background opposite
              to the screen's. Without these three roles, Material would bring
              its default purple back there. -->
         <item name="colorSurfaceInverse">@color/surface_inverse</item>
-        <item name="colorOnSurfaceInverse">@color/encre_inverse</item>
+        <item name="colorOnSurfaceInverse">@color/ink_inverse</item>
         <item name="colorPrimaryInverse">@color/signal_inverse</item>
 
-        <item name="android:statusBarColor">@color/papier</item>
-        <item name="android:navigationBarColor">@color/papier</item>
+        <item name="android:statusBarColor">@color/paper</item>
+        <item name="android:navigationBarColor">@color/paper</item>
         <item name="android:windowLightStatusBar">true</item>
 
         <item name="android:textAppearance">@style/TextAppearance.RoueLibre.Body</item>

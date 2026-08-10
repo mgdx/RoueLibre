@@ -95,7 +95,7 @@ class DataManifestTest {
 
     @Test
     fun `an unreadable manifest returns a failure, not an exception`() {
-        assertTrue(DataManifestReader.read("{ ceci n'est pas du json") is Outcome.Failure)
+        assertTrue(DataManifestReader.read("{ this is not json") is Outcome.Failure)
     }
 
     @Test

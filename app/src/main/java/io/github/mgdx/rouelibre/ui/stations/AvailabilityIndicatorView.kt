@@ -148,16 +148,16 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
         if (display.isOutOfService) {
             return IndicatorPalette(
                 fillColour = null,
-                ringColour = colour(R.color.encre_douce),
-                inkColour = colour(R.color.encre_douce),
+                ringColour = colour(R.color.ink_soft),
+                inkColour = colour(R.color.ink_soft),
                 ringDashes = outOfServiceDashes,
             )
         }
         return when (display.level) {
             null -> IndicatorPalette(
                 fillColour = null,
-                ringColour = colour(R.color.encre_douce),
-                inkColour = colour(R.color.encre_douce),
+                ringColour = colour(R.color.ink_soft),
+                inkColour = colour(R.color.ink_soft),
                 ringDashes = unknownDashes,
             )
 
@@ -165,29 +165,29 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
                 // An open ring, unfilled: the absence shows in the disc being
                 // empty, not only in the figure being 0.
                 fillColour = null,
-                ringColour = colour(R.color.alerte),
-                inkColour = colour(R.color.alerte),
+                ringColour = colour(R.color.alert),
+                inkColour = colour(R.color.alert),
                 ringDashes = null,
             )
 
             AvailabilityLevel.Low -> IndicatorPalette(
-                fillColour = colour(R.color.dispo_faible),
-                ringColour = colour(R.color.dispo_faible),
-                inkColour = colour(R.color.dispo_faible_encre),
+                fillColour = colour(R.color.availability_low),
+                ringColour = colour(R.color.availability_low),
+                inkColour = colour(R.color.availability_low_ink),
                 ringDashes = null,
             )
 
             AvailabilityLevel.Medium -> IndicatorPalette(
-                fillColour = colour(R.color.dispo_moyenne),
-                ringColour = colour(R.color.dispo_moyenne),
-                inkColour = colour(R.color.dispo_moyenne_encre),
+                fillColour = colour(R.color.availability_medium),
+                ringColour = colour(R.color.availability_medium),
+                inkColour = colour(R.color.availability_medium_ink),
                 ringDashes = null,
             )
 
             AvailabilityLevel.Good -> IndicatorPalette(
-                fillColour = colour(R.color.dispo_bonne),
-                ringColour = colour(R.color.dispo_bonne),
-                inkColour = colour(R.color.dispo_bonne_encre),
+                fillColour = colour(R.color.availability_good),
+                ringColour = colour(R.color.availability_good),
+                inkColour = colour(R.color.availability_good_ink),
                 ringDashes = null,
             )
         }

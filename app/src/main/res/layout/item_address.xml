@@ -33,7 +33,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/encre_douce"
+        app:tint="@color/ink_soft"
         tools:src="@drawable/ic_search" />
 
     <TextView

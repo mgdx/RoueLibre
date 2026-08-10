@@ -66,7 +66,7 @@
         android:paddingEnd="@dimen/space_m"
         android:paddingBottom="@dimen/space_s"
         android:textAppearance="@style/TextAppearance.RoueLibre.Body"
-        android:textColor="@color/alerte"
+        android:textColor="@color/alert"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

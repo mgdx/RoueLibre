@@ -106,7 +106,7 @@ class AddressNormalizerTest {
 
     @Test
     fun `an unreadable rules file returns a failure, not an exception`() {
-        val outcome = AddressNormalizerReader.read("{ ceci n'est pas du json")
+        val outcome = AddressNormalizerReader.read("{ this is not json")
         assertTrue(outcome is Outcome.Failure)
     }
 

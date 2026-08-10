@@ -185,20 +185,20 @@ class JourneyPlannerTest {
         val stations = listOf(
             station("depart", at(0.0, 100.0)),
             station("pleine", at(0.0, 3900.0), docks = 0),
-            station("avec-places", at(0.0, 3500.0), docks = 7),
+            station("with-docks", at(0.0, 3500.0), docks = 7),
         )
         val planner = JourneyPlanner(FakeRouter())
 
         val plan = planner.plan(origin, destination, stations) as JourneyPlan.Found
 
-        assertEquals("avec-places", plan.best.arrivalStation.id)
+        assertEquals("with-docks", plan.best.arrivalStation.id)
         assertTrue(plan.best.docksAtArrival >= 1)
     }
 
     @Test
     fun `ignores a station that no longer rents, even full of bikes`() = runTest {
         val stations = listOf(
-            station("hors-service", at(0.0, 100.0), bikes = 20, renting = false),
+            station("out-of-service", at(0.0, 100.0), bikes = 20, renting = false),
             station("en-service", at(0.0, 600.0), bikes = 4),
             station("arrivee", at(0.0, 3900.0)),
         )

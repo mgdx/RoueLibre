@@ -1,16 +1,15 @@
-# Profil vélo urbain — Roue Libre
+# City bike profile — Roue Libre
 #
-# Sert le trajet principal, de station à station (SPEC.md §5). Il décrit un
-# vélo de libre-service : lourd, une vingtaine de kilos, position droite,
-# pneus étroits, pas de suspension, souvent pas de vitesses utiles. Ce n'est ni
-# un vélo de route ni un VTT, et les profils amont — fastbike, mtb — le
-# serviraient mal.
+# Serves the main leg, from station to station (SPEC.md §5). It describes a
+# bike-share bike: heavy, some twenty kilos, upright riding position, narrow
+# tyres, no suspension, often no usable gears. It is neither a road bike nor a
+# mountain bike, and the upstream profiles — fastbike, mtb — would serve it
+# badly.
 #
-# Les facteurs de coût multiplient la distance. Un facteur de 2 signifie qu'on
-# acceptera un détour allant jusqu'au double de la longueur pour éviter ce type
-# de voie.
+# The cost factors multiply distance. A factor of 2 means a detour of up to
+# twice the length will be accepted to avoid that kind of way.
 #
-# Licence : GPLv3, comme le reste du projet.
+# Licence: GPLv3, like the rest of the project.
 
 ---context:global
 
@@ -18,10 +17,10 @@ assign validForBikes = true
 
 assign turnInstructionMode = 0
 
-# La métropole lilloise est plate — une cinquantaine de mètres de dénivelé au
-# total. La pénalité de montée n'est donc pas nulle, parce qu'un vélo de
-# libre-service pèse lourd et grimpe mal, mais elle reste faible : elle ne
-# doit pas provoquer de détour sur un terrain qui n'a pas de vraies côtes.
+# The Lille metropolis is flat — some fifty metres of climb in all. The uphill
+# penalty is therefore not zero, because a bike-share bike is heavy and climbs
+# poorly, but it stays low: it must not cause a detour on terrain that has no
+# real hills.
 assign downhillcost = 0
 assign downhillcutoff = 2.0
 assign uphillcost = 40
@@ -29,19 +28,18 @@ assign uphillcutoff = 2.0
 
 ---context:way
 
-# Chaque changement de direction coûte : ralentir, regarder, redémarrer un
-# vélo lourd. Assez pour préférer un itinéraire simple à longueur égale, pas
-# assez pour allonger sensiblement le trajet.
+# Every change of direction costs: slowing down, looking, and getting a heavy
+# bike moving again. Enough to prefer a simple route at equal length, not
+# enough to lengthen the journey appreciably.
 assign turncost = 60
 
-# Coût d'entrée dans une voie : sert à décourager les enchaînements de petits
-# tronçons hétérogènes.
+# Cost of entering a way: discourages chains of short, mismatched sections.
 assign initialcost = 0
 
-# --- sens interdits ------------------------------------------------------
+# --- wrong ways ----------------------------------------------------------
 
-# Le double-sens cyclable est très répandu dans les zones 30 lilloises : le
-# refuser interdirait la moitié du centre-ville.
+# Contraflow cycling is very common in Lille's 30 km/h zones: refusing it
+# would rule out half the city centre.
 assign bicycle_may_go_against =
   or oneway:bicycle=no
   or cycleway=opposite|opposite_lane|opposite_track
@@ -52,58 +50,57 @@ assign is_wrong_way =
   and oneway=yes|true|1
   not bicycle_may_go_against
 
-# --- accès ---------------------------------------------------------------
+# --- access --------------------------------------------------------------
 
 assign bicycle_refused = bicycle=no|private|use_sidepath
 
 assign closed_to_all =
   and access=no|private not bicycle=yes|designated|permissive
 
-# Voies rapides : interdites au vélo, et mortelles si l'on s'y trompe.
+# Fast roads: forbidden to bikes, and deadly if one strays onto them.
 assign motorway_like = highway=motorway|motorway_link|trunk|trunk_link
 
 assign is_forbidden =
   or is_wrong_way or bicycle_refused or closed_to_all motorway_like
 
-# --- revêtement ----------------------------------------------------------
+# --- surface -------------------------------------------------------------
 
-# Le pavé est partout dans le Nord, et c'est le vrai sujet de confort pour un
-# vélo sans suspension à pneus étroits. Un pavé de qualité reste roulable, un
-# pavé ancien secoue au point qu'on préfère nettement contourner.
+# Cobbles are everywhere in the North, and they are the real comfort question
+# for a bike with no suspension and narrow tyres. Good-quality setts stay
+# rideable; old cobbles shake enough that one would clearly rather go round.
 assign surface_penalty =
   switch surface=asphalt|paved|concrete|paving_stones|metal|wood 1.0
   switch surface=sett 1.5
   switch surface=cobblestone 2.0
   switch surface=compacted|fine_gravel 1.3
   switch surface=gravel|ground|dirt|earth|grass|sand|mud 2.4
-  # Revêtement non renseigné : en ville, c'est de l'asphalte neuf fois sur dix.
+  # Surface not stated: in town, it is asphalt nine times out of ten.
   1.0
 
-# --- type de voie --------------------------------------------------------
+# --- kind of way ---------------------------------------------------------
 
-# Aménagements faits pour le vélo.
+# Infrastructure built for cycling.
 assign cycle_way =
   or highway=cycleway
   or cyclestreet=yes
   or bicycle_road=yes
   and highway=path|footway bicycle=designated
 
-# Voies apaisées où le vélo circule bien avec les voitures.
+# Calmed streets where a bike mixes well with cars.
 assign calm_way = highway=living_street|residential|service|unclassified|road
 
 assign base_cost
 
   switch is_forbidden 100000
 
-  # Les marches se franchissent vélo à la main. C'est possible, jamais
-  # souhaitable, et un vélo de libre-service est trop lourd pour le faire de
-  # bon cœur.
+  # Steps are taken with the bike in hand. It is possible, never desirable,
+  # and a bike-share bike is too heavy to do it willingly.
   switch highway=steps 40
 
-  # Une aire piétonne se traverse au pas. Tolérée, jamais préférée.
+  # A pedestrian area is crossed at walking pace. Tolerated, never preferred.
   switch highway=pedestrian 3.0
 
-  # Un trottoir sans autorisation cyclable : praticable à pied, à éviter.
+  # A pavement with no cycling permission: passable on foot, to be avoided.
   switch and highway=footway not bicycle=designated|yes 8.0
 
   switch cycle_way 1.0
@@ -116,20 +113,20 @@ assign base_cost
 
   2.5
 
-# Le coût final combine le type de voie et son revêtement : une piste cyclable
-# pavée n'est pas une piste cyclable lisse.
+# The final cost combines the kind of way with its surface: a cobbled cycle
+# track is not a smooth cycle track.
 assign costfactor
   switch equal base_cost 100000 100000
   multiply base_cost surface_penalty
 
 ---context:node
 
-# Ce qui oblige à descendre de vélo, ou l'interdit franchement.
+# What forces one off the bike, or forbids it outright.
 assign initialcost =
   switch bicycle=no|private 1000000
-  # Une barrière à contourner coûte le temps de mettre pied à terre.
+  # A barrier to get round costs the time of putting a foot down.
   switch barrier=gate|lift_gate|swing_gate|cycle_barrier|block|bollard 400
-  # Un feu tricolore coûte une attente moyenne, ce qui justifie un léger
-  # détour par un itinéraire qui en compte moins.
+  # Traffic lights cost an average wait, which justifies a slight detour by a
+  # route that has fewer of them.
   switch highway=traffic_signals 120
   0

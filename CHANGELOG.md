@@ -38,6 +38,10 @@ also records what has no visible effect.
   single namespace: three `tiles.mbtiles` would overwrite one another. On the
   device each file recovers its bare name — BRouter recognises its segments by
   name and would not find `vlille-E0_N50.rd5`.
+- **The repository speaks English.** Comments, KDoc, documentation, commit
+  messages, test names and the identifiers of the map style and of the design
+  tokens. The interface stays French, and `values/` remains its source: it is
+  the users' language, not the contributors' (`SPEC.md` §14).
 
 ### Fixed
 

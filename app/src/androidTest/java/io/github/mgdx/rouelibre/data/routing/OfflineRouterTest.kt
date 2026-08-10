@@ -88,7 +88,7 @@ class OfflineRouterTest {
             ?: throw AssertionError("cycling failure: $onBike")
 
         assertTrue(
-            "la marche devrait être plus lente que le vélo",
+            "walking should be slower than cycling",
             walking.duration > cycling.duration,
         )
     }
@@ -102,11 +102,11 @@ class OfflineRouterTest {
         // The engine snaps the ends to the nearest usable node; a few tens of
         // metres of difference are normal, kilometres are not.
         assertTrue(
-            "le tracé ne part pas du point demandé",
+            "the track does not start at the requested point",
             leg.geometry.first().distanceInMetresTo(lilleCentre) < TOLERANCE_METRES,
         )
         assertTrue(
-            "le tracé n'arrive pas au point demandé",
+            "the track does not end at the requested point",
             leg.geometry.last().distanceInMetresTo(roubaixCentre) < TOLERANCE_METRES,
         )
     }

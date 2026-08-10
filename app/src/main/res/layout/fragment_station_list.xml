@@ -37,7 +37,7 @@
         android:layout_marginEnd="@dimen/space_s"
         android:contentDescription="@string/storage_open"
         app:icon="@drawable/ic_storage"
-        app:iconTint="@color/encre"
+        app:iconTint="@color/ink"
         app:layout_constraintBottom_toBottomOf="@id/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/title" />
@@ -51,7 +51,7 @@
         android:layout_height="@dimen/touch_target_min"
         android:contentDescription="@string/favourites_open"
         app:icon="@drawable/ic_favourite"
-        app:iconTint="@color/encre"
+        app:iconTint="@color/ink"
         app:layout_constraintBottom_toBottomOf="@id/title"
         app:layout_constraintEnd_toStartOf="@id/open_storage"
         app:layout_constraintTop_toTopOf="@id/title" />

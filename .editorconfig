@@ -1,5 +1,5 @@
-# Formatage automatique, appliqué par ktlint (SPEC §14).
-# `./gradlew ktlintFormat` corrige, `./gradlew ktlintCheck` vérifie.
+# Automatic formatting, applied by ktlint (SPEC §14).
+# `./gradlew ktlintFormat` fixes, `./gradlew ktlintCheck` verifies.
 
 root = true
 
@@ -12,16 +12,16 @@ indent_style = space
 indent_size = 4
 
 [*.{kt,kts}]
-# Le style « ktlint_official » impose des retours à la ligne sur toute
-# expression multiligne, y compris là où la forme compacte se lit mieux.
-# Le style IntelliJ reste strict sur l'essentiel — indentation, imports,
-# espaces — sans réécrire la mise en forme des expressions.
+# The "ktlint_official" style forces line breaks on every multi-line
+# expression, including where the compact form reads better. The IntelliJ
+# style stays strict on what matters — indentation, imports, spacing —
+# without rewriting how expressions are laid out.
 ktlint_code_style = intellij_idea
 max_line_length = 100
 ij_kotlin_allow_trailing_comma = true
 ij_kotlin_allow_trailing_comma_on_call_site = true
-# Les noms de tests sont des phrases françaises entre accents graves : c'est
-# ce qui rend le rapport d'exécution lisible sans ouvrir le code.
+# Test names are sentences between backticks: that is what makes the test
+# report readable without opening the code.
 ktlint_function_naming_ignore_when_annotated_with = Test
 
 [*.{json,yaml,yml}]

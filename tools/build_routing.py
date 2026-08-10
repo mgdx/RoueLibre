@@ -98,7 +98,7 @@ def run_java(jar: Path, main_class: str, arguments: list[str], step: str,
     )
     if completed.returncode != 0:
         raise GenerationError(
-            f"Échec de l'étape « {step} » (code {completed.returncode}).\n"
+            f"Step \"{step}\" failed (code {completed.returncode}).\n"
             f"{(completed.stderr or completed.stdout).strip()[-2000:]}"
         )
     # The map creator writes its progress report to either stream depending on
@@ -112,7 +112,7 @@ def run_command(command: list[str], step: str) -> None:
     )
     if completed.returncode != 0:
         raise GenerationError(
-            f"Échec de l'étape « {step} » (code {completed.returncode}).\n"
+            f"Step \"{step}\" failed (code {completed.returncode}).\n"
             f"{completed.stderr.strip()[:2000]}"
         )
 
@@ -148,23 +148,23 @@ def ensure_brouter(cache_dir: Path) -> tuple[Path, Path]:
     profiles = cache_dir / "profiles"
 
     if not archive.exists():
-        print(f"[0/4] Téléchargement de BRouter {BROUTER_VERSION}…")
+        print(f"[0/4] Downloading BRouter {BROUTER_VERSION}…")
         download(BROUTER_RELEASE_URL, archive)
 
     actual = sha256_of(archive)
     if actual != BROUTER_RELEASE_SHA256:
         archive.unlink()
         raise GenerationError(
-            "L'archive BRouter téléchargée ne correspond pas à l'empreinte "
-            f"attendue.\n  attendu : {BROUTER_RELEASE_SHA256}\n"
-            f"  obtenu  : {actual}\nArchive supprimée ; relance le script."
+            "The downloaded BRouter archive does not match the expected "
+            f"digest.\n  expected: {BROUTER_RELEASE_SHA256}\n"
+            f"  got     : {actual}\nArchive deleted; run the script again."
         )
 
     if not jar.exists():
         with zipfile.ZipFile(archive) as archive_file:
             archive_file.extractall(cache_dir)
     if not jar.exists():
-        raise GenerationError(f"Jar BRouter introuvable après extraction : {jar}")
+        raise GenerationError(f"BRouter jar not found after unpacking: {jar}")
 
     profiles.mkdir(parents=True, exist_ok=True)
     shutil.copy(unpacked / "profiles2" / "lookups.dat", profiles / "lookups.dat")
@@ -173,7 +173,7 @@ def ensure_brouter(cache_dir: Path) -> tuple[Path, Path]:
         if not target.exists():
             download(BROUTER_PROFILE_BASE_URL + name, target)
 
-    print(f"[0/4] BRouter {BROUTER_VERSION} prêt (empreinte vérifiée).")
+    print(f"[0/4] BRouter {BROUTER_VERSION} ready (digest verified).")
     return jar, profiles
 
 
@@ -207,7 +207,7 @@ def prepare_elevation(box: BoundingBox, cache_dir: Path, work_dir: Path) -> Path
         hgt_file = hgt_dir / f"{tile}.hgt"
         if hgt_file.exists():
             continue
-        print(f"      téléchargement de l'altimétrie {tile}…")
+        print(f"      downloading elevation data {tile}…")
         compressed = hgt_dir / f"{tile}.hgt.gz"
         download(
             ELEVATION_TILE_URL.format(latitude=tile[:3], tile=tile), compressed
@@ -219,13 +219,13 @@ def prepare_elevation(box: BoundingBox, cache_dir: Path, work_dir: Path) -> Path
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--osm-extract", type=Path, required=True,
-                        help="extrait OpenStreetMap régional au format .osm.pbf")
+                        help="regional OpenStreetMap extract in .osm.pbf format")
     parser.add_argument("--config", type=Path, default=DEFAULT_CITY_CONFIG)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--work-dir", type=Path, default=DEFAULT_WORK_DIR)
     parser.add_argument("--cache-dir", type=Path, default=DEFAULT_CACHE_DIR)
     parser.add_argument("--no-elevation", action="store_true",
-                        help="ne pas attacher l'altimétrie au graphe")
+                        help="do not attach elevation data to the graph")
     parser.add_argument("--keep-intermediate", action="store_true")
     return parser.parse_args()
 
@@ -235,13 +235,13 @@ def main() -> int:
     try:
         if shutil.which("osmium") is None:
             raise GenerationError(
-                "osmium est absent. Installe-le : sudo apt install osmium-tool"
+                "osmium is missing. Install it: sudo apt install osmium-tool"
             )
         if shutil.which("java") is None:
-            raise GenerationError("java est absent (JDK 17 ou plus requis).")
+            raise GenerationError("java is missing (JDK 17 or later required).")
         if not arguments.osm_extract.exists():
             raise GenerationError(
-                f"Extrait OSM introuvable : {arguments.osm_extract}"
+                f"OSM extract not found: {arguments.osm_extract}"
             )
 
         # Resolved because the map creator runs with its own working
@@ -269,16 +269,16 @@ def main() -> int:
         # pass through, all the way across the country. Turn restrictions are
         # local to a junction and survive this strategy intact.
         area_extract = work / "area.osm.pbf"
-        print("[1/4] Découpe de l'extrait régional sur l'emprise…")
+        print("[1/4] Cutting the regional extract down to the box…")
         run_command(
             ["osmium", "extract", "--bbox", box.as_osmium_extract_argument(),
              "--strategy", "complete_ways", "--overwrite",
              "-o", area_extract, arguments.osm_extract],
             "osmium extract",
         )
-        print(f"      → {area_extract.stat().st_size / 1e6:.1f} Mo")
+        print(f"      → {area_extract.stat().st_size / 1e6:.1f} MB")
 
-        print("[2/4] Découpe OSM en tuiles de nœuds et de chemins…")
+        print("[2/4] Cutting OSM into node and way tiles…")
         output = run_java(
             jar, "btools.mapcreator.OsmFastCutter",
             [str(profiles / "lookups.dat"),
@@ -294,10 +294,10 @@ def main() -> int:
             if "turn-restrictions" in line:
                 print(f"      {line.strip()}")
 
-        print("[3/4] Unification des positions et altimétrie…")
+        print("[3/4] Unifying positions and elevation…")
         elevation_arguments: list[str] = []
         if arguments.no_elevation:
-            print("      altimétrie désactivée (--no-elevation)")
+            print("      elevation disabled (--no-elevation)")
             empty = work / "srtm-empty"
             empty.mkdir(exist_ok=True)
             elevation_arguments = [str(empty)]
@@ -307,7 +307,7 @@ def main() -> int:
             bef_dir.mkdir(parents=True, exist_ok=True)
             tile_name = brouter_elevation_tile_name(box)
             if not (bef_dir / f"{tile_name}.bef").exists():
-                print(f"      conversion de {tile_name} au format BRouter…")
+                print(f"      converting {tile_name} to the BRouter format…")
                 run_java(
                     jar, "btools.mapcreator.ElevationRasterTileConverter",
                     [tile_name, str(hgt_dir), str(bef_dir), "1"],
@@ -323,7 +323,7 @@ def main() -> int:
             "PosUnifier",
         )
 
-        print("[4/4] Assemblage du graphe routable…")
+        print("[4/4] Assembling the routable graph…")
         run_java(
             jar, "btools.mapcreator.WayLinker",
             [str(work / "unodes55"), str(work / "waytiles55"),
@@ -338,8 +338,8 @@ def main() -> int:
         segments = sorted((work / "segments").glob("*.rd5"))
         if not segments:
             raise GenerationError(
-                "Aucun fichier rd5 produit : le graphe est vide. Vérifie que "
-                "l'emprise recoupe bien l'extrait OSM fourni."
+                "No rd5 file produced: the graph is empty. Check that the box "
+                "really overlaps the OSM extract given."
             )
 
         arguments.output_dir.mkdir(parents=True, exist_ok=True)
@@ -354,9 +354,9 @@ def main() -> int:
         print(f"Graphe produit  : {arguments.output_dir}")
         for segment in segments:
             print(f"  {segment.name:16} "
-                  f"{(arguments.output_dir / segment.name).stat().st_size / 1e6:.2f} Mo")
-        print(f"Taille totale   : {total / 1e6:.2f} Mo")
-        print(f"Durée           : {elapsed / 60:.1f} min")
+                  f"{(arguments.output_dir / segment.name).stat().st_size / 1e6:.2f} MB")
+        print(f"Total size      : {total / 1e6:.2f} MB")
+        print(f"Duration        : {elapsed / 60:.1f} min")
         print(f"{'':=<60}")
 
         if not arguments.keep_intermediate:
@@ -364,7 +364,7 @@ def main() -> int:
         return 0
 
     except GenerationError as error:
-        print(f"\nErreur : {error}", file=sys.stderr)
+        print(f"\nError: {error}", file=sys.stderr)
         return 1
 
 

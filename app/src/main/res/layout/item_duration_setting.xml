@@ -30,7 +30,7 @@
         android:layout_width="@dimen/touch_target_min"
         android:layout_height="@dimen/touch_target_min"
         app:icon="@drawable/ic_minus"
-        app:iconTint="@color/encre"
+        app:iconTint="@color/ink"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/value"
         app:layout_constraintTop_toTopOf="parent" />
@@ -54,7 +54,7 @@
         android:layout_width="@dimen/touch_target_min"
         android:layout_height="@dimen/touch_target_min"
         app:icon="@drawable/ic_plus"
-        app:iconTint="@color/encre"
+        app:iconTint="@color/ink"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

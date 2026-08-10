@@ -12,24 +12,24 @@
 -->
 <resources>
 
-    <color name="papier">#0E1418</color>
+    <color name="paper">#0E1418</color>
     <color name="surface">#172027</color>
-    <color name="encre">#E7EDF1</color>
-    <color name="encre_douce">#93A3AD</color>
+    <color name="ink">#E7EDF1</color>
+    <color name="ink_soft">#93A3AD</color>
     <color name="signal">#3FBFCE</color>
-    <color name="alerte">#E0913F</color>
+    <color name="alert">#E0913F</color>
 
-    <color name="dispo_faible">#1B3D44</color>
-    <color name="dispo_moyenne">#22707C</color>
-    <color name="dispo_bonne">#3FBFCE</color>
-    <color name="dispo_faible_encre">#E7EDF1</color>
-    <color name="dispo_moyenne_encre">#E7EDF1</color>
-    <color name="dispo_bonne_encre">#0E1418</color>
+    <color name="availability_low">#1B3D44</color>
+    <color name="availability_medium">#22707C</color>
+    <color name="availability_good">#3FBFCE</color>
+    <color name="availability_low_ink">#E7EDF1</color>
+    <color name="availability_medium_ink">#E7EDF1</color>
+    <color name="availability_good_ink">#0E1418</color>
 
     <!-- Ink laid on a flat of the signal hue. -->
     <color name="surface_on_signal">#0E1418</color>
 
-    <color name="trait">#2A363F</color>
+    <color name="outline">#2A363F</color>
 
     <!-- The signal hue darkened, for inverted surfaces. -->
     <color name="signal_inverse">#00636F</color>
@@ -38,7 +38,7 @@
     <color name="surface_inverse">#E7EDF1</color>
 
     <!-- Ink laid on an inverted surface. -->
-    <color name="encre_inverse">#0E1418</color>
+    <color name="ink_inverse">#0E1418</color>
 
     <!-- The base map's palette, dark theme. The same desaturation with
          inverted values: the map stays scenery under the markers. -->

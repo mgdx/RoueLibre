@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
 #
-# Régénère les trois jeux de données hors ligne en une seule commande.
-# SPEC.md §15 : « Produire les données d'une autre ville doit être une seule
-# commande. »
+# Regenerates the three offline datasets in a single command.
+# SPEC.md §15: "Producing the data of another city must be a single command."
 #
-# Usage :
+# Usage:
 #   tools/generate_all.sh [--city config/cities/lille.json]
 #                         [--region europe/france/nord-pas-de-calais]
 #                         [--departments 59,62]
 #                         [--release-tag data-AAAA-MM]
 #                         [--skip-download]
 #
-# Les téléchargements sources (extrait OSM, extraits BAN) sont conservés dans
-# data/ et réutilisés d'une exécution à l'autre.
+# The source downloads (OSM extract, BAN extracts) are kept in data/ and
+# reused from one run to the next.
 
 set -euo pipefail
 
@@ -33,24 +32,24 @@ while [[ $# -gt 0 ]]; do
     --release-tag)  RELEASE_TAG="$2"; shift 2 ;;
     --skip-download) SKIP_DOWNLOAD=1; shift ;;
     -h|--help)      sed -n '2,20p' "$0"; exit 0 ;;
-    *) echo "Option inconnue : $1" >&2; exit 1 ;;
+    *) echo "Unknown option: $1" >&2; exit 1 ;;
   esac
 done
 
-# Le module sqlite3 de certaines distributions Python — conda notamment — est
-# compilé sans FTS4, seul moteur de recherche plein texte garanti sur les
-# Android que vise l'application. On impose donc le Python système.
+# Some distributions' Python builds their sqlite3 module without FTS4, the
+# only full-text search engine guaranteed on the Android versions the
+# application targets. The system Python is therefore imposed.
 PYTHON="/usr/bin/python3"
 if ! "$PYTHON" -c "import sqlite3, yaml
 sqlite3.connect(':memory:').execute('CREATE VIRTUAL TABLE t USING fts4(x)')" 2>/dev/null; then
-  echo "Erreur : $PYTHON doit disposer de FTS4 et de PyYAML." >&2
+  echo "Error: $PYTHON must provide FTS4 and PyYAML." >&2
   echo "         sudo apt install python3-yaml" >&2
   exit 1
 fi
 
 for tool in osmium tippecanoe tile-join java curl; do
   command -v "$tool" >/dev/null || {
-    echo "Erreur : « $tool » est absent." >&2
+    echo "Error: \"$tool\" is missing." >&2
     echo "         sudo apt install osmium-tool tippecanoe default-jdk curl" >&2
     exit 1
   }
@@ -59,9 +58,9 @@ done
 OSM_FILE="data/osm/$(basename "$OSM_REGION")-latest.osm.pbf"
 
 echo "════════════════════════════════════════════════════════════"
-echo " Roue Libre — génération des jeux de données hors ligne"
-echo " ville      : $CITY_CONFIG"
-echo " région OSM : $OSM_REGION"
+echo " Roue Libre — generating the offline datasets"
+echo " city       : $CITY_CONFIG"
+echo " OSM region : $OSM_REGION"
 echo " release    : $RELEASE_TAG"
 echo "════════════════════════════════════════════════════════════"
 
@@ -70,53 +69,53 @@ if [[ "$SKIP_DOWNLOAD" -eq 0 ]]; then
   echo "── Sources ──"
   mkdir -p data/osm data/ban
   if [[ ! -f "$OSM_FILE" ]]; then
-    echo "Téléchargement de l'extrait OpenStreetMap…"
+    echo "Downloading the OpenStreetMap extract…"
     curl -fSL --retry 3 -o "$OSM_FILE" \
       "https://download.geofabrik.de/${OSM_REGION}-latest.osm.pbf"
   else
-    echo "Extrait OSM déjà présent : $OSM_FILE"
+    echo "OSM extract already present: $OSM_FILE"
   fi
 
   IFS=',' read -ra DEPTS <<< "$DEPARTMENTS"
   for dept in "${DEPTS[@]}"; do
     target="data/ban/adresses-${dept}.csv.gz"
     if [[ ! -f "$target" ]]; then
-      echo "Téléchargement de la BAN, département $dept…"
+      echo "Downloading the BAN, department $dept…"
       curl -fSL --retry 3 -o "$target" \
         "https://adresse.data.gouv.fr/data/ban/adresses/latest/csv/adresses-${dept}.csv.gz"
     else
-      echo "Extrait BAN déjà présent : $target"
+      echo "BAN extract already present: $target"
     fi
   done
 fi
 
-# Chaque ville a son répertoire de sortie : générer Paris ne doit pas effacer
-# Lille. Le nom vient de l'identifiant de réseau de la configuration, seul
-# endroit où il est écrit (§15).
+# Each city has its own output directory: generating Paris must not erase
+# Lille. The name comes from the network identifier in the configuration, the
+# only place it is written (§15).
 NETWORK_ID="$("$PYTHON" -c "
 import json, sys
 print(json.load(open(sys.argv[1]))['network']['id'])" "$CITY_CONFIG")"
 OUT_DIR="data/out/$NETWORK_ID"
 mkdir -p "$OUT_DIR"
-echo " sortie     : $OUT_DIR"
+echo " output     : $OUT_DIR"
 
-# L'emprise vient en premier : les trois jeux suivants la prennent en entrée.
+# The box comes first: the three datasets that follow take it as input.
 echo
-echo "── 1/4 · Emprise de référence ──"
+echo "── 1/4 · Reference box ──"
 "$PYTHON" tools/compute_bbox.py --config "$CITY_CONFIG"
 
 echo
-echo "── 2/4 · Fond de carte ──"
+echo "── 2/4 · Base map ──"
 "$PYTHON" tools/build_tiles.py --config "$CITY_CONFIG" --osm-extract "$OSM_FILE" \
   --output "$OUT_DIR/tiles.mbtiles"
 
 echo
-echo "── 3/4 · Graphe de routage ──"
+echo "── 3/4 · Routing graph ──"
 "$PYTHON" tools/build_routing.py --config "$CITY_CONFIG" --osm-extract "$OSM_FILE" \
   --output-dir "$OUT_DIR/routing"
 
 echo
-echo "── 4/4 · Index d'adresses ──"
+echo "── 4/4 · Address index ──"
 BAN_ARGS=()
 IFS=',' read -ra DEPTS <<< "$DEPARTMENTS"
 for dept in "${DEPTS[@]}"; do
@@ -127,10 +126,10 @@ done
   --output "$OUT_DIR/addresses.sqlite"
 
 echo
-echo "── Manifeste ──"
+echo "── Manifest ──"
 "$PYTHON" tools/build_manifest.py --config "$CITY_CONFIG" \
   --data-dir "$OUT_DIR" --output "$OUT_DIR/manifest.json" \
   --release-tag "$RELEASE_TAG"
 
 echo
-echo "Terminé. Les fichiers à publier sont dans $OUT_DIR/."
+echo "Done. The files to publish are in $OUT_DIR/."

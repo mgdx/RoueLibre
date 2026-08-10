@@ -11,7 +11,7 @@ metres off, enough to pick the wrong station and therefore compute a wrong
 route.
 
 Sources:
-  · Base Adresse Nationale, département CSV extracts — house numbers
+  · Base Adresse Nationale, departmental CSV extracts — house numbers
   · OpenStreetMap — landmarks worth searching for, treated like streets
 
 Storage, and why it fits in a dozen megabytes for half a million addresses:
@@ -60,9 +60,9 @@ DEFAULT_OUTPUT = REPO_ROOT / "data" / "out" / "addresses.sqlite"
 # coarse enough that a delta almost always fits in one or two bytes.
 DELTA_SCALE = 100_000.0
 
-# Taille d'une cellule de la grille de recherche de commune, en degrés : environ
-# un kilomètre, soit le voisinage dans lequel un point de repère et la voie qui
-# le dessert se trouvent forcément.
+# Size of a cell of the commune-search grid, in degrees: about a kilometre,
+# which is the neighbourhood a landmark and the street serving it are bound to
+# share.
 GRID_DEGREES = 0.01
 
 # Entry kinds, mirrored by the Kotlin side.
@@ -97,9 +97,9 @@ class Street:
     city: str
     postcode: str
     kind: int
-    # Nom de la commune absorbée, quand il diffère de la commune actuelle :
-    # « Lomme », « Hellemmes » pour des adresses que la BAN rattache à Lille.
-    # C'est ce nom-là que l'habitant emploie et tape dans une recherche.
+    # Name of the absorbed municipality, when it differs from the current one:
+    # "Lomme", "Hellemmes" for addresses the BAN attaches to Lille. That is the
+    # name an inhabitant uses, and types into a search.
     former_city: str = ""
     latitudes: list[float] = field(default_factory=list)
     longitudes: list[float] = field(default_factory=list)
@@ -124,9 +124,9 @@ def require_fts4() -> None:
         connection.execute("CREATE VIRTUAL TABLE probe USING fts4(x)")
     except sqlite3.OperationalError as error:
         raise GenerationError(
-            "Ce Python est lié à un SQLite sans FTS4 "
-            f"(version {sqlite3.sqlite_version}) : {error}.\n"
-            "Relance le script avec le Python système, par exemple :\n"
+            "This Python is linked against an SQLite without FTS4 "
+            f"(version {sqlite3.sqlite_version}): {error}.\n"
+            "Run the script again with the system Python, for example:\n"
             "  /usr/bin/python3 tools/build_address_index.py …"
         ) from error
     finally:
@@ -203,8 +203,8 @@ def read_ban_files(
                         city=city,
                         postcode=(row["code_postal"] or "").strip(),
                         kind=KIND_STREET,
-                        # La colonne répète souvent la commune actuelle : ne
-                        # retenir que ce qu'elle apprend réellement.
+                        # The column often repeats the current municipality:
+                        # keep only what it genuinely tells us.
                         former_city=former_city if former_city != city else "",
                     )
                     streets[key] = street
@@ -228,7 +228,7 @@ def read_osm_places(
     """Extract named landmarks from OpenStreetMap, to be searched like streets."""
     if shutil.which("osmium") is None:
         raise GenerationError(
-            "osmium est absent. Installe-le : sudo apt install osmium-tool"
+            "osmium is missing. Install it: sudo apt install osmium-tool"
         )
 
     clipped = work_dir / "places-area.osm.pbf"
@@ -299,7 +299,7 @@ def fill_missing_places_communes(
 
     OpenStreetMap rarely tags ``addr:city`` on a metro station or a library:
     2 011 of the 2 436 landmarks inside the Paris bounding box carry none. The
-    application would then show « Châtelet - Les Halles » with an empty town,
+    application would then show "Châtelet - Les Halles" with an empty town,
     or worse, a postcode with nothing after it.
 
     A landmark sits in the commune of the streets around it, so the nearest
@@ -326,8 +326,8 @@ def fill_missing_places_communes(
         latitude, longitude = place.latitudes[0], place.longitudes[0]
         cell = (int(latitude / GRID_DEGREES), int(longitude / GRID_DEGREES))
         nearest, best = None, None
-        # Les cellules voisines suffisent : au-delà, la commune trouvée serait
-        # trop lointaine pour dire quoi que ce soit du lieu.
+        # The neighbouring cells are enough: beyond them, the municipality
+        # found would be too far away to say anything about the place.
         for delta_lat in (-1, 0, 1):
             for delta_lon in (-1, 0, 1):
                 for street in grid.get((cell[0] + delta_lat, cell[1] + delta_lon), ()):
@@ -378,9 +378,9 @@ CREATE TABLE street(
     normalized_type  TEXT,              -- "rue", "boulevard"… or NULL
     city             TEXT    NOT NULL,
     normalized_city  TEXT    NOT NULL,
-    -- Commune absorbée, quand elle diffère de la commune actuelle. La BAN
-    -- rattache Lomme et Hellemmes à Lille ; sans ce champ, personne n'y
-    -- trouverait sa rue en tapant le nom de sa commune.
+    -- Absorbed municipality, when it differs from the current one. The BAN
+    -- attaches Lomme and Hellemmes to Lille; without this field, nobody there
+    -- would find their street by typing the name of their municipality.
     former_city      TEXT,
     normalized_former_city TEXT,
     postcode         TEXT,
@@ -564,12 +564,8 @@ def write_normalization_fixtures(normalizer: AddressNormalizer,
             "name": split.proper_name,
         })
 
-    # Dans :core, où vit le normalisateur Kotlin : la logique de recherche est
-    # du Kotlin pur, testable sur la JVM sans émulateur (SPEC §14).
-    # Un fichier par réseau : générer une ville doit AJOUTER de la couverture,
-    # pas remplacer celle d'une autre. Chaque producteur écrit ses noms de
-    # voies à sa façon, et c'est précisément cette diversité qui éprouve la
-    # concordance entre le script et l'application.
+    # In :core, where the Kotlin normaliser lives: the search logic is pure
+    # Kotlin, testable on the JVM without an emulator (SPEC §14).
     destination = (REPO_ROOT / "core" / "src" / "test" / "resources"
                    / "normalization_fixtures" / f"{network_id}.json")
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -583,10 +579,10 @@ def write_normalization_fixtures(normalizer: AddressNormalizer,
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--ban-csv", type=Path, action="append", required=True,
-                        help="extrait BAN départemental (.csv ou .csv.gz), "
-                             "répétable")
+                        help="departmental BAN extract (.csv or .csv.gz), "
+                             "repeatable")
     parser.add_argument("--osm-extract", type=Path, default=None,
-                        help="extrait OSM pour les points de repère (§4.3)")
+                        help="OSM extract for the landmarks (§4.3)")
     parser.add_argument("--config", type=Path, default=DEFAULT_CITY_CONFIG)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     return parser.parse_args()
@@ -604,32 +600,32 @@ def main() -> int:
 
         for path in arguments.ban_csv:
             if not path.exists():
-                raise GenerationError(f"Extrait BAN introuvable : {path}")
+                raise GenerationError(f"BAN extract not found: {path}")
 
-        print("[1/3] Lecture des extraits BAN…")
+        print("[1/3] Reading the BAN extracts…")
         streets, rows_read, rows_kept = read_ban_files(
             arguments.ban_csv, box, normalizer
         )
-        print(f"      {rows_read} lignes lues, {rows_kept} dans l'emprise, "
-              f"{len(streets)} voies")
+        print(f"      {rows_read} rows read, {rows_kept} inside the box, "
+              f"{len(streets)} streets")
 
         place_count = 0
         if arguments.osm_extract is not None:
-            print("[2/3] Extraction des points de repère OpenStreetMap…")
+            print("[2/3] Extracting the OpenStreetMap landmarks…")
             with tempfile.TemporaryDirectory() as work:
                 places = read_osm_places(arguments.osm_extract, box, Path(work))
-            # Le rattachement a lieu avant la fusion : la grille ne doit
-            # contenir que des voies, pas les repères qu'on cherche à situer.
+            # The attachment happens before the merge: the grid must hold
+            # streets only, not the landmarks we are trying to place.
             filled = fill_missing_places_communes(streets, places)
             for index, place in enumerate(places):
                 streets[f"osm|{index}"] = place
             place_count = len(places)
-            print(f"      {place_count} points de repère, "
-                  f"{filled} rattachés à une commune voisine")
+            print(f"      {place_count} landmarks, "
+                  f"{filled} attached to a neighbouring municipality")
         else:
-            print("[2/3] Points de repère ignorés (--osm-extract non fourni)")
+            print("[2/3] Landmarks skipped (--osm-extract not given)")
 
-        print("[3/3] Écriture de la base…")
+        print("[3/3] Writing the database…")
         ordered = sorted(streets.items())
         generated_at = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         counts = build_database(
@@ -640,21 +636,21 @@ def main() -> int:
         size = arguments.output.stat().st_size
         elapsed = time.monotonic() - started
         print(f"\n{'':=<60}")
-        print(f"Index produit   : {arguments.output}")
-        print(f"Taille          : {size / 1e6:.1f} Mo")
-        print(f"Voies           : {counts['streets'] - place_count}")
-        print(f"Points de repère: {place_count}")
-        print(f"Numéros         : {counts['numbers']}")
-        print(f"Durée           : {elapsed / 60:.1f} min")
+        print(f"Index produced  : {arguments.output}")
+        print(f"Size            : {size / 1e6:.1f} MB")
+        print(f"Streets         : {counts['streets'] - place_count}")
+        print(f"Landmarks       : {place_count}")
+        print(f"House numbers   : {counts['numbers']}")
+        print(f"Duration        : {elapsed / 60:.1f} min")
         if counts["oversized_deltas"]:
-            print(f"Deltas hors 16 bits : {counts['oversized_deltas']} "
-                  f"(stockés tels quels, coût de quelques octets)")
+            print(f"Deltas beyond 16 bits: {counts['oversized_deltas']} "
+                  f"(stored as they are, at a cost of a few bytes)")
         print(f"{'':=<60}")
-        print(f"Cas de référence de normalisation : {fixtures}")
+        print(f"Normalisation reference cases: {fixtures}")
         return 0
 
     except GenerationError as error:
-        print(f"\nErreur : {error}", file=sys.stderr)
+        print(f"\nError: {error}", file=sys.stderr)
         return 1
 
 

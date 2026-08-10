@@ -1,29 +1,29 @@
 {
   "$comment": [
-    "Règles de normalisation des noms de voies — SPEC.md §4.3.",
+    "Street-name normalisation rules — SPEC.md §4.3.",
     "",
-    "Ce fichier est la SOURCE UNIQUE de ces règles. Il est lu par le script de",
-    "génération de l'index (tools/build_address_index.py) ET embarqué dans",
-    "l'APK, où le moteur de recherche le relit. Une divergence entre les deux",
-    "rendrait des rues introuvables : « boulevard » indexé d'un côté, « bd »",
-    "cherché de l'autre, et aucun résultat. D'où le fichier commun plutôt que",
-    "deux listes recopiées.",
+    "This file is the SINGLE SOURCE of those rules. It is read by the index",
+    "generation script (tools/build_address_index.py) AND embedded in the APK,",
+    "where the search engine reads it again. A divergence between the two would",
+    "make streets unfindable: \"boulevard\" indexed on one side, \"bd\" searched",
+    "on the other, and no result. Hence the shared file rather than two copied",
+    "lists.",
     "",
-    "La normalisation est appliquée à l'identique à l'index et à la saisie :",
-    "minuscules, accents et ponctuation supprimés, abréviations développées.",
+    "Normalisation is applied identically to the index and to what is typed:",
+    "lower case, accents and punctuation removed, abbreviations expanded.",
     "",
-    "tools/build_address_index.py produit également un jeu de cas de",
-    "référence que le test Kotlin rejoue, pour prouver que les deux",
-    "implémentations donnent le même résultat."
+    "tools/build_address_index.py also produces a set of reference cases that",
+    "the Kotlin test replays, to prove that the two implementations give the",
+    "same result."
   ],
 
   "rulesVersion": 1,
 
   "abbreviations": {
     "$comment": [
-      "Développées lors de la normalisation, sur des mots entiers uniquement.",
-      "Une abréviation d'une seule lettre n'est développée qu'en tête de nom,",
-      "sinon « r » transformerait « Jean R Dupont » en « Jean rue Dupont »."
+      "Expanded during normalisation, on whole words only.",
+      "A single-letter abbreviation is expanded only at the head of a name,",
+      "otherwise \"r\" would turn \"Jean R Dupont\" into \"Jean rue Dupont\"."
     ],
     "anywhere": {
       "st": "saint",
@@ -80,13 +80,13 @@
 
   "streetTypes": {
     "$comment": [
-      "Type de voie stocké dans un champ DISTINCT du nom propre (§4.3) :",
-      "« gambetta » doit trouver « rue Gambetta », et « rue de la gare » ne",
-      "doit pas être pénalisé par l'ordre des mots.",
-      "Reconnu seulement en tête de nom, et par correspondance la plus longue :",
-      "« rond point » avant « rond ». « drève » et « courée » sont propres au",
-      "Nord et absentes des listes génériques.",
-      "Écrits sous leur forme déjà normalisée (sans accent, en minuscules)."
+      "The street type is stored in a field SEPARATE from the proper name",
+      "(§4.3): \"gambetta\" must find \"rue Gambetta\", and \"rue de la gare\" must",
+      "not be penalised by word order.",
+      "Recognised only at the head of a name, and by longest match: \"rond",
+      "point\" before \"rond\". \"drève\" and \"courée\" belong to the North of",
+      "France and are absent from generic lists.",
+      "Written in their already normalised form (no accent, lower case)."
     ],
     "types": [
       "rond point", "grand rue", "grande rue", "petite rue",
@@ -108,9 +108,9 @@
 
   "stopWords": {
     "$comment": [
-      "Mots vides ignorés au CLASSEMENT — jamais à l'indexation, sinon",
-      "« rue de la gare » perdrait la moitié de son contenu. Ils servent à ne",
-      "pas récompenser une correspondance qui ne porte que sur « de » ou « la »."
+      "Stop words ignored when RANKING — never when indexing, otherwise",
+      "\"rue de la gare\" would lose half its content. They serve not to reward",
+      "a match that only bears on \"de\" or \"la\"."
     ],
     "words": ["de", "du", "des", "la", "le", "les", "l", "d", "au", "aux", "a", "et", "en", "sur", "sous"]
   }

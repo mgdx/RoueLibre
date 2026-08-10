@@ -24,24 +24,24 @@ dependencyResolutionManagement {
 
 rootProject.name = "Roue Libre"
 
-// BRouter est consommé comme BUILD COMPOSITE plutôt qu'inclus module par
-// module. Il apporte son propre `buildSrc`, ses conventions de compilation et
-// ses dépôts de dépendances ; l'inclure directement les mêlerait aux nôtres et
-// se heurterait notamment à `FAIL_ON_PROJECT_REPOS` ci-dessus. En build
-// composite, il se construit chez lui et Gradle substitue simplement la
-// coordonnée `org.btools:brouter-core` par le projet du sous-module.
+// BRouter is consumed as a COMPOSITE BUILD rather than included module by
+// module. It brings its own `buildSrc`, its own build conventions and its own
+// dependency repositories; including it directly would mix them with ours and
+// would run into `FAIL_ON_PROJECT_REPOS` above in particular. As a composite
+// build, it builds at home and Gradle simply substitutes the coordinate
+// `org.btools:brouter-core` with the submodule's project.
 //
-// Le sous-module est épinglé sur l'étiquette v1.7.10 : la reproductibilité du
-// build F-Droid en dépend. Ne pas y suivre `master`.
+// The submodule is pinned to the tag v1.7.10: the reproducibility of the
+// F-Droid build depends on it. Do not follow `master` there.
 //
-// Ne jamais créer de `local.properties` dans le sous-module : sa présence
-// ferait entrer l'application Android de BRouter dans la construction, avec
-// tout le poids qu'elle traîne.
+// Never create a `local.properties` inside the submodule: its presence would
+// pull BRouter's own Android application into the build, with all the weight
+// it drags along.
 includeBuild("third_party/brouter")
 
-// :core ne dépend d'aucune API Android. La séparation est structurelle et non
-// conventionnelle : le compilateur refuse un import Android dans ce module,
-// ce qui garantit que la logique métier reste testable sur la JVM sans
-// émulateur, comme l'exige le SPEC §14.
+// :core depends on no Android API. The separation is structural rather than
+// conventional: the compiler refuses an Android import in this module, which
+// guarantees that the business logic stays testable on the JVM without an
+// emulator, as SPEC §14 requires.
 include(":core")
 include(":app")

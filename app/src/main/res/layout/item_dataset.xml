@@ -60,7 +60,7 @@
         android:layout_height="@dimen/touch_target_min"
         android:layout_marginStart="@dimen/space_s"
         android:text="@string/dataset_delete"
-        android:textColor="@color/alerte"
+        android:textColor="@color/alert"
         app:layout_constraintBottom_toBottomOf="@id/dataset_import"
         app:layout_constraintStart_toEndOf="@id/dataset_import"
         app:layout_constraintTop_toTopOf="@id/dataset_import" />

@@ -135,8 +135,8 @@ class CityConfig:
         box = self.document["boundingBox"]
         if box.get("south") is None:
             raise ValueError(
-                "L'emprise n'est pas encore calculée dans "
-                f"{self.path.name}. Lance d'abord : python3 tools/compute_bbox.py"
+                "The box has not been computed yet in "
+                f"{self.path.name}. Run this first: python3 tools/compute_bbox.py"
             )
         return BoundingBox(
             south=box["south"],

@@ -1,48 +1,48 @@
-# Liste blanche des objets retenus dans le fond de carte — SPEC.md §4.2
+# Allowlist of the objects kept in the base map — SPEC.md §4.2
 #
-# Le filtrage se fait À LA GÉNÉRATION, pas seulement dans le style : ce qui
-# n'est pas retenu ici ne pèse rien dans le fichier de tuiles. C'est le
-# principal levier de taille après le niveau de zoom.
+# The filtering happens AT GENERATION TIME, not only in the style: what is not
+# kept here weighs nothing in the tile file. It is the main size lever after
+# the zoom level.
 #
-# Choix de conception assumé : la carte est un DÉCOR, les stations sont le
-# SUJET. Tous les points d'intérêt commerciaux sont donc écartés — commerces,
-# restaurants, bars, cafés, hôtels, banques, distributeurs, coiffeurs,
-# agences, bureaux, stations-service, parkings privés. Ne pas les réintroduire
-# sans revenir sur le §4.2.
+# A design choice made on purpose: the map is a SETTING, the stations are the
+# SUBJECT. Every commercial point of interest is therefore left out — shops,
+# restaurants, bars, cafés, hotels, banks, cash machines, hairdressers,
+# agencies, offices, filling stations, private car parks. Do not bring them
+# back without revisiting §4.2.
 #
-# Format de chaque couche :
-#   filters      expressions de sélection au format « osmium tags-filter »
-#                (n/ = nœud, w/ = chemin, r/ = relation, a/ = surface)
+# Format of each layer:
+#   filters      selection expressions in "osmium tags-filter" format
+#                (n/ = node, w/ = way, r/ = relation, a/ = area)
 #   geometry     point | linestring | polygon
-#   keepTags     attributs conservés dans les tuiles ; tout le reste est jeté
-#   minZoom      zoom à partir duquel la couche existe
-#   maxZoom      zoom maximal (défaut : maxZoom global)
+#   keepTags     attributes kept in the tiles; everything else is thrown away
+#   minZoom      zoom from which the layer exists
+#   maxZoom      maximum zoom (default: the global maxZoom)
 #
-# Les couches partageant le même minZoom sont produites en un seul appel à
-# tippecanoe, puis assemblées par tile-join.
+# Layers sharing the same minZoom are produced in a single call to tippecanoe,
+# then joined by tile-join.
 
 globalMaxZoom: 16
 
 layers:
 
-  # ---------------------------------------------------------------- eau ----
+  # -------------------------------------------------------------- water ----
   water:
-    description: Plans d'eau, bassins, étangs — surfaces.
+    description: Bodies of water, basins, ponds — areas.
     filters: ["a/natural=water", "a/landuse=reservoir,basin", "a/waterway=riverbank"]
     geometry: polygon
     keepTags: [name]
     minZoom: 10
 
   waterway:
-    description: Cours d'eau et canaux — la Deûle et la Marque structurent la métropole.
+    description: Watercourses and canals — the Deûle and the Marque shape the metropolis.
     filters: ["w/waterway=river,canal", "w/waterway=stream"]
     geometry: linestring
     keepTags: [name, waterway]
     minZoom: 12
 
-  # ------------------------------------------------------------ végétal ----
+  # ----------------------------------------------------------- greenery ----
   landcover:
-    description: Parcs, espaces verts, bois, cimetières — repères visuels majeurs.
+    description: Parks, green spaces, woods, cemeteries — major visual landmarks.
     filters:
       - "a/leisure=park,garden,nature_reserve,pitch,recreation_ground"
       - "a/landuse=forest,grass,meadow,cemetery,allotments,village_green"
@@ -51,11 +51,11 @@ layers:
     keepTags: [name, leisure, landuse, natural]
     minZoom: 11
 
-  # -------------------------------------------------------------- voirie ----
-  # Séparée en deux couches par importance : afficher toute la voirie dès le
-  # zoom 10 produirait des tuiles énormes et illisibles.
+  # --------------------------------------------------------------- roads ----
+  # Split into two layers by importance: drawing every road from zoom 10 on
+  # would produce enormous, unreadable tiles.
   road_major:
-    description: Autoroutes et axes structurants, visibles dès le zoom éloigné.
+    description: Motorways and main roads, visible from the far zooms on.
     filters: ["w/highway=motorway,trunk,primary,secondary,motorway_link,trunk_link,primary_link,secondary_link"]
     geometry: linestring
     keepTags: [name, highway, ref, tunnel, bridge]
@@ -63,8 +63,8 @@ layers:
 
   road_minor:
     description: >
-      Voirie de desserte et voies cyclables. Porte les noms de rues, exigés
-      par le §4.2. Arrive au zoom 13 : plus tôt, elle noierait la carte.
+      Local roads and cycle ways. Carries the street names §4.2 requires.
+      Arrives at zoom 13: any earlier, it would drown the map.
     filters:
       - "w/highway=tertiary,residential,unclassified,living_street,pedestrian,tertiary_link"
       - "w/highway=service,footway,path,cycleway,steps,track"
@@ -73,31 +73,31 @@ layers:
     minZoom: 13
 
   railway:
-    description: Voies ferrées, y compris métro et tramway.
+    description: Railways, including metro and tram lines.
     filters: ["w/railway=rail,subway,light_rail,tram,narrow_gauge"]
     geometry: linestring
     keepTags: [name, railway, tunnel]
     minZoom: 11
 
-  # ---------------------------------------------------------- bâtiments ----
+  # ---------------------------------------------------------- buildings ----
   building:
     description: >
-      Empreintes de bâtiments, en aplat discret. Zoom 15 minimum : c'est
-      habituellement la couche la plus lourde d'un jeu de tuiles vectorielles.
-      Si le budget de taille est dépassé, c'est le PREMIER levier à actionner
-      (§4.2) — monter son minZoom à 16, ou la retirer entièrement.
+      Building footprints, as a discreet flat tint. Zoom 15 at the earliest:
+      this is usually the heaviest layer of a vector tile set. If the size
+      budget is exceeded, it is the FIRST lever to pull (§4.2) — raise its
+      minZoom to 16, or drop it entirely.
     filters: ["a/building"]
     geometry: polygon
     keepTags: []
     minZoom: 15
 
-  # ------------------------------------------------------------- limites ----
+  # ---------------------------------------------------------- boundaries ----
   boundary:
     description: >
-      Limites communales — la métropole compte 95 communes. Exportée en
-      POLYGONES, pas en lignes : les lignes d'une relation de limite sont ses
-      chemins membres, c'est-à-dire les rues qui longent la frontière, pas le
-      contour de la commune. Le style ne dessine que le trait de bordure.
+      Municipal boundaries — the metropolis has 95 municipalities. Exported
+      as POLYGONS, not as lines: the lines of a boundary relation are its
+      member ways, that is the streets running along the border, not the
+      outline of the municipality. The style draws the border stroke only.
     filters: ["r/boundary=administrative"]
     geometry: polygon
     keepTags: [name, admin_level, boundary]
@@ -105,18 +105,18 @@ layers:
     onlyAdminLevels: ["8"]
 
   place:
-    description: Noms de communes, de quartiers et de lieux-dits.
+    description: Names of municipalities, districts and localities.
     filters: ["n/place=city,town,village,suburb,neighbourhood,quarter,hamlet"]
     geometry: point
     keepTags: [name, place, population]
     minZoom: 10
 
-  # ---------------------------------------------------------- transports ----
+  # ------------------------------------------------------------- transit ----
   transit:
     description: >
-      Stations de métro et de tramway, gares ferroviaires. Visibles à tous les
-      zooms : ce sont les repères d'orientation les plus utiles en ville, et
-      les correspondances naturelles d'un trajet à vélo.
+      Metro and tram stations, railway stations. Visible at every zoom: they
+      are the most useful orientation landmarks in a town, and the natural
+      connections of a bike journey.
     filters:
       - "n/railway=station,halt,subway_entrance"
       - "a/railway=station"
@@ -128,22 +128,22 @@ layers:
 
   busstop:
     description: >
-      Arrêts de bus, en points discrets et SANS étiquette. Zoom 15 minimum :
-      la métropole en compte plusieurs milliers, les afficher plus tôt
-      noierait la carte et les stations de vélos avec (§4.2).
+      Bus stops, as discreet points and WITHOUT a label. Zoom 15 at the
+      earliest: the metropolis has several thousand of them, and showing them
+      earlier would drown the map, and the bike stations with it (§4.2).
     filters: ["n/highway=bus_stop", "n/public_transport=platform"]
     geometry: point
     keepTags: []
     minZoom: 15
 
-  # ------------------------------------------- équipements et repères ----
+  # ------------------------------------- public buildings and landmarks ----
   poi:
     description: >
-      Équipements publics et repères visuels, et rien d'autre. La liste est
-      close : tout ajout doit se justifier par le repérage, jamais par
-      l'exhaustivité.
+      Public buildings and visual landmarks, and nothing else. The list is
+      closed: any addition must justify itself by finding one's way, never by
+      completeness.
     filters:
-      # équipements publics
+      # public buildings
       - "n/amenity=townhall,school,college,university,hospital,clinic,post_office,library,police,fire_station"
       - "a/amenity=townhall,school,college,university,hospital,clinic,post_office,library,police,fire_station"
       - "n/amenity=place_of_worship,theatre,arts_centre,community_centre"
@@ -151,7 +151,7 @@ layers:
       - "a/landuse=cemetery"
       - "n/leisure=sports_centre,swimming_pool,stadium"
       - "a/leisure=sports_centre,swimming_pool,stadium"
-      # repères visuels
+      # visual landmarks
       - "n/tourism=museum,attraction,artwork,viewpoint"
       - "a/tourism=museum,attraction"
       - "n/historic=monument,memorial,castle,tower,building"
@@ -162,16 +162,16 @@ layers:
     keepTags: [name, amenity, leisure, tourism, historic, man_made, religion, landuse]
     minZoom: 13
 
-# Objets explicitement écartés (§4.2). Cette liste ne sert pas au filtrage —
-# la liste blanche ci-dessus suffit — mais documente le choix pour qu'il ne
-# soit pas défait par inadvertance.
+# Objects deliberately left out (§4.2). This list plays no part in the
+# filtering — the allowlist above is enough — but records the choice so that
+# it is not undone by accident.
 excludedOnPurpose:
-  - shop=*            # commerces de toute nature
+  - shop=*            # shops of every kind
   - amenity=restaurant, fast_food, cafe, bar, pub, biergarten
   - tourism=hotel, hostel, guest_house, motel
   - amenity=bank, atm, bureau_de_change
   - amenity=fuel, charging_station
-  - amenity=parking    # y compris les parkings privés
-  - office=*           # bureaux d'entreprises et agences
-  - craft=*            # artisans, coiffeurs
-  - healthcare=*       # cabinets privés (les hôpitaux passent par amenity)
+  - amenity=parking    # including private car parks
+  - office=*           # company offices and agencies
+  - craft=*            # tradespeople, hairdressers
+  - healthcare=*       # private practices (hospitals come through amenity)

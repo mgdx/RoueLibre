@@ -21,34 +21,34 @@
 <resources>
 
     <!-- The screen's background. -->
-    <color name="papier">#E8ECEF</color>
+    <color name="paper">#E8ECEF</color>
     <!-- Surfaces laid on the background: list rows, sheets, fields. The
          separation is tonal, without a drop shadow. -->
     <color name="surface">#FAFCFD</color>
     <!-- Main text and strokes. Never pure black. -->
-    <color name="encre">#0E1519</color>
+    <color name="ink">#0E1519</color>
     <!-- Secondary text, captions, units. -->
-    <color name="encre_douce">#56656F</color>
+    <color name="ink_soft">#56656F</color>
     <!-- The signal hue: availability and interactive elements. -->
     <color name="signal">#00636F</color>
     <!-- Draws the eye to what is missing: no bike, no dock, out of service. -->
-    <color name="alerte">#9C4A00</color>
+    <color name="alert">#9C4A00</color>
 
     <!-- The availability scale, derived from the signal hue. -->
-    <color name="dispo_faible">#B8D5D8</color>
-    <color name="dispo_moyenne">#5BA1AA</color>
-    <color name="dispo_bonne">#00636F</color>
+    <color name="availability_low">#B8D5D8</color>
+    <color name="availability_medium">#5BA1AA</color>
+    <color name="availability_good">#00636F</color>
     <!-- The figure laid on each of the three fills. -->
-    <color name="dispo_faible_encre">#0E1519</color>
-    <color name="dispo_moyenne_encre">#0E1519</color>
-    <color name="dispo_bonne_encre">#FFFFFF</color>
+    <color name="availability_low_ink">#0E1519</color>
+    <color name="availability_medium_ink">#0E1519</color>
+    <color name="availability_good_ink">#FFFFFF</color>
 
     <!-- Ink laid on a flat of the signal hue: active button, well-stocked
          indicator. It inverts from one theme to the other. -->
     <color name="surface_on_signal">#FAFCFD</color>
 
     <!-- Separator strokes, field outlines. -->
-    <color name="trait">#CCD5DA</color>
+    <color name="outline">#CCD5DA</color>
 
     <!-- The signal hue lightened, for inverted surfaces — the alert bar in particular, whose background is dark even in the light theme. -->
     <color name="signal_inverse">#3FBFCE</color>
@@ -57,7 +57,7 @@
     <color name="surface_inverse">#0E1519</color>
 
     <!-- Ink laid on an inverted surface. -->
-    <color name="encre_inverse">#FAFCFD</color>
+    <color name="ink_inverse">#FAFCFD</color>
 
     <!--
         The base map's palette (SPEC §7).

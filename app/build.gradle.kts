@@ -1,8 +1,8 @@
 import java.util.Properties
 
 plugins {
-    // AGP 9 embarque le support Kotlin : appliquer en plus
-    // « org.jetbrains.kotlin.android » est désormais une erreur.
+    // AGP 9 carries Kotlin support: applying "org.jetbrains.kotlin.android"
+    // on top of it is now an error.
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
@@ -17,53 +17,49 @@ android {
 
     defaultConfig {
         applicationId = "io.github.mgdx.rouelibre"
-        // API 26 : java.time nativement disponible, donc pas de désucrage à
-        // configurer, icônes adaptatives, et surtout une pile TLS à jour
-        // (SPEC §3).
+        // API 26: java.time available natively, so no desugaring to set up,
+        // adaptive icons, and above all an up-to-date TLS stack (SPEC §3).
         minSdk = 26
         targetSdk = 37
         versionCode = 2
-        // Alpha : l'application fait le tour de son sujet — carte, recherche
-        // d'adresses, itinéraire porte-à-porte, et trois agglomérations au
-        // choix — mais rien n'a encore été publié à télécharger, et les écrans
-        // du premier lancement n'ont jamais tourné sur un appareil.
-        // Voir CHANGELOG.md.
+        // Alpha: the application covers its subject — map, address search,
+        // door-to-door journey, and a choice of three conurbations — but
+        // nothing has been published to download yet. See CHANGELOG.md.
         versionName = "0.2.0-alpha"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // Aucune sauvegarde automatique vers le cloud (SPEC §8).
+        // No automatic backup to the cloud (SPEC §8).
         manifestPlaceholders["allowBackup"] = "false"
     }
 
     androidResources {
-        // Déclare le français comme seule langue fournie. Sans cela, Android
-        // ne sait pas quelle langue contient `values/` : sur un appareil en
-        // anglais il servait les textes français avec des dates anglaises.
-        // Élague au passage les traductions des bibliothèques, qui pèsent
-        // plus que les nôtres.
+        // Declares which languages are supplied. Without it, Android does not
+        // know what language `values/` holds: on an English device it served
+        // the French texts with English dates. It also prunes the libraries'
+        // translations along the way, which weigh more than ours.
         localeFilters += listOf("fr", "en")
     }
 
     buildFeatures {
         viewBinding = true
-        // Pas de Compose : son poids est incompatible avec la contrainte de
-        // taille C4 (SPEC §3).
+        // No Compose: its weight is incompatible with the size constraint C4
+        // (SPEC §3).
         buildConfig = true
     }
 
     /**
-     * Signature des compilations de release faites ici.
+     * Signing of the release builds made here.
      *
-     * F-Droid recompile et signe lui-même : cette clé ne sert donc jamais à ce
-     * qui sera publié là-bas. Elle ne sert qu'aux versions que l'on installe
-     * soi-même pour les essayer, comme cette alpha.
+     * F-Droid rebuilds and signs for itself: this key therefore never signs
+     * what will be published there. It only signs the versions one installs
+     * oneself to try them out, like this alpha.
      *
-     * Le fichier `keystore.properties` est ignoré par Git et n'existe
-     * généralement pas. Sans lui, la release est signée par la clé de debug —
-     * suffisant pour installer un essai, et surtout **aucune clé n'est
-     * inventée en douce** : le jour où le projet aura sa clé de publication,
-     * ce sera une décision prise, pas un fichier apparu tout seul.
+     * The `keystore.properties` file is ignored by Git and usually does not
+     * exist. Without it, the release is signed by the debug key — enough to
+     * install a trial build, and above all **no key is invented on the sly**:
+     * the day the project has its publishing key, that will be a decision
+     * taken, not a file that appeared by itself.
      */
     val signingProperties = rootProject.file("keystore.properties")
     signingConfigs {
@@ -99,9 +95,9 @@ android {
         }
     }
 
-    // Les bibliothèques natives de MapLibre ne doivent pas être livrées quatre
-    // fois dans le même APK (SPEC §3). Le plafond de 12 Mo est par
-    // architecture, celui de 15 Mo pour l'APK universel.
+    // MapLibre's native libraries must not ship four times in the same APK
+    // (SPEC §3). The 12 MB ceiling is per architecture, the 15 MB one is for
+    // the universal APK.
     splits {
         abi {
             isEnable = true
@@ -111,9 +107,9 @@ android {
         }
     }
 
-    // F-Droid recompile depuis les sources et vérifie que le résultat
-    // correspond : le bloc de dépendances signé par AGP, non reproductible,
-    // n'a pas sa place dans l'artefact.
+    // F-Droid rebuilds from source and checks that the result matches: the
+    // dependency block signed by AGP, which is not reproducible, has no place
+    // in the artefact.
     dependenciesInfo {
         includeInApk = false
         includeInBundle = false
@@ -126,11 +122,11 @@ android {
 
     packaging {
         jniLibs {
-            // Compresse les bibliothèques natives dans l'APK. Android les
-            // extrait alors à l'installation, ce qui occupe un peu plus de
-            // place sur l'appareil mais divise par deux le téléchargement —
-            // treize mégaoctets de MapLibre en arm64. Sur un dépôt comme
-            // F-Droid, c'est le poids du téléchargement qui compte.
+            // Compresses the native libraries inside the APK. Android then
+            // extracts them at install time, which takes a little more room on
+            // the device but halves the download — thirteen megabytes of
+            // MapLibre on arm64. On a repository like F-Droid, it is the
+            // download weight that counts.
             useLegacyPackaging = true
         }
         resources {
@@ -143,7 +139,7 @@ android {
     }
 
     lint {
-        // Aucun avertissement toléré en release (SPEC §14).
+        // No warning tolerated in release (SPEC §14).
         warningsAsErrors = true
         abortOnError = true
     }
@@ -157,39 +153,39 @@ kotlin {
 }
 
 ksp {
-    // Le schéma de la base est versionné dans le dépôt : c'est ce qui rend
-    // les migrations relisibles et vérifiables par un contributeur.
+    // The database schema is versioned in the repository: that is what makes
+    // migrations re-readable and checkable by a contributor.
     arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 /**
- * Copie les fichiers de configuration partagés dans les ressources de l'APK.
+ * Copies the shared configuration files into the APK's assets.
  *
- * La configuration de ville est la source unique de tout ce qui est propre à
- * une agglomération (SPEC §15), et les règles de normalisation des noms de
- * voies sont partagées avec le script d'indexation (SPEC §4.3). Les deux
- * vivent à la racine du dépôt. Les copier au moment du build évite d'en
- * maintenir un second exemplaire, qui finirait par diverger — et une
- * divergence sur les règles de normalisation rendrait des rues introuvables.
+ * The city configuration is the single source of everything specific to a
+ * conurbation (SPEC §15), and the street-name normalisation rules are shared
+ * with the indexing script (SPEC §4.3). Both live at the root of the
+ * repository. Copying them at build time avoids maintaining a second copy,
+ * which would end up diverging — and a divergence in the normalisation rules
+ * would make streets unfindable.
  */
 abstract class CopySharedConfigurationTask : DefaultTask() {
 
     /**
-     * Les configurations de ville, une par agglomération servie.
+     * The city configurations, one per conurbation served.
      *
-     * Toutes sont livrées, aucune n'est privilégiée : l'application ne connaît
-     * pas de ville par défaut, elle en propose une d'après la position et
-     * retient celle qu'on a choisie (SPEC §15).
+     * All of them ship, none is favoured: the application knows no default
+     * city, it proposes one from the position and remembers the one chosen
+     * (SPEC §15).
      */
     @get:InputDirectory
     abstract val cityConfigurations: DirectoryProperty
 
     /**
-     * L'index de ces villes, produit par `tools/build_catalogue.py`.
+     * The index of those cities, produced by `tools/build_catalogue.py`.
      *
-     * Livré comme secours : le catalogue publié est téléchargeable et peut
-     * citer des villes plus récentes, mais un premier lancement sans réseau
-     * doit montrer une liste plutôt qu'un écran vide.
+     * Shipped as a fallback: the published catalogue is downloadable and may
+     * name more recent cities, but a first launch with no network must show a
+     * list rather than an empty screen.
      */
     @get:InputFile
     abstract val cityCatalogue: RegularFileProperty
@@ -198,12 +194,12 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
     abstract val normalizationRules: RegularFileProperty
 
     /**
-     * Les notes de version des métadonnées F-Droid.
+     * The release notes from the F-Droid metadata.
      *
-     * Elles sont la SOURCE UNIQUE de ce que l'écran « nouveautés » affiche
-     * (SPEC §7.10) : les recopier dans les ressources en ferait deux versions
-     * à tenir, et la seconde finirait par mentir. Le dossier peut être absent
-     * d'un clone partiel, auquel cas l'écran n'a simplement rien à montrer.
+     * They are the SINGLE SOURCE of what the "what's new" screen shows
+     * (SPEC §7.10): copying them into the resources would make two versions to
+     * keep, and the second would end up lying. The folder may be absent from a
+     * partial clone, in which case the screen simply has nothing to show.
      */
     @get:InputDirectory
     @get:Optional
@@ -218,10 +214,10 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
         target.mkdirs()
         cityCatalogue.get().asFile.copyTo(target.resolve("catalogue.json"), overwrite = true)
 
-        // Chaque configuration est rangée sous l'identifiant de son réseau, et
-        // non sous le nom de son fichier : c'est cet identifiant que porte le
-        // catalogue, et l'application n'a alors rien à deviner pour retrouver
-        // la configuration d'une ville qu'on vient de choisir.
+        // Each configuration is filed under its network identifier rather
+        // than under its file name: that identifier is the one the catalogue
+        // carries, so the application has nothing to guess when looking up the
+        // configuration of a city just chosen.
         val cities = target.resolve("cities")
         cities.deleteRecursively()
         cities.mkdirs()

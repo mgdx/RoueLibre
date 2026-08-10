@@ -3,52 +3,52 @@
   "name": "Roue Libre",
   "metadata": {
     "roue-libre:comment": [
-      "Style du fond de carte — SPEC.md §4.2 et §7.",
+      "Base map style — SPEC.md §4.2 and §7.",
       "",
-      "Tout ce qui est entre doubles accolades est remplacé au chargement :",
-      "les couleurs viennent des jetons de res/values/colors.xml, et le chemin",
-      "des tuiles n'est connu qu'à l'exécution, puisque le fichier est installé",
-      "dans le stockage privé de l'application.",
+      "Everything between double braces is replaced at load time: the colours",
+      "come from the tokens in res/values/colors.xml, and the path to the",
+      "tiles is only known at run time, since the file is installed in the",
+      "application's private storage.",
       "",
-      "Aucune URL distante. Les tuiles sont lues sur le disque, les glyphes sont",
-      "dans l'APK : afficher la carte ne fait sortir aucune requête (§2, C3).",
+      "No remote URL. The tiles are read from disk and the glyphs live in the",
+      "APK: drawing the map sends no request out (§2, C3).",
       "",
-      "Pas de feuille de sprites : les repères sont dessinés en cercles plutôt",
-      "qu'en icônes. C'est plus sobre, et cela évite d'embarquer une planche",
-      "d'images pour une poignée de symboles."
+      "No sprite sheet: markers are drawn as circles rather than icons. It is",
+      "plainer, and it avoids embedding a sheet of images for a handful of",
+      "symbols."
     ]
   },
   "glyphs": "asset://glyphs/{fontstack}/{range}.pbf",
   "sources": {
-    "vecteur": {
+    "vector": {
       "type": "vector",
       "url": "mbtiles://{{tilesPath}}"
     }
   },
   "layers": [
     {
-      "id": "fond",
+      "id": "background",
       "type": "background",
       "paint": { "background-color": "{{map_land}}" }
     },
     {
-      "id": "vegetation",
+      "id": "greenery",
       "type": "fill",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "landcover",
       "paint": { "fill-color": "{{map_greenery}}" }
     },
     {
-      "id": "eau",
+      "id": "water",
       "type": "fill",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "water",
       "paint": { "fill-color": "{{map_water}}" }
     },
     {
-      "id": "cours-d-eau",
+      "id": "waterways",
       "type": "line",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "waterway",
       "paint": {
         "line-color": "{{map_water}}",
@@ -56,9 +56,9 @@
       }
     },
     {
-      "id": "limites-communales",
+      "id": "municipal-boundaries",
       "type": "line",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "boundary",
       "paint": {
         "line-color": "{{map_boundary}}",
@@ -67,9 +67,9 @@
       }
     },
     {
-      "id": "batiments",
+      "id": "buildings",
       "type": "fill",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "building",
       "minzoom": 15,
       "paint": {
@@ -79,9 +79,9 @@
       }
     },
     {
-      "id": "voirie-secondaire",
+      "id": "minor-roads",
       "type": "line",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "road_minor",
       "minzoom": 13,
       "layout": { "line-cap": "round", "line-join": "round" },
@@ -91,9 +91,9 @@
       }
     },
     {
-      "id": "voirie-principale-contour",
+      "id": "major-roads-outline",
       "type": "line",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "road_major",
       "layout": { "line-cap": "round", "line-join": "round" },
       "paint": {
@@ -102,9 +102,9 @@
       }
     },
     {
-      "id": "voirie-principale",
+      "id": "major-roads",
       "type": "line",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "road_major",
       "layout": { "line-cap": "round", "line-join": "round" },
       "paint": {
@@ -113,9 +113,9 @@
       }
     },
     {
-      "id": "voies-ferrees",
+      "id": "railways",
       "type": "line",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "railway",
       "paint": {
         "line-color": "{{map_rail}}",
@@ -124,9 +124,9 @@
       }
     },
     {
-      "id": "arrets-de-bus",
+      "id": "bus-stops",
       "type": "circle",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "busstop",
       "minzoom": 15,
       "paint": {
@@ -136,9 +136,9 @@
       }
     },
     {
-      "id": "reperes",
+      "id": "landmarks",
       "type": "circle",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "poi",
       "minzoom": 13.5,
       "paint": {
@@ -147,9 +147,9 @@
       }
     },
     {
-      "id": "transports",
+      "id": "transit",
       "type": "circle",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "transit",
       "paint": {
         "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 1.8, 16, 4.5],
@@ -159,9 +159,9 @@
       }
     },
     {
-      "id": "noms-de-rues",
+      "id": "street-labels",
       "type": "symbol",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "road_minor",
       "minzoom": 15,
       "filter": ["has", "name"],
@@ -181,9 +181,9 @@
       }
     },
     {
-      "id": "noms-d-axes",
+      "id": "road-labels",
       "type": "symbol",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "road_major",
       "minzoom": 13,
       "filter": ["has", "name"],
@@ -202,9 +202,9 @@
       }
     },
     {
-      "id": "noms-de-transports",
+      "id": "transit-labels",
       "type": "symbol",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "transit",
       "minzoom": 13,
       "filter": ["has", "name"],
@@ -223,9 +223,9 @@
       }
     },
     {
-      "id": "noms-de-reperes",
+      "id": "landmark-labels",
       "type": "symbol",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "poi",
       "minzoom": 14.5,
       "filter": ["has", "name"],
@@ -245,9 +245,9 @@
       }
     },
     {
-      "id": "noms-de-communes",
+      "id": "municipality-labels",
       "type": "symbol",
-      "source": "vecteur",
+      "source": "vector",
       "source-layer": "place",
       "layout": {
         "text-field": ["get", "name"],

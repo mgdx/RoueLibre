@@ -62,10 +62,10 @@ def resolve_feed_url(discovery_document: dict, feed_name: str) -> str:
     """
     data = discovery_document["data"]
     if not data:
-        raise KeyError("Le fichier d'auto-découverte GBFS est vide.")
-    # GBFS 3.0 publie la liste directement ; les versions antérieures
-    # l'imbriquent sous une clé de langue, dont le nom n'est pas garanti — le
-    # flux lillois emploie « en » alors qu'il sert un réseau français.
+        raise KeyError("The GBFS auto-discovery file is empty.")
+    # GBFS 3.0 publishes the list directly; earlier versions nest it under a
+    # language key whose name is not guaranteed — the Lille feed uses "en"
+    # even though it serves a French network.
     if "feeds" in data:
         feeds = data["feeds"]
     else:
@@ -76,19 +76,19 @@ def resolve_feed_url(discovery_document: dict, feed_name: str) -> str:
             return feed["url"]
     available = ", ".join(feed["name"] for feed in feeds)
     raise KeyError(
-        f"Le flux « {feed_name} » est absent de l'auto-découverte. "
-        f"Flux disponibles : {available}"
+        f"Feed \"{feed_name}\" is absent from the auto-discovery file. "
+        f"Feeds available: {available}"
     )
 
 
 def load_stations(discovery_url: str | None, stations_file: Path | None) -> list[dict]:
     """Return the station list, from the network or from a local file."""
     if stations_file is not None:
-        print(f"Lecture des stations depuis {stations_file}")
+        print(f"Reading the stations from {stations_file}")
         with stations_file.open(encoding="utf-8") as stream:
             document = json.load(stream)
     else:
-        print(f"Auto-découverte GBFS : {discovery_url}")
+        print(f"GBFS auto-discovery : {discovery_url}")
         discovery = fetch_json(discovery_url)
         information_url = resolve_feed_url(discovery, "station_information")
         print(f"station_information : {information_url}")
@@ -105,7 +105,7 @@ def bounding_box_of_stations(stations: list[dict]) -> BoundingBox:
     latitudes = [station["lat"] for station in stations if "lat" in station]
     longitudes = [station["lon"] for station in stations if "lon" in station]
     if not latitudes or not longitudes:
-        raise ValueError("Aucune station exploitable dans station_information.")
+        raise ValueError("No usable station in station_information.")
     return BoundingBox(
         south=min(latitudes),
         west=min(longitudes),
@@ -120,24 +120,24 @@ def parse_arguments() -> argparse.Namespace:
         "--config",
         type=Path,
         default=DEFAULT_CITY_CONFIG,
-        help="fichier de configuration de ville à mettre à jour",
+        help="city configuration file to update",
     )
     parser.add_argument(
         "--stations-file",
         type=Path,
         default=None,
-        help="lire station_information.json localement au lieu du réseau",
+        help="read station_information.json locally instead of over the network",
     )
     parser.add_argument(
         "--margin-metres",
         type=float,
         default=None,
-        help="marge autour des stations (défaut : valeur de la configuration)",
+        help="margin around the stations (default: the configuration's value)",
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="afficher le résultat sans écrire la configuration",
+        help="show the result without writing the configuration",
     )
     return parser.parse_args()
 
@@ -157,9 +157,9 @@ def main() -> int:
 
     print()
     print(f"Stations              : {len(stations)}")
-    print(f"Rectangle des stations: {tight_box}")
-    print(f"Marge appliquée       : {margin:.0f} m")
-    print(f"Emprise de référence  : {reference_box}")
+    print(f"Station rectangle     : {tight_box}")
+    print(f"Margin applied        : {margin:.0f} m")
+    print(f"Reference box         : {reference_box}")
     print(
         f"Dimensions            : {reference_box.width_kilometres:.1f} km "
         f"× {reference_box.height_kilometres:.1f} km "
@@ -167,7 +167,7 @@ def main() -> int:
     )
 
     if arguments.dry_run:
-        print("\n--dry-run : configuration inchangée.")
+        print("\n--dry-run: configuration left unchanged.")
         return 0
 
     config.document["boundingBox"]["marginMeters"] = margin
@@ -177,7 +177,7 @@ def main() -> int:
         generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     )
     config.save()
-    print(f"\nÉcrit dans {config.path}")
+    print(f"\nWritten to {config.path}")
     return 0
 
 

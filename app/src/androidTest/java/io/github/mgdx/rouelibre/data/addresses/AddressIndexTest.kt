@@ -90,7 +90,7 @@ class AddressIndexTest {
         val results = search("gambeta")
 
         assertTrue(
-            "la rue visée doit figurer dans les trois premiers",
+            "the intended street must be among the first three",
             results.take(3).any { it.streetName == "Rue Gambetta" },
         )
     }
@@ -102,7 +102,7 @@ class AddressIndexTest {
         assertEquals(12, result.houseNumber)
         assertEquals(PositionPrecision.Exact, result.precision)
         assertTrue(
-            "le numéro doit être placé à sa position propre",
+            "the number must sit at its own position",
             result.position.distanceInMetresTo(NUMBER_12) < 5.0,
         )
     }

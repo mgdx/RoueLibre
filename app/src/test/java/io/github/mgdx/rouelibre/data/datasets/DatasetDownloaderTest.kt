@@ -63,7 +63,7 @@ class DatasetDownloaderTest {
             ?: throw AssertionError("failure: $outcome")
         assertEquals(1, files.size)
         assertEquals(content.size.toLong(), files.first().length())
-        assertTrue("le fichier partiel doit avoir disparu", partialFiles().isEmpty())
+        assertTrue("the partial file must be gone", partialFiles().isEmpty())
     }
 
     @Test
@@ -75,7 +75,7 @@ class DatasetDownloaderTest {
         val outcome = downloader.download(datasetOf(sha256 = "00".repeat(32)), workDirectory)
 
         assertTrue("expected a refusal, got: $outcome", outcome is Outcome.Failure)
-        assertTrue("rien ne doit rester à installer", workDirectory.listFiles().orEmpty().isEmpty())
+        assertTrue("nothing must be left to install", workDirectory.listFiles().orEmpty().isEmpty())
     }
 
     @Test

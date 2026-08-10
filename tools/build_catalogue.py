@@ -61,8 +61,8 @@ def describe(config_path: Path, data_dir: Path) -> dict:
     for corner in ("south", "west", "north", "east"):
         if corner not in box:
             raise CatalogueError(
-                f"{config_path.name} : emprise incomplète — lance d'abord "
-                f"tools/compute_bbox.py --config {config_path}"
+                f"{config_path.name}: incomplete box — run "
+                f"tools/compute_bbox.py --config {config_path} first"
             )
 
     manifest_path = data_dir / network["id"] / "manifest.json"
@@ -110,7 +110,7 @@ def main() -> int:
     try:
         configs = sorted(arguments.cities_dir.glob("*.json"))
         if not configs:
-            raise CatalogueError(f"Aucune configuration dans {arguments.cities_dir}")
+            raise CatalogueError(f"No configuration in {arguments.cities_dir}")
 
         entries = [describe(path, arguments.data_dir) for path in configs]
         catalogue = {
@@ -124,16 +124,16 @@ def main() -> int:
             json.dump(catalogue, stream, ensure_ascii=False, indent=2)
             stream.write("\n")
 
-        print(f"Catalogue écrit : {arguments.output}")
+        print(f"Catalogue written: {arguments.output}")
         for entry in catalogue["cities"]:
             size = entry["dataSizeBytes"]
-            weight = f"{size / 1e6:>6.1f} Mo" if size else "  non générée"
+            weight = f"{size / 1e6:>6.1f} MB" if size else "  not generated"
             print(f"  {entry['displayName']:<22} {entry['stationCount']:>5} stations "
                   f"{weight}")
         return 0
 
     except (CatalogueError, KeyError) as error:
-        print(f"\nErreur : {error}", file=sys.stderr)
+        print(f"\nError: {error}", file=sys.stderr)
         return 1
 
 

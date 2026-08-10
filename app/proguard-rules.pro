@@ -1,13 +1,13 @@
-# Règles R8 pour la compilation de release.
+# R8 rules for the release build.
 #
-# Le principe est de n'en ajouter aucune sans raison : chaque règle de
-# conservation est du code que R8 renonce à retirer, donc des kilooctets
-# d'APK et une contrainte de taille (SPEC §2, C4) un peu moins tenue.
+# The principle is to add none of them without a reason: every keep rule is
+# code R8 gives up removing, so kilobytes of APK and a size constraint
+# (SPEC §2, C4) held a little less firmly.
 
-# kotlinx.serialization engendre ses sérialiseurs à la compilation et les
-# retrouve par réflexion sur le champ statique du compagnon. Sans ces règles,
-# R8 les élague et l'analyse des flux GBFS échoue à l'exécution — en release
-# seulement, ce qui est le pire moment pour s'en apercevoir.
+# kotlinx.serialization generates its serialisers at compile time and finds
+# them again by reflection on the companion's static field. Without these
+# rules, R8 prunes them and parsing the GBFS feeds fails at run time — in
+# release only, which is the worst moment to find out.
 -keepattributes *Annotation*, InnerClasses
 -dontnote kotlinx.serialization.**
 
@@ -29,19 +29,19 @@
     kotlinx.serialization.KSerializer serializer(...);
 }
 
-# Les vues personnalisées sont instanciées par réflexion depuis le XML gonflé.
+# Custom views are instantiated by reflection from the inflated XML.
 -keepclasseswithmembers class * {
     public <init>(android.content.Context, android.util.AttributeSet);
 }
 
-# OkHttp référence des classes optionnelles absentes d'Android ; ces
-# avertissements sont attendus et sans conséquence.
+# OkHttp references optional classes absent from Android; these warnings are
+# expected and of no consequence.
 -dontwarn okhttp3.internal.platform.**
 -dontwarn org.conscrypt.**
 -dontwarn org.bouncycastle.**
 -dontwarn org.openjsse.**
 
-# Les traces d'un rapport de bogue doivent rester lisibles. Le fichier de
-# correspondance n'est pas publié ; seuls les numéros de ligne le sont.
+# The traces in a bug report must stay readable. The mapping file is not
+# published; only the line numbers are.
 -keepattributes SourceFile, LineNumberTable
 -renamesourcefileattribute SourceFile

@@ -4,18 +4,18 @@ plugins {
     alias(libs.plugins.ktlint)
 }
 
-// Module de logique métier pur : analyse des flux GBFS, algorithme de trajet,
-// résolution d'adresses. Aucune dépendance Android, donc testable sur la JVM
-// sans émulateur (SPEC §14).
+// Pure business-logic module: GBFS feed parsing, journey algorithm, address
+// resolution. No Android dependency, and therefore testable on the JVM without
+// an emulator (SPEC §14).
 //
-// La compatibilité binaire vise Java 11, celle du module applicatif, pour que
-// le même code s'exécute sur un appareil à l'API 26.
+// Binary compatibility targets Java 11, the application module's, so that the
+// same code runs on a device at API 26.
 kotlin {
     jvmToolchain(17)
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
-        // Le code métier est audité ; un avertissement non traité y est une
-        // dette, pas une nuisance acceptable (SPEC §14).
+        // The business code is audited; a warning left unhandled there is a
+        // debt, not an acceptable nuisance (SPEC §14).
         allWarningsAsErrors.set(true)
     }
 }
@@ -25,23 +25,23 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-// Les règles de normalisation des noms de voies vivent à la racine du dépôt :
-// c'est le même fichier que lit le script d'indexation, et le test vérifie
-// justement que les deux implémentations en tirent le même résultat (SPEC §4.3).
+// The street-name normalisation rules live at the root of the repository: it
+// is the same file the indexing script reads, and the test verifies precisely
+// that the two implementations draw the same result from it (SPEC §4.3).
 tasks.withType<Test>().configureEach {
     systemProperty(
         "rouelibre.normalizationRules",
         rootProject.file("config/address_normalization.json").absolutePath,
     )
-    // Les cas de référence, un fichier par ville générée : le test les rejoue
-    // tous, ce qui étend la preuve à chaque nouveau réseau.
-    // Le catalogue réellement publié : le test le rejoue plutôt qu'un exemple
-    // écrit pour l'occasion, ce qui prouve que le générateur et le lecteur
-    // s'accordent (SPEC §15).
+    // The catalogue as actually published: the test replays it rather than an
+    // example written for the occasion, which proves that the generator and
+    // the reader agree (SPEC §15).
     systemProperty(
         "rouelibre.cityCatalogue",
         rootProject.file("config/catalogue.json").absolutePath,
     )
+    // The reference cases, one file per generated city: the test replays them
+    // all, which extends the proof to every new network.
     systemProperty(
         "rouelibre.normalizationFixtures",
         file("src/test/resources/normalization_fixtures").absolutePath,
