@@ -91,7 +91,7 @@ Rendu **vectoriel hors ligne** via MapLibre Native. Aucune requête de tuile ne 
 
 - Format : **MBTiles** (base SQLite contenant les tuiles). MapLibre Native le lit directement depuis le disque via le schéma d'URI `mbtiles://`, utilisable tel quel dans le style — c'est le chemin le mieux supporté. PMTiles a été écarté : son atout est de servir des tuiles depuis un hébergement statique par requêtes HTTP *Range*, ce qui ne sert à rien ici puisque le fichier est téléchargé en entier, et ses sources ne gèrent ni les paquets hors ligne ni la mise en cache côté MapLibre Native.
 - Emprise : celle définie en tête du §4. Zoom **10 à 16**. Le zoom 16 suffit largement pour se repérer dans une rue ; monter à 17 ou 18 ferait exploser la taille pour un gain nul dans cette application.
-- Le fichier de tuiles n'est **pas dans l'APK** : il est téléchargé au premier lancement (voir §4.5). Budget cible : **30 à 60 Mo**.
+- Le fichier de tuiles n'est **pas dans l'APK** : il est téléchargé au premier lancement (voir §4.5). Ordre de grandeur attendu pour une agglomération de taille moyenne : **30 à 60 Mo**. Ce n'est pas un plafond : une métropole dense en produit légitimement davantage — Paris, avec 1,24 million d'empreintes de bâtiments dans son emprise contre 78 000 pour Lille, en produit 115 Mo. Les règles de rendu restent les mêmes pour toutes les villes ; on ne taille pas d'exception ville par ville.
 - Style de carte : un style sobre, embarqué dans l'APK sous forme de JSON, avec les polices et icônes nécessaires. Pas de style téléchargé depuis un service tiers.
 - Hébergement du fichier : voir §4.4. La **procédure de régénération** doit être documentée et scriptée dans le dépôt, pour que le fichier puisse être mis à jour sans dépendre de personne.
 
@@ -361,7 +361,7 @@ Chaque critère doit être vérifiable :
 6. Quand aucune station proche n'a de vélo, l'appli le dit explicitement au lieu de proposer un trajet impossible.
 7. En usage courant, **la seule requête réseau qui part est celle du flux GBFS** — à vérifier avec un pare-feu ou une capture de trafic. Les téléchargements de données n'ont lieu qu'au premier lancement ou sur action explicite de l'utilisateur.
 8. L'analyse Exodus Privacy ne détecte aucun tracker.
-9. L'APK de release pèse moins de 15 Mo, et moins de 12 Mo par architecture. L'occupation totale après téléchargement des données reste sous **135 Mo**.
+9. L'APK de release pèse moins de 15 Mo, et moins de 12 Mo par architecture. Les données téléchargées, elles, **n'ont pas de plafond fixe** : leur poids suit la taille et la densité du réseau servi, et une capitale pèse légitimement plus qu'une ville moyenne. Ce qui est exigé est que leur poids reste **raisonnable au regard de la ville couverte**, que l'application **annonce la taille avant de télécharger**, et qu'elle permette de **supprimer les données d'une ville** pour reprendre la place. À titre de repère : environ 40 Mo pour Lille ou Lyon, environ 140 Mo pour Paris.
 10. Une adresse avec numéro dans une longue artère est localisée à moins de 50 m de sa position réelle.
 11. Une recherche comportant une faute de frappe ou une lettre manquante retrouve la rue visée dans les trois premiers résultats.
 12. Un lien `geo:` ouvert depuis une autre application propose l'application dans le sélecteur et pré-remplit la destination.

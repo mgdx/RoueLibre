@@ -216,6 +216,13 @@ qui sortira sur F-Droid sera recompilé et signé là-bas.
 
 ### Corrigé
 
+- **Les points de repère n'avaient pas de commune.** OpenStreetMap étiquette
+  rarement la ville d'une station de métro ou d'une bibliothèque : 2 011 des
+  2 436 repères de l'emprise parisienne n'en portaient aucune, et « Châtelet -
+  Les Halles » s'affichait sans commune. Chacun reçoit désormais celle de la
+  voie la plus proche, trouvée par une grille au kilomètre plutôt qu'en
+  comparant toutes les paires. Plus aucun repère sans commune sur les trois
+  villes.
 - **La génération écrivait toutes les villes au même endroit.** Produire Paris
   effaçait Lille. Chaque ville a désormais son répertoire de sortie, nommé
   d'après l'identifiant de réseau de sa configuration.

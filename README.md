@@ -144,14 +144,18 @@ main. Leur génération est entièrement scriptée et versionnée dans
 tools/generate_all.sh
 ```
 
-Tailles réellement obtenues sur l'emprise lilloise, le 9 août 2026 :
+Tailles réellement obtenues, trois réseaux générés avec les mêmes règles :
 
-| Jeu | Budget `SPEC.md` | Obtenu |
-|---|---|---|
-| Fond de carte (MBTiles, zooms 10–16) | 30 – 60 Mo | **35,0 Mo** |
-| Graphe de routage (BRouter rd5) | 15 – 40 Mo | **1,7 Mo** |
-| Index d'adresses (SQLite FTS4) | 13 – 28 Mo | **5,9 Mo** |
-| **Total téléchargé** | | **42,5 Mo** |
+| Réseau | Stations | Emprise | Fond de carte | Routage | Adresses | Total |
+|---|---|---|---|---|---|---|
+| V'lille | 268 | 672 km² | 35,0 Mo | 1,7 Mo | 6,0 Mo | **42,7 Mo** |
+| Vélo'v Lyon | 465 | 575 km² | 35,6 Mo | 2,6 Mo | 4,1 Mo | **42,3 Mo** |
+| Vélib' Paris | 1 518 | 994 km² | 114,9 Mo | 7,2 Mo | 20,9 Mo | **143,0 Mo** |
+
+L'emprise est dérivée des stations elles-mêmes, ce qui suit la réalité des
+réseaux : « Lille » couvre 68 communes de la métropole, Lyon 85, Paris 211.
+Paris pèse davantage parce que c'est Paris — 1,24 million d'empreintes de
+bâtiments contre 78 000 pour Lille — et les règles de rendu restent communes.
 
 ## Portage vers une autre ville
 

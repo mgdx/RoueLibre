@@ -60,6 +60,11 @@ DEFAULT_OUTPUT = REPO_ROOT / "data" / "out" / "addresses.sqlite"
 # coarse enough that a delta almost always fits in one or two bytes.
 DELTA_SCALE = 100_000.0
 
+# Taille d'une cellule de la grille de recherche de commune, en degrés : environ
+# un kilomètre, soit le voisinage dans lequel un point de repère et la voie qui
+# le dessert se trouvent forcément.
+GRID_DEGREES = 0.01
+
 # Entry kinds, mirrored by the Kotlin side.
 KIND_STREET = 0
 KIND_PLACE = 1
@@ -285,6 +290,58 @@ def read_osm_places(
             place.longitudes.append(longitude)
             places.append(place)
     return places
+
+
+def fill_missing_places_communes(
+    streets: dict[str, Street], places: list[Street]
+) -> int:
+    """Give each landmark the commune of the street nearest to it.
+
+    OpenStreetMap rarely tags ``addr:city`` on a metro station or a library:
+    2 011 of the 2 436 landmarks inside the Paris bounding box carry none. The
+    application would then show « Châtelet - Les Halles » with an empty town,
+    or worse, a postcode with nothing after it.
+
+    A landmark sits in the commune of the streets around it, so the nearest
+    street answers the question. The search goes through a coarse grid rather
+    than comparing every pair: forty thousand streets against two thousand
+    landmarks would be eighty million comparisons for a fact that a
+    hundred-metre neighbourhood settles.
+
+    Returns:
+        The number of landmarks that received a commune.
+    """
+    grid: dict[tuple[int, int], list[Street]] = defaultdict(list)
+    for street in streets.values():
+        if street.kind != KIND_STREET or not street.latitudes:
+            continue
+        cell = (int(statistics.median(street.latitudes) / GRID_DEGREES),
+                int(statistics.median(street.longitudes) / GRID_DEGREES))
+        grid[cell].append(street)
+
+    filled = 0
+    for place in places:
+        if place.city or not place.latitudes:
+            continue
+        latitude, longitude = place.latitudes[0], place.longitudes[0]
+        cell = (int(latitude / GRID_DEGREES), int(longitude / GRID_DEGREES))
+        nearest, best = None, None
+        # Les cellules voisines suffisent : au-delà, la commune trouvée serait
+        # trop lointaine pour dire quoi que ce soit du lieu.
+        for delta_lat in (-1, 0, 1):
+            for delta_lon in (-1, 0, 1):
+                for street in grid.get((cell[0] + delta_lat, cell[1] + delta_lon), ()):
+                    distance = (
+                        (statistics.median(street.latitudes) - latitude) ** 2
+                        + (statistics.median(street.longitudes) - longitude) ** 2
+                    )
+                    if best is None or distance < best:
+                        nearest, best = street, distance
+        if nearest is not None:
+            place.city = nearest.city
+            place.postcode = place.postcode or nearest.postcode
+            filled += 1
+    return filled
 
 
 def pick_best_position(
@@ -561,10 +618,14 @@ def main() -> int:
             print("[2/3] Extraction des points de repère OpenStreetMap…")
             with tempfile.TemporaryDirectory() as work:
                 places = read_osm_places(arguments.osm_extract, box, Path(work))
+            # Le rattachement a lieu avant la fusion : la grille ne doit
+            # contenir que des voies, pas les repères qu'on cherche à situer.
+            filled = fill_missing_places_communes(streets, places)
             for index, place in enumerate(places):
                 streets[f"osm|{index}"] = place
             place_count = len(places)
-            print(f"      {place_count} points de repère")
+            print(f"      {place_count} points de repère, "
+                  f"{filled} rattachés à une commune voisine")
         else:
             print("[2/3] Points de repère ignorés (--osm-extract non fourni)")
 
