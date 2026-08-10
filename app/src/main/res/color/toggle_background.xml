@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Fond des boutons de bascule : plein quand le mode est actif, transparent
-    sinon. Material propose ses propres rôles de couleur pour cet état, mais
-    ils ramèneraient une teinte étrangère au jeu de jetons du projet.
+    The toggle buttons' background: filled when the mode is active,
+    transparent otherwise. Material offers its own colour roles for that state,
+    but they would bring back a hue foreign to the project's token set.
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:color="@color/signal" android:state_checked="true" />

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Thème sombre. Les couleurs elles-mêmes sont redéfinies dans
-    values-night/colors.xml ; il ne reste ici que ce qui ne peut pas l'être
-    par une simple ressource de couleur.
+    The dark theme. The colours themselves are redefined in
+    values-night/colors.xml; what remains here is only what a plain colour
+    resource cannot express.
 -->
 <resources>
 
@@ -30,7 +30,7 @@
 
         <item name="android:statusBarColor">@color/papier</item>
         <item name="android:navigationBarColor">@color/papier</item>
-        <!-- Icônes de la barre d'état en clair sur fond sombre. -->
+        <!-- Status bar icons in light on a dark background. -->
         <item name="android:windowLightStatusBar">false</item>
 
         <item name="android:textAppearance">@style/TextAppearance.RoueLibre.Body</item>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Mire de visée : le point que la carte désigne sous elle. Le trait clair
-     doublant le trait sombre la garde lisible sur un fond de n'importe quelle
-     valeur. -->
+<!-- The aiming crosshair: the point the map designates beneath it. The light
+     stroke doubling the dark one keeps it legible over a background of any
+     value. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="32dp"
     android:height="32dp"

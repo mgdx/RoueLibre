@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Point choisi sur la carte : une goutte pleine, posée par sa pointe.
+    The point picked on the map: a solid pin, resting on its tip.
 
-    Volontairement d'une autre FORME que les marqueurs de stations, qui sont
-    des disques : sur une carte qui en porte deux cent soixante-huit, le point
-    cherché doit se distinguer sans dépendre de sa seule couleur (SPEC §7).
+    Deliberately a different SHAPE from the station markers, which are discs: on
+    a map carrying two hundred and sixty-eight of them, the point sought must
+    stand out without depending on colour alone (SPEC §7).
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="32dp"
     android:height="40dp"
     android:viewportWidth="24"
     android:viewportHeight="30">
-    <!-- Liseré clair, pour que la goutte tienne aussi sur un fond sombre. -->
+    <!-- A light rim, so the pin holds on a dark background too. -->
     <path
         android:fillColor="@color/surface"
         android:pathData="M12,0C6.48,0 2,4.48 2,10c0,7.5 10,20 10,20s10,-12.5 10,-20C22,4.48 17.52,0 12,0z" />

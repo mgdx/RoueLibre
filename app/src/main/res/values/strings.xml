@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Français par défaut (SPEC §9). Aucune chaîne n'est écrite dans le code
-    Kotlin ni dans un layout.
+    French by default (SPEC §9). Not a single string is written in the Kotlin
+    code or in a layout.
 
-    Règles pour les contributeurs :
-      · placeholders positionnels (%1$s, %2$d), jamais de concaténation :
-        l'ordre des mots change d'une langue à l'autre ;
-      · <plurals> pour tout ce qui s'accorde ;
-      · un commentaire au-dessus de chaque chaîne ambiguë.
-    Voir CONTRIBUTING.md pour proposer une traduction.
+    Rules for contributors:
+      · positional placeholders (%1$s, %2$d), never concatenation: word order
+        changes from one language to another;
+      · <plurals> for everything that agrees;
+      · a comment above every ambiguous string.
+    See CONTRIBUTING.md to submit a translation.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">Roue Libre</string>
 
-    <!-- Écran principal : liste des stations. -->
+    <!-- Main screen: the station list. -->
     <string name="stations_title">Stations</string>
 
-    <!-- Nombre de vélos empruntables dans une station. -->
+    <!-- The number of bikes available to borrow at a station. -->
     <plurals name="bikes_available">
         <item quantity="one">%1$d vélo</item>
         <item quantity="other">%1$d vélos</item>
     </plurals>
 
-    <!-- Nombre de places libres pour rendre un vélo. -->
+    <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
         <item quantity="one">%1$d place</item>
         <item quantity="other">%1$d places</item>
     </plurals>
 
-    <!-- Lu par les lecteurs d'écran sur l'indicateur d'une station.
-         Exemple : « Rue Nationale, 6 vélos, 26 places ». -->
+    <!-- Spoken by screen readers on a station's indicator.
+         Example: "Rue Nationale, 6 vélos, 26 places". -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
 
     <string name="station_out_of_service">Hors service</string>
     <string name="station_availability_unknown">Disponibilité inconnue</string>
 
-    <!-- Champ de recherche au-dessus de la liste. Il filtre les stations par
-         leur nom ; la recherche d'adresses est un autre écran (SPEC §4.3). -->
+    <!-- The search field above the list. It filters stations by name; the
+         address search is a different screen (SPEC §4.3). -->
     <string name="search_stations_hint">Chercher une station</string>
     <string name="search_stations_clear">Effacer la recherche</string>
 
-    <!-- Liste vide parce que la recherche ne correspond à rien.
-         %1$s est ce que l'utilisateur a tapé. -->
+    <!-- The list is empty because the search matches nothing.
+         %1$s is what the user typed. -->
     <string name="stations_no_match_title">Aucune station trouvée</string>
     <string name="stations_no_match_message">Rien ne correspond à « %1$s ». Vérifie l\'orthographe, ou efface la recherche.</string>
     <string name="action_clear_search">Effacer la recherche</string>
 
-    <!-- Bascule entre emprunter un vélo et rendre un vélo (SPEC §7.1). -->
+    <!-- Toggle between borrowing a bike and returning one (SPEC §7.1). -->
     <string name="mode_bikes">Vélos</string>
     <string name="mode_docks">Places</string>
     <string name="mode_bikes_description">Afficher les vélos disponibles</string>
     <string name="mode_docks_description">Afficher les places libres</string>
 
-    <!-- Étiquette du compte secondaire, sous le chiffre de droite. -->
+    <!-- The secondary count's label, under the figure on the right. -->
     <string name="counterpart_bikes">vélos</string>
     <string name="counterpart_docks">places</string>
-    <!-- Affiché à la place du compte quand la station ne rend pas le service. -->
+    <!-- Shown instead of the count when the station does not provide the service. -->
     <string name="counterpart_none">—</string>
 
-    <!-- Ligne de détail sous le nom d'une station.
-         %1$s est un code postal, %2$d le nombre de points d'attache. -->
+    <!-- The detail line under a station's name.
+         %1$s is a postcode, %2$d the number of docking points. -->
     <plurals name="station_detail_with_capacity">
         <item quantity="one">%1$s · %2$d point d\'attache</item>
         <item quantity="other">%1$s · %2$d points d\'attache</item>
     </plurals>
 
-    <!-- Âge de la donnée affichée (SPEC §4.1). -->
+    <!-- The age of the displayed data (SPEC §4.1). -->
     <string name="freshness_just_now">à l\'instant</string>
     <plurals name="freshness_seconds">
         <item quantity="one">il y a %1$d seconde</item>
@@ -81,50 +81,51 @@
         <item quantity="other">il y a %1$d heures</item>
     </plurals>
     <string name="freshness_long_ago">il y a plus d\'un jour</string>
-    <!-- Accolé à l'âge quand la donnée n'est plus à jour.
-         Exemple : « Données figées · il y a 12 minutes ». -->
+    <!-- Attached to the age when the data is no longer current.
+         Example: "Données figées · il y a 12 minutes". -->
     <string name="freshness_stale">Données figées · %1$s</string>
     <string name="freshness_fresh">Mis à jour %1$s</string>
     <string name="freshness_never">Jamais mis à jour</string>
 
-    <!-- Écran vide : une invitation à agir, pas un constat (SPEC §7). -->
+    <!-- An empty screen: an invitation to act, not a statement (SPEC §7). -->
     <string name="stations_empty_title">Aucune station chargée</string>
     <string name="stations_empty_message">Tire la liste vers le bas pour récupérer les stations du réseau.</string>
 
-    <!-- Actions. Un même geste porte le même nom du bouton à la confirmation. -->
+    <!-- Actions. One gesture keeps one name from the button to the confirmation. -->
     <string name="action_refresh">Rafraîchir</string>
     <string name="action_retry">Réessayer</string>
 
-    <!-- Écran carte (SPEC §7.1). -->
+    <!-- The map screen (SPEC §7.1). -->
     <string name="map_open_list">Voir la liste des stations</string>
-    <!-- Attribution portée par la carte elle-même (SPEC §4.5). Tient sur une
-         ligne ; l'attribution complète du réseau est dans « À propos ». -->
+    <!-- The attribution carried by the map itself (SPEC §4.5). It fits on one
+         line; the network's full attribution is in "about". -->
     <string name="map_attribution">© les contributeurs OpenStreetMap</string>
-    <!-- Bouton « me localiser » et ce qu'il peut répondre (SPEC §7.1, §10).
-         Le refus ne relance jamais : il est constaté, pas discuté. -->
+    <!-- The "locate me" button and what it can answer (SPEC §7.1, §10). A
+         refusal never prompts again: it is noted, not argued with. -->
     <string name="map_locate_me">Me localiser</string>
     <string name="map_location_denied">Sans localisation, désigne ton point de départ sur la carte ou par une adresse.</string>
     <string name="map_location_unavailable">Position introuvable. Vérifie que la localisation est activée, puis réessaie.</string>
 
     <string name="map_needs_tiles_title">La carte a besoin du fond de carte</string>
     <string name="map_needs_tiles_message">Installe le fond de carte depuis l\'écran de stockage. En attendant, la liste des stations reste utilisable.</string>
-    <!-- Même écran, mais avant même d'avoir désigné une ville : ce n'est pas
-         un fichier qui manque, c'est le cadre de tout le reste (SPEC §15.1). -->
+    <!-- The same screen, but before a city has even been designated: it is
+         not a file that is missing but the frame for everything else
+         (SPEC §15.1). -->
     <string name="map_needs_city_title">Quelle ville ?</string>
     <string name="map_needs_city_message">Choisis l\'agglomération que tu veux consulter. Ses données se téléchargent ensuite, une fois pour toutes.</string>
 
-    <!-- Premier lancement (SPEC §7.9). On explique un fonctionnement, on ne
-         vend rien : phrases courtes, voix active, aucun jargon. -->
+    <!-- First launch (SPEC §7.9). We explain how something works, we are not
+         selling anything: short sentences, active voice, no jargon. -->
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">Cette application montre les vélos en libre-service sur une carte, et calcule un trajet porte-à-porte : marche jusqu\'à une station, vélo, puis marche jusqu\'au bout.\n\nElle est libre et ouverte. Pas de compte, pas de publicité, pas de mouchard.</string>
     <string name="welcome_privacy_title">Rien ne sort d\'ici</string>
     <string name="welcome_privacy_body">Les itinéraires sont calculés sur ce téléphone. Les adresses que tu cherches ne sont envoyées à personne, pas même pendant la frappe.\n\nAucun historique n\'est conservé : ni tes trajets, ni tes positions, ni tes destinations.\n\nLa seule requête qui part en usage courant demande combien de vélos sont disponibles.</string>
     <string name="welcome_data_title">Une ville, un téléchargement</string>
     <string name="welcome_data_body">La carte, les rues et le calcul d\'itinéraire vivent sur l\'appareil. C\'est ce qui les rend utilisables sans réseau — et cela suppose de télécharger les données de ta ville, une fois.\n\nCommence donc par la choisir. Compte quelques dizaines de mégaoctets pour une agglomération de taille moyenne, davantage pour une capitale ; la taille est annoncée avant le téléchargement.\n\nTu peux aussi le faire plus tard : en attendant, la liste des stations et leurs disponibilités restent utilisables.</string>
-    <!-- Position dans la séquence : « 1 sur 3 ». Ce n'est pas un accord de
-         nombre mais un repère de progression — le second nombre ne varie pas
-         avec le premier — d'où l'absence de pluriel.
-         %1$d est le numéro de la page, %2$d leur nombre. -->
+    <!-- Position in the sequence: "1 sur 3". This is not a number agreement
+         but a progress marker — the second number does not vary with the
+         first — hence the absence of a plural.
+         %1$d is the page number, %2$d how many there are. -->
     <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d sur %2$d</string>
     <string name="welcome_continue">Continuer</string>
     <string name="welcome_skip">Passer</string>
@@ -132,26 +133,26 @@
     <string name="welcome_later">Plus tard</string>
     <string name="welcome_open">Revoir la présentation</string>
 
-    <!-- Nouveautés après mise à jour (SPEC §7.10). -->
+    <!-- What's new after an update (SPEC §7.10). -->
     <string name="whats_new_title">Nouveautés</string>
     <string name="whats_new_done">Continuer</string>
     <string name="whats_new_nothing">Cette version n\'a pas de notes.</string>
     <string name="whats_new_open">Voir les nouveautés</string>
 
-    <!-- Lieu reçu d'une autre application (SPEC §7.8). -->
+    <!-- A place received from another application (SPEC §7.8). -->
     <string name="incoming_place_default_label">Lieu reçu</string>
     <string name="incoming_show_me">Voir</string>
     <string name="incoming_needs_index">Cette adresse doit être cherchée dans l\'index hors ligne, qui n\'est pas installé.</string>
-    <!-- %1$s est le texte reçu de l'autre application. -->
+    <!-- %1$s is the text received from the other application. -->
     <string name="incoming_address_not_found">« %1$s » ne correspond à aucune adresse de la zone couverte.</string>
     <string name="incoming_outside_coverage">Ce lieu est hors de la zone couverte par les données installées : aucun itinéraire ne peut y mener.</string>
 
-    <!-- Favoris (SPEC §7.5). -->
+    <!-- Favourites (SPEC §7.5). -->
     <string name="favourites_title">Favoris</string>
     <string name="favourites_open">Voir les favoris</string>
     <string name="favourites_reorder_hint">Garde une ligne appuyée pour la déplacer.</string>
 
-    <!-- Réglages (SPEC §7.6). -->
+    <!-- Settings (SPEC §7.6). -->
     <string name="settings_title">Réglages</string>
     <string name="settings_open">Réglages</string>
     <string name="settings_data_title">Données hors ligne</string>
@@ -169,11 +170,11 @@
     <string name="settings_sources_explanation">Laisse ces champs vides pour employer les adresses fournies avec l\'application. Les changer permet de servir un autre réseau, ou de te passer de l\'hébergeur par défaut.</string>
     <string name="settings_reset_default">Rétablir l\'adresse par défaut</string>
 
-    <!-- « À propos » (SPEC §7.7). Les attributions y sont dues, pas offertes :
-         les producteurs de données et les bibliothèques employées l'exigent. -->
+    <!-- The "about" screen (SPEC §7.7). The attributions there are owed, not
+         offered: the data producers and the libraries used require them. -->
     <string name="about_title">À propos</string>
     <string name="about_open">À propos</string>
-    <!-- %1$s est le numéro de version, par exemple « 0.1.0-alpha ». -->
+    <!-- %1$s is the version number, "0.1.0-alpha" for instance. -->
     <string name="about_version">Version %1$s</string>
 
     <string name="about_privacy_title">Vie privée</string>
@@ -185,9 +186,9 @@
     <string name="about_attribution_brouter">Calcul d\'itinéraire : BRouter, licence MIT, sur des données OpenStreetMap.</string>
     <string name="about_attribution_maplibre">Affichage de la carte : MapLibre Native, licence BSD à deux clauses.</string>
 
-    <!-- Liens web cartographiques (SPEC §7.8) : Android ne les confie à
-         l'application que si l'utilisateur l'autorise, et le dire évite de
-         faire passer ce comportement pour un défaut. -->
+    <!-- Web map links (SPEC §7.8): Android only hands them to the application
+         if the user allows it, and saying so keeps that behaviour from looking
+         like a defect. -->
     <string name="about_links_title">Ouvrir un lieu depuis une autre application</string>
     <string name="about_links_body">Les liens « geo: » et les adresses partagées en texte arrivent directement ici : choisis Roue Libre dans le sélecteur d\'Android. Les liens de sites de cartographie, eux, demandent une autorisation : Paramètres → Applications → Roue Libre → Ouvrir par défaut → Ajouter un lien.</string>
 
@@ -198,7 +199,7 @@
     <string name="about_licences_title">Licences</string>
     <string name="about_no_browser">Aucun navigateur n\'est installé sur cet appareil.</string>
 
-    <!-- Recherche d'itinéraire (SPEC §7.3). -->
+    <!-- Journey search (SPEC §7.3). -->
     <string name="journey_title">Itinéraire</string>
     <string name="journey_open">Chercher un itinéraire</string>
     <string name="journey_origin_empty">Partir d\'où ?</string>
@@ -209,7 +210,7 @@
     <string name="journey_hint">Le trajet est calculé sur l\'appareil : marche jusqu\'à une station, vélo, puis marche jusqu\'au bout.</string>
     <string name="journey_compute">Calculer l\'itinéraire</string>
 
-    <!-- Les quatre façons de désigner un point (SPEC §7.3). -->
+    <!-- The four ways of designating a point (SPEC §7.3). -->
     <string name="journey_source_my_position">Ma position</string>
     <string name="journey_source_address">Une adresse</string>
     <string name="journey_source_favourite">Une station favorite</string>
@@ -219,29 +220,29 @@
     <string name="journey_pick_confirm">Choisir ce point</string>
     <string name="journey_picked_point">Point sur la carte</string>
 
-    <!-- Résultat d'itinéraire (SPEC §7.4). -->
+    <!-- Journey result (SPEC §7.4). -->
     <string name="journey_result_title">Trajet</string>
-    <!-- %1$s est la durée à pied, %2$s celle à vélo, %3$s la distance totale. -->
+    <!-- %1$s is the walking time, %2$s the cycling time, %3$s the total distance. -->
     <string name="journey_summary">dont %1$s à pied et %2$s à vélo · %3$s</string>
     <string name="journey_alternatives">Couples de stations</string>
-    <!-- %1$s est la station de départ, %2$s celle d\'arrivée. -->
+    <!-- %1$s is the departure station, %2$s the arrival one. -->
     <string name="journey_alternative_stations">%1$s → %2$s</string>
-    <!-- %1$s est un nombre de vélos, %2$s un nombre de places. -->
+    <!-- %1$s is a number of bikes, %2$s a number of docks. -->
     <string name="journey_alternative_detail">%1$s au départ · %2$s à l\'arrivée</string>
     <string name="journey_recompute">Recalculer</string>
-    <!-- %1$s est le nom de la station. -->
+    <!-- %1$s is the station's name. -->
     <string name="journey_step_to_station">Marcher jusqu\'à %1$s</string>
     <string name="journey_step_ride">Pédaler jusqu\'à %1$s</string>
     <string name="journey_step_to_destination">Marcher jusqu\'à l\'arrivée</string>
     <string name="journey_step_walk_all">Marcher jusqu\'à l\'arrivée</string>
-    <!-- Le SPEC §6 impose de le dire quand le vélo ne fait pas gagner de temps.
-         %1$s est la durée à pied. -->
+    <!-- SPEC §6 requires saying so when the bike saves no time.
+         %1$s is the walking time. -->
     <string name="journey_walking_is_faster">À pied, tu y serais plus vite : %1$s.</string>
-    <!-- %1$s est la distance à pied. -->
+    <!-- %1$s is the walking distance. -->
     <string name="journey_walk_only">à pied, sur %1$s — aucun trajet à vélo n\'est possible ici.</string>
 
-    <!-- Pourquoi aucun trajet à vélo n'a été retenu (SPEC §6). Chaque cas dit
-         ce qui s'est passé, jamais un code technique. -->
+    <!-- Why no bike journey was retained (SPEC §6). Each case says what
+         happened, never a technical code. -->
     <string name="journey_none_title">Pas de trajet</string>
     <string name="journey_no_bike_nearby">Aucune station avec un vélo près du départ. Réessaie plus tard, ou pars d\'un autre point.</string>
     <string name="journey_no_dock_nearby">Aucune station avec une place libre près de l\'arrivée. Réessaie plus tard, ou vise un autre point.</string>
@@ -250,96 +251,96 @@
     <string name="journey_outside_coverage">Ce point est hors de la zone couverte par les données installées.</string>
     <string name="journey_no_stations">Aucune station connue. Rafraîchis la liste des stations, puis réessaie.</string>
 
-    <!-- Durées, formatées par les API de localisation (SPEC §9).
-         %1$d est un nombre de minutes ; %1$d h et %2$02d min pour les heures. -->
+    <!-- Durations, formatted through the localisation APIs (SPEC §9).
+         %1$d is a number of minutes; %1$d h and %2$02d min for hours. -->
     <string name="duration_minutes">%1$d min</string>
     <string name="duration_hours_minutes">%1$d h %2$02d</string>
 
-    <!-- Détail d'une station (SPEC §7.2). -->
+    <!-- A station's detail (SPEC §7.2). -->
     <plurals name="docks_total">
         <item quantity="one">%1$d point d\'attache</item>
         <item quantity="other">%1$d points d\'attache</item>
     </plurals>
-    <!-- %1$s est le nombre de points d'attache, %2$s l'âge de la donnée. -->
+    <!-- %1$s is the number of docking points, %2$s the age of the data. -->
     <string name="station_capacity_and_age">%1$s · %2$s</string>
-    <!-- Une station sans adresse propre — au milieu d'un rond-point, d'une
-         place — est située par rapport à la voie la plus proche.
-         %1$s est un nom de voie. -->
+    <!-- A station with no address of its own — in the middle of a roundabout,
+         of a square — is placed relative to the nearest street.
+         %1$s is a street name. -->
     <string name="station_address_nearby">À proximité de %1$s</string>
     <string name="station_favourite_add">Mettre en favori</string>
     <string name="station_favourite_remove">Retirer des favoris</string>
-    <!-- Actions de la feuille de station : préparer un itinéraire depuis
-         cette station, ou vers elle (SPEC §7.2). -->
+    <!-- The station sheet's actions: preparing a journey from this station,
+         or to it (SPEC §7.2). -->
     <string name="station_as_origin">Partir d\'ici</string>
     <string name="station_as_destination">Aller ici</string>
     <string name="station_open_in_navigation">Ouvrir dans une appli de navigation</string>
     <string name="station_no_navigation_app">Aucune application de cartographie n\'est installée sur cet appareil.</string>
 
-    <!-- Recherche d'adresses dans l'index hors ligne (SPEC §4.3). À ne pas
-         confondre avec le champ qui filtre la liste des stations. -->
+    <!-- Address search in the offline index (SPEC §4.3). Not to be confused
+         with the field that filters the station list. -->
     <string name="address_search_title">Chercher une adresse</string>
     <string name="address_search_hint">Numéro, rue, commune</string>
     <string name="address_search_clear">Effacer la recherche</string>
     <string name="address_search_privacy">Tout se cherche sur l\'appareil. Rien n\'est envoyé, pas même pendant la frappe.</string>
 
-    <!-- Une adresse trouvée. Le numéro et le nom de la voie sont assemblés par
-         ressource, jamais par concaténation : l'ordre change d'une langue à
-         l'autre (SPEC §9).
-         %1$s est le numéro (« 12 », « 12 bis »), %2$s le nom de la voie. -->
+    <!-- An address found. The number and the street name are assembled through
+         a resource, never by concatenation: the order changes from one language
+         to another (SPEC §9).
+         %1$s is the number ("12", "12 bis"), %2$s the street name. -->
     <string name="address_with_number">%1$s %2$s</string>
-    <!-- %1$d est le numéro, %2$s son indice de répétition (« bis », « ter »). -->
+    <!-- %1$d is the number, %2$s its repetition mark ("bis", "ter"). -->
     <string name="address_number_with_suffix">%1$d %2$s</string>
-    <!-- %1$s est un code postal, %2$s une commune. -->
+    <!-- %1$s is a postcode, %2$s a municipality. -->
     <string name="address_locality">%1$s %2$s</string>
-    <!-- %1$s est le lieu, %2$s une distance déjà formatée. -->
+    <!-- %1$s is the place, %2$s an already formatted distance. -->
     <string name="address_detail">%1$s · %2$s</string>
-    <!-- Dit quand le numéro cherché n'est pas dans l'index et qu'un voisin a
-         servi de repère. %1$s est la ligne de détail. -->
+    <!-- Said when the number sought is absent from the index and a neighbour
+         served as a landmark. %1$s is the detail line. -->
     <string name="address_detail_approximate">%1$s · position approchée</string>
-    <!-- Lu par les lecteurs d'écran sur une ligne de résultat.
-         %1$s est l'adresse, %2$s son contexte. -->
+    <!-- Spoken by screen readers on a result row.
+         %1$s is the address, %2$s its context. -->
     <string name="address_content_description">%1$s, %2$s</string>
 
-    <!-- Écran de recherche vide : chaque situation appelle un geste différent. -->
+    <!-- An empty search screen: each situation calls for a different gesture. -->
     <string name="address_search_prompt_title">Où vas-tu ?</string>
     <string name="address_search_prompt_message">Tape un nom de rue, avec ou sans numéro. Les gares, universités et grandes places se cherchent aussi.</string>
     <string name="address_no_match_title">Aucune adresse trouvée</string>
-    <!-- %1$s est ce que l'utilisateur a tapé. -->
+    <!-- %1$s is what the user typed. -->
     <string name="address_no_match_message">Rien ne correspond à « %1$s ». Essaie le nom de la rue seul, ou ajoute la commune.</string>
     <string name="address_needs_index_title">La recherche a besoin de l\'index d\'adresses</string>
     <string name="address_needs_index_message">Installe l\'index depuis l\'écran de stockage. Il reste sur l\'appareil et ne part jamais sur le réseau.</string>
     <string name="address_unreadable_title">Index d\'adresses illisible</string>
 
-    <!-- Point trouvé, posé sur la carte. Lu par les lecteurs d'écran :
-         l'adresse d'abord, l'action ensuite. %1$s est l'adresse trouvée. -->
+    <!-- The point found, laid on the map. Spoken by screen readers: the
+         address first, the action second. %1$s is the address found. -->
     <string name="map_picked_place_description">%1$s. Appuyer pour effacer ce point.</string>
 
-    <!-- Distances, formatées par les API de localisation (SPEC §9).
-         %1$d est un nombre de mètres, %1$s un nombre de kilomètres déjà écrit
-         dans la langue de l'interface. -->
+    <!-- Distances, formatted through the localisation APIs (SPEC §9).
+         %1$d is a number of metres, %1$s a number of kilometres already written
+         in the interface's language. -->
     <string name="distance_metres">%1$d m</string>
     <string name="distance_kilometres">%1$s km</string>
 
     <string name="action_back">Revenir</string>
 
-    <!-- Écran « ville » : quelle agglomération l'application sert (SPEC §15). -->
+    <!-- The city screen: which conurbation the application serves (SPEC §15). -->
     <string name="city_title">Ville</string>
     <string name="city_open">Changer de ville</string>
     <string name="city_choose">Choisir ma ville</string>
     <string name="city_intro">Choisis l\'agglomération que tu veux consulter. Ses données s\'installent ensuite, une fois pour toutes.</string>
     <string name="city_locate_me">Trouver ma ville</string>
     <string name="city_active">En service</string>
-    <!-- %1$d est un nombre de stations, %2$s une taille déjà formatée. -->
+    <!-- %1$d is a number of stations, %2$s an already formatted size. -->
     <plurals name="city_detail">
         <item quantity="one">%1$d station · %2$s à télécharger</item>
         <item quantity="other">%1$d stations · %2$s à télécharger</item>
     </plurals>
     <string name="city_detail_size_only">%1$s à télécharger</string>
     <string name="city_data_unavailable">Données pas encore publiées</string>
-    <!-- %1$s est une taille déjà formatée, par exemple « 42,5 Mo ». -->
+    <!-- %1$s is an already formatted size, "42,5 Mo" for instance. -->
     <string name="city_installed">%1$s installés sur l\'appareil</string>
     <string name="city_delete">Supprimer</string>
-    <!-- %1$s est le nom d\'une ville. -->
+    <!-- %1$s is a city's name. -->
     <string name="city_delete_description">Supprimer les données de %1$s</string>
     <string name="city_delete_title">Supprimer ces données ?</string>
     <string name="city_delete_body">Toutes les données hors ligne de %1$s seront effacées. Il faudra les retélécharger pour t\'en servir à nouveau.</string>
@@ -351,12 +352,12 @@
     <string name="city_none_nearby">Aucun réseau connu près d\'ici. Choisis une ville dans la liste.</string>
     <string name="action_cancel">Annuler</string>
 
-    <!-- Écran « stockage » : ce que l'application occupe, et comment le
-         reprendre (SPEC §4.4). -->
+    <!-- The storage screen: what the application occupies, and how to reclaim
+         it (SPEC §4.4). -->
     <string name="storage_title">Stockage</string>
     <string name="storage_open">Gérer les données hors ligne</string>
     <string name="storage_intro">La carte, le calcul d\'itinéraire et la recherche d\'adresses fonctionnent sans réseau. Ils demandent trois jeux de données, à installer une fois.</string>
-    <!-- %1$s est une taille déjà formatée, par exemple « 42,5 Mo ». -->
+    <!-- %1$s is an already formatted size, "42,5 Mo" for instance. -->
     <string name="storage_total">%1$s occupés sur cet appareil</string>
     <string name="storage_nothing_installed">Aucune donnée installée</string>
     <string name="storage_no_city">Aucune ville choisie</string>
@@ -368,52 +369,51 @@
     <string name="dataset_addresses">Index d\'adresses</string>
     <string name="dataset_addresses_purpose">Cherche les rues sans rien envoyer</string>
 
-    <!-- Mise à jour des jeux de données (SPEC §4.4). La vérification n'est
-         jamais automatique : une requête périodique dessinerait un profil
-         d'usage. -->
+    <!-- Updating the datasets (SPEC §4.4). The check is never automatic: a
+         periodic request would draw a usage profile. -->
     <string name="storage_check_updates">Vérifier les mises à jour</string>
     <string name="storage_checking">Consultation du manifeste…</string>
     <string name="storage_up_to_date">Tout est à jour.</string>
-    <!-- %1$s est une taille déjà formatée, par exemple « 42,5 Mo ». -->
+    <!-- %1$s is an already formatted size, "42,5 Mo" for instance. -->
     <string name="storage_download_pending">Télécharger %1$s</string>
-    <!-- %1$s est le nom du fichier, %2$s la part reçue, %3$s la taille totale. -->
+    <!-- %1$s is the file name, %2$s the part received, %3$s the total size. -->
     <string name="storage_downloading">%1$s · %2$s sur %3$s</string>
-    <!-- %1$s est le nom du jeu, %2$s la raison de l'échec. -->
+    <!-- %1$s is the set's name, %2$s the reason for the failure. -->
     <string name="storage_download_failed">%1$s : %2$s</string>
     <string name="storage_wifi_warning">Tu n\'es pas en Wi-Fi. Ce téléchargement peut peser lourd sur un forfait mobile.</string>
     <string name="dataset_update_available">Mise à jour disponible</string>
 
     <string name="dataset_absent">Pas installé</string>
-    <!-- %1$s est une taille, %2$s une date. Exemple : « 35,0 Mo · 9 août 2026 ». -->
+    <!-- %1$s is a size, %2$s a date. Example: "35,0 Mo · 9 août 2026". -->
     <string name="dataset_installed">%1$s · %2$s</string>
     <string name="dataset_import">Importer</string>
     <string name="dataset_replace">Remplacer</string>
     <string name="dataset_delete">Supprimer</string>
-    <!-- %1$s est le nom du jeu de données. -->
+    <!-- %1$s is the dataset's name. -->
     <string name="dataset_delete_description">Supprimer %1$s</string>
-    <!-- %1$s est le nom du jeu de données. -->
+    <!-- %1$s is the dataset's name. -->
     <string name="dataset_imported">%1$s installé</string>
     <string name="dataset_deleted">%1$s supprimé</string>
 
-    <!-- Refus d'importation : chaque cas dit quoi faire. -->
+    <!-- Import refusals: each case says what to do. -->
     <string name="dataset_rejected_empty">Le fichier choisi est vide.</string>
-    <!-- %1$s est le nom attendu du fichier, par exemple « tiles.mbtiles ». -->
+    <!-- %1$s is the expected file name, "tiles.mbtiles" for instance. -->
     <string name="dataset_rejected_format">Ce fichier n\'est pas celui attendu. Choisis le fichier « %1$s » produit par les scripts de génération.</string>
-    <!-- %1$d est la version trouvée, %2$d celle que l'application sait lire. -->
+    <!-- %1$d is the version found, %2$d the one the application can read. -->
     <string name="dataset_rejected_version">Ce fichier est en version de format %1$d, et cette version de l\'application lit la version %2$d. Mets l\'application à jour.</string>
     <string name="dataset_rejected_checksum">Le fichier ne correspond pas à son empreinte : il est incomplet ou abîmé. Retélécharge-le.</string>
     <string name="dataset_rejected_transfer">La copie du fichier a échoué. Vérifie l\'espace libre et réessaie.</string>
 
-    <!-- Messages d'erreur : ce qui s'est passé, et quoi faire. Sans excuses,
-         sans code technique (SPEC §7 et §14). -->
+    <!-- Error messages: what happened, and what to do. No apologies, no
+         technical codes (SPEC §7 and §14). -->
     <string name="error_offline">Pas de connexion. Les dernières disponibilités connues restent affichées.</string>
     <string name="error_timeout">Le serveur du réseau met trop de temps à répondre. Réessaie dans un moment.</string>
-    <!-- %1$d est le code HTTP renvoyé par le serveur. -->
+    <!-- %1$d is the HTTP code the server returned. -->
     <string name="error_server_refused">Le serveur du réseau a renvoyé une erreur (%1$d). Réessaie plus tard.</string>
     <string name="error_malformed">Les données reçues sont illisibles. Vérifie l\'adresse du flux dans les réglages.</string>
-    <!-- %1$s est le nom d'un flux GBFS, par exemple « station_status ». -->
+    <!-- %1$s is a GBFS feed name, "station_status" for instance. -->
     <string name="error_feed_unavailable">Le réseau ne publie pas le flux « %1$s ». Vérifie l\'adresse du flux dans les réglages.</string>
-    <!-- %1$s est un numéro de version, par exemple « 4.0 ». -->
+    <!-- %1$s is a version number, "4.0" for instance. -->
     <string name="error_unsupported_version">Ce réseau publie ses données en version %1$s, que cette version de l\'application ne sait pas lire. Mets l\'application à jour.</string>
     <string name="error_local_storage">Impossible de lire les données enregistrées sur l\'appareil.</string>
     <string name="error_no_city_chosen">Aucune ville n\'est sélectionnée. Choisissez-en une pour afficher les stations.</string>

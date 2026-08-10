@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Fond des étiquettes posées sur la carte : la surface du thème, au rayon
-     unique du projet. -->
+<!-- The background of labels laid on the map: the theme's surface, at the
+     project's single radius. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <solid android:color="@color/surface" />

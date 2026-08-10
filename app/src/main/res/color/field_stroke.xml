@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Contour du champ de recherche : discret au repos, teinte de signal une fois
-    saisi. Le contour n'est jamais le seul indice de sélection — le curseur et
-    le libellé flottant le disent aussi.
+    The search field's outline: discreet at rest, the signal hue once focused.
+    The outline is never the only cue of selection — the caret and the floating
+    label say so too.
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:color="@color/signal" android:state_focused="true" />

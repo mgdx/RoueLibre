@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Flèche de retour. Dessinée en vecteur : une icône bitmap coûterait cinq
-     densités pour le même trait. `autoMirrored` la retourne dans les langues
-     écrites de droite à gauche (SPEC §9). -->
+<!-- The back arrow. Drawn as a vector: a bitmap icon would cost five
+     densities for the same stroke. `autoMirrored` flips it in right-to-left
+     languages (SPEC §9). -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"

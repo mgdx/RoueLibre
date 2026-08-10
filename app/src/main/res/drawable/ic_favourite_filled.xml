@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Étoile pleine : station en favori. La forme change en même temps que le
-     remplissage, pour que l'état se lise sans dépendre de la couleur. -->
+<!-- A filled star: a station marked as a favourite. The shape changes along
+     with the fill, so the state reads without depending on colour. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
