@@ -70,14 +70,23 @@
                 android:text="@string/about_attributions_title"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
 
-            <!-- The served network's attribution: it comes from the city
-                 configuration, never from the code (SPEC §15). -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:text="@string/about_attribution_gbfs"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+
+            <!-- The served network's credit: it comes from the city
+                 configuration, never from the code (SPEC §15), and the ODbL
+                 licence of the feeds requires it (SPEC §4.5). Set in a
+                 secondary style: it is the credit, not the description. -->
             <TextView
                 android:id="@+id/network_attribution"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_s"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+                android:layout_marginTop="@dimen/space_xs"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
                 tools:text="Données V'lille — Ilevia / MEL, licence ODbL" />
 
             <TextView

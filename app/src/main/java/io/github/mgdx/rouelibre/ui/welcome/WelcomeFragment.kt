@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import io.github.mgdx.rouelibre.BuildConfig
 import io.github.mgdx.rouelibre.R
@@ -87,8 +88,10 @@ class WelcomeFragment : Fragment() {
             return
         }
         // Last page: the city is chosen first, since it determines which data
-        // to fetch. The next screen follows on from it.
-        finish(CityFragment())
+        // to fetch. The map goes underneath rather than being replaced by it —
+        // going back from the city then lands on the application, not outside
+        // it.
+        finish(MapFragment(), then = CityFragment())
     }
 
     private fun onSkip() {
@@ -107,13 +110,31 @@ class WelcomeFragment : Fragment() {
      *
      * The version is remembered here, not at launch: somebody who leaves the
      * application in the middle of the sequence must see it again.
+     *
+     * @param next the screen that becomes the root.
+     * @param then a screen opened on top of it, which Back closes.
      */
-    private fun finish(next: Fragment) {
+    private fun finish(next: Fragment, then: Fragment? = null) {
         viewLifecycleOwner.lifecycleScope.launch {
             container.preferences.setLastSeenVersionCode(BuildConfig.VERSION_CODE)
+            // The screens visited before are dropped. Replayed from the about
+            // screen, the sequence used to leave that screen on the stack: the
+            // first Back brought it up again over the screen just opened, two
+            // screens drawn on top of one another. Coming out of the
+            // presentation is a fresh start, not a step in a path.
+            parentFragmentManager.popBackStack(
+                null,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE,
+            )
             parentFragmentManager.beginTransaction()
                 .replace(R.id.content, next)
                 .commit()
+            if (then != null) {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.content, then)
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
     }
 

@@ -181,6 +181,11 @@
     <string name="about_privacy_body">Aucun compte, aucune publicité, aucun mouchard, aucun identifiant unique. Rien de ce que tu cherches ou de ce que tu calcules ne quitte ce téléphone : les adresses, les itinéraires et ta position restent ici, et ne sont pas conservés. La seule requête qui part en usage courant récupère la disponibilité des vélos. Les jeux de données ne sont téléchargés que sur ta demande.</string>
 
     <string name="about_attributions_title">Sources des données</string>
+    <!-- Availability, described like the other sources: by what the data is
+         and where it comes from, not by the brand of one network. The
+         producer's own credit follows, and it is that one the ODbL licence
+         requires (SPEC §4.5). -->
+    <string name="about_attribution_gbfs">Disponibilité des vélos : les données ouvertes du réseau desservi, publiées au format GBFS. En France, elles sont référencées sur transport.data.gouv.fr.</string>
     <string name="about_attribution_osm">Fond de carte, itinéraires et points de repère : © les contributeurs OpenStreetMap, licence ODbL.</string>
     <string name="about_attribution_ban">Adresses et numéros de voirie : Base Adresse Nationale, licence ODbL.</string>
     <string name="about_attribution_brouter">Calcul d\'itinéraire : BRouter, licence MIT, sur des données OpenStreetMap.</string>
