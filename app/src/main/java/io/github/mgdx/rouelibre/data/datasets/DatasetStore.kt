@@ -22,22 +22,21 @@ import java.security.MessageDigest
 import java.time.Instant
 
 /**
- * Range, valide et supprime les jeux de données hors ligne (SPEC.md §4.4).
+ * Stores, validates and deletes the offline datasets (SPEC.md §4.4).
  *
- * Deux règles gouvernent tout ce fichier.
+ * Two rules govern this whole file.
  *
- * **Une installation ne casse jamais l'existante.** Le fichier entrant est
- * écrit à côté, validé, et seulement ensuite mis à la place de l'ancien. Une
- * importation interrompue, un fichier tronqué ou un mauvais fichier laissent
- * l'application exactement dans l'état où elle était.
+ * **An installation never breaks the existing one.** The incoming file is
+ * written beside the old one, validated, and only then put in its place. An
+ * interrupted import, a truncated file or the wrong file leave the application
+ * exactly as it was.
  *
- * **Un fichier refusé dit pourquoi.** Un jeu de données pèse des dizaines de
- * mégaoctets ; échouer sans expliquer laisserait l'utilisateur relancer la
- * même importation indéfiniment.
+ * **A refused file says why.** A dataset weighs tens of megabytes; failing
+ * without explaining would leave the user retrying the same import for ever.
  *
- * @property context accès au stockage privé de l'application.
- * @property ioDispatcher contexte d'exécution des copies, qui portent sur
- *   plusieurs dizaines de mégaoctets.
+ * @property context access to the application's private storage.
+ * @property ioDispatcher the execution context for the copies, which carry
+ *   several tens of megabytes.
  */
 class DatasetStore(private val context: Context, private val ioDispatcher: CoroutineDispatcher) {
 
@@ -47,11 +46,11 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
     }
 
     /**
-     * La ville dont les jeux de données sont en service.
+     * The city whose datasets are in service.
      *
-     * `null` tant qu'aucune n'est choisie : il n'y a alors ni fichier à lire ni
-     * répertoire où écrire. `@Volatile` parce que la lecture vient du fil
-     * principal et le changement du répartiteur des entrées-sorties.
+     * `null` as long as none is chosen: there is then neither a file to read
+     * nor a directory to write into. `@Volatile` because the read comes from
+     * the main thread and the change from the IO dispatcher.
      */
     @Volatile
     private var cityId: String? = null
@@ -60,16 +59,16 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         get() = File(context.filesDir, DIRECTORY_NAME).apply { mkdirs() }
 
     /**
-     * Le répertoire de la ville en service.
+     * The directory of the city in service.
      *
-     * Chaque ville a le sien : garder les données de plusieurs villes côte à
-     * côte évite de tout retélécharger à chaque aller-retour entre deux, et
-     * c'est ce qui rend possible d'en supprimer une seule (SPEC §11.9).
+     * Every city has its own: keeping several cities' data side by side avoids
+     * downloading everything again on each trip between two, and it is what
+     * makes deleting a single one possible (SPEC §11.9).
      */
     private val directory: File?
         get() = cityId?.let { File(root, it).apply { mkdirs() } }
 
-    /** Le répertoire d'un jeu de données, créé au besoin, ou `null` sans ville. */
+    /** A dataset's directory, created as needed, or `null` without a city. */
     fun directoryOf(kind: DatasetKind): File? =
         directory?.let { File(it, kind.id).apply { mkdirs() } }
 
@@ -79,10 +78,10 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
     private val mutableInstalled = MutableStateFlow(readIndex())
 
     /**
-     * Met en service les données de la ville [id], ou aucune si `null`.
+     * Puts the data of city [id] into service, or none if `null`.
      *
-     * Relit l'inventaire dans la foulée : les écrans qui l'observent basculent
-     * donc sur la nouvelle ville sans avoir à s'en occuper.
+     * It re-reads the inventory in the same breath: the screens observing it
+     * therefore switch to the new city without having to bother.
      */
     fun useCity(id: String?) {
         if (id == cityId) return
@@ -91,9 +90,8 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
     }
 
     /**
-     * Poids des données d'une ville, y compris celles qui ne sont pas en
-     * service : c'est ce que l'écran de stockage annonce avant de proposer de
-     * les supprimer.
+     * The weight of a city's data, including a city not in service: it is what
+     * the storage screen announces before offering to delete it.
      */
     fun occupiedBytesOf(id: String): Long = File(root, id)
         .walkTopDown()
@@ -101,25 +99,25 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         .sumOf { it.length() }
 
     /**
-     * Supprime toutes les données d'une ville (SPEC §11.9).
+     * Deletes all of a city's data (SPEC §11.9).
      *
-     * Y compris celles de la ville en service : quelqu'un qui déménage doit
-     * pouvoir reprendre la place sans avoir à choisir une autre ville d'abord.
+     * Including that of the city in service: somebody who moves house must be
+     * able to reclaim the space without having to pick another city first.
      */
     suspend fun deleteCity(id: String): Unit = withContext(ioDispatcher) {
         File(root, id).deleteRecursively()
         if (id == cityId) mutableInstalled.value = emptyMap()
     }
 
-    /** Les jeux présents sur l'appareil, réémis à chaque changement. */
+    /** The sets present on the device, re-emitted on every change. */
     val installed: StateFlow<Map<DatasetKind, InstalledDataset>> = mutableInstalled.asStateFlow()
 
     /**
-     * Le fichier d'un jeu installé, ou `null` s'il ne l'est pas.
+     * The file of an installed set, or `null` if it is not installed.
      *
-     * Rendre le fichier plutôt que son contenu : MapLibre comme SQLite
-     * ouvrent le leur eux-mêmes, et recopier trente-cinq mégaoctets en mémoire
-     * n'aurait aucun sens.
+     * Returning the file rather than its contents: MapLibre and SQLite both
+     * open theirs themselves, and copying thirty-five megabytes into memory
+     * would make no sense.
      */
     fun fileOf(kind: DatasetKind): File? {
         val name = kind.fileName ?: return null
@@ -128,18 +126,18 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
     }
 
     /**
-     * Installe un fichier choisi par l'utilisateur.
+     * Installs a file chosen by the user.
      *
-     * L'import manuel n'est pas un mode dégradé : le SPEC §4.4 en fait une
-     * obligation, pour que quelqu'un qui génère ses propres fichiers puisse se
-     * servir de l'application sans qu'elle n'émette la moindre requête.
+     * Manual import is not a degraded mode: SPEC §4.4 makes it an obligation,
+     * so that somebody who generates their own files can use the application
+     * without it issuing a single request.
      *
-     * @param kind le jeu que ce fichier est censé être.
-     * @param source document choisi dans le sélecteur du système.
-     * @param expectedSha256 empreinte annoncée par un manifeste, si l'on en a
-     *   un. À l'import manuel il n'y en a généralement pas : la validation se
-     *   fait alors sur la structure du fichier et sa version de format.
-     * @return le jeu installé, ou la raison du refus.
+     * @param kind the set this file is supposed to be.
+     * @param source the document picked from the system chooser.
+     * @param expectedSha256 the digest announced by a manifest, if we have one.
+     *   On a manual import there usually is none: validation then rests on the
+     *   file's structure and its format version.
+     * @return the set installed, or the reason for the refusal.
      */
     suspend fun importFrom(
         kind: DatasetKind,
@@ -150,7 +148,7 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             ?: return@withContext DatasetImportResult.Rejected(NO_CITY_REJECTION)
         val targetName = kind.fileName ?: displayNameOf(source)
             ?: return@withContext DatasetImportResult.Rejected(
-                DatasetRejection.TransferFailed("nom du fichier introuvable"),
+                DatasetRejection.TransferFailed("file name not found"),
             )
         val staged = File(destination, "$targetName$STAGING_SUFFIX")
         try {
@@ -159,17 +157,17 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
                     copyAndDigest(stream, staged)
                 } ?: return@withContext rejected(
                     staged,
-                    DatasetRejection.TransferFailed("fichier illisible"),
+                    DatasetRejection.TransferFailed("unreadable file"),
                 )
             } catch (error: IOException) {
                 return@withContext rejected(
                     staged,
-                    DatasetRejection.TransferFailed(error.message ?: "copie interrompue"),
+                    DatasetRejection.TransferFailed(error.message ?: "copy interrupted"),
                 )
             } catch (error: SecurityException) {
                 return@withContext rejected(
                     staged,
-                    DatasetRejection.TransferFailed(error.message ?: "accès refusé"),
+                    DatasetRejection.TransferFailed(error.message ?: "access denied"),
                 )
             }
 
@@ -186,12 +184,11 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             val inspected = try {
                 inspect(kind, staged)
             } catch (error: RuntimeException) {
-                // Dernier filet : une bibliothèque de lecture qui lèverait un
-                // type inattendu ne doit pas faire tomber l'application au
-                // milieu d'une importation.
+                // Last net: a reading library throwing an unexpected type must
+                // not bring the application down in the middle of an import.
                 Inspection.Invalid(
                     DatasetRejection.WrongFormat(
-                        error.message?.take(MAX_REJECTION_DETAIL) ?: "fichier illisible",
+                        error.message?.take(MAX_REJECTION_DETAIL) ?: "unreadable file",
                     ),
                 )
             }
@@ -200,13 +197,13 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
                 is Inspection.Valid -> inspection.formatVersion
             }
 
-            // Le remplacement n'a lieu qu'ici, une fois tout vérifié.
+            // The replacement happens only here, once everything is checked.
             val target = File(destination, targetName)
             target.delete()
             if (!staged.renameTo(target)) {
                 return@withContext rejected(
                     staged,
-                    DatasetRejection.TransferFailed("remplacement impossible"),
+                    DatasetRejection.TransferFailed("replacement impossible"),
                 )
             }
 
@@ -226,20 +223,19 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
     }
 
     /**
-     * Met en place des fichiers déjà téléchargés et vérifiés (SPEC §4.4).
+     * Puts already downloaded and verified files into place (SPEC §4.4).
      *
-     * L'ordre est celui qu'impose le SPEC : les fichiers sont d'abord
-     * contrôlés, et l'ancienne version n'est retirée qu'ensuite. Une mise à
-     * jour interrompue ou corrompue ne doit jamais laisser l'application dans
-     * un état inutilisable.
+     * The order is the one the specification imposes: the files are checked
+     * first, and the old version is only removed afterwards. An interrupted or
+     * corrupted update must never leave the application unusable.
      *
-     * @param kind le jeu concerné.
-     * @param files les fichiers reçus, dont l'empreinte a déjà été confrontée
-     *   au manifeste par [DatasetDownloader].
-     * @param fingerprint empreinte de l'ensemble du jeu, telle que le
-     *   manifeste la décrit. C'est elle que l'on comparera à la publication
-     *   suivante pour savoir s'il y a lieu de retélécharger.
-     * @return le jeu installé, ou la raison du refus.
+     * @param kind the set concerned.
+     * @param files the files received, whose digests [DatasetDownloader] has
+     *   already put against the manifest.
+     * @param fingerprint the digest of the set as a whole, as the manifest
+     *   describes it. It is what will be compared against the next release to
+     *   decide whether re-downloading is called for.
+     * @return the set installed, or the reason for the refusal.
      */
     suspend fun install(
         kind: DatasetKind,
@@ -252,8 +248,8 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         val destination = directoryOf(kind)
             ?: return@withContext DatasetImportResult.Rejected(NO_CITY_REJECTION)
 
-        // Le contrôle porte sur les fichiers reçus, avant que quoi que ce soit
-        // ne soit remplacé.
+        // The check bears on the files received, before anything at all is
+        // replaced.
         var formatVersion: Int? = null
         for (file in files) {
             val inspected = try {
@@ -274,14 +270,14 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             }
         }
 
-        // Les fichiers de l'ancienne version s'en vont : un segment de routage
-        // devenu obsolète mais resté en place serait lu par le moteur.
+        // The old version's files go: a routing segment left in place after
+        // becoming obsolete would still be read by the engine.
         destination.listFiles()?.forEach { it.delete() }
         for (file in files) {
             val target = File(destination, file.name)
             if (!file.renameTo(target) && !copyInto(file, target)) {
                 return@withContext DatasetImportResult.Rejected(
-                    DatasetRejection.TransferFailed("mise en place de ${file.name} impossible"),
+                    DatasetRejection.TransferFailed("cannot put ${file.name} into place"),
                 )
             }
         }
@@ -298,11 +294,11 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
     }
 
     /**
-     * Déplace un fichier quand un simple renommage ne suffit pas.
+     * Moves a file when a plain rename does not suffice.
      *
-     * Le répertoire de travail et celui d'installation peuvent se trouver sur
-     * deux volumes différents — le cache est parfois monté à part — et
-     * `renameTo` échoue alors sans rien dire.
+     * The working directory and the installation directory can sit on two
+     * different volumes — the cache is sometimes mounted apart — and `renameTo`
+     * then fails without saying anything.
      */
     private fun copyInto(source: File, target: File): Boolean = try {
         source.copyTo(target, overwrite = true)
@@ -312,21 +308,21 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         false
     }
 
-    /** Supprime un jeu installé. L'utilisateur doit pouvoir reprendre la place. */
+    /** Deletes an installed set. The user must be able to reclaim the space. */
     suspend fun delete(kind: DatasetKind): Unit = withContext(ioDispatcher) {
         directoryOf(kind)?.deleteRecursively()
         writeIndex(mutableInstalled.value - kind)
     }
 
     /**
-     * Nom du document choisi dans le sélecteur.
+     * The name of the document picked from the chooser.
      *
-     * Nécessaire pour les jeux dont les fichiers gardent leur nom d'origine :
-     * le graphe de routage, dont BRouter déduit le nom des coordonnées.
+     * Needed for the sets whose files keep their original name: the routing
+     * graph, whose name BRouter derives from the coordinates.
      *
-     * Le repli sur le dernier segment de l'URI n'est pas décoratif : tous les
-     * fournisseurs de documents ne publient pas `DISPLAY_NAME`, et un fichier
-     * désigné par une URI `file:` n'a pas de fournisseur du tout.
+     * The fallback on the URI's last segment is not decorative: not every
+     * document provider publishes `DISPLAY_NAME`, and a file designated by a
+     * `file:` URI has no provider at all.
      */
     private fun displayNameOf(source: Uri): String? =
         (queriedDisplayNameOf(source) ?: source.lastPathSegment)
@@ -339,14 +335,14 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             if (column >= 0 && cursor.moveToFirst()) cursor.getString(column) else null
         }
 
-    /** Somme occupée par les jeux installés, affichée dans l'écran stockage. */
+    /** The total the installed sets occupy, shown in the storage screen. */
     fun occupiedBytes(): Long = mutableInstalled.value.values.sumOf { it.sizeBytes }
 
     /**
-     * Copie le flux vers [destination] en calculant son empreinte au passage.
+     * Copies the stream into [destination], computing its digest on the way.
      *
-     * En une seule lecture : relire trente-cinq mégaoctets pour les hacher
-     * doublerait le temps d'attente sans rien apporter.
+     * In a single read: reading thirty-five megabytes again just to hash them
+     * would double the wait for nothing.
      */
     private fun copyAndDigest(source: InputStream, destination: File): String {
         val digest = MessageDigest.getInstance("SHA-256")
@@ -363,15 +359,15 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
     }
 
     /**
-     * Vérifie qu'un fichier est bien ce qu'il prétend être.
+     * Checks that a file really is what it claims to be.
      *
-     * Sans manifeste, c'est la seule protection contre l'erreur la plus
-     * probable de l'import manuel : désigner le mauvais fichier. Un fond de
-     * carte importé comme index d'adresses ferait échouer la première
-     * recherche, longtemps après, sans rapport visible avec la cause.
+     * Without a manifest this is the only protection against the likeliest
+     * mistake of a manual import: picking the wrong file. A base map imported
+     * as an address index would fail the first search, long afterwards, with no
+     * visible connection to the cause.
      *
-     * @return la version de format lue dans le fichier, ou `null` s'il n'en
-     *   porte pas.
+     * @return the format version read from the file, or `null` if it carries
+     *   none.
      */
     private fun inspect(kind: DatasetKind, file: File): Inspection = when (kind) {
         DatasetKind.Tiles -> inspectTiles(file)
@@ -388,8 +384,8 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         if (format != EXPECTED_TILE_FORMAT) {
             return@readingSqlite Inspection.Invalid(
                 DatasetRejection.WrongFormat(
-                    "tuiles au format « ${format ?: "inconnu"} » au lieu de " +
-                        "« $EXPECTED_TILE_FORMAT »",
+                    "tiles in \"${format ?: "unknown"}\" format instead of " +
+                        "\"$EXPECTED_TILE_FORMAT\"",
                 ),
             )
         }
@@ -397,7 +393,7 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             .use { if (it.moveToFirst()) it.getLong(0) else 0L }
         if (tileCount == 0L) {
             return@readingSqlite Inspection.Invalid(
-                DatasetRejection.WrongFormat("le fichier ne contient aucune tuile"),
+                DatasetRejection.WrongFormat("the file contains no tile at all"),
             )
         }
         Inspection.Valid(null)
@@ -409,7 +405,7 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             arrayOf("formatVersion"),
         ).use { if (it.moveToFirst()) it.getString(0)?.toIntOrNull() else null }
             ?: return@readingSqlite Inspection.Invalid(
-                DatasetRejection.WrongFormat("index d'adresses sans version de format"),
+                DatasetRejection.WrongFormat("address index without a format version"),
             )
 
         if (version != SUPPORTED_ADDRESS_FORMAT_VERSION) {
@@ -424,17 +420,17 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             .use { if (it.moveToFirst()) it.getLong(0) else 0L }
         if (streetCount == 0L) {
             return@readingSqlite Inspection.Invalid(
-                DatasetRejection.WrongFormat("l'index ne contient aucune voie"),
+                DatasetRejection.WrongFormat("the index contains no street at all"),
             )
         }
         Inspection.Valid(version)
     }
 
     /**
-     * Le graphe de routage est un format binaire propre à BRouter, sans
-     * en-tête reconnaissable à peu de frais. On se contente donc d'écarter
-     * l'erreur la plus fréquente : avoir désigné l'un des deux autres jeux,
-     * qui sont des bases SQLite.
+     * The routing graph is a binary format of BRouter's own, with no header
+     * recognisable at low cost. We therefore settle for ruling out the
+     * commonest mistake: having picked one of the other two sets, which are
+     * SQLite databases.
      */
     private fun inspectRouting(file: File): Inspection {
         val header = ByteArray(SQLITE_MAGIC.size)
@@ -442,13 +438,13 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             file.inputStream().use { it.read(header) }
         } catch (error: IOException) {
             return Inspection.Invalid(
-                DatasetRejection.TransferFailed(error.message ?: "lecture impossible"),
+                DatasetRejection.TransferFailed(error.message ?: "cannot read"),
             )
         }
         if (read == SQLITE_MAGIC.size && header.contentEquals(SQLITE_MAGIC)) {
             return Inspection.Invalid(
                 DatasetRejection.WrongFormat(
-                    "ce fichier est une base SQLite, pas un graphe de routage",
+                    "this file is a SQLite database, not a routing graph",
                 ),
             )
         }
@@ -456,19 +452,17 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
     }
 
     /**
-     * Interroge un fichier comme une base SQLite, sans jamais lever.
+     * Queries a file as a SQLite database, without ever throwing.
      *
-     * L'ouverture **et** les requêtes sont couvertes par le même filet. Ce
-     * n'est pas de la prudence excessive : `openDatabase` réussit sur un
-     * fichier qui n'est pas une base du tout, parce qu'elle n'en lit pas
-     * l'en-tête, et c'est la première requête qui lève un
-     * `SQLiteDatabaseCorruptException`. Un utilisateur désignant le graphe de
-     * routage à la place du fond de carte faisait ainsi planter l'application.
+     * The opening **and** the queries are covered by the same net. This is not
+     * excessive caution: `openDatabase` succeeds on a file that is not a
+     * database at all, because it does not read its header, and it is the first
+     * query that throws a `SQLiteDatabaseCorruptException`. A user picking the
+     * routing graph instead of the base map crashed the application that way.
      *
-     * Le gestionnaire d'erreurs est neutralisé : celui d'Android **supprime**
-     * le fichier qu'il juge corrompu. Sur un fichier en cours de validation
-     * c'est sans conséquence, mais on ne veut pas de cette mécanique à portée
-     * d'un jeu de données déjà installé.
+     * The error handler is neutralised: Android's own **deletes** the file it
+     * judges corrupted. On a file being validated that is harmless, but we do
+     * not want that machinery within reach of an already installed dataset.
      */
     private inline fun readingSqlite(
         file: File,
@@ -478,11 +472,11 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             file.path,
             null,
             SQLiteDatabase.OPEN_READONLY,
-            { /* ne rien supprimer : le fichier ne nous appartient pas encore */ },
+            { /* delete nothing: the file is not ours yet */ },
         ).use { block(it) }
     } catch (error: RuntimeException) {
-        // SQLiteException et ses sous-classes ne sont pas vérifiées ; elles
-        // couvrent aussi bien un fichier corrompu qu'une table absente.
+        // SQLiteException and its subclasses are unchecked; they cover a
+        // corrupted file as well as a missing table.
         Inspection.Invalid(
             DatasetRejection.WrongFormat(
                 error.message?.take(MAX_REJECTION_DETAIL) ?: "fichier illisible",
@@ -495,12 +489,12 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         return DatasetImportResult.Rejected(reason)
     }
 
-    /** Ce qu'une inspection de fichier apprend, avant toute mise en place. */
+    /** What inspecting a file teaches, before anything is put into place. */
     private sealed interface Inspection {
-        /** Le fichier est bien celui attendu ; il porte éventuellement une version. */
+        /** The file is the expected one; it may carry a version. */
         data class Valid(val formatVersion: Int?) : Inspection
 
-        /** Le fichier n'est pas exploitable, pour la raison donnée. */
+        /** The file is unusable, for the reason given. */
         data class Invalid(val reason: DatasetRejection) : Inspection
     }
 
@@ -513,8 +507,8 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             json.decodeFromString(IndexDocument.serializer(), file.readText())
                 .entries
                 .mapNotNull { it.toDomain() }
-                // Un fichier disparu — vidage du cache, restauration partielle
-                // — ne doit pas laisser une entrée fantôme dans l'écran.
+                // A vanished file — a cleared cache, a partial restore — must
+                // not leave a ghost entry on the screen.
                 .filter { directoryOf(it.kind)?.listFiles()?.isNotEmpty() == true }
                 .associateBy { it.kind }
         } catch (_: Exception) {
@@ -537,32 +531,38 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         const val DIRECTORY_NAME = "datasets"
 
         /**
-         * Refus opposé à une installation sans ville active.
+         * The refusal opposed to an installation without an active city.
          *
-         * Il ne peut venir que d'un écran qui aurait dû être fermé : rien dans
-         * l'interface ne propose d'installer des données avant d'avoir choisi
-         * la ville qu'elles décrivent.
+         * It can only come from a screen that should have been closed: nothing
+         * in the interface offers installing data before the city it describes
+         * has been chosen.
          */
-        val NO_CITY_REJECTION = DatasetRejection.TransferFailed("aucune ville active")
+        val NO_CITY_REJECTION = DatasetRejection.TransferFailed("no active city")
         const val INDEX_FILE_NAME = "installed.json"
         const val STAGING_SUFFIX = ".incoming"
         const val COPY_BUFFER_BYTES = 1 shl 16
         const val EXPECTED_TILE_FORMAT = "pbf"
 
-        /** Longueur au-delà de laquelle un détail technique devient du bruit. */
+        /** The length past which a technical detail becomes noise. */
         const val MAX_REJECTION_DETAIL = 200
 
         /**
-         * Version de l'index d'adresses que cette version sait lire.
+         * The address index version this build can read.
          *
-         * Passée à 2 quand l'index s'est mis à porter le nom des communes
-         * absorbées : l'application interroge cette colonne, un index plus
-         * ancien n'est donc pas lisible et doit être refusé en le disant.
+         * Raised to 2 when the index started carrying the names of absorbed
+         * municipalities: the application queries that column, so an older
+         * index is not readable and must be refused with a word about why.
          */
         const val SUPPORTED_ADDRESS_FORMAT_VERSION = 2
 
-        /** Les seize premiers octets de tout fichier SQLite. */
-        val SQLITE_MAGIC: ByteArray = "SQLite format 3 ".toByteArray(Charsets.US_ASCII)
+        /**
+         * The first sixteen bytes of every SQLite file.
+         *
+         * The terminating NUL is written as an escape rather than as a raw
+         * byte: it used to be an invisible character in the source, which no
+         * review could see and any reformatting could have eaten.
+         */
+        val SQLITE_MAGIC: ByteArray = "SQLite format 3\u0000".toByteArray(Charsets.US_ASCII)
     }
 }
 
