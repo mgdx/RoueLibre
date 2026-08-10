@@ -23,7 +23,7 @@ class AddressNormalizerTest {
     private val normalizer = testNormalizer()
 
     @Test
-    fun `les cas de reference du script d'indexation sont reproduits`() {
+    fun `the indexing script's reference cases are reproduced`() {
         val files = fixtureFiles()
         assertTrue("aucun jeu de cas de référence trouvé", files.isNotEmpty())
 
@@ -55,7 +55,7 @@ class AddressNormalizerTest {
     }
 
     @Test
-    fun `les accents et la casse disparaissent`() {
+    fun `accents and case disappear`() {
         assertEquals(
             "rue de l hopital militaire",
             normalizer.normalize("Rue de l'Hôpital Militaire"),
@@ -64,28 +64,28 @@ class AddressNormalizerTest {
     }
 
     @Test
-    fun `les abreviations courantes sont developpees`() {
+    fun `common abbreviations are expanded`() {
         assertEquals("boulevard victor hugo", normalizer.normalize("Bd Victor Hugo"))
         assertEquals("avenue des flandres", normalizer.normalize("Av. des Flandres"))
         assertEquals("saint andre", normalizer.normalize("St-André"))
     }
 
     @Test
-    fun `une abreviation d'une lettre ne se developpe qu'en tete`() {
+    fun `a single-letter abbreviation is only expanded in leading position`() {
         // Sinon « Jean R Dupont » deviendrait « Jean rue Dupont ».
         assertEquals("rue nationale", normalizer.normalize("R. Nationale"))
         assertEquals("place jean r dupont", normalizer.normalize("Place Jean R Dupont"))
     }
 
     @Test
-    fun `le type de voie est detache du nom propre`() {
+    fun `the street type is detached from the proper name`() {
         val split = normalizer.analyse("Rue Gambetta")
         assertEquals("rue", split.streetType)
         assertEquals("gambetta", split.properName)
     }
 
     @Test
-    fun `un type n'est reconnu qu'en tete de nom`() {
+    fun `a type is only recognised at the head of a name`() {
         // Dans « rue de la Place », « place » fait partie du nom.
         val split = normalizer.analyse("Rue de la Place")
         assertEquals("rue", split.streetType)
@@ -93,12 +93,12 @@ class AddressNormalizerTest {
     }
 
     @Test
-    fun `le type le plus long l'emporte`() {
+    fun `the longest type wins`() {
         assertEquals("rond point", normalizer.analyse("Rond-Point de l'Europe").streetType)
     }
 
     @Test
-    fun `un nom reduit a son type le garde pour nom propre`() {
+    fun `a name reduced to its type keeps it as its proper name`() {
         // « Grand Place » ne doit pas devenir introuvable faute de nom propre.
         val split = normalizer.analyse("Grand Place")
         assertEquals(null, split.streetType)
@@ -106,7 +106,7 @@ class AddressNormalizerTest {
     }
 
     @Test
-    fun `un fichier de regles illisible rend un echec, pas une exception`() {
+    fun `an unreadable rules file returns a failure, not an exception`() {
         val outcome = AddressNormalizerReader.read("{ ceci n'est pas du json")
         assertTrue(outcome is Outcome.Failure)
     }

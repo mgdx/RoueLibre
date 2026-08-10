@@ -40,7 +40,7 @@ class GbfsParserTest {
     // ---------------------------------------------------------- découverte --
 
     @Test
-    fun `lit un document d'auto-decouverte GBFS 2 malgre sa cle de langue`() {
+    fun `reads a GBFS 2 auto-discovery document despite its language key`() {
         // Le flux lillois imbrique ses flux sous « en » bien qu'il serve un
         // réseau français : la langue ne doit jamais être supposée.
         val discovery = assertSuccess(parser.parseDiscovery(fixture("discovery_v2_real.json")))
@@ -57,7 +57,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `lit un document d'auto-decouverte GBFS 3 sans cle de langue`() {
+    fun `reads a GBFS 3 auto-discovery document without a language key`() {
         val discovery = assertSuccess(parser.parseDiscovery(fixture("discovery_v3.json")))
 
         assertEquals("3.0", discovery.version)
@@ -69,7 +69,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `signale precisement un flux absent de l'auto-decouverte`() {
+    fun `reports precisely which feed the auto-discovery lacks`() {
         val discovery = assertSuccess(parser.parseDiscovery(fixture("discovery_v3.json")))
 
         val outcome = discovery.urlOf("free_bike_status")
@@ -81,7 +81,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `refuse un document d'auto-decouverte sans liste de flux`() {
+    fun `refuses an auto-discovery document without a feed list`() {
         val outcome = parser.parseDiscovery("""{"version":"2.3","data":{}}""")
 
         assertTrue(outcome is Outcome.Failure)
@@ -89,7 +89,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `refuse un document qui n'est pas du JSON`() {
+    fun `refuses a document that is not JSON`() {
         val outcome = parser.parseDiscovery("<html>503 Service Unavailable</html>")
 
         assertTrue(outcome is Outcome.Failure)
@@ -99,7 +99,7 @@ class GbfsParserTest {
     // ------------------------------------------------------------ stations --
 
     @Test
-    fun `lit les stations du flux reel`() {
+    fun `reads the stations of the real feed`() {
         val feed = assertSuccess(
             parser.parseStationInformation(fixture("station_information_v2_real.json")),
         )
@@ -116,7 +116,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `lit un nom de station traduit du GBFS 3`() {
+    fun `reads a translated station name from GBFS 3`() {
         val feed = assertSuccess(
             parser.parseStationInformation(fixture("station_information_v3.json")),
         )
@@ -126,7 +126,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `ecarte une station sans position plutot que de rejeter tout le flux`() {
+    fun `drops a station without a position rather than rejecting the whole feed`() {
         // Une seule entrée fautive chez le producteur ne doit pas priver
         // l'utilisateur de toutes les autres.
         val feed = assertSuccess(
@@ -138,7 +138,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `lit un horodatage entier POSIX comme un horodatage RFC 3339`() {
+    fun `reads a POSIX integer timestamp as well as an RFC 3339 one`() {
         val fromEpoch = assertSuccess(
             parser.parseStationInformation(fixture("station_information_v2_real.json")),
         )
@@ -153,7 +153,7 @@ class GbfsParserTest {
     // --------------------------------------------------------- disponibilité --
 
     @Test
-    fun `lit l'etat des stations du flux reel`() {
+    fun `reads the station state of the real feed`() {
         val feed = assertSuccess(
             parser.parseStationStatus(fixture("station_status_v2_real.json")),
         )
@@ -169,7 +169,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `lit le champ renomme par le GBFS 3`() {
+    fun `reads the field GBFS 3 renamed`() {
         // GBFS 3.0 remplace num_bikes_available par num_vehicles_available.
         val feed = assertSuccess(parser.parseStationStatus(fixture("station_status_v3.json")))
 
@@ -177,7 +177,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `une station qui ne loue plus ne peut pas preter de velo`() {
+    fun `a station that no longer rents cannot lend a bike`() {
         val feed = assertSuccess(parser.parseStationStatus(fixture("station_status_v3.json")))
 
         val closed = feed.availabilities.first { it.stationId == "v3-2" }
@@ -187,7 +187,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `accepte des drapeaux publies en entiers`() {
+    fun `accepts flags published as integers`() {
         val document = """
             {"last_updated":1786264920,"ttl":0,"version":"2.3","data":{"stations":[
               {"station_id":"a","num_bikes_available":3,"num_docks_available":5,
@@ -205,7 +205,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `ramene un compte negatif a zero`() {
+    fun `brings a negative count back to zero`() {
         // Afficher « -1 vélo » serait pire que d'afficher zéro.
         val document = """
             {"version":"2.3","data":{"stations":[
@@ -222,7 +222,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `tolere un flux sans horodatage`() {
+    fun `tolerates a feed without a timestamp`() {
         val document = """{"version":"2.3","data":{"stations":[]}}"""
 
         val feed = assertSuccess(parser.parseStationStatus(document))
@@ -232,7 +232,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `ignore les champs inconnus d'un flux enrichi`() {
+    fun `ignores the unknown fields of an enriched feed`() {
         // Les producteurs ajoutent régulièrement des champs ; cela ne doit
         // jamais faire échouer la lecture.
         val document = """
@@ -247,7 +247,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `refuse un horodatage illisible`() {
+    fun `refuses an unreadable timestamp`() {
         val document = """
             {"last_updated":"pas une date","version":"2.3","data":{"stations":[]}}
         """.trimIndent()
@@ -259,7 +259,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `un flux vide reste un succes et non une erreur`() {
+    fun `an empty feed stays a success and not an error`() {
         // Réseau en maintenance : zéro station est une information, pas une
         // panne. L'interface doit pouvoir le dire calmement.
         val outcome = parser.parseStationInformation("""{"version":"2.3","data":{"stations":[]}}""")
@@ -270,7 +270,7 @@ class GbfsParserTest {
     // ------------------------------------------------- GBFS 1.0, Vélib' --
 
     @Test
-    fun `lit le document d'auto-decouverte de Velib en GBFS 1 point 0`() {
+    fun `reads Velib's auto-discovery document in GBFS 1 point 0`() {
         val discovery = assertSuccess(parser.parseDiscovery(fixture("discovery_v1_velib.json")))
 
         assertNotNull(discovery.feedUrlsByName["station_information"])
@@ -278,7 +278,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `accepte un identifiant de station publie en nombre`() {
+    fun `accepts a station identifier published as a number`() {
         // Vélib' publie « "station_id": 213688169 » là où le format impose une
         // chaîne. Le refuser rendrait le plus grand réseau de France — mille
         // cinq cents stations — entièrement inexploitable.
@@ -293,7 +293,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `accepte des drapeaux publies en zero et un`() {
+    fun `accepts flags published as zero and one`() {
         val status = assertSuccess(
             parser.parseStationStatus(fixture("station_status_v1_velib.json")),
         )
@@ -305,7 +305,7 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `les deux flux de Velib se rejoignent sur le meme identifiant`() {
+    fun `Velib's two feeds meet on the same identifier`() {
         // Ce qui compte n'est pas de lire chaque flux, mais que la jointure
         // tienne : un identifiant lu « 213688169 » d'un côté et « 2.13688169E8 »
         // de l'autre ne rapprocherait aucune station de son état.

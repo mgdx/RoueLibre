@@ -13,13 +13,13 @@ class FreshnessTest {
     private fun ago(seconds: Long) = freshnessOf(now.minusSeconds(seconds), now)
 
     @Test
-    fun `les toutes premieres secondes ne meritent pas de decompte`() {
+    fun `the very first seconds do not deserve a count`() {
         assertEquals(Freshness.JustNow, ago(0))
         assertEquals(Freshness.JustNow, ago(4))
     }
 
     @Test
-    fun `le decompte passe des secondes aux minutes puis aux heures`() {
+    fun `the count moves from seconds to minutes then to hours`() {
         assertEquals(Freshness.Seconds(12), ago(12))
         assertEquals(Freshness.Seconds(59), ago(59))
         assertEquals(Freshness.Minutes(1), ago(60))
@@ -30,19 +30,19 @@ class FreshnessTest {
     }
 
     @Test
-    fun `l'absence de donnee se distingue d'une donnee ancienne`() {
+    fun `the absence of data is told apart from old data`() {
         assertEquals(Freshness.Never, freshnessOf(null, now))
     }
 
     @Test
-    fun `une horloge qui recule ne produit pas un age negatif`() {
+    fun `a clock going backwards does not produce a negative age`() {
         // Correction NTP ou changement d'heure : mieux vaut « à l'instant »
         // que « il y a -3 secondes ».
         assertEquals(Freshness.JustNow, freshnessOf(now.plusSeconds(30), now))
     }
 
     @Test
-    fun `l'etat n'est dit fige qu'au-dela de cinq minutes`() {
+    fun `the state is only called frozen beyond five minutes`() {
         assertTrue(!ago(0).isStale)
         assertTrue(!ago(59).isStale)
         assertTrue(!ago(4 * 60).isStale)
@@ -52,7 +52,7 @@ class FreshnessTest {
     }
 
     @Test
-    fun `sans aucune donnee l'etat est fige par definition`() {
+    fun `without any data the state is frozen by definition`() {
         assertTrue(Freshness.Never.isStale)
     }
 }

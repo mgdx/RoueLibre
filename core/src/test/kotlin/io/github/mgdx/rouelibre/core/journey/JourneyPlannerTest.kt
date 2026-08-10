@@ -115,7 +115,7 @@ class JourneyPlannerTest {
     // ------------------------------------------------------ choix du couple --
 
     @Test
-    fun `optimise le couple et non la station la plus proche du depart`() = runTest {
+    fun `optimises the pair and not the station nearest the origin`() = runTest {
         // La station A est la plus proche du départ, mais elle mène à une
         // arrivée très mal placée. B est un peu plus loin et dessert bien.
         val stations = listOf(
@@ -132,7 +132,7 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `prefere une station bien fournie a une station a un seul velo`() = runTest {
+    fun `prefers a well-stocked station to one with a single bike`() = runTest {
         // La station à un vélo est plus proche, mais le risque qu'elle soit
         // vide à l'arrivée justifie de marcher un peu plus (SPEC §6).
         val stations = listOf(
@@ -148,7 +148,7 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `la penalite de risque ne renverse pas un ecart franc`() = runTest {
+    fun `the risk penalty does not overturn a clear margin`() = runTest {
         // Un vélo à deux cents mètres contre douze à un kilomètre et demi :
         // le risque ne doit pas faire préférer la marche interminable.
         val stations = listOf(
@@ -166,7 +166,7 @@ class JourneyPlannerTest {
     // --------------------------------------------------------- disponibilité --
 
     @Test
-    fun `ne retient jamais une station sans velo au depart`() = runTest {
+    fun `never keeps a station without a bike at the origin`() = runTest {
         val stations = listOf(
             station("vide", at(0.0, 100.0), bikes = 0),
             station("fournie", at(0.0, 600.0), bikes = 5),
@@ -181,7 +181,7 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `ne retient jamais une station sans place a l'arrivee`() = runTest {
+    fun `never keeps a station without a dock at the destination`() = runTest {
         val stations = listOf(
             station("depart", at(0.0, 100.0)),
             station("pleine", at(0.0, 3900.0), docks = 0),
@@ -196,7 +196,7 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `ignore une station qui ne loue plus, meme pleine de velos`() = runTest {
+    fun `ignores a station that no longer rents, even full of bikes`() = runTest {
         val stations = listOf(
             station("hors-service", at(0.0, 100.0), bikes = 20, renting = false),
             station("en-service", at(0.0, 600.0), bikes = 4),
@@ -210,7 +210,7 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `le dit quand aucune station proche n'a de velo`() = runTest {
+    fun `says so when no nearby station has a bike`() = runTest {
         // Le SPEC §6 l'exige : ne pas proposer un trajet impossible.
         val stations = listOf(
             station("vide-1", at(0.0, 100.0), bikes = 0),
@@ -226,7 +226,7 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `le dit quand aucune station d'arrivee n'a de place`() = runTest {
+    fun `says so when no arrival station has a dock`() = runTest {
         val stations = listOf(
             station("depart", at(0.0, 100.0)),
             station("pleine", at(0.0, 3900.0), docks = 0),
@@ -244,7 +244,7 @@ class JourneyPlannerTest {
     // ------------------------------------------------------------ marche --
 
     @Test
-    fun `signale que la marche est plus rapide sur un trajet tres court`() = runTest {
+    fun `reports that walking is faster on a very short journey`() = runTest {
         // Deux cents mètres à parcourir, avec des forfaits de quatre minutes :
         // prendre un vélo n'a aucun sens, et le SPEC §6 impose de le dire.
         val closeDestination = at(0.0, 200.0)
@@ -260,7 +260,7 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `ne signale pas la marche sur un trajet ou le velo gagne`() = runTest {
+    fun `does not report walking on a journey the bike wins`() = runTest {
         val stations = listOf(
             station("depart", at(0.0, 100.0)),
             station("arrivee", at(0.0, 3900.0)),
@@ -275,7 +275,7 @@ class JourneyPlannerTest {
     // ------------------------------------------------------ alternatives --
 
     @Test
-    fun `propose jusqu'a trois alternatives, dans l'ordre`() = runTest {
+    fun `offers up to three alternatives, in order`() = runTest {
         val stations = (0 until 5).map { station("depart-$it", at(it * 60.0, 150.0)) } +
             (0 until 5).map { station("arrivee-$it", at(it * 60.0, 3900.0)) }
         val planner = JourneyPlanner(FakeRouter())
@@ -290,7 +290,7 @@ class JourneyPlannerTest {
     // -------------------------------------------------------------- coût --
 
     @Test
-    fun `n'evalue qu'une fraction des couples grace a l'elagage`() = runTest {
+    fun `evaluates only a fraction of the pairs thanks to the pruning`() = runTest {
         // Cinq départs et cinq arrivées font vingt-cinq couples. Les calculer
         // tous coûterait dix secondes sur un vrai graphe.
         val stations = (0 until 6).map { station("depart-$it", at(it * 80.0, 150.0)) } +
@@ -309,7 +309,7 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `le temps annonce exclut la penalite de risque`() = runTest {
+    fun `the announced time excludes the risk penalty`() = runTest {
         // La pénalité sert à classer, jamais à être annoncée : l'utilisateur
         // verrait une durée qu'il n'observera pas.
         val stations = listOf(
@@ -328,7 +328,7 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `les forfaits de prise et de depose sont comptes`() = runTest {
+    fun `the pick-up and drop-off allowances are counted`() = runTest {
         val settings = JourneySettings(pickupTime = 3.minutes, dropoffTime = 1.minutes)
         val stations = listOf(
             station("depart", at(0.0, 100.0)),
@@ -342,7 +342,7 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `n'utilise jamais la meme station au depart et a l'arrivee`() = runTest {
+    fun `never uses the same station at both ends`() = runTest {
         val stations = listOf(station("unique", at(0.0, 100.0)))
         val planner = JourneyPlanner(FakeRouter())
 

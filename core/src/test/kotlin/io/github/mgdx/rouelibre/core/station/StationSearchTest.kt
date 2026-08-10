@@ -30,24 +30,24 @@ class StationSearchTest {
     private fun names(query: String) = filterStations(stations, query).map { it.station.name }
 
     @Test
-    fun `une saisie vide rend la liste intacte`() {
+    fun `an empty query returns the list untouched`() {
         assertEquals(stations.size, filterStations(stations, "").size)
         assertEquals(stations.size, filterStations(stations, "   ").size)
     }
 
     @Test
-    fun `une saisie faite de ponctuation seule rend la liste intacte`() {
+    fun `a query made of punctuation alone returns the list untouched`() {
         // Effacer un champ de recherche doit tout ramener, pas tout masquer.
         assertEquals(stations.size, filterStations(stations, "---").size)
     }
 
     @Test
-    fun `la recherche ignore la casse`() {
+    fun `the search ignores case`() {
         assertEquals(listOf("Wazemmes Marché"), names("WAZEMMES"))
     }
 
     @Test
-    fun `la recherche accentuee trouve un nom publie sans accents`() {
+    fun `an accented query finds a name published without accents`() {
         // Le flux lillois publie « Metropole Europeenne » sans accents, mais
         // personne ne tape comme ça.
         assertEquals(
@@ -57,34 +57,34 @@ class StationSearchTest {
     }
 
     @Test
-    fun `la recherche sans accents trouve un nom accentue`() {
+    fun `an unaccented query finds an accented name`() {
         assertEquals(listOf("Place du Théâtre"), names("theatre"))
     }
 
     @Test
-    fun `l'ordre des mots n'a pas d'importance`() {
+    fun `word order does not matter`() {
         assertEquals(listOf("Gare Lille Flandres"), names("flandres gare"))
     }
 
     @Test
-    fun `la frappe en cours trouve deja la station`() {
+    fun `typing in progress already finds the station`() {
         assertEquals(listOf("Wazemmes Marché"), names("waz"))
         assertEquals(listOf("Wazemmes Marché"), names("wazemmes mar"))
     }
 
     @Test
-    fun `un tiret vaut une separation de mots`() {
+    fun `a hyphen counts as a word separator`() {
         assertEquals(listOf("Saint-André"), names("andre"))
         assertEquals(listOf("Saint-André"), names("saint andre"))
     }
 
     @Test
-    fun `le code postal est cherchable puisqu'il est affiche`() {
+    fun `the postcode is searchable because it is displayed`() {
         assertEquals(listOf("Saint-André"), names("59350"))
     }
 
     @Test
-    fun `une station sans code postal reste cherchable par son nom`() {
+    fun `a station without a postcode stays searchable by its name`() {
         val orphan = listOf(entry("Solférino", postalCode = null))
         assertEquals(
             listOf("Solférino"),
@@ -95,17 +95,17 @@ class StationSearchTest {
     }
 
     @Test
-    fun `tous les mots de la saisie doivent correspondre`() {
+    fun `every word of the query must match`() {
         assertEquals(emptyList<String>(), names("gare wazemmes"))
     }
 
     @Test
-    fun `une saisie sans correspondance rend une liste vide`() {
+    fun `a query that matches nothing returns an empty list`() {
         assertEquals(emptyList<String>(), names("bruxelles"))
     }
 
     @Test
-    fun `l'ordre d'affichage est conserve`() {
+    fun `the display order is preserved`() {
         assertEquals(
             listOf("Gare Lille Flandres", "Metropole Europeenne de Lille (CB)"),
             names("lille"),
@@ -113,7 +113,7 @@ class StationSearchTest {
     }
 
     @Test
-    fun `un nom commencant par un chiffre se cherche par ce chiffre`() {
+    fun `a name starting with a digit is searched by that digit`() {
         assertEquals(listOf("4 vents"), names("4"))
     }
 }

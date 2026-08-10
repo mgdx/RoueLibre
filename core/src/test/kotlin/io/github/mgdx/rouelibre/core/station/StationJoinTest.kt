@@ -40,7 +40,7 @@ class StationJoinTest {
     )
 
     @Test
-    fun `une station sans etat reste presente et son etat reste inconnu`() {
+    fun `a station without a state stays present and its state stays unknown`() {
         val joined = joinStationsWithAvailability(
             stations = listOf(station("1"), station("2")),
             availabilities = listOf(availability("2")),
@@ -53,7 +53,7 @@ class StationJoinTest {
     }
 
     @Test
-    fun `un etat orphelin est ignore faute de savoir ou le placer`() {
+    fun `an orphan state is ignored for want of knowing where to place it`() {
         val joined = joinStationsWithAvailability(
             stations = listOf(station("1")),
             availabilities = listOf(availability("1"), availability("fantome")),
@@ -64,7 +64,7 @@ class StationJoinTest {
     }
 
     @Test
-    fun `l'ordre des stations est conserve`() {
+    fun `the stations' order is preserved`() {
         val joined = joinStationsWithAvailability(
             stations = listOf(station("c"), station("a"), station("b")),
             availabilities = emptyList(),
@@ -74,7 +74,7 @@ class StationJoinTest {
     }
 
     @Test
-    fun `une station non deployee est hors service`() {
+    fun `a station not deployed is out of service`() {
         val joined = joinStationsWithAvailability(
             listOf(station("1")),
             listOf(availability("1", installed = false)),
@@ -84,7 +84,7 @@ class StationJoinTest {
     }
 
     @Test
-    fun `une station qui ne loue ni ne recoit plus est hors service`() {
+    fun `a station that neither rents nor receives is out of service`() {
         val joined = joinStationsWithAvailability(
             listOf(station("1")),
             listOf(availability("1", renting = false, returning = false)),
@@ -94,7 +94,7 @@ class StationJoinTest {
     }
 
     @Test
-    fun `une station qui ne fait plus que recevoir reste en service`() {
+    fun `a station that only receives stays in service`() {
         // Elle rend encore un service réel : y déposer un vélo.
         val joined = joinStationsWithAvailability(
             listOf(station("1")),
@@ -105,7 +105,7 @@ class StationJoinTest {
     }
 
     @Test
-    fun `une station vide reste en service`() {
+    fun `an empty station stays in service`() {
         // Zéro vélo n'est pas une panne : c'est une information à afficher.
         val joined = joinStationsWithAvailability(
             listOf(station("1")),

@@ -18,18 +18,18 @@ class PlaceRequestTest {
     private val lille = Coordinates(50.6371, 3.0630)
 
     @Test
-    fun `une uri geo avec des coordonnées donne un point`() {
+    fun `a geo uri with coordinates gives a point`() {
         assertEquals(PlaceRequest.Point(lille), parsePlaceUri("geo:50.6371,3.0630"))
     }
 
     @Test
-    fun `le paramètre de zoom est ignoré`() {
+    fun `the zoom parameter is ignored`() {
         // Il dit comment regarder, pas où aller.
         assertEquals(PlaceRequest.Point(lille), parsePlaceUri("geo:50.6371,3.0630?z=17"))
     }
 
     @Test
-    fun `la requête l'emporte sur le point de convention`() {
+    fun `the query wins over the conventional point`() {
         // « geo:0,0 » veut dire « le lieu est dans la requête » ; le prendre au
         // pied de la lettre enverrait au large du golfe de Guinée.
         assertEquals(
@@ -39,7 +39,7 @@ class PlaceRequestTest {
     }
 
     @Test
-    fun `un libellé entre parenthèses est conservé`() {
+    fun `a label in parentheses is kept`() {
         assertEquals(
             PlaceRequest.Point(lille, "Grand-Place"),
             parsePlaceUri("geo:0,0?q=50.6371,3.0630(Grand-Place)"),
@@ -47,7 +47,7 @@ class PlaceRequestTest {
     }
 
     @Test
-    fun `une adresse en toutes lettres reste à chercher`() {
+    fun `an address in words remains to be searched for`() {
         assertEquals(
             PlaceRequest.Search("12 rue Nationale Lille"),
             parsePlaceUri("geo:0,0?q=12+rue+Nationale+Lille"),
@@ -55,7 +55,7 @@ class PlaceRequestTest {
     }
 
     @Test
-    fun `les échappements d'uri sont décodés`() {
+    fun `uri escapes are decoded`() {
         assertEquals(
             PlaceRequest.Search("rue de l'Hôpital"),
             parsePlaceUri("geo:0,0?q=rue%20de%20l'H%C3%B4pital".replace("%C3%B4", "ô")),
@@ -63,7 +63,7 @@ class PlaceRequestTest {
     }
 
     @Test
-    fun `le schéma google navigation est accepté`() {
+    fun `the google navigation scheme is accepted`() {
         // Encore émis par de nombreuses applications (SPEC §7.8).
         assertEquals(
             PlaceRequest.Point(lille),
@@ -76,7 +76,7 @@ class PlaceRequestTest {
     }
 
     @Test
-    fun `une uri sans lieu exploitable ne rend rien`() {
+    fun `a uri without a usable place returns nothing`() {
         assertNull(parsePlaceUri("geo:"))
         assertNull(parsePlaceUri("geo:0,0"))
         assertNull(parsePlaceUri("https://example.org/carte"))
@@ -84,7 +84,7 @@ class PlaceRequestTest {
     }
 
     @Test
-    fun `un lien web cartographique est reconnu quand le lieu y figure`() {
+    fun `a web map link is recognised when the place appears in it`() {
         // Ces liens ne parviennent à l'application que si l'utilisateur
         // l'autorise dans les paramètres du système (SPEC §7.8).
         assertEquals(
@@ -102,14 +102,14 @@ class PlaceRequestTest {
     }
 
     @Test
-    fun `un lien web sans lieu lisible ne rend rien`() {
+    fun `a web link without a readable place returns nothing`() {
         // Un lien raccourci ne dit où il mène qu'après redirection, et la
         // suivre ferait sortir une requête vers un tiers.
         assertNull(parsePlaceUri("https://maps.app.goo.gl/AbCdEf"))
     }
 
     @Test
-    fun `un texte partagé contenant des coordonnées donne un point`() {
+    fun `shared text containing coordinates gives a point`() {
         assertEquals(
             PlaceRequest.Point(lille),
             findPlaceInText("Rendez-vous ici : 50.6371, 3.0630 à midi"),
@@ -117,7 +117,7 @@ class PlaceRequestTest {
     }
 
     @Test
-    fun `un texte partagé contenant une uri geo est reconnu comme tel`() {
+    fun `shared text containing a geo uri is recognised as such`() {
         assertEquals(
             PlaceRequest.Point(lille, "Grand-Place"),
             findPlaceInText("Regarde geo:0,0?q=50.6371,3.0630(Grand-Place) c'est là"),
@@ -125,7 +125,7 @@ class PlaceRequestTest {
     }
 
     @Test
-    fun `un texte partagé sans coordonnées est traité comme une adresse`() {
+    fun `shared text without coordinates is treated as an address`() {
         // Le cas le plus fréquent : une adresse reçue par messagerie.
         assertEquals(
             PlaceRequest.Search("12 rue Nationale, Lille"),
@@ -134,12 +134,12 @@ class PlaceRequestTest {
     }
 
     @Test
-    fun `un texte vide ne rend rien`() {
+    fun `empty text returns nothing`() {
         assertNull(findPlaceInText("   "))
     }
 
     @Test
-    fun `deux entiers séparés par une virgule ne sont pas des coordonnées`() {
+    fun `two integers separated by a comma are not coordinates`() {
         // « 12,50 » est un prix, pas une position. La notation décimale à
         // virgule est indistinguable d'un couple d'entiers, donc écartée.
         assertEquals(

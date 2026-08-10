@@ -11,19 +11,19 @@ class EditDistanceTest {
         boundedDamerauLevenshteinDistance(source, target, maximum)
 
     @Test
-    fun `deux mots identiques sont a distance nulle`() {
+    fun `two identical words are at distance zero`() {
         assertEquals(0, distance("gambetta", "gambetta"))
     }
 
     @Test
-    fun `une lettre changee, ajoutee ou retiree vaut une faute`() {
+    fun `a letter changed, added or removed counts as one mistake`() {
         assertEquals(1, distance("gambetta", "gambetto"))
         assertEquals(1, distance("gambetta", "gambettta"))
         assertEquals(1, distance("gambetta", "gambeta"))
     }
 
     @Test
-    fun `deux lettres interverties valent une seule faute`() {
+    fun `two transposed letters count as a single mistake`() {
         // C'est ce qui distingue Damerau-Levenshtein de Levenshtein, et c'est
         // la faute la plus courante au clavier tactile.
         assertEquals(1, distance("gambetta", "gambetat"))
@@ -31,25 +31,25 @@ class EditDistanceTest {
     }
 
     @Test
-    fun `le plafond est respecte sans etre depasse silencieusement`() {
+    fun `the cap is respected without being silently exceeded`() {
         assertTrue(distance("lille", "roubaix", maximum = 2) > 2)
         assertTrue(distance("gambetta", "gambetta", maximum = 0) == 0)
     }
 
     @Test
-    fun `une difference de longueur superieure au plafond est ecartee tout de suite`() {
+    fun `a length difference beyond the cap is ruled out immediately`() {
         assertTrue(distance("gare", "gambetta", maximum = 2) > 2)
     }
 
     @Test
-    fun `un mot vide coute sa longueur a l'autre`() {
+    fun `an empty word costs the other its length`() {
         assertEquals(0, distance("", ""))
         assertEquals(3, distance("", "rue"))
         assertEquals(3, distance("rue", ""))
     }
 
     @Test
-    fun `la tolerance suit la longueur du mot`() {
+    fun `the tolerance follows the word's length`() {
         // Une faute en dessous de huit caractères, deux au-delà (SPEC §4.3).
         assertEquals(1, toleratedMistakes("gare"))
         assertEquals(1, toleratedMistakes("nationa"))

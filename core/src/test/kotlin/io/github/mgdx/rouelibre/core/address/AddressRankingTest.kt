@@ -52,7 +52,7 @@ class AddressRankingTest {
     ).map { it.street.id }
 
     @Test
-    fun `le nom propre suffit a trouver la voie`() {
+    fun `the proper name is enough to find the street`() {
         val gambetta = street("Rue Gambetta")
         val autres = listOf(street("Rue Nationale"), street("Boulevard de la Liberté"))
 
@@ -60,13 +60,13 @@ class AddressRankingTest {
     }
 
     @Test
-    fun `un prefixe couvre la frappe en cours`() {
+    fun `a prefix covers typing in progress`() {
         val gambetta = street("Rue Gambetta")
         assertEquals(listOf(gambetta.id), rank("gamb", listOf(gambetta)))
     }
 
     @Test
-    fun `le nom qui s'arrete ou la saisie s'arrete passe devant`() {
+    fun `the name that stops where the query stops comes first`() {
         val exacte = street("Rue Gambetta")
         val prolongee = street("Rue Gambetta Prolongée")
 
@@ -74,7 +74,7 @@ class AddressRankingTest {
     }
 
     @Test
-    fun `une faute de frappe retrouve la rue dans les trois premiers`() {
+    fun `a typo still finds the street in the first three results`() {
         // Critère d'acceptation 11 du SPEC.
         val visee = street("Rue Nationale")
         val bruit = listOf(
@@ -100,7 +100,7 @@ class AddressRankingTest {
     }
 
     @Test
-    fun `l'ordre des mots n'est pas penalisant`() {
+    fun `word order carries no penalty`() {
         // Le type de voie étant stocké à part, « gare de la rue » et « rue de
         // la gare » atteignent la même entrée (SPEC §4.3).
         val gare = street("Rue de la Gare")
@@ -108,7 +108,7 @@ class AddressRankingTest {
     }
 
     @Test
-    fun `a correspondance egale, la voie la plus proche passe devant`() {
+    fun `at equal match quality, the nearer street comes first`() {
         val loin = street("Rue Nationale", position = Coordinates(50.6900, 3.1700))
         val proche = street("Rue Nationale", position = Coordinates(50.6375, 3.0625))
 
@@ -119,7 +119,7 @@ class AddressRankingTest {
     }
 
     @Test
-    fun `une meilleure correspondance l'emporte sur la proximite`() {
+    fun `a better match wins over proximity`() {
         // La proximité départage à l'intérieur d'un palier, jamais entre deux.
         val voisineMaisAutre = street("Rue Nicolas Leblanc", position = centre)
         val exacteMaisLoin = street(
@@ -134,7 +134,7 @@ class AddressRankingTest {
     }
 
     @Test
-    fun `la commune fait partie de ce qui se cherche`() {
+    fun `the municipality is part of what is searched`() {
         val lille = street("Rue Nationale", city = "Lille")
         val roubaix = street("Rue Nationale", city = "Roubaix")
 
@@ -142,7 +142,7 @@ class AddressRankingTest {
     }
 
     @Test
-    fun `la commune absorbee se cherche comme la commune actuelle`() {
+    fun `the absorbed municipality is searched like the current one`() {
         // La Base Adresse Nationale rattache Lomme à Lille ; son habitant, lui,
         // tape « Lomme ».
         val lomme = street("Rue du Chemin de Fer", city = "Lille", formerCity = "Lomme")
@@ -152,13 +152,13 @@ class AddressRankingTest {
     }
 
     @Test
-    fun `un mot qui ne correspond a rien ecarte la voie`() {
+    fun `a word matching nothing rules the street out`() {
         val gambetta = street("Rue Gambetta")
         assertTrue(rank("gambetta roubaix", listOf(gambetta)).isEmpty())
     }
 
     @Test
-    fun `une faute sur un mot de deux lettres ne fait pas disparaitre la voie`() {
+    fun `a mistake in a two-letter word does not make the street vanish`() {
         // Mesuré sur l'index réel : « Re de la Paix » et « Rue ed la Paix » ne
         // rendaient AUCUN résultat, le fragment de deux lettres écartant à lui
         // seul toutes les voies. C'est pourtant la faute la plus banale, et le
@@ -170,7 +170,7 @@ class AddressRankingTest {
     }
 
     @Test
-    fun `un mot vide ne suffit pas a faire remonter une voie`() {
+    fun `a stop word alone is not enough to bring a street up`() {
         // « de » ne doit pas ramener la moitié de l'index.
         val liberte = street("Boulevard de la Liberté")
         val gambetta = street("Rue Gambetta")
@@ -179,7 +179,7 @@ class AddressRankingTest {
     }
 
     @Test
-    fun `le classement est stable d'une execution a l'autre`() {
+    fun `the ranking is stable from one run to the next`() {
         val jumelles = listOf(street("Rue Nationale"), street("Rue Nationale"))
         assertEquals(
             rank("rue nationale", jumelles),

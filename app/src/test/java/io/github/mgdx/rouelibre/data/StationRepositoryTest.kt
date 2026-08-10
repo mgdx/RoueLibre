@@ -108,7 +108,7 @@ class StationRepositoryTest {
     }
 
     @Test
-    fun `un premier rafraichissement recupere decouverte, stations et etat`() = runTest {
+    fun `a first refresh fetches discovery, stations and state`() = runTest {
         enqueueDiscovery()
         enqueueInformation()
         enqueueStatus(bikesAtFirstStation = 7)
@@ -122,7 +122,7 @@ class StationRepositoryTest {
     }
 
     @Test
-    fun `changer de ville ne laisse pas les stations de la precedente`() = runTest {
+    fun `changing city leaves none of the previous city's stations`() = runTest {
         // Elles n'ont rien à faire sur la carte d'une autre agglomération, et
         // hors ligne rien ne viendrait les remplacer (SPEC §15.1).
         enqueueDiscovery()
@@ -138,7 +138,7 @@ class StationRepositoryTest {
     }
 
     @Test
-    fun `l'entete User-Agent nomme l'application sans identifiant d'appareil`() = runTest {
+    fun `the User-Agent header names the application without a device identifier`() = runTest {
         enqueueDiscovery()
         enqueueInformation()
         enqueueStatus(bikesAtFirstStation = 1)
@@ -150,7 +150,7 @@ class StationRepositoryTest {
     }
 
     @Test
-    fun `un second rafraichissement dans la minute ne part pas sur le reseau`() = runTest {
+    fun `a second refresh within the minute does not go out on the network`() = runTest {
         enqueueDiscovery()
         enqueueInformation()
         enqueueStatus(bikesAtFirstStation = 7)
@@ -166,7 +166,7 @@ class StationRepositoryTest {
     }
 
     @Test
-    fun `tirer pour rafraichir passe outre le delai minimal`() = runTest {
+    fun `pull to refresh overrides the minimum delay`() = runTest {
         enqueueDiscovery()
         enqueueInformation()
         enqueueStatus(bikesAtFirstStation = 7)
@@ -184,7 +184,7 @@ class StationRepositoryTest {
     }
 
     @Test
-    fun `les donnees stables ne sont pas redemandees avant un jour`() = runTest {
+    fun `static data is not asked for again before a day has passed`() = runTest {
         enqueueDiscovery()
         enqueueInformation()
         enqueueStatus(bikesAtFirstStation = 7)
@@ -200,7 +200,7 @@ class StationRepositoryTest {
     }
 
     @Test
-    fun `les donnees stables sont redemandees passe un jour`() = runTest {
+    fun `static data is asked for again once a day has passed`() = runTest {
         enqueueDiscovery()
         enqueueInformation()
         enqueueStatus(bikesAtFirstStation = 7)
@@ -216,7 +216,7 @@ class StationRepositoryTest {
     }
 
     @Test
-    fun `un echec sur les donnees stables n'empeche pas d'actualiser l'etat`() = runTest {
+    fun `a failure on static data does not prevent refreshing the state`() = runTest {
         // Le cache contient déjà les stations : leur indisponibilité passagère
         // ne doit pas priver l'utilisateur d'une disponibilité fraîche.
         dao.stations.value = listOf(
@@ -234,7 +234,7 @@ class StationRepositoryTest {
     }
 
     @Test
-    fun `un echec sur les donnees stables est fatal si le cache est vide`() = runTest {
+    fun `a failure on static data is fatal when the cache is empty`() = runTest {
         enqueueDiscovery()
         server.enqueue(MockResponse(code = 503))
 
@@ -244,7 +244,7 @@ class StationRepositoryTest {
     }
 
     @Test
-    fun `un serveur en erreur sur l'etat remonte le code recu`() = runTest {
+    fun `a server erroring on the state reports the code received`() = runTest {
         enqueueDiscovery()
         enqueueInformation()
         server.enqueue(MockResponse(code = 500))
@@ -255,7 +255,7 @@ class StationRepositoryTest {
     }
 
     @Test
-    fun `une reponse illisible est signalee comme telle`() = runTest {
+    fun `an unreadable response is reported as such`() = runTest {
         server.enqueue(MockResponse(body = "<html>maintenance</html>"))
 
         val outcome = repository().refresh()

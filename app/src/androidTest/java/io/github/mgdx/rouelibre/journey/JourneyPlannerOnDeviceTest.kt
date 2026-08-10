@@ -88,7 +88,7 @@ class JourneyPlannerOnDeviceTest {
     }
 
     @Test
-    fun compose_un_trajet_complet_en_moins_de_trois_secondes() = runBlocking {
+    fun composes_a_complete_journey_in_under_three_seconds() = runBlocking {
         // Un premier appel amorce les caches du moteur ; c'est le second qui
         // reflète ce que vit l'utilisateur, dont l'application aura déjà
         // affiché la carte.
@@ -109,7 +109,7 @@ class JourneyPlannerOnDeviceTest {
     }
 
     @Test
-    fun le_trajet_retenu_a_bien_un_velo_au_depart_et_une_place_a_l_arrivee() = runBlocking {
+    fun the_chosen_journey_has_a_bike_at_the_origin_and_a_dock_at_the_end() = runBlocking {
         // Critère d'acceptation §11.5.
         val plan = planner.plan(lilleCentre, roubaix, stations) as JourneyPlan.Found
 
@@ -124,7 +124,7 @@ class JourneyPlannerOnDeviceTest {
     }
 
     @Test
-    fun le_trajet_enchaine_bien_marche_velo_marche() = runBlocking {
+    fun the_journey_really_chains_walk_bike_walk() = runBlocking {
         val plan = planner.plan(lilleCentre, roubaix, stations) as JourneyPlan.Found
         val best = plan.best
 
@@ -140,7 +140,7 @@ class JourneyPlannerOnDeviceTest {
     }
 
     @Test
-    fun propose_des_alternatives_distinctes() = runBlocking {
+    fun offers_distinct_alternatives() = runBlocking {
         val plan = planner.plan(lilleCentre, roubaix, stations) as JourneyPlan.Found
 
         val pairs = (listOf(plan.best) + plan.alternatives)

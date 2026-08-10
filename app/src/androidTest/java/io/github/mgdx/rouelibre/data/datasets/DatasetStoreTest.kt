@@ -48,7 +48,7 @@ class DatasetStoreTest {
     }
 
     @Test
-    fun le_graphe_de_routage_garde_le_nom_que_brouter_ira_chercher() = runBlocking {
+    fun the_routing_graph_keeps_the_name_brouter_will_look_for() = runBlocking {
         val source = fileNamed("E0_N50.rd5", "ceci n'est pas une base SQLite")
 
         val result = store.importFrom(DatasetKind.Routing, Uri.fromFile(source))
@@ -62,7 +62,7 @@ class DatasetStoreTest {
     }
 
     @Test
-    fun un_fichier_sqlite_propose_comme_graphe_est_refuse() = runBlocking {
+    fun a_sqlite_file_offered_as_a_graph_is_refused() = runBlocking {
         // L'erreur la plus probable de l'import manuel : désigner le mauvais
         // fichier. Un fond de carte pris pour un graphe doit être dit tout de
         // suite, pas découvert au premier itinéraire.
@@ -77,7 +77,7 @@ class DatasetStoreTest {
     }
 
     @Test
-    fun les_donnees_d_une_ville_n_apparaissent_pas_dans_une_autre() = runBlocking {
+    fun one_city_s_data_does_not_appear_in_another() = runBlocking {
         // Deux villes cohabitent sur l'appareil : passer de l'une à l'autre ne
         // doit ni mélanger leurs fichiers, ni faire croire que la seconde est
         // installée parce que la première l'est (SPEC §11.9).
@@ -100,7 +100,7 @@ class DatasetStoreTest {
     }
 
     @Test
-    fun supprimer_une_ville_rend_toute_sa_place() = runBlocking {
+    fun deleting_a_city_reclaims_all_its_space() = runBlocking {
         store.importFrom(DatasetKind.Routing, Uri.fromFile(fileNamed("E0_N50.rd5", "segment")))
         assertTrue(store.occupiedBytesOf(TEST_CITY) > 0)
 

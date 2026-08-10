@@ -62,7 +62,7 @@ class OfflineRouterTest {
     }
 
     @Test
-    fun calcule_un_itineraire_a_velo_entre_deux_villes_de_la_metropole() = runBlocking {
+    fun computes_a_bike_route_between_two_towns_of_the_metropolis() = runBlocking {
         val result = router.route(lilleCentre, roubaixCentre, TravelMode.Cycling)
 
         val leg = (result as? RouteResult.Success)?.leg
@@ -80,7 +80,7 @@ class OfflineRouterTest {
     }
 
     @Test
-    fun calcule_un_itineraire_a_pied_plus_lent_que_le_meme_a_velo() = runBlocking {
+    fun computes_a_walking_route_slower_than_the_same_one_by_bike() = runBlocking {
         val onFoot = router.route(lilleCentre, roubaixCentre, TravelMode.Walking)
         val onBike = router.route(lilleCentre, roubaixCentre, TravelMode.Cycling)
 
@@ -96,7 +96,7 @@ class OfflineRouterTest {
     }
 
     @Test
-    fun le_trace_part_bien_du_depart_et_arrive_bien_a_l_arrivee() = runBlocking {
+    fun the_track_really_starts_at_the_origin_and_ends_at_the_destination() = runBlocking {
         val result = router.route(lilleCentre, roubaixCentre, TravelMode.Cycling)
         val leg = (result as? RouteResult.Success)?.leg
             ?: throw AssertionError("échec inattendu : $result")
@@ -115,7 +115,7 @@ class OfflineRouterTest {
     }
 
     @Test
-    fun un_point_hors_emprise_est_signale_et_ne_plante_pas() = runBlocking {
+    fun a_point_outside_the_box_is_reported_and_does_not_crash() = runBlocking {
         // Bruxelles : hors du graphe téléchargé.
         val outside = Coordinates(50.8467, 4.3525)
 

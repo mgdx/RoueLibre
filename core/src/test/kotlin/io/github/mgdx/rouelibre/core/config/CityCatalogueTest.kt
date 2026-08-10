@@ -20,7 +20,7 @@ import java.io.File
 class CityCatalogueTest {
 
     @Test
-    fun `le catalogue produit par le generateur est lisible`() {
+    fun `the catalogue the generator produces is readable`() {
         val catalogue = publishedCatalogue()
 
         assertTrue("catalogue vide", catalogue.cities.isNotEmpty())
@@ -33,7 +33,7 @@ class CityCatalogueTest {
     }
 
     @Test
-    fun `chaque ville publiee annonce le poids de ses donnees`() {
+    fun `every published city announces the weight of its data`() {
         // Le SPEC §11.9 exige que la taille soit annoncée avant le
         // téléchargement : une ville dont les données sont générées mais dont
         // le poids manque ferait mentir cet écran.
@@ -46,7 +46,7 @@ class CityCatalogueTest {
     }
 
     @Test
-    fun `une position dans une ville servie designe son reseau`() {
+    fun `a position inside a served city designates its network`() {
         val catalogue = publishedCatalogue()
 
         assertEquals("vlille", catalogue.suggestionFor(GRAND_PLACE_DE_LILLE)?.id)
@@ -55,20 +55,20 @@ class CityCatalogueTest {
     }
 
     @Test
-    fun `une commune de la peripherie designe le reseau de la metropole`() {
+    fun `a municipality on the outskirts designates the metropolis's network`() {
         // Seclin est hors de l'emprise du V'lille mais dans sa couronne : la
         // proposition doit tenir, sans quoi elle ne servirait qu'au centre-ville.
         assertEquals("vlille", publishedCatalogue().suggestionFor(SECLIN)?.id)
     }
 
     @Test
-    fun `aucune ville n'est proposee loin de tout reseau`() {
+    fun `no city is proposed far from every network`() {
         assertNull(publishedCatalogue().suggestionFor(MARSEILLE))
         assertNull(publishedCatalogue().suggestionFor(REYKJAVIK))
     }
 
     @Test
-    fun `entre deux reseaux qui se recouvrent, le plus proche l'emporte`() {
+    fun `between two overlapping networks, the nearer one wins`() {
         val catalogue = catalogueOf(
             entry("large", south = 48.0, west = 2.0, north = 49.0, east = 3.0),
             entry("proche", south = 48.8, west = 2.3, north = 48.9, east = 2.4),
@@ -78,7 +78,7 @@ class CityCatalogueTest {
     }
 
     @Test
-    fun `une entree au rectangle absurde est ecartee sans perdre les autres`() {
+    fun `an entry with an absurd rectangle is dropped without losing the others`() {
         val document = """
             {
               "cities": [
@@ -101,7 +101,7 @@ class CityCatalogueTest {
     }
 
     @Test
-    fun `un catalogue illisible rend un echec, pas une exception`() {
+    fun `an unreadable catalogue returns a failure, not an exception`() {
         assertTrue(CityCatalogueReader.read("{ pas du json") is Outcome.Failure)
         assertTrue(CityCatalogueReader.read("""{"cities": []}""") is Outcome.Failure)
     }

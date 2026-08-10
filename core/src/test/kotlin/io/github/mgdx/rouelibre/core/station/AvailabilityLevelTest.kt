@@ -34,7 +34,7 @@ class AvailabilityLevelTest {
     )
 
     @Test
-    fun `l'echelle suit les seuils annonces`() {
+    fun `the scale follows the announced thresholds`() {
         assertEquals(AvailabilityLevel.None, availabilityLevelOf(0))
         assertEquals(AvailabilityLevel.Low, availabilityLevelOf(1))
         assertEquals(AvailabilityLevel.Low, availabilityLevelOf(2))
@@ -45,12 +45,12 @@ class AvailabilityLevelTest {
     }
 
     @Test
-    fun `un compte negatif est traite comme une absence`() {
+    fun `a negative count is treated as an absence`() {
         assertEquals(AvailabilityLevel.None, availabilityLevelOf(-3))
     }
 
     @Test
-    fun `le mode velos compte les velos, le mode places compte les places`() {
+    fun `bike mode counts bikes, dock mode counts docks`() {
         val entry = StationWithAvailability(station(), availability(bikes = 7, docks = 13))
 
         assertEquals(7, entry.displayFor(AvailabilityMode.Bikes).count)
@@ -58,7 +58,7 @@ class AvailabilityLevelTest {
     }
 
     @Test
-    fun `l'arc rapporte le compte a la capacite publiee`() {
+    fun `the arc relates the count to the published capacity`() {
         val entry = StationWithAvailability(
             station(capacity = 20),
             availability(bikes = 5, docks = 15),
@@ -68,7 +68,7 @@ class AvailabilityLevelTest {
     }
 
     @Test
-    fun `sans capacite publiee l'arc se rabat sur la somme observee`() {
+    fun `without a published capacity the arc falls back on the observed sum`() {
         val entry = StationWithAvailability(
             station(capacity = null),
             availability(bikes = 3, docks = 9),
@@ -78,7 +78,7 @@ class AvailabilityLevelTest {
     }
 
     @Test
-    fun `une station qui ne loue plus est hors service pour les velos seulement`() {
+    fun `a station that no longer rents is out of service for bikes only`() {
         // Elle rend encore un service réel : y déposer un vélo.
         val entry = StationWithAvailability(
             station(),
@@ -91,7 +91,7 @@ class AvailabilityLevelTest {
     }
 
     @Test
-    fun `une station non deployee est hors service des deux cotes`() {
+    fun `a station not deployed is out of service on both sides`() {
         val entry = StationWithAvailability(
             station(),
             availability(bikes = 4, docks = 8, installed = false),
@@ -102,7 +102,7 @@ class AvailabilityLevelTest {
     }
 
     @Test
-    fun `une station sans etat n'affiche ni chiffre ni niveau`() {
+    fun `a station without a state shows neither figure nor level`() {
         val entry = StationWithAvailability(station(), availability = null)
 
         val display = entry.displayFor(AvailabilityMode.Bikes)

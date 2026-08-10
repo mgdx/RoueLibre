@@ -104,7 +104,7 @@ class DeviceLocationTest {
     }
 
     @Test
-    fun rend_la_position_simulee() {
+    fun returns_the_mock_position() {
         manager.setTestProviderLocation(LocationManager.GPS_PROVIDER, lille)
 
         val position = deviceLocation.lastKnown()
@@ -115,7 +115,7 @@ class DeviceLocationTest {
     }
 
     @Test
-    fun attend_un_releve_quand_aucune_position_n_est_connue() = runBlocking {
+    fun waits_for_a_fix_when_no_position_is_known() = runBlocking {
         // Aucun relevé n'a encore été publié : `current` doit en demander un,
         // et le premier fournisseur qui répond l'emporte.
         val awaited = async { deviceLocation.current(Duration.ofSeconds(10)) }
@@ -128,7 +128,7 @@ class DeviceLocationTest {
     }
 
     @Test
-    fun ne_rend_rien_quand_le_fournisseur_est_eteint() {
+    fun returns_nothing_when_the_provider_is_off() {
         manager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, false)
 
         // Les autres fournisseurs de l'appareil restent éventuellement actifs :

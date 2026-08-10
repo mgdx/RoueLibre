@@ -39,7 +39,7 @@ class HouseNumberResolutionTest {
     private val streetCentre = Coordinates(50.6245, 3.0601)
 
     @Test
-    fun `un numero present dans l'index est rendu tel quel`() {
+    fun `a number present in the index is returned as it stands`() {
         val known = straightStreet(1..100)
         val resolved = resolveHouseNumber(42, "", known, streetCentre)
 
@@ -51,7 +51,7 @@ class HouseNumberResolutionTest {
     }
 
     @Test
-    fun `un numero absent est interpole entre ses voisins`() {
+    fun `an absent number is interpolated between its neighbours`() {
         val complete = straightStreet(1..100)
         val withGap = complete.filterNot { it.number == 51 }
 
@@ -73,7 +73,7 @@ class HouseNumberResolutionTest {
     }
 
     @Test
-    fun `l'interpolation reste du bon cote de la chaussee`() {
+    fun `the interpolation stays on the right side of the roadway`() {
         // Les impairs sont d'un côté, les pairs de l'autre : interpoler le 51
         // entre le 50 et le 52 le placerait sur le trottoir d'en face.
         val known = straightStreet(1..100).filterNot { it.number == 51 }
@@ -84,7 +84,7 @@ class HouseNumberResolutionTest {
     }
 
     @Test
-    fun `un seul voisin connu sert de repere, et le dit`() {
+    fun `a single known neighbour serves as a landmark, and says so`() {
         val known = straightStreet(1..10)
         val resolved = resolveHouseNumber(15, "", known, streetCentre)
 
@@ -93,7 +93,7 @@ class HouseNumberResolutionTest {
     }
 
     @Test
-    fun `un voisin trop lointain ne sert a rien et laisse le point de la voie`() {
+    fun `a neighbour too far away is useless and leaves the street's point`() {
         // Rendre la position du 9 pour un 500 laisserait croire à une
         // précision qui n'existe pas.
         val resolved = resolveHouseNumber(500, "", straightStreet(1..10), streetCentre)
@@ -103,7 +103,7 @@ class HouseNumberResolutionTest {
     }
 
     @Test
-    fun `une voie sans aucun numero rend son point representatif`() {
+    fun `a street with no numbers at all returns its representative point`() {
         val resolved = resolveHouseNumber(12, "", emptyList(), streetCentre)
 
         assertEquals(PositionPrecision.StreetOnly, resolved.precision)
@@ -111,7 +111,7 @@ class HouseNumberResolutionTest {
     }
 
     @Test
-    fun `un numero saisi sans indice accepte l'indice connu`() {
+    fun `a number typed without a mark accepts the known mark`() {
         val bis = KnownHouseNumber(12, "bis", Coordinates(50.6250, 3.0605))
         val resolved = resolveHouseNumber(12, "", listOf(bis), streetCentre)
 
@@ -120,7 +120,7 @@ class HouseNumberResolutionTest {
     }
 
     @Test
-    fun `l'indice saisi l'emporte sur le numero nu`() {
+    fun `the mark typed wins over the bare number`() {
         val nu = KnownHouseNumber(12, "", Coordinates(50.6250, 3.0605))
         val bis = KnownHouseNumber(12, "bis", Coordinates(50.6252, 3.0606))
         val resolved = resolveHouseNumber(12, "bis", listOf(nu, bis), streetCentre)

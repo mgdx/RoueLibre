@@ -54,7 +54,7 @@ class DatasetDownloaderTest {
     }
 
     @Test
-    fun `télécharge un jeu et vérifie son empreinte`() = runTest {
+    fun `downloads a set and verifies its digest`() = runTest {
         server.enqueue(MockResponse.Builder().code(200).body(okio.Buffer().write(content)).build())
 
         val outcome = downloader.download(datasetOf(sha256 = sha256Of(content)), workDirectory)
@@ -66,7 +66,7 @@ class DatasetDownloaderTest {
     }
 
     @Test
-    fun `refuse un fichier dont l'empreinte ne correspond pas`() = runTest {
+    fun `refuses a file whose digest does not match`() = runTest {
         // Le SPEC §4.4 l'exige : un fichier qui ne correspond pas au manifeste
         // est rejeté, et l'ancienne version conservée.
         server.enqueue(MockResponse.Builder().code(200).body(okio.Buffer().write(content)).build())
@@ -78,7 +78,7 @@ class DatasetDownloaderTest {
     }
 
     @Test
-    fun `reprend un transfert interrompu là où il s'est arrêté`() = runTest {
+    fun `resumes an interrupted transfer where it stopped`() = runTest {
         // Une coupure au bout de trente mégaoctets ne doit pas obliger à tout
         // reprendre : la requête suivante demande la suite.
         val alreadyReceived = 120_000
@@ -100,7 +100,7 @@ class DatasetDownloaderTest {
     }
 
     @Test
-    fun `repart de zéro si le serveur ignore la reprise`() = runTest {
+    fun `starts over if the server ignores the resumption`() = runTest {
         // Un serveur qui répond 200 renvoie le fichier entier : l'ajouter à la
         // suite de ce qu'on avait produirait un fichier corrompu.
         File(workDirectory, "$FILE_NAME.partial").writeBytes(content.copyOfRange(0, 120_000))
@@ -113,7 +113,7 @@ class DatasetDownloaderTest {
     }
 
     @Test
-    fun `un serveur qui refuse rend une erreur explicite`() = runTest {
+    fun `a server that refuses returns an explicit error`() = runTest {
         server.enqueue(MockResponse.Builder().code(404).build())
 
         val outcome = downloader.download(datasetOf(sha256 = sha256Of(content)), workDirectory)
@@ -122,7 +122,7 @@ class DatasetDownloaderTest {
     }
 
     @Test
-    fun `lit le manifeste publié`() = runTest {
+    fun `reads the published manifest`() = runTest {
         server.enqueue(
             MockResponse.Builder()
                 .code(200)

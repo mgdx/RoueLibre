@@ -69,7 +69,7 @@ class AddressIndexTest {
     }
 
     @Test
-    fun trouve_une_voie_par_son_nom_propre() = runBlocking {
+    fun finds_a_street_by_its_proper_name() = runBlocking {
         val results = search("gambetta")
 
         assertEquals("Rue Gambetta", results.first().streetName)
@@ -77,14 +77,14 @@ class AddressIndexTest {
     }
 
     @Test
-    fun trouve_une_voie_pendant_la_frappe() = runBlocking {
+    fun finds_a_street_while_typing() = runBlocking {
         // La correspondance par préfixe est ce qui rend la liste vivante :
         // « nation » doit déjà désigner la rue Nationale.
         assertEquals("Rue Nationale", search("rue nation").first().streetName)
     }
 
     @Test
-    fun rattrape_une_faute_de_frappe() = runBlocking {
+    fun recovers_from_a_typo() = runBlocking {
         // Second étage : l'index plein texte ne rend rien, le parcours par
         // distance d'édition retrouve la rue (SPEC §4.3, critère 11).
         val results = search("gambeta")
@@ -96,7 +96,7 @@ class AddressIndexTest {
     }
 
     @Test
-    fun place_un_numero_present_dans_l_index() = runBlocking {
+    fun places_a_number_present_in_the_index() = runBlocking {
         val result = search("12 rue Nationale").first()
 
         assertEquals(12, result.houseNumber)
@@ -108,7 +108,7 @@ class AddressIndexTest {
     }
 
     @Test
-    fun interpole_un_numero_absent_de_l_index() = runBlocking {
+    fun interpolates_a_number_absent_from_the_index() = runBlocking {
         // Le 16 n'est pas indexé : il doit tomber entre le 14 et le 18, et pas
         // au milieu de la rue.
         val result = search("16 rue Nationale").first()
@@ -123,7 +123,7 @@ class AddressIndexTest {
     }
 
     @Test
-    fun classe_par_proximite_a_correspondance_egale() = runBlocking {
+    fun ranks_by_proximity_at_equal_match() = runBlocking {
         // Deux « rue Nationale » : celle de Lille est à quelques centaines de
         // mètres du point de référence, celle de Roubaix à une douzaine de
         // kilomètres.
@@ -131,7 +131,7 @@ class AddressIndexTest {
     }
 
     @Test
-    fun trouve_une_voie_par_le_nom_de_sa_commune_absorbee() = runBlocking {
+    fun finds_a_street_by_its_absorbed_municipality_name() = runBlocking {
         // La Base Adresse Nationale rattache Lomme et Hellemmes à Lille. Leurs
         // habitants, eux, tapent le nom de leur commune.
         val result = search("chemin de fer lomme").first()
@@ -142,12 +142,12 @@ class AddressIndexTest {
     }
 
     @Test
-    fun ne_rend_rien_pour_une_saisie_vide() = runBlocking {
+    fun returns_nothing_for_an_empty_query() = runBlocking {
         assertEquals(emptyList<AddressResult>(), search("   "))
     }
 
     @Test
-    fun signale_un_index_absent_au_lieu_d_echouer_en_silence() = runBlocking {
+    fun reports_a_missing_index_instead_of_failing_silently() = runBlocking {
         index.close()
         indexFile.delete()
 

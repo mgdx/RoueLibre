@@ -59,7 +59,7 @@ class DataManifestTest {
         DataManifestReader.read(document).valueOrNull() ?: error("manifeste illisible")
 
     @Test
-    fun `lit ce que le script de génération produit`() {
+    fun `reads what the generation script produces`() {
         val manifest = manifest()
 
         assertEquals(2, manifest.formatVersion)
@@ -70,12 +70,12 @@ class DataManifestTest {
     }
 
     @Test
-    fun `annonce la taille totale, celle qu'il faut montrer avant de télécharger`() {
+    fun `announces the total size, the one to show before downloading`() {
         assertEquals(34992128L + 1659390L, manifest().totalSizeBytes)
     }
 
     @Test
-    fun `retrouve un jeu par sa catégorie`() {
+    fun `finds a set by its category`() {
         assertEquals(
             "tiles.mbtiles",
             manifest().datasetFor(DatasetKind.Tiles)?.files?.first()?.name,
@@ -84,7 +84,7 @@ class DataManifestTest {
     }
 
     @Test
-    fun `un jeu inconnu est ignoré plutôt que fatal`() {
+    fun `an unknown set is ignored rather than fatal`() {
         // Une publication plus récente peut décrire un jeu que cette version
         // ne connaît pas ; cela ne doit pas empêcher de mettre à jour les
         // autres.
@@ -95,12 +95,12 @@ class DataManifestTest {
     }
 
     @Test
-    fun `un manifeste illisible rend un échec, pas une exception`() {
+    fun `an unreadable manifest returns a failure, not an exception`() {
         assertTrue(DataManifestReader.read("{ ceci n'est pas du json") is Outcome.Failure)
     }
 
     @Test
-    fun `un jeu absent de l'appareil est à télécharger`() {
+    fun `a set absent from the device is to be downloaded`() {
         val states = compareWithInstalled(manifest(), installedFingerprints = emptyMap())
 
         assertEquals(DatasetUpdate.Missing, states[DatasetKind.Tiles])
@@ -108,7 +108,7 @@ class DataManifestTest {
     }
 
     @Test
-    fun `un jeu dont l'empreinte n'a pas changé n'est pas retéléchargé`() {
+    fun `a set whose digest has not changed is not downloaded again`() {
         // C'est tout l'intérêt du manifeste : rafraîchir l'index d'adresses ne
         // doit pas imposer de reprendre trente-cinq mégaoctets de tuiles.
         val states = compareWithInstalled(
@@ -124,7 +124,7 @@ class DataManifestTest {
     }
 
     @Test
-    fun `la casse de l'empreinte ne change rien`() {
+    fun `the digest's case changes nothing`() {
         val states = compareWithInstalled(
             manifest(),
             installedFingerprints = mapOf(DatasetKind.Tiles to "96BA5E62"),
@@ -134,7 +134,7 @@ class DataManifestTest {
     }
 
     @Test
-    fun `l'empreinte d'un jeu à plusieurs fichiers ne dépend pas de leur ordre`() {
+    fun `the digest of a multi-file set does not depend on their order`() {
         // Le graphe de routage peut compter plusieurs segments ; l'ordre dans
         // lequel le manifeste les liste ne doit pas provoquer un
         // retéléchargement inutile.
