@@ -1,0 +1,69 @@
+{
+  "$comment": [
+    "Configuration de ville — SPEC.md §15.",
+    "Ce fichier est la SEULE source des données propres à une agglomération.",
+    "Aucune URL, coordonnée ou nom de réseau ne doit apparaître ailleurs dans le code.",
+    "Le bloc 'boundingBox' est RECALCULÉ automatiquement par tools/compute_bbox.py",
+    "à chaque régénération des données (§4) — ne pas l'éditer à la main.",
+    "Pour porter l'application vers une autre ville, copier ce fichier et n'ajuster",
+    "que 'network', 'gbfsDiscoveryUrl', 'map' et 'dataRelease'. Voir README.md."
+  ],
+  "configVersion": 1,
+  "network": {
+    "id": "velib",
+    "displayName": "Vélib' Métropole",
+    "operator": "Smovengo / Syndicat Autolib' Vélib' Métropole",
+    "defaultLanguage": "fr"
+  },
+  "gbfs": {
+    "$comment": [
+      "URL du fichier d'auto-découverte, et lui seul (§4.1).",
+      "Relevée dans le catalogue MobilityData, puis vérifiée par requête réelle",
+      "le 2026-08-10 : HTTP 200.",
+      "Ce flux est en GBFS 1.0 : il publie « station_id » en nombre et ses",
+      "drapeaux en 0 et 1. L'analyseur les tolère (voir GbfsDocuments.kt)."
+    ],
+    "discoveryUrl": "https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/gbfs.json",
+    "attribution": "Données Vélib' Métropole — Smovengo, licence ODbL",
+    "attributionUrl": "https://www.velib-metropole.fr/donnees-open-data-gbfs-du-service-velib-metropole"
+  },
+  "boundingBox": {
+    "$comment": [
+      "Emprise de référence partagée par les trois jeux de données (§4).",
+      "Dérivée du rectangle englobant des stations, élargi de 3 km.",
+      "Généré par tools/compute_bbox.py — NE PAS ÉDITER À LA MAIN."
+    ],
+    "marginMeters": 3000.0,
+    "generatedAt": "2026-08-10T08:23:47Z",
+    "stationCount": 1518,
+    "south": 48.716436,
+    "west": 2.124587,
+    "north": 48.984517,
+    "east": 2.579197
+  },
+  "map": {
+    "$comment": [
+      "Centre et zoom d'ouverture quand la position n'est pas disponible.",
+      "MapLibre compte en tuiles de 512 pixels : son zoom est décalé d'environ",
+      "un cran par rapport à la convention des tuiles de 256. Le zoom 11,2 y",
+      "cadre l'ensemble de l'agglomération."
+    ],
+    "defaultCenterLatitude": 48.8566,
+    "defaultCenterLongitude": 2.3522,
+    "defaultZoom": 11.5,
+    "minZoom": 10,
+    "maxZoom": 16
+  },
+  "dataRelease": {
+    "$comment": [
+      "URL par défaut du manifeste décrivant le jeu de données publié (§4.4).",
+      "Modifiable dans les réglages, et contournable par import manuel :",
+      "l'hébergeur ne doit jamais être un point de défaillance unique.",
+      "formatVersion 2 : l'index d'adresses porte désormais le nom des communes",
+      "absorbées (Lomme, Hellemmes…), sans lequel leurs habitants ne trouvaient",
+      "pas leur rue en tapant le nom de leur commune."
+    ],
+    "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest.json",
+    "formatVersion": 2
+  }
+}

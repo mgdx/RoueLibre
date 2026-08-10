@@ -54,16 +54,23 @@ def resolve_feed_url(discovery_document: dict, feed_name: str) -> str:
     The discovery document nests its feed list under a language key. The
     standard does not mandate which language a producer publishes, and the
     V'lille feed uses ``en`` even though it serves a French network, so the
-    language key is never assumed — the first one present is used.
+    language key is never assumed — the first one present is used. GBFS 3.0
+    dropped the language level entirely and publishes the list directly.
 
     Raises:
         KeyError: if the document has no feed list or no such feed.
     """
-    languages = discovery_document["data"]
-    if not languages:
-        raise KeyError("Le fichier d'auto-découverte GBFS ne contient aucune langue.")
-    first_language = next(iter(languages))
-    feeds = languages[first_language]["feeds"]
+    data = discovery_document["data"]
+    if not data:
+        raise KeyError("Le fichier d'auto-découverte GBFS est vide.")
+    # GBFS 3.0 publie la liste directement ; les versions antérieures
+    # l'imbriquent sous une clé de langue, dont le nom n'est pas garanti — le
+    # flux lillois emploie « en » alors qu'il sert un réseau français.
+    if "feeds" in data:
+        feeds = data["feeds"]
+    else:
+        first_language = next(iter(data))
+        feeds = data[first_language]["feeds"]
     for feed in feeds:
         if feed["name"] == feed_name:
             return feed["url"]
