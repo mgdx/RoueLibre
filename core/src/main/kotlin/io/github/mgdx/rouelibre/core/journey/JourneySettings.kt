@@ -18,7 +18,7 @@ import kotlin.time.Duration.Companion.minutes
  *   end, for the same reasons.
  * @property maxWalkToStationMetres the distance beyond which a station stops
  *   being a candidate. Twelve hundred metres, about a quarter of an hour on
- *   foot: past that, the access walk and the four minutes of fixed handling
+ *   foot: past that, the access walk and the three minutes of fixed handling
  *   swallow everything the bike could have saved. Without this bound the
  *   algorithm serenely proposes walking four kilometres to fetch a bike, for
  *   want of anything better.
@@ -51,7 +51,7 @@ public data class JourneySettings(
     public val maxRideEvaluations: Int = 6,
     public val directWalkThresholdMetres: Double = 3_000.0,
     public val pickupTime: Duration = 2.minutes,
-    public val dropoffTime: Duration = 2.minutes,
+    public val dropoffTime: Duration = 1.minutes,
     public val fallbackPenalty: Duration = 6.minutes,
     public val bikeTurnoverPerMinute: Double = 0.12,
 ) {
