@@ -1,19 +1,19 @@
-# Génération des jeux de données hors ligne
+# Generating the offline datasets
 
-Ces scripts produisent les trois fichiers que l'application télécharge au
-premier lancement : le fond de carte, le graphe de routage et l'index
-d'adresses. Ils sont versionnés ici pour que les données puissent être
-régénérées sans dépendre de personne — c'est l'un des deux garde-fous exigés
-par le `SPEC.md` §4.4, l'autre étant l'import manuel dans l'application.
+These scripts produce the three files the application downloads on first
+launch: the base map, the routing graph and the address index. They are
+versioned here so the data can be regenerated without depending on anyone —
+that is one of the two safeguards `SPEC.md` §4.4 requires, the other being
+manual import in the application.
 
-## En une commande
+## In one command
 
 ```bash
 tools/generate_all.sh
 ```
 
-Pour une autre agglomération, il suffit de changer le fichier de configuration
-de ville et la région source :
+For another conurbation, it is enough to change the city configuration file and
+the source region:
 
 ```bash
 tools/generate_all.sh --city config/cities/rennes.json \
@@ -21,78 +21,79 @@ tools/generate_all.sh --city config/cities/rennes.json \
                       --departments 35
 ```
 
-## Prérequis
+## Prerequisites
 
 ```bash
 sudo apt install osmium-tool tippecanoe default-jdk python3-yaml curl
 ```
 
-**Utiliser `/usr/bin/python3`, pas celui de conda.** Le module `sqlite3` de
-certaines distributions Python est compilé sans FTS4, seul moteur de recherche
-plein texte garanti sur les versions d'Android que vise l'application. Le
-script d'index refuse de s'exécuter dans ce cas, avec le message qui va bien.
+**Use `/usr/bin/python3`, not conda's.** Some distributions' Python builds their
+`sqlite3` module without FTS4, the only full-text search engine guaranteed on
+the Android versions the application targets. The index script refuses to run in
+that case, with a message saying so.
 
-Compter environ **6 Go** d'espace disque temporaire et **5 minutes** sur une
-machine à 16 cœurs, l'essentiel étant le téléchargement des sources.
+Expect around **6 GB** of temporary disk space and **5 minutes** on a 16-core
+machine, most of which is downloading the sources.
 
-## Les scripts, dans leur ordre d'exécution
+## The scripts, in the order they run
 
-| Script | Rôle |
+| Script | Role |
 |---|---|
-| `compute_bbox.py` | Calcule l'emprise de référence à partir des stations du flux GBFS et l'inscrit dans la configuration de ville |
-| `build_tiles.py` | Produit `tiles.mbtiles` à partir d'un extrait OpenStreetMap |
-| `build_routing.py` | Produit le graphe BRouter `*.rd5` |
-| `build_address_index.py` | Produit `addresses.sqlite` à partir de la Base Adresse Nationale et d'OpenStreetMap |
-| `build_manifest.py` | Décrit la publication : tailles, empreintes SHA-256, URL |
+| `compute_bbox.py` | Computes the reference bounding box from the GBFS feed's stations and writes it into the city configuration |
+| `build_tiles.py` | Produces `tiles.mbtiles` from an OpenStreetMap extract |
+| `build_routing.py` | Produces the BRouter `*.rd5` graph |
+| `build_address_index.py` | Produces `addresses.sqlite` from the Base Adresse Nationale and OpenStreetMap |
+| `build_manifest.py` | Describes the release: sizes, SHA-256 digests, URLs |
+| `build_catalogue.py` | Derives the catalogue of served cities from their configurations |
 
-Modules partagés : `city_config.py` (lecture de la configuration de ville et
-géométrie de l'emprise) et `address_normalization.py` (normalisation des noms
-de voies, appliquée aussi par l'application).
+Shared modules: `city_config.py` (reading the city configuration and the box's
+geometry) and `address_normalization.py` (street-name normalisation, applied by
+the application too).
 
-## Fichiers de configuration
+## Configuration files
 
-| Fichier | Contenu |
+| File | Contents |
 |---|---|
-| `config/cities/<ville>.json` | Tout ce qui est propre à une agglomération : réseau, URL du flux GBFS, emprise, centrage. **Seul endroit** où ces valeurs existent |
-| `tools/map_features.yaml` | Liste blanche des objets retenus dans le fond de carte, et liste de ceux qui en sont écartés à dessein |
-| `config/address_normalization.json` | Règles de normalisation des noms de voies, partagées avec l'application |
+| `config/cities/<city>.json` | Everything specific to a conurbation: network, GBFS feed URL, bounding box, centring. **The only place** these values exist |
+| `tools/map_features.yaml` | The allowlist of objects kept in the base map, and the list of those deliberately excluded |
+| `config/address_normalization.json` | Street-name normalisation rules, shared with the application |
 
-## L'emprise de référence
+## The reference bounding box
 
-Les trois jeux de données partagent une seule emprise, **dérivée des stations
-elles-mêmes** : rectangle englobant, élargi de 3 km. Elle n'est jamais écrite à
-la main — `compute_bbox.py` la recalcule à chaque régénération et la réinscrit
-dans la configuration de ville, ce qui fait suivre automatiquement les
-extensions du réseau.
+The three datasets share a single box, **derived from the stations
+themselves**: their enclosing rectangle, widened by 3 km. It is never written by
+hand — `compute_bbox.py` recomputes it on every regeneration and writes it back
+into the city configuration, which makes it follow extensions of the network by
+itself.
 
-Ce n'est délibérément pas la limite administrative de la métropole, qui
-couvrirait de vastes zones rurales sans aucune station et alourdirait les trois
-jeux pour rien.
+It is deliberately not the metropolis's administrative boundary, which would
+cover vast rural areas without a single station and would inflate all three sets
+for nothing.
 
-## Tailles obtenues sur l'emprise lilloise
+## Sizes obtained over the Lille box
 
-Mesures réelles du 9 août 2026, sur une emprise de 442 km² (21,2 × 20,9 km)
-dérivée de 268 stations.
+Real measurements from 9 August 2026, over a box of 442 km² (21.2 × 20.9 km)
+derived from 268 stations.
 
-| Jeu | Budget `SPEC.md` | Obtenu | |
+| Set | `SPEC.md` budget | Obtained | |
 |---|---|---|---|
-| Fond de carte | 30 – 60 Mo | **35,0 Mo** | 4 052 tuiles, zooms 10 à 16 |
-| Graphe de routage | 15 – 40 Mo | **1,7 Mo** | un seul fichier `E0_N50.rd5` |
-| Index d'adresses | 13 – 28 Mo | **5,9 Mo** | 10 591 voies, 286 028 numéros, 490 repères |
-| **Total téléchargé** | | **42,5 Mo** | plafond de 135 Mo largement tenu |
+| Base map | 30 – 60 MB | **35.0 MB** | 4,052 tiles, zooms 10 to 16 |
+| Routing graph | 15 – 40 MB | **1.7 MB** | a single `E0_N50.rd5` file |
+| Address index | 13 – 28 MB | **5.9 MB** | 10,591 streets, 286,028 numbers, 490 landmarks |
+| **Total downloaded** | | **42.5 MB** | |
 
-Répartition du fond de carte : les empreintes de bâtiments, présentes à partir
-du zoom 15, en représentent à elles seules **21,5 Mo sur 35**. C'est le premier
-levier à actionner si le budget devait être dépassé sur une autre ville —
-monter leur `minZoom` à 16, ou retirer la couche.
+Breakdown of the base map: the building footprints, present from zoom 15 on,
+account for **21.5 MB out of 35** on their own. That is the first lever to pull
+if the budget were exceeded on another city — raising their `minZoom` to 16, or
+dropping the layer.
 
-## Régénérer les polices embarquées
+## Regenerating the embedded fonts
 
-Bricolage Grotesque est distribuée en police variable, mais
-`fontVariationSettings` n'existe qu'à partir de l'API 28 alors que
-l'application vise l'API 26 : sur un Android 8, les graisses demandées
-seraient ignorées et les titres s'afficheraient maigres. Deux instances
-statiques sont donc figées aux seules graisses utilisées.
+Bricolage Grotesque is distributed as a variable font, but
+`fontVariationSettings` only exists from API 28 while the application targets
+API 26: on an Android 8 the requested weights would be ignored and the titles
+would render thin. Two static instances are therefore frozen at the only weights
+used.
 
 ```bash
 pip install fonttools
@@ -102,42 +103,41 @@ python3 -m fontTools.varLib.instancer BricolageGrotesque.ttf \
     wght=600 wdth=100 opsz=24 -o bricolage_semibold.ttf
 ```
 
-Les deux fichiers pèsent 182 ko au total, contre 408 ko pour la police
-variable complète : la contrainte de compatibilité a aussi allégé l'APK.
-Atkinson Hyperlegible est déjà statique et s'embarque telle quelle.
+The two files weigh 182 kB in total, against 408 kB for the complete variable
+font: the compatibility constraint also lightened the APK. Atkinson Hyperlegible
+is already static and is embedded as it is.
 
-## Sources et licences
+## Sources and licences
 
-| Source | Usage | Licence |
+| Source | Use | Licence |
 |---|---|---|
-| [OpenStreetMap](https://www.openstreetmap.org) (extraits [Geofabrik](https://download.geofabrik.de/)) | fond de carte, graphe de routage, points de repère | ODbL |
-| [Base Adresse Nationale](https://adresse.data.gouv.fr/) | numéros de voirie | ODbL |
-| [BRouter](https://github.com/abrensch/brouter) 1.7.10 | générateur du graphe de routage | MIT |
-| [SRTM 1″](https://registry.opendata.aws/terrain-tiles/) via *terrain-tiles* | altimétrie du graphe | domaine public |
-| Flux GBFS du réseau | emprise de référence, disponibilités | voir la configuration de ville |
+| [OpenStreetMap](https://www.openstreetmap.org) ([Geofabrik](https://download.geofabrik.de/) extracts) | base map, routing graph, landmarks | ODbL |
+| [Base Adresse Nationale](https://adresse.data.gouv.fr/) | house numbers | ODbL |
+| [BRouter](https://github.com/abrensch/brouter) 1.7.10 | routing graph generator | MIT |
+| [SRTM 1″](https://registry.opendata.aws/terrain-tiles/) through *terrain-tiles* | the graph's elevation data | public domain |
+| The network's GBFS feed | reference bounding box, availability | see the city configuration |
 
-L'archive BRouter est vérifiée par empreinte SHA-256 avant usage : la version
-du générateur est figée, ce que réclame la reproductibilité du build.
+The BRouter archive is verified by SHA-256 digest before use: the generator's
+version is pinned, as the build's reproducibility requires.
 
-## Notes de mise en œuvre
+## Implementation notes
 
-**Découpe OSM.** Le fond de carte utilise la stratégie `smart` d'osmium, qui
-conserve les relations entières : sans elle, seules 41 des communes de
-l'emprise ont un contour assemblable, contre 72 avec. Le graphe de routage
-utilise `complete_ways`, car `smart` y ferait entrer l'intégralité des
-itinéraires cyclables longue distance qui ne font que traverser — jusqu'au
-centre de la France. Les tuiles sont ensuite recoupées sur l'emprise par
-tippecanoe, sinon les objets débordants dessineraient une frange de données
-partielles hors de la zone couverte.
+**OSM extraction.** The base map uses osmium's `smart` strategy, which keeps
+relations whole: without it, only 41 of the box's municipalities have an
+assemblable outline, against 72 with. The routing graph uses `complete_ways`,
+because `smart` would pull in the entirety of the long-distance cycle routes
+that merely pass through — as far as the middle of France. The tiles are then
+clipped to the box by tippecanoe, otherwise overhanging objects would draw a
+fringe of partial data outside the covered area.
 
-**Regroupement des adresses.** Les adresses sont regroupées par
-(code INSEE, ancienne commune, nom de voie normalisé) et non par `id_fantoir` :
-ce dernier est vide sur 24 363 des 286 338 lignes de l'emprise, ce qui coupait
-69 voies en deux. Le code de l'ancienne commune fait partie de la clé, sinon
-deux rues homonymes d'une commune fusionnée se retrouvent confondues.
+**Address grouping.** Addresses are grouped by (INSEE code, former municipality,
+normalised street name) rather than by `id_fantoir`: the latter is empty on
+24,363 of the box's 286,338 rows, which cut 69 streets in two. The former
+municipality's code is part of the key, otherwise two homonymous streets of a
+merged municipality end up conflated.
 
-**Position des numéros.** Chaque numéro est stocké en delta par rapport au
-point représentatif de sa voie, en centmillièmes de degré. Erreur de
-restitution mesurée sur 40 877 adresses : médiane **0,35 m**, 99ᵉ centile
-0,62 m, et 17 adresses seulement au-delà de 50 m — des incohérences de la BAN
-elle-même, non du codage.
+**House-number positions.** Each number is stored as a delta from its street's
+representative point, in hundred-thousandths of a degree. Round-trip error
+measured over 40,877 addresses: median **0.35 m**, 99th percentile 0.62 m, and
+only 17 addresses beyond 50 m — inconsistencies in the address base itself, not
+in the encoding.
