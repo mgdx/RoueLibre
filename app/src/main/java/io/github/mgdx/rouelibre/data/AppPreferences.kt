@@ -42,6 +42,9 @@ enum class AppTheme(val id: String) {
  */
 data class HandlingTimes(val pickupSeconds: Int, val dropoffSeconds: Int)
 
+/** Aucune version vue : l'application n'a encore jamais été lancée. */
+const val NEVER_LAUNCHED: Int = 0
+
 /**
  * Réglages et état persistant de l'application (SPEC §8).
  *
@@ -206,6 +209,22 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
         }
     }
 
+    /**
+     * Le dernier code de version que l'utilisateur a vu (SPEC §7.9, §7.10).
+     *
+     * Zéro veut dire « jamais lancée » : c'est l'écran d'accueil qui
+     * s'applique alors, jamais celui des nouveautés. Une valeur inférieure à
+     * la version installée veut dire « mise à jour depuis » : les notes des
+     * versions intermédiaires sont alors montrées, une seule fois.
+     */
+    suspend fun lastSeenVersionCode(): Int =
+        dataStore.data.first()[LAST_SEEN_VERSION_CODE] ?: NEVER_LAUNCHED
+
+    /** Retient la version que l'utilisateur vient de voir. */
+    suspend fun setLastSeenVersionCode(versionCode: Int) {
+        dataStore.edit { it[LAST_SEEN_VERSION_CODE] = versionCode }
+    }
+
     private companion object {
         val STATION_INFORMATION_FETCHED_AT =
             longPreferencesKey("station_information_fetched_at")
@@ -221,6 +240,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
         val PICKUP_SECONDS = intPreferencesKey("pickup_seconds")
         val DROPOFF_SECONDS = intPreferencesKey("dropoff_seconds")
         val DATA_MANIFEST_URL = stringPreferencesKey("data_manifest_url")
+        val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
 
         /** Deux minutes, la valeur par défaut du SPEC §6. */
         const val DEFAULT_HANDLING_SECONDS = 120

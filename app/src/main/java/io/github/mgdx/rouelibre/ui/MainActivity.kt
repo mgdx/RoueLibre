@@ -7,17 +7,21 @@ import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
+import io.github.mgdx.rouelibre.BuildConfig
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.intent.PlaceRequest
+import io.github.mgdx.rouelibre.data.NEVER_LAUNCHED
 import io.github.mgdx.rouelibre.databinding.ActivityMainBinding
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneyResultFragment
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.map.MapFragment
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
+import io.github.mgdx.rouelibre.ui.welcome.WelcomeFragment
+import io.github.mgdx.rouelibre.ui.welcome.WhatsNewFragment
 import kotlinx.coroutines.launch
 
 /**
@@ -51,6 +55,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.content, MapFragment())
                 .commit()
+            openFirstScreen()
             welcome(intent)
         }
     }
@@ -64,6 +69,46 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         binding = null
         super.onDestroy()
+    }
+
+    /**
+     * Montre l'accueil ou les nouveautés, s'il y a lieu (SPEC §7.9, §7.10).
+     *
+     * Le dernier code de version vu tranche entre les trois cas : jamais
+     * lancée, mise à jour depuis, ou rien de neuf. Les deux écrans sont
+     * exclusifs — les nouveautés ne s'affichent **jamais** à une première
+     * installation, où c'est l'accueil qui s'applique.
+     *
+     * La lecture est asynchrone : une lecture bloquante du disque retarderait
+     * le premier dessin pour un réglage qui, la plupart du temps, ne demande
+     * rien.
+     */
+    private fun openFirstScreen() {
+        lifecycleScope.launch {
+            val lastSeen = container.preferences.lastSeenVersionCode()
+            when {
+                lastSeen == NEVER_LAUNCHED -> replaceWith(WelcomeFragment())
+
+                lastSeen < BuildConfig.VERSION_CODE &&
+                    WhatsNewFragment.hasNotes(
+                        this@MainActivity,
+                        lastSeen,
+                        BuildConfig.VERSION_CODE,
+                    ) -> show(WhatsNewFragment.since(lastSeen))
+
+                // Rien à montrer, mais la version vue se met à jour : une
+                // version publiée sans note ne doit pas faire réapparaître les
+                // notes de la précédente au lancement suivant.
+                lastSeen < BuildConfig.VERSION_CODE ->
+                    container.preferences.setLastSeenVersionCode(BuildConfig.VERSION_CODE)
+            }
+        }
+    }
+
+    private fun replaceWith(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.content, fragment)
+            .commit()
     }
 
     /**

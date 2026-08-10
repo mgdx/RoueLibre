@@ -62,6 +62,21 @@ qui sortira sur F-Droid sera recompilé et signé là-bas.
   validé, puis mis en place — et un fichier refusé dit pourquoi.
 - **Filtre de la liste par nom de station**, insensible à la casse et aux
   accents, tolérant à l'ordre des mots, cherchant aussi le code postal.
+- **Premier lancement** (§7.9) : trois pages courtes — ce qu'est
+  l'application, ce qu'elle ne fait pas de vos données, ce dont elle a besoin —
+  chacune contournable, la dernière enchaînant directement sur le
+  téléchargement. Un écran et non une boîte de dialogue, parce qu'il doit
+  pouvoir être relu depuis « À propos ».
+- **Nouveautés après mise à jour** (§7.10), affichées une seule fois, et
+  jamais à une première installation. Si l'écart couvre plusieurs versions,
+  toutes les notes intermédiaires sont montrées, de la plus récente à la plus
+  ancienne.
+  - Les notes viennent des **métadonnées F-Droid**
+    (`fastlane/metadata/android/fr/changelogs/`), converties en ressource
+    embarquée au moment du build : F-Droid et l'application affichent
+    exactement le même texte, sans double saisie. Rien n'est téléchargé.
+- **Métadonnées F-Droid** : description courte, description longue et notes de
+  version, rédigées pour l'utilisateur et non pour le développeur.
 - **Téléchargement des jeux de données** (§4.4) : consultation du manifeste
   publié, comparaison des empreintes, et transfert de ce qui a changé — et de
   cela seulement. Rafraîchir l'index d'adresses n'impose donc pas de reprendre

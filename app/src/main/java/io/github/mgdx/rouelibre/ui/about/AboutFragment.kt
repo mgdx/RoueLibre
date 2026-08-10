@@ -12,7 +12,10 @@ import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.BuildConfig
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
+import io.github.mgdx.rouelibre.data.NEVER_LAUNCHED
 import io.github.mgdx.rouelibre.databinding.FragmentAboutBinding
+import io.github.mgdx.rouelibre.ui.welcome.WelcomeFragment
+import io.github.mgdx.rouelibre.ui.welcome.WhatsNewFragment
 
 /**
  * « À propos » (SPEC §7.7).
@@ -49,11 +52,12 @@ class AboutFragment : Fragment() {
         views.version.text = getString(R.string.about_version, BuildConfig.VERSION_NAME)
         views.networkAttribution.text = container.cityConfiguration.gbfs.attribution
         views.openRepository.setOnClickListener { openRepository() }
-        views.openLicences.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.content, LicencesFragment())
-                .addToBackStack(null)
-                .commit()
+        views.openLicences.setOnClickListener { show(LicencesFragment()) }
+        // Les deux écrans du premier lancement restent lisibles ensuite : le
+        // SPEC §7.9 et §7.10 l'exigent tous les deux.
+        views.openWelcome.setOnClickListener { show(WelcomeFragment()) }
+        views.openWhatsNew.setOnClickListener {
+            show(WhatsNewFragment.since(NEVER_LAUNCHED))
         }
     }
 
@@ -75,6 +79,13 @@ class AboutFragment : Fragment() {
             val views = binding ?: return
             Snackbar.make(views.root, R.string.about_no_browser, Snackbar.LENGTH_LONG).show()
         }
+    }
+
+    private fun show(fragment: Fragment) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.content, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private companion object {

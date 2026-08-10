@@ -179,6 +179,18 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
     @get:InputFile
     abstract val normalizationRules: RegularFileProperty
 
+    /**
+     * Les notes de version des métadonnées F-Droid.
+     *
+     * Elles sont la SOURCE UNIQUE de ce que l'écran « nouveautés » affiche
+     * (SPEC §7.10) : les recopier dans les ressources en ferait deux versions
+     * à tenir, et la seconde finirait par mentir. Le dossier peut être absent
+     * d'un clone partiel, auquel cas l'écran n'a simplement rien à montrer.
+     */
+    @get:InputDirectory
+    @get:Optional
+    abstract val changelogs: DirectoryProperty
+
     @get:OutputDirectory
     abstract val outputDirectory: DirectoryProperty
 
@@ -191,6 +203,13 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
         cityConfiguration.get().asFile.copyTo(target.resolve("city.json"), overwrite = true)
         normalizationRules.get().asFile
             .copyTo(target.resolve("address_normalization.json"), overwrite = true)
+
+        val notes = target.resolve("changelogs")
+        notes.deleteRecursively()
+        notes.mkdirs()
+        changelogs.orNull?.asFile?.listFiles()
+            ?.filter { it.isFile && it.extension == "txt" }
+            ?.forEach { it.copyTo(notes.resolve(it.name), overwrite = true) }
     }
 }
 
@@ -201,6 +220,8 @@ androidComponents {
         ) {
             cityConfiguration.set(rootProject.file("config/cities/lille.json"))
             normalizationRules.set(rootProject.file("config/address_normalization.json"))
+            val notes = rootProject.file("fastlane/metadata/android/fr/changelogs")
+            if (notes.isDirectory) changelogs.set(notes)
         }
         variant.sources.assets?.addGeneratedSourceDirectory(
             copyTask,

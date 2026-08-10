@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Premier lancement (SPEC §7.9).
+
+    Un écran, pas une boîte de dialogue : le contenu est trop dense pour une
+    fenêtre modale, et il doit pouvoir être relu depuis « À propos ».
+
+    Le texte est court et la sortie toujours possible : « Plus tard » ne cache
+    rien, il reporte. On explique un fonctionnement, on ne vend rien.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:paddingStart="@dimen/space_l"
+    android:paddingEnd="@dimen/space_l">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_xxl"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Roue Libre" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/body_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/space_l"
+        app:layout_constraintBottom_toTopOf="@id/next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title">
+
+        <TextView
+            android:id="@+id/body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="4dp"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+            tools:text="Application libre et ouverte, sans compte, sans publicité, sans mouchard." />
+    </androidx.core.widget.NestedScrollView>
+
+    <TextView
+        android:id="@+id/step"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_s"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Label"
+        app:layout_constraintBottom_toTopOf="@id/next"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="1 SUR 3" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/next"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginBottom="@dimen/space_s"
+        app:layout_constraintBottom_toTopOf="@id/skip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Continuer" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/skip"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginBottom="@dimen/space_l"
+        android:textColor="@color/signal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Passer" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

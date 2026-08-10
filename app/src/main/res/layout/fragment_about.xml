@@ -145,6 +145,22 @@
                 android:text="@string/about_open_repository" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/open_welcome"
+                style="@style/Widget.RoueLibre.Toggle"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/touch_target_min"
+                android:layout_marginTop="@dimen/space_s"
+                android:text="@string/welcome_open" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/open_whats_new"
+                style="@style/Widget.RoueLibre.Toggle"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/touch_target_min"
+                android:layout_marginTop="@dimen/space_s"
+                android:text="@string/whats_new_open" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/open_licences"
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"

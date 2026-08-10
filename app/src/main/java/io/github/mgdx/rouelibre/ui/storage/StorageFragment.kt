@@ -95,6 +95,13 @@ class StorageFragment : Fragment() {
 
         views.checkUpdates.setOnClickListener { onUpdateButtonClicked() }
 
+        // Ouvert depuis l'accueil, l'écran consulte d'emblée : l'utilisateur
+        // vient d'appuyer sur « Télécharger les données », lui redemander de
+        // le confirmer ici serait une porte de plus.
+        if (savedInstanceState == null && arguments?.getBoolean(ARGUMENT_CHECK_ON_OPEN) == true) {
+            viewModel.checkForUpdates()
+        }
+
         observeState()
         observeMessages()
     }
@@ -147,6 +154,20 @@ class StorageFragment : Fragment() {
     private fun requestImport(kind: DatasetKind) {
         awaitingImportFor = kind
         pickDocument.launch(arrayOf("*/*"))
+    }
+
+    companion object {
+        private const val ARGUMENT_CHECK_ON_OPEN = "consulter-a-l-ouverture"
+
+        /**
+         * Ouvre l'écran en consultant aussitôt le manifeste (SPEC §7.9).
+         *
+         * Réservé à l'enchaînement depuis l'écran d'accueil : ailleurs, la
+         * consultation reste déclenchée par un appui.
+         */
+        fun checkingForUpdates(): StorageFragment = StorageFragment().apply {
+            arguments = Bundle().apply { putBoolean(ARGUMENT_CHECK_ON_OPEN, true) }
+        }
     }
 
     private fun observeState() {
