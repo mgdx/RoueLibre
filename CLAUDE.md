@@ -1,63 +1,86 @@
 # CLAUDE.md
 
-## Avant toute chose
+## Before anything else
 
-**Lis `SPEC.md` à la racine du dépôt.** C'est le cahier des charges complet et la source de vérité du projet. Ce fichier-ci n'en est qu'un rappel opérationnel : en cas de contradiction, `SPEC.md` l'emporte.
+**Read `SPEC.md` at the root of the repository.** It is the complete
+specification and the project's source of truth. This file is only an
+operational reminder: where the two disagree, `SPEC.md` wins.
 
-## Le projet en une phrase
+## The project in one sentence
 
-**Roue Libre** — application Android libre affichant les stations de vélos en libre-service V'lille (métropole de Lille) sur une carte, et calculant un itinéraire porte-à-porte marche → vélo → marche. Tout fonctionne hors ligne sauf la disponibilité des vélos en temps réel.
+**Roue Libre** — a free Android application showing V'lille bike-share stations
+(Lille metropolitan area) on a map, and computing a door-to-door
+walk → bike → walk journey. Everything works offline except real-time bike
+availability.
 
-## Règles absolues
+## Absolute rules
 
-1. **Aucun service Google.** Ni Play Services, ni Firebase, ni FCM, ni Maps SDK, ni Crashlytics. L'appli doit tourner sur LineageOS sans GApps.
-2. **Aucune télémétrie, aucun mouchard, aucun identifiant unique.** Aucune donnée de trajet conservée.
-3. **Hors ligne par défaut.** Carte, recherche d'adresses et calcul d'itinéraire s'exécutent sur l'appareil. Seul le flux GBFS sort sur le réseau.
-4. **Légèreté.** APK < 15 Mo. Toute dépendance ajoutée doit être justifiée dans le `README.md`.
-5. **Rien de spécifique à Lille en dur** dans le code : URL, emprise, centrage et nom de réseau vivent dans la configuration de ville. Voir `SPEC.md` §15.
-6. **Zéro chaîne de caractères en dur.** Tout dans `res/values/strings.xml`, français par défaut, `plurals` pour les accords, placeholders positionnels.
-7. **GPLv3.** Vérifier la compatibilité de licence avant d'ajouter une dépendance.
+1. **No Google services.** No Play Services, no Firebase, no FCM, no Maps SDK,
+   no Crashlytics. The application must run on LineageOS without GApps.
+2. **No telemetry, no tracker, no unique identifier.** No journey data is kept.
+3. **Offline by default.** Map, address search and route computation all run on
+   the device. Only the GBFS feed goes out on the network.
+4. **Lightness.** APK under 15 MB. Every dependency added must be justified in
+   `README.md`.
+5. **Nothing specific to Lille hard-coded**: URLs, bounding box, centring and
+   network name all live in the city configuration. See `SPEC.md` §15.
+6. **Not a single hard-coded string.** Everything in `res/values/strings.xml`,
+   French by default, `plurals` for agreement, positional placeholders.
+7. **GPLv3.** Check licence compatibility before adding a dependency.
 
-## Conventions de code
+## Coding conventions
 
-Voir `SPEC.md` §14 pour le détail. En résumé :
+See `SPEC.md` §14 for the detail. In short:
 
-- Kotlin, vues XML + ViewBinding, **pas de Compose**. minSdk 26.
-- Logique métier en Kotlin pur, sans import Android, testable sur la JVM.
-- Commentaires : expliquer le **pourquoi**, pas le **quoi**. Justifier chaque coefficient de l'algorithme d'itinéraire.
-- KDoc sur tout ce qui est public. Nommage explicite en anglais, sans abréviations.
-- Fonctions courtes, à responsabilité unique. Pas de code mort, pas d'abstraction anticipée.
-- Commits atomiques, messages décrivant l'intention.
+- Kotlin, XML views + ViewBinding, **no Compose**. minSdk 26.
+- Business logic in pure Kotlin, no Android imports, testable on the JVM.
+- Comments explain the **why**, never the **what**. Every coefficient of the
+  journey algorithm must be justified.
+- KDoc on everything public. Explicit English naming, no abbreviations.
+- Short functions, single responsibility. No dead code, no premature
+  abstraction.
+- Atomic commits, messages describing intent.
 
-## Commandes
+## Commands
 
 ```bash
-./gradlew assembleDebug        # compilation
-./gradlew test                 # tests unitaires JVM
-./gradlew lint detekt          # analyse statique
+./gradlew assembleDebug        # build
+./gradlew test                 # JVM unit tests
+./gradlew lint                 # static analysis
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
-Compile et lance les tests après chaque changement significatif. Ne me livre pas du code qui ne compile pas.
+Build and run the tests after every significant change. Do not hand me code
+that does not compile.
 
-## Ce qu'il faut me demander avant de faire
+## Ask me before doing
 
-- Ajouter une dépendance qui ne figure pas dans `SPEC.md` §3.
-- S'écarter d'une décision déjà tranchée dans `SPEC.md` — elles l'ont été après discussion, pas par défaut.
-- Faire évoluer le schéma des données ou le format des fichiers téléchargés.
-- Appliquer un style visuel à l'ensemble de l'interface : soumets d'abord les jetons de conception et **une seule vue** en capture d'écran.
+- Adding a dependency that is not listed in `SPEC.md` §3.
+- Departing from a decision already settled in `SPEC.md` — those were settled
+  after discussion, not by default.
+- Changing the data schema or the format of the downloaded files.
+- Applying a visual style to the whole interface: submit the design tokens and
+  **a single screen** as a screenshot first.
 
-## Ce qu'il ne faut jamais faire
+## Never do
 
-- Contourner silencieusement une contrainte du §2 de `SPEC.md`. Si elle bloque une fonctionnalité, dis-le et propose une alternative.
-- Coder en dur une URL, une coordonnée ou une clé.
-- Inventer une URL de flux de données : vérifie-la par une requête réelle avant de l'inscrire dans le code.
-- Ajouter une fonctionnalité listée hors périmètre (`SPEC.md` §13).
+- Silently work around a constraint from `SPEC.md` §2. If one blocks a feature,
+  say so and propose an alternative.
+- Hard-code a URL, a coordinate or a key.
+- Invent a data feed URL: verify it with a real request before writing it into
+  the code.
+- Add a feature listed as out of scope (`SPEC.md` §13).
 
-## Ordre de travail
+## Order of work
 
-Suis la progression du §16 de `SPEC.md`. Elle commence par les **scripts de génération des données** — tuiles, graphe de routage, index d'adresses — dont les tailles réelles conditionnent toute l'architecture. Reporte-moi ces tailles avant de construire l'interface par-dessus.
+Follow the progression of `SPEC.md` §16. It starts with the **data generation
+scripts** — tiles, routing graph, address index — whose real sizes govern the
+whole architecture. Report those sizes to me before building the interface on
+top.
 
-## Langue
+## Language
 
-Le code, les noms de variables et les commentaires sont en anglais. L'interface, les messages d'erreur, la documentation et nos échanges sont en français.
+The code, its comments and the documentation are in English. **The application
+interface and its error messages are in French** (`SPEC.md` §9): the users
+served are French-speaking, and English is only a test translation. Our
+exchanges are in French.

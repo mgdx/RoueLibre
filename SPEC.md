@@ -1,431 +1,431 @@
-# Cahier des charges — Roue Libre (application Android)
+# Specification — Roue Libre (Android application)
 
-> **À l'agent :** ce document est la source de vérité du projet. En cas de doute entre ce fichier et une habitude de développement Android « classique », c'est ce fichier qui gagne. Toutes les décisions structurantes ont été tranchées : ne reviens sur aucune sans en discuter d'abord. Si une contrainte te paraît impossible à tenir, dis-le et propose une alternative plutôt que de la contourner en silence.
+> **To the agent:** this document is the project's source of truth. When in doubt between this file and a "classic" Android development habit, this file wins. Every structural decision has been settled: do not revisit any of them without discussing it first. If a constraint looks impossible to meet, say so and propose an alternative rather than silently working around it.
 
 ---
 
-## 1. Objectif
+## 1. Goal
 
-**Roue Libre** — le nom joue sur le double sens de « libre » : libre-service et logiciel libre. Il est **volontairement indépendant de toute ville et de tout réseau**, conformément au §15.
+**Roue Libre** — the name plays on the double meaning of *libre* in French: self-service and free software. It is **deliberately independent of any city and any network**, as required by §15.
 
-Application Android permettant de :
+An Android application that lets you:
 
-1. Visualiser sur une carte les stations V'lille (vélos en libre-service de la Métropole Européenne de Lille) avec leur disponibilité en temps réel (vélos disponibles, places libres).
-2. Calculer un itinéraire porte-à-porte combiné : **marche → vélo → marche**, en choisissant automatiquement la meilleure station de départ et la meilleure station d'arrivée.
+1. See V'lille stations (the bike-share network of the Lille European Metropolis) on a map with their real-time availability (bikes available, free docks).
+2. Compute a combined door-to-door journey: **walk → bike → walk**, automatically choosing the best departure station and the best arrival station.
 
-L'application est un outil personnel, sobre et rapide. Ce n'est pas une application de réservation : elle ne dialogue jamais avec le compte utilisateur V'lille.
+The application is a personal tool, plain and fast. It is not a booking application: it never talks to a V'lille user account.
 
-## 2. Contraintes non négociables
+## 2. Non-negotiable constraints
 
-| # | Contrainte | Conséquence |
+| # | Constraint | Consequence |
 |---|---|---|
-| C1 | **Open source**, publiée sur F-Droid | Licence libre, build reproductible, aucune dépendance propriétaire |
-| C2 | **Aucun service Google** | Interdit : Google Play Services, Firebase, FCM, Maps SDK, ML Kit, Crashlytics, Play Integrity. L'appli doit fonctionner sur LineageOS sans GApps |
-| C3 | **Vie privée** | Aucune télémétrie, aucun tracker, aucun identifiant unique, aucun compte. La position ne quitte jamais l'appareil |
-| C4 | **Légèreté** | APK cible **< 15 Mo** (**< 12 Mo** par architecture), hors données téléchargées. Toute dépendance ajoutée doit être justifiée dans le README |
-| C5 | **Fonctionnement hors ligne complet** | Carte, recherche d'adresses et calcul d'itinéraire fonctionnent **sans aucun réseau**. Seule la disponibilité temps réel des stations nécessite une connexion |
-| C6 | **Français par défaut, traduisible** | Voir §9 |
+| C1 | **Open source**, published on F-Droid | Free licence, reproducible build, no proprietary dependency |
+| C2 | **No Google service** | Forbidden: Google Play Services, Firebase, FCM, Maps SDK, ML Kit, Crashlytics, Play Integrity. The application must run on LineageOS without GApps |
+| C3 | **Privacy** | No telemetry, no tracker, no unique identifier, no account. The user's position never leaves the device |
+| C4 | **Lightness** | Target APK **under 15 MB** (**under 12 MB** per architecture), excluding downloaded data. Every dependency added must be justified in the README |
+| C5 | **Complete offline operation** | Map, address search and route computation all work **with no network at all**. Only real-time station availability needs a connection |
+| C6 | **French by default, translatable** | See §9 |
 
-L'appli doit passer le scan **F-Droid / Exodus Privacy** sans aucun tracker détecté.
+The application must pass the **F-Droid / Exodus Privacy** scan with no tracker detected.
 
-## 3. Stack technique
+## 3. Technical stack
 
-- **Langage :** Kotlin
-- **UI :** Vues XML + ViewBinding + Material Components. **Pas de Jetpack Compose** (poids, contrainte C4)
-- **minSdk : 26** (Android 8.0) — **targetSdk :** la dernière version stable. Justification : `java.time` disponible nativement (pas de *desugaring* à configurer), icônes adaptatives, et surtout une pile TLS à jour, indispensable pour télécharger les jeux de données sans se heurter aux magasins de certificats obsolètes des versions antérieures. Vérifier que le minSdk requis par MapLibre Native n'est pas supérieur.
-- **Réseau :** OkHttp + `kotlinx.serialization`. Pas de Retrofit, pas de Gson, pas de Moshi
-- **Cartographie :** MapLibre Native, alimenté par un fichier de tuiles vectorielles **local** (voir §4.2). C'est la seule dépendance native du projet, et la seule entorse assumée à la contrainte C4 : elle est le prix du hors-ligne
-- **Asynchrone :** Coroutines + Flow
-- **Persistance :** Room pour le cache des stations, `DataStore` (Preferences) pour les réglages
-- **Architecture :** MVVM simple, une seule activité, navigation par fragments. Pas d'injection de dépendances par framework (Hilt/Koin) : instanciation manuelle via un `AppContainer`
-- **Build :** Gradle Kotlin DSL, R8 activé en release, `shrinkResources true`, **splits par ABI** (les bibliothèques natives de MapLibre ne doivent pas être livrées quatre fois dans le même APK)
-- **`applicationId` :** de la forme `io.github.<compte>.rouelibre`. Ne pas inventer un identifiant fondé sur un domaine qui n'appartient pas au projet — c'est irréversible une fois l'application publiée.
-- **Licence :** **GPLv3**. Toute dépendance ajoutée doit être compatible avec cette licence — à vérifier avant intégration, en particulier pour le moteur de routage (§5)
+- **Language:** Kotlin
+- **UI:** XML views + ViewBinding + Material Components. **No Jetpack Compose** (weight, constraint C4)
+- **minSdk: 26** (Android 8.0) — **targetSdk:** the latest stable version. Rationale: `java.time` available natively (no desugaring to configure), adaptive icons, and above all an up-to-date TLS stack, indispensable for downloading the datasets without running into the obsolete certificate stores of earlier versions. Check that the minSdk required by MapLibre Native is not higher.
+- **Network:** OkHttp + `kotlinx.serialization`. No Retrofit, no Gson, no Moshi
+- **Mapping:** MapLibre Native, fed by a **local** vector tile file (see §4.2). It is the project's only native dependency, and the only accepted departure from constraint C4: it is the price of offline operation
+- **Asynchrony:** Coroutines + Flow
+- **Persistence:** Room for the station cache, `DataStore` (Preferences) for settings
+- **Architecture:** simple MVVM, a single activity, fragment-based navigation. No dependency injection framework (Hilt/Koin): manual instantiation through an `AppContainer`
+- **Build:** Gradle Kotlin DSL, R8 enabled in release, `shrinkResources true`, **ABI splits** (MapLibre's native libraries must not ship four times in the same APK)
+- **`applicationId`:** of the form `io.github.<account>.rouelibre`. Do not invent an identifier based on a domain the project does not own — it is irreversible once the application is published.
+- **Licence:** **GPLv3**. Every dependency added must be compatible with that licence — to be checked before integration, in particular for the routing engine (§5)
 
-Aucune bibliothèque d'analytics, de crash reporting ou de publicité, sous aucun prétexte.
+No analytics, crash reporting or advertising library, under any pretext.
 
-## 4. Sources de données
+## 4. Data sources
 
-### Emprise géographique de référence
+### Reference bounding box
 
-Tous les jeux de données hors ligne — tuiles, graphe de routage, index d'adresses — partagent **une seule et même emprise**, définie une fois pour toutes dans les scripts de génération.
+All the offline datasets — tiles, routing graph, address index — share **one and the same bounding box**, defined once and for all in the generation scripts.
 
-Attention au contresens : la Métropole Européenne de Lille n'est pas la ville de Lille. C'est un ensemble de **95 communes sur près de 672 km²**, allant jusqu'à la frontière belge, et comprenant aussi bien Roubaix, Tourcoing, Villeneuve-d'Ascq ou Seclin que des communes rurales des Weppes et de la Pévèle.
+Beware of the misreading: the Lille European Metropolis is not the city of Lille. It is a group of **95 municipalities over nearly 672 km²**, reaching the Belgian border, and including Roubaix, Tourcoing, Villeneuve-d'Ascq and Seclin as well as rural municipalities of the Weppes and the Pévèle.
 
-**L'emprise ne doit pas être la limite administrative de la MEL**, qui couvrirait de vastes zones rurales sans aucune station et alourdirait inutilement les trois jeux de données. Elle est **dérivée des stations elles-mêmes** :
+**The bounding box must not be the administrative boundary of the metropolis**, which would cover vast rural areas without a single station and would needlessly inflate all three datasets. It is **derived from the stations themselves**:
 
-1. calculer le rectangle englobant l'ensemble des stations présentes dans `station_information.json` ;
-2. l'élargir d'une **marge de 3 km**, pour couvrir les trajets à pied depuis ou vers la périphérie du réseau et éviter les effets de bord du calcul d'itinéraire près des limites du graphe.
+1. compute the rectangle enclosing every station present in `station_information.json`;
+2. widen it by a **3 km margin**, to cover walking legs from or towards the edge of the network and to avoid edge effects in route computation near the boundaries of the graph.
 
-Cette emprise est **recalculée à chaque régénération des données**, ce qui suit automatiquement les extensions du réseau. Elle est inscrite dans le fichier de configuration de ville (§15) et affichée dans l'écran « stockage ». Aucune coordonnée d'emprise n'est écrite en dur dans le code de l'application.
+This bounding box is **recomputed every time the data is regenerated**, which automatically follows extensions of the network. It is written into the city configuration file (§15) and shown in the "storage" screen. No bounding-box coordinate is hard-coded in the application.
 
-Conséquence à assumer : hors de cette emprise, la carte et le calcul d'itinéraire ne fonctionnent pas. L'application doit le détecter et le dire clairement, jamais échouer silencieusement.
+A consequence to accept: outside that box, the map and route computation do not work. The application must detect this and say so clearly, never fail silently.
 
-### 4.1 Disponibilité des stations — GBFS
+### 4.1 Station availability — GBFS
 
-La MEL publie la disponibilité au **format GBFS** (standard international du vélo en libre-service), rafraîchie **toutes les minutes**.
+The metropolis publishes availability in the **GBFS format** (the international bike-share standard), refreshed **every minute**.
 
-Fichiers utilisés :
+Files used:
 
-- `gbfs.json` — fichier d'auto-découverte listant les autres flux
-- `station_information.json` — données statiques : identifiant, nom, latitude/longitude, capacité
-- `station_status.json` — données temps réel : vélos disponibles, places libres, station en service ou non
+- `gbfs.json` — auto-discovery file listing the other feeds
+- `station_information.json` — static data: identifier, name, latitude/longitude, capacity
+- `station_status.json` — real-time data: bikes available, free docks, station in service or not
 
-**Règles d'implémentation :**
+**Implementation rules:**
 
-- L'URL du `gbfs.json` **ne doit pas être devinée**. L'agent doit la récupérer depuis la fiche du jeu de données sur `transport.data.gouv.fr` (Point d'Accès National) ou depuis le catalogue `systems.csv` de MobilityData, puis la vérifier par une requête réelle avant de l'inscrire dans le code.
-- Toutes les URL de flux passent par le fichier d'auto-découverte, jamais en dur : c'est le principe de GBFS et cela protège des changements d'URL côté producteur.
-- L'URL du `gbfs.json` doit être **modifiable dans les réglages**. Conséquence heureuse : l'appli fonctionne avec n'importe quel réseau GBFS du monde sans modification de code.
-- Ne pas utiliser les anciennes API `vlille-realtime` ni les wrappers JSON tiers que l'on trouve sur GitHub : ils sont **dépréciés**.
+- The `gbfs.json` URL **must not be guessed**. The agent must obtain it from the dataset page on `transport.data.gouv.fr` (the French national access point) or from MobilityData's `systems.csv` catalogue, then verify it with a real request before writing it into the code.
+- Every feed URL goes through the auto-discovery file, never hard-coded: that is the principle of GBFS and it protects against URL changes on the producer's side.
+- The `gbfs.json` URL must be **editable in the settings**. A happy consequence: the application works with any GBFS network in the world without a code change.
+- Do not use the old `vlille-realtime` APIs nor the third-party JSON wrappers found on GitHub: they are **deprecated**.
 
-**Politique de rafraîchissement :**
+**Refresh policy:**
 
-- `station_information.json` : mis en cache en base, rafraîchi au maximum une fois par jour (respecter le `ttl` du flux).
-- `station_status.json` : rafraîchi à l'ouverture de l'écran carte, puis au maximum toutes les 60 s tant que l'écran est visible, et sur geste de tirer-pour-rafraîchir. **Aucun rafraîchissement en arrière-plan**, aucun `WorkManager` périodique.
-- L'âge de la donnée doit être affiché à l'utilisateur (« il y a 12 s »).
-- Hors ligne : afficher le dernier état connu, clairement marqué comme périmé.
+- `station_information.json`: cached in the database, refreshed at most once a day (respect the feed's `ttl`).
+- `station_status.json`: refreshed when the map screen opens, then at most every 60 s while the screen is visible, and on a pull-to-refresh gesture. **No background refresh**, no periodic `WorkManager`.
+- The age of the data must be shown to the user ("12 s ago").
+- Offline: show the last known state, clearly marked as stale.
 
-### 4.2 Fond de carte
+### 4.2 Base map
 
-Rendu **vectoriel hors ligne** via MapLibre Native. Aucune requête de tuile ne part vers un serveur pendant l'usage.
+**Offline vector rendering** through MapLibre Native. No tile request goes out to a server during use.
 
-- Format : **MBTiles** (base SQLite contenant les tuiles). MapLibre Native le lit directement depuis le disque via le schéma d'URI `mbtiles://`, utilisable tel quel dans le style — c'est le chemin le mieux supporté. PMTiles a été écarté : son atout est de servir des tuiles depuis un hébergement statique par requêtes HTTP *Range*, ce qui ne sert à rien ici puisque le fichier est téléchargé en entier, et ses sources ne gèrent ni les paquets hors ligne ni la mise en cache côté MapLibre Native.
-- Emprise : celle définie en tête du §4. Zoom **10 à 16**. Le zoom 16 suffit largement pour se repérer dans une rue ; monter à 17 ou 18 ferait exploser la taille pour un gain nul dans cette application.
-- Le fichier de tuiles n'est **pas dans l'APK** : il est téléchargé au premier lancement (voir §4.5). Ordre de grandeur attendu pour une agglomération de taille moyenne : **30 à 60 Mo**. Ce n'est pas un plafond : une métropole dense en produit légitimement davantage — Paris, avec 1,24 million d'empreintes de bâtiments dans son emprise contre 78 000 pour Lille, en produit 115 Mo. Les règles de rendu restent les mêmes pour toutes les villes ; on ne taille pas d'exception ville par ville.
-- Style de carte : un style sobre, embarqué dans l'APK sous forme de JSON, avec les polices et icônes nécessaires. Pas de style téléchargé depuis un service tiers.
-- Hébergement du fichier : voir §4.4. La **procédure de régénération** doit être documentée et scriptée dans le dépôt, pour que le fichier puisse être mis à jour sans dépendre de personne.
+- Format: **MBTiles** (a SQLite database holding the tiles). MapLibre Native reads it straight from disk through the `mbtiles://` URI scheme, usable as such in the style — it is the best-supported path. PMTiles was rejected: its strength is serving tiles from static hosting through HTTP *Range* requests, which is useless here since the file is downloaded whole, and its sources handle neither offline packs nor caching on the MapLibre Native side.
+- Extent: the one defined at the head of §4. Zoom **10 to 16**. Zoom 16 is amply enough to find your way in a street; going to 17 or 18 would blow up the size for no gain in this application.
+- The tile file is **not in the APK**: it is downloaded on first launch (see §4.5). Expected order of magnitude for a medium-sized conurbation: **30 to 60 MB**. This is not a ceiling: a dense metropolis legitimately produces more — Paris, with 1.24 million building footprints inside its box against 78,000 for Lille, produces 115 MB. The rendering rules stay the same for every city; no per-city exception is carved out.
+- Map style: a plain style, embedded in the APK as JSON, with the fonts and icons it needs. No style downloaded from a third-party service.
+- File hosting: see §4.4. The **regeneration procedure** must be documented and scripted in the repository, so the file can be updated without depending on anyone.
 
-**Contenu de la carte.** Le filtrage se fait **à la génération** des tuiles, pas seulement dans le style : ce qui n'est pas retenu ne pèse rien. C'est le principal levier de taille après le niveau de zoom, et il sert autant la sobriété visuelle que la légèreté.
+**Map content.** Filtering happens **when the tiles are generated**, not only in the style: what is not kept weighs nothing. It is the main lever on size after the zoom level, and it serves visual restraint as much as lightness.
 
-Sont retenus, parce qu'ils servent à se repérer :
+Kept, because they help you find your way:
 
-- **transports** : stations de métro et de tramway (à tous les zooms), gares ferroviaires, arrêts de bus (**à partir du zoom 15 seulement**, en points discrets et sans étiquette — la métropole en compte plusieurs milliers, les afficher plus tôt noierait la carte et les stations avec) ;
-- **équipements publics** : mairies, écoles, collèges, lycées, universités et grandes écoles, hôpitaux et cliniques, bureaux de poste, bibliothèques, médiathèques, piscines, gymnases, cimetières ;
-- **repères visuels** : monuments, églises et édifices religieux, musées, théâtres, beffrois, statues et éléments remarquables ;
-- **trame urbaine** : parcs et espaces verts, cours d'eau et canaux, voies ferrées, noms de rues, limites communales, noms de communes et de quartiers ;
-- **empreintes de bâtiments**, mais **à partir du zoom 15 uniquement** et en aplat discret. C'est souvent la couche la plus lourde d'un jeu de tuiles vectorielles : si le budget de taille est dépassé, c'est le premier levier à actionner.
+- **transport**: metro and tram stations (at every zoom), railway stations, bus stops (**from zoom 15 only**, as discreet unlabelled points — the metropolis has several thousand of them, showing them earlier would drown the map and the stations with it);
+- **public facilities**: town halls, schools, secondary schools, universities and higher-education institutions, hospitals and clinics, post offices, libraries, media libraries, swimming pools, gymnasiums, cemeteries;
+- **visual landmarks**: monuments, churches and religious buildings, museums, theatres, belfries, statues and notable features;
+- **urban fabric**: parks and green spaces, watercourses and canals, railways, street names, municipal boundaries, names of municipalities and neighbourhoods;
+- **building footprints**, but **from zoom 15 only** and as a discreet flat fill. It is often the heaviest layer of a vector tile set: if the size budget is exceeded, it is the first lever to pull.
 
-Sont **écartés**, parce qu'ils encombrent sans servir : commerces, restaurants, bars, cafés, hôtels, banques, distributeurs, coiffeurs, agences, bureaux d'entreprises, stations-service, parkings privés, et l'ensemble des points d'intérêt commerciaux. Cette exclusion est un **choix de conception assumé**, pas une omission : la carte est un décor, les stations sont le sujet (§7).
+**Excluded**, because they clutter without serving: shops, restaurants, bars, cafés, hotels, banks, cash machines, hairdressers, agencies, company offices, petrol stations, private car parks, and every commercial point of interest. This exclusion is a **deliberate design choice**, not an omission: the map is scenery, the stations are the subject (§7).
 
-La liste retenue doit vivre dans un **fichier de configuration lisible** du script de génération, pour être ajustée sans replonger dans le code.
-- Prévoir dans les réglages une entrée « source des données cartographiques » permettant de pointer vers une autre URL ou d'importer un fichier local.
+The list must live in a **readable configuration file** of the generation script, so it can be adjusted without diving back into the code.
+- Provide a settings entry "map data source" allowing the user to point at another URL or import a local file.
 
-### 4.3 Recherche d'adresses — index local
+### 4.3 Address search — local index
 
-La recherche d'adresses se fait **entièrement sur l'appareil**. Aucun géocodeur en ligne, aucune requête tierce : c'est la donnée la plus sensible de l'application, puisqu'elle révèle où va l'utilisateur.
+Address search runs **entirely on the device**. No online geocoder, no third-party request: it is the most sensitive data in the application, since it reveals where the user is going.
 
-- Source : la **Base Adresse Nationale**, extraits départementaux librement téléchargeables.
-- **Granularité : le numéro de voirie.** Certaines artères lilloises font plus d'un kilomètre : un point unique par rue produirait une erreur de plusieurs centaines de mètres, suffisante pour désigner la mauvaise station et donc un itinéraire faux. La précision au numéro est donc une exigence, pas un confort.
-- L'index forme **un seul paquet téléchargé** avec les autres jeux de données (§4.4), rien n'est embarqué dans l'APK :
-  - **Voies** — une entrée par rue : nom, commune, code postal, point représentatif. Environ 15 à 20 000 entrées sur l'emprise de référence, **1 à 3 Mo**.
-  - **Numéros** — une entrée par adresse, rattachée à une voie. Environ 450 à 550 000 entrées sur l'emprise de référence, **12 à 25 Mo** selon l'encodage. Ces chiffres correspondent à la zone dense couverte par les stations ; retenir l'intégralité des 95 communes de la MEL les augmenterait sensiblement pour aucun usage réel.
-- Encodage : ne pas stocker un texte par adresse. Une entrée de numéro = référence de voie + numéro (entier + éventuel indice `bis`, `ter`, `A`) + coordonnées **encodées en delta par rapport au point de la voie**, sur deux entiers courts. On vise ainsi le bas de la fourchette plutôt que le haut.
-- Si le numéro saisi n'existe pas dans l'index, **interpoler** entre les deux numéros connus les plus proches de la même voie plutôt que de retomber sur le centre de la rue.
-- Ajouter également les **points d'intérêt utiles au repérage** : gares, stations de métro, universités, hôpitaux, grandes places. Quelques milliers d'entrées supplémentaires, extraites d'OpenStreetMap, traitées comme des voies.
-- Implémentation : **SQLite FTS uniquement sur les noms de voies** — c'est ce qui rend l'ensemble viable. Les numéros ne sont jamais recherchés en texte intégral : une fois la voie identifiée, le numéro se résout par un simple index sur (voie, numéro). Recherche insensible à la casse et aux accents, tolérante aux abréviations courantes (« bd », « av », « st »), résultats classés par proximité avec la position courante.
-- **Tolérance aux fautes de saisie.** La recherche doit retrouver une rue malgré une faute de frappe, une lettre oubliée ou deux lettres interverties. Mise en œuvre en deux étages :
-  1. **Normalisation**, appliquée aussi bien à l'index qu'à la saisie : minuscules, accents et ponctuation supprimés, abréviations développées (« st » → « saint », « bd » → « boulevard », « av » → « avenue », « fbg » → « faubourg »). Le **type de voie est stocké dans un champ distinct** du nom propre, pour que « gambetta » trouve « rue Gambetta » et que « rue de la gare » ne soit pas pénalisé par l'ordre des mots. Recherche par préfixe sur chaque mot, ce qui couvre la frappe en cours.
-  2. **Rattrapage par distance d'édition** lorsque le premier étage donne moins de résultats qu'attendu : distance de **Damerau-Levenshtein** — elle traite les interversions de lettres, faute la plus courante au clavier tactile — calculée en Kotlin sur les noms normalisés maintenus en mémoire. Le corpus étant de l'ordre de 20 000 entrées et moins d'un mégaoctet, un parcours complet reste de l'ordre de quelques dizaines de millisecondes.
-- Seuil de tolérance **proportionnel à la longueur** : une faute admise en dessous de huit caractères, deux au-delà. Au-delà, le bruit dépasse le service rendu.
-- Recherche **déclenchée avec un délai anti-rebond** (environ 150 ms) et **annulable** : chaque frappe annule le calcul précédent. Aucun calcul sur le fil principal.
-- **Classement des résultats** par score combiné : qualité de la correspondance d'abord, proximité avec la position courante ensuite. À égalité de correspondance, la rue la plus proche passe devant.
-- Ne pas dépendre du *tokenizer* trigramme de SQLite : il est absent des versions embarquées dans les Android les plus anciens que vise l'application. Le flou se fait en Kotlin. Vérifier de même la disponibilité effective de la version de FTS retenue sur un appareil à l'API 26, et prévoir un repli.
-- Documenter le script de génération de l'index dans le dépôt, pour permettre sa régénération et son extension à d'autres agglomérations.
+- Source: the **Base Adresse Nationale**, freely downloadable per-department extracts.
+- **Granularity: the house number.** Some Lille thoroughfares are over a kilometre long: a single point per street would produce an error of several hundred metres, enough to designate the wrong station and therefore a wrong journey. House-number precision is a requirement, not a comfort.
+- The index forms **a single downloaded package** together with the other datasets (§4.4); nothing is embedded in the APK:
+  - **Streets** — one entry per street: name, municipality, postcode, representative point. Around 15,000 to 20,000 entries over the reference box, **1 to 3 MB**.
+  - **House numbers** — one entry per address, attached to a street. Around 450,000 to 550,000 entries over the reference box, **12 to 25 MB** depending on the encoding. Those figures correspond to the dense area covered by the stations; keeping all 95 municipalities of the metropolis would raise them appreciably for no real use.
+- Encoding: do not store text per address. A house-number entry = street reference + number (integer plus an optional `bis`, `ter`, `A` suffix) + coordinates **encoded as deltas from the street's point**, on two short integers. That is how we aim for the bottom of the range rather than the top.
+- If the number typed does not exist in the index, **interpolate** between the two nearest known numbers of the same street rather than falling back on the middle of the street.
+- Also add the **points of interest useful for finding your way**: railway stations, metro stations, universities, hospitals, major squares. A few thousand extra entries, extracted from OpenStreetMap, treated as streets.
+- Implementation: **SQLite FTS on street names only** — that is what makes the whole thing viable. Numbers are never searched full-text: once the street is identified, the number resolves through a plain index on (street, number). Search insensitive to case and accents, tolerant of common abbreviations ("bd", "av", "st"), results ranked by proximity to the current position.
+- **Tolerance to typing mistakes.** Search must find a street despite a typo, a missing letter or two transposed letters. Implemented in two stages:
+  1. **Normalisation**, applied to the index and to the query alike: lowercase, accents and punctuation removed, abbreviations expanded ("st" → "saint", "bd" → "boulevard", "av" → "avenue", "fbg" → "faubourg"). The **street type is stored in a separate field** from the proper name, so that "gambetta" finds "rue Gambetta" and "rue de la gare" is not penalised by word order. Prefix matching on each word, which covers typing in progress.
+  2. **Edit-distance fallback** when the first stage returns fewer results than expected: **Damerau-Levenshtein** distance — it handles letter transposition, the commonest mistake on a touch keyboard — computed in Kotlin over the normalised names held in memory. With a corpus of around 20,000 entries and under a megabyte, a full scan stays in the tens of milliseconds.
+- Tolerance threshold **proportional to length**: one mistake allowed below eight characters, two beyond. Past that, the noise exceeds the service.
+- Search **triggered with a debounce delay** (around 150 ms) and **cancellable**: each keystroke cancels the previous computation. No computation on the main thread.
+- **Result ranking** by a combined score: match quality first, proximity to the current position second. At equal match quality, the nearer street comes first.
+- Do not depend on SQLite's trigram tokenizer: it is absent from the versions embedded in the oldest Android releases the application targets. Fuzziness happens in Kotlin. Likewise check that the chosen FTS version is actually available on an API 26 device, and plan a fallback.
+- Document the index generation script in the repository, to allow its regeneration and its extension to other conurbations.
 
-### 4.4 Téléchargement initial des données
+### 4.4 Initial data download
 
-Au premier lancement, un écran explique clairement ce qui va être téléchargé, pour quelle taille, et demande confirmation :
+On first launch, a screen explains clearly what is about to be downloaded, at what size, and asks for confirmation:
 
-- fond de carte vectoriel de la métropole (§4.2) ;
-- données de routage (§5) ;
-- index d'adresses, voies et numéros (§4.3).
+- the metropolis's vector base map (§4.2);
+- routing data (§5);
+- the address index, streets and house numbers (§4.3).
 
-Les trois jeux forment **un ensemble cohérent, versionné et publié ensemble**. L'application ne dispose d'aucune donnée géographique tant qu'ils ne sont pas installés : avant cela, elle se limite à la liste des stations et à leurs disponibilités, et le dit clairement.
+The three sets form **a coherent whole, versioned and published together**. The application has no geographic data at all until they are installed: before that it is limited to the station list and their availability, and says so clearly.
 
-Contraintes : téléchargement **repris en cas d'interruption**, avertissement si l'utilisateur n'est pas en Wi-Fi, possibilité de reporter (l'appli reste alors utilisable en mode dégradé : liste des stations et disponibilités, sans carte ni itinéraire), et vérification d'intégrité du fichier téléchargé.
+Constraints: download **resumed after an interruption**, a warning if the user is not on Wi-Fi, the option to postpone (the application then remains usable in degraded mode: station list and availability, without map or journeys), and an integrity check on the downloaded file.
 
-**Import manuel obligatoire.** Chaque jeu de données doit pouvoir être **fourni à la main** depuis un fichier présent sur l'appareil, sans aucun téléchargement. L'utilisateur qui génère lui-même ses fichiers, ou les copie par câble, doit pouvoir installer et utiliser l'application sans qu'elle n'émette la moindre requête vers un serveur de données. Le téléchargement est le chemin par défaut, jamais le seul chemin.
+**Manual import is mandatory.** Every dataset must be **providable by hand** from a file present on the device, with no download at all. Someone who generates their own files, or copies them over a cable, must be able to install and use the application without it issuing a single request to a data server. Downloading is the default path, never the only path.
 
-**Hébergement des fichiers de données : les *releases* du dépôt GitHub**, en fichiers attachés. La limite de taille par fichier y est très largement supérieure à nos besoins.
+**Data file hosting: the GitHub repository's *releases***, as attached files. The per-file size limit there is far above our needs.
 
-Règles associées :
+Associated rules:
 
-- Les données sont publiées comme des **releases distinctes de celles de l'application** (par exemple étiquetées `data-2026-08`), afin qu'une mise à jour du fond de carte n'oblige pas à publier une version de l'appli, et inversement.
-- Chaque publication de données est décrite par un **fichier manifeste** (quelques kilooctets) listant, pour chacun des trois jeux : son identifiant, sa version, sa date de génération, son URL, sa taille et son **empreinte SHA-256**. Le manifeste porte aussi l'emprise géographique et la version de format attendue par l'application.
-- **Mise à jour par comparaison d'empreintes.** L'application conserve l'empreinte de chaque fichier installé, récupère le manifeste, et ne retélécharge **que les jeux dont l'empreinte a changé**. Rafraîchir uniquement l'index d'adresses ne doit jamais imposer de reprendre les 60 Mo de tuiles.
-- L'empreinte est **revérifiée après téléchargement** : un fichier qui ne correspond pas au manifeste est rejeté, et l'ancienne version conservée. Une mise à jour interrompue ou corrompue ne doit jamais laisser l'application dans un état inutilisable — écrire le nouveau fichier à côté, valider, puis remplacer.
-- **La vérification n'est jamais automatique en arrière-plan** : elle a lieu sur action explicite de l'utilisateur, depuis l'écran « stockage », qui affiche la date de sa dernière exécution. Une requête périodique dessinerait un profil d'usage de l'application, ce que la contrainte C3 exclut.
-- Si le manifeste annonce une **version de format** que l'application ne sait pas lire, le dire clairement et inviter à mettre à jour l'application, plutôt que d'échouer à l'ouverture d'un fichier.
-- L'application ne code en dur qu'une URL par défaut, **modifiable dans les réglages**, et sait de toute façon fonctionner par import manuel (voir plus haut). L'hébergeur ne doit jamais être un point de défaillance unique.
-- Le `User-Agent` des téléchargements identifie l'application et sa version, sans aucun identifiant propre à l'utilisateur.
+- Data is published as **releases distinct from the application's** (tagged `data-2026-08`, for instance), so that updating the base map does not force an application release, and the other way round.
+- Every data release is described by a **manifest file** (a few kilobytes) listing, for each of the three sets: its identifier, its version, its generation date, its URL, its size and its **SHA-256 digest**. The manifest also carries the bounding box and the format version the application is expected to read.
+- **Update by digest comparison.** The application keeps the digest of every installed file, fetches the manifest, and re-downloads **only the sets whose digest changed**. Refreshing the address index alone must never force 60 MB of tiles to come down again.
+- The digest is **re-verified after download**: a file that does not match the manifest is rejected, and the previous version kept. An interrupted or corrupted update must never leave the application unusable — write the new file beside the old one, validate, then replace.
+- **Checking is never automatic in the background**: it happens on an explicit user action, from the "storage" screen, which shows when it last ran. A periodic request would draw a usage profile of the application, which constraint C3 rules out.
+- If the manifest announces a **format version** the application cannot read, say so clearly and invite the user to update the application, rather than failing when opening a file.
+- The application hard-codes only a default URL, **editable in the settings**, and can work through manual import anyway (see above). The host must never be a single point of failure.
+- The `User-Agent` of downloads identifies the application and its version, with no identifier specific to the user.
 
-Dans tous les cas, deux garde-fous sont **obligatoires**, pour que l'application survive à la disparition de l'hébergeur : le réglage permettant de pointer vers une autre URL ou d'importer un fichier local (§4.2), et les scripts de régénération versionnés dans le dépôt. L'URL par défaut ne doit jamais être un point de défaillance unique.
+In every case, two safeguards are **mandatory**, so that the application survives the disappearance of its host: the setting allowing another URL or a local file import (§4.2), and the regeneration scripts versioned in the repository. The default URL must never be a single point of failure.
 
-Un écran « stockage » doit lister chaque jeu de données avec sa taille, sa date, un bouton de mise à jour et un bouton de suppression. L'utilisateur doit toujours savoir ce que l'appli occupe et pouvoir le reprendre.
+A "storage" screen must list every dataset with its size, its date, an update button and a delete button. The user must always know what the application occupies and be able to reclaim it.
 
-### 4.5 Attribution (obligatoire)
+### 4.5 Attribution (mandatory)
 
-Un écran « À propos » doit afficher :
+An "about" screen must show:
 
-- l'attribution et la licence des données V'lille (Métropole Européenne de Lille) ;
-- « © les contributeurs OpenStreetMap » ;
-- l'attribution du moteur de routage et de ses données ;
-- la licence de l'application et le lien vers le dépôt.
+- the attribution and licence of the V'lille data (Lille European Metropolis);
+- "© OpenStreetMap contributors";
+- the attribution of the routing engine and its data;
+- the application's licence and the link to the repository.
 
-L'attribution OpenStreetMap doit également être visible **sur la carte elle-même**.
+The OpenStreetMap attribution must also be visible **on the map itself**.
 
-## 5. Moteur de routage (hors ligne)
+## 5. Routing engine (offline)
 
-**Recommandation : BRouter**, moteur de calcul d'itinéraire vélo hors ligne, éprouvé sur Android, orienté cyclisme, avec profils paramétrables.
+**Recommendation: BRouter**, an offline bike routing engine, proven on Android, cycling-oriented, with configurable profiles.
 
-- **Licence : MIT** (vérifié). Compatible avec la GPLv3 de l'application : le code MIT peut être intégré dans un ensemble GPLv3, à condition de **conserver l'avis de copyright et le texte de la licence MIT** dans les mentions légales de l'appli. Attention : plusieurs pages tierces et anciens dépôts *brouter-web* décrivent encore BRouter comme GPLv3 — c'est obsolète, le fichier `LICENSE` du dépôt `abrensch/brouter` fait foi.
-- Intégrer le **cœur de BRouter comme bibliothèque** dans l'application, plutôt que de dépendre de l'application BRouter installée séparément (l'utilisateur ne doit avoir qu'une seule appli à installer). Le module est publié comme artefact Maven : `org.btools:brouter-core`. Vérifier la version courante et privilégier cette dépendance à une copie de sources dans le dépôt.
-- Les **données de routage** ne sont **pas embarquées dans l'APK** : elles sont téléchargées au premier lancement (§4.4).
-- **Priorité : générer un jeu de données limité à l'emprise de référence définie en tête du §4** plutôt que d'utiliser les segments de 5°×5° distribués par BRouter, qui couvrent une bonne partie du nord de l'Europe. On passe ainsi d'environ 100–170 Mo à **15–40 Mo**. C'est le seul poste où l'on divise le poids par cinq, donc il vaut l'effort d'intégration. Le script de génération doit être versionné dans le dépôt.
-- Si cette découpe s'avère impraticable, le signaler et proposer le repli sur les segments standard **avant** de l'implémenter.
-- Deux profils sont nécessaires : **piéton** (trajets d'accès) et **vélo urbain** (trajet principal).
+- **Licence: MIT** (verified). Compatible with the application's GPLv3: MIT code can be integrated into a GPLv3 whole, provided the **MIT copyright notice and licence text are kept** in the application's legal notices. Careful: several third-party pages and old *brouter-web* repositories still describe BRouter as GPLv3 — that is obsolete, the `LICENSE` file of the `abrensch/brouter` repository is authoritative.
+- Integrate **BRouter's core as a library** in the application, rather than depending on the BRouter application being installed separately (the user must have only one application to install). The module is published as a Maven artifact: `org.btools:brouter-core`. Check the current version and prefer that dependency to a copy of the sources in the repository.
+- The **routing data** is **not embedded in the APK**: it is downloaded on first launch (§4.4).
+- **Priority: generate a dataset limited to the reference bounding box defined at the head of §4** rather than using the 5°×5° segments distributed by BRouter, which cover a good part of northern Europe. That takes us from roughly 100–170 MB down to **15–40 MB**. It is the only place where weight is divided by five, so it is worth the integration effort. The generation script must be versioned in the repository.
+- If that carve-out turns out to be impractical, report it and propose falling back on the standard segments **before** implementing it.
+- Two profiles are needed: **pedestrian** (access legs) and **urban bike** (main leg).
 
-Si l'agent estime BRouter inadapté après investigation, il doit **proposer une alternative et attendre validation**, pas décider seul.
+If the agent judges BRouter unsuitable after investigation, it must **propose an alternative and wait for approval**, not decide alone.
 
-## 6. Algorithme du trajet optimisé
+## 6. Optimised journey algorithm
 
-C'est le cœur métier de l'application. À implémenter dans une classe isolée et testable, sans dépendance à Android.
+This is the application's business core. To be implemented in an isolated, testable class, with no dependency on Android.
 
-**Entrées :** point de départ, point d'arrivée, état courant des stations.
+**Inputs:** departure point, arrival point, current state of the stations.
 
-**Principe :** ne jamais se contenter de « la station la plus proche ». Optimiser le **couple** station de départ / station d'arrivée.
+**Principle:** never settle for "the nearest station". Optimise the **pair** departure station / arrival station.
 
-1. Sélectionner les **N stations candidates au départ** (par défaut N = 5) parmi les plus proches du point de départ ayant `num_bikes_available ≥ 1` et étant en service.
-2. Sélectionner les **M stations candidates à l'arrivée** (par défaut M = 5) parmi les plus proches du point d'arrivée ayant `num_docks_available ≥ 1` et étant en service.
-3. Pour chaque couple (départ, arrivée), calculer : temps de marche vers la station de départ + temps de vélo entre stations + temps de marche vers la destination.
-4. Ajouter un **temps forfaitaire de prise et de dépose du vélo** (par défaut 2 min de chaque côté, configurable).
-5. Retenir le couple au temps total minimal, et proposer **les 3 meilleures alternatives** à l'utilisateur.
+1. Select the **N candidate departure stations** (N = 5 by default) among those nearest the departure point with `num_bikes_available ≥ 1` and in service.
+2. Select the **M candidate arrival stations** (M = 5 by default) among those nearest the arrival point with `num_docks_available ≥ 1` and in service.
+3. For every (departure, arrival) pair, compute: walking time to the departure station + biking time between stations + walking time to the destination.
+4. Add a **fixed time for taking and returning the bike** (2 min on each side by default, configurable).
+5. Keep the pair with the smallest total time, and offer the user **the 3 best alternatives**.
 
-**Fiabilité — règles importantes :**
+**Reliability — important rules:**
 
-- Une station avec 1 seul vélo peut se vider pendant le trajet à pied. Appliquer une **pénalité de risque** croissante quand la disponibilité est faible : une station à 1 vélo est moins attractive qu'une station à 8 vélos, même un peu plus loin. Idem à l'arrivée pour les places libres.
-- Toujours afficher le nombre de vélos ou de places de la station retenue, pour que l'utilisateur juge lui-même.
-- Si le trajet à vélo est plus lent que la marche directe, **le dire** et proposer l'itinéraire piéton.
-- Le nombre de calculs d'itinéraire (N × M + marches) doit rester borné : viser un résultat en **moins de 3 secondes** sur un appareil milieu de gamme, calcul lancé hors du thread principal et annulable.
+- A station with a single bike can empty while you walk to it. Apply a **risk penalty** that grows as availability falls: a station with 1 bike is less attractive than a station with 8, even slightly further away. Same at the arrival end for free docks.
+- Always show the number of bikes or docks of the chosen station, so the user can judge for themselves.
+- If the bike journey is slower than walking straight there, **say so** and offer the pedestrian route.
+- The number of route computations (N × M + walking legs) must stay bounded: aim for a result in **under 3 seconds** on a mid-range device, computed off the main thread and cancellable.
 
-## 7. Écrans
+## 7. Screens
 
-### Identité visuelle et principes d'interface
+### Visual identity and interface principles
 
-L'application doit être **soignée, épurée et vivante** — pas une interface Material par défaut. Mais « fais quelque chose de beau » ne produit qu'un résultat générique : la direction ci-dessous est donc contraignante.
+The application must be **carefully made, spare and alive** — not a default Material interface. But "make something beautiful" only produces a generic result: the direction below is therefore binding.
 
-**Système de jetons.** Avant d'écrire la moindre vue, produire un fichier de jetons de conception et le faire valider :
+**Token system.** Before writing a single view, produce a design-token file and have it approved:
 
-- une palette de **4 à 6 couleurs nommées** (fond, encre, accent, plus l'échelle de disponibilité) ;
-- **deux familles typographiques** : une avec du caractère pour les chiffres et les titres — les nombres de vélos sont l'information centrale de cette application, ils méritent un traitement mémorable — et une neutre et lisible pour le reste ;
-- une **échelle d'espacement** et un rayon d'arrondi uniques, appliqués partout.
+- a palette of **4 to 6 named colours** (background, ink, accent, plus the availability scale);
+- **two type families**: one with character for numbers and titles — bike counts are this application's central information, they deserve memorable treatment — and one neutral and legible for everything else;
+- a single **spacing scale** and corner radius, applied everywhere.
 
-Aucune couleur ni taille ne doit être écrite en dur dans un layout : tout passe par les ressources.
+No colour or size may be hard-coded in a layout: everything goes through resources.
 
-**Élément signature.** Dépenser l'audace à un seul endroit : l'**indicateur de disponibilité** des stations. C'est ce que l'utilisateur regarde cent fois par semaine, c'est ce dont il se souviendra. Il doit se lire instantanément, en marchant, au soleil, d'un coup d'œil. Tout le reste de l'interface est calme et discipliné autour de lui.
+**Signature element.** Spend the boldness in a single place: the stations' **availability indicator**. It is what the user looks at a hundred times a week, it is what they will remember. It must read instantly, while walking, in the sun, at a glance. The rest of the interface is calm and disciplined around it.
 
-**À éviter explicitement**, parce que ce sont des réflexes et non des choix : le fond crème avec accent terre cuite, le fond noir avec un unique accent vert acide, l'empilement de cartes à ombre portée sur fond gris. Si une décision de style pourrait s'appliquer telle quelle à n'importe quelle autre application, c'est qu'elle n'a pas été prise.
+**Explicitly to be avoided**, because they are reflexes rather than choices: the cream background with a terracotta accent, the black background with a single acid-green accent, the stack of drop-shadowed cards on grey. If a style decision could apply as-is to any other application, it was not a decision.
 
-**Le style de carte est un objet de design**, pas un réglage technique. Le fond doit être **désaturé** pour que les marqueurs ressortent : la carte est un décor, les stations sont le sujet.
+**The map style is a design object**, not a technical setting. The background must be **desaturated** so the markers stand out: the map is scenery, the stations are the subject.
 
-**Contraintes de qualité, non négociables :** thèmes clair et sombre tous deux soignés ; cibles tactiles d'au moins 48 dp ; contrastes conformes aux recommandations d'accessibilité ; libellés de contenu sur tous les éléments interactifs ; préférence système « réduire les animations » respectée ; interface utilisable à une main, les commandes principales à portée du pouce.
+**Quality constraints, non-negotiable:** light and dark themes both carefully made; touch targets of at least 48 dp; contrast meeting accessibility guidance; content labels on every interactive element; the system "reduce animations" preference respected; the interface usable one-handed, the main controls within thumb reach.
 
-**Mouvement :** au service de la compréhension uniquement — apparition des marqueurs, tracé de l'itinéraire, transition vers le détail d'une station. Rien d'ambiant, rien de décoratif.
+**Motion:** in the service of understanding only — markers appearing, the route being drawn, the transition to a station's detail. Nothing ambient, nothing decorative.
 
-**Écriture de l'interface :** phrases courtes, voix active, une action porte le même nom du bouton jusqu'à la confirmation. Un message d'erreur dit ce qui s'est passé et quoi faire, sans s'excuser ni rester vague. Un écran vide est une invitation à agir, pas un constat.
+**Interface writing:** short sentences, active voice, an action bearing the same name from the button through to the confirmation. An error message says what happened and what to do, without apologising or staying vague. An empty screen is an invitation to act, not a statement of fact.
 
-**Le nom « V'lille » n'apparaît pas dans l'identité visuelle** : ni sa couleur de marque, ni son logo, ni sa typographie. L'application a son identité propre — c'est une exigence de portabilité (§15) autant qu'une prudence sur les marques.
+**The name "V'lille" does not appear in the visual identity**: not its brand colour, not its logo, not its typeface. The application has an identity of its own — that is a portability requirement (§15) as much as trademark caution.
 
-### 7.1 Carte (écran principal)
+### 7.1 Map (main screen)
 
-- Carte plein écran centrée sur la métropole lilloise, ou sur la position de l'utilisateur si la permission est accordée.
-- Un marqueur par station, **lisible d'un coup d'œil** : le code couleur reflète la disponibilité (aucun vélo / peu / correct / station hors service). La couleur seule ne doit jamais porter l'information : ajouter le chiffre ou une forme distincte (accessibilité, daltonisme).
-- Bascule **« vélos » / « places »** : selon que l'utilisateur cherche à emprunter ou à rendre.
-- Regroupement des marqueurs aux niveaux de zoom éloignés.
-- Bouton « me localiser », bouton « rafraîchir », accès aux réglages et à la recherche d'itinéraire.
-- Indicateur d'âge de la donnée.
+- Full-screen map centred on the Lille metropolis, or on the user's position if permission is granted.
+- One marker per station, **legible at a glance**: the colour code reflects availability (no bikes / few / fine / station out of service). Colour alone must never carry the information: add the figure or a distinct shape (accessibility, colour blindness).
+- **"Bikes" / "docks"** toggle: depending on whether the user wants to borrow or to return.
+- Marker clustering at distant zoom levels.
+- "Locate me" button, "refresh" button, access to the settings and to the journey search.
+- Data-age indicator.
 
-### 7.2 Détail d'une station
+### 7.2 Station detail
 
-Feuille glissante depuis le bas : nom, adresse, vélos disponibles, places libres, capacité totale, état, distance depuis la position, horodatage. Actions : mettre en favori, définir comme départ ou comme arrivée d'un itinéraire, ouvrir dans une appli de navigation externe.
+A sheet sliding up from the bottom: name, address, bikes available, free docks, total capacity, state, distance from the current position, timestamp. Actions: add to favourites, set as the departure or the arrival of a journey, open in an external navigation application.
 
-### 7.3 Recherche d'itinéraire
+### 7.3 Journey search
 
-- Deux champs : départ et arrivée. Chacun accepte : ma position, un favori, un point choisi sur la carte, une adresse.
-- La recherche d'adresses interroge **l'index local** décrit au §4.3. Aucun appel réseau, aucune suggestion envoyée à un tiers, y compris pendant la frappe.
-- Bouton d'inversion départ/arrivée.
+- Two fields: departure and arrival. Each accepts: my position, a favourite, a point picked on the map, an address.
+- Address search queries the **local index** described in §4.3. No network call, no suggestion sent to a third party, including while typing.
+- A swap button for departure and arrival.
 
-### 7.4 Résultat d'itinéraire
+### 7.4 Journey result
 
-- Tracé sur la carte en trois segments visuellement distincts : marche, vélo, marche.
-- Résumé : temps total, dont marche et vélo, distance, station de départ (avec nombre de vélos), station d'arrivée (avec nombre de places).
-- Liste des étapes, et accès aux 3 alternatives.
-- Bouton de recalcul (les disponibilités ont pu changer).
+- Drawn on the map as three visually distinct legs: walk, bike, walk.
+- Summary: total time, of which walking and biking, distance, departure station (with its bike count), arrival station (with its dock count).
+- List of steps, and access to the 3 alternatives.
+- A recompute button (availability may have changed).
 
-### 7.5 Favoris
+### 7.5 Favourites
 
-Liste des stations mises en favori, avec leur disponibilité en direct. Réorganisable.
+A list of the stations marked as favourites, with their live availability. Reorderable.
 
-### 7.6 Réglages
+### 7.6 Settings
 
-URL du flux GBFS, serveur de tuiles, gestion des données de routage, temps forfaitaires de prise/dépose, thème clair/sombre/système, activation du géocodage.
+GBFS feed URL, tile source, routing data management, fixed pick-up/drop-off times, light/dark/system theme.
 
-### 7.7 À propos
+### 7.7 About
 
-Attributions (§4.3), version, lien vers le dépôt, politique de confidentialité en clair.
+Attributions (§4.3), version, link to the repository, privacy policy in plain words.
 
-### 7.8 Ouverture depuis une autre application
+### 7.8 Opening from another application
 
-L'application doit apparaître dans le sélecteur d'Android lorsqu'un lieu est ouvert ou partagé depuis une autre application, et pouvoir être retenue comme choix par défaut. Le lieu reçu devient directement la **destination** d'un nouvel itinéraire.
+The application must appear in Android's chooser when a place is opened or shared from another application, and must be selectable as the default choice. The received place becomes directly the **destination** of a new journey.
 
-**Points d'entrée à déclarer :**
+**Entry points to declare:**
 
-- `ACTION_VIEW` sur le schéma **`geo:`**, avec les catégories `DEFAULT` et `BROWSABLE`. Toutes les formes doivent être acceptées : `geo:<lat>,<lon>`, avec paramètre de zoom, `geo:0,0?q=<lat>,<lon>(<libellé>)`, et `geo:0,0?q=<adresse en texte>` — cette dernière étant résolue par l'index local (§4.3), **sans aucun appel réseau**.
-- `ACTION_VIEW` sur le schéma **`google.navigation:`**, encore émis par de nombreuses applications.
-- **`ACTION_SEND`** de texte brut : détecter dans le texte partagé un couple de coordonnées ou une adresse. C'est le cas d'usage le plus fréquent en pratique — une adresse reçue par messagerie.
-- Liens web cartographiques : à traiter, mais en sachant qu'ils **ne peuvent pas être vérifiés automatiquement**, les domaines concernés n'appartenant pas au projet. Depuis Android 12, ils ne parviennent à l'application que si l'utilisateur l'autorise dans les paramètres système. Documenter cette manipulation dans l'écran « À propos » et dans le `README.md`, sans quoi le comportement passera pour un défaut.
+- `ACTION_VIEW` on the **`geo:`** scheme, with the `DEFAULT` and `BROWSABLE` categories. Every form must be accepted: `geo:<lat>,<lon>`, with a zoom parameter, `geo:0,0?q=<lat>,<lon>(<label>)`, and `geo:0,0?q=<address as text>` — the last resolved by the local index (§4.3), **with no network call**.
+- `ACTION_VIEW` on the **`google.navigation:`** scheme, still emitted by many applications.
+- **`ACTION_SEND`** of plain text: detect a coordinate pair or an address inside the shared text. It is the commonest case in practice — an address received over a messaging application.
+- Web map links: to be handled, but knowing they **cannot be verified automatically**, since the domains involved do not belong to the project. Since Android 12 they only reach the application if the user allows it in the system settings. Document that step in the "about" screen and in the `README.md`, failing which the behaviour will look like a defect.
 
-**Comportement attendu :**
+**Expected behaviour:**
 
-- Ouvrir directement l'écran de résultat d'itinéraire, destination pré-remplie, départ à la position courante. Si la localisation est refusée ou indisponible, ouvrir l'écran de recherche avec seulement la destination renseignée.
-- Afficher le libellé reçu s'il y en a un, plutôt que des coordonnées brutes.
-- Si le point est **hors de l'emprise** (§4), le dire clairement et proposer de l'afficher malgré tout sur la carte si les données le permettent, sans tenter de calcul d'itinéraire.
-- Si les jeux de données ne sont pas encore installés, l'expliquer et proposer le téléchargement, plutôt que d'échouer.
-- Une intention entrante ne déclenche **jamais** de requête réseau autre que le rafraîchissement normal des disponibilités.
-- L'application ne doit pas s'installer comme gestionnaire par défaut d'elle-même : le choix appartient à l'utilisateur, via le sélecteur d'Android.
+- Open the journey result screen directly, destination pre-filled, departure at the current position. If location is denied or unavailable, open the search screen with only the destination filled in.
+- Show the received label if there is one, rather than raw coordinates.
+- If the point is **outside the bounding box** (§4), say so clearly and offer to show it on the map anyway if the data allows, without attempting a route computation.
+- If the datasets are not installed yet, explain it and offer the download, rather than failing.
+- An incoming intent **never** triggers a network request other than the normal availability refresh.
+- The application must not install itself as its own default handler: the choice belongs to the user, through Android's chooser.
 
-Aucune permission supplémentaire n'est nécessaire pour tout ceci.
+No extra permission is needed for any of this.
 
-### 7.9 Premier lancement
+### 7.9 First launch
 
-Au tout premier démarrage, un écran d'accueil — **pas une boîte de dialogue** : le contenu est trop dense pour une fenêtre modale, et il doit pouvoir être relu depuis « À propos » — présente l'application en quelques phrases courtes :
+On the very first start, a welcome screen — **not a dialog**: the content is too dense for a modal window, and it must be readable again from "about" — introduces the application in a few short sentences:
 
-- application **libre et ouverte**, sans compte, sans publicité, sans mouchard ;
-- **aucune donnée personnelle ne quitte l'appareil** : les itinéraires sont calculés sur le téléphone, les destinations recherchées ne sont envoyées à personne, aucun historique n'est conservé ;
-- **fonctionnement hors ligne** : la carte, les rues, les points d'intérêt et le calcul d'itinéraire résident sur l'appareil, ce qui suppose un **téléchargement initial** ; seule la disponibilité des vélos en temps réel nécessite ensuite une connexion.
+- a **free and open** application, no account, no advertising, no tracker;
+- **no personal data leaves the device**: journeys are computed on the phone, searched destinations are sent to nobody, no history is kept;
+- **offline operation**: the map, the streets, the points of interest and the route computation live on the device, which implies an **initial download**; only real-time bike availability needs a connection afterwards.
 
-Cet écran enchaîne directement sur la confirmation de téléchargement décrite au §4.4, avec la taille annoncée — **une seule séquence, pas deux murs de texte successifs**. Trois écrans au maximum, chacun contournable, et un bouton pour reporter le téléchargement.
+That screen leads straight into the download confirmation described in §4.4, with the size announced — **a single sequence, not two successive walls of text**. Three screens at most, each skippable, and a button to postpone the download.
 
-Le ton est celui du §7 : phrases courtes, voix active, aucun jargon. On explique un fonctionnement, on ne vend rien.
+The tone is that of §7: short sentences, active voice, no jargon. We explain how something works, we are not selling anything.
 
-### 7.10 Nouveautés après mise à jour
+### 7.10 What's new after an update
 
-Après l'installation d'une nouvelle version, un écran de **nouveautés** s'affiche **une seule fois**, listant corrections et améliorations depuis la version précédemment installée.
+After a new version is installed, a **what's new** screen appears **once only**, listing fixes and improvements since the previously installed version.
 
-- L'application mémorise le dernier code de version vu. Si l'écart couvre plusieurs versions, présenter les notes de **toutes** les versions intermédiaires, de la plus récente à la plus ancienne.
-- **Jamais affiché lors d'une première installation** : c'est l'écran §7.9 qui s'applique alors.
-- Toujours accessible ensuite depuis « À propos ».
-- Les notes sont **embarquées dans l'APK**, jamais téléchargées : aucune requête réseau ne doit être déclenchée par cet écran.
-- **Source unique de vérité** : les notes de version des métadonnées F-Droid (`fastlane/metadata/android/fr/changelogs/<versionCode>.txt`). Elles sont converties en ressource embarquée **au moment du build**, pour que F-Droid et l'application affichent exactement le même texte sans double saisie.
-- Rédiger ces notes **pour l'utilisateur, pas pour le développeur** : « la recherche d'adresse tolère désormais les fautes de frappe », et non « refactorisation du module de géocodage ». Chaîne traduisible comme le reste.
+- The application remembers the last version code seen. If the gap spans several versions, present the notes of **all** the intermediate versions, from newest to oldest.
+- **Never shown on a first installation**: the §7.9 screen applies then.
+- Always reachable afterwards from "about".
+- The notes are **embedded in the APK**, never downloaded: no network request may be triggered by that screen.
+- **Single source of truth**: the release notes of the F-Droid metadata (`fastlane/metadata/android/fr/changelogs/<versionCode>.txt`). They are converted into an embedded resource **at build time**, so that F-Droid and the application show exactly the same text without double entry.
+- Write those notes **for the user, not for the developer**: "address search now tolerates typos", not "refactored the geocoding module". Translatable like everything else.
 
-## 8. Stockage et modèle de données
+## 8. Storage and data model
 
-- **Room** : table des stations (données statiques) + table du dernier état connu.
-- **DataStore** : réglages et favoris (identifiants de stations).
-- **Aucune donnée de trajet n'est conservée** : ni historique, ni positions, ni destinations. Les itinéraires calculés vivent en mémoire le temps de la session.
-- Aucune sauvegarde automatique vers le cloud : `android:allowBackup="false"`.
+- **Room**: a station table (static data) + a table of the last known state.
+- **DataStore**: settings and favourites (station identifiers).
+- **No journey data is kept**: no history, no positions, no destinations. Computed journeys live in memory for the duration of the session.
+- No automatic cloud backup: `android:allowBackup="false"`.
 
 ## 9. Internationalisation
 
-- **Zéro chaîne de caractères en dur** dans le code Kotlin ou les layouts. Tout dans `res/values/strings.xml`, qui constitue la **langue par défaut : le français**.
-- Utiliser `<plurals>` pour tout ce qui s'accorde (« 1 vélo disponible » / « 3 vélos disponibles »).
-- Utiliser des **placeholders positionnels** (`%1$s`, `%2$d`) et jamais de concaténation de chaînes : l'ordre des mots change d'une langue à l'autre.
-- Ajouter des commentaires `<!-- -->` au-dessus des chaînes ambiguës, pour les futurs traducteurs.
-- Prévoir `res/values-en/` vide ou traduit en exemple, pour montrer la marche à suivre.
-- Formater dates, heures, distances et durées via les API de localisation, pas à la main.
-- Layouts compatibles avec les langues écrites de droite à gauche (`start`/`end` plutôt que `left`/`right`).
-- Prévoir un fichier `CONTRIBUTING.md` expliquant comment proposer une traduction.
+- **Not a single hard-coded string** in the Kotlin code or the layouts. Everything in `res/values/strings.xml`, which constitutes the **default language: French**. The interface serves French-speaking users; the code and its documentation are in English (§14), the interface is not.
+- Use `<plurals>` for everything that agrees ("1 bike available" / "3 bikes available").
+- Use **positional placeholders** (`%1$s`, `%2$d`) and never string concatenation: word order changes from one language to another.
+- Add `<!-- -->` comments above ambiguous strings, for future translators.
+- Provide `res/values-en/`, empty or translated as an example, to show the way.
+- Format dates, times, distances and durations through the localisation APIs, not by hand.
+- Layouts compatible with right-to-left languages (`start`/`end` rather than `left`/`right`).
+- Provide a `CONTRIBUTING.md` explaining how to submit a translation.
 
 ## 10. Permissions
 
-Permissions demandées, et **aucune autre** :
+Permissions requested, and **no others**:
 
-- `INTERNET` — récupération des flux GBFS et des tuiles
-- `ACCESS_COARSE_LOCATION` et `ACCESS_FINE_LOCATION` — demandées **au moment de l'usage**, jamais au lancement
-- `ACCESS_NETWORK_STATE` — détection du mode hors ligne
+- `INTERNET` — fetching the GBFS feeds and the datasets
+- `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCATION` — requested **at the moment of use**, never at launch
+- `ACCESS_NETWORK_STATE` — offline detection
 
-L'application doit être **pleinement utilisable si la permission de localisation est refusée** : l'utilisateur désigne alors ses points de départ et d'arrivée à la main. Le refus ne doit jamais bloquer un écran ni déclencher de relance insistante.
+The application must be **fully usable if location permission is denied**: the user then designates their departure and arrival points by hand. A refusal must never block a screen nor trigger an insistent prompt.
 
-La géolocalisation utilise le fournisseur de position du système Android, **pas** les services de localisation fusionnés de Google.
+Geolocation uses the Android system's location provider, **not** Google's fused location services.
 
-## 11. Critères d'acceptation
+## 11. Acceptance criteria
 
-Chaque critère doit être vérifiable :
+Every criterion must be verifiable:
 
-1. L'appli s'installe et fonctionne sur un appareil sans services Google.
-2. Les stations s'affichent sur la carte avec des disponibilités cohérentes avec le site officiel.
-3. **En mode avion**, une fois les données téléchargées : la carte s'affiche, la recherche d'adresses fonctionne, un itinéraire complet se calcule. Seules les disponibilités sont figées sur le dernier état connu, explicitement marqué comme périmé. Aucune erreur bloquante.
-4. Un itinéraire entre deux points de la métropole renvoie un trajet marche → vélo → marche en moins de 3 secondes.
-5. La station de départ proposée a toujours au moins 1 vélo ; la station d'arrivée au moins 1 place.
-6. Quand aucune station proche n'a de vélo, l'appli le dit explicitement au lieu de proposer un trajet impossible.
-7. En usage courant, **la seule requête réseau qui part est celle du flux GBFS** — à vérifier avec un pare-feu ou une capture de trafic. Les téléchargements de données n'ont lieu qu'au premier lancement ou sur action explicite de l'utilisateur.
-8. L'analyse Exodus Privacy ne détecte aucun tracker.
-9. L'APK de release pèse moins de 15 Mo, et moins de 12 Mo par architecture. Les données téléchargées, elles, **n'ont pas de plafond fixe** : leur poids suit la taille et la densité du réseau servi, et une capitale pèse légitimement plus qu'une ville moyenne. Ce qui est exigé est que leur poids reste **raisonnable au regard de la ville couverte**, que l'application **annonce la taille avant de télécharger**, et qu'elle permette de **supprimer les données d'une ville** pour reprendre la place. À titre de repère : environ 40 Mo pour Lille ou Lyon, environ 140 Mo pour Paris.
-10. Une adresse avec numéro dans une longue artère est localisée à moins de 50 m de sa position réelle.
-11. Une recherche comportant une faute de frappe ou une lettre manquante retrouve la rue visée dans les trois premiers résultats.
-12. Un lien `geo:` ouvert depuis une autre application propose l'application dans le sélecteur et pré-remplit la destination.
-13. Le basculement du système en anglais ne casse aucune mise en page (avec `values-en/` de test).
-14. Toutes les attributions sont présentes.
-15. Le build est reproductible : deux compilations successives produisent le même APK.
+1. The application installs and works on a device without Google services.
+2. Stations appear on the map with availability consistent with the official site.
+3. **In airplane mode**, once the data is downloaded: the map displays, address search works, a complete journey computes. Only availability is frozen at the last known state, explicitly marked as stale. No blocking error.
+4. A journey between two points of the metropolis returns a walk → bike → walk trip in under 3 seconds.
+5. The proposed departure station always has at least 1 bike; the arrival station at least 1 free dock.
+6. When no nearby station has a bike, the application says so explicitly instead of proposing an impossible journey.
+7. In ordinary use, **the only network request that goes out is the GBFS feed** — to be verified with a firewall or a traffic capture. Data downloads happen only on first launch or on an explicit user action.
+8. Exodus Privacy analysis detects no tracker.
+9. The release APK weighs under 15 MB, and under 12 MB per architecture. The downloaded data, for its part, **has no fixed ceiling**: its weight follows the size and density of the network served, and a capital legitimately weighs more than a medium-sized city. What is required is that its weight stay **reasonable for the city covered**, that the application **announce the size before downloading**, and that it allow **deleting one city's data** to reclaim the space. As a landmark: around 40 MB for Lille or Lyon, around 140 MB for Paris.
+10. An address with a house number in a long thoroughfare is located within 50 m of its real position.
+11. A search containing a typo or a missing letter finds the intended street in the first three results.
+12. A `geo:` link opened from another application offers this application in the chooser and pre-fills the destination.
+13. Switching the system to English breaks no layout (with the test `values-en/`).
+14. Every attribution is present.
+15. The build is reproducible: two successive compilations produce the same APK.
 
-## 12. Livrables
+## 12. Deliverables
 
-- Dépôt Git avec historique de commits propre et atomique
-- `README.md` : **bilingue par en-tête**. Il s'ouvre sur un court paragraphe **en anglais** — trois ou quatre phrases — expliquant ce qu'est l'application, qu'elle vise avant tout un public français, et que la suite du document est donc rédigée en français. Le reste est **entièrement en français** : description, captures d'écran, architecture et schéma des couches, instructions de compilation, génération des jeux de données, justification de chaque dépendance, procédure de portage vers une autre ville (§15). Cet en-tête anglais rend le dépôt intelligible pour un visiteur étranger sans imposer une traduction intégrale à maintenir en double.
-- `CONTRIBUTING.md` incluant la procédure de traduction
-- Fichier de licence
-- Métadonnées F-Droid (`fastlane/metadata/android/fr/`) : description courte, description longue, notes de version, captures d'écran
-- Tests unitaires sur l'algorithme du §6 et sur l'analyse des flux GBFS
-- APK de release signé
+- A Git repository with a clean, atomic commit history
+- `README.md`: **bilingual by header**. It opens on a short paragraph **in French** — three or four sentences — explaining what the application is, that its interface is in French because it serves French-speaking users, and that the rest of the document is therefore written in English. Everything else is **entirely in English**: description, screenshots, architecture and layer diagram, build instructions, dataset generation, justification of every dependency, procedure for adding a city (§15). That French header keeps the repository intelligible to the audience the application serves, without imposing a full translation to maintain in duplicate.
+- `CONTRIBUTING.md` including the translation procedure
+- A licence file
+- F-Droid metadata (`fastlane/metadata/android/fr/`): short description, long description, release notes, screenshots
+- Unit tests on the §6 algorithm and on GBFS feed parsing
+- A signed release APK
 - `CHANGELOG.md`
 
-## 13. Hors périmètre de la v1
+## 13. Out of scope for v1
 
-À ne pas implémenter, même si l'occasion se présente : notifications, widget d'écran d'accueil, historique de trajets, comptes utilisateurs, réservation de vélo, intégration des transports en commun, prévisions de disponibilité, statistiques, partage social, mode navigation guidée avec instructions vocales.
+Not to be implemented, even if the opportunity arises: notifications, home-screen widget, journey history, user accounts, bike booking, public transport integration, availability forecasting, statistics, social sharing, guided navigation mode with voice instructions.
 
-## 14. Qualité et maintenabilité du code
+## 14. Code quality and maintainability
 
-Ce projet est destiné à vivre longtemps, à être repris par des contributeurs et à être audité par des relecteurs F-Droid. La lisibilité prime sur l'astuce.
+This project is meant to live a long time, to be taken over by contributors and to be audited by F-Droid reviewers. Readability beats cleverness.
 
-- **Nommage explicite**, en anglais pour le code, sans abréviations obscures. Un nom long et clair vaut mieux qu'un nom court à déchiffrer.
-- **Fonctions courtes**, à responsabilité unique. Si une fonction demande un commentaire pour expliquer ce qu'elle fait, c'est en général qu'il faut la découper.
-- **Commentaires : expliquer le *pourquoi*, pas le *quoi*.** Un commentaire qui paraphrase le code est du bruit qui se périmera. Documenter en revanche systématiquement : les choix non évidents, les compromis acceptés, les contournements de limitations de bibliothèques, et les formules métier — en particulier tout le §6, où chaque coefficient doit être justifié.
-- **KDoc** sur toutes les classes et fonctions publiques : rôle, paramètres, valeur de retour, cas d'erreur.
-- **Séparation stricte des couches.** La logique métier (§6, analyse des flux, résolution d'adresses) doit être en Kotlin pur, sans aucun import Android, donc testable sur la JVM sans émulateur.
-- **Pas de code mort, pas de fonctionnalité anticipée.** Ne pas construire d'abstraction « au cas où » : les seules généralisations demandées sont celles du §15.
-- **Gestion d'erreurs explicite** : types de résultat plutôt qu'exceptions silencieuses, et pour chaque échec un message utilisateur en français qui dit quoi faire, pas un code technique.
-- **Tests unitaires obligatoires** sur l'algorithme du §6, l'analyse GBFS, la résolution d'adresses et l'interpolation des numéros. Chaque correction de bogue s'accompagne du test qui l'aurait détectée.
-- **Formatage automatique** (ktlint ou équivalent) et **analyse statique** (Android Lint, detekt) intégrés au build, sans avertissement toléré en release.
-- **Commits atomiques**, messages explicites décrivant l'intention.
-- Le `README.md` doit permettre à quelqu'un qui découvre le dépôt de compiler et de comprendre l'architecture en moins de trente minutes. Un schéma des couches et du flux de données y est attendu.
+- **The code and everything written around it are in English**: identifiers, comments, KDoc, documentation and commit messages. The exception is the user interface and its error messages, which are in French (§9), and the F-Droid metadata that goes with it.
+- **Explicit naming**, without obscure abbreviations. A long clear name beats a short one you have to decipher.
+- **Short functions**, single responsibility. If a function needs a comment to explain what it does, it usually needs splitting.
+- **Comments: explain the *why*, not the *what*.** A comment that paraphrases the code is noise that will go stale. Do document systematically, however: non-obvious choices, accepted trade-offs, workarounds for library limitations, and business formulas — in particular all of §6, where every coefficient must be justified.
+- **KDoc** on every public class and function: role, parameters, return value, error cases.
+- **Strict layer separation.** Business logic (§6, feed parsing, address resolution) must be in pure Kotlin, with no Android import, hence testable on the JVM without an emulator.
+- **No dead code, no anticipated feature.** Do not build an abstraction "just in case": the only generalisations asked for are those of §15.
+- **Explicit error handling**: result types rather than silent exceptions, and for every failure a French user-facing message saying what to do, not a technical code.
+- **Unit tests are mandatory** on the §6 algorithm, GBFS parsing, address resolution and house-number interpolation. Every bug fix comes with the test that would have caught it.
+- **Automatic formatting** (ktlint or equivalent) and **static analysis** (Android Lint, detekt) wired into the build, with no warning tolerated in release.
+- **Atomic commits**, explicit messages describing intent.
 
-## 15. Portabilité vers une autre agglomération
+## 15. Portability to another conurbation
 
-L'application doit pouvoir servir une autre ville **sans modification du code**. C'est une exigence de conception, pas une intention.
+The application must be able to serve another city **without a code change**. This is a design requirement, not an intention.
 
-- **Aucune donnée propre à Lille en dur** dans le code : ni URL, ni emprise géographique, ni coordonnées de centrage, ni nom de réseau. Tout cela vit dans un **fichier de configuration de ville**, unique et documenté.
-- Ce fichier décrit : nom du réseau, URL du `gbfs.json`, emprise géographique, centre et zoom par défaut, URL des jeux de données à télécharger, langue par défaut.
-- Le format GBFS étant un standard international, l'essentiel de la portabilité est acquis dès lors que l'URL est configurable (§4.1).
-- Les **scripts de génération** des données (tuiles, graphe de routage, index d'adresses) prennent l'emprise géographique en paramètre. Produire les données d'une autre ville doit être une seule commande.
-- Le vocabulaire du code et de l'interface reste **générique** : « station », « vélo », « réseau ». Le nom « V'lille » n'apparaît que dans les chaînes traduisibles et la configuration, jamais dans un nom de classe ou de variable.
-- Documenter dans le `README.md` la marche à suivre complète pour déployer l'appli sur une nouvelle ville.
-- Attention toutefois : la Base Adresse Nationale est française. Pour une ville étrangère, l'index d'adresses devrait être régénéré depuis OpenStreetMap. Le script doit isoler cette source derrière une interface claire pour rendre la substitution possible.
+- **No data specific to Lille hard-coded** in the code: no URL, no bounding box, no centring coordinates, no network name. All of it lives in a **city configuration file**, single and documented.
+- That file describes: network name, `gbfs.json` URL, bounding box, default centre and zoom, URLs of the datasets to download, default language.
+- Since GBFS is an international standard, most of the portability is won as soon as the URL is configurable (§4.1).
+- The **generation scripts** for the data (tiles, routing graph, address index) take the bounding box as a parameter. Producing another city's data must be a single command.
+- The vocabulary of the code and of the interface stays **generic**: "station", "bike", "network". The name "V'lille" appears only in translatable strings and in the configuration, never in a class or variable name.
+- Document in `README.md` the complete procedure for deploying the application on a new city.
+- One caveat, though: the Base Adresse Nationale is French. For a foreign city, the address index would have to be regenerated from OpenStreetMap. The script must isolate that source behind a clear interface to make substitution possible.
 
-### 15.1 Plusieurs villes dans la même application
+### 15.1 Several cities in the same application
 
-Servir une ville sans recompiler ne suffit pas : une seule application doit pouvoir servir **plusieurs réseaux**, l'un après l'autre, et ne rien télécharger de ceux qu'on n'utilise pas.
+Serving one city without recompiling is not enough: a single application must be able to serve **several networks**, one after another, and download nothing of those it does not use.
 
-- Il existe **une configuration de ville par réseau servi**, et un **catalogue** qui les indexe. Le catalogue est dérivé des configurations, jamais écrit à la main : il porte, pour chaque ville, son emprise, son centre, le nombre de stations et **le poids de ses données**.
-- Le catalogue est **téléchargeable**, pour qu'une ville nouvelle apparaisse sans publier de version. Un exemplaire est livré dans l'APK comme secours : un premier lancement sans réseau doit montrer une liste, pas un écran vide.
-- L'application **ne suppose aucune ville par défaut**. Au premier lancement elle en **propose une d'après la position**, sur appui d'un bouton et jamais d'elle-même (§10) ; au-delà d'une cinquantaine de kilomètres du réseau le plus proche, elle ne propose rien plutôt que n'importe quoi.
-- Les jeux de données sont **rangés par ville**. Deux villes cohabitent donc sur l'appareil sans se mélanger, et les données de l'une se suppriment sans toucher à l'autre (§11.9).
-- Les règles de normalisation des noms de voies (§4.3) sont propres à un pays. Elles doivent pouvoir accompagner les données d'une ville plutôt que d'être figées dans l'application.
+- There is **one city configuration per network served**, and a **catalogue** indexing them. The catalogue is derived from the configurations, never written by hand: it carries, for each city, its bounding box, its centre, its station count and **the weight of its data**.
+- The catalogue is **downloadable**, so that a new city appears without publishing a release. A copy ships in the APK as a fallback: a first launch without a network must show a list, not an empty screen.
+- The application **assumes no default city**. On first launch it **proposes one from the user's position**, on a button press and never by itself (§10); beyond fifty kilometres or so from the nearest network, it proposes nothing rather than anything.
+- Datasets are **stored per city**. Two cities therefore coexist on the device without mixing, and one city's data can be deleted without touching the other (§11.9).
+- The street-name normalisation rules (§4.3) are country-specific. They must be able to travel with a city's data rather than being frozen into the application.
 
-## 16. Méthode de travail attendue de l'agent
+## 16. Working method expected of the agent
 
-1. Commencer par **vérifier l'URL réelle du flux GBFS** et la structure exacte des données reçues avant d'écrire les modèles de données. Ne rien coder en dur qui n'ait été observé.
-2. Livrer par étapes vérifiables, dans cet ordre : (1) récupération et affichage des données GBFS en liste, (2) **scripts de génération des données hors ligne** — tuiles, graphe de routage, index d'adresses — avec les tailles réelles obtenues, à comparer aux budgets annoncés, (3) carte vectorielle et marqueurs, (4) moteur de routage hors ligne, (5) algorithme de trajet optimisé, (6) recherche d'adresses locale, (7) écrans restants, (8) finitions et métadonnées F-Droid.
-   L'étape (2) vient tôt à dessein : c'est elle qui valide ou invalide tout le pari du hors-ligne. Si les tailles réelles s'écartent nettement des budgets, il faut le savoir avant d'avoir construit l'interface par-dessus.
-3. Ne jamais ajouter une dépendance sans la justifier dans le README.
-4. Signaler immédiatement tout point où une contrainte du §2 empêcherait une fonctionnalité, plutôt que de contourner la contrainte.
+1. Start by **verifying the real GBFS feed URL** and the exact structure of the data received before writing the data models. Hard-code nothing that has not been observed.
+2. Deliver in verifiable stages, in this order: (1) fetching and displaying GBFS data as a list, (2) **offline data generation scripts** — tiles, routing graph, address index — with the real sizes obtained, to be compared against the announced budgets, (3) vector map and markers, (4) offline routing engine, (5) optimised journey algorithm, (6) local address search, (7) remaining screens, (8) finishing touches and F-Droid metadata.
+   Stage (2) comes early on purpose: it is what validates or invalidates the whole offline bet. If the real sizes depart appreciably from the budgets, we need to know before the interface has been built on top.
+3. Never add a dependency without justifying it in the README.
+4. Report immediately any point where a §2 constraint would prevent a feature, rather than working around the constraint.
