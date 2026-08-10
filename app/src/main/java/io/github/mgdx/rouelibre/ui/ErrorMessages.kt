@@ -28,4 +28,5 @@ fun DataError.toUserMessage(context: Context): String = when (this) {
         context.getString(R.string.error_unsupported_version, version)
     is DataError.LocalStorageFailure ->
         context.getString(R.string.error_local_storage)
+    DataError.NoCityChosen -> context.getString(R.string.error_no_city_chosen)
 }

@@ -48,7 +48,7 @@ class StorageFragment : Fragment() {
             downloader = container.datasetDownloader,
             manifestUrl = { container.dataManifestUrl() },
             workDirectory = container.downloadWorkDirectory,
-            supportedFormatVersion = container.cityConfiguration.dataRelease.formatVersion,
+            supportedFormatVersion = { container.activeCity()?.dataRelease?.formatVersion },
         )
     }
 

@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.BuildConfig
 import io.github.mgdx.rouelibre.R
@@ -16,6 +18,7 @@ import io.github.mgdx.rouelibre.data.NEVER_LAUNCHED
 import io.github.mgdx.rouelibre.databinding.FragmentAboutBinding
 import io.github.mgdx.rouelibre.ui.welcome.WelcomeFragment
 import io.github.mgdx.rouelibre.ui.welcome.WhatsNewFragment
+import kotlinx.coroutines.launch
 
 /**
  * « À propos » (SPEC §7.7).
@@ -50,7 +53,14 @@ class AboutFragment : Fragment() {
         views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
         views.toolbar.navigationContentDescription = getString(R.string.action_back)
         views.version.text = getString(R.string.about_version, BuildConfig.VERSION_NAME)
-        views.networkAttribution.text = container.cityConfiguration.gbfs.attribution
+        // L'attribution est celle du producteur du flux, donc de la ville
+        // active : sans ville, il n'y a personne à créditer et la ligne est
+        // masquée plutôt que vide.
+        viewLifecycleOwner.lifecycleScope.launch {
+            val attribution = container.activeCity()?.gbfs?.attribution
+            views.networkAttribution.isVisible = !attribution.isNullOrBlank()
+            views.networkAttribution.text = attribution.orEmpty()
+        }
         views.openRepository.setOnClickListener { openRepository() }
         views.openLicences.setOnClickListener { show(LicencesFragment()) }
         // Les deux écrans du premier lancement restent lisibles ensuite : le

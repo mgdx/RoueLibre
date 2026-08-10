@@ -25,6 +25,20 @@ class RoueLibreApplication : Application() {
         super.onCreate()
         container = AppContainer(this)
         applyChosenTheme()
+        followActiveCity()
+    }
+
+    /**
+     * Met en service les données de la ville active, et suit ses changements.
+     *
+     * Les jeux de données sont rangés par ville : sans cela, le magasin ne
+     * saurait pas dans quel répertoire lire. Le suivi vaut pour tout l'écran de
+     * stockage, qui observe l'inventaire sans jamais demander de ville.
+     */
+    private fun followActiveCity() {
+        CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate).launch {
+            container.preferences.activeCityIdFlow.collect(container.datasetStore::useCity)
+        }
     }
 
     /**

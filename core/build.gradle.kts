@@ -35,6 +35,13 @@ tasks.withType<Test>().configureEach {
     )
     // Les cas de référence, un fichier par ville générée : le test les rejoue
     // tous, ce qui étend la preuve à chaque nouveau réseau.
+    // Le catalogue réellement publié : le test le rejoue plutôt qu'un exemple
+    // écrit pour l'occasion, ce qui prouve que le générateur et le lecteur
+    // s'accordent (SPEC §15).
+    systemProperty(
+        "rouelibre.cityCatalogue",
+        rootProject.file("config/catalogue.json").absolutePath,
+    )
     systemProperty(
         "rouelibre.normalizationFixtures",
         file("src/test/resources/normalization_fixtures").absolutePath,

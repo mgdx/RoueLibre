@@ -195,6 +195,41 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
      * l'hébergeur par défaut ne soit jamais un point de défaillance unique
      * (SPEC §4.4).
      */
+    /**
+     * La ville que l'application sert en ce moment.
+     *
+     * `null` tant qu'aucune n'a été choisie : l'application ne suppose pas
+     * d'agglomération par défaut, et c'est l'écran d'accueil qui en propose une
+     * (SPEC §15). Seul l'identifiant est retenu — pas une position, pas un
+     * historique de villes visitées (SPEC §2, C3).
+     */
+    suspend fun activeCityId(): String? =
+        dataStore.data.first()[ACTIVE_CITY_ID]?.takeIf { it.isNotBlank() }
+
+    /** Suit la ville active, pour que les écrans se remettent à jour. */
+    val activeCityIdFlow: Flow<String?> =
+        dataStore.data.map { it[ACTIVE_CITY_ID]?.takeIf { id -> id.isNotBlank() } }
+
+    /**
+     * Change de ville active.
+     *
+     * Les réglages qui désignaient l'ancienne — URL du flux et du manifeste —
+     * sont effacés du même mouvement : gardés, ils feraient afficher les
+     * stations d'une ville sur la carte d'une autre, et rien dans l'interface
+     * n'expliquerait pourquoi.
+     */
+    suspend fun setActiveCityId(id: String?) {
+        dataStore.edit { preferences ->
+            if (id.isNullOrBlank()) {
+                preferences.remove(ACTIVE_CITY_ID)
+            } else {
+                preferences[ACTIVE_CITY_ID] = id
+            }
+            preferences.remove(GBFS_DISCOVERY_URL)
+            preferences.remove(DATA_MANIFEST_URL)
+        }
+    }
+
     suspend fun dataManifestUrlOverride(): String? =
         dataStore.data.first()[DATA_MANIFEST_URL]?.takeIf { it.isNotBlank() }
 
@@ -240,6 +275,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
         val PICKUP_SECONDS = intPreferencesKey("pickup_seconds")
         val DROPOFF_SECONDS = intPreferencesKey("dropoff_seconds")
         val DATA_MANIFEST_URL = stringPreferencesKey("data_manifest_url")
+        val ACTIVE_CITY_ID = stringPreferencesKey("active_city_id")
         val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
 
         /** Deux minutes, la valeur par défaut du SPEC §6. */

@@ -43,9 +43,6 @@ class AddressIndexTest {
     private lateinit var datasets: DatasetStore
     private lateinit var indexFile: File
 
-    /** L'index réellement installé, mis de côté le temps du test. */
-    private var installedIndex: File? = null
-
     /** Le centre de Lille, point de référence du classement. */
     private val centre = Coordinates(50.6370, 3.0630)
 
@@ -53,27 +50,22 @@ class AddressIndexTest {
     fun buildIndex() {
         val target = InstrumentationRegistry.getInstrumentation().targetContext
         datasets = DatasetStore(target, Dispatchers.IO)
-        indexFile = datasets.directoryOf(DatasetKind.Addresses)
+        // Une ville à soi : les jeux étant rangés par réseau, le test écrit
+        // dans un répertoire qui n'appartient à aucune ville réelle. Un test
+        // qui efface les données de celui qui l'exécute est un mauvais voisin.
+        datasets.useCity(TEST_CITY)
+        indexFile = checkNotNull(datasets.directoryOf(DatasetKind.Addresses))
             // L'index a un nom canonique, contrairement au graphe de routage.
             .resolve(checkNotNull(DatasetKind.Addresses.fileName))
-        // Un vrai index peut être installé sur l'appareil : il est mis de côté
-        // le temps du test, jamais détruit. Un test qui efface les données de
-        // celui qui l'exécute est un mauvais voisin.
-        installedIndex = indexFile.takeIf { it.isFile }?.let { existing ->
-            val kept = File(existing.parentFile, existing.name + KEPT_SUFFIX)
-            kept.delete()
-            if (existing.renameTo(kept)) kept else null
-        }
         indexFile.delete()
         writeIndex(indexFile)
         index = AddressIndex(datasets, normalizer(target), Dispatchers.IO)
     }
 
     @After
-    fun removeIndex() {
+    fun removeIndex() = runBlocking {
         index.close()
-        indexFile.delete()
-        installedIndex?.renameTo(indexFile)
+        datasets.deleteCity(TEST_CITY)
     }
 
     @Test
@@ -298,8 +290,8 @@ class AddressIndexTest {
     private companion object {
         const val DELTA_SCALE = 100_000.0
 
-        /** Suffixe du fichier mis de côté pendant le test. */
-        const val KEPT_SUFFIX = ".installe"
+        /** Réseau propre au test, pour n'effacer aucune donnée installée. */
+        const val TEST_CITY = "reseau-de-test"
 
         val NUMBER_12 = Coordinates(50.6340, 3.0550)
         val NUMBER_14 = Coordinates(50.6345, 3.0552)

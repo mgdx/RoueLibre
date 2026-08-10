@@ -226,6 +226,32 @@
     <string name="distance_kilometres">%1$s km</string>
     <string name="action_back">Back</string>
 
+    <!-- City screen: which conurbation the application serves. -->
+    <string name="city_title">City</string>
+    <string name="city_open">Change city</string>
+    <string name="city_choose">Choose my city</string>
+    <string name="city_intro">Pick the conurbation you want to use. Its data is installed afterwards, once and for all.</string>
+    <string name="city_locate_me">Find my city</string>
+    <string name="city_active">In use</string>
+    <plurals name="city_detail">
+        <item quantity="one">%1$d station · %2$s to download</item>
+        <item quantity="other">%1$d stations · %2$s to download</item>
+    </plurals>
+    <string name="city_detail_size_only">%1$s to download</string>
+    <string name="city_data_unavailable">Data not published yet</string>
+    <string name="city_installed">%1$s installed on the device</string>
+    <string name="city_delete">Delete</string>
+    <string name="city_delete_description">Delete the data for %1$s</string>
+    <string name="city_delete_title">Delete this data?</string>
+    <string name="city_delete_body">All offline data for %1$s will be erased. You will have to download it again to use it.</string>
+    <string name="city_delete_confirm">Delete</string>
+    <string name="city_deleted">Data for %1$s deleted</string>
+    <string name="city_proposal_title">Your city</string>
+    <string name="city_proposal_body">You seem to be in the area covered by %1$s. Shall we go with that?</string>
+    <string name="city_proposal_accept">Yes</string>
+    <string name="city_none_nearby">No known network near here. Pick a city from the list.</string>
+    <string name="action_cancel">Cancel</string>
+
     <string name="storage_title">Storage</string>
     <string name="storage_open">Manage offline data</string>
     <string name="storage_intro">The map, the journey planner and the address search work with no network. They need three datasets, installed once.</string>
@@ -270,5 +296,6 @@
     <string name="error_feed_unavailable">The network does not publish the “%1$s” feed. Check the feed address in the settings.</string>
     <string name="error_unsupported_version">This network publishes its data in version %1$s, which this version of the app cannot read. Update the app.</string>
     <string name="error_local_storage">Unable to read the data stored on the device.</string>
+    <string name="error_no_city_chosen">No city is selected. Choose one to see its stations.</string>
 
 </resources>

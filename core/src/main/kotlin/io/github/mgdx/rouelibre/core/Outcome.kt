@@ -89,4 +89,13 @@ public sealed interface DataError {
 
     /** Les données locales sont absentes ou illisibles. */
     public data class LocalStorageFailure(public val detail: String) : DataError
+
+    /**
+     * Aucune ville n'est choisie.
+     *
+     * Distincte d'une panne : il n'y a rien à réessayer, seulement une ville à
+     * désigner. C'est l'état d'un premier lancement, et celui d'un appareil
+     * dont on vient de supprimer les données de la dernière ville installée.
+     */
+    public data object NoCityChosen : DataError
 }

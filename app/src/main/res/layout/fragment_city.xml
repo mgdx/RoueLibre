@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Écran « ville » (SPEC §15) : quelle agglomération l'application sert.
+
+    Le bouton de localisation vient avant la liste : c'est le chemin court, et
+    la liste reste là pour qui refuse la permission ou prépare un voyage.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/city_title"
+        app:titleTextAppearance="@style/TextAppearance.RoueLibre.Title" />
+
+    <TextView
+        android:id="@+id/city_intro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_s"
+        android:layout_marginEnd="@dimen/space_l"
+        android:text="@string/city_intro"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/locate_me"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_m"
+        android:text="@string/city_locate_me"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/city_intro" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cities"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/space_m"
+        android:background="?attr/colorSurface"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/locate_me"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_city" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

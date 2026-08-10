@@ -46,16 +46,70 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         prettyPrint = true
     }
 
-    private val directory: File
+    /**
+     * La ville dont les jeux de données sont en service.
+     *
+     * `null` tant qu'aucune n'est choisie : il n'y a alors ni fichier à lire ni
+     * répertoire où écrire. `@Volatile` parce que la lecture vient du fil
+     * principal et le changement du répartiteur des entrées-sorties.
+     */
+    @Volatile
+    private var cityId: String? = null
+
+    private val root: File
         get() = File(context.filesDir, DIRECTORY_NAME).apply { mkdirs() }
 
-    /** Le répertoire d'un jeu de données, créé au besoin. */
-    fun directoryOf(kind: DatasetKind): File = File(directory, kind.id).apply { mkdirs() }
+    /**
+     * Le répertoire de la ville en service.
+     *
+     * Chaque ville a le sien : garder les données de plusieurs villes côte à
+     * côte évite de tout retélécharger à chaque aller-retour entre deux, et
+     * c'est ce qui rend possible d'en supprimer une seule (SPEC §11.9).
+     */
+    private val directory: File?
+        get() = cityId?.let { File(root, it).apply { mkdirs() } }
 
-    private val indexFile: File
-        get() = File(directory, INDEX_FILE_NAME)
+    /** Le répertoire d'un jeu de données, créé au besoin, ou `null` sans ville. */
+    fun directoryOf(kind: DatasetKind): File? =
+        directory?.let { File(it, kind.id).apply { mkdirs() } }
+
+    private val indexFile: File?
+        get() = directory?.let { File(it, INDEX_FILE_NAME) }
 
     private val mutableInstalled = MutableStateFlow(readIndex())
+
+    /**
+     * Met en service les données de la ville [id], ou aucune si `null`.
+     *
+     * Relit l'inventaire dans la foulée : les écrans qui l'observent basculent
+     * donc sur la nouvelle ville sans avoir à s'en occuper.
+     */
+    fun useCity(id: String?) {
+        if (id == cityId) return
+        cityId = id
+        mutableInstalled.value = readIndex()
+    }
+
+    /**
+     * Poids des données d'une ville, y compris celles qui ne sont pas en
+     * service : c'est ce que l'écran de stockage annonce avant de proposer de
+     * les supprimer.
+     */
+    fun occupiedBytesOf(id: String): Long = File(root, id)
+        .walkTopDown()
+        .filter { it.isFile }
+        .sumOf { it.length() }
+
+    /**
+     * Supprime toutes les données d'une ville (SPEC §11.9).
+     *
+     * Y compris celles de la ville en service : quelqu'un qui déménage doit
+     * pouvoir reprendre la place sans avoir à choisir une autre ville d'abord.
+     */
+    suspend fun deleteCity(id: String): Unit = withContext(ioDispatcher) {
+        File(root, id).deleteRecursively()
+        if (id == cityId) mutableInstalled.value = emptyMap()
+    }
 
     /** Les jeux présents sur l'appareil, réémis à chaque changement. */
     val installed: StateFlow<Map<DatasetKind, InstalledDataset>> = mutableInstalled.asStateFlow()
@@ -69,7 +123,8 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
      */
     fun fileOf(kind: DatasetKind): File? {
         val name = kind.fileName ?: return null
-        return File(directoryOf(kind), name).takeIf { it.isFile && it.length() > 0 }
+        val directory = directoryOf(kind) ?: return null
+        return File(directory, name).takeIf { it.isFile && it.length() > 0 }
     }
 
     /**
@@ -91,11 +146,13 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         source: Uri,
         expectedSha256: String? = null,
     ): DatasetImportResult = withContext(ioDispatcher) {
+        val destination = directoryOf(kind)
+            ?: return@withContext DatasetImportResult.Rejected(NO_CITY_REJECTION)
         val targetName = kind.fileName ?: displayNameOf(source)
             ?: return@withContext DatasetImportResult.Rejected(
                 DatasetRejection.TransferFailed("nom du fichier introuvable"),
             )
-        val staged = File(directoryOf(kind), "$targetName$STAGING_SUFFIX")
+        val staged = File(destination, "$targetName$STAGING_SUFFIX")
         try {
             val digest = try {
                 context.contentResolver.openInputStream(source)?.use { stream ->
@@ -144,7 +201,7 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             }
 
             // Le remplacement n'a lieu qu'ici, une fois tout vérifié.
-            val target = File(directoryOf(kind), targetName)
+            val target = File(destination, targetName)
             target.delete()
             if (!staged.renameTo(target)) {
                 return@withContext rejected(
@@ -155,7 +212,7 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
 
             val record = InstalledDataset(
                 kind = kind,
-                sizeBytes = directoryOf(kind).walkTopDown().filter { it.isFile }
+                sizeBytes = destination.walkTopDown().filter { it.isFile }
                     .sumOf { it.length() },
                 sha256 = digest,
                 installedAt = Instant.now(),
@@ -192,6 +249,8 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         if (files.isEmpty()) {
             return@withContext DatasetImportResult.Rejected(DatasetRejection.Empty)
         }
+        val destination = directoryOf(kind)
+            ?: return@withContext DatasetImportResult.Rejected(NO_CITY_REJECTION)
 
         // Le contrôle porte sur les fichiers reçus, avant que quoi que ce soit
         // ne soit remplacé.
@@ -215,7 +274,6 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             }
         }
 
-        val destination = directoryOf(kind)
         // Les fichiers de l'ancienne version s'en vont : un segment de routage
         // devenu obsolète mais resté en place serait lu par le moteur.
         destination.listFiles()?.forEach { it.delete() }
@@ -256,7 +314,7 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
 
     /** Supprime un jeu installé. L'utilisateur doit pouvoir reprendre la place. */
     suspend fun delete(kind: DatasetKind): Unit = withContext(ioDispatcher) {
-        directoryOf(kind).deleteRecursively()
+        directoryOf(kind)?.deleteRecursively()
         writeIndex(mutableInstalled.value - kind)
     }
 
@@ -449,7 +507,7 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
     // ------------------------------------------------------------- index --
 
     private fun readIndex(): Map<DatasetKind, InstalledDataset> {
-        val file = indexFile
+        val file = indexFile ?: return emptyMap()
         if (!file.isFile) return emptyMap()
         return try {
             json.decodeFromString(IndexDocument.serializer(), file.readText())
@@ -457,7 +515,7 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
                 .mapNotNull { it.toDomain() }
                 // Un fichier disparu — vidage du cache, restauration partielle
                 // — ne doit pas laisser une entrée fantôme dans l'écran.
-                .filter { directoryOf(it.kind).listFiles()?.isNotEmpty() == true }
+                .filter { directoryOf(it.kind)?.listFiles()?.isNotEmpty() == true }
                 .associateBy { it.kind }
         } catch (_: Exception) {
             emptyMap()
@@ -465,7 +523,8 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
     }
 
     private fun writeIndex(records: Map<DatasetKind, InstalledDataset>) {
-        indexFile.writeText(
+        val file = indexFile ?: return
+        file.writeText(
             json.encodeToString(
                 IndexDocument.serializer(),
                 IndexDocument(records.values.map(IndexEntry::fromDomain)),
@@ -476,6 +535,15 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
 
     private companion object {
         const val DIRECTORY_NAME = "datasets"
+
+        /**
+         * Refus opposé à une installation sans ville active.
+         *
+         * Il ne peut venir que d'un écran qui aurait dû être fermé : rien dans
+         * l'interface ne propose d'installer des données avant d'avoir choisi
+         * la ville qu'elles décrivent.
+         */
+        val NO_CITY_REJECTION = DatasetRejection.TransferFailed("aucune ville active")
         const val INDEX_FILE_NAME = "installed.json"
         const val STAGING_SUFFIX = ".incoming"
         const val COPY_BUFFER_BYTES = 1 shl 16

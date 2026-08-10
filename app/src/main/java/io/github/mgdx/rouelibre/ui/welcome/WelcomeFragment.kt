@@ -11,8 +11,8 @@ import io.github.mgdx.rouelibre.BuildConfig
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.databinding.FragmentWelcomeBinding
+import io.github.mgdx.rouelibre.ui.city.CityFragment
 import io.github.mgdx.rouelibre.ui.map.MapFragment
-import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import kotlinx.coroutines.launch
 
 /**
@@ -87,9 +87,9 @@ class WelcomeFragment : Fragment() {
             showPage()
             return
         }
-        // Dernière page : on part chercher les données, ce qui est une action
-        // explicite de l'utilisateur — la seule qui autorise une requête.
-        finish(StorageFragment.checkingForUpdates())
+        // Dernière page : on choisit d'abord la ville, puisque c'est elle qui
+        // détermine les données à chercher. L'écran suivant enchaîne dessus.
+        finish(CityFragment())
     }
 
     private fun onSkip() {

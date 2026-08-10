@@ -27,6 +27,7 @@ import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
 import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
+import io.github.mgdx.rouelibre.ui.city.CityFragment
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.prefersReducedMotion
@@ -165,7 +166,8 @@ class MapFragment : Fragment() {
         views.pickedPlace.setOnClickListener { showPickedPlace(null) }
         applyModeLabel()
 
-        views.missingTilesStorage.setOnClickListener { show(StorageFragment()) }
+        // La cible dépend de ce qui manque, et elle est fixée avec le libellé,
+        // au moment où l'on sait s'il y a une ville — voir loadTilesFor.
         views.missingTilesList.setOnClickListener { show(StationListFragment()) }
 
         applyPickingMode(views)
@@ -222,13 +224,37 @@ class MapFragment : Fragment() {
      * sans qu'il ait à relancer l'application.
      */
     private fun loadTilesIfInstalled() {
+        // La ville active se lit sur le disque : la carte se dessine donc au
+        // retour de cette lecture, et non pendant.
+        viewLifecycleOwner.lifecycleScope.launch {
+            loadTilesFor(container.activeCity())
+        }
+    }
+
+    private fun loadTilesFor(configuration: CityConfiguration?) {
         val views = binding ?: return
         val map = mapLibreMap ?: return
         if (styleLoaded) return
 
-        val tiles = container.datasetStore.fileOf(DatasetKind.Tiles)
+        // Sans ville choisie, il n'y a pas de fond de carte à charger : c'est
+        // le même écran que sans tuiles installées, qui invite à en obtenir.
+        val tiles = if (configuration == null) {
+            null
+        } else {
+            container.datasetStore.fileOf(DatasetKind.Tiles)
+        }
         views.missingTiles.isVisible = tiles == null
         views.attribution.isVisible = tiles != null
+        // Sans ville, ce ne sont pas des données qui manquent mais le choix de
+        // l'agglomération : proposer d'installer des tuiles n'aurait aucun sens
+        // tant qu'on ne sait pas celles de quelle ville.
+        if (configuration == null) {
+            views.missingTilesStorage.setText(R.string.city_choose)
+            views.missingTilesStorage.setOnClickListener { show(CityFragment()) }
+        } else {
+            views.missingTilesStorage.setText(R.string.storage_open)
+            views.missingTilesStorage.setOnClickListener { show(StorageFragment()) }
+        }
         // Les commandes de l'écran principal ne réapparaissent pas quand la
         // carte sert à désigner un point : on est venu viser, pas consulter.
         val showsControls = tiles != null && !isPicking()
@@ -237,9 +263,7 @@ class MapFragment : Fragment() {
         // la recherche s'ouvre depuis la carte, elle en suppose une.
         views.openSearch.isVisible = showsControls
         views.openJourney.isVisible = showsControls
-        if (tiles == null) return
-
-        val configuration = container.cityConfiguration
+        if (tiles == null || configuration == null) return
 
         map.uiSettings.isAttributionEnabled = false
         map.uiSettings.isLogoEnabled = false

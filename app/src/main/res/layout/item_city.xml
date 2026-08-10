@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Une ville du catalogue : son nom, son réseau, ce que ses données pèsent.
+
+    La ligne ne peint pas son fond, comme celle des stations : c'est la liste
+    qui le fait, une fois pour toutes.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
+    android:minHeight="@dimen/touch_target_min"
+    android:paddingStart="@dimen/space_l"
+    android:paddingTop="@dimen/space_m"
+    android:paddingEnd="@dimen/space_l"
+    android:paddingBottom="@dimen/space_m">
+
+    <TextView
+        android:id="@+id/city_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/city_active"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="V'lille" />
+
+    <TextView
+        android:id="@+id/city_active"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/city_active"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Label"
+        app:layout_constraintBottom_toBottomOf="@id/city_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/city_name" />
+
+    <TextView
+        android:id="@+id/city_detail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/city_name"
+        tools:text="268 stations · 42,6 Mo à télécharger" />
+
+    <TextView
+        android:id="@+id/city_installed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_xs"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Label"
+        app:layout_constraintEnd_toStartOf="@id/city_delete"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/city_detail"
+        tools:text="42,5 Mo installés sur l'appareil" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/city_delete"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/touch_target_min"
+        android:text="@string/city_delete"
+        android:textColor="@color/alerte"
+        app:layout_constraintBottom_toBottomOf="@id/city_installed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/city_installed" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

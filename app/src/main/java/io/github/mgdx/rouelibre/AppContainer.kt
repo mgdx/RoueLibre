@@ -9,7 +9,6 @@ import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.address.AddressNormalizer
 import io.github.mgdx.rouelibre.core.address.AddressNormalizerReader
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
-import io.github.mgdx.rouelibre.core.config.CityConfigurationReader
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.Router
@@ -18,6 +17,7 @@ import io.github.mgdx.rouelibre.core.routing.TravelMode
 import io.github.mgdx.rouelibre.data.AppPreferences
 import io.github.mgdx.rouelibre.data.StationRepository
 import io.github.mgdx.rouelibre.data.addresses.AddressIndex
+import io.github.mgdx.rouelibre.data.cities.CityCatalogueSource
 import io.github.mgdx.rouelibre.data.datasets.DatasetDownloader
 import io.github.mgdx.rouelibre.data.datasets.DatasetStore
 import io.github.mgdx.rouelibre.data.local.StationDatabase
@@ -46,27 +46,46 @@ private val Context.preferencesDataStore: DataStore<Preferences> by preferencesD
 class AppContainer(private val context: Context) {
 
     /**
-     * La configuration de ville, copiée dans les ressources au moment du
-     * build depuis `config/cities/lille.json`.
-     *
-     * La lecture est synchrone : le fichier fait deux kilooctets et se trouve
-     * déjà dans l'APK projeté en mémoire.
-     *
-     * @throws IllegalStateException si le fichier est absent ou illisible. Ce
-     *   n'est pas une situation utilisateur mais un défaut de fabrication de
-     *   l'APK : l'application ne peut alors rien faire de sensé.
+     * Le catalogue des villes servies et leurs configurations (SPEC §15).
      */
-    val cityConfiguration: CityConfiguration by lazy {
-        val document = context.assets.open(CITY_CONFIGURATION_ASSET)
-            .bufferedReader()
-            .use { it.readText() }
-        when (val outcome = CityConfigurationReader.read(document)) {
-            is Outcome.Success -> outcome.value
-            is Outcome.Failure -> error(
-                "Configuration de ville illisible dans l'APK : ${outcome.error}",
-            )
-        }
+    val cityCatalogueSource: CityCatalogueSource by lazy {
+        CityCatalogueSource(context, httpClient, userAgent(), Dispatchers.IO)
     }
+
+    /**
+     * La configuration de la ville active, ou `null` si aucune n'est choisie.
+     *
+     * L'application ne suppose aucune agglomération par défaut : tant que
+     * l'accueil n'en a pas proposé une et qu'on ne l'a pas acceptée, il n'y a
+     * ni carte à cadrer ni flux à interroger.
+     *
+     * Le résultat est gardé en mémoire, la clé étant l'identifiant lu dans les
+     * réglages : changer de ville invalide donc le cache de lui-même, sans
+     * qu'un écran ait à penser à le vider.
+     */
+    suspend fun activeCity(): CityConfiguration? {
+        val identifier = preferences.activeCityId()
+        // Mis en service ici plutôt qu'au seul suivi du réglage : un écran qui
+        // demande la ville puis lit ses fichiers dans la foulée ne doit pas
+        // dépendre de l'ordre dans lequel deux coroutines s'exécutent.
+        datasetStore.useCity(identifier)
+        if (identifier == null) return null
+        cachedCity?.let { (cachedId, configuration) ->
+            if (cachedId == identifier) return configuration
+        }
+        val configuration = cityCatalogueSource.configuration(identifier) ?: return null
+        cachedCity = identifier to configuration
+        return configuration
+    }
+
+    /**
+     * La ville active au dernier appel d'[activeCity].
+     *
+     * `@Volatile` parce que la lecture vient du fil principal et l'écriture du
+     * répartiteur des entrées-sorties.
+     */
+    @Volatile
+    private var cachedCity: Pair<String, CityConfiguration>? = null
 
     private val httpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
@@ -150,11 +169,11 @@ class AppContainer(private val context: Context) {
         get() = File(context.cacheDir, "telechargements")
 
     /**
-     * L'adresse du manifeste : celle qu'a choisie l'utilisateur, sinon celle
-     * livrée avec l'application (SPEC §4.4).
+     * L'adresse du manifeste : celle qu'a choisie l'utilisateur, sinon celle de
+     * la ville active (SPEC §4.4). `null` s'il n'y a pas encore de ville.
      */
-    suspend fun dataManifestUrl(): String = preferences.dataManifestUrlOverride()
-        ?: cityConfiguration.dataRelease.manifestUrl
+    suspend fun dataManifestUrl(): String? = preferences.dataManifestUrlOverride()
+        ?: activeCity()?.dataRelease?.manifestUrl
 
     /**
      * Position de l'appareil, demandée au moment de l'usage seulement.
@@ -211,7 +230,7 @@ class AppContainer(private val context: Context) {
             // redémarrage (SPEC §4.1).
             discoveryUrlProvider = {
                 preferences.gbfsDiscoveryUrlOverride()
-                    ?: cityConfiguration.gbfs.discoveryUrl
+                    ?: activeCity()?.gbfs?.discoveryUrl
             },
         )
     }
@@ -224,7 +243,6 @@ class AppContainer(private val context: Context) {
     private fun userAgent(): String = "RoueLibre/${BuildConfig.VERSION_NAME} (+$REPOSITORY_URL)"
 
     private companion object {
-        const val CITY_CONFIGURATION_ASSET = "city.json"
         const val NORMALIZATION_RULES_ASSET = "address_normalization.json"
         const val REPOSITORY_URL = "https://github.com/mgdx/RoueLibre"
         val CONNECT_TIMEOUT: Duration = Duration.ofSeconds(10)

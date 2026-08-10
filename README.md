@@ -157,10 +157,11 @@ réseaux : « Lille » couvre 68 communes de la métropole, Lyon 85, Paris 211.
 Paris pèse davantage parce que c'est Paris — 1,24 million d'empreintes de
 bâtiments contre 78 000 pour Lille — et les règles de rendu restent communes.
 
-## Portage vers une autre ville
+## Ajouter une ville
 
-Aucune donnée propre à Lille n'existe dans le code : ni URL, ni emprise, ni
-coordonnée de centrage, ni nom de réseau. Tout vit dans un seul fichier.
+Aucune donnée propre à une agglomération n'existe dans le code : ni URL, ni
+emprise, ni coordonnée de centrage, ni nom de réseau. Chaque ville tient dans un
+fichier de `config/cities/`, et le catalogue les indexe.
 
 1. **Copier la configuration de ville.** Partir de
    [`config/cities/lille.json`](config/cities/lille.json) et n'ajuster que le
@@ -179,8 +180,22 @@ coordonnée de centrage, ni nom de réseau. Tout vit dans un seul fichier.
    ```
    L'emprise est dérivée des stations du réseau, puis élargie de 3 km ; elle
    suit donc automatiquement les extensions du réseau.
-4. **Publier les fichiers** de `data/out/` dans une *release* du dépôt, avec le
-   manifeste, et pointer `dataRelease.manifestUrl` dessus.
+4. **Régénérer le catalogue**, qui annonce à l'application ce qui existe et ce
+   que cela pèse :
+   ```bash
+   python3 tools/build_catalogue.py
+   ```
+   Il est dérivé des configurations, jamais écrit à la main : une entrée tenue
+   à la main finirait par décrire une ville qu'on ne peut pas installer.
+5. **Publier les fichiers** de `data/out/<réseau>/` dans une *release* du dépôt,
+   avec le manifeste et le catalogue. Une release n'a qu'un espace de noms :
+   les fichiers y portent le préfixe de leur réseau — `velib-tiles.mbtiles` —
+   et retrouvent leur nom nu une fois installés.
+
+L'application ne suppose aucune ville par défaut. Elle propose celle qui
+correspond à la position, sur appui d'un bouton, et range les données de chaque
+ville à part : deux villes cohabitent sur l'appareil, et l'on supprime l'une
+sans toucher à l'autre.
 
 Le format GBFS étant un standard international, l'essentiel de la portabilité
 est acquis dès que l'URL est configurable — elle l'est aussi depuis les

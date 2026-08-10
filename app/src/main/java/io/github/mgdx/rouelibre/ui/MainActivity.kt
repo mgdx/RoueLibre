@@ -157,7 +157,8 @@ class MainActivity : AppCompatActivity() {
             }
             return null
         }
-        val outcome = container.addressIndex.search(text, origin = defaultOrigin(), limit = 1)
+        val origin = defaultOrigin() ?: return null
+        val outcome = container.addressIndex.search(text, origin = origin, limit = 1)
         val found = (outcome as? Outcome.Success)?.value?.firstOrNull()
         if (found == null) {
             showMessage(getString(R.string.incoming_address_not_found, text)) {
@@ -175,8 +176,8 @@ class MainActivity : AppCompatActivity() {
      * montre le point si elle le peut, et l'application dit pourquoi elle
      * s'arrête là (SPEC §4, §7.8).
      */
-    private fun openFor(destination: JourneyEndpoint) {
-        val boundingBox = container.cityConfiguration.boundingBox
+    private suspend fun openFor(destination: JourneyEndpoint) {
+        val boundingBox = container.activeCity()?.boundingBox
         if (boundingBox != null && destination.position !in boundingBox) {
             show(MapFragment.showing(destination))
             showMessage(getString(R.string.incoming_outside_coverage))
@@ -199,9 +200,15 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    /** Point de référence du classement des adresses, faute de position. */
-    private fun defaultOrigin(): Coordinates = container.deviceLocation.lastKnown()
-        ?: container.cityConfiguration.map.centre
+    /**
+     * Point de référence du classement des adresses, faute de position.
+     *
+     * Le centre de la ville active, qui n'est pas une position de l'utilisateur
+     * mais un point fixe de la configuration. Sans ville, il n'y a pas d'index
+     * d'adresses non plus : l'appelant n'arrive jamais jusqu'ici.
+     */
+    private suspend fun defaultOrigin(): Coordinates? = container.deviceLocation.lastKnown()
+        ?: container.activeCity()?.map?.centre
 
     private fun show(fragment: Fragment) {
         supportFragmentManager.beginTransaction()

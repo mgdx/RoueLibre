@@ -412,6 +412,16 @@ L'application doit pouvoir servir une autre ville **sans modification du code**.
 - Documenter dans le `README.md` la marche à suivre complète pour déployer l'appli sur une nouvelle ville.
 - Attention toutefois : la Base Adresse Nationale est française. Pour une ville étrangère, l'index d'adresses devrait être régénéré depuis OpenStreetMap. Le script doit isoler cette source derrière une interface claire pour rendre la substitution possible.
 
+### 15.1 Plusieurs villes dans la même application
+
+Servir une ville sans recompiler ne suffit pas : une seule application doit pouvoir servir **plusieurs réseaux**, l'un après l'autre, et ne rien télécharger de ceux qu'on n'utilise pas.
+
+- Il existe **une configuration de ville par réseau servi**, et un **catalogue** qui les indexe. Le catalogue est dérivé des configurations, jamais écrit à la main : il porte, pour chaque ville, son emprise, son centre, le nombre de stations et **le poids de ses données**.
+- Le catalogue est **téléchargeable**, pour qu'une ville nouvelle apparaisse sans publier de version. Un exemplaire est livré dans l'APK comme secours : un premier lancement sans réseau doit montrer une liste, pas un écran vide.
+- L'application **ne suppose aucune ville par défaut**. Au premier lancement elle en **propose une d'après la position**, sur appui d'un bouton et jamais d'elle-même (§10) ; au-delà d'une cinquantaine de kilomètres du réseau le plus proche, elle ne propose rien plutôt que n'importe quoi.
+- Les jeux de données sont **rangés par ville**. Deux villes cohabitent donc sur l'appareil sans se mélanger, et les données de l'une se suppriment sans toucher à l'autre (§11.9).
+- Les règles de normalisation des noms de voies (§4.3) sont propres à un pays. Elles doivent pouvoir accompagner les données d'une ville plutôt que d'être figées dans l'application.
+
 ## 16. Méthode de travail attendue de l'agent
 
 1. Commencer par **vérifier l'URL réelle du flux GBFS** et la structure exacte des données reçues avant d'écrire les modèles de données. Ne rien coder en dur qui n'ait été observé.

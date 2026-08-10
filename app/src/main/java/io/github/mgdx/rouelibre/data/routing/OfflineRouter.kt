@@ -59,7 +59,10 @@ class OfflineRouter(
         mode: TravelMode,
         timeoutMillis: Long = DEFAULT_TIMEOUT_MILLIS,
     ): RouteResult = withContext(computeDispatcher) {
+        // Sans ville active, il n'y a pas de répertoire de segments : c'est le
+        // même manque qu'un graphe absent, et le même message.
         val segments = datasets.directoryOf(DatasetKind.Routing)
+            ?: return@withContext RouteResult.Failure(RoutingFailure.GraphMissing)
         if (segments.listFiles()?.none { it.name.endsWith(RD5_SUFFIX) } != false) {
             return@withContext RouteResult.Failure(RoutingFailure.GraphMissing)
         }

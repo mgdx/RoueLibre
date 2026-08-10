@@ -8,6 +8,39 @@ Les notes destinées aux utilisateurs vivent dans
 les développeurs. Ce fichier-ci s'adresse aux contributeurs et retient aussi ce
 qui n'a aucun effet visible.
 
+## [Non publié]
+
+### Ajouté
+
+- **Plusieurs villes dans la même application** (`SPEC.md` §15.1). Trois
+  réseaux sont servis : V'lille, Vélo'v et Vélib' Métropole.
+  - Un **catalogue** dérivé des configurations de ville — `tools/build_catalogue.py`
+    — porte pour chacune son emprise, son centre, ses stations et le poids de
+    ses données. Il est téléchargeable, pour qu'une ville nouvelle apparaisse
+    sans publier de version, et livré dans l'APK comme secours.
+  - Un **écran « ville »** propose l'agglomération d'après la position, sur
+    appui d'un bouton et jamais de lui-même. Au-delà de cinquante kilomètres du
+    réseau le plus proche, il ne propose rien.
+  - Les jeux de données sont **rangés par ville** : deux villes cohabitent sans
+    se mélanger, et les données de l'une se suppriment sans toucher à l'autre.
+
+### Modifié
+
+- **L'application ne suppose plus de ville par défaut.** Elle en servait une,
+  compilée dans l'APK ; elle sert désormais celle qu'on lui a désignée, et le
+  dit tant qu'on ne l'a pas fait.
+- **Les fichiers publiés portent le nom de leur réseau.** Une release GitHub
+  n'a qu'un espace de noms : trois `tiles.mbtiles` s'y écraseraient. Sur
+  l'appareil, chaque fichier retrouve son nom nu — BRouter reconnaît ses
+  segments au nom et ne trouverait pas `vlille-E0_N50.rd5`.
+
+### Corrigé
+
+- **Un appareil qui avait déjà des données installées ne les retrouve pas.**
+  Elles étaient rangées sans ville ; il n'y a pas moyen de deviner laquelle, et
+  les rattacher au hasard ferait afficher la carte d'une ville sous le nom
+  d'une autre. Il faut les réinstaller après avoir choisi sa ville.
+
 ## [0.1.0-alpha]
 
 Première version installable. Elle fait le tour de son sujet — carte hors

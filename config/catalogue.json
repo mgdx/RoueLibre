@@ -1,0 +1,64 @@
+{
+  "catalogueVersion": 1,
+  "catalogueUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/catalogue.json",
+  "generatedAt": "2026-08-10T09:23:51Z",
+  "cities": [
+    {
+      "id": "vlille",
+      "displayName": "V'lille",
+      "operator": "Métropole Européenne de Lille",
+      "country": "FR",
+      "stationCount": 268,
+      "boundingBox": {
+        "south": 50.576061,
+        "west": 2.941358,
+        "north": 50.763769,
+        "east": 3.241396
+      },
+      "centreLatitude": 50.633333,
+      "centreLongitude": 3.066667,
+      "gbfsDiscoveryUrl": "https://media.ilevia.fr/opendata/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-vlille.json",
+      "dataSizeBytes": 42607102,
+      "releaseTag": "data-2026-08"
+    },
+    {
+      "id": "velib",
+      "displayName": "Vélib' Métropole",
+      "operator": "Smovengo / Syndicat Autolib' Vélib' Métropole",
+      "country": "FR",
+      "stationCount": 1518,
+      "boundingBox": {
+        "south": 48.716436,
+        "west": 2.124587,
+        "north": 48.984517,
+        "east": 2.579197
+      },
+      "centreLatitude": 48.8566,
+      "centreLongitude": 2.3522,
+      "gbfsDiscoveryUrl": "https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velib.json",
+      "dataSizeBytes": 142972945,
+      "releaseTag": "data-2026-08"
+    },
+    {
+      "id": "velov",
+      "displayName": "Vélo'v",
+      "operator": "JCDecaux / Métropole de Lyon",
+      "country": "FR",
+      "stationCount": 465,
+      "boundingBox": {
+        "south": 45.666362,
+        "west": 4.739882,
+        "north": 45.91449,
+        "east": 5.008247
+      },
+      "centreLatitude": 45.764,
+      "centreLongitude": 4.8357,
+      "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/lyon/gbfs/v3/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velov.json",
+      "dataSizeBytes": 42311488,
+      "releaseTag": "data-2026-08"
+    }
+  ]
+}

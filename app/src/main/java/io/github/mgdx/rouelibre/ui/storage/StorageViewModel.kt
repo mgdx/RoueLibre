@@ -105,9 +105,9 @@ sealed interface StorageMessage {
 class StorageViewModel(
     private val store: DatasetStore,
     private val downloader: DatasetDownloader,
-    private val manifestUrl: suspend () -> String,
+    private val manifestUrl: suspend () -> String?,
     private val workDirectory: File,
-    private val supportedFormatVersion: Int,
+    private val supportedFormatVersion: suspend () -> Int?,
 ) : ViewModel() {
 
     private val mutableState = MutableStateFlow(StorageUiState())
@@ -174,7 +174,15 @@ class StorageViewModel(
         if (mutableState.value.isChecking) return
         viewModelScope.launch {
             mutableState.update { it.copy(isChecking = true) }
-            val outcome = downloader.fetchManifest(manifestUrl())
+            // Sans ville active il n'y a pas de manifeste à consulter : le dire
+            // vaut mieux qu'interroger une adresse choisie au hasard.
+            val url = manifestUrl()
+            if (url == null) {
+                mutableState.update { it.copy(isChecking = false) }
+                messageChannel.send(StorageMessage.CheckFailed(DataError.NoCityChosen))
+                return@launch
+            }
+            val outcome = downloader.fetchManifest(url)
             mutableState.update { it.copy(isChecking = false) }
             when (outcome) {
                 is Outcome.Failure -> messageChannel.send(StorageMessage.CheckFailed(outcome.error))
@@ -191,9 +199,10 @@ class StorageViewModel(
      * à l'ouverture d'un fichier.
      */
     private suspend fun acceptManifest(manifest: DataManifest) {
-        if (manifest.formatVersion != supportedFormatVersion) {
+        val supported = supportedFormatVersion() ?: return
+        if (manifest.formatVersion != supported) {
             messageChannel.send(
-                StorageMessage.UnsupportedFormat(manifest.formatVersion, supportedFormatVersion),
+                StorageMessage.UnsupportedFormat(manifest.formatVersion, supported),
             )
             return
         }
@@ -283,9 +292,9 @@ class StorageViewModel(
     class Factory(
         private val store: DatasetStore,
         private val downloader: DatasetDownloader,
-        private val manifestUrl: suspend () -> String,
+        private val manifestUrl: suspend () -> String?,
         private val workDirectory: File,
-        private val supportedFormatVersion: Int,
+        private val supportedFormatVersion: suspend () -> Int?,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

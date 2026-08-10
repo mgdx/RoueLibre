@@ -67,8 +67,13 @@ def sha256_of(path: Path) -> str:
 
 
 def describe(dataset: Dataset, data_dir: Path, base_url: str,
-             release_tag: str) -> dict:
+             release_tag: str, network_id: str) -> dict:
     """Build the manifest entry for one dataset.
+
+    The published name and the local name differ. A release holds the data of
+    every city in one flat namespace, where three `tiles.mbtiles` would collide;
+    on the device the file keeps its bare name, because BRouter recognises its
+    segments by name and would not find `vlille-E0_N50.rd5`.
 
     Raises:
         ManifestError: if the dataset has not been generated yet.
@@ -95,7 +100,7 @@ def describe(dataset: Dataset, data_dir: Path, base_url: str,
         "files": [
             {
                 "name": path.name,
-                "url": f"{base_url}/{release_tag}/{path.name}",
+                "url": f"{base_url}/{release_tag}/{network_id}-{path.name}",
                 "sizeBytes": path.stat().st_size,
                 "sha256": sha256_of(path),
             }
@@ -124,7 +129,7 @@ def main() -> int:
 
         entries = [
             describe(dataset, arguments.data_dir, arguments.base_url,
-                     arguments.release_tag)
+                     arguments.release_tag, config.network_id)
             for dataset in DATASETS
         ]
 

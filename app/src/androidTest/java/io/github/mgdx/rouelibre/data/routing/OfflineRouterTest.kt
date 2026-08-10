@@ -48,7 +48,10 @@ class OfflineRouterTest {
         val testAssets = InstrumentationRegistry.getInstrumentation().context.assets
 
         datasets = DatasetStore(target, Dispatchers.IO)
-        val segments = datasets.directoryOf(DatasetKind.Routing)
+        // Les jeux sont rangés par réseau : le graphe du test va dans le sien,
+        // pour ne pas se mêler aux données d'une ville installée.
+        datasets.useCity(TEST_CITY)
+        val segments = checkNotNull(datasets.directoryOf(DatasetKind.Routing))
         val graph = segments.resolve(GRAPH_FILE)
         if (!graph.isFile) {
             testAssets.open(GRAPH_FILE).use { source ->
@@ -130,6 +133,9 @@ class OfflineRouterTest {
 
     private companion object {
         const val GRAPH_FILE = "E0_N50.rd5"
+
+        /** Réseau propre au test, pour n'effacer aucune donnée installée. */
+        const val TEST_CITY = "reseau-de-test"
         const val TOLERANCE_METRES = 200.0
     }
 }

@@ -15,6 +15,7 @@ import io.github.mgdx.rouelibre.data.AppTheme
 import io.github.mgdx.rouelibre.databinding.FragmentSettingsBinding
 import io.github.mgdx.rouelibre.databinding.ItemDurationSettingBinding
 import io.github.mgdx.rouelibre.ui.about.AboutFragment
+import io.github.mgdx.rouelibre.ui.city.CityFragment
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -35,12 +36,10 @@ class SettingsFragment : Fragment() {
     private var binding: FragmentSettingsBinding? = null
 
     private val preferences
-        get() = (requireActivity().application as RoueLibreApplication).container.preferences
+        get() = container.preferences
 
-    private val cityConfiguration
-        get() = (requireActivity().application as RoueLibreApplication)
-            .container
-            .cityConfiguration
+    private val container
+        get() = (requireActivity().application as RoueLibreApplication).container
 
     /** Vrai pendant qu'un champ est rempli par le code, pour ne pas le réécrire. */
     private var isFilling = false
@@ -61,6 +60,7 @@ class SettingsFragment : Fragment() {
 
         views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
         views.toolbar.navigationContentDescription = getString(R.string.action_back)
+        views.openCity.setOnClickListener { show(CityFragment()) }
         views.openStorage.setOnClickListener { show(StorageFragment()) }
         views.openAbout.setOnClickListener { show(AboutFragment()) }
 
@@ -161,9 +161,12 @@ class SettingsFragment : Fragment() {
             views.gbfsUrl.setText(preferences.gbfsDiscoveryUrlOverride().orEmpty())
             views.manifestUrl.setText(preferences.dataManifestUrlOverride().orEmpty())
             isFilling = false
+            // Les adresses par défaut sont celles de la ville active : sans
+            // ville, il n'y en a pas, et le champ reste simplement vide.
+            val city = container.activeCity()
+            views.gbfsField.placeholderText = city?.gbfs?.discoveryUrl
+            views.manifestField.placeholderText = city?.dataRelease?.manifestUrl
         }
-        views.gbfsField.placeholderText = cityConfiguration.gbfs.discoveryUrl
-        views.manifestField.placeholderText = cityConfiguration.dataRelease.manifestUrl
 
         views.gbfsUrl.doAfterTextChanged { text ->
             if (isFilling) return@doAfterTextChanged

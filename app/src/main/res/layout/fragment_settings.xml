@@ -42,10 +42,27 @@
             android:paddingEnd="@dimen/space_l"
             android:paddingBottom="@dimen/space_xxl">
 
+            <!-- La ville sert de cadre à tout le reste, elle vient donc avant. -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/city_title"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/open_city"
+                style="@style/Widget.RoueLibre.Toggle"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/touch_target_min"
+                android:layout_marginTop="@dimen/space_s"
+                android:gravity="start|center_vertical"
+                android:text="@string/city_open" />
+
             <!-- Données hors ligne : le réglage le plus consulté, donc en tête. -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
                 android:text="@string/settings_data_title"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
 

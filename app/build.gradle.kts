@@ -173,8 +173,25 @@ ksp {
  */
 abstract class CopySharedConfigurationTask : DefaultTask() {
 
+    /**
+     * Les configurations de ville, une par agglomération servie.
+     *
+     * Toutes sont livrées, aucune n'est privilégiée : l'application ne connaît
+     * pas de ville par défaut, elle en propose une d'après la position et
+     * retient celle qu'on a choisie (SPEC §15).
+     */
+    @get:InputDirectory
+    abstract val cityConfigurations: DirectoryProperty
+
+    /**
+     * L'index de ces villes, produit par `tools/build_catalogue.py`.
+     *
+     * Livré comme secours : le catalogue publié est téléchargeable et peut
+     * citer des villes plus récentes, mais un premier lancement sans réseau
+     * doit montrer une liste plutôt qu'un écran vide.
+     */
     @get:InputFile
-    abstract val cityConfiguration: RegularFileProperty
+    abstract val cityCatalogue: RegularFileProperty
 
     @get:InputFile
     abstract val normalizationRules: RegularFileProperty
@@ -198,9 +215,24 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
     fun copyConfiguration() {
         val target = outputDirectory.get().asFile
         target.mkdirs()
-        // Renommé en « city.json » : l'application ne doit rien connaître du
-        // nom de l'agglomération qu'elle sert.
-        cityConfiguration.get().asFile.copyTo(target.resolve("city.json"), overwrite = true)
+        cityCatalogue.get().asFile.copyTo(target.resolve("catalogue.json"), overwrite = true)
+
+        // Chaque configuration est rangée sous l'identifiant de son réseau, et
+        // non sous le nom de son fichier : c'est cet identifiant que porte le
+        // catalogue, et l'application n'a alors rien à deviner pour retrouver
+        // la configuration d'une ville qu'on vient de choisir.
+        val cities = target.resolve("cities")
+        cities.deleteRecursively()
+        cities.mkdirs()
+        cityConfigurations.get().asFile.listFiles()
+            ?.filter { it.isFile && it.extension == "json" }
+            ?.forEach { configuration ->
+                val document = groovy.json.JsonSlurper().parse(configuration)
+                val network = (document as Map<*, *>)["network"] as Map<*, *>
+                val identifier = network["id"] as String
+                configuration.copyTo(cities.resolve("$identifier.json"), overwrite = true)
+            }
+
         normalizationRules.get().asFile
             .copyTo(target.resolve("address_normalization.json"), overwrite = true)
 
@@ -218,7 +250,8 @@ androidComponents {
         val copyTask = tasks.register<CopySharedConfigurationTask>(
             "copySharedConfigurationFor${variant.name.replaceFirstChar { it.uppercase() }}",
         ) {
-            cityConfiguration.set(rootProject.file("config/cities/lille.json"))
+            cityConfigurations.set(rootProject.file("config/cities"))
+            cityCatalogue.set(rootProject.file("config/catalogue.json"))
             normalizationRules.set(rootProject.file("config/address_normalization.json"))
             val notes = rootProject.file("fastlane/metadata/android/fr/changelogs")
             if (notes.isDirectory) changelogs.set(notes)

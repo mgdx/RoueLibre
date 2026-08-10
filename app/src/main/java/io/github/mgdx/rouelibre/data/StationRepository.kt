@@ -1,5 +1,6 @@
 package io.github.mgdx.rouelibre.data
 
+import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.gbfs.GbfsDiscovery
 import io.github.mgdx.rouelibre.core.geo.Coordinates
@@ -32,16 +33,17 @@ import java.time.Instant
  * @property dao cache local.
  * @property refreshTimestamps mémorise la date du dernier rafraîchissement des
  *   données stables, qui doit survivre au redémarrage de l'application.
- * @property discoveryUrlProvider donne l'URL du document d'auto-découverte.
- *   C'est une fonction et non une valeur parce que ce réglage est modifiable
- *   par l'utilisateur (SPEC §4.1) et peut changer entre deux appels.
+ * @property discoveryUrlProvider donne l'URL du document d'auto-découverte, ou
+ *   `null` si aucune ville n'est choisie. C'est une fonction et non une valeur
+ *   parce que ce réglage est modifiable par l'utilisateur (SPEC §4.1) et change
+ *   avec la ville active.
  * @property clock horloge, injectée pour rendre la politique testable.
  */
 class StationRepository(
     private val remote: GbfsRemoteSource,
     private val dao: StationDao,
     private val refreshTimestamps: RefreshTimestampStore,
-    private val discoveryUrlProvider: suspend () -> String,
+    private val discoveryUrlProvider: suspend () -> String?,
     private val clock: Clock = Clock.systemUTC(),
 ) {
 
@@ -136,7 +138,9 @@ class StationRepository(
      * Le document d'auto-découverte, relu seulement si l'URL a changé.
      */
     private suspend fun discovery(): Outcome<GbfsDiscovery> {
-        val url = discoveryUrlProvider()
+        // Pas d'URL : aucune ville n'est choisie. Il n'y a rien à réessayer, et
+        // le dire ainsi évite d'afficher une panne de réseau qui n'existe pas.
+        val url = discoveryUrlProvider() ?: return Outcome.Failure(DataError.NoCityChosen)
         cachedDiscovery?.let { cached ->
             if (cachedDiscoveryUrl == url) return Outcome.Success(cached)
         }

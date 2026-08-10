@@ -314,6 +314,35 @@
 
     <string name="action_back">Revenir</string>
 
+    <!-- Écran « ville » : quelle agglomération l'application sert (SPEC §15). -->
+    <string name="city_title">Ville</string>
+    <string name="city_open">Changer de ville</string>
+    <string name="city_choose">Choisir ma ville</string>
+    <string name="city_intro">Choisis l\'agglomération que tu veux consulter. Ses données s\'installent ensuite, une fois pour toutes.</string>
+    <string name="city_locate_me">Trouver ma ville</string>
+    <string name="city_active">En service</string>
+    <!-- %1$d est un nombre de stations, %2$s une taille déjà formatée. -->
+    <plurals name="city_detail">
+        <item quantity="one">%1$d station · %2$s à télécharger</item>
+        <item quantity="other">%1$d stations · %2$s à télécharger</item>
+    </plurals>
+    <string name="city_detail_size_only">%1$s à télécharger</string>
+    <string name="city_data_unavailable">Données pas encore publiées</string>
+    <!-- %1$s est une taille déjà formatée, par exemple « 42,5 Mo ». -->
+    <string name="city_installed">%1$s installés sur l\'appareil</string>
+    <string name="city_delete">Supprimer</string>
+    <!-- %1$s est le nom d\'une ville. -->
+    <string name="city_delete_description">Supprimer les données de %1$s</string>
+    <string name="city_delete_title">Supprimer ces données ?</string>
+    <string name="city_delete_body">Toutes les données hors ligne de %1$s seront effacées. Il faudra les retélécharger pour t\'en servir à nouveau.</string>
+    <string name="city_delete_confirm">Supprimer</string>
+    <string name="city_deleted">Données de %1$s supprimées</string>
+    <string name="city_proposal_title">Ta ville</string>
+    <string name="city_proposal_body">Tu sembles être dans la zone couverte par %1$s. On part là-dessus ?</string>
+    <string name="city_proposal_accept">Oui</string>
+    <string name="city_none_nearby">Aucun réseau connu près d\'ici. Choisis une ville dans la liste.</string>
+    <string name="action_cancel">Annuler</string>
+
     <!-- Écran « stockage » : ce que l'application occupe, et comment le
          reprendre (SPEC §4.4). -->
     <string name="storage_title">Stockage</string>
@@ -378,5 +407,6 @@
     <!-- %1$s est un numéro de version, par exemple « 4.0 ». -->
     <string name="error_unsupported_version">Ce réseau publie ses données en version %1$s, que cette version de l\'application ne sait pas lire. Mets l\'application à jour.</string>
     <string name="error_local_storage">Impossible de lire les données enregistrées sur l\'appareil.</string>
+    <string name="error_no_city_chosen">Aucune ville n\'est sélectionnée. Choisissez-en une pour afficher les stations.</string>
 
 </resources>

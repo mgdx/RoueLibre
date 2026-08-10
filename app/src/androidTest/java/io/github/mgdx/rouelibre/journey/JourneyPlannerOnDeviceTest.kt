@@ -56,7 +56,10 @@ class JourneyPlannerOnDeviceTest {
         val testAssets = InstrumentationRegistry.getInstrumentation().context.assets
 
         val datasets = DatasetStore(target, Dispatchers.IO)
-        val graph = datasets.directoryOf(DatasetKind.Routing).resolve(GRAPH_FILE)
+        // Les jeux sont rangés par réseau : le graphe du test va dans le sien,
+        // pour ne pas se mêler aux données d'une ville installée.
+        datasets.useCity(TEST_CITY)
+        val graph = checkNotNull(datasets.directoryOf(DatasetKind.Routing)).resolve(GRAPH_FILE)
         if (!graph.isFile) {
             testAssets.open(GRAPH_FILE).use { source ->
                 graph.outputStream().use { source.copyTo(it) }
@@ -153,6 +156,9 @@ class JourneyPlannerOnDeviceTest {
     private companion object {
         const val TAG = "RoueLibrePerf"
         const val GRAPH_FILE = "E0_N50.rd5"
+
+        /** Réseau propre au test, pour n'effacer aucune donnée installée. */
+        const val TEST_CITY = "reseau-de-test"
 
         /** Le budget du SPEC §6, avec la marge d'un émulateur. */
         const val BUDGET_MILLIS = 3_000L

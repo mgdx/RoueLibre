@@ -34,12 +34,15 @@ class DatasetStoreTest {
     fun prepare() {
         val target = InstrumentationRegistry.getInstrumentation().targetContext
         store = DatasetStore(target, Dispatchers.IO)
+        // Les jeux sont rangés par ville : sans ville en service, il n'y a
+        // aucun répertoire où écrire.
+        store.useCity(TEST_CITY)
         incoming = File(target.cacheDir, "incoming").apply { mkdirs() }
     }
 
     @After
     fun clean() = runBlocking {
-        store.delete(DatasetKind.Routing)
+        store.deleteCity(TEST_CITY)
         incoming.deleteRecursively()
         Unit
     }
@@ -51,7 +54,7 @@ class DatasetStoreTest {
         val result = store.importFrom(DatasetKind.Routing, Uri.fromFile(source))
 
         assertTrue("import refusé : $result", result is DatasetImportResult.Installed)
-        val installed = store.directoryOf(DatasetKind.Routing).listFiles().orEmpty()
+        val installed = store.directoryOf(DatasetKind.Routing)?.listFiles().orEmpty()
         assertEquals(
             listOf("E0_N50.rd5"),
             installed.map { it.name },
@@ -70,13 +73,52 @@ class DatasetStoreTest {
         val result = store.importFrom(DatasetKind.Routing, Uri.fromFile(source))
 
         assertTrue("refus attendu, obtenu : $result", result is DatasetImportResult.Rejected)
-        assertTrue(store.directoryOf(DatasetKind.Routing).listFiles().orEmpty().isEmpty())
+        assertTrue(store.directoryOf(DatasetKind.Routing)?.listFiles().orEmpty().isEmpty())
+    }
+
+    @Test
+    fun les_donnees_d_une_ville_n_apparaissent_pas_dans_une_autre() = runBlocking {
+        // Deux villes cohabitent sur l'appareil : passer de l'une à l'autre ne
+        // doit ni mélanger leurs fichiers, ni faire croire que la seconde est
+        // installée parce que la première l'est (SPEC §11.9).
+        store.importFrom(DatasetKind.Routing, Uri.fromFile(fileNamed("E0_N50.rd5", "segment")))
+        assertTrue(store.fileOf(DatasetKind.Routing) != null)
+
+        store.useCity(OTHER_TEST_CITY)
+        try {
+            assertEquals(null, store.fileOf(DatasetKind.Routing))
+            assertTrue(store.installed.value.isEmpty())
+
+            store.useCity(TEST_CITY)
+            assertTrue(
+                "la ville d'origine a perdu ses données",
+                store.fileOf(DatasetKind.Routing) != null,
+            )
+        } finally {
+            store.deleteCity(OTHER_TEST_CITY)
+        }
+    }
+
+    @Test
+    fun supprimer_une_ville_rend_toute_sa_place() = runBlocking {
+        store.importFrom(DatasetKind.Routing, Uri.fromFile(fileNamed("E0_N50.rd5", "segment")))
+        assertTrue(store.occupiedBytesOf(TEST_CITY) > 0)
+
+        store.deleteCity(TEST_CITY)
+
+        assertEquals(0L, store.occupiedBytesOf(TEST_CITY))
+        assertEquals(null, store.fileOf(DatasetKind.Routing))
+        assertTrue(store.installed.value.isEmpty())
     }
 
     private fun fileNamed(name: String, content: String): File =
         File(incoming, name).apply { writeText(content) }
 
     private companion object {
+        /** Identifiants de réseau propres au test, pour ne rien effacer d'installé. */
+        const val TEST_CITY = "reseau-de-test"
+        const val OTHER_TEST_CITY = "autre-reseau-de-test"
+
         /**
          * Les seize premiers octets de tout fichier SQLite, terminateur nul
          * compris. L'en-tête est écrit à la main plutôt que par une vraie
