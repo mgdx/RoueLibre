@@ -25,15 +25,14 @@ import org.junit.runner.RunWith
 import kotlin.system.measureTimeMillis
 
 /**
- * Éprouve l'algorithme de trajet sur le vrai graphe, avec les vraies stations.
+ * Exercises the journey algorithm on the real graph, with the real stations.
  *
- * C'est le seul endroit où le critère d'acceptation §11.4 peut réellement être
- * vérifié : « un itinéraire entre deux points de la métropole renvoie un trajet
- * marche → vélo → marche en moins de 3 secondes ». Les tests JVM de
- * l'algorithme utilisent un moteur simulé et ne disent rien du temps de calcul
- * réel.
+ * This is the only place acceptance criterion §11.4 can actually be verified:
+ * "a journey between two points of the metropolis returns a walk → bike → walk
+ * trip in under 3 seconds". The JVM tests of the algorithm use a fake engine
+ * and say nothing about real computation time.
  *
- * Les données sont des captures du 9 août 2026 : 268 stations et leur état.
+ * The data are captures from 9 August 2026: 268 stations and their state.
  */
 @RunWith(AndroidJUnit4::class)
 class JourneyPlannerOnDeviceTest {
@@ -44,10 +43,10 @@ class JourneyPlannerOnDeviceTest {
     /** Place du Théâtre, Lille. */
     private val lilleCentre = Coordinates(50.6383, 3.0640)
 
-    /** Parc Barbieux, Roubaix — huit kilomètres au nord-est. */
+    /** Parc Barbieux, Roubaix — eight kilometres to the north-east. */
     private val roubaix = Coordinates(50.6805, 3.1620)
 
-    /** Gare de Villeneuve-d'Ascq Pont de Bois, à l'est. */
+    /** Villeneuve-d'Ascq Pont de Bois station, to the east. */
     private val villeneuveDAscq = Coordinates(50.6270, 3.1400)
 
     @Before
@@ -56,8 +55,8 @@ class JourneyPlannerOnDeviceTest {
         val testAssets = InstrumentationRegistry.getInstrumentation().context.assets
 
         val datasets = DatasetStore(target, Dispatchers.IO)
-        // Les jeux sont rangés par réseau : le graphe du test va dans le sien,
-        // pour ne pas se mêler aux données d'une ville installée.
+        // The sets are stored per network: the test's graph goes into its own,
+        // so as not to mingle with an installed city's data.
         datasets.useCity(TEST_CITY)
         val graph = checkNotNull(datasets.directoryOf(DatasetKind.Routing)).resolve(GRAPH_FILE)
         if (!graph.isFile) {
@@ -89,9 +88,9 @@ class JourneyPlannerOnDeviceTest {
 
     @Test
     fun composes_a_complete_journey_in_under_three_seconds() = runBlocking {
-        // Un premier appel amorce les caches du moteur ; c'est le second qui
-        // reflète ce que vit l'utilisateur, dont l'application aura déjà
-        // affiché la carte.
+        // A first call primes the engine's caches; it is the second that
+        // reflects what the user experiences, whose application will already
+        // have drawn the map.
         planner.plan(lilleCentre, roubaix, stations)
 
         lateinit var plan: JourneyPlan
@@ -99,18 +98,18 @@ class JourneyPlannerOnDeviceTest {
             plan = planner.plan(lilleCentre, villeneuveDAscq, stations)
         }
 
-        // La mesure est journalisée : un test qui se contente de comparer à
-        // un seuil ne dit pas de combien on est passé, et c'est justement ce
-        // qu'on veut surveiller au fil des versions.
-        Log.i(TAG, "trajet complet composé en $elapsed ms")
+        // The measurement is logged: a test that merely compares against a
+        // threshold does not say by how much it passed, and that is precisely
+        // what we want to watch across releases.
+        Log.i(TAG, "complete journey composed in $elapsed ms")
 
-        assertTrue("aucun trajet trouvé : $plan", plan is JourneyPlan.Found)
-        assertTrue("trop lent : $elapsed ms", elapsed < BUDGET_MILLIS)
+        assertTrue("no journey found: $plan", plan is JourneyPlan.Found)
+        assertTrue("too slow: $elapsed ms", elapsed < BUDGET_MILLIS)
     }
 
     @Test
     fun the_chosen_journey_has_a_bike_at_the_origin_and_a_dock_at_the_end() = runBlocking {
-        // Critère d'acceptation §11.5.
+        // Acceptance criterion §11.5.
         val plan = planner.plan(lilleCentre, roubaix, stations) as JourneyPlan.Found
 
         assertTrue(
@@ -131,12 +130,12 @@ class JourneyPlannerOnDeviceTest {
         assertTrue(TravelMode.Walking == best.walkToStation.mode)
         assertTrue(TravelMode.Cycling == best.ride.mode)
         assertTrue(TravelMode.Walking == best.walkToDestination.mode)
-        // Les marches d'accès doivent rester des marches d'accès.
+        // The access walks must stay access walks.
         assertTrue(
             "marche d'accès démesurée : ${best.walkToStation.distanceMetres} m",
             best.walkToStation.distanceMetres < 2_000,
         )
-        assertTrue("trajet à vélo vide", best.ride.distanceMetres > 500)
+        assertTrue("empty bike leg", best.ride.distanceMetres > 500)
     }
 
     @Test
@@ -145,22 +144,22 @@ class JourneyPlannerOnDeviceTest {
 
         val pairs = (listOf(plan.best) + plan.alternatives)
             .map { it.departureStation.id to it.arrivalStation.id }
-        assertTrue("alternatives en double : $pairs", pairs.size == pairs.toSet().size)
+        assertTrue("duplicate alternatives: $pairs", pairs.size == pairs.toSet().size)
     }
 
     private fun <T> Outcome<T>.orFail(): T = when (this) {
         is Outcome.Success -> value
-        is Outcome.Failure -> throw AssertionError("capture illisible : $error")
+        is Outcome.Failure -> throw AssertionError("unreadable capture: $error")
     }
 
     private companion object {
         const val TAG = "RoueLibrePerf"
         const val GRAPH_FILE = "E0_N50.rd5"
 
-        /** Réseau propre au test, pour n'effacer aucune donnée installée. */
+        /** A network of the test's own, so as to erase no installed data. */
         const val TEST_CITY = "reseau-de-test"
 
-        /** Le budget du SPEC §6, avec la marge d'un émulateur. */
+        /** The budget of SPEC §6, with an emulator's margin. */
         const val BUDGET_MILLIS = 3_000L
     }
 }

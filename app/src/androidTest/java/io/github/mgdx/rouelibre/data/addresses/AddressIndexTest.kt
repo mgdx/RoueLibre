@@ -24,17 +24,17 @@ import org.junit.runner.RunWith
 import java.io.File
 
 /**
- * Éprouve la recherche d'adresses sur le SQLite d'Android, pas sur celui de la
- * machine de développement.
+ * Exercises address search on Android's SQLite, not on the development
+ * machine's.
  *
- * C'est tout l'intérêt de ce test : le SPEC §4.3 impose de vérifier que la
- * version de FTS retenue existe réellement sur un appareil à l'API 26, et que
- * le *tokenizer* choisi y est présent. Un index qui se construit très bien
- * sous Python peut être illisible sur un téléphone.
+ * That is the whole point of this test: SPEC §4.3 requires checking that the
+ * chosen FTS version really exists on an API 26 device, and that the chosen
+ * tokenizer is present there. An index that builds perfectly well under Python
+ * can be unreadable on a phone.
  *
- * L'index est fabriqué ici plutôt que copié depuis les ressources : le vrai
- * fichier pèse six mégaoctets et l'essentiel se prouve sur une douzaine de
- * lignes, tant que le schéma est celui du script de génération.
+ * The index is built here rather than copied from the resources: the real file
+ * weighs six megabytes, and what matters is proven on a dozen rows, as long as
+ * the schema is the generation script's.
  */
 @RunWith(AndroidJUnit4::class)
 class AddressIndexTest {
@@ -43,19 +43,19 @@ class AddressIndexTest {
     private lateinit var datasets: DatasetStore
     private lateinit var indexFile: File
 
-    /** Le centre de Lille, point de référence du classement. */
+    /** The centre of Lille, the ranking's reference point. */
     private val centre = Coordinates(50.6370, 3.0630)
 
     @Before
     fun buildIndex() {
         val target = InstrumentationRegistry.getInstrumentation().targetContext
         datasets = DatasetStore(target, Dispatchers.IO)
-        // Une ville à soi : les jeux étant rangés par réseau, le test écrit
-        // dans un répertoire qui n'appartient à aucune ville réelle. Un test
-        // qui efface les données de celui qui l'exécute est un mauvais voisin.
+        // A city of its own: the sets being stored per network, the test
+        // writes into a directory belonging to no real city. A test that erases
+        // the data of whoever runs it is a bad neighbour.
         datasets.useCity(TEST_CITY)
         indexFile = checkNotNull(datasets.directoryOf(DatasetKind.Addresses))
-            // L'index a un nom canonique, contrairement au graphe de routage.
+            // The index has a canonical name, unlike the routing graph.
             .resolve(checkNotNull(DatasetKind.Addresses.fileName))
         indexFile.delete()
         writeIndex(indexFile)
@@ -78,15 +78,15 @@ class AddressIndexTest {
 
     @Test
     fun finds_a_street_while_typing() = runBlocking {
-        // La correspondance par préfixe est ce qui rend la liste vivante :
-        // « nation » doit déjà désigner la rue Nationale.
+        // Prefix matching is what makes the list feel alive: "nation" must
+        // already designate the rue Nationale.
         assertEquals("Rue Nationale", search("rue nation").first().streetName)
     }
 
     @Test
     fun recovers_from_a_typo() = runBlocking {
-        // Second étage : l'index plein texte ne rend rien, le parcours par
-        // distance d'édition retrouve la rue (SPEC §4.3, critère 11).
+        // Second stage: the full-text index returns nothing, and the
+        // edit-distance scan finds the street (SPEC §4.3, criterion 11).
         val results = search("gambeta")
 
         assertTrue(
@@ -109,8 +109,8 @@ class AddressIndexTest {
 
     @Test
     fun interpolates_a_number_absent_from_the_index() = runBlocking {
-        // Le 16 n'est pas indexé : il doit tomber entre le 14 et le 18, et pas
-        // au milieu de la rue.
+        // Number 16 is not indexed: it must land between 14 and 18, and not in
+        // the middle of the street.
         val result = search("16 rue Nationale").first()
 
         assertEquals(16, result.houseNumber)
@@ -124,20 +124,19 @@ class AddressIndexTest {
 
     @Test
     fun ranks_by_proximity_at_equal_match() = runBlocking {
-        // Deux « rue Nationale » : celle de Lille est à quelques centaines de
-        // mètres du point de référence, celle de Roubaix à une douzaine de
-        // kilomètres.
+        // Two "rue Nationale": the one in Lille is a few hundred metres from
+        // the reference point, the one in Roubaix a dozen kilometres away.
         assertEquals("Lille", search("rue nationale").first().city)
     }
 
     @Test
     fun finds_a_street_by_its_absorbed_municipality_name() = runBlocking {
-        // La Base Adresse Nationale rattache Lomme et Hellemmes à Lille. Leurs
-        // habitants, eux, tapent le nom de leur commune.
+        // The national address base attaches Lomme and Hellemmes to Lille.
+        // Their residents, for their part, type their own municipality's name.
         val result = search("chemin de fer lomme").first()
 
         assertEquals("Rue du Chemin de Fer", result.streetName)
-        // Et c'est ce nom-là qui s'affiche : le code postal est celui de Lomme.
+        // And that is the name shown: the postcode is Lomme's.
         assertEquals("Lomme", result.city)
     }
 
@@ -152,13 +151,13 @@ class AddressIndexTest {
         indexFile.delete()
 
         val outcome = index.search("gambetta", centre)
-        assertTrue("échec attendu, obtenu : $outcome", outcome is Outcome.Failure)
+        assertTrue("expected a failure, got: $outcome", outcome is Outcome.Failure)
     }
 
     private suspend fun search(query: String): List<AddressResult> =
         when (val outcome = index.search(query, centre)) {
             is Outcome.Success -> outcome.value
-            is Outcome.Failure -> throw AssertionError("recherche en échec : ${outcome.error}")
+            is Outcome.Failure -> throw AssertionError("search failed: ${outcome.error}")
         }
 
     private fun normalizer(context: Context): AddressNormalizer {
@@ -167,16 +166,16 @@ class AddressIndexTest {
             .use { it.readText() }
         return when (val outcome = AddressNormalizerReader.read(document)) {
             is Outcome.Success -> outcome.value
-            is Outcome.Failure -> throw AssertionError("règles illisibles : ${outcome.error}")
+            is Outcome.Failure -> throw AssertionError("unreadable rules: ${outcome.error}")
         }
     }
 
     /**
-     * Écrit un index minuscule, au schéma exact du script de génération.
+     * Writes a tiny index, to the generation script's exact schema.
      *
-     * Toute divergence avec `tools/build_address_index.py` rendrait ce test
-     * rassurant et faux : c'est le schéma qui est éprouvé ici autant que le
-     * code qui le lit.
+     * Any divergence from `tools/build_address_index.py` would make this test
+     * reassuring and wrong: it is the schema that is exercised here as much as
+     * the code that reads it.
      */
     private fun writeIndex(file: File) {
         val database = SQLiteDatabase.openOrCreateDatabase(file, null)
@@ -221,8 +220,8 @@ class AddressIndexTest {
                 50.6330,
                 3.0600,
             )
-            // Une adresse que la Base Adresse Nationale rattache à Lille, mais
-            // que son habitant situe à Lomme.
+            // An address the national address base attaches to Lille, but
+            // which its resident places in Lomme.
             addStreet(
                 it,
                 5,
@@ -235,7 +234,7 @@ class AddressIndexTest {
                 formerCity = "Lomme",
             )
 
-            // Numéros de la rue Nationale de Lille : le 16 manque exprès.
+            // Numbers of Lille's rue Nationale: 16 is missing on purpose.
             addNumber(it, 2, 12, NUMBER_12)
             addNumber(it, 2, 14, NUMBER_14)
             addNumber(it, 2, 18, NUMBER_18)
@@ -290,14 +289,14 @@ class AddressIndexTest {
     private companion object {
         const val DELTA_SCALE = 100_000.0
 
-        /** Réseau propre au test, pour n'effacer aucune donnée installée. */
+        /** A network of the test's own, so as to erase no installed data. */
         const val TEST_CITY = "reseau-de-test"
 
         val NUMBER_12 = Coordinates(50.6340, 3.0550)
         val NUMBER_14 = Coordinates(50.6345, 3.0552)
         val NUMBER_18 = Coordinates(50.6360, 3.0558)
 
-        /** Points représentatifs des voies, pour calculer les deltas. */
+        /** The streets' representative points, used to compute the deltas. */
         val STREET_POSITIONS = mapOf(2L to Coordinates(50.6355, 3.0555))
     }
 }

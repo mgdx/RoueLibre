@@ -18,17 +18,15 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Éprouve BRouter là où il tournera vraiment : sur Android.
+ * Exercises BRouter where it will really run: on Android.
  *
- * Ce test existe parce que le reste de la chaîne ne prouve rien de ce qui
- * compte ici. Que le sous-module compile ne dit pas que son code s'exécute
- * sous ART ; qu'il calcule un itinéraire sur la machine de développement ne
- * dit pas qu'il retrouvera ses fichiers dans le stockage privé d'une
- * application.
+ * This test exists because the rest of the chain proves nothing about what
+ * matters here. That the submodule compiles does not say its code runs under
+ * ART; that it computes a route on the development machine does not say it will
+ * find its files inside an application's private storage.
  *
- * Le graphe de routage est dans les ressources du test, jamais dans celles de
- * l'application : le SPEC §5 exige qu'il soit téléchargé ou importé, pas
- * embarqué.
+ * The routing graph lives in the test's resources, never in the application's:
+ * SPEC §5 requires it to be downloaded or imported, not embedded.
  */
 @RunWith(AndroidJUnit4::class)
 class OfflineRouterTest {
@@ -36,10 +34,10 @@ class OfflineRouterTest {
     private lateinit var router: OfflineRouter
     private lateinit var datasets: DatasetStore
 
-    /** Grand-Place de Lille. */
+    /** The Grand-Place in Lille. */
     private val lilleCentre = Coordinates(50.6371, 3.0630)
 
-    /** Grand-Place de Roubaix, à une douzaine de kilomètres. */
+    /** The Grand-Place in Roubaix, a dozen kilometres away. */
     private val roubaixCentre = Coordinates(50.6900, 3.1750)
 
     @Before
@@ -48,8 +46,8 @@ class OfflineRouterTest {
         val testAssets = InstrumentationRegistry.getInstrumentation().context.assets
 
         datasets = DatasetStore(target, Dispatchers.IO)
-        // Les jeux sont rangés par réseau : le graphe du test va dans le sien,
-        // pour ne pas se mêler aux données d'une ville installée.
+        // The sets are stored per network: the test's graph goes into its own,
+        // so as not to mingle with an installed city's data.
         datasets.useCity(TEST_CITY)
         val segments = checkNotNull(datasets.directoryOf(DatasetKind.Routing))
         val graph = segments.resolve(GRAPH_FILE)
@@ -69,14 +67,14 @@ class OfflineRouterTest {
             ?: throw AssertionError("unexpected failure: $result")
 
         assertEquals(TravelMode.Cycling, leg.mode)
-        // À vol d'oiseau il y a environ 10 km ; un trajet praticable fait
-        // nécessairement plus, sans pouvoir doubler la distance.
+        // As the crow flies it is about 10 km; a usable route is necessarily
+        // longer, without being able to double the distance.
         assertTrue(
             "distance invraisemblable : ${leg.distanceMetres} m",
             leg.distanceMetres in 10_000..20_000,
         )
-        assertTrue("durée invraisemblable : ${leg.duration}", leg.duration.inWholeMinutes in 20..90)
-        assertTrue("tracé trop pauvre : ${leg.geometry.size} points", leg.geometry.size > 100)
+        assertTrue("implausible duration: ${leg.duration}", leg.duration.inWholeMinutes in 20..90)
+        assertTrue("track too sparse: ${leg.geometry.size} points", leg.geometry.size > 100)
     }
 
     @Test
@@ -101,9 +99,8 @@ class OfflineRouterTest {
         val leg = (result as? RouteResult.Success)?.leg
             ?: throw AssertionError("unexpected failure: $result")
 
-        // Le moteur accroche les extrémités au nœud praticable le plus proche ;
-        // quelques dizaines de mètres d'écart sont normales, pas des
-        // kilomètres.
+        // The engine snaps the ends to the nearest usable node; a few tens of
+        // metres of difference are normal, kilometres are not.
         assertTrue(
             "le tracé ne part pas du point demandé",
             leg.geometry.first().distanceInMetresTo(lilleCentre) < TOLERANCE_METRES,
@@ -116,7 +113,7 @@ class OfflineRouterTest {
 
     @Test
     fun a_point_outside_the_box_is_reported_and_does_not_crash() = runBlocking {
-        // Bruxelles : hors du graphe téléchargé.
+        // Brussels: outside the downloaded graph.
         val outside = Coordinates(50.8467, 4.3525)
 
         val result = router.route(lilleCentre, outside, TravelMode.Cycling)
@@ -134,7 +131,7 @@ class OfflineRouterTest {
     private companion object {
         const val GRAPH_FILE = "E0_N50.rd5"
 
-        /** Réseau propre au test, pour n'effacer aucune donnée installée. */
+        /** A network of the test's own, so as to erase no installed data. */
         const val TEST_CITY = "reseau-de-test"
         const val TOLERANCE_METRES = 200.0
     }

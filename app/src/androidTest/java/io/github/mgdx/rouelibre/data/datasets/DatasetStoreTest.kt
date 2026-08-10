@@ -16,13 +16,13 @@ import org.junit.runner.RunWith
 import java.io.File
 
 /**
- * Éprouve l'installation des jeux de données (SPEC §4.4).
+ * Exercises the installation of the datasets (SPEC §4.4).
  *
- * Le cas qui justifie ce test à lui seul : **le graphe de routage doit garder
- * son nom d'origine.** BRouter déduit le nom du segment des coordonnées
- * cherchées — `E0_N50.rd5` pour Lille — puis l'ouvre directement. Un graphe
- * renommé à l'installation reste sur le disque sans jamais être lu, et le
- * moteur répond « aucun itinéraire » sans que rien n'indique la cause.
+ * The case that justifies this test on its own: **the routing graph must keep
+ * its original name.** BRouter derives the segment's name from the coordinates
+ * it is looking for — `E0_N50.rd5` for Lille — then opens it directly. A graph
+ * renamed at installation stays on disk without ever being read, and the engine
+ * answers "no route" with nothing to point at the cause.
  */
 @RunWith(AndroidJUnit4::class)
 class DatasetStoreTest {
@@ -34,8 +34,8 @@ class DatasetStoreTest {
     fun prepare() {
         val target = InstrumentationRegistry.getInstrumentation().targetContext
         store = DatasetStore(target, Dispatchers.IO)
-        // Les jeux sont rangés par ville : sans ville en service, il n'y a
-        // aucun répertoire où écrire.
+        // The sets are stored per city: without a city in service there is no
+        // directory to write into.
         store.useCity(TEST_CITY)
         incoming = File(target.cacheDir, "incoming").apply { mkdirs() }
     }
@@ -53,7 +53,7 @@ class DatasetStoreTest {
 
         val result = store.importFrom(DatasetKind.Routing, Uri.fromFile(source))
 
-        assertTrue("import refusé : $result", result is DatasetImportResult.Installed)
+        assertTrue("import refused: $result", result is DatasetImportResult.Installed)
         val installed = store.directoryOf(DatasetKind.Routing)?.listFiles().orEmpty()
         assertEquals(
             listOf("E0_N50.rd5"),
@@ -63,9 +63,9 @@ class DatasetStoreTest {
 
     @Test
     fun a_sqlite_file_offered_as_a_graph_is_refused() = runBlocking {
-        // L'erreur la plus probable de l'import manuel : désigner le mauvais
-        // fichier. Un fond de carte pris pour un graphe doit être dit tout de
-        // suite, pas découvert au premier itinéraire.
+        // The likeliest mistake of a manual import: picking the wrong file. A
+        // base map taken for a graph has to be said at once, not discovered at
+        // the first journey.
         val source = File(incoming, "tiles.mbtiles").apply {
             writeBytes(SQLITE_HEADER + "et la suite".toByteArray())
         }
@@ -78,9 +78,9 @@ class DatasetStoreTest {
 
     @Test
     fun one_city_s_data_does_not_appear_in_another() = runBlocking {
-        // Deux villes cohabitent sur l'appareil : passer de l'une à l'autre ne
-        // doit ni mélanger leurs fichiers, ni faire croire que la seconde est
-        // installée parce que la première l'est (SPEC §11.9).
+        // Two cities coexist on the device: moving from one to the other must
+        // neither mix their files nor suggest the second is installed because
+        // the first is (SPEC §11.9).
         store.importFrom(DatasetKind.Routing, Uri.fromFile(fileNamed("E0_N50.rd5", "segment")))
         assertTrue(store.fileOf(DatasetKind.Routing) != null)
 
@@ -115,14 +115,14 @@ class DatasetStoreTest {
         File(incoming, name).apply { writeText(content) }
 
     private companion object {
-        /** Identifiants de réseau propres au test, pour ne rien effacer d'installé. */
+        /** Network identifiers of the test's own, so as to erase nothing installed. */
         const val TEST_CITY = "reseau-de-test"
         const val OTHER_TEST_CITY = "autre-reseau-de-test"
 
         /**
-         * Les seize premiers octets de tout fichier SQLite, terminateur nul
-         * compris. L'en-tête est écrit à la main plutôt que par une vraie
-         * base : c'est tout ce que la validation lit.
+         * The first sixteen bytes of every SQLite file, terminating NUL
+         * included. The header is written by hand rather than by a real
+         * database: it is all the validation reads.
          */
         val SQLITE_HEADER: ByteArray =
             "SQLite format 3\u0000".toByteArray(Charsets.US_ASCII)

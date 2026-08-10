@@ -1,6 +1,6 @@
-// `Criteria` et `addTestProvider` n'ont de signature moderne qu'à partir de
-// l'API 30 ; l'application vise l'API 26, c'est donc l'ancienne qu'il faut
-// éprouver.
+// `Criteria` and `addTestProvider` only have a modern signature from API 30
+// on; the application targets API 26, so it is the old one that has to be
+// exercised.
 @file:Suppress("DEPRECATION")
 
 package io.github.mgdx.rouelibre.data.location
@@ -25,24 +25,23 @@ import org.junit.runner.RunWith
 import java.time.Duration
 
 /**
- * Éprouve la lecture de la position avec un fournisseur simulé.
+ * Exercises reading the position with a mock provider.
  *
- * Un fournisseur de test, et non le vrai GPS : un test ne peut pas dépendre de
- * l'endroit où se trouve l'appareil, ni attendre qu'il voie le ciel. La
- * position injectée est au centre de Lille, dans l'emprise des données.
+ * A test provider, and not the real GPS: a test cannot depend on where the
+ * device happens to be, nor wait for it to see the sky. The injected position
+ * is in the centre of Lille, inside the data's bounding box.
  *
- * Simuler une position demande deux autorisations, et les deux sont des
- * conditions de l'appareil, pas du code :
+ * Mocking a position needs two permissions, and both are conditions of the
+ * device rather than of the code:
  *
  * ```
  * adb shell appops set io.github.mgdx.rouelibre.debug android:mock_location allow
  * ```
  *
- * puis, dans les options pour développeurs, **« Application de position
- * fictive » → Roue Libre**. Éprouvé sur un Android 16 : sans ce second réglage,
- * le système accepte `addTestProvider` et `setTestProviderLocation` sans erreur,
- * mais ne livre la position à personne. Le test s'abstient alors plutôt que
- * d'échouer.
+ * then, in the developer options, **"Mock location app" → Roue Libre**. Proven
+ * on an Android 16: without that second setting the system accepts
+ * `addTestProvider` and `setTestProviderLocation` without error, but delivers
+ * the position to nobody. The test then abstains rather than failing.
  */
 @RunWith(AndroidJUnit4::class)
 class DeviceLocationTest {
@@ -51,7 +50,7 @@ class DeviceLocationTest {
     private lateinit var deviceLocation: DeviceLocation
     private var providerAdded = false
 
-    /** Grand-Place de Lille. */
+    /** The Grand-Place in Lille. */
     private val lille = Location(LocationManager.GPS_PROVIDER).apply {
         latitude = 50.6371
         longitude = 3.0630
@@ -84,11 +83,11 @@ class DeviceLocationTest {
         } catch (_: SecurityException) {
             false
         }
-        assumeTrue("simulation de position non autorisée sur cet appareil", providerAdded)
+        assumeTrue("mock location is not permitted on this device", providerAdded)
 
-        // Le système peut accepter le fournisseur sans rien en livrer : c'est
-        // le cas tant que l'application n'est pas désignée « application de
-        // position fictive » dans les options pour développeurs.
+        // The system may accept the provider without delivering anything from
+        // it: that is the case until the application is named as the "mock
+        // location app" in the developer options.
         manager.setTestProviderLocation(LocationManager.GPS_PROVIDER, lille)
         assumeTrue(
             "désigne Roue Libre comme application de position fictive " +
@@ -108,7 +107,7 @@ class DeviceLocationTest {
         manager.setTestProviderLocation(LocationManager.GPS_PROVIDER, lille)
 
         val position = deviceLocation.lastKnown()
-        assertNotNull("position simulée non lue", position)
+        assertNotNull("mock position not read", position)
 
         assertEquals(lille.latitude, position!!.latitude, TOLERANCE)
         assertEquals(lille.longitude, position.longitude, TOLERANCE)
@@ -116,14 +115,14 @@ class DeviceLocationTest {
 
     @Test
     fun waits_for_a_fix_when_no_position_is_known() = runBlocking {
-        // Aucun relevé n'a encore été publié : `current` doit en demander un,
-        // et le premier fournisseur qui répond l'emporte.
+        // No fix has been published yet: `current` must ask for one, and the
+        // first provider to answer wins.
         val awaited = async { deviceLocation.current(Duration.ofSeconds(10)) }
         delay(FIX_DELAY_MILLIS)
         manager.setTestProviderLocation(LocationManager.GPS_PROVIDER, lille)
 
         val position = awaited.await()
-        assertNotNull("aucun relevé obtenu", position)
+        assertNotNull("no fix obtained", position)
         assertEquals(lille.latitude, position!!.latitude, TOLERANCE)
     }
 
@@ -131,8 +130,8 @@ class DeviceLocationTest {
     fun returns_nothing_when_the_provider_is_off() {
         manager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, false)
 
-        // Les autres fournisseurs de l'appareil restent éventuellement actifs :
-        // ce qui est vérifié ici est qu'un fournisseur éteint n'est pas lu.
+        // The device's other providers may well stay active: what is verified
+        // here is that a provider switched off is not read.
         assertNull(
             "un fournisseur éteint ne doit rien rendre",
             runCatching { manager.getLastKnownLocation(LocationManager.GPS_PROVIDER) }.getOrNull(),
@@ -140,10 +139,10 @@ class DeviceLocationTest {
     }
 
     private companion object {
-        /** Un cent-millième de degré : un mètre environ. */
+        /** A hundred-thousandth of a degree: about a metre. */
         const val TOLERANCE = 1e-5
 
-        /** Délai avant de publier le relevé, pour que l'attente ait lieu. */
+        /** The delay before publishing the fix, so the wait actually happens. */
         const val FIX_DELAY_MILLIS = 500L
     }
 }
