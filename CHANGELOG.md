@@ -31,6 +31,30 @@ also records what has no visible effect.
 
 ### Changed
 
+- **The station list starts with the nearest station**, and each row says how
+  far it is, when the position is known and falls inside the served city.
+  Elsewhere — position unknown, refused, or another conurbation — the
+  alphabetical order stays.
+- **"Places" became "Places libres"**, on the toggle and under the count: what
+  is being counted is free docks, not places in the general sense.
+- **Touching a station on the map brings it to the middle of what stays
+  visible**, above the detail sheet, at the same zoom.
+- **A network is named with its conurbation**: "V'lille — Lille". The city
+  comes from the configuration, and the catalogue carries it.
+- **One minute to return a bike**, two to take one (`SPEC.md` §6). The two
+  gestures are not the same one.
+- **The journey screen shows the shape of a journey**: walk, station, ride,
+  station, walk.
+- **The place icon used in lists and buttons is a line icon**, the size of the
+  others. The map's two-tone pin stays on the map, where its size is legible.
+- **The map opens on the user's position** when the system already holds one
+  and it falls inside the served city. No fix is requested and no permission
+  asked: what one came to see is the stations around oneself, not the middle of
+  the conurbation.
+- **The availability source is described like the others** in "about" — by what
+  the data is and where it comes from, in GBFS, indexed on
+  transport.data.gouv.fr. The producer's credit follows it, as the ODbL licence
+  of the feeds requires (`SPEC.md` §4.5).
 - **The application no longer assumes a default city.** It used to serve one
   compiled into the APK; it now serves the one it has been given, and says so
   until it has been.
@@ -58,6 +82,19 @@ also records what has no visible effect.
   stored without a city; there is no way to guess which, and attaching it at
   random would show one city's map under another's name. It has to be installed
   again after choosing a city.
+- **An installed city still offered its data "to download".** The row announced
+  the weight to fetch above the line saying it was already there. Once
+  installed, it shows the number of stations alone.
+- **The theme chosen was forgotten as soon as one left the screen.** Applying a
+  theme has the activity rebuilt, which cancelled the coroutine writing the
+  choice down: it was applied but never saved. Written first, applied second.
+- **Replaying the presentation left two screens on top of one another.** From
+  "about", the sequence kept that screen on the back stack; the first Back drew
+  it over the screen just opened. Coming out of the presentation now starts
+  from a clean stack, with the map underneath.
+- **The two journey fields were not aligned.** The second carried a start
+  margin on top of a constraint that already positioned it, and sat sixteen
+  density-independent pixels to the right of the first.
 
 ## [0.1.0-alpha]
 
