@@ -8,10 +8,11 @@ operational reminder: where the two disagree, `SPEC.md` wins.
 
 ## The project in one sentence
 
-**Roue Libre** — a free Android application showing V'lille bike-share stations
-(Lille metropolitan area) on a map, and computing a door-to-door
-walk → bike → walk journey. Everything works offline except real-time bike
-availability.
+**Roue Libre** — a free Android application showing bike-share stations on a
+map and computing a door-to-door walk → bike → walk journey. It serves any
+conurbation whose network publishes its stations as open data in GBFS, several
+of them side by side, and none by default. Everything works offline except
+real-time availability.
 
 ## Absolute rules
 
@@ -22,7 +23,7 @@ availability.
    the device. Only the GBFS feed goes out on the network.
 4. **Lightness.** APK under 15 MB. Every dependency added must be justified in
    `README.md`.
-5. **Nothing specific to Lille hard-coded**: URLs, bounding box, centring and
+5. **Nothing specific to a city hard-coded**: URLs, bounding box, centring and
    network name all live in the city configuration. See `SPEC.md` §15.
 6. **Not a single hard-coded string.** Everything in `res/values/strings.xml`,
    French by default, `plurals` for agreement, positional placeholders.

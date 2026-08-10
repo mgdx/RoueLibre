@@ -10,10 +10,14 @@
 
 An Android application that lets you:
 
-1. See V'lille stations (the bike-share network of the Lille European Metropolis) on a map with their real-time availability (bikes available, free docks).
+1. See the stations of a bike-share network on a map with their real-time availability (bikes available, free docks).
 2. Compute a combined door-to-door journey: **walk → bike → walk**, automatically choosing the best departure station and the best arrival station.
 
-The application is a personal tool, plain and fast. It is not a booking application: it never talks to a V'lille user account.
+**Which network? Any that publishes its stations as open data.** The application serves every conurbation whose network publishes a GBFS feed — the international bike-share standard — and adding one is a matter of a configuration file and a data generation run, never of code (§15). Several cities live side by side in the same installation, and the user chooses which one is being served (§15.1). No city is a default, and none is privileged in the code, in the interface or in the visual identity.
+
+The figures quoted throughout this document come from the conurbations actually generated — Lille, Lyon, Paris. They are measurements, not a scope: they say what to expect of a medium-sized city and of a capital.
+
+The application is a personal tool, plain and fast. It is not a booking application: it never talks to a network's user account.
 
 ## 2. Non-negotiable constraints
 
@@ -50,20 +54,20 @@ No analytics, crash reporting or advertising library, under any pretext.
 
 All the offline datasets — tiles, routing graph, address index — share **one and the same bounding box**, defined once and for all in the generation scripts.
 
-Beware of the misreading: the Lille European Metropolis is not the city of Lille. It is a group of **95 municipalities over nearly 672 km²**, reaching the Belgian border, and including Roubaix, Tourcoing, Villeneuve-d'Ascq and Seclin as well as rural municipalities of the Weppes and the Pévèle.
+Beware of the misreading a network's name invites: it is almost never the city it is named after. A bike-share network serves a conurbation — a group of municipalities, town centres and outskirts together. The Lille one, for instance, covers **95 municipalities over nearly 672 km²**, from Roubaix and Tourcoing to rural municipalities of the Weppes; the Paris one covers 211.
 
-**The bounding box must not be the administrative boundary of the metropolis**, which would cover vast rural areas without a single station and would needlessly inflate all three datasets. It is **derived from the stations themselves**:
+**The bounding box must not be the administrative boundary of the conurbation**, which would cover vast areas without a single station and would needlessly inflate all three datasets. It is **derived from the stations themselves**:
 
 1. compute the rectangle enclosing every station present in `station_information.json`;
 2. widen it by a **3 km margin**, to cover walking legs from or towards the edge of the network and to avoid edge effects in route computation near the boundaries of the graph.
 
-This bounding box is **recomputed every time the data is regenerated**, which automatically follows extensions of the network. It is written into the city configuration file (§15) and shown in the "storage" screen. No bounding-box coordinate is hard-coded in the application.
+This bounding box is **recomputed every time the data is regenerated**, which automatically follows extensions of the network. It is written into the city configuration file (§15) and shown in the "storage" screen. No bounding-box coordinate is hard-coded in the application, and every city served has its own.
 
 A consequence to accept: outside that box, the map and route computation do not work. The application must detect this and say so clearly, never fail silently.
 
 ### 4.1 Station availability — GBFS
 
-The metropolis publishes availability in the **GBFS format** (the international bike-share standard), refreshed **every minute**.
+The networks served publish their availability in the **GBFS format** (the international bike-share standard), refreshed **every minute** as a rule. Versions 1.0, 2.x and 3.0 are all in the field and must all be read: a producer's version is its own business, not the user's.
 
 Files used:
 
@@ -76,7 +80,7 @@ Files used:
 - The `gbfs.json` URL **must not be guessed**. The agent must obtain it from the dataset page on `transport.data.gouv.fr` (the French national access point) or from MobilityData's `systems.csv` catalogue, then verify it with a real request before writing it into the code.
 - Every feed URL goes through the auto-discovery file, never hard-coded: that is the principle of GBFS and it protects against URL changes on the producer's side.
 - The `gbfs.json` URL must be **editable in the settings**. A happy consequence: the application works with any GBFS network in the world without a code change.
-- Do not use the old `vlille-realtime` APIs nor the third-party JSON wrappers found on GitHub: they are **deprecated**.
+- Do not use a network's legacy proprietary API, nor the third-party JSON wrappers found on GitHub, when a GBFS feed exists: they are **deprecated** and nobody maintains them. Lille's old `vlille-realtime` API is the example to hand.
 
 **Refresh policy:**
 
@@ -99,7 +103,7 @@ Files used:
 
 Kept, because they help you find your way:
 
-- **transport**: metro and tram stations (at every zoom), railway stations, bus stops (**from zoom 15 only**, as discreet unlabelled points — the metropolis has several thousand of them, showing them earlier would drown the map and the stations with it);
+- **transport**: metro and tram stations (at every zoom), railway stations, bus stops (**from zoom 15 only**, as discreet unlabelled points — a conurbation has several thousand of them, showing them earlier would drown the map and the stations with it);
 - **public facilities**: town halls, schools, secondary schools, universities and higher-education institutions, hospitals and clinics, post offices, libraries, media libraries, swimming pools, gymnasiums, cemeteries;
 - **visual landmarks**: monuments, churches and religious buildings, museums, theatres, belfries, statues and notable features;
 - **urban fabric**: parks and green spaces, watercourses and canals, railways, street names, municipal boundaries, names of municipalities and neighbourhoods;
@@ -114,11 +118,11 @@ The list must live in a **readable configuration file** of the generation script
 
 Address search runs **entirely on the device**. No online geocoder, no third-party request: it is the most sensitive data in the application, since it reveals where the user is going.
 
-- Source: the **Base Adresse Nationale**, freely downloadable per-department extracts.
-- **Granularity: the house number.** Some Lille thoroughfares are over a kilometre long: a single point per street would produce an error of several hundred metres, enough to designate the wrong station and therefore a wrong journey. House-number precision is a requirement, not a comfort.
+- Source: the country's open address base. For France, the **Base Adresse Nationale**, in freely downloadable per-department extracts. The script must isolate that source so another country's can take its place (§15).
+- **Granularity: the house number.** A thoroughfare is often over a kilometre long: a single point per street would produce an error of several hundred metres, enough to designate the wrong station and therefore a wrong journey. House-number precision is a requirement, not a comfort.
 - The index forms **a single downloaded package** together with the other datasets (§4.4); nothing is embedded in the APK:
   - **Streets** — one entry per street: name, municipality, postcode, representative point. Around 15,000 to 20,000 entries over the reference box, **1 to 3 MB**.
-  - **House numbers** — one entry per address, attached to a street. Around 450,000 to 550,000 entries over the reference box, **12 to 25 MB** depending on the encoding. Those figures correspond to the dense area covered by the stations; keeping all 95 municipalities of the metropolis would raise them appreciably for no real use.
+  - **House numbers** — one entry per address, attached to a street. Around 450,000 to 550,000 entries over the reference box, **12 to 25 MB** depending on the encoding. Those figures correspond to the dense area covered by the stations; keeping a conurbation's whole administrative area would raise them appreciably for no real use.
 - Encoding: do not store text per address. A house-number entry = street reference + number (integer plus an optional `bis`, `ter`, `A` suffix) + coordinates **encoded as deltas from the street's point**, on two short integers. That is how we aim for the bottom of the range rather than the top.
 - If the number typed does not exist in the index, **interpolate** between the two nearest known numbers of the same street rather than falling back on the middle of the street.
 - Also add the **points of interest useful for finding your way**: railway stations, metro stations, universities, hospitals, major squares. A few thousand extra entries, extracted from OpenStreetMap, treated as streets.
@@ -136,7 +140,7 @@ Address search runs **entirely on the device**. No online geocoder, no third-par
 
 On first launch, a screen explains clearly what is about to be downloaded, at what size, and asks for confirmation:
 
-- the metropolis's vector base map (§4.2);
+- the vector base map of the city served (§4.2);
 - routing data (§5);
 - the address index, streets and house numbers (§4.3).
 
@@ -167,7 +171,7 @@ A "storage" screen must list every dataset with its size, its date, an update bu
 
 An "about" screen must show:
 
-- the attribution and licence of the V'lille data (Lille European Metropolis);
+- the attribution and licence of the availability feed of the network served, as its configuration declares them — they change with the city;
 - "© OpenStreetMap contributors";
 - the attribution of the routing engine and its data;
 - the application's licence and the link to the repository.
@@ -234,11 +238,11 @@ No colour or size may be hard-coded in a layout: everything goes through resourc
 
 **Interface writing:** short sentences, active voice, an action bearing the same name from the button through to the confirmation. An error message says what happened and what to do, without apologising or staying vague. An empty screen is an invitation to act, not a statement of fact.
 
-**The name "V'lille" does not appear in the visual identity**: not its brand colour, not its logo, not its typeface. The application has an identity of its own — that is a portability requirement (§15) as much as trademark caution.
+**No network's name appears in the visual identity**: not its brand colour, not its logo, not its typeface. The application has an identity of its own, the same whichever city it is serving — that is a portability requirement (§15) as much as trademark caution.
 
 ### 7.1 Map (main screen)
 
-- Full-screen map centred on the Lille metropolis, or on the user's position if permission is granted.
+- Full-screen map, centred on the user's position when the system already holds one inside the city served, and on that city's configured centring otherwise.
 - One marker per station, **legible at a glance**: the colour code reflects availability (no bikes / few / fine / station out of service). Colour alone must never carry the information: add the figure or a distinct shape (accessibility, colour blindness).
 - **"Bikes" / "docks"** toggle: depending on whether the user wants to borrow or to return.
 - Marker clustering at distant zoom levels.
@@ -356,7 +360,7 @@ Every criterion must be verifiable:
 1. The application installs and works on a device without Google services.
 2. Stations appear on the map with availability consistent with the official site.
 3. **In airplane mode**, once the data is downloaded: the map displays, address search works, a complete journey computes. Only availability is frozen at the last known state, explicitly marked as stale. No blocking error.
-4. A journey between two points of the metropolis returns a walk → bike → walk trip in under 3 seconds.
+4. A journey between two points of the served area returns a walk → bike → walk trip in under 3 seconds.
 5. The proposed departure station always has at least 1 bike; the arrival station at least 1 free dock.
 6. When no nearby station has a bike, the application says so explicitly instead of proposing an impossible journey.
 7. In ordinary use, **the only network request that goes out is the GBFS feed** — to be verified with a firewall or a traffic capture. Data downloads happen only on first launch or on an explicit user action.
@@ -404,11 +408,11 @@ This project is meant to live a long time, to be taken over by contributors and 
 
 The application must be able to serve another city **without a code change**. This is a design requirement, not an intention.
 
-- **No data specific to Lille hard-coded** in the code: no URL, no bounding box, no centring coordinates, no network name. All of it lives in a **city configuration file**, single and documented.
+- **No data specific to a city hard-coded** in the code: no URL, no bounding box, no centring coordinates, no network name. All of it lives in a **city configuration file**, single and documented.
 - That file describes: network name, `gbfs.json` URL, bounding box, default centre and zoom, URLs of the datasets to download, default language.
 - Since GBFS is an international standard, most of the portability is won as soon as the URL is configurable (§4.1).
 - The **generation scripts** for the data (tiles, routing graph, address index) take the bounding box as a parameter. Producing another city's data must be a single command.
-- The vocabulary of the code and of the interface stays **generic**: "station", "bike", "network". The name "V'lille" appears only in translatable strings and in the configuration, never in a class or variable name.
+- The vocabulary of the code and of the interface stays **generic**: "station", "bike", "network". A network's name lives in its configuration alone — never in a class name, a variable or a string resource.
 - Document in `README.md` the complete procedure for deploying the application on a new city.
 - One caveat, though: the Base Adresse Nationale is French. For a foreign city, the address index would have to be regenerated from OpenStreetMap. The script must isolate that source behind a clear interface to make substitution possible.
 

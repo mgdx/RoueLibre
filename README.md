@@ -1,24 +1,29 @@
 # Roue Libre
 
 **Roue Libre** est une application Android libre pour les réseaux de vélos en
-libre-service, construite pour la métropole lilloise. Elle affiche la
-disponibilité des stations sur une carte et calcule un itinéraire porte-à-porte
-combinant la marche et le vélo. Son interface est en français, parce que ce sont
-des francophones qu'elle sert ; **la suite de ce document est en anglais**,
-comme le code.
+libre-service. Elle affiche la disponibilité des stations sur une carte et
+calcule un itinéraire porte-à-porte combinant la marche et le vélo, dans
+n'importe quelle agglomération dont le réseau publie ses stations en données
+ouvertes. Son interface est en français, parce que ce sont des francophones
+qu'elle sert ; **la suite de ce document est en anglais**, comme le code.
 
 ---
 
 ## What it is
 
-A free Android application that shows the bike-share stations of the Lille
-metropolis and computes a door-to-door **walk → bike → walk** journey, choosing
-the best pair of stations rather than the nearest one.
+A free Android application that shows bike-share stations and computes a
+door-to-door **walk → bike → walk** journey, choosing the best pair of stations
+rather than the nearest one.
+
+It serves **any conurbation whose network publishes its stations as open data**
+in the GBFS format, and several of them can live side by side on the same
+device. Three are generated today — Lille, Lyon and Paris — and adding a fourth
+is a configuration file and a data generation run, never a code change (see
+[Adding a city](#adding-a-city)). No city is a default: the application
+proposes one from your position, and you choose.
 
 The name plays on the double meaning of *libre* in French: self-service and free
-software. Nothing in the code names a particular network — serving another
-conurbation is a matter of adding a configuration file (see
-[Adding a city](#adding-a-city)).
+software.
 
 ## What sets it apart
 
@@ -231,7 +236,7 @@ and whose archive is verified by SHA-256 digest.
 
 | Source | Use | Licence |
 |---|---|---|
-| Ilevia / Métropole Européenne de Lille GBFS feed | station availability | ODbL |
+| The GBFS feed of each network served, named in its configuration | station availability | ODbL, as a rule |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) | base map, routing, landmarks | ODbL |
 | [Base Adresse Nationale](https://adresse.data.gouv.fr/) | house numbers | ODbL |
 | [BRouter](https://github.com/abrensch/brouter) | routing engine and generator | MIT |
