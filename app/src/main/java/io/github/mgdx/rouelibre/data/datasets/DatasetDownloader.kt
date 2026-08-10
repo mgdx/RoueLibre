@@ -20,37 +20,35 @@ import java.security.MessageDigest
 import kotlin.coroutines.coroutineContext
 
 /**
- * Ce qui se passe pendant un téléchargement, pour que l'écran le montre.
+ * What is happening during a download, so the screen can show it.
  *
- * @property fileName le fichier en cours.
- * @property downloadedBytes ce qui est déjà sur l'appareil, reprise comprise.
- * @property totalBytes la taille annoncée par le manifeste.
+ * @property fileName the file in progress.
+ * @property downloadedBytes what is already on the device, resumption included.
+ * @property totalBytes the size announced by the manifest.
  */
 data class DownloadProgress(val fileName: String, val downloadedBytes: Long, val totalBytes: Long)
 
 /**
- * Télécharge les jeux de données publiés (SPEC §4.4).
+ * Downloads the published datasets (SPEC §4.4).
  *
- * Trois exigences gouvernent ce fichier.
+ * Three requirements govern this file.
  *
- * **La reprise.** Un jeu pèse des dizaines de mégaoctets ; une coupure de
- * réseau au bout de trente ne doit pas obliger à tout reprendre. Le fichier
- * partiel est conservé et la requête suivante demande la suite par un en-tête
- * `Range`.
+ * **Resumption.** A dataset weighs tens of megabytes; a network cut after
+ * thirty of them must not force starting over. The partial file is kept and the
+ * next request asks for the remainder through a `Range` header.
  *
- * **La vérification.** L'empreinte annoncée par le manifeste est recalculée
- * sur ce qui a été reçu. Un fichier qui ne correspond pas est rejeté, et
- * l'installation précédente reste intacte.
+ * **Verification.** The digest announced by the manifest is recomputed over
+ * what was received. A file that does not match is rejected, and the previous
+ * installation stays untouched.
  *
- * **Rien d'automatique.** Cette classe n'est appelée que sur action explicite
- * de l'utilisateur. Une vérification périodique dessinerait un profil d'usage,
- * ce que la contrainte C3 exclut.
+ * **Nothing automatic.** This class is only called on an explicit user action.
+ * A periodic check would draw a usage profile, which constraint C3 rules out.
  *
- * @property client le client HTTP partagé de l'application.
- * @property userAgent identifie l'application et sa version, sans aucun
- *   identifiant propre à l'utilisateur ou à l'appareil.
- * @property ioDispatcher contexte d'exécution : ces transferts portent sur
- *   des dizaines de mégaoctets.
+ * @property client the application's shared HTTP client.
+ * @property userAgent identifies the application and its version, with no
+ *   identifier specific to the user or the device.
+ * @property ioDispatcher the execution context: these transfers carry tens of
+ *   megabytes.
  */
 class DatasetDownloader(
     private val client: OkHttpClient,
@@ -59,10 +57,10 @@ class DatasetDownloader(
 ) {
 
     /**
-     * Récupère et lit le manifeste de publication.
+     * Fetches and reads the release manifest.
      *
-     * @param url adresse du manifeste, celle de la configuration de ville ou
-     *   celle qu'a choisie l'utilisateur.
+     * @param url the manifest's address, either the city configuration's or the
+     *   one the user chose.
      */
     suspend fun fetchManifest(url: String): Outcome<DataManifest> = withContext(ioDispatcher) {
         when (val body = get(url)) {
@@ -85,24 +83,24 @@ class DatasetDownloader(
     } catch (_: UnknownHostException) {
         Outcome.Failure(DataError.Offline)
     } catch (error: IOException) {
-        Outcome.Failure(DataError.MalformedResponse(error.message ?: "manifeste illisible"))
+        Outcome.Failure(DataError.MalformedResponse(error.message ?: "unreadable manifest"))
     } catch (error: IllegalArgumentException) {
-        // Une URL inexploitable, saisie dans les réglages.
-        Outcome.Failure(DataError.MalformedResponse(error.message ?: "adresse invalide"))
+        // An unusable URL, typed into the settings.
+        Outcome.Failure(DataError.MalformedResponse(error.message ?: "invalid address"))
     }
 
     /**
-     * Télécharge les fichiers d'un jeu dans un répertoire de travail.
+     * Downloads a dataset's files into a working directory.
      *
-     * Rien n'est installé ici : les fichiers reçus et vérifiés sont laissés à
-     * l'appelant, qui les met en place. Le SPEC §4.4 impose d'écrire à côté,
-     * de valider, puis de remplacer — une mise à jour interrompue ne doit
-     * jamais laisser l'application inutilisable.
+     * Nothing is installed here: the files received and verified are left to
+     * the caller, who puts them in place. SPEC §4.4 requires writing beside,
+     * validating, then replacing — an interrupted update must never leave the
+     * application unusable.
      *
-     * @param dataset le jeu à prendre.
-     * @param workDirectory où déposer les fichiers reçus.
-     * @param onProgress appelé au fil du transfert, sur le fil d'appel.
-     * @return les fichiers reçus et vérifiés, ou la raison de l'échec.
+     * @param dataset the set to fetch.
+     * @param workDirectory where to drop the files received.
+     * @param onProgress called as the transfer goes, on the calling thread.
+     * @return the files received and verified, or the reason for the failure.
      */
     suspend fun download(
         dataset: ManifestDataset,
@@ -129,8 +127,8 @@ class DatasetDownloader(
         val partial = File(workDirectory, "${file.name}$PARTIAL_SUFFIX")
         val alreadyReceived = if (partial.isFile) partial.length() else 0L
 
-        // Un fichier partiel plus gros que ce qui est annoncé n'est pas une
-        // reprise possible : c'est le reste d'un autre téléchargement.
+        // A partial file larger than what is announced is not a resumable one:
+        // it is the leftover of another download.
         if (alreadyReceived > file.sizeBytes && file.sizeBytes > 0) {
             partial.delete()
         }
@@ -140,12 +138,12 @@ class DatasetDownloader(
 
         val digest = sha256Of(partial)
         if (file.sha256.isNotEmpty() && !digest.equals(file.sha256, ignoreCase = true)) {
-            // Le fichier reçu n'est pas celui annoncé : le garder pour une
-            // reprise ne ferait que répéter l'erreur.
+            // The file received is not the one announced: keeping it for a
+            // resumption would only repeat the mistake.
             partial.delete()
             return Outcome.Failure(
                 DataError.MalformedResponse(
-                    "empreinte inattendue pour ${file.name} : $digest",
+                    "unexpected digest for ${file.name}: $digest",
                 ),
             )
         }
@@ -154,20 +152,19 @@ class DatasetDownloader(
         complete.delete()
         if (!partial.renameTo(complete)) {
             return Outcome.Failure(
-                DataError.LocalStorageFailure("impossible de ranger ${file.name}"),
+                DataError.LocalStorageFailure("cannot put ${file.name} into place"),
             )
         }
         return Outcome.Success(complete)
     }
 
     /**
-     * Reçoit le fichier, en reprenant là où un transfert précédent s'est
-     * arrêté.
+     * Receives the file, resuming where a previous transfer stopped.
      *
-     * Un serveur qui ignore l'en-tête `Range` répond 200 avec le fichier
-     * entier ; il faut alors repartir de zéro plutôt que d'ajouter le début à
-     * la suite de ce qu'on avait — ce qui produirait un fichier corrompu que
-     * seule l'empreinte rattraperait.
+     * A server that ignores the `Range` header answers 200 with the whole file;
+     * we must then start from scratch rather than append the beginning to what
+     * we already had — which would produce a corrupted file that only the
+     * digest would catch.
      */
     private fun fetchInto(
         file: ManifestFile,
@@ -205,13 +202,13 @@ class DatasetDownloader(
         }
         Outcome.Success(Unit)
     } catch (_: InterruptedIOException) {
-        // Interruption volontaire ou expiration : le fichier partiel reste,
-        // c'est précisément ce qui permettra de reprendre.
+        // A deliberate interruption or an expiry: the partial file stays, which
+        // is precisely what will allow resuming.
         Outcome.Failure(DataError.Timeout)
     } catch (_: UnknownHostException) {
         Outcome.Failure(DataError.Offline)
     } catch (error: IOException) {
-        Outcome.Failure(DataError.MalformedResponse(error.message ?: "transfert interrompu"))
+        Outcome.Failure(DataError.MalformedResponse(error.message ?: "transfer interrupted"))
     }
 
     private fun sha256Of(file: File): String {
@@ -228,7 +225,14 @@ class DatasetDownloader(
     }
 
     private companion object {
-        const val PARTIAL_SUFFIX = ".partiel"
+        /**
+         * Suffix of a download in progress.
+         *
+         * It names a file in the cache directory, never anything the user
+         * reads: it follows the code into English rather than staying with the
+         * interface.
+         */
+        const val PARTIAL_SUFFIX = ".partial"
         const val COPY_BUFFER_BYTES = 1 shl 16
         const val HTTP_PARTIAL_CONTENT = 206
     }

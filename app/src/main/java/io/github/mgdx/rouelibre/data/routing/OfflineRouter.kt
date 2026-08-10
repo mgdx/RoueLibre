@@ -18,20 +18,20 @@ import java.io.File
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * Calcule les itinéraires sur l'appareil, avec BRouter (SPEC.md §5).
+ * Computes routes on the device, with BRouter (SPEC.md §5).
  *
- * BRouter est intégré comme sous-module Git et construit avec l'application :
- * l'artefact Maven que le SPEC envisageait n'est publié nulle part. Le
- * sous-module est épinglé sur une étiquette, ce que réclame la reproductibilité
- * du build F-Droid.
+ * BRouter is integrated as a Git submodule and built with the application: the
+ * Maven artifact the specification envisaged is published nowhere. The
+ * submodule is pinned to a tag, as the reproducibility of the F-Droid build
+ * requires.
  *
- * Rien ne sort sur le réseau : le graphe est un fichier installé sur
- * l'appareil, les profils sont dans l'APK.
+ * Nothing goes out on the network: the graph is a file installed on the device,
+ * the profiles are in the APK.
  *
- * @property context sert à lire les profils dans les ressources.
- * @property datasets donne accès au graphe de routage installé.
- * @property computeDispatcher contexte d'exécution. Le calcul est purement
- *   processeur et peut durer plusieurs centaines de millisecondes.
+ * @property context used to read the profiles from the resources.
+ * @property datasets gives access to the installed routing graph.
+ * @property computeDispatcher the execution context. The computation is purely
+ *   processor-bound and can last several hundred milliseconds.
  */
 class OfflineRouter(
     private val context: Context,
@@ -39,19 +39,19 @@ class OfflineRouter(
     private val computeDispatcher: CoroutineDispatcher,
 ) {
 
-    /** Les profils n'ont besoin d'être déposés qu'une fois par exécution. */
+    /** The profiles only need laying down once per run. */
     @Volatile
     private var profilesExtracted = false
 
     /**
-     * Calcule un itinéraire entre deux points.
+     * Computes a route between two points.
      *
-     * @param from point de départ.
-     * @param to point d'arrivée.
-     * @param mode à pied ou à vélo.
-     * @param timeoutMillis au-delà, le calcul est abandonné. Le SPEC §6 vise
-     *   moins de trois secondes pour l'ensemble des itinéraires d'un trajet ;
-     *   un seul segment qui s'éternise doit rendre la main.
+     * @param from the departure point.
+     * @param to the arrival point.
+     * @param mode on foot or by bike.
+     * @param timeoutMillis past this, the computation is abandoned. SPEC §6
+     *   aims for under three seconds for all the legs of a journey; a single
+     *   leg that drags on must hand back control.
      */
     suspend fun route(
         from: Coordinates,
@@ -59,8 +59,8 @@ class OfflineRouter(
         mode: TravelMode,
         timeoutMillis: Long = DEFAULT_TIMEOUT_MILLIS,
     ): RouteResult = withContext(computeDispatcher) {
-        // Sans ville active, il n'y a pas de répertoire de segments : c'est le
-        // même manque qu'un graphe absent, et le même message.
+        // Without an active city there is no segment directory: that is the
+        // same lack as a missing graph, and the same message.
         val segments = datasets.directoryOf(DatasetKind.Routing)
             ?: return@withContext RouteResult.Failure(RoutingFailure.GraphMissing)
         if (segments.listFiles()?.none { it.name.endsWith(RD5_SUFFIX) } != false) {
@@ -69,7 +69,7 @@ class OfflineRouter(
 
         val profile = prepareProfile(mode)
             ?: return@withContext RouteResult.Failure(
-                RoutingFailure.EngineFailure("profil « ${mode.profileName} » illisible"),
+                RoutingFailure.EngineFailure("profile \"${mode.profileName}\" unreadable"),
             )
 
         val routingContext = RoutingContext().apply { localFunction = profile.absolutePath }
@@ -79,7 +79,7 @@ class OfflineRouter(
             RoutingEngine(null, null, segments, waypoints, routingContext)
         } catch (error: RuntimeException) {
             return@withContext RouteResult.Failure(
-                RoutingFailure.EngineFailure(error.message ?: "moteur indisponible"),
+                RoutingFailure.EngineFailure(error.message ?: "engine unavailable"),
             )
         }
 
@@ -87,7 +87,7 @@ class OfflineRouter(
             engine.doRun(timeoutMillis)
         } catch (error: RuntimeException) {
             return@withContext RouteResult.Failure(
-                RoutingFailure.EngineFailure(error.message ?: "calcul interrompu"),
+                RoutingFailure.EngineFailure(error.message ?: "computation interrupted"),
             )
         }
 
@@ -102,15 +102,15 @@ class OfflineRouter(
     }
 
     /**
-     * Traduit un message du moteur en cause exploitable.
+     * Translates an engine message into a usable cause.
      *
-     * BRouter ne rend qu'une chaîne libre ; la reconnaître ici évite de la
-     * montrer telle quelle, en anglais et pleine de vocabulaire interne.
+     * BRouter only returns a free-form string; recognising it here avoids
+     * showing it as such, in English and full of internal vocabulary.
      */
     private fun failureOf(message: String): RoutingFailure = when {
         message.contains("timeout", ignoreCase = true) -> RoutingFailure.Timeout
-        // Le moteur emploie ces formulations quand le point tombe hors des
-        // segments chargés, ou trop loin de toute voie du graphe.
+        // The engine uses these wordings when the point falls outside the
+        // loaded segments, or too far from any way in the graph.
         message.contains("position not mapped", ignoreCase = true) ||
             message.contains("out of", ignoreCase = true) -> RoutingFailure.OutsideCoverage
         message.contains("no track found", ignoreCase = true) ||
@@ -119,15 +119,15 @@ class OfflineRouter(
     }
 
     /**
-     * Copie les profils depuis les ressources vers un répertoire lisible.
+     * Copies the profiles from the resources into a readable directory.
      *
-     * BRouter ouvre ses profils par chemin de fichier, ce qu'une ressource
-     * d'APK n'est pas. Le fichier de vocabulaire `lookups.dat` doit se trouver
-     * dans le même répertoire que le profil : c'est là que le moteur va le
-     * chercher, et sans lui aucun profil ne se compile.
+     * BRouter opens its profiles by file path, which an APK resource is not.
+     * The `lookups.dat` vocabulary file must sit in the same directory as the
+     * profile: that is where the engine looks for it, and without it no profile
+     * compiles.
      *
-     * Le sous-répertoire `profiles2` n'est pas décoratif : le moteur remonte
-     * de deux niveaux depuis le profil pour situer son répertoire de travail.
+     * The `profiles2` subdirectory is not decorative: the engine walks two
+     * levels up from the profile to locate its working directory.
      */
     private fun prepareProfile(mode: TravelMode): File? {
         val directory = File(context.filesDir, PROFILE_DIRECTORY).apply { mkdirs() }
@@ -136,13 +136,13 @@ class OfflineRouter(
     }
 
     /**
-     * Dépose vocabulaire et profils sur le disque, une fois par exécution.
+     * Lays the vocabulary and the profiles on disk, once per run.
      *
-     * Les trois fichiers sont réécrits plutôt que comparés : ils pèsent
-     * trente-six kilooctets à eux tous, et comparer leur taille demanderait
-     * `openFd`, qui échoue sur un asset compressé — ce que l'outillage Android
-     * fait de tout fichier texte. Une fois par lancement suffit largement, et
-     * cela met à jour les profils après une mise à jour de l'application.
+     * The three files are rewritten rather than compared: together they weigh
+     * thirty-six kilobytes, and comparing their size would need `openFd`, which
+     * fails on a compressed asset — which is what the Android tooling makes of
+     * any text file. Once per launch is amply enough, and it refreshes the
+     * profiles after an application update.
      */
     @Synchronized
     private fun extractProfiles(directory: File): Boolean {
@@ -164,13 +164,13 @@ class OfflineRouter(
 
     private fun waypointOf(point: Coordinates, name: String) = OsmNodeNamed().apply {
         this.name = name
-        // BRouter travaille en microdegrés entiers, décalés pour rester
-        // positifs. Le demi-microdegré ajouté est son arrondi, repris tel quel
-        // pour que nos points tombent sur les mêmes nœuds que les siens.
+        // BRouter works in integer microdegrees, offset to stay positive. The
+        // half microdegree added is its own rounding, taken as is so that our
+        // points land on the same nodes as its own.
         //
-        // Écriture par les champs et lecture par les accesseurs : un point de
-        // passage expose ses coordonnées en champs publics modifiables, un
-        // point de tracé les garde privées derrière `getILat`.
+        // Written through the fields and read through the accessors: a waypoint
+        // exposes its coordinates as mutable public fields, whereas a track
+        // node keeps them private behind `getILat`.
         ilon = ((point.longitude + 180.0) * MICRODEGREES + 0.5).toInt()
         ilat = ((point.latitude + 90.0) * MICRODEGREES + 0.5).toInt()
     }

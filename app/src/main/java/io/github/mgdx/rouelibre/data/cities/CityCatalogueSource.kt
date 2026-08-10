@@ -16,15 +16,15 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 
 /**
- * Le catalogue des villes servies, et les configurations qui vont avec.
+ * The catalogue of cities served, and the configurations that go with them.
  *
- * Deux sources, dans cet ordre : le catalogue téléchargé s'il y en a un, celui
- * livré dans l'APK sinon. Le premier permet d'ajouter une ville sans publier de
- * version ; le second garantit qu'un premier lancement sans réseau montre
- * quelque chose plutôt qu'une liste vide.
+ * Two sources, in this order: the downloaded catalogue if there is one, the one
+ * shipped in the APK otherwise. The first allows adding a city without
+ * publishing a release; the second guarantees that a first launch without a
+ * network shows something rather than an empty list.
  *
- * Rien n'est téléchargé de soi-même : [refresh] n'est appelé que par un écran,
- * sur action explicite ou à l'ouverture de la liste des villes.
+ * Nothing is downloaded of its own accord: [refresh] is only called by a
+ * screen, on an explicit action or when the city list is opened.
  */
 class CityCatalogueSource(
     private val context: Context,
@@ -37,25 +37,25 @@ class CityCatalogueSource(
         get() = File(context.filesDir, CACHE_FILE_NAME)
 
     /**
-     * Le catalogue à utiliser maintenant, sans accès réseau.
+     * The catalogue to use right now, without network access.
      *
-     * Un catalogue téléchargé illisible — fichier tronqué, format d'une version
-     * ultérieure — est ignoré au profit de celui de l'APK plutôt que de rendre
-     * l'application inutilisable.
+     * A downloaded catalogue that cannot be read — a truncated file, the format
+     * of a later version — is ignored in favour of the APK's, rather than
+     * making the application unusable.
      *
-     * @throws IllegalStateException si même le catalogue livré est illisible.
-     *   Ce n'est pas une situation utilisateur mais un défaut de fabrication.
+     * @throws IllegalStateException if even the shipped catalogue is
+     *   unreadable. That is not a user situation but a manufacturing defect.
      */
     suspend fun catalogue(): CityCatalogue = withContext(ioDispatcher) {
         downloadedCatalogue() ?: embeddedCatalogue()
     }
 
     /**
-     * Retélécharge le catalogue et le conserve s'il est lisible.
+     * Downloads the catalogue again and keeps it if it is readable.
      *
-     * @param url adresse du catalogue publié.
-     * @return le catalogue en vigueur après l'opération — celui qui vient
-     *   d'arriver, ou celui d'avant si le téléchargement a échoué.
+     * @param url the address of the published catalogue.
+     * @return the catalogue in force after the operation — the one that just
+     *   arrived, or the previous one if the download failed.
      */
     suspend fun refresh(url: String): Outcome<CityCatalogue> = withContext(ioDispatcher) {
         val request = Request.Builder()
@@ -71,9 +71,9 @@ class CityCatalogueSource(
                 when (val outcome = CityCatalogueReader.read(document)) {
                     is Outcome.Failure -> outcome
                     is Outcome.Success -> {
-                        // Écrit seulement après analyse réussie : un fichier de
-                        // cache invalide condamnerait tous les lancements
-                        // suivants à retomber sur celui de l'APK sans le dire.
+                        // Written only after a successful parse: an invalid
+                        // cache file would condemn every later launch to fall
+                        // back on the APK's without saying so.
                         writeCache(document)
                         outcome
                     }
@@ -87,15 +87,15 @@ class CityCatalogueSource(
     }
 
     /**
-     * La configuration complète de la ville [cityId].
+     * The complete configuration of the city [cityId].
      *
-     * Le catalogue situe une ville et annonce le poids de ses données ; la
-     * configuration porte le reste — attribution, cadrage, versions de format.
-     * Elle est livrée dans l'APK, une par ville connue à la publication.
+     * The catalogue locates a city and announces the weight of its data; the
+     * configuration carries the rest — attribution, framing, format versions.
+     * It ships in the APK, one per city known at publication time.
      *
-     * @return `null` si cette version de l'application ne connaît pas la ville.
-     *   Un catalogue téléchargé peut en citer de plus récentes : l'interface
-     *   doit alors inviter à mettre à jour, pas échouer sans explication.
+     * @return `null` if this version of the application does not know the city.
+     *   A downloaded catalogue may name more recent ones: the interface must
+     *   then invite an update, not fail without explanation.
      */
     suspend fun configuration(cityId: String): CityConfiguration? = withContext(ioDispatcher) {
         val document = try {
@@ -107,7 +107,7 @@ class CityCatalogueSource(
         }
         when (val outcome = CityConfigurationReader.read(document)) {
             is Outcome.Success -> outcome.value
-            is Outcome.Failure -> error("Configuration « $cityId » illisible dans l'APK")
+            is Outcome.Failure -> error("Configuration \"$cityId\" unreadable in the APK")
         }
     }
 
@@ -128,16 +128,16 @@ class CityCatalogueSource(
             .use { it.readText() }
         return when (val outcome = CityCatalogueReader.read(document)) {
             is Outcome.Success -> outcome.value
-            is Outcome.Failure -> error("Catalogue illisible dans l'APK : ${outcome.error}")
+            is Outcome.Failure -> error("Catalogue unreadable in the APK: ${outcome.error}")
         }
     }
 
     private fun writeCache(document: String) {
-        val staging = File(context.filesDir, "$CACHE_FILE_NAME.partiel")
+        val staging = File(context.filesDir, "$CACHE_FILE_NAME.partial")
         try {
             staging.writeText(document)
-            // Renommage atomique : une coupure au milieu de l'écriture laisse
-            // le catalogue précédent intact plutôt qu'un fichier à moitié écrit.
+            // Atomic rename: a cut in the middle of the write leaves the
+            // previous catalogue intact rather than a half-written file.
             if (!staging.renameTo(cacheFile)) staging.delete()
         } catch (_: IOException) {
             staging.delete()

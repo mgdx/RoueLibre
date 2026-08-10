@@ -16,36 +16,35 @@ import java.time.Duration
 import kotlin.coroutines.resume
 
 /**
- * Position de l'appareil, obtenue du système (SPEC §10).
+ * The device's position, obtained from the system (SPEC §10).
  *
- * **Le fournisseur du système, jamais les services de localisation fusionnés
- * de Google** : ceux-ci font partie des Play Services, que la contrainte C2
- * interdit. `LocationManager` est l'API de l'AOSP, présente sur un LineageOS
- * sans GApps.
+ * **The system provider, never Google's fused location services**: those are
+ * part of Play Services, which constraint C2 forbids. `LocationManager` is the
+ * AOSP API, present on a LineageOS without GApps.
  *
- * La position n'est ni écrite sur le disque, ni envoyée, ni conservée d'une
- * session à l'autre : elle vit en mémoire le temps du calcul qui la demande
- * (SPEC §2, C3).
+ * The position is neither written to disk, nor sent anywhere, nor kept from one
+ * session to the next: it lives in memory for the duration of the computation
+ * that asks for it (SPEC §2, C3).
  *
- * Aucune fonction ici ne demande de permission : c'est à l'écran qui déclenche
- * l'usage de le faire, au moment où l'utilisateur le comprend.
+ * No function here asks for a permission: that falls to the screen triggering
+ * the use, at the moment the user understands why.
  */
 class DeviceLocation(private val context: Context) {
 
     private val locationManager: LocationManager?
         get() = ContextCompat.getSystemService(context, LocationManager::class.java)
 
-    /** Vrai si l'une des deux permissions de localisation est accordée. */
+    /** True if either of the two location permissions is granted. */
     fun isPermitted(): Boolean = PERMISSIONS.any {
         ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
     }
 
     /**
-     * Vrai si l'appareil peut fournir une position.
+     * True if the device can provide a position at all.
      *
-     * Distinguer ce cas du refus de permission : « la localisation est
-     * désactivée » et « l'application n'y a pas droit » n'appellent pas le
-     * même geste de la part de l'utilisateur.
+     * This case must be told apart from a denied permission: "location is
+     * turned off" and "the application is not allowed to use it" call for
+     * different actions from the user.
      */
     fun isAvailable(): Boolean = locationManager?.let { manager ->
         USABLE_PROVIDERS.any { provider ->
@@ -54,14 +53,14 @@ class DeviceLocation(private val context: Context) {
     } ?: false
 
     /**
-     * La dernière position connue, si elle est encore fraîche.
+     * The last known position, if it is still fresh.
      *
-     * Immédiate et sans coût énergétique : c'est ce que le système a déjà.
-     * Une position d'il y a une heure ne dit plus où l'on est, d'où la limite
-     * de fraîcheur.
+     * Immediate and free of energy cost: it is what the system already holds. A
+     * position from an hour ago no longer says where we are, hence the
+     * freshness limit.
      *
-     * @return la position, ou `null` si aucune n'est connue, assez récente, ou
-     *   permise.
+     * @return the position, or `null` if none is known, recent enough, or
+     *   permitted.
      */
     fun lastKnown(): Coordinates? {
         if (!isPermitted()) return null
@@ -75,11 +74,11 @@ class DeviceLocation(private val context: Context) {
     }
 
     /**
-     * Une position fraîche, en attendant un relevé si nécessaire.
+     * A fresh position, waiting for a fix if need be.
      *
-     * @param timeout délai au-delà duquel on renonce plutôt que de faire
-     *   attendre indéfiniment sous un immeuble ou dans un parking.
-     * @return la position, ou `null` si elle n'a pas pu être obtenue.
+     * @param timeout the delay past which we give up rather than leave the user
+     *   waiting indefinitely under a building or in a car park.
+     * @return the position, or `null` if it could not be obtained.
      */
     suspend fun current(timeout: Duration = REQUEST_TIMEOUT): Coordinates? {
         lastKnown()?.let { return it }
@@ -97,25 +96,25 @@ class DeviceLocation(private val context: Context) {
         } catch (_: TimeoutCancellationException) {
             null
         } catch (_: SecurityException) {
-            // La permission a pu être retirée entre la vérification et l'appel.
+            // The permission may have been revoked between the check and the call.
             null
         }
     }
 
     /**
-     * Attend le premier relevé venu, et se désabonne quoi qu'il arrive.
+     * Waits for the first fix to arrive, and unsubscribes whatever happens.
      *
-     * **Tous les fournisseurs disponibles sont interrogés en même temps**, et
-     * le premier qui répond l'emporte. N'en interroger qu'un ne marche pas : le
-     * GPS est le plus précis mais reste muet en intérieur, où le réseau répond
-     * en une seconde. Éprouvé sur appareil — à l'intérieur, la version qui
-     * n'interrogeait que le GPS attendait dix secondes pour ne rien rendre.
+     * **Every available provider is queried at once**, and the first to answer
+     * wins. Querying only one does not work: GPS is the most accurate but stays
+     * silent indoors, where the network provider answers in a second. Proven on
+     * a device — indoors, the version that queried GPS alone waited ten seconds
+     * to return nothing.
      *
-     * Pour ce que l'application en fait — cadrer une carte, mesurer une
-     * distance à une station — le premier relevé suffit largement.
+     * For what the application does with it — framing a map, measuring a
+     * distance to a station — the first fix is amply enough.
      *
-     * `getCurrentLocation` ferait cela en une ligne, mais n'existe qu'à partir
-     * de l'API 30 ; l'application vise l'API 26.
+     * `getCurrentLocation` would do this in one line, but only exists from
+     * API 30; the application targets API 26.
      */
     private suspend fun awaitFirstFix(
         manager: LocationManager,
@@ -127,13 +126,13 @@ class DeviceLocation(private val context: Context) {
                 if (continuation.isActive) continuation.resume(location.toCoordinates())
             }
 
-            // Obligatoires avant l'API 30, où leurs implémentations par défaut
-            // n'existent pas encore.
+            // Mandatory before API 30, where their default implementations do
+            // not exist yet.
             override fun onProviderEnabled(provider: String) = Unit
 
             override fun onProviderDisabled(provider: String) = Unit
 
-            @Deprecated("Retiré à l'API 29, mais requis par l'interface avant elle.")
+            @Deprecated("Removed in API 29, but required by the interface before it.")
             override fun onStatusChanged(
                 provider: String?,
                 status: Int,
@@ -158,22 +157,22 @@ class DeviceLocation(private val context: Context) {
     } catch (_: SecurityException) {
         null
     } catch (_: IllegalArgumentException) {
-        // Un fournisseur absent de cet appareil.
+        // A provider this device does not have.
         null
     }
 
     private fun Location.toCoordinates() = Coordinates(latitude, longitude)
 
     companion object {
-        /** Les deux permissions, dans l'ordre où elles seront demandées. */
+        /** The two permissions, in the order they will be requested. */
         val PERMISSIONS: Array<String> = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,
         )
 
         /**
-         * Fournisseurs interrogés, du plus précis au moins gourmand. Aucun
-         * n'appartient aux services Google.
+         * The providers queried, from the most accurate to the least hungry.
+         * None of them belongs to the Google services.
          */
         private val USABLE_PROVIDERS = listOf(
             LocationManager.GPS_PROVIDER,
@@ -181,10 +180,10 @@ class DeviceLocation(private val context: Context) {
             LocationManager.PASSIVE_PROVIDER,
         )
 
-        /** Au-delà, une position ne dit plus où l'on se trouve. */
+        /** Past this, a position no longer says where we are. */
         private val MAXIMUM_AGE: Duration = Duration.ofMinutes(2)
 
-        /** Délai au-delà duquel on renonce à obtenir un relevé. */
+        /** The delay past which we give up on obtaining a fix. */
         private val REQUEST_TIMEOUT: Duration = Duration.ofSeconds(10)
     }
 }

@@ -82,7 +82,7 @@ class DatasetDownloaderTest {
         // Une coupure au bout de trente mégaoctets ne doit pas obliger à tout
         // reprendre : la requête suivante demande la suite.
         val alreadyReceived = 120_000
-        File(workDirectory, "$FILE_NAME.partiel").writeBytes(
+        File(workDirectory, "$FILE_NAME.partial").writeBytes(
             content.copyOfRange(0, alreadyReceived),
         )
         server.enqueue(
@@ -103,7 +103,7 @@ class DatasetDownloaderTest {
     fun `repart de zéro si le serveur ignore la reprise`() = runTest {
         // Un serveur qui répond 200 renvoie le fichier entier : l'ajouter à la
         // suite de ce qu'on avait produirait un fichier corrompu.
-        File(workDirectory, "$FILE_NAME.partiel").writeBytes(content.copyOfRange(0, 120_000))
+        File(workDirectory, "$FILE_NAME.partial").writeBytes(content.copyOfRange(0, 120_000))
         server.enqueue(MockResponse.Builder().code(200).body(okio.Buffer().write(content)).build())
 
         val outcome = downloader.download(datasetOf(sha256 = sha256Of(content)), workDirectory)
@@ -159,7 +159,7 @@ class DatasetDownloaderTest {
     )
 
     private fun partialFiles() =
-        workDirectory.listFiles().orEmpty().filter { it.name.endsWith(".partiel") }
+        workDirectory.listFiles().orEmpty().filter { it.name.endsWith(".partial") }
 
     private fun sha256Of(bytes: ByteArray): String = MessageDigest.getInstance("SHA-256")
         .digest(bytes)
