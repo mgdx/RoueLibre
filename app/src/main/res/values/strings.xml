@@ -305,6 +305,21 @@
     <string name="dataset_addresses">Index d\'adresses</string>
     <string name="dataset_addresses_purpose">Cherche les rues sans rien envoyer</string>
 
+    <!-- Mise à jour des jeux de données (SPEC §4.4). La vérification n'est
+         jamais automatique : une requête périodique dessinerait un profil
+         d'usage. -->
+    <string name="storage_check_updates">Vérifier les mises à jour</string>
+    <string name="storage_checking">Consultation du manifeste…</string>
+    <string name="storage_up_to_date">Tout est à jour.</string>
+    <!-- %1$s est une taille déjà formatée, par exemple « 42,5 Mo ». -->
+    <string name="storage_download_pending">Télécharger %1$s</string>
+    <!-- %1$s est le nom du fichier, %2$s la part reçue, %3$s la taille totale. -->
+    <string name="storage_downloading">%1$s · %2$s sur %3$s</string>
+    <!-- %1$s est le nom du jeu, %2$s la raison de l'échec. -->
+    <string name="storage_download_failed">%1$s : %2$s</string>
+    <string name="storage_wifi_warning">Tu n\'es pas en Wi-Fi. Ce téléchargement peut peser lourd sur un forfait mobile.</string>
+    <string name="dataset_update_available">Mise à jour disponible</string>
+
     <string name="dataset_absent">Pas installé</string>
     <!-- %1$s est une taille, %2$s une date. Exemple : « 35,0 Mo · 9 août 2026 ». -->
     <string name="dataset_installed">%1$s · %2$s</string>

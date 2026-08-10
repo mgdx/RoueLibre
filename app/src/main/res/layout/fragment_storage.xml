@@ -55,12 +55,61 @@
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/space_m"
         android:background="?attr/colorSurface"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/check_updates"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/storage_total"
         tools:itemCount="3"
         tools:listitem="@layout/item_dataset" />
+
+    <!--
+        Ce que le téléchargement en cours est en train de faire (SPEC §4.4).
+        Une barre déterminée, parce que la taille est connue d'avance : une
+        barre indéterminée sur quarante mégaoctets serait une non-information.
+    -->
+    <TextView
+        android:id="@+id/download_state"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/download_progress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="tiles.mbtiles · 12,4 Mo sur 35,0 Mo"
+        tools:visibility="visible" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/download_progress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_xs"
+        android:layout_marginEnd="@dimen/space_l"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/check_updates"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:trackColor="@color/trait"
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/check_updates"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_s"
+        android:layout_marginEnd="@dimen/space_l"
+        android:layout_marginBottom="@dimen/space_l"
+        android:text="@string/storage_check_updates"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/importing"

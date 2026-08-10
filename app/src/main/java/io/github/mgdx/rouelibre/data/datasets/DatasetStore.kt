@@ -168,6 +168,92 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         }
     }
 
+    /**
+     * Met en place des fichiers déjà téléchargés et vérifiés (SPEC §4.4).
+     *
+     * L'ordre est celui qu'impose le SPEC : les fichiers sont d'abord
+     * contrôlés, et l'ancienne version n'est retirée qu'ensuite. Une mise à
+     * jour interrompue ou corrompue ne doit jamais laisser l'application dans
+     * un état inutilisable.
+     *
+     * @param kind le jeu concerné.
+     * @param files les fichiers reçus, dont l'empreinte a déjà été confrontée
+     *   au manifeste par [DatasetDownloader].
+     * @param fingerprint empreinte de l'ensemble du jeu, telle que le
+     *   manifeste la décrit. C'est elle que l'on comparera à la publication
+     *   suivante pour savoir s'il y a lieu de retélécharger.
+     * @return le jeu installé, ou la raison du refus.
+     */
+    suspend fun install(
+        kind: DatasetKind,
+        files: List<File>,
+        fingerprint: String,
+    ): DatasetImportResult = withContext(ioDispatcher) {
+        if (files.isEmpty()) {
+            return@withContext DatasetImportResult.Rejected(DatasetRejection.Empty)
+        }
+
+        // Le contrôle porte sur les fichiers reçus, avant que quoi que ce soit
+        // ne soit remplacé.
+        var formatVersion: Int? = null
+        for (file in files) {
+            val inspected = try {
+                inspect(kind, file)
+            } catch (error: RuntimeException) {
+                Inspection.Invalid(
+                    DatasetRejection.WrongFormat(
+                        error.message?.take(MAX_REJECTION_DETAIL) ?: "fichier illisible",
+                    ),
+                )
+            }
+            when (inspected) {
+                is Inspection.Invalid -> return@withContext DatasetImportResult.Rejected(
+                    inspected.reason,
+                )
+
+                is Inspection.Valid -> formatVersion = inspected.formatVersion ?: formatVersion
+            }
+        }
+
+        val destination = directoryOf(kind)
+        // Les fichiers de l'ancienne version s'en vont : un segment de routage
+        // devenu obsolète mais resté en place serait lu par le moteur.
+        destination.listFiles()?.forEach { it.delete() }
+        for (file in files) {
+            val target = File(destination, file.name)
+            if (!file.renameTo(target) && !copyInto(file, target)) {
+                return@withContext DatasetImportResult.Rejected(
+                    DatasetRejection.TransferFailed("mise en place de ${file.name} impossible"),
+                )
+            }
+        }
+
+        val record = InstalledDataset(
+            kind = kind,
+            sizeBytes = destination.walkTopDown().filter { it.isFile }.sumOf { it.length() },
+            sha256 = fingerprint,
+            installedAt = Instant.now(),
+            formatVersion = formatVersion,
+        )
+        writeIndex(mutableInstalled.value + (kind to record))
+        DatasetImportResult.Installed(record)
+    }
+
+    /**
+     * Déplace un fichier quand un simple renommage ne suffit pas.
+     *
+     * Le répertoire de travail et celui d'installation peuvent se trouver sur
+     * deux volumes différents — le cache est parfois monté à part — et
+     * `renameTo` échoue alors sans rien dire.
+     */
+    private fun copyInto(source: File, target: File): Boolean = try {
+        source.copyTo(target, overwrite = true)
+        source.delete()
+        true
+    } catch (_: IOException) {
+        false
+    }
+
     /** Supprime un jeu installé. L'utilisateur doit pouvoir reprendre la place. */
     suspend fun delete(kind: DatasetKind): Unit = withContext(ioDispatcher) {
         directoryOf(kind).deleteRecursively()

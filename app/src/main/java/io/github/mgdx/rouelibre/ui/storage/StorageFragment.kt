@@ -1,5 +1,7 @@
 package io.github.mgdx.rouelibre.ui.storage
 
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -37,9 +39,16 @@ class StorageFragment : Fragment() {
 
     private var binding: FragmentStorageBinding? = null
 
+    private val container
+        get() = (requireActivity().application as RoueLibreApplication).container
+
     private val viewModel: StorageViewModel by viewModels {
         StorageViewModel.Factory(
-            (requireActivity().application as RoueLibreApplication).container.datasetStore,
+            store = container.datasetStore,
+            downloader = container.datasetDownloader,
+            manifestUrl = { container.dataManifestUrl() },
+            workDirectory = container.downloadWorkDirectory,
+            supportedFormatVersion = container.cityConfiguration.dataRelease.formatVersion,
         )
     }
 
@@ -84,8 +93,42 @@ class StorageFragment : Fragment() {
             DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL),
         )
 
+        views.checkUpdates.setOnClickListener { onUpdateButtonClicked() }
+
         observeState()
         observeMessages()
+    }
+
+    /**
+     * Le même bouton consulte puis télécharge.
+     *
+     * Deux boutons distincts obligeraient à comprendre la différence avant
+     * d'agir. Ici, la première pression demande ce qui est publié, la seconde
+     * — dont le libellé annonce alors la taille — le prend.
+     */
+    private fun onUpdateButtonClicked() {
+        val state = viewModel.state.value
+        if (state.manifest != null && state.outdated.isNotEmpty()) {
+            warnIfNotOnWifi()
+            viewModel.downloadPending()
+        } else {
+            viewModel.checkForUpdates()
+        }
+    }
+
+    /**
+     * Avertit si l'on n'est pas en Wi-Fi (SPEC §4.4).
+     *
+     * Un avertissement, pas un obstacle : quelqu'un qui a un forfait généreux
+     * n'a pas à demander la permission à son application.
+     */
+    private fun warnIfNotOnWifi() {
+        val manager = requireContext().getSystemService(ConnectivityManager::class.java) ?: return
+        val capabilities = manager.getNetworkCapabilities(manager.activeNetwork)
+        val onWifi = capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
+        if (onWifi) return
+        val views = binding ?: return
+        Snackbar.make(views.root, R.string.storage_wifi_warning, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {
@@ -112,7 +155,24 @@ class StorageFragment : Fragment() {
                 viewModel.state.collect { state ->
                     val views = binding ?: return@collect
                     adapter.submitList(state.datasets)
-                    views.importing.isVisible = state.isImporting
+                    views.importing.isVisible = state.isImporting || state.isChecking
+                    showDownload(state)
+                    views.checkUpdates.setText(
+                        if (state.manifest != null && state.outdated.isNotEmpty()) {
+                            R.string.storage_download_pending
+                        } else {
+                            R.string.storage_check_updates
+                        },
+                    )
+                    if (state.manifest != null && state.outdated.isNotEmpty()) {
+                        views.checkUpdates.text = getString(
+                            R.string.storage_download_pending,
+                            formatBytes(state.pendingBytes, requireContext().textLocale()),
+                        )
+                    }
+                    views.checkUpdates.isEnabled =
+                        !state.isChecking &&
+                        state.downloading == null
                     views.storageTotal.text = state.totalBytes
                         ?.let {
                             getString(
@@ -123,6 +183,35 @@ class StorageFragment : Fragment() {
                         ?: getString(R.string.storage_nothing_installed)
                 }
             }
+        }
+    }
+
+    /** Montre ce que le transfert en cours a déjà reçu. */
+    private fun showDownload(state: StorageUiState) {
+        val views = binding ?: return
+        val progress = state.downloading
+        views.downloadState.isVisible = progress != null || state.isChecking
+        views.downloadProgress.isVisible = progress != null
+        if (state.isChecking) {
+            // Une consultation ne dure qu'un instant, mais elle passe par le
+            // réseau : le dire évite de croire que l'appui s'est perdu.
+            views.downloadState.setText(R.string.storage_checking)
+        }
+        if (progress == null) return
+
+        val locale = requireContext().textLocale()
+        views.downloadState.text = getString(
+            R.string.storage_downloading,
+            progress.fileName,
+            formatBytes(progress.downloadedBytes, locale),
+            formatBytes(progress.totalBytes, locale),
+        )
+        views.downloadProgress.isIndeterminate = progress.totalBytes <= 0
+        if (progress.totalBytes > 0) {
+            views.downloadProgress.setProgressCompat(
+                ((progress.downloadedBytes * 100) / progress.totalBytes).toInt(),
+                true,
+            )
         }
     }
 

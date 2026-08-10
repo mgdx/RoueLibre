@@ -62,6 +62,22 @@ qui sortira sur F-Droid sera recompilé et signé là-bas.
   validé, puis mis en place — et un fichier refusé dit pourquoi.
 - **Filtre de la liste par nom de station**, insensible à la casse et aux
   accents, tolérant à l'ordre des mots, cherchant aussi le code postal.
+- **Téléchargement des jeux de données** (§4.4) : consultation du manifeste
+  publié, comparaison des empreintes, et transfert de ce qui a changé — et de
+  cela seulement. Rafraîchir l'index d'adresses n'impose donc pas de reprendre
+  les trente-cinq mégaoctets de tuiles.
+  - **Reprise** d'un transfert interrompu par en-tête `Range`, avec retour à
+    zéro si le serveur l'ignore : ajouter le début du fichier à la suite de ce
+    qu'on avait produirait un fichier corrompu.
+  - **Empreinte revérifiée** après réception. Un fichier qui ne correspond pas
+    au manifeste est rejeté et l'installation précédente reste intacte : les
+    fichiers reçus sont contrôlés avant que quoi que ce soit ne soit remplacé.
+  - Un manifeste annonçant une version de format inconnue invite à mettre
+    l'application à jour, plutôt que d'échouer plus tard à l'ouverture d'un
+    fichier.
+  - **Jamais automatique** : la vérification a lieu sur appui, depuis l'écran
+    de stockage. Une requête périodique dessinerait un profil d'usage.
+  - Avertissement hors Wi-Fi — un avertissement, pas un obstacle.
 - **Ouverture depuis une autre application** (§7.8) : l'application apparaît
   dans le sélecteur d'Android pour les schémas `geo:` et `google.navigation:`,
   et pour le partage de texte brut — le cas le plus fréquent en pratique, une

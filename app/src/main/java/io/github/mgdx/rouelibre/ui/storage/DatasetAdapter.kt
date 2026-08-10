@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.data.DatasetRejection
+import io.github.mgdx.rouelibre.core.data.DatasetUpdate
 import io.github.mgdx.rouelibre.databinding.ItemDatasetBinding
 import io.github.mgdx.rouelibre.ui.textLocale
+import io.github.mgdx.rouelibre.ui.toUserMessage
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -50,10 +52,15 @@ class DatasetAdapter(
             binding.datasetPurpose.setText(row.kind.purposeResource())
 
             val installed = row.installed
-            binding.datasetState.text = if (installed == null) {
-                context.getString(R.string.dataset_absent)
-            } else {
-                context.getString(
+            binding.datasetState.text = when {
+                installed == null -> context.getString(R.string.dataset_absent)
+
+                // Le manifeste a été consulté et annonce autre chose : le dire
+                // sur la ligne concernée, plutôt qu'en bloc (SPEC §4.4).
+                row.update == DatasetUpdate.Outdated ->
+                    context.getString(R.string.dataset_update_available)
+
+                else -> context.getString(
                     R.string.dataset_installed,
                     formatBytes(installed.sizeBytes, context.textLocale()),
                     dateFormatFor(context)
@@ -142,6 +149,22 @@ fun StorageMessage.toText(context: Context): String = when (this) {
 
     is StorageMessage.Deleted ->
         context.getString(R.string.dataset_deleted, context.getString(kind.nameResource()))
+
+    is StorageMessage.CheckFailed -> error.toUserMessage(context)
+
+    is StorageMessage.UnsupportedFormat -> context.getString(
+        R.string.dataset_rejected_version,
+        found,
+        supported,
+    )
+
+    StorageMessage.AlreadyUpToDate -> context.getString(R.string.storage_up_to_date)
+
+    is StorageMessage.DownloadFailed -> context.getString(
+        R.string.storage_download_failed,
+        context.getString(kind.nameResource()),
+        error.toUserMessage(context),
+    )
 
     is StorageMessage.Rejected -> when (val cause = reason) {
         DatasetRejection.Empty -> context.getString(R.string.dataset_rejected_empty)

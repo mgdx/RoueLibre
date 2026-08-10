@@ -18,6 +18,7 @@ import io.github.mgdx.rouelibre.core.routing.TravelMode
 import io.github.mgdx.rouelibre.data.AppPreferences
 import io.github.mgdx.rouelibre.data.StationRepository
 import io.github.mgdx.rouelibre.data.addresses.AddressIndex
+import io.github.mgdx.rouelibre.data.datasets.DatasetDownloader
 import io.github.mgdx.rouelibre.data.datasets.DatasetStore
 import io.github.mgdx.rouelibre.data.local.StationDatabase
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
@@ -25,6 +26,7 @@ import io.github.mgdx.rouelibre.data.network.GbfsRemoteSource
 import io.github.mgdx.rouelibre.data.routing.OfflineRouter
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
+import java.io.File
 import java.time.Duration
 
 private val Context.preferencesDataStore: DataStore<Preferences> by preferencesDataStore(
@@ -132,6 +134,27 @@ class AppContainer(private val context: Context) {
             )
         }
     }
+
+    /**
+     * Téléchargement des jeux de données publiés (SPEC §4.4).
+     *
+     * Jamais appelé de lui-même : seul l'écran de stockage le déclenche, sur
+     * action explicite.
+     */
+    val datasetDownloader: DatasetDownloader by lazy {
+        DatasetDownloader(httpClient, userAgent(), Dispatchers.IO)
+    }
+
+    /** Où déposer ce qui est en cours de téléchargement, avant vérification. */
+    val downloadWorkDirectory: File
+        get() = File(context.cacheDir, "telechargements")
+
+    /**
+     * L'adresse du manifeste : celle qu'a choisie l'utilisateur, sinon celle
+     * livrée avec l'application (SPEC §4.4).
+     */
+    suspend fun dataManifestUrl(): String = preferences.dataManifestUrlOverride()
+        ?: cityConfiguration.dataRelease.manifestUrl
 
     /**
      * Position de l'appareil, demandée au moment de l'usage seulement.
