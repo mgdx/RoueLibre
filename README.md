@@ -1,281 +1,275 @@
 # Roue Libre
 
-**Roue Libre** is a free and open-source Android app for public bike-share
-networks, built for the Lille metropolitan area in northern France. It shows
-station availability on a map and computes door-to-door journeys that combine
-walking and cycling. Everything runs on the device — map, address search and
-routing all work with no network at all; only live bike availability needs a
-connection. There is no Google dependency of any kind, no account, no
-telemetry. The app is aimed at a French-speaking audience, so **the rest of
-this document is in French**.
+**Roue Libre** est une application Android libre pour les réseaux de vélos en
+libre-service, construite pour la métropole lilloise. Elle affiche la
+disponibilité des stations sur une carte et calcule un itinéraire porte-à-porte
+combinant la marche et le vélo. Son interface est en français, parce que ce sont
+des francophones qu'elle sert ; **la suite de ce document est en anglais**,
+comme le code.
 
 ---
 
-## Ce que c'est
+## What it is
 
-Une application Android libre qui affiche les stations de vélos en libre-service
-de la métropole lilloise et calcule un itinéraire porte-à-porte
-**marche → vélo → marche**, en choisissant le meilleur couple de stations
-plutôt que la plus proche.
+A free Android application that shows the bike-share stations of the Lille
+metropolis and computes a door-to-door **walk → bike → walk** journey, choosing
+the best pair of stations rather than the nearest one.
 
-Le nom joue sur le double sens de « libre » : libre-service et logiciel libre.
-Rien dans le code ne nomme un réseau particulier — servir une autre
-agglomération se fait en remplaçant un fichier de configuration (voir
-[Portage vers une autre ville](#portage-vers-une-autre-ville)).
+The name plays on the double meaning of *libre* in French: self-service and free
+software. Nothing in the code names a particular network — serving another
+conurbation is a matter of adding a configuration file (see
+[Adding a city](#adding-a-city)).
 
-## Ce qui la distingue
+## What sets it apart
 
-- **Aucun service Google.** Ni Play Services, ni Firebase, ni Maps SDK. Elle
-  tourne sur LineageOS sans GApps.
-- **Aucune télémétrie, aucun mouchard, aucun identifiant unique.** Aucune
-  donnée de trajet n'est conservée : ni historique, ni positions, ni
-  destinations.
-- **Hors ligne par défaut.** Carte vectorielle, recherche d'adresses et calcul
-  d'itinéraire s'exécutent sur l'appareil. La recherche d'adresse est la donnée
-  la plus sensible de l'application — elle révèle où vous allez — et ne quitte
-  jamais le téléphone.
-- **Légère.** Cible : moins de 15 Mo d'APK, moins de 135 Mo une fois les
-  données hors ligne installées.
+- **No Google service.** No Play Services, no Firebase, no Maps SDK. It runs on
+  LineageOS without GApps.
+- **No telemetry, no tracker, no unique identifier.** No journey data is kept:
+  no history, no positions, no destinations.
+- **Offline by default.** The vector map, the address search and the route
+  computation all run on the device. Address search is the application's most
+  sensitive data — it reveals where you are going — and it never leaves the
+  phone.
+- **Light.** Target: under 15 MB of APK. The downloaded data has no fixed
+  ceiling; its weight follows the city served, and it is announced before
+  downloading.
 
-## État d'avancement
+## Progress
 
-Le projet suit la progression du `SPEC.md` §16.
+The project follows the progression of `SPEC.md` §16.
 
-| Étape | État |
+| Stage | State |
 |---|---|
-| 1. Récupération et affichage des données GBFS en liste | ✅ fait |
-| 2. Scripts de génération des données hors ligne | ✅ fait |
-| 3. Carte vectorielle et marqueurs | ✅ fait |
-| 4. Moteur de routage hors ligne | ✅ fait |
-| 5. Algorithme de trajet optimisé | ✅ fait |
-| 6. Recherche d'adresses locale | ✅ fait |
-| 7. Écrans restants | ✅ fait |
-| 8. Finitions et métadonnées F-Droid | en cours — téléchargement des données, métadonnées et traduction d'exemple faits |
+| 1. Fetching and displaying GBFS data as a list | ✅ done |
+| 2. Offline data generation scripts | ✅ done |
+| 3. Vector map and markers | ✅ done |
+| 4. Offline routing engine | ✅ done |
+| 5. Optimised journey algorithm | ✅ done |
+| 6. Local address search | ✅ done |
+| 7. Remaining screens | ✅ done |
+| 8. Finishing touches and F-Droid metadata | under way — data download, metadata and the sample translation are done |
 
-Une première version installable, **0.1.0-alpha**, existe : elle affiche la
-carte et les disponibilités, cherche une adresse hors ligne et calcule un
-itinéraire porte-à-porte. Les jeux de données s'y installent encore à la main,
-et plusieurs écrans manquent — voir le [CHANGELOG](CHANGELOG.md).
+A first installable version, **0.2.0-alpha**, exists: it shows the map and the
+availability, searches an address offline, computes a door-to-door journey and
+serves three networks. The datasets are still installed by hand — nothing has
+been published to download yet — see the [CHANGELOG](CHANGELOG.md).
 
 ## Architecture
 
-Deux modules Gradle, et la frontière entre les deux est vérifiée par le
-compilateur plutôt que par la discipline.
+Two Gradle modules, and the boundary between them is enforced by the compiler
+rather than by discipline.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  :app                                          Android      │
 │                                                             │
-│  ui/          Activité unique, fragments, vues XML          │
-│               ViewBinding, pas de Compose                   │
-│      ↑ état observé (StateFlow)                             │
+│  ui/          single activity, fragments, XML views         │
+│               ViewBinding, no Compose                       │
+│      ↑ observed state (StateFlow)                           │
 │  ui/*ViewModel                                              │
 │      ↑ Outcome<T>                                           │
-│  data/        StationRepository — politique de fraîcheur    │
-│      ├── network/  OkHttp ──────────────────► flux GBFS     │
+│  data/        StationRepository — freshness policy          │
+│      ├── network/  OkHttp ──────────────────► GBFS feeds    │
 │      └── local/    Room, DataStore                          │
 │      ↑                                                      │
-│  AppContainer  instanciation manuelle, pas de Hilt ni Koin  │
+│  AppContainer  manual instantiation, no Hilt and no Koin    │
 └──────────────────────────┬──────────────────────────────────┘
-                           │ dépend de
+                           │ depends on
 ┌──────────────────────────▼──────────────────────────────────┐
-│  :core                                    Kotlin pur        │
+│  :core                                    pure Kotlin       │
 │                                                             │
-│  gbfs/       analyse des flux, tolérante GBFS 2.x et 3.0    │
-│  station/    modèle métier, échelle de disponibilité,       │
-│              fraîcheur de la donnée                         │
-│  address/    normalisation des noms de voies, distance      │
-│              d'édition, classement, interpolation des       │
-│              numéros                                        │
-│  journey/    algorithme du trajet marche → vélo → marche    │
-│  geo/        coordonnées, emprise, distances                │
-│  config/     lecture de la configuration de ville           │
-│  Outcome     types de résultat, jamais d'exception muette   │
+│  gbfs/       feed parsing, tolerant of GBFS 2.x and 3.0     │
+│  station/    domain model, availability scale, freshness    │
+│              of the data                                    │
+│  address/    street-name normalisation, edit distance,      │
+│              ranking, house-number interpolation            │
+│  journey/    the walk → bike → walk algorithm               │
+│  geo/        coordinates, bounding box, distances           │
+│  config/     reading the city configuration and catalogue   │
+│  Outcome     result types, never a silent exception         │
 │                                                             │
-│  Aucun import Android. Testable sur la JVM, sans émulateur. │
+│  No Android import. Testable on the JVM, without emulator.  │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Le flux de données.** Le dépôt est la source unique. Il émet un flux continu
-du contenu du cache local, ce qui fait que l'interface affiche quelque chose
-immédiatement, y compris hors ligne et dès le premier dessin. Le réseau vient
-par-dessus : une actualisation écrit dans le cache, et le cache réémet. Aucun
-écran ne parle au réseau directement.
+**The data flow.** The repository is the single source. It emits a continuous
+stream of the local cache's contents, which means the interface shows something
+immediately, offline included and from the first draw. The network comes on top:
+a refresh writes into the cache, and the cache re-emits. No screen talks to the
+network directly.
 
-**La gestion d'erreurs.** Aucune exception ne traverse une frontière de couche.
-Les échecs sont des valeurs — `Outcome.Failure(DataError.Offline)` — et la
-seule couche qui les met en mots français est l'interface. Le module métier n'a
-pas le droit de contenir une chaîne affichable.
+**Error handling.** No exception crosses a layer boundary. Failures are values —
+`Outcome.Failure(DataError.Offline)` — and the only layer that puts them into
+French words is the interface. The business module is not allowed to hold a
+displayable string.
 
-## Compiler
+## Building
 
-Le dépôt contient un sous-module. Le cloner sans lui donnerait une
-compilation qui échoue sur le moteur de routage :
+The repository contains a submodule. Cloning without it would give a build that
+fails on the routing engine:
 
 ```bash
 git clone --recurse-submodules https://github.com/mgdx/RoueLibre.git
-# ou, sur un dépôt déjà cloné :
+# or, on an already cloned repository:
 git submodule update --init
 ```
 
 ```bash
-./gradlew assembleDebug     # compilation
-./gradlew test              # tests unitaires sur la JVM
-./gradlew lint ktlintCheck  # analyse statique, aucun avertissement toléré
+./gradlew assembleDebug     # build
+./gradlew test              # unit tests on the JVM
+./gradlew lint ktlintCheck  # static analysis, no warning tolerated
 adb install -r app/build/outputs/apk/debug/app-universal-debug.apk
 ```
 
-Il faut un JDK 17 ou plus et le SDK Android (compileSdk 37). Aucune clé, aucun
-compte, aucun service tiers n'est nécessaire pour compiler.
+You need a JDK 17 or later and the Android SDK (compileSdk 37). No key, no
+account and no third-party service is required to build.
 
-Taille de l'APK de release, carte, routage, recherche d'adresses et
-itinéraire compris : **7,67 Mo en arm64-v8a** et 7,10 Mo en armeabi-v7a, pour
-un plafond de 12 Mo par architecture. Les bibliothèques natives de MapLibre sont empaquetées
-compressées — sans quoi le même APK pèserait 14,87 Mo.
+Release APK size, map, routing, address search and journeys included:
+**7.67 MB on arm64-v8a** and 7.10 MB on armeabi-v7a, against a ceiling of 12 MB
+per architecture. MapLibre's native libraries are packaged compressed — without
+that, the same APK would weigh 14.87 MB.
 
-## Générer les jeux de données hors ligne
+## Generating the offline datasets
 
-Les trois jeux — fond de carte, graphe de routage, index d'adresses — ne sont
-pas dans l'APK : ils sont téléchargés au premier lancement, ou fournis à la
-main. Leur génération est entièrement scriptée et versionnée dans
-[`tools/`](tools/README.md) :
+The three sets — base map, routing graph, address index — are not in the APK:
+they are downloaded on first launch, or provided by hand. Their generation is
+entirely scripted and versioned in [`tools/`](tools/README.md):
 
 ```bash
 tools/generate_all.sh
 ```
 
-Tailles réellement obtenues, trois réseaux générés avec les mêmes règles :
+Sizes actually obtained, three networks generated under the same rules:
 
-| Réseau | Stations | Emprise | Fond de carte | Routage | Adresses | Total |
+| Network | Stations | Area | Base map | Routing | Addresses | Total |
 |---|---|---|---|---|---|---|
-| V'lille | 268 | 672 km² | 35,0 Mo | 1,7 Mo | 6,0 Mo | **42,7 Mo** |
-| Vélo'v Lyon | 465 | 575 km² | 35,6 Mo | 2,6 Mo | 4,1 Mo | **42,3 Mo** |
-| Vélib' Paris | 1 518 | 994 km² | 114,9 Mo | 7,2 Mo | 20,9 Mo | **143,0 Mo** |
+| V'lille | 268 | 672 km² | 35.0 MB | 1.7 MB | 6.0 MB | **42.7 MB** |
+| Vélo'v Lyon | 465 | 575 km² | 35.6 MB | 2.6 MB | 4.1 MB | **42.3 MB** |
+| Vélib' Paris | 1,518 | 994 km² | 114.9 MB | 7.2 MB | 20.9 MB | **143.0 MB** |
 
-L'emprise est dérivée des stations elles-mêmes, ce qui suit la réalité des
-réseaux : « Lille » couvre 68 communes de la métropole, Lyon 85, Paris 211.
-Paris pèse davantage parce que c'est Paris — 1,24 million d'empreintes de
-bâtiments contre 78 000 pour Lille — et les règles de rendu restent communes.
+The bounding box is derived from the stations themselves, which follows the
+reality of the networks: "Lille" covers 68 municipalities of the metropolis,
+Lyon 85, Paris 211. Paris weighs more because it is Paris — 1.24 million
+building footprints against 78,000 for Lille — and the rendering rules stay
+common to all.
 
-## Ajouter une ville
+## Adding a city
 
-Aucune donnée propre à une agglomération n'existe dans le code : ni URL, ni
-emprise, ni coordonnée de centrage, ni nom de réseau. Chaque ville tient dans un
-fichier de `config/cities/`, et le catalogue les indexe.
+No data specific to a conurbation exists in the code: no URL, no bounding box,
+no centring coordinate, no network name. Each city fits in one file under
+`config/cities/`, and the catalogue indexes them.
 
-1. **Copier la configuration de ville.** Partir de
-   [`config/cities/lille.json`](config/cities/lille.json) et n'ajuster que le
-   bloc `network`, l'URL du `gbfs.json` et le centrage de la carte. Ne pas
-   toucher au bloc `boundingBox` : il est recalculé automatiquement.
-2. **Trouver l'URL du flux GBFS.** Ne jamais la deviner : la relever dans le
-   [catalogue MobilityData](https://github.com/MobilityData/gbfs/blob/master/systems.csv)
-   ou, en France, sur [transport.data.gouv.fr](https://transport.data.gouv.fr/),
-   puis la vérifier par une requête réelle.
-3. **Générer les données** avec la région OpenStreetMap et les départements
-   correspondants :
+1. **Copy a city configuration.** Start from
+   [`config/cities/lille.json`](config/cities/lille.json) and adjust only the
+   `network` block, the `gbfs.json` URL and the map's centring. Leave the
+   `boundingBox` block alone: it is recomputed automatically.
+2. **Find the GBFS feed URL.** Never guess it: take it from the
+   [MobilityData catalogue](https://github.com/MobilityData/gbfs/blob/master/systems.csv)
+   or, in France, from [transport.data.gouv.fr](https://transport.data.gouv.fr/),
+   then verify it with a real request.
+3. **Generate the data** with the matching OpenStreetMap region and
+   departments:
    ```bash
-   tools/generate_all.sh --city config/cities/<ville>.json \
+   tools/generate_all.sh --city config/cities/<city>.json \
                          --region europe/france/<region> \
                          --departments 35
    ```
-   L'emprise est dérivée des stations du réseau, puis élargie de 3 km ; elle
-   suit donc automatiquement les extensions du réseau.
-4. **Régénérer le catalogue**, qui annonce à l'application ce qui existe et ce
-   que cela pèse :
+   The bounding box is derived from the network's stations, then widened by
+   3 km; it therefore follows extensions of the network by itself.
+4. **Regenerate the catalogue**, which tells the application what exists and
+   what it weighs:
    ```bash
    python3 tools/build_catalogue.py
    ```
-   Il est dérivé des configurations, jamais écrit à la main : une entrée tenue
-   à la main finirait par décrire une ville qu'on ne peut pas installer.
-5. **Publier les fichiers** de `data/out/<réseau>/` dans une *release* du dépôt,
-   avec le manifeste et le catalogue. Une release n'a qu'un espace de noms :
-   les fichiers y portent le préfixe de leur réseau — `velib-tiles.mbtiles` —
-   et retrouvent leur nom nu une fois installés.
+   It is derived from the configurations, never written by hand: an entry
+   maintained by hand would end up describing a city one cannot install.
+5. **Publish the files** from `data/out/<network>/` in a repository release,
+   along with the manifest and the catalogue. A release has a single namespace:
+   the files carry their network's prefix there — `velib-tiles.mbtiles` — and
+   recover their bare name once installed.
 
-L'application ne suppose aucune ville par défaut. Elle propose celle qui
-correspond à la position, sur appui d'un bouton, et range les données de chaque
-ville à part : deux villes cohabitent sur l'appareil, et l'on supprime l'une
-sans toucher à l'autre.
+The application assumes no default city. It proposes the one matching your
+position, on a button press, and stores each city's data apart: two cities
+coexist on the device, and deleting one leaves the other untouched.
 
-Le format GBFS étant un standard international, l'essentiel de la portabilité
-est acquis dès que l'URL est configurable — elle l'est aussi depuis les
-réglages de l'application, sans recompiler.
+Since GBFS is an international standard, most of the portability is won as soon
+as the URL is configurable — and it is also configurable from the application's
+settings, without recompiling.
 
-**Une limite à connaître :** l'index d'adresses s'appuie sur la Base Adresse
-Nationale, qui est française. Pour une ville étrangère il faudrait le
-régénérer depuis OpenStreetMap ; le script isole cette source pour rendre la
-substitution possible.
+**One limit to know about:** the address index rests on the Base Adresse
+Nationale, which is French. For a foreign city it would have to be regenerated
+from OpenStreetMap; the script isolates that source to make the substitution
+possible.
 
-## Dépendances, et pourquoi chacune
+## Dependencies, and why each one
 
-Le `SPEC.md` §4 impose de justifier chaque ajout. Rien n'entre sans raison.
+`SPEC.md` §4 requires justifying every addition. Nothing enters without a
+reason.
 
-| Dépendance | Rôle | Pourquoi elle plutôt qu'une autre |
+| Dependency | Role | Why it rather than another |
 |---|---|---|
-| **OkHttp** | requêtes HTTP | Trois requêtes GET ne justifient pas Retrofit. OkHttp seul suffit et pèse moins. |
-| **kotlinx.serialization** | lecture du JSON | Génération à la compilation, donc pas de réflexion ni de règles R8 à maintenir — contrairement à Gson ou Moshi. |
-| **Room** | cache des stations | Requis par le `SPEC.md` §8. Apporte les flux réactifs et la vérification des requêtes à la compilation. |
-| **DataStore** | réglages | Quelques valeurs isolées ; Room serait disproportionné. |
-| **Coroutines** | asynchrone | Standard du langage. |
-| **Material Components** | socle de l'interface | Composants accessibles éprouvés. Aucune de ses couleurs par défaut ne subsiste. |
-| **BRouter** | calcul d'itinéraires hors ligne | Moteur éprouvé, orienté cyclisme, profils paramétrables. Intégré comme **sous-module Git** épinglé sur une étiquette : l'artefact Maven `org.btools:brouter-core` que l'on trouve mentionné n'est publié nulle part. MIT, compatible GPLv3, avis de licence conservé dans les mentions de l'application. |
-| **MapLibre Native** | carte vectorielle hors ligne | Seule dépendance native du projet, et seule entorse assumée à la contrainte de taille : c'est le prix du hors-ligne. Lit le MBTiles directement sur le disque, sans serveur de tuiles. BSD-2-Clause, minSdk 23. |
-| **AndroidX** *(core, appcompat, fragment, lifecycle, recyclerview, swiperefreshlayout, constraintlayout)* | briques d'interface | Base d'une application à vues XML. |
-| **Atkinson Hyperlegible** | police de texte | Dessinée par le Braille Institute pour la basse vision : le 0 se distingue du O, le 1 du l. Pour une application lue en marchant, c'est fonctionnel. SIL OFL. |
-| **Bricolage Grotesque** | police des chiffres | Les nombres de vélos sont l'information centrale ; ils méritent une lettre reconnaissable de loin. Figée en deux instances statiques de 91 ko. SIL OFL. |
+| **OkHttp** | HTTP requests | Three GET requests do not justify Retrofit. OkHttp alone suffices and weighs less. |
+| **kotlinx.serialization** | reading JSON | Generation at compile time, so no reflection and no R8 rules to maintain — unlike Gson or Moshi. |
+| **Room** | station cache | Required by `SPEC.md` §8. Brings reactive streams and compile-time query checking. |
+| **DataStore** | settings | A few isolated values; Room would be out of proportion. |
+| **Coroutines** | asynchrony | The language's standard. |
+| **Material Components** | interface base | Proven accessible components. None of its default colours survives. |
+| **BRouter** | offline route computation | A proven engine, cycling-oriented, with configurable profiles. Integrated as a **Git submodule** pinned to a tag: the `org.btools:brouter-core` Maven artifact one finds mentioned is published nowhere. MIT, GPLv3-compatible, licence notice kept in the application's legal notices. |
+| **MapLibre Native** | offline vector map | The project's only native dependency, and its only accepted departure from the size constraint: it is the price of offline operation. Reads the MBTiles straight from disk, without a tile server. BSD-2-Clause, minSdk 23. |
+| **AndroidX** *(core, appcompat, fragment, lifecycle, recyclerview, swiperefreshlayout, constraintlayout)* | interface building blocks | The base of an XML-view application. |
+| **Atkinson Hyperlegible** | body typeface | Drawn by the Braille Institute for low vision: 0 is distinct from O, 1 from l. For an application read while walking, that is functional. SIL OFL. |
+| **Bricolage Grotesque** | figures typeface | Bike counts are the central information; they deserve letters recognisable from a distance. Frozen into two static instances of 91 kB. SIL OFL. |
 
-Aucune bibliothèque d'analytics, de rapport de plantage ou de publicité, sous
-aucun prétexte.
+No analytics, crash reporting or advertising library, under any pretext.
 
-**Outils de génération des données**, hors APK : `osmium-tool`, `tippecanoe`,
-`fontTools`, et le générateur de cartes de [BRouter](https://github.com/abrensch/brouter)
-(MIT), dont la version est figée et l'archive vérifiée par empreinte SHA-256.
+**Data generation tools**, outside the APK: `osmium-tool`, `tippecanoe`,
+`fontTools`, and the map creator from
+[BRouter](https://github.com/abrensch/brouter) (MIT), whose version is pinned
+and whose archive is verified by SHA-256 digest.
 
-## Sources de données et attributions
+## Data sources and attributions
 
-| Source | Usage | Licence |
+| Source | Use | Licence |
 |---|---|---|
-| Flux GBFS d'Ilevia / Métropole Européenne de Lille | disponibilité des stations | ODbL |
-| [OpenStreetMap](https://www.openstreetmap.org/copyright) | fond de carte, routage, points de repère | ODbL |
-| [Base Adresse Nationale](https://adresse.data.gouv.fr/) | numéros de voirie | ODbL |
-| [BRouter](https://github.com/abrensch/brouter) | moteur et générateur de routage | MIT |
-| SRTM via [terrain-tiles](https://registry.opendata.aws/terrain-tiles/) | altimétrie du graphe | domaine public |
+| Ilevia / Métropole Européenne de Lille GBFS feed | station availability | ODbL |
+| [OpenStreetMap](https://www.openstreetmap.org/copyright) | base map, routing, landmarks | ODbL |
+| [Base Adresse Nationale](https://adresse.data.gouv.fr/) | house numbers | ODbL |
+| [BRouter](https://github.com/abrensch/brouter) | routing engine and generator | MIT |
+| SRTM through [terrain-tiles](https://registry.opendata.aws/terrain-tiles/) | the graph's elevation data | public domain |
 
-## Ouvrir un lieu depuis une autre application
+## Opening a place from another application
 
-Les liens `geo:` et `google.navigation:`, ainsi que les adresses partagées en
-texte brut, arrivent directement dans Roue Libre : il suffit de la choisir dans
-le sélecteur d'Android.
+`geo:` and `google.navigation:` links, along with addresses shared as plain
+text, arrive straight in Roue Libre: it is enough to choose it in Android's
+chooser.
 
-Les liens de sites de cartographie — `openstreetmap.org`, `google.com/maps` —
-ne peuvent **pas** être vérifiés automatiquement, ces domaines n'appartenant
-pas au projet. Depuis Android 12, ils ne parviennent donc à l'application que
-si vous l'y autorisez :
+Links from mapping websites — `openstreetmap.org`, `google.com/maps` —
+**cannot** be verified automatically, those domains not belonging to the
+project. Since Android 12 they therefore only reach the application if you allow
+it:
 
-**Paramètres → Applications → Roue Libre → Ouvrir par défaut → Ajouter un
-lien**, puis cochez les domaines voulus.
+**Settings → Apps → Roue Libre → Open by default → Add link**, then tick the
+domains you want.
 
-Un lien raccourci n'est pas reconnu : le lieu n'y apparaît qu'après
-redirection, et la suivre ferait sortir une requête vers un tiers à qui l'on
-apprendrait où vous allez.
+A shortened link is not recognised: the place only appears after a redirect, and
+following it would send a request out to a third party, teaching them where you
+are going.
 
-## Vie privée
+## Privacy
 
-En usage courant, **la seule requête réseau qui part est celle du flux GBFS**.
-Les téléchargements de données n'ont lieu qu'au premier lancement ou sur action
-explicite. La vérification des mises à jour n'est jamais automatique : une
-requête périodique dessinerait un profil d'usage.
+In ordinary use, **the only network request that goes out is the GBFS feed**.
+Data downloads happen only on first launch or on an explicit action. Checking
+for updates is never automatic: a periodic request would draw a usage profile.
 
-Aucun identifiant n'est envoyé. Le `User-Agent` nomme l'application et sa
-version, rien d'autre. `android:allowBackup` est à `false` : rien ne part vers
-le cloud.
+No identifier is sent. The `User-Agent` names the application and its version,
+nothing else. `android:allowBackup` is `false`: nothing goes to the cloud.
 
-## Contribuer
+## Contributing
 
-Voir [CONTRIBUTING.md](CONTRIBUTING.md), qui décrit notamment la procédure de
-traduction.
+See [CONTRIBUTING.md](CONTRIBUTING.md), which covers the translation procedure
+in particular.
 
 ## Licence
 
-[GPLv3](LICENSE). Les polices embarquées sont sous
-[SIL Open Font License](app/src/main/assets/licences/), qui leur est propre.
+[GPLv3](LICENSE). The embedded fonts are under the
+[SIL Open Font License](app/src/main/assets/licences/), which is their own.
