@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Arabic — TO BE TRANSLATED.
+    Finnish — TO BE TRANSLATED.
 
     Every string below still holds its English text: this file is a starting
     point, not a translation. Translate the contents of the tags, never their
@@ -20,19 +20,11 @@
 
     <plurals name="bikes_available">
         <item quantity="one">%1$d bike</item>
-        <item quantity="zero">%1$d bikes</item>
-        <item quantity="two">%1$d bikes</item>
-        <item quantity="few">%1$d bikes</item>
-        <item quantity="many">%1$d bikes</item>
         <item quantity="other">%1$d bikes</item>
     </plurals>
 
     <plurals name="docks_available">
         <item quantity="one">%1$d dock</item>
-        <item quantity="zero">%1$d docks</item>
-        <item quantity="two">%1$d docks</item>
-        <item quantity="few">%1$d docks</item>
-        <item quantity="many">%1$d docks</item>
         <item quantity="other">%1$d docks</item>
     </plurals>
 
@@ -56,36 +48,20 @@
 
     <plurals name="station_detail_with_capacity">
         <item quantity="one">%1$s · %2$d dock</item>
-        <item quantity="zero">%1$s · %2$d docks</item>
-        <item quantity="two">%1$s · %2$d docks</item>
-        <item quantity="few">%1$s · %2$d docks</item>
-        <item quantity="many">%1$s · %2$d docks</item>
         <item quantity="other">%1$s · %2$d docks</item>
     </plurals>
 
     <string name="freshness_just_now">just now</string>
     <plurals name="freshness_seconds">
         <item quantity="one">%1$d second ago</item>
-        <item quantity="zero">%1$d seconds ago</item>
-        <item quantity="two">%1$d seconds ago</item>
-        <item quantity="few">%1$d seconds ago</item>
-        <item quantity="many">%1$d seconds ago</item>
         <item quantity="other">%1$d seconds ago</item>
     </plurals>
     <plurals name="freshness_minutes">
         <item quantity="one">%1$d minute ago</item>
-        <item quantity="zero">%1$d minutes ago</item>
-        <item quantity="two">%1$d minutes ago</item>
-        <item quantity="few">%1$d minutes ago</item>
-        <item quantity="many">%1$d minutes ago</item>
         <item quantity="other">%1$d minutes ago</item>
     </plurals>
     <plurals name="freshness_hours">
         <item quantity="one">%1$d hour ago</item>
-        <item quantity="zero">%1$d hours ago</item>
-        <item quantity="two">%1$d hours ago</item>
-        <item quantity="few">%1$d hours ago</item>
-        <item quantity="many">%1$d hours ago</item>
         <item quantity="other">%1$d hours ago</item>
     </plurals>
     <string name="freshness_long_ago">more than a day ago</string>
@@ -218,10 +194,6 @@
 
     <plurals name="docks_total">
         <item quantity="one">%1$d dock</item>
-        <item quantity="zero">%1$d docks</item>
-        <item quantity="two">%1$d docks</item>
-        <item quantity="few">%1$d docks</item>
-        <item quantity="many">%1$d docks</item>
         <item quantity="other">%1$d docks</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
@@ -265,18 +237,10 @@
     <string name="city_active">In use</string>
     <plurals name="city_detail">
         <item quantity="one">%1$d station · %2$s to download</item>
-        <item quantity="zero">%1$d stations · %2$s to download</item>
-        <item quantity="two">%1$d stations · %2$s to download</item>
-        <item quantity="few">%1$d stations · %2$s to download</item>
-        <item quantity="many">%1$d stations · %2$s to download</item>
         <item quantity="other">%1$d stations · %2$s to download</item>
     </plurals>
     <plurals name="city_stations">
         <item quantity="one">%1$d station</item>
-        <item quantity="zero">%1$d stations</item>
-        <item quantity="two">%1$d stations</item>
-        <item quantity="few">%1$d stations</item>
-        <item quantity="many">%1$d stations</item>
         <item quantity="other">%1$d stations</item>
     </plurals>
     <string name="city_detail_size_only">%1$s to download</string>

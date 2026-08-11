@@ -25,11 +25,18 @@ which has no language qualifier: it is what Android serves when nothing else
 matches, so it is always complete. French, in `values-fr/`, is a translation
 like the others.
 
-**Eight languages are already started** — Arabic, German, Spanish, Italian,
-Dutch, Polish, Portuguese, Chinese. Their files exist under `values-ar/`,
-`values-de/` and so on, but every string in them still holds its English text:
-they are a starting point, not a translation. Open the one for your language
-and translate it in place.
+**Twenty-six languages are already started** — Albanian, Arabic, Basque,
+Bosnian, Catalan, Chinese, Croatian, Czech, Danish, Dutch, Finnish, German,
+Hungarian, Italian, Japanese, Latvian, Lithuanian, Norwegian, Polish,
+Portuguese, Romanian, Slovak, Slovene, Spanish, Swedish. Their files exist
+under `values-ar/`, `values-de/` and so on, but every string in them still
+holds its English text: they are a starting point, not a translation. Open the
+one for your language and translate it in place.
+
+The list follows the catalogue: there is a started file for every language
+spoken where a network is served, so that arriving in Ljubljana or Pristina
+with the application means arriving in a language somebody can finish rather
+than in a folder somebody must create.
 
 For a language that has no file yet:
 
@@ -91,6 +98,32 @@ button through to the confirmation.
 
 **The vocabulary stays generic**: "station", "bike", "network". A particular
 network's name appears only in the city configuration.
+
+## Teaching it your streets
+
+A translation makes the interface readable. This makes the **search** work, and
+it is a different file.
+
+The address index folds a street name down to a comparable form before storing
+it, and folds what you type the same way. Those rules are written per language,
+in [`config/address-normalization/`](config/address-normalization/): which
+abbreviations to expand (`ul.` → *ulica*, `bd` → *boulevard*), which letters to
+fold that accent removal cannot reach (ß → ss, ł → l), which words are street
+types to be split off the head of a name, and which are articles not worth
+ranking on.
+
+If your language is there, read it: a missing abbreviation is a street its
+speakers cannot find. If it is not, copy `en.json`, fill it in, and add a
+dozen real street names to `referenceNames` — a unit test replays them against
+both implementations from the moment the file lands. Then:
+
+```bash
+python3 tools/refresh_normalization_fixtures.py   # --check to see without writing
+./gradlew :core:test
+```
+
+A language with no file of its own is served by `en.json`: plain folding, no
+street type. It works, and it is worse than what you can write in an hour.
 
 ## Contributing code
 

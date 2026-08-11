@@ -9,7 +9,8 @@
     escaped.
 
     While a string is left in English, that is what this language's users will
-    read. The application's source language is French, in `values/`.
+    read. The application's default language is English, in `values/`, which is
+    what this file was copied from.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools">
 
