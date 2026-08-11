@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 import urllib.request
 from datetime import datetime, timezone
@@ -114,11 +115,71 @@ def has_usable_position(station: dict) -> bool:
     return abs(latitude) > 0.0001 or abs(longitude) > 0.0001
 
 
+# A station standing this far from every other one is not part of the network.
+# The stations of a docked network are a few hundred metres apart and a few
+# kilometres at most; twenty-five leaves room for the widest real gap — a
+# network serving two towns across a valley — and catches what is not a station
+# at all. Valenbisi publishes one called "LABMAD", three hundred kilometres
+# from Valencia, in Madrid: its rectangle measured 33,645 km² instead of 150,
+# and the network was set aside as "not a conurbation" on the strength of it.
+STRAY_STATION_DISTANCE_KILOMETRES = 25.0
+
+# Cell of the grid the neighbour search uses, in degrees of latitude: a little
+# over the distance above, so that a station's neighbours can only be in its
+# own cell or in the eight around it.
+STRAY_GRID_DEGREES = 0.25
+
+
+def stray_positions(positions: list[tuple[float, float]]) -> set[int]:
+    """The indices of the positions standing alone, far from every other.
+
+    Compared against the OTHER STATIONS rather than against the centre of the
+    network: a network legitimately spread over a valley has no centre worth
+    the name, whereas a station three hundred kilometres from its nearest
+    neighbour is a mistake in the feed whichever way it is measured.
+
+    A network of one or two stations is left alone: with nothing to be far
+    from, the question does not arise.
+    """
+    if len(positions) < 3:
+        return set()
+    grid: dict[tuple[int, int], list[int]] = {}
+    for index, (latitude, longitude) in enumerate(positions):
+        cell = (int(latitude // STRAY_GRID_DEGREES), int(longitude // STRAY_GRID_DEGREES))
+        grid.setdefault(cell, []).append(index)
+
+    limit = STRAY_STATION_DISTANCE_KILOMETRES
+    strays = set()
+    for index, (latitude, longitude) in enumerate(positions):
+        cell = (int(latitude // STRAY_GRID_DEGREES), int(longitude // STRAY_GRID_DEGREES))
+        alone = True
+        for row in (-1, 0, 1):
+            for column in (-1, 0, 1):
+                for other in grid.get((cell[0] + row, cell[1] + column), ()):
+                    if other == index:
+                        continue
+                    other_latitude, other_longitude = positions[other]
+                    north = (other_latitude - latitude) * 111.32
+                    east = (other_longitude - longitude) * 111.32 * math.cos(
+                        math.radians(latitude))
+                    if north * north + east * east <= limit * limit:
+                        alone = False
+                        break
+                if not alone:
+                    break
+            if not alone:
+                break
+        if alone:
+            strays.add(index)
+    return strays
+
+
 def positioned_stations(stations: list[dict]) -> list[dict]:
     """The stations that can be placed on a map, the others said out loud.
 
     A feed losing positions is a feed whose next regeneration deserves a look,
-    so the count is printed rather than swallowed.
+    so the count is printed rather than swallowed. Same for the strays: what is
+    dropped from the box is named, never swallowed.
 
     Raises:
         ValueError: if not one station carries a usable position.
@@ -129,6 +190,17 @@ def positioned_stations(stations: list[dict]) -> list[dict]:
     dropped = len(stations) - len(positioned)
     if dropped:
         print(f"Stations without a usable position, ignored: {dropped}")
+
+    strays = stray_positions([(station["lat"], station["lon"]) for station in positioned])
+    if strays:
+        for index in sorted(strays):
+            station = positioned[index]
+            print(f"Station standing alone, ignored: "
+                  f"{station.get('name') or station.get('station_id')} "
+                  f"({station['lat']}, {station['lon']})")
+        positioned = [
+            station for index, station in enumerate(positioned) if index not in strays
+        ]
     return positioned
 
 
