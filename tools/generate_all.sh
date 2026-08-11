@@ -10,11 +10,15 @@
 #                         [--release-tag data-AAAA-MM]
 #                         [--skip-download]
 #
-# The OpenStreetMap extract and the Base Adresse Nationale departments are
-# read from the city configuration's "dataSources" block, which
+# The OpenStreetMap extract and, in France, the Base Adresse Nationale
+# departments are read from the city configuration's "dataSources" block, which
 # tools/discover_networks.py derives from the reference box. Passing --region
 # or --departments overrides them, for a box that reaches a sliver of a
 # neighbouring department the sampling missed.
+#
+# Outside France the addresses come from the OSM extract itself (SPEC §15):
+# there is no national base to download, and the configuration says so with
+# "addressSource": "openstreetmap".
 #
 # The source downloads (OSM extract, BAN extracts) are kept in data/ and
 # reused from one run to the next.
@@ -74,9 +78,20 @@ print(','.join(sources.get(sys.argv[2]) or []))" "$CITY_CONFIG" "$1"
 [[ -n "$OSM_REGION"  ]] || OSM_REGION="$(read_from_config osmRegions)"
 [[ -n "$DEPARTMENTS" ]] || DEPARTMENTS="$(read_from_config banDepartments)"
 
-if [[ -z "$OSM_REGION" || -z "$DEPARTMENTS" ]]; then
-  echo "Error: $CITY_CONFIG carries no \"dataSources\" block." >&2
-  echo "         Pass --region and --departments, or regenerate the" >&2
+ADDRESS_SOURCE="$("$PYTHON" -c "
+import json, sys
+sources = json.load(open(sys.argv[1])).get('dataSources') or {}
+print(sources.get('addressSource') or ('ban' if sources.get('banDepartments') else 'openstreetmap'))" "$CITY_CONFIG")"
+
+if [[ -z "$OSM_REGION" ]]; then
+  echo "Error: $CITY_CONFIG names no OpenStreetMap extract." >&2
+  echo "         Pass --region, or regenerate the configuration:" >&2
+  echo "         python3 tools/add_city.py --network <id>" >&2
+  exit 1
+fi
+if [[ "$ADDRESS_SOURCE" == "ban" && -z "$DEPARTMENTS" ]]; then
+  echo "Error: $CITY_CONFIG reads its addresses from the BAN but names" >&2
+  echo "         no department. Pass --departments, or regenerate the" >&2
   echo "         configuration: python3 tools/add_city.py --network <id>" >&2
   exit 1
 fi
@@ -94,7 +109,7 @@ echo "════════════════════════�
 echo " Roue Libre — generating the offline datasets"
 echo " city       : $CITY_CONFIG"
 echo " OSM region : $OSM_REGION"
-echo " BAN        : $DEPARTMENTS"
+echo " addresses  : $ADDRESS_SOURCE${DEPARTMENTS:+ ($DEPARTMENTS)}"
 echo " release    : $RELEASE_TAG"
 echo "════════════════════════════════════════════════════════════"
 
@@ -122,6 +137,7 @@ if [[ "$SKIP_DOWNLOAD" -eq 0 ]]; then
   fi
 
   IFS=',' read -ra DEPTS <<< "$DEPARTMENTS"
+  [[ "$ADDRESS_SOURCE" == "ban" ]] || DEPTS=()
   for dept in "${DEPTS[@]}"; do
     target="data/ban/adresses-${dept}.csv.gz"
     if [[ ! -f "$target" ]]; then
@@ -161,11 +177,15 @@ echo "── 3/4 · Routing graph ──"
 
 echo
 echo "── 4/4 · Address index ──"
+# In France the house numbers come from the national base; everywhere else
+# from the extract above, which build_address_index.py reads on its own.
 BAN_ARGS=()
-IFS=',' read -ra DEPTS <<< "$DEPARTMENTS"
-for dept in "${DEPTS[@]}"; do
-  BAN_ARGS+=(--ban-csv "data/ban/adresses-${dept}.csv.gz")
-done
+if [[ "$ADDRESS_SOURCE" == "ban" ]]; then
+  IFS=',' read -ra DEPTS <<< "$DEPARTMENTS"
+  for dept in "${DEPTS[@]}"; do
+    BAN_ARGS+=(--ban-csv "data/ban/adresses-${dept}.csv.gz")
+  done
+fi
 "$PYTHON" tools/build_address_index.py --config "$CITY_CONFIG" \
   "${BAN_ARGS[@]}" --osm-extract "$OSM_FILE" \
   --output "$OUT_DIR/addresses.sqlite"

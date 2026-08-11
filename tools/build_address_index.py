@@ -47,7 +47,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from address_normalization import REFERENCE_STREET_NAMES, AddressNormalizer
+from address_normalization import AddressNormalizer, normalizer_for
 from city_config import DEFAULT_CITY_CONFIG, BoundingBox, CityConfig
 
 TOOLS_DIR = Path(__file__).resolve().parent
@@ -292,6 +292,282 @@ def read_osm_places(
     return places
 
 
+# What OpenStreetMap calls a way one can be addressed on. Service roads and
+# tracks are in: a house number hangs off them as readily as off a street, and
+# a search that ignored them would miss the addresses attached to them.
+ADDRESSABLE_HIGHWAYS = (
+    "w/highway=residential,living_street,unclassified,tertiary,secondary,"
+    "primary,trunk,pedestrian,footway,cycleway,service,track,road",
+)
+
+# Objects carrying a house number: a node in the garden, the building itself,
+# or the parcel. All three are in use, often in the same street.
+ADDRESSED_OBJECTS = ("n/addr:housenumber", "w/addr:housenumber", "a/addr:housenumber")
+
+# Places whose name is worth attaching to a street that carries no municipality
+# of its own — which, in OpenStreetMap, is almost every street.
+MUNICIPALITY_PLACES = ("n/place=city,town,village,borough,suburb,quarter,hamlet",)
+
+
+def osmium_export(
+    source: Path, filters: tuple[str, ...], tags: list[str],
+    geometry_types: str, work_dir: Path, name: str,
+) -> Path:
+    """Filter an extract on tags and export what is left as GeoJSON lines."""
+    filtered = work_dir / f"{name}.osm.pbf"
+    subprocess.run(
+        ["osmium", "tags-filter", "--overwrite", "-o", str(filtered),
+         str(source), *filters],
+        check=True, capture_output=True,
+    )
+    export_config = work_dir / f"{name}.export.json"
+    export_config.write_text(json.dumps({
+        "attributes": {"type": False, "id": False},
+        "include_tags": tags,
+        "linear_tags": True, "area_tags": True,
+    }), encoding="utf-8")
+    exported = work_dir / f"{name}.geojsonseq"
+    subprocess.run(
+        ["osmium", "export", "--overwrite", "-f", "geojsonseq",
+         "--geometry-types", geometry_types, "--config", str(export_config),
+         "-o", str(exported), str(filtered)],
+        check=True, capture_output=True,
+    )
+    return exported
+
+
+def geojson_records(path: Path):
+    """Read a GeoJSON-sequence file, one record at a time."""
+    with path.open(encoding="utf-8") as stream:
+        for line in stream:
+            line = line.strip().lstrip("\x1e")
+            if line:
+                yield json.loads(line)
+
+
+def positions_of(geometry: dict) -> list[tuple[float, float]]:
+    """Every point of a geometry, whatever its shape.
+
+    A house number is a node here, a building outline there, and a street is a
+    line: the index only ever needs points, and the median of them is what
+    becomes a street's representative position.
+    """
+    kind = geometry.get("type")
+    coordinates = geometry.get("coordinates")
+    if kind == "Point":
+        return [(coordinates[1], coordinates[0])]
+    if kind == "LineString":
+        return [(point[1], point[0]) for point in coordinates]
+    if kind == "MultiLineString":
+        return [(point[1], point[0]) for line in coordinates for point in line]
+    if kind == "Polygon":
+        return [(point[1], point[0]) for point in coordinates[0]]
+    if kind == "MultiPolygon":
+        return [(point[1], point[0]) for polygon in coordinates for point in polygon[0]]
+    return []
+
+
+def read_osm_addresses(
+    osm_extract: Path, box: BoundingBox, work_dir: Path,
+    normalizer: AddressNormalizer,
+) -> tuple[dict[str, Street], int, int]:
+    """Read streets and house numbers from OpenStreetMap (SPEC.md §4.3, §15).
+
+    France publishes a national address base and the script reads that one
+    there. Everywhere else there is no such base, or it is neither free nor
+    downloadable, and §15 said what to do about it: rebuild the index from
+    OpenStreetMap. The extract is already on disk — the map and the routing
+    graph are cut from it — so a city costs one download rather than two.
+
+    What is read, and why in this order:
+
+    1. the named ways, which give the streets themselves. A street with no
+       house number mapped on it is still a street somebody types into a
+       search box, and dropping it would leave whole neighbourhoods silent;
+    2. the objects carrying ``addr:housenumber``, attached to the street named
+       by their ``addr:street``. Where that tag is absent the ``addr:place``
+       one takes over, which is how villages without street names are
+       addressed in the Nordic countries and in much of central Europe.
+
+    The coverage is not the BAN's, and it varies from one city to the next —
+    that is the honest cost of the substitution, and the figures printed at the
+    end of a run say what it came to for this conurbation.
+
+    Returns:
+        The streets by key, the number of objects read and the number kept.
+    """
+    if shutil.which("osmium") is None:
+        raise GenerationError(
+            "osmium is missing. Install it: sudo apt install osmium-tool"
+        )
+
+    clipped = work_dir / "addresses-area.osm.pbf"
+    subprocess.run(
+        ["osmium", "extract", "--bbox", box.as_osmium_extract_argument(),
+         "--strategy", "complete_ways", "--overwrite",
+         "-o", str(clipped), str(osm_extract)],
+        check=True, capture_output=True,
+    )
+
+    streets: dict[str, Street] = {}
+    read = kept = 0
+
+    def key_of(name: str, city: str) -> str:
+        return f"{normalizer.normalize(city)}|{normalizer.normalize(name)}"
+
+    ways = osmium_export(
+        clipped, ADDRESSABLE_HIGHWAYS,
+        ["name", "addr:city", "addr:postcode"], "linestring", work_dir, "ways",
+    )
+    for record in geojson_records(ways):
+        read += 1
+        properties = record.get("properties") or {}
+        name = (properties.get("name") or "").strip()
+        if not name:
+            continue
+        positions = [
+            position for position in positions_of(record.get("geometry") or {})
+            if box.contains(*position)
+        ]
+        if not positions:
+            continue
+        city = (properties.get("addr:city") or "").strip()
+        street = streets.setdefault(key_of(name, city), Street(
+            display_name=name,
+            city=city,
+            postcode=(properties.get("addr:postcode") or "").strip(),
+            kind=KIND_STREET,
+        ))
+        # A street is mapped in several pieces — one per junction, or per
+        # change of surface. Every piece's points go in: the median of the
+        # whole is the point that ends up representing the street.
+        street.latitudes.extend(latitude for latitude, _ in positions)
+        street.longitudes.extend(longitude for _, longitude in positions)
+        kept += 1
+
+    addresses = osmium_export(
+        clipped, ADDRESSED_OBJECTS,
+        ["addr:housenumber", "addr:street", "addr:place", "addr:city",
+         "addr:postcode"],
+        "point,polygon", work_dir, "addresses",
+    )
+    for record in geojson_records(addresses):
+        read += 1
+        properties = record.get("properties") or {}
+        # A street name first, a place name failing that: whole regions are
+        # addressed "Storgatan 4" in one country and "Bergsäter 12" in the next.
+        name = (properties.get("addr:street") or properties.get("addr:place") or "").strip()
+        if not name:
+            continue
+        positions = positions_of(record.get("geometry") or {})
+        if not positions:
+            continue
+        # A building is a polygon: its address is one point, not its outline.
+        latitude = sum(position[0] for position in positions) / len(positions)
+        longitude = sum(position[1] for position in positions) / len(positions)
+        if not box.contains(latitude, longitude):
+            continue
+
+        city = (properties.get("addr:city") or "").strip()
+        street = streets.get(key_of(name, city))
+        if street is None and city:
+            # The number names its municipality and the street does not, which
+            # is the common case: the street is looked up without it rather
+            # than a second, empty-municipality street being created beside it.
+            street = streets.get(key_of(name, ""))
+        if street is None:
+            street = Street(
+                display_name=name,
+                city=city,
+                postcode=(properties.get("addr:postcode") or "").strip(),
+                kind=KIND_STREET,
+            )
+            streets[key_of(name, city)] = street
+        if not street.city and city:
+            street.city = city
+        if not street.postcode:
+            street.postcode = (properties.get("addr:postcode") or "").strip()
+
+        street.latitudes.append(latitude)
+        street.longitudes.append(longitude)
+        kept += 1
+
+        parsed = parse_house_number(
+            *split_house_number(properties.get("addr:housenumber") or "")
+        )
+        if parsed is not None:
+            street.numbers.setdefault(parsed, []).append((latitude, longitude))
+
+    return streets, read, kept
+
+
+def split_house_number(raw: str) -> tuple[str, str]:
+    """Separate a house number from what trails it.
+
+    OpenStreetMap holds the number as one string, and the world writes it in
+    every way there is: "12", "12A", "12 bis", "12-14" for a building spanning
+    two numbers. The leading digits are the number, the rest is the repetition
+    mark the BAN would have put in its own column.
+    """
+    raw = raw.strip()
+    digits = ""
+    for character in raw:
+        if not character.isdigit():
+            break
+        digits += character
+    return digits, raw[len(digits):].strip(" -/").lower()
+
+
+def attach_municipalities(streets: dict[str, Street], places: list[Street]) -> int:
+    """Name the municipality of the streets that carry none.
+
+    OpenStreetMap tags ``addr:city`` on the house numbers, rarely on the street
+    itself, and in some countries on neither. A street with no municipality is
+    still findable, but the results list would show it against a blank, and two
+    streets of the same name in two towns would be indistinguishable.
+
+    The nearest inhabited place gives its name. It is an approximation — a
+    boundary is not a distance — and it is the same one `fill_missing_places_communes`
+    makes for landmarks, for the same reason: the alternative is a blank.
+    """
+    if not places:
+        return 0
+    named = 0
+    for street in streets.values():
+        if street.city or not street.latitudes:
+            continue
+        latitude = statistics.median(street.latitudes)
+        longitude = statistics.median(street.longitudes)
+        nearest = min(places, key=lambda place: (
+            (place.latitudes[0] - latitude) ** 2
+            + (place.longitudes[0] - longitude) ** 2
+        ))
+        street.city = nearest.display_name
+        named += 1
+    return named
+
+
+def read_osm_municipalities(
+    osm_extract: Path, box: BoundingBox, work_dir: Path
+) -> list[Street]:
+    """The inhabited places of the box, as points carrying a name."""
+    exported = osmium_export(
+        osm_extract, MUNICIPALITY_PLACES, ["name", "place"], "point",
+        work_dir, "municipalities",
+    )
+    places = []
+    for record in geojson_records(exported):
+        name = ((record.get("properties") or {}).get("name") or "").strip()
+        longitude, latitude = record["geometry"]["coordinates"]
+        if not name or not box.contains(latitude, longitude):
+            continue
+        place = Street(display_name=name, city=name, postcode="", kind=KIND_PLACE)
+        place.latitudes.append(latitude)
+        place.longitudes.append(longitude)
+        places.append(place)
+    return places
+
+
 def fill_missing_places_communes(
     streets: dict[str, Street], places: list[Street]
 ) -> int:
@@ -500,12 +776,12 @@ def build_database(
             ("formatVersion", str(config.format_version)),
             ("generatedAt", generated_at),
             ("deltaScale", str(int(DELTA_SCALE))),
-            ("normalizationRulesVersion", str(
-                json.loads(
-                    (REPO_ROOT / "config" / "address_normalization.json")
-                    .read_text(encoding="utf-8")
-                )["rulesVersion"]
-            )),
+            # Which rules this index was built with, and in which language.
+            # The application reads both back rather than deciding for itself:
+            # an index searched with another language's street types would
+            # answer nothing to "ulica D\u0142uga" (SPEC \u00a715.1).
+            ("normalizationLanguage", normalizer.language),
+            ("normalizationRulesVersion", str(normalizer.rules_version)),
             ("boundingBox", json.dumps({
                 "south": config.bounding_box.south,
                 "west": config.bounding_box.west,
@@ -548,7 +824,7 @@ def write_normalization_fixtures(normalizer: AddressNormalizer,
     sampled = [street.display_name for _, street in streets[::997]][:120]
 
     cases = []
-    for raw in REFERENCE_STREET_NAMES + sampled:
+    for raw in normalizer.reference_names + sampled:
         split = normalizer.analyse(raw)
         cases.append({
             "input": raw,
@@ -563,7 +839,8 @@ def write_normalization_fixtures(normalizer: AddressNormalizer,
                    / "normalization_fixtures" / f"{network_id}.json")
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(
-        json.dumps({"cases": cases}, ensure_ascii=False, indent=2) + "\n",
+        json.dumps({"language": normalizer.language, "cases": cases},
+                   ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
     return destination
@@ -571,11 +848,14 @@ def write_normalization_fixtures(normalizer: AddressNormalizer,
 
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--ban-csv", type=Path, action="append", required=True,
+    parser.add_argument("--ban-csv", type=Path, action="append", default=[],
                         help="departmental BAN extract (.csv or .csv.gz), "
-                             "repeatable")
+                             "repeatable. France only: elsewhere the addresses "
+                             "come from the OSM extract (§15)")
     parser.add_argument("--osm-extract", type=Path, default=None,
-                        help="OSM extract for the landmarks (§4.3)")
+                        help="OSM extract, for the landmarks and — where no "
+                             "national address base is given — for the "
+                             "streets and house numbers themselves (§4.3)")
     parser.add_argument("--config", type=Path, default=DEFAULT_CITY_CONFIG)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     return parser.parse_args()
@@ -587,20 +867,47 @@ def main() -> int:
         require_fts4()
         config = CityConfig.load(arguments.config)
         box = config.bounding_box
-        normalizer = AddressNormalizer.load()
+        # The rules of the language the city's address base is written in
+        # (\u00a715.1). The configuration names it; what is retained goes into the
+        # index, so the search can never apply another language's.
+        normalizer = normalizer_for(config.default_language)
         started = time.monotonic()
         print(f"Emprise : {box}\n")
 
         for path in arguments.ban_csv:
             if not path.exists():
                 raise GenerationError(f"BAN extract not found: {path}")
+        if not arguments.ban_csv and arguments.osm_extract is None:
+            raise GenerationError(
+                "Nothing to read addresses from: pass --ban-csv for a French "
+                "conurbation, or --osm-extract for any other (§15)."
+            )
 
-        print("[1/3] Reading the BAN extracts…")
-        streets, rows_read, rows_kept = read_ban_files(
-            arguments.ban_csv, box, normalizer
-        )
-        print(f"      {rows_read} rows read, {rows_kept} inside the box, "
-              f"{len(streets)} streets")
+        municipalities: list[Street] = []
+        if arguments.ban_csv:
+            print("[1/3] Reading the BAN extracts…")
+            streets, rows_read, rows_kept = read_ban_files(
+                arguments.ban_csv, box, normalizer
+            )
+            print(f"      {rows_read} rows read, {rows_kept} inside the box, "
+                  f"{len(streets)} streets")
+        else:
+            # No national address base for this country: the addresses are read
+            # from the extract the map is already cut from (§15).
+            print("[1/3] Reading the addresses of the OpenStreetMap extract…")
+            with tempfile.TemporaryDirectory() as work:
+                streets, rows_read, rows_kept = read_osm_addresses(
+                    arguments.osm_extract, box, Path(work), normalizer
+                )
+                municipalities = read_osm_municipalities(
+                    arguments.osm_extract, box, Path(work)
+                )
+            named = attach_municipalities(streets, municipalities)
+            numbered = sum(len(street.numbers) for street in streets.values())
+            print(f"      {rows_read} objects read, {rows_kept} inside the box, "
+                  f"{len(streets)} streets, {numbered} house numbers")
+            print(f"      {named} streets named after the nearest of "
+                  f"{len(municipalities)} municipalities")
 
         place_count = 0
         if arguments.osm_extract is not None:
