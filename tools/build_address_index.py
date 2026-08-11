@@ -65,6 +65,10 @@ DELTA_SCALE = 100_000.0
 # share.
 GRID_DEGREES = 0.01
 
+# Real street names kept in the reference cases the Kotlin test replays. Enough
+# to cover a city's own spellings without turning a fixture into a corpus.
+SAMPLED_STREET_NAMES = 120
+
 # Entry kinds, mirrored by the Kotlin side.
 KIND_STREET = 0
 KIND_PLACE = 1
@@ -820,8 +824,12 @@ def write_normalization_fixtures(normalizer: AddressNormalizer,
     is exactly what makes the check worth running.
     """
     # A slice of real names as well, so the fixture covers what the data
-    # actually contains rather than only what we thought to imagine.
-    sampled = [street.display_name for _, street in streets[::997]][:120]
+    # actually contains rather than only what we thought to imagine. The stride
+    # follows the corpus: a fixed one was cut for the half-million rows of a
+    # French department and left a city read from OpenStreetMap — a twentieth
+    # of that — with two samples.
+    stride = max(1, len(streets) // SAMPLED_STREET_NAMES)
+    sampled = [street.display_name for _, street in streets[::stride]][:SAMPLED_STREET_NAMES]
 
     cases = []
     for raw in normalizer.reference_names + sampled:

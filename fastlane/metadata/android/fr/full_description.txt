@@ -16,7 +16,9 @@ La carte, le graphe de routage et l'index d'adresses ne sont pas dans l'applicat
 
 <b>Les villes servies</b>
 
-Trois réseaux pour l'instant : V'lille pour la métropole de Lille, Vélo'v pour celle de Lyon, Vélib' Métropole pour Paris et sa couronne. L'application propose la vôtre d'après votre position, si vous le lui demandez, et vous pouvez en garder plusieurs installées et passer de l'une à l'autre.
+Près de trois cents réseaux, dans une trentaine de pays : tous ceux qui publient leurs stations en données ouvertes et dont les bornes permettent de garantir le retour du vélo — de Vélib' à Paris à Citi Bike à New York, en passant par Prague, Barcelone, Copenhague, Tokyo et Buenos Aires. L'application vous propose le vôtre d'après votre position, si vous le lui demandez, et vous pouvez en garder plusieurs installés.
+
+Les jeux de données hors ligne ne sont produits que pour quelques-uns pour l'instant. Pour les autres, l'application le dit plutôt que de faire semblant : la liste montre ce qui existe, et les fichiers se produisent avec les scripts du dépôt.
 
 Elle n'est liée à aucun réseau en particulier : la liste des villes se met à jour d'elle-même, et l'adresse du flux GBFS se change dans les réglages, ce qui la rend utilisable avec n'importe quel réseau GBFS du monde.
 

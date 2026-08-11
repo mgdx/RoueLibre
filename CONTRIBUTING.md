@@ -25,10 +25,10 @@ which has no language qualifier: it is what Android serves when nothing else
 matches, so it is always complete. French, in `values-fr/`, is a translation
 like the others.
 
-**Twenty-six languages are already started** — Albanian, Arabic, Basque,
-Bosnian, Catalan, Chinese, Croatian, Czech, Danish, Dutch, Finnish, German,
-Hungarian, Italian, Japanese, Latvian, Lithuanian, Norwegian, Polish,
-Portuguese, Romanian, Slovak, Slovene, Spanish, Swedish. Their files exist
+**Twenty-nine languages are already started** — Albanian, Arabic, Basque,
+Bosnian, Catalan, Chinese, Croatian, Czech, Danish, Dutch, Finnish, Galician,
+German, Hungarian, Italian, Japanese, Latvian, Lithuanian, Norwegian, Polish,
+Portuguese, Romanian, Serbian, Slovak, Slovene, Spanish, Swedish, Turkish. Their files exist
 under `values-ar/`, `values-de/` and so on, but every string in them still
 holds its English text: they are a starting point, not a translation. Open the
 one for your language and translate it in place.

@@ -50,8 +50,8 @@ android {
         // with.
         localeFilters += listOf(
             "en", "fr", "ar", "de", "es", "it", "nl", "pl", "pt", "zh",
-            "bs", "ca", "cs", "da", "eu", "fi", "hr", "hu", "ja", "lt",
-            "lv", "nb", "ro", "sk", "sl", "sq", "sv",
+            "bs", "ca", "cs", "da", "eu", "fi", "gl", "hr", "hu", "ja",
+            "lt", "lv", "nb", "ro", "sk", "sl", "sq", "sr", "sv", "tr",
         )
     }
 

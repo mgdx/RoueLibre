@@ -11,6 +11,87 @@ also records what has no visible effect.
 
 ### Added
 
+- **Every bike-share network in the world that publishes its stations** — 306
+  of them, in 35 countries, against 69 in France alone. The survey that found
+  the French ones now reads the whole GBFS registry, calls the sixteen hundred
+  feeds it lists, and judges each on what its feed answered. Nothing about the
+  application had to change for it: `SPEC.md` §15 asked that serving another
+  conurbation be a configuration file, and this is that promise spent a second
+  time, on Prague, New York, Barcelona, Tokyo, Buenos Aires and Pristina.
+  - `tools/discover_networks.py` is no longer French. It reads MobilityData's
+    `systems.csv` — the registry the GBFS standard keeps of itself, and the
+    only catalogue covering every country — beside France's national access
+    point and the hand-checked addresses of `config/extra-feeds.json`. The
+    eligibility rules are unchanged, and they still do most of the work: of
+    1,531 distinct systems, 306 pass.
+  - Two public datasets replace what was a table of French regions. Geofabrik's
+    extract index answers "which extract covers this box" by testing the box
+    against the extracts' own geometry, so the answer holds for Auckland as
+    well as for Amiens — and an extract that is an ancestor of another already
+    chosen is dropped rather than downloaded beside it. The GeoNames gazetteer
+    names the municipalities the stations stand in, in any country.
+  - The report says which municipalities each network covers besides the town
+    it is named after. A bike-share network belongs to an agglomeration, and
+    the reference box is derived from its stations precisely so the
+    neighbouring towns fall inside it; naming them is how the page shows they
+    were not forgotten. It also fixed a real omission: Ecobici was named after
+    a borough of Mexico City, whose own point lies three hundred metres outside
+    the rectangle its stations enclose.
+  - The list, rejections and their reasons included, moved from
+    `docs/networks-france.md` to [`docs/networks.md`](docs/networks.md), and is
+    grouped by country.
+
+- **A station standing alone is no longer part of the box.** The rectangle is
+  derived from the stations, and one station in the wrong place carries it
+  away: Valenbisi publishes a "LABMAD" three hundred kilometres from Valencia,
+  in Madrid, which made its box 33,645 km² instead of 150 and had the network
+  set aside as "one feed for a whole region". A station more than 25 km from
+  every other is now dropped from the box — named in the log, never swallowed —
+  which is the same treatment the latitude-zero station already had. Recorded
+  in `SPEC.md` §4, whose first step said "every station".
+
+- **The address index is no longer French.** `SPEC.md` §15 carried a caveat
+  since the first line of this project: the Base Adresse Nationale is French,
+  and a foreign city would have to have its index rebuilt from OpenStreetMap.
+  It now does. `tools/build_address_index.py` reads the named ways and the
+  `addr:housenumber` objects of the extract the map and the routing graph are
+  already cut from — one download instead of two — and names the streets that
+  carry no municipality after the nearest inhabited place. France keeps the
+  BAN, which is finer there; the configuration says which applies, in
+  `dataSources.addressSource`, and `tools/generate_all.sh` follows it.
+
+- **Street-name normalisation, one file per language.** A street type is a word
+  of a language: "rue" says nothing about a Warsaw address, where the word is
+  *ulica* and the abbreviation *ul.*, and no accent removal folds the ß that
+  half of Germany types as "ss". `config/address_normalization.json` became
+  `config/address-normalization/<language>.json`, thirty-three of them, and
+  §15.1's requirement that those rules travel with a city's data is finally
+  met: the index records the language it was built with, and the application
+  reads it back from there rather than deciding for itself — so an index and a
+  rule set can never be paired wrongly. A language with no file falls back on
+  English, and `reference-<language>.json` in the test fixtures proves each new
+  file the day it lands rather than the day a city speaking it is generated.
+  - New in the rules: `letterReplacements`, for the letters accent removal
+    cannot reach because they are not accented letters — ß, ø, ł, đ, þ, the
+    Greek final sigma, the Turkish dotless ı. Applied identically on both sides
+    of the search, in Kotlin and in Python.
+
+- **Twenty-nine started translations**, against eight: one for every language
+  spoken where a network is served — Albanian, Basque, Bosnian, Catalan,
+  Croatian, Czech, Danish, Finnish, Galician, Hungarian, Japanese, Latvian,
+  Lithuanian, Norwegian, Romanian, Serbian, Slovak, Slovene, Swedish, Turkish — each holding the English text
+  until somebody translates it. Arriving in Ljubljana with the application must
+  mean arriving in a language somebody can finish, not in a folder somebody
+  must create.
+
+- **A city configuration carries its country** (ISO 3166-1 alpha-2) and the
+  language its streets are named in. The catalogue groups on the first; the
+  index is built with the second. A feed declaring English in Nantes has
+  declared a default, not a fact about its street names, and twenty-five French
+  networks do exactly that: a declared language is followed only where it names
+  one of the country's own — which is how Barcelona is served in Catalan and
+  Bilbao in Basque.
+
 - **Every French bike-share network that publishes its stations** — 69 of them,
   against three. `SPEC.md` §15 asks that serving another conurbation be a
   configuration file and never a code change; this is that promise spent.

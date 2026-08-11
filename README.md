@@ -8,15 +8,15 @@ rather than the nearest one.
 
 It serves **any conurbation whose network publishes its stations as open data**
 in the GBFS format, and several of them can live side by side on the same
-device. **69 French networks are configured** — every one whose stations are
-published and whose docks the journey algorithm can rely on, from Vélib' to
-Auch's ten stations, by way of Marseille, Toulouse, Strasbourg, Pointe-à-Pitre
-and Saint-Pierre de La Réunion. The list, and what was set aside and why, is in
-[`docs/networks-france.md`](docs/networks-france.md); three of them have their
-offline data generated so far. Adding a network is a configuration file and a
-data generation run, never a code change (see
-[Adding a city](#adding-a-city)). No city is a default: the application
-proposes one from your position, and you choose.
+device. **306 networks in 35 countries are configured** — every one whose
+stations are published and whose docks the journey algorithm can rely on, from
+Vélib' to Auch's ten stations, by way of New York, Prague, Barcelona, Tokyo,
+Buenos Aires and Pristina. The list, and what was set aside and why, is in
+[`docs/networks.md`](docs/networks.md); three of them have their offline data
+generated so far. Adding a network is a configuration file and a data
+generation run, never a code change (see [Adding a city](#adding-a-city)). No
+city is a default: the application proposes one from your position, and you
+choose.
 
 The interface is in English, and translations are welcome — see
 [CONTRIBUTING.md](CONTRIBUTING.md).
@@ -176,29 +176,35 @@ No data specific to a conurbation exists in the code: no URL, no bounding box,
 no centring coordinate, no network name. Each city fits in one file under
 `config/cities/`, and the catalogue indexes them.
 
-**In France, both steps are already done.** The survey below re-reads the two
-catalogues, calls every feed, applies the eligibility rules and writes the
-configurations of the networks it kept:
+**For the whole world, both steps are already done.** The survey below
+re-reads the public catalogues, calls every feed on earth that claims to
+publish stations — around sixteen hundred of them — applies the eligibility
+rules and writes the configurations of the networks it kept:
 
 ```bash
-python3 tools/discover_networks.py    # calls every French feed, writes the list
+python3 tools/discover_networks.py    # calls every feed, writes docs/networks.md
+python3 tools/discover_networks.py --country PL   # or one country at a time
 python3 tools/add_city.py --list      # what it would add
 python3 tools/add_city.py --all       # writes config/cities/*.json
+python3 tools/add_city.py --refresh-sources   # re-reads where the data is cut from
 ```
 
-By hand, or for a network outside France:
+By hand, for a network the catalogues do not list:
 
 1. **Find the GBFS feed URL.** Never guess it: take it from the
-   [MobilityData catalogue](https://github.com/MobilityData/gbfs/blob/master/systems.csv)
-   or, in France, from [transport.data.gouv.fr](https://transport.data.gouv.fr/),
-   then verify it with a real request.
+   [MobilityData catalogue](https://github.com/MobilityData/gbfs/blob/master/systems.csv),
+   in France from [transport.data.gouv.fr](https://transport.data.gouv.fr/), or
+   from the producer's own developer page — then verify it with a real request.
+   An address found that way goes into
+   [`config/extra-feeds.json`](config/extra-feeds.json), where the survey picks
+   it up and judges it like any other.
 2. **Copy a city configuration.** Start from
    [`config/cities/lille.json`](config/cities/lille.json) and adjust only the
    `network` block, the `gbfs.json` URL and the map's centring. Leave the
    `boundingBox` block alone: it is recomputed automatically.
-3. **Generate the data.** The OpenStreetMap extract and the address-base
-   departments come from the configuration's `dataSources` block, so the
-   command carries nothing but the city:
+3. **Generate the data.** The OpenStreetMap extract, and in France the
+   address-base departments, come from the configuration's `dataSources` block,
+   so the command carries nothing but the city:
    ```bash
    tools/generate_all.sh --city config/cities/<city>.json
    ```
@@ -227,10 +233,22 @@ Since GBFS is an international standard, most of the portability is won as soon
 as the URL is configurable — and it is also configurable from the application's
 settings, without recompiling.
 
-**One limit to know about:** the address index rests on the Base Adresse
-Nationale, which is French. For a foreign city it would have to be regenerated
-from OpenStreetMap; the script isolates that source to make the substitution
-possible.
+**Where the addresses come from.** In France the index is built from the Base
+Adresse Nationale, which is the finer source there; everywhere else it is built
+from the OpenStreetMap extract the map and the routing graph are already cut
+from, so a city costs one download rather than two. The configuration says
+which, in `dataSources.addressSource`, and the coverage of the second varies
+from one city to the next — that is the honest cost of not having a national
+address base to lean on.
+
+**Street names are normalised in their own language.** "Boulevard" abbreviates
+to "bd" in French, "ulica" to "ul." in Polish, and "Straße" is typed "Strasse"
+by half of Germany. One file per language holds those rules, in
+[`config/address-normalization/`](config/address-normalization/); the index
+records which one it was built with, and the application reads it back from
+there rather than deciding for itself. A language with no file of its own falls
+back on English — plain folding, which still finds a street typed in full — and
+writing one is a pull request against a single JSON file.
 
 ## Dependencies, and why each one
 
@@ -264,7 +282,10 @@ and whose archive is verified by SHA-256 digest.
 |---|---|---|
 | The GBFS feed of each network served, named in its configuration | station availability | ODbL, as a rule |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) | base map, routing, landmarks | ODbL |
-| [Base Adresse Nationale](https://adresse.data.gouv.fr/) | house numbers | ODbL |
+| [Base Adresse Nationale](https://adresse.data.gouv.fr/) | house numbers, France | ODbL |
+| [OpenStreetMap](https://www.openstreetmap.org/copyright) | house numbers, everywhere else | ODbL |
+| [Geofabrik's extract index](https://download.geofabrik.de/) | which extract covers a city's box | ODbL |
+| [GeoNames](https://www.geonames.org/) | the municipalities a network covers | CC BY 4.0 |
 | [BRouter](https://github.com/abrensch/brouter) | routing engine and generator | MIT |
 | SRTM through [terrain-tiles](https://registry.opendata.aws/terrain-tiles/) | the graph's elevation data | public domain |
 

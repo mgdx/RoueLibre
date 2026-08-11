@@ -58,7 +58,7 @@ Beware of the misreading a network's name invites: it is almost never the city i
 
 **The bounding box must not be the administrative boundary of the conurbation**, which would cover vast areas without a single station and would needlessly inflate all three datasets. It is **derived from the stations themselves**:
 
-1. compute the rectangle enclosing every station present in `station_information.json`;
+1. compute the rectangle enclosing every station present in `station_information.json`, **less the ones that are not really there**: a position at latitude zero, a field left empty rather than omitted, and a station standing more than 25 km from every other — Valenbisi publishes one in Madrid, three hundred kilometres from Valencia, and it stretched the network's rectangle from 150 km² to 33,645. The stations of a docked network are a few hundred metres apart; what is dropped is named in the generation log, never swallowed;
 2. widen it by a **3 km margin**, to cover walking legs from or towards the edge of the network and to avoid edge effects in route computation near the boundaries of the graph.
 
 This bounding box is **recomputed every time the data is regenerated**, which automatically follows extensions of the network. It is written into the city configuration file (§15) and shown in the "storage" screen. No bounding-box coordinate is hard-coded in the application, and every city served has its own.
@@ -77,7 +77,7 @@ Files used:
 
 **Implementation rules:**
 
-- The `gbfs.json` URL **must not be guessed**. The agent must obtain it from the dataset page on `transport.data.gouv.fr` (the French national access point) or from MobilityData's `systems.csv` catalogue, then verify it with a real request before writing it into the code.
+- The `gbfs.json` URL **must not be guessed**. The agent must obtain it from a public catalogue — MobilityData's `systems.csv`, the registry the GBFS standard keeps of itself and the only one covering every country; the dataset page on `transport.data.gouv.fr` for France; or the producer's own developer page — then verify it with a real request before writing it into the code. An address found on a producer's page goes into `config/extra-feeds.json` with the page it was read from, so the claim can be checked.
 - Every feed URL goes through the auto-discovery file, never hard-coded: that is the principle of GBFS and it protects against URL changes on the producer's side.
 - The `gbfs.json` URL must be **editable in the settings**. A happy consequence: the application works with any GBFS network in the world without a code change.
 - Do not use a network's legacy proprietary API, nor the third-party JSON wrappers found on GitHub, when a GBFS feed exists: they are **deprecated** and nobody maintains them. Lille's old `vlille-realtime` API is the example to hand.
@@ -118,7 +118,7 @@ The list must live in a **readable configuration file** of the generation script
 
 Address search runs **entirely on the device**. No online geocoder, no third-party request: it is the most sensitive data in the application, since it reveals where the user is going.
 
-- Source: the country's open address base. For France, the **Base Adresse Nationale**, in freely downloadable per-department extracts. The script must isolate that source so another country's can take its place (§15).
+- Source: the country's open address base. For France, the **Base Adresse Nationale**, in freely downloadable per-department extracts. **Everywhere else, OpenStreetMap** — the very extract the base map and the routing graph are already cut from, so that a city costs one download rather than two. The city configuration says which, in `dataSources.addressSource`, and the script reads the two behind the same interface: house numbers from `addr:housenumber`, streets from the named ways, municipalities from the nearest inhabited place. The coverage of the second is not the first's, and it varies from one city to the next; that is the accepted cost of serving a country that publishes no address base of its own.
 - **Granularity: the house number.** A thoroughfare is often over a kilometre long: a single point per street would produce an error of several hundred metres, enough to designate the wrong station and therefore a wrong journey. House-number precision is a requirement, not a comfort.
 - The index forms **a single downloaded package** together with the other datasets (§4.4); nothing is embedded in the APK:
   - **Streets** — one entry per street: name, municipality, postcode, representative point. Around 15,000 to 20,000 entries over the reference box, **1 to 3 MB**.
@@ -127,8 +127,9 @@ Address search runs **entirely on the device**. No online geocoder, no third-par
 - If the number typed does not exist in the index, **interpolate** between the two nearest known numbers of the same street rather than falling back on the middle of the street.
 - Also add the **points of interest useful for finding your way**: railway stations, metro stations, universities, hospitals, major squares. A few thousand extra entries, extracted from OpenStreetMap, treated as streets.
 - Implementation: **SQLite FTS on street names only** — that is what makes the whole thing viable. Numbers are never searched full-text: once the street is identified, the number resolves through a plain index on (street, number). Search insensitive to case and accents, tolerant of common abbreviations ("bd", "av", "st"), results ranked by proximity to the current position.
+- **Normalisation is written per language**, in `config/address-normalization/<language>.json`, and the language meant is the one the **address base** is written in, never the one the interface speaks: an index built over Antwerp is searched in Dutch whatever the phone is set to. A street type is a word of a language — "rue" says nothing about a Warsaw address, where the word is *ulica* — and §15.1 requires those rules to travel with a city's data. The index records the language it was built with; the application reads it back from there rather than deciding for itself, so an index and a rule set can never be paired wrongly. A language with no file of its own falls back on English: plain folding, no street type, which still finds a street typed in full.
 - **Tolerance to typing mistakes.** Search must find a street despite a typo, a missing letter or two transposed letters. Implemented in two stages:
-  1. **Normalisation**, applied to the index and to the query alike: lowercase, accents and punctuation removed, abbreviations expanded ("st" → "saint", "bd" → "boulevard", "av" → "avenue", "fbg" → "faubourg"). The **street type is stored in a separate field** from the proper name, so that "gambetta" finds "rue Gambetta" and "rue de la gare" is not penalised by word order. Prefix matching on each word, which covers typing in progress.
+  1. **Normalisation**, applied to the index and to the query alike: lowercase, letters folded that accent removal cannot reach (ß → ss, ł → l, ø → o, final sigma → sigma), accents and punctuation removed, abbreviations expanded ("st" → "saint", "bd" → "boulevard", "av" → "avenue", "fbg" → "faubourg", "ul." → "ulica"). The **street type is stored in a separate field** from the proper name, so that "gambetta" finds "rue Gambetta" and "rue de la gare" is not penalised by word order. Prefix matching on each word, which covers typing in progress.
   2. **Edit-distance fallback** when the first stage returns fewer results than expected: **Damerau-Levenshtein** distance — it handles letter transposition, the commonest mistake on a touch keyboard — computed in Kotlin over the normalised names held in memory. With a corpus of around 20,000 entries and under a megabyte, a full scan stays in the tens of milliseconds.
 - Tolerance threshold **proportional to length**: one mistake allowed below eight characters, two beyond. Past that, the noise exceeds the service.
 - Search **triggered with a debounce delay** (around 150 ms) and **cancellable**: each keystroke cancels the previous computation. No computation on the main thread.
@@ -343,7 +344,7 @@ After a new version is installed, a **what's new** screen appears **once only**,
 - Use `<plurals>` for everything that agrees ("1 bike available" / "3 bikes available").
 - Use **positional placeholders** (`%1$s`, `%2$d`) and never string concatenation: word order changes from one language to another.
 - Add `<!-- -->` comments above ambiguous strings, for future translators.
-- Provide a **started file for the most widely spoken languages**, holding the English text until somebody translates it, so that contributing means editing a file rather than creating one. Every language supplied must be declared in `localeFilters`, without which its folder is dropped from the APK.
+- Provide a **started file for the most widely spoken languages, and for every language spoken where a network is served**, holding the English text until somebody translates it, so that contributing means editing a file rather than creating one. The catalogue is what settles the list: arriving in Ljubljana or Pristina with the application must mean arriving in a language somebody can finish, not in a folder somebody must create. Every language supplied must be declared in `localeFilters`, without which its folder is dropped from the APK.
 - Format dates, times, distances and durations through the localisation APIs, not by hand.
 - Layouts compatible with right-to-left languages (`start`/`end` rather than `left`/`right`).
 - Provide a `CONTRIBUTING.md` explaining how to submit a translation.
@@ -416,13 +417,13 @@ This project is meant to live a long time, to be taken over by contributors and 
 
 The application must be able to serve another city **without a code change**. This is a design requirement, not an intention.
 
-- **No data specific to a city hard-coded** in the code: no URL, no bounding box, no centring coordinates, no network name. All of it lives in a **city configuration file**, single and documented.
+- **No data specific to a city hard-coded** in the code: no URL, no bounding box, no centring coordinates, no network name. All of it lives in a **city configuration file**, single and documented. It carries the country as well (ISO 3166-1 alpha-2), which the catalogue groups on and the generation scripts read the address base of.
 - That file describes: network name, `gbfs.json` URL, bounding box, default centre and zoom, URLs of the datasets to download, default language.
 - Since GBFS is an international standard, most of the portability is won as soon as the URL is configurable (§4.1).
 - The **generation scripts** for the data (tiles, routing graph, address index) take the bounding box as a parameter. Producing another city's data must be a single command.
 - The vocabulary of the code and of the interface stays **generic**: "station", "bike", "network". A network's name lives in its configuration alone — never in a class name, a variable or a string resource.
 - Document in `README.md` the complete procedure for deploying the application on a new city.
-- One caveat, though: the Base Adresse Nationale is French. For a foreign city, the address index would have to be regenerated from OpenStreetMap. The script must isolate that source behind a clear interface to make substitution possible.
+- The Base Adresse Nationale is French, and it was long the caveat here. It no longer is: the index script reads the addresses of any other country from its OpenStreetMap extract, behind the same interface, and the configuration says which source applies (§4.3).
 
 ### 15.1 Several cities in the same application
 
@@ -434,7 +435,7 @@ Serving one city without recompiling is not enough: a single application must be
 - Afterwards, and once a city is in service, the application **offers the network of the conurbation it finds itself in** when that is not the one being served: someone who travels arrives with another city's data installed, on a blank map that says nothing about the network under their feet. Strictly bounded: it reads only **a position the system already holds** — no permission requested, no fix asked for, nothing at all if location is denied or off (§10) — it compares it against the catalogue **already on the device**, so no request goes out, it **offers** and never acts, and a refusal is not repeated for the rest of the session. Nothing about the cities one passes through is written down (§2, C3).
 - The catalogue is **searchable by name**, network or conurbation: past a few dozen entries a list is scrolled rather than read.
 - Datasets are **stored per city**. Two cities therefore coexist on the device without mixing, and one city's data can be deleted without touching the other (§11.9).
-- The street-name normalisation rules (§4.3) are country-specific. They must be able to travel with a city's data rather than being frozen into the application.
+- The street-name normalisation rules (§4.3) are language-specific, one file per language, and they travel with a city's data rather than being frozen into the application: the address index records which language it was built with, and the application applies that one. All the rule files ship, since a user installs a second city without updating the application.
 
 ## 16. Working method expected of the agent
 
