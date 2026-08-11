@@ -1,0 +1,152 @@
+{
+  "$comment": [
+    "Street-name normalisation rules, Italian — SPEC.md §4.3.",
+    "",
+    "One file per language, in this directory, and the language is the one",
+    "the ADDRESS BASE is written in, not the one the interface speaks: an",
+    "index built over Antwerp is searched in Dutch whatever the phone is",
+    "set to. The index says which file it was built with (§15.1), so the",
+    "two can never be paired wrongly.",
+    "",
+    "Read by tools/build_address_index.py AND embedded in the APK, where",
+    "the search engine reads it again. A divergence between the two would",
+    "make streets unfindable, hence the shared file.",
+    "",
+    "Italian writes the type first — \"Via Roma\", \"Piazza del Duomo\" —",
+    "and abbreviates it constantly on the signs themselves. Only the",
+    "whole-word contractions are expanded, though — \"vle\", \"pzza\",",
+    "\"cso\": a form written with an internal dot, \"V.le\", is broken into",
+    "two words by the punctuation rule before any abbreviation is looked",
+    "up, and rewriting its pieces would turn a viale into a via.",
+    "",
+    "Venice's \"calle\", \"fondamenta\" and \"campo\" are in the list for the",
+    "same reason a Marseille \"traverse\" is in the French one: a city",
+    "names its ways in its own words."
+  ],
+  "language": "it",
+  "rulesVersion": 1,
+  "abbreviations": {
+    "$comment": [
+      "Expanded during normalisation, on whole words only. A",
+      "single-letter abbreviation is expanded at the head of a name",
+      "only, otherwise it would rewrite an initial in the middle of a",
+      "person's name."
+    ],
+    "anywhere": {
+      "vle": "viale",
+      "pza": "piazza",
+      "pzza": "piazza",
+      "ple": "piazzale",
+      "cso": "corso",
+      "str": "strada",
+      "loc": "localita",
+      "sta": "santa",
+      "sto": "santo",
+      "lgo": "largo"
+    },
+    "leadingOnly": {
+      "s": "san"
+    }
+  },
+  "streetTypes": {
+    "$comment": [
+      "The street type is stored in a field SEPARATE from the proper",
+      "name (§4.3), and is recognised at the HEAD of a name only, by",
+      "longest match. Written in their already normalised form.",
+      "A language that writes its type last, or glues it to the name,",
+      "has few entries here or none at all: that is a fact about the",
+      "language, not an omission."
+    ],
+    "types": [
+      "via",
+      "viale",
+      "piazza",
+      "piazzale",
+      "corso",
+      "largo",
+      "vicolo",
+      "strada",
+      "lungomare",
+      "lungarno",
+      "salita",
+      "discesa",
+      "ponte",
+      "galleria",
+      "borgo",
+      "contrada",
+      "calle",
+      "campo",
+      "campiello",
+      "fondamenta",
+      "rio tera",
+      "ruga",
+      "traversa",
+      "circonvallazione",
+      "passeggiata",
+      "parco",
+      "villaggio"
+    ]
+  },
+  "$letterReplacementsComment": [
+    "Letters that survive accent removal, because they are not accented",
+    "letters at all: NFD decomposition has nothing to take off them.",
+    "They are folded here instead, on both sides of the search alike."
+  ],
+  "letterReplacements": {},
+  "$punctuationComment": [
+    "Turned into word breaks on both sides of the search. The",
+    "non-breaking spaces are here rather than left to the whitespace",
+    "split: Python treats them as whitespace and Kotlin's \\s does not,",
+    "so a name holding one would be indexed as two words and searched as",
+    "one."
+  ],
+  "punctuationReplacedBySpace": "'’`-–—‑_.,;:!?()[]{}/\\\"«»&+*#@%=<>|~$^§°…   ",
+  "stopWords": {
+    "$comment": [
+      "Stop words ignored when RANKING — never when indexing,",
+      "otherwise a name would lose half its content. They serve not to",
+      "reward a match that only bears on an article."
+    ],
+    "words": [
+      "di",
+      "del",
+      "della",
+      "dei",
+      "delle",
+      "dello",
+      "degli",
+      "da",
+      "dal",
+      "la",
+      "il",
+      "lo",
+      "le",
+      "gli",
+      "e",
+      "in",
+      "a",
+      "al"
+    ]
+  },
+  "$referenceNamesComment": [
+    "Names written out on purpose, replayed by the Kotlin test against",
+    "every network generated in this language. They are what proves the",
+    "Python script and the application read these rules the same way,",
+    "from the day the rules are written rather than from the day a city",
+    "of this language has its data generated."
+  ],
+  "referenceNames": [
+    "Via Roma",
+    "Piazza del Duomo",
+    "Corso Vittorio Emanuele II",
+    "V.le della Libertà",
+    "P.zza San Marco",
+    "Vicolo Stretto",
+    "Lungomare Cristoforo Colombo",
+    "Calle Larga XXII Marzo",
+    "Fondamenta Nuove",
+    "Salita di San Nicola",
+    "Largo Argentina",
+    "Contrada Sant'Antonio"
+  ]
+}

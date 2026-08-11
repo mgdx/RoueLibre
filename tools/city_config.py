@@ -120,6 +120,21 @@ class CityConfig:
         return self.document["gbfs"]["discoveryUrl"]
 
     @property
+    def default_language(self) -> str:
+        """The language of the conurbation's own address base (§15.1).
+
+        Not the language of the interface, which follows the device: it is the
+        language streets are named in here, and therefore the one whose
+        normalisation rules the index has to be built with.
+        """
+        return self.document["network"].get("defaultLanguage", "en")
+
+    @property
+    def country(self) -> str:
+        """ISO 3166-1 alpha-2 code of the country the network runs in."""
+        return self.document.get("country", "")
+
+    @property
     def format_version(self) -> int:
         return self.document["dataRelease"]["formatVersion"]
 

@@ -1,0 +1,59 @@
+{
+  "language": "hu",
+  "cases": [
+    {
+      "input": "Andrássy út",
+      "normalized": "andrassy ut",
+      "type": null,
+      "name": "andrassy ut"
+    },
+    {
+      "input": "Deák Ferenc tér",
+      "normalized": "deak ferenc ter",
+      "type": null,
+      "name": "deak ferenc ter"
+    },
+    {
+      "input": "Váci u.",
+      "normalized": "vaci utca",
+      "type": null,
+      "name": "vaci utca"
+    },
+    {
+      "input": "Váci utca",
+      "normalized": "vaci utca",
+      "type": null,
+      "name": "vaci utca"
+    },
+    {
+      "input": "Nagykörút",
+      "normalized": "nagykorut",
+      "type": null,
+      "name": "nagykorut"
+    },
+    {
+      "input": "Szent István körút",
+      "normalized": "szent istvan korut",
+      "type": null,
+      "name": "szent istvan korut"
+    },
+    {
+      "input": "Bartók Béla út",
+      "normalized": "bartok bela ut",
+      "type": null,
+      "name": "bartok bela ut"
+    },
+    {
+      "input": "Kossuth Lajos tér",
+      "normalized": "kossuth lajos ter",
+      "type": null,
+      "name": "kossuth lajos ter"
+    },
+    {
+      "input": "Dr. Szabó Ferenc utca",
+      "normalized": "doktor szabo ferenc utca",
+      "type": null,
+      "name": "doktor szabo ferenc utca"
+    }
+  ]
+}

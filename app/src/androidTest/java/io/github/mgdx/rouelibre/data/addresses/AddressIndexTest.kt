@@ -5,8 +5,6 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import io.github.mgdx.rouelibre.core.Outcome
-import io.github.mgdx.rouelibre.core.address.AddressNormalizer
-import io.github.mgdx.rouelibre.core.address.AddressNormalizerReader
 import io.github.mgdx.rouelibre.core.address.AddressResult
 import io.github.mgdx.rouelibre.core.address.PositionPrecision
 import io.github.mgdx.rouelibre.core.data.DatasetKind
@@ -59,7 +57,7 @@ class AddressIndexTest {
             .resolve(checkNotNull(DatasetKind.Addresses.fileName))
         indexFile.delete()
         writeIndex(indexFile)
-        index = AddressIndex(datasets, normalizer(target), Dispatchers.IO)
+        index = AddressIndex(datasets, AddressNormalizers(target), Dispatchers.IO)
     }
 
     @After
@@ -160,16 +158,6 @@ class AddressIndexTest {
             is Outcome.Failure -> throw AssertionError("search failed: ${outcome.error}")
         }
 
-    private fun normalizer(context: Context): AddressNormalizer {
-        val document = context.assets.open("address_normalization.json")
-            .bufferedReader()
-            .use { it.readText() }
-        return when (val outcome = AddressNormalizerReader.read(document)) {
-            is Outcome.Success -> outcome.value
-            is Outcome.Failure -> throw AssertionError("unreadable rules: ${outcome.error}")
-        }
-    }
-
     /**
      * Writes a tiny index, to the generation script's exact schema.
      *
@@ -204,7 +192,10 @@ class AddressIndexTest {
             )
             it.execSQL("CREATE TABLE metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL)")
             it.execSQL(
-                "INSERT INTO metadata VALUES ('formatVersion','2'),('deltaScale','100000')",
+                "INSERT INTO metadata VALUES ('formatVersion','2'),('deltaScale','100000')," +
+                    // The language the names below are written in: the index
+                    // says it, and the search reads it back (SPEC §15.1).
+                    "('normalizationLanguage','fr')",
             )
 
             addStreet(it, 1, "Rue Gambetta", "rue", "gambetta", "Lille", 50.6290, 3.0530)

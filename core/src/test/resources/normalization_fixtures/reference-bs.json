@@ -1,0 +1,53 @@
+{
+  "language": "bs",
+  "cases": [
+    {
+      "input": "Ulica Zmaja od Bosne",
+      "normalized": "ulica zmaja od bosne",
+      "type": "ulica",
+      "name": "zmaja od bosne"
+    },
+    {
+      "input": "Trg djece Sarajeva",
+      "normalized": "trg djece sarajeva",
+      "type": "trg",
+      "name": "djece sarajeva"
+    },
+    {
+      "input": "Ferhadija",
+      "normalized": "ferhadija",
+      "type": null,
+      "name": "ferhadija"
+    },
+    {
+      "input": "Titova ulica",
+      "normalized": "titova ulica",
+      "type": null,
+      "name": "titova ulica"
+    },
+    {
+      "input": "Obala Kulina bana",
+      "normalized": "obala kulina bana",
+      "type": "obala",
+      "name": "kulina bana"
+    },
+    {
+      "input": "Bulevar Meše Selimovića",
+      "normalized": "bulevar mese selimovica",
+      "type": null,
+      "name": "bulevar mese selimovica"
+    },
+    {
+      "input": "Put mladih muslimana",
+      "normalized": "put mladih muslimana",
+      "type": "put",
+      "name": "mladih muslimana"
+    },
+    {
+      "input": "Sarači sokak",
+      "normalized": "saraci sokak",
+      "type": null,
+      "name": "saraci sokak"
+    }
+  ]
+}

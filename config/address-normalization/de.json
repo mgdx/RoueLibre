@@ -1,0 +1,131 @@
+{
+  "$comment": [
+    "Street-name normalisation rules, German — SPEC.md §4.3.",
+    "",
+    "One file per language, in this directory, and the language is the one",
+    "the ADDRESS BASE is written in, not the one the interface speaks: an",
+    "index built over Antwerp is searched in Dutch whatever the phone is",
+    "set to. The index says which file it was built with (§15.1), so the",
+    "two can never be paired wrongly.",
+    "",
+    "Read by tools/build_address_index.py AND embedded in the APK, where",
+    "the search engine reads it again. A divergence between the two would",
+    "make streets unfindable, hence the shared file.",
+    "",
+    "German glues the type to the name — \"Bahnhofstraße\", \"Marienplatz\"",
+    "— so there is no type to detach: the list of types below holds only",
+    "the few words that do stand on their own (\"Am Markt\", \"An der",
+    "Alster\" are not types at all).",
+    "",
+    "What matters here is the ß. Accent removal cannot touch it, since it",
+    "is not an accented letter, and half the country types \"strasse\"",
+    "where the sign reads \"Straße\". Folding it to \"ss\" on both sides of",
+    "the search is what makes the two meet."
+  ],
+  "language": "de",
+  "rulesVersion": 1,
+  "abbreviations": {
+    "$comment": [
+      "Expanded during normalisation, on whole words only. A",
+      "single-letter abbreviation is expanded at the head of a name",
+      "only, otherwise it would rewrite an initial in the middle of a",
+      "person's name."
+    ],
+    "anywhere": {
+      "str": "strasse",
+      "pl": "platz",
+      "wg": "weg",
+      "st": "sankt",
+      "gr": "gross",
+      "kl": "klein"
+    },
+    "leadingOnly": {}
+  },
+  "streetTypes": {
+    "$comment": [
+      "The street type is stored in a field SEPARATE from the proper",
+      "name (§4.3), and is recognised at the HEAD of a name only, by",
+      "longest match. Written in their already normalised form.",
+      "A language that writes its type last, or glues it to the name,",
+      "has few entries here or none at all: that is a fact about the",
+      "language, not an omission."
+    ],
+    "types": [
+      "platz",
+      "strasse",
+      "allee",
+      "weg",
+      "ring",
+      "markt",
+      "ufer",
+      "gasse",
+      "steig",
+      "chaussee",
+      "promenade",
+      "park"
+    ]
+  },
+  "$letterReplacementsComment": [
+    "Letters that survive accent removal, because they are not accented",
+    "letters at all: NFD decomposition has nothing to take off them.",
+    "They are folded here instead, on both sides of the search alike."
+  ],
+  "letterReplacements": {
+    "ß": "ss"
+  },
+  "$punctuationComment": [
+    "Turned into word breaks on both sides of the search. The",
+    "non-breaking spaces are here rather than left to the whitespace",
+    "split: Python treats them as whitespace and Kotlin's \\s does not,",
+    "so a name holding one would be indexed as two words and searched as",
+    "one."
+  ],
+  "punctuationReplacedBySpace": "'’`-–—‑_.,;:!?()[]{}/\\\"«»&+*#@%=<>|~$^§°…   ",
+  "stopWords": {
+    "$comment": [
+      "Stop words ignored when RANKING — never when indexing,",
+      "otherwise a name would lose half its content. They serve not to",
+      "reward a match that only bears on an article."
+    ],
+    "words": [
+      "der",
+      "die",
+      "das",
+      "den",
+      "dem",
+      "des",
+      "am",
+      "an",
+      "im",
+      "in",
+      "zum",
+      "zur",
+      "auf",
+      "bei",
+      "von",
+      "vor",
+      "und"
+    ]
+  },
+  "$referenceNamesComment": [
+    "Names written out on purpose, replayed by the Kotlin test against",
+    "every network generated in this language. They are what proves the",
+    "Python script and the application read these rules the same way,",
+    "from the day the rules are written rather than from the day a city",
+    "of this language has its data generated."
+  ],
+  "referenceNames": [
+    "Bahnhofstraße",
+    "Bahnhofstrasse",
+    "Marienplatz",
+    "Unter den Linden",
+    "Kurfürstendamm",
+    "Große Freiheit",
+    "St.-Pauli-Landungsbrücken",
+    "Am Hauptbahnhof",
+    "Prinzregentenstraße",
+    "Karl-Marx-Allee",
+    "Schloßplatz",
+    "Gr. Bleichen"
+  ]
+}

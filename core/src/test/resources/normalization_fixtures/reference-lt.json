@@ -1,0 +1,47 @@
+{
+  "language": "lt",
+  "cases": [
+    {
+      "input": "Gedimino pr.",
+      "normalized": "gedimino prospektas",
+      "type": null,
+      "name": "gedimino prospektas"
+    },
+    {
+      "input": "Gedimino prospektas",
+      "normalized": "gedimino prospektas",
+      "type": null,
+      "name": "gedimino prospektas"
+    },
+    {
+      "input": "Pilies g.",
+      "normalized": "pilies gatve",
+      "type": null,
+      "name": "pilies gatve"
+    },
+    {
+      "input": "Pilies gatvė",
+      "normalized": "pilies gatve",
+      "type": null,
+      "name": "pilies gatve"
+    },
+    {
+      "input": "Katedros aikštė",
+      "normalized": "katedros aikste",
+      "type": null,
+      "name": "katedros aikste"
+    },
+    {
+      "input": "Laisvės alėja",
+      "normalized": "laisves aleja",
+      "type": null,
+      "name": "laisves aleja"
+    },
+    {
+      "input": "Savanorių pr.",
+      "normalized": "savanoriu prospektas",
+      "type": null,
+      "name": "savanoriu prospektas"
+    }
+  ]
+}

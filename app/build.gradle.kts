@@ -195,8 +195,16 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
     @get:InputFile
     abstract val cityCatalogue: RegularFileProperty
 
-    @get:InputFile
-    abstract val normalizationRules: RegularFileProperty
+    /**
+     * The street-name normalisation rules, one file per language.
+     *
+     * All of them ship: which one applies is decided by the address index
+     * being searched, which says what it was built with (SPEC §15.1), and a
+     * user who installs a second city must not have to update the application
+     * to be able to search in it.
+     */
+    @get:InputDirectory
+    abstract val normalizationRules: DirectoryProperty
 
     /**
      * The F-Droid metadata, whose release notes the application reads.
@@ -237,8 +245,12 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
                 configuration.copyTo(cities.resolve("$identifier.json"), overwrite = true)
             }
 
-        normalizationRules.get().asFile
-            .copyTo(target.resolve("address_normalization.json"), overwrite = true)
+        val rules = target.resolve("address-normalization")
+        rules.deleteRecursively()
+        rules.mkdirs()
+        normalizationRules.get().asFile.listFiles()
+            ?.filter { it.isFile && it.extension == "json" }
+            ?.forEach { it.copyTo(rules.resolve(it.name), overwrite = true) }
 
         // One folder per locale published — changelogs/en-US, changelogs/fr —
         // keeping the store's own directory names, which is what lets the
@@ -266,7 +278,7 @@ androidComponents {
         ) {
             cityConfigurations.set(rootProject.file("config/cities"))
             cityCatalogue.set(rootProject.file("config/catalogue.json"))
-            normalizationRules.set(rootProject.file("config/address_normalization.json"))
+            normalizationRules.set(rootProject.file("config/address-normalization"))
             val metadata = rootProject.file("fastlane/metadata/android")
             if (metadata.isDirectory) storeMetadata.set(metadata)
         }

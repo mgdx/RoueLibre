@@ -1,8 +1,14 @@
 {
   "$comment": [
-    "Street-name normalisation rules — SPEC.md §4.3.",
+    "Street-name normalisation rules, French — SPEC.md §4.3.",
     "",
-    "This file is the SINGLE SOURCE of those rules. It is read by the index",
+    "One file per language, in this directory, and the language is the one the",
+    "ADDRESS BASE is written in, not the one the interface speaks: an index",
+    "built over Antwerp is searched in Dutch whatever the phone is set to. The",
+    "index says which file it was built with (§15.1), so the two can never be",
+    "paired wrongly.",
+    "",
+    "This file is the SINGLE SOURCE of the French rules. It is read by the index",
     "generation script (tools/build_address_index.py) AND embedded in the APK,",
     "where the search engine reads it again. A divergence between the two would",
     "make streets unfindable: \"boulevard\" indexed on one side, \"bd\" searched",
@@ -10,23 +16,25 @@
     "lists.",
     "",
     "Normalisation is applied identically to the index and to what is typed:",
-    "lower case, accents and punctuation removed, abbreviations expanded.",
+    "lower case, letters folded, accents and punctuation removed, abbreviations",
+    "expanded.",
     "",
     "tools/build_address_index.py also produces a set of reference cases that",
     "the Kotlin test replays, to prove that the two implementations give the",
     "same result. tools/refresh_normalization_fixtures.py recomputes them",
-    "whenever these rules change, without rebuilding the indexes.",
+    "whenever these rules change, without rebuilding the indexes. The names it",
+    "replays are \"referenceNames\" at the foot of this file.",
     "",
     "SCOPE. The rules cover the whole of the French address base, mainland and",
     "overseas: the application serves every conurbation publishing its stations",
     "(§1), and a rule set written for one city leaves the others' streets",
     "unfindable. The vocabulary of a Marseille traverse, a Lyon montée, a Breton",
     "venelle and a Réunion ravine is as necessary here as the rue and the",
-    "boulevard. Per §15.1 these rules are country-specific: another country's",
-    "would replace this file, not extend it."
+    "boulevard."
   ],
 
-  "rulesVersion": 2,
+  "language": "fr",
+  "rulesVersion": 3,
 
   "abbreviations": {
     "$comment": [
@@ -180,6 +188,17 @@
     ]
   },
 
+  "$letterReplacementsComment": [
+    "Letters that survive accent removal, because they are not an accented",
+    "letter at all: NFD decomposition has nothing to take off a ligature. They",
+    "are folded here instead, on both sides of the search alike, so that",
+    "\"Cœur de Ville\" is found by whoever types \"coeur\"."
+  ],
+  "letterReplacements": {
+    "œ": "oe",
+    "æ": "ae"
+  },
+
   "$punctuationComment": [
     "Turned into word breaks on both sides of the search. The non-breaking",
     "spaces are here rather than left to the whitespace split: Python treats",
@@ -195,5 +214,36 @@
       "a match that only bears on \"de\" or \"la\"."
     ],
     "words": ["de", "du", "des", "la", "le", "les", "l", "d", "au", "aux", "a", "et", "en", "sur", "sous", "lez", "par"]
-  }
+  },
+
+  "$referenceNamesComment": [
+    "Names written out on purpose, replayed by the Kotlin test against every",
+    "network generated in this language. They exist because the real street",
+    "names sampled from a city's own address base only ever cover that city's",
+    "vocabulary: the first block is what any French address base holds, the",
+    "second is what a single region holds and the others do not. A rule added",
+    "for Marseille or for Saint-Denis de La Réunion is worth nothing if no test",
+    "ever reads a name written the way people write it there."
+  ],
+  "referenceNames": [
+    "Rue Gambetta", "Boulevard de la Liberté", "Av. des Flandres",
+    "Bd Victor Hugo", "R. Nationale", "St-André", "Rue de l'Hôpital Militaire",
+    "Place du Général de Gaulle", "Chemin des Écoliers", "Grand Place",
+    "Rond-Point de l'Europe", "Impasse Sainte-Cécile", "Drève du Château",
+    "rue jean-baptiste lebas", "FAUBOURG DE ROUBAIX", "Allée Père Damien",
+    "ALL DES TILLEULS", "CHE DE LA FONTAINE", "MTE DU CALVAIRE",
+    "RLE DES QUATRE VENTS", "LD LES GRANDES TERRES", "TRA DE LA GARE",
+    "PRV Notre-Dame", "ESP Charles de Gaulle", "VLGE DE HAUT",
+    "Rte Départementale 6", "Chemin Rural n°4", "Terre-Plein Central",
+    "Place du Cœur de Ville",
+
+    "Traverse de la Bonne Mère", "Vallon des Auffes", "Calanque de Sormiou",
+    "Montée de la Grande-Côte", "Traboule des Voraces", "Quai Saint-Antoine",
+    "Venelle du Puits", "Hent ar Mor", "Ru du Moulin",
+    "Cavée Saint-Gilles", "Côte des Deux Amants",
+    "Carriera Nòstra Dama", "Cami de la Ribera", "Androne des Frères",
+    "Ravine des Cabris", "Morne à l'Eau", "Habitation Beauséjour",
+    "Îlet à Cochons", "Section Malecon",
+    "Corniche du Pharo", "Digue des Alliés", "Front de Mer Sud"
+  ]
 }

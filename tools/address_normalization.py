@@ -1,8 +1,18 @@
 """Normalisation of street names, shared with the Android application.
 
-The rules themselves live in ``config/address_normalization.json`` so that the
-index and the search box cannot drift apart; this module only applies them.
-See the header of that file for why.
+The rules themselves live in ``config/address-normalization/<language>.json``
+so that the index and the search box cannot drift apart; this module only
+applies them. See the header of any of those files for why.
+
+There is one file per language because a street type is a word of a language:
+``rue`` and ``boulevard`` say nothing about a Warsaw address, where the word is
+``ulica`` and the abbreviation ``ul.``. SPEC.md §15.1 asks for exactly that —
+rules that travel with a city's data rather than being frozen into the
+application.
+
+The language meant is the one the ADDRESS BASE is written in, not the one the
+interface speaks: an index built over Antwerp is searched in Dutch whatever the
+phone is set to.
 
 The pipeline, applied identically to indexed names and to typed queries:
 
@@ -19,7 +29,11 @@ from functools import lru_cache
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_RULES_FILE = REPO_ROOT / "config" / "address_normalization.json"
+RULES_DIR = REPO_ROOT / "config" / "address-normalization"
+
+# The language a set of data falls back on when it names none, and the one
+# whose file must exist: English, like the interface's own default (§9).
+DEFAULT_LANGUAGE = "en"
 
 
 @dataclass(frozen=True)
@@ -40,6 +54,17 @@ class AddressNormalizer:
     """Applies the shared normalisation rules to street names and queries."""
 
     def __init__(self, rules: dict) -> None:
+        self.language = rules.get("language", DEFAULT_LANGUAGE)
+        self.rules_version = rules.get("rulesVersion", 1)
+        self.reference_names = list(rules.get("referenceNames", []))
+        # Letters accent removal cannot reach, because they are not accented
+        # letters: the German ß, the Nordic ø and æ, the Polish ł, the Greek
+        # final sigma. Folded on both sides of the search, so that whoever
+        # types "strasse" finds a "Straße".
+        self._letters = {
+            key: value for key, value in (rules.get("letterReplacements") or {}).items()
+            if not key.startswith("$")
+        }
         abbreviations = rules["abbreviations"]
         self._anywhere = {
             key: value for key, value in abbreviations["anywhere"].items()
@@ -58,9 +83,29 @@ class AddressNormalizer:
         )
 
     @classmethod
-    def load(cls, path: Path = DEFAULT_RULES_FILE) -> "AddressNormalizer":
+    def load(cls, path: Path) -> "AddressNormalizer":
         with path.open(encoding="utf-8") as stream:
             return cls(json.load(stream))
+
+    @classmethod
+    def for_language(cls, language: str | None) -> "AddressNormalizer":
+        """The rules of a language, or English where none are written yet.
+
+        Falling back rather than failing is deliberate: a network appears in a
+        country before anyone has written that country's street vocabulary, and
+        an index built with the plainest rules is still searchable — a street
+        found by its whole name, without the type/name split. What is never
+        acceptable is building an index with one set of rules and searching it
+        with another, and that cannot happen here: the language retained is
+        written into the index, and the application reads it back from there.
+        """
+        for candidate in (language, DEFAULT_LANGUAGE):
+            if not candidate:
+                continue
+            path = RULES_DIR / f"{candidate}.json"
+            if path.is_file():
+                return cls.load(path)
+        raise FileNotFoundError(f"No normalisation rules in {RULES_DIR}")
 
     @property
     def stop_words(self) -> frozenset[str]:
@@ -83,10 +128,18 @@ class AddressNormalizer:
     def normalize(self, text: str) -> str:
         """Fold a raw name or query down to its comparable form.
 
-        Lowercase, unaccented, punctuation turned into word breaks, known
-        abbreviations expanded, whitespace collapsed.
+        Lowercase, letters folded, unaccented, punctuation turned into word
+        breaks, known abbreviations expanded, whitespace collapsed.
+
+        The order matters and is the same in Kotlin: lowercasing first, since
+        the letters folded are written in lower case; then the folding, whose
+        output — "ss" for "ß" — must itself go through accent removal.
         """
-        folded = self.strip_accents(text).lower()
+        lowered = text.lower()
+        if self._letters:
+            lowered = "".join(self._letters.get(character, character)
+                              for character in lowered)
+        folded = self.strip_accents(lowered)
         folded = "".join(
             " " if character in self._punctuation else character
             for character in folded
@@ -126,36 +179,12 @@ class AddressNormalizer:
         return self.split_street_type(self.normalize(raw_name))
 
 
-@lru_cache(maxsize=1)
-def default_normalizer() -> AddressNormalizer:
-    return AddressNormalizer.load()
+@lru_cache(maxsize=None)
+def normalizer_for(language: str | None) -> AddressNormalizer:
+    """The rules of a language, loaded once per run."""
+    return AddressNormalizer.for_language(language)
 
 
-# Names written out on purpose, replayed by the Kotlin test against every
-# generated network (see tools/build_address_index.py). They exist because the
-# real street names sampled from a city's own address base only ever cover that
-# city's vocabulary: the first block is what any French address base holds, the
-# second is what a single region holds and the others do not. A rule added for
-# Marseille or for Saint-Denis de La Réunion is worth nothing if no test ever
-# reads a name written the way people write it there.
-REFERENCE_STREET_NAMES = [
-    # Everywhere, and the abbreviations the Base Adresse Nationale carries.
-    "Rue Gambetta", "Boulevard de la Liberté", "Av. des Flandres",
-    "Bd Victor Hugo", "R. Nationale", "St-André", "Rue de l'Hôpital Militaire",
-    "Place du Général de Gaulle", "Chemin des Écoliers", "Grand Place",
-    "Rond-Point de l'Europe", "Impasse Sainte-Cécile", "Drève du Château",
-    "rue jean-baptiste lebas", "FAUBOURG DE ROUBAIX", "Allée Père Damien",
-    "ALL DES TILLEULS", "CHE DE LA FONTAINE", "MTE DU CALVAIRE",
-    "RLE DES QUATRE VENTS", "LD LES GRANDES TERRES", "TRA DE LA GARE",
-    "PRV Notre-Dame", "ESP Charles de Gaulle", "VLGE DE HAUT",
-    "Rte Départementale 6", "Chemin Rural n°4", "Terre-Plein Central",
-    # One region each, in the words that region uses.
-    "Traverse de la Bonne Mère", "Vallon des Auffes", "Calanque de Sormiou",
-    "Montée de la Grande-Côte", "Traboule des Voraces", "Quai Saint-Antoine",
-    "Venelle du Puits", "Hent ar Mor", "Ru du Moulin",
-    "Cavée Saint-Gilles", "Côte des Deux Amants",
-    "Carriera Nòstra Dama", "Cami de la Ribera", "Androne des Frères",
-    "Ravine des Cabris", "Morne à l'Eau", "Habitation Beauséjour",
-    "Îlet à Cochons", "Section Malecon",
-    "Corniche du Pharo", "Digue des Alliés", "Front de Mer Sud",
-]
+def available_languages() -> list[str]:
+    """The languages whose street vocabulary is written down."""
+    return sorted(path.stem for path in RULES_DIR.glob("*.json"))

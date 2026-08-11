@@ -1,0 +1,47 @@
+{
+  "language": "ms",
+  "cases": [
+    {
+      "input": "Jalan Ampang",
+      "normalized": "jalan ampang",
+      "type": "jalan",
+      "name": "ampang"
+    },
+    {
+      "input": "Jln Tun Razak",
+      "normalized": "jalan tun razak",
+      "type": "jalan",
+      "name": "tun razak"
+    },
+    {
+      "input": "Lorong Kuda",
+      "normalized": "lorong kuda",
+      "type": "lorong",
+      "name": "kuda"
+    },
+    {
+      "input": "Persiaran KLCC",
+      "normalized": "persiaran klcc",
+      "type": "persiaran",
+      "name": "klcc"
+    },
+    {
+      "input": "Lebuh Pasar Besar",
+      "normalized": "lebuh pasar besar",
+      "type": "lebuh",
+      "name": "pasar besar"
+    },
+    {
+      "input": "Medan Pasar",
+      "normalized": "medan pasar",
+      "type": "medan",
+      "name": "pasar"
+    },
+    {
+      "input": "Taman Tasik Perdana",
+      "normalized": "taman tasik perdana",
+      "type": "taman",
+      "name": "tasik perdana"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "language": "ca",
+  "cases": [
+    {
+      "input": "Carrer de Mallorca",
+      "normalized": "carrer de mallorca",
+      "type": "carrer",
+      "name": "de mallorca"
+    },
+    {
+      "input": "C/ Balmes",
+      "normalized": "carrer balmes",
+      "type": "carrer",
+      "name": "balmes"
+    },
+    {
+      "input": "Avinguda Diagonal",
+      "normalized": "avinguda diagonal",
+      "type": "avinguda",
+      "name": "diagonal"
+    },
+    {
+      "input": "Av. Meridiana",
+      "normalized": "avinguda meridiana",
+      "type": "avinguda",
+      "name": "meridiana"
+    },
+    {
+      "input": "Plaça de Catalunya",
+      "normalized": "placa de catalunya",
+      "type": "placa",
+      "name": "de catalunya"
+    },
+    {
+      "input": "Passeig de Gràcia",
+      "normalized": "passeig de gracia",
+      "type": "passeig",
+      "name": "de gracia"
+    },
+    {
+      "input": "Pg. de Sant Joan",
+      "normalized": "passeig de sant joan",
+      "type": "passeig",
+      "name": "de sant joan"
+    },
+    {
+      "input": "Rambla del Raval",
+      "normalized": "rambla del raval",
+      "type": "rambla",
+      "name": "del raval"
+    },
+    {
+      "input": "Avinguda del Paral·lel",
+      "normalized": "avinguda del paral·lel",
+      "type": "avinguda",
+      "name": "del paral·lel"
+    },
+    {
+      "input": "Ronda de Sant Pere",
+      "normalized": "ronda de sant pere",
+      "type": "ronda",
+      "name": "de sant pere"
+    },
+    {
+      "input": "Camí de la Font",
+      "normalized": "cami de la font",
+      "type": "cami",
+      "name": "de la font"
+    },
+    {
+      "input": "Ptge. de la Pau",
+      "normalized": "passatge de la pau",
+      "type": "passatge",
+      "name": "de la pau"
+    }
+  ]
+}

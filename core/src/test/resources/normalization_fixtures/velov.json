@@ -1,4 +1,5 @@
 {
+  "language": "fr",
   "cases": [
     {
       "input": "Rue Gambetta",
@@ -167,6 +168,12 @@
       "normalized": "terre plein central",
       "type": "terre plein",
       "name": "central"
+    },
+    {
+      "input": "Place du Cœur de Ville",
+      "normalized": "place du coeur de ville",
+      "type": "place",
+      "name": "du coeur de ville"
     },
     {
       "input": "Traverse de la Bonne Mère",

@@ -1,0 +1,47 @@
+{
+  "language": "tr",
+  "cases": [
+    {
+      "input": "Atatürk Caddesi",
+      "normalized": "ataturk caddesi",
+      "type": null,
+      "name": "ataturk caddesi"
+    },
+    {
+      "input": "İstiklal Cd.",
+      "normalized": "istiklal caddesi",
+      "type": null,
+      "name": "istiklal caddesi"
+    },
+    {
+      "input": "Bağdat Caddesi",
+      "normalized": "bagdat caddesi",
+      "type": null,
+      "name": "bagdat caddesi"
+    },
+    {
+      "input": "Cumhuriyet Bulv.",
+      "normalized": "cumhuriyet bulvari",
+      "type": null,
+      "name": "cumhuriyet bulvari"
+    },
+    {
+      "input": "Moda Sk.",
+      "normalized": "moda sokak",
+      "type": null,
+      "name": "moda sokak"
+    },
+    {
+      "input": "Barbaros Bulvarı",
+      "normalized": "barbaros bulvari",
+      "type": null,
+      "name": "barbaros bulvari"
+    },
+    {
+      "input": "Kadıköy Mah.",
+      "normalized": "kadikoy mahallesi",
+      "type": null,
+      "name": "kadikoy mahallesi"
+    }
+  ]
+}

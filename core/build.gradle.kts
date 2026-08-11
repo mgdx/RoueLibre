@@ -25,13 +25,14 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-// The street-name normalisation rules live at the root of the repository: it
-// is the same file the indexing script reads, and the test verifies precisely
-// that the two implementations draw the same result from it (SPEC §4.3).
+// The street-name normalisation rules live at the root of the repository, one
+// file per language: they are the very files the indexing script reads, and the
+// test verifies precisely that the two implementations draw the same result
+// from them (SPEC §4.3).
 tasks.withType<Test>().configureEach {
     systemProperty(
         "rouelibre.normalizationRules",
-        rootProject.file("config/address_normalization.json").absolutePath,
+        rootProject.file("config/address-normalization").absolutePath,
     )
     // The catalogue as actually published: the test replays it rather than an
     // example written for the occasion, which proves that the generator and

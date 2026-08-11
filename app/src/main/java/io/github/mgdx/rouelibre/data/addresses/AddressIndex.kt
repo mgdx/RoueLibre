@@ -45,13 +45,14 @@ import kotlin.coroutines.coroutineContext
  *    versions embedded in the oldest Android releases the application targets.
  *
  * @property datasetStore where to find the installed index file.
- * @property normalizer the rules shared with the indexing script.
+ * @property normalizers the rules shared with the indexing script, one set per
+ *   language. Which set applies is read from the index itself.
  * @property ioDispatcher the execution context: reading the file and the fuzzy
  *   scan are both too long for the main thread.
  */
 class AddressIndex(
     private val datasetStore: DatasetStore,
-    private val normalizer: AddressNormalizer,
+    private val normalizers: AddressNormalizers,
     private val ioDispatcher: CoroutineDispatcher,
 ) {
 
@@ -67,6 +68,13 @@ class AddressIndex(
         val database: SQLiteDatabase,
         val streets: List<SearchableStreet>,
         val deltaScale: Double,
+        /**
+         * The rules this index was built with, read from the file itself.
+         *
+         * Not the language of the interface, nor the one the served city
+         * declares: the one the indexed names were folded with (SPEC §15.1).
+         */
+        val normalizer: AddressNormalizer,
     )
 
     private val openMutex = Mutex()
@@ -91,9 +99,15 @@ class AddressIndex(
         origin: Coordinates?,
         limit: Int = DEFAULT_RESULT_COUNT,
     ): Outcome<List<AddressResult>> = withContext(ioDispatcher) {
-        val query = normalizer.parseQuery(rawQuery)
-        if (query.isEmpty) return@withContext Outcome.Success(emptyList())
+        // A query with nothing in it designates nothing, and saying so costs
+        // no file access: the search box is empty far more often than it is
+        // full, and an index absent is not an error to report to somebody who
+        // has typed nothing.
+        if (rawQuery.isBlank()) return@withContext Outcome.Success(emptyList())
 
+        // The index is opened before the query is parsed, and not after: it is
+        // the index that says which language its names were folded with, and
+        // the query must be folded the same way.
         val index = try {
             open() ?: return@withContext Outcome.Failure(
                 DataError.LocalStorageFailure("address index absent"),
@@ -103,6 +117,9 @@ class AddressIndex(
                 DataError.LocalStorageFailure(error.message ?: "address index unreadable"),
             )
         }
+
+        val query = index.normalizer.parseQuery(rawQuery)
+        if (query.isEmpty) return@withContext Outcome.Success(emptyList())
 
         try {
             val ranked = rank(index, query, origin, limit)
@@ -211,11 +228,11 @@ class AddressIndex(
         limit: Int,
     ): List<ScoredStreet> {
         val byPrefix = index.matchingFullText(query)
-        val exact = rankStreets(byPrefix, query, normalizer.stopWords, origin, limit)
+        val exact = rankStreets(byPrefix, query, index.normalizer.stopWords, origin, limit)
         if (exact.size >= MINIMUM_PREFIX_RESULTS || exact.size >= limit) return exact
 
         coroutineContext.ensureActive()
-        return rankStreets(index.streets, query, normalizer.stopWords, origin, limit)
+        return rankStreets(index.streets, query, index.normalizer.stopWords, origin, limit)
     }
 
     // -------------------------------------------------------- first stage --
@@ -372,6 +389,7 @@ class AddressIndex(
                 database = database,
                 streets = database.readCorpus(),
                 deltaScale = database.readDeltaScale(),
+                normalizer = normalizers.of(database.readNormalizationLanguage()),
             ).also { opened = it }
         }
     }
@@ -426,6 +444,23 @@ class AddressIndex(
         stored?.takeIf { it > 0.0 } ?: DEFAULT_DELTA_SCALE
     }
 
+    /**
+     * The language the indexed names were folded with (SPEC §15.1).
+     *
+     * Read from the file rather than deduced from the city or from the device:
+     * the rules that must be applied to a query are the ones the index was
+     * built with, and nothing else. An index produced before the rules were
+     * split by language names none, and is French — those were Lille, Lyon and
+     * Paris.
+     */
+    private fun SQLiteDatabase.readNormalizationLanguage(): String = rawQuery(
+        "SELECT value FROM metadata WHERE key = ?",
+        arrayOf("normalizationLanguage"),
+    ).use { cursor ->
+        val stored = if (cursor.moveToFirst()) cursor.getString(0) else null
+        stored?.takeIf { it.isNotBlank() } ?: LANGUAGE_BEFORE_THE_SPLIT
+    }
+
     private fun Cursor.getStringOrNull(column: Int): String? =
         if (isNull(column)) null else getString(column)
 
@@ -456,6 +491,12 @@ class AddressIndex(
 
         /** Hundred-thousandths of a degree, what the generation script writes. */
         const val DEFAULT_DELTA_SCALE = 100_000.0
+
+        /**
+         * The language of an index built before the rules were split by
+         * language: the three conurbations generated then were French.
+         */
+        const val LANGUAGE_BEFORE_THE_SPLIT = "fr"
 
         /**
          * The radius within which a street is examined for reverse geocoding.

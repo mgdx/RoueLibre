@@ -1,0 +1,47 @@
+{
+  "language": "et",
+  "cases": [
+    {
+      "input": "Viru tänav",
+      "normalized": "viru tanav",
+      "type": null,
+      "name": "viru tanav"
+    },
+    {
+      "input": "Narva mnt",
+      "normalized": "narva maantee",
+      "type": null,
+      "name": "narva maantee"
+    },
+    {
+      "input": "Narva maantee",
+      "normalized": "narva maantee",
+      "type": null,
+      "name": "narva maantee"
+    },
+    {
+      "input": "Vabaduse väljak",
+      "normalized": "vabaduse valjak",
+      "type": null,
+      "name": "vabaduse valjak"
+    },
+    {
+      "input": "Estonia pst",
+      "normalized": "estonia puiestee",
+      "type": null,
+      "name": "estonia puiestee"
+    },
+    {
+      "input": "Pärnu maantee",
+      "normalized": "parnu maantee",
+      "type": null,
+      "name": "parnu maantee"
+    },
+    {
+      "input": "Roosikrantsi tn",
+      "normalized": "roosikrantsi tanav",
+      "type": null,
+      "name": "roosikrantsi tanav"
+    }
+  ]
+}

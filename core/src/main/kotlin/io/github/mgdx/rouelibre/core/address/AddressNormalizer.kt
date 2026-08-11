@@ -23,10 +23,15 @@ public data class SplitName(
  * Reduces street names and queries to a comparable form (SPEC §4.3).
  *
  * The rules applied here are not written in this file: they live in
- * `config/address_normalization.json`, read both by the script that builds the
- * index and by the application. A divergence between the two would make streets
- * impossible to find — "boulevard" indexed on one side, "bd" searched on the
- * other — hence the single source.
+ * `config/address-normalization/<language>.json`, read both by the script that
+ * builds the index and by the application. A divergence between the two would
+ * make streets impossible to find — "boulevard" indexed on one side, "bd"
+ * searched on the other — hence the single source.
+ *
+ * One file per language, because a street type is a word of a language:
+ * "ulica" is what "rue" is, and neither belongs in the other's country. Which
+ * file applies is decided by the address index being searched, which records
+ * what it was built with (SPEC §15.1).
  *
  * The treatment, identical at both ends:
  * ```
@@ -35,6 +40,14 @@ public data class SplitName(
  * ```
  */
 public class AddressNormalizer internal constructor(
+    /** The language of the address base these rules describe, "fr", "pl"… */
+    public val language: String,
+    /**
+     * Letters accent removal cannot reach, because they are not accented
+     * letters at all: the German ß, the Nordic ø, the Polish ł. Folded on both
+     * sides of the search alike, so that "strasse" finds a "Straße".
+     */
+    private val letterReplacements: Map<Char, String>,
     private val anywhereAbbreviations: Map<String, String>,
     private val leadingAbbreviations: Map<String, String>,
     private val punctuation: Set<Char>,
@@ -56,8 +69,24 @@ public class AddressNormalizer internal constructor(
      * @return the normalised form, possibly empty.
      */
     public fun normalize(text: String): String {
-        val folded = StringBuilder(text.length)
-        for (character in stripAccents(text).lowercase()) {
+        // The order matters, and is the same in the Python script: lowercasing
+        // first, since the letters folded are written in lower case; the
+        // folding next, whose output — "ss" for "ß" — must itself go through
+        // accent removal.
+        val lowered = text.lowercase()
+        val replaced = if (letterReplacements.isEmpty()) {
+            lowered
+        } else {
+            val builder = StringBuilder(lowered.length)
+            for (character in lowered) {
+                val replacement = letterReplacements[character]
+                if (replacement == null) builder.append(character) else builder.append(replacement)
+            }
+            builder.toString()
+        }
+
+        val folded = StringBuilder(replaced.length)
+        for (character in stripAccents(replaced)) {
             folded.append(if (character in punctuation) ' ' else character)
         }
 
@@ -141,7 +170,7 @@ public object AddressNormalizerReader {
     private val json = Json { ignoreUnknownKeys = true }
 
     /**
-     * Parses the contents of `address_normalization.json`.
+     * Parses the contents of one `address-normalization/<language>.json`.
      *
      * @param document the raw contents of the file embedded in the APK.
      * @return the normaliser, or the error preventing it from being built.
@@ -166,13 +195,23 @@ public object AddressNormalizerReader {
 
 @Serializable
 private data class NormalizationRulesDocument(
+    val language: String = "en",
     val rulesVersion: Int = 1,
+    val letterReplacements: Map<String, String> = emptyMap(),
     val abbreviations: AbbreviationsDocument,
     val streetTypes: StreetTypesDocument,
     val punctuationReplacedBySpace: String,
     val stopWords: StopWordsDocument,
 ) {
     fun toNormalizer(): AddressNormalizer = AddressNormalizer(
+        language = language,
+        // Written as strings in the file, where a key is a letter and a value
+        // may be two — "ß" folds to "ss". Only single-letter keys can be
+        // folded character by character; a longer one would be a rule of
+        // another kind, and is refused rather than half applied.
+        letterReplacements = letterReplacements.withoutComments()
+            .filterKeys { it.length == 1 }
+            .mapKeys { (letter, _) -> letter[0] },
         anywhereAbbreviations = abbreviations.anywhere.withoutComments(),
         leadingAbbreviations = abbreviations.leadingOnly.withoutComments(),
         punctuation = punctuationReplacedBySpace.toSet(),

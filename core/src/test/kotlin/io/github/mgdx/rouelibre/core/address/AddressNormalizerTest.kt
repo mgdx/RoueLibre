@@ -30,6 +30,11 @@ class AddressNormalizerTest {
         files.forEach { file ->
             val fixtures = json.decodeFromString(FixtureFile.serializer(), file.readText())
             assertTrue("empty reference cases in ${file.name}", fixtures.cases.isNotEmpty())
+            // Each set says which language it was generated in: a Warsaw index
+            // is searched with Polish street types, whatever the phone speaks
+            // (SPEC §15.1). Replaying it with another language's rules would
+            // prove nothing.
+            val normalizer = TestRules.of(fixtures.language)
             fixtures.cases.forEach { case ->
                 assertEquals(
                     "normalisation de « ${case.input} » (${file.name})",
@@ -110,8 +115,40 @@ class AddressNormalizerTest {
         assertTrue(outcome is Outcome.Failure)
     }
 
+    @Test
+    fun `every language's rules can be read`() {
+        val languages = TestRules.languages()
+        assertTrue("no rules file found", languages.isNotEmpty())
+        assertTrue("English is the fallback and must exist", "en" in languages)
+        languages.forEach { language ->
+            assertEquals(
+                "the rules of \"$language\" name another language",
+                language,
+                TestRules.of(language).language,
+            )
+        }
+        println("languages read: ${languages.joinToString(", ")}")
+    }
+
+    @Test
+    fun `a letter that no accent removal reaches is folded`() {
+        // "ß" is not an accented letter: NFD has nothing to take off it, so
+        // whoever types "strasse" would never find a "Straße" without this.
+        assertEquals("bahnhofstrasse", TestRules.of("de").normalize("Bahnhofstraße"))
+        assertEquals("bahnhofstrasse", TestRules.of("de").normalize("Bahnhofstrasse"))
+        // The same mechanism, in a language that needs it for another letter.
+        assertEquals("ulica dluga", TestRules.of("pl").normalize("Ulica Długa"))
+    }
+
     @Serializable
-    private data class FixtureFile(val cases: List<FixtureCase> = emptyList())
+    private data class FixtureFile(
+        /**
+         * The language the cases were generated in. Absent from the files
+         * written when there was only one, which were French.
+         */
+        val language: String = "fr",
+        val cases: List<FixtureCase> = emptyList(),
+    )
 
     @Serializable
     private data class FixtureCase(

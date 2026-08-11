@@ -1,0 +1,41 @@
+{
+  "language": "sq",
+  "cases": [
+    {
+      "input": "Rruga e Kavajës",
+      "normalized": "rruga e kavajes",
+      "type": "rruga",
+      "name": "e kavajes"
+    },
+    {
+      "input": "Rr. e Durrësit",
+      "normalized": "rruga e durresit",
+      "type": "rruga",
+      "name": "e durresit"
+    },
+    {
+      "input": "Bulevardi Dëshmorët e Kombit",
+      "normalized": "bulevardi deshmoret e kombit",
+      "type": "bulevardi",
+      "name": "deshmoret e kombit"
+    },
+    {
+      "input": "Sheshi Skënderbej",
+      "normalized": "sheshi skenderbej",
+      "type": "sheshi",
+      "name": "skenderbej"
+    },
+    {
+      "input": "Rruga e Elbasanit",
+      "normalized": "rruga e elbasanit",
+      "type": "rruga",
+      "name": "e elbasanit"
+    },
+    {
+      "input": "Ura e Tabakëve",
+      "normalized": "ura e tabakeve",
+      "type": "ura",
+      "name": "e tabakeve"
+    }
+  ]
+}

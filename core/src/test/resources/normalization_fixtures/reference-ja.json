@@ -1,0 +1,41 @@
+{
+  "language": "ja",
+  "cases": [
+    {
+      "input": "中央区銀座",
+      "normalized": "中央区銀座",
+      "type": null,
+      "name": "中央区銀座"
+    },
+    {
+      "input": "青山通り",
+      "normalized": "青山通り",
+      "type": null,
+      "name": "青山通り"
+    },
+    {
+      "input": "表参道",
+      "normalized": "表参道",
+      "type": null,
+      "name": "表参道"
+    },
+    {
+      "input": "京都市中京区烏丸通",
+      "normalized": "京都市中京区烏丸通",
+      "type": null,
+      "name": "京都市中京区烏丸通"
+    },
+    {
+      "input": "みなとみらい大通り",
+      "normalized": "みなとみらい大通り",
+      "type": null,
+      "name": "みなとみらい大通り"
+    },
+    {
+      "input": "Chuo-ku Ginza",
+      "normalized": "chuo ku ginza",
+      "type": null,
+      "name": "chuo ku ginza"
+    }
+  ]
+}

@@ -6,8 +6,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import io.github.mgdx.rouelibre.core.Outcome
-import io.github.mgdx.rouelibre.core.address.AddressNormalizer
-import io.github.mgdx.rouelibre.core.address.AddressNormalizerReader
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
 import io.github.mgdx.rouelibre.core.geo.Coordinates
@@ -17,6 +15,7 @@ import io.github.mgdx.rouelibre.core.routing.TravelMode
 import io.github.mgdx.rouelibre.data.AppPreferences
 import io.github.mgdx.rouelibre.data.StationRepository
 import io.github.mgdx.rouelibre.data.addresses.AddressIndex
+import io.github.mgdx.rouelibre.data.addresses.AddressNormalizers
 import io.github.mgdx.rouelibre.data.cities.CityCatalogueSource
 import io.github.mgdx.rouelibre.data.datasets.DatasetDownloader
 import io.github.mgdx.rouelibre.data.datasets.DatasetStore
@@ -183,26 +182,15 @@ class AppContainer(private val context: Context) {
 
     /**
      * The street-name normalisation rules, shared with the script that builds
-     * the index (SPEC §4.3).
+     * the index (SPEC §4.3), one set per language (§15.1).
      *
-     * The file is copied into the APK at build time from
-     * `config/address_normalization.json`, the single source on both sides: a
-     * divergence would make streets impossible to find.
-     *
-     * @throws IllegalStateException if the file is absent or unreadable — a
-     *   manufacturing defect of the APK, not a user situation.
+     * The files are copied into the APK at build time from
+     * `config/address-normalization/`, the single source on both sides: a
+     * divergence would make streets impossible to find. Which set applies is
+     * the index's business, not this container's — it is the file that was
+     * built with them.
      */
-    val addressNormalizer: AddressNormalizer by lazy {
-        val document = context.assets.open(NORMALIZATION_RULES_ASSET)
-            .bufferedReader()
-            .use { it.readText() }
-        when (val outcome = AddressNormalizerReader.read(document)) {
-            is Outcome.Success -> outcome.value
-            is Outcome.Failure -> error(
-                "Normalisation rules unreadable in the APK: ${outcome.error}",
-            )
-        }
-    }
+    val addressNormalizers: AddressNormalizers by lazy { AddressNormalizers(context) }
 
     /**
      * Downloading of the published datasets (SPEC §4.4).
@@ -240,7 +228,7 @@ class AppContainer(private val context: Context) {
      * corpus, the following ones walk through it.
      */
     val addressIndex: AddressIndex by lazy {
-        AddressIndex(datasetStore, addressNormalizer, Dispatchers.IO)
+        AddressIndex(datasetStore, addressNormalizers, Dispatchers.IO)
     }
 
     /**
@@ -291,7 +279,6 @@ class AppContainer(private val context: Context) {
     private fun userAgent(): String = "RoueLibre/${BuildConfig.VERSION_NAME} (+$REPOSITORY_URL)"
 
     private companion object {
-        const val NORMALIZATION_RULES_ASSET = "address_normalization.json"
         const val REPOSITORY_URL = "https://github.com/mgdx/RoueLibre"
         val CONNECT_TIMEOUT: Duration = Duration.ofSeconds(10)
         val READ_TIMEOUT: Duration = Duration.ofSeconds(20)

@@ -1,0 +1,160 @@
+{
+  "$comment": [
+    "Street-name normalisation rules, Spanish — SPEC.md §4.3.",
+    "",
+    "One file per language, in this directory, and the language is the one",
+    "the ADDRESS BASE is written in, not the one the interface speaks: an",
+    "index built over Antwerp is searched in Dutch whatever the phone is",
+    "set to. The index says which file it was built with (§15.1), so the",
+    "two can never be paired wrongly.",
+    "",
+    "Read by tools/build_address_index.py AND embedded in the APK, where",
+    "the search engine reads it again. A divergence between the two would",
+    "make streets unfindable, hence the shared file.",
+    "",
+    "Spanish writes the type first — \"Calle Mayor\", \"Avenida de la",
+    "Constitución\" — so detaching it is what lets \"mayor\" find the",
+    "street without typing \"calle\".",
+    "",
+    "The list serves Spain and Spanish America alike: \"calzada\" and",
+    "\"cerrada\" are Mexico's, \"pasaje\" the Southern Cone's, and a rule",
+    "set that only knew Madrid would leave those unsearchable."
+  ],
+  "language": "es",
+  "rulesVersion": 1,
+  "abbreviations": {
+    "$comment": [
+      "Expanded during normalisation, on whole words only. A",
+      "single-letter abbreviation is expanded at the head of a name",
+      "only, otherwise it would rewrite an initial in the middle of a",
+      "person's name."
+    ],
+    "anywhere": {
+      "cl": "calle",
+      "avda": "avenida",
+      "avd": "avenida",
+      "av": "avenida",
+      "pza": "plaza",
+      "pl": "plaza",
+      "ctra": "carretera",
+      "psje": "pasaje",
+      "pje": "pasaje",
+      "gta": "glorieta",
+      "trav": "travesia",
+      "urb": "urbanizacion",
+      "sta": "santa",
+      "sto": "santo",
+      "dr": "doctor",
+      "gral": "general",
+      "po": "paseo"
+    },
+    "leadingOnly": {
+      "c": "calle",
+      "a": "avenida",
+      "p": "paseo",
+      "s": "san"
+    }
+  },
+  "streetTypes": {
+    "$comment": [
+      "The street type is stored in a field SEPARATE from the proper",
+      "name (§4.3), and is recognised at the HEAD of a name only, by",
+      "longest match. Written in their already normalised form.",
+      "A language that writes its type last, or glues it to the name,",
+      "has few entries here or none at all: that is a fact about the",
+      "language, not an omission."
+    ],
+    "types": [
+      "calle",
+      "avenida",
+      "plaza",
+      "paseo",
+      "camino",
+      "carretera",
+      "ronda",
+      "travesia",
+      "callejon",
+      "pasaje",
+      "glorieta",
+      "rambla",
+      "gran via",
+      "via",
+      "cuesta",
+      "bajada",
+      "subida",
+      "puente",
+      "parque",
+      "jardin",
+      "muelle",
+      "calzada",
+      "cerrada",
+      "privada",
+      "prolongacion",
+      "circuito",
+      "boulevard",
+      "bulevar",
+      "andador",
+      "costanera",
+      "diagonal",
+      "peatonal"
+    ]
+  },
+  "$letterReplacementsComment": [
+    "Letters that survive accent removal, because they are not accented",
+    "letters at all: NFD decomposition has nothing to take off them.",
+    "They are folded here instead, on both sides of the search alike."
+  ],
+  "letterReplacements": {
+    "ñ": "n"
+  },
+  "$punctuationComment": [
+    "Turned into word breaks on both sides of the search. The",
+    "non-breaking spaces are here rather than left to the whitespace",
+    "split: Python treats them as whitespace and Kotlin's \\s does not,",
+    "so a name holding one would be indexed as two words and searched as",
+    "one."
+  ],
+  "punctuationReplacedBySpace": "'’`-–—‑_.,;:!?()[]{}/\\\"«»&+*#@%=<>|~$^§°…   ",
+  "stopWords": {
+    "$comment": [
+      "Stop words ignored when RANKING — never when indexing,",
+      "otherwise a name would lose half its content. They serve not to",
+      "reward a match that only bears on an article."
+    ],
+    "words": [
+      "de",
+      "del",
+      "la",
+      "las",
+      "el",
+      "los",
+      "y",
+      "en",
+      "a",
+      "al"
+    ]
+  },
+  "$referenceNamesComment": [
+    "Names written out on purpose, replayed by the Kotlin test against",
+    "every network generated in this language. They are what proves the",
+    "Python script and the application read these rules the same way,",
+    "from the day the rules are written rather than from the day a city",
+    "of this language has its data generated."
+  ],
+  "referenceNames": [
+    "Calle Mayor",
+    "Avenida de la Constitución",
+    "Plaza del Sol",
+    "Paseo de Gracia",
+    "C/ Alcalá",
+    "Avda. de América",
+    "Gran Vía",
+    "Camino Viejo del Puerto",
+    "Callejón de la Cruz",
+    "Ronda de Toledo",
+    "Calzada de Tlalpan",
+    "Pasaje Peatonal Norte",
+    "Travesía de Santa Ana",
+    "Cañada Real"
+  ]
+}
