@@ -1,29 +1,45 @@
 #!/usr/bin/env python3
-"""Survey the French bike-share networks that publish a GBFS feed (SPEC.md §4.1).
+"""Survey the bike-share networks of the world that publish a GBFS feed (SPEC.md §4.1).
 
-`SPEC.md` forbids guessing a `gbfs.json` URL: it must come from the national
-access point `transport.data.gouv.fr` or from MobilityData's `systems.csv`
-catalogue, and be verified by a real request before being written into a
-configuration. This script does exactly that, for every French system at once,
-and keeps the evidence: it reads both catalogues, calls every feed it finds,
-and records what came back.
+`SPEC.md` forbids guessing a `gbfs.json` URL: it must come from a public
+catalogue — MobilityData's `systems.csv`, the registry the GBFS standard keeps
+of itself, or a country's own national access point — and be verified by a real
+request before being written into a configuration. This script does exactly
+that, for every system of every country at once, and keeps the evidence: it
+reads the catalogues, calls every feed it finds, and records what came back.
 
 It then applies the eligibility rules below. They matter more than the survey
-itself, because most of what publishes GBFS in France is **not** what this
-application serves: free-floating scooters, car-sharing, and fleets whose
-"stations" are painted parking areas with no docks at all.
+itself, because most of what publishes GBFS is **not** what this application
+serves: free-floating scooters, car-sharing, and fleets whose "stations" are
+painted parking areas with no docks at all.
+
+Three public datasets place what is found, none of them tied to one country:
+
+* MobilityData's registry says which country a system runs in;
+* Geofabrik's extract index says which OpenStreetMap extract covers its box —
+  the box is tested against the extracts' own geometry, so the answer holds as
+  well for Auckland as for Amiens;
+* the GeoNames gazetteer names the municipalities the stations stand in. A
+  network is named after its brand, or after the largest town it serves, and
+  neither says what a *conurbation* is: the list of municipalities does, and it
+  is what says out loud that Lille's network is also Roubaix's.
+
+France keeps one enrichment of its own, because its address base is
+departmental: the state's geographic API says which Base Adresse Nationale
+extracts a box reaches (§4.3). Every other country's address index comes from
+OpenStreetMap, as §15 foresaw.
 
 Output:
 
-* ``docs/networks-france.md`` — the readable list, eligible networks first,
-  then the rejected ones grouped by reason. Regenerating it is how the list is
-  kept honest;
-* ``data/networks-fr.json`` — the same survey, machine-readable, consumed by
+* ``docs/networks.md`` — the readable list, country by country, eligible
+  networks first, then the rejected ones grouped by reason. Regenerating it is
+  how the list is kept honest;
+* ``data/networks.json`` — the same survey, machine-readable, consumed by
   ``tools/add_city.py`` to write the city configurations.
 
 Usage:
     python3 tools/discover_networks.py [--report PATH] [--survey PATH]
-                                       [--offline]
+                                       [--country FR] [--offline]
 """
 
 from __future__ import annotations
@@ -39,25 +55,57 @@ import time
 import unicodedata
 import urllib.error
 import urllib.request
+import zipfile
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+# Shared with the script that writes the box into a configuration: the survey
+# and the generation must agree on which stations make the box, or a network
+# would be judged on one rectangle and served on another.
+from compute_bbox import stray_positions
+
 TOOLS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = TOOLS_DIR.parent
-DEFAULT_REPORT = REPO_ROOT / "docs" / "networks-france.md"
-DEFAULT_SURVEY = REPO_ROOT / "data" / "networks-fr.json"
+DEFAULT_REPORT = REPO_ROOT / "docs" / "networks.md"
+DEFAULT_SURVEY = REPO_ROOT / "data" / "networks.json"
+DEFAULT_EXTRA_FEEDS = REPO_ROOT / "config" / "extra-feeds.json"
 
-# The two catalogues SPEC.md §4.1 names as acceptable starting points. Neither
-# is trusted on its own: each is only a list of addresses to go and check.
+# Downloads worth keeping between runs: the gazetteer and the extract index
+# weigh tens of megabytes and change by the month, not by the hour. Under
+# data/, which the repository ignores — every one of them is reproducible.
+CACHE_DIR = REPO_ROOT / "data" / "cache"
+
+# The registry the GBFS standard keeps of itself: the one catalogue that lists
+# every country. Neither it nor any other is trusted on its own — each is only
+# a list of addresses to go and check.
 MOBILITYDATA_SYSTEMS_CSV = (
     "https://raw.githubusercontent.com/MobilityData/gbfs/master/systems.csv"
 )
+MOBILITYDATA_SYSTEMS_PAGE = "https://github.com/MobilityData/gbfs/blob/master/systems.csv"
+
+# France's national access point. Kept beside the registry, and no other
+# country's equivalent is: it is the only one that publishes, in one call and
+# without a key, both the address of a feed and the authority behind it — which
+# is what the "about" screen has to credit (§4.5).
 TRANSPORT_DATA_GOUV_DATASETS = "https://transport.data.gouv.fr/api/datasets"
+
+# Where Geofabrik describes every extract it publishes, geometry included. Used
+# to answer "which extract covers this box" by testing the box against the
+# extracts themselves, rather than by keeping a table of regions that would be
+# wrong for the next country added.
+GEOFABRIK_INDEX = "https://download.geofabrik.de/index-v1.json"
+GEOFABRIK_DOWNLOAD_PREFIX = "https://download.geofabrik.de/"
+
+# The GeoNames gazetteer, populated places of 500 inhabitants and over, in the
+# public form its authors publish (CC BY 4.0). It is what names the
+# municipalities a network covers, in any country.
+GEONAMES_CITIES_ZIP = "https://download.geonames.org/export/dump/cities500.zip"
+GEONAMES_CITIES_FILE = "cities500.txt"
 
 # Identifies the tooling without carrying anything specific to a user (§4.4).
 USER_AGENT = "RoueLibre-tools/1.0 (+https://github.com/mgdx/RoueLibre)"
-NETWORK_TIMEOUT_SECONDS = 25
-CONCURRENT_REQUESTS = 10
+NETWORK_TIMEOUT_SECONDS = 20
+CONCURRENT_REQUESTS = 24
 
 # The margin §4 puts around the stations to make the reference box. Repeated
 # from tools/add_city.py, which writes it into each configuration: here it only
@@ -67,8 +115,8 @@ DEFAULT_MARGIN_METRES = 3000.0
 # Resolves a station's position to its municipality and department, which is
 # what tells the generation scripts which Base Adresse Nationale extracts to
 # download. Public, keyless, and run by the same administration as the BAN.
+# France only: it is the French address base that is departmental.
 GEO_API_COMMUNES = "https://geo.api.gouv.fr/communes"
-GEO_API_EPCI_COMMUNES = "https://geo.api.gouv.fr/epcis/{code}/communes"
 
 # Below this, the journey algorithm has nothing to optimise: §6 picks the best
 # pair among five candidate departure stations and five arrival ones, and a
@@ -80,7 +128,7 @@ MINIMUM_STATIONS = 10
 # publish one feed for a whole region, or for the whole country: their
 # enclosing rectangle would then cover hundreds of municipalities without a
 # station, and §4's three datasets — tiles, routing graph, address index — are
-# sized for a conurbation, not for a quarter of France. As a landmark, the
+# sized for a conurbation, not for a quarter of a country. As a landmark, the
 # Paris box measures 33 × 30 km, near 1,000 km².
 MAXIMUM_AREA_SQUARE_KILOMETRES = 2_500
 
@@ -93,17 +141,19 @@ ATTEMPTS_PER_URL = 2
 # every municipality a network reaches without storing the whole feed.
 STATION_SAMPLES = 25
 
-# The reference box is sampled on a grid as well, to list the departments it
+# The reference box is sampled on a grid as well, to find the extracts it
 # reaches. The stations alone would not do: the box carries a 3 km margin
-# around them, and the Base Adresse Nationale extract to download is chosen for
-# the box, not for the stations. A grid of this side leaves no gap wider than a
-# fifth of the box — no French department is that small.
+# around them, and what is downloaded is cut to the box, not to the stations.
 BOX_GRID_SIDE = 5
 
 # Past this, a title has stopped being a name and started describing an offer.
 MAXIMUM_NAME_WORDS = 4
 
-# What the licence codes of the two catalogues mean, spelled out for the
+# Municipalities named in the report beside the main one. A network covering
+# ninety of them is described by its largest, not by a list nobody reads.
+MUNICIPALITIES_LISTED = 6
+
+# What the licence codes of the catalogues mean, spelled out for the
 # attribution the "about" screen shows (§4.5). A code absent from this table is
 # reproduced as it stands rather than guessed at.
 LICENCE_NAMES = {
@@ -111,8 +161,10 @@ LICENCE_NAMES = {
     "fr-lo": "Licence Ouverte",
     "odc-odbl": "ODbL",
     "ODbL-1.0": "ODbL",
+    "odbl": "ODbL",
     "CC0-1.0": "CC0 1.0",
     "CC-BY-4.0": "CC BY 4.0",
+    "CC-BY-SA-4.0": "CC BY-SA 4.0",
     "cc-by": "CC BY",
     "notspecified": "",
     "other-open": "",
@@ -124,42 +176,61 @@ LICENCE_NAMES = {
 BICYCLE_FORM_FACTORS = frozenset({"bicycle", "cargo_bicycle"})
 DISQUALIFYING_FORM_FACTORS = frozenset({"car", "moped", "other"})
 
-# Geofabrik publishes its French extracts under the pre-2016 regions. The map
-# is needed to tell a generation run which extract to download; there is no
-# programmatic source for it, so it is written out once here.
-GEOFABRIK_REGION_BY_DEPARTMENT = {
-    "alsace": ("67", "68"),
-    "aquitaine": ("24", "33", "40", "47", "64"),
-    "auvergne": ("03", "15", "43", "63"),
-    "basse-normandie": ("14", "50", "61"),
-    "bourgogne": ("21", "58", "71", "89"),
-    "bretagne": ("22", "29", "35", "56"),
-    "centre": ("18", "28", "36", "37", "41", "45"),
-    "champagne-ardenne": ("08", "10", "51", "52"),
-    "corse": ("2A", "2B"),
-    "franche-comte": ("25", "39", "70", "90"),
-    "guadeloupe": ("971",),
-    "guyane": ("973",),
-    "haute-normandie": ("27", "76"),
-    "ile-de-france": ("75", "77", "78", "91", "92", "93", "94", "95"),
-    "languedoc-roussillon": ("11", "30", "34", "48", "66"),
-    "limousin": ("19", "23", "87"),
-    "lorraine": ("54", "55", "57", "88"),
-    "martinique": ("972",),
-    "mayotte": ("976",),
-    "midi-pyrenees": ("09", "12", "31", "32", "46", "65", "81", "82"),
-    "nord-pas-de-calais": ("59", "62"),
-    "pays-de-la-loire": ("44", "49", "53", "72", "85"),
-    "picardie": ("02", "60", "80"),
-    "poitou-charentes": ("16", "17", "79", "86"),
-    "provence-alpes-cote-d-azur": ("04", "05", "06", "13", "83", "84"),
-    "reunion": ("974",),
-    "rhone-alpes": ("01", "07", "26", "38", "42", "69", "73", "74"),
+# The languages a country's STREETS are named in, the majority one first
+# (§15.1). This is what a city configuration announces, and what decides which
+# street-name normalisation rules its address index is built with — not the
+# language of the interface, which follows the device (§9).
+#
+# A country with several is listed with all of them, because the choice is then
+# the producer's to state: Barcelona's feed says Catalan and Bilbao's Basque,
+# and their streets are indeed carrers and kaleak. What is NOT taken at its
+# word is a feed declaring English in a country that has no English street: a
+# GBFS producer writes "en" when it has not thought about the question, and
+# twenty-five French networks do exactly that.
+#
+# Kosovo is listed as Albanian alone, though Serbian is co-official there: its
+# address base is written in Albanian, and one network's feed says otherwise
+# only because its operator's software defaults to it.
+OFFICIAL_LANGUAGES = {
+    "AE": ("ar",), "AR": ("es",), "AT": ("de",), "AU": ("en",),
+    "BA": ("bs", "hr", "sr"), "BE": ("nl", "fr", "de"), "BG": ("bg",),
+    "BR": ("pt",), "CA": ("en", "fr"), "CH": ("de", "fr", "it"),
+    "CL": ("es",), "CO": ("es",), "CR": ("es",), "CY": ("el", "tr"),
+    "CZ": ("cs",), "DE": ("de",), "DK": ("da",), "EE": ("et",),
+    "EG": ("ar",), "ES": ("es", "ca", "eu", "gl"), "FI": ("fi", "sv"),
+    "FR": ("fr",), "GB": ("en",), "GR": ("el",), "HR": ("hr",),
+    "HU": ("hu",), "IE": ("en",), "IL": ("he", "ar"), "IS": ("is",),
+    "IT": ("it", "de"), "JP": ("ja",), "KR": ("ko",), "LI": ("de",),
+    "LT": ("lt",), "LU": ("fr", "de"), "LV": ("lv",), "MA": ("ar", "fr"),
+    "MC": ("fr",), "MT": ("en",), "MX": ("es",), "MY": ("ms",),
+    "NL": ("nl",), "NO": ("nb",), "NZ": ("en",), "PA": ("es",),
+    "PE": ("es",), "PL": ("pl",), "PT": ("pt",), "QA": ("ar",),
+    "RO": ("ro",), "RS": ("sr",), "SA": ("ar",), "SE": ("sv",),
+    "SG": ("en", "ms"), "SI": ("sl",), "SK": ("sk",), "TR": ("tr",),
+    "TW": ("zh",), "UA": ("uk",), "US": ("en",), "UY": ("es",),
+    "XK": ("sq",),
 }
-REGION_OF_DEPARTMENT = {
-    department: region
-    for region, departments in GEOFABRIK_REGION_BY_DEPARTMENT.items()
-    for department in departments
+
+# Country names, for a report that reads as prose rather than as a list of
+# codes. The catalogue itself carries the code alone (§15.1).
+COUNTRY_NAMES = {
+    "AE": "United Arab Emirates", "AR": "Argentina", "AT": "Austria",
+    "AU": "Australia", "BA": "Bosnia and Herzegovina", "BE": "Belgium",
+    "BG": "Bulgaria", "BR": "Brazil", "CA": "Canada", "CH": "Switzerland",
+    "CL": "Chile", "CO": "Colombia", "CR": "Costa Rica", "CY": "Cyprus",
+    "CZ": "Czechia", "DE": "Germany", "DK": "Denmark", "EE": "Estonia",
+    "EG": "Egypt", "ES": "Spain", "FI": "Finland", "FR": "France",
+    "GB": "United Kingdom", "GR": "Greece", "HR": "Croatia", "HU": "Hungary",
+    "IE": "Ireland", "IL": "Israel", "IS": "Iceland", "IT": "Italy",
+    "JP": "Japan", "KR": "South Korea", "LI": "Liechtenstein",
+    "LT": "Lithuania", "LU": "Luxembourg", "LV": "Latvia", "MA": "Morocco",
+    "MC": "Monaco", "MT": "Malta", "MX": "Mexico", "MY": "Malaysia",
+    "NL": "Netherlands", "NO": "Norway", "NZ": "New Zealand", "PA": "Panama",
+    "PE": "Peru", "PL": "Poland", "PT": "Portugal", "QA": "Qatar",
+    "RO": "Romania", "RS": "Serbia", "SA": "Saudi Arabia", "SE": "Sweden",
+    "SG": "Singapore", "SI": "Slovenia", "SK": "Slovakia", "TR": "Türkiye",
+    "TW": "Taiwan", "UA": "Ukraine", "US": "United States", "UY": "Uruguay",
+    "XK": "Kosovo",
 }
 
 
@@ -188,6 +259,24 @@ def fetch_text(url: str) -> str:
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(request, timeout=NETWORK_TIMEOUT_SECONDS) as response:
         return response.read().decode("utf-8", "replace")
+
+
+def cached_download(url: str, name: str) -> Path:
+    """Download a reference dataset once, and reuse it on the next run.
+
+    The gazetteer and the extract index weigh tens of megabytes and describe a
+    world that changes by the month. Re-downloading them on every survey would
+    only be discourteous to the two projects that publish them for free.
+    """
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    path = CACHE_DIR / name
+    if path.is_file() and path.stat().st_size > 0:
+        return path
+    print(f"Downloading {url}")
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    with urllib.request.urlopen(request, timeout=180) as response:
+        path.write_bytes(response.read())
+    return path
 
 
 def feed_urls(discovery_document: dict) -> dict[str, str]:
@@ -224,6 +313,17 @@ def localised(value) -> str:
 
 
 def probe(candidate: dict) -> dict:
+    """Call one network's feeds, and never let a malformed one stop the survey."""
+    try:
+        return probe_feeds(candidate)
+    except Exception as error:  # noqa: BLE001 — one broken feed, not a broken run
+        survey = dict(candidate)
+        survey["verdict"] = "unreachable"
+        survey["error"] = f"{type(error).__name__}: {error}"
+        return survey
+
+
+def probe_feeds(candidate: dict) -> dict:
     """Call one network's feeds and describe what came back.
 
     Never raises: a failure is a result like any other, and it is reported
@@ -265,6 +365,13 @@ def probe(candidate: dict) -> dict:
             survey["systemOperator"] = localised(information.get("operator"))
             survey["licenceId"] = information.get("license_id")
             survey["licenceUrl"] = information.get("license_url")
+            # The language the producer writes in, which is the one the
+            # configuration announces (§15) when the country speaks several.
+            declared = information.get("language") or information.get("languages")
+            if isinstance(declared, list):
+                declared = declared[0] if declared else None
+            if isinstance(declared, str) and declared:
+                survey["feedLanguage"] = declared.split("-")[0].lower()
         except Exception:  # noqa: BLE001 — optional enrichment
             pass
 
@@ -291,18 +398,28 @@ def probe(candidate: dict) -> dict:
         return survey
 
     positioned = [
-        station for station in stations
-        if is_usable_position(station.get("lat"), station.get("lon"))
+        position for position in (station_position(station) for station in stations)
+        if position is not None
     ]
+    # A station standing hundreds of kilometres from every other is a mistake
+    # in the feed, not an outpost of the network: it would stretch the
+    # reference box until the network no longer looked like a conurbation, and
+    # §4's three datasets are cut to that box.
+    strays = stray_positions(positioned)
+    if strays:
+        survey["strayStations"] = len(strays)
+        positioned = [
+            position for index, position in enumerate(positioned) if index not in strays
+        ]
     survey["stationCount"] = len(positioned)
     survey["unpositionedStations"] = len(stations) - len(positioned)
-    survey["capacityTotal"] = sum(station.get("capacity") or 0 for station in stations)
+    survey["capacityTotal"] = sum(whole_number(station.get("capacity")) for station in stations)
     if positioned:
         box = {
-            "south": min(station["lat"] for station in positioned),
-            "west": min(station["lon"] for station in positioned),
-            "north": max(station["lat"] for station in positioned),
-            "east": max(station["lon"] for station in positioned),
+            "south": min(latitude for latitude, _ in positioned),
+            "west": min(longitude for _, longitude in positioned),
+            "north": max(latitude for latitude, _ in positioned),
+            "east": max(longitude for _, longitude in positioned),
         }
         survey["boundingBox"] = box
         record_reference_area(survey)
@@ -310,7 +427,7 @@ def probe(candidate: dict) -> dict:
         # the conurbation later on without keeping every station in the survey.
         step = max(1, len(positioned) // STATION_SAMPLES)
         survey["stationSamples"] = [
-            [station["lat"], station["lon"]] for station in positioned[::step]
+            [latitude, longitude] for latitude, longitude in positioned[::step]
         ][:STATION_SAMPLES]
 
     if "station_status" in feeds:
@@ -320,9 +437,10 @@ def probe(candidate: dict) -> dict:
                 "num_docks_available" in station for station in live
             )
             survey["bikesAvailable"] = sum(
-                station.get("num_bikes_available")
-                or station.get("num_vehicles_available")
-                or 0
+                whole_number(
+                    station.get("num_bikes_available")
+                    or station.get("num_vehicles_available")
+                )
                 for station in live
             )
         except Exception:  # noqa: BLE001 — optional enrichment
@@ -332,19 +450,36 @@ def probe(candidate: dict) -> dict:
     return survey
 
 
-def is_usable_position(latitude, longitude) -> bool:
-    """True if a station carries a position that can be believed.
+def station_position(station: dict) -> tuple[float, float] | None:
+    """The position of a station, if it carries one that can be believed.
 
     Feeds do publish stations at latitude zero — a field left empty rather than
     omitted. One of them is enough to stretch the reference box from the
     conurbation down to the Gulf of Guinea, and with it the three datasets §4
     derives from that box.
+
+    The numbers are read rather than trusted: the standard asks for a decimal,
+    and a producer here and there publishes the string of one. Refusing those
+    feeds would drop real networks over a matter of quotation marks.
     """
-    if latitude is None or longitude is None:
-        return False
+    try:
+        latitude = float(station.get("lat"))
+        longitude = float(station.get("lon"))
+    except (TypeError, ValueError):
+        return None
     if not (-90.0 <= latitude <= 90.0 and -180.0 <= longitude <= 180.0):
-        return False
-    return abs(latitude) > 0.0001 or abs(longitude) > 0.0001
+        return None
+    if abs(latitude) <= 0.0001 and abs(longitude) <= 0.0001:
+        return None
+    return latitude, longitude
+
+
+def whole_number(value) -> int:
+    """A count as the feed published it, whatever type it chose for it."""
+    try:
+        return int(float(value))
+    except (TypeError, ValueError):
+        return 0
 
 
 def widen(box: dict, margin_metres: float) -> dict:
@@ -418,25 +553,27 @@ def verdict_of(survey: dict) -> str:
 
 
 def read_mobilitydata(source: str) -> list[dict]:
-    """Read the French entries of MobilityData's `systems.csv`."""
+    """Read every system of MobilityData's `systems.csv`, whatever its country."""
     rows = csv.DictReader(io.StringIO(source))
     return [
         {
             "source": "MobilityData",
+            "country": row["Country Code"].strip().upper(),
             "systemId": row["System ID"].strip(),
             "catalogueName": row["Name"].strip(),
             "location": row["Location"].strip(),
+            "homepageUrl": row["URL"].strip(),
             "declaredVersions": row["Supported Versions"].strip(),
             "authenticationType": row["Authentication Type"].strip(),
             "discoveryUrls": [row["Auto-Discovery URL"].strip()],
         }
         for row in rows
-        if row["Country Code"].strip() == "FR" and row["Auto-Discovery URL"].strip()
+        if row["Auto-Discovery URL"].strip()
     ]
 
 
 def read_transport_data_gouv(datasets: list) -> list[dict]:
-    """Read the station-based bike datasets of the national access point.
+    """Read the station-based bike datasets of France's national access point.
 
     The access point classifies its shared-vehicle datasets itself: `bicycle`
     says what the fleet is, `freefloating` says whether it has docks. Trusting
@@ -466,6 +603,7 @@ def read_transport_data_gouv(datasets: list) -> list[dict]:
         areas = dataset.get("covered_area") or []
         candidates.append({
             "source": "transport.data.gouv.fr",
+            "country": "FR",
             "systemId": dataset.get("slug", ""),
             "catalogueName": dataset.get("title", ""),
             "catalogueTitle": dataset.get("title", ""),
@@ -483,24 +621,63 @@ def read_transport_data_gouv(datasets: list) -> list[dict]:
     return candidates
 
 
+def read_extra_feeds(path: Path) -> list[dict]:
+    """Read the addresses found outside the two catalogues above.
+
+    A national registry lags behind the networks it describes, and a country
+    without a national access point has none at all. What that leaves out is
+    listed by hand in `config/extra-feeds.json`, each entry carrying the public
+    page it was read from — an operator's developer page, a city's open-data
+    portal — so that the claim can be checked. Nothing is trusted for having
+    been written there: the address is called and judged like any other.
+    """
+    if not path.is_file():
+        return []
+    document = json.loads(path.read_text(encoding="utf-8"))
+    return [
+        {
+            "source": feed.get("source") or "hand-checked",
+            "country": feed["country"].upper(),
+            "systemId": feed["id"],
+            "catalogueName": feed.get("name", ""),
+            "location": feed.get("location", ""),
+            "homepageUrl": feed.get("homepageUrl", ""),
+            "publisher": feed.get("publisher", ""),
+            "licence": feed.get("licence"),
+            "datasetPageUrl": feed.get("datasetPageUrl"),
+            "declaredVersions": "",
+            "authenticationType": "",
+            "discoveryUrls": [feed["discoveryUrl"]],
+        }
+        for feed in document.get("feeds", [])
+    ]
+
+
 def merge(surveys: list[dict]) -> list[dict]:
-    """Fuse the two catalogues' views of the same network into one entry.
+    """Fuse the catalogues' views of the same network into one entry.
 
     The same network is published under different addresses on either side —
     `api.gbfs.ecovelo.mobi` here, `api.gbfs.v3.0.ecovelo.mobi` there — so the
     join cannot be on the URL. It is on the stations themselves: two feeds
     serving the same rectangle with the same number of stations are the same
-    network, and no French conurbation is ambiguous at that resolution.
+    network, and no two conurbations are ambiguous at that resolution.
     """
     merged: list[dict] = []
+    by_country: dict[str, list[dict]] = {}
     for survey in surveys:
-        twin = next((other for other in merged if same_network(other, survey)), None)
+        # Comparing every survey against every other is quadratic and, over a
+        # thousand systems, slow for nothing: two feeds sharing a rectangle
+        # share a country.
+        neighbours = by_country.setdefault(survey.get("country", ""), [])
+        twin = next((other for other in neighbours if same_network(other, survey)), None)
         if twin is None:
-            merged.append(dict(survey))
+            copy = dict(survey)
+            merged.append(copy)
+            neighbours.append(copy)
             continue
-        # The national access point knows the authority and the licence; the
-        # MobilityData catalogue knows the declared versions. Keep both, and
-        # keep the address that answered with the most recent GBFS version.
+        # A national access point knows the authority and the licence; the
+        # registry knows the declared versions. Keep both, and keep the address
+        # that answered with the most recent GBFS version.
         for key, value in survey.items():
             if value in (None, "", [], {}):
                 continue
@@ -516,11 +693,10 @@ def merge(surveys: list[dict]) -> list[dict]:
 def same_network(left: dict, right: dict) -> bool:
     """True if two surveys describe the same network.
 
-    The join cannot be on the address: the two catalogues publish the same
-    network under different hosts, and a conurbation that has changed operator
-    keeps both its feeds listed. It is on the stations — two feeds covering the
-    same rectangle with a comparable number of stations describe the same
-    network, and no two French conurbations overlap at that resolution.
+    The join cannot be on the address: the catalogues publish the same network
+    under different hosts, and a conurbation that has changed operator keeps
+    both its feeds listed. It is on the stations — two feeds covering the same
+    rectangle with a comparable number of stations describe the same network.
     """
     if set(left.get("discoveryUrls", [])) & set(right.get("discoveryUrls", [])):
         return True
@@ -541,10 +717,10 @@ def same_network(left: dict, right: dict) -> bool:
 def attach_unreachable_metadata(surveys: list[dict]) -> None:
     """Lend an unreachable dataset's description to the network it describes.
 
-    The national access point often publishes an address that no longer
-    answers beside one that does — the producer moved its feed and only one of
-    the two catalogues followed. The geometric join cannot see it, since a
-    feed that did not answer has no stations to compare.
+    A national access point often publishes an address that no longer answers
+    beside one that does — the producer moved its feed and only one of the two
+    catalogues followed. The geometric join cannot see it, since a feed that
+    did not answer has no stations to compare.
 
     Its description is still worth having: it is where the authority, the
     licence and the dataset page come from, and those go into the attribution
@@ -569,7 +745,8 @@ def attach_unreachable_metadata(surveys: list[dict]) -> None:
         )
         matches = [
             twin for twin in reachable
-            if place_words(twin.get("mainCity") or "") & area
+            if twin.get("country") == survey.get("country")
+            and place_words(twin.get("mainCity") or "") & area
         ]
         # Only an unambiguous match: two networks in the same conurbation would
         # each be as plausible, and a wrong attribution is worse than none.
@@ -604,9 +781,9 @@ def drop_duplicate_feeds(surveys: list[dict]) -> None:
     same name twice would read as a defect. The feed speaking the more recent
     GBFS version wins, then the one holding more stations.
 
-    Two networks may legitimately share a brand across the country — "Vélo
-    Modalis" runs in Angoulême, Royan and Saintes — so the name is not enough:
-    the boxes must overlap too.
+    Two networks may legitimately share a brand across a country — "Vélo
+    Modalis" runs in Angoulême, Royan and Saintes, "nextbike" in half of
+    Germany — so the name is not enough: the boxes must overlap too.
     """
     by_name: dict[str, list[dict]] = {}
     for survey in surveys:
@@ -652,70 +829,269 @@ def newer_version(candidate: str | None, current: str | None) -> bool:
     return parts(candidate) > parts(current)
 
 
-def locate(survey: dict) -> None:
-    """Fill in the main municipality and the departments a network spans.
+class Extracts:
+    """Geofabrik's published extracts, and which of them covers a box.
 
-    Both come from the state's own geographic API rather than from the feed: a
-    network names itself after its brand, not after the municipalities it
-    covers, and the generation scripts need the departments to know which Base
-    Adresse Nationale extracts to download.
+    A table of regions per country would be wrong for the next country added,
+    and there are a hundred and eighty of them. Geofabrik describes each of its
+    extracts with the geometry it was cut to, so the question can be asked of
+    the data instead: the box is tested against the extracts themselves.
 
-    The stations are what is looked up, not the intercommunality's boundary.
-    SPEC.md §4 derives the reference box from the stations, and that box
-    routinely crosses into a neighbouring department the intercommunality does
-    not include — Lyon's reaches into the Ain, Avignon's into the Gard.
+    The smallest extract that covers a point wins. Downloading Bavaria to serve
+    Munich is a gigabyte; downloading Europe would be sixty.
     """
-    stations = survey.get("stationSamples") or []
-    box = survey.get("boundingBox")
-    grid: list[list[float]] = []
-    if box:
-        # The reference box, margin included: it is what the three datasets are
-        # cut to, so it is what decides which extracts to download.
-        widened = widen(box, DEFAULT_MARGIN_METRES)
+
+    def __init__(self, features: list[dict]) -> None:
+        self.regions = []
+        for feature in features:
+            pbf = (feature.get("properties", {}).get("urls") or {}).get("pbf")
+            geometry = feature.get("geometry")
+            if not pbf or not geometry or not pbf.startswith(GEOFABRIK_DOWNLOAD_PREFIX):
+                continue
+            path = pbf[len(GEOFABRIK_DOWNLOAD_PREFIX):].removesuffix("-latest.osm.pbf")
+            polygons = (
+                geometry["coordinates"] if geometry["type"] == "MultiPolygon"
+                else [geometry["coordinates"]]
+            )
+            envelope = self._envelope(polygons)
+            self.regions.append({
+                "path": path,
+                "name": feature["properties"].get("name", path),
+                "polygons": polygons,
+                "envelope": envelope,
+                "area": (envelope[2] - envelope[0]) * (envelope[3] - envelope[1]),
+            })
+
+    @classmethod
+    def download(cls) -> "Extracts":
+        index = json.loads(
+            cached_download(GEOFABRIK_INDEX, "geofabrik-index.json").read_text("utf-8")
+        )
+        return cls(index["features"])
+
+    @staticmethod
+    def _envelope(polygons: list) -> tuple[float, float, float, float]:
+        longitudes = [point[0] for polygon in polygons for ring in polygon for point in ring]
+        latitudes = [point[1] for polygon in polygons for ring in polygon for point in ring]
+        return (min(longitudes), min(latitudes), max(longitudes), max(latitudes))
+
+    @staticmethod
+    def _inside_ring(longitude: float, latitude: float, ring: list) -> bool:
+        """Ray casting, the plain form: a point is inside if a ray crosses oddly."""
+        inside = False
+        previous_longitude, previous_latitude = ring[-1][0], ring[-1][1]
+        for point in ring:
+            longitude_here, latitude_here = point[0], point[1]
+            if (latitude_here > latitude) != (previous_latitude > latitude):
+                crossing = (
+                    previous_longitude - longitude_here
+                ) * (latitude - latitude_here) / (
+                    previous_latitude - latitude_here
+                ) + longitude_here
+                if longitude < crossing:
+                    inside = not inside
+            previous_longitude, previous_latitude = longitude_here, latitude_here
+        return inside
+
+    def _covers(self, region: dict, latitude: float, longitude: float) -> bool:
+        west, south, east, north = region["envelope"]
+        if not (west <= longitude <= east and south <= latitude <= north):
+            return False
+        for polygon in region["polygons"]:
+            # A polygon's first ring is its outline, the others its holes: an
+            # extract cut around an enclave has them.
+            if not self._inside_ring(longitude, latitude, polygon[0]):
+                continue
+            if any(self._inside_ring(longitude, latitude, hole) for hole in polygon[1:]):
+                continue
+            return True
+        return False
+
+    def covering(self, latitude: float, longitude: float) -> str | None:
+        """The smallest extract holding this point, as a download path."""
+        candidates = [
+            region for region in self.regions
+            if self._covers(region, latitude, longitude)
+        ]
+        if not candidates:
+            return None
+        return min(candidates, key=lambda region: region["area"])["path"]
+
+    def for_box(self, box: dict) -> list[str]:
+        """The extracts a reference box reaches, sampled on a grid.
+
+        A box straddling two of them needs both, merged: Avignon's reaches into
+        Languedoc-Roussillon, Basel's into Germany. Sampling the box rather
+        than the stations is deliberate — what gets cut is the box, margin
+        included.
+        """
+        found: list[str] = []
         for row in range(BOX_GRID_SIDE):
             for column in range(BOX_GRID_SIDE):
-                grid.append([
-                    widened["south"] + (widened["north"] - widened["south"])
-                    * row / (BOX_GRID_SIDE - 1),
-                    widened["west"] + (widened["east"] - widened["west"])
-                    * column / (BOX_GRID_SIDE - 1),
-                ])
-    if not stations and not grid:
+                latitude = box["south"] + (box["north"] - box["south"]) * row / (
+                    BOX_GRID_SIDE - 1)
+                longitude = box["west"] + (box["east"] - box["west"]) * column / (
+                    BOX_GRID_SIDE - 1)
+                path = self.covering(latitude, longitude)
+                if path and path not in found:
+                    found.append(path)
+        # A point out at sea is inside no county but inside the country that
+        # county belongs to, and the country would then be downloaded beside
+        # it — England beside Hampshire, for a box reaching into the Solent.
+        # An extract that is an ancestor of another already chosen adds
+        # nothing but its own gigabyte.
+        return sorted(
+            path for path in found
+            if not any(other != path and other.startswith(f"{path}/") for other in found)
+        )
+
+
+class Gazetteer:
+    """The world's populated places, and which of them a network stands in.
+
+    Answers the question a network's name never does: not "what is this network
+    called" but "which municipalities does it serve". A bike-share network is a
+    conurbation's, not a town's — Lille's covers ninety-five municipalities —
+    and §4 derives the reference box from the stations precisely so that the
+    neighbouring towns are inside it. Naming them is how the report shows that
+    they were not forgotten.
+    """
+
+    # A degree of latitude to a cell: coarse, but it turns a scan of two
+    # hundred thousand places into a look at three or four cells.
+    CELL_DEGREES = 1.0
+
+    # GeoNames codes a district of a town "PPLX". Those are neighbourhoods —
+    # Manhattan, Kreuzberg — and one of them would name a conurbation after a
+    # quarter of it. Kept in the list of places covered, never as the main one.
+    SECTION_CODE = "PPLX"
+
+    def __init__(self, places: list[tuple]) -> None:
+        self.cells: dict[tuple[int, int], list[tuple]] = {}
+        for place in places:
+            key = (int(place[0] // self.CELL_DEGREES), int(place[1] // self.CELL_DEGREES))
+            self.cells.setdefault(key, []).append(place)
+
+    @classmethod
+    def download(cls) -> "Gazetteer":
+        archive = cached_download(GEONAMES_CITIES_ZIP, "cities500.zip")
+        places = []
+        with zipfile.ZipFile(archive) as bundle:
+            with bundle.open(GEONAMES_CITIES_FILE) as stream:
+                for line in io.TextIOWrapper(stream, encoding="utf-8"):
+                    columns = line.split("\t")
+                    if len(columns) < 15:
+                        continue
+                    try:
+                        places.append((
+                            float(columns[4]),          # latitude
+                            float(columns[5]),          # longitude
+                            columns[1],                 # name
+                            columns[8],                 # country code
+                            int(columns[14] or 0),      # population
+                            columns[7],                 # feature code
+                        ))
+                    except ValueError:
+                        continue
+        return cls(places)
+
+    def inside(self, box: dict, country: str | None = None) -> list[tuple]:
+        """Every place the box holds, most populous first.
+
+        The country is a filter and not a requirement: a registry and a
+        gazetteer do not always agree on where a border runs — Belfast is
+        Ireland to the one and the United Kingdom to the other — and a network
+        left nameless over a disagreement of that kind serves nobody. Where the
+        filter empties the list, the places are taken as they come.
+        """
+        found = []
+        for row in range(int(box["south"] // self.CELL_DEGREES),
+                         int(box["north"] // self.CELL_DEGREES) + 1):
+            for column in range(int(box["west"] // self.CELL_DEGREES),
+                                int(box["east"] // self.CELL_DEGREES) + 1):
+                for place in self.cells.get((row, column), ()):
+                    if not (box["south"] <= place[0] <= box["north"]
+                            and box["west"] <= place[1] <= box["east"]):
+                        continue
+                    found.append(place)
+        of_country = [place for place in found if place[3] == country] if country else found
+        return sorted(of_country or found, key=lambda place: -place[4])
+
+    def main_place(self, places: list[tuple]) -> str:
+        """The place that names a conurbation: its largest true municipality."""
+        towns = [place for place in places if place[5] != self.SECTION_CODE] or places
+        return towns[0][2] if towns else ""
+
+
+def french_departments(survey: dict) -> None:
+    """Fill in the Base Adresse Nationale extracts a French box reaches (§4.3).
+
+    France's address base is published department by department, so a French
+    city configuration has to name them. The state's own geographic API
+    answers, for a position, which department it falls in.
+
+    The reference box is what is sampled, not the stations: the box carries the
+    3 km margin, and it routinely crosses into a neighbouring department the
+    intercommunality does not include — Lyon's reaches into the Ain,
+    Avignon's into the Gard.
+    """
+    box = survey.get("boundingBox")
+    if not box:
+        return
+    widened = widen(box, DEFAULT_MARGIN_METRES)
+    departments: set[str] = set()
+    for row in range(BOX_GRID_SIDE):
+        for column in range(BOX_GRID_SIDE):
+            latitude = widened["south"] + (widened["north"] - widened["south"]) * row / (
+                BOX_GRID_SIDE - 1)
+            longitude = widened["west"] + (widened["east"] - widened["west"]) * column / (
+                BOX_GRID_SIDE - 1)
+            try:
+                found = fetch_json(
+                    f"{GEO_API_COMMUNES}?lat={latitude}&lon={longitude}"
+                    "&fields=nom,code,codeDepartement"
+                )
+            except Exception:  # noqa: BLE001 — a point at sea returns nothing
+                continue
+            departments.update(
+                municipality["codeDepartement"] for municipality in found
+            )
+    if departments:
+        survey["banDepartments"] = sorted(departments)
+
+
+def locate(survey: dict, extracts: Extracts, gazetteer: Gazetteer) -> None:
+    """Say where a network is: its municipalities, and the extract to cut.
+
+    Both are read from the stations rather than from an administrative
+    boundary, as §4 requires: a network spills over the edge of the authority
+    that runs it, and the box is what the datasets are cut to.
+    """
+    box = survey.get("boundingBox")
+    if not box:
         return
 
-    departments: set[str] = set()
-    municipalities: dict[str, dict] = {}
-    for index, (latitude, longitude) in enumerate(stations + grid):
-        try:
-            found = fetch_json(
-                f"{GEO_API_COMMUNES}?lat={latitude}&lon={longitude}"
-                "&fields=nom,code,codeDepartement,population"
-            )
-        except Exception:  # noqa: BLE001 — a point at sea returns nothing
-            continue
-        for municipality in found:
-            departments.add(municipality["codeDepartement"])
-            # Only the municipalities actually holding stations may name the
-            # conurbation: the grid reaches into the countryside around it.
-            if index < len(stations):
-                municipalities[municipality["code"]] = municipality
+    # The reference box, margin included: it is the ground the datasets cover,
+    # and a conurbation's largest town can stand just outside the rectangle its
+    # own stations enclose — Mexico City is three hundred metres outside
+    # Ecobici's, which would have named the network after a borough of it.
+    widened = widen(box, DEFAULT_MARGIN_METRES)
+    places = gazetteer.inside(widened, survey.get("country") or None)
+    if places:
+        survey["mainCity"] = gazetteer.main_place(places)
+        # Municipalities, not neighbourhoods: what is worth saying is that the
+        # box holds Roubaix and Tourcoing beside Lille, not that it holds the
+        # eleventh district of Budapest beside Budapest.
+        survey["municipalities"] = [
+            place[2] for place in places if place[5] != Gazetteer.SECTION_CODE
+        ]
 
-    if municipalities:
-        # The most populous municipality holding stations names the
-        # conurbation: it is what the interface shows beside the brand, and
-        # "Vélo'v — Lyon" is the only form that locates a network for someone
-        # who has never been there. Reading it from the stations rather than
-        # from the intercommunality keeps it true of where the bikes are.
-        largest = max(municipalities.values(), key=lambda item: item.get("population") or 0)
-        survey["mainCity"] = largest["nom"]
-    if departments:
-        survey["departments"] = sorted(departments)
-        regions = sorted({
-            REGION_OF_DEPARTMENT[department]
-            for department in departments
-            if department in REGION_OF_DEPARTMENT
-        })
-        survey["osmRegions"] = [f"europe/france/{region}" for region in regions]
+    survey["osmRegions"] = extracts.for_box(widened)
+
+    # Re-rendering a stored survey must not call the state's API again for
+    # departments it already holds.
+    if survey.get("country") == "FR" and not survey.get("banDepartments"):
+        french_departments(survey)
 
 
 def normalised(text: str) -> str:
@@ -730,15 +1106,18 @@ def normalised(text: str) -> str:
 
 
 # Words that never distinguish one network from another: the legal form of an
-# intercommunality, and the vocabulary its name is built from. Stripped from
-# the tail of a title along with the territory's own words.
-# "vélo" is deliberately absent: half the brands are built on it, and popping
-# it would turn "Ti Vélo" into "Ti".
+# authority, and the vocabulary its name is built from. Stripped from the tail
+# of a title along with the territory's own words.
+# "vélo", "bike" and their cousins are deliberately absent: half the brands are
+# built on them, and popping one would turn "Ti Vélo" into "Ti".
 ADMINISTRATIVE_WORDS = frozenset("""
     ca cc cu ce communaute communautes commune communes limitrophe limitrophes
     agglomeration agglo metropole eurometropole syndicat mixte territoire pays
     grand grande grands grandes petit petite region departement ville villes
     de du des d la le les l en et au aux sur sous a
+    city ciudad citta cidade stadt stad by kommune gemeinde comune municipio
+    municipality metropolitan metropolitana county province provincia
+    prefecture district area urban public gmbh ag as sa spa bv nv oy ab
 """.split())
 
 
@@ -747,8 +1126,8 @@ def territory_words(survey: dict) -> frozenset[str]:
     words = set(ADMINISTRATIVE_WORDS)
     for source in ("coveredAreaName", "mainCity", "location"):
         words.update(normalised(survey.get(source) or "").split())
-    # The region as well: an overseas network trails it — "Altervélo
-    # Saint-Pierre La Réunion" — where a mainland one never does.
+    # The region as well: an overseas or provincial network trails it —
+    # "Altervélo Saint-Pierre La Réunion" — where a metropolitan one never does.
     for region in survey.get("osmRegions") or []:
         words.update(region.rsplit("/", 1)[-1].split("-"))
     return frozenset(words)
@@ -757,12 +1136,11 @@ def territory_words(survey: dict) -> frozenset[str]:
 def strip_territory(name: str, forgettable: frozenset[str]) -> str:
     """Remove the territory a network's published title trails behind it.
 
-    The national access point titles its datasets "VLS *brand* *territory*" —
-    "VLS Naolib Nantes Métropole", "VLS AuxR_M le vélo Communauté
-    d'agglomération de l'Auxerrois". The territory belongs in the
-    configuration's own fields, not in the network's name: the interface
-    already shows the two side by side, and "Naolib — Nantes" must not read
-    "Naolib Nantes Métropole — Nantes".
+    A national access point titles its datasets "VLS *brand* *territory*" —
+    "VLS Naolib Nantes Métropole" — and a registry does the same in its own
+    language. The territory belongs in the configuration's own fields, not in
+    the network's name: the interface already shows the two side by side, and
+    "Naolib — Nantes" must not read "Naolib Nantes Métropole — Nantes".
 
     Only a **trailing** territory goes: a brand may legitimately carry a place
     name at its head, as "Vélib' Métropole" does.
@@ -779,11 +1157,11 @@ def strip_territory(name: str, forgettable: frozenset[str]) -> str:
 def display_name_of(survey: dict) -> str:
     """The name to show for a network, as short as it can be while still true.
 
-    Three spellings reach us and none is reliably the best: the title of the
+    Three spellings reach us and none is reliably the best: the title of a
     national access point's dataset, the `name` the feed publishes for itself,
-    and the label of the MobilityData catalogue. They are tried in that order,
-    each stripped of the boilerplate its producer adds — "VLS " in front, the
-    territory behind, the city in brackets.
+    and the label of the registry. They are tried in that order, each stripped
+    of the boilerplate its producer adds — "VLS " in front, the territory
+    behind, the city in brackets.
 
     A candidate that says nothing but where it runs — a feed calling itself
     "Valenciennes", a title reading "Tarbes Lourdes Pyrénées" — is refused and
@@ -794,6 +1172,16 @@ def display_name_of(survey: dict) -> str:
     for key in ("catalogueTitle", "systemName", "catalogueName"):
         raw = (survey.get(key) or "").strip()
         if not raw:
+            continue
+        # A feed naming itself "bike_share_toronto" has given its identifier,
+        # not its name. The catalogue holds the name in that case.
+        if "_" in raw and " " not in raw:
+            continue
+        # "Regensburg, Augsburg, Straubing, Tuttlingen" is the list of towns an
+        # operator serves under one feed, not a name. The next source gives the
+        # brand — "Donkey Republic Regensburg", which the territory stripping
+        # then shortens to "Donkey Republic".
+        if "," in raw:
             continue
         # "VLS Vélomagg Montpellier…", "GraouLib' (Metz)", "Vélhop - Strasbourg"
         candidate = re.sub(r"^VLS\s+", "", raw)
@@ -810,6 +1198,20 @@ def display_name_of(survey: dict) -> str:
             continue
         return candidate
     return survey.get("catalogueName", "").strip()
+
+
+def language_of(survey: dict) -> str:
+    """The language this city's streets are named in (§15.1).
+
+    The producer's own declaration is followed wherever it names one of the
+    country's languages: Barcelona's feed says Catalan, Bilbao's says Basque,
+    and their streets are carrers and kaleak. Anything else is the country's
+    majority language — a feed declaring English in Nantes has declared a
+    default, not a fact about its street names.
+    """
+    officials = OFFICIAL_LANGUAGES.get(survey.get("country", ""), ("en",))
+    declared = survey.get("feedLanguage")
+    return declared if declared in officials else officials[0]
 
 
 def attribution_of(survey: dict) -> None:
@@ -834,7 +1236,7 @@ def attribution_of(survey: dict) -> None:
     survey["licenceName"] = licence
 
     credited = operator or survey.get("displayName", "")
-    attribution = f"Données {survey.get('displayName', '')} — {credited}"
+    attribution = f"Data {survey.get('displayName', '')} — {credited}"
     if licence:
         # "licence Licence Ouverte 2.0" reads as a stammer; some licence names
         # already carry the word.
@@ -844,7 +1246,8 @@ def attribution_of(survey: dict) -> None:
     survey["attributionUrl"] = (
         survey.get("datasetPageUrl")
         or survey.get("licenceUrl")
-        or "https://transport.data.gouv.fr/datasets"
+        or survey.get("homepageUrl")
+        or MOBILITYDATA_SYSTEMS_PAGE
     )
 
 
@@ -923,8 +1326,13 @@ def describe(surveys: list[dict]) -> None:
             survey["verdict"] = "eligible"
             record_reference_area(survey)
             survey["displayName"] = display_name_of(survey)
+            survey["language"] = language_of(survey)
             attribution_of(survey)
     drop_duplicate_feeds(surveys)
+
+
+def country_name(code: str) -> str:
+    return COUNTRY_NAMES.get(code, code or "—")
 
 
 def write_survey(generated_at: str, surveys: list[dict], path: Path) -> None:
@@ -939,23 +1347,25 @@ def write_survey(generated_at: str, surveys: list[dict], path: Path) -> None:
 
 
 def write_report(surveys: list[dict], path: Path, generated_at: str) -> None:
-    """Write the readable list of French networks."""
-    eligible = sorted(
-        (survey for survey in surveys if survey["verdict"] == "eligible"),
-        key=lambda survey: -survey.get("stationCount", 0),
-    )
+    """Write the readable list of the networks of the world."""
+    eligible = [survey for survey in surveys if survey["verdict"] == "eligible"]
+    by_country: dict[str, list[dict]] = {}
+    for survey in eligible:
+        by_country.setdefault(survey.get("country", ""), []).append(survey)
+
     lines = [
-        "# Bike-share networks in France that publish their stations",
+        "# Bike-share networks that publish their stations",
         "",
         "> Generated by `tools/discover_networks.py` on "
         f"{generated_at}. Do not edit by hand: regenerate it.",
         "",
         "`SPEC.md` §4.1 forbids guessing a `gbfs.json` address. Every one below was",
-        "read from [MobilityData's `systems.csv`](https://github.com/MobilityData/gbfs)",
-        "or from the [national access point](https://transport.data.gouv.fr), then",
-        "**called for real** — the station counts, the GBFS versions and the",
-        "rejections all come from what the feeds answered, not from what their",
-        "catalogues claim.",
+        "read from a public catalogue — [MobilityData's `systems.csv`]"
+        "(https://github.com/MobilityData/gbfs), the registry the GBFS standard",
+        "keeps of itself, France's [national access point](https://transport.data.gouv.fr),",
+        "or an operator's own developer page — then **called for real**. The station",
+        "counts, the GBFS versions and the rejections all come from what the feeds",
+        "answered, not from what their catalogues claim.",
         "",
         "## What counts as a network this application can serve",
         "",
@@ -964,45 +1374,67 @@ def write_report(surveys: list[dict], path: Path, generated_at: str) -> None:
         "3. its stations are real docks — a declared capacity, and a live count of",
         "   free docks, both of which §6 needs to promise the bike can be returned;",
         f"4. it has at least {MINIMUM_STATIONS} stations;",
-        "5. its feed needs no key, since the application hard-codes no secret.",
+        f"5. its reference box stays under {MAXIMUM_AREA_SQUARE_KILOMETRES:,} km², the size",
+        "   §4's three datasets are cut for;",
+        "6. its feed needs no key, since the application hard-codes no secret.",
         "",
-        "Most of what publishes GBFS in France fails the second or the third rule:",
-        "scooter fleets outnumber bike-share networks, and they publish their",
-        "parking areas as stations.",
+        "Most of what publishes GBFS fails the second or the third rule: free-floating",
+        "fleets outnumber docked networks, and they publish their parking areas as",
+        "stations.",
         "",
         "A conurbation absent from this page altogether — neither served nor set",
-        "aside — publishes no station feed in either catalogue. Several sizeable",
-        "French networks are in that case: their availability lives behind a",
-        "proprietary interface, and `SPEC.md` §4.1 rules those out. Re-running the",
+        "aside — publishes no station feed in any catalogue read here. Several",
+        "sizeable networks are in that case: their availability lives behind a key or",
+        "a proprietary interface, and `SPEC.md` §4.1 rules those out. Re-running the",
         "script is what settles whether that is still true.",
         "",
-        f"## Served — {len(eligible)} networks",
+        f"## Served — {len(eligible)} networks in {len(by_country)} "
+        + ("country" if len(by_country) == 1 else "countries"),
         "",
         "The bounding box of each is derived from its **own stations** widened by",
         "3 km (§4), which is why it covers the conurbation rather than the",
-        "municipality the network is named after.",
+        "municipality the network is named after. \"Also covers\" names the other",
+        "municipalities standing inside that box: a bike-share network belongs to an",
+        "agglomeration, and the map must not be centred on its largest town alone.",
         "",
-        "| Network | Conurbation | Stations | Docks | GBFS | Box | "
-        "OSM extract | BAN |",
-        "|---|---|---:|---:|:--:|---:|---|---|",
     ]
-    for survey in eligible:
-        regions = ", ".join(
-            region.rsplit("/", 1)[-1] for region in survey.get("osmRegions", [])
-        )
-        lines.append(
-            f"| {survey.get('displayName') or survey['catalogueName']} "
-            f"| {survey.get('mainCity') or survey.get('location') or '—'} "
-            f"| {survey.get('stationCount', 0)} "
-            f"| {survey.get('capacityTotal', 0)} "
-            f"| {survey.get('gbfsVersion', '?')} "
-            f"| {survey.get('areaSquareKilometres', 0)} km² "
-            f"| {regions or '—'} "
-            f"| {', '.join(survey.get('departments', [])) or '—'} |"
-        )
+
+    for code in sorted(by_country, key=lambda code: (-len(by_country[code]), code)):
+        networks = sorted(by_country[code], key=lambda survey: -survey.get("stationCount", 0))
+        language = "/".join(OFFICIAL_LANGUAGES.get(code, ("en",)))
+        lines += [
+            f"### {country_name(code)} ({code}) — {len(networks)} "
+            + ("network" if len(networks) == 1 else "networks")
+            + f", street names in `{language}`",
+            "",
+            "| Network | Conurbation | Also covers | Stations | Docks | GBFS | Box | "
+            "OSM extract |",
+            "|---|---|---|---:|---:|:--:|---:|---|",
+        ]
+        for survey in networks:
+            others = [
+                place for place in (survey.get("municipalities") or [])
+                if place != survey.get("mainCity")
+            ]
+            covered = ", ".join(others[:MUNICIPALITIES_LISTED])
+            if len(others) > MUNICIPALITIES_LISTED:
+                covered += f", +{len(others) - MUNICIPALITIES_LISTED}"
+            regions = ", ".join(
+                region.rsplit("/", 1)[-1] for region in survey.get("osmRegions", [])
+            )
+            lines.append(
+                f"| {survey.get('displayName') or survey['catalogueName']} "
+                f"| {survey.get('mainCity') or survey.get('location') or '—'} "
+                f"| {covered or '—'} "
+                f"| {survey.get('stationCount', 0)} "
+                f"| {survey.get('capacityTotal', 0)} "
+                f"| {survey.get('gbfsVersion', '?')} "
+                f"| {survey.get('areaSquareKilometres', 0)} km² "
+                f"| {regions or '—'} |"
+            )
+        lines.append("")
 
     lines += [
-        "",
         "\"Box\" is the reference box, margin included: the area the base map,",
         "the routing graph and the address index are all cut to. A small network",
         "is mostly margin — Auch's ten stations enclose 4 km², the box around",
@@ -1014,14 +1446,16 @@ def write_report(surveys: list[dict], path: Path, generated_at: str) -> None:
     for verdict, (title, why) in VERDICT_EXPLANATIONS.items():
         rejected = sorted(
             (survey for survey in surveys if survey["verdict"] == verdict),
-            key=lambda survey: (survey.get("catalogueName") or "").lower(),
+            key=lambda survey: ((survey.get("country") or ""),
+                                (survey.get("catalogueName") or "").lower()),
         )
         if not rejected:
             continue
         lines += [f"### {title} — {len(rejected)}", "", why, ""]
         names = ", ".join(sorted({
             f"{survey.get('systemName') or survey['catalogueName']}"
-            + (f" ({survey['location']})" if survey.get("location") else "")
+            + (f" ({survey['location']}, {survey.get('country', '')})"
+               if survey.get("location") else f" ({survey.get('country', '')})")
             for survey in rejected
         }, key=str.lower))
         lines += [names, ""]
@@ -1034,6 +1468,9 @@ def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
     parser.add_argument("--survey", type=Path, default=DEFAULT_SURVEY)
+    parser.add_argument("--extra-feeds", type=Path, default=DEFAULT_EXTRA_FEEDS)
+    parser.add_argument("--country", action="append", default=[],
+                        help="restrict the survey to these ISO country codes")
     parser.add_argument(
         "--offline",
         action="store_true",
@@ -1049,20 +1486,43 @@ def main() -> int:
     if arguments.offline:
         stored = json.loads(arguments.survey.read_text(encoding="utf-8"))
         surveys = stored["networks"]
+        # The municipalities and the extracts are placed again: both come from
+        # two files on disk, and re-reading them costs nothing where calling
+        # sixteen hundred feeds again would cost an hour.
+        extracts = Extracts.download()
+        gazetteer = Gazetteer.download()
+        for survey in surveys:
+            if survey["verdict"] in ("eligible", "duplicate-feed"):
+                locate(survey, extracts, gazetteer)
         describe(surveys)
         write_survey(stored.get("generatedAt", generated_at), surveys, arguments.survey)
         write_report(surveys, arguments.report, generated_at)
         print(f"Rewritten from {arguments.survey}: {arguments.report}")
         return 0
 
+    wanted = {code.upper() for code in arguments.country}
+
     print(f"Reading {MOBILITYDATA_SYSTEMS_CSV}")
     candidates = read_mobilitydata(fetch_text(MOBILITYDATA_SYSTEMS_CSV))
-    print(f"  {len(candidates)} French systems")
+    print(f"  {len(candidates)} systems in "
+          f"{len({candidate['country'] for candidate in candidates})} countries")
 
-    print(f"Reading {TRANSPORT_DATA_GOUV_DATASETS}")
-    from_state = read_transport_data_gouv(fetch_json(TRANSPORT_DATA_GOUV_DATASETS))
-    print(f"  {len(from_state)} station-based bike datasets")
-    candidates += from_state
+    extra = read_extra_feeds(arguments.extra_feeds)
+    if extra:
+        print(f"Reading {arguments.extra_feeds}")
+        print(f"  {len(extra)} addresses found outside the registry")
+        candidates += extra
+
+    if not wanted or "FR" in wanted:
+        print(f"Reading {TRANSPORT_DATA_GOUV_DATASETS}")
+        from_state = read_transport_data_gouv(fetch_json(TRANSPORT_DATA_GOUV_DATASETS))
+        print(f"  {len(from_state)} station-based bike datasets")
+        candidates += from_state
+
+    if wanted:
+        candidates = [
+            candidate for candidate in candidates if candidate["country"] in wanted
+        ]
 
     print(f"Calling {len(candidates)} feeds…")
     with ThreadPoolExecutor(max_workers=CONCURRENT_REQUESTS) as pool:
@@ -1072,9 +1532,13 @@ def main() -> int:
     eligible = [survey for survey in surveys if survey["verdict"] == "eligible"]
     print(f"  {len(eligible)} eligible networks out of {len(surveys)} distinct systems")
 
-    print("Resolving municipalities and departments…")
+    print("Reading the extract index and the gazetteer…")
+    extracts = Extracts.download()
+    gazetteer = Gazetteer.download()
+
+    print("Naming the municipalities and choosing the extracts…")
     with ThreadPoolExecutor(max_workers=CONCURRENT_REQUESTS) as pool:
-        list(pool.map(locate, eligible))
+        list(pool.map(lambda survey: locate(survey, extracts, gazetteer), eligible))
 
     attach_unreachable_metadata(surveys)
     describe(surveys)

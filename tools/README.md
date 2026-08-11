@@ -24,19 +24,28 @@ neighbouring department the sampling missed.
 written by hand:
 
 ```bash
-python3 tools/discover_networks.py    # calls every French feed, writes the list
+python3 tools/discover_networks.py    # calls every feed on earth, writes the list
 python3 tools/add_city.py --list      # what it would add, and under what name
 python3 tools/add_city.py --all       # writes the configurations
 python3 tools/build_catalogue.py      # re-derives the catalogue from them
 ```
 
-`discover_networks.py` reads the two catalogues `SPEC.md` §4.1 accepts —
-MobilityData's `systems.csv` and the national access point — calls every
-address they publish, and keeps only what this application can actually serve:
-stations with real docks, a fleet holding bicycles and no car, at least ten
-stations, a feed needing no key. The reasoned list it produces, rejections
-included, is [`docs/networks-france.md`](../docs/networks-france.md); the same
-survey in machine-readable form lands in `data/networks-fr.json`.
+`discover_networks.py` reads the catalogues `SPEC.md` §4.1 accepts — the GBFS
+registry `systems.csv`, France's national access point, and the hand-checked
+addresses of `config/extra-feeds.json` — calls every address they publish,
+and keeps only what this application can actually serve: stations with real
+docks, a fleet holding bicycles and no car, at least ten stations, a box that
+still describes a conurbation, a feed needing no key. It then places what it
+kept: Geofabrik's extract index says which OpenStreetMap extract covers the
+box, the GeoNames gazetteer names the municipalities the stations stand in, and
+France's geographic API says which Base Adresse Nationale extracts to download.
+The reasoned list it produces, rejections included, is
+[`docs/networks.md`](../docs/networks.md); the same survey in machine-readable
+form lands in `data/networks.json`.
+
+Calling sixteen hundred feeds takes the better part of an hour. `--country FR`
+restricts it to one country, and `--offline` re-renders the report from the
+last survey without calling anything.
 
 `add_city.py` turns each surveyed network into a configuration: verified feed
 address, network and authority names, licence, reference box recomputed against
@@ -61,12 +70,12 @@ machine, most of which is downloading the sources.
 
 | Script | Role |
 |---|---|
-| `discover_networks.py` | Surveys every French GBFS feed, keeps the docked bike networks, writes `docs/networks-france.md` |
+| `discover_networks.py` | Surveys every GBFS feed of every country, keeps the docked bike networks, writes `docs/networks.md` |
 | `add_city.py` | Turns a surveyed network into a `config/cities/*.json` |
 | `compute_bbox.py` | Computes the reference bounding box from the GBFS feed's stations and writes it into the city configuration |
 | `build_tiles.py` | Produces `tiles.mbtiles` from an OpenStreetMap extract |
 | `build_routing.py` | Produces the BRouter `*.rd5` graph |
-| `build_address_index.py` | Produces `addresses.sqlite` from the Base Adresse Nationale and OpenStreetMap |
+| `build_address_index.py` | Produces `addresses.sqlite`, from the Base Adresse Nationale in France and from the OpenStreetMap extract everywhere else |
 | `build_manifest.py` | Describes the release: sizes, SHA-256 digests, URLs |
 | `build_catalogue.py` | Derives the catalogue of served cities from their configurations |
 | `refresh_normalization_fixtures.py` | Recomputes the normalisation reference cases after the shared rules change |
@@ -82,25 +91,44 @@ the application too).
 | `config/cities/<city>.json` | Everything specific to a conurbation: network, GBFS feed URL, bounding box, centring, the extracts its data is cut from. **The only place** these values exist |
 | `config/catalogue.json` | The index of those configurations, derived from them |
 | `tools/map_features.yaml` | The allowlist of objects kept in the base map, and the list of those deliberately excluded |
-| `config/address_normalization.json` | Street-name normalisation rules, shared with the application |
+| `config/address-normalization/<language>.json` | Street-name normalisation rules, one file per language, shared with the application |
+| `config/extra-feeds.json` | Auto-discovery addresses found outside the public catalogues, each with the page it was read from |
 
-## Street-name normalisation, and why it is national
+## Street-name normalisation, one file per language
 
-`config/address_normalization.json` is what makes a typed street meet an
-indexed one: it lowercases, strips accents and punctuation, expands
-abbreviations, and splits a leading way type off the proper name so that
-"gambetta" finds "rue Gambetta".
+`config/address-normalization/<language>.json` is what makes a typed street
+meet an indexed one: it lowercases, folds the letters accent removal cannot
+reach, strips accents and punctuation, expands abbreviations, and splits a
+leading way type off the proper name so that "gambetta" finds "rue Gambetta".
 
-Its content covers the whole French address base, not one city. Two reasons:
+**There is one file per language because a street type is a word of a
+language.** "Rue" and "boulevard" say nothing about a Warsaw address, where the
+word is *ulica* and the abbreviation *ul.*; "Straße" is typed *Strasse* by half
+of Germany, and no accent removal folds a ß. The language meant is the one the
+**address base** is written in, not the one the interface speaks: an index
+built over Antwerp is searched in Dutch whatever the phone is set to. The index
+records which file it was built with, and the application reads it back from
+there — the two ends therefore cannot be paired wrongly.
 
-* the Base Adresse Nationale carries the DGFiP's way-type codes — `ALL`, `CHE`,
-  `MTE`, `RLE`, `LD`, `TRA`, `PRV` — and a code left unexpanded is a street
-  nobody finds by typing its name in full;
+Each file covers a whole language, not one city. Two reasons:
+
+* an address base carries its country's abbreviations — the DGFiP's way-type
+  codes `ALL`, `CHE`, `MTE`, `RLE`, `LD`, `TRA`, `PRV` in France, `ul.`, `al.`,
+  `pl.` in Poland, `Str.`, `Cd.`, `Sk.` elsewhere — and a code left unexpanded
+  is a street nobody finds by typing its name in full;
 * a conurbation names its ways in its own words. *Traverse* and *vallon* are
   Marseille, *montée* and *traboule* Lyon, *courée* and *drève* the North,
   *venelle* and *hent* Brittany, *cavée* Normandy, *carriera* and *cami* the
-  Occitan south, *ravine*, *morne* and *habitation* Guadeloupe and Réunion.
-  Leaving a region's vocabulary out costs its inhabitants the type/name split.
+  Occitan south, *ravine*, *morne* and *habitation* Guadeloupe and Réunion;
+  *calle*, *calzada* and *cerrada* are Spanish America, *calle* and
+  *fondamenta* Venice. Leaving a region's vocabulary out costs its inhabitants
+  the type/name split.
+
+A language with no file of its own falls back on English — plain folding, no
+street type, which still finds a street typed in full. Writing one is a pull
+request against a single JSON file, and `reference-<language>.json` in the
+test fixtures proves it the day it lands rather than the day a city speaking
+it has its data generated.
 
 After editing the rules, recompute the reference cases the Kotlin test replays:
 
@@ -183,11 +211,20 @@ that merely pass through — as far as the middle of France. The tiles are then
 clipped to the box by tippecanoe, otherwise overhanging objects would draw a
 fringe of partial data outside the covered area.
 
-**Address grouping.** Addresses are grouped by (INSEE code, former municipality,
-normalised street name) rather than by `id_fantoir`: the latter is empty on
-24,363 of the box's 286,338 rows, which cut 69 streets in two. The former
-municipality's code is part of the key, otherwise two homonymous streets of a
-merged municipality end up conflated.
+**Address grouping, from the BAN.** Addresses are grouped by (INSEE code,
+former municipality, normalised street name) rather than by `id_fantoir`: the
+latter is empty on 24,363 of the box's 286,338 rows, which cut 69 streets in
+two. The former municipality's code is part of the key, otherwise two homonymous
+streets of a merged municipality end up conflated.
+
+**Address grouping, from OpenStreetMap.** There is no national identifier to
+group on, so the key is (normalised municipality, normalised street name). A
+house number naming a municipality its street does not is attached to the
+street all the same rather than opening a second one beside it: OpenStreetMap
+tags `addr:city` on the numbers far more often than on the ways. Streets left
+without a municipality — most of them — take the name of the nearest inhabited
+place, which is an approximation of a boundary by a distance, and the
+alternative was a blank in the results list.
 
 **House-number positions.** Each number is stored as a delta from its street's
 representative point, in hundred-thousandths of a degree. Round-trip error
