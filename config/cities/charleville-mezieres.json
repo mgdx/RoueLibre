@@ -10,6 +10,7 @@
     "regeneration of the data (§4) — do not edit it by hand."
   ],
   "configVersion": 1,
+  "country": "FR",
   "network": {
     "id": "cycl-am",
     "displayName": "Cycl'AM",
@@ -69,11 +70,13 @@
       "into a neighbouring department."
     ],
     "osmRegions": [
+      "europe/belgium",
       "europe/france/champagne-ardenne"
     ],
     "banDepartments": [
       "08"
-    ]
+    ],
+    "addressSource": "ban"
   },
   "dataRelease": {
     "$comment": [

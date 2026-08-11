@@ -9,6 +9,7 @@
     "'network', 'gbfsDiscoveryUrl', 'map' and 'dataRelease'. See README.md."
   ],
   "configVersion": 1,
+  "country": "FR",
   "network": {
     "id": "velib",
     "displayName": "Vélib' Métropole",
@@ -76,7 +77,8 @@
       "93",
       "94",
       "95"
-    ]
+    ],
+    "addressSource": "ban"
   },
   "dataRelease": {
     "$comment": [

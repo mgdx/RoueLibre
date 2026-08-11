@@ -9,6 +9,7 @@
     "'network', 'gbfsDiscoveryUrl', 'map' and 'dataRelease'. See README.md."
   ],
   "configVersion": 1,
+  "country": "FR",
   "network": {
     "id": "vlille",
     "displayName": "V'lille",
@@ -69,11 +70,13 @@
       "into a neighbouring department."
     ],
     "osmRegions": [
+      "europe/belgium",
       "europe/france/nord-pas-de-calais"
     ],
     "banDepartments": [
       "59"
-    ]
+    ],
+    "addressSource": "ban"
   },
   "dataRelease": {
     "$comment": [

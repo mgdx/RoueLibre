@@ -36,7 +36,7 @@ from compute_bbox import bounding_box_of_stations, load_stations, positioned_sta
 
 TOOLS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = TOOLS_DIR.parent
-DEFAULT_SURVEY = REPO_ROOT / "data" / "networks-fr.json"
+DEFAULT_SURVEY = REPO_ROOT / "data" / "networks.json"
 DEFAULT_CITIES_DIR = REPO_ROOT / "config" / "cities"
 
 # Where the data of a city is published (§4.4). Written into each
@@ -68,18 +68,39 @@ CONFIGURATION_COMMENT = [
     "This file is the ONLY source of the data specific to a conurbation.",
     "No URL, coordinate or network name may appear anywhere else in the code.",
     "Written by tools/add_city.py from the survey of tools/discover_networks.py,",
-    "which read the auto-discovery address from transport.data.gouv.fr or from",
-    "MobilityData's catalogue and verified it by a real request (§4.1).",
+    "which read the auto-discovery address from a public catalogue — the GBFS",
+    "registry, a national access point, an operator's own developer page — and",
+    "verified it by a real request (§4.1).",
     "The 'boundingBox' block is RECOMPUTED by tools/compute_bbox.py on every",
     "regeneration of the data (§4) — do not edit it by hand.",
 ]
 
 
+# Letters that survive accent removal because they are not accented letters:
+# NFD decomposition has nothing to take off them. An identifier names a file, a
+# directory of data and a URL, and none of those is a place for a ł.
+TRANSLITERATIONS = {
+    "ß": "ss", "ł": "l", "đ": "d", "ø": "o", "æ": "ae", "œ": "oe",
+    "å": "aa", "þ": "th", "ð": "d", "ı": "i", "ŀ": "l", "ĳ": "ij",
+}
+
+
 def slug(text: str) -> str:
-    """Reduce a name to an identifier: lowercase, unaccented, hyphenated."""
-    decomposed = unicodedata.normalize("NFD", text.lower())
+    """Reduce a name to an identifier: lowercase, unaccented, ASCII, hyphenated.
+
+    The result names a configuration file, the directory the city's data is
+    generated into, and the manifest published for it. Anything outside ASCII
+    would travel badly through all three, so what accent removal cannot fold is
+    transliterated, and whatever is left of another script is dropped — a
+    network named only in Greek or Japanese falls back on the identifier its
+    catalogue gave it.
+    """
+    lowered = "".join(
+        TRANSLITERATIONS.get(character, character) for character in text.lower()
+    )
+    decomposed = unicodedata.normalize("NFD", lowered)
     letters = "".join(
-        character if character.isalnum() else " "
+        character if character.isalnum() and character.isascii() else " "
         for character in decomposed
         if unicodedata.category(character) != "Mn"
     )
@@ -121,12 +142,18 @@ def build_document(survey: dict, network_id: str, box: BoundingBox,
     return {
         "$comment": CONFIGURATION_COMMENT,
         "configVersion": 1,
+        # ISO 3166-1 alpha-2. The catalogue groups the cities by it (§15.1),
+        # and the generation scripts read the address base of that country.
+        "country": survey.get("country", ""),
         "network": {
             "id": network_id,
             "displayName": survey["displayName"],
             "operator": survey.get("operator") or survey["displayName"],
             "city": survey.get("mainCity") or survey.get("location") or "",
-            "defaultLanguage": "fr",
+            # The language the STREETS are named in, which is the one the
+            # address index is built and searched with (§15.1). Not the
+            # language of the interface: that one follows the device (§9).
+            "defaultLanguage": survey.get("language", "en"),
         },
         "gbfs": {
             "$comment": [
@@ -177,13 +204,21 @@ def build_document(survey: dict, network_id: str, box: BoundingBox,
             "$comment": [
                 "What tools/generate_all.sh needs in order to produce this",
                 "city's data in one command: the OpenStreetMap extract to cut",
-                "the box out of, and the Base Adresse Nationale departments the",
-                "box reaches. Both are read from the stations themselves, not",
-                "from an administrative boundary — a network routinely spills",
-                "into a neighbouring department.",
+                "the box out of, and where the addresses come from.",
+                "",
+                "Both are read from the stations themselves, not from an",
+                "administrative boundary — a network routinely spills into a",
+                "neighbouring department, region or country.",
+                "",
+                "\"addressSource\" is \"ban\" for France, whose address base is",
+                "published department by department and is the better source",
+                "there, and \"openstreetmap\" everywhere else, as SPEC.md §15",
+                "foresaw: the addresses are then read from the very extract",
+                "listed above, and no second download is needed.",
             ],
             "osmRegions": survey.get("osmRegions", []),
-            "banDepartments": survey.get("departments", []),
+            "addressSource": address_source_of(survey),
+            "banDepartments": survey.get("banDepartments", []),
         },
         "dataRelease": {
             "$comment": [
@@ -195,6 +230,17 @@ def build_document(survey: dict, network_id: str, box: BoundingBox,
             "formatVersion": DATA_FORMAT_VERSION,
         },
     }
+
+
+def address_source_of(survey: dict) -> str:
+    """Where this city's house numbers are to be read from (§4.3).
+
+    France publishes a national address base, department by department, and it
+    is finer than anything else available there. Everywhere else the addresses
+    come from OpenStreetMap — the extract the map and the routing graph are
+    already cut from, so a city costs one download rather than two.
+    """
+    return "ban" if survey.get("country") == "FR" and survey.get("banDepartments") else "openstreetmap"
 
 
 def existing_configurations(cities_dir: Path) -> dict[str, dict]:
@@ -248,12 +294,55 @@ def parse_arguments() -> argparse.Namespace:
                         help="show what would be written, and write nothing")
     parser.add_argument("--overwrite", action="store_true",
                         help="rewrite a configuration that already exists")
+    parser.add_argument("--refresh-sources", action="store_true",
+                        help="update only the \"dataSources\" block of the "
+                             "configurations already written, leaving "
+                             "everything settled by hand alone")
     return parser.parse_args()
+
+
+def refresh_data_sources(networks: list[dict], configurations: dict[str, dict]) -> int:
+    """Bring the "dataSources" block of the served cities up to the survey.
+
+    Where a configuration comes from is settled once; where its data is CUT
+    FROM is not. The survey learns it again on every run, from the stations
+    themselves, and it changes: a network extends over a border and its box
+    starts reaching an extract it did not reach before. Lille's reaches into
+    Belgium, Strasbourg's into Germany, and a map cut without them would stop
+    dead at the frontier while the stations carry on.
+
+    Nothing else in the file is touched: the names, the comments and the
+    addresses of the three conurbations settled by hand stay as they are.
+    """
+    changed = 0
+    for network in networks:
+        identifier = already_served(network, configurations)
+        if identifier is None:
+            continue
+        existing = configurations[identifier]
+        sources = existing["document"].setdefault("dataSources", {})
+        wanted = {
+            "osmRegions": network.get("osmRegions", []),
+            "addressSource": address_source_of(network),
+            "banDepartments": network.get("banDepartments", []),
+        }
+        if all(sources.get(key) == value for key, value in wanted.items()):
+            continue
+        was = ", ".join(region.rsplit("/", 1)[-1] for region in sources.get("osmRegions", []))
+        sources.update(wanted)
+        with existing["path"].open("w", encoding="utf-8") as stream:
+            json.dump(existing["document"], stream, ensure_ascii=False, indent=2)
+            stream.write("\n")
+        now = ", ".join(region.rsplit("/", 1)[-1] for region in wanted["osmRegions"])
+        print(f"  ~ {network['displayName']:<26} {was or '—'} → {now or '—'}")
+        changed += 1
+    return changed
 
 
 def main() -> int:
     arguments = parse_arguments()
-    if not (arguments.all or arguments.network or arguments.list):
+    if not (arguments.all or arguments.network or arguments.list
+            or arguments.refresh_sources):
         print("Nothing to do: pass --all, --network or --list.", file=sys.stderr)
         return 1
 
@@ -267,6 +356,12 @@ def main() -> int:
     networks.sort(key=lambda network: -network.get("stationCount", 0))
 
     configurations = existing_configurations(arguments.cities_dir)
+
+    if arguments.refresh_sources:
+        changed = refresh_data_sources(networks, configurations)
+        print(f"\n{changed} configuration(s) brought up to the survey")
+        return 0
+
     taken_identifiers = set(configurations)
     taken_files = {path.stem for path in arguments.cities_dir.glob("*.json")}
 

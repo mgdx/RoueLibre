@@ -10,6 +10,7 @@
     "regeneration of the data (§4) — do not edit it by hand."
   ],
   "configVersion": 1,
+  "country": "FR",
   "network": {
     "id": "vertuose",
     "displayName": "Vertuose",
@@ -69,13 +70,16 @@
       "into a neighbouring department."
     ],
     "osmRegions": [
-      "europe/france/lorraine"
+      "europe/belgium",
+      "europe/france/lorraine",
+      "europe/luxembourg"
     ],
     "banDepartments": [
       "54",
       "55",
       "57"
-    ]
+    ],
+    "addressSource": "ban"
   },
   "dataRelease": {
     "$comment": [

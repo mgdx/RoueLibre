@@ -10,6 +10,7 @@
     "regeneration of the data (§4) — do not edit it by hand."
   ],
   "configVersion": 1,
+  "country": "FR",
   "network": {
     "id": "choletbus-2-roues",
     "displayName": "Choletbus 2 Roues",
@@ -73,7 +74,8 @@
     ],
     "banDepartments": [
       "49"
-    ]
+    ],
+    "addressSource": "ban"
   },
   "dataRelease": {
     "$comment": [

@@ -10,6 +10,7 @@
     "regeneration of the data (§4) — do not edit it by hand."
   ],
   "configVersion": 1,
+  "country": "FR",
   "network": {
     "id": "velo-modalis-royan",
     "displayName": "Vélo Modalis",
@@ -69,11 +70,13 @@
       "into a neighbouring department."
     ],
     "osmRegions": [
+      "europe/france/aquitaine",
       "europe/france/poitou-charentes"
     ],
     "banDepartments": [
       "17"
-    ]
+    ],
+    "addressSource": "ban"
   },
   "dataRelease": {
     "$comment": [

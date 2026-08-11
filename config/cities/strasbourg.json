@@ -10,6 +10,7 @@
     "regeneration of the data (§4) — do not edit it by hand."
   ],
   "configVersion": 1,
+  "country": "FR",
   "network": {
     "id": "velhop",
     "displayName": "Vélhop",
@@ -69,11 +70,13 @@
       "into a neighbouring department."
     ],
     "osmRegions": [
-      "europe/france/alsace"
+      "europe/france/alsace",
+      "europe/germany/baden-wuerttemberg/freiburg-regbez"
     ],
     "banDepartments": [
       "67"
-    ]
+    ],
+    "addressSource": "ban"
   },
   "dataRelease": {
     "$comment": [

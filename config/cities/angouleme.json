@@ -10,6 +10,7 @@
     "regeneration of the data (§4) — do not edit it by hand."
   ],
   "configVersion": 1,
+  "country": "FR",
   "network": {
     "id": "velo-modalis",
     "displayName": "Vélo Modalis",
@@ -75,7 +76,8 @@
     "banDepartments": [
       "16",
       "24"
-    ]
+    ],
+    "addressSource": "ban"
   },
   "dataRelease": {
     "$comment": [

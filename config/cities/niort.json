@@ -10,6 +10,7 @@
     "regeneration of the data (§4) — do not edit it by hand."
   ],
   "configVersion": 1,
+  "country": "FR",
   "network": {
     "id": "tanlib",
     "displayName": "Tanlib",
@@ -69,13 +70,13 @@
       "into a neighbouring department."
     ],
     "osmRegions": [
-      "europe/france/pays-de-la-loire",
       "europe/france/poitou-charentes"
     ],
     "banDepartments": [
       "79",
       "85"
-    ]
+    ],
+    "addressSource": "ban"
   },
   "dataRelease": {
     "$comment": [

@@ -10,6 +10,7 @@
     "regeneration of the data (§4) — do not edit it by hand."
   ],
   "configVersion": 1,
+  "country": "FR",
   "network": {
     "id": "c-velo",
     "displayName": "C Vélo",
@@ -73,7 +74,8 @@
     ],
     "banDepartments": [
       "63"
-    ]
+    ],
+    "addressSource": "ban"
   },
   "dataRelease": {
     "$comment": [

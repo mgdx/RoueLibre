@@ -9,6 +9,7 @@
     "'network', 'gbfsDiscoveryUrl', 'map' and 'dataRelease'. See README.md."
   ],
   "configVersion": 1,
+  "country": "FR",
   "network": {
     "id": "velov",
     "displayName": "Vélo'v",
@@ -68,7 +69,8 @@
     "banDepartments": [
       "01",
       "69"
-    ]
+    ],
+    "addressSource": "ban"
   },
   "dataRelease": {
     "$comment": [
