@@ -42,8 +42,14 @@ DEFAULT_CITIES_DIR = REPO_ROOT / "config" / "cities"
 # Where the data of a city is published (§4.4). Written into each
 # configuration, and changeable in the settings: the host must never be a
 # single point of failure, which is why the application can also be fed by hand.
+#
+# A repository of its own, and not the application's: "latest" names the newest
+# release of a whole repository, whatever it holds. Published beside the
+# application, a release of the code would take that name from the data and
+# every city would stop finding its manifest — silently, since the URL stays
+# perfectly valid and answers 404 only on the device.
 MANIFEST_URL_TEMPLATE = (
-    "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-{id}.json"
+    "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-{id}.json"
 )
 
 # The margin §4 puts around the stations, so that a walking leg towards the

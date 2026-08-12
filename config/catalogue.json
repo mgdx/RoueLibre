@@ -1,7 +1,7 @@
 {
   "catalogueVersion": 1,
-  "catalogueUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/catalogue.json",
-  "generatedAt": "2026-08-11T04:41:54Z",
+  "catalogueUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/catalogue.json",
+  "generatedAt": "2026-08-12T13:55:37Z",
   "cities": [
     {
       "id": "aar-bike",
@@ -19,7 +19,7 @@
       "centreLatitude": 37.925609,
       "centreLongitude": 32.503198,
       "gbfsDiscoveryUrl": "https://app.linkalock.com/api/gbfs/D2uRLGw8vBa2FJxa8/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-aar-bike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-aar-bike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -39,7 +39,7 @@
       "centreLatitude": 43.353371,
       "centreLongitude": -8.415629,
       "gbfsDiscoveryUrl": "https://acoruna.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-acoruna.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-acoruna.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -59,7 +59,7 @@
       "centreLatitude": 41.373822,
       "centreLongitude": 2.10556,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_bs/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-ambici.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-ambici.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -79,9 +79,9 @@
       "centreLatitude": 47.673388,
       "centreLongitude": -2.983985,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/auray-quiberon/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-aqta.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-aqta.json",
+      "dataSizeBytes": 3216273,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "acces-velo",
@@ -99,7 +99,7 @@
       "centreLatitude": 48.376478,
       "centreLongitude": -71.055244,
       "gbfsDiscoveryUrl": "https://saguenay.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-acces-velo.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-acces-velo.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -119,7 +119,7 @@
       "centreLatitude": 46.072281,
       "centreLongitude": 23.572017,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ai/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-alba-iulia-velocity.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-alba-iulia-velocity.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -139,9 +139,9 @@
       "centreLatitude": -21.310899,
       "centreLongitude": 55.430334,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/altervelo/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-altervelo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-altervelo.json",
+      "dataSizeBytes": 11135447,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "auch-velo-c",
@@ -159,9 +159,9 @@
       "centreLatitude": 43.642727,
       "centreLongitude": 0.586763,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/auchveloc/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-auch-velo-c.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-auch-velo-c.json",
+      "dataSizeBytes": 3315587,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "auxr-m-le-velo",
@@ -179,9 +179,9 @@
       "centreLatitude": 47.79284,
       "centreLongitude": 3.56089,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/auxerre/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-auxr-m-le-velo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-auxr-m-le-velo.json",
+      "dataSizeBytes": 13278843,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "biker",
@@ -199,7 +199,7 @@
       "centreLatitude": 53.112052,
       "centreLongitude": 23.164904,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_bp/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-biker.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-biker.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -219,7 +219,7 @@
       "centreLatitude": 45.796959,
       "centreLongitude": 16.009695,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_hd/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bajs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bajs.json",
       "dataSizeBytes": 27705701,
       "releaseTag": "data-2026-08"
     },
@@ -239,7 +239,7 @@
       "centreLatitude": 60.385371,
       "centreLongitude": 5.323859,
       "gbfsDiscoveryUrl": "https://gbfs.urbansharing.com/bergenbysykkel.no/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bergen-bysykkel.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bergen-bysykkel.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -259,7 +259,7 @@
       "centreLatitude": 50.995171,
       "centreLongitude": 7.204105,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ac/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bergisches-e-bike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bergisches-e-bike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -279,7 +279,7 @@
       "centreLatitude": 54.597031,
       "centreLongitude": -5.923221,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Belfast/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-belfast.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-belfast.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -299,7 +299,7 @@
       "centreLatitude": 52.483738,
       "centreLongitude": -1.806945,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/West_Midlands/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-birmingham.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-birmingham.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -319,7 +319,7 @@
       "centreLatitude": 51.658616,
       "centreLongitude": -0.272103,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Hertsmere/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-borehamwood.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-borehamwood.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -339,7 +339,7 @@
       "centreLatitude": 50.735874,
       "centreLongitude": -1.871028,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/BCP/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -359,9 +359,9 @@
       "centreLatitude": 53.812123,
       "centreLongitude": -1.77087,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Bradford/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-bradford.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-bradford.json",
+      "dataSizeBytes": 7955531,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "beryl-brighton",
@@ -379,7 +379,7 @@
       "centreLatitude": 50.835691,
       "centreLongitude": -0.134241,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Brighton/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-brighton.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-brighton.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -399,9 +399,9 @@
       "centreLatitude": 51.282021,
       "centreLongitude": 1.083326,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Canterbury/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-canterbury.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-canterbury.json",
+      "dataSizeBytes": 3998879,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "beryl-eastleigh",
@@ -419,7 +419,7 @@
       "centreLatitude": 50.968709,
       "centreLongitude": -1.361825,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Eastleigh/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-eastleigh.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-eastleigh.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -439,9 +439,9 @@
       "centreLatitude": 51.237534,
       "centreLongitude": -0.57791,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Guildford/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-guildford.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-guildford.json",
+      "dataSizeBytes": 6447347,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "beryl-hereford",
@@ -459,9 +459,9 @@
       "centreLatitude": 52.061252,
       "centreLongitude": -2.736306,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Hereford/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-hereford.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-hereford.json",
+      "dataSizeBytes": 3666661,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "beryl-leeds",
@@ -479,9 +479,9 @@
       "centreLatitude": 53.812801,
       "centreLongitude": -1.543881,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Leeds/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-leeds.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-leeds.json",
+      "dataSizeBytes": 20631125,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "beryl-newport",
@@ -499,7 +499,7 @@
       "centreLatitude": 50.69704,
       "centreLongitude": -1.22134,
       "gbfsDiscoveryUrl": "https://gbfs.beryl.cc/v2_2/Isle_of_Wight/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-newport.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-newport.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -519,9 +519,9 @@
       "centreLatitude": 52.618166,
       "centreLongitude": 1.244263,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Norwich/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-norwich.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-norwich.json",
+      "dataSizeBytes": 19233871,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "beryl-plymouth",
@@ -539,7 +539,7 @@
       "centreLatitude": 50.391185,
       "centreLongitude": -4.133021,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Plymouth/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-plymouth.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-plymouth.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -559,7 +559,7 @@
       "centreLatitude": 50.815354,
       "centreLongitude": -1.07347,
       "gbfsDiscoveryUrl": "https://gbfs.beryl.cc/v2_2/Portsmouth/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-portsmouth.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-portsmouth.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -579,7 +579,7 @@
       "centreLatitude": 50.917483,
       "centreLongitude": -1.40829,
       "gbfsDiscoveryUrl": "https://gbfs.beryl.cc/v2_2/Southampton/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-southampton.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-southampton.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -599,9 +599,9 @@
       "centreLatitude": 51.899799,
       "centreLongitude": -0.189877,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Stevenage/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-stevenage.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-stevenage.json",
+      "dataSizeBytes": 6358399,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "beryl-watford",
@@ -619,7 +619,7 @@
       "centreLatitude": 51.666874,
       "centreLongitude": -0.401345,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Watford/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-watford.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-watford.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -639,9 +639,9 @@
       "centreLatitude": 50.641841,
       "centreLongitude": -2.458964,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Weymouth/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-weymouth.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-weymouth.json",
+      "dataSizeBytes": 5304572,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "beryl-worcester",
@@ -659,9 +659,9 @@
       "centreLatitude": 52.196249,
       "centreLongitude": -2.20786,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Worcester/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-beryl-worcester.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-beryl-worcester.json",
+      "dataSizeBytes": 5586182,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "bicimislata",
@@ -679,7 +679,7 @@
       "centreLatitude": 39.467781,
       "centreLongitude": -0.38715,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ad/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bicimislata.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bicimislata.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -699,9 +699,9 @@
       "centreLatitude": 39.597855,
       "centreLongitude": 2.665927,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ea/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bicipalma.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bicipalma.json",
+      "dataSizeBytes": 7825741,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "bicikelj",
@@ -719,7 +719,7 @@
       "centreLatitude": 46.061229,
       "centreLongitude": 14.537441,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/ljubljana/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bicikelj.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bicikelj.json",
       "dataSizeBytes": 17964323,
       "releaseTag": "data-2026-08"
     },
@@ -739,7 +739,7 @@
       "centreLatitude": 40.353481,
       "centreLongitude": -3.531926,
       "gbfsDiscoveryUrl": "https://rivas.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bicinrivas.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bicinrivas.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -759,7 +759,7 @@
       "centreLatitude": 41.404435,
       "centreLongitude": 2.164922,
       "gbfsDiscoveryUrl": "https://barcelona.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -779,7 +779,7 @@
       "centreLatitude": 35.05277,
       "centreLongitude": -85.291522,
       "gbfsDiscoveryUrl": "https://chattanooga.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bike-chattanooga.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bike-chattanooga.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -799,7 +799,7 @@
       "centreLatitude": -30.071206,
       "centreLongitude": -51.204366,
       "gbfsDiscoveryUrl": "https://portoalegre.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bike-porto-alegre.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bike-porto-alegre.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -819,7 +819,7 @@
       "centreLatitude": -33.418836,
       "centreLongitude": -70.584421,
       "gbfsDiscoveryUrl": "https://santiago.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bike-santiago.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bike-santiago.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -839,7 +839,7 @@
       "centreLatitude": -25.432043,
       "centreLongitude": -49.277088,
       "gbfsDiscoveryUrl": "https://curitiba.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bike-estacio.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bike-estacio.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -859,7 +859,7 @@
       "centreLatitude": -8.087374,
       "centreLongitude": -34.895788,
       "gbfsDiscoveryUrl": "https://recife.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bike-itau.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bike-itau.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -879,7 +879,7 @@
       "centreLatitude": -34.417101,
       "centreLongitude": -58.654708,
       "gbfsDiscoveryUrl": "https://nordelta.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bike-nordelta.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bike-nordelta.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -899,7 +899,7 @@
       "centreLatitude": 43.70036,
       "centreLongitude": -79.363324,
       "gbfsDiscoveryUrl": "https://toronto.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bike-share.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bike-share.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -919,7 +919,7 @@
       "centreLatitude": 49.217873,
       "centreLongitude": 18.743056,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ak/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bikekia.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bikekia.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -939,7 +939,7 @@
       "centreLatitude": 45.528677,
       "centreLongitude": -122.64565,
       "gbfsDiscoveryUrl": "https://gbfs.biketownpdx.com/gbfs/2.3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-biketown.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-biketown.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -959,7 +959,7 @@
       "centreLatitude": 43.262394,
       "centreLongitude": -2.936663,
       "gbfsDiscoveryUrl": "https://bilbao.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bilbao-bizi.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bilbao-bizi.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -979,7 +979,7 @@
       "centreLatitude": 41.648093,
       "centreLongitude": -0.892687,
       "gbfsDiscoveryUrl": "https://zaragoza.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bizi.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bizi.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -999,7 +999,7 @@
       "centreLatitude": 42.393478,
       "centreLongitude": -71.058987,
       "gbfsDiscoveryUrl": "https://gbfs.bluebikes.com/gbfs/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bluebikes.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bluebikes.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1019,7 +1019,7 @@
       "centreLatitude": 53.11212,
       "centreLongitude": 8.750432,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_bq/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bre-bike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bre-bike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1039,9 +1039,9 @@
       "centreLatitude": 48.150755,
       "centreLongitude": 3.27605,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/sens/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-brennus-a-velo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-brennus-a-velo.json",
+      "dataSizeBytes": 6065226,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "bubi-3-0",
@@ -1059,7 +1059,7 @@
       "centreLatitude": 47.504665,
       "centreLongitude": 19.062639,
       "gbfsDiscoveryUrl": "https://gbfs.urbansharing.com/molbubi.hu/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bubi-3-0.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bubi-3-0.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1079,9 +1079,9 @@
       "centreLatitude": 45.765627,
       "centreLongitude": 3.141961,
       "gbfsDiscoveryUrl": "https://clermontferrand.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-c-velo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-c-velo.json",
+      "dataSizeBytes": 16476627,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "cyclolibre",
@@ -1099,9 +1099,9 @@
       "centreLatitude": 43.215553,
       "centreLongitude": 2.356662,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/cyclolibre/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-cyclolibre.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-cyclolibre.json",
+      "dataSizeBytes": 4166440,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "calivelo",
@@ -1119,9 +1119,9 @@
       "centreLatitude": 44.943861,
       "centreLongitude": -0.196192,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/calivelo/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-calivelo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-calivelo.json",
+      "dataSizeBytes": 26647350,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "campus",
@@ -1139,7 +1139,7 @@
       "centreLatitude": 52.630229,
       "centreLongitude": 13.501136,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_cb/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-campus.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-campus.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1159,9 +1159,9 @@
       "centreLatitude": 49.591054,
       "centreLongitude": -1.600454,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/capcotentin/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-cap-cotentin-velo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-cap-cotentin-velo.json",
+      "dataSizeBytes": 15145123,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "capmetro",
@@ -1179,7 +1179,7 @@
       "centreLatitude": 30.260791,
       "centreLongitude": -97.735409,
       "gbfsDiscoveryUrl": "https://austin.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-capmetro.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-capmetro.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1199,7 +1199,7 @@
       "centreLatitude": 51.121749,
       "centreLongitude": 23.484645,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_cw/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-chelmski-rower.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-chelmski-rower.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1219,9 +1219,9 @@
       "centreLatitude": 47.053173,
       "centreLongitude": -0.877293,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/choletbus/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-choletbus-2-roues.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-choletbus-2-roues.json",
+      "dataSizeBytes": 5318914,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "citi-bike",
@@ -1239,7 +1239,7 @@
       "centreLatitude": 40.761815,
       "centreLongitude": -73.965185,
       "gbfsDiscoveryUrl": "https://gbfs.citibikenyc.com/gbfs/2.3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-citi-bike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-citi-bike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1259,7 +1259,7 @@
       "centreLatitude": 60.214148,
       "centreLongitude": 24.940357,
       "gbfsDiscoveryUrl": "https://gbfs.theta.fifteen.eu/gbfs/2.2/helsinki/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-city-bikes.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-city-bikes.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1279,9 +1279,9 @@
       "centreLatitude": 47.744685,
       "centreLongitude": 7.330369,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/mulhouse/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-compte-mobilite.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-compte-mobilite.json",
+      "dataSizeBytes": 7007419,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "cycl-am",
@@ -1299,9 +1299,9 @@
       "centreLatitude": 49.744985,
       "centreLongitude": 4.826478,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/cyclam/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-cycl-am.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-cycl-am.json",
+      "dataSizeBytes": 13846225,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "cyclocity-toyama",
@@ -1319,7 +1319,7 @@
       "centreLatitude": 36.698956,
       "centreLongitude": 137.201624,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/toyama/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-cyclocity-toyama.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-cyclocity-toyama.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1339,7 +1339,7 @@
       "centreLatitude": 54.691486,
       "centreLongitude": 25.281138,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/vilnius/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-cyclocity.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-cyclocity.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1359,9 +1359,9 @@
       "centreLatitude": 49.367116,
       "centreLongitude": 3.330159,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/cyclovis/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-cyclovis.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-cyclovis.json",
+      "dataSizeBytes": 4805774,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "dbizi",
@@ -1379,7 +1379,7 @@
       "centreLatitude": 43.307507,
       "centreLongitude": -1.969618,
       "gbfsDiscoveryUrl": "https://sansebastian.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-dbizi.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-dbizi.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1399,7 +1399,7 @@
       "centreLatitude": 41.856677,
       "centreLongitude": -87.686096,
       "gbfsDiscoveryUrl": "https://gbfs.divvybikes.com/gbfs/2.3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-divvy.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-divvy.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1419,7 +1419,7 @@
       "centreLatitude": 55.790618,
       "centreLongitude": 12.333674,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_ballerup/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-ballerup.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-ballerup.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1439,7 +1439,7 @@
       "centreLatitude": 41.393494,
       "centreLongitude": 2.166584,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_barcelona/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1459,7 +1459,7 @@
       "centreLatitude": 51.846184,
       "centreLongitude": 4.820101,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_gorinchem/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-dordrecht.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-dordrecht.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1479,7 +1479,7 @@
       "centreLatitude": 60.182897,
       "centreLongitude": 24.912968,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_helsinki/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-helsinki.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-helsinki.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1499,7 +1499,7 @@
       "centreLatitude": 48.913722,
       "centreLongitude": 11.89554,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/Kelheim/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-kelheim.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-kelheim.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1519,7 +1519,7 @@
       "centreLatitude": 52.998828,
       "centreLongitude": 11.845841,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/Donkey-Prignitz/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-prignitz.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-prignitz.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1539,7 +1539,7 @@
       "centreLatitude": 57.05114,
       "centreLongitude": 9.932105,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_aalborg/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-aalborg.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-aalborg.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1559,7 +1559,7 @@
       "centreLatitude": 56.150816,
       "centreLongitude": 10.197125,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_aarhus/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-arhus.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-arhus.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1579,7 +1579,7 @@
       "centreLatitude": 48.368644,
       "centreLongitude": 10.892722,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/Augsburg/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-augsburg.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-augsburg.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1599,7 +1599,7 @@
       "centreLatitude": 47.49629,
       "centreLongitude": 19.060727,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_budapest/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-budapest.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-budapest.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1619,7 +1619,7 @@
       "centreLatitude": 55.775077,
       "centreLongitude": 12.504546,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_copenhagen/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-copenhagen.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-copenhagen.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1639,7 +1639,7 @@
       "centreLatitude": 46.219826,
       "centreLongitude": 6.127181,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_ge/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-geneva.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-geneva.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1659,7 +1659,7 @@
       "centreLatitude": 51.048791,
       "centreLongitude": 3.715954,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_gh/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-gent.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-gent.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1679,7 +1679,7 @@
       "centreLatitude": 63.557371,
       "centreLongitude": 27.212909,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_iisalmi/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-iisalmi.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-iisalmi.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1699,7 +1699,7 @@
       "centreLatitude": 61.194566,
       "centreLongitude": 28.763784,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_imatra/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-imatra.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-imatra.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1719,7 +1719,7 @@
       "centreLatitude": 51.092336,
       "centreLongitude": 2.633087,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_westhoek/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-koksijde.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-koksijde.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1739,7 +1739,7 @@
       "centreLatitude": 60.477364,
       "centreLongitude": 26.913037,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_kotka/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-kotka.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-kotka.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1759,7 +1759,7 @@
       "centreLatitude": 60.896555,
       "centreLongitude": 26.697257,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_kouvola/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-kouvola.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-kouvola.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1779,7 +1779,7 @@
       "centreLatitude": 47.638091,
       "centreLongitude": 9.189478,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_kreuzlingen/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-kreuzlingen.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-kreuzlingen.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1799,7 +1799,7 @@
       "centreLatitude": 61.057477,
       "centreLongitude": 28.179282,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_lappeenranta/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-lappeenranta.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-lappeenranta.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1819,7 +1819,7 @@
       "centreLatitude": 55.58296,
       "centreLongitude": 12.991567,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_malmoe/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-malmo.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-malmo.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1839,7 +1839,7 @@
       "centreLatitude": 46.96509,
       "centreLongitude": 6.898585,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_neuchatel/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-neuchatel.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-neuchatel.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1859,7 +1859,7 @@
       "centreLatitude": 55.396195,
       "centreLongitude": 10.258481,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_odense/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-odense.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-odense.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1879,9 +1879,9 @@
       "centreLatitude": 51.786333,
       "centreLongitude": -1.27158,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_oxford/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-oxford.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-oxford.json",
+      "dataSizeBytes": 13006241,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "donkey-republic-porvoo",
@@ -1899,7 +1899,7 @@
       "centreLatitude": 60.377468,
       "centreLongitude": 25.661541,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_porvoo/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-porvoo.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-porvoo.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1919,7 +1919,7 @@
       "centreLatitude": 49.037045,
       "centreLongitude": 12.153443,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_regensburg/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-regensburg.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-regensburg.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1939,7 +1939,7 @@
       "centreLatitude": 60.73866,
       "centreLongitude": 24.779457,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_riihimaki/gbfs",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-riihimaki.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-riihimaki.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1959,7 +1959,7 @@
       "centreLatitude": 52.109799,
       "centreLongitude": 4.619784,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_katwijk/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-rotterdam.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-rotterdam.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1979,7 +1979,7 @@
       "centreLatitude": 52.05104,
       "centreLongitude": 4.367226,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_den_haag/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-the-hague.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-the-hague.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -1999,7 +1999,7 @@
       "centreLatitude": 46.754041,
       "centreLongitude": 7.631783,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_thun/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-thun.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-thun.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2019,7 +2019,7 @@
       "centreLatitude": 60.442064,
       "centreLongitude": 22.228915,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_turku/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-turku.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-turku.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2039,7 +2039,7 @@
       "centreLatitude": 52.104661,
       "centreLongitude": 5.213448,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_ut/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-utrecht.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-utrecht.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2059,9 +2059,9 @@
       "centreLatitude": 50.34224,
       "centreLongitude": 3.515851,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/valenciennes/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic.json",
+      "dataSizeBytes": 7235915,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "donkey-republic-yverdon-les-bains",
@@ -2079,7 +2079,7 @@
       "centreLatitude": 46.819127,
       "centreLongitude": 6.68666,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_yverdon-les-bains/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-yverdon-les-bains.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-yverdon-les-bains.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2099,7 +2099,7 @@
       "centreLatitude": 51.812042,
       "centreLongitude": 4.817721,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_dordrecht/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-donkey-republic-drechtsteden.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-drechtsteden.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2119,7 +2119,7 @@
       "centreLatitude": 52.418285,
       "centreLongitude": 13.786452,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ed/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-edeka.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-edeka.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2139,7 +2139,7 @@
       "centreLatitude": -34.612229,
       "centreLongitude": -58.441743,
       "gbfsDiscoveryUrl": "https://buenosaires.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-ecobici-buenos-aires.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-ecobici-buenos-aires.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2159,7 +2159,7 @@
       "centreLatitude": 19.407609,
       "centreLongitude": -99.171881,
       "gbfsDiscoveryUrl": "https://gbfs.mex.lyftbikes.com/gbfs/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-ecobici.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-ecobici.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2179,7 +2179,7 @@
       "centreLatitude": 50.572966,
       "centreLongitude": 6.673787,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_eb/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-eifel-e-bike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-eifel-e-bike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2199,7 +2199,7 @@
       "centreLatitude": 43.727401,
       "centreLongitude": 13.19226,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_fa/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-fa-mo-se.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-fa-mo-se.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2219,7 +2219,7 @@
       "centreLatitude": 48.033083,
       "centreLongitude": 7.856611,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_df/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-frelo.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-frelo.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2239,7 +2239,7 @@
       "centreLatitude": 52.104822,
       "centreLongitude": 20.654559,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_gp/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-grm-grodzisk-poland.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-grm-grodzisk-poland.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2259,7 +2259,7 @@
       "centreLatitude": 41.150371,
       "centreLongitude": 1.101797,
       "gbfsDiscoveryUrl": "https://gbfs.ganxeta.cat/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-ganxeta.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-ganxeta.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2279,9 +2279,9 @@
       "centreLatitude": 43.559597,
       "centreLongitude": 16.448099,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_gt/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-grad.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-grad.json",
+      "dataSizeBytes": 12952771,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "graoulib",
@@ -2299,9 +2299,9 @@
       "centreLatitude": 49.105795,
       "centreLongitude": 6.186515,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/metz/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-graoulib.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-graoulib.json",
+      "dataSizeBytes": 12702118,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "hannover-gvh",
@@ -2319,7 +2319,7 @@
       "centreLatitude": 52.364564,
       "centreLongitude": 9.748308,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_hannover/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-hannover-gvh.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-hannover-gvh.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2339,7 +2339,7 @@
       "centreLatitude": 51.598637,
       "centreLongitude": 8.18373,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_hb/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-helbi.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-helbi.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2359,7 +2359,7 @@
       "centreLatitude": 45.763144,
       "centreLongitude": 22.906577,
       "gbfsDiscoveryUrl": "https://hunedoara.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-hunedoara.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-hunedoara.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2379,9 +2379,9 @@
       "centreLatitude": 43.308255,
       "centreLongitude": -0.368975,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/pau/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-idecycle.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-idecycle.json",
+      "dataSizeBytes": 10795888,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "impulsyon",
@@ -2399,9 +2399,9 @@
       "centreLatitude": 46.675666,
       "centreLongitude": -1.426722,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/impulsyon/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-impulsyon.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-impulsyon.json",
+      "dataSizeBytes": 5622856,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "jaskolka",
@@ -2419,7 +2419,7 @@
       "centreLatitude": 49.95392,
       "centreLongitude": 18.581542,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_pj/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-jaskolka.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-jaskolka.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2439,7 +2439,7 @@
       "centreLatitude": 50.949816,
       "centreLongitude": 6.97891,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_kg/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-kvb-rad.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kvb-rad.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2459,7 +2459,7 @@
       "centreLatitude": 48.936912,
       "centreLongitude": 8.366739,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_fg/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-kvv-nextbike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kvv-nextbike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2479,9 +2479,9 @@
       "centreLatitude": 16.237726,
       "centreLongitude": -61.429226,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/karu/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-karu-velo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-karu-velo.json",
+      "dataSizeBytes": 11038991,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "koninski-rower-miejski-poland",
@@ -2499,7 +2499,7 @@
       "centreLatitude": 52.218381,
       "centreLongitude": 18.260096,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_pn/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-koninski-rower-miejski-poland.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-koninski-rower-miejski-poland.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2519,7 +2519,7 @@
       "centreLatitude": 54.200831,
       "centreLongitude": 16.184065,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ps/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-koszalinski-rower-miejski-poland.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-koszalinski-rower-miejski-poland.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2539,7 +2539,7 @@
       "centreLatitude": 51.397934,
       "centreLongitude": 12.213932,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_lc/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-landkreis.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-landkreis.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2559,9 +2559,9 @@
       "centreLatitude": 48.299566,
       "centreLongitude": 4.065855,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/lemarcel/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-le-marcel.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-le-marcel.json",
+      "dataSizeBytes": 8009436,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "le-velo-baulois",
@@ -2579,9 +2579,9 @@
       "centreLatitude": 47.283105,
       "centreLongitude": -2.378926,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/labaule/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-le-velo-baulois.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-le-velo-baulois.json",
+      "dataSizeBytes": 5004873,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "le-velo-tbm",
@@ -2599,9 +2599,9 @@
       "centreLatitude": 44.839794,
       "centreLongitude": -0.58518,
       "gbfsDiscoveryUrl": "https://bdx.mecatran.com/utw/ws/gbfs/bordeaux/v3/gbfs.json?apiKey=opendata-bordeaux-metropole-flux-gtfs-rt",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-le-velo-tbm.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-le-velo-tbm.json",
+      "dataSizeBytes": 32434205,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "levelo",
@@ -2619,9 +2619,9 @@
       "centreLatitude": 43.276582,
       "centreLongitude": 5.414946,
       "gbfsDiscoveryUrl": "https://gbfs.omega.fifteen.eu/gbfs/2.2/marseille/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-levelo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-levelo.json",
+      "dataSizeBytes": 23729106,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "les-petites-reines",
@@ -2639,9 +2639,9 @@
       "centreLatitude": 46.505523,
       "centreLongitude": -1.767521,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/petitesreines/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-les-petites-reines.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-les-petites-reines.json",
+      "dataSizeBytes": 6069641,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "li-bia-velo",
@@ -2659,7 +2659,7 @@
       "centreLatitude": 50.461792,
       "centreLongitude": 4.861019,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/namur/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-li-bia-velo.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-li-bia-velo.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2679,9 +2679,9 @@
       "centreLatitude": 44.966081,
       "centreLongitude": 4.950713,
       "gbfsDiscoveryUrl": "https://valence.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-libelo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-libelo.json",
+      "dataSizeBytes": 21512783,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "lovelo",
@@ -2699,9 +2699,9 @@
       "centreLatitude": 49.42187,
       "centreLongitude": 1.098821,
       "gbfsDiscoveryUrl": "https://gbfs.urbansharing.com/lovelolibreservice.fr/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-lovelo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-lovelo.json",
+      "dataSizeBytes": 15474339,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "lundahoj",
@@ -2719,7 +2719,7 @@
       "centreLatitude": 55.703574,
       "centreLongitude": 13.198322,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/lund/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-lundahoj.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-lundahoj.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2739,7 +2739,7 @@
       "centreLatitude": 39.727656,
       "centreLongitude": -104.996323,
       "gbfsDiscoveryUrl": "https://gbfs.lyft.com/gbfs/2.3/den/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-lyft-bikes-scooters.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-lyft-bikes-scooters.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2759,9 +2759,9 @@
       "centreLatitude": 46.546958,
       "centreLongitude": 15.647122,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/maribor/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-mbajk.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-mbajk.json",
+      "dataSizeBytes": 5668628,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "mobibike",
@@ -2779,7 +2779,7 @@
       "centreLatitude": 51.057652,
       "centreLongitude": 13.757745,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_dx/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-mobibike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-mobibike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2799,7 +2799,7 @@
       "centreLatitude": -32.940759,
       "centreLongitude": -60.668324,
       "gbfsDiscoveryUrl": "https://www.mibicitubici.gob.ar/opendata/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-mi-bici-tu-bici.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-mi-bici-tu-bici.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2819,7 +2819,7 @@
       "centreLatitude": 49.270369,
       "centreLongitude": -123.151655,
       "gbfsDiscoveryUrl": "https://gbfs.kappa.fifteen.eu/gbfs/2.2/mobi/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-mobi-by-rogers.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-mobi-by-rogers.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2839,7 +2839,7 @@
       "centreLatitude": 43.738749,
       "centreLongitude": 7.428061,
       "gbfsDiscoveryUrl": "https://monaco.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-monabike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-monabike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2859,9 +2859,9 @@
       "centreLatitude": 45.8773,
       "centreLongitude": 6.649285,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/mont_blanc/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-montenvelo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-montenvelo.json",
+      "dataSizeBytes": 9796731,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "mlawskie-rowery-miejskie",
@@ -2879,7 +2879,7 @@
       "centreLatitude": 53.117272,
       "centreLongitude": 20.37013,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_oe/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-mlawskie-rowery-miejskie.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-mlawskie-rowery-miejskie.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2899,7 +2899,7 @@
       "centreLatitude": 51.230712,
       "centreLongitude": 6.45747,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_sn/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-new-mobus-nextbike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-new-mobus-nextbike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -2919,9 +2919,9 @@
       "centreLatitude": 47.215395,
       "centreLongitude": -1.557686,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/nantes/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-naolib.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-naolib.json",
+      "dataSizeBytes": 19157689,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "naolib-micromob",
@@ -2939,9 +2939,9 @@
       "centreLatitude": 47.255035,
       "centreLongitude": -1.576083,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/chantrerie/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-naolib-micromob.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-naolib-micromob.json",
+      "dataSizeBytes": 22729960,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "nemovelo",
@@ -2949,7 +2949,7 @@
       "operator": "Ecovelo",
       "mainCity": "Nîmes",
       "country": "FR",
-      "stationCount": 52,
+      "stationCount": 51,
       "boundingBox": {
         "south": 43.782799,
         "west": 4.28116,
@@ -2959,9 +2959,9 @@
       "centreLatitude": 43.83914,
       "centreLongitude": 4.370274,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/nemovelo/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nemovelo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nemovelo.json",
+      "dataSizeBytes": 8407170,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "nomago-bikes",
@@ -2979,9 +2979,9 @@
       "centreLatitude": 46.19056,
       "centreLongitude": 15.240011,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_cn/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nomago-bikes.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nomago-bikes.json",
+      "dataSizeBytes": 67886622,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "nomago-bikes-ljubljana",
@@ -2999,9 +2999,9 @@
       "centreLatitude": 46.080325,
       "centreLongitude": 14.512106,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_cc/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nomago-bikes-ljubljana.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nomago-bikes-ljubljana.json",
+      "dataSizeBytes": 26199237,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "nomago-bikes-nova-gorica",
@@ -3019,7 +3019,7 @@
       "centreLatitude": 45.951645,
       "centreLongitude": 13.661482,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ce/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nomago-bikes-nova-gorica.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nomago-bikes-nova-gorica.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3039,9 +3039,9 @@
       "centreLatitude": 47.257908,
       "centreLongitude": -0.061422,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/ogalo/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-ogalo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-ogalo.json",
+      "dataSizeBytes": 4393413,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "optymo",
@@ -3059,9 +3059,9 @@
       "centreLatitude": 47.628135,
       "centreLongitude": 6.848535,
       "gbfsDiscoveryUrl": "https://data.optymo.fr/vls/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-optymo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-optymo.json",
+      "dataSizeBytes": 8358529,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "otwocki-rower-miejski",
@@ -3079,7 +3079,7 @@
       "centreLatitude": 52.111182,
       "centreLongitude": 21.284076,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_os/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-otwocki-rower-miejski.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-otwocki-rower-miejski.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3099,7 +3099,7 @@
       "centreLatitude": 40.444586,
       "centreLongitude": -79.9533,
       "gbfsDiscoveryUrl": "https://pittsburgh.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-pogoh.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-pogoh.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3119,7 +3119,7 @@
       "centreLatitude": 52.353122,
       "centreLongitude": 13.012568,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_dc/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-potsdam-rad.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-potsdam-rad.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3139,7 +3139,7 @@
       "centreLatitude": 42.65635,
       "centreLongitude": 21.151543,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_gs/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-prishtina-bike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-prishtina-bike.json",
       "dataSizeBytes": 3819926,
       "releaseTag": "data-2026-08"
     },
@@ -3159,7 +3159,7 @@
       "centreLatitude": 52.166819,
       "centreLongitude": 20.81363,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_or/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-pruszkowski-rower-miejski.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-pruszkowski-rower-miejski.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3179,9 +3179,9 @@
       "centreLatitude": 45.899083,
       "centreLongitude": 3.104354,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/rlvlib/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-rlv-lib.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-rlv-lib.json",
+      "dataSizeBytes": 4171527,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "rubis-velo",
@@ -3199,9 +3199,9 @@
       "centreLatitude": 46.217015,
       "centreLongitude": 5.23196,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/beb/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-rubis-velo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-rubis-velo.json",
+      "dataSizeBytes": 6011404,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "star",
@@ -3219,9 +3219,9 @@
       "centreLatitude": 48.10861,
       "centreLongitude": -1.669486,
       "gbfsDiscoveryUrl": "https://eu.ftp.opendatasoft.com/star/gbfs/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-star.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-star.json",
+      "dataSizeBytes": 12093105,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "semo",
@@ -3239,9 +3239,9 @@
       "centreLatitude": 49.230073,
       "centreLongitude": 1.249478,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/semo/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-semo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-semo.json",
+      "dataSizeBytes": 13194032,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "senica-bajk",
@@ -3259,7 +3259,7 @@
       "centreLatitude": 48.684407,
       "centreLongitude": 17.372391,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_av/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-senica-bajk.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-senica-bajk.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3279,7 +3279,7 @@
       "centreLatitude": 37.372562,
       "centreLongitude": -5.960686,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/seville/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-sevici.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-sevici.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3299,7 +3299,7 @@
       "centreLatitude": 54.09635,
       "centreLongitude": 13.401663,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ug/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-stadtrad-universitats-und-hansestadt-greifswald.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-stadtrad-universitats-und-hansestadt-greifswald.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3319,7 +3319,7 @@
       "centreLatitude": 47.26638,
       "centreLongitude": 11.40081,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_si/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-stadtrad.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-stadtrad.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3339,9 +3339,9 @@
       "centreLatitude": 53.470056,
       "centreLongitude": -2.252257,
       "gbfsDiscoveryUrl": "https://beryl-gbfs-production.web.app/v2_2/Greater_Manchester/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-starling-bank-bikes.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-starling-bank-bikes.json",
+      "dataSizeBytes": 24569074,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "tlp-mobilites",
@@ -3359,9 +3359,9 @@
       "centreLatitude": 43.162498,
       "centreLongitude": 0.009657,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/tlpmobilites/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-tlp-mobilites.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-tlp-mobilites.json",
+      "dataSizeBytes": 18423855,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "torrentbici",
@@ -3379,7 +3379,7 @@
       "centreLatitude": 39.429944,
       "centreLongitude": -0.474369,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-torrentbici.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-torrentbici.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3399,9 +3399,9 @@
       "centreLatitude": 43.460748,
       "centreLongitude": -3.823656,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ek/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-tuebici.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-tuebici.json",
+      "dataSizeBytes": 5668734,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "tanlib",
@@ -3419,9 +3419,9 @@
       "centreLatitude": 46.32565,
       "centreLongitude": -0.438933,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/tanlib/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-tanlib.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-tanlib.json",
+      "dataSizeBytes": 10455542,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "tarnowski-rower-miejski",
@@ -3439,7 +3439,7 @@
       "centreLatitude": 50.018383,
       "centreLongitude": 20.968207,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tn/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-tarnowski-rower-miejski.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-tarnowski-rower-miejski.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3459,9 +3459,9 @@
       "centreLatitude": 44.208054,
       "centreLongitude": 0.642232,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/tempovelo/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-tempo-velo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-tempo-velo.json",
+      "dataSizeBytes": 6650676,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "ti-velo",
@@ -3479,9 +3479,9 @@
       "centreLatitude": 48.45585,
       "centreLongitude": -4.274018,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/landerneau/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-ti-velo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-ti-velo.json",
+      "dataSizeBytes": 5111918,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "twisto-velolib",
@@ -3499,9 +3499,9 @@
       "centreLatitude": 49.221515,
       "centreLongitude": -0.349185,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/caen/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-twisto-velolib.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-twisto-velolib.json",
+      "dataSizeBytes": 24399371,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "usedomrad",
@@ -3519,7 +3519,7 @@
       "centreLatitude": 54.003062,
       "centreLongitude": 14.018288,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ur/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-usedomrad.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-usedomrad.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3539,8 +3539,8 @@
       "centreLatitude": 50.633333,
       "centreLongitude": 3.066667,
       "gbfsDiscoveryUrl": "https://media.ilevia.fr/opendata/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-vlille.json",
-      "dataSizeBytes": 42607102,
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-vlille.json",
+      "dataSizeBytes": 44092630,
       "releaseTag": "data-2026-08"
     },
     {
@@ -3559,7 +3559,7 @@
       "centreLatitude": 49.475551,
       "centreLongitude": 11.055986,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_dv/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-vag-rad.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-vag-rad.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3579,7 +3579,7 @@
       "centreLatitude": 52.222241,
       "centreLongitude": 21.043017,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_vw/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-veturilo-3-0.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-veturilo-3-0.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3599,7 +3599,7 @@
       "centreLatitude": 47.582471,
       "centreLongitude": 12.169625,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_vt/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-vvt-regiorad-tirol.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-vvt-regiorad-tirol.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3619,7 +3619,7 @@
       "centreLatitude": 39.470605,
       "centreLongitude": -0.374923,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/valence/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-valenbisi.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-valenbisi.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3639,7 +3639,7 @@
       "centreLatitude": 41.623317,
       "centreLongitude": -4.73821,
       "gbfsDiscoveryUrl": "https://valladolid.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-valladolid.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-valladolid.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3659,9 +3659,9 @@
       "centreLatitude": 50.923882,
       "centreLongitude": 1.857014,
       "gbfsDiscoveryUrl": "https://stce.transdev-hdf.fr/gbfs/",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-vel-in.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-vel-in.json",
+      "dataSizeBytes": 10204471,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velo-antwerpen",
@@ -3679,7 +3679,7 @@
       "centreLatitude": 51.212745,
       "centreLongitude": 4.41071,
       "gbfsDiscoveryUrl": "https://gbfs.smartbike.com/antwerp/1.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velo-antwerpen.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velo-antwerpen.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3699,9 +3699,9 @@
       "centreLatitude": 45.901232,
       "centreLongitude": 6.109675,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/annecy/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velonecy.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velonecy.json",
+      "dataSizeBytes": 28612035,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velopop",
@@ -3719,9 +3719,9 @@
       "centreLatitude": 43.93766,
       "centreLongitude": 4.833355,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/avignon/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velopop.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velopop.json",
+      "dataSizeBytes": 11619890,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "verona-bike",
@@ -3739,7 +3739,7 @@
       "centreLatitude": 45.430267,
       "centreLongitude": 10.998553,
       "gbfsDiscoveryUrl": "https://gbfs.urbansharing.com/bikeverona.it/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-verona-bike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-verona-bike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3759,9 +3759,9 @@
       "centreLatitude": 49.493992,
       "centreLongitude": 5.807139,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/vertuose/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-vertuose.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-vertuose.json",
+      "dataSizeBytes": 16060723,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "viavelo",
@@ -3779,9 +3779,9 @@
       "centreLatitude": 46.001277,
       "centreLongitude": 4.725862,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/viavelo/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-viavelo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-viavelo.json",
+      "dataSizeBytes": 5948563,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "villo",
@@ -3799,7 +3799,7 @@
       "centreLatitude": 50.844545,
       "centreLongitude": 4.36553,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/bruxelles/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-villo.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-villo.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -3819,9 +3819,9 @@
       "centreLatitude": 48.179785,
       "centreLongitude": 6.40814,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/epinal/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-vivolt.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-vivolt.json",
+      "dataSizeBytes": 25811251,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velostan-lib",
@@ -3839,9 +3839,9 @@
       "centreLatitude": 48.684771,
       "centreLongitude": 6.179822,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/nancy/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velostan-lib.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velostan-lib.json",
+      "dataSizeBytes": 9611403,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velam",
@@ -3859,9 +3859,9 @@
       "centreLatitude": 49.89057,
       "centreLongitude": 2.288314,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/amiens/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velam.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velam.json",
+      "dataSizeBytes": 7831823,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velhop",
@@ -3879,9 +3879,9 @@
       "centreLatitude": 48.593389,
       "centreLongitude": 7.726514,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ae/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velhop.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velhop.json",
+      "dataSizeBytes": 24839811,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velivert",
@@ -3889,7 +3889,7 @@
       "operator": "Fifteen / Saint-Etienne Métropole",
       "mainCity": "Saint-Étienne",
       "country": "FR",
-      "stationCount": 100,
+      "stationCount": 102,
       "boundingBox": {
         "south": 45.357551,
         "west": 4.212426,
@@ -3899,9 +3899,9 @@
       "centreLatitude": 45.463385,
       "centreLongitude": 4.439096,
       "gbfsDiscoveryUrl": "https://api.saint-etienne-metropole.fr/velivert/api/gbfs/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velivert.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velivert.json",
+      "dataSizeBytes": 28928592,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velib",
@@ -3919,8 +3919,8 @@
       "centreLatitude": 48.8566,
       "centreLongitude": 2.3522,
       "gbfsDiscoveryUrl": "https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velib.json",
-      "dataSizeBytes": 142972945,
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velib.json",
+      "dataSizeBytes": 142977041,
       "releaseTag": "data-2026-08"
     },
     {
@@ -3939,9 +3939,9 @@
       "centreLatitude": 46.85029,
       "centreLongitude": 0.569823,
       "gbfsDiscoveryUrl": "https://www.mobility-parc.net/gbfs/v3/CHATELLERAULT/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velibleu.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velibleu.json",
+      "dataSizeBytes": 16783444,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velibeo",
@@ -3959,9 +3959,9 @@
       "centreLatitude": 45.161827,
       "centreLongitude": 1.51574,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/velibeo/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velibeo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velibeo.json",
+      "dataSizeBytes": 7069816,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velo-modalis",
@@ -3979,9 +3979,9 @@
       "centreLatitude": 45.648535,
       "centreLongitude": 0.183765,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/angouleme/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velo-modalis.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velo-modalis.json",
+      "dataSizeBytes": 25843593,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velo-modalis-royan",
@@ -3999,9 +3999,9 @@
       "centreLatitude": 45.648785,
       "centreLongitude": -1.007,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/modalis-royan/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velo-modalis-royan.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velo-modalis-royan.json",
+      "dataSizeBytes": 9342147,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velo-modalis-saintes",
@@ -4019,9 +4019,9 @@
       "centreLatitude": 45.73475,
       "centreLongitude": -0.63843,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/saintes/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velo-modalis-saintes.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velo-modalis-saintes.json",
+      "dataSizeBytes": 5323861,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velo-baie",
@@ -4039,9 +4039,9 @@
       "centreLatitude": 48.506586,
       "centreLongitude": -2.760944,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/saintbrieuc/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velo-baie.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velo-baie.json",
+      "dataSizeBytes": 6400154,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velo-cite",
@@ -4059,9 +4059,9 @@
       "centreLatitude": 49.552068,
       "centreLongitude": 3.618276,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/velocite/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velo-cite.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velo-cite.json",
+      "dataSizeBytes": 4417022,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velov",
@@ -4079,8 +4079,8 @@
       "centreLatitude": 45.764,
       "centreLongitude": 4.8357,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/lyon/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velov.json",
-      "dataSizeBytes": 42311488,
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velov.json",
+      "dataSizeBytes": 42315077,
       "releaseTag": "data-2026-08"
     },
     {
@@ -4099,9 +4099,9 @@
       "centreLatitude": 47.240037,
       "centreLongitude": 6.011674,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/besancon/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velocite-besancon.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velocite-besancon.json",
+      "dataSizeBytes": 6296974,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velocite",
@@ -4119,9 +4119,9 @@
       "centreLatitude": 47.766681,
       "centreLongitude": 7.352627,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_af/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velocite.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velocite.json",
+      "dataSizeBytes": 12451967,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velomodalis",
@@ -4139,9 +4139,9 @@
       "centreLatitude": 45.64921,
       "centreLongitude": -0.197335,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/velo-modalis/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velomodalis.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velomodalis.json",
+      "dataSizeBytes": 10644932,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velomoove",
@@ -4159,9 +4159,9 @@
       "centreLatitude": 48.76398,
       "centreLongitude": 6.128015,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/pompey/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velomoove.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velomoove.json",
+      "dataSizeBytes": 6933647,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velozef",
@@ -4179,9 +4179,9 @@
       "centreLatitude": 48.405475,
       "centreLongitude": -4.485565,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/brest/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velozef.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velozef.json",
+      "dataSizeBytes": 17068755,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velomagg",
@@ -4199,9 +4199,9 @@
       "centreLatitude": 43.598735,
       "centreLongitude": 3.895805,
       "gbfsDiscoveryUrl": "https://gbfs.theta.fifteen.eu/gbfs/montpellier/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velomagg.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velomagg.json",
+      "dataSizeBytes": 18858514,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velotoulouse",
@@ -4209,19 +4209,19 @@
       "operator": "Toulouse métropole",
       "mainCity": "Toulouse",
       "country": "FR",
-      "stationCount": 466,
+      "stationCount": 465,
       "boundingBox": {
         "south": 43.512267,
-        "west": 0.962959,
+        "west": 1.282817,
         "north": 43.694456,
         "east": 1.554249
       },
       "centreLatitude": 43.603362,
       "centreLongitude": 1.258604,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/toulouse/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velotoulouse.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velotoulouse.json",
+      "dataSizeBytes": 38797962,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "wienmobil-rad",
@@ -4239,7 +4239,7 @@
       "centreLatitude": 48.21066,
       "centreLongitude": 16.386451,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_wr/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-wienmobil-rad.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-wienmobil-rad.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4259,7 +4259,7 @@
       "centreLatitude": 53.355151,
       "centreLongitude": 10.211911,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_wd/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-winsenrad.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-winsenrad.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4279,7 +4279,7 @@
       "centreLatitude": 52.639761,
       "centreLongitude": 19.078949,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_wf/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-wlower.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-wlower.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4299,7 +4299,7 @@
       "centreLatitude": 44.202801,
       "centreLongitude": 17.912823,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_bz/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-zenica.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-zenica.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4319,7 +4319,7 @@
       "centreLatitude": 51.920165,
       "centreLongitude": 15.509989,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_pm/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-zielonogorski-rower-miejski.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-zielonogorski-rower-miejski.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4339,9 +4339,9 @@
       "centreLatitude": 49.245837,
       "centreLongitude": 4.037156,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/zebullo/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-zebullo.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-zebullo.json",
+      "dataSizeBytes": 10763685,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "avelo-quebec",
@@ -4359,7 +4359,7 @@
       "centreLatitude": 46.8198,
       "centreLongitude": -71.256461,
       "gbfsDiscoveryUrl": "https://quebec.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-avelo-quebec.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-avelo-quebec.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4379,7 +4379,7 @@
       "centreLatitude": 40.42189,
       "centreLongitude": -3.8925,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_by/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bibo.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bibo.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4399,7 +4399,7 @@
       "centreLatitude": 43.31952,
       "centreLongitude": -8.500464,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_aa/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-biciarteixo.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-biciarteixo.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4419,7 +4419,7 @@
       "centreLatitude": 40.424133,
       "centreLongitude": -3.682465,
       "gbfsDiscoveryUrl": "https://madrid.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bicimad.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bicimad.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4439,7 +4439,7 @@
       "centreLatitude": 45.481895,
       "centreLongitude": 9.165561,
       "gbfsDiscoveryUrl": "https://gbfs.urbansharing.com/bikemi.com/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bikemi.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bikemi.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4459,7 +4459,7 @@
       "centreLatitude": 43.317045,
       "centreLongitude": -2.986597,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_bw/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-bizkaibizi.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bizkaibizi.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4479,7 +4479,7 @@
       "centreLatitude": 48.31417,
       "centreLongitude": 14.300224,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_al/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-city-bike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-city-bike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4499,7 +4499,7 @@
       "centreLatitude": 47.139263,
       "centreLongitude": 23.883105,
       "gbfsDiscoveryUrl": "https://dej.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-dej-bikecity.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-dej-bikecity.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4519,7 +4519,7 @@
       "centreLatitude": 35.589311,
       "centreLongitude": 139.765269,
       "gbfsDiscoveryUrl": "https://api-public.odpt.org/api/v4/gbfs/docomo-cycle-tokyo/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-docomo-bike-share-service.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-docomo-bike-share-service.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4539,7 +4539,7 @@
       "centreLatitude": 53.345029,
       "centreLongitude": -6.270433,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/dublin/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-dublinbikes.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-dublinbikes.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4559,9 +4559,9 @@
       "centreLatitude": 45.539323,
       "centreLongitude": 18.666486,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_em/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-emobi.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-emobi.json",
+      "dataSizeBytes": 3738449,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "euregiobike",
@@ -4579,7 +4579,7 @@
       "centreLatitude": 50.768731,
       "centreLongitude": 6.102479,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_an/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-euregiobike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-euregiobike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4599,7 +4599,7 @@
       "centreLatitude": 50.299581,
       "centreLongitude": 8.590405,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ev/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-flux-bikesharing.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-flux-bikesharing.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4619,7 +4619,7 @@
       "centreLatitude": 32.73818,
       "centreLongitude": -97.33814,
       "gbfsDiscoveryUrl": "https://fortworth.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-fortworth.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-fortworth.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4639,7 +4639,7 @@
       "centreLatitude": 46.906011,
       "centreLongitude": 9.521309,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ms/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-invia-bikeshare.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-invia-bikeshare.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4659,7 +4659,7 @@
       "centreLatitude": 39.297035,
       "centreLongitude": -107.015179,
       "gbfsDiscoveryUrl": "https://aspen.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-kitchen-aspen.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kitchen-aspen.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4679,7 +4679,7 @@
       "centreLatitude": -15.781938,
       "centreLongitude": -47.892545,
       "gbfsDiscoveryUrl": "https://brasilia.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-kitchen-brasilia.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kitchen-brasilia.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4699,7 +4699,7 @@
       "centreLatitude": 42.413753,
       "centreLongitude": -83.090383,
       "gbfsDiscoveryUrl": "https://detroit.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-kitchen-detroit.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kitchen-detroit.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4719,7 +4719,7 @@
       "centreLatitude": 40.909086,
       "centreLongitude": -73.126306,
       "gbfsDiscoveryUrl": "https://stonybrook.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-kitchen-east-setauket.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kitchen-east-setauket.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4739,9 +4739,9 @@
       "centreLatitude": 21.292062,
       "centreLongitude": -157.834709,
       "gbfsDiscoveryUrl": "https://honolulu.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-kitchen-honolulu.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kitchen-honolulu.json",
+      "dataSizeBytes": 4232622,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "kitchen-rio-de-janeiro",
@@ -4759,7 +4759,7 @@
       "centreLatitude": -22.943835,
       "centreLongitude": -43.322207,
       "gbfsDiscoveryUrl": "https://riodejaneiro.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-kitchen-rio-de-janeiro.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kitchen-rio-de-janeiro.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4779,7 +4779,7 @@
       "centreLatitude": -12.975099,
       "centreLongitude": -38.429952,
       "gbfsDiscoveryUrl": "https://salvador.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-kitchen-salvador.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kitchen-salvador.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4799,7 +4799,7 @@
       "centreLatitude": -23.574513,
       "centreLongitude": -46.68763,
       "gbfsDiscoveryUrl": "https://saopaulo.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-kitchen-sao-paulo.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kitchen-sao-paulo.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4819,7 +4819,7 @@
       "centreLatitude": 32.22317,
       "centreLongitude": -110.962529,
       "gbfsDiscoveryUrl": "https://tucson.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-kitchen-tucson.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kitchen-tucson.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4839,7 +4839,7 @@
       "centreLatitude": 20.687826,
       "centreLongitude": -103.365163,
       "gbfsDiscoveryUrl": "https://guadalajara.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-kitchen.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kitchen.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4859,7 +4859,7 @@
       "centreLatitude": 50.889519,
       "centreLongitude": 6.79904,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_re/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-mobic.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-mobic.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4879,7 +4879,7 @@
       "centreLatitude": 53.07488,
       "centreLongitude": 9.071397,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_am/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-moin-mobil.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-moin-mobil.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4899,7 +4899,7 @@
       "centreLatitude": 51.473028,
       "centreLongitude": 11.969439,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_mx/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-movemix-bike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-movemix-bike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4919,7 +4919,7 @@
       "centreLatitude": 28.112813,
       "centreLongitude": -15.446021,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_el/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-moxsi.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-moxsi.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4939,7 +4939,7 @@
       "centreLatitude": 49.778344,
       "centreLongitude": 14.678907,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_co/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-benesov.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-benesov.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4959,7 +4959,7 @@
       "centreLatitude": 45.692433,
       "centreLongitude": 9.66639,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ib/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-bergamo.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-bergamo.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4979,7 +4979,7 @@
       "centreLatitude": 52.502189,
       "centreLongitude": 13.425759,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_bn/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-berlin.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-berlin.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -4999,7 +4999,7 @@
       "centreLatitude": 49.947641,
       "centreLongitude": 14.036155,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_td/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-beroun.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-beroun.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5019,7 +5019,7 @@
       "centreLatitude": 48.138158,
       "centreLongitude": 17.110934,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_bi/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-bratislava.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-bratislava.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5039,7 +5039,7 @@
       "centreLatitude": 49.227446,
       "centreLongitude": 16.59615,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_te/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-brno.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-brno.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5059,9 +5059,9 @@
       "centreLatitude": 49.905434,
       "centreLongitude": 16.454922,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_nc/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-ceska-trebova.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-ceska-trebova.json",
+      "dataSizeBytes": 2525826,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "nextbike-dusseldorf",
@@ -5079,7 +5079,7 @@
       "centreLatitude": 51.218903,
       "centreLongitude": 6.815651,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_dd/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-dusseldorf.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-dusseldorf.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5099,7 +5099,7 @@
       "centreLatitude": 50.430444,
       "centreLongitude": 15.819851,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tf/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-dvur-kralove-nad-labem.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-dvur-kralove-nad-labem.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5119,7 +5119,7 @@
       "centreLatitude": 49.69162,
       "centreLongitude": 18.318705,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ts/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-frydek-mistek.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-frydek-mistek.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5139,7 +5139,7 @@
       "centreLatitude": 50.580576,
       "centreLongitude": 8.6877,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ng/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-giessen.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-giessen.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5159,7 +5159,7 @@
       "centreLatitude": 48.85242,
       "centreLongitude": 17.12014,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_nh/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-hodonin.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-hodonin.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5179,7 +5179,7 @@
       "centreLatitude": 50.201229,
       "centreLongitude": 16.020193,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tl/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-hradec-kralove.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-hradec-kralove.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5199,9 +5199,9 @@
       "centreLatitude": 50.728571,
       "centreLongitude": 15.168948,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ud/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-jablonec-nad-nisou.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-jablonec-nad-nisou.json",
+      "dataSizeBytes": 4322896,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "nextbike-jicin",
@@ -5219,7 +5219,7 @@
       "centreLatitude": 50.39065,
       "centreLongitude": 15.329595,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_nt/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-jicin.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-jicin.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5239,7 +5239,7 @@
       "centreLatitude": 51.309813,
       "centreLongitude": 9.480343,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_dk/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-kassel.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-kassel.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5259,7 +5259,7 @@
       "centreLatitude": 50.150532,
       "centreLongitude": 14.043813,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tk/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-kladno.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-kladno.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5279,7 +5279,7 @@
       "centreLatitude": 46.623363,
       "centreLongitude": 14.19348,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ka/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-klagenfurt-am-worthersee.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-klagenfurt-am-worthersee.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5299,7 +5299,7 @@
       "centreLatitude": 50.385127,
       "centreLongitude": 13.184761,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ko/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-klasterec-nad-ohri.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-klasterec-nad-ohri.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5319,7 +5319,7 @@
       "centreLatitude": 50.085318,
       "centreLongitude": 17.682523,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tw/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-krnov.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-krnov.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5339,7 +5339,7 @@
       "centreLatitude": 49.027136,
       "centreLongitude": 17.121949,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ky/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-kyjov.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-kyjov.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5359,7 +5359,7 @@
       "centreLatitude": 51.352266,
       "centreLongitude": 12.364826,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_le/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-leipzig.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-leipzig.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5379,7 +5379,7 @@
       "centreLatitude": 42.598408,
       "centreLongitude": -5.576234,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_sl/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-leon.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-leon.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5399,9 +5399,9 @@
       "centreLatitude": 50.76886,
       "centreLongitude": 15.06332,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_xa/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-liberec.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-liberec.json",
+      "dataSizeBytes": 6543725,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "nextbike-litovel",
@@ -5419,7 +5419,7 @@
       "centreLatitude": 49.701413,
       "centreLongitude": 17.068582,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_nl/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-litovel.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-litovel.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5439,7 +5439,7 @@
       "centreLatitude": 50.511831,
       "centreLongitude": 14.05492,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_lo/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-lovosice.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-lovosice.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5459,7 +5459,7 @@
       "centreLatitude": 50.811051,
       "centreLongitude": 8.766725,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_nm/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-marburg-an-der-lahn.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-marburg-an-der-lahn.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5479,9 +5479,9 @@
       "centreLatitude": 49.75915,
       "centreLongitude": 16.651071,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_xc/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-moravska-trebova.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-moravska-trebova.json",
+      "dataSizeBytes": 2005956,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "nextbike-most",
@@ -5499,7 +5499,7 @@
       "centreLatitude": 50.506168,
       "centreLongitude": 13.645855,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_uo/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-most.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-most.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5519,7 +5519,7 @@
       "centreLatitude": 50.256639,
       "centreLongitude": 14.514306,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ne/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-neratovice.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-neratovice.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5539,7 +5539,7 @@
       "centreLatitude": 53.707901,
       "centreLongitude": 10.012858,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_nn/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-norderstedt.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-norderstedt.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5559,7 +5559,7 @@
       "centreLatitude": 49.945175,
       "centreLongitude": 17.901812,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tj/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-opava.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-opava.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5579,7 +5579,7 @@
       "centreLatitude": 49.833298,
       "centreLongitude": 18.23866,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_to/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-ostrava.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-ostrava.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5599,9 +5599,9 @@
       "centreLatitude": 49.211425,
       "centreLongitude": 17.526645,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ot/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-otrokovice.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-otrokovice.json",
+      "dataSizeBytes": 2841250,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "nextbike-pelhrimov",
@@ -5619,7 +5619,7 @@
       "centreLatitude": 49.431795,
       "centreLongitude": 15.219105,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_cq/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-pelhrimov.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-pelhrimov.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5639,7 +5639,7 @@
       "centreLatitude": 49.299344,
       "centreLongitude": 14.153558,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ty/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-pisek.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-pisek.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5659,7 +5659,7 @@
       "centreLatitude": 50.062926,
       "centreLongitude": 14.491847,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tg/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5679,7 +5679,7 @@
       "centreLatitude": 49.470914,
       "centreLongitude": 17.443481,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_nr/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-prerov.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-prerov.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5699,7 +5699,7 @@
       "centreLatitude": 50.422838,
       "centreLongitude": 14.254982,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_rl/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-roudnice-nad-labem.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-roudnice-nad-labem.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5719,7 +5719,7 @@
       "centreLatitude": 49.991798,
       "centreLongitude": 8.428005,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_do/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-russelsheim-am-main.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-russelsheim-am-main.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5739,7 +5739,7 @@
       "centreLatitude": 56.13785,
       "centreLongitude": -3.931907,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_uk/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-stirling.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-stirling.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5759,7 +5759,7 @@
       "centreLatitude": 49.965457,
       "centreLongitude": 16.973813,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ns/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-sumperk.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-sumperk.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5779,7 +5779,7 @@
       "centreLatitude": 49.213195,
       "centreLongitude": 15.873564,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tu/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-trebic.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-trebic.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5799,7 +5799,7 @@
       "centreLatitude": 50.57058,
       "centreLongitude": 15.924636,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_xb/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-trutnov.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-trutnov.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5819,9 +5819,9 @@
       "centreLatitude": 49.06334,
       "centreLongitude": 17.474176,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tt/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-uherske-hradiste.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-uherske-hradiste.json",
+      "dataSizeBytes": 4930857,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "nextbike-vrchlabi",
@@ -5839,7 +5839,7 @@
       "centreLatitude": 50.629774,
       "centreLongitude": 15.633769,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_vr/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-vrchlabi.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-vrchlabi.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5859,7 +5859,7 @@
       "centreLatitude": 50.077103,
       "centreLongitude": 8.244963,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_wn/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-wiesbaden.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-wiesbaden.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5879,9 +5879,9 @@
       "centreLatitude": 49.237116,
       "centreLongitude": 17.657924,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tv/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-zlin.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-zlin.json",
+      "dataSizeBytes": 8661611,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "nextbike-bicilog",
@@ -5899,7 +5899,7 @@
       "centreLatitude": 42.462483,
       "centreLongitude": -2.444967,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ej/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-bicilog.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-bicilog.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5919,7 +5919,7 @@
       "centreLatitude": 56.959196,
       "centreLongitude": 24.131217,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_lv/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-lv.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-lv.json",
       "dataSizeBytes": 25822332,
       "releaseTag": "data-2026-08"
     },
@@ -5939,7 +5939,7 @@
       "centreLatitude": 50.461298,
       "centreLongitude": 14.931961,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tq/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-mladoboleslavsko.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-mladoboleslavsko.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5959,7 +5959,7 @@
       "centreLatitude": 49.652755,
       "centreLongitude": 14.632,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_cu/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nextbike-olbramovicevotice.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-olbramovicevotice.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5979,7 +5979,7 @@
       "centreLatitude": 45.504346,
       "centreLongitude": -122.827774,
       "gbfsDiscoveryUrl": "https://nike.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-nike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -5999,9 +5999,9 @@
       "centreLatitude": 45.85965,
       "centreLongitude": 1.2634,
       "gbfsDiscoveryUrl": "https://proxy.transport.data.gouv.fr/resource/pony-limoges-gbfs/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-pony.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-pony.json",
+      "dataSizeBytes": 13460460,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "swabi",
@@ -6019,7 +6019,7 @@
       "centreLatitude": 48.3522,
       "centreLongitude": 10.884691,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/swabi/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-swabi.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-swabi.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -6039,7 +6039,7 @@
       "centreLatitude": 49.613494,
       "centreLongitude": 6.118954,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/luxembourg/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-vel-oh.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-vel-oh.json",
       "dataSizeBytes": 18747848,
       "releaseTag": "data-2026-08"
     },
@@ -6059,9 +6059,9 @@
       "centreLatitude": 49.032,
       "centreLongitude": 2.056483,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/cergy/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-velo2.json",
-      "dataSizeBytes": null,
-      "releaseTag": null
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velo2.json",
+      "dataSizeBytes": 12035008,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "westbike",
@@ -6079,7 +6079,7 @@
       "centreLatitude": 51.052785,
       "centreLongitude": 6.20637,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_gh/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-westbike.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-westbike.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -6099,7 +6099,7 @@
       "centreLatitude": 51.047649,
       "centreLongitude": 7.015823,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_dw/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-wupsirad.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-wupsirad.json",
       "dataSizeBytes": null,
       "releaseTag": null
     },
@@ -6119,7 +6119,7 @@
       "centreLatitude": 53.168639,
       "centreLongitude": 22.06297,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_oa/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre/releases/latest/download/manifest-loker.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-loker.json",
       "dataSizeBytes": null,
       "releaseTag": null
     }

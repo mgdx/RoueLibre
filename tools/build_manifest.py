@@ -32,7 +32,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_DATA_DIR = REPO_ROOT / "data" / "out"
 DEFAULT_OUTPUT = DEFAULT_DATA_DIR / "manifest.json"
 
-DEFAULT_BASE_URL = "https://github.com/mgdx/RoueLibre/releases/download"
+# The data lives in a repository of its own: see the comment on
+# MANIFEST_URL_TEMPLATE in add_city.py, which explains what "latest" would
+# otherwise cost.
+DEFAULT_BASE_URL = "https://github.com/mgdx/RoueLibre-data/releases/download"
 
 
 @dataclass(frozen=True)

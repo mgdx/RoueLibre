@@ -35,7 +35,7 @@ DEFAULT_OUTPUT = REPO_ROOT / "config" / "catalogue.json"
 # (SPEC.md §15) — and so that a fork republishes to its own address by
 # regenerating the catalogue, not by patching Kotlin.
 DEFAULT_CATALOGUE_URL = (
-    "https://github.com/mgdx/RoueLibre/releases/latest/download/catalogue.json"
+    "https://github.com/mgdx/RoueLibre-data/releases/latest/download/catalogue.json"
 )
 
 # Bumped when the shape of this document changes in a way older applications
