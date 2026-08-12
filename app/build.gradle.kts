@@ -21,11 +21,13 @@ android {
         // adaptive icons, and above all an up-to-date TLS stack (SPEC §3).
         minSdk = 26
         targetSdk = 37
-        versionCode = 2
-        // Alpha: the application covers its subject — map, address search,
-        // door-to-door journey, and a choice of three conurbations — but
-        // nothing has been published to download yet. See CHANGELOG.md.
-        versionName = "0.2.0-alpha"
+        versionCode = 3
+        // Alpha still: the application covers its subject — map, address
+        // search, door-to-door journey — over every conurbation whose network
+        // publishes its stations, and the data is published at last. What
+        // keeps it in alpha is the field: those datasets have been generated
+        // in bulk, not walked over. See CHANGELOG.md.
+        versionName = "0.3.0-alpha"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

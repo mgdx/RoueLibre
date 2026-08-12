@@ -9,6 +9,15 @@ also records what has no visible effect.
 
 ## [Unreleased]
 
+## [0.3.0-alpha]
+
+The version that publishes its data. The three sets of 101 conurbations — the
+seventy French ones and thirty-one others — are downloadable from
+[RoueLibre-data](https://github.com/mgdx/RoueLibre-data/releases), so the
+application no longer asks anyone to run the repository's scripts before it can
+show a map. It stays an alpha for one reason: those datasets were generated in
+bulk and verified by their digests, not walked over.
+
 ### Added
 
 - **Every bike-share network in the world that publishes its stations** — 306
