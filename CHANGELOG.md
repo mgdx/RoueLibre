@@ -155,6 +155,18 @@ also records what has no visible effect.
 
 ### Changed
 
+- **The base map has a ceiling, and it is 200 MB.** `SPEC.md` said two things
+  at once about the weight of the downloaded data: §4.2 announced "30 to 60 MB"
+  for a medium-sized conurbation, and §11.9 that the data "has no fixed
+  ceiling". Neither told anyone what to do about Paris. The figure is now
+  written down and it applies to the base map alone, the heaviest of the three
+  sets: under 200 MB no city is refused, over it the layer to pull is the
+  building footprints — for every city at once, not for the offending one.
+  Vélib' passes, at 114.9 MB of tiles inside a box holding 1.24 million
+  building footprints against 78,000 for Lille. Measured over the seventy
+  French networks generated the same day: median 10.9 MB for the three sets
+  together, 3.2 MB for Auray, 143.0 MB for Paris, and Paris alone above 60 MB.
+
 - **The map stops at the edge of what was downloaded, without showing it.** The
   camera is penned inside the reference bounding box of `SPEC.md` §4: it no
   longer zooms out past that box covering the screen, and it no longer pans

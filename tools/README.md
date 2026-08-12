@@ -153,20 +153,36 @@ for nothing.
 
 ## Sizes obtained over the Lille box
 
-Real measurements from 9 August 2026, over a box of 442 km² (21.2 × 20.9 km)
+Real measurements from 12 August 2026, over a box of 442 km² (21.2 × 20.9 km)
 derived from 268 stations.
 
 | Set | `SPEC.md` budget | Obtained | |
 |---|---|---|---|
-| Base map | 30 – 60 MB | **35.0 MB** | 4,052 tiles, zooms 10 to 16 |
+| Base map | 30 – 60 MB, ceiling 200 | **36.4 MB** | 4,195 tiles, zooms 10 to 16 |
 | Routing graph | 15 – 40 MB | **1.7 MB** | a single `E0_N50.rd5` file |
-| Address index | 13 – 28 MB | **5.9 MB** | 10,591 streets, 286,028 numbers, 490 landmarks |
-| **Total downloaded** | | **42.5 MB** | |
+| Address index | 13 – 28 MB | **6.0 MB** | 11,090 streets, 286,028 numbers |
+| **Total downloaded** | | **44.1 MB** | |
 
 Breakdown of the base map: the building footprints, present from zoom 15 on,
-account for **21.5 MB out of 35** on their own. That is the first lever to pull
-if the budget were exceeded on another city — raising their `minZoom` to 16, or
+account for over half of it on their own. That is the first lever to pull if
+the ceiling were reached on another city — raising their `minZoom` to 16, or
 dropping the layer.
+
+## Sizes obtained over the seventy French networks
+
+Generated in one run on 12 August 2026, 2 h 15 on a sixteen-core machine, the
+sources already downloaded.
+
+| | |
+|---|---|
+| Total | **1.08 GB** for 70 conurbations |
+| Median | **10.9 MB** per conurbation, all three sets together |
+| Lightest | Auray, **3.2 MB** |
+| Heaviest | Paris, **143.0 MB** — 114.9 of base map, 20.9 of addresses, 7.2 of routing |
+
+Paris is the only one over 60 MB, and it stays under the 200 MB ceiling
+`SPEC.md` §4.2 sets on the base map. Its box holds 1.24 million building
+footprints against 78,000 for Lille, which is the whole of the difference.
 
 ## Regenerating the embedded fonts
 
