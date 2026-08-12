@@ -455,7 +455,6 @@ class JourneyResultFragment : Fragment() {
             requireContext().formatDuration(option.ride.duration),
             requireContext().formatDistance(option.distanceMetres.toDouble()),
         )
-        showNotice(state)
         showSteps(option)
         showShape(option)
     }
@@ -487,10 +486,12 @@ class JourneyResultFragment : Fragment() {
         requireContext().formatDistance(leg.distanceMetres.toDouble())
 
     /**
-     * Says what is missing when no bike journey could be composed.
+     * Shows the walk, or says what is missing when there is not even one.
      *
      * SPEC §6 requires it: when no nearby station has a bike, that has to be
-     * said, not an impossible journey proposed.
+     * said, not an impossible journey proposed. The walk that replaces a bike
+     * journey the walk itself beats arrives here too, and reads as the journey
+     * it is — the reason only chooses how the summary phrases it.
      */
     private fun showWithoutJourney(state: JourneyUiState) {
         val views = binding ?: return
@@ -504,12 +505,11 @@ class JourneyResultFragment : Fragment() {
         views.summary.text = when {
             !state.hasStations -> getString(R.string.journey_no_stations)
             walk != null -> getString(
-                R.string.journey_walk_only,
+                walkSummaryOf(plan),
                 requireContext().formatDistance(walk.distanceMetres.toDouble()),
             )
             else -> reasonOf(plan)
         }
-        views.notice.isVisible = false
         // One dotted stroke between two ends: the journey there is, with no
         // station on the way.
         views.shape.legs = walk
@@ -520,6 +520,17 @@ class JourneyResultFragment : Fragment() {
         }
         showStepsOrNot()
     }
+
+    /**
+     * How the walk's summary reads: as the better of the two, or as the only
+     * one left.
+     */
+    private fun walkSummaryOf(plan: JourneyPlan?): Int =
+        if ((plan as? JourneyPlan.WalkOnly)?.reason == NoBikeJourney.WalkingIsQuicker) {
+            R.string.journey_walk_is_quicker
+        } else {
+            R.string.journey_walk_only
+        }
 
     private fun reasonOf(plan: JourneyPlan?): String {
         val reason = when (plan) {
@@ -534,24 +545,11 @@ class JourneyResultFragment : Fragment() {
                 NoBikeJourney.NoRouteBetweenStations -> R.string.journey_no_route
                 NoBikeJourney.GraphMissing -> R.string.journey_graph_missing
                 NoBikeJourney.OutsideCoverage -> R.string.journey_outside_coverage
-                null -> R.string.journey_no_route
+                // A walk that beat the bike never reaches here: it comes with a
+                // route, and its summary is the one above.
+                NoBikeJourney.WalkingIsQuicker, null -> R.string.journey_no_route
             },
         )
-    }
-
-    /** Warns when walking straight there beats the bike (SPEC §6). */
-    private fun showNotice(state: JourneyUiState) {
-        val views = binding ?: return
-        val fasterOnFoot = (state.plan as? JourneyPlan.Found)
-            ?.takeIf { it.walkingIsFaster }
-            ?.directWalk
-        views.notice.isVisible = fasterOnFoot != null
-        if (fasterOnFoot != null) {
-            views.notice.text = getString(
-                R.string.journey_walking_is_faster,
-                requireContext().formatDuration(fasterOnFoot.duration),
-            )
-        }
     }
 
     /** The three steps, in the order one lives them. */

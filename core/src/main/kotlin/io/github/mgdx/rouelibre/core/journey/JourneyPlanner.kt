@@ -129,11 +129,14 @@ public class JourneyPlanner(
         }
 
         val best = options.minBy { it.rankingTime }
-        return JourneyPlan.Found(
-            best = best,
-            directWalk = directWalk,
-            walkingIsFaster = directWalk != null && directWalk.duration < best.travelTime,
-        )
+        // A bike journey the walk beats is not offered at all: the walk is
+        // (SPEC §6). Announcing the ride with a note saying one would get there
+        // sooner on foot handed the user back a comparison already made, and
+        // made them ask for the walk they had just been told to take.
+        if (directWalk != null && directWalk.duration < best.travelTime) {
+            return JourneyPlan.WalkOnly(directWalk, NoBikeJourney.WalkingIsQuicker)
+        }
+        return JourneyPlan.Found(best)
     }
 
     /**

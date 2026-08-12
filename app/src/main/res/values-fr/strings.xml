@@ -248,11 +248,11 @@
     <string name="journey_step_ride">Pédaler jusqu\'à %1$s</string>
     <string name="journey_step_to_destination">Marcher jusqu\'à l\'arrivée</string>
     <string name="journey_step_walk_all">Marcher jusqu\'à l\'arrivée</string>
-    <!-- SPEC §6 requires saying so when the bike saves no time.
-         %1$s is the walking time. -->
-    <string name="journey_walking_is_faster">À pied, tu y serais plus vite : %1$s.</string>
     <!-- %1$s is the walking distance. -->
     <string name="journey_walk_only">à pied, sur %1$s — aucun trajet à vélo n\'est possible ici.</string>
+    <!-- SPEC §6: when the bike saves no time, the walk is the journey offered.
+         %1$s is the walking distance. -->
+    <string name="journey_walk_is_quicker">à pied, sur %1$s — plus rapide que d\'aller chercher un vélo.</string>
 
     <!-- Why no bike journey was retained (SPEC §6). Each case says what
          happened, never a technical code. -->

@@ -177,22 +177,6 @@
                 android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
                 tools:text="dont 9 min à pied et 13 min à vélo · 4,1 km" />
 
-            <!-- Warns when walking straight there is faster (SPEC §6). -->
-            <TextView
-                android:id="@+id/notice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_m"
-                android:background="@drawable/pill_surface"
-                android:paddingStart="@dimen/space_m"
-                android:paddingTop="@dimen/space_s"
-                android:paddingEnd="@dimen/space_m"
-                android:paddingBottom="@dimen/space_s"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Body"
-                android:visibility="gone"
-                tools:text="À pied, tu y serais plus vite : 18 min."
-                tools:visibility="visible" />
-
             <!-- The whole journey at a glance: how far each leg runs above its
                  stroke, how long it takes below. It repeats what the folded
                  steps say, so a screen reader must not read it a second time. -->

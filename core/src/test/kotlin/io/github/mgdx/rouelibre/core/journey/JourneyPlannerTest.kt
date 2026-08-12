@@ -253,9 +253,10 @@ class JourneyPlannerTest {
     // -------------------------------------------------------------- walk --
 
     @Test
-    fun `reports that walking is faster on a very short journey`() = runTest {
+    fun `offers the walk itself on a journey the bike loses`() = runTest {
         // Two hundred metres to cover: fetching a bike costs two detours on
-        // foot for a ride of a few seconds, and SPEC §6 requires saying so.
+        // foot for a ride of a few seconds. SPEC §6 wants the walk offered, not
+        // a ride carrying a note about it.
         val closeDestination = at(0.0, 200.0)
         val stations = listOf(
             station("depart", at(0.0, 150.0)),
@@ -263,22 +264,26 @@ class JourneyPlannerTest {
         )
         val planner = JourneyPlanner(FakeRouter())
 
-        val plan = planner.plan(origin, closeDestination, stations) as JourneyPlan.Found
+        val plan = planner.plan(origin, closeDestination, stations)
 
-        assertTrue("walking should be announced as faster", plan.walkingIsFaster)
+        assertTrue("expected WalkOnly, got $plan", plan is JourneyPlan.WalkOnly)
+        assertEquals(
+            NoBikeJourney.WalkingIsQuicker,
+            (plan as JourneyPlan.WalkOnly).reason,
+        )
     }
 
     @Test
-    fun `does not report walking on a journey the bike wins`() = runTest {
+    fun `keeps the bike on a journey it wins`() = runTest {
         val stations = listOf(
             station("depart", at(0.0, 100.0)),
             station("arrivee", at(0.0, 3900.0)),
         )
         val planner = JourneyPlanner(FakeRouter())
 
-        val plan = planner.plan(origin, destination, stations) as JourneyPlan.Found
+        val plan = planner.plan(origin, destination, stations)
 
-        assertTrue(!plan.walkingIsFaster)
+        assertTrue("expected Found, got $plan", plan is JourneyPlan.Found)
     }
 
     // -------------------------------------------------------------- cost --

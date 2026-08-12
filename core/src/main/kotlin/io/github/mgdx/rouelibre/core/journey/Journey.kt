@@ -67,7 +67,7 @@ public data class JourneyOption(
 public sealed interface JourneyPlan {
 
     /**
-     * A bike journey was found.
+     * A bike journey was found, and it beats walking.
      *
      * One journey and one only: the pair the algorithm proved best (SPEC §6).
      * The runners-up are not carried, because they are not offered — a second
@@ -75,20 +75,18 @@ public sealed interface JourneyPlan {
      * penalty has already made for them.
      *
      * @property best the chosen option.
-     * @property directWalk the direct walk, when it could be computed.
-     * @property walkingIsFaster true when walking all the way is quicker than
-     *   the bike journey. SPEC §6 requires saying so.
      */
-    public data class Found(
-        public val best: JourneyOption,
-        public val directWalk: RouteLeg?,
-        public val walkingIsFaster: Boolean,
-    ) : JourneyPlan
+    public data class Found(public val best: JourneyOption) : JourneyPlan
 
     /**
-     * No bike journey is possible, but the direct walk is.
+     * The journey offered runs on foot from end to end.
      *
-     * @property reason what was missing.
+     * Either no bike journey could be composed, or one could and lost to the
+     * walk — in both cases walking is the answer, and [reason] says which of
+     * the two brought us here.
+     *
+     * @property directWalk the walk from one end to the other.
+     * @property reason why no bike is ridden.
      */
     public data class WalkOnly(public val directWalk: RouteLeg, public val reason: NoBikeJourney) :
         JourneyPlan
@@ -101,9 +99,19 @@ public sealed interface JourneyPlan {
  * Why no bike journey was retained.
  *
  * SPEC §6 is explicit: when no nearby station has a bike, the application must
- * say so, not propose an impossible journey.
+ * say so, not propose an impossible journey. One of these causes is not a
+ * failure at all — [WalkingIsQuicker] — but it ends the same way, on a walk.
  */
 public sealed interface NoBikeJourney {
+
+    /**
+     * A bike journey exists, and the walk gets there sooner.
+     *
+     * The bike journey is then not carried: the user asked to reach a place,
+     * not to fetch a bike, and offering a trip alongside a note saying the walk
+     * beat it left them to arbitrate a comparison already settled.
+     */
+    public data object WalkingIsQuicker : NoBikeJourney
 
     /** No station in service with at least one bike near the departure point. */
     public data object NoBikeNearby : NoBikeJourney

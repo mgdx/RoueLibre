@@ -210,7 +210,7 @@ This is the application's business core. To be implemented in an isolated, testa
 
 - A station with a single bike can empty while you walk to it. Apply a **risk penalty** that grows as availability falls: a station with 1 bike is less attractive than a station with 8, even slightly further away. Same at the arrival end for free docks.
 - Always show the number of bikes or docks of the chosen station, so the user can judge for themselves.
-- If the bike journey is slower than walking straight there, **say so** and offer the pedestrian route.
+- If the bike journey is slower than walking straight there, **the walk is the journey offered** — the bike trip is not shown at all. Until 13 August 2026 the ride was announced with a note saying one would get there sooner on foot; that note handed back a comparison the algorithm had already made, and left the user to ask for the walk they had just been told to take. The summary says why the answer is a walk: sooner than going to fetch a bike.
 - The number of route computations (N × M + walking legs) must stay bounded, computed off the main thread and cancellable. There is **no fixed deadline on the answer**: the earlier one of 3 seconds was dropped on 12 August 2026, because it was held by cutting every leg off at 5 seconds — and a journey right across a conurbation, whose bike leg alone takes longer than that on a phone, was then reported as having no route at all. A wrong answer in three seconds is worth less than a right one in thirty. What remains is a per-leg limit set by the slowest device we mean to serve rather than the fastest (1 min, see `OfflineRouter`), and an interface that says it is working for as long as it takes.
 
 ## 7. Screens
