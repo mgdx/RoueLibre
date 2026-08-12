@@ -39,6 +39,7 @@ import io.github.mgdx.rouelibre.ui.stations.StationsViewModel
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.maplibre.android.MapLibre
@@ -112,6 +113,9 @@ class MapFragment : Fragment() {
      */
     private var lastKnownPosition: Coordinates? = null
 
+    /** The subscription that moves the point, while the map is on screen. */
+    private var following: Job? = null
+
     /**
      * Requests the location permissions, and never insists.
      *
@@ -124,6 +128,9 @@ class MapFragment : Fragment() {
     ) { granted ->
         if (granted.values.any { it }) {
             locateMe()
+            // Only now may the point start following: before this answer there
+            // was nothing to follow it with (SPEC §10).
+            followUserPosition()
         } else {
             showMessage(R.string.map_location_denied)
         }
@@ -183,6 +190,8 @@ class MapFragment : Fragment() {
         observeStations()
         observeErrors()
         keepAvailabilityFresh()
+        followUserPosition()
+        askForLocation()
     }
 
     /**
@@ -524,10 +533,26 @@ class MapFragment : Fragment() {
     // ----------------------------------------------------------- location --
 
     /**
+     * Asks for the location permission when the map opens (SPEC §7.1).
+     *
+     * **Once per session, and only if it has never been granted.** The point
+     * that follows the device is what this screen is for; asking again at each
+     * return to the map, on the other hand, is the insistence SPEC §10
+     * forbids. After a refusal the map stays whole, without a point, and the
+     * "locate me" button is the way back.
+     */
+    private fun askForLocation() {
+        if (container.deviceLocation.isPermitted()) return
+        if (!container.rememberLocationRequest()) return
+        requestLocationPermission.launch(DeviceLocation.PERMISSIONS)
+    }
+
+    /**
      * Answers the "locate me" button (SPEC §7.1).
      *
-     * Here, and nowhere else, is where location permission is requested: at the
-     * moment the user has just asked for it (SPEC §10).
+     * The other of the two moments where the permission is requested, and the
+     * one that comes back: after a refusal at opening, this is what the user
+     * has left to change their mind (SPEC §10).
      */
     private fun onLocateMeClicked() {
         val location = container.deviceLocation
@@ -565,6 +590,37 @@ class MapFragment : Fragment() {
             lastKnownPosition = position
             userPositionSource?.setGeoJson(UserPositionMarker.featureFor(position))
             moveCameraTo(LatLng(position.latitude, position.longitude), USER_POSITION_ZOOM)
+        }
+    }
+
+    /**
+     * Moves the point as the device moves (SPEC §7.1).
+     *
+     * **The point follows, the map does not.** Recentring at every fix would
+     * take the map back from under the user each time they looked a street
+     * further on; the framing stays theirs, and "locate me" is what brings it
+     * back to the point.
+     *
+     * Only if the permission is already granted: opening the map asks for
+     * nothing, and a user who has refused keeps a map without a point rather
+     * than a second prompt (SPEC §10). The permission being granted later, from
+     * the button, is what starts the following then.
+     *
+     * The subscription follows the screen — `repeatOnLifecycle` drops it as
+     * soon as the map is no longer displayed, so nothing listens to the
+     * satellites in the background — and the position is written nowhere
+     * (SPEC §2, C3).
+     */
+    private fun followUserPosition() {
+        if (following?.isActive == true) return
+        if (!container.deviceLocation.isPermitted()) return
+        following = viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                container.deviceLocation.positions().collect { position ->
+                    lastKnownPosition = position
+                    userPositionSource?.setGeoJson(UserPositionMarker.featureFor(position))
+                }
+            }
         }
     }
 
@@ -781,6 +837,10 @@ class MapFragment : Fragment() {
         super.onResume()
         binding?.map?.onResume()
         loadTilesIfInstalled()
+        // The permission may have been granted from the Android settings while
+        // the application was away: the point then starts following on the way
+        // back, without a detour through the button.
+        followUserPosition()
     }
 
     override fun onPause() {
@@ -816,6 +876,7 @@ class MapFragment : Fragment() {
         stationSource = null
         pickedPlaceSource = null
         userPositionSource = null
+        following = null
         mapLibreMap = null
         styleLoaded = false
         binding = null

@@ -186,6 +186,27 @@ also records what has no visible effect.
   `tools/refresh_normalization_fixtures.py` recomputes the reference cases the
   Kotlin test replays, without rebuilding an index.
 
+### Added
+
+- **The map asks for the location permission when it opens**, where nothing was
+  asked before a press of "locate me". The point that follows the device is
+  what the screen is for, and reaching it through a button first is a detour.
+  Once per session and never again once refused — the button is what remains to
+  change one's mind — and the map stays whole without it. `SPEC.md` §10 said
+  "at the moment of use, never at launch"; the map being the launch screen,
+  that paragraph is now written as the two moments it really is.
+- **The point follows again when the permission is granted from the Android
+  settings**, rather than only after a return through the button: the
+  subscription is retried when the map comes back to the foreground.
+- **The user's point follows the device on the map, in real time.** It only
+  moved on a press of "locate me" until now, which on a walk meant a point
+  standing a street behind. The framing stays the user's: recentring at every
+  fix would take the map back from under someone looking further on, and
+  "locate me" is what brings it back to the point. Nothing is asked for at
+  opening — the following only starts if the permission is already granted, or
+  from the moment the button obtains it — and the subscription stops with the
+  screen. `SPEC.md` §7.1 says so now.
+
 ### Fixed
 
 - **The point showing the user stayed where it was while the device moved on.**

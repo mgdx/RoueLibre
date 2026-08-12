@@ -248,6 +248,8 @@ No colour or size may be hard-coded in a layout: everything goes through resourc
 - **"Bikes" / "docks"** toggle: depending on whether the user wants to borrow or to return.
 - Marker clustering at distant zoom levels.
 - "Locate me" button, "refresh" button, access to the settings and to the journey search.
+- The **user's position follows the device in real time** while the map is on screen. The point moves, the framing does not: recentring at every fix would take the map back from under someone looking a street further on, and "locate me" is what brings it back. The subscription stops with the screen, so nothing listens to the satellites in the background.
+- The location permission is **asked for when the map opens**, once per session (§10). The point that follows the device is what this screen is for, and reaching it through a button first is a detour. Refused, the map stays whole and pointless — in the literal sense — and nothing asks again: "locate me" is what remains to change one's mind.
 - Data-age indicator.
 
 ### 7.2 Station detail
@@ -355,7 +357,7 @@ After a new version is installed, a **what's new** screen appears **once only**,
 Permissions requested, and **no others**:
 
 - `INTERNET` — fetching the GBFS feeds and the datasets
-- `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCATION` — requested **at the moment of use**, never at launch
+- `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCATION` — requested **when the map opens**, once per session and never again once refused, and on a press of "locate me" (§7.1). Those two moments and no other: no screen that does not show a position may ask for one
 - `ACCESS_NETWORK_STATE` — offline detection
 
 The application must be **fully usable if location permission is denied**: the user then designates their departure and arrival points by hand. A refusal must never block a screen nor trigger an insistent prompt.

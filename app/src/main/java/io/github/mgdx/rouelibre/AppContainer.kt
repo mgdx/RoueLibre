@@ -5,7 +5,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
-import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
 import io.github.mgdx.rouelibre.core.geo.Coordinates
@@ -126,6 +125,27 @@ class AppContainer(private val context: Context) {
     fun rememberCityProposal(id: String): Boolean = proposedCityIds.add(id)
 
     private val proposedCityIds = mutableSetOf<String>()
+
+    /**
+     * Says whether location may still be asked for, and notes that it was.
+     *
+     * The map asks for the permission when it opens (SPEC §7.1): the point
+     * that follows the device is the screen's own subject, and reaching it
+     * through a button first is a detour. Asking again at every return to the
+     * map would turn a request into insistence, which SPEC §10 forbids — hence
+     * once, after which the "locate me" button is what remains.
+     *
+     * In memory and for the session alone, like the city proposal above.
+     *
+     * @return true the first time, false afterwards.
+     */
+    fun rememberLocationRequest(): Boolean {
+        if (locationRequested) return false
+        locationRequested = true
+        return true
+    }
+
+    private var locationRequested = false
 
     /**
      * The active city as of the last call to [activeCity].
