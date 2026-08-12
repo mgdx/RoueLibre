@@ -254,6 +254,23 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **A city could be given the map of the city generated before it.**
+  `tools/build_tiles.py` reused the cut of the reference box whenever the file
+  was there, testing nothing but its existence, and every network wrote that
+  file to the same `data/work/tiles/`. The clean-up runs only on success, so a
+  run interrupted after the cut left its own behind for the next city, which
+  took it for its own. What followed was built from the wrong conurbation's
+  data and clipped to a box it does not describe. Measured on Nantes, whose two
+  networks overlap by 72.5 %: the second came out at 1,914 tiles and 12.5 MB
+  instead of 2,117 and 18.7 MB — a map missing everything north of its
+  neighbour's box, with no error raised, a plausible size and a manifest whose
+  digest matched the file it described. The cut now carries what it was made
+  of, source extract and box, and is reused only against a match; each network
+  also gets a working directory of its own. Found by generating the seventy
+  French conurbations in one run, where Saint-Étienne died at its cut and left
+  the three cities behind it to fail on an empty one — the loud half of the
+  same defect.
+
 - **"My position" looked like it did nothing.** Choosing it closed the address
   search and left the field on its old label for as long as the fix took — up
   to the ten seconds `DeviceLocation` waits for one, indoors. Nothing said a

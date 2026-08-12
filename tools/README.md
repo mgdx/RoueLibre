@@ -219,6 +219,14 @@ version is pinned, as the build's reproducibility requires.
 
 ## Implementation notes
 
+**Reusing the cut.** `build_tiles.py` keeps the box's cut between runs — it
+costs minutes on a large region — but reuses it only when the file beside it,
+`area.provenance.json`, says it was made of the same extract for the same box.
+Existence alone used to be the test, and since the working files are removed
+only when a run succeeds, a run interrupted after the cut handed its own to the
+next city. Each network also works in `data/work/tiles/<network>/` rather than
+in one shared directory. To re-cut on purpose, delete the directory.
+
 **OSM extraction.** The base map uses osmium's `smart` strategy, which keeps
 relations whole: without it, only 41 of the box's municipalities have an
 assemblable outline, against 72 with. The routing graph uses `complete_ways`,

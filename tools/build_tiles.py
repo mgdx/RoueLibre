@@ -89,6 +89,27 @@ def load_layers() -> tuple[dict, int]:
     return document["layers"], int(document["globalMaxZoom"])
 
 
+def cut_provenance(regional_extract: Path, bounding_box: BoundingBox) -> dict:
+    """What a cut was made of, in the terms that decide whether it can serve.
+
+    The extract is identified by size and modification time beside its path:
+    two cities can be cut from the same file name and get different data, a
+    Geofabrik extract refreshed between two runs being exactly that case.
+    """
+    stat = regional_extract.stat()
+    return {
+        "sourceExtract": str(regional_extract.resolve()),
+        "sourceSizeBytes": stat.st_size,
+        "sourceModifiedNanoseconds": stat.st_mtime_ns,
+        "boundingBox": {
+            "south": bounding_box.south,
+            "west": bounding_box.west,
+            "north": bounding_box.north,
+            "east": bounding_box.east,
+        },
+    }
+
+
 def cut_to_bounding_box(
     regional_extract: Path, bounding_box: BoundingBox, work_dir: Path
 ) -> Path:
@@ -100,12 +121,32 @@ def cut_to_bounding_box(
     commune whose outline pokes outside the bounding box fails to assemble and
     silently disappears from the map: measured on this extract, 41 communes
     came through instead of 95.
+
+    The cut is reused across runs — it costs minutes on a large region — but
+    **only when it was made of the same extract for the same box**, which the
+    file beside it records. Existence alone used to be the test, and a run
+    interrupted after this step left its cut to the next city: the map of one
+    conurbation would then be built from the data of another, clipped to a box
+    it does not describe, and nothing downstream would notice. The stamp is
+    written only once osmium has succeeded, so a cut left half-written is
+    re-made rather than trusted.
     """
     area_extract = work_dir / "area.osm.pbf"
-    if area_extract.exists():
-        print(f"[1/5] Cut already done: {area_extract} ({human_size(area_extract)})")
-        return area_extract
+    stamp = work_dir / "area.provenance.json"
+    expected = cut_provenance(regional_extract, bounding_box)
+    if area_extract.exists() and stamp.exists():
+        try:
+            recorded = json.loads(stamp.read_text())
+        except json.JSONDecodeError:
+            recorded = None
+        if recorded == expected:
+            print(f"[1/5] Cut already done: {area_extract} "
+                  f"({human_size(area_extract)})")
+            return area_extract
+        print("[1/5] The cut lying here was made of something else — cutting "
+              "again.")
     print("[1/5] Cutting the regional extract down to the box…")
+    stamp.unlink(missing_ok=True)
     run(
         [
             "osmium", "extract",
@@ -118,6 +159,7 @@ def cut_to_bounding_box(
         ],
         "osmium extract",
     )
+    stamp.write_text(json.dumps(expected, indent=1))
     print(f"      → {area_extract.name} : {human_size(area_extract)}")
     return area_extract
 
@@ -273,7 +315,9 @@ def parse_arguments() -> argparse.Namespace:
                         help="regional OpenStreetMap extract in .osm.pbf format")
     parser.add_argument("--config", type=Path, default=DEFAULT_CITY_CONFIG)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
-    parser.add_argument("--work-dir", type=Path, default=DEFAULT_WORK_DIR)
+    parser.add_argument("--work-dir", type=Path, default=DEFAULT_WORK_DIR,
+                        help="intermediate files; defaults to a directory of "
+                             "the network's own under data/work/tiles/")
     parser.add_argument("--keep-intermediate", action="store_true",
                         help="keep the working files for inspection")
     parser.add_argument("--only-layers", nargs="*", default=None,
@@ -293,6 +337,13 @@ def main() -> int:
 
         config = CityConfig.load(arguments.config)
         bounding_box = config.bounding_box
+
+        # One working directory per network, so that generating a catalogue
+        # in one go never has two cities meet in the same intermediate files.
+        # An explicit --work-dir is left exactly as it was given.
+        if arguments.work_dir == DEFAULT_WORK_DIR:
+            arguments.work_dir = DEFAULT_WORK_DIR / config.network_id
+
         layers, global_max_zoom = load_layers()
         if arguments.only_layers:
             layers = {k: v for k, v in layers.items() if k in arguments.only_layers}
