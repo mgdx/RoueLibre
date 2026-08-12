@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The launcher icon's background layer, a single flat colour.
+
+    It sits apart from the palette in colors.xml on purpose: those tokens
+    dress the interface and follow the light or dark theme, whereas a
+    launcher icon has one appearance and must not follow anything — the
+    system draws it long before the application starts.
+-->
+<resources>
+    <color name="ic_launcher_background">#0F6E56</color>
+</resources>

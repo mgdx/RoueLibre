@@ -9,6 +9,22 @@ also records what has no visible effect.
 
 ## [Unreleased]
 
+### Changed
+
+- **The application has its own icon**: a bicycle whose front wheel is a map
+  pin, white on a deep green, in place of the green robot Android Studio
+  leaves behind. It is adaptive, and themed on Android 13 and above — the
+  monochrome layer repeats the drawing exactly, so the icon keeps its form
+  when the launcher recolours it. The SVG sources are kept in `art/`, with
+  the note on how they map onto the adaptive canvas.
+
+### Removed
+
+- The ten bitmap launcher icons of `mipmap-*dpi`, 48 kB no device could
+  reach: with `minSdk` 26 the adaptive icon of `mipmap-anydpi` answers at
+  every density, and the grid drawn as `ic_launcher_background` went with
+  them.
+
 ## [0.3.0-alpha]
 
 The version that publishes its data. The three sets of 101 conurbations — the
