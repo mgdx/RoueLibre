@@ -90,6 +90,11 @@ class MapFragment : Fragment() {
      * map's view without destroying the fragment: without this, coming back
      * brought the opening framing, and the user lost the place they were
      * looking at.
+     *
+     * A turn of the phone destroys the fragment as well, and this field with
+     * it: it is therefore saved in the state too, or the map came back up on
+     * the position of the user rather than on the address they had just gone
+     * looking for.
      */
     private var lastCamera: CameraPosition? = null
 
@@ -200,6 +205,7 @@ class MapFragment : Fragment() {
         views.missingTilesList.setOnClickListener { show(StationListFragment()) }
 
         applyPickingMode(views)
+        restoreCamera(savedInstanceState)
         restorePickedPlace(savedInstanceState)
         showRequestedPlace(savedInstanceState)
         listenForPickedAddress()
@@ -818,6 +824,27 @@ class MapFragment : Fragment() {
         )
     }
 
+    /**
+     * Takes back the framing the screen had before the phone was turned.
+     *
+     * Only the target and the zoom: the tilt and the bearing are not the
+     * user's to set here — the map holds neither — and restoring them would be
+     * restoring nothing.
+     */
+    private fun restoreCamera(savedInstanceState: Bundle?) {
+        val saved = savedInstanceState ?: return
+        if (!saved.containsKey(STATE_CAMERA_LATITUDE)) return
+        lastCamera = CameraPosition.Builder()
+            .target(
+                LatLng(
+                    saved.getDouble(STATE_CAMERA_LATITUDE),
+                    saved.getDouble(STATE_CAMERA_LONGITUDE),
+                ),
+            )
+            .zoom(saved.getDouble(STATE_CAMERA_ZOOM))
+            .build()
+    }
+
     private fun restorePickedPlace(savedInstanceState: Bundle?) {
         val saved = savedInstanceState ?: return
         if (!saved.containsKey(STATE_PICKED_LATITUDE)) return
@@ -938,6 +965,14 @@ class MapFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding?.map?.onSaveInstanceState(outState)
+        // Where the map was looking, so that turning the phone shows the same
+        // place in the other shape rather than starting the screen over.
+        val camera = mapLibreMap?.cameraPosition ?: lastCamera
+        camera?.target?.let { target ->
+            outState.putDouble(STATE_CAMERA_LATITUDE, target.latitude)
+            outState.putDouble(STATE_CAMERA_LONGITUDE, target.longitude)
+            outState.putDouble(STATE_CAMERA_ZOOM, camera.zoom)
+        }
         // The chosen point survives a rotation, and nothing else: it is
         // written nowhere on disk (SPEC §8).
         pickedPlace?.let { place ->
@@ -1017,6 +1052,10 @@ class MapFragment : Fragment() {
 
         /** The camera move's duration, short enough not to keep anyone waiting. */
         const val CAMERA_ANIMATION_MILLIS = 600
+
+        const val STATE_CAMERA_LATITUDE = "camera-latitude"
+        const val STATE_CAMERA_LONGITUDE = "camera-longitude"
+        const val STATE_CAMERA_ZOOM = "camera-zoom"
 
         const val STATE_PICKED_LATITUDE = "picked-latitude"
         const val STATE_PICKED_LONGITUDE = "picked-longitude"
