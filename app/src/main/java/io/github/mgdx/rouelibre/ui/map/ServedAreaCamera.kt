@@ -67,6 +67,21 @@ class ServedAreaCamera(
         view.addOnCameraDidChangeListener(this)
     }
 
+    /**
+     * Measures the limits again for the map as it stands right now.
+     *
+     * The widest zoom follows the shape of the map view, not only its camera: a
+     * tall viewport reaches the area's northern and southern edges long before
+     * a short one does, so it is held closer. A screen whose map changes height
+     * — the journey's, which fills it while the answer is worked out and halves
+     * when it arrives — otherwise frames itself against the limit measured on
+     * the viewport it had before. Measured on the journey across Paris, that
+     * cost a tenth of a zoom step of framing, which is a tenth too many.
+     */
+    fun remeasure() {
+        confine()
+    }
+
     override fun onCameraIsChanging() {
         confine()
     }

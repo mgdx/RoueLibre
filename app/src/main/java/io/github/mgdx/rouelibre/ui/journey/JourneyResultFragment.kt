@@ -70,6 +70,12 @@ class JourneyResultFragment : Fragment() {
     private var frame: LatLngBounds? = null
 
     /**
+     * The limit penning the camera inside the served area, kept so that the
+     * framing can have it measured again against the map's current height.
+     */
+    private var servedArea: ServedAreaCamera? = null
+
+    /**
      * The last position shown, held for the life of the screen only.
      *
      * It survives a rebuild of the view — a rotation must not make the point
@@ -329,13 +335,17 @@ class JourneyResultFragment : Fragment() {
             // laid out, and the limits are read off it.
             val view = binding?.map ?: return@launch
             view.doOnLayout {
-                ServedAreaCamera(
+                servedArea = ServedAreaCamera(
                     view = view,
                     map = map,
                     area = area,
                     widestZoom = city.map.minZoom.toDouble(),
                     closestZoom = closestZoom,
-                ).hold()
+                ).apply { hold() }
+                // The limit was measured on the map as it was when it was laid
+                // out; the framing waiting for it was computed for that same
+                // moment. Laying it again now puts the two back in step.
+                applyFrame()
             }
         }
     }
@@ -666,6 +676,16 @@ class JourneyResultFragment : Fragment() {
         val views = binding ?: return
         val map = mapLibreMap ?: return
         val bounds = frame ?: return
+        // The camera's widest zoom depends on the shape of the map view, and
+        // this one halves in height when the answer arrives: measured while the
+        // map still filled the screen, the limit in force is tighter than the
+        // one this framing is entitled to. It is worth the recomputation — but
+        // it does not buy a journey right across the conurbation its margins.
+        // Nothing here can: the base map holds no tile below zoom 10, so on a
+        // phone the widest possible view spans some twenty kilometres and a
+        // thirty-kilometre track cannot be shown whole. That ceiling is in the
+        // data, not in the camera.
+        servedArea?.remeasure()
         // The band of attribution lies over the map: the track is framed above
         // it, not underneath.
         val band = views.attribution.height
@@ -733,6 +753,7 @@ class JourneyResultFragment : Fragment() {
         rideSource = null
         markerSource = null
         userPositionSource = null
+        servedArea = null
         mapLibreMap = null
         styleLoaded = false
         binding = null
