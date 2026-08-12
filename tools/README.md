@@ -219,6 +219,26 @@ version is pinned, as the build's reproducibility requires.
 
 ## Implementation notes
 
+**Downloading the sources.** Every source is fetched under a temporary name,
+checked — `gzip -t` for the address base, `osmium fileinfo` for an extract —
+and only then given its final name. Two reasons, both met in practice.
+`adresse.data.gouv.fr` drops its stream in mid-body on about one request in
+three, and curl's `--retry` does not replay that: it covers timeouts, refused
+connections, 429 and 5xx, not a transfer that dies after a 200, which is why
+`--retry-all-errors` is passed. And curl writes as it goes, so a transfer
+interrupted at the final name leaves a truncated file that the "already
+present" test takes for a complete download, every later run reusing it and
+failing three steps away. That host is also asked in HTTP/1.1, which it
+survives; Geofabrik served 164 extracts over HTTP/2 without one failure and is
+left alone.
+
+**Merging two extracts.** Geofabrik cuts all its regions from the same daily
+snapshot, and two extracts downloaded on different days hold the same node
+under two versions. `osmium merge` keeps both, and everything downstream stops
+at "Node ID twice in input". The script compares the extracts' snapshot
+timestamps before merging and refuses rather than produce that file: delete
+them from `data/osm/` and let it fetch them again.
+
 **Reusing the cut.** `build_tiles.py` keeps the box's cut between runs — it
 costs minutes on a large region — but reuses it only when the file beside it,
 `area.provenance.json`, says it was made of the same extract for the same box.

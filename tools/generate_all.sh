@@ -113,6 +113,51 @@ echo " addresses  : $ADDRESS_SOURCE${DEPARTMENTS:+ ($DEPARTMENTS)}"
 echo " release    : $RELEASE_TAG"
 echo "════════════════════════════════════════════════════════════"
 
+# Is this file whole? Asked of the format itself, not of the size, which the
+# server never announced reliably enough to compare.
+#
+# "osmium fileinfo" reads the format from the file's extension, and the file
+# being checked is still called *.part: -F says what it is, without which a
+# perfectly good extract is rejected.
+verify_download() {
+  case "$2" in
+    pbf)  osmium fileinfo -F pbf "$1" >/dev/null 2>&1 ;;
+    gzip) gzip -t "$1" 2>/dev/null ;;
+  esac
+}
+
+# Downloads to a temporary name, checks what arrived, and only then gives it
+# the name the rest of the script looks for.
+#
+# Two things this guards against, both met while generating the seventy French
+# conurbations. First, curl's --retry only replays what it calls transient —
+# timeouts, refused connections, 429 and 5xx — and a connection dying in
+# mid-body after a 200 is not on that list. It is, however, what
+# adresse.data.gouv.fr does about one request in three, so --retry-all-errors
+# is the flag that matters here. Second, curl writes as it goes: interrupted at
+# the final name, it leaves a truncated file that the "already present" test
+# below takes for a complete download, and every later run reuses it. The
+# failure then surfaces three steps away, in whatever tries to read it.
+download_verified() {
+  local url="$1" target="$2" kind="$3" label="$4"
+  shift 4
+  local attempt
+  mkdir -p "$(dirname "$target")"
+  for attempt in 1 2 3; do
+    if curl -fSL --retry 5 --retry-all-errors --retry-delay 5 \
+         --remove-on-error "$@" -o "${target}.part" "$url" \
+       && verify_download "${target}.part" "$kind"; then
+      mv "${target}.part" "$target"
+      return 0
+    fi
+    rm -f "${target}.part"
+    echo "  $label: attempt $attempt brought nothing usable, retrying…" >&2
+    sleep $((attempt * 5))
+  done
+  echo "Error: could not download $label from $url" >&2
+  return 1
+}
+
 if [[ "$SKIP_DOWNLOAD" -eq 0 ]]; then
   echo
   echo "── Sources ──"
@@ -123,12 +168,25 @@ if [[ "$SKIP_DOWNLOAD" -eq 0 ]]; then
       part="data/osm/$(basename "$region")-latest.osm.pbf"
       if [[ ! -f "$part" ]]; then
         echo "Downloading the OpenStreetMap extract: $region…"
-        curl -fSL --retry 3 -o "$part" \
-          "https://download.geofabrik.de/${region}-latest.osm.pbf"
+        download_verified \
+          "https://download.geofabrik.de/${region}-latest.osm.pbf" \
+          "$part" pbf "OpenStreetMap extract $region"
       fi
       PARTS+=("$part")
     done
     if [[ "${#PARTS[@]}" -gt 1 ]]; then
+      # Merging two extracts cut from different daily snapshots leaves the same
+      # node under two versions, which osmium merge keeps both of and every
+      # later step rejects as "Node ID twice in input". Same day, same cut.
+      SNAPSHOTS="$(for part in "${PARTS[@]}"; do
+        osmium fileinfo -e -g header.option.timestamp "$part"
+      done | sort -u | wc -l)"
+      if [[ "$SNAPSHOTS" -gt 1 ]]; then
+        echo "Error: the extracts to merge come from different snapshots." >&2
+        echo "         Delete them from data/osm/ and let this script fetch" >&2
+        echo "         them again, so that all of them are of one day." >&2
+        exit 1
+      fi
       echo "Merging ${#PARTS[@]} extracts…"
       osmium merge --overwrite -o "$OSM_FILE" "${PARTS[@]}"
     fi
@@ -142,8 +200,12 @@ if [[ "$SKIP_DOWNLOAD" -eq 0 ]]; then
     target="data/ban/adresses-${dept}.csv.gz"
     if [[ ! -f "$target" ]]; then
       echo "Downloading the BAN, department $dept…"
-      curl -fSL --retry 3 -o "$target" \
-        "https://adresse.data.gouv.fr/data/ban/adresses/latest/csv/adresses-${dept}.csv.gz"
+      # --http1.1 for this host alone: it drops multiplexed streams in mid-body
+      # on nearly every request, where Geofabrik served 164 extracts over HTTP/2
+      # without one failure.
+      download_verified \
+        "https://adresse.data.gouv.fr/data/ban/adresses/latest/csv/adresses-${dept}.csv.gz" \
+        "$target" gzip "BAN department $dept" --http1.1
     else
       echo "BAN extract already present: $target"
     fi

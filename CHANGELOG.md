@@ -254,6 +254,27 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **A source half downloaded was kept, and reused, as if it were whole.**
+  `tools/generate_all.sh` wrote each download straight to its final name, so a
+  transfer that died in mid-body left a truncated file that the "already
+  present" test took for a complete one; every later run reused it and failed
+  three steps away, in whatever tried to read it, until someone deleted it by
+  hand. It also trusted `curl --retry`, which replays timeouts, refused
+  connections, 429 and 5xx — not a connection dropped after a 200, which is
+  exactly what `adresse.data.gouv.fr` does about one request in three. Sources
+  are now fetched under a temporary name, checked for what they claim to be
+  (`gzip -t`, `osmium fileinfo`) and only then renamed, with
+  `--retry-all-errors` and, for that host alone, HTTP/1.1. Geofabrik served 164
+  extracts over HTTP/2 without a failure and is left as it was.
+
+- **Two extracts of different days are no longer merged into an unusable
+  file.** A reference box straddling two Geofabrik regions needs both, and the
+  same node cut from two daily snapshots comes with two versions; `osmium
+  merge` keeps both, and every step downstream stops at "Node ID twice in
+  input". That is what killed Saint-Étienne's generation, whose box reaches
+  from Rhône-Alpes into Auvergne. The script now compares the snapshots before
+  merging and says what to do about it.
+
 - **A city could be given the map of the city generated before it.**
   `tools/build_tiles.py` reused the cut of the reference box whenever the file
   was there, testing nothing but its existence, and every network wrote that
