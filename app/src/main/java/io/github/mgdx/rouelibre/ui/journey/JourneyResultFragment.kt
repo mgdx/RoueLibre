@@ -59,6 +59,14 @@ class JourneyResultFragment : Fragment() {
     private var styleLoaded = false
 
     /**
+     * The track the camera must show, kept for as long as it is displayed.
+     *
+     * The map is not always the size it will end up being when the journey is
+     * drawn: holding the framing lets it be laid again once it is.
+     */
+    private var frame: LatLngBounds? = null
+
+    /**
      * The last position shown, held for the life of the screen only.
      *
      * It survives a rebuild of the view — a rotation must not make the point
@@ -163,6 +171,15 @@ class JourneyResultFragment : Fragment() {
 
         views.map.onCreate(savedInstanceState)
         views.map.getMapAsync(::onMapReady)
+        // The map changes height as the detail below it grows: the journey is
+        // framed again each time, or it would stay fitted to a viewport it no
+        // longer has.
+        views.map.addOnLayoutChangeListener { _, left, top, right, bottom,
+            oldLeft, oldTop, oldRight, oldBottom ->
+            val changed = right - left != oldRight - oldLeft ||
+                bottom - top != oldBottom - oldTop
+            if (changed) applyFrame()
+        }
 
         picker.listen(viewLifecycleOwner)
         showEndpoints()
@@ -561,10 +578,44 @@ class JourneyResultFragment : Fragment() {
 
     /** Frames the map on the whole track, with a comfortable margin. */
     private fun frameOn(points: List<LatLng>) {
-        val map = mapLibreMap ?: return
         if (points.size < 2) return
-        val bounds = LatLngBounds.Builder().includes(points).build()
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, FRAME_PADDING_PIXELS))
+        frame = LatLngBounds.Builder().includes(points).build()
+        applyFrame()
+    }
+
+    /**
+     * Brings the camera onto the track, for the map as it stands right now.
+     *
+     * The detail underneath is as tall as the journey it describes, and it is
+     * absent while the journey is being worked out: the map fills the screen
+     * then, and shrinks by half when the answer arrives. A framing computed
+     * before that layout fits the track into a viewport that no longer exists —
+     * one or two zoom steps too close, which cuts a journey running north-south
+     * while leaving a wide one apparently right. Hence the framing is kept and
+     * laid again at the map's real size, whenever that size changes.
+     */
+    private fun applyFrame() {
+        val views = binding ?: return
+        val map = mapLibreMap ?: return
+        val bounds = frame ?: return
+        // The band of attribution lies over the map: the track is framed above
+        // it, not underneath.
+        val band = views.attribution.height
+        val width = views.map.width
+        val height = views.map.height - band
+        if (width <= 0 || height <= 0) return
+
+        // A margin wide enough for the markers, which are drawn centred on
+        // their point and would otherwise be cut in half at the edge. MapLibre
+        // counts it in screen pixels and divides by the density itself, so it
+        // is stated in dp: the same margin on every screen. And it never eats
+        // more than a quarter of the map — on a short one it gives way rather
+        // than leaving the framing nothing to work with.
+        val margin = (FRAME_PADDING_DP * resources.displayMetrics.density).toInt()
+            .coerceAtMost(minOf(width, height) / 4)
+        map.moveCamera(
+            CameraUpdateFactory.newLatLngBounds(bounds, margin, margin, margin, margin + band),
+        )
     }
 
     // ---------------------------------------------------- map lifecycle --
@@ -625,8 +676,8 @@ class JourneyResultFragment : Fragment() {
         private const val STATE_ORIGIN = "state-origin"
         private const val STATE_DESTINATION = "state-destination"
 
-        /** The margin around the track, in pixels, so it does not touch the edges. */
-        private const val FRAME_PADDING_PIXELS = 80
+        /** The margin around the track, in dp, so it does not touch the edges. */
+        private const val FRAME_PADDING_DP = 32
 
         /** Opens the result for a pair of points already designated. */
         fun newInstance(
