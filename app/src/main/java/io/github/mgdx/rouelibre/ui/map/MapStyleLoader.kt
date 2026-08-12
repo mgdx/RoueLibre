@@ -33,17 +33,23 @@ object MapStyleLoader {
         "map_land" to R.color.map_land,
         "map_water" to R.color.map_water,
         "map_greenery" to R.color.map_greenery,
+        "map_wood" to R.color.map_wood,
         "map_building" to R.color.map_building,
         "map_building_edge" to R.color.map_building_edge,
         "map_road_major" to R.color.map_road_major,
         "map_road_major_edge" to R.color.map_road_major_edge,
         "map_road_minor" to R.color.map_road_minor,
+        "map_road_minor_edge" to R.color.map_road_minor_edge,
+        "map_path" to R.color.map_path,
+        "map_cycleway" to R.color.map_cycleway,
         "map_rail" to R.color.map_rail,
         "map_boundary" to R.color.map_boundary,
         "map_label" to R.color.map_label,
         "map_label_strong" to R.color.map_label_strong,
         "map_label_halo" to R.color.map_label_halo,
         "map_marker_minor" to R.color.map_marker_minor,
+        "map_water_label" to R.color.map_water_label,
+        "map_greenery_label" to R.color.map_greenery_label,
     )
 
     /**

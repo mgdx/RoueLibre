@@ -43,20 +43,32 @@
 
     <!-- The base map's palette, dark theme. The same desaturation with
          inverted values: the map stays scenery under the markers, and the
-         water keeps the blue cast that tells it apart from the parks. -->
+         water keeps the blue cast that tells it apart from the parks.
+
+         One thing does not mirror the light theme: which of a road's two
+         strokes carries it. On a pale ground the road is white and its casing
+         draws the line; on a dark ground the road is the lighter of the two,
+         so the fill carries it and the casing only opens a gap between two
+         streets running side by side. The style is the same, the roles swap. -->
     <color name="map_land">#101613</color>
-    <color name="map_water">#16262A</color>
-    <color name="map_greenery">#16211A</color>
-    <color name="map_building">#1A231E</color>
-    <color name="map_building_edge">#232D27</color>
-    <color name="map_road_major">#2A3630</color>
-    <color name="map_road_major_edge">#3A4842</color>
-    <color name="map_road_minor">#1D2721</color>
-    <color name="map_rail">#394740</color>
-    <color name="map_boundary">#33423B</color>
-    <color name="map_label">#94A69E</color>
-    <color name="map_label_strong">#C9D9D1</color>
+    <color name="map_water">#17303A</color>
+    <color name="map_greenery">#17241A</color>
+    <color name="map_wood">#1D2E1E</color>
+    <color name="map_building">#1B241F</color>
+    <color name="map_building_edge">#2B352E</color>
+    <color name="map_road_major">#4B5A52</color>
+    <color name="map_road_major_edge">#29332D</color>
+    <color name="map_road_minor">#38443D</color>
+    <color name="map_road_minor_edge">#222C27</color>
+    <color name="map_path">#4A5A51</color>
+    <color name="map_cycleway">#2F9268</color>
+    <color name="map_rail">#46554D</color>
+    <color name="map_boundary">#3A4A42</color>
+    <color name="map_label">#A3B5AC</color>
+    <color name="map_label_strong">#D8E6DE</color>
     <color name="map_label_halo">#101613</color>
-    <color name="map_marker_minor">#5A6F65</color>
+    <color name="map_marker_minor">#677C71</color>
+    <color name="map_water_label">#79A9B4</color>
+    <color name="map_greenery_label">#86AE80</color>
 
 </resources>

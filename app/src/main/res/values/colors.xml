@@ -73,6 +73,14 @@
         subject. Every hue is pulled towards grey so the green markers stand
         out without having to shout.
 
+        Desaturated is not the same as flat, and the two were confused in the
+        first set: every token there sat between 87% and 100% lightness, so the
+        whole map was one wash and its roads read as ghosts. What separates one
+        layer from the next here is VALUE, spread over a real range — the land
+        sits near 80%, the casings near 55%, the labels near 15%. Saturation is
+        untouched, so the markers still own the only strong colour on screen,
+        and value contrast is what survives being read in full sunlight.
+
         The water keeps a blue cast while everything else leans green: a river
         that matches the parks around it stops reading as water, and that is a
         legibility question rather than a question of palette.
@@ -81,19 +89,47 @@
         style holds no hard-coded colour, and the dark theme changes only these
         values, never the layers' structure.
     -->
-    <color name="map_land">#EFF2EF</color>
-    <color name="map_water">#C4D8D9</color>
-    <color name="map_greenery">#DBE5DA</color>
-    <color name="map_building">#E3E8E4</color>
-    <color name="map_building_edge">#D4DBD6</color>
+    <color name="map_land">#E9EDE8</color>
+    <color name="map_water">#B3CFD3</color>
+    <color name="map_greenery">#CFE0C9</color>
+    <!-- Woods and scrub, a step darker than mown grass: a forest and a football
+         pitch are not the same landmark when finding one's way. -->
+    <color name="map_wood">#B6D0AE</color>
+    <color name="map_building">#DBE1DA</color>
+    <color name="map_building_edge">#C2CBC1</color>
     <color name="map_road_major">#FFFFFF</color>
-    <color name="map_road_major_edge">#D3DAD5</color>
-    <color name="map_road_minor">#F8FBF9</color>
-    <color name="map_rail">#BBC6C0</color>
-    <color name="map_boundary">#C1CBC5</color>
-    <color name="map_label">#4B5A54</color>
-    <color name="map_label_strong">#28352F</color>
-    <color name="map_label_halo">#EFF2EF</color>
-    <color name="map_marker_minor">#93A29B</color>
+    <color name="map_road_major_edge">#94A59A</color>
+    <color name="map_road_minor">#FFFFFF</color>
+    <!-- The casing is what draws a minor street: its white fill alone is
+         invisible on a pale ground. -->
+    <color name="map_road_minor_edge">#B4BFB6</color>
+    <!-- Footways and tracks: walkable, but not a street. Drawn dotted, so the
+         colour only has to hold at hairline width. -->
+    <color name="map_path">#A2B2A7</color>
+    <!-- Cycle ways. The one piece of scenery a bike application may not treat
+         as scenery — hence the only saturated hue on the base map. Kept a step
+         lighter than the signal green, and dashed rather than solid, so it
+         never competes with a station marker.
+
+         Bus lanes merely shared with buses were drawn in this same green and
+         taken back out: a boulevard already carrying its carriageway, its
+         footway and its cycle way could not take a fourth stroke. What earns
+         the colour is a way laid out for bicycles, not every way one is allowed
+         to ride. -->
+    <color name="map_cycleway">#3E8F6B</color>
+    <color name="map_rail">#A5B2AA</color>
+    <color name="map_boundary">#AAB6AE</color>
+    <color name="map_label">#3F4E48</color>
+    <color name="map_label_strong">#18231E</color>
+    <!-- Lighter than the land, so a halo lifts its label off every ground the
+         map has, parks and water included. -->
+    <color name="map_label_halo">#F1F4F0</color>
+    <color name="map_marker_minor">#8A9A92</color>
+    <!-- River and canal names, tinted towards their own water: a label in the
+         land's colour laid across a river reads as belonging to the bank. -->
+    <color name="map_water_label">#3D6570</color>
+    <!-- Park and wood names, tinted towards their own ground, for the same
+         reason as the water labels. -->
+    <color name="map_greenery_label">#3D5B3B</color>
 
 </resources>
