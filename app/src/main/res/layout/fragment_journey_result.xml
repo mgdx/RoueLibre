@@ -16,16 +16,18 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+    <!-- No title: the screen says what it is by what it shows, and a whole bar
+         spent repeating the word "journey" pushed the two ends — the part one
+         comes here to read and to correct — a row further down. The way back
+         stays, on the row of the first field, so nothing is lost but the word. -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/touch_target_min"
+        app:layout_constraintBottom_toBottomOf="@id/origin"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_back"
-        app:title="@string/journey_result_title"
-        app:titleTextAppearance="@style/TextAppearance.RoueLibre.Title" />
+        app:layout_constraintTop_toTopOf="@id/origin"
+        app:navigationIcon="@drawable/ic_back" />
 
     <!-- The two ends, in the shape the search screen gave them: a press
          reopens the address search, and the answer recomputes the journey. -->
@@ -34,13 +36,12 @@
         style="@style/Widget.RoueLibre.Toggle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_l"
         android:layout_marginTop="@dimen/space_s"
         android:gravity="start|center_vertical"
         android:minHeight="@dimen/touch_target_min"
         app:layout_constraintEnd_toStartOf="@id/swap"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toEndOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="12 bis Rue Nationale" />
 
     <!-- No start margin here: this field's edges are those of the one above. -->
