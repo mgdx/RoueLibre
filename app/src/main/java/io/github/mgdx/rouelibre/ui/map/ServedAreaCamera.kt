@@ -60,11 +60,49 @@ class ServedAreaCamera(
      */
     private var confining = false
 
+    /**
+     * Whether a move the application itself ordered is under way.
+     *
+     * MapLibre applies a target box by jumping the camera inside it, and that
+     * jump cancels whatever move is in flight. The map screen frames the
+     * address just found the moment its style is ready, a few milliseconds
+     * before its view is laid out — and the limits, laid down on that layout,
+     * killed the move where it stood: the map stayed on the framing the user
+     * had just asked to leave, which is their own position, and the address
+     * appeared to have been ignored.
+     *
+     * The limits therefore keep still for the length of a move of ours. They
+     * lose nothing by it: every point the application aims at lies inside the
+     * served area, and the framing that lands is measured again on arrival.
+     */
+    private var moving = false
+
     /** Applies the limits, and keeps them true for as long as the map lives. */
     fun hold() {
         confine()
         view.addOnCameraIsChangingListener(this)
         view.addOnCameraDidChangeListener(this)
+    }
+
+    /**
+     * Stands the limits down for a move the application is about to order.
+     *
+     * The box in force was measured for the framing being left: kept during
+     * the move, it would hold the camera short of a destination near the edge
+     * of the area, which at the closest zoom is a legitimate place to be. It
+     * goes now — before the move starts, since lifting it stops the camera
+     * too — and [holdAgain] puts back the one that suits where the move lands.
+     */
+    fun releaseForMove() {
+        moving = true
+        appliedCentres = null
+        map.setLatLngBoundsForCameraTarget(null)
+    }
+
+    /** Measures the limits again, on the framing the move has landed on. */
+    fun holdAgain() {
+        moving = false
+        confine()
     }
 
     /**
@@ -91,7 +129,7 @@ class ServedAreaCamera(
     }
 
     private fun confine() {
-        if (confining) return
+        if (moving || confining) return
         confining = true
         try {
             applyLimits()

@@ -104,6 +104,15 @@ class MapFragment : Fragment() {
     /** A point found by the address search, and its label. */
     private data class PickedPlace(val position: LatLng, val label: String)
 
+    /**
+     * The limits that pen the camera inside the served area.
+     *
+     * Kept to hand because a move the screen orders — an address found, a
+     * cluster opened — has to stand them down while it runs, or they cut it
+     * short (see [moveCameraTo]).
+     */
+    private var servedAreaCamera: ServedAreaCamera? = null
+
     private var userPositionSource: GeoJsonSource? = null
 
     /**
@@ -335,15 +344,19 @@ class MapFragment : Fragment() {
     private fun holdCameraOverServedArea(map: MapLibreMap, configuration: CityConfiguration) {
         val area = configuration.boundingBox?.takeIf { it.isUsable } ?: return
         val view = binding?.map ?: return
-        view.doOnLayout {
-            ServedAreaCamera(
-                view = view,
-                map = map,
-                area = area,
-                widestZoom = configuration.map.minZoom.toDouble(),
-                closestZoom = configuration.map.maxZoom.toDouble() + 1,
-            ).hold()
-        }
+        val camera = ServedAreaCamera(
+            view = view,
+            map = map,
+            area = area,
+            widestZoom = configuration.map.minZoom.toDouble(),
+            closestZoom = configuration.map.maxZoom.toDouble() + 1,
+        )
+        // Known to the screen before the layout, not only after it: the style
+        // becomes ready in between, and the move it sets off — the address the
+        // search has just returned — must be able to stand these limits down
+        // before they are laid on top of it.
+        servedAreaCamera = camera
+        view.doOnLayout { camera.hold() }
     }
 
     /**
@@ -740,6 +753,11 @@ class MapFragment : Fragment() {
      * The move is animated so one understands where one came from — unless the
      * device asks for reduced animations, in which case the map jumps straight
      * to the destination (SPEC §7).
+     *
+     * The limits over the served area stand down for its length: laying one
+     * down cancels the move in flight, and this one was dying to the limits
+     * being measured a few milliseconds after it started. They are taken up
+     * again on arrival, where they are measured on the framing that landed.
      */
     private fun moveCameraTo(target: LatLng, zoom: Double = PICKED_PLACE_ZOOM) {
         val map = mapLibreMap
@@ -748,11 +766,37 @@ class MapFragment : Fragment() {
             return
         }
         val update = CameraUpdateFactory.newLatLngZoom(target, zoom)
+        val servedArea = servedAreaCamera
+        servedArea?.releaseForMove()
         if (requireContext().prefersReducedMotion()) {
             map.moveCamera(update)
-        } else {
-            map.animateCamera(update, CAMERA_ANIMATION_MILLIS)
+            servedArea?.holdAgain()
+            return
         }
+        map.animateCamera(
+            update,
+            CAMERA_ANIMATION_MILLIS,
+            object : MapLibreMap.CancelableCallback {
+                override fun onFinish() = holdOverServedAreaAgain(servedArea)
+
+                // A move cut short — by a finger on the map, or by another
+                // move — leaves the camera somewhere legitimate all the same:
+                // what matters is that the limits come back, wherever it is.
+                override fun onCancel() = holdOverServedAreaAgain(servedArea)
+            },
+        )
+    }
+
+    /**
+     * Takes the limits up again once a move of ours has ended.
+     *
+     * The screen may have gone in the meantime — one leaves for the list while
+     * the map is still travelling — and the limits are then measured on a map
+     * whose view no longer exists.
+     */
+    private fun holdOverServedAreaAgain(servedArea: ServedAreaCamera?) {
+        if (mapLibreMap == null) return
+        servedArea?.holdAgain()
     }
 
     /**
@@ -914,6 +958,7 @@ class MapFragment : Fragment() {
         stationSource = null
         pickedPlaceSource = null
         userPositionSource = null
+        servedAreaCamera = null
         mapLibreMap = null
         styleLoaded = false
         binding = null
