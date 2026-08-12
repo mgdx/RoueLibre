@@ -43,6 +43,23 @@ class ServedAreaCamera(
     private var appliedCentres: LatLngBounds? = null
     private var appliedWidestZoom: Double = Double.NaN
 
+    /**
+     * Whether we are already inside [confine].
+     *
+     * Handing a target box to the map moves the camera on the spot, and that
+     * move is reported back before `setLatLngBoundsForCameraTarget` has
+     * returned. Recomputing the limit from the position it just moved to hands
+     * over another box, which moves the camera again — the two chase each other
+     * down the stack. Framing a journey right across the conurbation puts the
+     * camera exactly where that happens, at a zoom the served area barely
+     * allows, and the application died there of a `StackOverflowError`.
+     *
+     * A move we caused ourselves teaches us nothing we do not already know: the
+     * box we just handed over is the one in force. The next move, the user's or
+     * the map's, confines the camera again from a position that has settled.
+     */
+    private var confining = false
+
     /** Applies the limits, and keeps them true for as long as the map lives. */
     fun hold() {
         confine()
@@ -59,6 +76,16 @@ class ServedAreaCamera(
     }
 
     private fun confine() {
+        if (confining) return
+        confining = true
+        try {
+            applyLimits()
+        } finally {
+            confining = false
+        }
+    }
+
+    private fun applyLimits() {
         val visible = map.projection.visibleRegion.latLngBounds
         val latitudeSpan = visible.latitudeSpan
         val longitudeSpan = visible.longitudeSpan
