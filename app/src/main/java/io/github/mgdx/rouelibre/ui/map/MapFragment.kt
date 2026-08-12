@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
@@ -301,6 +302,7 @@ class MapFragment : Fragment() {
         map.setMaxZoomPreference(configuration.map.maxZoom.toDouble() + 1)
         map.cameraPosition = lastCamera?.takeIf { it.suits(configuration) }
             ?: openingCamera(configuration)
+        holdCameraOverServedArea(map, configuration)
 
         map.addOnMapClickListener(::onMapClicked)
 
@@ -316,6 +318,31 @@ class MapFragment : Fragment() {
                 pendingCameraTarget = null
                 moveCameraTo(target)
             }
+        }
+    }
+
+    /**
+     * Pens the camera inside the served area (SPEC §7.1).
+     *
+     * The city without a bounding box is the city whose configuration does not
+     * declare one: there is then nothing to hold the camera to, and the map
+     * stays as free as it was.
+     *
+     * The limits are read off the visible region, which the map only has once
+     * it has been measured — hence the wait for the layout pass rather than an
+     * application on the spot.
+     */
+    private fun holdCameraOverServedArea(map: MapLibreMap, configuration: CityConfiguration) {
+        val area = configuration.boundingBox?.takeIf { it.isUsable } ?: return
+        val view = binding?.map ?: return
+        view.doOnLayout {
+            ServedAreaCamera(
+                view = view,
+                map = map,
+                area = area,
+                widestZoom = configuration.map.minZoom.toDouble(),
+                closestZoom = configuration.map.maxZoom.toDouble() + 1,
+            ).hold()
         }
     }
 

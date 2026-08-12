@@ -155,6 +155,18 @@ also records what has no visible effect.
 
 ### Changed
 
+- **The map stops at the edge of what was downloaded, without showing it.** The
+  camera is penned inside the reference bounding box of `SPEC.md` §4: it no
+  longer zooms out past that box covering the screen, and it no longer pans
+  close enough to an edge for the emptiness beyond to appear. Roads cut off in
+  mid-air and a straight line of nothing across the screen read as a coastline,
+  never as the end of a download. Both limits are measured off the visible
+  region on every camera move, so they follow the zoom, the shape of the window
+  and the screen's rotation; the arithmetic is in `core`, on the JVM, and the
+  map screen and the journey's map share the same `ServedAreaCamera`. On a
+  conurbation smaller than a screenful, the widest zoom is now the one framing
+  the box, whatever `minZoom` the city configuration allows.
+
 - **The journey's two ends stay on the result screen, and can be corrected
   there.** The fields of `SPEC.md` §7.3 and their swap button now head the
   result: a mistaken address, a departure one would rather take from the other

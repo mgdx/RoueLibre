@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.doOnLayout
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -27,6 +28,7 @@ import io.github.mgdx.rouelibre.databinding.ItemJourneyStepBinding
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.formatDuration
 import io.github.mgdx.rouelibre.ui.map.MapStyleLoader
+import io.github.mgdx.rouelibre.ui.map.ServedAreaCamera
 import io.github.mgdx.rouelibre.ui.map.UserPositionMarker
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
@@ -262,7 +264,7 @@ class JourneyResultFragment : Fragment() {
         map.uiSettings.isAttributionEnabled = false
         map.uiSettings.isLogoEnabled = false
         map.uiSettings.isRotateGesturesEnabled = false
-        limitZoom(map)
+        limitCamera(map, hasTiles = tiles != null)
         // Without a base map the track is still drawn on an empty background:
         // less telling, but the route is computed and the detail reads.
         if (tiles == null) return
@@ -302,20 +304,39 @@ class JourneyResultFragment : Fragment() {
     }
 
     /**
-     * Caps how close the map may come, at the tiles' own limit.
+     * Bounds where the camera may go, at the tiles' own limits.
      *
      * Past their maximum zoom MapLibre scales the last ones it has: one step is
      * allowed, which lets "locate me" come right down onto the pavement without
      * the labels turning to mush. The city is read from disk, so the cap
      * arrives a moment after the map — before any gesture, in practice.
      *
-     * The lower bound is left alone on purpose: a long journey has to be framed
-     * whole, however far out that takes the camera.
+     * With a base map underneath, the camera is also penned inside the served
+     * area, as on the main screen: the edge of the data must not show here
+     * either. It costs the framing of a journey crossing the conurbation from
+     * end to end, which then loses its margins — a fair trade against a screen
+     * half empty. Without tiles there is no edge to hide, and nothing to gain
+     * from holding a track that is drawn on bare background.
      */
-    private fun limitZoom(map: MapLibreMap) {
+    private fun limitCamera(map: MapLibreMap, hasTiles: Boolean) {
         viewLifecycleOwner.lifecycleScope.launch {
             val city = container.activeCity() ?: return@launch
-            map.setMaxZoomPreference(city.map.maxZoom.toDouble() + 1)
+            val closestZoom = city.map.maxZoom.toDouble() + 1
+            map.setMaxZoomPreference(closestZoom)
+            val area = city.boundingBox?.takeIf { it.isUsable } ?: return@launch
+            if (!hasTiles) return@launch
+            // The visible region is only measurable once the map view has been
+            // laid out, and the limits are read off it.
+            val view = binding?.map ?: return@launch
+            view.doOnLayout {
+                ServedAreaCamera(
+                    view = view,
+                    map = map,
+                    area = area,
+                    widestZoom = city.map.minZoom.toDouble(),
+                    closestZoom = closestZoom,
+                ).hold()
+            }
         }
     }
 
