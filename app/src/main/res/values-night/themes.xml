@@ -21,6 +21,27 @@
         <item name="colorSurfaceVariant">@color/surface</item>
         <item name="colorOnSurfaceVariant">@color/ink_soft</item>
         <item name="colorOutline">@color/outline</item>
+        <item name="colorOutlineVariant">@color/outline</item>
+        <!-- The same mapping as the light theme, and for the same reason:
+             unset, these roles bring the library's mauve-tinted greys back. -->
+        <item name="colorSurfaceContainerLowest">@color/surface</item>
+        <item name="colorSurfaceContainerLow">@color/surface</item>
+        <item name="colorSurfaceContainer">@color/surface</item>
+        <item name="colorSurfaceContainerHigh">@color/surface</item>
+        <item name="colorSurfaceContainerHighest">@color/surface</item>
+        <item name="colorSurfaceDim">@color/paper</item>
+        <item name="colorSurfaceBright">@color/surface</item>
+        <item name="elevationOverlayColor">@color/surface</item>
+        <item name="colorPrimaryContainer">@color/availability_low</item>
+        <item name="colorOnPrimaryContainer">@color/ink</item>
+        <item name="colorSecondaryContainer">@color/paper</item>
+        <item name="colorOnSecondaryContainer">@color/ink</item>
+        <item name="colorTertiary">@color/signal</item>
+        <item name="colorOnTertiary">@color/paper</item>
+        <item name="colorTertiaryContainer">@color/availability_low</item>
+        <item name="colorOnTertiaryContainer">@color/ink</item>
+        <item name="colorErrorContainer">@color/paper</item>
+        <item name="colorOnErrorContainer">@color/alert</item>
         <!-- Inverted surfaces: the alert banner sits on a background
              opposite to the screen's. Without these three roles, Material
              would bring its default purple back to it. -->
@@ -38,6 +59,8 @@
         <item name="textAppearanceBodyLarge">@style/TextAppearance.RoueLibre.Body</item>
         <item name="textAppearanceBodyMedium">@style/TextAppearance.RoueLibre.Secondary</item>
         <item name="textAppearanceLabelMedium">@style/TextAppearance.RoueLibre.Label</item>
+
+        <item name="materialButtonStyle">@style/Widget.RoueLibre.Button</item>
 
         <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.RoueLibre</item>
         <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.RoueLibre</item>

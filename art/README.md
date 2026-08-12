@@ -11,7 +11,10 @@ translation of them.
 | `ic_launcher_monochrome.svg` | The same drawing, single colour, for the themed icon of Android 13+ | `app/src/main/res/drawable/ic_launcher_monochrome.xml` |
 
 The background is a flat `#0F6E56`, declared once in
-`app/src/main/res/values/ic_launcher_background.xml`.
+`app/src/main/res/values/ic_launcher_background.xml`. It is also the
+interface's signal hue, declared a second time as `signal` in
+`values/colors.xml` — the icon must not follow the dark theme, so the two
+cannot be one resource. Changing the green means changing both.
 
 Changing the drawing means changing the SVG **and** the two vector drawables:
 nothing generates one from the other at build time, so they are kept in step

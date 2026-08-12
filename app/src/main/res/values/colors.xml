@@ -6,83 +6,94 @@
     colour is written into a layout: everything goes through these resources,
     and the dark theme redefines the same names in values-night/colors.xml.
 
-    Direction: "slate". A cool blue-grey for the background, ink almost black
-    but never black, and ONE signal hue — a deep teal — carrying both
-    availability and interaction. The boldness is spent in a single place, the
-    availability indicator; everything else is calm.
+    Direction: "pine". The signal hue is the launcher icon's green, to the
+    digit — the application and the thing the user taps on their home screen
+    must read as one object, and a teal interface behind a green icon read as
+    two. The neutrals follow it: the background is a grey pulled towards green
+    rather than towards blue, ink almost black but never black, and the
+    boldness is spent in a single place, the availability indicator.
 
     The availability scale is a ramp of INK DENSITY over a single hue: the more
     bikes there are, the more ink there is. It is therefore legible whatever
     the form of colour blindness, and the figure is shown on top in any case —
     colour never carries the information alone.
 
-    Contrasts verified (WCAG 2.1): the lowest in the set is 5.07:1.
+    The alert hue stays rust: it sits opposite the green on the wheel, which is
+    exactly what an alert has to do — be the one thing on the screen that is
+    not the interface's own colour.
+
+    Contrasts verified (WCAG 2.1): the lowest in the set is 5.04:1.
 -->
 <resources>
 
     <!-- The screen's background. -->
-    <color name="paper">#E8ECEF</color>
+    <color name="paper">#E7ECE9</color>
     <!-- Surfaces laid on the background: list rows, sheets, fields. The
          separation is tonal, without a drop shadow. -->
-    <color name="surface">#FAFCFD</color>
+    <color name="surface">#F9FCFA</color>
     <!-- Main text and strokes. Never pure black. -->
-    <color name="ink">#0E1519</color>
+    <color name="ink">#0F1714</color>
     <!-- Secondary text, captions, units. -->
-    <color name="ink_soft">#56656F</color>
-    <!-- The signal hue: availability and interactive elements. -->
-    <color name="signal">#00636F</color>
+    <color name="ink_soft">#55665F</color>
+    <!-- The signal hue: availability and interactive elements. The launcher
+         icon's background colour, unchanged. -->
+    <color name="signal">#0F6E56</color>
     <!-- Draws the eye to what is missing: no bike, no dock, out of service. -->
     <color name="alert">#9C4A00</color>
 
     <!-- The availability scale, derived from the signal hue. -->
-    <color name="availability_low">#B8D5D8</color>
-    <color name="availability_medium">#5BA1AA</color>
-    <color name="availability_good">#00636F</color>
+    <color name="availability_low">#BCD6CC</color>
+    <color name="availability_medium">#4F9C82</color>
+    <color name="availability_good">#0F6E56</color>
     <!-- The figure laid on each of the three fills. -->
-    <color name="availability_low_ink">#0E1519</color>
-    <color name="availability_medium_ink">#0E1519</color>
+    <color name="availability_low_ink">#0F1714</color>
+    <color name="availability_medium_ink">#0F1714</color>
     <color name="availability_good_ink">#FFFFFF</color>
 
     <!-- Ink laid on a flat of the signal hue: active button, well-stocked
          indicator. It inverts from one theme to the other. -->
-    <color name="surface_on_signal">#FAFCFD</color>
+    <color name="surface_on_signal">#F9FCFA</color>
 
     <!-- Separator strokes, field outlines. -->
-    <color name="outline">#CCD5DA</color>
+    <color name="outline">#C9D6CF</color>
 
     <!-- The signal hue lightened, for inverted surfaces — the alert bar in particular, whose background is dark even in the light theme. -->
-    <color name="signal_inverse">#3FBFCE</color>
+    <color name="signal_inverse">#3FB68F</color>
 
     <!-- The background of inverted surfaces. -->
-    <color name="surface_inverse">#0E1519</color>
+    <color name="surface_inverse">#0F1714</color>
 
     <!-- Ink laid on an inverted surface. -->
-    <color name="ink_inverse">#FAFCFD</color>
+    <color name="ink_inverse">#F9FCFA</color>
 
     <!--
         The base map's palette (SPEC §7).
 
         Deliberately DESATURATED: the map is scenery, the stations are the
-        subject. Every hue is pulled towards grey so the teal markers stand out
-        without having to shout.
+        subject. Every hue is pulled towards grey so the green markers stand
+        out without having to shout.
+
+        The water keeps a blue cast while everything else leans green: a river
+        that matches the parks around it stops reading as water, and that is a
+        legibility question rather than a question of palette.
 
         These tokens are injected into assets/map/style.json at load time: the
         style holds no hard-coded colour, and the dark theme changes only these
         values, never the layers' structure.
     -->
-    <color name="map_land">#EEF1F3</color>
-    <color name="map_water">#C9D7DD</color>
-    <color name="map_greenery">#DCE4DC</color>
-    <color name="map_building">#E2E7EB</color>
-    <color name="map_building_edge">#D3DADF</color>
+    <color name="map_land">#EFF2EF</color>
+    <color name="map_water">#C4D8D9</color>
+    <color name="map_greenery">#DBE5DA</color>
+    <color name="map_building">#E3E8E4</color>
+    <color name="map_building_edge">#D4DBD6</color>
     <color name="map_road_major">#FFFFFF</color>
-    <color name="map_road_major_edge">#D2D9DE</color>
-    <color name="map_road_minor">#F8FAFB</color>
-    <color name="map_rail">#BAC4CA</color>
-    <color name="map_boundary">#C0CAD1</color>
-    <color name="map_label">#4B5A63</color>
-    <color name="map_label_strong">#28353D</color>
-    <color name="map_label_halo">#EEF1F3</color>
-    <color name="map_marker_minor">#93A1A9</color>
+    <color name="map_road_major_edge">#D3DAD5</color>
+    <color name="map_road_minor">#F8FBF9</color>
+    <color name="map_rail">#BBC6C0</color>
+    <color name="map_boundary">#C1CBC5</color>
+    <color name="map_label">#4B5A54</color>
+    <color name="map_label_strong">#28352F</color>
+    <color name="map_label_halo">#EFF2EF</color>
+    <color name="map_marker_minor">#93A29B</color>
 
 </resources>

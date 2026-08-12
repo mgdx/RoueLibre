@@ -63,6 +63,23 @@
     </style>
 
     <!--
+        The main action button. Material rounds a filled button into a pill
+        through a shape role the theme's global radius override does not
+        reach — the same escape the toggle below had to close. Left alone, the
+        eight buttons that carry a screen's main action would be the only pills
+        in an interface whose one round element is the availability indicator,
+        and the signature would stop being a signature.
+
+        The style is hung on `materialButtonStyle` in the theme rather than
+        quoted screen by screen: a button that has to remember to ask for the
+        house shape is one that will eventually forget.
+    -->
+    <style name="Widget.RoueLibre.Button" parent="Widget.Material3.Button">
+        <item name="shapeAppearance">@style/ShapeAppearance.RoueLibre</item>
+        <item name="android:textAppearance">@style/TextAppearance.RoueLibre.Body</item>
+    </style>
+
+    <!--
         The bikes / docks toggle. The default Material style colours the
         active state with `colorSecondaryContainer`, a role the project's token
         set does not use: rather than divert that role for the whole theme, the

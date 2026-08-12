@@ -3,58 +3,60 @@
     Colour tokens — dark theme. SPEC.md §7.
 
     The same names as in the light theme, with redefined values. This is not an
-    inversion: the background is a blued slate rather than black, the signal
-    hue is lightened to hold on a dark background, and the availability scale
-    inverts in luminance — on a dark background, "more ink" becomes "more
-    light".
+    inversion: the background is a greened slate rather than black, the signal
+    hue is the icon's green lightened until it holds on a dark background, and
+    the availability scale inverts in luminance — on a dark background, "more
+    ink" becomes "more light".
 
-    Contrasts verified: the lowest in the set is 4.84:1.
+    Contrasts verified: the lowest in the set is 5.04:1.
 -->
 <resources>
 
-    <color name="paper">#0E1418</color>
-    <color name="surface">#172027</color>
-    <color name="ink">#E7EDF1</color>
-    <color name="ink_soft">#93A3AD</color>
-    <color name="signal">#3FBFCE</color>
+    <color name="paper">#0D1512</color>
+    <color name="surface">#16211C</color>
+    <color name="ink">#E6EEEA</color>
+    <color name="ink_soft">#94A69E</color>
+    <color name="signal">#3FB68F</color>
     <color name="alert">#E0913F</color>
 
-    <color name="availability_low">#1B3D44</color>
-    <color name="availability_medium">#22707C</color>
-    <color name="availability_good">#3FBFCE</color>
-    <color name="availability_low_ink">#E7EDF1</color>
-    <color name="availability_medium_ink">#E7EDF1</color>
-    <color name="availability_good_ink">#0E1418</color>
+    <color name="availability_low">#17392E</color>
+    <color name="availability_medium">#1E7159</color>
+    <color name="availability_good">#3FB68F</color>
+    <color name="availability_low_ink">#E6EEEA</color>
+    <color name="availability_medium_ink">#E6EEEA</color>
+    <color name="availability_good_ink">#0D1512</color>
 
     <!-- Ink laid on a flat of the signal hue. -->
-    <color name="surface_on_signal">#0E1418</color>
+    <color name="surface_on_signal">#0D1512</color>
 
-    <color name="outline">#2A363F</color>
+    <color name="outline">#29352F</color>
 
-    <!-- The signal hue darkened, for inverted surfaces. -->
-    <color name="signal_inverse">#00636F</color>
+    <!-- The signal hue darkened, for inverted surfaces: the icon's green
+         itself, which is the one that holds on a light background. -->
+    <color name="signal_inverse">#0F6E56</color>
 
     <!-- The background of inverted surfaces. -->
-    <color name="surface_inverse">#E7EDF1</color>
+    <color name="surface_inverse">#E6EEEA</color>
 
     <!-- Ink laid on an inverted surface. -->
-    <color name="ink_inverse">#0E1418</color>
+    <color name="ink_inverse">#0D1512</color>
 
     <!-- The base map's palette, dark theme. The same desaturation with
-         inverted values: the map stays scenery under the markers. -->
-    <color name="map_land">#11171C</color>
-    <color name="map_water">#16232B</color>
-    <color name="map_greenery">#17211C</color>
-    <color name="map_building">#1A222A</color>
-    <color name="map_building_edge">#222C35</color>
-    <color name="map_road_major">#2A343C</color>
-    <color name="map_road_major_edge">#3A464F</color>
-    <color name="map_road_minor">#1D262D</color>
-    <color name="map_rail">#39454D</color>
-    <color name="map_boundary">#33404A</color>
-    <color name="map_label">#93A3AD</color>
-    <color name="map_label_strong">#C9D6DE</color>
-    <color name="map_label_halo">#11171C</color>
-    <color name="map_marker_minor">#5A6A75</color>
+         inverted values: the map stays scenery under the markers, and the
+         water keeps the blue cast that tells it apart from the parks. -->
+    <color name="map_land">#101613</color>
+    <color name="map_water">#16262A</color>
+    <color name="map_greenery">#16211A</color>
+    <color name="map_building">#1A231E</color>
+    <color name="map_building_edge">#232D27</color>
+    <color name="map_road_major">#2A3630</color>
+    <color name="map_road_major_edge">#3A4842</color>
+    <color name="map_road_minor">#1D2721</color>
+    <color name="map_rail">#394740</color>
+    <color name="map_boundary">#33423B</color>
+    <color name="map_label">#94A69E</color>
+    <color name="map_label_strong">#C9D9D1</color>
+    <color name="map_label_halo">#101613</color>
+    <color name="map_marker_minor">#5A6F65</color>
 
 </resources>

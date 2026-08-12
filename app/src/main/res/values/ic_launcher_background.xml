@@ -2,10 +2,13 @@
 <!--
     The launcher icon's background layer, a single flat colour.
 
-    It sits apart from the palette in colors.xml on purpose: those tokens
-    dress the interface and follow the light or dark theme, whereas a
-    launcher icon has one appearance and must not follow anything — the
-    system draws it long before the application starts.
+    It holds the same value as `signal` in the light theme, and stays a
+    separate resource on purpose: those tokens dress the interface and follow
+    the light or dark theme, whereas a launcher icon has one appearance and
+    must not follow anything — the system draws it long before the application
+    starts. Pointing this at `@color/signal` would repaint the icon the day the
+    dark theme is picked up. Changing the identity's green therefore means
+    changing this value and the light theme's `signal` together.
 -->
 <resources>
     <color name="ic_launcher_background">#0F6E56</color>

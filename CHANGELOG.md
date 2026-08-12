@@ -11,6 +11,19 @@ also records what has no visible effect.
 
 ### Changed
 
+- **The interface takes the icon's colour.** The signal hue is now the
+  launcher icon's green to the digit, and the neutrals lean green rather than
+  blue: an application whose home-screen icon and first screen do not share a
+  colour reads as two objects. The availability scale, the map's palette and
+  the dark theme follow, contrasts re-verified — the lowest in the set is
+  5.04:1.
+- The five `surfaceContainer*` roles of Material 3 are now mapped onto the
+  project's two tones. Left unset they were not neutral: the station sheet,
+  which reads one of them, was drawn in the library's mauve-tinted grey.
+- The main action button takes the interface's radius instead of Material's
+  pill. It was the only perfectly round element besides the availability
+  indicator, which is the one thing meant to be round.
+
 - **The application has its own icon**: a bicycle whose front wheel is a map
   pin, white on a deep green, in place of the green robot Android Studio
   leaves behind. It is adaptive, and themed on Android 13 and above — the
