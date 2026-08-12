@@ -188,6 +188,21 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **The point showing the user stayed where it was while the device moved on.**
+  Two causes, both in `DeviceLocation`. Every provider is listened to at once,
+  as it must be — the satellites stay silent indoors, where the network answers
+  in a second — but the answers were taken in the order they arrived: the
+  network's always came first, several hundred metres wide and identical from
+  one street to the next, and it landed on top of the satellite fix that was
+  actually following the walk. Fixes are now arbitrated on accuracy
+  (`core.geo.PositionFix`), and a coarse one only replaces a precise one once
+  the latter has aged half a minute, which is what unfreezes the point when the
+  satellites do go silent. And "locate me" answered out of the cache of
+  positions already known, up to two minutes old — where the user *was*, a
+  hundred metres back on foot and six hundred by bike. It now asks for a fix,
+  leaves a coarse first answer four seconds to be beaten by a precise one, and
+  only falls back on the position already known if nothing arrives at all.
+
 - **A station at latitude zero no longer stretches a city's data across the
   Atlantic.** Naolib publishes one; the Nantes bounding box measured 888,100 km²
   instead of 150, and the three datasets §4 cuts from that box would have

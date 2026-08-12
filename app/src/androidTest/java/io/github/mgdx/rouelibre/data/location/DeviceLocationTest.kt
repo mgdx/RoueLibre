@@ -11,8 +11,10 @@ import android.location.LocationManager
 import android.os.SystemClock
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import io.github.mgdx.rouelibre.core.geo.Coordinates
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -120,16 +122,72 @@ class DeviceLocationTest {
     }
 
     @Test
-    fun waits_for_a_fix_when_no_position_is_known() = runBlocking {
-        // No fix has been published yet: `current` must ask for one, and the
-        // first provider to answer wins.
+    fun waits_for_a_fix_rather_than_serve_a_position_already_known() = runBlocking {
+        // "Locate me" asks where one IS. A position from a minute ago says
+        // where one WAS, and serving it is what left the point standing still
+        // while the user walked on: `current` must go and ask for a fix.
+        manager.setTestProviderLocation(LocationManager.GPS_PROVIDER, aged(lille))
         val awaited = async { deviceLocation.current(Duration.ofSeconds(10)) }
         delay(FIX_DELAY_MILLIS)
-        manager.setTestProviderLocation(LocationManager.GPS_PROVIDER, lille)
+        val moved = movedNorthBy(TRACK_STEP_METRES)
+        manager.setTestProviderLocation(LocationManager.GPS_PROVIDER, moved)
 
         val position = awaited.await()
         assertNotNull("no fix obtained", position)
-        assertEquals(lille.latitude, position!!.latitude, TOLERANCE)
+        assertEquals(
+            "the position already known was served instead of a fresh fix",
+            moved.latitude,
+            position!!.latitude,
+            TOLERANCE,
+        )
+    }
+
+    @Test
+    fun the_followed_position_moves_with_the_device() = runBlocking {
+        // The regression this whole file exists for: the point stayed put
+        // while the device went on, every fix after the first being turned
+        // down. Three points fifty metres apart, and all three must be seen.
+        val track = List(TRACK_POINTS) { step -> movedNorthBy(step * TRACK_STEP_METRES) }
+        val seen = mutableListOf<Coordinates>()
+        val following = launch { deviceLocation.positions().collect { seen += it } }
+
+        track.forEach { point ->
+            manager.setTestProviderLocation(LocationManager.GPS_PROVIDER, point)
+            // Longer than the two seconds the subscription throttles at, so
+            // that no fix is dropped for having come too soon after another.
+            delay(FOLLOW_STEP_MILLIS)
+        }
+        following.cancel()
+
+        val last = seen.lastOrNull()
+        assertNotNull("no position followed at all", last)
+        assertEquals(
+            "the followed point stopped moving",
+            track.last().latitude,
+            last!!.latitude,
+            TOLERANCE,
+        )
+        assertEquals(
+            "one fix per point of the track was expected",
+            TRACK_POINTS,
+            seen.distinct().size,
+        )
+    }
+
+    /** The same point, stamped as taken long enough ago to be worth nothing. */
+    private fun aged(point: Location) = Location(point).apply {
+        time = System.currentTimeMillis() - STALE_AGE_MILLIS
+        elapsedRealtimeNanos =
+            SystemClock.elapsedRealtimeNanos() - STALE_AGE_MILLIS * NANOSECONDS_PER_MILLISECOND
+    }
+
+    /** The Grand-Place, moved [metres] due north. */
+    private fun movedNorthBy(metres: Double) = Location(LocationManager.GPS_PROVIDER).apply {
+        latitude = lille.latitude + metres / METRES_PER_DEGREE_OF_LATITUDE
+        longitude = lille.longitude
+        accuracy = 12f
+        time = System.currentTimeMillis()
+        elapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos()
     }
 
     @Test
@@ -150,5 +208,22 @@ class DeviceLocationTest {
 
         /** The delay before publishing the fix, so the wait actually happens. */
         const val FIX_DELAY_MILLIS = 500L
+
+        /** How many points of the followed track are published. */
+        const val TRACK_POINTS = 3
+
+        /** How far apart they are, in metres: well past the five-metre floor. */
+        const val TRACK_STEP_METRES = 50.0
+
+        /** And how far apart in time: past the two seconds of the throttle. */
+        const val FOLLOW_STEP_MILLIS = 2_500L
+
+        /** A degree of latitude, in metres. Constant, unlike a longitude's. */
+        const val METRES_PER_DEGREE_OF_LATITUDE = 111_320.0
+
+        /** How old a position has to be for the application to disown it. */
+        const val STALE_AGE_MILLIS = 60_000L
+
+        const val NANOSECONDS_PER_MILLISECOND = 1_000_000L
     }
 }
