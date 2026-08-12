@@ -39,8 +39,9 @@ import io.github.mgdx.rouelibre.ui.stations.StationsViewModel
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraPosition
@@ -113,8 +114,16 @@ class MapFragment : Fragment() {
      */
     private var lastKnownPosition: Coordinates? = null
 
-    /** The subscription that moves the point, while the map is on screen. */
-    private var following: Job? = null
+    /**
+     * Whether the point may follow the device: the permission as it stands.
+     *
+     * A flow rather than a call, because the answer changes while the map is
+     * up — granted from the button, or from the Android settings while the
+     * application was away — and the following has to start on that answer.
+     * Asking again on every return to the screen would mean subscribing again
+     * on every return, and stacking one subscription per visit.
+     */
+    private val locationPermitted = MutableStateFlow(false)
 
     /**
      * Requests the location permissions, and never insists.
@@ -130,7 +139,7 @@ class MapFragment : Fragment() {
             locateMe()
             // Only now may the point start following: before this answer there
             // was nothing to follow it with (SPEC §10).
-            followUserPosition()
+            locationPermitted.value = true
         } else {
             showMessage(R.string.map_location_denied)
         }
@@ -601,24 +610,26 @@ class MapFragment : Fragment() {
      * further on; the framing stays theirs, and "locate me" is what brings it
      * back to the point.
      *
-     * Only if the permission is already granted: opening the map asks for
-     * nothing, and a user who has refused keeps a map without a point rather
-     * than a second prompt (SPEC §10). The permission being granted later, from
-     * the button, is what starts the following then.
+     * Only if the permission is granted: opening the map asks for nothing, and
+     * a user who has refused keeps a map without a point rather than a second
+     * prompt (SPEC §10). The permission granted later — from the button, or
+     * from the Android settings — opens the gate, and the following starts
+     * there and then.
      *
-     * The subscription follows the screen — `repeatOnLifecycle` drops it as
-     * soon as the map is no longer displayed, so nothing listens to the
-     * satellites in the background — and the position is written nowhere
-     * (SPEC §2, C3).
+     * Subscribed once for the life of the view, and following the screen —
+     * `repeatOnLifecycle` drops it as soon as the map is no longer displayed,
+     * so nothing listens to the satellites in the background — and the position
+     * is written nowhere (SPEC §2, C3).
      */
     private fun followUserPosition() {
-        if (following?.isActive == true) return
-        if (!container.deviceLocation.isPermitted()) return
-        following = viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                container.deviceLocation.positions().collect { position ->
-                    lastKnownPosition = position
-                    userPositionSource?.setGeoJson(UserPositionMarker.featureFor(position))
+                locationPermitted.collectLatest { permitted ->
+                    if (!permitted) return@collectLatest
+                    container.deviceLocation.positions().collect { position ->
+                        lastKnownPosition = position
+                        userPositionSource?.setGeoJson(UserPositionMarker.featureFor(position))
+                    }
                 }
             }
         }
@@ -837,10 +848,10 @@ class MapFragment : Fragment() {
         super.onResume()
         binding?.map?.onResume()
         loadTilesIfInstalled()
-        // The permission may have been granted from the Android settings while
-        // the application was away: the point then starts following on the way
-        // back, without a detour through the button.
-        followUserPosition()
+        // The permission may have been granted, or withdrawn, from the Android
+        // settings while the application was away: the point starts or stops
+        // following on the way back, without a detour through the button.
+        locationPermitted.value = container.deviceLocation.isPermitted()
     }
 
     override fun onPause() {
@@ -876,7 +887,6 @@ class MapFragment : Fragment() {
         stationSource = null
         pickedPlaceSource = null
         userPositionSource = null
-        following = null
         mapLibreMap = null
         styleLoaded = false
         binding = null
