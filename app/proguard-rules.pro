@@ -34,6 +34,14 @@
     public <init>(android.content.Context, android.util.AttributeSet);
 }
 
+# BRouter reads its own version out of its package, in a static initialiser:
+# `OsmTrack.class.getPackage().getImplementationVersion()`. R8 moves every
+# class into the root package, where Android's `getPackage()` answers null —
+# so that initialiser throws, and with it every route computation, in the
+# release build alone. Keeping the package name is enough; the classes
+# themselves stay renamed and shrunk.
+-keeppackagenames btools.**
+
 # OkHttp references optional classes absent from Android; these warnings are
 # expected and of no consequence.
 -dontwarn okhttp3.internal.platform.**
