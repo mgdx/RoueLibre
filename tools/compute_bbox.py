@@ -278,11 +278,18 @@ def main() -> int:
         return 0
 
     config.document["boundingBox"]["marginMeters"] = margin
-    config.update_bounding_box(
+    centre_moved = config.update_bounding_box(
         reference_box,
         station_count=len(stations),
         generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     )
+    if centre_moved:
+        opening = config.document["map"]
+        print(
+            f"Opening centre moved  : {opening['defaultCenterLatitude']:.6f}, "
+            f"{opening['defaultCenterLongitude']:.6f} — the former one fell "
+            "outside the new box"
+        )
     config.save()
     print(f"\nWritten to {config.path}")
     return 0

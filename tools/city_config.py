@@ -166,8 +166,25 @@ class CityConfig:
 
     def update_bounding_box(
         self, box: BoundingBox, station_count: int, generated_at: str
-    ) -> None:
-        """Record a freshly computed bounding box, preserving the comments."""
+    ) -> bool:
+        """Record a freshly computed bounding box, preserving the comments.
+
+        The opening centre follows the box when the box leaves it behind. A
+        recomputation does not only widen the rectangle: dropping a stray
+        station, or a network that retreats from an outlying town, moves an edge
+        inwards, and VélôToulouse showed what that costs — one station shed
+        26 km west of the others took the western edge with it, and the centre
+        stayed where the old rectangle used to be, outside the new one. The map
+        then opens on an area holding no station at all.
+
+        A centre still inside the box is left alone: the first cities served
+        have theirs set on the city centre rather than on the middle of the
+        rectangle, and that is a deliberate choice this must not undo.
+
+        Returns:
+            whether the opening centre had to be moved, so the caller can say
+            so in its log rather than change the map in silence.
+        """
         stored = self.document["boundingBox"]
         stored["generatedAt"] = generated_at
         stored["stationCount"] = station_count
@@ -175,3 +192,12 @@ class CityConfig:
         stored["west"] = round(box.west, 6)
         stored["north"] = round(box.north, 6)
         stored["east"] = round(box.east, 6)
+
+        opening = self.document["map"]
+        if box.contains(
+            opening["defaultCenterLatitude"], opening["defaultCenterLongitude"]
+        ):
+            return False
+        opening["defaultCenterLatitude"] = round((box.south + box.north) / 2, 6)
+        opening["defaultCenterLongitude"] = round((box.west + box.east) / 2, 6)
+        return True

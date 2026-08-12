@@ -65,6 +65,23 @@ def describe(config_path: Path, data_dir: Path) -> dict:
                 f"tools/compute_bbox.py --config {config_path} first"
             )
 
+    centre_latitude = document["map"]["defaultCenterLatitude"]
+    centre_longitude = document["map"]["defaultCenterLongitude"]
+    # The catalogue is what proposes a city and frames its map before anything
+    # is downloaded. An opening centre outside its own box opens on an area the
+    # tiles do not cover, and it is a symptom rather than a typo: the box was
+    # recomputed and shrank past a centre nothing moved. Refusing to publish it
+    # is what turns that into a fixable error instead of a blank map.
+    if not (
+        box["south"] <= centre_latitude <= box["north"]
+        and box["west"] <= centre_longitude <= box["east"]
+    ):
+        raise CatalogueError(
+            f"{config_path.name}: opening centre {centre_latitude}, "
+            f"{centre_longitude} lies outside the box — re-run "
+            f"tools/compute_bbox.py --config {config_path}"
+        )
+
     manifest_path = data_dir / network["id"] / "manifest.json"
     size_bytes = None
     release_tag = None
@@ -91,8 +108,8 @@ def describe(config_path: Path, data_dir: Path) -> dict:
             "south": box["south"], "west": box["west"],
             "north": box["north"], "east": box["east"],
         },
-        "centreLatitude": document["map"]["defaultCenterLatitude"],
-        "centreLongitude": document["map"]["defaultCenterLongitude"],
+        "centreLatitude": centre_latitude,
+        "centreLongitude": centre_longitude,
         "gbfsDiscoveryUrl": document["gbfs"]["discoveryUrl"],
         "manifestUrl": document["dataRelease"]["manifestUrl"],
         "dataSizeBytes": size_bytes,
