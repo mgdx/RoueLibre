@@ -144,7 +144,11 @@ def parse_house_number(raw_number: str, raw_suffix: str) -> tuple[int, str] | No
     information than the street itself.
     """
     raw_number = raw_number.strip()
-    if not raw_number.isdigit():
+    # isdecimal, not isdigit: the latter answers true for characters int()
+    # refuses — the superscripts ² and ³ among them, which Karlsruhe writes in
+    # its addresses. Everything isdecimal accepts, int() parses, including the
+    # Arabic-Indic digits an address base outside Europe may hold.
+    if not raw_number.isdecimal():
         return None
     number = int(raw_number)
     if number <= 0:
@@ -516,7 +520,11 @@ def split_house_number(raw: str) -> tuple[str, str]:
     raw = raw.strip()
     digits = ""
     for character in raw:
-        if not character.isdigit():
+        # isdecimal rather than isdigit, or "23²" — a real Karlsruhe address —
+        # has its superscript counted as part of the number and int() then
+        # refuses the whole thing, taking the city's index down with it. Read
+        # this way the ² becomes what it is, a repetition mark.
+        if not character.isdecimal():
             break
         digits += character
     return digits, raw[len(digits):].strip(" -/").lower()

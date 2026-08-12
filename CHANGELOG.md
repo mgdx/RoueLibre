@@ -31,6 +31,17 @@ also records what has no visible effect.
   when the launcher recolours it. The SVG sources are kept in `art/`, with
   the note on how they map onto the adaptive canvas.
 
+### Fixed
+
+- **A superscript in a house number no longer costs a city its index.**
+  `tools/build_address_index.py` read the leading digits of an OpenStreetMap
+  house number with `str.isdigit()`, which answers true for `²` and `³` —
+  characters `int()` then refuses. Karlsruhe writes "23²", so the whole
+  generation of that city stopped there. Read with `str.isdecimal()` instead,
+  the superscript becomes what it is, a repetition mark beside the number 23,
+  and the Arabic-Indic digits an address base outside Europe may hold keep
+  working, since everything `isdecimal` accepts `int()` parses.
+
 ### Removed
 
 - **The pick-up and drop-off time**, setting and allowance both (SPEC §6,
