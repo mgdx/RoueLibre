@@ -211,7 +211,7 @@ This is the application's business core. To be implemented in an isolated, testa
 - A station with a single bike can empty while you walk to it. Apply a **risk penalty** that grows as availability falls: a station with 1 bike is less attractive than a station with 8, even slightly further away. Same at the arrival end for free docks.
 - Always show the number of bikes or docks of the chosen station, so the user can judge for themselves.
 - If the bike journey is slower than walking straight there, **say so** and offer the pedestrian route.
-- The number of route computations (N × M + walking legs) must stay bounded: aim for a result in **under 3 seconds** on a mid-range device, computed off the main thread and cancellable.
+- The number of route computations (N × M + walking legs) must stay bounded, computed off the main thread and cancellable. There is **no fixed deadline on the answer**: the earlier one of 3 seconds was dropped on 12 August 2026, because it was held by cutting every leg off at 5 seconds — and a journey right across a conurbation, whose bike leg alone takes longer than that on a phone, was then reported as having no route at all. A wrong answer in three seconds is worth less than a right one in thirty. What remains is a per-leg limit set by the slowest device we mean to serve rather than the fastest (1 min, see `OfflineRouter`), and an interface that says it is working for as long as it takes.
 
 ## 7. Screens
 
@@ -377,7 +377,7 @@ Every criterion must be verifiable:
 1. The application installs and works on a device without Google services.
 2. Stations appear on the map with availability consistent with the official site.
 3. **In airplane mode**, once the data is downloaded: the map displays, address search works, a complete journey computes. Only availability is frozen at the last known state, explicitly marked as stale. No blocking error.
-4. A journey between two points of the served area returns a walk → bike → walk trip in under 3 seconds.
+4. A journey between two points of the served area returns a walk → bike → walk trip — including between two opposite ends of it, where the bike leg alone runs to some thirty kilometres.
 5. The proposed departure station always has at least 1 bike; the arrival station at least 1 free dock.
 6. When no nearby station has a bike, the application says so explicitly instead of proposing an impossible journey.
 7. In ordinary use, **the only network request that goes out is the GBFS feed** — to be verified with a firewall or a traffic capture. Data downloads happen only on first launch or on an explicit user action.

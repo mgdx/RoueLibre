@@ -32,8 +32,8 @@ import kotlin.time.Duration.Companion.minutes
  *   could not trace, or to compute a pair whose lower bound still beats the
  *   best journey found — leaving that pair unexamined could mean returning a
  *   second-best. As many as the first wave: the worst case doubles but stays
- *   bounded, and together the two budgets are what hold the response time
- *   required by SPEC §6.
+ *   bounded, and together the two budgets are what keep the wait required by
+ *   SPEC §6 within reason — twelve legs, never the twenty-five.
  * @property directWalkThresholdMetres the straight-line distance beyond which
  *   the direct walk is no longer computed up front. Three kilometres: on foot
  *   that is already three quarters of an hour, where the same trip by bike

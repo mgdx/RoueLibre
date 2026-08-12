@@ -15,10 +15,12 @@ import io.github.mgdx.rouelibre.ui.prefersReducedMotion
 /**
  * A bike crossing the screen while the journey is being worked out.
  *
- * The wait is short — SPEC §6 budgets three seconds — but it is the only
- * moment the application makes anybody wait, and a spinner says nothing about
- * what is happening. The bike of the journey's stations crosses from one edge
- * to the other, comes back along a higher line, and goes round again for as
+ * The wait usually lasts a second or two, but a journey right across the
+ * conurbation runs to half a minute on an older phone (SPEC §6, which sets no
+ * deadline — which is exactly why the wait must be inhabited). It is the
+ * only moment the application makes anybody wait, and a spinner says nothing
+ * about what is happening. The bike of the journey's stations crosses from one
+ * edge to the other, comes back along a higher line, and goes round again for as
  * long as the computation runs: motion in the service of understanding, which
  * is the only kind SPEC §7 accepts.
  *

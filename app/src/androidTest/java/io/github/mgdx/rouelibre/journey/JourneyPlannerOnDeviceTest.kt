@@ -28,9 +28,9 @@ import kotlin.system.measureTimeMillis
  * Exercises the journey algorithm on the real graph, with the real stations.
  *
  * This is the only place acceptance criterion §11.4 can actually be verified:
- * "a journey between two points of the metropolis returns a walk → bike → walk
- * trip in under 3 seconds". The JVM tests of the algorithm use a fake engine
- * and say nothing about real computation time.
+ * that a journey between two points of the metropolis returns a walk → bike →
+ * walk trip. The JVM tests of the algorithm use a fake engine and say nothing
+ * about real computation time.
  *
  * The data are captures from 9 August 2026: 268 stations and their state.
  */
@@ -87,7 +87,7 @@ class JourneyPlannerOnDeviceTest {
     }
 
     @Test
-    fun composes_a_complete_journey_in_under_three_seconds() = runBlocking {
+    fun composes_a_complete_journey_without_the_wait_running_away() = runBlocking {
         // A first call primes the engine's caches; it is the second that
         // reflects what the user experiences, whose application will already
         // have drawn the map.
@@ -104,7 +104,7 @@ class JourneyPlannerOnDeviceTest {
         Log.i(TAG, "complete journey composed in $elapsed ms")
 
         assertTrue("no journey found: $plan", plan is JourneyPlan.Found)
-        assertTrue("too slow: $elapsed ms", elapsed < BUDGET_MILLIS)
+        assertTrue("the computation ran away: $elapsed ms", elapsed < RUNAWAY_MILLIS)
     }
 
     @Test
@@ -160,7 +160,14 @@ class JourneyPlannerOnDeviceTest {
         /** A network of the test's own, so as to erase no installed data. */
         const val TEST_CITY = "reseau-de-test"
 
-        /** The budget of SPEC §6, with an emulator's margin. */
-        const val BUDGET_MILLIS = 3_000L
+        /**
+         * A regression net, no longer a deadline.
+         *
+         * SPEC §6 dropped its three-second budget: the answer takes as long as
+         * the graph demands. This threshold only catches a computation that has
+         * run away — a wave of legs all timing out, a pruning that stopped
+         * pruning — on a trip of eight kilometres that takes a second or two.
+         */
+        const val RUNAWAY_MILLIS = 15_000L
     }
 }

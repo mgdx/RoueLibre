@@ -49,9 +49,10 @@ class OfflineRouter(
      * @param from the departure point.
      * @param to the arrival point.
      * @param mode on foot or by bike.
-     * @param timeoutMillis past this, the computation is abandoned. SPEC §6
-     *   aims for under three seconds for all the legs of a journey; a single
-     *   leg that drags on must hand back control.
+     * @param timeoutMillis past this, the computation is abandoned. It is a
+     *   safety net against a leg that never converges, not a response-time
+     *   budget: SPEC §6 asks that the number of computations be bounded, no
+     *   longer that the answer come within three seconds.
      */
     suspend fun route(
         from: Coordinates,
@@ -195,6 +196,20 @@ class OfflineRouter(
         const val PROFILE_SUFFIX = ".brf"
         const val RD5_SUFFIX = ".rd5"
         const val MICRODEGREES = 1_000_000.0
-        const val DEFAULT_TIMEOUT_MILLIS = 5_000L
+        /**
+         * How long a single leg may take before it is abandoned.
+         *
+         * One minute — a safety net against a leg that never converges, not a
+         * response-time budget. The earlier five seconds cut off legs that were
+         * merely long: a twenty-six-kilometre ride across the Paris
+         * conurbation, which the engine traces in two seconds on a desktop,
+         * still had not finished after ten on a Fairphone 3 computing six of
+         * them at once — and every one of them being cut short left the user
+         * with "no route", accusing the map of a hole it does not have. The
+         * limit must be set by the slowest device we mean to serve, not by the
+         * fastest; a wait the user can see through is worth more than a wrong
+         * answer given quickly.
+         */
+        const val DEFAULT_TIMEOUT_MILLIS = 60_000L
     }
 }

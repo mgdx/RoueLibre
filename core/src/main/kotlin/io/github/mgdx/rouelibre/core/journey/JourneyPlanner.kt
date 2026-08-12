@@ -24,12 +24,14 @@ import kotlin.time.Duration.Companion.seconds
  * the departure point may hold a single bike, or force a detour at the far end;
  * it is the whole pair that must be optimised.
  *
- * ## Staying under three seconds
+ * ## Keeping the wait bearable
  *
  * Five departure stations and five arrival stations make twenty-five bike legs
  * to evaluate. Measured on the Lille graph, a ten-kilometre leg takes four
- * tenths of a second: computing them all would take ten seconds, far beyond the
- * budget of SPEC §6.
+ * tenths of a second: computing them all would take ten seconds, and a leg
+ * across the Paris conurbation costs several times that. SPEC §6 sets no
+ * deadline on the answer, but it does require the number of computations to
+ * stay bounded — nobody watches a bike go round for two minutes.
  *
  * The algorithm goes about it in two steps.
  *
@@ -44,9 +46,9 @@ import kotlin.time.Duration.Companion.seconds
  * twenty-five pairs' cost.
  *
  * It then computes them **in parallel**. Those six legs are independent, and a
- * phone has several cores; chaining them would only add up their durations.
- * Measured on the emulator, chaining took 2.4 s against the 3 s budget of
- * SPEC §6 — a margin that would not have survived a mid-range device.
+ * phone has several cores; chaining them would only add up their durations —
+ * measured on the emulator, chaining six short legs already took 2.4 s, and
+ * long ones would turn that into a minute.
  *
  * @property router access to the routing engine.
  * @property settings the algorithm's settings.
