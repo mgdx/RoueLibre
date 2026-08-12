@@ -7,9 +7,7 @@ import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
 import io.github.mgdx.rouelibre.core.journey.JourneyPlanner
-import io.github.mgdx.rouelibre.core.journey.JourneySettings
 import io.github.mgdx.rouelibre.core.journey.Router
-import io.github.mgdx.rouelibre.data.AppPreferences
 import io.github.mgdx.rouelibre.data.StationRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +16,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
 
 /**
  * The state of the journey result screen.
@@ -51,7 +48,6 @@ data class JourneyUiState(
 class JourneyViewModel(
     private val router: Router,
     private val repository: StationRepository,
-    private val preferences: AppPreferences,
     origin: Coordinates,
     destination: Coordinates,
 ) : ViewModel() {
@@ -108,17 +104,7 @@ class JourneyViewModel(
                 }
                 return@launch
             }
-            // The fixed handling times are re-read on every computation:
-            // changing them in the settings must show on the next recompute,
-            // without restarting the application (SPEC §7.6).
-            val handling = preferences.handlingTimes.first()
-            val planner = JourneyPlanner(
-                router,
-                JourneySettings(
-                    pickupTime = handling.pickupSeconds.seconds,
-                    dropoffTime = handling.dropoffSeconds.seconds,
-                ),
-            )
+            val planner = JourneyPlanner(router)
             val plan = planner.plan(origin, destination, stations)
             mutableState.update {
                 it.copy(plan = plan, isComputing = false, hasStations = true)
@@ -130,7 +116,6 @@ class JourneyViewModel(
     class Factory(
         private val router: Router,
         private val repository: StationRepository,
-        private val preferences: AppPreferences,
         private val origin: Coordinates,
         private val destination: Coordinates,
     ) : ViewModelProvider.Factory {
@@ -139,7 +124,7 @@ class JourneyViewModel(
             require(modelClass.isAssignableFrom(JourneyViewModel::class.java)) {
                 "unexpected model: ${modelClass.name}"
             }
-            return JourneyViewModel(router, repository, preferences, origin, destination) as T
+            return JourneyViewModel(router, repository, origin, destination) as T
         }
     }
 }

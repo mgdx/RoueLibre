@@ -13,11 +13,9 @@ import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.data.AppTheme
 import io.github.mgdx.rouelibre.databinding.FragmentSettingsBinding
-import io.github.mgdx.rouelibre.databinding.ItemDurationSettingBinding
 import io.github.mgdx.rouelibre.ui.about.AboutFragment
 import io.github.mgdx.rouelibre.ui.city.CityFragment
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -64,7 +62,6 @@ class SettingsFragment : Fragment() {
         views.openAbout.setOnClickListener { show(AboutFragment()) }
 
         setUpTheme(views)
-        setUpHandlingTimes(views)
         setUpSources(views)
     }
 
@@ -112,47 +109,6 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private fun setUpHandlingTimes(views: FragmentSettingsBinding) {
-        views.pickup.label.setText(R.string.settings_pickup)
-        views.dropoff.label.setText(R.string.settings_dropoff)
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                preferences.handlingTimes.collect { times ->
-                    showMinutes(binding?.pickup, times.pickupSeconds)
-                    showMinutes(binding?.dropoff, times.dropoffSeconds)
-                }
-            }
-        }
-
-        views.pickup.decrease.setOnClickListener { changePickup(-STEP_SECONDS) }
-        views.pickup.increase.setOnClickListener { changePickup(+STEP_SECONDS) }
-        views.dropoff.decrease.setOnClickListener { changeDropoff(-STEP_SECONDS) }
-        views.dropoff.increase.setOnClickListener { changeDropoff(+STEP_SECONDS) }
-    }
-
-    private fun showMinutes(row: ItemDurationSettingBinding?, seconds: Int) {
-        row?.value?.text = getString(R.string.duration_minutes, seconds / SECONDS_PER_MINUTE)
-    }
-
-    private fun changePickup(delta: Int) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            val current = preferences.handlingTimes.first()
-            preferences.setHandlingTimes(
-                current.copy(pickupSeconds = current.pickupSeconds + delta),
-            )
-        }
-    }
-
-    private fun changeDropoff(delta: Int) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            val current = preferences.handlingTimes.first()
-            preferences.setHandlingTimes(
-                current.copy(dropoffSeconds = current.dropoffSeconds + delta),
-            )
-        }
-    }
-
     /**
      * The two source addresses.
      *
@@ -194,8 +150,4 @@ class SettingsFragment : Fragment() {
             .commit()
     }
 
-    private companion object {
-        const val SECONDS_PER_MINUTE = 60
-        const val STEP_SECONDS = 60
-    }
 }

@@ -14,7 +14,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import kotlin.math.roundToInt
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -255,8 +254,8 @@ class JourneyPlannerTest {
 
     @Test
     fun `reports that walking is faster on a very short journey`() = runTest {
-        // Two hundred metres to cover, with three minutes of fixed handling:
-        // taking a bike makes no sense, and SPEC §6 requires saying so.
+        // Two hundred metres to cover: fetching a bike costs two detours on
+        // foot for a ride of a few seconds, and SPEC §6 requires saying so.
         val closeDestination = at(0.0, 200.0)
         val stations = listOf(
             station("depart", at(0.0, 150.0)),
@@ -368,12 +367,6 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `the default allowances are those of the specification`() {
-        // SPEC §6: two minutes to take a bike, one to return it.
-        assertEquals(3.minutes, JourneySettings().handlingTime)
-    }
-
-    @Test
     fun `the announced time excludes the risk penalty`() = runTest {
         // The penalty serves to rank, never to be announced: the user would
         // see a duration they will not experience.
@@ -393,17 +386,22 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `the pick-up and drop-off allowances are counted`() = runTest {
-        val settings = JourneySettings(pickupTime = 3.minutes, dropoffTime = 1.minutes)
+    fun `the announced time is the three legs and nothing else`() = runTest {
+        // No fixed allowance is added any more (SPEC §6): the time shown is
+        // the one the routing engine traced, walk, ride and walk.
         val stations = listOf(
             station("depart", at(0.0, 100.0)),
             station("arrivee", at(0.0, 3900.0)),
         )
-        val planner = JourneyPlanner(FakeRouter(), settings)
+        val planner = JourneyPlanner(FakeRouter())
 
         val plan = planner.plan(origin, destination, stations) as JourneyPlan.Found
 
-        assertEquals(4.minutes, plan.best.handlingTime)
+        val best = plan.best
+        assertEquals(
+            best.walkToStation.duration + best.ride.duration + best.walkToDestination.duration,
+            best.travelTime,
+        )
     }
 
     @Test

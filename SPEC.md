@@ -203,7 +203,7 @@ This is the application's business core. To be implemented in an isolated, testa
 1. Select the **N candidate departure stations** (N = 5 by default) among those nearest the departure point with `num_bikes_available ≥ 1` and in service.
 2. Select the **M candidate arrival stations** (M = 5 by default) among those nearest the arrival point with `num_docks_available ≥ 1` and in service.
 3. For every (departure, arrival) pair, compute: walking time to the departure station + biking time between stations + walking time to the destination.
-4. Add a **fixed time for taking and returning the bike**, configurable: 2 min to take one, 1 min to return it. The two gestures are not the same — taking means finding a working bike, unlocking it and adjusting the saddle; returning means pushing it into a dock and waiting for the beep.
+4. **No fixed allowance for taking or returning the bike.** Until 12 August 2026 a configurable pick-up and drop-off time — 2 min and 1 min by default — was added to every journey; it was dropped on that date, setting included. Being the same constant on every pair, it never decided which pair won: it shifted every total by the same amount, and what it really did was ask the user to tune a figure they had no way of measuring. Two consequences are accepted: the announced time is now the one the routing engine traced and nothing else, and the bike wins the comparison with walking on trips slightly shorter than before, since it no longer carries three minutes of standing still.
 5. Keep the pair with the smallest total time, and offer **that one alone**. The application proposes a single journey, the one it has proved best. A list of runner-up pairs asked the user to arbitrate a choice the risk penalty of the rules below has already made for them, on figures they cannot weigh better than the algorithm: it was a way of not deciding. What the interface owes them instead is the availability of the stations chosen, so they can judge the risk they are taking (see below).
 
 **Reliability — important rules:**
@@ -286,7 +286,7 @@ A list of the stations marked as favourites, with their live availability. Reord
 
 ### 7.6 Settings
 
-GBFS feed URL, tile source, routing data management, fixed pick-up/drop-off times, light/dark/system theme.
+GBFS feed URL, tile source, routing data management, light/dark/system theme.
 
 ### 7.7 About
 

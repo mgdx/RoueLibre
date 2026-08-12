@@ -139,7 +139,6 @@ class JourneyResultFragment : Fragment() {
         JourneyViewModel.Factory(
             router = container.journeyRouter,
             repository = container.stationRepository,
-            preferences = container.preferences,
             origin = origin.position,
             destination = destination.position,
         )

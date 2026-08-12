@@ -33,6 +33,15 @@ also records what has no visible effect.
 
 ### Removed
 
+- **The pick-up and drop-off time**, setting and allowance both (SPEC §6,
+  §7.6). The same three minutes were added to every pair, so they never
+  decided which one won; they only inflated the time announced and asked the
+  user to tune a figure they could not measure. The journey now announces
+  what the routing engine traced, walk, ride and walk. Two effects follow:
+  every journey reads about three minutes shorter than before, and the bike
+  wins against walking on slightly shorter trips. The stored values are left
+  on disk, unread — nothing is written to remove them.
+
 - The ten bitmap launcher icons of `mipmap-*dpi`, 48 kB no device could
   reach: with `minSdk` 26 the adaptive icon of `mipmap-anydpi` answers at
   every density, and the grid drawn as `ic_launcher_background` went with

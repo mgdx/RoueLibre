@@ -33,7 +33,6 @@ public interface Router {
  * @property ride the bike leg between the two stations.
  * @property walkToDestination the walk from the arrival station to the
  *   destination.
- * @property handlingTime the fixed pick-up and drop-off time.
  * @property riskPenalty the reliability penalty, expressed in time. It serves
  *   to rank the options, never to be announced as a duration: the time shown to
  *   the user is [travelTime].
@@ -46,13 +45,11 @@ public data class JourneyOption(
     public val walkToStation: RouteLeg,
     public val ride: RouteLeg,
     public val walkToDestination: RouteLeg,
-    public val handlingTime: Duration,
     public val riskPenalty: Duration,
 ) {
-    /** The duration actually expected, fixed handling included, penalty excluded. */
+    /** The duration actually expected, penalty excluded: the three legs, and nothing else. */
     public val travelTime: Duration
-        get() = walkToStation.duration + ride.duration +
-            walkToDestination.duration + handlingTime
+        get() = walkToStation.duration + ride.duration + walkToDestination.duration
 
     /** The duration used for ranking: the expected time, raised by the risk. */
     public val rankingTime: Duration

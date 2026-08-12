@@ -211,8 +211,7 @@ public class JourneyPlanner(
         val asTheCrowFlies = departure.station.position
             .distanceInMetresTo(arrival.station.position)
         val fastestRide = (asTheCrowFlies / OPTIMISTIC_CYCLING_METRES_PER_SECOND).seconds
-        val travel = walkToStation.duration + fastestRide +
-            walkToDestination.duration + settings.handlingTime
+        val travel = walkToStation.duration + fastestRide + walkToDestination.duration
         return travel + riskOf(departure, arrival, walkToStation.duration, fastestRide)
     }
 
@@ -293,7 +292,6 @@ public class JourneyPlanner(
                     walkToStation = pair.walkToStation,
                     ride = ride,
                     walkToDestination = pair.walkToDestination,
-                    handlingTime = settings.handlingTime,
                     riskPenalty = riskOf(
                         pair.departure,
                         pair.arrival,
@@ -312,7 +310,7 @@ public class JourneyPlanner(
      *
      * At the departure end, the risk is finding the station empty after the
      * access walk. At the arrival end, finding it full — and the exposure is
-     * longer, since one gets there after the walk, the pick-up and the ride.
+     * longer, since one gets there after the walk and the ride.
      */
     private fun riskOf(
         departure: Candidate,
@@ -327,7 +325,7 @@ public class JourneyPlanner(
         )
         val arrivalRisk = availabilityRiskPenalty(
             count = arrival.count,
-            exposure = walkToStation + settings.pickupTime + ride,
+            exposure = walkToStation + ride,
             settings = settings,
         )
         return departureRisk + arrivalRisk

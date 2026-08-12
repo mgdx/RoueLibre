@@ -18,10 +18,9 @@ import kotlin.time.Duration.Companion.minutes
  *   end, for the same reasons.
  * @property maxWalkToStationMetres the distance beyond which a station stops
  *   being a candidate. Twelve hundred metres, about a quarter of an hour on
- *   foot: past that, the access walk and the three minutes of fixed handling
- *   swallow everything the bike could have saved. Without this bound the
- *   algorithm serenely proposes walking four kilometres to fetch a bike, for
- *   want of anything better.
+ *   foot: past that, the access walk swallows everything the bike could have
+ *   saved. Without this bound the algorithm serenely proposes walking four
+ *   kilometres to fetch a bike, for want of anything better.
  * @property maxRideEvaluations how many bike legs the first wave computes,
  *   taken from the top of the ranking by lower bound. Pruning by lower bound
  *   does most of the work, but it depends on the geometry and guarantees
@@ -37,12 +36,10 @@ import kotlin.time.Duration.Companion.minutes
  * @property directWalkThresholdMetres the straight-line distance beyond which
  *   the direct walk is no longer computed up front. Three kilometres: on foot
  *   that is already three quarters of an hour, where the same trip by bike
- *   takes twenty minutes, fixed handling included. Walking can no longer win,
- *   and computing it cost a fifth of the time budget by itself. It is still
- *   computed, whatever the distance, when no bike journey is possible: it is
- *   then the only answer to give.
- * @property pickupTime fixed time to unlock and pull out a bike.
- * @property dropoffTime fixed time to rack and lock a bike.
+ *   takes twenty minutes. Walking can no longer win, and computing it cost a
+ *   fifth of the time budget by itself. It is still computed, whatever the
+ *   distance, when no bike journey is possible: it is then the only answer to
+ *   give.
  * @property fallbackPenalty the time lost if the chosen station turns out to be
  *   unusable on arrival: one has to reach the next one on foot. It converts a
  *   risk into minutes, and so makes it comparable to a detour.
@@ -57,8 +54,6 @@ public data class JourneySettings(
     public val maxRideEvaluations: Int = 6,
     public val extraRideEvaluations: Int = 6,
     public val directWalkThresholdMetres: Double = 3_000.0,
-    public val pickupTime: Duration = 2.minutes,
-    public val dropoffTime: Duration = 1.minutes,
     public val fallbackPenalty: Duration = 6.minutes,
     public val bikeTurnoverPerMinute: Double = 0.12,
 ) {
@@ -70,10 +65,6 @@ public data class JourneySettings(
         require(extraRideEvaluations >= 0) { "the extra ride budget cannot be negative" }
         require(bikeTurnoverPerMinute >= 0) { "a turnover rate cannot be negative" }
     }
-
-    /** Total fixed handling time, at both ends of the bike leg. */
-    public val handlingTime: Duration
-        get() = pickupTime + dropoffTime
 }
 
 /**

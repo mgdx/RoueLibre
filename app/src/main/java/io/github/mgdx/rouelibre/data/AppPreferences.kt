@@ -34,14 +34,6 @@ enum class AppTheme(val id: String) {
     }
 }
 
-/**
- * The journey's two fixed handling times, in seconds (SPEC §6).
- *
- * @property pickupSeconds time to take the bike at the departure station.
- * @property dropoffSeconds time to return it at the arrival station.
- */
-data class HandlingTimes(val pickupSeconds: Int, val dropoffSeconds: Int)
-
 /** No version seen: the application has never been launched. */
 const val NEVER_LAUNCHED: Int = 0
 
@@ -164,32 +156,6 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
     }
 
     /**
-     * Fixed times for taking and returning the bike (SPEC §6).
-     *
-     * Configurable because they depend on the person and on the station: two
-     * minutes for someone who knows the motion, more with a stubborn lock or a
-     * temperamental dock. They weigh on the choice of stations as much as on
-     * the time announced.
-     *
-     * The two sides do not default to the same value: returning a bike is one
-     * gesture, taking one is several.
-     */
-    val handlingTimes: Flow<HandlingTimes> = dataStore.data.map { preferences ->
-        HandlingTimes(
-            pickupSeconds = preferences[PICKUP_SECONDS] ?: DEFAULT_PICKUP_SECONDS,
-            dropoffSeconds = preferences[DROPOFF_SECONDS] ?: DEFAULT_DROPOFF_SECONDS,
-        )
-    }
-
-    /** Stores the fixed times, clamped to plausible values. */
-    suspend fun setHandlingTimes(times: HandlingTimes) {
-        dataStore.edit { preferences ->
-            preferences[PICKUP_SECONDS] = times.pickupSeconds.coerceIn(0, MAX_HANDLING_SECONDS)
-            preferences[DROPOFF_SECONDS] = times.dropoffSeconds.coerceIn(0, MAX_HANDLING_SECONDS)
-        }
-    }
-
-    /**
      * The city the application is serving right now.
      *
      * `null` until one has been chosen: the application assumes no default
@@ -271,25 +237,8 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
         /** No GBFS identifier contains a newline. */
         const val SEPARATOR = "\n"
         val THEME = stringPreferencesKey("theme")
-        val PICKUP_SECONDS = intPreferencesKey("pickup_seconds")
-        val DROPOFF_SECONDS = intPreferencesKey("dropoff_seconds")
         val DATA_MANIFEST_URL = stringPreferencesKey("data_manifest_url")
         val ACTIVE_CITY_ID = stringPreferencesKey("active_city_id")
         val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
-
-        /**
-         * Two minutes to take a bike (SPEC §6): finding one that works,
-         * unlocking it, adjusting the saddle.
-         */
-        const val DEFAULT_PICKUP_SECONDS = 120
-
-        /**
-         * One minute to return it (SPEC §6): rolling up to a free dock and
-         * pushing the bike in. Nothing to choose, nothing to adjust.
-         */
-        const val DEFAULT_DROPOFF_SECONDS = 60
-
-        /** A quarter of an hour to take a bike is no longer a fixed time. */
-        const val MAX_HANDLING_SECONDS = 900
     }
 }

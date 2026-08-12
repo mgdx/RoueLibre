@@ -117,35 +117,6 @@
                     android:text="@string/settings_theme_dark" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
-            <!-- Fixed handling times (SPEC §6). -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_l"
-                android:text="@string/settings_handling_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_xs"
-                android:text="@string/settings_handling_explanation"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
-
-            <include
-                android:id="@+id/pickup"
-                layout="@layout/item_duration_setting"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_s" />
-
-            <include
-                android:id="@+id/dropoff"
-                layout="@layout/item_duration_setting"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_xs" />
-
             <!-- Sources (SPEC §4.1, §4.4): the default host must never be a
                  single point of failure. -->
             <TextView
