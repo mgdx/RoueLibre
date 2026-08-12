@@ -2,9 +2,11 @@
 <!--
     Journey result (SPEC §7.4).
 
-    The map fills the top, the detail reads underneath: one first looks at where
-    one is going, then reads how long it takes. The whole thing scrolls, because
-    the step list and the alternatives do not always fit on screen.
+    The two ends stay at the top, where they were asked for and where they can
+    be corrected without going back. The map takes whatever room is left, and
+    the detail is anchored to the bottom edge: one reads the total time with the
+    thumb already on it, and the screen never shows a band of nothing under the
+    last button.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -25,14 +27,63 @@
         app:title="@string/journey_result_title"
         app:titleTextAppearance="@style/TextAppearance.RoueLibre.Title" />
 
+    <!-- The two ends, in the shape the search screen gave them: a press
+         reopens the address search, and the answer recomputes the journey. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/origin"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_s"
+        android:gravity="start|center_vertical"
+        android:minHeight="@dimen/touch_target_min"
+        app:layout_constraintEnd_toStartOf="@id/swap"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:text="12 bis Rue Nationale" />
+
+    <!-- No start margin here: this field's edges are those of the one above. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/destination"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_s"
+        android:gravity="start|center_vertical"
+        android:minHeight="@dimen/touch_target_min"
+        app:layout_constraintEnd_toEndOf="@id/origin"
+        app:layout_constraintStart_toStartOf="@id/origin"
+        app:layout_constraintTop_toBottomOf="@id/origin"
+        tools:text="Gare Lille Flandres" />
+
+    <!-- Origin / destination swap (SPEC §7.3), between the two fields and
+         to their right: the position says what the button exchanges. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/swap"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginStart="@dimen/space_s"
+        android:layout_marginEnd="@dimen/space_l"
+        android:contentDescription="@string/journey_swap"
+        app:icon="@drawable/ic_swap"
+        app:iconTint="@color/ink"
+        app:layout_constraintBottom_toBottomOf="@id/destination"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/origin" />
+
+    <!-- The map takes what the fields and the detail leave: no fixed ratio, so
+         a short detail widens the map instead of leaving a gap. -->
     <org.maplibre.android.maps.MapView
         android:id="@+id/map"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="H,3:2"
+        android:layout_marginTop="@dimen/space_s"
+        app:layout_constraintBottom_toTopOf="@id/detail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/destination" />
 
     <TextView
         android:id="@+id/attribution"
@@ -52,24 +103,61 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- Locate me, at the corner of the map the thumb reaches: it brings the
+         framing back onto the walker, as close as the tiles allow. The
+         permission is asked for here, at the moment it is understood
+         (SPEC §10). -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/locate_me"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_s"
+        android:contentDescription="@string/map_locate_me"
+        app:backgroundTint="@color/surface"
+        app:icon="@drawable/ic_my_location"
+        app:iconTint="@color/ink"
+        app:layout_constraintBottom_toTopOf="@id/attribution"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- How far up the detail may climb when it is long. Below it, the map
+         would no longer be a map. -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/detail_ceiling"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.45" />
+
+    <!--
+        The detail, laid against the bottom edge.
+
+        It is as tall as it needs to be and no taller — hence the wrap, held to
+        its constraints — and it is the bottom of the screen it hangs from, so
+        the last button sits where the thumb already is. Past the ceiling it
+        scrolls rather than eating the map.
+    -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/detail"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="?attr/colorSurface"
+        app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/map">
+        app:layout_constraintTop_toBottomOf="@id/detail_ceiling"
+        app:layout_constraintVertical_bias="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingStart="@dimen/space_l"
-            android:paddingTop="@dimen/space_l"
+            android:paddingTop="@dimen/space_m"
             android:paddingEnd="@dimen/space_l"
-            android:paddingBottom="@dimen/space_l">
+            android:paddingBottom="@dimen/space_m">
 
             <!-- The total time, the information one comes for. -->
             <TextView
@@ -109,7 +197,7 @@
                 android:id="@+id/steps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_l"
+                android:layout_marginTop="@dimen/space_m"
                 android:orientation="vertical" />
 
             <!-- The whole journey at a glance, distances under each stroke.
@@ -119,7 +207,7 @@
                 android:id="@+id/shape"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_l"
+                android:layout_marginTop="@dimen/space_m"
                 android:importantForAccessibility="no" />
 
             <com.google.android.material.button.MaterialButton
@@ -127,7 +215,7 @@
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/touch_target_min"
-                android:layout_marginTop="@dimen/space_l"
+                android:layout_marginTop="@dimen/space_m"
                 android:text="@string/journey_recompute" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
@@ -137,7 +225,9 @@
 
         Declared last so it covers the map and the detail: what is underneath
         belongs to the previous journey, or to none, and showing it half-built
-        under a spinner would be showing an answer that is not one yet.
+        under a spinner would be showing an answer that is not one yet. The two
+        fields stay clear of it: correcting a point is precisely what one does
+        while waiting.
     -->
     <LinearLayout
         android:id="@+id/computing"
@@ -151,7 +241,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/destination">
 
         <io.github.mgdx.rouelibre.ui.journey.ComputingBikeView
             android:id="@+id/computing_bike"

@@ -155,6 +155,27 @@ also records what has no visible effect.
 
 ### Changed
 
+- **The journey's two ends stay on the result screen, and can be corrected
+  there.** The fields of `SPEC.md` §7.3 and their swap button now head the
+  result: a mistaken address, a departure one would rather take from the other
+  end of the street, the way back — a press, and the journey is worked out
+  again, instead of a way back to the previous screen and everything filled in
+  a second time. The four ways of designating a point moved into a
+  `JourneyEndpointPicker` the two screens share, rather than being written
+  twice.
+
+- **The detail is laid against the bottom edge of the screen.** It was the top
+  of a scrolling area as tall as what was left, so a short journey left a band
+  of nothing between the recompute button and the edge of the screen. It now
+  hangs from the bottom, the map takes every pixel it leaves, and a detail too
+  long to fit scrolls inside itself rather than eating the map.
+
+- **A "locate me" button on the result's map.** Bottom right, where the thumb
+  is: it brings the framing down onto the walker at the closest zoom the tiles
+  allow, which is what tells the next street corner apart on a map framed on a
+  whole journey. It is the only thing on that screen asking for the location
+  permission, and only when pressed (`SPEC.md` §10).
+
 - **One journey, the one proved best.** The list of runner-up station pairs is
   gone, and with it the choice it handed back to the user: the risk penalty of
   `SPEC.md` §6 already weighs a well-stocked station against a nearer one, and
@@ -208,6 +229,14 @@ also records what has no visible effect.
   screen. `SPEC.md` §7.1 says so now.
 
 ### Fixed
+
+- **"My position" looked like it did nothing.** Choosing it closed the address
+  search and left the field on its old label for as long as the fix took — up
+  to the ten seconds `DeviceLocation` waits for one, indoors. Nothing said a
+  search was under way, so the press read as lost, and one pressed again. The
+  field now carries the wait ("Finding your position…") and goes back to what
+  it said, whether a point was found or the search failed — in which case the
+  message explaining it was already there, only nobody had waited for it.
 
 - **The point showing the user stayed where it was while the device moved on.**
   Two causes, both in `DeviceLocation`. Every provider is listened to at once,

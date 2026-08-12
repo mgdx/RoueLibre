@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.data.DatasetKind
@@ -18,12 +20,14 @@ import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
 import io.github.mgdx.rouelibre.core.journey.NoBikeJourney
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
+import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyResultBinding
 import io.github.mgdx.rouelibre.databinding.ItemJourneyStepBinding
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.formatDuration
 import io.github.mgdx.rouelibre.ui.map.MapStyleLoader
 import io.github.mgdx.rouelibre.ui.map.UserPositionMarker
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.maplibre.android.MapLibre
@@ -63,20 +67,46 @@ class JourneyResultFragment : Fragment() {
      */
     private var lastKnownPosition: Coordinates? = null
 
+    /** The subscription that moves the point, while the screen is displayed. */
+    private var following: Job? = null
+
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
 
-    /** Where the journey sets off from, as the screen was opened with it. */
-    private val origin: JourneyEndpoint
-        get() = checkNotNull(JourneyEndpoint.readFrom(arguments, ARGUMENT_ORIGIN)) {
-            "origin point missing"
-        }
+    /**
+     * Where the journey sets off from.
+     *
+     * The screen opens on the point it was given, and that point can be
+     * corrected here: a mistaken address is worth a press, not a way back.
+     */
+    private lateinit var origin: JourneyEndpoint
 
-    /** Where it goes. */
-    private val destination: JourneyEndpoint
-        get() = checkNotNull(JourneyEndpoint.readFrom(arguments, ARGUMENT_DESTINATION)) {
-            "destination point missing"
+    /** Where it goes, likewise correctable. */
+    private lateinit var destination: JourneyEndpoint
+
+    private val picker = JourneyEndpointPicker(
+        fragment = this,
+        onMessage = ::showMessage,
+        onPicked = ::acceptEndpoint,
+        onLocating = ::showLocating,
+    )
+
+    /**
+     * Requests the location permissions for the "locate me" button, and never
+     * insists: a refusal leaves the journey and its map whole (SPEC §10).
+     */
+    private val requestLocationPermission = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions(),
+    ) { granted ->
+        if (granted.values.any { it }) {
+            locateMe()
+            // Only now may the point start following: before this answer there
+            // was nothing to follow it with (SPEC §10).
+            followUserPosition()
+        } else {
+            showMessage(getString(R.string.map_location_denied))
         }
+    }
 
     private val viewModel: JourneyViewModel by viewModels {
         JourneyViewModel.Factory(
@@ -86,6 +116,26 @@ class JourneyResultFragment : Fragment() {
             origin = origin.position,
             destination = destination.position,
         )
+    }
+
+    /**
+     * Establishes the two ends before anything reads them.
+     *
+     * What the screen was opened with, unless it has been corrected since: a
+     * point changed here outlives a rotation, and it is that one the journey
+     * must be worked out between.
+     */
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        origin = JourneyEndpoint.readFrom(savedInstanceState, STATE_ORIGIN)
+            ?: checkNotNull(JourneyEndpoint.readFrom(arguments, ARGUMENT_ORIGIN)) {
+                "origin point missing"
+            }
+        destination = JourneyEndpoint.readFrom(savedInstanceState, STATE_DESTINATION)
+            ?: checkNotNull(JourneyEndpoint.readFrom(arguments, ARGUMENT_DESTINATION)) {
+                "destination point missing"
+            }
+        picker.readFrom(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -106,10 +156,16 @@ class JourneyResultFragment : Fragment() {
         views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
         views.toolbar.navigationContentDescription = getString(R.string.action_back)
         views.recompute.setOnClickListener { viewModel.compute() }
+        views.origin.setOnClickListener { picker.choose(true, destination.position) }
+        views.destination.setOnClickListener { picker.choose(false, origin.position) }
+        views.swap.setOnClickListener { swapEndpoints() }
+        views.locateMe.setOnClickListener { onLocateMeClicked() }
 
         views.map.onCreate(savedInstanceState)
         views.map.getMapAsync(::onMapReady)
 
+        picker.listen(viewLifecycleOwner)
+        showEndpoints()
         followUserPosition()
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -119,12 +175,61 @@ class JourneyResultFragment : Fragment() {
         }
     }
 
+    // ----------------------------------------------------------- the ends --
+
+    /**
+     * Takes a corrected end and asks for the journey between the new pair.
+     *
+     * Nothing is kept from the previous answer: the question has changed.
+     */
+    private fun acceptEndpoint(endpoint: JourneyEndpoint, isOrigin: Boolean) {
+        if (isOrigin) origin = endpoint else destination = endpoint
+        showEndpoints()
+        viewModel.planBetween(origin.position, destination.position)
+    }
+
+    /** Reverses the journey (SPEC §7.3): the way back is not the way there. */
+    private fun swapEndpoints() {
+        val previousOrigin = origin
+        origin = destination
+        destination = previousOrigin
+        showEndpoints()
+        viewModel.planBetween(origin.position, destination.position)
+    }
+
+    private fun showEndpoints() {
+        val views = binding ?: return
+        views.origin.text = origin.label
+        views.destination.text = destination.label
+    }
+
+    /**
+     * Shows, in the field itself, that the position is being looked for.
+     *
+     * The journey on screen is left alone meanwhile: it is still the answer to
+     * the question as it stands, and blanking it would say the opposite. The
+     * end of the wait restores what the field said, whether a point was found
+     * or not.
+     */
+    private fun showLocating(isOrigin: Boolean, searching: Boolean) {
+        val views = binding ?: return
+        if (!searching) {
+            showEndpoints()
+            return
+        }
+        val field = if (isOrigin) views.origin else views.destination
+        field.setText(R.string.journey_locating)
+    }
+
+    // ----------------------------------------------------------- the map --
+
     private fun onMapReady(map: MapLibreMap) {
         mapLibreMap = map
         val tiles = container.datasetStore.fileOf(DatasetKind.Tiles)
         map.uiSettings.isAttributionEnabled = false
         map.uiSettings.isLogoEnabled = false
         map.uiSettings.isRotateGesturesEnabled = false
+        limitZoom(map)
         // Without a base map the track is still drawn on an empty background:
         // less telling, but the route is computed and the detail reads.
         if (tiles == null) return
@@ -164,19 +269,98 @@ class JourneyResultFragment : Fragment() {
     }
 
     /**
+     * Caps how close the map may come, at the tiles' own limit.
+     *
+     * Past their maximum zoom MapLibre scales the last ones it has: one step is
+     * allowed, which lets "locate me" come right down onto the pavement without
+     * the labels turning to mush. The city is read from disk, so the cap
+     * arrives a moment after the map — before any gesture, in practice.
+     *
+     * The lower bound is left alone on purpose: a long journey has to be framed
+     * whole, however far out that takes the camera.
+     */
+    private fun limitZoom(map: MapLibreMap) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val city = container.activeCity() ?: return@launch
+            map.setMaxZoomPreference(city.map.maxZoom.toDouble() + 1)
+        }
+    }
+
+    /**
+     * Answers the "locate me" button.
+     *
+     * The three cases are told apart: no permission yet, location switched off,
+     * or a position to go and get. Only the first asks for anything, and asks
+     * once (SPEC §10).
+     */
+    private fun onLocateMeClicked() {
+        val location = container.deviceLocation
+        when {
+            !location.isPermitted() ->
+                requestLocationPermission.launch(DeviceLocation.PERMISSIONS)
+
+            !location.isAvailable() ->
+                showMessage(getString(R.string.map_location_unavailable))
+
+            else -> locateMe()
+        }
+    }
+
+    /**
+     * Brings the map down onto the walker, as close as the tiles allow.
+     *
+     * On this screen the map is small and framed on the whole journey: getting
+     * back to where one actually stands, at the closest zoom, is what tells the
+     * next street corner apart. The position frames the map and feeds the
+     * display source, and is written nowhere else (SPEC §2, C3).
+     */
+    private fun locateMe() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            // A first fix can take several seconds indoors. Disabling the
+            // button meanwhile avoids suggesting the press was lost.
+            binding?.locateMe?.isEnabled = false
+            val position = try {
+                container.deviceLocation.current()
+            } finally {
+                binding?.locateMe?.isEnabled = true
+            }
+            if (position == null) {
+                showMessage(getString(R.string.map_location_unavailable))
+                return@launch
+            }
+            lastKnownPosition = position
+            userPositionSource?.setGeoJson(UserPositionMarker.featureFor(position))
+            val map = mapLibreMap ?: return@launch
+            map.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(position.latitude, position.longitude),
+                    map.maxZoomLevel,
+                ),
+            )
+        }
+    }
+
+    private fun showMessage(message: String) {
+        val views = binding ?: return
+        Snackbar.make(views.root, message, Snackbar.LENGTH_LONG).show()
+    }
+
+    /**
      * Follows the position and moves the point on the map (SPEC §7.4).
      *
-     * Only if the permission has already been granted: this screen shows a
-     * journey, it is not the moment to ask for anything (SPEC §10). Without the
-     * permission, or with location switched off, no point is shown and nothing
-     * says otherwise.
+     * Only if the permission has already been granted: opening this screen asks
+     * for nothing (SPEC §10). Without the permission, or with location switched
+     * off, no point is shown and nothing says otherwise — and it is the "locate
+     * me" button, once answered, that starts the following.
      *
      * The subscription stops with the screen, and the position is written
      * nowhere: it lives in the display source, for as long as it is displayed
      * (SPEC §2, C3).
      */
     private fun followUserPosition() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        if (following?.isActive == true) return
+        if (!container.deviceLocation.isPermitted()) return
+        following = viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 container.deviceLocation.positions().collect { position ->
                     lastKnownPosition = position
@@ -408,6 +592,11 @@ class JourneyResultFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding?.map?.onSaveInstanceState(outState)
+        // The two ends as they now stand, which is not always how the screen
+        // was opened. They go no further than this bundle (SPEC §8).
+        origin.writeTo(outState, STATE_ORIGIN)
+        destination.writeTo(outState, STATE_DESTINATION)
+        picker.writeTo(outState)
     }
 
     override fun onLowMemory() {
@@ -417,6 +606,9 @@ class JourneyResultFragment : Fragment() {
 
     override fun onDestroyView() {
         binding?.map?.onDestroy()
+        // The subscription dies with the view's scope; the reference must go
+        // with it, or the next view would believe the point already followed.
+        following = null
         walkSource = null
         rideSource = null
         markerSource = null
@@ -430,6 +622,8 @@ class JourneyResultFragment : Fragment() {
     companion object {
         private const val ARGUMENT_ORIGIN = "origin"
         private const val ARGUMENT_DESTINATION = "destination"
+        private const val STATE_ORIGIN = "state-origin"
+        private const val STATE_DESTINATION = "state-destination"
 
         /** The margin around the track, in pixels, so it does not touch the edges. */
         private const val FRAME_PADDING_PIXELS = 80

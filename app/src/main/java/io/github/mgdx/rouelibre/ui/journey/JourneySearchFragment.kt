@@ -4,19 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
-import io.github.mgdx.rouelibre.RoueLibreApplication
-import io.github.mgdx.rouelibre.core.geo.Coordinates
-import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentJourneySearchBinding
-import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
-import io.github.mgdx.rouelibre.ui.address.SearchShortcut
-import io.github.mgdx.rouelibre.ui.map.MapFragment
-import kotlinx.coroutines.launch
 
 /**
  * Journey search: from where to where (SPEC §7.3).
@@ -35,23 +26,12 @@ class JourneySearchFragment : Fragment() {
     private var origin: JourneyEndpoint? = null
     private var destination: JourneyEndpoint? = null
 
-    /** The field the chosen way is to fill, for the length of the round trip. */
-    private var awaitingOrigin = true
-
-    private val container
-        get() = (requireActivity().application as RoueLibreApplication).container
-
-    private val requestLocationPermission = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions(),
-    ) { granted ->
-        if (granted.values.any { it }) {
-            useMyPosition()
-        } else {
-            // The refusal is not argued with: the other three ways of
-            // designating a point remain whole (SPEC §10).
-            showMessage(getString(R.string.map_location_denied))
-        }
-    }
+    private val picker = JourneyEndpointPicker(
+        fragment = this,
+        onMessage = ::showMessage,
+        onPicked = ::accept,
+        onLocating = ::showLocating,
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,7 +55,7 @@ class JourneySearchFragment : Fragment() {
         if (savedInstanceState != null) {
             origin = JourneyEndpoint.readFrom(savedInstanceState, STATE_ORIGIN)
             destination = JourneyEndpoint.readFrom(savedInstanceState, STATE_DESTINATION)
-            awaitingOrigin = savedInstanceState.getBoolean(STATE_AWAITING_ORIGIN, true)
+            picker.readFrom(savedInstanceState)
         } else {
             // A point received from elsewhere: from another application
             // (SPEC §7.8) or from a station just consulted (SPEC §7.2). Only
@@ -88,12 +68,12 @@ class JourneySearchFragment : Fragment() {
 
         views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
         views.toolbar.navigationContentDescription = getString(R.string.action_back)
-        views.origin.setOnClickListener { chooseEndpoint(isOrigin = true) }
-        views.destination.setOnClickListener { chooseEndpoint(isOrigin = false) }
+        views.origin.setOnClickListener { picker.choose(true, destination?.position) }
+        views.destination.setOnClickListener { picker.choose(false, origin?.position) }
         views.swap.setOnClickListener { swap() }
         views.compute.setOnClickListener { openResult() }
 
-        listenForChoices()
+        picker.listen(viewLifecycleOwner)
         showEndpoints()
     }
 
@@ -101,7 +81,7 @@ class JourneySearchFragment : Fragment() {
         super.onSaveInstanceState(outState)
         origin?.writeTo(outState, STATE_ORIGIN)
         destination?.writeTo(outState, STATE_DESTINATION)
-        outState.putBoolean(STATE_AWAITING_ORIGIN, awaitingOrigin)
+        picker.writeTo(outState)
     }
 
     override fun onDestroyView() {
@@ -109,114 +89,26 @@ class JourneySearchFragment : Fragment() {
         super.onDestroyView()
     }
 
-    /**
-     * Opens what fills a field (SPEC §7.3).
-     *
-     * Straight to the address search, without a menu of ways in between: one
-     * nearly always knows the address one is going to, and the three other ways
-     * — one's position first — head the result list, a press away.
-     */
-    private fun chooseEndpoint(isOrigin: Boolean) {
-        awaitingOrigin = isOrigin
-        openAddressSearch(isOrigin)
-    }
-
-    /**
-     * Collects what the designation screens return.
-     *
-     * Each returns a point under its own key; here is where they meet the field
-     * that was waiting for them.
-     */
-    private fun listenForChoices() {
-        parentFragmentManager.setFragmentResultListener(
-            AddressSearchFragment.SHORTCUT_REQUEST_KEY,
-            viewLifecycleOwner,
-        ) { _, result ->
-            when (result.getString(AddressSearchFragment.RESULT_SHORTCUT)) {
-                SearchShortcut.MyPosition.name -> askForMyPosition()
-                SearchShortcut.OnMap.name -> openMapPicker()
-                SearchShortcut.Favourite.name -> openFavourites()
-            }
-        }
-
-        parentFragmentManager.setFragmentResultListener(
-            AddressSearchFragment.REQUEST_KEY,
-            viewLifecycleOwner,
-        ) { _, result ->
-            accept(
-                JourneyEndpoint(
-                    label = result.getString(AddressSearchFragment.RESULT_LABEL).orEmpty(),
-                    position = Coordinates(
-                        result.getDouble(AddressSearchFragment.RESULT_LATITUDE),
-                        result.getDouble(AddressSearchFragment.RESULT_LONGITUDE),
-                    ),
-                ),
-            )
-        }
-
-        parentFragmentManager.setFragmentResultListener(
-            MapFragment.PICK_REQUEST_KEY,
-            viewLifecycleOwner,
-        ) { _, result ->
-            JourneyEndpoint.readFrom(result, MapFragment.PICK_RESULT_PREFIX)?.let(::accept)
-        }
-
-        parentFragmentManager.setFragmentResultListener(
-            FavouriteStationSheet.REQUEST_KEY,
-            viewLifecycleOwner,
-        ) { _, result ->
-            awaitingOrigin = result.getBoolean(FavouriteStationSheet.RESULT_IS_ORIGIN, true)
-            JourneyEndpoint.readFrom(result, FavouriteStationSheet.RESULT_PREFIX)?.let(::accept)
-        }
-    }
-
-    private fun accept(endpoint: JourneyEndpoint) {
-        if (awaitingOrigin) origin = endpoint else destination = endpoint
+    private fun accept(endpoint: JourneyEndpoint, isOrigin: Boolean) {
+        if (isOrigin) origin = endpoint else destination = endpoint
         showEndpoints()
     }
 
-    private fun askForMyPosition() {
-        if (container.deviceLocation.isPermitted()) {
-            useMyPosition()
-        } else {
-            requestLocationPermission.launch(DeviceLocation.PERMISSIONS)
-        }
-    }
-
-    private fun useMyPosition() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            val position = container.deviceLocation.current()
-            if (position == null) {
-                showMessage(getString(R.string.map_location_unavailable))
-                return@launch
-            }
-            accept(JourneyEndpoint(getString(R.string.journey_source_my_position), position))
-        }
-    }
-
     /**
-     * Opens the address search for the field being filled.
+     * Shows, in the field itself, that the position is being looked for.
      *
-     * The other end, when it is already known, ranks the results by proximity:
-     * looking for a destination, the streets near the departure point come
-     * first, and that is usually the right guess.
+     * The end of the wait restores what the field said: the point found
+     * overwrites it a moment later, and a failed search must not leave the
+     * screen claiming to be still searching.
      */
-    private fun openAddressSearch(isOrigin: Boolean) {
-        show(
-            AddressSearchFragment.forJourneyEndpoint(
-                isOrigin = isOrigin,
-                origin = if (isOrigin) destination?.position else origin?.position,
-            ),
-        )
-    }
-
-    private fun openMapPicker() {
-        show(MapFragment.forPicking())
-    }
-
-    private fun openFavourites() {
-        FavouriteStationSheet.newInstance(awaitingOrigin)
-            .show(parentFragmentManager, FavouriteStationSheet.TAG)
+    private fun showLocating(isOrigin: Boolean, searching: Boolean) {
+        val views = binding ?: return
+        if (!searching) {
+            showEndpoints()
+            return
+        }
+        val field = if (isOrigin) views.origin else views.destination
+        field.setText(R.string.journey_locating)
     }
 
     private fun swap() {
@@ -237,12 +129,8 @@ class JourneySearchFragment : Fragment() {
     private fun openResult() {
         val from = origin ?: return
         val to = destination ?: return
-        show(JourneyResultFragment.newInstance(from, to))
-    }
-
-    private fun show(fragment: Fragment) {
         parentFragmentManager.beginTransaction()
-            .replace(R.id.content, fragment)
+            .replace(R.id.content, JourneyResultFragment.newInstance(from, to))
             .addToBackStack(null)
             .commit()
     }
@@ -255,7 +143,6 @@ class JourneySearchFragment : Fragment() {
     companion object {
         private const val STATE_ORIGIN = "origin"
         private const val STATE_DESTINATION = "destination"
-        private const val STATE_AWAITING_ORIGIN = "awaited-field"
         private const val ARGUMENT_DESTINATION = "received-destination"
         private const val ARGUMENT_ORIGIN = "received-origin"
 

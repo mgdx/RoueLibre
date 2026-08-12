@@ -52,9 +52,13 @@ class JourneyViewModel(
     private val router: Router,
     private val repository: StationRepository,
     private val preferences: AppPreferences,
-    private val origin: Coordinates,
-    private val destination: Coordinates,
+    origin: Coordinates,
+    destination: Coordinates,
 ) : ViewModel() {
+
+    /** The two ends, as the result screen may correct them without going back. */
+    private var origin: Coordinates = origin
+    private var destination: Coordinates = destination
 
     private val mutableState = MutableStateFlow(JourneyUiState())
 
@@ -65,6 +69,20 @@ class JourneyViewModel(
     val state: StateFlow<JourneyUiState> = mutableState.asStateFlow()
 
     init {
+        compute()
+    }
+
+    /**
+     * Works the journey out again between two ends that have changed (SPEC §7.4).
+     *
+     * Correcting a point on the result screen is a new question, not a refresh:
+     * the previous answer is dropped and the computation starts over. Two ends
+     * identical to the current ones ask nothing, and cancel nothing.
+     */
+    fun planBetween(origin: Coordinates, destination: Coordinates) {
+        if (origin == this.origin && destination == this.destination) return
+        this.origin = origin
+        this.destination = destination
         compute()
     }
 

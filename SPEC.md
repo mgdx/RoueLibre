@@ -261,16 +261,20 @@ A sheet sliding up from the bottom: name, address, bikes available, free docks, 
 - Two fields: departure and arrival. Each accepts: my position, a favourite, a point picked on the map, an address.
 - A field **opens the address search directly**, without a menu of ways in between: one nearly always knows the address one is going to. The three other ways head the result list, where they stay whatever is typed — **my position first**, since that is what somebody setting off means by "from here".
 - Address search queries the **local index** described in §4.3. No network call, no suggestion sent to a third party, including while typing.
+- **"My position" says that it is looking.** A first fix takes up to ten seconds indoors, and the field itself carries the wait meanwhile: without it the screen comes back from the address search with nothing changed, which reads as a press that was lost. Found or not, the field goes back to what it said.
 - A swap button for departure and arrival.
 
 ### 7.4 Journey result
 
-- **While it is being worked out**, the screen shows the wait rather than an empty result: the bike of the stations crosses from one edge to the other, comes back along a higher line, and goes round again, under a sentence saying what is happening. A device asking for reduced animations gets the drawing still (§7).
+- **The two ends stay at the top**, in the fields and with the swap button of §7.3: a point is corrected here, without going back. Any change — a field refilled, the two swapped — asks for the journey again straight away.
+- **While it is being worked out**, the screen shows the wait rather than an empty result: the bike of the stations crosses from one edge to the other, comes back along a higher line, and goes round again, under a sentence saying what is happening. A device asking for reduced animations gets the drawing still (§7). The two fields stay clear of that wait: correcting a point is precisely what one does while it lasts.
 - Drawn on the map as three visually distinct legs: walk, bike, walk.
 - The journey's **four points** are marked: the two stations, and the two ends of the journey. Shape carries the meaning as much as colour: a station is a filled disc bearing a bike, an end of the journey an outlined disc bearing a walking figure — the drawing of the search screen's illustration, at marker size.
-- The **user's position** is shown and follows the device while the screen is open, **above every other marker**. Only if the permission is already granted: this screen shows a journey, it is not the moment to ask for one (§10).
+- The **user's position** is shown and follows the device while the screen is open, **above every other marker**. Nothing is requested when the screen opens: without the permission, no point, and nothing says otherwise (§10).
+- A **"locate me" button** at the bottom right of the map brings the framing down onto the walker, as close as the tiles allow. It is the one thing on this screen that asks for the location permission, and only when pressed — which is the moment the user has said what they want it for (§10).
 - Summary: total time, of which walking and biking, distance, departure station (with its bike count), arrival station (with its dock count).
 - List of steps, one line per leg.
+- **The detail is laid against the bottom edge**, and the map takes every pixel it leaves: the total time and the recompute button sit where the thumb already is, and a short journey widens the map instead of leaving a band of nothing under the last button. A long detail scrolls rather than eating the map.
 - The **shape of the journey** under them, in the drawing of the search screen — outlined disc bearing a walking figure at either end, filled disc bearing a bike at each station, dotted stroke for a walk and unbroken for the ride — with **the distance of each leg written under its stroke**. The steps read one at a time; this is the whole journey seen at once.
 - A recompute button (availability may have changed).
 
