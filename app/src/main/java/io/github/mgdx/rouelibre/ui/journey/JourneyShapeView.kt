@@ -12,20 +12,24 @@ import androidx.core.content.ContextCompat
 import io.github.mgdx.rouelibre.R
 
 /**
- * The shape of the journey being shown: walk, ride, walk, with its distances.
+ * The shape of the journey being shown: walk, ride, walk, timed and measured.
  *
  * The same drawing as the search screen's illustration — outlined disc bearing
  * a walking figure at either end, filled disc bearing a bike at each station,
  * dotted strokes for the walks and an unbroken one for the ride — except that
- * this one carries the journey actually computed, and writes under each stroke
- * how far it runs.
+ * this one carries the journey actually computed, and writes on each stroke how
+ * far it runs above and how long it takes below.
  *
- * It is the whole journey seen at once, where the step list underneath reads
- * one line at a time. The two say the same thing; that is why the drawing is
- * decorative for a screen reader, which reads the steps instead.
+ * The two lines are not interchangeable: it is the minutes one leaves the
+ * drawing with, so they sit on the side the reading goes on towards, and the
+ * distance labels its stroke from above.
+ *
+ * It is the whole journey seen at once, where the step list reads one line at a
+ * time. The two say the same thing; that is why the drawing is decorative for a
+ * screen reader, which reads the steps instead.
  *
  * Drawn by hand rather than assembled from views: four discs, three strokes and
- * three labels whose widths depend on one another are a layout pass to write in
+ * six labels whose widths depend on one another are a layout pass to write in
  * XML and six lines of arithmetic here.
  */
 class JourneyShapeView @JvmOverloads constructor(
@@ -38,9 +42,10 @@ class JourneyShapeView @JvmOverloads constructor(
      * One leg of the journey.
      *
      * @property isRide true for the bike leg, false for a walk.
+     * @property duration how long it takes, already put into words.
      * @property distance how far it runs, already put into words.
      */
-    data class Leg(val isRide: Boolean, val distance: String)
+    data class Leg(val isRide: Boolean, val duration: String, val distance: String)
 
     private val walkPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
@@ -71,6 +76,16 @@ class JourneyShapeView @JvmOverloads constructor(
         textSize = resources.getDimension(R.dimen.text_label)
     }
 
+    /**
+     * The times, in full ink.
+     *
+     * A journey is chosen on its minutes, not on its metres: the two lines are
+     * the same size, and the contrast alone says which of them one reads first.
+     */
+    private val durationPaint = Paint(textPaint).apply {
+        color = ContextCompat.getColor(context, R.color.ink)
+    }
+
     private val endpointMarker: Drawable? =
         AppCompatResources.getDrawable(context, R.drawable.marker_journey_endpoint)
 
@@ -92,10 +107,17 @@ class JourneyShapeView @JvmOverloads constructor(
             invalidate()
         }
 
+    /** The height of one line of label, whichever of the two paints draws it. */
+    private val lineHeight: Float
+        get() = textPaint.fontMetrics.let { it.descent - it.ascent }
+
+    /** Where the discs begin: one line of label, and its gap, sit above them. */
+    private val nodeTop: Int
+        get() = paddingTop + (lineHeight + labelGap).toInt()
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val metrics = textPaint.fontMetrics
-        val height = paddingTop + nodeSize + labelGap +
-            (metrics.descent - metrics.ascent).toInt() + paddingBottom
+        // A line above the discs and one below, each held off by the same gap.
+        val height = nodeTop + nodeSize + labelGap + lineHeight.toInt() + paddingBottom
         setMeasuredDimension(
             resolveSize(suggestedMinimumWidth, widthMeasureSpec),
             resolveSize(height, heightMeasureSpec),
@@ -110,8 +132,13 @@ class JourneyShapeView @JvmOverloads constructor(
         val strokeSpan = (span - nodes * nodeSize).toFloat() / legs.size
         if (strokeSpan <= 0f) return
 
-        val centreY = (paddingTop + nodeSize / 2).toFloat()
-        val baseline = paddingTop + nodeSize + labelGap - textPaint.fontMetrics.ascent
+        val top = nodeTop
+        val centreY = (top + nodeSize / 2).toFloat()
+        val ascent = textPaint.fontMetrics.ascent
+        // The line above hangs from the top edge, so its descent clears the
+        // discs by the gap; the one below sits a gap under them.
+        val distanceBaseline = paddingTop - ascent
+        val timeBaseline = top + nodeSize + labelGap - ascent
         legs.forEachIndexed { index, leg ->
             // Read off the two discs the leg joins rather than from its own
             // rank: in a right-to-left layout the second of them is the one on
@@ -120,8 +147,10 @@ class JourneyShapeView @JvmOverloads constructor(
             val after = nodeLeft(index + 1)
             val start = minOf(before, after) + nodeSize + strokeInset
             val end = maxOf(before, after) - strokeInset
+            val middle = (start + end) / 2f
             canvas.drawLine(start, centreY, end, centreY, if (leg.isRide) ridePaint else walkPaint)
-            canvas.drawText(leg.distance, (start + end) / 2f, baseline, textPaint)
+            canvas.drawText(leg.distance, middle, distanceBaseline, textPaint)
+            canvas.drawText(leg.duration, middle, timeBaseline, durationPaint)
         }
 
         // The discs last: a stroke that overshot its inset would be covered
@@ -131,7 +160,7 @@ class JourneyShapeView @JvmOverloads constructor(
             // stations: the same distinction the illustration draws.
             val marker = if (index == 0 || index == nodes - 1) endpointMarker else stationMarker
             val left = nodeLeft(index).toInt()
-            marker?.setBounds(left, paddingTop, left + nodeSize, paddingTop + nodeSize)
+            marker?.setBounds(left, top, left + nodeSize, top + nodeSize)
             marker?.draw(canvas)
         }
     }

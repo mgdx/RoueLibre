@@ -193,23 +193,43 @@
                 tools:text="À pied, tu y serais plus vite : 18 min."
                 tools:visibility="visible" />
 
-            <!-- The three steps, in the order one lives them. -->
-            <LinearLayout
-                android:id="@+id/steps"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_m"
-                android:orientation="vertical" />
-
-            <!-- The whole journey at a glance, distances under each stroke.
-                 It repeats what the steps above say, so a screen reader must
-                 not read it a second time. -->
+            <!-- The whole journey at a glance: how far each leg runs above its
+                 stroke, how long it takes below. It repeats what the folded
+                 steps say, so a screen reader must not read it a second time. -->
             <io.github.mgdx.rouelibre.ui.journey.JourneyShapeView
                 android:id="@+id/shape"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_m"
                 android:importantForAccessibility="no" />
+
+            <!-- Opens the step list, and says which way it is going to go: the
+                 three lines are folded away by default, and whoever wants the
+                 name of each station asks for them here. Last of the reading,
+                 just above the recompute button: everything the screen offers
+                 to do comes after everything it has to say. -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/steps_toggle"
+                style="@style/Widget.RoueLibre.Toggle"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/touch_target_min"
+                android:layout_marginTop="@dimen/space_m"
+                android:text="@string/journey_steps_show"
+                app:icon="@drawable/ic_plus"
+                app:iconGravity="textStart" />
+
+            <!-- The three steps, in the order one lives them. Folded until
+                 asked for: the time, the summary and the drawing answer the
+                 question on their own, and the stations are the detail. They
+                 open under the button that asks for them. -->
+            <LinearLayout
+                android:id="@+id/steps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/recompute"

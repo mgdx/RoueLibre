@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -78,6 +79,16 @@ class JourneyResultFragment : Fragment() {
     /** The subscription that moves the point, while the screen is displayed. */
     private var following: Job? = null
 
+    /**
+     * Whether the step list is unfolded, for the life of the screen.
+     *
+     * Folded to begin with: the total time, the summary and the drawing answer
+     * the question, and the three lines naming the stations are what one asks
+     * for afterwards. The answer survives a rotation — and a recomputation,
+     * which changes the steps but not the wish to see them.
+     */
+    private var stepsShown = false
+
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
 
@@ -144,6 +155,7 @@ class JourneyResultFragment : Fragment() {
                 "destination point missing"
             }
         picker.readFrom(savedInstanceState)
+        stepsShown = savedInstanceState?.getBoolean(STATE_STEPS_SHOWN) ?: false
     }
 
     override fun onCreateView(
@@ -164,6 +176,10 @@ class JourneyResultFragment : Fragment() {
         views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
         views.toolbar.navigationContentDescription = getString(R.string.action_back)
         views.recompute.setOnClickListener { viewModel.compute() }
+        views.stepsToggle.setOnClickListener {
+            stepsShown = !stepsShown
+            showStepsOrNot()
+        }
         views.origin.setOnClickListener { picker.choose(true, destination.position) }
         views.destination.setOnClickListener { picker.choose(false, origin.position) }
         views.swap.setOnClickListener { swapEndpoints() }
@@ -415,19 +431,27 @@ class JourneyResultFragment : Fragment() {
     }
 
     /**
-     * Draws the journey's shape, with how far each of its legs runs.
+     * Draws the journey's shape, with how long each leg takes and how far it
+     * runs.
      *
-     * The step list above reads one line at a time; this is the whole journey
-     * seen at once, in the drawing the search screen uses for it.
+     * The step list reads one line at a time, and is folded away besides; this
+     * is the whole journey seen at once, in the drawing the search screen uses
+     * for it.
      */
     private fun showShape(option: JourneyOption) {
         val views = binding ?: return
         views.shape.legs = listOf(
-            JourneyShapeView.Leg(isRide = false, distance = distanceOf(option.walkToStation)),
-            JourneyShapeView.Leg(isRide = true, distance = distanceOf(option.ride)),
-            JourneyShapeView.Leg(isRide = false, distance = distanceOf(option.walkToDestination)),
+            legOf(option.walkToStation, isRide = false),
+            legOf(option.ride, isRide = true),
+            legOf(option.walkToDestination, isRide = false),
         )
     }
+
+    private fun legOf(leg: RouteLeg, isRide: Boolean) = JourneyShapeView.Leg(
+        isRide = isRide,
+        duration = requireContext().formatDuration(leg.duration),
+        distance = distanceOf(leg),
+    )
 
     private fun distanceOf(leg: RouteLeg): String =
         requireContext().formatDistance(leg.distanceMetres.toDouble())
@@ -459,11 +483,12 @@ class JourneyResultFragment : Fragment() {
         // One dotted stroke between two ends: the journey there is, with no
         // station on the way.
         views.shape.legs = walk
-            ?.let { listOf(JourneyShapeView.Leg(isRide = false, distance = distanceOf(it))) }
+            ?.let { listOf(legOf(it, isRide = false)) }
             .orEmpty()
         if (walk != null) {
             addStep(R.drawable.ic_walk, getString(R.string.journey_step_walk_all), null, walk)
         }
+        showStepsOrNot()
     }
 
     private fun reasonOf(plan: JourneyPlan?): String {
@@ -529,6 +554,28 @@ class JourneyResultFragment : Fragment() {
             label = getString(R.string.journey_step_to_destination),
             detail = null,
             leg = option.walkToDestination,
+        )
+        showStepsOrNot()
+    }
+
+    /**
+     * Shows the steps, or the invitation to open them.
+     *
+     * The button says what the press will do, not what state the list is in: a
+     * label reading "details" while the details are already there would be a
+     * button describing itself. And it disappears altogether when there is no
+     * step to open — an impossible journey has nothing folded behind it.
+     */
+    private fun showStepsOrNot() {
+        val views = binding ?: return
+        val hasSteps = views.steps.isNotEmpty()
+        views.stepsToggle.isVisible = hasSteps
+        views.steps.isVisible = hasSteps && stepsShown
+        views.stepsToggle.setText(
+            if (stepsShown) R.string.journey_steps_hide else R.string.journey_steps_show,
+        )
+        views.stepsToggle.setIconResource(
+            if (stepsShown) R.drawable.ic_minus else R.drawable.ic_plus,
         )
     }
 
@@ -648,6 +695,7 @@ class JourneyResultFragment : Fragment() {
         origin.writeTo(outState, STATE_ORIGIN)
         destination.writeTo(outState, STATE_DESTINATION)
         picker.writeTo(outState)
+        outState.putBoolean(STATE_STEPS_SHOWN, stepsShown)
     }
 
     override fun onLowMemory() {
@@ -675,6 +723,7 @@ class JourneyResultFragment : Fragment() {
         private const val ARGUMENT_DESTINATION = "destination"
         private const val STATE_ORIGIN = "state-origin"
         private const val STATE_DESTINATION = "state-destination"
+        private const val STATE_STEPS_SHOWN = "state-steps-shown"
 
         /** The margin around the track, in dp, so it does not touch the edges. */
         private const val FRAME_PADDING_DP = 32
