@@ -52,6 +52,20 @@ address, network and authority names, licence, reference box recomputed against
 the live feed, opening framing, and the sources a generation run needs. It
 never touches a configuration that already exists unless told to.
 
+## Publishing what was generated
+
+```bash
+bash tools/publish_data.sh --dry-run   # what it would do
+bash tools/publish_data.sh             # does it
+```
+
+It creates `mgdx/RoueLibre-data` if it is missing, opens the release named by
+the run's tag, and uploads every generated set under the exact name its
+manifest announces — `<network>-tiles.mbtiles` and the rest — then asks GitHub
+for two of those addresses to check that what the application will request is
+really there. Re-runnable: an asset already up is replaced, so an interrupted
+upload is finished by running it again. Needs `gh` and a `gh auth login`.
+
 ## Prerequisites
 
 ```bash
@@ -79,6 +93,7 @@ machine, most of which is downloading the sources.
 | `build_manifest.py` | Describes the release: sizes, SHA-256 digests, URLs |
 | `build_catalogue.py` | Derives the catalogue of served cities from their configurations |
 | `refresh_normalization_fixtures.py` | Recomputes the normalisation reference cases after the shared rules change |
+| `publish_data.sh` | Uploads the generated sets to the `RoueLibre-data` releases, at the addresses the manifests name |
 
 Shared modules: `city_config.py` (reading the city configuration and the box's
 geometry) and `address_normalization.py` (street-name normalisation, applied by
