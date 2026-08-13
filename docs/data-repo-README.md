@@ -21,6 +21,25 @@ releases, one of those would take that name and every city would stop finding
 its manifest — silently, since the URL stays well-formed. Here, `latest` can
 only ever mean a release of data.
 
+## How the releases are laid out
+
+GitHub allows a thousand assets per release, and three hundred conurbations
+come to some 1,350 files. So:
+
+| Release | Holds |
+|---|---|
+| `data-<date>-fr`, `-de`, `-jp`… | the heavy files, one release per country |
+| `data-<date>` | the catalogue and every manifest, and nothing else |
+
+The index release is published **after** the others, and re-published whenever
+any of them changes: it has to be the newest for `latest/download` to find it.
+Each manifest names the fixed tag its own files live at, so no later release
+can take them away.
+
+Downloading by hand needs no knowledge of this: read
+`releases/latest/download/manifest-<network>.json` and follow the URLs it
+gives.
+
 ## Installing without this repository
 
 Nothing obliges you to go through it. The application accepts another manifest

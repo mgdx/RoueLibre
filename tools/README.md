@@ -55,16 +55,32 @@ never touches a configuration that already exists unless told to.
 ## Publishing what was generated
 
 ```bash
-bash tools/publish_data.sh --dry-run   # what it would do
-bash tools/publish_data.sh             # does it
+python3 tools/publish_data.py --dry-run   # what it would do
+python3 tools/publish_data.py             # does it
 ```
 
-It creates `mgdx/RoueLibre-data` if it is missing, opens the release named by
-the run's tag, and uploads every generated set under the exact name its
-manifest announces — `<network>-tiles.mbtiles` and the rest — then asks GitHub
-for two of those addresses to check that what the application will request is
-really there. Re-runnable: an asset already up is replaced, so an interrupted
-upload is finished by running it again. Needs `gh` and a `gh auth login`.
+Needs `gh` and a `gh auth login`. Re-runnable: an asset already online is left
+alone, so an interrupted upload is finished by running it again.
+
+**One release per country, and a last one holding the index.** GitHub allows
+**1,000 assets per release** — the message is `file_count limited to 1000
+assets per release` — and 306 conurbations come to some 1,350 files. The heavy
+files therefore go to `data-<tag>-fr`, `data-<tag>-de`, `data-<tag>-jp`; the
+largest of those is France, at 234 assets, so the ceiling is far off even as
+networks grow.
+
+The last release, `data-<tag>`, holds nothing but the catalogue and the 306
+manifests. It exists because the application asks for
+`releases/latest/download/manifest-<network>.json`, and *latest* names the
+newest release of the repository, whichever it is: every manifest must sit in
+one release, and that release must be the newest. Hence the rule the script
+enforces — **the index is deleted and re-created after everything else**, so
+that it takes that place back. Publish data any other way and the manifests
+become unreachable without a single URL changing.
+
+A city's files are found from its country, which its configuration already
+declares. Nothing records where a file went, so a partial upload never leaves a
+registry to reconcile: run it again and it resumes.
 
 ## Prerequisites
 
@@ -93,7 +109,7 @@ machine, most of which is downloading the sources.
 | `build_manifest.py` | Describes the release: sizes, SHA-256 digests, URLs |
 | `build_catalogue.py` | Derives the catalogue of served cities from their configurations |
 | `refresh_normalization_fixtures.py` | Recomputes the normalisation reference cases after the shared rules change |
-| `publish_data.sh` | Uploads the generated sets to the `RoueLibre-data` releases, at the addresses the manifests name |
+| `publish_data.py` | Uploads the generated sets to the `RoueLibre-data` releases, at the addresses the manifests name |
 
 Shared modules: `city_config.py` (reading the city configuration and the box's
 geometry) and `address_normalization.py` (street-name normalisation, applied by
