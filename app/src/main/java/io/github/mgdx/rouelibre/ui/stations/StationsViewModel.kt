@@ -10,12 +10,13 @@ import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.filterStations
 import io.github.mgdx.rouelibre.core.station.orderStations
 import io.github.mgdx.rouelibre.data.StationRepository
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -91,15 +92,25 @@ class StationsViewModel(
     val state: StateFlow<StationsUiState> = mutableState.asStateFlow()
 
     /**
-     * The failures to report, once each.
+     * The failures to report, once each, to the screen on display.
      *
-     * A channel rather than a state field: an error is an event, and showing it
-     * again on every rotation of the screen would be a defect.
+     * An event and not a state field: kept as state, the same failure would
+     * come back on every rotation of the screen. Nothing is kept for an absent
+     * reader either — no replay, and a buffer that only serves a screen already
+     * listening: a failure that arrives while the screen is gone describes a
+     * state that will have changed by the time it comes back. That is how the
+     * very first launch used to end on "no city is selected" over the map of
+     * the city that had just been downloaded — the failure was raised by the
+     * map built under the welcome sequence, before a city was chosen, and
+     * delivered on the way back from the download.
      */
-    private val errorChannel = Channel<DataError>(Channel.BUFFERED)
+    private val failures = MutableSharedFlow<DataError>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
 
     /** The stream of failures to present to the user. */
-    val errors: Flow<DataError> = errorChannel.receiveAsFlow()
+    val errors: Flow<DataError> = failures.asSharedFlow()
 
     /**
      * The stations as the repository supplies them, before filtering.
@@ -187,7 +198,7 @@ class StationsViewModel(
             val outcome = repository.refresh(force = force)
             mutableState.update { it.copy(isRefreshing = false) }
             if (outcome is Outcome.Failure) {
-                errorChannel.send(outcome.error)
+                failures.tryEmit(outcome.error)
             }
         }
     }
