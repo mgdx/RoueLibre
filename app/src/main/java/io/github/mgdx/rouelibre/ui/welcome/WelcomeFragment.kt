@@ -72,6 +72,7 @@ class WelcomeFragment : Fragment() {
         val current = PAGES[page]
         views.title.setText(current.title)
         views.body.setText(current.body)
+        views.illustration.setImageResource(current.illustration)
         views.step.text = getString(R.string.welcome_step, page + 1, PAGES.size)
         views.next.setText(current.next)
         views.skip.setText(current.skip)
@@ -138,8 +139,20 @@ class WelcomeFragment : Fragment() {
         }
     }
 
-    /** One page of the welcome screen. */
-    private data class Page(val title: Int, val body: Int, val next: Int, val skip: Int)
+    /**
+     * One page of the welcome screen.
+     *
+     * The drawing is part of the page and not of the layout: what a page says
+     * is a shape before it is a paragraph, and the reader who skips the text
+     * still leaves with it.
+     */
+    private data class Page(
+        val title: Int,
+        val body: Int,
+        val illustration: Int,
+        val next: Int,
+        val skip: Int,
+    )
 
     private companion object {
         const val STATE_PAGE = "page"
@@ -152,18 +165,21 @@ class WelcomeFragment : Fragment() {
             Page(
                 title = R.string.welcome_hello_title,
                 body = R.string.welcome_hello_body,
+                illustration = R.drawable.illustration_welcome_hello,
                 next = R.string.welcome_continue,
                 skip = R.string.welcome_skip,
             ),
             Page(
                 title = R.string.welcome_privacy_title,
                 body = R.string.welcome_privacy_body,
+                illustration = R.drawable.illustration_welcome_privacy,
                 next = R.string.welcome_continue,
                 skip = R.string.welcome_skip,
             ),
             Page(
                 title = R.string.welcome_data_title,
                 body = R.string.welcome_data_body,
+                illustration = R.drawable.illustration_welcome_data,
                 next = R.string.welcome_choose_city,
                 skip = R.string.welcome_later,
             ),

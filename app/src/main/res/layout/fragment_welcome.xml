@@ -7,6 +7,16 @@
 
     The text is short and the way out always available: "later" hides nothing,
     it postpones. We explain how something works, we are not selling anything.
+
+    Each page carries a drawing above its buttons. It is not decoration filling
+    a void: what a page says in three sentences — a journey walk-bike-walk, a
+    boundary nothing crosses, a city downloaded once — is a shape before it is
+    a paragraph, and the reader who skips the text still leaves with it.
+
+    The side spacing is set with margins on each child, not with padding on the
+    root: fitsSystemWindows replaces the padding of the view it is set on with
+    the window insets, and the padding declared here used to be silently
+    dropped — the text ran into both edges of the screen.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,15 +24,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:paddingStart="@dimen/space_l"
-    android:paddingEnd="@dimen/space_l">
+    android:fitsSystemWindows="true">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
         android:layout_marginTop="@dimen/space_xxl"
+        android:layout_marginEnd="@dimen/space_l"
         android:textAppearance="@style/TextAppearance.RoueLibre.Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,10 +43,13 @@
         android:id="@+id/body_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="@dimen/space_l"
         android:layout_marginTop="@dimen/space_l"
-        app:layout_constraintBottom_toTopOf="@id/next"
+        android:layout_marginEnd="@dimen/space_l"
+        app:layout_constraintBottom_toTopOf="@id/illustration"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHeight_default="wrap"
         app:layout_constraintTop_toBottomOf="@id/title">
 
         <TextView
@@ -48,10 +61,44 @@
             tools:text="Application libre et ouverte, sans compte, sans publicité, sans mouchard." />
     </androidx.core.widget.NestedScrollView>
 
+    <!-- The drawing of the current page. Purely decorative: it repeats what
+         the text above says, so a screen reader must not read it a second
+         time.
+
+         Placed under the text rather than above it: the text is what one reads
+         first, and the drawing is what one is left looking at.
+
+         It takes the height the text leaves rather than a written-down size: a
+         fixed height leaves a hole on the short pages and steals from the text
+         on the long ones. The text is measured first and capped at what the
+         screen has; the drawing gets the remainder, and fitCenter keeps its
+         proportions whatever that turns out to be.
+
+         So it shrinks as the font grows, and at the largest sizes it goes
+         altogether rather than pushing a paragraph below the fold. That is the
+         right order: the drawing helps the text, it does not replace it. -->
+    <ImageView
+        android:id="@+id/illustration"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
+        android:layout_marginBottom="@dimen/space_l"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@id/step"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/body_container"
+        app:layout_constraintVertical_weight="2"
+        tools:src="@drawable/illustration_welcome_hello" />
+
     <TextView
         android:id="@+id/step"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
         android:layout_marginBottom="@dimen/space_s"
         android:textAppearance="@style/TextAppearance.RoueLibre.Label"
         app:layout_constraintBottom_toTopOf="@id/next"
@@ -62,6 +109,8 @@
         android:id="@+id/next"
         android:layout_width="0dp"
         android:layout_height="@dimen/touch_target_min"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
         android:layout_marginBottom="@dimen/space_s"
         app:layout_constraintBottom_toTopOf="@id/skip"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,6 +122,8 @@
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="0dp"
         android:layout_height="@dimen/touch_target_min"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
         android:layout_marginBottom="@dimen/space_l"
         android:textColor="@color/signal"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -326,6 +326,8 @@ On the very first start, a welcome screen — **not a dialog**: the content is t
 
 That screen leads straight into the download confirmation described in §4.4, with the size announced — **a single sequence, not two successive walls of text**. Three screens at most, each skippable, and a button to postpone the download.
 
+Each page carries **one drawing**, under its text and above its buttons: the journey walk-bike-walk laid on the map it happens on, the phone whose boundary a single dashed thread crosses, the city's tiles becoming a map once they are downloaded. They are vector drawables built from the palette and map tokens of §7 — the same discs, the same dashes, the same ground colours as the real map — so the pages show the application rather than illustrate it. They are decorative for accessibility purposes: each repeats what its paragraph says, and a screen reader must not read it twice. The drawing takes the height the text leaves and disappears at the largest font sizes rather than pushing a sentence below the fold.
+
 The tone is that of §7: short sentences, active voice, no jargon. We explain how something works, we are not selling anything.
 
 ### 7.10 What's new after an update

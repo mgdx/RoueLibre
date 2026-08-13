@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    One city, one download (SPEC §7.9, third page).
+
+    On the left, the city as it is shipped: separate tiles, each a fragment of
+    ground, water or street. On the right, the same tiles once they are on the
+    phone — assembled, continuous, a map one can use. The arrow between the two
+    is the download, drawn once and solid: it happens a single time, and the
+    page's whole point is that afterwards nothing else has to be fetched.
+
+    Four tiles rather than a neat grid of nine: the number has to read as "a
+    few pieces", not as a quantity the user should count.
+
+    Every colour comes from the base map's tokens, so the tiles and the screen
+    beside them are made of the same material, and the drawing follows the dark
+    theme without this file knowing about it.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="180dp"
+    android:height="105dp"
+    android:autoMirrored="true"
+    android:viewportWidth="240"
+    android:viewportHeight="140">
+
+    <!-- The tiles, still apart. -->
+    <path
+        android:fillColor="@color/map_land"
+        android:pathData="M16,24 H48 A4,4 0 0 1 52,28 V60 A4,4 0 0 1 48,64 H16 A4,4 0 0 1 12,60 V28 A4,4 0 0 1 16,24 Z"
+        android:strokeColor="@color/outline"
+        android:strokeWidth="1.5" />
+    <path
+        android:fillColor="@color/map_land"
+        android:pathData="M64,24 H96 A4,4 0 0 1 100,28 V60 A4,4 0 0 1 96,64 H64 A4,4 0 0 1 60,60 V28 A4,4 0 0 1 64,24 Z"
+        android:strokeColor="@color/outline"
+        android:strokeWidth="1.5" />
+    <path
+        android:fillColor="@color/map_land"
+        android:pathData="M16,76 H48 A4,4 0 0 1 52,80 V112 A4,4 0 0 1 48,116 H16 A4,4 0 0 1 12,112 V80 A4,4 0 0 1 16,76 Z"
+        android:strokeColor="@color/outline"
+        android:strokeWidth="1.5" />
+    <path
+        android:fillColor="@color/map_land"
+        android:pathData="M64,76 H96 A4,4 0 0 1 100,80 V112 A4,4 0 0 1 96,116 H64 A4,4 0 0 1 60,112 V80 A4,4 0 0 1 64,76 Z"
+        android:strokeColor="@color/outline"
+        android:strokeWidth="1.5" />
+
+    <!-- What each tile carries. The street runs across both tiles of the top
+         row at the same height, the river across both of the bottom row, and
+         one street down the right-hand column: the four pieces have to be
+         readable as one city cut up, or the arrow means nothing. -->
+    <path
+        android:fillColor="@color/map_greenery"
+        android:pathData="M20,28 H42 A3,3 0 0 1 45,31 V41 A3,3 0 0 1 42,44 H20 A3,3 0 0 1 17,41 V31 A3,3 0 0 1 20,28 Z" />
+    <path
+        android:pathData="M12,92 C22,100 32,88 52,94 M60,94 C72,98 84,90 100,96"
+        android:strokeColor="@color/map_water"
+        android:strokeWidth="6" />
+    <path
+        android:pathData="M12,52 H52 M60,52 H100 M80,24 V64 M80,76 V116"
+        android:strokeColor="@color/map_road_minor_edge"
+        android:strokeWidth="5" />
+    <path
+        android:pathData="M12,52 H52 M60,52 H100 M80,24 V64 M80,76 V116"
+        android:strokeColor="@color/map_road_minor"
+        android:strokeWidth="3.5" />
+
+    <!-- The download itself. -->
+    <path
+        android:pathData="M106,70 H128"
+        android:strokeColor="@color/signal"
+        android:strokeLineCap="round"
+        android:strokeWidth="3.5" />
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M122,64 L128,70 L122,76"
+        android:strokeColor="@color/signal"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="3.5" />
+
+    <!-- The phone, drawn as on the previous page: the same object, so the two
+         pages are understood to be about the same device. -->
+    <path
+        android:fillColor="@color/surface"
+        android:pathData="M152,6 H216 A12,12 0 0 1 228,18 V122 A12,12 0 0 1 216,134 H152 A12,12 0 0 1 140,122 V18 A12,12 0 0 1 152,6 Z"
+        android:strokeColor="@color/ink"
+        android:strokeWidth="2.5" />
+
+    <!-- The tiles assembled: the streets now run from one edge to the other,
+         and the stations have somewhere to sit. -->
+    <group>
+        <clip-path android:pathData="M154,18 H214 A6,6 0 0 1 220,24 V110 A6,6 0 0 1 214,116 H154 A6,6 0 0 1 148,110 V24 A6,6 0 0 1 154,18 Z" />
+
+        <path
+            android:fillColor="@color/map_land"
+            android:pathData="M154,18 H214 A6,6 0 0 1 220,24 V110 A6,6 0 0 1 214,116 H154 A6,6 0 0 1 148,110 V24 A6,6 0 0 1 154,18 Z" />
+        <path
+            android:fillColor="@color/map_greenery"
+            android:pathData="M156,26 H174 A4,4 0 0 1 178,30 V42 A4,4 0 0 1 174,46 H156 A4,4 0 0 1 152,42 V30 A4,4 0 0 1 156,26 Z" />
+        <path
+            android:pathData="M148,96 C166,88 186,102 220,94"
+            android:strokeColor="@color/map_water"
+            android:strokeWidth="8" />
+        <path
+            android:pathData="M148,66 H220 M186,18 V116"
+            android:strokeColor="@color/map_road_minor_edge"
+            android:strokeWidth="8" />
+        <path
+            android:pathData="M148,66 H220 M186,18 V116"
+            android:strokeColor="@color/map_road_minor"
+            android:strokeWidth="6.5" />
+    </group>
+
+    <!-- Two stations, to say what the downloaded map is for. They carry the
+         bike glyph rather than being left plain: a bare green disc on a map
+         reads as a dot, and the page has to end on stations. -->
+    <path
+        android:fillColor="@color/signal"
+        android:pathData="M168,71a9,9 0 1,0 0.1,0z"
+        android:strokeColor="@color/surface"
+        android:strokeWidth="1.5" />
+    <group
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        android:translateX="162"
+        android:translateY="74">
+        <path
+            android:fillColor="@color/surface_on_signal"
+            android:pathData="M15.5,5.5c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM5,12c-2.8,0 -5,2.2 -5,5s2.2,5 5,5 5,-2.2 5,-5 -2.2,-5 -5,-5zM5,20.5c-1.9,0 -3.5,-1.6 -3.5,-3.5s1.6,-3.5 3.5,-3.5 3.5,1.6 3.5,3.5 -1.6,3.5 -3.5,3.5zM10.8,10.5l2.4,-2.4 0.8,0.8c1.3,1.3 3,2.1 5.1,2.1V9c-1.5,0 -2.7,-0.6 -3.6,-1.5l-1.9,-1.9c-0.5,-0.4 -1,-0.6 -1.6,-0.6s-1.1,0.2 -1.4,0.6L7.8,8.4c-0.4,0.4 -0.6,0.9 -0.6,1.4 0,0.6 0.2,1.1 0.6,1.4L11,14v5h2v-6.2l-2.2,-2.3zM19,12c-2.8,0 -5,2.2 -5,5s2.2,5 5,5 5,-2.2 5,-5 -2.2,-5 -5,-5zM19,20.5c-1.9,0 -3.5,-1.6 -3.5,-3.5s1.6,-3.5 3.5,-3.5 3.5,1.6 3.5,3.5 -1.6,3.5 -3.5,3.5z" />
+    </group>
+    <path
+        android:fillColor="@color/signal"
+        android:pathData="M200,45a9,9 0 1,0 0.1,0z"
+        android:strokeColor="@color/surface"
+        android:strokeWidth="1.5" />
+    <group
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        android:translateX="194"
+        android:translateY="48">
+        <path
+            android:fillColor="@color/surface_on_signal"
+            android:pathData="M15.5,5.5c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM5,12c-2.8,0 -5,2.2 -5,5s2.2,5 5,5 5,-2.2 5,-5 -2.2,-5 -5,-5zM5,20.5c-1.9,0 -3.5,-1.6 -3.5,-3.5s1.6,-3.5 3.5,-3.5 3.5,1.6 3.5,3.5 -1.6,3.5 -3.5,3.5zM10.8,10.5l2.4,-2.4 0.8,0.8c1.3,1.3 3,2.1 5.1,2.1V9c-1.5,0 -2.7,-0.6 -3.6,-1.5l-1.9,-1.9c-0.5,-0.4 -1,-0.6 -1.6,-0.6s-1.1,0.2 -1.4,0.6L7.8,8.4c-0.4,0.4 -0.6,0.9 -0.6,1.4 0,0.6 0.2,1.1 0.6,1.4L11,14v5h2v-6.2l-2.2,-2.3zM19,12c-2.8,0 -5,2.2 -5,5s2.2,5 5,5 5,-2.2 5,-5 -2.2,-5 -5,-5zM19,20.5c-1.9,0 -3.5,-1.6 -3.5,-3.5s1.6,-3.5 3.5,-3.5 3.5,1.6 3.5,3.5 -1.6,3.5 -3.5,3.5z" />
+    </group>
+</vector>
