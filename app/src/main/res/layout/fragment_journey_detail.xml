@@ -105,6 +105,34 @@
                 android:layout_marginTop="@dimen/space_l"
                 android:orientation="vertical" />
 
+            <!--
+                The ground the ride runs over (SPEC §7.4.1).
+
+                Last, and only where the graph has something to say: a total of
+                metres says how much there is to climb, never where it stands,
+                and where it stands is what one decides a ride on. It reads
+                under the legs it describes, because it describes the ride
+                rather than the walks — one does not choose the shape of the
+                pavement.
+            -->
+            <TextView
+                android:id="@+id/profile_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xl"
+                android:text="@string/journey_detail_profile"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Label"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <io.github.mgdx.rouelibre.ui.journey.ElevationProfileView
+                android:id="@+id/profile"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/journey_profile_height"
+                android:layout_marginTop="@dimen/space_s"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
             <!-- The counts above are the ones the journey was worked out on,
                  and a station empties while one walks to it (SPEC §6). Only a
                  journey with stations reads this. -->

@@ -187,6 +187,13 @@ class OfflineRouter(
                 longitude = node.iLon / MICRODEGREES - 180.0,
             )
         },
+        // The engine reads elevation in quarter-metres, and marks a node whose
+        // graph carries none with the smallest short there is. Passed on as it
+        // comes, unfiltered: what it draws is the shape of the ground, where
+        // `ascend` above is the engine's own filtered sum (SPEC §7.4.1).
+        elevationsMetres = nodes.map { node ->
+            node.sElev.takeIf { it != Short.MIN_VALUE }?.let { it / ELEVATION_STEPS_PER_METRE }
+        },
     )
 
     private companion object {
@@ -196,6 +203,10 @@ class OfflineRouter(
         const val PROFILE_SUFFIX = ".brf"
         const val RD5_SUFFIX = ".rd5"
         const val MICRODEGREES = 1_000_000.0
+
+        /** The engine holds an elevation as a count of quarter-metres. */
+        const val ELEVATION_STEPS_PER_METRE = 4.0
+
         /**
          * How long a single leg may take before it is abandoned.
          *

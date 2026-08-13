@@ -73,6 +73,35 @@ fun Context.formatClimb(metres: Int, overMetres: Int): String? {
     return getString(R.string.distance_metres, rounded)
 }
 
+/**
+ * Whether a leg's relief has a shape worth drawing (SPEC §7.4.1).
+ *
+ * The same two thresholds that silence [formatClimb], for the same reason: what
+ * the graph holds under three hundred metres of ground, or inside five metres
+ * of height, is the sampling of SRTM and its error rather than the ground. A
+ * profile drawn from it would stretch that error across the width of the
+ * screen, and read as a hill.
+ *
+ * @param overMetres the length of the leg.
+ * @param rangeMetres the height between its lowest and its highest reading —
+ *   not its climb, which can add up over ups and downs that a drawing would
+ *   have to amplify to show at all.
+ */
+fun isReliefWorthDrawing(overMetres: Int, rangeMetres: Double): Boolean =
+    overMetres >= CLIMB_MEASURABLE_OVER && rangeMetres >= CLIMB_ROUNDING
+
+/**
+ * Writes a height above sea level.
+ *
+ * Rounded to five metres, as a climb is and for the same reason: the readings
+ * come from samples whose vertical error runs to several metres, and a figure
+ * written to the metre would promise what they cannot.
+ */
+fun Context.formatAltitude(metres: Double): String {
+    val rounded = (metres / CLIMB_ROUNDING).roundToInt() * CLIMB_ROUNDING
+    return getString(R.string.distance_metres, rounded)
+}
+
 private const val METRES_PER_KILOMETRE = 1_000.0
 
 /** Below a kilometre, the distance rounds to the nearest ten metres. */

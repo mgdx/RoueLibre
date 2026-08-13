@@ -539,23 +539,22 @@ class JourneyResultFragment : Fragment() {
     private fun showWithoutJourney(state: JourneyUiState) {
         val views = binding ?: return
         val plan = state.plan
-        val walk = (plan as? JourneyPlan.WalkOnly)?.directWalk
-        views.totalTime.text = walk
-            ?.let { requireContext().formatDuration(it.duration) }
+        val walkOnly = plan as? JourneyPlan.WalkOnly
+        views.totalTime.text = walkOnly
+            ?.let { requireContext().formatDuration(it.directWalk.duration) }
             ?: getString(R.string.journey_none_title)
         views.summary.text = when {
             !state.hasStations -> getString(R.string.journey_no_stations)
-            walk != null -> requireContext().walkSummary(
-                walk,
-                isQuickerThanTheBike = (plan as? JourneyPlan.WalkOnly)?.reason ==
-                    NoBikeJourney.WalkingIsQuicker,
+            walkOnly != null -> requireContext().walkSummary(
+                walkOnly.directWalk,
+                isQuickerThanTheBike = walkOnly.reason == NoBikeJourney.WalkingIsQuicker,
             )
             else -> reasonOf(plan)
         }
         // One dotted stroke between two ends: the journey there is, with no
         // station on the way.
-        views.shape.legs = walk
-            ?.let { listOf(legOf(it, isRide = false)) }
+        views.shape.legs = walkOnly
+            ?.let { listOf(legOf(it.directWalk, isRide = false)) }
             .orEmpty()
     }
 

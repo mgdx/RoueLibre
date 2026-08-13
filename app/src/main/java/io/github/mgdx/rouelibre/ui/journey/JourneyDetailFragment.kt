@@ -19,14 +19,18 @@ import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
 import io.github.mgdx.rouelibre.core.journey.NoBikeJourney
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
+import io.github.mgdx.rouelibre.core.routing.elevationProfile
+import io.github.mgdx.rouelibre.core.routing.smoothedOver
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyDetailBinding
 import io.github.mgdx.rouelibre.databinding.ItemJourneyPlaceBinding
 import io.github.mgdx.rouelibre.databinding.ItemJourneyStepBinding
 import io.github.mgdx.rouelibre.ui.address.toTitle
+import io.github.mgdx.rouelibre.ui.formatAltitude
 import io.github.mgdx.rouelibre.ui.formatClimb
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.formatDuration
+import io.github.mgdx.rouelibre.ui.isReliefWorthDrawing
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -82,6 +86,7 @@ class JourneyDetailFragment : Fragment() {
         }
 
         showTotal(journey)
+        showProfile(journey.plan)
         viewModel.locate(stationsOf(journey.plan))
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -132,6 +137,45 @@ class JourneyDetailFragment : Fragment() {
                 distance = distanceOf(leg.route),
             )
         }
+    }
+
+    /**
+     * The ground the ride runs over, where the graph has something to say
+     * (SPEC §7.4.1).
+     *
+     * Only the bike leg is drawn: the walks are lived at a pace no hill
+     * changes, and it is the ride one decides on. The drawing is silent
+     * wherever the climb figure itself would be — under three hundred metres of
+     * ground, or inside five metres of height, what the graph holds is the
+     * error between two SRTM samples, and stretching it across the screen would
+     * draw a hill that is not there.
+     */
+    private fun showProfile(plan: JourneyPlan) {
+        val views = binding ?: return
+        val ride = (plan as? JourneyPlan.Found)?.best?.ride
+        val profile = ride?.elevationProfile()?.smoothedOver(PROFILE_SMOOTHING_METRES).orEmpty()
+        val lowest = profile.minOfOrNull { it.elevationMetres }
+        val highest = profile.maxOfOrNull { it.elevationMetres }
+        val worthDrawing = ride != null &&
+            lowest != null &&
+            highest != null &&
+            isReliefWorthDrawing(ride.distanceMetres, highest - lowest)
+
+        views.profileTitle.isVisible = worthDrawing
+        views.profile.isVisible = worthDrawing
+        if (!worthDrawing) return
+
+        views.profile.lowestLabel = requireContext().formatAltitude(lowest)
+        views.profile.highestLabel = requireContext().formatAltitude(highest)
+        views.profile.profile = profile
+        // A drawing says nothing to a screen reader: the sentence it stands for
+        // is read instead, and it is the one the drawing draws.
+        views.profile.contentDescription = getString(
+            R.string.journey_detail_profile_description,
+            requireContext().formatClimb(ride.ascentMetres, ride.distanceMetres),
+            views.profile.lowestLabel,
+            views.profile.highestLabel,
+        )
     }
 
     /** One leg of the journey, and whether a bike is ridden along it. */
@@ -314,4 +358,16 @@ class JourneyDetailFragment : Fragment() {
     private fun climbOf(leg: RouteLeg): String? = requireContext()
         .formatClimb(leg.ascentMetres, leg.distanceMetres)
         ?.let { getString(R.string.journey_climb, it) }
+
+    private companion object {
+        /**
+         * The ground a reading of the profile is averaged over.
+         *
+         * Half of what it takes for a climb to be worth naming (SPEC §7.4): a
+         * rise of three hundred metres comes through whole, and the saw the
+         * SRTM samples draw across flat ground — a metre up and a metre down
+         * every fifty — does not.
+         */
+        const val PROFILE_SMOOTHING_METRES = 150.0
+    }
 }

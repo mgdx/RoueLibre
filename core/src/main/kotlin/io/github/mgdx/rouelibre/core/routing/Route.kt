@@ -25,6 +25,13 @@ public enum class TravelMode(public val profileName: String) {
  * @property duration the duration the engine estimates for this mode.
  * @property ascentMetres the cumulative climb.
  * @property geometry the track, from start to finish.
+ * @property elevationsMetres the height above sea level at each point of
+ *   [geometry], in the same order and of the same length. `null` at a point the
+ *   routing graph carries no elevation for, and the whole list empty when the
+ *   engine returned none — a graph generated without elevation, or a leg of one
+ *   point. It is the raw reading, unfiltered, where [ascentMetres] is the
+ *   engine's filtered sum: the two answer different questions, and drawing the
+ *   shape of a leg needs the readings themselves.
  */
 public data class RouteLeg(
     public val mode: TravelMode,
@@ -32,6 +39,7 @@ public data class RouteLeg(
     public val duration: Duration,
     public val ascentMetres: Int,
     public val geometry: List<Coordinates>,
+    public val elevationsMetres: List<Double?> = emptyList(),
 )
 
 /**

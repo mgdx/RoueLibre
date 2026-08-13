@@ -245,6 +245,11 @@
     <string name="journey_detail_arrival_station">Station d\'arrivée</string>
     <!-- The counts shown are the ones the journey was worked out on: a station
          empties while one walks to it (SPEC §6). -->
+    <!-- The drawing of the ground the bike leg runs over. -->
+    <string name="journey_detail_profile">Le trajet à vélo, montées et descentes</string>
+    <!-- Read out in place of the drawing. %1$s is the climb of the ride, %2$s
+         its lowest point above sea level and %3$s its highest. -->
+    <string name="journey_detail_profile_description">Le trajet à vélo grimpe %1$s, entre %2$s et %3$s d\'altitude.</string>
     <string name="journey_detail_availability_note">Vélos et places libres tels qu\'ils étaient au calcul du trajet.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->

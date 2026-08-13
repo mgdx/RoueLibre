@@ -11,6 +11,19 @@ also records what has no visible effect.
 
 ### Added
 
+- **The journey's detail draws the ground the ride runs over.** The routing
+  graph carries the elevation of every node it returns, and until now only
+  their sum was read. A total says how much there is to climb, never where: a
+  hundred metres taken in one wall at the end of the ride is not the ride a
+  hundred metres spread over ten kilometres is. The curve is the bike leg's
+  alone, on its own vertical scale, with its lowest and highest written at the
+  ends so an amplified bump cannot read as a mountain. It is smoothed over a
+  hundred and fifty metres first: raw, the SRTM samples draw a saw of a metre
+  up and a metre down every fifty across flat country, which is their error and
+  not the ground — the same error that keeps a climb from being named under
+  three hundred metres, and the same silence when there is less than five
+  metres of height to show.
+
 - **The journey opens in full.** The block holding the total time, the summary
   and the drawing is now itself the way to a screen of its own, pressed where
   it is read: it names each station, the street it stands in — read off the
