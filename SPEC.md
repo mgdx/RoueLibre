@@ -333,6 +333,8 @@ Each page carries **one drawing**, under its text and above its buttons: the jou
 
 The tone is that of §7: short sentences, active voice, no jargon. We explain how something works, we are not selling anything.
 
+The map lies under this sequence, already in place, and its own request for the location permission therefore reaches the screen over the first page — see §10, where that is stated and accepted.
+
 ### 7.10 What's new after an update
 
 After a new version is installed, a **what's new** screen appears **once only**, listing fixes and improvements since the previously installed version.
@@ -370,8 +372,10 @@ After a new version is installed, a **what's new** screen appears **once only**,
 Permissions requested, and **no others**:
 
 - `INTERNET` — fetching the GBFS feeds and the datasets
-- `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCATION` — requested **when the map opens**, once per session and never again once refused, and on a press of "locate me" (§7.1). Those two moments and no other: no screen that does not show a position may ask for one
+- `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCATION` — requested **when the map opens**, once per session and never again once refused, and on a press of "locate me" (§7.1). Those two moments and no other: no screen that never shows a position may ask for one
 - `ACCESS_NETWORK_STATE` — offline detection
+
+**The very first launch is the exception, and it is accepted.** The map is the application's content: it is put in place as the application starts, and the welcome sequence of §7.9 is laid over it. The map has therefore opened, and it asks — so on a fresh install the system dialog appears over the first page of the welcome, before that page has been read. Two ways out were weighed on 13 August 2026 and both cost more than they save. Holding the map back until the sequence ends builds the main screen after the sequence rather than behind it, so the application arrives at its map slower at the very moment it is being judged. Moving the request to the end of the sequence asks on the same run anyway, one screen later, and buys nothing but the order. What this section actually guards is untouched: the request belongs to the map, which is where one lands the moment the sequence is over; it is made once; a refusal is never repeated; and no screen asks for a permission it makes no use of. The cost accepted is a dialog arriving before its explanation, on one launch in the life of an installation.
 
 The application must be **fully usable if location permission is denied**: the user then designates their departure and arrival points by hand. A refusal must never block a screen nor trigger an insistent prompt.
 
