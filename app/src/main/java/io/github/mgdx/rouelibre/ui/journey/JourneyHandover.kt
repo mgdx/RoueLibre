@@ -32,8 +32,18 @@ import io.github.mgdx.rouelibre.ui.MainActivity
  */
 class JourneyHandover(private val fragment: Fragment, private val onMessage: (String) -> Unit) {
 
-    /** One leg's end: where it stops, and under what name. */
-    private data class Target(val label: String, val position: Coordinates)
+    /**
+     * One leg's end, named twice.
+     *
+     * @property leg how the leg reads in the menu, where the question is which
+     *   part of the journey one is setting off on: "ride to Roubaix Mairie".
+     * @property place what the point is called, which is what travels with the
+     *   coordinates. The application receiving it shows a place, and a place is
+     *   called "Roubaix Mairie" — it is not called "ride to Roubaix Mairie",
+     *   which is what OsmAnd was handed and displayed on a first try.
+     * @property position where it stands.
+     */
+    private data class Target(val leg: String, val place: String, val position: Coordinates)
 
     /**
      * Offers the journey's legs, and hands the chosen one over.
@@ -53,7 +63,11 @@ class JourneyHandover(private val fragment: Fragment, private val onMessage: (St
     private fun targetsOf(journey: ShownJourney): List<Target> = when (val plan = journey.plan) {
         is JourneyPlan.Found -> legsOf(plan.best, journey.destination)
         is JourneyPlan.WalkOnly -> listOf(
-            Target(journey.destination.label, journey.destination.position),
+            Target(
+                leg = fragment.getString(R.string.journey_step_walk_all),
+                place = journey.destination.label,
+                position = journey.destination.position,
+            ),
         )
 
         is JourneyPlan.Impossible -> emptyList()
@@ -67,23 +81,29 @@ class JourneyHandover(private val fragment: Fragment, private val onMessage: (St
      */
     private fun legsOf(option: JourneyOption, destination: JourneyEndpoint) = listOf(
         Target(
-            fragment.getString(R.string.journey_step_to_station, option.departureStation.name),
-            option.departureStation.position,
+            leg = fragment.getString(
+                R.string.journey_step_to_station,
+                option.departureStation.name,
+            ),
+            place = option.departureStation.name,
+            position = option.departureStation.position,
         ),
         Target(
-            fragment.getString(R.string.journey_step_ride, option.arrivalStation.name),
-            option.arrivalStation.position,
+            leg = fragment.getString(R.string.journey_step_ride, option.arrivalStation.name),
+            place = option.arrivalStation.name,
+            position = option.arrivalStation.position,
         ),
         Target(
-            fragment.getString(R.string.journey_step_to_destination),
-            destination.position,
+            leg = fragment.getString(R.string.journey_step_to_destination),
+            place = destination.label,
+            position = destination.position,
         ),
     )
 
     private fun ask(targets: List<Target>) {
         MaterialAlertDialogBuilder(fragment.requireContext())
             .setTitle(R.string.journey_navigate_which)
-            .setItems(targets.map { it.label }.toTypedArray()) { _, chosen ->
+            .setItems(targets.map { it.leg }.toTypedArray()) { _, chosen ->
                 handOver(targets[chosen])
             }
             .show()
@@ -110,7 +130,7 @@ class JourneyHandover(private val fragment: Fragment, private val onMessage: (St
         val point = "${target.position.latitude},${target.position.longitude}"
         // A station's name holds spaces, and sometimes an ampersand: encoded,
         // or the receiving application reads a truncated label.
-        val label = Uri.encode(target.label)
+        val label = Uri.encode(target.place)
         val place = Intent(Intent.ACTION_VIEW, "geo:$point?q=$point($label)".toUri())
 
         val guides = context.packageManager.queryIntentActivities(place, 0)
