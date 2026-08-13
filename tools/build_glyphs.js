@@ -28,23 +28,32 @@ const FONT_DIRECTORY = path.join(REPO_ROOT, 'app/src/main/res/font');
 const DEFAULT_OUTPUT = path.join(REPO_ROOT, 'app/src/main/assets/glyphs');
 
 /*
- * The ranges kept, and why only those.
+ * Every range of the Basic Multilingual Plane, and that is not a precaution.
  *
- *   0–255      basic Latin and Latin-1 supplement: all everyday French,
- *              accents and « » quotation marks included.
- *   256–511    Latin Extended-A: the œ of "Cœur", the ł and ż of names of
- *              Polish origin, common in the mining basin of the North.
- *   8192–8447  general punctuation: the typographic apostrophe ’, which the
- *              Base Adresse Nationale and OpenStreetMap both use.
+ * A missing range does NOT merely leave a character blank, as this script long
+ * assumed: MapLibre answers "Could not read asset", the tile whose label needed
+ * it never finishes its layout, and NOTHING of that tile is drawn — not the
+ * streets, not the water, not the parks. Hunedoara showed it plainly: a town
+ * whose streets are named "Piața Gării" has its Ș and Ț in 512–767, which was
+ * not shipped, and its map came up empty over a perfectly good tile set.
  *
- * Every extra range weighs a few tens of kilobytes per weight. Missing
- * characters draw blank: better to check than to add as a precaution.
+ * The cost is small, because fontnik answers for a range the font does not
+ * cover with a valid empty file of forty-four bytes. Only the ranges the font
+ * really carries weigh anything — Latin, its extensions and the punctuation —
+ * and the two hundred and fifty others amount to eleven kilobytes together.
+ * That is what buys a base map that cannot be blanked by a place name, in
+ * Japanese as in Romanian: what the font cannot draw stays blank, which is
+ * what a missing character was always supposed to cost.
+ *
+ * MapLibre never asks beyond the BMP: a name written in an astral plane —
+ * emoji do turn up in OpenStreetMap — is dropped from the label rather than
+ * requested.
  */
-const TEXT_RANGES = [
-  [0, 255],
-  [256, 511],
-  [8192, 8447],
-];
+const BMP_RANGE_COUNT = 256;
+const TEXT_RANGES = Array.from({ length: BMP_RANGE_COUNT }, (_, index) => [
+  index * 256,
+  index * 256 + 255,
+]);
 
 /*
  * The station markers show digits only, all in the first range. Embedding the

@@ -153,6 +153,20 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **One letter missing from the fonts blanked a whole town's map.** Hunedoara
+  came up empty — no street, no river, no park — over a tile set that held
+  1,120 roads at the very spot the camera was on. The cause was two lines in
+  the log: `Failed to load glyph range 512-767`. The Romanian Ș and Ț live in
+  that range, the APK shipped only Latin, Latin Extended-A and punctuation, and
+  MapLibre does not skip the character it cannot draw: the tile whose label
+  needed the range never finishes its layout, and nothing of it is drawn. The
+  generator now produces every range of the Basic Multilingual Plane, which
+  costs 230 kB because a range the font does not cover answers in forty-four
+  bytes — what the font cannot draw stays blank, which is what a missing
+  character was always supposed to cost. Nine of the networks served wrote
+  names in that range, and thirty more used one of the other absent ranges,
+  Greek, Cyrillic and Japanese included.
+
 - **A URI escape carries a byte, not a character.** Percent-escaped UTF-8 was
   decoded one escape at a time, so "é" — which travels as `%C3%A9` — arrived as
   two characters: a place shared as "rue de l'Hôpital" reached the address

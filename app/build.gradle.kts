@@ -161,6 +161,16 @@ android {
     }
 }
 
+// The glyphs the map draws its labels with. The test reads the very directory
+// tools/build_glyphs.js writes, because a range missing there does not blank a
+// character but the whole tile that needed it (SPEC §4.2).
+tasks.withType<Test>().configureEach {
+    systemProperty(
+        "rouelibre.glyphs",
+        file("src/main/assets/glyphs").absolutePath,
+    )
+}
+
 kotlin {
     jvmToolchain(17)
     compilerOptions {
