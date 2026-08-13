@@ -184,8 +184,8 @@ It must be:
    reason for choosing it over another;
 2. **GPLv3-compatible** — check before integrating;
 3. **free of any Google service**: no Play Services, no Firebase, no Maps SDK,
-   no ML Kit, no Crashlytics. The application must work on LineageOS without
-   GApps;
+   no ML Kit, no Crashlytics. The application must work on any Android OS
+   without Google services;
 4. **free of telemetry.** The Exodus Privacy analysis must detect no tracker.
 
 If one of those constraints stands in the way of a feature you find useful, say

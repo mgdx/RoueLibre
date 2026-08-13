@@ -31,7 +31,7 @@ import java.time.Duration
  *
  * **The system provider, never Google's fused location services**: those are
  * part of Play Services, which constraint C2 forbids. `LocationManager` is the
- * AOSP API, present on a LineageOS without GApps.
+ * AOSP API, present on any Android OS without Google services.
  *
  * Every provider the device has is listened to at once, and their answers are
  * arbitrated on accuracy rather than taken in the order they arrive — see

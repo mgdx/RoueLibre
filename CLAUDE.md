@@ -17,7 +17,8 @@ real-time availability.
 ## Absolute rules
 
 1. **No Google services.** No Play Services, no Firebase, no FCM, no Maps SDK,
-   no Crashlytics. The application must run on LineageOS without GApps.
+   no Crashlytics. The application must run on any Android OS without Google
+   services.
 2. **No telemetry, no tracker, no unique identifier.** No journey data is kept.
 3. **Offline by default.** Map, address search and route computation all run on
    the device. Only the GBFS feed goes out on the network.
