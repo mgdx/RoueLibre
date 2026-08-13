@@ -28,6 +28,7 @@ import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
+import io.github.mgdx.rouelibre.ui.BikeGlyphs
 import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
 import io.github.mgdx.rouelibre.ui.city.CityFragment
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
@@ -40,6 +41,7 @@ import io.github.mgdx.rouelibre.ui.stations.StationsViewModel
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
+import io.github.mgdx.rouelibre.ui.withBikeFleet
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -199,6 +201,12 @@ class MapFragment : Fragment() {
         views.modeToggle.setOnClickListener { toggleMode() }
         views.pickedPlace.setOnClickListener { showPickedPlace(null) }
         applyModeLabel()
+        // The button that opens the journey search carries the bike of the
+        // network served: with a bolt where that network lends pedal-assist
+        // bikes (SPEC §15).
+        withBikeFleet { electricBikes ->
+            binding?.openJourney?.setIconResource(BikeGlyphs.icon(electricBikes))
+        }
 
         // The target depends on what is missing, and it is set together with
         // the label, once we know whether there is a city — see loadTilesFor.

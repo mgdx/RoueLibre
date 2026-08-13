@@ -31,6 +31,7 @@ import io.github.mgdx.rouelibre.ui.formatDuration
 import io.github.mgdx.rouelibre.ui.map.MapStyleLoader
 import io.github.mgdx.rouelibre.ui.map.ServedAreaCamera
 import io.github.mgdx.rouelibre.ui.map.UserPositionMarker
+import io.github.mgdx.rouelibre.ui.withBikeFleet
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -88,6 +89,14 @@ class JourneyResultFragment : Fragment() {
 
     /** The subscription that moves the point, while the screen is displayed. */
     private var following: Job? = null
+
+    /**
+     * Whether the network served lends pedal-assist bikes (SPEC §15).
+     *
+     * Read once, kept here because the style can load before or after the
+     * answer: whichever comes second registers the station marker.
+     */
+    private var electricBikes = false
 
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
@@ -227,10 +236,34 @@ class JourneyResultFragment : Fragment() {
         picker.listen(viewLifecycleOwner)
         showEndpoints()
         followUserPosition()
+        readBikeFleet()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collectLatest(::show)
+            }
+        }
+    }
+
+    /**
+     * Puts the bike of the network served on the three drawings of this screen.
+     *
+     * The bike being waited for, the two discs of the shape and the stations on
+     * the map all carry a bolt where the network lends pedal-assist bikes
+     * (SPEC §15). The configuration is read from disk, so the answer arrives
+     * after the screen: the plain bike is drawn until then, and the style —
+     * which may not have loaded yet — takes its image whenever it is ready.
+     */
+    private fun readBikeFleet() {
+        withBikeFleet { electric ->
+            electricBikes = electric
+            val views = binding ?: return@withBikeFleet
+            views.shape.electricBikes = electric
+            views.computingBike.electricBikes = electric
+            if (styleLoaded) {
+                mapLibreMap?.style?.let {
+                    JourneyMarkers.registerImages(requireContext(), it, electric)
+                }
             }
         }
     }
@@ -311,7 +344,7 @@ class JourneyResultFragment : Fragment() {
             val markers = GeoJsonSource(JourneyMarkers.SOURCE_ID)
             markerSource = markers
             style.addSource(markers)
-            JourneyMarkers.registerImages(requireContext(), style)
+            JourneyMarkers.registerImages(requireContext(), style, electricBikes)
             style.addLayer(JourneyMarkers.layer())
 
             // The user's position comes last of all, and therefore on top:

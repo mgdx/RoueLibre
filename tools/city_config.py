@@ -20,6 +20,20 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CITY_CONFIG = REPO_ROOT / "config" / "cities" / "lille.json"
 
+# What the "fleet" block says about itself, written by whichever script fills
+# it — the survey when a city is added, tools/read_fleet.py when an existing
+# one is refreshed. One text, so the two cannot drift apart.
+FLEET_COMMENT = [
+    "What the network lends, as its own feed declares it (§4.1).",
+    "Read from the GBFS vehicle_types feed, never written by hand: a",
+    "bicycle whose propulsion_type is electric is a pedal-assist bike,",
+    "and the interface then marks every bike glyph it draws for this",
+    "city with a bolt (§7).",
+    "A network whose feed declares no vehicle type has no such block at",
+    "all: the application draws the plain bike rather than promising a",
+    "motor nobody verified.",
+]
+
 # One degree of latitude is very nearly this many metres everywhere on the
 # ellipsoid; the variation is far below the precision this project needs.
 METRES_PER_DEGREE_LATITUDE = 111_320.0
@@ -137,6 +151,58 @@ class CityConfig:
     @property
     def format_version(self) -> int:
         return self.document["dataRelease"]["formatVersion"]
+
+    @property
+    def has_electric_bikes(self) -> bool:
+        """Whether the network lends pedal-assist bikes (§15).
+
+        False as well when the configuration says nothing, which is the case
+        of a network whose feed declares no vehicle type: the application then
+        draws the plain bike rather than promising a motor nobody verified.
+        """
+        return bool(self.document.get("fleet", {}).get("electricBikes", False))
+
+    def update_fleet(self, has_electric_bikes: bool, surveyed_at: str) -> bool:
+        """Record what the network's own feed says it lends.
+
+        Written by ``tools/read_fleet.py`` from the GBFS ``vehicle_types``
+        feed, and by nothing else: this is a fact about the city, and §16
+        wants facts observed rather than typed in.
+
+        Returns:
+            whether the configuration changed, so a caller sweeping three
+            hundred cities can name the ones that moved and leave the rest
+            untouched — including their file's modification date.
+        """
+        stored = self.document.get("fleet")
+        # The documentation counts as content: a comment reworded in one place
+        # must reach the three hundred files it explains, and a run that
+        # changed nothing else must leave their dates alone.
+        unchanged = (
+            stored is not None
+            and stored.get("electricBikes") == has_electric_bikes
+            and stored.get("$comment") == FLEET_COMMENT
+        )
+        if unchanged:
+            return False
+        # Placed after the network it describes, where whoever reads the file
+        # expects it, rather than appended at the end.
+        fleet = {
+            "$comment": FLEET_COMMENT,
+            "electricBikes": has_electric_bikes,
+            "surveyedAt": surveyed_at,
+        }
+        rebuilt = {}
+        for key, value in self.document.items():
+            if key == "fleet":
+                continue
+            rebuilt[key] = value
+            if key == "network":
+                rebuilt["fleet"] = fleet
+        if "fleet" not in rebuilt:
+            rebuilt["fleet"] = fleet
+        self.document = rebuilt
+        return True
 
     @property
     def bounding_box(self) -> BoundingBox:

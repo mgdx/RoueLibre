@@ -187,6 +187,7 @@ python3 tools/discover_networks.py --country PL   # or one country at a time
 python3 tools/add_city.py --list      # what it would add
 python3 tools/add_city.py --all       # writes config/cities/*.json
 python3 tools/add_city.py --refresh-sources   # re-reads where the data is cut from
+python3 tools/read_fleet.py --all     # asks each network what it lends
 ```
 
 By hand, for a network the catalogues do not list:
@@ -232,6 +233,17 @@ coexist on the device, and deleting one leaves the other untouched.
 Since GBFS is an international standard, most of the portability is won as soon
 as the URL is configurable — and it is also configurable from the application's
 settings, without recompiling.
+
+**Electric or not, the drawing says so.** A network lending pedal-assist bikes
+is not the same offer as one lending mechanical bikes, and the bike glyphs of
+that city carry a small bolt — the journey button, the ride leg, the discs
+standing for stations. Nothing is guessed:
+[`tools/read_fleet.py`](tools/read_fleet.py) reads the network's own GBFS
+`vehicle_types` feed and writes the answer into the `fleet` block of its
+configuration, which is the only place the application looks. A feed declaring
+no vehicle type leaves the block out, and the plain bike is drawn. Of the
+networks served today, 192 lend pedal-assist bikes, 101 lend mechanical ones
+and 13 say nothing.
 
 **Where the addresses come from.** In France the index is built from the Base
 Adresse Nationale, which is the finer source there; everywhere else it is built

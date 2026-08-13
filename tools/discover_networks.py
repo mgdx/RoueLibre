@@ -176,6 +176,11 @@ LICENCE_NAMES = {
 BICYCLE_FORM_FACTORS = frozenset({"bicycle", "cargo_bicycle"})
 DISQUALIFYING_FORM_FACTORS = frozenset({"car", "moped", "other"})
 
+# GBFS propulsion values that mean a motor helps the rider. A bicycle declaring
+# one of them is a pedal-assist bike, which the interface draws with a bolt
+# (§7): the answer is read here, from the feed itself, and never guessed.
+ELECTRIC_PROPULSIONS = frozenset({"electric_assist", "electric"})
+
 # The languages a country's STREETS are named in, the majority one first
 # (§15.1). This is what a city configuration announces, and what decides which
 # street-name normalisation rules its address index is built with — not the
@@ -380,6 +385,15 @@ def probe_feeds(candidate: dict) -> dict:
             types = fetch_json(feeds["vehicle_types"])["data"]["vehicle_types"]
             survey["formFactors"] = sorted(
                 {kind.get("form_factor", "unknown") for kind in types}
+            )
+            # Only the bicycles are looked at: a network's electric SCOOTERS
+            # say nothing about the bikes one borrows at its docks. Absent
+            # from the survey when no vehicle type is declared, which is how a
+            # city ends up with no fleet block and the plain bike drawn.
+            survey["electricBikes"] = any(
+                kind.get("form_factor") in BICYCLE_FORM_FACTORS
+                and kind.get("propulsion_type") in ELECTRIC_PROPULSIONS
+                for kind in types
             )
         except Exception:  # noqa: BLE001 — optional enrichment
             pass

@@ -10,6 +10,7 @@ import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import io.github.mgdx.rouelibre.R
+import io.github.mgdx.rouelibre.ui.BikeGlyphs
 
 /**
  * The shape of the journey being shown: walk, ride, walk, timed and measured.
@@ -89,8 +90,26 @@ class JourneyShapeView @JvmOverloads constructor(
     private val endpointMarker: Drawable? =
         AppCompatResources.getDrawable(context, R.drawable.marker_journey_endpoint)
 
-    private val stationMarker: Drawable? =
+    private var stationMarker: Drawable? =
         AppCompatResources.getDrawable(context, R.drawable.marker_journey_station)
+
+    /**
+     * Whether the network served lends pedal-assist bikes (SPEC §15).
+     *
+     * The two station discs then bear the bolt, exactly as the map's markers
+     * and the search screen's illustration do: the same journey, drawn three
+     * times, must be recognised from one screen to the next.
+     */
+    var electricBikes: Boolean = false
+        set(value) {
+            if (field == value) return
+            field = value
+            stationMarker = AppCompatResources.getDrawable(
+                context,
+                BikeGlyphs.stationMarker(value),
+            )
+            invalidate()
+        }
 
     private val nodeSize = resources.getDimensionPixelSize(R.dimen.journey_shape_node)
 

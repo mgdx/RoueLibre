@@ -11,6 +11,23 @@ also records what has no visible effect.
 
 ### Added
 
+- **A city lending pedal-assist bikes draws them with a bolt.** Whether the
+  fleet is electric is now part of a city's configuration, in a `fleet` block,
+  and every bike the interface draws for that city carries a small bolt: the
+  button opening the journey search, the ride leg of the detail, and the discs
+  standing for a station on the map, in the search screen's illustration, in
+  the shape of the computed journey and in the bike that crosses the screen
+  while it is being worked out. It is the difference between two offers, and
+  the first thing one wants to know before walking to a station. The value is
+  never typed in: `tools/read_fleet.py` reads the network's own GBFS
+  `vehicle_types` feed, where a bicycle whose `propulsion_type` is electric
+  settles the question — 192 of the networks served lend pedal-assist bikes,
+  101 lend mechanical ones, and 13 declare no vehicle type at all and keep the
+  plain bike. A mixed fleet counts as electric: the question is whether the
+  city lends electric bikes. The application's own identity is untouched — the
+  launcher icon and the welcome screens are the same whichever city is served,
+  one of them being shown before any city has been chosen.
+
 - **The result screen has a button bringing the map back onto the whole
   journey.** It sits above "locate me", which is the button that takes the map
   away from it: coming down onto the walker, or panning to look at a junction,

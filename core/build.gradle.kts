@@ -41,6 +41,13 @@ tasks.withType<Test>().configureEach {
         "rouelibre.cityCatalogue",
         rootProject.file("config/catalogue.json").absolutePath,
     )
+    // The city configurations as the tools actually write them: the reader is
+    // tested against all of them, so a field the scripts add and the
+    // application ignores cannot go unnoticed (SPEC §15).
+    systemProperty(
+        "rouelibre.cityConfigurations",
+        rootProject.file("config/cities").absolutePath,
+    )
     // The reference cases, one file per generated city: the test replays them
     // all, which extends the proof to every new network.
     systemProperty(

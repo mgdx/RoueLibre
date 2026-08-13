@@ -243,6 +243,8 @@ No colour or size may be hard-coded in a layout: everything goes through resourc
 
 **No network's name appears in the visual identity**: not its brand colour, not its logo, not its typeface. The application has an identity of its own, the same whichever city it is serving — that is a portability requirement (§15) as much as trademark caution.
 
+**The bike drawn says what is lent.** Where the network in service lends pedal-assist bikes, every bike glyph drawn for that city bears a small bolt: the button opening the journey search, the ride leg, and the discs standing for a station wherever they appear — map, illustration, detail. Not a brand mark and not a decoration: it is the difference between two offers, and it is the first thing one wants to know before walking to a station. Whether it applies is read from the city configuration (§15) and from nowhere else, so a mechanical fleet in one conurbation and an electric one in the next need no code change. A mixed fleet counts as electric: what the bolt answers is whether the city lends electric bikes. The application's own identity is untouched — the launcher icon and the welcome screens are the same whichever city is served, and one of them is shown before any city has been chosen at all.
+
 ### 7.1 Map (main screen)
 
 - Full-screen map, centred on the user's position when the system already holds one inside the city served, and on that city's configured centring otherwise.
@@ -455,7 +457,8 @@ This project is meant to live a long time, to be taken over by contributors and 
 The application must be able to serve another city **without a code change**. This is a design requirement, not an intention.
 
 - **No data specific to a city hard-coded** in the code: no URL, no bounding box, no centring coordinates, no network name. All of it lives in a **city configuration file**, single and documented. It carries the country as well (ISO 3166-1 alpha-2), which the catalogue groups on and the generation scripts read the address base of.
-- That file describes: network name, `gbfs.json` URL, bounding box, default centre and zoom, URLs of the datasets to download, default language.
+- That file describes: network name, `gbfs.json` URL, bounding box, default centre and zoom, URLs of the datasets to download, default language, and whether the fleet holds pedal-assist bikes.
+- The **fleet** is read from the network's own `vehicle_types` feed by `tools/read_fleet.py`, never typed in: a bicycle whose `propulsion_type` is electric is a pedal-assist bike, and the interface then marks that city's bike glyphs with a bolt (§7). A network whose feed declares no vehicle type says nothing rather than something unverified, and the plain bike is drawn. The application itself never calls that feed: this is a fact settled when the city is added, not real-time state.
 - Since GBFS is an international standard, most of the portability is won as soon as the URL is configurable (§4.1).
 - The **generation scripts** for the data (tiles, routing graph, address index) take the bounding box as a parameter. Producing another city's data must be a single command.
 - The vocabulary of the code and of the interface stays **generic**: "station", "bike", "network". A network's name lives in its configuration alone — never in a class name, a variable or a string resource.

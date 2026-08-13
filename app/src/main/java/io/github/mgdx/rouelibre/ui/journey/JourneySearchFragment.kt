@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.databinding.FragmentJourneySearchBinding
+import io.github.mgdx.rouelibre.ui.BikeGlyphs
+import io.github.mgdx.rouelibre.ui.withBikeFleet
 
 /**
  * Journey search: from where to where (SPEC §7.3).
@@ -75,6 +77,11 @@ class JourneySearchFragment : Fragment() {
 
         picker.listen(viewLifecycleOwner)
         showEndpoints()
+        // The illustration draws the stations of the network served: bearing a
+        // bolt where that network lends pedal-assist bikes (SPEC §15).
+        withBikeFleet { electricBikes ->
+            binding?.shape?.setImageResource(BikeGlyphs.journeyShape(electricBikes))
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

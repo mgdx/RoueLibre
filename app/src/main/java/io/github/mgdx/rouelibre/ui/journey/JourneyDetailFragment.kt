@@ -25,12 +25,14 @@ import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyDetailBinding
 import io.github.mgdx.rouelibre.databinding.ItemJourneyPlaceBinding
 import io.github.mgdx.rouelibre.databinding.ItemJourneyStepBinding
+import io.github.mgdx.rouelibre.ui.BikeGlyphs
 import io.github.mgdx.rouelibre.ui.address.toTitle
 import io.github.mgdx.rouelibre.ui.formatAltitude
 import io.github.mgdx.rouelibre.ui.formatClimb
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.formatDuration
 import io.github.mgdx.rouelibre.ui.isReliefWorthDrawing
+import io.github.mgdx.rouelibre.ui.withBikeFleet
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -58,6 +60,13 @@ class JourneyDetailFragment : Fragment() {
     private val viewModel: JourneyDetailViewModel by viewModels {
         JourneyDetailViewModel.Factory(container.addressIndex)
     }
+
+    /**
+     * Whether the network served lends pedal-assist bikes (SPEC §15).
+     *
+     * The ride's icon and the two station markers carry the bolt when it does.
+     */
+    private var electricBikes = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,6 +96,14 @@ class JourneyDetailFragment : Fragment() {
 
         showTotal(journey)
         showProfile(journey.plan)
+        // The city's configuration is read from disk: the rows are laid with
+        // the plain bike and drawn again, a moment later, with the network's
+        // own.
+        withBikeFleet { electric ->
+            electricBikes = electric
+            binding?.shape?.electricBikes = electric
+            showJourney(journey, viewModel.addresses.value)
+        }
         viewModel.locate(stationsOf(journey.plan))
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -244,7 +261,7 @@ class JourneyDetailFragment : Fragment() {
             ),
         )
         addLeg(
-            icon = R.drawable.ic_bike,
+            icon = BikeGlyphs.icon(electricBikes),
             label = getString(R.string.journey_step_ride, option.arrivalStation.name),
             leg = option.ride,
         )
@@ -299,6 +316,7 @@ class JourneyDetailFragment : Fragment() {
     ) {
         val views = binding ?: return
         val place = ItemJourneyPlaceBinding.inflate(layoutInflater, views.steps, false)
+        place.marker.setImageResource(BikeGlyphs.stationMarker(electricBikes))
         place.role.text = role
         place.name.text = station.name
         place.address.isGone = address == null

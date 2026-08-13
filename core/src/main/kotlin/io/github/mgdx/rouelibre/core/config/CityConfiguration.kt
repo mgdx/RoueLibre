@@ -18,6 +18,7 @@ import kotlinx.serialization.json.Json
 public data class CityConfiguration(
     public val configVersion: Int,
     public val network: NetworkDescription,
+    public val fleet: FleetDescription,
     public val gbfs: GbfsSettings,
     /**
      * The reference bounding box shared by the three offline datasets.
@@ -39,6 +40,28 @@ public data class NetworkDescription(
     public val city: String?,
     public val operator: String,
     public val defaultLanguage: String,
+)
+
+/**
+ * What the network lends, as its own feed declares it.
+ *
+ * A city-specific fact like any other, and therefore read from the
+ * configuration rather than decided in the code (SPEC §15): the same
+ * application serves a mechanical fleet and an electric one.
+ */
+public data class FleetDescription(
+    /**
+     * Whether the fleet holds pedal-assist bikes.
+     *
+     * True as soon as the network declares one, mixed fleets included: what
+     * this answers is whether the city lends electric bikes, and the interface
+     * marks its bike glyph with a bolt when it does (SPEC §7).
+     *
+     * False when the configuration says nothing, which is the case of a
+     * network whose GBFS feed declares no vehicle type: the plain bike is then
+     * drawn rather than a motor nobody verified.
+     */
+    public val hasElectricBikes: Boolean,
 )
 
 /** Access to the real-time feed. */
@@ -110,6 +133,7 @@ public object CityConfigurationReader {
 private data class CityConfigurationDocument(
     val configVersion: Int = 1,
     val network: NetworkDocument,
+    val fleet: FleetDocument = FleetDocument(),
     val gbfs: GbfsDocument,
     val boundingBox: BoundingBoxDocument = BoundingBoxDocument(),
     val map: MapDocument,
@@ -124,6 +148,7 @@ private data class CityConfigurationDocument(
             operator = network.operator,
             defaultLanguage = network.defaultLanguage,
         ),
+        fleet = FleetDescription(hasElectricBikes = fleet.electricBikes),
         gbfs = GbfsSettings(
             discoveryUrl = gbfs.discoveryUrl,
             attribution = gbfs.attribution,
@@ -150,6 +175,14 @@ private data class NetworkDocument(
     val city: String? = null,
     val operator: String,
     val defaultLanguage: String = "fr",
+)
+
+@Serializable
+private data class FleetDocument(
+    // Absent from a configuration written before the fleet was ever read, and
+    // from one whose network declares no vehicle type: both mean "not known to
+    // be electric", which is drawn as the plain bike.
+    val electricBikes: Boolean = false,
 )
 
 @Serializable

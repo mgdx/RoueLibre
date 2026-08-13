@@ -31,7 +31,7 @@ import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 
-from city_config import BoundingBox, CityConfig
+from city_config import FLEET_COMMENT, BoundingBox, CityConfig
 from compute_bbox import bounding_box_of_stations, load_stations, positioned_stations
 
 TOOLS_DIR = Path(__file__).resolve().parent
@@ -145,6 +145,18 @@ def build_document(survey: dict, network_id: str, box: BoundingBox,
     centre_latitude = round((box.south + box.north) / 2, 6)
     centre_longitude = round((box.west + box.east) / 2, 6)
     versions = survey.get("declaredVersions") or survey.get("gbfsVersion", "")
+    # No block at all where the feed declares no vehicle type: the application
+    # then draws the plain bike, and tools/read_fleet.py can fill it in later
+    # if the producer starts publishing one.
+    fleet = (
+        {
+            "$comment": FLEET_COMMENT,
+            "electricBikes": survey["electricBikes"],
+            "surveyedAt": survey.get("surveyedAt", ""),
+        }
+        if "electricBikes" in survey
+        else None
+    )
     return {
         "$comment": CONFIGURATION_COMMENT,
         "configVersion": 1,
@@ -161,6 +173,7 @@ def build_document(survey: dict, network_id: str, box: BoundingBox,
             # language of the interface: that one follows the device (§9).
             "defaultLanguage": survey.get("language", "en"),
         },
+        **({"fleet": fleet} if fleet else {}),
         "gbfs": {
             "$comment": [
                 "URL of the auto-discovery file, and of that alone (§4.1).",
