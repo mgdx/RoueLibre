@@ -9,7 +9,26 @@ also records what has no visible effect.
 
 ## [Unreleased]
 
+### Added
+
+- **Every configured conurbation now has its data, and it is published.** The
+  three sets exist for all **306** networks, 5.60 GB in total — median 10.2 MB
+  a city, 2.0 MB for Moravská Třebová, 165.8 MB for Rotterdam, which is the
+  heaviest and still under the 200 MB ceiling of `SPEC.md` §4.2. Together they
+  hold 923,859 tiles, 1,115,241 streets and 20,706,107 house numbers. Each was
+  checked against its manifest's digests, both its SQLite files opened and
+  queried, and its routing graph counted.
+
 ### Changed
+
+- **The data is laid out as one release per country**, plus a last one holding
+  the catalogue and the 306 manifests. GitHub allows a thousand assets per
+  release and the sets come to some 1,350 files, so a single release could not
+  hold them. The index release is re-created after every other one, because
+  `releases/latest/download/manifest-<network>.json` is what the application
+  asks for and *latest* means the newest release of the repository. Neither the
+  application nor the 306 configurations changed for it: only where the files
+  sit, which each manifest names for itself.
 
 - **The interface takes the icon's colour.** The signal hue is now the
   launcher icon's green to the digit, and the neutrals lean green rather than
