@@ -198,6 +198,10 @@ class JourneyResultFragment : Fragment() {
         views.destination.setOnClickListener { picker.choose(false, origin.position) }
         views.swap.setOnClickListener { swapEndpoints() }
         views.locateMe.setOnClickListener { onLocateMeClicked() }
+        // The way back from wherever the map has been taken to. Animated, unlike
+        // the framing the screen lays by itself: this one answers a press, and
+        // the move is what says the press was heard.
+        views.frameJourney.setOnClickListener { applyFrame(animated = true) }
 
         views.map.onCreate(savedInstanceState)
         views.map.getMapAsync(::onMapReady)
@@ -609,10 +613,17 @@ class JourneyResultFragment : Fragment() {
         )
     }
 
-    /** Frames the map on the whole track, with a comfortable margin. */
+    /**
+     * Frames the map on the whole track, with a comfortable margin.
+     *
+     * A journey of fewer than two points has no extent to frame — an impossible
+     * one, most often. The framing is then dropped rather than kept from the
+     * previous answer, and the button offering to come back to it goes with it:
+     * there is nothing left to come back to.
+     */
     private fun frameOn(points: List<LatLng>) {
-        if (points.size < 2) return
-        frame = LatLngBounds.Builder().includes(points).build()
+        frame = points.takeIf { it.size >= 2 }?.let { LatLngBounds.Builder().includes(it).build() }
+        binding?.frameJourney?.isVisible = frame != null
         applyFrame()
     }
 
@@ -626,8 +637,13 @@ class JourneyResultFragment : Fragment() {
      * one or two zoom steps too close, which cuts a journey running north-south
      * while leaving a wide one apparently right. Hence the framing is kept and
      * laid again at the map's real size, whenever that size changes.
+     *
+     * @param animated true when a press asked for it, so the map travels back
+     * rather than jumping: the movement is what tells where one has been taken
+     * from. The screen's own re-framings stay abrupt — they follow a layout
+     * change nobody asked for, and animating them would draw the eye to it.
      */
-    private fun applyFrame() {
+    private fun applyFrame(animated: Boolean = false) {
         val views = binding ?: return
         val map = mapLibreMap ?: return
         val bounds = frame ?: return
@@ -663,10 +679,25 @@ class JourneyResultFragment : Fragment() {
         // ceiling is in the data, not in the camera.
         val limits = servedArea
         limits?.releaseForMove()
-        map.moveCamera(
-            CameraUpdateFactory.newLatLngBounds(bounds, margin, margin, margin, margin + band),
+        val update = CameraUpdateFactory
+            .newLatLngBounds(bounds, margin, margin, margin, margin + band)
+        if (!animated) {
+            map.moveCamera(update)
+            limits?.holdAgain()
+            return
+        }
+        // The limits stay down for the whole flight, not just its start: laying
+        // them again mid-move jumps the camera inside the box and kills the
+        // animation where it stands. They are taken up on arrival, however the
+        // move ends — a gesture during it cancels the animation, and a camera
+        // left unpenned is what lets the edge of the served area show.
+        map.animateCamera(
+            update,
+            object : MapLibreMap.CancelableCallback {
+                override fun onCancel() = limits?.holdAgain() ?: Unit
+                override fun onFinish() = limits?.holdAgain() ?: Unit
+            },
         )
-        limits?.holdAgain()
     }
 
     // ---------------------------------------------------- map lifecycle --

@@ -11,6 +11,16 @@ also records what has no visible effect.
 
 ### Added
 
+- **The result screen has a button bringing the map back onto the whole
+  journey.** It sits above "locate me", which is the button that takes the map
+  away from it: coming down onto the walker, or panning to look at a junction,
+  left no way back to the shape of the journey short of computing it again. The
+  framing is the one the screen lays by itself, applied to the map as it stands
+  — but animated, since a press deserves to be seen answered, and the camera's
+  limits are stood down for the whole flight rather than laid again mid-move,
+  which would jump the camera inside its box and kill the animation. The button
+  is absent while there is nothing to frame.
+
 - **The journey's detail draws the ground the ride runs over.** The routing
   graph carries the elevation of every node it returns, and until now only
   their sum was read. A total says how much there is to climb, never where: a

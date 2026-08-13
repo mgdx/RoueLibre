@@ -104,6 +104,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- Back to the whole journey. It undoes what the button under it does:
+         once the map has come down onto the walker, or a pan has taken it off
+         the track, this is the way back to the shape of the journey without
+         recomputing it. Above "locate me" because it is the wider of the two
+         views, and it is hidden while there is no track to frame. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/frame_journey"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginBottom="@dimen/space_s"
+        android:contentDescription="@string/journey_frame"
+        android:visibility="gone"
+        app:backgroundTint="@color/surface"
+        app:icon="@drawable/ic_frame_journey"
+        app:iconTint="@color/ink"
+        app:layout_constraintBottom_toTopOf="@id/locate_me"
+        app:layout_constraintEnd_toEndOf="@id/locate_me"
+        tools:visibility="visible" />
+
     <!-- Locate me, at the corner of the map the thumb reaches: it brings the
          framing back onto the walker, as close as the tiles allow. The
          permission is asked for here, at the moment it is understood
