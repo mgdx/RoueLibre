@@ -149,7 +149,7 @@ class JourneyDetailFragment : Fragment() {
     }
 
     /**
-     * The journey in the order it is lived, from the start to the destination.
+     * The journey in the order it is lived: each leg, and the stations between.
      *
      * Rebuilt whole whenever an address arrives: the rows are few, and a list
      * assembled in one pass is easier to follow than one patched in place.
@@ -158,11 +158,10 @@ class JourneyDetailFragment : Fragment() {
         val views = binding ?: return
         views.steps.removeAllViews()
 
-        addPlace(
-            marker = R.drawable.marker_journey_endpoint,
-            role = getString(R.string.journey_detail_start),
-            name = journey.origin.label,
-        )
+        // The two ends are not rows of their own: they are named by the legs
+        // that reach them — "walk to the destination" — and by the two fields
+        // at the top of the screen this one was opened from. A row repeating
+        // one of them said nothing the reader had not just read.
         when (val plan = journey.plan) {
             is JourneyPlan.Found -> addRide(plan.best, addresses)
             is JourneyPlan.WalkOnly -> addLeg(
@@ -173,11 +172,6 @@ class JourneyDetailFragment : Fragment() {
 
             is JourneyPlan.Impossible -> Unit
         }
-        addPlace(
-            marker = R.drawable.marker_journey_endpoint,
-            role = getString(R.string.journey_detail_destination),
-            name = journey.destination.label,
-        )
         // The counts are the ones the journey was decided on, not the ones the
         // stations hold now: saying so is what keeps a figure read five minutes
         // ago from being taken for a promise (SPEC §6). Only a bike journey has
@@ -185,17 +179,16 @@ class JourneyDetailFragment : Fragment() {
         views.availabilityNote.isVisible = journey.plan is JourneyPlan.Found
     }
 
-    /** The three legs and the two stations between the journey's ends. */
+    /** The three legs, and the two stations they run between. */
     private fun addRide(option: JourneyOption, addresses: Map<String, AddressResult>) {
         addLeg(
             icon = R.drawable.ic_walk,
             label = getString(R.string.journey_step_to_station, option.departureStation.name),
             leg = option.walkToStation,
         )
-        addPlace(
-            marker = R.drawable.marker_journey_station,
+        addStation(
             role = getString(R.string.journey_detail_departure_station),
-            name = option.departureStation.name,
+            station = option.departureStation,
             address = addresses[option.departureStation.id],
             availability = availabilityOf(
                 counted = resources.getQuantityString(
@@ -211,10 +204,9 @@ class JourneyDetailFragment : Fragment() {
             label = getString(R.string.journey_step_ride, option.arrivalStation.name),
             leg = option.ride,
         )
-        addPlace(
-            marker = R.drawable.marker_journey_station,
+        addStation(
             role = getString(R.string.journey_detail_arrival_station),
-            name = option.arrivalStation.name,
+            station = option.arrivalStation,
             address = addresses[option.arrivalStation.id],
             availability = availabilityOf(
                 counted = resources.getQuantityString(
@@ -248,22 +240,26 @@ class JourneyDetailFragment : Fragment() {
         )
     }
 
-    private fun addPlace(
-        marker: Int,
+    /**
+     * A station of the journey: what it is called, where it stands, what it
+     * held.
+     *
+     * The marker is the map's own, so the row and the point drawn on the
+     * previous screen are recognised as the same thing.
+     */
+    private fun addStation(
         role: String,
-        name: String,
-        address: AddressResult? = null,
-        availability: String? = null,
+        station: Station,
+        address: AddressResult?,
+        availability: String,
     ) {
         val views = binding ?: return
         val place = ItemJourneyPlaceBinding.inflate(layoutInflater, views.steps, false)
-        place.marker.setImageResource(marker)
         place.role.text = role
-        place.name.text = name
+        place.name.text = station.name
         place.address.isGone = address == null
         address?.let { place.address.text = addressLineOf(it) }
-        place.availability.isVisible = availability != null
-        availability?.let { place.availability.text = it }
+        place.availability.text = availability
         views.steps.addView(place.root)
     }
 

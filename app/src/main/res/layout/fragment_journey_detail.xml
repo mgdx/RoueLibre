@@ -47,25 +47,42 @@
             android:paddingEnd="@dimen/space_l"
             android:paddingBottom="@dimen/space_xxl">
 
-            <!-- The same two lines as the result screen, which is where the
-                 press came from: arriving on a different total would be
-                 arriving on a different journey. Here they have the width to
-                 stand one above the other. -->
-            <TextView
-                android:id="@+id/total_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/bricolage_semibold"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Title"
-                tools:text="24 min" />
+            <!--
+                The same two lines as the result screen, laid the same way:
+                the summary beside the figure it explains and from its top, not
+                under it (SPEC §7.4). Arriving here on a total set out
+                differently would read as arriving on a different journey.
 
-            <TextView
-                android:id="@+id/summary"
+                A weighted LinearLayout row would settle its own height before
+                handing the summary its share of the width, and the second line
+                of a summary that wraps would fall outside it. Hence a
+                ConstraintLayout, as on the screen this one repeats.
+            -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_xs"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
-                tools:text="of which 9 min walking and 13 min riding · 4.1 km · 45 m of climb" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/total_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bricolage_semibold"
+                    android:textAppearance="@style/TextAppearance.RoueLibre.Title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="24 min" />
+
+                <TextView
+                    android:id="@+id/summary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_m"
+                    android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/total_time"
+                    app:layout_constraintTop_toTopOf="@id/total_time"
+                    tools:text="of which 9 min walking and 13 min riding · 4.1 km · 45 m of climb" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- The drawing repeats what the rows below say, so a screen reader
                  must not read it a second time. -->

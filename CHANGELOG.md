@@ -16,7 +16,9 @@ also records what has no visible effect.
   it is read: it names each station, the street it stands in — read off the
   offline address index, since the availability feed publishes none — what it
   held when the journey was worked out, and every leg with its distance, its
-  minutes and its climb. The journey travels there in memory, never through a
+  minutes and its climb. The two ends of the journey have no row there: the leg
+  reaching each of them names it, and the fields of the screen one comes from
+  name it again. The journey travels there in memory, never through a
   saved argument: it carries its tracks point by point, and `SPEC.md` §8 wants
   it kept nowhere.
 
