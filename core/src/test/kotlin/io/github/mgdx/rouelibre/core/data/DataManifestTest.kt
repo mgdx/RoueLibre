@@ -99,6 +99,43 @@ class DataManifestTest {
     }
 
     @Test
+    fun `a file name that is not a file name has the whole manifest refused`() {
+        // This name becomes a path component on the device. A manifest naming
+        // "../../elsewhere" would have the download land outside the directory
+        // prepared for it, and the digest is no protection: whoever writes the
+        // manifest supplies the content and the digest it is checked against.
+        //
+        // Refused whole, not ignored like an unknown set: a set this version
+        // does not know is a later release doing its job, a name like this one
+        // is a manifest that must not be acted on at all.
+        for (name in listOf("../evil", "sous/dossier", "..", ".", "")) {
+            val forged = document.replace("\"name\": \"tiles.mbtiles\"", "\"name\": \"$name\"")
+
+            assertTrue(
+                "the name \"$name\" should have been refused",
+                DataManifestReader.read(forged) is Outcome.Failure,
+            )
+        }
+    }
+
+    @Test
+    fun `an ordinary file name is still accepted`() {
+        // The counterpart of the test above: the rule bears on what designates a
+        // path, not on what a name looks like. A space or an accent is a
+        // legitimate name, and tools/build_manifest.py may publish one.
+        val accented = document.replace(
+            "\"name\": \"tiles.mbtiles\"",
+            "\"name\": \"fond é.mbtiles\"",
+        )
+
+        assertEquals(
+            "fond é.mbtiles",
+            DataManifestReader.read(accented).valueOrNull()
+                ?.datasetFor(DatasetKind.Tiles)?.files?.first()?.name,
+        )
+    }
+
+    @Test
     fun `a set absent from the device is to be downloaded`() {
         val states = compareWithInstalled(manifest(), installedFingerprints = emptyMap())
 

@@ -39,7 +39,8 @@ data class DownloadProgress(val fileName: String, val downloadedBytes: Long, val
  *
  * **Verification.** The digest announced by the manifest is recomputed over
  * what was received. A file that does not match is rejected, and the previous
- * installation stays untouched.
+ * installation stays untouched. It says what the file **is**; it says nothing
+ * about where it lands — see [fileInside], which answers that other question.
  *
  * **Nothing automatic.** This class is only called on an explicit user action.
  * A periodic check would draw a usage profile, which constraint C3 rules out.
@@ -124,7 +125,11 @@ class DatasetDownloader(
         workDirectory: File,
         onProgress: (DownloadProgress) -> Unit,
     ): Outcome<File> {
-        val partial = File(workDirectory, "${file.name}$PARTIAL_SUFFIX")
+        val complete = fileInside(workDirectory, file.name)
+            ?: return Outcome.Failure(
+                DataError.MalformedResponse("unusable file name: ${file.name}"),
+            )
+        val partial = File(complete.path + PARTIAL_SUFFIX)
         val alreadyReceived = if (partial.isFile) partial.length() else 0L
 
         // A partial file larger than what is announced is not a resumable one:
@@ -148,7 +153,6 @@ class DatasetDownloader(
             )
         }
 
-        val complete = File(workDirectory, file.name)
         complete.delete()
         if (!partial.renameTo(complete)) {
             return Outcome.Failure(
@@ -209,6 +213,30 @@ class DatasetDownloader(
         Outcome.Failure(DataError.Offline)
     } catch (error: IOException) {
         Outcome.Failure(DataError.MalformedResponse(error.message ?: "transfer interrupted"))
+    }
+
+    /**
+     * The file [name] designates inside [directory], or `null` if it would land
+     * anywhere else.
+     *
+     * [ManifestFile] already refuses a name that is not a plain file name, and
+     * that refusal is the real barrier: a manifest naming such a file is
+     * rejected whole, before a single request goes out. This second check states
+     * the same guarantee where it actually has to hold — **nothing is written
+     * outside the working directory** — so that it survives a caller that one
+     * day hands over a name from somewhere else.
+     *
+     * The comparison is on canonical paths: only the file system knows what a
+     * path resolves to, symbolic links included.
+     */
+    private fun fileInside(directory: File, name: String): File? {
+        val target = File(directory, name)
+        return try {
+            val root = directory.canonicalPath + File.separator
+            target.takeIf { it.canonicalPath.startsWith(root) }
+        } catch (_: IOException) {
+            null
+        }
     }
 
     private fun sha256Of(file: File): String {

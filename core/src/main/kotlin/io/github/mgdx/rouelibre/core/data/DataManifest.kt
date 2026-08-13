@@ -76,17 +76,61 @@ public data class ManifestDataset(
  * A file to download.
  *
  * @property name the name it is published under, and the name it will be stored
- *   under.
+ *   under. It must be a plain file name — see [requirePlainFileName].
  * @property url where to get it.
  * @property sizeBytes the announced size, shown before asking for confirmation.
  * @property sha256 the digest, re-verified after download (SPEC §4.4).
+ * @throws IllegalArgumentException if [name] is not a plain file name. The
+ *   reader turns that into a refusal of the whole manifest.
  */
 public data class ManifestFile(
     public val name: String,
     public val url: String,
     public val sizeBytes: Long,
     public val sha256: String,
-)
+) {
+    init {
+        requirePlainFileName(name)
+    }
+}
+
+/**
+ * Refuses a file name that would designate anything but a file in the directory
+ * meant for it.
+ *
+ * This name arrives in a **downloaded** document and becomes a path component on
+ * the device. A `..` in it would make the download land outside the directory
+ * prepared for it — anywhere in the application's private storage — and the
+ * digest announced beside it is no protection whatsoever: whoever writes the
+ * manifest supplies the content *and* the digest it is checked against. The
+ * verification says what the file is, never where it lands.
+ *
+ * The refusal happens here, at the reading, rather than at the moment of
+ * writing: a manifest that names such a file is not a manifest to be patched up,
+ * it is one to be rejected — and it must be rejected whole, unlike a dataset of
+ * an unknown category, which a later release may legitimately describe.
+ *
+ * What is refused is a separator, the two names that designate a directory, and
+ * the null character, which truncates a path in the layers underneath. Nothing
+ * more: what matters is that the name designate a file *here*, not that it look
+ * the way today's generation script writes it. A legitimate name may well hold a
+ * space or an accent, and refusing those would be inventing a rule the property
+ * to be held does not need.
+ *
+ * The backslash is refused as well as the slash. It separates nothing on
+ * Android, but this module compiles and is tested on the JVM, and a rule that
+ * depends on the platform it runs on is a rule one has to think about twice.
+ */
+private fun requirePlainFileName(name: String) {
+    require(
+        name.isNotEmpty() &&
+            name != "." &&
+            name != ".." &&
+            '/' !in name &&
+            '\\' !in name &&
+            '\u0000' !in name,
+    ) { "unusable file name in the manifest: \"$name\"" }
+}
 
 /**
  * What is to be done with a set, faced with a manifest.
