@@ -127,6 +127,38 @@ public data class CityEntry(
         get() = dataSizeBytes != null && dataSizeBytes > 0
 }
 
+/**
+ * Says whether [id] may be used as a network identifier.
+ *
+ * This identifier is not a label: it **names a directory** in the application's
+ * private storage, one per city (see the data store), and it is read back from
+ * the settings at every launch. The catalogue that carries it is downloaded,
+ * therefore produced elsewhere: a `..` in it would make the whole of a city's
+ * storage — creation, listing, and the recursive deletion of "delete this
+ * city's data" — bear on a directory nobody chose.
+ *
+ * The alphabet is the one `tools/add_city.py` guarantees. Its `slug()` folds
+ * every name to lowercase unaccented ASCII and joins the pieces with hyphens,
+ * precisely because the result "names a configuration file, the directory the
+ * city's data is generated into, and the manifest published for it". This
+ * function is the reading side of that same promise.
+ *
+ * The length limit is not a security matter — no separator gets through
+ * whatever the length — but a file system refuses a name past its own limit,
+ * and failing here says why while failing there would not.
+ */
+public fun isUsableCityId(id: String): Boolean = id.isNotEmpty() &&
+    id.length <= MAXIMUM_CITY_ID_LENGTH &&
+    id.all { it in 'a'..'z' || it in '0'..'9' || it == '-' }
+
+/**
+ * The longest identifier accepted.
+ *
+ * The longest the catalogue carries is forty-seven characters; this leaves
+ * room without approaching the limit of any file system.
+ */
+private const val MAXIMUM_CITY_ID_LENGTH = 64
+
 /** Reads a catalogue of cities. */
 public object CityCatalogueReader {
 
@@ -199,7 +231,10 @@ private data class CityEntryDocument(
             null
         }
         return CityEntry(
-            id = id.takeIf { it.isNotBlank() } ?: return null,
+            // Dropped rather than fatal, like an absurd bounding box above: one
+            // unusable entry in a downloaded catalogue must not take the three
+            // hundred others with it.
+            id = id.takeIf(::isUsableCityId) ?: return null,
             displayName = displayName.takeIf { it.isNotBlank() } ?: return null,
             mainCity = mainCity?.takeIf { it.isNotBlank() },
             operator = operator,

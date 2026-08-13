@@ -126,6 +126,44 @@ class CityCatalogueTest {
     }
 
     @Test
+    fun `an entry whose identifier could not name a directory is dropped`() {
+        // The identifier names the directory a city's data lives in, and the
+        // catalogue is downloaded. A "../.." would make the storage of a city —
+        // its creation, its listing, and the recursive deletion of "delete this
+        // city's data" — bear on a directory nobody chose.
+        val document = """
+            {
+              "cities": [
+                { "id": "../..", "displayName": "Escaping",
+                  "gbfsDiscoveryUrl": "https://example.org/gbfs.json",
+                  "manifestUrl": "https://example.org/manifest.json",
+                  "boundingBox": { "south": 48.0, "west": 2.0,
+                                   "north": 49.0, "east": 3.0 } },
+                { "id": "sound", "displayName": "Sound",
+                  "gbfsDiscoveryUrl": "https://example.org/gbfs.json",
+                  "manifestUrl": "https://example.org/manifest.json",
+                  "boundingBox": { "south": 48.0, "west": 2.0,
+                                   "north": 49.0, "east": 3.0 } }
+              ]
+            }
+        """.trimIndent()
+
+        val catalogue = (CityCatalogueReader.read(document) as Outcome.Success).value
+        assertEquals(listOf("sound"), catalogue.cities.map { it.id })
+    }
+
+    @Test
+    fun `every published identifier passes the rule`() {
+        // The counterpart: the rule is the alphabet tools/add_city.py already
+        // guarantees, so it must let through all three hundred and six cities
+        // published today. A rule that refused one of them would take the city
+        // off the list on the next update.
+        publishedCatalogue().cities.forEach { city ->
+            assertTrue("refused identifier: ${city.id}", isUsableCityId(city.id))
+        }
+    }
+
+    @Test
     fun `an unreadable catalogue returns a failure, not an exception`() {
         assertTrue(CityCatalogueReader.read("{ not json") is Outcome.Failure)
         assertTrue(CityCatalogueReader.read("""{"cities": []}""") is Outcome.Failure)

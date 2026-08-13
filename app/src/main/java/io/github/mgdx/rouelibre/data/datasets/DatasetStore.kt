@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.provider.OpenableColumns
+import io.github.mgdx.rouelibre.core.config.isUsableCityId
 import io.github.mgdx.rouelibre.core.data.DatasetImportResult
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.data.DatasetRejection
@@ -82,10 +83,16 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
      *
      * It re-reads the inventory in the same breath: the screens observing it
      * therefore switch to the new city without having to bother.
+     *
+     * An identifier that could not name a directory serves none. The reader of
+     * the catalogue drops such an entry well before this point, so nothing in
+     * the interface can offer one; what arrives here is what a **previous**
+     * version wrote into the settings, and it must not be acted on.
      */
     fun useCity(id: String?) {
-        if (id == cityId) return
-        cityId = id
+        val served = id?.takeIf(::isUsableCityId)
+        if (served == cityId) return
+        cityId = served
         mutableInstalled.value = readIndex()
     }
 
@@ -93,10 +100,11 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
      * The weight of a city's data, including a city not in service: it is what
      * the storage screen announces before offering to delete it.
      */
-    fun occupiedBytesOf(id: String): Long = File(root, id)
-        .walkTopDown()
-        .filter { it.isFile }
-        .sumOf { it.length() }
+    fun occupiedBytesOf(id: String): Long = directoryOfCity(id)
+        ?.walkTopDown()
+        ?.filter { it.isFile }
+        ?.sumOf { it.length() }
+        ?: 0L
 
     /**
      * Deletes all of a city's data (SPEC §11.9).
@@ -105,9 +113,19 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
      * able to reclaim the space without having to pick another city first.
      */
     suspend fun deleteCity(id: String): Unit = withContext(ioDispatcher) {
-        File(root, id).deleteRecursively()
+        directoryOfCity(id)?.deleteRecursively()
         if (id == cityId) mutableInstalled.value = emptyMap()
     }
+
+    /**
+     * The directory of the city [id], or `null` if that is not an identifier.
+     *
+     * The single door to a city's storage, so that no caller can walk in with a
+     * name that designates something else. `deleteCity` recursively deletes what
+     * this returns: it is the one place where the question has to be settled.
+     */
+    private fun directoryOfCity(id: String): File? =
+        if (isUsableCityId(id)) File(root, id) else null
 
     /** The sets present on the device, re-emitted on every change. */
     val installed: StateFlow<Map<DatasetKind, InstalledDataset>> = mutableInstalled.asStateFlow()

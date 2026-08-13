@@ -7,6 +7,7 @@ import io.github.mgdx.rouelibre.core.config.CityCatalogue
 import io.github.mgdx.rouelibre.core.config.CityCatalogueReader
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.CityConfigurationReader
+import io.github.mgdx.rouelibre.core.config.isUsableCityId
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -98,6 +99,10 @@ class CityCatalogueSource(
      *   then invite an update, not fail without explanation.
      */
     suspend fun configuration(cityId: String): CityConfiguration? = withContext(ioDispatcher) {
+        // The identifier names an asset here, as it names a directory in the
+        // data store. It is read back from the settings, where an older version
+        // may have written one the catalogue reader would refuse today.
+        if (!isUsableCityId(cityId)) return@withContext null
         val document = try {
             context.assets.open("$CITIES_ASSET_DIRECTORY/$cityId.json")
                 .bufferedReader()
