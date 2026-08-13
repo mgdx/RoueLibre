@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The journey in detail (SPEC §7.4).
+
+    The result screen answers the question — how long, which way — on a screen
+    it shares with the map. This one has the whole height to itself, and spends
+    it on what would not fit there: the stations by name, the street each stands
+    in, what each of them held when the journey was worked out, and what every
+    leg costs in distance, in minutes and in metres climbed.
+
+    It is read in the order the journey is lived: the start, the walk, the
+    station, the ride, the other station, the last walk, the destination.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/journey_detail_title"
+        app:titleTextAppearance="@style/TextAppearance.RoueLibre.Title" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/space_l"
+            android:paddingTop="@dimen/space_s"
+            android:paddingEnd="@dimen/space_l"
+            android:paddingBottom="@dimen/space_xxl">
+
+            <!-- The same two lines as the result screen, which is where the
+                 press came from: arriving on a different total would be
+                 arriving on a different journey. Here they have the width to
+                 stand one above the other. -->
+            <TextView
+                android:id="@+id/total_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bricolage_semibold"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Title"
+                tools:text="24 min" />
+
+            <TextView
+                android:id="@+id/summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+                tools:text="of which 9 min walking and 13 min riding · 4.1 km · 45 m of climb" />
+
+            <!-- The drawing repeats what the rows below say, so a screen reader
+                 must not read it a second time. -->
+            <io.github.mgdx.rouelibre.ui.journey.JourneyShapeView
+                android:id="@+id/shape"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:importantForAccessibility="no" />
+
+            <!-- The journey, place by place and leg by leg, filled in by the
+                 fragment: what it holds depends on whether a bike is ridden.
+                 Nothing rules it off from the summary above but the space
+                 between them — the interface has no cards and no separators,
+                 and this screen is not the place to invent one. -->
+            <LinearLayout
+                android:id="@+id/steps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:orientation="vertical" />
+
+            <!-- The counts above are the ones the journey was worked out on,
+                 and a station empties while one walks to it (SPEC §6). Only a
+                 journey with stations reads this. -->
+            <TextView
+                android:id="@+id/availability_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:text="@string/journey_detail_availability_note"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

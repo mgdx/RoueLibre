@@ -49,6 +49,10 @@
     <dimen name="journey_shape_dash">2dp</dimen>
     <dimen name="journey_shape_dash_gap">5dp</dimen>
 
+    <!-- The marker heading a place on the journey's detail: the map's own
+         marker, at the size the drawing above it uses for the same disc. -->
+    <dimen name="journey_place_marker">32dp</dimen>
+
     <!-- The bike that crosses the screen while a journey is worked out. Large
          on purpose: it is alone on its screen and has no neighbour to be
          proportionate to, unlike the markers it borrows its drawing from. -->

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    One step of the journey (SPEC §7.4).
+    One leg of the journey (SPEC §7.4), on the detail screen.
 
     The icon says the mode, the text says what to do and where, the duration
-    stays right-aligned so the three steps compare at a glance.
+    stays right-aligned so the three legs compare at a glance. The icon is
+    inset, so that this row's text stands in the same column as the text of the
+    places it runs between (item_journey_place), whose marker is wider.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,6 +21,7 @@
         android:id="@+id/mode_icon"
         android:layout_width="@dimen/space_xl"
         android:layout_height="@dimen/space_xl"
+        android:layout_marginStart="@dimen/space_s"
         android:importantForAccessibility="no"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

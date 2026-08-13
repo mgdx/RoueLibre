@@ -11,6 +11,24 @@ also records what has no visible effect.
 
 ### Added
 
+- **The journey opens in full.** The block holding the total time, the summary
+  and the drawing is now itself the way to a screen of its own, pressed where
+  it is read: it names each station, the street it stands in — read off the
+  offline address index, since the availability feed publishes none — what it
+  held when the journey was worked out, and every leg with its distance, its
+  minutes and its climb. The journey travels there in memory, never through a
+  saved argument: it carries its tracks point by point, and `SPEC.md` §8 wants
+  it kept nowhere.
+
+- **A "navigation" button hands a leg of the journey to an application that
+  guides along it**, in the place the "details" button held. A `geo:` URI
+  carries one point and no standard scheme carries a route, so the press asks
+  which part of the journey is being set off on and hands that leg's end over,
+  named. This application is taken out of the choice: it answers `geo:` itself,
+  and on a phone where it is the only one to, handing a leg over reopened Roue
+  Libre and started the journey again. Where no other application answers, the
+  screen says so.
+
 - **The journey says what it climbs.** The summary names the metres gained over
   the whole trip, walks included, and each step of the detail names its own —
   five metres on the walk out, seventy on a ride from Lille to Roubaix. The
@@ -38,6 +56,12 @@ also records what has no visible effect.
   queried, and its routing graph counted.
 
 ### Changed
+
+- **The step list left the result screen for the detail screen**, and the
+  "details" button that unfolded it went with it. It was a row spent saying in
+  words what the block above it can say by answering to a press, on a screen
+  where every row is taken from the map. The `ic_plus` and `ic_minus`
+  drawables, which nothing else used, are deleted.
 
 - **The journey's summary moved up beside the total time**, level with its top,
   instead of sitting on a line of its own under it. It says the same thing and

@@ -155,92 +155,119 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="@dimen/space_l"
             android:paddingTop="@dimen/space_m"
-            android:paddingEnd="@dimen/space_l"
             android:paddingBottom="@dimen/space_m">
 
             <!--
-                The total time, the information one comes for, and beside it
-                what makes it up.
+                Everything the screen has to say, and the way to the rest of it.
 
-                On one row rather than two: the summary is the same sentence
-                either way, and set under the figure it pushed the drawing and
-                everything after it a line further down for nothing. The
-                summary takes the width the figure leaves and wraps under
-                itself, and it starts at the figure's own top rather than on
-                its baseline: a summary of two lines then stands beside the
-                figure instead of hanging below it, which is another few
-                pixels the map keeps.
+                The block is the button: the time, the summary and the drawing
+                are what one reads, and pressing them is how one asks for the
+                journey in full. A row spent on a "details" button said the
+                same thing in words, below the drawing it was talking about,
+                and took the height from the map to say it.
+
+                The horizontal padding sits here rather than on the column, so
+                the ripple runs the whole width of the screen: a press near the
+                edge is a press on the block, and it must look like one.
             -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/total_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/bricolage_semibold"
-                    android:textAppearance="@style/TextAppearance.RoueLibre.Title"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="24 min" />
-
-                <!-- A weighted row would have done, were it not for
-                     LinearLayout measuring its own height before it hands the
-                     summary its share of the width: the second line of a
-                     summary that wraps then falls outside the row and is cut
-                     off by the drawing under it. -->
-                <TextView
-                    android:id="@+id/summary"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_m"
-                    android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/total_time"
-                    app:layout_constraintTop_toTopOf="@id/total_time"
-                    tools:text="dont 9 min à pied et 13 min à vélo · 4,1 km · 45 m de dénivelé" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- The whole journey at a glance: how far each leg runs above its
-                 stroke, how long it takes below. It repeats what the folded
-                 steps say, so a screen reader must not read it a second time. -->
-            <io.github.mgdx.rouelibre.ui.journey.JourneyShapeView
-                android:id="@+id/shape"
+            <LinearLayout
+                android:id="@+id/summary_block"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_m"
-                android:importantForAccessibility="no" />
+                android:background="?attr/selectableItemBackground"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/space_l"
+                android:paddingTop="@dimen/space_s"
+                android:paddingEnd="@dimen/space_l"
+                android:paddingBottom="@dimen/space_s">
 
-            <!-- Opens the step list, and says which way it is going to go: the
-                 three lines are folded away by default, and whoever wants the
-                 name of each station asks for them here. Last of the reading:
-                 everything the screen offers to do comes after everything it
-                 has to say. -->
+                <!--
+                    The total time, the information one comes for, and beside it
+                    what makes it up.
+
+                    On one row rather than two: the summary is the same sentence
+                    either way, and set under the figure it pushed the drawing
+                    and everything after it a line further down for nothing. The
+                    summary takes the width the figure leaves and wraps under
+                    itself, and it starts at the figure's own top rather than on
+                    its baseline: a summary of two lines then stands beside the
+                    figure instead of hanging below it, which is another few
+                    pixels the map keeps.
+                -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/total_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/bricolage_semibold"
+                        android:textAppearance="@style/TextAppearance.RoueLibre.Title"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="24 min" />
+
+                    <!-- A weighted row would have done, were it not for
+                         LinearLayout measuring its own height before it hands
+                         the summary its share of the width: the second line of
+                         a summary that wraps then falls outside the row and is
+                         cut off by the drawing under it. -->
+                    <TextView
+                        android:id="@+id/summary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_m"
+                        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+                        app:layout_constraintEnd_toStartOf="@id/detail_chevron"
+                        app:layout_constraintStart_toEndOf="@id/total_time"
+                        app:layout_constraintTop_toTopOf="@id/total_time"
+                        tools:text="dont 9 min à pied et 13 min à vélo · 4,1 km · 45 m de dénivelé" />
+
+                    <!-- The one mark saying the block goes somewhere. It is
+                         hidden when there is nothing to open, so the sign never
+                         promises a screen that does not exist. -->
+                    <ImageView
+                        android:id="@+id/detail_chevron"
+                        android:layout_width="@dimen/space_xl"
+                        android:layout_height="@dimen/space_xl"
+                        android:importantForAccessibility="no"
+                        app:layout_constraintBottom_toBottomOf="@id/total_time"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/total_time"
+                        app:srcCompat="@drawable/ic_chevron"
+                        app:tint="@color/ink_soft" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- The whole journey at a glance: how far each leg runs above
+                     its stroke, how long it takes below. The detail screen says
+                     it again in words, so a screen reader must not read the
+                     drawing itself. -->
+                <io.github.mgdx.rouelibre.ui.journey.JourneyShapeView
+                    android:id="@+id/shape"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_m"
+                    android:importantForAccessibility="no" />
+            </LinearLayout>
+
+            <!-- Hands a leg of the journey to whichever application guides
+                 along it: this one computes journeys, it does not guide
+                 (SPEC §13). Last of the reading — everything the screen offers
+                 to do comes after everything it has to say — and absent when
+                 there is no journey to hand over. -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/steps_toggle"
+                android:id="@+id/navigate"
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/touch_target_min"
+                android:layout_marginStart="@dimen/space_l"
                 android:layout_marginTop="@dimen/space_m"
-                android:text="@string/journey_steps_show"
-                app:icon="@drawable/ic_plus"
+                android:layout_marginEnd="@dimen/space_l"
+                android:text="@string/journey_navigate"
+                app:icon="@drawable/ic_navigation"
                 app:iconGravity="textStart" />
-
-            <!-- The three steps, in the order one lives them. Folded until
-                 asked for: the time, the summary and the drawing answer the
-                 question on their own, and the stations are the detail. They
-                 open under the button that asks for them. -->
-            <LinearLayout
-                android:id="@+id/steps"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_m"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

@@ -25,6 +25,28 @@
         android:name="android.hardware.location"
         android:required="false" />
 
+    <!--
+        Which applications this one can see: those that open a place
+        (SPEC §7.2, §7.4), and no others.
+
+        From Android 11 on, an application sees nothing of what is installed
+        unless it declares what it is looking for. Without this, handing a
+        station or a leg of a journey over could not tell "no navigation
+        application on this device" from "one is there and it answers" — and
+        this application answers `geo:` itself, so it would only ever have
+        found itself.
+
+        This is a filter, not a permission: it grants sight of the
+        applications answering this very intent, nothing wider, and no list of
+        what is installed ever leaves the device (SPEC §2, C3).
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="geo" />
+        </intent>
+    </queries>
+
     <application
         android:name=".RoueLibreApplication"
         android:allowBackup="false"
