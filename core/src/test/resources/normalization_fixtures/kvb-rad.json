@@ -1,0 +1,797 @@
+{
+  "language": "de",
+  "cases": [
+    {
+      "input": "Bahnhofstraße",
+      "normalized": "bahnhofstrasse",
+      "type": null,
+      "name": "bahnhofstrasse"
+    },
+    {
+      "input": "Bahnhofstrasse",
+      "normalized": "bahnhofstrasse",
+      "type": null,
+      "name": "bahnhofstrasse"
+    },
+    {
+      "input": "Marienplatz",
+      "normalized": "marienplatz",
+      "type": null,
+      "name": "marienplatz"
+    },
+    {
+      "input": "Unter den Linden",
+      "normalized": "unter den linden",
+      "type": null,
+      "name": "unter den linden"
+    },
+    {
+      "input": "Kurfürstendamm",
+      "normalized": "kurfurstendamm",
+      "type": null,
+      "name": "kurfurstendamm"
+    },
+    {
+      "input": "Große Freiheit",
+      "normalized": "grosse freiheit",
+      "type": null,
+      "name": "grosse freiheit"
+    },
+    {
+      "input": "St.-Pauli-Landungsbrücken",
+      "normalized": "sankt pauli landungsbrucken",
+      "type": null,
+      "name": "sankt pauli landungsbrucken"
+    },
+    {
+      "input": "Am Hauptbahnhof",
+      "normalized": "am hauptbahnhof",
+      "type": null,
+      "name": "am hauptbahnhof"
+    },
+    {
+      "input": "Prinzregentenstraße",
+      "normalized": "prinzregentenstrasse",
+      "type": null,
+      "name": "prinzregentenstrasse"
+    },
+    {
+      "input": "Karl-Marx-Allee",
+      "normalized": "karl marx allee",
+      "type": null,
+      "name": "karl marx allee"
+    },
+    {
+      "input": "Schloßplatz",
+      "normalized": "schlossplatz",
+      "type": null,
+      "name": "schlossplatz"
+    },
+    {
+      "input": "Gr. Bleichen",
+      "normalized": "gross bleichen",
+      "type": null,
+      "name": "gross bleichen"
+    },
+    {
+      "input": "Eulenburg",
+      "normalized": "eulenburg",
+      "type": null,
+      "name": "eulenburg"
+    },
+    {
+      "input": "Hindemithweg",
+      "normalized": "hindemithweg",
+      "type": null,
+      "name": "hindemithweg"
+    },
+    {
+      "input": "Bibliothek des NS-Dokumentationszentrum",
+      "normalized": "bibliothek des ns dokumentationszentrum",
+      "type": null,
+      "name": "bibliothek des ns dokumentationszentrum"
+    },
+    {
+      "input": "Deutsches Tanzarchiv",
+      "normalized": "deutsches tanzarchiv",
+      "type": null,
+      "name": "deutsches tanzarchiv"
+    },
+    {
+      "input": "7 Raben",
+      "normalized": "7 raben",
+      "type": null,
+      "name": "7 raben"
+    },
+    {
+      "input": "Ausbildungsinstitut für Kinder- und Jugendpsychotherapie",
+      "normalized": "ausbildungsinstitut fur kinder und jugendpsychotherapie",
+      "type": null,
+      "name": "ausbildungsinstitut fur kinder und jugendpsychotherapie"
+    },
+    {
+      "input": "Kath. Öffentl. Bücherei Odenthal",
+      "normalized": "kath offentl bucherei odenthal",
+      "type": null,
+      "name": "kath offentl bucherei odenthal"
+    },
+    {
+      "input": "Urania im Spiegelpalast",
+      "normalized": "urania im spiegelpalast",
+      "type": null,
+      "name": "urania im spiegelpalast"
+    },
+    {
+      "input": "Sülztalplatz",
+      "normalized": "sulztalplatz",
+      "type": null,
+      "name": "sulztalplatz"
+    },
+    {
+      "input": "Agilolfstraße",
+      "normalized": "agilolfstrasse",
+      "type": null,
+      "name": "agilolfstrasse"
+    },
+    {
+      "input": "Allerseelenstraße",
+      "normalized": "allerseelenstrasse",
+      "type": null,
+      "name": "allerseelenstrasse"
+    },
+    {
+      "input": "Altonaer Straße",
+      "normalized": "altonaer strasse",
+      "type": null,
+      "name": "altonaer strasse"
+    },
+    {
+      "input": "Am Brücker Bach",
+      "normalized": "am brucker bach",
+      "type": null,
+      "name": "am brucker bach"
+    },
+    {
+      "input": "Am Geus Garten",
+      "normalized": "am geus garten",
+      "type": null,
+      "name": "am geus garten"
+    },
+    {
+      "input": "Am Husholz",
+      "normalized": "am husholz",
+      "type": null,
+      "name": "am husholz"
+    },
+    {
+      "input": "Am Kutzhof",
+      "normalized": "am kutzhof",
+      "type": null,
+      "name": "am kutzhof"
+    },
+    {
+      "input": "Am Pfropfbusch",
+      "normalized": "am pfropfbusch",
+      "type": null,
+      "name": "am pfropfbusch"
+    },
+    {
+      "input": "Am Schnellert",
+      "normalized": "am schnellert",
+      "type": null,
+      "name": "am schnellert"
+    },
+    {
+      "input": "Am Waldschlößchen",
+      "normalized": "am waldschlosschen",
+      "type": null,
+      "name": "am waldschlosschen"
+    },
+    {
+      "input": "An den Pescher Höfen",
+      "normalized": "an den pescher hofen",
+      "type": null,
+      "name": "an den pescher hofen"
+    },
+    {
+      "input": "An der Laach",
+      "normalized": "an der laach",
+      "type": null,
+      "name": "an der laach"
+    },
+    {
+      "input": "An St. Laurentius",
+      "normalized": "an sankt laurentius",
+      "type": null,
+      "name": "an sankt laurentius"
+    },
+    {
+      "input": "Arminiusstraße",
+      "normalized": "arminiusstrasse",
+      "type": null,
+      "name": "arminiusstrasse"
+    },
+    {
+      "input": "Auf dem Kamm",
+      "normalized": "auf dem kamm",
+      "type": null,
+      "name": "auf dem kamm"
+    },
+    {
+      "input": "Auf der Grenzkaul",
+      "normalized": "auf der grenzkaul",
+      "type": null,
+      "name": "auf der grenzkaul"
+    },
+    {
+      "input": "Baesweilerhof",
+      "normalized": "baesweilerhof",
+      "type": null,
+      "name": "baesweilerhof"
+    },
+    {
+      "input": "Beerenstraße",
+      "normalized": "beerenstrasse",
+      "type": null,
+      "name": "beerenstrasse"
+    },
+    {
+      "input": "Bernhardstraße",
+      "normalized": "bernhardstrasse",
+      "type": null,
+      "name": "bernhardstrasse"
+    },
+    {
+      "input": "Bitze",
+      "normalized": "bitze",
+      "type": null,
+      "name": "bitze"
+    },
+    {
+      "input": "Bootsweg",
+      "normalized": "bootsweg",
+      "type": null,
+      "name": "bootsweg"
+    },
+    {
+      "input": "Brigidastraße",
+      "normalized": "brigidastrasse",
+      "type": null,
+      "name": "brigidastrasse"
+    },
+    {
+      "input": "Buchheimer Pfädchen",
+      "normalized": "buchheimer pfadchen",
+      "type": null,
+      "name": "buchheimer pfadchen"
+    },
+    {
+      "input": "Camberger Straße",
+      "normalized": "camberger strasse",
+      "type": null,
+      "name": "camberger strasse"
+    },
+    {
+      "input": "Christine-Plück-Straße",
+      "normalized": "christine pluck strasse",
+      "type": null,
+      "name": "christine pluck strasse"
+    },
+    {
+      "input": "Dädalusring",
+      "normalized": "dadalusring",
+      "type": null,
+      "name": "dadalusring"
+    },
+    {
+      "input": "Dessauerstraße",
+      "normalized": "dessauerstrasse",
+      "type": null,
+      "name": "dessauerstrasse"
+    },
+    {
+      "input": "Donarstraße",
+      "normalized": "donarstrasse",
+      "type": null,
+      "name": "donarstrasse"
+    },
+    {
+      "input": "Dülmener Weg",
+      "normalized": "dulmener weg",
+      "type": null,
+      "name": "dulmener weg"
+    },
+    {
+      "input": "Eichelhäherweg",
+      "normalized": "eichelhaherweg",
+      "type": null,
+      "name": "eichelhaherweg"
+    },
+    {
+      "input": "Elsa-Brändström-Straße",
+      "normalized": "elsa brandstrom strasse",
+      "type": null,
+      "name": "elsa brandstrom strasse"
+    },
+    {
+      "input": "Erich-Ollenhauer-Weg",
+      "normalized": "erich ollenhauer weg",
+      "type": null,
+      "name": "erich ollenhauer weg"
+    },
+    {
+      "input": "Eupener Straße",
+      "normalized": "eupener strasse",
+      "type": null,
+      "name": "eupener strasse"
+    },
+    {
+      "input": "Ferdinand-Schäfer-Straße",
+      "normalized": "ferdinand schafer strasse",
+      "type": null,
+      "name": "ferdinand schafer strasse"
+    },
+    {
+      "input": "Forsbacher Mühle",
+      "normalized": "forsbacher muhle",
+      "type": null,
+      "name": "forsbacher muhle"
+    },
+    {
+      "input": "Freiheitstraße",
+      "normalized": "freiheitstrasse",
+      "type": null,
+      "name": "freiheitstrasse"
+    },
+    {
+      "input": "Frohnhofstraße",
+      "normalized": "frohnhofstrasse",
+      "type": null,
+      "name": "frohnhofstrasse"
+    },
+    {
+      "input": "Gennerstraße",
+      "normalized": "gennerstrasse",
+      "type": null,
+      "name": "gennerstrasse"
+    },
+    {
+      "input": "Gezelinallee",
+      "normalized": "gezelinallee",
+      "type": null,
+      "name": "gezelinallee"
+    },
+    {
+      "input": "Goldfasanenweg",
+      "normalized": "goldfasanenweg",
+      "type": null,
+      "name": "goldfasanenweg"
+    },
+    {
+      "input": "Greinstraße",
+      "normalized": "greinstrasse",
+      "type": null,
+      "name": "greinstrasse"
+    },
+    {
+      "input": "Guderadisweg",
+      "normalized": "guderadisweg",
+      "type": null,
+      "name": "guderadisweg"
+    },
+    {
+      "input": "Hagenauer Weg",
+      "normalized": "hagenauer weg",
+      "type": null,
+      "name": "hagenauer weg"
+    },
+    {
+      "input": "Hans-Zanders-Straße",
+      "normalized": "hans zanders strasse",
+      "type": null,
+      "name": "hans zanders strasse"
+    },
+    {
+      "input": "Heckenrosenpfad",
+      "normalized": "heckenrosenpfad",
+      "type": null,
+      "name": "heckenrosenpfad"
+    },
+    {
+      "input": "Heinrich-Heine-Weg",
+      "normalized": "heinrich heine weg",
+      "type": null,
+      "name": "heinrich heine weg"
+    },
+    {
+      "input": "Henry-Ford-Straße",
+      "normalized": "henry ford strasse",
+      "type": null,
+      "name": "henry ford strasse"
+    },
+    {
+      "input": "Herzogstraße",
+      "normalized": "herzogstrasse",
+      "type": null,
+      "name": "herzogstrasse"
+    },
+    {
+      "input": "Hofferhofer Straße",
+      "normalized": "hofferhofer strasse",
+      "type": null,
+      "name": "hofferhofer strasse"
+    },
+    {
+      "input": "Hoppersheider Busch",
+      "normalized": "hoppersheider busch",
+      "type": null,
+      "name": "hoppersheider busch"
+    },
+    {
+      "input": "Ibisweg",
+      "normalized": "ibisweg",
+      "type": null,
+      "name": "ibisweg"
+    },
+    {
+      "input": "Im Feldrain",
+      "normalized": "im feldrain",
+      "type": null,
+      "name": "im feldrain"
+    },
+    {
+      "input": "Im Krahnenhof",
+      "normalized": "im krahnenhof",
+      "type": null,
+      "name": "im krahnenhof"
+    },
+    {
+      "input": "Im Steinfeld",
+      "normalized": "im steinfeld",
+      "type": null,
+      "name": "im steinfeld"
+    },
+    {
+      "input": "In den Vierwinden",
+      "normalized": "in den vierwinden",
+      "type": null,
+      "name": "in den vierwinden"
+    },
+    {
+      "input": "Irmgardstraße",
+      "normalized": "irmgardstrasse",
+      "type": null,
+      "name": "irmgardstrasse"
+    },
+    {
+      "input": "Johann-Frizen-Straße",
+      "normalized": "johann frizen strasse",
+      "type": null,
+      "name": "johann frizen strasse"
+    },
+    {
+      "input": "Josephskirchplatz",
+      "normalized": "josephskirchplatz",
+      "type": null,
+      "name": "josephskirchplatz"
+    },
+    {
+      "input": "Kämpchensweg",
+      "normalized": "kampchensweg",
+      "type": null,
+      "name": "kampchensweg"
+    },
+    {
+      "input": "Kasernenstraße",
+      "normalized": "kasernenstrasse",
+      "type": null,
+      "name": "kasernenstrasse"
+    },
+    {
+      "input": "Kerbelweg",
+      "normalized": "kerbelweg",
+      "type": null,
+      "name": "kerbelweg"
+    },
+    {
+      "input": "Klausenburg-Straße",
+      "normalized": "klausenburg strasse",
+      "type": null,
+      "name": "klausenburg strasse"
+    },
+    {
+      "input": "Köhlstraße",
+      "normalized": "kohlstrasse",
+      "type": null,
+      "name": "kohlstrasse"
+    },
+    {
+      "input": "Krämersgasse",
+      "normalized": "kramersgasse",
+      "type": null,
+      "name": "kramersgasse"
+    },
+    {
+      "input": "Kump",
+      "normalized": "kump",
+      "type": null,
+      "name": "kump"
+    },
+    {
+      "input": "Landrat-Görg-Straße",
+      "normalized": "landrat gorg strasse",
+      "type": null,
+      "name": "landrat gorg strasse"
+    },
+    {
+      "input": "Leineweberstraße",
+      "normalized": "leineweberstrasse",
+      "type": null,
+      "name": "leineweberstrasse"
+    },
+    {
+      "input": "Lina-Bommer-Weg",
+      "normalized": "lina bommer weg",
+      "type": null,
+      "name": "lina bommer weg"
+    },
+    {
+      "input": "Lortzingstraße",
+      "normalized": "lortzingstrasse",
+      "type": null,
+      "name": "lortzingstrasse"
+    },
+    {
+      "input": "Lützerodeweg",
+      "normalized": "lutzerodeweg",
+      "type": null,
+      "name": "lutzerodeweg"
+    },
+    {
+      "input": "Maria-Ablaß-Platz",
+      "normalized": "maria ablass platz",
+      "type": null,
+      "name": "maria ablass platz"
+    },
+    {
+      "input": "Masurenstraße",
+      "normalized": "masurenstrasse",
+      "type": null,
+      "name": "masurenstrasse"
+    },
+    {
+      "input": "Mehlemer Straße",
+      "normalized": "mehlemer strasse",
+      "type": null,
+      "name": "mehlemer strasse"
+    },
+    {
+      "input": "Michaelshovener Straße",
+      "normalized": "michaelshovener strasse",
+      "type": null,
+      "name": "michaelshovener strasse"
+    },
+    {
+      "input": "Morsestraße",
+      "normalized": "morsestrasse",
+      "type": null,
+      "name": "morsestrasse"
+    },
+    {
+      "input": "Nassestraße",
+      "normalized": "nassestrasse",
+      "type": null,
+      "name": "nassestrasse"
+    },
+    {
+      "input": "Neukronenberger Straße",
+      "normalized": "neukronenberger strasse",
+      "type": null,
+      "name": "neukronenberger strasse"
+    },
+    {
+      "input": "Norkstraße",
+      "normalized": "norkstrasse",
+      "type": null,
+      "name": "norkstrasse"
+    },
+    {
+      "input": "Offenbachplatz",
+      "normalized": "offenbachplatz",
+      "type": null,
+      "name": "offenbachplatz"
+    },
+    {
+      "input": "Othmarstraße",
+      "normalized": "othmarstrasse",
+      "type": null,
+      "name": "othmarstrasse"
+    },
+    {
+      "input": "Pastor-Hochherz-Straße",
+      "normalized": "pastor hochherz strasse",
+      "type": null,
+      "name": "pastor hochherz strasse"
+    },
+    {
+      "input": "Peter-Bauer-Straße",
+      "normalized": "peter bauer strasse",
+      "type": null,
+      "name": "peter bauer strasse"
+    },
+    {
+      "input": "Pfeilshofstraße",
+      "normalized": "pfeilshofstrasse",
+      "type": null,
+      "name": "pfeilshofstrasse"
+    },
+    {
+      "input": "Pontonbrücke",
+      "normalized": "pontonbrucke",
+      "type": null,
+      "name": "pontonbrucke"
+    },
+    {
+      "input": "Raderthaler Straße",
+      "normalized": "raderthaler strasse",
+      "type": null,
+      "name": "raderthaler strasse"
+    },
+    {
+      "input": "Reinholdstraße",
+      "normalized": "reinholdstrasse",
+      "type": null,
+      "name": "reinholdstrasse"
+    },
+    {
+      "input": "Richard-Seiffert-Straße",
+      "normalized": "richard seiffert strasse",
+      "type": null,
+      "name": "richard seiffert strasse"
+    },
+    {
+      "input": "Rolshover Kirchweg",
+      "normalized": "rolshover kirchweg",
+      "type": null,
+      "name": "rolshover kirchweg"
+    },
+    {
+      "input": "Rotschwänzchenweg",
+      "normalized": "rotschwanzchenweg",
+      "type": null,
+      "name": "rotschwanzchenweg"
+    },
+    {
+      "input": "Salomonsgasse",
+      "normalized": "salomonsgasse",
+      "type": null,
+      "name": "salomonsgasse"
+    },
+    {
+      "input": "Schartgasse",
+      "normalized": "schartgasse",
+      "type": null,
+      "name": "schartgasse"
+    },
+    {
+      "input": "Schlesischer Platz",
+      "normalized": "schlesischer platz",
+      "type": null,
+      "name": "schlesischer platz"
+    },
+    {
+      "input": "Schulwaldweg",
+      "normalized": "schulwaldweg",
+      "type": null,
+      "name": "schulwaldweg"
+    },
+    {
+      "input": "Senecaweg",
+      "normalized": "senecaweg",
+      "type": null,
+      "name": "senecaweg"
+    },
+    {
+      "input": "Sintherner Holzweg",
+      "normalized": "sintherner holzweg",
+      "type": null,
+      "name": "sintherner holzweg"
+    },
+    {
+      "input": "Stammheimer Ring",
+      "normalized": "stammheimer ring",
+      "type": null,
+      "name": "stammheimer ring"
+    },
+    {
+      "input": "Stöckerstraße",
+      "normalized": "stockerstrasse",
+      "type": null,
+      "name": "stockerstrasse"
+    },
+    {
+      "input": "Straße B10",
+      "normalized": "strasse b10",
+      "type": "strasse",
+      "name": "b10"
+    },
+    {
+      "input": "Taborplatz",
+      "normalized": "taborplatz",
+      "type": null,
+      "name": "taborplatz"
+    },
+    {
+      "input": "Theophanoplatz",
+      "normalized": "theophanoplatz",
+      "type": null,
+      "name": "theophanoplatz"
+    },
+    {
+      "input": "Torstraße",
+      "normalized": "torstrasse",
+      "type": null,
+      "name": "torstrasse"
+    },
+    {
+      "input": "Unstrutstraße",
+      "normalized": "unstrutstrasse",
+      "type": null,
+      "name": "unstrutstrasse"
+    },
+    {
+      "input": "Vallendarer Straße",
+      "normalized": "vallendarer strasse",
+      "type": null,
+      "name": "vallendarer strasse"
+    },
+    {
+      "input": "Volmeweg",
+      "normalized": "volmeweg",
+      "type": null,
+      "name": "volmeweg"
+    },
+    {
+      "input": "Wahlenstraße",
+      "normalized": "wahlenstrasse",
+      "type": null,
+      "name": "wahlenstrasse"
+    },
+    {
+      "input": "Weidenbuscher Weg",
+      "normalized": "weidenbuscher weg",
+      "type": null,
+      "name": "weidenbuscher weg"
+    },
+    {
+      "input": "Wesselinger Weg",
+      "normalized": "wesselinger weg",
+      "type": null,
+      "name": "wesselinger weg"
+    },
+    {
+      "input": "Wildstraße",
+      "normalized": "wildstrasse",
+      "type": null,
+      "name": "wildstrasse"
+    },
+    {
+      "input": "Wingertstraße",
+      "normalized": "wingertstrasse",
+      "type": null,
+      "name": "wingertstrasse"
+    },
+    {
+      "input": "Zaunkönigweg",
+      "normalized": "zaunkonigweg",
+      "type": null,
+      "name": "zaunkonigweg"
+    },
+    {
+      "input": "Zum Feldhaus",
+      "normalized": "zum feldhaus",
+      "type": null,
+      "name": "zum feldhaus"
+    }
+  ]
+}

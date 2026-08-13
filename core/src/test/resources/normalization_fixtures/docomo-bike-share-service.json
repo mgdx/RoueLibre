@@ -1,0 +1,761 @@
+{
+  "language": "ja",
+  "cases": [
+    {
+      "input": "中央区銀座",
+      "normalized": "中央区銀座",
+      "type": null,
+      "name": "中央区銀座"
+    },
+    {
+      "input": "青山通り",
+      "normalized": "青山通り",
+      "type": null,
+      "name": "青山通り"
+    },
+    {
+      "input": "表参道",
+      "normalized": "表参道",
+      "type": null,
+      "name": "表参道"
+    },
+    {
+      "input": "京都市中京区烏丸通",
+      "normalized": "京都市中京区烏丸通",
+      "type": null,
+      "name": "京都市中京区烏丸通"
+    },
+    {
+      "input": "みなとみらい大通り",
+      "normalized": "みなとみらい大通り",
+      "type": null,
+      "name": "みなとみらい大通り"
+    },
+    {
+      "input": "Chuo-ku Ginza",
+      "normalized": "chuo ku ginza",
+      "type": null,
+      "name": "chuo ku ginza"
+    },
+    {
+      "input": "新子安",
+      "normalized": "新子安",
+      "type": null,
+      "name": "新子安"
+    },
+    {
+      "input": "新都心十二社クリニック",
+      "normalized": "新都心十二社クリニック",
+      "type": null,
+      "name": "新都心十二社クリニック"
+    },
+    {
+      "input": "白金高輪",
+      "normalized": "白金高輪",
+      "type": null,
+      "name": "白金高輪"
+    },
+    {
+      "input": "青砥",
+      "normalized": "青砥",
+      "type": null,
+      "name": "青砥"
+    },
+    {
+      "input": "中山駅前",
+      "normalized": "中山駅前",
+      "type": null,
+      "name": "中山駅前"
+    },
+    {
+      "input": "鶴見",
+      "normalized": "鶴見",
+      "type": null,
+      "name": "鶴見"
+    },
+    {
+      "input": "西新井",
+      "normalized": "西新井",
+      "type": null,
+      "name": "西新井"
+    },
+    {
+      "input": "葛飾区保健所",
+      "normalized": "葛飾区保健所",
+      "type": null,
+      "name": "葛飾区保健所"
+    },
+    {
+      "input": "ないものわない",
+      "normalized": "ないものわない",
+      "type": null,
+      "name": "ないものわない"
+    },
+    {
+      "input": "高円寺駅前図書サービスコーナー",
+      "normalized": "高円寺駅前図書サーヒスコーナー",
+      "type": null,
+      "name": "高円寺駅前図書サーヒスコーナー"
+    },
+    {
+      "input": "草間彌生美術館",
+      "normalized": "草間彌生美術館",
+      "type": null,
+      "name": "草間彌生美術館"
+    },
+    {
+      "input": "地下鉄成増",
+      "normalized": "地下鉄成増",
+      "type": null,
+      "name": "地下鉄成増"
+    },
+    {
+      "input": "狛江市立中央図書館",
+      "normalized": "狛江市立中央図書館",
+      "type": null,
+      "name": "狛江市立中央図書館"
+    },
+    {
+      "input": "日経ホール",
+      "normalized": "日経ホール",
+      "type": null,
+      "name": "日経ホール"
+    },
+    {
+      "input": "渋谷",
+      "normalized": "渋谷",
+      "type": null,
+      "name": "渋谷"
+    },
+    {
+      "input": "国際医療福祉大学東京赤坂キャンパス",
+      "normalized": "国際医療福祉大学東京赤坂キャンハス",
+      "type": null,
+      "name": "国際医療福祉大学東京赤坂キャンハス"
+    },
+    {
+      "input": "水天宮前",
+      "normalized": "水天宮前",
+      "type": null,
+      "name": "水天宮前"
+    },
+    {
+      "input": "映画「天気の子」ロケ地",
+      "normalized": "映画「天気の子」ロケ地",
+      "type": null,
+      "name": "映画「天気の子」ロケ地"
+    },
+    {
+      "input": "新桜台",
+      "normalized": "新桜台",
+      "type": null,
+      "name": "新桜台"
+    },
+    {
+      "input": "保谷",
+      "normalized": "保谷",
+      "type": null,
+      "name": "保谷"
+    },
+    {
+      "input": "練馬",
+      "normalized": "練馬",
+      "type": null,
+      "name": "練馬"
+    },
+    {
+      "input": "羽田空港第1・第2ターミナル",
+      "normalized": "羽田空港第1・第2ターミナル",
+      "type": null,
+      "name": "羽田空港第1・第2ターミナル"
+    },
+    {
+      "input": "井の頭公園",
+      "normalized": "井の頭公園",
+      "type": null,
+      "name": "井の頭公園"
+    },
+    {
+      "input": "トキワ荘マンガミュージアム",
+      "normalized": "トキワ荘マンカミューシアム",
+      "type": null,
+      "name": "トキワ荘マンカミューシアム"
+    },
+    {
+      "input": "やさきの道口",
+      "normalized": "やさきの道口",
+      "type": null,
+      "name": "やさきの道口"
+    },
+    {
+      "input": "横浜実践看護専門学校",
+      "normalized": "横浜実践看護専門学校",
+      "type": null,
+      "name": "横浜実践看護専門学校"
+    },
+    {
+      "input": "アレンデール城",
+      "normalized": "アレンテール城",
+      "type": null,
+      "name": "アレンテール城"
+    },
+    {
+      "input": "KIMONO TEA CEREMONY MAIKOYA TOKYO",
+      "normalized": "kimono tea ceremony maikoya tokyo",
+      "type": null,
+      "name": "kimono tea ceremony maikoya tokyo"
+    },
+    {
+      "input": "Kawasaki Robostage",
+      "normalized": "kawasaki robostage",
+      "type": null,
+      "name": "kawasaki robostage"
+    },
+    {
+      "input": "ちえ内科",
+      "normalized": "ちえ内科",
+      "type": null,
+      "name": "ちえ内科"
+    },
+    {
+      "input": "台東区役所",
+      "normalized": "台東区役所",
+      "type": null,
+      "name": "台東区役所"
+    },
+    {
+      "input": "大田区立六郷図書館",
+      "normalized": "大田区立六郷図書館",
+      "type": null,
+      "name": "大田区立六郷図書館"
+    },
+    {
+      "input": "成友会小森病院",
+      "normalized": "成友会小森病院",
+      "type": null,
+      "name": "成友会小森病院"
+    },
+    {
+      "input": "学會津八一記念博物館",
+      "normalized": "学會津八一記念博物館",
+      "type": null,
+      "name": "学會津八一記念博物館"
+    },
+    {
+      "input": "東京科学大学（医学部）",
+      "normalized": "東京科学大学（医学部）",
+      "type": null,
+      "name": "東京科学大学（医学部）"
+    },
+    {
+      "input": "東洋大学（社会学部）",
+      "normalized": "東洋大学（社会学部）",
+      "type": null,
+      "name": "東洋大学（社会学部）"
+    },
+    {
+      "input": "霊寶殿",
+      "normalized": "霊寶殿",
+      "type": null,
+      "name": "霊寶殿"
+    },
+    {
+      "input": "研精会山田病院",
+      "normalized": "研精会山田病院",
+      "type": null,
+      "name": "研精会山田病院"
+    },
+    {
+      "input": "葛飾区立立石図書館",
+      "normalized": "葛飾区立立石図書館",
+      "type": null,
+      "name": "葛飾区立立石図書館"
+    },
+    {
+      "input": "関町病院",
+      "normalized": "関町病院",
+      "type": null,
+      "name": "関町病院"
+    },
+    {
+      "input": "川崎市立高津図書館橘分館",
+      "normalized": "川崎市立高津図書館橘分館",
+      "type": null,
+      "name": "川崎市立高津図書館橘分館"
+    },
+    {
+      "input": "鴨居病院",
+      "normalized": "鴨居病院",
+      "type": null,
+      "name": "鴨居病院"
+    },
+    {
+      "input": "Matsumi-cho Kanagawa-like",
+      "normalized": "matsumi cho kanagawa like",
+      "type": null,
+      "name": "matsumi cho kanagawa like"
+    },
+    {
+      "input": "Friendly Road 柴一",
+      "normalized": "friendly road 柴一",
+      "type": null,
+      "name": "friendly road 柴一"
+    },
+    {
+      "input": "JR新宿駅;2階;C階段",
+      "normalized": "jr新宿駅 2階 c階段",
+      "type": null,
+      "name": "jr新宿駅 2階 c階段"
+    },
+    {
+      "input": "JR秋葉原駅;3階;NewDaysミニ 秋葉原1号",
+      "normalized": "jr秋葉原駅 3階 newdaysミニ 秋葉原1号",
+      "type": null,
+      "name": "jr秋葉原駅 3階 newdaysミニ 秋葉原1号"
+    },
+    {
+      "input": "PROMINENCE ROKA",
+      "normalized": "prominence roka",
+      "type": null,
+      "name": "prominence roka"
+    },
+    {
+      "input": "あけぼの橋",
+      "normalized": "あけほの橋",
+      "type": null,
+      "name": "あけほの橋"
+    },
+    {
+      "input": "かつら並木ニッピ通り",
+      "normalized": "かつら並木ニッヒ通り",
+      "type": null,
+      "name": "かつら並木ニッヒ通り"
+    },
+    {
+      "input": "しんかわおおはし",
+      "normalized": "しんかわおおはし",
+      "type": null,
+      "name": "しんかわおおはし"
+    },
+    {
+      "input": "そよ風歩道橋",
+      "normalized": "そよ風歩道橋",
+      "type": null,
+      "name": "そよ風歩道橋"
+    },
+    {
+      "input": "ひさご通り",
+      "normalized": "ひさこ通り",
+      "type": null,
+      "name": "ひさこ通り"
+    },
+    {
+      "input": "ももよ通り",
+      "normalized": "ももよ通り",
+      "type": null,
+      "name": "ももよ通り"
+    },
+    {
+      "input": "イーストロード",
+      "normalized": "イーストロート",
+      "type": null,
+      "name": "イーストロート"
+    },
+    {
+      "input": "クックロード",
+      "normalized": "クックロート",
+      "type": null,
+      "name": "クックロート"
+    },
+    {
+      "input": "ジョギング通り",
+      "normalized": "ショキンク通り",
+      "type": null,
+      "name": "ショキンク通り"
+    },
+    {
+      "input": "タワービュー通り",
+      "normalized": "タワーヒュー通り",
+      "type": null,
+      "name": "タワーヒュー通り"
+    },
+    {
+      "input": "ファイアー通り",
+      "normalized": "ファイアー通り",
+      "type": null,
+      "name": "ファイアー通り"
+    },
+    {
+      "input": "ヤッホーROAD",
+      "normalized": "ヤッホーroad",
+      "type": null,
+      "name": "ヤッホーroad"
+    },
+    {
+      "input": "万葉の小経",
+      "normalized": "万葉の小経",
+      "type": null,
+      "name": "万葉の小経"
+    },
+    {
+      "input": "上原水道通り",
+      "normalized": "上原水道通り",
+      "type": null,
+      "name": "上原水道通り"
+    },
+    {
+      "input": "不動坂",
+      "normalized": "不動坂",
+      "type": null,
+      "name": "不動坂"
+    },
+    {
+      "input": "中央通路",
+      "normalized": "中央通路",
+      "type": null,
+      "name": "中央通路"
+    },
+    {
+      "input": "丸の内パークイン",
+      "normalized": "丸の内ハークイン",
+      "type": null,
+      "name": "丸の内ハークイン"
+    },
+    {
+      "input": "二枚橋",
+      "normalized": "二枚橋",
+      "type": null,
+      "name": "二枚橋"
+    },
+    {
+      "input": "京葉地下通路 (地下3階)",
+      "normalized": "京葉地下通路 地下3階",
+      "type": null,
+      "name": "京葉地下通路 地下3階"
+    },
+    {
+      "input": "伏見通り",
+      "normalized": "伏見通り",
+      "type": null,
+      "name": "伏見通り"
+    },
+    {
+      "input": "八千代橋",
+      "normalized": "八千代橋",
+      "type": null,
+      "name": "八千代橋"
+    },
+    {
+      "input": "六阿弥陀道",
+      "normalized": "六阿弥陀道",
+      "type": null,
+      "name": "六阿弥陀道"
+    },
+    {
+      "input": "北千束二の橋",
+      "normalized": "北千束二の橋",
+      "type": null,
+      "name": "北千束二の橋"
+    },
+    {
+      "input": "千代田小通り",
+      "normalized": "千代田小通り",
+      "type": null,
+      "name": "千代田小通り"
+    },
+    {
+      "input": "南砂六丁目公園",
+      "normalized": "南砂六丁目公園",
+      "type": null,
+      "name": "南砂六丁目公園"
+    },
+    {
+      "input": "呑川緑道",
+      "normalized": "呑川緑道",
+      "type": null,
+      "name": "呑川緑道"
+    },
+    {
+      "input": "国道409号",
+      "normalized": "国道409号",
+      "type": null,
+      "name": "国道409号"
+    },
+    {
+      "input": "外貿2号道路",
+      "normalized": "外貿2号道路",
+      "type": null,
+      "name": "外貿2号道路"
+    },
+    {
+      "input": "大師道",
+      "normalized": "大師道",
+      "type": null,
+      "name": "大師道"
+    },
+    {
+      "input": "天沼陸橋",
+      "normalized": "天沼陸橋",
+      "type": null,
+      "name": "天沼陸橋"
+    },
+    {
+      "input": "安心お宿",
+      "normalized": "安心お宿",
+      "type": null,
+      "name": "安心お宿"
+    },
+    {
+      "input": "小倉商栄会",
+      "normalized": "小倉商栄会",
+      "type": null,
+      "name": "小倉商栄会"
+    },
+    {
+      "input": "尾崎橋",
+      "normalized": "尾崎橋",
+      "type": null,
+      "name": "尾崎橋"
+    },
+    {
+      "input": "市ノ坪跨線橋",
+      "normalized": "市ノ坪跨線橋",
+      "type": null,
+      "name": "市ノ坪跨線橋"
+    },
+    {
+      "input": "広小路横丁",
+      "normalized": "広小路横丁",
+      "type": null,
+      "name": "広小路横丁"
+    },
+    {
+      "input": "徳丸石川通り",
+      "normalized": "徳丸石川通り",
+      "type": null,
+      "name": "徳丸石川通り"
+    },
+    {
+      "input": "掃部橋",
+      "normalized": "掃部橋",
+      "type": null,
+      "name": "掃部橋"
+    },
+    {
+      "input": "新宿ターミナル;R出入口",
+      "normalized": "新宿ターミナル r出入口",
+      "type": null,
+      "name": "新宿ターミナル r出入口"
+    },
+    {
+      "input": "新水沢橋",
+      "normalized": "新水沢橋",
+      "type": null,
+      "name": "新水沢橋"
+    },
+    {
+      "input": "日東橋潮田通り",
+      "normalized": "日東橋潮田通り",
+      "type": null,
+      "name": "日東橋潮田通り"
+    },
+    {
+      "input": "旭町通り",
+      "normalized": "旭町通り",
+      "type": null,
+      "name": "旭町通り"
+    },
+    {
+      "input": "望みが丘歩道橋",
+      "normalized": "望みか丘歩道橋",
+      "type": null,
+      "name": "望みか丘歩道橋"
+    },
+    {
+      "input": "東九通り",
+      "normalized": "東九通り",
+      "type": null,
+      "name": "東九通り"
+    },
+    {
+      "input": "東京川口線",
+      "normalized": "東京川口線",
+      "type": null,
+      "name": "東京川口線"
+    },
+    {
+      "input": "東京駅京葉地下丸の内口",
+      "normalized": "東京駅京葉地下丸の内口",
+      "type": null,
+      "name": "東京駅京葉地下丸の内口"
+    },
+    {
+      "input": "東生田歩道橋",
+      "normalized": "東生田歩道橋",
+      "type": null,
+      "name": "東生田歩道橋"
+    },
+    {
+      "input": "柴又街道",
+      "normalized": "柴又街道",
+      "type": null,
+      "name": "柴又街道"
+    },
+    {
+      "input": "梅屋敷東通り",
+      "normalized": "梅屋敷東通り",
+      "type": null,
+      "name": "梅屋敷東通り"
+    },
+    {
+      "input": "歩行者専用（7時40分から8時40分、土・日曜・休日除く）",
+      "normalized": "歩行者専用（7時40分から8時40分、土・日曜・休日除く）",
+      "type": null,
+      "name": "歩行者専用（7時40分から8時40分、土・日曜・休日除く）"
+    },
+    {
+      "input": "江戸橋南詰歩道橋",
+      "normalized": "江戸橋南詰歩道橋",
+      "type": null,
+      "name": "江戸橋南詰歩道橋"
+    },
+    {
+      "input": "浜路橋",
+      "normalized": "浜路橋",
+      "type": null,
+      "name": "浜路橋"
+    },
+    {
+      "input": "渋谷マークシティ駐車場",
+      "normalized": "渋谷マークシティ駐車場",
+      "type": null,
+      "name": "渋谷マークシティ駐車場"
+    },
+    {
+      "input": "片倉六角橋線",
+      "normalized": "片倉六角橋線",
+      "type": null,
+      "name": "片倉六角橋線"
+    },
+    {
+      "input": "環状4号線",
+      "normalized": "環状4号線",
+      "type": null,
+      "name": "環状4号線"
+    },
+    {
+      "input": "白山祝田田町線",
+      "normalized": "白山祝田田町線",
+      "type": null,
+      "name": "白山祝田田町線"
+    },
+    {
+      "input": "神代植物公園通り",
+      "normalized": "神代植物公園通り",
+      "type": null,
+      "name": "神代植物公園通り"
+    },
+    {
+      "input": "立石仲見世通り",
+      "normalized": "立石仲見世通り",
+      "type": null,
+      "name": "立石仲見世通り"
+    },
+    {
+      "input": "経堂西通り商店会",
+      "normalized": "経堂西通り商店会",
+      "type": null,
+      "name": "経堂西通り商店会"
+    },
+    {
+      "input": "自由通路",
+      "normalized": "自由通路",
+      "type": null,
+      "name": "自由通路"
+    },
+    {
+      "input": "茅ケ崎中央",
+      "normalized": "茅ケ崎中央",
+      "type": null,
+      "name": "茅ケ崎中央"
+    },
+    {
+      "input": "菅原天神通り（松原大山通り）",
+      "normalized": "菅原天神通り（松原大山通り）",
+      "type": null,
+      "name": "菅原天神通り（松原大山通り）"
+    },
+    {
+      "input": "藍染川通り",
+      "normalized": "藍染川通り",
+      "type": null,
+      "name": "藍染川通り"
+    },
+    {
+      "input": "補助第300号線",
+      "normalized": "補助第300号線",
+      "type": null,
+      "name": "補助第300号線"
+    },
+    {
+      "input": "西友 荻窪店;1階",
+      "normalized": "西友 荻窪店 1階",
+      "type": null,
+      "name": "西友 荻窪店 1階"
+    },
+    {
+      "input": "西新宿駅;2番線;2号車2番ドア付近",
+      "normalized": "西新宿駅 2番線 2号車2番トア付近",
+      "type": null,
+      "name": "西新宿駅 2番線 2号車2番トア付近"
+    },
+    {
+      "input": "言問大谷田線",
+      "normalized": "言問大谷田線",
+      "type": null,
+      "name": "言問大谷田線"
+    },
+    {
+      "input": "赤坂見附",
+      "normalized": "赤坂見附",
+      "type": null,
+      "name": "赤坂見附"
+    },
+    {
+      "input": "道玄坂",
+      "normalized": "道玄坂",
+      "type": null,
+      "name": "道玄坂"
+    },
+    {
+      "input": "銀座マロニエ通り",
+      "normalized": "銀座マロニエ通り",
+      "type": null,
+      "name": "銀座マロニエ通り"
+    },
+    {
+      "input": "閻魔坂",
+      "normalized": "閻魔坂",
+      "type": null,
+      "name": "閻魔坂"
+    },
+    {
+      "input": "青海橋",
+      "normalized": "青海橋",
+      "type": null,
+      "name": "青海橋"
+    },
+    {
+      "input": "駒ヶ坂橋",
+      "normalized": "駒ヶ坂橋",
+      "type": null,
+      "name": "駒ヶ坂橋"
+    },
+    {
+      "input": "鳥越明神通り",
+      "normalized": "鳥越明神通り",
+      "type": null,
+      "name": "鳥越明神通り"
+    }
+  ]
+}

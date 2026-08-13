@@ -1,0 +1,761 @@
+{
+  "language": "ja",
+  "cases": [
+    {
+      "input": "中央区銀座",
+      "normalized": "中央区銀座",
+      "type": null,
+      "name": "中央区銀座"
+    },
+    {
+      "input": "青山通り",
+      "normalized": "青山通り",
+      "type": null,
+      "name": "青山通り"
+    },
+    {
+      "input": "表参道",
+      "normalized": "表参道",
+      "type": null,
+      "name": "表参道"
+    },
+    {
+      "input": "京都市中京区烏丸通",
+      "normalized": "京都市中京区烏丸通",
+      "type": null,
+      "name": "京都市中京区烏丸通"
+    },
+    {
+      "input": "みなとみらい大通り",
+      "normalized": "みなとみらい大通り",
+      "type": null,
+      "name": "みなとみらい大通り"
+    },
+    {
+      "input": "Chuo-ku Ginza",
+      "normalized": "chuo ku ginza",
+      "type": null,
+      "name": "chuo ku ginza"
+    },
+    {
+      "input": "西富山",
+      "normalized": "西富山",
+      "type": null,
+      "name": "西富山"
+    },
+    {
+      "input": "速星",
+      "normalized": "速星",
+      "type": null,
+      "name": "速星"
+    },
+    {
+      "input": "奥田病院",
+      "normalized": "奥田病院",
+      "type": null,
+      "name": "奥田病院"
+    },
+    {
+      "input": "富山大学（人文学部）",
+      "normalized": "富山大学（人文学部）",
+      "type": null,
+      "name": "富山大学（人文学部）"
+    },
+    {
+      "input": "富山大学（人間発達科学部）",
+      "normalized": "富山大学（人間発達科学部）",
+      "type": null,
+      "name": "富山大学（人間発達科学部）"
+    },
+    {
+      "input": "富山大学（工学部・都市デザイン学部）",
+      "normalized": "富山大学（工学部・都市テサイン学部）",
+      "type": null,
+      "name": "富山大学（工学部・都市テサイン学部）"
+    },
+    {
+      "input": "富山大学（理学部）",
+      "normalized": "富山大学（理学部）",
+      "type": null,
+      "name": "富山大学（理学部）"
+    },
+    {
+      "input": "富山大学（経済学部）",
+      "normalized": "富山大学（経済学部）",
+      "type": null,
+      "name": "富山大学（経済学部）"
+    },
+    {
+      "input": "富山市民俗民芸村",
+      "normalized": "富山市民俗民芸村",
+      "type": null,
+      "name": "富山市民俗民芸村"
+    },
+    {
+      "input": "富山市立図書館呉羽分館",
+      "normalized": "富山市立図書館呉羽分館",
+      "type": null,
+      "name": "富山市立図書館呉羽分館"
+    },
+    {
+      "input": "富山市立図書館堀川分館",
+      "normalized": "富山市立図書館堀川分館",
+      "type": null,
+      "name": "富山市立図書館堀川分館"
+    },
+    {
+      "input": "富山市立図書館新庄分館",
+      "normalized": "富山市立図書館新庄分館",
+      "type": null,
+      "name": "富山市立図書館新庄分館"
+    },
+    {
+      "input": "南富山",
+      "normalized": "南富山",
+      "type": null,
+      "name": "南富山"
+    },
+    {
+      "input": "富山市立図書館豊田分館",
+      "normalized": "富山市立図書館豊田分館",
+      "type": null,
+      "name": "富山市立図書館豊田分館"
+    },
+    {
+      "input": "富山県埋蔵文化財センター",
+      "normalized": "富山県埋蔵文化財センター",
+      "type": null,
+      "name": "富山県埋蔵文化財センター"
+    },
+    {
+      "input": "富山県教育記念館",
+      "normalized": "富山県教育記念館",
+      "type": null,
+      "name": "富山県教育記念館"
+    },
+    {
+      "input": "富山県立中央病院",
+      "normalized": "富山県立中央病院",
+      "type": null,
+      "name": "富山県立中央病院"
+    },
+    {
+      "input": "富山県立図書館",
+      "normalized": "富山県立図書館",
+      "type": null,
+      "name": "富山県立図書館"
+    },
+    {
+      "input": "桐朋学園大学院大学",
+      "normalized": "桐朋学園大学院大学",
+      "type": null,
+      "name": "桐朋学園大学院大学"
+    },
+    {
+      "input": "清幸会島田病院",
+      "normalized": "清幸会島田病院",
+      "type": null,
+      "name": "清幸会島田病院"
+    },
+    {
+      "input": "白雲会呉羽神経サナトリウム",
+      "normalized": "白雲会呉羽神経サナトリウム",
+      "type": null,
+      "name": "白雲会呉羽神経サナトリウム"
+    },
+    {
+      "input": "富山県立総合衛生学院",
+      "normalized": "富山県立総合衛生学院",
+      "type": null,
+      "name": "富山県立総合衛生学院"
+    },
+    {
+      "input": "富山大学附属図書館",
+      "normalized": "富山大学附属図書館",
+      "type": null,
+      "name": "富山大学附属図書館"
+    },
+    {
+      "input": "不二越",
+      "normalized": "不二越",
+      "type": null,
+      "name": "不二越"
+    },
+    {
+      "input": "婦中鵜坂",
+      "normalized": "婦中鵜坂",
+      "type": null,
+      "name": "婦中鵜坂"
+    },
+    {
+      "input": "中島閘門",
+      "normalized": "中島閘門",
+      "type": null,
+      "name": "中島閘門"
+    },
+    {
+      "input": "富山市立図書館本館",
+      "normalized": "富山市立図書館本館",
+      "type": null,
+      "name": "富山市立図書館本館"
+    },
+    {
+      "input": "富山市ガラス美術館",
+      "normalized": "富山市カラス美術館",
+      "type": null,
+      "name": "富山市カラス美術館"
+    },
+    {
+      "input": "富山",
+      "normalized": "富山",
+      "type": null,
+      "name": "富山"
+    },
+    {
+      "input": "富山",
+      "normalized": "富山",
+      "type": null,
+      "name": "富山"
+    },
+    {
+      "input": "朝日の滝",
+      "normalized": "朝日の滝",
+      "type": null,
+      "name": "朝日の滝"
+    },
+    {
+      "input": "とやま駅南図書館「ぶらり」",
+      "normalized": "とやま駅南図書館「ふらり」",
+      "type": null,
+      "name": "とやま駅南図書館「ふらり」"
+    },
+    {
+      "input": "富山県民小劇場オルビス",
+      "normalized": "富山県民小劇場オルヒス",
+      "type": null,
+      "name": "富山県民小劇場オルヒス"
+    },
+    {
+      "input": "栄町",
+      "normalized": "栄町",
+      "type": null,
+      "name": "栄町"
+    },
+    {
+      "input": "大泉",
+      "normalized": "大泉",
+      "type": null,
+      "name": "大泉"
+    },
+    {
+      "input": "楽翠亭美術館",
+      "normalized": "楽翠亭美術館",
+      "type": null,
+      "name": "楽翠亭美術館"
+    },
+    {
+      "input": "Kokusai Kaigijo mae Stop",
+      "normalized": "kokusai kaigijo mae stop",
+      "type": null,
+      "name": "kokusai kaigijo mae stop"
+    },
+    {
+      "input": "Grand plaza mae stop",
+      "normalized": "grand plaza mae stop",
+      "type": null,
+      "name": "grand plaza mae stop"
+    },
+    {
+      "input": "kokusai Kaigijo Mae stop",
+      "normalized": "kokusai kaigijo mae stop",
+      "type": null,
+      "name": "kokusai kaigijo mae stop"
+    },
+    {
+      "input": "Grand Plaza MAE Stop",
+      "normalized": "grand plaza mae stop",
+      "type": null,
+      "name": "grand plaza mae stop"
+    },
+    {
+      "input": "電鉄富山",
+      "normalized": "電鉄富山",
+      "type": null,
+      "name": "電鉄富山"
+    },
+    {
+      "input": "東新庄",
+      "normalized": "東新庄",
+      "type": null,
+      "name": "東新庄"
+    },
+    {
+      "input": "稲荷町",
+      "normalized": "稲荷町",
+      "type": null,
+      "name": "稲荷町"
+    },
+    {
+      "input": "新庄田中",
+      "normalized": "新庄田中",
+      "type": null,
+      "name": "新庄田中"
+    },
+    {
+      "input": "呉羽",
+      "normalized": "呉羽",
+      "type": null,
+      "name": "呉羽"
+    },
+    {
+      "input": "城川原",
+      "normalized": "城川原",
+      "type": null,
+      "name": "城川原"
+    },
+    {
+      "input": "龍谷富山高校前(永楽町)",
+      "normalized": "龍谷富山高校前 永楽町",
+      "type": null,
+      "name": "龍谷富山高校前 永楽町"
+    },
+    {
+      "input": "オークスカナルパークホテル富山前",
+      "normalized": "オークスカナルハークホテル富山前",
+      "type": null,
+      "name": "オークスカナルハークホテル富山前"
+    },
+    {
+      "input": "新富山口",
+      "normalized": "新富山口",
+      "type": null,
+      "name": "新富山口"
+    },
+    {
+      "input": "続日本100名城スタンプ134・富山城",
+      "normalized": "続日本100名城スタンフ134・富山城",
+      "type": null,
+      "name": "続日本100名城スタンフ134・富山城"
+    },
+    {
+      "input": "中島閘門操作室",
+      "normalized": "中島閘門操作室",
+      "type": null,
+      "name": "中島閘門操作室"
+    },
+    {
+      "input": "奥田中学校前",
+      "normalized": "奥田中学校前",
+      "type": null,
+      "name": "奥田中学校前"
+    },
+    {
+      "input": "犬島新町",
+      "normalized": "犬島新町",
+      "type": null,
+      "name": "犬島新町"
+    },
+    {
+      "input": "下奥井",
+      "normalized": "下奥井",
+      "type": null,
+      "name": "下奥井"
+    },
+    {
+      "input": "粟島 (大阪屋ショップ前)",
+      "normalized": "粟島 大阪屋ショッフ前",
+      "type": null,
+      "name": "粟島 大阪屋ショッフ前"
+    },
+    {
+      "input": "越中中島",
+      "normalized": "越中中島",
+      "type": null,
+      "name": "越中中島"
+    },
+    {
+      "input": "インテック本社前",
+      "normalized": "インテック本社前",
+      "type": null,
+      "name": "インテック本社前"
+    },
+    {
+      "input": "富山市立図書館奥田北分館",
+      "normalized": "富山市立図書館奥田北分館",
+      "type": null,
+      "name": "富山市立図書館奥田北分館"
+    },
+    {
+      "input": "とやま市民交流館図書サービスコーナー",
+      "normalized": "とやま市民交流館図書サーヒスコーナー",
+      "type": null,
+      "name": "とやま市民交流館図書サーヒスコーナー"
+    },
+    {
+      "input": "和敬会谷野呉山病院",
+      "normalized": "和敬会谷野呉山病院",
+      "type": null,
+      "name": "和敬会谷野呉山病院"
+    },
+    {
+      "input": "大谷和子こども美術館",
+      "normalized": "大谷和子ことも美術館",
+      "type": null,
+      "name": "大谷和子ことも美術館"
+    },
+    {
+      "input": "chuodori",
+      "normalized": "chuodori",
+      "type": null,
+      "name": "chuodori"
+    },
+    {
+      "input": "Funahashi",
+      "normalized": "funahashi",
+      "type": null,
+      "name": "funahashi"
+    },
+    {
+      "input": "Japan, 930-0001 Toyama, Meirincho, 1−220 きときと市場「とやマルシェ」内 JR富山駅 １F",
+      "normalized": "japan 930 0001 toyama meirincho 1−220 きときと市場「とやマルシェ」内 jr富山駅 １f",
+      "type": null,
+      "name": "japan 930 0001 toyama meirincho 1−220 きときと市場「とやマルシェ」内 jr富山駅 １f"
+    },
+    {
+      "input": "あざみ通り",
+      "normalized": "あさみ通り",
+      "type": null,
+      "name": "あさみ通り"
+    },
+    {
+      "input": "あざみ通り (Azami-dori)",
+      "normalized": "あさみ通り azami dori",
+      "type": null,
+      "name": "あさみ通り azami dori"
+    },
+    {
+      "input": "けやき通り",
+      "normalized": "けやき通り",
+      "type": null,
+      "name": "けやき通り"
+    },
+    {
+      "input": "けやき通り (Keyaki-dori)",
+      "normalized": "けやき通り keyaki dori",
+      "type": null,
+      "name": "けやき通り keyaki dori"
+    },
+    {
+      "input": "このて橋",
+      "normalized": "このて橋",
+      "type": null,
+      "name": "このて橋"
+    },
+    {
+      "input": "しののめ通り",
+      "normalized": "しののめ通り",
+      "type": null,
+      "name": "しののめ通り"
+    },
+    {
+      "input": "すずかけ通り",
+      "normalized": "すすかけ通り",
+      "type": null,
+      "name": "すすかけ通り"
+    },
+    {
+      "input": "ひまわり通り",
+      "normalized": "ひまわり通り",
+      "type": null,
+      "name": "ひまわり通り"
+    },
+    {
+      "input": "ゆりの木通り",
+      "normalized": "ゆりの木通り",
+      "type": null,
+      "name": "ゆりの木通り"
+    },
+    {
+      "input": "三室荒屋富山線",
+      "normalized": "三室荒屋富山線",
+      "type": null,
+      "name": "三室荒屋富山線"
+    },
+    {
+      "input": "上滝山室線",
+      "normalized": "上滝山室線",
+      "type": null,
+      "name": "上滝山室線"
+    },
+    {
+      "input": "下掛尾堀川小泉線",
+      "normalized": "下掛尾堀川小泉線",
+      "type": null,
+      "name": "下掛尾堀川小泉線"
+    },
+    {
+      "input": "中大泉橋",
+      "normalized": "中大泉橋",
+      "type": null,
+      "name": "中大泉橋"
+    },
+    {
+      "input": "中央サイクリングロード",
+      "normalized": "中央サイクリンクロート",
+      "type": null,
+      "name": "中央サイクリンクロート"
+    },
+    {
+      "input": "中央通り",
+      "normalized": "中央通り",
+      "type": null,
+      "name": "中央通り"
+    },
+    {
+      "input": "中沖呉羽線",
+      "normalized": "中沖呉羽線",
+      "type": null,
+      "name": "中沖呉羽線"
+    },
+    {
+      "input": "今木橋",
+      "normalized": "今木橋",
+      "type": null,
+      "name": "今木橋"
+    },
+    {
+      "input": "八幡田稲荷線",
+      "normalized": "八幡田稲荷線",
+      "type": null,
+      "name": "八幡田稲荷線"
+    },
+    {
+      "input": "八町大門線",
+      "normalized": "八町大門線",
+      "type": null,
+      "name": "八町大門線"
+    },
+    {
+      "input": "千歳橋",
+      "normalized": "千歳橋",
+      "type": null,
+      "name": "千歳橋"
+    },
+    {
+      "input": "千草橋",
+      "normalized": "千草橋",
+      "type": null,
+      "name": "千草橋"
+    },
+    {
+      "input": "南北自由通路",
+      "normalized": "南北自由通路",
+      "type": null,
+      "name": "南北自由通路"
+    },
+    {
+      "input": "双泉橋",
+      "normalized": "双泉橋",
+      "type": null,
+      "name": "双泉橋"
+    },
+    {
+      "input": "吉作小竹線",
+      "normalized": "吉作小竹線",
+      "type": null,
+      "name": "吉作小竹線"
+    },
+    {
+      "input": "四方新中茶屋線",
+      "normalized": "四方新中茶屋線",
+      "type": null,
+      "name": "四方新中茶屋線"
+    },
+    {
+      "input": "国道359号",
+      "normalized": "国道359号",
+      "type": null,
+      "name": "国道359号"
+    },
+    {
+      "input": "国道41号",
+      "normalized": "国道41号",
+      "type": null,
+      "name": "国道41号"
+    },
+    {
+      "input": "国道8号",
+      "normalized": "国道8号",
+      "type": null,
+      "name": "国道8号"
+    },
+    {
+      "input": "城址大通り",
+      "normalized": "城址大通り",
+      "type": null,
+      "name": "城址大通り"
+    },
+    {
+      "input": "報国橋",
+      "normalized": "報国橋",
+      "type": null,
+      "name": "報国橋"
+    },
+    {
+      "input": "大泉橋",
+      "normalized": "大泉橋",
+      "type": null,
+      "name": "大泉橋"
+    },
+    {
+      "input": "大清橋",
+      "normalized": "大清橋",
+      "type": null,
+      "name": "大清橋"
+    },
+    {
+      "input": "天神橋",
+      "normalized": "天神橋",
+      "type": null,
+      "name": "天神橋"
+    },
+    {
+      "input": "太平橋",
+      "normalized": "太平橋",
+      "type": null,
+      "name": "太平橋"
+    },
+    {
+      "input": "婦中バイパス",
+      "normalized": "婦中ハイハス",
+      "type": null,
+      "name": "婦中ハイハス"
+    },
+    {
+      "input": "婦中平岡線",
+      "normalized": "婦中平岡線",
+      "type": null,
+      "name": "婦中平岡線"
+    },
+    {
+      "input": "安住橋",
+      "normalized": "安住橋",
+      "type": null,
+      "name": "安住橋"
+    },
+    {
+      "input": "宮ケ島歩道",
+      "normalized": "宮ケ島歩道",
+      "type": null,
+      "name": "宮ケ島歩道"
+    },
+    {
+      "input": "宮下橋",
+      "normalized": "宮下橋",
+      "type": null,
+      "name": "宮下橋"
+    },
+    {
+      "input": "富山上滝立山線",
+      "normalized": "富山上滝立山線",
+      "type": null,
+      "name": "富山上滝立山線"
+    },
+    {
+      "input": "富山停車場線",
+      "normalized": "富山停車場線",
+      "type": null,
+      "name": "富山停車場線"
+    },
+    {
+      "input": "富山八尾線",
+      "normalized": "富山八尾線",
+      "type": null,
+      "name": "富山八尾線"
+    },
+    {
+      "input": "富山地方鉄道バス専用道",
+      "normalized": "富山地方鉄道ハス専用道",
+      "type": null,
+      "name": "富山地方鉄道ハス専用道"
+    },
+    {
+      "input": "富山外郭環状線",
+      "normalized": "富山外郭環状線",
+      "type": null,
+      "name": "富山外郭環状線"
+    },
+    {
+      "input": "富山大沢野線",
+      "normalized": "富山大沢野線",
+      "type": null,
+      "name": "富山大沢野線"
+    },
+    {
+      "input": "富山小杉線",
+      "normalized": "富山小杉線",
+      "type": null,
+      "name": "富山小杉線"
+    },
+    {
+      "input": "富山庄川線",
+      "normalized": "富山庄川線",
+      "type": null,
+      "name": "富山庄川線"
+    },
+    {
+      "input": "富山戸出小矢部線",
+      "normalized": "富山戸出小矢部線",
+      "type": null,
+      "name": "富山戸出小矢部線"
+    },
+    {
+      "input": "富山港線",
+      "normalized": "富山港線",
+      "type": null,
+      "name": "富山港線"
+    },
+    {
+      "input": "富山環状線",
+      "normalized": "富山環状線",
+      "type": null,
+      "name": "富山環状線"
+    },
+    {
+      "input": "富山立山公園線",
+      "normalized": "富山立山公園線",
+      "type": null,
+      "name": "富山立山公園線"
+    },
+    {
+      "input": "富山立山魚津線",
+      "normalized": "富山立山魚津線",
+      "type": null,
+      "name": "富山立山魚津線"
+    },
+    {
+      "input": "富山笹津線",
+      "normalized": "富山笹津線",
+      "type": null,
+      "name": "富山笹津線"
+    },
+    {
+      "input": "富山駅前斜めどうり",
+      "normalized": "富山駅前斜めとうり",
+      "type": null,
+      "name": "富山駅前斜めとうり"
+    },
+    {
+      "input": "富山駅南北線",
+      "normalized": "富山駅南北線",
+      "type": null,
+      "name": "富山駅南北線"
+    },
+    {
+      "input": "富山駅地下道",
+      "normalized": "富山駅地下道",
+      "type": null,
+      "name": "富山駅地下道"
+    }
+  ]
+}

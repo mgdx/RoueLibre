@@ -1,0 +1,773 @@
+{
+  "language": "bs",
+  "cases": [
+    {
+      "input": "Ulica Zmaja od Bosne",
+      "normalized": "ulica zmaja od bosne",
+      "type": "ulica",
+      "name": "zmaja od bosne"
+    },
+    {
+      "input": "Trg djece Sarajeva",
+      "normalized": "trg djece sarajeva",
+      "type": "trg",
+      "name": "djece sarajeva"
+    },
+    {
+      "input": "Ferhadija",
+      "normalized": "ferhadija",
+      "type": null,
+      "name": "ferhadija"
+    },
+    {
+      "input": "Titova ulica",
+      "normalized": "titova ulica",
+      "type": null,
+      "name": "titova ulica"
+    },
+    {
+      "input": "Obala Kulina bana",
+      "normalized": "obala kulina bana",
+      "type": "obala",
+      "name": "kulina bana"
+    },
+    {
+      "input": "Bulevar Meše Selimovića",
+      "normalized": "bulevar mese selimovica",
+      "type": null,
+      "name": "bulevar mese selimovica"
+    },
+    {
+      "input": "Put mladih muslimana",
+      "normalized": "put mladih muslimana",
+      "type": "put",
+      "name": "mladih muslimana"
+    },
+    {
+      "input": "Sarači sokak",
+      "normalized": "saraci sokak",
+      "type": null,
+      "name": "saraci sokak"
+    },
+    {
+      "input": "Gradska biblioteka / City library",
+      "normalized": "gradska biblioteka city library",
+      "type": null,
+      "name": "gradska biblioteka city library"
+    },
+    {
+      "input": "Zenica Teretna",
+      "normalized": "zenica teretna",
+      "type": null,
+      "name": "zenica teretna"
+    },
+    {
+      "input": "Zenica",
+      "normalized": "zenica",
+      "type": null,
+      "name": "zenica"
+    },
+    {
+      "input": "Aska Borića",
+      "normalized": "aska borica",
+      "type": null,
+      "name": "aska borica"
+    },
+    {
+      "input": "Ćire Truhelke",
+      "normalized": "cire truhelke",
+      "type": null,
+      "name": "cire truhelke"
+    },
+    {
+      "input": "Ćurukovića put",
+      "normalized": "curukovica put",
+      "type": null,
+      "name": "curukovica put"
+    },
+    {
+      "input": "Dobrovoljnih darovalaca krvi",
+      "normalized": "dobrovoljnih darovalaca krvi",
+      "type": null,
+      "name": "dobrovoljnih darovalaca krvi"
+    },
+    {
+      "input": "Meokušnice",
+      "normalized": "meokusnice",
+      "type": null,
+      "name": "meokusnice"
+    },
+    {
+      "input": "Sarajevska ulica / Сарајевска улица",
+      "normalized": "sarajevska ulica сарајевска улица",
+      "type": null,
+      "name": "sarajevska ulica сарајевска улица"
+    },
+    {
+      "input": "Stanični trg",
+      "normalized": "stanicni trg",
+      "type": null,
+      "name": "stanicni trg"
+    },
+    {
+      "input": "Trg Bosne i Hercegovine",
+      "normalized": "trg bosne i hercegovine",
+      "type": "trg",
+      "name": "bosne i hercegovine"
+    },
+    {
+      "input": "9. maja",
+      "normalized": "9 maja",
+      "type": null,
+      "name": "9 maja"
+    },
+    {
+      "input": "Abdulaziza - Aska Borića",
+      "normalized": "abdulaziza aska borica",
+      "type": null,
+      "name": "abdulaziza aska borica"
+    },
+    {
+      "input": "Ahmeta Hafizovića",
+      "normalized": "ahmeta hafizovica",
+      "type": null,
+      "name": "ahmeta hafizovica"
+    },
+    {
+      "input": "Aleja šehida",
+      "normalized": "aleja sehida",
+      "type": null,
+      "name": "aleja sehida"
+    },
+    {
+      "input": "Armije RBiH",
+      "normalized": "armije rbih",
+      "type": null,
+      "name": "armije rbih"
+    },
+    {
+      "input": "Augusta Šenoe",
+      "normalized": "augusta senoe",
+      "type": null,
+      "name": "augusta senoe"
+    },
+    {
+      "input": "Avde Smaljovića",
+      "normalized": "avde smaljovica",
+      "type": null,
+      "name": "avde smaljovica"
+    },
+    {
+      "input": "Begagića put",
+      "normalized": "begagica put",
+      "type": null,
+      "name": "begagica put"
+    },
+    {
+      "input": "Bijeli put",
+      "normalized": "bijeli put",
+      "type": null,
+      "name": "bijeli put"
+    },
+    {
+      "input": "Bilimišće",
+      "normalized": "bilimisce",
+      "type": null,
+      "name": "bilimisce"
+    },
+    {
+      "input": "Bilinpoljski most",
+      "normalized": "bilinpoljski most",
+      "type": null,
+      "name": "bilinpoljski most"
+    },
+    {
+      "input": "Bilmišće",
+      "normalized": "bilmisce",
+      "type": null,
+      "name": "bilmisce"
+    },
+    {
+      "input": "BISTUA NOVA (PERIN HAN)",
+      "normalized": "bistua nova perin han",
+      "type": null,
+      "name": "bistua nova perin han"
+    },
+    {
+      "input": "Bistua Nuova",
+      "normalized": "bistua nuova",
+      "type": null,
+      "name": "bistua nuova"
+    },
+    {
+      "input": "Blatuša",
+      "normalized": "blatusa",
+      "type": null,
+      "name": "blatusa"
+    },
+    {
+      "input": "Branilaca Bosne",
+      "normalized": "branilaca bosne",
+      "type": null,
+      "name": "branilaca bosne"
+    },
+    {
+      "input": "Branislava Nušića",
+      "normalized": "branislava nusica",
+      "type": null,
+      "name": "branislava nusica"
+    },
+    {
+      "input": "Brce",
+      "normalized": "brce",
+      "type": null,
+      "name": "brce"
+    },
+    {
+      "input": "Brdo",
+      "normalized": "brdo",
+      "type": null,
+      "name": "brdo"
+    },
+    {
+      "input": "Bulevar Ezhera Eze Arnautovića",
+      "normalized": "bulevar ezhera eze arnautovica",
+      "type": null,
+      "name": "bulevar ezhera eze arnautovica"
+    },
+    {
+      "input": "Bulevar Kralja Tvrtka I",
+      "normalized": "bulevar kralja tvrtka i",
+      "type": null,
+      "name": "bulevar kralja tvrtka i"
+    },
+    {
+      "input": "Bulevar Kulina Bana",
+      "normalized": "bulevar kulina bana",
+      "type": null,
+      "name": "bulevar kulina bana"
+    },
+    {
+      "input": "Čalići",
+      "normalized": "calici",
+      "type": null,
+      "name": "calici"
+    },
+    {
+      "input": "Čifluk",
+      "normalized": "cifluk",
+      "type": null,
+      "name": "cifluk"
+    },
+    {
+      "input": "Crkvice",
+      "normalized": "crkvice",
+      "type": null,
+      "name": "crkvice"
+    },
+    {
+      "input": "Crnile",
+      "normalized": "crnile",
+      "type": null,
+      "name": "crnile"
+    },
+    {
+      "input": "Đerzelezova",
+      "normalized": "derzelezova",
+      "type": null,
+      "name": "derzelezova"
+    },
+    {
+      "input": "Dobrovoljnih davalaca krvi",
+      "normalized": "dobrovoljnih davalaca krvi",
+      "type": null,
+      "name": "dobrovoljnih davalaca krvi"
+    },
+    {
+      "input": "Dr. Abdulaziza - Aska Borića",
+      "normalized": "dr abdulaziza aska borica",
+      "type": null,
+      "name": "dr abdulaziza aska borica"
+    },
+    {
+      "input": "Dr Adolfa Goldbergera",
+      "normalized": "dr adolfa goldbergera",
+      "type": null,
+      "name": "dr adolfa goldbergera"
+    },
+    {
+      "input": "Dr. Ćire Truhelke",
+      "normalized": "dr cire truhelke",
+      "type": null,
+      "name": "dr cire truhelke"
+    },
+    {
+      "input": "Dr Hasana Muminagića",
+      "normalized": "dr hasana muminagica",
+      "type": null,
+      "name": "dr hasana muminagica"
+    },
+    {
+      "input": "Dr. Safvet-bega Bašagića",
+      "normalized": "dr safvet bega basagica",
+      "type": null,
+      "name": "dr safvet bega basagica"
+    },
+    {
+      "input": "Drvena Ćuprija",
+      "normalized": "drvena cuprija",
+      "type": null,
+      "name": "drvena cuprija"
+    },
+    {
+      "input": "Drveni most",
+      "normalized": "drveni most",
+      "type": null,
+      "name": "drveni most"
+    },
+    {
+      "input": "Ekinovića put",
+      "normalized": "ekinovica put",
+      "type": null,
+      "name": "ekinovica put"
+    },
+    {
+      "input": "Fakultetska",
+      "normalized": "fakultetska",
+      "type": null,
+      "name": "fakultetska"
+    },
+    {
+      "input": "Fra Grge Martića",
+      "normalized": "fra grge martica",
+      "type": null,
+      "name": "fra grge martica"
+    },
+    {
+      "input": "Fra Ivana Jukića",
+      "normalized": "fra ivana jukica",
+      "type": null,
+      "name": "fra ivana jukica"
+    },
+    {
+      "input": "Fra LJUBE Hrgica",
+      "normalized": "fra ljube hrgica",
+      "type": null,
+      "name": "fra ljube hrgica"
+    },
+    {
+      "input": "Fra Ljudevita Hrgića",
+      "normalized": "fra ljudevita hrgica",
+      "type": null,
+      "name": "fra ljudevita hrgica"
+    },
+    {
+      "input": "Goraždanska",
+      "normalized": "gorazdanska",
+      "type": null,
+      "name": "gorazdanska"
+    },
+    {
+      "input": "Gorazdanska Ulica",
+      "normalized": "gorazdanska ulica",
+      "type": null,
+      "name": "gorazdanska ulica"
+    },
+    {
+      "input": "Gradac",
+      "normalized": "gradac",
+      "type": null,
+      "name": "gradac"
+    },
+    {
+      "input": "Hadžije Mazića",
+      "normalized": "hadzije mazica",
+      "type": null,
+      "name": "hadzije mazica"
+    },
+    {
+      "input": "Hakije Kulenovića",
+      "normalized": "hakije kulenovica",
+      "type": null,
+      "name": "hakije kulenovica"
+    },
+    {
+      "input": "Hamdije Kreševljakovića",
+      "normalized": "hamdije kresevljakovica",
+      "type": null,
+      "name": "hamdije kresevljakovica"
+    },
+    {
+      "input": "I Zeničke brigade",
+      "normalized": "i zenicke brigade",
+      "type": null,
+      "name": "i zenicke brigade"
+    },
+    {
+      "input": "Ibrakovića put",
+      "normalized": "ibrakovica put",
+      "type": null,
+      "name": "ibrakovica put"
+    },
+    {
+      "input": "Ilirski put",
+      "normalized": "ilirski put",
+      "type": null,
+      "name": "ilirski put"
+    },
+    {
+      "input": "Islambegovića put",
+      "normalized": "islambegovica put",
+      "type": null,
+      "name": "islambegovica put"
+    },
+    {
+      "input": "Ivana Cankara",
+      "normalized": "ivana cankara",
+      "type": null,
+      "name": "ivana cankara"
+    },
+    {
+      "input": "Ivana Gundulića",
+      "normalized": "ivana gundulica",
+      "type": null,
+      "name": "ivana gundulica"
+    },
+    {
+      "input": "Jalijski most",
+      "normalized": "jalijski most",
+      "type": null,
+      "name": "jalijski most"
+    },
+    {
+      "input": "Jalijski put",
+      "normalized": "jalijski put",
+      "type": null,
+      "name": "jalijski put"
+    },
+    {
+      "input": "Jalimamov put",
+      "normalized": "jalimamov put",
+      "type": null,
+      "name": "jalimamov put"
+    },
+    {
+      "input": "Jevrejska",
+      "normalized": "jevrejska",
+      "type": null,
+      "name": "jevrejska"
+    },
+    {
+      "input": "Josipa Dakića",
+      "normalized": "josipa dakica",
+      "type": null,
+      "name": "josipa dakica"
+    },
+    {
+      "input": "Josipovića put",
+      "normalized": "josipovica put",
+      "type": null,
+      "name": "josipovica put"
+    },
+    {
+      "input": "Kamberovića čikma",
+      "normalized": "kamberovica cikma",
+      "type": null,
+      "name": "kamberovica cikma"
+    },
+    {
+      "input": "Kamberovića most",
+      "normalized": "kamberovica most",
+      "type": null,
+      "name": "kamberovica most"
+    },
+    {
+      "input": "Kanal",
+      "normalized": "kanal",
+      "type": null,
+      "name": "kanal"
+    },
+    {
+      "input": "Klopački put",
+      "normalized": "klopacki put",
+      "type": null,
+      "name": "klopacki put"
+    },
+    {
+      "input": "Kočeva",
+      "normalized": "koceva",
+      "type": null,
+      "name": "koceva"
+    },
+    {
+      "input": "Kočevska Česma",
+      "normalized": "kocevska cesma",
+      "type": null,
+      "name": "kocevska cesma"
+    },
+    {
+      "input": "Kranjčevićeva",
+      "normalized": "kranjceviceva",
+      "type": null,
+      "name": "kranjceviceva"
+    },
+    {
+      "input": "Krč",
+      "normalized": "krc",
+      "type": null,
+      "name": "krc"
+    },
+    {
+      "input": "Krivače",
+      "normalized": "krivace",
+      "type": null,
+      "name": "krivace"
+    },
+    {
+      "input": "Kučukovići",
+      "normalized": "kucukovici",
+      "type": null,
+      "name": "kucukovici"
+    },
+    {
+      "input": "Londža",
+      "normalized": "londza",
+      "type": null,
+      "name": "londza"
+    },
+    {
+      "input": "Luke",
+      "normalized": "luke",
+      "type": null,
+      "name": "luke"
+    },
+    {
+      "input": "Lukovo polje",
+      "normalized": "lukovo polje",
+      "type": null,
+      "name": "lukovo polje"
+    },
+    {
+      "input": "Margita",
+      "normalized": "margita",
+      "type": null,
+      "name": "margita"
+    },
+    {
+      "input": "Marjanovića put",
+      "normalized": "marjanovica put",
+      "type": null,
+      "name": "marjanovica put"
+    },
+    {
+      "input": "Maršala Tita",
+      "normalized": "marsala tita",
+      "type": null,
+      "name": "marsala tita"
+    },
+    {
+      "input": "Masarykova",
+      "normalized": "masarykova",
+      "type": null,
+      "name": "masarykova"
+    },
+    {
+      "input": "Mehmeda Azapagića",
+      "normalized": "mehmeda azapagica",
+      "type": null,
+      "name": "mehmeda azapagica"
+    },
+    {
+      "input": "Mehmeda Spahe",
+      "normalized": "mehmeda spahe",
+      "type": null,
+      "name": "mehmeda spahe"
+    },
+    {
+      "input": "Mehmedalije Tarabara",
+      "normalized": "mehmedalije tarabara",
+      "type": null,
+      "name": "mehmedalije tarabara"
+    },
+    {
+      "input": "Mejdandžik",
+      "normalized": "mejdandzik",
+      "type": null,
+      "name": "mejdandzik"
+    },
+    {
+      "input": "Milivoja Čekade",
+      "normalized": "milivoja cekade",
+      "type": null,
+      "name": "milivoja cekade"
+    },
+    {
+      "input": "Mirka Davidovića",
+      "normalized": "mirka davidovica",
+      "type": null,
+      "name": "mirka davidovica"
+    },
+    {
+      "input": "Mokušnice",
+      "normalized": "mokusnice",
+      "type": null,
+      "name": "mokusnice"
+    },
+    {
+      "input": "Muftije Šemsekadića",
+      "normalized": "muftije semsekadica",
+      "type": null,
+      "name": "muftije semsekadica"
+    },
+    {
+      "input": "Muhameda Seida Serdarevića",
+      "normalized": "muhameda seida serdarevica",
+      "type": null,
+      "name": "muhameda seida serdarevica"
+    },
+    {
+      "input": "Nikole Tesle",
+      "normalized": "nikole tesle",
+      "type": null,
+      "name": "nikole tesle"
+    },
+    {
+      "input": "Nurije Pozderca",
+      "normalized": "nurije pozderca",
+      "type": null,
+      "name": "nurije pozderca"
+    },
+    {
+      "input": "Odmut",
+      "normalized": "odmut",
+      "type": null,
+      "name": "odmut"
+    },
+    {
+      "input": "Pehare",
+      "normalized": "pehare",
+      "type": null,
+      "name": "pehare"
+    },
+    {
+      "input": "Ploče",
+      "normalized": "ploce",
+      "type": null,
+      "name": "ploce"
+    },
+    {
+      "input": "Podunje",
+      "normalized": "podunje",
+      "type": null,
+      "name": "podunje"
+    },
+    {
+      "input": "Potok",
+      "normalized": "potok",
+      "type": null,
+      "name": "potok"
+    },
+    {
+      "input": "Prašnice",
+      "normalized": "prasnice",
+      "type": null,
+      "name": "prasnice"
+    },
+    {
+      "input": "Prof. Juraja Neidharta",
+      "normalized": "prof juraja neidharta",
+      "type": null,
+      "name": "prof juraja neidharta"
+    },
+    {
+      "input": "Profesora Mustafe Čauševića",
+      "normalized": "profesora mustafe causevica",
+      "type": null,
+      "name": "profesora mustafe causevica"
+    },
+    {
+      "input": "Prolaz kod kafića Lav",
+      "normalized": "prolaz kod kafica lav",
+      "type": null,
+      "name": "prolaz kod kafica lav"
+    },
+    {
+      "input": "Prolaz na kraju zgrade od kafića Lav prema džamiji",
+      "normalized": "prolaz na kraju zgrade od kafica lav prema dzamiji",
+      "type": null,
+      "name": "prolaz na kraju zgrade od kafica lav prema dzamiji"
+    },
+    {
+      "input": "Prusačka",
+      "normalized": "prusacka",
+      "type": null,
+      "name": "prusacka"
+    },
+    {
+      "input": "Prvomajska",
+      "normalized": "prvomajska",
+      "type": null,
+      "name": "prvomajska"
+    },
+    {
+      "input": "Rafaela Levija",
+      "normalized": "rafaela levija",
+      "type": null,
+      "name": "rafaela levija"
+    },
+    {
+      "input": "Raspotočka",
+      "normalized": "raspotocka",
+      "type": null,
+      "name": "raspotocka"
+    },
+    {
+      "input": "Ravan",
+      "normalized": "ravan",
+      "type": null,
+      "name": "ravan"
+    },
+    {
+      "input": "Reisa Čauševića",
+      "normalized": "reisa causevica",
+      "type": null,
+      "name": "reisa causevica"
+    },
+    {
+      "input": "Ričički put",
+      "normalized": "ricicki put",
+      "type": null,
+      "name": "ricicki put"
+    },
+    {
+      "input": "Rudnički most",
+      "normalized": "rudnicki most",
+      "type": null,
+      "name": "rudnicki most"
+    },
+    {
+      "input": "Rujev Do",
+      "normalized": "rujev do",
+      "type": null,
+      "name": "rujev do"
+    },
+    {
+      "input": "Saliha Cakana Mulalića",
+      "normalized": "saliha cakana mulalica",
+      "type": null,
+      "name": "saliha cakana mulalica"
+    },
+    {
+      "input": "Sandžačka",
+      "normalized": "sandzacka",
+      "type": null,
+      "name": "sandzacka"
+    },
+    {
+      "input": "Šankara",
+      "normalized": "sankara",
+      "type": null,
+      "name": "sankara"
+    }
+  ]
+}

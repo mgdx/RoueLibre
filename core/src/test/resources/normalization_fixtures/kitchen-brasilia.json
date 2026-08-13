@@ -1,0 +1,791 @@
+{
+  "language": "pt",
+  "cases": [
+    {
+      "input": "Rua Augusta",
+      "normalized": "rua augusta",
+      "type": "rua",
+      "name": "augusta"
+    },
+    {
+      "input": "Avenida Paulista",
+      "normalized": "avenida paulista",
+      "type": "avenida",
+      "name": "paulista"
+    },
+    {
+      "input": "Praça do Comércio",
+      "normalized": "praca do comercio",
+      "type": "praca",
+      "name": "do comercio"
+    },
+    {
+      "input": "Av. da Liberdade",
+      "normalized": "avenida da liberdade",
+      "type": "avenida",
+      "name": "da liberdade"
+    },
+    {
+      "input": "Tv. da Palha",
+      "normalized": "travessa da palha",
+      "type": "travessa",
+      "name": "da palha"
+    },
+    {
+      "input": "Largo do Chiado",
+      "normalized": "largo do chiado",
+      "type": "largo",
+      "name": "do chiado"
+    },
+    {
+      "input": "Alameda Santos",
+      "normalized": "alameda santos",
+      "type": "alameda",
+      "name": "santos"
+    },
+    {
+      "input": "Rodovia dos Imigrantes",
+      "normalized": "rodovia dos imigrantes",
+      "type": "rodovia",
+      "name": "dos imigrantes"
+    },
+    {
+      "input": "Beco do Carneiro",
+      "normalized": "beco do carneiro",
+      "type": "beco",
+      "name": "do carneiro"
+    },
+    {
+      "input": "Calçada da Glória",
+      "normalized": "calcada da gloria",
+      "type": "calcada",
+      "name": "da gloria"
+    },
+    {
+      "input": "R. Dr. António Luís Gomes",
+      "normalized": "rua doutor antonio luis gomes",
+      "type": "rua",
+      "name": "doutor antonio luis gomes"
+    },
+    {
+      "input": "SEPN 513  Bloco D",
+      "normalized": "sepn 513 bloco d",
+      "type": null,
+      "name": "sepn 513 bloco d"
+    },
+    {
+      "input": "SHCN CL Quadra 315 Bloco A",
+      "normalized": "shcn cl quadra 315 bloco a",
+      "type": null,
+      "name": "shcn cl quadra 315 bloco a"
+    },
+    {
+      "input": "CLN 316. Bloco D",
+      "normalized": "cln 316 bloco d",
+      "type": null,
+      "name": "cln 316 bloco d"
+    },
+    {
+      "input": "EQS 102/103 Bloco A",
+      "normalized": "eqs 102 103 bloco a",
+      "type": null,
+      "name": "eqs 102 103 bloco a"
+    },
+    {
+      "input": "SCLN 116 Bloco G",
+      "normalized": "scln 116 bloco g",
+      "type": null,
+      "name": "scln 116 bloco g"
+    },
+    {
+      "input": "SCRN 502",
+      "normalized": "scrn 502",
+      "type": null,
+      "name": "scrn 502"
+    },
+    {
+      "input": "SGAN 702",
+      "normalized": "sgan 702",
+      "type": null,
+      "name": "sgan 702"
+    },
+    {
+      "input": "SHCG/N 711 Bloco M",
+      "normalized": "shcg n 711 bloco m",
+      "type": null,
+      "name": "shcg n 711 bloco m"
+    },
+    {
+      "input": "SHCG/N 713 Bloco C",
+      "normalized": "shcg n 713 bloco c",
+      "type": null,
+      "name": "shcg n 713 bloco c"
+    },
+    {
+      "input": "SHCG/N 714 Bloco N",
+      "normalized": "shcg n 714 bloco n",
+      "type": null,
+      "name": "shcg n 714 bloco n"
+    },
+    {
+      "input": "SHCG/N 715 Bloco N",
+      "normalized": "shcg n 715 bloco n",
+      "type": null,
+      "name": "shcg n 715 bloco n"
+    },
+    {
+      "input": "SHCG/N 716 Bloco T",
+      "normalized": "shcg n 716 bloco t",
+      "type": null,
+      "name": "shcg n 716 bloco t"
+    },
+    {
+      "input": "SHIP BLOCO B LOJA 13",
+      "normalized": "ship bloco b loja 13",
+      "type": null,
+      "name": "ship bloco b loja 13"
+    },
+    {
+      "input": "112 Sul",
+      "normalized": "112 sul",
+      "type": null,
+      "name": "112 sul"
+    },
+    {
+      "input": "Espaço Cultural Lúcio Costa - Maquete de Brasília",
+      "normalized": "espaco cultural lucio costa maquete de brasilia",
+      "type": null,
+      "name": "espaco cultural lucio costa maquete de brasilia"
+    },
+    {
+      "input": "ITAC - Instituto Técnico de Aviação Civil",
+      "normalized": "itac instituto tecnico de aviacao civil",
+      "type": null,
+      "name": "itac instituto tecnico de aviacao civil"
+    },
+    {
+      "input": "Espaço em Cena",
+      "normalized": "espaco em cena",
+      "type": null,
+      "name": "espaco em cena"
+    },
+    {
+      "input": "Núcleo de Nutrição",
+      "normalized": "nucleo de nutricao",
+      "type": null,
+      "name": "nucleo de nutricao"
+    },
+    {
+      "input": "102 Sul",
+      "normalized": "102 sul",
+      "type": null,
+      "name": "102 sul"
+    },
+    {
+      "input": "Pontão do Lago Sul",
+      "normalized": "pontao do lago sul",
+      "type": null,
+      "name": "pontao do lago sul"
+    },
+    {
+      "input": "SHIGS Quadra 714 Bloco U",
+      "normalized": "shigs quadra 714 bloco u",
+      "type": null,
+      "name": "shigs quadra 714 bloco u"
+    },
+    {
+      "input": "Acesso Bloco E",
+      "normalized": "acesso bloco e",
+      "type": null,
+      "name": "acesso bloco e"
+    },
+    {
+      "input": "Atalho",
+      "normalized": "atalho",
+      "type": null,
+      "name": "atalho"
+    },
+    {
+      "input": "Bloco A - Calçada",
+      "normalized": "bloco a calcada",
+      "type": null,
+      "name": "bloco a calcada"
+    },
+    {
+      "input": "Bloco R - Calçada",
+      "normalized": "bloco r calcada",
+      "type": null,
+      "name": "bloco r calcada"
+    },
+    {
+      "input": "CCSW 4",
+      "normalized": "ccsw 4",
+      "type": null,
+      "name": "ccsw 4"
+    },
+    {
+      "input": "Ciclovia da Epia",
+      "normalized": "ciclovia da epia",
+      "type": null,
+      "name": "ciclovia da epia"
+    },
+    {
+      "input": "Ciclovia Parque Península Sul",
+      "normalized": "ciclovia parque peninsula sul",
+      "type": null,
+      "name": "ciclovia parque peninsula sul"
+    },
+    {
+      "input": "CLN 113/114",
+      "normalized": "cln 113 114",
+      "type": null,
+      "name": "cln 113 114"
+    },
+    {
+      "input": "CLN 305",
+      "normalized": "cln 305",
+      "type": null,
+      "name": "cln 305"
+    },
+    {
+      "input": "CLN 402/403",
+      "normalized": "cln 402 403",
+      "type": null,
+      "name": "cln 402 403"
+    },
+    {
+      "input": "CLRN 703",
+      "normalized": "clrn 703",
+      "type": null,
+      "name": "clrn 703"
+    },
+    {
+      "input": "CLS 207/208",
+      "normalized": "cls 207 208",
+      "type": null,
+      "name": "cls 207 208"
+    },
+    {
+      "input": "CLS 310",
+      "normalized": "cls 310",
+      "type": null,
+      "name": "cls 310"
+    },
+    {
+      "input": "CLS 406/407",
+      "normalized": "cls 406 407",
+      "type": null,
+      "name": "cls 406 407"
+    },
+    {
+      "input": "CLSW 104",
+      "normalized": "clsw 104",
+      "type": null,
+      "name": "clsw 104"
+    },
+    {
+      "input": "Condomínio Privê Lago Norte II - Quadra 4",
+      "normalized": "condominio prive lago norte ii quadra 4",
+      "type": null,
+      "name": "condominio prive lago norte ii quadra 4"
+    },
+    {
+      "input": "Edf Pmu Praça do Biriti",
+      "normalized": "edf pmu praca do biriti",
+      "type": null,
+      "name": "edf pmu praca do biriti"
+    },
+    {
+      "input": "EQN 412/413",
+      "normalized": "eqn 412 413",
+      "type": null,
+      "name": "eqn 412 413"
+    },
+    {
+      "input": "Estacionamento Parque Vivencial",
+      "normalized": "estacionamento parque vivencial",
+      "type": null,
+      "name": "estacionamento parque vivencial"
+    },
+    {
+      "input": "Estrada Parque Torto",
+      "normalized": "estrada parque torto",
+      "type": "estrada",
+      "name": "parque torto"
+    },
+    {
+      "input": "HCGN 714 P/S/O",
+      "normalized": "hcgn 714 p s o",
+      "type": null,
+      "name": "hcgn 714 p s o"
+    },
+    {
+      "input": "L2 Sul",
+      "normalized": "l2 sul",
+      "type": null,
+      "name": "l2 sul"
+    },
+    {
+      "input": "Noroeste Comercial Região 510",
+      "normalized": "noroeste comercial regiao 510",
+      "type": null,
+      "name": "noroeste comercial regiao 510"
+    },
+    {
+      "input": "Orla Do Pontão",
+      "normalized": "orla do pontao",
+      "type": null,
+      "name": "orla do pontao"
+    },
+    {
+      "input": "QMSW 4 Lote 4",
+      "normalized": "qmsw 4 lote 4",
+      "type": null,
+      "name": "qmsw 4 lote 4"
+    },
+    {
+      "input": "QRON - Conjunto 2 a 3",
+      "normalized": "qron conjunto 2 a 3",
+      "type": null,
+      "name": "qron conjunto 2 a 3"
+    },
+    {
+      "input": "QRSN - Conjunto 6 a 7",
+      "normalized": "qrsn conjunto 6 a 7",
+      "type": null,
+      "name": "qrsn conjunto 6 a 7"
+    },
+    {
+      "input": "Quadra 1 Conjunto F",
+      "normalized": "quadra 1 conjunto f",
+      "type": null,
+      "name": "quadra 1 conjunto f"
+    },
+    {
+      "input": "Quadra 1105",
+      "normalized": "quadra 1105",
+      "type": null,
+      "name": "quadra 1105"
+    },
+    {
+      "input": "Quadra 1405",
+      "normalized": "quadra 1405",
+      "type": null,
+      "name": "quadra 1405"
+    },
+    {
+      "input": "Quadra 3 Conjunto CM",
+      "normalized": "quadra 3 conjunto cm",
+      "type": null,
+      "name": "quadra 3 conjunto cm"
+    },
+    {
+      "input": "Quadra 5",
+      "normalized": "quadra 5",
+      "type": null,
+      "name": "quadra 5"
+    },
+    {
+      "input": "Quadra 701",
+      "normalized": "quadra 701",
+      "type": null,
+      "name": "quadra 701"
+    },
+    {
+      "input": "RE 3",
+      "normalized": "re 3",
+      "type": null,
+      "name": "re 3"
+    },
+    {
+      "input": "Rua 25",
+      "normalized": "rua 25",
+      "type": "rua",
+      "name": "25"
+    },
+    {
+      "input": "Rua Amazonas",
+      "normalized": "rua amazonas",
+      "type": "rua",
+      "name": "amazonas"
+    },
+    {
+      "input": "Rua do Campo",
+      "normalized": "rua do campo",
+      "type": "rua",
+      "name": "do campo"
+    },
+    {
+      "input": "Rua Maria do Chapéu",
+      "normalized": "rua maria do chapeu",
+      "type": "rua",
+      "name": "maria do chapeu"
+    },
+    {
+      "input": "S3 Leste",
+      "normalized": "s3 leste",
+      "type": null,
+      "name": "s3 leste"
+    },
+    {
+      "input": "SAUS Quadra 1",
+      "normalized": "saus quadra 1",
+      "type": null,
+      "name": "saus quadra 1"
+    },
+    {
+      "input": "SCES Trecho 1 Conjunto 3 Lote 5/6",
+      "normalized": "sces trecho 1 conjunto 3 lote 5 6",
+      "type": null,
+      "name": "sces trecho 1 conjunto 3 lote 5 6"
+    },
+    {
+      "input": "SCHES Quadra 605",
+      "normalized": "sches quadra 605",
+      "type": null,
+      "name": "sches quadra 605"
+    },
+    {
+      "input": "SCLRN 711",
+      "normalized": "sclrn 711",
+      "type": null,
+      "name": "sclrn 711"
+    },
+    {
+      "input": "SCRN 708/709 A",
+      "normalized": "scrn 708 709 a",
+      "type": null,
+      "name": "scrn 708 709 a"
+    },
+    {
+      "input": "SCS Quadra 4",
+      "normalized": "scs quadra 4",
+      "type": null,
+      "name": "scs quadra 4"
+    },
+    {
+      "input": "SES Quadra 813",
+      "normalized": "ses quadra 813",
+      "type": null,
+      "name": "ses quadra 813"
+    },
+    {
+      "input": "SGAN - Quadra 606",
+      "normalized": "sgan quadra 606",
+      "type": null,
+      "name": "sgan quadra 606"
+    },
+    {
+      "input": "SGAS 911",
+      "normalized": "sgas 911",
+      "type": null,
+      "name": "sgas 911"
+    },
+    {
+      "input": "SGAS - Quadra 615",
+      "normalized": "sgas quadra 615",
+      "type": null,
+      "name": "sgas quadra 615"
+    },
+    {
+      "input": "SHCES Quadra 403",
+      "normalized": "shces quadra 403",
+      "type": null,
+      "name": "shces quadra 403"
+    },
+    {
+      "input": "SHCN EQ 110/111 BL A",
+      "normalized": "shcn eq 110 111 bl a",
+      "type": null,
+      "name": "shcn eq 110 111 bl a"
+    },
+    {
+      "input": "SHIGS Quadra 707",
+      "normalized": "shigs quadra 707",
+      "type": null,
+      "name": "shigs quadra 707"
+    },
+    {
+      "input": "SHIN QI 1 Conjunto 1",
+      "normalized": "shin qi 1 conjunto 1",
+      "type": null,
+      "name": "shin qi 1 conjunto 1"
+    },
+    {
+      "input": "SHIN QI 10 Conjunto 5",
+      "normalized": "shin qi 10 conjunto 5",
+      "type": null,
+      "name": "shin qi 10 conjunto 5"
+    },
+    {
+      "input": "SHIN QI 11 Conjunto 8",
+      "normalized": "shin qi 11 conjunto 8",
+      "type": null,
+      "name": "shin qi 11 conjunto 8"
+    },
+    {
+      "input": "SHIN QI 13 Conjunto 6",
+      "normalized": "shin qi 13 conjunto 6",
+      "type": null,
+      "name": "shin qi 13 conjunto 6"
+    },
+    {
+      "input": "SHIN QI 16 Conjunto 2",
+      "normalized": "shin qi 16 conjunto 2",
+      "type": null,
+      "name": "shin qi 16 conjunto 2"
+    },
+    {
+      "input": "SHIN QI 2 Conjunto 9",
+      "normalized": "shin qi 2 conjunto 9",
+      "type": null,
+      "name": "shin qi 2 conjunto 9"
+    },
+    {
+      "input": "SHIN QI 4 Conjunto 10",
+      "normalized": "shin qi 4 conjunto 10",
+      "type": null,
+      "name": "shin qi 4 conjunto 10"
+    },
+    {
+      "input": "SHIN QI 5 Conjunto 7",
+      "normalized": "shin qi 5 conjunto 7",
+      "type": null,
+      "name": "shin qi 5 conjunto 7"
+    },
+    {
+      "input": "SHIN QI 7 Conjunto 10",
+      "normalized": "shin qi 7 conjunto 10",
+      "type": null,
+      "name": "shin qi 7 conjunto 10"
+    },
+    {
+      "input": "SHIN QI 8 Conjunto 10",
+      "normalized": "shin qi 8 conjunto 10",
+      "type": null,
+      "name": "shin qi 8 conjunto 10"
+    },
+    {
+      "input": "SHIN QI 9 Conjunto 2",
+      "normalized": "shin qi 9 conjunto 2",
+      "type": null,
+      "name": "shin qi 9 conjunto 2"
+    },
+    {
+      "input": "SHIN QL 10 Conjunto 3",
+      "normalized": "shin ql 10 conjunto 3",
+      "type": null,
+      "name": "shin ql 10 conjunto 3"
+    },
+    {
+      "input": "SHIN QL 13 Conjunto 1",
+      "normalized": "shin ql 13 conjunto 1",
+      "type": null,
+      "name": "shin ql 13 conjunto 1"
+    },
+    {
+      "input": "SHIN QL 15 Conjunto 6",
+      "normalized": "shin ql 15 conjunto 6",
+      "type": null,
+      "name": "shin ql 15 conjunto 6"
+    },
+    {
+      "input": "SHIN QL 2 Conjunto 6",
+      "normalized": "shin ql 2 conjunto 6",
+      "type": null,
+      "name": "shin ql 2 conjunto 6"
+    },
+    {
+      "input": "SHIN QL 4 Conjunto 7",
+      "normalized": "shin ql 4 conjunto 7",
+      "type": null,
+      "name": "shin ql 4 conjunto 7"
+    },
+    {
+      "input": "SHIN QL 7 Conjunto 4",
+      "normalized": "shin ql 7 conjunto 4",
+      "type": null,
+      "name": "shin ql 7 conjunto 4"
+    },
+    {
+      "input": "SHIN QL 9 Conjunto 7",
+      "normalized": "shin ql 9 conjunto 7",
+      "type": null,
+      "name": "shin ql 9 conjunto 7"
+    },
+    {
+      "input": "SHIS QI 13 Bloco F",
+      "normalized": "shis qi 13 bloco f",
+      "type": null,
+      "name": "shis qi 13 bloco f"
+    },
+    {
+      "input": "SHIS QI 15 Conjunto 4",
+      "normalized": "shis qi 15 conjunto 4",
+      "type": null,
+      "name": "shis qi 15 conjunto 4"
+    },
+    {
+      "input": "SHIS QI 23 Conjunto 12",
+      "normalized": "shis qi 23 conjunto 12",
+      "type": null,
+      "name": "shis qi 23 conjunto 12"
+    },
+    {
+      "input": "SHIS QI 25 Conjunto 13 a 14",
+      "normalized": "shis qi 25 conjunto 13 a 14",
+      "type": null,
+      "name": "shis qi 25 conjunto 13 a 14"
+    },
+    {
+      "input": "SHIS QI 7 Conjunto 1",
+      "normalized": "shis qi 7 conjunto 1",
+      "type": null,
+      "name": "shis qi 7 conjunto 1"
+    },
+    {
+      "input": "SHIS QI 7 Conjunto 9 e 10",
+      "normalized": "shis qi 7 conjunto 9 e 10",
+      "type": null,
+      "name": "shis qi 7 conjunto 9 e 10"
+    },
+    {
+      "input": "SHIS QI 9 Conjunto 3",
+      "normalized": "shis qi 9 conjunto 3",
+      "type": null,
+      "name": "shis qi 9 conjunto 3"
+    },
+    {
+      "input": "SHIS QL 10 Conjunto 9",
+      "normalized": "shis ql 10 conjunto 9",
+      "type": null,
+      "name": "shis ql 10 conjunto 9"
+    },
+    {
+      "input": "SHIS QL 12 Conjunto 7",
+      "normalized": "shis ql 12 conjunto 7",
+      "type": null,
+      "name": "shis ql 12 conjunto 7"
+    },
+    {
+      "input": "SHIS QL 22 Conjunto 3",
+      "normalized": "shis ql 22 conjunto 3",
+      "type": null,
+      "name": "shis ql 22 conjunto 3"
+    },
+    {
+      "input": "SHIS QL 6 Conjunto 3",
+      "normalized": "shis ql 6 conjunto 3",
+      "type": null,
+      "name": "shis ql 6 conjunto 3"
+    },
+    {
+      "input": "SHN Quadra 1",
+      "normalized": "shn quadra 1",
+      "type": null,
+      "name": "shn quadra 1"
+    },
+    {
+      "input": "SIA Quadra 5C",
+      "normalized": "sia quadra 5c",
+      "type": null,
+      "name": "sia quadra 5c"
+    },
+    {
+      "input": "SIG - Quadra 3",
+      "normalized": "sig quadra 3",
+      "type": null,
+      "name": "sig quadra 3"
+    },
+    {
+      "input": "SMLN ML4 Conjunto 3",
+      "normalized": "smln ml4 conjunto 3",
+      "type": null,
+      "name": "smln ml4 conjunto 3"
+    },
+    {
+      "input": "SQN 105 Bloco K",
+      "normalized": "sqn 105 bloco k",
+      "type": null,
+      "name": "sqn 105 bloco k"
+    },
+    {
+      "input": "SQN 203",
+      "normalized": "sqn 203",
+      "type": null,
+      "name": "sqn 203"
+    },
+    {
+      "input": "SQN 305",
+      "normalized": "sqn 305",
+      "type": null,
+      "name": "sqn 305"
+    },
+    {
+      "input": "SQN 402",
+      "normalized": "sqn 402",
+      "type": null,
+      "name": "sqn 402"
+    },
+    {
+      "input": "SQN 415  Blobo F/E",
+      "normalized": "sqn 415 blobo f e",
+      "type": null,
+      "name": "sqn 415 blobo f e"
+    },
+    {
+      "input": "SQNW 108",
+      "normalized": "sqnw 108",
+      "type": null,
+      "name": "sqnw 108"
+    },
+    {
+      "input": "SQS 111",
+      "normalized": "sqs 111",
+      "type": null,
+      "name": "sqs 111"
+    },
+    {
+      "input": "SQS 116 Bloco K/J/H",
+      "normalized": "sqs 116 bloco k j h",
+      "type": null,
+      "name": "sqs 116 bloco k j h"
+    },
+    {
+      "input": "SQS 303",
+      "normalized": "sqs 303",
+      "type": null,
+      "name": "sqs 303"
+    },
+    {
+      "input": "SQS 316 Bloco C/D",
+      "normalized": "sqs 316 bloco c d",
+      "type": null,
+      "name": "sqs 316 bloco c d"
+    },
+    {
+      "input": "SQS 411/412",
+      "normalized": "sqs 411 412",
+      "type": null,
+      "name": "sqs 411 412"
+    },
+    {
+      "input": "SQSW 105",
+      "normalized": "sqsw 105",
+      "type": null,
+      "name": "sqsw 105"
+    },
+    {
+      "input": "SQSW 303 BLoco K",
+      "normalized": "sqsw 303 bloco k",
+      "type": null,
+      "name": "sqsw 303 bloco k"
+    },
+    {
+      "input": "SUL 809",
+      "normalized": "sul 809",
+      "type": null,
+      "name": "sul 809"
+    }
+  ]
+}

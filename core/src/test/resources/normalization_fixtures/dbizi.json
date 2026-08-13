@@ -1,0 +1,809 @@
+{
+  "language": "es",
+  "cases": [
+    {
+      "input": "Calle Mayor",
+      "normalized": "calle mayor",
+      "type": "calle",
+      "name": "mayor"
+    },
+    {
+      "input": "Avenida de la Constitución",
+      "normalized": "avenida de la constitucion",
+      "type": "avenida",
+      "name": "de la constitucion"
+    },
+    {
+      "input": "Plaza del Sol",
+      "normalized": "plaza del sol",
+      "type": "plaza",
+      "name": "del sol"
+    },
+    {
+      "input": "Paseo de Gracia",
+      "normalized": "paseo de gracia",
+      "type": "paseo",
+      "name": "de gracia"
+    },
+    {
+      "input": "C/ Alcalá",
+      "normalized": "calle alcala",
+      "type": "calle",
+      "name": "alcala"
+    },
+    {
+      "input": "Avda. de América",
+      "normalized": "avenida de america",
+      "type": "avenida",
+      "name": "de america"
+    },
+    {
+      "input": "Gran Vía",
+      "normalized": "gran via",
+      "type": null,
+      "name": "gran via"
+    },
+    {
+      "input": "Camino Viejo del Puerto",
+      "normalized": "camino viejo del puerto",
+      "type": "camino",
+      "name": "viejo del puerto"
+    },
+    {
+      "input": "Callejón de la Cruz",
+      "normalized": "callejon de la cruz",
+      "type": "callejon",
+      "name": "de la cruz"
+    },
+    {
+      "input": "Ronda de Toledo",
+      "normalized": "ronda de toledo",
+      "type": "ronda",
+      "name": "de toledo"
+    },
+    {
+      "input": "Calzada de Tlalpan",
+      "normalized": "calzada de tlalpan",
+      "type": "calzada",
+      "name": "de tlalpan"
+    },
+    {
+      "input": "Pasaje Peatonal Norte",
+      "normalized": "pasaje peatonal norte",
+      "type": "pasaje",
+      "name": "peatonal norte"
+    },
+    {
+      "input": "Travesía de Santa Ana",
+      "normalized": "travesia de santa ana",
+      "type": "travesia",
+      "name": "de santa ana"
+    },
+    {
+      "input": "Cañada Real",
+      "normalized": "canada real",
+      "type": null,
+      "name": "canada real"
+    },
+    {
+      "input": "Foru plaza",
+      "normalized": "foru plaza",
+      "type": null,
+      "name": "foru plaza"
+    },
+    {
+      "input": "Biteri plaza",
+      "normalized": "biteri plaza",
+      "type": null,
+      "name": "biteri plaza"
+    },
+    {
+      "input": "Okendo plaza",
+      "normalized": "okendo plaza",
+      "type": null,
+      "name": "okendo plaza"
+    },
+    {
+      "input": "Calle Sorgintxulo",
+      "normalized": "calle sorgintxulo",
+      "type": "calle",
+      "name": "sorgintxulo"
+    },
+    {
+      "input": "Plaza Berria",
+      "normalized": "plaza berria",
+      "type": "plaza",
+      "name": "berria"
+    },
+    {
+      "input": "Urdaburu plaza",
+      "normalized": "urdaburu plaza",
+      "type": null,
+      "name": "urdaburu plaza"
+    },
+    {
+      "input": "Ernest Lluch kultur etxea",
+      "normalized": "ernest lluch kultur etxea",
+      "type": null,
+      "name": "ernest lluch kultur etxea"
+    },
+    {
+      "input": "Lugaritz Kultur Etxea",
+      "normalized": "lugaritz kultur etxea",
+      "type": null,
+      "name": "lugaritz kultur etxea"
+    },
+    {
+      "input": "Gazteszena",
+      "normalized": "gazteszena",
+      "type": null,
+      "name": "gazteszena"
+    },
+    {
+      "input": "Herrera",
+      "normalized": "herrera",
+      "type": null,
+      "name": "herrera"
+    },
+    {
+      "input": "Ategorrieta",
+      "normalized": "ategorrieta",
+      "type": null,
+      "name": "ategorrieta"
+    },
+    {
+      "input": "Larratxo",
+      "normalized": "larratxo",
+      "type": null,
+      "name": "larratxo"
+    },
+    {
+      "input": "Sutegi aretoa",
+      "normalized": "sutegi aretoa",
+      "type": null,
+      "name": "sutegi aretoa"
+    },
+    {
+      "input": "Karmengo Ama plaza",
+      "normalized": "karmengo ama plaza",
+      "type": null,
+      "name": "karmengo ama plaza"
+    },
+    {
+      "input": "Biteri plaza",
+      "normalized": "biteri plaza",
+      "type": null,
+      "name": "biteri plaza"
+    },
+    {
+      "input": "Agineta bidea",
+      "normalized": "agineta bidea",
+      "type": null,
+      "name": "agineta bidea"
+    },
+    {
+      "input": "Aingeru Zaindariaren bidea",
+      "normalized": "aingeru zaindariaren bidea",
+      "type": null,
+      "name": "aingeru zaindariaren bidea"
+    },
+    {
+      "input": "Aizkorri kalea",
+      "normalized": "aizkorri kalea",
+      "type": null,
+      "name": "aizkorri kalea"
+    },
+    {
+      "input": "Aldaiburu bidea",
+      "normalized": "aldaiburu bidea",
+      "type": null,
+      "name": "aldaiburu bidea"
+    },
+    {
+      "input": "Aldura gunea",
+      "normalized": "aldura gunea",
+      "type": null,
+      "name": "aldura gunea"
+    },
+    {
+      "input": "Alkolea kalea",
+      "normalized": "alkolea kalea",
+      "type": null,
+      "name": "alkolea kalea"
+    },
+    {
+      "input": "Amaragaina kalea",
+      "normalized": "amaragaina kalea",
+      "type": null,
+      "name": "amaragaina kalea"
+    },
+    {
+      "input": "Andaluzia biribilgunea",
+      "normalized": "andaluzia biribilgunea",
+      "type": null,
+      "name": "andaluzia biribilgunea"
+    },
+    {
+      "input": "Añorga Etorbidea",
+      "normalized": "anorga etorbidea",
+      "type": null,
+      "name": "anorga etorbidea"
+    },
+    {
+      "input": "Antxota kalea",
+      "normalized": "antxota kalea",
+      "type": null,
+      "name": "antxota kalea"
+    },
+    {
+      "input": "Aralar plaza",
+      "normalized": "aralar plaza",
+      "type": null,
+      "name": "aralar plaza"
+    },
+    {
+      "input": "Argel pasealekua",
+      "normalized": "argel pasealekua",
+      "type": null,
+      "name": "argel pasealekua"
+    },
+    {
+      "input": "Arrapide pasealekua",
+      "normalized": "arrapide pasealekua",
+      "type": null,
+      "name": "arrapide pasealekua"
+    },
+    {
+      "input": "Arroka kalea",
+      "normalized": "arroka kalea",
+      "type": null,
+      "name": "arroka kalea"
+    },
+    {
+      "input": "Askatasuna plaza",
+      "normalized": "askatasuna plaza",
+      "type": null,
+      "name": "askatasuna plaza"
+    },
+    {
+      "input": "Atallu kalea",
+      "normalized": "atallu kalea",
+      "type": null,
+      "name": "atallu kalea"
+    },
+    {
+      "input": "Atzekoate",
+      "normalized": "atzekoate",
+      "type": null,
+      "name": "atzekoate"
+    },
+    {
+      "input": "Azeki Aundia kalea",
+      "normalized": "azeki aundia kalea",
+      "type": null,
+      "name": "azeki aundia kalea"
+    },
+    {
+      "input": "Baratzategi kalea",
+      "normalized": "baratzategi kalea",
+      "type": null,
+      "name": "baratzategi kalea"
+    },
+    {
+      "input": "Baztan kalea",
+      "normalized": "baztan kalea",
+      "type": null,
+      "name": "baztan kalea"
+    },
+    {
+      "input": "Beloka pasealekua",
+      "normalized": "beloka pasealekua",
+      "type": null,
+      "name": "beloka pasealekua"
+    },
+    {
+      "input": "Bernardo Estornés Lasa kalea",
+      "normalized": "bernardo estornes lasa kalea",
+      "type": null,
+      "name": "bernardo estornes lasa kalea"
+    },
+    {
+      "input": "Bilbao plaza",
+      "normalized": "bilbao plaza",
+      "type": null,
+      "name": "bilbao plaza"
+    },
+    {
+      "input": "Bodaleku bidea",
+      "normalized": "bodaleku bidea",
+      "type": null,
+      "name": "bodaleku bidea"
+    },
+    {
+      "input": "Brunet kalea",
+      "normalized": "brunet kalea",
+      "type": null,
+      "name": "brunet kalea"
+    },
+    {
+      "input": "Camino kalea",
+      "normalized": "camino kalea",
+      "type": "camino",
+      "name": "kalea"
+    },
+    {
+      "input": "De Lasarte plaza",
+      "normalized": "de lasarte plaza",
+      "type": null,
+      "name": "de lasarte plaza"
+    },
+    {
+      "input": "Donostia etorbidea",
+      "normalized": "donostia etorbidea",
+      "type": null,
+      "name": "donostia etorbidea"
+    },
+    {
+      "input": "Eduardo Chillida pasealekua",
+      "normalized": "eduardo chillida pasealekua",
+      "type": null,
+      "name": "eduardo chillida pasealekua"
+    },
+    {
+      "input": "Elenategi kalea",
+      "normalized": "elenategi kalea",
+      "type": null,
+      "name": "elenategi kalea"
+    },
+    {
+      "input": "Elkano kalea",
+      "normalized": "elkano kalea",
+      "type": null,
+      "name": "elkano kalea"
+    },
+    {
+      "input": "Erramunene kalea",
+      "normalized": "erramunene kalea",
+      "type": null,
+      "name": "erramunene kalea"
+    },
+    {
+      "input": "Errekatxo plaza",
+      "normalized": "errekatxo plaza",
+      "type": null,
+      "name": "errekatxo plaza"
+    },
+    {
+      "input": "Errotazar bidea",
+      "normalized": "errotazar bidea",
+      "type": null,
+      "name": "errotazar bidea"
+    },
+    {
+      "input": "Etarte",
+      "normalized": "etarte",
+      "type": null,
+      "name": "etarte"
+    },
+    {
+      "input": "Euskal Herria kalea",
+      "normalized": "euskal herria kalea",
+      "type": null,
+      "name": "euskal herria kalea"
+    },
+    {
+      "input": "Felipe Sagarna \"Zapa\"",
+      "normalized": "felipe sagarna zapa",
+      "type": null,
+      "name": "felipe sagarna zapa"
+    },
+    {
+      "input": "Foruen pasealekua",
+      "normalized": "foruen pasealekua",
+      "type": null,
+      "name": "foruen pasealekua"
+    },
+    {
+      "input": "Funikularraren plaza",
+      "normalized": "funikularraren plaza",
+      "type": null,
+      "name": "funikularraren plaza"
+    },
+    {
+      "input": "Galtzaraborda etorbidea",
+      "normalized": "galtzaraborda etorbidea",
+      "type": null,
+      "name": "galtzaraborda etorbidea"
+    },
+    {
+      "input": "Gasteiz kalea",
+      "normalized": "gasteiz kalea",
+      "type": null,
+      "name": "gasteiz kalea"
+    },
+    {
+      "input": "Gernika ibilbidea",
+      "normalized": "gernika ibilbidea",
+      "type": null,
+      "name": "gernika ibilbidea"
+    },
+    {
+      "input": "Goiko Galtzada Berria",
+      "normalized": "goiko galtzada berria",
+      "type": null,
+      "name": "goiko galtzada berria"
+    },
+    {
+      "input": "Gracia Olazabal",
+      "normalized": "gracia olazabal",
+      "type": null,
+      "name": "gracia olazabal"
+    },
+    {
+      "input": "Guillermo de Lazon kalea",
+      "normalized": "guillermo de lazon kalea",
+      "type": null,
+      "name": "guillermo de lazon kalea"
+    },
+    {
+      "input": "Heriz pasealekua",
+      "normalized": "heriz pasealekua",
+      "type": null,
+      "name": "heriz pasealekua"
+    },
+    {
+      "input": "Hipolito Gezala kalea",
+      "normalized": "hipolito gezala kalea",
+      "type": null,
+      "name": "hipolito gezala kalea"
+    },
+    {
+      "input": "Igara bidea",
+      "normalized": "igara bidea",
+      "type": null,
+      "name": "igara bidea"
+    },
+    {
+      "input": "Illarraberri kalea",
+      "normalized": "illarraberri kalea",
+      "type": null,
+      "name": "illarraberri kalea"
+    },
+    {
+      "input": "Intxaurdegi kalea",
+      "normalized": "intxaurdegi kalea",
+      "type": null,
+      "name": "intxaurdegi kalea"
+    },
+    {
+      "input": "Irigoien",
+      "normalized": "irigoien",
+      "type": null,
+      "name": "irigoien"
+    },
+    {
+      "input": "Isabel II.aren hiribidea",
+      "normalized": "isabel ii aren hiribidea",
+      "type": null,
+      "name": "isabel ii aren hiribidea"
+    },
+    {
+      "input": "Izaburu kalea",
+      "normalized": "izaburu kalea",
+      "type": null,
+      "name": "izaburu kalea"
+    },
+    {
+      "input": "Jauregi kalea",
+      "normalized": "jauregi kalea",
+      "type": null,
+      "name": "jauregi kalea"
+    },
+    {
+      "input": "Jose Arana kalea",
+      "normalized": "jose arana kalea",
+      "type": null,
+      "name": "jose arana kalea"
+    },
+    {
+      "input": "Jose Migel Barandiaran pasealekua",
+      "normalized": "jose migel barandiaran pasealekua",
+      "type": null,
+      "name": "jose migel barandiaran pasealekua"
+    },
+    {
+      "input": "Juan de Bilbao kalea",
+      "normalized": "juan de bilbao kalea",
+      "type": null,
+      "name": "juan de bilbao kalea"
+    },
+    {
+      "input": "Julimasene",
+      "normalized": "julimasene",
+      "type": null,
+      "name": "julimasene"
+    },
+    {
+      "input": "Kalezar auzoa",
+      "normalized": "kalezar auzoa",
+      "type": null,
+      "name": "kalezar auzoa"
+    },
+    {
+      "input": "Karabel Zubia",
+      "normalized": "karabel zubia",
+      "type": null,
+      "name": "karabel zubia"
+    },
+    {
+      "input": "Karobieta parkea",
+      "normalized": "karobieta parkea",
+      "type": null,
+      "name": "karobieta parkea"
+    },
+    {
+      "input": "Konsignatario kalea",
+      "normalized": "konsignatario kalea",
+      "type": null,
+      "name": "konsignatario kalea"
+    },
+    {
+      "input": "Kristobal Balenziaga kalea",
+      "normalized": "kristobal balenziaga kalea",
+      "type": null,
+      "name": "kristobal balenziaga kalea"
+    },
+    {
+      "input": "Lanberri kalea",
+      "normalized": "lanberri kalea",
+      "type": null,
+      "name": "lanberri kalea"
+    },
+    {
+      "input": "Larraundi",
+      "normalized": "larraundi",
+      "type": null,
+      "name": "larraundi"
+    },
+    {
+      "input": "Lauaizeta kalea",
+      "normalized": "lauaizeta kalea",
+      "type": null,
+      "name": "lauaizeta kalea"
+    },
+    {
+      "input": "Lezoko Maria",
+      "normalized": "lezoko maria",
+      "type": null,
+      "name": "lezoko maria"
+    },
+    {
+      "input": "Loistarain kalea",
+      "normalized": "loistarain kalea",
+      "type": null,
+      "name": "loistarain kalea"
+    },
+    {
+      "input": "Lugaritz biribilunea",
+      "normalized": "lugaritz biribilunea",
+      "type": null,
+      "name": "lugaritz biribilunea"
+    },
+    {
+      "input": "Madalena kalea",
+      "normalized": "madalena kalea",
+      "type": null,
+      "name": "madalena kalea"
+    },
+    {
+      "input": "Manuel Lardizabal pasealekua",
+      "normalized": "manuel lardizabal pasealekua",
+      "type": null,
+      "name": "manuel lardizabal pasealekua"
+    },
+    {
+      "input": "Maria Lezo kalea",
+      "normalized": "maria lezo kalea",
+      "type": null,
+      "name": "maria lezo kalea"
+    },
+    {
+      "input": "Marrus bidea",
+      "normalized": "marrus bidea",
+      "type": null,
+      "name": "marrus bidea"
+    },
+    {
+      "input": "Masti-Loidi kalea",
+      "normalized": "masti loidi kalea",
+      "type": null,
+      "name": "masti loidi kalea"
+    },
+    {
+      "input": "Mendiolako bidea",
+      "normalized": "mendiolako bidea",
+      "type": null,
+      "name": "mendiolako bidea"
+    },
+    {
+      "input": "Mikeletegi pasealekua",
+      "normalized": "mikeletegi pasealekua",
+      "type": null,
+      "name": "mikeletegi pasealekua"
+    },
+    {
+      "input": "Monpasaldeko bidea",
+      "normalized": "monpasaldeko bidea",
+      "type": null,
+      "name": "monpasaldeko bidea"
+    },
+    {
+      "input": "Mundaiz kalea",
+      "normalized": "mundaiz kalea",
+      "type": null,
+      "name": "mundaiz kalea"
+    },
+    {
+      "input": "Nafarroa hiribidea",
+      "normalized": "nafarroa hiribidea",
+      "type": null,
+      "name": "nafarroa hiribidea"
+    },
+    {
+      "input": "Oindi kalea",
+      "normalized": "oindi kalea",
+      "type": null,
+      "name": "oindi kalea"
+    },
+    {
+      "input": "Oleta plaza",
+      "normalized": "oleta plaza",
+      "type": null,
+      "name": "oleta plaza"
+    },
+    {
+      "input": "Orkolaga kalea",
+      "normalized": "orkolaga kalea",
+      "type": null,
+      "name": "orkolaga kalea"
+    },
+    {
+      "input": "Pagoaga kalea",
+      "normalized": "pagoaga kalea",
+      "type": null,
+      "name": "pagoaga kalea"
+    },
+    {
+      "input": "Pasaiako Portuko zeharbidea",
+      "normalized": "pasaiako portuko zeharbidea",
+      "type": null,
+      "name": "pasaiako portuko zeharbidea"
+    },
+    {
+      "input": "Paseo Manuel Lardizabal",
+      "normalized": "paseo manuel lardizabal",
+      "type": "paseo",
+      "name": "manuel lardizabal"
+    },
+    {
+      "input": "Pedro Cormenzana kalea",
+      "normalized": "pedro cormenzana kalea",
+      "type": null,
+      "name": "pedro cormenzana kalea"
+    },
+    {
+      "input": "Peruene kalea",
+      "normalized": "peruene kalea",
+      "type": null,
+      "name": "peruene kalea"
+    },
+    {
+      "input": "Pinutegi kalea",
+      "normalized": "pinutegi kalea",
+      "type": null,
+      "name": "pinutegi kalea"
+    },
+    {
+      "input": "Podavines kalea",
+      "normalized": "podavines kalea",
+      "type": null,
+      "name": "podavines kalea"
+    },
+    {
+      "input": "Puente de Mundaiz",
+      "normalized": "puente de mundaiz",
+      "type": "puente",
+      "name": "de mundaiz"
+    },
+    {
+      "input": "Rodil",
+      "normalized": "rodil",
+      "type": null,
+      "name": "rodil"
+    },
+    {
+      "input": "Sagastialde auzoa",
+      "normalized": "sagastialde auzoa",
+      "type": null,
+      "name": "sagastialde auzoa"
+    },
+    {
+      "input": "San Bizente kalea",
+      "normalized": "san bizente kalea",
+      "type": null,
+      "name": "san bizente kalea"
+    },
+    {
+      "input": "San Lorenzo kalea",
+      "normalized": "san lorenzo kalea",
+      "type": null,
+      "name": "san lorenzo kalea"
+    },
+    {
+      "input": "Sanchez Toca kalea",
+      "normalized": "sanchez toca kalea",
+      "type": null,
+      "name": "sanchez toca kalea"
+    },
+    {
+      "input": "Santesteban musikaria",
+      "normalized": "santesteban musikaria",
+      "type": null,
+      "name": "santesteban musikaria"
+    },
+    {
+      "input": "Secundino Esnaola",
+      "normalized": "secundino esnaola",
+      "type": null,
+      "name": "secundino esnaola"
+    },
+    {
+      "input": "Sokamuturra kalexka",
+      "normalized": "sokamuturra kalexka",
+      "type": null,
+      "name": "sokamuturra kalexka"
+    },
+    {
+      "input": "Tellerialde plaza",
+      "normalized": "tellerialde plaza",
+      "type": null,
+      "name": "tellerialde plaza"
+    },
+    {
+      "input": "Tomás Alba kalea",
+      "normalized": "tomas alba kalea",
+      "type": null,
+      "name": "tomas alba kalea"
+    },
+    {
+      "input": "Tranbiabidea",
+      "normalized": "tranbiabidea",
+      "type": null,
+      "name": "tranbiabidea"
+    },
+    {
+      "input": "Txaparrene pasealekua",
+      "normalized": "txaparrene pasealekua",
+      "type": null,
+      "name": "txaparrene pasealekua"
+    },
+    {
+      "input": "Txirrita Bertsolaria",
+      "normalized": "txirrita bertsolaria",
+      "type": null,
+      "name": "txirrita bertsolaria"
+    },
+    {
+      "input": "Txurkoene kalea",
+      "normalized": "txurkoene kalea",
+      "type": null,
+      "name": "txurkoene kalea"
+    },
+    {
+      "input": "Ur Zaleak pasaia",
+      "normalized": "ur zaleak pasaia",
+      "type": null,
+      "name": "ur zaleak pasaia"
+    }
+  ]
+}

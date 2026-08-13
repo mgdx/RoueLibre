@@ -1,0 +1,791 @@
+{
+  "language": "nl",
+  "cases": [
+    {
+      "input": "Kalverstraat",
+      "normalized": "kalverstraat",
+      "type": null,
+      "name": "kalverstraat"
+    },
+    {
+      "input": "Prins Hendriklaan",
+      "normalized": "prins hendriklaan",
+      "type": null,
+      "name": "prins hendriklaan"
+    },
+    {
+      "input": "Grote Markt",
+      "normalized": "grote markt",
+      "type": null,
+      "name": "grote markt"
+    },
+    {
+      "input": "Sint-Jansstraat",
+      "normalized": "sint jansstraat",
+      "type": null,
+      "name": "sint jansstraat"
+    },
+    {
+      "input": "Nieuwezijds Voorburgwal",
+      "normalized": "nieuwezijds voorburgwal",
+      "type": null,
+      "name": "nieuwezijds voorburgwal"
+    },
+    {
+      "input": "Vijzelgracht",
+      "normalized": "vijzelgracht",
+      "type": null,
+      "name": "vijzelgracht"
+    },
+    {
+      "input": "Havenkade",
+      "normalized": "havenkade",
+      "type": null,
+      "name": "havenkade"
+    },
+    {
+      "input": "Dr. Lelykade",
+      "normalized": "doctor lelykade",
+      "type": null,
+      "name": "doctor lelykade"
+    },
+    {
+      "input": "Lange Nieuwstr.",
+      "normalized": "lange nieuwstr",
+      "type": null,
+      "name": "lange nieuwstr"
+    },
+    {
+      "input": "Meir",
+      "normalized": "meir",
+      "type": null,
+      "name": "meir"
+    },
+    {
+      "input": "Groenplaats",
+      "normalized": "groenplaats",
+      "type": null,
+      "name": "groenplaats"
+    },
+    {
+      "input": "Z.3. Doorvled",
+      "normalized": "z 3 doorvled",
+      "type": null,
+      "name": "z 3 doorvled"
+    },
+    {
+      "input": "Musée Braille - BrailleMuseum",
+      "normalized": "musee braille braillemuseum",
+      "type": null,
+      "name": "musee braille braillemuseum"
+    },
+    {
+      "input": "MoMuse",
+      "normalized": "momuse",
+      "type": null,
+      "name": "momuse"
+    },
+    {
+      "input": "Vivier d'Oie - Diesdelle",
+      "normalized": "vivier d oie diesdelle",
+      "type": null,
+      "name": "vivier d oie diesdelle"
+    },
+    {
+      "input": "Tisserands en laine - Wolwevers en –handelaars",
+      "normalized": "tisserands en laine wolwevers en handelaars",
+      "type": null,
+      "name": "tisserands en laine wolwevers en handelaars"
+    },
+    {
+      "input": "Tour & Taxis",
+      "normalized": "tour taxis",
+      "type": null,
+      "name": "tour taxis"
+    },
+    {
+      "input": "Institut Supérieur de Peinture Van Der Kelen – Logelain",
+      "normalized": "institut superieur de peinture van der kelen logelain",
+      "type": null,
+      "name": "institut superieur de peinture van der kelen logelain"
+    },
+    {
+      "input": "Sint-Stevens-Woluwe",
+      "normalized": "sint stevens woluwe",
+      "type": null,
+      "name": "sint stevens woluwe"
+    },
+    {
+      "input": "22",
+      "normalized": "22",
+      "type": null,
+      "name": "22"
+    },
+    {
+      "input": "67",
+      "normalized": "67",
+      "type": null,
+      "name": "67"
+    },
+    {
+      "input": "Albert Bechetlaan",
+      "normalized": "albert bechetlaan",
+      "type": null,
+      "name": "albert bechetlaan"
+    },
+    {
+      "input": "Allée John Cluysenaar - John Cluysenaardreef",
+      "normalized": "allee john cluysenaar john cluysenaardreef",
+      "type": null,
+      "name": "allee john cluysenaar john cluysenaardreef"
+    },
+    {
+      "input": "Assesteenweg",
+      "normalized": "assesteenweg",
+      "type": null,
+      "name": "assesteenweg"
+    },
+    {
+      "input": "Avenue C - C laan",
+      "normalized": "avenue c c laan",
+      "type": null,
+      "name": "avenue c c laan"
+    },
+    {
+      "input": "Avenue de Boitsfort - Bosvoordselaan",
+      "normalized": "avenue de boitsfort bosvoordselaan",
+      "type": null,
+      "name": "avenue de boitsfort bosvoordselaan"
+    },
+    {
+      "input": "Avenue de l'Observatoire - Sterrewachtlaan",
+      "normalized": "avenue de l observatoire sterrewachtlaan",
+      "type": null,
+      "name": "avenue de l observatoire sterrewachtlaan"
+    },
+    {
+      "input": "Avenue de la Pinède - Pijnboslaan",
+      "normalized": "avenue de la pinede pijnboslaan",
+      "type": null,
+      "name": "avenue de la pinede pijnboslaan"
+    },
+    {
+      "input": "Avenue des Airelles - Bosbessenlaan",
+      "normalized": "avenue des airelles bosbessenlaan",
+      "type": null,
+      "name": "avenue des airelles bosbessenlaan"
+    },
+    {
+      "input": "Avenue des Dryades - Bosnimfenlaan",
+      "normalized": "avenue des dryades bosnimfenlaan",
+      "type": null,
+      "name": "avenue des dryades bosnimfenlaan"
+    },
+    {
+      "input": "Avenue des Narcisses - Narcisbloemenlaan",
+      "normalized": "avenue des narcisses narcisbloemenlaan",
+      "type": null,
+      "name": "avenue des narcisses narcisbloemenlaan"
+    },
+    {
+      "input": "Avenue du Bois Jean - Jansboslaan",
+      "normalized": "avenue du bois jean jansboslaan",
+      "type": null,
+      "name": "avenue du bois jean jansboslaan"
+    },
+    {
+      "input": "Avenue du Kouter - Kouterlaan",
+      "normalized": "avenue du kouter kouterlaan",
+      "type": null,
+      "name": "avenue du kouter kouterlaan"
+    },
+    {
+      "input": "Avenue Edmond Galoppin - Edmond Galoppinlaan",
+      "normalized": "avenue edmond galoppin edmond galoppinlaan",
+      "type": null,
+      "name": "avenue edmond galoppin edmond galoppinlaan"
+    },
+    {
+      "input": "Avenue Georges Eekhoud - Georges Eekhoudlaan",
+      "normalized": "avenue georges eekhoud georges eekhoudlaan",
+      "type": null,
+      "name": "avenue georges eekhoud georges eekhoudlaan"
+    },
+    {
+      "input": "Avenue Jacques Brel - Jacques Brellaan",
+      "normalized": "avenue jacques brel jacques brellaan",
+      "type": null,
+      "name": "avenue jacques brel jacques brellaan"
+    },
+    {
+      "input": "Avenue Laure - Lauralaan",
+      "normalized": "avenue laure lauralaan",
+      "type": null,
+      "name": "avenue laure lauralaan"
+    },
+    {
+      "input": "Avenue Nellie Melba - Nellie Melbalaan",
+      "normalized": "avenue nellie melba nellie melbalaan",
+      "type": null,
+      "name": "avenue nellie melba nellie melbalaan"
+    },
+    {
+      "input": "Avenue Saint-Augustin - Sint-Augustinuslaan",
+      "normalized": "avenue saint augustin sint augustinuslaan",
+      "type": null,
+      "name": "avenue saint augustin sint augustinuslaan"
+    },
+    {
+      "input": "Barrière de Saint-Gilles - Bareel van Sint-Gillis",
+      "normalized": "barriere de saint gilles bareel van sint gillis",
+      "type": null,
+      "name": "barriere de saint gilles bareel van sint gillis"
+    },
+    {
+      "input": "Beverlindestraat",
+      "normalized": "beverlindestraat",
+      "type": null,
+      "name": "beverlindestraat"
+    },
+    {
+      "input": "Bosdalgaarde - Clos du Val du Bois",
+      "normalized": "bosdalgaarde clos du val du bois",
+      "type": null,
+      "name": "bosdalgaarde clos du val du bois"
+    },
+    {
+      "input": "Boulevard Industriel - Industrielaan",
+      "normalized": "boulevard industriel industrielaan",
+      "type": "boulevard",
+      "name": "industriel industrielaan"
+    },
+    {
+      "input": "Bufkensstraat",
+      "normalized": "bufkensstraat",
+      "type": null,
+      "name": "bufkensstraat"
+    },
+    {
+      "input": "Carré Sersté - Serstéblok",
+      "normalized": "carre serste sersteblok",
+      "type": null,
+      "name": "carre serste sersteblok"
+    },
+    {
+      "input": "Chaussée Saint-Pierre - Sint-Pieterssteenweg",
+      "normalized": "chaussee saint pierre sint pieterssteenweg",
+      "type": null,
+      "name": "chaussee saint pierre sint pieterssteenweg"
+    },
+    {
+      "input": "Chemin de la Source - Weg naar de Bron",
+      "normalized": "chemin de la source weg naar de bron",
+      "type": null,
+      "name": "chemin de la source weg naar de bron"
+    },
+    {
+      "input": "Chemin du Rossignol - Nachtegaalsweg",
+      "normalized": "chemin du rossignol nachtegaalsweg",
+      "type": null,
+      "name": "chemin du rossignol nachtegaalsweg"
+    },
+    {
+      "input": "Clos de la Tramontane - Tramontanegaarde",
+      "normalized": "clos de la tramontane tramontanegaarde",
+      "type": null,
+      "name": "clos de la tramontane tramontanegaarde"
+    },
+    {
+      "input": "Clos du Mouron - Murikgaarde",
+      "normalized": "clos du mouron murikgaarde",
+      "type": null,
+      "name": "clos du mouron murikgaarde"
+    },
+    {
+      "input": "Cour des Lions",
+      "normalized": "cour des lions",
+      "type": null,
+      "name": "cour des lions"
+    },
+    {
+      "input": "Delhaize OUT Parking DC B",
+      "normalized": "delhaize out parking dc b",
+      "type": null,
+      "name": "delhaize out parking dc b"
+    },
+    {
+      "input": "Drève de Carloo - Carloodreef",
+      "normalized": "dreve de carloo carloodreef",
+      "type": null,
+      "name": "dreve de carloo carloodreef"
+    },
+    {
+      "input": "Drève du Sénéchal - Landvoogddreef",
+      "normalized": "dreve du senechal landvoogddreef",
+      "type": null,
+      "name": "dreve du senechal landvoogddreef"
+    },
+    {
+      "input": "Eeuwstraat",
+      "normalized": "eeuwstraat",
+      "type": null,
+      "name": "eeuwstraat"
+    },
+    {
+      "input": "Fabrieksstraat",
+      "normalized": "fabrieksstraat",
+      "type": null,
+      "name": "fabrieksstraat"
+    },
+    {
+      "input": "Galerie du Commerce - Handelsgalerij",
+      "normalized": "galerie du commerce handelsgalerij",
+      "type": null,
+      "name": "galerie du commerce handelsgalerij"
+    },
+    {
+      "input": "Grande rue au Bois - Grote Bosstraat",
+      "normalized": "grande rue au bois grote bosstraat",
+      "type": null,
+      "name": "grande rue au bois grote bosstraat"
+    },
+    {
+      "input": "Hammestraat",
+      "normalized": "hammestraat",
+      "type": null,
+      "name": "hammestraat"
+    },
+    {
+      "input": "Henrik Thumasplein",
+      "normalized": "henrik thumasplein",
+      "type": null,
+      "name": "henrik thumasplein"
+    },
+    {
+      "input": "Hollevit",
+      "normalized": "hollevit",
+      "type": null,
+      "name": "hollevit"
+    },
+    {
+      "input": "Impasse des Escargots - Slakkengang",
+      "normalized": "impasse des escargots slakkengang",
+      "type": null,
+      "name": "impasse des escargots slakkengang"
+    },
+    {
+      "input": "Jachthofweg",
+      "normalized": "jachthofweg",
+      "type": null,
+      "name": "jachthofweg"
+    },
+    {
+      "input": "Joseph Jolystraat",
+      "normalized": "joseph jolystraat",
+      "type": null,
+      "name": "joseph jolystraat"
+    },
+    {
+      "input": "Karstraatweg",
+      "normalized": "karstraatweg",
+      "type": null,
+      "name": "karstraatweg"
+    },
+    {
+      "input": "Kievitlaan - Avenue du Vanneau",
+      "normalized": "kievitlaan avenue du vanneau",
+      "type": null,
+      "name": "kievitlaan avenue du vanneau"
+    },
+    {
+      "input": "Koersweide",
+      "normalized": "koersweide",
+      "type": null,
+      "name": "koersweide"
+    },
+    {
+      "input": "Kruipweg",
+      "normalized": "kruipweg",
+      "type": null,
+      "name": "kruipweg"
+    },
+    {
+      "input": "Leeuwerkikenlaan - Avenue des Alouettes",
+      "normalized": "leeuwerkikenlaan avenue des alouettes",
+      "type": null,
+      "name": "leeuwerkikenlaan avenue des alouettes"
+    },
+    {
+      "input": "Louis Niemegeersstraat",
+      "normalized": "louis niemegeersstraat",
+      "type": null,
+      "name": "louis niemegeersstraat"
+    },
+    {
+      "input": "Medekensstraat",
+      "normalized": "medekensstraat",
+      "type": null,
+      "name": "medekensstraat"
+    },
+    {
+      "input": "Molenkouter",
+      "normalized": "molenkouter",
+      "type": null,
+      "name": "molenkouter"
+    },
+    {
+      "input": "Nieuwenhovenlaan",
+      "normalized": "nieuwenhovenlaan",
+      "type": null,
+      "name": "nieuwenhovenlaan"
+    },
+    {
+      "input": "Oude Geraardsbergsebaan",
+      "normalized": "oude geraardsbergsebaan",
+      "type": null,
+      "name": "oude geraardsbergsebaan"
+    },
+    {
+      "input": "Passage 44",
+      "normalized": "passage 44",
+      "type": null,
+      "name": "passage 44"
+    },
+    {
+      "input": "Penarroyalaan",
+      "normalized": "penarroyalaan",
+      "type": null,
+      "name": "penarroyalaan"
+    },
+    {
+      "input": "Place Akarova - Akarovaplein",
+      "normalized": "place akarova akarovaplein",
+      "type": null,
+      "name": "place akarova akarovaplein"
+    },
+    {
+      "input": "Place De Linde - De Lindeplein",
+      "normalized": "place de linde de lindeplein",
+      "type": null,
+      "name": "place de linde de lindeplein"
+    },
+    {
+      "input": "Place Émile Danco - Émile Dancoplein",
+      "normalized": "place emile danco emile dancoplein",
+      "type": null,
+      "name": "place emile danco emile dancoplein"
+    },
+    {
+      "input": "Place Saint-Jean - Sint-Jansplein",
+      "normalized": "place saint jean sint jansplein",
+      "type": null,
+      "name": "place saint jean sint jansplein"
+    },
+    {
+      "input": "Prieeldreef",
+      "normalized": "prieeldreef",
+      "type": null,
+      "name": "prieeldreef"
+    },
+    {
+      "input": "Ravenweg",
+      "normalized": "ravenweg",
+      "type": null,
+      "name": "ravenweg"
+    },
+    {
+      "input": "Rond-point des Allemands - Rond Plein der Duitsen",
+      "normalized": "rond point des allemands rond plein der duitsen",
+      "type": null,
+      "name": "rond point des allemands rond plein der duitsen"
+    },
+    {
+      "input": "Rue Alexandre De Craene - Alexandre De Craenestraat",
+      "normalized": "rue alexandre de craene alexandre de craenestraat",
+      "type": null,
+      "name": "rue alexandre de craene alexandre de craenestraat"
+    },
+    {
+      "input": "Rue Auguste Hainaut - Auguste Hainautstraat",
+      "normalized": "rue auguste hainaut auguste hainautstraat",
+      "type": null,
+      "name": "rue auguste hainaut auguste hainautstraat"
+    },
+    {
+      "input": "Rue Camille Lemonnier - Camille Lemonnierstraat",
+      "normalized": "rue camille lemonnier camille lemonnierstraat",
+      "type": null,
+      "name": "rue camille lemonnier camille lemonnierstraat"
+    },
+    {
+      "input": "Rue d'Accolay - Accolaystraat",
+      "normalized": "rue d accolay accolaystraat",
+      "type": null,
+      "name": "rue d accolay accolaystraat"
+    },
+    {
+      "input": "Rue de Dilbeek - Dilbeekse Straat",
+      "normalized": "rue de dilbeek dilbeekse straat",
+      "type": null,
+      "name": "rue de dilbeek dilbeekse straat"
+    },
+    {
+      "input": "Rue de l'Arc - Boogstraat",
+      "normalized": "rue de l arc boogstraat",
+      "type": null,
+      "name": "rue de l arc boogstraat"
+    },
+    {
+      "input": "Rue de l'Évêque - Bisschopsstraat",
+      "normalized": "rue de l eveque bisschopsstraat",
+      "type": null,
+      "name": "rue de l eveque bisschopsstraat"
+    },
+    {
+      "input": "Rue de la Charité - Liefdadigheidsstraat",
+      "normalized": "rue de la charite liefdadigheidsstraat",
+      "type": null,
+      "name": "rue de la charite liefdadigheidsstraat"
+    },
+    {
+      "input": "Rue de la Grenouillette - Waterranonkelstraat",
+      "normalized": "rue de la grenouillette waterranonkelstraat",
+      "type": null,
+      "name": "rue de la grenouillette waterranonkelstraat"
+    },
+    {
+      "input": "Rue de la Reine - Koninginnestraat",
+      "normalized": "rue de la reine koninginnestraat",
+      "type": null,
+      "name": "rue de la reine koninginnestraat"
+    },
+    {
+      "input": "Rue de Liège - Luikstraat",
+      "normalized": "rue de liege luikstraat",
+      "type": null,
+      "name": "rue de liege luikstraat"
+    },
+    {
+      "input": "Rue de Spa - Spastraat",
+      "normalized": "rue de spa spastraat",
+      "type": null,
+      "name": "rue de spa spastraat"
+    },
+    {
+      "input": "Rue des Béguines - Begijnenstraat",
+      "normalized": "rue des beguines begijnenstraat",
+      "type": null,
+      "name": "rue des beguines begijnenstraat"
+    },
+    {
+      "input": "Rue des Éburons - Eburonenstraat",
+      "normalized": "rue des eburons eburonenstraat",
+      "type": null,
+      "name": "rue des eburons eburonenstraat"
+    },
+    {
+      "input": "Rue des Merisiers - Kriekebomenstraat",
+      "normalized": "rue des merisiers kriekebomenstraat",
+      "type": null,
+      "name": "rue des merisiers kriekebomenstraat"
+    },
+    {
+      "input": "Rue des Sangliers - Everzwijnenstraat",
+      "normalized": "rue des sangliers everzwijnenstraat",
+      "type": null,
+      "name": "rue des sangliers everzwijnenstraat"
+    },
+    {
+      "input": "Rue du Belvédère - Belvédèrestraat",
+      "normalized": "rue du belvedere belvederestraat",
+      "type": null,
+      "name": "rue du belvedere belvederestraat"
+    },
+    {
+      "input": "Rue du Chien Marin - Zeehondstraat",
+      "normalized": "rue du chien marin zeehondstraat",
+      "type": null,
+      "name": "rue du chien marin zeehondstraat"
+    },
+    {
+      "input": "Rue du Grand Duc - Groothertogstraat",
+      "normalized": "rue du grand duc groothertogstraat",
+      "type": null,
+      "name": "rue du grand duc groothertogstraat"
+    },
+    {
+      "input": "Rue du Merlo - Merlostraat",
+      "normalized": "rue du merlo merlostraat",
+      "type": null,
+      "name": "rue du merlo merlostraat"
+    },
+    {
+      "input": "Rue du Progrès - Vooruitgangstraat",
+      "normalized": "rue du progres vooruitgangstraat",
+      "type": null,
+      "name": "rue du progres vooruitgangstraat"
+    },
+    {
+      "input": "Rue du Villageois - Dorpelingenstraat",
+      "normalized": "rue du villageois dorpelingenstraat",
+      "type": null,
+      "name": "rue du villageois dorpelingenstraat"
+    },
+    {
+      "input": "Rue Emmanuel Van Driessche - Emmanuel Van Driesschestraat",
+      "normalized": "rue emmanuel van driessche emmanuel van driesschestraat",
+      "type": null,
+      "name": "rue emmanuel van driessche emmanuel van driesschestraat"
+    },
+    {
+      "input": "Rue François Couteaux - François Couteauxstraat",
+      "normalized": "rue francois couteaux francois couteauxstraat",
+      "type": null,
+      "name": "rue francois couteaux francois couteauxstraat"
+    },
+    {
+      "input": "Rue Georges De Lombaerde - Georges De Lombaerdestraat",
+      "normalized": "rue georges de lombaerde georges de lombaerdestraat",
+      "type": null,
+      "name": "rue georges de lombaerde georges de lombaerdestraat"
+    },
+    {
+      "input": "Rue Henri Caron - Henri Caronstraat",
+      "normalized": "rue henri caron henri caronstraat",
+      "type": null,
+      "name": "rue henri caron henri caronstraat"
+    },
+    {
+      "input": "Rue Jacques Vandervleet - Jacques Vandervleetstraat",
+      "normalized": "rue jacques vandervleet jacques vandervleetstraat",
+      "type": null,
+      "name": "rue jacques vandervleet jacques vandervleetstraat"
+    },
+    {
+      "input": "Rue Joseph Bens - Joseph Bensstraat",
+      "normalized": "rue joseph bens joseph bensstraat",
+      "type": null,
+      "name": "rue joseph bens joseph bensstraat"
+    },
+    {
+      "input": "Rue Lacaille - Lacaillestraat",
+      "normalized": "rue lacaille lacaillestraat",
+      "type": null,
+      "name": "rue lacaille lacaillestraat"
+    },
+    {
+      "input": "Rue Louis De Gunst - Louis De Gunststraat",
+      "normalized": "rue louis de gunst louis de gunststraat",
+      "type": null,
+      "name": "rue louis de gunst louis de gunststraat"
+    },
+    {
+      "input": "Rue Melpomène - Melpomenestraat",
+      "normalized": "rue melpomene melpomenestraat",
+      "type": null,
+      "name": "rue melpomene melpomenestraat"
+    },
+    {
+      "input": "Rue Paul Leduc - Paul Leducstraat",
+      "normalized": "rue paul leduc paul leducstraat",
+      "type": null,
+      "name": "rue paul leduc paul leducstraat"
+    },
+    {
+      "input": "Rue Raphaël - Raphaëlstraat",
+      "normalized": "rue raphael raphaelstraat",
+      "type": null,
+      "name": "rue raphael raphaelstraat"
+    },
+    {
+      "input": "Rue Saint-Quentin - Saint-Quentinstraat",
+      "normalized": "rue saint quentin saint quentinstraat",
+      "type": null,
+      "name": "rue saint quentin saint quentinstraat"
+    },
+    {
+      "input": "Rue Thomas Van Hemelrijck - Thomas Van Hemelrijckstraat",
+      "normalized": "rue thomas van hemelrijck thomas van hemelrijckstraat",
+      "type": null,
+      "name": "rue thomas van hemelrijck thomas van hemelrijckstraat"
+    },
+    {
+      "input": "Rue Vergote - Vergotestraat",
+      "normalized": "rue vergote vergotestraat",
+      "type": null,
+      "name": "rue vergote vergotestraat"
+    },
+    {
+      "input": "Ruwkruidlaan - Avenue de l'Aspérule",
+      "normalized": "ruwkruidlaan avenue de l asperule",
+      "type": null,
+      "name": "ruwkruidlaan avenue de l asperule"
+    },
+    {
+      "input": "Sentier des Pommes - Appelgang",
+      "normalized": "sentier des pommes appelgang",
+      "type": null,
+      "name": "sentier des pommes appelgang"
+    },
+    {
+      "input": "Sint-Martinusweg",
+      "normalized": "sint martinusweg",
+      "type": null,
+      "name": "sint martinusweg"
+    },
+    {
+      "input": "Square Apollo - Apollosquare",
+      "normalized": "square apollo apollosquare",
+      "type": null,
+      "name": "square apollo apollosquare"
+    },
+    {
+      "input": "Square Émile Vandervelde - Émile Vanderveldesquare",
+      "normalized": "square emile vandervelde emile vanderveldesquare",
+      "type": null,
+      "name": "square emile vandervelde emile vanderveldesquare"
+    },
+    {
+      "input": "Steenbakkerijweg",
+      "normalized": "steenbakkerijweg",
+      "type": null,
+      "name": "steenbakkerijweg"
+    },
+    {
+      "input": "Tennislaan",
+      "normalized": "tennislaan",
+      "type": null,
+      "name": "tennislaan"
+    },
+    {
+      "input": "Tumulidreef",
+      "normalized": "tumulidreef",
+      "type": null,
+      "name": "tumulidreef"
+    },
+    {
+      "input": "Varkengatweg",
+      "normalized": "varkengatweg",
+      "type": null,
+      "name": "varkengatweg"
+    },
+    {
+      "input": "Vijversweg",
+      "normalized": "vijversweg",
+      "type": null,
+      "name": "vijversweg"
+    },
+    {
+      "input": "Voetweg 89 - Hellebeekbergvoetweg",
+      "normalized": "voetweg 89 hellebeekbergvoetweg",
+      "type": null,
+      "name": "voetweg 89 hellebeekbergvoetweg"
+    },
+    {
+      "input": "Weidenstraat - Rue des Prés",
+      "normalized": "weidenstraat rue des pres",
+      "type": null,
+      "name": "weidenstraat rue des pres"
+    }
+  ]
+}

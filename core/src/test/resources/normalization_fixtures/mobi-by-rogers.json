@@ -1,0 +1,797 @@
+{
+  "language": "en",
+  "cases": [
+    {
+      "input": "Abbey Rd",
+      "normalized": "abbey road",
+      "type": null,
+      "name": "abbey road"
+    },
+    {
+      "input": "Baker Street",
+      "normalized": "baker street",
+      "type": null,
+      "name": "baker street"
+    },
+    {
+      "input": "St James's Park",
+      "normalized": "saint james south park",
+      "type": null,
+      "name": "saint james south park"
+    },
+    {
+      "input": "Queen's Crescent",
+      "normalized": "queen south crescent",
+      "type": null,
+      "name": "queen south crescent"
+    },
+    {
+      "input": "Kensington High St",
+      "normalized": "kensington high st",
+      "type": null,
+      "name": "kensington high st"
+    },
+    {
+      "input": "Dr Martin Luther King Jr Blvd",
+      "normalized": "doctor martin luther king jr boulevard",
+      "type": null,
+      "name": "doctor martin luther king jr boulevard"
+    },
+    {
+      "input": "N Michigan Ave",
+      "normalized": "north michigan avenue",
+      "type": null,
+      "name": "north michigan avenue"
+    },
+    {
+      "input": "The Mall",
+      "normalized": "the mall",
+      "type": null,
+      "name": "the mall"
+    },
+    {
+      "input": "Hyde Park Corner",
+      "normalized": "hyde park corner",
+      "type": null,
+      "name": "hyde park corner"
+    },
+    {
+      "input": "Cherry Ln",
+      "normalized": "cherry lane",
+      "type": null,
+      "name": "cherry lane"
+    },
+    {
+      "input": "Mt Pleasant Ter",
+      "normalized": "mount pleasant terrace",
+      "type": null,
+      "name": "mount pleasant terrace"
+    },
+    {
+      "input": "Fifth Avenue",
+      "normalized": "fifth avenue",
+      "type": null,
+      "name": "fifth avenue"
+    },
+    {
+      "input": "14th Street East",
+      "normalized": "14th street east",
+      "type": null,
+      "name": "14th street east"
+    },
+    {
+      "input": "Park Royal",
+      "normalized": "park royal",
+      "type": "park",
+      "name": "royal"
+    },
+    {
+      "input": "Northeastern University",
+      "normalized": "northeastern university",
+      "type": null,
+      "name": "northeastern university"
+    },
+    {
+      "input": "Museum Of North Vancouver",
+      "normalized": "museum of north vancouver",
+      "type": null,
+      "name": "museum of north vancouver"
+    },
+    {
+      "input": "Davis academy",
+      "normalized": "davis academy",
+      "type": null,
+      "name": "davis academy"
+    },
+    {
+      "input": "VPL: Kensington Branch",
+      "normalized": "vpl kensington branch",
+      "type": null,
+      "name": "vpl kensington branch"
+    },
+    {
+      "input": "Commercial–Broadway",
+      "normalized": "commercial broadway",
+      "type": null,
+      "name": "commercial broadway"
+    },
+    {
+      "input": "Dunbar Theatre",
+      "normalized": "dunbar theatre",
+      "type": null,
+      "name": "dunbar theatre"
+    },
+    {
+      "input": "Olympic Village",
+      "normalized": "olympic village",
+      "type": null,
+      "name": "olympic village"
+    },
+    {
+      "input": "Kitsilano Point",
+      "normalized": "kitsilano point",
+      "type": null,
+      "name": "kitsilano point"
+    },
+    {
+      "input": "Semana Crescent",
+      "normalized": "semana crescent",
+      "type": null,
+      "name": "semana crescent"
+    },
+    {
+      "input": "159",
+      "normalized": "159",
+      "type": null,
+      "name": "159"
+    },
+    {
+      "input": "29th Avenue Path",
+      "normalized": "29th avenue path",
+      "type": null,
+      "name": "29th avenue path"
+    },
+    {
+      "input": "Acadia Road",
+      "normalized": "acadia road",
+      "type": null,
+      "name": "acadia road"
+    },
+    {
+      "input": "Alder Bay Court",
+      "normalized": "alder bay court",
+      "type": null,
+      "name": "alder bay court"
+    },
+    {
+      "input": "Amyl Way",
+      "normalized": "amyl way",
+      "type": null,
+      "name": "amyl way"
+    },
+    {
+      "input": "Arbutus Street",
+      "normalized": "arbutus street",
+      "type": null,
+      "name": "arbutus street"
+    },
+    {
+      "input": "Atlantic Street",
+      "normalized": "atlantic street",
+      "type": null,
+      "name": "atlantic street"
+    },
+    {
+      "input": "Balaclava Street",
+      "normalized": "balaclava street",
+      "type": null,
+      "name": "balaclava street"
+    },
+    {
+      "input": "BC Parkway",
+      "normalized": "bc parkway",
+      "type": null,
+      "name": "bc parkway"
+    },
+    {
+      "input": "Belle Isle Place",
+      "normalized": "belle isle place",
+      "type": null,
+      "name": "belle isle place"
+    },
+    {
+      "input": "Beverly Crescent",
+      "normalized": "beverly crescent",
+      "type": null,
+      "name": "beverly crescent"
+    },
+    {
+      "input": "Blanca Street",
+      "normalized": "blanca street",
+      "type": null,
+      "name": "blanca street"
+    },
+    {
+      "input": "Boulevard Crescent",
+      "normalized": "boulevard crescent",
+      "type": "boulevard",
+      "name": "crescent"
+    },
+    {
+      "input": "Bridge Road",
+      "normalized": "bridge road",
+      "type": null,
+      "name": "bridge road"
+    },
+    {
+      "input": "Brule Mews",
+      "normalized": "brule mews",
+      "type": null,
+      "name": "brule mews"
+    },
+    {
+      "input": "Byron Road",
+      "normalized": "byron road",
+      "type": null,
+      "name": "byron road"
+    },
+    {
+      "input": "Campus Road",
+      "normalized": "campus road",
+      "type": null,
+      "name": "campus road"
+    },
+    {
+      "input": "Carnarvon Street",
+      "normalized": "carnarvon street",
+      "type": null,
+      "name": "carnarvon street"
+    },
+    {
+      "input": "Cecil Green Park Road",
+      "normalized": "cecil green park road",
+      "type": null,
+      "name": "cecil green park road"
+    },
+    {
+      "input": "Central Valley Greenway",
+      "normalized": "central valley greenway",
+      "type": null,
+      "name": "central valley greenway"
+    },
+    {
+      "input": "Cherry Street",
+      "normalized": "cherry street",
+      "type": null,
+      "name": "cherry street"
+    },
+    {
+      "input": "Chilco Street",
+      "normalized": "chilco street",
+      "type": null,
+      "name": "chilco street"
+    },
+    {
+      "input": "Cloverley Street",
+      "normalized": "cloverley street",
+      "type": null,
+      "name": "cloverley street"
+    },
+    {
+      "input": "Continental Street",
+      "normalized": "continental street",
+      "type": null,
+      "name": "continental street"
+    },
+    {
+      "input": "Cottonwood Place",
+      "normalized": "cottonwood place",
+      "type": null,
+      "name": "cottonwood place"
+    },
+    {
+      "input": "Crown Crescent",
+      "normalized": "crown crescent",
+      "type": null,
+      "name": "crown crescent"
+    },
+    {
+      "input": "Dawson Street",
+      "normalized": "dawson street",
+      "type": null,
+      "name": "dawson street"
+    },
+    {
+      "input": "Divine Place",
+      "normalized": "divine place",
+      "type": null,
+      "name": "divine place"
+    },
+    {
+      "input": "Duff Street",
+      "normalized": "duff street",
+      "type": null,
+      "name": "duff street"
+    },
+    {
+      "input": "Earl Finning Place",
+      "normalized": "earl finning place",
+      "type": null,
+      "name": "earl finning place"
+    },
+    {
+      "input": "East 17th Street",
+      "normalized": "east 17th street",
+      "type": null,
+      "name": "east 17th street"
+    },
+    {
+      "input": "East 27th Avenue",
+      "normalized": "east 27th avenue",
+      "type": null,
+      "name": "east 27th avenue"
+    },
+    {
+      "input": "East 40th Avenue",
+      "normalized": "east 40th avenue",
+      "type": null,
+      "name": "east 40th avenue"
+    },
+    {
+      "input": "East 55th Avenue",
+      "normalized": "east 55th avenue",
+      "type": null,
+      "name": "east 55th avenue"
+    },
+    {
+      "input": "East 8th Avenue",
+      "normalized": "east 8th avenue",
+      "type": null,
+      "name": "east 8th avenue"
+    },
+    {
+      "input": "Eastern Avenue",
+      "normalized": "eastern avenue",
+      "type": null,
+      "name": "eastern avenue"
+    },
+    {
+      "input": "Ellerton Court",
+      "normalized": "ellerton court",
+      "type": null,
+      "name": "ellerton court"
+    },
+    {
+      "input": "Fairchild Road",
+      "normalized": "fairchild road",
+      "type": null,
+      "name": "fairchild road"
+    },
+    {
+      "input": "Ferguson Road",
+      "normalized": "ferguson road",
+      "type": null,
+      "name": "ferguson road"
+    },
+    {
+      "input": "Foreshore Walk",
+      "normalized": "foreshore walk",
+      "type": null,
+      "name": "foreshore walk"
+    },
+    {
+      "input": "Frederick Street",
+      "normalized": "frederick street",
+      "type": null,
+      "name": "frederick street"
+    },
+    {
+      "input": "Georgia Street",
+      "normalized": "georgia street",
+      "type": null,
+      "name": "georgia street"
+    },
+    {
+      "input": "Glenaire Drive",
+      "normalized": "glenaire drive",
+      "type": null,
+      "name": "glenaire drive"
+    },
+    {
+      "input": "Grantham Place",
+      "normalized": "grantham place",
+      "type": null,
+      "name": "grantham place"
+    },
+    {
+      "input": "Greta Street",
+      "normalized": "greta street",
+      "type": null,
+      "name": "greta street"
+    },
+    {
+      "input": "Hance",
+      "normalized": "hance",
+      "type": null,
+      "name": "hance"
+    },
+    {
+      "input": "Hawks Avenue",
+      "normalized": "hawks avenue",
+      "type": null,
+      "name": "hawks avenue"
+    },
+    {
+      "input": "Henry",
+      "normalized": "henry",
+      "type": null,
+      "name": "henry"
+    },
+    {
+      "input": "Homer Street",
+      "normalized": "homer street",
+      "type": null,
+      "name": "homer street"
+    },
+    {
+      "input": "Hummingbird Place",
+      "normalized": "hummingbird place",
+      "type": null,
+      "name": "hummingbird place"
+    },
+    {
+      "input": "Interriver Park Road",
+      "normalized": "interriver park road",
+      "type": null,
+      "name": "interriver park road"
+    },
+    {
+      "input": "Jervis Mews",
+      "normalized": "jervis mews",
+      "type": null,
+      "name": "jervis mews"
+    },
+    {
+      "input": "Kaylela Place",
+      "normalized": "kaylela place",
+      "type": null,
+      "name": "kaylela place"
+    },
+    {
+      "input": "Kevin Place",
+      "normalized": "kevin place",
+      "type": null,
+      "name": "kevin place"
+    },
+    {
+      "input": "Kirkland Street",
+      "normalized": "kirkland street",
+      "type": null,
+      "name": "kirkland street"
+    },
+    {
+      "input": "Lahb Avenue",
+      "normalized": "lahb avenue",
+      "type": null,
+      "name": "lahb avenue"
+    },
+    {
+      "input": "Laurel Street",
+      "normalized": "laurel street",
+      "type": null,
+      "name": "laurel street"
+    },
+    {
+      "input": "Lillooet Street",
+      "normalized": "lillooet street",
+      "type": null,
+      "name": "lillooet street"
+    },
+    {
+      "input": "Lolo Lane",
+      "normalized": "lolo lane",
+      "type": null,
+      "name": "lolo lane"
+    },
+    {
+      "input": "Lower Mall - stəywət",
+      "normalized": "lower mall stəywət",
+      "type": null,
+      "name": "lower mall stəywət"
+    },
+    {
+      "input": "MacKie Street",
+      "normalized": "mackie street",
+      "type": null,
+      "name": "mackie street"
+    },
+    {
+      "input": "maləy̓ - Mali Avenue",
+      "normalized": "maləy mali avenue",
+      "type": null,
+      "name": "maləy mali avenue"
+    },
+    {
+      "input": "Marina traffic",
+      "normalized": "marina traffic",
+      "type": null,
+      "name": "marina traffic"
+    },
+    {
+      "input": "Matapan Crescent",
+      "normalized": "matapan crescent",
+      "type": null,
+      "name": "matapan crescent"
+    },
+    {
+      "input": "McGeer Street",
+      "normalized": "mcgeer street",
+      "type": null,
+      "name": "mcgeer street"
+    },
+    {
+      "input": "Meadow Trail",
+      "normalized": "meadow trail",
+      "type": null,
+      "name": "meadow trail"
+    },
+    {
+      "input": "Militant Mothers of Raymur Overpass",
+      "normalized": "militant mothers of raymur overpass",
+      "type": null,
+      "name": "militant mothers of raymur overpass"
+    },
+    {
+      "input": "Montgomery Street",
+      "normalized": "montgomery street",
+      "type": null,
+      "name": "montgomery street"
+    },
+    {
+      "input": "Nairn Avenue",
+      "normalized": "nairn avenue",
+      "type": null,
+      "name": "nairn avenue"
+    },
+    {
+      "input": "Neptune / Cargill Overpass",
+      "normalized": "neptune cargill overpass",
+      "type": null,
+      "name": "neptune cargill overpass"
+    },
+    {
+      "input": "North Cassiar Street",
+      "normalized": "north cassiar street",
+      "type": null,
+      "name": "north cassiar street"
+    },
+    {
+      "input": "North Penticton Street",
+      "normalized": "north penticton street",
+      "type": null,
+      "name": "north penticton street"
+    },
+    {
+      "input": "Oben Street",
+      "normalized": "oben street",
+      "type": null,
+      "name": "oben street"
+    },
+    {
+      "input": "Orange Dogwood Trail",
+      "normalized": "orange dogwood trail",
+      "type": null,
+      "name": "orange dogwood trail"
+    },
+    {
+      "input": "Park Drive",
+      "normalized": "park drive",
+      "type": "park",
+      "name": "drive"
+    },
+    {
+      "input": "Pender Street",
+      "normalized": "pender street",
+      "type": null,
+      "name": "pender street"
+    },
+    {
+      "input": "Pioneer Walk",
+      "normalized": "pioneer walk",
+      "type": null,
+      "name": "pioneer walk"
+    },
+    {
+      "input": "Prince Albert Greenway",
+      "normalized": "prince albert greenway",
+      "type": null,
+      "name": "prince albert greenway"
+    },
+    {
+      "input": "Quebec Place",
+      "normalized": "quebec place",
+      "type": null,
+      "name": "quebec place"
+    },
+    {
+      "input": "Raindance Court",
+      "normalized": "raindance court",
+      "type": null,
+      "name": "raindance court"
+    },
+    {
+      "input": "Reservoir Trail",
+      "normalized": "reservoir trail",
+      "type": null,
+      "name": "reservoir trail"
+    },
+    {
+      "input": "Rock",
+      "normalized": "rock",
+      "type": null,
+      "name": "rock"
+    },
+    {
+      "input": "Rossland Street",
+      "normalized": "rossland street",
+      "type": null,
+      "name": "rossland street"
+    },
+    {
+      "input": "Saint Catherines Street",
+      "normalized": "saint catherines street",
+      "type": null,
+      "name": "saint catherines street"
+    },
+    {
+      "input": "Salish Trail",
+      "normalized": "salish trail",
+      "type": null,
+      "name": "salish trail"
+    },
+    {
+      "input": "Sasamat Street",
+      "normalized": "sasamat street",
+      "type": null,
+      "name": "sasamat street"
+    },
+    {
+      "input": "Seaside Bike Route",
+      "normalized": "seaside bike route",
+      "type": null,
+      "name": "seaside bike route"
+    },
+    {
+      "input": "Seaside Greenway - Kitsilano Beach Park",
+      "normalized": "seaside greenway kitsilano beach park",
+      "type": null,
+      "name": "seaside greenway kitsilano beach park"
+    },
+    {
+      "input": "Seylynn Crescent",
+      "normalized": "seylynn crescent",
+      "type": null,
+      "name": "seylynn crescent"
+    },
+    {
+      "input": "Sherry Sakamoto",
+      "normalized": "sherry sakamoto",
+      "type": null,
+      "name": "sherry sakamoto"
+    },
+    {
+      "input": "Skeena Street",
+      "normalized": "skeena street",
+      "type": null,
+      "name": "skeena street"
+    },
+    {
+      "input": "South Creek Trail",
+      "normalized": "south creek trail",
+      "type": null,
+      "name": "south creek trail"
+    },
+    {
+      "input": "Springtree Drive",
+      "normalized": "springtree drive",
+      "type": null,
+      "name": "springtree drive"
+    },
+    {
+      "input": "Staunton",
+      "normalized": "staunton",
+      "type": null,
+      "name": "staunton"
+    },
+    {
+      "input": "Sundance Crescent",
+      "normalized": "sundance crescent",
+      "type": null,
+      "name": "sundance crescent"
+    },
+    {
+      "input": "Tamarind Drive",
+      "normalized": "tamarind drive",
+      "type": null,
+      "name": "tamarind drive"
+    },
+    {
+      "input": "Tennis Crescent",
+      "normalized": "tennis crescent",
+      "type": null,
+      "name": "tennis crescent"
+    },
+    {
+      "input": "Thurston Street",
+      "normalized": "thurston street",
+      "type": null,
+      "name": "thurston street"
+    },
+    {
+      "input": "Totem Court",
+      "normalized": "totem court",
+      "type": null,
+      "name": "totem court"
+    },
+    {
+      "input": "Tunnel Trail",
+      "normalized": "tunnel trail",
+      "type": null,
+      "name": "tunnel trail"
+    },
+    {
+      "input": "Upper Asian Way",
+      "normalized": "upper asian way",
+      "type": null,
+      "name": "upper asian way"
+    },
+    {
+      "input": "Vipond Place",
+      "normalized": "vipond place",
+      "type": null,
+      "name": "vipond place"
+    },
+    {
+      "input": "Walter Gage Road",
+      "normalized": "walter gage road",
+      "type": null,
+      "name": "walter gage road"
+    },
+    {
+      "input": "Webber Lane",
+      "normalized": "webber lane",
+      "type": null,
+      "name": "webber lane"
+    },
+    {
+      "input": "West 15th Avenue",
+      "normalized": "west 15th avenue",
+      "type": null,
+      "name": "west 15th avenue"
+    },
+    {
+      "input": "West 22nd Avenue",
+      "normalized": "west 22nd avenue",
+      "type": null,
+      "name": "west 22nd avenue"
+    },
+    {
+      "input": "West 37th Avenue",
+      "normalized": "west 37th avenue",
+      "type": null,
+      "name": "west 37th avenue"
+    },
+    {
+      "input": "West 50th Avenue",
+      "normalized": "west 50th avenue",
+      "type": null,
+      "name": "west 50th avenue"
+    },
+    {
+      "input": "West 65th Avenue",
+      "normalized": "west 65th avenue",
+      "type": null,
+      "name": "west 65th avenue"
+    }
+  ]
+}

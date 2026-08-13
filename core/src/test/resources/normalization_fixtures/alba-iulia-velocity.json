@@ -1,0 +1,779 @@
+{
+  "language": "ro",
+  "cases": [
+    {
+      "input": "Strada Lipscani",
+      "normalized": "strada lipscani",
+      "type": "strada",
+      "name": "lipscani"
+    },
+    {
+      "input": "Bulevardul Unirii",
+      "normalized": "bulevardul unirii",
+      "type": "bulevardul",
+      "name": "unirii"
+    },
+    {
+      "input": "B-dul Magheru",
+      "normalized": "b dul magheru",
+      "type": null,
+      "name": "b dul magheru"
+    },
+    {
+      "input": "Calea Victoriei",
+      "normalized": "calea victoriei",
+      "type": "calea",
+      "name": "victoriei"
+    },
+    {
+      "input": "Șos. Kiseleff",
+      "normalized": "soseaua kiseleff",
+      "type": "soseaua",
+      "name": "kiseleff"
+    },
+    {
+      "input": "Piața Universității",
+      "normalized": "piata universitatii",
+      "type": "piata",
+      "name": "universitatii"
+    },
+    {
+      "input": "Aleea Teilor",
+      "normalized": "aleea teilor",
+      "type": "aleea",
+      "name": "teilor"
+    },
+    {
+      "input": "Splaiul Independenței",
+      "normalized": "splaiul independentei",
+      "type": "splaiul",
+      "name": "independentei"
+    },
+    {
+      "input": "Str. Sf. Vineri",
+      "normalized": "strada sfantul vineri",
+      "type": "strada",
+      "name": "sfantul vineri"
+    },
+    {
+      "input": "9 Mai",
+      "normalized": "9 mai",
+      "type": null,
+      "name": "9 mai"
+    },
+    {
+      "input": "Alexandru Odobescu",
+      "normalized": "alexandru odobescu",
+      "type": null,
+      "name": "alexandru odobescu"
+    },
+    {
+      "input": "Anina",
+      "normalized": "anina",
+      "type": null,
+      "name": "anina"
+    },
+    {
+      "input": "Arnsberg",
+      "normalized": "arnsberg",
+      "type": null,
+      "name": "arnsberg"
+    },
+    {
+      "input": "Azur",
+      "normalized": "azur",
+      "type": null,
+      "name": "azur"
+    },
+    {
+      "input": "Basarabiei",
+      "normalized": "basarabiei",
+      "type": null,
+      "name": "basarabiei"
+    },
+    {
+      "input": "Brândușei",
+      "normalized": "brandusei",
+      "type": null,
+      "name": "brandusei"
+    },
+    {
+      "input": "Calistrat Hogaș",
+      "normalized": "calistrat hogas",
+      "type": null,
+      "name": "calistrat hogas"
+    },
+    {
+      "input": "Cătinei",
+      "normalized": "catinei",
+      "type": null,
+      "name": "catinei"
+    },
+    {
+      "input": "Clăbucet",
+      "normalized": "clabucet",
+      "type": null,
+      "name": "clabucet"
+    },
+    {
+      "input": "Cornel Ciugudean",
+      "normalized": "cornel ciugudean",
+      "type": null,
+      "name": "cornel ciugudean"
+    },
+    {
+      "input": "Daliei",
+      "normalized": "daliei",
+      "type": null,
+      "name": "daliei"
+    },
+    {
+      "input": "Dobrogei",
+      "normalized": "dobrogei",
+      "type": null,
+      "name": "dobrogei"
+    },
+    {
+      "input": "Energiei",
+      "normalized": "energiei",
+      "type": null,
+      "name": "energiei"
+    },
+    {
+      "input": "Ferdinand I",
+      "normalized": "ferdinand i",
+      "type": null,
+      "name": "ferdinand i"
+    },
+    {
+      "input": "Gardeniei",
+      "normalized": "gardeniei",
+      "type": null,
+      "name": "gardeniei"
+    },
+    {
+      "input": "George Sand",
+      "normalized": "george sand",
+      "type": null,
+      "name": "george sand"
+    },
+    {
+      "input": "Gilău",
+      "normalized": "gilau",
+      "type": null,
+      "name": "gilau"
+    },
+    {
+      "input": "Henri Coandă",
+      "normalized": "henri coanda",
+      "type": null,
+      "name": "henri coanda"
+    },
+    {
+      "input": "Inului",
+      "normalized": "inului",
+      "type": null,
+      "name": "inului"
+    },
+    {
+      "input": "Ion Creangă",
+      "normalized": "ion creanga",
+      "type": null,
+      "name": "ion creanga"
+    },
+    {
+      "input": "Iuliu Maniu",
+      "normalized": "iuliu maniu",
+      "type": null,
+      "name": "iuliu maniu"
+    },
+    {
+      "input": "Lipova",
+      "normalized": "lipova",
+      "type": null,
+      "name": "lipova"
+    },
+    {
+      "input": "Lupșa",
+      "normalized": "lupsa",
+      "type": null,
+      "name": "lupsa"
+    },
+    {
+      "input": "Marin Sorescu",
+      "normalized": "marin sorescu",
+      "type": null,
+      "name": "marin sorescu"
+    },
+    {
+      "input": "Mioriței",
+      "normalized": "mioritei",
+      "type": null,
+      "name": "mioritei"
+    },
+    {
+      "input": "Mușețelului",
+      "normalized": "musetelului",
+      "type": null,
+      "name": "musetelului"
+    },
+    {
+      "input": "Negrileasa",
+      "normalized": "negrileasa",
+      "type": null,
+      "name": "negrileasa"
+    },
+    {
+      "input": "Nicolae Titulescu",
+      "normalized": "nicolae titulescu",
+      "type": null,
+      "name": "nicolae titulescu"
+    },
+    {
+      "input": "Orizont 10",
+      "normalized": "orizont 10",
+      "type": null,
+      "name": "orizont 10"
+    },
+    {
+      "input": "Orizont 21",
+      "normalized": "orizont 21",
+      "type": null,
+      "name": "orizont 21"
+    },
+    {
+      "input": "Orizont 4",
+      "normalized": "orizont 4",
+      "type": null,
+      "name": "orizont 4"
+    },
+    {
+      "input": "Padiș",
+      "normalized": "padis",
+      "type": null,
+      "name": "padis"
+    },
+    {
+      "input": "Pescarilor",
+      "normalized": "pescarilor",
+      "type": null,
+      "name": "pescarilor"
+    },
+    {
+      "input": "Pietroasa",
+      "normalized": "pietroasa",
+      "type": null,
+      "name": "pietroasa"
+    },
+    {
+      "input": "Primăveri",
+      "normalized": "primaveri",
+      "type": null,
+      "name": "primaveri"
+    },
+    {
+      "input": "Refractara",
+      "normalized": "refractara",
+      "type": null,
+      "name": "refractara"
+    },
+    {
+      "input": "Romanița",
+      "normalized": "romanita",
+      "type": null,
+      "name": "romanita"
+    },
+    {
+      "input": "Serenadei",
+      "normalized": "serenadei",
+      "type": null,
+      "name": "serenadei"
+    },
+    {
+      "input": "Stadionului",
+      "normalized": "stadionului",
+      "type": null,
+      "name": "stadionului"
+    },
+    {
+      "input": "Strada 1 Decembie 1918",
+      "normalized": "strada 1 decembie 1918",
+      "type": "strada",
+      "name": "1 decembie 1918"
+    },
+    {
+      "input": "Strunga",
+      "normalized": "strunga",
+      "type": null,
+      "name": "strunga"
+    },
+    {
+      "input": "Tarnița",
+      "normalized": "tarnita",
+      "type": null,
+      "name": "tarnita"
+    },
+    {
+      "input": "Toporaşilor",
+      "normalized": "toporasilor",
+      "type": null,
+      "name": "toporasilor"
+    },
+    {
+      "input": "Tudor Vladimirescu",
+      "normalized": "tudor vladimirescu",
+      "type": null,
+      "name": "tudor vladimirescu"
+    },
+    {
+      "input": "Valea Aurului",
+      "normalized": "valea aurului",
+      "type": null,
+      "name": "valea aurului"
+    },
+    {
+      "input": "Vasile Alecsandri",
+      "normalized": "vasile alecsandri",
+      "type": null,
+      "name": "vasile alecsandri"
+    },
+    {
+      "input": "Vilelor",
+      "normalized": "vilelor",
+      "type": null,
+      "name": "vilelor"
+    },
+    {
+      "input": "Energiei",
+      "normalized": "energiei",
+      "type": null,
+      "name": "energiei"
+    },
+    {
+      "input": "Castanului",
+      "normalized": "castanului",
+      "type": null,
+      "name": "castanului"
+    },
+    {
+      "input": "Merilor",
+      "normalized": "merilor",
+      "type": null,
+      "name": "merilor"
+    },
+    {
+      "input": "Poarta V",
+      "normalized": "poarta v",
+      "type": null,
+      "name": "poarta v"
+    },
+    {
+      "input": "Bastionul Sfântul Eugen",
+      "normalized": "bastionul sfantul eugen",
+      "type": null,
+      "name": "bastionul sfantul eugen"
+    },
+    {
+      "input": "Ravelinul Sfântul Francisc de Paola",
+      "normalized": "ravelinul sfantul francisc de paola",
+      "type": null,
+      "name": "ravelinul sfantul francisc de paola"
+    },
+    {
+      "input": "Camera de tortură",
+      "normalized": "camera de tortura",
+      "type": null,
+      "name": "camera de tortura"
+    },
+    {
+      "input": "Primăria Municipiului Alba Iulia",
+      "normalized": "primaria municipiului alba iulia",
+      "type": null,
+      "name": "primaria municipiului alba iulia"
+    },
+    {
+      "input": "Bastionul Sașilor",
+      "normalized": "bastionul sasilor",
+      "type": null,
+      "name": "bastionul sasilor"
+    },
+    {
+      "input": "Aleea Sfântul Eugeniu",
+      "normalized": "aleea sfantul eugeniu",
+      "type": "aleea",
+      "name": "sfantul eugeniu"
+    },
+    {
+      "input": "Bulevardul Revoluției 1989",
+      "normalized": "bulevardul revolutiei 1989",
+      "type": "bulevardul",
+      "name": "revolutiei 1989"
+    },
+    {
+      "input": "Dig",
+      "normalized": "dig",
+      "type": null,
+      "name": "dig"
+    },
+    {
+      "input": "Pietrar",
+      "normalized": "pietrar",
+      "type": null,
+      "name": "pietrar"
+    },
+    {
+      "input": "Strada Alba Regia",
+      "normalized": "strada alba regia",
+      "type": "strada",
+      "name": "alba regia"
+    },
+    {
+      "input": "Strada Alessandria",
+      "normalized": "strada alessandria",
+      "type": "strada",
+      "name": "alessandria"
+    },
+    {
+      "input": "Strada Alexandru Zane",
+      "normalized": "strada alexandru zane",
+      "type": "strada",
+      "name": "alexandru zane"
+    },
+    {
+      "input": "Strada Amurgului",
+      "normalized": "strada amurgului",
+      "type": "strada",
+      "name": "amurgului"
+    },
+    {
+      "input": "Strada Anton Pann",
+      "normalized": "strada anton pann",
+      "type": "strada",
+      "name": "anton pann"
+    },
+    {
+      "input": "Strada Arieșului",
+      "normalized": "strada ariesului",
+      "type": "strada",
+      "name": "ariesului"
+    },
+    {
+      "input": "Strada Atena",
+      "normalized": "strada atena",
+      "type": "strada",
+      "name": "atena"
+    },
+    {
+      "input": "Strada Baba Novac",
+      "normalized": "strada baba novac",
+      "type": "strada",
+      "name": "baba novac"
+    },
+    {
+      "input": "Strada Bayome",
+      "normalized": "strada bayome",
+      "type": "strada",
+      "name": "bayome"
+    },
+    {
+      "input": "Strada Biruinței",
+      "normalized": "strada biruintei",
+      "type": "strada",
+      "name": "biruintei"
+    },
+    {
+      "input": "Strada Brândușei",
+      "normalized": "strada brandusei",
+      "type": "strada",
+      "name": "brandusei"
+    },
+    {
+      "input": "Strada Burebista",
+      "normalized": "strada burebista",
+      "type": "strada",
+      "name": "burebista"
+    },
+    {
+      "input": "Strada Calea Doamnei",
+      "normalized": "strada calea doamnei",
+      "type": "strada",
+      "name": "calea doamnei"
+    },
+    {
+      "input": "Strada Câmpului",
+      "normalized": "strada campului",
+      "type": "strada",
+      "name": "campului"
+    },
+    {
+      "input": "Strada Castanului",
+      "normalized": "strada castanului",
+      "type": "strada",
+      "name": "castanului"
+    },
+    {
+      "input": "Strada Cezar Boliac",
+      "normalized": "strada cezar boliac",
+      "type": "strada",
+      "name": "cezar boliac"
+    },
+    {
+      "input": "Strada Cireșilor",
+      "normalized": "strada ciresilor",
+      "type": "strada",
+      "name": "ciresilor"
+    },
+    {
+      "input": "Strada Constantin Brâncuși",
+      "normalized": "strada constantin brancusi",
+      "type": "strada",
+      "name": "constantin brancusi"
+    },
+    {
+      "input": "Strada Corneliu Radu Zăvoiu",
+      "normalized": "strada corneliu radu zavoiu",
+      "type": "strada",
+      "name": "corneliu radu zavoiu"
+    },
+    {
+      "input": "Strada Crișanei",
+      "normalized": "strada crisanei",
+      "type": "strada",
+      "name": "crisanei"
+    },
+    {
+      "input": "Strada Dealul Furcilor",
+      "normalized": "strada dealul furcilor",
+      "type": "strada",
+      "name": "dealul furcilor"
+    },
+    {
+      "input": "Strada Dimitrie Anghel",
+      "normalized": "strada dimitrie anghel",
+      "type": "strada",
+      "name": "dimitrie anghel"
+    },
+    {
+      "input": "Strada Doctor Cornel Ciugudean",
+      "normalized": "strada doctor cornel ciugudean",
+      "type": "strada",
+      "name": "doctor cornel ciugudean"
+    },
+    {
+      "input": "Strada Eftimie Murgu",
+      "normalized": "strada eftimie murgu",
+      "type": "strada",
+      "name": "eftimie murgu"
+    },
+    {
+      "input": "Strada Eroilor",
+      "normalized": "strada eroilor",
+      "type": "strada",
+      "name": "eroilor"
+    },
+    {
+      "input": "Strada Feneș",
+      "normalized": "strada fenes",
+      "type": "strada",
+      "name": "fenes"
+    },
+    {
+      "input": "Strada Gârda",
+      "normalized": "strada garda",
+      "type": "strada",
+      "name": "garda"
+    },
+    {
+      "input": "Strada Gemina",
+      "normalized": "strada gemina",
+      "type": "strada",
+      "name": "gemina"
+    },
+    {
+      "input": "Strada George Topârceanu",
+      "normalized": "strada george toparceanu",
+      "type": "strada",
+      "name": "george toparceanu"
+    },
+    {
+      "input": "Strada Ghioceilor",
+      "normalized": "strada ghioceilor",
+      "type": "strada",
+      "name": "ghioceilor"
+    },
+    {
+      "input": "Strada Grâului",
+      "normalized": "strada graului",
+      "type": "strada",
+      "name": "graului"
+    },
+    {
+      "input": "Strada Hobița",
+      "normalized": "strada hobita",
+      "type": "strada",
+      "name": "hobita"
+    },
+    {
+      "input": "Strada Iederei",
+      "normalized": "strada iederei",
+      "type": "strada",
+      "name": "iederei"
+    },
+    {
+      "input": "Strada Ioan Constande",
+      "normalized": "strada ioan constande",
+      "type": "strada",
+      "name": "ioan constande"
+    },
+    {
+      "input": "Strada Ion Creangă",
+      "normalized": "strada ion creanga",
+      "type": "strada",
+      "name": "ion creanga"
+    },
+    {
+      "input": "Strada Ionel Pop",
+      "normalized": "strada ionel pop",
+      "type": "strada",
+      "name": "ionel pop"
+    },
+    {
+      "input": "Strada Jules Verne",
+      "normalized": "strada jules verne",
+      "type": "strada",
+      "name": "jules verne"
+    },
+    {
+      "input": "Strada Lăpușului",
+      "normalized": "strada lapusului",
+      "type": "strada",
+      "name": "lapusului"
+    },
+    {
+      "input": "Strada Lotru",
+      "normalized": "strada lotru",
+      "type": "strada",
+      "name": "lotru"
+    },
+    {
+      "input": "Strada Maior Tiberiu Iancu",
+      "normalized": "strada maior tiberiu iancu",
+      "type": "strada",
+      "name": "maior tiberiu iancu"
+    },
+    {
+      "input": "Strada Marin Sorescu",
+      "normalized": "strada marin sorescu",
+      "type": "strada",
+      "name": "marin sorescu"
+    },
+    {
+      "input": "Strada Mihai Viteazul",
+      "normalized": "strada mihai viteazul",
+      "type": "strada",
+      "name": "mihai viteazul"
+    },
+    {
+      "input": "Strada Mirajului",
+      "normalized": "strada mirajului",
+      "type": "strada",
+      "name": "mirajului"
+    },
+    {
+      "input": "Strada Modena",
+      "normalized": "strada modena",
+      "type": "strada",
+      "name": "modena"
+    },
+    {
+      "input": "Strada Muresului",
+      "normalized": "strada muresului",
+      "type": "strada",
+      "name": "muresului"
+    },
+    {
+      "input": "Strada Napoca",
+      "normalized": "strada napoca",
+      "type": "strada",
+      "name": "napoca"
+    },
+    {
+      "input": "Strada Nicolae Crețulescu",
+      "normalized": "strada nicolae cretulescu",
+      "type": "strada",
+      "name": "nicolae cretulescu"
+    },
+    {
+      "input": "Strada Nopții",
+      "normalized": "strada noptii",
+      "type": "strada",
+      "name": "noptii"
+    },
+    {
+      "input": "Strada Octavian Paler",
+      "normalized": "strada octavian paler",
+      "type": "strada",
+      "name": "octavian paler"
+    },
+    {
+      "input": "Strada Orizont 10",
+      "normalized": "strada orizont 10",
+      "type": "strada",
+      "name": "orizont 10"
+    },
+    {
+      "input": "Strada Orizont 18",
+      "normalized": "strada orizont 18",
+      "type": "strada",
+      "name": "orizont 18"
+    },
+    {
+      "input": "Strada Orizont 24",
+      "normalized": "strada orizont 24",
+      "type": "strada",
+      "name": "orizont 24"
+    },
+    {
+      "input": "Strada Orizont 7",
+      "normalized": "strada orizont 7",
+      "type": "strada",
+      "name": "orizont 7"
+    },
+    {
+      "input": "Strada Padiș",
+      "normalized": "strada padis",
+      "type": "strada",
+      "name": "padis"
+    },
+    {
+      "input": "Strada Păușa",
+      "normalized": "strada pausa",
+      "type": "strada",
+      "name": "pausa"
+    },
+    {
+      "input": "Strada Petru Maior",
+      "normalized": "strada petru maior",
+      "type": "strada",
+      "name": "petru maior"
+    },
+    {
+      "input": "Strada Platanului",
+      "normalized": "strada platanului",
+      "type": "strada",
+      "name": "platanului"
+    },
+    {
+      "input": "Strada Poligonului",
+      "normalized": "strada poligonului",
+      "type": "strada",
+      "name": "poligonului"
+    },
+    {
+      "input": "Strada Principală",
+      "normalized": "strada principala",
+      "type": "strada",
+      "name": "principala"
+    }
+  ]
+}

@@ -1,0 +1,797 @@
+{
+  "language": "en",
+  "cases": [
+    {
+      "input": "Abbey Rd",
+      "normalized": "abbey road",
+      "type": null,
+      "name": "abbey road"
+    },
+    {
+      "input": "Baker Street",
+      "normalized": "baker street",
+      "type": null,
+      "name": "baker street"
+    },
+    {
+      "input": "St James's Park",
+      "normalized": "saint james south park",
+      "type": null,
+      "name": "saint james south park"
+    },
+    {
+      "input": "Queen's Crescent",
+      "normalized": "queen south crescent",
+      "type": null,
+      "name": "queen south crescent"
+    },
+    {
+      "input": "Kensington High St",
+      "normalized": "kensington high st",
+      "type": null,
+      "name": "kensington high st"
+    },
+    {
+      "input": "Dr Martin Luther King Jr Blvd",
+      "normalized": "doctor martin luther king jr boulevard",
+      "type": null,
+      "name": "doctor martin luther king jr boulevard"
+    },
+    {
+      "input": "N Michigan Ave",
+      "normalized": "north michigan avenue",
+      "type": null,
+      "name": "north michigan avenue"
+    },
+    {
+      "input": "The Mall",
+      "normalized": "the mall",
+      "type": null,
+      "name": "the mall"
+    },
+    {
+      "input": "Hyde Park Corner",
+      "normalized": "hyde park corner",
+      "type": null,
+      "name": "hyde park corner"
+    },
+    {
+      "input": "Cherry Ln",
+      "normalized": "cherry lane",
+      "type": null,
+      "name": "cherry lane"
+    },
+    {
+      "input": "Mt Pleasant Ter",
+      "normalized": "mount pleasant terrace",
+      "type": null,
+      "name": "mount pleasant terrace"
+    },
+    {
+      "input": "Fifth Avenue",
+      "normalized": "fifth avenue",
+      "type": null,
+      "name": "fifth avenue"
+    },
+    {
+      "input": "Staffern Dr #16",
+      "normalized": "staffern dr 16",
+      "type": null,
+      "name": "staffern dr 16"
+    },
+    {
+      "input": "Toronto Public Library - Goldhawk Park",
+      "normalized": "toronto public library goldhawk park",
+      "type": null,
+      "name": "toronto public library goldhawk park"
+    },
+    {
+      "input": "Downsview Park",
+      "normalized": "downsview park",
+      "type": null,
+      "name": "downsview park"
+    },
+    {
+      "input": "Comedy Club Danforth",
+      "normalized": "comedy club danforth",
+      "type": null,
+      "name": "comedy club danforth"
+    },
+    {
+      "input": "Regis College Library",
+      "normalized": "regis college library",
+      "type": null,
+      "name": "regis college library"
+    },
+    {
+      "input": "1st Avenue East",
+      "normalized": "1st avenue east",
+      "type": null,
+      "name": "1st avenue east"
+    },
+    {
+      "input": "Abbs Street",
+      "normalized": "abbs street",
+      "type": null,
+      "name": "abbs street"
+    },
+    {
+      "input": "Alan Avenue",
+      "normalized": "alan avenue",
+      "type": null,
+      "name": "alan avenue"
+    },
+    {
+      "input": "Allotment Lane",
+      "normalized": "allotment lane",
+      "type": null,
+      "name": "allotment lane"
+    },
+    {
+      "input": "Ann O'Reilly Road",
+      "normalized": "ann o reilly road",
+      "type": null,
+      "name": "ann o reilly road"
+    },
+    {
+      "input": "Ardtrea Avenue",
+      "normalized": "ardtrea avenue",
+      "type": null,
+      "name": "ardtrea avenue"
+    },
+    {
+      "input": "Aspen Avenue",
+      "normalized": "aspen avenue",
+      "type": null,
+      "name": "aspen avenue"
+    },
+    {
+      "input": "Axum Place",
+      "normalized": "axum place",
+      "type": null,
+      "name": "axum place"
+    },
+    {
+      "input": "Barbed Wire Lane",
+      "normalized": "barbed wire lane",
+      "type": null,
+      "name": "barbed wire lane"
+    },
+    {
+      "input": "Bayview Avenue",
+      "normalized": "bayview avenue",
+      "type": null,
+      "name": "bayview avenue"
+    },
+    {
+      "input": "Bellehaven Crescent",
+      "normalized": "bellehaven crescent",
+      "type": null,
+      "name": "bellehaven crescent"
+    },
+    {
+      "input": "Bestview Park Nature Trail",
+      "normalized": "bestview park nature trail",
+      "type": null,
+      "name": "bestview park nature trail"
+    },
+    {
+      "input": "Blacksmith Crescent",
+      "normalized": "blacksmith crescent",
+      "type": null,
+      "name": "blacksmith crescent"
+    },
+    {
+      "input": "Bondhead Place",
+      "normalized": "bondhead place",
+      "type": null,
+      "name": "bondhead place"
+    },
+    {
+      "input": "Braemore Gardens",
+      "normalized": "braemore gardens",
+      "type": null,
+      "name": "braemore gardens"
+    },
+    {
+      "input": "Bridport Crescent",
+      "normalized": "bridport crescent",
+      "type": null,
+      "name": "bridport crescent"
+    },
+    {
+      "input": "Brucedale Crescent",
+      "normalized": "brucedale crescent",
+      "type": null,
+      "name": "brucedale crescent"
+    },
+    {
+      "input": "Burton's Lane",
+      "normalized": "burton south lane",
+      "type": null,
+      "name": "burton south lane"
+    },
+    {
+      "input": "Camor Court",
+      "normalized": "camor court",
+      "type": null,
+      "name": "camor court"
+    },
+    {
+      "input": "Carmel Court",
+      "normalized": "carmel court",
+      "type": null,
+      "name": "carmel court"
+    },
+    {
+      "input": "Cathedral Bluffs Drive",
+      "normalized": "cathedral bluffs drive",
+      "type": null,
+      "name": "cathedral bluffs drive"
+    },
+    {
+      "input": "Chaplin Crescent",
+      "normalized": "chaplin crescent",
+      "type": null,
+      "name": "chaplin crescent"
+    },
+    {
+      "input": "Chianti Square",
+      "normalized": "chianti square",
+      "type": null,
+      "name": "chianti square"
+    },
+    {
+      "input": "Clarington Road",
+      "normalized": "clarington road",
+      "type": null,
+      "name": "clarington road"
+    },
+    {
+      "input": "Cochrane Court",
+      "normalized": "cochrane court",
+      "type": null,
+      "name": "cochrane court"
+    },
+    {
+      "input": "Confederation Drive",
+      "normalized": "confederation drive",
+      "type": null,
+      "name": "confederation drive"
+    },
+    {
+      "input": "Corvette Avenue",
+      "normalized": "corvette avenue",
+      "type": null,
+      "name": "corvette avenue"
+    },
+    {
+      "input": "Crepo Drive",
+      "normalized": "crepo drive",
+      "type": null,
+      "name": "crepo drive"
+    },
+    {
+      "input": "Cut Trail",
+      "normalized": "cut trail",
+      "type": null,
+      "name": "cut trail"
+    },
+    {
+      "input": "Davidson Avenue",
+      "normalized": "davidson avenue",
+      "type": null,
+      "name": "davidson avenue"
+    },
+    {
+      "input": "Dell Park Avenue",
+      "normalized": "dell park avenue",
+      "type": null,
+      "name": "dell park avenue"
+    },
+    {
+      "input": "Ditty Lane",
+      "normalized": "ditty lane",
+      "type": null,
+      "name": "ditty lane"
+    },
+    {
+      "input": "Dorlen Avenue",
+      "normalized": "dorlen avenue",
+      "type": null,
+      "name": "dorlen avenue"
+    },
+    {
+      "input": "Duncairn Underpass",
+      "normalized": "duncairn underpass",
+      "type": null,
+      "name": "duncairn underpass"
+    },
+    {
+      "input": "East Don Parkland Trail",
+      "normalized": "east don parkland trail",
+      "type": null,
+      "name": "east don parkland trail"
+    },
+    {
+      "input": "Edmund Gate",
+      "normalized": "edmund gate",
+      "type": null,
+      "name": "edmund gate"
+    },
+    {
+      "input": "Elsfield Road",
+      "normalized": "elsfield road",
+      "type": null,
+      "name": "elsfield road"
+    },
+    {
+      "input": "Ethel Avenue",
+      "normalized": "ethel avenue",
+      "type": null,
+      "name": "ethel avenue"
+    },
+    {
+      "input": "Fallingbrook Crescent",
+      "normalized": "fallingbrook crescent",
+      "type": null,
+      "name": "fallingbrook crescent"
+    },
+    {
+      "input": "Ferris Crescent",
+      "normalized": "ferris crescent",
+      "type": null,
+      "name": "ferris crescent"
+    },
+    {
+      "input": "Flintwood Court",
+      "normalized": "flintwood court",
+      "type": null,
+      "name": "flintwood court"
+    },
+    {
+      "input": "Foxhunt Drive",
+      "normalized": "foxhunt drive",
+      "type": null,
+      "name": "foxhunt drive"
+    },
+    {
+      "input": "Gage Avenue",
+      "normalized": "gage avenue",
+      "type": null,
+      "name": "gage avenue"
+    },
+    {
+      "input": "Genessee Avenue",
+      "normalized": "genessee avenue",
+      "type": null,
+      "name": "genessee avenue"
+    },
+    {
+      "input": "Glen Cedar Road",
+      "normalized": "glen cedar road",
+      "type": null,
+      "name": "glen cedar road"
+    },
+    {
+      "input": "Gloxinia Crescent",
+      "normalized": "gloxinia crescent",
+      "type": null,
+      "name": "gloxinia crescent"
+    },
+    {
+      "input": "Gramercy Square",
+      "normalized": "gramercy square",
+      "type": null,
+      "name": "gramercy square"
+    },
+    {
+      "input": "Greenock Drive",
+      "normalized": "greenock drive",
+      "type": null,
+      "name": "greenock drive"
+    },
+    {
+      "input": "Gzowski Boulevard",
+      "normalized": "gzowski boulevard",
+      "type": null,
+      "name": "gzowski boulevard"
+    },
+    {
+      "input": "Harlech Court",
+      "normalized": "harlech court",
+      "type": null,
+      "name": "harlech court"
+    },
+    {
+      "input": "Hazelridge Drive",
+      "normalized": "hazelridge drive",
+      "type": null,
+      "name": "hazelridge drive"
+    },
+    {
+      "input": "Hickory Tree Road",
+      "normalized": "hickory tree road",
+      "type": null,
+      "name": "hickory tree road"
+    },
+    {
+      "input": "Holburne Road",
+      "normalized": "holburne road",
+      "type": null,
+      "name": "holburne road"
+    },
+    {
+      "input": "Hoyle Avenue",
+      "normalized": "hoyle avenue",
+      "type": null,
+      "name": "hoyle avenue"
+    },
+    {
+      "input": "Idema Road",
+      "normalized": "idema road",
+      "type": null,
+      "name": "idema road"
+    },
+    {
+      "input": "Ivordale Crescent",
+      "normalized": "ivordale crescent",
+      "type": null,
+      "name": "ivordale crescent"
+    },
+    {
+      "input": "Jim Wilson Lane",
+      "normalized": "jim wilson lane",
+      "type": null,
+      "name": "jim wilson lane"
+    },
+    {
+      "input": "Kariya Drive",
+      "normalized": "kariya drive",
+      "type": null,
+      "name": "kariya drive"
+    },
+    {
+      "input": "Kewbeach Avenue",
+      "normalized": "kewbeach avenue",
+      "type": null,
+      "name": "kewbeach avenue"
+    },
+    {
+      "input": "Kinkora Drive",
+      "normalized": "kinkora drive",
+      "type": null,
+      "name": "kinkora drive"
+    },
+    {
+      "input": "Ladysbridge Drive",
+      "normalized": "ladysbridge drive",
+      "type": null,
+      "name": "ladysbridge drive"
+    },
+    {
+      "input": "Lansing Square",
+      "normalized": "lansing square",
+      "type": null,
+      "name": "lansing square"
+    },
+    {
+      "input": "Leameadow Road",
+      "normalized": "leameadow road",
+      "type": null,
+      "name": "leameadow road"
+    },
+    {
+      "input": "Lillian Greene Lane",
+      "normalized": "lillian greene lane",
+      "type": null,
+      "name": "lillian greene lane"
+    },
+    {
+      "input": "Lofty Hillway",
+      "normalized": "lofty hillway",
+      "type": null,
+      "name": "lofty hillway"
+    },
+    {
+      "input": "Lower Don River Trail",
+      "normalized": "lower don river trail",
+      "type": null,
+      "name": "lower don river trail"
+    },
+    {
+      "input": "MacNaughton Road",
+      "normalized": "macnaughton road",
+      "type": null,
+      "name": "macnaughton road"
+    },
+    {
+      "input": "Maple Bush Avenue",
+      "normalized": "maple bush avenue",
+      "type": null,
+      "name": "maple bush avenue"
+    },
+    {
+      "input": "Marsha Drive",
+      "normalized": "marsha drive",
+      "type": null,
+      "name": "marsha drive"
+    },
+    {
+      "input": "McCowan Road",
+      "normalized": "mccowan road",
+      "type": null,
+      "name": "mccowan road"
+    },
+    {
+      "input": "Melva Crescent",
+      "normalized": "melva crescent",
+      "type": null,
+      "name": "melva crescent"
+    },
+    {
+      "input": "Millcreek Crescent",
+      "normalized": "millcreek crescent",
+      "type": null,
+      "name": "millcreek crescent"
+    },
+    {
+      "input": "Monastery Lane",
+      "normalized": "monastery lane",
+      "type": null,
+      "name": "monastery lane"
+    },
+    {
+      "input": "Mountalan Avenue",
+      "normalized": "mountalan avenue",
+      "type": null,
+      "name": "mountalan avenue"
+    },
+    {
+      "input": "Navenby Crescent",
+      "normalized": "navenby crescent",
+      "type": null,
+      "name": "navenby crescent"
+    },
+    {
+      "input": "Nipissing Court",
+      "normalized": "nipissing court",
+      "type": null,
+      "name": "nipissing court"
+    },
+    {
+      "input": "Northwest Gate",
+      "normalized": "northwest gate",
+      "type": null,
+      "name": "northwest gate"
+    },
+    {
+      "input": "Old Jane Street",
+      "normalized": "old jane street",
+      "type": null,
+      "name": "old jane street"
+    },
+    {
+      "input": "Oscar Court",
+      "normalized": "oscar court",
+      "type": null,
+      "name": "oscar court"
+    },
+    {
+      "input": "Pape Bus Terminal",
+      "normalized": "pape bus terminal",
+      "type": null,
+      "name": "pape bus terminal"
+    },
+    {
+      "input": "Paul Markway",
+      "normalized": "paul markway",
+      "type": null,
+      "name": "paul markway"
+    },
+    {
+      "input": "Perthshire Street",
+      "normalized": "perthshire street",
+      "type": null,
+      "name": "perthshire street"
+    },
+    {
+      "input": "Pining Road",
+      "normalized": "pining road",
+      "type": null,
+      "name": "pining road"
+    },
+    {
+      "input": "Portneuf Court",
+      "normalized": "portneuf court",
+      "type": null,
+      "name": "portneuf court"
+    },
+    {
+      "input": "Pryor Avenue",
+      "normalized": "pryor avenue",
+      "type": null,
+      "name": "pryor avenue"
+    },
+    {
+      "input": "Rainswood Court",
+      "normalized": "rainswood court",
+      "type": null,
+      "name": "rainswood court"
+    },
+    {
+      "input": "Redcar Avenue",
+      "normalized": "redcar avenue",
+      "type": null,
+      "name": "redcar avenue"
+    },
+    {
+      "input": "Richey Crescent",
+      "normalized": "richey crescent",
+      "type": null,
+      "name": "richey crescent"
+    },
+    {
+      "input": "Robindale Avenue",
+      "normalized": "robindale avenue",
+      "type": null,
+      "name": "robindale avenue"
+    },
+    {
+      "input": "Roseborough Crescent",
+      "normalized": "roseborough crescent",
+      "type": null,
+      "name": "roseborough crescent"
+    },
+    {
+      "input": "Royalpark Way",
+      "normalized": "royalpark way",
+      "type": null,
+      "name": "royalpark way"
+    },
+    {
+      "input": "St. Cuthberts Road",
+      "normalized": "saint cuthberts road",
+      "type": null,
+      "name": "saint cuthberts road"
+    },
+    {
+      "input": "Sandale Gardens",
+      "normalized": "sandale gardens",
+      "type": null,
+      "name": "sandale gardens"
+    },
+    {
+      "input": "Scenic Hill Court",
+      "normalized": "scenic hill court",
+      "type": null,
+      "name": "scenic hill court"
+    },
+    {
+      "input": "Seymour Avenue",
+      "normalized": "seymour avenue",
+      "type": null,
+      "name": "seymour avenue"
+    },
+    {
+      "input": "Shields Avenue",
+      "normalized": "shields avenue",
+      "type": null,
+      "name": "shields avenue"
+    },
+    {
+      "input": "Sinclair Street",
+      "normalized": "sinclair street",
+      "type": null,
+      "name": "sinclair street"
+    },
+    {
+      "input": "Sousa Mendes Street",
+      "normalized": "sousa mendes street",
+      "type": null,
+      "name": "sousa mendes street"
+    },
+    {
+      "input": "Staffordshire Place",
+      "normalized": "staffordshire place",
+      "type": null,
+      "name": "staffordshire place"
+    },
+    {
+      "input": "Stoneglen Drive",
+      "normalized": "stoneglen drive",
+      "type": null,
+      "name": "stoneglen drive"
+    },
+    {
+      "input": "Sundel Avenue",
+      "normalized": "sundel avenue",
+      "type": null,
+      "name": "sundel avenue"
+    },
+    {
+      "input": "Tall Grass Trail",
+      "normalized": "tall grass trail",
+      "type": null,
+      "name": "tall grass trail"
+    },
+    {
+      "input": "Temple Bar Crescent",
+      "normalized": "temple bar crescent",
+      "type": null,
+      "name": "temple bar crescent"
+    },
+    {
+      "input": "Thora Avenue",
+      "normalized": "thora avenue",
+      "type": null,
+      "name": "thora avenue"
+    },
+    {
+      "input": "Todmorden Lane",
+      "normalized": "todmorden lane",
+      "type": null,
+      "name": "todmorden lane"
+    },
+    {
+      "input": "Treecrest Drive",
+      "normalized": "treecrest drive",
+      "type": null,
+      "name": "treecrest drive"
+    },
+    {
+      "input": "Tuxedo Court",
+      "normalized": "tuxedo court",
+      "type": null,
+      "name": "tuxedo court"
+    },
+    {
+      "input": "Valley Ridge Crescent",
+      "normalized": "valley ridge crescent",
+      "type": null,
+      "name": "valley ridge crescent"
+    },
+    {
+      "input": "Via Cassia Drive",
+      "normalized": "via cassia drive",
+      "type": null,
+      "name": "via cassia drive"
+    },
+    {
+      "input": "Walford Court",
+      "normalized": "walford court",
+      "type": null,
+      "name": "walford court"
+    },
+    {
+      "input": "Waymar Heights Boulevard",
+      "normalized": "waymar heights boulevard",
+      "type": null,
+      "name": "waymar heights boulevard"
+    },
+    {
+      "input": "Westlake Crescent",
+      "normalized": "westlake crescent",
+      "type": null,
+      "name": "westlake crescent"
+    },
+    {
+      "input": "Widdicombe Hill",
+      "normalized": "widdicombe hill",
+      "type": null,
+      "name": "widdicombe hill"
+    },
+    {
+      "input": "Windcroft Court",
+      "normalized": "windcroft court",
+      "type": null,
+      "name": "windcroft court"
+    },
+    {
+      "input": "Woodchester Court",
+      "normalized": "woodchester court",
+      "type": null,
+      "name": "woodchester court"
+    }
+  ]
+}

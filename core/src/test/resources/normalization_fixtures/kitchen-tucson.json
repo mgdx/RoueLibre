@@ -1,0 +1,797 @@
+{
+  "language": "en",
+  "cases": [
+    {
+      "input": "Abbey Rd",
+      "normalized": "abbey road",
+      "type": null,
+      "name": "abbey road"
+    },
+    {
+      "input": "Baker Street",
+      "normalized": "baker street",
+      "type": null,
+      "name": "baker street"
+    },
+    {
+      "input": "St James's Park",
+      "normalized": "saint james south park",
+      "type": null,
+      "name": "saint james south park"
+    },
+    {
+      "input": "Queen's Crescent",
+      "normalized": "queen south crescent",
+      "type": null,
+      "name": "queen south crescent"
+    },
+    {
+      "input": "Kensington High St",
+      "normalized": "kensington high st",
+      "type": null,
+      "name": "kensington high st"
+    },
+    {
+      "input": "Dr Martin Luther King Jr Blvd",
+      "normalized": "doctor martin luther king jr boulevard",
+      "type": null,
+      "name": "doctor martin luther king jr boulevard"
+    },
+    {
+      "input": "N Michigan Ave",
+      "normalized": "north michigan avenue",
+      "type": null,
+      "name": "north michigan avenue"
+    },
+    {
+      "input": "The Mall",
+      "normalized": "the mall",
+      "type": null,
+      "name": "the mall"
+    },
+    {
+      "input": "Hyde Park Corner",
+      "normalized": "hyde park corner",
+      "type": null,
+      "name": "hyde park corner"
+    },
+    {
+      "input": "Cherry Ln",
+      "normalized": "cherry lane",
+      "type": null,
+      "name": "cherry lane"
+    },
+    {
+      "input": "Mt Pleasant Ter",
+      "normalized": "mount pleasant terrace",
+      "type": null,
+      "name": "mount pleasant terrace"
+    },
+    {
+      "input": "Fifth Avenue",
+      "normalized": "fifth avenue",
+      "type": null,
+      "name": "fifth avenue"
+    },
+    {
+      "input": "Fox Theatre",
+      "normalized": "fox theatre",
+      "type": null,
+      "name": "fox theatre"
+    },
+    {
+      "input": "Tucson Emergency Room And Hospital",
+      "normalized": "tucson emergency room and hospital",
+      "type": null,
+      "name": "tucson emergency room and hospital"
+    },
+    {
+      "input": "Broadway Boulevard",
+      "normalized": "broadway boulevard",
+      "type": null,
+      "name": "broadway boulevard"
+    },
+    {
+      "input": "North First Avenue",
+      "normalized": "north first avenue",
+      "type": null,
+      "name": "north first avenue"
+    },
+    {
+      "input": "West Saint Marys Road",
+      "normalized": "west saint marys road",
+      "type": null,
+      "name": "west saint marys road"
+    },
+    {
+      "input": "Aviation Spur",
+      "normalized": "aviation spur",
+      "type": null,
+      "name": "aviation spur"
+    },
+    {
+      "input": "Calzados de Los Fresnos",
+      "normalized": "calzados de los fresnos",
+      "type": null,
+      "name": "calzados de los fresnos"
+    },
+    {
+      "input": "Desert Stravenue",
+      "normalized": "desert stravenue",
+      "type": null,
+      "name": "desert stravenue"
+    },
+    {
+      "input": "East 19th Street",
+      "normalized": "east 19th street",
+      "type": null,
+      "name": "east 19th street"
+    },
+    {
+      "input": "East 31st Street",
+      "normalized": "east 31st street",
+      "type": null,
+      "name": "east 31st street"
+    },
+    {
+      "input": "East 46th Street",
+      "normalized": "east 46th street",
+      "type": null,
+      "name": "east 46th street"
+    },
+    {
+      "input": "East Allison Road",
+      "normalized": "east allison road",
+      "type": null,
+      "name": "east allison road"
+    },
+    {
+      "input": "East Aviation Parkway",
+      "normalized": "east aviation parkway",
+      "type": null,
+      "name": "east aviation parkway"
+    },
+    {
+      "input": "East Blanton Drive",
+      "normalized": "east blanton drive",
+      "type": null,
+      "name": "east blanton drive"
+    },
+    {
+      "input": "East Cairn Street",
+      "normalized": "east cairn street",
+      "type": null,
+      "name": "east cairn street"
+    },
+    {
+      "input": "East Calle de Felicidad",
+      "normalized": "east calle de felicidad",
+      "type": null,
+      "name": "east calle de felicidad"
+    },
+    {
+      "input": "East Calle Portal",
+      "normalized": "east calle portal",
+      "type": null,
+      "name": "east calle portal"
+    },
+    {
+      "input": "East Chauncy Lane",
+      "normalized": "east chauncy lane",
+      "type": null,
+      "name": "east chauncy lane"
+    },
+    {
+      "input": "East Crosby Vista",
+      "normalized": "east crosby vista",
+      "type": null,
+      "name": "east crosby vista"
+    },
+    {
+      "input": "East Drive",
+      "normalized": "east drive",
+      "type": null,
+      "name": "east drive"
+    },
+    {
+      "input": "East Evans Boulevard",
+      "normalized": "east evans boulevard",
+      "type": null,
+      "name": "east evans boulevard"
+    },
+    {
+      "input": "East Fort Lowell Road",
+      "normalized": "east fort lowell road",
+      "type": null,
+      "name": "east fort lowell road"
+    },
+    {
+      "input": "East Greenlee Place",
+      "normalized": "east greenlee place",
+      "type": null,
+      "name": "east greenlee place"
+    },
+    {
+      "input": "East Haven Lane",
+      "normalized": "east haven lane",
+      "type": null,
+      "name": "east haven lane"
+    },
+    {
+      "input": "East Innovate Lane",
+      "normalized": "east innovate lane",
+      "type": null,
+      "name": "east innovate lane"
+    },
+    {
+      "input": "East Keswick Circle",
+      "normalized": "east keswick circle",
+      "type": null,
+      "name": "east keswick circle"
+    },
+    {
+      "input": "East Lester Place",
+      "normalized": "east lester place",
+      "type": null,
+      "name": "east lester place"
+    },
+    {
+      "input": "East March Place",
+      "normalized": "east march place",
+      "type": null,
+      "name": "east march place"
+    },
+    {
+      "input": "East Montecito Street",
+      "normalized": "east montecito street",
+      "type": null,
+      "name": "east montecito street"
+    },
+    {
+      "input": "East Pace Court",
+      "normalized": "east pace court",
+      "type": null,
+      "name": "east pace court"
+    },
+    {
+      "input": "East Pima Street",
+      "normalized": "east pima street",
+      "type": null,
+      "name": "east pima street"
+    },
+    {
+      "input": "East Red Owl Lane",
+      "normalized": "east red owl lane",
+      "type": null,
+      "name": "east red owl lane"
+    },
+    {
+      "input": "East Saint Bernadine Street",
+      "normalized": "east saint bernadine street",
+      "type": null,
+      "name": "east saint bernadine street"
+    },
+    {
+      "input": "East Seneca Street",
+      "normalized": "east seneca street",
+      "type": null,
+      "name": "east seneca street"
+    },
+    {
+      "input": "East Sylvane Drive",
+      "normalized": "east sylvane drive",
+      "type": null,
+      "name": "east sylvane drive"
+    },
+    {
+      "input": "East Valentine Place",
+      "normalized": "east valentine place",
+      "type": null,
+      "name": "east valentine place"
+    },
+    {
+      "input": "East Water Street",
+      "normalized": "east water street",
+      "type": null,
+      "name": "east water street"
+    },
+    {
+      "input": "EastLustrumLane",
+      "normalized": "eastlustrumlane",
+      "type": null,
+      "name": "eastlustrumlane"
+    },
+    {
+      "input": "Hill Farm Drive",
+      "normalized": "hill farm drive",
+      "type": null,
+      "name": "hill farm drive"
+    },
+    {
+      "input": "Ironwood Path",
+      "normalized": "ironwood path",
+      "type": null,
+      "name": "ironwood path"
+    },
+    {
+      "input": "Lamp Lighter",
+      "normalized": "lamp lighter",
+      "type": null,
+      "name": "lamp lighter"
+    },
+    {
+      "input": "Montezuma Avenue",
+      "normalized": "montezuma avenue",
+      "type": null,
+      "name": "montezuma avenue"
+    },
+    {
+      "input": "North 5th Avenue",
+      "normalized": "north 5th avenue",
+      "type": null,
+      "name": "north 5th avenue"
+    },
+    {
+      "input": "North Apache Drive",
+      "normalized": "north apache drive",
+      "type": null,
+      "name": "north apache drive"
+    },
+    {
+      "input": "North Avenida de Suenos",
+      "normalized": "north avenida de suenos",
+      "type": null,
+      "name": "north avenida de suenos"
+    },
+    {
+      "input": "North Bell Hollow Place",
+      "normalized": "north bell hollow place",
+      "type": null,
+      "name": "north bell hollow place"
+    },
+    {
+      "input": "North Bryant Avenue",
+      "normalized": "north bryant avenue",
+      "type": null,
+      "name": "north bryant avenue"
+    },
+    {
+      "input": "North Camino Emiliano",
+      "normalized": "north camino emiliano",
+      "type": null,
+      "name": "north camino emiliano"
+    },
+    {
+      "input": "North Castro Avenue",
+      "normalized": "north castro avenue",
+      "type": null,
+      "name": "north castro avenue"
+    },
+    {
+      "input": "North Chrysler Drive",
+      "normalized": "north chrysler drive",
+      "type": null,
+      "name": "north chrysler drive"
+    },
+    {
+      "input": "North Crow Creek Lane",
+      "normalized": "north crow creek lane",
+      "type": null,
+      "name": "north crow creek lane"
+    },
+    {
+      "input": "North Desert Stravenue",
+      "normalized": "north desert stravenue",
+      "type": null,
+      "name": "north desert stravenue"
+    },
+    {
+      "input": "North Edith Boulevard",
+      "normalized": "north edith boulevard",
+      "type": null,
+      "name": "north edith boulevard"
+    },
+    {
+      "input": "North Fickett Avenue",
+      "normalized": "north fickett avenue",
+      "type": null,
+      "name": "north fickett avenue"
+    },
+    {
+      "input": "North Gaia Place",
+      "normalized": "north gaia place",
+      "type": null,
+      "name": "north gaia place"
+    },
+    {
+      "input": "North Gypsy Lane",
+      "normalized": "north gypsy lane",
+      "type": null,
+      "name": "north gypsy lane"
+    },
+    {
+      "input": "North Huachuca Drive",
+      "normalized": "north huachuca drive",
+      "type": null,
+      "name": "north huachuca drive"
+    },
+    {
+      "input": "North Jacobus Avenue",
+      "normalized": "north jacobus avenue",
+      "type": null,
+      "name": "north jacobus avenue"
+    },
+    {
+      "input": "North Lane",
+      "normalized": "north lane",
+      "type": null,
+      "name": "north lane"
+    },
+    {
+      "input": "North Louis Avenue",
+      "normalized": "north louis avenue",
+      "type": null,
+      "name": "north louis avenue"
+    },
+    {
+      "input": "North Meyer Avenue",
+      "normalized": "north meyer avenue",
+      "type": null,
+      "name": "north meyer avenue"
+    },
+    {
+      "input": "North Navajo",
+      "normalized": "north navajo",
+      "type": null,
+      "name": "north navajo"
+    },
+    {
+      "input": "North Orchard Place",
+      "normalized": "north orchard place",
+      "type": null,
+      "name": "north orchard place"
+    },
+    {
+      "input": "North Park Avenue",
+      "normalized": "north park avenue",
+      "type": null,
+      "name": "north park avenue"
+    },
+    {
+      "input": "North Potter Place",
+      "normalized": "north potter place",
+      "type": null,
+      "name": "north potter place"
+    },
+    {
+      "input": "North River Creek Place",
+      "normalized": "north river creek place",
+      "type": null,
+      "name": "north river creek place"
+    },
+    {
+      "input": "North San Jose Avenue",
+      "normalized": "north san jose avenue",
+      "type": null,
+      "name": "north san jose avenue"
+    },
+    {
+      "input": "North Silver Mosaic Drive",
+      "normalized": "north silver mosaic drive",
+      "type": null,
+      "name": "north silver mosaic drive"
+    },
+    {
+      "input": "North Takahe Way",
+      "normalized": "north takahe way",
+      "type": null,
+      "name": "north takahe way"
+    },
+    {
+      "input": "North Tuttle Avenue",
+      "normalized": "north tuttle avenue",
+      "type": null,
+      "name": "north tuttle avenue"
+    },
+    {
+      "input": "North Walnut Boulevard",
+      "normalized": "north walnut boulevard",
+      "type": null,
+      "name": "north walnut boulevard"
+    },
+    {
+      "input": "North York Place",
+      "normalized": "north york place",
+      "type": null,
+      "name": "north york place"
+    },
+    {
+      "input": "Placita Nuevo Dia",
+      "normalized": "placita nuevo dia",
+      "type": null,
+      "name": "placita nuevo dia"
+    },
+    {
+      "input": "Scenic Ridge Lane",
+      "normalized": "scenic ridge lane",
+      "type": null,
+      "name": "scenic ridge lane"
+    },
+    {
+      "input": "South 14th Avenue",
+      "normalized": "south 14th avenue",
+      "type": null,
+      "name": "south 14th avenue"
+    },
+    {
+      "input": "South Amalia Avenue",
+      "normalized": "south amalia avenue",
+      "type": null,
+      "name": "south amalia avenue"
+    },
+    {
+      "input": "South Beaver Drive",
+      "normalized": "south beaver drive",
+      "type": null,
+      "name": "south beaver drive"
+    },
+    {
+      "input": "South Calle Chaparita",
+      "normalized": "south calle chaparita",
+      "type": null,
+      "name": "south calle chaparita"
+    },
+    {
+      "input": "South Catalina Avenue",
+      "normalized": "south catalina avenue",
+      "type": null,
+      "name": "south catalina avenue"
+    },
+    {
+      "input": "South Columbia Drive",
+      "normalized": "south columbia drive",
+      "type": null,
+      "name": "south columbia drive"
+    },
+    {
+      "input": "South Desert Avenue",
+      "normalized": "south desert avenue",
+      "type": null,
+      "name": "south desert avenue"
+    },
+    {
+      "input": "South Erin Avenue",
+      "normalized": "south erin avenue",
+      "type": null,
+      "name": "south erin avenue"
+    },
+    {
+      "input": "South Forrest Avenue",
+      "normalized": "south forrest avenue",
+      "type": null,
+      "name": "south forrest avenue"
+    },
+    {
+      "input": "South Herbert Avenue",
+      "normalized": "south herbert avenue",
+      "type": null,
+      "name": "south herbert avenue"
+    },
+    {
+      "input": "South Jones Boulevard",
+      "normalized": "south jones boulevard",
+      "type": null,
+      "name": "south jones boulevard"
+    },
+    {
+      "input": "South Lavonne Way",
+      "normalized": "south lavonne way",
+      "type": null,
+      "name": "south lavonne way"
+    },
+    {
+      "input": "South Marmora Avenue",
+      "normalized": "south marmora avenue",
+      "type": null,
+      "name": "south marmora avenue"
+    },
+    {
+      "input": "South Mountain Avenue",
+      "normalized": "south mountain avenue",
+      "type": null,
+      "name": "south mountain avenue"
+    },
+    {
+      "input": "South Norton Vista",
+      "normalized": "south norton vista",
+      "type": null,
+      "name": "south norton vista"
+    },
+    {
+      "input": "South Paradise Mountain Road",
+      "normalized": "south paradise mountain road",
+      "type": null,
+      "name": "south paradise mountain road"
+    },
+    {
+      "input": "South Railroad Avenue",
+      "normalized": "south railroad avenue",
+      "type": null,
+      "name": "south railroad avenue"
+    },
+    {
+      "input": "South Saint Pablo Drive",
+      "normalized": "south saint pablo drive",
+      "type": null,
+      "name": "south saint pablo drive"
+    },
+    {
+      "input": "South San Rafael Avenue",
+      "normalized": "south san rafael avenue",
+      "type": null,
+      "name": "south san rafael avenue"
+    },
+    {
+      "input": "South Southern Pacific Avenue",
+      "normalized": "south southern pacific avenue",
+      "type": null,
+      "name": "south southern pacific avenue"
+    },
+    {
+      "input": "South Tower Road",
+      "normalized": "south tower road",
+      "type": null,
+      "name": "south tower road"
+    },
+    {
+      "input": "South Via Estrella Blanca",
+      "normalized": "south via estrella blanca",
+      "type": null,
+      "name": "south via estrella blanca"
+    },
+    {
+      "input": "South Winstel Boulevard",
+      "normalized": "south winstel boulevard",
+      "type": null,
+      "name": "south winstel boulevard"
+    },
+    {
+      "input": "Veterans Street",
+      "normalized": "veterans street",
+      "type": null,
+      "name": "veterans street"
+    },
+    {
+      "input": "West 22nd Street",
+      "normalized": "west 22nd street",
+      "type": null,
+      "name": "west 22nd street"
+    },
+    {
+      "input": "West 36th Street",
+      "normalized": "west 36th street",
+      "type": null,
+      "name": "west 36th street"
+    },
+    {
+      "input": "West Ajo Way",
+      "normalized": "west ajo way",
+      "type": null,
+      "name": "west ajo way"
+    },
+    {
+      "input": "West Avenida Cresta",
+      "normalized": "west avenida cresta",
+      "type": null,
+      "name": "west avenida cresta"
+    },
+    {
+      "input": "West Boulder Street",
+      "normalized": "west boulder street",
+      "type": null,
+      "name": "west boulder street"
+    },
+    {
+      "input": "West Calle Campana de Plata",
+      "normalized": "west calle campana de plata",
+      "type": null,
+      "name": "west calle campana de plata"
+    },
+    {
+      "input": "West Calle Guadalajara",
+      "normalized": "west calle guadalajara",
+      "type": null,
+      "name": "west calle guadalajara"
+    },
+    {
+      "input": "West Calle Progresso",
+      "normalized": "west calle progresso",
+      "type": null,
+      "name": "west calle progresso"
+    },
+    {
+      "input": "West Camino Claveles",
+      "normalized": "west camino claveles",
+      "type": null,
+      "name": "west camino claveles"
+    },
+    {
+      "input": "West Circle B Drive",
+      "normalized": "west circle b drive",
+      "type": null,
+      "name": "west circle b drive"
+    },
+    {
+      "input": "West Dahil Road",
+      "normalized": "west dahil road",
+      "type": null,
+      "name": "west dahil road"
+    },
+    {
+      "input": "West Drachman Street",
+      "normalized": "west drachman street",
+      "type": null,
+      "name": "west drachman street"
+    },
+    {
+      "input": "West Flores Street",
+      "normalized": "west flores street",
+      "type": null,
+      "name": "west flores street"
+    },
+    {
+      "input": "West Green Street",
+      "normalized": "west green street",
+      "type": null,
+      "name": "west green street"
+    },
+    {
+      "input": "West Hualapai Road",
+      "normalized": "west hualapai road",
+      "type": null,
+      "name": "west hualapai road"
+    },
+    {
+      "input": "West Kandy Court",
+      "normalized": "west kandy court",
+      "type": null,
+      "name": "west kandy court"
+    },
+    {
+      "input": "West Leawood Drive",
+      "normalized": "west leawood drive",
+      "type": null,
+      "name": "west leawood drive"
+    },
+    {
+      "input": "West Mc Cormick Street",
+      "normalized": "west mc cormick street",
+      "type": null,
+      "name": "west mc cormick street"
+    },
+    {
+      "input": "West Morgan Road",
+      "normalized": "west morgan road",
+      "type": null,
+      "name": "west morgan road"
+    },
+    {
+      "input": "West Paine Trail",
+      "normalized": "west paine trail",
+      "type": null,
+      "name": "west paine trail"
+    },
+    {
+      "input": "West Pennington Street",
+      "normalized": "west pennington street",
+      "type": null,
+      "name": "west pennington street"
+    },
+    {
+      "input": "West President Street",
+      "normalized": "west president street",
+      "type": null,
+      "name": "west president street"
+    }
+  ]
+}

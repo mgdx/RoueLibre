@@ -1,0 +1,797 @@
+{
+  "language": "de",
+  "cases": [
+    {
+      "input": "Bahnhofstraße",
+      "normalized": "bahnhofstrasse",
+      "type": null,
+      "name": "bahnhofstrasse"
+    },
+    {
+      "input": "Bahnhofstrasse",
+      "normalized": "bahnhofstrasse",
+      "type": null,
+      "name": "bahnhofstrasse"
+    },
+    {
+      "input": "Marienplatz",
+      "normalized": "marienplatz",
+      "type": null,
+      "name": "marienplatz"
+    },
+    {
+      "input": "Unter den Linden",
+      "normalized": "unter den linden",
+      "type": null,
+      "name": "unter den linden"
+    },
+    {
+      "input": "Kurfürstendamm",
+      "normalized": "kurfurstendamm",
+      "type": null,
+      "name": "kurfurstendamm"
+    },
+    {
+      "input": "Große Freiheit",
+      "normalized": "grosse freiheit",
+      "type": null,
+      "name": "grosse freiheit"
+    },
+    {
+      "input": "St.-Pauli-Landungsbrücken",
+      "normalized": "sankt pauli landungsbrucken",
+      "type": null,
+      "name": "sankt pauli landungsbrucken"
+    },
+    {
+      "input": "Am Hauptbahnhof",
+      "normalized": "am hauptbahnhof",
+      "type": null,
+      "name": "am hauptbahnhof"
+    },
+    {
+      "input": "Prinzregentenstraße",
+      "normalized": "prinzregentenstrasse",
+      "type": null,
+      "name": "prinzregentenstrasse"
+    },
+    {
+      "input": "Karl-Marx-Allee",
+      "normalized": "karl marx allee",
+      "type": null,
+      "name": "karl marx allee"
+    },
+    {
+      "input": "Schloßplatz",
+      "normalized": "schlossplatz",
+      "type": null,
+      "name": "schlossplatz"
+    },
+    {
+      "input": "Gr. Bleichen",
+      "normalized": "gross bleichen",
+      "type": null,
+      "name": "gross bleichen"
+    },
+    {
+      "input": "Dellbrückstraße",
+      "normalized": "dellbruckstrasse",
+      "type": null,
+      "name": "dellbruckstrasse"
+    },
+    {
+      "input": "Fürstentelefon",
+      "normalized": "furstentelefon",
+      "type": null,
+      "name": "furstentelefon"
+    },
+    {
+      "input": "Kaffeemühle",
+      "normalized": "kaffeemuhle",
+      "type": null,
+      "name": "kaffeemuhle"
+    },
+    {
+      "input": "Das rote Boot",
+      "normalized": "das rote boot",
+      "type": null,
+      "name": "das rote boot"
+    },
+    {
+      "input": "Technik Zweirad-Museum",
+      "normalized": "technik zweirad museum",
+      "type": null,
+      "name": "technik zweirad museum"
+    },
+    {
+      "input": "Peenemünder Werkbahn",
+      "normalized": "peenemunder werkbahn",
+      "type": null,
+      "name": "peenemunder werkbahn"
+    },
+    {
+      "input": "Theaterakademie Vorpommern",
+      "normalized": "theaterakademie vorpommern",
+      "type": null,
+      "name": "theaterakademie vorpommern"
+    },
+    {
+      "input": "Muzeum Latarnictwa i Ratownictwa Morskiego",
+      "normalized": "muzeum latarnictwa i ratownictwa morskiego",
+      "type": null,
+      "name": "muzeum latarnictwa i ratownictwa morskiego"
+    },
+    {
+      "input": "Platz der Jugend",
+      "normalized": "platz der jugend",
+      "type": "platz",
+      "name": "der jugend"
+    },
+    {
+      "input": "Wolgast",
+      "normalized": "wolgast",
+      "type": null,
+      "name": "wolgast"
+    },
+    {
+      "input": "Ückeritz",
+      "normalized": "uckeritz",
+      "type": null,
+      "name": "uckeritz"
+    },
+    {
+      "input": "Mühlenstein der ehemaligen NeuSallenthiner Windmühle",
+      "normalized": "muhlenstein der ehemaligen neusallenthiner windmuhle",
+      "type": null,
+      "name": "muhlenstein der ehemaligen neusallenthiner windmuhle"
+    },
+    {
+      "input": "Traktorbahn",
+      "normalized": "traktorbahn",
+      "type": null,
+      "name": "traktorbahn"
+    },
+    {
+      "input": "Kletterparcours",
+      "normalized": "kletterparcours",
+      "type": null,
+      "name": "kletterparcours"
+    },
+    {
+      "input": "Ulica, Powstańców Śląskich",
+      "normalized": "ulica powstancow slaskich",
+      "type": null,
+      "name": "ulica powstancow slaskich"
+    },
+    {
+      "input": "11 Listopada",
+      "normalized": "11 listopada",
+      "type": null,
+      "name": "11 listopada"
+    },
+    {
+      "input": "7B",
+      "normalized": "7b",
+      "type": null,
+      "name": "7b"
+    },
+    {
+      "input": "Aleja A",
+      "normalized": "aleja a",
+      "type": null,
+      "name": "aleja a"
+    },
+    {
+      "input": "Aleja F",
+      "normalized": "aleja f",
+      "type": null,
+      "name": "aleja f"
+    },
+    {
+      "input": "aleja Wiązowa",
+      "normalized": "aleja wiazowa",
+      "type": null,
+      "name": "aleja wiazowa"
+    },
+    {
+      "input": "Alter Peeneweg",
+      "normalized": "alter peeneweg",
+      "type": null,
+      "name": "alter peeneweg"
+    },
+    {
+      "input": "Am Birkenhain",
+      "normalized": "am birkenhain",
+      "type": null,
+      "name": "am birkenhain"
+    },
+    {
+      "input": "Am Erlebnishof",
+      "normalized": "am erlebnishof",
+      "type": null,
+      "name": "am erlebnishof"
+    },
+    {
+      "input": "Am Glauben",
+      "normalized": "am glauben",
+      "type": null,
+      "name": "am glauben"
+    },
+    {
+      "input": "Am Hünengrab",
+      "normalized": "am hunengrab",
+      "type": null,
+      "name": "am hunengrab"
+    },
+    {
+      "input": "Am Kirchberg",
+      "normalized": "am kirchberg",
+      "type": null,
+      "name": "am kirchberg"
+    },
+    {
+      "input": "Am Mühlenbach",
+      "normalized": "am muhlenbach",
+      "type": null,
+      "name": "am muhlenbach"
+    },
+    {
+      "input": "Am Schanzberg",
+      "normalized": "am schanzberg",
+      "type": null,
+      "name": "am schanzberg"
+    },
+    {
+      "input": "Am Sonnenacker",
+      "normalized": "am sonnenacker",
+      "type": null,
+      "name": "am sonnenacker"
+    },
+    {
+      "input": "Am Strauchelfeld",
+      "normalized": "am strauchelfeld",
+      "type": null,
+      "name": "am strauchelfeld"
+    },
+    {
+      "input": "Am Wäldchen",
+      "normalized": "am waldchen",
+      "type": null,
+      "name": "am waldchen"
+    },
+    {
+      "input": "Am Wolfskrug",
+      "normalized": "am wolfskrug",
+      "type": null,
+      "name": "am wolfskrug"
+    },
+    {
+      "input": "An den Kreischen",
+      "normalized": "an den kreischen",
+      "type": null,
+      "name": "an den kreischen"
+    },
+    {
+      "input": "An der Feuerwehr",
+      "normalized": "an der feuerwehr",
+      "type": null,
+      "name": "an der feuerwehr"
+    },
+    {
+      "input": "An der Seebrücke",
+      "normalized": "an der seebrucke",
+      "type": null,
+      "name": "an der seebrucke"
+    },
+    {
+      "input": "Apothekerweg",
+      "normalized": "apothekerweg",
+      "type": null,
+      "name": "apothekerweg"
+    },
+    {
+      "input": "August-Dähn-Straße",
+      "normalized": "august dahn strasse",
+      "type": null,
+      "name": "august dahn strasse"
+    },
+    {
+      "input": "Bahnhof",
+      "normalized": "bahnhof",
+      "type": null,
+      "name": "bahnhof"
+    },
+    {
+      "input": "Barlickiego",
+      "normalized": "barlickiego",
+      "type": null,
+      "name": "barlickiego"
+    },
+    {
+      "input": "Benzer Chaussee",
+      "normalized": "benzer chaussee",
+      "type": null,
+      "name": "benzer chaussee"
+    },
+    {
+      "input": "Birkenhainring",
+      "normalized": "birkenhainring",
+      "type": null,
+      "name": "birkenhainring"
+    },
+    {
+      "input": "Bolesława Chrobrego",
+      "normalized": "bolesława chrobrego",
+      "type": null,
+      "name": "bolesława chrobrego"
+    },
+    {
+      "input": "Breite Straße",
+      "normalized": "breite strasse",
+      "type": null,
+      "name": "breite strasse"
+    },
+    {
+      "input": "Bungalowsiedlung",
+      "normalized": "bungalowsiedlung",
+      "type": null,
+      "name": "bungalowsiedlung"
+    },
+    {
+      "input": "Chausseestraße",
+      "normalized": "chausseestrasse",
+      "type": null,
+      "name": "chausseestrasse"
+    },
+    {
+      "input": "Damerow",
+      "normalized": "damerow",
+      "type": null,
+      "name": "damerow"
+    },
+    {
+      "input": "dojazd pożarowy 31",
+      "normalized": "dojazd pozarowy 31",
+      "type": null,
+      "name": "dojazd pozarowy 31"
+    },
+    {
+      "input": "Dr.-Theodor-Neubauer-Straße",
+      "normalized": "dr theodor neubauer strasse",
+      "type": null,
+      "name": "dr theodor neubauer strasse"
+    },
+    {
+      "input": "Drosselweg",
+      "normalized": "drosselweg",
+      "type": null,
+      "name": "drosselweg"
+    },
+    {
+      "input": "Emilii Gierczak",
+      "normalized": "emilii gierczak",
+      "type": null,
+      "name": "emilii gierczak"
+    },
+    {
+      "input": "Feldstraße",
+      "normalized": "feldstrasse",
+      "type": null,
+      "name": "feldstrasse"
+    },
+    {
+      "input": "Fischerweg",
+      "normalized": "fischerweg",
+      "type": null,
+      "name": "fischerweg"
+    },
+    {
+      "input": "Frankstraße",
+      "normalized": "frankstrasse",
+      "type": null,
+      "name": "frankstrasse"
+    },
+    {
+      "input": "Friedrichstraße",
+      "normalized": "friedrichstrasse",
+      "type": null,
+      "name": "friedrichstrasse"
+    },
+    {
+      "input": "Gartenberg",
+      "normalized": "gartenberg",
+      "type": null,
+      "name": "gartenberg"
+    },
+    {
+      "input": "Geltinger Weg",
+      "normalized": "geltinger weg",
+      "type": null,
+      "name": "geltinger weg"
+    },
+    {
+      "input": "Gneveziner Damm",
+      "normalized": "gneveziner damm",
+      "type": null,
+      "name": "gneveziner damm"
+    },
+    {
+      "input": "Greifenstraße",
+      "normalized": "greifenstrasse",
+      "type": null,
+      "name": "greifenstrasse"
+    },
+    {
+      "input": "Grüne Trift",
+      "normalized": "grune trift",
+      "type": null,
+      "name": "grune trift"
+    },
+    {
+      "input": "Hafenweg",
+      "normalized": "hafenweg",
+      "type": null,
+      "name": "hafenweg"
+    },
+    {
+      "input": "Heberleinstraße",
+      "normalized": "heberleinstrasse",
+      "type": null,
+      "name": "heberleinstrasse"
+    },
+    {
+      "input": "Hellerstraße",
+      "normalized": "hellerstrasse",
+      "type": null,
+      "name": "hellerstrasse"
+    },
+    {
+      "input": "Hexenheide",
+      "normalized": "hexenheide",
+      "type": null,
+      "name": "hexenheide"
+    },
+    {
+      "input": "Hohenthorstraße",
+      "normalized": "hohenthorstrasse",
+      "type": null,
+      "name": "hohenthorstrasse"
+    },
+    {
+      "input": "Hugo-Elsner-Straße",
+      "normalized": "hugo elsner strasse",
+      "type": null,
+      "name": "hugo elsner strasse"
+    },
+    {
+      "input": "Im Mühlenkamp",
+      "normalized": "im muhlenkamp",
+      "type": null,
+      "name": "im muhlenkamp"
+    },
+    {
+      "input": "Jägerstraße",
+      "normalized": "jagerstrasse",
+      "type": null,
+      "name": "jagerstrasse"
+    },
+    {
+      "input": "Johannisberg",
+      "normalized": "johannisberg",
+      "type": null,
+      "name": "johannisberg"
+    },
+    {
+      "input": "Juliusza Słowackiego",
+      "normalized": "juliusza słowackiego",
+      "type": null,
+      "name": "juliusza słowackiego"
+    },
+    {
+      "input": "Kapitänsweg",
+      "normalized": "kapitansweg",
+      "type": null,
+      "name": "kapitansweg"
+    },
+    {
+      "input": "Karnin",
+      "normalized": "karnin",
+      "type": null,
+      "name": "karnin"
+    },
+    {
+      "input": "Kaszubska",
+      "normalized": "kaszubska",
+      "type": null,
+      "name": "kaszubska"
+    },
+    {
+      "input": "Kirchenstraße",
+      "normalized": "kirchenstrasse",
+      "type": null,
+      "name": "kirchenstrasse"
+    },
+    {
+      "input": "Kleingartengelände",
+      "normalized": "kleingartengelande",
+      "type": null,
+      "name": "kleingartengelande"
+    },
+    {
+      "input": "Kommune",
+      "normalized": "kommune",
+      "type": null,
+      "name": "kommune"
+    },
+    {
+      "input": "Kossaków",
+      "normalized": "kossakow",
+      "type": null,
+      "name": "kossakow"
+    },
+    {
+      "input": "Krösliner Chaussee",
+      "normalized": "krosliner chaussee",
+      "type": null,
+      "name": "krosliner chaussee"
+    },
+    {
+      "input": "Kurze Straße",
+      "normalized": "kurze strasse",
+      "type": null,
+      "name": "kurze strasse"
+    },
+    {
+      "input": "Lassaner Straße",
+      "normalized": "lassaner strasse",
+      "type": null,
+      "name": "lassaner strasse"
+    },
+    {
+      "input": "Libnow",
+      "normalized": "libnow",
+      "type": null,
+      "name": "libnow"
+    },
+    {
+      "input": "Loddiner Landweg",
+      "normalized": "loddiner landweg",
+      "type": null,
+      "name": "loddiner landweg"
+    },
+    {
+      "input": "Lutycka",
+      "normalized": "lutycka",
+      "type": null,
+      "name": "lutycka"
+    },
+    {
+      "input": "Marktplatz",
+      "normalized": "marktplatz",
+      "type": null,
+      "name": "marktplatz"
+    },
+    {
+      "input": "Mazurska",
+      "normalized": "mazurska",
+      "type": null,
+      "name": "mazurska"
+    },
+    {
+      "input": "Mieszka I",
+      "normalized": "mieszka i",
+      "type": null,
+      "name": "mieszka i"
+    },
+    {
+      "input": "Mönchow",
+      "normalized": "monchow",
+      "type": null,
+      "name": "monchow"
+    },
+    {
+      "input": "Müggenhof",
+      "normalized": "muggenhof",
+      "type": null,
+      "name": "muggenhof"
+    },
+    {
+      "input": "Nabrzeże Czyszczenia Barek",
+      "normalized": "nabrzeze czyszczenia barek",
+      "type": null,
+      "name": "nabrzeze czyszczenia barek"
+    },
+    {
+      "input": "Netzebander Straße",
+      "normalized": "netzebander strasse",
+      "type": null,
+      "name": "netzebander strasse"
+    },
+    {
+      "input": "Neuer Weg",
+      "normalized": "neuer weg",
+      "type": null,
+      "name": "neuer weg"
+    },
+    {
+      "input": "Norweska",
+      "normalized": "norweska",
+      "type": null,
+      "name": "norweska"
+    },
+    {
+      "input": "Okólna",
+      "normalized": "okolna",
+      "type": null,
+      "name": "okolna"
+    },
+    {
+      "input": "Owocowa",
+      "normalized": "owocowa",
+      "type": null,
+      "name": "owocowa"
+    },
+    {
+      "input": "Pasker Weg",
+      "normalized": "pasker weg",
+      "type": null,
+      "name": "pasker weg"
+    },
+    {
+      "input": "Peenestraße",
+      "normalized": "peenestrasse",
+      "type": null,
+      "name": "peenestrasse"
+    },
+    {
+      "input": "Pinnow",
+      "normalized": "pinnow",
+      "type": null,
+      "name": "pinnow"
+    },
+    {
+      "input": "Platz des Friedens",
+      "normalized": "platz des friedens",
+      "type": "platz",
+      "name": "des friedens"
+    },
+    {
+      "input": "Poznańska",
+      "normalized": "poznanska",
+      "type": null,
+      "name": "poznanska"
+    },
+    {
+      "input": "Querstraße",
+      "normalized": "querstrasse",
+      "type": null,
+      "name": "querstrasse"
+    },
+    {
+      "input": "Reestower Straße",
+      "normalized": "reestower strasse",
+      "type": null,
+      "name": "reestower strasse"
+    },
+    {
+      "input": "Robert-Koch-Straße",
+      "normalized": "robert koch strasse",
+      "type": null,
+      "name": "robert koch strasse"
+    },
+    {
+      "input": "Rycerska",
+      "normalized": "rycerska",
+      "type": null,
+      "name": "rycerska"
+    },
+    {
+      "input": "St. Pauli",
+      "normalized": "sankt pauli",
+      "type": null,
+      "name": "sankt pauli"
+    },
+    {
+      "input": "Schlehenweg",
+      "normalized": "schlehenweg",
+      "type": null,
+      "name": "schlehenweg"
+    },
+    {
+      "input": "Schulweg",
+      "normalized": "schulweg",
+      "type": null,
+      "name": "schulweg"
+    },
+    {
+      "input": "Seeadler-Damm",
+      "normalized": "seeadler damm",
+      "type": null,
+      "name": "seeadler damm"
+    },
+    {
+      "input": "Sellin",
+      "normalized": "sellin",
+      "type": null,
+      "name": "sellin"
+    },
+    {
+      "input": "Sienkiewicza",
+      "normalized": "sienkiewicza",
+      "type": null,
+      "name": "sienkiewicza"
+    },
+    {
+      "input": "Spechtweg",
+      "normalized": "spechtweg",
+      "type": null,
+      "name": "spechtweg"
+    },
+    {
+      "input": "Stefana Jaracza",
+      "normalized": "stefana jaracza",
+      "type": null,
+      "name": "stefana jaracza"
+    },
+    {
+      "input": "Stolperstraße",
+      "normalized": "stolperstrasse",
+      "type": null,
+      "name": "stolperstrasse"
+    },
+    {
+      "input": "Straße zur Koppel",
+      "normalized": "strasse zur koppel",
+      "type": "strasse",
+      "name": "zur koppel"
+    },
+    {
+      "input": "Swinemünder Straße",
+      "normalized": "swinemunder strasse",
+      "type": null,
+      "name": "swinemunder strasse"
+    },
+    {
+      "input": "Teichweg",
+      "normalized": "teichweg",
+      "type": null,
+      "name": "teichweg"
+    },
+    {
+      "input": "Triftstraße",
+      "normalized": "triftstrasse",
+      "type": null,
+      "name": "triftstrasse"
+    },
+    {
+      "input": "Ujejskiego",
+      "normalized": "ujejskiego",
+      "type": null,
+      "name": "ujejskiego"
+    },
+    {
+      "input": "Vinetastraße",
+      "normalized": "vinetastrasse",
+      "type": null,
+      "name": "vinetastrasse"
+    },
+    {
+      "input": "Waldsiedlung",
+      "normalized": "waldsiedlung",
+      "type": null,
+      "name": "waldsiedlung"
+    },
+    {
+      "input": "Waschensee",
+      "normalized": "waschensee",
+      "type": null,
+      "name": "waschensee"
+    },
+    {
+      "input": "Weiblitz",
+      "normalized": "weiblitz",
+      "type": null,
+      "name": "weiblitz"
+    }
+  ]
+}

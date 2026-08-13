@@ -1,0 +1,773 @@
+{
+  "language": "sv",
+  "cases": [
+    {
+      "input": "Drottninggatan",
+      "normalized": "drottninggatan",
+      "type": null,
+      "name": "drottninggatan"
+    },
+    {
+      "input": "Sveavägen",
+      "normalized": "sveavagen",
+      "type": null,
+      "name": "sveavagen"
+    },
+    {
+      "input": "Kungsholmstorg",
+      "normalized": "kungsholmstorg",
+      "type": null,
+      "name": "kungsholmstorg"
+    },
+    {
+      "input": "Odenplan",
+      "normalized": "odenplan",
+      "type": null,
+      "name": "odenplan"
+    },
+    {
+      "input": "Sankt Eriksgatan",
+      "normalized": "sankt eriksgatan",
+      "type": null,
+      "name": "sankt eriksgatan"
+    },
+    {
+      "input": "Götgatan",
+      "normalized": "gotgatan",
+      "type": null,
+      "name": "gotgatan"
+    },
+    {
+      "input": "Norra Bantorget",
+      "normalized": "norra bantorget",
+      "type": null,
+      "name": "norra bantorget"
+    },
+    {
+      "input": "Slussplan",
+      "normalized": "slussplan",
+      "type": null,
+      "name": "slussplan"
+    },
+    {
+      "input": "Sockerbitstorget",
+      "normalized": "sockerbitstorget",
+      "type": null,
+      "name": "sockerbitstorget"
+    },
+    {
+      "input": "Floragången",
+      "normalized": "floragangen",
+      "type": null,
+      "name": "floragangen"
+    },
+    {
+      "input": "Ola Billgrens plats",
+      "normalized": "ola billgrens plats",
+      "type": null,
+      "name": "ola billgrens plats"
+    },
+    {
+      "input": "Gustav Adolfs torg",
+      "normalized": "gustav adolfs torg",
+      "type": null,
+      "name": "gustav adolfs torg"
+    },
+    {
+      "input": "Rosengård",
+      "normalized": "rosengard",
+      "type": null,
+      "name": "rosengard"
+    },
+    {
+      "input": "I love Malmo",
+      "normalized": "i love malmo",
+      "type": null,
+      "name": "i love malmo"
+    },
+    {
+      "input": "Abbotsgatan",
+      "normalized": "abbotsgatan",
+      "type": null,
+      "name": "abbotsgatan"
+    },
+    {
+      "input": "Åkerbärsgränd",
+      "normalized": "akerbarsgrand",
+      "type": null,
+      "name": "akerbarsgrand"
+    },
+    {
+      "input": "Almlyckegränd",
+      "normalized": "almlyckegrand",
+      "type": null,
+      "name": "almlyckegrand"
+    },
+    {
+      "input": "Andersgatan",
+      "normalized": "andersgatan",
+      "type": null,
+      "name": "andersgatan"
+    },
+    {
+      "input": "Ankarstigen",
+      "normalized": "ankarstigen",
+      "type": null,
+      "name": "ankarstigen"
+    },
+    {
+      "input": "Armborstgränd",
+      "normalized": "armborstgrand",
+      "type": null,
+      "name": "armborstgrand"
+    },
+    {
+      "input": "Augustenborgsvägen",
+      "normalized": "augustenborgsvagen",
+      "type": null,
+      "name": "augustenborgsvagen"
+    },
+    {
+      "input": "Bågängsstigen",
+      "normalized": "bagangsstigen",
+      "type": null,
+      "name": "bagangsstigen"
+    },
+    {
+      "input": "Bariumgatan",
+      "normalized": "bariumgatan",
+      "type": null,
+      "name": "bariumgatan"
+    },
+    {
+      "input": "Beijerskajen",
+      "normalized": "beijerskajen",
+      "type": null,
+      "name": "beijerskajen"
+    },
+    {
+      "input": "Bersågatan",
+      "normalized": "bersagatan",
+      "type": null,
+      "name": "bersagatan"
+    },
+    {
+      "input": "Bjällhögsgatan",
+      "normalized": "bjallhogsgatan",
+      "type": null,
+      "name": "bjallhogsgatan"
+    },
+    {
+      "input": "Blåhakestigen",
+      "normalized": "blahakestigen",
+      "type": null,
+      "name": "blahakestigen"
+    },
+    {
+      "input": "Bodilsgatan",
+      "normalized": "bodilsgatan",
+      "type": null,
+      "name": "bodilsgatan"
+    },
+    {
+      "input": "Borggatan",
+      "normalized": "borggatan",
+      "type": null,
+      "name": "borggatan"
+    },
+    {
+      "input": "Broddagatan",
+      "normalized": "broddagatan",
+      "type": null,
+      "name": "broddagatan"
+    },
+    {
+      "input": "Buskmätaregatan",
+      "normalized": "buskmataregatan",
+      "type": null,
+      "name": "buskmataregatan"
+    },
+    {
+      "input": "Carl Flormansgatan",
+      "normalized": "carl flormansgatan",
+      "type": null,
+      "name": "carl flormansgatan"
+    },
+    {
+      "input": "Citadellsvägen",
+      "normalized": "citadellsvagen",
+      "type": null,
+      "name": "citadellsvagen"
+    },
+    {
+      "input": "Dalbyvägen",
+      "normalized": "dalbyvagen",
+      "type": null,
+      "name": "dalbyvagen"
+    },
+    {
+      "input": "Diakongatan",
+      "normalized": "diakongatan",
+      "type": null,
+      "name": "diakongatan"
+    },
+    {
+      "input": "Donaugatan",
+      "normalized": "donaugatan",
+      "type": null,
+      "name": "donaugatan"
+    },
+    {
+      "input": "Edgrens allé",
+      "normalized": "edgrens alle",
+      "type": null,
+      "name": "edgrens alle"
+    },
+    {
+      "input": "Eldviksgatan",
+      "normalized": "eldviksgatan",
+      "type": null,
+      "name": "eldviksgatan"
+    },
+    {
+      "input": "Ensittargången",
+      "normalized": "ensittargangen",
+      "type": null,
+      "name": "ensittargangen"
+    },
+    {
+      "input": "Estlandsgatan",
+      "normalized": "estlandsgatan",
+      "type": null,
+      "name": "estlandsgatan"
+    },
+    {
+      "input": "Farborets väg",
+      "normalized": "farborets vag",
+      "type": null,
+      "name": "farborets vag"
+    },
+    {
+      "input": "Fisktärnevägen",
+      "normalized": "fisktarnevagen",
+      "type": null,
+      "name": "fisktarnevagen"
+    },
+    {
+      "input": "Flygfältsvägen",
+      "normalized": "flygfaltsvagen",
+      "type": null,
+      "name": "flygfaltsvagen"
+    },
+    {
+      "input": "Fosiedalsvägen",
+      "normalized": "fosiedalsvagen",
+      "type": null,
+      "name": "fosiedalsvagen"
+    },
+    {
+      "input": "Fritz Bauers gata",
+      "normalized": "fritz bauers gata",
+      "type": null,
+      "name": "fritz bauers gata"
+    },
+    {
+      "input": "Gamla Lundavägen",
+      "normalized": "gamla lundavagen",
+      "type": null,
+      "name": "gamla lundavagen"
+    },
+    {
+      "input": "Getekärrsvägen",
+      "normalized": "getekarrsvagen",
+      "type": null,
+      "name": "getekarrsvagen"
+    },
+    {
+      "input": "Glostorps kyrkostig",
+      "normalized": "glostorps kyrkostig",
+      "type": null,
+      "name": "glostorps kyrkostig"
+    },
+    {
+      "input": "Gräsandsvägen",
+      "normalized": "grasandsvagen",
+      "type": null,
+      "name": "grasandsvagen"
+    },
+    {
+      "input": "Grönvångsgatan",
+      "normalized": "gronvangsgatan",
+      "type": null,
+      "name": "gronvangsgatan"
+    },
+    {
+      "input": "Gustav Möllers gata",
+      "normalized": "gustav mollers gata",
+      "type": null,
+      "name": "gustav mollers gata"
+    },
+    {
+      "input": "Hallenborgs gata",
+      "normalized": "hallenborgs gata",
+      "type": null,
+      "name": "hallenborgs gata"
+    },
+    {
+      "input": "Hantverkaregatan",
+      "normalized": "hantverkaregatan",
+      "type": null,
+      "name": "hantverkaregatan"
+    },
+    {
+      "input": "Hedmätaregatan",
+      "normalized": "hedmataregatan",
+      "type": null,
+      "name": "hedmataregatan"
+    },
+    {
+      "input": "Hermanstorpsvägen",
+      "normalized": "hermanstorpsvagen",
+      "type": null,
+      "name": "hermanstorpsvagen"
+    },
+    {
+      "input": "Höbalsgatan",
+      "normalized": "hobalsgatan",
+      "type": null,
+      "name": "hobalsgatan"
+    },
+    {
+      "input": "Hökgatan",
+      "normalized": "hokgatan",
+      "type": null,
+      "name": "hokgatan"
+    },
+    {
+      "input": "Höstgatan",
+      "normalized": "hostgatan",
+      "type": null,
+      "name": "hostgatan"
+    },
+    {
+      "input": "Hyllie kyrkoväg",
+      "normalized": "hyllie kyrkovag",
+      "type": null,
+      "name": "hyllie kyrkovag"
+    },
+    {
+      "input": "Ingvallavägen",
+      "normalized": "ingvallavagen",
+      "type": null,
+      "name": "ingvallavagen"
+    },
+    {
+      "input": "Järneksgatan",
+      "normalized": "jarneksgatan",
+      "type": null,
+      "name": "jarneksgatan"
+    },
+    {
+      "input": "Jupitergatan",
+      "normalized": "jupitergatan",
+      "type": null,
+      "name": "jupitergatan"
+    },
+    {
+      "input": "Kalvhagen",
+      "normalized": "kalvhagen",
+      "type": null,
+      "name": "kalvhagen"
+    },
+    {
+      "input": "Kärleksstigen",
+      "normalized": "karleksstigen",
+      "type": null,
+      "name": "karleksstigen"
+    },
+    {
+      "input": "Kattviksgången",
+      "normalized": "kattviksgangen",
+      "type": null,
+      "name": "kattviksgangen"
+    },
+    {
+      "input": "Klaffbron",
+      "normalized": "klaffbron",
+      "type": null,
+      "name": "klaffbron"
+    },
+    {
+      "input": "Knivgatan",
+      "normalized": "knivgatan",
+      "type": null,
+      "name": "knivgatan"
+    },
+    {
+      "input": "Kompasgatan",
+      "normalized": "kompasgatan",
+      "type": null,
+      "name": "kompasgatan"
+    },
+    {
+      "input": "Körsbärsgatan",
+      "normalized": "korsbarsgatan",
+      "type": null,
+      "name": "korsbarsgatan"
+    },
+    {
+      "input": "Krikongatan",
+      "normalized": "krikongatan",
+      "type": null,
+      "name": "krikongatan"
+    },
+    {
+      "input": "Krusegatan",
+      "normalized": "krusegatan",
+      "type": null,
+      "name": "krusegatan"
+    },
+    {
+      "input": "Kuskgatan",
+      "normalized": "kuskgatan",
+      "type": null,
+      "name": "kuskgatan"
+    },
+    {
+      "input": "Lagunavägen",
+      "normalized": "lagunavagen",
+      "type": null,
+      "name": "lagunavagen"
+    },
+    {
+      "input": "Lars Ols Väg",
+      "normalized": "lars ols vag",
+      "type": null,
+      "name": "lars ols vag"
+    },
+    {
+      "input": "Ligustergatan",
+      "normalized": "ligustergatan",
+      "type": null,
+      "name": "ligustergatan"
+    },
+    {
+      "input": "Lindängsvägen",
+      "normalized": "lindangsvagen",
+      "type": null,
+      "name": "lindangsvagen"
+    },
+    {
+      "input": "Ljungholmsgågen",
+      "normalized": "ljungholmsgagen",
+      "type": null,
+      "name": "ljungholmsgagen"
+    },
+    {
+      "input": "Lotshusgatan",
+      "normalized": "lotshusgatan",
+      "type": null,
+      "name": "lotshusgatan"
+    },
+    {
+      "input": "Lyckesholmsgatan",
+      "normalized": "lyckesholmsgatan",
+      "type": null,
+      "name": "lyckesholmsgatan"
+    },
+    {
+      "input": "Mångatan",
+      "normalized": "mangatan",
+      "type": null,
+      "name": "mangatan"
+    },
+    {
+      "input": "Mary Hemmings gata",
+      "normalized": "mary hemmings gata",
+      "type": null,
+      "name": "mary hemmings gata"
+    },
+    {
+      "input": "Mellersta Tennisgränd",
+      "normalized": "mellersta tennisgrand",
+      "type": null,
+      "name": "mellersta tennisgrand"
+    },
+    {
+      "input": "Mölledalsgatan",
+      "normalized": "molledalsgatan",
+      "type": null,
+      "name": "molledalsgatan"
+    },
+    {
+      "input": "Musketörgatan",
+      "normalized": "musketorgatan",
+      "type": null,
+      "name": "musketorgatan"
+    },
+    {
+      "input": "Nils Anderssons gata",
+      "normalized": "nils anderssons gata",
+      "type": null,
+      "name": "nils anderssons gata"
+    },
+    {
+      "input": "Nordreflintvägen",
+      "normalized": "nordreflintvagen",
+      "type": null,
+      "name": "nordreflintvagen"
+    },
+    {
+      "input": "Norrbäcksgatan",
+      "normalized": "norrbacksgatan",
+      "type": null,
+      "name": "norrbacksgatan"
+    },
+    {
+      "input": "Nyodlingsgatan",
+      "normalized": "nyodlingsgatan",
+      "type": null,
+      "name": "nyodlingsgatan"
+    },
+    {
+      "input": "Olshögsgränd",
+      "normalized": "olshogsgrand",
+      "type": null,
+      "name": "olshogsgrand"
+    },
+    {
+      "input": "Östervärnsgatan",
+      "normalized": "ostervarnsgatan",
+      "type": null,
+      "name": "ostervarnsgatan"
+    },
+    {
+      "input": "Östra sjukhusgatan",
+      "normalized": "ostra sjukhusgatan",
+      "type": null,
+      "name": "ostra sjukhusgatan"
+    },
+    {
+      "input": "Paprikavägen",
+      "normalized": "paprikavagen",
+      "type": null,
+      "name": "paprikavagen"
+    },
+    {
+      "input": "Per Wickenbergsgatan",
+      "normalized": "per wickenbergsgatan",
+      "type": null,
+      "name": "per wickenbergsgatan"
+    },
+    {
+      "input": "Piongatan",
+      "normalized": "piongatan",
+      "type": null,
+      "name": "piongatan"
+    },
+    {
+      "input": "Portvaktsgatan",
+      "normalized": "portvaktsgatan",
+      "type": null,
+      "name": "portvaktsgatan"
+    },
+    {
+      "input": "Räfsgatan",
+      "normalized": "rafsgatan",
+      "type": null,
+      "name": "rafsgatan"
+    },
+    {
+      "input": "Revingehedsgatan",
+      "normalized": "revingehedsgatan",
+      "type": null,
+      "name": "revingehedsgatan"
+    },
+    {
+      "input": "Risholmsgatan",
+      "normalized": "risholmsgatan",
+      "type": null,
+      "name": "risholmsgatan"
+    },
+    {
+      "input": "Rörtornsgatan",
+      "normalized": "rortornsgatan",
+      "type": null,
+      "name": "rortornsgatan"
+    },
+    {
+      "input": "Rudhögsgatan",
+      "normalized": "rudhogsgatan",
+      "type": null,
+      "name": "rudhogsgatan"
+    },
+    {
+      "input": "Sagas gränd",
+      "normalized": "sagas grand",
+      "type": null,
+      "name": "sagas grand"
+    },
+    {
+      "input": "Sankt Knuts torg",
+      "normalized": "sankt knuts torg",
+      "type": null,
+      "name": "sankt knuts torg"
+    },
+    {
+      "input": "Segevägen",
+      "normalized": "segevagen",
+      "type": null,
+      "name": "segevagen"
+    },
+    {
+      "input": "Silvergransgatan",
+      "normalized": "silvergransgatan",
+      "type": null,
+      "name": "silvergransgatan"
+    },
+    {
+      "input": "Skabersjögatan",
+      "normalized": "skabersjogatan",
+      "type": null,
+      "name": "skabersjogatan"
+    },
+    {
+      "input": "Skimmelgatan",
+      "normalized": "skimmelgatan",
+      "type": null,
+      "name": "skimmelgatan"
+    },
+    {
+      "input": "Skultunagatan",
+      "normalized": "skultunagatan",
+      "type": null,
+      "name": "skultunagatan"
+    },
+    {
+      "input": "Slussgatan",
+      "normalized": "slussgatan",
+      "type": null,
+      "name": "slussgatan"
+    },
+    {
+      "input": "Snorkelgatan",
+      "normalized": "snorkelgatan",
+      "type": null,
+      "name": "snorkelgatan"
+    },
+    {
+      "input": "Södra Tennisgränd",
+      "normalized": "sodra tennisgrand",
+      "type": null,
+      "name": "sodra tennisgrand"
+    },
+    {
+      "input": "Solursgatan",
+      "normalized": "solursgatan",
+      "type": null,
+      "name": "solursgatan"
+    },
+    {
+      "input": "Spårvägsgatan",
+      "normalized": "sparvagsgatan",
+      "type": null,
+      "name": "sparvagsgatan"
+    },
+    {
+      "input": "Stadt Hamburgsgatan",
+      "normalized": "stadt hamburgsgatan",
+      "type": null,
+      "name": "stadt hamburgsgatan"
+    },
+    {
+      "input": "Stenhuggaregatan",
+      "normalized": "stenhuggaregatan",
+      "type": null,
+      "name": "stenhuggaregatan"
+    },
+    {
+      "input": "Storabackegatan",
+      "normalized": "storabackegatan",
+      "type": null,
+      "name": "storabackegatan"
+    },
+    {
+      "input": "Sturegatan",
+      "normalized": "sturegatan",
+      "type": null,
+      "name": "sturegatan"
+    },
+    {
+      "input": "Svängedammsgatan",
+      "normalized": "svangedammsgatan",
+      "type": null,
+      "name": "svangedammsgatan"
+    },
+    {
+      "input": "Syster Nannys stig",
+      "normalized": "syster nannys stig",
+      "type": null,
+      "name": "syster nannys stig"
+    },
+    {
+      "input": "Taxusgatan",
+      "normalized": "taxusgatan",
+      "type": null,
+      "name": "taxusgatan"
+    },
+    {
+      "input": "Toffelmakarens gränd",
+      "normalized": "toffelmakarens grand",
+      "type": null,
+      "name": "toffelmakarens grand"
+    },
+    {
+      "input": "Torsdagsgatan",
+      "normalized": "torsdagsgatan",
+      "type": null,
+      "name": "torsdagsgatan"
+    },
+    {
+      "input": "Triangeln",
+      "normalized": "triangeln",
+      "type": null,
+      "name": "triangeln"
+    },
+    {
+      "input": "Typografgatan",
+      "normalized": "typografgatan",
+      "type": null,
+      "name": "typografgatan"
+    },
+    {
+      "input": "Vadmalsvägen",
+      "normalized": "vadmalsvagen",
+      "type": null,
+      "name": "vadmalsvagen"
+    },
+    {
+      "input": "Varbergsgatan",
+      "normalized": "varbergsgatan",
+      "type": null,
+      "name": "varbergsgatan"
+    },
+    {
+      "input": "Västra Ansgarigatan",
+      "normalized": "vastra ansgarigatan",
+      "type": null,
+      "name": "vastra ansgarigatan"
+    },
+    {
+      "input": "Vegeholmsgatan",
+      "normalized": "vegeholmsgatan",
+      "type": null,
+      "name": "vegeholmsgatan"
+    },
+    {
+      "input": "Videdalsvägen",
+      "normalized": "videdalsvagen",
+      "type": null,
+      "name": "videdalsvagen"
+    }
+  ]
+}

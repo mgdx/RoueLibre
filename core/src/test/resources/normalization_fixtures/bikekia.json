@@ -1,0 +1,773 @@
+{
+  "language": "sk",
+  "cases": [
+    {
+      "input": "Obchodná",
+      "normalized": "obchodna",
+      "type": null,
+      "name": "obchodna"
+    },
+    {
+      "input": "nám. SNP",
+      "normalized": "namestie snp",
+      "type": "namestie",
+      "name": "snp"
+    },
+    {
+      "input": "Námestie slobody",
+      "normalized": "namestie slobody",
+      "type": "namestie",
+      "name": "slobody"
+    },
+    {
+      "input": "Hlavná ulica",
+      "normalized": "hlavna ulica",
+      "type": null,
+      "name": "hlavna ulica"
+    },
+    {
+      "input": "Trieda SNP",
+      "normalized": "trieda snp",
+      "type": "trieda",
+      "name": "snp"
+    },
+    {
+      "input": "Nábrežie armádneho generála Ludvíka Svobodu",
+      "normalized": "nabrezie armadneho generala ludvika svobodu",
+      "type": "nabrezie",
+      "name": "armadneho generala ludvika svobodu"
+    },
+    {
+      "input": "Most SNP",
+      "normalized": "most snp",
+      "type": "most",
+      "name": "snp"
+    },
+    {
+      "input": "Sady Janka Kráľa",
+      "normalized": "sady janka krala",
+      "type": "sady",
+      "name": "janka krala"
+    },
+    {
+      "input": "Brezany",
+      "normalized": "brezany",
+      "type": null,
+      "name": "brezany"
+    },
+    {
+      "input": "Majer",
+      "normalized": "majer",
+      "type": null,
+      "name": "majer"
+    },
+    {
+      "input": "Lietavská Lúčka",
+      "normalized": "lietavska lucka",
+      "type": null,
+      "name": "lietavska lucka"
+    },
+    {
+      "input": "Obecná knižnica Divinka s pobočkou v Lalinku",
+      "normalized": "obecna kniznica divinka s pobockou v lalinku",
+      "type": null,
+      "name": "obecna kniznica divinka s pobockou v lalinku"
+    },
+    {
+      "input": "Žilina predmestie",
+      "normalized": "zilina predmestie",
+      "type": null,
+      "name": "zilina predmestie"
+    },
+    {
+      "input": "Fedor F. Ruppeldt",
+      "normalized": "fedor f ruppeldt",
+      "type": null,
+      "name": "fedor f ruppeldt"
+    },
+    {
+      "input": "Žilinský Baťov kanál",
+      "normalized": "zilinsky batov kanal",
+      "type": null,
+      "name": "zilinsky batov kanal"
+    },
+    {
+      "input": "Bytčica",
+      "normalized": "bytcica",
+      "type": null,
+      "name": "bytcica"
+    },
+    {
+      "input": "Stráňavy",
+      "normalized": "stranavy",
+      "type": null,
+      "name": "stranavy"
+    },
+    {
+      "input": "Bôrik",
+      "normalized": "borik",
+      "type": null,
+      "name": "borik"
+    },
+    {
+      "input": "Hliny II",
+      "normalized": "hliny ii",
+      "type": null,
+      "name": "hliny ii"
+    },
+    {
+      "input": "Považský Chlmec",
+      "normalized": "povazsky chlmec",
+      "type": null,
+      "name": "povazsky chlmec"
+    },
+    {
+      "input": "Vlčince",
+      "normalized": "vlcince",
+      "type": null,
+      "name": "vlcince"
+    },
+    {
+      "input": "Žilinská Lehota",
+      "normalized": "zilinska lehota",
+      "type": null,
+      "name": "zilinska lehota"
+    },
+    {
+      "input": "Alexandra Rudnaya",
+      "normalized": "alexandra rudnaya",
+      "type": null,
+      "name": "alexandra rudnaya"
+    },
+    {
+      "input": "Andreja Lemeša",
+      "normalized": "andreja lemesa",
+      "type": null,
+      "name": "andreja lemesa"
+    },
+    {
+      "input": "Astrová",
+      "normalized": "astrova",
+      "type": null,
+      "name": "astrova"
+    },
+    {
+      "input": "Banícka",
+      "normalized": "banicka",
+      "type": null,
+      "name": "banicka"
+    },
+    {
+      "input": "Berylová",
+      "normalized": "berylova",
+      "type": null,
+      "name": "berylova"
+    },
+    {
+      "input": "Bláhova",
+      "normalized": "blahova",
+      "type": null,
+      "name": "blahova"
+    },
+    {
+      "input": "Borová",
+      "normalized": "borova",
+      "type": null,
+      "name": "borova"
+    },
+    {
+      "input": "Budatínska",
+      "normalized": "budatinska",
+      "type": null,
+      "name": "budatinska"
+    },
+    {
+      "input": "Bytčianska",
+      "normalized": "bytcianska",
+      "type": null,
+      "name": "bytcianska"
+    },
+    {
+      "input": "Čepiel",
+      "normalized": "cepiel",
+      "type": null,
+      "name": "cepiel"
+    },
+    {
+      "input": "Cesta na štadión",
+      "normalized": "cesta na stadion",
+      "type": "cesta",
+      "name": "na stadion"
+    },
+    {
+      "input": "Chotárna",
+      "normalized": "chotarna",
+      "type": null,
+      "name": "chotarna"
+    },
+    {
+      "input": "Czambelova",
+      "normalized": "czambelova",
+      "type": null,
+      "name": "czambelova"
+    },
+    {
+      "input": "Dedinská",
+      "normalized": "dedinska",
+      "type": null,
+      "name": "dedinska"
+    },
+    {
+      "input": "Do Magúr",
+      "normalized": "do magur",
+      "type": null,
+      "name": "do magur"
+    },
+    {
+      "input": "Do Rosiny",
+      "normalized": "do rosiny",
+      "type": null,
+      "name": "do rosiny"
+    },
+    {
+      "input": "Dr. Karola Kmeťku",
+      "normalized": "doktor karola kmetku",
+      "type": null,
+      "name": "doktor karola kmetku"
+    },
+    {
+      "input": "Dolová",
+      "normalized": "dolova",
+      "type": null,
+      "name": "dolova"
+    },
+    {
+      "input": "Družstevná",
+      "normalized": "druzstevna",
+      "type": null,
+      "name": "druzstevna"
+    },
+    {
+      "input": "Egrešová",
+      "normalized": "egresova",
+      "type": null,
+      "name": "egresova"
+    },
+    {
+      "input": "Farské schody",
+      "normalized": "farske schody",
+      "type": null,
+      "name": "farske schody"
+    },
+    {
+      "input": "Fialová",
+      "normalized": "fialova",
+      "type": null,
+      "name": "fialova"
+    },
+    {
+      "input": "Gabčíkova",
+      "normalized": "gabcikova",
+      "type": null,
+      "name": "gabcikova"
+    },
+    {
+      "input": "Gerlachovská",
+      "normalized": "gerlachovska",
+      "type": null,
+      "name": "gerlachovska"
+    },
+    {
+      "input": "Hallonova",
+      "normalized": "hallonova",
+      "type": null,
+      "name": "hallonova"
+    },
+    {
+      "input": "Hlavná cesta",
+      "normalized": "hlavna cesta",
+      "type": null,
+      "name": "hlavna cesta"
+    },
+    {
+      "input": "Holubia",
+      "normalized": "holubia",
+      "type": null,
+      "name": "holubia"
+    },
+    {
+      "input": "Horná Trnovská",
+      "normalized": "horna trnovska",
+      "type": null,
+      "name": "horna trnovska"
+    },
+    {
+      "input": "Hroznová",
+      "normalized": "hroznova",
+      "type": null,
+      "name": "hroznova"
+    },
+    {
+      "input": "J. Kráľa",
+      "normalized": "j krala",
+      "type": null,
+      "name": "j krala"
+    },
+    {
+      "input": "Jána Čajdu",
+      "normalized": "jana cajdu",
+      "type": null,
+      "name": "jana cajdu"
+    },
+    {
+      "input": "Jána Stražana",
+      "normalized": "jana strazana",
+      "type": null,
+      "name": "jana strazana"
+    },
+    {
+      "input": "Jarná",
+      "normalized": "jarna",
+      "type": null,
+      "name": "jarna"
+    },
+    {
+      "input": "Jedlíkova",
+      "normalized": "jedlikova",
+      "type": null,
+      "name": "jedlikova"
+    },
+    {
+      "input": "Jozefa Vuruma",
+      "normalized": "jozefa vuruma",
+      "type": null,
+      "name": "jozefa vuruma"
+    },
+    {
+      "input": "Juraja Slottu",
+      "normalized": "juraja slottu",
+      "type": null,
+      "name": "juraja slottu"
+    },
+    {
+      "input": "Kálov",
+      "normalized": "kalov",
+      "type": null,
+      "name": "kalov"
+    },
+    {
+      "input": "Karola Kmeťku",
+      "normalized": "karola kmetku",
+      "type": null,
+      "name": "karola kmetku"
+    },
+    {
+      "input": "Kollárova",
+      "normalized": "kollarova",
+      "type": null,
+      "name": "kollarova"
+    },
+    {
+      "input": "Košická",
+      "normalized": "kosicka",
+      "type": null,
+      "name": "kosicka"
+    },
+    {
+      "input": "Kristenovej",
+      "normalized": "kristenovej",
+      "type": null,
+      "name": "kristenovej"
+    },
+    {
+      "input": "Kubelíkova",
+      "normalized": "kubelikova",
+      "type": null,
+      "name": "kubelikova"
+    },
+    {
+      "input": "Kvetná",
+      "normalized": "kvetna",
+      "type": null,
+      "name": "kvetna"
+    },
+    {
+      "input": "Ľavobrežná",
+      "normalized": "lavobrezna",
+      "type": null,
+      "name": "lavobrezna"
+    },
+    {
+      "input": "Levočská",
+      "normalized": "levocska",
+      "type": null,
+      "name": "levocska"
+    },
+    {
+      "input": "Lipová",
+      "normalized": "lipova",
+      "type": null,
+      "name": "lipova"
+    },
+    {
+      "input": "Ľudovíta Fullu",
+      "normalized": "ludovita fullu",
+      "type": null,
+      "name": "ludovita fullu"
+    },
+    {
+      "input": "Majerská",
+      "normalized": "majerska",
+      "type": null,
+      "name": "majerska"
+    },
+    {
+      "input": "Malá voda",
+      "normalized": "mala voda",
+      "type": null,
+      "name": "mala voda"
+    },
+    {
+      "input": "Martinčekova",
+      "normalized": "martincekova",
+      "type": null,
+      "name": "martincekova"
+    },
+    {
+      "input": "McDrive",
+      "normalized": "mcdrive",
+      "type": null,
+      "name": "mcdrive"
+    },
+    {
+      "input": "Mikuláša Galandu",
+      "normalized": "mikulasa galandu",
+      "type": null,
+      "name": "mikulasa galandu"
+    },
+    {
+      "input": "Mlynská",
+      "normalized": "mlynska",
+      "type": null,
+      "name": "mlynska"
+    },
+    {
+      "input": "Mostová",
+      "normalized": "mostova",
+      "type": null,
+      "name": "mostova"
+    },
+    {
+      "input": "Na Bárek",
+      "normalized": "na barek",
+      "type": null,
+      "name": "na barek"
+    },
+    {
+      "input": "Na Dúbravy",
+      "normalized": "na dubravy",
+      "type": null,
+      "name": "na dubravy"
+    },
+    {
+      "input": "Na jame",
+      "normalized": "na jame",
+      "type": null,
+      "name": "na jame"
+    },
+    {
+      "input": "Na Majer",
+      "normalized": "na majer",
+      "type": null,
+      "name": "na majer"
+    },
+    {
+      "input": "Na piesky",
+      "normalized": "na piesky",
+      "type": null,
+      "name": "na piesky"
+    },
+    {
+      "input": "Na Šefranici",
+      "normalized": "na sefranici",
+      "type": null,
+      "name": "na sefranici"
+    },
+    {
+      "input": "Na starej hradskej",
+      "normalized": "na starej hradskej",
+      "type": null,
+      "name": "na starej hradskej"
+    },
+    {
+      "input": "Na Trojak",
+      "normalized": "na trojak",
+      "type": null,
+      "name": "na trojak"
+    },
+    {
+      "input": "Na Závaží",
+      "normalized": "na zavazi",
+      "type": null,
+      "name": "na zavazi"
+    },
+    {
+      "input": "Námestie gen. M. R. Štefánika",
+      "normalized": "namestie general m r stefanika",
+      "type": "namestie",
+      "name": "general m r stefanika"
+    },
+    {
+      "input": "Námestie obetí komunizmu",
+      "normalized": "namestie obeti komunizmu",
+      "type": "namestie",
+      "name": "obeti komunizmu"
+    },
+    {
+      "input": "Nanterská",
+      "normalized": "nanterska",
+      "type": null,
+      "name": "nanterska"
+    },
+    {
+      "input": "Nižedvorská",
+      "normalized": "nizedvorska",
+      "type": null,
+      "name": "nizedvorska"
+    },
+    {
+      "input": "Obvodová",
+      "normalized": "obvodova",
+      "type": null,
+      "name": "obvodova"
+    },
+    {
+      "input": "Ondavská",
+      "normalized": "ondavska",
+      "type": null,
+      "name": "ondavska"
+    },
+    {
+      "input": "Osiková",
+      "normalized": "osikova",
+      "type": null,
+      "name": "osikova"
+    },
+    {
+      "input": "Ovsená",
+      "normalized": "ovsena",
+      "type": null,
+      "name": "ovsena"
+    },
+    {
+      "input": "Pekná",
+      "normalized": "pekna",
+      "type": null,
+      "name": "pekna"
+    },
+    {
+      "input": "Pittsburgská",
+      "normalized": "pittsburgska",
+      "type": null,
+      "name": "pittsburgska"
+    },
+    {
+      "input": "Pod Borím",
+      "normalized": "pod borim",
+      "type": null,
+      "name": "pod borim"
+    },
+    {
+      "input": "Pod Grendel",
+      "normalized": "pod grendel",
+      "type": null,
+      "name": "pod grendel"
+    },
+    {
+      "input": "Pod jarkom",
+      "normalized": "pod jarkom",
+      "type": null,
+      "name": "pod jarkom"
+    },
+    {
+      "input": "Pod univerzitou",
+      "normalized": "pod univerzitou",
+      "type": null,
+      "name": "pod univerzitou"
+    },
+    {
+      "input": "Podvŕšie",
+      "normalized": "podvrsie",
+      "type": null,
+      "name": "podvrsie"
+    },
+    {
+      "input": "Popradská",
+      "normalized": "popradska",
+      "type": null,
+      "name": "popradska"
+    },
+    {
+      "input": "Predmestská",
+      "normalized": "predmestska",
+      "type": null,
+      "name": "predmestska"
+    },
+    {
+      "input": "Pri Kysuci",
+      "normalized": "pri kysuci",
+      "type": null,
+      "name": "pri kysuci"
+    },
+    {
+      "input": "Prieložná",
+      "normalized": "prielozna",
+      "type": null,
+      "name": "prielozna"
+    },
+    {
+      "input": "Purpurová",
+      "normalized": "purpurova",
+      "type": null,
+      "name": "purpurova"
+    },
+    {
+      "input": "Radová",
+      "normalized": "radova",
+      "type": null,
+      "name": "radova"
+    },
+    {
+      "input": "Republiky",
+      "normalized": "republiky",
+      "type": null,
+      "name": "republiky"
+    },
+    {
+      "input": "Romualda Zaymusa",
+      "normalized": "romualda zaymusa",
+      "type": null,
+      "name": "romualda zaymusa"
+    },
+    {
+      "input": "Rudolfa Dilonga",
+      "normalized": "rudolfa dilonga",
+      "type": null,
+      "name": "rudolfa dilonga"
+    },
+    {
+      "input": "Sad SNP",
+      "normalized": "sad snp",
+      "type": null,
+      "name": "sad snp"
+    },
+    {
+      "input": "Segnerova",
+      "normalized": "segnerova",
+      "type": null,
+      "name": "segnerova"
+    },
+    {
+      "input": "Sivá",
+      "normalized": "siva",
+      "type": null,
+      "name": "siva"
+    },
+    {
+      "input": "Skotňová",
+      "normalized": "skotnova",
+      "type": null,
+      "name": "skotnova"
+    },
+    {
+      "input": "Slnečnicová",
+      "normalized": "slnecnicova",
+      "type": null,
+      "name": "slnecnicova"
+    },
+    {
+      "input": "Spojná",
+      "normalized": "spojna",
+      "type": null,
+      "name": "spojna"
+    },
+    {
+      "input": "Stárkova",
+      "normalized": "starkova",
+      "type": null,
+      "name": "starkova"
+    },
+    {
+      "input": "Stodolova",
+      "normalized": "stodolova",
+      "type": null,
+      "name": "stodolova"
+    },
+    {
+      "input": "Štrková",
+      "normalized": "strkova",
+      "type": null,
+      "name": "strkova"
+    },
+    {
+      "input": "Sumčia",
+      "normalized": "sumcia",
+      "type": null,
+      "name": "sumcia"
+    },
+    {
+      "input": "Sv. Jána Nepomuckého",
+      "normalized": "svaty jana nepomuckeho",
+      "type": null,
+      "name": "svaty jana nepomuckeho"
+    },
+    {
+      "input": "Terasy",
+      "normalized": "terasy",
+      "type": null,
+      "name": "terasy"
+    },
+    {
+      "input": "Tretia",
+      "normalized": "tretia",
+      "type": null,
+      "name": "tretia"
+    },
+    {
+      "input": "Tyrkysová",
+      "normalized": "tyrkysova",
+      "type": null,
+      "name": "tyrkysova"
+    },
+    {
+      "input": "Vajanského",
+      "normalized": "vajanskeho",
+      "type": null,
+      "name": "vajanskeho"
+    },
+    {
+      "input": "Veľká okružná",
+      "normalized": "velka okruzna",
+      "type": null,
+      "name": "velka okruzna"
+    },
+    {
+      "input": "Vojtecha Spanyola",
+      "normalized": "vojtecha spanyola",
+      "type": null,
+      "name": "vojtecha spanyola"
+    },
+    {
+      "input": "Za cintorínom",
+      "normalized": "za cintorinom",
+      "type": null,
+      "name": "za cintorinom"
+    },
+    {
+      "input": "Za potokom",
+      "normalized": "za potokom",
+      "type": null,
+      "name": "za potokom"
+    }
+  ]
+}

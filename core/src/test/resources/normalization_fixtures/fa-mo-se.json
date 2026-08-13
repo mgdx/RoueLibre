@@ -1,0 +1,797 @@
+{
+  "language": "it",
+  "cases": [
+    {
+      "input": "Via Roma",
+      "normalized": "via roma",
+      "type": "via",
+      "name": "roma"
+    },
+    {
+      "input": "Piazza del Duomo",
+      "normalized": "piazza del duomo",
+      "type": "piazza",
+      "name": "del duomo"
+    },
+    {
+      "input": "Corso Vittorio Emanuele II",
+      "normalized": "corso vittorio emanuele ii",
+      "type": "corso",
+      "name": "vittorio emanuele ii"
+    },
+    {
+      "input": "V.le della Libertà",
+      "normalized": "v le della liberta",
+      "type": null,
+      "name": "v le della liberta"
+    },
+    {
+      "input": "P.zza San Marco",
+      "normalized": "p zza san marco",
+      "type": null,
+      "name": "p zza san marco"
+    },
+    {
+      "input": "Vicolo Stretto",
+      "normalized": "vicolo stretto",
+      "type": "vicolo",
+      "name": "stretto"
+    },
+    {
+      "input": "Lungomare Cristoforo Colombo",
+      "normalized": "lungomare cristoforo colombo",
+      "type": "lungomare",
+      "name": "cristoforo colombo"
+    },
+    {
+      "input": "Calle Larga XXII Marzo",
+      "normalized": "calle larga xxii marzo",
+      "type": "calle",
+      "name": "larga xxii marzo"
+    },
+    {
+      "input": "Fondamenta Nuove",
+      "normalized": "fondamenta nuove",
+      "type": "fondamenta",
+      "name": "nuove"
+    },
+    {
+      "input": "Salita di San Nicola",
+      "normalized": "salita di san nicola",
+      "type": "salita",
+      "name": "di san nicola"
+    },
+    {
+      "input": "Largo Argentina",
+      "normalized": "largo argentina",
+      "type": "largo",
+      "name": "argentina"
+    },
+    {
+      "input": "Contrada Sant'Antonio",
+      "normalized": "contrada sant antonio",
+      "type": "contrada",
+      "name": "sant antonio"
+    },
+    {
+      "input": "Senigallia",
+      "normalized": "senigallia",
+      "type": null,
+      "name": "senigallia"
+    },
+    {
+      "input": "Biblioteca Comunale Antonelliana",
+      "normalized": "biblioteca comunale antonelliana",
+      "type": null,
+      "name": "biblioteca comunale antonelliana"
+    },
+    {
+      "input": "Museo diocesano",
+      "normalized": "museo diocesano",
+      "type": null,
+      "name": "museo diocesano"
+    },
+    {
+      "input": "Bretella Nord (Complanare)",
+      "normalized": "bretella nord complanare",
+      "type": null,
+      "name": "bretella nord complanare"
+    },
+    {
+      "input": "Foro Annonario",
+      "normalized": "foro annonario",
+      "type": null,
+      "name": "foro annonario"
+    },
+    {
+      "input": "Località Molino Marazzana",
+      "normalized": "localita molino marazzana",
+      "type": null,
+      "name": "localita molino marazzana"
+    },
+    {
+      "input": "Mondolfo Airfield",
+      "normalized": "mondolfo airfield",
+      "type": null,
+      "name": "mondolfo airfield"
+    },
+    {
+      "input": "Piazza Andrea Doria",
+      "normalized": "piazza andrea doria",
+      "type": "piazza",
+      "name": "andrea doria"
+    },
+    {
+      "input": "Piazza della Vittoria",
+      "normalized": "piazza della vittoria",
+      "type": "piazza",
+      "name": "della vittoria"
+    },
+    {
+      "input": "Piazza Perticari",
+      "normalized": "piazza perticari",
+      "type": "piazza",
+      "name": "perticari"
+    },
+    {
+      "input": "Piazzale Alfieri",
+      "normalized": "piazzale alfieri",
+      "type": "piazzale",
+      "name": "alfieri"
+    },
+    {
+      "input": "Piazzale Fratelli Cairoli",
+      "normalized": "piazzale fratelli cairoli",
+      "type": "piazzale",
+      "name": "fratelli cairoli"
+    },
+    {
+      "input": "Ponte Alberto Zavatti",
+      "normalized": "ponte alberto zavatti",
+      "type": "ponte",
+      "name": "alberto zavatti"
+    },
+    {
+      "input": "Strada Alderana",
+      "normalized": "strada alderana",
+      "type": "strada",
+      "name": "alderana"
+    },
+    {
+      "input": "Strada Comunale delle Grazie",
+      "normalized": "strada comunale delle grazie",
+      "type": "strada",
+      "name": "comunale delle grazie"
+    },
+    {
+      "input": "Strada Consolazione",
+      "normalized": "strada consolazione",
+      "type": "strada",
+      "name": "consolazione"
+    },
+    {
+      "input": "Strada del Bagnolo",
+      "normalized": "strada del bagnolo",
+      "type": "strada",
+      "name": "del bagnolo"
+    },
+    {
+      "input": "Strada del Crocefisso della Valle-Portone",
+      "normalized": "strada del crocefisso della valle portone",
+      "type": "strada",
+      "name": "del crocefisso della valle portone"
+    },
+    {
+      "input": "Strada del Moroso",
+      "normalized": "strada del moroso",
+      "type": "strada",
+      "name": "del moroso"
+    },
+    {
+      "input": "Strada della Benedetta",
+      "normalized": "strada della benedetta",
+      "type": "strada",
+      "name": "della benedetta"
+    },
+    {
+      "input": "Strada della Grancetta/Via Marzocca",
+      "normalized": "strada della grancetta via marzocca",
+      "type": "strada",
+      "name": "della grancetta via marzocca"
+    },
+    {
+      "input": "Strada della Passera",
+      "normalized": "strada della passera",
+      "type": "strada",
+      "name": "della passera"
+    },
+    {
+      "input": "Strada delle Bettolelle",
+      "normalized": "strada delle bettolelle",
+      "type": "strada",
+      "name": "delle bettolelle"
+    },
+    {
+      "input": "Strada di Maiano",
+      "normalized": "strada di maiano",
+      "type": "strada",
+      "name": "di maiano"
+    },
+    {
+      "input": "Strada di San Gaudenzio",
+      "normalized": "strada di san gaudenzio",
+      "type": "strada",
+      "name": "di san gaudenzio"
+    },
+    {
+      "input": "Strada Fosso di Ripe",
+      "normalized": "strada fosso di ripe",
+      "type": "strada",
+      "name": "fosso di ripe"
+    },
+    {
+      "input": "Strada Monte Bugaro",
+      "normalized": "strada monte bugaro",
+      "type": "strada",
+      "name": "monte bugaro"
+    },
+    {
+      "input": "Strada Provinciale 12 Corinaldese",
+      "normalized": "strada provinciale 12 corinaldese",
+      "type": "strada",
+      "name": "provinciale 12 corinaldese"
+    },
+    {
+      "input": "Strada Provinciale Croce Buzzo",
+      "normalized": "strada provinciale croce buzzo",
+      "type": "strada",
+      "name": "provinciale croce buzzo"
+    },
+    {
+      "input": "Strada San Fortunato",
+      "normalized": "strada san fortunato",
+      "type": "strada",
+      "name": "san fortunato"
+    },
+    {
+      "input": "Strada Santa Croce",
+      "normalized": "strada santa croce",
+      "type": "strada",
+      "name": "santa croce"
+    },
+    {
+      "input": "Strada Solfanuccio",
+      "normalized": "strada solfanuccio",
+      "type": "strada",
+      "name": "solfanuccio"
+    },
+    {
+      "input": "Strada Torre Campetto",
+      "normalized": "strada torre campetto",
+      "type": "strada",
+      "name": "torre campetto"
+    },
+    {
+      "input": "Via A. Cerasi",
+      "normalized": "via a cerasi",
+      "type": "via",
+      "name": "a cerasi"
+    },
+    {
+      "input": "Via Adolfo Gherardi",
+      "normalized": "via adolfo gherardi",
+      "type": "via",
+      "name": "adolfo gherardi"
+    },
+    {
+      "input": "Via Alessandro Volta",
+      "normalized": "via alessandro volta",
+      "type": "via",
+      "name": "alessandro volta"
+    },
+    {
+      "input": "Via Amilcare Ponchielli",
+      "normalized": "via amilcare ponchielli",
+      "type": "via",
+      "name": "amilcare ponchielli"
+    },
+    {
+      "input": "Via Angelo Maierini",
+      "normalized": "via angelo maierini",
+      "type": "via",
+      "name": "angelo maierini"
+    },
+    {
+      "input": "Via Antonio Gramsci",
+      "normalized": "via antonio gramsci",
+      "type": "via",
+      "name": "antonio gramsci"
+    },
+    {
+      "input": "Via Arezzo",
+      "normalized": "via arezzo",
+      "type": "via",
+      "name": "arezzo"
+    },
+    {
+      "input": "Via Bari",
+      "normalized": "via bari",
+      "type": "via",
+      "name": "bari"
+    },
+    {
+      "input": "Via Bellini",
+      "normalized": "via bellini",
+      "type": "via",
+      "name": "bellini"
+    },
+    {
+      "input": "Via Bologna",
+      "normalized": "via bologna",
+      "type": "via",
+      "name": "bologna"
+    },
+    {
+      "input": "Via Boscomarina",
+      "normalized": "via boscomarina",
+      "type": "via",
+      "name": "boscomarina"
+    },
+    {
+      "input": "Via Buonincontri",
+      "normalized": "via buonincontri",
+      "type": "via",
+      "name": "buonincontri"
+    },
+    {
+      "input": "Via Campo Boario",
+      "normalized": "via campo boario",
+      "type": "via",
+      "name": "campo boario"
+    },
+    {
+      "input": "Via Carestia",
+      "normalized": "via carestia",
+      "type": "via",
+      "name": "carestia"
+    },
+    {
+      "input": "Via Carpegna",
+      "normalized": "via carpegna",
+      "type": "via",
+      "name": "carpegna"
+    },
+    {
+      "input": "Via Castello",
+      "normalized": "via castello",
+      "type": "via",
+      "name": "castello"
+    },
+    {
+      "input": "Via Cesare Battisti",
+      "normalized": "via cesare battisti",
+      "type": "via",
+      "name": "cesare battisti"
+    },
+    {
+      "input": "Via Claudio Monteverdi",
+      "normalized": "via claudio monteverdi",
+      "type": "via",
+      "name": "claudio monteverdi"
+    },
+    {
+      "input": "Via Comunale",
+      "normalized": "via comunale",
+      "type": "via",
+      "name": "comunale"
+    },
+    {
+      "input": "Via Cristoforo Colombo",
+      "normalized": "via cristoforo colombo",
+      "type": "via",
+      "name": "cristoforo colombo"
+    },
+    {
+      "input": "Via Dante Alighieri",
+      "normalized": "via dante alighieri",
+      "type": "via",
+      "name": "dante alighieri"
+    },
+    {
+      "input": "Via degli Ulivi",
+      "normalized": "via degli ulivi",
+      "type": "via",
+      "name": "degli ulivi"
+    },
+    {
+      "input": "Via dei Mille",
+      "normalized": "via dei mille",
+      "type": "via",
+      "name": "dei mille"
+    },
+    {
+      "input": "Via del Campo Sportivo",
+      "normalized": "via del campo sportivo",
+      "type": "via",
+      "name": "del campo sportivo"
+    },
+    {
+      "input": "Via del Sole",
+      "normalized": "via del sole",
+      "type": "via",
+      "name": "del sole"
+    },
+    {
+      "input": "Via della Cereria",
+      "normalized": "via della cereria",
+      "type": "via",
+      "name": "della cereria"
+    },
+    {
+      "input": "Via della Marina",
+      "normalized": "via della marina",
+      "type": "via",
+      "name": "della marina"
+    },
+    {
+      "input": "Via della Tombaccia",
+      "normalized": "via della tombaccia",
+      "type": "via",
+      "name": "della tombaccia"
+    },
+    {
+      "input": "Via delle Querce",
+      "normalized": "via delle querce",
+      "type": "via",
+      "name": "delle querce"
+    },
+    {
+      "input": "Via Dogana Vecchia",
+      "normalized": "via dogana vecchia",
+      "type": "via",
+      "name": "dogana vecchia"
+    },
+    {
+      "input": "Via Don Umberto Secchiaroli",
+      "normalized": "via don umberto secchiaroli",
+      "type": "via",
+      "name": "don umberto secchiaroli"
+    },
+    {
+      "input": "Via Enrico Berlinguer",
+      "normalized": "via enrico berlinguer",
+      "type": "via",
+      "name": "enrico berlinguer"
+    },
+    {
+      "input": "Via Evangelista Torricelli",
+      "normalized": "via evangelista torricelli",
+      "type": "via",
+      "name": "evangelista torricelli"
+    },
+    {
+      "input": "Via Federico Brandani",
+      "normalized": "via federico brandani",
+      "type": "via",
+      "name": "federico brandani"
+    },
+    {
+      "input": "Via Foce Cesano",
+      "normalized": "via foce cesano",
+      "type": "via",
+      "name": "foce cesano"
+    },
+    {
+      "input": "Via Francesco Arsilli",
+      "normalized": "via francesco arsilli",
+      "type": "via",
+      "name": "francesco arsilli"
+    },
+    {
+      "input": "Via Fratelli Bandiera",
+      "normalized": "via fratelli bandiera",
+      "type": "via",
+      "name": "fratelli bandiera"
+    },
+    {
+      "input": "Via G. Anastasi",
+      "normalized": "via g anastasi",
+      "type": "via",
+      "name": "g anastasi"
+    },
+    {
+      "input": "Via Gaetano Salvemini",
+      "normalized": "via gaetano salvemini",
+      "type": "via",
+      "name": "gaetano salvemini"
+    },
+    {
+      "input": "Via Giacomo Brodolini",
+      "normalized": "via giacomo brodolini",
+      "type": "via",
+      "name": "giacomo brodolini"
+    },
+    {
+      "input": "Via Giambattista Vico",
+      "normalized": "via giambattista vico",
+      "type": "via",
+      "name": "giambattista vico"
+    },
+    {
+      "input": "Via Gioco Pallone",
+      "normalized": "via gioco pallone",
+      "type": "via",
+      "name": "gioco pallone"
+    },
+    {
+      "input": "Via Giovanni Falcone",
+      "normalized": "via giovanni falcone",
+      "type": "via",
+      "name": "giovanni falcone"
+    },
+    {
+      "input": "Via Giovanni Segantini",
+      "normalized": "via giovanni segantini",
+      "type": "via",
+      "name": "giovanni segantini"
+    },
+    {
+      "input": "Via Girolamo Savonarola",
+      "normalized": "via girolamo savonarola",
+      "type": "via",
+      "name": "girolamo savonarola"
+    },
+    {
+      "input": "Via Giuseppe Di Vittorio",
+      "normalized": "via giuseppe di vittorio",
+      "type": "via",
+      "name": "giuseppe di vittorio"
+    },
+    {
+      "input": "Via Giuseppe Rovani",
+      "normalized": "via giuseppe rovani",
+      "type": "via",
+      "name": "giuseppe rovani"
+    },
+    {
+      "input": "Via Grotte di Frasassi",
+      "normalized": "via grotte di frasassi",
+      "type": "via",
+      "name": "grotte di frasassi"
+    },
+    {
+      "input": "Via Hans Christian Andersen",
+      "normalized": "via hans christian andersen",
+      "type": "via",
+      "name": "hans christian andersen"
+    },
+    {
+      "input": "Via Ischia",
+      "normalized": "via ischia",
+      "type": "via",
+      "name": "ischia"
+    },
+    {
+      "input": "Via La Fonte",
+      "normalized": "via la fonte",
+      "type": "via",
+      "name": "la fonte"
+    },
+    {
+      "input": "Via Lago di Como",
+      "normalized": "via lago di como",
+      "type": "via",
+      "name": "lago di como"
+    },
+    {
+      "input": "Via Lago di Pilato",
+      "normalized": "via lago di pilato",
+      "type": "via",
+      "name": "lago di pilato"
+    },
+    {
+      "input": "Via Lauro De Bosis",
+      "normalized": "via lauro de bosis",
+      "type": "via",
+      "name": "lauro de bosis"
+    },
+    {
+      "input": "Via Livorno",
+      "normalized": "via livorno",
+      "type": "via",
+      "name": "livorno"
+    },
+    {
+      "input": "Via Luigi Boccherini",
+      "normalized": "via luigi boccherini",
+      "type": "via",
+      "name": "luigi boccherini"
+    },
+    {
+      "input": "Via Luigi Motta",
+      "normalized": "via luigi motta",
+      "type": "via",
+      "name": "luigi motta"
+    },
+    {
+      "input": "Via Mantegna A.",
+      "normalized": "via mantegna a",
+      "type": "via",
+      "name": "mantegna a"
+    },
+    {
+      "input": "Via Mare Adriatico",
+      "normalized": "via mare adriatico",
+      "type": "via",
+      "name": "mare adriatico"
+    },
+    {
+      "input": "Via Martin Luther King",
+      "normalized": "via martin luther king",
+      "type": "via",
+      "name": "martin luther king"
+    },
+    {
+      "input": "Via Massimo D'Azeglio",
+      "normalized": "via massimo d azeglio",
+      "type": "via",
+      "name": "massimo d azeglio"
+    },
+    {
+      "input": "Via Mercurio",
+      "normalized": "via mercurio",
+      "type": "via",
+      "name": "mercurio"
+    },
+    {
+      "input": "Via Molino",
+      "normalized": "via molino",
+      "type": "via",
+      "name": "molino"
+    },
+    {
+      "input": "Via Montebello",
+      "normalized": "via montebello",
+      "type": "via",
+      "name": "montebello"
+    },
+    {
+      "input": "Via Montesaltello",
+      "normalized": "via montesaltello",
+      "type": "via",
+      "name": "montesaltello"
+    },
+    {
+      "input": "Via Nettuno",
+      "normalized": "via nettuno",
+      "type": "via",
+      "name": "nettuno"
+    },
+    {
+      "input": "Via Olmi Grandi",
+      "normalized": "via olmi grandi",
+      "type": "via",
+      "name": "olmi grandi"
+    },
+    {
+      "input": "Via Palermo",
+      "normalized": "via palermo",
+      "type": "via",
+      "name": "palermo"
+    },
+    {
+      "input": "Via Passo di Rango",
+      "normalized": "via passo di rango",
+      "type": "via",
+      "name": "passo di rango"
+    },
+    {
+      "input": "Via Piave",
+      "normalized": "via piave",
+      "type": "via",
+      "name": "piave"
+    },
+    {
+      "input": "Via Pisa",
+      "normalized": "via pisa",
+      "type": "via",
+      "name": "pisa"
+    },
+    {
+      "input": "Via Porta Giuseppe Mazzini",
+      "normalized": "via porta giuseppe mazzini",
+      "type": "via",
+      "name": "porta giuseppe mazzini"
+    },
+    {
+      "input": "Via Potenza",
+      "normalized": "via potenza",
+      "type": "via",
+      "name": "potenza"
+    },
+    {
+      "input": "Via Quattro Novembre",
+      "normalized": "via quattro novembre",
+      "type": "via",
+      "name": "quattro novembre"
+    },
+    {
+      "input": "Via Renato Ciucci",
+      "normalized": "via renato ciucci",
+      "type": "via",
+      "name": "renato ciucci"
+    },
+    {
+      "input": "Via Roma",
+      "normalized": "via roma",
+      "type": "via",
+      "name": "roma"
+    },
+    {
+      "input": "Via Rudyard Kipling",
+      "normalized": "via rudyard kipling",
+      "type": "via",
+      "name": "rudyard kipling"
+    },
+    {
+      "input": "Via Samo",
+      "normalized": "via samo",
+      "type": "via",
+      "name": "samo"
+    },
+    {
+      "input": "Via San Martino",
+      "normalized": "via san martino",
+      "type": "via",
+      "name": "san martino"
+    },
+    {
+      "input": "Via San Sebastiano",
+      "normalized": "via san sebastiano",
+      "type": "via",
+      "name": "san sebastiano"
+    },
+    {
+      "input": "Via Santissima Trinità",
+      "normalized": "via santissima trinita",
+      "type": "via",
+      "name": "santissima trinita"
+    },
+    {
+      "input": "Via Scarpante",
+      "normalized": "via scarpante",
+      "type": "via",
+      "name": "scarpante"
+    },
+    {
+      "input": "Via Smirne",
+      "normalized": "via smirne",
+      "type": "via",
+      "name": "smirne"
+    },
+    {
+      "input": "Via T. Serenelli",
+      "normalized": "via t serenelli",
+      "type": "via",
+      "name": "t serenelli"
+    },
+    {
+      "input": "Via Terni",
+      "normalized": "via terni",
+      "type": "via",
+      "name": "terni"
+    },
+    {
+      "input": "Via Tiziano Vercellio",
+      "normalized": "via tiziano vercellio",
+      "type": "via",
+      "name": "tiziano vercellio"
+    },
+    {
+      "input": "Via Torre",
+      "normalized": "via torre",
+      "type": "via",
+      "name": "torre"
+    }
+  ]
+}

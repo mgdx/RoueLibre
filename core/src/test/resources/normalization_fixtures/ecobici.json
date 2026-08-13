@@ -1,0 +1,809 @@
+{
+  "language": "es",
+  "cases": [
+    {
+      "input": "Calle Mayor",
+      "normalized": "calle mayor",
+      "type": "calle",
+      "name": "mayor"
+    },
+    {
+      "input": "Avenida de la Constitución",
+      "normalized": "avenida de la constitucion",
+      "type": "avenida",
+      "name": "de la constitucion"
+    },
+    {
+      "input": "Plaza del Sol",
+      "normalized": "plaza del sol",
+      "type": "plaza",
+      "name": "del sol"
+    },
+    {
+      "input": "Paseo de Gracia",
+      "normalized": "paseo de gracia",
+      "type": "paseo",
+      "name": "de gracia"
+    },
+    {
+      "input": "C/ Alcalá",
+      "normalized": "calle alcala",
+      "type": "calle",
+      "name": "alcala"
+    },
+    {
+      "input": "Avda. de América",
+      "normalized": "avenida de america",
+      "type": "avenida",
+      "name": "de america"
+    },
+    {
+      "input": "Gran Vía",
+      "normalized": "gran via",
+      "type": null,
+      "name": "gran via"
+    },
+    {
+      "input": "Camino Viejo del Puerto",
+      "normalized": "camino viejo del puerto",
+      "type": "camino",
+      "name": "viejo del puerto"
+    },
+    {
+      "input": "Callejón de la Cruz",
+      "normalized": "callejon de la cruz",
+      "type": "callejon",
+      "name": "de la cruz"
+    },
+    {
+      "input": "Ronda de Toledo",
+      "normalized": "ronda de toledo",
+      "type": "ronda",
+      "name": "de toledo"
+    },
+    {
+      "input": "Calzada de Tlalpan",
+      "normalized": "calzada de tlalpan",
+      "type": "calzada",
+      "name": "de tlalpan"
+    },
+    {
+      "input": "Pasaje Peatonal Norte",
+      "normalized": "pasaje peatonal norte",
+      "type": "pasaje",
+      "name": "peatonal norte"
+    },
+    {
+      "input": "Travesía de Santa Ana",
+      "normalized": "travesia de santa ana",
+      "type": "travesia",
+      "name": "de santa ana"
+    },
+    {
+      "input": "Cañada Real",
+      "normalized": "canada real",
+      "type": null,
+      "name": "canada real"
+    },
+    {
+      "input": "Adolfo López Mateos",
+      "normalized": "adolfo lopez mateos",
+      "type": null,
+      "name": "adolfo lopez mateos"
+    },
+    {
+      "input": "Cedros",
+      "normalized": "cedros",
+      "type": null,
+      "name": "cedros"
+    },
+    {
+      "input": "Merida",
+      "normalized": "merida",
+      "type": null,
+      "name": "merida"
+    },
+    {
+      "input": "Manuel Gonzalez",
+      "normalized": "manuel gonzalez",
+      "type": null,
+      "name": "manuel gonzalez"
+    },
+    {
+      "input": "Biblioteca \"Ricardo Monges López\"",
+      "normalized": "biblioteca ricardo monges lopez",
+      "type": null,
+      "name": "biblioteca ricardo monges lopez"
+    },
+    {
+      "input": "Ocelote",
+      "normalized": "ocelote",
+      "type": null,
+      "name": "ocelote"
+    },
+    {
+      "input": "Niños Héroes",
+      "normalized": "ninos heroes",
+      "type": null,
+      "name": "ninos heroes"
+    },
+    {
+      "input": "Biblioteca Raúl Baillères Jr",
+      "normalized": "biblioteca raul bailleres jr",
+      "type": null,
+      "name": "biblioteca raul bailleres jr"
+    },
+    {
+      "input": "Grupo de Especialidades Médicas Santa Inés",
+      "normalized": "grupo de especialidades medicas santa ines",
+      "type": null,
+      "name": "grupo de especialidades medicas santa ines"
+    },
+    {
+      "input": "Tasqueña",
+      "normalized": "tasquena",
+      "type": null,
+      "name": "tasquena"
+    },
+    {
+      "input": "1a Cerrada de los Corceles",
+      "normalized": "1a cerrada de los corceles",
+      "type": null,
+      "name": "1a cerrada de los corceles"
+    },
+    {
+      "input": "2o. Retorno Avenida de las Torres",
+      "normalized": "2o retorno avenida de las torres",
+      "type": null,
+      "name": "2o retorno avenida de las torres"
+    },
+    {
+      "input": "7 Manzana XII",
+      "normalized": "7 manzana xii",
+      "type": null,
+      "name": "7 manzana xii"
+    },
+    {
+      "input": "Andador 6",
+      "normalized": "andador 6",
+      "type": "andador",
+      "name": "6"
+    },
+    {
+      "input": "Andador Jalisciense",
+      "normalized": "andador jalisciense",
+      "type": "andador",
+      "name": "jalisciense"
+    },
+    {
+      "input": "Andador Tamuín",
+      "normalized": "andador tamuin",
+      "type": "andador",
+      "name": "tamuin"
+    },
+    {
+      "input": "Avenida Andrés Molina Enríquez",
+      "normalized": "avenida andres molina enriquez",
+      "type": "avenida",
+      "name": "andres molina enriquez"
+    },
+    {
+      "input": "Avenida de los Olivos",
+      "normalized": "avenida de los olivos",
+      "type": "avenida",
+      "name": "de los olivos"
+    },
+    {
+      "input": "Avenida Hidalgo",
+      "normalized": "avenida hidalgo",
+      "type": "avenida",
+      "name": "hidalgo"
+    },
+    {
+      "input": "Avenida Oceanía",
+      "normalized": "avenida oceania",
+      "type": "avenida",
+      "name": "oceania"
+    },
+    {
+      "input": "Avenida Santa Ana",
+      "normalized": "avenida santa ana",
+      "type": "avenida",
+      "name": "santa ana"
+    },
+    {
+      "input": "Calle 11 de Abril",
+      "normalized": "calle 11 de abril",
+      "type": "calle",
+      "name": "11 de abril"
+    },
+    {
+      "input": "Calle 3er Anillo de Circunvalación",
+      "normalized": "calle 3er anillo de circunvalacion",
+      "type": "calle",
+      "name": "3er anillo de circunvalacion"
+    },
+    {
+      "input": "Calle Ágata",
+      "normalized": "calle agata",
+      "type": "calle",
+      "name": "agata"
+    },
+    {
+      "input": "Calle Alhelí",
+      "normalized": "calle alheli",
+      "type": "calle",
+      "name": "alheli"
+    },
+    {
+      "input": "Calle Aniceto de Zamacois",
+      "normalized": "calle aniceto de zamacois",
+      "type": "calle",
+      "name": "aniceto de zamacois"
+    },
+    {
+      "input": "Calle Asientos",
+      "normalized": "calle asientos",
+      "type": "calle",
+      "name": "asientos"
+    },
+    {
+      "input": "Calle Bahía de Santa Bárbara",
+      "normalized": "calle bahia de santa barbara",
+      "type": "calle",
+      "name": "bahia de santa barbara"
+    },
+    {
+      "input": "Calle Biógrafos",
+      "normalized": "calle biografos",
+      "type": "calle",
+      "name": "biografos"
+    },
+    {
+      "input": "Calle Cabrío",
+      "normalized": "calle cabrio",
+      "type": "calle",
+      "name": "cabrio"
+    },
+    {
+      "input": "Calle Cañada",
+      "normalized": "calle canada",
+      "type": "calle",
+      "name": "canada"
+    },
+    {
+      "input": "Calle Cataratas",
+      "normalized": "calle cataratas",
+      "type": "calle",
+      "name": "cataratas"
+    },
+    {
+      "input": "Calle Cerro El Vigilante",
+      "normalized": "calle cerro el vigilante",
+      "type": "calle",
+      "name": "cerro el vigilante"
+    },
+    {
+      "input": "Calle Cifuentes",
+      "normalized": "calle cifuentes",
+      "type": "calle",
+      "name": "cifuentes"
+    },
+    {
+      "input": "Calle Constantino",
+      "normalized": "calle constantino",
+      "type": "calle",
+      "name": "constantino"
+    },
+    {
+      "input": "Calle Cuenca",
+      "normalized": "calle cuenca",
+      "type": "calle",
+      "name": "cuenca"
+    },
+    {
+      "input": "Calle del Parque",
+      "normalized": "calle del parque",
+      "type": "calle",
+      "name": "del parque"
+    },
+    {
+      "input": "Calle Doctor Salvador Garcíadiego",
+      "normalized": "calle doctor salvador garciadiego",
+      "type": "calle",
+      "name": "doctor salvador garciadiego"
+    },
+    {
+      "input": "Calle El Bosque",
+      "normalized": "calle el bosque",
+      "type": "calle",
+      "name": "el bosque"
+    },
+    {
+      "input": "Calle Escuela Médico Militar",
+      "normalized": "calle escuela medico militar",
+      "type": "calle",
+      "name": "escuela medico militar"
+    },
+    {
+      "input": "Calle Felipe Berriozábal",
+      "normalized": "calle felipe berriozabal",
+      "type": "calle",
+      "name": "felipe berriozabal"
+    },
+    {
+      "input": "Calle Francisco Novoa",
+      "normalized": "calle francisco novoa",
+      "type": "calle",
+      "name": "francisco novoa"
+    },
+    {
+      "input": "Calle G Manzana II",
+      "normalized": "calle g manzana ii",
+      "type": "calle",
+      "name": "g manzana ii"
+    },
+    {
+      "input": "Calle General Miguel Quintana",
+      "normalized": "calle general miguel quintana",
+      "type": "calle",
+      "name": "general miguel quintana"
+    },
+    {
+      "input": "Calle Golondrina Galanteo",
+      "normalized": "calle golondrina galanteo",
+      "type": "calle",
+      "name": "golondrina galanteo"
+    },
+    {
+      "input": "Calle Hacienda de los Arcos",
+      "normalized": "calle hacienda de los arcos",
+      "type": "calle",
+      "name": "hacienda de los arcos"
+    },
+    {
+      "input": "Calle Héroes Ferrocarrileros",
+      "normalized": "calle heroes ferrocarrileros",
+      "type": "calle",
+      "name": "heroes ferrocarrileros"
+    },
+    {
+      "input": "Calle Ingeniero Claudio Castro",
+      "normalized": "calle ingeniero claudio castro",
+      "type": "calle",
+      "name": "ingeniero claudio castro"
+    },
+    {
+      "input": "Calle Jarciería",
+      "normalized": "calle jarcieria",
+      "type": "calle",
+      "name": "jarcieria"
+    },
+    {
+      "input": "Calle José María de Teresa",
+      "normalized": "calle jose maria de teresa",
+      "type": "calle",
+      "name": "jose maria de teresa"
+    },
+    {
+      "input": "Calle Julian Carillo",
+      "normalized": "calle julian carillo",
+      "type": "calle",
+      "name": "julian carillo"
+    },
+    {
+      "input": "Calle Lago Ayarza",
+      "normalized": "calle lago ayarza",
+      "type": "calle",
+      "name": "lago ayarza"
+    },
+    {
+      "input": "Calle Lago Wette",
+      "normalized": "calle lago wette",
+      "type": "calle",
+      "name": "lago wette"
+    },
+    {
+      "input": "Calle Litoral",
+      "normalized": "calle litoral",
+      "type": "calle",
+      "name": "litoral"
+    },
+    {
+      "input": "Calle M. Garatuza",
+      "normalized": "calle m garatuza",
+      "type": "calle",
+      "name": "m garatuza"
+    },
+    {
+      "input": "Calle Mar Caspio",
+      "normalized": "calle mar caspio",
+      "type": "calle",
+      "name": "mar caspio"
+    },
+    {
+      "input": "Calle Mateo Herrera",
+      "normalized": "calle mateo herrera",
+      "type": "calle",
+      "name": "mateo herrera"
+    },
+    {
+      "input": "Calle Milán",
+      "normalized": "calle milan",
+      "type": "calle",
+      "name": "milan"
+    },
+    {
+      "input": "Calle Monte Líbano",
+      "normalized": "calle monte libano",
+      "type": "calle",
+      "name": "monte libano"
+    },
+    {
+      "input": "Calle Noche Triste",
+      "normalized": "calle noche triste",
+      "type": "calle",
+      "name": "noche triste"
+    },
+    {
+      "input": "Calle Norte 72 B",
+      "normalized": "calle norte 72 b",
+      "type": "calle",
+      "name": "norte 72 b"
+    },
+    {
+      "input": "Calle Orfebrería",
+      "normalized": "calle orfebreria",
+      "type": "calle",
+      "name": "orfebreria"
+    },
+    {
+      "input": "Calle Paileros",
+      "normalized": "calle paileros",
+      "type": "calle",
+      "name": "paileros"
+    },
+    {
+      "input": "Calle Paseo de los Granados",
+      "normalized": "calle paseo de los granados",
+      "type": "calle",
+      "name": "paseo de los granados"
+    },
+    {
+      "input": "Calle Pensador Mexicano",
+      "normalized": "calle pensador mexicano",
+      "type": "calle",
+      "name": "pensador mexicano"
+    },
+    {
+      "input": "Calle Playa Azul",
+      "normalized": "calle playa azul",
+      "type": "calle",
+      "name": "playa azul"
+    },
+    {
+      "input": "Calle Pomona",
+      "normalized": "calle pomona",
+      "type": "calle",
+      "name": "pomona"
+    },
+    {
+      "input": "Calle Presa Valsequillo",
+      "normalized": "calle presa valsequillo",
+      "type": "calle",
+      "name": "presa valsequillo"
+    },
+    {
+      "input": "Calle Puerto Yavaros",
+      "normalized": "calle puerto yavaros",
+      "type": "calle",
+      "name": "puerto yavaros"
+    },
+    {
+      "input": "Calle República de Costa Rica",
+      "normalized": "calle republica de costa rica",
+      "type": "calle",
+      "name": "republica de costa rica"
+    },
+    {
+      "input": "Calle Río Mixcoac",
+      "normalized": "calle rio mixcoac",
+      "type": "calle",
+      "name": "rio mixcoac"
+    },
+    {
+      "input": "Calle Rosa Verde",
+      "normalized": "calle rosa verde",
+      "type": "calle",
+      "name": "rosa verde"
+    },
+    {
+      "input": "Calle San Joaquín",
+      "normalized": "calle san joaquin",
+      "type": "calle",
+      "name": "san joaquin"
+    },
+    {
+      "input": "Calle Segunda Cerrada Clavelinas",
+      "normalized": "calle segunda cerrada clavelinas",
+      "type": "calle",
+      "name": "segunda cerrada clavelinas"
+    },
+    {
+      "input": "Calle Sololá",
+      "normalized": "calle solola",
+      "type": "calle",
+      "name": "solola"
+    },
+    {
+      "input": "Calle Tabachin",
+      "normalized": "calle tabachin",
+      "type": "calle",
+      "name": "tabachin"
+    },
+    {
+      "input": "Calle Tepeaca",
+      "normalized": "calle tepeaca",
+      "type": "calle",
+      "name": "tepeaca"
+    },
+    {
+      "input": "Calle Tláloc",
+      "normalized": "calle tlaloc",
+      "type": "calle",
+      "name": "tlaloc"
+    },
+    {
+      "input": "Calle Tukurutai Acatl",
+      "normalized": "calle tukurutai acatl",
+      "type": "calle",
+      "name": "tukurutai acatl"
+    },
+    {
+      "input": "Calle Vidriería",
+      "normalized": "calle vidrieria",
+      "type": "calle",
+      "name": "vidrieria"
+    },
+    {
+      "input": "Calle Zinnia",
+      "normalized": "calle zinnia",
+      "type": "calle",
+      "name": "zinnia"
+    },
+    {
+      "input": "Callejón Flamencos",
+      "normalized": "callejon flamencos",
+      "type": "callejon",
+      "name": "flamencos"
+    },
+    {
+      "input": "Calz. De Las Armas",
+      "normalized": "calz de las armas",
+      "type": null,
+      "name": "calz de las armas"
+    },
+    {
+      "input": "Camino Puerto Ceguayo",
+      "normalized": "camino puerto ceguayo",
+      "type": "camino",
+      "name": "puerto ceguayo"
+    },
+    {
+      "input": "Cerrada 22 de Noviembre",
+      "normalized": "cerrada 22 de noviembre",
+      "type": "cerrada",
+      "name": "22 de noviembre"
+    },
+    {
+      "input": "Cerrada Alfredo Chavero",
+      "normalized": "cerrada alfredo chavero",
+      "type": "cerrada",
+      "name": "alfredo chavero"
+    },
+    {
+      "input": "Cerrada Campo Alazán",
+      "normalized": "cerrada campo alazan",
+      "type": "cerrada",
+      "name": "campo alazan"
+    },
+    {
+      "input": "Cerrada de Gloria",
+      "normalized": "cerrada de gloria",
+      "type": "cerrada",
+      "name": "de gloria"
+    },
+    {
+      "input": "Cerrada Eligio Villamar",
+      "normalized": "cerrada eligio villamar",
+      "type": "cerrada",
+      "name": "eligio villamar"
+    },
+    {
+      "input": "Cerrada Holbein",
+      "normalized": "cerrada holbein",
+      "type": "cerrada",
+      "name": "holbein"
+    },
+    {
+      "input": "Cerrada Lomas Valentina",
+      "normalized": "cerrada lomas valentina",
+      "type": "cerrada",
+      "name": "lomas valentina"
+    },
+    {
+      "input": "Cerrada Nezahualcóyotl",
+      "normalized": "cerrada nezahualcoyotl",
+      "type": "cerrada",
+      "name": "nezahualcoyotl"
+    },
+    {
+      "input": "Cerrada Primera Cristóbal Colón",
+      "normalized": "cerrada primera cristobal colon",
+      "type": "cerrada",
+      "name": "primera cristobal colon"
+    },
+    {
+      "input": "Cerrada Reforma 2540",
+      "normalized": "cerrada reforma 2540",
+      "type": "cerrada",
+      "name": "reforma 2540"
+    },
+    {
+      "input": "Cerrada Santiago",
+      "normalized": "cerrada santiago",
+      "type": "cerrada",
+      "name": "santiago"
+    },
+    {
+      "input": "Cerrada Sierra Mojada",
+      "normalized": "cerrada sierra mojada",
+      "type": "cerrada",
+      "name": "sierra mojada"
+    },
+    {
+      "input": "Cerrada Trabajadoras Sociales",
+      "normalized": "cerrada trabajadoras sociales",
+      "type": "cerrada",
+      "name": "trabajadoras sociales"
+    },
+    {
+      "input": "Circuito Rivera de Echegaray",
+      "normalized": "circuito rivera de echegaray",
+      "type": "circuito",
+      "name": "rivera de echegaray"
+    },
+    {
+      "input": "Edificio 20",
+      "normalized": "edificio 20",
+      "type": null,
+      "name": "edificio 20"
+    },
+    {
+      "input": "General Felipe Ángeles",
+      "normalized": "general felipe angeles",
+      "type": null,
+      "name": "general felipe angeles"
+    },
+    {
+      "input": "José María Morelos y Pavón",
+      "normalized": "jose maria morelos y pavon",
+      "type": null,
+      "name": "jose maria morelos y pavon"
+    },
+    {
+      "input": "Martin Mendalde",
+      "normalized": "martin mendalde",
+      "type": null,
+      "name": "martin mendalde"
+    },
+    {
+      "input": "Palacio Escorial",
+      "normalized": "palacio escorial",
+      "type": null,
+      "name": "palacio escorial"
+    },
+    {
+      "input": "Pedregal de Coyoacán",
+      "normalized": "pedregal de coyoacan",
+      "type": null,
+      "name": "pedregal de coyoacan"
+    },
+    {
+      "input": "Primer Callejón Principal",
+      "normalized": "primer callejon principal",
+      "type": null,
+      "name": "primer callejon principal"
+    },
+    {
+      "input": "Privada 1ª de Nauyaca",
+      "normalized": "privada 1ª de nauyaca",
+      "type": "privada",
+      "name": "1ª de nauyaca"
+    },
+    {
+      "input": "Privada Árbol",
+      "normalized": "privada arbol",
+      "type": "privada",
+      "name": "arbol"
+    },
+    {
+      "input": "Privada Coapetate",
+      "normalized": "privada coapetate",
+      "type": "privada",
+      "name": "coapetate"
+    },
+    {
+      "input": "Privada Ferrocarril de Cuernavaca",
+      "normalized": "privada ferrocarril de cuernavaca",
+      "type": "privada",
+      "name": "ferrocarril de cuernavaca"
+    },
+    {
+      "input": "Privada Los Viveros",
+      "normalized": "privada los viveros",
+      "type": "privada",
+      "name": "los viveros"
+    },
+    {
+      "input": "Privada Primer Retorno San Simón",
+      "normalized": "privada primer retorno san simon",
+      "type": "privada",
+      "name": "primer retorno san simon"
+    },
+    {
+      "input": "Privada San Francisco",
+      "normalized": "privada san francisco",
+      "type": "privada",
+      "name": "san francisco"
+    },
+    {
+      "input": "Privada Tocuil",
+      "normalized": "privada tocuil",
+      "type": "privada",
+      "name": "tocuil"
+    },
+    {
+      "input": "Prolongación Presa don Martín",
+      "normalized": "prolongacion presa don martin",
+      "type": "prolongacion",
+      "name": "presa don martin"
+    },
+    {
+      "input": "Retorno 1 General Ignacio Zaragoza",
+      "normalized": "retorno 1 general ignacio zaragoza",
+      "type": null,
+      "name": "retorno 1 general ignacio zaragoza"
+    },
+    {
+      "input": "Retorno 207",
+      "normalized": "retorno 207",
+      "type": null,
+      "name": "retorno 207"
+    },
+    {
+      "input": "Retorno 45 Oriente",
+      "normalized": "retorno 45 oriente",
+      "type": null,
+      "name": "retorno 45 oriente"
+    },
+    {
+      "input": "Retorno de Kappa",
+      "normalized": "retorno de kappa",
+      "type": null,
+      "name": "retorno de kappa"
+    },
+    {
+      "input": "Segunda Cerrada de Cinco de Mayo",
+      "normalized": "segunda cerrada de cinco de mayo",
+      "type": null,
+      "name": "segunda cerrada de cinco de mayo"
+    },
+    {
+      "input": "Subteniente Crisóforo Salido Grijalva",
+      "normalized": "subteniente crisoforo salido grijalva",
+      "type": null,
+      "name": "subteniente crisoforo salido grijalva"
+    }
+  ]
+}

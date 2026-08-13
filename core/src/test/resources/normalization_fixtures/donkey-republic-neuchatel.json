@@ -1,0 +1,797 @@
+{
+  "language": "de",
+  "cases": [
+    {
+      "input": "Bahnhofstraße",
+      "normalized": "bahnhofstrasse",
+      "type": null,
+      "name": "bahnhofstrasse"
+    },
+    {
+      "input": "Bahnhofstrasse",
+      "normalized": "bahnhofstrasse",
+      "type": null,
+      "name": "bahnhofstrasse"
+    },
+    {
+      "input": "Marienplatz",
+      "normalized": "marienplatz",
+      "type": null,
+      "name": "marienplatz"
+    },
+    {
+      "input": "Unter den Linden",
+      "normalized": "unter den linden",
+      "type": null,
+      "name": "unter den linden"
+    },
+    {
+      "input": "Kurfürstendamm",
+      "normalized": "kurfurstendamm",
+      "type": null,
+      "name": "kurfurstendamm"
+    },
+    {
+      "input": "Große Freiheit",
+      "normalized": "grosse freiheit",
+      "type": null,
+      "name": "grosse freiheit"
+    },
+    {
+      "input": "St.-Pauli-Landungsbrücken",
+      "normalized": "sankt pauli landungsbrucken",
+      "type": null,
+      "name": "sankt pauli landungsbrucken"
+    },
+    {
+      "input": "Am Hauptbahnhof",
+      "normalized": "am hauptbahnhof",
+      "type": null,
+      "name": "am hauptbahnhof"
+    },
+    {
+      "input": "Prinzregentenstraße",
+      "normalized": "prinzregentenstrasse",
+      "type": null,
+      "name": "prinzregentenstrasse"
+    },
+    {
+      "input": "Karl-Marx-Allee",
+      "normalized": "karl marx allee",
+      "type": null,
+      "name": "karl marx allee"
+    },
+    {
+      "input": "Schloßplatz",
+      "normalized": "schlossplatz",
+      "type": null,
+      "name": "schlossplatz"
+    },
+    {
+      "input": "Gr. Bleichen",
+      "normalized": "gross bleichen",
+      "type": null,
+      "name": "gross bleichen"
+    },
+    {
+      "input": "Le Milavy",
+      "normalized": "le milavy",
+      "type": null,
+      "name": "le milavy"
+    },
+    {
+      "input": "Le Rondel",
+      "normalized": "le rondel",
+      "type": null,
+      "name": "le rondel"
+    },
+    {
+      "input": "La Lance",
+      "normalized": "la lance",
+      "type": null,
+      "name": "la lance"
+    },
+    {
+      "input": "Métairie d'Enges",
+      "normalized": "metairie d enges",
+      "type": null,
+      "name": "metairie d enges"
+    },
+    {
+      "input": "Islerenhölzli",
+      "normalized": "islerenholzli",
+      "type": null,
+      "name": "islerenholzli"
+    },
+    {
+      "input": "Fin-de-Ressudens",
+      "normalized": "fin de ressudens",
+      "type": null,
+      "name": "fin de ressudens"
+    },
+    {
+      "input": "La Reprise",
+      "normalized": "la reprise",
+      "type": null,
+      "name": "la reprise"
+    },
+    {
+      "input": "Rançonnière-Dessus",
+      "normalized": "ranconniere dessus",
+      "type": null,
+      "name": "ranconniere dessus"
+    },
+    {
+      "input": "Pasquiers-Pernet",
+      "normalized": "pasquiers pernet",
+      "type": null,
+      "name": "pasquiers pernet"
+    },
+    {
+      "input": "Route de la Place-d'Armes",
+      "normalized": "route de la place d armes",
+      "type": null,
+      "name": "route de la place d armes"
+    },
+    {
+      "input": "Bibliothèque de la Faculté des sciences économiques",
+      "normalized": "bibliotheque de la faculte des sciences economiques",
+      "type": null,
+      "name": "bibliotheque de la faculte des sciences economiques"
+    },
+    {
+      "input": "Ariane",
+      "normalized": "ariane",
+      "type": null,
+      "name": "ariane"
+    },
+    {
+      "input": "Chauffage à distance à bois",
+      "normalized": "chauffage a distance a bois",
+      "type": null,
+      "name": "chauffage a distance a bois"
+    },
+    {
+      "input": "Serrières",
+      "normalized": "serrieres",
+      "type": null,
+      "name": "serrieres"
+    },
+    {
+      "input": "Le Locle",
+      "normalized": "le locle",
+      "type": null,
+      "name": "le locle"
+    },
+    {
+      "input": "Chasselas",
+      "normalized": "chasselas",
+      "type": null,
+      "name": "chasselas"
+    },
+    {
+      "input": "Montmirail",
+      "normalized": "montmirail",
+      "type": null,
+      "name": "montmirail"
+    },
+    {
+      "input": "Allée des Erables",
+      "normalized": "allee des erables",
+      "type": "allee",
+      "name": "des erables"
+    },
+    {
+      "input": "Aux Crétêts",
+      "normalized": "aux cretets",
+      "type": null,
+      "name": "aux cretets"
+    },
+    {
+      "input": "Avenue Édouard-Dubois",
+      "normalized": "avenue edouard dubois",
+      "type": null,
+      "name": "avenue edouard dubois"
+    },
+    {
+      "input": "Brühlweg",
+      "normalized": "bruhlweg",
+      "type": null,
+      "name": "bruhlweg"
+    },
+    {
+      "input": "Ch. de la Montagne (bas)",
+      "normalized": "ch de la montagne bas",
+      "type": null,
+      "name": "ch de la montagne bas"
+    },
+    {
+      "input": "Ch. du Bas",
+      "normalized": "ch du bas",
+      "type": null,
+      "name": "ch du bas"
+    },
+    {
+      "input": "Champ Babou",
+      "normalized": "champ babou",
+      "type": null,
+      "name": "champ babou"
+    },
+    {
+      "input": "Chantemerle",
+      "normalized": "chantemerle",
+      "type": null,
+      "name": "chantemerle"
+    },
+    {
+      "input": "Chemin d'Ostende",
+      "normalized": "chemin d ostende",
+      "type": null,
+      "name": "chemin d ostende"
+    },
+    {
+      "input": "Chemin de Châtelard",
+      "normalized": "chemin de chatelard",
+      "type": null,
+      "name": "chemin de chatelard"
+    },
+    {
+      "input": "Chemin de l'Abbaye",
+      "normalized": "chemin de l abbaye",
+      "type": null,
+      "name": "chemin de l abbaye"
+    },
+    {
+      "input": "Chemin de la Baconnière",
+      "normalized": "chemin de la baconniere",
+      "type": null,
+      "name": "chemin de la baconniere"
+    },
+    {
+      "input": "Chemin de la Charrière",
+      "normalized": "chemin de la charriere",
+      "type": null,
+      "name": "chemin de la charriere"
+    },
+    {
+      "input": "Chemin de la Côte aux Moines",
+      "normalized": "chemin de la cote aux moines",
+      "type": null,
+      "name": "chemin de la cote aux moines"
+    },
+    {
+      "input": "Chemin de la Forêt",
+      "normalized": "chemin de la foret",
+      "type": null,
+      "name": "chemin de la foret"
+    },
+    {
+      "input": "Chemin de la Maladière",
+      "normalized": "chemin de la maladiere",
+      "type": null,
+      "name": "chemin de la maladiere"
+    },
+    {
+      "input": "Chemin de la Pépinière",
+      "normalized": "chemin de la pepiniere",
+      "type": null,
+      "name": "chemin de la pepiniere"
+    },
+    {
+      "input": "Chemin de la Prison aux Vaches",
+      "normalized": "chemin de la prison aux vaches",
+      "type": null,
+      "name": "chemin de la prison aux vaches"
+    },
+    {
+      "input": "Chemin de la Troche",
+      "normalized": "chemin de la troche",
+      "type": null,
+      "name": "chemin de la troche"
+    },
+    {
+      "input": "Chemin de Platte-Fin",
+      "normalized": "chemin de platte fin",
+      "type": null,
+      "name": "chemin de platte fin"
+    },
+    {
+      "input": "Chemin de Treyvaux",
+      "normalized": "chemin de treyvaux",
+      "type": null,
+      "name": "chemin de treyvaux"
+    },
+    {
+      "input": "Chemin des Aulnes",
+      "normalized": "chemin des aulnes",
+      "type": null,
+      "name": "chemin des aulnes"
+    },
+    {
+      "input": "Chemin des Carabiniers",
+      "normalized": "chemin des carabiniers",
+      "type": null,
+      "name": "chemin des carabiniers"
+    },
+    {
+      "input": "Chemin des Cheseaux",
+      "normalized": "chemin des cheseaux",
+      "type": null,
+      "name": "chemin des cheseaux"
+    },
+    {
+      "input": "Chemin des Délèzes",
+      "normalized": "chemin des delezes",
+      "type": null,
+      "name": "chemin des delezes"
+    },
+    {
+      "input": "Chemin des Fours",
+      "normalized": "chemin des fours",
+      "type": null,
+      "name": "chemin des fours"
+    },
+    {
+      "input": "Chemin des Jardillets",
+      "normalized": "chemin des jardillets",
+      "type": null,
+      "name": "chemin des jardillets"
+    },
+    {
+      "input": "Chemin des Macherelles",
+      "normalized": "chemin des macherelles",
+      "type": null,
+      "name": "chemin des macherelles"
+    },
+    {
+      "input": "Chemin des Neigeux",
+      "normalized": "chemin des neigeux",
+      "type": null,
+      "name": "chemin des neigeux"
+    },
+    {
+      "input": "Chemin des Pièces",
+      "normalized": "chemin des pieces",
+      "type": null,
+      "name": "chemin des pieces"
+    },
+    {
+      "input": "Chemin des Quatre-Ministraux",
+      "normalized": "chemin des quatre ministraux",
+      "type": null,
+      "name": "chemin des quatre ministraux"
+    },
+    {
+      "input": "Chemin des Rosets",
+      "normalized": "chemin des rosets",
+      "type": null,
+      "name": "chemin des rosets"
+    },
+    {
+      "input": "Chemin des Trois-Chênes",
+      "normalized": "chemin des trois chenes",
+      "type": null,
+      "name": "chemin des trois chenes"
+    },
+    {
+      "input": "Chemin du Battoir",
+      "normalized": "chemin du battoir",
+      "type": null,
+      "name": "chemin du battoir"
+    },
+    {
+      "input": "Chemin du Chalvaire",
+      "normalized": "chemin du chalvaire",
+      "type": null,
+      "name": "chemin du chalvaire"
+    },
+    {
+      "input": "Chemin du Crêt-du-Parc",
+      "normalized": "chemin du cret du parc",
+      "type": null,
+      "name": "chemin du cret du parc"
+    },
+    {
+      "input": "Chemin du Gravenau",
+      "normalized": "chemin du gravenau",
+      "type": null,
+      "name": "chemin du gravenau"
+    },
+    {
+      "input": "Chemin du Muret",
+      "normalized": "chemin du muret",
+      "type": null,
+      "name": "chemin du muret"
+    },
+    {
+      "input": "Chemin du Potat-Dessus",
+      "normalized": "chemin du potat dessus",
+      "type": null,
+      "name": "chemin du potat dessus"
+    },
+    {
+      "input": "Chemin du Ronzi",
+      "normalized": "chemin du ronzi",
+      "type": null,
+      "name": "chemin du ronzi"
+    },
+    {
+      "input": "Chemin du Vau-Vesin",
+      "normalized": "chemin du vau vesin",
+      "type": null,
+      "name": "chemin du vau vesin"
+    },
+    {
+      "input": "Chemin forestier La Diagonale",
+      "normalized": "chemin forestier la diagonale",
+      "type": null,
+      "name": "chemin forestier la diagonale"
+    },
+    {
+      "input": "Chemin Jean Roulet",
+      "normalized": "chemin jean roulet",
+      "type": null,
+      "name": "chemin jean roulet"
+    },
+    {
+      "input": "Chemin privé",
+      "normalized": "chemin prive",
+      "type": null,
+      "name": "chemin prive"
+    },
+    {
+      "input": "Cité-Suchard",
+      "normalized": "cite suchard",
+      "type": null,
+      "name": "cite suchard"
+    },
+    {
+      "input": "Crêt du Mont d'Amin",
+      "normalized": "cret du mont d amin",
+      "type": null,
+      "name": "cret du mont d amin"
+    },
+    {
+      "input": "En Crausa",
+      "normalized": "en crausa",
+      "type": null,
+      "name": "en crausa"
+    },
+    {
+      "input": "Faubourg de l'Hôpital",
+      "normalized": "faubourg de l hopital",
+      "type": null,
+      "name": "faubourg de l hopital"
+    },
+    {
+      "input": "Giratoire des Château des Monts",
+      "normalized": "giratoire des chateau des monts",
+      "type": null,
+      "name": "giratoire des chateau des monts"
+    },
+    {
+      "input": "Haut de Cerf",
+      "normalized": "haut de cerf",
+      "type": null,
+      "name": "haut de cerf"
+    },
+    {
+      "input": "Impasse de la Clairière",
+      "normalized": "impasse de la clairiere",
+      "type": null,
+      "name": "impasse de la clairiere"
+    },
+    {
+      "input": "Impasse des Cent-Pas",
+      "normalized": "impasse des cent pas",
+      "type": null,
+      "name": "impasse des cent pas"
+    },
+    {
+      "input": "Impasse des Sittelles",
+      "normalized": "impasse des sittelles",
+      "type": null,
+      "name": "impasse des sittelles"
+    },
+    {
+      "input": "Impasse du Noyer",
+      "normalized": "impasse du noyer",
+      "type": null,
+      "name": "impasse du noyer"
+    },
+    {
+      "input": "L'Erable",
+      "normalized": "l erable",
+      "type": null,
+      "name": "l erable"
+    },
+    {
+      "input": "La Croix",
+      "normalized": "la croix",
+      "type": null,
+      "name": "la croix"
+    },
+    {
+      "input": "La Prise Marthe",
+      "normalized": "la prise marthe",
+      "type": null,
+      "name": "la prise marthe"
+    },
+    {
+      "input": "Layon des Bamps",
+      "normalized": "layon des bamps",
+      "type": null,
+      "name": "layon des bamps"
+    },
+    {
+      "input": "Le Grabou",
+      "normalized": "le grabou",
+      "type": null,
+      "name": "le grabou"
+    },
+    {
+      "input": "Le Terdo",
+      "normalized": "le terdo",
+      "type": null,
+      "name": "le terdo"
+    },
+    {
+      "input": "Les Champsrayés",
+      "normalized": "les champsrayes",
+      "type": null,
+      "name": "les champsrayes"
+    },
+    {
+      "input": "Les Jean-d'Hôtaux",
+      "normalized": "les jean d hotaux",
+      "type": null,
+      "name": "les jean d hotaux"
+    },
+    {
+      "input": "Les Rochettes",
+      "normalized": "les rochettes",
+      "type": null,
+      "name": "les rochettes"
+    },
+    {
+      "input": "Moulin Gris",
+      "normalized": "moulin gris",
+      "type": null,
+      "name": "moulin gris"
+    },
+    {
+      "input": "Passage des Mitrailleurs",
+      "normalized": "passage des mitrailleurs",
+      "type": null,
+      "name": "passage des mitrailleurs"
+    },
+    {
+      "input": "Place Alexis-Marie-Piaget",
+      "normalized": "place alexis marie piaget",
+      "type": null,
+      "name": "place alexis marie piaget"
+    },
+    {
+      "input": "Place du Village",
+      "normalized": "place du village",
+      "type": null,
+      "name": "place du village"
+    },
+    {
+      "input": "Pré-du-Pont",
+      "normalized": "pre du pont",
+      "type": null,
+      "name": "pre du pont"
+    },
+    {
+      "input": "Riedern",
+      "normalized": "riedern",
+      "type": null,
+      "name": "riedern"
+    },
+    {
+      "input": "Route de Belmont",
+      "normalized": "route de belmont",
+      "type": null,
+      "name": "route de belmont"
+    },
+    {
+      "input": "Route de Concise",
+      "normalized": "route de concise",
+      "type": null,
+      "name": "route de concise"
+    },
+    {
+      "input": "Route de Grandcour",
+      "normalized": "route de grandcour",
+      "type": null,
+      "name": "route de grandcour"
+    },
+    {
+      "input": "Route de la Corniche",
+      "normalized": "route de la corniche",
+      "type": null,
+      "name": "route de la corniche"
+    },
+    {
+      "input": "Route de la Piscine",
+      "normalized": "route de la piscine",
+      "type": null,
+      "name": "route de la piscine"
+    },
+    {
+      "input": "Route de Landeyeux",
+      "normalized": "route de landeyeux",
+      "type": null,
+      "name": "route de landeyeux"
+    },
+    {
+      "input": "Route de Sachet",
+      "normalized": "route de sachet",
+      "type": null,
+      "name": "route de sachet"
+    },
+    {
+      "input": "Route des Buchilles",
+      "normalized": "route des buchilles",
+      "type": null,
+      "name": "route des buchilles"
+    },
+    {
+      "input": "Route des Longschamps",
+      "normalized": "route des longschamps",
+      "type": null,
+      "name": "route des longschamps"
+    },
+    {
+      "input": "Route du Brel",
+      "normalized": "route du brel",
+      "type": null,
+      "name": "route du brel"
+    },
+    {
+      "input": "Route du Pra",
+      "normalized": "route du pra",
+      "type": null,
+      "name": "route du pra"
+    },
+    {
+      "input": "Route Henripolis",
+      "normalized": "route henripolis",
+      "type": null,
+      "name": "route henripolis"
+    },
+    {
+      "input": "Rue Beausite",
+      "normalized": "rue beausite",
+      "type": null,
+      "name": "rue beausite"
+    },
+    {
+      "input": "Rue de Chemarin",
+      "normalized": "rue de chemarin",
+      "type": null,
+      "name": "rue de chemarin"
+    },
+    {
+      "input": "Rue de l'Etang",
+      "normalized": "rue de l etang",
+      "type": null,
+      "name": "rue de l etang"
+    },
+    {
+      "input": "Rue de la Citadelle",
+      "normalized": "rue de la citadelle",
+      "type": null,
+      "name": "rue de la citadelle"
+    },
+    {
+      "input": "Rue de la Gachette",
+      "normalized": "rue de la gachette",
+      "type": null,
+      "name": "rue de la gachette"
+    },
+    {
+      "input": "Rue de la Ravine",
+      "normalized": "rue de la ravine",
+      "type": null,
+      "name": "rue de la ravine"
+    },
+    {
+      "input": "Rue de Pommeret",
+      "normalized": "rue de pommeret",
+      "type": null,
+      "name": "rue de pommeret"
+    },
+    {
+      "input": "Rue des Berthoudes",
+      "normalized": "rue des berthoudes",
+      "type": null,
+      "name": "rue des berthoudes"
+    },
+    {
+      "input": "Rue des Couviers",
+      "normalized": "rue des couviers",
+      "type": null,
+      "name": "rue des couviers"
+    },
+    {
+      "input": "Rue des Grandes-Planches",
+      "normalized": "rue des grandes planches",
+      "type": null,
+      "name": "rue des grandes planches"
+    },
+    {
+      "input": "Rue des Pinsons",
+      "normalized": "rue des pinsons",
+      "type": null,
+      "name": "rue des pinsons"
+    },
+    {
+      "input": "Rue des Sors",
+      "normalized": "rue des sors",
+      "type": null,
+      "name": "rue des sors"
+    },
+    {
+      "input": "Rue du Bourg",
+      "normalized": "rue du bourg",
+      "type": null,
+      "name": "rue du bourg"
+    },
+    {
+      "input": "Rue du Crêt Taconnet",
+      "normalized": "rue du cret taconnet",
+      "type": null,
+      "name": "rue du cret taconnet"
+    },
+    {
+      "input": "Rue du Midi",
+      "normalized": "rue du midi",
+      "type": null,
+      "name": "rue du midi"
+    },
+    {
+      "input": "Rue du Progrès",
+      "normalized": "rue du progres",
+      "type": null,
+      "name": "rue du progres"
+    },
+    {
+      "input": "Rue du Tronchet",
+      "normalized": "rue du tronchet",
+      "type": null,
+      "name": "rue du tronchet"
+    },
+    {
+      "input": "Rue Frédéric Soguel",
+      "normalized": "rue frederic soguel",
+      "type": null,
+      "name": "rue frederic soguel"
+    },
+    {
+      "input": "Rue Jehan-Droz",
+      "normalized": "rue jehan droz",
+      "type": null,
+      "name": "rue jehan droz"
+    },
+    {
+      "input": "Rue Paul-Vouga",
+      "normalized": "rue paul vouga",
+      "type": null,
+      "name": "rue paul vouga"
+    },
+    {
+      "input": "Ruelle Crible",
+      "normalized": "ruelle crible",
+      "type": null,
+      "name": "ruelle crible"
+    },
+    {
+      "input": "Ruelle des Romains",
+      "normalized": "ruelle des romains",
+      "type": null,
+      "name": "ruelle des romains"
+    }
+  ]
+}

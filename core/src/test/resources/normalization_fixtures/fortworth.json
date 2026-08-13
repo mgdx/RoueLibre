@@ -1,0 +1,797 @@
+{
+  "language": "en",
+  "cases": [
+    {
+      "input": "Abbey Rd",
+      "normalized": "abbey road",
+      "type": null,
+      "name": "abbey road"
+    },
+    {
+      "input": "Baker Street",
+      "normalized": "baker street",
+      "type": null,
+      "name": "baker street"
+    },
+    {
+      "input": "St James's Park",
+      "normalized": "saint james south park",
+      "type": null,
+      "name": "saint james south park"
+    },
+    {
+      "input": "Queen's Crescent",
+      "normalized": "queen south crescent",
+      "type": null,
+      "name": "queen south crescent"
+    },
+    {
+      "input": "Kensington High St",
+      "normalized": "kensington high st",
+      "type": null,
+      "name": "kensington high st"
+    },
+    {
+      "input": "Dr Martin Luther King Jr Blvd",
+      "normalized": "doctor martin luther king jr boulevard",
+      "type": null,
+      "name": "doctor martin luther king jr boulevard"
+    },
+    {
+      "input": "N Michigan Ave",
+      "normalized": "north michigan avenue",
+      "type": null,
+      "name": "north michigan avenue"
+    },
+    {
+      "input": "The Mall",
+      "normalized": "the mall",
+      "type": null,
+      "name": "the mall"
+    },
+    {
+      "input": "Hyde Park Corner",
+      "normalized": "hyde park corner",
+      "type": null,
+      "name": "hyde park corner"
+    },
+    {
+      "input": "Cherry Ln",
+      "normalized": "cherry lane",
+      "type": null,
+      "name": "cherry lane"
+    },
+    {
+      "input": "Mt Pleasant Ter",
+      "normalized": "mount pleasant terrace",
+      "type": null,
+      "name": "mount pleasant terrace"
+    },
+    {
+      "input": "Fifth Avenue",
+      "normalized": "fifth avenue",
+      "type": null,
+      "name": "fifth avenue"
+    },
+    {
+      "input": "California Parkway East",
+      "normalized": "california parkway east",
+      "type": null,
+      "name": "california parkway east"
+    },
+    {
+      "input": "Livestock Exchange Building",
+      "normalized": "livestock exchange building",
+      "type": null,
+      "name": "livestock exchange building"
+    },
+    {
+      "input": "Fort Worth Central",
+      "normalized": "fort worth central",
+      "type": null,
+      "name": "fort worth central"
+    },
+    {
+      "input": "Adrian Drive",
+      "normalized": "adrian drive",
+      "type": null,
+      "name": "adrian drive"
+    },
+    {
+      "input": "Alto Monte Court",
+      "normalized": "alto monte court",
+      "type": null,
+      "name": "alto monte court"
+    },
+    {
+      "input": "Apache Plume Road",
+      "normalized": "apache plume road",
+      "type": null,
+      "name": "apache plume road"
+    },
+    {
+      "input": "Asbury Drive",
+      "normalized": "asbury drive",
+      "type": null,
+      "name": "asbury drive"
+    },
+    {
+      "input": "Avenue E",
+      "normalized": "avenue east",
+      "type": "avenue",
+      "name": "east"
+    },
+    {
+      "input": "Banbury Court",
+      "normalized": "banbury court",
+      "type": null,
+      "name": "banbury court"
+    },
+    {
+      "input": "Bellaire Court",
+      "normalized": "bellaire court",
+      "type": null,
+      "name": "bellaire court"
+    },
+    {
+      "input": "Bertrose Avenue",
+      "normalized": "bertrose avenue",
+      "type": null,
+      "name": "bertrose avenue"
+    },
+    {
+      "input": "Bishops Flower Road",
+      "normalized": "bishops flower road",
+      "type": null,
+      "name": "bishops flower road"
+    },
+    {
+      "input": "Blueridge Drive",
+      "normalized": "blueridge drive",
+      "type": null,
+      "name": "blueridge drive"
+    },
+    {
+      "input": "Bowline Court",
+      "normalized": "bowline court",
+      "type": null,
+      "name": "bowline court"
+    },
+    {
+      "input": "Briarcliff Road",
+      "normalized": "briarcliff road",
+      "type": null,
+      "name": "briarcliff road"
+    },
+    {
+      "input": "Brothers Street",
+      "normalized": "brothers street",
+      "type": null,
+      "name": "brothers street"
+    },
+    {
+      "input": "Burnett Street",
+      "normalized": "burnett street",
+      "type": null,
+      "name": "burnett street"
+    },
+    {
+      "input": "Calloway Place",
+      "normalized": "calloway place",
+      "type": null,
+      "name": "calloway place"
+    },
+    {
+      "input": "Canyon Springs Road",
+      "normalized": "canyon springs road",
+      "type": null,
+      "name": "canyon springs road"
+    },
+    {
+      "input": "Carverly Drive",
+      "normalized": "carverly drive",
+      "type": null,
+      "name": "carverly drive"
+    },
+    {
+      "input": "Champions Avenue",
+      "normalized": "champions avenue",
+      "type": null,
+      "name": "champions avenue"
+    },
+    {
+      "input": "Chesser Boyer Road",
+      "normalized": "chesser boyer road",
+      "type": null,
+      "name": "chesser boyer road"
+    },
+    {
+      "input": "Cityview Boulevard",
+      "normalized": "cityview boulevard",
+      "type": null,
+      "name": "cityview boulevard"
+    },
+    {
+      "input": "Clotell Court",
+      "normalized": "clotell court",
+      "type": null,
+      "name": "clotell court"
+    },
+    {
+      "input": "Coltrane Street",
+      "normalized": "coltrane street",
+      "type": null,
+      "name": "coltrane street"
+    },
+    {
+      "input": "Coral Circle",
+      "normalized": "coral circle",
+      "type": null,
+      "name": "coral circle"
+    },
+    {
+      "input": "Crabtree Street",
+      "normalized": "crabtree street",
+      "type": null,
+      "name": "crabtree street"
+    },
+    {
+      "input": "Crowley Street",
+      "normalized": "crowley street",
+      "type": null,
+      "name": "crowley street"
+    },
+    {
+      "input": "Darcy Street",
+      "normalized": "darcy street",
+      "type": null,
+      "name": "darcy street"
+    },
+    {
+      "input": "Delaware Trail",
+      "normalized": "delaware trail",
+      "type": null,
+      "name": "delaware trail"
+    },
+    {
+      "input": "Dodge Avenue",
+      "normalized": "dodge avenue",
+      "type": null,
+      "name": "dodge avenue"
+    },
+    {
+      "input": "Drift",
+      "normalized": "drift",
+      "type": null,
+      "name": "drift"
+    },
+    {
+      "input": "East 2nd Street",
+      "normalized": "east 2nd street",
+      "type": null,
+      "name": "east 2nd street"
+    },
+    {
+      "input": "East Devitt Street",
+      "normalized": "east devitt street",
+      "type": null,
+      "name": "east devitt street"
+    },
+    {
+      "input": "East Northside Drive",
+      "normalized": "east northside drive",
+      "type": null,
+      "name": "east northside drive"
+    },
+    {
+      "input": "Eastway Reserve Drive",
+      "normalized": "eastway reserve drive",
+      "type": null,
+      "name": "eastway reserve drive"
+    },
+    {
+      "input": "Elaine Court",
+      "normalized": "elaine court",
+      "type": null,
+      "name": "elaine court"
+    },
+    {
+      "input": "Ems Road West",
+      "normalized": "ems road west",
+      "type": null,
+      "name": "ems road west"
+    },
+    {
+      "input": "Express Drive",
+      "normalized": "express drive",
+      "type": null,
+      "name": "express drive"
+    },
+    {
+      "input": "Fieldcrest Drive",
+      "normalized": "fieldcrest drive",
+      "type": null,
+      "name": "fieldcrest drive"
+    },
+    {
+      "input": "Forest Highlands Drive",
+      "normalized": "forest highlands drive",
+      "type": null,
+      "name": "forest highlands drive"
+    },
+    {
+      "input": "Frontier Street",
+      "normalized": "frontier street",
+      "type": null,
+      "name": "frontier street"
+    },
+    {
+      "input": "Garwood Drive",
+      "normalized": "garwood drive",
+      "type": null,
+      "name": "garwood drive"
+    },
+    {
+      "input": "Glen Garden Avenue",
+      "normalized": "glen garden avenue",
+      "type": null,
+      "name": "glen garden avenue"
+    },
+    {
+      "input": "Gothic Drive",
+      "normalized": "gothic drive",
+      "type": null,
+      "name": "gothic drive"
+    },
+    {
+      "input": "Greenleaf Street",
+      "normalized": "greenleaf street",
+      "type": null,
+      "name": "greenleaf street"
+    },
+    {
+      "input": "Haley Lane",
+      "normalized": "haley lane",
+      "type": null,
+      "name": "haley lane"
+    },
+    {
+      "input": "Hartford Drive",
+      "normalized": "hartford drive",
+      "type": null,
+      "name": "hartford drive"
+    },
+    {
+      "input": "Headless Horseman Road",
+      "normalized": "headless horseman road",
+      "type": null,
+      "name": "headless horseman road"
+    },
+    {
+      "input": "Hieghtsview Lane South",
+      "normalized": "hieghtsview lane south",
+      "type": null,
+      "name": "hieghtsview lane south"
+    },
+    {
+      "input": "Hillside Drive",
+      "normalized": "hillside drive",
+      "type": null,
+      "name": "hillside drive"
+    },
+    {
+      "input": "Howell Drive",
+      "normalized": "howell drive",
+      "type": null,
+      "name": "howell drive"
+    },
+    {
+      "input": "Indian Creek Drive",
+      "normalized": "indian creek drive",
+      "type": null,
+      "name": "indian creek drive"
+    },
+    {
+      "input": "Jacksboro Highway",
+      "normalized": "jacksboro highway",
+      "type": null,
+      "name": "jacksboro highway"
+    },
+    {
+      "input": "Jerry Lane",
+      "normalized": "jerry lane",
+      "type": null,
+      "name": "jerry lane"
+    },
+    {
+      "input": "Kathy Lane",
+      "normalized": "kathy lane",
+      "type": null,
+      "name": "kathy lane"
+    },
+    {
+      "input": "Kilpatrick Avenue",
+      "normalized": "kilpatrick avenue",
+      "type": null,
+      "name": "kilpatrick avenue"
+    },
+    {
+      "input": "Koldin Lane",
+      "normalized": "koldin lane",
+      "type": null,
+      "name": "koldin lane"
+    },
+    {
+      "input": "Lakeland Street",
+      "normalized": "lakeland street",
+      "type": null,
+      "name": "lakeland street"
+    },
+    {
+      "input": "Laura Ann Court",
+      "normalized": "laura ann court",
+      "type": null,
+      "name": "laura ann court"
+    },
+    {
+      "input": "Levee Circle East",
+      "normalized": "levee circle east",
+      "type": null,
+      "name": "levee circle east"
+    },
+    {
+      "input": "Little Brook Lane",
+      "normalized": "little brook lane",
+      "type": null,
+      "name": "little brook lane"
+    },
+    {
+      "input": "Loraine Street",
+      "normalized": "loraine street",
+      "type": null,
+      "name": "loraine street"
+    },
+    {
+      "input": "Lynndale Place",
+      "normalized": "lynndale place",
+      "type": null,
+      "name": "lynndale place"
+    },
+    {
+      "input": "Manderly Place",
+      "normalized": "manderly place",
+      "type": null,
+      "name": "manderly place"
+    },
+    {
+      "input": "Marsalis Street",
+      "normalized": "marsalis street",
+      "type": null,
+      "name": "marsalis street"
+    },
+    {
+      "input": "Mc Gee Drive",
+      "normalized": "mc gee drive",
+      "type": null,
+      "name": "mc gee drive"
+    },
+    {
+      "input": "Mecca Street",
+      "normalized": "mecca street",
+      "type": null,
+      "name": "mecca street"
+    },
+    {
+      "input": "Merrymount Road",
+      "normalized": "merrymount road",
+      "type": null,
+      "name": "merrymount road"
+    },
+    {
+      "input": "Miraloma Drive",
+      "normalized": "miraloma drive",
+      "type": null,
+      "name": "miraloma drive"
+    },
+    {
+      "input": "Montecito Lane",
+      "normalized": "montecito lane",
+      "type": null,
+      "name": "montecito lane"
+    },
+    {
+      "input": "Mount View Avenue",
+      "normalized": "mount view avenue",
+      "type": null,
+      "name": "mount view avenue"
+    },
+    {
+      "input": "Neystel Road",
+      "normalized": "neystel road",
+      "type": null,
+      "name": "neystel road"
+    },
+    {
+      "input": "North Edgewood Terrace",
+      "normalized": "north edgewood terrace",
+      "type": null,
+      "name": "north edgewood terrace"
+    },
+    {
+      "input": "North Rivercrest Drive",
+      "normalized": "north rivercrest drive",
+      "type": null,
+      "name": "north rivercrest drive"
+    },
+    {
+      "input": "Northeast 29th Street",
+      "normalized": "northeast 29th street",
+      "type": null,
+      "name": "northeast 29th street"
+    },
+    {
+      "input": "Northwest 32nd Street",
+      "normalized": "northwest 32nd street",
+      "type": null,
+      "name": "northwest 32nd street"
+    },
+    {
+      "input": "Oak Hill Circle",
+      "normalized": "oak hill circle",
+      "type": null,
+      "name": "oak hill circle"
+    },
+    {
+      "input": "Oakwood Cemetery",
+      "normalized": "oakwood cemetery",
+      "type": null,
+      "name": "oakwood cemetery"
+    },
+    {
+      "input": "Orein Street",
+      "normalized": "orein street",
+      "type": null,
+      "name": "orein street"
+    },
+    {
+      "input": "Palmer Drive",
+      "normalized": "palmer drive",
+      "type": null,
+      "name": "palmer drive"
+    },
+    {
+      "input": "Parker Road",
+      "normalized": "parker road",
+      "type": null,
+      "name": "parker road"
+    },
+    {
+      "input": "Peggy Drive",
+      "normalized": "peggy drive",
+      "type": null,
+      "name": "peggy drive"
+    },
+    {
+      "input": "Plover Circle",
+      "normalized": "plover circle",
+      "type": null,
+      "name": "plover circle"
+    },
+    {
+      "input": "Prince Street",
+      "normalized": "prince street",
+      "type": null,
+      "name": "prince street"
+    },
+    {
+      "input": "Ranch House Drive East",
+      "normalized": "ranch house drive east",
+      "type": null,
+      "name": "ranch house drive east"
+    },
+    {
+      "input": "Red Maple Circle",
+      "normalized": "red maple circle",
+      "type": null,
+      "name": "red maple circle"
+    },
+    {
+      "input": "Revere Street",
+      "normalized": "revere street",
+      "type": null,
+      "name": "revere street"
+    },
+    {
+      "input": "Ridgmar Boulevard",
+      "normalized": "ridgmar boulevard",
+      "type": null,
+      "name": "ridgmar boulevard"
+    },
+    {
+      "input": "River Pass Street",
+      "normalized": "river pass street",
+      "type": null,
+      "name": "river pass street"
+    },
+    {
+      "input": "Riverstone Way",
+      "normalized": "riverstone way",
+      "type": null,
+      "name": "riverstone way"
+    },
+    {
+      "input": "Rogers Street",
+      "normalized": "rogers street",
+      "type": null,
+      "name": "rogers street"
+    },
+    {
+      "input": "Rupert Street",
+      "normalized": "rupert street",
+      "type": null,
+      "name": "rupert street"
+    },
+    {
+      "input": "Salisbury Street",
+      "normalized": "salisbury street",
+      "type": null,
+      "name": "salisbury street"
+    },
+    {
+      "input": "Sarita Drive",
+      "normalized": "sarita drive",
+      "type": null,
+      "name": "sarita drive"
+    },
+    {
+      "input": "Selkirk Drive West",
+      "normalized": "selkirk drive west",
+      "type": null,
+      "name": "selkirk drive west"
+    },
+    {
+      "input": "Sheer Bliss Lane",
+      "normalized": "sheer bliss lane",
+      "type": null,
+      "name": "sheer bliss lane"
+    },
+    {
+      "input": "Skyacres Drive",
+      "normalized": "skyacres drive",
+      "type": null,
+      "name": "skyacres drive"
+    },
+    {
+      "input": "South Enderly Place",
+      "normalized": "south enderly place",
+      "type": null,
+      "name": "south enderly place"
+    },
+    {
+      "input": "South Sylvania Avenue",
+      "normalized": "south sylvania avenue",
+      "type": null,
+      "name": "south sylvania avenue"
+    },
+    {
+      "input": "Springs Road",
+      "normalized": "springs road",
+      "type": null,
+      "name": "springs road"
+    },
+    {
+      "input": "Stewart Street",
+      "normalized": "stewart street",
+      "type": null,
+      "name": "stewart street"
+    },
+    {
+      "input": "Summercrest Court",
+      "normalized": "summercrest court",
+      "type": null,
+      "name": "summercrest court"
+    },
+    {
+      "input": "T L Ferguson Court North",
+      "normalized": "t l ferguson court north",
+      "type": null,
+      "name": "t l ferguson court north"
+    },
+    {
+      "input": "Terra Trail",
+      "normalized": "terra trail",
+      "type": null,
+      "name": "terra trail"
+    },
+    {
+      "input": "Tierney Road",
+      "normalized": "tierney road",
+      "type": null,
+      "name": "tierney road"
+    },
+    {
+      "input": "Trail Lake Drive",
+      "normalized": "trail lake drive",
+      "type": null,
+      "name": "trail lake drive"
+    },
+    {
+      "input": "Triumph Street",
+      "normalized": "triumph street",
+      "type": null,
+      "name": "triumph street"
+    },
+    {
+      "input": "Valentine Street",
+      "normalized": "valentine street",
+      "type": null,
+      "name": "valentine street"
+    },
+    {
+      "input": "Vernon Castle Avenue",
+      "normalized": "vernon castle avenue",
+      "type": null,
+      "name": "vernon castle avenue"
+    },
+    {
+      "input": "Virginia Court",
+      "normalized": "virginia court",
+      "type": null,
+      "name": "virginia court"
+    },
+    {
+      "input": "Walnut Ridge Road",
+      "normalized": "walnut ridge road",
+      "type": null,
+      "name": "walnut ridge road"
+    },
+    {
+      "input": "Watermill Drive",
+      "normalized": "watermill drive",
+      "type": null,
+      "name": "watermill drive"
+    },
+    {
+      "input": "Wells Drive",
+      "normalized": "wells drive",
+      "type": null,
+      "name": "wells drive"
+    },
+    {
+      "input": "West Biddison Street",
+      "normalized": "west biddison street",
+      "type": null,
+      "name": "west biddison street"
+    },
+    {
+      "input": "West Jessamine Street",
+      "normalized": "west jessamine street",
+      "type": null,
+      "name": "west jessamine street"
+    },
+    {
+      "input": "West Thornhill Drive",
+      "normalized": "west thornhill drive",
+      "type": null,
+      "name": "west thornhill drive"
+    },
+    {
+      "input": "Westmont Court",
+      "normalized": "westmont court",
+      "type": null,
+      "name": "westmont court"
+    },
+    {
+      "input": "Wichita Court",
+      "normalized": "wichita court",
+      "type": null,
+      "name": "wichita court"
+    },
+    {
+      "input": "Willow Ridge Road",
+      "normalized": "willow ridge road",
+      "type": null,
+      "name": "willow ridge road"
+    }
+  ]
+}

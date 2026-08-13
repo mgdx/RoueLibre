@@ -1,0 +1,791 @@
+{
+  "language": "nl",
+  "cases": [
+    {
+      "input": "Kalverstraat",
+      "normalized": "kalverstraat",
+      "type": null,
+      "name": "kalverstraat"
+    },
+    {
+      "input": "Prins Hendriklaan",
+      "normalized": "prins hendriklaan",
+      "type": null,
+      "name": "prins hendriklaan"
+    },
+    {
+      "input": "Grote Markt",
+      "normalized": "grote markt",
+      "type": null,
+      "name": "grote markt"
+    },
+    {
+      "input": "Sint-Jansstraat",
+      "normalized": "sint jansstraat",
+      "type": null,
+      "name": "sint jansstraat"
+    },
+    {
+      "input": "Nieuwezijds Voorburgwal",
+      "normalized": "nieuwezijds voorburgwal",
+      "type": null,
+      "name": "nieuwezijds voorburgwal"
+    },
+    {
+      "input": "Vijzelgracht",
+      "normalized": "vijzelgracht",
+      "type": null,
+      "name": "vijzelgracht"
+    },
+    {
+      "input": "Havenkade",
+      "normalized": "havenkade",
+      "type": null,
+      "name": "havenkade"
+    },
+    {
+      "input": "Dr. Lelykade",
+      "normalized": "doctor lelykade",
+      "type": null,
+      "name": "doctor lelykade"
+    },
+    {
+      "input": "Lange Nieuwstr.",
+      "normalized": "lange nieuwstr",
+      "type": null,
+      "name": "lange nieuwstr"
+    },
+    {
+      "input": "Meir",
+      "normalized": "meir",
+      "type": null,
+      "name": "meir"
+    },
+    {
+      "input": "Groenplaats",
+      "normalized": "groenplaats",
+      "type": null,
+      "name": "groenplaats"
+    },
+    {
+      "input": "Fortgracht",
+      "normalized": "fortgracht",
+      "type": null,
+      "name": "fortgracht"
+    },
+    {
+      "input": "Sint Vincentiusplantsoen",
+      "normalized": "sint vincentiusplantsoen",
+      "type": null,
+      "name": "sint vincentiusplantsoen"
+    },
+    {
+      "input": "Bibliotheek Lekkerkerk",
+      "normalized": "bibliotheek lekkerkerk",
+      "type": null,
+      "name": "bibliotheek lekkerkerk"
+    },
+    {
+      "input": "Publiekslocatie Prins Alexander",
+      "normalized": "publiekslocatie prins alexander",
+      "type": null,
+      "name": "publiekslocatie prins alexander"
+    },
+    {
+      "input": "TU Aula Congrescentrum",
+      "normalized": "tu aula congrescentrum",
+      "type": null,
+      "name": "tu aula congrescentrum"
+    },
+    {
+      "input": "Lorna Te Georgestraat",
+      "normalized": "lorna te georgestraat",
+      "type": null,
+      "name": "lorna te georgestraat"
+    },
+    {
+      "input": "3e Binnenvestgracht",
+      "normalized": "3e binnenvestgracht",
+      "type": null,
+      "name": "3e binnenvestgracht"
+    },
+    {
+      "input": "Acacialaan",
+      "normalized": "acacialaan",
+      "type": null,
+      "name": "acacialaan"
+    },
+    {
+      "input": "Agamemnonstraat",
+      "normalized": "agamemnonstraat",
+      "type": null,
+      "name": "agamemnonstraat"
+    },
+    {
+      "input": "Allard Piersonstraat",
+      "normalized": "allard piersonstraat",
+      "type": null,
+      "name": "allard piersonstraat"
+    },
+    {
+      "input": "Anemoonpad",
+      "normalized": "anemoonpad",
+      "type": null,
+      "name": "anemoonpad"
+    },
+    {
+      "input": "Appelhof",
+      "normalized": "appelhof",
+      "type": null,
+      "name": "appelhof"
+    },
+    {
+      "input": "Avicennapad",
+      "normalized": "avicennapad",
+      "type": null,
+      "name": "avicennapad"
+    },
+    {
+      "input": "Barneveldhoeve",
+      "normalized": "barneveldhoeve",
+      "type": null,
+      "name": "barneveldhoeve"
+    },
+    {
+      "input": "Belvédèrepad",
+      "normalized": "belvederepad",
+      "type": null,
+      "name": "belvederepad"
+    },
+    {
+      "input": "Bertramvaart",
+      "normalized": "bertramvaart",
+      "type": null,
+      "name": "bertramvaart"
+    },
+    {
+      "input": "Birkholm",
+      "normalized": "birkholm",
+      "type": null,
+      "name": "birkholm"
+    },
+    {
+      "input": "Boekweitakker",
+      "normalized": "boekweitakker",
+      "type": null,
+      "name": "boekweitakker"
+    },
+    {
+      "input": "Bosboomhof",
+      "normalized": "bosboomhof",
+      "type": null,
+      "name": "bosboomhof"
+    },
+    {
+      "input": "Brantwijk",
+      "normalized": "brantwijk",
+      "type": null,
+      "name": "brantwijk"
+    },
+    {
+      "input": "Brug Venneperhout",
+      "normalized": "brug venneperhout",
+      "type": null,
+      "name": "brug venneperhout"
+    },
+    {
+      "input": "Burgemeester Honnerlage Gretehof",
+      "normalized": "burgemeester honnerlage gretehof",
+      "type": null,
+      "name": "burgemeester honnerlage gretehof"
+    },
+    {
+      "input": "C. Busken Huetstraat",
+      "normalized": "c busken huetstraat",
+      "type": null,
+      "name": "c busken huetstraat"
+    },
+    {
+      "input": "Cathrijnenbrug",
+      "normalized": "cathrijnenbrug",
+      "type": null,
+      "name": "cathrijnenbrug"
+    },
+    {
+      "input": "Clausholmpad",
+      "normalized": "clausholmpad",
+      "type": null,
+      "name": "clausholmpad"
+    },
+    {
+      "input": "Cornelis Dopperlaan",
+      "normalized": "cornelis dopperlaan",
+      "type": null,
+      "name": "cornelis dopperlaan"
+    },
+    {
+      "input": "Daliepad",
+      "normalized": "daliepad",
+      "type": null,
+      "name": "daliepad"
+    },
+    {
+      "input": "De Hagen",
+      "normalized": "de hagen",
+      "type": null,
+      "name": "de hagen"
+    },
+    {
+      "input": "de Savornin Lohmansingel",
+      "normalized": "de savornin lohmansingel",
+      "type": null,
+      "name": "de savornin lohmansingel"
+    },
+    {
+      "input": "Den Brabanderhove",
+      "normalized": "den brabanderhove",
+      "type": null,
+      "name": "den brabanderhove"
+    },
+    {
+      "input": "Distelveld",
+      "normalized": "distelveld",
+      "type": null,
+      "name": "distelveld"
+    },
+    {
+      "input": "Dongestraat",
+      "normalized": "dongestraat",
+      "type": null,
+      "name": "dongestraat"
+    },
+    {
+      "input": "Druivenstraat",
+      "normalized": "druivenstraat",
+      "type": null,
+      "name": "druivenstraat"
+    },
+    {
+      "input": "Edmond Hellenraadstraat",
+      "normalized": "edmond hellenraadstraat",
+      "type": null,
+      "name": "edmond hellenraadstraat"
+    },
+    {
+      "input": "Elinor Ostromstraat",
+      "normalized": "elinor ostromstraat",
+      "type": null,
+      "name": "elinor ostromstraat"
+    },
+    {
+      "input": "Essenburgsingel",
+      "normalized": "essenburgsingel",
+      "type": null,
+      "name": "essenburgsingel"
+    },
+    {
+      "input": "Fijanerf",
+      "normalized": "fijanerf",
+      "type": null,
+      "name": "fijanerf"
+    },
+    {
+      "input": "Frankrijkweg",
+      "normalized": "frankrijkweg",
+      "type": null,
+      "name": "frankrijkweg"
+    },
+    {
+      "input": "Galgweg",
+      "normalized": "galgweg",
+      "type": null,
+      "name": "galgweg"
+    },
+    {
+      "input": "Genistastraat",
+      "normalized": "genistastraat",
+      "type": null,
+      "name": "genistastraat"
+    },
+    {
+      "input": "Gloucesterstraat",
+      "normalized": "gloucesterstraat",
+      "type": null,
+      "name": "gloucesterstraat"
+    },
+    {
+      "input": "Graaf Willemlaan",
+      "normalized": "graaf willemlaan",
+      "type": null,
+      "name": "graaf willemlaan"
+    },
+    {
+      "input": "Groenlust",
+      "normalized": "groenlust",
+      "type": null,
+      "name": "groenlust"
+    },
+    {
+      "input": "Halfrond",
+      "normalized": "halfrond",
+      "type": null,
+      "name": "halfrond"
+    },
+    {
+      "input": "Hazelaardreef",
+      "normalized": "hazelaardreef",
+      "type": null,
+      "name": "hazelaardreef"
+    },
+    {
+      "input": "Hemertplein",
+      "normalized": "hemertplein",
+      "type": null,
+      "name": "hemertplein"
+    },
+    {
+      "input": "Hertog van Beijerenstraat",
+      "normalized": "hertog van beijerenstraat",
+      "type": null,
+      "name": "hertog van beijerenstraat"
+    },
+    {
+      "input": "Hof van Duivenvoorde",
+      "normalized": "hof van duivenvoorde",
+      "type": "hof",
+      "name": "van duivenvoorde"
+    },
+    {
+      "input": "Hoogendijklaan",
+      "normalized": "hoogendijklaan",
+      "type": null,
+      "name": "hoogendijklaan"
+    },
+    {
+      "input": "Huigpark",
+      "normalized": "huigpark",
+      "type": null,
+      "name": "huigpark"
+    },
+    {
+      "input": "Ingelandpad",
+      "normalized": "ingelandpad",
+      "type": null,
+      "name": "ingelandpad"
+    },
+    {
+      "input": "Jacob van Campenplein",
+      "normalized": "jacob van campenplein",
+      "type": null,
+      "name": "jacob van campenplein"
+    },
+    {
+      "input": "Jan Prinshof",
+      "normalized": "jan prinshof",
+      "type": null,
+      "name": "jan prinshof"
+    },
+    {
+      "input": "Johan de Wittlaan",
+      "normalized": "johan de wittlaan",
+      "type": null,
+      "name": "johan de wittlaan"
+    },
+    {
+      "input": "Jozef Israëlsstraat",
+      "normalized": "jozef israelsstraat",
+      "type": null,
+      "name": "jozef israelsstraat"
+    },
+    {
+      "input": "Kanaalpad Zuidwest",
+      "normalized": "kanaalpad zuidwest",
+      "type": null,
+      "name": "kanaalpad zuidwest"
+    },
+    {
+      "input": "Keizershof",
+      "normalized": "keizershof",
+      "type": null,
+      "name": "keizershof"
+    },
+    {
+      "input": "Klaaswaalsestraat",
+      "normalized": "klaaswaalsestraat",
+      "type": null,
+      "name": "klaaswaalsestraat"
+    },
+    {
+      "input": "Knopkruid",
+      "normalized": "knopkruid",
+      "type": null,
+      "name": "knopkruid"
+    },
+    {
+      "input": "Kooidijk",
+      "normalized": "kooidijk",
+      "type": null,
+      "name": "kooidijk"
+    },
+    {
+      "input": "Korteweg",
+      "normalized": "korteweg",
+      "type": null,
+      "name": "korteweg"
+    },
+    {
+      "input": "Kruisweg",
+      "normalized": "kruisweg",
+      "type": null,
+      "name": "kruisweg"
+    },
+    {
+      "input": "Laan van Spieringshoek",
+      "normalized": "laan van spieringshoek",
+      "type": "laan",
+      "name": "van spieringshoek"
+    },
+    {
+      "input": "Langelaan",
+      "normalized": "langelaan",
+      "type": null,
+      "name": "langelaan"
+    },
+    {
+      "input": "Leidse Schouw",
+      "normalized": "leidse schouw",
+      "type": null,
+      "name": "leidse schouw"
+    },
+    {
+      "input": "Lijtweg",
+      "normalized": "lijtweg",
+      "type": null,
+      "name": "lijtweg"
+    },
+    {
+      "input": "Looierij",
+      "normalized": "looierij",
+      "type": null,
+      "name": "looierij"
+    },
+    {
+      "input": "Maarten Dijkshoornlaan",
+      "normalized": "maarten dijkshoornlaan",
+      "type": null,
+      "name": "maarten dijkshoornlaan"
+    },
+    {
+      "input": "Mare",
+      "normalized": "mare",
+      "type": null,
+      "name": "mare"
+    },
+    {
+      "input": "Marsmanhove",
+      "normalized": "marsmanhove",
+      "type": null,
+      "name": "marsmanhove"
+    },
+    {
+      "input": "Meester L.A. Kesperweg",
+      "normalized": "meester l a kesperweg",
+      "type": null,
+      "name": "meester l a kesperweg"
+    },
+    {
+      "input": "Mezenlaan",
+      "normalized": "mezenlaan",
+      "type": null,
+      "name": "mezenlaan"
+    },
+    {
+      "input": "Molenaar van Schelvenlaan",
+      "normalized": "molenaar van schelvenlaan",
+      "type": null,
+      "name": "molenaar van schelvenlaan"
+    },
+    {
+      "input": "Mulderstraat",
+      "normalized": "mulderstraat",
+      "type": null,
+      "name": "mulderstraat"
+    },
+    {
+      "input": "Nes",
+      "normalized": "nes",
+      "type": null,
+      "name": "nes"
+    },
+    {
+      "input": "Nijverheidsweg",
+      "normalized": "nijverheidsweg",
+      "type": null,
+      "name": "nijverheidsweg"
+    },
+    {
+      "input": "Ochterveltstraat",
+      "normalized": "ochterveltstraat",
+      "type": null,
+      "name": "ochterveltstraat"
+    },
+    {
+      "input": "Ooster Lekdijk",
+      "normalized": "ooster lekdijk",
+      "type": null,
+      "name": "ooster lekdijk"
+    },
+    {
+      "input": "Oud Adeselaan",
+      "normalized": "oud adeselaan",
+      "type": null,
+      "name": "oud adeselaan"
+    },
+    {
+      "input": "P.F. von Sieboldlaan",
+      "normalized": "p f von sieboldlaan",
+      "type": null,
+      "name": "p f von sieboldlaan"
+    },
+    {
+      "input": "Park de Elsberg",
+      "normalized": "park de elsberg",
+      "type": "park",
+      "name": "de elsberg"
+    },
+    {
+      "input": "Pelikaanweg",
+      "normalized": "pelikaanweg",
+      "type": null,
+      "name": "pelikaanweg"
+    },
+    {
+      "input": "Pieter de Vogel Rotonde",
+      "normalized": "pieter de vogel rotonde",
+      "type": null,
+      "name": "pieter de vogel rotonde"
+    },
+    {
+      "input": "Plein 1945 - 1995",
+      "normalized": "plein 1945 1995",
+      "type": "plein",
+      "name": "1945 1995"
+    },
+    {
+      "input": "Pottenbakkersweg",
+      "normalized": "pottenbakkersweg",
+      "type": null,
+      "name": "pottenbakkersweg"
+    },
+    {
+      "input": "Prolkade",
+      "normalized": "prolkade",
+      "type": null,
+      "name": "prolkade"
+    },
+    {
+      "input": "Ravelplein",
+      "normalized": "ravelplein",
+      "type": null,
+      "name": "ravelplein"
+    },
+    {
+      "input": "Reykjavikweg",
+      "normalized": "reykjavikweg",
+      "type": null,
+      "name": "reykjavikweg"
+    },
+    {
+      "input": "Rijnzichtstraat",
+      "normalized": "rijnzichtstraat",
+      "type": null,
+      "name": "rijnzichtstraat"
+    },
+    {
+      "input": "Rogier van Otterloopad",
+      "normalized": "rogier van otterloopad",
+      "type": null,
+      "name": "rogier van otterloopad"
+    },
+    {
+      "input": "Rozensingel",
+      "normalized": "rozensingel",
+      "type": null,
+      "name": "rozensingel"
+    },
+    {
+      "input": "Sam van Houtenplein",
+      "normalized": "sam van houtenplein",
+      "type": null,
+      "name": "sam van houtenplein"
+    },
+    {
+      "input": "Schermerhornlaan",
+      "normalized": "schermerhornlaan",
+      "type": null,
+      "name": "schermerhornlaan"
+    },
+    {
+      "input": "Schouwburglaan",
+      "normalized": "schouwburglaan",
+      "type": null,
+      "name": "schouwburglaan"
+    },
+    {
+      "input": "Simon Miedemahof",
+      "normalized": "simon miedemahof",
+      "type": null,
+      "name": "simon miedemahof"
+    },
+    {
+      "input": "Sleper",
+      "normalized": "sleper",
+      "type": null,
+      "name": "sleper"
+    },
+    {
+      "input": "Sonatepad",
+      "normalized": "sonatepad",
+      "type": null,
+      "name": "sonatepad"
+    },
+    {
+      "input": "Spoorpad",
+      "normalized": "spoorpad",
+      "type": null,
+      "name": "spoorpad"
+    },
+    {
+      "input": "Steinerbospad",
+      "normalized": "steinerbospad",
+      "type": null,
+      "name": "steinerbospad"
+    },
+    {
+      "input": "Strandwal",
+      "normalized": "strandwal",
+      "type": null,
+      "name": "strandwal"
+    },
+    {
+      "input": "Takkenburg",
+      "normalized": "takkenburg",
+      "type": null,
+      "name": "takkenburg"
+    },
+    {
+      "input": "Theo Huizenaarhof",
+      "normalized": "theo huizenaarhof",
+      "type": null,
+      "name": "theo huizenaarhof"
+    },
+    {
+      "input": "Ton Albertsstraat",
+      "normalized": "ton albertsstraat",
+      "type": null,
+      "name": "ton albertsstraat"
+    },
+    {
+      "input": "Tuindersstraat",
+      "normalized": "tuindersstraat",
+      "type": null,
+      "name": "tuindersstraat"
+    },
+    {
+      "input": "Valdezstraat",
+      "normalized": "valdezstraat",
+      "type": null,
+      "name": "valdezstraat"
+    },
+    {
+      "input": "Van Der Hoekdreef",
+      "normalized": "van der hoekdreef",
+      "type": null,
+      "name": "van der hoekdreef"
+    },
+    {
+      "input": "Van Hoochstratenweg",
+      "normalized": "van hoochstratenweg",
+      "type": null,
+      "name": "van hoochstratenweg"
+    },
+    {
+      "input": "Van Swindenstraat",
+      "normalized": "van swindenstraat",
+      "type": null,
+      "name": "van swindenstraat"
+    },
+    {
+      "input": "Veldstraat",
+      "normalized": "veldstraat",
+      "type": null,
+      "name": "veldstraat"
+    },
+    {
+      "input": "Vierde kade",
+      "normalized": "vierde kade",
+      "type": null,
+      "name": "vierde kade"
+    },
+    {
+      "input": "Vliegende Hollanderstraat",
+      "normalized": "vliegende hollanderstraat",
+      "type": null,
+      "name": "vliegende hollanderstraat"
+    },
+    {
+      "input": "Vosholstraat",
+      "normalized": "vosholstraat",
+      "type": null,
+      "name": "vosholstraat"
+    },
+    {
+      "input": "Waalsteenhof",
+      "normalized": "waalsteenhof",
+      "type": null,
+      "name": "waalsteenhof"
+    },
+    {
+      "input": "Waterliniepad IV",
+      "normalized": "waterliniepad iv",
+      "type": null,
+      "name": "waterliniepad iv"
+    },
+    {
+      "input": "Wessel Ilckenstraat",
+      "normalized": "wessel ilckenstraat",
+      "type": null,
+      "name": "wessel ilckenstraat"
+    },
+    {
+      "input": "Wielewaal",
+      "normalized": "wielewaal",
+      "type": null,
+      "name": "wielewaal"
+    },
+    {
+      "input": "Willem Tholenstraat",
+      "normalized": "willem tholenstraat",
+      "type": null,
+      "name": "willem tholenstraat"
+    },
+    {
+      "input": "Wondklaver",
+      "normalized": "wondklaver",
+      "type": null,
+      "name": "wondklaver"
+    },
+    {
+      "input": "Zeilvaart",
+      "normalized": "zeilvaart",
+      "type": null,
+      "name": "zeilvaart"
+    },
+    {
+      "input": "Zouterijweg",
+      "normalized": "zouterijweg",
+      "type": null,
+      "name": "zouterijweg"
+    }
+  ]
+}

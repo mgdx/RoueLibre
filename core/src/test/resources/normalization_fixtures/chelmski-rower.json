@@ -1,0 +1,791 @@
+{
+  "language": "pl",
+  "cases": [
+    {
+      "input": "ul. Długa",
+      "normalized": "ulica dluga",
+      "type": "ulica",
+      "name": "dluga"
+    },
+    {
+      "input": "Ulica Długa",
+      "normalized": "ulica dluga",
+      "type": "ulica",
+      "name": "dluga"
+    },
+    {
+      "input": "al. Jerozolimskie",
+      "normalized": "aleja jerozolimskie",
+      "type": "aleja",
+      "name": "jerozolimskie"
+    },
+    {
+      "input": "pl. Zbawiciela",
+      "normalized": "plac zbawiciela",
+      "type": "plac",
+      "name": "zbawiciela"
+    },
+    {
+      "input": "Aleja Niepodległości",
+      "normalized": "aleja niepodleglosci",
+      "type": "aleja",
+      "name": "niepodleglosci"
+    },
+    {
+      "input": "os. Tysiąclecia",
+      "normalized": "osiedle tysiaclecia",
+      "type": "osiedle",
+      "name": "tysiaclecia"
+    },
+    {
+      "input": "Rondo Daszyńskiego",
+      "normalized": "rondo daszynskiego",
+      "type": "rondo",
+      "name": "daszynskiego"
+    },
+    {
+      "input": "ul. Świętego Marcina",
+      "normalized": "ulica swietego marcina",
+      "type": "ulica",
+      "name": "swietego marcina"
+    },
+    {
+      "input": "Bulwar Nadwiślański",
+      "normalized": "bulwar nadwislanski",
+      "type": "bulwar",
+      "name": "nadwislanski"
+    },
+    {
+      "input": "Most Poniatowskiego",
+      "normalized": "most poniatowskiego",
+      "type": "most",
+      "name": "poniatowskiego"
+    },
+    {
+      "input": "ul. gen. Władysława Sikorskiego",
+      "normalized": "ulica general wladyslawa sikorskiego",
+      "type": "ulica",
+      "name": "general wladyslawa sikorskiego"
+    },
+    {
+      "input": "Chemiczna",
+      "normalized": "chemiczna",
+      "type": null,
+      "name": "chemiczna"
+    },
+    {
+      "input": "Józefa Elsnera",
+      "normalized": "jozefa elsnera",
+      "type": null,
+      "name": "jozefa elsnera"
+    },
+    {
+      "input": "Plac imienia Jana Pawła II",
+      "normalized": "plac imienia jana pawla ii",
+      "type": "plac",
+      "name": "imienia jana pawla ii"
+    },
+    {
+      "input": "Poziomkowa",
+      "normalized": "poziomkowa",
+      "type": null,
+      "name": "poziomkowa"
+    },
+    {
+      "input": "Urząd Gminy Kamień",
+      "normalized": "urzad gminy kamien",
+      "type": null,
+      "name": "urzad gminy kamien"
+    },
+    {
+      "input": "Instytut Matematyki i Informatyki PANS w Chełmie",
+      "normalized": "instytut matematyki i informatyki pans w chelmie",
+      "type": null,
+      "name": "instytut matematyki i informatyki pans w chelmie"
+    },
+    {
+      "input": "Plac Tadeusza Kościuszki",
+      "normalized": "plac tadeusza kosciuszki",
+      "type": "plac",
+      "name": "tadeusza kosciuszki"
+    },
+    {
+      "input": "Zarys Fundamentów Kamienic Węglińskiego",
+      "normalized": "zarys fundamentow kamienic weglinskiego",
+      "type": null,
+      "name": "zarys fundamentow kamienic weglinskiego"
+    },
+    {
+      "input": "Gustaw Orlicz-Dreszer",
+      "normalized": "gustaw orlicz dreszer",
+      "type": null,
+      "name": "gustaw orlicz dreszer"
+    },
+    {
+      "input": "Wiatrak Koźlak",
+      "normalized": "wiatrak kozlak",
+      "type": null,
+      "name": "wiatrak kozlak"
+    },
+    {
+      "input": "Bazylany",
+      "normalized": "bazylany",
+      "type": null,
+      "name": "bazylany"
+    },
+    {
+      "input": "11 Listopda",
+      "normalized": "11 listopda",
+      "type": null,
+      "name": "11 listopda"
+    },
+    {
+      "input": "Adamów",
+      "normalized": "adamow",
+      "type": null,
+      "name": "adamow"
+    },
+    {
+      "input": "Aleja Marszałka Józefa Piłsudskiego",
+      "normalized": "aleja marszalka jozefa pilsudskiego",
+      "type": "aleja",
+      "name": "marszalka jozefa pilsudskiego"
+    },
+    {
+      "input": "Aleksandra Janowskiego",
+      "normalized": "aleksandra janowskiego",
+      "type": null,
+      "name": "aleksandra janowskiego"
+    },
+    {
+      "input": "Astrowa",
+      "normalized": "astrowa",
+      "type": null,
+      "name": "astrowa"
+    },
+    {
+      "input": "Bednarska",
+      "normalized": "bednarska",
+      "type": null,
+      "name": "bednarska"
+    },
+    {
+      "input": "Błękitna",
+      "normalized": "blekitna",
+      "type": null,
+      "name": "blekitna"
+    },
+    {
+      "input": "Bolesława Chrobrego",
+      "normalized": "boleslawa chrobrego",
+      "type": null,
+      "name": "boleslawa chrobrego"
+    },
+    {
+      "input": "Botaniczna",
+      "normalized": "botaniczna",
+      "type": null,
+      "name": "botaniczna"
+    },
+    {
+      "input": "Brzeźno",
+      "normalized": "brzezno",
+      "type": null,
+      "name": "brzezno"
+    },
+    {
+      "input": "Bukowa",
+      "normalized": "bukowa",
+      "type": null,
+      "name": "bukowa"
+    },
+    {
+      "input": "Cementowa",
+      "normalized": "cementowa",
+      "type": null,
+      "name": "cementowa"
+    },
+    {
+      "input": "Chemiczna",
+      "normalized": "chemiczna",
+      "type": null,
+      "name": "chemiczna"
+    },
+    {
+      "input": "Cynamonowa",
+      "normalized": "cynamonowa",
+      "type": null,
+      "name": "cynamonowa"
+    },
+    {
+      "input": "Czesława Miłosza",
+      "normalized": "czeslawa milosza",
+      "type": null,
+      "name": "czeslawa milosza"
+    },
+    {
+      "input": "Depułtycze Królewskie",
+      "normalized": "depultycze krolewskie",
+      "type": null,
+      "name": "depultycze krolewskie"
+    },
+    {
+      "input": "Dojazdowa",
+      "normalized": "dojazdowa",
+      "type": null,
+      "name": "dojazdowa"
+    },
+    {
+      "input": "Dorohuska",
+      "normalized": "dorohuska",
+      "type": null,
+      "name": "dorohuska"
+    },
+    {
+      "input": "Dworska",
+      "normalized": "dworska",
+      "type": null,
+      "name": "dworska"
+    },
+    {
+      "input": "Elizy Orzeszkowej",
+      "normalized": "elizy orzeszkowej",
+      "type": null,
+      "name": "elizy orzeszkowej"
+    },
+    {
+      "input": "Fabryczna",
+      "normalized": "fabryczna",
+      "type": null,
+      "name": "fabryczna"
+    },
+    {
+      "input": "Fryderyka Chopina",
+      "normalized": "fryderyka chopina",
+      "type": null,
+      "name": "fryderyka chopina"
+    },
+    {
+      "input": "Gdańska",
+      "normalized": "gdanska",
+      "type": null,
+      "name": "gdanska"
+    },
+    {
+      "input": "Generała Józefa Sowińskiego",
+      "normalized": "generala jozefa sowinskiego",
+      "type": null,
+      "name": "generala jozefa sowinskiego"
+    },
+    {
+      "input": "Generała Ludwika Kmicic-Skrzyńskiego",
+      "normalized": "generala ludwika kmicic skrzynskiego",
+      "type": null,
+      "name": "generala ludwika kmicic skrzynskiego"
+    },
+    {
+      "input": "Generała Stefana Grota-Roweckiego",
+      "normalized": "generala stefana grota roweckiego",
+      "type": null,
+      "name": "generala stefana grota roweckiego"
+    },
+    {
+      "input": "Główna",
+      "normalized": "glowna",
+      "type": null,
+      "name": "glowna"
+    },
+    {
+      "input": "Górnicza",
+      "normalized": "gornicza",
+      "type": null,
+      "name": "gornicza"
+    },
+    {
+      "input": "Grzegorza Piramowicza",
+      "normalized": "grzegorza piramowicza",
+      "type": null,
+      "name": "grzegorza piramowicza"
+    },
+    {
+      "input": "Henryka Wieniawskiego",
+      "normalized": "henryka wieniawskiego",
+      "type": null,
+      "name": "henryka wieniawskiego"
+    },
+    {
+      "input": "Hiacyntowa",
+      "normalized": "hiacyntowa",
+      "type": null,
+      "name": "hiacyntowa"
+    },
+    {
+      "input": "Hrubieszowska",
+      "normalized": "hrubieszowska",
+      "type": null,
+      "name": "hrubieszowska"
+    },
+    {
+      "input": "Ignacego Krasickiego",
+      "normalized": "ignacego krasickiego",
+      "type": null,
+      "name": "ignacego krasickiego"
+    },
+    {
+      "input": "Ignatów",
+      "normalized": "ignatow",
+      "type": null,
+      "name": "ignatow"
+    },
+    {
+      "input": "Izabeli Łęckiej",
+      "normalized": "izabeli leckiej",
+      "type": null,
+      "name": "izabeli leckiej"
+    },
+    {
+      "input": "Jadwigi Młodowskiej",
+      "normalized": "jadwigi mlodowskiej",
+      "type": null,
+      "name": "jadwigi mlodowskiej"
+    },
+    {
+      "input": "Jałowcowa",
+      "normalized": "jalowcowa",
+      "type": null,
+      "name": "jalowcowa"
+    },
+    {
+      "input": "Jana Kilińskiego",
+      "normalized": "jana kilinskiego",
+      "type": null,
+      "name": "jana kilinskiego"
+    },
+    {
+      "input": "Jana Skrzetuskiego",
+      "normalized": "jana skrzetuskiego",
+      "type": null,
+      "name": "jana skrzetuskiego"
+    },
+    {
+      "input": "Janusza Korczaka",
+      "normalized": "janusza korczaka",
+      "type": null,
+      "name": "janusza korczaka"
+    },
+    {
+      "input": "Jasna",
+      "normalized": "jasna",
+      "type": null,
+      "name": "jasna"
+    },
+    {
+      "input": "Jaworowa",
+      "normalized": "jaworowa",
+      "type": null,
+      "name": "jaworowa"
+    },
+    {
+      "input": "Jeziorna",
+      "normalized": "jeziorna",
+      "type": null,
+      "name": "jeziorna"
+    },
+    {
+      "input": "Józefin",
+      "normalized": "jozefin",
+      "type": null,
+      "name": "jozefin"
+    },
+    {
+      "input": "Kaflarska",
+      "normalized": "kaflarska",
+      "type": null,
+      "name": "kaflarska"
+    },
+    {
+      "input": "Kamień-Kolonia",
+      "normalized": "kamien kolonia",
+      "type": null,
+      "name": "kamien kolonia"
+    },
+    {
+      "input": "Karola Kurpińskiego",
+      "normalized": "karola kurpinskiego",
+      "type": null,
+      "name": "karola kurpinskiego"
+    },
+    {
+      "input": "Katedralna",
+      "normalized": "katedralna",
+      "type": null,
+      "name": "katedralna"
+    },
+    {
+      "input": "Kazimierza Czernickiego",
+      "normalized": "kazimierza czernickiego",
+      "type": null,
+      "name": "kazimierza czernickiego"
+    },
+    {
+      "input": "Kazimierza Szpotańskiego",
+      "normalized": "kazimierza szpotanskiego",
+      "type": null,
+      "name": "kazimierza szpotanskiego"
+    },
+    {
+      "input": "Kmicica",
+      "normalized": "kmicica",
+      "type": null,
+      "name": "kmicica"
+    },
+    {
+      "input": "Konrada Wallenroda",
+      "normalized": "konrada wallenroda",
+      "type": null,
+      "name": "konrada wallenroda"
+    },
+    {
+      "input": "Kościelna",
+      "normalized": "koscielna",
+      "type": null,
+      "name": "koscielna"
+    },
+    {
+      "input": "Kowalska",
+      "normalized": "kowalska",
+      "type": null,
+      "name": "kowalska"
+    },
+    {
+      "input": "Kredowa",
+      "normalized": "kredowa",
+      "type": null,
+      "name": "kredowa"
+    },
+    {
+      "input": "Kryształowa",
+      "normalized": "krysztalowa",
+      "type": null,
+      "name": "krysztalowa"
+    },
+    {
+      "input": "Krzywice-Kolonia",
+      "normalized": "krzywice kolonia",
+      "type": null,
+      "name": "krzywice kolonia"
+    },
+    {
+      "input": "Księdza Jerzego Popiełuszki",
+      "normalized": "ksiedza jerzego popieluszki",
+      "type": null,
+      "name": "ksiedza jerzego popieluszki"
+    },
+    {
+      "input": "Księdza Stanisława Brzóski",
+      "normalized": "ksiedza stanislawa brzoski",
+      "type": null,
+      "name": "ksiedza stanislawa brzoski"
+    },
+    {
+      "input": "Kujawska",
+      "normalized": "kujawska",
+      "type": null,
+      "name": "kujawska"
+    },
+    {
+      "input": "Łączna",
+      "normalized": "laczna",
+      "type": null,
+      "name": "laczna"
+    },
+    {
+      "input": "Lazurowa",
+      "normalized": "lazurowa",
+      "type": null,
+      "name": "lazurowa"
+    },
+    {
+      "input": "Leśna",
+      "normalized": "lesna",
+      "type": null,
+      "name": "lesna"
+    },
+    {
+      "input": "Lipowa",
+      "normalized": "lipowa",
+      "type": null,
+      "name": "lipowa"
+    },
+    {
+      "input": "Lubelska",
+      "normalized": "lubelska",
+      "type": null,
+      "name": "lubelska"
+    },
+    {
+      "input": "Lwowska D",
+      "normalized": "lwowska d",
+      "type": null,
+      "name": "lwowska d"
+    },
+    {
+      "input": "Majdańska",
+      "normalized": "majdanska",
+      "type": null,
+      "name": "majdanska"
+    },
+    {
+      "input": "Malinowa",
+      "normalized": "malinowa",
+      "type": null,
+      "name": "malinowa"
+    },
+    {
+      "input": "Marii Konopnickiej",
+      "normalized": "marii konopnickiej",
+      "type": null,
+      "name": "marii konopnickiej"
+    },
+    {
+      "input": "Marysin",
+      "normalized": "marysin",
+      "type": null,
+      "name": "marysin"
+    },
+    {
+      "input": "Metalowa",
+      "normalized": "metalowa",
+      "type": null,
+      "name": "metalowa"
+    },
+    {
+      "input": "Miernicza",
+      "normalized": "miernicza",
+      "type": null,
+      "name": "miernicza"
+    },
+    {
+      "input": "Mikołaja Reja",
+      "normalized": "mikolaja reja",
+      "type": null,
+      "name": "mikolaja reja"
+    },
+    {
+      "input": "Młynarska",
+      "normalized": "mlynarska",
+      "type": null,
+      "name": "mlynarska"
+    },
+    {
+      "input": "Mołodutyn",
+      "normalized": "molodutyn",
+      "type": null,
+      "name": "molodutyn"
+    },
+    {
+      "input": "Nad Zalewem",
+      "normalized": "nad zalewem",
+      "type": null,
+      "name": "nad zalewem"
+    },
+    {
+      "input": "Natalin",
+      "normalized": "natalin",
+      "type": null,
+      "name": "natalin"
+    },
+    {
+      "input": "Nowe Depułtycze",
+      "normalized": "nowe depultycze",
+      "type": null,
+      "name": "nowe depultycze"
+    },
+    {
+      "input": "Obłońska",
+      "normalized": "oblonska",
+      "type": null,
+      "name": "oblonska"
+    },
+    {
+      "input": "Okszów",
+      "normalized": "okszow",
+      "type": null,
+      "name": "okszow"
+    },
+    {
+      "input": "Olenówka",
+      "normalized": "olenowka",
+      "type": null,
+      "name": "olenowka"
+    },
+    {
+      "input": "Oskara Kolberga",
+      "normalized": "oskara kolberga",
+      "type": null,
+      "name": "oskara kolberga"
+    },
+    {
+      "input": "Pana Wołodyjowskiego",
+      "normalized": "pana wolodyjowskiego",
+      "type": null,
+      "name": "pana wolodyjowskiego"
+    },
+    {
+      "input": "Pastelowa",
+      "normalized": "pastelowa",
+      "type": null,
+      "name": "pastelowa"
+    },
+    {
+      "input": "Pętla Piwna",
+      "normalized": "petla piwna",
+      "type": null,
+      "name": "petla piwna"
+    },
+    {
+      "input": "Piękna",
+      "normalized": "piekna",
+      "type": null,
+      "name": "piekna"
+    },
+    {
+      "input": "Plac Kupiecki",
+      "normalized": "plac kupiecki",
+      "type": "plac",
+      "name": "kupiecki"
+    },
+    {
+      "input": "Platynowa",
+      "normalized": "platynowa",
+      "type": null,
+      "name": "platynowa"
+    },
+    {
+      "input": "Podgórze",
+      "normalized": "podgorze",
+      "type": null,
+      "name": "podgorze"
+    },
+    {
+      "input": "Podwalna",
+      "normalized": "podwalna",
+      "type": null,
+      "name": "podwalna"
+    },
+    {
+      "input": "Poległych",
+      "normalized": "poleglych",
+      "type": null,
+      "name": "poleglych"
+    },
+    {
+      "input": "Południowa",
+      "normalized": "poludniowa",
+      "type": null,
+      "name": "poludniowa"
+    },
+    {
+      "input": "Powstańców Warszawy",
+      "normalized": "powstancow warszawy",
+      "type": null,
+      "name": "powstancow warszawy"
+    },
+    {
+      "input": "Przejazd Kowelski",
+      "normalized": "przejazd kowelski",
+      "type": null,
+      "name": "przejazd kowelski"
+    },
+    {
+      "input": "Pstrągowa",
+      "normalized": "pstragowa",
+      "type": null,
+      "name": "pstragowa"
+    },
+    {
+      "input": "Pułkownika Stanisława Dąbka",
+      "normalized": "pulkownika stanislawa dabka",
+      "type": null,
+      "name": "pulkownika stanislawa dabka"
+    },
+    {
+      "input": "Rampa Brzeska",
+      "normalized": "rampa brzeska",
+      "type": null,
+      "name": "rampa brzeska"
+    },
+    {
+      "input": "Rodzinna",
+      "normalized": "rodzinna",
+      "type": null,
+      "name": "rodzinna"
+    },
+    {
+      "input": "Rondo Bogusława Mikusa",
+      "normalized": "rondo boguslawa mikusa",
+      "type": "rondo",
+      "name": "boguslawa mikusa"
+    },
+    {
+      "input": "Rondo Jeńców Stalagu 319",
+      "normalized": "rondo jencow stalagu 319",
+      "type": "rondo",
+      "name": "jencow stalagu 319"
+    },
+    {
+      "input": "Rondo Zrzeszenia Wolność i Niezawisłość",
+      "normalized": "rondo zrzeszenia wolnosc i niezawislosc",
+      "type": "rondo",
+      "name": "zrzeszenia wolnosc i niezawislosc"
+    },
+    {
+      "input": "Rubinowa",
+      "normalized": "rubinowa",
+      "type": null,
+      "name": "rubinowa"
+    },
+    {
+      "input": "Sadowa",
+      "normalized": "sadowa",
+      "type": null,
+      "name": "sadowa"
+    },
+    {
+      "input": "Siewna",
+      "normalized": "siewna",
+      "type": null,
+      "name": "siewna"
+    },
+    {
+      "input": "Skowronkowa",
+      "normalized": "skowronkowa",
+      "type": null,
+      "name": "skowronkowa"
+    },
+    {
+      "input": "Słowikowa",
+      "normalized": "slowikowa",
+      "type": null,
+      "name": "slowikowa"
+    },
+    {
+      "input": "Spółdzielcza",
+      "normalized": "spoldzielcza",
+      "type": null,
+      "name": "spoldzielcza"
+    },
+    {
+      "input": "Stanisława Małachowskiego",
+      "normalized": "stanislawa malachowskiego",
+      "type": null,
+      "name": "stanislawa malachowskiego"
+    },
+    {
+      "input": "Stanisława Wokulskiego",
+      "normalized": "stanislawa wokulskiego",
+      "type": null,
+      "name": "stanislawa wokulskiego"
+    }
+  ]
+}
