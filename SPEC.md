@@ -26,7 +26,7 @@ The application is a personal tool, plain and fast. It is not a booking applicat
 | C1 | **Open source**, published on F-Droid | Free licence, reproducible build, no proprietary dependency |
 | C2 | **No Google service** | Forbidden: Google Play Services, Firebase, FCM, Maps SDK, ML Kit, Crashlytics, Play Integrity. The application must run on LineageOS without GApps |
 | C3 | **Privacy** | No telemetry, no tracker, no unique identifier, no account. The user's position never leaves the device |
-| C4 | **Lightness** | Target APK **under 15 MB** (**under 12 MB** per architecture), excluding downloaded data. Every dependency added must be justified in the README |
+| C4 | **Lightness** | Target APK **under 15 MB** (**under 12 MB** per architecture), excluding downloaded data. Every dependency added must be justified in the documentation, in `docs/dependencies.md` |
 | C5 | **Complete offline operation** | Map, address search and route computation all work **with no network at all**. Only real-time station availability needs a connection |
 | C6 | **English by default, translatable** | See §9 |
 
@@ -323,7 +323,7 @@ The application must appear in Android's chooser when a place is opened or share
 - `ACTION_VIEW` on the **`geo:`** scheme, with the `DEFAULT` and `BROWSABLE` categories. Every form must be accepted: `geo:<lat>,<lon>`, with a zoom parameter, `geo:0,0?q=<lat>,<lon>(<label>)`, and `geo:0,0?q=<address as text>` — the last resolved by the local index (§4.3), **with no network call**.
 - `ACTION_VIEW` on the **`google.navigation:`** scheme, still emitted by many applications.
 - **`ACTION_SEND`** of plain text: detect a coordinate pair or an address inside the shared text. It is the commonest case in practice — an address received over a messaging application.
-- Web map links: to be handled, but knowing they **cannot be verified automatically**, since the domains involved do not belong to the project. Since Android 12 they only reach the application if the user allows it in the system settings. Document that step in the "about" screen and in the `README.md`, failing which the behaviour will look like a defect.
+- Web map links: to be handled, but knowing they **cannot be verified automatically**, since the domains involved do not belong to the project. Since Android 12 they only reach the application if the user allows it in the system settings. Document that step in the "about" screen and in `docs/sharing-links.md`, failing which the behaviour will look like a defect.
 
 **Expected behaviour:**
 
@@ -423,7 +423,7 @@ Every criterion must be verifiable:
 ## 12. Deliverables
 
 - A Git repository with a clean, atomic commit history
-- `README.md`: **entirely in English**, like the interface it describes — description, screenshots, architecture and layer diagram, build instructions, dataset generation, justification of every dependency, procedure for adding a city (§15). It explains the name, which is a French phrase and does not travel by itself.
+- `README.md`: **entirely in English**, like the interface it describes. It is the front page and stays short — what the application is, what it does, how to build it, how to contribute — and it explains the name, which is a French phrase and does not travel by itself. The detail lives in `docs/`, one file per subject, so that the front page stays readable: `architecture.md` (layers and data flow), `offline-data.md` (dataset generation, sizes obtained, procedure for adding a city per §15, sources and attributions), `dependencies.md` (justification of every one), `sharing-links.md` (places opened from another application), `networks.md` (generated, never written by hand).
 - `CONTRIBUTING.md` including the translation procedure
 - A licence file
 - F-Droid metadata (`fastlane/metadata/android/fr/`): short description, long description, release notes, screenshots
@@ -463,7 +463,7 @@ The application must be able to serve another city **without a code change**. Th
 - Since GBFS is an international standard, most of the portability is won as soon as the URL is configurable (§4.1).
 - The **generation scripts** for the data (tiles, routing graph, address index) take the bounding box as a parameter. Producing another city's data must be a single command.
 - The vocabulary of the code and of the interface stays **generic**: "station", "bike", "network". A network's name lives in its configuration alone — never in a class name, a variable or a string resource.
-- Document in `README.md` the complete procedure for deploying the application on a new city.
+- Document in `docs/offline-data.md` the complete procedure for deploying the application on a new city.
 - The Base Adresse Nationale is French, and it was long the caveat here. It no longer is: the index script reads the addresses of any other country from its OpenStreetMap extract, behind the same interface, and the configuration says which source applies (§4.3).
 
 ### 15.1 Several cities in the same application
@@ -483,5 +483,5 @@ Serving one city without recompiling is not enough: a single application must be
 1. Start by **verifying the real GBFS feed URL** and the exact structure of the data received before writing the data models. Hard-code nothing that has not been observed.
 2. Deliver in verifiable stages, in this order: (1) fetching and displaying GBFS data as a list, (2) **offline data generation scripts** — tiles, routing graph, address index — with the real sizes obtained, to be compared against the announced budgets, (3) vector map and markers, (4) offline routing engine, (5) optimised journey algorithm, (6) local address search, (7) remaining screens, (8) finishing touches and F-Droid metadata.
    Stage (2) comes early on purpose: it is what validates or invalidates the whole offline bet. If the real sizes depart appreciably from the budgets, we need to know before the interface has been built on top.
-3. Never add a dependency without justifying it in the README.
+3. Never add a dependency without justifying it in `docs/dependencies.md`.
 4. Report immediately any point where a §2 constraint would prevent a feature, rather than working around the constraint.
