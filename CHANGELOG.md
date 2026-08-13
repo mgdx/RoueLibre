@@ -151,6 +151,31 @@ also records what has no visible effect.
   when the launcher recolours it. The SVG sources are kept in `art/`, with
   the note on how they map onto the adaptive canvas.
 
+### Changed
+
+- **A network is no longer refused for the ground it covers.** The survey used
+  to reject any feed whose stations enclosed more than 2,500 km², on the
+  grounds that such a rectangle is a region rather than a conurbation. Kiel
+  failed it by seven per cent — 2,672 km² for a network of 203 stations that
+  is plainly one city and its region — and a line that turns that away while
+  admitting the same shape at 2,499 says more about the line than about the
+  network. The rule is gone rather than moved. What the data costs is settled
+  where it can be measured, by the tile ceiling of `SPEC.md` §4.2, on the files
+  produced: Kiel's whole dataset weighs 54.4 MB, less than Lille's over four
+  times the area. The area is still surveyed and printed for every network. It
+  lets 27 feeds into the list of what can be served, from Capital Bikeshare and
+  BIXI Montréal to national ones — being eligible is not being served, and each
+  still has to have its data produced.
+
+### Added
+
+- **Kiel is served** (`config/cities/kiel.json`): Donkey Republic, 203 stations
+  and 4,118 docks over the city and its region, from Rendsburg to Plön, with
+  pedal-assist bikes. Its data weighs 54.4 MB — 50.1 of base map, 1.9 of
+  routing graph, 2.4 of address index over 5,918 streets and 102,214 house
+  numbers. The GBFS registry publishes this network twice, under the address it
+  opened with and the one it carries today; the configuration takes the second.
+
 ### Fixed
 
 - **Two cities were named after a neighbour.** The city list offered a "Donkey

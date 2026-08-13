@@ -124,13 +124,14 @@ GEO_API_COMMUNES = "https://geo.api.gouv.fr/communes"
 # Such systems are listed as rejected, never hidden — the reason is printed.
 MINIMUM_STATIONS = 10
 
-# Beyond this, the stations no longer describe a conurbation. Some operators
-# publish one feed for a whole region, or for the whole country: their
-# enclosing rectangle would then cover hundreds of municipalities without a
-# station, and §4's three datasets — tiles, routing graph, address index — are
-# sized for a conurbation, not for a quarter of a country. As a landmark, the
-# Paris box measures 33 × 30 km, near 1,000 km².
-MAXIMUM_AREA_SQUARE_KILOMETRES = 2_500
+# There is NO ceiling on the area a network covers, and that is a decision
+# rather than an oversight. One was tried — 2,500 km², then 2,700 — and it
+# refused Kiel by seven per cent while letting a network of the same shape
+# through at 2,499: a line drawn there says more about the line than about the
+# network. What the datasets cost is governed where it belongs, by the tile
+# ceiling of §4.2, which is measured on the files produced rather than guessed
+# from a rectangle. The area is still recorded and printed for every network,
+# so whoever generates one knows what they are cutting.
 
 # Every attempt is retried once: a name resolution that fails for a second is
 # not a network that does not exist, and a single miss would drop a real
@@ -559,9 +560,6 @@ def verdict_of(survey: dict) -> str:
 
     if survey["stationCount"] < MINIMUM_STATIONS:
         return "too-few-stations"
-
-    if survey.get("areaSquareKilometres", 0) > MAXIMUM_AREA_SQUARE_KILOMETRES:
-        return "not-a-conurbation"
 
     return "eligible"
 
@@ -1278,12 +1276,6 @@ VERDICT_EXPLANATIONS = {
         "catalogue's address for the same network does. Its description of the "
         "authority and the licence has been kept.",
     ),
-    "not-a-conurbation": (
-        "One feed for a whole region",
-        "The stations are scattered over more than "
-        f"{MAXIMUM_AREA_SQUARE_KILOMETRES:,} km²: their enclosing rectangle is "
-        "not a conurbation, and §4's three datasets are cut to a conurbation.",
-    ),
     "free-floating": (
         "Free-floating fleet",
         "No `station_information` feed: the vehicles are left anywhere. "
@@ -1388,9 +1380,11 @@ def write_report(surveys: list[dict], path: Path, generated_at: str) -> None:
         "3. its stations are real docks — a declared capacity, and a live count of",
         "   free docks, both of which §6 needs to promise the bike can be returned;",
         f"4. it has at least {MINIMUM_STATIONS} stations;",
-        f"5. its reference box stays under {MAXIMUM_AREA_SQUARE_KILOMETRES:,} km², the size",
-        "   §4's three datasets are cut for;",
-        "6. its feed needs no key, since the application hard-codes no secret.",
+        "5. its feed needs no key, since the application hard-codes no secret.",
+        "",
+        "The area a network covers is NOT one of the rules: a feed serving a whole",
+        "region is served like any other if it passes them, and what its data weighs",
+        "is settled by the tile ceiling of `SPEC.md` §4.2, on the files produced.",
         "",
         "Most of what publishes GBFS fails the second or the third rule: free-floating",
         "fleets outnumber docked networks, and they publish their parking areas as",

@@ -1,7 +1,7 @@
 {
   "catalogueVersion": 1,
   "catalogueUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/catalogue.json",
-  "generatedAt": "2026-08-13T21:47:29Z",
+  "generatedAt": "2026-08-13T22:00:27Z",
   "cities": [
     {
       "id": "aar-bike",
@@ -1722,6 +1722,26 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-rotterdam.json",
       "dataSizeBytes": 165821584,
       "releaseTag": "data-2026-08-nl"
+    },
+    {
+      "id": "donkey-republic-kiel",
+      "displayName": "Donkey Republic",
+      "operator": "Donkey Republic",
+      "mainCity": "Kiel",
+      "country": "DE",
+      "stationCount": 203,
+      "boundingBox": {
+        "south": 54.125849,
+        "west": 9.528915,
+        "north": 54.508349,
+        "east": 10.495333
+      },
+      "centreLatitude": 54.317099,
+      "centreLongitude": 10.012124,
+      "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_kiel/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-kiel.json",
+      "dataSizeBytes": 54420475,
+      "releaseTag": "data-2026-08-de"
     },
     {
       "id": "donkey-republic-koksijde",
