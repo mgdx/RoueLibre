@@ -188,36 +188,48 @@ private fun parametersOf(body: String): Map<String, String> {
  * The business module does not know `Uri.decode`; it must stay compilable and
  * testable on the JVM (SPEC §14). A `+` means a space, as in an HTTP query —
  * that is how mapping applications write their addresses.
+ *
+ * **An escape carries a byte, not a character.** A run of them is gathered and
+ * decoded as UTF-8 in one go, since that is the encoding a URI escapes in: "é"
+ * travels as `%C3%A9`, two escapes for one letter. Reading each of them as a
+ * character of its own turned "Église" into "Ãglise" — which is what "rue de
+ * l'Hôpital" arrived as, from an application sharing an accented address, and
+ * from this one handing a station's name over to a navigation application
+ * (SPEC §7.4).
  */
 private fun decodeUriComponent(value: String): String {
-    val builder = StringBuilder(value.length)
+    val decoded = StringBuilder(value.length)
+    val escaped = mutableListOf<Byte>()
+
+    fun flushEscapes() {
+        if (escaped.isEmpty()) return
+        decoded.append(escaped.toByteArray().toString(Charsets.UTF_8))
+        escaped.clear()
+    }
+
     var index = 0
     while (index < value.length) {
         val character = value[index]
+        val code = if (character == '%' && index + 2 < value.length) {
+            value.substring(index + 1, index + 3).toIntOrNull(radix = 16)
+        } else {
+            null
+        }
         when {
-            character == '+' -> {
-                builder.append(' ')
-                index++
-            }
-
-            character == '%' && index + 2 < value.length -> {
-                val code = value.substring(index + 1, index + 3).toIntOrNull(radix = 16)
-                if (code == null) {
-                    builder.append(character)
-                    index++
-                } else {
-                    builder.append(code.toChar())
-                    index += 3
-                }
+            code != null -> {
+                escaped.add(code.toByte())
+                index += 3
             }
 
             else -> {
-                builder.append(character)
+                flushEscapes()
+                decoded.append(if (character == '+') ' ' else character)
                 index++
             }
         }
     }
-    return builder.toString()
+    flushEscapes()
+    return decoded.toString()
 }
 
 /**

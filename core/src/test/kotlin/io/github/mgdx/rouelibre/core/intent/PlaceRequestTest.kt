@@ -64,7 +64,18 @@ class PlaceRequestTest {
     fun `uri escapes are decoded`() {
         assertEquals(
             PlaceRequest.Search("rue de l'Hôpital"),
-            parsePlaceUri("geo:0,0?q=rue%20de%20l'H%C3%B4pital".replace("%C3%B4", "ô")),
+            parsePlaceUri("geo:0,0?q=rue%20de%20l'H%C3%B4pital"),
+        )
+    }
+
+    @Test
+    fun `an escaped letter spanning two bytes is one letter`() {
+        // A URI escapes UTF-8 bytes: "é" travels as two of them. Read one by
+        // one they became "Ã©", which is how a station named "Pédaler" came
+        // back from a navigation application handover (SPEC §7.4).
+        assertEquals(
+            PlaceRequest.Point(lille, "Église Saint-Maurice"),
+            parsePlaceUri("geo:0,0?q=50.6371,3.0630(%C3%89glise%20Saint-Maurice)"),
         )
     }
 

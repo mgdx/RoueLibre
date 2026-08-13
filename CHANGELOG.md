@@ -79,6 +79,13 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **A URI escape carries a byte, not a character.** Percent-escaped UTF-8 was
+  decoded one escape at a time, so "é" — which travels as `%C3%A9` — arrived as
+  two characters: a place shared as "rue de l'Hôpital" reached the address
+  search as "rue de l'HÃ´pital". The escapes of a run are now gathered and
+  decoded as UTF-8 in one go. The test covering this had been written around
+  the bug, replacing the escape with the letter it stood for.
+
 - **The journey arrives already framed.** The track was laid in the bottom of
   the map, a third of it showing open country above, and the framing corrected
   itself as soon as the detail was opened or closed. Two accidents, both in the
