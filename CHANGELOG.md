@@ -52,6 +52,31 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **The journey arrives already framed.** The track was laid in the bottom of
+  the map, a third of it showing open country above, and the framing corrected
+  itself as soon as the detail was opened or closed. Two accidents, both in the
+  camera limit that keeps the served area's edge off the screen (`SPEC.md`
+  §7.1). The box penning the camera's target was measured for the framing being
+  left — the map fills the screen while the journey is worked out, and at that
+  size the viewport is taller than the whole served area, so the box collapsed
+  onto a single latitude and the move that followed was clamped to it. And the
+  framing move MapLibre makes for us is reported back from inside itself, at a
+  point where the map's projection already answers for the new position while
+  `cameraPosition` still returns the old one: the limit recomputed there came
+  from no framing at all — one reach negative, the other two and a half times
+  its true value — and yanked the camera onto the edge of a box that meant
+  nothing. Measured on the marker of the departure station, Lille → Villeneuve
+  d'Ascq: 492 px from the top of the map at first display against 334 px
+  afterwards, 60 dp too low. The limits now stand down for the length of the
+  framing move and are measured again where it lands, as the map screen already
+  did for the address it flies to; only the zoom floor is brought up to date
+  beforehand, since lifting that is what would uncover the edge. A journey
+  north-south, which the limit clamps for real, gained more than the reported
+  one: it arrived with the track all but off the screen. Verified on a
+  Fairphone FP3 — first display, recomputation, rotation there and back, and
+  detail folded and unfolded now give the same framing to the pixel, on a short
+  trip, an east-west one, a north-south one, and one crossing the conurbation
+  end to end.
 - **A long trip no longer answers with four hours of walking.** How far one may
   walk to a station was capped at 1 200 m. Tourcoing → Wattignies, 17 km across
   the Lille conurbation, has a V'lille station 203 m from the departure point,

@@ -71,6 +71,16 @@ class ServedAreaCamera(
      * had just asked to leave, which is their own position, and the address
      * appeared to have been ignored.
      *
+     * Nothing measured during such a move would be worth having anyway. The
+     * map reports the jump back to us from inside it, at a point where its
+     * projection already answers for the new framing while `cameraPosition`
+     * still returns the old one — MapLibre only refreshes that after the jump
+     * returns, and never at all for a move it was not asked to animate. The
+     * reaches computed from the two together belong to no framing whatever: on
+     * the journey screen one came out negative and the other at two and a half
+     * times its true value, and the box they made yanked the track sixty dp
+     * down the map.
+     *
      * The limits therefore keep still for the length of a move of ours. They
      * lose nothing by it: every point the application aims at lies inside the
      * served area, and the framing that lands is measured again on arrival.
@@ -85,38 +95,37 @@ class ServedAreaCamera(
     }
 
     /**
-     * Stands the limits down for a move the application is about to order.
+     * Stands the target box down for a move the application is about to order,
+     * having first brought the zoom floor up to date.
      *
-     * The box in force was measured for the framing being left: kept during
-     * the move, it would hold the camera short of a destination near the edge
-     * of the area, which at the closest zoom is a legitimate place to be. It
-     * goes now — before the move starts, since lifting it stops the camera
-     * too — and [holdAgain] puts back the one that suits where the move lands.
+     * The box in force was measured for the framing being left, and it suits no
+     * other. It would hold the camera short of a destination near the edge of
+     * the area, which at the closest zoom is a legitimate place to be — and,
+     * worse, it would hold a framing wider than the one it was measured on
+     * nowhere near where it belongs: a box that suits a close view is shrunk by
+     * half a small viewport, when the move that is coming needs it shrunk by
+     * half a large one. On the journey screen it clamped the whole track a
+     * screenful too far north. It goes now — before the move starts, since
+     * lifting it stops the camera too — and [holdAgain] puts back the one that
+     * suits where the move lands.
+     *
+     * The zoom floor is measured again rather than lifted: lifting it is what
+     * would let the edge show. It follows the shape of the map view, not the
+     * camera, and the view may have changed shape since the last move — the
+     * journey screen's map fills the screen while the answer is worked out and
+     * halves when it arrives. Measured on the viewport it had before, the floor
+     * forbids the very zoom the coming framing is entitled to.
      */
     fun releaseForMove() {
         moving = true
         appliedCentres = null
         map.setLatLngBoundsForCameraTarget(null)
+        visibleRegion()?.let(::applyWidestZoom)
     }
 
     /** Measures the limits again, on the framing the move has landed on. */
     fun holdAgain() {
         moving = false
-        confine()
-    }
-
-    /**
-     * Measures the limits again for the map as it stands right now.
-     *
-     * The widest zoom follows the shape of the map view, not only its camera: a
-     * tall viewport reaches the area's northern and southern edges long before
-     * a short one does, so it is held closer. A screen whose map changes height
-     * — the journey's, which fills it while the answer is worked out and halves
-     * when it arrives — otherwise frames itself against the limit measured on
-     * the viewport it had before. Measured on the journey across Paris, that
-     * cost a tenth of a zoom step of framing, which is a tenth too many.
-     */
-    fun remeasure() {
         confine()
     }
 
@@ -132,32 +141,49 @@ class ServedAreaCamera(
         if (moving || confining) return
         confining = true
         try {
-            applyLimits()
+            val visible = visibleRegion() ?: return
+            applyWidestZoom(visible)
+            applyCentres(visible)
         } finally {
             confining = false
         }
     }
 
-    private fun applyLimits() {
-        val visible = map.projection.visibleRegion.latLngBounds
-        val latitudeSpan = visible.latitudeSpan
-        val longitudeSpan = visible.longitudeSpan
-        // Before the map view is laid out the region has no extent: measuring
-        // from it would give a limit that nothing supports.
-        if (latitudeSpan <= 0.0 || longitudeSpan <= 0.0) return
+    /**
+     * What the map is showing, or nothing while it has no extent to speak of.
+     *
+     * Before the map view is laid out the region is a point: measuring from it
+     * would give a limit that nothing supports.
+     */
+    private fun visibleRegion(): LatLngBounds? = map.projection.visibleRegion.latLngBounds
+        .takeIf { it.latitudeSpan > 0.0 && it.longitudeSpan > 0.0 }
 
+    /**
+     * Holds the camera at a zoom where the area still covers the screen.
+     *
+     * A tall viewport reaches the area's northern and southern edges long
+     * before a short one does, so it is held closer.
+     */
+    private fun applyWidestZoom(visible: LatLngBounds) {
         // Held between the city's own two zooms: below, the configured limit
         // stands, since the tiles are drawn for it; above, a box smaller than
         // the screen would ask for a zoom the base map cannot serve, and the
         // two preferences would cross.
         val widest = area
-            .zoomKeepingViewportInside(map.cameraPosition.zoom, latitudeSpan, longitudeSpan)
+            .zoomKeepingViewportInside(
+                map.cameraPosition.zoom,
+                visible.latitudeSpan,
+                visible.longitudeSpan,
+            )
             .coerceIn(widestZoom, closestZoom)
         if (widest.differsFrom(appliedWidestZoom)) {
             appliedWidestZoom = widest
             map.setMinZoomPreference(widest)
         }
+    }
 
+    /** Keeps the camera's target far enough from the edge to hide it. */
+    private fun applyCentres(visible: LatLngBounds) {
         // Measured from the camera's own target, which a Mercator viewport does
         // not sit in the middle of, degree for degree.
         val target = map.cameraPosition.target ?: return

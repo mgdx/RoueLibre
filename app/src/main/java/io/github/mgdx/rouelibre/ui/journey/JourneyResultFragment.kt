@@ -71,7 +71,8 @@ class JourneyResultFragment : Fragment() {
 
     /**
      * The limit penning the camera inside the served area, kept so that the
-     * framing can have it measured again against the map's current height.
+     * framing can stand it down for the length of its own move and have it
+     * measured again on the map as it then stands.
      */
     private var servedArea: ServedAreaCamera? = null
 
@@ -676,16 +677,6 @@ class JourneyResultFragment : Fragment() {
         val views = binding ?: return
         val map = mapLibreMap ?: return
         val bounds = frame ?: return
-        // The camera's widest zoom depends on the shape of the map view, and
-        // this one halves in height when the answer arrives: measured while the
-        // map still filled the screen, the limit in force is tighter than the
-        // one this framing is entitled to. It is worth the recomputation — but
-        // it does not buy a journey right across the conurbation its margins.
-        // Nothing here can: the base map holds no tile below zoom 10, so on a
-        // phone the widest possible view spans some twenty kilometres and a
-        // thirty-kilometre track cannot be shown whole. That ceiling is in the
-        // data, not in the camera.
-        servedArea?.remeasure()
         // The band of attribution lies over the map: the track is framed above
         // it, not underneath.
         val band = views.attribution.height
@@ -701,9 +692,27 @@ class JourneyResultFragment : Fragment() {
         // than leaving the framing nothing to work with.
         val margin = (FRAME_PADDING_DP * resources.displayMetrics.density).toInt()
             .coerceAtMost(minOf(width, height) / 4)
+
+        // The camera limit stands down for the length of the move, and is
+        // measured again on arrival: it was laid down for the framing being
+        // left, and this screen leaves a very different one — the map fills the
+        // screen while the answer is worked out, so the box in force pens the
+        // camera as a viewport twice this height requires, and the framing that
+        // arrives is clamped short of where it belongs. The zoom floor is
+        // brought up to date rather than lifted, so nothing here can uncover
+        // the edge of the served area (SPEC §7.1).
+        //
+        // That floor does not buy a journey right across the conurbation its
+        // margins, and nothing here can: the base map holds no tile below zoom
+        // 10, so on a phone the widest possible view spans some twenty
+        // kilometres and a thirty-kilometre track cannot be shown whole. That
+        // ceiling is in the data, not in the camera.
+        val limits = servedArea
+        limits?.releaseForMove()
         map.moveCamera(
             CameraUpdateFactory.newLatLngBounds(bounds, margin, margin, margin, margin + band),
         )
+        limits?.holdAgain()
     }
 
     // ---------------------------------------------------- map lifecycle --
