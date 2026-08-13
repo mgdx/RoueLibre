@@ -127,11 +127,18 @@ class WelcomeFragment : Fragment() {
                 null,
                 FragmentManager.POP_BACK_STACK_INCLUSIVE,
             )
+            // Reordering allowed, and it matters: without it the screen placed
+            // underneath is built and resumed for the instant between the two
+            // transactions, long enough to ask the network for stations no city
+            // has been chosen for yet — a request from a screen nobody is
+            // looking at, which SPEC §4.1 rules out.
             parentFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
                 .replace(R.id.content, next)
                 .commit()
             if (then != null) {
                 parentFragmentManager.beginTransaction()
+                    .setReorderingAllowed(true)
                     .replace(R.id.content, then)
                     .addToBackStack(null)
                     .commit()
