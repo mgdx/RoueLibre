@@ -134,7 +134,7 @@ class DatasetDownloaderTest {
                     {"formatVersion":2,"releaseTag":"data-2026-08","network":"vlille",
                      "datasets":[{"id":"tiles","files":[
                        {"name":"tiles.mbtiles","url":"https://example.org/t","sizeBytes":10,
-                        "sha256":"ab"}]}]}
+                        "sha256":"${"ab".repeat(32)}"}]}]}
                     """.trimIndent(),
                 )
                 .build(),

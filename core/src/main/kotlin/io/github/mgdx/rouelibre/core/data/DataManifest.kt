@@ -79,9 +79,11 @@ public data class ManifestDataset(
  *   under. It must be a plain file name — see [requirePlainFileName].
  * @property url where to get it.
  * @property sizeBytes the announced size, shown before asking for confirmation.
- * @property sha256 the digest, re-verified after download (SPEC §4.4).
- * @throws IllegalArgumentException if [name] is not a plain file name. The
- *   reader turns that into a refusal of the whole manifest.
+ * @property sha256 the digest, re-verified after download (SPEC §4.4). It is
+ *   required — see [requireDigest].
+ * @throws IllegalArgumentException if [name] is not a plain file name, or if
+ *   [sha256] is not a digest. The reader turns that into a refusal of the whole
+ *   manifest.
  */
 public data class ManifestFile(
     public val name: String,
@@ -91,6 +93,7 @@ public data class ManifestFile(
 ) {
     init {
         requirePlainFileName(name)
+        requireDigest(sha256, name)
     }
 }
 
@@ -131,6 +134,38 @@ private fun requirePlainFileName(name: String) {
             '\u0000' !in name,
     ) { "unusable file name in the manifest: \"$name\"" }
 }
+
+/**
+ * Refuses a file announced without a usable digest.
+ *
+ * The digest is what SPEC §4.4 rests the whole download on: what arrives is
+ * hashed and put against what was announced. Making it optional made that
+ * guarantee optional too — and optional for **whoever writes the manifest**,
+ * which is to say for the one party it protects against. A file with no digest
+ * was installed on the strength of its shape alone, silently, with nothing to
+ * distinguish it from a verified one.
+ *
+ * A SHA-256 is sixty-four hexadecimal characters, and refusing anything else
+ * here rather than at the comparison is not pedantry: a truncated or mistyped
+ * digest would otherwise be found out only after tens of megabytes have come
+ * down, under a message about an unexpected digest that would point at the
+ * server rather than at the manifest.
+ *
+ * The case is free, as it is in the comparison.
+ *
+ * @param name the file concerned, so the refusal says which one.
+ */
+private fun requireDigest(sha256: String, name: String) {
+    require(sha256.length == SHA256_LENGTH && sha256.all { it.isHexadecimal() }) {
+        "unusable digest for \"$name\": \"$sha256\""
+    }
+}
+
+private const val SHA256_LENGTH = 64
+
+private fun Char.isHexadecimal(): Boolean = this in '0'..'9' ||
+    this in 'a'..'f' ||
+    this in 'A'..'F'
 
 /**
  * What is to be done with a set, faced with a manifest.

@@ -35,7 +35,7 @@ class DataManifestTest {
                   "name": "tiles.mbtiles",
                   "url": "https://example.org/data-2026-08/tiles.mbtiles",
                   "sizeBytes": 34992128,
-                  "sha256": "96ba5e62"
+                  "sha256": "96ba5e6296ba5e6296ba5e6296ba5e6296ba5e6296ba5e6296ba5e6296ba5e62"
                 }
               ]
             },
@@ -47,7 +47,7 @@ class DataManifestTest {
                   "name": "E0_N50.rd5",
                   "url": "https://example.org/data-2026-08/E0_N50.rd5",
                   "sizeBytes": 1659390,
-                  "sha256": "87c3857f"
+                  "sha256": "87c3857f87c3857f87c3857f87c3857f87c3857f87c3857f87c3857f87c3857f"
                 }
               ]
             }
@@ -136,6 +136,29 @@ class DataManifestTest {
     }
 
     @Test
+    fun `a file announced without a usable digest has the manifest refused`() {
+        // The digest is what the whole download rests on (SPEC §4.4): what
+        // arrives is hashed and put against what was announced. Leaving it
+        // optional left that verification to the discretion of whoever writes
+        // the manifest — that is, of the one party it protects against.
+        for (digest in listOf("", "96ba5e62", "zz".repeat(32), "96ba5e62 ")) {
+            val forged = document.replace(
+                "\"sha256\": \"$TILES_DIGEST\"",
+                "\"sha256\": \"$digest\"",
+            )
+
+            assertTrue(
+                "the digest \"$digest\" should have been refused",
+                DataManifestReader.read(forged) is Outcome.Failure,
+            )
+        }
+        // A field renamed is a field absent: the reader ignores what it does not
+        // know, and an absent digest must be refused like an unusable one.
+        val absent = document.replace("\"sha256\"", "\"digest\"")
+        assertTrue(DataManifestReader.read(absent) is Outcome.Failure)
+    }
+
+    @Test
     fun `a set absent from the device is to be downloaded`() {
         val states = compareWithInstalled(manifest(), installedFingerprints = emptyMap())
 
@@ -150,7 +173,7 @@ class DataManifestTest {
         val states = compareWithInstalled(
             manifest(),
             installedFingerprints = mapOf(
-                DatasetKind.Tiles to "96ba5e62",
+                DatasetKind.Tiles to TILES_DIGEST,
                 DatasetKind.Routing to "0000",
             ),
         )
@@ -163,7 +186,7 @@ class DataManifestTest {
     fun `the digest's case changes nothing`() {
         val states = compareWithInstalled(
             manifest(),
-            installedFingerprints = mapOf(DatasetKind.Tiles to "96BA5E62"),
+            installedFingerprints = mapOf(DatasetKind.Tiles to TILES_DIGEST.uppercase()),
         )
 
         assertEquals(DatasetUpdate.UpToDate, states[DatasetKind.Tiles])
@@ -174,12 +197,17 @@ class DataManifestTest {
         // The routing graph may hold several segments; the order the manifest
         // lists them in must not cause a needless re-download.
         val files = listOf(
-            ManifestFile("b.rd5", "https://example.org/b", 1, "bbbb"),
-            ManifestFile("a.rd5", "https://example.org/a", 1, "aaaa"),
+            ManifestFile("b.rd5", "https://example.org/b", 1, "b".repeat(64)),
+            ManifestFile("a.rd5", "https://example.org/a", 1, "a".repeat(64)),
         )
         val direct = ManifestDataset(DatasetKind.Routing, "", files)
         val reversed = ManifestDataset(DatasetKind.Routing, "", files.reversed())
 
         assertEquals(direct.fingerprint, reversed.fingerprint)
+    }
+
+    private companion object {
+        /** The digest the fixture announces for the tiles. */
+        const val TILES_DIGEST = "96ba5e6296ba5e6296ba5e6296ba5e6296ba5e6296ba5e6296ba5e6296ba5e62"
     }
 }

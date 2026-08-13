@@ -141,8 +141,13 @@ class DatasetDownloader(
         val outcome = fetchInto(file, partial, onProgress)
         if (outcome is Outcome.Failure) return outcome
 
+        // Unconditional: the reader refuses a manifest that announces a file
+        // without a digest, so there is no case here where the comparison could
+        // be skipped. It used to be conditioned on the digest being present,
+        // which left it to whoever wrote the manifest to decide whether it took
+        // place.
         val digest = sha256Of(partial)
-        if (file.sha256.isNotEmpty() && !digest.equals(file.sha256, ignoreCase = true)) {
+        if (!digest.equals(file.sha256, ignoreCase = true)) {
             // The file received is not the one announced: keeping it for a
             // resumption would only repeat the mistake.
             partial.delete()
