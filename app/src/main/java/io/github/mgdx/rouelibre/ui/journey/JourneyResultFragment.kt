@@ -25,6 +25,7 @@ import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyResultBinding
 import io.github.mgdx.rouelibre.databinding.ItemJourneyStepBinding
+import io.github.mgdx.rouelibre.ui.formatClimb
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.formatDuration
 import io.github.mgdx.rouelibre.ui.map.MapStyleLoader
@@ -447,13 +448,17 @@ class JourneyResultFragment : Fragment() {
         }
 
         views.totalTime.text = requireContext().formatDuration(option.travelTime)
-        views.summary.text = getString(
-            R.string.journey_summary,
-            requireContext().formatDuration(
-                option.walkToStation.duration + option.walkToDestination.duration,
+        views.summary.text = withClimb(
+            getString(
+                R.string.journey_summary,
+                requireContext().formatDuration(
+                    option.walkToStation.duration + option.walkToDestination.duration,
+                ),
+                requireContext().formatDuration(option.ride.duration),
+                requireContext().formatDistance(option.distanceMetres.toDouble()),
             ),
-            requireContext().formatDuration(option.ride.duration),
-            requireContext().formatDistance(option.distanceMetres.toDouble()),
+            option.climbMetres,
+            option.distanceMetres,
         )
         showSteps(option)
         showShape(option)
@@ -484,6 +489,35 @@ class JourneyResultFragment : Fragment() {
 
     private fun distanceOf(leg: RouteLeg): String =
         requireContext().formatDistance(leg.distanceMetres.toDouble())
+
+    /**
+     * The climb of one leg, named as such, or nothing on flat ground.
+     *
+     * A bare figure would be unreadable beside a distance — "650 m · 20 m" says
+     * nothing about which way the second one runs — so the metres never appear
+     * without the word that turns them upright.
+     */
+    private fun climbOf(leg: RouteLeg): String? = requireContext()
+        .formatClimb(leg.ascentMetres, leg.distanceMetres)
+        ?.let { getString(R.string.journey_climb, it) }
+
+    /**
+     * Adds the journey's climb to the summary, where there is one to add.
+     *
+     * The summary is a list of clauses, not a sentence: the climb joins it
+     * behind the separator the rest of the screen already uses. Flat ground
+     * leaves the line exactly as it was — a journey that gains nothing has
+     * nothing to say about hills, and "0 m of climb" would be a figure the
+     * reader has to weigh before discarding.
+     */
+    private fun withClimb(summary: String, climbMetres: Int, overMetres: Int): String {
+        val climb = requireContext().formatClimb(climbMetres, overMetres) ?: return summary
+        return getString(
+            R.string.address_detail,
+            summary,
+            getString(R.string.journey_climb, climb),
+        )
+    }
 
     /**
      * Shows the walk, or says what is missing when there is not even one.
@@ -525,15 +559,29 @@ class JourneyResultFragment : Fragment() {
      * Naming what was missing is left to the cases where a walk arrives without
      * a bike journey at all. When the walk simply won, the reason is the whole
      * summary: it got there sooner.
+     *
+     * The climb, where there is one, is written into the sentence rather than
+     * hung after it: this summary ends on a full stop and a reason, and a
+     * clause added behind that would read as an afterthought to a finished
+     * sentence.
      */
-    private fun walkSummaryOf(plan: JourneyPlan?, walk: RouteLeg): String = getString(
-        if ((plan as? JourneyPlan.WalkOnly)?.reason == NoBikeJourney.WalkingIsQuicker) {
-            R.string.journey_walk_is_quicker
-        } else {
-            R.string.journey_walk_only
-        },
-        distanceOf(walk),
-    )
+    private fun walkSummaryOf(plan: JourneyPlan?, walk: RouteLeg): String {
+        val quicker = (plan as? JourneyPlan.WalkOnly)?.reason == NoBikeJourney.WalkingIsQuicker
+        val climb = requireContext().formatClimb(walk.ascentMetres, walk.distanceMetres)
+            ?: return getString(
+                if (quicker) R.string.journey_walk_is_quicker else R.string.journey_walk_only,
+                distanceOf(walk),
+            )
+        return getString(
+            if (quicker) {
+                R.string.journey_walk_is_quicker_climb
+            } else {
+                R.string.journey_walk_only_climb
+            },
+            distanceOf(walk),
+            climb,
+        )
+    }
 
     private fun reasonOf(plan: JourneyPlan?): String {
         val reason = when (plan) {
@@ -610,16 +658,22 @@ class JourneyResultFragment : Fragment() {
         )
     }
 
+    /**
+     * One step, with what it costs under what it asks of you.
+     *
+     * The second line reads in the order the leg is lived: how far it runs, how
+     * much of it goes up, and what waits at the end of it. Each part drops out
+     * when it has nothing to say — flat ground names no climb, and the last
+     * walk has no station to count.
+     */
     private fun addStep(icon: Int, label: String, detail: String?, leg: RouteLeg) {
         val views = binding ?: return
         val step = ItemJourneyStepBinding.inflate(layoutInflater, views.steps, false)
         step.modeIcon.setImageResource(icon)
         step.label.text = label
         step.duration.text = requireContext().formatDuration(leg.duration)
-        val distance = requireContext().formatDistance(leg.distanceMetres.toDouble())
-        step.detail.text = detail
-            ?.let { getString(R.string.address_detail, distance, it) }
-            ?: distance
+        step.detail.text = listOfNotNull(distanceOf(leg), climbOf(leg), detail)
+            .reduce { read, next -> getString(R.string.address_detail, read, next) }
         views.steps.addView(step.root)
     }
 

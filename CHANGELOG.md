@@ -11,6 +11,24 @@ also records what has no visible effect.
 
 ### Added
 
+- **The journey says what it climbs.** The summary names the metres gained over
+  the whole trip, walks included, and each step of the detail names its own —
+  five metres on the walk out, seventy on a ride from Lille to Roubaix. The
+  figure was already in the graph: the routing data is built with SRTM
+  elevation, and BRouter has been returning its filtered ascent since the first
+  route was traced. Nothing read it. On a heavy share bike it is what separates
+  a ride one takes from a ride one regrets, and no city among the 306 is
+  promised to be as flat as Lille.
+- A climb is named over three hundred metres of ground and not under it, and
+  from five metres up. The graph's elevation is SRTM sampled every thirty
+  metres or so: a shorter stretch is described by the error between two
+  readings rather than by the ground, which is how forty metres of pavement
+  came to announce five metres of climb in testing. A plain ten-metre floor was
+  tried instead and dropped — it silenced the bike leg of a flat conurbation's
+  journeys while the total, summing three legs, still named a climb. The same
+  silence covers a graph generated with `--no-elevation`, which would otherwise
+  read a row of zeroes.
+
 - **Every configured conurbation now has its data, and it is published.** The
   three sets exist for all **306** networks, 5.60 GB in total — median 10.2 MB
   a city, 2.0 MB for Moravská Třebová, 165.8 MB for Rotterdam, which is the

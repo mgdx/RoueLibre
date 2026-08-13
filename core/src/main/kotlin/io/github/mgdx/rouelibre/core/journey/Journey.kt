@@ -59,6 +59,20 @@ public data class JourneyOption(
     public val distanceMetres: Int
         get() = walkToStation.distanceMetres + ride.distanceMetres +
             walkToDestination.distanceMetres
+
+    /**
+     * The metres climbed over the whole journey, the two walks included.
+     *
+     * The three legs add up rather than the ends being subtracted: what a
+     * journey costs is every hill gone up, and a climb repaid by a descent
+     * further on is still a climb. Each leg's figure is the routing engine's
+     * filtered ascent, which already forgives dips of ten metres — so what is
+     * summed here is real relief, not the sampling noise of the elevation
+     * data.
+     */
+    public val climbMetres: Int
+        get() = walkToStation.ascentMetres + ride.ascentMetres +
+            walkToDestination.ascentMetres
 }
 
 /**

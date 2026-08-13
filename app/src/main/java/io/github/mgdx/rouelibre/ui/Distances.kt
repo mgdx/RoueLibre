@@ -34,7 +34,60 @@ fun Context.formatDistance(metres: Double): String {
     )
 }
 
+/**
+ * Puts a climb into words, or says there is none worth naming.
+ *
+ * A climb is read in metres however big it gets — a hill is counted in metres
+ * by everyone who rides up one — so this is not [formatDistance] applied to a
+ * vertical figure: no kilometre ever appears here.
+ *
+ * Two things silence it, and they are the same thing said twice: the elevation
+ * of the routing graph comes from SRTM samples some thirty metres apart, whose
+ * vertical error runs to several metres.
+ *
+ * - **A stretch too short to be described by them says nothing.** Forty metres
+ *   of pavement announced five metres of climb — a twelve per cent grade on a
+ *   street that has none — because two samples and the error between them were
+ *   the whole of what the engine had to go on. Under [CLIMB_MEASURABLE_OVER]
+ *   the figure is not the ground, it is the sampling.
+ * - **Under five metres nothing is named either**, and the figure is written to
+ *   five above it, which is as fine as those samples can honestly promise.
+ *
+ * What is *not* used here is a floor high enough to hide real relief: a ride
+ * across flat country that gains seven metres has gained them, and the ten
+ * metres tried first — the dip the engine's own filter forgives — silenced the
+ * bike leg of half the journeys in a flat conurbation while the total, summing
+ * three legs, still named one.
+ *
+ * @param metres the climb the routing engine measured.
+ * @param overMetres the ground it was gained over: one leg's length, or the
+ *   whole journey's.
+ * @return the climb ready to show, "45 m" for instance, or null when the ground
+ *   is flat enough, or short enough, that saying anything would be saying too
+ *   much.
+ */
+fun Context.formatClimb(metres: Int, overMetres: Int): String? {
+    if (overMetres < CLIMB_MEASURABLE_OVER) return null
+    if (metres < CLIMB_ROUNDING) return null
+    val rounded = (metres.toDouble() / CLIMB_ROUNDING).roundToInt() * CLIMB_ROUNDING
+    return getString(R.string.distance_metres, rounded)
+}
+
 private const val METRES_PER_KILOMETRE = 1_000.0
 
 /** Below a kilometre, the distance rounds to the nearest ten metres. */
 private const val METRE_ROUNDING = 10
+
+/** A climb is written to five metres, and under one step it is not written. */
+private const val CLIMB_ROUNDING = 5
+
+/**
+ * The ground a climb needs to be gained over before it is worth naming.
+ *
+ * Three hundred metres is some ten SRTM samples: enough for the stretch to have
+ * a shape of its own rather than to be one reading and its error. Shorter than
+ * that, the engine's elevation filter has not had the length to work either —
+ * it forgives dips as it goes, but the first rise of a leg always counts, and on
+ * a leg of forty metres that first rise is the whole figure.
+ */
+private const val CLIMB_MEASURABLE_OVER = 300
