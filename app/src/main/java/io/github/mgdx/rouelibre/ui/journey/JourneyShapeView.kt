@@ -94,7 +94,7 @@ class JourneyShapeView @JvmOverloads constructor(
 
     private val nodeSize = resources.getDimensionPixelSize(R.dimen.journey_shape_node)
 
-    private val labelGap = resources.getDimensionPixelSize(R.dimen.space_s)
+    private val labelGap = resources.getDimensionPixelSize(R.dimen.journey_shape_label_gap)
 
     /** How far a stroke stops short of the discs it joins. */
     private val strokeInset = resources.getDimension(R.dimen.space_xs)

@@ -97,6 +97,14 @@ also records what has no visible effect.
   is a `ConstraintLayout`, checked at font scale 1.5 where the summary runs to
   three lines.
 
+- **The journey's drawing holds its figures against its strokes.** The distance
+  above and the time below stood a full `space_s` off the discs, and read as two
+  rows of figures floating over and under a drawing rather than as its labels.
+  The gap is its own dimension now, at 2 dp: measured from the disc, but read
+  against the stroke half a disc further in, which leaves the figures room to
+  breathe while belonging to the line they measure. The whole block is 12 dp
+  shorter, which the map keeps.
+
 - **The data is laid out as one release per country**, plus a last one holding
   the catalogue and the 306 manifests. GitHub allows a thousand assets per
   release and the sets come to some 1,350 files, so a single release could not

@@ -48,6 +48,12 @@
     <dimen name="journey_shape_ride_stroke">3dp</dimen>
     <dimen name="journey_shape_dash">2dp</dimen>
     <dimen name="journey_shape_dash_gap">5dp</dimen>
+    <!-- How far a label stands off the disc it is level with. Measured from the
+         disc, but read against the stroke it labels, which runs half a disc
+         further in: a gap that looks tight here still leaves the label a
+         comfortable distance from its own line, and a roomy one had the figures
+         floating clear of the drawing they belong to. -->
+    <dimen name="journey_shape_label_gap">2dp</dimen>
 
     <!-- The ground the ride runs over, drawn on the journey's detail. Tall
          enough for a climb halfway along to be told apart from one at the end,
