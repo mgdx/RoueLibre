@@ -39,6 +39,15 @@ also records what has no visible effect.
 
 ### Changed
 
+- **The journey's summary moved up beside the total time**, level with its top,
+  instead of sitting on a line of its own under it. It says the same thing and
+  gives the map back the row it was taking. A weighted `LinearLayout` row was
+  the obvious way and the wrong one: it settles its own height before handing
+  the summary its share of the width, so the second line of a summary that
+  wraps fell outside the row and was cut off by the drawing under it. The row
+  is a `ConstraintLayout`, checked at font scale 1.5 where the summary runs to
+  three lines.
+
 - **The data is laid out as one release per country**, plus a last one holding
   the catalogue and the 306 manifests. GitHub allows a thousand assets per
   release and the sets come to some 1,350 files, so a single release could not

@@ -160,22 +160,49 @@
             android:paddingEnd="@dimen/space_l"
             android:paddingBottom="@dimen/space_m">
 
-            <!-- The total time, the information one comes for. -->
-            <TextView
-                android:id="@+id/total_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/bricolage_semibold"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Title"
-                tools:text="24 min" />
+            <!--
+                The total time, the information one comes for, and beside it
+                what makes it up.
 
-            <TextView
-                android:id="@+id/summary"
+                On one row rather than two: the summary is the same sentence
+                either way, and set under the figure it pushed the drawing and
+                everything after it a line further down for nothing. The
+                summary takes the width the figure leaves and wraps under
+                itself, and it starts at the figure's own top rather than on
+                its baseline: a summary of two lines then stands beside the
+                figure instead of hanging below it, which is another few
+                pixels the map keeps.
+            -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_xs"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
-                tools:text="dont 9 min à pied et 13 min à vélo · 4,1 km" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/total_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bricolage_semibold"
+                    android:textAppearance="@style/TextAppearance.RoueLibre.Title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="24 min" />
+
+                <!-- A weighted row would have done, were it not for
+                     LinearLayout measuring its own height before it hands the
+                     summary its share of the width: the second line of a
+                     summary that wraps then falls outside the row and is cut
+                     off by the drawing under it. -->
+                <TextView
+                    android:id="@+id/summary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_m"
+                    android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/total_time"
+                    app:layout_constraintTop_toTopOf="@id/total_time"
+                    tools:text="dont 9 min à pied et 13 min à vélo · 4,1 km · 45 m de dénivelé" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- The whole journey at a glance: how far each leg runs above its
                  stroke, how long it takes below. It repeats what the folded
