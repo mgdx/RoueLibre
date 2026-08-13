@@ -6,7 +6,7 @@
     be corrected without going back. The map takes whatever room is left, and
     the detail is anchored to the bottom edge: one reads the total time with the
     thumb already on it, and the screen never shows a band of nothing under the
-    last button.
+    last line.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -189,9 +189,9 @@
 
             <!-- Opens the step list, and says which way it is going to go: the
                  three lines are folded away by default, and whoever wants the
-                 name of each station asks for them here. Last of the reading,
-                 just above the recompute button: everything the screen offers
-                 to do comes after everything it has to say. -->
+                 name of each station asks for them here. Last of the reading:
+                 everything the screen offers to do comes after everything it
+                 has to say. -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/steps_toggle"
                 style="@style/Widget.RoueLibre.Toggle"
@@ -214,14 +214,6 @@
                 android:orientation="vertical"
                 android:visibility="gone"
                 tools:visibility="visible" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/recompute"
-                style="@style/Widget.RoueLibre.Toggle"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_min"
-                android:layout_marginTop="@dimen/space_m"
-                android:text="@string/journey_recompute" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

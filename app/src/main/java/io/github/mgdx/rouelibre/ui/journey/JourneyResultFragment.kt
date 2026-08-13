@@ -183,7 +183,6 @@ class JourneyResultFragment : Fragment() {
 
         views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
         views.toolbar.navigationContentDescription = getString(R.string.action_back)
-        views.recompute.setOnClickListener { viewModel.compute() }
         views.stepsToggle.setOnClickListener {
             stepsShown = !stepsShown
             showStepsOrNot()

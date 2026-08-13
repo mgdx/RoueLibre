@@ -85,9 +85,10 @@ class JourneyViewModel(
     /**
      * Recomputes the journey (SPEC §7.4).
      *
-     * The recompute button exists because availability changes: the station
-     * chosen five minutes ago may have emptied. The computation therefore
-     * starts again from the most recent station state the repository holds.
+     * Availability changes: the station chosen five minutes ago may have
+     * emptied. The computation therefore starts again from the most recent
+     * station state the repository holds, never from the one the previous
+     * answer was built on.
      */
     fun compute() {
         // The previous computation, still running, would race this one for the
