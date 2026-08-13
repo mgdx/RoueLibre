@@ -504,10 +504,7 @@ class JourneyResultFragment : Fragment() {
             ?: getString(R.string.journey_none_title)
         views.summary.text = when {
             !state.hasStations -> getString(R.string.journey_no_stations)
-            walk != null -> getString(
-                walkSummaryOf(plan),
-                requireContext().formatDistance(walk.distanceMetres.toDouble()),
-            )
+            walk != null -> walkSummaryOf(plan, walk)
             else -> reasonOf(plan)
         }
         // One dotted stroke between two ends: the journey there is, with no
@@ -524,13 +521,19 @@ class JourneyResultFragment : Fragment() {
     /**
      * How the walk's summary reads: as the better of the two, or as the only
      * one left.
+     *
+     * Naming what was missing is left to the cases where a walk arrives without
+     * a bike journey at all. When the walk simply won, the reason is the whole
+     * summary: it got there sooner.
      */
-    private fun walkSummaryOf(plan: JourneyPlan?): Int =
+    private fun walkSummaryOf(plan: JourneyPlan?, walk: RouteLeg): String = getString(
         if ((plan as? JourneyPlan.WalkOnly)?.reason == NoBikeJourney.WalkingIsQuicker) {
             R.string.journey_walk_is_quicker
         } else {
             R.string.journey_walk_only
-        }
+        },
+        distanceOf(walk),
+    )
 
     private fun reasonOf(plan: JourneyPlan?): String {
         val reason = when (plan) {

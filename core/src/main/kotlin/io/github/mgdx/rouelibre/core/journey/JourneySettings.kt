@@ -16,11 +16,6 @@ import kotlin.time.Duration.Companion.minutes
  *   candidate multiplies the number of pairs to evaluate.
  * @property arrivalCandidates how many stations are examined at the arrival
  *   end, for the same reasons.
- * @property maxWalkToStationMetres the distance beyond which a station stops
- *   being a candidate. Twelve hundred metres, about a quarter of an hour on
- *   foot: past that, the access walk swallows everything the bike could have
- *   saved. Without this bound the algorithm serenely proposes walking four
- *   kilometres to fetch a bike, for want of anything better.
  * @property maxRideEvaluations how many bike legs the first wave computes,
  *   taken from the top of the ranking by lower bound. Pruning by lower bound
  *   does most of the work, but it depends on the geometry and guarantees
@@ -34,10 +29,13 @@ import kotlin.time.Duration.Companion.minutes
  *   bounded, and together the two budgets are what keep the wait required by
  *   SPEC §6 within reason — twelve legs, never the twenty-five.
  * @property directWalkThresholdMetres the straight-line distance beyond which
- *   the direct walk is no longer computed up front. Three kilometres: on foot
- *   that is already three quarters of an hour, where the same trip by bike
- *   takes twenty minutes. Walking can no longer win, and computing it cost a
- *   fifth of the time budget by itself. It is still computed, whatever the
+ *   the direct walk is no longer computed **up front**. Three kilometres: below
+ *   it walking often wins, so the leg is computed alongside the access walks,
+ *   where it costs nothing but a core; above it, computing it up front spent a
+ *   fifth of the time budget on a result usually thrown away. This is a matter
+ *   of when, never of whether: past this distance the walk is computed after
+ *   the fact, and only when the journey found fails to beat a walker nobody
+ *   keeps up with (see `JourneyPlanner`). It is also computed, whatever the
  *   distance, when no bike journey is possible: it is then the only answer to
  *   give.
  * @property fallbackPenalty the time lost if the chosen station turns out to be
@@ -50,7 +48,6 @@ import kotlin.time.Duration.Companion.minutes
 public data class JourneySettings(
     public val departureCandidates: Int = 5,
     public val arrivalCandidates: Int = 5,
-    public val maxWalkToStationMetres: Double = 1_200.0,
     public val maxRideEvaluations: Int = 6,
     public val extraRideEvaluations: Int = 6,
     public val directWalkThresholdMetres: Double = 3_000.0,
@@ -60,7 +57,6 @@ public data class JourneySettings(
     init {
         require(departureCandidates > 0) { "at least one departure station is needed" }
         require(arrivalCandidates > 0) { "at least one arrival station is needed" }
-        require(maxWalkToStationMetres > 0) { "the walking distance must be positive" }
         require(maxRideEvaluations > 0) { "at least one ride must be evaluated" }
         require(extraRideEvaluations >= 0) { "the extra ride budget cannot be negative" }
         require(bikeTurnoverPerMinute >= 0) { "a turnover rate cannot be negative" }

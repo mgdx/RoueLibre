@@ -219,12 +219,14 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `says so when no nearby station has a bike`() = runTest {
-        // SPEC §6 requires it: do not propose an impossible journey.
+    fun `says so when no station at all has a bike`() = runTest {
+        // SPEC §6 requires it: do not propose an impossible journey. Every
+        // station has to be empty for this, since distance disqualifies none:
+        // a station with a bike is a candidate however far off it stands.
         val stations = listOf(
             station("vide-1", at(0.0, 100.0), bikes = 0),
             station("vide-2", at(0.0, 300.0), bikes = 0),
-            station("arrivee", at(0.0, 3900.0)),
+            station("vide-3", at(0.0, 3900.0), bikes = 0),
         )
         val planner = JourneyPlanner(FakeRouter())
 
@@ -235,10 +237,10 @@ class JourneyPlannerTest {
     }
 
     @Test
-    fun `says so when no arrival station has a dock`() = runTest {
+    fun `says so when no station at all has a free dock`() = runTest {
         val stations = listOf(
-            station("depart", at(0.0, 100.0)),
-            station("pleine", at(0.0, 3900.0), docks = 0),
+            station("pleine-1", at(0.0, 100.0), docks = 0),
+            station("pleine-2", at(0.0, 3900.0), docks = 0),
         )
         val planner = JourneyPlanner(FakeRouter())
 
@@ -248,6 +250,93 @@ class JourneyPlannerTest {
             NoBikeJourney.NoDockNearby,
             (plan as JourneyPlan.WalkOnly).reason,
         )
+    }
+
+    // ------------------------------------------ reach of the access walk --
+
+    @Test
+    fun `crosses the conurbation though the arrival station is far off`() = runTest {
+        // Rue Nationale, Tourcoing → rue Faidherbe, Wattignies: 17.4 km apart,
+        // a V'lille station 203 m from the departure point, and the nearest
+        // one to the arrival ("Recherche") 2 363 m away. A threshold of 1 200 m
+        // discarded it, leaving nothing but 19.7 km of walking — three hours
+        // fifty-four, where the bike takes about an hour. SPEC §11.4 requires
+        // the walk → bike → walk journey here.
+        val wattignies = at(0.0, 17_450.0)
+        val stations = listOf(
+            station("avenue-millet", at(0.0, 203.0), bikes = 6),
+            station("recherche", at(0.0, 17_450.0 - 2_363.0), docks = 13),
+        )
+        val planner = JourneyPlanner(FakeRouter())
+
+        val plan = planner.plan(origin, wattignies, stations)
+
+        assertTrue("expected Found, got $plan", plan is JourneyPlan.Found)
+        val best = (plan as JourneyPlan.Found).best
+        assertEquals("avenue-millet", best.departureStation.id)
+        assertEquals("recherche", best.arrivalStation.id)
+    }
+
+    @Test
+    fun `rides even when the only station is kilometres from the destination`() = runTest {
+        // Thirty kilometres to cover and the nearest station five from the
+        // arrival: an hour on foot at the far end, and still a saving of
+        // hours. No distance disqualifies a station — only the comparison with
+        // walking does, and here walking loses.
+        val farAway = at(0.0, 30_000.0)
+        val stations = listOf(
+            station("depart", at(0.0, 100.0)),
+            station("a-cinq-km", at(0.0, 25_000.0), docks = 8),
+        )
+        val planner = JourneyPlanner(FakeRouter())
+
+        val plan = planner.plan(origin, farAway, stations)
+
+        assertTrue("expected Found, got $plan", plan is JourneyPlan.Found)
+        assertEquals("a-cinq-km", (plan as JourneyPlan.Found).best.arrivalStation.id)
+    }
+
+    @Test
+    fun `offers the walk when fetching the bike costs more than it saves`() = runTest {
+        // Four kilometres to cover, both stations five kilometres off the
+        // straight line: the two access walks alone outlast walking the whole
+        // way. Nothing bars that pair any more, so the guard is the comparison
+        // — and it only holds because the direct walk is computed here, beyond
+        // the distance at which it is worked out up front.
+        val stations = listOf(
+            station("depart-a-l-ecart", at(5_000.0, 0.0)),
+            station("arrivee-a-l-ecart", at(5_000.0, 4_000.0)),
+        )
+        val planner = JourneyPlanner(FakeRouter())
+
+        val plan = planner.plan(origin, destination, stations)
+
+        assertTrue("expected WalkOnly, got $plan", plan is JourneyPlan.WalkOnly)
+        assertEquals(
+            NoBikeJourney.WalkingIsQuicker,
+            (plan as JourneyPlan.WalkOnly).reason,
+        )
+    }
+
+    @Test
+    fun `spares the direct walk when the bike has already outrun it`() = runTest {
+        // A twenty-kilometre walk costs as much to trace as the ride itself.
+        // When the journey found is quicker than the straight line covered at
+        // a pace nobody holds, no real walk can win and none is computed: the
+        // two access walks are the only walking legs traced.
+        val wattignies = at(0.0, 17_450.0)
+        // One station usable at each end and no other, so the walking legs
+        // traced are exactly the two access walks.
+        val stations = listOf(
+            station("avenue-millet", at(0.0, 203.0), bikes = 6, docks = 0),
+            station("recherche", at(0.0, 17_450.0 - 2_363.0), bikes = 0, docks = 13),
+        )
+        val router = FakeRouter()
+        val planner = JourneyPlanner(router)
+
+        planner.plan(origin, wattignies, stations)
+
+        assertEquals(2, router.walkingCalls)
     }
 
     // -------------------------------------------------------------- walk --

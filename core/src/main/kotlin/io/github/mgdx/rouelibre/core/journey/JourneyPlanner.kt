@@ -71,6 +71,8 @@ public class JourneyPlanner(
         destination: Coordinates,
         stations: List<StationWithAvailability>,
     ): JourneyPlan {
+        val tripMetres = origin.distanceInMetresTo(destination)
+
         val departures = candidates(
             stations = stations,
             near = origin,
@@ -87,11 +89,11 @@ public class JourneyPlanner(
         if (departures.isEmpty()) return giveUp(origin, destination, NoBikeJourney.NoBikeNearby)
         if (arrivals.isEmpty()) return giveUp(origin, destination, NoBikeJourney.NoDockNearby)
 
-        // The direct walk is only computed if it stands a chance of winning.
-        // Over three kilometres it cannot, and computing it would cost a fifth
-        // of the time budget for a result we knew we would discard.
-        val couldWalkAllTheWay = origin.distanceInMetresTo(destination) <=
-            settings.directWalkThresholdMetres
+        // Below three kilometres the direct walk is computed here, in the same
+        // breath as the access walks: it often wins, and in this scope it costs
+        // a core rather than a wait. Beyond, it is left to the end of the
+        // method, where it is only computed if it can still change the answer.
+        val couldWalkAllTheWay = tripMetres <= settings.directWalkThresholdMetres
 
         // The access walks are short and few; every pair uses them, so all of
         // them are computed. A single scope carries them all, the direct walk
@@ -133,8 +135,9 @@ public class JourneyPlanner(
         // (SPEC §6). Announcing the ride with a note saying one would get there
         // sooner on foot handed the user back a comparison already made, and
         // made them ask for the walk they had just been told to take.
-        if (directWalk != null && directWalk.duration < best.travelTime) {
-            return JourneyPlan.WalkOnly(directWalk, NoBikeJourney.WalkingIsQuicker)
+        val walk = directWalk ?: directWalkIfItCouldWin(origin, destination, tripMetres, best)
+        if (walk != null && walk.duration < best.travelTime) {
+            return JourneyPlan.WalkOnly(walk, NoBikeJourney.WalkingIsQuicker)
         }
         return JourneyPlan.Found(best)
     }
@@ -145,6 +148,14 @@ public class JourneyPlanner(
      * A station out of service, or empty on the side we need, is not a
      * candidate: proposing a journey that leans on it would be proposing an
      * impossible journey.
+     *
+     * **Distance disqualifies nothing.** A station is examined however far it
+     * stands: on a long trip, twenty minutes of access walk buy hours, and a
+     * cut-off — whatever its value — answered a fifteen-kilometre journey with
+     * four hours of walking rather than the ride that was there for the taking.
+     * What guards against an access walk that costs more than it saves is not a
+     * threshold but the comparison with the direct walk, which decides on the
+     * real times rather than on a distance believed to stand for them.
      *
      * Nearness is judged as the crow flies. A station across a river can
      * therefore edge out one that is nearer on foot — accepted: measuring the
@@ -165,12 +176,33 @@ public class JourneyPlanner(
                 straightLineMetres = near.distanceInMetresTo(entry.station.position),
             )
         }
-        // A station out of walking range is not a candidate, even if there is
-        // no other: announcing that no station is usable beats proposing three
-        // kilometres on foot to go and fetch a bike.
-        .filter { it.straightLineMetres <= settings.maxWalkToStationMetres }
         .sortedBy { it.straightLineMetres }
         .take(limit)
+
+    /**
+     * The direct walk, computed late and only when it can still win.
+     *
+     * Since no distance disqualifies a station, the walk is what keeps an
+     * absurd journey off the screen — two hours on foot to fetch a bike is
+     * refused here, by measurement, not by a rule of thumb. But computing a
+     * twenty-kilometre walk to discard it costs as much as the ride itself, so
+     * it is worth asking first whether it could win at all: the walk cannot
+     * take less than the straight line covered at a pace nobody holds. A
+     * journey quicker than *that* beats every real walk, and none is computed.
+     *
+     * The bound is optimistic on purpose, in the walker's favour: were it
+     * generous the other way, we would skip a walk that would have won.
+     */
+    private suspend fun directWalkIfItCouldWin(
+        origin: Coordinates,
+        destination: Coordinates,
+        tripMetres: Double,
+        best: JourneyOption,
+    ): RouteLeg? {
+        val fastestWalk = (tripMetres / OPTIMISTIC_WALKING_METRES_PER_SECOND).seconds
+        if (best.travelTime <= fastestWalk) return null
+        return legOrNull(origin, destination, TravelMode.Walking)
+    }
 
     /**
      * Prepares the usable pairs, each with its lower bound.
@@ -390,6 +422,17 @@ public class JourneyPlanner(
          * speed would risk discarding the best pair before ever computing it.
          */
         const val OPTIMISTIC_CYCLING_METRES_PER_SECOND = 7.0
+
+        /**
+         * The speed used to tell whether the direct walk is worth computing,
+         * in metres per second — six and a half kilometres an hour.
+         *
+         * A brisk walk, held by nobody over an hour, where the engine traces
+         * urban walking at about 1.4 m/s. Same requirement as above and for the
+         * same reason: no real walk can beat this, so a journey that beats it
+         * needs no walk computed to prove it wins.
+         */
+        const val OPTIMISTIC_WALKING_METRES_PER_SECOND = 1.8
     }
 }
 

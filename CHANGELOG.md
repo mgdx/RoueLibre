@@ -52,6 +52,24 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **A long trip no longer answers with four hours of walking.** How far one may
+  walk to a station was capped at 1 200 m. Tourcoing → Wattignies, 17 km across
+  the Lille conurbation, has a V'lille station 203 m from the departure point,
+  but the nearest one to the arrival — Recherche — stands 2 363 m off. It was
+  discarded, no pair of stations remained, and the application fell back on the
+  direct walk: 19.7 km, three hours fifty-four, "no bike journey is possible
+  here" — a breach of `SPEC.md` §11.4. **The cap is gone**: a station is a
+  candidate however far it stands. No threshold on the access walk can tell the
+  trip where twenty minutes on foot are worth it from the trip where they are
+  not, since it never sees how long the journey is.
+- **What guards against an absurd access walk is now the comparison with
+  walking, and it is made at every distance.** It was only made under 3 km,
+  which was harmless while the cap kept far-fetched pairs out and would not be
+  any more. Beyond that distance the direct walk is traced after the fact, and
+  only when the journey found fails to beat the straight line covered at
+  1.8 m/s — a pace no walker holds, so anything quicker beats every real walk
+  and needs no leg traced. One route computation added at worst, on journeys
+  where walking might still win (`SPEC.md` §6).
 - **A superscript in a house number no longer costs a city its index.**
   `tools/build_address_index.py` read the leading digits of an OpenStreetMap
   house number with `str.isdigit()`, which answers true for `²` and `³` —

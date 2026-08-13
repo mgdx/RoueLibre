@@ -113,10 +113,16 @@ public sealed interface NoBikeJourney {
      */
     public data object WalkingIsQuicker : NoBikeJourney
 
-    /** No station in service with at least one bike near the departure point. */
+    /**
+     * The network has no station in service holding a bike.
+     *
+     * Distance is not what brings us here — no station is ever too far to be
+     * examined. This is the whole network being empty, or out of service, on
+     * the lending side.
+     */
     public data object NoBikeNearby : NoBikeJourney
 
-    /** No station in service with at least one dock near the arrival point. */
+    /** The network has no station in service with a free dock. */
     public data object NoDockNearby : NoBikeJourney
 
     /** Stations exist, but no route joins them. */
