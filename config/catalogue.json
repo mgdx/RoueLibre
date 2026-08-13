@@ -1,7 +1,7 @@
 {
   "catalogueVersion": 1,
   "catalogueUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/catalogue.json",
-  "generatedAt": "2026-08-13T06:52:19Z",
+  "generatedAt": "2026-08-13T21:47:29Z",
   "cities": [
     {
       "id": "aar-bike",
@@ -1447,7 +1447,7 @@
       "id": "donkey-dordrecht",
       "displayName": "Donkey",
       "operator": "Donkey Republic",
-      "mainCity": "Dordrecht",
+      "mainCity": "Gorinchem",
       "country": "NL",
       "stationCount": 322,
       "boundingBox": {
@@ -1704,6 +1704,26 @@
       "releaseTag": "data-2026-08-fi"
     },
     {
+      "id": "donkey-republic-rotterdam",
+      "displayName": "Donkey Republic",
+      "operator": "Donkey Republic",
+      "mainCity": "Katwijk",
+      "country": "NL",
+      "stationCount": 382,
+      "boundingBox": {
+        "south": 51.89593,
+        "west": 4.341861,
+        "north": 52.323668,
+        "east": 4.897708
+      },
+      "centreLatitude": 52.109799,
+      "centreLongitude": 4.619784,
+      "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_katwijk/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-rotterdam.json",
+      "dataSizeBytes": 165821584,
+      "releaseTag": "data-2026-08-nl"
+    },
+    {
       "id": "donkey-republic-koksijde",
       "displayName": "Donkey Republic",
       "operator": "Donkey Republic",
@@ -1942,26 +1962,6 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-riihimaki.json",
       "dataSizeBytes": 4203589,
       "releaseTag": "data-2026-08-fi"
-    },
-    {
-      "id": "donkey-republic-rotterdam",
-      "displayName": "Donkey Republic",
-      "operator": "Donkey Republic",
-      "mainCity": "Rotterdam",
-      "country": "NL",
-      "stationCount": 382,
-      "boundingBox": {
-        "south": 51.89593,
-        "west": 4.341861,
-        "north": 52.323668,
-        "east": 4.897708
-      },
-      "centreLatitude": 52.109799,
-      "centreLongitude": 4.619784,
-      "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_katwijk/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-rotterdam.json",
-      "dataSizeBytes": 165821584,
-      "releaseTag": "data-2026-08-nl"
     },
     {
       "id": "donkey-republic-the-hague",

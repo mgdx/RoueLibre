@@ -153,6 +153,18 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **Two cities were named after a neighbour.** The city list offered a "Donkey
+  Republic — Rotterdam" that served Katwijk, sixty kilometres away, and a
+  "Donkey — Dordrecht" that served Gorinchem while the real Dordrecht sat two
+  rows below under another network. Neither name came from the producer: the
+  survey reads the main city off the gazetteer over the box widened by 3 km,
+  and the largest municipality that box reaches wins — which is right for a
+  network named after a region and wrong for one whose outskirts brush a
+  metropolis. The GBFS registry names both feeds after the town they serve, and
+  the configurations now say the same. Their identifiers keep the name they
+  were published under: an identifier names a dataset and its manifest, not a
+  place, and renaming one would orphan the data already installed.
+
 - **One letter missing from the fonts blanked a whole town's map.** Hunedoara
   came up empty — no street, no river, no park — over a tile set that held
   1,120 roads at the very spot the camera was on. The cause was two lines in
