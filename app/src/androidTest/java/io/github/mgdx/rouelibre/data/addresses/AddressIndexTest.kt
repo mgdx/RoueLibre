@@ -6,6 +6,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.address.AddressResult
 import io.github.mgdx.rouelibre.core.address.PositionPrecision
+import io.github.mgdx.rouelibre.core.address.WordMatching
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.geo.distanceInMetresTo
@@ -81,6 +82,28 @@ class AddressIndexTest {
     }
 
     @Test
+    fun a_finished_text_is_not_completed_for_the_sender() = runBlocking {
+        // A text shared by another application is not typing in progress: its
+        // first result becomes a journey without anyone choosing it. Both
+        // stages of the search must therefore refuse to read "Gambetta" into
+        // "gamb" — the full-text one, whose expression loses its star, as much
+        // as the scan that follows (SPEC §7.8).
+        assertEquals(emptyList<AddressResult>(), search("gamb", WordMatching.WholeWords))
+        assertEquals("Rue Gambetta", search("gamb", WordMatching.Prefixes).first().streetName)
+    }
+
+    @Test
+    fun a_finished_text_still_finds_the_address_it_names() = runBlocking {
+        // The counterpart: the two paths must agree on a real address, house
+        // number included.
+        val result = search("12 rue Nationale, Lille", WordMatching.WholeWords).first()
+
+        assertEquals("Rue Nationale", result.streetName)
+        assertEquals("Lille", result.city)
+        assertEquals(12, result.houseNumber)
+    }
+
+    @Test
     fun recovers_from_a_typo() = runBlocking {
         // Second stage: the full-text index returns nothing, and the
         // edit-distance scan finds the street (SPEC §4.3, criterion 11).
@@ -147,12 +170,15 @@ class AddressIndexTest {
         index.close()
         indexFile.delete()
 
-        val outcome = index.search("gambetta", centre)
+        val outcome = index.search("gambetta", centre, WordMatching.Prefixes)
         assertTrue("expected a failure, got: $outcome", outcome is Outcome.Failure)
     }
 
-    private suspend fun search(query: String): List<AddressResult> =
-        when (val outcome = index.search(query, centre)) {
+    private suspend fun search(
+        query: String,
+        matching: WordMatching = WordMatching.Prefixes,
+    ): List<AddressResult> =
+        when (val outcome = index.search(query, centre, matching)) {
             is Outcome.Success -> outcome.value
             is Outcome.Failure -> throw AssertionError("search failed: ${outcome.error}")
         }

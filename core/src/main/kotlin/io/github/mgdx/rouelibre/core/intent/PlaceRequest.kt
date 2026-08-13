@@ -29,6 +29,12 @@ public sealed interface PlaceRequest {
     /**
      * A place described in words, to be looked up in the index.
      *
+     * The text is **finished**: it comes whole from another application, and
+     * nobody is going to add a letter to it or pick from a list of guesses. The
+     * index is therefore searched for the words themselves — see
+     * `WordMatching.WholeWords` — failing which a sentence naming no address at
+     * all would still be fitted to the street it happens to begin like.
+     *
      * @property text what the sender wrote.
      */
     public data class Search(public val text: String) : PlaceRequest {
@@ -218,8 +224,14 @@ private fun decodeUriComponent(value: String): String {
  * Looks for a place inside shared text (SPEC §7.8).
  *
  * This is the commonest case in practice: an address received over a messaging
- * application, then shared into this one. The text may be an address, a
- * coordinate pair, a pasted `geo:` URI, or any of those buried in a sentence.
+ * application, then shared into this one. A coordinate pair and a pasted `geo:`
+ * URI are picked out of the middle of a sentence; anything else is handed on as
+ * it came, for the index to answer or not.
+ *
+ * Nothing here decides whether the text holds an address: the index alone knows
+ * the streets, and it is asked the question in the terms of a finished text
+ * (see [PlaceRequest.Search]). A sentence naming no address then comes back
+ * empty, which is what the screen has to say.
  *
  * @param text the shared text, as it came.
  * @return the place recognised, or `null` if the text is empty.

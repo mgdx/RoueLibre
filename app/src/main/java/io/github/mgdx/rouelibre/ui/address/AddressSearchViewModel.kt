@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.address.AddressResult
+import io.github.mgdx.rouelibre.core.address.WordMatching
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.data.addresses.AddressIndex
 import kotlinx.coroutines.FlowPreview
@@ -104,7 +105,9 @@ class AddressSearchViewModel(private val index: AddressIndex, private val origin
         }
 
         mutableState.update { it.copy(isSearching = true, isIndexInstalled = true) }
-        when (val outcome = index.search(query, origin)) {
+        // Typed letter by letter: a word begun stands for the word meant, and
+        // the list it produces is a proposal the user still chooses from.
+        when (val outcome = index.search(query, origin, WordMatching.Prefixes)) {
             is Outcome.Success -> mutableState.update {
                 it.copy(results = outcome.value, isSearching = false, error = null)
             }

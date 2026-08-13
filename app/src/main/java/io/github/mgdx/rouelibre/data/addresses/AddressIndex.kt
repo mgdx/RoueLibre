@@ -12,6 +12,7 @@ import io.github.mgdx.rouelibre.core.address.KnownHouseNumber
 import io.github.mgdx.rouelibre.core.address.PositionPrecision
 import io.github.mgdx.rouelibre.core.address.ScoredStreet
 import io.github.mgdx.rouelibre.core.address.SearchableStreet
+import io.github.mgdx.rouelibre.core.address.WordMatching
 import io.github.mgdx.rouelibre.core.address.parseQuery
 import io.github.mgdx.rouelibre.core.address.rankStreets
 import io.github.mgdx.rouelibre.core.address.resolveHouseNumber
@@ -90,6 +91,8 @@ class AddressIndex(
      *   either writing order.
      * @param origin the reference point for ranking results by proximity — the
      *   user's position or the centre of the map. `null` if neither is known.
+     * @param matching whether the query is still being typed, and may therefore
+     *   stand for longer words, or is a finished text (SPEC §7.8).
      * @param limit how many results are wanted.
      * @return the addresses found, best first; an empty list if the query
      *   designates nothing; a failure if the index is absent or unreadable.
@@ -97,6 +100,7 @@ class AddressIndex(
     suspend fun search(
         rawQuery: String,
         origin: Coordinates?,
+        matching: WordMatching,
         limit: Int = DEFAULT_RESULT_COUNT,
     ): Outcome<List<AddressResult>> = withContext(ioDispatcher) {
         // A query with nothing in it designates nothing, and saying so costs
@@ -122,7 +126,7 @@ class AddressIndex(
         if (query.isEmpty) return@withContext Outcome.Success(emptyList())
 
         try {
-            val ranked = rank(index, query, origin, limit)
+            val ranked = rank(index, query, origin, limit, matching)
             Outcome.Success(ranked.map { scored -> index.toResult(scored, query) })
         } catch (error: RuntimeException) {
             // A corrupted index must not bring the screen down: it can be
@@ -226,28 +230,46 @@ class AddressIndex(
         query: AddressQuery,
         origin: Coordinates?,
         limit: Int,
+        matching: WordMatching,
     ): List<ScoredStreet> {
-        val byPrefix = index.matchingFullText(query)
-        val exact = rankStreets(byPrefix, query, index.normalizer.stopWords, origin, limit)
+        val byPrefix = index.matchingFullText(query, matching)
+        val exact =
+            rankStreets(byPrefix, query, index.normalizer.stopWords, origin, limit, matching)
         if (exact.size >= MINIMUM_PREFIX_RESULTS || exact.size >= limit) return exact
 
         coroutineContext.ensureActive()
-        return rankStreets(index.streets, query, index.normalizer.stopWords, origin, limit)
+        return rankStreets(
+            index.streets,
+            query,
+            index.normalizer.stopWords,
+            origin,
+            limit,
+            matching,
+        )
     }
 
     // -------------------------------------------------------- first stage --
 
     /**
-     * The streets one of whose words starts with each of the words typed.
+     * The streets holding each of the words searched for.
+     *
+     * A word is asked for as a prefix or in full, according to [matching]: the
+     * first stage must not bring back candidates the ranking is going to refuse,
+     * nor leave out those it would have retained (SPEC §7.8).
      *
      * Stop words are dropped from the query when something else remains: asking
      * the index for every street containing "de" would mean walking through
      * half of it to learn nothing. They do count in the ranking, however.
      */
-    private fun OpenIndex.matchingFullText(query: AddressQuery): List<SearchableStreet> {
+    private fun OpenIndex.matchingFullText(
+        query: AddressQuery,
+        matching: WordMatching,
+    ): List<SearchableStreet> {
         val meaningful = query.terms.filterNot { it in normalizer.stopWords }
         val searched = meaningful.ifEmpty { query.terms }
-        val expression = searched.joinToString(" ") { "$it*" }
+        val expression = searched.joinToString(" ") { term ->
+            if (matching == WordMatching.Prefixes) "$term*" else term
+        }
 
         val matched = HashSet<Long>()
         database.rawQuery(

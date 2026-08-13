@@ -12,10 +12,12 @@ import io.github.mgdx.rouelibre.BuildConfig
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.Outcome
+import io.github.mgdx.rouelibre.core.address.WordMatching
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.intent.PlaceRequest
 import io.github.mgdx.rouelibre.data.NEVER_LAUNCHED
 import io.github.mgdx.rouelibre.databinding.ActivityMainBinding
+import io.github.mgdx.rouelibre.ui.address.toTitle
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneyResultFragment
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
@@ -223,6 +225,13 @@ class MainActivity : AppCompatActivity() {
     /**
      * Looks up in the index the address received in words.
      *
+     * The very search the address box runs, asked in the same terms, so that
+     * the two paths cannot answer differently: the same query, the same number
+     * of results — of which the first is kept — and the same wording for it.
+     * The one thing said differently is that this text is **finished**: nobody
+     * is typing it, and its first result becomes a journey without anyone
+     * choosing it, so a word must not stand for a longer one (SPEC §7.8).
+     *
      * Without an index, that has to be said, with an offer to install one,
      * rather than failing (SPEC §7.8).
      */
@@ -234,7 +243,11 @@ class MainActivity : AppCompatActivity() {
             return null
         }
         val origin = defaultOrigin() ?: return null
-        val outcome = container.addressIndex.search(text, origin = origin, limit = 1)
+        val outcome = container.addressIndex.search(
+            text,
+            origin = origin,
+            matching = WordMatching.WholeWords,
+        )
         val found = (outcome as? Outcome.Success)?.value?.firstOrNull()
         if (found == null) {
             showMessage(getString(R.string.incoming_address_not_found, text)) {
@@ -242,7 +255,7 @@ class MainActivity : AppCompatActivity() {
             }
             return null
         }
-        return JourneyEndpoint(found.streetName, found.position)
+        return JourneyEndpoint(found.toTitle(this), found.position)
     }
 
     /**

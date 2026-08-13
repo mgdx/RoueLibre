@@ -43,12 +43,14 @@ class AddressRankingTest {
         candidates: List<SearchableStreet>,
         origin: Coordinates? = null,
         limit: Int = 5,
+        matching: WordMatching = WordMatching.Prefixes,
     ): List<Long> = rankStreets(
         candidates,
         normalizer.parseQuery(query),
         normalizer.stopWords,
         origin,
         limit,
+        matching,
     ).map { it.street.id }
 
     @Test
@@ -167,6 +169,38 @@ class AddressRankingTest {
 
         assertEquals(listOf(paix.id), rank("re de la paix", listOf(paix)))
         assertEquals(listOf(paix.id), rank("rue ed la paix", listOf(paix)))
+    }
+
+    @Test
+    fun `a two-letter fragment does not pick a street out on a correction`() {
+        // The counterpart of the test above: too weak to rule a street out, it
+        // is just as weak at singling one out. "on" is one mistake from "Or",
+        // from "En", from "Un" — the correction writes another word instead of
+        // repairing one, and there is nothing here for it to lean on.
+        val lion = street("Place du Lion d'Or")
+
+        assertEquals(emptyList<Long>(), rank("on", listOf(lion)))
+        // Begun rather than mistyped, it still designates the street it opens:
+        // that is typing in progress, and the list is only a proposal.
+        assertEquals(listOf(lion.id), rank("li", listOf(lion)))
+    }
+
+    @Test
+    fun `a finished text is not read as a word begun`() {
+        // What a text received from another application calls for: its first
+        // result becomes a journey without anyone choosing it (SPEC §7.8).
+        val gambetta = street("Rue Gambetta")
+
+        assertEquals(listOf(gambetta.id), rank("gamb", listOf(gambetta)))
+        assertEquals(
+            emptyList<Long>(),
+            rank("gamb", listOf(gambetta), matching = WordMatching.WholeWords),
+        )
+        // The whole word, though, is the same street on either path.
+        assertEquals(
+            listOf(gambetta.id),
+            rank("rue gambetta", listOf(gambetta), matching = WordMatching.WholeWords),
+        )
     }
 
     @Test

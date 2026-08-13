@@ -47,8 +47,12 @@ private const val CITY_WEIGHT = 0.8
 private const val WEAK_TERM_WEIGHT = 0.2
 
 /**
- * Length below which a word cannot, on its own, rule a street out. Two letters
- * is the size of a stop word or of a truncated "rue".
+ * Length below which a word carries no meaning of its own. Two letters is the
+ * size of a stop word or of a truncated "rue".
+ *
+ * Such a word neither rules a street out nor picks one: a correction applied to
+ * two letters changes half of them, which no longer repairs a word but writes
+ * another.
  */
 private const val SHORT_TERM_LENGTH = 2
 
@@ -79,6 +83,28 @@ private const val TWO_MISTAKES_SCORE = 0.35
 private const val COVERAGE_WEIGHT = 0.15
 
 /**
+ * How far a query word may reach into an indexed one (SPEC §4.3, §7.8).
+ *
+ * Not a matter of strictness but of what the text is. A query typed into the
+ * search box is unfinished by nature — the user is on the third letter of their
+ * street — and the list it produces is a proposal they still have to choose
+ * from. A text received from another application is finished, and nobody
+ * chooses from anything: its first result becomes the journey.
+ */
+public enum class WordMatching {
+    /** A word may stand for a longer one: "gamb" designates "Gambetta". */
+    Prefixes,
+
+    /**
+     * A word is only itself, typos aside.
+     *
+     * What a finished text calls for: "on" is not "Onze Novembre", and taking
+     * it for that would invent a destination out of a sentence that names none.
+     */
+    WholeWords,
+}
+
+/**
  * Ranks the candidate streets for a query.
  *
  * @param candidates the streets to sort out, as the index returned them.
@@ -87,6 +113,7 @@ private const val COVERAGE_WEIGHT = 0.15
  * @param origin reference point for proximity — the user's position, or the
  *   centre of the map. `null` if neither is known.
  * @param limit how many results to return.
+ * @param matching whether the text is still being typed or finished.
  * @return the retained streets, best first.
  */
 public fun rankStreets(
@@ -95,11 +122,12 @@ public fun rankStreets(
     stopWords: Set<String>,
     origin: Coordinates?,
     limit: Int,
+    matching: WordMatching,
 ): List<ScoredStreet> {
     if (query.isEmpty || limit <= 0) return emptyList()
 
     val scored = candidates.mapNotNull { street ->
-        val quality = matchQualityOf(street, query.terms, stopWords)
+        val quality = matchQualityOf(street, query.terms, stopWords, matching)
         if (quality <= 0.0) {
             null
         } else {
@@ -136,6 +164,7 @@ private fun matchQualityOf(
     street: SearchableStreet,
     terms: List<String>,
     stopWords: Set<String>,
+    matching: WordMatching,
 ): Double {
     val nameWords = street.normalizedName.split(' ').filter { it.isNotEmpty() }
     val typeWords = street.normalizedType?.split(' ')?.filter { it.isNotEmpty() }.orEmpty()
@@ -150,17 +179,22 @@ private fun matchQualityOf(
     val coveredNameWords = HashSet<String>()
 
     for (term in terms) {
-        val againstName = bestScoreAmong(term, nameWords)
-        val best = maxOf(
-            againstName.score * PROPER_NAME_WEIGHT,
-            bestScoreAmong(term, typeWords).score * STREET_TYPE_WEIGHT,
-            bestScoreAmong(term, cityWords).score * CITY_WEIGHT,
-        )
         // A stop word, or a two-letter fragment, does not carry enough meaning
         // to rule a street out on its own. Measured on the real index: a letter
         // lost from "rue" — "Re de la Paix" — left no result at all, while the
         // rest of the query designated the street unambiguously.
+        //
+        // The same lack of meaning bars it from picking one out: a correction
+        // applied to two letters produces another word rather than the same one
+        // — "on" for "Or", "20" for "2" — and a query reduced to that fragment
+        // would designate a street nobody named (SPEC §7.8).
         val isWeak = term in stopWords || term.length <= SHORT_TERM_LENGTH
+        val againstName = bestScoreAmong(term, nameWords, matching, isWeak)
+        val best = maxOf(
+            againstName.score * PROPER_NAME_WEIGHT,
+            bestScoreAmong(term, typeWords, matching, isWeak).score * STREET_TYPE_WEIGHT,
+            bestScoreAmong(term, cityWords, matching, isWeak).score * CITY_WEIGHT,
+        )
         if (best <= 0.0 && !isWeak) return 0.0
         againstName.word?.let(coveredNameWords::add)
 
@@ -182,10 +216,15 @@ private fun matchQualityOf(
 }
 
 /** The best score of a query word among a field's words, and the word hit. */
-private fun bestScoreAmong(term: String, words: List<String>): WordMatch {
+private fun bestScoreAmong(
+    term: String,
+    words: List<String>,
+    matching: WordMatching,
+    isWeak: Boolean,
+): WordMatch {
     var best = WordMatch(0.0, null)
     for (word in words) {
-        val score = scoreWord(term, word)
+        val score = scoreWord(term, word, matching, isWeak)
         if (score > best.score) best = WordMatch(score, word)
     }
     return best
@@ -199,17 +238,26 @@ private data class WordMatch(val score: Double, val word: String?)
  * Three cases, from the surest to the least sure: the whole word, the prefix —
  * which covers typing in progress — then the edit-distance fallback, which only
  * comes in if the first two fail.
+ *
+ * The middle case is the one a finished text does without: it is what lets a
+ * fragment stand for a longer word, and a fragment is only ever meant when
+ * someone is still typing.
+ *
+ * The last is refused to a word too weak to designate anything ([isWeak]),
+ * which is where a correction stops repairing a word and starts producing
+ * another one.
  */
-private fun scoreWord(term: String, word: String): Double {
+private fun scoreWord(
+    term: String,
+    word: String,
+    matching: WordMatching,
+    isWeak: Boolean,
+): Double {
     if (term == word) return EXACT_WORD_SCORE
-    if (word.startsWith(term)) {
+    if (matching == WordMatching.Prefixes && word.startsWith(term)) {
         return PREFIX_FLOOR + PREFIX_RANGE * (term.length.toDouble() / word.length)
     }
-    // Falling back on a single-letter word makes no sense: within one mistake
-    // it matches any other letter. From two letters on, though, the fallback
-    // earns its keep — "ed" for "de", "re" for "rue" — and the low weight given
-    // to such fragments contains the noise that follows.
-    if (term.length < MINIMUM_FUZZY_LENGTH) return 0.0
+    if (isWeak) return 0.0
 
     val tolerance = toleratedMistakes(term)
     // Beyond the ceiling, the distance returned is not the real one: it only
@@ -222,6 +270,3 @@ private fun scoreWord(term: String, word: String): Double {
         else -> TWO_MISTAKES_SCORE
     }
 }
-
-/** Below two letters, any correction brings anything closer. */
-private const val MINIMUM_FUZZY_LENGTH = 2
