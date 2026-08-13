@@ -119,11 +119,6 @@
     <string name="settings_theme_system">System</string>
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_dark">Dark</string>
-    <string name="settings_sources_title">Data sources</string>
-    <string name="settings_gbfs_url">Availability feed address</string>
-    <string name="settings_manifest_url">Data manifest address</string>
-    <string name="settings_sources_explanation">Leave these fields empty to use the addresses shipped with the app. Changing them lets you serve another network, or do without the default host.</string>
-    <string name="settings_reset_default">Restore the default address</string>
 
     <string name="about_title">About</string>
     <string name="about_open">About</string>
@@ -313,8 +308,8 @@
     <string name="error_offline">No connection. The last known availability stays on screen.</string>
     <string name="error_timeout">The network’s server is taking too long to answer. Try again in a moment.</string>
     <string name="error_server_refused">The network’s server returned an error (%1$d). Try again later.</string>
-    <string name="error_malformed">The data received is unreadable. Check the feed address in the settings.</string>
-    <string name="error_feed_unavailable">The network does not publish the “%1$s” feed. Check the feed address in the settings.</string>
+    <string name="error_malformed">The data received is unreadable. The network’s feed is at fault; try again later.</string>
+    <string name="error_feed_unavailable">The network does not publish the “%1$s” feed.</string>
     <string name="error_unsupported_version">This network publishes its data in version %1$s, which this version of the app cannot read. Update the app.</string>
     <string name="error_local_storage">Unable to read the data stored on the device.</string>
     <string name="error_no_city_chosen">No city is selected. Choose one to see its stations.</string>

@@ -79,7 +79,7 @@ Files used:
 
 - The `gbfs.json` URL **must not be guessed**. The agent must obtain it from a public catalogue — MobilityData's `systems.csv`, the registry the GBFS standard keeps of itself and the only one covering every country; the dataset page on `transport.data.gouv.fr` for France; or the producer's own developer page — then verify it with a real request before writing it into the code. An address found on a producer's page goes into `config/extra-feeds.json` with the page it was read from, so the claim can be checked.
 - Every feed URL goes through the auto-discovery file, never hard-coded: that is the principle of GBFS and it protects against URL changes on the producer's side.
-- The `gbfs.json` URL must be **editable in the settings**. A happy consequence: the application works with any GBFS network in the world without a code change.
+- The `gbfs.json` URL comes from the **city configuration** (§15), never from a setting. A happy consequence: the application works with any GBFS network in the world without a code change — serving another one means adding its city, not retyping an address by hand. There is no URL field in the interface: an address typed wrong there breaks the availability screen with nothing to explain why, while the catalogue's entries have been verified.
 - Do not use a network's legacy proprietary API, nor the third-party JSON wrappers found on GitHub, when a GBFS feed exists: they are **deprecated** and nobody maintains them. Lille's old `vlille-realtime` API is the example to hand.
 
 **Refresh policy:**
@@ -112,7 +112,7 @@ Kept, because they help you find your way:
 **Excluded**, because they clutter without serving: shops, restaurants, bars, cafés, hotels, banks, cash machines, hairdressers, agencies, company offices, petrol stations, private car parks, and every commercial point of interest. This exclusion is a **deliberate design choice**, not an omission: the map is scenery, the stations are the subject (§7).
 
 The list must live in a **readable configuration file** of the generation script, so it can be adjusted without diving back into the code.
-- Provide a settings entry "map data source" allowing the user to point at another URL or import a local file.
+- The user must be able to install a map that does not come from the default host: not by typing a URL, but by **importing a local file** from the "storage" screen (§4.4), the very file the generation scripts produce.
 
 ### 4.3 Address search — local index
 
@@ -161,10 +161,10 @@ Associated rules:
 - The digest is **re-verified after download**: a file that does not match the manifest is rejected, and the previous version kept. An interrupted or corrupted update must never leave the application unusable — write the new file beside the old one, validate, then replace.
 - **Checking is never automatic in the background**: it happens on an explicit user action, from the "storage" screen, which shows when it last ran. A periodic request would draw a usage profile of the application, which constraint C3 rules out.
 - If the manifest announces a **format version** the application cannot read, say so clearly and invite the user to update the application, rather than failing when opening a file.
-- The application hard-codes only a default URL, **editable in the settings**, and can work through manual import anyway (see above). The host must never be a single point of failure.
+- The manifest's URL comes from the **city configuration** (§15), and the application can work through manual import anyway (see above). The host must never be a single point of failure.
 - The `User-Agent` of downloads identifies the application and its version, with no identifier specific to the user.
 
-In every case, two safeguards are **mandatory**, so that the application survives the disappearance of its host: the setting allowing another URL or a local file import (§4.2), and the regeneration scripts versioned in the repository. The default URL must never be a single point of failure.
+In every case, two safeguards are **mandatory**, so that the application survives the disappearance of its host: the local file import (§4.2), and the regeneration scripts versioned in the repository. The default URL must never be a single point of failure — someone whose host has vanished regenerates the files and imports them, or edits the city configuration and rebuilds.
 
 A "storage" screen must list every dataset with its size, its date, an update button and a delete button. The user must always know what the application occupies and be able to reclaim it.
 
@@ -286,7 +286,7 @@ A list of the stations marked as favourites, with their live availability. Reord
 
 ### 7.6 Settings
 
-GBFS feed URL, tile source, routing data management, light/dark/system theme.
+City served, offline data management, light/dark/system theme, and the way to the "about" screen. **No source address is typed here**: the feeds and the manifest come from the city configuration (§4.1, §4.4), and data that does not come down from them is brought in by importing a file from the "storage" screen.
 
 ### 7.7 About
 

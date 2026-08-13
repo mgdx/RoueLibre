@@ -227,11 +227,10 @@ class AppContainer(private val context: Context) {
         get() = File(context.cacheDir, "downloads")
 
     /**
-     * The manifest's address: the one the user chose, otherwise the active
-     * city's (SPEC §4.4). `null` if there is no city yet.
+     * The manifest's address, read from the active city's configuration
+     * (SPEC §4.4). `null` if there is no city yet.
      */
-    suspend fun dataManifestUrl(): String? = preferences.dataManifestUrlOverride()
-        ?: activeCity()?.dataRelease?.manifestUrl
+    suspend fun dataManifestUrl(): String? = activeCity()?.dataRelease?.manifestUrl
 
     /**
      * The device's position, asked for at the moment of use only.
@@ -282,13 +281,9 @@ class AppContainer(private val context: Context) {
             ),
             dao = database.stationDao(),
             refreshTimestamps = preferences,
-            // The user setting wins over the shipped configuration; it is
-            // re-read on every call so a change takes effect without a restart
-            // (SPEC §4.1).
-            discoveryUrlProvider = {
-                preferences.gbfsDiscoveryUrlOverride()
-                    ?: activeCity()?.gbfs?.discoveryUrl
-            },
+            // Read on every call rather than captured: changing the city must
+            // take effect without a restart (SPEC §4.1).
+            discoveryUrlProvider = { activeCity()?.gbfs?.discoveryUrl },
         )
     }
 

@@ -65,27 +65,6 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
     }
 
     /**
-     * The GBFS auto-discovery URL chosen by the user.
-     *
-     * `null` until it has been changed: the city configuration's own applies
-     * then. This setting is what makes the application usable with any GBFS
-     * network at all (SPEC §4.1).
-     */
-    suspend fun gbfsDiscoveryUrlOverride(): String? =
-        dataStore.data.first()[GBFS_DISCOVERY_URL]?.takeIf { it.isNotBlank() }
-
-    /** Replaces the feed URL, or restores the configuration's own if `null`. */
-    suspend fun setGbfsDiscoveryUrlOverride(url: String?) {
-        dataStore.edit { preferences ->
-            if (url.isNullOrBlank()) {
-                preferences.remove(GBFS_DISCOVERY_URL)
-            } else {
-                preferences[GBFS_DISCOVERY_URL] = url
-            }
-        }
-    }
-
-    /**
      * The stations marked as favourites, **in the chosen order** (SPEC §7.5).
      *
      * Station identifiers, and nothing else: these are not the user's own
@@ -170,42 +149,13 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
     val activeCityIdFlow: Flow<String?> =
         dataStore.data.map { it[ACTIVE_CITY_ID]?.takeIf { id -> id.isNotBlank() } }
 
-    /**
-     * Changes the active city.
-     *
-     * The settings that designated the previous one — the feed and manifest
-     * URLs — are cleared in the same movement: kept, they would show one city's
-     * stations on another's map, and nothing in the interface would explain
-     * why.
-     */
+    /** Changes the active city. */
     suspend fun setActiveCityId(id: String?) {
         dataStore.edit { preferences ->
             if (id.isNullOrBlank()) {
                 preferences.remove(ACTIVE_CITY_ID)
             } else {
                 preferences[ACTIVE_CITY_ID] = id
-            }
-            preferences.remove(GBFS_DISCOVERY_URL)
-            preferences.remove(DATA_MANIFEST_URL)
-        }
-    }
-
-    /**
-     * The dataset manifest URL chosen by the user.
-     *
-     * `null` until it has been changed. This setting exists so that the default
-     * host is never a single point of failure (SPEC §4.4).
-     */
-    suspend fun dataManifestUrlOverride(): String? =
-        dataStore.data.first()[DATA_MANIFEST_URL]?.takeIf { it.isNotBlank() }
-
-    /** Replaces the manifest URL, or restores the configuration's own. */
-    suspend fun setDataManifestUrlOverride(url: String?) {
-        dataStore.edit { preferences ->
-            if (url.isNullOrBlank()) {
-                preferences.remove(DATA_MANIFEST_URL)
-            } else {
-                preferences[DATA_MANIFEST_URL] = url
             }
         }
     }
@@ -228,7 +178,6 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
     private companion object {
         val STATION_INFORMATION_FETCHED_AT =
             longPreferencesKey("station_information_fetched_at")
-        val GBFS_DISCOVERY_URL = stringPreferencesKey("gbfs_discovery_url")
 
         /** The favourites from before the ordered version, picked up on first read. */
         val FAVOURITE_STATION_IDS = stringSetPreferencesKey("favourite_station_ids")
@@ -237,7 +186,6 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
         /** No GBFS identifier contains a newline. */
         const val SEPARATOR = "\n"
         val THEME = stringPreferencesKey("theme")
-        val DATA_MANIFEST_URL = stringPreferencesKey("data_manifest_url")
         val ACTIVE_CITY_ID = stringPreferencesKey("active_city_id")
         val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
     }

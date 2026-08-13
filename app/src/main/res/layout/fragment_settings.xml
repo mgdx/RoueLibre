@@ -9,7 +9,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -116,62 +115,6 @@
                     android:layout_weight="1"
                     android:text="@string/settings_theme_dark" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
-
-            <!-- Sources (SPEC §4.1, §4.4): the default host must never be a
-                 single point of failure. -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_l"
-                android:text="@string/settings_sources_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/gbfs_field"
-                style="@style/Widget.RoueLibre.SearchField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_s"
-                android:hint="@string/settings_gbfs_url"
-                app:endIconContentDescription="@string/settings_reset_default"
-                app:endIconMode="clear_text">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/gbfs_url"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="textUri"
-                    android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/manifest_field"
-                style="@style/Widget.RoueLibre.SearchField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_s"
-                android:hint="@string/settings_manifest_url"
-                app:endIconContentDescription="@string/settings_reset_default"
-                app:endIconMode="clear_text">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/manifest_url"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="textUri"
-                    android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_xs"
-                android:text="@string/settings_sources_explanation"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/open_about"

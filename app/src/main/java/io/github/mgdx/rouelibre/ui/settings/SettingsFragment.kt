@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -62,7 +61,6 @@ class SettingsFragment : Fragment() {
         views.openAbout.setOnClickListener { show(AboutFragment()) }
 
         setUpTheme(views)
-        setUpSources(views)
     }
 
     override fun onDestroyView() {
@@ -105,40 +103,6 @@ class SettingsFragment : Fragment() {
                     )
                     isFilling = false
                 }
-            }
-        }
-    }
-
-    /**
-     * The two source addresses.
-     *
-     * Emptied, they restore the city configuration's own: that is what the
-     * field's cross does, and the hint then shows the default value. The
-     * default host must never be a single point of failure (SPEC §4.4).
-     */
-    private fun setUpSources(views: FragmentSettingsBinding) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            isFilling = true
-            views.gbfsUrl.setText(preferences.gbfsDiscoveryUrlOverride().orEmpty())
-            views.manifestUrl.setText(preferences.dataManifestUrlOverride().orEmpty())
-            isFilling = false
-            // The default addresses are the active city's: without a city
-            // there are none, and the field simply stays empty.
-            val city = container.activeCity()
-            views.gbfsField.placeholderText = city?.gbfs?.discoveryUrl
-            views.manifestField.placeholderText = city?.dataRelease?.manifestUrl
-        }
-
-        views.gbfsUrl.doAfterTextChanged { text ->
-            if (isFilling) return@doAfterTextChanged
-            viewLifecycleOwner.lifecycleScope.launch {
-                preferences.setGbfsDiscoveryUrlOverride(text?.toString())
-            }
-        }
-        views.manifestUrl.doAfterTextChanged { text ->
-            if (isFilling) return@doAfterTextChanged
-            viewLifecycleOwner.lifecycleScope.launch {
-                preferences.setDataManifestUrlOverride(text?.toString())
             }
         }
     }
