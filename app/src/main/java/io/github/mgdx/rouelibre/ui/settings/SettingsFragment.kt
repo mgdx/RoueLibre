@@ -113,5 +113,4 @@ class SettingsFragment : Fragment() {
             .addToBackStack(null)
             .commit()
     }
-
 }

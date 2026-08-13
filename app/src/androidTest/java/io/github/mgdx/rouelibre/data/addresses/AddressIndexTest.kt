@@ -177,11 +177,10 @@ class AddressIndexTest {
     private suspend fun search(
         query: String,
         matching: WordMatching = WordMatching.Prefixes,
-    ): List<AddressResult> =
-        when (val outcome = index.search(query, centre, matching)) {
-            is Outcome.Success -> outcome.value
-            is Outcome.Failure -> throw AssertionError("search failed: ${outcome.error}")
-        }
+    ): List<AddressResult> = when (val outcome = index.search(query, centre, matching)) {
+        is Outcome.Success -> outcome.value
+        is Outcome.Failure -> throw AssertionError("search failed: ${outcome.error}")
+    }
 
     /**
      * Writes a tiny index, to the generation script's exact schema.

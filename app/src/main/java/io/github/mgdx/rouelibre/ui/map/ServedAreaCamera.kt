@@ -38,7 +38,8 @@ class ServedAreaCamera(
     private val area: BoundingBox,
     private val widestZoom: Double,
     private val closestZoom: Double,
-) : MapView.OnCameraIsChangingListener, MapView.OnCameraDidChangeListener {
+) : MapView.OnCameraIsChangingListener,
+    MapView.OnCameraDidChangeListener {
 
     private var appliedCentres: LatLngBounds? = null
     private var appliedWidestZoom: Double = Double.NaN

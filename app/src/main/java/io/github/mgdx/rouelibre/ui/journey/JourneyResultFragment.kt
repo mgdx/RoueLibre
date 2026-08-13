@@ -208,8 +208,17 @@ class JourneyResultFragment : Fragment() {
         // The map changes height as the detail below it grows: the journey is
         // framed again each time, or it would stay fitted to a viewport it no
         // longer has.
-        views.map.addOnLayoutChangeListener { _, left, top, right, bottom,
-            oldLeft, oldTop, oldRight, oldBottom ->
+        views.map.addOnLayoutChangeListener {
+                _,
+                left,
+                top,
+                right,
+                bottom,
+                oldLeft,
+                oldTop,
+                oldRight,
+                oldBottom,
+            ->
             val changed = right - left != oldRight - oldLeft ||
                 bottom - top != oldBottom - oldTop
             if (changed) applyFrame()
