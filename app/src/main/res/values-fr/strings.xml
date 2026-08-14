@@ -70,6 +70,21 @@
         <item quantity="other">%1$s · %2$d points d\'attache</item>
     </plurals>
 
+    <!-- Ce que sont les vélos d'une station, affiché seulement là où le réseau
+         prête vraiment les deux sortes. %1$s est le compte des mécaniques,
+         %2$s celui des électriques, chacun déjà accordé en nombre. -->
+    <string name="station_bikes_split">%1$s · %2$s</string>
+    <plurals name="bikes_mechanical">
+        <item quantity="one">%1$d mécanique</item>
+        <item quantity="many">%1$d de mécaniques</item>
+        <item quantity="other">%1$d mécaniques</item>
+    </plurals>
+    <plurals name="bikes_electric">
+        <item quantity="one">%1$d électrique</item>
+        <item quantity="many">%1$d d\'électriques</item>
+        <item quantity="other">%1$d électriques</item>
+    </plurals>
+
     <!-- The age of the displayed data (SPEC §4.1). -->
     <string name="freshness_just_now">à l\'instant</string>
     <plurals name="freshness_seconds">
@@ -127,6 +142,9 @@
     <string name="welcome_hello_body">Cette application montre les vélos en libre-service sur une carte, et calcule un trajet porte-à-porte : marche jusqu\'à une station, vélo, puis marche jusqu\'au bout.\n\nElle est libre et ouverte. Pas de compte, pas de publicité, pas de mouchard.</string>
     <string name="welcome_privacy_title">Rien ne sort d\'ici</string>
     <string name="welcome_privacy_body">Les itinéraires sont calculés sur ce téléphone. Les adresses que tu cherches ne sont envoyées à personne, pas même pendant la frappe.\n\nAucun historique n\'est conservé : ni tes trajets, ni tes positions, ni tes destinations.\n\nLa seule requête qui part en usage courant demande combien de vélos sont disponibles.</string>
+    <string name="welcome_fleet_title">Ce que dit le vélo</string>
+    <string name="welcome_fleet_body">Le vélo dessiné dit ce que ta ville prête.\n\nUn vélo simple : on le pédale seul. Un éclair : un moteur aide à pédaler. Les deux marques : le réseau prête les deux sortes, et une station dit alors combien elle a de chacune.\n\nC\'est lu dans le flux du réseau lui-même, jamais deviné.</string>
+
     <string name="welcome_data_title">Une ville, un téléchargement</string>
     <string name="welcome_data_body">La carte, les rues et le calcul d\'itinéraire vivent sur l\'appareil. C\'est ce qui les rend utilisables sans réseau — et cela suppose de télécharger les données de ta ville, une fois.\n\nCommence donc par la choisir. Compte quelques dizaines de mégaoctets pour une agglomération de taille moyenne, davantage pour une capitale ; la taille est annoncée avant le téléchargement.\n\nTu peux aussi le faire plus tard : en attendant, la liste des stations et leurs disponibilités restent utilisables.</string>
     <!-- Position in the sequence: "1 sur 3". This is not a number agreement

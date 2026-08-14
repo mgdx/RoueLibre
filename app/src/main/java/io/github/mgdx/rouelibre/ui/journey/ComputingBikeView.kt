@@ -10,6 +10,7 @@ import android.view.animation.LinearInterpolator
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.withScale
 import io.github.mgdx.rouelibre.R
+import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
 import io.github.mgdx.rouelibre.ui.prefersReducedMotion
 
@@ -43,14 +44,15 @@ class ComputingBikeView @JvmOverloads constructor(
         AppCompatResources.getDrawable(context, R.drawable.marker_journey_station)
 
     /**
-     * Whether the network served lends pedal-assist bikes (SPEC §15).
+     * What the network served lends (SPEC §15).
      *
      * The bike crossing the screen is the one the journey will be made on: it
-     * takes the bolt when that network's does. Assigned once the city's
-     * configuration has been read, which is a moment after the screen appears —
-     * hence a property rather than a constructor argument.
+     * takes the bolt, or the bolt and the cog, when that network's does.
+     * Assigned once the city's configuration has been read, which is a moment
+     * after the screen appears — hence a property rather than a constructor
+     * argument.
      */
-    var electricBikes: Boolean = false
+    var fleet: BikeFleet = BikeFleet.Mechanical
         set(value) {
             if (field == value) return
             field = value

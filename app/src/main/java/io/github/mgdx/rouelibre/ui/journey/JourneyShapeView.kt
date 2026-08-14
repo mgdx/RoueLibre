@@ -10,6 +10,7 @@ import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import io.github.mgdx.rouelibre.R
+import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
 
 /**
@@ -94,13 +95,13 @@ class JourneyShapeView @JvmOverloads constructor(
         AppCompatResources.getDrawable(context, R.drawable.marker_journey_station)
 
     /**
-     * Whether the network served lends pedal-assist bikes (SPEC §15).
+     * What the network served lends (SPEC §15).
      *
-     * The two station discs then bear the bolt, exactly as the map's markers
-     * and the search screen's illustration do: the same journey, drawn three
-     * times, must be recognised from one screen to the next.
+     * The two station discs then bear the same badges as the map's markers and
+     * the search screen's illustration: the same journey, drawn three times,
+     * must be recognised from one screen to the next.
      */
-    var electricBikes: Boolean = false
+    var fleet: BikeFleet = BikeFleet.Mechanical
         set(value) {
             if (field == value) return
             field = value

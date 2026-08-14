@@ -7,7 +7,9 @@ import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.StationAvailability
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import java.time.Instant
@@ -117,6 +119,7 @@ public class GbfsParser {
                 // rather than displaying "-1 bike".
                 bikesAvailable = entry.bikesAvailable.coerceAtLeast(0),
                 docksAvailable = entry.docksAvailable.coerceAtLeast(0),
+                bikesByVehicleType = bikesByVehicleType(entry),
                 isInstalled = entry.isInstalled,
                 isRenting = entry.isRenting,
                 isReturning = entry.isReturning,
@@ -128,6 +131,37 @@ public class GbfsParser {
             lastUpdated = envelope.lastUpdated,
             version = envelope.version,
         )
+    }
+
+    /**
+     * Gathers a station's breakdown by vehicle type, whichever way it is
+     * published.
+     *
+     * The two forms never coexist in a feed, and they are merged into the same
+     * map so that the rest of the application knows only one shape. What the
+     * identifiers mean is not decided here: the parser knows no network, and
+     * the table that translates them lives in the city configuration
+     * (SPEC §15).
+     *
+     * A malformed entry is dropped rather than failing the read: a breakdown
+     * is a refinement of a count that is published on its own, and losing it
+     * must never cost the user the station.
+     */
+    private fun bikesByVehicleType(entry: GbfsStationStatus): Map<String, Int> {
+        val standard = entry.vehicleTypesAvailable.associate { count ->
+            count.vehicleTypeId to count.count.coerceAtLeast(0)
+        }
+        if (standard.isNotEmpty()) return standard
+        // Vélib' publishes one single-key object per kind, the key being the
+        // kind's name: [{"mechanical": 3}, {"ebike": 0}].
+        return entry.legacyBikesByKind
+            ?.flatMap { element -> (element as? JsonObject)?.entries.orEmpty() }
+            ?.mapNotNull { (kind, count) ->
+                val bikes = (count as? JsonPrimitive)?.intOrNull ?: return@mapNotNull null
+                kind to bikes.coerceAtLeast(0)
+            }
+            ?.toMap()
+            .orEmpty()
     }
 
     /**

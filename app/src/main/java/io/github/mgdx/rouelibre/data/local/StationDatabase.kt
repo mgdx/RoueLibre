@@ -9,7 +9,14 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.RoomDatabase
 import androidx.room.Transaction
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.SQLiteConnection
+import androidx.sqlite.execSQL
 import kotlinx.coroutines.flow.Flow
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.Json
 
 /**
  * A station's static data, cached (SPEC §8).
@@ -40,6 +47,16 @@ data class StationEntity(
 data class StationAvailabilityEntity(
     @PrimaryKey val stationId: String,
     val bikesAvailable: Int,
+    /**
+     * The breakdown by vehicle type, as the feed published it.
+     *
+     * Kept raw rather than already split into mechanical and electric: the
+     * table that translates the producer's identifiers lives in the city
+     * configuration and can be surveyed again, and a cache holding the feed's
+     * own words is then re-read correctly instead of carrying yesterday's
+     * reading. Empty for the feeds that publish no breakdown.
+     */
+    val bikesByVehicleType: Map<String, Int>,
     val docksAvailable: Int,
     val isInstalled: Boolean,
     val isRenting: Boolean,
@@ -111,17 +128,63 @@ interface StationDao {
     }
 }
 
+/**
+ * Stores a breakdown by vehicle type as JSON.
+ *
+ * A map of a producer's own identifiers has no fixed set of columns, and it is
+ * read as a whole or not at all: one text field carries it without a second
+ * table for a handful of numbers per station.
+ */
+object VehicleTypeCountsConverter {
+
+    private val json = Json
+
+    @TypeConverter
+    fun fromCounts(counts: Map<String, Int>): String =
+        if (counts.isEmpty()) "" else json.encodeToString(counts)
+
+    @TypeConverter
+    fun toCounts(stored: String): Map<String, Int> {
+        if (stored.isEmpty()) return emptyMap()
+        // A cache written by another version, or truncated by a device running
+        // out of space, must cost the count and nothing more.
+        return try {
+            json.decodeFromString<Map<String, Int>>(stored)
+        } catch (_: SerializationException) {
+            emptyMap()
+        }
+    }
+}
+
 /** The local database of stations and their last known state. */
 @Database(
     entities = [StationEntity::class, StationAvailabilityEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = true,
 )
+@TypeConverters(VehicleTypeCountsConverter::class)
 abstract class StationDatabase : RoomDatabase() {
     abstract fun stationDao(): StationDao
 
     companion object {
         /** The database file name, single for the whole application. */
         const val FILE_NAME: String = "stations.db"
+
+        /**
+         * Adds the breakdown by vehicle type to the cached states.
+         *
+         * Migrated rather than rebuilt: the cache is what the application shows
+         * offline, and dropping it would leave a user with no network staring
+         * at an empty list until they find one. The existing rows keep an empty
+         * breakdown, which shows the single figure they were already showing.
+         */
+        val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+            override fun migrate(connection: SQLiteConnection) {
+                connection.execSQL(
+                    "ALTER TABLE station_availability " +
+                        "ADD COLUMN bikesByVehicleType TEXT NOT NULL DEFAULT ''",
+                )
+            }
+        }
     }
 }

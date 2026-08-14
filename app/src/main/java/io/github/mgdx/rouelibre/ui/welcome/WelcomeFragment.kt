@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
  * A screen and not a dialog: the content is too dense for a modal window, and
  * it must be readable again from "about".
  *
- * Three pages at most, each skippable, and the last leads straight into
+ * Four pages at most, each skippable, and the last leads straight into
  * obtaining the data — a single sequence, not two successive walls of text.
  *
  * The tone is §7's: short sentences, active voice, no jargon. We explain how
@@ -165,8 +165,9 @@ class WelcomeFragment : Fragment() {
         const val STATE_PAGE = "page"
 
         /**
-         * The three pages, in order: what the application is, what it does not
-         * do with your data, and what it needs in order to work.
+         * The four pages, in order: what the application is, what it does not
+         * do with your data, how to read the bike it draws, and what it needs
+         * in order to work.
          */
         val PAGES = listOf(
             Page(
@@ -180,6 +181,13 @@ class WelcomeFragment : Fragment() {
                 title = R.string.welcome_privacy_title,
                 body = R.string.welcome_privacy_body,
                 illustration = R.drawable.illustration_welcome_privacy,
+                next = R.string.welcome_continue,
+                skip = R.string.welcome_skip,
+            ),
+            Page(
+                title = R.string.welcome_fleet_title,
+                body = R.string.welcome_fleet_body,
+                illustration = R.drawable.illustration_welcome_fleet,
                 next = R.string.welcome_continue,
                 skip = R.string.welcome_skip,
             ),

@@ -79,8 +79,8 @@ class JourneySearchFragment : Fragment() {
         showEndpoints()
         // The illustration draws the stations of the network served: bearing a
         // bolt where that network lends pedal-assist bikes (SPEC §15).
-        withBikeFleet { electricBikes ->
-            binding?.shape?.setImageResource(BikeGlyphs.journeyShape(electricBikes))
+        withBikeFleet { fleet ->
+            binding?.shape?.setImageResource(BikeGlyphs.journeyShape(fleet))
         }
     }
 

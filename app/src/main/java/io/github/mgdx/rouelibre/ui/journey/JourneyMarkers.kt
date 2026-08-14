@@ -6,6 +6,7 @@ import androidx.core.graphics.drawable.toBitmap
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
+import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
 import org.maplibre.android.maps.Style
 import org.maplibre.android.style.expressions.Expression
@@ -51,16 +52,16 @@ object JourneyMarkers {
      * MapLibre only draws raster images: the vectors are rendered once, at the
      * screen's density, rather than shipped in five sizes in the APK.
      *
-     * @param electricBikes whether the network served lends pedal-assist bikes,
+     * @param fleet what the network served lends,
      *   which its stations' discs then say with a bolt (SPEC §15). Registering
      *   the image again under the same name replaces it, so the answer may
      *   arrive after the style has loaded — which it does, being read from the
      *   city's configuration on disk.
      */
-    fun registerImages(context: Context, style: Style, electricBikes: Boolean) {
+    fun registerImages(context: Context, style: Style, fleet: BikeFleet) {
         style.addImage(
             STATION_IMAGE_ID,
-            imageOf(context, BikeGlyphs.stationMarker(electricBikes)),
+            imageOf(context, BikeGlyphs.stationMarker(fleet)),
         )
         style.addImage(ENDPOINT_IMAGE_ID, imageOf(context, R.drawable.marker_journey_endpoint))
     }

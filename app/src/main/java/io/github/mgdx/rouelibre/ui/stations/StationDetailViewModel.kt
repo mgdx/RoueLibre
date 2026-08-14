@@ -4,8 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.github.mgdx.rouelibre.core.address.AddressResult
+import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.geo.distanceInMetresTo
+import io.github.mgdx.rouelibre.core.station.BikeSplit
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
+import io.github.mgdx.rouelibre.core.station.splitByKind
 import io.github.mgdx.rouelibre.data.AppPreferences
 import io.github.mgdx.rouelibre.data.StationRepository
 import io.github.mgdx.rouelibre.data.addresses.AddressIndex
@@ -28,6 +31,9 @@ import java.time.Instant
  *   position, or `null` if they have not shared it.
  * @property isFavourite the station is among the favourites.
  * @property fetchedAt when the last successful fetch happened.
+ * @property bikeSplit how the bikes divide between mechanical and electric, or
+ *   `null` where the city does not lend both or where the feed's breakdown
+ *   cannot be trusted — the total then stands alone.
  */
 data class StationDetailUiState(
     val entry: StationWithAvailability? = null,
@@ -35,6 +41,7 @@ data class StationDetailUiState(
     val distanceInMetres: Double? = null,
     val isFavourite: Boolean = false,
     val fetchedAt: Instant? = null,
+    val bikeSplit: BikeSplit? = null,
 )
 
 /**
@@ -51,6 +58,7 @@ class StationDetailViewModel(
     private val preferences: AppPreferences,
     private val addressIndex: AddressIndex,
     private val deviceLocation: DeviceLocation,
+    private val fleet: suspend () -> FleetDescription?,
     private val stationId: String,
 ) : ViewModel() {
 
@@ -64,9 +72,18 @@ class StationDetailViewModel(
 
     init {
         viewModelScope.launch {
+            // Read once: what the city lends is settled when it is added, and
+            // the count that follows refreshes every minute.
+            val fleet = fleet()
             repository.observeStations().collect { snapshot ->
                 val entry = snapshot.stations.firstOrNull { it.station.id == stationId }
-                mutableState.update { it.copy(entry = entry, fetchedAt = snapshot.fetchedAt) }
+                mutableState.update {
+                    it.copy(
+                        entry = entry,
+                        fetchedAt = snapshot.fetchedAt,
+                        bikeSplit = splitOf(entry, fleet),
+                    )
+                }
                 if (entry != null) {
                     resolveAddressOnce(entry)
                     showDistanceOnce(entry)
@@ -78,6 +95,24 @@ class StationDetailViewModel(
                 mutableState.update { it.copy(isFavourite = stationId in favourites) }
             }
         }
+    }
+
+    /**
+     * Splits the station's bikes, where the split says something.
+     *
+     * Two conditions, and both are about not misleading. The city must lend
+     * both kinds in numbers that make an offer — elsewhere "5 mechanical ·
+     * 0 electric" suggests a shortage that does not exist. And the feed's own
+     * breakdown must add up to the count displayed, which [splitByKind]
+     * checks: a wrong split sends someone to a station for a bike that is not
+     * there.
+     */
+    private fun splitOf(
+        entry: StationWithAvailability?,
+        fleet: FleetDescription?,
+    ): BikeSplit? {
+        if (fleet == null || !fleet.isMixed) return null
+        return entry?.availability?.splitByKind(fleet.vehicleTypes)
     }
 
     /**
@@ -121,6 +156,7 @@ class StationDetailViewModel(
         private val preferences: AppPreferences,
         private val addressIndex: AddressIndex,
         private val deviceLocation: DeviceLocation,
+        private val fleet: suspend () -> FleetDescription?,
         private val stationId: String,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -133,6 +169,7 @@ class StationDetailViewModel(
                 preferences,
                 addressIndex,
                 deviceLocation,
+                fleet,
                 stationId,
             ) as T
         }

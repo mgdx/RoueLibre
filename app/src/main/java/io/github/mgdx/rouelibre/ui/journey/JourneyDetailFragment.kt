@@ -25,6 +25,7 @@ import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyDetailBinding
 import io.github.mgdx.rouelibre.databinding.ItemJourneyPlaceBinding
 import io.github.mgdx.rouelibre.databinding.ItemJourneyStepBinding
+import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
 import io.github.mgdx.rouelibre.ui.address.toTitle
 import io.github.mgdx.rouelibre.ui.formatAltitude
@@ -66,7 +67,7 @@ class JourneyDetailFragment : Fragment() {
      *
      * The ride's icon and the two station markers carry the bolt when it does.
      */
-    private var electricBikes = false
+    private var fleet = BikeFleet.Mechanical
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -99,9 +100,9 @@ class JourneyDetailFragment : Fragment() {
         // The city's configuration is read from disk: the rows are laid with
         // the plain bike and drawn again, a moment later, with the network's
         // own.
-        withBikeFleet { electric ->
-            electricBikes = electric
-            binding?.shape?.electricBikes = electric
+        withBikeFleet { lent ->
+            fleet = lent
+            binding?.shape?.fleet = lent
             showJourney(journey, viewModel.addresses.value)
         }
         viewModel.locate(stationsOf(journey.plan))
@@ -261,7 +262,7 @@ class JourneyDetailFragment : Fragment() {
             ),
         )
         addLeg(
-            icon = BikeGlyphs.icon(electricBikes),
+            icon = BikeGlyphs.icon(fleet),
             label = getString(R.string.journey_step_ride, option.arrivalStation.name),
             leg = option.ride,
         )
@@ -316,7 +317,7 @@ class JourneyDetailFragment : Fragment() {
     ) {
         val views = binding ?: return
         val place = ItemJourneyPlaceBinding.inflate(layoutInflater, views.steps, false)
-        place.marker.setImageResource(BikeGlyphs.stationMarker(electricBikes))
+        place.marker.setImageResource(BikeGlyphs.stationMarker(fleet))
         place.role.text = role
         place.name.text = station.name
         place.address.isGone = address == null

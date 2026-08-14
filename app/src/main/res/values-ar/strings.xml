@@ -63,6 +63,29 @@
         <item quantity="other">%1$s · %2$d docks</item>
     </plurals>
 
+    <!-- What a station's bikes are, shown only where the network lends both
+         kinds side by side. %1$s is the mechanical count, %2$s the electric
+         one, each already agreed in number. -->
+    <string name="station_bikes_split">%1$s · %2$s</string>
+
+    <plurals name="bikes_mechanical">
+        <item quantity="one">%1$d mechanical</item>
+        <item quantity="zero">%1$d mechanical</item>
+        <item quantity="two">%1$d mechanical</item>
+        <item quantity="few">%1$d mechanical</item>
+        <item quantity="many">%1$d mechanical</item>
+        <item quantity="other">%1$d mechanical</item>
+    </plurals>
+
+    <plurals name="bikes_electric">
+        <item quantity="one">%1$d electric</item>
+        <item quantity="zero">%1$d electric</item>
+        <item quantity="two">%1$d electric</item>
+        <item quantity="few">%1$d electric</item>
+        <item quantity="many">%1$d electric</item>
+        <item quantity="other">%1$d electric</item>
+    </plurals>
+
     <string name="freshness_just_now">just now</string>
     <plurals name="freshness_seconds">
         <item quantity="one">%1$d second ago</item>
@@ -112,6 +135,9 @@
     <string name="welcome_hello_body">This app shows shared bikes on a map and works out a door-to-door trip: walk to a station, ride, then walk the rest of the way.\n\nIt is free and open source. No account, no adverts, no tracker.</string>
     <string name="welcome_privacy_title">Nothing leaves this phone</string>
     <string name="welcome_privacy_body">Journeys are computed on this phone. The addresses you look up are sent to nobody, not even while you type.\n\nNo history is kept: not your trips, not your positions, not your destinations.\n\nThe only request that goes out in everyday use asks how many bikes are available.</string>
+    <string name="welcome_fleet_title">What the bike says</string>
+    <string name="welcome_fleet_body">The bike drawn tells you what your city lends.\n\nA plain bike: you pedal it yourself. A bolt: a motor helps you pedal. Both marks: the network lends the two kinds, and a station then says how many of each it holds.\n\nIt is read from the network\'s own feed, never guessed.</string>
+
     <string name="welcome_data_title">One city, one download</string>
     <string name="welcome_data_body">The map, the streets and the route calculation live on the device. That is what makes them work without a network — and it means downloading your city\'s data once.\n\nSo start by choosing it. Expect around forty megabytes for a medium-sized conurbation, more for a capital; the size is announced before the download.\n\nYou can also do it later: in the meantime, the station list and their availability remain usable.</string>
     <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d of %2$d</string>

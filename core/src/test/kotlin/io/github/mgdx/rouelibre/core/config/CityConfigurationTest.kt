@@ -1,6 +1,7 @@
 package io.github.mgdx.rouelibre.core.config
 
 import io.github.mgdx.rouelibre.core.Outcome
+import io.github.mgdx.rouelibre.core.station.VehicleKind
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -45,6 +46,32 @@ class CityConfigurationTest {
     }
 
     @Test
+    fun `a mixed city carries the table its station counts are split with`() {
+        // A city is called mixed only after tools/read_fleet.py has counted
+        // both kinds at its stations, and the split shown to the user (SPEC
+        // §7.2) is unreadable without the table: announcing one without the
+        // other would leave the station sheet promising a detail it cannot
+        // produce.
+        val mixed = publishedConfigurations().filter { it.second.fleet.isMixed }
+
+        assertTrue("no city lends both kinds", mixed.isNotEmpty())
+        mixed.forEach { (name, configuration) ->
+            assertTrue(
+                "mixed city without a vehicle type table in $name",
+                configuration.fleet.vehicleTypes.isNotEmpty(),
+            )
+            assertTrue(
+                "no electric type in the table of $name",
+                configuration.fleet.vehicleTypes.containsValue(VehicleKind.Electric),
+            )
+            assertTrue(
+                "a mixed city that does not lend electric bikes in $name",
+                configuration.fleet.hasElectricBikes,
+            )
+        }
+    }
+
+    @Test
     fun `a configuration saying nothing of its fleet is read as mechanical`() {
         // What a network whose feed declares no vehicle type leaves behind, and
         // what every configuration written before the fleet was ever read looks
@@ -53,6 +80,10 @@ class CityConfigurationTest {
 
         val configuration = (outcome as Outcome.Success).value
         assertFalse(configuration.fleet.hasElectricBikes)
+        // And never mixed either: a split is shown only where bikes of both
+        // kinds were counted, never where nothing was.
+        assertFalse(configuration.fleet.isMixed)
+        assertTrue(configuration.fleet.vehicleTypes.isEmpty())
         assertEquals("example", configuration.network.id)
     }
 

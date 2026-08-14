@@ -176,6 +176,40 @@ class GbfsParserTest {
     }
 
     @Test
+    fun `reads the standard breakdown by vehicle type`() {
+        val feed = assertSuccess(parser.parseStationStatus(fixture("station_status_v3.json")))
+
+        val station = feed.availabilities.first { it.stationId == "v3-1" }
+        assertEquals(mapOf("bike" to 5, "ebike" to 2), station.bikesByVehicleType)
+    }
+
+    @Test
+    fun `reads the breakdown Velib publishes in its own way`() {
+        // GBFS 1.0 has no vehicle_types feed to point identifiers at, so the
+        // network names the kinds inline. Refusing that shape would hide the
+        // electric bikes of the largest network in France.
+        val feed = assertSuccess(
+            parser.parseStationStatus(fixture("station_status_v1_velib.json")),
+        )
+
+        val station = feed.availabilities.first { it.stationId == "213688169" }
+        assertEquals(mapOf("mechanical" to 16, "ebike" to 1), station.bikesByVehicleType)
+    }
+
+    @Test
+    fun `a feed publishing no breakdown leaves it empty rather than guessing`() {
+        val document = """
+            {"last_updated":1786264920,"ttl":60,"version":"2.0","data":{"stations":[
+              {"station_id":"a","num_bikes_available":3,"num_docks_available":5}
+            ]}}
+        """.trimIndent()
+
+        val feed = assertSuccess(parser.parseStationStatus(document))
+
+        assertTrue(feed.availabilities.single().bikesByVehicleType.isEmpty())
+    }
+
+    @Test
     fun `a station that no longer rents cannot lend a bike`() {
         val feed = assertSuccess(parser.parseStationStatus(fixture("station_status_v3.json")))
 

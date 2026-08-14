@@ -204,8 +204,8 @@ class MapFragment : Fragment() {
         // The button that opens the journey search carries the bike of the
         // network served: with a bolt where that network lends pedal-assist
         // bikes (SPEC §15).
-        withBikeFleet { electricBikes ->
-            binding?.openJourney?.setIconResource(BikeGlyphs.icon(electricBikes))
+        withBikeFleet { fleet ->
+            binding?.openJourney?.setIconResource(BikeGlyphs.icon(fleet))
         }
 
         // The target depends on what is missing, and it is set together with

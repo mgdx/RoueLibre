@@ -4,6 +4,7 @@ import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.geo.BoundingBox
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.station.VehicleKind
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -43,25 +44,47 @@ public data class NetworkDescription(
 )
 
 /**
- * What the network lends, as its own feed declares it.
+ * What the network lends, as counted from its own feeds.
  *
  * A city-specific fact like any other, and therefore read from the
  * configuration rather than decided in the code (SPEC §15): the same
  * application serves a mechanical fleet and an electric one.
+ *
+ * Counted rather than declared, and that distinction is the whole of it: a
+ * third of the networks declaring a mixed fleet have not one bike of one of the
+ * two kinds in circulation. `tools/read_fleet.py` counts the bikes standing at
+ * the stations and writes down what it saw.
  */
 public data class FleetDescription(
     /**
      * Whether the fleet holds pedal-assist bikes.
      *
-     * True as soon as the network declares one, mixed fleets included: what
-     * this answers is whether the city lends electric bikes, and the interface
-     * marks its bike glyph with a bolt when it does (SPEC §7).
+     * True as soon as one is in circulation, mixed fleets included: what this
+     * answers is whether the city lends electric bikes, and the interface marks
+     * its bike glyph with a bolt when it does (SPEC §7).
      *
-     * False when the configuration says nothing, which is the case of a
-     * network whose GBFS feed declares no vehicle type: the plain bike is then
-     * drawn rather than a motor nobody verified.
+     * False when the configuration says nothing, which is the case of a network
+     * whose GBFS feeds let nothing be counted and declare no vehicle type: the
+     * plain bike is then drawn rather than a motor nobody verified.
      */
     public val hasElectricBikes: Boolean,
+    /**
+     * Whether both kinds are lent side by side, in numbers that make an offer.
+     *
+     * Only then is a station's count worth splitting (SPEC §7.2). Elsewhere the
+     * split would be noise — "5 mechanical · 0 electric" suggests a shortage
+     * that does not exist — and a bike counted in a kind nobody lends is a
+     * promise the user cannot collect.
+     */
+    public val isMixed: Boolean,
+    /**
+     * The kind of every vehicle type identifier the status feed counts by.
+     *
+     * Empty for a network publishing no breakdown, which then shows one figure.
+     * An identifier absent from the table is what silences a station's split:
+     * five networks publish at their stations a type they never declared.
+     */
+    public val vehicleTypes: Map<String, VehicleKind>,
 )
 
 /** Access to the real-time feed. */
@@ -148,7 +171,11 @@ private data class CityConfigurationDocument(
             operator = network.operator,
             defaultLanguage = network.defaultLanguage,
         ),
-        fleet = FleetDescription(hasElectricBikes = fleet.electricBikes),
+        fleet = FleetDescription(
+            hasElectricBikes = fleet.electricBikes,
+            isMixed = fleet.mixed,
+            vehicleTypes = fleet.vehicleTypes.mapValues { (_, kind) -> kind.toDomain() },
+        ),
         gbfs = GbfsSettings(
             discoveryUrl = gbfs.discoveryUrl,
             attribution = gbfs.attribution,
@@ -183,7 +210,24 @@ private data class FleetDocument(
     // from one whose network declares no vehicle type: both mean "not known to
     // be electric", which is drawn as the plain bike.
     val electricBikes: Boolean = false,
+    // Absent from a configuration written before the bikes were ever counted.
+    // Not known to be mixed is shown as a single figure, which is always true.
+    val mixed: Boolean = false,
+    val vehicleTypes: Map<String, String> = emptyMap(),
 )
+
+/**
+ * Reads the kind written in the configuration.
+ *
+ * Anything unexpected is read as [VehicleKind.Other] rather than refused: a
+ * kind this build does not know is certainly not a bike it can count, and one
+ * unreadable word must not cost the user the whole city.
+ */
+private fun String.toDomain(): VehicleKind = when (this) {
+    "mechanical" -> VehicleKind.Mechanical
+    "electric" -> VehicleKind.Electric
+    else -> VehicleKind.Other
+}
 
 @Serializable
 private data class GbfsDocument(

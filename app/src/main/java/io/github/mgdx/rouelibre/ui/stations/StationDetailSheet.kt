@@ -20,6 +20,7 @@ import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.address.AddressResult
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
+import io.github.mgdx.rouelibre.core.station.BikeSplit
 import io.github.mgdx.rouelibre.core.station.ServiceState
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.displayFor
@@ -54,6 +55,7 @@ class StationDetailSheet : BottomSheetDialogFragment() {
             preferences = container.preferences,
             addressIndex = container.addressIndex,
             deviceLocation = container.deviceLocation,
+            fleet = { container.activeCity()?.fleet },
             stationId = requireArguments().getString(ARGUMENT_STATION_ID).orEmpty(),
         )
     }
@@ -96,10 +98,39 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         views.name.text = entry.station.name
         views.bikesIndicator.display = entry.displayFor(AvailabilityMode.Bikes)
         views.docksIndicator.display = entry.displayFor(AvailabilityMode.Docks)
+        showBikeSplit(state.bikeSplit)
         showAddress(state.address, state.distanceInMetres)
         showServiceState(state)
         showCapacityAndFreshness(entry.station, state.fetchedAt)
         showFavourite(state.isFavourite)
+    }
+
+    /**
+     * Says what the bikes standing there are (SPEC §7.2).
+     *
+     * A line under the count rather than a second figure inside the disc: the
+     * disc answers "is there a bike", which is asked from a map holding fifty
+     * stations, while "which bike" is asked once one station is being looked
+     * at. Absent whenever the model could not settle it — the city lends one
+     * kind, or the feed's breakdown does not add up.
+     */
+    private fun showBikeSplit(split: BikeSplit?) {
+        val views = binding ?: return
+        views.bikesSplit.isVisible = split != null
+        if (split == null) return
+        views.bikesSplit.text = getString(
+            R.string.station_bikes_split,
+            resources.getQuantityString(
+                R.plurals.bikes_mechanical,
+                split.mechanical,
+                split.mechanical,
+            ),
+            resources.getQuantityString(
+                R.plurals.bikes_electric,
+                split.electric,
+                split.electric,
+            ),
+        )
     }
 
     private fun showAddress(address: AddressResult?, distanceInMetres: Double?) {

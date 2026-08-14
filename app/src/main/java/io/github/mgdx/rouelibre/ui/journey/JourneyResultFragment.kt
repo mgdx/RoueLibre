@@ -26,6 +26,7 @@ import io.github.mgdx.rouelibre.core.journey.NoBikeJourney
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyResultBinding
+import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.formatDuration
 import io.github.mgdx.rouelibre.ui.map.MapStyleLoader
@@ -96,7 +97,7 @@ class JourneyResultFragment : Fragment() {
      * Read once, kept here because the style can load before or after the
      * answer: whichever comes second registers the station marker.
      */
-    private var electricBikes = false
+    private var fleet = BikeFleet.Mechanical
 
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
@@ -255,14 +256,14 @@ class JourneyResultFragment : Fragment() {
      * which may not have loaded yet — takes its image whenever it is ready.
      */
     private fun readBikeFleet() {
-        withBikeFleet { electric ->
-            electricBikes = electric
+        withBikeFleet { lent ->
+            fleet = lent
             val views = binding ?: return@withBikeFleet
-            views.shape.electricBikes = electric
-            views.computingBike.electricBikes = electric
+            views.shape.fleet = lent
+            views.computingBike.fleet = lent
             if (styleLoaded) {
                 mapLibreMap?.style?.let {
-                    JourneyMarkers.registerImages(requireContext(), it, electric)
+                    JourneyMarkers.registerImages(requireContext(), it, lent)
                 }
             }
         }
@@ -344,7 +345,7 @@ class JourneyResultFragment : Fragment() {
             val markers = GeoJsonSource(JourneyMarkers.SOURCE_ID)
             markerSource = markers
             style.addSource(markers)
-            JourneyMarkers.registerImages(requireContext(), style, electricBikes)
+            JourneyMarkers.registerImages(requireContext(), style, fleet)
             style.addLayer(JourneyMarkers.layer())
 
             // The user's position comes last of all, and therefore on top:

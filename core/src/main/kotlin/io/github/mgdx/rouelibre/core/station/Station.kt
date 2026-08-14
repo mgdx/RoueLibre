@@ -29,6 +29,11 @@ public data class Station(
  *
  * @property stationId the identifier of the station described.
  * @property bikesAvailable bikes that can be borrowed.
+ * @property bikesByVehicleType how those bikes divide between the network's
+ *   vehicle types, as the feed publishes it, and empty when it publishes
+ *   nothing. The identifiers are the producer's own and mean nothing here: it
+ *   takes the network's table to turn them into mechanical and electric, which
+ *   is what [splitByKind] does.
  * @property docksAvailable free docks to return a bike to.
  * @property isInstalled the station is deployed on the ground.
  * @property isRenting the station accepts rentals.
@@ -40,6 +45,7 @@ public data class StationAvailability(
     public val stationId: String,
     public val bikesAvailable: Int,
     public val docksAvailable: Int,
+    public val bikesByVehicleType: Map<String, Int> = emptyMap(),
     public val isInstalled: Boolean,
     public val isRenting: Boolean,
     public val isReturning: Boolean,

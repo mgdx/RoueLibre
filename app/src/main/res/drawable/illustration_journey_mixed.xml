@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The shape of a journey in a city whose network lends both kinds of bike
+    side by side (SPEC §15): illustration_journey, whose two station discs bear
+    the bolt and the cog of ic_bike_mixed, as a pair. Everything else is that file,
+    unchanged — the comments below included, since they explain the same
+    drawing.
+
+    The shape of a journey: walk, bike, walk (SPEC §5).
+
+    Read left to right — one sets off on foot, dashed; reaches a station, a
+    solid disc; rides to another station, an unbroken line; and finishes on
+    foot. The two kinds of stroke say what the words above say, for the eye
+    that will not read them.
+
+    Drawn dash by dash: a vector drawable has no dash array, and a bitmap would
+    cost five densities for four circles.
+
+    The intrinsic size is smaller than the drawing space: the view stretches it
+    to the width available, and past 200 dp lint rightly asks what an icon that
+    large is doing in a drawable.
+
+    Mirrored in right-to-left languages: the drawing tells a sequence, and a
+    sequence is read in the direction of the text around it. Left unmirrored,
+    it had an Arabic reader starting at the end.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="180dp"
+    android:autoMirrored="true"
+    android:height="30dp"
+    android:viewportWidth="240"
+    android:viewportHeight="40">
+
+    <!-- Departure, on foot: an outlined circle, because nothing is waiting
+         there — it is where the user happens to be. -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M20,6a14,14 0 1,0 0.1,0z"
+        android:strokeColor="@color/ink_soft"
+        android:strokeWidth="2" />
+    <group
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:translateX="11.6"
+        android:translateY="11.6">
+        <path
+            android:fillColor="@color/ink"
+            android:pathData="M13.5,5.5c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM9.8,8.9L7,23h2.1l1.8,-8 2.1,2v6h2v-7.5l-2.1,-2 0.6,-3C14.8,12 16.8,13 19,13v-2c-1.9,0 -3.5,-1 -4.3,-2.4l-1,-1.6c-0.4,-0.6 -1,-1 -1.7,-1 -0.3,0 -0.5,0.1 -0.8,0.1L6,8.3V13h2V9.6l1.8,-0.7" />
+    </group>
+
+    <!-- Walking to the departure station. -->
+    <path
+        android:pathData="M38,20h7 M49,20h7 M60,20h7"
+        android:strokeColor="@color/ink_soft"
+        android:strokeLineCap="round"
+        android:strokeWidth="2" />
+
+    <!-- Departure station: a solid disc, like the markers on the map. -->
+    <path
+        android:fillColor="@color/signal"
+        android:pathData="M85,5a15,15 0 1,0 0.1,0z" />
+    <group
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:translateX="76.6"
+        android:translateY="11.6">
+        <group
+            android:scaleX="0.9"
+            android:scaleY="0.9"
+            android:translateX="2.4"
+            android:translateY="2.4">
+            <path
+                android:fillColor="@color/surface_on_signal"
+                android:pathData="M15.5,5.5c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM5,12c-2.8,0 -5,2.2 -5,5s2.2,5 5,5 5,-2.2 5,-5 -2.2,-5 -5,-5zM5,20.5c-1.9,0 -3.5,-1.6 -3.5,-3.5s1.6,-3.5 3.5,-3.5 3.5,1.6 3.5,3.5 -1.6,3.5 -3.5,3.5zM10.8,10.5l2.4,-2.4 0.8,0.8c1.3,1.3 3,2.1 5.1,2.1V9c-1.5,0 -2.7,-0.6 -3.6,-1.5l-1.9,-1.9c-0.5,-0.4 -1,-0.6 -1.6,-0.6s-1.1,0.2 -1.4,0.6L7.8,8.4c-0.4,0.4 -0.6,0.9 -0.6,1.4 0,0.6 0.2,1.1 0.6,1.4L11,14v5h2v-6.2l-2.2,-2.3zM19,12c-2.8,0 -5,2.2 -5,5s2.2,5 5,5 5,-2.2 5,-5 -2.2,-5 -5,-5zM19,20.5c-1.9,0 -3.5,-1.6 -3.5,-3.5s1.6,-3.5 3.5,-3.5 3.5,1.6 3.5,3.5 -1.6,3.5 -3.5,3.5z" />
+            <path
+                android:fillColor="@color/surface_on_signal"
+                android:pathData="M4.5,1.2L1.3,5L3.8,5L3.4,8.4L6.6,4.6L4.1,4.6z" />
+        </group>
+        <path
+            android:fillColor="@color/surface_on_signal"
+            android:fillType="evenOdd"
+            android:pathData="M4.95,11.96L5.64,12.43L5.10,13.37L4.35,13.00L3.55,13.46L3.49,14.30L2.41,14.30L2.35,13.46L1.55,13.00L0.80,13.37L0.26,12.43L0.95,11.96L0.95,11.04L0.26,10.57L0.80,9.63L1.55,10.00L2.35,9.54L2.41,8.70L3.49,8.70L3.55,9.54L4.35,10.00L5.10,9.63L5.64,10.57L4.95,11.04ZM2.05,11.50a0.90,0.90 0 1,0 1.80,0a0.90,0.90 0 1,0 -1.80,0Z" />
+    </group>
+
+    <!-- The ride: one unbroken line, the journey's main leg. -->
+    <path
+        android:pathData="M102,20h36"
+        android:strokeColor="@color/signal"
+        android:strokeLineCap="round"
+        android:strokeWidth="3" />
+
+    <!-- Arrival station, the same disc: one leaves a station and reaches a
+         station, and the drawing must not suggest otherwise. -->
+    <path
+        android:fillColor="@color/signal"
+        android:pathData="M155,5a15,15 0 1,0 0.1,0z" />
+    <group
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:translateX="146.6"
+        android:translateY="11.6">
+        <group
+            android:scaleX="0.9"
+            android:scaleY="0.9"
+            android:translateX="2.4"
+            android:translateY="2.4">
+            <path
+                android:fillColor="@color/surface_on_signal"
+                android:pathData="M15.5,5.5c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM5,12c-2.8,0 -5,2.2 -5,5s2.2,5 5,5 5,-2.2 5,-5 -2.2,-5 -5,-5zM5,20.5c-1.9,0 -3.5,-1.6 -3.5,-3.5s1.6,-3.5 3.5,-3.5 3.5,1.6 3.5,3.5 -1.6,3.5 -3.5,3.5zM10.8,10.5l2.4,-2.4 0.8,0.8c1.3,1.3 3,2.1 5.1,2.1V9c-1.5,0 -2.7,-0.6 -3.6,-1.5l-1.9,-1.9c-0.5,-0.4 -1,-0.6 -1.6,-0.6s-1.1,0.2 -1.4,0.6L7.8,8.4c-0.4,0.4 -0.6,0.9 -0.6,1.4 0,0.6 0.2,1.1 0.6,1.4L11,14v5h2v-6.2l-2.2,-2.3zM19,12c-2.8,0 -5,2.2 -5,5s2.2,5 5,5 5,-2.2 5,-5 -2.2,-5 -5,-5zM19,20.5c-1.9,0 -3.5,-1.6 -3.5,-3.5s1.6,-3.5 3.5,-3.5 3.5,1.6 3.5,3.5 -1.6,3.5 -3.5,3.5z" />
+            <path
+                android:fillColor="@color/surface_on_signal"
+                android:pathData="M4.5,1.2L1.3,5L3.8,5L3.4,8.4L6.6,4.6L4.1,4.6z" />
+        </group>
+        <path
+            android:fillColor="@color/surface_on_signal"
+            android:fillType="evenOdd"
+            android:pathData="M4.95,11.96L5.64,12.43L5.10,13.37L4.35,13.00L3.55,13.46L3.49,14.30L2.41,14.30L2.35,13.46L1.55,13.00L0.80,13.37L0.26,12.43L0.95,11.96L0.95,11.04L0.26,10.57L0.80,9.63L1.55,10.00L2.35,9.54L2.41,8.70L3.49,8.70L3.55,9.54L4.35,10.00L5.10,9.63L5.64,10.57L4.95,11.04ZM2.05,11.50a0.90,0.90 0 1,0 1.80,0a0.90,0.90 0 1,0 -1.80,0Z" />
+    </group>
+
+    <!-- Walking to the destination. -->
+    <path
+        android:pathData="M173,20h7 M184,20h7 M195,20h7"
+        android:strokeColor="@color/ink_soft"
+        android:strokeLineCap="round"
+        android:strokeWidth="2" />
+
+    <!-- Destination, on foot: outlined, like the departure. -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M220,6a14,14 0 1,0 0.1,0z"
+        android:strokeColor="@color/ink_soft"
+        android:strokeWidth="2" />
+    <group
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:translateX="211.6"
+        android:translateY="11.6">
+        <path
+            android:fillColor="@color/ink"
+            android:pathData="M13.5,5.5c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM9.8,8.9L7,23h2.1l1.8,-8 2.1,2v6h2v-7.5l-2.1,-2 0.6,-3C14.8,12 16.8,13 19,13v-2c-1.9,0 -3.5,-1 -4.3,-2.4l-1,-1.6c-0.4,-0.6 -1,-1 -1.7,-1 -0.3,0 -0.5,0.1 -0.8,0.1L6,8.3V13h2V9.6l1.8,-0.7" />
+    </group>
+</vector>

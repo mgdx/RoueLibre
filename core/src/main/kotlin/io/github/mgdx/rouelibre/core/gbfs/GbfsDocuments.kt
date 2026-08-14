@@ -198,6 +198,21 @@ internal data class GbfsStationInformation(
     @SerialName("post_code") val postCode: String? = null,
 )
 
+/**
+ * How many bikes of one vehicle type stand at a station.
+ *
+ * The standard breakdown, published since GBFS 2.1. The identifier is the
+ * producer's own — `346` at nextbike, `mechanical` at Lyon — and says nothing
+ * by itself: it takes the network's table to know what it stands for.
+ */
+@Serializable
+internal data class GbfsVehicleTypeCount(
+    @SerialName("vehicle_type_id")
+    @Serializable(with = FlexibleIdSerializer::class)
+    val vehicleTypeId: String,
+    val count: Int = 0,
+)
+
 /** The state of a station as published by `station_status`. */
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
@@ -209,6 +224,20 @@ internal data class GbfsStationStatus(
     @SerialName("num_bikes_available")
     @JsonNames("num_vehicles_available")
     val bikesAvailable: Int = 0,
+    @SerialName("vehicle_types_available")
+    val vehicleTypesAvailable: List<GbfsVehicleTypeCount> = emptyList(),
+    /**
+     * The breakdown as Vélib' Métropole publishes it, kept raw.
+     *
+     * An extension, not the standard: the network is on GBFS 1.0, which has no
+     * `vehicle_types` feed to point identifiers at, so it names the kinds
+     * inline — `[{"mechanical": 3}, {"ebike": 0}]`. A list of objects with
+     * arbitrary keys has no shape to declare, hence the raw element, read by
+     * the parser. Refusing it would hide the 7854 electric bikes of the
+     * largest network in France.
+     */
+    @SerialName("num_bikes_available_types")
+    val legacyBikesByKind: JsonArray? = null,
     @SerialName("num_docks_available") val docksAvailable: Int = 0,
     @SerialName("is_installed")
     @Serializable(with = LenientBooleanSerializer::class)
