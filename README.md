@@ -11,7 +11,7 @@
 <p align="center">
   <a href="LICENSE"><img alt="Licence: GPLv3" src="https://img.shields.io/badge/licence-GPLv3-0F6E56?style=flat-square"></a>
   <img alt="Android 8.0 and later" src="https://img.shields.io/badge/Android-8.0%2B-0F6E56?style=flat-square">
-  <a href="docs/networks.md"><img alt="306 networks in 35 countries" src="https://img.shields.io/badge/networks-306%20in%2035%20countries-0F6E56?style=flat-square"></a>
+  <a href="docs/networks.md"><img alt="333 networks in 38 countries" src="https://img.shields.io/badge/networks-333%20in%2038%20countries-0F6E56?style=flat-square"></a>
   <img alt="No tracker" src="https://img.shields.io/badge/trackers-none-0F6E56?style=flat-square">
   <img alt="APK: 8.5 MB" src="https://img.shields.io/badge/APK-8.5%20MB-0F6E56?style=flat-square">
 </p>
@@ -28,10 +28,12 @@ but the live availability of the bikes runs on your phone.
 
 ## Features
 
-- 🚲 **306 bike-share networks in 35 countries**, from Vélib' to Auch's ten
-  stations, by way of New York, Prague, Barcelona, Tokyo, Buenos Aires and
-  Pristina. No city is a default: the application proposes the one matching your
-  position, and you choose. The full list is in
+- 🚲 **333 bike-share networks in 38 countries**, 75,095 stations, from Vélib'
+  to Auch's ten, by way of New York, Montréal, Prague, Barcelona, Dubai, Buenos
+  Aires and Pristina. A network serving a whole region counts too — Vélo Fluo
+  puts one station in each town of the Grand Est. No city is a default: the
+  application proposes the one matching your position, measured on where its
+  stations actually are, and you choose. The full list is in
   [`docs/networks.md`](docs/networks.md).
 
 - 🗺️ **A map that shows what a cyclist needs:**
@@ -49,7 +51,8 @@ but the live availability of the bikes runs on your phone.
   later.
 
 - 🔒 **Private, and local.** Everything happens on the device:
-  - the map, streets and routing data are downloaded **once**, and that is it;
+  - the map, streets and routing data are downloaded **once** — 10.6 MB for a
+    median city — and that is it;
   - the journey is computed on the phone;
   - searching a street or a station never leaves it — it is the most telling
     data the application handles, since it says where you are going;

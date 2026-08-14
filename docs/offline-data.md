@@ -8,13 +8,18 @@ generation is entirely scripted and versioned in [`tools/`](../tools/README.md):
 tools/generate_all.sh
 ```
 
-Sizes actually obtained, three networks generated under the same rules:
+**330 networks of the 333 served have their data produced: 12.3 GB in all**,
+median 10.6 MB a city. Sizes actually obtained, under the same rules for all:
 
 | Network | Stations | Area | Base map | Routing | Addresses | Total |
 |---|---|---|---|---|---|---|
+| Hunedoara | 12 | 65 km² | 1.0 MB | 0.1 MB | 0.1 MB | **1.2 MB** |
 | V'lille | 268 | 672 km² | 35.0 MB | 1.7 MB | 6.0 MB | **42.7 MB** |
-| Vélo'v Lyon | 465 | 575 km² | 35.6 MB | 2.6 MB | 4.1 MB | **42.3 MB** |
+| Donkey Kiel | 203 | 2,672 km² | 50.1 MB | 1.9 MB | 2.4 MB | **54.4 MB** |
 | Vélib' Paris | 1,518 | 994 km² | 114.9 MB | 7.2 MB | 20.9 MB | **143.0 MB** |
+| Careem Dubai | 212 | 162,065 km² | 160.0 MB | 12.5 MB | 3.6 MB | **176.1 MB** |
+| Blue-bike | 315 | 21,772 km² | 932.0 MB | 62.6 MB | 26.7 MB | **1,021 MB** |
+| Vélo Fluo Grand Est | 42 | 89,038 km² | 1,343 MB | 76.5 MB | 31.6 MB | **1,451 MB** |
 
 The bounding box is derived from the stations themselves, which follows the
 reality of the networks: "Lille" covers 68 municipalities of the metropolis,
@@ -49,6 +54,7 @@ python3 tools/add_city.py --list      # what it would add
 python3 tools/add_city.py --all       # writes config/cities/*.json
 python3 tools/add_city.py --refresh-sources   # re-reads where the data is cut from
 python3 tools/read_fleet.py --all     # asks each network what it lends
+python3 tools/sample_stations.py --all   # records where its stations are
 ```
 
 By hand, for a network the catalogues do not list:
@@ -89,7 +95,11 @@ By hand, for a network the catalogues do not list:
 
 The application assumes no default city. It proposes the one matching your
 position, on a button press, and stores each city's data apart: two cities
-coexist on the device, and deleting one leaves the other untouched.
+coexist on the device, and deleting one leaves the other untouched. **Which
+city matches is measured on stations, never on the reference box** — each
+configuration carries eight positions taken through the network, because the
+box of a network serving a whole region is mostly empty: Vélo Fluo's passes
+46 km from the middle of the Morvan while its nearest bike is 130 km away.
 
 Since GBFS is an international standard, most of the portability is won as soon
 as the URL is configurable — and it is also configurable from the application's
@@ -104,8 +114,8 @@ guessed: [`tools/read_fleet.py`](../tools/read_fleet.py) reads the network's own
 GBFS `vehicle_types` feed and writes the answer into the `fleet` block of its
 configuration, which is the only place the application looks. A feed declaring
 no vehicle type leaves the block out, and the plain bike is drawn. Of the
-networks served today, 192 lend pedal-assist bikes, 101 lend mechanical ones
-and 13 say nothing.
+networks served today, 215 lend pedal-assist bikes, 103 lend mechanical ones
+and 15 say nothing.
 
 ## Where the addresses come from
 

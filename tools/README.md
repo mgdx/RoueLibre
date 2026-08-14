@@ -64,12 +64,12 @@ alone, so an interrupted upload is finished by running it again.
 
 **One release per country, and a last one holding the index.** GitHub allows
 **1,000 assets per release** — the message is `file_count limited to 1000
-assets per release` — and 306 conurbations come to some 1,350 files. The heavy
+assets per release` — and 333 conurbations come to some 1,470 files. The heavy
 files therefore go to `data-<tag>-fr`, `data-<tag>-de`, `data-<tag>-jp`; the
 largest of those is France, at 234 assets, so the ceiling is far off even as
 networks grow.
 
-The last release, `data-<tag>`, holds nothing but the catalogue and the 306
+The last release, `data-<tag>`, holds nothing but the catalogue and the 333
 manifests. It exists because the application asks for
 `releases/latest/download/manifest-<network>.json`, and *latest* names the
 newest release of the repository, whichever it is: every manifest must sit in
@@ -237,6 +237,14 @@ python3 -m fontTools.varLib.instancer BricolageGrotesque.ttf \
 The two files weigh 182 kB in total, against 408 kB for the complete variable
 font: the compatibility constraint also lightened the APK. Atkinson Hyperlegible
 is already static and is embedded as it is.
+
+The map's own glyphs are cut from those fonts by `node tools/build_glyphs.js`,
+and it produces **every range of the Basic Multilingual Plane**, 354 kB in all.
+That is not thoroughness for its own sake: a range MapLibre asks for and does
+not find fails the tile whose label needed it, and nothing of that tile is
+drawn — one Romanian letter emptied Hunedoara's map of its streets, its river
+and its parks. A range the font does not cover answers in forty-four bytes, so
+the whole plane costs little and no place name can blank a map again.
 
 ## Sources and licences
 
