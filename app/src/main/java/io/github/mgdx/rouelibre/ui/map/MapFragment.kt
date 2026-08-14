@@ -18,10 +18,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
+import io.github.mgdx.rouelibre.core.config.CityEntry
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
@@ -31,6 +33,7 @@ import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
 import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
 import io.github.mgdx.rouelibre.ui.city.CityFragment
+import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.prefersReducedMotion
@@ -121,6 +124,16 @@ class MapFragment : Fragment() {
     private var servedAreaCamera: ServedAreaCamera? = null
 
     private var userPositionSource: GeoJsonSource? = null
+
+    /**
+     * The city this map is drawn for, as soon as it is known.
+     *
+     * Kept to hand because "locate me" has to know where the served area stops:
+     * the camera is penned inside that area (see [ServedAreaCamera]), so a
+     * position outside it would move the map to the nearest edge and pass that
+     * off as where the user stands.
+     */
+    private var servedCity: CityConfiguration? = null
 
     /**
      * The last position shown, held in memory for the session only.
@@ -278,6 +291,10 @@ class MapFragment : Fragment() {
     }
 
     private fun loadTilesFor(configuration: CityConfiguration?) {
+        // Noted before anything may return early: the served area is what
+        // "locate me" measures itself against, and it is known here even when
+        // the style has already been loaded.
+        servedCity = configuration
         val views = binding ?: return
         val map = mapLibreMap ?: return
         if (styleLoaded) return
@@ -652,7 +669,110 @@ class MapFragment : Fragment() {
             }
             lastKnownPosition = position
             userPositionSource?.setGeoJson(UserPositionMarker.featureFor(position))
+            // Outside the city served there is nothing to move to: the camera
+            // is held inside that city's box, so it would stop at the edge
+            // nearest the user and show that as their position — a point on a
+            // street they are a hundred kilometres from, with nothing saying
+            // so. What the moment calls for is the other city, not a framing.
+            if (isOutsideServedArea(position)) {
+                sayWeAreElsewhere(position)
+                return@launch
+            }
             moveCameraTo(LatLng(position.latitude, position.longitude), USER_POSITION_ZOOM)
+        }
+    }
+
+    /**
+     * Says whether [position] falls outside the area this map covers.
+     *
+     * The city whose configuration declares no bounding box covers everything
+     * as far as this screen is concerned: nothing pens its camera either, so
+     * nothing is being passed off as anything.
+     */
+    private fun isOutsideServedArea(position: Coordinates): Boolean {
+        val area = servedCity?.boundingBox?.takeIf { it.isUsable } ?: return false
+        return position !in area
+    }
+
+    /**
+     * Tells the user their position is off this map, and offers the way out.
+     *
+     * The way out is the network of the conurbation they are actually in, when
+     * the catalogue knows one and its data is published — the same offer
+     * §15.1 makes on opening the application, asked for here rather than
+     * volunteered. Failing that, the city list, which is where one changes map.
+     *
+     * The catalogue read is the one already on the device: no request goes out,
+     * and the position serves this single question before being forgotten
+     * (SPEC §2, C3).
+     */
+    private suspend fun sayWeAreElsewhere(position: Coordinates) {
+        val served = servedCity ?: return
+        val servedLabel = requireContext()
+            .cityLabel(served.network.displayName, served.network.city)
+        // Designating a point is composing a journey in the city served:
+        // changing map there would throw away the endpoint already chosen. All
+        // that is left to do is say where we are.
+        if (isPicking()) {
+            showMessage(getString(R.string.map_outside_city_brief, servedLabel))
+            return
+        }
+        val here = cityAround(position)
+        if (here == null) {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.map_outside_city_title)
+                .setMessage(getString(R.string.map_outside_city_message, servedLabel))
+                .setPositiveButton(R.string.city_choose) { _, _ -> show(CityFragment()) }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
+            return
+        }
+        val installed = container.datasetStore.occupiedBytesOf(here.id) > 0
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.city_here_title)
+            .setMessage(
+                getString(
+                    if (installed) R.string.city_here_installed_body else R.string.city_here_body,
+                    requireContext().cityLabel(here.displayName, here.mainCity),
+                ),
+            )
+            .setPositiveButton(
+                if (installed) R.string.city_here_use else R.string.city_here_install,
+            ) { _, _ -> serve(here.id, installed) }
+            .setNegativeButton(R.string.action_cancel, null)
+            .show()
+    }
+
+    /**
+     * The network serving where the user stands, if it is worth proposing.
+     *
+     * A city whose data is not published yet leads to a download with nothing
+     * to fetch, and the city already in service is not a change of map: neither
+     * is offered.
+     */
+    private suspend fun cityAround(position: Coordinates): CityEntry? =
+        container.cityCatalogueSource.catalogue()
+            .suggestionFor(position)
+            ?.takeIf { it.isAvailable && it.id != servedCity?.network?.id }
+
+    /**
+     * Serves the city the user accepted.
+     *
+     * Its data already there, the map has everything it needs and is built
+     * again on it — this screen loads its style once and keeps it, so the new
+     * city's tiles need a new screen. Otherwise the storage screen takes over:
+     * it announces the weight before fetching anything (SPEC §4.4).
+     */
+    private fun serve(cityId: String, installed: Boolean) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            container.switchToCity(cityId)
+            if (installed) {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.content, MapFragment())
+                    .commit()
+            } else {
+                show(StorageFragment.checkingForUpdates())
+            }
         }
     }
 
@@ -690,6 +810,11 @@ class MapFragment : Fragment() {
     }
 
     private fun showMessage(message: Int) {
+        val views = binding ?: return
+        Snackbar.make(views.root, message, Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun showMessage(message: CharSequence) {
         val views = binding ?: return
         Snackbar.make(views.root, message, Snackbar.LENGTH_LONG).show()
     }

@@ -266,6 +266,23 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **"Locate me" from another city moved the point to a street the user was a
+  hundred kilometres from.** The camera is penned inside the served city's
+  bounding box, so a position outside it did not stop the move: it was clamped
+  to the nearest edge, and the map settled there without a word — the button
+  appeared to have worked, on a wrong point. The map now compares the position
+  it obtains against the city's box, and says the position is off this map
+  rather than framing anything. It comes with the way out: the network of the
+  conurbation one is actually in, when the catalogue on the device knows one
+  whose data is published — the same offer §15.1 makes on opening, asked for
+  this time rather than volunteered, hence not held back by its once-per-session
+  restraint — and the city list otherwise. While the map is being used to
+  designate a journey's endpoint it only says so, a change of city there
+  throwing away what was being composed. The journey screen's own "locate me"
+  button (§7.4) was clamping the same way and now says the same thing, without
+  the offer: it shows one journey in one conurbation. `SPEC.md` §7.1 and §7.4
+  record it.
+
 - **Two cities were named after a neighbour.** The city list offered a "Donkey
   Republic — Rotterdam" that served Katwijk, sixty kilometres away, and a
   "Donkey — Dordrecht" that served Gorinchem while the real Dordrecht sat two

@@ -18,6 +18,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
+import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
@@ -27,6 +28,7 @@ import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyResultBinding
 import io.github.mgdx.rouelibre.ui.BikeFleet
+import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.formatDuration
 import io.github.mgdx.rouelibre.ui.map.MapStyleLoader
@@ -78,6 +80,14 @@ class JourneyResultFragment : Fragment() {
      * measured again on the map as it then stands.
      */
     private var servedArea: ServedAreaCamera? = null
+
+    /**
+     * The city this map is drawn for, once it has been read from disk.
+     *
+     * Kept for the same reason as on the main screen: "locate me" has to know
+     * where the served area stops, since the camera may not leave it.
+     */
+    private var servedCity: CityConfiguration? = null
 
     /**
      * The last position shown, held for the life of the screen only.
@@ -380,6 +390,7 @@ class JourneyResultFragment : Fragment() {
     private fun limitCamera(map: MapLibreMap, hasTiles: Boolean) {
         viewLifecycleOwner.lifecycleScope.launch {
             val city = container.activeCity() ?: return@launch
+            servedCity = city
             val closestZoom = city.map.maxZoom.toDouble() + 1
             map.setMaxZoomPreference(closestZoom)
             val area = city.boundingBox?.takeIf { it.isUsable } ?: return@launch
@@ -447,6 +458,24 @@ class JourneyResultFragment : Fragment() {
             }
             lastKnownPosition = position
             userPositionSource?.setGeoJson(UserPositionMarker.featureFor(position))
+            // Outside the served area the camera cannot follow — it is penned
+            // inside the city's box — and it would settle at the edge nearest
+            // the user, passing that off as where they stand. This screen shows
+            // one journey in one city: saying so is all it can usefully do,
+            // changing city here throwing that journey away.
+            val outside = servedCity?.boundingBox
+                ?.takeIf { it.isUsable }
+                ?.let { position !in it } == true
+            if (outside) {
+                val city = checkNotNull(servedCity).network
+                showMessage(
+                    getString(
+                        R.string.map_outside_city_brief,
+                        requireContext().cityLabel(city.displayName, city.city),
+                    ),
+                )
+                return@launch
+            }
             val map = mapLibreMap ?: return@launch
             map.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(

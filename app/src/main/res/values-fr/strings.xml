@@ -127,6 +127,9 @@
     <string name="map_locate_me">Me localiser</string>
     <string name="map_location_denied">Sans localisation, désigne ton point de départ sur la carte ou par une adresse.</string>
     <string name="map_location_unavailable">Position introuvable. Vérifie que la localisation est activée, puis réessaie.</string>
+    <string name="map_outside_city_title">Tu es ailleurs</string>
+    <string name="map_outside_city_message">Ta position tombe hors de la zone que couvre %1$s : cette carte ne peut pas l\'afficher. Choisis la ville où tu te trouves pour voir ses stations.</string>
+    <string name="map_outside_city_brief">Ta position tombe hors de la zone que couvre %1$s.</string>
 
     <string name="map_needs_tiles_title">La carte a besoin du fond de carte</string>
     <string name="map_needs_tiles_message">Installe le fond de carte depuis l\'écran de stockage. En attendant, la liste des stations reste utilisable.</string>

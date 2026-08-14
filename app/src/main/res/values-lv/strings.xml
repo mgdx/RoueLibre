@@ -102,6 +102,9 @@
     <string name="map_locate_me">Locate me</string>
     <string name="map_location_denied">Without location, pick your starting point on the map or by address.</string>
     <string name="map_location_unavailable">Position unavailable. Check that location is switched on, then try again.</string>
+    <string name="map_outside_city_title">You are elsewhere</string>
+    <string name="map_outside_city_message">Your position falls outside the area %1$s covers, so this map cannot show it. Pick the city you are in to see its stations.</string>
+    <string name="map_outside_city_brief">Your position falls outside the area %1$s covers.</string>
     <string name="map_needs_tiles_title">The map needs its offline tiles</string>
     <string name="map_needs_tiles_message">Install the map data from the storage screen. In the meantime, the station list stays usable.</string>
     <string name="map_needs_city_title">Which city?</string>
