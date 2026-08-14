@@ -24,14 +24,19 @@ DEFAULT_CITY_CONFIG = REPO_ROOT / "config" / "cities" / "lille.json"
 # it — the survey when a city is added, tools/read_fleet.py when an existing
 # one is refreshed. One text, so the two cannot drift apart.
 FLEET_COMMENT = [
-    "What the network lends, as its own feed declares it (§4.1).",
-    "Read from the GBFS vehicle_types feed, never written by hand: a",
-    "bicycle whose propulsion_type is electric is a pedal-assist bike,",
-    "and the interface then marks every bike glyph it draws for this",
-    "city with a bolt (§7).",
-    "A network whose feed declares no vehicle type has no such block at",
-    "all: the application draws the plain bike rather than promising a",
-    "motor nobody verified.",
+    "What the network lends, counted from its own feeds (§4.1).",
+    "Never written by hand, and never taken from the vehicle_types",
+    "declaration alone: a third of the networks declaring a mixed fleet",
+    "have not a single bike of one of the two kinds in circulation.",
+    "tools/read_fleet.py therefore counts the bikes actually available",
+    "at the stations, and writes what it saw.",
+    "\"electricBikes\" marks every bike glyph drawn for this city with a",
+    "bolt (§7); \"mixed\" is what allows the station sheet to split its",
+    "count into mechanical and electric; \"vehicleTypes\" translates the",
+    "identifiers the status feed counts by into the two kinds.",
+    "A network whose feeds let nothing be counted keeps whatever its",
+    "declaration says and is never called mixed: the application draws",
+    "one plain figure rather than a split nobody verified.",
 ]
 
 # One degree of latitude is very nearly this many metres everywhere on the
@@ -214,36 +219,56 @@ class CityConfig:
         """
         return bool(self.document.get("fleet", {}).get("electricBikes", False))
 
-    def update_fleet(self, has_electric_bikes: bool, surveyed_at: str) -> bool:
-        """Record what the network's own feed says it lends.
+    def update_fleet(
+        self,
+        has_electric_bikes: bool,
+        is_mixed: bool,
+        vehicle_types: dict[str, str],
+        bikes_seen: dict[str, int],
+        surveyed_at: str,
+    ) -> bool:
+        """Record what the network lends, as counted from its own feeds.
 
-        Written by ``tools/read_fleet.py`` from the GBFS ``vehicle_types``
-        feed, and by nothing else: this is a fact about the city, and §16
-        wants facts observed rather than typed in.
+        Written by ``tools/read_fleet.py`` and by nothing else: this is a fact
+        about the city, and §16 wants facts observed rather than typed in.
+
+        Args:
+            has_electric_bikes: whether pedal-assist bikes are in circulation.
+            is_mixed: whether both kinds are, in numbers that make an offer.
+            vehicle_types: the kind — ``mechanical``, ``electric`` or
+                ``other`` — of every vehicle type identifier the status feed
+                may count by.
+            bikes_seen: how many of each kind were out at survey time, kept so
+                that the two flags above can be checked rather than believed.
 
         Returns:
             whether the configuration changed, so a caller sweeping three
             hundred cities can name the ones that moved and leave the rest
             untouched — including their file's modification date.
         """
-        stored = self.document.get("fleet")
-        # The documentation counts as content: a comment reworded in one place
-        # must reach the three hundred files it explains, and a run that
-        # changed nothing else must leave their dates alone.
-        unchanged = (
-            stored is not None
-            and stored.get("electricBikes") == has_electric_bikes
-            and stored.get("$comment") == FLEET_COMMENT
-        )
-        if unchanged:
-            return False
         # Placed after the network it describes, where whoever reads the file
         # expects it, rather than appended at the end.
         fleet = {
             "$comment": FLEET_COMMENT,
             "electricBikes": has_electric_bikes,
+            "mixed": is_mixed,
+            "vehicleTypes": dict(sorted(vehicle_types.items())),
+            "bikesSeen": bikes_seen,
             "surveyedAt": surveyed_at,
         }
+        stored = self.document.get("fleet")
+        # The documentation counts as content: a comment reworded in one place
+        # must reach the three hundred files it explains, and a run that
+        # changed nothing else must leave their dates alone. The survey date
+        # is excluded on purpose — it moves at every run by definition, and
+        # rewriting three hundred files to say "counted again, same answer"
+        # would drown the one city that did change.
+        if stored is not None and all(
+            stored.get(key) == value
+            for key, value in fleet.items()
+            if key != "surveyedAt"
+        ):
+            return False
         rebuilt = {}
         for key, value in self.document.items():
             if key == "fleet":

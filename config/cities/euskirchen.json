@@ -20,17 +20,30 @@
   },
   "fleet": {
     "$comment": [
-      "What the network lends, as its own feed declares it (§4.1).",
-      "Read from the GBFS vehicle_types feed, never written by hand: a",
-      "bicycle whose propulsion_type is electric is a pedal-assist bike,",
-      "and the interface then marks every bike glyph it draws for this",
-      "city with a bolt (§7).",
-      "A network whose feed declares no vehicle type has no such block at",
-      "all: the application draws the plain bike rather than promising a",
-      "motor nobody verified."
+      "What the network lends, counted from its own feeds (§4.1).",
+      "Never written by hand, and never taken from the vehicle_types",
+      "declaration alone: a third of the networks declaring a mixed fleet",
+      "have not a single bike of one of the two kinds in circulation.",
+      "tools/read_fleet.py therefore counts the bikes actually available",
+      "at the stations, and writes what it saw.",
+      "\"electricBikes\" marks every bike glyph drawn for this city with a",
+      "bolt (§7); \"mixed\" is what allows the station sheet to split its",
+      "count into mechanical and electric; \"vehicleTypes\" translates the",
+      "identifiers the status feed counts by into the two kinds.",
+      "A network whose feeds let nothing be counted keeps whatever its",
+      "declaration says and is never called mixed: the application draws",
+      "one plain figure rather than a split nobody verified."
     ],
     "electricBikes": true,
-    "surveyedAt": "2026-08-13T20:26:23Z"
+    "mixed": false,
+    "vehicleTypes": {
+      "183": "electric",
+      "204": "electric"
+    },
+    "bikesSeen": {
+      "electric": 63
+    },
+    "surveyedAt": "2026-08-14T11:30:15Z"
   },
   "gbfs": {
     "$comment": [

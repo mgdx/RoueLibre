@@ -148,10 +148,18 @@ def build_document(survey: dict, network_id: str, box: BoundingBox,
     # No block at all where the feed declares no vehicle type: the application
     # then draws the plain bike, and tools/read_fleet.py can fill it in later
     # if the producer starts publishing one.
+    #
+    # What the survey holds is the declaration, and the declaration alone: it
+    # never counted a bike. The city is therefore never born mixed — splitting
+    # a station's count needs bikes seen at stations, which is
+    # tools/read_fleet.py's job on the run that follows.
     fleet = (
         {
             "$comment": FLEET_COMMENT,
             "electricBikes": survey["electricBikes"],
+            "mixed": False,
+            "vehicleTypes": {},
+            "bikesSeen": {},
             "surveyedAt": survey.get("surveyedAt", ""),
         }
         if "electricBikes" in survey
