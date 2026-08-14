@@ -74,6 +74,30 @@
     </style>
 
     <!--
+        Every piece of running text in the application, justified.
+
+        Hung on the theme's `android:textViewStyle` rather than written into
+        each layout: a paragraph that has to remember to ask for the house
+        setting is one that will eventually forget, and the same reasoning
+        already governs the button style below.
+
+        Justification only ever moves lines that have a line after them, so a
+        label, a station name or a figure — anything that fits on one line — is
+        left exactly as it was. What changes is the paragraphs: "about",
+        the welcome pages, the release notes.
+
+        Hyphenation comes with it, and is not decoration. Justifying without
+        it stretches the word spaces of a narrow column until rivers of white
+        run down the page, which on a phone held at arm's length is worse than
+        the ragged edge it replaced. Android turns hyphenation off by default,
+        for speed; here the text is short enough for that not to be a concern.
+    -->
+    <style name="Widget.RoueLibre.Text" parent="Widget.MaterialComponents.TextView">
+        <item name="android:justificationMode">inter_word</item>
+        <item name="android:hyphenationFrequency">normal</item>
+    </style>
+
+    <!--
         The main action button. Material rounds a filled button into a pill
         through a shape role the theme's global radius override does not
         reach — the same escape the toggle below had to close. Left alone, the

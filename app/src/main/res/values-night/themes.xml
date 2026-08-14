@@ -61,6 +61,8 @@
         <item name="textAppearanceLabelMedium">@style/TextAppearance.RoueLibre.Label</item>
 
         <item name="materialButtonStyle">@style/Widget.RoueLibre.Button</item>
+        <!-- Running text is justified, application-wide (SPEC §7). -->
+        <item name="android:textViewStyle">@style/Widget.RoueLibre.Text</item>
 
         <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.RoueLibre</item>
         <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.RoueLibre</item>
