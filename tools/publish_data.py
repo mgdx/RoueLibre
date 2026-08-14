@@ -58,15 +58,22 @@ def run(command: list[str], dry_run: bool = False) -> str:
     return result.stdout
 
 
-def existing_assets(tag: str, repo: str) -> set[str] | None:
-    """The names already online, or None when the release does not exist."""
+def existing_assets(tag: str, repo: str) -> dict[str, int] | None:
+    """The names already online and their sizes, or None when there is no
+    such release.
+
+    The size is what tells a file that is merely already there from one that
+    has been regenerated since: the routing graphs rebuilt with their elevation
+    kept the name they were published under and weigh some ten per cent more.
+    """
     result = subprocess.run(
         ["gh", "release", "view", tag, "--repo", repo, "--json", "assets"],
         capture_output=True, text=True,
     )
     if result.returncode != 0:
         return None
-    return {asset["name"] for asset in json.loads(result.stdout)["assets"]}
+    return {asset["name"]: asset["size"]
+            for asset in json.loads(result.stdout)["assets"]}
 
 
 def read_cities() -> list[dict]:
@@ -102,10 +109,21 @@ def heavy_files(city: dict) -> list[tuple[Path, str]]:
 
 
 def stamp_manifests(cities: list[dict], tag: str, dry_run: bool) -> None:
-    """Rewrite every manifest so its URLs name the release its files are in."""
+    """Rewrite every manifest so its URLs name the release its files are in.
+
+    Also whenever a dataset has been generated since the manifest was written:
+    a manifest is a list of digests, and one older than the files it describes
+    would send the application after a file it then refuses.
+    """
     for city in cities:
         country_tag = f"{tag}-{city['country']}"
-        if city["manifest"].get("releaseTag") == country_tag:
+        written = city["manifest_path"].stat().st_mtime
+        described = max(
+            (source.stat().st_mtime for source, _ in heavy_files(city)
+             if source.exists()),
+            default=0.0,
+        )
+        if city["manifest"].get("releaseTag") == country_tag and written >= described:
             continue
         print(f"  {city['id']} → {country_tag}")
         if dry_run:
@@ -126,7 +144,7 @@ def upload(tag: str, repo: str, title: str, notes: str,
         print(f"  creating release {tag}")
         run(["gh", "release", "create", tag, "--repo", repo,
              "--title", title, "--notes", notes], dry_run)
-        online = set()
+        online = {}
 
     # gh names an asset after the file it is given, so the staging directory
     # holds hard links under the published names — 5.6 GB copied to be renamed
@@ -136,7 +154,7 @@ def upload(tag: str, repo: str, title: str, notes: str,
         stale.unlink()
     pending = []
     for source, name in files:
-        if name in online:
+        if online.get(name) == source.stat().st_size:
             continue
         link = staging / name
         link.hardlink_to(source)
