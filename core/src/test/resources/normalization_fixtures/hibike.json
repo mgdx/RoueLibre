@@ -1,0 +1,797 @@
+{
+  "language": "en",
+  "cases": [
+    {
+      "input": "Abbey Rd",
+      "normalized": "abbey road",
+      "type": null,
+      "name": "abbey road"
+    },
+    {
+      "input": "Baker Street",
+      "normalized": "baker street",
+      "type": null,
+      "name": "baker street"
+    },
+    {
+      "input": "St James's Park",
+      "normalized": "saint james south park",
+      "type": null,
+      "name": "saint james south park"
+    },
+    {
+      "input": "Queen's Crescent",
+      "normalized": "queen south crescent",
+      "type": null,
+      "name": "queen south crescent"
+    },
+    {
+      "input": "Kensington High St",
+      "normalized": "kensington high st",
+      "type": null,
+      "name": "kensington high st"
+    },
+    {
+      "input": "Dr Martin Luther King Jr Blvd",
+      "normalized": "doctor martin luther king jr boulevard",
+      "type": null,
+      "name": "doctor martin luther king jr boulevard"
+    },
+    {
+      "input": "N Michigan Ave",
+      "normalized": "north michigan avenue",
+      "type": null,
+      "name": "north michigan avenue"
+    },
+    {
+      "input": "The Mall",
+      "normalized": "the mall",
+      "type": null,
+      "name": "the mall"
+    },
+    {
+      "input": "Hyde Park Corner",
+      "normalized": "hyde park corner",
+      "type": null,
+      "name": "hyde park corner"
+    },
+    {
+      "input": "Cherry Ln",
+      "normalized": "cherry lane",
+      "type": null,
+      "name": "cherry lane"
+    },
+    {
+      "input": "Mt Pleasant Ter",
+      "normalized": "mount pleasant terrace",
+      "type": null,
+      "name": "mount pleasant terrace"
+    },
+    {
+      "input": "Fifth Avenue",
+      "normalized": "fifth avenue",
+      "type": null,
+      "name": "fifth avenue"
+    },
+    {
+      "input": "E Puainako",
+      "normalized": "east puainako",
+      "type": null,
+      "name": "east puainako"
+    },
+    {
+      "input": "Waianuenue",
+      "normalized": "waianuenue",
+      "type": null,
+      "name": "waianuenue"
+    },
+    {
+      "input": "Boiling Pots",
+      "normalized": "boiling pots",
+      "type": null,
+      "name": "boiling pots"
+    },
+    {
+      "input": "Manta Ray",
+      "normalized": "manta ray",
+      "type": null,
+      "name": "manta ray"
+    },
+    {
+      "input": "Ken Yamase Memorial Stadium",
+      "normalized": "ken yamase memorial stadium",
+      "type": null,
+      "name": "ken yamase memorial stadium"
+    },
+    {
+      "input": "11 Road",
+      "normalized": "11 road",
+      "type": null,
+      "name": "11 road"
+    },
+    {
+      "input": "36th Avenue",
+      "normalized": "36th avenue",
+      "type": null,
+      "name": "36th avenue"
+    },
+    {
+      "input": "A'ulepe Street",
+      "normalized": "a ulepe street",
+      "type": null,
+      "name": "a ulepe street"
+    },
+    {
+      "input": "Ahui Street",
+      "normalized": "ahui street",
+      "type": null,
+      "name": "ahui street"
+    },
+    {
+      "input": "Ainanani Street",
+      "normalized": "ainanani street",
+      "type": null,
+      "name": "ainanani street"
+    },
+    {
+      "input": "Akamai Loop",
+      "normalized": "akamai loop",
+      "type": null,
+      "name": "akamai loop"
+    },
+    {
+      "input": "Akoni Drive",
+      "normalized": "akoni drive",
+      "type": null,
+      "name": "akoni drive"
+    },
+    {
+      "input": "Alaha Street",
+      "normalized": "alaha street",
+      "type": null,
+      "name": "alaha street"
+    },
+    {
+      "input": "Alekona Place",
+      "normalized": "alekona place",
+      "type": null,
+      "name": "alekona place"
+    },
+    {
+      "input": "Aloha Kona Drive",
+      "normalized": "aloha kona drive",
+      "type": null,
+      "name": "aloha kona drive"
+    },
+    {
+      "input": "Anela Street",
+      "normalized": "anela street",
+      "type": null,
+      "name": "anela street"
+    },
+    {
+      "input": "Auwae Road",
+      "normalized": "auwae road",
+      "type": null,
+      "name": "auwae road"
+    },
+    {
+      "input": "Barenaba Lane",
+      "normalized": "barenaba lane",
+      "type": null,
+      "name": "barenaba lane"
+    },
+    {
+      "input": "Camp Pow",
+      "normalized": "camp pow",
+      "type": null,
+      "name": "camp pow"
+    },
+    {
+      "input": "Donahue Road",
+      "normalized": "donahue road",
+      "type": null,
+      "name": "donahue road"
+    },
+    {
+      "input": "East Kawili Street",
+      "normalized": "east kawili street",
+      "type": null,
+      "name": "east kawili street"
+    },
+    {
+      "input": "Ekaha Street",
+      "normalized": "ekaha street",
+      "type": null,
+      "name": "ekaha street"
+    },
+    {
+      "input": "Enos Road",
+      "normalized": "enos road",
+      "type": null,
+      "name": "enos road"
+    },
+    {
+      "input": "Haaheo Road",
+      "normalized": "haaheo road",
+      "type": null,
+      "name": "haaheo road"
+    },
+    {
+      "input": "Hālāwai Way",
+      "normalized": "halawai way",
+      "type": null,
+      "name": "halawai way"
+    },
+    {
+      "input": "Halehau Street",
+      "normalized": "halehau street",
+      "type": null,
+      "name": "halehau street"
+    },
+    {
+      "input": "Hāmiha Street",
+      "normalized": "hamiha street",
+      "type": null,
+      "name": "hamiha street"
+    },
+    {
+      "input": "Haoa Street",
+      "normalized": "haoa street",
+      "type": null,
+      "name": "haoa street"
+    },
+    {
+      "input": "Haʻo Street",
+      "normalized": "haʻo street",
+      "type": null,
+      "name": "haʻo street"
+    },
+    {
+      "input": "Hibiscus Place",
+      "normalized": "hibiscus place",
+      "type": null,
+      "name": "hibiscus place"
+    },
+    {
+      "input": "Hina Street",
+      "normalized": "hina street",
+      "type": null,
+      "name": "hina street"
+    },
+    {
+      "input": "Hoaloha Street",
+      "normalized": "hoaloha street",
+      "type": null,
+      "name": "hoaloha street"
+    },
+    {
+      "input": "Holomalia Street",
+      "normalized": "holomalia street",
+      "type": null,
+      "name": "holomalia street"
+    },
+    {
+      "input": "Hoohoaloha Place",
+      "normalized": "hoohoaloha place",
+      "type": null,
+      "name": "hoohoaloha place"
+    },
+    {
+      "input": "Hoonanea Street",
+      "normalized": "hoonanea street",
+      "type": null,
+      "name": "hoonanea street"
+    },
+    {
+      "input": "Hoʻolaupaʻi Street",
+      "normalized": "hoʻolaupaʻi street",
+      "type": null,
+      "name": "hoʻolaupaʻi street"
+    },
+    {
+      "input": "Huaka Place",
+      "normalized": "huaka place",
+      "type": null,
+      "name": "huaka place"
+    },
+    {
+      "input": "Hui Street",
+      "normalized": "hui street",
+      "type": null,
+      "name": "hui street"
+    },
+    {
+      "input": "Ihupani Place",
+      "normalized": "ihupani place",
+      "type": null,
+      "name": "ihupani place"
+    },
+    {
+      "input": "Iloko Street",
+      "normalized": "iloko street",
+      "type": null,
+      "name": "iloko street"
+    },
+    {
+      "input": "Ipuka Street",
+      "normalized": "ipuka street",
+      "type": null,
+      "name": "ipuka street"
+    },
+    {
+      "input": "Kaala Place",
+      "normalized": "kaala place",
+      "type": null,
+      "name": "kaala place"
+    },
+    {
+      "input": "Kahakai Road",
+      "normalized": "kahakai road",
+      "type": null,
+      "name": "kahakai road"
+    },
+    {
+      "input": "Kahikini Street",
+      "normalized": "kahikini street",
+      "type": null,
+      "name": "kahikini street"
+    },
+    {
+      "input": "Kahula Place",
+      "normalized": "kahula place",
+      "type": null,
+      "name": "kahula place"
+    },
+    {
+      "input": "Kaikuono Street",
+      "normalized": "kaikuono street",
+      "type": null,
+      "name": "kaikuono street"
+    },
+    {
+      "input": "Kaiʻupoho Place",
+      "normalized": "kaiʻupoho place",
+      "type": null,
+      "name": "kaiʻupoho place"
+    },
+    {
+      "input": "Kalanikoa Street",
+      "normalized": "kalanikoa street",
+      "type": null,
+      "name": "kalanikoa street"
+    },
+    {
+      "input": "Kaloko Halia Place",
+      "normalized": "kaloko halia place",
+      "type": null,
+      "name": "kaloko halia place"
+    },
+    {
+      "input": "Kamalei Place",
+      "normalized": "kamalei place",
+      "type": null,
+      "name": "kamalei place"
+    },
+    {
+      "input": "Kamilo Street",
+      "normalized": "kamilo street",
+      "type": null,
+      "name": "kamilo street"
+    },
+    {
+      "input": "Kanoelehua Avenue",
+      "normalized": "kanoelehua avenue",
+      "type": null,
+      "name": "kanoelehua avenue"
+    },
+    {
+      "input": "Kapualani Street",
+      "normalized": "kapualani street",
+      "type": null,
+      "name": "kapualani street"
+    },
+    {
+      "input": "Kaumalumalu Drive",
+      "normalized": "kaumalumalu drive",
+      "type": null,
+      "name": "kaumalumalu drive"
+    },
+    {
+      "input": "Kawili Place",
+      "normalized": "kawili place",
+      "type": null,
+      "name": "kawili place"
+    },
+    {
+      "input": "Kealakaa Street",
+      "normalized": "kealakaa street",
+      "type": null,
+      "name": "kealakaa street"
+    },
+    {
+      "input": "Keawe Street",
+      "normalized": "keawe street",
+      "type": null,
+      "name": "keawe street"
+    },
+    {
+      "input": "Kekela Street",
+      "normalized": "kekela street",
+      "type": null,
+      "name": "kekela street"
+    },
+    {
+      "input": "Keola Place",
+      "normalized": "keola place",
+      "type": null,
+      "name": "keola place"
+    },
+    {
+      "input": "Kiai Place",
+      "normalized": "kiai place",
+      "type": null,
+      "name": "kiai place"
+    },
+    {
+      "input": "Kilapa Street",
+      "normalized": "kilapa street",
+      "type": null,
+      "name": "kilapa street"
+    },
+    {
+      "input": "Kini Loop",
+      "normalized": "kini loop",
+      "type": null,
+      "name": "kini loop"
+    },
+    {
+      "input": "Kipuni Place",
+      "normalized": "kipuni place",
+      "type": null,
+      "name": "kipuni place"
+    },
+    {
+      "input": "Kōko ʻOlua Way",
+      "normalized": "koko ʻolua way",
+      "type": null,
+      "name": "koko ʻolua way"
+    },
+    {
+      "input": "Komomala Drive",
+      "normalized": "komomala drive",
+      "type": null,
+      "name": "komomala drive"
+    },
+    {
+      "input": "Krauss Avenue",
+      "normalized": "krauss avenue",
+      "type": null,
+      "name": "krauss avenue"
+    },
+    {
+      "input": "Kuauli Road",
+      "normalized": "kuauli road",
+      "type": null,
+      "name": "kuauli road"
+    },
+    {
+      "input": "Kukui Place",
+      "normalized": "kukui place",
+      "type": null,
+      "name": "kukui place"
+    },
+    {
+      "input": "Kulana Street",
+      "normalized": "kulana street",
+      "type": null,
+      "name": "kulana street"
+    },
+    {
+      "input": "Kumukoa Street",
+      "normalized": "kumukoa street",
+      "type": null,
+      "name": "kumukoa street"
+    },
+    {
+      "input": "Kupuohi Place",
+      "normalized": "kupuohi place",
+      "type": null,
+      "name": "kupuohi place"
+    },
+    {
+      "input": "Lakana Street",
+      "normalized": "lakana street",
+      "type": null,
+      "name": "lakana street"
+    },
+    {
+      "input": "Laniuma Place",
+      "normalized": "laniuma place",
+      "type": null,
+      "name": "laniuma place"
+    },
+    {
+      "input": "Lawaia Plaza",
+      "normalized": "lawaia plaza",
+      "type": null,
+      "name": "lawaia plaza"
+    },
+    {
+      "input": "Leialoha Street",
+      "normalized": "leialoha street",
+      "type": null,
+      "name": "leialoha street"
+    },
+    {
+      "input": "Leomele Place",
+      "normalized": "leomele place",
+      "type": null,
+      "name": "leomele place"
+    },
+    {
+      "input": "Lihiwai Street",
+      "normalized": "lihiwai street",
+      "type": null,
+      "name": "lihiwai street"
+    },
+    {
+      "input": "Loio Street",
+      "normalized": "loio street",
+      "type": null,
+      "name": "loio street"
+    },
+    {
+      "input": "Lopez Drive",
+      "normalized": "lopez drive",
+      "type": null,
+      "name": "lopez drive"
+    },
+    {
+      "input": "Lulana Street",
+      "normalized": "lulana street",
+      "type": null,
+      "name": "lulana street"
+    },
+    {
+      "input": "Mahi Street",
+      "normalized": "mahi street",
+      "type": null,
+      "name": "mahi street"
+    },
+    {
+      "input": "Maile Street",
+      "normalized": "maile street",
+      "type": null,
+      "name": "maile street"
+    },
+    {
+      "input": "Makana Place",
+      "normalized": "makana place",
+      "type": null,
+      "name": "makana place"
+    },
+    {
+      "input": "Mala Street",
+      "normalized": "mala street",
+      "type": null,
+      "name": "mala street"
+    },
+    {
+      "input": "Māliko Street",
+      "normalized": "maliko street",
+      "type": null,
+      "name": "maliko street"
+    },
+    {
+      "input": "Mamo Lane",
+      "normalized": "mamo lane",
+      "type": null,
+      "name": "mamo lane"
+    },
+    {
+      "input": "Manu Place",
+      "normalized": "manu place",
+      "type": null,
+      "name": "manu place"
+    },
+    {
+      "input": "Mauna Kea Access Road",
+      "normalized": "mauna kea access road",
+      "type": null,
+      "name": "mauna kea access road"
+    },
+    {
+      "input": "Melani Street",
+      "normalized": "melani street",
+      "type": null,
+      "name": "melani street"
+    },
+    {
+      "input": "Menehune Road",
+      "normalized": "menehune road",
+      "type": null,
+      "name": "menehune road"
+    },
+    {
+      "input": "Mililani Street",
+      "normalized": "mililani street",
+      "type": null,
+      "name": "mililani street"
+    },
+    {
+      "input": "Mohouli Street",
+      "normalized": "mohouli street",
+      "type": null,
+      "name": "mohouli street"
+    },
+    {
+      "input": "Muku Place",
+      "normalized": "muku place",
+      "type": null,
+      "name": "muku place"
+    },
+    {
+      "input": "Namaka Place",
+      "normalized": "namaka place",
+      "type": null,
+      "name": "namaka place"
+    },
+    {
+      "input": "Napoʻo Place",
+      "normalized": "napoʻo place",
+      "type": null,
+      "name": "napoʻo place"
+    },
+    {
+      "input": "Nightingale Lane",
+      "normalized": "nightingale lane",
+      "type": null,
+      "name": "nightingale lane"
+    },
+    {
+      "input": "Nohona Street",
+      "normalized": "nohona street",
+      "type": null,
+      "name": "nohona street"
+    },
+    {
+      "input": "North Mea Lanakila Place",
+      "normalized": "north mea lanakila place",
+      "type": null,
+      "name": "north mea lanakila place"
+    },
+    {
+      "input": "Oahu Street",
+      "normalized": "oahu street",
+      "type": null,
+      "name": "oahu street"
+    },
+    {
+      "input": "Ohukea Street",
+      "normalized": "ohukea street",
+      "type": null,
+      "name": "ohukea street"
+    },
+    {
+      "input": "Old Homestead Road",
+      "normalized": "old homestead road",
+      "type": null,
+      "name": "old homestead road"
+    },
+    {
+      "input": "Ololi Road",
+      "normalized": "ololi road",
+      "type": null,
+      "name": "ololi road"
+    },
+    {
+      "input": "Oneawa Way",
+      "normalized": "oneawa way",
+      "type": null,
+      "name": "oneawa way"
+    },
+    {
+      "input": "Opikanalani Place",
+      "normalized": "opikanalani place",
+      "type": null,
+      "name": "opikanalani place"
+    },
+    {
+      "input": "Paipai Street",
+      "normalized": "paipai street",
+      "type": null,
+      "name": "paipai street"
+    },
+    {
+      "input": "Palani Street",
+      "normalized": "palani street",
+      "type": null,
+      "name": "palani street"
+    },
+    {
+      "input": "Pamala Place",
+      "normalized": "pamala place",
+      "type": null,
+      "name": "pamala place"
+    },
+    {
+      "input": "Paulehia Street",
+      "normalized": "paulehia street",
+      "type": null,
+      "name": "paulehia street"
+    },
+    {
+      "input": "Peʻepeʻe Place",
+      "normalized": "peʻepeʻe place",
+      "type": null,
+      "name": "peʻepeʻe place"
+    },
+    {
+      "input": "Piliki Place",
+      "normalized": "piliki place",
+      "type": null,
+      "name": "piliki place"
+    },
+    {
+      "input": "Pohu Place",
+      "normalized": "pohu place",
+      "type": null,
+      "name": "pohu place"
+    },
+    {
+      "input": "Princess Keelikolani Drive",
+      "normalized": "princess keelikolani drive",
+      "type": null,
+      "name": "princess keelikolani drive"
+    },
+    {
+      "input": "Pueo Lane",
+      "normalized": "pueo lane",
+      "type": null,
+      "name": "pueo lane"
+    },
+    {
+      "input": "Puko Street",
+      "normalized": "puko street",
+      "type": null,
+      "name": "puko street"
+    },
+    {
+      "input": "Puohe Street",
+      "normalized": "puohe street",
+      "type": null,
+      "name": "puohe street"
+    },
+    {
+      "input": "Puulani Road",
+      "normalized": "puulani road",
+      "type": null,
+      "name": "puulani road"
+    },
+    {
+      "input": "Railroad Avenue",
+      "normalized": "railroad avenue",
+      "type": null,
+      "name": "railroad avenue"
+    },
+    {
+      "input": "Sarona Road",
+      "normalized": "sarona road",
+      "type": null,
+      "name": "sarona road"
+    },
+    {
+      "input": "South Kopua Road",
+      "normalized": "south kopua road",
+      "type": null,
+      "name": "south kopua road"
+    },
+    {
+      "input": "Stainback Highway",
+      "normalized": "stainback highway",
+      "type": null,
+      "name": "stainback highway"
+    }
+  ]
+}

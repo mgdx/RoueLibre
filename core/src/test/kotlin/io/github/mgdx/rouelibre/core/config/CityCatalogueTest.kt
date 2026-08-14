@@ -238,6 +238,10 @@ class CityCatalogueTest {
                 boundingBox = box,
                 centre = box.centre,
                 stationCount = null,
+                // The hand-made entries of these tests carry no station, so
+                // they are measured on their box — the behaviour a catalogue
+                // produced before the samples existed still gets.
+                stationSamples = emptyList(),
                 gbfsDiscoveryUrl = "https://example.org/gbfs.json",
                 manifestUrl = "https://example.org/manifest.json",
                 dataSizeBytes = null,

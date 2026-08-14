@@ -69,6 +69,9 @@ class CitySearchTest {
             boundingBox = BoundingBox(48.0, 2.0, 49.0, 3.0),
             centre = BoundingBox(48.0, 2.0, 49.0, 3.0).centre,
             stationCount = null,
+            // This test searches by name; where the stations are does not
+            // enter into it.
+            stationSamples = emptyList(),
             gbfsDiscoveryUrl = "https://example.org/gbfs.json",
             manifestUrl = "https://example.org/manifest.json",
             dataSizeBytes = null,

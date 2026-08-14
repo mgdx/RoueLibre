@@ -43,15 +43,19 @@ public data class CityCatalogue(
     /**
      * The cities ranked by proximity to [position].
      *
-     * Those whose box contains the point come first, the tightest at the head:
-     * two networks can overlap, and the more plausible one is then the one
-     * whose centre we are nearest. The others follow, by growing distance to
-     * their box.
+     * The nearest station first, and not the nearest rectangle: a regional
+     * network's box covers hundreds of municipalities that hold no bike, and
+     * ranking on it put a network 130 km from its own stations at the head of
+     * the list. Where the entry carries no station — a catalogue older than
+     * that field — its box answers instead, which is what this did before.
+     *
+     * Two networks can serve the same place; the one whose centre we are
+     * nearest then comes first.
      */
     public fun rank(position: Coordinates): List<CityEntry> = cities
         .sortedWith(
             compareBy(
-                { it.boundingBox.distanceOutsideInMetres(position) },
+                { it.distanceInMetresFrom(position) },
                 { it.centre.distanceInMetresTo(position) },
                 // On a tie, a stable order rather than the file's own.
                 { it.displayName },
@@ -68,7 +72,7 @@ public data class CityCatalogue(
      */
     public fun suggestionFor(position: Coordinates): CityEntry? =
         rank(position).firstOrNull { entry ->
-            entry.boundingBox.distanceOutsideInMetres(position) <= SUGGESTION_RADIUS_METRES
+            entry.distanceInMetresFrom(position) <= SUGGESTION_RADIUS_METRES
         }
 
     public companion object {
@@ -109,6 +113,20 @@ public data class CityEntry(
     public val boundingBox: BoundingBox,
     public val centre: Coordinates,
     public val stationCount: Int?,
+    /**
+     * A handful of station positions, spread through the network.
+     *
+     * They answer the only question a rectangle answers badly: how far away
+     * the bikes are. A network serving a whole region encloses a box that is
+     * mostly empty — Vélo Fluo puts one station per town of the Grand Est,
+     * 261 km by 327 — and someone standing in the middle of the Morvan is
+     * 46 km from that box and 130 km from its nearest bike. Proximity is
+     * therefore measured to these points, never to the rectangle.
+     *
+     * Empty on a catalogue produced before this field existed; the box then
+     * stands in for them, which is the old behaviour rather than none.
+     */
+    public val stationSamples: List<Coordinates>,
     public val gbfsDiscoveryUrl: String,
     public val manifestUrl: String,
     /**
@@ -125,6 +143,18 @@ public data class CityEntry(
     /** True if this city's data is published and downloadable. */
     public val isAvailable: Boolean
         get() = dataSizeBytes != null && dataSizeBytes > 0
+
+    /**
+     * How far [position] is from this network, in metres.
+     *
+     * The distance to the nearest station known of it — the samples are spread
+     * through the network, so the figure is an upper bound of the real one and
+     * never flatters a network whose bikes are far away. Without samples, the
+     * distance to the box, as before.
+     */
+    public fun distanceInMetresFrom(position: Coordinates): Double =
+        stationSamples.minOfOrNull { it.distanceInMetresTo(position) }
+            ?: boundingBox.distanceOutsideInMetres(position)
 }
 
 /**
@@ -215,6 +245,7 @@ private data class CityEntryDocument(
     val centreLatitude: Double? = null,
     val centreLongitude: Double? = null,
     val stationCount: Int? = null,
+    val stationSamples: List<List<Double>> = emptyList(),
     val gbfsDiscoveryUrl: String,
     val manifestUrl: String,
     val dataSizeBytes: Long? = null,
@@ -242,6 +273,13 @@ private data class CityEntryDocument(
             boundingBox = box,
             centre = centre ?: box.centre,
             stationCount = stationCount,
+            // A malformed pair is dropped rather than fatal: the catalogue is
+            // produced elsewhere, and one bad coordinate must not cost a city
+            // its entry — the others still say where the network is.
+            stationSamples = stationSamples.mapNotNull { pair ->
+                if (pair.size != 2) return@mapNotNull null
+                runCatching { Coordinates(pair[0], pair[1]) }.getOrNull()
+            },
             gbfsDiscoveryUrl = gbfsDiscoveryUrl,
             manifestUrl = manifestUrl,
             dataSizeBytes = dataSizeBytes,

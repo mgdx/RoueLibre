@@ -1,0 +1,773 @@
+{
+  "language": "ar",
+  "cases": [
+    {
+      "input": "شارع الملك فيصل",
+      "normalized": "شارع الملك فيصل",
+      "type": "شارع",
+      "name": "الملك فيصل"
+    },
+    {
+      "input": "شارع الشيخ زايد",
+      "normalized": "شارع الشيخ زايد",
+      "type": "شارع",
+      "name": "الشيخ زايد"
+    },
+    {
+      "input": "طريق الملك عبدالعزيز",
+      "normalized": "طريق الملك عبدالعزيز",
+      "type": "طريق",
+      "name": "الملك عبدالعزيز"
+    },
+    {
+      "input": "ميدان التحرير",
+      "normalized": "ميدان التحرير",
+      "type": "ميدان",
+      "name": "التحرير"
+    },
+    {
+      "input": "جادة الأمير محمد",
+      "normalized": "جاده الامير محمد",
+      "type": null,
+      "name": "جاده الامير محمد"
+    },
+    {
+      "input": "كورنيش الدوحة",
+      "normalized": "كورنيش الدوحه",
+      "type": "كورنيش",
+      "name": "الدوحه"
+    },
+    {
+      "input": "نهج الحبيب بورقيبة",
+      "normalized": "نهج الحبيب بورقيبه",
+      "type": "نهج",
+      "name": "الحبيب بورقيبه"
+    },
+    {
+      "input": "زنقة الأطلس",
+      "normalized": "زنقه الاطلس",
+      "type": null,
+      "name": "زنقه الاطلس"
+    },
+    {
+      "input": "990",
+      "normalized": "990",
+      "type": null,
+      "name": "990"
+    },
+    {
+      "input": "Tahira Restauran",
+      "normalized": "tahira restauran",
+      "type": null,
+      "name": "tahira restauran"
+    },
+    {
+      "input": "مسجد سراقة بن مالك",
+      "normalized": "مسجد سراقه بن مالك",
+      "type": null,
+      "name": "مسجد سراقه بن مالك"
+    },
+    {
+      "input": "FIFA FUN FEST BUS HUB",
+      "normalized": "fifa fun fest bus hub",
+      "type": null,
+      "name": "fifa fun fest bus hub"
+    },
+    {
+      "input": "Gate 4 - Al Barsha Pond Park",
+      "normalized": "gate 4 al barsha pond park",
+      "type": null,
+      "name": "gate 4 al barsha pond park"
+    },
+    {
+      "input": "15",
+      "normalized": "15",
+      "type": null,
+      "name": "15"
+    },
+    {
+      "input": "296",
+      "normalized": "296",
+      "type": null,
+      "name": "296"
+    },
+    {
+      "input": "49 Street",
+      "normalized": "49 street",
+      "type": null,
+      "name": "49 street"
+    },
+    {
+      "input": "76th Street",
+      "normalized": "76th street",
+      "type": null,
+      "name": "76th street"
+    },
+    {
+      "input": "Abu Hail Street",
+      "normalized": "abu hail street",
+      "type": null,
+      "name": "abu hail street"
+    },
+    {
+      "input": "Al Fosool Street",
+      "normalized": "al fosool street",
+      "type": null,
+      "name": "al fosool street"
+    },
+    {
+      "input": "Al Maayesha",
+      "normalized": "al maayesha",
+      "type": null,
+      "name": "al maayesha"
+    },
+    {
+      "input": "Al Quoz 1 Street",
+      "normalized": "al quoz 1 street",
+      "type": null,
+      "name": "al quoz 1 street"
+    },
+    {
+      "input": "Alsahab",
+      "normalized": "alsahab",
+      "type": null,
+      "name": "alsahab"
+    },
+    {
+      "input": "Cinematic Adventure Street",
+      "normalized": "cinematic adventure street",
+      "type": null,
+      "name": "cinematic adventure street"
+    },
+    {
+      "input": "Fehad Al-gahtani",
+      "normalized": "fehad al gahtani",
+      "type": null,
+      "name": "fehad al gahtani"
+    },
+    {
+      "input": "Ibrahim Bin Saad Street",
+      "normalized": "ibrahim bin saad street",
+      "type": null,
+      "name": "ibrahim bin saad street"
+    },
+    {
+      "input": "Mantis",
+      "normalized": "mantis",
+      "type": null,
+      "name": "mantis"
+    },
+    {
+      "input": "No. 166",
+      "normalized": "no 166",
+      "type": null,
+      "name": "no 166"
+    },
+    {
+      "input": "No.519",
+      "normalized": "no 519",
+      "type": null,
+      "name": "no 519"
+    },
+    {
+      "input": "PV-76",
+      "normalized": "pv 76",
+      "type": null,
+      "name": "pv 76"
+    },
+    {
+      "input": "Seven Sands",
+      "normalized": "seven sands",
+      "type": null,
+      "name": "seven sands"
+    },
+    {
+      "input": "Wadi Al Taliha",
+      "normalized": "wadi al taliha",
+      "type": null,
+      "name": "wadi al taliha"
+    },
+    {
+      "input": "إبراهيم بن المفلح",
+      "normalized": "ابراهيم بن المفلح",
+      "type": null,
+      "name": "ابراهيم بن المفلح"
+    },
+    {
+      "input": "ابن الحلبي",
+      "normalized": "ابن الحلبي",
+      "type": null,
+      "name": "ابن الحلبي"
+    },
+    {
+      "input": "ابن تقي",
+      "normalized": "ابن تقي",
+      "type": null,
+      "name": "ابن تقي"
+    },
+    {
+      "input": "ابن عديس",
+      "normalized": "ابن عديس",
+      "type": null,
+      "name": "ابن عديس"
+    },
+    {
+      "input": "ابو حيان",
+      "normalized": "ابو حيان",
+      "type": null,
+      "name": "ابو حيان"
+    },
+    {
+      "input": "أبي السعود العطار",
+      "normalized": "ابي السعود العطار",
+      "type": null,
+      "name": "ابي السعود العطار"
+    },
+    {
+      "input": "أبي القاسم بن الشيخ",
+      "normalized": "ابي القاسم بن الشيخ",
+      "type": null,
+      "name": "ابي القاسم بن الشيخ"
+    },
+    {
+      "input": "ابي حديد",
+      "normalized": "ابي حديد",
+      "type": null,
+      "name": "ابي حديد"
+    },
+    {
+      "input": "أبي عقيل الزرقي",
+      "normalized": "ابي عقيل الزرقي",
+      "type": null,
+      "name": "ابي عقيل الزرقي"
+    },
+    {
+      "input": "أحمد الثعلبي",
+      "normalized": "احمد الثعلبي",
+      "type": null,
+      "name": "احمد الثعلبي"
+    },
+    {
+      "input": "أحمد بن عيسى",
+      "normalized": "احمد بن عيسي",
+      "type": null,
+      "name": "احمد بن عيسي"
+    },
+    {
+      "input": "إسماعيل السدي",
+      "normalized": "اسماعيل السدي",
+      "type": null,
+      "name": "اسماعيل السدي"
+    },
+    {
+      "input": "الأحوص الأنصاري",
+      "normalized": "الاحوص الانصاري",
+      "type": null,
+      "name": "الاحوص الانصاري"
+    },
+    {
+      "input": "الأمير عبدالله بن سعود بن فيصل",
+      "normalized": "الامير عبدالله بن سعود بن فيصل",
+      "type": null,
+      "name": "الامير عبدالله بن سعود بن فيصل"
+    },
+    {
+      "input": "البصيرية",
+      "normalized": "البصيريه",
+      "type": null,
+      "name": "البصيريه"
+    },
+    {
+      "input": "الجتلاوية",
+      "normalized": "الجتلاويه",
+      "type": null,
+      "name": "الجتلاويه"
+    },
+    {
+      "input": "الحبيل",
+      "normalized": "الحبيل",
+      "type": null,
+      "name": "الحبيل"
+    },
+    {
+      "input": "الحلية",
+      "normalized": "الحليه",
+      "type": null,
+      "name": "الحليه"
+    },
+    {
+      "input": "الخوير",
+      "normalized": "الخوير",
+      "type": null,
+      "name": "الخوير"
+    },
+    {
+      "input": "الردف",
+      "normalized": "الردف",
+      "type": null,
+      "name": "الردف"
+    },
+    {
+      "input": "الساعة",
+      "normalized": "الساعه",
+      "type": null,
+      "name": "الساعه"
+    },
+    {
+      "input": "الشامي",
+      "normalized": "الشامي",
+      "type": null,
+      "name": "الشامي"
+    },
+    {
+      "input": "الشيخ محمد بن مانع",
+      "normalized": "الشيخ محمد بن مانع",
+      "type": null,
+      "name": "الشيخ محمد بن مانع"
+    },
+    {
+      "input": "الطفيل بن زيد",
+      "normalized": "الطفيل بن زيد",
+      "type": null,
+      "name": "الطفيل بن زيد"
+    },
+    {
+      "input": "العقلية",
+      "normalized": "العقليه",
+      "type": null,
+      "name": "العقليه"
+    },
+    {
+      "input": "الفرش",
+      "normalized": "الفرش",
+      "type": null,
+      "name": "الفرش"
+    },
+    {
+      "input": "القلاع",
+      "normalized": "القلاع",
+      "type": null,
+      "name": "القلاع"
+    },
+    {
+      "input": "المحب الحلبي",
+      "normalized": "المحب الحلبي",
+      "type": null,
+      "name": "المحب الحلبي"
+    },
+    {
+      "input": "المضيق",
+      "normalized": "المضيق",
+      "type": null,
+      "name": "المضيق"
+    },
+    {
+      "input": "المويسمية",
+      "normalized": "المويسميه",
+      "type": null,
+      "name": "المويسميه"
+    },
+    {
+      "input": "الهَيْثَم",
+      "normalized": "الهيثم",
+      "type": null,
+      "name": "الهيثم"
+    },
+    {
+      "input": "أم حبيبة بنت أبي سفيان",
+      "normalized": "ام حبيبه بنت ابي سفيان",
+      "type": null,
+      "name": "ام حبيبه بنت ابي سفيان"
+    },
+    {
+      "input": "برقين",
+      "normalized": "برقين",
+      "type": null,
+      "name": "برقين"
+    },
+    {
+      "input": "بير سفيان",
+      "normalized": "بير سفيان",
+      "type": null,
+      "name": "بير سفيان"
+    },
+    {
+      "input": "جبل الكور",
+      "normalized": "جبل الكور",
+      "type": null,
+      "name": "جبل الكور"
+    },
+    {
+      "input": "جندب بن عمار",
+      "normalized": "جندب بن عمار",
+      "type": null,
+      "name": "جندب بن عمار"
+    },
+    {
+      "input": "حسين البوري",
+      "normalized": "حسين البوري",
+      "type": null,
+      "name": "حسين البوري"
+    },
+    {
+      "input": "خالد بن احمد",
+      "normalized": "خالد بن احمد",
+      "type": null,
+      "name": "خالد بن احمد"
+    },
+    {
+      "input": "درب شعيب دقيل",
+      "normalized": "درب شعيب دقيل",
+      "type": null,
+      "name": "درب شعيب دقيل"
+    },
+    {
+      "input": "ردمية الفقير - رغبة",
+      "normalized": "ردميه الفقير رغبه",
+      "type": null,
+      "name": "ردميه الفقير رغبه"
+    },
+    {
+      "input": "رقم 283",
+      "normalized": "رقم 283",
+      "type": null,
+      "name": "رقم 283"
+    },
+    {
+      "input": "رقم 86",
+      "normalized": "رقم 86",
+      "type": null,
+      "name": "رقم 86"
+    },
+    {
+      "input": "زياد الباهلي",
+      "normalized": "زياد الباهلي",
+      "type": null,
+      "name": "زياد الباهلي"
+    },
+    {
+      "input": "ساموده",
+      "normalized": "ساموده",
+      "type": null,
+      "name": "ساموده"
+    },
+    {
+      "input": "سكة اللؤلؤ",
+      "normalized": "سكه اللولو",
+      "type": null,
+      "name": "سكه اللولو"
+    },
+    {
+      "input": "سويد بن حارثة",
+      "normalized": "سويد بن حارثه",
+      "type": null,
+      "name": "سويد بن حارثه"
+    },
+    {
+      "input": "شارع 1242",
+      "normalized": "شارع 1242",
+      "type": "شارع",
+      "name": "1242"
+    },
+    {
+      "input": "شارع 172",
+      "normalized": "شارع 172",
+      "type": "شارع",
+      "name": "172"
+    },
+    {
+      "input": "شارع 3080",
+      "normalized": "شارع 3080",
+      "type": "شارع",
+      "name": "3080"
+    },
+    {
+      "input": "شارع 522",
+      "normalized": "شارع 522",
+      "type": "شارع",
+      "name": "522"
+    },
+    {
+      "input": "شارع 841",
+      "normalized": "شارع 841",
+      "type": "شارع",
+      "name": "841"
+    },
+    {
+      "input": "شارع ابن قدامة",
+      "normalized": "شارع ابن قدامه",
+      "type": "شارع",
+      "name": "ابن قدامه"
+    },
+    {
+      "input": "شارع أحمد بن ماجد",
+      "normalized": "شارع احمد بن ماجد",
+      "type": "شارع",
+      "name": "احمد بن ماجد"
+    },
+    {
+      "input": "شارع الأمطار",
+      "normalized": "شارع الامطار",
+      "type": "شارع",
+      "name": "الامطار"
+    },
+    {
+      "input": "شارع الثاملة",
+      "normalized": "شارع الثامله",
+      "type": "شارع",
+      "name": "الثامله"
+    },
+    {
+      "input": "شارع الحميد",
+      "normalized": "شارع الحميد",
+      "type": "شارع",
+      "name": "الحميد"
+    },
+    {
+      "input": "شارع الرضحية",
+      "normalized": "شارع الرضحيه",
+      "type": "شارع",
+      "name": "الرضحيه"
+    },
+    {
+      "input": "شارع السيف 2",
+      "normalized": "شارع السيف 2",
+      "type": "شارع",
+      "name": "السيف 2"
+    },
+    {
+      "input": "شارع الطيف",
+      "normalized": "شارع الطيف",
+      "type": "شارع",
+      "name": "الطيف"
+    },
+    {
+      "input": "شارع الفَضِيلة 1",
+      "normalized": "شارع الفضيله 1",
+      "type": "شارع",
+      "name": "الفضيله 1"
+    },
+    {
+      "input": "شارع المحاوشية",
+      "normalized": "شارع المحاوشيه",
+      "type": "شارع",
+      "name": "المحاوشيه"
+    },
+    {
+      "input": "شارع المَنيُور",
+      "normalized": "شارع المنيور",
+      "type": "شارع",
+      "name": "المنيور"
+    },
+    {
+      "input": "شارع الوِقَايَة",
+      "normalized": "شارع الوقايه",
+      "type": "شارع",
+      "name": "الوقايه"
+    },
+    {
+      "input": "شارع بُرْق الكُود",
+      "normalized": "شارع برق الكود",
+      "type": "شارع",
+      "name": "برق الكود"
+    },
+    {
+      "input": "شارع جبل العين",
+      "normalized": "شارع جبل العين",
+      "type": "شارع",
+      "name": "جبل العين"
+    },
+    {
+      "input": "شارع حِصن الغَيل",
+      "normalized": "شارع حصن الغيل",
+      "type": "شارع",
+      "name": "حصن الغيل"
+    },
+    {
+      "input": "شارع رزنامة",
+      "normalized": "شارع رزنامه",
+      "type": "شارع",
+      "name": "رزنامه"
+    },
+    {
+      "input": "شارع زيد بن عاصم بن عمرو بن عوف",
+      "normalized": "شارع زيد بن عاصم بن عمرو بن عوف",
+      "type": "شارع",
+      "name": "زيد بن عاصم بن عمرو بن عوف"
+    },
+    {
+      "input": "شارع صخر",
+      "normalized": "شارع صخر",
+      "type": "شارع",
+      "name": "صخر"
+    },
+    {
+      "input": "شارع عبدالملك بن عباس",
+      "normalized": "شارع عبدالملك بن عباس",
+      "type": "شارع",
+      "name": "عبدالملك بن عباس"
+    },
+    {
+      "input": "شارع غُوَيفَة",
+      "normalized": "شارع غويفه",
+      "type": "شارع",
+      "name": "غويفه"
+    },
+    {
+      "input": "شارع محمد بن كاسب المهيري",
+      "normalized": "شارع محمد بن كاسب المهيري",
+      "type": "شارع",
+      "name": "محمد بن كاسب المهيري"
+    },
+    {
+      "input": "شارع نِقا مِرَيخ",
+      "normalized": "شارع نقا مريخ",
+      "type": "شارع",
+      "name": "نقا مريخ"
+    },
+    {
+      "input": "شارع وادي وج",
+      "normalized": "شارع وادي وج",
+      "type": "شارع",
+      "name": "وادي وج"
+    },
+    {
+      "input": "شمس الدين بن عبدالملك",
+      "normalized": "شمس الدين بن عبدالملك",
+      "type": null,
+      "name": "شمس الدين بن عبدالملك"
+    },
+    {
+      "input": "طاهر البقال",
+      "normalized": "طاهر البقال",
+      "type": null,
+      "name": "طاهر البقال"
+    },
+    {
+      "input": "طريق حرس الحدود القطري",
+      "normalized": "طريق حرس الحدود القطري",
+      "type": "طريق",
+      "name": "حرس الحدود القطري"
+    },
+    {
+      "input": "عامر بن وائلة",
+      "normalized": "عامر بن وايله",
+      "type": null,
+      "name": "عامر بن وايله"
+    },
+    {
+      "input": "عبدالرحمن بن صخر",
+      "normalized": "عبدالرحمن بن صخر",
+      "type": null,
+      "name": "عبدالرحمن بن صخر"
+    },
+    {
+      "input": "عبدالله آل خلف",
+      "normalized": "عبدالله ال خلف",
+      "type": null,
+      "name": "عبدالله ال خلف"
+    },
+    {
+      "input": "عبدالله حسين ثعيل الرحماني البقمي",
+      "normalized": "عبدالله حسين ثعيل الرحماني البقمي",
+      "type": null,
+      "name": "عبدالله حسين ثعيل الرحماني البقمي"
+    },
+    {
+      "input": "عدي بن زيد",
+      "normalized": "عدي بن زيد",
+      "type": null,
+      "name": "عدي بن زيد"
+    },
+    {
+      "input": "علي بن ابي القاسم",
+      "normalized": "علي بن ابي القاسم",
+      "type": null,
+      "name": "علي بن ابي القاسم"
+    },
+    {
+      "input": "عمرو بن الاهتم",
+      "normalized": "عمرو بن الاهتم",
+      "type": null,
+      "name": "عمرو بن الاهتم"
+    },
+    {
+      "input": "غضية",
+      "normalized": "غضيه",
+      "type": null,
+      "name": "غضيه"
+    },
+    {
+      "input": "قطرانه",
+      "normalized": "قطرانه",
+      "type": null,
+      "name": "قطرانه"
+    },
+    {
+      "input": "مالك النضيري",
+      "normalized": "مالك النضيري",
+      "type": null,
+      "name": "مالك النضيري"
+    },
+    {
+      "input": "محمد المشاري",
+      "normalized": "محمد المشاري",
+      "type": null,
+      "name": "محمد المشاري"
+    },
+    {
+      "input": "محمد بن مبارك",
+      "normalized": "محمد بن مبارك",
+      "type": null,
+      "name": "محمد بن مبارك"
+    },
+    {
+      "input": "مسجد",
+      "normalized": "مسجد",
+      "type": null,
+      "name": "مسجد"
+    },
+    {
+      "input": "ملك الليل",
+      "normalized": "ملك الليل",
+      "type": null,
+      "name": "ملك الليل"
+    },
+    {
+      "input": "ممر 609",
+      "normalized": "ممر 609",
+      "type": null,
+      "name": "ممر 609"
+    },
+    {
+      "input": "ممر عبدالله بن هلال",
+      "normalized": "ممر عبدالله بن هلال",
+      "type": null,
+      "name": "ممر عبدالله بن هلال"
+    },
+    {
+      "input": "نبوان",
+      "normalized": "نبوان",
+      "type": null,
+      "name": "نبوان"
+    },
+    {
+      "input": "وادي الأحاسب",
+      "normalized": "وادي الاحاسب",
+      "type": null,
+      "name": "وادي الاحاسب"
+    },
+    {
+      "input": "وادي قريات العطن",
+      "normalized": "وادي قريات العطن",
+      "type": null,
+      "name": "وادي قريات العطن"
+    },
+    {
+      "input": "يعقوب الصفار",
+      "normalized": "يعقوب الصفار",
+      "type": null,
+      "name": "يعقوب الصفار"
+    }
+  ]
+}

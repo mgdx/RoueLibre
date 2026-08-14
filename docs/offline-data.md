@@ -22,6 +22,15 @@ Lyon 85, Paris 211. Paris weighs more because it is Paris — 1.24 million
 building footprints against 78,000 for Lille — and the rendering rules stay
 common to all.
 
+**Area does not decide weight, and it decides nothing here.** A network is
+never refused for the ground its stations cover: Kiel's reaches from Rendsburg
+to Plön over 2,672 km², four times Lille's, and its base map weighs 50 MB
+against Lille's 35 — countryside costs almost nothing to draw. The **300 MB of `SPEC.md` §4.2** is the
+figure a conurbation is designed for, and every one of them stays under it. A
+network serving a whole region legitimately exceeds it — Vélo Fluo's one
+station per town of the Grand Est weighs 1,343 MB — and is served anyway, its
+weight announced before the download rather than hidden behind a refusal.
+
 ## Adding a city
 
 No data specific to a conurbation exists in the code: no URL, no bounding box,

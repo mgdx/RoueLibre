@@ -211,8 +211,11 @@ sources already downloaded.
 | Lightest | Auray, **3.2 MB** |
 | Heaviest | Paris, **143.0 MB** — 114.9 of base map, 20.9 of addresses, 7.2 of routing |
 
-Paris is the only one over 60 MB, and it stays under the 200 MB ceiling
-`SPEC.md` §4.2 sets on the base map. Its box holds 1.24 million building
+Paris is the only one over 60 MB, and it stays well under the 300 MB
+`SPEC.md` §4.2 sets as the figure to design for. Since a network is no longer
+refused for the ground its stations cover, regional feeds have joined the list
+and some exceed that figure — their weight is announced before the download,
+never worked around. Its box holds 1.24 million building
 footprints against 78,000 for Lille, which is the whole of the difference.
 
 ## Regenerating the embedded fonts

@@ -104,6 +104,11 @@ def describe(config_path: Path, data_dir: Path) -> dict:
         "mainCity": network.get("city"),
         "country": document.get("country", "FR"),
         "stationCount": box.get("stationCount"),
+        # Where the bikes actually are. The box of a regional network is mostly
+        # empty — one station per town of a region encloses hundreds of
+        # municipalities holding none — so the application measures how near a
+        # network is on these points and never on the rectangle.
+        "stationSamples": document.get("stationSamples", []),
         "boundingBox": {
             "south": box["south"], "west": box["west"],
             "north": box["north"], "east": box["east"],

@@ -153,6 +153,37 @@ also records what has no visible effect.
 
 ### Changed
 
+- **How near a network is, is measured on its stations rather than on its
+  rectangle.** The application offers the network of the conurbation one
+  happens to be in; it read that off the reference box, which describes a
+  conurbation well and a region not at all. With regional feeds now served, a
+  position in the middle of the Morvan was offered 1.4 GB of map for Vélo Fluo,
+  whose box passes 46 km away and whose nearest bike is 130. Each city
+  configuration therefore carries eight station positions, spread through the
+  network — `tools/sample_stations.py` reads them from the feed, and the
+  catalogue carries them on — and both the ranking and the fifty-kilometre
+  offer measure the distance to the nearest of them. Seclin still gets V'lille
+  at 8.3 km; the Morvan gets nothing at 72.7. A catalogue produced before the
+  field exists falls back on the box, which is the previous behaviour rather
+  than none. The catalogue grows from 182 to 389 kB.
+
+- **The base map's 300 MB is a figure to design for, not a gate.** It was a
+  200 MB ceiling; raising it to 300 was not enough to make it true, because a
+  network serving a whole region legitimately exceeds any such figure and
+  refusing its map would be refusing the network. Twenty-four cities generated
+  in one run measured what a rectangle never told: Dubai's box is the second
+  widest of them all, 162,065 km², and its map weighs 160 MB because it is
+  desert from edge to edge, while Brussels weighs 932 MB over a box seven times
+  smaller because Belgium is built upon everywhere. Between Hilo at 2.4 kB/km²
+  and Cologne at 44 there is a factor of eighteen at comparable areas. Every
+  conurbation stays well under the figure — the heaviest of the three hundred
+  is 172 MB — and six regional networks stand above it, their weight announced
+  before the download like everyone else's. The building layer, which §4.2
+  names as the lever, was measured rather than assumed: moved to zoom 16 it
+  returned 15%, which brings a 323 MB map under the figure and does nothing for
+  a 932 MB one. It stays unpulled — it would change the map of every city for
+  the sake of six.
+
 - **A network is no longer refused for the ground it covers.** The survey used
   to reject any feed whose stations enclosed more than 2,500 km², on the
   grounds that such a rectangle is a region rather than a conurbation. Kiel
@@ -168,6 +199,18 @@ also records what has no visible effect.
   still has to have its data produced.
 
 ### Added
+
+- **Twenty-six networks join the ones served**, all of them feeds the area rule
+  used to refuse: Capital Bikeshare in Washington, BIXI Montréal, Antwerp's and
+  Brussels' Donkey and Blue-bike, METROROWER in Katowice, MEVO in Gdańsk, MyRadl
+  in Munich, Lyft Bike in San Jose, Careem in Dubai, nextbike in Lucerne,
+  Nicosia, Sarajevo and Zagreb, Beryl in Cornwall, Bora in Viseu, HIBike in
+  Hilo, Lovesharing in the Canaries, and others. Twenty-four have their data
+  produced — 6.8 GB in all — of which six weigh more than the 300 MB ceiling
+  and are therefore listed without data until the question of the building
+  layer is settled. Vienna and Zurich wait on Geofabrik: two of the extracts
+  their boxes need still carry the previous day's snapshot, and merging two
+  days leaves the same node twice.
 
 - **Kiel is served** (`config/cities/kiel.json`): Donkey Republic, 203 stations
   and 4,118 docks over the city and its region, from Rendsburg to Plön, with

@@ -39,6 +39,34 @@ FLEET_COMMENT = [
 METRES_PER_DEGREE_LATITUDE = 111_320.0
 
 
+# How many station positions a configuration carries. Eight describes a network
+# stretched over a region along its whole length — one station per town of the
+# Grand Est, 261 km by 327 — for a hundred and sixty bytes, and the application
+# measures on them how near a network is (§15.1).
+STATION_SAMPLE_COUNT = 8
+
+# Five decimals is a metre. A station's position is known to far less than
+# that, and the figure decides a distance in kilometres.
+SAMPLE_PRECISION = 5
+
+
+def sample_positions(stations: list[dict], count: int = STATION_SAMPLE_COUNT) -> list[list[float]]:
+    """Take positions spread through a station list, in feed order.
+
+    At regular intervals rather than the first ones: a feed often lists a
+    network district by district, and the first eight would describe one
+    neighbourhood of a conurbation that spreads over sixty municipalities.
+    """
+    if not stations:
+        return []
+    step = max(1, len(stations) // count)
+    picked = stations[::step][:count]
+    return [
+        [round(station["lat"], SAMPLE_PRECISION), round(station["lon"], SAMPLE_PRECISION)]
+        for station in picked
+    ]
+
+
 @dataclass(frozen=True)
 class BoundingBox:
     """A geographic rectangle in WGS 84 decimal degrees."""
@@ -151,6 +179,30 @@ class CityConfig:
     @property
     def format_version(self) -> int:
         return self.document["dataRelease"]["formatVersion"]
+
+    def update_station_samples(self, samples: list[list[float]]) -> bool:
+        """Record where the stations are, for the proposal of §15.1.
+
+        Written right after the box, which comes from the same stations and the
+        same fetch.
+
+        Returns:
+            whether the configuration changed, so a sweep over three hundred
+            cities names the ones that moved and leaves the rest untouched.
+        """
+        if self.document.get("stationSamples") == samples:
+            return False
+        rebuilt = {}
+        for key, value in self.document.items():
+            if key == "stationSamples":
+                continue
+            rebuilt[key] = value
+            if key == "boundingBox":
+                rebuilt["stationSamples"] = samples
+        if "stationSamples" not in rebuilt:
+            rebuilt["stationSamples"] = samples
+        self.document = rebuilt
+        return True
 
     @property
     def has_electric_bikes(self) -> bool:

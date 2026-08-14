@@ -1,0 +1,791 @@
+{
+  "language": "pt",
+  "cases": [
+    {
+      "input": "Rua Augusta",
+      "normalized": "rua augusta",
+      "type": "rua",
+      "name": "augusta"
+    },
+    {
+      "input": "Avenida Paulista",
+      "normalized": "avenida paulista",
+      "type": "avenida",
+      "name": "paulista"
+    },
+    {
+      "input": "Praça do Comércio",
+      "normalized": "praca do comercio",
+      "type": "praca",
+      "name": "do comercio"
+    },
+    {
+      "input": "Av. da Liberdade",
+      "normalized": "avenida da liberdade",
+      "type": "avenida",
+      "name": "da liberdade"
+    },
+    {
+      "input": "Tv. da Palha",
+      "normalized": "travessa da palha",
+      "type": "travessa",
+      "name": "da palha"
+    },
+    {
+      "input": "Largo do Chiado",
+      "normalized": "largo do chiado",
+      "type": "largo",
+      "name": "do chiado"
+    },
+    {
+      "input": "Alameda Santos",
+      "normalized": "alameda santos",
+      "type": "alameda",
+      "name": "santos"
+    },
+    {
+      "input": "Rodovia dos Imigrantes",
+      "normalized": "rodovia dos imigrantes",
+      "type": "rodovia",
+      "name": "dos imigrantes"
+    },
+    {
+      "input": "Beco do Carneiro",
+      "normalized": "beco do carneiro",
+      "type": "beco",
+      "name": "do carneiro"
+    },
+    {
+      "input": "Calçada da Glória",
+      "normalized": "calcada da gloria",
+      "type": "calcada",
+      "name": "da gloria"
+    },
+    {
+      "input": "R. Dr. António Luís Gomes",
+      "normalized": "rua doutor antonio luis gomes",
+      "type": "rua",
+      "name": "doutor antonio luis gomes"
+    },
+    {
+      "input": "EN 2",
+      "normalized": "en 2",
+      "type": null,
+      "name": "en 2"
+    },
+    {
+      "input": "Pelourinho de Pendilhe",
+      "normalized": "pelourinho de pendilhe",
+      "type": null,
+      "name": "pelourinho de pendilhe"
+    },
+    {
+      "input": "Junta de Freguesia de Lagares da Beira",
+      "normalized": "junta de freguesia de lagares da beira",
+      "type": null,
+      "name": "junta de freguesia de lagares da beira"
+    },
+    {
+      "input": "Solar de Lapa",
+      "normalized": "solar de lapa",
+      "type": null,
+      "name": "solar de lapa"
+    },
+    {
+      "input": "Canas - Felgueira",
+      "normalized": "canas felgueira",
+      "type": null,
+      "name": "canas felgueira"
+    },
+    {
+      "input": "Drave",
+      "normalized": "drave",
+      "type": null,
+      "name": "drave"
+    },
+    {
+      "input": "Pelourinho dos Alhais",
+      "normalized": "pelourinho dos alhais",
+      "type": null,
+      "name": "pelourinho dos alhais"
+    },
+    {
+      "input": "Zona Industrial Guarita",
+      "normalized": "zona industrial guarita",
+      "type": null,
+      "name": "zona industrial guarita"
+    },
+    {
+      "input": "Alto do Aral",
+      "normalized": "alto do aral",
+      "type": null,
+      "name": "alto do aral"
+    },
+    {
+      "input": "Avenida António Martins de Almeida",
+      "normalized": "avenida antonio martins de almeida",
+      "type": "avenida",
+      "name": "antonio martins de almeida"
+    },
+    {
+      "input": "Avenida da Bélgica",
+      "normalized": "avenida da belgica",
+      "type": "avenida",
+      "name": "da belgica"
+    },
+    {
+      "input": "Avenida do Pombal",
+      "normalized": "avenida do pombal",
+      "type": "avenida",
+      "name": "do pombal"
+    },
+    {
+      "input": "Avenida Doutor Jorge Coelho",
+      "normalized": "avenida doutor jorge coelho",
+      "type": "avenida",
+      "name": "doutor jorge coelho"
+    },
+    {
+      "input": "Avenida Larga Pedrinho",
+      "normalized": "avenida larga pedrinho",
+      "type": "avenida",
+      "name": "larga pedrinho"
+    },
+    {
+      "input": "Avenida Quinta da Alagoa",
+      "normalized": "avenida quinta da alagoa",
+      "type": "avenida",
+      "name": "quinta da alagoa"
+    },
+    {
+      "input": "Bairro da Carvalhinha",
+      "normalized": "bairro da carvalhinha",
+      "type": null,
+      "name": "bairro da carvalhinha"
+    },
+    {
+      "input": "Bairro Nova Fábrica da Colchoaria",
+      "normalized": "bairro nova fabrica da colchoaria",
+      "type": null,
+      "name": "bairro nova fabrica da colchoaria"
+    },
+    {
+      "input": "Beco da Laje",
+      "normalized": "beco da laje",
+      "type": "beco",
+      "name": "da laje"
+    },
+    {
+      "input": "Beco do Caminho Novo",
+      "normalized": "beco do caminho novo",
+      "type": "beco",
+      "name": "do caminho novo"
+    },
+    {
+      "input": "Beco dos Paus",
+      "normalized": "beco dos paus",
+      "type": "beco",
+      "name": "dos paus"
+    },
+    {
+      "input": "Calçada do Custodio",
+      "normalized": "calcada do custodio",
+      "type": "calcada",
+      "name": "do custodio"
+    },
+    {
+      "input": "Caminho da Santa Eulália",
+      "normalized": "caminho da santa eulalia",
+      "type": "caminho",
+      "name": "da santa eulalia"
+    },
+    {
+      "input": "Caminho Do Serrado",
+      "normalized": "caminho do serrado",
+      "type": "caminho",
+      "name": "do serrado"
+    },
+    {
+      "input": "Canto do Medorno",
+      "normalized": "canto do medorno",
+      "type": null,
+      "name": "canto do medorno"
+    },
+    {
+      "input": "ER 230",
+      "normalized": "er 230",
+      "type": null,
+      "name": "er 230"
+    },
+    {
+      "input": "Estrada de Vilarinho",
+      "normalized": "estrada de vilarinho",
+      "type": "estrada",
+      "name": "de vilarinho"
+    },
+    {
+      "input": "Estradão Videmonte - Folgosinho",
+      "normalized": "estradao videmonte folgosinho",
+      "type": null,
+      "name": "estradao videmonte folgosinho"
+    },
+    {
+      "input": "Largo da Bomba",
+      "normalized": "largo da bomba",
+      "type": "largo",
+      "name": "da bomba"
+    },
+    {
+      "input": "Largo da Rua",
+      "normalized": "largo da rua",
+      "type": "largo",
+      "name": "da rua"
+    },
+    {
+      "input": "Largo de São Martinho",
+      "normalized": "largo de sao martinho",
+      "type": "largo",
+      "name": "de sao martinho"
+    },
+    {
+      "input": "Largo do Pelourinho",
+      "normalized": "largo do pelourinho",
+      "type": "largo",
+      "name": "do pelourinho"
+    },
+    {
+      "input": "Largo José Fernandes",
+      "normalized": "largo jose fernandes",
+      "type": "largo",
+      "name": "jose fernandes"
+    },
+    {
+      "input": "Lugar de Vale de Carregosa",
+      "normalized": "lugar de vale de carregosa",
+      "type": null,
+      "name": "lugar de vale de carregosa"
+    },
+    {
+      "input": "Ponte de Touro",
+      "normalized": "ponte de touro",
+      "type": null,
+      "name": "ponte de touro"
+    },
+    {
+      "input": "Praça Magalhães Coutinho",
+      "normalized": "praca magalhaes coutinho",
+      "type": "praca",
+      "name": "magalhaes coutinho"
+    },
+    {
+      "input": "Praza de Dom Duarte",
+      "normalized": "praza de dom duarte",
+      "type": null,
+      "name": "praza de dom duarte"
+    },
+    {
+      "input": "Rota das Faias / Rota do Corredor de Mouros",
+      "normalized": "rota das faias rota do corredor de mouros",
+      "type": null,
+      "name": "rota das faias rota do corredor de mouros"
+    },
+    {
+      "input": "Rua 1",
+      "normalized": "rua 1",
+      "type": "rua",
+      "name": "1"
+    },
+    {
+      "input": "Rua Abade Dourado",
+      "normalized": "rua abade dourado",
+      "type": "rua",
+      "name": "abade dourado"
+    },
+    {
+      "input": "Rua Almirante Afonso Cerqueira",
+      "normalized": "rua almirante afonso cerqueira",
+      "type": "rua",
+      "name": "almirante afonso cerqueira"
+    },
+    {
+      "input": "Rua António Costa Beirão",
+      "normalized": "rua antonio costa beirao",
+      "type": "rua",
+      "name": "antonio costa beirao"
+    },
+    {
+      "input": "Rua Armando de Jesus Costa",
+      "normalized": "rua armando de jesus costa",
+      "type": "rua",
+      "name": "armando de jesus costa"
+    },
+    {
+      "input": "Rua Barros Lobo",
+      "normalized": "rua barros lobo",
+      "type": "rua",
+      "name": "barros lobo"
+    },
+    {
+      "input": "Rua Canos de Ferro",
+      "normalized": "rua canos de ferro",
+      "type": "rua",
+      "name": "canos de ferro"
+    },
+    {
+      "input": "Rua Casal Sul",
+      "normalized": "rua casal sul",
+      "type": "rua",
+      "name": "casal sul"
+    },
+    {
+      "input": "Rua Cidade Le Puy En Velay",
+      "normalized": "rua cidade le puy en velay",
+      "type": "rua",
+      "name": "cidade le puy en velay"
+    },
+    {
+      "input": "Rua Conselheiro Morais de Carvalho",
+      "normalized": "rua conselheiro morais de carvalho",
+      "type": "rua",
+      "name": "conselheiro morais de carvalho"
+    },
+    {
+      "input": "Rua Da Amizade",
+      "normalized": "rua da amizade",
+      "type": "rua",
+      "name": "da amizade"
+    },
+    {
+      "input": "Rua Da Cabria",
+      "normalized": "rua da cabria",
+      "type": "rua",
+      "name": "da cabria"
+    },
+    {
+      "input": "Rua da Castiça",
+      "normalized": "rua da castica",
+      "type": "rua",
+      "name": "da castica"
+    },
+    {
+      "input": "Rua da Deveza",
+      "normalized": "rua da deveza",
+      "type": "rua",
+      "name": "da deveza"
+    },
+    {
+      "input": "Rua da Feiteira",
+      "normalized": "rua da feiteira",
+      "type": "rua",
+      "name": "da feiteira"
+    },
+    {
+      "input": "Rua da Foz",
+      "normalized": "rua da foz",
+      "type": "rua",
+      "name": "da foz"
+    },
+    {
+      "input": "Rua da Lapa",
+      "normalized": "rua da lapa",
+      "type": "rua",
+      "name": "da lapa"
+    },
+    {
+      "input": "Rua da Missa",
+      "normalized": "rua da missa",
+      "type": "rua",
+      "name": "da missa"
+    },
+    {
+      "input": "Rua da Pipa",
+      "normalized": "rua da pipa",
+      "type": "rua",
+      "name": "da pipa"
+    },
+    {
+      "input": "Rua da Quinta de Cima",
+      "normalized": "rua da quinta de cima",
+      "type": "rua",
+      "name": "da quinta de cima"
+    },
+    {
+      "input": "Rua da Seara",
+      "normalized": "rua da seara",
+      "type": "rua",
+      "name": "da seara"
+    },
+    {
+      "input": "Rua da Varziela",
+      "normalized": "rua da varziela",
+      "type": "rua",
+      "name": "da varziela"
+    },
+    {
+      "input": "Rua das Campas",
+      "normalized": "rua das campas",
+      "type": "rua",
+      "name": "das campas"
+    },
+    {
+      "input": "Rua das Escolas Travessa 7",
+      "normalized": "rua das escolas travessa 7",
+      "type": "rua",
+      "name": "das escolas travessa 7"
+    },
+    {
+      "input": "Rua das Moitas",
+      "normalized": "rua das moitas",
+      "type": "rua",
+      "name": "das moitas"
+    },
+    {
+      "input": "Rua das Sêmeas",
+      "normalized": "rua das semeas",
+      "type": "rua",
+      "name": "das semeas"
+    },
+    {
+      "input": "Rua de Gago Coutinho",
+      "normalized": "rua de gago coutinho",
+      "type": "rua",
+      "name": "de gago coutinho"
+    },
+    {
+      "input": "Rua de Santa Eulália",
+      "normalized": "rua de santa eulalia",
+      "type": "rua",
+      "name": "de santa eulalia"
+    },
+    {
+      "input": "Rua de São Pelágio",
+      "normalized": "rua de sao pelagio",
+      "type": "rua",
+      "name": "de sao pelagio"
+    },
+    {
+      "input": "Rua do Adro Velho",
+      "normalized": "rua do adro velho",
+      "type": "rua",
+      "name": "do adro velho"
+    },
+    {
+      "input": "Rua do Bairro do Vale",
+      "normalized": "rua do bairro do vale",
+      "type": "rua",
+      "name": "do bairro do vale"
+    },
+    {
+      "input": "Rua Do Caminho Do Fundo",
+      "normalized": "rua do caminho do fundo",
+      "type": "rua",
+      "name": "do caminho do fundo"
+    },
+    {
+      "input": "Rua do Castro",
+      "normalized": "rua do castro",
+      "type": "rua",
+      "name": "do castro"
+    },
+    {
+      "input": "Rua do Comércio",
+      "normalized": "rua do comercio",
+      "type": "rua",
+      "name": "do comercio"
+    },
+    {
+      "input": "Rua do Espiche",
+      "normalized": "rua do espiche",
+      "type": "rua",
+      "name": "do espiche"
+    },
+    {
+      "input": "Rua do Golo",
+      "normalized": "rua do golo",
+      "type": "rua",
+      "name": "do golo"
+    },
+    {
+      "input": "Rua do Loteamento do Olival",
+      "normalized": "rua do loteamento do olival",
+      "type": "rua",
+      "name": "do loteamento do olival"
+    },
+    {
+      "input": "Rua do Oitão",
+      "normalized": "rua do oitao",
+      "type": "rua",
+      "name": "do oitao"
+    },
+    {
+      "input": "Rua do Pedregal",
+      "normalized": "rua do pedregal",
+      "type": "rua",
+      "name": "do pedregal"
+    },
+    {
+      "input": "Rua do Pombal de Cima",
+      "normalized": "rua do pombal de cima",
+      "type": "rua",
+      "name": "do pombal de cima"
+    },
+    {
+      "input": "Rua do Saco",
+      "normalized": "rua do saco",
+      "type": "rua",
+      "name": "do saco"
+    },
+    {
+      "input": "Rua do Tanque",
+      "normalized": "rua do tanque",
+      "type": "rua",
+      "name": "do tanque"
+    },
+    {
+      "input": "Rua do Valinho",
+      "normalized": "rua do valinho",
+      "type": "rua",
+      "name": "do valinho"
+    },
+    {
+      "input": "Rua Dona Flora Belo",
+      "normalized": "rua dona flora belo",
+      "type": "rua",
+      "name": "dona flora belo"
+    },
+    {
+      "input": "Rua dos Castanheiros",
+      "normalized": "rua dos castanheiros",
+      "type": "rua",
+      "name": "dos castanheiros"
+    },
+    {
+      "input": "Rua dos Medronheiros",
+      "normalized": "rua dos medronheiros",
+      "type": "rua",
+      "name": "dos medronheiros"
+    },
+    {
+      "input": "Rua dos Tanques",
+      "normalized": "rua dos tanques",
+      "type": "rua",
+      "name": "dos tanques"
+    },
+    {
+      "input": "Rua Doutor António Simões Saraiva",
+      "normalized": "rua doutor antonio simoes saraiva",
+      "type": "rua",
+      "name": "doutor antonio simoes saraiva"
+    },
+    {
+      "input": "Rua Doutor Francisco Sá Carneiro",
+      "normalized": "rua doutor francisco sa carneiro",
+      "type": "rua",
+      "name": "doutor francisco sa carneiro"
+    },
+    {
+      "input": "Rua Doutor Maximiano de Aragão",
+      "normalized": "rua doutor maximiano de aragao",
+      "type": "rua",
+      "name": "doutor maximiano de aragao"
+    },
+    {
+      "input": "Rua Eirô",
+      "normalized": "rua eiro",
+      "type": "rua",
+      "name": "eiro"
+    },
+    {
+      "input": "Rua Fernandes Marques de Oliveira",
+      "normalized": "rua fernandes marques de oliveira",
+      "type": "rua",
+      "name": "fernandes marques de oliveira"
+    },
+    {
+      "input": "Rua Francisco Correia Penalva",
+      "normalized": "rua francisco correia penalva",
+      "type": "rua",
+      "name": "francisco correia penalva"
+    },
+    {
+      "input": "Rua Graciano José Figueiredo",
+      "normalized": "rua graciano jose figueiredo",
+      "type": "rua",
+      "name": "graciano jose figueiredo"
+    },
+    {
+      "input": "Rua João Pessoa Homem",
+      "normalized": "rua joao pessoa homem",
+      "type": "rua",
+      "name": "joao pessoa homem"
+    },
+    {
+      "input": "Rua José Martins",
+      "normalized": "rua jose martins",
+      "type": "rua",
+      "name": "jose martins"
+    },
+    {
+      "input": "Rua Latada",
+      "normalized": "rua latada",
+      "type": "rua",
+      "name": "latada"
+    },
+    {
+      "input": "Rua Manuel Lagos",
+      "normalized": "rua manuel lagos",
+      "type": "rua",
+      "name": "manuel lagos"
+    },
+    {
+      "input": "Rua Mestre de Avis",
+      "normalized": "rua mestre de avis",
+      "type": "rua",
+      "name": "mestre de avis"
+    },
+    {
+      "input": "Rua Nossa Senhora da Saúde",
+      "normalized": "rua nossa senhora da saude",
+      "type": "rua",
+      "name": "nossa senhora da saude"
+    },
+    {
+      "input": "Rua Novos Horizontes",
+      "normalized": "rua novos horizontes",
+      "type": "rua",
+      "name": "novos horizontes"
+    },
+    {
+      "input": "Rua Padre Cruz",
+      "normalized": "rua padre cruz",
+      "type": "rua",
+      "name": "padre cruz"
+    },
+    {
+      "input": "Rua Pedro Álvares Gouveia",
+      "normalized": "rua pedro alvares gouveia",
+      "type": "rua",
+      "name": "pedro alvares gouveia"
+    },
+    {
+      "input": "Rua Primeiro de Maio",
+      "normalized": "rua primeiro de maio",
+      "type": "rua",
+      "name": "primeiro de maio"
+    },
+    {
+      "input": "Rua Quinta da Cova",
+      "normalized": "rua quinta da cova",
+      "type": "rua",
+      "name": "quinta da cova"
+    },
+    {
+      "input": "Rua Regada das Hortas",
+      "normalized": "rua regada das hortas",
+      "type": "rua",
+      "name": "regada das hortas"
+    },
+    {
+      "input": "Rua Santo Estêvão",
+      "normalized": "rua santo estevao",
+      "type": "rua",
+      "name": "santo estevao"
+    },
+    {
+      "input": "Rua Senhora da Piedade",
+      "normalized": "rua senhora da piedade",
+      "type": "rua",
+      "name": "senhora da piedade"
+    },
+    {
+      "input": "Rua União Fialense",
+      "normalized": "rua uniao fialense",
+      "type": "rua",
+      "name": "uniao fialense"
+    },
+    {
+      "input": "Rua Vasco da Gama",
+      "normalized": "rua vasco da gama",
+      "type": "rua",
+      "name": "vasco da gama"
+    },
+    {
+      "input": "Travessa Albino Ferreira",
+      "normalized": "travessa albino ferreira",
+      "type": "travessa",
+      "name": "albino ferreira"
+    },
+    {
+      "input": "Travessa da Áurea",
+      "normalized": "travessa da aurea",
+      "type": "travessa",
+      "name": "da aurea"
+    },
+    {
+      "input": "Travessa da Escola Primária",
+      "normalized": "travessa da escola primaria",
+      "type": "travessa",
+      "name": "da escola primaria"
+    },
+    {
+      "input": "Travessa da Quinta da Formiga",
+      "normalized": "travessa da quinta da formiga",
+      "type": "travessa",
+      "name": "da quinta da formiga"
+    },
+    {
+      "input": "Travessa das Caleiras",
+      "normalized": "travessa das caleiras",
+      "type": "travessa",
+      "name": "das caleiras"
+    },
+    {
+      "input": "Travessa de Santa Cristina",
+      "normalized": "travessa de santa cristina",
+      "type": "travessa",
+      "name": "de santa cristina"
+    },
+    {
+      "input": "Travessa Do Cabril",
+      "normalized": "travessa do cabril",
+      "type": "travessa",
+      "name": "do cabril"
+    },
+    {
+      "input": "Travessa do Fontalinho",
+      "normalized": "travessa do fontalinho",
+      "type": "travessa",
+      "name": "do fontalinho"
+    },
+    {
+      "input": "Travessa do Plame",
+      "normalized": "travessa do plame",
+      "type": "travessa",
+      "name": "do plame"
+    },
+    {
+      "input": "Travessa Dório",
+      "normalized": "travessa dorio",
+      "type": "travessa",
+      "name": "dorio"
+    },
+    {
+      "input": "Travessa Família Cardoso Pessoa",
+      "normalized": "travessa familia cardoso pessoa",
+      "type": "travessa",
+      "name": "familia cardoso pessoa"
+    },
+    {
+      "input": "Travessa Número 5",
+      "normalized": "travessa numero 5",
+      "type": "travessa",
+      "name": "numero 5"
+    },
+    {
+      "input": "Travessa Veiga Simão",
+      "normalized": "travessa veiga simao",
+      "type": "travessa",
+      "name": "veiga simao"
+    }
+  ]
+}
