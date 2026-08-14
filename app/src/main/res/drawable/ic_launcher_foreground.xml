@@ -4,10 +4,17 @@
     halves of what the application does.
 
     Drawn on a 512 viewport mapped to the adaptive icon's 108dp canvas, so
-    1dp = 4.74 units. Every stroke stays inside the 33dp safe radius around
-    the centre — the smallest zone a launcher mask can leave visible — which
-    is why the drawing does not fill its canvas: the margin is the mask's,
-    not decoration.
+    1dp = 4.74 units. The paths as written reach 162.7 units from the centre
+    — 34.3dp — which all but fills the 36dp circle a round mask leaves
+    visible: on a launcher the rear wheel and the pin came out tangent to the
+    edge, with no air around them.
+
+    Hence the enclosing group: scaling by 0.875 about the centre brings that
+    reach down to 30dp, so the drawing sits inside a 60dp circle and keeps
+    6dp of margin to the round mask and 3dp to the 33dp safe radius, the
+    smallest zone any mask is guaranteed to leave visible. The scale lives on
+    a group rather than in the coordinates so the geometry below stays the
+    keyline drawing, and the margin stays a single number to turn.
 
     White on the flat background of @color/ic_launcher_background; the
     monochrome variant lives in ic_launcher_monochrome.xml.
@@ -17,26 +24,32 @@
     android:height="108dp"
     android:viewportWidth="512"
     android:viewportHeight="512">
-    <path
-        android:pathData="M171.04,214.24 A64.8,64.8 0 1 0 171.04,343.84 A64.8,64.8 0 1 0 171.04,214.24 Z"
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="19.8"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round" />
-    <path
-        android:pathData="M171.04,279.04 L235.84,178.24 L325.84,181.84 M235.84,178.24 L286.24,279.04 L171.04,279.04"
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="19.8"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round" />
-    <path
-        android:pathData="M207.04,156.64 L257.44,156.64 M307.84,149.44 L358.24,149.44 M333.04,149.44 L325.84,181.84"
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="19.8"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round" />
-    <path
-        android:pathData="M406.01,284.55 A64.8,64.8 0 1 0 296.07,284.55 L351.04,372.64 Z M351.04,228.64 A21.6,21.6 0 1 0 351.04,271.84 A21.6,21.6 0 1 0 351.04,228.64 Z"
-        android:fillColor="#FFFFFF"
-        android:fillType="evenOdd" />
+    <group
+        android:pivotX="256"
+        android:pivotY="256"
+        android:scaleX="0.875"
+        android:scaleY="0.875">
+        <path
+            android:pathData="M171.04,214.24 A64.8,64.8 0 1 0 171.04,343.84 A64.8,64.8 0 1 0 171.04,214.24 Z"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="19.8"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M171.04,279.04 L235.84,178.24 L325.84,181.84 M235.84,178.24 L286.24,279.04 L171.04,279.04"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="19.8"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M207.04,156.64 L257.44,156.64 M307.84,149.44 L358.24,149.44 M333.04,149.44 L325.84,181.84"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="19.8"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M406.01,284.55 A64.8,64.8 0 1 0 296.07,284.55 L351.04,372.64 Z M351.04,228.64 A21.6,21.6 0 1 0 351.04,271.84 A21.6,21.6 0 1 0 351.04,228.64 Z"
+            android:fillColor="#FFFFFF"
+            android:fillType="evenOdd" />
+    </group>
 </vector>
