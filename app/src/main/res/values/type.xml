@@ -53,6 +53,17 @@
         <item name="android:fontFeatureSettings">tnum</item>
     </style>
 
+    <!--
+        The application's name on the opening screen (SPEC §7.0). The title
+        face, one size above the title: alone on a green field under a 160dp
+        mark, the title size read as a caption. The colour changes too, this
+        text sitting on the identity's green and not on the theme's paper.
+    -->
+    <style name="TextAppearance.RoueLibre.Intro" parent="TextAppearance.RoueLibre.Title">
+        <item name="android:textSize">@dimen/text_intro</item>
+        <item name="android:textColor">@color/identity_ink</item>
+    </style>
+
     <!-- Short labels, in spaced capitals. -->
     <style name="TextAppearance.RoueLibre.Label" parent="TextAppearance.Material3.LabelMedium">
         <item name="android:fontFamily">@font/atkinson</item>

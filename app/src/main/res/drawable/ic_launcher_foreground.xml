@@ -16,8 +16,10 @@
     a group rather than in the coordinates so the geometry below stays the
     keyline drawing, and the margin stays a single number to turn.
 
-    White on the flat background of @color/ic_launcher_background; the
-    monochrome variant lives in ic_launcher_monochrome.xml.
+    White on the flat background of @color/identity_ground; the monochrome
+    variant lives in ic_launcher_monochrome.xml. The opening screen (SPEC
+    §7.0) draws this same layer, which is why it is a drawable rather than a
+    resource buried in the mipmaps.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"

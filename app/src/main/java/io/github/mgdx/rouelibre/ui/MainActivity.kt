@@ -1,11 +1,17 @@
 package io.github.mgdx.rouelibre.ui
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withStarted
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.BuildConfig
@@ -28,6 +34,36 @@ import io.github.mgdx.rouelibre.ui.welcome.WhatsNewFragment
 import kotlinx.coroutines.launch
 
 /**
+ * How long the opening takes to clear once its work is done. Short enough to
+ * be read as the screen handing over rather than as a wait of its own.
+ */
+private const val INTRO_FADE_MILLIS = 180L
+
+/**
+ * The least time the opening stays once it is on the screen (SPEC §7.0).
+ *
+ * Not a pause for effect: below this the screen is not read, it is glimpsed.
+ * Measured on a Fairphone 5, where the whole opening lasted two tenths of a
+ * second and the name never once showed on a plain green.
+ *
+ * It is counted from the moment the opening reaches the screen, so what it
+ * adds is only what the start-up had not already spent past that moment: two
+ * tenths of a second on a Fairphone 3, half a second on the faster Fairphone
+ * 5. It is a floor, not a delay added to the wait.
+ */
+private const val INTRO_MINIMUM_MILLIS = 600L
+
+/**
+ * How the system bars look, so that the opening can borrow them for the length
+ * of its green and give them back unchanged (SPEC §7.0).
+ */
+private data class SystemBars(
+    val statusBar: Int,
+    val navigationBar: Int,
+    val lightIcons: Boolean,
+)
+
+/**
  * The application's single activity (SPEC §3).
  *
  * It hosts the fragments, and receives the places other applications send it
@@ -37,11 +73,38 @@ class MainActivity : AppCompatActivity() {
 
     private var binding: ActivityMainBinding? = null
 
+    /**
+     * The three conditions the opening's departure waits on (SPEC §7.0): that
+     * the first screen is settled, that it has something drawn in it, and that
+     * it has been looked at.
+     *
+     * None is a formality. The read that settles the first screen finishes in
+     * a tenth of a second, whereas the map behind takes a good second to
+     * appear on a cold start: on that signal alone the opening was taken down
+     * while there was still nothing underneath it. And on a fast phone all of
+     * it is over in two tenths of a second — measured on a Fairphone 5, the
+     * name appeared only in the three frames of the fade-out, over a map
+     * already showing through.
+     */
+    private var contentDrawn = false
+    private var firstScreenSettled = false
+    private var heldLongEnough = false
+
+    /** The system bars as the interface's theme wants them — see [openIntro]. */
+    private var barsBeforeIntro: SystemBars? = null
+
     private val container
         get() = (application as RoueLibreApplication).container
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // The manifest declares the intro theme so that the window Android
+        // draws before this activity exists already carries the identity's
+        // green (SPEC §7.0). That theme has done its work here: the interface
+        // runs on its own, and asking for it before the first inflation is
+        // what keeps the intro's green bars from becoming the application's.
+        setTheme(R.style.Theme_RoueLibre)
         super.onCreate(savedInstanceState)
+        handOverSplashWithoutFading()
         // The content runs under the system bars, which the theme colours like
         // the background: the screen reads as one piece.
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -54,11 +117,184 @@ class MainActivity : AppCompatActivity() {
         // by the system; replacing them would erase their state, and replaying
         // the intent would reopen a screen the user has left.
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.content, MapFragment())
-                .commit()
-            openFirstScreen()
-            welcome(intent)
+            openIntro()
+            // Everything below is deferred by one frame, and that is the whole
+            // reason the opening is ever seen. Committed here and now, the map
+            // makes the activity's first frame cost some two and a half
+            // seconds on a Fairphone 3, and Android holds its own splash
+            // screen over the entire wait — which shows the mark but cannot
+            // show a word of text. Posted, the first frame is the opening
+            // alone and costs nothing: the splash hands over almost at once,
+            // and it is the opening that covers the map's start-up, name and
+            // all.
+            // Hung on the first draw pass rather than posted straight away: a
+            // plain post runs before the first traversal, which would put the
+            // map back into the frame it is being kept out of.
+            //
+            // And run through `withStarted`, because a deferred fragment
+            // transaction is one that can land after the activity has saved
+            // its state — the screen going dark during a cold start was enough
+            // to crash it — whereas this one waits for the activity to be back
+            // in a state that can take it.
+            created.root.doOnPreDraw {
+                lifecycleScope.launch {
+                    withStarted {
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.content, MapFragment())
+                            .commit()
+                        whenContentIsDrawn()
+                        openFirstScreen()
+                        welcome(intent)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Notes that the screen under the opening now has something on it.
+     *
+     * The opening may not leave before that: it would hand over to a container
+     * with no view in it yet, and the user would be shown a blank in the place
+     * of the map they are waiting for.
+     */
+    private fun whenContentIsDrawn() {
+        val views = binding ?: return
+        views.content.doOnPreDraw {
+            it.post {
+                contentDrawn = true
+                closeIntroIfDue()
+            }
+        }
+    }
+
+    /**
+     * Cuts from Android's splash screen to ours instead of dissolving into it.
+     *
+     * Left to itself, Android 12 and later fade their splash out over the
+     * arriving application. Measured on the device, the mark went almost fully
+     * transparent for some three tenths of a second and then came back — a
+     * blink in the middle of the very screen whose job is to hold still
+     * (SPEC §7.0). It fades what it drew, and what is underneath is the same
+     * drawing at the same size in the same place, so there is nothing to
+     * dissolve into: removing the splash outright makes the handover a cut
+     * nobody can see.
+     *
+     * Before Android 12 there is no such splash and nothing to take over.
+     */
+    private fun handOverSplashWithoutFading() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
+        splashScreen.setOnExitAnimationListener { splash ->
+            splash.remove()
+            holdIntro()
+        }
+    }
+
+    /**
+     * Starts counting the opening's minimum stay (SPEC §7.0).
+     *
+     * Counted from here and not from `onCreate`, because here is where the
+     * opening actually reaches the screen: until Android's splash hands over,
+     * whatever we drew was drawn underneath it. Counted from `onCreate`, the
+     * six hundred milliseconds would already have run out on a phone whose
+     * splash lasts longer than that, which is every phone this is meant to
+     * help.
+     *
+     * Before Android 12 there is no splash, and the first draw is that moment.
+     */
+    private fun holdIntro() {
+        val intro = binding?.intro?.root ?: return
+        intro.postDelayed(
+            {
+                heldLongEnough = true
+                closeIntroIfDue()
+            },
+            INTRO_MINIMUM_MILLIS,
+        )
+    }
+
+    /**
+     * Puts up the opening screen (SPEC §7.0).
+     *
+     * Called before the first fragment is committed, so that what the user has
+     * been looking at since the launcher — the mark on its green — simply goes
+     * on, now with the application's name under it.
+     *
+     * The system bars come along: the theme colours them like the background,
+     * and left alone they would draw two pale strips across the green.
+     */
+    private fun openIntro() {
+        val views = binding ?: return
+        views.intro.root.isVisible = true
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            views.intro.root.doOnPreDraw { holdIntro() }
+        }
+        val controller = WindowInsetsControllerCompat(window, views.root)
+        // Noted as the theme has just left them. What the opening gives back
+        // has to be exactly what it borrowed, and taking a copy is surer than
+        // reading the theme again later — and than naming the colours a second
+        // time here, where the light and dark variants would drift apart.
+        barsBeforeIntro = SystemBars(
+            statusBar = window.statusBarColor,
+            navigationBar = window.navigationBarColor,
+            lightIcons = controller.isAppearanceLightStatusBars,
+        )
+        val ground = ContextCompat.getColor(this, R.color.identity_ground)
+        window.statusBarColor = ground
+        window.navigationBarColor = ground
+        controller.isAppearanceLightStatusBars = false
+        controller.isAppearanceLightNavigationBars = false
+    }
+
+    /**
+     * Takes the opening away once all three of its conditions are met.
+     *
+     * The wait is the longest of the three, not their sum: the minimum stay
+     * runs while the map is starting up, so on a slow phone it has long
+     * expired by the time there is anything to hand over to, and costs nothing.
+     */
+    private fun closeIntroIfDue() {
+        if (contentDrawn && firstScreenSettled && heldLongEnough) closeIntro()
+    }
+
+    /**
+     * Takes the opening screen away.
+     *
+     * The fade is short enough not to be a wait of its own, and is dropped
+     * altogether when the device asks for less movement (SPEC §7).
+     */
+    private fun closeIntro() {
+        val views = binding ?: return
+        val intro = views.intro.root
+        if (!intro.isVisible) return
+        restoreSystemBars()
+        if (prefersReducedMotion()) {
+            intro.isVisible = false
+            return
+        }
+        intro.animate()
+            .alpha(0f)
+            .setDuration(INTRO_FADE_MILLIS)
+            .withEndAction {
+                intro.isVisible = false
+                // The view is kept, so it must be left as it was found.
+                intro.alpha = 1f
+            }
+    }
+
+    /**
+     * Hands the system bars back as the opening found them.
+     *
+     * Both bars carry the same colour, so the same icon polarity suits them.
+     */
+    private fun restoreSystemBars() {
+        val views = binding ?: return
+        val bars = barsBeforeIntro ?: return
+        window.statusBarColor = bars.statusBar
+        window.navigationBarColor = bars.navigationBar
+        WindowInsetsControllerCompat(window, views.root).run {
+            isAppearanceLightStatusBars = bars.lightIcons
+            isAppearanceLightNavigationBars = bars.lightIcons
         }
     }
 
@@ -87,31 +323,47 @@ class MainActivity : AppCompatActivity() {
      */
     private fun openFirstScreen() {
         lifecycleScope.launch {
-            val lastSeen = container.preferences.lastSeenVersionCode()
-            when {
-                lastSeen == NEVER_LAUNCHED -> {
-                    replaceWith(WelcomeFragment())
-                    return@launch
-                }
-
-                lastSeen < BuildConfig.VERSION_CODE &&
-                    WhatsNewFragment.hasNotes(
-                        this@MainActivity,
-                        lastSeen,
-                        BuildConfig.VERSION_CODE,
-                    ) -> {
-                    show(WhatsNewFragment.since(lastSeen))
-                    return@launch
-                }
-
-                // Nothing to show, but the version seen is updated: a release
-                // published without notes must not bring the previous
-                // release's notes back on the next launch.
-                lastSeen < BuildConfig.VERSION_CODE ->
-                    container.preferences.setLastSeenVersionCode(BuildConfig.VERSION_CODE)
-            }
-            proposeCityHere()
+            val opened = showFirstScreen()
+            // That read was the whole of what the opening was hiding, so the
+            // opening goes now — before any dialog, which must not be argued
+            // with through a green sheet.
+            firstScreenSettled = true
+            closeIntroIfDue()
+            if (!opened) proposeCityHere()
         }
+    }
+
+    /**
+     * Puts up the welcome or the what's-new screen, whichever applies.
+     *
+     * @return true if one of the two was put up, in which case the user has a
+     *   screen to read and nothing else may be laid over it.
+     */
+    private suspend fun showFirstScreen(): Boolean {
+        val lastSeen = container.preferences.lastSeenVersionCode()
+        when {
+            lastSeen == NEVER_LAUNCHED -> {
+                replaceWith(WelcomeFragment())
+                return true
+            }
+
+            lastSeen < BuildConfig.VERSION_CODE &&
+                WhatsNewFragment.hasNotes(
+                    this@MainActivity,
+                    lastSeen,
+                    BuildConfig.VERSION_CODE,
+                ) -> {
+                show(WhatsNewFragment.since(lastSeen))
+                return true
+            }
+
+            // Nothing to show, but the version seen is updated: a release
+            // published without notes must not bring the previous release's
+            // notes back on the next launch.
+            lastSeen < BuildConfig.VERSION_CODE ->
+                container.preferences.setLastSeenVersionCode(BuildConfig.VERSION_CODE)
+        }
+        return false
     }
 
     /**

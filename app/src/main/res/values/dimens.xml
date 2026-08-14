@@ -70,8 +70,31 @@
     <dimen name="computing_bike_size">96dp</dimen>
     <dimen name="computing_bike_lane_gap">80dp</dimen>
 
+    <!-- The opening screen (SPEC §7.0).
+
+         The canvas is not a size chosen here: it is the box Android's own
+         splash screen draws an icon in, 288dp, and matching it is the whole
+         point. The launcher icon's drawing occupies the middle 60dp out of its
+         108dp canvas, so at 288dp the bicycle reads at 160dp — exactly what
+         the system was showing a frame earlier. Any other value makes the mark
+         jump the moment the application takes over.
+
+         The name hangs from the middle of the window, which is where the mark
+         is centred: half the bicycle as drawn, 80dp, plus one rung of the
+         spacing scale. Measuring from the middle rather than from the image's
+         edge is what skips the canvas's transparent margin, 64dp of nothing
+         that would otherwise push the name away from the drawing. -->
+    <dimen name="intro_mark_canvas">288dp</dimen>
+    <dimen name="intro_name_drop">104dp</dimen>
+
     <!-- Typographic scale. -->
     <dimen name="text_title">22sp</dimen>
+    <!-- The name on the opening screen, and the one rung of the scale that
+         belongs to a single screen. It earns the exception: everywhere else a
+         title shares its screen with the text it heads, whereas this one has
+         a whole green field to itself and a 160dp mark above it, against which
+         the title size read as a caption. -->
+    <dimen name="text_intro">32sp</dimen>
     <dimen name="text_indicator">24sp</dimen>
     <dimen name="text_body">16sp</dimen>
     <dimen name="text_secondary">14sp</dimen>

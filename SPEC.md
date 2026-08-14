@@ -246,6 +246,22 @@ No colour or size may be hard-coded in a layout: everything goes through resourc
 
 **The bike drawn says what is lent.** Where the network in service lends pedal-assist bikes, every bike glyph drawn for that city bears a small bolt: the button opening the journey search, the ride leg, and the discs standing for a station wherever they appear — map, illustration, detail. Not a brand mark and not a decoration: it is the difference between two offers, and it is the first thing one wants to know before walking to a station. Whether it applies is read from the city configuration (§15) and from nowhere else, so a mechanical fleet in one conurbation and an electric one in the next need no code change. A mixed fleet counts as electric: what the bolt answers is whether the city lends electric bikes. The application's own identity is untouched — the launcher icon and the welcome screens are the same whichever city is served, and one of them is shown before any city has been chosen at all.
 
+### 7.0 Opening
+
+The first thing the application shows is its own mark: the launcher icon's bicycle and pin, white on the identity's green filling the screen, with the application's name under it. It is what the user has just tapped, held a moment longer — the point is continuity, not ceremony.
+
+**It leaves when three things are true**: the first screen is settled — the last version code seen has been read, which decides between the welcome screen (§7.9), the what's-new screen (§7.10) and the map — that screen has something drawn in it, and the opening has been on the screen for **six hundred milliseconds**.
+
+That floor was not the intention and was put in on evidence. Without it the opening lasts exactly as long as the work it hides, which sounds right and is not: measured frame by frame on a Fairphone 5, the whole thing was over in two tenths of a second and the name appeared only in the three frames of the fade-out, over a map already showing through. The faster the phone, the less the screen exists — and a screen that exists only on slow hardware is not a screen. The six hundred milliseconds are counted from the moment the opening actually reaches the glass, not from the application starting: until Android's own splash hands over, whatever we drew was drawn underneath it.
+
+The wait is the longest of the three conditions and not their sum: what the floor adds is only the part the start-up had not already spent once the opening was up — two tenths of a second on a Fairphone 3, half a second on the faster Fairphone 5. It is a floor, not a delay laid on top of the wait.
+
+**The green starts before the application does.** Between the tap and the activity's first frame, Android draws a window of its own from the theme declared in the manifest; on Android 12 and later it draws its splash screen there. Both are given the identity's green and the same mark, so the sequence is one continuous image rather than a pale flash followed by a green one. The system bars are green for as long as the opening lasts, and are handed back to the theme's colours with it.
+
+**The identity does not follow the theme.** The green and the white are fixed, in the dark theme as in the light one: they are the mark's own colours, the ones the launcher draws the icon in, and a white bicycle on the dark theme's lighter green would not be the same mark. They are held apart from the interface's tokens for that reason.
+
+Nothing on this screen can be pressed, and nothing is announced to a screen reader twice: the mark is decorative, the name says it.
+
 ### 7.1 Map (main screen)
 
 - Full-screen map, centred on the user's position when the system already holds one inside the city served, and on that city's configured centring otherwise.

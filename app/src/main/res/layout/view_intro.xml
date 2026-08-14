@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The opening — SPEC §7.0.
+
+    The identity's green over the whole window, system bars included, with the
+    mark the user has just tapped and the application's name under it. It
+    covers the moment MainActivity needs to learn which screen comes first,
+    and it leaves as soon as that is settled: nothing here is on a timer.
+
+    **The mark must not move.** Android has already been drawing it, at its own
+    size and centred on the screen, since before this activity existed. So the
+    mark is centred on the middle of the window and the name is hung below that
+    middle, rather than the two being centred together as a block — which would
+    have shifted the mark upwards at the very moment the application took over,
+    the one moment the drawing is supposed to stand still.
+
+    It is clickable although nothing on it can be pressed. A tap landing
+    through it would reach the map underneath, on a screen the user cannot
+    see — a press they never aimed at anything.
+
+    Lint's overdraw warning is right and is accepted: this green is painted
+    over the theme's background on purpose, for the second or so it takes the
+    screen underneath to be worth showing. Moving it to the theme, as lint
+    suggests, would make it the whole application's background.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/identity_ground"
+    android:clickable="true"
+    android:focusable="true"
+    android:visibility="gone"
+    tools:ignore="Overdraw">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <!-- Decorative: the name below says the same thing, and a screen reader
+         must not announce the application twice. -->
+    <ImageView
+        android:id="@+id/mark"
+        android:layout_width="@dimen/intro_mark_canvas"
+        android:layout_height="@dimen/intro_mark_canvas"
+        android:contentDescription="@null"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_launcher_foreground"
+        app:layout_constraintBottom_toBottomOf="@id/middle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/middle" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/intro_name_drop"
+        android:paddingHorizontal="@dimen/space_l"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Intro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/middle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

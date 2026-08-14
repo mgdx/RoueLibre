@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     A single activity, navigation by fragments (SPEC §3).
+
+    The opening (SPEC §7.0) is laid over the container rather than pushed
+    through it as one more fragment: it lives for the length of one disk read,
+    has no state to save and nothing to go back to.
 -->
-<androidx.fragment.app.FragmentContainerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/content"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Starts hidden — the visibility is declared in view_intro.xml, since
+         an <include> passes on nothing but the id and the layout params. -->
+    <include
+        android:id="@+id/intro"
+        layout="@layout/view_intro" />
+
+</FrameLayout>

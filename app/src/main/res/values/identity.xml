@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The application's identity: the two colours of the mark itself, the green
+    it is laid on and the white it is drawn in.
+
+    They stay separate from the theme's tokens on purpose. Those tokens dress
+    the interface and follow the light or dark theme, whereas the mark has one
+    appearance: the launcher draws the icon long before the application starts,
+    and the opening screen (SPEC §7.0) shows that same icon, so neither may
+    follow anything. Pointing these at @color/signal and @color/surface would
+    repaint the icon and lighten the opening the day the dark theme is picked
+    up, and the white bicycle would then sit on a pale green.
+
+    The ground holds the same value as `signal` in the light theme, and the ink
+    the same as `surface`. Changing the identity's green therefore means
+    changing this file and the light theme together.
+-->
+<resources>
+    <color name="identity_ground">#0F6E56</color>
+    <color name="identity_ink">#F9FCFA</color>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    From Android 12 on, the system draws its own splash screen at launch and
+    ignores the launch theme's `windowBackground`: the three attributes below
+    are the only way to reach it, and they do not exist before API 31.
+
+    Without them Android 12 would put the launcher icon on the theme's
+    background — the pale flash the intro theme exists to remove — and then
+    hand over to a green screen. With them the system shows the mark on its
+    own green, and the activity continues that exact image, adding the name
+    under it. The seam between the two is meant to be invisible.
+-->
+<resources>
+
+    <style name="Theme.RoueLibre.Intro" parent="Theme.RoueLibre">
+        <item name="android:windowBackground">@color/identity_ground</item>
+        <item name="android:statusBarColor">@color/identity_ground</item>
+        <item name="android:navigationBarColor">@color/identity_ground</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <item name="android:windowSplashScreenBackground">@color/identity_ground</item>
+        <!-- The icon's foreground layer alone: the system supplies the ground
+             above, and the adaptive icon's own background would only paint the
+             same green a second time, inside a circle whose edge would then
+             show. -->
+        <item name="android:windowSplashScreenAnimatedIcon">
+            @drawable/ic_launcher_foreground
+        </item>
+        <!-- The system reserves a 288dp circle and insets the icon by a third
+             of it. Our drawing already keeps its distance from that edge
+             (ic_launcher_foreground.xml), so it needs no second margin. -->
+        <item name="android:windowSplashScreenIconBackgroundColor">
+            @android:color/transparent
+        </item>
+    </style>
+
+</resources>

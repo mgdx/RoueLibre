@@ -58,9 +58,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RoueLibre">
 
+        <!--
+            The theme named here is the one Android draws the window with
+            before the activity exists: the opening's green (SPEC §7.0).
+            MainActivity puts the interface's own theme back as its first act.
+        -->
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
+            android:theme="@style/Theme.RoueLibre.Intro"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

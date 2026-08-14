@@ -85,6 +85,31 @@
         <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.RoueLibre</item>
     </style>
 
+    <!--
+        The theme the window is born with, and only that — SPEC §7.0.
+
+        Between the tap on the launcher icon and the activity's first frame,
+        Android draws a window of its own from the theme declared in the
+        manifest. Left on Theme.RoueLibre that window is `paper`, so the
+        opening green arrived after a pale flash. This theme paints the
+        identity's green there instead, system bars included, so the green is
+        already in place when the activity takes over and the opening reads as
+        one continuous screen rather than two.
+
+        It follows nothing: no values-night variant, because the mark it
+        carries has one appearance (see identity.xml).
+
+        MainActivity puts Theme.RoueLibre back before its first inflation —
+        this theme must never dress the interface itself.
+    -->
+    <style name="Theme.RoueLibre.Intro" parent="Theme.RoueLibre">
+        <item name="android:windowBackground">@color/identity_ground</item>
+        <item name="android:statusBarColor">@color/identity_ground</item>
+        <item name="android:navigationBarColor">@color/identity_ground</item>
+        <!-- White bars on a dark green ground. -->
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
     <style name="ShapeAppearance.RoueLibre" parent="ShapeAppearance.Material3.Corner.None">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/radius</item>
