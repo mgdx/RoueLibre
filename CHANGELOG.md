@@ -266,6 +266,23 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **Most of the cities were given a routing graph with no elevation, and their
+  journeys therefore named no climb.** The graph's elevation comes from SRTM
+  readings converted into the 5°×5° tiles BRouter names them by, and the
+  conversion was skipped whenever a tile of that name was already in the cache —
+  though what such a tile holds is only the readings the *first* city of that
+  square had downloaded. Paris shares its square with Lyon, three degrees of
+  latitude to the south, and the square was converted for Lyon before Paris had
+  downloaded a reading of its own: the Paris graph carried no elevation at all,
+  and the ride up to Montmartre was announced flat, while
+  Lille — the first city of its own square — was served correctly and hid the
+  fault. `tools/build_routing.py` now reconverts a tile older than a reading it
+  needs, and converts every tile the box reaches rather than the single one its
+  north-west corner falls in: thirty-nine of the conurbations served straddle
+  one of those lines and were flat on the far side of it. Two hundred and forty
+  of the three hundred and thirty-three graphs published are missing some or all
+  of their elevation and are to be regenerated; Paris has been.
+
 - **"Locate me" from another city moved the point to a street the user was a
   hundred kilometres from.** The camera is penned inside the served city's
   bounding box, so a position outside it did not stop the move: it was clamped

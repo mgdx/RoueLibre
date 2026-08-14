@@ -177,33 +177,76 @@ def ensure_brouter(cache_dir: Path) -> tuple[Path, Path]:
     return jar, profiles
 
 
-def elevation_tiles_for(box: BoundingBox) -> list[str]:
-    """Name the one-degree SRTM tiles covering a bounding box."""
-    tiles = []
-    for latitude in range(math.floor(box.south), math.floor(box.north) + 1):
-        for longitude in range(math.floor(box.west), math.floor(box.east) + 1):
-            latitude_part = f"{'N' if latitude >= 0 else 'S'}{abs(latitude):02d}"
-            longitude_part = f"{'E' if longitude >= 0 else 'W'}{abs(longitude):03d}"
-            tiles.append(f"{latitude_part}{longitude_part}")
-    return tiles
+def elevation_tiles_for(box: BoundingBox) -> list[tuple[int, int]]:
+    """The south-west corners of the one-degree SRTM tiles covering a box."""
+    return [
+        (latitude, longitude)
+        for latitude in range(math.floor(box.south), math.floor(box.north) + 1)
+        for longitude in range(math.floor(box.west), math.floor(box.east) + 1)
+    ]
 
 
-def brouter_elevation_tile_name(box: BoundingBox) -> str:
-    """Name the 5°×5° elevation tile BRouter expects for a bounding box.
+def elevation_tile_name(latitude: int, longitude: int) -> str:
+    """Name the one-degree SRTM tile with that south-west corner."""
+    latitude_part = f"{'N' if latitude >= 0 else 'S'}{abs(latitude):02d}"
+    longitude_part = f"{'E' if longitude >= 0 else 'W'}{abs(longitude):03d}"
+    return f"{latitude_part}{longitude_part}"
+
+
+def brouter_elevation_tile_name(latitude: float, longitude: float) -> str:
+    """Name the 5°×5° elevation tile BRouter expects for a point.
 
     BRouter reuses the CGIAR SRTM grid: column 1 starts at 180° W, row 1 at
     60° N, both counting in five-degree steps.
     """
-    column = int((box.west + 180.0) / 5.0) + 1
-    row = int((60.0 - box.north) / 5.0) + 1
+    column = int((longitude + 180.0) / 5.0) + 1
+    row = int((60.0 - latitude) / 5.0) + 1
     return f"srtm_{column:02d}_{row:02d}"
 
 
-def prepare_elevation(box: BoundingBox, cache_dir: Path, work_dir: Path) -> Path:
-    """Fetch SRTM tiles and convert them to the format BRouter reads."""
+def brouter_elevation_tiles_for(
+    box: BoundingBox, hgt_dir: Path
+) -> dict[str, list[Path]]:
+    """The BRouter tiles a box needs, each with the readings it is made of.
+
+    A box is not bound to a single five-degree tile: a conurbation astride one
+    of those lines — Lyon, Helsinki, Brussels — reaches two, and taking the
+    tile of its north-west corner alone would leave the rest of it flat.
+    """
+    tiles: dict[str, list[Path]] = {}
+    for latitude, longitude in elevation_tiles_for(box):
+        # Named after the middle of the one-degree square rather than its
+        # corner, so that a square whose edge lies on a five-degree line is
+        # counted on its own side of it rather than on the neighbour's.
+        tile = brouter_elevation_tile_name(latitude + 0.5, longitude + 0.5)
+        reading = hgt_dir / f"{elevation_tile_name(latitude, longitude)}.hgt"
+        tiles.setdefault(tile, []).append(reading)
+    return tiles
+
+
+def elevation_tile_holds(converted: Path, readings: list[Path]) -> bool:
+    """Whether a converted tile was made from these readings.
+
+    The converter reads whatever the cache holds when it runs, and names its
+    output after the five-degree square alone. A square converted for one city
+    therefore covers only the ground that city had downloaded, and the cities
+    that came after it in the same square inherited a tile with a hole where
+    they stand: the Paris graph carried no elevation at all because the square
+    it shares with Lyon had been converted, months of readings earlier, for
+    Lyon. A tile older than a reading it needs cannot have seen it.
+    """
+    if not converted.exists():
+        return False
+    converted_at = converted.stat().st_mtime
+    return all(reading.stat().st_mtime <= converted_at for reading in readings)
+
+
+def prepare_elevation(box: BoundingBox, cache_dir: Path) -> Path:
+    """Fetch the SRTM readings a box needs, and say where they are."""
     hgt_dir = cache_dir / "srtm-hgt"
     hgt_dir.mkdir(parents=True, exist_ok=True)
-    for tile in elevation_tiles_for(box):
+    for latitude, longitude in elevation_tiles_for(box):
+        tile = elevation_tile_name(latitude, longitude)
         hgt_file = hgt_dir / f"{tile}.hgt"
         if hgt_file.exists():
             continue
@@ -302,12 +345,17 @@ def main() -> int:
             empty.mkdir(exist_ok=True)
             elevation_arguments = [str(empty)]
         else:
-            hgt_dir = prepare_elevation(box, arguments.cache_dir, work)
+            hgt_dir = prepare_elevation(box, arguments.cache_dir)
             bef_dir = arguments.cache_dir / "srtm-bef"
             bef_dir.mkdir(parents=True, exist_ok=True)
-            tile_name = brouter_elevation_tile_name(box)
-            if not (bef_dir / f"{tile_name}.bef").exists():
+            tiles = brouter_elevation_tiles_for(box, hgt_dir)
+            for tile_name, readings in tiles.items():
+                if elevation_tile_holds(bef_dir / f"{tile_name}.bef", readings):
+                    continue
                 print(f"      converting {tile_name} to the BRouter format…")
+                # The converter is handed the whole cache: it takes from it
+                # every reading of the square it is asked for, this city's and
+                # its neighbours', so one conversion serves them all.
                 run_java(
                     jar, "btools.mapcreator.ElevationRasterTileConverter",
                     [tile_name, str(hgt_dir), str(bef_dir), "1"],
