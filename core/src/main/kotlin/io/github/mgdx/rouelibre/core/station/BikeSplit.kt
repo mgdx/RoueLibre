@@ -56,9 +56,7 @@ public data class BikeSplit(public val mechanical: Int, public val electric: Int
  * @param vehicleTypes the kind of each vehicle type identifier of this network.
  * @return the split, or `null` if it cannot be trusted.
  */
-public fun StationAvailability.splitByKind(
-    vehicleTypes: Map<String, VehicleKind>,
-): BikeSplit? {
+public fun StationAvailability.splitByKind(vehicleTypes: Map<String, VehicleKind>): BikeSplit? {
     if (bikesByVehicleType.isEmpty() || vehicleTypes.isEmpty()) return null
     var mechanical = 0
     var electric = 0

@@ -107,10 +107,7 @@ class StationDetailViewModel(
      * checks: a wrong split sends someone to a station for a bike that is not
      * there.
      */
-    private fun splitOf(
-        entry: StationWithAvailability?,
-        fleet: FleetDescription?,
-    ): BikeSplit? {
+    private fun splitOf(entry: StationWithAvailability?, fleet: FleetDescription?): BikeSplit? {
         if (fleet == null || !fleet.isMixed) return null
         return entry?.availability?.splitByKind(fleet.vehicleTypes)
     }

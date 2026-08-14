@@ -13,10 +13,7 @@ import org.junit.Test
  */
 class BikeSplitTest {
 
-    private fun availability(
-        bikes: Int,
-        byType: Map<String, Int>,
-    ) = StationAvailability(
+    private fun availability(bikes: Int, byType: Map<String, Int>) = StationAvailability(
         stationId = "1",
         bikesAvailable = bikes,
         bikesByVehicleType = byType,

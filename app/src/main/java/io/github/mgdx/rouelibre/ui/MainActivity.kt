@@ -57,11 +57,7 @@ private const val INTRO_MINIMUM_MILLIS = 600L
  * How the system bars look, so that the opening can borrow them for the length
  * of its green and give them back unchanged (SPEC §7.0).
  */
-private data class SystemBars(
-    val statusBar: Int,
-    val navigationBar: Int,
-    val lightIcons: Boolean,
-)
+private data class SystemBars(val statusBar: Int, val navigationBar: Int, val lightIcons: Boolean)
 
 /**
  * The application's single activity (SPEC §3).
