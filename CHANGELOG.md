@@ -11,6 +11,35 @@ also records what has no visible effect.
 
 ### Added
 
+- **The first-launch sequence gains a page explaining the bike drawn.** Third
+  of four now: the three station discs side by side — plain, bolted, bolted and
+  cogged — over three sentences saying which is which and that it is read from
+  the network's own feed rather than guessed. A mark met on every screen
+  afterwards deserves to be introduced once; `SPEC.md` §7.9 said three pages
+  and now says four, which is its ceiling.
+
+- **A city lending both kinds draws a cog beside the bolt.** The bike glyph had
+  two states, plain and bolted, and a mixed fleet counted as electric; it now
+  has three, and the third says the truth of 102 of the networks served: both
+  offers, side by side. The cog sits under the bolt, offset a little towards the
+  edge so the two read as one pair, at the glyph's own scale, so it rides down
+  to marker size with it — the journey
+  button, the ride leg, the station discs on the map, in the search screen's
+  illustration and in the bike that crosses the screen while a journey is being
+  worked out. Three new vector drawables, no new asset weight worth measuring.
+
+- **A station says how many of its bikes are mechanical and how many are
+  electric**, under the count, in the conurbations that lend both — "3
+  mechanical · 1 electric". It is the moment the question is asked: one is
+  deciding whether to walk over, and a climb makes the difference between the
+  two. It costs no request, the breakdown travelling in the `station_status`
+  feed already fetched, as `vehicle_types_available` since GBFS 2.1 and as
+  Vélib's `num_bikes_available_types` on GBFS 1.0. The map and list markers are
+  unchanged and keep counting whole stations: two numbers in a disc are
+  unreadable at fifty stations on screen. The line disappears rather than lie —
+  a vehicle type the network never declared, or a breakdown that does not add up
+  to the count displayed, leaves the total standing alone, which is always true.
+
 - **A city lending pedal-assist bikes draws them with a bolt.** Whether the
   fleet is electric is now part of a city's configuration, in a `fleet` block,
   and every bike the interface draws for that city carries a small bolt: the
@@ -98,6 +127,22 @@ also records what has no visible effect.
   queried, and its routing graph counted.
 
 ### Changed
+
+- **What a city lends is now counted, no longer merely declared.**
+  `tools/read_fleet.py` used to read the GBFS `vehicle_types` feed and believe
+  it; it now counts the bikes standing at the stations. A survey of the 333
+  networks served showed why: a third of those declaring a mixed fleet have not
+  one bike of one of the two kinds out. Madrid declared a mechanical type and
+  puts out 5872 electric bikes and no mechanical one, Berlin declared an
+  electric type and puts out 1989 mechanical ones and no electric one — both
+  wore the wrong glyph. Vélib' Métropole, which declares nothing at all, wore a
+  plain bike over 7836 electric ones. The `fleet` block now also carries whether
+  both kinds are really lent, and the table translating the producer's vehicle
+  type identifiers, without which a station's count cannot be split. A kind
+  under two percent of the bikes counted does not make a mixed fleet: Barcelona
+  puts out 1922 electric bikes and 2 mechanical ones, which is a residue and not
+  an offer. Counted today: 102 mixed fleets, 95 electric, 136 mechanical, and 27
+  networks letting nothing be counted, which keep their declaration.
 
 - **The step list left the result screen for the detail screen**, and the
   "details" button that unfolded it went with it. It was a row spent saying in

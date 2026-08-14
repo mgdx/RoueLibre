@@ -53,7 +53,7 @@ python3 tools/discover_networks.py --country PL   # or one country at a time
 python3 tools/add_city.py --list      # what it would add
 python3 tools/add_city.py --all       # writes config/cities/*.json
 python3 tools/add_city.py --refresh-sources   # re-reads where the data is cut from
-python3 tools/read_fleet.py --all     # asks each network what it lends
+python3 tools/read_fleet.py --all     # counts the bikes each network has out
 python3 tools/sample_stations.py --all   # records where its stations are
 ```
 
@@ -108,14 +108,33 @@ settings, without recompiling.
 ## Electric or not, the drawing says so
 
 A network lending pedal-assist bikes is not the same offer as one lending
-mechanical bikes, and the bike glyphs of that city carry a small bolt — the
-journey button, the ride leg, the discs standing for stations. Nothing is
-guessed: [`tools/read_fleet.py`](../tools/read_fleet.py) reads the network's own
-GBFS `vehicle_types` feed and writes the answer into the `fleet` block of its
-configuration, which is the only place the application looks. A feed declaring
-no vehicle type leaves the block out, and the plain bike is drawn. Of the
-networks served today, 215 lend pedal-assist bikes, 103 lend mechanical ones
-and 15 say nothing.
+mechanical bikes, nor as one lending both, and the bike glyphs of that city say
+which — plain, bearing a bolt, or bearing a bolt and a cog — wherever a bike is
+drawn: the journey button, the ride leg, the discs standing for stations.
+Nothing is guessed, and nothing is taken on the operator's word either:
+[`tools/read_fleet.py`](../tools/read_fleet.py) **counts the bikes standing at
+the stations** and writes what it saw into the `fleet` block of the city's
+configuration, which is the only place the application looks.
+
+Counting rather than reading the `vehicle_types` declaration is the whole point.
+A third of the networks declaring a mixed fleet have not one bike of one of the
+two kinds in circulation: Madrid declares a mechanical type and puts out 5872
+electric bikes and no mechanical one, Berlin declares an electric type and puts
+out 1989 mechanical bikes and no electric one. Vélib' Métropole declares nothing
+at all — it is on GBFS 1.0, which has no `vehicle_types` feed — and lends 7836
+electric bikes beside 11 687 mechanical ones. Of the networks served today, 102
+lend both kinds, 95 lend electric bikes only, 136 lend mechanical ones only, and
+27 let nothing be counted and keep whatever their declaration says.
+
+Where both kinds are lent, the station's sheet splits its count — "3 mechanical
+· 1 electric". The breakdown costs no extra request: it travels in the
+`station_status` feed already fetched, as `vehicle_types_available` since
+GBFS 2.1 and as Vélib's `num_bikes_available_types` on GBFS 1.0. The identifiers
+it counts by are the producer's own — `346` and `348` at nextbike, `mechanical`
+and `electrical` at Lyon — and the `fleet.vehicleTypes` table of the
+configuration is what translates them. A type absent from that table, or a
+breakdown that does not add up to the count displayed, silences the line rather
+than risking a wrong split: the total alone is always true.
 
 ## Where the addresses come from
 

@@ -39,7 +39,11 @@ but the live availability of the bikes runs on your phone.
 - 🗺️ **A map that shows what a cyclist needs:**
   - cycle ways, drawn apart from the streets;
   - public buildings and landmarks, to find your way by sight;
-  - pedal-assist bikes, marked with a bolt wherever the city lends them.
+  - what the city lends, drawn on the bike itself: plain where the network
+    lends only mechanical bikes, a bolt where it lends only electric ones, a
+    bolt and a cog where it lends both;
+  - and in that last case, a station saying how many of its bikes are
+    mechanical and how many are electric.
 
 - 🧭 **The best journey, not the nearest station:**
   - the departure and arrival stations are chosen from the live availability —
