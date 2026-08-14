@@ -8,6 +8,7 @@ import io.github.mgdx.rouelibre.core.gbfs.GbfsFeedNames
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
 import io.github.mgdx.rouelibre.core.gbfs.StationInformationFeed
 import io.github.mgdx.rouelibre.core.gbfs.StationStatusFeed
+import io.github.mgdx.rouelibre.core.gbfs.VehicleTypesFeed
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -63,6 +64,18 @@ class GbfsRemoteSource(
         discovery.urlOf(GbfsFeedNames.STATION_STATUS)
             .flatMap { fetchText(it) }
             .flatMap(parser::parseStationStatus)
+
+    /**
+     * Reads what each vehicle type identifier stands for.
+     *
+     * The feed a network on GBFS 1.0 does not have: the failure is then
+     * `FeedUnavailable`, which the caller reads as "nothing declared" rather
+     * than as a breakdown.
+     */
+    suspend fun fetchVehicleTypes(discovery: GbfsDiscovery): Outcome<VehicleTypesFeed> =
+        discovery.urlOf(GbfsFeedNames.VEHICLE_TYPES)
+            .flatMap { fetchText(it) }
+            .flatMap(parser::parseVehicleTypes)
 
     /**
      * Runs a GET and returns the response body.

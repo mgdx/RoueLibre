@@ -3,10 +3,13 @@ package io.github.mgdx.rouelibre.data
 import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.gbfs.GbfsDiscovery
+import io.github.mgdx.rouelibre.core.gbfs.VehicleTypesFeed
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.station.FleetReading
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.StationAvailability
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
+import io.github.mgdx.rouelibre.core.station.countFleet
 import io.github.mgdx.rouelibre.core.station.joinStationsWithAvailability
 import io.github.mgdx.rouelibre.data.local.StationAvailabilityEntity
 import io.github.mgdx.rouelibre.data.local.StationDao
@@ -35,6 +38,10 @@ import java.time.Instant
  * @property discoveryUrlProvider gives the auto-discovery document's URL, or
  *   `null` if no city is chosen. It is a function and not a value because the
  *   setting is user-editable (SPEC §4.1) and changes with the active city.
+ * @property recordFleet takes what the bikes just fetched say the network
+ *   lends. Reported rather than stored here: this repository counts, and what
+ *   is made of the count — remembered, merged with earlier readings, shown — is
+ *   the fleet repository's business.
  * @property clock the clock, injected to keep the policy testable.
  */
 class StationRepository(
@@ -42,6 +49,7 @@ class StationRepository(
     private val dao: StationDao,
     private val refreshTimestamps: RefreshTimestampStore,
     private val discoveryUrlProvider: suspend () -> String?,
+    private val recordFleet: suspend (FleetReading) -> Unit = {},
     private val clock: Clock = Clock.systemUTC(),
 ) {
 
@@ -54,6 +62,16 @@ class StationRepository(
      */
     private var cachedDiscovery: GbfsDiscovery? = null
     private var cachedDiscoveryUrl: String? = null
+
+    /**
+     * The session's vehicle type table, once read.
+     *
+     * What each identifier stands for changes when an operator adds a kind to
+     * its fleet, which happens a few times a year — so once per session is
+     * plenty, and it is what makes "the application checks the network when it
+     * opens" true without asking again every minute.
+     */
+    private var cachedVehicleTypes: VehicleTypesFeed? = null
 
     /** Serialises refreshes: two screens can ask for one. */
     private val refreshLock = Mutex()
@@ -127,10 +145,54 @@ class StationRepository(
                     outcome.value.availabilities.map { it.toEntity(fetchedAt = now) },
                 )
                 lastStatusRefresh = now
+                countFleetFrom(discovery, outcome.value.availabilities)
             }
         }
 
         Outcome.Success(Unit)
+    }
+
+    /**
+     * Counts what the network lends, from the state just fetched.
+     *
+     * Done here because this is where both halves are in hand: the bikes
+     * standing at the stations, and the table saying what they are. It costs no
+     * request beyond the vehicle type table, read once for the session.
+     *
+     * A failure to count is never a failure to refresh: the counts are the
+     * screen's subject, and what the bikes *are* is a refinement of them.
+     */
+    private suspend fun countFleetFrom(
+        discovery: GbfsDiscovery,
+        availabilities: List<StationAvailability>,
+    ) {
+        val declared = vehicleTypes(discovery)
+        recordFleet(
+            countFleet(
+                availabilities = availabilities,
+                declaredVehicleTypes = declared.kinds,
+                declaresElectricBikes = declared.declaresElectricBikes,
+            ),
+        )
+    }
+
+    /**
+     * The vehicle type table, read once per session.
+     *
+     * An empty table is a perfectly ordinary answer: a network on GBFS 1.0 has
+     * no such feed to publish, and its kinds are read from the names it puts
+     * inline in `station_status` instead. That answer is remembered like a real
+     * one — there is nothing to retry — whereas a network failure is not, so a
+     * connection coming back brings the table with it.
+     */
+    private suspend fun vehicleTypes(discovery: GbfsDiscovery): VehicleTypesFeed {
+        cachedVehicleTypes?.let { return it }
+        return when (val outcome = remote.fetchVehicleTypes(discovery)) {
+            is Outcome.Success -> outcome.value.also { cachedVehicleTypes = it }
+            is Outcome.Failure -> NO_VEHICLE_TYPES.also {
+                if (outcome.error is DataError.FeedUnavailable) cachedVehicleTypes = it
+            }
+        }
     }
 
     /**
@@ -146,6 +208,7 @@ class StationRepository(
         dao.clearStations()
         cachedDiscovery = null
         cachedDiscoveryUrl = null
+        cachedVehicleTypes = null
         lastStatusRefresh = null
         // The date of the last fetch need not be rewritten: an empty cache
         // makes the refresh due anyway.
@@ -183,6 +246,14 @@ class StationRepository(
     }
 
     private companion object {
+        /** What a network declaring no vehicle type at all leaves us with. */
+        val NO_VEHICLE_TYPES = VehicleTypesFeed(
+            kinds = emptyMap(),
+            declaresElectricBikes = false,
+            lastUpdated = null,
+            version = null,
+        )
+
         /**
          * The feed is produced every minute; asking more often would bring back
          * no new data and would only load the producer's server (SPEC §4.1).

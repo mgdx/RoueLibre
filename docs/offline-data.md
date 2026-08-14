@@ -114,7 +114,19 @@ drawn: the journey button, the ride leg, the discs standing for stations.
 Nothing is guessed, and nothing is taken on the operator's word either:
 [`tools/read_fleet.py`](../tools/read_fleet.py) **counts the bikes standing at
 the stations** and writes what it saw into the `fleet` block of the city's
-configuration, which is the only place the application looks.
+configuration.
+
+That block is the **seed**, not the last word. The application counts again from
+the live feeds, on every refresh of the stations: it reads `vehicle_types` once
+per session to know what each identifier is, then sorts the bikes of
+`station_status` into the two kinds over the whole network. A network that gains
+a kind between two releases therefore shows the right bike straight away, instead
+of waiting for the next survey. **A reading only ever adds** — it can reveal a
+kind the seed did not know about, never take one away, so the glyph does not
+flicker on a network whose stations happen to be empty of one kind at four in the
+morning. What is counted is remembered across restarts, under the name of the city
+it was counted in, so a launch with no connection keeps it. The seed is what
+answers on a first launch, offline, or where the feeds let nothing be counted.
 
 Counting rather than reading the `vehicle_types` declaration is the whole point.
 A third of the networks declaring a mixed fleet have not one bike of one of the
@@ -123,18 +135,26 @@ electric bikes and no mechanical one, Berlin declares an electric type and puts
 out 1989 mechanical bikes and no electric one. Vélib' Métropole declares nothing
 at all — it is on GBFS 1.0, which has no `vehicle_types` feed — and lends 7836
 electric bikes beside 11 687 mechanical ones. Of the networks served today, 102
-lend both kinds, 95 lend electric bikes only, 136 lend mechanical ones only, and
+lend both kinds, 93 lend electric bikes only, 138 lend mechanical ones only, and
 27 let nothing be counted and keep whatever their declaration says.
+
+Those figures are the **seeds** as of the survey of 14 August 2026, not what a
+user will see: the application recounts from the live feeds, and the 27 that let
+nothing be counted that day will be counted the first time one of their stations
+holds a bike. Re-running the survey is therefore no longer what makes a network
+show the right bike — it is what makes its *first* launch show it.
 
 Where both kinds are lent, the station's sheet splits its count — "3 mechanical
 · 1 electric". The breakdown costs no extra request: it travels in the
 `station_status` feed already fetched, as `vehicle_types_available` since
 GBFS 2.1 and as Vélib's `num_bikes_available_types` on GBFS 1.0. The identifiers
 it counts by are the producer's own — `346` and `348` at nextbike, `mechanical`
-and `electrical` at Lyon — and the `fleet.vehicleTypes` table of the
-configuration is what translates them. A type absent from that table, or a
-breakdown that does not add up to the count displayed, silences the line rather
-than risking a wrong split: the total alone is always true.
+and `electrical` at Lyon — and the `vehicleTypes` table is what translates them,
+read from the network's own `vehicle_types` feed and seeded by the configuration.
+A type absent from that table, or a breakdown that does not add up to the count
+displayed, silences the line rather than risking a wrong split: the total alone
+is always true. Keeping that table counted rather than surveyed is what stops the
+line disappearing without a word the day an operator adds a kind.
 
 ## Where the addresses come from
 

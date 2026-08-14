@@ -7,6 +7,13 @@ lending both kinds side by side lets the station sheet split its count into
 mechanical and electric (§7.2). Both belong in the city configuration like
 every other city-specific value, and neither is ever typed by hand.
 
+What this script writes is the **seed** of that answer. The application counts
+again from the live feeds on every refresh (§4.1), so a network that changes
+between two releases needs no new survey; the seed is what answers on a first
+launch, on a launch with no connection, and where the feeds let nothing be
+counted. The two countings must agree — `core/station/FleetReading.kt` is the
+same rules in Kotlin, and a change made to one belongs in the other.
+
 Neither is read from the `vehicle_types` declaration alone either, and that is
 the whole point of this script. A survey of the three hundred and thirty-three
 configured networks found that **a third of those declaring a mixed fleet have

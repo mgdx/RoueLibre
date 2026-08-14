@@ -46,14 +46,19 @@ public data class NetworkDescription(
 /**
  * What the network lends, as counted from its own feeds.
  *
- * A city-specific fact like any other, and therefore read from the
- * configuration rather than decided in the code (SPEC §15): the same
- * application serves a mechanical fleet and an electric one.
+ * A city-specific fact like any other, and therefore never decided in the code
+ * (SPEC §15): the same application serves a mechanical fleet and an electric
+ * one.
  *
  * Counted rather than declared, and that distinction is the whole of it: a
  * third of the networks declaring a mixed fleet have not one bike of one of the
- * two kinds in circulation. `tools/read_fleet.py` counts the bikes standing at
- * the stations and writes down what it saw.
+ * two kinds in circulation.
+ *
+ * What sits here is the **seed**: `tools/read_fleet.py` counts the bikes when
+ * the city is added and writes down what it saw, so that a first launch — with
+ * no network yet, or none ever — still draws the right bike. The application
+ * counts again from the live feeds and refines it as it goes (SPEC §4.1); the
+ * reading in force is the one the fleet repository holds, not this one.
  */
 public data class FleetDescription(
     /**
@@ -174,7 +179,9 @@ private data class CityConfigurationDocument(
         fleet = FleetDescription(
             hasElectricBikes = fleet.electricBikes,
             isMixed = fleet.mixed,
-            vehicleTypes = fleet.vehicleTypes.mapValues { (_, kind) -> kind.toDomain() },
+            vehicleTypes = fleet.vehicleTypes.mapValues { (_, kind) ->
+                VehicleKind.ofWireName(kind)
+            },
         ),
         gbfs = GbfsSettings(
             discoveryUrl = gbfs.discoveryUrl,
@@ -215,19 +222,6 @@ private data class FleetDocument(
     val mixed: Boolean = false,
     val vehicleTypes: Map<String, String> = emptyMap(),
 )
-
-/**
- * Reads the kind written in the configuration.
- *
- * Anything unexpected is read as [VehicleKind.Other] rather than refused: a
- * kind this build does not know is certainly not a bike it can count, and one
- * unreadable word must not cost the user the whole city.
- */
-private fun String.toDomain(): VehicleKind = when (this) {
-    "mechanical" -> VehicleKind.Mechanical
-    "electric" -> VehicleKind.Electric
-    else -> VehicleKind.Other
-}
 
 @Serializable
 private data class GbfsDocument(

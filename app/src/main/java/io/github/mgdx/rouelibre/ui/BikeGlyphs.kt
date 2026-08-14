@@ -2,10 +2,14 @@ package io.github.mgdx.rouelibre.ui
 
 import androidx.annotation.DrawableRes
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.config.FleetDescription
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 /**
@@ -29,10 +33,12 @@ enum class BikeFleet {
 
     companion object {
         /**
-         * What a city's configuration says it lends (SPEC §15).
+         * What the city in service is known to lend (SPEC §7, §15).
          *
-         * A city not chosen yet, and one whose feeds let nothing be counted,
-         * both give [Mechanical]: the plain bike promises the least.
+         * A city not chosen yet, one whose configuration has not been read from
+         * disk yet, and one whose feeds let nothing be counted all give
+         * [Mechanical]: the plain bike promises the least, and the bolt is what
+         * has to be earned.
          */
         fun of(fleet: FleetDescription?): BikeFleet = when {
             fleet == null -> Mechanical
@@ -52,9 +58,10 @@ enum class BikeFleet {
  * bike is drawn — the journey button, the ride leg, the stations of a journey —
  * and nowhere else: it is a property of the fleet, not a decoration.
  *
- * Which of the three applies is read from the city configuration and from
- * nothing else (SPEC §15): the code knows no city, and the same build serves a
- * mechanical fleet in one conurbation and a mixed one in the next.
+ * Which of the three applies is never decided here (SPEC §15): the code knows
+ * no city, and the same build serves a mechanical fleet in one conurbation and a
+ * mixed one in the next. It is counted from the network's own feeds, seeded by
+ * the city configuration for the launches that reach no network (SPEC §4.1).
  *
  * The application's own identity is left alone — the launcher icon and the
  * welcome screens are the same whichever city is served, and one of them is
@@ -88,17 +95,33 @@ object BikeGlyphs {
 }
 
 /**
- * Says what the city in service lends, once it is known.
+ * Says what the city in service lends, and says it again when that changes.
  *
- * The configuration is read from disk, so the answer comes a moment after the
- * screen: [apply] therefore runs on a view already on screen, and every caller
- * draws the plain bike until then rather than an empty space.
+ * Two moments, and both come after the screen is up. The configuration is read
+ * from disk, so the first answer arrives a beat late — every caller draws the
+ * plain bike until then rather than an empty space. Then the stations refresh,
+ * the bikes standing at them are counted (SPEC §4.1), and a network that turns
+ * out to lend more than the configuration was seeded with says so on the spot.
+ * A reading only ever adds (see `FleetRepository`), so this fires rarely and
+ * never flickers back.
  *
- * @param apply what to redraw, run on the main thread while the view lives.
+ * [apply] must therefore be safe to run more than once: it redraws, it does not
+ * append.
+ *
+ * @param apply what to redraw, run on the main thread while the view is
+ *   started.
  */
 fun Fragment.withBikeFleet(apply: (fleet: BikeFleet) -> Unit) {
+    val container = (requireActivity().application as RoueLibreApplication).container
     viewLifecycleOwner.lifecycleScope.launch {
-        val container = (requireActivity().application as RoueLibreApplication).container
-        apply(BikeFleet.of(container.activeCity()?.fleet))
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            container.fleetRepository.fleet
+                .map { BikeFleet.of(it) }
+                // Several readings draw the same bike — a vehicle type added to
+                // the table changes nothing here. Redrawing on each would put
+                // the markers back into the map style for nothing.
+                .distinctUntilChanged()
+                .collect(apply)
+        }
     }
 }

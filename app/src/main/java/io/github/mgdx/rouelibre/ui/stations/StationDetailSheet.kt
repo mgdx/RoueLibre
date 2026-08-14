@@ -55,7 +55,7 @@ class StationDetailSheet : BottomSheetDialogFragment() {
             preferences = container.preferences,
             addressIndex = container.addressIndex,
             deviceLocation = container.deviceLocation,
-            fleet = { container.activeCity()?.fleet },
+            fleet = container.fleetRepository.fleet,
             stationId = requireArguments().getString(ARGUMENT_STATION_ID).orEmpty(),
         )
     }

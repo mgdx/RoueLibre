@@ -2,8 +2,10 @@ package io.github.mgdx.rouelibre.core.gbfs
 
 import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.Outcome
+import io.github.mgdx.rouelibre.core.station.VehicleKind
 import io.github.mgdx.rouelibre.core.valueOrNull
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -352,5 +354,74 @@ class GbfsParserTest {
         val connues = information.stations.map { it.id }.toSet()
         val etats = status.availabilities.map { it.stationId }.toSet()
         assertEquals(connues, etats)
+    }
+
+    // --------------------------------------------------- the vehicle types --
+
+    @Test
+    fun `sorts the declared types into the three kinds`() {
+        val document = """
+            {"last_updated":1786264920,"ttl":0,"version":"2.3","data":{"vehicle_types":[
+              {"vehicle_type_id":"346","form_factor":"bicycle","propulsion_type":"human"},
+              {"vehicle_type_id":"348","form_factor":"bicycle",
+               "propulsion_type":"electric_assist"},
+              {"vehicle_type_id":"cargo","form_factor":"cargo_bicycle",
+               "propulsion_type":"human"},
+              {"vehicle_type_id":"trot","form_factor":"scooter",
+               "propulsion_type":"electric"}
+            ]}}
+        """.trimIndent()
+
+        val feed = assertSuccess(parser.parseVehicleTypes(document))
+
+        assertEquals(
+            mapOf(
+                "346" to VehicleKind.Mechanical,
+                "348" to VehicleKind.Electric,
+                "cargo" to VehicleKind.Mechanical,
+                // An electric SCOOTER says nothing about the network's bikes,
+                // and the status feed counts it alongside them.
+                "trot" to VehicleKind.Other,
+            ),
+            feed.kinds,
+        )
+        assertTrue(feed.declaresElectricBikes)
+    }
+
+    @Test
+    fun `a throttle bicycle is still a bike one does not pedal alone`() {
+        val document = """
+            {"version":"3.0","data":{"vehicle_types":[
+              {"vehicle_type_id":"e","form_factor":"bicycle","propulsion_type":"electric"}
+            ]}}
+        """.trimIndent()
+
+        val feed = assertSuccess(parser.parseVehicleTypes(document))
+
+        assertEquals(mapOf("e" to VehicleKind.Electric), feed.kinds)
+    }
+
+    @Test
+    fun `a type declaring nothing falls to the plain bike`() {
+        // The bolt is what has to be earned: a producer omitting both fields
+        // must not be read as lending pedal-assist bikes.
+        val document = """
+            {"version":"2.3","data":{"vehicle_types":[{"vehicle_type_id":"bike"}]}}
+        """.trimIndent()
+
+        val feed = assertSuccess(parser.parseVehicleTypes(document))
+
+        assertEquals(mapOf("bike" to VehicleKind.Other), feed.kinds)
+        assertFalse(feed.declaresElectricBikes)
+    }
+
+    @Test
+    fun `an empty declaration is read, not refused`() {
+        val document = """{"version":"2.3","data":{"vehicle_types":[]}}"""
+
+        val feed = assertSuccess(parser.parseVehicleTypes(document))
+
+        assertTrue(feed.kinds.isEmpty())
+        assertFalse(feed.declaresElectricBikes)
     }
 }

@@ -30,6 +30,11 @@ FLEET_COMMENT = [
     "have not a single bike of one of the two kinds in circulation.",
     "tools/read_fleet.py therefore counts the bikes actually available",
     "at the stations, and writes what it saw.",
+    "This block SEEDS the answer, it does not settle it: the",
+    "application counts again from the live feeds on every refresh,",
+    "and a reading only ever adds to what is written here. What this",
+    "block is for is the launch that reaches no network -- the first",
+    "one, and every one made with no connection.",
     "\"electricBikes\" marks every bike glyph drawn for this city with a",
     "bolt (§7); \"mixed\" is what allows the station sheet to split its",
     "count into mechanical and electric; \"vehicleTypes\" translates the",
@@ -231,6 +236,12 @@ class CityConfig:
 
         Written by ``tools/read_fleet.py`` and by nothing else: this is a fact
         about the city, and §16 wants facts observed rather than typed in.
+
+        What is recorded seeds the application rather than settling it. The
+        application counts again from the live feeds on every refresh (§4.1),
+        so a survey run again is no longer what makes a network show the right
+        bike — it is what makes its *first* launch show it, before any feed has
+        been reached.
 
         Args:
             has_electric_bikes: whether pedal-assist bikes are in circulation.

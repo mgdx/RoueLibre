@@ -3,17 +3,22 @@ package io.github.mgdx.rouelibre.core.station
 /**
  * The kind of vehicle a station's count may be made of.
  *
- * Which identifier is which is a fact about the network, read from the city
- * configuration and from nowhere else (SPEC §15): producers name their types as
- * they please — `346` and `348` at nextbike, `mechanical` and `electrical` at
- * Lyon, `bike` at Lille.
+ * Which identifier is which is a fact about the network, never about the
+ * application (SPEC §15): producers name their types as they please — `346` and
+ * `348` at nextbike, `mechanical` and `electrical` at Lyon, `bike` at Lille. The
+ * table translating them is read from the network's own `vehicle_types` feed and
+ * seeded by the city configuration (SPEC §4.1).
+ *
+ * @property wireName how the kind is written down, in the city configuration as
+ *   in the settings where a reading is remembered. Stable from one release to
+ *   the next, and lowercase, being the vocabulary the generation scripts write.
  */
-public enum class VehicleKind {
+public enum class VehicleKind(public val wireName: String) {
     /** A bicycle one pedals alone. */
-    Mechanical,
+    Mechanical("mechanical"),
 
     /** A bicycle a motor helps to pedal. */
-    Electric,
+    Electric("electric"),
 
     /**
      * A scooter, a moped — anything that is not a bicycle.
@@ -23,7 +28,20 @@ public enum class VehicleKind {
      * same breakdown. Knowing that an identifier is *not* a bike is what
      * distinguishes it from one that could not be read at all.
      */
-    Other,
+    Other("other"),
+    ;
+
+    public companion object {
+        /**
+         * Reads a kind back from its [wireName].
+         *
+         * Anything unexpected reads as [Other] rather than being refused: a kind
+         * this build does not know is certainly not a bike it can count, and one
+         * unreadable word must not cost the user the whole city.
+         */
+        public fun ofWireName(name: String?): VehicleKind =
+            entries.firstOrNull { it.wireName == name } ?: Other
+    }
 }
 
 /**

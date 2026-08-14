@@ -13,9 +13,11 @@ import io.github.mgdx.rouelibre.data.AppPreferences
 import io.github.mgdx.rouelibre.data.StationRepository
 import io.github.mgdx.rouelibre.data.addresses.AddressIndex
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -58,7 +60,7 @@ class StationDetailViewModel(
     private val preferences: AppPreferences,
     private val addressIndex: AddressIndex,
     private val deviceLocation: DeviceLocation,
-    private val fleet: suspend () -> FleetDescription?,
+    private val fleet: Flow<FleetDescription?>,
     private val stationId: String,
 ) : ViewModel() {
 
@@ -72,16 +74,16 @@ class StationDetailViewModel(
 
     init {
         viewModelScope.launch {
-            // Read once: what the city lends is settled when it is added, and
-            // the count that follows refreshes every minute.
-            val fleet = fleet()
-            repository.observeStations().collect { snapshot ->
+            // Followed rather than read once: the first refresh may be what
+            // establishes that the network lends both kinds, and the split is
+            // then owed to a sheet already open (SPEC §4.1).
+            combine(repository.observeStations(), fleet, ::Pair).collect { (snapshot, lent) ->
                 val entry = snapshot.stations.firstOrNull { it.station.id == stationId }
                 mutableState.update {
                     it.copy(
                         entry = entry,
                         fetchedAt = snapshot.fetchedAt,
-                        bikeSplit = splitOf(entry, fleet),
+                        bikeSplit = splitOf(entry, lent),
                     )
                 }
                 if (entry != null) {
@@ -153,7 +155,7 @@ class StationDetailViewModel(
         private val preferences: AppPreferences,
         private val addressIndex: AddressIndex,
         private val deviceLocation: DeviceLocation,
-        private val fleet: suspend () -> FleetDescription?,
+        private val fleet: Flow<FleetDescription?>,
         private val stationId: String,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")

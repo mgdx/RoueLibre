@@ -5,6 +5,7 @@ import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.StationAvailability
+import io.github.mgdx.rouelibre.core.station.VehicleKind
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -103,6 +104,62 @@ public class GbfsParser {
         }
 
     /**
+     * Reads `vehicle_types` and sorts the declared types into the three kinds.
+     *
+     * This is the table that gives the identifiers of `vehicle_types_available`
+     * a meaning. It is read for what each identifier *is*, never for what the
+     * network is: a declaration says what an operator may lend one day, and a
+     * third of the networks declaring a mixed fleet have not one bike of one of
+     * the two kinds in circulation. What the network lends is counted from
+     * `station_status` instead, by [io.github.mgdx.rouelibre.core.station.countFleet].
+     *
+     * The declaration is nevertheless worth keeping on one point, which
+     * [VehicleTypesFeed.declaresElectricBikes] carries: a network whose every
+     * station is empty at that moment lets nothing be counted, and it must not
+     * turn an electric city into a mechanical one.
+     *
+     * @param document the raw contents of `vehicle_types.json`.
+     */
+    public fun parseVehicleTypes(document: String): Outcome<VehicleTypesFeed> = parsing {
+        val envelope = json.decodeFromString(
+            GbfsEnvelope.serializer(GbfsVehicleTypesData.serializer()),
+            document,
+        )
+        val kinds = envelope.data.vehicleTypes.associate { declared ->
+            declared.vehicleTypeId to kindOf(declared)
+        }
+        VehicleTypesFeed(
+            kinds = kinds,
+            declaresElectricBikes = kinds.containsValue(VehicleKind.Electric),
+            lastUpdated = envelope.lastUpdated,
+            version = envelope.version,
+        )
+    }
+
+    /**
+     * Sorts one declared vehicle type into the kind the application counts by.
+     *
+     * Two questions, in that order. Is it a bicycle at all — a network's
+     * electric SCOOTERS say nothing about its bikes, and they are counted in
+     * the status feed alongside them. Then, does a motor help the rider:
+     * `electric_assist` is the pedal-assist bike this is about, and `electric`
+     * is a throttle vehicle, which on a bicycle form factor is still a bike one
+     * does not pedal alone. Everything else — `human`, `combustion` — is not.
+     *
+     * A type declaring no form factor falls to [VehicleKind.Other]: the field
+     * has been mandatory since GBFS 2.1, so its absence is a malformed entry,
+     * and a vehicle we cannot even call a bicycle belongs in neither column.
+     */
+    private fun kindOf(declared: GbfsVehicleType): VehicleKind {
+        if (declared.formFactor !in BICYCLE_FORM_FACTORS) return VehicleKind.Other
+        return if (declared.propulsionType in ELECTRIC_PROPULSIONS) {
+            VehicleKind.Electric
+        } else {
+            VehicleKind.Mechanical
+        }
+    }
+
+    /**
      * Reads `station_status` and returns the current state of the stations.
      *
      * @param document the raw contents of `station_status.json`.
@@ -197,6 +254,14 @@ public class GbfsParser {
         if (latitude !in -90.0..90.0 || longitude !in -180.0..180.0) return null
         return Coordinates(latitude, longitude)
     }
+
+    private companion object {
+        /** The vehicle forms this application is about. */
+        val BICYCLE_FORM_FACTORS = setOf("bicycle", "cargo_bicycle")
+
+        /** The GBFS propulsion values that mean a motor helps the rider. */
+        val ELECTRIC_PROPULSIONS = setOf("electric_assist", "electric")
+    }
 }
 
 /**
@@ -234,6 +299,21 @@ public data class StationStatusFeed(
     public val version: String?,
 )
 
+/**
+ * The useful contents of `vehicle_types`.
+ *
+ * @property kinds what each declared identifier is. Empty for a network that
+ *   publishes the feed with nothing in it.
+ * @property declaresElectricBikes whether a pedal-assist bicycle is among the
+ *   types declared. All there is to go on when nothing can be counted.
+ */
+public data class VehicleTypesFeed(
+    public val kinds: Map<String, VehicleKind>,
+    public val declaresElectricBikes: Boolean,
+    public val lastUpdated: Instant?,
+    public val version: String?,
+)
+
 /** The standard names of the GBFS feeds the application uses. */
 public object GbfsFeedNames {
     /** Static station data. */
@@ -241,4 +321,13 @@ public object GbfsFeedNames {
 
     /** Real-time station state. */
     public const val STATION_STATUS: String = "station_status"
+
+    /**
+     * What each vehicle type identifier stands for.
+     *
+     * Absent from GBFS 1.0, which is where Vélib' Métropole still is: a network
+     * publishing no such feed names its kinds inline in `station_status`
+     * instead, and the fleet is counted through those names.
+     */
+    public const val VEHICLE_TYPES: String = "vehicle_types"
 }

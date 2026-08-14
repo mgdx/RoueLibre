@@ -7,9 +7,14 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
+import io.github.mgdx.rouelibre.core.config.FleetDescription
+import io.github.mgdx.rouelibre.core.station.VehicleKind
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.Json
 import java.time.Instant
 
 /**
@@ -44,7 +49,54 @@ const val NEVER_LAUNCHED: Int = 0
  * Nothing written here describes a journey: no history, no position, no
  * destination (SPEC §2, C3).
  */
-class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTimestampStore {
+class AppPreferences(private val dataStore: DataStore<Preferences>) :
+    RefreshTimestampStore,
+    MeasuredFleetStore {
+
+    /**
+     * What the network was last counted to lend (SPEC §4.1).
+     *
+     * One slot for the city in service, holding the identifier it was counted
+     * for: a reading found under another city's name is a reading about another
+     * network, and is read as none at all.
+     */
+    override suspend fun measuredFleet(cityId: String): FleetDescription? {
+        val stored = dataStore.data.first()[MEASURED_FLEET] ?: return null
+        val reading = try {
+            json.decodeFromString<StoredFleet>(stored)
+        } catch (_: SerializationException) {
+            // Written by a version that wrote it differently, or truncated by a
+            // device out of space. Counting again costs one refresh; refusing
+            // to launch would cost the user the application.
+            return null
+        }
+        if (reading.cityId != cityId) return null
+        return FleetDescription(
+            hasElectricBikes = reading.electricBikes,
+            isMixed = reading.mixed,
+            vehicleTypes = reading.vehicleTypes.mapValues { (_, kind) ->
+                VehicleKind.ofWireName(kind)
+            },
+        )
+    }
+
+    /** Stores a reading, replacing whatever the slot held. */
+    override suspend fun setMeasuredFleet(cityId: String, fleet: FleetDescription) {
+        val reading = StoredFleet(
+            cityId = cityId,
+            electricBikes = fleet.hasElectricBikes,
+            mixed = fleet.isMixed,
+            vehicleTypes = fleet.vehicleTypes.mapValues { (_, kind) -> kind.wireName },
+        )
+        dataStore.edit { it[MEASURED_FLEET] = json.encodeToString(reading) }
+    }
+
+    /** Empties the slot, the city served having changed. */
+    override suspend fun clearMeasuredFleet() {
+        dataStore.edit { it.remove(MEASURED_FLEET) }
+    }
+
+    private val json = Json { ignoreUnknownKeys = true }
 
     /**
      * When the stations' static data was last refreshed.
@@ -188,5 +240,22 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) : RefreshTim
         val THEME = stringPreferencesKey("theme")
         val ACTIVE_CITY_ID = stringPreferencesKey("active_city_id")
         val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
+        val MEASURED_FLEET = stringPreferencesKey("measured_fleet")
     }
 }
+
+/**
+ * A counted fleet as it is written to disk.
+ *
+ * Its own shape rather than the domain one, so that renaming a property of
+ * [FleetDescription] cannot silently make every stored reading unreadable. The
+ * kinds are written by their `wireName`, the same words the city configuration
+ * uses.
+ */
+@Serializable
+private data class StoredFleet(
+    val cityId: String,
+    val electricBikes: Boolean,
+    val mixed: Boolean,
+    val vehicleTypes: Map<String, String>,
+)

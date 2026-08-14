@@ -12,6 +12,8 @@ import io.github.mgdx.rouelibre.core.journey.Router
 import io.github.mgdx.rouelibre.core.routing.RouteResult
 import io.github.mgdx.rouelibre.core.routing.TravelMode
 import io.github.mgdx.rouelibre.data.AppPreferences
+import io.github.mgdx.rouelibre.data.CityFleet
+import io.github.mgdx.rouelibre.data.FleetRepository
 import io.github.mgdx.rouelibre.data.StationRepository
 import io.github.mgdx.rouelibre.data.addresses.AddressIndex
 import io.github.mgdx.rouelibre.data.addresses.AddressNormalizers
@@ -90,6 +92,9 @@ class AppContainer(private val context: Context) {
         cachedCity = null
         datasetStore.useCity(id)
         stationRepository.forget()
+        // One conurbation's fleet says nothing about another's: leaving a mixed
+        // city for a mechanical one must not carry the cog over.
+        fleetRepository.forget()
     }
 
     /**
@@ -285,6 +290,23 @@ class AppContainer(private val context: Context) {
             // Read on every call rather than captured: changing the city must
             // take effect without a restart (SPEC §4.1).
             discoveryUrlProvider = { activeCity()?.gbfs?.discoveryUrl },
+            recordFleet = { fleetRepository.record(it) },
+        )
+    }
+
+    /**
+     * What the city in service lends, as the bikes at its stations say it
+     * (SPEC §4.1, §7).
+     *
+     * Seeded by the configuration so a first launch has an answer, then
+     * refined by every refresh of the stations.
+     */
+    val fleetRepository: FleetRepository by lazy {
+        FleetRepository(
+            store = preferences,
+            activeCityFleet = {
+                activeCity()?.let { CityFleet(id = it.network.id, configured = it.fleet) }
+            },
         )
     }
 

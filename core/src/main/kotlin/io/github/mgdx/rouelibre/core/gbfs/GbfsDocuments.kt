@@ -253,6 +253,30 @@ internal data class GbfsStationStatus(
     val lastReported: Instant? = null,
 )
 
+/**
+ * A vehicle type as declared by `vehicle_types`.
+ *
+ * The feed that gives the identifiers of `vehicle_types_available` a meaning:
+ * what the vehicle is, and what moves it. Both fields are optional here because
+ * a producer may omit them, and an entry saying nothing is an entry whose bikes
+ * cannot be sorted — which the reader must be able to notice rather than guess.
+ */
+@Serializable
+internal data class GbfsVehicleType(
+    @SerialName("vehicle_type_id")
+    @Serializable(with = FlexibleIdSerializer::class)
+    val vehicleTypeId: String,
+    @SerialName("form_factor") val formFactor: String? = null,
+    @SerialName("propulsion_type") val propulsionType: String? = null,
+)
+
+/** The contents of `vehicle_types`. */
+@Serializable
+internal data class GbfsVehicleTypesData(
+    @SerialName("vehicle_types")
+    val vehicleTypes: List<GbfsVehicleType> = emptyList(),
+)
+
 /** The contents of `station_information`. */
 @Serializable
 internal data class GbfsStationInformationData(
