@@ -133,6 +133,18 @@ MINIMUM_STATIONS = 10
 # from a rectangle. The area is still recorded and printed for every network,
 # so whoever generates one knows what they are cutting.
 
+# One line is drawn all the same, and it is not the one above: it separates a
+# conurbation, however wide, from a country. Docomo publishes one feed for the
+# whole of Japan — 5,758 stations, a box of 1,600 km by 2,100 that takes in the
+# two Koreas — and §4 cuts every dataset to a single rectangle: its base map
+# alone would run to tens of gigabytes, downloaded whole by someone who rides
+# in one city of it. The widest network actually served covers 160,000 km²
+# (Careem, along the Gulf), so this line sits three times above what it must
+# let through and forty below what it must stop. A feed caught here is not too
+# big to serve: it is waiting to be split into the conurbations it covers, each
+# of which is an ordinary city of this catalogue.
+COUNTRY_WIDE_AREA = 500_000
+
 # Every attempt is retried once: a name resolution that fails for a second is
 # not a network that does not exist, and a single miss would drop a real
 # conurbation from the list.
@@ -560,6 +572,9 @@ def verdict_of(survey: dict) -> str:
 
     if survey["stationCount"] < MINIMUM_STATIONS:
         return "too-few-stations"
+
+    if (survey.get("areaSquareKilometres") or 0) > COUNTRY_WIDE_AREA:
+        return "country-wide-feed"
 
     return "eligible"
 
@@ -1299,6 +1314,13 @@ VERDICT_EXPLANATIONS = {
         "Cars sharing the same stations",
         "The fleet mixes bikes with cars or mopeds at the same stations: the "
         "availability figure shown on a marker would count vehicles nobody pedals.",
+    ),
+    "country-wide-feed": (
+        f"One feed for a whole country (over {COUNTRY_WIDE_AREA:,} km²)",
+        "The datasets are cut to one rectangle (§4), and a country-sized "
+        "rectangle produces a base map of tens of gigabytes for someone who "
+        "rides in one city of it. Such a feed is served as soon as it is split "
+        "into the conurbations it covers.",
     ),
     "too-few-stations": (
         f"Fewer than {MINIMUM_STATIONS} stations",
