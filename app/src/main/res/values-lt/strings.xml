@@ -206,6 +206,11 @@
     <!-- Metres climbed over a leg or over the whole journey. Shown only where
          there is relief worth naming; a flat city never reads this. -->
     <string name="journey_climb">%1$s of climb</string>
+    <!-- What waits at the station one sets off from, hung at the end of the
+         journey summary, in a conurbation lending both kinds of bike
+         (SPEC §7.4). %1$s is the two counts, mechanical and electric, each
+         already agreed in number. -->
+    <string name="journey_bikes_at_departure">%1$s at the departure station</string>
     <!-- The block holding the total time, the summary and the drawing opens
          the journey in full: this is what the press does, announced to a screen
          reader that would otherwise say only "activate". -->

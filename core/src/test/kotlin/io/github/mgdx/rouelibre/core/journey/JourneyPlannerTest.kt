@@ -102,6 +102,7 @@ class JourneyPlannerTest {
         position: Coordinates,
         bikes: Int = 10,
         docks: Int = 10,
+        bikesByVehicleType: Map<String, Int> = emptyMap(),
         installed: Boolean = true,
         renting: Boolean = true,
         returning: Boolean = true,
@@ -110,6 +111,7 @@ class JourneyPlannerTest {
         availability = StationAvailability(
             stationId = id,
             bikesAvailable = bikes,
+            bikesByVehicleType = bikesByVehicleType,
             docksAvailable = docks,
             isInstalled = installed,
             isRenting = renting,
@@ -187,6 +189,37 @@ class JourneyPlannerTest {
 
         assertEquals("fournie", plan.best.departureStation.id)
         assertTrue(plan.best.bikesAtDeparture >= 1)
+    }
+
+    @Test
+    fun `carries the breakdown of the departure station, and of that one only`() = runTest {
+        // The count shown beside the journey is frozen at this instant, and so
+        // is what it divides into: the interface says how many of those bikes
+        // are electric (SPEC §7.4). What the arrival station holds is not
+        // carried — one arrives there on the bike one already has.
+        val stations = listOf(
+            station(
+                "depart",
+                at(0.0, 200.0),
+                bikes = 4,
+                bikesByVehicleType = mapOf("mecanique" to 3, "electrique" to 1),
+            ),
+            station(
+                "arrivee",
+                at(0.0, 3900.0),
+                bikes = 7,
+                bikesByVehicleType = mapOf("electrique" to 7),
+            ),
+        )
+        val planner = JourneyPlanner(FakeRouter())
+
+        val plan = planner.plan(origin, destination, stations) as JourneyPlan.Found
+
+        assertEquals("depart", plan.best.departureStation.id)
+        assertEquals(
+            mapOf("mecanique" to 3, "electrique" to 1),
+            plan.best.bikesByVehicleTypeAtDeparture,
+        )
     }
 
     @Test

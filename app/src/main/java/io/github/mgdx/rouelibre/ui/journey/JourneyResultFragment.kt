@@ -19,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
+import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
@@ -35,6 +36,7 @@ import io.github.mgdx.rouelibre.ui.map.MapStyleLoader
 import io.github.mgdx.rouelibre.ui.map.ServedAreaCamera
 import io.github.mgdx.rouelibre.ui.map.UserPositionMarker
 import io.github.mgdx.rouelibre.ui.withBikeFleet
+import io.github.mgdx.rouelibre.ui.withFleet
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -108,6 +110,15 @@ class JourneyResultFragment : Fragment() {
      * answer: whichever comes second registers the station marker.
      */
     private var fleet = BikeFleet.Mechanical
+
+    /**
+     * What that network lends, down to the vehicle types it counts by.
+     *
+     * Kept beside [fleet] because the summary needs more than the bike drawn:
+     * it says how many of the bikes waiting at the departure station are
+     * electric, and reading that takes the identifier table (SPEC §7.4).
+     */
+    private var lentFleet: FleetDescription? = null
 
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
@@ -248,6 +259,7 @@ class JourneyResultFragment : Fragment() {
         showEndpoints()
         followUserPosition()
         readBikeFleet()
+        readLentFleet()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -276,6 +288,20 @@ class JourneyResultFragment : Fragment() {
                     JourneyMarkers.registerImages(requireContext(), it, lent)
                 }
             }
+        }
+    }
+
+    /**
+     * Follows what the network lends, for the summary alone.
+     *
+     * Only the summary is written again when a reading lands, never the whole
+     * screen: redrawing the journey would frame the map on it, and take the
+     * user back from wherever they had panned it to.
+     */
+    private fun readLentFleet() {
+        withFleet { lent ->
+            lentFleet = lent
+            viewModel.state.value.chosen?.let(::showSummary)
         }
     }
 
@@ -531,8 +557,25 @@ class JourneyResultFragment : Fragment() {
         }
 
         views.totalTime.text = requireContext().formatDuration(option.travelTime)
-        views.summary.text = requireContext().journeySummary(option)
+        showSummary(option)
         showShape(option)
+    }
+
+    /**
+     * What makes the total up, and what waits at the departure station.
+     *
+     * The two kinds are counted apart where the city lends both: it is what
+     * decides whether the walk to the station is the one wanted (SPEC §7.4),
+     * and the counts are the frozen ones the journey was worked out on, like
+     * the total time beside them.
+     */
+    private fun showSummary(option: JourneyOption) {
+        val views = binding ?: return
+        views.summary.text = requireContext().journeySummary(
+            option,
+            atDeparture = requireContext()
+                .bikesAtDeparture(option.bikeSplitAtDeparture(lentFleet)),
+        )
     }
 
     /**

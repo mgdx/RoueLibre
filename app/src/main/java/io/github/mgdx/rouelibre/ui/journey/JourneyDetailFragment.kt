@@ -15,6 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.address.AddressResult
+import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
 import io.github.mgdx.rouelibre.core.journey.NoBikeJourney
@@ -34,6 +35,7 @@ import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.formatDuration
 import io.github.mgdx.rouelibre.ui.isReliefWorthDrawing
 import io.github.mgdx.rouelibre.ui.withBikeFleet
+import io.github.mgdx.rouelibre.ui.withFleet
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -68,6 +70,14 @@ class JourneyDetailFragment : Fragment() {
      * The ride's icon and the two station markers carry the bolt when it does.
      */
     private var fleet = BikeFleet.Mechanical
+
+    /**
+     * What the network lends, down to the vehicle types it counts by.
+     *
+     * The summary says what the two kinds of bike at the departure station
+     * divide into, and reading that takes the identifier table (SPEC §7.4.1).
+     */
+    private var lentFleet: FleetDescription? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -105,6 +115,12 @@ class JourneyDetailFragment : Fragment() {
             binding?.shape?.fleet = lent
             showJourney(journey, viewModel.addresses.value)
         }
+        // The same reading, read in full: the summary splits the bikes waiting
+        // at the departure station, which the bike glyph alone cannot say.
+        withFleet { lent ->
+            lentFleet = lent
+            showTotal(journey)
+        }
         viewModel.locate(stationsOf(journey.plan))
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -129,7 +145,7 @@ class JourneyDetailFragment : Fragment() {
      *
      * A detail that restated the total differently would read as a second
      * journey. The wording is therefore built the same way, from the same
-     * resources.
+     * resources — the bikes waiting at the departure station included.
      */
     private fun showTotal(journey: ShownJourney) {
         val views = binding ?: return
@@ -140,7 +156,11 @@ class JourneyDetailFragment : Fragment() {
             option?.travelTime ?: walk?.directWalk?.duration ?: return,
         )
         views.summary.text = when {
-            option != null -> requireContext().journeySummary(option)
+            option != null -> requireContext().journeySummary(
+                option,
+                atDeparture = requireContext()
+                    .bikesAtDeparture(option.bikeSplitAtDeparture(lentFleet)),
+            )
             walk != null -> requireContext().walkSummary(
                 walk.directWalk,
                 isQuickerThanTheBike = walk.reason == NoBikeJourney.WalkingIsQuicker,

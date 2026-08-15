@@ -11,6 +11,23 @@ also records what has no visible effect.
 
 ### Added
 
+- **A journey says what is waiting at the station it starts from**, in the
+  conurbations that lend both kinds of bike. The summary ends on the two counts,
+  in the wording of the station's own sheet — "45 m of climb · 5 mechanical ·
+  3 electric at the departure station" — on the result screen and on its detail
+  alike, which repeat each other word for word. It is what the decision to walk
+  to a station rests on and what the rest of the line cannot supply: the total
+  time promises a bike, and which bike is what turns a hilly ride into one worth
+  taking. The counts are the frozen ones
+  the journey was worked out on, like the minutes beside them, and the
+  breakdown travels in the availability already read — no extra request. It
+  goes silent under the rules that silence a station's own split: a
+  conurbation lending one kind, a breakdown that does not add up to the count,
+  a vehicle type the network never declared. `JourneyOption` carries the
+  departure station's breakdown in the producer's own identifiers, the
+  algorithm having no business knowing which identifier is which (`SPEC.md`
+  §15); the interface reads it through the network's table.
+
 - **The first-launch sequence gains a page explaining the bike drawn.** Third
   of four now: the three station discs side by side — plain, bolted, bolted and
   cogged — over three sentences saying which is which and that it is read from

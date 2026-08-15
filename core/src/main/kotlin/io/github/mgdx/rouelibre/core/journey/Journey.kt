@@ -28,6 +28,12 @@ public interface Router {
  * @property arrivalStation the station where it is returned.
  * @property bikesAtDeparture bikes available when the journey was computed.
  *   Always shown, so the user can judge the risk for themselves (SPEC §6).
+ * @property bikesByVehicleTypeAtDeparture how those bikes divided between the
+ *   network's own vehicle type identifiers at that same instant, and empty
+ *   where the feed publishes no breakdown. Carried raw, because turning
+ *   identifiers into kinds takes the network's table, which this algorithm has
+ *   no business knowing (SPEC §15): it is the interface that reads it, to say
+ *   how many of the bikes waiting are electric (SPEC §7.4).
  * @property docksAtArrival free docks when the journey was computed.
  * @property walkToStation the access walk to the departure station.
  * @property ride the bike leg between the two stations.
@@ -41,6 +47,7 @@ public data class JourneyOption(
     public val departureStation: Station,
     public val arrivalStation: Station,
     public val bikesAtDeparture: Int,
+    public val bikesByVehicleTypeAtDeparture: Map<String, Int> = emptyMap(),
     public val docksAtArrival: Int,
     public val walkToStation: RouteLeg,
     public val ride: RouteLeg,

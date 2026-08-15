@@ -125,3 +125,24 @@ fun Fragment.withBikeFleet(apply: (fleet: BikeFleet) -> Unit) {
         }
     }
 }
+
+/**
+ * Says what the city lends down to the vehicle types it counts its bikes by.
+ *
+ * The reading itself, where [withBikeFleet] gives only the bike to draw: it
+ * takes the identifier table to say how many of the bikes at a station are
+ * electric (SPEC §7.2), and that table grows as the network is read (SPEC
+ * §4.1). Nothing is deduplicated here, since a table that has gained an
+ * identifier is a reading that changes what the caller says.
+ *
+ * @param apply what to redraw, run on the main thread while the view is
+ *   started, and safe to run more than once.
+ */
+fun Fragment.withFleet(apply: (fleet: FleetDescription?) -> Unit) {
+    val container = (requireActivity().application as RoueLibreApplication).container
+    viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            container.fleetRepository.fleet.collect(apply)
+        }
+    }
+}

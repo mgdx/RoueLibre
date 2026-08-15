@@ -173,6 +173,7 @@ public class JourneyPlanner(
             Candidate(
                 station = entry.station,
                 count = count,
+                bikesByVehicleType = entry.availability?.bikesByVehicleType.orEmpty(),
                 straightLineMetres = near.distanceInMetresTo(entry.station.position),
             )
         }
@@ -323,6 +324,7 @@ public class JourneyPlanner(
                     departureStation = pair.departure.station,
                     arrivalStation = pair.arrival.station,
                     bikesAtDeparture = pair.departure.count,
+                    bikesByVehicleTypeAtDeparture = pair.departure.bikesByVehicleType,
                     docksAtArrival = pair.arrival.count,
                     walkToStation = pair.walkToStation,
                     ride = ride,
@@ -396,10 +398,20 @@ public class JourneyPlanner(
         }
     }
 
-    /** A retained station, with what qualifies it. */
+    /**
+     * A retained station, with what qualifies it.
+     *
+     * @property count what it holds of the side we need: bikes at the departure
+     *   end, free docks at the arrival end.
+     * @property bikesByVehicleType how its bikes divide between the network's
+     *   own vehicle type identifiers. Read at both ends, since it comes with
+     *   the state the count itself is read from, and only used at the departure
+     *   end: what is returned at the arrival end is the bike one already has.
+     */
     private data class Candidate(
         val station: Station,
         val count: Int,
+        val bikesByVehicleType: Map<String, Int>,
         val straightLineMetres: Double,
     )
 
