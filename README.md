@@ -30,11 +30,9 @@ but the live availability of the bikes runs on your phone.
 
 - 🚲 **333 bike-share networks in 38 countries**, 75,095 stations, from Vélib'
   to Auch's ten, by way of New York, Montréal, Prague, Barcelona, Dubai, Buenos
-  Aires and Pristina. A network serving a whole region counts too — Vélo Fluo
-  puts one station in each town of the Grand Est. No city is a default: the
-  application proposes the one matching your position, measured on where its
-  stations actually are, and you choose. The full list is in
-  [`docs/networks.md`](docs/networks.md).
+  Aires and Pristina. No city is a default: the application proposes the one
+  matching your position, measured on where itsstations actually are, and you
+  choose. The full list is in [`docs/networks.md`](docs/networks.md).
 
 - 🗺️ **A map that shows what a cyclist needs:**
   - cycle ways, drawn apart from the streets;
