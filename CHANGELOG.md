@@ -746,6 +746,41 @@ also records what has no visible effect.
   every density, and the grid drawn as `ic_launcher_background` went with
   them.
 
+### Added
+
+- **Datasets wait for a connection nobody is billed for** (SPEC §4.4, §7.6).
+  A city weighs from a few megabytes to 1.3 GB — Vélo Fluo's base map alone is
+  1 343 MB — and until now nothing stopped that from leaving on the mobile plan
+  of somebody who had not thought about it. A switch in the offline data section
+  of the settings, **on by default**, because a gigabyte spent unasked costs
+  more than a download put off for an hour.
+  **It reads the billing, not the transport.** Android answers what a network
+  charges for (`NET_CAPABILITY_NOT_METERED`), which is the truer notion here: a
+  phone's shared connection is Wi-Fi and is a mobile plan, and a capped hotel
+  Wi-Fi declares itself billed. No permission was added — `ACCESS_NETWORK_STATE`
+  was already declared — and no dependency either.
+  **It is never a dead end.** Every time the setting holds a transfer back, the
+  screen says why, names what the transfer weighs, and offers to run it anyway:
+  somebody in a hotel with no Wi-Fi has to be able to install their city. That
+  agreement covers the one transfer and leaves the setting alone, so the next
+  download asks again. A connection that starts billing **in the middle** of a
+  file stops the transfer where it stands rather than finishing it in silence,
+  and the resumption asks the server for the remainder from the offset reached.
+  Nothing starts again from the background — §4.1 rules that out — so the return
+  of an unbilled connection is announced on the screen the user is looking at.
+  The manifest check, a few kilobytes, is never held back: what the setting
+  governs is the datasets, not every request that leaves.
+
+### Fixed
+
+- **A transfer given up ran to its end anyway.** `DatasetDownloader` copied its
+  buffers without ever looking at the coroutine it was running in, and a read
+  blocks, so cancellation could not reach the loop: a download nobody wanted any
+  more went on to the last byte of a gigabyte. It now checks between buffers,
+  and what has arrived stays in the partial file for the resumption to pick up.
+  Nothing depended on this before — nothing cancelled a download — and the
+  setting above is what made it matter.
+
 ## [0.3.0-alpha]
 
 The version that publishes its data. The three sets of 101 conurbations — the
