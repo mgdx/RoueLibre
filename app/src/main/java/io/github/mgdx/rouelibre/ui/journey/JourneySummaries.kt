@@ -3,13 +3,15 @@ package io.github.mgdx.rouelibre.ui.journey
 import android.content.Context
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.config.FleetDescription
+import io.github.mgdx.rouelibre.core.journey.JourneyMinutes
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
+import io.github.mgdx.rouelibre.core.journey.shownMinutes
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.station.BikeSplit
 import io.github.mgdx.rouelibre.core.station.splitBikesByKind
 import io.github.mgdx.rouelibre.ui.formatClimb
 import io.github.mgdx.rouelibre.ui.formatDistance
-import io.github.mgdx.rouelibre.ui.formatDuration
+import io.github.mgdx.rouelibre.ui.formatMinutes
 
 /**
  * The line under the total time, written once for the two screens that show it.
@@ -27,15 +29,24 @@ import io.github.mgdx.rouelibre.ui.formatDuration
  * nothing to say about hills, and "0 m of climb" is a figure the reader has to
  * weigh before discarding.
  *
+ * The two figures of time are the journey's own, apportioned once for the whole
+ * screen: this line sits beside the total and above the band of legs, and the
+ * three have to add up (see [shownMinutes]).
+ *
+ * @param minutes the journey's legs as they are shown, rounded together.
  * @param atDeparture the bikes standing at the departure station, already
  *   worded by [bikesAtDeparture], or `null` where the city lends one kind or
  *   the breakdown cannot be trusted.
  */
-fun Context.journeySummary(option: JourneyOption, atDeparture: String? = null): String {
+fun Context.journeySummary(
+    option: JourneyOption,
+    minutes: JourneyMinutes,
+    atDeparture: String? = null,
+): String {
     val summary = getString(
         R.string.journey_summary,
-        formatDuration(option.walkToStation.duration + option.walkToDestination.duration),
-        formatDuration(option.ride.duration),
+        formatMinutes(minutes.walking),
+        formatMinutes(minutes.ride),
         formatDistance(option.distanceMetres.toDouble()),
     )
     val climb = formatClimb(option.climbMetres, option.distanceMetres)

@@ -22,9 +22,12 @@ import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.journey.JourneyMinutes
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
 import io.github.mgdx.rouelibre.core.journey.NoBikeJourney
+import io.github.mgdx.rouelibre.core.journey.inShownMinutes
+import io.github.mgdx.rouelibre.core.journey.shownMinutes
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyResultBinding
@@ -32,6 +35,7 @@ import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.formatDuration
+import io.github.mgdx.rouelibre.ui.formatMinutes
 import io.github.mgdx.rouelibre.ui.map.MapStyleLoader
 import io.github.mgdx.rouelibre.ui.map.ServedAreaCamera
 import io.github.mgdx.rouelibre.ui.map.UserPositionMarker
@@ -556,9 +560,14 @@ class JourneyResultFragment : Fragment() {
             return
         }
 
-        views.totalTime.text = requireContext().formatDuration(option.travelTime)
+        // Rounded once for the three figures the card carries: the total, the
+        // sentence beside it and the band underneath describe the same journey,
+        // and each rounding its own legs made them disagree by a minute or two
+        // (see JourneyMinutes).
+        val minutes = option.shownMinutes()
+        views.totalTime.text = requireContext().formatMinutes(minutes.total)
         showSummary(option)
-        showShape(option)
+        showShape(option, minutes)
     }
 
     /**
@@ -573,6 +582,7 @@ class JourneyResultFragment : Fragment() {
         val views = binding ?: return
         views.summary.text = requireContext().journeySummary(
             option,
+            minutes = option.shownMinutes(),
             atDeparture = requireContext()
                 .bikesAtDeparture(option.bikeSplitAtDeparture(lentFleet)),
         )
@@ -629,18 +639,18 @@ class JourneyResultFragment : Fragment() {
      * is the whole journey seen at once, in the drawing the search screen uses
      * for it.
      */
-    private fun showShape(option: JourneyOption) {
+    private fun showShape(option: JourneyOption, minutes: JourneyMinutes) {
         val views = binding ?: return
         views.shape.legs = listOf(
-            legOf(option.walkToStation, isRide = false),
-            legOf(option.ride, isRide = true),
-            legOf(option.walkToDestination, isRide = false),
+            legOf(option.walkToStation, minutes.walkToStation, isRide = false),
+            legOf(option.ride, minutes.ride, isRide = true),
+            legOf(option.walkToDestination, minutes.walkToDestination, isRide = false),
         )
     }
 
-    private fun legOf(leg: RouteLeg, isRide: Boolean) = JourneyShapeView.Leg(
+    private fun legOf(leg: RouteLeg, minutes: Int, isRide: Boolean) = JourneyShapeView.Leg(
         isRide = isRide,
-        duration = requireContext().formatDuration(leg.duration),
+        duration = requireContext().formatMinutes(minutes),
         distance = distanceOf(leg),
     )
 
@@ -671,9 +681,18 @@ class JourneyResultFragment : Fragment() {
             else -> reasonOf(plan)
         }
         // One dotted stroke between two ends: the journey there is, with no
-        // station on the way.
+        // station on the way. A single leg is its own total, so there is
+        // nothing to apportion here.
         views.shape.legs = walkOnly
-            ?.let { listOf(legOf(it.directWalk, isRide = false)) }
+            ?.let {
+                listOf(
+                    legOf(
+                        it.directWalk,
+                        it.directWalk.duration.inShownMinutes(),
+                        isRide = false,
+                    ),
+                )
+            }
             .orEmpty()
     }
 
