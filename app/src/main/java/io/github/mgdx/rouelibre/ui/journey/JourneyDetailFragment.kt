@@ -22,6 +22,7 @@ import io.github.mgdx.rouelibre.core.journey.JourneyPlan
 import io.github.mgdx.rouelibre.core.journey.NoBikeJourney
 import io.github.mgdx.rouelibre.core.journey.apportionMinutes
 import io.github.mgdx.rouelibre.core.journey.shownMinutes
+import io.github.mgdx.rouelibre.core.measure.isReliefWorthDrawing
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.routing.elevationProfile
 import io.github.mgdx.rouelibre.core.routing.smoothedOver
@@ -36,7 +37,6 @@ import io.github.mgdx.rouelibre.ui.formatAltitude
 import io.github.mgdx.rouelibre.ui.formatClimb
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.formatMinutes
-import io.github.mgdx.rouelibre.ui.isReliefWorthDrawing
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
 import kotlinx.coroutines.flow.collectLatest

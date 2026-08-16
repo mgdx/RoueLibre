@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import io.github.mgdx.rouelibre.core.config.FleetDescription
+import io.github.mgdx.rouelibre.core.measure.UnitChoice
 import io.github.mgdx.rouelibre.core.station.VehicleKind
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import kotlinx.coroutines.flow.Flow
@@ -189,6 +190,29 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * The units distances are written in (SPEC §7.6, §9).
+     *
+     * The default follows the device's region, the only choice that respects a
+     * preference the user has already expressed elsewhere — and a value that
+     * cannot be read means the same thing, never a system in particular (see
+     * [UnitChoice.fromId]).
+     *
+     * **A way of writing, not a way of computing.** What is stored changes no
+     * journey and no measurement: everything is worked out in metres and this
+     * is consulted when a figure becomes text (SPEC §14). And it says nothing
+     * about the user beyond how they read a distance (SPEC §2, C3).
+     *
+     * A flow rather than a read: the interface is rebuilt on it, so a choice
+     * made must show at once and everywhere.
+     */
+    val units: Flow<UnitChoice> = dataStore.data.map { UnitChoice.fromId(it[UNITS]) }
+
+    /** Stores the chosen units. */
+    suspend fun setUnits(choice: UnitChoice) {
+        dataStore.edit { it[UNITS] = choice.id }
+    }
+
+    /**
      * Whether journeys are worked out for the user's own bike (SPEC §7.3).
      *
      * False by default: the application serves a bike-share network, and the
@@ -324,6 +348,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         /** No GBFS identifier contains a newline. */
         const val SEPARATOR = "\n"
         val THEME = stringPreferencesKey("theme")
+        val UNITS = stringPreferencesKey("units")
         val USES_OWN_BIKE = booleanPreferencesKey("uses_own_bike")
         val WANTED_BIKE_KIND = stringPreferencesKey("wanted_bike_kind")
         val ACTIVE_CITY_ID = stringPreferencesKey("active_city_id")

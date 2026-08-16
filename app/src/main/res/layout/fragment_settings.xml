@@ -121,6 +121,90 @@
                     android:text="@string/settings_theme_dark" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
+            <!--
+                Units (SPEC §7.6, §9). Four states — the region's own, and the
+                three systems that can override it — laid out in a row like the
+                theme above. The labels show the units rather than the
+                countries: what one gets is what is written, and no system
+                belongs to a nation.
+            -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:text="@string/settings_units_title"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/units"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:contentDescription="@string/settings_units_description"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/units_system"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/settings_units_system_description"
+                    android:insetLeft="0dp"
+                    android:insetRight="0dp"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:minWidth="0dp"
+                    android:paddingStart="@dimen/space_xs"
+                    android:paddingEnd="@dimen/space_xs"
+                    android:text="@string/settings_units_system" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/units_metric"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/settings_units_metric_description"
+                    android:insetLeft="0dp"
+                    android:insetRight="0dp"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:minWidth="0dp"
+                    android:paddingStart="@dimen/space_xs"
+                    android:paddingEnd="@dimen/space_xs"
+                    android:text="@string/settings_units_metric" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/units_us"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/settings_units_us_description"
+                    android:insetLeft="0dp"
+                    android:insetRight="0dp"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:minWidth="0dp"
+                    android:paddingStart="@dimen/space_xs"
+                    android:paddingEnd="@dimen/space_xs"
+                    android:text="@string/settings_units_us" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/units_uk"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/settings_units_uk_description"
+                    android:insetLeft="0dp"
+                    android:insetRight="0dp"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:minWidth="0dp"
+                    android:paddingStart="@dimen/space_xs"
+                    android:paddingEnd="@dimen/space_xs"
+                    android:text="@string/settings_units_uk" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/open_about"
                 style="@style/Widget.RoueLibre.Toggle"

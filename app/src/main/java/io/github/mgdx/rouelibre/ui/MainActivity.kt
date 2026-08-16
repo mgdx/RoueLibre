@@ -10,7 +10,9 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.withStarted
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -89,6 +91,14 @@ class MainActivity : AppCompatActivity() {
     /** The system bars as the interface's theme wants them — see [openIntro]. */
     private var barsBeforeIntro: SystemBars? = null
 
+    /**
+     * The units the screens on show were written in (SPEC §7.6).
+     *
+     * Noted at birth so that a change made in the settings can be told from the
+     * value this activity was already built with — see [followUnits].
+     */
+    private val unitsShown = DisplayedUnits.current()
+
     private val container
         get() = (application as RoueLibreApplication).container
 
@@ -108,6 +118,7 @@ class MainActivity : AppCompatActivity() {
         val created = ActivityMainBinding.inflate(layoutInflater)
         binding = created
         setContentView(created.root)
+        followUnits()
 
         // On recreation — rotation, theme change — the fragments are restored
         // by the system; replacing them would erase their state, and replaying
@@ -143,6 +154,29 @@ class MainActivity : AppCompatActivity() {
                         welcome(intent)
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * Rebuilds the interface when the units change (SPEC §7.6).
+     *
+     * Distances are written when a screen binds its views, so a change of units
+     * only shows on the screens drawn after it: a station sheet, a journey and
+     * a list of stations already on show would go on saying metres. Rebuilding
+     * is how the theme applies too, for the same reason and by the same
+     * mechanism — the fragments and their view models survive it, so the
+     * journey being read is still the journey being read, worked out on the
+     * same metres and shown with the same station and the same minutes.
+     *
+     * Only a change of the units *actually written in* rebuilds anything: in a
+     * metric region, choosing "metric" over "follow the system" changes nothing
+     * on screen and must cost nothing either.
+     */
+    private fun followUnits() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                DisplayedUnits.system.collect { if (it != unitsShown) recreate() }
             }
         }
     }

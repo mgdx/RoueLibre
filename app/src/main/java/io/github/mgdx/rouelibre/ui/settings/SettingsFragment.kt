@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
+import io.github.mgdx.rouelibre.core.measure.UnitChoice
 import io.github.mgdx.rouelibre.data.AppTheme
 import io.github.mgdx.rouelibre.databinding.FragmentSettingsBinding
 import io.github.mgdx.rouelibre.ui.about.AboutFragment
@@ -61,6 +62,7 @@ class SettingsFragment : Fragment() {
         views.openAbout.setOnClickListener { show(AboutFragment()) }
 
         setUpTheme(views)
+        setUpUnits(views)
     }
 
     override fun onDestroyView() {
@@ -99,6 +101,51 @@ class SettingsFragment : Fragment() {
                             AppTheme.Light -> R.id.theme_light
                             AppTheme.Dark -> R.id.theme_dark
                             AppTheme.System -> R.id.theme_system
+                        },
+                    )
+                    isFilling = false
+                }
+            }
+        }
+    }
+
+    /**
+     * The units distances are written in (SPEC §7.6, §9).
+     *
+     * Written immediately, like the theme and for the same reason, and applied
+     * without waiting for the next launch: the interface is rebuilt on the new
+     * units by `MainActivity`, which watches them. Nothing else moves — the
+     * journey, the stations chosen and the minutes announced are all worked out
+     * in metres and are not asked again (SPEC §14).
+     */
+    private fun setUpUnits(views: FragmentSettingsBinding) {
+        views.units.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked || isFilling) return@addOnButtonCheckedListener
+            val choice = when (checkedId) {
+                R.id.units_metric -> UnitChoice.Metric
+                R.id.units_us -> UnitChoice.UnitedStates
+                R.id.units_uk -> UnitChoice.UnitedKingdom
+                else -> UnitChoice.FollowSystem
+            }
+            // The trap the theme above documents does not apply here, and it
+            // is worth saying why: there the write and the rebuild were two
+            // steps of one coroutine, and the second cancelled the first. Here
+            // the rebuild is caused by the write having landed — the interface
+            // follows the stored value — so nothing can rebuild ahead of it.
+            viewLifecycleOwner.lifecycleScope.launch { preferences.setUnits(choice) }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preferences.units.collect { choice ->
+                    val current = binding ?: return@collect
+                    isFilling = true
+                    current.units.check(
+                        when (choice) {
+                            UnitChoice.FollowSystem -> R.id.units_system
+                            UnitChoice.Metric -> R.id.units_metric
+                            UnitChoice.UnitedStates -> R.id.units_us
+                            UnitChoice.UnitedKingdom -> R.id.units_uk
                         },
                     )
                     isFilling = false

@@ -168,6 +168,20 @@
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_dark">Dark</string>
 
+    <!-- Units (SPEC 7.6). The buttons name the units rather than the
+         countries: what one gets is what is shown, and no system belongs to a
+         nation. -->
+    <string name="settings_units_title">Units</string>
+    <string name="settings_units_system">System</string>
+    <string name="settings_units_metric">m · km</string>
+    <string name="settings_units_us">ft · mi</string>
+    <string name="settings_units_uk">yd · mi</string>
+    <string name="settings_units_description">Units used for distances</string>
+    <string name="settings_units_system_description">Follow the region the device is set to</string>
+    <string name="settings_units_metric_description">Metres and kilometres</string>
+    <string name="settings_units_us_description">Feet and miles</string>
+    <string name="settings_units_uk_description">Yards and miles</string>
+
     <string name="about_title">About</string>
     <string name="about_open">About</string>
     <string name="about_version">Version %1$s</string>
@@ -322,8 +336,14 @@
     <string name="address_unreadable_title">Address index unreadable</string>
     <string name="map_picked_place_description">%1$s. Tap to clear this point.</string>
 
-    <string name="distance_metres">%1$d m</string>
+    <string name="distance_metres">%1$s m</string>
     <string name="distance_kilometres">%1$s km</string>
+    <!-- Unit symbols. Written the same way in most languages; the string
+         exists in every one all the same, so a language that writes them
+         otherwise has somewhere to say so. -->
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
     <string name="action_back">Back</string>
 
     <!-- City screen: which conurbation the application serves. -->

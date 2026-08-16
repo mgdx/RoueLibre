@@ -200,6 +200,20 @@
     <string name="settings_theme_light">Clair</string>
     <string name="settings_theme_dark">Sombre</string>
 
+    <!-- Unités (SPEC 7.6). Les boutons nomment les unités et non les pays :
+         ce qu'on obtient est ce qui est écrit, et aucun système n'appartient à
+         une nation. -->
+    <string name="settings_units_title">Unités</string>
+    <string name="settings_units_system">Système</string>
+    <string name="settings_units_metric">m · km</string>
+    <string name="settings_units_us">ft · mi</string>
+    <string name="settings_units_uk">yd · mi</string>
+    <string name="settings_units_description">Unités des distances</string>
+    <string name="settings_units_system_description">Suivre la région réglée sur l\'appareil</string>
+    <string name="settings_units_metric_description">Mètres et kilomètres</string>
+    <string name="settings_units_us_description">Pieds et miles</string>
+    <string name="settings_units_uk_description">Yards et miles</string>
+
     <!-- The "about" screen (SPEC §7.7). The attributions there are owed, not
          offered: the data producers and the libraries used require them. -->
     <string name="about_title">À propos</string>
@@ -411,11 +425,18 @@
          address first, the action second. %1$s is the address found. -->
     <string name="map_picked_place_description">%1$s. Appuyer pour effacer ce point.</string>
 
-    <!-- Distances, formatted through the localisation APIs (SPEC §9).
-         %1$d is a number of metres, %1$s a number of kilometres already written
-         in the interface's language. -->
-    <string name="distance_metres">%1$d m</string>
+    <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
+         five, %1$s is a figure already rounded and already written in the
+         interface's language: the translation places the symbol, never the
+         number. Which of the five applies is the reader's unit system. -->
+    <string name="distance_metres">%1$s m</string>
     <string name="distance_kilometres">%1$s km</string>
+    <!-- The symbols of the two imperial systems. Written the same way in most
+         languages; the string exists in every one all the same, so a language
+         that writes them otherwise has somewhere to say so. -->
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
 
     <string name="action_back">Revenir</string>
 
