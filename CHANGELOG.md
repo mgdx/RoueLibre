@@ -258,6 +258,23 @@ also records what has no visible effect.
 
 ### Changed
 
+- **The settings screen is laid out in sections.** Nothing is added and nothing
+  behaves differently: the four settings it holds are the same four, in the same
+  order, doing the same thing. What changes is that each now sits under a
+  section title — city, display, offline data — instead of carrying a title of
+  its own, and that "about" closes the screen outside them all. The reason is
+  what comes next: six settings are due to arrive here over the coming weeks,
+  each from its own piece of work, and left to invent their own place they would
+  produce six layouts and as many conflicts. `SPEC.md` §7.6 now names the
+  sections, fixes their order and says where a new setting goes, which is the
+  paragraph those pieces of work will read. **An empty section is not shown and
+  is not written into the layout**: "Journey" is absent until the first setting
+  is placed there, a title followed by nothing being a promise the screen cannot
+  keep. A section title is a heading for a screen reader, which means one can
+  jump between sections rather than hear the screen read end to end — set in
+  code rather than in the layout, the attribute that declares it having arrived
+  in API 28, above this application's floor.
+
 - **A distance under a kilometre now follows the interface's language, not the
   device's.** It was written through `%1$d`, which Android formats with the
   configuration's locale, while the kilometre beside it went through

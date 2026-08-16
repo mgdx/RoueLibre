@@ -377,6 +377,25 @@ A list of the stations marked as favourites, with their live availability. Reord
 
 City served, offline data management, light/dark/system theme, **the units distances are written in**, and the way to the "about" screen. **No source address is typed here**: the feeds and the manifest come from the city configuration (§4.1, §4.4), and data that does not come down from them is brought in by importing a file from the "storage" screen.
 
+**The screen is laid out in sections, and this is where a new setting learns its place.** Four of them, in this order, each with a title of its own:
+
+| Section | What it holds |
+|---|---|
+| **City** | which network is served (§15.1) |
+| **Journey** | what qualifies a journey before it is asked for: the walking pace, the kind of bike wanted, one's own bike |
+| **Display** | what the interface looks like and what it writes in: theme, units, language, the screen it opens on, the size of the figures |
+| **Offline data** | what is installed, what it occupies and how to reclaim it (§4.4) |
+
+The order is the reading: the city frames everything under it — the network served, the data installed, the journeys computed — and the data one has to download comes last of the four because it is the one thing here that is not a preference. English is the source, as everywhere (§9); the French names are a translation like any other.
+
+The way to "about" (§7.7) **closes the screen and belongs to no section**. It settles nothing and changes nothing, it opens a screen, and a title above it would only repeat the word written on it. What says it stands outside the sections is the air above it, one rung of the spacing scale wider than the gap a section takes: read on the phone, at the section's own gap it passed for a second offline-data setting.
+
+**A section holding nothing is not shown, and is not written into the layout either.** A title followed by nothing promises a setting the screen does not have, and §14 wants no view built against a feature that has not arrived. "Journey" is in that case as this is written: the first setting placed there brings its title with it, between the city and the display. What a setting costs is therefore its own views under the right title, and nothing above or below them.
+
+**A section title is announced as a heading**, so a screen reader can jump from one to the next instead of reading the screen end to end. The attribute that declares a heading in a layout arrived in API 28, two releases above this application's floor, so the title is a small view of its own that sets it in code and holds on every device served.
+
+**The screen scrolls**, and has to: six settings are due to arrive in those sections, and nine of them no longer fit on a phone.
+
 - **The units** offer the four states of §9 — follow the system, metric, American, British — on the theme's pattern: written the moment they are pressed, with no "apply" button, and applied without waiting for the next launch. The interface is rebuilt on the new units, as it is on a new theme and by the same mechanism, since a distance is written when a screen binds its views and a screen already drawn would otherwise go on saying metres. Nothing else moves: the journey on show keeps its stations, its metres and its minutes, all of them worked out before any unit was chosen (§14).
 - The buttons **name the units and not the countries** — "m · km", "ft · mi", "yd · mi" — because what one gets is what is written, and because no system of measurement belongs to a nation. Each carries a content label spelling its units out, the symbols being unreadable aloud.
 
