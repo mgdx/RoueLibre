@@ -6,6 +6,7 @@ import androidx.core.graphics.drawable.toBitmap
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
+import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
 import org.maplibre.android.maps.Style
@@ -61,19 +62,28 @@ object JourneyMarkers {
      *   the image again under the same name replaces it, so the answer may
      *   arrive after the style has loaded — which it does, being read from the
      *   city's configuration on disk.
+     * @param ownBikeKind what the rider said their own bike is, which the two
+     *   ends of a ride on it then say with a bolt (SPEC §7.6). Read from the
+     *   settings, so it arrives late in the same way and for the same reason.
      */
-    fun registerImages(context: Context, style: Style, fleet: BikeFleet) {
+    fun registerImages(
+        context: Context,
+        style: Style,
+        fleet: BikeFleet,
+        ownBikeKind: OwnBikeKind?,
+    ) {
         style.addImage(
             STATION_IMAGE_ID,
             imageOf(context, BikeGlyphs.stationMarker(fleet)),
         )
         style.addImage(ENDPOINT_IMAGE_ID, imageOf(context, R.drawable.marker_journey_endpoint))
         // The ends of a ride on one's own bike (SPEC §7.3): the filled bike
-        // disc already drawn elsewhere, and the plain one — the bolt and the
-        // cog say what waits at a station, and this bike is the rider's own.
+        // disc already drawn elsewhere. It never takes the cog, and it takes
+        // the bolt from the rider and not from the network — what a network
+        // lends says nothing about a bike that is not its own.
         style.addImage(
             ENDPOINT_OWN_BIKE_IMAGE_ID,
-            imageOf(context, R.drawable.marker_journey_station),
+            imageOf(context, OwnBikeGlyphs.endpointMarker(ownBikeKind)),
         )
     }
 

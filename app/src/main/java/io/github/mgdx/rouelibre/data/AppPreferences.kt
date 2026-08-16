@@ -271,6 +271,45 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * What the user says their own bike is (SPEC §7.3, §7.6).
+     *
+     * `null` — nothing written down — means "not specified", and that is the
+     * state on a fresh installation and after any reset; a word this build
+     * cannot read means the same thing, never a kind (see
+     * [OwnBikeKind.fromId]). Not specified reproduces exactly the drawings and
+     * the sentences of the version before this choice existed.
+     *
+     * **This is not [wantedBikeKind], and the two must never be taken for one
+     * another.** That one asks which of the bikes the **network** lends one
+     * wants to be sent to: it exists only in a conurbation lending both, and it
+     * narrows the stations §6 may choose. This one asks what the rider's **own**
+     * bike is: it belongs to no fleet, it is the same in every city, and it
+     * changes nothing but what is drawn and what is said — no speed, no
+     * coefficient, no profile (see [OwnBikeKind]).
+     *
+     * **A word about equipment, not a journey**, like [usesOwnBike] beside it:
+     * "mechanical", "electric", or nothing at all, and no point, no time, no
+     * destination goes with it (SPEC §2, C3).
+     *
+     * A flow rather than a read: the journey screens follow it, so a bike
+     * declared in the settings reaches the drawing without a restart.
+     */
+    val ownBikeKind: Flow<OwnBikeKind?> = dataStore.data.map {
+        OwnBikeKind.fromId(it[OWN_BIKE_KIND])
+    }
+
+    /** Remembers what the user's own bike is, or that they have not said. */
+    suspend fun setOwnBikeKind(kind: OwnBikeKind?) {
+        dataStore.edit { preferences ->
+            if (kind == null) {
+                preferences.remove(OWN_BIKE_KIND)
+            } else {
+                preferences[OWN_BIKE_KIND] = kind.id
+            }
+        }
+    }
+
+    /**
      * Whether journeys are worked out for the user's own bike (SPEC §7.3).
      *
      * False by default: the application serves a bike-share network, and the
@@ -442,6 +481,12 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         val WALKING_PACE = stringPreferencesKey("walking_pace")
         val OPENING_SCREEN = stringPreferencesKey("opening_screen")
         val LARGE_AVAILABILITY_NUMBERS = booleanPreferencesKey("large_availability_numbers")
+
+        /**
+         * The rider's own bike, which is not [WANTED_BIKE_KIND] above: that one
+         * is a kind asked of the network, this one a fact about the rider.
+         */
+        val OWN_BIKE_KIND = stringPreferencesKey("own_bike_kind")
         val ACTIVE_CITY_ID = stringPreferencesKey("active_city_id")
         val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
         val DECLINED_CITY_PROPOSAL_ID = stringPreferencesKey("declined_city_proposal_id")

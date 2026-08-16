@@ -470,4 +470,22 @@
          the map keeps its markers as they are. -->
     <string name="settings_large_numbers_hint">In the station list and on a station’s details. The map markers keep their size.</string>
 
+    <!-- The rider's OWN bike, not the network's. Keep the wording clearly
+         about the reader's own equipment: the journey screen carries a
+         separate, similar-looking choice about the bikes the network lends. -->
+    <string name="settings_own_bike_kind_title">Your own bike</string>
+    <!-- Read aloud in place of the three buttons beside it. -->
+    <string name="settings_own_bike_kind_description">The kind of bike you own</string>
+    <string name="settings_own_bike_kind_unspecified">Not specified</string>
+    <string name="settings_own_bike_kind_mechanical">Mechanical</string>
+    <string name="settings_own_bike_kind_electric">Electric</string>
+    <!-- Under the three buttons. Says what this changes and what it does not,
+         so nobody expects a faster journey out of it. -->
+    <string name="settings_own_bike_kind_hint">Used only to draw and describe a journey on your own bike. It changes no route and no time.</string>
+
+    <!-- The summary of a ride on one's own bike, where that bike was said to be
+         a pedal-assist one. %1$s is a distance, %2$s a climb. -->
+    <string name="journey_own_bike_electric_only">on your own electric bike, over %1$s.</string>
+    <string name="journey_own_bike_electric_only_climb">on your own electric bike, over %1$s and %2$s of climb.</string>
+
 </resources>

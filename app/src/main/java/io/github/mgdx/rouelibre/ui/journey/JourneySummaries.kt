@@ -9,6 +9,7 @@ import io.github.mgdx.rouelibre.core.journey.shownMinutes
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.station.BikeSplit
 import io.github.mgdx.rouelibre.core.station.splitBikesByKind
+import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.ui.formatClimb
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.formatMinutes
@@ -99,12 +100,40 @@ fun Context.bikesAtDeparture(split: BikeSplit?): String? = split?.let {
  * is no station to name, no bike to count and no walk to apportion (SPEC §7.3).
  * The climb goes inside the sentence rather than behind it, for the reason
  * [walkSummary] gives: this one ends on a full stop.
+ *
+ * **The sentence names the bike where the rider named it** (SPEC §7.6): "on your
+ * own electric bike" where they said theirs is one, and "on your own bike"
+ * otherwise. Two wordings and not three, for the reason `OwnBikeGlyphs` gives
+ * about its two drawings — the plain bike promises the least, and it is what a
+ * bike declared mechanical and a bike nobody declared both are.
+ *
+ * **No minute of this line depends on the kind.** A pedal-assist bike is quicker
+ * in the real world, but the ride was traced over the same graph with the same
+ * profile, and this application announces nothing it has not computed (SPEC §6).
+ *
+ * @param kind what the rider said their own bike is, or `null` if they have not.
  */
-fun Context.ownBikeSummary(ride: RouteLeg): String {
+fun Context.ownBikeSummary(ride: RouteLeg, kind: OwnBikeKind?): String {
     val distance = formatDistance(ride.distanceMetres.toDouble())
+    val isElectric = kind == OwnBikeKind.Electric
     val climb = formatClimb(ride.ascentMetres, ride.distanceMetres)
-        ?: return getString(R.string.journey_own_bike_only, distance)
-    return getString(R.string.journey_own_bike_only_climb, distance, climb)
+        ?: return getString(
+            if (isElectric) {
+                R.string.journey_own_bike_electric_only
+            } else {
+                R.string.journey_own_bike_only
+            },
+            distance,
+        )
+    return getString(
+        if (isElectric) {
+            R.string.journey_own_bike_electric_only_climb
+        } else {
+            R.string.journey_own_bike_only_climb
+        },
+        distance,
+        climb,
+    )
 }
 
 /**

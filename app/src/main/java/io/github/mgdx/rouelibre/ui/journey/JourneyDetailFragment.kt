@@ -27,6 +27,7 @@ import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.routing.elevationProfile
 import io.github.mgdx.rouelibre.core.routing.smoothedOver
 import io.github.mgdx.rouelibre.core.station.Station
+import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyDetailBinding
 import io.github.mgdx.rouelibre.databinding.ItemJourneyPlaceBinding
 import io.github.mgdx.rouelibre.databinding.ItemJourneyStepBinding
@@ -125,6 +126,18 @@ class JourneyDetailFragment : Fragment() {
      * divide into, and reading that takes the identifier table (SPEC §7.4.1).
      */
     private var lentFleet: FleetDescription? = null
+
+    /**
+     * What the rider said their **own** bike is, or `null` if they have not
+     * (SPEC §7.6).
+     *
+     * A different question from [fleet] and [lentFleet] above, and never read
+     * off them: those say what the network lends, this says what the rider
+     * owns. It reaches the drawing's two ends and the sentence beside the
+     * total, both of which are repeated word for word from the screen this one
+     * opens from (SPEC §7.4.1).
+     */
+    private var ownBikeKind: OwnBikeKind? = null
 
     /**
      * Takes back the two ends of the journey described.
@@ -262,6 +275,15 @@ class JourneyDetailFragment : Fragment() {
             lentFleet = lent
             showTotal(journey)
         }
+        // And the rider's own bike, which is another question entirely: it
+        // reaches the two ends of the drawing and the sentence beside the total,
+        // both of which this screen repeats from the one it was opened from
+        // (SPEC §7.4.1, §7.6).
+        withOwnBikeKind { declared ->
+            ownBikeKind = declared
+            binding?.shape?.ownBikeKind = declared
+            showTotal(journey)
+        }
         viewModel.locate(stationsOf(journey.plan))
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -312,7 +334,7 @@ class JourneyDetailFragment : Fragment() {
                 isQuickerThanTheBike = walk.reason == NoBikeJourney.WalkingIsQuicker,
             )
 
-            ownBike != null -> requireContext().ownBikeSummary(ownBike.ride)
+            ownBike != null -> requireContext().ownBikeSummary(ownBike.ride, ownBikeKind)
             else -> return
         }
         views.shape.legs = legsOf(plan).mapIndexed { index, leg ->

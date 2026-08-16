@@ -30,6 +30,7 @@ import io.github.mgdx.rouelibre.core.journey.inShownMinutes
 import io.github.mgdx.rouelibre.core.journey.shownMinutes
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
+import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyResultBinding
 import io.github.mgdx.rouelibre.ui.BikeFleet
@@ -125,6 +126,17 @@ class JourneyResultFragment : Fragment() {
      * electric, and reading that takes the identifier table (SPEC §7.4).
      */
     private var lentFleet: FleetDescription? = null
+
+    /**
+     * What the rider said their **own** bike is, or `null` if they have not
+     * (SPEC §7.6).
+     *
+     * Kept here for the same reason as [fleet]: the style can load before or
+     * after the answer, and whichever comes second registers the endpoint
+     * marker. It is never read off [fleet] and never stands in for it — one
+     * says what the network lends, the other what the rider owns.
+     */
+    private var ownBikeKind: OwnBikeKind? = null
 
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
@@ -303,6 +315,7 @@ class JourneyResultFragment : Fragment() {
         followUserPosition()
         readBikeFleet()
         readLentFleet()
+        readOwnBikeKind()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -328,7 +341,7 @@ class JourneyResultFragment : Fragment() {
             views.computingBike.fleet = lent
             if (styleLoaded) {
                 mapLibreMap?.style?.let {
-                    JourneyMarkers.registerImages(requireContext(), it, lent)
+                    JourneyMarkers.registerImages(requireContext(), it, lent, ownBikeKind)
                 }
             }
         }
@@ -345,6 +358,39 @@ class JourneyResultFragment : Fragment() {
         withFleet { lent ->
             lentFleet = lent
             viewModel.state.value.chosen?.let(::showSummary)
+        }
+    }
+
+    /**
+     * Puts the rider's own bike on the drawing and in the sentence
+     * (SPEC §7.3, §7.6).
+     *
+     * A reading of its own, and not a corner of [readBikeFleet]: that one says
+     * what the **network** lends, this one what the rider says they own, and
+     * neither may be read off the other. It reaches the two ends of the shape,
+     * the two ends on the map, and the sentence under the total — nothing else,
+     * and no minute anywhere: the ride was traced over the same graph with the
+     * same profile whatever kind was declared (SPEC §6).
+     *
+     * The answer comes off disk, so it lands after the screen: the plain bike is
+     * drawn until then, which is what an undeclared bike takes anyway. Only the
+     * sentence is rewritten, never the whole screen — redrawing the journey
+     * would frame the map again and take the user back from wherever they had
+     * panned it, exactly as [readLentFleet] guards against.
+     */
+    private fun readOwnBikeKind() {
+        withOwnBikeKind { declared ->
+            ownBikeKind = declared
+            val views = binding ?: return@withOwnBikeKind
+            views.shape.ownBikeKind = declared
+            if (styleLoaded) {
+                mapLibreMap?.style?.let {
+                    JourneyMarkers.registerImages(requireContext(), it, fleet, declared)
+                }
+            }
+            (viewModel.state.value.plan as? JourneyPlan.OwnBike)?.let {
+                views.summary.text = requireContext().ownBikeSummary(it.ride, declared)
+            }
         }
     }
 
@@ -424,7 +470,7 @@ class JourneyResultFragment : Fragment() {
             val markers = GeoJsonSource(JourneyMarkers.SOURCE_ID)
             markerSource = markers
             style.addSource(markers)
-            JourneyMarkers.registerImages(requireContext(), style, fleet)
+            JourneyMarkers.registerImages(requireContext(), style, fleet, ownBikeKind)
             style.addLayer(JourneyMarkers.layer())
 
             // The user's position comes last of all, and therefore on top:
@@ -717,7 +763,7 @@ class JourneyResultFragment : Fragment() {
             ?.let { requireContext().formatDuration(it.duration) }
             ?: getString(R.string.journey_none_title)
         views.summary.text = when {
-            ownBike != null -> requireContext().ownBikeSummary(ownBike.ride)
+            ownBike != null -> requireContext().ownBikeSummary(ownBike.ride, ownBikeKind)
             !state.hasStations -> getString(R.string.journey_no_stations)
             walkOnly != null -> requireContext().walkSummary(
                 walkOnly.directWalk,

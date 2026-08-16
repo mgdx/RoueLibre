@@ -164,9 +164,11 @@ also records what has no visible effect.
   drawing losing its dashes and its station discs, and its two ends becoming
   the filled bike disc already drawn elsewhere instead of the outlined walking
   figure — the figure says how that point is lived, and nothing here is walked.
-  The same ends are drawn on the result screen and on its map, and they take
-  neither bolt nor cog: what the network lends says nothing about a bike that is
-  not the network's. `JourneyPlan` gains an `OwnBike` case and `JourneyPlanner` a
+  The same ends are drawn on the result screen and on its map. They never take
+  the cog, and they take the bolt from the rider rather than from the network —
+  see the setting further down this list: what the network lends says nothing
+  about a bike that is not the network's, and what the rider declares says
+  everything about it. `JourneyPlan` gains an `OwnBike` case and `JourneyPlanner` a
   `planWithOwnBike`; the choice is a boolean in the preferences and nothing
   else — no point, no time, no destination (`SPEC.md` §2, C3). `SPEC.md` §7.3,
   §7.4 and §7.4.1 say it.
@@ -496,6 +498,35 @@ also records what has no visible effect.
   change that was decided against. The disc grows by the same third as the
   figure inside it, that ratio and not the absolute size being what keeps three
   digits inside the ring.
+
+- **One can say what one's own bike is**, mechanical or electric, in the journey
+  section of the settings (`SPEC.md` §7.3, §7.4, §7.6). **Not specified is the
+  default**, at installation, after a reset and for a word that cannot be read,
+  and it reproduces exactly the drawings and the sentences of the version before
+  this choice existed. Declared electric, a journey on one's own bike draws the
+  bolt at its two ends — on the search screen's illustration, on the result
+  screen's drawing and on the two points of its map — and the summary says "on
+  your own electric bike". A bike declared mechanical takes the plain drawing, as
+  an undeclared one does: the plain bike promises the least and the bolt is what
+  has to be earned.
+  **It changes the drawing and the sentence, and nothing else.** No speed, no
+  coefficient, no dedicated profile — a decision and not an omission. A
+  pedal-assist bike is quicker in the real world, but §6 announces only what the
+  routing engine traced, and the ride runs over the same graph with the same
+  profile whatever was declared: the same pair of points comes back with the
+  same track and the same minutes under all three states, which is what the test
+  holds. What holds it structurally is that `OwnBikeKind` lives in the
+  application's settings and the `core` module the algorithm lives in cannot see
+  it.
+  **It is not the kind of bike asked of the network**, and the two are
+  deliberately named apart, documented apart and stored under different keys.
+  That one is a question about the network's bikes — which of them one wants to
+  be sent to — so it exists only where the network lends both kinds and it
+  narrows the stations the algorithm may choose. This one is a question about
+  the rider, whose bike belongs to no fleet and is the same in Lille as in Lyon:
+  it is offered **everywhere**, `FleetDescription.isMixed` being none of its
+  business, and the line under the three buttons says what it does not do, so
+  nobody expects a faster journey out of it.
 
 ### Fixed
 

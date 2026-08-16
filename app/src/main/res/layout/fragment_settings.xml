@@ -128,6 +128,85 @@
                     android:text="@string/settings_walking_pace_brisk" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
+            <!--
+                What the rider's own bike is (SPEC §7.3, §7.6). Three states,
+                the leftmost saying nothing, on the pattern of the pace above.
+
+                It is NOT the kind of bike asked of the network, which lives on
+                the journey screen, exists only where the network lends both
+                kinds, and narrows the stations the algorithm may choose. This
+                one is a fact about the rider: their bike belongs to no fleet, it
+                is the same in every city, so it is offered everywhere and asks
+                nothing of `FleetDescription.isMixed`. It is also the one setting
+                of this section that reaches no computation at all — it changes
+                what is drawn and what is said, and not one minute announced.
+            -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:text="@string/settings_own_bike_kind_title"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/own_bike_kind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:contentDescription="@string/settings_own_bike_kind_description"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/own_bike_kind_unspecified"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:insetLeft="0dp"
+                    android:insetRight="0dp"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:minWidth="0dp"
+                    android:paddingStart="@dimen/space_xs"
+                    android:paddingEnd="@dimen/space_xs"
+                    android:text="@string/settings_own_bike_kind_unspecified" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/own_bike_kind_mechanical"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:insetLeft="0dp"
+                    android:insetRight="0dp"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:minWidth="0dp"
+                    android:paddingStart="@dimen/space_xs"
+                    android:paddingEnd="@dimen/space_xs"
+                    android:text="@string/settings_own_bike_kind_mechanical" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/own_bike_kind_electric"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:insetLeft="0dp"
+                    android:insetRight="0dp"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:minWidth="0dp"
+                    android:paddingStart="@dimen/space_xs"
+                    android:paddingEnd="@dimen/space_xs"
+                    android:text="@string/settings_own_bike_kind_electric" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="@string/settings_own_bike_kind_hint"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
+
             <!-- Display: what the interface looks like and what it writes in.
                  Neither touches the data nor the journeys (SPEC §14). -->
             <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle
