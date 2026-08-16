@@ -327,6 +327,20 @@ also records what has no visible effect.
   Handing the station to a navigation application stays offered, that one not
   running on our graph. `SPEC.md` §4 records the choice.
 
+- **The address search announced "nothing matches" while it was still
+  searching.** On Vélo Fluo — Strasbourg and its 162,198 streets, typing "Rue
+  Pierre de Martimprey" produced "Nothing matches" at 2.3 s and the street
+  itself at 5.4 s, with nothing touched in between: the screen spent three
+  seconds asserting the opposite of what it was about to answer, and advising
+  the user to reword a query that was right. The state raised "searching" only
+  when the scan started, and what lies before that is not the 150 ms debounce
+  but the wait for the previous scan — `collectLatest` cancels it, yet a scan
+  already inside SQLite gives the coroutine back only when it returns.
+  **"Searching" is now true from the keystroke onwards**, and the screen shows a
+  third state saying so rather than concluding. No fixed delay was added: that
+  would have moved the lie rather than removed it. A search that genuinely finds
+  nothing still says so at once — 0.2 s on Hunedoara.
+
 - **A city announced as unpublished offered its 1.65 GB one tap later.** The
   list said "Data not published yet" of sharedmobility.ch — Zürich, and the
   storage screen reached on touching that very row proposed "Download 1.65 GB";

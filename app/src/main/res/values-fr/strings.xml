@@ -363,6 +363,8 @@
     <!-- An empty search screen: each situation calls for a different gesture. -->
     <string name="address_search_prompt_title">Où vas-tu ?</string>
     <string name="address_search_prompt_message">Tape un nom de rue, avec ou sans numéro. Les gares, universités et grandes places se cherchent aussi.</string>
+    <string name="address_searching_title">Recherche en cours…</string>
+    <string name="address_searching_message">Parcours des adresses installées sur cet appareil.</string>
     <string name="address_no_match_title">Aucune adresse trouvée</string>
     <!-- %1$s is what the user typed. -->
     <string name="address_no_match_message">Rien ne correspond à « %1$s ». Essaie le nom de la rue seul, ou ajoute la commune.</string>

@@ -134,8 +134,8 @@ class AddressSearchFragment : Fragment() {
     /**
      * Shows what there is to say when the list is empty.
      *
-     * Four situations, four different gestures: install the index, clear a
-     * fruitless query, type something, or import an unreadable file again.
+     * Five situations, five different gestures: wait, install the index, clear
+     * a fruitless query, type something, or import an unreadable file again.
      * Conflating them would send the user looking for a breakdown that does not
      * exist.
      */
@@ -143,11 +143,20 @@ class AddressSearchFragment : Fragment() {
         val views = binding ?: return
         views.emptyState.isVisible = state.results.isEmpty()
         if (state.results.isNotEmpty()) return
-        // While a search runs, the previous message stays: replacing it with
-        // the opening prompt on every keystroke would make the screen flicker
-        // between two queries that themselves follow one another smoothly.
-        if (state.isSearching && state.query.isNotBlank()) return
         views.emptyAction.isVisible = false
+
+        // A running search concludes nothing. It used to leave the previous
+        // message standing, to spare a flicker between two queries following
+        // one another; on a large index that message was an announced absence,
+        // and it stood for three seconds over a query that was about to
+        // succeed. Saying "searching" costs the flicker and cannot be wrong —
+        // and only where the screen holds nothing else, since results already
+        // on show hide this panel altogether.
+        if (state.isSearching && state.query.isNotBlank()) {
+            views.emptyTitle.setText(R.string.address_searching_title)
+            views.emptyMessage.setText(R.string.address_searching_message)
+            return
+        }
 
         when {
             !state.isIndexInstalled -> {
