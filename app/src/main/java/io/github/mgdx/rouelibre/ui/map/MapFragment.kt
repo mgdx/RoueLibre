@@ -24,9 +24,12 @@ import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.CityEntry
+import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
+import io.github.mgdx.rouelibre.core.station.BikeKindFilter
+import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
@@ -45,6 +48,7 @@ import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
 import io.github.mgdx.rouelibre.ui.withBikeFleet
+import io.github.mgdx.rouelibre.ui.withFleet
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -188,6 +192,38 @@ class MapFragment : Fragment() {
 
     private var mode: AvailabilityMode = AvailabilityMode.Bikes
 
+    /**
+     * The kind of bike the markers count, or `null` for all of them (SPEC §7.1).
+     *
+     * Its own control, owing nothing to the journey screen's: what is filtered
+     * here changes no journey, and a kind chosen for a journey filters nothing
+     * here. It lives as long as the screen does, like [mode] beside it and for
+     * the same reason — it is a way of looking at the map right now, not a fact
+     * about the rider, so nothing of it is written down.
+     */
+    private var bikeKind: WantedBikeKind? = null
+
+    /**
+     * What the network in service lends, so the markers can be counted by kind.
+     *
+     * `null` until the reading lands. It decides whether the filter exists at
+     * all — a network lending one kind is offered nothing to filter — and it
+     * carries the vehicle type table without which no identifier can be read as
+     * a kind (SPEC §4.1).
+     */
+    private var lentFleet: FleetDescription? = null
+
+    /**
+     * Whether the controls laid over the map are up at all.
+     *
+     * False until the base map is known to be installed, and false while a point
+     * is being designated. The kind filter follows it — it is one of those
+     * controls — and it has to be told rather than to read another button's
+     * visibility, the two being settled by different coroutines racing to
+     * finish.
+     */
+    private var showsMapControls = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -212,13 +248,24 @@ class MapFragment : Fragment() {
         views.locateMe.setOnClickListener { onLocateMeClicked() }
         views.openJourney.setOnClickListener { show(JourneySearchFragment()) }
         views.modeToggle.setOnClickListener { toggleMode() }
+        views.bikeKindFilter.setOnClickListener { toggleBikeKind() }
         views.pickedPlace.setOnClickListener { showPickedPlace(null) }
         applyModeLabel()
+        applyBikeKindLabel()
         // The button that opens the journey search carries the bike of the
         // network served: with a bolt where that network lends pedal-assist
         // bikes (SPEC §15).
         withBikeFleet { fleet ->
             binding?.openJourney?.setIconResource(BikeGlyphs.icon(fleet))
+        }
+        // The filter exists only where both kinds are lent, and the reading
+        // that says so arrives after the screen and may change under it
+        // (SPEC §4.1): following it puts the button there, or takes it away,
+        // without the map being rebuilt.
+        withFleet { lent ->
+            lentFleet = lent
+            showBikeKindFilter()
+            publishStations()
         }
 
         // The target depends on what is missing, and it is set together with
@@ -325,11 +372,13 @@ class MapFragment : Fragment() {
         // The main screen's controls do not reappear when the map is being
         // used to designate a point: one came to aim, not to browse.
         val showsControls = tiles != null && !isPicking()
+        showsMapControls = showsControls
         views.modeToggle.isVisible = showsControls
         // Without a base map, an address found would have nowhere to land: the
         // search opens from the map, and presumes one.
         views.openSearch.isVisible = showsControls
         views.openJourney.isVisible = showsControls
+        showBikeKindFilter()
         if (tiles == null || configuration == null) return
 
         map.uiSettings.isAttributionEnabled = false
@@ -496,7 +545,11 @@ class MapFragment : Fragment() {
     private fun publishStations() {
         val source = stationSource ?: return
         source.setGeoJson(
-            StationMarkers.toFeatureCollection(viewModel.state.value.stations, mode),
+            StationMarkers.toFeatureCollection(
+                viewModel.state.value.stations,
+                mode,
+                bikeKindFilter(),
+            ),
         )
     }
 
@@ -1022,7 +1075,77 @@ class MapFragment : Fragment() {
             AvailabilityMode.Docks -> AvailabilityMode.Bikes
         }
         applyModeLabel()
+        // The kind filter has nothing to say about free docks, so it goes while
+        // they are being shown. The choice itself is kept: coming back to the
+        // bikes finds it again, rather than silently reset.
+        showBikeKindFilter()
         publishStations()
+    }
+
+    /**
+     * Passes to the next kind counted: all bikes, then mechanical, then
+     * electric.
+     *
+     * A button labelled by what is shown rather than by what a press would do,
+     * exactly like the toggle beside it. Three states on one button rather than
+     * a row of three: the map is scenery for the stations (SPEC §7), and every
+     * control laid over it is taken from them.
+     */
+    private fun toggleBikeKind() {
+        bikeKind = when (bikeKind) {
+            null -> WantedBikeKind.Mechanical
+            WantedBikeKind.Mechanical -> WantedBikeKind.Electric
+            WantedBikeKind.Electric -> null
+        }
+        applyBikeKindLabel()
+        publishStations()
+    }
+
+    private fun applyBikeKindLabel() {
+        val button = binding?.bikeKindFilter ?: return
+        button.setText(
+            when (bikeKind) {
+                null -> R.string.map_bikes_all_kinds
+                WantedBikeKind.Mechanical -> R.string.map_bikes_mechanical
+                WantedBikeKind.Electric -> R.string.map_bikes_electric
+            },
+        )
+        button.contentDescription = getString(
+            when (bikeKind) {
+                null -> R.string.map_bikes_all_kinds_description
+                WantedBikeKind.Mechanical -> R.string.map_bikes_mechanical_description
+                WantedBikeKind.Electric -> R.string.map_bikes_electric_description
+            },
+        )
+    }
+
+    /**
+     * Shows the kind filter where it has something to filter.
+     *
+     * It follows the toggle beside it — gone without a base map, and gone while
+     * a point is being designated — and needs two more things of its own: a
+     * network that really lends both kinds (SPEC §15), since offering to sort
+     * bikes into two piles where there is one would promise something nobody can
+     * collect, and the bikes being what is counted, a kind having nothing to say
+     * about a free dock.
+     */
+    private fun showBikeKindFilter() {
+        val views = binding ?: return
+        views.bikeKindFilter.isVisible = showsMapControls &&
+            mode == AvailabilityMode.Bikes &&
+            lentFleet?.isMixed == true
+    }
+
+    /**
+     * The kind the markers count, or `null` — all of them.
+     *
+     * Silent wherever the filter itself is: a network lending one kind, or a
+     * reading not landed yet, leaves the markers counting whole stations.
+     */
+    private fun bikeKindFilter(): BikeKindFilter? {
+        val wanted = bikeKind ?: return null
+        val lent = lentFleet?.takeIf { it.isMixed } ?: return null
+        return BikeKindFilter(wanted, lent.vehicleTypes)
     }
 
     private fun applyModeLabel() {

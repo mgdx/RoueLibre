@@ -11,6 +11,38 @@ also records what has no visible effect.
 
 ### Added
 
+- **Choosing the bike a journey is worked out for.** Where the network lends
+  both kinds, the journey screen offers "any bike", "mechanical" or "electric",
+  beside the switch for one's own bike and remembered like it: what somebody
+  wants to ride is a fact about them, not about one trip. Asking for nothing is
+  the default, at installation and after any reset — the application presumes no
+  kind, as it presumes no city. Asking for one is a **strict filter and not a
+  weighting**: a station that does not hold that kind is not a candidate at all,
+  and when none is left the answer says so and names the kind — "no station
+  nearby has an electric bike right now" — rather than walking somebody towards
+  a bike that is not there. No penalty coefficient was invented for the wrong
+  kind, because there was nothing to measure. A station whose breakdown cannot
+  be read is left out too: one cannot promise a bike one has not managed to
+  count — and asked for nothing, that same station is a candidate like any
+  other. Three things stay as they were, each for its own reason: the arrival
+  end, a free dock being a free dock whatever is returned to it; the time
+  announced, an assisted bike being traced over the same graph with the same
+  profile; and the counts carried, which are still the station's whole stock.
+  The selector **does not exist** in a conurbation lending one kind, nor while
+  the own-bike switch is on — absent rather than greyed out, since a choice
+  nobody can collect is a promise not to make — and it appears or goes with the
+  reading of the fleet, without the screen being rebuilt. A choice remembered in
+  a mixed city and read back in a mechanical one is ignored and not erased, so
+  coming back finds it. The map gets a filter of its own beside its "bikes /
+  free docks" toggle, counting one kind in the markers, and the two controls
+  command nothing of each other. **Neither reaches a station's sheet or a
+  journey's detail**, which show both counts whatever was asked: they answer
+  "what is waiting there", and a filter is a question put elsewhere — a
+  requirement negative enough to deserve a test that fails the day somebody
+  wires a kind into either. `SPEC.md` §6, §7.1, §7.2, §7.3, §7.4 and §7.4.1 say
+  it; the choice is one word in the preferences, "mechanical", "electric" or
+  nothing at all (`SPEC.md` §2, C3).
+
 - **A journey on one's own bike.** A switch under the two points of the journey
   screen, off by default and remembered from one journey to the next: what
   somebody rides is a fact about them, not about one trip, and asking again

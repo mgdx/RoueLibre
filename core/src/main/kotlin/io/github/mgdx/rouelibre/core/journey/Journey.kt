@@ -5,6 +5,7 @@ import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.routing.RouteResult
 import io.github.mgdx.rouelibre.core.routing.TravelMode
 import io.github.mgdx.rouelibre.core.station.Station
+import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import kotlin.time.Duration
 
 /**
@@ -155,6 +156,23 @@ public sealed interface NoBikeJourney {
      * the lending side.
      */
     public data object NoBikeNearby : NoBikeJourney
+
+    /**
+     * No station in service holds a bike of the kind asked for (SPEC §7.3).
+     *
+     * Distinct from [NoBikeNearby] because the two call for different things to
+     * be done about them: one waits for a bike, the other may simply take the
+     * other kind. The kind is carried so the message can name it — "no station
+     * nearby has an electric bike right now" is an answer, "no bike found" is
+     * not.
+     *
+     * A station whose breakdown cannot be read counts as not holding the kind:
+     * a bike nobody managed to count is not a bike to walk to (see
+     * `BikeKindFilter`).
+     *
+     * @property wanted the kind that was asked for.
+     */
+    public data class NoWantedBikeNearby(public val wanted: WantedBikeKind) : NoBikeJourney
 
     /** The network has no station in service with a free dock. */
     public data object NoDockNearby : NoBikeJourney

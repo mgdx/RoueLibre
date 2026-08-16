@@ -44,6 +44,15 @@
     <string name="mode_docks">Free docks</string>
     <string name="mode_bikes_description">Show available bikes</string>
     <string name="mode_docks_description">Show free docks</string>
+
+    <!-- Which bikes the markers count, where the network lends both kinds
+         (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
+    <string name="map_bikes_all_kinds">All bikes</string>
+    <string name="map_bikes_mechanical">Mechanical</string>
+    <string name="map_bikes_electric">Electric</string>
+    <string name="map_bikes_all_kinds_description">Every bike is counted. Tap to count the mechanical ones only.</string>
+    <string name="map_bikes_mechanical_description">Mechanical bikes are counted. Tap to count the electric ones only.</string>
+    <string name="map_bikes_electric_description">Electric bikes are counted. Tap to count them all.</string>
     <string name="counterpart_bikes">bikes</string>
     <string name="counterpart_docks">free docks</string>
     <string name="counterpart_none">—</string>
@@ -180,6 +189,15 @@
          that replaces the one above it when it is on (SPEC §7.3). -->
     <string name="journey_own_bike">Ride my own bike</string>
     <string name="journey_hint_own_bike">The journey is computed on the device: one ride from door to door, with no station on the way.</string>
+
+    <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
+         which is what the application does at rest. -->
+    <string name="journey_bike_kind_any">Any bike</string>
+    <string name="journey_bike_kind_mechanical">Mechanical</string>
+    <string name="journey_bike_kind_electric">Electric</string>
+    <string name="journey_bike_kind_any_description">Any bike, whichever kind</string>
+    <string name="journey_bike_kind_mechanical_description">A bike I pedal myself</string>
+    <string name="journey_bike_kind_electric_description">A pedal-assist bike</string>
     <string name="journey_compute">Work out the journey</string>
     <string name="journey_computing">Working out the best journey…</string>
     <!-- Nothing is being chosen here — there is one route to trace, not a pair
@@ -240,6 +258,9 @@
     <string name="journey_walk_is_quicker_climb">on foot, over %1$s and %2$s of climb — sooner than going to fetch a bike.</string>
     <string name="journey_none_title">No journey</string>
     <string name="journey_no_bike_nearby">No station with a bike near the start. Try again later, or start from somewhere else.</string>
+
+    <string name="journey_no_mechanical_nearby">No station nearby has a mechanical bike right now. Ask for any bike, or try again later.</string>
+    <string name="journey_no_electric_nearby">No station nearby has an electric bike right now. Ask for any bike, or try again later.</string>
     <string name="journey_no_dock_nearby">No station with a free dock near the destination. Try again later, or aim somewhere else.</string>
     <string name="journey_no_route">No practicable route between these two points.</string>
     <string name="journey_graph_missing">The routing data is not installed. Add it from the storage screen.</string>

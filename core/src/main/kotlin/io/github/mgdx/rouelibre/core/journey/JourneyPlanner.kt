@@ -6,7 +6,9 @@ import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.routing.RouteResult
 import io.github.mgdx.rouelibre.core.routing.RoutingFailure
 import io.github.mgdx.rouelibre.core.routing.TravelMode
+import io.github.mgdx.rouelibre.core.station.BikeKindFilter
 import io.github.mgdx.rouelibre.core.station.Station
+import io.github.mgdx.rouelibre.core.station.StationAvailability
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -50,12 +52,35 @@ import kotlin.time.Duration.Companion.seconds
  * measured on the emulator, chaining six short legs already took 2.4 s, and
  * long ones would turn that into a minute.
  *
+ * ## Asking for one kind of bike
+ *
+ * [wantedBike] narrows the departure end to the stations that really hold the
+ * kind asked for, and does nothing else (SPEC §6). It is a **strict filter, not
+ * a weighting**: a station without that kind is not a candidate at all, and when
+ * none is left the answer says so rather than proposing a walk towards a bike
+ * that is not there. There is no penalty coefficient for the wrong kind, because
+ * there is nothing to measure — the question is not "how likely am I to find
+ * one" but "does this station lend one".
+ *
+ * Three things it deliberately leaves alone. The **arrival end**, where a free
+ * dock is a free dock whatever one returns to it. The **time announced**, which
+ * stays what the engine traced: a pedal-assist bike is quicker in the real
+ * world, but the profile it is traced with is the same one, and this application
+ * announces nothing it has not computed (SPEC §6). And the **counts carried**,
+ * which remain the station's whole stock, both for what the interface shows and
+ * for the reliability penalty: re-basing that penalty on one kind would be a
+ * coefficient nobody has measured.
+ *
  * @property router access to the routing engine.
  * @property settings the algorithm's settings.
+ * @property wantedBike the kind of bike asked for, with the network's table to
+ *   recognise it by, or `null` — the default — to ask for nothing. Built without
+ *   it, this class behaves exactly as it did before the choice existed.
  */
 public class JourneyPlanner(
     private val router: Router,
     private val settings: JourneySettings = JourneySettings(),
+    private val wantedBike: BikeKindFilter? = null,
 ) {
 
     /**
@@ -77,8 +102,14 @@ public class JourneyPlanner(
             stations = stations,
             near = origin,
             limit = settings.departureCandidates,
-            countOf = { it.availability?.takeIf { state -> state.canLendBike }?.bikesAvailable },
+            countOf = { entry ->
+                entry.availability
+                    ?.takeIf { state -> state.canLendBike && lendsTheWantedBike(state) }
+                    ?.bikesAvailable
+            },
         )
+        // The arrival end ignores the kind asked for: a free dock is a free dock
+        // whatever bike is returned to it (SPEC §6).
         val arrivals = candidates(
             stations = stations,
             near = destination,
@@ -86,7 +117,7 @@ public class JourneyPlanner(
             countOf = { it.availability?.takeIf { state -> state.canAcceptBike }?.docksAvailable },
         )
 
-        if (departures.isEmpty()) return giveUp(origin, destination, NoBikeJourney.NoBikeNearby)
+        if (departures.isEmpty()) return giveUp(origin, destination, noBikeToLend())
         if (arrivals.isEmpty()) return giveUp(origin, destination, NoBikeJourney.NoDockNearby)
 
         // Below three kilometres the direct walk is computed here, in the same
@@ -181,7 +212,8 @@ public class JourneyPlanner(
      *
      * A station out of service, or empty on the side we need, is not a
      * candidate: proposing a journey that leans on it would be proposing an
-     * impossible journey.
+     * impossible journey. At the departure end, a kind asked for narrows it
+     * further, by the same reasoning — see [lendsTheWantedBike].
      *
      * **Distance disqualifies nothing.** A station is examined however far it
      * stands: on a long trip, twenty minutes of access walk buy hours, and a
@@ -213,6 +245,36 @@ public class JourneyPlanner(
         }
         .sortedBy { it.straightLineMetres }
         .take(limit)
+
+    /**
+     * Whether a station holds a bike of the kind asked for.
+     *
+     * True for everybody when nothing was asked for, which is the application at
+     * rest: no kind is presumed.
+     *
+     * **A station whose breakdown cannot be read is left out.** The feed may
+     * count bikes under a vehicle type the network never declared, or publish a
+     * breakdown that does not add up to the total, or publish none at all
+     * (see `splitBikesByKind`): in all three the station may well hold what is
+     * wanted, and nothing here can say so. Walking somebody to a bike we failed
+     * to count would be promising what we cannot deliver, which is the same
+     * reason a station's sheet shows its total alone rather than a guess
+     * (SPEC §7.2).
+     */
+    private fun lendsTheWantedBike(availability: StationAvailability): Boolean =
+        wantedBike?.isSatisfiedBy(availability) ?: true
+
+    /**
+     * Why no station can lend, in the terms the question was put in.
+     *
+     * Somebody who asked for a kind is told about that kind: "no station nearby
+     * has an electric bike right now" leaves them something to do — take the
+     * other kind, or wait — where a bare "no bike found" would have them look
+     * for another address.
+     */
+    private fun noBikeToLend(): NoBikeJourney = wantedBike
+        ?.let { NoBikeJourney.NoWantedBikeNearby(it.wanted) }
+        ?: NoBikeJourney.NoBikeNearby
 
     /**
      * The direct walk, computed late and only when it can still win.

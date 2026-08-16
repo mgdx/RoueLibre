@@ -69,7 +69,11 @@ public data class BikeSplit(public val mechanical: Int, public val electric: Int
  * - **nothing published at all**, which is the case of a station holding no
  *   bike, and of the feeds that publish no breakdown.
  *
- * In each case the caller shows the total alone, which is always true.
+ * In each case the caller shows the total alone, which is always true. A caller
+ * looking for one kind in particular reads that `null` as a station out of the
+ * running rather than as a station holding none — see [BikeKindFilter], which is
+ * the only place a kind ever filters anything: what a station's sheet and a
+ * journey's detail show is always both counts (SPEC §7.2, §7.4.1).
  *
  * It takes the breakdown apart from the total it must add up to, rather than a
  * station's state: a journey carries the two figures it was worked out on, away

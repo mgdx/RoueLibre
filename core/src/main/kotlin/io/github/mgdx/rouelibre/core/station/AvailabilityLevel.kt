@@ -76,8 +76,17 @@ public data class AvailabilityDisplay(
  * Turns a station's state into what the indicator must show.
  *
  * @param mode according to whether the user is after a bike or a dock.
+ * @param kind the kind of bike being counted, or `null` — the default — to count
+ *   them all. It applies to [AvailabilityMode.Bikes] alone: docks have no kind,
+ *   and a filter has nothing to say about them (SPEC §7.1). A station whose
+ *   breakdown cannot be read answers like a station with no state at all —
+ *   unknown, and drawn without a figure — never as a station holding none: see
+ *   [BikeKindFilter.bikesAt].
  */
-public fun StationWithAvailability.displayFor(mode: AvailabilityMode): AvailabilityDisplay {
+public fun StationWithAvailability.displayFor(
+    mode: AvailabilityMode,
+    kind: BikeKindFilter? = null,
+): AvailabilityDisplay {
     val current = availability
         ?: return AvailabilityDisplay(
             count = null,
@@ -102,7 +111,18 @@ public fun StationWithAvailability.displayFor(mode: AvailabilityMode): Availabil
     }
 
     val count = when (mode) {
-        AvailabilityMode.Bikes -> current.bikesAvailable
+        AvailabilityMode.Bikes -> kind?.let { wanted ->
+            // Unreadable breakdown: the same answer as a station the feed says
+            // nothing about. Drawing a nought would claim we counted and found
+            // none, which is not what happened.
+            wanted.bikesAt(current) ?: return AvailabilityDisplay(
+                count = null,
+                level = null,
+                isOutOfService = false,
+                filledFraction = null,
+            )
+        } ?: current.bikesAvailable
+
         AvailabilityMode.Docks -> current.docksAvailable
     }
     // The published capacity is preferred to the sum of bikes plus docks, which

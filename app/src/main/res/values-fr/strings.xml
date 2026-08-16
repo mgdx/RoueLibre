@@ -58,6 +58,15 @@
     <string name="mode_bikes_description">Afficher les vélos disponibles</string>
     <string name="mode_docks_description">Afficher les places libres</string>
 
+    <!-- Which bikes the markers count, where the network lends both kinds
+         (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
+    <string name="map_bikes_all_kinds">Tous les vélos</string>
+    <string name="map_bikes_mechanical">Mécaniques</string>
+    <string name="map_bikes_electric">Électriques</string>
+    <string name="map_bikes_all_kinds_description">Tous les vélos sont comptés. Touche pour ne compter que les mécaniques.</string>
+    <string name="map_bikes_mechanical_description">Les vélos mécaniques sont comptés. Touche pour ne compter que les électriques.</string>
+    <string name="map_bikes_electric_description">Les vélos électriques sont comptés. Touche pour tous les compter.</string>
+
     <!-- The secondary count's label, under the figure on the right. -->
     <string name="counterpart_bikes">vélos</string>
     <string name="counterpart_docks">places libres</string>
@@ -244,6 +253,15 @@
          that replaces the one above it when it is on (SPEC §7.3). -->
     <string name="journey_own_bike">Avec mon propre vélo</string>
     <string name="journey_hint_own_bike">Le trajet est calculé sur l\'appareil : un seul trajet à vélo d\'un bout à l\'autre, sans passer par une station.</string>
+
+    <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
+         which is what the application does at rest. -->
+    <string name="journey_bike_kind_any">Peu importe</string>
+    <string name="journey_bike_kind_mechanical">Mécanique</string>
+    <string name="journey_bike_kind_electric">Électrique</string>
+    <string name="journey_bike_kind_any_description">N\'importe quel vélo, quel qu\'il soit</string>
+    <string name="journey_bike_kind_mechanical_description">Un vélo que je pédale seul</string>
+    <string name="journey_bike_kind_electric_description">Un vélo à assistance électrique</string>
     <string name="journey_compute">Calculer l\'itinéraire</string>
     <string name="journey_computing">Calcul du meilleur itinéraire…</string>
     <!-- Nothing is being chosen here — there is one route to trace, not a pair
@@ -317,6 +335,9 @@
          happened, never a technical code. -->
     <string name="journey_none_title">Pas de trajet</string>
     <string name="journey_no_bike_nearby">Aucune station avec un vélo près du départ. Réessaie plus tard, ou pars d\'un autre point.</string>
+
+    <string name="journey_no_mechanical_nearby">Aucune station proche n\'a de vélo mécanique en ce moment. Demande n\'importe quel vélo, ou réessaie plus tard.</string>
+    <string name="journey_no_electric_nearby">Aucune station proche n\'a de vélo électrique en ce moment. Demande n\'importe quel vélo, ou réessaie plus tard.</string>
     <string name="journey_no_dock_nearby">Aucune station avec une place libre près de l\'arrivée. Réessaie plus tard, ou vise un autre point.</string>
     <string name="journey_no_route">Aucun chemin praticable entre ces deux points.</string>
     <string name="journey_graph_missing">Le graphe de routage n\'est pas installé. Ajoute-le depuis l\'écran de stockage.</string>

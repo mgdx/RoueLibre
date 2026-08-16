@@ -6,9 +6,12 @@ import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.routing.RouteResult
 import io.github.mgdx.rouelibre.core.routing.RoutingFailure
 import io.github.mgdx.rouelibre.core.routing.TravelMode
+import io.github.mgdx.rouelibre.core.station.BikeKindFilter
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.StationAvailability
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
+import io.github.mgdx.rouelibre.core.station.VehicleKind
+import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -539,6 +542,202 @@ class JourneyPlannerTest {
         val plan = planner.plan(origin, destination, stations)
 
         assertTrue("expected a walking fallback, got $plan", plan is JourneyPlan.WalkOnly)
+    }
+
+    // ------------------------------------------------- kind of bike asked --
+
+    /** Lyon's own words for its two kinds, as its `vehicle_types` feed has them. */
+    private val vehicleTypes = mapOf(
+        "mecanique" to VehicleKind.Mechanical,
+        "electrique" to VehicleKind.Electric,
+    )
+
+    private fun wanting(kind: WantedBikeKind) = JourneyPlanner(
+        FakeRouter(),
+        wantedBike = BikeKindFilter(kind, vehicleTypes),
+    )
+
+    /** The nearest station lends mechanical bikes only; a farther one, electric. */
+    private val mixedNetwork = listOf(
+        station(
+            "mecanique-proche",
+            at(0.0, 150.0),
+            bikes = 5,
+            bikesByVehicleType = mapOf("mecanique" to 5),
+        ),
+        station(
+            "electrique-loin",
+            at(0.0, 700.0),
+            bikes = 3,
+            bikesByVehicleType = mapOf("electrique" to 3),
+        ),
+        station("arrivee", at(0.0, 3900.0), bikes = 0, docks = 9),
+    )
+
+    @Test
+    fun `a kind asked for keeps only the stations that hold one`() = runTest {
+        val plan = wanting(WantedBikeKind.Electric)
+            .plan(origin, destination, mixedNetwork) as JourneyPlan.Found
+
+        assertEquals("electrique-loin", plan.best.departureStation.id)
+    }
+
+    @Test
+    fun `by default no kind is asked for at all`() = runTest {
+        // The non-regression that matters most: built without a word about
+        // kinds, the algorithm is the one that existed before the choice did —
+        // here it takes the nearest station, which lends the other kind.
+        val plan = JourneyPlanner(FakeRouter())
+            .plan(origin, destination, mixedNetwork) as JourneyPlan.Found
+
+        assertEquals("mecanique-proche", plan.best.departureStation.id)
+    }
+
+    @Test
+    fun `a station whose breakdown cannot be read is left out when a kind is asked for`() =
+        runTest {
+            // The feed counts its bikes under a vehicle type the network never
+            // declared: the station may well hold an electric bike, and nothing
+            // can say so. Walking somebody to a bike we failed to count would
+            // promise what we cannot deliver (SPEC §7.2).
+            val stations = listOf(
+                station(
+                    "illisible-proche",
+                    at(0.0, 150.0),
+                    bikes = 5,
+                    bikesByVehicleType = mapOf("431" to 5),
+                ),
+                station(
+                    "electrique-loin",
+                    at(0.0, 700.0),
+                    bikes = 3,
+                    bikesByVehicleType = mapOf("electrique" to 3),
+                ),
+                station("arrivee", at(0.0, 3900.0), bikes = 0, docks = 9),
+            )
+
+            val plan = wanting(WantedBikeKind.Electric)
+                .plan(origin, destination, stations) as JourneyPlan.Found
+
+            assertEquals("electrique-loin", plan.best.departureStation.id)
+        }
+
+    @Test
+    fun `a station whose breakdown cannot be read is kept when no kind is asked for`() = runTest {
+        // The same station, the same feed: what excludes it above is the
+        // request, never the reading itself.
+        val stations = listOf(
+            station(
+                "illisible-proche",
+                at(0.0, 150.0),
+                bikes = 5,
+                bikesByVehicleType = mapOf("431" to 5),
+            ),
+            station(
+                "electrique-loin",
+                at(0.0, 700.0),
+                bikes = 3,
+                bikesByVehicleType = mapOf("electrique" to 3),
+            ),
+            station("arrivee", at(0.0, 3900.0), bikes = 0, docks = 9),
+        )
+
+        val plan = JourneyPlanner(FakeRouter())
+            .plan(origin, destination, stations) as JourneyPlan.Found
+
+        assertEquals("illisible-proche", plan.best.departureStation.id)
+    }
+
+    @Test
+    fun `says which kind is missing when no station holds it`() = runTest {
+        // SPEC §6 again: say so rather than propose a journey towards a bike
+        // that is not there — and say WHICH bike, so there is something to do
+        // about it.
+        val stations = listOf(
+            station(
+                "mecanique-1",
+                at(0.0, 150.0),
+                bikes = 5,
+                bikesByVehicleType = mapOf("mecanique" to 5),
+            ),
+            station(
+                "mecanique-2",
+                at(0.0, 3900.0),
+                bikes = 4,
+                docks = 9,
+                bikesByVehicleType = mapOf("mecanique" to 4),
+            ),
+        )
+
+        val plan = wanting(WantedBikeKind.Electric).plan(origin, destination, stations)
+
+        assertTrue("expected WalkOnly, got $plan", plan is JourneyPlan.WalkOnly)
+        assertEquals(
+            NoBikeJourney.NoWantedBikeNearby(WantedBikeKind.Electric),
+            (plan as JourneyPlan.WalkOnly).reason,
+        )
+    }
+
+    @Test
+    fun `the arrival end is indifferent to the kind asked for`() = runTest {
+        // A free dock is a free dock whatever is returned to it (SPEC §6): the
+        // nearest arrival station wins though it holds not one electric bike.
+        val stations = listOf(
+            station(
+                "depart",
+                at(0.0, 150.0),
+                bikes = 3,
+                bikesByVehicleType = mapOf("electrique" to 3),
+            ),
+            station(
+                "arrivee-proche",
+                at(0.0, 3900.0),
+                bikes = 6,
+                docks = 9,
+                bikesByVehicleType = mapOf("mecanique" to 6),
+            ),
+            station(
+                "arrivee-loin",
+                at(0.0, 3300.0),
+                bikes = 6,
+                docks = 9,
+                bikesByVehicleType = mapOf("electrique" to 6),
+            ),
+        )
+
+        val plan = wanting(WantedBikeKind.Electric)
+            .plan(origin, destination, stations) as JourneyPlan.Found
+
+        assertEquals("arrivee-proche", plan.best.arrivalStation.id)
+    }
+
+    @Test
+    fun `the breakdown carried does not depend on the kind asked for`() = runTest {
+        // What the screens SHOW is both counts, whatever was asked for: they
+        // answer "what is waiting there", and the filter is a question put
+        // elsewhere (SPEC §7.2, §7.4). The same journey, worked out for an
+        // electric bike and for none, must carry the same two figures.
+        val stations = listOf(
+            station(
+                "depart",
+                at(0.0, 150.0),
+                bikes = 4,
+                bikesByVehicleType = mapOf("mecanique" to 3, "electrique" to 1),
+            ),
+            station("arrivee", at(0.0, 3900.0), bikes = 0, docks = 9),
+        )
+
+        val asked = wanting(WantedBikeKind.Electric)
+            .plan(origin, destination, stations) as JourneyPlan.Found
+        val unasked = JourneyPlanner(FakeRouter())
+            .plan(origin, destination, stations) as JourneyPlan.Found
+
+        assertEquals("depart", asked.best.departureStation.id)
+        assertEquals(
+            unasked.best.bikesByVehicleTypeAtDeparture,
+            asked.best.bikesByVehicleTypeAtDeparture,
+        )
+        assertEquals(unasked.best.bikesAtDeparture, asked.best.bikesAtDeparture)
     }
 
     // --------------------------------------------------------- own bike --

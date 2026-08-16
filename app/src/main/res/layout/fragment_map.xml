@@ -176,6 +176,26 @@
         tools:text="Vélos" />
 
     <!--
+        Which bikes the markers count (SPEC §7.1), beside the toggle that says
+        whether they count bikes at all. It is its own control: what is filtered
+        here changes nothing about the journey screen, and the other way round.
+        Shown only where the network lends both kinds, and only while bikes are
+        being counted — a kind has nothing to say about a free dock.
+    -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bike_kind_filter"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginStart="@dimen/space_s"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/mode_toggle"
+        app:layout_constraintStart_toEndOf="@id/mode_toggle"
+        app:layout_constraintTop_toTopOf="@id/mode_toggle"
+        tools:text="Électriques"
+        tools:visibility="visible" />
+
+    <!--
         The "pick a point" mode (SPEC §7.3): the map moves under a fixed
         crosshair, rather than waiting for a precise tap. One aims by moving the
         map, which leaves what is being aimed at visible.

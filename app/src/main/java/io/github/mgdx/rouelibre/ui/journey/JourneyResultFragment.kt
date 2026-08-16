@@ -29,6 +29,7 @@ import io.github.mgdx.rouelibre.core.journey.NoBikeJourney
 import io.github.mgdx.rouelibre.core.journey.inShownMinutes
 import io.github.mgdx.rouelibre.core.journey.shownMinutes
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
+import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyResultBinding
 import io.github.mgdx.rouelibre.ui.BikeFleet
@@ -39,6 +40,7 @@ import io.github.mgdx.rouelibre.ui.formatMinutes
 import io.github.mgdx.rouelibre.ui.map.MapStyleLoader
 import io.github.mgdx.rouelibre.ui.map.ServedAreaCamera
 import io.github.mgdx.rouelibre.ui.map.UserPositionMarker
+import io.github.mgdx.rouelibre.ui.toUserMessage
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
 import kotlinx.coroutines.Job
@@ -148,6 +150,19 @@ class JourneyResultFragment : Fragment() {
      */
     private var usesOwnBike = false
 
+    /**
+     * The kind of bike asked for on the search screen, or `null` for none
+     * (SPEC §7.3).
+     *
+     * It travels here so that a rotation, or a process killed and restored, asks
+     * the same question again — a journey worked out for an electric bike must
+     * not come back as a journey worked out for any. It decides which stations
+     * may be departed from and nothing else: what this screen and its detail
+     * **show** of those stations is both counts, whatever was asked for
+     * (SPEC §7.2, §7.4).
+     */
+    private var wantedBikeKind: WantedBikeKind? = null
+
     private val picker = JourneyEndpointPicker(
         fragment = this,
         onMessage = ::showMessage,
@@ -190,6 +205,8 @@ class JourneyResultFragment : Fragment() {
             origin = origin.position,
             destination = destination.position,
             usesOwnBike = usesOwnBike,
+            wantedBikeKind = wantedBikeKind,
+            fleet = container.fleetRepository.fleet,
         )
     }
 
@@ -212,6 +229,10 @@ class JourneyResultFragment : Fragment() {
             }
         usesOwnBike = savedInstanceState?.getBoolean(STATE_OWN_BIKE)
             ?: arguments?.getBoolean(ARGUMENT_OWN_BIKE) == true
+        wantedBikeKind = WantedBikeKind.ofWireName(
+            savedInstanceState?.getString(STATE_WANTED_BIKE_KIND)
+                ?: arguments?.getString(ARGUMENT_WANTED_BIKE_KIND),
+        )
         picker.readFrom(savedInstanceState)
     }
 
@@ -713,24 +734,20 @@ class JourneyResultFragment : Fragment() {
             .orEmpty()
     }
 
+    /**
+     * Why there is no journey, in words.
+     *
+     * The wording lives with the other user-facing failures (`ErrorMessages`),
+     * where SPEC §14 wants it: a plan with no reason at all — which does not
+     * happen — falls back on the plainest of them.
+     */
     private fun reasonOf(plan: JourneyPlan?): String {
         val reason = when (plan) {
             is JourneyPlan.Impossible -> plan.reason
             is JourneyPlan.WalkOnly -> plan.reason
             else -> null
         }
-        return getString(
-            when (reason) {
-                NoBikeJourney.NoBikeNearby -> R.string.journey_no_bike_nearby
-                NoBikeJourney.NoDockNearby -> R.string.journey_no_dock_nearby
-                NoBikeJourney.NoRouteBetweenStations -> R.string.journey_no_route
-                NoBikeJourney.GraphMissing -> R.string.journey_graph_missing
-                NoBikeJourney.OutsideCoverage -> R.string.journey_outside_coverage
-                // A walk that beat the bike never reaches here: it comes with a
-                // route, and its summary is the one above.
-                NoBikeJourney.WalkingIsQuicker, null -> R.string.journey_no_route
-            },
-        )
+        return reason?.toUserMessage(requireContext()) ?: getString(R.string.journey_no_route)
     }
 
     /** Draws the chosen option and frames the map on it. */
@@ -893,6 +910,7 @@ class JourneyResultFragment : Fragment() {
         origin.writeTo(outState, STATE_ORIGIN)
         destination.writeTo(outState, STATE_DESTINATION)
         outState.putBoolean(STATE_OWN_BIKE, usesOwnBike)
+        outState.putString(STATE_WANTED_BIKE_KIND, wantedBikeKind?.wireName)
         picker.writeTo(outState)
     }
 
@@ -921,9 +939,11 @@ class JourneyResultFragment : Fragment() {
         private const val ARGUMENT_ORIGIN = "origin"
         private const val ARGUMENT_DESTINATION = "destination"
         private const val ARGUMENT_OWN_BIKE = "own-bike"
+        private const val ARGUMENT_WANTED_BIKE_KIND = "wanted-bike-kind"
         private const val STATE_ORIGIN = "state-origin"
         private const val STATE_DESTINATION = "state-destination"
         private const val STATE_OWN_BIKE = "state-own-bike"
+        private const val STATE_WANTED_BIKE_KIND = "state-wanted-bike-kind"
 
         /** The margin around the track, in dp, so it does not touch the edges. */
         private const val FRAME_PADDING_DP = 32
@@ -934,16 +954,21 @@ class JourneyResultFragment : Fragment() {
          * @param usesOwnBike true for the journey of somebody riding their own
          *   bike: one ride, no station, and the network left out of it
          *   (SPEC §7.3).
+         * @param wantedBikeKind the kind of bike asked for, or `null` for no
+         *   kind at all — which is what a point arriving from another
+         *   application asks for, nobody having chosen anything on its behalf.
          */
         fun newInstance(
             origin: JourneyEndpoint,
             destination: JourneyEndpoint,
             usesOwnBike: Boolean = false,
+            wantedBikeKind: WantedBikeKind? = null,
         ): JourneyResultFragment = JourneyResultFragment().apply {
             arguments = Bundle().apply {
                 origin.writeTo(this, ARGUMENT_ORIGIN)
                 destination.writeTo(this, ARGUMENT_DESTINATION)
                 putBoolean(ARGUMENT_OWN_BIKE, usesOwnBike)
+                putString(ARGUMENT_WANTED_BIKE_KIND, wantedBikeKind?.wireName)
             }
         }
     }

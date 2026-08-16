@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.station.AvailabilityLevel
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
+import io.github.mgdx.rouelibre.core.station.BikeKindFilter
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.displayFor
 import org.maplibre.android.style.expressions.Expression
@@ -70,13 +71,19 @@ object StationMarkers {
      *
      * @param stations the known stations and their last state.
      * @param mode what the marker is to count.
+     * @param kind the kind of bike being counted, or `null` to count them all
+     *   (SPEC §7.1). A station whose breakdown cannot be read then falls into
+     *   the same case as one the feed says nothing about: an "unknown" disc
+     *   without a figure, never a nought — writing one would claim we counted
+     *   and found none.
      */
     fun toFeatureCollection(
         stations: List<StationWithAvailability>,
         mode: AvailabilityMode,
+        kind: BikeKindFilter? = null,
     ): FeatureCollection {
         val features = stations.map { entry ->
-            val display = entry.displayFor(mode)
+            val display = entry.displayFor(mode, kind)
             Feature.fromGeometry(
                 Point.fromLngLat(
                     entry.station.position.longitude,

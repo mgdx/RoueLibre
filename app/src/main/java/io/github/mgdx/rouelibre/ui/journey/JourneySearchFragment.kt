@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
+import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.databinding.FragmentJourneySearchBinding
 import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
 import io.github.mgdx.rouelibre.ui.withBikeFleet
+import io.github.mgdx.rouelibre.ui.withFleet
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -55,6 +58,25 @@ class JourneySearchFragment : Fragment() {
      * laid from both.
      */
     private var fleet = BikeFleet.Mechanical
+
+    /**
+     * The kind of bike wanted, or `null` for no kind at all (SPEC §7.3).
+     *
+     * Held here as well as on the buttons, because it is read back when the
+     * journey is asked for, and because the selector may not be on screen: a
+     * choice made in a mixed conurbation stays remembered while a mechanical one
+     * is being served, and is found again on the way back.
+     */
+    private var wantedBikeKind: WantedBikeKind? = null
+
+    /**
+     * Whether the network in service really lends both kinds (SPEC §15).
+     *
+     * It decides whether the selector exists at all. Read from a flow, so a
+     * reading landing after the screen — or a change of city — puts it right
+     * without rebuilding anything.
+     */
+    private var lendsBothKinds = false
 
     private val preferences
         get() = (requireActivity().application as RoueLibreApplication).container.preferences
@@ -123,7 +145,16 @@ class JourneySearchFragment : Fragment() {
             fleet = lent
             showShape()
         }
+        // The selector only exists where both kinds are lent, and that answer
+        // arrives from a flow: a first reading off disk, then the count made on
+        // every refresh (SPEC §4.1). Following it rather than asking once is
+        // what lets the selector appear, or go, without the screen being rebuilt.
+        withFleet { lent ->
+            lendsBothKinds = lent?.isMixed == true
+            showBikeKindSelector()
+        }
         setUpOwnBike()
+        setUpBikeKind()
     }
 
     /**
@@ -154,12 +185,68 @@ class JourneySearchFragment : Fragment() {
         }
     }
 
+    /**
+     * Sets the selector up on the kind chosen last time (SPEC §7.3).
+     *
+     * Read once when the screen is built, and written from here alone, for the
+     * reasons [setUpOwnBike] gives. The buttons are listened to only after the
+     * stored answer has been put on them, or checking one would be taken for a
+     * press and write back what was just read.
+     */
+    private fun setUpBikeKind() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            wantedBikeKind = preferences.wantedBikeKind.first()
+            val current = binding ?: return@launch
+            current.bikeKind.check(buttonOf(wantedBikeKind))
+            showBikeKindSelector()
+            current.bikeKind.addOnButtonCheckedListener { _, checkedId, isChecked ->
+                // Every change fires twice — the button left, then the one
+                // taken — and only the second says what was chosen.
+                if (!isChecked) return@addOnButtonCheckedListener
+                wantedBikeKind = kindOf(checkedId)
+                // Kept for the next journey and the next launch: what somebody
+                // wants to ride is a fact about them, not about this trip.
+                viewLifecycleOwner.lifecycleScope.launch {
+                    preferences.setWantedBikeKind(wantedBikeKind)
+                }
+            }
+        }
+    }
+
+    /**
+     * Shows the selector where it means something, and hides it elsewhere.
+     *
+     * Two things take it away, and neither greys it out: a network lending one
+     * kind, which could not satisfy the choice (SPEC §7.2), and one's own bike,
+     * which looks at no station at all. Offering a choice nobody can collect is
+     * a promise the application must not make.
+     */
+    private fun showBikeKindSelector() {
+        val views = binding ?: return
+        views.bikeKind.isVisible = lendsBothKinds && !usesOwnBike
+    }
+
+    /** The button standing for a kind, the leftmost one asking for nothing. */
+    private fun buttonOf(kind: WantedBikeKind?): Int = when (kind) {
+        null -> R.id.bike_kind_any
+        WantedBikeKind.Mechanical -> R.id.bike_kind_mechanical
+        WantedBikeKind.Electric -> R.id.bike_kind_electric
+    }
+
+    /** What a checked button asks for, `null` being a choice that asks nothing. */
+    private fun kindOf(buttonId: Int): WantedBikeKind? = when (buttonId) {
+        R.id.bike_kind_mechanical -> WantedBikeKind.Mechanical
+        R.id.bike_kind_electric -> WantedBikeKind.Electric
+        else -> null
+    }
+
     /** Says, in words and in the drawing, what kind of journey is being asked for. */
     private fun showMode() {
         val views = binding ?: return
         views.hint.setText(
             if (usesOwnBike) R.string.journey_hint_own_bike else R.string.journey_hint,
         )
+        showBikeKindSelector()
         showShape()
     }
 
@@ -229,11 +316,20 @@ class JourneySearchFragment : Fragment() {
         views.compute.isEnabled = origin != null && destination != null
     }
 
+    /**
+     * Opens the result for what has been composed here.
+     *
+     * The kind asked for goes with it only where it can be honoured: on one's
+     * own bike no station is chosen, and a network lending one kind has nothing
+     * to filter — passing it anyway would leave a journey to be refused for a
+     * choice the screen was not even showing.
+     */
     private fun openResult() {
         val from = origin ?: return
         val to = destination ?: return
+        val kind = wantedBikeKind.takeIf { lendsBothKinds && !usesOwnBike }
         parentFragmentManager.beginTransaction()
-            .replace(R.id.content, JourneyResultFragment.newInstance(from, to, usesOwnBike))
+            .replace(R.id.content, JourneyResultFragment.newInstance(from, to, usesOwnBike, kind))
             .addToBackStack(null)
             .commit()
     }

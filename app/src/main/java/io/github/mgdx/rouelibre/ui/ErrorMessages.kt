@@ -3,6 +3,8 @@ package io.github.mgdx.rouelibre.ui
 import android.content.Context
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.DataError
+import io.github.mgdx.rouelibre.core.journey.NoBikeJourney
+import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 
 /**
  * Turns a business failure into a sentence meant for the user.
@@ -34,3 +36,32 @@ fun DataError.toUserMessage(context: Context): String = when (this) {
         context.getString(R.string.error_local_storage)
     DataError.NoCityChosen -> context.getString(R.string.error_no_city_chosen)
 }
+
+/**
+ * Turns a journey that could not be composed into a sentence for the user.
+ *
+ * Each says what happened **and what to do about it** (SPEC §14): the missing
+ * routing data sends one to the storage screen, an empty network to another hour
+ * or another starting point, and a kind of bike nobody has to the other kind.
+ * Naming the kind is what makes that last one an answer — "no station nearby has
+ * an electric bike right now" leaves something to do, where "no bike found"
+ * leaves one looking for another address.
+ *
+ * [NoBikeJourney.WalkingIsQuicker] is not a failure and never reaches here: it
+ * comes with a walk of its own, which the summary describes (SPEC §6).
+ */
+fun NoBikeJourney.toUserMessage(context: Context): String = context.getString(
+    when (this) {
+        NoBikeJourney.NoBikeNearby -> R.string.journey_no_bike_nearby
+        is NoBikeJourney.NoWantedBikeNearby -> when (wanted) {
+            WantedBikeKind.Mechanical -> R.string.journey_no_mechanical_nearby
+            WantedBikeKind.Electric -> R.string.journey_no_electric_nearby
+        }
+
+        NoBikeJourney.NoDockNearby -> R.string.journey_no_dock_nearby
+        NoBikeJourney.NoRouteBetweenStations -> R.string.journey_no_route
+        NoBikeJourney.GraphMissing -> R.string.journey_graph_missing
+        NoBikeJourney.OutsideCoverage -> R.string.journey_outside_coverage
+        NoBikeJourney.WalkingIsQuicker -> R.string.journey_no_route
+    },
+)

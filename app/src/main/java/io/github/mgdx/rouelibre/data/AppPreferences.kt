@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.station.VehicleKind
+import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -210,6 +211,40 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * The kind of bike journeys are worked out for (SPEC §7.3).
+     *
+     * `null` — nothing written down — means no kind is asked for, and that is
+     * the state on a fresh installation and after any reset: the application
+     * presumes no kind, as it presumes no city (SPEC §15). A word it cannot read
+     * means the same thing, never a kind (see [WantedBikeKind.ofWireName]).
+     *
+     * Kept for the same reason as [usesOwnBike], and beside it: what somebody
+     * wants to ride is a fact about them, where the two points are a fact about
+     * one trip. It is ignored — never erased — in a conurbation lending one kind
+     * only, so coming back to a mixed one finds the choice again.
+     *
+     * **A word about equipment, not a journey.** What is written is
+     * "mechanical", "electric", or nothing at all: no point, no time, no
+     * destination goes with it (SPEC §2, C3).
+     *
+     * A flow rather than a read, for the reason [usesOwnBike] gives.
+     */
+    val wantedBikeKind: Flow<WantedBikeKind?> = dataStore.data.map {
+        WantedBikeKind.ofWireName(it[WANTED_BIKE_KIND])
+    }
+
+    /** Remembers the kind of bike wanted, or that none is. */
+    suspend fun setWantedBikeKind(kind: WantedBikeKind?) {
+        dataStore.edit { preferences ->
+            if (kind == null) {
+                preferences.remove(WANTED_BIKE_KIND)
+            } else {
+                preferences[WANTED_BIKE_KIND] = kind.wireName
+            }
+        }
+    }
+
+    /**
      * The city the application is serving right now.
      *
      * `null` until one has been chosen: the application assumes no default
@@ -290,6 +325,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         const val SEPARATOR = "\n"
         val THEME = stringPreferencesKey("theme")
         val USES_OWN_BIKE = booleanPreferencesKey("uses_own_bike")
+        val WANTED_BIKE_KIND = stringPreferencesKey("wanted_bike_kind")
         val ACTIVE_CITY_ID = stringPreferencesKey("active_city_id")
         val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
         val DECLINED_CITY_PROPOSAL_ID = stringPreferencesKey("declined_city_proposal_id")

@@ -90,6 +90,25 @@ class JourneySummariesTest {
     }
 
     @Test
+    fun `the departure split takes no kind, so a filter cannot reach it`() {
+        // A negative requirement, and therefore worth a test of its own. The
+        // result screen and its detail show BOTH counts whatever kind was asked
+        // for on the search screen (SPEC §7.4): somebody who asked for an
+        // electric bike and opens the journey wants to know what is waiting,
+        // not to be handed back their own request — that is also what lets them
+        // change their mind knowing what they are changing to. The day somebody
+        // wires a kind in here, this fails.
+        val split = Class.forName("io.github.mgdx.rouelibre.ui.journey.JourneySummariesKt")
+            .declaredMethods
+            .single { it.name == "bikeSplitAtDeparture" }
+
+        assertEquals(
+            listOf(JourneyOption::class.java, FleetDescription::class.java),
+            split.parameterTypes.toList(),
+        )
+    }
+
+    @Test
     fun `says nothing when the breakdown does not add up to the count shown`() {
         // The shape the Beryl networks publish: the total counts scooters the
         // breakdown does not. A wrong split sends somebody to a station for a
