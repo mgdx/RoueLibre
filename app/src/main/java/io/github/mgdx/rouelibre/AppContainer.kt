@@ -23,6 +23,7 @@ import io.github.mgdx.rouelibre.data.datasets.DatasetStore
 import io.github.mgdx.rouelibre.data.local.StationDatabase
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.data.network.GbfsRemoteSource
+import io.github.mgdx.rouelibre.data.network.HttpsOnlyInterceptor
 import io.github.mgdx.rouelibre.data.routing.OfflineRouter
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -196,6 +197,9 @@ class AppContainer(private val context: Context) {
         OkHttpClient.Builder()
             .connectTimeout(CONNECT_TIMEOUT)
             .readTimeout(READ_TIMEOUT)
+            // Every address the application calls goes out in TLS, whatever
+            // scheme it was published with (SPEC §4.1).
+            .addInterceptor(HttpsOnlyInterceptor())
             // No disk cache: the freshness policy is the repository's
             // (SPEC §4.1), and an HTTP cache on top would make it impossible to
             // reason about.

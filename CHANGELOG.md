@@ -283,6 +283,25 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **Rosario showed no station, ever, over four characters in its producer's
+  feed.** Mi Bici Tu Bici serves its auto-discovery document over `https://` and
+  names its four feeds over `http://` — the very same paths, which answer
+  perfectly in TLS and which its own server redirects there. The application
+  permits no cleartext traffic, so Android refused the call before it left the
+  device and the network's 101 stations were unreachable. Every request now goes
+  out in TLS whatever scheme its address carried, in one interceptor on the
+  shared HTTP client: a cleartext address is a certain failure, so rewriting it
+  can only turn that certainty into a chance, and no network that works today
+  can be broken by it. The answer sits there rather than in the city
+  configuration because nothing specific to a city is hard-coded (`SPEC.md` §15)
+  — Rosario was the only one of the three hundred and thirty-three networks
+  served in that case, and the next producer to publish the same typo is served
+  without a release. Opening cleartext traffic for that one network was refused:
+  it would lower the whole application's guarantee to accommodate a producer who
+  already serves TLS correctly. Washington's attribution link, the last
+  cleartext address left in the shipped configuration, was moved to `https://`
+  with it — it is opened in a browser and no interceptor of ours sees it.
+
 - **Most of the cities were given a routing graph with no elevation, and their
   journeys therefore named no climb.** The graph's elevation comes from SRTM
   readings converted into the 5°×5° tiles BRouter names them by, and the
