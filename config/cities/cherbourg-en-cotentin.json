@@ -12,6 +12,18 @@
   "configVersion": 1,
   "country": "FR",
   "network": {
+    "$comment": [
+      "\"city\" departs from the gazetteer on purpose, and must survive the",
+      "next hand that compares this file with docs/networks.md.",
+      "tools/discover_networks.py names a conurbation after the largest",
+      "GeoNames place inside the box, which here answers \"Cherbourg\": that",
+      "gazetteer still predates the 2016 merger, and lists Équeurdreville,",
+      "Tourlaville and Octeville separately although all three have been",
+      "quarters of Cherbourg-en-Cotentin since. The legal name is kept, and",
+      "it is also the one that answers more typing — the search matches word",
+      "by word, so \"cherbourg\" finds it exactly as \"Cherbourg\" would, and",
+      "\"cotentin\" finds it too."
+    ],
     "id": "cap-cotentin-velo",
     "displayName": "Cap Cotentin Vélo",
     "operator": "Communauté d'agglomération Le Cotentin",

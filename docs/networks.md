@@ -10,6 +10,15 @@
 > municipalities and areas were recomputed with this script's own gazetteer and
 > box, their stations and docks read from their feeds that day. Nothing else was
 > touched, and a full run remains the only thing that refreshes the rest.
+>
+> Two labels below differ from `config/cities/` on purpose, and are not drift to
+> be repaired: this page names a network as the catalogues do and a conurbation
+> after the largest GeoNames place in its box, while the configuration carries
+> the name the application shows. So "Vélib" here is "Vélib' Métropole" there,
+> and "Cherbourg" is "Cherbourg-en-Cotentin" — the gazetteer still predating the
+> 2016 merger. Every other line agrees, and the five that did not were the
+> configuration's to fix, `network.city` being written once when a city is added
+> while `compute_bbox.py` moves the box under it at every regeneration.
 
 `SPEC.md` §4.1 forbids guessing a `gbfs.json` address. Every one below was
 read from a public catalogue — [MobilityData's `systems.csv`](https://github.com/MobilityData/gbfs), the registry the GBFS standard
