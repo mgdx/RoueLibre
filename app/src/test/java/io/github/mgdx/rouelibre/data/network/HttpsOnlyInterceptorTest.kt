@@ -50,7 +50,9 @@ class HttpsOnlyInterceptorTest {
         // Mi Bici Tu Bici serves its auto-discovery document in https and names
         // its feeds in http: the paths below answer in TLS, and Android refuses
         // to fetch them otherwise.
-        val called = addressCalled("http://www.mibicitubici.gob.ar/opendata/station_information.json")
+        val called = addressCalled(
+            "http://www.mibicitubici.gob.ar/opendata/station_information.json",
+        )
 
         assertEquals(
             "https://www.mibicitubici.gob.ar/opendata/station_information.json",

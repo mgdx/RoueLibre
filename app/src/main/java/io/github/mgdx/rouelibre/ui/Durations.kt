@@ -16,8 +16,7 @@ import kotlin.time.Duration
  *
  * @return a duration ready to show, "14 min" or "1 h 05" for instance.
  */
-fun Context.formatDuration(duration: Duration): String =
-    formatMinutes(duration.inShownMinutes())
+fun Context.formatDuration(duration: Duration): String = formatMinutes(duration.inShownMinutes())
 
 /**
  * Puts an already rounded count of minutes into words.
