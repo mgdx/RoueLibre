@@ -112,12 +112,20 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
                 ?: entry.station.postalCode.orEmpty()
             val detail = entry.station.capacity
                 ?.let {
-                    resources.getQuantityString(
-                        R.plurals.station_detail_with_capacity,
-                        it,
-                        whereabouts,
-                        it,
-                    )
+                    // A network that publishes neither postcode nor position
+                    // leaves nothing before the separator, and the row opened
+                    // on one — "· 22 docking points". The capacity then stands
+                    // on its own, in the wording the station's own sheet uses.
+                    if (whereabouts.isBlank()) {
+                        resources.getQuantityString(R.plurals.docks_total, it, it)
+                    } else {
+                        resources.getQuantityString(
+                            R.plurals.station_detail_with_capacity,
+                            it,
+                            whereabouts,
+                            it,
+                        )
+                    }
                 }
                 ?: whereabouts
             // Said on the row rather than only on the sheet: this is where the

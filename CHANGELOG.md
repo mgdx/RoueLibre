@@ -341,6 +341,13 @@ also records what has no visible effect.
   would have moved the lie rather than removed it. A search that genuinely finds
   nothing still says so at once — 0.2 s on Hunedoara.
 
+- **A station row opened on a separator.** A network publishing neither
+  postcode nor position leaves nothing to put before the capacity, and the line
+  began mid-sentence — "· 20 docking points" at Rosario, Bilbao and Zürich. The
+  capacity now stands on its own there, in the wording the station's own sheet
+  uses. Rows that do have somewhere to name are unchanged: "50 m · 36 docking
+  points".
+
 - **The address index never said how few numbers it held.** Tokyo's index
   carries 101 house numbers for 7,565 streets and Toyama's 7 for 105, against a
   median of 16.4 per street over the 332 networks; every search there lands on
