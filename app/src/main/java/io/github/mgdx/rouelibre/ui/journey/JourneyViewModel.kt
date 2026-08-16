@@ -42,6 +42,10 @@ data class JourneyUiState(
  * algorithm, and it is cancellable: leaving the screen while it runs interrupts
  * it along with the model.
  *
+ * Two questions can be asked of it, and it is [usesOwnBike] that says which:
+ * the walk → bike → walk journey through the network's stations, or the single
+ * ride of somebody on their own bike (SPEC §7.3).
+ *
  * Nothing is kept: neither the journey nor its points. SPEC §8 wants computed
  * routes to live in memory, for the session only.
  */
@@ -50,6 +54,7 @@ class JourneyViewModel(
     private val repository: StationRepository,
     origin: Coordinates,
     destination: Coordinates,
+    private val usesOwnBike: Boolean = false,
 ) : ViewModel() {
 
     /** The two ends, as the result screen may correct them without going back. */
@@ -98,6 +103,18 @@ class JourneyViewModel(
         computation?.cancel()
         computation = viewModelScope.launch {
             mutableState.update { it.copy(isComputing = true) }
+            val planner = JourneyPlanner(router)
+            // On one's own bike the network is not consulted at all: no station
+            // is chosen, so an empty station list is not a reason to give up on
+            // the journey — a user who has never refreshed the feed still gets
+            // their ride (SPEC §7.3).
+            if (usesOwnBike) {
+                val ride = planner.planWithOwnBike(origin, destination)
+                mutableState.update {
+                    it.copy(plan = ride, isComputing = false, hasStations = true)
+                }
+                return@launch
+            }
             val stations = repository.observeStations().first().stations
             if (stations.isEmpty()) {
                 mutableState.update {
@@ -105,7 +122,6 @@ class JourneyViewModel(
                 }
                 return@launch
             }
-            val planner = JourneyPlanner(router)
             val plan = planner.plan(origin, destination, stations)
             mutableState.update {
                 it.copy(plan = plan, isComputing = false, hasStations = true)
@@ -119,13 +135,20 @@ class JourneyViewModel(
         private val repository: StationRepository,
         private val origin: Coordinates,
         private val destination: Coordinates,
+        private val usesOwnBike: Boolean = false,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass.isAssignableFrom(JourneyViewModel::class.java)) {
                 "unexpected model: ${modelClass.name}"
             }
-            return JourneyViewModel(router, repository, origin, destination) as T
+            return JourneyViewModel(
+                router,
+                repository,
+                origin,
+                destination,
+                usesOwnBike,
+            ) as T
         }
     }
 }

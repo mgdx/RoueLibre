@@ -11,6 +11,29 @@ also records what has no visible effect.
 
 ### Added
 
+- **A journey on one's own bike.** A switch under the two points of the journey
+  screen, off by default and remembered from one journey to the next: what
+  somebody rides is a fact about them, not about one trip, and asking again
+  every time would ask them the same answer every time. Turned on, the journey
+  is a single ride from door to door — no station is chosen, no walk is
+  measured, and the station feed is not consulted at all, so somebody who has
+  never refreshed it still gets their route. The direct walk is neither computed
+  nor compared: it guards, in the station algorithm, against a journey where
+  fetching a bike costs more than it saves, and here nothing is fetched. The
+  result reads in one leg — the ride's time, "on your own bike, over 5.2 km and
+  15 m of climb", one unbroken stroke between the two ends — and its detail
+  carries the ride's elevation profile with no station row and no availability
+  note. The sentence and the drawing of the search screen follow the switch, the
+  drawing losing its dashes and its station discs, and its two ends becoming
+  the filled bike disc already drawn elsewhere instead of the outlined walking
+  figure — the figure says how that point is lived, and nothing here is walked.
+  The same ends are drawn on the result screen and on its map, and they take
+  neither bolt nor cog: what the network lends says nothing about a bike that is
+  not the network's. `JourneyPlan` gains an `OwnBike` case and `JourneyPlanner` a
+  `planWithOwnBike`; the choice is a boolean in the preferences and nothing
+  else — no point, no time, no destination (`SPEC.md` §2, C3). `SPEC.md` §7.3,
+  §7.4 and §7.4.1 say it.
+
 - **A journey says what is waiting at the station it starts from**, in the
   conurbations that lend both kinds of bike. The summary ends on the two counts,
   in the wording of the station's own sheet — "45 m of climb · 5 mechanical ·

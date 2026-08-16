@@ -92,6 +92,22 @@ fun Context.bikesAtDeparture(split: BikeSplit?): String? = split?.let {
 }
 
 /**
+ * The summary of a journey ridden from end to end on one's own bike.
+ *
+ * The same two things the walk's own summary says — how far it runs, and how
+ * much of it goes up — because they are the whole of what is left to say: there
+ * is no station to name, no bike to count and no walk to apportion (SPEC §7.3).
+ * The climb goes inside the sentence rather than behind it, for the reason
+ * [walkSummary] gives: this one ends on a full stop.
+ */
+fun Context.ownBikeSummary(ride: RouteLeg): String {
+    val distance = formatDistance(ride.distanceMetres.toDouble())
+    val climb = formatClimb(ride.ascentMetres, ride.distanceMetres)
+        ?: return getString(R.string.journey_own_bike_only, distance)
+    return getString(R.string.journey_own_bike_only_climb, distance, climb)
+}
+
+/**
  * The summary of a journey made on foot from end to end.
  *
  * It says why there is no bike in it: because there was none to be had, or

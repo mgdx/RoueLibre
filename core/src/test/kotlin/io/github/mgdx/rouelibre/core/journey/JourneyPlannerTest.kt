@@ -540,4 +540,51 @@ class JourneyPlannerTest {
 
         assertTrue("expected a walking fallback, got $plan", plan is JourneyPlan.WalkOnly)
     }
+
+    // --------------------------------------------------------- own bike --
+
+    @Test
+    fun `on one's own bike, one leg is traced and no station is looked at`() = runTest {
+        val router = FakeRouter()
+        val planner = JourneyPlanner(router)
+
+        val plan = planner.planWithOwnBike(origin, destination) as JourneyPlan.OwnBike
+
+        assertEquals(TravelMode.Cycling, plan.ride.mode)
+        assertEquals(1, router.cyclingCalls)
+        // Not one walk: neither an access leg, since nothing is fetched, nor
+        // the direct walk, since it is not being compared against (SPEC §7.3).
+        assertEquals(0, router.walkingCalls)
+    }
+
+    @Test
+    fun `on one's own bike, the ride is offered even where the walk is quicker`() = runTest {
+        // Two hundred metres is quicker on foot than on a bike one has to
+        // wheel out; the user has said they are riding, and the answer is the
+        // ride they asked for.
+        val planner = JourneyPlanner(FakeRouter())
+
+        val plan = planner.planWithOwnBike(origin, at(0.0, 200.0))
+
+        assertTrue("expected a ride, got $plan", plan is JourneyPlan.OwnBike)
+    }
+
+    @Test
+    fun `on one's own bike, a missing graph is said to be missing`() = runTest {
+        // The engine's reason has to survive: telling somebody there is no
+        // route, when the routing data was never installed, sends them looking
+        // for another address instead of to the storage screen (SPEC §7.4).
+        val router = object : Router {
+            override suspend fun route(
+                from: Coordinates,
+                to: Coordinates,
+                mode: TravelMode,
+            ): RouteResult = RouteResult.Failure(RoutingFailure.GraphMissing)
+        }
+        val planner = JourneyPlanner(router)
+
+        val plan = planner.planWithOwnBike(origin, destination)
+
+        assertEquals(JourneyPlan.Impossible(NoBikeJourney.GraphMissing), plan)
+    }
 }

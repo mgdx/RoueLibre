@@ -70,6 +70,17 @@ class JourneyHandover(private val fragment: Fragment, private val onMessage: (St
             ),
         )
 
+        // One leg, so no question is asked: the ride ends where the journey
+        // does, and a menu of one is a press spent on a choice that does not
+        // exist.
+        is JourneyPlan.OwnBike -> listOf(
+            Target(
+                leg = fragment.getString(R.string.journey_step_ride_all),
+                place = journey.destination.label,
+                position = journey.destination.position,
+            ),
+        )
+
         is JourneyPlan.Impossible -> emptyList()
     }
 

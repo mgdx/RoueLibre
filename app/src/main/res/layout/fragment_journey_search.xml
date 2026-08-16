@@ -71,6 +71,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/origin" />
 
+    <!-- Riding one's own bike (SPEC §7.3): under the two points, because it
+         qualifies the journey they describe, and above the sentence that says
+         what the journey is made of — which this switch rewrites. -->
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/own_bike"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
+        android:minHeight="@dimen/touch_target_min"
+        android:text="@string/journey_own_bike"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/destination" />
+
     <TextView
         android:id="@+id/hint"
         android:layout_width="0dp"
@@ -82,7 +99,7 @@
         android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/destination" />
+        app:layout_constraintTop_toBottomOf="@id/own_bike" />
 
     <!-- The shape of a journey, under the sentence that describes it. Purely
          decorative: it repeats what the text says, so a screen reader must not

@@ -5,18 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
+import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.databinding.FragmentJourneySearchBinding
+import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
 import io.github.mgdx.rouelibre.ui.withBikeFleet
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 /**
  * Journey search: from where to where (SPEC §7.3).
  *
- * Two points to designate, each in four ways, and a button to swap them.
+ * Two points to designate, each in four ways, a button to swap them, and a
+ * switch saying whether the bike is the network's or the user's own.
  * Nothing is computed here: the screen only gathers what the computation needs,
  * and that happens on the result screen.
+ *
+ * The switch is the one thing on this screen that outlives it: what somebody
+ * rides is a fact about them, where the two points are a fact about one trip
+ * (SPEC §7.3, §8).
  *
  * None of these designations leaves the device, and none is kept: SPEC §8
  * forbids holding on to a destination.
@@ -27,6 +37,27 @@ class JourneySearchFragment : Fragment() {
 
     private var origin: JourneyEndpoint? = null
     private var destination: JourneyEndpoint? = null
+
+    /**
+     * Whether the journey is to be ridden on the user's own bike (SPEC §7.3).
+     *
+     * Held here as well as on the switch, because the sentence and the drawing
+     * under it are laid out from it before the switch has been filled in.
+     */
+    private var usesOwnBike = false
+
+    /**
+     * What the network served lends, so the illustration can be drawn again.
+     *
+     * Two things decide the drawing — the fleet, read from disk a beat after
+     * the screen, and the switch, pressed whenever the user likes — and either
+     * can move after the other. Each keeps what it knows so the drawing can be
+     * laid from both.
+     */
+    private var fleet = BikeFleet.Mechanical
+
+    private val preferences
+        get() = (requireActivity().application as RoueLibreApplication).container.preferences
 
     private val picker = JourneyEndpointPicker(
         fragment = this,
@@ -88,9 +119,65 @@ class JourneySearchFragment : Fragment() {
         showEndpoints()
         // The illustration draws the stations of the network served: bearing a
         // bolt where that network lends pedal-assist bikes (SPEC §15).
-        withBikeFleet { fleet ->
-            binding?.shape?.setImageResource(BikeGlyphs.journeyShape(fleet))
+        withBikeFleet { lent ->
+            fleet = lent
+            showShape()
         }
+        setUpOwnBike()
+    }
+
+    /**
+     * Sets the switch up on the choice the user made last time (SPEC §7.3).
+     *
+     * The stored value is read once, when the screen is built: it is written
+     * from here and nowhere else, so nothing can change it behind this screen's
+     * back. The switch is only listened to afterwards, or filling it in would
+     * be taken for a press and write back what was just read. Until the read
+     * lands — a few milliseconds off disk — the screen says the station
+     * journey, which is what the switch says at rest.
+     */
+    private fun setUpOwnBike() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            usesOwnBike = preferences.usesOwnBike.first()
+            val current = binding ?: return@launch
+            current.ownBike.isChecked = usesOwnBike
+            showMode()
+            current.ownBike.setOnCheckedChangeListener { _, isChecked ->
+                usesOwnBike = isChecked
+                showMode()
+                // Kept for the next journey, and for the next launch: owning a
+                // bike is a fact about the person, not about this trip.
+                viewLifecycleOwner.lifecycleScope.launch {
+                    preferences.setUsesOwnBike(isChecked)
+                }
+            }
+        }
+    }
+
+    /** Says, in words and in the drawing, what kind of journey is being asked for. */
+    private fun showMode() {
+        val views = binding ?: return
+        views.hint.setText(
+            if (usesOwnBike) R.string.journey_hint_own_bike else R.string.journey_hint,
+        )
+        showShape()
+    }
+
+    /**
+     * The illustration of the journey being asked for.
+     *
+     * On one's own bike it holds no station, so it takes no bolt either: what
+     * the network lends says nothing about a bike that is not the network's.
+     */
+    private fun showShape() {
+        val views = binding ?: return
+        views.shape.setImageResource(
+            if (usesOwnBike) {
+                R.drawable.illustration_journey_own_bike
+            } else {
+                BikeGlyphs.journeyShape(fleet)
+            },
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -146,7 +233,7 @@ class JourneySearchFragment : Fragment() {
         val from = origin ?: return
         val to = destination ?: return
         parentFragmentManager.beginTransaction()
-            .replace(R.id.content, JourneyResultFragment.newInstance(from, to))
+            .replace(R.id.content, JourneyResultFragment.newInstance(from, to, usesOwnBike))
             .addToBackStack(null)
             .commit()
     }

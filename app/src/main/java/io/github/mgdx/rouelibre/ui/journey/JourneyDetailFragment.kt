@@ -83,6 +83,17 @@ class JourneyDetailFragment : Fragment() {
     private var destination: JourneyEndpoint? = null
 
     /**
+     * Whether the journey described is ridden on the user's own bike.
+     *
+     * Read off the journey itself while there is one, and kept beside the two
+     * ends for the same reason they are: it is part of the question the screen
+     * would have to ask again after a killed process, and a station journey
+     * worked out in place of a ride would not be the journey being read
+     * (SPEC §7.3).
+     */
+    private var usesOwnBike = false
+
+    /**
      * Works the journey out again, on the one path that needs it.
      *
      * Built only when it is asked for, so arriving here the ordinary way — from
@@ -95,6 +106,7 @@ class JourneyDetailFragment : Fragment() {
             repository = container.stationRepository,
             origin = checkNotNull(origin).position,
             destination = checkNotNull(destination).position,
+            usesOwnBike = usesOwnBike,
         )
     }
 
@@ -126,6 +138,11 @@ class JourneyDetailFragment : Fragment() {
         origin = shown?.origin ?: JourneyEndpoint.readFrom(savedInstanceState, STATE_ORIGIN)
         destination = shown?.destination
             ?: JourneyEndpoint.readFrom(savedInstanceState, STATE_DESTINATION)
+        usesOwnBike = if (shown != null) {
+            shown.plan is JourneyPlan.OwnBike
+        } else {
+            savedInstanceState?.getBoolean(STATE_OWN_BIKE) == true
+        }
     }
 
     override fun onCreateView(
@@ -169,6 +186,7 @@ class JourneyDetailFragment : Fragment() {
         super.onSaveInstanceState(outState)
         origin?.writeTo(outState, STATE_ORIGIN)
         destination?.writeTo(outState, STATE_DESTINATION)
+        outState.putBoolean(STATE_OWN_BIKE, usesOwnBike)
     }
 
     /**
@@ -189,6 +207,7 @@ class JourneyDetailFragment : Fragment() {
         }
         val views = checkNotNull(binding)
         views.computing.isVisible = true
+        if (usesOwnBike) views.computingLabel.setText(R.string.journey_computing_own_bike)
         withBikeFleet { lent ->
             fleet = lent
             binding?.computingBike?.fleet = lent
@@ -273,6 +292,7 @@ class JourneyDetailFragment : Fragment() {
         val plan = journey.plan
         val option = (plan as? JourneyPlan.Found)?.best
         val walk = plan as? JourneyPlan.WalkOnly
+        val ownBike = plan as? JourneyPlan.OwnBike
         // The legs rounded together, so this screen's total, sentence, band and
         // step rows all say the same journey — and say the same thing as the
         // screen it was opened from, which rounds it the same way.
@@ -291,6 +311,7 @@ class JourneyDetailFragment : Fragment() {
                 isQuickerThanTheBike = walk.reason == NoBikeJourney.WalkingIsQuicker,
             )
 
+            ownBike != null -> requireContext().ownBikeSummary(ownBike.ride)
             else -> return
         }
         views.shape.legs = legsOf(plan).mapIndexed { index, leg ->
@@ -324,7 +345,13 @@ class JourneyDetailFragment : Fragment() {
      */
     private fun showProfile(plan: JourneyPlan) {
         val views = binding ?: return
-        val ride = (plan as? JourneyPlan.Found)?.best?.ride
+        val ride = when (plan) {
+            is JourneyPlan.Found -> plan.best.ride
+            // The whole journey is the ride here, and it is decided on the same
+            // question: what goes up.
+            is JourneyPlan.OwnBike -> plan.ride
+            is JourneyPlan.WalkOnly, is JourneyPlan.Impossible -> null
+        }
         val profile = ride?.elevationProfile()?.smoothedOver(PROFILE_SMOOTHING_METRES).orEmpty()
         val lowest = profile.minOfOrNull { it.elevationMetres }
         val highest = profile.maxOfOrNull { it.elevationMetres }
@@ -361,6 +388,7 @@ class JourneyDetailFragment : Fragment() {
         )
 
         is JourneyPlan.WalkOnly -> listOf(Leg(plan.directWalk, isRide = false))
+        is JourneyPlan.OwnBike -> listOf(Leg(plan.ride, isRide = true))
         is JourneyPlan.Impossible -> emptyList()
     }
 
@@ -389,6 +417,16 @@ class JourneyDetailFragment : Fragment() {
                 icon = R.drawable.ic_walk,
                 label = getString(R.string.journey_step_walk_all),
                 leg = plan.directWalk,
+                minutes = minutes.first(),
+            )
+
+            // The plain bike, whatever the network lends: the bolt and the cog
+            // describe what waits at a station (SPEC §15), and this bike is the
+            // rider's own.
+            is JourneyPlan.OwnBike -> addLeg(
+                icon = R.drawable.ic_bike,
+                label = getString(R.string.journey_step_ride_all),
+                leg = plan.ride,
                 minutes = minutes.first(),
             )
 
@@ -556,6 +594,7 @@ class JourneyDetailFragment : Fragment() {
     private companion object {
         private const val STATE_ORIGIN = "state-origin"
         private const val STATE_DESTINATION = "state-destination"
+        private const val STATE_OWN_BIKE = "state-own-bike"
 
         /**
          * The ground a reading of the profile is averaged over.

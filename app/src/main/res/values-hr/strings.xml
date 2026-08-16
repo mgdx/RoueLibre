@@ -184,8 +184,16 @@
     <string name="journey_choose_destination">Going where?</string>
     <string name="journey_swap">Swap start and destination</string>
     <string name="journey_hint">The journey is computed on the device: walk to a station, ride, then walk the rest of the way.</string>
+    <!-- The switch that leaves the network out of the journey, and the sentence
+         that replaces the one above it when it is on (SPEC §7.3). -->
+    <string name="journey_own_bike">Ride my own bike</string>
+    <string name="journey_hint_own_bike">The journey is computed on the device: one ride from door to door, with no station on the way.</string>
     <string name="journey_compute">Work out the journey</string>
     <string name="journey_computing">Working out the best journey…</string>
+    <!-- Nothing is being chosen here — there is one route to trace, not a pair
+         of stations to weigh — so the wait does not claim to be looking for the
+         best of anything. -->
+    <string name="journey_computing_own_bike">Working the ride out…</string>
     <string name="journey_source_my_position">My position</string>
     <string name="journey_locating">Finding your position…</string>
     <string name="journey_source_favourite">A favourite station</string>
@@ -228,6 +236,12 @@
     <string name="journey_step_ride">Ride to %1$s</string>
     <string name="journey_step_to_destination">Walk to the destination</string>
     <string name="journey_step_walk_all">Walk to the destination</string>
+    <string name="journey_step_ride_all">Ride to the destination</string>
+    <!-- The summary of a journey ridden on one's own bike: it sits under the
+         total time, where the walk's own summary sits, and says the same two
+         things — how far, and how much of it goes up. -->
+    <string name="journey_own_bike_only">on your own bike, over %1$s.</string>
+    <string name="journey_own_bike_only_climb">on your own bike, over %1$s and %2$s of climb.</string>
     <string name="journey_walk_only">on foot, over %1$s — no bike journey is possible here.</string>
     <string name="journey_walk_only_climb">on foot, over %1$s and %2$s of climb — no bike journey is possible here.</string>
     <string name="journey_walk_is_quicker">on foot, over %1$s — sooner than going to fetch a bike.</string>

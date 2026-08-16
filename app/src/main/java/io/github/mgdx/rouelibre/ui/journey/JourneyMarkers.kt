@@ -43,8 +43,12 @@ object JourneyMarkers {
     private const val KIND_STATION = "station"
     private const val KIND_ENDPOINT = "endpoint"
 
+    /** An end of a journey ridden from one end to the other (SPEC §7.3). */
+    private const val KIND_ENDPOINT_OWN_BIKE = "endpoint-own-bike"
+
     private const val STATION_IMAGE_ID = "journey-station-marker"
     private const val ENDPOINT_IMAGE_ID = "journey-endpoint-marker"
+    private const val ENDPOINT_OWN_BIKE_IMAGE_ID = "journey-endpoint-own-bike-marker"
 
     /**
      * Registers the two drawings in the style.
@@ -64,6 +68,13 @@ object JourneyMarkers {
             imageOf(context, BikeGlyphs.stationMarker(fleet)),
         )
         style.addImage(ENDPOINT_IMAGE_ID, imageOf(context, R.drawable.marker_journey_endpoint))
+        // The ends of a ride on one's own bike (SPEC §7.3): the filled bike
+        // disc already drawn elsewhere, and the plain one — the bolt and the
+        // cog say what waits at a station, and this bike is the rider's own.
+        style.addImage(
+            ENDPOINT_OWN_BIKE_IMAGE_ID,
+            imageOf(context, R.drawable.marker_journey_station),
+        )
     }
 
     /** The markers' layer, each disc centred on its point. */
@@ -75,6 +86,7 @@ object JourneyMarkers {
                     Expression.literal(ENDPOINT_IMAGE_ID),
                     Expression.stop(KIND_STATION, STATION_IMAGE_ID),
                     Expression.stop(KIND_ENDPOINT, ENDPOINT_IMAGE_ID),
+                    Expression.stop(KIND_ENDPOINT_OWN_BIKE, ENDPOINT_OWN_BIKE_IMAGE_ID),
                 ),
             ),
             PropertyFactory.iconAnchor(Property.ICON_ANCHOR_CENTER),
@@ -91,20 +103,27 @@ object JourneyMarkers {
      * @param origin where the user sets off from, if it is known.
      * @param destination where they are going.
      * @param option the station pair shown, or `null` when the journey comes
-     *   down to a walk — the two ends are then still worth drawing.
+     *   down to a single leg — the two ends are then still worth drawing.
+     * @param isRidden true when that single leg is ridden on the user's own
+     *   bike (SPEC §7.3): the two ends then bear a bike rather than a walking
+     *   figure, since nothing of that journey is walked.
      */
     fun featuresFor(
         origin: Coordinates?,
         destination: Coordinates?,
         option: JourneyOption?,
-    ): FeatureCollection = FeatureCollection.fromFeatures(
-        listOfNotNull(
-            origin?.let { pointAt(it, KIND_ENDPOINT) },
-            option?.let { pointAt(it.departureStation.position, KIND_STATION) },
-            option?.let { pointAt(it.arrivalStation.position, KIND_STATION) },
-            destination?.let { pointAt(it, KIND_ENDPOINT) },
-        ),
-    )
+        isRidden: Boolean = false,
+    ): FeatureCollection {
+        val end = if (isRidden) KIND_ENDPOINT_OWN_BIKE else KIND_ENDPOINT
+        return FeatureCollection.fromFeatures(
+            listOfNotNull(
+                origin?.let { pointAt(it, end) },
+                option?.let { pointAt(it.departureStation.position, KIND_STATION) },
+                option?.let { pointAt(it.arrivalStation.position, KIND_STATION) },
+                destination?.let { pointAt(it, end) },
+            ),
+        )
+    }
 
     private fun pointAt(position: Coordinates, kind: String): Feature =
         Feature.fromGeometry(Point.fromLngLat(position.longitude, position.latitude))

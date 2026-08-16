@@ -91,6 +91,18 @@ class JourneyShapeView @JvmOverloads constructor(
     private val endpointMarker: Drawable? =
         AppCompatResources.getDrawable(context, R.drawable.marker_journey_endpoint)
 
+    /**
+     * The ends of a journey ridden from one end to the other (SPEC §7.3).
+     *
+     * The figure inside a disc says how that point is lived, and nothing of
+     * that journey is walked. It is the filled bike disc the interface already
+     * draws, rather than a fourth drawing invented for the occasion — and the
+     * plain one, whatever the network lends: the bolt and the cog say what
+     * waits at a station, and this bike is the rider's own (SPEC §15).
+     */
+    private val ownBikeEndpointMarker: Drawable? =
+        AppCompatResources.getDrawable(context, R.drawable.marker_journey_station)
+
     private var stationMarker: Drawable? =
         AppCompatResources.getDrawable(context, R.drawable.marker_journey_station)
 
@@ -173,12 +185,22 @@ class JourneyShapeView @JvmOverloads constructor(
             canvas.drawText(leg.duration, middle, timeBaseline, durationPaint)
         }
 
+        // A journey of one ride is one made on the rider's own bike: no station
+        // is reached, so no station disc is drawn, and the two ends carry the
+        // bike rather than the walking figure — the drawing of the search
+        // screen for that same journey (SPEC §7.3).
+        val ends = if (legs.size == 1 && legs.first().isRide) {
+            ownBikeEndpointMarker
+        } else {
+            endpointMarker
+        }
+
         // The discs last: a stroke that overshot its inset would be covered
         // rather than crossing the disc it points at.
         repeat(nodes) { index ->
             // The ends are where the user stands, the ones between are
             // stations: the same distinction the illustration draws.
-            val marker = if (index == 0 || index == nodes - 1) endpointMarker else stationMarker
+            val marker = if (index == 0 || index == nodes - 1) ends else stationMarker
             val left = nodeLeft(index).toInt()
             marker?.setBounds(left, top, left + nodeSize, top + nodeSize)
             marker?.draw(canvas)

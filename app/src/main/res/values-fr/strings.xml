@@ -240,8 +240,16 @@
     <string name="journey_choose_destination">Aller où ?</string>
     <string name="journey_swap">Intervertir le départ et l\'arrivée</string>
     <string name="journey_hint">Le trajet est calculé sur l\'appareil : marche jusqu\'à une station, vélo, puis marche jusqu\'au bout.</string>
+    <!-- The switch that leaves the network out of the journey, and the sentence
+         that replaces the one above it when it is on (SPEC §7.3). -->
+    <string name="journey_own_bike">Avec mon propre vélo</string>
+    <string name="journey_hint_own_bike">Le trajet est calculé sur l\'appareil : un seul trajet à vélo d\'un bout à l\'autre, sans passer par une station.</string>
     <string name="journey_compute">Calculer l\'itinéraire</string>
     <string name="journey_computing">Calcul du meilleur itinéraire…</string>
+    <!-- Nothing is being chosen here — there is one route to trace, not a pair
+         of stations to weigh — so the wait does not claim to be looking for the
+         best of anything. -->
+    <string name="journey_computing_own_bike">Calcul du trajet à vélo…</string>
 
     <!-- The four ways of designating a point (SPEC §7.3). -->
     <string name="journey_source_my_position">Ma position</string>
@@ -291,6 +299,12 @@
     <string name="journey_step_ride">Pédaler jusqu\'à %1$s</string>
     <string name="journey_step_to_destination">Marcher jusqu\'à l\'arrivée</string>
     <string name="journey_step_walk_all">Marcher jusqu\'à l\'arrivée</string>
+    <string name="journey_step_ride_all">Pédaler jusqu\'à l\'arrivée</string>
+    <!-- The summary of a journey ridden on one's own bike: it sits under the
+         total time, where the walk's own summary sits, and says the same two
+         things — how far, and how much of it goes up. -->
+    <string name="journey_own_bike_only">avec ton propre vélo, sur %1$s.</string>
+    <string name="journey_own_bike_only_climb">avec ton propre vélo, sur %1$s et %2$s de dénivelé.</string>
     <!-- %1$s is the walking distance. -->
     <string name="journey_walk_only">à pied, sur %1$s — aucun trajet à vélo n\'est possible ici.</string>
     <string name="journey_walk_only_climb">à pied, sur %1$s et %2$s de dénivelé — aucun trajet à vélo n\'est possible ici.</string>

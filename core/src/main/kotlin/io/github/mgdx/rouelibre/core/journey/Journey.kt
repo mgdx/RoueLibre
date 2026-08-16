@@ -100,6 +100,19 @@ public sealed interface JourneyPlan {
     public data class Found(public val best: JourneyOption) : JourneyPlan
 
     /**
+     * The journey is ridden from end to end, on the rider's own bike.
+     *
+     * No station stands in it and none was looked for: the bike is already
+     * there, so there is nothing to fetch and nothing to return (SPEC §7.3).
+     * That is why it carries one leg where [Found] carries three, and why no
+     * count of bikes or docks comes with it — the availability feed has nothing
+     * to say about a bike that is not the network's.
+     *
+     * @property ride the ride from one end to the other.
+     */
+    public data class OwnBike(public val ride: RouteLeg) : JourneyPlan
+
+    /**
      * The journey offered runs on foot from end to end.
      *
      * Either no bike journey could be composed, or one could and lost to the

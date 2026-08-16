@@ -2,6 +2,7 @@ package io.github.mgdx.rouelibre.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
@@ -187,6 +188,28 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * Whether journeys are worked out for the user's own bike (SPEC §7.3).
+     *
+     * False by default: the application serves a bike-share network, and the
+     * journey through its stations is what one opens it for. The choice is kept
+     * because it is a fact about the person rather than about the trip — one
+     * who owns a bike still owns it tomorrow — and asking again at every
+     * journey would be asking the same answer of them every time.
+     *
+     * **A preference, not a journey.** What is written is a yes or a no about
+     * equipment; no point, no time, no destination goes with it (SPEC §2, C3).
+     *
+     * A flow rather than a read: it is read from a screen that is opened again
+     * and again, and a value that changes must not need the screen rebuilt.
+     */
+    val usesOwnBike: Flow<Boolean> = dataStore.data.map { it[USES_OWN_BIKE] ?: false }
+
+    /** Remembers whether the user rides their own bike. */
+    suspend fun setUsesOwnBike(usesOwnBike: Boolean) {
+        dataStore.edit { it[USES_OWN_BIKE] = usesOwnBike }
+    }
+
+    /**
      * The city the application is serving right now.
      *
      * `null` until one has been chosen: the application assumes no default
@@ -266,6 +289,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         /** No GBFS identifier contains a newline. */
         const val SEPARATOR = "\n"
         val THEME = stringPreferencesKey("theme")
+        val USES_OWN_BIKE = booleanPreferencesKey("uses_own_bike")
         val ACTIVE_CITY_ID = stringPreferencesKey("active_city_id")
         val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
         val DECLINED_CITY_PROPOSAL_ID = stringPreferencesKey("declined_city_proposal_id")

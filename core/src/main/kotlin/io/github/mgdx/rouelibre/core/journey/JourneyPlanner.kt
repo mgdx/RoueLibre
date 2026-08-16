@@ -143,6 +143,40 @@ public class JourneyPlanner(
     }
 
     /**
+     * Composes the journey of somebody riding their own bike (SPEC §7.3).
+     *
+     * One leg, from the door one leaves to the door one reaches. No station is
+     * looked at — not the nearest, not the best stocked: the bike is already
+     * downstairs, so the whole of what [plan] does, which is to pay two walks
+     * and a reliability risk for the right to borrow one, has nothing left to
+     * buy.
+     *
+     * **The direct walk is not computed, and not compared.** In [plan] it
+     * guards against a journey where fetching a bike costs more than it saves;
+     * here nothing is fetched, and answering "you would get there sooner on
+     * foot" to somebody who has said they are on their bike would be answering
+     * a question they did not ask.
+     *
+     * The ride is traced with the same profile as a share bike's leg
+     * (`TravelMode.Cycling`): the graph carries one set of costs for a bicycle,
+     * and the streets a bike may take do not depend on whose bike it is.
+     *
+     * @param origin departure point.
+     * @param destination arrival point.
+     * @return the ride, or what prevented it from being traced.
+     */
+    public suspend fun planWithOwnBike(
+        origin: Coordinates,
+        destination: Coordinates,
+    ): JourneyPlan = when (val result = router.route(origin, destination, TravelMode.Cycling)) {
+        is RouteResult.Success -> JourneyPlan.OwnBike(result.leg)
+        // The engine's reason is kept rather than flattened into "no route":
+        // a graph that is not installed and a point outside the covered area
+        // call for two different things to be done about them (SPEC §7.4).
+        is RouteResult.Failure -> JourneyPlan.Impossible(result.reason.toNoBikeJourney())
+    }
+
+    /**
      * Keeps the nearest stations that actually provide the service.
      *
      * A station out of service, or empty on the side we need, is not a

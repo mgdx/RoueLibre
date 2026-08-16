@@ -138,6 +138,16 @@ class JourneyResultFragment : Fragment() {
     /** Where it goes, likewise correctable. */
     private lateinit var destination: JourneyEndpoint
 
+    /**
+     * Whether the journey is ridden on the user's own bike (SPEC §7.3).
+     *
+     * Asked for on the search screen and not changed here: correcting a point
+     * is correcting the question, where changing bike is asking another one.
+     * It survives a rotation with the two ends, so the journey worked out again
+     * is the one that was on screen.
+     */
+    private var usesOwnBike = false
+
     private val picker = JourneyEndpointPicker(
         fragment = this,
         onMessage = ::showMessage,
@@ -179,6 +189,7 @@ class JourneyResultFragment : Fragment() {
             repository = container.stationRepository,
             origin = origin.position,
             destination = destination.position,
+            usesOwnBike = usesOwnBike,
         )
     }
 
@@ -199,6 +210,8 @@ class JourneyResultFragment : Fragment() {
             ?: checkNotNull(JourneyEndpoint.readFrom(arguments, ARGUMENT_DESTINATION)) {
                 "destination point missing"
             }
+        usesOwnBike = savedInstanceState?.getBoolean(STATE_OWN_BIKE)
+            ?: arguments?.getBoolean(ARGUMENT_OWN_BIKE) == true
         picker.readFrom(savedInstanceState)
     }
 
@@ -219,6 +232,10 @@ class JourneyResultFragment : Fragment() {
 
         views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
         views.toolbar.navigationContentDescription = getString(R.string.action_back)
+        // Nothing is being weighed on one's own bike: there is one route to
+        // trace, and the wait must not claim to be looking for the best of a
+        // choice that does not exist.
+        if (usesOwnBike) views.computingLabel.setText(R.string.journey_computing_own_bike)
         views.summaryBlock.setOnClickListener { openDetail() }
         // What the press does, rather than the bare "activate" a screen reader
         // would otherwise announce over a block of four figures.
@@ -556,7 +573,7 @@ class JourneyResultFragment : Fragment() {
         showWaysOn(state)
         val option = state.chosen
         if (option == null) {
-            showWithoutJourney(state)
+            showJourneyWithoutStations(state)
             return
         }
 
@@ -599,7 +616,9 @@ class JourneyResultFragment : Fragment() {
      */
     private fun showWaysOn(state: JourneyUiState) {
         val views = binding ?: return
-        val hasJourney = state.plan is JourneyPlan.Found || state.plan is JourneyPlan.WalkOnly
+        val hasJourney = state.plan is JourneyPlan.Found ||
+            state.plan is JourneyPlan.WalkOnly ||
+            state.plan is JourneyPlan.OwnBike
         views.summaryBlock.isClickable = hasJourney
         views.summaryBlock.isFocusable = hasJourney
         views.detailChevron.isVisible = hasJourney
@@ -658,21 +677,25 @@ class JourneyResultFragment : Fragment() {
         requireContext().formatDistance(leg.distanceMetres.toDouble())
 
     /**
-     * Shows the walk, or says what is missing when there is not even one.
+     * Shows a journey with no station in it, or says what is missing.
      *
-     * SPEC §6 requires it: when no nearby station has a bike, that has to be
-     * said, not an impossible journey proposed. The walk that replaces a bike
-     * journey the walk itself beats arrives here too, and reads as the journey
-     * it is — the reason only chooses how the summary phrases it.
+     * Two of them run from one end to the other in a single leg: the walk that
+     * SPEC §6 requires when no nearby station has a bike — or when walking is
+     * quicker than fetching one — and the ride of somebody on their own bike,
+     * which never had a station in it to begin with (SPEC §7.3). What is left
+     * is a journey that could not be composed at all, which says why.
      */
-    private fun showWithoutJourney(state: JourneyUiState) {
+    private fun showJourneyWithoutStations(state: JourneyUiState) {
         val views = binding ?: return
         val plan = state.plan
+        val ownBike = plan as? JourneyPlan.OwnBike
         val walkOnly = plan as? JourneyPlan.WalkOnly
-        views.totalTime.text = walkOnly
-            ?.let { requireContext().formatDuration(it.directWalk.duration) }
+        val soleLeg = ownBike?.ride ?: walkOnly?.directWalk
+        views.totalTime.text = soleLeg
+            ?.let { requireContext().formatDuration(it.duration) }
             ?: getString(R.string.journey_none_title)
         views.summary.text = when {
+            ownBike != null -> requireContext().ownBikeSummary(ownBike.ride)
             !state.hasStations -> getString(R.string.journey_no_stations)
             walkOnly != null -> requireContext().walkSummary(
                 walkOnly.directWalk,
@@ -680,18 +703,12 @@ class JourneyResultFragment : Fragment() {
             )
             else -> reasonOf(plan)
         }
-        // One dotted stroke between two ends: the journey there is, with no
-        // station on the way. A single leg is its own total, so there is
-        // nothing to apportion here.
-        views.shape.legs = walkOnly
+        // One stroke between two ends — dotted for the walk, unbroken for the
+        // ride: the journey there is, with no station on the way. A single leg
+        // is its own total, so there is nothing to apportion here.
+        views.shape.legs = soleLeg
             ?.let {
-                listOf(
-                    legOf(
-                        it.directWalk,
-                        it.directWalk.duration.inShownMinutes(),
-                        isRide = false,
-                    ),
-                )
+                listOf(legOf(it, it.duration.inShownMinutes(), isRide = ownBike != null))
             }
             .orEmpty()
     }
@@ -726,14 +743,26 @@ class JourneyResultFragment : Fragment() {
         // The two ends are drawn even when no journey was composed: they say
         // what was asked for, which is worth showing when the answer is empty.
         markerSource?.setGeoJson(
-            JourneyMarkers.featuresFor(origin.position, destination.position, option),
+            JourneyMarkers.featuresFor(
+                origin.position,
+                destination.position,
+                option,
+                isRidden = state.plan is JourneyPlan.OwnBike,
+            ),
         )
 
         if (option == null) {
+            // A journey with no station runs in one leg, and which of the two
+            // sources carries it is the whole difference between them: dotted
+            // for the walk, unbroken for the ride on one's own bike.
             val directWalk = (state.plan as? JourneyPlan.WalkOnly)?.directWalk
+            val ownRide = (state.plan as? JourneyPlan.OwnBike)?.ride
             walk.setGeoJson(JourneyLines.featuresOf(directWalk))
-            ride.setGeoJson(JourneyLines.featuresOf(null))
-            frameOn(directWalk?.geometry.orEmpty().map { LatLng(it.latitude, it.longitude) })
+            ride.setGeoJson(JourneyLines.featuresOf(ownRide))
+            frameOn(
+                (directWalk ?: ownRide)?.geometry.orEmpty()
+                    .map { LatLng(it.latitude, it.longitude) },
+            )
             return
         }
         walk.setGeoJson(JourneyLines.walkFeatures(option))
@@ -863,6 +892,7 @@ class JourneyResultFragment : Fragment() {
         // was opened. They go no further than this bundle (SPEC §8).
         origin.writeTo(outState, STATE_ORIGIN)
         destination.writeTo(outState, STATE_DESTINATION)
+        outState.putBoolean(STATE_OWN_BIKE, usesOwnBike)
         picker.writeTo(outState)
     }
 
@@ -890,20 +920,30 @@ class JourneyResultFragment : Fragment() {
     companion object {
         private const val ARGUMENT_ORIGIN = "origin"
         private const val ARGUMENT_DESTINATION = "destination"
+        private const val ARGUMENT_OWN_BIKE = "own-bike"
         private const val STATE_ORIGIN = "state-origin"
         private const val STATE_DESTINATION = "state-destination"
+        private const val STATE_OWN_BIKE = "state-own-bike"
 
         /** The margin around the track, in dp, so it does not touch the edges. */
         private const val FRAME_PADDING_DP = 32
 
-        /** Opens the result for a pair of points already designated. */
+        /**
+         * Opens the result for a pair of points already designated.
+         *
+         * @param usesOwnBike true for the journey of somebody riding their own
+         *   bike: one ride, no station, and the network left out of it
+         *   (SPEC §7.3).
+         */
         fun newInstance(
             origin: JourneyEndpoint,
             destination: JourneyEndpoint,
+            usesOwnBike: Boolean = false,
         ): JourneyResultFragment = JourneyResultFragment().apply {
             arguments = Bundle().apply {
                 origin.writeTo(this, ARGUMENT_ORIGIN)
                 destination.writeTo(this, ARGUMENT_DESTINATION)
+                putBoolean(ARGUMENT_OWN_BIKE, usesOwnBike)
             }
         }
     }
