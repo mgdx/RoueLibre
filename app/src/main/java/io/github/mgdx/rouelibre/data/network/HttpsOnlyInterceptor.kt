@@ -18,7 +18,7 @@ import okhttp3.Response
  * `http://` — the very same paths that answer perfectly in TLS, and that the
  * server itself redirects there. Without this rule the network shows no station,
  * ever, over a producer's typo. It was the only one of the three hundred and
- * thirty-three networks served in that case, which is exactly why the answer
+ * thirty-two networks served in that case, which is exactly why the answer
  * belongs here and not in its city configuration: nothing specific to a city is
  * hard-coded (SPEC §15), and the next producer to publish the same typo is
  * served without a release.

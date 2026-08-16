@@ -64,12 +64,12 @@ alone, so an interrupted upload is finished by running it again.
 
 **One release per country, and a last one holding the index.** GitHub allows
 **1,000 assets per release** — the message is `file_count limited to 1000
-assets per release` — and 333 conurbations come to some 1,470 files. The heavy
+assets per release` — and 332 conurbations come to some 1,160 files. The heavy
 files therefore go to `data-<tag>-fr`, `data-<tag>-de`, `data-<tag>-jp`; the
-largest of those is France, at 234 assets, so the ceiling is far off even as
+largest of those is France, at 240 assets, so the ceiling is far off even as
 networks grow.
 
-The last release, `data-<tag>`, holds nothing but the catalogue and the 333
+The last release, `data-<tag>`, holds nothing but the catalogue and the 332
 manifests. It exists because the application asks for
 `releases/latest/download/manifest-<network>.json`, and *latest* names the
 newest release of the repository, whichever it is: every manifest must sit in

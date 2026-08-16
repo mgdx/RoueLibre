@@ -11,7 +11,7 @@
 <p align="center">
   <a href="LICENSE"><img alt="Licence: GPLv3" src="https://img.shields.io/badge/licence-GPLv3-0F6E56?style=flat-square"></a>
   <img alt="Android 8.0 and later" src="https://img.shields.io/badge/Android-8.0%2B-0F6E56?style=flat-square">
-  <a href="docs/networks.md"><img alt="333 networks in 38 countries" src="https://img.shields.io/badge/networks-333%20in%2038%20countries-0F6E56?style=flat-square"></a>
+  <a href="docs/networks.md"><img alt="332 networks in 38 countries" src="https://img.shields.io/badge/networks-332%20in%2038%20countries-0F6E56?style=flat-square"></a>
   <img alt="No tracker" src="https://img.shields.io/badge/trackers-none-0F6E56?style=flat-square">
   <img alt="APK: 8.5 MB" src="https://img.shields.io/badge/APK-8.5%20MB-0F6E56?style=flat-square">
 </p>
@@ -35,7 +35,7 @@ but the live availability of the bikes runs on your phone.
 
 ## Features
 
-- 🚲 **333 bike-share networks in 38 countries**, 75,095 stations, from Vélib'
+- 🚲 **332 bike-share networks in 38 countries**, 69,337 stations, from Vélib'
   to Auch's ten, by way of New York, Montréal, Prague, Barcelona, Dubai, Buenos
   Aires and Pristina. No city is a default: the application proposes the one
   matching your position, measured on where itsstations actually are, and you
