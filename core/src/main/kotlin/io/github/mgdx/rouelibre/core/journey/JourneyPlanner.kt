@@ -62,14 +62,16 @@ import kotlin.time.Duration.Companion.seconds
  * there is nothing to measure — the question is not "how likely am I to find
  * one" but "does this station lend one".
  *
- * Three things it deliberately leaves alone. The **arrival end**, where a free
- * dock is a free dock whatever one returns to it. The **time announced**, which
- * stays what the engine traced: a pedal-assist bike is quicker in the real
+ * Two things it deliberately leaves alone. The **arrival end**, where a free
+ * dock is a free dock whatever one returns to it. And the **time announced**,
+ * which stays what the engine traced: a pedal-assist bike is quicker in the real
  * world, but the profile it is traced with is the same one, and this application
- * announces nothing it has not computed (SPEC §6). And the **counts carried**,
- * which remain the station's whole stock, both for what the interface shows and
- * for the reliability penalty: re-basing that penalty on one kind would be a
- * coefficient nobody has measured.
+ * announces nothing it has not computed (SPEC §6).
+ *
+ * One thing it does reach: the **reliability penalty**, which then weighs the
+ * bikes of that kind alone rather than the station's whole rack — see
+ * [countAtRisk]. What the journey **carries and shows** is the whole count all
+ * the same (SPEC §7.4).
  *
  * @property router access to the routing engine.
  * @property settings the algorithm's settings.
@@ -107,6 +109,7 @@ public class JourneyPlanner(
                     ?.takeIf { state -> state.canLendBike && lendsTheWantedBike(state) }
                     ?.bikesAvailable
             },
+            atRisk = ::countAtRisk,
         )
         // The arrival end ignores the kind asked for: a free dock is a free dock
         // whatever bike is returned to it (SPEC §6).
@@ -233,18 +236,43 @@ public class JourneyPlanner(
         near: Coordinates,
         limit: Int,
         countOf: (StationWithAvailability) -> Int?,
+        atRisk: (StationWithAvailability, Int) -> Int = { _, count -> count },
     ): List<Candidate> = stations
         .mapNotNull { entry ->
             val count = countOf(entry)?.takeIf { it > 0 } ?: return@mapNotNull null
             Candidate(
                 station = entry.station,
                 count = count,
+                countAtRisk = atRisk(entry, count),
                 bikesByVehicleType = entry.availability?.bikesByVehicleType.orEmpty(),
                 straightLineMetres = near.distanceInMetresTo(entry.station.position),
             )
         }
         .sortedBy { it.straightLineMetres }
         .take(limit)
+
+    /**
+     * The stock the reliability penalty is measured on.
+     *
+     * The whole count, except at the departure end when a kind was asked for:
+     * there it is the bikes **of that kind alone**. The seven mechanical bikes
+     * standing beside the single electric one do not serve somebody who asked
+     * for an electric bike — if that one goes while they walk, they reach the
+     * next station just as surely as if the whole rack had emptied, and that is
+     * exactly the cost `fallbackPenalty` stands for.
+     *
+     * The turnover rate is left alone, and no constant is added: what changes is
+     * the base it divides, not the figure itself. That does carry an assumption
+     * — that any bike leaving the station could be one of the kind wanted, which
+     * is the pessimistic reading of a rate measured over the whole stock. It is
+     * the deliberate side to err on: under-stating this risk sends somebody to a
+     * bike that will not be there, while over-stating it sends them a little
+     * further to one that will.
+     *
+     * At the arrival end nothing changes, a free dock taking back any bike.
+     */
+    private fun countAtRisk(entry: StationWithAvailability, count: Int): Int =
+        wantedBike?.bikesAt(entry.availability) ?: count
 
     /**
      * Whether a station holds a bike of the kind asked for.
@@ -441,9 +469,10 @@ public class JourneyPlanner(
     /**
      * The pair's reliability penalty (SPEC §6).
      *
-     * At the departure end, the risk is finding the station empty after the
-     * access walk. At the arrival end, finding it full — and the exposure is
-     * longer, since one gets there after the walk and the ride.
+     * At the departure end, the risk is finding the station empty **of what one
+     * asked for** after the access walk — see [countAtRisk]. At the arrival end,
+     * finding it full — and the exposure is longer, since one gets there after
+     * the walk and the ride.
      */
     private fun riskOf(
         departure: Candidate,
@@ -452,12 +481,12 @@ public class JourneyPlanner(
         ride: Duration,
     ): Duration {
         val departureRisk = availabilityRiskPenalty(
-            count = departure.count,
+            count = departure.countAtRisk,
             exposure = walkToStation,
             settings = settings,
         )
         val arrivalRisk = availabilityRiskPenalty(
-            count = arrival.count,
+            count = arrival.countAtRisk,
             exposure = walkToStation + ride,
             settings = settings,
         )
@@ -498,7 +527,12 @@ public class JourneyPlanner(
      * A retained station, with what qualifies it.
      *
      * @property count what it holds of the side we need: bikes at the departure
-     *   end, free docks at the arrival end.
+     *   end, free docks at the arrival end. It is the figure the journey carries
+     *   and the interface shows, and a kind asked for never narrows it
+     *   (SPEC §7.4).
+     * @property countAtRisk what the reliability penalty is measured on — see
+     *   [countAtRisk]. The same figure as [count], except at the departure end
+     *   when a kind was asked for.
      * @property bikesByVehicleType how its bikes divide between the network's
      *   own vehicle type identifiers. Read at both ends, since it comes with
      *   the state the count itself is read from, and only used at the departure
@@ -507,6 +541,7 @@ public class JourneyPlanner(
     private data class Candidate(
         val station: Station,
         val count: Int,
+        val countAtRisk: Int,
         val bikesByVehicleType: Map<String, Int>,
         val straightLineMetres: Double,
     )

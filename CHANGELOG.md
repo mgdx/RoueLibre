@@ -24,10 +24,17 @@ also records what has no visible effect.
   kind, because there was nothing to measure. A station whose breakdown cannot
   be read is left out too: one cannot promise a bike one has not managed to
   count — and asked for nothing, that same station is a candidate like any
-  other. Three things stay as they were, each for its own reason: the arrival
-  end, a free dock being a free dock whatever is returned to it; the time
-  announced, an assisted bike being traced over the same graph with the same
-  profile; and the counts carried, which are still the station's whole stock.
+  other. **The reliability penalty then weighs the bikes of that kind alone**:
+  one electric bike among eight at six minutes' walk loses to four electric
+  bikes a minute further, where counting the whole rack would have sent the
+  rider to the first — the seven mechanical bikes beside the lone electric one
+  serve nobody who asked for an electric one. No coefficient is added or
+  changed, only the base the turnover rate divides. Two things stay as they
+  were: the arrival end, a free dock being a free dock whatever is returned to
+  it, risk included; and the time announced, an assisted bike being traced over
+  the same graph with the same profile. The counts the journey carries and shows
+  are still the station's whole stock — the penalty ranks, it is never
+  displayed.
   The selector **does not exist** in a conurbation lending one kind, nor while
   the own-bike switch is on — absent rather than greyed out, since a choice
   nobody can collect is a promise not to make — and it appears or goes with the

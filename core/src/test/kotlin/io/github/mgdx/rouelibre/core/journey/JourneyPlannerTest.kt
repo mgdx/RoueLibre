@@ -712,6 +712,74 @@ class JourneyPlannerTest {
     }
 
     @Test
+    fun `the risk is weighed on the bikes of the kind asked for`() = runTest {
+        // One electric bike among eight, six minutes away, against four
+        // electric bikes one minute further. Counting the whole rack, the near
+        // station looks safe and wins; counting what the rider actually asked
+        // for, the single electric bike is exactly as likely to go as a lone
+        // bike would be — and losing it costs the walk to the next station.
+        val stations = listOf(
+            station(
+                "un-seul-electrique",
+                at(0.0, 450.0),
+                bikes = 8,
+                bikesByVehicleType = mapOf("mecanique" to 7, "electrique" to 1),
+            ),
+            station(
+                "quatre-electriques",
+                at(0.0, 530.0),
+                bikes = 4,
+                bikesByVehicleType = mapOf("electrique" to 4),
+            ),
+            station("arrivee", at(0.0, 3900.0), bikes = 0, docks = 9),
+        )
+
+        val asked = wanting(WantedBikeKind.Electric)
+            .plan(origin, destination, stations) as JourneyPlan.Found
+        val unasked = JourneyPlanner(FakeRouter())
+            .plan(origin, destination, stations) as JourneyPlan.Found
+
+        assertEquals("quatre-electriques", asked.best.departureStation.id)
+        // Asked for nothing, the nearer rack still wins: what moved the choice
+        // is the request, not a change to the penalty itself.
+        assertEquals("un-seul-electrique", unasked.best.departureStation.id)
+    }
+
+    @Test
+    fun `the arrival risk still weighs the free docks themselves`() = runTest {
+        // A dock takes back any bike: the kind asked for must not narrow what
+        // the arrival end is weighed on, or a station holding no electric bike
+        // would be penalised for having none to lend.
+        val stations = listOf(
+            station(
+                "depart",
+                at(0.0, 150.0),
+                bikes = 3,
+                bikesByVehicleType = mapOf("electrique" to 3),
+            ),
+            station(
+                "arrivee",
+                at(0.0, 3900.0),
+                bikes = 6,
+                docks = 9,
+                bikesByVehicleType = mapOf("mecanique" to 6),
+            ),
+        )
+
+        val asked = (
+            wanting(WantedBikeKind.Electric)
+                .plan(origin, destination, stations) as JourneyPlan.Found
+            ).best
+        val unasked = (
+            JourneyPlanner(FakeRouter())
+                .plan(origin, destination, stations) as JourneyPlan.Found
+            ).best
+
+        assertEquals("arrivee", asked.arrivalStation.id)
+        assertEquals(unasked.riskPenalty, asked.riskPenalty)
+    }
+
+    @Test
     fun `the breakdown carried does not depend on the kind asked for`() = runTest {
         // What the screens SHOW is both counts, whatever was asked for: they
         // answer "what is waiting there", and the filter is a question put

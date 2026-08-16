@@ -219,11 +219,16 @@ This is the application's business core. To be implemented in an isolated, testa
 
 **A kind of bike asked for narrows step 1, and nothing else.** Where the network lends both (§15), the journey screen lets one ask for a mechanical or a pedal-assist bike (§7.3); a station that does not hold that kind is then **not a candidate at all**. It is a strict filter and deliberately not a weighting: there is no penalty coefficient for the wrong kind, because there would be nothing to measure — the question is not how likely one is to find such a bike but whether the station lends one, and §14 wants every coefficient justified rather than invented. When no station is left, the application says so, naming the kind (§7.4), rather than walking somebody towards a bike that is not there.
 
-Three things it leaves untouched, each for its own reason:
+Two things it leaves untouched, each for its own reason:
 
-- **the arrival end**, where a free dock is a free dock whatever is returned to it;
-- **the time announced**, which stays the one the engine traced. A pedal-assist bike is quicker in the real world, but it is ridden over the same graph with the same profile, and this application announces nothing it has not computed (point 4 above). A speed added for the motor would be a figure nobody measured;
-- **the counts carried**, which remain the station's whole stock — both for what the interface shows (§7.2, §7.4) and for the reliability penalty below. Re-basing that penalty on one kind would be a new coefficient, and it is not one anybody has measured either.
+- **the arrival end**, where a free dock is a free dock whatever is returned to it — and that holds for the risk weighed there as well as for the choice itself;
+- **the time announced**, which stays the one the engine traced. A pedal-assist bike is quicker in the real world, but it is ridden over the same graph with the same profile, and this application announces nothing it has not computed (point 4 above). A speed added for the motor would be a figure nobody measured.
+
+**The reliability penalty, on the other hand, weighs the kind asked for.** At the departure end it is measured on the bikes of that kind alone, not on the station's whole rack: the seven mechanical bikes standing beside the single electric one serve nobody who asked for an electric one, and if that one goes during the access walk the rider reaches the next station just as surely as if the rack had emptied — which is exactly what `fallbackPenalty` stands for. One electric bike among eight at six minutes' walk therefore loses to four electric bikes a minute further, where counting the whole rack would have sent the rider to the first.
+
+No coefficient is added and none is changed: the turnover rate is the one measured before, and what moves is the base it divides. That does carry an assumption — that a bike leaving the station could be one of the kind wanted — which is the pessimistic reading of a rate measured over a whole stock, the other being that each kind empties in proportion to its share. It is the deliberate side to err on: under-stating this risk sends somebody to a bike that will not be there, while over-stating it sends them a little further to one that will. It was settled on 16 August 2026, the penalty having weighed the whole rack when the choice of kind was first written.
+
+**What the journey carries and shows is the whole count all the same** (§7.2, §7.4): the penalty is a way of ranking, never a figure to display.
 
 A station whose breakdown **cannot be read** is left out when a kind is asked for. The three cases are those of §7.2 — a vehicle type the network never declared, a breakdown that does not add up to the count displayed, no breakdown published at all — and the reasoning is the same one: one cannot promise a bike one has not managed to count. Asked for nothing, that same station is a candidate like any other; it is the request that excludes it, never the reading.
 
