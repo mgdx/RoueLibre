@@ -12,10 +12,13 @@ import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.data.DatasetRejection
 import io.github.mgdx.rouelibre.core.data.DatasetUpdate
 import io.github.mgdx.rouelibre.core.data.InstalledDataset
+import io.github.mgdx.rouelibre.core.data.MeteredTransferGate
 import io.github.mgdx.rouelibre.core.data.compareWithInstalled
 import io.github.mgdx.rouelibre.data.datasets.DatasetDownloader
 import io.github.mgdx.rouelibre.data.datasets.DatasetStore
 import io.github.mgdx.rouelibre.data.datasets.DownloadProgress
+import io.github.mgdx.rouelibre.data.network.ConnectionCost
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,6 +52,11 @@ data class DatasetRow(
  * @property isChecking a manifest check is under way.
  * @property manifest the announced release, once checked.
  * @property downloading the transfer in progress, if there is one.
+ * @property unmeteredOnly what the setting says about billed connections
+ *   (SPEC §7.6).
+ * @property isMetered whether the connection in use bills what goes over it.
+ * @property heldBackByMetering a transfer is waiting for a connection nobody is
+ *   billed for — refused before starting, or stopped in the middle.
  */
 data class StorageUiState(
     val datasets: List<DatasetRow> = DatasetKind.entries.map { DatasetRow(it, null) },
@@ -57,6 +65,9 @@ data class StorageUiState(
     val isChecking: Boolean = false,
     val manifest: DataManifest? = null,
     val downloading: DownloadProgress? = null,
+    val unmeteredOnly: Boolean = true,
+    val isMetered: Boolean = false,
+    val heldBackByMetering: Boolean = false,
 ) {
     /** The sets the manifest announces as absent or out of date. */
     val outdated: List<DatasetRow>
@@ -92,6 +103,22 @@ sealed interface StorageMessage {
 
     /** The file offered was refused, for the reason given. */
     data class Rejected(val kind: DatasetKind, val reason: DatasetRejection) : StorageMessage
+
+    /**
+     * Nothing is being downloaded because the connection bills (SPEC §4.4).
+     *
+     * Never a dead end: whoever reads this is offered the transfer anyway, this
+     * once, with what it weighs named in the question.
+     *
+     * @param pendingBytes what there is to download, announced before anything
+     *   starts (SPEC §11.9).
+     * @param wasUnderWay the transfer had begun and has just been stopped,
+     *   rather than being refused before its first byte.
+     */
+    data class HeldBackByMetering(val pendingBytes: Long, val wasUnderWay: Boolean) : StorageMessage
+
+    /** The connection no longer bills: what was held back can start again. */
+    data object CanResumeOnUnmetered : StorageMessage
 }
 
 /**
@@ -101,6 +128,13 @@ sealed interface StorageMessage {
  * **The check is never automatic.** It happens on an explicit action, from this
  * screen: a periodic request would draw a usage profile of the application,
  * which constraint C3 rules out.
+ *
+ * **Nothing goes out on a billed connection** while the setting asks otherwise
+ * (SPEC §4.4, §7.6): a transfer is refused before its first byte, or stopped
+ * where it stands if the connection starts billing in the middle of it. Both
+ * are said out loud, with what the download weighs, and both offer to run it
+ * anyway — a setting that could not be overridden would keep somebody in a
+ * hotel with no Wi-Fi from installing their city.
  */
 class StorageViewModel(
     private val store: DatasetStore,
@@ -108,9 +142,15 @@ class StorageViewModel(
     private val manifestUrl: suspend () -> String?,
     private val workDirectory: File,
     private val supportedFormatVersion: suspend () -> Int?,
+    connectionCost: ConnectionCost,
+    unmeteredOnly: Flow<Boolean>,
 ) : ViewModel() {
 
-    private val mutableState = MutableStateFlow(StorageUiState())
+    private val mutableState = MutableStateFlow(
+        // Read before anything is collected: a press arriving in the first
+        // milliseconds of the screen must be answered on the real connection.
+        StorageUiState(isMetered = connectionCost.isMetered()),
+    )
 
     /** The screen's current state. */
     val state: StateFlow<StorageUiState> = mutableState.asStateFlow()
@@ -120,7 +160,25 @@ class StorageViewModel(
     /** The outcomes to announce, once each. */
     val messages: Flow<StorageMessage> = messageChannel.receiveAsFlow()
 
+    /** The rule on billed connections, and the exemption that lifts it once. */
+    private val gate = MeteredTransferGate()
+
+    /** The transfer under way, kept so that a billed connection can stop it. */
+    private var downloadJob: Job? = null
+
     init {
+        viewModelScope.launch {
+            unmeteredOnly.collect { only ->
+                mutableState.update { it.copy(unmeteredOnly = only) }
+                applyBillingRule()
+            }
+        }
+        viewModelScope.launch {
+            connectionCost.metered.collect { metered ->
+                mutableState.update { it.copy(isMetered = metered) }
+                applyBillingRule()
+            }
+        }
         viewModelScope.launch {
             store.installed.collect { installed ->
                 mutableState.update { current ->
@@ -215,48 +273,118 @@ class StorageViewModel(
      * Downloads and installs whatever the manifest announces as new.
      *
      * Sets already up to date are not fetched again: that is the whole point of
-     * comparing digests.
+     * comparing digests. Nothing starts on a billed connection while the
+     * setting asks otherwise — the screen is told why, and offered [downloadAnyway].
      */
     fun downloadPending() {
+        startDownload()
+    }
+
+    /**
+     * Downloads it anyway, on this connection, this once (SPEC §4.4).
+     *
+     * The setting is left as it is: what is being agreed to is this transfer,
+     * not a rule. Somebody in a hotel with no Wi-Fi must be able to install
+     * their city without giving up the protection for good.
+     */
+    fun downloadAnyway() {
+        gate.exemptOneTransfer()
+        startDownload()
+    }
+
+    private fun startDownload() {
         val manifest = mutableState.value.manifest ?: return
-        if (mutableState.value.downloading != null) return
-        viewModelScope.launch {
-            for (row in mutableState.value.outdated) {
-                val dataset = manifest.datasetFor(row.kind) ?: continue
-                val outcome = downloader.download(
-                    dataset,
-                    File(workDirectory, row.kind.id),
-                ) { progress ->
-                    mutableState.update { it.copy(downloading = progress) }
-                }
-                when (outcome) {
-                    is Outcome.Failure -> {
-                        mutableState.update { it.copy(downloading = null) }
-                        messageChannel.send(
-                            StorageMessage.DownloadFailed(row.kind, outcome.error),
-                        )
-                        return@launch
+        if (downloadJob?.isActive == true) return
+        val current = mutableState.value
+        if (!gate.mayRun(current.unmeteredOnly, current.isMetered)) {
+            holdBack(wasUnderWay = false)
+            return
+        }
+        mutableState.update { it.copy(heldBackByMetering = false) }
+        downloadJob = viewModelScope.launch {
+            try {
+                for (row in mutableState.value.outdated) {
+                    val dataset = manifest.datasetFor(row.kind) ?: continue
+                    val outcome = downloader.download(
+                        dataset,
+                        File(workDirectory, row.kind.id),
+                    ) { progress ->
+                        mutableState.update { it.copy(downloading = progress) }
                     }
+                    when (outcome) {
+                        is Outcome.Failure -> {
+                            messageChannel.send(
+                                StorageMessage.DownloadFailed(row.kind, outcome.error),
+                            )
+                            return@launch
+                        }
 
-                    is Outcome.Success -> {
-                        val installed = store.install(
-                            kind = row.kind,
-                            files = outcome.value,
-                            fingerprint = dataset.fingerprint,
-                        )
-                        messageChannel.send(
-                            when (installed) {
-                                is DatasetImportResult.Installed ->
-                                    StorageMessage.Installed(row.kind)
+                        is Outcome.Success -> {
+                            val installed = store.install(
+                                kind = row.kind,
+                                files = outcome.value,
+                                fingerprint = dataset.fingerprint,
+                            )
+                            messageChannel.send(
+                                when (installed) {
+                                    is DatasetImportResult.Installed ->
+                                        StorageMessage.Installed(row.kind)
 
-                                is DatasetImportResult.Rejected ->
-                                    StorageMessage.Rejected(row.kind, installed.reason)
-                            },
-                        )
+                                    is DatasetImportResult.Rejected ->
+                                        StorageMessage.Rejected(row.kind, installed.reason)
+                                },
+                            )
+                        }
                     }
                 }
+            } finally {
+                // Also on the way out of a cancellation, which is how a
+                // connection that starts billing ends a transfer: the exemption
+                // is spent with the transfer that carried it, so the next one
+                // asks again.
+                gate.transferEnded()
+                mutableState.update { it.copy(downloading = null).withManifestApplied() }
             }
-            mutableState.update { it.copy(downloading = null).withManifestApplied() }
+        }
+    }
+
+    /**
+     * Stops short of the connection, and says what it would have cost.
+     *
+     * @param wasUnderWay the transfer had begun, rather than being refused
+     *   before its first byte.
+     */
+    private fun holdBack(wasUnderWay: Boolean) {
+        mutableState.update { it.copy(heldBackByMetering = true, downloading = null) }
+        messageChannel.trySend(
+            StorageMessage.HeldBackByMetering(mutableState.value.pendingBytes, wasUnderWay),
+        )
+    }
+
+    /**
+     * Applies the rule whenever the connection or the setting changes.
+     *
+     * **Stopping in the middle is the point.** A gigabyte that carries on in
+     * silence over a mobile plan is precisely what the setting promises to
+     * avoid, so the transfer is cancelled where it stands; what has arrived
+     * stays on disk, and the next attempt asks the server for the rest.
+     *
+     * **Nothing starts again on its own.** SPEC §4.1 refuses background work, so
+     * the return of an unbilled connection is announced to whoever is looking at
+     * the screen, and the press that resumes the transfer is theirs.
+     */
+    private fun applyBillingRule() {
+        val current = mutableState.value
+        val allowed = gate.mayRun(current.unmeteredOnly, current.isMetered)
+        val job = downloadJob
+        if (!allowed && job?.isActive == true) {
+            job.cancel()
+            holdBack(wasUnderWay = true)
+            return
+        }
+        if (allowed && current.heldBackByMetering && job?.isActive != true) {
+            mutableState.update { it.copy(heldBackByMetering = false) }
+            messageChannel.trySend(StorageMessage.CanResumeOnUnmetered)
         }
     }
 
@@ -294,6 +422,8 @@ class StorageViewModel(
         private val manifestUrl: suspend () -> String?,
         private val workDirectory: File,
         private val supportedFormatVersion: suspend () -> Int?,
+        private val connectionCost: ConnectionCost,
+        private val unmeteredOnly: Flow<Boolean>,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -306,6 +436,8 @@ class StorageViewModel(
                 manifestUrl,
                 workDirectory,
                 supportedFormatVersion,
+                connectionCost,
+                unmeteredOnly,
             ) as T
         }
     }
