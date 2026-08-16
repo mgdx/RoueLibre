@@ -6,7 +6,23 @@
 #
 # The cost factors multiply distance. A factor of 2 means a detour of up to
 # twice the length will be accepted to avoid that kind of way. They express
-# COMFORT, not speed: walking speed is applied by the application, uniformly.
+# COMFORT and nothing else: not one of them enters the duration the engine
+# reports, which is what a journey is compared on (SPEC.md §6).
+#
+# The pace is the engine's own, and it is not uniform. BRouter times a foot
+# profile with Tobler's hiking function, capped at the default `maxSpeed` of
+# 6 km/h this file does not override, so every segment is timed on its own
+# slope. Measured over six legs of the Lille graph on 16 August 2026 — 314 m to
+# 10.2 km — whole legs come out between 1.39 and 1.44 m/s, that is 5.0 to
+# 5.2 km/h; the spread comes from the descents, where the function reaches its
+# ceiling.
+#
+# What the application does with that duration is scale it by the walking pace
+# the user chose, in `core` and in plain Kotlin (SPEC.md §6, §7.6): the minutes
+# are multiplied, the track and its distance untouched — the same streets are
+# walked whether one dawdles or hurries. Until 16 August 2026 this comment said
+# the application applied a uniform walking speed here. It never did: no code
+# touched the engine's figure at all.
 #
 # Licence: GPLv3, like the rest of the project.
 
