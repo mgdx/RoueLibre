@@ -169,6 +169,14 @@ tasks.withType<Test>().configureEach {
         "rouelibre.glyphs",
         file("src/main/assets/glyphs").absolutePath,
     )
+    // The languages Android's per-application settings offer. That XML is the
+    // one place the list of translations is written a second time — Android
+    // reads it from the resources, so it cannot be computed — and the test
+    // reads the file itself to check the two still agree (SPEC §9).
+    systemProperty(
+        "rouelibre.locales",
+        file("src/main/res").absolutePath,
+    )
 }
 
 kotlin {

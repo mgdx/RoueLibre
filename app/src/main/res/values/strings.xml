@@ -460,4 +460,16 @@
     <string name="error_local_storage">Unable to read the data stored on the device.</string>
     <string name="error_no_city_chosen">No city is selected. Choose one to see its stations.</string>
 
+    <!-- Application language -->
+    <string name="settings_language_title">Language</string>
+    <!-- Heads the list of languages: the interface follows the device's own
+         language, which is what it did before this setting existed. The
+         languages themselves are never translated — each is written in its own
+         language, and comes from Android rather than from this file. -->
+    <string name="settings_language_system">System</string>
+    <!-- Spoken label of the row, read aloud in place of the language alone.
+         %1$s is the language in service: "English", "Français", or the wording
+         above when the device's own is followed. -->
+    <string name="settings_language_description">Language of the interface: %1$s</string>
+
 </resources>

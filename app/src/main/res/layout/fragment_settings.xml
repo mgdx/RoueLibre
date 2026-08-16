@@ -261,6 +261,35 @@
                     android:text="@string/settings_units_uk" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
+            <!--
+                The language the interface speaks (SPEC §7.6, §9). A row that
+                opens a list, and not a row of buttons like the theme and the
+                units above it: the choices here are the translations that
+                actually exist, they grow every time somebody finishes one, and
+                each is written in its own language — "Français", "العربية" —
+                which no three-across row of buttons would hold. The row carries
+                the language in service, so the screen answers the question
+                without being pressed.
+            -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:text="@string/settings_language_title"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+
+            <!-- Its text and its spoken label are both written by the code:
+                 what they say is the language chosen, which no resource
+                 knows. -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/language"
+                style="@style/Widget.RoueLibre.Toggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:gravity="start|center_vertical"
+                android:minHeight="@dimen/touch_target_min" />
+
             <!-- Offline data: what the application occupies, and how to
                  reclaim it (SPEC §4.4). -->
             <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle

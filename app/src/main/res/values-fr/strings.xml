@@ -593,4 +593,11 @@
     <string name="error_local_storage">Impossible de lire les données enregistrées sur l\'appareil.</string>
     <string name="error_no_city_chosen">Aucune ville n\'est sélectionnée. Choisissez-en une pour afficher les stations.</string>
 
+    <!-- Application language -->
+    <string name="settings_language_title">Langue</string>
+    <string name="settings_language_system">Système</string>
+    <!-- %1$s est la langue en service : « English », « Français », ou le
+         libellé ci-dessus quand c\'est celle de l\'appareil qui est suivie. -->
+    <string name="settings_language_description">Langue de l\'interface : %1$s</string>
+
 </resources>

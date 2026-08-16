@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.journey.WalkingPace
@@ -15,9 +16,14 @@ import io.github.mgdx.rouelibre.core.measure.UnitChoice
 import io.github.mgdx.rouelibre.data.AppTheme
 import io.github.mgdx.rouelibre.databinding.FragmentSettingsBinding
 import io.github.mgdx.rouelibre.ui.about.AboutFragment
+import io.github.mgdx.rouelibre.ui.chosenLanguage
 import io.github.mgdx.rouelibre.ui.city.CityFragment
+import io.github.mgdx.rouelibre.ui.endonym
+import io.github.mgdx.rouelibre.ui.offeredLanguages
+import io.github.mgdx.rouelibre.ui.speakLanguage
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 /**
  * Settings (SPEC §7.6).
@@ -68,6 +74,7 @@ class SettingsFragment : Fragment() {
         setUpWalkingPace(views)
         setUpTheme(views)
         setUpUnits(views)
+        setUpLanguage(views)
         setUpOfflineData(views)
         setUpAbout(views)
     }
@@ -225,6 +232,66 @@ class SettingsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    /**
+     * The language the interface speaks, under the units in the display section
+     * (SPEC §7.6, §9).
+     *
+     * Nothing is read from or written to the preferences here, alone among the
+     * settings on this screen, and [chosenLanguage] says why: AppCompat stores
+     * this one itself, and a second copy of it would diverge the first time the
+     * language was changed from Android's own per-application settings.
+     *
+     * Nor is there anything to collect: applying a language rebuilds the
+     * activity, so this fragment is created afresh on the new choice and reads
+     * it once, here.
+     */
+    private fun setUpLanguage(views: FragmentSettingsBinding) {
+        showLanguage(views, chosenLanguage())
+        views.language.setOnClickListener { chooseLanguage() }
+    }
+
+    /** Writes the language in service on the row that opens the list. */
+    private fun showLanguage(views: FragmentSettingsBinding, language: Locale?) {
+        val name = language?.endonym() ?: getString(R.string.settings_language_system)
+        views.language.text = name
+        // The row reads as a bare language name otherwise — "Français" alone,
+        // with nothing saying what it settles.
+        views.language.contentDescription =
+            getString(R.string.settings_language_description, name)
+    }
+
+    /**
+     * Offers the languages the interface exists in.
+     *
+     * The list is [offeredLanguages] and is derived from the translations that
+     * exist, never written out here: offering a language to answer in English
+     * would be worse than not offering it. "Follow the system" heads it, as it
+     * heads the theme and the units, and is what an unknown or absent choice
+     * reads as.
+     *
+     * The choice applies on the press, with no "apply" button and nothing to
+     * confirm, so the list closes on it.
+     */
+    private fun chooseLanguage() {
+        val offered = offeredLanguages()
+        val names = (
+            listOf(getString(R.string.settings_language_system)) + offered.map { it.endonym() }
+            ).toTypedArray()
+        val chosen = chosenLanguage()
+        val ticked =
+            if (chosen == null) 0 else offered.indexOfFirst { it.language == chosen.language } + 1
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.settings_language_title)
+            .setSingleChoiceItems(names, ticked) { dialog, which ->
+                dialog.dismiss()
+                // Index 0 is "follow the system", which is the absence of a
+                // language rather than one of them.
+                speakLanguage(offered.getOrNull(which - 1))
+            }
+            .setNegativeButton(R.string.action_cancel, null)
+            .show()
     }
 
     private fun show(fragment: Fragment) {

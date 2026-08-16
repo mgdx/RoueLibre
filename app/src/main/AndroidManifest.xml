@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!--
         The permissions requested, and no others (SPEC §10).
@@ -54,9 +55,58 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
+        tools:targetApi="tiramisu"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.RoueLibre">
+        android:theme="@style/Theme.RoueLibre"
+        tools:ignore="UnusedTranslation"><!--
+            UnusedTranslation is silenced here and nowhere else, and only for
+            what it means on this attribute: lint reads every `values-<lang>/`
+            folder as a language that ought to be declared in the locale config,
+            and names the twenty-eight started files whose strings still hold
+            the English text. Declaring them is exactly what SPEC §9 refuses —
+            the system's language picker would offer "Deutsch" and hand back
+            English. They stay in the APK and stay served to a device set to
+            them, which is what those files are for; what they are not is a
+            choice to offer. `UnusedAttribute` below is the same shape of
+            answer: the attribute does nothing before Android 13, which is
+            precisely why the library's own storage covers the releases beneath.
+        -->
+
+        <!--
+            android:localeConfig above names the languages the interface can be
+            asked to speak, so that Android's own per-application language
+            settings offer them too, from Android 13 on (SPEC §7.6, §9). The
+            same choice, offered a second time by the system and writing the
+            same stored value: it is not a second setting.
+        -->
+
+        <!--
+            Not a service, and never started: AppCompat reads this declaration
+            for the single flag inside it, which opts the application into
+            having its chosen language stored by the library itself. That is why
+            it is declared disabled — nothing must be able to bind it.
+
+            What it buys is Android 12 and below, which have no per-application
+            language of their own: there AppCompat keeps the choice in a file of
+            its own and reads it back before the first view of a cold start.
+            From Android 13 on the framework holds it, and this same declaration
+            is what lets AppCompat carry a choice made under the old scheme over
+            to the new one when a device is updated.
+
+            Without it, the language would be forgotten the moment the
+            application was closed on every device below Android 13 — which the
+            minSdk 26 of SPEC §3 still serves.
+        -->
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
 
         <!--
             The theme named here is the one Android draws the window with
