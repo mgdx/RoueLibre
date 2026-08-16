@@ -1,6 +1,7 @@
 package io.github.mgdx.rouelibre
 
 import android.content.Context
+import android.net.ConnectivityManager
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -22,8 +23,10 @@ import io.github.mgdx.rouelibre.data.datasets.DatasetDownloader
 import io.github.mgdx.rouelibre.data.datasets.DatasetStore
 import io.github.mgdx.rouelibre.data.local.StationDatabase
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
+import io.github.mgdx.rouelibre.data.network.ConnectionCost
 import io.github.mgdx.rouelibre.data.network.GbfsRemoteSource
 import io.github.mgdx.rouelibre.data.network.HttpsOnlyInterceptor
+import io.github.mgdx.rouelibre.data.network.SystemConnectionCost
 import io.github.mgdx.rouelibre.data.routing.OfflineRouter
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -266,6 +269,18 @@ class AppContainer(private val context: Context) {
     /** Where to drop what is being downloaded, before verification. */
     val downloadWorkDirectory: File
         get() = File(context.cacheDir, "downloads")
+
+    /**
+     * What the connection in use bills, which decides whether a dataset may
+     * travel on it (SPEC §4.4).
+     */
+    val connectionCost: ConnectionCost by lazy {
+        SystemConnectionCost(
+            checkNotNull(context.getSystemService(ConnectivityManager::class.java)) {
+                "no connectivity service on this device"
+            },
+        )
+    }
 
     /**
      * The manifest's address, read from the active city's configuration
