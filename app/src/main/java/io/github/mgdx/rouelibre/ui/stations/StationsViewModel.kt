@@ -84,6 +84,7 @@ enum class Emptiness {
 class StationsViewModel(
     private val repository: StationRepository,
     private val positionForOrdering: suspend () -> Coordinates? = { null },
+    private val readLetterFolds: suspend () -> Map<Char, String> = { emptyMap() },
 ) : ViewModel() {
 
     private val mutableState = MutableStateFlow(StationsUiState())
@@ -129,6 +130,24 @@ class StationsViewModel(
      */
     private var orderingPosition: Coordinates? = null
 
+    /**
+     * The letters accent removal cannot reach, for the search field.
+     *
+     * A network names its stops in its own language — "Ludwigsstraße",
+     * "Białostocka" — and its rider types on whatever keyboard they have
+     * (SPEC §4.3). Read off the main thread, because the rules sit in files and
+     * this field filters on every keystroke; until they arrive the fold is the
+     * plain one, and the list is filtered again as soon as they do.
+     */
+    private var letterFolds: Map<Char, String> = emptyMap()
+
+    init {
+        viewModelScope.launch {
+            letterFolds = readLetterFolds()
+            mutableState.update { it.copy(stations = visibleStations(it.query)) }
+        }
+    }
+
     init {
         viewModelScope.launch {
             repository.observeStations().collect { snapshot ->
@@ -165,7 +184,7 @@ class StationsViewModel(
 
     /** The stations to show: those the search keeps, in the order that suits. */
     private fun visibleStations(query: String): List<StationWithAvailability> =
-        orderStations(filterStations(allStations, query), orderingPosition)
+        orderStations(filterStations(allStations, query, letterFolds), orderingPosition)
 
     /**
      * Takes a new search query into account.
@@ -207,13 +226,14 @@ class StationsViewModel(
     class Factory(
         private val repository: StationRepository,
         private val positionForOrdering: suspend () -> Coordinates? = { null },
+        private val readLetterFolds: suspend () -> Map<Char, String> = { emptyMap() },
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass.isAssignableFrom(StationsViewModel::class.java)) {
                 "unexpected model: ${modelClass.name}"
             }
-            return StationsViewModel(repository, positionForOrdering) as T
+            return StationsViewModel(repository, positionForOrdering, readLetterFolds) as T
         }
     }
 }

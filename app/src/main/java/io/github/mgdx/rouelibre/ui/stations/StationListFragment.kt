@@ -24,9 +24,11 @@ import io.github.mgdx.rouelibre.databinding.FragmentStationListBinding
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Instant
 
 /**
@@ -46,6 +48,11 @@ class StationListFragment : Fragment() {
         StationsViewModel.Factory(
             container.stationRepository,
             positionForOrdering = { container.positionInsideActiveCity() },
+            readLetterFolds = {
+                withContext(Dispatchers.IO) {
+                    container.addressNormalizers.searchLetterFolds()
+                }
+            },
         )
     }
 
@@ -122,14 +129,6 @@ class StationListFragment : Fragment() {
         observeState()
         observeErrors()
         keepAvailabilityFresh()
-    }
-
-    override fun onDestroyView() {
-        // The RecyclerView outlives the view through its adapter; detaching it
-        // avoids holding on to the destroyed view.
-        binding?.stations?.adapter = null
-        binding = null
-        super.onDestroyView()
     }
 
     private fun observeState() {

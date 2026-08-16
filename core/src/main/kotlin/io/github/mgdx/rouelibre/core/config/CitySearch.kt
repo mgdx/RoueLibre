@@ -14,11 +14,21 @@ import io.github.mgdx.rouelibre.core.station.foldForSearch
  * What is searched is what the row shows — the network's name and the
  * conurbation it runs in. Matching on a field the user cannot see would produce
  * results nothing on screen explains.
+ *
+ * @param letterFolds the letters accent removal cannot reach (see
+ *   [foldForSearch]). The catalogue is the search that needs them most: it
+ *   spans some forty countries, and seven of its cities are named with a letter
+ *   no keyboard here carries — "Białystok", "Gießen", "Łomża". Without the
+ *   folds, two of them answer to no ASCII typing at all.
  */
-public fun filterCities(cities: List<CityEntry>, query: String): List<CityEntry> {
-    val folded = foldForSearch(query)
+public fun filterCities(
+    cities: List<CityEntry>,
+    query: String,
+    letterFolds: Map<Char, String>,
+): List<CityEntry> {
+    val folded = foldForSearch(query, letterFolds)
     if (folded.isEmpty()) return cities
-    return cities.filter { cityMatches(it, folded) }
+    return cities.filter { cityMatches(it, folded, letterFolds) }
 }
 
 /**
@@ -34,10 +44,15 @@ public fun filterCities(cities: List<CityEntry>, query: String): List<CityEntry>
  * type**: "V'Lille" and "Vélo'v" are searched as "vlille" and "velov", which
  * match nothing once the apostrophe has split them in two.
  */
-internal fun cityMatches(entry: CityEntry, foldedQuery: String): Boolean {
+internal fun cityMatches(
+    entry: CityEntry,
+    foldedQuery: String,
+    letterFolds: Map<Char, String>,
+): Boolean {
     if (foldedQuery.isEmpty()) return true
     val words = foldForSearch(
         listOfNotNull(entry.displayName, entry.mainCity).joinToString(" "),
+        letterFolds,
     ).split(' ')
     return foldedQuery.split(' ').all { term ->
         words.indices.any { start ->

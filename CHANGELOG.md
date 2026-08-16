@@ -283,6 +283,22 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **Seven cities answered to nobody typing their name.** "bialystok" returned
+  "No city found" while BIKER — Białystok sat in the catalogue, and so did
+  "giessen", "lomza", "wloclawek", "chelm", "jaskolka" and "mlawa"; for Włower
+  and ŁoKeR no ASCII typing reached them at all, every word of their label
+  beginning with the letter at fault, so they were only ever found by scrolling
+  332 rows. `foldForSearch` decomposed and dropped the combining marks, which
+  never reaches "ł", "ß" or "ø": those are letters in their own right, not a
+  base and an accent. The fold table SPEC.md §4.3 names has existed all along in
+  `config/address-normalization/`, read by the indexing script and by the
+  address search; **the catalogue and station searches now read it too**, rather
+  than a second copy of it. It is gathered across every language shipped, those
+  two searches carrying none, and restricted to the letters accent removal
+  cannot reach — so Danish "å → aa" stays out and "alborg" goes on finding
+  "Ålborg". Both sides of the search fold alike: "gießen" and "giessen" find the
+  same city.
+
 - **Bilbao counted 822 docking points where its own figures made 22.** Every one
   of the 65 stations of Bilbao Bizi announced a capacity its own counters
   contradicted by a factor of forty — "ABANDO, 9 bikes, 13 spaces", then "822

@@ -4,6 +4,7 @@ import android.content.Context
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.address.AddressNormalizer
 import io.github.mgdx.rouelibre.core.address.AddressNormalizerReader
+import io.github.mgdx.rouelibre.core.address.searchLetterFolds
 import java.io.IOException
 
 /**
@@ -30,6 +31,8 @@ class AddressNormalizers(private val context: Context) {
 
     private val loaded = HashMap<String, AddressNormalizer>()
 
+    private var folds: Map<Char, String>? = null
+
     /**
      * The rules of [language], or English where that language has none.
      *
@@ -53,6 +56,33 @@ class AddressNormalizers(private val context: Context) {
         return normalizer
     }
 
+    /**
+     * The letters to fold in the searches that carry no language (SPEC §4.3).
+     *
+     * The station list and the city catalogue are searched without knowing what
+     * language anything is written in, so they take every rule set shipped
+     * rather than one. Gathered from the same files as the rest, which is the
+     * point: "ł → l" is written down once, in `config/address-normalization/`,
+     * and the indexing script reads it from there too.
+     *
+     * Read once and kept: the files are a hundred and seventy kilobytes all
+     * told, and the search field they serve filters on every keystroke.
+     */
+    @Synchronized
+    fun searchLetterFolds(): Map<Char, String> {
+        folds?.let { return it }
+        val languages = try {
+            context.assets.list(RULES_DIRECTORY)?.asList().orEmpty()
+        } catch (_: IOException) {
+            emptyList()
+        }
+        val gathered = searchLetterFolds(
+            languages.mapNotNull { file -> read(file.removeSuffix(RULES_SUFFIX)) },
+        )
+        folds = gathered
+        return gathered
+    }
+
     private fun read(language: String): AddressNormalizer? {
         val document = try {
             context.assets.open("$RULES_DIRECTORY/$language.json")
@@ -74,6 +104,8 @@ class AddressNormalizers(private val context: Context) {
 
     private companion object {
         const val RULES_DIRECTORY = "address-normalization"
+
+        const val RULES_SUFFIX = ".json"
 
         /** The language of the interface itself (SPEC §9), and of last resort. */
         const val FALLBACK_LANGUAGE = "en"

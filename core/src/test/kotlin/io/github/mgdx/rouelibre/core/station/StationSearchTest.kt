@@ -1,5 +1,7 @@
 package io.github.mgdx.rouelibre.core.station
 
+import io.github.mgdx.rouelibre.core.address.TestRules
+import io.github.mgdx.rouelibre.core.address.searchLetterFolds
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -27,18 +29,19 @@ class StationSearchTest {
         entry("4 vents", postalCode = "59260"),
     )
 
-    private fun names(query: String) = filterStations(stations, query).map { it.station.name }
+    private fun names(query: String) =
+        filterStations(stations, query, FOLDS).map { it.station.name }
 
     @Test
     fun `an empty query returns the list untouched`() {
-        assertEquals(stations.size, filterStations(stations, "").size)
-        assertEquals(stations.size, filterStations(stations, "   ").size)
+        assertEquals(stations.size, filterStations(stations, "", FOLDS).size)
+        assertEquals(stations.size, filterStations(stations, "   ", FOLDS).size)
     }
 
     @Test
     fun `a query made of punctuation alone returns the list untouched`() {
         // Clearing a search field must bring everything back, not hide it.
-        assertEquals(stations.size, filterStations(stations, "---").size)
+        assertEquals(stations.size, filterStations(stations, "---", FOLDS).size)
     }
 
     @Test
@@ -88,7 +91,7 @@ class StationSearchTest {
         val orphan = listOf(entry("Solférino", postalCode = null))
         assertEquals(
             listOf("Solférino"),
-            filterStations(orphan, "solferino").map {
+            filterStations(orphan, "solferino", FOLDS).map {
                 it.station.name
             },
         )
@@ -115,5 +118,33 @@ class StationSearchTest {
     @Test
     fun `a name starting with a digit is searched by that digit`() {
         assertEquals(listOf("4 vents"), names("4"))
+    }
+
+    @Test
+    fun `a stop named with a letter no keyboard here carries is still found`() {
+        // The folds serve the station list as well as the catalogue, and a
+        // network names its stops in its own language: this is the second use
+        // SPEC §4.3 asks not to degrade.
+        val abroad = listOf(entry("Ludwigsstraße", postalCode = null))
+        assertEquals(
+            listOf("Ludwigsstraße"),
+            filterStations(abroad, "ludwigsstrasse", FOLDS).map { it.station.name },
+        )
+        // And the name as written still finds itself: both sides are folded.
+        assertEquals(
+            listOf("Ludwigsstraße"),
+            filterStations(abroad, "ludwigsstraße", FOLDS).map { it.station.name },
+        )
+    }
+
+    private companion object {
+        /**
+         * The folds as they are shipped, gathered from every rule set.
+         *
+         * Read from `config/address-normalization/` rather than written out
+         * here: that table is the repository's only one, and a copy taken for
+         * a test would stop telling the truth the day the real one moved.
+         */
+        val FOLDS = searchLetterFolds(TestRules.languages().map(TestRules::of))
     }
 }

@@ -46,8 +46,12 @@ public class AddressNormalizer internal constructor(
      * Letters accent removal cannot reach, because they are not accented
      * letters at all: the German ß, the Nordic ø, the Polish ł. Folded on both
      * sides of the search alike, so that "strasse" finds a "Straße".
+     *
+     * Public because this is the repository's only table of them, and the
+     * searches that carry no language — the station list, the city catalogue —
+     * are fed from it by [searchLetterFolds] rather than from a second copy.
      */
-    private val letterReplacements: Map<Char, String>,
+    public val letterReplacements: Map<Char, String>,
     private val anywhereAbbreviations: Map<String, String>,
     private val leadingAbbreviations: Map<String, String>,
     private val punctuation: Set<Char>,

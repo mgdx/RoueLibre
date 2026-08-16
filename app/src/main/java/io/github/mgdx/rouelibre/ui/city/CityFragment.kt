@@ -24,7 +24,9 @@ import io.github.mgdx.rouelibre.core.config.filterCities
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentCityBinding
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Choosing the city served (SPEC §15).
@@ -48,6 +50,14 @@ class CityFragment : Fragment() {
 
     /** What is typed in the search field, raw. */
     private var query: String = ""
+
+    /**
+     * The letters accent removal cannot reach, read once with the catalogue.
+     *
+     * Without them seven of the three hundred and thirty-two cities answer to
+     * no ordinary keyboard, two of them to no ASCII typing at all (SPEC §4.3).
+     */
+    private var letterFolds: Map<Char, String> = emptyMap()
 
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
@@ -128,6 +138,11 @@ class CityFragment : Fragment() {
      */
     private fun showCatalogue() {
         viewLifecycleOwner.lifecycleScope.launch {
+            // Before the first row shows, and off the main thread: the field
+            // filters on every keystroke and must never wait on a file.
+            letterFolds = withContext(Dispatchers.IO) {
+                container.addressNormalizers.searchLetterFolds()
+            }
             publish(container.cityCatalogueSource.catalogue())
             val url = catalogue?.catalogueUrl ?: return@launch
             val refreshed = container.cityCatalogueSource.refresh(url)
@@ -166,7 +181,7 @@ class CityFragment : Fragment() {
     private fun showRows() {
         val views = binding ?: return
         val byIdentifier = rows.associateBy { it.entry.id }
-        val shown = filterCities(rows.map { it.entry }, query)
+        val shown = filterCities(rows.map { it.entry }, query, letterFolds)
             .mapNotNull { byIdentifier[it.id] }
         adapter.submitList(shown)
 
