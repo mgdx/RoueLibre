@@ -66,7 +66,10 @@ but the live availability of the bikes runs on your phone.
   - searching a street or a station never leaves it — it is the most telling
     data the application handles, since it says where you are going;
   - in ordinary use, **the only request that goes out is the network's public
-    station feed**. No telemetry, no tracker, no identifier, no history.
+    station feed**, read straight from the operator's own server, with no Roue
+    Libre server in between
+    ([how](docs/architecture.md#where-the-availability-comes-from));
+  - no telemetry, no tracker, no identifier, no history.
 
 ## What "Roue Libre" means
 

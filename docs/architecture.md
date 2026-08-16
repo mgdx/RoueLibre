@@ -53,6 +53,48 @@ the fall back on the declaration when nothing is out — are held by JVM tests
 rather than by a device. The city configuration seeds the answer and no longer
 settles it: see [`offline-data.md`](offline-data.md) and `SPEC.md` §4.1.
 
+## Where the availability comes from
+
+There is no Roue Libre server between the phone and the stations. The live
+availability is read from the GBFS feed the network publishes itself, and the
+chain that leads to it holds no address of ours.
+
+The city configuration carries a single address, the auto-discovery document
+`gbfs.json`. Everything else — `station_information`, `station_status`,
+`vehicle_types` — is read from that document rather than from a constant, which
+is the principle of GBFS and what keeps a feed moved on the producer's side from
+breaking a release. The whole chain is three files: `CityCatalogueSource`, which
+gives the city its configuration, `GbfsRemoteSource`, which fetches, and
+`StationRepository`, which decides when.
+
+Those addresses are the operators' own: `gbfs.nextbike.net` for the 128 nextbike
+networks, `stables.donkey.bike` for Donkey Republic's 40, the 40
+`*.publicbikesystem.net` of PBSC, `api.gbfs.v3.0.ecovelo.mobi`,
+`api.cyclocity.fr` for JCDecaux, `*.fifteen.eu`, Beryl's two domains,
+`gbfs.urbansharing.com`, `velib-metropole-opendata.smovengo.cloud`, and one
+domain per network for the rest.
+
+Four networks are read at an address that is not the operator's own, because
+that is where the network publishes and there is no more direct source to aim
+at: Limoges through the proxy of `transport.data.gouv.fr`, Rennes on the
+authority's Opendatasoft portal, Tokyo through ODPT, and Blue-bike on De Lijn's
+API.
+
+Two other things do come from an address of ours, and neither carries a station:
+the city catalogue and the map, routing and address datasets, published as
+releases of `RoueLibre-data`. The catalogue is only downloaded when the city list
+is opened, the datasets once per city.
+
+Everything goes out over TLS. An address in cleartext — a producer's typo in an
+auto-discovery document — is rewritten to `https://` by `HttpsOnlyInterceptor`
+rather than failing, since the application declares no cleartext exception. The
+`User-Agent` names the application and its version, and nothing else: no
+identifier of the device or of the user.
+
+Nothing is fetched in the background. Every request comes from a screen being
+shown or from a gesture: at most one state refresh a minute, one static refresh a
+day, and pull-to-refresh forces the first.
+
 **Error handling.** No exception crosses a layer boundary. Failures are values —
 `Outcome.Failure(DataError.Offline)` — and the only layer that puts them into
 words is the interface. The business module is not allowed to hold a
