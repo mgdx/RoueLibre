@@ -69,6 +69,7 @@ class SettingsFragment : Fragment() {
         setUpTheme(views)
         setUpUnits(views)
         setUpOfflineData(views)
+        setUpDownloadPolicy(views)
         setUpAbout(views)
     }
 
@@ -129,6 +130,35 @@ class SettingsFragment : Fragment() {
     /** The offline data section: what is installed, and how to reclaim it (SPEC §4.4). */
     private fun setUpOfflineData(views: FragmentSettingsBinding) {
         views.openStorage.setOnClickListener { show(StorageFragment()) }
+    }
+
+    /**
+     * What connection the datasets may travel on (SPEC §4.4, §7.6).
+     *
+     * Written the moment it is pressed, like every setting here, and it changes
+     * no screen already drawn: what it settles is what the storage screen does
+     * at the next press of its download button. On by default, so a gigabyte
+     * never leaves on a mobile plan nobody meant to spend — and never a dead
+     * end, since that screen offers the transfer anyway when it holds one back.
+     */
+    private fun setUpDownloadPolicy(views: FragmentSettingsBinding) {
+        views.downloadUnmeteredOnly.setOnCheckedChangeListener { _, isChecked ->
+            if (isFilling) return@setOnCheckedChangeListener
+            viewLifecycleOwner.lifecycleScope.launch {
+                preferences.setDownloadOnUnmeteredOnly(isChecked)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preferences.downloadOnUnmeteredOnly.collect { unmeteredOnly ->
+                    val current = binding ?: return@collect
+                    isFilling = true
+                    current.downloadUnmeteredOnly.isChecked = unmeteredOnly
+                    isFilling = false
+                }
+            }
+        }
     }
 
     /** The way to "about" (SPEC §7.7), which belongs to no section. */
