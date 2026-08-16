@@ -283,6 +283,22 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **A server whose certificate could not be trusted was announced as a feed
+  publishing rubbish.** sharedmobility.ch let its own certificate expire on
+  15 August 2026 and Zürich lost its stations behind "the data received is
+  unreadable. The network's feed is at fault" — an accusation aimed at a
+  producer whose data had not reached us by a single byte. A TLS failure is an
+  `IOException` like any other, and it fell into the generic case that names the
+  content at fault. `DataError.UntrustedServer` now says what happened: the
+  server could not prove who it is, nothing was fetched, and the operator has to
+  renew its certificate — there being nothing for the user to do, and nothing
+  for us to do either short of accepting an expired certificate, which is out of
+  the question. Caught in the three places the application calls the network:
+  the feeds, the release manifest, and the dataset transfer, the last two of
+  which said "unreadable manifest" and "interrupted transfer" on the same
+  failure. The technical detail stays in the value, for the log and the bug
+  report, as it does for a malformed response.
+
 - **Rosario showed no station, ever, over four characters in its producer's
   feed.** Mi Bici Tu Bici serves its auto-discovery document over `https://` and
   names its four feeds over `http://` — the very same paths, which answer

@@ -1,5 +1,6 @@
 package io.github.mgdx.rouelibre.data.datasets
 
+import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.data.ManifestDataset
@@ -17,6 +18,7 @@ import org.junit.Test
 import java.io.File
 import java.nio.file.Files
 import java.security.MessageDigest
+import javax.net.ssl.SSLHandshakeException
 
 /**
  * Tests of dataset downloading (SPEC §4.4).
@@ -64,6 +66,29 @@ class DatasetDownloaderTest {
         assertEquals(1, files.size)
         assertEquals(content.size.toLong(), files.first().length())
         assertTrue("the partial file must be gone", partialFiles().isEmpty())
+    }
+
+    @Test
+    fun `names a manifest host that cannot be trusted for what it is`() = runTest {
+        // Not a manifest that cannot be read: nothing was received. Told
+        // otherwise, the reader looks for a fault in a file that never came
+        // down. The failure is raised by an interceptor rather than by a real
+        // handshake — what is under test is the name given to it.
+        val refused = DatasetDownloader(
+            client = OkHttpClient.Builder()
+                .addInterceptor { throw SSLHandshakeException("certificate expired") }
+                .build(),
+            userAgent = "RoueLibre/test",
+            ioDispatcher = Dispatchers.IO,
+        )
+
+        val outcome = refused.fetchManifest("https://example.invalid/manifest.json")
+
+        assertTrue(outcome is Outcome.Failure)
+        assertTrue(
+            "expected UntrustedServer, got $outcome",
+            (outcome as Outcome.Failure).error is DataError.UntrustedServer,
+        )
     }
 
     @Test

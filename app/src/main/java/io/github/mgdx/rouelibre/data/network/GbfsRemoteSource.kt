@@ -16,6 +16,7 @@ import okhttp3.Request
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import javax.net.ssl.SSLException
 
 /**
  * Fetches the GBFS feeds over the network.
@@ -119,6 +120,15 @@ class GbfsRemoteSource(
         } catch (_: UnknownHostException) {
             // A name that cannot be resolved: in practice, no connection.
             Outcome.Failure(DataError.Offline)
+        } catch (error: SSLException) {
+            // Before the generic case below, which it would otherwise fall into
+            // — it is an IOException like any other — and be announced as a
+            // feed publishing rubbish, when nothing was received at all. The
+            // certificate itself never surfaces on its own: Android wraps its
+            // refusal in a handshake failure, so this is where it is caught.
+            Outcome.Failure(
+                DataError.UntrustedServer(error.message ?: "TLS handshake refused"),
+            )
         } catch (error: IOException) {
             Outcome.Failure(
                 DataError.MalformedResponse(error.message ?: "network failure"),

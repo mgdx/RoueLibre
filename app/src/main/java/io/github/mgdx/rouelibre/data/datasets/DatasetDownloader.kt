@@ -17,6 +17,7 @@ import java.io.InterruptedIOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.security.MessageDigest
+import javax.net.ssl.SSLException
 import kotlin.coroutines.coroutineContext
 
 /**
@@ -83,6 +84,11 @@ class DatasetDownloader(
         Outcome.Failure(DataError.Timeout)
     } catch (_: UnknownHostException) {
         Outcome.Failure(DataError.Offline)
+    } catch (error: SSLException) {
+        // The manifest host could not prove who it is: nothing came down, and
+        // announcing an unreadable manifest would send the reader looking for a
+        // fault in a file we never received.
+        Outcome.Failure(DataError.UntrustedServer(error.message ?: "TLS handshake refused"))
     } catch (error: IOException) {
         Outcome.Failure(DataError.MalformedResponse(error.message ?: "unreadable manifest"))
     } catch (error: IllegalArgumentException) {
@@ -216,6 +222,10 @@ class DatasetDownloader(
         Outcome.Failure(DataError.Timeout)
     } catch (_: UnknownHostException) {
         Outcome.Failure(DataError.Offline)
+    } catch (error: SSLException) {
+        // The partial file stays, like any other interruption: the transfer can
+        // resume once the host is trustworthy again.
+        Outcome.Failure(DataError.UntrustedServer(error.message ?: "TLS handshake refused"))
     } catch (error: IOException) {
         Outcome.Failure(DataError.MalformedResponse(error.message ?: "transfer interrupted"))
     }

@@ -66,6 +66,21 @@ public sealed interface DataError {
     public data object Timeout : DataError
 
     /**
+     * The server's identity could not be established, so nothing was fetched.
+     *
+     * An expired certificate, a chain that leads nowhere: the exchange stopped
+     * before a single byte of data was received, which is what separates this
+     * from [MalformedResponse] — there is nothing to blame the producer's feed
+     * for, and nothing the user can do but wait for the operator to put its
+     * certificate back in order. sharedmobility.ch let its own expire on
+     * 15 August 2026, and the application said its data was unreadable.
+     *
+     * @property detail a technical description, meant for the log and the bug
+     *   report, never for the screen.
+     */
+    public data class UntrustedServer(public val detail: String) : DataError
+
+    /**
      * The response does not have the expected shape.
      *
      * @property detail a technical description, meant for the log and the bug
