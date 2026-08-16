@@ -195,8 +195,26 @@ internal data class GbfsStationInformation(
     val lat: Double,
     val lon: Double,
     val capacity: Int? = null,
+    /**
+     * The docking points broken down by the vehicle types they take.
+     *
+     * Published since GBFS 2.3, and the standard states that its counts must
+     * total `capacity`. Where the two disagree the document contradicts itself,
+     * and [GbfsParser.parseStationInformation] says which one it believes.
+     */
+    @SerialName("vehicle_docks_capacity")
+    val vehicleDocksCapacity: List<GbfsDockCount> = emptyList(),
     @SerialName("post_code") val postCode: String? = null,
 )
+
+/**
+ * How many docks a station has for one group of vehicle types.
+ *
+ * The groups are disjoint — a dock belongs to exactly one entry, which lists
+ * every type it takes — so the counts add up to the station's docking points.
+ */
+@Serializable
+internal data class GbfsDockCount(val count: Int = 0)
 
 /**
  * How many bikes of one vehicle type stand at a station.

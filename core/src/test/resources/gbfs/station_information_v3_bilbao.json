@@ -1,0 +1,102 @@
+{
+  "last_updated": "2026-08-16T09:48:17Z",
+  "ttl": 12,
+  "version": "3.0",
+  "data": {
+    "stations": [
+      {
+        "vehicle_types_capacity": [
+          {
+            "vehicle_type_ids": [
+              "ASTRO",
+              "BOOST",
+              "CHLOE",
+              "COSMO",
+              "EFIT",
+              "FIT",
+              "ICONIC",
+              "METRO",
+              "METRO_CONNECTED"
+            ],
+            "count": 800
+          }
+        ],
+        "vehicle_docks_capacity": [
+          {
+            "vehicle_type_ids": [
+              "ASTRO",
+              "BOOST",
+              "CHLOE",
+              "COSMO",
+              "EFIT",
+              "FIT",
+              "ICONIC",
+              "METRO",
+              "METRO_CONNECTED"
+            ],
+            "count": 22
+          }
+        ],
+        "station_id": "25",
+        "external_id": "c39bdbbd-cfe5-11f0-8a79-06db259ad4f1",
+        "name": [
+          {
+            "text": "ABANDO",
+            "language": "en"
+          },
+          {
+            "text": "ABANDO",
+            "language": "fr"
+          },
+          {
+            "text": "ABANDO",
+            "language": "nl"
+          },
+          {
+            "text": "ABANDO",
+            "language": "es"
+          },
+          {
+            "text": "ABANDO",
+            "language": "eu"
+          }
+        ],
+        "lat": 43.261101,
+        "lon": -2.927215,
+        "address": "Plaza Circular",
+        "capacity": 822,
+        "is_charging_station": true,
+        "rental_methods": [
+          "key",
+          "transitcard",
+          "creditcard",
+          "phone"
+        ],
+        "is_virtual_station": false,
+        "short_name": [
+          {
+            "text": "25",
+            "language": "en"
+          },
+          {
+            "text": "25",
+            "language": "fr"
+          },
+          {
+            "text": "25",
+            "language": "nl"
+          },
+          {
+            "text": "25",
+            "language": "es"
+          },
+          {
+            "text": "25",
+            "language": "eu"
+          }
+        ],
+        "rental_uris": {}
+      }
+    ]
+  }
+}

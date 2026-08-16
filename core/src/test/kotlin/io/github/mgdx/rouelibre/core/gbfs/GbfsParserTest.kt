@@ -139,6 +139,32 @@ class GbfsParserTest {
     }
 
     @Test
+    fun `a capacity the document itemises against is not the one kept`() {
+        // ABANDO, in Bilbao, exactly as its producer publishes it: "capacity"
+        // 822, while the "vehicle_docks_capacity" beside it counts 22 — and
+        // the station's own status counts nine bikes and thirteen free spaces.
+        // The station sheet used to write "822 docking points" under them.
+        val feed = assertSuccess(
+            parser.parseStationInformation(fixture("station_information_v3_bilbao.json")),
+        )
+
+        val abando = feed.stations.first { it.id == "25" }
+        assertEquals("ABANDO", abando.name)
+        assertEquals(22, abando.capacity)
+    }
+
+    @Test
+    fun `a capacity nothing contradicts is kept as published`() {
+        // The other two hundred and ninety-one networks, which itemise nothing:
+        // their figure must come through untouched.
+        val feed = assertSuccess(
+            parser.parseStationInformation(fixture("station_information_v2_real.json")),
+        )
+
+        assertEquals(36, feed.stations.first { it.id == "1" }.capacity)
+    }
+
+    @Test
     fun `reads a POSIX integer timestamp as well as an RFC 3339 one`() {
         val fromEpoch = assertSuccess(
             parser.parseStationInformation(fixture("station_information_v2_real.json")),

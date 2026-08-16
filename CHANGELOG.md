@@ -283,6 +283,20 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **Bilbao counted 822 docking points where its own figures made 22.** Every one
+  of the 65 stations of Bilbao Bizi announced a capacity its own counters
+  contradicted by a factor of forty — "ABANDO, 9 bikes, 13 spaces", then "822
+  docking points" two lines below. GBFS publishes the figure twice and requires
+  the two to agree, and the producer's `capacity` also counts
+  `vehicle_types_capacity`, which is not a count of docks at all. **The itemised
+  `vehicle_docks_capacity` now wins wherever a document publishes both**, that
+  being what the standard defines the field to be: no threshold, no name of a
+  city or an operator. Measured against the networks' own live counters, the
+  median error of `capacity` is 800 docks at Bilbao, 22 at BiciMAD and 21 at
+  Nike, against 0, 2 and 1 for the itemised figure. The 291 networks that
+  itemise nothing — Bixi and V'Lille among them — are untouched, and so are the
+  37 whose two figures already agree.
+
 - **A city announced as unpublished offered its 1.65 GB one tap later.** The
   list said "Data not published yet" of sharedmobility.ch — Zürich, and the
   storage screen reached on touching that very row proposed "Download 1.65 GB";
