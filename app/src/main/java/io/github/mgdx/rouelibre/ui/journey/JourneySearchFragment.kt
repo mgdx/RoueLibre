@@ -11,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
+import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.databinding.FragmentJourneySearchBinding
 import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
@@ -68,6 +69,19 @@ class JourneySearchFragment : Fragment() {
      * is being served, and is found again on the way back.
      */
     private var wantedBikeKind: WantedBikeKind? = null
+
+    /**
+     * What the rider said their **own** bike is, or `null` if they have not
+     * (SPEC §7.6).
+     *
+     * Not [wantedBikeKind] above, and never to be read for it: that one is a
+     * kind asked of the network and narrows the stations §6 may choose, this one
+     * is a fact about the rider and reaches only the drawing under the fields.
+     * It is declared in the settings rather than here, being asked once and not
+     * once a journey, and it is followed rather than read once so a bike
+     * declared while this screen sits on the back stack reaches the drawing.
+     */
+    private var ownBikeKind: OwnBikeKind? = null
 
     /**
      * Whether the network in service really lends both kinds (SPEC §15).
@@ -152,6 +166,13 @@ class JourneySearchFragment : Fragment() {
         withFleet { lent ->
             lendsBothKinds = lent?.isMixed == true
             showBikeKindSelector()
+        }
+        // And the rider's own bike bears the bolt where they said it does
+        // (SPEC §7.6). A separate reading from the one above, on purpose: what
+        // the network lends and what the rider owns answer different questions.
+        withOwnBikeKind { declared ->
+            ownBikeKind = declared
+            showShape()
         }
         setUpOwnBike()
         setUpBikeKind()
@@ -253,14 +274,15 @@ class JourneySearchFragment : Fragment() {
     /**
      * The illustration of the journey being asked for.
      *
-     * On one's own bike it holds no station, so it takes no bolt either: what
-     * the network lends says nothing about a bike that is not the network's.
+     * On one's own bike it holds no station, so what the network lends says
+     * nothing about it — but what the rider said they own says everything, and
+     * the bolt comes from there instead (SPEC §7.6).
      */
     private fun showShape() {
         val views = binding ?: return
         views.shape.setImageResource(
             if (usesOwnBike) {
-                R.drawable.illustration_journey_own_bike
+                OwnBikeGlyphs.journeyShape(ownBikeKind)
             } else {
                 BikeGlyphs.journeyShape(fleet)
             },

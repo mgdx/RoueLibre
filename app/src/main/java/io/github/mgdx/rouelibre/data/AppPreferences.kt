@@ -214,6 +214,102 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * The screen the application opens on (SPEC §7.0, §7.6).
+     *
+     * [OpeningScreen.Map] by default, and for any value that cannot be read
+     * (see [OpeningScreen.fromId]): it is what the application has always opened
+     * on, so nothing changes for somebody who never opens this screen.
+     *
+     * **A way of arriving, not a way of computing**, like [units] and unlike
+     * [walkingPace]: no journey and no measurement depends on it. And it says
+     * nothing about the user beyond which of two screens they read first
+     * (SPEC §2, C3).
+     *
+     * A flow rather than a read, on the pattern of the settings around it —
+     * though the one place it is consulted, the activity's first transaction,
+     * takes a single value from it.
+     */
+    val openingScreen: Flow<OpeningScreen> = dataStore.data.map { preferences ->
+        OpeningScreen.fromId(preferences[OPENING_SCREEN])
+    }
+
+    /** Stores the screen the application is to open on. */
+    suspend fun setOpeningScreen(screen: OpeningScreen) {
+        dataStore.edit { it[OPENING_SCREEN] = screen.id }
+    }
+
+    /**
+     * Whether the availability figures are drawn larger (SPEC §7, §7.6).
+     *
+     * False by default, and for a preference that was never written: the
+     * interface as it is drawn is the one everybody gets until they ask for
+     * something else.
+     *
+     * **Not a stand-in for the system's own font size**, which the indicator
+     * already follows — its tokens are in `sp`. It answers what that setting
+     * cannot: it enlarges the single figure looked at a hundred times a week
+     * and leaves the rest of the interface where it is.
+     *
+     * **The map's markers are outside its reach**, deliberately: a marker's size
+     * decides how many stations stay legible side by side at a given zoom, which
+     * is a question of map drawing rather than of accessibility, and enlarged
+     * they would overlap (SPEC §7.1).
+     *
+     * **A way of writing, not a way of computing**, like [units]: no journey and
+     * no measurement depends on it, and it says nothing about the user beyond
+     * how large they read a figure (SPEC §2, C3).
+     *
+     * A flow rather than a read: it is collected by every screen showing an
+     * indicator, so a choice made shows at once and everywhere.
+     */
+    val largeAvailabilityNumbers: Flow<Boolean> =
+        dataStore.data.map { it[LARGE_AVAILABILITY_NUMBERS] ?: false }
+
+    /** Remembers whether the availability figures are drawn larger. */
+    suspend fun setLargeAvailabilityNumbers(large: Boolean) {
+        dataStore.edit { it[LARGE_AVAILABILITY_NUMBERS] = large }
+    }
+
+    /**
+     * What the user says their own bike is (SPEC §7.3, §7.6).
+     *
+     * `null` — nothing written down — means "not specified", and that is the
+     * state on a fresh installation and after any reset; a word this build
+     * cannot read means the same thing, never a kind (see
+     * [OwnBikeKind.fromId]). Not specified reproduces exactly the drawings and
+     * the sentences of the version before this choice existed.
+     *
+     * **This is not [wantedBikeKind], and the two must never be taken for one
+     * another.** That one asks which of the bikes the **network** lends one
+     * wants to be sent to: it exists only in a conurbation lending both, and it
+     * narrows the stations §6 may choose. This one asks what the rider's **own**
+     * bike is: it belongs to no fleet, it is the same in every city, and it
+     * changes nothing but what is drawn and what is said — no speed, no
+     * coefficient, no profile (see [OwnBikeKind]).
+     *
+     * **A word about equipment, not a journey**, like [usesOwnBike] beside it:
+     * "mechanical", "electric", or nothing at all, and no point, no time, no
+     * destination goes with it (SPEC §2, C3).
+     *
+     * A flow rather than a read: the journey screens follow it, so a bike
+     * declared in the settings reaches the drawing without a restart.
+     */
+    val ownBikeKind: Flow<OwnBikeKind?> = dataStore.data.map {
+        OwnBikeKind.fromId(it[OWN_BIKE_KIND])
+    }
+
+    /** Remembers what the user's own bike is, or that they have not said. */
+    suspend fun setOwnBikeKind(kind: OwnBikeKind?) {
+        dataStore.edit { preferences ->
+            if (kind == null) {
+                preferences.remove(OWN_BIKE_KIND)
+            } else {
+                preferences[OWN_BIKE_KIND] = kind.id
+            }
+        }
+    }
+
+    /**
      * Whether journeys are worked out for the user's own bike (SPEC §7.3).
      *
      * False by default: the application serves a bike-share network, and the
@@ -417,6 +513,14 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         val USES_OWN_BIKE = booleanPreferencesKey("uses_own_bike")
         val WANTED_BIKE_KIND = stringPreferencesKey("wanted_bike_kind")
         val WALKING_PACE = stringPreferencesKey("walking_pace")
+        val OPENING_SCREEN = stringPreferencesKey("opening_screen")
+        val LARGE_AVAILABILITY_NUMBERS = booleanPreferencesKey("large_availability_numbers")
+
+        /**
+         * The rider's own bike, which is not [WANTED_BIKE_KIND] above: that one
+         * is a kind asked of the network, this one a fact about the rider.
+         */
+        val OWN_BIKE_KIND = stringPreferencesKey("own_bike_kind")
         val ACTIVE_CITY_ID = stringPreferencesKey("active_city_id")
         val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
         val DECLINED_CITY_PROPOSAL_ID = stringPreferencesKey("declined_city_proposal_id")

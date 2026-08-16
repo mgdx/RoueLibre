@@ -13,6 +13,8 @@ import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.journey.WalkingPace
 import io.github.mgdx.rouelibre.core.measure.UnitChoice
 import io.github.mgdx.rouelibre.data.AppTheme
+import io.github.mgdx.rouelibre.data.OpeningScreen
+import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.databinding.FragmentSettingsBinding
 import io.github.mgdx.rouelibre.ui.about.AboutFragment
 import io.github.mgdx.rouelibre.ui.city.CityFragment
@@ -66,8 +68,11 @@ class SettingsFragment : Fragment() {
         // display, offline data, then the way to "about".
         setUpCity(views)
         setUpWalkingPace(views)
+        setUpOwnBikeKind(views)
         setUpTheme(views)
         setUpUnits(views)
+        setUpOpeningScreen(views)
+        setUpLargeNumbers(views)
         setUpOfflineData(views)
         setUpDownloadPolicy(views)
         setUpAbout(views)
@@ -119,6 +124,51 @@ class SettingsFragment : Fragment() {
                             WalkingPace.Slow -> R.id.walking_pace_slow
                             WalkingPace.Normal -> R.id.walking_pace_normal
                             WalkingPace.Brisk -> R.id.walking_pace_brisk
+                        },
+                    )
+                    isFilling = false
+                }
+            }
+        }
+    }
+
+    /**
+     * What the rider's own bike is, in the journey section (SPEC §7.3, §7.6).
+     *
+     * **Not the kind of bike asked of the network**, which lives on the journey
+     * screen: that one exists only where the network lends both kinds and it
+     * narrows the stations §6 may choose. This one is a fact about the rider —
+     * their bike belongs to no fleet and is the same in every city — so it is
+     * offered everywhere and asks nothing of `FleetDescription.isMixed`.
+     *
+     * It is also the one setting of this section that reaches no computation:
+     * written the moment it is pressed, like the pace above, but read only by
+     * the drawings and the sentences of a journey on one's own bike. Not a
+     * minute announced depends on it (SPEC §6).
+     */
+    private fun setUpOwnBikeKind(views: FragmentSettingsBinding) {
+        views.ownBikeKind.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            // Every change fires twice — the button left, then the one taken —
+            // and only the second says what was chosen.
+            if (!isChecked || isFilling) return@addOnButtonCheckedListener
+            val kind = when (checkedId) {
+                R.id.own_bike_kind_mechanical -> OwnBikeKind.Mechanical
+                R.id.own_bike_kind_electric -> OwnBikeKind.Electric
+                else -> null
+            }
+            viewLifecycleOwner.lifecycleScope.launch { preferences.setOwnBikeKind(kind) }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preferences.ownBikeKind.collect { kind ->
+                    val current = binding ?: return@collect
+                    isFilling = true
+                    current.ownBikeKind.check(
+                        when (kind) {
+                            null -> R.id.own_bike_kind_unspecified
+                            OwnBikeKind.Mechanical -> R.id.own_bike_kind_mechanical
+                            OwnBikeKind.Electric -> R.id.own_bike_kind_electric
                         },
                     )
                     isFilling = false
@@ -251,6 +301,70 @@ class SettingsFragment : Fragment() {
                             UnitChoice.UnitedKingdom -> R.id.units_uk
                         },
                     )
+                    isFilling = false
+                }
+            }
+        }
+    }
+
+    /**
+     * The screen the application opens on, in the display section
+     * (SPEC §7.0, §7.6).
+     *
+     * Written the moment it is pressed, like the theme and the units, and like
+     * the walking pace it applies to nothing already on screen: it is read once,
+     * by the activity, at the launch after this one. Nothing is rebuilt here —
+     * the screen one is standing on is not the screen one opens with.
+     */
+    private fun setUpOpeningScreen(views: FragmentSettingsBinding) {
+        views.openingScreen.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked || isFilling) return@addOnButtonCheckedListener
+            val screen = when (checkedId) {
+                R.id.opening_screen_list -> OpeningScreen.StationList
+                else -> OpeningScreen.Map
+            }
+            viewLifecycleOwner.lifecycleScope.launch { preferences.setOpeningScreen(screen) }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preferences.openingScreen.collect { screen ->
+                    val current = binding ?: return@collect
+                    isFilling = true
+                    current.openingScreen.check(
+                        when (screen) {
+                            OpeningScreen.Map -> R.id.opening_screen_map
+                            OpeningScreen.StationList -> R.id.opening_screen_list
+                        },
+                    )
+                    isFilling = false
+                }
+            }
+        }
+    }
+
+    /**
+     * Larger availability figures, in the display section (SPEC §7, §7.6).
+     *
+     * Written the moment it is pressed, like everything else on this screen. The
+     * screens showing an indicator follow the stored value themselves, so a
+     * figure changes size on the list one goes back to without anything being
+     * rebuilt.
+     */
+    private fun setUpLargeNumbers(views: FragmentSettingsBinding) {
+        views.largeNumbers.setOnCheckedChangeListener { _, isChecked ->
+            if (isFilling) return@setOnCheckedChangeListener
+            viewLifecycleOwner.lifecycleScope.launch {
+                preferences.setLargeAvailabilityNumbers(isChecked)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preferences.largeAvailabilityNumbers.collect { large ->
+                    val current = binding ?: return@collect
+                    isFilling = true
+                    current.largeNumbers.isChecked = large
                     isFilling = false
                 }
             }

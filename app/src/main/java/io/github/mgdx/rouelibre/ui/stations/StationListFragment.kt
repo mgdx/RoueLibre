@@ -21,6 +21,7 @@ import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.databinding.FragmentStationListBinding
+import io.github.mgdx.rouelibre.ui.map.MapFragment
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
@@ -85,6 +86,7 @@ class StationListFragment : Fragment() {
         views.stations.setHasFixedSize(true)
 
         views.openStorage.setOnClickListener { openStorage() }
+        showWayToTheMap(views)
         views.openFavourites.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.content, FavouriteStationsFragment())
@@ -125,6 +127,11 @@ class StationListFragment : Fragment() {
         // Asked for once per appearance: a list reordering itself under the
         // finger would be worse than one ordered a moment late.
         viewModel.orderByProximity()
+
+        // The signature element at whichever size the reader asked for
+        // (SPEC §7.6). It is the list that carries it, not the row: every row
+        // writes its figure the same way.
+        withLargeAvailabilityNumbers { adapter.largeFigures = it }
 
         observeState()
         observeErrors()
@@ -237,6 +244,30 @@ class StationListFragment : Fragment() {
                 views.emptyAction.setText(R.string.action_clear_search)
                 views.emptyAction.setOnClickListener { views.searchInput.text?.clear() }
             }
+        }
+    }
+
+    /**
+     * Offers the map, where this list is the screen the application opened on
+     * (SPEC §7.6).
+     *
+     * Reached from the map, this list has one behind it and the back gesture is
+     * the way to it — a second way would land on a copy of a screen already
+     * there. Opened on, it has nothing behind it, and the map is where the
+     * journey search and the settings are reached from: without this the
+     * setting that put the user here could not be undone.
+     *
+     * An empty back stack is what tells the two apart, and it is read on every
+     * appearance rather than once: coming back from the what's-new screen
+     * (SPEC §7.10) rebuilds this view with nothing behind it again.
+     */
+    private fun showWayToTheMap(views: FragmentStationListBinding) {
+        views.openMap.isVisible = parentFragmentManager.backStackEntryCount == 0
+        views.openMap.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.content, MapFragment())
+                .addToBackStack(null)
+                .commit()
         }
     }
 

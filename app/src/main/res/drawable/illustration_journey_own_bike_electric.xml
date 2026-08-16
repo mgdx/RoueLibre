@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The shape of a journey ridden on one's own bike, where the rider has said
+    that bike is a pedal-assist one (SPEC §7.3, §7.6).
+
+    `illustration_journey_own_bike`, with the bolt of `ic_bike_electric` added
+    inside each of the two scaled groups — the same addition, at the same place,
+    that `marker_journey_station_electric` makes to the plain station disc. The
+    bolt therefore sits exactly where the icon puts it and rides the disc down
+    with the glyph, rather than being pinned to a corner.
+
+    The bolt still does not come from the network: it comes from the rider, who
+    said what they ride. That is the whole difference from the plain drawing
+    beside this one — what the network lends says nothing about a bike that is
+    not the network's, and a declared bike says everything about it.
+
+    Mirrored in right-to-left languages, for the reason the other one gives.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="180dp"
+    android:height="30dp"
+    android:autoMirrored="true"
+    android:viewportWidth="240"
+    android:viewportHeight="40">
+
+    <!-- Departure, on the bike one already has. -->
+    <path
+        android:fillColor="@color/signal"
+        android:pathData="M20,5a15,15 0 1,0 0.1,0z" />
+    <group
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:translateX="11.6"
+        android:translateY="11.6">
+        <path
+            android:fillColor="@color/surface_on_signal"
+            android:pathData="M15.5,5.5c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM5,12c-2.8,0 -5,2.2 -5,5s2.2,5 5,5 5,-2.2 5,-5 -2.2,-5 -5,-5zM5,20.5c-1.9,0 -3.5,-1.6 -3.5,-3.5s1.6,-3.5 3.5,-3.5 3.5,1.6 3.5,3.5 -1.6,3.5 -3.5,3.5zM10.8,10.5l2.4,-2.4 0.8,0.8c1.3,1.3 3,2.1 5.1,2.1V9c-1.5,0 -2.7,-0.6 -3.6,-1.5l-1.9,-1.9c-0.5,-0.4 -1,-0.6 -1.6,-0.6s-1.1,0.2 -1.4,0.6L7.8,8.4c-0.4,0.4 -0.6,0.9 -0.6,1.4 0,0.6 0.2,1.1 0.6,1.4L11,14v5h2v-6.2l-2.2,-2.3zM19,12c-2.8,0 -5,2.2 -5,5s2.2,5 5,5 5,-2.2 5,-5 -2.2,-5 -5,-5zM19,20.5c-1.9,0 -3.5,-1.6 -3.5,-3.5s1.6,-3.5 3.5,-3.5 3.5,1.6 3.5,3.5 -1.6,3.5 -3.5,3.5z" />
+        <path
+            android:fillColor="@color/surface_on_signal"
+            android:pathData="M4.5,1.2L1.3,5L3.8,5L3.4,8.4L6.6,4.6L4.1,4.6z" />
+    </group>
+
+    <!-- The ride, from one end to the other: one stroke, the whole journey. -->
+    <path
+        android:pathData="M42,20h156"
+        android:strokeColor="@color/signal"
+        android:strokeLineCap="round"
+        android:strokeWidth="3" />
+
+    <!-- Arrival, the same disc: one sets off on that bike and arrives on it. -->
+    <path
+        android:fillColor="@color/signal"
+        android:pathData="M220,5a15,15 0 1,0 0.1,0z" />
+    <group
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:translateX="211.6"
+        android:translateY="11.6">
+        <path
+            android:fillColor="@color/surface_on_signal"
+            android:pathData="M15.5,5.5c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM5,12c-2.8,0 -5,2.2 -5,5s2.2,5 5,5 5,-2.2 5,-5 -2.2,-5 -5,-5zM5,20.5c-1.9,0 -3.5,-1.6 -3.5,-3.5s1.6,-3.5 3.5,-3.5 3.5,1.6 3.5,3.5 -1.6,3.5 -3.5,3.5zM10.8,10.5l2.4,-2.4 0.8,0.8c1.3,1.3 3,2.1 5.1,2.1V9c-1.5,0 -2.7,-0.6 -3.6,-1.5l-1.9,-1.9c-0.5,-0.4 -1,-0.6 -1.6,-0.6s-1.1,0.2 -1.4,0.6L7.8,8.4c-0.4,0.4 -0.6,0.9 -0.6,1.4 0,0.6 0.2,1.1 0.6,1.4L11,14v5h2v-6.2l-2.2,-2.3zM19,12c-2.8,0 -5,2.2 -5,5s2.2,5 5,5 5,-2.2 5,-5 -2.2,-5 -5,-5zM19,20.5c-1.9,0 -3.5,-1.6 -3.5,-3.5s1.6,-3.5 3.5,-3.5 3.5,1.6 3.5,3.5 -1.6,3.5 -3.5,3.5z" />
+        <path
+            android:fillColor="@color/surface_on_signal"
+            android:pathData="M4.5,1.2L1.3,5L3.8,5L3.4,8.4L6.6,4.6L4.1,4.6z" />
+    </group>
+</vector>

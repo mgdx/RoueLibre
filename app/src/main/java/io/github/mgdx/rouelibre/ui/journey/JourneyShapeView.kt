@@ -10,6 +10,7 @@ import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import io.github.mgdx.rouelibre.R
+import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
 
@@ -96,12 +97,34 @@ class JourneyShapeView @JvmOverloads constructor(
      *
      * The figure inside a disc says how that point is lived, and nothing of
      * that journey is walked. It is the filled bike disc the interface already
-     * draws, rather than a fourth drawing invented for the occasion — and the
-     * plain one, whatever the network lends: the bolt and the cog say what
-     * waits at a station, and this bike is the rider's own (SPEC §15).
+     * draws, rather than a fourth drawing invented for the occasion. It never
+     * takes the cog, and it takes the bolt from the rider rather than from the
+     * network: what the network lends says nothing about a bike that is not the
+     * network's, whereas the rider saying they ride an electric one says
+     * everything about it (SPEC §7.6).
      */
-    private val ownBikeEndpointMarker: Drawable? =
-        AppCompatResources.getDrawable(context, R.drawable.marker_journey_station)
+    private var ownBikeEndpointMarker: Drawable? =
+        AppCompatResources.getDrawable(context, OwnBikeGlyphs.endpointMarker(null))
+
+    /**
+     * What the rider said their own bike is, or `null` if they have not
+     * (SPEC §7.6).
+     *
+     * It reaches only the two ends of a journey ridden on that bike, and only
+     * what is drawn: no minute of this drawing depends on it. Deliberately
+     * separate from [fleet] beside it, which says what the **network** lends —
+     * the two answer different questions and are never read off one another.
+     */
+    var ownBikeKind: OwnBikeKind? = null
+        set(value) {
+            if (field == value) return
+            field = value
+            ownBikeEndpointMarker = AppCompatResources.getDrawable(
+                context,
+                OwnBikeGlyphs.endpointMarker(value),
+            )
+            invalidate()
+        }
 
     private var stationMarker: Drawable? =
         AppCompatResources.getDrawable(context, R.drawable.marker_journey_station)

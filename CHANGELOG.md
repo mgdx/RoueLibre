@@ -164,9 +164,11 @@ also records what has no visible effect.
   drawing losing its dashes and its station discs, and its two ends becoming
   the filled bike disc already drawn elsewhere instead of the outlined walking
   figure — the figure says how that point is lived, and nothing here is walked.
-  The same ends are drawn on the result screen and on its map, and they take
-  neither bolt nor cog: what the network lends says nothing about a bike that is
-  not the network's. `JourneyPlan` gains an `OwnBike` case and `JourneyPlanner` a
+  The same ends are drawn on the result screen and on its map. They never take
+  the cog, and they take the bolt from the rider rather than from the network —
+  see the setting further down this list: what the network lends says nothing
+  about a bike that is not the network's, and what the rider declares says
+  everything about it. `JourneyPlan` gains an `OwnBike` case and `JourneyPlanner` a
   `planWithOwnBike`; the choice is a boolean in the preferences and nothing
   else — no point, no time, no destination (`SPEC.md` §2, C3). `SPEC.md` §7.3,
   §7.4 and §7.4.1 say it.
@@ -497,7 +499,80 @@ also records what has no visible effect.
   numbers. The GBFS registry publishes this network twice, under the address it
   opened with and the one it carries today; the configuration takes the second.
 
+- **The screen the application opens on is a choice**: the map, as always, or
+  the station list (`SPEC.md` §7.0, §7.6). The map is the application's content
+  and stays the default — somebody who never opens the settings sees exactly
+  what they saw before — but it is not what everybody opens the application for:
+  somebody who always sets off from the same station reads one line of a list,
+  not a plan. **Opening on the list asks for no position**: the location
+  permission belongs to the map (§10), so the map is not built at all rather
+  than built and replaced, and coming to it afterwards asks then, once. The
+  choice settles where one lands and nothing else — the welcome sequence, the
+  what's-new screen and a place received from another application all still come
+  over it, an explicit intention beating a preference. A list opened on carries
+  a way to the map, which it does not carry when it was reached from one: there
+  the back gesture is that way, whereas opened on it has nothing behind it, and
+  the map is where the journey search and the settings are reached from.
+
+- **The availability figures can be asked for larger** (`SPEC.md` §7, §7.6). A
+  switch in the display section, off by default. It is not a stand-in for
+  Android's own text size — the whole interface follows that one, the indicator
+  included — but it does what that setting cannot: it enlarges the single figure
+  the application is opened a hundred times a week to read, and leaves
+  everything around it where it was. It reaches the figure where it is read at
+  leisure, in the station list, the favourites and a station's details, **and
+  not the map's markers**: a marker's size decides how many stations stay
+  legible side by side at a given zoom, which is a question of map drawing
+  rather than of accessibility, and enlarged the discs would overlap and the map
+  would say less. The line under the switch says so, so nobody looks for a
+  change that was decided against. The disc grows by the same third as the
+  figure inside it, that ratio and not the absolute size being what keeps three
+  digits inside the ring.
+
+- **One can say what one's own bike is**, mechanical or electric, in the journey
+  section of the settings (`SPEC.md` §7.3, §7.4, §7.6). **Not specified is the
+  default**, at installation, after a reset and for a word that cannot be read,
+  and it reproduces exactly the drawings and the sentences of the version before
+  this choice existed. Declared electric, a journey on one's own bike draws the
+  bolt at its two ends — on the search screen's illustration, on the result
+  screen's drawing and on the two points of its map — the summary says "on your
+  own electric bike", and the one step row of the detail carries the same bike
+  beside it, since three readings of one journey on one screen have to agree.
+  A bike declared mechanical takes the plain drawing, as
+  an undeclared one does: the plain bike promises the least and the bolt is what
+  has to be earned.
+  **It changes the drawing and the sentence, and nothing else.** No speed, no
+  coefficient, no dedicated profile — a decision and not an omission. A
+  pedal-assist bike is quicker in the real world, but §6 announces only what the
+  routing engine traced, and the ride runs over the same graph with the same
+  profile whatever was declared: the same pair of points comes back with the
+  same track and the same minutes under all three states, which is what the test
+  holds. What holds it structurally is that `OwnBikeKind` lives in the
+  application's settings and the `core` module the algorithm lives in cannot see
+  it.
+  **It is not the kind of bike asked of the network**, and the two are
+  deliberately named apart, documented apart and stored under different keys.
+  That one is a question about the network's bikes — which of them one wants to
+  be sent to — so it exists only where the network lends both kinds and it
+  narrows the stations the algorithm may choose. This one is a question about
+  the rider, whose bike belongs to no fleet and is the same in Lille as in Lyon:
+  it is offered **everywhere**, `FleetDescription.isMixed` being none of its
+  business, and the line under the three buttons says what it does not do, so
+  nobody expects a faster journey out of it.
+
 ### Fixed
+
+- **The availability figure was cut off by the system's own font size.** The
+  indicator's figure has always been painted in `sp` and has always followed the
+  text size set in Android's settings — but the disc holding it was declared in
+  `dp` and did not, and `AvailabilityIndicatorView` paints onto a canvas clipped
+  to its own bounds. Raise the font size on the phone and the count grew until
+  it ran into its own ring, worst exactly where the figure is worth reading: a
+  station of more than a hundred docks. The disc is now declared in `sp` like the
+  figure it holds, which is the one box of the token file that follows the text
+  scale rather than the screen. At the default scale the two units are the same,
+  so nothing moves for anybody who has asked for nothing. The ring keeps its
+  `dp`: it is a stroke and not a letter.
 
 - **Seven cities answered to nobody typing their name.** "bialystok" returned
   "No city found" while BIKER — Białystok sat in the catalogue, and so did

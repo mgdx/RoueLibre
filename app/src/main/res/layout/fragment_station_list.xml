@@ -23,7 +23,7 @@
         android:layout_marginTop="@dimen/space_l"
         android:text="@string/stations_title"
         android:textAppearance="@style/TextAppearance.RoueLibre.Title"
-        app:layout_constraintEnd_toStartOf="@id/open_favourites"
+        app:layout_constraintEnd_toStartOf="@id/open_map"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,6 +60,28 @@
         app:layout_constraintBottom_toBottomOf="@id/title"
         app:layout_constraintEnd_toStartOf="@id/open_storage"
         app:layout_constraintTop_toTopOf="@id/title" />
+
+    <!-- The way to the map, shown only where this list is the screen the
+         application opened on (SPEC §7.6). Reached from the map, this list has
+         a map behind it and the back gesture is the way to it; opened on, it
+         has nothing behind it at all, and without this the map — and the
+         settings that live on it — would be out of reach. Gone rather than
+         disabled: a button that leads back where one already is is not a
+         choice. The title's box stops here, so it collapses onto the star when
+         this is gone. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/open_map"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:contentDescription="@string/stations_open_map"
+        android:visibility="gone"
+        app:icon="@drawable/ic_place"
+        app:iconTint="@color/ink"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintEnd_toStartOf="@id/open_favourites"
+        app:layout_constraintTop_toTopOf="@id/title"
+        tools:visibility="visible" />
 
     <!-- The data's age, required by SPEC §4.1. -->
     <TextView

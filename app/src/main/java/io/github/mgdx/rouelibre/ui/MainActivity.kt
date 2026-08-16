@@ -24,15 +24,18 @@ import io.github.mgdx.rouelibre.core.address.WordMatching
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.intent.PlaceRequest
 import io.github.mgdx.rouelibre.data.NEVER_LAUNCHED
+import io.github.mgdx.rouelibre.data.OpeningScreen
 import io.github.mgdx.rouelibre.databinding.ActivityMainBinding
 import io.github.mgdx.rouelibre.ui.address.toTitle
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneyResultFragment
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.map.MapFragment
+import io.github.mgdx.rouelibre.ui.stations.StationListFragment
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.welcome.WelcomeFragment
 import io.github.mgdx.rouelibre.ui.welcome.WhatsNewFragment
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -145,9 +148,18 @@ class MainActivity : AppCompatActivity() {
             // in a state that can take it.
             created.root.doOnPreDraw {
                 lifecycleScope.launch {
+                    // The screen the user asked to land on (SPEC §7.6), read
+                    // before the transaction rather than corrected after it.
+                    // Putting the map up and replacing it would build the one
+                    // screen that asks for the location permission on behalf of
+                    // somebody who chose the list — and SPEC §10 wants no
+                    // screen asking for a position it never shows. The read
+                    // costs a few milliseconds under the opening screen, whose
+                    // six hundred are running anyway.
+                    val opening = container.preferences.openingScreen.first()
                     withStarted {
                         supportFragmentManager.beginTransaction()
-                            .replace(R.id.content, MapFragment())
+                            .replace(R.id.content, openingFragment(opening))
                             .commit()
                         whenContentIsDrawn()
                         openFirstScreen()
@@ -156,6 +168,21 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    /**
+     * The screen the application lands on (SPEC §7.0, §7.6).
+     *
+     * The choice settles where one lands and nothing else. The welcome sequence
+     * and the what's-new screen are laid over whatever this returns
+     * (SPEC §7.9, §7.10) — on a fresh installation nothing is chosen anyway, so
+     * the map is in place under the welcome exactly as §10 describes — and a
+     * place received from another application opens its journey over it too
+     * (SPEC §7.8): an explicit intention beats a preference.
+     */
+    private fun openingFragment(opening: OpeningScreen): Fragment = when (opening) {
+        OpeningScreen.Map -> MapFragment()
+        OpeningScreen.StationList -> StationListFragment()
     }
 
     /**

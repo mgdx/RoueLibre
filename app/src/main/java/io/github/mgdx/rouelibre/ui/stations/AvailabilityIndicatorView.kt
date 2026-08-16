@@ -79,9 +79,44 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
             invalidate()
         }
 
+    /**
+     * Whether the figure is drawn at the larger of the two sizes
+     * (SPEC §7, §7.6).
+     *
+     * Not a substitute for the system's own font size, which this view already
+     * follows — both its tokens are in `sp`. It answers a different need: it
+     * enlarges the one figure that is read a hundred times a week without
+     * enlarging the whole interface, which is precisely what the system setting
+     * cannot do.
+     *
+     * **The map's markers are deliberately left out of it.** They are not drawn
+     * by this view, and they must not be: a marker's size decides how many
+     * stations stay legible side by side at a given zoom, which is a question of
+     * map drawing rather than of accessibility — enlarged, the discs would
+     * overlap and the map would say less, not more (SPEC §7.1).
+     *
+     * The disc grows with the figure, and by the same fraction: the ratio is
+     * what keeps three digits inside the ring.
+     */
+    var largeFigures: Boolean = false
+        set(value) {
+            if (field == value) return
+            field = value
+            requestLayout()
+            invalidate()
+        }
+
+    /** The size the figure is painted at, at whichever of the two settings. */
+    private val figureSize: Float
+        get() = resources.getDimension(
+            if (largeFigures) R.dimen.text_indicator_large else R.dimen.text_indicator,
+        )
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         // Always square, so the disc stays a circle whatever the container.
-        val preferred = resources.getDimensionPixelSize(R.dimen.indicator_size)
+        val preferred = resources.getDimensionPixelSize(
+            if (largeFigures) R.dimen.indicator_size_large else R.dimen.indicator_size,
+        )
         val width = resolveSize(preferred, widthMeasureSpec)
         val height = resolveSize(preferred, heightMeasureSpec)
         val side = minOf(width, height)
@@ -136,7 +171,7 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
 
         val label = display.count?.toString() ?: UNKNOWN_LABEL
         textPaint.color = palette.inkColour
-        textPaint.textSize = resources.getDimension(R.dimen.text_indicator)
+        textPaint.textSize = figureSize
         // Optical centring: `descent` and `ascent` bracket the text's real
         // height, whose middle is brought onto the disc's centre.
         val metrics = textPaint.fontMetrics

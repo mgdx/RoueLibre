@@ -27,6 +27,7 @@ import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.routing.elevationProfile
 import io.github.mgdx.rouelibre.core.routing.smoothedOver
 import io.github.mgdx.rouelibre.core.station.Station
+import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyDetailBinding
 import io.github.mgdx.rouelibre.databinding.ItemJourneyPlaceBinding
 import io.github.mgdx.rouelibre.databinding.ItemJourneyStepBinding
@@ -125,6 +126,18 @@ class JourneyDetailFragment : Fragment() {
      * divide into, and reading that takes the identifier table (SPEC §7.4.1).
      */
     private var lentFleet: FleetDescription? = null
+
+    /**
+     * What the rider said their **own** bike is, or `null` if they have not
+     * (SPEC §7.6).
+     *
+     * A different question from [fleet] and [lentFleet] above, and never read
+     * off them: those say what the network lends, this says what the rider
+     * owns. It reaches the drawing's two ends and the sentence beside the
+     * total, both of which are repeated word for word from the screen this one
+     * opens from (SPEC §7.4.1).
+     */
+    private var ownBikeKind: OwnBikeKind? = null
 
     /**
      * Takes back the two ends of the journey described.
@@ -262,6 +275,18 @@ class JourneyDetailFragment : Fragment() {
             lentFleet = lent
             showTotal(journey)
         }
+        // And the rider's own bike, which is another question entirely: it
+        // reaches the two ends of the drawing, the sentence beside the total —
+        // both repeated word for word from the screen this one was opened from —
+        // and the icon of the one row a ride on one's own bike has
+        // (SPEC §7.4.1, §7.6). All three, or the reader would meet the bolt
+        // above the row and a plain bike on it.
+        withOwnBikeKind { declared ->
+            ownBikeKind = declared
+            binding?.shape?.ownBikeKind = declared
+            showTotal(journey)
+            showJourney(journey, viewModel.addresses.value)
+        }
         viewModel.locate(stationsOf(journey.plan))
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -312,7 +337,7 @@ class JourneyDetailFragment : Fragment() {
                 isQuickerThanTheBike = walk.reason == NoBikeJourney.WalkingIsQuicker,
             )
 
-            ownBike != null -> requireContext().ownBikeSummary(ownBike.ride)
+            ownBike != null -> requireContext().ownBikeSummary(ownBike.ride, ownBikeKind)
             else -> return
         }
         views.shape.legs = legsOf(plan).mapIndexed { index, leg ->
@@ -421,11 +446,15 @@ class JourneyDetailFragment : Fragment() {
                 minutes = minutes.first(),
             )
 
-            // The plain bike, whatever the network lends: the bolt and the cog
-            // describe what waits at a station (SPEC §15), and this bike is the
-            // rider's own.
+            // Never the cog, and the bolt from the rider rather than from the
+            // network: what a network lends says nothing about a bike that is
+            // not its own (SPEC §15), and the rider who declared an electric one
+            // said everything about it (SPEC §7.6). The same move the ride row
+            // of a station journey makes with `BikeGlyphs.icon`, with the
+            // declaration in place of the fleet — and the same answer the shape
+            // above this row and the sentence beside the total already give.
             is JourneyPlan.OwnBike -> addLeg(
-                icon = R.drawable.ic_bike,
+                icon = OwnBikeGlyphs.icon(ownBikeKind),
                 label = getString(R.string.journey_step_ride_all),
                 leg = plan.ride,
                 minutes = minutes.first(),

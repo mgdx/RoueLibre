@@ -74,10 +74,13 @@
         tools:text="Hors service"
         tools:visibility="visible" />
 
+    <!-- Both indicators ask for their own size rather than being given one:
+         they hold a figure, and that figure follows the system's font size and
+         the "large figures" setting alike (SPEC §7.6). -->
     <io.github.mgdx.rouelibre.ui.stations.AvailabilityIndicatorView
         android:id="@+id/bikes_indicator"
-        android:layout_width="@dimen/indicator_size"
-        android:layout_height="@dimen/indicator_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_l"
         android:importantForAccessibility="no"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,8 +99,8 @@
 
     <io.github.mgdx.rouelibre.ui.stations.AvailabilityIndicatorView
         android:id="@+id/docks_indicator"
-        android:layout_width="@dimen/indicator_size"
-        android:layout_height="@dimen/indicator_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_xl"
         android:importantForAccessibility="no"
         app:layout_constraintStart_toEndOf="@id/bikes_label"
