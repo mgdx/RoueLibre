@@ -165,6 +165,13 @@ fun StorageMessage.toText(context: Context): String = when (this) {
 
     StorageMessage.AlreadyUpToDate -> context.getString(R.string.storage_up_to_date)
 
+    is StorageMessage.HeldBackByMetering -> context.getString(
+        if (wasUnderWay) R.string.download_stopped_body else R.string.download_held_back_body,
+        formatBytes(context, pendingBytes),
+    )
+
+    StorageMessage.CanResumeOnUnmetered -> context.getString(R.string.download_can_resume)
+
     is StorageMessage.DownloadFailed -> context.getString(
         R.string.storage_download_failed,
         context.getString(kind.nameResource()),

@@ -278,6 +278,34 @@
                 android:text="@string/storage_open"
                 app:icon="@drawable/ic_storage" />
 
+            <!--
+                What connection a dataset may travel on (SPEC §4.4). Under the
+                way to the storage screen, because what it settles is what
+                happens there: a city weighs from a few megabytes to more than a
+                gigabyte.
+
+                It names the billing and not the Wi-Fi, which is what Android
+                actually decides on and the truer word besides: a phone's shared
+                connection is Wi-Fi and is a mobile plan. The line under it says
+                so in ordinary words, since the accurate one is not the common
+                one.
+            -->
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/download_unmetered_only"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:minHeight="@dimen/touch_target_min"
+                android:text="@string/download_unmetered_only"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="@string/download_unmetered_only_description"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
+
             <!-- "About" heads no section of its own: it settles nothing and
                  changes nothing, it opens a screen, and a title above it would
                  only repeat the word written on it. What says it belongs to no

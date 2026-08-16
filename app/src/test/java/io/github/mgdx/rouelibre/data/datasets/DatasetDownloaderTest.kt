@@ -5,7 +5,10 @@ import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.data.ManifestDataset
 import io.github.mgdx.rouelibre.core.data.ManifestFile
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
@@ -124,6 +127,44 @@ class DatasetDownloaderTest {
             ?: throw AssertionError("failure: $outcome")
         assertEquals(content.size.toLong(), files.first().length())
         assertEquals("bytes=$alreadyReceived-", server.takeRequest().headers["Range"])
+    }
+
+    @Test
+    fun `a transfer given up stops where it is and starts again from there`() = runTest {
+        // The whole promise of SPEC §4.4 when a connection starts billing in
+        // the middle of a gigabyte: stop, keep what arrived, and ask for the
+        // rest — never for the whole file again.
+        server.enqueue(MockResponse.Builder().code(200).body(okio.Buffer().write(content)).build())
+        val scope = CoroutineScope(Dispatchers.IO)
+
+        // Cancelled from inside the transfer, which is what a connection
+        // turning billed does to it.
+        scope.launch {
+            downloader.download(datasetOf(sha256 = sha256Of(content)), workDirectory) {
+                scope.cancel()
+            }
+        }.join()
+
+        val partial = File(workDirectory, "$FILE_NAME.partial")
+        val kept = partial.length()
+        assertTrue("nothing was kept of the transfer", kept > 0)
+        assertTrue("the transfer ran to its end anyway", kept < content.size)
+        assertTrue("nothing must be installed", File(workDirectory, FILE_NAME).length() == 0L)
+
+        server.enqueue(
+            MockResponse.Builder()
+                .code(206)
+                .body(okio.Buffer().write(content.copyOfRange(kept.toInt(), content.size)))
+                .build(),
+        )
+
+        val outcome = downloader.download(datasetOf(sha256 = sha256Of(content)), workDirectory)
+
+        val files = (outcome as? Outcome.Success)?.value
+            ?: throw AssertionError("failure: $outcome")
+        assertEquals(content.size.toLong(), files.first().length())
+        server.takeRequest()
+        assertEquals("bytes=$kept-", server.takeRequest().headers["Range"])
     }
 
     @Test

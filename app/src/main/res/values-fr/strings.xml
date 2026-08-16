@@ -607,5 +607,22 @@
         <item quantity="many">%1$d de stations masquées</item>
         <item quantity="other">%1$d stations masquées</item>
     </plurals>
+    <!-- Unmetered-only downloads -->
+    <!-- Le réglage nomme la facturation et non le Wi-Fi : un partage de
+         connexion est du Wi-Fi et est un forfait mobile, et un Wi-Fi plafonné
+         se déclare facturé. -->
+    <string name="download_unmetered_only">Télécharger seulement en connexion non facturée</string>
+    <string name="download_unmetered_only_description">En général le Wi-Fi. Un partage de connexion ou un Wi-Fi limité est facturé au mégaoctet et compte comme des données mobiles.</string>
+    <string name="download_held_back_title">Téléchargement retenu</string>
+    <!-- %1$s est une taille, « 340 Mo » par exemple. -->
+    <string name="download_held_back_body">Cette connexion est facturée au mégaoctet. Connecte-toi en Wi-Fi pour télécharger %1$s, ou télécharge quand même maintenant.</string>
+    <string name="download_stopped_title">Téléchargement arrêté</string>
+    <!-- %1$s est une taille, « 340 Mo » par exemple. Ce qui est déjà arrivé
+         reste sur l\'appareil et le transfert repart de là. -->
+    <string name="download_stopped_body">Cette connexion est maintenant facturée au mégaoctet, le téléchargement s\'est arrêté. Ce qui est arrivé est conservé. Connecte-toi en Wi-Fi pour finir les %1$s, ou continue quand même maintenant.</string>
+    <string name="download_anyway">Télécharger quand même</string>
+    <!-- %1$s est une taille, « 340 Mo » par exemple. -->
+    <string name="download_waiting_for_unmetered">En attente d\'une connexion non facturée pour télécharger %1$s.</string>
+    <string name="download_can_resume">Cette connexion n\'est plus facturée. Relance le téléchargement : il reprend où il s\'est arrêté.</string>
 
 </resources>

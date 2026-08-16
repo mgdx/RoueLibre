@@ -467,5 +467,22 @@
         <item quantity="many">%1$d stations hidden</item>
         <item quantity="other">%1$d stations hidden</item>
     </plurals>
+    <!-- Unmetered-only downloads -->
+    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
+         connection is Wi-Fi and is a mobile plan, and a capped hotspot
+         declares itself billed. -->
+    <string name="download_unmetered_only">Download only on an unmetered connection</string>
+    <string name="download_unmetered_only_description">Usually Wi-Fi. A shared phone connection or a capped hotspot is billed by the megabyte and counts as mobile data.</string>
+    <string name="download_held_back_title">Download held back</string>
+    <!-- %1$s is a size, "340 MB" for instance. -->
+    <string name="download_held_back_body">This connection is billed by the megabyte. Connect to Wi-Fi to download %1$s, or download it anyway now.</string>
+    <string name="download_stopped_title">Download stopped</string>
+    <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
+         on the device and the transfer picks up from there. -->
+    <string name="download_stopped_body">This connection is now billed by the megabyte, so the download stopped. What has arrived is kept. Connect to Wi-Fi to finish the %1$s, or carry on anyway now.</string>
+    <string name="download_anyway">Download anyway</string>
+    <!-- %1$s is a size, "340 MB" for instance. -->
+    <string name="download_waiting_for_unmetered">Waiting for an unmetered connection to download %1$s.</string>
+    <string name="download_can_resume">This connection is no longer billed. Start the download again: it carries on where it stopped.</string>
 
 </resources>

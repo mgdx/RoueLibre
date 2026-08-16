@@ -50,6 +50,8 @@ class StorageFragment : Fragment() {
             manifestUrl = { container.dataManifestUrl() },
             workDirectory = container.downloadWorkDirectory,
             supportedFormatVersion = { container.activeCity()?.dataRelease?.formatVersion },
+            connectionCost = container.connectionCost,
+            unmeteredOnly = container.preferences.downloadOnUnmeteredOnly,
         )
     }
 
@@ -118,7 +120,10 @@ class StorageFragment : Fragment() {
     private fun onUpdateButtonClicked() {
         val state = viewModel.state.value
         if (state.manifest != null && state.outdated.isNotEmpty()) {
-            warnIfNotOnWifi()
+            // The old warning belongs to the setting being off: with it on, the
+            // model refuses the transfer and offers it anyway, and two words
+            // about the same connection would only muddle the screen.
+            if (!state.unmeteredOnly) warnIfNotOnWifi()
             viewModel.downloadPending()
         } else {
             viewModel.checkForUpdates()
@@ -129,7 +134,10 @@ class StorageFragment : Fragment() {
      * Warns if we are not on Wi-Fi (SPEC §4.4).
      *
      * A warning, not an obstacle: somebody on a generous data plan does not
-     * have to ask their application for permission.
+     * have to ask their application for permission. Shown only when the setting
+     * of §7.6 is off, which is exactly the case it was written for — with the
+     * setting on, a billed connection is answered by a question rather than by
+     * a remark in passing.
      */
     private fun warnIfNotOnWifi() {
         val manager = requireContext().getSystemService(ConnectivityManager::class.java) ?: return
@@ -185,6 +193,41 @@ class StorageFragment : Fragment() {
                 ),
             )
             .setPositiveButton(R.string.dataset_delete) { _, _ -> viewModel.delete(kind) }
+            .setNegativeButton(R.string.action_cancel, null)
+            .show()
+    }
+
+    /**
+     * Says why nothing is coming down, and offers to download anyway
+     * (SPEC §4.4).
+     *
+     * **Never a dead end**: somebody in a hotel with no Wi-Fi must be able to
+     * install their city. The question names what the transfer weighs — that is
+     * what is at stake on a connection billed by the megabyte — and tells what
+     * to do about it rather than stating a fact. Answering yes covers this
+     * transfer only: the setting is not touched, and the next download asks
+     * again.
+     */
+    private fun offerToDownloadAnyway(held: StorageMessage.HeldBackByMetering) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(
+                if (held.wasUnderWay) {
+                    R.string.download_stopped_title
+                } else {
+                    R.string.download_held_back_title
+                },
+            )
+            .setMessage(
+                getString(
+                    if (held.wasUnderWay) {
+                        R.string.download_stopped_body
+                    } else {
+                        R.string.download_held_back_body
+                    },
+                    formatBytes(requireContext(), held.pendingBytes),
+                ),
+            )
+            .setPositiveButton(R.string.download_anyway) { _, _ -> viewModel.downloadAnyway() }
             .setNegativeButton(R.string.action_cancel, null)
             .show()
     }
@@ -272,12 +315,22 @@ class StorageFragment : Fragment() {
     private fun showDownload(state: StorageUiState) {
         val views = binding ?: return
         val progress = state.downloading
-        views.downloadState.isVisible = progress != null || state.isChecking
+        views.downloadState.isVisible =
+            progress != null ||
+            state.isChecking ||
+            state.heldBackByMetering
         views.downloadProgress.isVisible = progress != null
         if (state.isChecking) {
             // A check lasts only a moment, but it goes over the network:
             // saying so avoids the impression that the press was lost.
             views.downloadState.setText(R.string.storage_checking)
+        } else if (progress == null && state.heldBackByMetering) {
+            // The line stays for as long as the wait does: a bar that has gone
+            // away leaves a screen that looks idle for no stated reason.
+            views.downloadState.text = getString(
+                R.string.download_waiting_for_unmetered,
+                formatBytes(requireContext(), state.pendingBytes),
+            )
         }
         if (progress == null) return
 
@@ -301,7 +354,14 @@ class StorageFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.messages.collect { message ->
-                    showMessage(message.toText(requireContext()))
+                    // A refusal asks a question — it is the one message here
+                    // that expects an answer, and a bar that goes away by
+                    // itself would take the way out with it.
+                    if (message is StorageMessage.HeldBackByMetering) {
+                        offerToDownloadAnyway(message)
+                    } else {
+                        showMessage(message.toText(requireContext()))
+                    }
                 }
             }
         }
