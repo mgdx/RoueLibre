@@ -484,6 +484,18 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **The availability figure was cut off by the system's own font size.** The
+  indicator's figure has always been painted in `sp` and has always followed the
+  text size set in Android's settings — but the disc holding it was declared in
+  `dp` and did not, and `AvailabilityIndicatorView` paints onto a canvas clipped
+  to its own bounds. Raise the font size on the phone and the count grew until
+  it ran into its own ring, worst exactly where the figure is worth reading: a
+  station of more than a hundred docks. The disc is now declared in `sp` like the
+  figure it holds, which is the one box of the token file that follows the text
+  scale rather than the screen. At the default scale the two units are the same,
+  so nothing moves for anybody who has asked for nothing. The ring keeps its
+  `dp`: it is a stroke and not a letter.
+
 - **Seven cities answered to nobody typing their name.** "bialystok" returned
   "No city found" while BIKER — Białystok sat in the catalogue, and so did
   "giessen", "lomza", "wloclawek", "chelm", "jaskolka" and "mlawa"; for Włower
