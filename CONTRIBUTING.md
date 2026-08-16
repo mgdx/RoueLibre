@@ -57,6 +57,41 @@ While a string is left untranslated, that is the English text its readers
 get — the same thing they would have got with no file at all. Translating half
 a file is already worth doing.
 
+### When a translation is finished
+
+A started file holds the English text, and the application knows it: it goes on
+formatting that language's dates and distances in English, and it does not offer
+that language in its settings. **"Deutsch" that answers in English would be
+worse than no German at all.** So a translation only becomes real when it is
+declared, and it has to be declared in **three** places — the code holds one
+list, the build holds another, and Android insists on reading a third from the
+resources, where nothing can be computed:
+
+1. **`TRANSLATED_LANGUAGES`**, in
+   [`app/src/main/java/io/github/mgdx/rouelibre/ui/Locales.kt`](app/src/main/java/io/github/mgdx/rouelibre/ui/Locales.kt).
+   This is the one that matters, and everything the application decides for
+   itself is derived from it: the dates, the numbers and the distances start
+   being formatted in the language, and the language chooser in the settings
+   starts offering it. Nothing else in the Kotlin code has to change.
+2. **`localeFilters`**, in
+   [`app/build.gradle.kts`](app/build.gradle.kts). Already done if the started
+   file exists, since a folder absent from that list is dropped from the APK.
+   Check it rather than assume it.
+3. **`res/xml/locales_config.xml`**, which is what makes the language appear in
+   **Android's own per-application language settings**, from Android 13 on. It
+   is the one place the list is written a second time, because Android reads it
+   from the APK's resources; a unit test reads that file and fails if it and
+   `TRANSLATED_LANGUAGES` disagree, so a step forgotten here is a red build
+   rather than a defect nobody notices.
+
+Then run `./gradlew test`: the tests pin the three against one another, and their
+failures name the file left behind.
+
+Two things are **not** on that list, and deliberately. Nothing has to be added to
+the settings screen — the chooser is built from the list, not written out beside
+it. And `values-<language>/` folders are never read to decide what is offered:
+thirty of them exist, and most still hold English.
+
 ### Rules to respect
 
 **Placeholders are positional and keep their number.** `%1$s` stays `%1$s`, but

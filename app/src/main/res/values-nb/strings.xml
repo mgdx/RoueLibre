@@ -503,5 +503,16 @@
          a pedal-assist one. %1$s is a distance, %2$s a climb. -->
     <string name="journey_own_bike_electric_only">on your own electric bike, over %1$s.</string>
     <string name="journey_own_bike_electric_only_climb">on your own electric bike, over %1$s and %2$s of climb.</string>
+    <!-- Application language -->
+    <string name="settings_language_title">Language</string>
+    <!-- Heads the list of languages: the interface follows the device's own
+         language, which is what it did before this setting existed. The
+         languages themselves are never translated — each is written in its own
+         language, and comes from Android rather than from this file. -->
+    <string name="settings_language_system">System</string>
+    <!-- Spoken label of the row, read aloud in place of the language alone.
+         %1$s is the language in service: "English", "Français", or the wording
+         above when the device's own is followed. -->
+    <string name="settings_language_description">Language of the interface: %1$s</string>
 
 </resources>

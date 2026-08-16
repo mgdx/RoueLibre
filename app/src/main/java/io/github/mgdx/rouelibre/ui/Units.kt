@@ -1,15 +1,18 @@
 package io.github.mgdx.rouelibre.ui
 
+import android.content.res.Resources
 import android.icu.util.LocaleData
 import android.icu.util.LocaleData.MeasurementSystem
 import android.icu.util.ULocale
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.core.os.ConfigurationCompat
 import io.github.mgdx.rouelibre.core.measure.UnitChoice
 import io.github.mgdx.rouelibre.core.measure.UnitSystem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.Locale
 
 /**
  * The units the application writes its distances in, for the whole process
@@ -54,7 +57,7 @@ object DisplayedUnits {
  * the British case included: the United Kingdom counts short distances in yards
  * where the United States counts them in feet.
  *
- * **The formatting locale, not the language the interface is speaking.**
+ * **The device's own locale, not the language the interface is speaking.**
  * Somebody reading English in Lyon wants kilometres, and their device says so
  * through its region: what the application's own resources resolved to is a
  * question about words, not about measurements.
@@ -71,15 +74,47 @@ object DisplayedUnits {
  * on: `en-GB` gives `UK`, `en-US` gives `US`, and `en-FR` gives `SI`.
  */
 fun regionUnitSystem(): UnitSystem {
-    val locale = ULocale.getDefault(ULocale.Category.FORMAT)
+    val locale = deviceLocale()
     val region = locale.country
     if (region.isNullOrEmpty()) return UnitSystem.Metric
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) return icuUnitSystem(locale)
-    return when (region) {
-        in REGIONS_MEASURING_IN_FEET -> UnitSystem.UnitedStates
-        in REGIONS_MEASURING_IN_YARDS -> UnitSystem.UnitedKingdom
-        else -> UnitSystem.Metric
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        return icuUnitSystem(ULocale.forLocale(locale))
     }
+    return unitSystemOfRegion(region)
+}
+
+/**
+ * The locale of the **device**, which the language chosen in the application
+ * does not touch (SPEC §7.6, §9).
+ *
+ * This read `ULocale.getDefault(ULocale.Category.FORMAT)` until the interface
+ * gained a language of its own, and that would now be a bug. Choosing a
+ * language puts it at the head of the process's locale list — before the
+ * device's own, which is kept behind it — and a language carries no country:
+ * the tag stored is `fr`, never `fr-FR`. Read there, somebody in Boston who
+ * puts the interface into French would find their miles turned into kilometres
+ * by a setting about words. `Resources.getSystem()` carries the device's
+ * configuration, which no per-application language overrides, on every release
+ * served.
+ *
+ * With no language chosen the two answer the same thing, which is why nothing
+ * changes for whoever never opens that setting.
+ */
+private fun deviceLocale(): Locale =
+    ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0]
+        ?: Locale.getDefault()
+
+/**
+ * What a region measures in, asked of the table rather than of ICU.
+ *
+ * Split out from [regionUnitSystem] so that a test on the JVM can pin what the
+ * units are read from — a region, never a language — where neither ICU nor the
+ * device's configuration can be reached.
+ */
+internal fun unitSystemOfRegion(region: String): UnitSystem = when (region) {
+    in REGIONS_MEASURING_IN_FEET -> UnitSystem.UnitedStates
+    in REGIONS_MEASURING_IN_YARDS -> UnitSystem.UnitedKingdom
+    else -> UnitSystem.Metric
 }
 
 /** What ICU says of a locale, where the platform is new enough to be asked. */

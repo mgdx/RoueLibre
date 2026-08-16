@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The languages Android's own per-application language settings offer for
+    this application, from Android 13 on (SPEC §7.6, §9).
+
+    The same list the chooser in the settings screen offers, and it has to be:
+    the two write one and the same stored choice, and a language offered in one
+    place and not the other would look like a defect.
+
+    That list is TRANSLATED_LANGUAGES, in `ui/Locales.kt`, and NOT the thirty
+    folders under `res/values-*/` nor the thirty entries of `localeFilters`:
+    most of those files still hold the English text, and offering "Deutsch" to
+    hand back English would be worse than offering no German at all.
+
+    This file cannot be computed — Android reads it from the APK's resources —
+    so it is the one place where that list is written a second time. A unit
+    test reads this very file and fails if the two ever disagree; see
+    `CONTRIBUTING.md` for the places a new translation has to be declared in.
+-->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="en" />
+    <locale android:name="fr" />
+</locale-config>

@@ -656,5 +656,11 @@
          a pedal-assist one. %1$s is a distance, %2$s a climb. -->
     <string name="journey_own_bike_electric_only">avec ton propre vélo électrique, sur %1$s.</string>
     <string name="journey_own_bike_electric_only_climb">avec ton propre vélo électrique, sur %1$s et %2$s de dénivelé.</string>
+    <!-- Application language -->
+    <string name="settings_language_title">Langue</string>
+    <string name="settings_language_system">Système</string>
+    <!-- %1$s est la langue en service : « English », « Français », ou le
+         libellé ci-dessus quand c\'est celle de l\'appareil qui est suivie. -->
+    <string name="settings_language_description">Langue de l\'interface : %1$s</string>
 
 </resources>

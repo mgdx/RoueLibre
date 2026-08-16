@@ -334,6 +334,41 @@ also records what has no visible effect.
   redrawing several hundred markers and hiding some. `SPEC.md` §7.1 now carries
   the two filters, their idle default, the rule about silence and the
   requirement that an active filter be visible without anything being opened.
+- **The language of the interface is chosen in the application** (SPEC §9,
+  §7.6). It followed the system, with no recourse: a francophone whose phone is
+  in English read the application in English, while the French translation sat
+  complete in `values-fr/` and out of reach. §9 has the other languages exist to
+  be read, and reaching them only by changing the language of the whole phone
+  emptied half of that. The setting sits under the units in the display section,
+  applies on the press with no "apply" button, and follows the system by
+  default — which is the behaviour of every version before it, and what an
+  absent or unknown value reads as.
+  **Only the languages actually translated are offered**, which is the whole
+  difficulty of the change: the repository carries thirty `values-<language>/`
+  folders and thirty entries in `localeFilters`, and twenty-eight of them still
+  hold the English text. The chooser is **derived from `TRANSLATED_LANGUAGES`**
+  in `ui/Locales.kt` — the list the dates and distances already followed — so
+  finishing a translation is the whole of what it takes to have it offered, and
+  offering "Deutsch" to hand back English never becomes possible. Each language
+  is named in its own language, and a test fails if that list is ever copied out
+  a second time.
+  **AppCompat holds the choice and holds it alone**: it applies it, stores it —
+  in the framework from Android 13 on, in a file of its own below that, opted
+  into by the `autoStoreLocales` service now declared in the manifest — and
+  rebuilds the screens on it, as a change of theme does. No second copy in
+  `AppPreferences`, which would diverge the first time the language was changed
+  from Android's own per-application settings. Those settings offer the same
+  languages, through `res/xml/locales_config.xml`: the one place the list is
+  written twice, since Android reads it from the resources, and a unit test
+  reads that file and fails if the two disagree. `CONTRIBUTING.md` now lists the
+  three places a finished translation has to be declared in.
+  **The units do not follow the language**, and holding that took a change:
+  `regionUnitSystem` read `ULocale.getDefault(ULocale.Category.FORMAT)`, which
+  the chosen language now sits at the head of, and a language carries no
+  country — the tag is `fr`, never `fr-FR`. Somebody in Boston putting the
+  interface into French would have lost their miles to a setting about words.
+  It reads the device's own configuration instead, which no per-application
+  language overrides; with no language chosen the two answer the same thing.
 
 ### Changed
 
