@@ -477,6 +477,9 @@
     <string name="dataset_delete">Supprimer</string>
     <!-- %1$s is the dataset's name. -->
     <string name="dataset_delete_description">Supprimer %1$s</string>
+    <string name="dataset_delete_title">Supprimer ces données ?</string>
+    <!-- %1$s is the dataset's name, %2$s the space it frees. -->
+    <string name="dataset_delete_body">Les données « %1$s » seront effacées et libéreront %2$s. Il faudra les retélécharger pour t\'en servir hors ligne.</string>
     <!-- %1$s is the dataset's name. -->
     <string name="dataset_imported">%1$s installé</string>
     <string name="dataset_deleted">%1$s supprimé</string>

@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
@@ -67,7 +68,7 @@ class StorageFragment : Fragment() {
 
     private val adapter = DatasetAdapter(
         onImport = ::requestImport,
-        onDelete = { viewModel.delete(it) },
+        onDelete = ::confirmDelete,
     )
 
     override fun onCreateView(
@@ -135,14 +136,57 @@ class StorageFragment : Fragment() {
         val capabilities = manager.getNetworkCapabilities(manager.activeNetwork)
         val onWifi = capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
         if (onWifi) return
+        showMessage(getString(R.string.storage_wifi_warning))
+    }
+
+    /**
+     * Says what has just happened, above the button rather than over it.
+     *
+     * The screen ends on a button pinned to the bottom edge, which is exactly
+     * where a snackbar rises: left to itself it covered the label — "Download
+     * 967 kB" read through "Base map deleted" — and neither could be read. The
+     * bar is therefore anchored to the button, which pushes it up by its
+     * height.
+     */
+    private fun showMessage(message: CharSequence) {
         val views = binding ?: return
-        Snackbar.make(views.root, R.string.storage_wifi_warning, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(views.root, message, Snackbar.LENGTH_LONG)
+            .setAnchorView(views.checkUpdates)
+            .show()
     }
 
     override fun onDestroyView() {
         binding?.datasets?.adapter = null
         binding = null
         super.onDestroyView()
+    }
+
+    /**
+     * Asks for confirmation before erasing an installed set (SPEC §4.4).
+     *
+     * The same question the city screen asks before erasing a whole city, for
+     * the same reason: up to a hundred megabytes that only the network can put
+     * back, behind a button that sits one press away in a list one scrolls. The
+     * size is named in the question — what is at stake here is the download it
+     * would take to undo, and that is what the figure says.
+     */
+    private fun confirmDelete(kind: DatasetKind) {
+        val installed = viewModel.state.value.datasets
+            .firstOrNull { it.kind == kind }
+            ?.installed
+            ?: return
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.dataset_delete_title)
+            .setMessage(
+                getString(
+                    R.string.dataset_delete_body,
+                    getString(kind.nameResource()),
+                    formatBytes(requireContext(), installed.sizeBytes),
+                ),
+            )
+            .setPositiveButton(R.string.dataset_delete) { _, _ -> viewModel.delete(kind) }
+            .setNegativeButton(R.string.action_cancel, null)
+            .show()
     }
 
     /**
@@ -257,10 +301,7 @@ class StorageFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.messages.collect { message ->
-                    val views = binding ?: return@collect
-                    Snackbar
-                        .make(views.root, message.toText(requireContext()), Snackbar.LENGTH_LONG)
-                        .show()
+                    showMessage(message.toText(requireContext()))
                 }
             }
         }

@@ -347,6 +347,9 @@
     <string name="dataset_replace">Replace</string>
     <string name="dataset_delete">Delete</string>
     <string name="dataset_delete_description">Delete %1$s</string>
+    <string name="dataset_delete_title">Delete this data?</string>
+    <!-- %1$s is the dataset's name, %2$s the space it frees. -->
+    <string name="dataset_delete_body">The “%1$s” data will be erased, freeing %2$s. You will have to download it again to work offline.</string>
     <string name="dataset_imported">%1$s installed</string>
     <string name="dataset_deleted">%1$s deleted</string>
 
