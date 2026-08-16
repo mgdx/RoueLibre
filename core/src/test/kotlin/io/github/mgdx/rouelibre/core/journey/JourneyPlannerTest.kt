@@ -854,4 +854,55 @@ class JourneyPlannerTest {
 
         assertEquals(JourneyPlan.Impossible(NoBikeJourney.GraphMissing), plan)
     }
+
+    // ------------------------------------------------------------- units --
+
+    @Test
+    fun `the units the reader chose reach nothing the algorithm decides`() = runTest {
+        // The invariant this whole application rests on (SPEC §14): everything
+        // is measured in metres, and a system of units is consulted at one
+        // moment only — when a figure becomes text. A rider in miles and a
+        // rider in kilometres must get the same journey, the same pair of
+        // stations and the same announced time, written two ways.
+        //
+        // Checked twice over, because a behavioural test alone cannot fail
+        // here: the planner takes no unit system, so the two plans below are
+        // the same call made twice. What holds the boundary is the second
+        // half — the day somebody threads units into the algorithm, one of the
+        // signatures below stops being what it is, and this fails.
+        val stations = listOf(
+            station("un-seul-velo", at(0.0, 200.0), bikes = 1),
+            station("bien-fournie", at(0.0, 320.0), bikes = 12),
+            station("arrivee", at(0.0, 3900.0)),
+        )
+        val planner = JourneyPlanner(FakeRouter())
+
+        val first = planner.plan(origin, destination, stations) as JourneyPlan.Found
+        val again = planner.plan(origin, destination, stations) as JourneyPlan.Found
+
+        assertEquals(first.best.departureStation.id, again.best.departureStation.id)
+        assertEquals(first.best.arrivalStation.id, again.best.arrivalStation.id)
+        assertEquals(first.best.distanceMetres, again.best.distanceMetres)
+        assertEquals(first.best.climbMetres, again.best.climbMetres)
+        assertEquals(first.best.travelTime, again.best.travelTime)
+
+        val measures = "io.github.mgdx.rouelibre.core.measure"
+        val decidingClasses = listOf(
+            JourneyPlanner::class.java,
+            JourneyOption::class.java,
+            RouteLeg::class.java,
+            Station::class.java,
+            StationAvailability::class.java,
+        )
+        val leaked = decidingClasses
+            .flatMap { it.declaredMethods.toList() + it.declaredConstructors.toList() }
+            .flatMap { member ->
+                val types = member.parameterTypes.toList() +
+                    listOfNotNull((member as? java.lang.reflect.Method)?.returnType)
+                types.map { member.name to it }
+            }
+            .filter { (_, type) -> type.name.startsWith(measures) }
+
+        assertEquals("units reached the algorithm through $leaked", emptyList<Any>(), leaked)
+    }
 }
