@@ -300,6 +300,39 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * Whether the datasets may only travel over a connection nobody is billed
+     * for (SPEC §4.4).
+     *
+     * **True by default**, and true for anything absent or unreadable: a city's
+     * data runs from a few megabytes to more than a gigabyte, and a gigabyte
+     * that leaves on a mobile plan nobody meant to spend costs more than a
+     * download put off for an hour.
+     *
+     * **Billing, not Wi-Fi.** What Android answers is what a network bills, and
+     * that is the truer notion: a phone's shared connection is Wi-Fi and is a
+     * mobile plan, while a capped hotel Wi-Fi declares itself billed. The word
+     * written here says so, and so does the switch that sets it.
+     *
+     * **It is never a dead end**: the storage screen offers to download anyway,
+     * for that one transfer, and doing so leaves this value untouched.
+     *
+     * **A preference about transfers, not a journey.** What is written is a yes
+     * or a no about downloading; no point, no time, no destination goes with it
+     * (SPEC §2, C3).
+     *
+     * A flow rather than a read, for the reason [usesOwnBike] gives: the storage
+     * screen watches it, and a setting changed while a transfer waits must reach
+     * that screen without it being rebuilt.
+     */
+    val downloadOnUnmeteredOnly: Flow<Boolean> =
+        dataStore.data.map { it[DOWNLOAD_ON_UNMETERED_ONLY] ?: true }
+
+    /** Remembers whether downloads wait for a connection nobody is billed for. */
+    suspend fun setDownloadOnUnmeteredOnly(unmeteredOnly: Boolean) {
+        dataStore.edit { it[DOWNLOAD_ON_UNMETERED_ONLY] = unmeteredOnly }
+    }
+
+    /**
      * The city the application is serving right now.
      *
      * `null` until one has been chosen: the application assumes no default
@@ -380,6 +413,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         const val SEPARATOR = "\n"
         val THEME = stringPreferencesKey("theme")
         val UNITS = stringPreferencesKey("units")
+        val DOWNLOAD_ON_UNMETERED_ONLY = booleanPreferencesKey("download_on_unmetered_only")
         val USES_OWN_BIKE = booleanPreferencesKey("uses_own_bike")
         val WANTED_BIKE_KIND = stringPreferencesKey("wanted_bike_kind")
         val WALKING_PACE = stringPreferencesKey("walking_pace")
