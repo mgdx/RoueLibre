@@ -376,8 +376,10 @@ class MainActivity : AppCompatActivity() {
      * and is written nowhere (SPEC §2, C3).
      *
      * The proposal is an offer, never an action: nothing is downloaded and no
-     * city changes until the user says so. Declined, it is not repeated for the
-     * rest of the session.
+     * city changes until the user says so. Declined, it is not put again — not
+     * for the rest of the session, and not at the next launch either, until the
+     * user is somewhere that network does not serve (see
+     * `AppContainer.rememberCityProposal`).
      */
     private suspend fun proposeCityHere() {
         // The application was opened for a place, not by its user: they came
@@ -390,27 +392,40 @@ class MainActivity : AppCompatActivity() {
         val position = container.deviceLocation.lastKnown() ?: return
 
         val catalogue = container.cityCatalogueSource.catalogue()
-        val here = catalogue.suggestionFor(position) ?: return
-        if (here.id == servedCityId) return
         // A city whose data is not published yet is not worth proposing:
-        // accepting would lead to a download that has nothing to fetch.
-        if (!here.isAvailable) return
-        if (!container.rememberCityProposal(here.id)) return
+        // accepting would lead to a download that has nothing to fetch. Nor is
+        // the city already in service, which is no change of map at all.
+        val here = catalogue.suggestionFor(position)
+            ?.takeIf { it.isAvailable && it.id != servedCityId }
+        // Asked even when there is nothing to propose: standing outside the
+        // network one declined is what forgets that refusal.
+        if (!container.rememberCityProposal(here?.id)) return
+        val city = checkNotNull(here)
 
-        val installed = container.datasetStore.occupiedBytesOf(here.id) > 0
+        val installed = container.datasetStore.occupiedBytesOf(city.id) > 0
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.city_here_title)
             .setMessage(
                 getString(
                     if (installed) R.string.city_here_installed_body else R.string.city_here_body,
-                    cityLabel(here.displayName, here.mainCity),
+                    cityLabel(city.displayName, city.mainCity),
                 ),
             )
             .setPositiveButton(
                 if (installed) R.string.city_here_use else R.string.city_here_install,
-            ) { _, _ -> switchTo(here.id, installed) }
-            .setNegativeButton(R.string.action_cancel, null)
+            ) { _, _ -> switchTo(city.id, installed) }
+            .setNegativeButton(R.string.action_cancel) { _, _ -> declineCity(city.id) }
             .show()
+    }
+
+    /**
+     * Takes note that the offer was turned down.
+     *
+     * A "no" that lasted only until the application was closed put the same
+     * question at the next launch, and at the one after that.
+     */
+    private fun declineCity(cityId: String) {
+        lifecycleScope.launch { container.rememberCityRefusal(cityId) }
     }
 
     /**

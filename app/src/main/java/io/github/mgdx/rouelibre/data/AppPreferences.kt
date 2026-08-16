@@ -213,6 +213,34 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * The network whose proposal the user turned down (SPEC §15.1).
+     *
+     * The application offers the network of the conurbation one happens to be
+     * in. Offered again at the next launch, and at every press of "locate me",
+     * an offer becomes insistence — and the button that answers "where am I"
+     * becomes unusable to anyone who wants to keep the city they chose.
+     *
+     * **A network identifier, and nothing more.** Not a position, not a date,
+     * not a list of the cities one has passed through: constraint C3 forbids
+     * recording where somebody has been, and the name of a public network one
+     * declined says nothing of the sort. It is dropped as soon as the user is
+     * somewhere that network does not serve — see `AppContainer`.
+     */
+    suspend fun declinedCityProposalId(): String? =
+        dataStore.data.first()[DECLINED_CITY_PROPOSAL_ID]?.takeIf { it.isNotBlank() }
+
+    /** Records a declined proposal, or forgets the one recorded. */
+    suspend fun setDeclinedCityProposalId(id: String?) {
+        dataStore.edit { preferences ->
+            if (id.isNullOrBlank()) {
+                preferences.remove(DECLINED_CITY_PROPOSAL_ID)
+            } else {
+                preferences[DECLINED_CITY_PROPOSAL_ID] = id
+            }
+        }
+    }
+
+    /**
      * The last version code the user has seen (SPEC §7.9, §7.10).
      *
      * Zero means "never launched": the welcome screen applies then, never the
@@ -240,6 +268,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         val THEME = stringPreferencesKey("theme")
         val ACTIVE_CITY_ID = stringPreferencesKey("active_city_id")
         val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
+        val DECLINED_CITY_PROPOSAL_ID = stringPreferencesKey("declined_city_proposal_id")
         val MEASURED_FLEET = stringPreferencesKey("measured_fleet")
     }
 }

@@ -120,14 +120,45 @@ class AppContainer(private val context: Context) {
      *
      * The application offers the network of the conurbation one happens to be
      * in (SPEC §15.1). Offering it again at every screen, once refused, would
-     * turn an offer into insistence.
+     * turn an offer into insistence — and it did: the dialogue came back at
+     * every launch and at every press of "locate me", which left that button
+     * unusable to anyone who wanted to keep the city they had chosen.
      *
-     * In memory and for the session alone: nothing about the cities one passes
-     * through is written to disk (SPEC §2, C3).
+     * Two memories answer that, because they answer two different questions.
+     * The one held here, in memory, says "this city has been offered on this
+     * run" and stops a second offer a minute later. The one in the settings
+     * says "this city has been declined" and survives a restart, because a
+     * refusal that only lasted until the application was closed was no refusal
+     * at all — see [rememberCityRefusal].
      *
-     * @return true the first time this city is proposed, false afterwards.
+     * A refusal is dropped as soon as the user is somewhere the declined
+     * network does not serve: having left the area that prompted the offer,
+     * they may want it if they come back. Nothing about the cities passed
+     * through is written down beyond that single identifier (SPEC §2, C3).
+     *
+     * @param id the network serving where the user stands, or `null` where none
+     *   does — which proposes nothing, and forgets any refusal.
+     * @return true if this city may be proposed now.
      */
-    fun rememberCityProposal(id: String): Boolean = proposedCityIds.add(id)
+    suspend fun rememberCityProposal(id: String?): Boolean {
+        val declined = preferences.declinedCityProposalId()
+        if (declined != null && declined != id) {
+            preferences.setDeclinedCityProposalId(null)
+            proposedCityIds.remove(declined)
+        }
+        if (id == null || declined == id) return false
+        return proposedCityIds.add(id)
+    }
+
+    /**
+     * Notes that the user declined the city offered.
+     *
+     * Kept in the settings, so that three launches in a row do not put the same
+     * question three times.
+     */
+    suspend fun rememberCityRefusal(id: String) {
+        preferences.setDeclinedCityProposalId(id)
+    }
 
     private val proposedCityIds = mutableSetOf<String>()
 

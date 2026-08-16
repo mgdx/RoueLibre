@@ -705,6 +705,11 @@ class MapFragment : Fragment() {
      * The catalogue read is the one already on the device: no request goes out,
      * and the position serves this single question before being forgotten
      * (SPEC §2, C3).
+     *
+     * A city already offered and turned down is not offered again: the press
+     * is answered in one line instead. Reopening the dialogue on every press
+     * was what made "locate me" unusable to anybody who meant to keep the city
+     * they had chosen.
      */
     private suspend fun sayWeAreElsewhere(position: Coordinates) {
         val served = servedCity ?: return
@@ -718,6 +723,15 @@ class MapFragment : Fragment() {
             return
         }
         val here = cityAround(position)
+        // Asked before the answer is chosen: standing outside the network one
+        // declined is what forgets that refusal, whatever is said next.
+        val mayPropose = container.rememberCityProposal(here?.id)
+        if (here != null && !mayPropose) {
+            // Where we are is still worth saying: the press asked a question,
+            // and silence would read as a button that does nothing.
+            showMessage(getString(R.string.map_outside_city_brief, servedLabel))
+            return
+        }
         if (here == null) {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.map_outside_city_title)
@@ -739,8 +753,18 @@ class MapFragment : Fragment() {
             .setPositiveButton(
                 if (installed) R.string.city_here_use else R.string.city_here_install,
             ) { _, _ -> serve(here.id, installed) }
-            .setNegativeButton(R.string.action_cancel, null)
+            .setNegativeButton(R.string.action_cancel) { _, _ -> declineCity(here.id) }
             .show()
+    }
+
+    /**
+     * Takes note that the offer was turned down.
+     *
+     * Kept beyond the session, like the one the application makes on opening: a
+     * refusal forgotten at the next launch is a question asked again.
+     */
+    private fun declineCity(cityId: String) {
+        viewLifecycleOwner.lifecycleScope.launch { container.rememberCityRefusal(cityId) }
     }
 
     /**
