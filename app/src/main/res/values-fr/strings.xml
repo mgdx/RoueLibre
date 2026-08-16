@@ -593,4 +593,14 @@
     <string name="error_local_storage">Impossible de lire les données enregistrées sur l\'appareil.</string>
     <string name="error_no_city_chosen">Aucune ville n\'est sélectionnée. Choisissez-en une pour afficher les stations.</string>
 
+    <!-- Opening screen, large numbers, own bike kind -->
+
+    <string name="settings_opening_title">Ouvrir sur</string>
+    <!-- Read aloud in place of the two buttons beside it. -->
+    <string name="settings_opening_description">Écran sur lequel l\'application s\'ouvre</string>
+    <string name="settings_opening_map">Carte</string>
+    <string name="settings_opening_list">Liste des stations</string>
+    <!-- The way to the map from a station list opened on. -->
+    <string name="stations_open_map">Voir la carte</string>
+
 </resources>

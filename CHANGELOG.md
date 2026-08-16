@@ -467,6 +467,21 @@ also records what has no visible effect.
   numbers. The GBFS registry publishes this network twice, under the address it
   opened with and the one it carries today; the configuration takes the second.
 
+- **The screen the application opens on is a choice**: the map, as always, or
+  the station list (`SPEC.md` §7.0, §7.6). The map is the application's content
+  and stays the default — somebody who never opens the settings sees exactly
+  what they saw before — but it is not what everybody opens the application for:
+  somebody who always sets off from the same station reads one line of a list,
+  not a plan. **Opening on the list asks for no position**: the location
+  permission belongs to the map (§10), so the map is not built at all rather
+  than built and replaced, and coming to it afterwards asks then, once. The
+  choice settles where one lands and nothing else — the welcome sequence, the
+  what's-new screen and a place received from another application all still come
+  over it, an explicit intention beating a preference. A list opened on carries
+  a way to the map, which it does not carry when it was reached from one: there
+  the back gesture is that way, whereas opened on it has nothing behind it, and
+  the map is where the journey search and the settings are reached from.
+
 ### Fixed
 
 - **Seven cities answered to nobody typing their name.** "bialystok" returned

@@ -261,6 +261,47 @@
                     android:text="@string/settings_units_uk" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
+            <!--
+                The screen the application opens on (SPEC §7.0, §7.6). Two
+                choices in a row, like the theme and the units above. The map
+                is the default and the first of the two: it is what §7.0 opens
+                on, and what somebody who never comes here goes on seeing.
+            -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:text="@string/settings_opening_title"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/opening_screen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:contentDescription="@string/settings_opening_description"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/opening_screen_map"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:text="@string/settings_opening_map" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/opening_screen_list"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:text="@string/settings_opening_list" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
             <!-- Offline data: what the application occupies, and how to
                  reclaim it (SPEC §4.4). -->
             <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle

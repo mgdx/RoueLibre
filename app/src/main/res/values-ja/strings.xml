@@ -431,4 +431,14 @@
     <string name="error_local_storage">Unable to read the data stored on the device.</string>
     <string name="error_no_city_chosen">No city is selected. Choose one to see its stations.</string>
 
+    <!-- Opening screen, large numbers, own bike kind -->
+
+    <string name="settings_opening_title">Opens on</string>
+    <!-- Read aloud in place of the two buttons beside it. -->
+    <string name="settings_opening_description">The screen the app opens on</string>
+    <string name="settings_opening_map">Map</string>
+    <string name="settings_opening_list">Station list</string>
+    <!-- The way to the map from a station list opened on. -->
+    <string name="stations_open_map">See the map</string>
+
 </resources>

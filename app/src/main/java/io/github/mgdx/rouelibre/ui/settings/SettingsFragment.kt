@@ -13,6 +13,7 @@ import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.journey.WalkingPace
 import io.github.mgdx.rouelibre.core.measure.UnitChoice
 import io.github.mgdx.rouelibre.data.AppTheme
+import io.github.mgdx.rouelibre.data.OpeningScreen
 import io.github.mgdx.rouelibre.databinding.FragmentSettingsBinding
 import io.github.mgdx.rouelibre.ui.about.AboutFragment
 import io.github.mgdx.rouelibre.ui.city.CityFragment
@@ -68,6 +69,7 @@ class SettingsFragment : Fragment() {
         setUpWalkingPace(views)
         setUpTheme(views)
         setUpUnits(views)
+        setUpOpeningScreen(views)
         setUpOfflineData(views)
         setUpAbout(views)
     }
@@ -219,6 +221,42 @@ class SettingsFragment : Fragment() {
                             UnitChoice.Metric -> R.id.units_metric
                             UnitChoice.UnitedStates -> R.id.units_us
                             UnitChoice.UnitedKingdom -> R.id.units_uk
+                        },
+                    )
+                    isFilling = false
+                }
+            }
+        }
+    }
+
+    /**
+     * The screen the application opens on, in the display section
+     * (SPEC §7.0, §7.6).
+     *
+     * Written the moment it is pressed, like the theme and the units, and like
+     * the walking pace it applies to nothing already on screen: it is read once,
+     * by the activity, at the launch after this one. Nothing is rebuilt here —
+     * the screen one is standing on is not the screen one opens with.
+     */
+    private fun setUpOpeningScreen(views: FragmentSettingsBinding) {
+        views.openingScreen.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked || isFilling) return@addOnButtonCheckedListener
+            val screen = when (checkedId) {
+                R.id.opening_screen_list -> OpeningScreen.StationList
+                else -> OpeningScreen.Map
+            }
+            viewLifecycleOwner.lifecycleScope.launch { preferences.setOpeningScreen(screen) }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preferences.openingScreen.collect { screen ->
+                    val current = binding ?: return@collect
+                    isFilling = true
+                    current.openingScreen.check(
+                        when (screen) {
+                            OpeningScreen.Map -> R.id.opening_screen_map
+                            OpeningScreen.StationList -> R.id.opening_screen_list
                         },
                     )
                     isFilling = false

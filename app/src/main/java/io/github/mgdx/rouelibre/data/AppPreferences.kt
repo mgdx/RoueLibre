@@ -214,6 +214,31 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * The screen the application opens on (SPEC §7.0, §7.6).
+     *
+     * [OpeningScreen.Map] by default, and for any value that cannot be read
+     * (see [OpeningScreen.fromId]): it is what the application has always opened
+     * on, so nothing changes for somebody who never opens this screen.
+     *
+     * **A way of arriving, not a way of computing**, like [units] and unlike
+     * [walkingPace]: no journey and no measurement depends on it. And it says
+     * nothing about the user beyond which of two screens they read first
+     * (SPEC §2, C3).
+     *
+     * A flow rather than a read, on the pattern of the settings around it —
+     * though the one place it is consulted, the activity's first transaction,
+     * takes a single value from it.
+     */
+    val openingScreen: Flow<OpeningScreen> = dataStore.data.map { preferences ->
+        OpeningScreen.fromId(preferences[OPENING_SCREEN])
+    }
+
+    /** Stores the screen the application is to open on. */
+    suspend fun setOpeningScreen(screen: OpeningScreen) {
+        dataStore.edit { it[OPENING_SCREEN] = screen.id }
+    }
+
+    /**
      * Whether journeys are worked out for the user's own bike (SPEC §7.3).
      *
      * False by default: the application serves a bike-share network, and the
@@ -383,6 +408,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         val USES_OWN_BIKE = booleanPreferencesKey("uses_own_bike")
         val WANTED_BIKE_KIND = stringPreferencesKey("wanted_bike_kind")
         val WALKING_PACE = stringPreferencesKey("walking_pace")
+        val OPENING_SCREEN = stringPreferencesKey("opening_screen")
         val ACTIVE_CITY_ID = stringPreferencesKey("active_city_id")
         val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
         val DECLINED_CITY_PROPOSAL_ID = stringPreferencesKey("declined_city_proposal_id")
