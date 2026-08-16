@@ -123,7 +123,8 @@
                 android:id="@+id/open_sources"
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_min"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/touch_target_min"
                 android:layout_marginTop="@dimen/space_m"
                 android:text="@string/about_open_sources" />
 
@@ -159,7 +160,8 @@
                 android:id="@+id/open_repository"
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_min"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/touch_target_min"
                 android:layout_marginTop="@dimen/space_m"
                 android:text="@string/about_open_repository" />
 
@@ -167,7 +169,8 @@
                 android:id="@+id/open_welcome"
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_min"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/touch_target_min"
                 android:layout_marginTop="@dimen/space_s"
                 android:text="@string/welcome_open" />
 
@@ -175,7 +178,8 @@
                 android:id="@+id/open_whats_new"
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_min"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/touch_target_min"
                 android:layout_marginTop="@dimen/space_s"
                 android:text="@string/whats_new_open" />
 
@@ -183,7 +187,8 @@
                 android:id="@+id/open_licences"
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_min"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/touch_target_min"
                 android:layout_marginTop="@dimen/space_s"
                 android:text="@string/about_open_licences" />
         </LinearLayout>

@@ -276,12 +276,21 @@
                  along it: this one computes journeys, it does not guide
                  (SPEC §13). Last of the reading — everything the screen offers
                  to do comes after everything it has to say — and absent when
-                 there is no journey to hand over. -->
+                 there is no journey to hand over.
+
+                 Its height is a floor, not a measurement: nailed to the minimum
+                 touch target, the label was cut off mid-sentence — "Open in a
+                 navigation" — as soon as the system font passed 130%, with no
+                 ellipsis to even say so. The forty-eight density-independent
+                 pixels are what a finger needs, never what a sentence needs;
+                 every button in the application that carries a sentence is laid
+                 the same way. -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/navigate"
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_min"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/touch_target_min"
                 android:layout_marginStart="@dimen/space_l"
                 android:layout_marginTop="@dimen/space_m"
                 android:layout_marginEnd="@dimen/space_l"

@@ -196,7 +196,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/pick_confirm"
         android:layout_width="0dp"
-        android:layout_height="@dimen/touch_target_min"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/touch_target_min"
         android:layout_marginStart="@dimen/space_l"
         android:layout_marginEnd="@dimen/space_l"
         android:layout_marginBottom="@dimen/space_l"

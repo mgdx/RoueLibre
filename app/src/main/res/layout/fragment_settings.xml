@@ -52,7 +52,8 @@
                 android:id="@+id/open_city"
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_min"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/touch_target_min"
                 android:layout_marginTop="@dimen/space_s"
                 android:gravity="start|center_vertical"
                 android:text="@string/city_open" />
@@ -69,7 +70,8 @@
                 android:id="@+id/open_storage"
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_min"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/touch_target_min"
                 android:layout_marginTop="@dimen/space_s"
                 android:gravity="start|center_vertical"
                 android:text="@string/storage_open"
@@ -95,7 +97,8 @@
                     android:id="@+id/theme_system"
                     style="@style/Widget.RoueLibre.Toggle"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/touch_target_min"
+                    android:layout_height="match_parent"
+                    android:minHeight="@dimen/touch_target_min"
                     android:layout_weight="1"
                     android:text="@string/settings_theme_system" />
 
@@ -103,7 +106,8 @@
                     android:id="@+id/theme_light"
                     style="@style/Widget.RoueLibre.Toggle"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/touch_target_min"
+                    android:layout_height="match_parent"
+                    android:minHeight="@dimen/touch_target_min"
                     android:layout_weight="1"
                     android:text="@string/settings_theme_light" />
 
@@ -111,7 +115,8 @@
                     android:id="@+id/theme_dark"
                     style="@style/Widget.RoueLibre.Toggle"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/touch_target_min"
+                    android:layout_height="match_parent"
+                    android:minHeight="@dimen/touch_target_min"
                     android:layout_weight="1"
                     android:text="@string/settings_theme_dark" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
@@ -120,7 +125,8 @@
                 android:id="@+id/open_about"
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_min"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/touch_target_min"
                 android:layout_marginTop="@dimen/space_l"
                 android:gravity="start|center_vertical"
                 android:text="@string/about_open" />

@@ -121,7 +121,8 @@
             android:id="@+id/mode_bikes"
             style="@style/Widget.RoueLibre.Toggle"
             android:layout_width="0dp"
-            android:layout_height="@dimen/touch_target_min"
+            android:layout_height="match_parent"
+            android:minHeight="@dimen/touch_target_min"
             android:layout_weight="1"
             android:text="@string/mode_bikes" />
 
@@ -129,7 +130,8 @@
             android:id="@+id/mode_docks"
             style="@style/Widget.RoueLibre.Toggle"
             android:layout_width="0dp"
-            android:layout_height="@dimen/touch_target_min"
+            android:layout_height="match_parent"
+            android:minHeight="@dimen/touch_target_min"
             android:layout_weight="1"
             android:text="@string/mode_docks" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
