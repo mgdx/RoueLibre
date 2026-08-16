@@ -303,6 +303,36 @@ also records what has no visible effect.
   checked against its manifest's digests, both its SQLite files opened and
   queried, and its routing graph counted.
 
+- **The map can leave out the stations that answer nothing.** Two switches, in a
+  sheet opened from a pill beside the mode toggle: **hide the stations out of
+  service**, and **hide the empty ones**. In a dense conurbation the map carries
+  several hundred discs and a good part of them are of no use to somebody
+  looking for a bike now — a station out of service will lend none, a station at
+  zero will lend none either. "Empty" reads with the toggle: no bike while bikes
+  are counted, no free dock while docks are, so the same station disappears
+  under one and comes back under the other. **Both are off by default** and
+  neither is written down — they live as long as the screen, like the mode
+  toggle and the kind filter beside them, which is what keeps a filter from
+  becoming a trap laid for the next launch. No adjustable threshold and no "at
+  least three bikes": the marker already says how many there are.
+  **What the feed is silent about is never hidden.** `ServiceState.Unknown`
+  survives "out of service", and a count nobody could read — a station absent
+  from `station_status`, a breakdown by kind that does not add up — survives
+  "empty". Hiding either would assert on the strength of a silence something the
+  application has not read, which is the same rule that silences a station's
+  split rather than guessing at it. Three of the nine tests in `:core` exist for
+  that case alone, and they fail the moment an absent count is read as a nought.
+  **A map that hides stations says so.** While a filter is on, the pill stops
+  being an icon and names how many stations are missing right now, nought
+  included — that nought being what tells the user a filter is on at all. The
+  count is recomputed at every refresh, so it stays true without anyone touching
+  a switch. The sifting is done in `:core` in plain Kotlin, on what the marker
+  **shows** rather than on the raw feed, which is what makes it agree with the
+  kind filter for free; and it happens before the features are built, not by
+  redrawing several hundred markers and hiding some. `SPEC.md` §7.1 now carries
+  the two filters, their idle default, the rule about silence and the
+  requirement that an active filter be visible without anything being opened.
+
 ### Changed
 
 - **The settings screen is laid out in sections.** Nothing is added and nothing

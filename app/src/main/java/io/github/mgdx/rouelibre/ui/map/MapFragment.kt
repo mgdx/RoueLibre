@@ -29,8 +29,10 @@ import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.BikeKindFilter
+import io.github.mgdx.rouelibre.core.station.StationFilter
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.core.station.freshnessOf
+import io.github.mgdx.rouelibre.core.station.stationsShownOnMap
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
@@ -204,6 +206,18 @@ class MapFragment : Fragment() {
     private var bikeKind: WantedBikeKind? = null
 
     /**
+     * Which stations the map leaves out, and at rest it leaves out none.
+     *
+     * Written nowhere, exactly like [mode] and [bikeKind] beside it: the three
+     * are ways of looking at the map for a minute, not facts about the rider,
+     * and the screen would be inventing a third conduct in the same corner by
+     * remembering one of them. That is also what keeps a filter from being a
+     * trap — a map that hides stations cannot come back hiding them after the
+     * application has been closed, since it comes back showing everything.
+     */
+    private var mapFilter: StationFilter = StationFilter()
+
+    /**
      * What the network in service lends, so the markers can be counted by kind.
      *
      * `null` until the reading lands. It decides whether the filter exists at
@@ -249,9 +263,11 @@ class MapFragment : Fragment() {
         views.openJourney.setOnClickListener { show(JourneySearchFragment()) }
         views.modeToggle.setOnClickListener { toggleMode() }
         views.bikeKindFilter.setOnClickListener { toggleBikeKind() }
+        views.stationFilter.setOnClickListener { openStationFilters() }
         views.pickedPlace.setOnClickListener { showPickedPlace(null) }
         applyModeLabel()
         applyBikeKindLabel()
+        listenForStationFilters()
         // The button that opens the journey search carries the bike of the
         // network served: with a bolt where that network lends pedal-assist
         // bikes (SPEC §15).
@@ -378,6 +394,9 @@ class MapFragment : Fragment() {
         // search opens from the map, and presumes one.
         views.openSearch.isVisible = showsControls
         views.openJourney.isVisible = showsControls
+        // Which stations are drawn is a question about the map: it goes with
+        // the map's other controls, and asks nothing of the network's fleet.
+        views.stationFilter.isVisible = showsControls
         showBikeKindFilter()
         if (tiles == null || configuration == null) return
 
@@ -542,15 +561,78 @@ class MapFragment : Fragment() {
         lastKnownPosition?.let { userPosition.setGeoJson(UserPositionMarker.featureFor(it)) }
     }
 
+    /**
+     * Redraws the markers for the stations the filter leaves standing.
+     *
+     * The stations are sifted **before** the features are built rather than by
+     * redrawing them all and hiding some: the list runs to several hundred
+     * entries and is replayed at every refresh.
+     *
+     * The label is written here too, and not where the switches are set: what it
+     * says — how many stations are missing — is only known once the sifting has
+     * been done, and it changes at every refresh without anyone touching a
+     * switch.
+     */
     private fun publishStations() {
+        val all = viewModel.state.value.stations
+        val shown = stationsShownOnMap(all, mapFilter, mode, bikeKindFilter())
+        showStationFilterLabel(hidden = all.size - shown.size)
         val source = stationSource ?: return
-        source.setGeoJson(
-            StationMarkers.toFeatureCollection(
-                viewModel.state.value.stations,
-                mode,
-                bikeKindFilter(),
-            ),
-        )
+        source.setGeoJson(StationMarkers.toFeatureCollection(shown, mode, bikeKindFilter()))
+    }
+
+    /**
+     * Says on the map itself what the filter is taking away (SPEC §7.1).
+     *
+     * A filter that hides stations without saying so turns a helpful map into a
+     * misleading one: somebody finding a quarter empty must understand why
+     * without opening anything. The pill therefore stops being an icon and
+     * becomes a sentence for as long as a filter is on — nought included, which
+     * is what tells the user a filter is on while it happens to hide nothing.
+     */
+    private fun showStationFilterLabel(hidden: Int) {
+        val button = binding?.stationFilter ?: return
+        button.isChecked = !mapFilter.hidesNothing
+        if (mapFilter.hidesNothing) {
+            button.text = null
+            // Nothing to stand off from: the funnel alone, centred.
+            button.iconPadding = 0
+            button.contentDescription = getString(R.string.map_filter_open)
+        } else {
+            button.text = resources.getQuantityString(R.plurals.map_filter_hidden, hidden, hidden)
+            button.iconPadding = resources.getDimensionPixelSize(R.dimen.space_s)
+            // The sentence is the button's own text: a description on top of it
+            // would be read INSTEAD of the count, which is the information.
+            button.contentDescription = null
+        }
+    }
+
+    /** Opens the two switches on the filter in force. */
+    private fun openStationFilters() {
+        MapFiltersSheet.newInstance(mapFilter, mode)
+            .show(parentFragmentManager, MapFiltersSheet.TAG)
+        // The button is checkable, so the press has just flipped it: it is the
+        // filter that says how it looks, not the last tap.
+        binding?.stationFilter?.isChecked = !mapFilter.hidesNothing
+    }
+
+    /**
+     * Follows the switches while the sheet is open.
+     *
+     * The sheet answers at every flick rather than at a confirmation, and the
+     * map redraws under it: one sees what a switch takes away as one takes it.
+     */
+    private fun listenForStationFilters() {
+        parentFragmentManager.setFragmentResultListener(
+            MapFiltersSheet.REQUEST_KEY,
+            viewLifecycleOwner,
+        ) { _, result ->
+            mapFilter = StationFilter(
+                hideOutOfService = result.getBoolean(MapFiltersSheet.RESULT_HIDE_OUT_OF_SERVICE),
+                hideEmpty = result.getBoolean(MapFiltersSheet.RESULT_HIDE_EMPTY),
+            )
+            publishStations()
+        }
     }
 
     /**

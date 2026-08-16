@@ -460,4 +460,18 @@
     <string name="error_local_storage">Unable to read the data stored on the device.</string>
     <string name="error_no_city_chosen">No city is selected. Choose one to see its stations.</string>
 
+    <!-- Map station filters -->
+    <string name="map_filter_title">Which stations to show</string>
+    <string name="map_filter_open">Choose which stations the map shows</string>
+    <string name="map_filter_hide_out_of_service">Hide the stations out of service</string>
+    <string name="map_filter_hide_empty_bikes">Hide the stations with no bike</string>
+    <string name="map_filter_hide_empty_docks">Hide the stations with no free dock</string>
+    <string name="map_filter_keeps_unknown">Stations the network says nothing about stay on the map: a count nobody could read is not a count of nothing.</string>
+    <!-- On the map, while a filter is on: how many stations it is leaving out.
+         Zero is said too — it is what tells the user the filter is on at all. -->
+    <plurals name="map_filter_hidden">
+        <item quantity="one">%1$d station hidden</item>
+        <item quantity="other">%1$d stations hidden</item>
+    </plurals>
+
 </resources>
