@@ -276,13 +276,16 @@ class JourneyDetailFragment : Fragment() {
             showTotal(journey)
         }
         // And the rider's own bike, which is another question entirely: it
-        // reaches the two ends of the drawing and the sentence beside the total,
-        // both of which this screen repeats from the one it was opened from
-        // (SPEC §7.4.1, §7.6).
+        // reaches the two ends of the drawing, the sentence beside the total —
+        // both repeated word for word from the screen this one was opened from —
+        // and the icon of the one row a ride on one's own bike has
+        // (SPEC §7.4.1, §7.6). All three, or the reader would meet the bolt
+        // above the row and a plain bike on it.
         withOwnBikeKind { declared ->
             ownBikeKind = declared
             binding?.shape?.ownBikeKind = declared
             showTotal(journey)
+            showJourney(journey, viewModel.addresses.value)
         }
         viewModel.locate(stationsOf(journey.plan))
         viewLifecycleOwner.lifecycleScope.launch {
@@ -443,11 +446,15 @@ class JourneyDetailFragment : Fragment() {
                 minutes = minutes.first(),
             )
 
-            // The plain bike, whatever the network lends: the bolt and the cog
-            // describe what waits at a station (SPEC §15), and this bike is the
-            // rider's own.
+            // Never the cog, and the bolt from the rider rather than from the
+            // network: what a network lends says nothing about a bike that is
+            // not its own (SPEC §15), and the rider who declared an electric one
+            // said everything about it (SPEC §7.6). The same move the ride row
+            // of a station journey makes with `BikeGlyphs.icon`, with the
+            // declaration in place of the fleet — and the same answer the shape
+            // above this row and the sentence beside the total already give.
             is JourneyPlan.OwnBike -> addLeg(
-                icon = R.drawable.ic_bike,
+                icon = OwnBikeGlyphs.icon(ownBikeKind),
                 label = getString(R.string.journey_step_ride_all),
                 leg = plan.ride,
                 minutes = minutes.first(),

@@ -29,6 +29,19 @@ import kotlinx.coroutines.launch
  */
 object OwnBikeGlyphs {
 
+    /**
+     * The bike as an icon, beside the row of a ride on one's own bike.
+     *
+     * The counterpart of `BikeGlyphs.icon`, which the station journey's ride row
+     * already uses: the row's icon follows the bike the row is about, and on
+     * this journey that bike is the rider's.
+     */
+    @DrawableRes
+    fun icon(kind: OwnBikeKind?): Int = when (kind) {
+        OwnBikeKind.Electric -> R.drawable.ic_bike_electric
+        else -> R.drawable.ic_bike
+    }
+
     /** The disc standing at either end of a journey on one's own bike. */
     @DrawableRes
     fun endpointMarker(kind: OwnBikeKind?): Int = when (kind) {

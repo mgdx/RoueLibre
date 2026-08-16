@@ -505,8 +505,10 @@ also records what has no visible effect.
   and it reproduces exactly the drawings and the sentences of the version before
   this choice existed. Declared electric, a journey on one's own bike draws the
   bolt at its two ends — on the search screen's illustration, on the result
-  screen's drawing and on the two points of its map — and the summary says "on
-  your own electric bike". A bike declared mechanical takes the plain drawing, as
+  screen's drawing and on the two points of its map — the summary says "on your
+  own electric bike", and the one step row of the detail carries the same bike
+  beside it, since three readings of one journey on one screen have to agree.
+  A bike declared mechanical takes the plain drawing, as
   an undeclared one does: the plain bike promises the least and the bolt is what
   has to be earned.
   **It changes the drawing and the sentence, and nothing else.** No speed, no
