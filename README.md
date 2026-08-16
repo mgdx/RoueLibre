@@ -23,6 +23,13 @@ hundreds of cities across several countries, and computes the best journey to
 make with those bikes — door to door, **walk → bike → walk**. It is designed to
 be simple, efficient and privacy-friendly.
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/journey-shape-dark.svg">
+    <img src="docs/images/journey-shape-light.svg" alt="Walk, bike, walk: an outlined circle at either end for the two doors, a filled disc at each of the two stations, dashes for the walks and an unbroken line for the ride." width="420">
+  </picture>
+</p>
+
 It is free software under the GPLv3, it uses no Google service, and everything
 but the live availability of the bikes runs on your phone.
 
