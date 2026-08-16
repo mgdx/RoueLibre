@@ -86,12 +86,23 @@ By hand, for a network the catalogues do not list:
    ```bash
    python3 tools/build_catalogue.py
    ```
-   It is derived from the configurations, never written by hand: an entry
-   maintained by hand would end up describing a city one cannot install.
+   It is derived from the configurations and the manifests, never written by
+   hand: an entry maintained by hand would end up describing a city one cannot
+   install. It must be re-derived **after** the data, never before — a catalogue
+   older than the manifests beside it announces a city as unpublished in the
+   list and downloads it on the very next screen.
 5. **Publish the files** from `data/out/<network>/` in a repository release,
-   along with the manifest and the catalogue. A release has a single namespace:
-   the files carry their network's prefix there — `velib-tiles.mbtiles` — and
-   recover their bare name once installed.
+   along with the manifest and the catalogue:
+   ```bash
+   python3 tools/publish_data.py
+   ```
+   A release has a single namespace: the files carry their network's prefix
+   there — `velib-tiles.mbtiles` — and recover their bare name once installed.
+   The command refuses to send a catalogue that disagrees with the manifests it
+   would travel with, and names the cities and the command that fixes it. It
+   rewrites a manifest whose release tag or digests have gone stale, which is
+   itself one of the ways the catalogue falls behind: when it says it has, run
+   step 4 again and publish once more.
 
 The application assumes no default city. It proposes the one matching your
 position, on a button press, and stores each city's data apart: two cities

@@ -108,13 +108,17 @@ def heavy_files(city: dict) -> list[tuple[Path, str]]:
     return files
 
 
-def stamp_manifests(cities: list[dict], tag: str, dry_run: bool) -> None:
+def stamp_manifests(cities: list[dict], tag: str, dry_run: bool) -> set[str]:
     """Rewrite every manifest so its URLs name the release its files are in.
 
     Also whenever a dataset has been generated since the manifest was written:
     a manifest is a list of digests, and one older than the files it describes
     would send the application after a file it then refuses.
+
+    Returns the cities rewritten, which the catalogue then has to be re-derived
+    from: this step is itself one of the ways it goes stale.
     """
+    stamped = set()
     for city in cities:
         country_tag = f"{tag}-{city['country']}"
         written = city["manifest_path"].stat().st_mtime
@@ -126,6 +130,7 @@ def stamp_manifests(cities: list[dict], tag: str, dry_run: bool) -> None:
         if city["manifest"].get("releaseTag") == country_tag and written >= described:
             continue
         print(f"  {city['id']} → {country_tag}")
+        stamped.add(city["id"])
         if dry_run:
             continue
         run(["/usr/bin/python3", str(TOOLS_DIR / "build_manifest.py"),
@@ -134,6 +139,67 @@ def stamp_manifests(cities: list[dict], tag: str, dry_run: bool) -> None:
              "--output", str(city["manifest_path"]),
              "--release-tag", country_tag])
         city["manifest"] = json.loads(city["manifest_path"].read_text())
+    return stamped
+
+
+def manifest_size(manifest: dict) -> int:
+    """What a manifest says the whole of a city's data weighs."""
+    return sum(entry["sizeBytes"]
+               for dataset in manifest.get("datasets", [])
+               for entry in dataset["files"])
+
+
+def check_catalogue(cities: list[dict], stamped: set[str], dry_run: bool) -> None:
+    """Refuse to publish a catalogue that contradicts the manifests beside it.
+
+    The catalogue and the manifests leave in the same release and describe the
+    same files, but they are produced by two commands run at two moments. The
+    catalogue is the one the list of cities reads, so a catalogue older than the
+    manifests makes the application announce a city as unpublished on one screen
+    and offer its download on the next.
+
+    Nothing here repairs the catalogue: it is derived from the configurations
+    and the manifests, and re-deriving it silently at publishing time would hide
+    a change to a file the repository tracks. Refusing before a single byte goes
+    out, and naming the command that fixes it, is what stops the drift from
+    reaching a phone.
+    """
+    catalogue = json.loads(CATALOGUE.read_text(encoding="utf-8"))
+    entries = {entry["id"]: entry for entry in catalogue["cities"]}
+    disagreements = []
+    for city in cities:
+        entry = entries.get(city["id"])
+        if entry is None:
+            disagreements.append(f"{city['id']}: absent from the catalogue")
+            continue
+        # A dry run leaves the manifests as they were, so a city it would have
+        # stamped cannot be compared against what will actually be published.
+        if dry_run and city["id"] in stamped:
+            continue
+        expected = manifest_size(city["manifest"])
+        if entry["dataSizeBytes"] != expected:
+            disagreements.append(
+                f"{city['id']}: catalogue says {entry['dataSizeBytes']}, "
+                f"manifest says {expected} bytes")
+        elif entry["releaseTag"] != city["manifest"].get("releaseTag"):
+            disagreements.append(
+                f"{city['id']}: catalogue says release {entry['releaseTag']}, "
+                f"manifest says {city['manifest'].get('releaseTag')}")
+
+    if dry_run and stamped:
+        print(f"  {len(stamped)} manifests would be rewritten; the catalogue "
+              f"has to be rebuilt after that, and is not compared here")
+    if not disagreements:
+        print(f"  {len(cities)} entries agree with their manifest")
+        return
+    for line in disagreements[:10]:
+        print(f"    {line}")
+    if len(disagreements) > 10:
+        print(f"    … and {len(disagreements) - 10} more")
+    raise PublishError(
+        f"the catalogue disagrees with {len(disagreements)} of the manifests "
+        f"it would be published with: run python3 tools/build_catalogue.py, "
+        f"then publish again")
 
 
 def upload(tag: str, repo: str, title: str, notes: str,
@@ -228,7 +294,12 @@ def main() -> int:
         print(f"{len(cities)} cities, {len(by_country)} countries\n")
 
         print("── Manifests ──")
-        stamp_manifests(cities, arguments.tag, arguments.dry_run)
+        stamped = stamp_manifests(cities, arguments.tag, arguments.dry_run)
+
+        # Before anything is sent: a catalogue that lies about a city is worth
+        # catching here rather than after 5.6 GB have gone out.
+        print("\n── Catalogue ──")
+        check_catalogue(cities, stamped, arguments.dry_run)
 
         print("\n── Country releases ──")
         staging = REPO_ROOT / "data" / "release" / "staging"

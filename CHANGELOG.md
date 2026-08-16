@@ -283,6 +283,20 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **A city announced as unpublished offered its 1.65 GB one tap later.** The
+  list said "Data not published yet" of sharedmobility.ch — Zürich, and the
+  storage screen reached on touching that very row proposed "Download 1.65 GB";
+  nextbike Niederösterreich — Vienna said the same of its 413 MB. The catalogue
+  published on 15 August was derived at 11:41 and the two datasets finished at
+  11:44 and 12:17: it was older than the data it describes, and
+  `publish_data.py` sent it out anyway. **Publishing now refuses a catalogue
+  that disagrees with the manifests it would travel with** — a different size, a
+  different release tag, or an entry carrying none while the manifest exists —
+  names the cities and the command that re-derives it, and stops before a single
+  byte goes out. The check runs after the manifests are stamped, that stamping
+  being itself one of the ways the catalogue falls behind. All 332 entries now
+  agree with their manifest.
+
 - **A server whose certificate could not be trusted was announced as a feed
   publishing rubbish.** sharedmobility.ch let its own certificate expire on
   15 August 2026 and Zürich lost its stations behind "the data received is
