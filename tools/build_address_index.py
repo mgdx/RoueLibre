@@ -69,6 +69,27 @@ GRID_DEGREES = 0.01
 # to cover a city's own spellings without turning a fixture into a corpus.
 SAMPLED_STREET_NAMES = 120
 
+# Below this many house numbers per street, an index stops being an address
+# index and becomes a street directory: nearly every search then falls back on
+# the street's representative point, with the error of several hundred metres
+# §4.3 calls unacceptable — "enough to designate the wrong station and
+# therefore a wrong journey".
+#
+# The median over the 332 networks served is 16.4 numbers per street, so this
+# floor sits far under the ordinary case and only catches what is degenerate.
+# It is a threshold on the data and never on a country: nothing here names one,
+# and a place whose numbers get mapped rises above it without a release. What
+# it catches today is Japan, where OpenStreetMap carries almost no
+# "addr:housenumber" because an address there is not built on the street —
+# Tokyo at 0.01, Toyama at 0.04.
+#
+# It warns and does not refuse. §4.3 already accepts that the coverage of
+# OpenStreetMap varies from one city to the next, and refusing here would leave
+# Tokyo — the catalogue's largest network, 1891 stations — with no address
+# search at all, which serves its rider worse than a street-level one that says
+# it is approximate.
+HOUSE_NUMBERS_PER_STREET_FLOOR = 1.0
+
 # Entry kinds, mirrored by the Kotlin side.
 KIND_STREET = 0
 KIND_PLACE = 1
@@ -818,6 +839,39 @@ def build_database(
     }
 
 
+def report_house_number_coverage(streets: int, numbers: int) -> None:
+    """State how well the index locates an address, and say so when it barely does.
+
+    The figure the report was missing. A count of streets and a count of
+    numbers side by side say nothing on their own; their ratio says whether a
+    search will land on a doorstep or on the middle of a thoroughfare, which is
+    the whole difference §4.3 draws between an address index and a street list.
+
+    Written to stderr below the floor so that it survives a run over 332 cities,
+    where a line of standard output scrolls past unread.
+    """
+    if streets <= 0:
+        return
+    ratio = numbers / streets
+    print(f"Numbers/street  : {ratio:.2f}")
+    if ratio >= HOUSE_NUMBERS_PER_STREET_FLOOR:
+        return
+    print(
+        f"\nWarning: {ratio:.2f} house numbers per street, under the floor of "
+        f"{HOUSE_NUMBERS_PER_STREET_FLOOR:.2f}.\n"
+        f"         The address base carries almost no numbers over this box, so "
+        f"nearly every\n"
+        f"         search will land on the street's representative point rather "
+        f"than on a\n"
+        f"         doorstep. The application drops a number it cannot resolve "
+        f"rather than\n"
+        f"         placing it wrongly, so nothing is broken here and the index "
+        f"is worth\n"
+        f"         publishing as it is (SPEC.md §4.3).",
+        file=sys.stderr,
+    )
+
+
 def write_normalization_fixtures(normalizer: AddressNormalizer,
                                  streets: list[tuple[str, Street]],
                                  network_id: str) -> Path:
@@ -957,6 +1011,9 @@ def main() -> int:
         print(f"Streets         : {counts['streets'] - place_count}")
         print(f"Landmarks       : {place_count}")
         print(f"House numbers   : {counts['numbers']}")
+        # Streets only: a landmark carries no number by construction, and
+        # counting it in the denominator would blame the wrong thing.
+        report_house_number_coverage(counts["streets"] - place_count, counts["numbers"])
         print(f"Duration        : {elapsed / 60:.1f} min")
         if counts["oversized_deltas"]:
             print(f"Deltas beyond 16 bits: {counts['oversized_deltas']} "

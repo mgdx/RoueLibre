@@ -341,6 +341,21 @@ also records what has no visible effect.
   would have moved the lie rather than removed it. A search that genuinely finds
   nothing still says so at once — 0.2 s on Hunedoara.
 
+- **The address index never said how few numbers it held.** Tokyo's index
+  carries 101 house numbers for 7,565 streets and Toyama's 7 for 105, against a
+  median of 16.4 per street over the 332 networks; every search there lands on
+  the street's representative point, several hundred metres out, which
+  `SPEC.md` §4.3 calls unacceptable — and nothing measured or reported it.
+  **The indexing script now states the numbers-per-street ratio and warns under
+  a floor of one.** It warns and does not refuse: §4.3 already accepts that
+  OpenStreetMap's coverage varies, an address in Japan is not built on the
+  street, and refusing would leave the catalogue's largest network with no
+  address search at all — worse than a street search the application never
+  passes off as more, a number it cannot resolve being dropped from the result
+  rather than placed wrongly. The floor is a threshold on the data and never on
+  a country: nothing names one, and a place whose numbers get mapped rises above
+  it without a release.
+
 - **A city announced as unpublished offered its 1.65 GB one tap later.** The
   list said "Data not published yet" of sharedmobility.ch — Zürich, and the
   storage screen reached on touching that very row proposed "Download 1.65 GB";
