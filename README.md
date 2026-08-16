@@ -48,11 +48,15 @@ but the live availability of the bikes runs on your phone.
     lends only mechanical bikes, a bolt where it lends only electric ones, a
     bolt and a cog where it lends both;
   - and in that last case, a station saying how many of its bikes are
-    mechanical and how many are electric.
+    mechanical and how many are electric, and a filter to count only the kind
+    you are after.
 
 - 🧭 **The best journey, not the nearest station:**
   - the departure and arrival stations are chosen from the live availability —
     bikes to take at one end, free docks to return to at the other;
+  - and where the city lends both, you can even pick the bike you prefer:
+    mechanical or electric, and only the stations that really hold one are
+    considered;
   - the route follows the cycle ways;
   - the climb is counted and named, because a bike-share bike is heavy.
 
