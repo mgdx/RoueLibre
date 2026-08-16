@@ -35,6 +35,34 @@ class JourneySearchFragment : Fragment() {
         onLocating = ::showLocating,
     )
 
+    /**
+     * Takes the two points back, before anything can read or rewrite them.
+     *
+     * Here rather than in `onViewCreated`, because a screen left on the back
+     * stack — this one, while the result is being read — has no view rebuilt
+     * when the activity is: only this runs. Read from the view's arrival, the
+     * two points stayed empty through the whole recreation, and the next save
+     * wrote that emptiness over the state that still held them. Coming back
+     * from the result then landed on a blank form.
+     *
+     * A bundle that is null is a screen being created for the first time, and
+     * only then are the arguments read: a point received from another
+     * application (SPEC §7.8) or from a station just consulted (SPEC §7.2),
+     * with the other end left to fill. This runs once for the fragment, so
+     * nothing here can overwrite a point picked since.
+     */
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState != null) {
+            origin = JourneyEndpoint.readFrom(savedInstanceState, STATE_ORIGIN)
+            destination = JourneyEndpoint.readFrom(savedInstanceState, STATE_DESTINATION)
+            picker.readFrom(savedInstanceState)
+            return
+        }
+        origin = JourneyEndpoint.readFrom(arguments, ARGUMENT_ORIGIN)
+        destination = JourneyEndpoint.readFrom(arguments, ARGUMENT_DESTINATION)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,25 +76,6 @@ class JourneySearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val views = checkNotNull(binding)
-
-        // Only when the screen is rebuilt after being destroyed — rotation, a
-        // return from the background. Going through the address search destroys
-        // the VIEW alone: the fields already filled still live in the fragment,
-        // and re-reading them from an absent bundle erased them. The second
-        // point then overwrote the first.
-        if (savedInstanceState != null) {
-            origin = JourneyEndpoint.readFrom(savedInstanceState, STATE_ORIGIN)
-            destination = JourneyEndpoint.readFrom(savedInstanceState, STATE_DESTINATION)
-            picker.readFrom(savedInstanceState)
-        } else {
-            // A point received from elsewhere: from another application
-            // (SPEC §7.8) or from a station just consulted (SPEC §7.2). Only
-            // the other end remains to be filled.
-            if (origin == null) origin = JourneyEndpoint.readFrom(arguments, ARGUMENT_ORIGIN)
-            if (destination == null) {
-                destination = JourneyEndpoint.readFrom(arguments, ARGUMENT_DESTINATION)
-            }
-        }
 
         views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
         views.toolbar.navigationContentDescription = getString(R.string.action_back)
