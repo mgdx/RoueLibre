@@ -5,6 +5,17 @@
     Written by hand rather than with androidx.preference: that library brings
     its own visual grammar, which the project's tokens would then have to fight,
     for a dozen settings that fit on one screen.
+
+    Laid out in sections, in the order SPEC §7.6 fixes: city, journey, display,
+    offline data — then the way to "about", which belongs to no section and
+    closes the screen. Placing a new setting is meant to be one thing: adding
+    its views under the right title, without touching a line above or below.
+
+    A section with nothing in it is not written here at all. "Journey" is that
+    case today, which is why it is absent rather than empty: a title followed
+    by nothing promises a setting the screen does not have, and SPEC §14 wants
+    no view built against a feature that has not arrived. The first setting
+    placed there brings its title with it, between the city and the display.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,56 +43,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
+        <!-- No top padding: the first section title carries the air above it
+             itself, like every other one. -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingStart="@dimen/space_l"
-            android:paddingTop="@dimen/space_s"
             android:paddingEnd="@dimen/space_l"
             android:paddingBottom="@dimen/space_xxl">
 
-            <!-- The city frames everything else, so it comes first. -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/city_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+            <!-- The city frames everything else — the network served, the data
+                 installed, the journeys computed — so it comes first. -->
+            <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle
+                style="@style/Widget.RoueLibre.SettingsSection"
+                android:text="@string/settings_section_city" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/open_city"
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/touch_target_min"
-                android:layout_marginTop="@dimen/space_s"
+                android:layout_marginTop="@dimen/space_m"
                 android:gravity="start|center_vertical"
+                android:minHeight="@dimen/touch_target_min"
                 android:text="@string/city_open" />
 
-            <!-- Offline data: the most consulted setting, hence at the top. -->
+            <!-- Display: what the interface looks like and what it writes in.
+                 Neither touches the data nor the journeys (SPEC §14). -->
+            <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle
+                style="@style/Widget.RoueLibre.SettingsSection"
+                android:text="@string/settings_section_display" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_l"
-                android:text="@string/settings_data_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/open_storage"
-                style="@style/Widget.RoueLibre.Toggle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/touch_target_min"
-                android:layout_marginTop="@dimen/space_s"
-                android:gravity="start|center_vertical"
-                android:text="@string/storage_open"
-                app:icon="@drawable/ic_storage" />
-
-            <!-- Theme (SPEC §7.6). -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_l"
+                android:layout_marginTop="@dimen/space_m"
                 android:text="@string/settings_theme_title"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
 
@@ -98,8 +95,8 @@
                     style="@style/Widget.RoueLibre.Toggle"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:minHeight="@dimen/touch_target_min"
                     android:layout_weight="1"
+                    android:minHeight="@dimen/touch_target_min"
                     android:text="@string/settings_theme_system" />
 
                 <com.google.android.material.button.MaterialButton
@@ -107,8 +104,8 @@
                     style="@style/Widget.RoueLibre.Toggle"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:minHeight="@dimen/touch_target_min"
                     android:layout_weight="1"
+                    android:minHeight="@dimen/touch_target_min"
                     android:text="@string/settings_theme_light" />
 
                 <com.google.android.material.button.MaterialButton
@@ -116,8 +113,8 @@
                     style="@style/Widget.RoueLibre.Toggle"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:minHeight="@dimen/touch_target_min"
                     android:layout_weight="1"
+                    android:minHeight="@dimen/touch_target_min"
                     android:text="@string/settings_theme_dark" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -205,14 +202,37 @@
                     android:text="@string/settings_units_uk" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
+            <!-- Offline data: what the application occupies, and how to
+                 reclaim it (SPEC §4.4). -->
+            <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle
+                style="@style/Widget.RoueLibre.SettingsSection"
+                android:text="@string/settings_section_data" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/open_storage"
+                style="@style/Widget.RoueLibre.Toggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:gravity="start|center_vertical"
+                android:minHeight="@dimen/touch_target_min"
+                android:text="@string/storage_open"
+                app:icon="@drawable/ic_storage" />
+
+            <!-- "About" heads no section of its own: it settles nothing and
+                 changes nothing, it opens a screen, and a title above it would
+                 only repeat the word written on it. What says it belongs to no
+                 section is the air above it, one rung wider than the gap a
+                 section title takes: read on the phone, at the section's own
+                 gap it passed for a second offline-data setting. -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/open_about"
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/touch_target_min"
-                android:layout_marginTop="@dimen/space_l"
+                android:layout_marginTop="@dimen/space_xxl"
                 android:gravity="start|center_vertical"
+                android:minHeight="@dimen/touch_target_min"
                 android:text="@string/about_open" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

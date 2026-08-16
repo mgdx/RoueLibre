@@ -27,6 +27,11 @@ import kotlinx.coroutines.launch
  *
  * Every change is saved immediately. There is no "apply" button: a setting one
  * has changed is a setting one wants.
+ *
+ * The screen is laid out in sections (SPEC §7.6) and this class follows that
+ * order, one short function per setting. Wiring nine settings inside
+ * [onViewCreated] would make a wall out of the one place that says what the
+ * screen holds.
  */
 class SettingsFragment : Fragment() {
 
@@ -55,14 +60,14 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val views = checkNotNull(binding)
 
-        views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
-        views.toolbar.navigationContentDescription = getString(R.string.action_back)
-        views.openCity.setOnClickListener { show(CityFragment()) }
-        views.openStorage.setOnClickListener { show(StorageFragment()) }
-        views.openAbout.setOnClickListener { show(AboutFragment()) }
-
+        setUpToolbar(views)
+        // In the order the screen reads them (SPEC §7.6): city, display,
+        // offline data, then the way to "about".
+        setUpCity(views)
         setUpTheme(views)
         setUpUnits(views)
+        setUpOfflineData(views)
+        setUpAbout(views)
     }
 
     override fun onDestroyView() {
@@ -70,6 +75,32 @@ class SettingsFragment : Fragment() {
         super.onDestroyView()
     }
 
+    private fun setUpToolbar(views: FragmentSettingsBinding) {
+        views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
+        views.toolbar.navigationContentDescription = getString(R.string.action_back)
+    }
+
+    /** The city section: which network is served (SPEC §15.1). */
+    private fun setUpCity(views: FragmentSettingsBinding) {
+        views.openCity.setOnClickListener { show(CityFragment()) }
+    }
+
+    /** The offline data section: what is installed, and how to reclaim it (SPEC §4.4). */
+    private fun setUpOfflineData(views: FragmentSettingsBinding) {
+        views.openStorage.setOnClickListener { show(StorageFragment()) }
+    }
+
+    /** The way to "about" (SPEC §7.7), which belongs to no section. */
+    private fun setUpAbout(views: FragmentSettingsBinding) {
+        views.openAbout.setOnClickListener { show(AboutFragment()) }
+    }
+
+    /**
+     * The theme, in the display section (SPEC §7.6).
+     *
+     * Written before being applied, and the order is what matters: see the
+     * comment in the listener below, which documents a bug already fixed once.
+     */
     private fun setUpTheme(views: FragmentSettingsBinding) {
         views.theme.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (!isChecked || isFilling) return@addOnButtonCheckedListener
@@ -110,7 +141,8 @@ class SettingsFragment : Fragment() {
     }
 
     /**
-     * The units distances are written in (SPEC §7.6, §9).
+     * The units distances are written in, beside the theme in the display
+     * section (SPEC §7.6, §9).
      *
      * Written immediately, like the theme and for the same reason, and applied
      * without waiting for the next launch: the interface is rebuilt on the new

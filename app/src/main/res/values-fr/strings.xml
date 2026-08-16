@@ -194,7 +194,13 @@
     <!-- Settings (SPEC §7.6). -->
     <string name="settings_title">Réglages</string>
     <string name="settings_open">Réglages</string>
-    <string name="settings_data_title">Données hors ligne</string>
+    <!-- Les titres de section de l'écran des réglages (SPEC §7.6), dans
+         l'ordre où l'écran les pose. Une section qui ne contient rien ne
+         s'affiche pas : son titre arrive avec le premier réglage posé
+         dessous. -->
+    <string name="settings_section_city">Ville</string>
+    <string name="settings_section_display">Affichage</string>
+    <string name="settings_section_data">Données hors ligne</string>
     <string name="settings_theme_title">Thème</string>
     <string name="settings_theme_system">Système</string>
     <string name="settings_theme_light">Clair</string>

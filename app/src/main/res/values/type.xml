@@ -98,6 +98,32 @@
     </style>
 
     <!--
+        A section title on the settings screen (SPEC §7.6).
+
+        The whole title — its face, its size and the air above it — is held
+        here rather than in the layout, because settings are due to arrive in
+        those sections one at a time and from different hands: placing one must
+        mean adding a view under the right title, never copying five attributes
+        and hoping they match the ones above.
+
+        The title face, not the small capitals a single setting's label is set
+        in: the screen carries two levels now, and a section has to win over
+        the setting it heads.
+
+        What is not here is the heading a screen reader jumps between: the
+        attribute that declares it, `android:accessibilityHeading`, arrived in
+        API 28 and would leave the two releases below that without it.
+        `SettingsSectionTitle`, the view this style dresses, sets it in code
+        instead, for every device the application runs on.
+    -->
+    <style name="Widget.RoueLibre.SettingsSection" parent="Widget.RoueLibre.Text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/space_xl</item>
+        <item name="android:textAppearance">@style/TextAppearance.RoueLibre.Title</item>
+    </style>
+
+    <!--
         The main action button. Material rounds a filled button into a pill
         through a shape role the theme's global radius override does not
         reach — the same escape the toggle below had to close. Left alone, the
