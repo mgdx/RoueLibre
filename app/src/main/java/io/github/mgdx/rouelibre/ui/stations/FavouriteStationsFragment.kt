@@ -75,6 +75,11 @@ class FavouriteStationsFragment : Fragment() {
         )
         ItemTouchHelper(DragToReorder(::onMoved, ::onDropped)).attachToRecyclerView(views.stations)
 
+        // The same rows as the full list, so the same figures at the same size
+        // (SPEC §7.6): a favourite is an extract of that list, not another
+        // screen.
+        withLargeAvailabilityNumbers { adapter.largeFigures = it }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.favourites.collectLatest { favourites ->

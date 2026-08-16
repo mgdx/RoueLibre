@@ -482,6 +482,21 @@ also records what has no visible effect.
   the back gesture is that way, whereas opened on it has nothing behind it, and
   the map is where the journey search and the settings are reached from.
 
+- **The availability figures can be asked for larger** (`SPEC.md` §7, §7.6). A
+  switch in the display section, off by default. It is not a stand-in for
+  Android's own text size — the whole interface follows that one, the indicator
+  included — but it does what that setting cannot: it enlarges the single figure
+  the application is opened a hundred times a week to read, and leaves
+  everything around it where it was. It reaches the figure where it is read at
+  leisure, in the station list, the favourites and a station's details, **and
+  not the map's markers**: a marker's size decides how many stations stay
+  legible side by side at a given zoom, which is a question of map drawing
+  rather than of accessibility, and enlarged the discs would overlap and the map
+  would say less. The line under the switch says so, so nobody looks for a
+  change that was decided against. The disc grows by the same third as the
+  figure inside it, that ratio and not the absolute size being what keeps three
+  digits inside the ring.
+
 ### Fixed
 
 - **The availability figure was cut off by the system's own font size.** The

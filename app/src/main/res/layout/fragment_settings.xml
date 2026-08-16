@@ -302,6 +302,33 @@
                     android:text="@string/settings_opening_list" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
+            <!--
+                Larger availability figures (SPEC §7, §7.6). A switch and not a
+                row of sizes: there is one thing to ask, and one figure it
+                applies to.
+
+                It sits under the units rather than in an accessibility section
+                of its own, because it is not a substitute for Android's font
+                size — which the indicator already follows — but a way of
+                enlarging the one figure that is read a hundred times a week
+                without enlarging the whole interface.
+            -->
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/large_numbers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:minHeight="@dimen/touch_target_min"
+                android:text="@string/settings_large_numbers_title"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="@string/settings_large_numbers_hint"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
+
             <!-- Offline data: what the application occupies, and how to
                  reclaim it (SPEC §4.4). -->
             <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle

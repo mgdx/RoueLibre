@@ -603,4 +603,9 @@
     <!-- The way to the map from a station list opened on. -->
     <string name="stations_open_map">Voir la carte</string>
 
+    <string name="settings_large_numbers_title">Grands chiffres de disponibilité</string>
+    <!-- Under the switch. Says where the figures grow, and where they do not:
+         the map keeps its markers as they are. -->
+    <string name="settings_large_numbers_hint">Dans la liste des stations et sur la fiche d\'une station. Les pastilles de la carte gardent leur taille.</string>
+
 </resources>
