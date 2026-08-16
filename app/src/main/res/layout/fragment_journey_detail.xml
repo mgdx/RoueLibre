@@ -148,4 +148,48 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <!--
+        The wait, on the one occasion this screen has anything to compute.
+
+        The journey lives in memory only (SPEC §8), so a process killed while
+        this screen was open brings it back with nothing to describe: it is then
+        worked out again from the two ends, which are all that was kept. Hidden
+        the rest of the time — arriving here from the result screen describes a
+        journey already made, and shows this not at all. The same bike as the
+        result screen crosses the wait, because it is the same wait.
+    -->
+    <LinearLayout
+        android:id="@+id/computing"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/colorSurface"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:visibility="visible">
+
+        <io.github.mgdx.rouelibre.ui.journey.ComputingBikeView
+            android:id="@+id/computing_bike"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="no" />
+
+        <TextView
+            android:id="@+id/computing_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_xxl"
+            android:layout_marginTop="@dimen/space_xl"
+            android:layout_marginEnd="@dimen/space_xxl"
+            android:gravity="center"
+            android:text="@string/journey_computing"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

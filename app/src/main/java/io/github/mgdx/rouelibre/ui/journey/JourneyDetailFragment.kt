@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.withStarted
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.address.AddressResult
@@ -19,6 +20,8 @@ import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
 import io.github.mgdx.rouelibre.core.journey.NoBikeJourney
+import io.github.mgdx.rouelibre.core.journey.apportionMinutes
+import io.github.mgdx.rouelibre.core.journey.shownMinutes
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.routing.elevationProfile
 import io.github.mgdx.rouelibre.core.routing.smoothedOver
@@ -32,11 +35,12 @@ import io.github.mgdx.rouelibre.ui.address.toTitle
 import io.github.mgdx.rouelibre.ui.formatAltitude
 import io.github.mgdx.rouelibre.ui.formatClimb
 import io.github.mgdx.rouelibre.ui.formatDistance
-import io.github.mgdx.rouelibre.ui.formatDuration
+import io.github.mgdx.rouelibre.ui.formatMinutes
 import io.github.mgdx.rouelibre.ui.isReliefWorthDrawing
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -47,9 +51,11 @@ import kotlinx.coroutines.launch
  * each station by name and by street, what it held when the journey was worked
  * out, and every leg with its distance, its minutes and its climb.
  *
- * Nothing is fetched and nothing is computed here — the journey arrives already
- * made, through [ShownJourneyViewModel] — save the stations' addresses, which
- * are read off the offline index (SPEC §4.3).
+ * Nothing is fetched here save the stations' addresses, which are read off the
+ * offline index (SPEC §4.3), and nothing is computed: the journey arrives
+ * already made, through [ShownJourneyViewModel]. The one exception is a screen
+ * coming back from a killed process, which finds that holder empty and has the
+ * journey worked out again from the two ends it kept.
  */
 class JourneyDetailFragment : Fragment() {
 
@@ -62,6 +68,34 @@ class JourneyDetailFragment : Fragment() {
 
     private val viewModel: JourneyDetailViewModel by viewModels {
         JourneyDetailViewModel.Factory(container.addressIndex)
+    }
+
+    /**
+     * Where the journey described sets off from, and where it goes.
+     *
+     * The two ends are the whole of what this screen keeps of a journey: two
+     * labelled points, which go no further than its instance state (SPEC §8).
+     * They are what lets it be found again after the process has been killed —
+     * the journey itself, thousands of coordinates long, is not written
+     * anywhere and is worked out afresh (see [ShownJourneyViewModel]).
+     */
+    private var origin: JourneyEndpoint? = null
+    private var destination: JourneyEndpoint? = null
+
+    /**
+     * Works the journey out again, on the one path that needs it.
+     *
+     * Built only when it is asked for, so arriving here the ordinary way — from
+     * a result screen that has just computed the journey — computes nothing a
+     * second time.
+     */
+    private val plannedAgain: JourneyViewModel by viewModels {
+        JourneyViewModel.Factory(
+            router = container.journeyRouter,
+            repository = container.stationRepository,
+            origin = checkNotNull(origin).position,
+            destination = checkNotNull(destination).position,
+        )
     }
 
     /**
@@ -78,6 +112,21 @@ class JourneyDetailFragment : Fragment() {
      * divide into, and reading that takes the identifier table (SPEC §7.4.1).
      */
     private var lentFleet: FleetDescription? = null
+
+    /**
+     * Takes back the two ends of the journey described.
+     *
+     * From the holder while it still holds one, and from the instance state
+     * otherwise — which is the process having been killed while this screen was
+     * open, the one case where the two differ.
+     */
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val shown = shownJourney.journey
+        origin = shown?.origin ?: JourneyEndpoint.readFrom(savedInstanceState, STATE_ORIGIN)
+        destination = shown?.destination
+            ?: JourneyEndpoint.readFrom(savedInstanceState, STATE_DESTINATION)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,14 +146,86 @@ class JourneyDetailFragment : Fragment() {
         views.toolbar.navigationContentDescription = getString(R.string.action_back)
 
         // The journey lives in memory only (SPEC §8): a process killed while
-        // this screen was open comes back to an empty holder. Stepping back to
-        // the result screen puts the user in front of the one place that can
-        // work the journey out again, rather than in front of an empty screen.
-        val journey = shownJourney.journey ?: run {
+        // this screen was open comes back to an empty holder. The screen the
+        // user left is the one they must find again, so it is worked out again
+        // here rather than stepping back to the result screen — which is what
+        // used to happen, and lost them the very page they were reading.
+        val journey = shownJourney.journey
+        if (journey == null) {
+            workTheJourneyOutAgain()
+            return
+        }
+        showJourneyInFull(journey)
+    }
+
+    /**
+     * Keeps the two ends, so this screen can be found again after a kill.
+     *
+     * Two labelled points and nothing else: no track, no station, no history
+     * (SPEC §8). They live in this bundle and go no further, exactly as the
+     * result screen keeps its own.
+     */
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        origin?.writeTo(outState, STATE_ORIGIN)
+        destination?.writeTo(outState, STATE_DESTINATION)
+    }
+
+    /**
+     * Composes the journey again, and shows it here when it arrives.
+     *
+     * Without the two ends there is nothing to compose — a state that should
+     * not arise, since they are saved with the screen — and the result screen
+     * underneath is then the only place left that can answer. The wait is
+     * inhabited by the same bike as on that screen: this computation takes
+     * exactly as long as the first one did.
+     */
+    private fun workTheJourneyOutAgain() {
+        val from = origin
+        val to = destination
+        if (from == null || to == null) {
             parentFragmentManager.popBackStack()
             return
         }
+        val views = checkNotNull(binding)
+        views.computing.isVisible = true
+        withBikeFleet { lent ->
+            fleet = lent
+            binding?.computingBike?.fleet = lent
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            val settled = plannedAgain.state.first { !it.isComputing }
+            // The screen may be in the background by now: laying a journey out
+            // there — and, failing one, stepping back — has to wait for it to be
+            // looked at again.
+            viewLifecycleOwner.withStarted { showComputed(settled, from, to) }
+        }
+    }
 
+    /**
+     * Shows the journey just worked out, or gives up on describing it.
+     *
+     * A journey that can no longer be composed — the bikes gone from the
+     * departure station while the application was away, the network not yet
+     * fetched — has no detail to read. The result screen is where the reason for
+     * that is said, and stepping back to it is what puts the reason on screen.
+     */
+    private fun showComputed(state: JourneyUiState, from: JourneyEndpoint, to: JourneyEndpoint) {
+        val plan = state.plan
+        if (plan == null || plan is JourneyPlan.Impossible) {
+            parentFragmentManager.popBackStack()
+            return
+        }
+        val journey = ShownJourney(from, to, plan)
+        // Left where the result screen underneath reads it too: it is the
+        // journey being shown, whichever of the two screens shows it.
+        shownJourney.journey = journey
+        binding?.computing?.isVisible = false
+        showJourneyInFull(journey)
+    }
+
+    /** Lays the whole screen out for a journey that is ready to be described. */
+    private fun showJourneyInFull(journey: ShownJourney) {
         showTotal(journey)
         showProfile(journey.plan)
         // The city's configuration is read from disk: the rows are laid with
@@ -152,12 +273,16 @@ class JourneyDetailFragment : Fragment() {
         val plan = journey.plan
         val option = (plan as? JourneyPlan.Found)?.best
         val walk = plan as? JourneyPlan.WalkOnly
-        views.totalTime.text = requireContext().formatDuration(
-            option?.travelTime ?: walk?.directWalk?.duration ?: return,
-        )
+        // The legs rounded together, so this screen's total, sentence, band and
+        // step rows all say the same journey — and say the same thing as the
+        // screen it was opened from, which rounds it the same way.
+        val minutes = legMinutesOf(plan)
+        if (minutes.isEmpty()) return
+        views.totalTime.text = requireContext().formatMinutes(minutes.sum())
         views.summary.text = when {
             option != null -> requireContext().journeySummary(
                 option,
+                minutes = option.shownMinutes(),
                 atDeparture = requireContext()
                     .bikesAtDeparture(option.bikeSplitAtDeparture(lentFleet)),
             )
@@ -168,14 +293,23 @@ class JourneyDetailFragment : Fragment() {
 
             else -> return
         }
-        views.shape.legs = legsOf(plan).map { leg ->
+        views.shape.legs = legsOf(plan).mapIndexed { index, leg ->
             JourneyShapeView.Leg(
                 isRide = leg.isRide,
-                duration = requireContext().formatDuration(leg.route.duration),
+                duration = requireContext().formatMinutes(minutes[index]),
                 distance = distanceOf(leg.route),
             )
         }
     }
+
+    /**
+     * The legs of [plan] in whole minutes, in the order [legsOf] gives them.
+     *
+     * Empty for a journey that could not be composed: it has no leg to show and
+     * no total to announce.
+     */
+    private fun legMinutesOf(plan: JourneyPlan): List<Int> =
+        apportionMinutes(legsOf(plan).map { it.route.duration })
 
     /**
      * The ground the ride runs over, where the graph has something to say
@@ -240,16 +374,22 @@ class JourneyDetailFragment : Fragment() {
         val views = binding ?: return
         views.steps.removeAllViews()
 
+        // The rows carry the same minutes as the band above them, which is why
+        // they are handed the apportioned figures rather than rounding the legs
+        // again for themselves.
+        val minutes = legMinutesOf(journey.plan)
+
         // The two ends are not rows of their own: they are named by the legs
         // that reach them — "walk to the destination" — and by the two fields
         // at the top of the screen this one was opened from. A row repeating
         // one of them said nothing the reader had not just read.
         when (val plan = journey.plan) {
-            is JourneyPlan.Found -> addRide(plan.best, addresses)
+            is JourneyPlan.Found -> addRide(plan.best, minutes, addresses)
             is JourneyPlan.WalkOnly -> addLeg(
                 icon = R.drawable.ic_walk,
                 label = getString(R.string.journey_step_walk_all),
                 leg = plan.directWalk,
+                minutes = minutes.first(),
             )
 
             is JourneyPlan.Impossible -> Unit
@@ -261,12 +401,21 @@ class JourneyDetailFragment : Fragment() {
         views.availabilityNote.isVisible = journey.plan is JourneyPlan.Found
     }
 
-    /** The three legs, and the two stations they run between. */
-    private fun addRide(option: JourneyOption, addresses: Map<String, AddressResult>) {
+    /**
+     * The three legs, and the two stations they run between.
+     *
+     * @param minutes the three legs' apportioned minutes, in that same order.
+     */
+    private fun addRide(
+        option: JourneyOption,
+        minutes: List<Int>,
+        addresses: Map<String, AddressResult>,
+    ) {
         addLeg(
             icon = R.drawable.ic_walk,
             label = getString(R.string.journey_step_to_station, option.departureStation.name),
             leg = option.walkToStation,
+            minutes = minutes[0],
         )
         addStation(
             role = getString(R.string.journey_detail_departure_station),
@@ -285,6 +434,7 @@ class JourneyDetailFragment : Fragment() {
             icon = BikeGlyphs.icon(fleet),
             label = getString(R.string.journey_step_ride, option.arrivalStation.name),
             leg = option.ride,
+            minutes = minutes[1],
         )
         addStation(
             role = getString(R.string.journey_detail_arrival_station),
@@ -303,6 +453,7 @@ class JourneyDetailFragment : Fragment() {
             icon = R.drawable.ic_walk,
             label = getString(R.string.journey_step_to_destination),
             leg = option.walkToDestination,
+            minutes = minutes[2],
         )
     }
 
@@ -372,13 +523,17 @@ class JourneyDetailFragment : Fragment() {
      *
      * The second line reads in the order the leg is lived: how far it runs, and
      * how much of it goes up. Flat ground names no climb (SPEC §7.4).
+     *
+     * @param minutes what this leg was apportioned out of the journey's total,
+     *   rather than its own rounding: the rows are read against the total above
+     *   them, and have to add up to it.
      */
-    private fun addLeg(icon: Int, label: String, leg: RouteLeg) {
+    private fun addLeg(icon: Int, label: String, leg: RouteLeg, minutes: Int) {
         val views = binding ?: return
         val step = ItemJourneyStepBinding.inflate(layoutInflater, views.steps, false)
         step.modeIcon.setImageResource(icon)
         step.label.text = label
-        step.duration.text = requireContext().formatDuration(leg.duration)
+        step.duration.text = requireContext().formatMinutes(minutes)
         step.detail.text = listOfNotNull(distanceOf(leg), climbOf(leg))
             .reduce { read, next -> getString(R.string.address_detail, read, next) }
         views.steps.addView(step.root)
@@ -399,6 +554,9 @@ class JourneyDetailFragment : Fragment() {
         ?.let { getString(R.string.journey_climb, it) }
 
     private companion object {
+        private const val STATE_ORIGIN = "state-origin"
+        private const val STATE_DESTINATION = "state-destination"
+
         /**
          * The ground a reading of the profile is averaged over.
          *

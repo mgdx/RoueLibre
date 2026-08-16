@@ -31,8 +31,9 @@ data class ShownJourney(
  *
  * The consequence is accepted and handled: after the process is killed and the
  * back stack restored, this holder comes back empty. The detail screen then
- * steps back to the result screen, which works the journey out again — the only
- * place that can.
+ * works the journey out again from the two ends it kept in its own state, and
+ * leaves the result here — so the user finds the page they were reading rather
+ * than the screen above it.
  */
 class ShownJourneyViewModel : ViewModel() {
 
