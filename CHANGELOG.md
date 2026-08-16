@@ -11,6 +11,53 @@ also records what has no visible effect.
 
 ### Added
 
+- **A walking pace, and journeys worked out for it.** The algorithm of §6
+  optimises a **pair** of stations by comparing times, and two of the three legs
+  it compares are walked — so a walking speed is not a matter of presentation:
+  it decides which pair wins. Until now everybody got a fit walker's journey.
+  Somebody who walks slowly is owed a nearer departure station even at the price
+  of pedalling further, and that is arithmetic the application cannot guess: it
+  is a question of accuracy as much as of accessibility, for an older rider, for
+  somebody with a suitcase or a child, for somebody who limps. **Three levels
+  named in words** — slow, normal, brisk — in the new "Journey" section of the
+  settings, written the moment they are pressed and read again at the next
+  journey, so a pace changed applies without a restart. **No slider, no speed
+  typed in by hand, and no figure in km/h anywhere in the interface**: one knows
+  one walks slowly, which is a fact about oneself and not a measurement, and a
+  speed shown on a button would be read as a promise about the minutes
+  announced.
+  **"Normal" is a factor of exactly one**, at installation, after a reset and
+  for any stored value that cannot be read — so a journey comes back identical
+  to the one the previous version computed, which is the test this whole change
+  is held to. The other two are **factors on the duration of a walking leg**,
+  not absolute speeds: what is stable from one version to the next is the ratio
+  to the engine's pace, not a value that would have to be chased whenever
+  BRouter's model changed. Slow multiplies by 1.40 and brisk by 0.85.
+  **The reference pace was measured rather than assumed**, and the profile
+  comment that described it was wrong. `urban-walk.brf` claimed the application
+  applied a uniform walking speed; no code ever did, and the speed is not
+  uniform either — BRouter times a foot profile with Tobler's hiking function
+  capped at its default 6 km/h, which our profile does not override, so every
+  segment is timed on its own slope. Over six legs of the Lille graph, 314 m to
+  10.2 km, it traces **1.39 to 1.44 m/s — 5.0 to 5.2 km/h**, the spread coming
+  from the descents where the function reaches its ceiling. That puts slow at
+  about 3.6 km/h, the pace pedestrian crossing times are designed around, and
+  brisk at about 6 km/h. The comment now says what the code does.
+  **The factor is applied in `:core`, in plain Kotlin, before any pair is
+  compared** — on the duration alone, the track and its distance untouched,
+  since the same streets are walked whether one dawdles or hurries. There is no
+  BRouter profile per pace and nothing is recomputed. The ride is never touched;
+  the direct walk follows the same pace, without which a slow walker would be
+  sent walking more often than they should be; and the minutes shown follow too,
+  being the very figures the pairs were weighed on. The optimistic bound that
+  decides whether a long direct walk is worth computing at all is scaled with
+  the pace, so it stays exactly as optimistic for a slow walker as for a brisk
+  one. `SPEC.md` §6 now says why this setting is not the pick-up delay dropped
+  on 12 August 2026 for being unmeasurable and for shifting every pair alike:
+  this one multiplies rather than adds, it multiplies the walking legs alone,
+  and it asks for a fact rather than an estimate. §7.6 says the setting itself,
+  and "Journey" is no longer an empty section.
+
 - **Distances in the units the reader's region uses, and a setting to say
   otherwise.** The catalogue serves 332 networks, American and British ones
   among them, and the application showed kilometres in Boston. That was the
