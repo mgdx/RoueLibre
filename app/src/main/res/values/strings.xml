@@ -37,6 +37,12 @@
     <string name="station_out_of_service">Out of service</string>
     <string name="station_availability_unknown">Availability unknown</string>
 
+    <!-- Shown for a station the network publishes outside the area its data
+         covers: it exists and its bikes are counted, but no map and no route
+         reach it. The short form joins the rest of the row. -->
+    <string name="station_beyond_area_short">beyond the map</string>
+    <string name="station_beyond_area">This station lies outside the area the installed data covers. Its bikes are counted live, but no map and no route can reach it.</string>
+
     <string name="search_stations_hint">Search for a station</string>
     <string name="search_stations_clear">Clear the search</string>
     <string name="stations_no_match_title">No station found</string>

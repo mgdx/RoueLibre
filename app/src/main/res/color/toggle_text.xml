@@ -5,6 +5,14 @@
     8.44:1 in the dark one.
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+        A button that has been withdrawn must look withdrawn. The sheet of a
+        station beyond the installed data switches off the two journey buttons
+        (§4), and in the signal hue they went on reading as an offer: the press
+        did nothing and nothing said why. Muted ink rather than a faded signal,
+        the token set already carrying the "secondary, not actionable" colour.
+    -->
+    <item android:color="@color/ink_soft" android:state_enabled="false" />
     <item android:color="@color/surface_on_signal" android:state_checked="true" />
     <item android:color="@color/signal" />
 </selector>

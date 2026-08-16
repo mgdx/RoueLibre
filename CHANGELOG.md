@@ -313,6 +313,20 @@ also records what has no visible effect.
   itemise nothing — Bixi and V'Lille among them — are untouched, and so are the
   37 whose two figures already agree.
 
+- **A station the data does not cover was offered as an ordinary one.** Fifteen
+  networks publish at least one station outside the box their datasets are cut
+  from: producers' leftovers, like the Hunedoara entry standing in Bucharest 290
+  km away, and real stations, like the Namur, Mons, De Panne and Libramont ones
+  Blue-bike serves 75 km from the rest. They could be opened, favourited and
+  asked for a journey, which could then only answer "no usable route". **They
+  are now shown and said to be beyond the data**: the row carries the mention,
+  the sheet explains it in full, and the two journey buttons are switched off
+  and now look it. Hiding them was refused — six networks would silently lose
+  real stations whose waiting bikes the live feed still counts truthfully — and
+  widening the box is what `compute_bbox.py` sets strays aside to prevent.
+  Handing the station to a navigation application stays offered, that one not
+  running on our graph. `SPEC.md` §4 records the choice.
+
 - **A city announced as unpublished offered its 1.65 GB one tap later.** The
   list said "Data not published yet" of sharedmobility.ch — Zürich, and the
   storage screen reached on touching that very row proposed "Download 1.65 GB";

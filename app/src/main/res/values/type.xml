@@ -122,7 +122,7 @@
     -->
     <style name="Widget.RoueLibre.Toggle" parent="Widget.Material3.Button.OutlinedButton">
         <item name="backgroundTint">@color/toggle_background</item>
-        <item name="strokeColor">@color/signal</item>
+        <item name="strokeColor">@color/toggle_stroke</item>
         <item name="android:textColor">@color/toggle_text</item>
         <item name="iconTint">@color/toggle_text</item>
         <item name="android:textAppearance">@style/TextAppearance.RoueLibre.Body</item>

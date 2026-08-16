@@ -19,12 +19,14 @@ import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.address.AddressResult
+import io.github.mgdx.rouelibre.core.geo.BoundingBox
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.BikeSplit
 import io.github.mgdx.rouelibre.core.station.ServiceState
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.displayFor
 import io.github.mgdx.rouelibre.core.station.freshnessOf
+import io.github.mgdx.rouelibre.core.station.isBeyondCoveredArea
 import io.github.mgdx.rouelibre.databinding.SheetStationDetailBinding
 import io.github.mgdx.rouelibre.ui.address.toTitle
 import io.github.mgdx.rouelibre.ui.formatDistance
@@ -45,6 +47,14 @@ import java.time.Instant
 class StationDetailSheet : BottomSheetDialogFragment() {
 
     private var binding: SheetStationDetailBinding? = null
+
+    /**
+     * The area the installed data covers, `null` until it has been read.
+     *
+     * A station outside it is a real station with real bikes, and no journey of
+     * ours can reach it (see [isBeyondCoveredArea]).
+     */
+    private var coveredArea: BoundingBox? = null
 
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
@@ -80,6 +90,13 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         views.openInNavigation.setOnClickListener { openInNavigationApp() }
 
         viewLifecycleOwner.lifecycleScope.launch {
+            coveredArea = container.activeCity()?.boundingBox
+            // The sheet may already be drawn: what has just been learnt is
+            // whether the journey it offers can exist at all.
+            show(viewModel.state.value)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collectLatest(::show)
             }
@@ -101,6 +118,7 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         showBikeSplit(state.bikeSplit)
         showAddress(state.address, state.distanceInMetres)
         showServiceState(state)
+        showJourneyOffer(state)
         showCapacityAndFreshness(entry.station, state.fetchedAt)
         showFavourite(state.isFavourite)
     }
@@ -167,10 +185,20 @@ class StationDetailSheet : BottomSheetDialogFragment() {
      * A station that works has no need to announce itself: its figures speak.
      * A station out of service, on the other hand, must say so before the user
      * walks over to it.
+     *
+     * Being beyond the installed data comes first, and in more words than the
+     * rest: it is not a state of the station but of what we hold about it, it
+     * will not right itself on the next refresh, and it is the reason the two
+     * journey buttons below have gone quiet.
      */
     private fun showServiceState(state: StationDetailUiState) {
         val views = binding ?: return
         val entry = state.entry ?: return
+        if (entry.station.isBeyondCoveredArea(coveredArea)) {
+            views.serviceState.isVisible = true
+            views.serviceState.setText(R.string.station_beyond_area)
+            return
+        }
         views.serviceState.isVisible = entry.serviceState != ServiceState.InService
         views.serviceState.setText(
             when (entry.serviceState) {
@@ -178,6 +206,26 @@ class StationDetailSheet : BottomSheetDialogFragment() {
                 else -> R.string.station_availability_unknown
             },
         )
+    }
+
+    /**
+     * Withdraws the journey a station beyond the data could never be given.
+     *
+     * The route is computed over a graph cut from the city's box, so a station
+     * outside it has no path to or from anywhere: offering the button and
+     * answering "no usable route" after the computation tells the user they got
+     * something wrong, when it was never on offer.
+     *
+     * Handing the station to a navigation application stays: that one does not
+     * run on our graph, and it is the answer left to somebody who does want to
+     * go there.
+     */
+    private fun showJourneyOffer(state: StationDetailUiState) {
+        val views = binding ?: return
+        val station = state.entry?.station ?: return
+        val reachable = !station.isBeyondCoveredArea(coveredArea)
+        views.setAsOrigin.isEnabled = reachable
+        views.setAsDestination.isEnabled = reachable
     }
 
     private fun showCapacityAndFreshness(station: Station, fetchedAt: Instant?) {

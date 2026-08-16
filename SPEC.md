@@ -65,6 +65,8 @@ This bounding box is **recomputed every time the data is regenerated**, which au
 
 A consequence to accept: outside that box, the map and route computation do not work. The application must detect this and say so clearly, never fail silently.
 
+**That applies to the stations themselves.** Dropping a station from the box does not drop it from the feed, and fifteen of the networks served publish at least one station outside their own box — some of them producers' leftovers, some of them real: Blue-bike serves Namur, Mons, De Panne and Libramont, 75 km from the rectangle drawn around the rest. **Such a station is shown, and said to be beyond the data.** Hiding it would make six networks silently lose real stations whose waiting bikes the live feed still counts truthfully; widening the box to reach it is what step 1 above exists to prevent. What is withdrawn is only what cannot be delivered: the journey to or from it, refused on the station's own sheet rather than after a computation that could only fail. Handing the station to a navigation application stays offered, that one not running on our graph.
+
 ### 4.1 Station availability — GBFS
 
 The networks served publish their availability in the **GBFS format** (the international bike-share standard), refreshed **every minute** as a rule. Versions 1.0, 2.x and 3.0 are all in the field and must all be read: a producer's version is its own business, not the user's.

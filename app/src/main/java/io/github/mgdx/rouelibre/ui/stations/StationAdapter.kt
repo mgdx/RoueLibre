@@ -7,11 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.mgdx.rouelibre.R
+import io.github.mgdx.rouelibre.core.geo.BoundingBox
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.geo.distanceInMetresTo
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.displayFor
+import io.github.mgdx.rouelibre.core.station.isBeyondCoveredArea
 import io.github.mgdx.rouelibre.databinding.ItemStationBinding
 import io.github.mgdx.rouelibre.ui.formatDistance
 
@@ -46,6 +48,21 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
             notifyItemRangeChanged(0, itemCount)
         }
 
+    /**
+     * The area the installed data covers, or `null` while it is unknown.
+     *
+     * A row whose station falls outside it says so: it is shown, because it is
+     * a real station of the network with real bikes at it, but it must not be
+     * presented as one this city's map and graph can serve
+     * (see [isBeyondCoveredArea]).
+     */
+    var coveredArea: BoundingBox? = null
+        set(value) {
+            if (field == value) return
+            field = value
+            notifyItemRangeChanged(0, itemCount)
+        }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StationViewHolder {
         val binding = ItemStationBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -56,7 +73,7 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: StationViewHolder, position: Int) {
-        holder.bind(getItem(position), mode, origin)
+        holder.bind(getItem(position), mode, origin, coveredArea)
     }
 
     /** One station row. */
@@ -71,8 +88,14 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
          * @param entry the station and its last known state.
          * @param mode what the indicator is to count.
          * @param origin where to measure the distance from, or `null`.
+         * @param coveredArea the area the installed data covers, or `null`.
          */
-        fun bind(entry: StationWithAvailability, mode: AvailabilityMode, origin: Coordinates?) {
+        fun bind(
+            entry: StationWithAvailability,
+            mode: AvailabilityMode,
+            origin: Coordinates?,
+            coveredArea: BoundingBox?,
+        ) {
             val context = binding.root.context
             val resources = context.resources
             val display = entry.displayFor(mode)
@@ -87,7 +110,7 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
             val whereabouts = origin
                 ?.let { context.formatDistance(entry.station.position.distanceInMetresTo(it)) }
                 ?: entry.station.postalCode.orEmpty()
-            binding.detail.text = entry.station.capacity
+            val detail = entry.station.capacity
                 ?.let {
                     resources.getQuantityString(
                         R.plurals.station_detail_with_capacity,
@@ -97,6 +120,15 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
                     )
                 }
                 ?: whereabouts
+            // Said on the row rather than only on the sheet: this is where the
+            // station is picked out of the list, and a station 290 km beyond
+            // the map must not read as an ordinary one until it is opened.
+            val beyond = context.getString(R.string.station_beyond_area_short)
+            binding.detail.text = when {
+                !entry.station.isBeyondCoveredArea(coveredArea) -> detail
+                detail.isBlank() -> beyond
+                else -> context.getString(R.string.address_detail, detail, beyond)
+            }
             binding.detail.isGone = binding.detail.text.isNullOrBlank()
 
             // The counterpart count: docks when the indicator shows bikes, and

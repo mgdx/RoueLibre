@@ -38,6 +38,8 @@
 
     <string name="station_out_of_service">Hors service</string>
     <string name="station_availability_unknown">Disponibilité inconnue</string>
+    <string name="station_beyond_area_short">hors carte</string>
+    <string name="station_beyond_area">Cette station est hors de la zone couverte par les données installées. Ses vélos sont comptés en direct, mais aucune carte et aucun itinéraire ne peuvent l’atteindre.</string>
 
     <!-- The search field above the list. It filters stations by name; the
          address search is a different screen (SPEC §4.3). -->

@@ -129,6 +129,33 @@ class StationListFragment : Fragment() {
         observeState()
         observeErrors()
         keepAvailabilityFresh()
+        showCoveredArea()
+    }
+
+    /**
+     * Tells the rows which stations the installed data actually reaches.
+     *
+     * A network is under no obligation to keep its stations inside the box its
+     * data was cut from, and fifteen of them do not (SPEC §4). Read once: the
+     * box belongs to the city in service, and changing city rebuilds the
+     * screen.
+     */
+    private fun showCoveredArea() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val area = (requireActivity().application as RoueLibreApplication)
+                .container
+                .activeCity()
+                ?.boundingBox
+            adapter.coveredArea = area
+        }
+    }
+
+    override fun onDestroyView() {
+        // The RecyclerView outlives the view through its adapter; detaching it
+        // avoids holding on to the destroyed view.
+        binding?.stations?.adapter = null
+        binding = null
+        super.onDestroyView()
     }
 
     private fun observeState() {

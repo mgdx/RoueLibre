@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The toggle buttons' outline. The signal hue while the button is an offer,
+    the plain outline once it has been withdrawn — a station beyond the
+    installed data can be given no journey (§4), and its two buttons must read
+    as switched off rather than merely unresponsive.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/outline" android:state_enabled="false" />
+    <item android:color="@color/signal" />
+</selector>
