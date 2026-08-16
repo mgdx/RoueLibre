@@ -18,6 +18,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.security.MessageDigest
 import javax.net.ssl.SSLException
+import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.coroutineContext
 
 /**
@@ -118,7 +119,7 @@ class DatasetDownloader(
         val received = mutableListOf<File>()
         for (file in dataset.files) {
             coroutineContext.ensureActive()
-            when (val outcome = downloadFile(file, workDirectory, onProgress)) {
+            when (val outcome = downloadFile(file, workDirectory, coroutineContext, onProgress)) {
                 is Outcome.Failure -> return@withContext outcome
                 is Outcome.Success -> received.add(outcome.value)
             }
@@ -129,6 +130,7 @@ class DatasetDownloader(
     private fun downloadFile(
         file: ManifestFile,
         workDirectory: File,
+        context: CoroutineContext,
         onProgress: (DownloadProgress) -> Unit,
     ): Outcome<File> {
         val complete = fileInside(workDirectory, file.name)
@@ -144,7 +146,7 @@ class DatasetDownloader(
             partial.delete()
         }
 
-        val outcome = fetchInto(file, partial, onProgress)
+        val outcome = fetchInto(file, partial, context, onProgress)
         if (outcome is Outcome.Failure) return outcome
 
         // Unconditional: the reader refuses a manifest that announces a file
@@ -180,10 +182,14 @@ class DatasetDownloader(
      * we must then start from scratch rather than append the beginning to what
      * we already had — which would produce a corrupted file that only the
      * digest would catch.
+     *
+     * @param context the caller's, watched at every buffer so that a transfer
+     *   nobody wants any more stops here rather than at the end of a gigabyte.
      */
     private fun fetchInto(
         file: ManifestFile,
         partial: File,
+        context: CoroutineContext,
         onProgress: (DownloadProgress) -> Unit,
     ): Outcome<Unit> = try {
         val alreadyReceived = if (partial.isFile) partial.length() else 0L
@@ -206,6 +212,13 @@ class DatasetDownloader(
                 java.io.FileOutputStream(partial, resuming).use { sink ->
                     val buffer = ByteArray(COPY_BUFFER_BYTES)
                     while (true) {
+                        // A read blocks, so cancellation cannot reach the loop
+                        // by itself: without this the transfer would run to its
+                        // end whatever the caller decided. A Wi-Fi lost for a
+                        // mobile plan is exactly that decision (SPEC §4.4), and
+                        // what has arrived stays in the partial file for the
+                        // resumption to pick up.
+                        context.ensureActive()
                         val read = source.read(buffer)
                         if (read < 0) break
                         sink.write(buffer, 0, read)
