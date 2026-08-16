@@ -139,8 +139,20 @@
     <string name="settings_title">Settings</string>
     <string name="settings_open">Settings</string>
     <string name="settings_section_city">City</string>
+    <string name="settings_section_journey">Journey</string>
     <string name="settings_section_display">Display</string>
     <string name="settings_section_data">Offline data</string>
+
+    <!-- The walking pace (SPEC §6, §7.6). Named in words and never in km/h: a
+         pace is something one knows about oneself, where a speed is a figure
+         nobody has measured about themselves — and a speed written on a button
+         would be read as a promise about the minutes to come. -->
+    <string name="settings_walking_pace_title">Walking pace</string>
+    <string name="settings_walking_pace_slow">Slow</string>
+    <string name="settings_walking_pace_normal">Normal</string>
+    <string name="settings_walking_pace_brisk">Brisk</string>
+    <string name="settings_walking_pace_description">Pace the walking parts of a journey are worked out at</string>
+
     <string name="settings_theme_title">Theme</string>
     <string name="settings_theme_system">System</string>
     <string name="settings_theme_light">Light</string>

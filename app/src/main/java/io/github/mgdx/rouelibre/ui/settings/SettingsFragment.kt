@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
+import io.github.mgdx.rouelibre.core.journey.WalkingPace
 import io.github.mgdx.rouelibre.core.measure.UnitChoice
 import io.github.mgdx.rouelibre.data.AppTheme
 import io.github.mgdx.rouelibre.databinding.FragmentSettingsBinding
@@ -61,9 +62,10 @@ class SettingsFragment : Fragment() {
         val views = checkNotNull(binding)
 
         setUpToolbar(views)
-        // In the order the screen reads them (SPEC §7.6): city, display,
-        // offline data, then the way to "about".
+        // In the order the screen reads them (SPEC §7.6): city, journey,
+        // display, offline data, then the way to "about".
         setUpCity(views)
+        setUpWalkingPace(views)
         setUpTheme(views)
         setUpUnits(views)
         setUpOfflineData(views)
@@ -83,6 +85,45 @@ class SettingsFragment : Fragment() {
     /** The city section: which network is served (SPEC §15.1). */
     private fun setUpCity(views: FragmentSettingsBinding) {
         views.openCity.setOnClickListener { show(CityFragment()) }
+    }
+
+    /**
+     * The walking pace, in the journey section (SPEC §6, §7.6).
+     *
+     * Written the moment it is pressed, on the theme's pattern and with no
+     * "apply" button. Nothing is applied here, though, and that is the whole
+     * difference with the two settings below: this one changes no screen already
+     * drawn. It is read again when the next journey is worked out — the model
+     * collects it from the preferences — so a pace changed here reaches the next
+     * journey and leaves the one on show as it was computed.
+     */
+    private fun setUpWalkingPace(views: FragmentSettingsBinding) {
+        views.walkingPace.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked || isFilling) return@addOnButtonCheckedListener
+            val pace = when (checkedId) {
+                R.id.walking_pace_slow -> WalkingPace.Slow
+                R.id.walking_pace_brisk -> WalkingPace.Brisk
+                else -> WalkingPace.Normal
+            }
+            viewLifecycleOwner.lifecycleScope.launch { preferences.setWalkingPace(pace) }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preferences.walkingPace.collect { pace ->
+                    val current = binding ?: return@collect
+                    isFilling = true
+                    current.walkingPace.check(
+                        when (pace) {
+                            WalkingPace.Slow -> R.id.walking_pace_slow
+                            WalkingPace.Normal -> R.id.walking_pace_normal
+                            WalkingPace.Brisk -> R.id.walking_pace_brisk
+                        },
+                    )
+                    isFilling = false
+                }
+            }
+        }
     }
 
     /** The offline data section: what is installed, and how to reclaim it (SPEC §4.4). */

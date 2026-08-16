@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import io.github.mgdx.rouelibre.core.config.FleetDescription
+import io.github.mgdx.rouelibre.core.journey.WalkingPace
 import io.github.mgdx.rouelibre.core.measure.UnitChoice
 import io.github.mgdx.rouelibre.core.station.VehicleKind
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
@@ -269,6 +270,36 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * How fast the user walks, which the journey is worked out for (SPEC §6, §7.6).
+     *
+     * [WalkingPace.Normal] by default, and for any value that cannot be read
+     * (see [WalkingPace.fromId]): it is the pace the application has always used,
+     * so an absent preference changes no journey.
+     *
+     * **A fact about the person, like [usesOwnBike].** How fast somebody walks is
+     * true of them tomorrow as well, which is why it lives in the settings rather
+     * than being asked at every journey — and why it belongs in the journey
+     * section of that screen, since it qualifies a journey before it is asked
+     * for. What is written is one word about a pace: no point, no time, no
+     * destination goes with it (SPEC §2, C3), and nothing here says why somebody
+     * walks slowly.
+     *
+     * **This one does reach the algorithm**, unlike [units]: it multiplies the
+     * walking legs, so it changes which pair of stations wins (SPEC §6). That is
+     * what it is for.
+     *
+     * A flow rather than a read: it is consulted at each computation, so a pace
+     * changed in the settings applies to the next journey without the
+     * application being restarted.
+     */
+    val walkingPace: Flow<WalkingPace> = dataStore.data.map { WalkingPace.fromId(it[WALKING_PACE]) }
+
+    /** Remembers how fast the user walks. */
+    suspend fun setWalkingPace(pace: WalkingPace) {
+        dataStore.edit { it[WALKING_PACE] = pace.id }
+    }
+
+    /**
      * The city the application is serving right now.
      *
      * `null` until one has been chosen: the application assumes no default
@@ -351,6 +382,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         val UNITS = stringPreferencesKey("units")
         val USES_OWN_BIKE = booleanPreferencesKey("uses_own_bike")
         val WANTED_BIKE_KIND = stringPreferencesKey("wanted_bike_kind")
+        val WALKING_PACE = stringPreferencesKey("walking_pace")
         val ACTIVE_CITY_ID = stringPreferencesKey("active_city_id")
         val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
         val DECLINED_CITY_PROPOSAL_ID = stringPreferencesKey("declined_city_proposal_id")

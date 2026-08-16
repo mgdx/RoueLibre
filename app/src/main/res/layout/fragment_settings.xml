@@ -11,11 +11,11 @@
     closes the screen. Placing a new setting is meant to be one thing: adding
     its views under the right title, without touching a line above or below.
 
-    A section with nothing in it is not written here at all. "Journey" is that
-    case today, which is why it is absent rather than empty: a title followed
-    by nothing promises a setting the screen does not have, and SPEC §14 wants
-    no view built against a feature that has not arrived. The first setting
-    placed there brings its title with it, between the city and the display.
+    A section with nothing in it is not written here at all: a title followed by
+    nothing promises a setting the screen does not have, and SPEC §14 wants no
+    view built against a feature that has not arrived. "Journey" was that case
+    until the walking pace arrived and brought its title with it, between the
+    city and the display, exactly as that rule intends.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -68,6 +68,65 @@
                 android:gravity="start|center_vertical"
                 android:minHeight="@dimen/touch_target_min"
                 android:text="@string/city_open" />
+
+            <!-- Journey: what qualifies a journey before it is asked for
+                 (SPEC §7.6). Unlike the display section below, what stands here
+                 reaches the algorithm of §6 and changes which stations it
+                 chooses — that is what it is for. -->
+            <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle
+                style="@style/Widget.RoueLibre.SettingsSection"
+                android:text="@string/settings_section_journey" />
+
+            <!--
+                The walking pace (SPEC §6, §7.6). Three named levels in a row,
+                like the theme below: no slider and no speed typed in by hand.
+                The buttons name a pace in words and never a figure in km/h —
+                one knows one walks slowly, and a speed shown here would be read
+                as a promise about the minutes announced.
+            -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:text="@string/settings_walking_pace_title"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/walking_pace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:contentDescription="@string/settings_walking_pace_description"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/walking_pace_slow"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:text="@string/settings_walking_pace_slow" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/walking_pace_normal"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:text="@string/settings_walking_pace_normal" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/walking_pace_brisk"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:text="@string/settings_walking_pace_brisk" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <!-- Display: what the interface looks like and what it writes in.
                  Neither touches the data nor the journeys (SPEC §14). -->

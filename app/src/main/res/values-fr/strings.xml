@@ -199,8 +199,20 @@
          s'affiche pas : son titre arrive avec le premier réglage posé
          dessous. -->
     <string name="settings_section_city">Ville</string>
+    <string name="settings_section_journey">Itinéraire</string>
     <string name="settings_section_display">Affichage</string>
     <string name="settings_section_data">Données hors ligne</string>
+
+    <!-- La vitesse de marche (SPEC §6, §7.6). Nommée en mots et jamais en
+         km/h : on sait comment on marche, alors qu'une vitesse est un chiffre
+         que personne n'a mesuré sur soi — et une vitesse écrite sur un bouton
+         se lirait comme une promesse sur les minutes annoncées. -->
+    <string name="settings_walking_pace_title">Vitesse de marche</string>
+    <string name="settings_walking_pace_slow">Lente</string>
+    <string name="settings_walking_pace_normal">Normale</string>
+    <string name="settings_walking_pace_brisk">Rapide</string>
+    <string name="settings_walking_pace_description">Vitesse à laquelle les parties à pied d\'un itinéraire sont calculées</string>
+
     <string name="settings_theme_title">Thème</string>
     <string name="settings_theme_system">Système</string>
     <string name="settings_theme_light">Clair</string>
