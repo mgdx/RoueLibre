@@ -11,6 +11,57 @@ also records what has no visible effect.
 
 ### Added
 
+- **Distances in the units the reader's region uses, and a setting to say
+  otherwise.** The catalogue serves 332 networks, American and British ones
+  among them, and the application showed kilometres in Boston. That was the
+  defect a hard-coded address would be — an assumption about a country, written
+  into the code — in an application whose interface is English by default
+  precisely because it serves whatever city publishes its data, not one country.
+  The region is now asked of ICU, which ships with Android and needs no
+  dependency and no Google service: `LocaleData.getMeasurementSystem` on the
+  **formatting** locale, since somebody reading English in Lyon wants
+  kilometres. **Three systems, because the imperial world is not one place**:
+  metres then kilometres, feet then miles, yards then miles — folding the last
+  two together would write "820 ft" to a reader whose road signs count in yards.
+  The setting in "Settings" has **four states**, "System" being one of its own
+  rather than a synonym for metric, and it names units rather than countries —
+  `m · km`, `ft · mi`, `yd · mi` — because what one gets is what is written and
+  no system of measurement belongs to a nation. It is written the moment it is
+  pressed and applied at once, on every screen, the interface being rebuilt on
+  it as it is on a theme.
+  **The rule the whole thing rests on is now written into `SPEC.md` §14: the
+  application computes in metres and converts only at the last moment, to write
+  a piece of text.** The routing engine, the algorithm of §6, the bounding
+  boxes, the manifests, the GBFS feeds and the elevation profile are all in
+  metres and none of them knows this setting exists; the conversion happens in
+  one function, on the value just before it becomes a string. A rider in miles
+  and a rider in kilometres therefore get the **same journey**, the same
+  departure station and the same announced time — only the writing differs, and
+  two tests in `:core` fail the day that stops being true. The conversion and
+  the rounding moved into `:core` in the same breath, in plain Kotlin with no
+  Android import, which is what makes them testable on the JVM at all;
+  `ui/Distances.kt` keeps only what needs a `Context`, fetching the unit's
+  symbol from the resources.
+  **Every imperial step is at least as coarse as its metric counterpart** — 50
+  ft or 25 yd where metric writes 10 m, 20 ft where it writes 5 m — so changing
+  units never claims to have measured better than the metre did: an address is
+  known to a few metres and the reader's position to a good deal less. The unit
+  changes at a thousand of the smaller one in all three systems, the metric
+  threshold applied to another unit, past which the figure needs four digits and
+  stops being read at a glance. **The two silences of a climb do not move**:
+  three hundred metres of ground and five metres of height are facts about the
+  SRTM samples rather than about the reader, and a climb too small to be real is
+  just as unsayable in feet. Height follows the system chosen, in feet for both
+  imperial ones, the elevation profile's axis and its spoken description
+  included: a sentence does not mix two systems.
+  Read on a Fairphone 3 rather than assumed: ICU answers `UK` for `en-GB`, `US`
+  for `en-US`, `SI` for `en-FR` — and `US` for a bare `en` or for the
+  undetermined locale, which is a default standing in for an answer, so a locale
+  carrying no region is read as metric here. `getMeasurementSystem` arrived in
+  Android 9 and this application serves Android 8, so the two regions it names
+  in feet and the two it names in yards are copied from ICU's own reading of all
+  253 regions it knows, for those two releases alone.
+
 - **Choosing the bike a journey is worked out for.** Where the network lends
   both kinds, the journey screen offers "any bike", "mechanical" or "electric",
   beside the switch for one's own bike and remembered like it: what somebody
@@ -206,6 +257,15 @@ also records what has no visible effect.
   queried, and its routing graph counted.
 
 ### Changed
+
+- **A distance under a kilometre now follows the interface's language, not the
+  device's.** It was written through `%1$d`, which Android formats with the
+  configuration's locale, while the kilometre beside it went through
+  `NumberFormat` and the language actually displayed. On a device set to a
+  language the application does not speak — the case `SPEC.md` §9 settles — the
+  metres came out in that language's digits and the kilometres in English ones,
+  in the same sentence. Both are now written by the same rule. Nothing changes
+  in English or in French, the two languages the interface exists in.
 
 - **What a city lends is now counted, no longer merely declared.**
   `tools/read_fleet.py` used to read the GBFS `vehicle_types` feed and believe

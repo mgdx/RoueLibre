@@ -5,5 +5,6 @@ The data is published, and the map is no longer French.
 • Address search works outside France: where there is no national address base, the streets and house numbers are read from OpenStreetMap itself, in the language of the country.
 • The map stops at the edge of what was downloaded rather than showing an empty void beyond it.
 • A journey's two ends stay on the result screen and can be corrected there.
+• Distances are shown in the units your region uses: miles and feet in the United States, miles and yards in the United Kingdom, kilometres everywhere else. The setting is in Settings if you want otherwise.
 
 Every city's weight is announced before downloading: 3 MB for Auray, 143 MB for Paris.
