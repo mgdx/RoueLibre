@@ -593,4 +593,19 @@
     <string name="error_local_storage">Impossible de lire les données enregistrées sur l\'appareil.</string>
     <string name="error_no_city_chosen">Aucune ville n\'est sélectionnée. Choisissez-en une pour afficher les stations.</string>
 
+    <!-- Map station filters -->
+    <string name="map_filter_title">Quelles stations afficher</string>
+    <string name="map_filter_open">Choisir les stations affichées sur la carte</string>
+    <string name="map_filter_hide_out_of_service">Masquer les stations hors service</string>
+    <string name="map_filter_hide_empty_bikes">Masquer les stations sans vélo</string>
+    <string name="map_filter_hide_empty_docks">Masquer les stations sans place libre</string>
+    <string name="map_filter_keeps_unknown">Les stations dont le réseau ne dit rien restent affichées : un compte que personne n\'a pu lire n\'est pas un compte nul.</string>
+    <!-- Sur la carte, quand un filtre est actif : combien de stations il écarte.
+         Zéro est annoncé aussi — c\'est ce qui signale que le filtre est actif. -->
+    <plurals name="map_filter_hidden">
+        <item quantity="one">%1$d station masquée</item>
+        <item quantity="many">%1$d de stations masquées</item>
+        <item quantity="other">%1$d stations masquées</item>
+    </plurals>
+
 </resources>
