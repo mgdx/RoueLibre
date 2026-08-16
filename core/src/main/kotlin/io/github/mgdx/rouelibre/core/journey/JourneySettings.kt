@@ -44,6 +44,14 @@ import kotlin.time.Duration.Companion.minutes
  * @property bikeTurnoverPerMinute the rate at which a station empties or fills,
  *   in bikes per minute. About one bike every eight minutes during busy hours;
  *   it is what gives the risk penalty its scale.
+ * @property walkingPace how fast the person this journey is worked out for
+ *   walks, as a factor on the duration of every walking leg — see [WalkingPace],
+ *   which justifies its three values. Unlike every other setting here it is the
+ *   user's own, and it belongs among these because it is a coefficient of the
+ *   algorithm rather than a way of writing a result: it **multiplies** the
+ *   walking legs, so it changes which pair of stations wins, which is exactly
+ *   what it is asked to do. [WalkingPace.Normal], the default, multiplies by one
+ *   and leaves the algorithm as it was before the setting existed.
  */
 public data class JourneySettings(
     public val departureCandidates: Int = 5,
@@ -53,6 +61,7 @@ public data class JourneySettings(
     public val directWalkThresholdMetres: Double = 3_000.0,
     public val fallbackPenalty: Duration = 6.minutes,
     public val bikeTurnoverPerMinute: Double = 0.12,
+    public val walkingPace: WalkingPace = WalkingPace.Normal,
 ) {
     init {
         require(departureCandidates > 0) { "at least one departure station is needed" }

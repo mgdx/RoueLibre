@@ -73,6 +73,15 @@ import kotlin.time.Duration.Companion.seconds
  * [countAtRisk]. What the journey **carries and shows** is the whole count all
  * the same (SPEC §7.4).
  *
+ * ## Walking at one's own pace
+ *
+ * [JourneySettings.walkingPace] scales the duration of every walking leg before
+ * anything is compared — see [atTheWalkingPaceAsked]. It is not a matter of
+ * presentation: the two walks are two of the three legs being weighed against
+ * one another, so a slower walker is genuinely owed a nearer departure station,
+ * even at the cost of a longer ride. At [WalkingPace.Normal] the factor is one
+ * and this class behaves exactly as it did before the pace existed.
+ *
  * @property router access to the routing engine.
  * @property settings the algorithm's settings.
  * @property wantedBike the kind of bike asked for, with the network's table to
@@ -324,10 +333,25 @@ public class JourneyPlanner(
         tripMetres: Double,
         best: JourneyOption,
     ): RouteLeg? {
-        val fastestWalk = (tripMetres / OPTIMISTIC_WALKING_METRES_PER_SECOND).seconds
+        val fastestWalk = (tripMetres / optimisticWalkingMetresPerSecond).seconds
         if (best.travelTime <= fastestWalk) return null
         return legOrNull(origin, destination, TravelMode.Walking)
     }
+
+    /**
+     * The pace no walker beats, for the walker this journey is being worked out
+     * for.
+     *
+     * The bound of [OPTIMISTIC_WALKING_METRES_PER_SECOND] is stated against the
+     * engine's own pace, so it has to be moved with it: a slow walker's real
+     * walk is 1.4 times longer, and a bound that ignored that would keep sending
+     * a twenty-kilometre walk to be computed that never had a chance. Divided by
+     * the same factor the walk is multiplied by, the bound stays exactly as
+     * optimistic as it was — never generous the other way, which is the only
+     * error that would matter, since it would skip a walk that would have won.
+     */
+    private val optimisticWalkingMetresPerSecond: Double
+        get() = OPTIMISTIC_WALKING_METRES_PER_SECOND / settings.walkingPace.durationFactor
 
     /**
      * Prepares the usable pairs, each with its lower bound.
@@ -498,8 +522,33 @@ public class JourneyPlanner(
         to: Coordinates,
         mode: TravelMode,
     ): RouteLeg? = when (val result = router.route(from, to, mode)) {
-        is RouteResult.Success -> result.leg
+        is RouteResult.Success -> result.leg.atTheWalkingPaceAsked()
         is RouteResult.Failure -> null
+    }
+
+    /**
+     * A walking leg as the person asking for it actually walks it (SPEC §6).
+     *
+     * **The one place the pace enters, and it enters early on purpose.** Every
+     * leg this class uses comes through [legOrNull], so scaling here reaches the
+     * access walks, the direct walk and the walk offered when no bike journey
+     * can be composed — all of them before a single pair is compared, which is
+     * the whole point: a pace that only reached the figures on the screen would
+     * announce different minutes for the same stations, and leave a slow walker
+     * sent to the station a brisk one was owed.
+     *
+     * **The geometry is not recomputed, and there is no profile per pace.** The
+     * same streets are walked whether one dawdles or hurries: what changes is
+     * how long they take. So the track, its distance and its climb are the
+     * engine's, untouched, and only the duration is scaled.
+     *
+     * **The ride is never touched.** This setting says how somebody walks; it
+     * says nothing about how they pedal, and SPEC §6 announces no time it has
+     * not computed.
+     */
+    private fun RouteLeg.atTheWalkingPaceAsked(): RouteLeg = when (mode) {
+        TravelMode.Walking -> copy(duration = duration * settings.walkingPace.durationFactor)
+        TravelMode.Cycling -> this
     }
 
     /**
@@ -570,10 +619,13 @@ public class JourneyPlanner(
          * The speed used to tell whether the direct walk is worth computing,
          * in metres per second — six and a half kilometres an hour.
          *
-         * A brisk walk, held by nobody over an hour, where the engine traces
-         * urban walking at about 1.4 m/s. Same requirement as above and for the
-         * same reason: no real walk can beat this, so a journey that beats it
-         * needs no walk computed to prove it wins.
+         * Held by nobody over an hour, where the engine traces urban walking at
+         * about 1.4 m/s and the fastest pace on offer — [WalkingPace.Brisk] —
+         * brings that to 1.67. Same requirement as above and for the same
+         * reason: no real walk can beat this, so a journey that beats it needs
+         * no walk computed to prove it wins. It is stated against the engine's
+         * own pace and scaled with it, see [optimisticWalkingMetresPerSecond];
+         * whatever pace is asked for, this must stay above it.
          */
         const val OPTIMISTIC_WALKING_METRES_PER_SECOND = 1.8
     }

@@ -855,6 +855,206 @@ class JourneyPlannerTest {
         assertEquals(JourneyPlan.Impossible(NoBikeJourney.GraphMissing), plan)
     }
 
+    // ------------------------------------------------------ walking pace --
+
+    /**
+     * One departure station and one arrival station, so the pair is forced.
+     *
+     * What varies then is only what the pace does to the legs, which is what
+     * the two tests below want to read.
+     */
+    private fun onePair() = listOf(
+        station("depart", at(0.0, 100.0), bikes = 12, docks = 0),
+        station("arrivee", at(0.0, 3900.0), bikes = 0, docks = 12),
+    )
+
+    @Test
+    fun `at a normal pace the journey is the one computed before the pace existed`() = runTest {
+        // The test that matters most of this chantier: "normal" must reproduce
+        // exactly what the application did before there was a pace to choose.
+        // Checked two ways, because either alone would let a defect through.
+        //
+        // First that the default settings and an explicit "normal" give the very
+        // same journey — the same pair, the same minutes.
+        val stations = onePair()
+        val asBefore = JourneyPlanner(FakeRouter())
+        val atNormalPace = JourneyPlanner(
+            FakeRouter(),
+            JourneySettings(walkingPace = WalkingPace.Normal),
+        )
+
+        val before = asBefore.plan(origin, destination, stations) as JourneyPlan.Found
+        val now = atNormalPace.plan(origin, destination, stations) as JourneyPlan.Found
+
+        assertEquals(before.best.departureStation.id, now.best.departureStation.id)
+        assertEquals(before.best.arrivalStation.id, now.best.arrivalStation.id)
+        assertEquals(before.best.travelTime, now.best.travelTime)
+        assertEquals(before.best.walkToStation.duration, now.best.walkToStation.duration)
+        assertEquals(before.best.ride.duration, now.best.ride.duration)
+        assertEquals(before.best.walkToDestination.duration, now.best.walkToDestination.duration)
+
+        // Then that a walking leg carries the engine's own figure, untouched.
+        // The comparison above would still pass if both sides were scaled by the
+        // same wrong factor; this pins the figure to what the engine returned.
+        for (walk in listOf(now.best.walkToStation, now.best.walkToDestination)) {
+            val asTheEngineTraced =
+                (walk.distanceMetres / FakeRouter.WALKING_METRES_PER_SECOND).roundToInt().seconds
+            assertEquals(asTheEngineTraced, walk.duration)
+        }
+        assertEquals(1.0, WalkingPace.Normal.durationFactor, 0.0)
+    }
+
+    @Test
+    fun `the pace decides which pair wins`() = runTest {
+        // The test that proves the setting is worth having: without it, nothing
+        // says the pace does anything but rewrite the minutes on the screen.
+        //
+        // Two departure stations. The near one is two hundred metres away but
+        // its ride is three times slower than it should be — roadworks; the far
+        // one is a walk of three kilometres and rides straight there. Between
+        // the two paces the winner changes: somebody who walks slowly is owed
+        // the near station even at the price of that ride, and somebody who
+        // walks briskly is better off walking to the far one.
+        val proche = at(0.0, 100.0)
+        val loin = at(0.0, 3000.0)
+        val arrivee = at(0.0, 3900.0)
+        val stations = listOf(
+            station("proche", proche, bikes = 12, docks = 0),
+            station("loin", loin, bikes = 12, docks = 0),
+            station("arrivee", arrivee, bikes = 0, docks = 12),
+        )
+        val roadworks = setOf(FakeRouter.key(proche, arrivee))
+
+        val whenSlow = JourneyPlanner(
+            FakeRouter(slowRides = roadworks),
+            JourneySettings(walkingPace = WalkingPace.Slow),
+        ).plan(origin, destination, stations) as JourneyPlan.Found
+        val whenBrisk = JourneyPlanner(
+            FakeRouter(slowRides = roadworks),
+            JourneySettings(walkingPace = WalkingPace.Brisk),
+        ).plan(origin, destination, stations) as JourneyPlan.Found
+
+        assertEquals("proche", whenSlow.best.departureStation.id)
+        assertEquals("loin", whenBrisk.best.departureStation.id)
+    }
+
+    @Test
+    fun `the ride is untouched, whatever the pace`() = runTest {
+        // The pace says how somebody walks and nothing about how they pedal
+        // (SPEC §6). The pair being forced, the same bike leg is traced three
+        // times: its duration must not move an inch while the walks do.
+        val stations = onePair()
+
+        val legs = WalkingPace.entries.map { pace ->
+            val plan = JourneyPlanner(FakeRouter(), JourneySettings(walkingPace = pace))
+                .plan(origin, destination, stations) as JourneyPlan.Found
+            plan.best
+        }
+
+        assertEquals(1, legs.map { it.ride.duration }.distinct().size)
+        assertEquals(1, legs.map { it.ride.distanceMetres }.distinct().size)
+        // And the walks did move, without which the assertion above proves
+        // nothing at all.
+        assertEquals(3, legs.map { it.walkToStation.duration }.distinct().size)
+    }
+
+    @Test
+    fun `the direct walk follows the pace, under the threshold`() = runTest {
+        // A journey of a kilometre — under `directWalkThresholdMetres`, so the
+        // walk is traced alongside the access walks. The bike leg is three times
+        // slower than it should be, which puts the two answers within a hair of
+        // each other: a brisk walker gets there sooner on foot, a slow one does
+        // not. Were the walk left at the engine's pace, the slow walker would be
+        // sent walking — the exact opposite of what the setting is for.
+        val destination = at(0.0, 1000.0)
+        val depart = at(0.0, 50.0)
+        val arrivee = at(0.0, 950.0)
+        val stations = listOf(
+            station("depart", depart, bikes = 12, docks = 0),
+            station("arrivee", arrivee, bikes = 0, docks = 12),
+        )
+        val roadworks = setOf(FakeRouter.key(depart, arrivee))
+
+        val whenSlow = JourneyPlanner(
+            FakeRouter(slowRides = roadworks),
+            JourneySettings(walkingPace = WalkingPace.Slow),
+        ).plan(origin, destination, stations)
+        val whenBrisk = JourneyPlanner(
+            FakeRouter(slowRides = roadworks),
+            JourneySettings(walkingPace = WalkingPace.Brisk),
+        ).plan(origin, destination, stations)
+
+        assertTrue(
+            "a slow walker is better off riding, got $whenSlow",
+            whenSlow is JourneyPlan.Found,
+        )
+        val walked = whenBrisk as JourneyPlan.WalkOnly
+        assertEquals(NoBikeJourney.WalkingIsQuicker, walked.reason)
+        val atTheEnginesPace =
+            (walked.directWalk.distanceMetres / FakeRouter.WALKING_METRES_PER_SECOND)
+                .roundToInt().seconds
+        assertEquals(
+            atTheEnginesPace * WalkingPace.Brisk.durationFactor,
+            walked.directWalk.duration,
+        )
+    }
+
+    @Test
+    fun `beyond the threshold the walk is still weighed, at the pace asked for`() = runTest {
+        // Past `directWalkThresholdMetres` the walk is only traced when the
+        // journey found fails to beat a walker nobody keeps up with. That bound
+        // moves with the pace, and it must stay optimistic: a brisk walker's
+        // winning walk must still be computed. Four kilometres, a station at
+        // either end and a ride three times slower than it should be — the walk
+        // wins for a brisk walker and loses for a slow one.
+        val destination = at(0.0, 4000.0)
+        val depart = at(0.0, 50.0)
+        val arrivee = at(0.0, 3950.0)
+        val stations = listOf(
+            station("depart", depart, bikes = 12, docks = 0),
+            station("arrivee", arrivee, bikes = 0, docks = 12),
+        )
+        val roadworks = setOf(FakeRouter.key(depart, arrivee))
+
+        val whenSlow = JourneyPlanner(
+            FakeRouter(slowRides = roadworks),
+            JourneySettings(walkingPace = WalkingPace.Slow),
+        ).plan(origin, destination, stations)
+        val whenBrisk = JourneyPlanner(
+            FakeRouter(slowRides = roadworks),
+            JourneySettings(walkingPace = WalkingPace.Brisk),
+        ).plan(origin, destination, stations)
+
+        assertTrue(
+            "a slow walker is better off riding, got $whenSlow",
+            whenSlow is JourneyPlan.Found,
+        )
+        val walked = whenBrisk as JourneyPlan.WalkOnly
+        assertEquals(NoBikeJourney.WalkingIsQuicker, walked.reason)
+        val atTheEnginesPace =
+            (walked.directWalk.distanceMetres / FakeRouter.WALKING_METRES_PER_SECOND)
+                .roundToInt().seconds
+        assertEquals(
+            atTheEnginesPace * WalkingPace.Brisk.durationFactor,
+            walked.directWalk.duration,
+        )
+    }
+
+    @Test
+    fun `a pace nobody wrote down, or nobody can read, is the normal one`() = runTest {
+        // A stored value that cannot be read must never change a journey: a word
+        // written by another version, or by a hand, would otherwise send
+        // somebody to a station the application never chose for them.
+        assertEquals(WalkingPace.Normal, WalkingPace.fromId(null))
+        assertEquals(WalkingPace.Normal, WalkingPace.fromId(""))
+        assertEquals(WalkingPace.Normal, WalkingPace.fromId("rapide"))
+        // And every identifier this build writes is one it reads back, which is
+        // what makes the stored word stable from one release to the next.
+        for (pace in WalkingPace.entries) {
+            assertEquals(pace, WalkingPace.fromId(pace.id))
+        }
+    }
+
     // ------------------------------------------------------------- units --
 
     @Test
