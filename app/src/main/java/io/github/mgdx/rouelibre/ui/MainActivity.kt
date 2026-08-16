@@ -392,11 +392,12 @@ class MainActivity : AppCompatActivity() {
         val position = container.deviceLocation.lastKnown() ?: return
 
         val catalogue = container.cityCatalogueSource.catalogue()
-        // A city whose data is not published yet is not worth proposing:
-        // accepting would lead to a download that has nothing to fetch. Nor is
-        // the city already in service, which is no change of map at all.
+        // A city the catalogue announces no weight for is not worth proposing:
+        // this proposal interrupts, so it is only made where the size can be
+        // named. Nor is the city already in service, which is no change of map
+        // at all.
         val here = catalogue.suggestionFor(position)
-            ?.takeIf { it.isAvailable && it.id != servedCityId }
+            ?.takeIf { it.hasAnnouncedSize && it.id != servedCityId }
         // Asked even when there is nothing to propose: standing outside the
         // network one declined is what forgets that refusal.
         if (!container.rememberCityProposal(here?.id)) return

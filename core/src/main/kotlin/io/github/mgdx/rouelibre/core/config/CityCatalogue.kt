@@ -130,18 +130,21 @@ public data class CityEntry(
     public val gbfsDiscoveryUrl: String,
     public val manifestUrl: String,
     /**
-     * The total weight of the offline data, in bytes, or `null` if it has not
-     * been produced yet.
+     * The total weight of the offline data, in bytes, or `null` when the
+     * catalogue does not carry it.
      *
-     * SPEC §11.9 requires the size to be announced before downloading. A city
-     * with no known size is a city one cannot install: it stays listed, but the
-     * interface must say so.
+     * SPEC §11.9 requires the size to be announced before downloading, and this
+     * is where the list of cities reads it. **`null` says the catalogue does not
+     * know, never that the data is missing**: the catalogue is derived and
+     * published apart from the manifests, so it can lag behind the release it
+     * indexes. The manifest, which the storage screen fetches, is what settles
+     * the question.
      */
     public val dataSizeBytes: Long?,
     public val releaseTag: String?,
 ) {
-    /** True if this city's data is published and downloadable. */
-    public val isAvailable: Boolean
+    /** True if the catalogue announces a weight for this city's data. */
+    public val hasAnnouncedSize: Boolean
         get() = dataSizeBytes != null && dataSizeBytes > 0
 
     /**

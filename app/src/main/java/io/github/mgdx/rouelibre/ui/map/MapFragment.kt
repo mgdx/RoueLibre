@@ -770,14 +770,15 @@ class MapFragment : Fragment() {
     /**
      * The network serving where the user stands, if it is worth proposing.
      *
-     * A city whose data is not published yet leads to a download with nothing
-     * to fetch, and the city already in service is not a change of map: neither
-     * is offered.
+     * A proposal made on its own account is only worth making where the weight
+     * can be named, so a city the catalogue announces none for is left out; the
+     * city already in service is not a change of map, and is left out too. The
+     * list of cities is less strict, because there the user asked.
      */
     private suspend fun cityAround(position: Coordinates): CityEntry? =
         container.cityCatalogueSource.catalogue()
             .suggestionFor(position)
-            ?.takeIf { it.isAvailable && it.id != servedCity?.network?.id }
+            ?.takeIf { it.hasAnnouncedSize && it.id != servedCity?.network?.id }
 
     /**
      * Serves the city the user accepted.

@@ -86,9 +86,18 @@ class CityAdapter(
                 // below already says what it weighs here.
                 installed -> ""
 
-                // A listed city whose data is not published: say so, rather
-                // than letting a download fail.
-                else -> context.getString(R.string.city_data_unavailable)
+                // The catalogue carries no size — it is published apart from
+                // the manifests and can lag behind them, so its silence proves
+                // nothing about the data. Announce what is actually known,
+                // rather than a "not published yet" the storage screen then
+                // contradicts by offering the download (SPEC §4.4).
+                stations != null -> context.resources.getQuantityString(
+                    R.plurals.city_detail_size_unknown,
+                    stations,
+                    stations,
+                )
+
+                else -> context.getString(R.string.city_size_unknown)
             }
             binding.cityDetail.isVisible = binding.cityDetail.text.isNotEmpty()
 

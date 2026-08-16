@@ -297,6 +297,19 @@ also records what has no visible effect.
   being itself one of the ways the catalogue falls behind. All 332 entries now
   agree with their manifest.
 
+  **The application no longer draws a conclusion the catalogue cannot support
+  either.** A missing size said "Data not published yet", which is a claim about
+  the world; all the catalogue knows is that it carries no size, and it is
+  published apart from the manifests and can lag behind them. The row now says
+  "Size announced before downloading" — with the station count, which the old
+  wording swallowed — and the storage screen, which does fetch the manifest,
+  announces it. Both screens say the same thing, and the size still comes before
+  the download as `SPEC.md` §4.4 and §11.9 require. The proposal made on the
+  application's own account — the nearby city offered on the map — stays limited
+  to cities the catalogue vouches for: an interruption is worth making only when
+  the weight can be named. `CityEntry.isAvailable` is renamed
+  `hasAnnouncedSize`, which is what it tests.
+
 - **A server whose certificate could not be trusted was announced as a feed
   publishing rubbish.** sharedmobility.ch let its own certificate expire on
   15 August 2026 and Zürich lost its stations behind "the data received is

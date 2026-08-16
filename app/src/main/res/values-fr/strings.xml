@@ -402,7 +402,14 @@
         <item quantity="other">%1$d stations</item>
     </plurals>
     <string name="city_detail_size_only">%1$s à télécharger</string>
-    <string name="city_data_unavailable">Données pas encore publiées</string>
+    <!-- Same row when the catalogue carries no size: it only says it does not
+         know, never that the data is missing. %1$d is a number of stations. -->
+    <plurals name="city_detail_size_unknown">
+        <item quantity="one">%1$d station · taille annoncée avant le téléchargement</item>
+        <item quantity="many">%1$d de stations · taille annoncée avant le téléchargement</item>
+        <item quantity="other">%1$d stations · taille annoncée avant le téléchargement</item>
+    </plurals>
+    <string name="city_size_unknown">Taille annoncée avant le téléchargement</string>
     <!-- %1$s is an already formatted size, "42,5 Mo" for instance. -->
     <string name="city_installed">%1$s installés sur l\'appareil</string>
     <!-- A network and the conurbation it serves, "V'lille — Lille".

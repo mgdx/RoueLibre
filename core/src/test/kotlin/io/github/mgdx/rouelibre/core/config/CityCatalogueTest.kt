@@ -34,20 +34,20 @@ class CityCatalogueTest {
 
     @Test
     fun `a city either announces the weight of its data or none at all`() {
-        // SPEC §11.9 requires the size to be announced before downloading. The
-        // catalogue lists every network whose feed the survey verified, and
-        // most of them have no data produced yet: those carry no weight, and
-        // the interface says so rather than offering a download that would
-        // fail. What must never happen is a weight of zero, which would read as
-        // "nothing to download".
+        // SPEC §11.9 requires the size to be announced before downloading. A
+        // catalogue may carry no weight for a network — its data has not been
+        // produced, or the catalogue was derived before it was — and the
+        // interface then says only that it does not know. What must never
+        // happen is a weight of zero, which would read as "nothing to
+        // download".
         val cities = publishedCatalogue().cities
         cities.forEach { city ->
             val size = city.dataSizeBytes
             assertTrue("data weight of zero for ${city.id}", size == null || size > 0)
         }
         assertTrue(
-            "no city has its data published",
-            cities.any { it.isAvailable },
+            "no city announces the weight of its data",
+            cities.any { it.hasAnnouncedSize },
         )
     }
 
