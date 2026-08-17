@@ -31,3 +31,9 @@ __pycache__/
 keystore.properties
 *.jks
 *.keystore
+
+# The agent worktrees opened under `.claude/`, and the local tooling settings
+# beside them. A worktree is a checkout of this very repository, which has no
+# business inside its own history; the settings describe one contributor's
+# tooling, not the project.
+.claude/
