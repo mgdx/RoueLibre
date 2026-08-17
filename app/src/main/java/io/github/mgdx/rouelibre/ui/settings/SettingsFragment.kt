@@ -80,6 +80,7 @@ class SettingsFragment : Fragment() {
         setUpLanguage(views)
         setUpOpeningScreen(views)
         setUpLargeNumbers(views)
+        setUpStationFilters(views)
         setUpOfflineData(views)
         setUpDownloadPolicy(views)
         setUpAbout(views)
@@ -432,6 +433,58 @@ class SettingsFragment : Fragment() {
                     val current = binding ?: return@collect
                     isFilling = true
                     current.largeNumbers.isChecked = large
+                    isFilling = false
+                }
+            }
+        }
+    }
+
+    /**
+     * Which stations the map draws at all, in the display section (SPEC §7.1,
+     * §7.6).
+     *
+     * Written the moment a switch is pressed, like everything else on this
+     * screen, and kept from one session to the next like the theme and the
+     * units. The map follows the stored value itself, so the markers are already
+     * back — or already gone — on the map one returns to.
+     *
+     * **This screen is the only place either filter is visible at all.** The map
+     * carries no control and no witness, which SPEC §7.1 settles and names as a
+     * compromise rather than an oversight: a filter left on for weeks explains
+     * itself here or nowhere. Hence the two lines under the switches, which are
+     * part of the setting and not decoration.
+     */
+    private fun setUpStationFilters(views: FragmentSettingsBinding) {
+        views.hideOutOfServiceStations.setOnCheckedChangeListener { _, isChecked ->
+            if (isFilling) return@setOnCheckedChangeListener
+            viewLifecycleOwner.lifecycleScope.launch {
+                preferences.setHideOutOfServiceStations(isChecked)
+            }
+        }
+        views.hideEmptyStations.setOnCheckedChangeListener { _, isChecked ->
+            if (isFilling) return@setOnCheckedChangeListener
+            viewLifecycleOwner.lifecycleScope.launch {
+                preferences.setHideEmptyStations(isChecked)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preferences.hideOutOfServiceStations.collect { hide ->
+                    val current = binding ?: return@collect
+                    isFilling = true
+                    current.hideOutOfServiceStations.isChecked = hide
+                    isFilling = false
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preferences.hideEmptyStations.collect { hide ->
+                    val current = binding ?: return@collect
+                    isFilling = true
+                    current.hideEmptyStations.isChecked = hide
                     isFilling = false
                 }
             }

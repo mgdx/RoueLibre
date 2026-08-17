@@ -593,20 +593,6 @@
     <string name="error_local_storage">Impossible de lire les données enregistrées sur l\'appareil.</string>
     <string name="error_no_city_chosen">Aucune ville n\'est sélectionnée. Choisissez-en une pour afficher les stations.</string>
 
-    <!-- Map station filters -->
-    <string name="map_filter_title">Quelles stations afficher</string>
-    <string name="map_filter_open">Choisir les stations affichées sur la carte</string>
-    <string name="map_filter_hide_out_of_service">Masquer les stations hors service</string>
-    <string name="map_filter_hide_empty_bikes">Masquer les stations sans vélo</string>
-    <string name="map_filter_hide_empty_docks">Masquer les stations sans place libre</string>
-    <string name="map_filter_keeps_unknown">Les stations dont le réseau ne dit rien restent affichées : un compte que personne n\'a pu lire n\'est pas un compte nul.</string>
-    <!-- Sur la carte, quand un filtre est actif : combien de stations il écarte.
-         Zéro est annoncé aussi — c\'est ce qui signale que le filtre est actif. -->
-    <plurals name="map_filter_hidden">
-        <item quantity="one">%1$d station masquée</item>
-        <item quantity="many">%1$d de stations masquées</item>
-        <item quantity="other">%1$d stations masquées</item>
-    </plurals>
     <!-- Unmetered-only downloads -->
     <!-- Le réglage nomme la facturation et non le Wi-Fi : un partage de
          connexion est du Wi-Fi et est un forfait mobile, et un Wi-Fi plafonné
@@ -638,6 +624,19 @@
     <!-- Under the switch. Says where the figures grow, and where they do not:
          the map keeps its markers as they are. -->
     <string name="settings_large_numbers_hint">Dans la liste des stations et sur la fiche d\'une station. Les pastilles de la carte gardent leur taille.</string>
+
+    <!-- Which stations the map draws at all. Set in the settings and nowhere
+         else: the map itself carries no control and no badge (SPEC 7.1). -->
+    <string name="settings_map_filters_title">Les stations que la carte affiche</string>
+    <string name="settings_map_filters_hide_out_of_service">Masquer les stations hors service</string>
+    <!-- One wording for both modes: this screen knows nothing of the map's
+         Bikes / Free docks button, so it may name neither. -->
+    <string name="settings_map_filters_hide_empty">Masquer les stations qui n\'ont rien à offrir</string>
+    <!-- Under the switch, saying what "nothing" is read against. -->
+    <string name="settings_map_filters_hide_empty_hint">« Rien » se lit selon ce que la carte compte : aucun vélo quand elle compte les vélos, aucune place libre quand elle compte les places.</string>
+    <!-- Under both switches. The most important rule of the two filters, and
+         the only place it is now written. -->
+    <string name="settings_map_filters_keeps_unknown">Les stations dont le réseau ne dit rien restent affichées : un compte que personne n\'a pu lire n\'est pas un compte nul.</string>
 
     <!-- The rider's OWN bike, not the network's. Keep the wording clearly
          about the reader's own equipment: the journey screen carries a
