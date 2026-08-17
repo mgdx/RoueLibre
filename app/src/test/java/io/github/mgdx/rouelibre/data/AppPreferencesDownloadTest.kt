@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -72,5 +73,16 @@ class AppPreferencesDownloadTest {
         store.edit { it[key] = false }
 
         assertFalse(AppPreferences(store).downloadOnUnmeteredOnly.first())
+    }
+
+    @Test
+    fun `a value that is not a yes or a no still waits for an unmetered connection`() = runTest {
+        // Written by a version that stored it differently, or by a file left
+        // half-written. Read as anything but "wait", a settings file nobody can
+        // make sense of would send a gigabyte out on a mobile plan.
+        val store = newStore()
+        store.edit { it[stringPreferencesKey("download_on_unmetered_only")] = "false" }
+
+        assertTrue(AppPreferences(store).downloadOnUnmeteredOnly.first())
     }
 }

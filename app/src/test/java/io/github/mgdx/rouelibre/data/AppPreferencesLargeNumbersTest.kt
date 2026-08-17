@@ -3,6 +3,8 @@ package io.github.mgdx.rouelibre.data
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -55,5 +57,16 @@ class AppPreferencesLargeNumbersTest {
         preferences.setLargeAvailabilityNumbers(false)
 
         assertFalse(preferences.largeAvailabilityNumbers.first())
+    }
+
+    @Test
+    fun `a value that is not a yes or a no draws the ordinary figures`() = runTest {
+        // Written by a version that stored it differently, or by a file left
+        // half-written: every screen showing an indicator collects this, so a
+        // value read through its typed key would take them all down at once.
+        val store = newStore()
+        store.edit { it[stringPreferencesKey("large_availability_numbers")] = "true" }
+
+        assertFalse(AppPreferences(store).largeAvailabilityNumbers.first())
     }
 }

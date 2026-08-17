@@ -131,6 +131,14 @@ happened and what to do, without apologising or staying vague. An empty screen
 invites action, it does not state a fact. An action keeps the same name from the
 button through to the confirmation.
 
+**French says *tu*.** In `values-fr/` and in the store texts of
+`fastlane/metadata/android/fr/` alike: the application speaks to one person
+walking to a station, not to a customer — "Tu choisis ta ville", never "Vous
+choisissez votre ville" (`SPEC.md` §9). The rule is about the French, and this
+file and `docs/` are outside it, addressing developers rather than users. Every
+other language settles its own register: choose the one that sounds like one
+person talking to another, and hold it from the first string to the last.
+
 **The vocabulary stays generic**: "station", "bike", "network". A particular
 network's name appears only in the city configuration.
 

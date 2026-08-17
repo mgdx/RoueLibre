@@ -389,6 +389,20 @@ also records what has no visible effect.
 
 ### Changed
 
+- **The French of the store texts now says *tu*, like the interface.**
+  `res/values-fr/` has always addressed the reader as one person; the F-Droid
+  description and all three release notes said *vous* — "Vous choisissez votre
+  ville au premier lancement" — so the store page and the first screen spoke to
+  two different people. All five files were rewritten rather than conjugated
+  where the person was carried by a possessive pronoun or a subjunctive
+  ("l'application propose la vôtre" → "la tienne", "sans que vous le disiez" →
+  "sans que tu le dises"); the tone is untouched, only the person moves. Nothing
+  in the application changes — the what's-new screen reads those very files
+  (§7.10), so what it shows follows. The rule is now written where it will be
+  read before the next translation is started: `SPEC.md` §9 and the translation
+  rules of `CONTRIBUTING.md`. It is about the French; documents addressed to
+  contributors are outside it.
+
 - **The settings screen is laid out in sections.** Nothing is added and nothing
   behaves differently: the four settings it holds are the same four, in the same
   order, doing the same thing. What changes is that each now sits under a
@@ -613,6 +627,23 @@ also records what has no visible effect.
   nobody expects a faster journey out of it.
 
 ### Fixed
+
+- **Three yes-or-no settings were still read without their guard.** The two map
+  filters go through `readFlag`, which reads a boolean through
+  `Preferences.asMap` so the cast can be checked: a settings file holding
+  something else under one of those names — written by a version that stored it
+  differently, or truncated by a device out of space — gives back the default
+  instead of taking the screen down with a `ClassCastException`. The larger
+  availability figures, the own-bike switch and the "download on an unmetered
+  connection only" setting were still read through their typed key, and each is
+  collected by a screen: the indicator on every list, the journey search, the
+  storage screen. **The helper now takes the value an unreadable setting means**
+  rather than assuming "no": the first two read as false, and downloads still
+  **wait for an unmetered connection** when nothing can be read, which is the
+  decision of `SPEC.md` §4.4 — read the other way round, an unreadable file
+  would send a gigabyte out on a mobile plan. No default changes. Three tests
+  cover it, one per setting, and all three threw a `ClassCastException` before
+  the change.
 
 - **The availability figure was cut off by the system's own font size.** The
   indicator's figure has always been painted in `sp` and has always followed the
