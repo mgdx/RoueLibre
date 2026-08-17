@@ -647,9 +647,9 @@
     <string name="settings_own_bike_kind_unspecified">Non précisé</string>
     <string name="settings_own_bike_kind_mechanical">Mécanique</string>
     <string name="settings_own_bike_kind_electric">Électrique</string>
-    <!-- Under the three buttons. Says what this changes and what it does not,
-         so nobody expects a faster journey out of it. -->
-    <string name="settings_own_bike_kind_hint">Sert seulement à dessiner et à décrire un trajet avec ton propre vélo. Ne change aucun itinéraire ni aucune durée.</string>
+    <!-- Under the three buttons. Says what this changes: an electric bike is
+         routed and timed as one, where the other two states are not. -->
+    <string name="settings_own_bike_kind_hint">Déclaré électrique, ton vélo a son propre itinéraire et ses propres durées. Non précisé et mécanique donnent le même trajet.</string>
 
     <!-- The summary of a ride on one's own bike, where that bike was said to be
          a pedal-assist one. %1$s is a distance, %2$s a climb. -->

@@ -521,9 +521,9 @@
     <string name="settings_own_bike_kind_unspecified">Not specified</string>
     <string name="settings_own_bike_kind_mechanical">Mechanical</string>
     <string name="settings_own_bike_kind_electric">Electric</string>
-    <!-- Under the three buttons. Says what this changes and what it does not,
-         so nobody expects a faster journey out of it. -->
-    <string name="settings_own_bike_kind_hint">Used only to draw and describe a journey on your own bike. It changes no route and no time.</string>
+    <!-- Under the three buttons. Says what this changes: an electric bike is
+         routed and timed as one, where the other two states are not. -->
+    <string name="settings_own_bike_kind_hint">Declared electric, your own bike gets its own route and its own times. Not specified and mechanical give the same journey.</string>
 
     <!-- The summary of a ride on one's own bike, where that bike was said to be
          a pedal-assist one. %1$s is a distance, %2$s a climb. -->
