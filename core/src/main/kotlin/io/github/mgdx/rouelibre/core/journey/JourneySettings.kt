@@ -52,6 +52,13 @@ import kotlin.time.Duration.Companion.minutes
  *   walking legs, so it changes which pair of stations wins, which is exactly
  *   what it is asked to do. [WalkingPace.Normal], the default, multiplies by one
  *   and leaves the algorithm as it was before the setting existed.
+ * @property riddenBike the bike this journey is worked out on — see [RiddenBike],
+ *   which justifies its profile and its factor. Like [walkingPace] it is the
+ *   user's, and it belongs here for the same reason: it decides the profile the
+ *   ride is traced with and scales its duration, so it changes which pair of
+ *   stations wins. [RiddenBike.Mechanical], the default, is the profile and the
+ *   factor of the version before pedal assistance was modelled, and it is also
+ *   what a rider who asked for no particular kind gets (SPEC §6).
  */
 public data class JourneySettings(
     public val departureCandidates: Int = 5,
@@ -62,6 +69,7 @@ public data class JourneySettings(
     public val fallbackPenalty: Duration = 6.minutes,
     public val bikeTurnoverPerMinute: Double = 0.12,
     public val walkingPace: WalkingPace = WalkingPace.Normal,
+    public val riddenBike: RiddenBike = RiddenBike.Mechanical,
 ) {
     init {
         require(departureCandidates > 0) { "at least one departure station is needed" }

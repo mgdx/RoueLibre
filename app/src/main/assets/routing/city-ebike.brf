@@ -1,0 +1,180 @@
+# City pedal-assist bike profile — Roue Libre
+#
+# Serves the main leg when the ride is made on a pedal-assist bike (SPEC.md
+# §5, §6). It describes the same bike-share bike as `city-bike.brf` — same
+# twenty-odd kilos of frame, same upright position, same narrow tyres, same
+# absent gears — carrying a motor and a battery. Everything about the streets
+# it may take, the surfaces it dislikes and the turns it pays for is therefore
+# copied from that profile unchanged: the assistance changes how a hill and a
+# distance are paid for, never where a bicycle is allowed to go.
+#
+# Three assignments, and only three, differ from `city-bike.brf`. Each is
+# justified where it stands, and nothing else here should be read as a
+# deliberate divergence.
+#
+# The cost factors multiply distance. A factor of 2 means a detour of up to
+# twice the length will be accepted to avoid that kind of way.
+#
+# Licence: GPLv3, like the rest of the project.
+
+---context:global
+
+assign validForBikes = true
+
+assign turnInstructionMode = 0
+
+# --- what the motor changes ----------------------------------------------
+
+# DIFFERS FROM city-bike.brf (1/3). The engine solves a constant-power
+# equation for the speed of every section: the pedalling power against the
+# rolling resistance, the slope and the air. The mechanical profile leaves it
+# at the engine's default hundred watts, which is a rider pedalling steadily,
+# and that is kept here — the rider of an assisted bike pedals no harder, that
+# being the point of the assistance. What is added on top is the motor's.
+#
+# The figure is anchored on the one fact about a pedelec that is measured
+# rather than felt: European law rates the motor at 250 W and **cuts the
+# assistance off at 25 km/h**. Assistance tapers as that ceiling is neared, so
+# a model that holds power constant must state the average contribution over a
+# ride and not the motor's peak. Forty watts on top of the rider's hundred is
+# the value that puts this profile's free-running speed on the flat at the
+# cut-off itself — which is where a pedelec settles on an open flat street,
+# and the reason its ceiling is a figure riders recognise. Above it the motor
+# gives nothing and gravity still gives what it gives, which is why no ceiling
+# is written here: on a descent this bike coasts like any other, and capping it
+# at 25 would have made the assisted bike the slower one downhill.
+assign bikerPower = 140
+
+# DIFFERS FROM city-bike.brf (2/3). Motor and battery weigh some five kilos
+# more than the bare share bike, and mass is what a climb is paid in. The
+# mechanical profile leaves the engine's ninety kilos — a seventy-kilo rider on
+# a twenty-kilo bike — so the assisted one carries ninety-five. It is stated
+# rather than ignored because it is the one term where the assistance costs
+# something: on a five per cent grade those five kilos take about four per cent
+# off the speed the motor buys. Small beside what the motor gives, and on the
+# honest side of the account.
+assign totalMass = 95
+
+# DIFFERS FROM city-bike.brf (3/3). The Lille metropolis is flat — some fifty
+# metres of climb in all — and the mechanical profile still pays forty metres
+# of detour per metre climbed, because a heavy share bike climbs poorly and its
+# rider knows it. An assisted one does not: the motor gives most on precisely
+# the sections where it is asked for, so **a hill stops being a reason to go
+# round**. Lowered to a quarter of the mechanical figure rather than to zero:
+# a climb still takes longer than the flat, which the kinematic model above
+# already charges in minutes, and a bridge ramp taken for nothing remains worth
+# a short detour. The cutoff is untouched: below two per cent, neither bike is
+# climbing anything.
+assign downhillcost = 0
+assign downhillcutoff = 2.0
+assign uphillcost = 10
+assign uphillcutoff = 2.0
+
+---context:way
+
+# Every change of direction costs: slowing down, looking, and getting a heavy
+# bike moving again. Enough to prefer a simple route at equal length, not
+# enough to lengthen the journey appreciably. An assisted bike is heavier still
+# and pulls away no more willingly at walking pace, the assistance being
+# proportional to what the rider puts in: unchanged.
+assign turncost = 60
+
+# Cost of entering a way: discourages chains of short, mismatched sections.
+assign initialcost = 0
+
+# --- wrong ways ----------------------------------------------------------
+
+# Contraflow cycling is very common in Lille's 30 km/h zones: refusing it
+# would rule out half the city centre.
+assign bicycle_may_go_against =
+  or oneway:bicycle=no
+  or cycleway=opposite|opposite_lane|opposite_track
+  highway=living_street|pedestrian
+
+assign is_wrong_way =
+  and reversedirection=yes
+  and oneway=yes|true|1
+  not bicycle_may_go_against
+
+# --- access --------------------------------------------------------------
+
+assign bicycle_refused = bicycle=no|private|use_sidepath
+
+assign closed_to_all =
+  and access=no|private not bicycle=yes|designated|permissive
+
+# Fast roads: forbidden to bikes, and deadly if one strays onto them.
+assign motorway_like = highway=motorway|motorway_link|trunk|trunk_link
+
+assign is_forbidden =
+  or is_wrong_way or bicycle_refused or closed_to_all motorway_like
+
+# --- surface -------------------------------------------------------------
+
+# Cobbles are everywhere in the North, and they are the real comfort question
+# for a bike with no suspension and narrow tyres. Good-quality setts stay
+# rideable; old cobbles shake enough that one would clearly rather go round.
+# The motor drives the wheel, not the tyres or the springs the bike does not
+# have, so these are the mechanical profile's figures exactly.
+assign surface_penalty =
+  switch surface=asphalt|paved|concrete|paving_stones|metal|wood 1.0
+  switch surface=sett 1.5
+  switch surface=cobblestone 2.0
+  switch surface=compacted|fine_gravel 1.3
+  switch surface=gravel|ground|dirt|earth|grass|sand|mud 2.4
+  # Surface not stated: in town, it is asphalt nine times out of ten.
+  1.0
+
+# --- kind of way ---------------------------------------------------------
+
+# Infrastructure built for cycling.
+assign cycle_way =
+  or highway=cycleway
+  or cyclestreet=yes
+  or bicycle_road=yes
+  and highway=path|footway bicycle=designated
+
+# Calmed streets where a bike mixes well with cars.
+assign calm_way = highway=living_street|residential|service|unclassified|road
+
+assign base_cost
+
+  switch is_forbidden 100000
+
+  # Steps are taken with the bike in hand. It is possible, never desirable,
+  # and an assisted share bike is heavier still.
+  switch highway=steps 40
+
+  # A pedestrian area is crossed at walking pace. Tolerated, never preferred.
+  switch highway=pedestrian 3.0
+
+  # A pavement with no cycling permission: passable on foot, to be avoided.
+  switch and highway=footway not bicycle=designated|yes 8.0
+
+  switch cycle_way 1.0
+  switch calm_way 1.2
+  switch highway=track 1.8
+
+  switch highway=tertiary|tertiary_link 1.5
+  switch highway=secondary|secondary_link 2.1
+  switch highway=primary|primary_link 3.0
+
+  2.5
+
+# The final cost combines the kind of way with its surface: a cobbled cycle
+# track is not a smooth cycle track.
+assign costfactor
+  switch equal base_cost 100000 100000
+  multiply base_cost surface_penalty
+
+---context:node
+
+# What forces one off the bike, or forbids it outright.
+assign initialcost =
+  switch bicycle=no|private 1000000
+  # A barrier to get round costs the time of putting a foot down.
+  switch barrier=gate|lift_gate|swing_gate|cycle_barrier|block|bollard 400
+  # Traffic lights cost an average wait, which justifies a slight detour by a
+  # route that has fewer of them.
+  switch highway=traffic_signals 120
+  0

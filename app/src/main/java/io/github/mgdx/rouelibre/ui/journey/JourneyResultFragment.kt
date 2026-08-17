@@ -220,6 +220,7 @@ class JourneyResultFragment : Fragment() {
             wantedBikeKind = wantedBikeKind,
             fleet = container.fleetRepository.fleet,
             walkingPace = container.preferences.walkingPace,
+            ownBikeKind = container.preferences.ownBikeKind,
         )
     }
 

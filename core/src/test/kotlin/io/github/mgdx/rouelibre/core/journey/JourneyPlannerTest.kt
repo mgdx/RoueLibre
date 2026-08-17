@@ -17,6 +17,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import kotlin.math.roundToInt
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -36,43 +37,54 @@ class JourneyPlannerTest {
      * The 25 % detour matches what one observes in town between the straight
      * line and the real path. A ride listed in [slowRides] keeps its distance
      * but takes three times longer — roadworks the lower bound cannot see.
+     *
+     * **The two bike profiles are deliberately indistinguishable here**: same
+     * track, same speed, whichever is asked for. What the real profiles do to a
+     * ride is BRouter's business and is exercised on the device; what these
+     * tests must pin down is the planner's own arithmetic, so any difference a
+     * test observes between the two bikes comes from
+     * [RiddenBike.durationFactor] and from nothing else. Which profile was
+     * asked for is watched separately, through [modesAsked].
      */
     private class FakeRouter(
         private val unreachable: Set<String> = emptySet(),
         private val slowRides: Set<String> = emptySet(),
+        private val rideSeconds: Map<String, Int> = emptyMap(),
     ) : Router {
         var cyclingCalls = 0
             private set
         var walkingCalls = 0
             private set
 
+        /** Every mode the planner asked for, in order. */
+        val modesAsked = mutableListOf<TravelMode>()
+
         override suspend fun route(
             from: Coordinates,
             to: Coordinates,
             mode: TravelMode,
         ): RouteResult {
+            modesAsked += mode
             if (key(from, to) in unreachable) {
                 return RouteResult.Failure(RoutingFailure.NoRouteFound)
             }
-            when (mode) {
-                TravelMode.Cycling -> cyclingCalls++
-                TravelMode.Walking -> walkingCalls++
-            }
+            val onABike = mode != TravelMode.Walking
+            if (onABike) cyclingCalls++ else walkingCalls++
             val metres = (from.distanceInMetresTo(to) * DETOUR).roundToInt()
-            val speed = when (mode) {
-                TravelMode.Walking -> WALKING_METRES_PER_SECOND
-                TravelMode.Cycling -> CYCLING_METRES_PER_SECOND
-            }
-            val slowdown = if (mode == TravelMode.Cycling && key(from, to) in slowRides) {
-                SLOW_FACTOR
-            } else {
-                1
-            }
+            val speed = if (onABike) CYCLING_METRES_PER_SECOND else WALKING_METRES_PER_SECOND
+            val slowdown = if (onABike && key(from, to) in slowRides) SLOW_FACTOR else 1
+            // A ride may be given its duration outright, the geometry keeping
+            // its own: it is the only way to lay out two pairs whose rides
+            // differ by far more than their tracks do, which is what a test of
+            // the ride factor needs and what a fake proportional to distance
+            // can never produce.
+            val stated = rideSeconds[key(from, to)].takeIf { onABike }
             return RouteResult.Success(
                 RouteLeg(
                     mode = mode,
                     distanceMetres = metres,
-                    duration = (metres / speed).roundToInt().seconds * slowdown,
+                    duration = stated?.seconds
+                        ?: ((metres / speed).roundToInt().seconds * slowdown),
                     ascentMetres = 0,
                     geometry = listOf(from, to),
                 ),
@@ -1053,6 +1065,188 @@ class JourneyPlannerTest {
         for (pace in WalkingPace.entries) {
             assertEquals(pace, WalkingPace.fromId(pace.id))
         }
+    }
+
+    // -------------------------------------------------------- ridden bike --
+
+    @Test
+    fun `on a mechanical bike the journey is the one computed before assistance existed`() =
+        runTest {
+            // The counterpart of the pace test above, and the one that matters
+            // most here: a journey asked for without naming a kind — which is
+            // the default, and the pessimistic reading SPEC §6 settles on —
+            // must come back exactly as it did before pedal assistance was
+            // modelled. Same pair, same track, same minutes.
+            val stations = onePair()
+            val asBefore = JourneyPlanner(FakeRouter())
+            val onAPlainBike = JourneyPlanner(
+                FakeRouter(),
+                JourneySettings(riddenBike = RiddenBike.Mechanical),
+            )
+
+            val before = asBefore.plan(origin, destination, stations) as JourneyPlan.Found
+            val now = onAPlainBike.plan(origin, destination, stations) as JourneyPlan.Found
+
+            assertEquals(before.best.departureStation.id, now.best.departureStation.id)
+            assertEquals(before.best.arrivalStation.id, now.best.arrivalStation.id)
+            assertEquals(before.best.travelTime, now.best.travelTime)
+            assertEquals(before.best.ride.duration, now.best.ride.duration)
+            assertEquals(before.best.ride.distanceMetres, now.best.ride.distanceMetres)
+
+            // And the ride carries the engine's own figure, untouched: the
+            // comparison above would still pass were both sides scaled by the
+            // same wrong factor.
+            val asTheEngineTraced =
+                (now.best.ride.distanceMetres / FakeRouter.CYCLING_METRES_PER_SECOND)
+                    .roundToInt().seconds
+            assertEquals(asTheEngineTraced, now.best.ride.duration)
+            assertEquals(1.0, RiddenBike.Mechanical.durationFactor, 0.0)
+            // The profile asked for is the mechanical one, so a rider promised
+            // nothing is not sent over the assisted graph either.
+            assertEquals(TravelMode.Cycling, now.best.ride.mode)
+        }
+
+    @Test
+    fun `an assisted bike is quicker over the same track, and the walks do not move`() = runTest {
+        // The pair being forced, the same three legs are traced twice. The ride
+        // must shorten by exactly the factor and nothing else; the two walks
+        // must not move at all, a motor saying nothing about how one walks.
+        val stations = onePair()
+
+        val plain = JourneyPlanner(
+            FakeRouter(),
+            JourneySettings(riddenBike = RiddenBike.Mechanical),
+        ).plan(origin, destination, stations) as JourneyPlan.Found
+        val assisted = JourneyPlanner(
+            FakeRouter(),
+            JourneySettings(riddenBike = RiddenBike.ElectricallyAssisted),
+        ).plan(origin, destination, stations) as JourneyPlan.Found
+
+        assertTrue(
+            "the assisted ride should be quicker: ${assisted.best.ride.duration} " +
+                "against ${plain.best.ride.duration}",
+            assisted.best.ride.duration < plain.best.ride.duration,
+        )
+        assertEquals(
+            plain.best.ride.duration * RiddenBike.ElectricallyAssisted.durationFactor,
+            assisted.best.ride.duration,
+        )
+        assertEquals(plain.best.walkToStation.duration, assisted.best.walkToStation.duration)
+        assertEquals(
+            plain.best.walkToDestination.duration,
+            assisted.best.walkToDestination.duration,
+        )
+    }
+
+    @Test
+    fun `the bike ridden decides which profile the engine is asked for`() = runTest {
+        // The factor is only half of it: the ride is traced with the profile
+        // that describes the bike, which is what keeps SPEC §6's rule that the
+        // application announces nothing it has not computed. Watched on the
+        // router itself, since the fake makes the two profiles behave alike.
+        val stations = onePair()
+
+        for (bike in RiddenBike.entries) {
+            val router = FakeRouter()
+            JourneyPlanner(router, JourneySettings(riddenBike = bike))
+                .plan(origin, destination, stations)
+
+            val ridden = router.modesAsked.filter { it != TravelMode.Walking }
+            assertTrue("no ride was traced for $bike", ridden.isNotEmpty())
+            assertEquals(listOf(bike.travelMode), ridden.distinct())
+        }
+    }
+
+    @Test
+    fun `the bike ridden decides which pair wins`() = runTest {
+        // The test that proves the factor belongs in the algorithm and not in
+        // the writing of the result.
+        //
+        // Two departure stations, and a trade between them. The near one is a
+        // hundred metres' walk away but its ride is three times slower than it
+        // should be — roadworks — so it buys a short walk with a long ride. The
+        // other lies further along the way and rides almost nothing. Taking a
+        // slice off every ride can only favour the first, and where the two are
+        // close enough it flips the winner outright: an arbitration a factor
+        // confined to the screen could never make.
+        //
+        // The two rides are given their durations outright rather than derived
+        // from their length, because that is the only way to lay out a case
+        // where the rides differ far more than the tracks do — and it is the
+        // difference between the rides the factor bites on. The figures are
+        // laid out to leave a hundred seconds of margin either way, so this
+        // holds for any factor below 0.975 rather than for one exact value.
+        val proche = at(0.0, 100.0)
+        val loin = at(0.0, 4_000.0)
+        val arrivee = at(0.0, 14_000.0)
+        val destination = at(0.0, 14_100.0)
+        val stations = listOf(
+            station("proche", proche, bikes = 12, docks = 0),
+            station("loin", loin, bikes = 12, docks = 0),
+            station("arrivee", arrivee, bikes = 0, docks = 12),
+        )
+        // Walk 100 s then ride 5500 s, against walk 4000 s then ride 1500 s:
+        // 5700 s against 5600 s, so the far station wins on a plain bike by a
+        // hundred seconds. Take a slice off both rides and the near station's
+        // four thousand seconds of ride shrink by far more than the far
+        // station's fifteen hundred, and it wins instead.
+        val rides = mapOf(
+            FakeRouter.key(proche, arrivee) to 5_500,
+            FakeRouter.key(loin, arrivee) to 1_500,
+        )
+
+        suspend fun departureChosenBy(bike: RiddenBike): String {
+            val plan = JourneyPlanner(
+                FakeRouter(rideSeconds = rides),
+                // The reliability penalty is switched off, and only here: it
+                // weighs an exposure that the ride is part of, so it moves with
+                // the factor too. What this test has to read is the choice of
+                // times alone, and it can only read it with the other term of
+                // the sum held still.
+                JourneySettings(fallbackPenalty = Duration.ZERO, riddenBike = bike),
+            ).plan(origin, destination, stations) as JourneyPlan.Found
+            return plan.best.departureStation.id
+        }
+
+        assertEquals("loin", departureChosenBy(RiddenBike.Mechanical))
+        assertEquals("proche", departureChosenBy(RiddenBike.ElectricallyAssisted))
+    }
+
+    @Test
+    fun `on one's own bike, the declared kind decides the profile and the minutes`() = runTest {
+        // SPEC §7.6 held until 17 August 2026 that not a minute of this line
+        // moved with the declaration. It moves now, and only for a bike
+        // declared assisted: "not specified" and "mechanical" both come back
+        // with the ride of before, which is the application layer's doing —
+        // here the two states it maps them to are checked apart.
+        val plainRouter = FakeRouter()
+        val assistedRouter = FakeRouter()
+
+        val plain = JourneyPlanner(plainRouter, JourneySettings(riddenBike = RiddenBike.Mechanical))
+            .planWithOwnBike(origin, destination) as JourneyPlan.OwnBike
+        val assisted = JourneyPlanner(
+            assistedRouter,
+            JourneySettings(riddenBike = RiddenBike.ElectricallyAssisted),
+        ).planWithOwnBike(origin, destination) as JourneyPlan.OwnBike
+
+        assertEquals(listOf(TravelMode.Cycling), plainRouter.modesAsked)
+        assertEquals(listOf(TravelMode.ElectricCycling), assistedRouter.modesAsked)
+        assertEquals(
+            plain.ride.duration * RiddenBike.ElectricallyAssisted.durationFactor,
+            assisted.ride.duration,
+        )
+        // Still one leg and no walk, whichever bike it is (SPEC §7.3).
+        assertEquals(0, assistedRouter.walkingCalls)
+    }
+
+    @Test
+    fun `every bike names a profile of its own`() = runTest {
+        // The profiles laid on disk are derived from `TravelMode.entries`
+        // (`OfflineRouter.extractProfiles`), so a bike pointing at a mode that
+        // pointed nowhere would fail on the device and nowhere earlier.
+        val profiles = RiddenBike.entries.map { it.travelMode.profileName }
+        assertEquals(profiles.distinct(), profiles)
+        assertEquals(emptyList<String>(), profiles.filter { it.isBlank() })
     }
 
     // ------------------------------------------------------------- units --

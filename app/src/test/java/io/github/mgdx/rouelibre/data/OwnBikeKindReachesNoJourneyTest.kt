@@ -5,21 +5,22 @@ import org.junit.Test
 import java.io.File
 
 /**
- * The rider's own bike changes no journey (SPEC §6, §7.6).
+ * The rider's own bike is a preference, and it stays on this side (SPEC §7.6).
  *
- * A pedal-assist bike is quicker in the real world, and this application still
- * announces only what the routing engine traced: the ride runs over the same
- * graph with the same profile whatever kind was declared, so the same pair of
- * points must come back with the same track and the same minutes. It is a
- * decision and not an omission — a speed added for the motor would be a figure
- * nobody measured.
+ * Until 17 August 2026 this test guarded a stronger claim: that the declared
+ * kind changed no journey at all, held structurally by the fact that the `core`
+ * module could not see the type. That claim fell with the decision it protected
+ * — a pedal-assist bike really is quicker, and the ride is now traced with a
+ * profile that describes it.
  *
- * What holds it is structural rather than a rule anybody has to remember:
- * [OwnBikeKind] lives in the application's settings, and the `core` module —
- * where the algorithm of §6, the router and the planner live — does not depend
- * on the application and could not read it. This test guards the day somebody
- * moves the type "for symmetry" with `WantedBikeKind`, which is a kind asked of
- * the network and does legitimately reach the algorithm.
+ * **What the test guards is what remains true, and it is not a leftover.** The
+ * algorithm needs one thing about the bike, `RiddenBike`, and that lives in
+ * `core`. [OwnBikeKind] is something else: a question put to the rider, with a
+ * wording, a default and a storage key of its own, none of which the algorithm
+ * has any business knowing. SPEC §7.6 requires it to stay distinguishable from
+ * the kind asked of the network — two questions, two names, two keys — and the
+ * day either is moved into `core` "for symmetry" that distinction starts eroding
+ * from the bottom.
  */
 class OwnBikeKindReachesNoJourneyTest {
 
@@ -30,7 +31,7 @@ class OwnBikeKindReachesNoJourneyTest {
             .map { it.name }
             .sorted()
         assertEquals(
-            "the rider's own bike must not reach the journey algorithm",
+            "the rider's own bike is a preference, not a notion of the algorithm",
             emptyList<String>(),
             mentions,
         )
