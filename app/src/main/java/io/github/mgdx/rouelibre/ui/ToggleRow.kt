@@ -9,8 +9,15 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 
 /**
- * A row of choice buttons — theme, units, walking pace, the kind of bike — that
+ * A row of choice buttons — theme, units, the screen opened on, one's own bike,
+ * the walking pace, the kind of bike wanted, bikes against free docks — that
  * keeps its labels whole at every text size the system offers (SPEC §7).
+ *
+ * Every such row in the application is one of these, and its buttons wear
+ * `Widget.RoueLibre.Toggle.Choice`, which hands the label the width Material
+ * would have spent on padding. The two work together: the style is what makes
+ * a row of three still hold "Système" at ×2.0, and this view is what happens
+ * when even that is not enough.
  *
  * A plain [MaterialButtonToggleGroup] gives each button an equal share of the
  * width whatever it has to write in it, and a share is a third or a quarter of
@@ -23,8 +30,9 @@ import com.google.android.material.button.MaterialButtonToggleGroup
  * The row answers in two steps, in this order:
  *
  *  1. **The label wraps.** A button holds up to [MAXIMUM_LABEL_LINES] lines and
- *     grows taller; the row stays a row and nothing around it moves. This alone
- *     carries every label the interface has through ×1.5 on a 411 dp screen.
+ *     grows taller; the row stays a row and nothing around it moves. This is
+ *     what carries "Liste des stations" to ×2.0 on a 411 dp screen, on two
+ *     lines, in a row of two.
  *  2. **The row stacks.** When even those lines cannot hold a label — a long
  *     single word such as "Électrique" has nowhere to break, so no number of
  *     lines saves it — the buttons go one under another, each on the full

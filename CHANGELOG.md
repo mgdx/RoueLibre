@@ -656,6 +656,32 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **The settings screen cut its own labels off at the text sizes it exists to
+  serve.** Every row of choices in the application laid its buttons out at an
+  equal share of the width whatever they had to write, and Android wrote as much
+  of a label as fitted the share, followed by an ellipsis. At ×1.3 the screen
+  opened on was already "Liste des stat…"; at ×2.0 the theme offered "Syst…"
+  against "Som…", the units "Syst…" against "m · k…", and the walking pace "Nor…"
+  against "Rapi…". The setting meant to make the screen readable was making it
+  less so, which SPEC §7 rules out. **The seven rows are now `ToggleRow`**, which
+  wraps a label to two lines inside its button and stacks the row into a column
+  only where even two lines cannot hold it — measured on the buttons themselves
+  at the width they would get, with an ellipsis, a dropped line and a word cut in
+  two all counting as a failure. Their buttons wear a style of their own that
+  spends Material's 88 dp minimum width and 24 dp side padding on letters
+  instead of air, which is what lets a row of three still write "Système" whole
+  at ×2.0. Nothing is written smaller anywhere: **it is the height that gives
+  way, never the size of the characters.** Measured on a Fairphone 3, 411 dp
+  wide, in French and in English: at ×2.0 only the units row of four stacks, the
+  screen opened on takes two lines and stays a row, and every other row is
+  unchanged.
+- **A heading came out justified once it took two lines.** The theme justifies
+  every text view, which shows only on a line that has another after it — so a
+  section title or the small capitals naming a setting were untouched until the
+  text size doubled and gave them a second line. "WHICH STATIONS THE MAP SHOWS"
+  then arrived as four words spread bank to bank, reading as four labels rather
+  than one. Headings no longer justify; running text still does, having the lines
+  to absorb it.
 - **Three yes-or-no settings were still read without their guard.** The two map
   filters go through `readFlag`, which reads a boolean through
   `Preferences.asMap` so the cast can be checked: a settings file holding
