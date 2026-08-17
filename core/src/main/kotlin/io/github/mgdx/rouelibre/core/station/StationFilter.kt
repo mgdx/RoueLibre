@@ -72,19 +72,13 @@ public data class StationFilter(
  *   hidden under one and drawn under the other.
  * @param kind the kind of bike being counted, or `null` for all of them. A
  *   station whose breakdown cannot be read counts as unknown, not as empty.
- * @param alwaysShown stations that survive whatever the filter says. A journey
- *   drawn on the map keeps the stations it just proposed: making them vanish
- *   would be the screen contradicting itself one line further down.
  */
 public fun stationsShownOnMap(
     stations: List<StationWithAvailability>,
     filter: StationFilter,
     mode: AvailabilityMode,
     kind: BikeKindFilter? = null,
-    alwaysShown: Set<String> = emptySet(),
 ): List<StationWithAvailability> {
     if (filter.hidesNothing) return stations
-    return stations.filter { entry ->
-        entry.station.id in alwaysShown || filter.keeps(entry.displayFor(mode, kind))
-    }
+    return stations.filter { entry -> filter.keeps(entry.displayFor(mode, kind)) }
 }

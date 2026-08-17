@@ -46,8 +46,7 @@ class StationFilterTest {
         filter: StationFilter,
         mode: AvailabilityMode = AvailabilityMode.Bikes,
         kind: BikeKindFilter? = null,
-        alwaysShown: Set<String> = emptySet(),
-    ) = stationsShownOnMap(stations, filter, mode, kind, alwaysShown).map { it.station.id }
+    ) = stationsShownOnMap(stations, filter, mode, kind).map { it.station.id }
 
     @Test
     fun `at rest the filter takes nothing away`() {
@@ -143,24 +142,6 @@ class StationFilterTest {
         assertEquals(
             listOf("has electric", "unreadable", "no breakdown"),
             idsShown(stations, StationFilter(hideEmpty = true), kind = kind),
-        )
-    }
-
-    @Test
-    fun `the stations of a journey drawn on the map survive every filter`() {
-        val stations = listOf(
-            entry("departure", bikes = 0),
-            entry("arrival", installed = false),
-            entry("bystander", bikes = 0),
-        )
-
-        assertEquals(
-            listOf("departure", "arrival"),
-            idsShown(
-                stations,
-                StationFilter(hideOutOfService = true, hideEmpty = true),
-                alwaysShown = setOf("departure", "arrival"),
-            ),
         )
     }
 
