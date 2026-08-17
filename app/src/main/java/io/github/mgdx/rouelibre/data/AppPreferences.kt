@@ -191,6 +191,72 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * Whether the map leaves out the stations the feed says are out of service
+     * (SPEC §7.1, §7.6).
+     *
+     * False by default, and false for anything that cannot be read as a yes or a
+     * no: a map nobody has asked anything of shows the network as it stands.
+     *
+     * **It is kept from one session to the next**, like the theme and the units
+     * beside it, because it is settled in the settings and nowhere else. The
+     * consequence is named in SPEC §7.1 and accepted: nothing on the map recalls
+     * that a filter is on, so somebody reopening the application weeks later on a
+     * neighbourhood emptied of its stations has only this screen to explain it.
+     * That is why the two switches say in full what they take away — and it is a
+     * decision, not an oversight to be corrected by putting a badge back on the
+     * map.
+     *
+     * **A way of looking, not a journey**, like [largeAvailabilityNumbers]: what
+     * is written is a yes or a no about drawing markers, and no point, no time,
+     * no destination goes with it (SPEC §2, C3).
+     *
+     * A flow rather than a read: the map follows it, so a switch flicked here
+     * reaches the markers without the application being restarted.
+     */
+    val hideOutOfServiceStations: Flow<Boolean> =
+        dataStore.data.map { it.readFlag(HIDE_OUT_OF_SERVICE_STATIONS) }
+
+    /** Remembers whether the map leaves out the stations out of service. */
+    suspend fun setHideOutOfServiceStations(hide: Boolean) {
+        dataStore.edit { it[HIDE_OUT_OF_SERVICE_STATIONS] = hide }
+    }
+
+    /**
+     * Whether the map leaves out the stations whose count was read as zero
+     * (SPEC §7.1, §7.6).
+     *
+     * False by default and false for anything unreadable, kept from one session
+     * to the next, and a way of looking rather than a journey — all three for the
+     * reasons [hideOutOfServiceStations] gives, the compromise of §7.1 included.
+     *
+     * **What "empty" means is not settled here.** It is read against what the map
+     * is counting at that moment — no bike while bikes are counted, no free dock
+     * while docks are — so the same station is dropped by one mode and kept by
+     * the other. This screen knows nothing of that toggle, which is why the
+     * switch is worded to hold in both modes.
+     */
+    val hideEmptyStations: Flow<Boolean> =
+        dataStore.data.map { it.readFlag(HIDE_EMPTY_STATIONS) }
+
+    /** Remembers whether the map leaves out the stations read as empty. */
+    suspend fun setHideEmptyStations(hide: Boolean) {
+        dataStore.edit { it[HIDE_EMPTY_STATIONS] = hide }
+    }
+
+    /**
+     * Reads a yes-or-no setting, anything else counting as "never answered".
+     *
+     * The map is built on these two, and a settings file holding something other
+     * than a boolean under one of these names — written by a version that stored
+     * it differently, or truncated by a device out of space — would otherwise
+     * take the screen down rather than draw every station. Going through
+     * [Preferences.asMap] is what makes the cast checkable at all: reading
+     * through a typed key hands back a value nobody verified.
+     */
+    private fun Preferences.readFlag(key: Preferences.Key<Boolean>): Boolean =
+        asMap()[key] as? Boolean ?: false
+
+    /**
      * The units distances are written in (SPEC §7.6, §9).
      *
      * The default follows the device's region, the only choice that respects a
@@ -508,6 +574,11 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         /** No GBFS identifier contains a newline. */
         const val SEPARATOR = "\n"
         val THEME = stringPreferencesKey("theme")
+
+        /** Which stations the map draws at all (SPEC §7.1). */
+        val HIDE_OUT_OF_SERVICE_STATIONS =
+            booleanPreferencesKey("hide_out_of_service_stations")
+        val HIDE_EMPTY_STATIONS = booleanPreferencesKey("hide_empty_stations")
         val UNITS = stringPreferencesKey("units")
         val DOWNLOAD_ON_UNMETERED_ONLY = booleanPreferencesKey("download_on_unmetered_only")
         val USES_OWN_BIKE = booleanPreferencesKey("uses_own_bike")

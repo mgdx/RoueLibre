@@ -443,17 +443,6 @@
     <string name="error_local_storage">Unable to read the data stored on the device.</string>
     <string name="error_no_city_chosen">No city is selected. Choose one to see its stations.</string>
 
-    <!-- Map station filters -->
-    <string name="map_filter_title">Which stations to show</string>
-    <string name="map_filter_open">Choose which stations the map shows</string>
-    <string name="map_filter_hide_out_of_service">Hide the stations out of service</string>
-    <string name="map_filter_hide_empty_bikes">Hide the stations with no bike</string>
-    <string name="map_filter_hide_empty_docks">Hide the stations with no free dock</string>
-    <string name="map_filter_keeps_unknown">Stations the network says nothing about stay on the map: a count nobody could read is not a count of nothing.</string>
-    <plurals name="map_filter_hidden">
-        <item quantity="one">%1$d station hidden</item>
-        <item quantity="other">%1$d stations hidden</item>
-    </plurals>
     <!-- Unmetered-only downloads -->
     <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
          connection is Wi-Fi and is a mobile plan, and a capped hotspot
@@ -485,6 +474,19 @@
     <!-- Under the switch. Says where the figures grow, and where they do not:
          the map keeps its markers as they are. -->
     <string name="settings_large_numbers_hint">In the station list and on a station’s details. The map markers keep their size.</string>
+
+    <!-- Which stations the map draws at all. Set in the settings and nowhere
+         else: the map itself carries no control and no badge (SPEC 7.1). -->
+    <string name="settings_map_filters_title">Which stations the map shows</string>
+    <string name="settings_map_filters_hide_out_of_service">Hide the stations out of service</string>
+    <!-- One wording for both modes: this screen knows nothing of the map's
+         Bikes / Free docks button, so it may name neither. -->
+    <string name="settings_map_filters_hide_empty">Hide the stations with nothing to offer</string>
+    <!-- Under the switch, saying what "nothing" is read against. -->
+    <string name="settings_map_filters_hide_empty_hint">“Nothing” follows what the map is counting: no bike while it counts bikes, no free dock while it counts free docks.</string>
+    <!-- Under both switches. The most important rule of the two filters, and
+         the only place it is now written. -->
+    <string name="settings_map_filters_keeps_unknown">Stations the network says nothing about stay on the map: a count nobody could read is not a count of nothing.</string>
 
     <!-- The rider's OWN bike, not the network's. Keep the wording clearly
          about the reader's own equipment: the journey screen carries a

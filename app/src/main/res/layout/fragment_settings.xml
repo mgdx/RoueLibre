@@ -437,6 +437,64 @@
                 android:text="@string/settings_large_numbers_hint"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
 
+            <!--
+                Which stations the map draws at all (SPEC §7.1), the sequel to
+                the map's own toggle saying what a marker counts.
+
+                They are set here and nowhere else, and the map shows no trace
+                of them: no pill, no count, no lit control. That is a decision
+                and the compromise it carries is named in SPEC §7.1 — a filter
+                outlives the session with nothing on screen to recall it, so
+                these lines are the only explanation a user has for a
+                neighbourhood short of its stations. They therefore say in full
+                what they take away, and what they never take.
+            -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:text="@string/settings_map_filters_title"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/hide_out_of_service_stations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:minHeight="@dimen/touch_target_min"
+                android:text="@string/settings_map_filters_hide_out_of_service"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+
+            <!-- One switch for both modes, worded to hold in either: the
+                 Bikes / Free docks button is a state of the map screen, which
+                 this screen knows nothing about. The line under it says what
+                 "nothing" is read against. -->
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/hide_empty_stations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:minHeight="@dimen/touch_target_min"
+                android:text="@string/settings_map_filters_hide_empty"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="@string/settings_map_filters_hide_empty_hint"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
+
+            <!-- The rule that makes both filters honest, and now the only place
+                 it is written: what the feed is silent about is not what it
+                 says is absent. -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:text="@string/settings_map_filters_keeps_unknown"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
+
             <!-- Offline data: what the application occupies, and how to
                  reclaim it (SPEC §4.4). -->
             <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle

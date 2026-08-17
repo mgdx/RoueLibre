@@ -158,38 +158,11 @@
         android:textAppearance="@style/TextAppearance.RoueLibre.Body"
         android:visibility="gone"
         app:drawableStartCompat="@drawable/ic_place"
-        app:layout_constraintBottom_toTopOf="@id/station_filter"
+        app:layout_constraintBottom_toTopOf="@id/mode_toggle"
         app:layout_constraintEnd_toStartOf="@id/open_search"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="12 bis Rue Nationale"
         tools:visibility="visible" />
-
-    <!--
-        Which stations are drawn at all (SPEC §7.1), the sequel to the toggle
-        below saying what they count. It opens the two switches in a sheet, and
-        it is the same control that reports them: while a filter is on the pill
-        names how many stations are missing from the map, so a quarter suddenly
-        empty explains itself without anything being opened.
-
-        Its own line above the mode row rather than beside it: with a count
-        spelled out the three pills no longer fit across a narrow screen, and in
-        French least of all.
-    -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/station_filter"
-        style="@style/Widget.RoueLibre.Toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/touch_target_min"
-        android:layout_marginStart="@dimen/space_m"
-        android:layout_marginBottom="@dimen/space_s"
-        android:checkable="true"
-        android:contentDescription="@string/map_filter_open"
-        android:minWidth="@dimen/touch_target_min"
-        app:icon="@drawable/ic_filter"
-        app:iconPadding="0dp"
-        app:layout_constraintBottom_toTopOf="@id/mode_toggle"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="12 stations hidden" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mode_toggle"
