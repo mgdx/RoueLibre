@@ -6,17 +6,17 @@ Tout fonctionne sur l'appareil : la carte, la recherche d'adresses et le calcul 
 
 • Aucun service Google : ni Play Services, ni Firebase, ni Maps SDK. Elle tourne sur n'importe quel Android sans les services Google.
 • Aucune télémétrie, aucun mouchard, aucun identifiant unique, aucun compte.
-• Aucune donnée de trajet conservée : ni historique, ni positions, ni destinations. Ce que vous cherchez ne quitte pas le téléphone.
+• Aucune donnée de trajet conservée : ni historique, ni positions, ni destinations. Ce que tu cherches ne quitte pas le téléphone.
 • Aucune ville n'est imposée : plusieurs agglomérations cohabitent sur l'appareil, et l'on supprime les données de l'une sans toucher aux autres.
-• L'itinéraire optimise le <i>couple</i> de stations — départ et arrivée — plutôt que de retenir la plus proche, et tient compte du risque qu'une station peu fournie se vide pendant que vous marchez.
+• L'itinéraire optimise le <i>couple</i> de stations — départ et arrivée — plutôt que de retenir la plus proche, et tient compte du risque qu'une station peu fournie se vide pendant que tu marches.
 
 <b>À savoir avant d'installer</b>
 
-La carte, le graphe de routage et l'index d'adresses ne sont pas dans l'application : ils se téléchargent une fois, depuis l'écran de stockage, ou s'installent à la main depuis des fichiers que vous produisez vous-même. Leur poids suit la ville — quelques dizaines de mégaoctets pour une agglomération de taille moyenne, davantage pour une capitale — et il est annoncé avant le téléchargement.
+La carte, le graphe de routage et l'index d'adresses ne sont pas dans l'application : ils se téléchargent une fois, depuis l'écran de stockage, ou s'installent à la main depuis des fichiers que tu produis toi-même. Leur poids suit la ville — quelques dizaines de mégaoctets pour une agglomération de taille moyenne, davantage pour une capitale — et il est annoncé avant le téléchargement.
 
 <b>Les villes servies</b>
 
-Près de trois cents réseaux, dans une trentaine de pays : tous ceux qui publient leurs stations en données ouvertes et dont les bornes permettent de garantir le retour du vélo — de Vélib' à Paris à Citi Bike à New York, en passant par Prague, Barcelone, Copenhague, Tokyo et Buenos Aires. L'application vous propose le vôtre d'après votre position, si vous le lui demandez, et vous pouvez en garder plusieurs installés.
+Près de trois cents réseaux, dans une trentaine de pays : tous ceux qui publient leurs stations en données ouvertes et dont les bornes permettent de garantir le retour du vélo — de Vélib' à Paris à Citi Bike à New York, en passant par Prague, Barcelone, Copenhague, Tokyo et Buenos Aires. L'application te propose le tien d'après ta position, si tu le lui demandes, et tu peux en garder plusieurs installés.
 
 Les jeux de données hors ligne ne sont produits que pour quelques-uns pour l'instant. Pour les autres, l'application le dit plutôt que de faire semblant : la liste montre ce qui existe, et les fichiers se produisent avec les scripts du dépôt.
 

@@ -389,6 +389,20 @@ also records what has no visible effect.
 
 ### Changed
 
+- **The French of the store texts now says *tu*, like the interface.**
+  `res/values-fr/` has always addressed the reader as one person; the F-Droid
+  description and all three release notes said *vous* — "Vous choisissez votre
+  ville au premier lancement" — so the store page and the first screen spoke to
+  two different people. All five files were rewritten rather than conjugated
+  where the person was carried by a possessive pronoun or a subjunctive
+  ("l'application propose la vôtre" → "la tienne", "sans que vous le disiez" →
+  "sans que tu le dises"); the tone is untouched, only the person moves. Nothing
+  in the application changes — the what's-new screen reads those very files
+  (§7.10), so what it shows follows. The rule is now written where it will be
+  read before the next translation is started: `SPEC.md` §9 and the translation
+  rules of `CONTRIBUTING.md`. It is about the French; documents addressed to
+  contributors are outside it.
+
 - **The settings screen is laid out in sections.** Nothing is added and nothing
   behaves differently: the four settings it holds are the same four, in the same
   order, doing the same thing. What changes is that each now sits under a
