@@ -72,13 +72,17 @@ public enum class RiddenBike(
     Mechanical(TravelMode.Cycling, 1.00),
 
     /**
-     * A pedal-assist bike.
+     * A pedal-assist bike — about twenty per cent quicker, all told.
      *
-     * PROVISIONAL FACTOR — awaiting the value Leo settles on. The measurement it
-     * is derived from is the one described above: the profile alone accounts for
-     * ×0.840 of the ride, so 0.95 on top of it puts the whole at about ×0.80,
-     * the twenty per cent asked for. Rounded to two figures like [WalkingPace]'s,
-     * a third being a precision the underlying measurement does not have.
+     * **The factor is what the profile does not already give, and no more.**
+     * Measured over eleven legs of the Lille graph on 17 August 2026, 331 m to
+     * 15.2 km, [TravelMode.ElectricCycling] alone takes ×0.8406 of the
+     * mechanical profile's time; 0.95 on top of it brings the whole to ×0.80,
+     * which is the ratio observed in town between a share bike at some 15 km/h
+     * and an assisted one at 18 to 19.
+     *
+     * Rounded to two figures, like [WalkingPace]'s: a third would claim a
+     * precision the measurement behind it does not have.
      */
     ElectricallyAssisted(TravelMode.ElectricCycling, 0.95),
 }

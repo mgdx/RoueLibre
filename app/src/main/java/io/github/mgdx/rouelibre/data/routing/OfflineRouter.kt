@@ -139,11 +139,11 @@ class OfflineRouter(
     /**
      * Lays the vocabulary and the profiles on disk, once per run.
      *
-     * The three files are rewritten rather than compared: together they weigh
-     * thirty-six kilobytes, and comparing their size would need `openFd`, which
-     * fails on a compressed asset — which is what the Android tooling makes of
-     * any text file. Once per launch is amply enough, and it refreshes the
-     * profiles after an application update.
+     * The four files are rewritten rather than compared: together they weigh
+     * some forty-seven kilobytes, and comparing their size would need `openFd`,
+     * which fails on a compressed asset — which is what the Android tooling
+     * makes of any text file. Once per launch is amply enough, and it refreshes
+     * the profiles after an application update.
      */
     @Synchronized
     private fun extractProfiles(directory: File): Boolean {
