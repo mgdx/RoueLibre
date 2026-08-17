@@ -117,8 +117,8 @@ class DeviceLocationTest {
         val position = deviceLocation.lastKnown()
         assertNotNull("mock position not read", position)
 
-        assertEquals(lille.latitude, position!!.latitude, TOLERANCE)
-        assertEquals(lille.longitude, position.longitude, TOLERANCE)
+        assertEquals(lille.latitude, position!!.coordinates.latitude, TOLERANCE)
+        assertEquals(lille.longitude, position.coordinates.longitude, TOLERANCE)
     }
 
     @Test
@@ -137,7 +137,7 @@ class DeviceLocationTest {
         assertEquals(
             "the position already known was served instead of a fresh fix",
             moved.latitude,
-            position!!.latitude,
+            position!!.coordinates.latitude,
             TOLERANCE,
         )
     }
@@ -149,7 +149,7 @@ class DeviceLocationTest {
         // down. Three points fifty metres apart, and all three must be seen.
         val track = List(TRACK_POINTS) { step -> movedNorthBy(step * TRACK_STEP_METRES) }
         val seen = mutableListOf<Coordinates>()
-        val following = launch { deviceLocation.positions().collect { seen += it } }
+        val following = launch { deviceLocation.positions().collect { seen += it.coordinates } }
 
         track.forEach { point ->
             manager.setTestProviderLocation(LocationManager.GPS_PROVIDER, point)

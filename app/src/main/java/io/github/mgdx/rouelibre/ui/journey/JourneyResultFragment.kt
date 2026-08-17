@@ -21,7 +21,7 @@ import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.data.DatasetKind
-import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.geo.PositionFix
 import io.github.mgdx.rouelibre.core.journey.JourneyMinutes
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
@@ -73,6 +73,7 @@ class JourneyResultFragment : Fragment() {
     private var rideSource: GeoJsonSource? = null
     private var markerSource: GeoJsonSource? = null
     private var userPositionSource: GeoJsonSource? = null
+    private var userAccuracySource: GeoJsonSource? = null
     private var styleLoaded = false
 
     /**
@@ -99,13 +100,13 @@ class JourneyResultFragment : Fragment() {
     private var servedCity: CityConfiguration? = null
 
     /**
-     * The last position shown, held for the life of the screen only.
+     * The last fix shown, held for the life of the screen only.
      *
-     * It survives a rebuild of the view — a rotation must not make the point
-     * vanish until the next fix — and nothing else: it is written nowhere
-     * (SPEC §2, C3).
+     * It survives a rebuild of the view — a rotation must not make the point,
+     * nor the circle around it, vanish until the next fix — and nothing else:
+     * it is written nowhere (SPEC §2, C3).
      */
-    private var lastKnownPosition: Coordinates? = null
+    private var lastKnownPosition: PositionFix? = null
 
     /** The subscription that moves the point, while the screen is displayed. */
     private var following: Job? = null
@@ -476,11 +477,18 @@ class JourneyResultFragment : Fragment() {
             // The user's position comes last of all, and therefore on top:
             // where one IS beats what one has planned, and the two coincide
             // often enough at the start of a journey for the order to matter.
+            // Its circle of uncertainty goes just under it, above the tracks:
+            // it is a doubt about the point, not about the journey.
+            val userAccuracy = GeoJsonSource(UserPositionMarker.ACCURACY_SOURCE_ID)
+            userAccuracySource = userAccuracy
+            style.addSource(userAccuracy)
+            style.addLayer(UserPositionMarker.accuracyLayer(requireContext()))
+
             val userPosition = GeoJsonSource(UserPositionMarker.SOURCE_ID)
             userPositionSource = userPosition
             style.addSource(userPosition)
             style.addLayer(UserPositionMarker.layer(requireContext()))
-            userPosition.setGeoJson(UserPositionMarker.featureFor(lastKnownPosition))
+            showPosition(lastKnownPosition)
 
             styleLoaded = true
             drawJourney(viewModel.state.value)
@@ -562,17 +570,18 @@ class JourneyResultFragment : Fragment() {
             // A first fix can take several seconds indoors. Disabling the
             // button meanwhile avoids suggesting the press was lost.
             binding?.locateMe?.isEnabled = false
-            val position = try {
+            val fix = try {
                 container.deviceLocation.current()
             } finally {
                 binding?.locateMe?.isEnabled = true
             }
-            if (position == null) {
+            if (fix == null) {
                 showMessage(getString(R.string.map_location_unavailable))
                 return@launch
             }
-            lastKnownPosition = position
-            userPositionSource?.setGeoJson(UserPositionMarker.featureFor(position))
+            val position = fix.coordinates
+            lastKnownPosition = fix
+            showPosition(fix)
             // Outside the served area the camera cannot follow — it is penned
             // inside the city's box — and it would settle at the edge nearest
             // the user, passing that off as where they stand. This screen shows
@@ -623,12 +632,23 @@ class JourneyResultFragment : Fragment() {
         if (!container.deviceLocation.isPermitted()) return
         following = viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                container.deviceLocation.positions().collect { position ->
-                    lastKnownPosition = position
-                    userPositionSource?.setGeoJson(UserPositionMarker.featureFor(position))
+                container.deviceLocation.positions().collect { fix ->
+                    lastKnownPosition = fix
+                    showPosition(fix)
                 }
             }
         }
+    }
+
+    /**
+     * Draws the point and, when the fix is a coarse one, the circle around it.
+     *
+     * The two sources are set together: a circle left behind by the point it
+     * belongs to would circle a place the user has left (SPEC §7.4).
+     */
+    private fun showPosition(fix: PositionFix?) {
+        userPositionSource?.setGeoJson(UserPositionMarker.featureFor(fix))
+        userAccuracySource?.setGeoJson(UserPositionMarker.accuracyFeatureFor(fix))
     }
 
     private fun show(state: JourneyUiState) {
@@ -975,6 +995,7 @@ class JourneyResultFragment : Fragment() {
         rideSource = null
         markerSource = null
         userPositionSource = null
+        userAccuracySource = null
         servedArea = null
         mapLibreMap = null
         styleLoaded = false

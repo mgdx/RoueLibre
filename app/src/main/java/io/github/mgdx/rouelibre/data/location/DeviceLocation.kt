@@ -77,10 +77,11 @@ class DeviceLocation(private val context: Context) {
      * Used to frame a map or to name the city one is in — never to answer "and
      * where am I now?", which is [current]'s business.
      *
-     * @return the position, or `null` if none is known, recent enough, or
-     *   permitted.
+     * @return the fix, or `null` if none is known, recent enough, or
+     *   permitted. The fix rather than its coordinates: how wide it is decides
+     *   what the map draws around the point (SPEC §7.1).
      */
-    fun lastKnown(): Coordinates? = lastKnownFix(MAXIMUM_AGE)?.coordinates
+    fun lastKnown(): PositionFix? = lastKnownFix(MAXIMUM_AGE)
 
     /**
      * A fresh position, waiting for a fix if need be.
@@ -94,12 +95,12 @@ class DeviceLocation(private val context: Context) {
      * @param timeout the delay past which we give up rather than leave the user
      *   waiting indefinitely under a building or in a car park. The position
      *   already known then serves as a fallback: an old point beats none.
-     * @return the position, or `null` if it could not be obtained.
+     * @return the fix, or `null` if it could not be obtained.
      */
-    suspend fun current(timeout: Duration = REQUEST_TIMEOUT): Coordinates? {
+    suspend fun current(timeout: Duration = REQUEST_TIMEOUT): PositionFix? {
         lastKnownFix(CACHE_MAXIMUM_AGE)
             ?.takeIf { it.isPreciseEnough }
-            ?.let { return it.coordinates }
+            ?.let { return it }
         val manager = locationManager?.takeIf { isPermitted() } ?: return null
         val providers = enabledProviders(manager)
         if (providers.isEmpty()) return null
@@ -118,10 +119,11 @@ class DeviceLocation(private val context: Context) {
      * without emitting when the permission is missing or every provider is off
      * — the caller then simply shows nothing.
      *
-     * @return the last known position first, when there is a fresh one, then
-     *   every fix that improves on the one being shown.
+     * @return the last known fix first, when there is a fresh one, then every
+     *   fix that improves on the one being shown. The fixes whole: the map
+     *   draws the accuracy they announce around the point (SPEC §7.1).
      */
-    fun positions(): Flow<Coordinates> = flow {
+    fun positions(): Flow<PositionFix> = flow {
         val manager = locationManager?.takeIf { isPermitted() } ?: return@flow
         val providers = enabledProviders(manager)
         if (providers.isEmpty()) return@flow
@@ -130,12 +132,12 @@ class DeviceLocation(private val context: Context) {
         // fix would leave the map without a point for several seconds while
         // one is perfectly well known.
         var shown: PositionFix? = lastKnownFix(MAXIMUM_AGE)
-        shown?.let { emit(it.coordinates) }
+        shown?.let { emit(it) }
 
         fixes(manager, providers, FOLLOW_INTERVAL, FOLLOW_DISTANCE_METRES).collect { fix ->
             if (!fix.improvesOn(shown)) return@collect
             shown = fix
-            emit(fix.coordinates)
+            emit(fix)
         }
     }
 
@@ -160,7 +162,7 @@ class DeviceLocation(private val context: Context) {
         manager: LocationManager,
         providers: List<String>,
         timeout: Duration,
-    ): Coordinates? = coroutineScope {
+    ): PositionFix? = coroutineScope {
         var best: PositionFix? = null
         val listening = launch {
             val subscription = this
@@ -184,7 +186,7 @@ class DeviceLocation(private val context: Context) {
         // Joined as well as cancelled: this is what makes the fixes written by
         // the subscription's thread visible to this one.
         listening.cancelAndJoin()
-        best?.coordinates
+        best
     }
 
     /**

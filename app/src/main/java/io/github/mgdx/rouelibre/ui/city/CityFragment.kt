@@ -217,7 +217,7 @@ class CityFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             binding?.locateMe?.isEnabled = false
             val position = try {
-                container.deviceLocation.current()
+                container.deviceLocation.current()?.coordinates
             } finally {
                 binding?.locateMe?.isEnabled = true
             }

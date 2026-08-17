@@ -27,6 +27,7 @@ import io.github.mgdx.rouelibre.core.config.CityEntry
 import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.geo.PositionFix
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.BikeKindFilter
 import io.github.mgdx.rouelibre.core.station.StationFilter
@@ -133,6 +134,8 @@ class MapFragment : Fragment() {
 
     private var userPositionSource: GeoJsonSource? = null
 
+    private var userAccuracySource: GeoJsonSource? = null
+
     /**
      * The city this map is drawn for, as soon as it is known.
      *
@@ -144,13 +147,16 @@ class MapFragment : Fragment() {
     private var servedCity: CityConfiguration? = null
 
     /**
-     * The last position shown, held in memory for the session only.
+     * The last fix shown, held in memory for the session only.
      *
      * It survives a rebuild of the view — going through the list and coming
      * back must not make the point vanish — and nothing else: it is written
      * nowhere (SPEC §2, C3).
+     *
+     * The fix and not its coordinates alone: the circle of uncertainty has to
+     * come back with the point it belongs to.
      */
-    private var lastKnownPosition: Coordinates? = null
+    private var lastKnownPosition: PositionFix? = null
 
     /**
      * Whether the point may follow the device: the permission as it stands.
@@ -491,13 +497,13 @@ class MapFragment : Fragment() {
         val here = container.deviceLocation
             .takeIf { it.isPermitted() }
             ?.lastKnown()
-            ?.takeIf { position -> configuration.boundingBox?.let { position in it } == true }
+            ?.takeIf { fix -> configuration.boundingBox?.let { fix.coordinates in it } == true }
         if (here != null) {
             // Shown as well as framed: a map centred on nothing would leave the
             // user guessing which point it settled on.
             lastKnownPosition = here
             return CameraPosition.Builder()
-                .target(LatLng(here.latitude, here.longitude))
+                .target(LatLng(here.coordinates.latitude, here.coordinates.longitude))
                 .zoom(USER_POSITION_ZOOM)
                 .build()
         }
@@ -548,6 +554,16 @@ class MapFragment : Fragment() {
         style.addLayer(PickedPlaceMarker.layer())
         publishPickedPlace()
 
+        // The circle of uncertainty goes down before the disc: it is the ground
+        // the point may be standing on, and the point stands on top of it.
+        val userAccuracy = GeoJsonSource(
+            UserPositionMarker.ACCURACY_SOURCE_ID,
+            UserPositionMarker.accuracyFeatureFor(null),
+        )
+        userAccuracySource = userAccuracy
+        style.addSource(userAccuracy)
+        style.addLayer(UserPositionMarker.accuracyLayer(context))
+
         val userPosition = GeoJsonSource(
             UserPositionMarker.SOURCE_ID,
             UserPositionMarker.featureFor(null),
@@ -557,7 +573,7 @@ class MapFragment : Fragment() {
         style.addLayer(UserPositionMarker.layer(context))
         // The known position is shown again after the view is rebuilt, without
         // asking the system afresh.
-        lastKnownPosition?.let { userPosition.setGeoJson(UserPositionMarker.featureFor(it)) }
+        showPosition(lastKnownPosition)
     }
 
     /**
@@ -760,17 +776,18 @@ class MapFragment : Fragment() {
             // button meanwhile avoids suggesting the press was lost — and
             // avoids stacking several of them.
             binding?.locateMe?.isEnabled = false
-            val position = try {
+            val fix = try {
                 container.deviceLocation.current()
             } finally {
                 binding?.locateMe?.isEnabled = true
             }
-            if (position == null) {
+            if (fix == null) {
                 showMessage(R.string.map_location_unavailable)
                 return@launch
             }
-            lastKnownPosition = position
-            userPositionSource?.setGeoJson(UserPositionMarker.featureFor(position))
+            val position = fix.coordinates
+            lastKnownPosition = fix
+            showPosition(fix)
             // Outside the city served there is nothing to move to: the camera
             // is held inside that city's box, so it would stop at the edge
             // nearest the user and show that as their position — a point on a
@@ -927,13 +944,24 @@ class MapFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 locationPermitted.collectLatest { permitted ->
                     if (!permitted) return@collectLatest
-                    container.deviceLocation.positions().collect { position ->
-                        lastKnownPosition = position
-                        userPositionSource?.setGeoJson(UserPositionMarker.featureFor(position))
+                    container.deviceLocation.positions().collect { fix ->
+                        lastKnownPosition = fix
+                        showPosition(fix)
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Draws the point and, when the fix is a coarse one, the circle around it.
+     *
+     * The two sources are set together: a circle left behind by the point it
+     * belongs to would circle a place the user has left (SPEC §7.1).
+     */
+    private fun showPosition(fix: PositionFix?) {
+        userPositionSource?.setGeoJson(UserPositionMarker.featureFor(fix))
+        userAccuracySource?.setGeoJson(UserPositionMarker.accuracyFeatureFor(fix))
     }
 
     private fun showMessage(message: Int) {
@@ -1323,6 +1351,7 @@ class MapFragment : Fragment() {
         stationSource = null
         pickedPlaceSource = null
         userPositionSource = null
+        userAccuracySource = null
         servedAreaCamera = null
         mapLibreMap = null
         styleLoaded = false
