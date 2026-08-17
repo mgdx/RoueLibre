@@ -70,16 +70,16 @@ class SettingsFragment : Fragment() {
         val views = checkNotNull(binding)
 
         setUpToolbar(views)
-        // In the order the screen reads them (SPEC §7.6): city, journey,
-        // display, offline data, then the way to "about".
+        // In the order the screen reads them (SPEC §7.6): city, display,
+        // journey, offline data, then the way to "about".
         setUpCity(views)
-        setUpWalkingPace(views)
-        setUpOwnBikeKind(views)
+        setUpLanguage(views)
         setUpTheme(views)
         setUpUnits(views)
-        setUpLanguage(views)
         setUpOpeningScreen(views)
         setUpStationFilters(views)
+        setUpOwnBikeKind(views)
+        setUpWalkingPace(views)
         setUpOfflineData(views)
         setUpDownloadPolicy(views)
         setUpAbout(views)
@@ -105,10 +105,10 @@ class SettingsFragment : Fragment() {
      *
      * Written the moment it is pressed, on the theme's pattern and with no
      * "apply" button. Nothing is applied here, though, and that is the whole
-     * difference with the two settings below: this one changes no screen already
-     * drawn. It is read again when the next journey is worked out — the model
-     * collects it from the preferences — so a pace changed here reaches the next
-     * journey and leaves the one on show as it was computed.
+     * difference with the theme and the units: this one changes no screen
+     * already drawn. It is read again when the next journey is worked out — the
+     * model collects it from the preferences — so a pace changed here reaches
+     * the next journey and leaves the one on show as it was computed.
      */
     private fun setUpWalkingPace(views: FragmentSettingsBinding) {
         views.walkingPace.addOnButtonCheckedListener { _, checkedId, isChecked ->
@@ -149,7 +149,7 @@ class SettingsFragment : Fragment() {
      * offered everywhere and asks nothing of `FleetDescription.isMixed`.
      *
      * It is also the one setting of this section that reaches no computation:
-     * written the moment it is pressed, like the pace above, but read only by
+     * written the moment it is pressed, like the pace under it, but read only by
      * the drawings and the sentences of a journey on one's own bike. Not a
      * minute announced depends on it (SPEC §6).
      */
@@ -315,7 +315,7 @@ class SettingsFragment : Fragment() {
     }
 
     /**
-     * The language the interface speaks, under the units in the display section
+     * The language the interface speaks, at the head of the display section
      * (SPEC §7.6, §9).
      *
      * Nothing is read from or written to the preferences here, alone among the

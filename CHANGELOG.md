@@ -389,6 +389,19 @@ also records what has no visible effect.
 
 ### Changed
 
+- **The settings read in a new order: city, display, journey, offline data**
+  (SPEC §7.6). Display comes before journey because what one settles on
+  arriving is what one is looking at — the language, the theme, the units —
+  whereas the journey section qualifies a request that has not been made yet,
+  and reaching the theme meant scrolling past it. **The language now opens the
+  display section**, above the theme, since it decides how everything under it
+  is read, the labels of the other settings included. **One's own bike now
+  heads the journey section**, above the walking pace, since it says who the
+  cyclist is before the pace says how they walk. Blocks moved and nothing else:
+  the views keep their identifiers, their strings and the code that wires them,
+  and the spacing rule of the screen is unchanged — the first setting under a
+  title carries `space_m` and the ones after it `space_l`.
+
 - **The French of the store texts now says *tu*, like the interface.**
   `res/values-fr/` has always addressed the reader as one person; the F-Droid
   description and all three release notes said *vous* — "Vous choisissez votre
