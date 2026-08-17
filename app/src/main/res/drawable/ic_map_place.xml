@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The way to the map, from the station list.
+
+    A folded map with a place pin astride its top-right corner. ic_place alone
+    stood there before, and a pin on its own says "where this is", not "the plan
+    all of them sit on" — which is what the button opens. The folds are what say
+    "map" at this size: a plain rectangle reads as a card or a photograph.
+
+    The map's outline stops short of the pin, its top edge and its right edge
+    both ending about a unit away, so a thread of the background runs between
+    the two drawings. Without it the pin's flank and the map's corner merge into
+    one thick stroke at 24 dp and neither shape survives. That is also why this
+    icon is stroked where ic_place and ic_storage are filled contours: two
+    shapes laid over one another have to be cut where they meet, and a stroke is
+    cut by being drawn shorter. 1.8 against their 2, a hair lighter on purpose —
+    at 2 both the pin's hole and that thread close up at 24 dp.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- The folded map: three panels, the folds alternating up and down. Its
+         top-right corner is missing, the pin standing there. -->
+    <path
+        android:pathData="M14.8,8.5 L12.2,9.2 L7,7.8 L1.8,9.2 L1.8,20.6 L7,19.2 L12.2,20.6 L17.4,19.2 L17.4,11.2 M7,7.8 L7,19.2 M12.2,9.2 L12.2,20.6"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineJoin="round"
+        android:strokeWidth="1.8" />
+
+    <!-- The pin of ic_place, small enough to share the box and set high and to
+         the right, where it covers the corner rather than the folds. -->
+    <path
+        android:pathData="M18.9,11.4 C17.4,9.5 16,7.4 16,6.1 C16,4.5 17.3,3.2 18.9,3.2 C20.5,3.2 21.8,4.5 21.8,6.1 C21.8,7.4 20.4,9.5 18.9,11.4 Z"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineJoin="round"
+        android:strokeWidth="1.8" />
+
+    <!-- Solid, as ic_place's is: a ring this small closes up. -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M18.9,5.05 C19.48,5.05 19.95,5.52 19.95,6.1 C19.95,6.68 19.48,7.15 18.9,7.15 C18.32,7.15 17.85,6.68 17.85,6.1 C17.85,5.52 18.32,5.05 18.9,5.05 Z" />
+</vector>

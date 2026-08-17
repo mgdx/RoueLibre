@@ -27,21 +27,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- The title stops at the innermost icon, not at the outermost: the two
+    <!-- The title stops at the innermost icon, not at the outermost: the three
          icons sit side by side, and a title box running under the first of
          them only looks harmless while the text is left-aligned. In Arabic it
          is right-aligned, and "Stations" was printed under the star. -->
 
-    <!-- Access to offline data management. It will join the map screen's
-         settings (SPEC §7.1) once that screen exists. -->
+    <!-- The settings, at the edge where the map keeps them too (SPEC §7.1), so
+         one gesture finds them from either screen. They are also the way to the
+         offline data, which is why no fourth icon leads there: their own "manage
+         offline data" line does (SPEC §4.4), and four controls beside the title
+         leave the title nothing. -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/open_storage"
+        android:id="@+id/open_settings"
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="@dimen/touch_target_min"
         android:layout_height="@dimen/touch_target_min"
         android:layout_marginEnd="@dimen/space_s"
-        android:contentDescription="@string/storage_open"
-        app:icon="@drawable/ic_storage"
+        android:contentDescription="@string/settings_open"
+        app:icon="@drawable/ic_settings"
         app:iconTint="@color/ink"
         app:layout_constraintBottom_toBottomOf="@id/title"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,30 +61,28 @@
         app:icon="@drawable/ic_favourite"
         app:iconTint="@color/ink"
         app:layout_constraintBottom_toBottomOf="@id/title"
-        app:layout_constraintEnd_toStartOf="@id/open_storage"
+        app:layout_constraintEnd_toStartOf="@id/open_settings"
         app:layout_constraintTop_toTopOf="@id/title" />
 
-    <!-- The way to the map, shown only where this list is the screen the
-         application opened on (SPEC §7.6). Reached from the map, this list has
-         a map behind it and the back gesture is the way to it; opened on, it
-         has nothing behind it at all, and without this the map — and the
-         settings that live on it — would be out of reach. Gone rather than
-         disabled: a button that leads back where one already is is not a
-         choice. The title's box stops here, so it collapses onto the star when
-         this is gone. -->
+    <!-- The way to the map, here whatever is behind this list (SPEC §7.6). It
+         used to be shown only where this list was the screen the application
+         opened on, and it vanished the moment one came back to the list from the
+         map — which stacks a second list — leaving the map reachable by nothing
+         but repeated back gestures. A way out that appears and disappears with
+         the depth of the back stack cannot be learnt. Pressed, it returns to the
+         map behind rather than building another: see StationListFragment. The
+         title's box stops here, this being the innermost of the three. -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/open_map"
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="@dimen/touch_target_min"
         android:layout_height="@dimen/touch_target_min"
         android:contentDescription="@string/stations_open_map"
-        android:visibility="gone"
-        app:icon="@drawable/ic_place"
+        app:icon="@drawable/ic_map_place"
         app:iconTint="@color/ink"
         app:layout_constraintBottom_toBottomOf="@id/title"
         app:layout_constraintEnd_toStartOf="@id/open_favourites"
-        app:layout_constraintTop_toTopOf="@id/title"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toTopOf="@id/title" />
 
     <!-- The data's age, required by SPEC §4.1. -->
     <TextView

@@ -13,6 +13,7 @@ import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -37,12 +38,17 @@ import io.github.mgdx.rouelibre.core.station.stationsShownOnMap
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
+import io.github.mgdx.rouelibre.ui.MAP_BACK_STACK_ENTRY
+import io.github.mgdx.rouelibre.ui.STATION_LIST_BACK_STACK_ENTRY
+import io.github.mgdx.rouelibre.ui.ScreenBehind
 import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
+import io.github.mgdx.rouelibre.ui.backStackEntryNames
 import io.github.mgdx.rouelibre.ui.city.CityFragment
 import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.prefersReducedMotion
+import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
 import io.github.mgdx.rouelibre.ui.stations.StationDetailSheet
 import io.github.mgdx.rouelibre.ui.stations.StationListFragment
@@ -266,7 +272,7 @@ class MapFragment : Fragment() {
 
         views.map.onCreate(savedInstanceState)
         views.openSettings.setOnClickListener { show(SettingsFragment()) }
-        views.openList.setOnClickListener { show(StationListFragment()) }
+        views.openList.setOnClickListener { showTheList() }
         views.openSearch.setOnClickListener { openAddressSearch() }
         views.locateMe.setOnClickListener { onLocateMeClicked() }
         views.openJourney.setOnClickListener { show(JourneySearchFragment()) }
@@ -294,7 +300,7 @@ class MapFragment : Fragment() {
 
         // The target depends on what is missing, and it is set together with
         // the label, once we know whether there is a city — see loadTilesFor.
-        views.missingTilesList.setOnClickListener { show(StationListFragment()) }
+        views.missingTilesList.setOnClickListener { showTheList() }
 
         applyPickingMode(views)
         restoreCamera(savedInstanceState)
@@ -1289,6 +1295,37 @@ class MapFragment : Fragment() {
             .replace(R.id.content, fragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    /**
+     * Goes to the station list, coming back to the one behind where there is one.
+     *
+     * The other half of the rule the list's own way to the map follows
+     * (SPEC §7.6): the two screens lead to each other, so building a second copy
+     * on each press would stack them without end. Every transaction between the
+     * pair is named, which is what lets either of them find the other behind it.
+     */
+    private fun showTheList() {
+        val manager = parentFragmentManager
+        when (
+            screenBehind(
+                STATION_LIST_BACK_STACK_ENTRY,
+                MAP_BACK_STACK_ENTRY,
+                manager.backStackEntryNames(),
+            )
+        ) {
+            ScreenBehind.Stacked -> manager.popBackStack(STATION_LIST_BACK_STACK_ENTRY, 0)
+
+            ScreenBehind.Underneath -> manager.popBackStack(
+                MAP_BACK_STACK_ENTRY,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE,
+            )
+
+            ScreenBehind.Nowhere -> manager.beginTransaction()
+                .replace(R.id.content, StationListFragment())
+                .addToBackStack(STATION_LIST_BACK_STACK_ENTRY)
+                .commit()
+        }
     }
 
     // ------------------------------------------------- map lifecycle --
