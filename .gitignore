@@ -32,6 +32,10 @@ keystore.properties
 *.jks
 *.keystore
 
+# Working documents that are not the project: prompts, reports, notes. The name
+# says what the folder is for, and this line is what holds it.
+/do-not-commit/
+
 # The agent worktrees opened under `.claude/`, and the local tooling settings
 # beside them. A worktree is a checkout of this very repository, which has no
 # business inside its own history; the settings describe one contributor's
