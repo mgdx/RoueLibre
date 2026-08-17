@@ -35,33 +35,17 @@ class IndicatorScaleTest {
     }
 
     @Test
-    fun `the disc keeps room for a three-digit count, at either size`() {
+    fun `the disc keeps room for a three-digit count`() {
         val declared = dimensions()
         // Bricolage's figures run to some 0.6 em wide, so three of them and the
         // ring on either side have to fit inside the disc. Held as a ratio and
         // not as two absolute sizes, because it is the ratio that has to
-        // survive either of them being changed — and it is the whole reason the
-        // large setting grows the disc and not the figure alone.
-        listOf(
-            "indicator_size" to "text_indicator",
-            "indicator_size_large" to "text_indicator_large",
-        ).forEach { (discToken, figureToken) ->
-            val disc = sizeOf(declared.getValue(discToken))
-            val figure = sizeOf(declared.getValue(figureToken))
-            assertTrue(
-                "$discToken of $disc for $figureToken of $figure truncates three digits",
-                disc / figure >= MINIMUM_DISC_TO_FIGURE,
-            )
-        }
-    }
-
-    @Test
-    fun `the large setting really is larger`() {
-        val declared = dimensions()
+        // survive either of them being changed.
+        val disc = sizeOf(declared.getValue("indicator_size"))
+        val figure = sizeOf(declared.getValue("text_indicator"))
         assertTrue(
-            "the large figure is no larger than the ordinary one",
-            sizeOf(declared.getValue("text_indicator_large")) >
-                sizeOf(declared.getValue("text_indicator")),
+            "a disc of $disc for a figure of $figure truncates three digits",
+            disc / figure >= MINIMUM_DISC_TO_FIGURE,
         )
     }
 
@@ -96,8 +80,6 @@ class IndicatorScaleTest {
         val SCALED_WITH_THE_TEXT = listOf(
             "indicator_size",
             "text_indicator",
-            "indicator_size_large",
-            "text_indicator_large",
         )
 
         /**

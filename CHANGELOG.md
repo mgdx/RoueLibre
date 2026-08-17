@@ -497,6 +497,21 @@ also records what has no visible effect.
   when the launcher recolours it. The SVG sources are kept in `art/`, with
   the note on how they map onto the adaptive canvas.
 
+### Removed
+
+- **The larger availability figures**, switch and dimensions both (SPEC §7,
+  §7.6). It drew the indicator's figure and its disc a third larger on the
+  station list, the favourites and a station's sheet. Android's own text size
+  already does that: the indicator follows it, both its tokens being in `sp`,
+  and this switch added nothing to it — for a preference, a helper collecting
+  it, a flag threaded through three adapters, two dimension tokens and two
+  paragraphs of specification, five files to keep in step for a size the system
+  offers anyway. The figures go back everywhere to the size they had before it
+  existed. **The stored preference is not migrated**: the key
+  `large_availability_numbers` leaves the code and a value an existing
+  installation may have written stays on disk, unread — nothing is written to
+  remove it, as with the pick-up and drop-off time below.
+
 ### Changed
 
 - **How near a network is, is measured on its stations rather than on its

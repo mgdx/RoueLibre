@@ -206,9 +206,9 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
      * decision, not an oversight to be corrected by putting a badge back on the
      * map.
      *
-     * **A way of looking, not a journey**, like [largeAvailabilityNumbers]: what
-     * is written is a yes or a no about drawing markers, and no point, no time,
-     * no destination goes with it (SPEC §2, C3).
+     * **A way of looking, not a journey**: what is written is a yes or a no
+     * about drawing markers, and no point, no time, no destination goes with it
+     * (SPEC §2, C3).
      *
      * A flow rather than a read: the map follows it, so a switch flicked here
      * reaches the markers without the application being restarted.
@@ -310,38 +310,6 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     /** Stores the screen the application is to open on. */
     suspend fun setOpeningScreen(screen: OpeningScreen) {
         dataStore.edit { it[OPENING_SCREEN] = screen.id }
-    }
-
-    /**
-     * Whether the availability figures are drawn larger (SPEC §7, §7.6).
-     *
-     * False by default, and for a preference that was never written or that
-     * cannot be read as a yes or a no: the interface as it is drawn is the one
-     * everybody gets until they ask for something else.
-     *
-     * **Not a stand-in for the system's own font size**, which the indicator
-     * already follows — its tokens are in `sp`. It answers what that setting
-     * cannot: it enlarges the single figure looked at a hundred times a week
-     * and leaves the rest of the interface where it is.
-     *
-     * **The map's markers are outside its reach**, deliberately: a marker's size
-     * decides how many stations stay legible side by side at a given zoom, which
-     * is a question of map drawing rather than of accessibility, and enlarged
-     * they would overlap (SPEC §7.1).
-     *
-     * **A way of writing, not a way of computing**, like [units]: no journey and
-     * no measurement depends on it, and it says nothing about the user beyond
-     * how large they read a figure (SPEC §2, C3).
-     *
-     * A flow rather than a read: it is collected by every screen showing an
-     * indicator, so a choice made shows at once and everywhere.
-     */
-    val largeAvailabilityNumbers: Flow<Boolean> =
-        dataStore.data.map { it.readFlag(LARGE_AVAILABILITY_NUMBERS, ifUnanswered = false) }
-
-    /** Remembers whether the availability figures are drawn larger. */
-    suspend fun setLargeAvailabilityNumbers(large: Boolean) {
-        dataStore.edit { it[LARGE_AVAILABILITY_NUMBERS] = large }
     }
 
     /**
@@ -595,7 +563,6 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         val WANTED_BIKE_KIND = stringPreferencesKey("wanted_bike_kind")
         val WALKING_PACE = stringPreferencesKey("walking_pace")
         val OPENING_SCREEN = stringPreferencesKey("opening_screen")
-        val LARGE_AVAILABILITY_NUMBERS = booleanPreferencesKey("large_availability_numbers")
 
         /**
          * The rider's own bike, which is not [WANTED_BIKE_KIND] above: that one

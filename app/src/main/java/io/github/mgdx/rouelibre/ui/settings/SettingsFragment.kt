@@ -79,7 +79,6 @@ class SettingsFragment : Fragment() {
         setUpUnits(views)
         setUpLanguage(views)
         setUpOpeningScreen(views)
-        setUpLargeNumbers(views)
         setUpStationFilters(views)
         setUpOfflineData(views)
         setUpDownloadPolicy(views)
@@ -405,34 +404,6 @@ class SettingsFragment : Fragment() {
                             OpeningScreen.StationList -> R.id.opening_screen_list
                         },
                     )
-                    isFilling = false
-                }
-            }
-        }
-    }
-
-    /**
-     * Larger availability figures, in the display section (SPEC §7, §7.6).
-     *
-     * Written the moment it is pressed, like everything else on this screen. The
-     * screens showing an indicator follow the stored value themselves, so a
-     * figure changes size on the list one goes back to without anything being
-     * rebuilt.
-     */
-    private fun setUpLargeNumbers(views: FragmentSettingsBinding) {
-        views.largeNumbers.setOnCheckedChangeListener { _, isChecked ->
-            if (isFilling) return@setOnCheckedChangeListener
-            viewLifecycleOwner.lifecycleScope.launch {
-                preferences.setLargeAvailabilityNumbers(isChecked)
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                preferences.largeAvailabilityNumbers.collect { large ->
-                    val current = binding ?: return@collect
-                    isFilling = true
-                    current.largeNumbers.isChecked = large
                     isFilling = false
                 }
             }

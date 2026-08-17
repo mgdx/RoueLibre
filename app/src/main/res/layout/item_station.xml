@@ -24,8 +24,8 @@
     android:paddingBottom="@dimen/space_m">
 
     <!-- The indicator asks for its own size rather than being given one: it
-         holds a figure, and that figure follows both the system's font size and
-         the "large figures" setting (SPEC §7.6). -->
+         holds a figure, and that figure follows the system's font size
+         (SPEC §7). -->
     <io.github.mgdx.rouelibre.ui.stations.AvailabilityIndicatorView
         android:id="@+id/indicator"
         android:layout_width="wrap_content"

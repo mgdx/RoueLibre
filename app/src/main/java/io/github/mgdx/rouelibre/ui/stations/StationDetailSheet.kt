@@ -96,15 +96,6 @@ class StationDetailSheet : BottomSheetDialogFragment() {
             show(viewModel.state.value)
         }
 
-        // Both counts at whichever size the reader asked for (SPEC §7.6): this
-        // is the other screen where the figure is read at leisure, and it must
-        // be written like the list one arrives from.
-        withLargeAvailabilityNumbers { large ->
-            val current = binding ?: return@withLargeAvailabilityNumbers
-            current.bikesIndicator.largeFigures = large
-            current.docksIndicator.largeFigures = large
-        }
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collectLatest(::show)

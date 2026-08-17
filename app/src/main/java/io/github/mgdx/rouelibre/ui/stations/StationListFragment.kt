@@ -128,11 +128,6 @@ class StationListFragment : Fragment() {
         // finger would be worse than one ordered a moment late.
         viewModel.orderByProximity()
 
-        // The signature element at whichever size the reader asked for
-        // (SPEC §7.6). It is the list that carries it, not the row: every row
-        // writes its figure the same way.
-        withLargeAvailabilityNumbers { adapter.largeFigures = it }
-
         observeState()
         observeErrors()
         keepAvailabilityFresh()
