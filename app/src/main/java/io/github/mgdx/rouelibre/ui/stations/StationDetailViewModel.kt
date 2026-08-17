@@ -139,7 +139,7 @@ class StationDetailViewModel(
     private fun showDistanceOnce(entry: StationWithAvailability) {
         if (distanceResolved) return
         distanceResolved = true
-        val here = deviceLocation.lastKnown() ?: return
+        val here = deviceLocation.lastKnown()?.coordinates ?: return
         val distance = here.distanceInMetresTo(entry.station.position)
         mutableState.update { it.copy(distanceInMetres = distance) }
     }

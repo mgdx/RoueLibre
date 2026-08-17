@@ -167,7 +167,7 @@ class JourneyEndpointPicker(
         onLocating(isOrigin, true)
         fragment.viewLifecycleOwner.lifecycleScope.launch {
             val position = try {
-                container.deviceLocation.current()
+                container.deviceLocation.current()?.coordinates
             } finally {
                 onLocating(isOrigin, false)
             }

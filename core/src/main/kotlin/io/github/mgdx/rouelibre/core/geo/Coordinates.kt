@@ -16,7 +16,7 @@ public data class Coordinates(public val latitude: Double, public val longitude:
 }
 
 /** The earth's mean radius, in metres. */
-private const val EARTH_RADIUS_METRES = 6_371_008.8
+internal const val EARTH_RADIUS_METRES: Double = 6_371_008.8
 
 /**
  * The great-circle distance between two points, in metres.

@@ -450,7 +450,7 @@ class MainActivity : AppCompatActivity() {
         // Before the first city is chosen, it is the welcome screen's job to
         // propose one: two proposals in a row would be one too many.
         val servedCityId = container.preferences.activeCityId() ?: return
-        val position = container.deviceLocation.lastKnown() ?: return
+        val position = container.deviceLocation.lastKnown()?.coordinates ?: return
 
         val catalogue = container.cityCatalogueSource.catalogue()
         // A city the catalogue announces no weight for is not worth proposing:
@@ -600,7 +600,7 @@ class MainActivity : AppCompatActivity() {
         // The departure is the current position when it is already known.
         // Asking for it on this occasion would be the prompt SPEC §10 rules
         // out: the user did not open the application, it was opened for them.
-        val here = container.deviceLocation.lastKnown()
+        val here = container.deviceLocation.lastKnown()?.coordinates
         if (here == null) {
             show(JourneySearchFragment.newInstance(destination = destination))
             return
@@ -620,8 +620,9 @@ class MainActivity : AppCompatActivity() {
      * fixed point of the configuration. Without a city there is no address
      * index either: the caller never gets this far.
      */
-    private suspend fun defaultOrigin(): Coordinates? = container.deviceLocation.lastKnown()
-        ?: container.activeCity()?.map?.centre
+    private suspend fun defaultOrigin(): Coordinates? =
+        container.deviceLocation.lastKnown()?.coordinates
+            ?: container.activeCity()?.map?.centre
 
     private fun show(fragment: Fragment) {
         supportFragmentManager.beginTransaction()

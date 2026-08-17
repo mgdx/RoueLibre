@@ -114,7 +114,7 @@ class AppContainer(private val context: Context) {
      *   better than a distance to somewhere else.
      */
     suspend fun positionInsideActiveCity(): Coordinates? {
-        val position = deviceLocation.lastKnown() ?: return null
+        val position = deviceLocation.lastKnown()?.coordinates ?: return null
         val box = activeCity()?.boundingBox ?: return null
         return position.takeIf { it in box }
     }
