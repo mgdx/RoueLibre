@@ -1,6 +1,5 @@
 package io.github.mgdx.rouelibre.ui
 
-import io.github.mgdx.rouelibre.core.measure.UnitSystem
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
@@ -163,29 +162,6 @@ class LocalesTest {
     fun `the language chosen names no region for the units to read`() {
         for (language in offeredLanguages()) {
             assertEquals("A language offered must carry no country", "", language.country)
-            assertEquals(UnitSystem.Metric, unitSystemOfRegion(language.country))
-        }
-        assertEquals(UnitSystem.UnitedStates, unitSystemOfRegion("US"))
-        assertEquals(UnitSystem.UnitedKingdom, unitSystemOfRegion("GB"))
-        assertEquals(UnitSystem.Metric, unitSystemOfRegion("FR"))
-    }
-
-    /**
-     * And the region is read whatever language is put in front of it: an
-     * American device reads miles in every language the interface speaks.
-     */
-    @Test
-    fun `the units do not move when the language does`() {
-        for (language in TRANSLATED_LANGUAGES) {
-            assertEquals(
-                "Boston reads miles whatever the interface is speaking",
-                UnitSystem.UnitedStates,
-                unitSystemOfRegion(Locale.forLanguageTag("$language-US").country),
-            )
-            assertEquals(
-                UnitSystem.Metric,
-                unitSystemOfRegion(Locale.forLanguageTag("$language-FR").country),
-            )
         }
     }
 }

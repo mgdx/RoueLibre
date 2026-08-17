@@ -72,15 +72,24 @@ object DisplayedUnits {
  * United States would put a French reader who forces the interface into English
  * onto miles. The same reading confirmed the rest of what this function rests
  * on: `en-GB` gives `UK`, `en-US` gives `US`, and `en-FR` gives `SI`.
+ *
+ * **On Android 8.0 and 8.1 this writes metric wherever the device is, and that
+ * is a decision rather than an oversight.** `LocaleData.getMeasurementSystem`
+ * arrived in Android 9, and answering for those two releases meant carrying a
+ * table of 253 regions copied out of ICU by hand — a copy nobody would reread,
+ * ageing in place, for two releases. The American reader it concerns reaches
+ * feet and miles in two taps through the units setting (SPEC §7.6, §9), which
+ * overrides this reading whatever it says. It is the one place in the
+ * application where somebody has to act to be shown what their region measures
+ * in.
  */
 fun regionUnitSystem(): UnitSystem {
     val locale = deviceLocale()
-    val region = locale.country
-    if (region.isNullOrEmpty()) return UnitSystem.Metric
+    if (locale.country.isNullOrEmpty()) return UnitSystem.Metric
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         return icuUnitSystem(ULocale.forLocale(locale))
     }
-    return unitSystemOfRegion(region)
+    return UnitSystem.Metric
 }
 
 /**
@@ -104,19 +113,6 @@ private fun deviceLocale(): Locale =
     ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0]
         ?: Locale.getDefault()
 
-/**
- * What a region measures in, asked of the table rather than of ICU.
- *
- * Split out from [regionUnitSystem] so that a test on the JVM can pin what the
- * units are read from — a region, never a language — where neither ICU nor the
- * device's configuration can be reached.
- */
-internal fun unitSystemOfRegion(region: String): UnitSystem = when (region) {
-    in REGIONS_MEASURING_IN_FEET -> UnitSystem.UnitedStates
-    in REGIONS_MEASURING_IN_YARDS -> UnitSystem.UnitedKingdom
-    else -> UnitSystem.Metric
-}
-
 /** What ICU says of a locale, where the platform is new enough to be asked. */
 @RequiresApi(Build.VERSION_CODES.P)
 private fun icuUnitSystem(locale: ULocale): UnitSystem =
@@ -125,27 +121,3 @@ private fun icuUnitSystem(locale: ULocale): UnitSystem =
         MeasurementSystem.UK -> UnitSystem.UnitedKingdom
         else -> UnitSystem.Metric
     }
-
-/**
- * The regions ICU counts in feet, for the two releases that cannot be asked.
- *
- * `LocaleData.getMeasurementSystem` arrived in Android 9, and this application
- * serves Android 8.0 and 8.1 as well (SPEC §3). Rather than show those two
- * releases metric distances wherever they are, the answer is **copied from ICU
- * rather than assumed**: asked for all 253 regions it knows, on a Fairphone 3
- * on 16 August 2026, it named these two and no others — the American
- * territories it counts as metric are therefore left out on its authority, not
- * on ours.
- *
- * A table of regions is not a table of cities: nothing here is specific to a
- * network, and every one of them is overridden by the setting (SPEC §15).
- */
-private val REGIONS_MEASURING_IN_FEET = setOf("US", "LR")
-
-/**
- * The regions ICU counts in yards, read the same way and on the same day.
- *
- * Myanmar keeps units of its own, which CLDR files under the British system;
- * that is ICU's reading and this follows it rather than second-guessing it.
- */
-private val REGIONS_MEASURING_IN_YARDS = setOf("GB", "MM")
