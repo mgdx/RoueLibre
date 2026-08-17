@@ -70,17 +70,16 @@ class SettingsFragment : Fragment() {
         val views = checkNotNull(binding)
 
         setUpToolbar(views)
-        // In the order the screen reads them (SPEC §7.6): city, journey,
-        // display, offline data, then the way to "about".
+        // In the order the screen reads them (SPEC §7.6): city, display,
+        // journey, offline data, then the way to "about".
         setUpCity(views)
-        setUpWalkingPace(views)
-        setUpOwnBikeKind(views)
+        setUpLanguage(views)
         setUpTheme(views)
         setUpUnits(views)
-        setUpLanguage(views)
         setUpOpeningScreen(views)
-        setUpLargeNumbers(views)
         setUpStationFilters(views)
+        setUpOwnBikeKind(views)
+        setUpWalkingPace(views)
         setUpOfflineData(views)
         setUpDownloadPolicy(views)
         setUpAbout(views)
@@ -106,10 +105,10 @@ class SettingsFragment : Fragment() {
      *
      * Written the moment it is pressed, on the theme's pattern and with no
      * "apply" button. Nothing is applied here, though, and that is the whole
-     * difference with the two settings below: this one changes no screen already
-     * drawn. It is read again when the next journey is worked out — the model
-     * collects it from the preferences — so a pace changed here reaches the next
-     * journey and leaves the one on show as it was computed.
+     * difference with the theme and the units: this one changes no screen
+     * already drawn. It is read again when the next journey is worked out — the
+     * model collects it from the preferences — so a pace changed here reaches
+     * the next journey and leaves the one on show as it was computed.
      */
     private fun setUpWalkingPace(views: FragmentSettingsBinding) {
         views.walkingPace.addOnButtonCheckedListener { _, checkedId, isChecked ->
@@ -149,10 +148,16 @@ class SettingsFragment : Fragment() {
      * their bike belongs to no fleet and is the same in every city — so it is
      * offered everywhere and asks nothing of `FleetDescription.isMixed`.
      *
-     * It is also the one setting of this section that reaches no computation:
-     * written the moment it is pressed, like the pace above, but read only by
-     * the drawings and the sentences of a journey on one's own bike. Not a
-     * minute announced depends on it (SPEC §6).
+     * **A declared pedal-assist bike changes the ride itself**, and since
+     * 17 August 2026 the minutes with it: the two ends of a journey on one's own
+     * bike take the bolt, the summary names that bike, and the ride is traced
+     * with a profile of its own — a profile the engine computes with, never a
+     * speed applied afterwards (SPEC §6). "Not specified" and "mechanical" both
+     * give the ride of before, to the track and to the minute.
+     *
+     * Written the moment it is pressed, like the pace under it, and read when
+     * the next journey is asked for: a journey already on the screen keeps the
+     * stations and the minutes it was worked out with.
      */
     private fun setUpOwnBikeKind(views: FragmentSettingsBinding) {
         views.ownBikeKind.addOnButtonCheckedListener { _, checkedId, isChecked ->
@@ -316,7 +321,7 @@ class SettingsFragment : Fragment() {
     }
 
     /**
-     * The language the interface speaks, under the units in the display section
+     * The language the interface speaks, at the head of the display section
      * (SPEC §7.6, §9).
      *
      * Nothing is read from or written to the preferences here, alone among the
@@ -405,34 +410,6 @@ class SettingsFragment : Fragment() {
                             OpeningScreen.StationList -> R.id.opening_screen_list
                         },
                     )
-                    isFilling = false
-                }
-            }
-        }
-    }
-
-    /**
-     * Larger availability figures, in the display section (SPEC §7, §7.6).
-     *
-     * Written the moment it is pressed, like everything else on this screen. The
-     * screens showing an indicator follow the stored value themselves, so a
-     * figure changes size on the list one goes back to without anything being
-     * rebuilt.
-     */
-    private fun setUpLargeNumbers(views: FragmentSettingsBinding) {
-        views.largeNumbers.setOnCheckedChangeListener { _, isChecked ->
-            if (isFilling) return@setOnCheckedChangeListener
-            viewLifecycleOwner.lifecycleScope.launch {
-                preferences.setLargeAvailabilityNumbers(isChecked)
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                preferences.largeAvailabilityNumbers.collect { large ->
-                    val current = binding ?: return@collect
-                    isFilling = true
-                    current.largeNumbers.isChecked = large
                     isFilling = false
                 }
             }

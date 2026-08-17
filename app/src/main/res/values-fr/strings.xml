@@ -620,11 +620,6 @@
     <!-- The way to the map from a station list opened on. -->
     <string name="stations_open_map">Voir la carte</string>
 
-    <string name="settings_large_numbers_title">Grands chiffres de disponibilité</string>
-    <!-- Under the switch. Says where the figures grow, and where they do not:
-         the map keeps its markers as they are. -->
-    <string name="settings_large_numbers_hint">Dans la liste des stations et sur la fiche d\'une station. Les pastilles de la carte gardent leur taille.</string>
-
     <!-- Which stations the map draws at all. Set in the settings and nowhere
          else: the map itself carries no control and no badge (SPEC 7.1). -->
     <string name="settings_map_filters_title">Les stations que la carte affiche</string>

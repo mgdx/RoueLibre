@@ -52,19 +52,6 @@
     <dimen name="indicator_size">52sp</dimen>
     <dimen name="indicator_ring">4dp</dimen>
 
-    <!-- The same indicator, enlarged on request (SPEC §7, §7.6). It is not an
-         answer to the system font size, which the pair above already follows and
-         which enlarges the whole interface: this one grows the single figure
-         that is looked at a hundred times a week and leaves the rest of the
-         screen where it was, which the system setting cannot do.
-
-         A third of a size up, and the disc grows by exactly the same third: the
-         ratio is what keeps three digits inside the ring, and a station of more
-         than a hundred docks would be truncated by growing one of the two
-         alone. -->
-    <dimen name="indicator_size_large">69sp</dimen>
-    <dimen name="text_indicator_large">32sp</dimen>
-
     <!-- The shape of a journey: discs, strokes and their dashes. The disc is
          the marker of the journey map, at the size a row of four holds on the
          narrowest screen. -->

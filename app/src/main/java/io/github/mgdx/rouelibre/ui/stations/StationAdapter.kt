@@ -63,20 +63,6 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
             notifyItemRangeChanged(0, itemCount)
         }
 
-    /**
-     * Whether the indicator's figure is drawn larger (SPEC §7, §7.6).
-     *
-     * Part of a row's visual identity like [mode], and invisible to
-     * `ListAdapter` for the same reason: the stations have not changed, only the
-     * size they are written at.
-     */
-    var largeFigures: Boolean = false
-        set(value) {
-            if (field == value) return
-            field = value
-            notifyItemRangeChanged(0, itemCount)
-        }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StationViewHolder {
         val binding = ItemStationBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -87,7 +73,7 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: StationViewHolder, position: Int) {
-        holder.bind(getItem(position), mode, origin, coveredArea, largeFigures)
+        holder.bind(getItem(position), mode, origin, coveredArea)
     }
 
     /** One station row. */
@@ -103,20 +89,17 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
          * @param mode what the indicator is to count.
          * @param origin where to measure the distance from, or `null`.
          * @param coveredArea the area the installed data covers, or `null`.
-         * @param largeFigures whether the indicator's figure is drawn larger.
          */
         fun bind(
             entry: StationWithAvailability,
             mode: AvailabilityMode,
             origin: Coordinates?,
             coveredArea: BoundingBox?,
-            largeFigures: Boolean,
         ) {
             val context = binding.root.context
             val resources = context.resources
             val display = entry.displayFor(mode)
 
-            binding.indicator.largeFigures = largeFigures
             binding.indicator.display = display
             binding.name.text = entry.station.name
 

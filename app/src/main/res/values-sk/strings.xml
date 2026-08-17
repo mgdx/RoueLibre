@@ -494,11 +494,6 @@
     <!-- The way to the map from a station list opened on. -->
     <string name="stations_open_map">See the map</string>
 
-    <string name="settings_large_numbers_title">Large availability figures</string>
-    <!-- Under the switch. Says where the figures grow, and where they do not:
-         the map keeps its markers as they are. -->
-    <string name="settings_large_numbers_hint">In the station list and on a station’s details. The map markers keep their size.</string>
-
     <!-- Which stations the map draws at all. Set in the settings and nowhere
          else: the map itself carries no control and no badge (SPEC 7.1). -->
     <string name="settings_map_filters_title">Which stations the map shows</string>

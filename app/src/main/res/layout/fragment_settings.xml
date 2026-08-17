@@ -6,7 +6,7 @@
     its own visual grammar, which the project's tokens would then have to fight,
     for a dozen settings that fit on one screen.
 
-    Laid out in sections, in the order SPEC §7.6 fixes: city, journey, display,
+    Laid out in sections, in the order SPEC §7.6 fixes: city, display, journey,
     offline data — then the way to "about", which belongs to no section and
     closes the screen. Placing a new setting is meant to be one thing: adding
     its views under the right title, without touching a line above or below.
@@ -14,8 +14,8 @@
     A section with nothing in it is not written here at all: a title followed by
     nothing promises a setting the screen does not have, and SPEC §14 wants no
     view built against a feature that has not arrived. "Journey" was that case
-    until the walking pace arrived and brought its title with it, between the
-    city and the display, exactly as that rule intends.
+    until the walking pace arrived and brought its title with it, exactly as
+    that rule intends.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -69,154 +69,51 @@
                 android:minHeight="@dimen/touch_target_min"
                 android:text="@string/city_open" />
 
-            <!-- Journey: what qualifies a journey before it is asked for
-                 (SPEC §7.6). Unlike the display section below, what stands here
-                 reaches the algorithm of §6 and changes which stations it
-                 chooses — that is what it is for. -->
-            <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle
-                style="@style/Widget.RoueLibre.SettingsSection"
-                android:text="@string/settings_section_journey" />
-
-            <!--
-                The walking pace (SPEC §6, §7.6). Three named levels in a row,
-                like the theme below: no slider and no speed typed in by hand.
-                The buttons name a pace in words and never a figure in km/h —
-                one knows one walks slowly, and a speed shown here would be read
-                as a promise about the minutes announced.
-            -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_m"
-                android:text="@string/settings_walking_pace_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
-
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/walking_pace"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_s"
-                android:contentDescription="@string/settings_walking_pace_description"
-                app:selectionRequired="true"
-                app:singleSelection="true">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/walking_pace_slow"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:minHeight="@dimen/touch_target_min"
-                    android:text="@string/settings_walking_pace_slow" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/walking_pace_normal"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:minHeight="@dimen/touch_target_min"
-                    android:text="@string/settings_walking_pace_normal" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/walking_pace_brisk"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:minHeight="@dimen/touch_target_min"
-                    android:text="@string/settings_walking_pace_brisk" />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
-
-            <!--
-                What the rider's own bike is (SPEC §7.3, §7.6). Three states,
-                the leftmost saying nothing, on the pattern of the pace above.
-
-                It is NOT the kind of bike asked of the network, which lives on
-                the journey screen, exists only where the network lends both
-                kinds, and narrows the stations the algorithm may choose. This
-                one is a fact about the rider: their bike belongs to no fleet, it
-                is the same in every city, so it is offered everywhere and asks
-                nothing of `FleetDescription.isMixed`. It is also the one setting
-                of this section that reaches no computation at all — it changes
-                what is drawn and what is said, and not one minute announced.
-            -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_l"
-                android:text="@string/settings_own_bike_kind_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
-
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/own_bike_kind"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_s"
-                android:contentDescription="@string/settings_own_bike_kind_description"
-                app:selectionRequired="true"
-                app:singleSelection="true">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/own_bike_kind_unspecified"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:insetLeft="0dp"
-                    android:insetRight="0dp"
-                    android:minHeight="@dimen/touch_target_min"
-                    android:minWidth="0dp"
-                    android:paddingStart="@dimen/space_xs"
-                    android:paddingEnd="@dimen/space_xs"
-                    android:text="@string/settings_own_bike_kind_unspecified" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/own_bike_kind_mechanical"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:insetLeft="0dp"
-                    android:insetRight="0dp"
-                    android:minHeight="@dimen/touch_target_min"
-                    android:minWidth="0dp"
-                    android:paddingStart="@dimen/space_xs"
-                    android:paddingEnd="@dimen/space_xs"
-                    android:text="@string/settings_own_bike_kind_mechanical" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/own_bike_kind_electric"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:insetLeft="0dp"
-                    android:insetRight="0dp"
-                    android:minHeight="@dimen/touch_target_min"
-                    android:minWidth="0dp"
-                    android:paddingStart="@dimen/space_xs"
-                    android:paddingEnd="@dimen/space_xs"
-                    android:text="@string/settings_own_bike_kind_electric" />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_xs"
-                android:text="@string/settings_own_bike_kind_hint"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
-
             <!-- Display: what the interface looks like and what it writes in.
-                 Neither touches the data nor the journeys (SPEC §14). -->
+                 Neither touches the data nor the journeys (SPEC §14). It comes
+                 before the journey section because what one settles on arriving
+                 is what one is looking at, while a journey has not been asked
+                 for yet. -->
             <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle
                 style="@style/Widget.RoueLibre.SettingsSection"
                 android:text="@string/settings_section_display" />
 
+            <!--
+                The language the interface speaks (SPEC §7.6, §9). It opens the
+                display section because it decides how everything under it is
+                read, the labels of the other settings included.
+
+                A row that opens a list, and not a row of buttons like the theme
+                and the units under it: the choices here are the translations
+                that actually exist, they grow every time somebody finishes one,
+                and each is written in its own language — "Français", "العربية" —
+                which no three-across row of buttons would hold. The row carries
+                the language in service, so the screen answers the question
+                without being pressed.
+            -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_m"
+                android:text="@string/settings_language_title"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+
+            <!-- Its text and its spoken label are both written by the code:
+                 what they say is the language chosen, which no resource
+                 knows. -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/language"
+                style="@style/Widget.RoueLibre.Toggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:gravity="start|center_vertical"
+                android:minHeight="@dimen/touch_target_min" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
                 android:text="@string/settings_theme_title"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
 
@@ -341,35 +238,6 @@
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <!--
-                The language the interface speaks (SPEC §7.6, §9). A row that
-                opens a list, and not a row of buttons like the theme and the
-                units above it: the choices here are the translations that
-                actually exist, they grow every time somebody finishes one, and
-                each is written in its own language — "Français", "العربية" —
-                which no three-across row of buttons would hold. The row carries
-                the language in service, so the screen answers the question
-                without being pressed.
-            -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_l"
-                android:text="@string/settings_language_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
-
-            <!-- Its text and its spoken label are both written by the code:
-                 what they say is the language chosen, which no resource
-                 knows. -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/language"
-                style="@style/Widget.RoueLibre.Toggle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_s"
-                android:gravity="start|center_vertical"
-                android:minHeight="@dimen/touch_target_min" />
-
-            <!--
                 The screen the application opens on (SPEC §7.0, §7.6). Two
                 choices in a row, like the theme and the units above. The map
                 is the default and the first of the two: it is what §7.0 opens
@@ -409,33 +277,6 @@
                     android:minHeight="@dimen/touch_target_min"
                     android:text="@string/settings_opening_list" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
-
-            <!--
-                Larger availability figures (SPEC §7, §7.6). A switch and not a
-                row of sizes: there is one thing to ask, and one figure it
-                applies to.
-
-                It sits under the units rather than in an accessibility section
-                of its own, because it is not a substitute for Android's font
-                size — which the indicator already follows — but a way of
-                enlarging the one figure that is read a hundred times a week
-                without enlarging the whole interface.
-            -->
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/large_numbers"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_l"
-                android:minHeight="@dimen/touch_target_min"
-                android:text="@string/settings_large_numbers_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_xs"
-                android:text="@string/settings_large_numbers_hint"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
 
             <!--
                 Which stations the map draws at all (SPEC §7.1), the sequel to
@@ -494,6 +335,148 @@
                 android:layout_marginTop="@dimen/space_m"
                 android:text="@string/settings_map_filters_keeps_unknown"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
+
+            <!-- Journey: what qualifies a journey before it is asked for
+                 (SPEC §7.6). Unlike the display section above, what stands here
+                 reaches the algorithm of §6 and changes which stations it
+                 chooses — that is what it is for. -->
+            <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle
+                style="@style/Widget.RoueLibre.SettingsSection"
+                android:text="@string/settings_section_journey" />
+
+            <!--
+                What the rider's own bike is (SPEC §7.3, §7.6). Three states,
+                the leftmost saying nothing, on the pattern of the pace under
+                it. It heads the section because it says who the cyclist is
+                before the pace says how they walk.
+
+                It is NOT the kind of bike asked of the network, which lives on
+                the journey screen, exists only where the network lends both
+                kinds, and narrows the stations the algorithm may choose. This
+                one is a fact about the rider: their bike belongs to no fleet, it
+                is the same in every city, so it is offered everywhere and asks
+                nothing of `FleetDescription.isMixed`. Declared as a pedal-assist
+                bike it changes what is drawn, what is said and — since
+                17 August 2026 — the ride itself, traced with a profile of its
+                own; the other two states give the ride of before, to the track
+                and to the minute. The line under the buttons says as much.
+            -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:text="@string/settings_own_bike_kind_title"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/own_bike_kind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:contentDescription="@string/settings_own_bike_kind_description"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/own_bike_kind_unspecified"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:insetLeft="0dp"
+                    android:insetRight="0dp"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:minWidth="0dp"
+                    android:paddingStart="@dimen/space_xs"
+                    android:paddingEnd="@dimen/space_xs"
+                    android:text="@string/settings_own_bike_kind_unspecified" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/own_bike_kind_mechanical"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:insetLeft="0dp"
+                    android:insetRight="0dp"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:minWidth="0dp"
+                    android:paddingStart="@dimen/space_xs"
+                    android:paddingEnd="@dimen/space_xs"
+                    android:text="@string/settings_own_bike_kind_mechanical" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/own_bike_kind_electric"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:insetLeft="0dp"
+                    android:insetRight="0dp"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:minWidth="0dp"
+                    android:paddingStart="@dimen/space_xs"
+                    android:paddingEnd="@dimen/space_xs"
+                    android:text="@string/settings_own_bike_kind_electric" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="@string/settings_own_bike_kind_hint"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
+
+            <!--
+                The walking pace (SPEC §6, §7.6). Three named levels in a row,
+                like the theme above: no slider and no speed typed in by hand.
+                The buttons name a pace in words and never a figure in km/h —
+                one knows one walks slowly, and a speed shown here would be read
+                as a promise about the minutes announced.
+            -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:text="@string/settings_walking_pace_title"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/walking_pace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:contentDescription="@string/settings_walking_pace_description"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/walking_pace_slow"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:text="@string/settings_walking_pace_slow" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/walking_pace_normal"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:text="@string/settings_walking_pace_normal" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/walking_pace_brisk"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:text="@string/settings_walking_pace_brisk" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <!-- Offline data: what the application occupies, and how to
                  reclaim it (SPEC §4.4). -->

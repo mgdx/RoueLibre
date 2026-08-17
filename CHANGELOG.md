@@ -389,6 +389,19 @@ also records what has no visible effect.
 
 ### Changed
 
+- **The settings read in a new order: city, display, journey, offline data**
+  (SPEC §7.6). Display comes before journey because what one settles on
+  arriving is what one is looking at — the language, the theme, the units —
+  whereas the journey section qualifies a request that has not been made yet,
+  and reaching the theme meant scrolling past it. **The language now opens the
+  display section**, above the theme, since it decides how everything under it
+  is read, the labels of the other settings included. **One's own bike now
+  heads the journey section**, above the walking pace, since it says who the
+  cyclist is before the pace says how they walk. Blocks moved and nothing else:
+  the views keep their identifiers, their strings and the code that wires them,
+  and the spacing rule of the screen is unchanged — the first setting under a
+  title carries `space_m` and the ones after it `space_l`.
+
 - **The French of the store texts now says *tu*, like the interface.**
   `res/values-fr/` has always addressed the reader as one person; the F-Droid
   description and all three release notes said *vous* — "Vous choisissez votre
@@ -496,6 +509,21 @@ also records what has no visible effect.
   monochrome layer repeats the drawing exactly, so the icon keeps its form
   when the launcher recolours it. The SVG sources are kept in `art/`, with
   the note on how they map onto the adaptive canvas.
+
+### Removed
+
+- **The larger availability figures**, switch and dimensions both (SPEC §7,
+  §7.6). It drew the indicator's figure and its disc a third larger on the
+  station list, the favourites and a station's sheet. Android's own text size
+  already does that: the indicator follows it, both its tokens being in `sp`,
+  and this switch added nothing to it — for a preference, a helper collecting
+  it, a flag threaded through three adapters, two dimension tokens and two
+  paragraphs of specification, five files to keep in step for a size the system
+  offers anyway. The figures go back everywhere to the size they had before it
+  existed. **The stored preference is not migrated**: the key
+  `large_availability_numbers` leaves the code and a value an existing
+  installation may have written stays on disk, unread — nothing is written to
+  remove it, as with the pick-up and drop-off time below.
 
 ### Changed
 
