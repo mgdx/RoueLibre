@@ -93,7 +93,7 @@
          one of its points. Gone, not disabled, in a conurbation lending one
          kind only, and gone again on one's own bike: it is the code that shows
          it, never this file. -->
-    <com.google.android.material.button.MaterialButtonToggleGroup
+    <io.github.mgdx.rouelibre.ui.ToggleRow
         android:id="@+id/bike_kind"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -110,40 +110,22 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bike_kind_any"
-            style="@style/Widget.RoueLibre.Toggle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            style="@style/Widget.RoueLibre.Toggle.Choice"
             android:contentDescription="@string/journey_bike_kind_any_description"
-            android:minHeight="@dimen/touch_target_min"
-            android:paddingStart="@dimen/space_s"
-            android:paddingEnd="@dimen/space_s"
             android:text="@string/journey_bike_kind_any" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bike_kind_mechanical"
-            style="@style/Widget.RoueLibre.Toggle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            style="@style/Widget.RoueLibre.Toggle.Choice"
             android:contentDescription="@string/journey_bike_kind_mechanical_description"
-            android:minHeight="@dimen/touch_target_min"
-            android:paddingStart="@dimen/space_s"
-            android:paddingEnd="@dimen/space_s"
             android:text="@string/journey_bike_kind_mechanical" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bike_kind_electric"
-            style="@style/Widget.RoueLibre.Toggle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            style="@style/Widget.RoueLibre.Toggle.Choice"
             android:contentDescription="@string/journey_bike_kind_electric_description"
-            android:minHeight="@dimen/touch_target_min"
-            android:paddingStart="@dimen/space_s"
-            android:paddingEnd="@dimen/space_s"
             android:text="@string/journey_bike_kind_electric" />
-    </com.google.android.material.button.MaterialButtonToggleGroup>
+    </io.github.mgdx.rouelibre.ui.ToggleRow>
 
     <TextView
         android:id="@+id/hint"

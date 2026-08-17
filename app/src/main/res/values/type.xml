@@ -121,6 +121,11 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/space_xl</item>
         <item name="android:textAppearance">@style/TextAppearance.RoueLibre.Title</item>
+        <!-- Not justified, for the reason given under
+             `Widget.RoueLibre.SettingsLabel`: a heading that takes two lines
+             at the largest text sizes must not have the first of them spread
+             bank to bank. -->
+        <item name="android:justificationMode">none</item>
     </style>
 
     <!--
@@ -157,6 +162,59 @@
              this, the toggle would be the interface's second round element and
              would steal the indicator's thunder. -->
         <item name="shapeAppearance">@style/ShapeAppearance.RoueLibre</item>
+    </style>
+
+    <!--
+        One choice inside a row of choices — theme, units, the screen opened
+        on, one's own bike, the walking pace, the kind of bike wanted, bikes
+        against free docks. It dresses the buttons of `ToggleRow`, which is
+        what keeps their labels whole at every text size (SPEC §7).
+
+        Everything here is room for the label. Material sizes a button for a
+        sentence standing alone: 88dp of minimum width, 24dp of padding on
+        each side and an inset besides. In a row those figures are spent on
+        air — the width is the row's share whatever the button asks for, and
+        what the padding takes comes straight out of the letters. Reduced to
+        one rung of the spacing scale, they leave a three-across row on a
+        411 dp screen some 110 dp of writing instead of 62 dp, which is the
+        difference between "Système" written and "Syst…".
+
+        The layout parameters ride in the style rather than in each button
+        because a row is an all-or-nothing thing: a single button left at its
+        own width would take a share the others do not have, and the row would
+        be measured on a share nobody gets. `ToggleRow` rewrites the width and
+        the weight when it stacks, so what is here is the state it starts in.
+    -->
+    <style name="Widget.RoueLibre.Toggle.Choice">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:minHeight">@dimen/touch_target_min</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:paddingStart">@dimen/space_xs</item>
+        <item name="android:paddingEnd">@dimen/space_xs</item>
+    </style>
+
+    <!--
+        The label naming one setting on the settings screen, in the small
+        capitals of `TextAppearance.RoueLibre.Label`.
+
+        What it adds to that face is the refusal of the justification the
+        theme gives every text view. Justifying only shows on a line that has
+        another after it, which a label of two or three words never had — until
+        the system's text size doubled and "WHICH STATIONS THE MAP SHOWS" took
+        two lines. Justified, its first line came out as four words spread bank
+        to bank with a hand's breadth between them, which reads as four labels
+        rather than one. Running text keeps its justification: a paragraph has
+        the lines to absorb it, a heading has not.
+    -->
+    <style name="Widget.RoueLibre.SettingsLabel" parent="Widget.RoueLibre.Text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:justificationMode">none</item>
+        <item name="android:textAppearance">@style/TextAppearance.RoueLibre.Label</item>
     </style>
 
     <!--

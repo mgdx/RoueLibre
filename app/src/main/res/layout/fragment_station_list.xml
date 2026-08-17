@@ -127,7 +127,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- The "bikes" / "docks" toggle (SPEC §7.1). -->
-    <com.google.android.material.button.MaterialButtonToggleGroup
+    <io.github.mgdx.rouelibre.ui.ToggleRow
         android:id="@+id/mode_toggle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -142,22 +142,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mode_bikes"
-            style="@style/Widget.RoueLibre.Toggle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:minHeight="@dimen/touch_target_min"
-            android:layout_weight="1"
+            style="@style/Widget.RoueLibre.Toggle.Choice"
             android:text="@string/mode_bikes" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mode_docks"
-            style="@style/Widget.RoueLibre.Toggle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:minHeight="@dimen/touch_target_min"
-            android:layout_weight="1"
+            style="@style/Widget.RoueLibre.Toggle.Choice"
             android:text="@string/mode_docks" />
-    </com.google.android.material.button.MaterialButtonToggleGroup>
+    </io.github.mgdx.rouelibre.ui.ToggleRow>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"

@@ -92,11 +92,9 @@
                 without being pressed.
             -->
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Widget.RoueLibre.SettingsLabel"
                 android:layout_marginTop="@dimen/space_m"
-                android:text="@string/settings_language_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+                android:text="@string/settings_language_title" />
 
             <!-- Its text and its spoken label are both written by the code:
                  what they say is the language chosen, which no resource
@@ -111,13 +109,11 @@
                 android:minHeight="@dimen/touch_target_min" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Widget.RoueLibre.SettingsLabel"
                 android:layout_marginTop="@dimen/space_l"
-                android:text="@string/settings_theme_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+                android:text="@string/settings_theme_title" />
 
-            <com.google.android.material.button.MaterialButtonToggleGroup
+            <io.github.mgdx.rouelibre.ui.ToggleRow
                 android:id="@+id/theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,31 +123,19 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/theme_system"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:minHeight="@dimen/touch_target_min"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:text="@string/settings_theme_system" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/theme_light"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:minHeight="@dimen/touch_target_min"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:text="@string/settings_theme_light" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/theme_dark"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:minHeight="@dimen/touch_target_min"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:text="@string/settings_theme_dark" />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
+            </io.github.mgdx.rouelibre.ui.ToggleRow>
 
             <!--
                 Units (SPEC §7.6, §9). Four states — the region's own, and the
@@ -161,13 +145,11 @@
                 belongs to a nation.
             -->
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Widget.RoueLibre.SettingsLabel"
                 android:layout_marginTop="@dimen/space_l"
-                android:text="@string/settings_units_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+                android:text="@string/settings_units_title" />
 
-            <com.google.android.material.button.MaterialButtonToggleGroup
+            <io.github.mgdx.rouelibre.ui.ToggleRow
                 android:id="@+id/units"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -178,64 +160,28 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/units_system"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:contentDescription="@string/settings_units_system_description"
-                    android:insetLeft="0dp"
-                    android:insetRight="0dp"
-                    android:minHeight="@dimen/touch_target_min"
-                    android:minWidth="0dp"
-                    android:paddingStart="@dimen/space_xs"
-                    android:paddingEnd="@dimen/space_xs"
                     android:text="@string/settings_units_system" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/units_metric"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:contentDescription="@string/settings_units_metric_description"
-                    android:insetLeft="0dp"
-                    android:insetRight="0dp"
-                    android:minHeight="@dimen/touch_target_min"
-                    android:minWidth="0dp"
-                    android:paddingStart="@dimen/space_xs"
-                    android:paddingEnd="@dimen/space_xs"
                     android:text="@string/settings_units_metric" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/units_us"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:contentDescription="@string/settings_units_us_description"
-                    android:insetLeft="0dp"
-                    android:insetRight="0dp"
-                    android:minHeight="@dimen/touch_target_min"
-                    android:minWidth="0dp"
-                    android:paddingStart="@dimen/space_xs"
-                    android:paddingEnd="@dimen/space_xs"
                     android:text="@string/settings_units_us" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/units_uk"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:contentDescription="@string/settings_units_uk_description"
-                    android:insetLeft="0dp"
-                    android:insetRight="0dp"
-                    android:minHeight="@dimen/touch_target_min"
-                    android:minWidth="0dp"
-                    android:paddingStart="@dimen/space_xs"
-                    android:paddingEnd="@dimen/space_xs"
                     android:text="@string/settings_units_uk" />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
+            </io.github.mgdx.rouelibre.ui.ToggleRow>
 
             <!--
                 The screen the application opens on (SPEC §7.0, §7.6). Two
@@ -244,13 +190,11 @@
                 on, and what somebody who never comes here goes on seeing.
             -->
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Widget.RoueLibre.SettingsLabel"
                 android:layout_marginTop="@dimen/space_l"
-                android:text="@string/settings_opening_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+                android:text="@string/settings_opening_title" />
 
-            <com.google.android.material.button.MaterialButtonToggleGroup
+            <io.github.mgdx.rouelibre.ui.ToggleRow
                 android:id="@+id/opening_screen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -261,22 +205,14 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/opening_screen_map"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:minHeight="@dimen/touch_target_min"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:text="@string/settings_opening_map" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/opening_screen_list"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:minHeight="@dimen/touch_target_min"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:text="@string/settings_opening_list" />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
+            </io.github.mgdx.rouelibre.ui.ToggleRow>
 
             <!--
                 Which stations the map draws at all (SPEC §7.1), the sequel to
@@ -291,11 +227,9 @@
                 what they take away, and what they never take.
             -->
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Widget.RoueLibre.SettingsLabel"
                 android:layout_marginTop="@dimen/space_l"
-                android:text="@string/settings_map_filters_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+                android:text="@string/settings_map_filters_title" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/hide_out_of_service_stations"
@@ -362,11 +296,9 @@
                 and to the minute. The line under the buttons says as much.
             -->
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Widget.RoueLibre.SettingsLabel"
                 android:layout_marginTop="@dimen/space_m"
-                android:text="@string/settings_own_bike_kind_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+                android:text="@string/settings_own_bike_kind_title" />
 
             <io.github.mgdx.rouelibre.ui.ToggleRow
                 android:id="@+id/own_bike_kind"
@@ -379,44 +311,17 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/own_bike_kind_unspecified"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:insetLeft="0dp"
-                    android:insetRight="0dp"
-                    android:minHeight="@dimen/touch_target_min"
-                    android:minWidth="0dp"
-                    android:paddingStart="@dimen/space_xs"
-                    android:paddingEnd="@dimen/space_xs"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:text="@string/settings_own_bike_kind_unspecified" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/own_bike_kind_mechanical"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:insetLeft="0dp"
-                    android:insetRight="0dp"
-                    android:minHeight="@dimen/touch_target_min"
-                    android:minWidth="0dp"
-                    android:paddingStart="@dimen/space_xs"
-                    android:paddingEnd="@dimen/space_xs"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:text="@string/settings_own_bike_kind_mechanical" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/own_bike_kind_electric"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:insetLeft="0dp"
-                    android:insetRight="0dp"
-                    android:minHeight="@dimen/touch_target_min"
-                    android:minWidth="0dp"
-                    android:paddingStart="@dimen/space_xs"
-                    android:paddingEnd="@dimen/space_xs"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:text="@string/settings_own_bike_kind_electric" />
             </io.github.mgdx.rouelibre.ui.ToggleRow>
 
@@ -435,13 +340,11 @@
                 as a promise about the minutes announced.
             -->
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Widget.RoueLibre.SettingsLabel"
                 android:layout_marginTop="@dimen/space_l"
-                android:text="@string/settings_walking_pace_title"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+                android:text="@string/settings_walking_pace_title" />
 
-            <com.google.android.material.button.MaterialButtonToggleGroup
+            <io.github.mgdx.rouelibre.ui.ToggleRow
                 android:id="@+id/walking_pace"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -452,31 +355,19 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/walking_pace_slow"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:minHeight="@dimen/touch_target_min"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:text="@string/settings_walking_pace_slow" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/walking_pace_normal"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:minHeight="@dimen/touch_target_min"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:text="@string/settings_walking_pace_normal" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/walking_pace_brisk"
-                    style="@style/Widget.RoueLibre.Toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:minHeight="@dimen/touch_target_min"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
                     android:text="@string/settings_walking_pace_brisk" />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
+            </io.github.mgdx.rouelibre.ui.ToggleRow>
 
             <!-- Offline data: what the application occupies, and how to
                  reclaim it (SPEC §4.4). -->
