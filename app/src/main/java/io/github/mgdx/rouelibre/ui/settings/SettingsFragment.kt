@@ -148,10 +148,16 @@ class SettingsFragment : Fragment() {
      * their bike belongs to no fleet and is the same in every city — so it is
      * offered everywhere and asks nothing of `FleetDescription.isMixed`.
      *
-     * It is also the one setting of this section that reaches no computation:
-     * written the moment it is pressed, like the pace under it, but read only by
-     * the drawings and the sentences of a journey on one's own bike. Not a
-     * minute announced depends on it (SPEC §6).
+     * **A declared pedal-assist bike changes the ride itself**, and since
+     * 17 August 2026 the minutes with it: the two ends of a journey on one's own
+     * bike take the bolt, the summary names that bike, and the ride is traced
+     * with a profile of its own — a profile the engine computes with, never a
+     * speed applied afterwards (SPEC §6). "Not specified" and "mechanical" both
+     * give the ride of before, to the track and to the minute.
+     *
+     * Written the moment it is pressed, like the pace under it, and read when
+     * the next journey is asked for: a journey already on the screen keeps the
+     * stations and the minutes it was worked out with.
      */
     private fun setUpOwnBikeKind(views: FragmentSettingsBinding) {
         views.ownBikeKind.addOnButtonCheckedListener { _, checkedId, isChecked ->

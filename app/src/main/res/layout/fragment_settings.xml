@@ -355,9 +355,11 @@
                 kinds, and narrows the stations the algorithm may choose. This
                 one is a fact about the rider: their bike belongs to no fleet, it
                 is the same in every city, so it is offered everywhere and asks
-                nothing of `FleetDescription.isMixed`. It is also the one setting
-                of this section that reaches no computation at all — it changes
-                what is drawn and what is said, and not one minute announced.
+                nothing of `FleetDescription.isMixed`. Declared as a pedal-assist
+                bike it changes what is drawn, what is said and — since
+                17 August 2026 — the ride itself, traced with a profile of its
+                own; the other two states give the ride of before, to the track
+                and to the minute. The line under the buttons says as much.
             -->
             <TextView
                 android:layout_width="match_parent"
