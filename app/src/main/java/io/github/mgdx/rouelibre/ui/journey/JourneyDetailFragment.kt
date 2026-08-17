@@ -109,6 +109,7 @@ class JourneyDetailFragment : Fragment() {
             destination = checkNotNull(destination).position,
             usesOwnBike = usesOwnBike,
             walkingPace = container.preferences.walkingPace,
+            ownBikeKind = container.preferences.ownBikeKind,
         )
     }
 

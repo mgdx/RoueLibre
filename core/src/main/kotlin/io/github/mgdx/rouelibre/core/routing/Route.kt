@@ -4,7 +4,17 @@ import io.github.mgdx.rouelibre.core.geo.Coordinates
 import kotlin.time.Duration
 
 /**
- * The two travel modes of a door-to-door journey (SPEC.md §5).
+ * The travel modes of a door-to-door journey (SPEC.md §5).
+ *
+ * One entry, one BRouter profile: the list of profiles the application lays on
+ * disk is derived from these entries, so a mode added here is a profile that
+ * must exist under `assets/routing`.
+ *
+ * **Two of them describe a bicycle**, and that is the whole of what the pedal
+ * assistance is modelled by: the ride is traced with the profile that describes
+ * the bike it is ridden on, so what comes back is the engine's own estimate for
+ * that bike rather than a speed added to somebody else's (SPEC §6). Which of
+ * the two is used is decided by [io.github.mgdx.rouelibre.core.journey.RiddenBike].
  *
  * @property profileName the name of the BRouter profile file, without its
  *   extension.
@@ -13,8 +23,11 @@ public enum class TravelMode(public val profileName: String) {
     /** Access legs, on foot. */
     Walking("urban-walk"),
 
-    /** The main leg, on a share bike. */
+    /** The main leg, on a share bike one pedals alone. */
     Cycling("city-bike"),
+
+    /** The main leg, on a pedal-assist bike. */
+    ElectricCycling("city-ebike"),
 }
 
 /**

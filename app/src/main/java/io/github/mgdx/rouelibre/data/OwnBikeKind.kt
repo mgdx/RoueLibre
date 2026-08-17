@@ -12,17 +12,24 @@ package io.github.mgdx.rouelibre.data
  * Lille as in Lyon, so it is offered **everywhere**, `FleetDescription.isMixed`
  * being none of its business, and it is asked once in the settings.
  *
- * **It changes nothing but what is drawn and said.** No speed, no coefficient,
- * no profile: a pedal-assist bike is quicker in the real world, but §6 announces
- * only what the routing engine traced, and the ride is traced over the same
- * graph with the same profile whatever kind is declared. That is a decision and
- * not an omission — a figure invented for the motor is a figure nobody measured
- * — and it is why this type lives here, in the application's settings, and not
- * in the `core` module where the algorithm lives: nothing there can reach it.
+ * **Since 17 August 2026 it reaches the ride as well as the drawing.** Until
+ * then it changed nothing but what was drawn and said — no speed, no
+ * coefficient, no dedicated profile — on the grounds that §6 announces only
+ * what the routing engine traced. That decision fell: a pedal-assist bike is
+ * genuinely quicker, and announcing the same minutes for both was the larger
+ * error. What it was protecting is protected still, because what changed is the
+ * profile the engine traces with — `RiddenBike.ElectricallyAssisted` — and not
+ * a figure invented afterwards.
+ *
+ * **This type stays here all the same.** It is a preference of the application,
+ * with a storage key and a wording of its own, and the `core` module has no
+ * business knowing either; what crosses into it is `RiddenBike`, the bike a ride
+ * is computed on, and `asRiddenBike` is the whole of the translation.
  *
  * `null` — the type is used as a nullable throughout — is "not specified", the
- * state at installation and after any reset, and it reproduces exactly the
- * drawings and the sentences of the version before this choice existed.
+ * state at installation and after any reset. It rides exactly as [Mechanical]
+ * does, to the track and to the minute, and it keeps the drawings and the
+ * sentences of the version before this choice existed.
  *
  * @property id the value written to disk, stable from one release to the next.
  */

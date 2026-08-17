@@ -13,7 +13,9 @@ import io.github.mgdx.rouelibre.core.journey.Router
 import io.github.mgdx.rouelibre.core.journey.WalkingPace
 import io.github.mgdx.rouelibre.core.station.BikeKindFilter
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
+import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.data.StationRepository
+import io.github.mgdx.rouelibre.data.asRiddenBike
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,6 +67,10 @@ data class JourneyUiState(
  * @property walkingPace how fast the user walks (SPEC §7.6). Read at each
  *   computation rather than captured when the screen opened, so a pace changed
  *   in the settings applies to the next journey without a restart.
+ * @property ownBikeKind what the rider says their own bike is (SPEC §7.6), read
+ *   the same way and for the same reason. It reaches the ride of somebody on
+ *   their own bike and nothing else: what the network lends says nothing about
+ *   the bike in one's hallway, and the reverse holds just as firmly.
  */
 class JourneyViewModel(
     private val router: Router,
@@ -75,6 +81,7 @@ class JourneyViewModel(
     private val wantedBikeKind: WantedBikeKind? = null,
     private val fleet: Flow<FleetDescription?> = flowOf(null),
     private val walkingPace: Flow<WalkingPace> = flowOf(WalkingPace.Normal),
+    private val ownBikeKind: Flow<OwnBikeKind?> = flowOf(null),
 ) : ViewModel() {
 
     /** The two ends, as the result screen may correct them without going back. */
@@ -126,10 +133,15 @@ class JourneyViewModel(
             // On one's own bike the network is not consulted at all: no station
             // is chosen, so an empty station list is not a reason to give up on
             // the journey — a user who has never refreshed the feed still gets
-            // their ride (SPEC §7.3). No kind is asked for either: the bike is
-            // the rider's own, and what the network lends says nothing about it.
+            // their ride (SPEC §7.3). No kind is asked of the network either:
+            // the bike is the rider's own, and what the network lends says
+            // nothing about it. What the rider declared theirs to be does count,
+            // and it is the one setting that reaches this ride: it decides the
+            // profile it is traced with (SPEC §7.6). The walking pace is not
+            // passed on, this journey being one leg and no step of it walked.
             if (usesOwnBike) {
-                val ride = JourneyPlanner(router).planWithOwnBike(origin, destination)
+                val settings = JourneySettings(riddenBike = ownBikeKind.first().asRiddenBike())
+                val ride = JourneyPlanner(router, settings).planWithOwnBike(origin, destination)
                 mutableState.update {
                     it.copy(plan = ride, isComputing = false, hasStations = true)
                 }
@@ -142,12 +154,19 @@ class JourneyViewModel(
                 }
                 return@launch
             }
+            // The filter is read once and used twice: what the algorithm was
+            // narrowed by must be what the ride is timed on. A kind the network
+            // cannot honour is dropped here (see below), and a journey open to
+            // every station must not be worked out on a bike it was not
+            // promised (SPEC §6).
+            val filter = bikeKindFilter()
             val planner = JourneyPlanner(
                 router = router,
-                // The pace only reaches the walk → bike → walk journey: the ride
-                // above is one leg and no step of it is walked (SPEC §7.3).
-                settings = JourneySettings(walkingPace = walkingPace.first()),
-                wantedBike = bikeKindFilter(),
+                settings = JourneySettings(
+                    walkingPace = walkingPace.first(),
+                    riddenBike = filter?.wanted.asRiddenBike(),
+                ),
+                wantedBike = filter,
             )
             val plan = planner.plan(origin, destination, stations)
             mutableState.update {
@@ -188,6 +207,7 @@ class JourneyViewModel(
         private val wantedBikeKind: WantedBikeKind? = null,
         private val fleet: Flow<FleetDescription?> = flowOf(null),
         private val walkingPace: Flow<WalkingPace> = flowOf(WalkingPace.Normal),
+        private val ownBikeKind: Flow<OwnBikeKind?> = flowOf(null),
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -203,6 +223,7 @@ class JourneyViewModel(
                 wantedBikeKind,
                 fleet,
                 walkingPace,
+                ownBikeKind,
             ) as T
         }
     }

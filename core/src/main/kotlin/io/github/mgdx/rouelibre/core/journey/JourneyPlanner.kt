@@ -62,25 +62,28 @@ import kotlin.time.Duration.Companion.seconds
  * there is nothing to measure — the question is not "how likely am I to find
  * one" but "does this station lend one".
  *
- * Two things it deliberately leaves alone. The **arrival end**, where a free
- * dock is a free dock whatever one returns to it. And the **time announced**,
- * which stays what the engine traced: a pedal-assist bike is quicker in the real
- * world, but the profile it is traced with is the same one, and this application
- * announces nothing it has not computed (SPEC §6).
+ * One thing it deliberately leaves alone: the **arrival end**, where a free dock
+ * is a free dock whatever one returns to it.
  *
  * One thing it does reach: the **reliability penalty**, which then weighs the
  * bikes of that kind alone rather than the station's whole rack — see
  * [countAtRisk]. What the journey **carries and shows** is the whole count all
  * the same (SPEC §7.4).
  *
- * ## Walking at one's own pace
+ * The **time announced** moves with it too, since 17 August 2026, and only when
+ * an assisted bike was asked for: that is [JourneySettings.riddenBike]'s doing
+ * rather than this filter's, and the application layer is what joins the two.
  *
- * [JourneySettings.walkingPace] scales the duration of every walking leg before
- * anything is compared — see [atTheWalkingPaceAsked]. It is not a matter of
- * presentation: the two walks are two of the three legs being weighed against
- * one another, so a slower walker is genuinely owed a nearer departure station,
- * even at the cost of a longer ride. At [WalkingPace.Normal] the factor is one
- * and this class behaves exactly as it did before the pace existed.
+ * ## At the paces asked for
+ *
+ * [JourneySettings.walkingPace] and [JourneySettings.riddenBike] scale the
+ * duration of every leg before anything is compared — see [atThePacesAsked].
+ * Neither is a matter of presentation: the two walks and the ride are the three
+ * legs being weighed against one another, so a slower walker is genuinely owed a
+ * nearer departure station even at the cost of a longer ride, and a quicker bike
+ * genuinely earns a station further off. At [WalkingPace.Normal] and
+ * [RiddenBike.Mechanical] both factors are one and this class behaves exactly as
+ * it did before either existed.
  *
  * @property router access to the routing engine.
  * @property settings the algorithm's settings.
@@ -200,9 +203,14 @@ public class JourneyPlanner(
      * foot" to somebody who has said they are on their bike would be answering
      * a question they did not ask.
      *
-     * The ride is traced with the same profile as a share bike's leg
-     * (`TravelMode.Cycling`): the graph carries one set of costs for a bicycle,
-     * and the streets a bike may take do not depend on whose bike it is.
+     * **The ride is traced with the profile of the bike the rider declared**
+     * ([JourneySettings.riddenBike]), exactly as a share bike's leg is traced
+     * with the profile of the bike the network was asked for. The streets a
+     * bicycle may take do not depend on whose bicycle it is, and neither profile
+     * lets it anywhere the other would not; what depends on the bike is how fast
+     * it covers them and how much a hill costs it. A bike declared mechanical
+     * and a bike nobody declared are the same plain bike and come back with the
+     * ride of before this was modelled (SPEC §7.6).
      *
      * @param origin departure point.
      * @param destination arrival point.
@@ -211,8 +219,10 @@ public class JourneyPlanner(
     public suspend fun planWithOwnBike(
         origin: Coordinates,
         destination: Coordinates,
-    ): JourneyPlan = when (val result = router.route(origin, destination, TravelMode.Cycling)) {
-        is RouteResult.Success -> JourneyPlan.OwnBike(result.leg)
+    ): JourneyPlan = when (
+        val result = router.route(origin, destination, settings.riddenBike.travelMode)
+    ) {
+        is RouteResult.Success -> JourneyPlan.OwnBike(result.leg.atThePacesAsked())
         // The engine's reason is kept rather than flattened into "no route":
         // a graph that is not installed and a point outside the covered area
         // call for two different things to be done about them (SPEC §7.4).
@@ -462,10 +472,13 @@ public class JourneyPlanner(
     private suspend fun computeWave(wave: List<Pair>): List<JourneyOption> = coroutineScope {
         wave.map { pair ->
             async {
+                // Traced with the profile of the bike this journey is for: an
+                // assisted one is not merely quicker over the same track, it
+                // has no reason to go round a hill (SPEC §6).
                 val ride = legOrNull(
                     pair.departure.station.position,
                     pair.arrival.station.position,
-                    TravelMode.Cycling,
+                    settings.riddenBike.travelMode,
                 ) ?: return@async null
 
                 JourneyOption(
@@ -522,33 +535,38 @@ public class JourneyPlanner(
         to: Coordinates,
         mode: TravelMode,
     ): RouteLeg? = when (val result = router.route(from, to, mode)) {
-        is RouteResult.Success -> result.leg.atTheWalkingPaceAsked()
+        is RouteResult.Success -> result.leg.atThePacesAsked()
         is RouteResult.Failure -> null
     }
 
     /**
-     * A walking leg as the person asking for it actually walks it (SPEC §6).
+     * A leg as the person asking for it actually covers it (SPEC §6).
      *
-     * **The one place the pace enters, and it enters early on purpose.** Every
-     * leg this class uses comes through [legOrNull], so scaling here reaches the
-     * access walks, the direct walk and the walk offered when no bike journey
-     * can be composed — all of them before a single pair is compared, which is
-     * the whole point: a pace that only reached the figures on the screen would
-     * announce different minutes for the same stations, and leave a slow walker
-     * sent to the station a brisk one was owed.
+     * **The one place either pace enters, and it enters early on purpose.**
+     * Every leg this class uses comes through [legOrNull], so scaling here
+     * reaches the access walks, the direct walk, the walk offered when no bike
+     * journey can be composed and the ride itself — all of them before a single
+     * pair is compared, which is the whole point: a factor that only reached the
+     * figures on the screen would announce different minutes for the same
+     * stations, and leave a slow walker sent to the station a brisk one was owed,
+     * or a rider on an assisted bike sent to the station a mechanical one was.
      *
-     * **The geometry is not recomputed, and there is no profile per pace.** The
-     * same streets are walked whether one dawdles or hurries: what changes is
-     * how long they take. So the track, its distance and its climb are the
-     * engine's, untouched, and only the duration is scaled.
+     * **Two factors, two questions, and they never meet on the same leg.** The
+     * walks carry [WalkingPace]'s alone — a motor says nothing about how one
+     * walks — and the ride carries [RiddenBike]'s alone.
      *
-     * **The ride is never touched.** This setting says how somebody walks; it
-     * says nothing about how they pedal, and SPEC §6 announces no time it has
-     * not computed.
+     * **The geometry is not recomputed here, and there is no profile per pace.**
+     * The same streets are walked whether one dawdles or hurries: what changes is
+     * how long they take, so the track, its distance and its climb are the
+     * engine's, untouched. The two bikes are the one place where the streets may
+     * genuinely differ, and that is settled where it belongs — in the profile the
+     * leg was traced with, chosen before this point — never by a correction
+     * applied after the fact.
      */
-    private fun RouteLeg.atTheWalkingPaceAsked(): RouteLeg = when (mode) {
+    private fun RouteLeg.atThePacesAsked(): RouteLeg = when (mode) {
         TravelMode.Walking -> copy(duration = duration * settings.walkingPace.durationFactor)
-        TravelMode.Cycling -> this
+        TravelMode.Cycling, TravelMode.ElectricCycling ->
+            copy(duration = duration * settings.riddenBike.durationFactor)
     }
 
     /**

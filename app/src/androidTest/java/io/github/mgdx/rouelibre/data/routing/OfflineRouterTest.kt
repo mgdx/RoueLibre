@@ -112,6 +112,59 @@ class OfflineRouterTest {
     }
 
     @Test
+    fun computes_a_route_with_the_pedal_assist_profile() = runBlocking {
+        // The profile added on 17 August 2026 (SPEC §5, §6). Nothing before the
+        // device says it is even syntactically valid: BRouter compiles a
+        // profile at the moment it is used, from a file the application has to
+        // have laid on disk itself, so a typo in it fails here and nowhere
+        // earlier. The list of profiles extracted is derived from
+        // `TravelMode.entries`, which is what makes it enough to add the entry.
+        val result = router.route(lilleCentre, roubaixCentre, TravelMode.ElectricCycling)
+
+        val leg = (result as? RouteResult.Success)?.leg
+            ?: throw AssertionError("unexpected failure: $result")
+
+        assertEquals(TravelMode.ElectricCycling, leg.mode)
+        assertTrue(
+            "implausible distance: ${leg.distanceMetres} m",
+            leg.distanceMetres in 10_000..20_000,
+        )
+        assertTrue("implausible duration: ${leg.duration}", leg.duration.inWholeMinutes in 15..90)
+        assertTrue("track too sparse: ${leg.geometry.size} points", leg.geometry.size > 100)
+    }
+
+    @Test
+    fun the_pedal_assist_profile_is_quicker_than_the_mechanical_one() = runBlocking {
+        // The whole point of having two bike profiles: the assistance has to
+        // reach the minutes the engine returns, or the profile is decoration.
+        // Measured on the desktop over eleven legs of this same graph, the
+        // assisted profile takes about 0.84 of the mechanical one's time; the
+        // bound here is loose on purpose, since what must not regress is the
+        // sign of the difference and not a figure this test could not defend.
+        val plain = router.route(lilleCentre, roubaixCentre, TravelMode.Cycling)
+        val assisted = router.route(lilleCentre, roubaixCentre, TravelMode.ElectricCycling)
+
+        val onAPlainBike = (plain as? RouteResult.Success)?.leg
+            ?: throw AssertionError("mechanical failure: $plain")
+        val onAnAssistedBike = (assisted as? RouteResult.Success)?.leg
+            ?: throw AssertionError("pedal-assist failure: $assisted")
+
+        assertTrue(
+            "the assisted ride should be quicker: ${onAnAssistedBike.duration} " +
+                "against ${onAPlainBike.duration}",
+            onAnAssistedBike.duration < onAPlainBike.duration,
+        )
+        // And it is a bicycle still: the Lille metropolis being flat, the two
+        // profiles trace the same streets, so a track that had wandered off
+        // would mean the assistance had bought a licence it must not have.
+        assertTrue(
+            "the assisted track is implausibly different: " +
+                "${onAnAssistedBike.distanceMetres} m against ${onAPlainBike.distanceMetres} m",
+            onAnAssistedBike.distanceMetres < onAPlainBike.distanceMetres * 2,
+        )
+    }
+
+    @Test
     fun a_point_outside_the_box_is_reported_and_does_not_crash() = runBlocking {
         // Brussels: outside the downloaded graph.
         val outside = Coordinates(50.8467, 4.3525)
