@@ -214,7 +214,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
      * reaches the markers without the application being restarted.
      */
     val hideOutOfServiceStations: Flow<Boolean> =
-        dataStore.data.map { it.readFlag(HIDE_OUT_OF_SERVICE_STATIONS) }
+        dataStore.data.map { it.readFlag(HIDE_OUT_OF_SERVICE_STATIONS, ifUnanswered = false) }
 
     /** Remembers whether the map leaves out the stations out of service. */
     suspend fun setHideOutOfServiceStations(hide: Boolean) {
@@ -236,7 +236,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
      * switch is worded to hold in both modes.
      */
     val hideEmptyStations: Flow<Boolean> =
-        dataStore.data.map { it.readFlag(HIDE_EMPTY_STATIONS) }
+        dataStore.data.map { it.readFlag(HIDE_EMPTY_STATIONS, ifUnanswered = false) }
 
     /** Remembers whether the map leaves out the stations read as empty. */
     suspend fun setHideEmptyStations(hide: Boolean) {
@@ -246,15 +246,23 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     /**
      * Reads a yes-or-no setting, anything else counting as "never answered".
      *
-     * The map is built on these two, and a settings file holding something other
-     * than a boolean under one of these names — written by a version that stored
-     * it differently, or truncated by a device out of space — would otherwise
-     * take the screen down rather than draw every station. Going through
-     * [Preferences.asMap] is what makes the cast checkable at all: reading
-     * through a typed key hands back a value nobody verified.
+     * Screens are built on these settings, and a settings file holding something
+     * other than a boolean under one of their names — written by a version that
+     * stored it differently, or truncated by a device out of space — would
+     * otherwise take a screen down rather than fall back on what the application
+     * does when nobody has answered. Going through [Preferences.asMap] is what
+     * makes the cast checkable at all: reading through a typed key hands back a
+     * value nobody verified.
+     *
+     * @param key the name the setting is written under.
+     * @param ifUnanswered what an absent or unreadable value means. It is the
+     *   setting's own default and never a fixed "no": leaving the datasets on a
+     *   billed connection is a yes (SPEC §4.4), while hiding stations is a no.
      */
-    private fun Preferences.readFlag(key: Preferences.Key<Boolean>): Boolean =
-        asMap()[key] as? Boolean ?: false
+    private fun Preferences.readFlag(
+        key: Preferences.Key<Boolean>,
+        ifUnanswered: Boolean,
+    ): Boolean = asMap()[key] as? Boolean ?: ifUnanswered
 
     /**
      * The units distances are written in (SPEC §7.6, §9).
@@ -307,9 +315,9 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     /**
      * Whether the availability figures are drawn larger (SPEC §7, §7.6).
      *
-     * False by default, and for a preference that was never written: the
-     * interface as it is drawn is the one everybody gets until they ask for
-     * something else.
+     * False by default, and for a preference that was never written or that
+     * cannot be read as a yes or a no: the interface as it is drawn is the one
+     * everybody gets until they ask for something else.
      *
      * **Not a stand-in for the system's own font size**, which the indicator
      * already follows — its tokens are in `sp`. It answers what that setting
@@ -329,7 +337,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
      * indicator, so a choice made shows at once and everywhere.
      */
     val largeAvailabilityNumbers: Flow<Boolean> =
-        dataStore.data.map { it[LARGE_AVAILABILITY_NUMBERS] ?: false }
+        dataStore.data.map { it.readFlag(LARGE_AVAILABILITY_NUMBERS, ifUnanswered = false) }
 
     /** Remembers whether the availability figures are drawn larger. */
     suspend fun setLargeAvailabilityNumbers(large: Boolean) {
@@ -378,8 +386,9 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     /**
      * Whether journeys are worked out for the user's own bike (SPEC §7.3).
      *
-     * False by default: the application serves a bike-share network, and the
-     * journey through its stations is what one opens it for. The choice is kept
+     * False by default, and false again for anything that cannot be read as a
+     * yes or a no: the application serves a bike-share network, and the journey
+     * through its stations is what one opens it for. The choice is kept
      * because it is a fact about the person rather than about the trip — one
      * who owns a bike still owns it tomorrow — and asking again at every
      * journey would be asking the same answer of them every time.
@@ -390,7 +399,8 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
      * A flow rather than a read: it is read from a screen that is opened again
      * and again, and a value that changes must not need the screen rebuilt.
      */
-    val usesOwnBike: Flow<Boolean> = dataStore.data.map { it[USES_OWN_BIKE] ?: false }
+    val usesOwnBike: Flow<Boolean> =
+        dataStore.data.map { it.readFlag(USES_OWN_BIKE, ifUnanswered = false) }
 
     /** Remembers whether the user rides their own bike. */
     suspend fun setUsesOwnBike(usesOwnBike: Boolean) {
@@ -487,7 +497,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
      * that screen without it being rebuilt.
      */
     val downloadOnUnmeteredOnly: Flow<Boolean> =
-        dataStore.data.map { it[DOWNLOAD_ON_UNMETERED_ONLY] ?: true }
+        dataStore.data.map { it.readFlag(DOWNLOAD_ON_UNMETERED_ONLY, ifUnanswered = true) }
 
     /** Remembers whether downloads wait for a connection nobody is billed for. */
     suspend fun setDownloadOnUnmeteredOnly(unmeteredOnly: Boolean) {

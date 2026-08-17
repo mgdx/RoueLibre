@@ -614,6 +614,23 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **Three yes-or-no settings were still read without their guard.** The two map
+  filters go through `readFlag`, which reads a boolean through
+  `Preferences.asMap` so the cast can be checked: a settings file holding
+  something else under one of those names — written by a version that stored it
+  differently, or truncated by a device out of space — gives back the default
+  instead of taking the screen down with a `ClassCastException`. The larger
+  availability figures, the own-bike switch and the "download on an unmetered
+  connection only" setting were still read through their typed key, and each is
+  collected by a screen: the indicator on every list, the journey search, the
+  storage screen. **The helper now takes the value an unreadable setting means**
+  rather than assuming "no": the first two read as false, and downloads still
+  **wait for an unmetered connection** when nothing can be read, which is the
+  decision of `SPEC.md` §4.4 — read the other way round, an unreadable file
+  would send a gigabyte out on a mobile plan. No default changes. Three tests
+  cover it, one per setting, and all three threw a `ClassCastException` before
+  the change.
+
 - **The availability figure was cut off by the system's own font size.** The
   indicator's figure has always been painted in `sp` and has always followed the
   text size set in Android's settings — but the disc holding it was declared in
