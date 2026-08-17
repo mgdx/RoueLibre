@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -21,8 +22,13 @@ import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.databinding.FragmentStationListBinding
+import io.github.mgdx.rouelibre.ui.MAP_BACK_STACK_ENTRY
+import io.github.mgdx.rouelibre.ui.STATION_LIST_BACK_STACK_ENTRY
+import io.github.mgdx.rouelibre.ui.ScreenBehind
+import io.github.mgdx.rouelibre.ui.backStackEntryNames
 import io.github.mgdx.rouelibre.ui.map.MapFragment
-import io.github.mgdx.rouelibre.ui.storage.StorageFragment
+import io.github.mgdx.rouelibre.ui.screenBehind
+import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
 import kotlinx.coroutines.Dispatchers
@@ -85,7 +91,12 @@ class StationListFragment : Fragment() {
         // refresh, across 268 stations.
         views.stations.setHasFixedSize(true)
 
-        views.openStorage.setOnClickListener { openStorage() }
+        views.openSettings.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.content, SettingsFragment())
+                .addToBackStack(null)
+                .commit()
+        }
         showWayToTheMap(views)
         views.openFavourites.setOnClickListener {
             parentFragmentManager.beginTransaction()
@@ -243,35 +254,45 @@ class StationListFragment : Fragment() {
     }
 
     /**
-     * Offers the map, where this list is the screen the application opened on
-     * (SPEC §7.6).
+     * Offers the map, whatever stands behind this list (SPEC §7.6).
      *
-     * Reached from the map, this list has one behind it and the back gesture is
-     * the way to it — a second way would land on a copy of a screen already
-     * there. Opened on, it has nothing behind it, and the map is where the
-     * journey search and the settings are reached from: without this the
-     * setting that put the user here could not be undone.
+     * It was offered only where the back stack was empty — where this list was
+     * the screen the application opened on, the map being reachable by the back
+     * gesture otherwise. The map's own way to the list puts a second list up
+     * rather than coming back to the first, so the stack was no longer empty and
+     * the button was gone, with nothing left but repeated back gestures to reach
+     * the map again. A way out that comes and goes with the depth of the stack is
+     * unpredictable to whoever is using it, which is worse than the duplicate
+     * screen that rule was written to avoid.
      *
-     * An empty back stack is what tells the two apart, and it is read on every
-     * appearance rather than once: coming back from the what's-new screen
-     * (SPEC §7.10) rebuilds this view with nothing behind it again.
+     * Pressed, it **comes back to the map already behind** where there is one, so
+     * that pressing the two buttons in turn cannot stack map over list over map:
+     * every one of these transactions is named, which is what makes an existing
+     * map findable. Only with no map behind at all is one built.
      */
     private fun showWayToTheMap(views: FragmentStationListBinding) {
-        views.openMap.isVisible = parentFragmentManager.backStackEntryCount == 0
         views.openMap.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.content, MapFragment())
-                .addToBackStack(null)
-                .commit()
-        }
-    }
+            val manager = parentFragmentManager
+            when (
+                screenBehind(
+                    MAP_BACK_STACK_ENTRY,
+                    STATION_LIST_BACK_STACK_ENTRY,
+                    manager.backStackEntryNames(),
+                )
+            ) {
+                ScreenBehind.Stacked -> manager.popBackStack(MAP_BACK_STACK_ENTRY, 0)
 
-    /** Opens the offline data management screen (SPEC §4.4). */
-    private fun openStorage() {
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.content, StorageFragment())
-            .addToBackStack(null)
-            .commit()
+                ScreenBehind.Underneath -> manager.popBackStack(
+                    STATION_LIST_BACK_STACK_ENTRY,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE,
+                )
+
+                ScreenBehind.Nowhere -> manager.beginTransaction()
+                    .replace(R.id.content, MapFragment())
+                    .addToBackStack(MAP_BACK_STACK_ENTRY)
+                    .commit()
+            }
+        }
     }
 
     private fun hideKeyboard(view: View) {
