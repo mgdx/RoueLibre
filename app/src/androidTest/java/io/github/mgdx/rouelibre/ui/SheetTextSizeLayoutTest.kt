@@ -258,6 +258,17 @@ class SheetTextSizeLayoutTest {
         )
         sheet.show(R.id.service_state)
         sheet.setText(R.id.service_state, context.getString(R.string.station_out_of_service))
+        // The labels come from the code rather than from the layout, being
+        // agreed with the count beside them: the plural form is the longer of
+        // the two, and the one the defect was measured on.
+        sheet.setText(
+            R.id.bikes_label,
+            context.resources.getQuantityString(R.plurals.counterpart_bikes, BIKES),
+        )
+        sheet.setText(
+            R.id.docks_label,
+            context.resources.getQuantityString(R.plurals.counterpart_docks, DOCKS),
+        )
         sheet.show(R.id.bikes_split)
         sheet.setText(
             R.id.bikes_split,

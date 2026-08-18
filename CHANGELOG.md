@@ -656,6 +656,33 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **"1 free docks".** The word beside a station's count did not agree with the
+  count: a station with one free dock read "1 PLACES LIBRES" on its sheet and on
+  its list row, and "1 free docks" in English. `counterpart_bikes` and
+  `counterpart_docks` were fixed `<string>`s, the only two labels in the
+  application to escape the rule SPEC §9 and §14 set — a label posed beside a
+  figure is a sentence, even when it is two words long, and a sentence agrees.
+  They are `<plurals>` now, in all thirty language files, with the categories
+  each language draws and no more: English `one`/`other`, French adding the
+  `many` that takes "de", `other` alone where a language agrees nothing.
+  **What makes these two unlike every other plural here is that the number is
+  not in them.** The disc beside the label already holds the figure, so an item
+  written `%1$d free docks` would say it twice; they are resolved with the count
+  as a quantity and formatted with no argument at all. That is also what Android
+  lint's `ImpliedQuantity` is unable to imagine — it reads a plural without a
+  placeholder as an oversight — so the two carry a `tools:ignore` naming it, and
+  nothing else does.
+  **Since the label now depends on a count, it comes from the code**, not from
+  `android:text` in `sheet_station_detail.xml`; a disc with no figure — unknown,
+  or out of service — keeps the plural form.
+  `CounterpartAgreementTest` reads the thirty files off the disk, the way
+  `IndicatorScaleTest` reads `dimens.xml`, and fails on two counts: a language
+  whose categories do not match its grammar, and an item that has grown a
+  placeholder back. The second is the one a contributor breaks first.
+  One consequence worth writing down, because it looks like a defect: French
+  puts 0 in `one`, so an empty station reads "0 place libre" while English reads
+  "0 free docks". Both are right; the plural rules differ.
+
 - **A station's sheet cut off its labels and its three buttons.** Measured on a
   Fairphone 3 in French: at ×1.3 "Ouvrir dans une appli de navig…", at ×1.8 the
   "LIBRES" of "PLACES LIBRES" gone over the edge of the screen, at ×2.0 "PLAC",
