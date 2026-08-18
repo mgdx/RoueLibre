@@ -110,6 +110,7 @@ class JourneyDetailFragment : Fragment() {
             usesOwnBike = usesOwnBike,
             walkingPace = container.preferences.walkingPace,
             ownBikeKind = container.preferences.ownBikeKind,
+            coveredArea = container.coveredArea(),
         )
     }
 
