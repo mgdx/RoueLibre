@@ -58,24 +58,39 @@ import com.google.android.material.button.MaterialButtonToggleGroup
  * characters; `autoSizeTextType` would answer no to the only thing they asked.
  *
  * **Material logs `Child order wasn't updated` under this row, and it stays.**
- * A [MaterialButtonToggleGroup] draws its buttons in an order of its own — the
- * checked one last, so that its stroke is not covered by its neighbours' — and
- * it works that order out at the head of its `dispatchDraw`, into a field of
- * its own. Until the row has been drawn once that field is empty, so a question
- * about the drawing order asked before the first draw is answered with the
- * natural order and a warning, one line per button. Those questions come from
- * outside the drawing pass: chiefly the walk of the accessibility tree, which
- * happens whenever a service — or a `uiautomator` dump — asks for it.
+ * A [MaterialButtonToggleGroup] draws its buttons in an order of its own and
+ * works that order out at the head of its `dispatchDraw`, into a field it keeps
+ * to itself. Until the row has been drawn once that field is empty, and every
+ * question put to the group about its drawing order before that first draw is
+ * answered with the natural order and one line of log per button.
  *
- * Nothing here provokes it. Every button of every such row in the application
- * is declared in XML and none is added, moved or removed afterwards, which is
- * the case the message is written for. The field cannot be primed from outside
- * the library, and the two cures left are both worse than the line they would
- * remove: turning the custom drawing order off gives back overlapping strokes,
- * and copying the library's ordering into this class makes us the owner of a
- * rule we would then have to keep in step with it. So the warning is left where
- * it is, and written down here so that the next reader of the log knows it has
- * been looked at.
+ * **It is the display that emits them, not the observing.** Measured on a
+ * Fairphone FP3 under Android 15: the settings screen, whose five rows hold
+ * fifteen buttons between them, logs fifteen lines each time it is shown —
+ * thirty for two openings — with nothing reading the screen, and the same
+ * fifteen when a `uiautomator` dump does read it. The row on the station list
+ * logs none. What asks for the order before the first draw was not run down;
+ * that it asks is measured, and it is enough to judge the two cures.
+ *
+ * **Turning the custom drawing order off would silence it and change the
+ * rows.** `setChildrenDrawingOrderEnabled` is open to a subclass, and the order
+ * is not inert: with no spacing between the buttons the group gives each one a
+ * start margin of minus one stroke width, so two neighbours share a single
+ * line, and the drawing order is what hands that shared line to the checked
+ * button rather than to the one beside it. These buttons are outlined and their
+ * stroke colour follows their state, so the seam would take the wrong colour —
+ * in a row, and in a column at the text sizes where the row stacks.
+ *
+ * **Bringing the field up to date early is not open at all.** One private
+ * method writes it, called from `dispatchDraw` and from nowhere else, so no
+ * order of declaration and no call after inflation — `check`, `addView` — can
+ * reach it. Only a draw fills it, which is the one thing that has not happened
+ * yet when the question is put.
+ *
+ * So both cures are closed and the warning is left where it is, written down
+ * here so that the next reader of the log knows it has been looked at. It says
+ * nothing about this class: every button of every such row is declared in XML,
+ * and none is added, moved or removed afterwards.
  */
 class ToggleRow @JvmOverloads constructor(context: Context, attributes: AttributeSet? = null) :
     MaterialButtonToggleGroup(context, attributes) {
