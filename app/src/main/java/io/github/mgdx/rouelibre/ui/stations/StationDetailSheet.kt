@@ -1,5 +1,6 @@
 package io.github.mgdx.rouelibre.ui.stations
 
+import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -14,6 +15,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
@@ -68,6 +71,31 @@ class StationDetailSheet : BottomSheetDialogFragment() {
             fleet = container.fleetRepository.fleet,
             stationId = requireArguments().getString(ARGUMENT_STATION_ID).orEmpty(),
         )
+    }
+
+    /**
+     * Opens the sheet on its actions rather than on a strip of itself.
+     *
+     * The height a bottom sheet is born collapsed at is decided by a rule of
+     * the framework's own — the screen less a 16:9 rectangle of it — which
+     * knows nothing of what the sheet holds. In portrait that leaves more than
+     * this detail needs, so the collapsed sheet already shows all of it; turn
+     * the phone sideways and the same rule falls to the 64 dp floor, which
+     * showed the station's name and left the three buttons under the edge of
+     * the screen.
+     *
+     * The orientation is not asked about, because it is not the question: this
+     * sheet holds one station's detail and the three things one can do with it,
+     * and there is no longer list underneath for a collapsed state to preview.
+     * It opens expanded wherever it is opened, and skips the collapsed state
+     * altogether so that a downward swipe dismisses it instead of hiding its
+     * actions again.
+     */
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.behavior.skipCollapsed = true
+        dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        return dialog
     }
 
     override fun onCreateView(
