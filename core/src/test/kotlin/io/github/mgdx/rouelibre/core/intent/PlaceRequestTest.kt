@@ -116,6 +116,17 @@ class PlaceRequestTest {
             PlaceRequest.Point(lille),
             parsePlaceUri("https://www.openstreetmap.org/#map=17/50.6371/3.0630"),
         )
+        // What the "share" button of Google Maps writes today: the named
+        // place, then the coordinates. Its host is `www.google.com`, declared
+        // in the manifest beside the historical `maps.google.com`.
+        assertEquals(
+            PlaceRequest.Point(lille),
+            parsePlaceUri("https://www.google.com/maps/place/Grand+Place/@50.6371,3.0630,17z"),
+        )
+        assertEquals(
+            PlaceRequest.Point(lille),
+            parsePlaceUri("https://maps.google.com/maps?q=50.6371,3.0630"),
+        )
     }
 
     @Test

@@ -166,6 +166,31 @@
             </intent-filter>
 
             <!--
+                Google Maps' current host, and a filter of its own because
+                Android crosses the attributes of a single filter with one
+                another: the path below, declared above, would have been
+                required of the OpenStreetMap links too, which carry none.
+
+                `maps.google.com` is the historical spelling; what Google Maps
+                shares today reads `www.google.com/maps/@…`, which the parser
+                has always known how to read (SPEC §7.8). The path is what
+                keeps the application out of Android's chooser for every other
+                address on that host — a search, a mail, a video.
+            -->
+            <intent-filter android:autoVerify="false">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" />
+                <data android:host="www.google.com" />
+                <!-- "/maps" itself and what hangs under it, rather than a
+                     single prefix that would also take in a path merely
+                     beginning with those five letters. -->
+                <data android:path="/maps" />
+                <data android:pathPrefix="/maps/" />
+            </intent-filter>
+
+            <!--
                 Text sharing: the commonest case in practice, an address
                 received over a messaging application. The text is parsed on
                 the device, and resolved by the local address index.
