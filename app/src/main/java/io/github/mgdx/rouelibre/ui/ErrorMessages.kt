@@ -55,9 +55,14 @@ fun DataError.toUserMessage(context: Context): String = when (this) {
  * last availability on screen, which is the sentence a stopped download was
  * being answered with.
  *
- * Everything else — no city chosen, a local file that cannot be read — reads
- * the same on both screens and is left to [toUserMessage] rather than copied,
- * which is what keeps the two from drifting apart.
+ * A sixth failure is neither the server's nor resumable in the same way: the
+ * device refusing the file. Downloading writes where refreshing reads, so the
+ * refresh's "unable to read the data stored on the device" describes the
+ * opposite gesture, and the way out is the reader's own rather than the host's.
+ *
+ * Everything else — no city chosen above all — reads the same on both screens
+ * and is left to [toUserMessage] rather than copied, which is what keeps the
+ * two from drifting apart.
  *
  * @return a complete sentence, ready to be shown.
  */
@@ -73,6 +78,13 @@ fun DataError.toDownloadMessage(context: Context): String = when (this) {
         // address that is not one, a transfer cut in the middle. The technical
         // detail stays in the value, as it does for the refresh.
         context.getString(R.string.error_malformed_download)
+    is DataError.LocalStorageFailure ->
+        // The one failure of the six that is not the server's: downloading
+        // WRITES to the device where refreshing reads from it, so "unable to
+        // read the data stored on the device" describes the opposite gesture.
+        // It is also the one whose way out is the reader's own — free some
+        // space — rather than waiting.
+        context.getString(R.string.error_local_storage_download)
     else -> toUserMessage(context)
 }
 

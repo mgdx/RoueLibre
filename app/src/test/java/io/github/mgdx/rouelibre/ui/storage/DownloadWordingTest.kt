@@ -102,6 +102,24 @@ class DownloadWordingTest {
     }
 
     /**
+     * The sentences were right and unreadable: the four written for the server
+     * failures ran to 119 characters where the bar showed about eighty, and
+     * were cut at an ellipsis — the very defect this campaign fixed on the
+     * station list. The screen gained a third line and a fourth, and they lost
+     * "try again later", which told somebody who had just been told the
+     * download resumes nothing they did not already have.
+     */
+    @Test
+    fun `no sentence of the family outgrows the snackbar that shows it`() {
+        LOCALES.forEach { folder ->
+            val overlong = FAMILY
+                .associateWith { stringOf(folder, it).length }
+                .filterValues { it > LONGEST }
+            assertEquals("$folder outgrows the snackbar", emptyMap<String, Int>(), overlong)
+        }
+    }
+
+    /**
      * A string missing from a started file is a string that language reads
      * nowhere, translated or not (SPEC §9) — and one `lint` fails the build on.
      */
@@ -125,7 +143,9 @@ class DownloadWordingTest {
         val declaration = Regex("""<string name="$name">(.*?)</string>""")
             .find(file.readText())
         checkNotNull(declaration) { "$name is not declared in ${file.path}" }
-        return declaration.groupValues[1]
+        // The apostrophes are escaped for Android, not for the reader, and the
+        // budget below counts what is read rather than what is written.
+        return declaration.groupValues[1].replace("\\'", "’")
     }
 
     private companion object {
@@ -146,7 +166,27 @@ class DownloadWordingTest {
             "error_server_refused$SUFFIX",
             "error_untrusted_server$SUFFIX",
             "error_malformed$SUFFIX",
+            "error_local_storage$SUFFIX",
         )
+
+        /**
+         * The longest a sentence of the family may be, and where the figure
+         * comes from.
+         *
+         * Measured on a Fairphone FP3, 1080 wide, French, text at its ordinary
+         * size: a snackbar on this screen is 954 px across, and sixty-four
+         * characters filled two lines of it — about forty to the line. Each of
+         * these is read behind a dataset's name, "Graphe de routage : ", twenty
+         * characters more. Eighty keeps the longest of them inside the three
+         * lines the screen now gives, with a fourth in hand for whoever reads at
+         * twice the text size.
+         *
+         * A count of characters is a budget and not a measurement — what a line
+         * holds depends on which characters they are — and it is here so that a
+         * sentence cannot grow back past what was measured without somebody
+         * deciding to.
+         */
+        const val LONGEST = 80
 
         /** How each language says the transfer carries on rather than restarts. */
         val RESUMPTION = mapOf(

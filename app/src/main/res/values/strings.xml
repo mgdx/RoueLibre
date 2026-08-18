@@ -475,11 +475,12 @@
          files come down resumably (SPEC §4.4) — which is what each of
          these says will happen next. -->
     <string name="error_offline_download">No connection. The download picks up where it stopped.</string>
-    <string name="error_timeout_download">The data server is taking too long to answer. The download picks up where it stopped.</string>
+    <string name="error_timeout_download">The server is not answering. The download picks up where it stopped.</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_download">The data server returned an error (%1$d). Try again later: the download picks up where it stopped.</string>
-    <string name="error_untrusted_server_download">Invalid security certificate. The download picks up once the data server has renewed it.</string>
-    <string name="error_malformed_download">The data received is unreadable. Try again later: the download picks up where it stopped.</string>
+    <string name="error_server_refused_download">Server error (%1$d). The download picks up where it stopped.</string>
+    <string name="error_untrusted_server_download">Invalid security certificate. The download picks up once it is renewed.</string>
+    <string name="error_malformed_download">Unreadable file received. The download picks up where it stopped.</string>
+    <string name="error_local_storage_download">The file could not be saved. Free some space and the download picks up.</string>
     <string name="error_timeout">The network’s server is taking too long to answer. Try again in a moment.</string>
     <string name="error_server_refused">The network’s server returned an error (%1$d). Try again later.</string>
     <string name="error_untrusted_server">The network’s server presented an invalid security certificate. Its data cannot be fetched safely until the operator renews it.</string>
