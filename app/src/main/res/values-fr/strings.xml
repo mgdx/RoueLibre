@@ -592,6 +592,11 @@
          technical codes (SPEC §7 and §14). -->
     <string name="error_offline">Pas de connexion. Les dernières disponibilités connues restent affichées.</string>
     <string name="error_offline_download">Pas de connexion. Le téléchargement reprend où il s\'est arrêté.</string>
+    <string name="error_timeout_download">Le serveur des données met trop de temps à répondre. Le téléchargement reprend où il s\'est arrêté.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_download">Le serveur des données a renvoyé une erreur (%1$d). Réessaie plus tard : le téléchargement reprend où il s\'est arrêté.</string>
+    <string name="error_untrusted_server_download">Certificat de sécurité invalide. Le téléchargement reprendra quand le serveur des données l\'aura renouvelé.</string>
+    <string name="error_malformed_download">Les données reçues sont illisibles. Réessaie plus tard : le téléchargement reprend où il s\'est arrêté.</string>
     <string name="error_timeout">Le serveur du réseau met trop de temps à répondre. Réessaie dans un moment.</string>
     <!-- %1$d is the HTTP code the server returned. -->
     <string name="error_server_refused">Le serveur du réseau a renvoyé une erreur (%1$d). Réessaie plus tard.</string>

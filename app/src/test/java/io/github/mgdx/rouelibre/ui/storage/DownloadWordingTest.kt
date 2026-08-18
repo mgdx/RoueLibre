@@ -1,6 +1,6 @@
 package io.github.mgdx.rouelibre.ui.storage
 
-import org.junit.Assert.assertFalse
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -9,13 +9,24 @@ import java.io.File
 /**
  * What the storage screen says when a dataset transfer fails (SPEC §4.4, §14).
  *
- * It reported an interrupted download with the sentence written for the
+ * It reported an interrupted download with the sentences written for the
  * availability refresh — "No connection. The last known availability stays on
- * screen." — read under the dataset's own name, "Map data: …". That answered
- * about bikes somebody who had just pressed "Download 35.0 MB", and said
- * nothing of the transfer they were watching. The two failures have their own
- * sentence now, and this test is what keeps one from being written back over
- * the other.
+ * screen.", "The network's server returned an error (503)." — read under the
+ * dataset's own name, "Map data: …". Two things were wrong with that, and this
+ * test holds both.
+ *
+ * **The screen was answering about bikes.** Somebody who had just pressed
+ * "Download 35.0 MB" was told what stays on screen, and nothing of the transfer
+ * they were watching.
+ *
+ * **It was naming the wrong server.** "The network's server" is the bike-share
+ * operator's, which this screen never talks to: the files come from whoever
+ * hosts them, and sending somebody to the wrong end of a breakdown is worse
+ * than telling them nothing.
+ *
+ * Each failure that can reach the download path has its own sentence now, and
+ * every one of them says what happens next — the transfer picks up where it
+ * stopped.
  *
  * The files are read from the disk, as `LocalesTest` reads the locale folders:
  * what is checked is what the application will be built with, and no Android
@@ -31,44 +42,81 @@ class DownloadWordingTest {
     )
 
     @Test
-    fun `a failed download does not borrow the availability refresh's sentence`() {
-        listOf("values", "values-fr").forEach { folder ->
-            assertNotEquals(
-                "$folder answers a failed download with the refresh's sentence",
-                stringOf(folder, "error_offline"),
-                stringOf(folder, "error_offline_download"),
-            )
+    fun `a failed download never borrows the availability refresh's sentence`() {
+        LOCALES.forEach { folder ->
+            FAMILY.forEach { name ->
+                assertNotEquals(
+                    "$folder answers a failed download with the refresh's sentence",
+                    stringOf(folder, name.removeSuffix(SUFFIX)),
+                    stringOf(folder, name),
+                )
+            }
         }
     }
 
     /**
-     * The defect itself, and not merely the fact that two strings differ: what
-     * made the message wrong is that it spoke of availability on a screen that
-     * downloads files.
+     * The first half of the defect: the storage screen downloads files, and has
+     * no availability to report on.
      */
     @Test
-    fun `the sentence for a failed download speaks of no availability`() {
-        assertFalse(
-            stringOf("values", "error_offline_download").contains("availability", true),
+    fun `no sentence of the family speaks of availability`() {
+        assertEquals(
+            emptyList<String>(),
+            FAMILY.filter { stringOf("values", it).contains("availability", true) },
         )
-        assertFalse(
-            stringOf("values-fr", "error_offline_download").contains("disponibilit", true),
+        assertEquals(
+            emptyList<String>(),
+            FAMILY.filter { stringOf("values-fr", it).contains("disponibilit", true) },
         )
     }
 
     /**
-     * A string missing from a started file is a string that language reads
-     * nowhere, translated or not (SPEC §9).
+     * The second half: the server these sentences describe is the one hosting
+     * the datasets. It is not the bike-share network's, and calling it that
+     * sends whoever reads it looking for a breakdown at the wrong end.
      */
     @Test
-    fun `every language carries the sentence`() {
+    fun `no sentence of the family blames the bike network`() {
+        assertEquals(
+            emptyList<String>(),
+            FAMILY.filter { stringOf("values", it).contains("network", true) },
+        )
+        assertEquals(
+            emptyList<String>(),
+            FAMILY.filter { stringOf("values-fr", it).contains("réseau", true) },
+        )
+    }
+
+    /**
+     * What every one of them owes its reader: the transfer is resumable
+     * (SPEC §4.4), so a failure here is never an invitation to start over.
+     */
+    @Test
+    fun `every sentence of the family says the transfer picks up again`() {
+        LOCALES.forEach { folder ->
+            val silent = FAMILY.filterNot { name ->
+                RESUMPTION.getValue(folder).containsMatchIn(stringOf(folder, name))
+            }
+            assertEquals("$folder says nothing of what happens next", emptyList<String>(), silent)
+        }
+    }
+
+    /**
+     * A string missing from a started file is a string that language reads
+     * nowhere, translated or not (SPEC §9) — and one `lint` fails the build on.
+     */
+    @Test
+    fun `every language carries every sentence of the family`() {
         resources.listFiles().orEmpty()
             .filter { it.isDirectory && File(it, "strings.xml").isFile }
             .forEach { folder ->
-                assertTrue(
-                    "error_offline_download is missing from ${folder.name}",
-                    File(folder, "strings.xml").readText().contains(DECLARATION),
-                )
+                val text = File(folder, "strings.xml").readText()
+                FAMILY.forEach { name ->
+                    assertTrue(
+                        "$name is missing from ${folder.name}",
+                        text.contains("""<string name="$name">"""),
+                    )
+                }
             }
     }
 
@@ -81,6 +129,29 @@ class DownloadWordingTest {
     }
 
     private companion object {
-        const val DECLARATION = """<string name="error_offline_download">"""
+        const val SUFFIX = "_download"
+
+        /** The two languages actually written; the rest hold the English text. */
+        val LOCALES = listOf("values", "values-fr")
+
+        /**
+         * The failures a dataset transfer can end on, named as the resources
+         * name them. Each is the download's own reading of the refresh string
+         * of the same name without the suffix, which is what the first test
+         * holds them against.
+         */
+        val FAMILY = listOf(
+            "error_offline$SUFFIX",
+            "error_timeout$SUFFIX",
+            "error_server_refused$SUFFIX",
+            "error_untrusted_server$SUFFIX",
+            "error_malformed$SUFFIX",
+        )
+
+        /** How each language says the transfer carries on rather than restarts. */
+        val RESUMPTION = mapOf(
+            "values" to Regex("picks up|pick up"),
+            "values-fr" to Regex("reprend|reprendra"),
+        )
     }
 }

@@ -41,19 +41,38 @@ fun DataError.toUserMessage(context: Context): String = when (this) {
  * The same failures, read on the storage screen, where a file was coming down
  * rather than an availability refresh going out.
  *
- * Only the wordings that name the availability refresh are said a second time
- * here. A dataset transfer cut short answered "the last known availability
- * stays on screen" tells its reader about bikes they never asked after, and
- * nothing at all about the transfer they were watching. Everything else reads
- * the same on both screens and is left to [toUserMessage], which is what keeps
- * the two from drifting apart.
+ * Two things separate a dataset transfer from a refresh of the availability,
+ * and every sentence below turns on one of them.
+ *
+ * **The server is not the same one.** "The network's server" is the bike-share
+ * operator's, which the storage screen never talks to: the files come from
+ * whoever hosts them. Somebody told their network's server refused an error 503
+ * while downloading a map would go looking for a breakdown at the wrong end.
+ *
+ * **The transfer is resumable** (SPEC §4.4), so the answer to "what now" is
+ * never "start over". That is what each of these says will happen next, and it
+ * is what the refresh's wordings cannot say — a refresh that fails leaves the
+ * last availability on screen, which is the sentence a stopped download was
+ * being answered with.
+ *
+ * Everything else — no city chosen, a local file that cannot be read — reads
+ * the same on both screens and is left to [toUserMessage] rather than copied,
+ * which is what keeps the two from drifting apart.
  *
  * @return a complete sentence, ready to be shown.
  */
 fun DataError.toDownloadMessage(context: Context): String = when (this) {
-    // What is worth saying to somebody whose download has just stopped is that
-    // nothing received is lost: these files come down resumably (SPEC §4.4).
     DataError.Offline -> context.getString(R.string.error_offline_download)
+    DataError.Timeout -> context.getString(R.string.error_timeout_download)
+    is DataError.ServerRefused ->
+        context.getString(R.string.error_server_refused_download, statusCode)
+    is DataError.UntrustedServer ->
+        context.getString(R.string.error_untrusted_server_download)
+    is DataError.MalformedResponse ->
+        // Everything unreadable arrives here: a manifest that will not parse, an
+        // address that is not one, a transfer cut in the middle. The technical
+        // detail stays in the value, as it does for the refresh.
+        context.getString(R.string.error_malformed_download)
     else -> toUserMessage(context)
 }
 
