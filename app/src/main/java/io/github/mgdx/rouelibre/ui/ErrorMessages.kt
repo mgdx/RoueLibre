@@ -38,6 +38,26 @@ fun DataError.toUserMessage(context: Context): String = when (this) {
 }
 
 /**
+ * The same failures, read on the storage screen, where a file was coming down
+ * rather than an availability refresh going out.
+ *
+ * Only the wordings that name the availability refresh are said a second time
+ * here. A dataset transfer cut short answered "the last known availability
+ * stays on screen" tells its reader about bikes they never asked after, and
+ * nothing at all about the transfer they were watching. Everything else reads
+ * the same on both screens and is left to [toUserMessage], which is what keeps
+ * the two from drifting apart.
+ *
+ * @return a complete sentence, ready to be shown.
+ */
+fun DataError.toDownloadMessage(context: Context): String = when (this) {
+    // What is worth saying to somebody whose download has just stopped is that
+    // nothing received is lost: these files come down resumably (SPEC §4.4).
+    DataError.Offline -> context.getString(R.string.error_offline_download)
+    else -> toUserMessage(context)
+}
+
+/**
  * Turns a journey that could not be composed into a sentence for the user.
  *
  * Each says what happened **and what to do about it** (SPEC §14): the missing
