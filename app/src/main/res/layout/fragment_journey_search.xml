@@ -140,6 +140,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bike_kind" />
 
+    <!-- What is missing before any journey can be worked out (SPEC §7.8).
+         A place received from another application opens this screen without
+         anybody having installed a city first, and the screen said nothing of
+         it. These two take the illustration's place rather than come on top of
+         it: the drawing is decoration, and the reason nothing can be computed
+         is not. Shown by the code alone, never by this file. -->
+    <TextView
+        android:id="@+id/missing_data"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
+        android:text="@string/journey_graph_missing"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hint"
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/missing_data_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_m"
+        android:minHeight="@dimen/touch_target_min"
+        android:text="@string/storage_open"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/missing_data"
+        tools:visibility="visible" />
+
     <!-- The shape of a journey, under the sentence that describes it. Purely
          decorative: it repeats what the text says, so a screen reader must not
          read it a second time. -->

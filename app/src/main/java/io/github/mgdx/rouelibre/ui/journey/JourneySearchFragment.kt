@@ -6,18 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
+import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.databinding.FragmentJourneySearchBinding
 import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
+import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 /**
@@ -176,6 +182,59 @@ class JourneySearchFragment : Fragment() {
         }
         setUpOwnBike()
         setUpBikeKind()
+        views.missingDataAction.setOnClickListener { openStorage() }
+        showInstalledData()
+    }
+
+    /**
+     * Says, where nothing is installed, that no journey can be worked out
+     * (SPEC §7.8).
+     *
+     * A place received from another application reaches this screen without
+     * anybody having chosen a city first, and the screen showed the whole form
+     * — the two fields, the drawing, the compute button — with nothing to say
+     * that it had no map to compute anything from. The specification wants that
+     * lack explained and the download offered rather than left to fail, which is
+     * what the address search already does when its index is missing.
+     *
+     * The point received stays in its field throughout: it is the one thing the
+     * user actually sent, and it must survive the trip to the storage screen and
+     * back. Followed rather than read once, so the notice goes of its own accord
+     * when that trip ends with a city installed.
+     */
+    private fun showInstalledData() {
+        val store = (requireActivity().application as RoueLibreApplication).container.datasetStore
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                store.installed
+                    .map { DatasetKind.Routing in it }
+                    // The inventory is re-read whole on every install; only its
+                    // answer about the routing graph changes anything here.
+                    .distinctUntilChanged()
+                    .collect(::showRoutingData)
+            }
+        }
+    }
+
+    /**
+     * Shows the notice, or the illustration, but never the two together.
+     *
+     * The drawing is decoration and the notice is not: where a journey cannot
+     * be worked out at all, the reason takes the decoration's place rather than
+     * being squeezed in beside it.
+     */
+    private fun showRoutingData(isGraphInstalled: Boolean) {
+        val views = binding ?: return
+        views.missingData.isVisible = !isGraphInstalled
+        views.missingDataAction.isVisible = !isGraphInstalled
+        views.shape.isVisible = isGraphInstalled
+    }
+
+    private fun openStorage() {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.content, StorageFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     /**
