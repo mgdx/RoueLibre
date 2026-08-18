@@ -14,6 +14,8 @@ import androidx.core.content.res.ResourcesCompat
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.station.AvailabilityDisplay
 import io.github.mgdx.rouelibre.core.station.AvailabilityLevel
+import io.github.mgdx.rouelibre.ui.textLocale
+import java.text.NumberFormat
 import kotlin.math.roundToInt
 
 /**
@@ -61,6 +63,21 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
         // refresh to the next depending on the figures shown.
         fontFeatureSettings = "tnum"
     }
+
+    /**
+     * The digits the figure is painted in (SPEC §9).
+     *
+     * Written with `toString()`, the count came out in Latin digits beside a
+     * label whose own figures Android had already put into those of the locale
+     * served — "٢٠ docks" under a disc reading "20". A disc and the words
+     * beside it are one phrase, and a phrase does not count in two systems.
+     *
+     * Held rather than made in `onDraw`, like everything else here: the glyph
+     * is painted for every visible marker on the map. The language cannot
+     * change under it, AppCompat rebuilding the screens — and with them these
+     * views — when it is chosen.
+     */
+    private val figures = NumberFormat.getIntegerInstance(context.textLocale())
 
     private val ringBounds = RectF()
 
@@ -202,7 +219,7 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
             return
         }
 
-        val label = display.count?.toString() ?: UNKNOWN_LABEL
+        val label = display.count?.let(figures::format) ?: UNKNOWN_LABEL
         textPaint.color = palette.inkColour
         textPaint.textSize = figureSize
         // Optical centring: `descent` and `ascent` bracket the text's real
