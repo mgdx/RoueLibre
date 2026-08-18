@@ -86,19 +86,25 @@
          hides the list while this stands, because the shortcuts drawn
          underneath turned both into an unreadable overlap. It scrolls rather
          than grow past that area, so that no text size can push the button
-         off the bottom of the screen. -->
+         off the bottom of the screen.
+
+         Its own anchors, and not the list's, although the two cover the same
+         area: a view hidden by the code is reduced to a point, and a panel
+         hung between the top and the bottom of that point resolved to nothing
+         at all — an empty screen where the message should have been. -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/empty_state"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/space_xxl"
+        android:layout_marginTop="@dimen/space_m"
         android:layout_marginEnd="@dimen/space_xxl"
         android:fillViewport="true"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/results"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/results"
+        app:layout_constraintTop_toBottomOf="@id/privacy_note"
         tools:visibility="visible">
 
         <LinearLayout
