@@ -76,7 +76,10 @@ public class GbfsParser {
      *
      * A station whose coordinates are absurd is dropped rather than failing the
      * whole feed: a single faulty entry on the producer's side must not deprive
-     * the user of the other 267.
+     * the user of the other 267. A station left with no name once its blanks
+     * are gone is dropped for the same reason and in the same way: it is a
+     * station nothing could be said about, and an empty line in the list and an
+     * untitled sheet say less than nothing.
      *
      * @param document the raw contents of `station_information.json`.
      */
@@ -88,12 +91,17 @@ public class GbfsParser {
             )
             val stations = envelope.data.stations.mapNotNull { entry ->
                 val position = coordinatesOrNull(entry.lat, entry.lon) ?: return@mapNotNull null
+                // The name arrives trimmed (see FlexibleTextSerializer); what
+                // is left of one that was nothing but blanks is no name at all.
+                val name = entry.name.takeIf { it.isNotEmpty() } ?: return@mapNotNull null
                 Station(
                     id = entry.stationId,
-                    name = entry.name,
+                    name = name,
                     position = position,
                     capacity = capacityOf(entry),
-                    postalCode = entry.postCode?.takeIf { it.isNotBlank() },
+                    // A postcode is written beside the name, and it arrives
+                    // from the same feed with the same liberties taken.
+                    postalCode = entry.postCode?.trim()?.takeIf { it.isNotEmpty() },
                 )
             }
             StationInformationFeed(
