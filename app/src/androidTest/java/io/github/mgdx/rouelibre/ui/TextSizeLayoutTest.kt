@@ -150,7 +150,11 @@ class TextSizeLayoutTest {
     private fun assertWritesItsTextWhole(written: Layout, what: String) {
         val lastLine = written.lineCount - 1
         assertEquals("$what is ellipsized", 0, written.getEllipsisCount(lastLine))
-        assertEquals("$what is not written to its end", written.text.length, written.getLineEnd(lastLine))
+        assertEquals(
+            "$what is not written to its end",
+            written.text.length,
+            written.getLineEnd(lastLine),
+        )
         for (line in 0 until lastLine) {
             val lastCharacter = written.text[written.getLineEnd(line) - 1]
             assertTrue(
@@ -190,15 +194,16 @@ class TextSizeLayoutTest {
 
     private fun contextAtTextSize(scale: Float): Context {
         val target = InstrumentationRegistry.getInstrumentation().targetContext
-        val configuration = Configuration(target.resources.configuration).apply { fontScale = scale }
+        val configuration = Configuration(target.resources.configuration).apply {
+            fontScale = scale
+        }
         return ContextThemeWrapper(
             target.createConfigurationContext(configuration),
             R.style.Theme_RoueLibre,
         )
     }
 
-    private fun name(screen: View, @IdRes id: Int) =
-        screen.resources.getResourceEntryName(id)
+    private fun name(screen: View, @IdRes id: Int) = screen.resources.getResourceEntryName(id)
 
     private companion object {
         /**

@@ -201,7 +201,12 @@ class ListTextSizeLayoutTest {
             screen.findViewById<View>(R.id.download_state).visibility = View.VISIBLE
             screen.setText(
                 R.id.download_state,
-                screen.context.getString(R.string.storage_downloading, "tiles.mbtiles", "12.4 MB", "35.0 MB"),
+                screen.context.getString(
+                    R.string.storage_downloading,
+                    "tiles.mbtiles",
+                    "12.4 MB",
+                    "35.0 MB",
+                ),
             )
         }
     }

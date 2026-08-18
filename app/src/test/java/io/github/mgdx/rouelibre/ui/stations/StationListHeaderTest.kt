@@ -107,31 +107,28 @@ class StationListHeaderTest {
     }
 
     /** The header's views by their identifier, the `@+id/` prefix dropped. */
-    private fun views(): Map<String, Element> =
-        root(resource("layout/fragment_station_list.xml"))
-            .descendants()
-            .mapNotNull { view ->
-                view.getAttribute("android:id")
-                    .removePrefix("@+id/")
-                    .ifEmpty { null }
-                    ?.let { it to view }
-            }
-            .toMap()
+    private fun views(): Map<String, Element> = root(resource("layout/fragment_station_list.xml"))
+        .descendants()
+        .mapNotNull { view ->
+            view.getAttribute("android:id")
+                .removePrefix("@+id/")
+                .ifEmpty { null }
+                ?.let { it to view }
+        }
+        .toMap()
 
     private fun viewOf(id: String): Element =
         checkNotNull(views()[id]) { "$id is not in fragment_station_list.xml" }
 
     /** What this view's end is pinned to, whether the parent or another view. */
-    private fun Element.endConstraint(): String =
-        getAttribute("app:layout_constraintEnd_toEndOf")
-            .takeIf { it == "parent" }
-            ?: getAttribute("app:layout_constraintEnd_toStartOf")
+    private fun Element.endConstraint(): String = getAttribute("app:layout_constraintEnd_toEndOf")
+        .takeIf { it == "parent" }
+        ?: getAttribute("app:layout_constraintEnd_toStartOf")
 
-    private fun root(file: File): Element =
-        DocumentBuilderFactory.newInstance()
-            .newDocumentBuilder()
-            .parse(file)
-            .documentElement
+    private fun root(file: File): Element = DocumentBuilderFactory.newInstance()
+        .newDocumentBuilder()
+        .parse(file)
+        .documentElement
 
     private fun Element.children(): List<Element> = (0 until childNodes.length)
         .map { childNodes.item(it) }

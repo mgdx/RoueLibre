@@ -57,10 +57,8 @@ import com.google.android.material.button.MaterialButtonToggleGroup
  * What this view never does is make the text smaller. The reader asked for big
  * characters; `autoSizeTextType` would answer no to the only thing they asked.
  */
-class ToggleRow @JvmOverloads constructor(
-    context: Context,
-    attributes: AttributeSet? = null,
-) : MaterialButtonToggleGroup(context, attributes) {
+class ToggleRow @JvmOverloads constructor(context: Context, attributes: AttributeSet? = null) :
+    MaterialButtonToggleGroup(context, attributes) {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val room = MeasureSpec.getSize(widthMeasureSpec) - paddingStart - paddingEnd
@@ -153,11 +151,10 @@ class ToggleRow @JvmOverloads constructor(
         orientation = wanted
     }
 
-    private fun shownButtons(): List<MaterialButton> =
-        (0 until childCount)
-            .map { getChildAt(it) }
-            .filterIsInstance<MaterialButton>()
-            .filter { it.visibility != View.GONE }
+    private fun shownButtons(): List<MaterialButton> = (0 until childCount)
+        .map { getChildAt(it) }
+        .filterIsInstance<MaterialButton>()
+        .filter { it.visibility != View.GONE }
 
     private companion object {
         /** See the class comment: two, and why it is two. */

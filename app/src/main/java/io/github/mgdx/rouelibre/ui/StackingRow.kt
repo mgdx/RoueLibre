@@ -46,10 +46,8 @@ import android.widget.LinearLayout
  * What this view never does is make the text smaller. The reader asked for
  * large characters.
  */
-class StackingRow @JvmOverloads constructor(
-    context: Context,
-    attributes: AttributeSet? = null,
-) : LinearLayout(context, attributes) {
+class StackingRow @JvmOverloads constructor(context: Context, attributes: AttributeSet? = null) :
+    LinearLayout(context, attributes) {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val room = MeasureSpec.getSize(widthMeasureSpec) - paddingStart - paddingEnd
@@ -103,8 +101,7 @@ class StackingRow @JvmOverloads constructor(
         orientation = wanted
     }
 
-    private fun shownBlocks(): List<View> =
-        (0 until childCount)
-            .map { getChildAt(it) }
-            .filter { it.visibility != View.GONE }
+    private fun shownBlocks(): List<View> = (0 until childCount)
+        .map { getChildAt(it) }
+        .filter { it.visibility != View.GONE }
 }

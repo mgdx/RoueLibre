@@ -69,10 +69,8 @@ import io.github.mgdx.rouelibre.R
  * What this view never does is make the text smaller. The reader asked for large
  * characters.
  */
-class StationRow @JvmOverloads constructor(
-    context: Context,
-    attributes: AttributeSet? = null,
-) : ConstraintLayout(context, attributes) {
+class StationRow @JvmOverloads constructor(context: Context, attributes: AttributeSet? = null) :
+    ConstraintLayout(context, attributes) {
 
     private lateinit var indicator: View
     private lateinit var name: TextView
