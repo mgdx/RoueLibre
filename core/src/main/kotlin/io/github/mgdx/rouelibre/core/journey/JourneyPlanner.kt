@@ -1,6 +1,8 @@
 package io.github.mgdx.rouelibre.core.journey
 
+import io.github.mgdx.rouelibre.core.geo.BoundingBox
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.geo.covers
 import io.github.mgdx.rouelibre.core.geo.distanceInMetresTo
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.routing.RouteResult
@@ -90,11 +92,16 @@ import kotlin.time.Duration.Companion.seconds
  * @property wantedBike the kind of bike asked for, with the network's table to
  *   recognise it by, or `null` — the default — to ask for nothing. Built without
  *   it, this class behaves exactly as it did before the choice existed.
+ * @property coveredArea the box the city's data was cut from, or `null` when it
+ *   is not known. It decides which points can be served at all — see
+ *   [outsideCoverage] — and a planner built without it refuses nothing, exactly
+ *   as it did before the check existed.
  */
 public class JourneyPlanner(
     private val router: Router,
     private val settings: JourneySettings = JourneySettings(),
     private val wantedBike: BikeKindFilter? = null,
+    private val coveredArea: BoundingBox? = null,
 ) {
 
     /**
@@ -110,6 +117,7 @@ public class JourneyPlanner(
         destination: Coordinates,
         stations: List<StationWithAvailability>,
     ): JourneyPlan {
+        outsideCoverage(origin, destination)?.let { return it }
         val tripMetres = origin.distanceInMetresTo(destination)
 
         val departures = candidates(
@@ -219,15 +227,42 @@ public class JourneyPlanner(
     public suspend fun planWithOwnBike(
         origin: Coordinates,
         destination: Coordinates,
-    ): JourneyPlan = when (
-        val result = router.route(origin, destination, settings.riddenBike.travelMode)
-    ) {
-        is RouteResult.Success -> JourneyPlan.OwnBike(result.leg.atThePacesAsked())
-        // The engine's reason is kept rather than flattened into "no route":
-        // a graph that is not installed and a point outside the covered area
-        // call for two different things to be done about them (SPEC §7.4).
-        is RouteResult.Failure -> JourneyPlan.Impossible(result.reason.toNoBikeJourney())
+    ): JourneyPlan {
+        outsideCoverage(origin, destination)?.let { return it }
+        return when (
+            val result = router.route(origin, destination, settings.riddenBike.travelMode)
+        ) {
+            is RouteResult.Success -> JourneyPlan.OwnBike(result.leg.atThePacesAsked())
+            // The engine's reason is kept rather than flattened into "no route":
+            // a graph that is not installed and a point outside the covered area
+            // call for two different things to be done about them (SPEC §7.4).
+            is RouteResult.Failure -> JourneyPlan.Impossible(result.reason.toNoBikeJourney())
+        }
     }
+
+    /**
+     * Refuses, before anything is computed, a journey with an end outside the
+     * data (SPEC §4, §7.8).
+     *
+     * SPEC §7.8 asks for it in those words: a point outside the box is said to
+     * be outside "without attempting a route computation". There is nothing to
+     * attempt — every dataset is cut from that one rectangle, so beyond it
+     * there is no graph to ride on and no street to walk down, and what the
+     * engine would eventually come back with reads as a hole in the streets
+     * rather than as the edge of what was downloaded.
+     *
+     * **The box is what was downloaded, not what the graph joins up.** A point
+     * inside it that no way reaches is another matter entirely, and it is left
+     * to the engine to answer for it.
+     *
+     * @return the refusal, or `null` when both ends can be served.
+     */
+    private fun outsideCoverage(origin: Coordinates, destination: Coordinates): JourneyPlan? =
+        if (coveredArea.covers(origin) && coveredArea.covers(destination)) {
+            null
+        } else {
+            JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage)
+        }
 
     /**
      * Keeps the nearest stations that actually provide the service.
@@ -575,6 +610,15 @@ public class JourneyPlanner(
      * It is computed here even if the distance made it useless for comparison:
      * without a bike it is the only answer we can give, and giving it is worth
      * the time it costs.
+     *
+     * **That last walk is also where the engine's own reason is recovered.**
+     * Every leg above comes back through [legOrNull], which keeps the track and
+     * drops why it failed — a loss of no consequence while a single pair simply
+     * cannot be joined, and a wrong answer when nothing could be traced at all.
+     * The walk asked for here crosses the same ground with the same data, so its
+     * failure carries the cause the whole computation stumbled on, and
+     * [decisiveOver] says when that cause outweighs the one the station search
+     * had reached.
      */
     private suspend fun giveUp(
         origin: Coordinates,
@@ -582,11 +626,9 @@ public class JourneyPlanner(
         reason: NoBikeJourney,
     ): JourneyPlan {
         coroutineContext.ensureActive()
-        val walk = legOrNull(origin, destination, TravelMode.Walking)
-        return if (walk != null) {
-            JourneyPlan.WalkOnly(walk, reason)
-        } else {
-            JourneyPlan.Impossible(reason)
+        return when (val walk = router.route(origin, destination, TravelMode.Walking)) {
+            is RouteResult.Success -> JourneyPlan.WalkOnly(walk.leg.atThePacesAsked(), reason)
+            is RouteResult.Failure -> JourneyPlan.Impossible(walk.reason.decisiveOver(reason))
         }
     }
 
@@ -659,4 +701,23 @@ public fun RoutingFailure.toNoBikeJourney(): NoBikeJourney = when (this) {
     RoutingFailure.GraphMissing -> NoBikeJourney.GraphMissing
     RoutingFailure.OutsideCoverage -> NoBikeJourney.OutsideCoverage
     else -> NoBikeJourney.NoRouteBetweenStations
+}
+
+/**
+ * The cause to announce when the walk of last resort failed as well.
+ *
+ * Two engine failures answer for the whole computation rather than for one leg:
+ * data that is not installed, and a point the data never covered. Neither is
+ * about the streets, both say what the user can do about it, and both stop
+ * every leg alike — so they replace [reason], which in their presence could
+ * only ever have been "no route between the stations", over a graph that was
+ * not being read.
+ *
+ * Every other failure leaves [reason] standing. It came from the state of the
+ * network rather than from the engine — no bike nearby, no free dock — and it
+ * is both truer and more useful than anything the engine's silence could add.
+ */
+private fun RoutingFailure.decisiveOver(reason: NoBikeJourney): NoBikeJourney = when (this) {
+    RoutingFailure.GraphMissing, RoutingFailure.OutsideCoverage -> toNoBikeJourney()
+    else -> reason
 }

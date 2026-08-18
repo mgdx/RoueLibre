@@ -77,7 +77,18 @@ class OfflineRouter(
         val waypoints = listOf(waypointOf(from, "origin"), waypointOf(to, "destination"))
 
         val engine = try {
-            RoutingEngine(null, null, segments, waypoints, routingContext)
+            RoutingEngine(null, null, segments, waypoints, routingContext).apply {
+                // Left to itself the engine prints the whole GPX of every track
+                // it finds on `System.out` — every point, in latitude, longitude
+                // and altitude — which on Android is the logcat: a buffer shared
+                // with the rest of the system and picked up again by
+                // `adb bugreport`. That is a recording of the journeys computed,
+                // which SPEC §2 constraint C3 forbids keeping, and which the "about"
+                // screen promises does not happen. The upstream field is spelt
+                // `quite`; it means "be quiet", and it silences nothing else — the
+                // track is still returned through `foundTrack`.
+                quite = true
+            }
         } catch (error: RuntimeException) {
             return@withContext RouteResult.Failure(
                 RoutingFailure.EngineFailure(error.message ?: "engine unavailable"),
@@ -111,9 +122,21 @@ class OfflineRouter(
     private fun failureOf(message: String): RoutingFailure = when {
         message.contains("timeout", ignoreCase = true) -> RoutingFailure.Timeout
         // The engine uses these wordings when the point falls outside the
-        // loaded segments, or too far from any way in the graph.
+        // loaded segments, or too far from any way in the graph. A point
+        // further out never even reaches that stage: no segment file covers it
+        // at all, and what comes back names the tile it went looking for —
+        // "datafile E0_N50.rd5 not found". That is not a graph that is
+        // missing, which is answered above by looking at the directory itself;
+        // it is a point the downloaded graph was never cut to reach, and
+        // reading it as anything else made the application answer a user
+        // standing two hundred kilometres away that no path joined the two
+        // points.
         message.contains("position not mapped", ignoreCase = true) ||
-            message.contains("out of", ignoreCase = true) -> RoutingFailure.OutsideCoverage
+            message.contains("out of", ignoreCase = true) ||
+            (
+                message.contains("datafile", ignoreCase = true) &&
+                    message.contains("not found", ignoreCase = true)
+                ) -> RoutingFailure.OutsideCoverage
         message.contains("no track found", ignoreCase = true) ||
             message.contains("target island", ignoreCase = true) -> RoutingFailure.NoRouteFound
         else -> RoutingFailure.EngineFailure(message)

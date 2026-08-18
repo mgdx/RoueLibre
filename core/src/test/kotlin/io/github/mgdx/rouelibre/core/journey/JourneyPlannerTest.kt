@@ -1,5 +1,6 @@
 package io.github.mgdx.rouelibre.core.journey
 
+import io.github.mgdx.rouelibre.core.geo.BoundingBox
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.geo.distanceInMetresTo
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
@@ -865,6 +866,126 @@ class JourneyPlannerTest {
         val plan = planner.planWithOwnBike(origin, destination)
 
         assertEquals(JourneyPlan.Impossible(NoBikeJourney.GraphMissing), plan)
+    }
+
+    // -------------------------------------------------- reason for giving up --
+
+    /** A router that traces nothing at all, always for the same reason. */
+    private class FailingRouter(private val failure: RoutingFailure) : Router {
+        override suspend fun route(
+            from: Coordinates,
+            to: Coordinates,
+            mode: TravelMode,
+        ): RouteResult = RouteResult.Failure(failure)
+    }
+
+    /** Two stations, so the share-bike path runs its full length. */
+    private fun departureAndArrival() = listOf(
+        station("depart", at(0.0, 100.0), bikes = 12, docks = 0),
+        station("arrivee", at(0.0, 3900.0), bikes = 0, docks = 12),
+    )
+
+    @Test
+    fun `on a share bike, a missing graph is said to be missing`() = runTest {
+        // The share-bike path answered "no path between those two points",
+        // accusing the streets of a hole where the routing data had simply
+        // never been installed — while the same journey on one's own bike said
+        // so plainly (SPEC §7.4).
+        val planner = JourneyPlanner(FailingRouter(RoutingFailure.GraphMissing))
+
+        val plan = planner.plan(origin, destination, departureAndArrival())
+
+        assertEquals(JourneyPlan.Impossible(NoBikeJourney.GraphMissing), plan)
+    }
+
+    @Test
+    fun `on a share bike, a point outside the covered area is said to be outside`() = runTest {
+        val planner = JourneyPlanner(FailingRouter(RoutingFailure.OutsideCoverage))
+
+        val plan = planner.plan(origin, destination, departureAndArrival())
+
+        assertEquals(JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage), plan)
+    }
+
+    @Test
+    fun `an engine failure does not overwrite the reason the network gave`() = runTest {
+        // "No station nearby has a bike" says what happened and what to wait
+        // for; the engine failing on the walk of last resort adds nothing to
+        // it, and must not take its place.
+        val stations = listOf(
+            station("vide", at(0.0, 100.0), bikes = 0),
+            station("arrivee", at(0.0, 3900.0), bikes = 0, docks = 12),
+        )
+        val planner = JourneyPlanner(FailingRouter(RoutingFailure.NoRouteFound))
+
+        val plan = planner.plan(origin, destination, stations)
+
+        assertEquals(JourneyPlan.Impossible(NoBikeJourney.NoBikeNearby), plan)
+    }
+
+    // -------------------------------------------------------- covered area --
+
+    /**
+     * The box the city's data was cut from, drawn around the points used here.
+     *
+     * Stated through [at], so it moves with them: what these tests are about is
+     * the edge, and an edge written in degrees of its own would drift from the
+     * points it is supposed to enclose.
+     */
+    private val servedArea = BoundingBox(
+        south = at(-2000.0, 0.0).latitude,
+        west = at(0.0, -2000.0).longitude,
+        north = at(2000.0, 0.0).latitude,
+        east = at(0.0, 6000.0).longitude,
+    )
+
+    @Test
+    fun `a point just outside the covered area is refused without computing`() = runTest {
+        // One metre past the northern edge. SPEC §7.8: say so clearly, without
+        // attempting a route computation — outside the box there is no graph
+        // to compute on, and the engine's failure would read as a hole in the
+        // streets rather than as the edge of the data.
+        val router = FakeRouter()
+        val planner = JourneyPlanner(router, coveredArea = servedArea)
+
+        val plan = planner.plan(at(2001.0, 0.0), destination, departureAndArrival())
+
+        assertEquals(JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage), plan)
+        assertEquals(0, router.walkingCalls)
+        assertEquals(0, router.cyclingCalls)
+    }
+
+    @Test
+    fun `a point on the very edge of the covered area is served`() = runTest {
+        // The edge belongs to the box: the data was generated up to it, and
+        // refusing there would withdraw a strip of the conurbation.
+        val planner = JourneyPlanner(FakeRouter(), coveredArea = servedArea)
+
+        val plan = planner.plan(at(2000.0, 0.0), destination, departureAndArrival())
+
+        assertTrue("expected a journey, got $plan", plan is JourneyPlan.Found)
+    }
+
+    @Test
+    fun `on one's own bike, an end outside the covered area is refused too`() = runTest {
+        // The check must hold whichever way the screen was reached and whatever
+        // bike is ridden: one metre past the eastern edge, one metre too far.
+        val router = FakeRouter()
+        val planner = JourneyPlanner(router, coveredArea = servedArea)
+
+        val plan = planner.planWithOwnBike(origin, at(0.0, 6001.0))
+
+        assertEquals(JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage), plan)
+        assertEquals(0, router.cyclingCalls)
+    }
+
+    @Test
+    fun `with no box known, no point is refused`() = runTest {
+        // Not knowing what was downloaded is no ground to refuse a point.
+        val plan = JourneyPlanner(FakeRouter())
+            .plan(at(2001.0, 0.0), destination, departureAndArrival())
+
+        assertTrue("expected a journey, got $plan", plan is JourneyPlan.Found)
     }
 
     // ------------------------------------------------------ walking pace --
