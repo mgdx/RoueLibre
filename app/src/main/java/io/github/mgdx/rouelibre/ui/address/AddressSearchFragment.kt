@@ -122,14 +122,13 @@ class AddressSearchFragment : Fragment() {
                 viewModel.state.collectLatest { state ->
                     val views = binding ?: return@collectLatest
                     adapter.submitList(state.results)
-                    showEmptyState(state)
+                    val panel = panelFor(state, showsShortcuts())
+                    showEmptyState(panel, state)
                     // The shortcuts are part of the list: it therefore has
                     // something to show even before a single letter is typed.
-                    // But the panel below is drawn over the list's own area,
-                    // and the two shown together laid "No address found" on
-                    // top of the very shortcuts it hid — so the panel, when
-                    // it has something to say, says it alone.
-                    views.results.isVisible = !views.emptyState.isVisible &&
+                    // Whether they survive the panel above them is the panel's
+                    // own answer, and it is not the same for all of them.
+                    views.results.isVisible = panel.keepsList &&
                         (state.results.isNotEmpty() || showsShortcuts())
                 }
             }
@@ -139,35 +138,33 @@ class AddressSearchFragment : Fragment() {
     /**
      * Shows what there is to say when the list is empty.
      *
-     * Five situations, five different gestures: wait, install the index, clear
-     * a fruitless query, type something, or import an unreadable file again.
-     * Conflating them would send the user looking for a breakdown that does not
-     * exist.
+     * Six situations, six different gestures: wait, install the index, clear a
+     * fruitless query, type something, pick one of the shortcuts, or import an
+     * unreadable file again. Conflating them would send the user looking for a
+     * breakdown that does not exist — [panelFor] is where they are told apart.
      *
-     * Whatever it ends up saying, the panel occupies the list's area on its
-     * own: the caller hides the list as soon as this leaves it visible.
+     * The panel stands above the list rather than over it, and the caller takes
+     * the list away under those of them that speak for the whole screen.
      */
-    private fun showEmptyState(state: AddressSearchUiState) {
+    private fun showEmptyState(panel: AddressSearchPanel, state: AddressSearchUiState) {
         val views = binding ?: return
-        views.emptyState.isVisible = state.results.isEmpty()
-        if (state.results.isNotEmpty()) return
+        views.emptyState.isVisible = panel != AddressSearchPanel.None
         views.emptyAction.isVisible = false
+        when (panel) {
+            AddressSearchPanel.None -> return
 
-        // A running search concludes nothing. It used to leave the previous
-        // message standing, to spare a flicker between two queries following
-        // one another; on a large index that message was an announced absence,
-        // and it stood for three seconds over a query that was about to
-        // succeed. Saying "searching" costs the flicker and cannot be wrong —
-        // and only where the screen holds nothing else, since results already
-        // on show hide this panel altogether.
-        if (state.isSearching && state.query.isNotBlank()) {
-            views.emptyTitle.setText(R.string.address_searching_title)
-            views.emptyMessage.setText(R.string.address_searching_message)
-            return
-        }
+            // A running search concludes nothing. It used to leave the previous
+            // message standing, to spare a flicker between two queries following
+            // one another; on a large index that message was an announced
+            // absence, and it stood for three seconds over a query that was
+            // about to succeed. Saying "searching" costs the flicker and cannot
+            // be wrong.
+            AddressSearchPanel.Searching -> {
+                views.emptyTitle.setText(R.string.address_searching_title)
+                views.emptyMessage.setText(R.string.address_searching_message)
+            }
 
-        when {
-            !state.isIndexInstalled -> {
+            AddressSearchPanel.NeedsIndex -> {
                 views.emptyTitle.setText(R.string.address_needs_index_title)
                 views.emptyMessage.setText(R.string.address_needs_index_message)
                 views.emptyAction.setText(R.string.storage_open)
@@ -175,26 +172,21 @@ class AddressSearchFragment : Fragment() {
                 views.emptyAction.setOnClickListener { openStorage() }
             }
 
-            state.error != null -> {
+            AddressSearchPanel.Unreadable -> {
                 views.emptyTitle.setText(R.string.address_unreadable_title)
-                views.emptyMessage.text = state.error.toUserMessage(requireContext())
+                views.emptyMessage.text = state.error?.toUserMessage(requireContext())
                 views.emptyAction.setText(R.string.storage_open)
                 views.emptyAction.isVisible = true
                 views.emptyAction.setOnClickListener { openStorage() }
             }
 
-            state.hasNoMatch -> {
+            AddressSearchPanel.NoMatch -> {
                 views.emptyTitle.setText(R.string.address_no_match_title)
                 views.emptyMessage.text =
                     getString(R.string.address_no_match_message, boundedQuery(state.query))
             }
 
-            // Nothing typed yet. With the shortcuts on screen, the list is not
-            // empty and there is nothing to invite: the invitation would land
-            // on top of the very rows that answer it.
-            showsShortcuts() -> views.emptyState.isVisible = false
-
-            else -> {
+            AddressSearchPanel.Prompt -> {
                 views.emptyTitle.setText(R.string.address_search_prompt_title)
                 views.emptyMessage.setText(R.string.address_search_prompt_message)
             }
