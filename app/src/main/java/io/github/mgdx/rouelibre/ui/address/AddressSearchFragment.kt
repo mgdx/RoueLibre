@@ -122,10 +122,15 @@ class AddressSearchFragment : Fragment() {
                 viewModel.state.collectLatest { state ->
                     val views = binding ?: return@collectLatest
                     adapter.submitList(state.results)
+                    showEmptyState(state)
                     // The shortcuts are part of the list: it therefore has
                     // something to show even before a single letter is typed.
-                    views.results.isVisible = state.results.isNotEmpty() || showsShortcuts()
-                    showEmptyState(state)
+                    // But the panel below is drawn over the list's own area,
+                    // and the two shown together laid "No address found" on
+                    // top of the very shortcuts it hid — so the panel, when
+                    // it has something to say, says it alone.
+                    views.results.isVisible = !views.emptyState.isVisible &&
+                        (state.results.isNotEmpty() || showsShortcuts())
                 }
             }
         }
@@ -138,6 +143,9 @@ class AddressSearchFragment : Fragment() {
      * a fruitless query, type something, or import an unreadable file again.
      * Conflating them would send the user looking for a breakdown that does not
      * exist.
+     *
+     * Whatever it ends up saying, the panel occupies the list's area on its
+     * own: the caller hides the list as soon as this leaves it visible.
      */
     private fun showEmptyState(state: AddressSearchUiState) {
         val views = binding ?: return
@@ -178,7 +186,7 @@ class AddressSearchFragment : Fragment() {
             state.hasNoMatch -> {
                 views.emptyTitle.setText(R.string.address_no_match_title)
                 views.emptyMessage.text =
-                    getString(R.string.address_no_match_message, state.query)
+                    getString(R.string.address_no_match_message, boundedQuery(state.query))
             }
 
             // Nothing typed yet. With the shortcuts on screen, the list is not

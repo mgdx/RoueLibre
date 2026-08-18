@@ -80,15 +80,20 @@
         tools:itemCount="4"
         tools:listitem="@layout/item_address" />
 
-    <!-- An empty screen: an invitation to act, not a statement (SPEC §7). -->
-    <LinearLayout
+    <!-- An empty screen: an invitation to act, not a statement (SPEC §7).
+
+         It takes the whole of the list's area and never shares it: the code
+         hides the list while this stands, because the shortcuts drawn
+         underneath turned both into an unreadable overlap. It scrolls rather
+         than grow past that area, so that no text size can push the button
+         off the bottom of the screen. -->
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/empty_state"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="@dimen/space_xxl"
         android:layout_marginEnd="@dimen/space_xxl"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
+        android:fillViewport="true"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/results"
         app:layout_constraintEnd_toEndOf="parent"
@@ -96,31 +101,38 @@
         app:layout_constraintTop_toTopOf="@id/results"
         tools:visibility="visible">
 
-        <TextView
-            android:id="@+id/empty_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textAppearance="@style/TextAppearance.RoueLibre.Title"
-            tools:text="Aucune adresse trouvée" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/empty_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_s"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
-            tools:text="Rien ne correspond à « rue de la lune »." />
+            <TextView
+                android:id="@+id/empty_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Title"
+                tools:text="Aucune adresse trouvée" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/empty_action"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/touch_target_min"
-            android:layout_marginTop="@dimen/space_l"
-            android:visibility="gone"
-            tools:text="Gérer les données hors ligne"
-            tools:visibility="visible" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/empty_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+                tools:text="Rien ne correspond à « rue de la lune »." />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/empty_action"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/touch_target_min"
+                android:layout_marginTop="@dimen/space_l"
+                android:visibility="gone"
+                tools:text="Gérer les données hors ligne"
+                tools:visibility="visible" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

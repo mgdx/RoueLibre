@@ -15,6 +15,31 @@ import io.github.mgdx.rouelibre.ui.formatDistance
  * from one language to another (SPEC §9).
  */
 
+/**
+ * The query as the "no address found" message quotes it back.
+ *
+ * Quoting it back is what makes that message about *this* search rather than
+ * about searching in general. But the field takes as much text as one cares to
+ * paste into it, and four hundred characters wrote a ten-line quotation that
+ * pushed the advice following it out of the panel — off the screen at the
+ * larger text sizes. Past [QUERY_ECHO_LIMIT] the quotation is cut short: long
+ * enough that no address anybody types is ever shortened, short enough that the
+ * sentence saying what to try next stays in sight.
+ */
+fun boundedQuery(query: String): String = if (query.length <= QUERY_ECHO_LIMIT) {
+    query
+} else {
+    query.take(QUERY_ECHO_LIMIT).trimEnd() + Typography.ellipsis
+}
+
+/**
+ * The longest quotation the "no address found" message carries, in characters.
+ *
+ * Sixty is above the longest address the index holds — street name, number and
+ * municipality together — so a real search is never quoted back shortened.
+ */
+private const val QUERY_ECHO_LIMIT = 60
+
 /** The main line: "12 bis Rue Nationale", or the name alone. */
 fun AddressResult.toTitle(context: Context): String {
     val number = houseNumber ?: return streetName
