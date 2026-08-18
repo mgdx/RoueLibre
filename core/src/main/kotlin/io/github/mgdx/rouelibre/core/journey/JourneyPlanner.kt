@@ -575,6 +575,15 @@ public class JourneyPlanner(
      * It is computed here even if the distance made it useless for comparison:
      * without a bike it is the only answer we can give, and giving it is worth
      * the time it costs.
+     *
+     * **That last walk is also where the engine's own reason is recovered.**
+     * Every leg above comes back through [legOrNull], which keeps the track and
+     * drops why it failed — a loss of no consequence while a single pair simply
+     * cannot be joined, and a wrong answer when nothing could be traced at all.
+     * The walk asked for here crosses the same ground with the same data, so its
+     * failure carries the cause the whole computation stumbled on, and
+     * [decisiveOver] says when that cause outweighs the one the station search
+     * had reached.
      */
     private suspend fun giveUp(
         origin: Coordinates,
@@ -582,11 +591,9 @@ public class JourneyPlanner(
         reason: NoBikeJourney,
     ): JourneyPlan {
         coroutineContext.ensureActive()
-        val walk = legOrNull(origin, destination, TravelMode.Walking)
-        return if (walk != null) {
-            JourneyPlan.WalkOnly(walk, reason)
-        } else {
-            JourneyPlan.Impossible(reason)
+        return when (val walk = router.route(origin, destination, TravelMode.Walking)) {
+            is RouteResult.Success -> JourneyPlan.WalkOnly(walk.leg.atThePacesAsked(), reason)
+            is RouteResult.Failure -> JourneyPlan.Impossible(walk.reason.decisiveOver(reason))
         }
     }
 
@@ -659,4 +666,23 @@ public fun RoutingFailure.toNoBikeJourney(): NoBikeJourney = when (this) {
     RoutingFailure.GraphMissing -> NoBikeJourney.GraphMissing
     RoutingFailure.OutsideCoverage -> NoBikeJourney.OutsideCoverage
     else -> NoBikeJourney.NoRouteBetweenStations
+}
+
+/**
+ * The cause to announce when the walk of last resort failed as well.
+ *
+ * Two engine failures answer for the whole computation rather than for one leg:
+ * data that is not installed, and a point the data never covered. Neither is
+ * about the streets, both say what the user can do about it, and both stop
+ * every leg alike — so they replace [reason], which in their presence could
+ * only ever have been "no route between the stations", over a graph that was
+ * not being read.
+ *
+ * Every other failure leaves [reason] standing. It came from the state of the
+ * network rather than from the engine — no bike nearby, no free dock — and it
+ * is both truer and more useful than anything the engine's silence could add.
+ */
+private fun RoutingFailure.decisiveOver(reason: NoBikeJourney): NoBikeJourney = when (this) {
+    RoutingFailure.GraphMissing, RoutingFailure.OutsideCoverage -> toNoBikeJourney()
+    else -> reason
 }

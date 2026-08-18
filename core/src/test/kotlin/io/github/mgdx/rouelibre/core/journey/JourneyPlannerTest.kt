@@ -867,6 +867,61 @@ class JourneyPlannerTest {
         assertEquals(JourneyPlan.Impossible(NoBikeJourney.GraphMissing), plan)
     }
 
+    // -------------------------------------------------- reason for giving up --
+
+    /** A router that traces nothing at all, always for the same reason. */
+    private class FailingRouter(private val failure: RoutingFailure) : Router {
+        override suspend fun route(
+            from: Coordinates,
+            to: Coordinates,
+            mode: TravelMode,
+        ): RouteResult = RouteResult.Failure(failure)
+    }
+
+    /** Two stations, so the share-bike path runs its full length. */
+    private fun departureAndArrival() = listOf(
+        station("depart", at(0.0, 100.0), bikes = 12, docks = 0),
+        station("arrivee", at(0.0, 3900.0), bikes = 0, docks = 12),
+    )
+
+    @Test
+    fun `on a share bike, a missing graph is said to be missing`() = runTest {
+        // The share-bike path answered "no path between those two points",
+        // accusing the streets of a hole where the routing data had simply
+        // never been installed — while the same journey on one's own bike said
+        // so plainly (SPEC §7.4).
+        val planner = JourneyPlanner(FailingRouter(RoutingFailure.GraphMissing))
+
+        val plan = planner.plan(origin, destination, departureAndArrival())
+
+        assertEquals(JourneyPlan.Impossible(NoBikeJourney.GraphMissing), plan)
+    }
+
+    @Test
+    fun `on a share bike, a point outside the covered area is said to be outside`() = runTest {
+        val planner = JourneyPlanner(FailingRouter(RoutingFailure.OutsideCoverage))
+
+        val plan = planner.plan(origin, destination, departureAndArrival())
+
+        assertEquals(JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage), plan)
+    }
+
+    @Test
+    fun `an engine failure does not overwrite the reason the network gave`() = runTest {
+        // "No station nearby has a bike" says what happened and what to wait
+        // for; the engine failing on the walk of last resort adds nothing to
+        // it, and must not take its place.
+        val stations = listOf(
+            station("vide", at(0.0, 100.0), bikes = 0),
+            station("arrivee", at(0.0, 3900.0), bikes = 0, docks = 12),
+        )
+        val planner = JourneyPlanner(FailingRouter(RoutingFailure.NoRouteFound))
+
+        val plan = planner.plan(origin, destination, stations)
+
+        assertEquals(JourneyPlan.Impossible(NoBikeJourney.NoBikeNearby), plan)
+    }
+
     // ------------------------------------------------------ walking pace --
 
     /**
