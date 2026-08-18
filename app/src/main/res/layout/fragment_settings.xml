@@ -35,7 +35,12 @@
         app:title="@string/settings_title"
         app:titleTextAppearance="@style/TextAppearance.RoueLibre.Title" />
 
+    <!-- The id is what keeps the scroll position. Android saves a view's state
+         only when it has one, and this screen is long enough that losing it is
+         felt: without the id, coming back from "About" or from the offline data
+         put the reader back at the top of the settings, every time. -->
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/settings_scroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

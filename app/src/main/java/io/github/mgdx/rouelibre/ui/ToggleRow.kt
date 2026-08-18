@@ -56,6 +56,26 @@ import com.google.android.material.button.MaterialButtonToggleGroup
  *
  * What this view never does is make the text smaller. The reader asked for big
  * characters; `autoSizeTextType` would answer no to the only thing they asked.
+ *
+ * **Material logs `Child order wasn't updated` under this row, and it stays.**
+ * A [MaterialButtonToggleGroup] draws its buttons in an order of its own — the
+ * checked one last, so that its stroke is not covered by its neighbours' — and
+ * it works that order out at the head of its `dispatchDraw`, into a field of
+ * its own. Until the row has been drawn once that field is empty, so a question
+ * about the drawing order asked before the first draw is answered with the
+ * natural order and a warning, one line per button. Those questions come from
+ * outside the drawing pass: chiefly the walk of the accessibility tree, which
+ * happens whenever a service — or a `uiautomator` dump — asks for it.
+ *
+ * Nothing here provokes it. Every button of every such row in the application
+ * is declared in XML and none is added, moved or removed afterwards, which is
+ * the case the message is written for. The field cannot be primed from outside
+ * the library, and the two cures left are both worse than the line they would
+ * remove: turning the custom drawing order off gives back overlapping strokes,
+ * and copying the library's ordering into this class makes us the owner of a
+ * rule we would then have to keep in step with it. So the warning is left where
+ * it is, and written down here so that the next reader of the log knows it has
+ * been looked at.
  */
 class ToggleRow @JvmOverloads constructor(context: Context, attributes: AttributeSet? = null) :
     MaterialButtonToggleGroup(context, attributes) {
