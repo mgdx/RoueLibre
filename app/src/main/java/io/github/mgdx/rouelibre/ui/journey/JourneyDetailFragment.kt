@@ -38,6 +38,7 @@ import io.github.mgdx.rouelibre.ui.formatAltitude
 import io.github.mgdx.rouelibre.ui.formatClimb
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.formatMinutes
+import io.github.mgdx.rouelibre.ui.inServedDigits
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
 import kotlinx.coroutines.flow.collectLatest
@@ -578,7 +579,14 @@ class JourneyDetailFragment : Fragment() {
         val place = if (address.postcode.isNullOrBlank()) {
             address.city
         } else {
-            getString(R.string.address_locality, address.postcode, address.city)
+            // The digits of a postcode are moved to the numeration served,
+            // never formatted: a number format would group them into
+            // "59 260" (SPEC §9).
+            getString(
+                R.string.address_locality,
+                requireContext().inServedDigits(address.postcode.orEmpty()),
+                address.city,
+            )
         }
         val what = if (address.houseNumber == null) {
             getString(R.string.station_address_nearby, address.streetName)

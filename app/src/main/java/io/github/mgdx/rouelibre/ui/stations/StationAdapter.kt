@@ -16,6 +16,7 @@ import io.github.mgdx.rouelibre.core.station.displayFor
 import io.github.mgdx.rouelibre.core.station.isBeyondCoveredArea
 import io.github.mgdx.rouelibre.databinding.ItemStationBinding
 import io.github.mgdx.rouelibre.ui.formatDistance
+import io.github.mgdx.rouelibre.ui.inServedDigits
 
 /**
  * Shows the stations as a list.
@@ -109,7 +110,12 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
             // metres away.
             val whereabouts = origin
                 ?.let { context.formatDistance(entry.station.position.distanceInMetresTo(it)) }
-                ?: entry.station.postalCode.orEmpty()
+                // A postcode is a label made of figures: its digits are moved
+                // to the numeration served — the count of docks beside it on
+                // this very line is already written in them — and never run
+                // through a number format, which would group "59260" into
+                // "59 260" (SPEC §9).
+                ?: context.inServedDigits(entry.station.postalCode.orEmpty())
             val detail = entry.station.capacity
                 ?.let {
                     // A network that publishes neither postcode nor position
@@ -147,7 +153,7 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
                     AvailabilityMode.Docks -> it.bikesAvailable
                 }
             }
-            binding.counterpart.text = counterpart?.toString()
+            binding.counterpart.text = counterpart?.let { context.inServedDigits(it) }
                 ?: context.getString(R.string.counterpart_none)
             // The label agrees with the figure beside it, and carries no number
             // of its own: the count is passed as a quantity, not as an

@@ -62,11 +62,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <!-- One line, whatever digits the locale counts in. Measured
+                     on the screen this one repeats: "٦ min" — an Arabic-Indic
+                     six from the fallback font, then a Latin word, two runs of
+                     opposite direction — breaks in two inside the width its own
+                     text asked for, which leaves the summary beside a figure
+                     twice as tall as it should be. Here the view only ever
+                     holds a duration, so the attribute settles it; the result
+                     screen also writes "No journey" in it and does the same in
+                     code. -->
                 <TextView
                     android:id="@+id/total_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/bricolage_semibold"
+                    android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.RoueLibre.Title"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

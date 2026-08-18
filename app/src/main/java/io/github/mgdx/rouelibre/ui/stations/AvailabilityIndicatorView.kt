@@ -14,8 +14,9 @@ import androidx.core.content.res.ResourcesCompat
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.station.AvailabilityDisplay
 import io.github.mgdx.rouelibre.core.station.AvailabilityLevel
+import io.github.mgdx.rouelibre.ui.inDigitsOf
 import io.github.mgdx.rouelibre.ui.textLocale
-import java.text.NumberFormat
+import io.github.mgdx.rouelibre.ui.zeroDigitOf
 import kotlin.math.roundToInt
 
 /**
@@ -72,12 +73,12 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
      * served — "٢٠ docks" under a disc reading "20". A disc and the words
      * beside it are one phrase, and a phrase does not count in two systems.
      *
-     * Held rather than made in `onDraw`, like everything else here: the glyph
-     * is painted for every visible marker on the map. The language cannot
-     * change under it, AppCompat rebuilding the screens — and with them these
-     * views — when it is chosen.
+     * The digit its numeration writes nought with is held rather than looked
+     * up in `onDraw`, like everything else here: the glyph is painted for every
+     * row the list scrolls past. The language cannot change under it, AppCompat
+     * rebuilding the screens — and with them these views — when it is chosen.
      */
-    private val figures = NumberFormat.getIntegerInstance(context.textLocale())
+    private val figureZero = zeroDigitOf(context.textLocale())
 
     private val ringBounds = RectF()
 
@@ -219,7 +220,9 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
             return
         }
 
-        val label = display.count?.let(figures::format) ?: UNKNOWN_LABEL
+        val label = display.count
+            ?.let { inDigitsOf(it.toString(), figureZero) }
+            ?: UNKNOWN_LABEL
         textPaint.color = palette.inkColour
         textPaint.textSize = figureSize
         // Optical centring: `descent` and `ascent` bracket the text's real
