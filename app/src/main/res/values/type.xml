@@ -218,6 +218,32 @@
     </style>
 
     <!--
+        A line that names one thing — a station, an address, a place picked on
+        the map, the file being downloaded, the map's attribution — as opposed
+        to a paragraph.
+
+        It refuses the two things the theme gives every text view, and for the
+        same reason `Widget.RoueLibre.SettingsLabel` refuses the first: both
+        only ever show on a line that has another after it, which a name never
+        had until the system's text size made it wrap. Justified, "Metropole
+        Europeenne de" comes out bank to bank with a hand's breadth between the
+        words and reads as three names rather than one. Hyphenated, the name is
+        no longer the name: "Metro-/pole" is not what is written on the station,
+        and station names carry hyphens of their own that a second one would be
+        read against. Running text keeps both — a paragraph has the lines to
+        absorb them.
+
+        It says nothing about the face, the size or the colour: those stay in
+        the layout's `textAppearance`, because these lines are not all set in
+        the same one — a name is body text, the line under it is secondary, the
+        attribution is a label.
+    -->
+    <style name="Widget.RoueLibre.Name" parent="Widget.RoueLibre.Text">
+        <item name="android:justificationMode">none</item>
+        <item name="android:hyphenationFrequency">none</item>
+    </style>
+
+    <!--
         The search field. Like the toggle, it carries its own colours rather
         than diverting Material roles for the whole theme.
     -->

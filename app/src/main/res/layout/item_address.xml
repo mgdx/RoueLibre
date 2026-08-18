@@ -11,6 +11,11 @@
     The press effect sits in `foreground` and not in `background`: the list
     already paints its own, and repainting per row would draw the same flat
     twice.
+
+    Neither line is held to one: an address written to its fifth letter is not
+    an address, and the row is free to grow taller (SPEC §7). It needs nothing
+    of the station row's arrangement, having only an icon of a fixed size beside
+    its text rather than a second block competing for the width.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -37,12 +42,11 @@
         tools:src="@drawable/ic_search" />
 
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_l"
-        android:ellipsize="end"
-        android:maxLines="1"
         android:textAppearance="@style/TextAppearance.RoueLibre.Body"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/kind_icon"
@@ -50,11 +54,10 @@
         tools:text="12 bis Rue Nationale" />
 
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/detail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="1"
         android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
         app:layout_constraintEnd_toEndOf="@id/title"
         app:layout_constraintStart_toStartOf="@id/title"

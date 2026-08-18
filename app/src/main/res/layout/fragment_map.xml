@@ -27,12 +27,11 @@
         open anything.
     -->
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/attribution"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/map_label_halo"
-        android:ellipsize="end"
-        android:maxLines="1"
         android:paddingStart="@dimen/space_s"
         android:paddingTop="2dp"
         android:paddingEnd="@dimen/space_s"
@@ -141,6 +140,7 @@
         not. A tap clears it.
     -->
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/picked_place"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -149,9 +149,7 @@
         android:layout_marginBottom="@dimen/space_m"
         android:background="@drawable/pill_surface"
         android:drawablePadding="@dimen/space_s"
-        android:ellipsize="end"
         android:gravity="center_vertical"
-        android:maxLines="1"
         android:minHeight="@dimen/touch_target_min"
         android:paddingStart="@dimen/space_m"
         android:paddingEnd="@dimen/space_m"
