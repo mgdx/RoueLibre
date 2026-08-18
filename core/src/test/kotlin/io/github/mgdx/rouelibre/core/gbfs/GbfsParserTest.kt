@@ -127,6 +127,45 @@ class GbfsParserTest {
     }
 
     @Test
+    fun `strips the blanks a network publishes around a station name`() {
+        // V'lille publishes "4 vents " with its trailing space, which reached
+        // the title of the station's sheet and its spoken label — "4 vents ,
+        // 8 bikes" — with the comma detached from the word.
+        val feed = assertSuccess(
+            parser.parseStationInformation(fixture("station_information_blanks.json")),
+        )
+
+        val station = feed.stations.first { it.id == "blanks-plain" }
+        assertEquals("4 vents", station.name)
+        assertEquals("59000", station.postalCode)
+    }
+
+    @Test
+    fun `strips the blanks around a translated name too`() {
+        // The same liberty, taken inside a GBFS 3 label: the trimming belongs
+        // to the reading of the name and not to one of its two encodings.
+        val feed = assertSuccess(
+            parser.parseStationInformation(fixture("station_information_blanks.json")),
+        )
+
+        val station = feed.stations.first { it.id == "blanks-translated" }
+        assertEquals("Place du Théâtre", station.name)
+    }
+
+    @Test
+    fun `a name that was nothing but blanks is no name at all`() {
+        // Dropped like a station without a position, and for the same reason:
+        // the rest of the feed must survive it, and an empty line in the list
+        // says less than nothing.
+        val feed = assertSuccess(
+            parser.parseStationInformation(fixture("station_information_blanks.json")),
+        )
+
+        assertEquals(2, feed.stations.size)
+        assertNull(feed.stations.firstOrNull { it.id == "blanks-only" })
+    }
+
+    @Test
     fun `drops a station without a position rather than rejecting the whole feed`() {
         // A single faulty entry on the producer's side must not deprive the
         // user of all the others.

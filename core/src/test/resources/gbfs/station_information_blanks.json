@@ -1,0 +1,31 @@
+{
+  "last_updated": 1755512400,
+  "ttl": 60,
+  "version": "2.3",
+  "data": {
+    "stations": [
+      {
+        "station_id": "blanks-plain",
+        "name": "4 vents ",
+        "lat": 50.641926,
+        "lon": 3.075992,
+        "capacity": 20,
+        "post_code": " 59000 "
+      },
+      {
+        "station_id": "blanks-translated",
+        "name": [{ "text": "  Place du Théâtre  ", "language": "fr" }],
+        "lat": 50.638,
+        "lon": 3.064,
+        "capacity": 24
+      },
+      {
+        "station_id": "blanks-only",
+        "name": "   ",
+        "lat": 50.636,
+        "lon": 3.071,
+        "capacity": 40
+      }
+    ]
+  }
+}

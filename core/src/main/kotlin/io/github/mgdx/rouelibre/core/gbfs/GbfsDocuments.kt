@@ -85,14 +85,23 @@ internal object FlexibleInstantSerializer : KSerializer<Instant> {
  * GBFS 3.0 made labels multilingual. No language preference is applied: the
  * first translation published is kept, for want of a better criterion and
  * because a station name is a place name, rarely translated in practice.
+ *
+ * **The blanks around the label are dropped as it is read.** Networks publish
+ * them — V'lille's "4 vents " carries a trailing space — and one travelled all
+ * the way to the title of the station's sheet and to its spoken label, where
+ * "4 vents , 8 bikes" detached the comma from the word. It is done here and not
+ * where a name is written out: nothing downstream should have to remember that
+ * a name arrives untidy, and everything that reads one — a title, a list row, a
+ * `geo:` label, a screen reader — would otherwise have to. The network's data
+ * is not being rewritten; a blank is simply not shown.
  */
 internal object FlexibleTextSerializer : KSerializer<String> {
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor("GbfsText", PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): String {
-        val jsonDecoder = decoder as? JsonDecoder ?: return decoder.decodeString()
-        return when (val element = jsonDecoder.decodeJsonElement()) {
+        val jsonDecoder = decoder as? JsonDecoder ?: return decoder.decodeString().trim()
+        val label = when (val element = jsonDecoder.decodeJsonElement()) {
             is JsonPrimitive -> element.content
             is JsonArray -> element.firstOrNull()
                 ?.jsonObject
@@ -103,6 +112,7 @@ internal object FlexibleTextSerializer : KSerializer<String> {
             is JsonObject -> element["text"]?.jsonPrimitive?.content
                 ?: throw GbfsFormatException("label without a \"text\" field")
         }
+        return label.trim()
     }
 
     override fun serialize(encoder: Encoder, value: String) {
