@@ -79,6 +79,10 @@
         <!-- Running text is justified, application-wide (SPEC §7). -->
         <item name="android:textViewStyle">@style/Widget.RoueLibre.Text</item>
 
+        <!-- A sheet is dressed by its own theme, and the line above does not
+             reach it. See ThemeOverlay.RoueLibre.BottomSheetDialog. -->
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.RoueLibre.BottomSheetDialog</item>
+
         <!-- A single radius, applied to every shape family. -->
         <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.RoueLibre</item>
         <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.RoueLibre</item>
@@ -110,6 +114,33 @@
         <item name="android:navigationBarColor">@color/identity_ground</item>
         <!-- White bars on a dark green ground. -->
         <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <!--
+        The theme a sheet sliding up from the bottom is dressed by.
+
+        It exists to undo one inheritance. Material's bottom sheet theme
+        descends from its **dialog** overlay, which points `materialButtonStyle`
+        at the style of an alert dialog's buttons — and that style carries
+        `android:lines="1"`, `android:singleLine` and `android:ellipsize="end"`,
+        decided for a pair of buttons reading "OK" and "Cancel". A style quoted
+        in a layout only overrides the attributes it names, so the three buttons
+        of a station's sheet kept their colours and their shape from
+        `Widget.RoueLibre.Toggle` and took the line limit from the theme: at
+        ×1.3 in French "Ouvrir dans une appli de navigation" came out as
+        "Ouvrir dans une appli de navig…", and at ×2.0 "Partir d'ici" as
+        "Partir d'i…". SPEC §7 rules that out — it is the height that gives way,
+        never the size of the characters, and a label written away is neither.
+
+        So the application's own button style is put back where every other
+        screen has it. Nothing else changes: the sheets' buttons all quote
+        `Widget.RoueLibre.Toggle`, which decides everything one sees, and a
+        button's layout margins are read from the layout rather than from this
+        style. What comes back with it is the absence of a line limit.
+    -->
+    <style name="ThemeOverlay.RoueLibre.BottomSheetDialog"
+        parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="materialButtonStyle">@style/Widget.RoueLibre.Button</item>
     </style>
 
     <style name="ShapeAppearance.RoueLibre" parent="ShapeAppearance.Material3.Corner.None">

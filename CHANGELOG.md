@@ -656,6 +656,79 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **A station's sheet cut off its labels and its three buttons.** Measured on a
+  Fairphone 3 in French: at ×1.3 "Ouvrir dans une appli de navig…", at ×1.8 the
+  "LIBRES" of "PLACES LIBRES" gone over the edge of the screen, at ×2.0 "PLAC",
+  "Partir d'i…" and "Ouvrir dans une appli…". The screen the text size exists
+  to serve, again made less readable by it, which SPEC §7 rules out.
+  **The two counts are now a `StackingRow`**, a third view for the answer
+  `ToggleRow` and `StationRow` already give: each count is a block of its own —
+  a disc and the word naming it, which are read as one thing — and the two
+  blocks step one under the other as soon as they are wider than the sheet. The
+  question is measured at the size in force, carries no threshold and no
+  coefficient, and the gap between the blocks becomes the gap above the second
+  one when they stack, as the station row's does.
+  **The buttons were a theme leaking in.** Material's bottom sheet theme
+  descends from its dialog overlay, which points `materialButtonStyle` at an
+  alert dialog's button — `android:lines="1"`, `android:singleLine`,
+  `android:ellipsize="end"`. A style quoted in a layout only overrides the
+  attributes it names, so the three buttons took their colours and their shape
+  from `Widget.RoueLibre.Toggle` and their line limit from Material.
+  `ThemeOverlay.RoueLibre.BottomSheetDialog` puts the application's own button
+  style back where every other screen has it, and the labels take the lines they
+  need. **Nothing else on any sheet changes**: they are the only buttons in the
+  only two sheets, and both quote the style that decides what one sees.
+  **The name, the address, the breakdown and the capacity line are no longer
+  justified or hyphenated.** They are lines that name one thing, and
+  `Widget.RoueLibre.Name` already refuses both for exactly them elsewhere; until
+  now the sheet let the theme hyphenate a station's name in the middle of a
+  word — measured at ×1.15 on a 320 dp screen — and spread "18 points d'attache
+  · Mis à jour…" bank to bank.
+  **At the normal text size nothing has moved**, pinned by a test rather than
+  asserted. `SheetTextSizeLayoutTest` lays the sheet out at the seven steps of
+  the slider, in English and in French, on 320, 360 and 411 dp, and fails on the
+  previous layout on five counts. It resolves the **bottom sheet's own theme**
+  the way the dialog resolves it, which is not a detail of the harness: under
+  `Theme.RoueLibre` alone the buttons wrap happily and the test reports a screen
+  that is broken on the device. It also asks a question the other two files do
+  not — whether a view is drawn **inside** its parent — because a label given
+  more width than the sheet has carries no ellipsis and reaches its last
+  character while half of it is off the screen, which is exactly how "PLACES
+  LIBRES" lost its second word.
+
+- **The availability disc stayed the size it was while everything around it
+  grew.** Android applies a **non-linear** magnification to sizes declared in
+  `sp` — the larger the number, the less of the reader's factor it receives —
+  and the indicator's three tokens sit far apart on that curve: the disc at
+  `52sp`, its figure at `24sp`, the body text beside it at `16sp`. Measured on a
+  Fairphone 3 running Android 15, at ×2.0 the body text grew by ×1.75, the
+  figure by ×1.50 and the disc by **×1.11**. So the disc stood still while the
+  line around it grew — the exact inverse of what SPEC §7 promises, which takes
+  this very disc as its example.
+  **The consequence is the real finding, and it is one about tests.** The room
+  the ring keeps for a three-digit count is a ratio, disc over figure, and on
+  the device it fell to **1.60**, under the **2.1** `IndicatorScaleTest`
+  requires to hold three digits inside the ring. **That test was green
+  throughout.** It reads the numbers as written in `dimens.xml`, where the ratio
+  is right, and no JVM applies the device's curve. Three tokens read at three
+  points of one curve stop describing the drawing they were chosen for, and a
+  test that never leaves the JVM cannot see it happen: it guarantees that the
+  tokens were *written* consistently, never that they *resolve* consistently.
+  **The three tokens are now read as the proportions they set out** — 52 : 24 :
+  16, taken raw from the resource table before any scale touches them. The
+  figure is painted as a multiple of the body text at the size the system is
+  actually giving body text, and the disc as a multiple of that figure. The
+  curve is neither re-implemented nor fought: it is read once, at the point
+  where the text the disc lives beside is read. **No new coefficient appears** —
+  §14 asks that each be justified, and there is none to justify, the two ratios
+  coming from the two design tokens that stay the one place these sizes are
+  decided. At the normal text size the disc is 137 px as it has always been.
+  `IndicatorScaleOnDeviceTest` measures the growth at the seven steps of the
+  slider and fails on the previous view from ×1.15 upwards; it asserts
+  **proportions rather than pixel counts**, so it holds on a phone whose curve
+  differs. SPEC §7 now carries the defect, the lesson about what an off-device
+  test can and cannot guarantee, and the party retained.
+
 - **The station list wrote station names away at the text sizes the settings
   screen was just repaired for.** At ×2.0 on a Fairphone 3 the list read
   "Alfre…", "Anato…" and "59260…": a name told from its neighbour's at the fifth

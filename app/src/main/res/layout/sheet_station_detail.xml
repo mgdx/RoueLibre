@@ -18,6 +18,7 @@
     android:paddingBottom="@dimen/space_l">
 
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -42,6 +43,7 @@
          publishes none. Hidden when the index is absent or knows nothing near
          enough — better to say nothing than to name the wrong street. -->
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -74,54 +76,85 @@
         tools:text="Hors service"
         tools:visibility="visible" />
 
-    <!-- Both indicators ask for their own size rather than being given one:
-         they hold a figure, and that figure follows the system's font size
-         (SPEC §7). -->
-    <io.github.mgdx.rouelibre.ui.stations.AvailabilityIndicatorView
-        android:id="@+id/bikes_indicator"
-        android:layout_width="wrap_content"
+    <!--
+        The two counts, each a disc and the word naming it.
+
+        The root is a `StackingRow` and not a plain row: the discs are sized in
+        `sp` and grow with the system's text size, the words beside them grow
+        too, and past a certain size the two pairs no longer fit across. They
+        then go one under the other rather than the second one running off the
+        edge of the screen, which is what "PLACES LIBRES" did at ×1.8. Why that
+        is decided by measuring rather than by a font scale is in that class.
+
+        Each pair is a block of its own, so a word never leaves its disc: what
+        is read is a figure and the word naming it, and a label that had stepped
+        below its own disc would be saying something else.
+    -->
+    <io.github.mgdx.rouelibre.ui.StackingRow
+        android:id="@+id/counts"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_l"
-        android:importantForAccessibility="no"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/service_state" />
+        app:layout_constraintTop_toBottomOf="@id/service_state">
 
-    <TextView
-        android:id="@+id/bikes_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_m"
-        android:text="@string/counterpart_bikes"
-        android:textAppearance="@style/TextAppearance.RoueLibre.Label"
-        app:layout_constraintBottom_toBottomOf="@id/bikes_indicator"
-        app:layout_constraintStart_toEndOf="@id/bikes_indicator"
-        app:layout_constraintTop_toTopOf="@id/bikes_indicator" />
+        <!-- Both indicators ask for their own size rather than being given one:
+             they hold a figure, and that figure follows the system's font size
+             (SPEC §7). -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-    <io.github.mgdx.rouelibre.ui.stations.AvailabilityIndicatorView
-        android:id="@+id/docks_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_xl"
-        android:importantForAccessibility="no"
-        app:layout_constraintStart_toEndOf="@id/bikes_label"
-        app:layout_constraintTop_toTopOf="@id/bikes_indicator" />
+            <io.github.mgdx.rouelibre.ui.stations.AvailabilityIndicatorView
+                android:id="@+id/bikes_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no" />
 
-    <TextView
-        android:id="@+id/docks_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_m"
-        android:text="@string/counterpart_docks"
-        android:textAppearance="@style/TextAppearance.RoueLibre.Label"
-        app:layout_constraintBottom_toBottomOf="@id/docks_indicator"
-        app:layout_constraintStart_toEndOf="@id/docks_indicator"
-        app:layout_constraintTop_toTopOf="@id/docks_indicator" />
+            <TextView
+                style="@style/Widget.RoueLibre.Name"
+                android:id="@+id/bikes_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_m"
+                android:text="@string/counterpart_bikes"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_xl"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <io.github.mgdx.rouelibre.ui.stations.AvailabilityIndicatorView
+                android:id="@+id/docks_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no" />
+
+            <TextView
+                style="@style/Widget.RoueLibre.Name"
+                android:id="@+id/docks_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_m"
+                android:text="@string/counterpart_docks"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Label" />
+        </LinearLayout>
+    </io.github.mgdx.rouelibre.ui.StackingRow>
 
     <!-- What those bikes are, where the network lends both kinds (SPEC §7.2).
          Hidden everywhere else, and hidden as soon as the feed's breakdown
          cannot be trusted: the figure above is then the only one shown, and it
          is always true. -->
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/bikes_split"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -130,11 +163,12 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bikes_indicator"
+        app:layout_constraintTop_toBottomOf="@id/counts"
         tools:text="3 mécaniques · 1 électrique"
         tools:visibility="visible" />
 
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/capacity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
