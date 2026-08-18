@@ -10,8 +10,13 @@
 
     The row does not paint its own background: the list does it, once and for
     all. Repainting it per row would draw the same flat twice per pixel.
+
+    The root is a `StationRow` and not a plain `ConstraintLayout`: the name and
+    the count share the row's width, and past a certain text size there is not
+    enough of it for both. What happens then, and why it is decided by measuring
+    rather than by a font scale, is in that class.
 -->
-<androidx.constraintlayout.widget.ConstraintLayout
+<io.github.mgdx.rouelibre.ui.stations.StationRow
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -25,7 +30,13 @@
 
     <!-- The indicator asks for its own size rather than being given one: it
          holds a figure, and that figure follows the system's font size
-         (SPEC §7). -->
+         (SPEC §7).
+
+         It stays centred on the row, which at the largest sizes puts the disc
+         beside the detail line rather than beside the name. Left as it is on
+         purpose: the disc belongs to the row and not to the name, nothing is
+         truncated or unreadable by it, and moving it would be a change of
+         appearance rather than a repair. -->
     <io.github.mgdx.rouelibre.ui.stations.AvailabilityIndicatorView
         android:id="@+id/indicator"
         android:layout_width="wrap_content"
@@ -79,30 +90,43 @@
             tools:text="places" />
     </LinearLayout>
 
+    <!--
+        No line limit and nothing to ellipsize with: a station's name is written
+        whole or it names nothing (SPEC §7). At the normal text size it fits on
+        one line and the row is the one it always was; past that it takes the
+        lines it needs and the row grows taller.
+
+        Its top hangs from the row and not from the indicator beside it, which
+        it did while it was one line. The indicator is centred on the row, so
+        anchoring the text to it made the row's height depend on where the
+        indicator sat and the indicator's position depend on the row's height: a
+        one-line row resolved that circle at the right answer because the
+        indicator was the taller of the two, and a wrapped one resolved it at
+        twice the height it needed. At the normal text size the indicator is
+        still the taller, so its top is the row's top and nothing has moved.
+    -->
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_l"
         android:layout_marginEnd="@dimen/space_m"
-        android:ellipsize="end"
-        android:maxLines="1"
         android:textAppearance="@style/TextAppearance.RoueLibre.Body"
         app:layout_constraintEnd_toStartOf="@id/counterpart_block"
         app:layout_constraintStart_toEndOf="@id/indicator"
-        app:layout_constraintTop_toTopOf="@id/indicator"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Gare Lille Flandres" />
 
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/detail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="1"
         android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
         app:layout_constraintEnd_toEndOf="@id/name"
         app:layout_constraintStart_toStartOf="@id/name"
         app:layout_constraintTop_toBottomOf="@id/name"
         tools:text="59000 · 40 points d'attache" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</io.github.mgdx.rouelibre.ui.stations.StationRow>

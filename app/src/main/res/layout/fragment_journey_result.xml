@@ -87,12 +87,11 @@
         app:layout_constraintTop_toBottomOf="@id/destination" />
 
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/attribution"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/map_label_halo"
-        android:ellipsize="end"
-        android:maxLines="1"
         android:paddingStart="@dimen/space_s"
         android:paddingTop="2dp"
         android:paddingEnd="@dimen/space_s"

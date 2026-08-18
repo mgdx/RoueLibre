@@ -32,12 +32,11 @@
         tools:src="@drawable/ic_my_location" />
 
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/shortcut_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_l"
-        android:ellipsize="end"
-        android:maxLines="1"
         android:textAppearance="@style/TextAppearance.RoueLibre.Body"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

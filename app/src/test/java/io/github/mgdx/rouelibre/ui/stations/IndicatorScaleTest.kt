@@ -19,6 +19,18 @@ import java.io.File
  * as `MapGlyphsTest` reads the glyphs the build ships: what is checked is what
  * the application will actually be built with. No Android runtime is involved,
  * which is what keeps this on the JVM (SPEC §14).
+ *
+ * **What this file can and cannot say.** It checks the numbers as declared, and
+ * that is the whole of its reach. It cannot see that from Android 14 a size in
+ * `sp` grows along a curve rather than by the factor asked for, the larger the
+ * declared number receiving the less of it — which on a Fairphone 3 at ×2.0 put
+ * these three tokens at ×1.75, ×1.50 and ×1.11 and dropped the ratio below to
+ * 1.60 while every assertion here still passed. The tokens are therefore read by
+ * `AvailabilityIndicatorView` as the proportions they set out, held against the
+ * body text rather than resolved one by one, and it is
+ * `IndicatorScaleOnDeviceTest` that measures whether they survive the curve.
+ * Neither file replaces the other: this one says what was drawn, that one says
+ * what a device draws.
  */
 class IndicatorScaleTest {
 
@@ -40,7 +52,8 @@ class IndicatorScaleTest {
         // Bricolage's figures run to some 0.6 em wide, so three of them and the
         // ring on either side have to fit inside the disc. Held as a ratio and
         // not as two absolute sizes, because it is the ratio that has to
-        // survive either of them being changed.
+        // survive either of them being changed — and, since the view now reads
+        // these tokens as proportions, this ratio is the one it applies.
         val disc = sizeOf(declared.getValue("indicator_size"))
         val figure = sizeOf(declared.getValue("text_indicator"))
         assertTrue(

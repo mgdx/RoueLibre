@@ -656,6 +656,58 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **The station list wrote station names away at the text sizes the settings
+  screen was just repaired for.** At ×2.0 on a Fairphone 3 the list read
+  "Alfre…", "Anato…" and "59260…": a name told from its neighbour's at the fifth
+  letter, on the screen one uses to pick a station, which is the grievance SPEC
+  §7 makes against a truncated availability figure. It was not the list alone —
+  `android:maxLines="1"` held a line to one in nine layouts — so the address
+  results, the shortcut naming a favourite station, the place picked on the map,
+  the map's attribution and the line saying what a download is doing all wrote
+  themselves away the same way. **Those lines now have no line limit and nothing
+  to ellipsize with**: they take the lines they need and what holds them grows
+  taller, with no maximum, for the reason now written into SPEC §7 — a line of a
+  list is the full width of the screen and has no equal share to stay inside, and
+  a station's name is written by the network rather than by us. The three
+  single-line **search fields are deliberately untouched**: what is typed there
+  scrolls under the caret rather than being written away, and the one line is
+  what makes the keyboard's key search.
+  **The station row also shares its width differently once the text is large.**
+  The name and the count of free docks sat side by side first-come-first-served,
+  and at ×2.0 the indicator and "PLACES LIBRES" between them left the name some
+  fifty dp of a 379 dp row — five letters, whatever was done about line limits.
+  The row is now a `StationRow`, which moves the count **below** the row's text
+  and gives the name the full width. The switch is measured, on the pattern of
+  `ToggleRow`: the name may not be left less of the row than everything else on
+  it put together, and the name laid out at the width it would actually get may
+  not come out with a word cut in two.
+  **One threshold stands in front of the first of those two, and it is the only
+  one in this work.** The sharing is asked of a reader who has turned the
+  system's text size up and of nobody else; the question about a cut word is
+  asked at every size, a cut word being a defect rather than a matter of
+  comfort. It is not a threshold of the kind SPEC §7 refuses elsewhere — those
+  guess at what a measurement can answer — but the answer to a question no
+  measurement can put: **who asked for something to change.** Somebody still at
+  the normal text size asked for nothing, and a row that rearranges itself under
+  their eyes is a regression for them whatever arithmetic produced it. It is
+  read from the text size and never from the screen width, and without it the
+  sharing rule was measured to move the count below at the normal size on a
+  360 dp screen in French and on a 320 dp one in both languages.
+  **A line that names one thing is no longer justified or hyphenated.** The
+  theme gives both to every text view, on the stated premise that a station name
+  fits on one line — a premise these changes end. Justified, "Metropole
+  Europeenne de" came out bank to bank and read as three names; hyphenated,
+  "Metro-/pole" is not the station's name. The new `Widget.RoueLibre.Name`
+  refuses both, which is the argument `Widget.RoueLibre.SettingsLabel` already
+  makes for a heading.
+  **At the normal text size nothing has moved**, and that is pinned by tests on
+  both sides of the threshold rather than asserted: the count keeps its place
+  beside the name at ×1.0 on all three screen widths in both languages, and the
+  sharing rule is in force at every step above it. `ListTextSizeLayoutTest` lays
+  every one of these lines out at the seven steps of the system's slider, in
+  English and in French, on 320, 360 and 411 dp, and fails on the previous
+  layouts.
+
 - **The settings screen cut its own labels off at the text sizes it exists to
   serve.** Every row of choices in the application laid its buttons out at an
   equal share of the width whatever they had to write, and Android wrote as much

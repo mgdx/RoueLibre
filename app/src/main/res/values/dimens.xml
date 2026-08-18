@@ -40,15 +40,24 @@
 
          The disc is in `sp` and not in `dp`, the one box in this file that
          follows the text scale rather than the screen. It holds a figure and
-         nothing else: `AvailabilityIndicatorView` paints that figure at
-         `text_indicator`, in `sp`, onto a canvas clipped to the view's bounds.
-         Frozen in `dp`, the disc therefore kept its 52 while the figure grew
-         with the system font size, and somebody who had asked Android for large
-         text read a count cut off inside its own ring — worst exactly where the
-         figure matters most, at a station of more than a hundred docks. At the
-         default scale the two units are the same, so nothing moves for anybody
-         who has asked for nothing. The ring keeps its `dp`: it is a stroke and
-         not a letter, and it only reads finer as the disc grows. -->
+         nothing else, so a disc frozen in `dp` cut the count off inside its own
+         ring for anybody who had asked Android for large text — worst exactly
+         where the figure matters most, at a station of more than a hundred
+         docks.
+
+         These three numbers are read by `AvailabilityIndicatorView` as the
+         **proportions** they set out — 52 to 24 to 16 — and not one by one. From
+         Android 14 a size in `sp` grows along a curve rather than by the factor
+         asked for, and the larger the declared number the less of the factor it
+         receives: measured on a Fairphone 3 at ×2.0, the 16 comes out at ×1.75,
+         the 24 at ×1.50 and the 52 at ×1.11. Read separately the three tokens
+         therefore drift apart, and the drawing they describe stops being the
+         drawing. Read as proportions of the body text, they hold at every
+         setting, whatever the curve does now or later. At the default scale
+         nothing moves for anybody who has asked for nothing.
+
+         The ring keeps its `dp`: it is a stroke and not a letter, and it only
+         reads finer as the disc grows. -->
     <dimen name="indicator_size">52sp</dimen>
     <dimen name="indicator_ring">4dp</dimen>
 
