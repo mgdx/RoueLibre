@@ -671,9 +671,40 @@ class JourneyResultFragment : Fragment() {
         // and each rounding its own legs made them disagree by a minute or two
         // (see JourneyMinutes).
         val minutes = option.shownMinutes()
-        views.totalTime.text = requireContext().formatMinutes(minutes.total)
+        showTotal(requireContext().formatMinutes(minutes.total))
         showSummary(option)
         showShape(option, minutes)
+    }
+
+    /**
+     * Writes what stands where the total time goes.
+     *
+     * **A figure is one line, whatever digits the locale counts it in.** On a
+     * device set to `ar` the total read "٦ min" — an Arabic-Indic six, then a
+     * Latin word, two runs of opposite direction — and broke in two inside a
+     * view measured at 143 px, which is the width that very text asks for: the
+     * line's runs need a hair more than the width the measurement had promised,
+     * and the wrap follows. The block then stood twice as tall, with the
+     * chevron — centred on this view — beside the middle of the summary rather
+     * than beside the figure, and the map lost the height. One line is also
+     * what a figure is: it is read at a glance, and a duration split across two
+     * lines is not read at all.
+     *
+     * A sentence is another matter and may take the lines it needs: "No
+     * journey" is the one thing this view holds that is not a figure, and at
+     * the largest text sizes it needs them.
+     *
+     * `setSingleLine` rather than `maxLines`, and the difference is the whole
+     * repair: a maximum of one line still breaks the text and then shows the
+     * first line alone — "٦" without its unit — where a single line is laid out
+     * as one run and kept whole.
+     *
+     * @param figure true when the view is being handed a duration.
+     */
+    private fun showTotal(text: CharSequence, figure: Boolean = true) {
+        val views = binding ?: return
+        views.totalTime.setSingleLine(figure)
+        views.totalTime.text = text
     }
 
     /**
@@ -780,9 +811,8 @@ class JourneyResultFragment : Fragment() {
         val ownBike = plan as? JourneyPlan.OwnBike
         val walkOnly = plan as? JourneyPlan.WalkOnly
         val soleLeg = ownBike?.ride ?: walkOnly?.directWalk
-        views.totalTime.text = soleLeg
-            ?.let { requireContext().formatDuration(it.duration) }
-            ?: getString(R.string.journey_none_title)
+        val total = soleLeg?.let { requireContext().formatDuration(it.duration) }
+        showTotal(total ?: getString(R.string.journey_none_title), figure = total != null)
         views.summary.text = when {
             ownBike != null -> requireContext().ownBikeSummary(ownBike.ride, ownBikeKind)
             !state.hasStations -> getString(R.string.journey_no_stations)
