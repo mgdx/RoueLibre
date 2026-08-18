@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -155,12 +156,24 @@ class StorageFragment : Fragment() {
      * 967 kB" read through "Base map deleted" — and neither could be read. The
      * bar is therefore anchored to the button, which pushes it up by its
      * height.
+     *
+     * **This screen's messages need more than the two lines a snackbar gives.**
+     * They are the only ones carrying a dataset's name in front of them —
+     * "Routing data: …" — and what follows has to say both what failed and what
+     * happens next, which measured 188 px of a full two lines at sixty-four
+     * characters on a 1080-wide screen. A third line was therefore missing
+     * before the sentence was, and a fourth is the margin somebody reading at
+     * twice the text size needs. Not more: past four a snackbar stops being a
+     * remark in passing and becomes a wall over the screen it comments on.
      */
     private fun showMessage(message: CharSequence) {
         val views = binding ?: return
-        Snackbar.make(views.root, message, Snackbar.LENGTH_LONG)
+        val bar = Snackbar.make(views.root, message, Snackbar.LENGTH_LONG)
             .setAnchorView(views.checkUpdates)
-            .show()
+        bar.view
+            .findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+            .maxLines = MESSAGE_LINES
+        bar.show()
     }
 
     override fun onDestroyView() {
@@ -246,6 +259,9 @@ class StorageFragment : Fragment() {
 
     companion object {
         private const val ARGUMENT_CHECK_ON_OPEN = "check-on-open"
+
+        /** What [showMessage] lets a snackbar grow to, and no further. */
+        private const val MESSAGE_LINES = 4
 
         /**
          * Opens the screen and checks the manifest immediately (SPEC §7.9).
