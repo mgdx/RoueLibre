@@ -50,11 +50,18 @@ See `SPEC.md` §14 for the detail. In short:
 ./gradlew assembleDebug        # build
 ./gradlew test                 # JVM unit tests
 ./gradlew lint                 # static analysis
+./gradlew ktlintCheck          # formatting, and it is enforced
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
 Build and run the tests after every significant change. Do not hand me code
 that does not compile.
+
+**All four gradle commands, not the first three.** `ktlintCheck` was missing
+from this list while the project ran it all the same, and a campaign checked
+against the three others alone left five files failing it — folded signatures,
+arguments held past a hundred characters. `./gradlew ktlintFormat` corrects
+almost everything it finds; what it cannot correct, it names.
 
 ## Ask me before doing
 
