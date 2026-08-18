@@ -656,6 +656,39 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **The availability disc stayed the size it was while everything around it
+  grew.** Android applies a **non-linear** magnification to sizes declared in
+  `sp` — the larger the number, the less of the reader's factor it receives —
+  and the indicator's three tokens sit far apart on that curve: the disc at
+  `52sp`, its figure at `24sp`, the body text beside it at `16sp`. Measured on a
+  Fairphone 3 running Android 15, at ×2.0 the body text grew by ×1.75, the
+  figure by ×1.50 and the disc by **×1.11**. So the disc stood still while the
+  line around it grew — the exact inverse of what SPEC §7 promises, which takes
+  this very disc as its example.
+  **The consequence is the real finding, and it is one about tests.** The room
+  the ring keeps for a three-digit count is a ratio, disc over figure, and on
+  the device it fell to **1.60**, under the **2.1** `IndicatorScaleTest`
+  requires to hold three digits inside the ring. **That test was green
+  throughout.** It reads the numbers as written in `dimens.xml`, where the ratio
+  is right, and no JVM applies the device's curve. Three tokens read at three
+  points of one curve stop describing the drawing they were chosen for, and a
+  test that never leaves the JVM cannot see it happen: it guarantees that the
+  tokens were *written* consistently, never that they *resolve* consistently.
+  **The three tokens are now read as the proportions they set out** — 52 : 24 :
+  16, taken raw from the resource table before any scale touches them. The
+  figure is painted as a multiple of the body text at the size the system is
+  actually giving body text, and the disc as a multiple of that figure. The
+  curve is neither re-implemented nor fought: it is read once, at the point
+  where the text the disc lives beside is read. **No new coefficient appears** —
+  §14 asks that each be justified, and there is none to justify, the two ratios
+  coming from the two design tokens that stay the one place these sizes are
+  decided. At the normal text size the disc is 137 px as it has always been.
+  `IndicatorScaleOnDeviceTest` measures the growth at the seven steps of the
+  slider and fails on the previous view from ×1.15 upwards; it asserts
+  **proportions rather than pixel counts**, so it holds on a phone whose curve
+  differs. SPEC §7 now carries the defect, the lesson about what an off-device
+  test can and cannot guarantee, and the party retained.
+
 - **The station list wrote station names away at the text sizes the settings
   screen was just repaired for.** At ×2.0 on a Fairphone 3 the list read
   "Alfre…", "Anato…" and "59260…": a name told from its neighbour's at the fifth
