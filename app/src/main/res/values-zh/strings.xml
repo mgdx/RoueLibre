@@ -29,6 +29,13 @@
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
     <string name="station_out_of_service">Out of service</string>
     <string name="station_availability_unknown">Availability unknown</string>
+
+    <!-- What a station is called when its feed publishes no name for it and no
+         street to stand in for one. The station itself is kept: it is real and
+         it holds bikes, and dropping it would take it off the map over a
+         mistyped string. -->
+    <string name="station_unnamed">Unnamed station</string>
+
     <string name="station_beyond_area_short">beyond the map</string>
     <string name="station_beyond_area">This station lies outside the area the installed data covers. Its bikes are counted live, but no map and no route can reach it.</string>
 

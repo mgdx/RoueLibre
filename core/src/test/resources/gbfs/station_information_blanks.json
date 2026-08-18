@@ -20,11 +20,19 @@
         "capacity": 24
       },
       {
-        "station_id": "blanks-only",
+        "station_id": "blanks-only-with-a-street",
         "name": "   ",
         "lat": 50.636,
         "lon": 3.071,
-        "capacity": 40
+        "capacity": 40,
+        "address": " 12 Rue Nationale "
+      },
+      {
+        "station_id": "blanks-only",
+        "name": "   ",
+        "lat": 50.633,
+        "lon": 3.058,
+        "capacity": 16
       }
     ]
   }
