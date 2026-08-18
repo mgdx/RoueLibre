@@ -1,6 +1,7 @@
 package io.github.mgdx.rouelibre.ui
 
 import android.content.Context
+import android.icu.text.NumberingSystem
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.ConfigurationCompat
 import androidx.core.os.LocaleListCompat
@@ -129,15 +130,47 @@ internal fun knownLanguage(stored: Locale?): Locale? =
  * and that is the whole point: the configuration is what carries the chosen
  * language, on every context the interface draws from.
  */
-fun Context.textLocale(): Locale =
-    textLocaleFor(ConfigurationCompat.getLocales(resources.configuration)[0])
+fun Context.textLocale(): Locale {
+    val served = ConfigurationCompat.getLocales(resources.configuration)[0]
+    return textLocaleFor(served, served?.let { NumberingSystem.getInstance(it)?.name })
+}
 
 /**
  * The locale figures are written in, given the language the resources resolved
- * to.
+ * to and the digits the served locale counts in.
  *
  * A language with no translation of its own is served English text, and is owed
- * English figures with it (SPEC §9, §11.13).
+ * English figures with it (SPEC §9, §11.13): the words and the dates follow the
+ * language, and that is what [displayed] decides.
+ *
+ * **The digits themselves follow the locale served, and not that language.**
+ * Android writes the figures held in the resources — every `%d`, every plural —
+ * with the configuration's own locale, which on a device set to Arabic means
+ * Arabic-Indic digits under text that is still English. What Kotlin formats
+ * beside them therefore has to count in the same digits, or one line carries two
+ * numbering systems at once: "59260 · ٢٠ docks" was read that way on a device
+ * set to `ar` (SPEC §9).
+ *
+ * Latin digits are left as the plain language: they are what English and French
+ * are written with, and a locale carrying the extension would no longer be equal
+ * to the one it was built from.
+ *
+ * @param numberingSystem the Unicode name of the served locale's digits —
+ *   "latn", "arab", "deva" — or null when it could not be read.
  */
-internal fun textLocaleFor(displayed: Locale?): Locale =
-    if (displayed != null && displayed.language in TRANSLATED_LANGUAGES) displayed else BASE_LOCALE
+internal fun textLocaleFor(displayed: Locale?, numberingSystem: String? = null): Locale {
+    val language =
+        if (displayed != null && displayed.language in TRANSLATED_LANGUAGES) {
+            displayed
+        } else {
+            BASE_LOCALE
+        }
+    if (numberingSystem == null || numberingSystem == LATIN_DIGITS) return language
+    // Composed as a tag rather than through Locale.Builder, which throws on a
+    // name it finds ill-formed: figures are not worth a crash, and a tag that
+    // cannot be parsed simply leaves the language as it was.
+    return Locale.forLanguageTag("${language.toLanguageTag()}-u-nu-$numberingSystem")
+}
+
+/** The digits English and French are written with. */
+private const val LATIN_DIGITS = "latn"

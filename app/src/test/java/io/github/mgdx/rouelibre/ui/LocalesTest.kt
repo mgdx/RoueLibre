@@ -1,5 +1,7 @@
 package io.github.mgdx.rouelibre.ui
 
+import io.github.mgdx.rouelibre.core.measure.UnitSystem
+import io.github.mgdx.rouelibre.core.measure.writeDistance
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
@@ -7,6 +9,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
+import java.text.NumberFormat
 import java.util.Locale
 
 /**
@@ -138,12 +141,74 @@ class LocalesTest {
         }
     }
 
-    /** A language with no translation of its own reads English figures (SPEC §11.13). */
+    /**
+     * A language with no translation of its own reads English words, and the
+     * figures that go with them (SPEC §11.13).
+     *
+     * Their digits are another matter, and the served locale's: see below.
+     */
     @Test
     fun `an untranslated language reads English figures`() {
         assertEquals(Locale.ENGLISH, textLocaleFor(Locale.GERMAN))
         assertEquals(Locale.ENGLISH, textLocaleFor(null))
     }
+
+    /**
+     * A language served with no translation of its own keeps English words and
+     * takes the digits of the locale served (SPEC §9).
+     *
+     * The whole of the repair to the two numbering systems read on one line:
+     * Android writes what the resources hold — `%d`, the plurals — in the
+     * digits of the configuration's locale, so a device set to `ar` was showing
+     * "٢٠ docks" beside a "1.2 km" that Kotlin had written in Latin ones. The
+     * words stay English, since `values-ar/` still holds the English text; the
+     * figures no longer disagree with the ones beside them.
+     */
+    @Test
+    fun `an untranslated language keeps English words and the served digits`() {
+        val figures = textLocaleFor(Locale.forLanguageTag("ar"), "arab")
+
+        assertEquals(Locale.ENGLISH.language, figures.language)
+        assertEquals("٢٠", NumberFormat.getIntegerInstance(figures).format(20))
+        // The digits alone: the separator between them is the numbering
+        // system's own, and this test is about the figures.
+        assertEquals(
+            "١٢",
+            writeDistance(1_240.0, UnitSystem.Metric, figures).amount.filter { it.isDigit() },
+        )
+    }
+
+    /**
+     * English and French are written exactly as they were before the digits
+     * became the served locale's.
+     *
+     * The trap of this repair, and the reason the Latin case returns the plain
+     * language rather than one carrying `-u-nu-latn`: the two format the same
+     * figures, but a locale carrying the extension is no longer equal to the
+     * one it was built from, and everything reading the language off it would
+     * have had to be checked one by one.
+     */
+    @Test
+    fun `Latin digits leave the language exactly as it was`() {
+        assertEquals(Locale.FRENCH, textLocaleFor(Locale.FRENCH, "latn"))
+        assertEquals(Locale.ENGLISH, textLocaleFor(Locale.ENGLISH, "latn"))
+        assertEquals(Locale.ENGLISH, textLocaleFor(Locale.GERMAN, "latn"))
+        assertEquals(Locale.CANADA_FRENCH, textLocaleFor(Locale.CANADA_FRENCH, "latn"))
+    }
+
+    /** And the figures they write are the same, digit for digit. */
+    @Test
+    fun `the figures English and French write do not move`() {
+        assertEquals("1,2 km", written(textLocaleFor(Locale.FRENCH, "latn")))
+        assertEquals("1.2 km", written(textLocaleFor(Locale.ENGLISH, "latn")))
+        // A device set to a language with no translation and Latin digits reads
+        // English text, and English figures with it, as it always has.
+        assertEquals("1.2 km", written(textLocaleFor(Locale.GERMAN, "latn")))
+    }
+
+    /** A distance as the interface shows it, unit included. */
+    private fun written(locale: Locale): String =
+        writeDistance(1_240.0, UnitSystem.Metric, locale).amount + " km"
 
     /**
      * The units are read from a region, and the language offered carries none
