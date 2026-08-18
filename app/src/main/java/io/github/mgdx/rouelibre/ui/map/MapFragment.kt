@@ -399,15 +399,29 @@ class MapFragment : Fragment() {
             views.missingTilesStorage.setText(R.string.storage_open)
             views.missingTilesStorage.setOnClickListener { show(StorageFragment()) }
         }
-        // The main screen's controls do not reappear when the map is being
-        // used to designate a point: one came to aim, not to browse.
-        val showsControls = tiles != null && !isPicking()
-        showsMapControls = showsControls
-        views.modeToggle.isVisible = showsControls
+        // That last message ends by sending the reader to the station list,
+        // which is no answer to somebody designating an end of a journey: in
+        // the picker the title says what is missing and the buttons say what
+        // to do about it. The message about the city, itself, holds in both
+        // roles.
+        views.missingTilesMessage.isVisible = configuration == null || !isPicking()
+
+        // Nothing stays laid over the map while that panel covers the screen:
+        // a control hidden behind it is invisible without ceasing to be
+        // clickable, and the crosshair and "Choose this point" were being
+        // pressed blind under the panel that asked for a city.
+        val controls = mapControls(hasBaseMap = tiles != null, isPicking = isPicking())
+        showsMapControls = controls.browsing
+        views.modeToggle.isVisible = controls.browsing
         // Without a base map, an address found would have nowhere to land: the
         // search opens from the map, and presumes one.
-        views.openSearch.isVisible = showsControls
-        views.openJourney.isVisible = showsControls
+        views.openSearch.isVisible = controls.browsing
+        views.openJourney.isVisible = controls.browsing
+        views.openList.isVisible = controls.browsing
+        views.openSettings.isVisible = controls.browsing
+        views.pickCrosshair.isVisible = controls.picking
+        views.pickConfirm.isVisible = controls.picking
+        views.locateMe.isVisible = controls.locateMe
         showBikeKindFilter()
         if (tiles == null || configuration == null) return
 
@@ -699,14 +713,21 @@ class MapFragment : Fragment() {
      */
     private fun applyPickingMode(views: FragmentMapBinding) {
         if (!isPicking()) return
-        views.pickCrosshair.isVisible = true
-        views.pickConfirm.isVisible = true
         views.openList.isVisible = false
         views.openSettings.isVisible = false
         views.openSearch.isVisible = false
         views.openJourney.isVisible = false
         views.modeToggle.isVisible = false
+        // The crosshair, its button and "locate me" wait on loadTilesFor to
+        // say whether there is a base map at all: with none there is nothing
+        // to aim at, and they would only stand under the panel that says so.
+        views.locateMe.isVisible = false
         views.pickConfirm.setOnClickListener { confirmPickedPoint() }
+        // That panel offers the station list, which from here would abandon
+        // the journey being composed. The way out of a picker is the way back
+        // to the choice of the end it was opened for.
+        views.missingTilesList.setText(R.string.action_back)
+        views.missingTilesList.setOnClickListener { parentFragmentManager.popBackStack() }
     }
 
     private fun isPicking(): Boolean = arguments?.getBoolean(ARGUMENT_PICKING) == true
