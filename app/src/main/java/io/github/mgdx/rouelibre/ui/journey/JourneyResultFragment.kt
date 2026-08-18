@@ -16,11 +16,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
+import io.github.mgdx.rouelibre.AppContainer
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.data.DatasetKind
+import io.github.mgdx.rouelibre.core.geo.BoundingBox
 import io.github.mgdx.rouelibre.core.geo.PositionFix
 import io.github.mgdx.rouelibre.core.journey.JourneyMinutes
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
@@ -45,7 +47,9 @@ import io.github.mgdx.rouelibre.ui.toUserMessage
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraUpdateFactory
@@ -222,6 +226,7 @@ class JourneyResultFragment : Fragment() {
             fleet = container.fleetRepository.fleet,
             walkingPace = container.preferences.walkingPace,
             ownBikeKind = container.preferences.ownBikeKind,
+            coveredArea = container.coveredArea(),
         )
     }
 
@@ -1072,3 +1077,24 @@ class JourneyResultFragment : Fragment() {
         }
     }
 }
+
+/**
+ * The box the city in service had its data cut from, as the journey screens
+ * read it (SPEC §4).
+ *
+ * Written once for the two screens that compose a journey, so both refuse the
+ * same points: a check spelt out twice is a check that drifts apart.
+ *
+ * **It follows the city rather than the screen.** Reading the box when the
+ * screen opened would have pinned it to whichever conurbation was in service at
+ * that moment, and a journey worked out after a change of city would then be
+ * measured against the box of the one left behind. Hung off
+ * [io.github.mgdx.rouelibre.data.AppPreferences.activeCityIdFlow], it is read
+ * afresh at each computation and each change publishes a new one.
+ *
+ * `null` where no city is chosen or none carries a box, which the algorithm
+ * reads as covering everything: not knowing what was downloaded is no ground to
+ * refuse a point.
+ */
+internal fun AppContainer.coveredArea(): Flow<BoundingBox?> =
+    preferences.activeCityIdFlow.map { activeCity()?.boundingBox }
