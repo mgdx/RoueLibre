@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.github.mgdx.rouelibre.core.config.FleetDescription
+import io.github.mgdx.rouelibre.core.geo.BoundingBox
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
@@ -71,6 +72,12 @@ data class JourneyUiState(
  *   the same way and for the same reason. It reaches the ride of somebody on
  *   their own bike and nothing else: what the network lends says nothing about
  *   the bike in one's hallway, and the reverse holds just as firmly.
+ * @property coveredArea the box the city's data was cut from, read at each
+ *   computation like the rest. It is what lets a journey with an end outside
+ *   that box be refused before anything is computed (SPEC §4, §7.8), and it is
+ *   handed to the algorithm rather than examined here: the question belongs to
+ *   the business core, where the map screen can ask it in the same words. A
+ *   flow yielding `null` refuses nothing.
  */
 class JourneyViewModel(
     private val router: Router,
@@ -82,6 +89,7 @@ class JourneyViewModel(
     private val fleet: Flow<FleetDescription?> = flowOf(null),
     private val walkingPace: Flow<WalkingPace> = flowOf(WalkingPace.Normal),
     private val ownBikeKind: Flow<OwnBikeKind?> = flowOf(null),
+    private val coveredArea: Flow<BoundingBox?> = flowOf(null),
 ) : ViewModel() {
 
     /** The two ends, as the result screen may correct them without going back. */
@@ -141,7 +149,8 @@ class JourneyViewModel(
             // passed on, this journey being one leg and no step of it walked.
             if (usesOwnBike) {
                 val settings = JourneySettings(riddenBike = ownBikeKind.first().asRiddenBike())
-                val ride = JourneyPlanner(router, settings).planWithOwnBike(origin, destination)
+                val ride = JourneyPlanner(router, settings, coveredArea = coveredArea.first())
+                    .planWithOwnBike(origin, destination)
                 mutableState.update {
                     it.copy(plan = ride, isComputing = false, hasStations = true)
                 }
@@ -167,6 +176,7 @@ class JourneyViewModel(
                     riddenBike = filter?.wanted.asRiddenBike(),
                 ),
                 wantedBike = filter,
+                coveredArea = coveredArea.first(),
             )
             val plan = planner.plan(origin, destination, stations)
             mutableState.update {
@@ -208,6 +218,7 @@ class JourneyViewModel(
         private val fleet: Flow<FleetDescription?> = flowOf(null),
         private val walkingPace: Flow<WalkingPace> = flowOf(WalkingPace.Normal),
         private val ownBikeKind: Flow<OwnBikeKind?> = flowOf(null),
+        private val coveredArea: Flow<BoundingBox?> = flowOf(null),
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -224,6 +235,7 @@ class JourneyViewModel(
                 fleet,
                 walkingPace,
                 ownBikeKind,
+                coveredArea,
             ) as T
         }
     }

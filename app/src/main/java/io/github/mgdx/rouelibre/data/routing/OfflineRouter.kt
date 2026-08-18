@@ -122,9 +122,21 @@ class OfflineRouter(
     private fun failureOf(message: String): RoutingFailure = when {
         message.contains("timeout", ignoreCase = true) -> RoutingFailure.Timeout
         // The engine uses these wordings when the point falls outside the
-        // loaded segments, or too far from any way in the graph.
+        // loaded segments, or too far from any way in the graph. A point
+        // further out never even reaches that stage: no segment file covers it
+        // at all, and what comes back names the tile it went looking for —
+        // "datafile E0_N50.rd5 not found". That is not a graph that is
+        // missing, which is answered above by looking at the directory itself;
+        // it is a point the downloaded graph was never cut to reach, and
+        // reading it as anything else made the application answer a user
+        // standing two hundred kilometres away that no path joined the two
+        // points.
         message.contains("position not mapped", ignoreCase = true) ||
-            message.contains("out of", ignoreCase = true) -> RoutingFailure.OutsideCoverage
+            message.contains("out of", ignoreCase = true) ||
+            (
+                message.contains("datafile", ignoreCase = true) &&
+                    message.contains("not found", ignoreCase = true)
+                ) -> RoutingFailure.OutsideCoverage
         message.contains("no track found", ignoreCase = true) ||
             message.contains("target island", ignoreCase = true) -> RoutingFailure.NoRouteFound
         else -> RoutingFailure.EngineFailure(message)

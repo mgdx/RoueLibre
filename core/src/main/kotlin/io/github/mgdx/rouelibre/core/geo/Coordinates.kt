@@ -86,3 +86,18 @@ public data class BoundingBox(
     public val isUsable: Boolean
         get() = abs(north - south) > 0.0 && abs(east - west) > 0.0
 }
+
+/**
+ * Whether [point] is reached by data cut from this box (SPEC §4).
+ *
+ * Tiles, routing graph and address index are all cut from one rectangle, so
+ * this one question decides what any of them can answer about a point — which
+ * is why it is asked here rather than by each screen for itself.
+ *
+ * **A box that is missing or empty covers everything.** Not knowing what was
+ * downloaded is no ground to refuse a point, and it is the same reading the
+ * application already gives a station beyond the data — see
+ * [io.github.mgdx.rouelibre.core.station.isBeyondCoveredArea].
+ */
+public fun BoundingBox?.covers(point: Coordinates): Boolean =
+    this == null || !isUsable || point in this
