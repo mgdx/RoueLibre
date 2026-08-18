@@ -118,10 +118,28 @@
             The theme named here is the one Android draws the window with
             before the activity exists: the opening's green (SPEC §7.0).
             MainActivity puts the interface's own theme back as its first act.
+
+            `launchMode` holds the application to the single activity SPEC §3
+            describes — one instance, and a place arriving from elsewhere
+            (SPEC §7.8) handed to the instance already living rather than
+            starting a second one beside it. Under the default `standard` mode
+            every incoming link built one more MainActivity in the same task,
+            each carrying a map of its own, and the newcomer covered the screen
+            with the opening's green for good: that green is taken down by the
+            handover from Android's splash screen, which is shown to a task
+            being launched and not to an activity started into one already on
+            show. What the user was left looking at was a dead application.
+
+            `singleTask` and not `singleTop`, which only reuses the instance
+            when it already sits at the top of the task the intent is aimed
+            at — and a sending application that starts this one inside its own
+            task aims elsewhere. The intent then reaches `onNewIntent`, which
+            is where MainActivity reads it.
         -->
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.RoueLibre.Intro"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>

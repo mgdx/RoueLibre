@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -355,9 +356,31 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Takes in a place that arrives while the application is already up
+     * (SPEC §7.8).
+     *
+     * Reached because the activity is declared `singleTask`: the living
+     * instance is handed the intent, where a second instance used to be built
+     * over it and to sit there showing the opening's green — see the manifest,
+     * which carries the reasoning.
+     *
+     * **The screens opened since are dropped, not left underneath.** A link
+     * arriving is a new intention rather than a step further into whatever was
+     * being read, and pushing each one over the last would have somebody
+     * walking back out through every itinerary they had ever been sent. What
+     * remains under the journey is the screen the application opens on, which
+     * is exactly what a link opening the application from cold leaves under it.
+     */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+        if (intent.toPlaceRequest() != null) {
+            supportFragmentManager.popBackStack(
+                null,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE,
+            )
+        }
         welcome(intent)
     }
 
