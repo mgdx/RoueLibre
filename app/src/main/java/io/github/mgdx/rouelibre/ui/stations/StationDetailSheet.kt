@@ -33,6 +33,7 @@ import io.github.mgdx.rouelibre.core.station.isBeyondCoveredArea
 import io.github.mgdx.rouelibre.databinding.SheetStationDetailBinding
 import io.github.mgdx.rouelibre.ui.address.toTitle
 import io.github.mgdx.rouelibre.ui.formatDistance
+import io.github.mgdx.rouelibre.ui.inServedDigits
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
@@ -203,7 +204,14 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         val place = if (address.postcode.isNullOrBlank()) {
             address.city
         } else {
-            getString(R.string.address_locality, address.postcode, address.city)
+            // The digits of a postcode are moved to the numeration served,
+            // never formatted: a number format would group them into
+            // "59 260" (SPEC §9).
+            getString(
+                R.string.address_locality,
+                requireContext().inServedDigits(address.postcode.orEmpty()),
+                address.city,
+            )
         }
         // A station standing in the middle of a roundabout has no address: the
         // neighbouring street is named instead, said to be a neighbourhood.

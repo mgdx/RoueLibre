@@ -106,6 +106,20 @@ object StationMarkers {
                 // A station out of service or without a state shows no figure:
                 // writing "0" would suggest an empty station, which is not the
                 // same information.
+                //
+                // **The one figure of the interface still written in Latin
+                // digits, and it is the map's glyphs that decide it** (SPEC
+                // §9). The markers are drawn by MapLibre from the signed
+                // distance fields `tools/build_glyphs.js` bakes into the
+                // assets, and the digit stack carries the first range of 256
+                // characters alone — Bricolage itself holds no Arabic-Indic
+                // digit either. Written here, they would reach the renderer as
+                // a range that does not exist, which is what empties a tile of
+                // everything it held, streets included (see MapGlyphsTest). The
+                // cluster counts are worse still: MapLibre writes those itself,
+                // from `point_count_abbreviated`, out of reach of any locale.
+                // Moving the map to the served digits is a decision about the
+                // font shipped, not about this line.
                 addStringProperty(
                     COUNT_PROPERTY,
                     display.count?.takeIf { !display.isOutOfService }?.toString().orEmpty(),

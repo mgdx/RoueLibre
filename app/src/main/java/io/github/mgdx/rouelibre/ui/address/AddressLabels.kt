@@ -5,6 +5,7 @@ import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.address.AddressResult
 import io.github.mgdx.rouelibre.core.address.PositionPrecision
 import io.github.mgdx.rouelibre.ui.formatDistance
+import io.github.mgdx.rouelibre.ui.inServedDigits
 
 /**
  * Puts a found address into words.
@@ -44,7 +45,10 @@ private const val QUERY_ECHO_LIMIT = 60
 fun AddressResult.toTitle(context: Context): String {
     val number = houseNumber ?: return streetName
     val written = if (houseNumberSuffix.isEmpty()) {
-        number.toString()
+        // The suffixed form has the number as a `%d`, which Android already
+        // writes in the digits of the locale served; alone, it went through
+        // `toString()` and stayed Latin beside it (SPEC §9).
+        context.inServedDigits(number)
     } else {
         context.getString(R.string.address_number_with_suffix, number, houseNumberSuffix)
     }
@@ -62,7 +66,14 @@ fun AddressResult.toDetail(context: Context): String {
     val place = if (postcode.isNullOrBlank()) {
         city
     } else {
-        context.getString(R.string.address_locality, postcode, city)
+        // A postcode is a label made of figures: its digits are moved to
+        // the numeration served, never run through a number format, which
+        // would group them into "59 260" (SPEC §9).
+        context.getString(
+            R.string.address_locality,
+            context.inServedDigits(postcode.orEmpty()),
+            city,
+        )
     }
     val withDistance = distanceInMetres
         ?.let { context.getString(R.string.address_detail, place, context.formatDistance(it)) }
