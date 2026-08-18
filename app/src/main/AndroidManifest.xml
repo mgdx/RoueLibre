@@ -6,15 +6,21 @@
         The permissions requested, and no others (SPEC §10).
         INTERNET serves the GBFS feed alone and, on an explicit action, the
         download of the offline datasets.
-        The location permissions will be requested at the moment of use, never
-        at launch, and refusing them must block no screen.
+        The location permissions are requested by the map alone, once per
+        session, and refusing them blocks no screen.
     -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!--
-        Location: requested at the moment of use, on a press of the "locate
-        me" button, and never at launch. Refusing it blocks no screen — the
-        user then designates their points by hand (SPEC §10).
+        Location: requested when the map opens, once per session, and on a
+        press of "locate me" — those two moments and no other, no screen that
+        never shows a position asking for one (SPEC §7.1, §10). A refusal is
+        never repeated: "locate me" is what remains to change one's mind, and
+        no screen is blocked meanwhile — the user then designates their points
+        by hand.
+        On the very first launch the map is already in place under the welcome
+        sequence, so the system dialog arrives over its first page; SPEC §10
+        weighs that case and accepts it.
         The position comes from the system provider, never from Google's fused
         location services, and does not leave the device.
         The application does NOT declare location as required: it must install
@@ -163,6 +169,31 @@
                 <data android:host="www.openstreetmap.org" />
                 <data android:host="openstreetmap.org" />
                 <data android:host="maps.google.com" />
+            </intent-filter>
+
+            <!--
+                Google Maps' current host, and a filter of its own because
+                Android crosses the attributes of a single filter with one
+                another: the path below, declared above, would have been
+                required of the OpenStreetMap links too, which carry none.
+
+                `maps.google.com` is the historical spelling; what Google Maps
+                shares today reads `www.google.com/maps/@…`, which the parser
+                has always known how to read (SPEC §7.8). The path is what
+                keeps the application out of Android's chooser for every other
+                address on that host — a search, a mail, a video.
+            -->
+            <intent-filter android:autoVerify="false">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" />
+                <data android:host="www.google.com" />
+                <!-- "/maps" itself and what hangs under it, rather than a
+                     single prefix that would also take in a path merely
+                     beginning with those five letters. -->
+                <data android:path="/maps" />
+                <data android:pathPrefix="/maps/" />
             </intent-filter>
 
             <!--
