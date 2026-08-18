@@ -77,7 +77,18 @@ class OfflineRouter(
         val waypoints = listOf(waypointOf(from, "origin"), waypointOf(to, "destination"))
 
         val engine = try {
-            RoutingEngine(null, null, segments, waypoints, routingContext)
+            RoutingEngine(null, null, segments, waypoints, routingContext).apply {
+                // Left to itself the engine prints the whole GPX of every track
+                // it finds on `System.out` — every point, in latitude, longitude
+                // and altitude — which on Android is the logcat: a buffer shared
+                // with the rest of the system and picked up again by
+                // `adb bugreport`. That is a recording of the journeys computed,
+                // which SPEC §2 constraint C3 forbids keeping, and which the "about"
+                // screen promises does not happen. The upstream field is spelt
+                // `quite`; it means "be quiet", and it silences nothing else — the
+                // track is still returned through `foundTrack`.
+                quite = true
+            }
         } catch (error: RuntimeException) {
             return@withContext RouteResult.Failure(
                 RoutingFailure.EngineFailure(error.message ?: "engine unavailable"),
