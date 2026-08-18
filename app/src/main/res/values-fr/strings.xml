@@ -38,6 +38,13 @@
 
     <string name="station_out_of_service">Hors service</string>
     <string name="station_availability_unknown">Disponibilité inconnue</string>
+
+    <!-- What a station is called when its feed publishes no name for it and no
+         street to stand in for one. The station itself is kept: it is real and
+         it holds bikes, and dropping it would take it off the map over a
+         mistyped string. -->
+    <string name="station_unnamed">Station sans nom</string>
+
     <string name="station_beyond_area_short">hors carte</string>
     <string name="station_beyond_area">Cette station est hors de la zone couverte par les données installées. Ses vélos sont comptés en direct, mais aucune carte et aucun itinéraire ne peuvent l’atteindre.</string>
 

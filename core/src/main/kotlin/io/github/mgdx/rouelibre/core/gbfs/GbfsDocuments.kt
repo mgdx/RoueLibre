@@ -214,6 +214,15 @@ internal data class GbfsStationInformation(
      */
     @SerialName("vehicle_docks_capacity")
     val vehicleDocksCapacity: List<GbfsDockCount> = emptyList(),
+    /**
+     * The street the station stands in, where the producer publishes one.
+     *
+     * Optional in the format and absent from most feeds — the application reads
+     * its own offline index for that (SPEC §4.3). It is kept for one purpose:
+     * to name a station whose `name` arrived empty, which
+     * [GbfsParser.parseStationInformation] does.
+     */
+    val address: String? = null,
     @SerialName("post_code") val postCode: String? = null,
 )
 

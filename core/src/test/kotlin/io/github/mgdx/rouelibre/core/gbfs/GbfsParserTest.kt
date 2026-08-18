@@ -153,16 +153,31 @@ class GbfsParserTest {
     }
 
     @Test
-    fun `a name that was nothing but blanks is no name at all`() {
-        // Dropped like a station without a position, and for the same reason:
-        // the rest of the feed must survive it, and an empty line in the list
-        // says less than nothing.
+    fun `a name that was nothing but blanks falls back on the street`() {
+        // The station is kept, unlike one without a position: it is real and it
+        // holds bikes, and taking it off the map because its network mistyped a
+        // string leaves whoever stands in front of it with no explanation. The
+        // street the feed publishes is the best name at hand.
         val feed = assertSuccess(
             parser.parseStationInformation(fixture("station_information_blanks.json")),
         )
 
-        assertEquals(2, feed.stations.size)
-        assertNull(feed.stations.firstOrNull { it.id == "blanks-only" })
+        val station = feed.stations.first { it.id == "blanks-only-with-a-street" }
+        assertEquals("12 Rue Nationale", station.name)
+    }
+
+    @Test
+    fun `a station with neither name nor street is kept for the layer above to name`() {
+        // No name is invented here: naming it takes a sentence in the reader's
+        // language, which this module holds none of (SPEC §14). What matters is
+        // that the station is still in the feed — GbfsRemoteSource names it.
+        val feed = assertSuccess(
+            parser.parseStationInformation(fixture("station_information_blanks.json")),
+        )
+
+        assertEquals(4, feed.stations.size)
+        val station = feed.stations.first { it.id == "blanks-only" }
+        assertEquals("", station.name)
     }
 
     @Test

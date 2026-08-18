@@ -76,10 +76,22 @@ public class GbfsParser {
      *
      * A station whose coordinates are absurd is dropped rather than failing the
      * whole feed: a single faulty entry on the producer's side must not deprive
-     * the user of the other 267. A station left with no name once its blanks
-     * are gone is dropped for the same reason and in the same way: it is a
-     * station nothing could be said about, and an empty line in the list and an
-     * untitled sheet say less than nothing.
+     * the user of the other 267. It is dropped because there is nowhere to put
+     * it — a station with no position is on no map and in no route.
+     *
+     * **A station left with no name once its blanks are gone is kept**, and
+     * that is a decision rather than an oversight. It was dropped at first, on
+     * the grounds that nothing could be said about it; but it is a real station
+     * with real bikes, and dropping it takes it off the map and out of the list
+     * because its network mistyped one string. Somebody standing in front of it
+     * would find it missing and have no way of knowing why, whereas a row named
+     * oddly is understood at a glance. So it stays, named with the best matter
+     * at hand: **the street the feed publishes for it**, where it publishes
+     * one. Where it publishes neither, the name is left empty here and the
+     * layer that shows stations puts a translated label in its place —
+     * `GbfsRemoteSource` — this module having no business holding a sentence in
+     * one language. The producer's identifier is never used for it: `vlille_042`
+     * is not the name of a place.
      *
      * @param document the raw contents of `station_information.json`.
      */
@@ -91,12 +103,11 @@ public class GbfsParser {
             )
             val stations = envelope.data.stations.mapNotNull { entry ->
                 val position = coordinatesOrNull(entry.lat, entry.lon) ?: return@mapNotNull null
-                // The name arrives trimmed (see FlexibleTextSerializer); what
-                // is left of one that was nothing but blanks is no name at all.
-                val name = entry.name.takeIf { it.isNotEmpty() } ?: return@mapNotNull null
                 Station(
                     id = entry.stationId,
-                    name = name,
+                    // The name arrives trimmed (see FlexibleTextSerializer), so
+                    // an empty one is a name the feed did not really publish.
+                    name = entry.name.ifEmpty { entry.address?.trim().orEmpty() },
                     position = position,
                     capacity = capacityOf(entry),
                     // A postcode is written beside the name, and it arrives

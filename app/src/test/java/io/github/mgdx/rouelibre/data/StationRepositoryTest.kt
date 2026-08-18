@@ -56,6 +56,7 @@ class StationRepositoryTest {
             client = OkHttpClient(),
             parser = GbfsParser(),
             userAgent = "RoueLibre-test/1.0",
+            unnamedStationLabel = { "Unnamed station" },
             ioDispatcher = Dispatchers.IO,
         ),
         dao = dao,

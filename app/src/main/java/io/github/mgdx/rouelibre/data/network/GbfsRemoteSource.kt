@@ -9,6 +9,7 @@ import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
 import io.github.mgdx.rouelibre.core.gbfs.StationInformationFeed
 import io.github.mgdx.rouelibre.core.gbfs.StationStatusFeed
 import io.github.mgdx.rouelibre.core.gbfs.VehicleTypesFeed
+import io.github.mgdx.rouelibre.core.map
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -29,12 +30,18 @@ import javax.net.ssl.SSLException
  * @property parser the parser for the documents received.
  * @property userAgent identifies the application and its version, with no
  *   identifier specific to the user or the device (SPEC §4.4).
+ * @property unnamedStationLabel what a station is called when its feed
+ *   publishes no name for it and no street either. It comes from here because
+ *   it is a translated sentence and the parser is Android-free Kotlin
+ *   (SPEC §14); it is read at every fetch rather than captured once, so it
+ *   follows the language in force.
  * @property ioDispatcher the execution context for the IO.
  */
 class GbfsRemoteSource(
     private val client: OkHttpClient,
     private val parser: GbfsParser,
     private val userAgent: String,
+    private val unnamedStationLabel: () -> String,
     private val ioDispatcher: CoroutineDispatcher,
 ) {
 
@@ -59,6 +66,32 @@ class GbfsRemoteSource(
     ): Outcome<StationInformationFeed> = discovery.urlOf(GbfsFeedNames.STATION_INFORMATION)
         .flatMap { fetchText(it) }
         .flatMap(parser::parseStationInformation)
+        .map(::named)
+
+    /**
+     * Names the stations their network left nameless.
+     *
+     * A feed sometimes publishes a station with a blank name and no street to
+     * fall back on. Such a station is kept — it is real, it holds bikes, and
+     * taking it off the map over a mistyped string would leave whoever is
+     * standing in front of it wondering why it is missing — so it needs
+     * something to be called. That something is a translated label, which is
+     * why it is put on here and not in the parser: the parser is Kotlin with no
+     * Android in it and can hold no sentence in one language (SPEC §14).
+     *
+     * The producer's identifier is deliberately not used: `vlille_042` is not
+     * the name of a place, and a technical key under a reader's eyes explains
+     * nothing to them.
+     */
+    private fun named(feed: StationInformationFeed): StationInformationFeed = feed.copy(
+        stations = feed.stations.map { station ->
+            if (station.name.isNotEmpty()) {
+                station
+            } else {
+                station.copy(name = unnamedStationLabel())
+            }
+        },
+    )
 
     /** Reads the stations' real-time state. */
     suspend fun fetchStationStatus(discovery: GbfsDiscovery): Outcome<StationStatusFeed> =

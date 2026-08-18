@@ -333,6 +333,9 @@ class AppContainer(private val context: Context) {
                 client = httpClient,
                 parser = GbfsParser(),
                 userAgent = userAgent(),
+                // Read at each fetch and not captured here: the label must be
+                // in the language in force when the feed is read.
+                unnamedStationLabel = { context.getString(R.string.station_unnamed) },
                 ioDispatcher = Dispatchers.IO,
             ),
             dao = database.stationDao(),
