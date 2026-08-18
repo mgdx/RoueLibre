@@ -677,10 +677,22 @@ also records what has no visible effect.
   and at ×2.0 the indicator and "PLACES LIBRES" between them left the name some
   fifty dp of a 379 dp row — five letters, whatever was done about line limits.
   The row is now a `StationRow`, which moves the count **below** the row's text
-  and gives the name the full width. The switch is measured and carries no
-  threshold, on the pattern of `ToggleRow`: the count may not take more of the
-  row than the name is left with, and the name laid out at the width it would
-  actually get may not come out with a word cut in two.
+  and gives the name the full width. The switch is measured, on the pattern of
+  `ToggleRow`: the name may not be left less of the row than everything else on
+  it put together, and the name laid out at the width it would actually get may
+  not come out with a word cut in two.
+  **One threshold stands in front of the first of those two, and it is the only
+  one in this work.** The sharing is asked of a reader who has turned the
+  system's text size up and of nobody else; the question about a cut word is
+  asked at every size, a cut word being a defect rather than a matter of
+  comfort. It is not a threshold of the kind SPEC §7 refuses elsewhere — those
+  guess at what a measurement can answer — but the answer to a question no
+  measurement can put: **who asked for something to change.** Somebody still at
+  the normal text size asked for nothing, and a row that rearranges itself under
+  their eyes is a regression for them whatever arithmetic produced it. It is
+  read from the text size and never from the screen width, and without it the
+  sharing rule was measured to move the count below at the normal size on a
+  360 dp screen in French and on a 320 dp one in both languages.
   **A line that names one thing is no longer justified or hyphenated.** The
   theme gives both to every text view, on the stated premise that a station name
   fits on one line — a premise these changes end. Justified, "Metropole
@@ -688,13 +700,13 @@ also records what has no visible effect.
   "Metro-/pole" is not the station's name. The new `Widget.RoueLibre.Name`
   refuses both, which is the argument `Widget.RoueLibre.SettingsLabel` already
   makes for a heading.
-  **At the normal text size nothing has moved** on the screen the row was
-  designed on, and that is pinned by a test rather than asserted: the stricter
-  sharing rule that reads better in the middle of the range was measured to
-  rebuild the row at ×1.0 on 320 and 360 dp screens, and was refused for it.
-  `ListTextSizeLayoutTest` lays every one of these lines out at the seven steps
-  of the system's slider, in English and in French, on three screen widths, and
-  fails on the previous layouts.
+  **At the normal text size nothing has moved**, and that is pinned by tests on
+  both sides of the threshold rather than asserted: the count keeps its place
+  beside the name at ×1.0 on all three screen widths in both languages, and the
+  sharing rule is in force at every step above it. `ListTextSizeLayoutTest` lays
+  every one of these lines out at the seven steps of the system's slider, in
+  English and in French, on 320, 360 and 411 dp, and fails on the previous
+  layouts.
 
 - **The settings screen cut its own labels off at the text sizes it exists to
   serve.** Every row of choices in the application laid its buttons out at an

@@ -30,7 +30,13 @@
 
     <!-- The indicator asks for its own size rather than being given one: it
          holds a figure, and that figure follows the system's font size
-         (SPEC §7). -->
+         (SPEC §7).
+
+         It stays centred on the row, which at the largest sizes puts the disc
+         beside the detail line rather than beside the name. Left as it is on
+         purpose: the disc belongs to the row and not to the name, nothing is
+         truncated or unreadable by it, and moving it would be a change of
+         appearance rather than a repair. -->
     <io.github.mgdx.rouelibre.ui.stations.AvailabilityIndicatorView
         android:id="@+id/indicator"
         android:layout_width="wrap_content"

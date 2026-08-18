@@ -59,17 +59,60 @@ class ListTextSizeLayoutTest {
     }
 
     /**
-     * The count beside the name may not take more of the row than the name.
+     * Above the normal text size, the name gets more of the row than everything
+     * else on it put together.
      *
-     * This is the rule `StationRow` applies, checked from the outside: what one
+     * The sharing rule `StationRow` applies, checked from the outside: what one
      * sees on the screen is not a decision but two blocks, and the defect was
-     * that the supporting one had taken the row. A row that stacked would leave
-     * the name the full width, which passes this all the same.
+     * that the supporting one had taken the row. A row that has stacked leaves
+     * the name the full width, which satisfies this the same way — the rule is
+     * about what the name ends up with, not about which arrangement got it
+     * there.
+     *
+     * The normal size is left out because the rule does not run there, which is
+     * the whole of [stationRowKeepsItsShapeAtTheNormalTextSize].
      */
     @Test
-    fun stationNameIsNeverGivenLessRoomThanTheCount() {
+    fun stationNameGetsHalfTheRowAboveTheNormalTextSize() {
         for (locale in LANGUAGES) {
-            for (scale in TEXT_SIZE_STEPS) {
+            for (scale in TEXT_SIZE_STEPS.filter { it > NORMAL_TEXT_SIZE }) {
+                for (width in SCREEN_WIDTHS_IN_DP) {
+                    val row = inflate(R.layout.item_station, scale, locale, width) {
+                        fillStationRow(it)
+                    }
+                    val name = row.findViewById<View>(R.id.name)
+                    val room = row.width - row.paddingStart - row.paddingEnd
+                    assertTrue(
+                        "at ×$scale in $locale on ${width}dp the name is left ${name.width} " +
+                            "of $room",
+                        name.width >= room - name.width,
+                    )
+                }
+            }
+        }
+    }
+
+    /**
+     * At the normal text size and below it, the row is arranged as it always
+     * was: the count stands beside the name.
+     *
+     * The other side of the one threshold in this work. The sharing rule of
+     * [stationNameGetsHalfTheRowAboveTheNormalTextSize] would move the count
+     * below here on the two narrower screens — measured, in French on 360 dp and
+     * in both languages on 320 — and it is held back for the reason SPEC §7
+     * gives: a reader who has not turned the text size up has asked for nothing,
+     * and a row that rearranges itself under their eyes is a regression for
+     * them. This is what a test of the rule alone would not see.
+     *
+     * What is checked here is the **arrangement** and not the number of lines:
+     * on 320 dp a name and its detail line did not fit their column at the
+     * normal size before this change either, and were written away with an
+     * ellipsis. That they now wrap is the repair.
+     */
+    @Test
+    fun stationRowKeepsItsShapeAtTheNormalTextSize() {
+        for (locale in LANGUAGES) {
+            for (scale in TEXT_SIZE_STEPS.filter { it <= NORMAL_TEXT_SIZE }) {
                 for (width in SCREEN_WIDTHS_IN_DP) {
                     val row = inflate(R.layout.item_station, scale, locale, width) {
                         fillStationRow(it)
@@ -77,9 +120,8 @@ class ListTextSizeLayoutTest {
                     val name = row.findViewById<View>(R.id.name)
                     val count = row.findViewById<View>(R.id.counterpart_block)
                     assertTrue(
-                        "at ×$scale in $locale on ${width}dp the count takes ${count.width} " +
-                            "of the row and leaves the name ${name.width}",
-                        name.width >= count.width,
+                        "the count left the name's side at ×$scale in $locale on ${width}dp",
+                        count.top < name.bottom,
                     )
                 }
             }
@@ -304,6 +346,12 @@ class ListTextSizeLayoutTest {
          * would pass while the screen failed.
          */
         const val LONGEST_STATION_NAME = "Metropole Europeenne de Lille (CB)"
+
+        /**
+         * The system's text size when nobody has touched it — the one threshold
+         * of this work, and the line these tests are written on both sides of.
+         */
+        const val NORMAL_TEXT_SIZE = 1.0f
 
         /** A name of the length most of the network's stations carry. */
         const val ORDINARY_STATION_NAME = "Gare Lille Flandres"

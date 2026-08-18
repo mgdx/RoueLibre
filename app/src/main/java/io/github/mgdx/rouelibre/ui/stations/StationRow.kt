@@ -37,41 +37,34 @@ import io.github.mgdx.rouelibre.R
  *     under the row's text, which then spans the full width. At ×2.0 that turns
  *     fifty dp of name into three hundred.
  *
- * **The switch is measured, and carries deliberately no threshold**, exactly as
- * the settings' rows do. Two questions are put, and the count steps below if
- * either is answered no:
+ * **The switch is measured**, as the settings' rows are. Two questions are put,
+ * and the count steps below if either is answered no:
  *
- *  - **the sharing**: the row asks its own two blocks how wide they want to be,
- *    at the text size in force, and the supporting fact may not take more of the
- *    row than the subject;
+ *  - **the sharing**: the row asks its own blocks how wide they want to be, at
+ *    the text size in force, and the name may not be left less of the row than
+ *    everything else on it put together;
  *  - **what the share writes**: the name is laid out at the width it would
  *    actually get and asked whether any line of it ends in the middle of a word,
  *    which is the third of the questions `ToggleRow` puts to its buttons.
  *    Android breaks a word wider than its line between two letters and with no
  *    hyphen, so a column narrower than one word of a name reports no ellipsis
- *    while being unreadable.
+ *    while being unreadable. A comparison of widths cannot see it: a share can
+ *    be even and still be narrower than "Europeenne".
  *
- * Neither question involves a font scale, a fraction of the screen or the
- * longest label of the longest translation, and both are right on a screen
- * nobody has tested and in a language nobody has translated yet.
+ * Neither question involves a fraction of the screen or the longest label of the
+ * longest translation, and both are right on a screen nobody has tested and in a
+ * language nobody has translated yet.
  *
- * **The first question is what holds the ordinary screen still**, and it is
- * there for that. A stricter sharing was tried — the name to be left more of the
- * row than everything else on it put together — and it reads better in the
- * middle of the range, putting the count below from ×1.5 in English on a 411 dp
- * screen where this one waits for ×2.0. It was dropped because it also stacks at
- * the **normal** text size on a 360 dp screen in French and on a 320 dp screen
- * in both languages, rebuilding the row for readers who never asked for large
- * characters and have no defect to fix. What is left in the middle of the range
- * is a name on three or four lines beside its count — taller than it might be,
- * and whole, which is what §7 asks for.
+ * **One threshold stands in front of the first question**, and only the first:
+ * the sharing is asked of a reader who has turned the system's text size up, and
+ * of nobody else. [readerAskedForLargeCharacters] says why, and it is the only
+ * threshold in this work.
  *
- * **The second question is what the first cannot see**, and it is the one that
- * makes two rows of the same list differ: at a size where a long name breaks a
- * word and a short one does not, the first stacks and the second does not. That
- * is accepted rather than overlooked. The alternative is a row that keeps its
- * shape and cuts a word in half, and SPEC §7 does not treat a cut word as a
- * compromise.
+ * **The second question is what makes two rows of one list differ**: at a size
+ * where a long name breaks a word and a short one does not, the first stacks and
+ * the second does not. That is accepted rather than overlooked. The alternative
+ * is a row that keeps its shape and cuts a word in half, and SPEC §7 does not
+ * treat a cut word as a compromise.
  *
  * What this view never does is make the text smaller. The reader asked for large
  * characters.
@@ -121,23 +114,62 @@ class StationRow @JvmOverloads constructor(
     /**
      * Whether the count can stand beside the name in [room].
      *
-     * Two things are asked, and the count steps below if either says no. The
-     * first is the sharing: the supporting fact may not take more of the row
-     * than the subject. The second is what a share of that width actually
-     * writes, which is the question `ToggleRow` puts to its buttons: a column
-     * narrower than one word of the name is not a column at all, since Android
-     * breaks a word too wide for its line between two letters and with no
-     * hyphen. A 320 dp screen at ×1.3 leaves the name 105 dp and "Europeenne"
-     * wants more, and the sharing alone called that fair.
+     * Two things are asked, and the count steps below if either says no.
+     *
+     * **The sharing**, asked only of a reader who has asked for large
+     * characters: the name may not be left less of the row than everything else
+     * on it put together. See [readerAskedForLargeCharacters] for why that one
+     * question is gated and the other is not.
+     *
+     * **What the share writes**, asked at every text size: the name laid out at
+     * the width it would actually get may not come out with a line ending in the
+     * middle of a word. This is the question `ToggleRow` puts to its buttons.
+     * Android breaks a word too wide for its line between two letters and with
+     * no hyphen, so a column narrower than one word of a name reports no ellipsis
+     * while being unreadable, and an even share can still be narrower than
+     * "Europeenne".
+     *
+     * It is asked at every size because **a cut word is a defect and not a
+     * matter of comfort**, so it is no business of the guard in front of the
+     * sharing. Where it earns its place is precisely at and below the normal
+     * size, the one range in which the sharing is not asked at all and this is
+     * the row's only safeguard. It has not been seen to fire there — measured on
+     * 320, 360 and 411 dp, in both languages — which is the answer one wants
+     * from a safeguard, not a reason to remove it.
      */
     private fun countCanStandBesideTheNameIn(room: Int): Boolean {
-        val wanted = widthWanted(count)
-        val leftToTheName = room - widthWanted(indicator) -
-            (name.layoutParams as LayoutParams).marginStart - gap - wanted
-        if (leftToTheName < wanted) return false
+        // Everything the row puts around the name: the indicator, the count, and
+        // the two margins holding the three apart. Written out rather than as
+        // `room - leftToTheName` so that the comparison below reads as the
+        // sentence it enforces.
+        val everythingElse = widthWanted(indicator) +
+            (name.layoutParams as LayoutParams).marginStart + gap + widthWanted(count)
+        val leftToTheName = room - everythingElse
+        if (readerAskedForLargeCharacters() && leftToTheName < everythingElse) return false
         return name.writesItsTextWholeAcross(leftToTheName) &&
             detail.writesItsTextWholeAcross(leftToTheName)
     }
+
+    /**
+     * Whether the system's text size has been turned up at all.
+     *
+     * **The one threshold in this work, and it is not of the kind SPEC §7
+     * refuses.** Those would guess at what a measurement can answer — the size at
+     * which a label stops fitting — and are refused for guessing. This one
+     * answers a question no measurement can put: **who asked for something to
+     * change.** A reader still at the normal text size has asked for nothing, and
+     * a row that rearranges itself under their eyes is a regression for them
+     * however good the arithmetic behind it. So the sharing rule, which trades a
+     * working row for a better one, is theirs to opt into by turning the size up;
+     * above that point both measurements govern and no threshold appears again.
+     *
+     * It is read from the **text size and not from the screen width**, because
+     * the question is about the reader's request and nothing else. Without it the
+     * sharing rule was measured to move the count below at the normal size on a
+     * 360 dp screen in French and on a 320 dp one in both languages.
+     */
+    private fun readerAskedForLargeCharacters() =
+        resources.configuration.fontScale > NORMAL_TEXT_SIZE
 
     /**
      * Whether [text], given exactly [width], lays its text out in a form one
@@ -204,5 +236,13 @@ class StationRow @JvmOverloads constructor(
         // children's constraints again once one of them has asked for a layout.
         name.layoutParams = nameParameters
         count.layoutParams = countParameters
+    }
+
+    private companion object {
+        /**
+         * The system's text size when nobody has touched it. See
+         * [readerAskedForLargeCharacters]: this is the whole of the threshold.
+         */
+        const val NORMAL_TEXT_SIZE = 1f
     }
 }
