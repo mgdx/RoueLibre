@@ -656,6 +656,46 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **A station's sheet cut off its labels and its three buttons.** Measured on a
+  Fairphone 3 in French: at ×1.3 "Ouvrir dans une appli de navig…", at ×1.8 the
+  "LIBRES" of "PLACES LIBRES" gone over the edge of the screen, at ×2.0 "PLAC",
+  "Partir d'i…" and "Ouvrir dans une appli…". The screen the text size exists
+  to serve, again made less readable by it, which SPEC §7 rules out.
+  **The two counts are now a `StackingRow`**, a third view for the answer
+  `ToggleRow` and `StationRow` already give: each count is a block of its own —
+  a disc and the word naming it, which are read as one thing — and the two
+  blocks step one under the other as soon as they are wider than the sheet. The
+  question is measured at the size in force, carries no threshold and no
+  coefficient, and the gap between the blocks becomes the gap above the second
+  one when they stack, as the station row's does.
+  **The buttons were a theme leaking in.** Material's bottom sheet theme
+  descends from its dialog overlay, which points `materialButtonStyle` at an
+  alert dialog's button — `android:lines="1"`, `android:singleLine`,
+  `android:ellipsize="end"`. A style quoted in a layout only overrides the
+  attributes it names, so the three buttons took their colours and their shape
+  from `Widget.RoueLibre.Toggle` and their line limit from Material.
+  `ThemeOverlay.RoueLibre.BottomSheetDialog` puts the application's own button
+  style back where every other screen has it, and the labels take the lines they
+  need. **Nothing else on any sheet changes**: they are the only buttons in the
+  only two sheets, and both quote the style that decides what one sees.
+  **The name, the address, the breakdown and the capacity line are no longer
+  justified or hyphenated.** They are lines that name one thing, and
+  `Widget.RoueLibre.Name` already refuses both for exactly them elsewhere; until
+  now the sheet let the theme hyphenate a station's name in the middle of a
+  word — measured at ×1.15 on a 320 dp screen — and spread "18 points d'attache
+  · Mis à jour…" bank to bank.
+  **At the normal text size nothing has moved**, pinned by a test rather than
+  asserted. `SheetTextSizeLayoutTest` lays the sheet out at the seven steps of
+  the slider, in English and in French, on 320, 360 and 411 dp, and fails on the
+  previous layout on five counts. It resolves the **bottom sheet's own theme**
+  the way the dialog resolves it, which is not a detail of the harness: under
+  `Theme.RoueLibre` alone the buttons wrap happily and the test reports a screen
+  that is broken on the device. It also asks a question the other two files do
+  not — whether a view is drawn **inside** its parent — because a label given
+  more width than the sheet has carries no ellipsis and reaches its last
+  character while half of it is off the screen, which is exactly how "PLACES
+  LIBRES" lost its second word.
+
 - **The availability disc stayed the size it was while everything around it
   grew.** Android applies a **non-linear** magnification to sizes declared in
   `sp` — the larger the number, the less of the reader's factor it receives —
