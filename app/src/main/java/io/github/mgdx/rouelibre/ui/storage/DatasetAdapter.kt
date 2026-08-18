@@ -13,7 +13,7 @@ import io.github.mgdx.rouelibre.core.data.DatasetRejection
 import io.github.mgdx.rouelibre.core.data.DatasetUpdate
 import io.github.mgdx.rouelibre.databinding.ItemDatasetBinding
 import io.github.mgdx.rouelibre.ui.textLocale
-import io.github.mgdx.rouelibre.ui.toUserMessage
+import io.github.mgdx.rouelibre.ui.toDownloadMessage
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -155,7 +155,7 @@ fun StorageMessage.toText(context: Context): String = when (this) {
     is StorageMessage.Deleted ->
         context.getString(R.string.dataset_deleted, context.getString(kind.nameResource()))
 
-    is StorageMessage.CheckFailed -> error.toUserMessage(context)
+    is StorageMessage.CheckFailed -> error.toDownloadMessage(context)
 
     is StorageMessage.UnsupportedFormat -> context.getString(
         R.string.dataset_rejected_version,
@@ -175,7 +175,7 @@ fun StorageMessage.toText(context: Context): String = when (this) {
     is StorageMessage.DownloadFailed -> context.getString(
         R.string.storage_download_failed,
         context.getString(kind.nameResource()),
-        error.toUserMessage(context),
+        error.toDownloadMessage(context),
     )
 
     is StorageMessage.Rejected -> when (val cause = reason) {

@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
+import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.databinding.FragmentStationListBinding
@@ -26,6 +27,7 @@ import io.github.mgdx.rouelibre.ui.MAP_BACK_STACK_ENTRY
 import io.github.mgdx.rouelibre.ui.STATION_LIST_BACK_STACK_ENTRY
 import io.github.mgdx.rouelibre.ui.ScreenBehind
 import io.github.mgdx.rouelibre.ui.backStackEntryNames
+import io.github.mgdx.rouelibre.ui.city.CityFragment
 import io.github.mgdx.rouelibre.ui.map.MapFragment
 import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
@@ -186,22 +188,48 @@ class StationListFragment : Fragment() {
         }
     }
 
+    /**
+     * Says why the list could not be refreshed, and offers the way out of it.
+     *
+     * "Try again" is the answer to a failure a second press may well settle — a
+     * feed that timed out, a connection that has come back. It is not the answer
+     * to having chosen no city: nothing is being asked of any network, and every
+     * press can only fail the same way. That one failure is offered the city
+     * chooser instead, which is the gesture the sentence asks for (SPEC §14).
+     */
     private fun observeErrors() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.errors.collect { error ->
                     val views = binding ?: return@collect
-                    Snackbar
-                        .make(
-                            views.root,
-                            error.toUserMessage(requireContext()),
-                            Snackbar.LENGTH_LONG,
-                        )
-                        .setAction(R.string.action_retry) { viewModel.refresh(force = true) }
-                        .show()
+                    val bar = Snackbar.make(
+                        views.root,
+                        error.toUserMessage(requireContext()),
+                        Snackbar.LENGTH_LONG,
+                    )
+                    if (error == DataError.NoCityChosen) {
+                        bar.setAction(R.string.city_choose) { showCityChooser() }
+                    } else {
+                        bar.setAction(R.string.action_retry) { viewModel.refresh(force = true) }
+                    }
+                    bar.show()
                 }
             }
         }
+    }
+
+    /**
+     * Opens the city chooser, the way the map and the settings open it.
+     *
+     * Nothing is named on the back stack: what is put up here is a detour, and
+     * coming back from it is the back gesture's business — unlike the map, which
+     * this list must be able to find again rather than build a second one of.
+     */
+    private fun showCityChooser() {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.content, CityFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     /**
