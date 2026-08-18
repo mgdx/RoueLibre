@@ -67,9 +67,19 @@
     <string name="map_bikes_mechanical_description">Les vélos mécaniques sont comptés. Touche pour ne compter que les électriques.</string>
     <string name="map_bikes_electric_description">Les vélos électriques sont comptés. Touche pour tous les compter.</string>
 
-    <!-- The secondary count's label, under the figure on the right. -->
-    <string name="counterpart_bikes">vélos</string>
-    <string name="counterpart_docks">places libres</string>
+    <!-- The secondary count's label, under the figure on the right. It carries
+         no number: the disc beside it already holds one. Only the word agrees,
+         "many" being the large numbers French writes with "de". -->
+    <plurals name="counterpart_bikes" tools:ignore="ImpliedQuantity">
+        <item quantity="one">vélo</item>
+        <item quantity="many">de vélos</item>
+        <item quantity="other">vélos</item>
+    </plurals>
+    <plurals name="counterpart_docks" tools:ignore="ImpliedQuantity">
+        <item quantity="one">place libre</item>
+        <item quantity="many">de places libres</item>
+        <item quantity="other">places libres</item>
+    </plurals>
     <!-- Shown instead of the count when the station does not provide the service. -->
     <string name="counterpart_none">—</string>
 

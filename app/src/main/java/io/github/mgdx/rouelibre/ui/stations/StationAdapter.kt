@@ -149,11 +149,16 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
             }
             binding.counterpart.text = counterpart?.toString()
                 ?: context.getString(R.string.counterpart_none)
-            binding.counterpartLabel.setText(
+            // The label agrees with the figure beside it, and carries no number
+            // of its own: the count is passed as a quantity, not as an
+            // argument. An unknown count reads as the plural, the form the pair
+            // is named with when nothing settles it.
+            binding.counterpartLabel.text = resources.getQuantityString(
                 when (mode) {
-                    AvailabilityMode.Bikes -> R.string.counterpart_docks
-                    AvailabilityMode.Docks -> R.string.counterpart_bikes
+                    AvailabilityMode.Bikes -> R.plurals.counterpart_docks
+                    AvailabilityMode.Docks -> R.plurals.counterpart_bikes
                 },
+                counterpart ?: 0,
             )
 
             // A screen reader must hear the same thing an eye sees: the name,

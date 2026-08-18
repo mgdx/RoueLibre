@@ -222,7 +222,10 @@ class ListTextSizeLayoutTest {
         // The longer of the two wordings, and the one on the screen the defect
         // was seen on: the list opens counting bikes, so the count beside the
         // name is the free docks.
-        row.setText(R.id.counterpart_label, context.getString(R.string.counterpart_docks))
+        row.setText(
+            R.id.counterpart_label,
+            context.resources.getQuantityString(R.plurals.counterpart_docks, DOCKS),
+        )
     }
 
     private fun addressDetail(context: Context) =

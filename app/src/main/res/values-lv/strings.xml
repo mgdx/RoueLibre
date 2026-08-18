@@ -55,8 +55,16 @@
     <string name="map_bikes_all_kinds_description">Every bike is counted. Tap to count the mechanical ones only.</string>
     <string name="map_bikes_mechanical_description">Mechanical bikes are counted. Tap to count the electric ones only.</string>
     <string name="map_bikes_electric_description">Electric bikes are counted. Tap to count them all.</string>
-    <string name="counterpart_bikes">bikes</string>
-    <string name="counterpart_docks">free docks</string>
+    <plurals name="counterpart_bikes" tools:ignore="ImpliedQuantity">
+        <item quantity="one">bike</item>
+        <item quantity="zero">bikes</item>
+        <item quantity="other">bikes</item>
+    </plurals>
+    <plurals name="counterpart_docks" tools:ignore="ImpliedQuantity">
+        <item quantity="one">free dock</item>
+        <item quantity="zero">free docks</item>
+        <item quantity="other">free docks</item>
+    </plurals>
     <string name="counterpart_none">—</string>
 
     <plurals name="station_detail_with_capacity">

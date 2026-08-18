@@ -113,8 +113,19 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         val entry = state.entry ?: return
 
         views.name.text = entry.station.name
-        views.bikesIndicator.display = entry.displayFor(AvailabilityMode.Bikes)
-        views.docksIndicator.display = entry.displayFor(AvailabilityMode.Docks)
+        val bikes = entry.displayFor(AvailabilityMode.Bikes)
+        val docks = entry.displayFor(AvailabilityMode.Docks)
+        views.bikesIndicator.display = bikes
+        views.docksIndicator.display = docks
+        // The label agrees with the figure standing in the disc beside it: the
+        // count is passed as a quantity and never as an argument, the plural
+        // holding the word alone. A disc with no figure — unknown, or out of
+        // service — is read as the plural, which is how the pair is named when
+        // no count settles it.
+        views.bikesLabel.text =
+            resources.getQuantityString(R.plurals.counterpart_bikes, bikes.count ?: 0)
+        views.docksLabel.text =
+            resources.getQuantityString(R.plurals.counterpart_docks, docks.count ?: 0)
         showBikeSplit(state.bikeSplit)
         showAddress(state.address, state.distanceInMetres)
         showServiceState(state)
