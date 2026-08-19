@@ -21,9 +21,10 @@ import kotlinx.coroutines.launch
 /**
  * Who produces the availability data, city by city (SPEC §4.5).
  *
- * The "about" screen credits the network being served — the one whose data is
- * on screen. This page credits all of them, including the cities one has not
- * installed, and gives the address of each feed.
+ * This page carries the networks' credits, all of them — the city installed
+ * as much as the ones never downloaded — each with the address of its feed.
+ * The "about" screen used to repeat the served network's credit, which had it
+ * read twice over two screens in a row; it is written here alone now.
  *
  * A page of its own rather than a longer "about": the licences of the feeds
  * ask for the notice to travel with the work and to be reachable, not to be on
