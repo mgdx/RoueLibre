@@ -36,6 +36,7 @@ import io.github.mgdx.rouelibre.ui.stations.StationListFragment
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.welcome.WelcomeFragment
 import io.github.mgdx.rouelibre.ui.welcome.WhatsNewFragment
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -58,6 +59,31 @@ private const val INTRO_FADE_MILLIS = 180L
  * 5. It is a floor, not a delay added to the wait.
  */
 private const val INTRO_MINIMUM_MILLIS = 600L
+
+/**
+ * How long the opening waits for Android's splash screen to hand over before
+ * it starts counting that stay anyway (SPEC §7.0).
+ *
+ * The stay is armed by that handover, and the handover is an event the system
+ * does not promise: it emits none for an activity started into a task already
+ * on show, and the opening then stayed up for ever — a green window holding
+ * the focus over an interface drawn underneath it and out of reach. The
+ * manifest's `singleTask` closed the way in that was found; it did not remove
+ * the dependency, and this deadline is what makes the opening's departure hang
+ * on nothing that may fail to arrive.
+ *
+ * **Three seconds, counted from the opening's first draw, and deliberately too
+ * long rather than too short.** It must never cut in front of the handover on
+ * a slow phone, which would count the stay from under the splash and shorten
+ * the ordinary opening: the platform caps a splash's icon animation at one
+ * second and lets go only once the application has drawn its first frame, so
+ * three seconds leaves that path a margin of three to one and the opening
+ * measured on the two Fairphones is not a millisecond shorter for this. And it
+ * must not become a wait of its own in the case it exists for: three seconds
+ * of the identity's green, then the six hundred milliseconds of the stay, is a
+ * slow start — for ever is a dead application.
+ */
+private const val INTRO_HANDOVER_DEADLINE_MILLIS = 3_000L
 
 /**
  * How the system bars look, so that the opening can borrow them for the length
@@ -94,6 +120,15 @@ class MainActivity : AppCompatActivity() {
 
     /** The system bars as the interface's theme wants them — see [openIntro]. */
     private var barsBeforeIntro: SystemBars? = null
+
+    /**
+     * Whether the minimum stay is already counting — see [holdIntro].
+     *
+     * Not a fourth condition of the opening's departure: it guards the way
+     * into that count, so that whichever of the two ways in arrives first
+     * settles when the stay starts and the other changes nothing.
+     */
+    private var introStayStarted = false
 
     /**
      * The units the screens on show were written in (SPEC §7.6).
@@ -259,16 +294,27 @@ class MainActivity : AppCompatActivity() {
      * help.
      *
      * Before Android 12 there is no splash, and the first draw is that moment.
+     *
+     * **Two ways lead here and the first of them wins**: the handover, which is
+     * the normal one wherever it happens, and the deadline of
+     * [INTRO_HANDOVER_DEADLINE_MILLIS] behind it. The second finds the work
+     * begun and does nothing — where it restarted the count instead, it would
+     * push the opening six hundred milliseconds further out for a reason
+     * nobody could see.
+     *
+     * The count hangs on the lifecycle and not on a view. It used to be posted
+     * on the opening's own view, read through the binding, and returned in
+     * silence when that binding was null: the one thing that takes the opening
+     * away, given up on without a word.
      */
     private fun holdIntro() {
-        val intro = binding?.intro?.root ?: return
-        intro.postDelayed(
-            {
-                heldLongEnough = true
-                closeIntroIfDue()
-            },
-            INTRO_MINIMUM_MILLIS,
-        )
+        if (introStayStarted) return
+        introStayStarted = true
+        lifecycleScope.launch {
+            delay(INTRO_MINIMUM_MILLIS)
+            heldLongEnough = true
+            closeIntroIfDue()
+        }
     }
 
     /**
@@ -284,8 +330,16 @@ class MainActivity : AppCompatActivity() {
     private fun openIntro() {
         val views = binding ?: return
         views.intro.root.isVisible = true
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-            views.intro.root.doOnPreDraw { holdIntro() }
+        views.intro.root.doOnPreDraw { veil ->
+            // Before Android 12 there is no splash to hand over: this draw is
+            // the moment the opening reaches the screen, and the stay counts
+            // from here.
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) holdIntro()
+            // The deadline is armed on every version, including the ones that
+            // have just started counting: there it runs out against a stay
+            // long since begun and does nothing, which is the whole of what
+            // [holdIntro] promises when it is called twice.
+            veil.postDelayed({ holdIntro() }, INTRO_HANDOVER_DEADLINE_MILLIS)
         }
         val controller = WindowInsetsControllerCompat(window, views.root)
         // Noted as the theme has just left them. What the opening gives back
