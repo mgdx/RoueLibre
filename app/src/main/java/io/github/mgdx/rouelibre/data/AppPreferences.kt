@@ -315,40 +315,34 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     /**
      * What the user says their own bike is (SPEC §7.3, §7.6).
      *
-     * `null` — nothing written down — means "not specified", and that is the
-     * state on a fresh installation and after any reset; a word this build
-     * cannot read means the same thing, never a kind (see
-     * [OwnBikeKind.fromId]). Not specified reproduces exactly the drawings and
-     * the sentences of the version before this choice existed.
+     * **[OwnBikeKind.Mechanical] on a fresh installation, after any reset, and
+     * for a word this build cannot read** (see [OwnBikeKind.fromId]). Nothing
+     * written down is read as the plain bike rather than as nothing said, which
+     * is the ride an unspecified bike was already getting: the setting no
+     * longer offers a third state to distinguish.
      *
      * **This is not [wantedBikeKind], and the two must never be taken for one
      * another.** That one asks which of the bikes the **network** lends one
      * wants to be sent to: it exists only in a conurbation lending both, and it
      * narrows the stations §6 may choose. This one asks what the rider's **own**
-     * bike is: it belongs to no fleet, it is the same in every city, and it
-     * changes nothing but what is drawn and what is said — no speed, no
-     * coefficient, no profile (see [OwnBikeKind]).
+     * bike is: it belongs to no fleet, it is the same in every city, and what it
+     * settles is the profile their own ride is traced with, along with the
+     * drawing and the wording (see [OwnBikeKind]).
      *
      * **A word about equipment, not a journey**, like [usesOwnBike] beside it:
-     * "mechanical", "electric", or nothing at all, and no point, no time, no
-     * destination goes with it (SPEC §2, C3).
+     * "mechanical" or "electric", and no point, no time, no destination goes
+     * with it (SPEC §2, C3).
      *
      * A flow rather than a read: the journey screens follow it, so a bike
      * declared in the settings reaches the drawing without a restart.
      */
-    val ownBikeKind: Flow<OwnBikeKind?> = dataStore.data.map {
+    val ownBikeKind: Flow<OwnBikeKind> = dataStore.data.map {
         OwnBikeKind.fromId(it[OWN_BIKE_KIND])
     }
 
-    /** Remembers what the user's own bike is, or that they have not said. */
-    suspend fun setOwnBikeKind(kind: OwnBikeKind?) {
-        dataStore.edit { preferences ->
-            if (kind == null) {
-                preferences.remove(OWN_BIKE_KIND)
-            } else {
-                preferences[OWN_BIKE_KIND] = kind.id
-            }
-        }
+    /** Remembers what the user's own bike is. */
+    suspend fun setOwnBikeKind(kind: OwnBikeKind) {
+        dataStore.edit { it[OWN_BIKE_KIND] = kind.id }
     }
 
     /**

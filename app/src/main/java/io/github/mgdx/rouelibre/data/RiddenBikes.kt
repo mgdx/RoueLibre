@@ -44,13 +44,12 @@ fun WantedBikeKind?.asRiddenBike(): RiddenBike = when (this) {
 /**
  * The rider's own bike, as the algorithm rides it (SPEC §7.6).
  *
- * **Not specified and mechanical give the same ride**, to the track and to the
- * minute: a bike declared mechanical and a bike nobody declared are the same
- * plain bike, which is already the rule that governs the bolt on the drawing
- * and the wording of the summary. Only a declared pedal-assist bike changes
- * anything, and it changes it because the rider said so.
+ * **Only a declared pedal-assist bike moves anything**, and it moves it because
+ * the rider said so. The mechanical bike is the ride of before, to the track
+ * and to the minute, and it is what an installation that has never been asked
+ * gets — which is why the setting offers two states and not three.
  */
-fun OwnBikeKind?.asRiddenBike(): RiddenBike = when (this) {
+fun OwnBikeKind.asRiddenBike(): RiddenBike = when (this) {
     OwnBikeKind.Electric -> RiddenBike.ElectricallyAssisted
-    OwnBikeKind.Mechanical, null -> RiddenBike.Mechanical
+    OwnBikeKind.Mechanical -> RiddenBike.Mechanical
 }

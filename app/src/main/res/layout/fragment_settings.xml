@@ -284,10 +284,11 @@
                 android:text="@string/settings_section_journey" />
 
             <!--
-                What the rider's own bike is (SPEC §7.3, §7.6). Three states,
-                the leftmost saying nothing, on the pattern of the pace under
-                it. It heads the section because it says who the cyclist is
-                before the pace says how they walk.
+                What the rider's own bike is (SPEC §7.3, §7.6). Two states, on
+                the pattern of the pace under it, and the mechanical bike is
+                where the row sits until the rider says otherwise. It heads the
+                section because it says who the cyclist is before the pace says
+                how they walk.
 
                 It is NOT the kind of bike asked of the network, which lives on
                 the journey screen, exists only where the network lends both
@@ -297,7 +298,7 @@
                 nothing of `FleetDescription.isMixed`. Declared as a pedal-assist
                 bike it changes what is drawn, what is said and — since
                 17 August 2026 — the ride itself, traced with a profile of its
-                own; the other two states give the ride of before, to the track
+                own; the mechanical bike gives the ride of before, to the track
                 and to the minute. The line under the buttons says as much.
             -->
             <TextView
@@ -313,11 +314,6 @@
                 android:contentDescription="@string/settings_own_bike_kind_description"
                 app:selectionRequired="true"
                 app:singleSelection="true">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/own_bike_kind_unspecified"
-                    style="@style/Widget.RoueLibre.Toggle.Choice"
-                    android:text="@string/settings_own_bike_kind_unspecified" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/own_bike_kind_mechanical"

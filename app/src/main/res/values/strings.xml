@@ -534,14 +534,13 @@
          about the reader's own equipment: the journey screen carries a
          separate, similar-looking choice about the bikes the network lends. -->
     <string name="settings_own_bike_kind_title">Your own bike</string>
-    <!-- Read aloud in place of the three buttons beside it. -->
+    <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_own_bike_kind_description">The kind of bike you own</string>
-    <string name="settings_own_bike_kind_unspecified">Not specified</string>
     <string name="settings_own_bike_kind_mechanical">Mechanical</string>
     <string name="settings_own_bike_kind_electric">Electric</string>
-    <!-- Under the three buttons. Says what this changes: an electric bike is
-         routed and timed as one, where the other two states are not. -->
-    <string name="settings_own_bike_kind_hint">Declared electric, your own bike gets its own route and its own times. Not specified and mechanical give the same journey.</string>
+    <!-- Under the two buttons. Says what the declaration changes: an electric
+         bike is routed and timed as one, where a mechanical one is not. -->
+    <string name="settings_own_bike_kind_hint">Declared electric, your own bike gets its own route and its own times.</string>
 
     <!-- The summary of a ride on one's own bike, where that bike was said to be
          a pedal-assist one. %1$s is a distance, %2$s a climb. -->

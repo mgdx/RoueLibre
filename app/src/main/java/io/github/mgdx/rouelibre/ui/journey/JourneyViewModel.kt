@@ -88,7 +88,7 @@ class JourneyViewModel(
     private val wantedBikeKind: WantedBikeKind? = null,
     private val fleet: Flow<FleetDescription?> = flowOf(null),
     private val walkingPace: Flow<WalkingPace> = flowOf(WalkingPace.Normal),
-    private val ownBikeKind: Flow<OwnBikeKind?> = flowOf(null),
+    private val ownBikeKind: Flow<OwnBikeKind> = flowOf(OwnBikeKind.Mechanical),
     private val coveredArea: Flow<BoundingBox?> = flowOf(null),
 ) : ViewModel() {
 
@@ -217,7 +217,7 @@ class JourneyViewModel(
         private val wantedBikeKind: WantedBikeKind? = null,
         private val fleet: Flow<FleetDescription?> = flowOf(null),
         private val walkingPace: Flow<WalkingPace> = flowOf(WalkingPace.Normal),
-        private val ownBikeKind: Flow<OwnBikeKind?> = flowOf(null),
+        private val ownBikeKind: Flow<OwnBikeKind> = flowOf(OwnBikeKind.Mechanical),
         private val coveredArea: Flow<BoundingBox?> = flowOf(null),
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")

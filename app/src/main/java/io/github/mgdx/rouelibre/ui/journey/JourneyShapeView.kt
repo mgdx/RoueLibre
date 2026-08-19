@@ -103,19 +103,20 @@ class JourneyShapeView @JvmOverloads constructor(
      * network's, whereas the rider saying they ride an electric one says
      * everything about it (SPEC §7.6).
      */
-    private var ownBikeEndpointMarker: Drawable? =
-        AppCompatResources.getDrawable(context, OwnBikeGlyphs.endpointMarker(null))
+    private var ownBikeEndpointMarker: Drawable? = AppCompatResources.getDrawable(
+        context,
+        OwnBikeGlyphs.endpointMarker(OwnBikeKind.Mechanical),
+    )
 
     /**
-     * What the rider said their own bike is, or `null` if they have not
-     * (SPEC §7.6).
+     * What the rider said their own bike is (SPEC §7.6).
      *
      * It reaches only the two ends of a journey ridden on that bike, and only
      * what is drawn: no minute of this drawing depends on it. Deliberately
      * separate from [fleet] beside it, which says what the **network** lends —
      * the two answer different questions and are never read off one another.
      */
-    var ownBikeKind: OwnBikeKind? = null
+    var ownBikeKind: OwnBikeKind = OwnBikeKind.Mechanical
         set(value) {
             if (field == value) return
             field = value
