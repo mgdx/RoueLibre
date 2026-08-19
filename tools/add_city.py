@@ -24,15 +24,14 @@ from __future__ import annotations
 
 import argparse
 import json
-import math
 import re
 import sys
 import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 
-from city_config import FLEET_COMMENT, BoundingBox, CityConfig
-from compute_bbox import bounding_box_of_stations, load_stations, positioned_stations
+from city_config import FLEET_COMMENT, BoundingBox, CityConfig, OpeningView
+from compute_bbox import bounding_box_of_stations, load_stations, survey_stations
 
 TOOLS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = TOOLS_DIR.parent
@@ -59,15 +58,6 @@ DEFAULT_MARGIN_METRES = 3000.0
 # The format of the datasets the application must be able to read. Same value
 # as the cities already configured: nothing about the format changes here.
 DATA_FORMAT_VERSION = 2
-
-# Opening zoom. MapLibre counts in 512-pixel tiles, which puts its zoom about
-# one step off the 256-tile convention. The three conurbations settled by hand
-# open between 11.2 and 11.5 over boxes around 21 km wide; the rule below
-# reproduces that and tightens the framing for a smaller network, so that a
-# ten-station town does not open on a quarter of its department.
-REFERENCE_ZOOM = 11.4
-REFERENCE_WIDTH_KILOMETRES = 21.0
-MINIMUM_ZOOM, MAXIMUM_ZOOM = 10.5, 14.0
 
 CONFIGURATION_COMMENT = [
     "City configuration — SPEC.md §15.",
@@ -132,18 +122,9 @@ def unique(candidate: str, taken: set[str], qualifier: str) -> str:
     return f"{qualified}-{index}"
 
 
-def default_zoom(box: BoundingBox) -> float:
-    """The opening zoom that frames a network of this size."""
-    width = max(box.width_kilometres, 0.5)
-    zoom = REFERENCE_ZOOM - math.log2(width / REFERENCE_WIDTH_KILOMETRES)
-    return round(min(max(zoom, MINIMUM_ZOOM), MAXIMUM_ZOOM), 1)
-
-
 def build_document(survey: dict, network_id: str, box: BoundingBox,
-                   station_count: int) -> dict:
+                   station_count: int, opening: OpeningView) -> dict:
     """Assemble a city configuration from a surveyed network and its box."""
-    centre_latitude = round((box.south + box.north) / 2, 6)
-    centre_longitude = round((box.west + box.east) / 2, 6)
     versions = survey.get("declaredVersions") or survey.get("gbfsVersion", "")
     # No block at all where the feed declares no vehicle type: the application
     # then draws the plain bike, and tools/read_fleet.py can fill it in later
@@ -216,14 +197,16 @@ def build_document(survey: dict, network_id: str, box: BoundingBox,
         "map": {
             "$comment": [
                 "Opening centre and zoom, used when no position is available.",
-                "The centre is that of the reference box: it is where the",
-                "stations are, which is what the user opens the map to see.",
+                "The centre is the MEDIAN of the station positions and not the",
+                "middle of the reference box: that middle can be a place with",
+                "no station at all, and the zoom follows the most populous",
+                "cluster, which is what the user opens the map to see (§4).",
                 "MapLibre counts in 512-pixel tiles: its zoom is off by about",
                 "one step from the 256-tile convention.",
             ],
-            "defaultCenterLatitude": centre_latitude,
-            "defaultCenterLongitude": centre_longitude,
-            "defaultZoom": default_zoom(box),
+            "defaultCenterLatitude": opening.latitude,
+            "defaultCenterLongitude": opening.longitude,
+            "defaultZoom": opening.zoom,
             "minZoom": 10,
             "maxZoom": 16,
         },
@@ -418,16 +401,22 @@ def main() -> int:
             continue
 
         try:
-            stations = positioned_stations(load_stations(network["discoveryUrl"], None))
+            surveyed = survey_stations(load_stations(network["discoveryUrl"], None))
+            stations = surveyed.stations
             box = bounding_box_of_stations(stations).expanded_by_metres(
                 DEFAULT_MARGIN_METRES
+            )
+            opening = OpeningView.from_stations(
+                surveyed.main_cluster_positions,
+                surveyed.main_cluster_box,
+                DEFAULT_MARGIN_METRES,
             )
         except Exception as error:  # noqa: BLE001 — reported, then the next city
             failed += 1
             print(f"  ! {network['displayName']:<26} {type(error).__name__}: {error}")
             continue
 
-        document = build_document(network, identifier, box, len(stations))
+        document = build_document(network, identifier, box, len(stations), opening)
         path = arguments.cities_dir / f"{file_name}.json"
         with path.open("w", encoding="utf-8") as stream:
             json.dump(document, stream, ensure_ascii=False, indent=2)
