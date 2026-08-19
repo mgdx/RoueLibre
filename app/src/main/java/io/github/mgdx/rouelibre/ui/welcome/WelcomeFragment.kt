@@ -72,7 +72,12 @@ class WelcomeFragment : Fragment() {
         val current = PAGES[page]
         views.title.setText(current.title)
         views.body.setText(current.body)
-        views.illustration.setImageResource(current.illustration)
+        val shows = current.shows
+        views.illustration.isVisible = shows is Shown.Drawing
+        if (shows is Shown.Drawing) {
+            views.illustration.setImageResource(shows.drawable)
+        }
+        views.fleetMarks.isVisible = shows is Shown.StationMarks
         views.step.text = getString(R.string.welcome_step, page + 1, PAGES.size)
         views.next.setText(current.next)
         views.skip.setText(current.skip)
@@ -147,16 +152,40 @@ class WelcomeFragment : Fragment() {
     }
 
     /**
+     * What a page shows under its text.
+     *
+     * A type rather than a flag per page: the layout offers two places for a
+     * figure, and naming which one a page uses says why it uses it — a page
+     * that adds a third would add a case here rather than a boolean nobody can
+     * read from the call site.
+     */
+    private sealed interface Shown {
+
+        /**
+         * A drawing, decorative: it repeats what the paragraph says, and the
+         * layout lets it shrink and then go at the largest font sizes.
+         */
+        data class Drawing(val drawable: Int) : Shown
+
+        /**
+         * The three station marks, each facing the sentence naming what its
+         * network lends. Those sentences carry the page's meaning, so they
+         * live in the text that scrolls and not in the drawing's place.
+         */
+        data object StationMarks : Shown
+    }
+
+    /**
      * One page of the welcome screen.
      *
-     * The drawing is part of the page and not of the layout: what a page says
+     * What it shows is part of the page and not of the layout: what a page says
      * is a shape before it is a paragraph, and the reader who skips the text
      * still leaves with it.
      */
     private data class Page(
         val title: Int,
         val body: Int,
-        val illustration: Int,
+        val shows: Shown,
         val next: Int,
         val skip: Int,
     )
@@ -173,28 +202,28 @@ class WelcomeFragment : Fragment() {
             Page(
                 title = R.string.welcome_hello_title,
                 body = R.string.welcome_hello_body,
-                illustration = R.drawable.illustration_welcome_hello,
+                shows = Shown.Drawing(R.drawable.illustration_welcome_hello),
                 next = R.string.welcome_continue,
                 skip = R.string.welcome_skip,
             ),
             Page(
                 title = R.string.welcome_privacy_title,
                 body = R.string.welcome_privacy_body,
-                illustration = R.drawable.illustration_welcome_privacy,
+                shows = Shown.Drawing(R.drawable.illustration_welcome_privacy),
                 next = R.string.welcome_continue,
                 skip = R.string.welcome_skip,
             ),
             Page(
                 title = R.string.welcome_fleet_title,
                 body = R.string.welcome_fleet_body,
-                illustration = R.drawable.illustration_welcome_fleet,
+                shows = Shown.StationMarks,
                 next = R.string.welcome_continue,
                 skip = R.string.welcome_skip,
             ),
             Page(
                 title = R.string.welcome_data_title,
                 body = R.string.welcome_data_body,
-                illustration = R.drawable.illustration_welcome_data,
+                shows = Shown.Drawing(R.drawable.illustration_welcome_data),
                 next = R.string.welcome_choose_city,
                 skip = R.string.welcome_later,
             ),
