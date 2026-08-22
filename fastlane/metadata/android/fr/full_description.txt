@@ -1,25 +1,25 @@
 Roue Libre affiche les stations de vélos en libre-service sur une carte et calcule un itinéraire porte-à-porte combinant la marche et le vélo.
 
-Tout fonctionne sur l'appareil : la carte, la recherche d'adresses et le calcul d'itinéraire n'ont besoin d'aucune connexion. Seule la disponibilité des vélos en temps réel sort sur le réseau.
+Tout fonctionne sur l’appareil : la carte, la recherche d’adresses et le calcul d’itinéraire n’ont besoin d’aucune connexion. Seule la disponibilité des vélos en temps réel sort sur le réseau.
 
 <b>Ce qui la distingue</b>
 
-• Aucun service Google : ni Play Services, ni Firebase, ni Maps SDK. Elle tourne sur n'importe quel Android sans les services Google.
+• Aucun service Google : ni Play Services, ni Firebase, ni Maps SDK. Elle tourne sur n’importe quel Android sans les services Google.
 • Aucune télémétrie, aucun mouchard, aucun identifiant unique, aucun compte.
-• Aucune donnée de trajet conservée : ni historique, ni positions, ni destinations. Ce que tu cherches ne quitte pas le téléphone.
-• Aucune ville n'est imposée : plusieurs agglomérations cohabitent sur l'appareil, et l'on supprime les données de l'une sans toucher aux autres.
-• L'itinéraire optimise le <i>couple</i> de stations — départ et arrivée — plutôt que de retenir la plus proche, et tient compte du risque qu'une station peu fournie se vide pendant que tu marches.
+• Aucune donnée de trajet conservée : ni historique, ni positions, ni destinations. Ce que tu cherches ne quitte pas le téléphone.
+• Aucune ville n’est imposée : plusieurs agglomérations cohabitent sur l’appareil, et l’on supprime les données de l’une sans toucher aux autres.
+• L’itinéraire optimise le <i>couple</i> de stations — départ et arrivée — plutôt que de retenir la plus proche, et tient compte du risque qu’une station peu fournie se vide pendant que tu marches.
 
-<b>À savoir avant d'installer</b>
+<b>À savoir avant d’installer</b>
 
-La carte, le graphe de routage et l'index d'adresses ne sont pas dans l'application : ils se téléchargent une fois, depuis l'écran de stockage, ou s'installent à la main depuis des fichiers que tu produis toi-même. Leur poids suit la ville — quelques dizaines de mégaoctets pour une agglomération de taille moyenne, davantage pour une capitale — et il est annoncé avant le téléchargement.
+La carte, le graphe de routage et l’index d’adresses ne sont pas dans l’application : ils se téléchargent une fois, depuis l’écran de stockage, ou s’installent à la main depuis des fichiers que tu produis toi-même. Leur poids suit la ville — quelques dizaines de mégaoctets pour une agglomération de taille moyenne, davantage pour une capitale — et il est annoncé avant le téléchargement.
 
 <b>Les villes servies</b>
 
-Près de trois cents réseaux, dans une trentaine de pays : tous ceux qui publient leurs stations en données ouvertes et dont les bornes permettent de garantir le retour du vélo — de Vélib' à Paris à Citi Bike à New York, en passant par Prague, Barcelone, Copenhague, Tokyo et Buenos Aires. L'application te propose le tien d'après ta position, si tu le lui demandes, et tu peux en garder plusieurs installés.
+Près de trois cents réseaux, dans une trentaine de pays : tous ceux qui publient leurs stations en données ouvertes et dont les points d’attache permettent de garantir le retour du vélo — de Vélib’ à Paris à Citi Bike à New York, en passant par Prague, Barcelone, Copenhague, Tokyo et Buenos Aires. L’application te propose le tien d’après ta position, si tu le lui demandes, et tu peux en garder plusieurs installés et passer de l’un à l’autre.
 
-Les jeux de données hors ligne ne sont produits que pour quelques-uns pour l'instant. Pour les autres, l'application le dit plutôt que de faire semblant : la liste montre ce qui existe, et les fichiers se produisent avec les scripts du dépôt.
+Pour l’instant, les jeux de données hors ligne n’existent que pour quelques-uns d’entre eux. Pour les autres, l’application le dit plutôt que de faire semblant : la liste montre ce qui existe, et les fichiers se produisent avec les scripts du dépôt.
 
-Elle n'est liée à aucun réseau en particulier : la liste des villes se met à jour d'elle-même, et chaque ville porte l'adresse de son propre flux GBFS, ce qui la rend utilisable avec n'importe quel réseau GBFS du monde.
+Elle n’est liée à aucun réseau en particulier : la liste des villes se met à jour d’elle-même, et chaque ville porte l’adresse de son propre flux GBFS, ce qui la rend utilisable avec n’importe quel réseau GBFS du monde.
 
 Logiciel libre sous licence GNU GPL v3.

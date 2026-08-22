@@ -120,7 +120,15 @@ either: Android Lint checks both ways, and it is right to.
 the singular — where English writes "0 bikes". Every language draws that line
 where it draws it; do not copy the source's.
 
-**Apostrophes are escaped**: `l\'instant`, never `l'instant`.
+**Use the typographic apostrophe**: `l’instant`, with U+2019, and never the
+straight `'`. It is what the English source already writes, it is what a reader
+of French expects in print, and it needs no escaping — a body that still holds
+`\'` is one that has the wrong character in it.
+
+**Punctuation that takes an inner space takes a non-breaking one.** French sets
+`?`, `!`, `;`, `:` and the inside of `« »` off with U+00A0, so that the mark
+never begins a line on its own. Every language does this its own way; follow the
+one you are writing.
 
 **The comments above the strings are meant for you.** They say what each
 placeholder stands for and in what context the sentence appears. Keep them, and
