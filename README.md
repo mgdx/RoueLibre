@@ -13,7 +13,7 @@
   <img alt="Android 8.0 and later" src="https://img.shields.io/badge/Android-8.0%2B-0F6E56?style=flat-square">
   <a href="docs/networks.md"><img alt="332 networks in 38 countries" src="https://img.shields.io/badge/networks-332%20in%2038%20countries-0F6E56?style=flat-square"></a>
   <img alt="No tracker" src="https://img.shields.io/badge/trackers-none-0F6E56?style=flat-square">
-  <img alt="APK: 8.5 MB" src="https://img.shields.io/badge/APK-8.5%20MB-0F6E56?style=flat-square">
+  <img alt="APK: 9.3 MB" src="https://img.shields.io/badge/APK-9.3%20MB-0F6E56?style=flat-square">
 </p>
 
 ## Description
@@ -33,12 +33,20 @@ be simple, efficient and privacy-friendly.
 It is free software under the GPLv3, it uses no Google service, and everything
 but the live availability of the bikes runs on your phone.
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/images/screenshot-map.png" width="30%" alt="The map around the Eiffel Tower: the Seine, the Champ de Mars and the Trocadéro gardens, the cycle ways drawn apart from the streets as dashed green lines, and a dozen Vélib' stations as green discs each carrying the number of bikes it holds.">
+  <img src="docs/images/screenshot-station.png" width="30%" alt="A station's sheet, “Octave Gréard – Tour Eiffel”: twenty-seven bikes and four free docks, under them the split into twenty-one mechanical and six electric, and the size of the stand at thirty-three docks.">
+  <img src="docs/images/screenshot-journey.png" width="30%" alt="A journey from the Champs-Élysées to the Eiffel Tower drawn on the map: thirteen minutes in all, two walking to the departure station, five riding along the Seine on an unbroken line, six walking to the door, and fifty metres of climb.">
+</p>
+
 ## Features
 
 - 🚲 **332 bike-share networks in 38 countries**, 69,337 stations, from Vélib'
   to Auch's ten, by way of New York, Montréal, Prague, Barcelona, Dubai, Buenos
   Aires and Pristina. No city is a default: the application proposes the one
-  matching your position, measured on where itsstations actually are, and you
+  matching your position, measured on where its stations actually are, and you
   choose. The full list is in [`docs/networks.md`](docs/networks.md).
 
 - 🗺️ **A map that shows what a cyclist needs:**
@@ -60,36 +68,35 @@ but the live availability of the bikes runs on your phone.
   - the route follows the cycle ways;
   - the climb is counted and named, because a bike-share bike is heavy.
 
-- 🪶 **Light and frugal.** 8.5 MB of APK, no background service, Android 8 and
+- 🪶 **Light and frugal.** 9.3 MB of APK, no background service, Android 8 and
   later.
 
 - 🔒 **Private, and local.** Everything happens on the device:
-  - the map, streets and routing data are downloaded **once** — 10.6 MB for a
-    median city — and that is it;
+  - the map, streets and routing data are downloaded **once** — 10.7 MB for a
+    median city — from the releases of
+    [`RoueLibre-data`](https://github.com/mgdx/RoueLibre-data), a repository of
+    this project, and that is it. What comes down is **static files and nothing
+    else**: a tile archive, a routing graph, an address index. No executable, no
+    plug-in, nothing the application runs as code;
+  - **that download is yours to start.** Choosing a city reads the published
+    manifest to learn what exists and what it weighs; not one byte of a dataset
+    moves until you press the button that announces the size, and none of it
+    ever moves in the background. The catalogue of cities is fetched the same
+    way, when the list of cities is opened and never otherwise. Any of the three
+    sets can also be installed **from a file of your own**, produced by the
+    scripts in [`tools/`](tools/README.md) — see
+    [`docs/offline-data.md`](docs/offline-data.md);
   - the journey is computed on the phone;
   - searching a street or a station never leaves it — it is the most telling
     data the application handles, since it says where you are going;
-  - in ordinary use, **the only request that goes out is the network's public
-    station feed**, read straight from the operator's own server, with no Roue
-    Libre server in between
-    ([how](docs/architecture.md#where-the-availability-comes-from));
+  - once your city is installed, **the only request that goes out is the
+    network's public station feed**, read straight from the operator's own
+    server, with no Roue Libre server in between
+    ([how](docs/architecture.md#where-the-availability-comes-from)) — which also
+    means the operator sees your address and the hour you asked, the price of
+    having nobody in the middle
+    ([why we say so](docs/architecture.md#what-the-operator-sees));
   - no telemetry, no tracker, no identifier, no history.
-
-## What "Roue Libre" means
-
-*Roue libre* is French for **freewheel**: the ratchet that lets a bicycle carry
-on rolling while the pedals stand still. To ride *en roue libre* is to coast —
-to be carried by what you have already put in, without pushing.
-
-The phrase is doing three things at once, and all three are the project:
-
-- **the freewheel** itself, the part that makes a bike a bike;
-- ***libre-service***, French for self-service — a bike-share bike is a *vélo en
-  libre-service*, which is what this application is about;
-- ***logiciel libre***, free software. Not free of charge: free as in free to
-  use, study, change and pass on. This one is under the GPL.
-
-One word, and it says: a bicycle, shared, and free.
 
 ## Building from source
 
@@ -126,7 +133,7 @@ It needs `osmium-tool`, `tippecanoe` and Python 3. The whole procedure, the
 sizes obtained and the way to add a network are in
 [`docs/offline-data.md`](docs/offline-data.md).
 
-The release APK weighs **8.49 MB on arm64-v8a** and 7.95 MB on armeabi-v7a,
+The release APK weighs **9.28 MB on arm64-v8a** and 8.72 MB on armeabi-v7a,
 map, routing, address search and journeys included, against a ceiling of 12 MB
 per architecture.
 
@@ -149,7 +156,8 @@ an issue before a large change.
   [`docs/offline-data.md`](docs/offline-data.md).
 - 🐛 **Report a bug** with the device, the Android version and the way to
   reproduce it. The application sends no log anywhere; if you attach one, read
-  it through first.
+  it through first. A security flaw goes to [`SECURITY.md`](SECURITY.md)
+  rather than to a public issue.
 - 💻 **Write code.** `./gradlew test lint ktlintCheck` must pass without a single
   warning, business logic goes into `:core` with no Android import, and not a
   single string is hard-coded.
@@ -164,10 +172,25 @@ To go further: the [architecture](docs/architecture.md), the
 [opening a place from another application](docs/sharing-links.md), and the
 [CHANGELOG](CHANGELOG.md).
 
-## Star the project
+And if none of that is for you: a ⭐ on the repository is what makes Roue Libre
+visible to the next person looking for a bike-share application that spies on
+nobody.
 
-If Roue Libre is useful to you, a ⭐ on the repository is what makes it visible
-to the next person looking for a bike-share application that spies on nobody.
+## What "Roue Libre" means
+
+*Roue libre* is French for **freewheel**: the ratchet that lets a bicycle carry
+on rolling while the pedals stand still. To ride *en roue libre* is to coast —
+to be carried by what you have already put in, without pushing.
+
+The phrase is doing three things at once, and all three are the project:
+
+- **the freewheel** itself, the part that makes a bike a bike;
+- ***libre-service***, French for self-service — a bike-share bike is a *vélo en
+  libre-service*, which is what this application is about;
+- ***logiciel libre***, free software. Not free of charge: free as in free to
+  use, study, change and pass on. This one is under the GPL.
+
+One word, and it says: a bicycle, shared, and free.
 
 ## Licence
 

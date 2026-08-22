@@ -83,7 +83,10 @@ API.
 Two other things do come from an address of ours, and neither carries a station:
 the city catalogue and the map, routing and address datasets, published as
 releases of `RoueLibre-data`. The catalogue is only downloaded when the city list
-is opened, the datasets once per city.
+is opened, the datasets once per city and only on a press. **Those two addresses
+are not settings**: they are shipped in the APK, and what stands in for them is a
+file imported by hand rather than a host typed in — see
+[`offline-data.md`](offline-data.md#hosting-the-data-yourself) and `SPEC.md` §9.
 
 Everything goes out over TLS. An address in cleartext — a producer's typo in an
 auto-discovery document — is rewritten to `https://` by `HttpsOnlyInterceptor`
@@ -94,6 +97,25 @@ identifier of the device or of the user.
 Nothing is fetched in the background. Every request comes from a screen being
 shown or from a gesture: at most one state refresh a minute, one static refresh a
 day, and pull-to-refresh forces the first.
+
+## What the operator sees
+
+Reading the feed at the operator's own address has a cost, and it is the honest
+counterpart of having no server of ours in between: **the operator sees the
+phone's IP address and the time of each request**, as any web server does of any
+visitor. Roue Libre sends nothing else — no identifier, no account, no position,
+no destination, and a `User-Agent` naming the application and its version and
+nothing more — so what is on offer is an address and a clock, not a person and
+not a journey. The same holds for the host of the catalogue and of the datasets,
+which is read at most a handful of times in the life of an installation.
+
+Put a server of ours in the middle and the operator would see us instead of the
+user — and we would then see every user, which is worse: an intermediary that
+knows which city each phone is watching, and when. That is the trade, and this
+side of it is the one we would rather take. Somebody who does not want the
+operator to see their address can put the application behind a VPN or Tor like
+any other, and the map, the routing and the address search go on working with no
+network at all.
 
 **Error handling.** No exception crosses a layer boundary. Failures are values —
 `Outcome.Failure(DataError.Offline)` — and the only layer that puts them into

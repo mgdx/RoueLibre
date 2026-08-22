@@ -150,7 +150,9 @@
   "dataRelease": {
     "$comment": [
       "Default URL of the manifest describing the published dataset (§4.4).",
-      "Changeable in the settings, and bypassable by manual import: the host",
+      "Not changeable in the application: no source address is typed there",
+      "(§9). What replaces this host is a manual import from the storage",
+      "screen, or this file edited and the application rebuilt — the host",
       "must never be a single point of failure.",
       "formatVersion 2: the address index now carries the names of absorbed",
       "municipalities (Lomme, Hellemmes…), without which their inhabitants",

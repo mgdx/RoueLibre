@@ -603,6 +603,7 @@ Every criterion must be verifiable:
 - `CONTRIBUTING.md` including the translation procedure
 - A licence file
 - F-Droid metadata (`fastlane/metadata/android/fr/`): short description, long description, release notes, screenshots
+  - **The French folder is named after the language, not after a region**: `fr`, beside `en-US`. The asymmetry is deliberate and is not drift to be repaired — a folder named after a language serves every region speaking it, where `fr-FR` might leave a reader in Québec or in Wallonie the English page. The application's own reading would tolerate either, matching on the part before the dash (`WhatsNewFragment.notesDirectory`); the store's is what decides here.
 - Unit tests on the §6 algorithm and on GBFS feed parsing
 - A signed release APK
 - `CHANGELOG.md`
