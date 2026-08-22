@@ -193,7 +193,7 @@ A "storage" screen must list every dataset with its size, its date, an update bu
 
 An "about" screen must show:
 
-- the attribution and licence of the availability feed of the network served, as its configuration declares them — they change with the city;
+- where the bike availability comes from, and a labelled way to the **sources page** at the foot of the attributions. That page — not this screen — carries the attribution and the licence of the availability feed, as each city configuration declares them, and it carries them for **every** network of the catalogue, the one installed included. Written in both places, the credit of the city served was written twice, on two screens read one after the other. The page is built from the configurations shipped in the APK and sends no request: the notice travels with the work and stays reachable offline, which is what the feeds' licences ask for. It is **searched by name**, as the city list is (§15) and with the same filtering: the catalogue runs to dozens of conurbations, and a credit one can only reach by scrolling until it turns up is barely reachable at all;
 - "© OpenStreetMap contributors";
 - the attribution of the routing engine and its data;
 - the application's licence and the link to the repository.
@@ -469,7 +469,7 @@ The way to "about" (§7.7) **closes the screen and belongs to no section**. It s
 
 ### 7.7 About
 
-Attributions (§4.3), version, link to the repository, privacy policy in plain words.
+Attributions (§4.5), version, link to the repository, privacy policy in plain words. The networks' credits are not written here but on the sources page it opens, which gives them for the whole catalogue rather than for the installed city alone.
 
 ### 7.8 Opening from another application
 
