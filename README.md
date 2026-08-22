@@ -46,7 +46,7 @@ but the live availability of the bikes runs on your phone.
 - 🚲 **332 bike-share networks in 38 countries**, 69,337 stations, from Vélib'
   to Auch's ten, by way of New York, Montréal, Prague, Barcelona, Dubai, Buenos
   Aires and Pristina. No city is a default: the application proposes the one
-  matching your position, measured on where itsstations actually are, and you
+  matching your position, measured on where its stations actually are, and you
   choose. The full list is in [`docs/networks.md`](docs/networks.md).
 
 - 🗺️ **A map that shows what a cyclist needs:**
@@ -97,22 +97,6 @@ but the live availability of the bikes runs on your phone.
     having nobody in the middle
     ([why we say so](docs/architecture.md#what-the-operator-sees));
   - no telemetry, no tracker, no identifier, no history.
-
-## What "Roue Libre" means
-
-*Roue libre* is French for **freewheel**: the ratchet that lets a bicycle carry
-on rolling while the pedals stand still. To ride *en roue libre* is to coast —
-to be carried by what you have already put in, without pushing.
-
-The phrase is doing three things at once, and all three are the project:
-
-- **the freewheel** itself, the part that makes a bike a bike;
-- ***libre-service***, French for self-service — a bike-share bike is a *vélo en
-  libre-service*, which is what this application is about;
-- ***logiciel libre***, free software. Not free of charge: free as in free to
-  use, study, change and pass on. This one is under the GPL.
-
-One word, and it says: a bicycle, shared, and free.
 
 ## Building from source
 
@@ -188,10 +172,25 @@ To go further: the [architecture](docs/architecture.md), the
 [opening a place from another application](docs/sharing-links.md), and the
 [CHANGELOG](CHANGELOG.md).
 
-## Star the project
+And if none of that is for you: a ⭐ on the repository is what makes Roue Libre
+visible to the next person looking for a bike-share application that spies on
+nobody.
 
-If Roue Libre is useful to you, a ⭐ on the repository is what makes it visible
-to the next person looking for a bike-share application that spies on nobody.
+## What "Roue Libre" means
+
+*Roue libre* is French for **freewheel**: the ratchet that lets a bicycle carry
+on rolling while the pedals stand still. To ride *en roue libre* is to coast —
+to be carried by what you have already put in, without pushing.
+
+The phrase is doing three things at once, and all three are the project:
+
+- **the freewheel** itself, the part that makes a bike a bike;
+- ***libre-service***, French for self-service — a bike-share bike is a *vélo en
+  libre-service*, which is what this application is about;
+- ***logiciel libre***, free software. Not free of charge: free as in free to
+  use, study, change and pass on. This one is under the GPL.
+
+One word, and it says: a bicycle, shared, and free.
 
 ## Licence
 
