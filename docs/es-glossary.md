@@ -103,14 +103,20 @@ puts the street before the number — "Gran Vía, 12" — where English puts the
 number first. This is precisely what positional placeholders exist for, and it
 is the only string in the file whose placeholders are reordered.
 
-`address_search_hint` follows it — *Calle y número*, and not the English
-*Number, street, town* — but it stops there, and that is deliberate.
-`AddressQuery.parseQuery` recognises a house number only as the **first** word
-of the query or as the **last** one: "Gran Vía 12" is read (the trailing case),
-where "Gran Vía 12 Madrid" is not, and the 12 would be searched for as if it
-were part of the street's name. An invitation naming the town after the number
-would therefore teach a form the engine cannot read. A shorter prompt that is
-right beats a complete one that loses the number.
+`address_search_hint` follows it — *Calle, número, localidad*, and not the
+English *Number, street, town*. The search engine reads a house number in the
+three orders that are written (SPEC §4.3): opening the query, closing it, or
+**standing between the street and the town**, which is Spanish's ordinary
+order and the reason this prompt may name it. A postcode is dropped before the
+number is looked for, so "Gran Vía 12 28013 Madrid" resolves as readily as
+"Gran Vía 12 Madrid".
+
+What the prompt must not do is invite a second number. A number that does not
+open the query is given up as soon as another appears, and a number between
+street and town is only read when neither neighbour is a stop word — the two
+guards that keep "Avenida 9 de Julio" and "Calle 20 de Noviembre" whole, which
+are streets of cities this application serves. Naming one number and one town
+is exactly as far as the prompt can go.
 
 ## Words that are not translated
 
