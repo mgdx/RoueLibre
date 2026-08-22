@@ -434,15 +434,17 @@
     <!-- Address search in the offline index (SPEC §4.3). Not to be confused
          with the field that filters the station list. -->
     <string name="address_search_title">Adresse suchen</string>
-    <string name="address_search_hint">Nummer, Straße, Ort</string>
+    <string name="address_search_hint">Straße, Hausnummer, Ort</string>
     <string name="address_search_clear">Suche löschen</string>
     <string name="address_search_privacy">Alles wird auf dem Gerät gesucht. Nichts wird gesendet, auch nicht während du tippst.</string>
 
     <!-- An address found. The number and the street name are assembled through
          a resource, never by concatenation: the order changes from one language
          to another (SPEC §9).
-         %1$s is the number ("12", "12 bis"), %2$s the street name. -->
-    <string name="address_with_number">%1$s %2$s</string>
+         %1$s is the number ("12", "12 bis"), %2$s the street name. German
+         writes the street first — "Bahnhofstraße 12" — which is the whole
+         reason this line is a resource and its placeholders are positional. -->
+    <string name="address_with_number">%2$s %1$s</string>
     <!-- %1$d is the number, %2$s its repetition mark ("bis", "ter"). -->
     <string name="address_number_with_suffix">%1$d %2$s</string>
     <!-- %1$s is a postcode, %2$s a municipality. -->
