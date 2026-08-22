@@ -18,6 +18,27 @@ import java.util.Locale
  */
 class LocalesTest {
 
+    private companion object {
+        /**
+         * A language the interface does not speak, and is not going to.
+         *
+         * These fixtures stood on German until German was translated, which is
+         * the trouble with borrowing a real target language for the part: it
+         * gets finished. Greek has no `values-el/` folder — no network in the
+         * catalogue is served in a Greek-speaking conurbation, which is what
+         * decides whether a started file exists (SPEC §9) — and the test
+         * below fails, naming this constant, the day that changes.
+         */
+        private val UNSPOKEN: Locale = Locale.forLanguageTag("el")
+
+        /**
+         * The share of strings that may come back identical to the English
+         * before a file is read as untranslated rather than as coincidentally
+         * alike. `tools/check_translations.py` draws it at the same place.
+         */
+        private const val UNTRANSLATED_SHARE = 0.15
+    }
+
     /** `app/src/main/res`, handed over by the build — see `app/build.gradle.kts`. */
     private val resources = File(
         checkNotNull(System.getProperty("rouelibre.locales")) {
@@ -68,13 +89,51 @@ class LocalesTest {
                 "about them",
             started.size > offered.size,
         )
-        // Three of them, named so that the day one is translated the failure
-        // says which list was forgotten rather than merely that a count moved.
-        for (language in listOf("de", "es", "ja")) {
-            assertTrue("$language is a started file", language in started)
-            assertFalse("$language still holds the English text", language in offered)
+        assertFalse(
+            "UNSPOKEN stands for a language with no folder, and ${UNSPOKEN.language} now has one",
+            UNSPOKEN.language in started,
+        )
+        // Which folders hold English is read from the files themselves rather
+        // than from a list of names written here. A list would have to be
+        // repointed every time a translation is finished — it named German,
+        // Spanish and Japanese until they were — and repointing a fixture is
+        // exactly the moment somebody quietly drops the check instead.
+        for (language in started) {
+            val english = holdsTheEnglishText(language)
+            if (language in offered) {
+                assertFalse(
+                    "$language is offered, so its file may not still hold the English text",
+                    english,
+                )
+            } else {
+                assertTrue(
+                    "$language is translated but not offered: TRANSLATED_LANGUAGES was forgotten",
+                    english,
+                )
+            }
         }
     }
+
+    /**
+     * Whether a language's file is still the starting point it was copied as.
+     *
+     * Read as the share of strings that are byte-identical to the English —
+     * a real translation lands near zero, and never at zero, since "Stations"
+     * is the German for "Stations". `tools/check_translations.py` draws the
+     * line at the same place and says which strings they are.
+     */
+    private fun holdsTheEnglishText(language: String): Boolean {
+        val english = readStrings(resources.resolve("values/strings.xml"))
+        val translated = readStrings(resources.resolve("values-$language/strings.xml"))
+        val identical = english.count { (name, value) -> translated[name] == value }
+        return identical > UNTRANSLATED_SHARE * english.size
+    }
+
+    /** The `<string name="…">…</string>` of a resource file, by name. */
+    private fun readStrings(file: File): Map<String, String> =
+        Regex("""<string name="([^"]+)"[^>]*>(.*?)</string>""", RegexOption.DOT_MATCHES_ALL)
+            .findAll(file.readText())
+            .associate { it.groupValues[1] to it.groupValues[2] }
 
     /**
      * Android's per-application language settings offer the same list.
@@ -110,11 +169,11 @@ class LocalesTest {
     /**
      * So is a choice naming a language the interface does not speak: Android's
      * per-application picker can leave one behind when a translation is
-     * withdrawn, and English text under a German heading is not a state to show.
+     * withdrawn, and English text under a translated heading is not a state to show.
      */
     @Test
     fun `an unknown stored choice follows the system`() {
-        assertNull(knownLanguage(Locale.GERMAN))
+        assertNull(knownLanguage(UNSPOKEN))
         assertNull(knownLanguage(Locale.forLanguageTag("und")))
         assertEquals(Locale.FRENCH, knownLanguage(Locale.FRENCH))
     }
@@ -149,7 +208,7 @@ class LocalesTest {
      */
     @Test
     fun `an untranslated language reads English figures`() {
-        assertEquals(Locale.ENGLISH, textLocaleFor(Locale.GERMAN))
+        assertEquals(Locale.ENGLISH, textLocaleFor(UNSPOKEN))
         assertEquals(Locale.ENGLISH, textLocaleFor(null))
     }
 
@@ -192,7 +251,7 @@ class LocalesTest {
     fun `Latin digits leave the language exactly as it was`() {
         assertEquals(Locale.FRENCH, textLocaleFor(Locale.FRENCH, "latn"))
         assertEquals(Locale.ENGLISH, textLocaleFor(Locale.ENGLISH, "latn"))
-        assertEquals(Locale.ENGLISH, textLocaleFor(Locale.GERMAN, "latn"))
+        assertEquals(Locale.ENGLISH, textLocaleFor(UNSPOKEN, "latn"))
         assertEquals(Locale.CANADA_FRENCH, textLocaleFor(Locale.CANADA_FRENCH, "latn"))
     }
 
@@ -203,7 +262,7 @@ class LocalesTest {
         assertEquals("1.2 km", written(textLocaleFor(Locale.ENGLISH, "latn")))
         // A device set to a language with no translation and Latin digits reads
         // English text, and English figures with it, as it always has.
-        assertEquals("1.2 km", written(textLocaleFor(Locale.GERMAN, "latn")))
+        assertEquals("1.2 km", written(textLocaleFor(UNSPOKEN, "latn")))
     }
 
     /** A distance as the interface shows it, unit included. */
