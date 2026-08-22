@@ -42,6 +42,17 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Roue Libre" />
 
+    <!-- The text hangs from the title, and the bias is what says so.
+
+         This container and the drawing under it constrain one another, which
+         makes them a chain, and a spread chain ignores the bias: on the three
+         pages that carry a drawing this attribute changes nothing, and the
+         drawing goes on taking the height the text leaves. The fleet page
+         hides the drawing, the chain is then gone, and the container is left
+         with slack between the title and the step label — which the default
+         bias of 0.5 spent by centring the text in it, a third of the screen of
+         nothing under the title. At 0 the text stays where it is on every
+         other page. -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/body_container"
         android:layout_width="0dp"
@@ -54,6 +65,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHeight_default="wrap"
         app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintVertical_bias="0"
         app:layout_goneMarginBottom="@dimen/space_l">
 
         <LinearLayout
@@ -80,12 +92,19 @@
                  altogether at the largest font sizes, which is right for a
                  decoration and wrong for a sentence carrying the meaning.
 
-                 Each line is one view, the mark being the sentence's own
-                 leading drawable: it is decorative, the sentence saying what it
-                 says, and a screen reader reads three lines each in one piece.
-                 The text wraps past the mark rather than under it, so a long
-                 sentence keeps its indent instead of running back to the
-                 margin. -->
+                 The mark is an image beside the sentence and not the
+                 sentence's own leading drawable, which is what `lint` would
+                 rather see here: a compound drawable is laid out at the
+                 resource's intrinsic size and there is no attribute to change
+                 it, and at the map's 36dp the cog and the bolt — the very
+                 thing this page teaches — came out the height of a line and
+                 could not be told apart. A view of our own takes the size we
+                 give it.
+
+                 Each mark is decorative, the sentence beside it saying what it
+                 says, so a screen reader stops on three lines and reads each in
+                 one piece. The sentence has its own column, weighted, so it
+                 wraps within it instead of running back under the mark. -->
             <LinearLayout
                 android:id="@+id/fleet_marks"
                 android:layout_width="match_parent"
@@ -95,37 +114,79 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/space_m"
+                    android:baselineAligned="false"
                     android:gravity="center_vertical"
-                    android:lineSpacingExtra="4dp"
-                    android:text="@string/welcome_fleet_mechanical_only"
-                    android:textAppearance="@style/TextAppearance.RoueLibre.Body"
-                    app:drawableStartCompat="@drawable/marker_journey_station" />
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
 
-                <TextView
+                    <ImageView
+                        android:layout_width="@dimen/welcome_mark"
+                        android:layout_height="@dimen/welcome_mark"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/marker_journey_station" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_m"
+                        android:layout_weight="1"
+                        android:lineSpacingExtra="4dp"
+                        android:text="@string/welcome_fleet_mechanical_only"
+                        android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_m"
-                    android:drawablePadding="@dimen/space_m"
+                    android:baselineAligned="false"
                     android:gravity="center_vertical"
-                    android:lineSpacingExtra="4dp"
-                    android:text="@string/welcome_fleet_electric_only"
-                    android:textAppearance="@style/TextAppearance.RoueLibre.Body"
-                    app:drawableStartCompat="@drawable/marker_journey_station_electric" />
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
 
-                <TextView
+                    <ImageView
+                        android:layout_width="@dimen/welcome_mark"
+                        android:layout_height="@dimen/welcome_mark"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/marker_journey_station_electric" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_m"
+                        android:layout_weight="1"
+                        android:lineSpacingExtra="4dp"
+                        android:text="@string/welcome_fleet_electric_only"
+                        android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_m"
-                    android:drawablePadding="@dimen/space_m"
+                    android:baselineAligned="false"
                     android:gravity="center_vertical"
-                    android:lineSpacingExtra="4dp"
-                    android:text="@string/welcome_fleet_mixed"
-                    android:textAppearance="@style/TextAppearance.RoueLibre.Body"
-                    app:drawableStartCompat="@drawable/marker_journey_station_mixed" />
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="@dimen/welcome_mark"
+                        android:layout_height="@dimen/welcome_mark"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/marker_journey_station_mixed" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_m"
+                        android:layout_weight="1"
+                        android:lineSpacingExtra="4dp"
+                        android:text="@string/welcome_fleet_mixed"
+                        android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

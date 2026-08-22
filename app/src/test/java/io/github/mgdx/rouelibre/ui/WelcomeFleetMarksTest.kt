@@ -44,7 +44,7 @@ class WelcomeFleetMarksTest {
         for ((_, marker) in MARKS) {
             assertTrue(
                 "The fleet page draws $marker, the map's own disc, rather than one of its own",
-                """app:drawableStartCompat="@drawable/$marker"""" in welcomeLayout,
+                """android:src="@drawable/$marker"""" in welcomeLayout,
             )
         }
     }
@@ -79,6 +79,51 @@ class WelcomeFleetMarksTest {
                 )
             }
         }
+    }
+
+    /**
+     * The mark is given a size of ours rather than the map's.
+     *
+     * A compound drawable would be laid out at the resource's intrinsic size,
+     * 36dp, which is the size a marker takes among fifty on a map and not the
+     * size at which a cog and a bolt are told apart by somebody meeting them
+     * for the first time. `lint` prefers the compound drawable and is told not
+     * to here; this is the assertion that says why, so the saving is not taken
+     * back later by a hand that only sees two views where one would do.
+     */
+    @Test
+    fun `each mark is given the page's own size`() {
+        assertEquals(
+            "Each mark is sized by the page, not by the drawable",
+            MARKS.size * 2,
+            """@dimen/welcome_mark"""".toRegex().findAll(welcomeLayout).count(),
+        )
+    }
+
+    /**
+     * The text hangs from the title on the fleet page as on the others.
+     *
+     * The container and the drawing under it constrain one another, so they
+     * form a chain, and a spread chain ignores the bias — which is the whole
+     * reason a bias of 0 can be written on the container without moving the
+     * three pages that do carry a drawing. Break the chain and that reasoning
+     * goes with it, silently, on pages this test is the only reader of. So
+     * both halves are pinned: the bias, and the chain it depends on.
+     */
+    @Test
+    fun `the text hangs from the title rather than floating under it`() {
+        assertTrue(
+            "The body container is biased to the top",
+            """app:layout_constraintVertical_bias="0"""" in welcomeLayout,
+        )
+        assertTrue(
+            "The container is constrained down to the drawing",
+            """app:layout_constraintBottom_toTopOf="@id/illustration"""" in welcomeLayout,
+        )
+        assertTrue(
+            "The drawing is constrained back up to the container, which is what makes a chain",
+            """app:layout_constraintTop_toBottomOf="@id/body_container"""" in welcomeLayout,
+        )
     }
 
     /**
