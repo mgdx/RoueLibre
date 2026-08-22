@@ -14,6 +14,8 @@ from __future__ import annotations
 
 import json
 import math
+import statistics
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -48,6 +50,34 @@ FLEET_COMMENT = [
 # ellipsoid; the variation is far below the precision this project needs.
 METRES_PER_DEGREE_LATITUDE = 111_320.0
 
+# The equator, in metres: what a whole map spans at zoom 0.
+EARTH_CIRCUMFERENCE_METRES = 40_075_016.686
+
+# MapLibre draws 512-pixel tiles, which is what puts its zoom about one step
+# off the 256-tile convention every other tool counts in.
+TILE_SIZE_PIXELS = 512
+
+# The screen the opening framing is judged on: the shape of the phones this is
+# tested on, and of most of what runs Android. It is read two ways, because the
+# two questions asked of a framing are not the same one (§4).
+REFERENCE_VIEWPORT_WIDTH_PIXELS = 1080
+REFERENCE_VIEWPORT_HEIGHT_PIXELS = 2280
+
+# Opening zoom. The three conurbations settled by hand open between 11.2 and
+# 11.5 over boxes around 21 km wide; the rule below reproduces that and
+# tightens the framing for a smaller network, so that a ten-station town does
+# not open on a quarter of its department.
+REFERENCE_ZOOM = 11.4
+REFERENCE_WIDTH_KILOMETRES = 21.0
+MINIMUM_ZOOM, MAXIMUM_ZOOM = 10.5, 14.0
+
+
+def metres_per_pixel(zoom: float, latitude: float) -> float:
+    """The ground distance one screen pixel covers at this zoom and latitude."""
+    return EARTH_CIRCUMFERENCE_METRES * math.cos(math.radians(latitude)) / (
+        TILE_SIZE_PIXELS * 2.0 ** zoom
+    )
+
 
 # How many station positions a configuration carries. Eight describes a network
 # stretched over a region along its whole length — one station per town of the
@@ -60,20 +90,24 @@ STATION_SAMPLE_COUNT = 8
 SAMPLE_PRECISION = 5
 
 
-def sample_positions(stations: list[dict], count: int = STATION_SAMPLE_COUNT) -> list[list[float]]:
-    """Take positions spread through a station list, in feed order.
+def spread_through(items: Sequence, count: int = STATION_SAMPLE_COUNT) -> list:
+    """Take ``count`` items at regular intervals through a list, in its order.
 
     At regular intervals rather than the first ones: a feed often lists a
     network district by district, and the first eight would describe one
     neighbourhood of a conurbation that spreads over sixty municipalities.
     """
-    if not stations:
+    if not items:
         return []
-    step = max(1, len(stations) // count)
-    picked = stations[::step][:count]
+    step = max(1, len(items) // count)
+    return list(items[::step][:count])
+
+
+def sample_positions(stations: list[dict], count: int = STATION_SAMPLE_COUNT) -> list[list[float]]:
+    """Take positions spread through a station list, in feed order."""
     return [
         [round(station["lat"], SAMPLE_PRECISION), round(station["lon"], SAMPLE_PRECISION)]
-        for station in picked
+        for station in spread_through(stations, count)
     ]
 
 
@@ -137,6 +171,155 @@ class BoundingBox:
             f"S {self.south:.6f}  O {self.west:.6f}  "
             f"N {self.north:.6f}  E {self.east:.6f}"
         )
+
+
+def default_zoom(box: BoundingBox) -> float:
+    """The opening zoom that frames a network of this width."""
+    width = max(box.width_kilometres, 0.5)
+    zoom = REFERENCE_ZOOM - math.log2(width / REFERENCE_WIDTH_KILOMETRES)
+    return round(min(max(zoom, MINIMUM_ZOOM), MAXIMUM_ZOOM), 1)
+
+
+def median_position(
+    positions: Sequence[tuple[float, float]]
+) -> tuple[float, float]:
+    """The median latitude and the median longitude of a set of positions.
+
+    The median and not the mean: a handful of stations at one end of a network
+    pulls a mean out of the built-up area it should be framing, while the
+    median stays where the stations are. Each coordinate is taken separately,
+    which is enough for a group of stations that hangs together — the caller
+    passes one cluster, not a network spread over a country, and the result
+    frames it rather than naming a point of interest.
+
+    Raises:
+        ValueError: if no position is given.
+    """
+    if not positions:
+        raise ValueError("No position to take a median of.")
+    return (
+        statistics.median(latitude for latitude, _ in positions),
+        statistics.median(longitude for _, longitude in positions),
+    )
+
+
+@dataclass(frozen=True)
+class OpeningView:
+    """Where the map opens on a network, and how wide (SPEC.md §4).
+
+    Not the middle of the reference box: that rectangle is drawn around
+    everything the feed publishes, and its middle can be a place holding no
+    station at all — Careem BIKE's box spanned Dubai and Medina, and its middle
+    fell 769 km from the nearest bike, in the Saudi desert.
+    """
+
+    latitude: float
+    longitude: float
+    zoom: float
+
+    @classmethod
+    def from_stations(
+        cls,
+        positions: Sequence[tuple[float, float]],
+        main_cluster_box: BoundingBox,
+        margin_metres: float,
+    ) -> "OpeningView":
+        """Frame a network on its stations rather than on its rectangle.
+
+        Both the centre and the zoom are read off the most populous cluster:
+        that is where the stations the user came to see are, and a network
+        holding one station per town of a region would otherwise open on the
+        region and show nothing anywhere. The centre is the median of those
+        positions and not their mean — the mean of a cluster stretched along a
+        valley lands in the fields beside it, the median stays on the stations.
+
+        Args:
+            positions: the positions of the most populous cluster.
+            main_cluster_box: the rectangle enclosing them.
+            margin_metres: the margin §4 puts around the stations, applied here
+                too so that the zoom of a single-cluster city is the very one
+                the reference box would have given.
+
+        Raises:
+            ValueError: if no position is given.
+        """
+        latitude, longitude = median_position(positions)
+        return cls(
+            latitude=round(latitude, 6),
+            longitude=round(longitude, 6),
+            zoom=default_zoom(main_cluster_box.expanded_by_metres(margin_metres)),
+        )
+
+    def _degrees_of(self, metres: float) -> tuple[float, float]:
+        """That distance in degrees of latitude, then of longitude, here."""
+        return (
+            metres / METRES_PER_DEGREE_LATITUDE,
+            metres
+            / (METRES_PER_DEGREE_LATITUDE * math.cos(math.radians(self.latitude))),
+        )
+
+    def shows_a_station(self, positions: Sequence[tuple[float, float]]) -> bool:
+        """Whether at least one of these positions is on screen at the opening.
+
+        This is the question the map asks when it opens with no fix available,
+        and the one nothing asked until Dubai opened on an empty desert.
+
+        The screen is read as a square of its narrow side, which under-states
+        what a phone held upright really shows: a check that decides whether to
+        move a map had better err towards calling the framing empty.
+        """
+        half_side = metres_per_pixel(self.zoom, self.latitude) * (
+            REFERENCE_VIEWPORT_WIDTH_PIXELS / 2.0
+        )
+        half_latitude, half_longitude = self._degrees_of(half_side)
+        return any(
+            abs(latitude - self.latitude) <= half_latitude
+            and abs(longitude - self.longitude) <= half_longitude
+            for latitude, longitude in positions
+        )
+
+    def distance_to_nearest_metres(
+        self, positions: Sequence[tuple[float, float]]
+    ) -> float:
+        """How far the nearest of these positions is from where the map opens.
+
+        Infinite when there is none, so that two framings can be compared
+        without the caller having to check first.
+        """
+        metres_per_degree_longitude = METRES_PER_DEGREE_LATITUDE * math.cos(
+            math.radians(self.latitude)
+        )
+        return min(
+            (
+                math.hypot(
+                    (latitude - self.latitude) * METRES_PER_DEGREE_LATITUDE,
+                    (longitude - self.longitude) * metres_per_degree_longitude,
+                )
+                for latitude, longitude in positions
+            ),
+            default=math.inf,
+        )
+
+    def reaches_a_station(self, positions: Sequence[tuple[float, float]]) -> bool:
+        """Whether one of these positions is within a screenful of the centre.
+
+        The same screen read at its most generous — corner to centre — because
+        this answers the question put by a witness too sparse for the strict
+        one. A configuration records eight positions spread through its network
+        (§15.1), and eight points spread through twelve thousand stations over
+        three hundred kilometres of Switzerland can all be forty kilometres
+        from a framing that is perfectly good. Anything this catches is a
+        framing that has left its network altogether, which is what Dubai's
+        had done, by a factor of twelve.
+        """
+        reach = (
+            metres_per_pixel(self.zoom, self.latitude)
+            * math.hypot(
+                REFERENCE_VIEWPORT_WIDTH_PIXELS, REFERENCE_VIEWPORT_HEIGHT_PIXELS
+            )
+            / 2.0
+        )
+        return self.distance_to_nearest_metres(positions) <= reach
 
 
 class CityConfig:
@@ -319,24 +502,47 @@ class CityConfig:
         return float(self.document["boundingBox"]["marginMeters"])
 
     def update_bounding_box(
-        self, box: BoundingBox, station_count: int, generated_at: str
+        self,
+        box: BoundingBox,
+        station_count: int,
+        generated_at: str,
+        opening: OpeningView | None = None,
+        station_positions: Sequence[tuple[float, float]] = (),
     ) -> bool:
         """Record a freshly computed bounding box, preserving the comments.
 
-        The opening centre follows the box when the box leaves it behind. A
+        The opening framing follows the stations when it stops showing any. A
         recomputation does not only widen the rectangle: dropping a stray
         station, or a network that retreats from an outlying town, moves an edge
         inwards, and VélôToulouse showed what that costs — one station shed
         26 km west of the others took the western edge with it, and the centre
-        stayed where the old rectangle used to be, outside the new one. The map
-        then opens on an area holding no station at all.
+        stayed where the old rectangle used to be, outside the new one.
 
-        A centre still inside the box is left alone: the first cities served
-        have theirs set on the city centre rather than on the middle of the
-        rectangle, and that is a deliberate choice this must not undo.
+        Falling outside the box was long the only test, and it let the worse
+        failure through: a centre that stays well inside a box spanning two
+        conurbations, showing neither. So the centre is now also required to
+        have a station on screen at the opening zoom, which is what the map is
+        opened for in the first place.
+
+        A framing that still shows the network is left alone: the first cities
+        served have their centre set on the city centre rather than computed,
+        and that is a deliberate choice this must not undo.
+
+        Args:
+            opening: the framing read from the stations, used only if the
+                stored one no longer shows any. Nothing is moved without it.
+            station_positions: a spread of positions through the most populous
+                cluster, the witness the stored framing is judged against —
+                a handful of points, deliberately, and taken from that cluster
+                alone. Judged against every station instead, a framing catching
+                one station at the end of an Alpine valley would pass:
+                sharedmobility.ch has enough of them for the whole of
+                Switzerland to answer "yes, one" wherever it is asked. Judged
+                against the whole network, a map opening 130 km west of
+                Strasbourg would pass on one station of the Meuse.
 
         Returns:
-            whether the opening centre had to be moved, so the caller can say
+            whether the opening framing had to be moved, so the caller can say
             so in its log rather than change the map in silence.
         """
         stored = self.document["boundingBox"]
@@ -347,11 +553,26 @@ class CityConfig:
         stored["north"] = round(box.north, 6)
         stored["east"] = round(box.east, 6)
 
-        opening = self.document["map"]
-        if box.contains(
-            opening["defaultCenterLatitude"], opening["defaultCenterLongitude"]
-        ):
+        map_block = self.document["map"]
+        current = OpeningView(
+            latitude=map_block["defaultCenterLatitude"],
+            longitude=map_block["defaultCenterLongitude"],
+            zoom=map_block["defaultZoom"],
+        )
+        if opening is None:
             return False
-        opening["defaultCenterLatitude"] = round((box.south + box.north) / 2, 6)
-        opening["defaultCenterLongitude"] = round((box.west + box.east) / 2, 6)
+        if box.contains(current.latitude, current.longitude):
+            if not station_positions or current.shows_a_station(station_positions):
+                return False
+            # Nothing to gain, nothing moves. A network spread over a whole
+            # country has no framing that shows one of a handful of points
+            # spread through it, and a map that cannot be improved on is not a
+            # map to rewrite at every regeneration.
+            if opening.distance_to_nearest_metres(
+                station_positions
+            ) >= current.distance_to_nearest_metres(station_positions):
+                return False
+        map_block["defaultCenterLatitude"] = opening.latitude
+        map_block["defaultCenterLongitude"] = opening.longitude
+        map_block["defaultZoom"] = opening.zoom
         return True

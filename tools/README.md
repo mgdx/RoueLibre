@@ -127,7 +127,7 @@ machine, most of which is downloading the sources.
 |---|---|
 | `discover_networks.py` | Surveys every GBFS feed of every country, keeps the docked bike networks, writes `docs/networks.md` |
 | `add_city.py` | Turns a surveyed network into a `config/cities/*.json` |
-| `compute_bbox.py` | Computes the reference bounding box from the GBFS feed's stations and writes it into the city configuration |
+| `compute_bbox.py` | Computes the reference bounding box and the map's opening framing from the GBFS feed's stations, and writes them into the city configuration |
 | `build_tiles.py` | Produces `tiles.mbtiles` from an OpenStreetMap extract |
 | `build_routing.py` | Produces the BRouter `*.rd5` graph |
 | `build_address_index.py` | Produces `addresses.sqlite`, from the Base Adresse Nationale in France and from the OpenStreetMap extract everywhere else |
@@ -207,6 +207,35 @@ itself.
 It is deliberately not the metropolis's administrative boundary, which would
 cover vast rural areas without a single station and would inflate all three sets
 for nothing.
+
+**A feed does not always hold one conurbation.** `compute_bbox.py` gathers the
+stations into clusters — 25 km from one member is enough to join one — and sets
+aside those that are both over 100 km from the most populous cluster and
+smaller than a tenth of the network (`SPEC.md` §4). Careem BIKE publishes 206
+stations in Dubai and 6 in Medina, 1,580 km away, and the box drawn around both
+measured 1,612 km by 100. Every cluster set aside is named in the log, with its
+size, its distance and one of its stations; nothing is dropped in silence. A
+network legitimately spread over a region is *not* touched by this — Nicosia
+puts 14 % of its stations on the far side of Cyprus and keeps them.
+
+**The map's opening centre comes from the same reading**: the median of the
+positions of the most populous cluster, at the zoom that frames that cluster.
+Not the middle of the rectangle, which for Dubai fell 769 km from the nearest
+bike. A centring already in the file is left alone as long as it still shows
+the network.
+
+## Running the tests
+
+The Python side has its own tests, and they go out on no network:
+
+```bash
+python3 -m unittest discover --start-directory tools/tests --top-level-directory tools
+```
+
+`tools/tests/test_city_framing.py` reads every `config/cities/*.json` and fails
+on a city whose map opens with none of its recorded stations within a
+screenful. That is the check Dubai went through: its data was complete and
+correct on the device, and the map simply opened somewhere else.
 
 ## Sizes obtained over the Lille box
 

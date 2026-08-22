@@ -30,24 +30,20 @@ class RiddenBikesTest {
     }
 
     @Test
-    fun `an undeclared own bike rides exactly as a mechanical one`() {
-        // SPEC §7.6: two wordings and not three. A bike declared mechanical and
-        // a bike nobody declared are the same plain bike, on the drawing, in
-        // the summary and now on the track as well.
-        assertEquals(RiddenBike.Mechanical, (null as OwnBikeKind?).asRiddenBike())
-        assertEquals(
-            (null as OwnBikeKind?).asRiddenBike(),
-            OwnBikeKind.Mechanical.asRiddenBike(),
-        )
+    fun `an own bike declared mechanical rides the plain bike`() {
+        // SPEC §7.6: it is the ride of before, to the track and to the minute,
+        // and since the third state went it is also the ride of an installation
+        // that has never been asked (see `AppPreferences.ownBikeKind`).
+        assertEquals(RiddenBike.Mechanical, OwnBikeKind.Mechanical.asRiddenBike())
     }
 
     @Test
     fun `a declared pedal-assist bike is the only own bike that changes the ride`() {
         assertEquals(RiddenBike.ElectricallyAssisted, OwnBikeKind.Electric.asRiddenBike())
-        // And it is the only one: everything else in the enum, plus the absent
-        // value, must land on the plain bike. Written as a sweep so a third
-        // state added to the setting cannot quietly inherit the assistance.
-        val assisted = (OwnBikeKind.entries + null).filter {
+        // And it is the only one: everything else in the enum must land on the
+        // plain bike. Written as a sweep so a kind added to the setting cannot
+        // quietly inherit the assistance.
+        val assisted = OwnBikeKind.entries.filter {
             it.asRiddenBike() == RiddenBike.ElectricallyAssisted
         }
         assertEquals(listOf(OwnBikeKind.Electric), assisted)

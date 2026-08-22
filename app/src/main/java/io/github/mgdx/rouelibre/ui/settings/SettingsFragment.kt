@@ -152,8 +152,9 @@ class SettingsFragment : Fragment() {
      * 17 August 2026 the minutes with it: the two ends of a journey on one's own
      * bike take the bolt, the summary names that bike, and the ride is traced
      * with a profile of its own — a profile the engine computes with, never a
-     * speed applied afterwards (SPEC §6). "Not specified" and "mechanical" both
-     * give the ride of before, to the track and to the minute.
+     * speed applied afterwards (SPEC §6). The mechanical bike is the ride of
+     * before, to the track and to the minute, and it is what the row is set to
+     * until the rider says otherwise.
      *
      * Written the moment it is pressed, like the pace under it, and read when
      * the next journey is asked for: a journey already on the screen keeps the
@@ -165,9 +166,8 @@ class SettingsFragment : Fragment() {
             // and only the second says what was chosen.
             if (!isChecked || isFilling) return@addOnButtonCheckedListener
             val kind = when (checkedId) {
-                R.id.own_bike_kind_mechanical -> OwnBikeKind.Mechanical
                 R.id.own_bike_kind_electric -> OwnBikeKind.Electric
-                else -> null
+                else -> OwnBikeKind.Mechanical
             }
             viewLifecycleOwner.lifecycleScope.launch { preferences.setOwnBikeKind(kind) }
         }
@@ -179,7 +179,6 @@ class SettingsFragment : Fragment() {
                     isFilling = true
                     current.ownBikeKind.check(
                         when (kind) {
-                            null -> R.id.own_bike_kind_unspecified
                             OwnBikeKind.Mechanical -> R.id.own_bike_kind_mechanical
                             OwnBikeKind.Electric -> R.id.own_bike_kind_electric
                         },

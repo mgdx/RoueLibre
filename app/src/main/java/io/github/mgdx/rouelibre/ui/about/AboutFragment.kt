@@ -7,18 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.BuildConfig
 import io.github.mgdx.rouelibre.R
-import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.data.NEVER_LAUNCHED
 import io.github.mgdx.rouelibre.databinding.FragmentAboutBinding
 import io.github.mgdx.rouelibre.ui.welcome.WelcomeFragment
 import io.github.mgdx.rouelibre.ui.welcome.WhatsNewFragment
-import kotlinx.coroutines.launch
 
 /**
  * The "about" screen (SPEC §7.7).
@@ -28,8 +24,10 @@ import kotlinx.coroutines.launch
  * politeness — the data shown comes from producers who require them, and so do
  * the libraries used.
  *
- * The network's attribution comes from the city configuration: serving another
- * conurbation must not require touching this screen (SPEC §15).
+ * The credit of the network served is **not** among them: the sources page,
+ * one press away, writes it for every network of the catalogue, the installed
+ * one included (SPEC §4.5). Written here as well, it was read twice over two
+ * screens in a row.
  */
 class AboutFragment : Fragment() {
 
@@ -48,19 +46,10 @@ class AboutFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val views = checkNotNull(binding)
-        val container = (requireActivity().application as RoueLibreApplication).container
 
         views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
         views.toolbar.navigationContentDescription = getString(R.string.action_back)
         views.version.text = getString(R.string.about_version, BuildConfig.VERSION_NAME)
-        // The attribution is the feed producer's, hence the active city's:
-        // without a city there is nobody to credit, and the line is hidden
-        // rather than left blank.
-        viewLifecycleOwner.lifecycleScope.launch {
-            val attribution = container.activeCity()?.gbfs?.attribution
-            views.networkAttribution.isVisible = !attribution.isNullOrBlank()
-            views.networkAttribution.text = attribution.orEmpty()
-        }
         views.openSources.setOnClickListener { show(DataSourcesFragment()) }
         views.openRepository.setOnClickListener { openRepository() }
         views.openLicences.setOnClickListener { show(LicencesFragment()) }

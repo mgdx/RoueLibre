@@ -174,7 +174,10 @@
     <string name="welcome_privacy_title">Rien ne sort d\'ici</string>
     <string name="welcome_privacy_body">Les itinéraires sont calculés sur ce téléphone. Les adresses que tu cherches ne sont envoyées à personne, pas même pendant la frappe.\n\nAucun historique n\'est conservé : ni tes trajets, ni tes positions, ni tes destinations.\n\nLa seule requête qui part en usage courant demande combien de vélos sont disponibles.</string>
     <string name="welcome_fleet_title">Ce que dit le vélo</string>
-    <string name="welcome_fleet_body">Le vélo dessiné dit ce que ta ville prête.\n\nUn vélo simple : on le pédale seul. Un éclair : un moteur aide à pédaler. Les deux marques : le réseau prête les deux sortes, et une station dit alors combien elle a de chacune.\n\nC\'est lu dans le flux du réseau lui-même, jamais deviné.</string>
+    <string name="welcome_fleet_body">Le vélo dessiné dit ce que ta ville prête.\n\nC\'est lu dans le flux du réseau lui-même, jamais deviné.</string>
+    <string name="welcome_fleet_mechanical_only">Le réseau ne prête que des vélos mécaniques.</string>
+    <string name="welcome_fleet_electric_only">Le réseau ne prête que des vélos électriques.</string>
+    <string name="welcome_fleet_mixed">Le réseau prête les deux sortes.</string>
 
     <string name="welcome_data_title">Une ville, un téléchargement</string>
     <string name="welcome_data_body">La carte, les rues et le calcul d\'itinéraire vivent sur l\'appareil. C\'est ce qui les rend utilisables sans réseau — et cela suppose de télécharger les données de ta ville, une fois.\n\nCommence donc par la choisir. Compte quelques dizaines de mégaoctets pour une agglomération de taille moyenne, davantage pour une capitale ; la taille est annoncée avant le téléchargement.\n\nTu peux aussi le faire plus tard : en attendant, la liste des stations et leurs disponibilités restent utilisables.</string>
@@ -636,7 +639,7 @@
     <string name="download_can_resume">Cette connexion n\'est plus facturée. Relance le téléchargement : il reprend où il s\'est arrêté.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
-    <string name="settings_opening_title">Ouvrir sur</string>
+    <string name="settings_opening_title">Ouvrir par défaut l\'application sur</string>
     <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_opening_description">Écran sur lequel l\'application s\'ouvre</string>
     <string name="settings_opening_map">Carte</string>
@@ -661,14 +664,13 @@
          about the reader's own equipment: the journey screen carries a
          separate, similar-looking choice about the bikes the network lends. -->
     <string name="settings_own_bike_kind_title">Ton propre vélo</string>
-    <!-- Read aloud in place of the three buttons beside it. -->
+    <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_own_bike_kind_description">Le type de vélo que tu possèdes</string>
-    <string name="settings_own_bike_kind_unspecified">Non précisé</string>
     <string name="settings_own_bike_kind_mechanical">Mécanique</string>
     <string name="settings_own_bike_kind_electric">Électrique</string>
-    <!-- Under the three buttons. Says what this changes: an electric bike is
-         routed and timed as one, where the other two states are not. -->
-    <string name="settings_own_bike_kind_hint">Déclaré électrique, ton vélo a son propre itinéraire et ses propres durées. Non précisé et mécanique donnent le même trajet.</string>
+    <!-- Under the two buttons. Says what the declaration changes: an electric
+         bike is routed and timed as one, where a mechanical one is not. -->
+    <string name="settings_own_bike_kind_hint">Déclaré électrique, ton vélo a son propre itinéraire et ses propres durées.</string>
 
     <!-- The summary of a ride on one's own bike, where that bike was said to be
          a pedal-assist one. %1$s is a distance, %2$s a climb. -->

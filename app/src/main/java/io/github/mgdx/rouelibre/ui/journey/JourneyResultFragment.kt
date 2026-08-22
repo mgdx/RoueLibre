@@ -141,7 +141,7 @@ class JourneyResultFragment : Fragment() {
      * marker. It is never read off [fleet] and never stands in for it — one
      * says what the network lends, the other what the rider owns.
      */
-    private var ownBikeKind: OwnBikeKind? = null
+    private var ownBikeKind: OwnBikeKind = OwnBikeKind.Mechanical
 
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container

@@ -22,10 +22,10 @@ import kotlinx.coroutines.launch
  * conurbation lends nothing that says anything about the electric bike in
  * somebody's hallway, and the reverse holds just as plainly.
  *
- * Two drawings and not three: the bolt is what has to be earned, so a bike
- * declared mechanical takes the same plain glyph as one nobody declared. The
- * plain bike promises the least, which is the rule `BikeGlyphs` already follows
- * for a fleet nothing is known about.
+ * Two drawings, and the bolt is the one that has to be earned: everything that
+ * is not a declared pedal-assist bike takes the plain glyph. The plain bike
+ * promises the least, which is the rule `BikeGlyphs` already follows for a
+ * fleet nothing is known about.
  */
 object OwnBikeGlyphs {
 
@@ -37,23 +37,23 @@ object OwnBikeGlyphs {
      * this journey that bike is the rider's.
      */
     @DrawableRes
-    fun icon(kind: OwnBikeKind?): Int = when (kind) {
+    fun icon(kind: OwnBikeKind): Int = when (kind) {
         OwnBikeKind.Electric -> R.drawable.ic_bike_electric
-        else -> R.drawable.ic_bike
+        OwnBikeKind.Mechanical -> R.drawable.ic_bike
     }
 
     /** The disc standing at either end of a journey on one's own bike. */
     @DrawableRes
-    fun endpointMarker(kind: OwnBikeKind?): Int = when (kind) {
+    fun endpointMarker(kind: OwnBikeKind): Int = when (kind) {
         OwnBikeKind.Electric -> R.drawable.marker_journey_station_electric
-        else -> R.drawable.marker_journey_station
+        OwnBikeKind.Mechanical -> R.drawable.marker_journey_station
     }
 
     /** The one-stroke illustration of the search screen. */
     @DrawableRes
-    fun journeyShape(kind: OwnBikeKind?): Int = when (kind) {
+    fun journeyShape(kind: OwnBikeKind): Int = when (kind) {
         OwnBikeKind.Electric -> R.drawable.illustration_journey_own_bike_electric
-        else -> R.drawable.illustration_journey_own_bike
+        OwnBikeKind.Mechanical -> R.drawable.illustration_journey_own_bike
     }
 }
 
@@ -61,14 +61,15 @@ object OwnBikeGlyphs {
  * Says what the rider's own bike is, and says it again when that changes.
  *
  * Read from disk, so the first answer arrives a beat after the screen: every
- * caller draws the plain bike until then, which is what an undeclared bike takes
- * anyway. Followed rather than read once, so a kind declared in the settings
- * reaches a journey screen without the application being restarted.
+ * caller draws the plain bike until then, which is what a bike nobody has
+ * declared is read as anyway. Followed rather than read once, so a kind
+ * declared in the settings reaches a journey screen without the application
+ * being restarted.
  *
  * @param apply what to redraw, run on the main thread while the view is started,
  *   and safe to run more than once.
  */
-fun Fragment.withOwnBikeKind(apply: (kind: OwnBikeKind?) -> Unit) {
+fun Fragment.withOwnBikeKind(apply: (kind: OwnBikeKind) -> Unit) {
     val container = (requireActivity().application as RoueLibreApplication).container
     viewLifecycleOwner.lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {

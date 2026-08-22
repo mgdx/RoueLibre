@@ -121,7 +121,10 @@
     <string name="welcome_privacy_title">Nothing leaves this phone</string>
     <string name="welcome_privacy_body">Journeys are computed on this phone. The addresses you look up are sent to nobody, not even while you type.\n\nNo history is kept: not your trips, not your positions, not your destinations.\n\nThe only request that goes out in everyday use asks how many bikes are available.</string>
     <string name="welcome_fleet_title">What the bike says</string>
-    <string name="welcome_fleet_body">The bike drawn tells you what your city lends.\n\nA plain bike: you pedal it yourself. A bolt: a motor helps you pedal. Both marks: the network lends the two kinds, and a station then says how many of each it holds.\n\nIt is read from the network\'s own feed, never guessed.</string>
+    <string name="welcome_fleet_body">The bike drawn tells you what your city lends.\n\nIt is read from the network\'s own feed, never guessed.</string>
+    <string name="welcome_fleet_mechanical_only">The network lends mechanical bikes only.</string>
+    <string name="welcome_fleet_electric_only">The network lends electric bikes only.</string>
+    <string name="welcome_fleet_mixed">The network lends both kinds.</string>
 
     <string name="welcome_data_title">One city, one download</string>
     <string name="welcome_data_body">The map, the streets and the route calculation live on the device. That is what makes them work without a network — and it means downloading your city\'s data once.\n\nSo start by choosing it. Expect around forty megabytes for a medium-sized conurbation, more for a capital; the size is announced before the download.\n\nYou can also do it later: in the meantime, the station list and their availability remain usable.</string>
@@ -467,7 +470,7 @@
     <string name="download_can_resume">This connection is no longer billed. Start the download again: it carries on where it stopped.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
-    <string name="settings_opening_title">Opens on</string>
+    <string name="settings_opening_title">Open the app by default on</string>
     <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_opening_description">The screen the app opens on</string>
     <string name="settings_opening_map">Map</string>
@@ -492,14 +495,13 @@
          about the reader's own equipment: the journey screen carries a
          separate, similar-looking choice about the bikes the network lends. -->
     <string name="settings_own_bike_kind_title">Your own bike</string>
-    <!-- Read aloud in place of the three buttons beside it. -->
+    <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_own_bike_kind_description">The kind of bike you own</string>
-    <string name="settings_own_bike_kind_unspecified">Not specified</string>
     <string name="settings_own_bike_kind_mechanical">Mechanical</string>
     <string name="settings_own_bike_kind_electric">Electric</string>
-    <!-- Under the three buttons. Says what this changes: an electric bike is
-         routed and timed as one, where the other two states are not. -->
-    <string name="settings_own_bike_kind_hint">Declared electric, your own bike gets its own route and its own times. Not specified and mechanical give the same journey.</string>
+    <!-- Under the two buttons. Says what the declaration changes: an electric
+         bike is routed and timed as one, where a mechanical one is not. -->
+    <string name="settings_own_bike_kind_hint">Declared electric, your own bike gets its own route and its own times.</string>
 
     <!-- The summary of a ride on one's own bike, where that bike was said to be
          a pedal-assist one. %1$s is a distance, %2$s a climb. -->

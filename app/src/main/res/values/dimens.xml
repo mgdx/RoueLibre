@@ -108,6 +108,20 @@
     <dimen name="intro_mark_canvas">288dp</dimen>
     <dimen name="intro_name_drop">104dp</dimen>
 
+    <!-- The station marks of the welcome screen's fleet page (SPEC §7.9).
+
+         Nearly twice the 36dp the map gives the same disc, and the reason is
+         what the page is for. On the map the disc answers "is there a station
+         here" among fifty others, and the bike inside it is a silhouette. Here
+         it answers "which of the three is this", and what has to be told apart
+         is the cog and the bolt on the bike's flanks — the cog is drawn with a
+         radius of 3.90 in a 24-unit glyph riding at 0.7 of the disc, so it
+         spans a little over five units of thirty-six: 5dp at the map's size,
+         a dot, against some 10dp here, about the height of a lowercase letter
+         of the sentence it faces. Larger still would crowd that sentence,
+         which is what carries the meaning. -->
+    <dimen name="welcome_mark">64dp</dimen>
+
     <!-- Typographic scale. -->
     <dimen name="text_title">22sp</dimen>
     <!-- The name on the opening screen, and the one rung of the scale that
