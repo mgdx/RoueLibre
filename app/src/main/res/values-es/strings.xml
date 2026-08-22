@@ -70,7 +70,7 @@
 
     <!-- The list is empty because the search matches nothing.
          %1$s is what the user typed. -->
-    <string name="stations_no_match_title">No se ha encontrado ninguna estación</string>
+    <string name="stations_no_match_title">No se encuentra ninguna estación</string>
     <string name="stations_no_match_message">Nada coincide con «%1$s». Comprueba la ortografía o borra la búsqueda.</string>
     <string name="action_clear_search">Borrar la búsqueda</string>
 
@@ -107,7 +107,8 @@
     <string name="counterpart_none">—</string>
 
     <!-- The detail line under a station's name.
-         %1$s is a postcode, %2$d the number of docking points. -->
+         %1$s is the distance to the station, or its postcode when the
+         position is unknown; %2$d the number of docking points. -->
     <plurals name="station_detail_with_capacity">
         <item quantity="one">%1$s · %2$d anclaje</item>
         <item quantity="many">%1$s · %2$d de anclajes</item>
@@ -284,7 +285,7 @@
          requires (SPEC §4.5). -->
     <string name="about_attribution_gbfs">Disponibilidad de las bicis: los datos abiertos de la red servida, publicados en formato GBFS. En Francia están referenciados en transport.data.gouv.fr.</string>
     <string name="about_attribution_osm">Mapa, rutas y puntos de referencia: © los colaboradores de OpenStreetMap, licencia ODbL.</string>
-    <string name="about_attribution_ban">Direcciones y números de calle: Base Adresse Nationale, licencia ODbL.</string>
+    <string name="about_attribution_ban">Direcciones y numeración de las calles: Base Adresse Nationale, licencia ODbL.</string>
     <string name="about_attribution_brouter">Cálculo de rutas: BRouter, licencia MIT, sobre datos de OpenStreetMap.</string>
     <string name="about_attribution_maplibre">Dibujo del mapa: MapLibre Native, licencia BSD de dos cláusulas.</string>
 
@@ -302,7 +303,7 @@
 
     <!-- The page crediting the feed producers of every city served (SPEC §4.5). -->
     <string name="sources_title">Fuentes de los datos</string>
-    <string name="sources_intro">La disponibilidad viene de la red de cada ciudad, en datos abiertos. Aquí está quién la produce, incluso para las ciudades que no has instalado.</string>
+    <string name="sources_intro">La disponibilidad viene de la red de cada ciudad, en datos abiertos. Aquí se dice quién la produce, incluso para las ciudades que no has instalado.</string>
     <string name="sources_open">Ver la fuente</string>
     <string name="about_licences_title">Licencias</string>
     <string name="about_no_browser">No hay ningún navegador instalado en este dispositivo.</string>
@@ -319,7 +320,7 @@
     <!-- The switch that leaves the network out of the journey, and the sentence
          that replaces the one above it when it is on (SPEC §7.3). -->
     <string name="journey_own_bike">Con mi propia bici</string>
-    <string name="journey_hint_own_bike">La ruta se calcula en el dispositivo: un solo trayecto en bici de principio a fin, sin pasar por ninguna estación.</string>
+    <string name="journey_hint_own_bike">La ruta se calcula en el dispositivo: un solo trayecto en bici de puerta a puerta, sin pasar por ninguna estación.</string>
 
     <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
          which is what the application does at rest. -->
@@ -351,7 +352,7 @@
          pan has taken it elsewhere. -->
     <string name="journey_frame">Ver toda la ruta</string>
     <!-- %1$s is the walking time, %2$s the cycling time, %3$s the total distance. -->
-    <string name="journey_summary">de ellos, %1$s a pie y %2$s en bici · %3$s</string>
+    <string name="journey_summary">%1$s a pie y %2$s en bici · %3$s</string>
     <!-- Metres climbed over a leg or over the whole journey. Shown only where
          there is relief worth naming; a flat city never reads this. -->
     <string name="journey_climb">%1$s de desnivel</string>
@@ -377,7 +378,7 @@
     <string name="journey_detail_availability_note">Bicis y espacios libres tal como estaban al calcular la ruta.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
-    <string name="journey_navigate">Abrir en una aplicación de navegación</string>
+    <string name="journey_navigate">Abrir en navegación</string>
     <string name="journey_navigate_which">¿Qué parte de la ruta?</string>
     <!-- %1$s is the station's name. -->
     <string name="journey_step_to_station">Camina hasta %1$s</string>
@@ -434,13 +435,13 @@
          or to it (SPEC §7.2). -->
     <string name="station_as_origin">Partir de aquí</string>
     <string name="station_as_destination">Ir aquí</string>
-    <string name="station_open_in_navigation">Abrir en una aplicación de navegación</string>
+    <string name="station_open_in_navigation">Abrir en navegación</string>
     <string name="station_no_navigation_app">No hay ninguna aplicación de mapas instalada en este dispositivo.</string>
 
     <!-- Address search in the offline index (SPEC §4.3). Not to be confused
          with the field that filters the station list. -->
     <string name="address_search_title">Buscar una dirección</string>
-    <string name="address_search_hint">Calle, número, localidad</string>
+    <string name="address_search_hint">Calle y número</string>
     <string name="address_search_clear">Borrar la búsqueda</string>
     <string name="address_search_privacy">Todo se busca en el dispositivo. No se envía nada, ni siquiera mientras escribes.</string>
 
@@ -461,7 +462,7 @@
     <string name="address_detail_approximate">%1$s · ubicación aproximada</string>
     <!-- Spoken by screen readers on a result row.
          %1$s is the address, %2$s its context. -->
-    <string name="address_content_description">%1$s, %2$s</string>
+    <string name="address_content_description">%1$s. %2$s</string>
 
     <!-- An empty search screen: each situation calls for a different gesture.
          "Estaciones" here are railway stations, not the network's. -->
@@ -472,7 +473,7 @@
          index the answer can be seconds away. -->
     <string name="address_searching_title">Buscando…</string>
     <string name="address_searching_message">Buscando entre las direcciones instaladas en este dispositivo.</string>
-    <string name="address_no_match_title">No se ha encontrado ninguna dirección</string>
+    <string name="address_no_match_title">No se encuentra ninguna dirección</string>
     <!-- %1$s is what the user typed. -->
     <string name="address_no_match_message">Nada coincide con «%1$s». Prueba solo con el nombre de la calle o añade la localidad.</string>
     <string name="address_needs_index_title">La búsqueda necesita el índice de direcciones</string>
@@ -529,7 +530,7 @@
     </plurals>
     <string name="city_size_unknown">Tamaño anunciado antes de descargar</string>
     <!-- %1$s is an already formatted size, "42,5 MB" for instance. -->
-    <string name="city_installed">%1$s instalados en el dispositivo</string>
+    <string name="city_installed">%1$s en el dispositivo</string>
     <!-- A network and the conurbation it serves, "Bicing — Barcelona".
          %1$s is the network, %2$s the city. -->
     <string name="city_label">%1$s — %2$s</string>
@@ -542,7 +543,7 @@
     <string name="city_deleted">Datos de %1$s eliminados</string>
     <string name="city_search_hint">Buscar una ciudad</string>
     <string name="city_search_clear">Borrar la búsqueda</string>
-    <string name="city_no_match_title">No se ha encontrado ninguna ciudad</string>
+    <string name="city_no_match_title">No se encuentra ninguna ciudad</string>
     <string name="city_no_match_message">Nada coincide con «%1$s». Comprueba la ortografía o borra la búsqueda.</string>
     <string name="city_proposal_title">Tu ciudad</string>
     <!-- Shown when the position says one is in another served conurbation than the one installed. -->
@@ -551,7 +552,7 @@
     <string name="city_here_installed_body">%1$s da servicio a la zona donde estás, y sus datos ya están en el dispositivo.</string>
     <string name="city_here_install">Instalar sus datos</string>
     <string name="city_here_use">Usar esta ciudad</string>
-    <string name="city_proposal_body">Parece que estás en la zona que cubre %1$s. ¿Vamos con eso?</string>
+    <string name="city_proposal_body">Parece que estás en la zona que cubre %1$s. ¿La usamos?</string>
     <string name="city_proposal_accept">Sí</string>
     <string name="city_none_nearby">No hay ninguna red conocida cerca de aquí. Elige una ciudad de la lista.</string>
     <string name="action_cancel">Cancelar</string>
@@ -569,7 +570,7 @@
     <string name="storage_open">Gestionar los datos sin conexión</string>
     <string name="storage_intro">El mapa, el cálculo de rutas y la búsqueda de direcciones funcionan sin conexión. Necesitan tres conjuntos de datos, que se instalan una vez.</string>
     <!-- %1$s is an already formatted size, "42,5 MB" for instance. -->
-    <string name="storage_total">%1$s ocupados en este dispositivo</string>
+    <string name="storage_total">Ocupa %1$s en este dispositivo</string>
     <string name="storage_nothing_installed">No hay datos instalados</string>
     <string name="storage_no_city">No hay ninguna ciudad elegida</string>
 
@@ -618,7 +619,7 @@
     <!-- %1$d is the version found, %2$d the one the application can read. -->
     <string name="dataset_rejected_version">Este archivo está en la versión de formato %1$d y esta versión de la aplicación lee la versión %2$d. Actualiza la aplicación.</string>
     <string name="dataset_rejected_checksum">El archivo no coincide con su suma de verificación: está incompleto o dañado. Descárgalo de nuevo.</string>
-    <string name="dataset_rejected_transfer">No se ha podido copiar el archivo. Comprueba el espacio disponible y vuelve a intentarlo.</string>
+    <string name="dataset_rejected_transfer">No se puede copiar el archivo. Comprueba el espacio disponible y vuelve a intentarlo.</string>
 
     <!-- Error messages: what happened, and what to do. No apologies, no
          technical codes (SPEC §7 and §14). -->
@@ -633,12 +634,12 @@
     <!-- %1$d is the HTTP code the server returned. -->
     <string name="error_server_refused_download">Error del servidor (%1$d). La descarga se reanuda donde se quedó.</string>
     <string name="error_untrusted_server_download">Certificado de seguridad no válido. La descarga se reanuda cuando se renueve.</string>
-    <string name="error_malformed_download">Se ha recibido un archivo ilegible. La descarga se reanuda donde se quedó.</string>
-    <string name="error_local_storage_download">No se ha podido guardar el archivo. Libera espacio y la descarga se reanuda.</string>
+    <string name="error_malformed_download">El archivo recibido es ilegible. La descarga se reanuda donde se quedó.</string>
+    <string name="error_local_storage_download">No se puede guardar el archivo. Libera espacio y la descarga se reanuda.</string>
     <string name="error_timeout">El servidor de la red tarda demasiado en responder. Vuelve a intentarlo en un momento.</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused">El servidor de la red ha devuelto un error (%1$d). Vuelve a intentarlo más tarde.</string>
-    <string name="error_untrusted_server">El servidor de la red ha presentado un certificado de seguridad no válido. Sus datos no se pueden obtener con seguridad hasta que el operador lo renueve.</string>
+    <string name="error_server_refused">Error del servidor de la red (%1$d). Vuelve a intentarlo más tarde.</string>
+    <string name="error_untrusted_server">El servidor de la red presenta un certificado de seguridad no válido. Sus datos no se pueden obtener con seguridad hasta que el operador lo renueve.</string>
     <string name="error_malformed">Los datos recibidos son ilegibles. El fallo está en el flujo de la red; vuelve a intentarlo más tarde.</string>
     <!-- %1$s is a GBFS feed name, "station_status" for instance. -->
     <string name="error_feed_unavailable">La red no publica el flujo «%1$s».</string>
@@ -652,15 +653,15 @@
          connection is Wi-Fi and is a mobile plan, and a capped hotspot
          declares itself billed. "Uso medido" is Android's own wording for it. -->
     <string name="download_unmetered_only">Descargar solo con una conexión de uso no medido</string>
-    <string name="download_unmetered_only_description">Normalmente el Wi-Fi. Compartir la conexión del móvil o un Wi-Fi limitado se factura por megabyte y cuenta como datos móviles.</string>
+    <string name="download_unmetered_only_description">Normalmente el Wi-Fi. Compartir la conexión del teléfono o un Wi-Fi limitado se factura por megabyte y cuenta como datos móviles.</string>
     <string name="download_held_back_title">Descarga retenida</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Esta conexión se factura por megabyte. Conéctate a una red Wi-Fi para descargar %1$s, o descarga de todos modos ahora.</string>
+    <string name="download_held_back_body">Esta conexión se factura por megabyte. Conéctate a una red Wi-Fi para descargar %1$s, o descarga igualmente ahora.</string>
     <string name="download_stopped_title">Descarga detenida</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">Esta conexión ahora se factura por megabyte, así que la descarga se ha detenido. Lo que ha llegado se conserva. Conéctate a una red Wi-Fi para terminar los %1$s, o continúa de todos modos ahora.</string>
-    <string name="download_anyway">Descargar de todos modos</string>
+    <string name="download_stopped_body">Esta conexión ahora se factura por megabyte, así que la descarga se detiene. Lo que ya está descargado se conserva. Conéctate a una red Wi-Fi para terminar los %1$s, o continúa igualmente ahora.</string>
+    <string name="download_anyway">Descargar igualmente</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_waiting_for_unmetered">Esperando una conexión de uso no medido para descargar %1$s.</string>
     <string name="download_can_resume">Esta conexión ya no se factura. Vuelve a iniciar la descarga: se reanuda donde se quedó.</string>

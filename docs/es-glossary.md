@@ -23,6 +23,16 @@ word wins: an application that calls the settings anything but **Ajustes** reads
 as a foreign one. The arbiter is the system lexicon extracted from
 `framework-res.apk` and `Settings.apk`.
 
+The **compound perfect is kept out of the status messages**, and that is a
+decision rather than an oversight: *no se ha encontrado*, *ha devuelto*, *se ha
+detenido* are understood everywhere but are heard as peninsular, and they are
+the loudest regional marker a file like this can carry. So an error or an empty
+state says what is true now — *No se encuentra ninguna estación*, *No se puede
+copiar el archivo*, *Error del servidor de la red*, *la descarga se detiene* —
+which is better Spanish for a status message in any case. The perfect is left
+where it belongs to the reader's own doing: *las ciudades que no has
+instalado*.
+
 Typography: a question opens with **¿** and an exclamation with **¡**;
 quotations are **« »**; no space stands before `:`, `;`, `?` or `!`. Spanish
 writes no apostrophe, so nothing in the file is escaped — the trap French has
@@ -93,10 +103,14 @@ puts the street before the number — "Gran Vía, 12" — where English puts the
 number first. This is precisely what positional placeholders exist for, and it
 is the only string in the file whose placeholders are reordered.
 
-`address_search_hint` follows it: *Calle, número, localidad*, and not the
-English order. `AddressQuery.parseQuery` accepts a number written either before
-or after the street, so the hint is free to name the order a Spanish speaker
-would type.
+`address_search_hint` follows it — *Calle y número*, and not the English
+*Number, street, town* — but it stops there, and that is deliberate.
+`AddressQuery.parseQuery` recognises a house number only as the **first** word
+of the query or as the **last** one: "Gran Vía 12" is read (the trailing case),
+where "Gran Vía 12 Madrid" is not, and the 12 would be searched for as if it
+were part of the street's name. An invitation naming the town after the number
+would therefore teach a form the engine cannot read. A shorter prompt that is
+right beats a complete one that loses the number.
 
 ## Words that are not translated
 
