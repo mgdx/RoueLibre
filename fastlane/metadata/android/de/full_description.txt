@@ -4,7 +4,7 @@ Alles läuft auf dem Gerät: Die Karte, die Adresssuche und die Routenberechnung
 
 <b>Was sie auszeichnet</b>
 
-• Kein Google-Dienst: keine Play Services, kein Firebase, kein Maps SDK. Sie läuft auf jedem Android ohne Google-Dienste.
+• Kein Google-Dienst: keine Play Services, kein Firebase, kein Maps SDK. Die App läuft auf jedem Android ohne Google-Dienste.
 • Keine Telemetrie, kein Tracker, keine eindeutige Kennung, kein Konto.
 • Keine Fahrtdaten gespeichert: kein Verlauf, keine Positionen, keine Ziele. Was du suchst, verlässt das Telefon nicht.
 • Keine Stadt wird dir vorgesetzt: Mehrere Ballungsräume liegen nebeneinander auf dem Gerät, und die Daten einer Stadt lassen sich löschen, ohne die anderen anzurühren.
@@ -12,7 +12,7 @@ Alles läuft auf dem Gerät: Die Karte, die Adresssuche und die Routenberechnung
 
 <b>Vor dem Installieren zu wissen</b>
 
-Die Karte, die Routendaten und der Adressindex stecken nicht in der App: Sie werden einmal heruntergeladen, über den Bildschirm „Speicher“, oder von Hand aus Dateien installiert, die du selbst erzeugst. Ihr Umfang richtet sich nach der Stadt – einige zehn Megabyte für einen mittelgroßen Ballungsraum, mehr für eine Hauptstadt – und er wird vor dem Download genannt.
+Die Karte, die Routendaten und der Adressindex stecken nicht in der App: Sie werden einmal heruntergeladen, über den Bildschirm „Speicher“, oder von Hand aus Dateien installiert, die du selbst erzeugst. Ihr Umfang richtet sich nach der Stadt – einige Dutzend Megabyte für einen mittelgroßen Ballungsraum, mehr für eine Hauptstadt – und er wird vor dem Download genannt.
 
 <b>Die bedienten Städte</b>
 
@@ -20,6 +20,6 @@ Knapp dreihundert Netze in rund dreißig Ländern: alle, die ihre Stationen als 
 
 Die Offline-Datensätze sind bisher für eine Handvoll davon erzeugt worden. Für die übrigen sagt die App es, statt so zu tun als ob: Die Liste zeigt, was es gibt, und die Dateien lassen sich mit den Skripten des Repositorys erzeugen.
 
-Sie ist an kein Netz im Besonderen gebunden: Die Liste der Städte aktualisiert sich selbst, und jede Stadt trägt die Adresse ihres eigenen GBFS-Feeds bei sich, was die App mit jedem GBFS-Netz der Welt nutzbar macht.
+Die App ist an kein Netz im Besonderen gebunden: Die Liste der Städte aktualisiert sich selbst, und jede Stadt trägt die Adresse ihres eigenen GBFS-Feeds bei sich, was die App mit jedem GBFS-Netz der Welt nutzbar macht.
 
 Freie Software unter der Lizenz GNU GPL v3.

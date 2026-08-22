@@ -103,7 +103,8 @@
     <string name="counterpart_none">—</string>
 
     <!-- The detail line under a station's name.
-         %1$s is a postcode, %2$d the number of docking points. -->
+         %1$s is a formatted distance, or a postcode when no origin is
+         known; %2$d is the number of docking points. -->
     <plurals name="station_detail_with_capacity">
         <item quantity="one">%1$s · %2$d Stellplatz</item>
         <item quantity="other">%1$s · %2$d Stellplätze</item>
@@ -178,14 +179,14 @@
     <!-- First launch (SPEC §7.9). We explain how something works, we are not
          selling anything: short sentences, active voice, no jargon. -->
     <string name="welcome_hello_title">Roue Libre</string>
-    <string name="welcome_hello_body">Diese App zeigt Leihräder auf einer Karte und berechnet eine Route von Tür zu Tür: zu Fuß zu einer Station, mit dem Rad weiter, dann zu Fuß bis ans Ziel.\n\nSie ist freie, quelloffene Software. Kein Konto, keine Werbung, kein Tracker.</string>
+    <string name="welcome_hello_body">Diese App zeigt Leihräder auf einer Karte und berechnet eine Route von Tür zu Tür: zu Fuß zu einer Station, mit dem Rad weiter, dann zu Fuß bis ans Ziel.\n\nRoue Libre ist freie, quelloffene Software. Kein Konto, keine Werbung, kein Tracker.</string>
     <string name="welcome_privacy_title">Nichts verlässt dieses Telefon</string>
     <string name="welcome_privacy_body">Routen werden auf diesem Telefon berechnet. Die Adressen, die du suchst, gehen an niemanden, auch nicht während du tippst.\n\nEs wird kein Verlauf gespeichert: weder deine Fahrten noch deine Positionen noch deine Ziele.\n\nDie einzige Anfrage, die im täglichen Gebrauch nach außen geht, fragt, wie viele Räder verfügbar sind.</string>
     <string name="welcome_fleet_title">Was das Rad verrät</string>
     <string name="welcome_fleet_body">Das abgebildete Rad zeigt, was deine Stadt verleiht.\n\nEs wird aus dem Feed des Netzes selbst gelesen, nie geraten.</string>
     <string name="welcome_fleet_mechanical_only">Das Netz verleiht nur mechanische Räder.</string>
     <string name="welcome_fleet_electric_only">Das Netz verleiht nur elektrische Räder.</string>
-    <string name="welcome_fleet_mixed">Das Netz verleiht beide Sorten.</string>
+    <string name="welcome_fleet_mixed">Das Netz verleiht beide Arten.</string>
 
     <string name="welcome_data_title">Eine Stadt, ein Download</string>
     <string name="welcome_data_body">Die Karte, die Straßen und die Routenberechnung liegen auf dem Gerät. Das macht sie ohne Netz nutzbar – und es heißt, die Daten deiner Stadt einmal herunterzuladen.\n\nFang also damit an, sie zu wählen. Rechne mit rund vierzig Megabyte für einen mittelgroßen Ballungsraum, mit mehr für eine Hauptstadt; die Größe wird vor dem Download genannt.\n\nDu kannst das auch später tun: Bis dahin bleiben die Stationsliste und ihre Verfügbarkeiten nutzbar.</string>
@@ -257,7 +258,7 @@
     <string name="settings_units_system_description">Der auf dem Gerät eingestellten Region folgen</string>
     <string name="settings_units_metric_description">Meter und Kilometer</string>
     <string name="settings_units_us_description">Fuß und Meilen</string>
-    <string name="settings_units_uk_description">Yard und Meilen</string>
+    <string name="settings_units_uk_description">Yards und Meilen</string>
 
     <!-- The "about" screen (SPEC §7.7). The attributions there are owed, not
          offered: the data producers and the libraries used require them. -->
@@ -278,13 +279,13 @@
     <string name="about_attribution_osm">Karte, Routenberechnung und Orientierungspunkte: © OpenStreetMap-Mitwirkende, ODbL-Lizenz.</string>
     <string name="about_attribution_ban">Adressen und Hausnummern: Base Adresse Nationale, ODbL-Lizenz.</string>
     <string name="about_attribution_brouter">Routenberechnung: BRouter, MIT-Lizenz, auf OpenStreetMap-Daten.</string>
-    <string name="about_attribution_maplibre">Kartendarstellung: MapLibre Native, BSD-Lizenz mit zwei Klauseln.</string>
+    <string name="about_attribution_maplibre">Kartendarstellung: MapLibre Native, Zwei-Klausel-BSD-Lizenz.</string>
 
     <!-- Web map links (SPEC §7.8): Android only hands them to the application
          if the user allows it, and saying so keeps that behaviour from looking
          like a defect. The path is Android's own German wording. -->
     <string name="about_links_title">Einen Ort aus einer anderen App öffnen</string>
-    <string name="about_links_body">„geo:“-Links und als reiner Text geteilte Adressen kommen direkt hier an: Wähle Roue Libre in der Auswahl von Android. Links von Kartendiensten brauchen eine Erlaubnis: Einstellungen → Apps → Roue Libre → Standardmäßig öffnen → Link hinzufügen.</string>
+    <string name="about_links_body">„geo:“-Links und als reiner Text geteilte Adressen kommen direkt hier an: Wähle Roue Libre unter „Öffnen mit“. Links von Kartendiensten brauchen eine Erlaubnis: Einstellungen → Apps → Roue Libre → Standardmäßig öffnen → Link hinzufügen.</string>
 
     <string name="about_licence_title">Lizenz</string>
     <string name="about_licence_body">Roue Libre ist freie Software, veröffentlicht unter der GNU GPL Version 3. Du darfst sie nutzen, untersuchen, verändern und weitergeben.</string>
@@ -372,8 +373,8 @@
     <string name="journey_navigate">In einer Navigations-App öffnen</string>
     <string name="journey_navigate_which">Welcher Teil der Route?</string>
     <!-- %1$s is the station's name. -->
-    <string name="journey_step_to_station">Zu Fuß zu %1$s</string>
-    <string name="journey_step_ride">Mit dem Rad zu %1$s</string>
+    <string name="journey_step_to_station">Zu Fuß bis %1$s</string>
+    <string name="journey_step_ride">Mit dem Rad bis %1$s</string>
     <string name="journey_step_to_destination">Zu Fuß zum Ziel</string>
     <string name="journey_step_walk_all">Zu Fuß zum Ziel</string>
     <string name="journey_step_ride_all">Mit dem Rad zum Ziel</string>
@@ -397,7 +398,7 @@
 
     <string name="journey_no_mechanical_nearby">Keine Station in der Nähe hat gerade ein mechanisches Rad. Frag nach irgendeinem Rad oder versuch es später noch einmal.</string>
     <string name="journey_no_electric_nearby">Keine Station in der Nähe hat gerade ein elektrisches Rad. Frag nach irgendeinem Rad oder versuch es später noch einmal.</string>
-    <string name="journey_no_dock_nearby">Keine Station mit einem freien Platz in der Nähe des Ziels. Versuch es später noch einmal oder ziele woanders hin.</string>
+    <string name="journey_no_dock_nearby">Keine Station mit einem freien Platz in der Nähe des Ziels. Versuch es später noch einmal oder wähle ein anderes Ziel.</string>
     <string name="journey_no_route">Kein befahrbarer Weg zwischen diesen beiden Punkten.</string>
     <string name="journey_graph_missing">Die Routendaten sind nicht installiert. Füge sie unter „Speicher“ hinzu.</string>
     <string name="journey_outside_coverage">Dieser Punkt liegt außerhalb des Gebiets, das die installierten Daten abdecken.</string>
@@ -633,7 +634,7 @@
          declares itself billed. "Ohne Datenlimit" is Android's own word for
          an unmetered connection. -->
     <string name="download_unmetered_only">Nur über eine Verbindung ohne Datenlimit herunterladen</string>
-    <string name="download_unmetered_only_description">Meist WLAN. Ein geteilter Handy-Hotspot oder ein begrenztes WLAN wird pro Megabyte abgerechnet und zählt als mobile Daten.</string>
+    <string name="download_unmetered_only_description">Meist WLAN. Ein geteilter Handy-Anschluss oder ein Hotspot mit Datenlimit wird pro Megabyte abgerechnet und zählt als mobile Daten.</string>
     <string name="download_held_back_title">Download zurückgehalten</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_held_back_body">Diese Verbindung wird pro Megabyte abgerechnet. Verbinde dich mit dem WLAN, um %1$s herunterzuladen, oder starte den Download jetzt trotzdem.</string>
@@ -678,7 +679,7 @@
     <string name="settings_own_bike_kind_electric">Elektrisch</string>
     <!-- Under the two buttons. Says what the declaration changes: an electric
          bike is routed and timed as one, where a mechanical one is not. -->
-    <string name="settings_own_bike_kind_hint">Als elektrisch angegeben, bekommt dein eigenes Rad eine eigene Route und eigene Zeiten.</string>
+    <string name="settings_own_bike_kind_hint">Wenn du es als elektrisch angibst, werden Route und Zeiten dafür berechnet.</string>
 
     <!-- The summary of a ride on one's own bike, where that bike was said to be
          a pedal-assist one. %1$s is a distance, %2$s a climb. -->

@@ -33,6 +33,7 @@ than the literal translation.
 | English | German | Why |
 |---|---|---|
 | journey | Route | The whole door-to-door thing: the screen, the settings section, the button, the errors. It is what a German mapping application calls a planned trip, and it is short, which matters on `journey_compute` and `journey_frame`. |
+| journey data (store texts) | Fahrtdaten, deine Fahrten | The one place *Route* is deliberately not used. "Keine Routendaten gespeichert" would collide head-on with `dataset_routing`, which **is** called *Routendaten* and **is** stored on the device — the sentence would say the opposite of the truth. *Fahrtdaten* is not a one-off either: `welcome_privacy_body` already says "weder deine Fahrten noch deine Positionen", so the store bullet and the welcome page use the same word for the same thing. Do not "correct" it back to *Route*. |
 | ride | Radfahrt / Fahrt | The bike leg alone, inside a journey. A different word from *Route*, so the elevation profile and the "own bike" wait cannot be mistaken for the whole thing. |
 | route | Weg | Only in `journey_no_route`, "Kein befahrbarer Weg zwischen diesen beiden Punkten": the line on the ground, not the planned journey. Also in `station_beyond_area`, for the same reason. |
 | bike | Rad, Räder | Shorter than *Fahrrad* by four characters on a label that is repeated on every marker, every row and every disc, and it is what German bike-share networks write. *Fahrrad* appears nowhere, so nothing reads as two words for one object. |
