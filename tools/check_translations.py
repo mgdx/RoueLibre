@@ -102,7 +102,12 @@ LETTERS_WORTH_TRANSLATING = 5
 # translation lands far below it; a started file sits at 100%.
 UNTRANSLATED_SHARE = 0.15
 
-PLACEHOLDER = re.compile(r"%(?:\d+\$)?[a-zA-Z]|%%")
+# A format specifier, whole: an optional argument index, then the flags, width
+# and precision Java allows between the index and the conversion letter.
+# `%2$02d` has to match — it is written that way in `duration_hours_minutes`,
+# and a pattern stopping at the index reads straight past it, leaving that
+# placeholder unchecked in every language.
+PLACEHOLDER = re.compile(r"%%|%(\d+\$)?[-#+ 0,(]*\d*(?:\.\d+)?([a-zA-Z])")
 
 
 def read(path: Path) -> tuple[dict[str, str], dict[str, dict[str, str]]]:
@@ -134,13 +139,23 @@ def worth_translating(english: str) -> bool:
 
 
 def placeholders(text: str) -> list[str]:
-    """The format specifiers of a string, in the order they are written.
+    """The format specifiers of a string, as index and conversion alone.
 
     Compared as a sorted list rather than as a set: a translation may reorder
     them — that is what positional placeholders are for — but it may not drop
     one, add one, or turn a `%1$s` into a `%1$d`.
+
+    **The padding is deliberately not compared.** English writes "1 h 05" and
+    pads its minutes `%2$02d`; a language that writes its unit in full writes
+    "1時間5分" and must not. Which figure is padded is a fact about how the
+    language writes a duration, where the argument it reads and the type it
+    reads it as are facts about the code calling it — and only those two can
+    be got wrong without anyone noticing until the screen throws.
     """
-    return sorted(PLACEHOLDER.findall(text))
+    return sorted(
+        "%%" if match.group(0) == "%%" else f"{match.group(1) or ''}{match.group(2)}"
+        for match in PLACEHOLDER.finditer(text)
+    )
 
 
 def check(language: str) -> tuple[list[str], list[str]]:
