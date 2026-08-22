@@ -62,7 +62,7 @@ from pathlib import Path
 # Shared with the script that writes the box into a configuration: the survey
 # and the generation must agree on which stations make the box, or a network
 # would be judged on one rectangle and served on another.
-from compute_bbox import stray_positions
+from compute_bbox import outlying_positions
 
 TOOLS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = TOOLS_DIR.parent
@@ -428,11 +428,11 @@ def probe_feeds(candidate: dict) -> dict:
         position for position in (station_position(station) for station in stations)
         if position is not None
     ]
-    # A station standing hundreds of kilometres from every other is a mistake
-    # in the feed, not an outpost of the network: it would stretch the
-    # reference box until the network no longer looked like a conurbation, and
-    # §4's three datasets are cut to that box.
-    strays = stray_positions(positioned)
+    # A station — or a small cluster of them — standing hundreds of kilometres
+    # from the rest is a mistake in the feed, not an outpost of the network: it
+    # would stretch the reference box until the network no longer looked like a
+    # conurbation, and §4's three datasets are cut to that box.
+    strays = outlying_positions(positioned)
     if strays:
         survey["strayStations"] = len(strays)
         positioned = [

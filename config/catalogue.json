@@ -1,7 +1,7 @@
 {
   "catalogueVersion": 1,
   "catalogueUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/catalogue.json",
-  "generatedAt": "2026-08-16T11:29:22Z",
+  "generatedAt": "2026-08-19T22:10:59Z",
   "cities": [
     {
       "id": "aar-bike",
@@ -549,49 +549,49 @@
       "operator": "BIXI",
       "mainCity": "Montréal",
       "country": "CA",
-      "stationCount": 1093,
+      "stationCount": 1070,
       "stationSamples": [
         [
           45.49965,
           -73.57634
         ],
         [
-          45.53711,
-          -73.571
+          45.52318,
+          -73.56891
         ],
         [
-          45.55088,
-          -73.58961
+          45.5243,
+          -73.60491
         ],
         [
-          45.45014,
-          -73.57225
+          45.51375,
+          -73.50879
         ],
         [
-          45.51875,
-          -73.57754
+          45.50527,
+          -73.57177
         ],
         [
-          45.59399,
-          -73.63767
+          45.44527,
+          -73.62448
         ],
         [
-          45.50988,
-          -73.61149
+          45.47801,
+          -73.57427
         ],
         [
-          45.51061,
-          -73.55013
+          45.52261,
+          -73.50244
         ]
       ],
       "boundingBox": {
-        "south": 45.352807,
-        "west": -73.979962,
+        "south": 45.389345,
+        "west": -73.979974,
         "north": 45.729299,
-        "east": -71.834147
+        "east": -73.224707
       },
-      "centreLatitude": 45.541053,
-      "centreLongitude": -72.907054,
+      "centreLatitude": 45.523982,
+      "centreLongitude": -73.581963,
       "gbfsDiscoveryUrl": "https://gbfs.velobixi.com/gbfs/2-2/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bixi.json",
       "dataSizeBytes": 147573735,
@@ -657,49 +657,49 @@
       "operator": "Bayern komplett",
       "mainCity": "Nuremberg",
       "country": "DE",
-      "stationCount": 167,
+      "stationCount": 166,
       "stationSamples": [
         [
           48.88949,
           12.55563
         ],
         [
-          48.92079,
-          11.88394
+          48.86904,
+          12.5738
         ],
         [
-          48.88746,
-          12.59056
+          48.99541,
+          12.19451
         ],
         [
-          48.55545,
-          12.19903
+          49.00877,
+          12.12214
         ],
         [
-          49.01849,
-          12.09291
+          48.88277,
+          12.53794
         ],
         [
-          48.99168,
-          12.10862
+          48.89327,
+          12.57578
         ],
         [
-          49.02077,
-          12.11047
+          49.02784,
+          12.16702
         ],
         [
-          48.53572,
-          12.14909
+          48.54566,
+          12.15251
         ]
       ],
       "boundingBox": {
-        "south": 48.497177,
-        "west": 10.845362,
-        "north": 49.932177,
-        "east": 12.698906
+        "south": 48.156165,
+        "west": 11.571734,
+        "north": 49.190577,
+        "east": 12.809187
       },
-      "centreLatitude": 49.214677,
-      "centreLongitude": 11.772134,
+      "centreLatitude": 49.005463,
+      "centreLongitude": 12.106281,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/bayern_komplett/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bayern-komplett.json",
       "dataSizeBytes": 449162995,
@@ -2817,7 +2817,7 @@
       "operator": "Blue-bike",
       "mainCity": "Brussels",
       "country": "BE",
-      "stationCount": 315,
+      "stationCount": 319,
       "stationSamples": [
         [
           51.21761,
@@ -2853,10 +2853,10 @@
         ]
       ],
       "boundingBox": {
-        "south": 50.598744,
-        "west": 2.692874,
+        "south": 49.893077,
+        "west": 2.559071,
         "north": 51.489125,
-        "east": 5.83136
+        "east": 5.831037
       },
       "centreLatitude": 51.043935,
       "centreLongitude": 4.262117,
@@ -3465,7 +3465,7 @@
       "operator": "Lyft",
       "mainCity": "Washington",
       "country": "US",
-      "stationCount": 860,
+      "stationCount": 863,
       "stationSamples": [
         [
           38.80552,
@@ -3519,49 +3519,49 @@
       "operator": "Careem BIKE",
       "mainCity": "Dubai",
       "country": "AE",
-      "stationCount": 212,
+      "stationCount": 206,
       "stationSamples": [
         [
           25.23629,
           55.47219
         ],
         [
-          25.07958,
-          55.13874
+          25.07107,
+          55.12815
         ],
         [
-          25.18454,
-          55.25463
+          25.18036,
+          55.26977
         ],
         [
-          25.20019,
-          55.43583
+          25.07308,
+          55.13736
         ],
         [
-          25.24908,
-          55.27631
+          25.07947,
+          55.15058
         ],
         [
-          25.27794,
-          55.36158
+          25.25511,
+          55.29725
         ],
         [
-          25.2465,
-          55.27425
+          25.26247,
+          55.30169
         ],
         [
-          25.13728,
-          55.20794
+          25.22542,
+          55.29157
         ]
       ],
       "boundingBox": {
-        "south": 24.43194,
-        "west": 39.540473,
+        "south": 24.82212,
+        "west": 55.097728,
         "north": 25.334866,
-        "east": 55.506735
+        "east": 55.506782
       },
-      "centreLatitude": 24.883403,
-      "centreLongitude": 47.523604,
+      "centreLatitude": 25.186528,
+      "centreLongitude": 55.257875,
       "gbfsDiscoveryUrl": "https://careem.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-careem-bike.json",
       "dataSizeBytes": 177586795,
@@ -4437,49 +4437,49 @@
       "operator": "Donkey Republic",
       "mainCity": "Nuremberg",
       "country": "DE",
-      "stationCount": 126,
+      "stationCount": 124,
       "stationSamples": [
         [
           48.88949,
           12.55563
         ],
         [
-          48.87154,
-          12.58893
+          49.07525,
+          12.19486
         ],
         [
-          49.01059,
-          12.08288
+          49.01912,
+          12.12054
         ],
         [
-          48.88197,
-          12.57346
+          48.87611,
+          12.55497
         ],
         [
-          49.01889,
-          12.10047
+          49.00207,
+          12.10151
         ],
         [
-          49.02031,
-          12.09658
+          49.01702,
+          12.10415
         ],
         [
-          49.01375,
-          12.10958
+          49.02124,
+          12.0872
         ],
         [
-          49.0181,
-          12.08517
+          49.0026,
+          12.10076
         ]
       ],
       "boundingBox": {
-        "south": 48.836418,
-        "west": 10.84522,
-        "north": 49.932177,
-        "east": 12.699048
+        "south": 48.156165,
+        "west": 11.571763,
+        "north": 49.120119,
+        "east": 12.698433
       },
-      "centreLatitude": 49.384297,
-      "centreLongitude": 11.772134,
+      "centreLatitude": 49.01651,
+      "centreLongitude": 12.104085,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_regensburg_straubing/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-nuremberg.json",
       "dataSizeBytes": 350902096,
@@ -6800,8 +6800,8 @@
         "north": 19.763184,
         "east": -155.000586
       },
-      "centreLatitude": 19.64774,
-      "centreLongitude": -155.517082,
+      "centreLatitude": 19.648783,
+      "centreLongitude": -155.962453,
       "gbfsDiscoveryUrl": "https://kona.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-hibike.json",
       "dataSizeBytes": 7220296,
@@ -7880,8 +7880,8 @@
         "north": 28.417073,
         "east": -13.832678
       },
-      "centreLatitude": 28.065354,
-      "centreLongitude": -14.810748,
+      "centreLatitude": 27.824618,
+      "centreLongitude": -15.572444,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ls/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-lovesharing.json",
       "dataSizeBytes": 31594627,
@@ -8001,7 +8001,7 @@
       "operator": "Lyft",
       "mainCity": "San Jose",
       "country": "US",
-      "stationCount": 634,
+      "stationCount": 633,
       "stationSamples": [
         [
           37.36,
@@ -11619,49 +11619,49 @@
       "operator": "Fluo Grand Est",
       "mainCity": "Strasbourg",
       "country": "FR",
-      "stationCount": 42,
+      "stationCount": 35,
       "stationSamples": [
         [
           47.62687,
           7.23895
         ],
         [
-          48.07292,
-          7.34768
+          48.76583,
+          5.58869
         ],
         [
-          48.42275,
-          7.63883
+          49.18903,
+          6.90094
         ],
         [
           49.40744,
           6.15725
         ],
         [
-          48.03822,
-          7.13453
+          48.40367,
+          7.4569
         ],
         [
-          49.69528,
-          4.93042
+          48.37345,
+          7.58407
         ],
         [
-          48.738,
-          7.05297
+          48.53728,
+          7.50064
         ],
         [
-          48.90033,
-          6.05139
+          48.74439,
+          7.36161
         ]
       ],
       "boundingBox": {
         "south": 47.563611,
-        "west": 3.452755,
-        "north": 49.965689,
-        "east": 7.990655
+        "west": 5.54802,
+        "north": 49.434389,
+        "east": 7.99044
       },
-      "centreLatitude": 48.76465,
-      "centreLongitude": 5.721705,
+      "centreLatitude": 48.47994,
+      "centreLongitude": 7.58407,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/velo-fluo/en/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velo-fluo.json",
       "dataSizeBytes": 1457365274,
@@ -14049,7 +14049,7 @@
       "operator": "nextbike GmbH",
       "mainCity": "Köln",
       "country": "DE",
-      "stationCount": 161,
+      "stationCount": 165,
       "stationSamples": [
         [
           50.75015,
@@ -15980,8 +15980,8 @@
         "north": 35.206773,
         "east": 34.103525
       },
-      "centreLatitude": 34.913903,
-      "centreLongitude": 33.196744,
+      "centreLatitude": 34.929993,
+      "centreLongitude": 33.35837,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_cy/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-nicosia.json",
       "dataSizeBytes": 83721094,
@@ -16914,14 +16914,6 @@
       "stationCount": 14,
       "stationSamples": [
         [
-          43.05368,
-          17.65028
-        ],
-        [
-          43.08028,
-          17.62846
-        ],
-        [
           44.96168,
           13.85579
         ],
@@ -16944,16 +16936,24 @@
         [
           45.08917,
           13.88186
+        ],
+        [
+          45.87408,
+          16.4106
+        ],
+        [
+          45.88257,
+          16.40827
         ]
       ],
       "boundingBox": {
         "south": 42.933097,
         "west": 13.710615,
         "north": 45.912352,
-        "east": 17.68801
+        "east": 16.753999
       },
-      "centreLatitude": 44.422725,
-      "centreLongitude": 15.699313,
+      "centreLatitude": 44.964615,
+      "centreLongitude": 13.851051,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_hr/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-zagreb.json",
       "dataSizeBytes": 825800483,
@@ -17060,8 +17060,8 @@
         "north": 44.657818,
         "east": 18.471685
       },
-      "centreLatitude": 43.979908,
-      "centreLongitude": 18.038593,
+      "centreLatitude": 43.857905,
+      "centreLongitude": 18.337621,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ba/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-bih.json",
       "dataSizeBytes": 80566282,
@@ -17397,7 +17397,7 @@
       "operator": "pbsn",
       "mainCity": "Toronto",
       "country": "CA",
-      "stationCount": 10,
+      "stationCount": 9,
       "stationSamples": [
         [
           45.55634,
@@ -17433,13 +17433,13 @@
         ]
       ],
       "boundingBox": {
-        "south": 43.623736,
-        "west": -79.418832,
-        "north": 45.583455,
-        "east": -73.434459
+        "south": 40.726928,
+        "west": -79.417922,
+        "north": 45.583405,
+        "east": -73.435368
       },
-      "centreLatitude": 44.603595,
-      "centreLongitude": -76.426645,
+      "centreLatitude": 45.534196,
+      "centreLongitude": -73.52342,
       "gbfsDiscoveryUrl": "https://pbsn.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-pbsn.json",
       "dataSizeBytes": 730391004,
@@ -17505,39 +17505,39 @@
       "operator": "Swiss Federal Office of Energy",
       "mainCity": "Zürich",
       "country": "CH",
-      "stationCount": 12879,
+      "stationCount": 12896,
       "stationSamples": [
         [
-          46.48242,
-          6.45548
+          47.13307,
+          7.24344
         ],
         [
-          46.19616,
-          6.15284
+          46.19574,
+          6.14632
         ],
         [
-          45.84976,
-          8.94503
+          47.56415,
+          7.58393
         ],
         [
-          47.19336,
-          7.70663
+          46.69189,
+          6.91181
         ],
         [
-          47.40642,
-          9.60651
+          47.6317,
+          8.65626
         ],
         [
-          47.44256,
-          8.56956
+          47.56132,
+          7.57803
         ],
         [
-          46.95435,
-          7.44535
+          46.85416,
+          9.52836
         ],
         [
-          47.50922,
-          8.76072
+          47.32064,
+          8.66143
         ]
       ],
       "boundingBox": {
@@ -17546,8 +17546,8 @@
         "north": 47.765196,
         "east": 10.409094
       },
-      "centreLatitude": 46.782163,
-      "centreLongitude": 8.181155,
+      "centreLatitude": 47.13965,
+      "centreLongitude": 7.600948,
       "gbfsDiscoveryUrl": "https://www.sharedmobility.ch/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-sharedmobility-ch.json",
       "dataSizeBytes": 1646129862,
