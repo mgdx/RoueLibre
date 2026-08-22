@@ -93,8 +93,10 @@
     <!-- Shown instead of the count when the station does not provide the service. -->
     <string name="counterpart_none">—</string>
 
-    <!-- The detail line under a station's name.
-         %1$s is a postcode, %2$d the number of docking points. -->
+    <!-- The detail line under a station's name, in the list.
+         %1$s is the distance to the station when the reader's position is
+         known, and its postcode when it is not. %2$d is the number of
+         docking points. -->
     <plurals name="station_detail_with_capacity">
         <item quantity="one">%1$s · %2$d point d’attache</item>
         <item quantity="many">%1$s · %2$d de points d’attache</item>

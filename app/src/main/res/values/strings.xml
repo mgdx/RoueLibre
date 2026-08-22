@@ -84,6 +84,12 @@
     </plurals>
     <string name="counterpart_none">—</string>
 
+    <!-- The detail line under a station's name, in the list.
+         %1$s is the distance to the station when the reader's position is
+         known, and its postcode when it is not — never both, and never a
+         label saying which: a postcode says nothing to somebody standing
+         fifty metres away. %2$d is the number of docking points.
+         `StationAdapter.whereabouts` is what decides. -->
     <plurals name="station_detail_with_capacity">
         <item quantity="one">%1$s · %2$d dock</item>
         <item quantity="other">%1$s · %2$d docks</item>
