@@ -172,7 +172,8 @@ an issue before a large change.
   [`docs/offline-data.md`](docs/offline-data.md).
 - 🐛 **Report a bug** with the device, the Android version and the way to
   reproduce it. The application sends no log anywhere; if you attach one, read
-  it through first.
+  it through first. A security flaw goes to [`SECURITY.md`](SECURITY.md)
+  rather than to a public issue.
 - 💻 **Write code.** `./gradlew test lint ktlintCheck` must pass without a single
   warning, business logic goes into `:core` with no Android import, and not a
   single string is hard-coded.
