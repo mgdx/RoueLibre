@@ -75,7 +75,7 @@ class FrenchToneTest {
         val declaration = Regex("""<string name="$name">(.*?)</string>""")
             .find(file.readText())
         checkNotNull(declaration) { "$name is not declared in ${file.path}" }
-        // The apostrophes are escaped for Android, not for the reader.
+        // A straight apostrophe would be escaped; French writes ’ and is not.
         return declaration.groupValues[1].replace("\\'", "’")
     }
 
