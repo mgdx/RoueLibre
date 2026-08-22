@@ -9,14 +9,17 @@
     The typography is Japanese:
       · no spaces between words, and full-width punctuation — 。、「」（） —
         which already carries the space a Latin mark would need beside it;
-      · figures, unit symbols and Latin names stay half-width: "12 km",
-        "Wi-Fi", "OpenStreetMap", "GBFS";
+      · figures, unit symbols and Latin names stay half-width, with a
+        half-width space on each side of the Latin run: 「Wi-Fi に接続」,
+        「GBFS 形式」, 「ODbL ライセンス」, 「バージョン %1$d です」;
+      · a question keeps its mark, and the mark is full-width ？;
       · the separator the English writes `·` is `・` (U+30FB), set tight;
       · no apostrophe is written at all, so nothing here is escaped;
       · Japanese has one plural category, `other`, and CLDR gives it no
         other: every count has to read for any number, which is what the
-        counters are for — 台 for bikes and racks, 分 for minutes, 件 for
-        stations;
+        counters are for — 台 for bikes and racks, 分 for minutes, か所 for
+        stations — and a count beside a kanji unit carries no leading zero,
+        「1時間5分」 rather than the clock's 「1時間05分」;
       · the register is the plain です・ます Android itself writes, with no
         commercial keigo. SPEC §9 asks the French for `tu`; this is what that
         rule asks of Japanese, which has no `tu` to ask for.
@@ -115,10 +118,10 @@
          one, each already agreed in number. -->
     <string name="station_bikes_split">%1$s・%2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="other">一般%1$d台</item>
+        <item quantity="other">一般車%1$d台</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="other">電動アシスト%1$d台</item>
+        <item quantity="other">電動アシスト車%1$d台</item>
     </plurals>
 
     <!-- The age of the displayed data (SPEC §4.1). -->
@@ -136,13 +139,14 @@
     <!-- Attached to the age when the data is no longer current.
          Example: 「古いデータ・12分前」. -->
     <string name="freshness_stale">古いデータ・%1$s</string>
-    <!-- %1$s is an age, 「5分前」 for instance. -->
-    <string name="freshness_fresh">%1$sに更新</string>
+    <!-- %1$s is an age, 「5分前」 for instance — and 「たった今」 under five
+         seconds, which is why the template carries no particle. -->
+    <string name="freshness_fresh">更新：%1$s</string>
     <string name="freshness_never">未更新</string>
 
     <!-- An empty screen: an invitation to act, not a statement (SPEC §7). -->
     <string name="stations_empty_title">ステーションが読み込まれていません</string>
-    <string name="stations_empty_message">リストを下に引っ張ると、サービスのステーションを取得します。</string>
+    <string name="stations_empty_message">一覧を下に引っ張ると、サービスのステーションを取得します。</string>
 
     <!-- Actions. One gesture keeps one name from the button to the confirmation. -->
     <string name="action_refresh">更新</string>
@@ -157,7 +161,7 @@
     <!-- The "locate me" button and what it can answer (SPEC §7.1, §10). A
          refusal never prompts again: it is noted, not argued with. -->
     <string name="map_locate_me">現在地</string>
-    <string name="map_location_denied">位置情報が使えない場合は、出発地点を地図か住所で指定してください。</string>
+    <string name="map_location_denied">位置情報がないので、出発地点を地図か住所で指定してください。</string>
     <string name="map_location_unavailable">現在地を取得できません。位置情報がオンになっているか確かめて、もう一度お試しください。</string>
     <string name="map_outside_city_title">別の地域にいます</string>
     <string name="map_outside_city_message">現在地は%1$sが対象とする範囲の外にあるため、この地図には表示できません。今いる都市を選ぶと、そのステーションを見られます。</string>
@@ -184,7 +188,7 @@
     <string name="welcome_fleet_mixed">このサービスは両方の種類を貸し出します。</string>
 
     <string name="welcome_data_title">都市ごとに、ダウンロードは一度</string>
-    <string name="welcome_data_body">地図も、道路も、経路の計算も、端末の中にあります。だからこそ通信なしで動きますが、そのために、都市のデータを一度だけダウンロードする必要があります。\n\nまずは都市を選んでください。中規模の都市圏でおよそ40MB、首都ならそれ以上です。サイズはダウンロードの前に表示されます。\n\nあとから行うこともできます。それまでの間も、ステーションの一覧と空き状況は使えます。</string>
+    <string name="welcome_data_body">地図も、道路も、経路の計算も、端末の中にあります。だからこそ通信なしで動きますが、そのために、都市のデータを一度だけダウンロードする必要があります。\n\nまずは都市を選んでください。中規模の都市圏でおよそ 40 MB、首都ならそれ以上です。サイズはダウンロードの前に表示されます。\n\nあとから行うこともできます。それまでの間も、ステーションの一覧と空き状況は使えます。</string>
     <!-- Position in the sequence: 「1/3」. This is not a number agreement but
          a progress marker — the second number does not vary with the first —
          hence the absence of a plural.
@@ -207,7 +211,7 @@
     <string name="incoming_show_me">表示</string>
     <string name="incoming_needs_index">この住所はオフラインの住所インデックスで調べる必要がありますが、インストールされていません。</string>
     <!-- %1$s is the text received from the other application. -->
-    <string name="incoming_address_not_found">「%1$s」は、対象範囲のどの住所とも一致しません。</string>
+    <string name="incoming_address_not_found">「%1$s」は、対象とする範囲のどの住所とも一致しません。</string>
     <string name="incoming_outside_coverage">この場所は、インストール済みのデータが対象とする範囲の外にあります。ここへ向かう経路は計算できません。</string>
 
     <!-- Favourites (SPEC §7.5). -->
@@ -271,17 +275,17 @@
          and where it comes from, not by the brand of one network. The
          producer's own credit follows, and it is that one the ODbL licence
          requires (SPEC §4.5). -->
-    <string name="about_attribution_gbfs">自転車の空き状況：対象サービスがGBFS形式で公開しているオープンデータ。フランスでは transport.data.gouv.fr に登録されています。</string>
-    <string name="about_attribution_osm">地図、経路計算、ランドマーク：© OpenStreetMap contributors、ODbLライセンス。</string>
-    <string name="about_attribution_ban">住所と番地：Base Adresse Nationale、ODbLライセンス。</string>
-    <string name="about_attribution_brouter">経路計算：BRouter、MITライセンス、OpenStreetMapのデータを使用。</string>
-    <string name="about_attribution_maplibre">地図の描画：MapLibre Native、2条項BSDライセンス。</string>
+    <string name="about_attribution_gbfs">自転車の空き状況：対象サービスが GBFS 形式で公開しているオープンデータ。フランスでは transport.data.gouv.fr に登録されています。</string>
+    <string name="about_attribution_osm">地図、経路計算、ランドマーク：© OpenStreetMap contributors、ODbL ライセンス。</string>
+    <string name="about_attribution_ban">住所と番地：Base Adresse Nationale、ODbL ライセンス。</string>
+    <string name="about_attribution_brouter">経路計算：BRouter、MIT ライセンス、OpenStreetMap のデータを使用。</string>
+    <string name="about_attribution_maplibre">地図の描画：MapLibre Native、2 条項 BSD ライセンス。</string>
 
     <!-- Web map links (SPEC §7.8): Android only hands them to the application
          if the user allows it, and saying so keeps that behaviour from looking
          like a defect. -->
     <string name="about_links_title">他のアプリから場所を開く</string>
-    <string name="about_links_body">「geo:」リンクと、プレーンテキストで共有された住所は、そのままここに届きます。Androidの選択画面で Roue Libre を選んでください。地図サイトのリンクには許可が必要です。設定 → アプリ → Roue Libre → デフォルトで開く → リンクを追加、と進んでください。</string>
+    <string name="about_links_body">「geo:」リンクと、プレーンテキストで共有された住所は、そのままここに届きます。Android の選択画面で Roue Libre を選んでください。地図サイトのリンクには許可が必要です。設定 → アプリ → Roue Libre → デフォルトで開く → リンクを追加、と進んでください。</string>
 
     <string name="about_licence_title">ライセンス</string>
     <string name="about_licence_body">Roue Libre は、GNU GPL バージョン 3 で公開されている自由ソフトウェアです。使うことも、調べることも、改変することも、再配布することもできます。</string>
@@ -312,10 +316,10 @@
 
     <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
          which is what the application does at rest. -->
-    <string name="journey_bike_kind_any">どれでも</string>
+    <string name="journey_bike_kind_any">どの自転車でも</string>
     <string name="journey_bike_kind_mechanical">一般自転車</string>
     <string name="journey_bike_kind_electric">電動アシスト</string>
-    <string name="journey_bike_kind_any_description">種類を問わず、どの自転車でも</string>
+    <string name="journey_bike_kind_any_description">種類を問わず、どれでもかまいません</string>
     <string name="journey_bike_kind_mechanical_description">自分でこぐ自転車</string>
     <string name="journey_bike_kind_electric_description">電動アシスト付きの自転車</string>
     <string name="journey_compute">経路を計算</string>
@@ -348,7 +352,7 @@
          journey summary, in a conurbation lending both kinds of bike
          (SPEC §7.4). %1$s is the two counts, mechanical and electric, each
          already agreed in number. -->
-    <string name="journey_bikes_at_departure">出発ステーションに%1$s</string>
+    <string name="journey_bikes_at_departure">出発ステーションに%1$sあり</string>
     <!-- The block holding the total time, the summary and the drawing opens
          the journey in full: this is what the press does, announced to a screen
          reader that would otherwise say only "activate". -->
@@ -402,9 +406,10 @@
 
     <!-- Durations, formatted through the localisation APIs (SPEC §9). Japanese
          writes the units in kanji rather than as Latin symbols.
-         %1$d is a number of minutes; %1$d 時間 and %2$02d 分 for hours. -->
+         %1$d is a number of minutes; %1$d 時間 and %2$d 分 for hours. The minutes
+         carry no leading zero: 「1時間5分」, not the clock’s 「1時間05分」. -->
     <string name="duration_minutes">%1$d分</string>
-    <string name="duration_hours_minutes">%1$d時間%2$02d分</string>
+    <string name="duration_hours_minutes">%1$d時間%2$d分</string>
 
     <!-- A station's detail (SPEC §7.2). The station's total capacity, counted
          in racks: 「空きラック12台・ラック30台」. -->
@@ -499,19 +504,19 @@
     <string name="city_active">使用中</string>
     <!-- %1$d is a number of stations, %2$s an already formatted size. -->
     <plurals name="city_detail">
-        <item quantity="other">ステーション%1$d件・ダウンロード%2$s</item>
+        <item quantity="other">ステーション%1$dか所・ダウンロード容量%2$s</item>
     </plurals>
     <!-- Same row, once the data is installed: the weight is then announced by
          city_installed just below, and saying "to download" would contradict
          it. -->
     <plurals name="city_stations">
-        <item quantity="other">ステーション%1$d件</item>
+        <item quantity="other">ステーション%1$dか所</item>
     </plurals>
-    <string name="city_detail_size_only">ダウンロード%1$s</string>
+    <string name="city_detail_size_only">ダウンロード容量%1$s</string>
     <!-- Same row when the catalogue carries no size: it only says it does not
          know, never that the data is missing. %1$d is a number of stations. -->
     <plurals name="city_detail_size_unknown">
-        <item quantity="other">ステーション%1$d件・サイズはダウンロード前に表示</item>
+        <item quantity="other">ステーション%1$dか所・サイズはダウンロード前に表示</item>
     </plurals>
     <string name="city_size_unknown">サイズはダウンロードの前に表示されます</string>
     <!-- %1$s is an already formatted size, "42.5 MB" for instance. -->
@@ -533,11 +538,11 @@
     <string name="city_proposal_title">あなたの都市</string>
     <!-- Shown when the position says one is in another served conurbation than the one installed. -->
     <string name="city_here_title">別の都市にいます</string>
-    <string name="city_here_body">%1$sが、今いる地域をカバーしています。データをインストールすると、そのステーションを見たり、ここで経路を計算したりできます。</string>
-    <string name="city_here_installed_body">%1$sが今いる地域をカバーしており、そのデータはすでに端末にあります。</string>
+    <string name="city_here_body">%1$sが、今いる地域を対象としています。データをインストールすると、そのステーションを見たり、ここで経路を計算したりできます。</string>
+    <string name="city_here_installed_body">%1$sが今いる地域を対象としており、そのデータはすでに端末にあります。</string>
     <string name="city_here_install">データをインストール</string>
     <string name="city_here_use">これを使う</string>
-    <string name="city_proposal_body">%1$sがカバーする地域にいるようです。これで進めますか？</string>
+    <string name="city_proposal_body">%1$sが対象とする地域にいるようです。これで進めますか？</string>
     <string name="city_proposal_accept">はい</string>
     <string name="city_none_nearby">この近くに、対応するサービスはありません。一覧から都市を選んでください。</string>
     <string name="action_cancel">キャンセル</string>
@@ -557,7 +562,7 @@
     <!-- %1$s is an already formatted size, "42.5 MB" for instance. -->
     <string name="storage_total">この端末で%1$sを使用中</string>
     <string name="storage_nothing_installed">データがインストールされていません</string>
-    <string name="storage_no_city">都市が選ばれていません</string>
+    <string name="storage_no_city">都市が選択されていません</string>
 
     <string name="dataset_tiles">地図データ</string>
     <string name="dataset_tiles_purpose">通信なしで地図を描画します</string>
@@ -574,10 +579,10 @@
     <!-- %1$s is an already formatted size, "42.5 MB" for instance. -->
     <string name="storage_download_pending">%1$sをダウンロード</string>
     <!-- %1$s is the file name, %2$s the part received, %3$s the total size. -->
-    <string name="storage_downloading">%1$s・%3$s中%2$s</string>
+    <string name="storage_downloading">%1$s・%2$s / %3$s</string>
     <!-- %1$s is the set's name, %2$s the reason for the failure. -->
     <string name="storage_download_failed">%1$s：%2$s</string>
-    <string name="storage_wifi_warning">Wi-Fiに接続していません。このダウンロードはモバイルデータを大きく消費することがあります。</string>
+    <string name="storage_wifi_warning">Wi-Fi に接続していません。このダウンロードはモバイルデータを大きく消費することがあります。</string>
     <string name="dataset_update_available">アップデートを利用できます</string>
 
     <string name="dataset_absent">未インストール</string>
@@ -600,7 +605,7 @@
     <!-- %1$s is the expected file name, "tiles.mbtiles" for instance. -->
     <string name="dataset_rejected_format">このファイルは想定されたものではありません。生成スクリプトが出力した「%1$s」を選んでください。</string>
     <!-- %1$d is the version found, %2$d the one the application can read. -->
-    <string name="dataset_rejected_version">このファイルはフォーマットのバージョン%1$dですが、このバージョンのアプリが読み取れるのはバージョン%2$dです。アプリを更新してください。</string>
+    <string name="dataset_rejected_version">このファイルはフォーマットのバージョン %1$d ですが、このバージョンのアプリが読み取れるのはバージョン %2$d です。アプリを更新してください。</string>
     <string name="dataset_rejected_checksum">ファイルがチェックサムと一致しません。不完全か、破損しています。もう一度ダウンロードしてください。</string>
     <string name="dataset_rejected_transfer">ファイルのコピーに失敗しました。空き容量を確かめて、もう一度お試しください。</string>
 
@@ -627,7 +632,7 @@
     <!-- %1$s is a GBFS feed name, "station_status" for instance. -->
     <string name="error_feed_unavailable">このサービスは「%1$s」フィードを公開していません。</string>
     <!-- %1$s is a version number, "4.0" for instance. -->
-    <string name="error_unsupported_version">このサービスはデータをバージョン%1$sで公開していますが、このバージョンのアプリでは読み取れません。アプリを更新してください。</string>
+    <string name="error_unsupported_version">このサービスはデータをバージョン %1$s で公開していますが、このバージョンのアプリでは読み取れません。アプリを更新してください。</string>
     <string name="error_local_storage">端末に保存されたデータを読み取れません。</string>
     <string name="error_no_city_chosen">都市が選択されていません。ひとつ選んでください。</string>
 
@@ -637,14 +642,14 @@
          declares itself billed. 従量制 and 定額制 are the words Android's own
          Wi-Fi settings use for the two. -->
     <string name="download_unmetered_only">定額制の接続でのみダウンロードする</string>
-    <string name="download_unmetered_only_description">通常はWi-Fiです。スマートフォンのテザリングや上限つきのWi-Fiは従量制で、モバイルデータとして扱われます。</string>
+    <string name="download_unmetered_only_description">通常は Wi-Fi です。スマートフォンのテザリングや上限つきの Wi-Fi は従量制で、モバイルデータとして扱われます。</string>
     <string name="download_held_back_title">ダウンロードを保留しました</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">この接続は従量制です。%1$sをダウンロードするにはWi-Fiに接続するか、このまま今すぐダウンロードしてください。</string>
+    <string name="download_held_back_body">この接続は従量制です。%1$sをダウンロードするには Wi-Fi に接続するか、このまま今すぐダウンロードしてください。</string>
     <string name="download_stopped_title">ダウンロードを停止しました</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">この接続が従量制になったため、ダウンロードを停止しました。受信済みの分は残してあります。%1$sを最後まで受け取るにはWi-Fiに接続するか、このまま今すぐ続けてください。</string>
+    <string name="download_stopped_body">この接続が従量制になったため、ダウンロードを停止しました。受信済みの分は残してあります。%1$sを最後まで受け取るには Wi-Fi に接続するか、このまま今すぐ続けてください。</string>
     <string name="download_anyway">このままダウンロード</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_waiting_for_unmetered">%1$sをダウンロードするため、定額制の接続を待っています。</string>
