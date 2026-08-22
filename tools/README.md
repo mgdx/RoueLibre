@@ -82,6 +82,31 @@ A city's files are found from its country, which its configuration already
 declares. Nothing records where a file went, so a partial upload never leaves a
 registry to reconcile: run it again and it resumes.
 
+## Keeping the figures honest
+
+```bash
+python3 tools/update_readme_figures.py           # rewrites what is stale
+python3 tools/update_readme_figures.py --check   # exit 1 if anything is stale
+```
+
+`README.md` and `docs/offline-data.md` quote the same handful of figures several
+times each — how many networks are served, in how many countries, how many
+stations they hold, what a median city weighs, what the release APK weighs. Each
+appears in a badge, in a feature and in a sentence, and written by hand the first
+network added would leave some of those places lying with nothing to say which
+one is right.
+
+So none of them is written by hand. The counts and the median size are read from
+`config/catalogue.json`, which `build_catalogue.py` derives from the
+configurations and the manifests; the APK sizes are read from the release APKs
+themselves, under `app/build/outputs/apk/release/`, so the figure is the file's
+own size and not a memory of it. **Run it after `build_catalogue.py`, and after
+`./gradlew assembleRelease` when the application's own weight is what changed** —
+with no release build on disk it leaves those two figures alone and says so,
+rather than inventing them. It refuses to pass silently over a sentence it cannot
+find: a figure whose place has been reworded is an error, not a no-op. Only the
+figures move; the hand wrapping around them is the author's.
+
 ## Prerequisites
 
 ```bash
@@ -110,6 +135,7 @@ machine, most of which is downloading the sources.
 | `build_catalogue.py` | Derives the catalogue of served cities from their configurations |
 | `refresh_normalization_fixtures.py` | Recomputes the normalisation reference cases after the shared rules change |
 | `publish_data.py` | Uploads the generated sets to the `RoueLibre-data` releases, at the addresses the manifests name |
+| `update_readme_figures.py` | Copies the counts, the median dataset size and the APK sizes into `README.md` and `docs/offline-data.md` |
 
 Shared modules: `city_config.py` (reading the city configuration and the box's
 geometry) and `address_normalization.py` (street-name normalisation, applied by
