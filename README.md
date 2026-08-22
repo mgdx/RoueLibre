@@ -33,6 +33,14 @@ be simple, efficient and privacy-friendly.
 It is free software under the GPLv3, it uses no Google service, and everything
 but the live availability of the bikes runs on your phone.
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/images/screenshot-map.png" width="30%" alt="The map around the Eiffel Tower: the Seine, the Champ de Mars and the Trocadéro gardens, the cycle ways drawn apart from the streets as dashed green lines, and a dozen Vélib' stations as green discs each carrying the number of bikes it holds.">
+  <img src="docs/images/screenshot-station.png" width="30%" alt="A station's sheet, “Octave Gréard – Tour Eiffel”: twenty-seven bikes and four free docks, under them the split into twenty-one mechanical and six electric, and the size of the stand at thirty-three docks.">
+  <img src="docs/images/screenshot-journey.png" width="30%" alt="A journey from the Champs-Élysées to the Eiffel Tower drawn on the map: thirteen minutes in all, two walking to the departure station, five riding along the Seine on an unbroken line, six walking to the door, and fifty metres of climb.">
+</p>
+
 ## Features
 
 - 🚲 **332 bike-share networks in 38 countries**, 69,337 stations, from Vélib'
