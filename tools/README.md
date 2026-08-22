@@ -218,6 +218,21 @@ size, its distance and one of its stations; nothing is dropped in silence. A
 network legitimately spread over a region is *not* touched by this — Nicosia
 puts 14 % of its stations on the far side of Cyprus and keeps them.
 
+**A box that shrinks takes its old files with it.** A city's output directory
+is never wiped between runs — `tiles.mbtiles` and `addresses.sqlite` cost hours
+and a run resumed after a failed step must find them where it left them — so
+the graph, the one dataset made of several files named after the 5°×5° square
+each covers, is where a correction leaves debris. Careem BIKE's box went from
+1,612 km wide to 45 and the run that followed produced the two squares it now
+needs, beside the eight of the desert between Medina and the Emirates that the
+old one had asked for. `build_manifest.py` lists what the directory holds, so
+the manifest announced ten files and 11.8 MB of graph instead of two and 4.0 —
+7.7 MB a Dubai user would have downloaded for nothing. `build_routing.py` now
+removes, after copying its output, every `*.rd5` this run did not produce, and
+names each one with its size in the log. It touches nothing else: sources and
+caches live in `data/osm/`, `data/ban/`, `data/cache/` and `data/work/`, and
+the two single-file datasets are not its to remove.
+
 **The map's opening centre comes from the same reading**: the median of the
 positions of the most populous cluster, at the zoom that frames that cluster.
 Not the middle of the rectangle, which for Dubai fell 769 km from the nearest

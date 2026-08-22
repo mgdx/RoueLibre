@@ -259,6 +259,51 @@ def prepare_elevation(box: BoundingBox, cache_dir: Path) -> Path:
     return hgt_dir
 
 
+def prune_stale_segments(output_dir: Path, produced: set[str]) -> int:
+    """Remove the rd5 files the current box no longer asks for.
+
+    The output directory of a city is never wiped between runs — deliberately,
+    because tiles.mbtiles and addresses.sqlite cost hours and a run resumed
+    after a failed step must find them where it left them. The graph is the one
+    dataset made of several files, named after the 5°×5° square each covers, so
+    it is the one where a box that shrinks leaves files behind: correcting
+    Careem BIKE's box from 1,612 km to 45 left the eight squares of the desert
+    between Medina and the Emirates in place, and build_manifest.py, which
+    lists what the directory holds, then announced 11.8 MB of graph instead of
+    4.0 — 7.7 MB a Dubai user would have downloaded for nothing.
+
+    The cleanup lives here rather than in generate_all.sh because this is the
+    only place that knows, without guessing, which squares the box demands:
+    they are the ones the map creator just produced. The orchestrator would
+    have to re-derive the grid naming, and a directory emptied up front would
+    take the other two datasets down with it.
+
+    Only files this script itself writes are considered: what it did not
+    produce, it does not remove. Sources and caches live elsewhere (data/osm,
+    data/cache, data/work) and are never reached from here.
+
+    Args:
+        output_dir: the city's routing directory.
+        produced: the names of the segments this run put there.
+
+    Returns:
+        the number of files removed.
+    """
+    stale = sorted(
+        path for path in output_dir.glob("*.rd5")
+        if path.is_file() and path.name not in produced
+    )
+    for path in stale:
+        # Named rather than swallowed, as the stations the cluster filter sets
+        # aside are (§4): a file leaving the release is a fact worth reading in
+        # the log the next morning.
+        size = path.stat().st_size
+        print(f"  {path.name:16} {size / 1e6:.2f} MB removed, "
+              f"outside the current box")
+        path.unlink()
+    return len(stale)
+
+
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--osm-extract", type=Path, required=True,
@@ -396,6 +441,12 @@ def main() -> int:
             destination = arguments.output_dir / segment.name
             shutil.copy(segment, destination)
             total += destination.stat().st_size
+
+        removed = prune_stale_segments(
+            arguments.output_dir, {segment.name for segment in segments}
+        )
+        if removed:
+            print(f"      {removed} segment(s) of a wider box removed")
 
         elapsed = time.monotonic() - started
         print(f"\n{'':=<60}")
