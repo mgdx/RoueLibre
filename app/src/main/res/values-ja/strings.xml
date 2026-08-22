@@ -434,7 +434,15 @@
     <!-- Address search in the offline index (SPEC §4.3). Not to be confused
          with the field that filters the station list. -->
     <string name="address_search_title">住所を検索</string>
-    <string name="address_search_hint">番地、通り、市区町村</string>
+    <!-- The compact placeholder in the field. It is written in the Japanese
+         order, largest first, and it does not name 番地. Where an address is
+         not built on the street, as in Japan, `addr:housenumber` is all but
+         absent — SPEC §4.3 measures Tokyo, the catalogue's largest network,
+         at 0.01 numbers per street — and 番地 names something the index does
+         not hold there in any form: a Japanese number belongs to a 街区, not
+         to a road. The prompt on the empty screen still says a number is
+         accepted where one exists, which is a permission and not a promise. -->
+    <string name="address_search_hint">市区町村、通りの名前</string>
     <string name="address_search_clear">検索を消去</string>
     <string name="address_search_privacy">検索はすべて端末の中で行います。入力している間も含めて、何も送信されません。</string>
 

@@ -93,6 +93,28 @@ by no space, the glyph carrying its own.
 | metered / unmetered | 従量制 / 定額制 | Android's own words for the two, from the Wi-Fi settings. The setting names the billing rather than Wi-Fi, as the English does. |
 | bytes | B, kB, MB, GB | Left as they are: Japanese writes the symbols in Latin. |
 
+## The search prompt names no house number
+
+`address_search_hint` is 「市区町村、通りの名前」, and not the source's
+"Number, street, town". Two things decide it, and only the second is about
+Japanese word order.
+
+SPEC §4.3 lets every translation write this prompt in the order of its own
+language: the query parser reads a house number in the three orders that are
+written. Japanese runs largest to smallest — 市区町村, then the road — so the
+English order is reversed rather than transposed.
+
+The number is then dropped altogether, which is the substantive decision. Where
+an address is not built on the street, as in Japan, `addr:housenumber` is all
+but absent; SPEC §4.3 measures Tokyo, the largest network in the catalogue, at
+0.01 numbers per street. And a Japanese 番地 is not a sparse version of a French
+one — it belongs to a 街区 inside a 町, not to a road — so naming it in the
+field would promise a kind of precision the index does not hold there in any
+form. `address_search_prompt_message`, on the empty screen, still says a number
+is accepted 「番地の有無にかかわらず」, which permits one where the city has
+them without promising one where it does not; `address_no_match_message` sends
+the reader back to the same two things the hint named, 通りの名前 and 市区町村.
+
 ## Words that are not translated
 
 Product and network names — Roue Libre, Vélib', Citi Bike, BRouter, MapLibre,
