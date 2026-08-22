@@ -2,12 +2,15 @@ package io.github.mgdx.rouelibre.ui
 
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Rect
 import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.widget.NestedScrollView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.android.material.button.MaterialButton
@@ -15,6 +18,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.materialswitch.MaterialSwitch
 import io.github.mgdx.rouelibre.R
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -128,6 +132,108 @@ class TextSizeLayoutTest {
         }
     }
 
+    /**
+     * The four pages of the welcome screen (SPEC §7.9), at every text size.
+     *
+     * A page is a title, a paragraph that may need to scroll, a decorative
+     * drawing, the step it is at and two buttons. What has to hold is what
+     * SPEC §14 asks of every screen: at the largest text size nothing the
+     * application writes is covered by anything else, and nothing is cut.
+     *
+     * Both halves have been seen to fail here, on a Fairphone 3 at ×2.0. The
+     * paragraph was written over the step label, over the button and over the
+     * link below it — a container measured as `wrap` takes the height of its
+     * content, and a chain that no longer fits does not shrink, it spills. And
+     * the title, justified, broke "téléchargement" between two letters to
+     * reach the far bank, which reads as a title cut off at the edge of the
+     * screen.
+     *
+     * The paragraph is the one text allowed not to be shown whole: it is what
+     * the container scrolls. What is asked of it is that it stay inside its
+     * room — everything below it is then reachable by scrolling. The texts
+     * that cannot scroll are asked to be written to their last character.
+     */
+    @Test
+    fun welcomePagesCoverNothingAndCutNothing() {
+        for (page in WELCOME_PAGES) {
+            for (scale in TEXT_SIZE_STEPS) {
+                val screen = inflate(R.layout.fragment_welcome, scale) { it.showPage(page) }
+                val what = "\"${screen.resources.getString(page.title)}\" at ×$scale"
+
+                for (id in WELCOME_UNSCROLLED_TEXTS) {
+                    val text = screen.findViewById<TextView>(id)
+                    val written = text.layout ?: error("no layout for ${name(screen, id)} at $what")
+                    assertWritesItsTextWhole(written, "${name(screen, id)} of $what")
+                }
+
+                // Not the paragraph against the step label alone: a page has
+                // five things on it and any of them written over another is
+                // the same defect. The drawing is in, and on purpose — it is
+                // allowed to shrink to nothing, never to be laid over the
+                // button.
+                val boxes = WELCOME_BOXES
+                    .map { it to screen.findViewById<View>(it) }
+                    .filter { (_, view) -> view.visibility == View.VISIBLE }
+                    .map { (id, view) -> name(screen, id) to boundsIn(view, screen) }
+                for ((first, second) in boxes.indices.flatMap { one ->
+                    (one + 1 until boxes.size).map { boxes[one] to boxes[it] }
+                }) {
+                    assertFalse(
+                        "${first.first} is written over ${second.first} on $what",
+                        Rect.intersects(first.second, second.second),
+                    )
+                }
+
+                // A room shorter than what it holds has to scroll, and a
+                // container of no height at all would satisfy the check above
+                // while showing nothing.
+                val container = screen.findViewById<NestedScrollView>(R.id.body_container)
+                assertTrue("the paragraph has no room on $what", container.height > 0)
+            }
+        }
+    }
+
+    /** Puts one welcome page on the screen, as `WelcomeFragment` does. */
+    private fun View.showPage(page: WelcomePage) {
+        findViewById<TextView>(R.id.title).setText(page.title)
+        findViewById<TextView>(R.id.body).setText(page.body)
+        findViewById<View>(R.id.illustration).visibility =
+            if (page.marks) View.GONE else View.VISIBLE
+        findViewById<View>(R.id.fleet_marks).visibility =
+            if (page.marks) View.VISIBLE else View.GONE
+        findViewById<TextView>(R.id.step).text =
+            resources.getString(R.string.welcome_step, 1, WELCOME_PAGES.size)
+        findViewById<MaterialButton>(R.id.next).setText(page.next)
+        findViewById<MaterialButton>(R.id.skip).setText(page.skip)
+    }
+
+    /** Where [view] sits on [root], whatever it is nested inside. */
+    private fun boundsIn(view: View, root: View): Rect {
+        val box = Rect(0, 0, view.width, view.height)
+        var current = view
+        while (current !== root) {
+            box.offset(current.left, current.top)
+            current = current.parent as View
+        }
+        return box
+    }
+
+    /**
+     * One page of the welcome screen, as this test needs to know it.
+     *
+     * The pages are written down a second time here rather than read from
+     * `WelcomeFragment`: what is measured is what the reader is shown, so the
+     * test states it, and a page added there without a line here would simply
+     * go unmeasured rather than quietly change what this test covers.
+     */
+    private data class WelcomePage(
+        val title: Int,
+        val body: Int,
+        val marks: Boolean,
+        val next: Int,
+        val skip: Int,
+    )
+
     private fun assertLabelsWhole(
         @LayoutRes screenLayout: Int,
         @IdRes rowId: Int,
@@ -214,6 +320,58 @@ class TextSizeLayoutTest {
          * label that fits at ×2.0 only because its row has stacked by then.
          */
         val TEXT_SIZE_STEPS = listOf(0.85f, 1.0f, 1.15f, 1.3f, 1.5f, 1.8f, 2.0f)
+
+        /**
+         * The four welcome pages, in the order `WelcomeFragment` shows them:
+         * what the application is, what it does not do with your data, how to
+         * read the bike it draws, and what it needs in order to work.
+         */
+        val WELCOME_PAGES = listOf(
+            WelcomePage(
+                title = R.string.welcome_hello_title,
+                body = R.string.welcome_hello_body,
+                marks = false,
+                next = R.string.welcome_continue,
+                skip = R.string.welcome_skip,
+            ),
+            WelcomePage(
+                title = R.string.welcome_privacy_title,
+                body = R.string.welcome_privacy_body,
+                marks = false,
+                next = R.string.welcome_continue,
+                skip = R.string.welcome_skip,
+            ),
+            WelcomePage(
+                title = R.string.welcome_fleet_title,
+                body = R.string.welcome_fleet_body,
+                marks = true,
+                next = R.string.welcome_continue,
+                skip = R.string.welcome_skip,
+            ),
+            WelcomePage(
+                title = R.string.welcome_data_title,
+                body = R.string.welcome_data_body,
+                marks = false,
+                next = R.string.welcome_choose_city,
+                skip = R.string.welcome_later,
+            ),
+        )
+
+        /**
+         * What a welcome page writes outside the container that scrolls, and
+         * which therefore has to be written whole.
+         */
+        val WELCOME_UNSCROLLED_TEXTS = listOf(R.id.title, R.id.step, R.id.next, R.id.skip)
+
+        /** Everything a welcome page draws, none of which may cover another. */
+        val WELCOME_BOXES = listOf(
+            R.id.title,
+            R.id.body_container,
+            R.id.illustration,
+            R.id.step,
+            R.id.next,
+            R.id.skip,
+        )
 
         /** The settings that write their label beside their control. */
         val SWITCH_IDS = listOf(

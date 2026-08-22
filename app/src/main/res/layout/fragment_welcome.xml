@@ -29,6 +29,16 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+    <!-- The page's title, and it refuses the justification the theme gives
+         every text view — as the settings screen's own headings do, for the
+         reason written there and one more.
+
+         Justifying spreads a line bank to bank, and reaching the far bank is
+         worth breaking a word for: at the largest text sizes "Une ville, un
+         téléchargement" came out as "Une ville, un téléchar" filling the line
+         to the pixel, with "gement" underneath. That reads as a title cut off
+         at the edge of the screen, which is what it is. Unjustified, the line
+         breaks at the space and the word stays whole. -->
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
@@ -36,195 +46,226 @@
         android:layout_marginStart="@dimen/space_l"
         android:layout_marginTop="@dimen/space_xxl"
         android:layout_marginEnd="@dimen/space_l"
+        android:justificationMode="none"
         android:textAppearance="@style/TextAppearance.RoueLibre.Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Roue Libre" />
 
-    <!-- The text hangs from the title, and the bias is what says so.
+    <!-- The room the text and the drawing share, between the title and the
+         step label, and it is a layout of its own for one reason: a widget
+         measured as `wrap` is measured against the height of the layout that
+         holds it, and against nothing else.
 
-         This container and the drawing under it constrain one another, which
-         makes them a chain, and a spread chain ignores the bias: on the three
-         pages that carry a drawing this attribute changes nothing, and the
-         drawing goes on taking the height the text leaves. The fleet page
-         hides the drawing, the chain is then gone, and the container is left
-         with slack between the title and the step label — which the default
-         bias of 0.5 spent by centring the text in it, a third of the screen of
-         nothing under the title. At 0 the text stays where it is on every
-         other page. -->
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/body_container"
+         The text container asks for the height of its content, capped at what
+         it is measured against. Held straight in the screen, that cap was the
+         screen — so at the largest text sizes the container claimed a height
+         the room below the title could not hold, and a chain that no longer
+         fits does not shrink: it spills. The paragraph was written over the
+         step label, over the button and over the link below it, and the
+         container never scrolled because it was never made shorter than what
+         it held.
+
+         Given a layout of its own, the cap becomes this room, less the
+         padding — so the container ends up either at its content's height or
+         at the room's, and in the second case it is shorter than the text and
+         scrolls, which is what SPEC §14 asks of a page that no longer fits.
+
+         The spacing above and below is this layout's padding rather than the
+         children's margins, and that is the point of it: padding is taken off
+         the height the children are measured against, a margin is not. -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/page_body"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/space_l"
-        android:layout_marginTop="@dimen/space_l"
         android:layout_marginEnd="@dimen/space_l"
-        app:layout_constraintBottom_toTopOf="@id/illustration"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintHeight_default="wrap"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_constraintVertical_bias="0"
-        app:layout_goneMarginBottom="@dimen/space_l">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/body"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lineSpacingExtra="4dp"
-                android:textAppearance="@style/TextAppearance.RoueLibre.Body"
-                tools:text="Application libre et ouverte, sans compte, sans publicité, sans mouchard." />
-
-            <!-- The three station marks, shown by the fleet page alone.
-
-                 They are the very discs the map draws for a journey's
-                 stations, at their own size, so the reader meets the mark here
-                 and recognises it there rather than learning a symbol twice.
-
-                 They sit in the text that scrolls and not in the drawing's
-                 place below: that place is meant to shrink and then go
-                 altogether at the largest font sizes, which is right for a
-                 decoration and wrong for a sentence carrying the meaning.
-
-                 The mark is an image beside the sentence and not the
-                 sentence's own leading drawable, which is what `lint` would
-                 rather see here: a compound drawable is laid out at the
-                 resource's intrinsic size and there is no attribute to change
-                 it, and at the map's 36dp the cog and the bolt — the very
-                 thing this page teaches — came out the height of a line and
-                 could not be told apart. A view of our own takes the size we
-                 give it.
-
-                 Each mark is decorative, the sentence beside it saying what it
-                 says, so a screen reader stops on three lines and reads each in
-                 one piece. The sentence has its own column, weighted, so it
-                 wraps within it instead of running back under the mark. -->
-            <LinearLayout
-                android:id="@+id/fleet_marks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_l"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:baselineAligned="false"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
-
-                    <ImageView
-                        android:layout_width="@dimen/welcome_mark"
-                        android:layout_height="@dimen/welcome_mark"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/marker_journey_station" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_m"
-                        android:layout_weight="1"
-                        android:lineSpacingExtra="4dp"
-                        android:text="@string/welcome_fleet_mechanical_only"
-                        android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_m"
-                    android:baselineAligned="false"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
-
-                    <ImageView
-                        android:layout_width="@dimen/welcome_mark"
-                        android:layout_height="@dimen/welcome_mark"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/marker_journey_station_electric" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_m"
-                        android:layout_weight="1"
-                        android:lineSpacingExtra="4dp"
-                        android:text="@string/welcome_fleet_electric_only"
-                        android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_m"
-                    android:baselineAligned="false"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
-
-                    <ImageView
-                        android:layout_width="@dimen/welcome_mark"
-                        android:layout_height="@dimen/welcome_mark"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/marker_journey_station_mixed" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_m"
-                        android:layout_weight="1"
-                        android:lineSpacingExtra="4dp"
-                        android:text="@string/welcome_fleet_mixed"
-                        android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-
-    <!-- The drawing of the current page. Purely decorative: it repeats what
-         the text above says, so a screen reader must not read it a second
-         time.
-
-         Placed under the text rather than above it: the text is what one reads
-         first, and the drawing is what one is left looking at.
-
-         It takes the height the text leaves rather than a written-down size: a
-         fixed height leaves a hole on the short pages and steals from the text
-         on the long ones. The text is measured first and capped at what the
-         screen has; the drawing gets the remainder, and fitCenter keeps its
-         proportions whatever that turns out to be.
-
-         So it shrinks as the font grows, and at the largest sizes it goes
-         altogether rather than pushing a paragraph below the fold. That is the
-         right order: the drawing helps the text, it does not replace it — and
-         it is why the fleet page's marks are not put here: what may vanish
-         must not be what carries the meaning. -->
-    <ImageView
-        android:id="@+id/illustration"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/space_l"
-        android:layout_marginTop="@dimen/space_l"
-        android:layout_marginEnd="@dimen/space_l"
-        android:layout_marginBottom="@dimen/space_l"
-        android:importantForAccessibility="no"
-        android:scaleType="fitCenter"
+        android:paddingTop="@dimen/space_l"
+        android:paddingBottom="@dimen/space_l"
         app:layout_constraintBottom_toTopOf="@id/step"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/body_container"
-        app:layout_constraintVertical_weight="2"
-        tools:src="@drawable/illustration_welcome_hello" />
+        app:layout_constraintTop_toBottomOf="@id/title">
+
+        <!-- The text hangs from the title, and the bias is what says so.
+
+             This container and the drawing under it constrain one another,
+             which makes them a chain, and a spread chain ignores the bias: on
+             the three pages that carry a drawing this attribute changes
+             nothing, and the drawing goes on taking the height the text
+             leaves. The fleet page hides the drawing, the chain is then gone,
+             and the container is left with the whole room to itself — which
+             the default bias of 0.5 spent by centring the text in it, a third
+             of the screen of nothing under the title. At 0 the text stays
+             where it is on every other page. -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/body_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/illustration"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHeight_default="wrap"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="4dp"
+                    android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+                    tools:text="Application libre et ouverte, sans compte, sans publicité, sans mouchard." />
+
+                <!-- The three station marks, shown by the fleet page alone.
+
+                     They are the very discs the map draws for a journey's
+                     stations, at their own size, so the reader meets the mark here
+                     and recognises it there rather than learning a symbol twice.
+
+                     They sit in the text that scrolls and not in the drawing's
+                     place below: that place is meant to shrink and then go
+                     altogether at the largest font sizes, which is right for a
+                     decoration and wrong for a sentence carrying the meaning.
+
+                     The mark is an image beside the sentence and not the
+                     sentence's own leading drawable, which is what `lint` would
+                     rather see here: a compound drawable is laid out at the
+                     resource's intrinsic size and there is no attribute to change
+                     it, and at the map's 36dp the cog and the bolt — the very
+                     thing this page teaches — came out the height of a line and
+                     could not be told apart. A view of our own takes the size we
+                     give it.
+
+                     Each mark is decorative, the sentence beside it saying what it
+                     says, so a screen reader stops on three lines and reads each in
+                     one piece. The sentence has its own column, weighted, so it
+                     wraps within it instead of running back under the mark. -->
+                <LinearLayout
+                    android:id="@+id/fleet_marks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_l"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="@dimen/welcome_mark"
+                            android:layout_height="@dimen/welcome_mark"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/marker_journey_station" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_m"
+                            android:layout_weight="1"
+                            android:lineSpacingExtra="4dp"
+                            android:text="@string/welcome_fleet_mechanical_only"
+                            android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_m"
+                        android:baselineAligned="false"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="@dimen/welcome_mark"
+                            android:layout_height="@dimen/welcome_mark"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/marker_journey_station_electric" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_m"
+                            android:layout_weight="1"
+                            android:lineSpacingExtra="4dp"
+                            android:text="@string/welcome_fleet_electric_only"
+                            android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_m"
+                        android:baselineAligned="false"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="@dimen/welcome_mark"
+                            android:layout_height="@dimen/welcome_mark"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/marker_journey_station_mixed" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_m"
+                            android:layout_weight="1"
+                            android:lineSpacingExtra="4dp"
+                            android:text="@string/welcome_fleet_mixed"
+                            android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- The drawing of the current page. Purely decorative: it repeats
+             what the text above says, so a screen reader must not read it a
+             second time.
+
+             Placed under the text rather than above it: the text is what one
+             reads first, and the drawing is what one is left looking at.
+
+             It takes the height the text leaves rather than a written-down
+             size: a fixed height leaves a hole on the short pages and steals
+             from the text on the long ones. The text is measured first and
+             capped at the room it is in; the drawing gets the remainder, and
+             fitCenter keeps its proportions whatever that turns out to be.
+
+             So it shrinks as the font grows, and at the largest sizes it goes
+             altogether rather than pushing a paragraph below the fold. That is
+             the right order: the drawing helps the text, it does not replace
+             it — and it is why the fleet page's marks are not put here: what
+             may vanish must not be what carries the meaning. -->
+        <ImageView
+            android:id="@+id/illustration"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/space_l"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/body_container"
+            app:layout_constraintVertical_weight="2"
+            tools:src="@drawable/illustration_welcome_hello" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/step"
