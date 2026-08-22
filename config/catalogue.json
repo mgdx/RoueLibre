@@ -1,7 +1,7 @@
 {
   "catalogueVersion": 1,
   "catalogueUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/catalogue.json",
-  "generatedAt": "2026-08-22T19:33:07Z",
+  "generatedAt": "2026-08-22T21:02:43Z",
   "cities": [
     {
       "id": "aar-bike",
@@ -549,7 +549,7 @@
       "operator": "BIXI",
       "mainCity": "Montréal",
       "country": "CA",
-      "stationCount": 1070,
+      "stationCount": 1077,
       "stationSamples": [
         [
           45.49965,
@@ -594,8 +594,8 @@
       "centreLongitude": -73.581963,
       "gbfsDiscoveryUrl": "https://gbfs.velobixi.com/gbfs/2-2/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bixi.json",
-      "dataSizeBytes": 147573735,
-      "releaseTag": "data-2026-08-ca"
+      "dataSizeBytes": 101931546,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "bajs",
@@ -657,7 +657,7 @@
       "operator": "Bayern komplett",
       "mainCity": "Nuremberg",
       "country": "DE",
-      "stationCount": 166,
+      "stationCount": 169,
       "stationSamples": [
         [
           48.88949,
@@ -702,8 +702,8 @@
       "centreLongitude": 12.106281,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/bayern_komplett/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bayern-komplett.json",
-      "dataSizeBytes": 449162995,
-      "releaseTag": "data-2026-08-de"
+      "dataSizeBytes": 226819608,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "bergen-bysykkel",
@@ -2862,8 +2862,8 @@
       "centreLongitude": 4.262117,
       "gbfsDiscoveryUrl": "https://api.delijn.be/gbfs/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-blue-bike.json",
-      "dataSizeBytes": 1023331659,
-      "releaseTag": "data-2026-08-be"
+      "dataSizeBytes": 1498133154,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "bluebikes",
@@ -3564,8 +3564,8 @@
       "centreLongitude": 55.257875,
       "gbfsDiscoveryUrl": "https://careem.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-careem-bike.json",
-      "dataSizeBytes": 177586795,
-      "releaseTag": "data-2026-08-ae"
+      "dataSizeBytes": 38716880,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "chelmski-rower",
@@ -4437,7 +4437,7 @@
       "operator": "Donkey Republic",
       "mainCity": "Nuremberg",
       "country": "DE",
-      "stationCount": 124,
+      "stationCount": 127,
       "stationSamples": [
         [
           48.88949,
@@ -4482,8 +4482,8 @@
       "centreLongitude": 12.104085,
       "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_regensburg_straubing/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-nuremberg.json",
-      "dataSizeBytes": 350902096,
-      "releaseTag": "data-2026-08-de"
+      "dataSizeBytes": 197567330,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "donkey-prignitz",
@@ -11664,8 +11664,8 @@
       "centreLongitude": 7.58407,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/velo-fluo/en/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velo-fluo.json",
-      "dataSizeBytes": 1457365274,
-      "releaseTag": "data-2026-08-fr"
+      "dataSizeBytes": 798078949,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "velo-modalis",
@@ -16956,8 +16956,8 @@
       "centreLongitude": 13.851051,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_hr/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-zagreb.json",
-      "dataSizeBytes": 825800483,
-      "releaseTag": "data-2026-08-hr"
+      "dataSizeBytes": 619237979,
+      "releaseTag": "data-2026-08"
     },
     {
       "id": "nextbike-zlin",
