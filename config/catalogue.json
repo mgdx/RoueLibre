@@ -1,7 +1,7 @@
 {
   "catalogueVersion": 1,
   "catalogueUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/catalogue.json",
-  "generatedAt": "2026-08-19T22:10:59Z",
+  "generatedAt": "2026-08-22T19:33:07Z",
   "cities": [
     {
       "id": "aar-bike",
@@ -11457,7 +11457,7 @@
       "operator": "Smovengo / Syndicat Autolib' Vélib' Métropole",
       "mainCity": "Paris",
       "country": "FR",
-      "stationCount": 1518,
+      "stationCount": 1519,
       "stationSamples": [
         [
           48.86598,
@@ -17390,60 +17390,6 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nike.json",
       "dataSizeBytes": 7744146,
       "releaseTag": "data-2026-08-us"
-    },
-    {
-      "id": "pbsn",
-      "displayName": "pbsn",
-      "operator": "pbsn",
-      "mainCity": "Toronto",
-      "country": "CA",
-      "stationCount": 9,
-      "stationSamples": [
-        [
-          45.55634,
-          -73.49361
-        ],
-        [
-          45.55646,
-          -73.49313
-        ],
-        [
-          45.52493,
-          -73.52342
-        ],
-        [
-          45.55651,
-          -73.49375
-        ],
-        [
-          45.5565,
-          -73.4938
-        ],
-        [
-          45.55636,
-          -73.49365
-        ],
-        [
-          43.65099,
-          -79.38098
-        ],
-        [
-          43.65069,
-          -79.38081
-        ]
-      ],
-      "boundingBox": {
-        "south": 40.726928,
-        "west": -79.417922,
-        "north": 45.583405,
-        "east": -73.435368
-      },
-      "centreLatitude": 45.534196,
-      "centreLongitude": -73.52342,
-      "gbfsDiscoveryUrl": "https://pbsn.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-pbsn.json",
-      "dataSizeBytes": 730391004,
-      "releaseTag": "data-2026-08-ca"
     },
     {
       "id": "pony",

@@ -398,7 +398,6 @@ agglomeration, and the map must not be centred on its largest town alone.
 | Mobi by Rogers | Vancouver | North Vancouver, West Vancouver, Victoria-Fraserview, Riley Park, Greektown | 263 | 4993 | 2.2 | 284 km² | southcoast-admreg |
 | avelo-quebec | Québec | Lévis, Neufchâtel-Est–Lebourgneuf, L'Ancienne-Lorette, Saint Romuald, Boischatel, Wendake | 225 | 4391 | 3.0 | 510 km² | quebec |
 | Accès Vélo | Saguenay | Saint-Fulgence | 20 | 140 | 3.0 | 684 km² | quebec |
-| pbsn | Toronto | Montréal, Ottawa, Laval, Markham, Gatineau, Longueuil, +184 | 10 | 27 | 3.0 | 103473 km² | ontario, quebec, new-york |
 
 ### Denmark (DK) — 5 networks, street names in `da`
 
