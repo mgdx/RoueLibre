@@ -1,0 +1,25 @@
+Roue Libre muestra las estaciones de bicis compartidas en un mapa y calcula una ruta puerta a puerta que combina caminar y pedalear.
+
+Todo funciona en el dispositivo: el mapa, la búsqueda de direcciones y el cálculo de rutas no necesitan ninguna conexión. Solo la disponibilidad de bicis en tiempo real sale a la red.
+
+<b>Lo que la distingue</b>
+
+• Ningún servicio de Google: ni Play Services, ni Firebase, ni Maps SDK. Funciona en cualquier Android sin los servicios de Google.
+• Sin telemetría, sin rastreadores, sin identificador único, sin cuenta.
+• No se conserva ningún dato de tus rutas: ni historial, ni ubicaciones, ni destinos. Lo que buscas no sale del teléfono.
+• No se impone ninguna ciudad: varias áreas metropolitanas conviven en el dispositivo, y los datos de una se borran sin tocar los de las demás.
+• La ruta optimiza el <i>par</i> de estaciones — la de salida y la de llegada — en lugar de quedarse con la más cercana, y tiene en cuenta el riesgo de que una estación poco surtida se vacíe mientras caminas hacia ella.
+
+<b>Conviene saberlo antes de instalar</b>
+
+El mapa, el grafo de rutas y el índice de direcciones no están en la aplicación: se descargan una vez, desde la pantalla de almacenamiento, o se instalan a mano desde archivos que produces tú mismo. Su peso depende de la ciudad — unas decenas de megabytes para un área metropolitana mediana, más para una capital — y se anuncia antes de descargar.
+
+<b>Las ciudades servidas</b>
+
+Cerca de trescientas redes, en una treintena de países: todas las que publican sus estaciones en datos abiertos y cuyos anclajes permiten garantizar la devolución de la bici — de Vélib' en París a Citi Bike en Nueva York, pasando por Praga, Barcelona, Copenhague, Tokio y Buenos Aires. La aplicación te propone la tuya a partir de tu ubicación, si se lo pides, y puedes mantener varias instaladas y pasar de una a otra.
+
+Por ahora, los conjuntos de datos sin conexión solo existen para unas pocas. Para las demás, la aplicación lo dice en lugar de disimular: la lista muestra lo que existe, y los archivos se producen con los scripts del repositorio.
+
+No está ligada a ninguna red en particular: la lista de ciudades se actualiza sola, y cada ciudad lleva la dirección de su propio flujo GBFS, lo que la hace utilizable con cualquier red GBFS del mundo.
+
+Software libre bajo la licencia GNU GPL v3.
