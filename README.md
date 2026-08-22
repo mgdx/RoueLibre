@@ -73,7 +73,19 @@ but the live availability of the bikes runs on your phone.
 
 - 🔒 **Private, and local.** Everything happens on the device:
   - the map, streets and routing data are downloaded **once** — 10.6 MB for a
-    median city — and that is it;
+    median city — from the releases of
+    [`RoueLibre-data`](https://github.com/mgdx/RoueLibre-data), a repository of
+    this project, and that is it. What comes down is **static files and nothing
+    else**: a tile archive, a routing graph, an address index. No executable, no
+    plug-in, nothing the application runs as code;
+  - **that download is yours to start.** Choosing a city reads the published
+    manifest to learn what exists and what it weighs; not one byte of a dataset
+    moves until you press the button that announces the size, and none of it
+    ever moves in the background. The catalogue of cities is fetched the same
+    way, when the list of cities is opened and never otherwise. Any of the three
+    sets can also be installed **from a file of your own**, produced by the
+    scripts in [`tools/`](tools/README.md) — see
+    [`docs/offline-data.md`](docs/offline-data.md);
   - the journey is computed on the phone;
   - searching a street or a station never leaves it — it is the most telling
     data the application handles, since it says where you are going;

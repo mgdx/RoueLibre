@@ -250,8 +250,10 @@ def build_document(survey: dict, network_id: str, box: BoundingBox,
         "dataRelease": {
             "$comment": [
                 "Default URL of the manifest describing the published dataset (§4.4).",
-                "Changeable in the settings, and bypassable by manual import: the",
-                "host must never be a single point of failure.",
+                "Not changeable in the application: no source address is typed there",
+                "(§9). What replaces this host is a manual import from the storage",
+                "screen, or this file edited and the application rebuilt — the host",
+                "must never be a single point of failure.",
             ],
             "manifestUrl": MANIFEST_URL_TEMPLATE.format(id=network_id),
             "formatVersion": DATA_FORMAT_VERSION,

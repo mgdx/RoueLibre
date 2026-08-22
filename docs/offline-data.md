@@ -113,8 +113,115 @@ box of a network serving a whole region is mostly empty: Vélo Fluo's passes
 46 km from the middle of the Morvan while its nearest bike is 130 km away.
 
 Since GBFS is an international standard, most of the portability is won as soon
-as the URL is configurable — and it is also configurable from the application's
-settings, without recompiling.
+as the URL is configurable (`SPEC.md` §4.1) — and it is, in the city's own
+configuration file, which is the only place a feed address is ever written.
+Adding a network takes that one JSON file and no code.
+
+## Hosting the data yourself
+
+The application downloads from **the releases of
+[`RoueLibre-data`](https://github.com/mgdx/RoueLibre-data)**, and from nowhere
+else: two addresses say so, both shipped inside the APK — `catalogueUrl` at the
+head of `config/catalogue.json`, which is where the list of cities is refreshed
+from, and `dataRelease.manifestUrl` in each city's configuration, which is where
+that city's files are described. **Neither is typed in the settings**, and
+`SPEC.md` §9 means that on purpose: no source address is entered in the
+application, and the way to install data that does not come from the default
+host is to **import the file itself** from the storage screen, which is the
+guarantee §4.4 asks for — the host must never be a single point of failure.
+
+Serving the files from somewhere else therefore means editing those two fields
+and building, which anyone may do: everything below is a plain static file, and
+the two documents that describe them are these.
+
+### The catalogue
+
+One document for the whole application, listing what exists. `build_catalogue.py`
+derives it from the configurations and the manifests; a third party writes the
+same shape:
+
+```json
+{
+  "catalogueVersion": 1,
+  "catalogueUrl": "https://example.org/catalogue.json",
+  "generatedAt": "2026-08-16T11:29:22Z",
+  "cities": [
+    {
+      "id": "velib",
+      "displayName": "Vélib' Métropole",
+      "mainCity": "Paris",
+      "operator": "Smovengo / Syndicat Autolib' Vélib' Métropole",
+      "country": "FR",
+      "stationCount": 1518,
+      "stationSamples": [[48.86598, 2.27572], [48.8549, 2.41867]],
+      "boundingBox": { "south": 48.716436, "west": 2.124587,
+                       "north": 48.984517, "east": 2.579197 },
+      "centreLatitude": 48.8566,
+      "centreLongitude": 2.3522,
+      "gbfsDiscoveryUrl": "https://…/gbfs.json",
+      "manifestUrl": "https://example.org/manifest-velib.json",
+      "dataSizeBytes": 143626141,
+      "releaseTag": "data-2026-08-fr"
+    }
+  ]
+}
+```
+
+`id`, `displayName`, `gbfsDiscoveryUrl`, `manifestUrl` and a sound `boundingBox`
+are what an entry cannot do without; the rest may be left out, and an entry
+missing one of them is **dropped on its own** rather than costing the catalogue
+its other three hundred. `catalogueUrl` is where the application will look next
+time, so a catalogue can move itself. `stationSamples` are eight positions taken
+through the network, and they are what "find my city" measures against — the
+reference box of a network serving a whole region is mostly empty.
+
+### The manifest
+
+One document per network, describing what is published for it and what it
+weighs. `build_manifest.py` writes it; the shape is:
+
+```json
+{
+  "formatVersion": 2,
+  "releaseTag": "data-2026-08-fr",
+  "generatedAt": "2026-08-14T15:45:13Z",
+  "network": "velib",
+  "boundingBox": { "south": 48.716436, "west": 2.124587,
+                   "north": 48.984517, "east": 2.579197 },
+  "datasets": [
+    {
+      "id": "tiles",
+      "description": "Vector base map",
+      "files": [
+        {
+          "name": "tiles.mbtiles",
+          "url": "https://example.org/velib-tiles.mbtiles",
+          "sizeBytes": 114855936,
+          "sha256": "56dd5fd3e10fb8f836a69c44de6c06360a57ea50d8236c0e027a58ef86e58e90"
+        }
+      ]
+    }
+  ]
+}
+```
+
+The three `id` values are `tiles`, `routing` and `addresses`, and a manifest may
+describe any subset of them. `name` must be a **plain file name** — no slash, no
+`..` — and the routing set is the one that may hold several files, one per
+BRouter segment, each keeping the name the engine derives from the coordinates
+it is looking for. `sha256` is the file's own digest, and it is the whole
+mechanism of a partial update: what is installed is compared against it, and only
+what differs comes down again. `formatVersion` must equal the `formatVersion` of
+the city's configuration, failing which the application says the format is one it
+cannot read and invites an update, rather than failing later when it opens a
+file. `network` must be the configuration's network identifier, and `releaseTag`
+is free text shown for what it is.
+
+Everything served is static: an MBTiles archive, one or more `rd5` graphs, a
+SQLite database, and these two JSON documents. Nothing is executed, nothing is
+loaded as code, and any file host that answers `GET` over HTTPS will do — the
+application declares no cleartext exception, so a plain `http://` address is
+rewritten to `https://` rather than followed.
 
 ## Electric or not, the drawing says so
 

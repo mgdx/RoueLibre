@@ -83,7 +83,10 @@ API.
 Two other things do come from an address of ours, and neither carries a station:
 the city catalogue and the map, routing and address datasets, published as
 releases of `RoueLibre-data`. The catalogue is only downloaded when the city list
-is opened, the datasets once per city.
+is opened, the datasets once per city and only on a press. **Those two addresses
+are not settings**: they are shipped in the APK, and what stands in for them is a
+file imported by hand rather than a host typed in — see
+[`offline-data.md`](offline-data.md#hosting-the-data-yourself) and `SPEC.md` §9.
 
 Everything goes out over TLS. An address in cleartext — a producer's typo in an
 auto-discovery document — is rewritten to `https://` by `HttpsOnlyInterceptor`
