@@ -70,7 +70,7 @@ object JourneyMarkers {
         context: Context,
         style: Style,
         fleet: BikeFleet,
-        ownBikeKind: OwnBikeKind?,
+        ownBikeKind: OwnBikeKind,
     ) {
         style.addImage(
             STATION_IMAGE_ID,

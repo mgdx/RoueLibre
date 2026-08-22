@@ -87,7 +87,7 @@ class JourneySearchFragment : Fragment() {
      * once a journey, and it is followed rather than read once so a bike
      * declared while this screen sits on the back stack reaches the drawing.
      */
-    private var ownBikeKind: OwnBikeKind? = null
+    private var ownBikeKind: OwnBikeKind = OwnBikeKind.Mechanical
 
     /**
      * Whether the network in service really lends both kinds (SPEC §15).

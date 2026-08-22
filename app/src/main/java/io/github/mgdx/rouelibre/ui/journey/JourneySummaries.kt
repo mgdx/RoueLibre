@@ -103,17 +103,17 @@ fun Context.bikesAtDeparture(split: BikeSplit?): String? = split?.let {
  *
  * **The sentence names the bike where the rider named it** (SPEC §7.6): "on your
  * own electric bike" where they said theirs is one, and "on your own bike"
- * otherwise. Two wordings and not three, for the reason `OwnBikeGlyphs` gives
- * about its two drawings — the plain bike promises the least, and it is what a
- * bike declared mechanical and a bike nobody declared both are.
+ * otherwise. Two wordings, for the reason `OwnBikeGlyphs` gives about its two
+ * drawings — the plain bike promises the least, and it is what everything that
+ * is not a declared pedal-assist bike is read as.
  *
  * **No minute of this line depends on the kind.** A pedal-assist bike is quicker
  * in the real world, but the ride was traced over the same graph with the same
  * profile, and this application announces nothing it has not computed (SPEC §6).
  *
- * @param kind what the rider said their own bike is, or `null` if they have not.
+ * @param kind what the rider said their own bike is.
  */
-fun Context.ownBikeSummary(ride: RouteLeg, kind: OwnBikeKind?): String {
+fun Context.ownBikeSummary(ride: RouteLeg, kind: OwnBikeKind): String {
     val distance = formatDistance(ride.distanceMetres.toDouble())
     val isElectric = kind == OwnBikeKind.Electric
     val climb = formatClimb(ride.ascentMetres, ride.distanceMetres)

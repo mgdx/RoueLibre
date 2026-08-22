@@ -140,7 +140,7 @@ class JourneyDetailFragment : Fragment() {
      * total, both of which are repeated word for word from the screen this one
      * opens from (SPEC §7.4.1).
      */
-    private var ownBikeKind: OwnBikeKind? = null
+    private var ownBikeKind: OwnBikeKind = OwnBikeKind.Mechanical
 
     /**
      * Takes back the two ends of the journey described.
