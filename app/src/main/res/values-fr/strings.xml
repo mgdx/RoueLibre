@@ -174,7 +174,10 @@
     <string name="welcome_privacy_title">Rien ne sort d\'ici</string>
     <string name="welcome_privacy_body">Les itinéraires sont calculés sur ce téléphone. Les adresses que tu cherches ne sont envoyées à personne, pas même pendant la frappe.\n\nAucun historique n\'est conservé : ni tes trajets, ni tes positions, ni tes destinations.\n\nLa seule requête qui part en usage courant demande combien de vélos sont disponibles.</string>
     <string name="welcome_fleet_title">Ce que dit le vélo</string>
-    <string name="welcome_fleet_body">Le vélo dessiné dit ce que ta ville prête.\n\nUn vélo simple : on le pédale seul. Un éclair : un moteur aide à pédaler. Les deux marques : le réseau prête les deux sortes, et une station dit alors combien elle a de chacune.\n\nC\'est lu dans le flux du réseau lui-même, jamais deviné.</string>
+    <string name="welcome_fleet_body">Le vélo dessiné dit ce que ta ville prête.\n\nC\'est lu dans le flux du réseau lui-même, jamais deviné.</string>
+    <string name="welcome_fleet_mechanical_only">Le réseau ne prête que des vélos mécaniques.</string>
+    <string name="welcome_fleet_electric_only">Le réseau ne prête que des vélos électriques.</string>
+    <string name="welcome_fleet_mixed">Le réseau prête les deux sortes.</string>
 
     <string name="welcome_data_title">Une ville, un téléchargement</string>
     <string name="welcome_data_body">La carte, les rues et le calcul d\'itinéraire vivent sur l\'appareil. C\'est ce qui les rend utilisables sans réseau — et cela suppose de télécharger les données de ta ville, une fois.\n\nCommence donc par la choisir. Compte quelques dizaines de mégaoctets pour une agglomération de taille moyenne, davantage pour une capitale ; la taille est annoncée avant le téléchargement.\n\nTu peux aussi le faire plus tard : en attendant, la liste des stations et leurs disponibilités restent utilisables.</string>

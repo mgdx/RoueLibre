@@ -13,6 +13,9 @@
     boundary nothing crosses, a city downloaded once — is a shape before it is
     a paragraph, and the reader who skips the text still leaves with it.
 
+    The fleet page is the exception, and it hides that drawing: its three marks
+    each carry a sentence, so they belong to the text (SPEC §7.9).
+
     The side spacing is set with margins on each child, not with padding on the
     root: fitsSystemWindows replaces the padding of the view it is set on with
     the window insets, and the padding declared here used to be silently
@@ -50,15 +53,81 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHeight_default="wrap"
-        app:layout_constraintTop_toBottomOf="@id/title">
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_goneMarginBottom="@dimen/space_l">
 
-        <TextView
-            android:id="@+id/body"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="4dp"
-            android:textAppearance="@style/TextAppearance.RoueLibre.Body"
-            tools:text="Application libre et ouverte, sans compte, sans publicité, sans mouchard." />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="4dp"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+                tools:text="Application libre et ouverte, sans compte, sans publicité, sans mouchard." />
+
+            <!-- The three station marks, shown by the fleet page alone.
+
+                 They are the very discs the map draws for a journey's
+                 stations, at their own size, so the reader meets the mark here
+                 and recognises it there rather than learning a symbol twice.
+
+                 They sit in the text that scrolls and not in the drawing's
+                 place below: that place is meant to shrink and then go
+                 altogether at the largest font sizes, which is right for a
+                 decoration and wrong for a sentence carrying the meaning.
+
+                 Each line is one view, the mark being the sentence's own
+                 leading drawable: it is decorative, the sentence saying what it
+                 says, and a screen reader reads three lines each in one piece.
+                 The text wraps past the mark rather than under it, so a long
+                 sentence keeps its indent instead of running back to the
+                 margin. -->
+            <LinearLayout
+                android:id="@+id/fleet_marks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/space_m"
+                    android:gravity="center_vertical"
+                    android:lineSpacingExtra="4dp"
+                    android:text="@string/welcome_fleet_mechanical_only"
+                    android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+                    app:drawableStartCompat="@drawable/marker_journey_station" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_m"
+                    android:drawablePadding="@dimen/space_m"
+                    android:gravity="center_vertical"
+                    android:lineSpacingExtra="4dp"
+                    android:text="@string/welcome_fleet_electric_only"
+                    android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+                    app:drawableStartCompat="@drawable/marker_journey_station_electric" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_m"
+                    android:drawablePadding="@dimen/space_m"
+                    android:gravity="center_vertical"
+                    android:lineSpacingExtra="4dp"
+                    android:text="@string/welcome_fleet_mixed"
+                    android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+                    app:drawableStartCompat="@drawable/marker_journey_station_mixed" />
+            </LinearLayout>
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <!-- The drawing of the current page. Purely decorative: it repeats what
@@ -76,7 +145,9 @@
 
          So it shrinks as the font grows, and at the largest sizes it goes
          altogether rather than pushing a paragraph below the fold. That is the
-         right order: the drawing helps the text, it does not replace it. -->
+         right order: the drawing helps the text, it does not replace it — and
+         it is why the fleet page's marks are not put here: what may vanish
+         must not be what carries the meaning. -->
     <ImageView
         android:id="@+id/illustration"
         android:layout_width="0dp"
