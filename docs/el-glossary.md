@@ -42,10 +42,13 @@ does: *Να διαγραφούν αυτά τα δεδομένα;*
 The English is **scrupulously impersonal** — "No history is kept", "It is read
 from the feed" — and stays so in Greek through the mediopassive: *Δεν κρατιέται
 κανένα ιστορικό*, *Διαβάζεται από την ίδια τη ροή του δικτύου*. The word *εμείς*
-appears nowhere, and neither does a first-person plural verb. In a privacy text
-whose whole argument is that nobody is behind the application, "we do not keep"
-would ask the reader to trust a "we" instead of stating a property of the
-software.
+appears nowhere. In a privacy text whose whole argument is that nobody is
+behind the application, "we do not keep" would ask the reader to trust a "we"
+instead of stating a property of the software. **One string does carry a
+first-person plural verb**, and it is the one where the English leaves the
+impersonal itself: `city_proposal_body`, *Να το χρησιμοποιήσουμε;* for "Shall
+we go with that?" — the application proposing a city, not a "we" standing
+behind it.
 
 The network in service is in **Nicosia**, so the Greek is standard Modern Greek,
 read the same in Athens and in Cyprus. No Cypriot form appears anywhere; nothing
@@ -59,27 +62,48 @@ Typography:
   πόλη;*, *Πού πηγαίνετε;*, *Από πού;*, *Προς πού;*, *Ποιο μέρος της
   διαδρομής;*, the two *Να διαγραφούν αυτά τα δεδομένα;* and *Να το
   χρησιμοποιήσουμε;*
-- The **áno teleía `·` (U+0387)** is the Greek semicolon: it stands where
-  English breaks two clauses with one, in `welcome_data_body` and
-  `error_malformed`. A middle dot of the same shape is also the separator the
-  interface hangs its figures on — *12 ελεύθερες θέσεις · 30 θέσεις* — but that
-  one comes from the source file and is punctuation of the layout, not of the
-  language.
+- The **áno teleía `·` (U+00B7, the middle dot Unicode canonicalises U+0387
+  to)** is the Greek semicolon: it stands where English breaks two clauses with
+  one, in `welcome_data_body` and `error_malformed`. The same codepoint is also
+  the separator the interface hangs its figures on — *12 ελεύθερες θέσεις · 30
+  θέσεις* — but that one comes from the source file and is punctuation of the
+  layout, not of the language. There is no U+0387 anywhere in the file, and
+  none should be added: it decomposes to U+00B7 and would only make two
+  spellings of one mark.
 - Quotations are **« »**, closed up with no space inside.
 - The apostrophe is **’** (U+2019), never the straight quote, which is why
   nothing in the file is escaped. Elision is avoided altogether in the interface
   strings, so the only apostrophes anywhere are the ones inside network names
   (*Vélib’*, *V’lille*, *Vélo’v*) in the store changelogs.
 - **The tonos is written on lower case and drops in all capitals.** Greek does
-  not accent a word set entirely in capitals. Two strings are set in capitals by
-  the interface itself — `counterpart_bikes` and `counterpart_docks`, under
-  `TextAppearance.RoueLibre.Label` — and they are written **accented** here all
-  the same, because `textAllCaps` goes through `TextUtils.toUpperCase`, which is
-  ICU-backed from API 24 and removes the tonos for `el`; minSdk is 26. Writing
-  them unaccented instead would strip the tonos on the station sheet, where the
-  same string is shown in lower case. It is worth confirming on the device the
-  first time the Greek is looked at: a list row must read ΠΟΔΗΛΑΤΑ and not
-  ΠΟΔΉΛΑΤΑ.
+  not accent a word set entirely in capitals, and roughly thirty strings here
+  are set in capitals by the interface itself: `counterpart_bikes` and
+  `counterpart_docks`, the two labels on a station's sheet, the section titles
+  of "about", `city_active`, `city_installed`, `dataset_absent`,
+  `dataset_installed`, `dataset_update_available`,
+  `journey_detail_departure_station` and `_arrival_station`,
+  `journey_detail_profile`, `storage_total`, `welcome_step`, and every settings
+  label through `Widget.RoueLibre.SettingsLabel`.
+
+  Every one of them is written **accented** all the same. The reason is not
+  that the platform will drop the tonos — it is that a resource file is written
+  in the orthography of its language, and dropping an accent for the benefit of
+  one rendering is a decision about that rendering, made in the wrong file.
+  What the platform actually does is an **open question, and it has not been
+  looked at on a device**. An earlier draft of this file asserted that
+  `textAllCaps` reaches ICU and that ICU drops the tonos; that assertion was
+  not verified and is probably wrong here. The module depends on
+  `androidx.appcompat`, so a `<TextView>` is inflated as an
+  `AppCompatTextView`, whose `AppCompatTextHelper` installs
+  `androidx.appcompat.text.AllCapsTransformationMethod`; that class calls
+  `String.toUpperCase(locale)`, whose tailoring covers `tr`, `az` and `lt` and
+  **not** the Greek tonos. If that is the path taken, the About screen reads
+  ΑΠΌΡΡΗΤΟ and ΆΔΕΙΑ and a list row reads ΠΟΔΉΛΑΤΑ — a visible spelling
+  mistake, and one the code makes out of a correct translation. **Somebody has
+  to install the debug build in Greek and look.** Whatever the answer, the fix
+  belongs to `TextAppearance.RoueLibre.Label` and not to this file:
+  unaccenting the strings here would put the mistake on every reader whose
+  platform does the right thing.
 - Final **ς** closes a word, **σ** stands everywhere else.
 
 Where Android's own Greek has a word, that word wins: an application that calls
@@ -93,12 +117,12 @@ Android's say so in their own row.
 | English | Greek | Why |
 |---|---|---|
 | journey | διαδρομή | The whole door-to-door thing: the screen title, the settings section, the compute button, the errors, the store texts. It is the everyday Greek word for a trip somebody has worked out, and in this file it names nothing else. |
-| ride | ποδηλατικό σκέλος | The bike leg alone, inside a journey — the elevation profile and the own-bike wait. *Σκέλος* is what Greek transport calls one leg of a trip, and choosing it keeps *διαδρομή* whole for the journey: *Το ποδηλατικό σκέλος, ανηφόρες και κατηφόρες* cannot be mistaken for *Η διαδρομή με λεπτομέρειες*. Where the leg is being travelled rather than named, the file writes **με ποδήλατο** — *Με ποδήλατο ως τον σταθμό %1$s*, *%2$s με ποδήλατο*. |
+| ride | ποδηλατικό σκέλος | The bike leg alone, inside a journey — the elevation profile and the own-bike wait. *Σκέλος* is what Greek transport calls one leg of a trip, and choosing it keeps *διαδρομή* whole for the journey: *Το ποδηλατικό σκέλος, ανηφόρες και κατηφόρες* cannot be mistaken for *Η διαδρομή με λεπτομέρειες*. Where the leg is being travelled rather than named, the file writes **με ποδήλατο** — *Με ποδήλατο μέχρι τον σταθμό %1$s*, *%2$s με ποδήλατο*. |
 | walking leg | πεζό σκέλος | The counterpart, in `settings_walking_pace_description`. The two make one series, which is the whole reason *σκέλος* was worth its slightly formal register. |
 | route | δρόμος | Only in `journey_no_route`: *Δεν υπάρχει βατός δρόμος ανάμεσα σε αυτά τα δύο σημεία* — the line on the ground, not the planned journey. The obvious translation of "route" **is** *διαδρομή*, and that is exactly why it is refused here: the string would then say "there is no journey", which is what the screen it sits on is about to say for quite different reasons. *Δρόμος* is plain and physical, and cannot be read as a plan. |
 | routing | δρομολόγηση | `dataset_routing`, `journey_graph_missing`, the BRouter and OpenStreetMap attributions. The standard technical term, and far enough from *δρόμος* in the ear that the dataset and the error above it do not blur. |
 | station | σταθμός | A bike-share station, everywhere. |
-| station (railway) | σιδηροδρομικός σταθμός | `address_search_prompt_message` means **railway** stations by "stations", and its comment in `values/strings.xml` says so. Greek uses *σταθμός* for both, so this one string is explicit — *σιδηροδρομικούς σταθμούς* — rather than leaving the reader to think the address search finds bike stations, which is precisely what that sentence is not offering. |
+| station (transport) | σταθμός των συγκοινωνιών | `address_search_prompt_message` means transport stations by "stations" — the campaign brief says so; `values/strings.xml` carries no comment there, and one would be worth adding to the source. Greek uses *σταθμός* for those and for a bike station alike, so this one string is explicit. Not *σιδηροδρομικούς*: the index holds `station=subway,light_rail` and `public_transport=station` as well as `railway=*`, changelog 2 already says *σταθμοί του μετρό* for the same points, and **Cyprus — the one Greek-speaking network served — has had no railway since 1951**, so a railway example would name a thing the Nicosia reader has never seen. |
 | bike | ποδήλατο | And **κοινόχρηστα ποδήλατα** where the product has to be named before it is known: the welcome page, the store short and full descriptions. Inside the interface the context is settled and *ποδήλατο* is enough. |
 | mechanical / electric | μηχανικό / ηλεκτρικό | Adjectives, as in English, because the counts are elliptical: *4 μηχανικά · 2 ηλεκτρικά* stands for *4 μηχανικά ποδήλατα*. They agree with whatever noun stands over them — neuter singular under «ποδήλατο» in `journey_bike_kind_*` and `settings_own_bike_kind_*`, neuter plural under «ποδήλατα» in `map_bikes_*`. `journey_bike_kind_electric_description` says **υποβοήθηση πεταλιού** so that "electric" cannot be read as a moped. |
 | dock (free) | ελεύθερη θέση | What a bike is returned into, counted as available: *6 ποδήλατα, 26 ελεύθερες θέσεις*. |
@@ -120,7 +144,7 @@ Android's say so in their own row.
 | Clear (a search) | Διαγραφή | Android writes *Διαγραφή* for clearing a field (`settings:clear`, `settings:searchview_clear_text_content_description`), and `map_picked_place_description` uses the same verb for clearing a picked point, so that clearing is one word everywhere. |
 | Refresh | Ανανέωση | And *Ανανεώστε τη λίστα* in `journey_no_stations`, so the button and the instruction pointing at it read as one thing. |
 | Back | Πίσω | `android:back_button_label`, `settings:back`. |
-| In use | Σε χρήση | On the city already selected. Android's `settings:running_processes_header_used_prefix` is *Χρησιμοποιείται*, a verb, which does not fit a badge on a row. |
+| In use | Σε χρήση | Android's own, twice: `android:media_route_status_in_use` and `settings:wifi_display_status_in_use`. On the city already selected. |
 | Out of service | Εκτός υπηρεσίας | `settings:radioInfo_service_out`. |
 | just now | μόλις τώρα | `settings:time_unit_just_now`, lower-cased because it is only ever read inside *Ενημερώθηκε %1$s*. |
 | Update available | Διαθέσιμη ενημέρωση | `settings:android_version_pending_update_summary`, word for word. |
@@ -135,7 +159,8 @@ Android's say so in their own row.
 | Import / Replace | Εισαγωγή / Αντικατάσταση | *Αντικατάσταση* is `settings:vpn_replace`. *Εισαγωγή* is not in the lexicon for importing a file — my choice, and the standard Greek for it. |
 | Tap | Πατήστε | And *Πατήστε παρατεταμένα* for a long press. |
 | app | εφαρμογή | Android's own throughout. |
-| what's new | Τι νέο υπάρχει | What the screen shows is the release notes. *Νέα* alone would also read as news from elsewhere. |
+| what's new | Τι νέο υπάρχει | What the screen shows is the release notes. *Νέα* alone would also read as news from elsewhere, which is why `changelogs/1.txt` names the screen rather than describing it. |
+| licences (components) | Άδειες των βιβλιοθηκών | *Συστατικά* is what a recipe has. What the screen lists is the licences of the libraries the application is built from. |
 | bytes | B, kB, MB, GB | Greek writes the same international symbols and says *byte*. |
 
 ## Free docks and total docks: one noun, two phrases
@@ -176,18 +201,38 @@ away from it:
   before the placeholder: a foreign proper name takes the neuter article in
   Greek — *το nextbike*, as *το Facebook* — and what these receive is
   `cityLabel`, "network — city", which reads correctly behind it.
-- **`journey_step_to_station`** and **`journey_step_ride`** write *ως **τον
+- **`journey_step_to_station`** and **`journey_step_ride`** write *μέχρι **τον
   σταθμό** %1$s*: the noun carries the accusative that a bare station name, of
-  any language, could not take.
-- **`station_address_nearby`** receives a **street name alone**, never a whole
-  address — `StationDetailSheet` and `JourneyDetailFragment` both pass
-  `address.streetName` — so it is *Κοντά **στην οδό** %1$s*, the article on the
-  noun and the name following it uninflected. Reading the call site is what
-  settled this: the noun is true, and the technique is only safe when it is.
+  any language, could not take — and here the noun **is** true, since both call
+  sites pass a station. The preposition is *μέχρι* and not *ως*, which also
+  means "as" and would let *ως τον σταθμό* be read for a moment as "as the
+  station".
+- **`station_address_nearby`** is *Κοντά: %1$s*, with **no noun at all** in
+  front of the placeholder. An earlier draft wrote *Κοντά στην οδό %1$s*, which
+  asserts something the call site does not guarantee: an `AddressResult` carries
+  an `AddressEntryKind` that may be `Landmark` as well as `Street`, and the
+  index is read without filtering on it, so the name can be a university rather
+  than a street. Greek street names also carry their own type often enough —
+  *Λεωφόρος Κηφισίας* — that *στην οδό* would double it. The colon hands the
+  name over uninflected and claims nothing about it. **Apposition behind a noun
+  is only safe when the noun is true of every value the placeholder can take**,
+  which is why `city_delete_description` may do it and this one may not.
 - **`storage_total`** is *Σύνολο: %1$s σε αυτή τη συσκευή* and
-  **`city_installed`** is *%1$s στη συσκευή*: neither carries a verb or a
-  participle that would have to agree with a size which may be "1 MB" or
-  "340 MB".
+  **`city_installed`** is *%1$s στη συσκευή*: in the first the size is set off
+  by a colon, in the second it opens the string, and in neither does an
+  article, a verb or a participle have to agree with a figure that may be
+  "1 MB" or "340 MB".
+- **Three strings do put an article on a size**, and they are the exception to
+  the line above: `download_stopped_body` (*τα %1$s*),
+  `download_waiting_for_unmetered` (*των %1$s*) and, before it was reworded,
+  `download_held_back_body`. They read correctly only because `formatBytes`
+  (`DatasetAdapter.kt`) writes megabytes with `%.1f` and gigabytes with `%.2f`,
+  so a size is never the bare *1 MB* that *τα 1 MB* would trip over — it is
+  always *1,0 MB*, and *τα 1,0 MB* is right. **That is an unwritten invariant
+  living in another file**, and it is written here so that whoever changes the
+  number format knows what else it holds up. `download_held_back_body` was
+  reworded regardless — its *τα* had no antecedent in its own sentence — and
+  now says *κατεβάστε τα δεδομένα*.
 - **`dataset_delete_description`, `dataset_imported`, `dataset_deleted`** use a
   colon — *Διαγραφή: %1$s*, *Έγινε εγκατάσταση: %1$s* — because the three
   dataset names are not all of one number (*Ευρετήριο διευθύνσεων* is singular,
@@ -204,11 +249,16 @@ away from it:
 address in, street before number — *Ερμού 12* — which `AddressQuery.parseQuery`
 reads in its "between the street and the town" position (SPEC §4.3).
 
-**No postcode is invited.** A postcode may only appear in the prompt where the
-country writes it as a single group of five digits: Greece writes it as two
-groups (*104 31*) and Cyprus as four digits (*1010*), so neither can be told
-from a house number — and a second number in the query makes the house number be
-given up anyway.
+**No postcode is invited.** `AddressQuery` strips a postcode only where it is
+written as a **single group of five digits** (`POSTCODE_LENGTH = 5`). Greece
+writes it as two groups (*104 31*); Cyprus writes it as a single group of
+**four** (*1010*), which is a single group but the wrong length, so it survives
+the stripping and is then read as a house number. Either way a second number in
+the query makes the house number be given up. This is worth reporting rather
+than working around: a Cypriot query like *Ερμού 12 1065 Λευκωσία* leaves
+"1065" among the search terms, and the scoring cancels on a term that matches
+nothing — the search returns nothing at all. The fix is in
+`AddressQuery.looksLikePostcode`, not in this file.
 
 The **layout of an address itself is not this file's business**, and no string
 here decides it: a Nicosia address reads *Ερμού 12* and a Lyon one *12 rue
@@ -227,7 +277,9 @@ Greece and for Cyprus alike.
 - **`duration_minutes`** is *%1$d λεπ.* and not *%1$d λεπτά*: it is a plain
   string and not a plural, so the spelled-out word would be wrong at one. The
   abbreviation agrees with nothing, as the English "min" does.
-  `duration_hours_minutes` keeps the English shape, *%1$d ώ %2$02d*.
+  `duration_hours_minutes` takes the same abbreviating full stop, *%1$d ώ.
+  %2$02d*: bare *ώ* is a letter, not an abbreviation, and the two lines sit
+  next to each other.
 
 ## Words that are not translated
 
