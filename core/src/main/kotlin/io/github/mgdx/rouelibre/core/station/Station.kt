@@ -80,6 +80,44 @@ public data class StationWithAvailability(
             !availability.isRenting && !availability.isReturning -> ServiceState.OutOfService
             else -> ServiceState.InService
         }
+
+    /**
+     * How long a station out of service has been silent, when the silence has
+     * lasted long enough to be worth saying; `null` in every other case.
+     *
+     * A station out of service is out of service whether it closed this
+     * morning or five months ago, and until now the application said the same
+     * word for both. The `last_reported` field of `station_status` — the
+     * instant the producer stamped the measurement — separates them, and it
+     * was being stored and never read. On the Lille network on 23 August 2026,
+     * two of the eight closed stations had reported that same day and one had
+     * reported nothing since 13 March: the first will likely reopen, the last
+     * is off the pavement.
+     *
+     * **The silence qualifies a closure, it never decides one.** The service
+     * state is settled by `is_installed`, `is_renting` and `is_returning`
+     * alone, which is why a station lending bikes gets no mark here however
+     * old its measurement is.
+     *
+     * **The threshold is a day**, expressed as the age having left the hours
+     * behind. The five minutes [Freshness.isStale] applies to the feed cannot
+     * apply to a station: GBFS obliges no producer to restamp a station whose
+     * count has not moved, so a network reporting only on change would see
+     * every one of its stations called silent at four in the morning. A day
+     * contradicts no producer — the Lille feed's 259 stations in service had a
+     * median age of 2.2 minutes — and it is the step at which the two cases
+     * above fall on either side.
+     *
+     * @param now the reference instant, injected to keep the rule testable.
+     */
+    public fun silentClosureAge(now: Instant): Freshness? {
+        if (serviceState != ServiceState.OutOfService) return null
+        val reportedAt = availability?.reportedAt ?: return null
+        return when (val age = freshnessOf(reportedAt, now)) {
+            is Freshness.Days, is Freshness.Months -> age
+            else -> null
+        }
+    }
 }
 
 /** A station's service state, from the user's point of view. */

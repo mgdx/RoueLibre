@@ -77,7 +77,7 @@ Files used:
 
 - `gbfs.json` — auto-discovery file listing the other feeds
 - `station_information.json` — static data: identifier, name, latitude/longitude, capacity
-- `station_status.json` — real-time data: bikes available, free docks, station in service or not
+- `station_status.json` — real-time data: bikes available, free docks, station in service or not, and `last_reported`, the instant the producer stamped that measurement
 - `vehicle_types.json` — what each vehicle type identifier stands for: a bicycle or a scooter, pedalled or motor-assisted. Absent from GBFS 1.0, and its absence is an ordinary answer rather than a failure (§15)
 
 **Implementation rules:**
@@ -95,6 +95,7 @@ Files used:
 - `vehicle_types.json`: read **once per session**, on the first refresh that reaches the network. What an identifier stands for changes when an operator adds a kind to its fleet, a few times a year; asking again every minute would double the traffic to learn nothing. A network publishing no such feed is remembered as publishing none, and is not asked again either.
 - The age of the data must be shown to the user ("12 s ago").
 - Offline: show the last known state, clearly marked as stale.
+- **Two ages, and they answer different questions.** The one above is the feed's: how long ago *we* fetched it, and beyond five minutes the state is marked frozen. A station's `last_reported` is its own: how long ago *it* last said anything. The second is only shown where it changes a reading — on a station out of service, where it separates one closed this morning from one that has reported nothing for months — and its threshold is a day rather than five minutes, since GBFS obliges no producer to restamp a station whose count has not moved.
 
 **What the network lends is counted, on every refresh.** The bikes standing at the stations are sorted into mechanical and electric through the vehicle type table, over the whole network, and that reading decides the bike glyph (§7) and the station split (§7.2). It costs no request beyond the table above: the breakdown travels in the `station_status` feed already fetched. The configuration only **seeds** the answer, for the launches that reach no network at all (§15).
 
