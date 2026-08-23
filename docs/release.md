@@ -229,22 +229,32 @@ plugin table maps AGP 9.3 to Gradle 9.5.0 — this project's exact pair. So to
 test locally, clone `gradlew-fdroid` yourself rather than trusting the copy
 that came with the package.
 
-What does have to be checked is the **JDK**. The build image is Debian trixie
-with `default-jdk-headless`, which is **JDK 21**, and it sets
+The **JDK** is what had to be settled, and it is. The build image is Debian
+trixie with `default-jdk-headless`, which is **JDK 21**, and it sets
 `org.gradle.java.installations.auto-download=false` — a toolchain that is not
-installed is not fetched. This repository asks for two that are not there:
-`gradle/gradle-daemon-jvm.properties` pins the Gradle daemon to **JDK 25**, and
-both modules declare `jvmToolchain(17)`. Reproduced under those conditions, the
-build fails twice over:
+installed is refused rather than fetched. This repository used to ask for two
+that are not there: a **JDK 25** daemon in `gradle/gradle-daemon-jvm.properties`
+and `jvmToolchain(17)` in both modules. Under those conditions the build failed
+on each in turn, so both now say 21.
 
-```
-Cannot find a Java installation … matching: {languageVersion=25, …}
-Cannot find a Java installation … matching: {languageVersion=17, …}
+Nothing about the application moved with them. The toolchain says which
+compiler runs; `jvmTarget` and `sourceCompatibility` say what is shipped, and
+both stay at 11 for API 26. Built before and after the change, the two APKs
+differ by exactly one entry — `META-INF/version-control-info.textproto`, which
+records the commit — and `classes.dex` is identical byte for byte.
+
+That is the condition to reproduce whenever the toolchain moves again:
+
+```bash
+git clone --recurse-submodules <repo> && cd <repo>
+JAVA_HOME=<a JDK 21> ./gradlew \
+  -Dorg.gradle.java.installations.auto-download=false \
+  -Dorg.gradle.java.installations.auto-detect=false \
+  assembleRelease
 ```
 
-Aligning both on the JDK their image carries is what unblocks it — the
-toolchain only says which compiler runs, and `sourceCompatibility` is what
-decides the bytecode the application ships.
+A fresh clone with nothing but a JDK 21 and no way to fetch another is what
+their server is. If that command builds, so will they.
 
 ### Being published under our own signature
 
