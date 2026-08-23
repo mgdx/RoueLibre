@@ -196,6 +196,7 @@ Builds:
       - third_party/brouter/buildSrc/src/main/groovy/brouter.library-conventions.gradle
     scandelete:
       - third_party/brouter/brouter-routing-app
+    ndk: r28c
 
   # … and the same for 42 x86, 43 x86_64, 44 arm64-v8a
 
@@ -277,12 +278,23 @@ will otherwise be offered to Gradle as a compiler and fail the build.
 ### What made it unreproducible
 
 Their first run rebuilt the application and found exactly one file different:
-`lib/*/libdatastore_shared_counter.so`. AGP had stripped it — 8,432 bytes down
-to 5,916 — and stripping is done by whichever NDK is installed, so two machines
-carrying different NDKs write two different files and the rebuild can never
-match. `packaging.jniLibs.keepDebugSymbols` now spares that one library: it
-travels from the AAR to the APK untouched, identical everywhere, for 2.5 kB per
-architecture. MapLibre's needs no such care — it arrives already stripped, so
+`lib/*/libdatastore_shared_counter.so`.
+
+The application compiles no native code of its own, so this was never about
+building — it was about **stripping**. AGP removes the symbols from the native
+libraries its dependencies ship, and it does so with whichever NDK it finds.
+Two machines carrying different ones write two different files, and the rebuild
+can never match. `ndkVersion` in `app/build.gradle.kts` and `ndk: r28c` in the
+recipe now name the same tool on both sides, so the stripping is the same
+operation rather than the same intention. Moving that version is a decision
+taken in the two places at once, which is the point of writing it down twice.
+
+Keeping the symbols instead — `packaging.jniLibs.keepDebugSymbols` — would also
+have made the file identical, by never touching it. It was tried and dropped:
+it ships symbols nobody reads and leaves every other library still stripped by
+an unnamed tool, which is treating the symptom.
+
+MapLibre's library needs none of this: it arrives already stripped, so
 stripping it again changes nothing, which is why it was never the file to
 differ.
 
