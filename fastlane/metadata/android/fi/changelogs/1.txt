@@ -1,0 +1,8 @@
+Ensimmäinen asennettava versio.
+
+• Asemakartta toimii ilman verkkoa, kun aineistot on asennettu. Vain pyörien saatavuus tarvitsee yhteyden.
+• Osoitehaku tapahtuu puhelimessa: mitään ei lähetetä, ei edes kirjoittaessa. Se sietää kirjoitusvirheet ja löytää liitoskunnat niiden omalla nimellä.
+• Reitinlaskenta kokoaa matkan kävely → pyörä → kävely valitsemalla parhaan asemaparin, ei lähintä asemaa, ja tarjoaa myös muita pareja.
+• Toisesta sovelluksesta jaettu paikka avautuu suoraan reitiksi.
+
+Puuttuu vielä: lukemasi Uutta-näyttö on olemassa, mutta aineistot on yhä ladattava Tallennustila-näytöltä.

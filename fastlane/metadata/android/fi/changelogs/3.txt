@@ -1,0 +1,17 @@
+Aineistot on julkaistu, eikä kartta ole enää ranskalainen.
+
+• 306 verkostoa 35 maassa, kaikki ne, jotka julkaisevat asemansa avoimena datana: Praha, Barcelona, Riika, Pristina, Buenos Aires. Valitset kaupunkisi ensimmäisellä käynnistyksellä, eikä mitään palvella oletuksena.
+• Aineistot ovat vihdoin ladattavissa. 101 kaupunkia on valmiina – seitsemänkymmentä ranskalaista ja kolmekymmentäyksi muuta – eikä niitä tarvitse enää tuottaa lähdekoodivaraston skripteillä.
+• Osoitehaku toimii Ranskan ulkopuolella: siellä missä kansallista osoiterekisteriä ei ole, kadut ja katunumerot luetaan suoraan OpenStreetMapista, maan omalla kielellä.
+• Kartta päättyy ladatun alueen reunaan sen sijaan, että näyttäisi sen takana tyhjää.
+• Reitin molemmat päät jäävät tulosnäytölle, ja niitä voi korjata siellä.
+• Etäisyydet näytetään alueesi käyttämissä yksiköissä: mailit ja jalat Yhdysvalloissa, mailit ja jaardit Yhdistyneessä kuningaskunnassa, kilometrit muualla. Asetus löytyy Asetuksista, jos haluat toisin.
+• Kerrot, miten nopeasti kävelet – hitaasti, normaalisti tai reippaasti – ja reitti lasketaan sen mukaan. Hidas kävely voi muuttaa tarjottua lähtöasemaa: lähempi asema, hieman pidemmän pyöräosuuden hinnalla. ”Normaali” on se, mitä sovellus on tehnyt tähän asti, ja se on oletus.
+• Kartta voi jättää pois asemat, joista ei ole sinulle hyötyä: poissa käytöstä olevat ja ne, joilla ei ole mitään tarjottavaa. Kaksi kytkintä on Asetuksissa Näyttö-kohdassa, ja valintasi säilyy – kartalla itsellään ei ole yhtään suodatinpainiketta. Se, mitä ”ei mitään” tarkoittaa, seuraa kartan Pyörät / Vapaat paikat -painiketta. Asemat, joista verkosto ei kerro mitään, jäävät aina kartalle.
+• Lataukset odottavat yhteyttä, jota ei laskuteta megatavuittain – yleensä Wi-Fiä. Kaupungin aineistot voivat painaa jopa 1,3 Gt, eikä mikään niistä lähde mobiililiittymäsi kautta ilman lupaasi: pidätetty lataus kertoo kokonsa ja tarjoutuu käynnistymään silti, sen yhden kerran. Jos yhteys alkaa laskuttaa kesken kaiken, lataus pysähtyy ja jatkuu myöhemmin siitä, mihin se jäi, sen sijaan, että alkaisi alusta. Asetus on Asetuksissa Offline-aineistot-kohdassa.
+• Valitset näytön, jolle sovellus avautuu: kartan kuten ennenkin, tai asemalistan. Listalle avautuminen ei pyydä sijaintilupaa lainkaan.
+• Pyörien ja paikkojen lukemat voi näyttää suurempina Asetuksista. Sovellus noudattaa jo puhelimeesi asetettua tekstikokoa; tämä suurentaa vain tuon yhden luvun suurentamatta kaikkea muuta. Kartan merkit säilyttävät kokonsa, joten asemat pysyvät luettavina vierekkäinkin.
+• Voit kertoa, onko oma pyöräsi tavallinen vai sähköpyörä. Sähköpyöräksi ilmoitettuna se saa oman reittinsä ja omat aikansa; tavalliseksi ilmoitettuna se pitää sen reitin, joka sillä on aina ollut.
+• Sovelluksen kieli on sinun valintasi, Asetuksissa, olipa puhelimesi millä kielellä tahansa. Tarjolla ovat vain ne kielet, jotka on todella käännetty – toistaiseksi englanti ja ranska. Yksiköt eivät muutu sen mukana: valitse ranska Bostonissa, ja etäisyytesi pysyvät maileina.
+
+Jokaisen kaupungin koko kerrotaan ennen latausta: 3 Mt Auraylle, 143 Mt Pariisille.
