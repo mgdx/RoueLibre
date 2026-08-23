@@ -15,9 +15,16 @@
     The reader is addressed in the third person singular — "Toque", "Escolha",
     "a sua cidade" — and never with "tu". That is not a compromise between the
     two norms: it is what European Android says, and it says nothing else.
-    Counted over the system lexicon, its Portuguese carries 217 third-person
-    imperatives against 0 in "tu", and 60 "o seu / a sua" against 0 "o teu /
-    a tua" — no "tu", no "te", anywhere. It happens to travel well to Brazil,
+    Counted over the system lexicon, its Portuguese carries 217 sentence-initial
+    third-person imperatives against 0 in "tu", and 60 rows with "o seu / a sua"
+    against 0 with "o teu / a tua" — no "tu", no "te", anywhere. The verbs
+    counted are listed in the glossary, so the figure can be checked.
+
+    One consequence is worth knowing before editing a string: because "o seu /
+    a sua" is how this file says YOUR, it is never how it says ITS. A city's or
+    a network's possessive is written "de" + the noun — "os dados desta cidade",
+    "os dados da rede" — except where the antecedent is the subject of its own
+    clause. The glossary says why. It happens to travel well to Brazil,
     where the same forms are "você", but the reason it is written is the
     system's own usage. This departs from the "tu" of values-fr/ and the "tú"
     of values-es/, whose languages Android addresses informally; Portuguese it
@@ -77,7 +84,7 @@
          covers: it exists and its bikes are counted, but no map and no route
          reach it. The short form joins the rest of the row. -->
     <string name="station_beyond_area_short">fora do mapa</string>
-    <string name="station_beyond_area">Esta estação fica fora da área que os dados instalados cobrem. As suas bicicletas são contadas em tempo real, mas nenhum mapa e nenhum caminho lá chegam.</string>
+    <string name="station_beyond_area">Esta estação fica fora da área que os dados instalados cobrem. As bicicletas desta estação são contadas em tempo real, mas nenhum mapa e nenhum caminho lá chegam.</string>
 
     <!-- The search field above the list. It filters stations by name; the
          address search is a different screen (SPEC §4.3). -->
@@ -189,7 +196,7 @@
     <string name="map_location_denied">Sem localização, indique o seu ponto de partida no mapa ou por endereço.</string>
     <string name="map_location_unavailable">Localização indisponível. Verifique se a localização está ativada e tente novamente.</string>
     <string name="map_outside_city_title">Está noutro lugar</string>
-    <string name="map_outside_city_message">A sua posição fica fora da área que %1$s cobre, por isso este mapa não a pode mostrar. Escolha a cidade onde está para ver as suas estações.</string>
+    <string name="map_outside_city_message">A sua posição fica fora da área que %1$s cobre, por isso este mapa não a pode mostrar. Escolha a cidade onde está para ver as estações.</string>
     <string name="map_outside_city_brief">A sua posição fica fora da área que %1$s cobre.</string>
 
     <string name="map_needs_tiles_title">O mapa base não está instalado</string>
@@ -203,7 +210,7 @@
     <!-- First launch (SPEC §7.9). We explain how something works, we are not
          selling anything: short sentences, active voice, no jargon. -->
     <string name="welcome_hello_title">Roue Libre</string>
-    <string name="welcome_hello_body">Esta aplicação mostra as bicicletas partilhadas num mapa e calcula um percurso porta a porta: caminha até uma estação, pedala e faz o resto a pé.\n\nÉ livre e de código aberto. Sem conta, sem publicidade, sem rastreadores.</string>
+    <string name="welcome_hello_body">Esta aplicação mostra as bicicletas partilhadas num mapa e calcula um percurso porta a porta: caminhar até uma estação, pedalar e fazer o resto a pé.\n\nÉ livre e de código aberto. Sem conta, sem publicidade, sem rastreadores.</string>
     <string name="welcome_privacy_title">Nada sai deste telefone</string>
     <string name="welcome_privacy_body">Os percursos são calculados neste telefone. Os endereços que pesquisa não são enviados a ninguém, nem sequer enquanto escreve.\n\nNão é guardado nenhum histórico: nem os seus percursos, nem as suas posições, nem os seus destinos.\n\nO único pedido que sai em uso normal pergunta quantas bicicletas estão disponíveis.</string>
     <string name="welcome_fleet_title">O que a bicicleta diz</string>
@@ -336,7 +343,7 @@
     <string name="journey_choose_origin">De onde parte?</string>
     <string name="journey_choose_destination">Para onde vai?</string>
     <string name="journey_swap">Trocar a partida e o destino</string>
-    <string name="journey_hint">O percurso é calculado no dispositivo: caminha até uma estação, pedala e faz o resto a pé.</string>
+    <string name="journey_hint">O percurso é calculado no dispositivo: caminhar até uma estação, pedalar e fazer o resto a pé.</string>
     <!-- The switch that leaves the network out of the journey, and the sentence
          that replaces the one above it when it is on (SPEC §7.3). -->
     <string name="journey_own_bike">Com a minha própria bicicleta</string>
@@ -372,7 +379,7 @@
          pan has taken it elsewhere. -->
     <string name="journey_frame">Ver todo o percurso</string>
     <!-- %1$s is the walking time, %2$s the cycling time, %3$s the total distance. -->
-    <string name="journey_summary">%1$s a pé e %2$s de bicicleta · %3$s</string>
+    <string name="journey_summary">dos quais %1$s a pé e %2$s de bicicleta · %3$s</string>
     <!-- Metres climbed over a leg or over the whole journey. Shown only where
          there is relief worth naming; a flat city never reads this. -->
     <string name="journey_climb">%1$s de desnível</string>
@@ -475,8 +482,11 @@
          Augusta, 12" where English writes "12 Rua Augusta".
          %1$s is the number ("12", "12 bis"), %2$s the street name. -->
     <string name="address_with_number">%2$s, %1$s</string>
-    <!-- %1$d is the number, %2$s its repetition mark ("bis", "ter"). -->
-    <string name="address_number_with_suffix">%1$d %2$s</string>
+    <!-- %1$d is the number, %2$s its repetition mark. Joined, with no space:
+         Portuguese writes "12A", where French writes "12 bis". The mark
+         arrives lowercased from the data pipeline, which is not this file's
+         to correct. -->
+    <string name="address_number_with_suffix">%1$d%2$s</string>
     <!-- %1$s is a postcode, %2$s a municipality. -->
     <string name="address_locality">%1$s %2$s</string>
     <!-- %1$s is the place, %2$s an already formatted distance. -->
@@ -555,7 +565,7 @@
     </plurals>
     <string name="city_size_unknown">Tamanho anunciado antes de transferir</string>
     <!-- %1$s is an already formatted size, "42,5 MB" for instance. -->
-    <string name="city_installed">%1$s no dispositivo</string>
+    <string name="city_installed">%1$s instalados no dispositivo</string>
     <!-- A network and the conurbation it serves, "GIRA — Lisboa".
          %1$s is the network, %2$s the city. -->
     <string name="city_label">%1$s — %2$s</string>
@@ -573,9 +583,9 @@
     <string name="city_proposal_title">A sua cidade</string>
     <!-- Shown when the position says one is in another served conurbation than the one installed. -->
     <string name="city_here_title">Está noutra cidade</string>
-    <string name="city_here_body">%1$s serve a área onde está. Instale os seus dados para ver as suas estações e calcular percursos aqui.</string>
-    <string name="city_here_installed_body">%1$s serve a área onde está, e os seus dados já estão no dispositivo.</string>
-    <string name="city_here_install">Instalar os seus dados</string>
+    <string name="city_here_body">%1$s serve a área onde está. Instale os dados desta cidade para ver as estações e calcular percursos aqui.</string>
+    <string name="city_here_installed_body">%1$s serve a área onde está, e os dados já estão no dispositivo.</string>
+    <string name="city_here_install">Instalar os dados desta cidade</string>
     <string name="city_here_use">Usar esta cidade</string>
     <string name="city_proposal_body">Parece estar na área que %1$s cobre. Usamos esta cidade?</string>
     <string name="city_proposal_accept">Sim</string>
@@ -664,7 +674,7 @@
     <string name="error_timeout">O servidor da rede está a demorar demasiado a responder. Tente novamente daqui a pouco.</string>
     <!-- %1$d is the HTTP code the server returned. -->
     <string name="error_server_refused">O servidor da rede devolveu um erro (%1$d). Tente novamente mais tarde.</string>
-    <string name="error_untrusted_server">O servidor da rede apresentou um certificado de segurança inválido. Os seus dados não podem ser obtidos com segurança enquanto o operador não o renovar.</string>
+    <string name="error_untrusted_server">O servidor da rede apresentou um certificado de segurança inválido. Os dados da rede não podem ser obtidos com segurança enquanto o operador não o renovar.</string>
     <string name="error_malformed">Os dados recebidos são ilegíveis. A falha está no fluxo da rede; tente novamente mais tarde.</string>
     <!-- %1$s is a GBFS feed name, "station_status" for instance. -->
     <string name="error_feed_unavailable">A rede não publica o fluxo «%1$s».</string>
@@ -679,7 +689,7 @@
          declares itself billed. "Acesso limitado" / "Acesso ilimitado" is
          Android's own wording for a metered network. -->
     <string name="download_unmetered_only">Transferir apenas numa ligação de acesso ilimitado</string>
-    <string name="download_unmetered_only_description">Normalmente o Wi-Fi. Partilhar a ligação do telefone ou um ponto de acesso limitado é pago ao megabyte e conta como dados móveis.</string>
+    <string name="download_unmetered_only_description">Normalmente o Wi-Fi. A ligação partilhada de um telefone ou um ponto de acesso com acesso limitado é paga ao megabyte e conta como dados móveis.</string>
     <string name="download_held_back_title">Transferência suspensa</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_held_back_body">Esta ligação é paga ao megabyte. Ligue-se a uma rede Wi-Fi para transferir %1$s ou transfira mesmo assim agora.</string>

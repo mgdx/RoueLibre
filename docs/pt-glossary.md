@@ -35,8 +35,18 @@ extraction took the bare code and so produced Brazilian throughout. It was
 caught here — the file held 186 rows saying *tela* and none saying *ecrã* — and
 this translation was written without it, from the norms themselves. It has since
 been regenerated as European, and every term below has now been checked against
-the real thing: 187 rows say *ecrã* and none say *tela*, 124 say *definições*
-and none say *configurações*.
+the real thing: **179** of its rows say *ecrã* and none say *tela*, **124** say
+*definições* and none say *configurações*, **62** say *ligação* or *ligações*
+and none say *conexão*.
+
+Those three figures count **rows** — strings of the lexicon containing the word
+— which is the unit used everywhere in this file unless it says otherwise. Two
+of them are easy to get wrong, so the traps are recorded here rather than left
+for the next contributor to fall into: counting *occurrences* rather than rows
+gives 188 for *ecrã*, since one string holds it twice; and counting *substrings*
+gives 131 for *definições*, because it swallows the 7 rows saying
+**pre**\ *definições*, which is a different word — Android's "default", not its
+"settings". 124 is the right number and 131 is the loose one.
 
 The re-check confirmed the vocabulary and corrected four words. That is recorded
 here because "right" and "right by luck" are not the same thing, and only the
@@ -52,6 +62,22 @@ second one rots silently:
 Everything else held. Citations in the table below give the key actually
 grepped; where this file departs from a row, it says so, and says why.
 
+Three departures are small enough to have gone unwritten, and are written here
+because an unwritten exception is one a reviewer "corrects" back:
+
+- **`storage_check_updates` says *Procurar atualizações*** where Android says
+  *Rever atualizações*. Kept because *Procurar* is what the Portuguese Play
+  Store puts on that button, and because the gesture here really is a search —
+  the manifest is read to find out whether anything is newer, not to review a
+  list already known.
+- **`journey_locating` (*A procurar a sua posição…*) and `incoming_needs_index`
+  (*tem de ser procurado*) use *procurar* against this file's own
+  "Search = Pesquisar" rule.** Deliberate: neither is a text search. *Pesquisar*
+  is what one does to an index with a typed query, which is what the address
+  and station fields do; locating a phone and looking a record up are *procurar*.
+- **`telefone` where Android says *telemóvel*** — argued at the end of the
+  divergence section below.
+
 ## Register: the third person, because that is what Android says
 
 The interface addresses the reader in the **third person singular** — *Toque*,
@@ -64,12 +90,19 @@ at all.** Counted over its Portuguese:
 
 | | third person / *o seu* | *tu* / *o teu* |
 |---|---|---|
-| imperatives, over 29 common verbs | **217** | **0** |
+| imperatives, sentence-initial, over the 29 verbs listed below | **217** | **0** |
 | possessives | **60** (*o seu*, *a sua*) | **0** (*o teu*, *a tua*) |
 | subject pronouns | *você* 0 — elided throughout | *tu* **0** |
 | clitic *te* | — | **0** |
 
-The imperative count takes sentence-initial forms only, so that descriptive
+The 29 verbs counted are *tocar, escolher, selecionar, introduzir, tentar,
+verificar, experimentar, premir, aceder, utilizar, adicionar, consultar, ligar,
+desligar, abrir, ir, ter, saber, manter, deslizar, arrastar, aguardar,
+confirmar, reiniciar, fazer, contactar, remover, instalar, eliminar, inserir,
+definir*, each in both its third-person and its *tu* form. An independent
+re-count with a different list of 45 verbs gave 203 against 0 — the totals move
+with the list, the zero does not, and the possessive count of 60 came out
+identical. The count takes sentence-initial forms only, so that descriptive
 clauses cannot inflate it. Five hits first looked like *tu* forms and are not:
 *Consulta de pesquisa* is a noun ("search query"), while *Abre a app Mensagens*,
 *Remove da secção de conversas* and *Tem mensagens novas* are third-person
@@ -153,6 +186,30 @@ The three dataset names are all **masculine singular** — *mapa base*, *grafo d
 percursos*, *índice de endereços* — which is what lets `dataset_imported` and
 `dataset_deleted` agree once for all three (*%1$s instalado*).
 
+## *O seu* belongs to the reader
+
+A consequence of the third-person register, and the one trap it sets. Because
+*o seu / a sua* is how this file says **your** — *a sua cidade*, *a sua posição*,
+*os seus percursos* — it cannot also be how it says **its**. A string that used
+it for a city or a network read as being about the reader: *Instalar os seus
+dados*, alone on a button, says "install your data", and `error_untrusted_server`
+saying *Os seus dados não podem ser obtidos com segurança* made an application
+whose whole argument is privacy appear to fear for the reader's own data.
+`map_outside_city_message` had both senses in one sentence.
+
+So: **a third party's possessive is written with *de* + the noun** — *os dados
+desta cidade*, *as estações dessa cidade*, *os dados da rede*, *as bicicletas
+desta estação*. `city_here_use` (*Usar esta cidade*) was already built that way.
+
+The one licence kept: a possessive whose antecedent is the **subject of its own
+clause** stays, because nothing else can be meant — *O ficheiro não corresponde
+à sua soma de verificação* (`dataset_rejected_checksum`), *Esta rede publica os
+seus dados na versão %1$s* (`error_unsupported_version`).
+
+Spanish has no such trap, and the difference is instructive rather than a
+mistake on either side: `values-es/` says *tú*, so *sus* can only mean *its*.
+The register decision is what creates this one, and it is the price of it.
+
 ## The order of an address, and why no postcode is invited
 
 `address_with_number` is written **`%2$s, %1$s`** and not `%1$s %2$s`:
@@ -190,7 +247,10 @@ change, and nothing else in the file should.
 | European (written here) | Brazilian | Where |
 |---|---|---|
 | Third person, no *tu* | the same third person | **No change.** The register was chosen precisely so this row would be empty. |
-| Definições | Configurações | `settings_title`, `settings_open`, `about_links_body`, and the store texts |
+| Definições | Configurações | `settings_title`, `settings_open`, `about_links_body`, and `changelogs/2.txt`, `changelogs/3.txt` (×5) |
+| lugar livre, lugares livres | vaga, vagas | **11 strings** — `mode_docks` (a button on the map) and `mode_docks_description`, the three items of `docks_available` and the three of `counterpart_docks`, `journey_no_dock_nearby`, `journey_detail_availability_note`, and `settings_map_filters_hide_empty_hint`, which holds it twice. The largest row of this table after *transferir*, and the one most visible on screen: *vaga* is the word every Brazilian network uses for a free dock |
+| gerir | gerenciar | `storage_open` |
+| noutro, noutra | em outro, em outra | `map_outside_city_title`, `city_here_title` — European Portuguese contracts *em* with the following word far more readily than Brazilian |
 | Anterior | Voltar | `action_back`. Both are Android's own word in their own norm, which is why this one is invisible without the lexicon: *Voltar* is what a European reader would guess and what a Brazilian device actually says |
 | Em utilização | Em uso | `city_active` |
 | acesso ilimitado, acesso limitado | ilimitada, limitada | `download_unmetered_only`, `download_waiting_for_unmetered` — Android names the metered state differently in each norm |
@@ -208,22 +268,23 @@ change, and nothing else in the file should.
 | até ao destino | até o destino | `journey_step_to_destination`, `journey_step_walk_all`, `journey_step_ride_all` |
 | libertar espaço | liberar espaço | `error_local_storage_download`, `dataset_delete_body` |
 | Toque sem soltar | Toque e segure | `favourites_reorder_hint` |
-| Abrir por predefinição | Abrir por padrão | `about_links_body` — it quotes a system path and has to match the device word for word, and this is the one step of it that differs: both norms call the Settings entry **Apps** (`settings:apps_dashboard_title`), and both say *Adicionar link* |
+| por predefinição | por padrão | `settings_opening_title`, `about_links_body` and `changelogs/3.txt` (×2, *nenhuma é servida por predefinição* and *é a predefinição*). In `about_links_body` it is the one step of a quoted system path that differs between the norms: both call the Settings entry **Apps** (`settings:apps_dashboard_title`), and both say *Adicionar link* |
 | Nova Iorque, Copenhaga | Nova York, Copenhague | `full_description.txt` |
 | Em França, fora de França | Na França, fora da França | `about_attribution_gbfs`, `changelogs/3.txt` — European Portuguese takes no article before most country names, Brazilian takes one |
-| *A calcular…*, *A pesquisar…* | *Calculando…*, *Pesquisando…* | `journey_computing`, `journey_computing_own_bike`, `journey_locating`, `address_searching_title`, `address_searching_message`, `storage_checking` — European Portuguese forms the progressive with *estar a* + infinitive, Brazilian with the gerund. This is systematic rather than lexical: it is the shape of the sentence, not a word to swap. |
+| *A calcular…*, *está a contar* | *Calculando…*, *está contando* | **9 places.** As a bare participial title: `journey_computing`, `journey_computing_own_bike`, `journey_locating`, `address_searching_title`, `address_searching_message`, `storage_checking`. As *estar a* + infinitive inside a sentence, which is the form easiest to miss: `error_timeout` (*está a demorar*), `settings_map_filters_hide_empty_hint` (*está a contar*), and `changelogs/1.txt` (*que está a ler*). European Portuguese forms the progressive with *estar a* + infinitive, Brazilian with the gerund. Systematic rather than lexical: it is the shape of the sentence, not a word to swap. |
 | *para a mover*, *para os transferir* | *para movê-la*, *para transferi-los* | clitic placement, systematic. European Portuguese puts the pronoun before the infinitive after a preposition; Brazilian attaches it. Both are grammatical written Portuguese, so nothing here is wrong in Brazil — it is only marked. |
 | *a minha cidade*, *a sua posição* | *minha cidade*, *sua posição* | the article before a possessive, systematic. European keeps it, Brazilian drops it in ordinary register. |
 
 Two words deliberately **not** taken from Android's European Portuguese.
 
-**telefone**, where Android says *telemóvel* (`android:permgrouplab_phone`,
-`settings:about_settings`). *Telemóvel* is European-only and reads as foreign in
-Brazil, where the word is *celular*; *telefone* is correct in both and is what
-`welcome_privacy_title`, `about_privacy_body` and the store texts use. This is
-the one place the shared-word rule is allowed to outrank the system's own word,
-and it is allowed because the alternative is a word half the readership does not
-use.
+**telefone**, where Android's commonest word is *telemóvel* — 57 rows, against
+23 that say *telefone*, among them `android:shutdown_confirm` (*O seu telefone
+será encerrado*). So this is a lighter departure than it first looked: not a
+word the system avoids, but its other word. *Telemóvel* is European-only and
+reads as foreign in Brazil, where the word is *celular*, while *telefone* is
+correct in both norms and is already Android's in two dozen strings. It is what
+`welcome_privacy_title`, `about_privacy_body`, `download_unmetered_only_description`
+and the store texts use.
 
 **endereço** and not *morada* for a postal address, throughout `address_*`,
 `dataset_addresses` and the store texts. *Morada* is the more idiomatic European
@@ -259,6 +320,16 @@ value must write it `\'`.
 Numbers keep the **decimal comma** and a thousands separator that is a space or
 a point: *42,5 MB*, *1,3 GB*. Size units are the international symbols — B, kB,
 MB, GB — since Portuguese says *byte*, not *octeto*.
+
+**Zero falls in a different category on a Brazilian device**, and nothing in
+this file can or should change that. CLDR gives `pt` the rule `one: i = 0..1`
+and `pt-PT` the rule `one: n = 1 and v = 0`: a count of zero resolves to `one`
+in Brazil and to `other` in Portugal. So the very same items read *0 bicicleta*
+in São Paulo and *0 bicicletas* in Lisbon. Both are correct in their own norm —
+this is the same fact `SPEC.md` §9 records about French counting zero with `one`
+where English counts it with `other`. It is written here only because Android
+serves this one file to both, so the `one` items have to read acceptably for
+zero as well as for one, and they do.
 
 `many` is a real plural category of Portuguese, reached at a million and beyond
 (CLDR). It is written out in every `<plurals>` all the same: what a language
