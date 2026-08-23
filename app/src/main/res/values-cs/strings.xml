@@ -59,7 +59,7 @@
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.
-         Example: „Národní, 6 kol, 26 stojanů“. -->
+         Example: „Národní, 6 kol, 26 volných míst“. -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
 
     <string name="station_out_of_service">Mimo provoz</string>
@@ -75,7 +75,7 @@
          covers: it exists and its bikes are counted, but no map and no route
          reach it. The short form joins the rest of the row. -->
     <string name="station_beyond_area_short">mimo mapu</string>
-    <string name="station_beyond_area">Tato stanice leží mimo oblast, kterou pokrývají nainstalovaná data. Její kola se počítají živě, ale nedosáhne k ní žádná mapa ani cesta.</string>
+    <string name="station_beyond_area">Tato stanice leží mimo oblast, kterou pokrývají nainstalovaná data. Její kola se počítají v reálném čase, ale nedosáhne k ní žádná mapa ani cesta.</string>
 
     <!-- The search field above the list. It filters stations by name; the
          address search is a different screen (SPEC §4.3). -->
@@ -203,11 +203,11 @@
     <string name="map_location_unavailable">Poloha není k dispozici. Zkontrolujte, že je zapnuté určování polohy, a zkuste to znovu.</string>
     <string name="map_outside_city_title">Jste jinde</string>
     <!-- %1$s is a network and the conurbation it serves, „V’lille – Lille“. -->
-    <string name="map_outside_city_message">Vaše poloha leží mimo oblast, kterou pokrývá %1$s, takže ji tato mapa nemůže zobrazit. Vyberte město, ve kterém jste, a uvidíte jeho stanice.</string>
+    <string name="map_outside_city_message">Nacházíte se mimo oblast, kterou pokrývá %1$s, takže vaši polohu tato mapa nemůže zobrazit. Vyberte město, ve kterém jste, a uvidíte jeho stanice.</string>
     <string name="map_outside_city_brief">Vaše poloha leží mimo oblast, kterou pokrývá %1$s.</string>
 
     <string name="map_needs_tiles_title">Chybí mapová data</string>
-    <string name="map_needs_tiles_message">Nainstalujte je v „Úložišti“. Mezitím zůstává seznam stanic použitelný.</string>
+    <string name="map_needs_tiles_message">Nainstalujte mapová data v „Úložišti“. Mezitím zůstává seznam stanic použitelný.</string>
     <!-- The same screen, but before a city has even been designated: it is
          not a file that is missing but the frame for everything else
          (SPEC §15.1). -->
@@ -227,7 +227,7 @@
     <string name="welcome_fleet_mixed">Síť půjčuje oba druhy.</string>
 
     <string name="welcome_data_title">Jedno město, jedno stažení</string>
-    <string name="welcome_data_body">Mapa, ulice i výpočet tras jsou uložené v zařízení. Právě proto fungují bez sítě – a znamená to jednou stáhnout data vašeho města.\n\nZačněte tedy jeho výběrem. Počítejte přibližně se čtyřiceti megabajty u středně velké aglomerace, u hlavního města s více; velikost se oznámí před stažením.\n\nMůžete to udělat i později: mezitím zůstávají seznam stanic a jejich dostupnost použitelné.</string>
+    <string name="welcome_data_body">Mapa, ulice i výpočet tras jsou uložené v zařízení. Právě proto fungují bez sítě – a znamená to jednou stáhnout data vašeho města.\n\nZačněte tedy jeho výběrem. Počítejte přibližně se čtyřiceti megabajty u středně velké aglomerace, více u hlavního města; velikost se oznámí před stažením.\n\nMůžete to udělat i později: mezitím zůstávají seznam stanic a jejich dostupnost použitelné.</string>
     <!-- Position in the sequence: „1 z 3“. This is not a number agreement
          but a progress marker — the second number does not vary with the
          first — hence the absence of a plural.
@@ -307,7 +307,7 @@
     <string name="about_version">Verze %1$s</string>
 
     <string name="about_privacy_title">Ochrana soukromí</string>
-    <string name="about_privacy_body">Žádný účet, žádné reklamy, žádný sledovací nástroj, žádný jedinečný identifikátor. Nic z toho, co hledáte nebo počítáte, neopustí tento telefon: adresy, trasy i vaše poloha zůstávají zde a neuchovávají se. Jediný požadavek, který při běžném používání odchází ven, načítá dostupnost kol. Datové sady se stahují jen tehdy, když o to požádáte.</string>
+    <string name="about_privacy_body">Žádný účet, žádné reklamy, žádný sledovací nástroj, žádný jedinečný identifikátor. Nic z toho, co hledáte nebo počítáte, neopustí tento telefon: adresy, cesty i vaše poloha zůstávají zde a neuchovávají se. Jediný požadavek, který při běžném používání odchází ven, načítá dostupnost kol. Datové sady se stahují jen tehdy, když o to požádáte.</string>
 
     <string name="about_attributions_title">Zdroje dat</string>
     <!-- Availability, described like the other sources: by what the data is
@@ -496,8 +496,9 @@
          is a resource and its placeholders are positional, and it is the same
          order the search prompt above asks for. -->
     <string name="address_with_number">%2$s %1$s</string>
-    <!-- %1$d is the number, %2$s its repetition mark („a“, „b“). -->
-    <string name="address_number_with_suffix">%1$d %2$s</string>
+    <!-- %1$d is the number, %2$s its repetition mark („a“, „b“). Czech
+         writes it against the number, „25a“, with no space. -->
+    <string name="address_number_with_suffix">%1$d%2$s</string>
     <!-- %1$s is a postcode, %2$s a municipality. -->
     <string name="address_locality">%1$s %2$s</string>
     <!-- %1$s is the place, %2$s an already formatted distance. -->
@@ -584,13 +585,16 @@
          %2$s the city. -->
     <string name="city_label">%1$s – %2$s</string>
     <string name="city_delete">Smazat</string>
-    <!-- %1$s is a city's name, in apposition after „města“, which carries the
-         case. -->
-    <string name="city_delete_description">Smazat data města %1$s</string>
+    <!-- %1$s is what `cityLabel` produced: a NETWORK name, not a city — 328
+         of the 331 catalogue entries have a `displayName` of their own, and
+         all 36 Czech networks are called „nextbike“. So these three lines
+         name nothing: the quotation marks and the colon hold the name at
+         arm's length, exactly as `dataset_deleted` does. -->
+    <string name="city_delete_description">Smazat data: %1$s</string>
     <string name="city_delete_title">Smazat tato data?</string>
-    <string name="city_delete_body">Všechna offline data města %1$s budou vymazána. Abyste je mohli používat, budete je muset znovu stáhnout.</string>
+    <string name="city_delete_body">Všechna offline data „%1$s“ budou vymazána. Abyste je mohli používat, budete je muset znovu stáhnout.</string>
     <string name="city_delete_confirm">Smazat</string>
-    <string name="city_deleted">Data města %1$s byla smazána</string>
+    <string name="city_deleted">Data „%1$s“ byla smazána</string>
     <string name="city_search_hint">Hledat město</string>
     <string name="city_search_clear">Smazat hledání</string>
     <string name="city_no_match_title">Žádné město nenalezeno</string>
@@ -662,7 +666,7 @@
     <string name="dataset_delete_description">Smazat %1$s</string>
     <string name="dataset_delete_title">Smazat tato data?</string>
     <!-- %1$s is the dataset's name, %2$s the space it frees. -->
-    <string name="dataset_delete_body">Data „%1$s“ budou vymazána a uvolní se %2$s. Abyste mohli pracovat offline, budete je muset znovu stáhnout.</string>
+    <string name="dataset_delete_body">Datová sada „%1$s“ bude vymazána a uvolní se %2$s. Abyste mohli pracovat offline, budete ji muset znovu stáhnout.</string>
     <!-- %1$s is the dataset's name. A dataset's name is masculine in one case
          and neuter plural in two, so these two lines are written as labels:
          no participle here has to agree with what it is handed. -->
@@ -676,7 +680,7 @@
     <!-- %1$d is the version found, %2$d the one the application can read. -->
     <string name="dataset_rejected_version">Tento soubor je ve verzi formátu %1$d a tato verze aplikace čte verzi %2$d. Aktualizujte aplikaci.</string>
     <string name="dataset_rejected_checksum">Soubor neodpovídá svému kontrolnímu součtu: je neúplný nebo poškozený. Stáhněte ho znovu.</string>
-    <string name="dataset_rejected_transfer">Kopírování souboru se nezdařilo. Zkontrolujte volné místo a zkuste to znovu.</string>
+    <string name="dataset_rejected_transfer">Kopírování souboru se nezdařilo. Zkontrolujte volné místo v úložišti a zkuste to znovu.</string>
 
     <!-- Error messages: what happened, and what to do. No apologies, no
          technical codes (SPEC §7 and §14). -->
@@ -720,7 +724,7 @@
     <string name="download_can_resume">Toto připojení se už neúčtuje. Spusťte stahování znovu: bude pokračovat tam, kde skončilo.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
-    <string name="settings_opening_title">Ve výchozím nastavení otevírat</string>
+    <string name="settings_opening_title">Výchozí obrazovka po spuštění</string>
     <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_opening_description">Obrazovka, na které se aplikace otevírá</string>
     <string name="settings_opening_map">Mapa</string>

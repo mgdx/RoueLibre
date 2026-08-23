@@ -31,7 +31,7 @@ why nothing in the file is escaped.
 
 A **non-breaking space** (U+00A0) stands after every one-letter preposition or
 conjunction — **k, s, v, z, o, u, a, i** — which Czech typesetting never leaves
-at the end of a line. There are 112 of them in the strings file and 93 more in
+at the end of a line. There are 113 of them in the strings file and 92 more in
 the store texts. The two-letter vocalised forms — *ke, se, ve, ze* — take an
 ordinary space: the rule is about a single letter left hanging, and they are
 not one.
@@ -48,7 +48,7 @@ knowing before it gets "fixed":
 |---|---|---|
 | `station_address_nearby` | `Poblíž: %1$s` | *Poblíž* governs the genitive, and the argument is a street **or** a square (`address.streetName` reaches it as it stands). A colon turns the line into a label, which declines nothing. |
 | `journey_step_to_station`, `journey_step_ride` | `Pěšky ke stanici %1$s` | The case falls on *stanici*; the name follows in apposition, in the nominative, exactly as it arrived. |
-| `city_delete_description`, `city_delete_body`, `city_deleted` | `… data města %1$s …` | Same device: *města* carries the genitive, the city name sits after it untouched. |
+| `city_delete_description`, `city_delete_body`, `city_deleted` | `Smazat data: %1$s`, `… data „%1$s“ …` | **Not the apposition device, and here is why not.** All three are handed `city.displayName` (`CityAdapter.kt:111`, `CityFragment.kt:279` and `:294`), which is the **network's** name, not the city's: 328 of the 331 catalogue entries carry a `displayName` of their own, and all 36 Czech networks are called *nextbike*. Writing „data města %1$s“ would have made a Brno reader read „data města nextbike“ — a false statement the English never makes, and one no other translation makes either. The colon and the quotation marks hold the name at arm's length instead, exactly as `dataset_deleted` does. |
 | `dataset_imported`, `dataset_deleted` | `Nainstalováno: %1$s` | A dataset's name is masculine in one case (*rejstřík adres*) and a neuter plural in two (*mapová data*, *data pro výpočet tras*), so no participle can be written that agrees with all three. A label with a colon agrees with nothing. |
 
 `city_here_body` and `city_here_installed_body` have the same problem in the
@@ -94,8 +94,9 @@ to protect a handful of named squares.
 | English | Czech | Why |
 |---|---|---|
 | journey | **trasa** | The whole door-to-door thing: the screen, the settings section, the button, the errors, the waits. It is what Czech mapping applications call a planned trip (*naplánovat trasu*, *zobrazit celou trasu*), and it is short, which matters on `journey_compute` and `journey_frame`. |
-| journey data (store texts) | **cesty** | The one place *trasa* is deliberately not used. "Neuchovává se nic o vašich trasách" would collide head-on with `dataset_routing`, which **is** called *data pro výpočet tras* and **is** stored on the device — the sentence would say the opposite of the truth. *Cesta* is not a one-off either: `welcome_privacy_body` already says "ani vaše cesty, ani vaše polohy", so the store bullet and the welcome page use the same word for the same thing. Do not "correct" it back to *trasa*. |
+| journey data (privacy) | **cesty** | The one place *trasa* is deliberately not used, and it holds across **all three** sentences that promise nothing is kept: `welcome_privacy_body` ("ani vaše cesty, ani vaše polohy"), `about_privacy_body` ("adresy, cesty i vaše poloha") and the store's own bullet ("nic o vašich cestách"). "Neuchovává se nic o vašich trasách" would collide head-on with `dataset_routing`, which **is** called *data pro výpočet tras* and **is** stored on the device — the sentence would say the opposite of the truth. `about_privacy_body` is the one that matters most, since it is the only one of the three that cohabits in the application with an Úložiště screen announcing those very data as installed. Do not "correct" any of them back to *trasa*. |
 | ride | **jízda** | The bike leg alone, inside a journey: `journey_computing_own_bike` ("Počítá se jízda…"), `journey_detail_profile`, `journey_detail_profile_description`. A different word from *trasa*, so the elevation profile and the own-bike wait cannot be mistaken for the whole thing. |
+| journey (changelogs/1.txt) | **cesta** | "skládá **cestu** pěšky → na kole → pěšky". *Trasa* is the word everywhere else, but the sentence already carries *trasy* twice ("Výpočet trasy skládá trasu…"), and Czech will not take the repetition. Written down here so the next contributor sees a choice rather than a slip; rewriting the sentence impersonally would work too. |
 | route | **cesta** | Only in `journey_no_route` — "Mezi těmito dvěma body nevede žádná sjízdná cesta" — and in `station_beyond_area`: the line on the ground, not the planned journey. |
 | station | **stanice** | A bike-share station, and what Czech networks call one. |
 | railway station | **nádraží** | What `address_search_prompt_message` means by "stations", and Czech has a separate word for it, so there is no ambiguity to manage: *stanice* stays the bike-share one throughout. |
