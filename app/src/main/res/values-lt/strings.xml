@@ -21,8 +21,11 @@
       · the dash that breaks a sentence is – (U+2013), with a space on either
         side, and not the em dash of the English file;
       · foreign product and brand names are set in „ “, as Android's own
-        Lithuanian does — „OpenStreetMap“, „BRouter“, „Roue Libre“ — while
-        Wi-Fi is written bare, again following Android;
+        Lithuanian does — „OpenStreetMap“, „BRouter“, „Roue Libre“, and
+        „Wi-Fi“ with them wherever it stands inside a sentence
+        (android:wifi_available_sign_in → *Prisijungti prie „Wi-Fi“ tinklo*);
+        only a label standing alone is written bare, which is a case this
+        file does not have;
       · the diacritics are written in full: ą č ę ė į š ų ū ž;
       · the apostrophe, where a name carries one (Vélib’), is ’ (U+2019) and
         never the straight quote, which is why nothing here is escaped.
@@ -185,7 +188,7 @@
 
     <string name="map_open_list">Žiūrėti stotelių sąrašą</string>
     <string name="map_attribution">© „OpenStreetMap“ bendraautoriai</string>
-    <string name="map_locate_me">Nustatyti mano vietą</string>
+    <string name="map_locate_me">Nustatyti mano buvimo vietą</string>
     <string name="map_location_denied">Be vietovės nustatymo pradžios tašką pasirinkite žemėlapyje arba pagal adresą.</string>
     <string name="map_location_unavailable">Buvimo vieta nepasiekiama. Patikrinkite, ar įjungta Vietovė, ir bandykite dar kartą.</string>
     <string name="map_outside_city_title">Esate kitur</string>
@@ -201,7 +204,7 @@
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">Ši programa rodo dalijimosi dviračius žemėlapyje ir apskaičiuoja kelionę nuo durų iki durų: nueiti iki stotelės, važiuoti dviračiu, tada nueiti likusį kelią.\n\nJi nemokama ir atvirojo kodo. Jokios paskyros, jokių reklamų, jokių sekimo priemonių.</string>
     <string name="welcome_privacy_title">Niekas neišeina iš šio telefono</string>
-    <string name="welcome_privacy_body">Kelionės apskaičiuojamos šiame telefone. Ieškomi adresai niekam nesiunčiami – net ir renkant tekstą.\n\nIstorija nesaugoma: nei kelionės, nei buvimo vietos, nei tikslai.\n\nVienintelė kasdien į tinklą iškeliaujanti užklausa teiraujasi, kiek yra laisvų dviračių.</string>
+    <string name="welcome_privacy_body">Kelionės apskaičiuojamos šiame telefone. Ieškomi adresai niekam nesiunčiami – net ir renkant tekstą.\n\nIstorija nesaugoma: nei kelionės, nei buvimo vietos, nei tikslai.\n\nVienintelė įprastai naudojantis į tinklą iškeliaujanti užklausa teiraujasi, kiek yra laisvų dviračių.</string>
     <string name="welcome_fleet_title">Ką sako dviratis</string>
     <string name="welcome_fleet_body">Nupieštas dviratis parodo, ką siūlo jūsų miestas.\n\nTai perskaitoma iš paties tinklo duomenų srauto, o ne spėjama.</string>
     <string name="welcome_fleet_mechanical_only">Tinklas siūlo tik mechaninius dviračius.</string>
@@ -228,8 +231,8 @@
     <string name="incoming_address_not_found">„%1$s“ neatitinka nė vieno adreso aprėptoje teritorijoje.</string>
     <string name="incoming_outside_coverage">Ši vieta yra už teritorijos, kurią apima įdiegti duomenys: jokia kelionė jos nepasiekia.</string>
 
-    <string name="favourites_title">Mėgstamiausios</string>
-    <string name="favourites_open">Žiūrėti mėgstamiausias</string>
+    <string name="favourites_title">Mėgstamiausios stotelės</string>
+    <string name="favourites_open">Žiūrėti mėgstamiausias stoteles</string>
     <string name="favourites_reorder_hint">Palieskite ir laikykite eilutę, kad ją perkeltumėte.</string>
 
     <string name="settings_title">Nustatymai</string>
@@ -275,14 +278,14 @@
     <string name="about_open">Apie programą</string>
     <string name="about_version">Versija %1$s</string>
     <string name="about_privacy_title">Privatumas</string>
-    <string name="about_privacy_body">Jokios paskyros, jokių reklamų, jokių sekimo priemonių, jokio unikalaus identifikatoriaus. Niekas, ko ieškote ar ką apskaičiuojate, neišeina iš šio telefono: adresai, kelionės ir jūsų buvimo vieta lieka čia ir nėra saugomi. Vienintelė kasdien į tinklą iškeliaujanti užklausa atsiunčia laisvų dviračių skaičių. Duomenų rinkiniai atsiunčiami tik paprašius.</string>
+    <string name="about_privacy_body">Jokios paskyros, jokių reklamų, jokių sekimo priemonių, jokio unikalaus identifikatoriaus. Niekas, ko ieškote ar ką apskaičiuojate, neišeina iš šio telefono: adresai, kelionės ir jūsų buvimo vieta lieka čia ir nėra saugomi. Vienintelė įprastai naudojantis į tinklą iškeliaujanti užklausa atsiunčia laisvų dviračių skaičių. Duomenų rinkiniai atsiunčiami tik paprašius.</string>
     <string name="about_attributions_title">Duomenų šaltiniai</string>
     <string name="about_attribution_gbfs">Dviračių prieinamumas: aptarnaujamo tinklo atvirieji duomenys, skelbiami GBFS formatu. Prancūzijoje jie sukataloguoti svetainėje transport.data.gouv.fr.</string>
     <string name="about_attribution_osm">Žemėlapis, maršrutai ir orientyrai: © „OpenStreetMap“ bendraautoriai, ODbL licencija.</string>
     <string name="about_attribution_ban">Adresai ir pastatų numeriai: „Base Adresse Nationale“, ODbL licencija.</string>
     <string name="about_attribution_brouter">Maršrutų skaičiavimas: „BRouter“, MIT licencija, pagal „OpenStreetMap“ duomenis.</string>
     <string name="about_attribution_maplibre">Žemėlapio piešimas: „MapLibre Native“, dviejų sąlygų BSD licencija.</string>
-    <string name="about_links_title">Vietos atvėrimas iš kitos programos</string>
+    <string name="about_links_title">Vietos atidarymas iš kitos programos</string>
     <string name="about_links_body">„geo:“ nuorodos ir paprastu tekstu bendrinami adresai patenka tiesiai čia: „Android“ parinkiklyje pasirinkite „Roue Libre“. Nuorodoms iš žemėlapių svetainių reikia leidimo: Nustatymai → Programos → „Roue Libre“ → Atidaryti pagal numatytuosius nustatymus → Pridėti nuorodą.</string>
     <string name="about_licence_title">Licencija</string>
     <string name="about_licence_body">„Roue Libre“ yra laisva programinė įranga, išleista pagal GNU GPL 3 versijos licenciją. Galite ją naudoti, tirti, keisti ir platinti toliau.</string>
@@ -292,7 +295,7 @@
 
     <string name="sources_title">Duomenų šaltiniai</string>
     <string name="sources_intro">Prieinamumą kaip atviruosius duomenis teikia kiekvieno miesto tinklas. Štai kas juos rengia – įskaitant ir miestus, kurie neįdiegti.</string>
-    <string name="sources_open">Atverti šaltinį</string>
+    <string name="sources_open">Atidaryti šaltinį</string>
     <string name="about_licences_title">Licencijos</string>
     <string name="about_no_browser">Šiame įrenginyje neįdiegta jokia naršyklė.</string>
 
@@ -327,7 +330,7 @@
     <string name="journey_locating">Nustatoma jūsų buvimo vieta…</string>
     <string name="journey_source_favourite">Mėgstamiausia stotelė</string>
     <string name="journey_source_on_map">Taškas žemėlapyje</string>
-    <string name="journey_no_favourite">Mėgstamiausių stotelių dar nėra. Atverkite stotelę ir palieskite žvaigždutę, kad ją pridėtumėte.</string>
+    <string name="journey_no_favourite">Mėgstamiausių stotelių dar nėra. Atidarykite stotelę ir palieskite žvaigždutę, kad ją pridėtumėte.</string>
     <string name="journey_pick_crosshair">Taikiklio taškas</string>
     <string name="journey_pick_confirm">Pasirinkti šį tašką</string>
     <string name="journey_picked_point">Taškas žemėlapyje</string>
@@ -360,7 +363,7 @@
     <string name="journey_detail_availability_note">Dviračių ir laisvų vietų skaičiai – tokie, kokie buvo skaičiuojant kelionę.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
-    <string name="journey_navigate">Atverti navigacijos programoje</string>
+    <string name="journey_navigate">Atidaryti navigacijos programoje</string>
     <string name="journey_navigate_which">Kurią kelionės dalį?</string>
     <!-- %1$s is a station's name. It is set in „ “ in apposition to
          "stotelės", which carries the case the preposition asks for, so the
@@ -413,7 +416,7 @@
     <string name="station_favourite_remove">Pašalinti iš mėgstamiausių</string>
     <string name="station_as_origin">Pradėti čia</string>
     <string name="station_as_destination">Vykti čia</string>
-    <string name="station_open_in_navigation">Atverti navigacijos programoje</string>
+    <string name="station_open_in_navigation">Atidaryti navigacijos programoje</string>
     <string name="station_no_navigation_app">Šiame įrenginyje neįdiegta jokia žemėlapių programa.</string>
 
     <string name="address_search_title">Ieškoti adreso</string>
@@ -466,10 +469,10 @@
     <string name="city_locate_me">Rasti mano miestą</string>
     <string name="city_active">Naudojama</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d stotelė · atsisiųsti %2$s</item>
-        <item quantity="few">%1$d stotelės · atsisiųsti %2$s</item>
-        <item quantity="many">%1$d stotelės · atsisiųsti %2$s</item>
-        <item quantity="other">%1$d stotelių · atsisiųsti %2$s</item>
+        <item quantity="one">%1$d stotelė · atsisiuntimas %2$s</item>
+        <item quantity="few">%1$d stotelės · atsisiuntimas %2$s</item>
+        <item quantity="many">%1$d stotelės · atsisiuntimas %2$s</item>
+        <item quantity="other">%1$d stotelių · atsisiuntimas %2$s</item>
     </plurals>
     <plurals name="city_stations">
         <item quantity="one">%1$d stotelė</item>
@@ -477,7 +480,7 @@
         <item quantity="many">%1$d stotelės</item>
         <item quantity="other">%1$d stotelių</item>
     </plurals>
-    <string name="city_detail_size_only">Atsisiųsti %1$s</string>
+    <string name="city_detail_size_only">Atsisiuntimas – %1$s</string>
     <plurals name="city_detail_size_unknown">
         <item quantity="one">%1$d stotelė · dydis nurodomas prieš atsisiunčiant</item>
         <item quantity="few">%1$d stotelės · dydis nurodomas prieš atsisiunčiant</item>
@@ -538,7 +541,7 @@
     <string name="storage_download_pending">Atsisiųsti %1$s</string>
     <string name="storage_downloading">%1$s · %2$s iš %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
-    <string name="storage_wifi_warning">Nesate prisijungę prie Wi-Fi. Šis atsisiuntimas gali stipriai apkrauti mobiliojo ryšio planą.</string>
+    <string name="storage_wifi_warning">Nesate prisijungę prie „Wi-Fi“. Šis atsisiuntimas gali stipriai apkrauti mobiliojo ryšio planą.</string>
     <string name="dataset_update_available">Pasiekiamas naujinys</string>
 
     <string name="dataset_absent">Neįdiegta</string>
@@ -588,23 +591,23 @@
          connection is Wi-Fi and is a mobile plan, and a capped hotspot
          declares itself billed. -->
     <string name="download_unmetered_only">Atsisiųsti tik neapmokestinamu ryšiu</string>
-    <string name="download_unmetered_only_description">Paprastai tai Wi-Fi. Bendrinamas telefono ryšys ar ribojamas viešosios interneto prieigos taškas apmokestinami už megabaitus ir laikomi mobiliojo ryšio duomenimis.</string>
+    <string name="download_unmetered_only_description">Paprastai tai „Wi-Fi“. Bendrinamas telefono ryšys ar ribojamas viešosios interneto prieigos taškas apmokestinami už megabaitus ir laikomi mobiliojo ryšio duomenimis.</string>
     <string name="download_held_back_title">Atsisiuntimas sulaikytas</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Šis ryšys apmokestinamas už megabaitus. Prisijunkite prie Wi-Fi, kad atsisiųstumėte %1$s, arba atsisiųskite dabar vis tiek.</string>
+    <string name="download_held_back_body">Šis ryšys apmokestinamas už megabaitus. Prisijunkite prie „Wi-Fi“, kad atsisiųstumėte %1$s, arba atsisiųskite dabar vis tiek.</string>
     <string name="download_stopped_title">Atsisiuntimas sustabdytas</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">Šis ryšys dabar apmokestinamas už megabaitus, todėl atsisiuntimas sustojo. Kas atsiųsta, išsaugota. Prisijunkite prie Wi-Fi, kad atsisiųstumėte %1$s, arba tęskite dabar vis tiek.</string>
+    <string name="download_stopped_body">Šis ryšys dabar apmokestinamas už megabaitus, todėl atsisiuntimas sustojo. Kas atsiųsta, išsaugota. Prisijunkite prie „Wi-Fi“, kad atsisiųstumėte %1$s, arba tęskite dabar vis tiek.</string>
     <string name="download_anyway">Vis tiek atsisiųsti</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_waiting_for_unmetered">Laukiama neapmokestinamo ryšio, kad būtų atsiųsta %1$s.</string>
     <string name="download_can_resume">Šis ryšys nebeapmokestinamas. Paleiskite atsisiuntimą iš naujo: jis tęsis nuo tos vietos, kurioje sustojo.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
-    <string name="settings_opening_title">Kuriuo ekranu atverti programą</string>
+    <string name="settings_opening_title">Kuriuo ekranu atidaryti programą</string>
     <!-- Read aloud in place of the two buttons beside it. -->
-    <string name="settings_opening_description">Ekranas, kuriuo atsiveria programa</string>
+    <string name="settings_opening_description">Ekranas, kuriuo atsidaro programa</string>
     <string name="settings_opening_map">Žemėlapis</string>
     <string name="settings_opening_list">Stotelių sąrašas</string>
     <!-- The way to the map from a station list opened on. -->
@@ -645,7 +648,7 @@
          language, which is what it did before this setting existed. The
          languages themselves are never translated — each is written in its own
          language, and comes from Android rather than from this file. -->
-    <string name="settings_language_system">Sistemos</string>
+    <string name="settings_language_system">Sistemos kalba</string>
     <!-- Spoken label of the row, read aloud in place of the language alone.
          %1$s is the language in service: "English", "Lietuvių", or the wording
          above when the device's own is followed. -->
