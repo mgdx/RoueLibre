@@ -184,7 +184,7 @@ Repo: https://github.com/mgdx/RoueLibre.git
 Builds:
   - versionName: 1.0.0
     versionCode: 41
-    commit: v1.0.0
+    commit: 433f49c402c50253ac084d7cebf09e8db09a9440
     submodules: true
     gradle:
       - yes
@@ -212,6 +212,13 @@ VercodeOperation:
 CurrentVersion: 1.0.0
 CurrentVersionCode: 44
 ```
+
+**`commit` names a full commit hash, never the tag.** A reviewer asked for it
+and they are right: a tag is a name somebody can move, and this one was moved
+four times before the recipe was right, while a hash is the thing itself. Read
+the hash off the tag rather than off `HEAD` — `git rev-parse v1.0.0^{commit}`,
+which resolves the annotated tag to the commit it points at, not to the tag
+object.
 
 `submodules: true` is what fetches BRouter, which the root `settings.gradle.kts`
 consumes as a composite build and which is pinned to a tag rather than
