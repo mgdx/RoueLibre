@@ -1,0 +1,25 @@
+Roue Libre viser stasjoner for delesykler på et kart og beregner en reise fra dør til dør som kombinerer gange og sykling.
+
+Alt kjører på enheten: kartet, adressesøket og ruteberegningen trenger ingen tilkobling i det hele tatt. Bare syklenes tilgjengelighet i sanntid går ut på nettet.
+
+<b>Det som skiller den ut</b>
+
+• Ingen Google-tjenester: ingen Play Services, ingen Firebase, ingen Maps SDK. Den kjører på et hvilket som helst Android-system uten Google-tjenester.
+• Ingen telemetri, ingen sporing, ingen unik id, ingen konto.
+• Ingen reisedata lagres: ingen historikk, ingen posisjoner, ingen destinasjoner. Det du søker etter, forlater ikke telefonen.
+• Ingen by er påtvunget: flere byområder kan ligge side om side på enheten, og dataene for én by kan slettes uten at de andre røres.
+• Reisen optimaliserer <i>paret</i> av stasjoner – avreise og ankomst – i stedet for å nøye seg med den nærmeste, og veier risikoen for at en dårlig fylt stasjon tømmes mens du går dit.
+
+<b>Verdt å vite før du installerer</b>
+
+Kartet, rutegrafen og adresseindeksen ligger ikke i appen: de lastes ned én gang, fra Lagring-skjermen, eller installeres for hånd fra filer du lager selv. Størrelsen følger byen – noen titalls megabyte for et mellomstort byområde, mer for en hovedstad – og den oppgis før nedlastingen.
+
+<b>Byene som betjenes</b>
+
+Nesten tre hundre nettverk, i rundt tretti land: alle som publiserer stasjonene sine som åpne data, og som har faste sykkelstativer reisen kan stole på – fra Vélib' i Paris til Citi Bike i New York, via Praha, Barcelona, København, Tokyo og Buenos Aires. Appen foreslår din ut fra posisjonen din, hvis du ber om det, og du kan ha flere installert og bytte mellom dem.
+
+Offlinedatasettene er så langt laget for en håndfull av dem. For de andre sier appen fra i stedet for å late som: listen viser hva som finnes, og filene kan lages med skriptene i kodelageret.
+
+Den er ikke knyttet til noe bestemt nettverk: bylisten oppdaterer seg selv, og hver by bærer adressen til sitt eget GBFS-feed, noe som gjør appen brukbar med et hvilket som helst GBFS-nettverk i verden.
+
+Fri programvare under lisensen GNU GPL v3.
