@@ -13,12 +13,15 @@
     from this file without reading that list.
 
     The reader is addressed in the third person singular — "Toque", "Escolha",
-    "a sua cidade" — and never with "tu". Portuguese has no informal register
-    the two norms share: European "tu" imperatives read as strange in Brazil,
-    and Brazilian "você" is the polite form in Portugal. The third person is
-    what Android itself says in both, and it is the one register read the same
-    way in Lisbon and in São Paulo. This departs from the "tu" of values-fr/ and
-    the "tú" of values-es/, and it is deliberate.
+    "a sua cidade" — and never with "tu". That is not a compromise between the
+    two norms: it is what European Android says, and it says nothing else.
+    Counted over the system lexicon, its Portuguese carries 217 third-person
+    imperatives against 0 in "tu", and 60 "o seu / a sua" against 0 "o teu /
+    a tua" — no "tu", no "te", anywhere. It happens to travel well to Brazil,
+    where the same forms are "você", but the reason it is written is the
+    system's own usage. This departs from the "tu" of values-fr/ and the "tú"
+    of values-es/, whose languages Android addresses informally; Portuguese it
+    does not. See docs/pt-glossary.md for the count.
 
     Rules, the same as everywhere: positional placeholders, <plurals> for
     anything that agrees, and the `name` attributes left untouched.
@@ -304,11 +307,13 @@
 
     <!-- Web map links (SPEC §7.8): Android only hands them to the application
          if the user allows it, and saying so keeps that behaviour from looking
-         like a defect. The path quoted is the one European Portuguese Android
-         writes; a Brazilian device reads it as Configurações → Apps → Abrir
-         por padrão. -->
+         like a defect. The path is quoted word for word from European
+         Portuguese Android — settings:apps_dashboard_title is "Apps",
+         settings:launch_by_default "Abrir por predefinição",
+         settings:app_launch_add_link "Adicionar link". A Brazilian device
+         reads that middle step as "Abrir por padrão". -->
     <string name="about_links_title">Abrir um local a partir de outra aplicação</string>
-    <string name="about_links_body">Os links «geo:» e os endereços partilhados como texto simples chegam diretamente aqui: escolha Roue Libre no seletor do Android. Já os links de sites de mapas precisam de uma autorização: Definições → Aplicações → Roue Libre → Abrir por predefinição → Adicionar link.</string>
+    <string name="about_links_body">Os links «geo:» e os endereços partilhados como texto simples chegam diretamente aqui: escolha Roue Libre no seletor do Android. Já os links de sites de mapas precisam de uma autorização: Definições → Apps → Roue Libre → Abrir por predefinição → Adicionar link.</string>
 
     <string name="about_licence_title">Licença</string>
     <string name="about_licence_body">O Roue Libre é software livre, publicado sob a licença GNU GPL versão 3. Pode usá-lo, estudá-lo, modificá-lo e redistribuí-lo.</string>
@@ -517,7 +522,7 @@
     <string name="distance_yards">%1$s yd</string>
     <string name="distance_miles">%1$s mi</string>
 
-    <string name="action_back">Voltar</string>
+    <string name="action_back">Anterior</string>
 
     <!-- The city screen: which conurbation the application serves (SPEC §15). -->
     <string name="city_title">Cidade</string>
@@ -525,7 +530,7 @@
     <string name="city_choose">Escolher a minha cidade</string>
     <string name="city_intro">Escolha a área metropolitana que quer consultar. Os dados são instalados depois, de uma vez por todas.</string>
     <string name="city_locate_me">Encontrar a minha cidade</string>
-    <string name="city_active">Em uso</string>
+    <string name="city_active">Em utilização</string>
     <!-- %1$d is a number of stations, %2$s an already formatted size. -->
     <plurals name="city_detail">
         <item quantity="one">%1$d estação · %2$s para transferir</item>
@@ -671,9 +676,9 @@
     <!-- Unmetered-only downloads -->
     <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
          connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. "Limitada" / "Ilimitada" is Android's own
-         wording for a metered network. -->
-    <string name="download_unmetered_only">Transferir apenas numa ligação ilimitada</string>
+         declares itself billed. "Acesso limitado" / "Acesso ilimitado" is
+         Android's own wording for a metered network. -->
+    <string name="download_unmetered_only">Transferir apenas numa ligação de acesso ilimitado</string>
     <string name="download_unmetered_only_description">Normalmente o Wi-Fi. Partilhar a ligação do telefone ou um ponto de acesso limitado é pago ao megabyte e conta como dados móveis.</string>
     <string name="download_held_back_title">Transferência suspensa</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
@@ -684,7 +689,7 @@
     <string name="download_stopped_body">Esta ligação passou a ser paga ao megabyte, por isso a transferência foi interrompida. O que já chegou fica guardado. Ligue-se a uma rede Wi-Fi para terminar os %1$s ou continue mesmo assim agora.</string>
     <string name="download_anyway">Transferir mesmo assim</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">À espera de uma ligação ilimitada para transferir %1$s.</string>
+    <string name="download_waiting_for_unmetered">À espera de uma ligação de acesso ilimitado para transferir %1$s.</string>
     <string name="download_can_resume">Esta ligação já não é paga. Inicie novamente a transferência: retoma onde parou.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 

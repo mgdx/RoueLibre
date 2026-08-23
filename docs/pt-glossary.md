@@ -24,44 +24,75 @@ is — and the divergence is listed under "Where the two norms part company"
 below. That list is what a `values-pt-rBR/` should be derived from; do not fork
 this file without reading it.
 
-## The lexicon supplied with this translation is Brazilian
+## The lexicon, and a correction worth recording
 
-`pt.tsv`, the system lexicon extracted from a phone's `framework-res.apk` and
-`Settings.apk` and supplied to arbitrate Android's own vocabulary, holds
-**Brazilian** Portuguese. That is not a judgement call — the extraction contains
-186 rows saying *tela*, 122 saying *configurações*, 43 saying *usuário*, 14
-saying *arquivo*, and **zero** rows saying *ecrã*, *definições*, *utilizador* or
-*ficheiro*.
+`pt.tsv` is the system lexicon extracted from a phone's `framework-res.apk` and
+`Settings.apk`, and it arbitrates any word Android already has.
 
-So it cannot arbitrate this file, and it was not allowed to. It was used in the
-one way it remains sound: as evidence of what Android says **where both norms
-say the same thing** — those citations are given in the table below with the
-resource key actually found. Where the row is Brazilian-only, the table says so
-and gives the European word instead, marked as a departure. Nothing here cites a
-key that was not grepped.
+**It was Brazilian on the first pass, and that was a tooling defect, since
+fixed.** AOSP names the Brazilian norm `pt` and the European one `pt-rPT`; the
+extraction took the bare code and so produced Brazilian throughout. It was
+caught here — the file held 186 rows saying *tela* and none saying *ecrã* — and
+this translation was written without it, from the norms themselves. It has since
+been regenerated as European, and every term below has now been checked against
+the real thing: 187 rows say *ecrã* and none say *tela*, 124 say *definições*
+and none say *configurações*.
 
-## Register: the third person, and not "tu"
+The re-check confirmed the vocabulary and corrected four words. That is recorded
+here because "right" and "right by luck" are not the same thing, and only the
+second one rots silently:
+
+| Was | Now | The row that decided it |
+|---|---|---|
+| Voltar | **Anterior** | `android:back_button_label`, `settings:back`, `settings:wizard_back`. `action_back` is the toolbar's back-arrow content description in eleven fragments and a visible back button in a twelfth — exactly the two things those keys name. One row does say *Voltar* (`android:input_method_nav_back_button_desc`), against five for *Anterior*. |
+| Em uso | **Em utilização** | `android:media_route_status_in_use`, `settings:wifi_display_status_in_use`. Longer than *Em uso* on the city row's badge, and taken anyway: length is not a reason to call a thing by a different name than the system does. |
+| Definições → **Aplicações** → … | Definições → **Apps** → … | `settings:apps_dashboard_title` and `settings:keywords_applications_settings` are both *Apps*. `about_links_body` quotes a Settings path and has to match the device word for word; *Aplicações* does exist in the lexicon, but only at `android:keyboard_shortcut_group_applications`, which is not this screen. |
+| ligação ilimitada | ligação de **acesso ilimitado** | `settings:wifi_unmetered_label` is *Acesso ilimitado* and `settings:wifi_metered_label` *Acesso limitado* — not the bare adjectives assumed. |
+
+Everything else held. Citations in the table below give the key actually
+grepped; where this file departs from a row, it says so, and says why.
+
+## Register: the third person, because that is what Android says
 
 The interface addresses the reader in the **third person singular** — *Toque*,
 *Escolha*, *Verifique*, *a sua cidade* — and never with *tu*.
 
-This departs from the *tu* of `values-fr/` and the *tú* of `values-es/`, and it
-is deliberate. **Portuguese has no informal register the two norms share.**
-European informality is *tu* with its own imperatives (*Toca*, *Escolhe*), which
-reads as strange, almost childish, to a Brazilian. Brazilian informality is
-*você*, which takes third-person forms — and those same forms are the polite
-register in Portugal. Only one of the two choices is readable on both sides of
-the Atlantic, and it is the third person. It is also what Android itself says in
-both norms: `android:lockscreen_password_wrong` is *Tente novamente*, a third
-person form, not *Tenta*.
+This was first settled on the argument that Portuguese has no informal register
+the two norms share. That is true, but it is only a tie-breaker. The lexicon
+gives the real reason, and it is not a tie: **European Android does not use *tu*
+at all.** Counted over its Portuguese:
 
-The consequence, kept consistent throughout: possessives are *o seu / a sua*,
-never *o teu*; the polite object pronoun *lhe* appears where the sentence needs
-one (*A aplicação propõe-lhe a sua*); *o senhor* never appears, since the third
-person alone is already neutral between the two norms.
+| | third person / *o seu* | *tu* / *o teu* |
+|---|---|---|
+| imperatives, over 29 common verbs | **217** | **0** |
+| possessives | **60** (*o seu*, *a sua*) | **0** (*o teu*, *a tua*) |
+| subject pronouns | *você* 0 — elided throughout | *tu* **0** |
+| clitic *te* | — | **0** |
 
-**This is the one decision in the file most worth a second opinion**, because it
-is the one that visibly breaks step with the other four translations.
+The imperative count takes sentence-initial forms only, so that descriptive
+clauses cannot inflate it. Five hits first looked like *tu* forms and are not:
+*Consulta de pesquisa* is a noun ("search query"), while *Abre a app Mensagens*,
+*Remove da secção de conversas* and *Tem mensagens novas* are third-person
+indicatives. The true count is 217 to nil.
+
+So the register here is the system's, not a compromise between two norms: an
+application saying *Toca* would be the odd one on the phone. That it also reads
+correctly in Brazil, where these same forms are *você*, is a convenience rather
+than the reason — and it is why the divergence table below has an empty row for
+it.
+
+It remains a real departure from `values-fr/` and `values-es/`, which say *tu*
+and *tú*. It is not the same decision reached differently: Android addresses
+French and Spanish informally and Portuguese formally, and each translation
+followed its own system. The German pilot ran this same count and found 69 *du*
+against 0 *Sie*, and went informal on it. Same method, opposite answer, both
+right.
+
+Consequences kept consistent throughout: possessives are *o seu / a sua*, never
+*o teu*; *o senhor* never appears, the third person being neutral already; and
+the polite object pronoun *lhe* is used where a sentence needs one (*A aplicação
+propõe-lhe a sua*, in the store text). That last is this file's own usage and
+not a citation — the lexicon has no *lhe* at all, having little occasion for one.
 
 ## The vocabulary
 
@@ -77,46 +108,46 @@ is the one that visibly breaks step with the other four translations.
 | dock (capacity) | doca | The same object counted as a total, which is a different figure on the screen: *12 lugares livres · 30 docas*. English says "dock" for both; Portuguese does not have to. *Doca* is what Lisbon's own GIRA calls the point a bike attaches to. |
 | dock | *never* «terminal», *never* «quiosque» | A terminal is what one pays at, not the point a bike attaches to. |
 | bike, electric | elétrica | Pedal-assist, never a moped: `journey_bike_kind_electric_description` says *com assistência elétrica ao pedalar* in full. Spelled *elétrica* in both norms since the 1990 orthographic agreement; the pre-agreement European *eléctrica* is not used. |
-| pace (walking) | ritmo de caminhada | A pace is not a speed: `values/strings.xml` says so above the string, and *velocidade* would say the opposite. *Ritmo* is masculine, hence *Lento / Normal / Rápido*. |
+| pace (walking) | ritmo de caminhada | A pace is not a speed: `values/strings.xml` says so above the string, and *velocidade* would say the opposite. Android's own slow/fast pair is *Lenta / Rápida* (`settings:speed_label_slow`, `settings:speed_label_fast`), feminine because it agrees with *velocidade*; *ritmo* is masculine, so this file writes *Lento / Normal / Rápido*. |
 | leg (of a journey) | trecho | *Os trechos a pé de um percurso*. Chosen over the European *troço*, which in Brazil reads as "junk"; *trecho* is correct in both. |
 | climb | desnível | The metres climbed over a leg or a journey. |
-| Settings | Definições | Android's European word. The lexicon supplied gives *Configurações* (`settings:settings_label`), which is Brazilian; this is a deliberate departure, listed below. |
-| Search | Pesquisar | Shared by both norms, and Android's own — `android:searchview_description_search`, `settings:search_menu_title`. |
-| Clear | Limpar | Android's word for emptying a field, which is what "clear the search" does — `settings:clear`. Shared. |
-| Refresh | Atualizar | Android's word for data — `android:autofill_update_yes` for the verb. Shared spelling since the orthographic agreement. |
-| Try again | Tentar novamente | Android's own, and already in the third person — `settings:network_connection_timeout_dialog_ok`, `settings:security_settings_fingerprint_enroll_dialog_try_again`. Shared. |
-| Back | Voltar | Android's word on the toolbar's back arrow — `android:back_button_label`. Shared. |
-| Tap | Toque | The third-person imperative, matching the register above. |
+| Settings | Definições | Android's own word, on thirteen rows including `settings:settings_label`, `settings:dashboard_title` and `android:global_action_settings`. Not one row says *Configurações*. |
+| Search | Pesquisar | Android's own — `android:searchview_description_search`, `android:ime_action_search`, `settings:search_menu_title`, on 17 rows against 6 for *procurar*. |
+| Clear | Limpar | Android's word for emptying a field, which is what "clear the search" does — `settings:clear`, `settings:proxy_clear_text`. |
+| Refresh | Atualizar | Android's verb — `android:autofill_update_yes`, `settings:nfc_payment_btn_text_update`. Spelled the same in both norms since the orthographic agreement. |
+| Try again | Tentar novamente | Android's own, on all six of its rows, with no variation — `android:lockscreen_password_wrong`, `settings:network_connection_timeout_dialog_ok`, `settings:private_space_tryagain_label`. |
+| Back | Anterior | Android's word on the back arrow and on a wizard's back button — `android:back_button_label`, `settings:back`, `settings:wizard_back`, `settings:searchview_navigation_content_description`. **Not *Voltar***, which is the obvious word and the wrong one: it holds a single row, `android:input_method_nav_back_button_desc`. `action_back` serves both the uses those four keys name. |
+| Tap | Toque | Android's own imperative, on 36 sentence-initial rows; *Toca* appears on none. |
 | Press and hold | Toque sem soltar | The European wording; Brazil says *toque e segure*, which is listed below. |
-| Delete / Remove | Eliminar / Remover | Two gestures, two words: *Eliminar* destroys data, *Remover* takes a station out of the favourites. Android confirms *Remover* — `settings:remove`, `android:kg_reordering_delete_drop_target_text`. For "delete" the lexicon gives the Brazilian *Excluir* (`android:delete`); *Eliminar* is the European word and is used here. |
-| Skip | Ignorar | The European word. The lexicon gives *Pular* (`android:skip_button_label`), which is Brazilian. |
-| Show | Mostrar / Ver | *Mostrar* where something hidden is revealed — what the map counts, what the list shows; Android's own at `settings:condition_expand_show`. **Ver** where a button opens a screen or a place: *Ver o mapa*, *Ver os favoritos*, *Ver as novidades*, and `incoming_show_me`. One word for one gesture. |
-| About | Acerca de | The European form of an application's about screen; Brazil writes *Sobre*. Android's own row is about the device, not about an application, so it does not arbitrate here. |
-| In use | Em uso | Android's own word, on the city already installed — `android:media_route_status_in_use`. Shared. |
-| Out of service | Fora de serviço | Android's own wording — `settings:radioInfo_service_out`. Shared. |
-| just now | agora mesmo | Android says *Agora* (`settings:time_unit_just_now`). Departed from on purpose: this string is read as one phrase with *Atualizado %1$s*, and *Atualizado agora mesmo* carries the "a moment ago" sense that *Atualizado agora* loses to the plain adverb. Shared between the norms either way. |
-| Update available | Atualização disponível | Android's own wording — `settings:android_version_pending_update_summary`. Shared. |
-| Replace | Substituir | Android's own word — `settings:vpn_replace`. Shared. |
-| Language | Idioma | Android's own word — `settings:app_locale_preference_title`. Shared. |
-| Cancel / Yes | Cancelar / Sim | Android's own — `android:cancel`, `settings:yes`. Shared. |
-| Storage | Armazenamento | Android's own — `settings:storage_settings`. Shared. |
-| Location / position | localização | Android's own word on the permission — `android:permgrouplab_location`. Shared. *Posição* is used for the reader's own point on the map, where the English says "position" rather than naming the permission. |
-| link (hyperlink) | link | Android's own, in the very path this file quotes — `settings:app_launch_supported_links_add` is *Adicionar link*. It also keeps *ligação* free for the network sense, which matters: writing both as *ligação* would have made `about_links_body` unreadable. |
-| connection (network) | ligação | The European word. Brazil says *conexão*, and in Brazil *ligação* means a phone call — so `error_offline` is written *Sem ligação à Internet*, which disambiguates for a Brazilian reader without leaving European Portuguese. |
+| Delete / Remove | Eliminar / Remover | Two gestures, two words, and Android distinguishes them the same way: *Eliminar* at `android:delete`, `android:deleteText`, `settings:delete` and nine more; *Remover* at `settings:remove`, `android:kg_reordering_delete_drop_target_text`, `settings:locale_remove_menu`. *Eliminar* destroys data, *Remover* takes a station out of the favourites. |
+| Skip | Ignorar | Android's own word — `android:skip_button_label`, `settings:skip_label`, `settings:gesture_button_skip`. |
+| Show / Hide | Mostrar / Ocultar | Android's own pair — `settings:condition_expand_show`, `settings:condition_expand_hide`; *Ocultar* is what the two map filters say. **Ver** is used instead where a button opens a screen or a place: *Ver o mapa*, *Ver os favoritos*, *Ver as novidades*, and `incoming_show_me`. One word for one gesture. |
+| About | Acerca de | Android's own construction, at `settings:about_settings` — *Acerca do telemóvel*. The application's screen is *Acerca de*, the same preposition with no complement. Brazil writes *Sobre*. |
+| In use | Em utilização | Android's own wording — `android:media_route_status_in_use`, `settings:wifi_display_status_in_use`. It sits on the city already installed. *Em uso* is shorter and was what this file said first; the badge takes the longer word because it is the system's. |
+| Out of service | Fora de serviço | Android's own wording — `settings:radioInfo_service_out`. |
+| just now | agora mesmo | Android's own wording — `settings:time_unit_just_now` is *Agora mesmo*. It reads as one phrase with *Atualizado %1$s*. |
+| Update available | Atualização disponível | Android's own wording — `settings:android_version_pending_update_summary`, which writes it with a full stop (*Atualização disponível.*); here it is a badge rather than a sentence, so the stop is dropped. |
+| Replace | Substituir | Android's own word — `settings:vpn_replace`. |
+| Language | Idioma | Android's own word — `settings:app_locale_preference_title`, `settings:tts_default_lang_title`. |
+| Cancel / Yes | Cancelar / Sim | Android's own — `android:cancel`, `settings:yes`, `settings:sim_action_yes`. |
+| Storage | Armazenamento | Android's own — `settings:storage_settings`, `settings:storage_category`. *Libertar espaço* in `error_local_storage_download` and `dataset_delete_body` follows `settings:storage_free_up_space_title`. |
+| Location / position | localização | Android's own word on the permission — `android:permgrouplab_location`, `settings:location_settings_title`. *Posição* is used for the reader's own point on the map, where the English says "position" rather than naming the permission. |
+| link (hyperlink) | link | Android's own, in the very path this file quotes — `settings:app_launch_add_link` is *Adicionar link*. It also keeps *ligação* free for the network sense, which matters: writing both as *ligação* would have made `about_links_body` unreadable. |
+| connection (network) | ligação | Android's own — `settings:mobile_data_no_connection` is *Sem ligação*, and the lexicon holds 55 *ligação* against 0 *conexão*. Brazil says *conexão*, and there *ligação* means a phone call, so `error_offline` is written *Sem ligação à Internet*: Android's word, disambiguated for a Brazilian reader without leaving European Portuguese. |
 | offline | offline | As a qualifier — *dados offline*, *índice offline*, *trabalhar offline* — where both norms use the borrowing unchanged. *Sem ligação* is used for the state of having no network. |
-| app | aplicação | The European word, understood in Brazil, where the everyday word is *aplicativo*. |
+| app | aplicação | The European word, understood in Brazil, where the everyday word is *aplicativo*. Android itself shortens it to *app* in running text (`android:install_carrier_app_notification_button`) and to *Apps* on the Settings dashboard; this file writes *aplicação* in its own sentences and *Apps* only inside the system path it quotes. |
 | conurbation | área metropolitana | Neutral, and the term the catalogue's own cities are described by. |
 | town (in an address) | localidade | Read the same way in both norms, where *município* and *concelho* are administrative. |
-| file | ficheiro | The European word. The lexicon gives *arquivo* throughout, which is Brazilian. |
-| download | transferir / transferência | The European verb and noun, and Android's own in Portugal. The lexicon gives *baixar* (`android:install_carrier_app_notification_button`) and *download*, both Brazilian. This is the divergence with the most occurrences in the file — the whole storage screen turns on it. |
+| file | ficheiro | Android's own — `android:mime_type_generic` is *Ficheiro*, `android:permgrouplab_storage` and `settings:storage_files` *Ficheiros*. Brazil says *arquivo*. |
+| download | transferir / transferência | Android's own verb and noun — `android:install_carrier_app_notification_button` is *Transferir app*, `settings:filter_apps_third_party` is *Transferidas*, `settings:ingress_rate_limit_dialog_title` says *velocidade de transferência*. Not one row says *baixar*. This is the divergence with the most occurrences in the file: the whole storage screen turns on it. |
 | feed (GBFS) | fluxo | The network's published stream, in the errors and in the welcome. |
 | tracker | rastreador | The store texts and `about_privacy_body`. Shared. |
 | map data / tiles | mapa base | The name the storage screen gives the dataset, and the one every other string must use for it — including `map_needs_tiles_title`. |
 | routing data | grafo de percursos | The project's own term, used in `journey_graph_missing` and in the store text too. More technical than the English "routing data", and kept deliberately: it is one object with one name, and it reuses *percurso* so the dataset and the thing it computes are visibly the same subject. |
 | address index | índice de endereços | — |
 | dataset | conjunto de dados | — |
-| unmetered connection | ligação ilimitada | Android's own pair for a metered network is *Limitada* / *Ilimitada* — `settings:wifi_metered_label`, `settings:wifi_unmetered_label`, shared by both norms. The setting's description then explains it as billing by the megabyte, exactly as the English does. |
-| by default | por predefinição | The European form, including in the Android Settings path quoted by `about_links_body`. Brazil writes *por padrão* — `settings:launch_by_default`. |
+| unmetered connection | ligação de acesso ilimitado | Android's own pair is *Acesso limitado* / *Acesso ilimitado* — `settings:wifi_metered_label`, `settings:wifi_unmetered_label` — and not the bare adjectives this file first assumed. The setting's description then explains it as billing by the megabyte, in plain words, exactly as the English does. |
+| by default | por predefinição | Android's own — `settings:launch_by_default` and `settings:auto_launch_label` are both *Abrir por predefinição*, which is the exact step `about_links_body` quotes. Brazil writes *por padrão*. |
 
 The three dataset names are all **masculine singular** — *mapa base*, *grafo de
 percursos*, *índice de endereços* — which is what lets `dataset_imported` and
@@ -160,6 +191,9 @@ change, and nothing else in the file should.
 |---|---|---|
 | Third person, no *tu* | the same third person | **No change.** The register was chosen precisely so this row would be empty. |
 | Definições | Configurações | `settings_title`, `settings_open`, `about_links_body`, and the store texts |
+| Anterior | Voltar | `action_back`. Both are Android's own word in their own norm, which is why this one is invisible without the lexicon: *Voltar* is what a European reader would guess and what a Brazilian device actually says |
+| Em utilização | Em uso | `city_active` |
+| acesso ilimitado, acesso limitado | ilimitada, limitada | `download_unmetered_only`, `download_waiting_for_unmetered` — Android names the metered state differently in each norm |
 | ecrã | tela | `map_needs_tiles_message`, `journey_graph_missing`, `address_needs_index_message`, `settings_opening_description`, `error_offline`, and the store texts |
 | ficheiro | arquivo | the five `dataset_rejected_*`, `error_malformed_download`, `error_local_storage_download` |
 | transferir, transferência | baixar, download | the whole storage screen, `city_detail*`, `download_*`, `welcome_data_*`, and the store texts |
@@ -174,19 +208,30 @@ change, and nothing else in the file should.
 | até ao destino | até o destino | `journey_step_to_destination`, `journey_step_walk_all`, `journey_step_ride_all` |
 | libertar espaço | liberar espaço | `error_local_storage_download`, `dataset_delete_body` |
 | Toque sem soltar | Toque e segure | `favourites_reorder_hint` |
-| Abrir por predefinição, Aplicações | Abrir por padrão, Apps | `about_links_body` — it quotes a system path and has to match the device word for word; the European path is quoted here, and the comment above the string says so |
+| Abrir por predefinição | Abrir por padrão | `about_links_body` — it quotes a system path and has to match the device word for word, and this is the one step of it that differs: both norms call the Settings entry **Apps** (`settings:apps_dashboard_title`), and both say *Adicionar link* |
 | Nova Iorque, Copenhaga | Nova York, Copenhague | `full_description.txt` |
 | Em França, fora de França | Na França, fora da França | `about_attribution_gbfs`, `changelogs/3.txt` — European Portuguese takes no article before most country names, Brazilian takes one |
 | *A calcular…*, *A pesquisar…* | *Calculando…*, *Pesquisando…* | `journey_computing`, `journey_computing_own_bike`, `journey_locating`, `address_searching_title`, `address_searching_message`, `storage_checking` — European Portuguese forms the progressive with *estar a* + infinitive, Brazilian with the gerund. This is systematic rather than lexical: it is the shape of the sentence, not a word to swap. |
 | *para a mover*, *para os transferir* | *para movê-la*, *para transferi-los* | clitic placement, systematic. European Portuguese puts the pronoun before the infinitive after a preposition; Brazilian attaches it. Both are grammatical written Portuguese, so nothing here is wrong in Brazil — it is only marked. |
 | *a minha cidade*, *a sua posição* | *minha cidade*, *sua posição* | the article before a possessive, systematic. European keeps it, Brazilian drops it in ordinary register. |
 
-One word deliberately **not** taken from European Portuguese: **endereço** and
-not *morada* for a postal address, throughout `address_*`, `dataset_addresses`
-and the store texts. *Morada* is the more idiomatic European word and reads as
-archaic — a dwelling, an abode — in Brazil, where it would be the single most
-jarring word in the file. *Endereço* is correct European Portuguese, is what
-Portuguese official texts write for a postal address, and is shared. A
+Two words deliberately **not** taken from Android's European Portuguese.
+
+**telefone**, where Android says *telemóvel* (`android:permgrouplab_phone`,
+`settings:about_settings`). *Telemóvel* is European-only and reads as foreign in
+Brazil, where the word is *celular*; *telefone* is correct in both and is what
+`welcome_privacy_title`, `about_privacy_body` and the store texts use. This is
+the one place the shared-word rule is allowed to outrank the system's own word,
+and it is allowed because the alternative is a word half the readership does not
+use.
+
+**endereço** and not *morada* for a postal address, throughout `address_*`,
+`dataset_addresses` and the store texts. *Morada* is the more idiomatic European
+word and reads as archaic — a dwelling, an abode — in Brazil, where it would be
+the single most jarring word in the file. This one turned out not to be a
+departure at all once the lexicon was corrected: Android itself says *endereço*,
+at `android:autofill_save_type_address`. It is correct European Portuguese, it is
+what Portuguese official texts write for a postal address, and it is shared. A
 `values-pt-rBR/` needs no change here; a reviewer who "corrects" it to *morada*
 is undoing a decision rather than fixing an oversight.
 
