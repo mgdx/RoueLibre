@@ -1,562 +1,649 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Slovene — TO BE TRANSLATED.
+    Slovene translation.
 
-    Every string below still holds its English text: this file is a starting
-    point, not a translation. Translate the contents of the tags, never their
-    `name` attribute, and read CONTRIBUTING.md first — placeholders keep their
-    number, plurals keep the categories of this language, and apostrophes are
+    English, in `values/`, is the source language (SPEC §9); this file is a
+    translation of it and is kept complete. The rules are the ones that hold
+    everywhere: positional placeholders, <plurals> for anything that agrees in
+    number, and the `name` attributes left untouched.
+
+    The reader is addressed with **vikanje**, and that is Android's own habit
+    rather than a house style: of the 5 900 system strings extracted from this
+    phone's `framework-res.apk` and `Settings.apk`, 174 carry a vy form
+    (Dotaknite se, Preverite, Poskusite, Izberite, Vnesite) against 95 bare
+    imperatives — and every one of those 95 is a **button or a menu label**
+    (Izberi datoteko, Namesti, Izklopi, Nastavi datum), never a sentence. This
+    file follows the same split: a control takes the bare imperative — Prekliči,
+    Izbriši, Nadaljuj, Preskoči, Poskusi znova, Osveži — and a sentence takes
+    the vy form. A confirmation dialog asks „Želite … ?“, which is what
+    Settings does (`dev_logpersist_clear_warning_title`).
+
+    Typography. Quotation marks are **„ … “**. An **ellipsis stands off its
+    word by a space** — „Iskanje …“, „Nalaganje …“ — which is what 90 of the
+    93 system strings holding one do; here that space is a non-breaking one
+    (U+00A0), so the three dots cannot be left alone at the head of a line.
+    The dash that breaks a sentence is **–** with a space on either side, not
+    the em dash the English file uses; that is the one piece of punctuation
+    changed inside a format-only string, `city_label` (`%1$s – %2$s`). The
+    apostrophe, where a network's name carries one (Vélib’, Vélo’v), is **’**
+    (U+2019) and never the straight quote, which is why nothing here is
     escaped.
 
-    While a string is left in English, that is what this language's users will
-    read. The application's default language is English, in `values/`, which is
-    what this file was copied from.
+    **Slovene counts to four, and its `two` is a real dual.** One bike is
+    „kolo“, two are „kolesi“, three or four are „kolesa“ and five are „koles“:
+    four genuinely different words, and no <plurals> below repeats one form in
+    two categories — except the three `freshness_*` ones, where „pred“ governs
+    the instrumental and the instrumental plural of a noun is the same at three
+    as at five. That duplication is the language, not a line left unfinished;
+    see docs/sl-glossary.md.
+
+    Slovene declines, and a case is a suffix. A sentence built around a
+    placeholder has to stay right whatever the placeholder holds, so several
+    lines here are turned around rather than given an ending they could not
+    control: a name is set in apposition after a noun that carries the case
+    („do postaje %1$s“), or the line becomes a label with a colon.
+
+    See docs/sl-glossary.md for the words this file holds to, and
+    CONTRIBUTING.md to submit a translation.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">Roue Libre</string>
 
-    <string name="stations_title">Stations</string>
+    <!-- Main screen: the station list. -->
+    <string name="stations_title">Postaje</string>
 
+    <!-- The number of bikes available to borrow at a station.
+         kolo · kolesi · kolesa · koles — the dual is the second form and is
+         not the plural. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d bike</item>
-        <item quantity="two">%1$d bikes</item>
-        <item quantity="few">%1$d bikes</item>
-        <item quantity="other">%1$d bikes</item>
+        <item quantity="one">%1$d kolo</item>
+        <item quantity="two">%1$d kolesi</item>
+        <item quantity="few">%1$d kolesa</item>
+        <item quantity="other">%1$d koles</item>
     </plurals>
 
+    <!-- The number of free docks to return a bike to. A free dock is a
+         "prosto mesto"; the dock counted as capacity is a "stojalo"
+         (`docks_total`), which is the pair of words the screen needs when it
+         shows both figures side by side. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d dock</item>
-        <item quantity="two">%1$d docks</item>
-        <item quantity="few">%1$d docks</item>
-        <item quantity="other">%1$d docks</item>
+        <item quantity="one">%1$d prosto mesto</item>
+        <item quantity="two">%1$d prosti mesti</item>
+        <item quantity="few">%1$d prosta mesta</item>
+        <item quantity="other">%1$d prostih mest</item>
     </plurals>
 
+    <!-- Spoken by screen readers on a station's indicator.
+         Example: "Trubarjeva cesta, 6 koles, 26 prostih mest". -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
-    <string name="station_out_of_service">Out of service</string>
-    <string name="station_availability_unknown">Availability unknown</string>
+    <!-- Android's own wording, `settings:radioInfo_service_out`. -->
+    <string name="station_out_of_service">Ne deluje</string>
+    <string name="station_availability_unknown">Razpoložljivost ni znana</string>
 
     <!-- What a station is called when its feed publishes no name for it and no
-         street to stand in for one. The station itself is kept: it is real and
-         it holds bikes, and dropping it would take it off the map over a
-         mistyped string. -->
-    <string name="station_unnamed">Unnamed station</string>
+         street to stand in for one. -->
+    <string name="station_unnamed">Neimenovana postaja</string>
 
-    <string name="station_beyond_area_short">beyond the map</string>
-    <string name="station_beyond_area">This station lies outside the area the installed data covers. Its bikes are counted live, but no map and no route can reach it.</string>
+    <!-- Shown for a station the network publishes outside the area its data
+         covers. The short form joins the rest of the row, so it stays
+         lowercase. -->
+    <string name="station_beyond_area_short">zunaj zemljevida</string>
+    <string name="station_beyond_area">Ta postaja je zunaj območja, ki ga pokrivajo nameščeni podatki. Njena kolesa se štejejo v živo, do nje pa ne sežeta ne zemljevid ne izračun poti.</string>
 
-    <string name="search_stations_hint">Search for a station</string>
-    <string name="search_stations_clear">Clear the search</string>
-    <string name="stations_no_match_title">No station found</string>
-    <string name="stations_no_match_message">Nothing matches “%1$s”. Check the spelling, or clear the search.</string>
-    <string name="action_clear_search">Clear the search</string>
+    <string name="search_stations_hint">Iskanje postaje</string>
+    <string name="search_stations_clear">Počisti iskanje</string>
+    <string name="stations_no_match_title">Ni najdenih postaj</string>
+    <string name="stations_no_match_message">Nič se ne ujema z „%1$s“. Preverite črkovanje ali počistite iskanje.</string>
+    <string name="action_clear_search">Počisti iskanje</string>
 
-    <string name="mode_bikes">Bikes</string>
-    <string name="mode_docks">Free docks</string>
-    <string name="mode_bikes_description">Show available bikes</string>
-    <string name="mode_docks_description">Show free docks</string>
+    <string name="mode_bikes">Kolesa</string>
+    <string name="mode_docks">Prosta mesta</string>
+    <string name="mode_bikes_description">Prikaz razpoložljivih koles</string>
+    <string name="mode_docks_description">Prikaz prostih mest</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
-         (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
-    <string name="map_bikes_all_kinds">All bikes</string>
-    <string name="map_bikes_mechanical">Mechanical</string>
-    <string name="map_bikes_electric">Electric</string>
-    <string name="map_bikes_all_kinds_description">Every bike is counted. Tap to count the mechanical ones only.</string>
-    <string name="map_bikes_mechanical_description">Mechanical bikes are counted. Tap to count the electric ones only.</string>
-    <string name="map_bikes_electric_description">Electric bikes are counted. Tap to count them all.</string>
+         (SPEC §7.1). The three labels are neuter plural adjectives agreeing
+         with the "kolesa" of the toggle beside them. -->
+    <string name="map_bikes_all_kinds">Vsa kolesa</string>
+    <string name="map_bikes_mechanical">Navadna</string>
+    <string name="map_bikes_electric">Električna</string>
+    <string name="map_bikes_all_kinds_description">Štejejo se vsa kolesa. Dotaknite se, da se štejejo samo navadna.</string>
+    <string name="map_bikes_mechanical_description">Štejejo se navadna kolesa. Dotaknite se, da se štejejo samo električna.</string>
+    <string name="map_bikes_electric_description">Štejejo se električna kolesa. Dotaknite se, da se štejejo vsa.</string>
+    <!-- The label beside a count, on a station's sheet and on a list row. No
+         item holds a number, and none ever should: the figure is painted in
+         the disc these words stand next to. -->
     <plurals name="counterpart_bikes" tools:ignore="ImpliedQuantity">
-        <item quantity="one">bike</item>
-        <item quantity="two">bikes</item>
-        <item quantity="few">bikes</item>
-        <item quantity="other">bikes</item>
+        <item quantity="one">kolo</item>
+        <item quantity="two">kolesi</item>
+        <item quantity="few">kolesa</item>
+        <item quantity="other">koles</item>
     </plurals>
     <plurals name="counterpart_docks" tools:ignore="ImpliedQuantity">
-        <item quantity="one">free dock</item>
-        <item quantity="two">free docks</item>
-        <item quantity="few">free docks</item>
-        <item quantity="other">free docks</item>
+        <item quantity="one">prosto mesto</item>
+        <item quantity="two">prosti mesti</item>
+        <item quantity="few">prosta mesta</item>
+        <item quantity="other">prostih mest</item>
     </plurals>
     <string name="counterpart_none">—</string>
 
+    <!-- The detail line under a station's name, in the list. %1$s is a
+         distance or a postcode, %2$d the number of docking points — the
+         capacity, hence "stojalo" and not "prosto mesto". -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d dock</item>
-        <item quantity="two">%1$s · %2$d docks</item>
-        <item quantity="few">%1$s · %2$d docks</item>
-        <item quantity="other">%1$s · %2$d docks</item>
+        <item quantity="one">%1$s · %2$d stojalo</item>
+        <item quantity="two">%1$s · %2$d stojali</item>
+        <item quantity="few">%1$s · %2$d stojala</item>
+        <item quantity="other">%1$s · %2$d stojal</item>
     </plurals>
 
-    <!-- What a station's bikes are, shown only where the network lends both
-         kinds side by side. %1$s is the mechanical count, %2$s the electric
-         one, each already agreed in number. -->
+    <!-- What a station's bikes are, where the network lends both kinds side by
+         side. Each half is an adjective alone, agreeing with the neuter
+         "kolo" the reader supplies: 1 navadno, 2 navadni, 3 navadna,
+         5 navadnih. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
-
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d mechanical</item>
-        <item quantity="two">%1$d mechanical</item>
-        <item quantity="few">%1$d mechanical</item>
-        <item quantity="other">%1$d mechanical</item>
+        <item quantity="one">%1$d navadno</item>
+        <item quantity="two">%1$d navadni</item>
+        <item quantity="few">%1$d navadna</item>
+        <item quantity="other">%1$d navadnih</item>
     </plurals>
-
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d electric</item>
-        <item quantity="two">%1$d electric</item>
-        <item quantity="few">%1$d electric</item>
-        <item quantity="other">%1$d electric</item>
+        <item quantity="one">%1$d električno</item>
+        <item quantity="two">%1$d električni</item>
+        <item quantity="few">%1$d električna</item>
+        <item quantity="other">%1$d električnih</item>
     </plurals>
 
-    <string name="freshness_just_now">just now</string>
+    <!-- How old the availability figures are. Android writes this "pred 2
+         dnevoma" (`settings:color_contrast_preview_email_send_date`), so
+         "pred" carries the instrumental and the whole phrase is built here
+         rather than in `freshness_fresh`. The instrumental plural is the same
+         word at three as at five, which is why `few` and `other` read alike
+         in these three plurals and only in these three. -->
+    <string name="freshness_just_now">pravkar</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">%1$d second ago</item>
-        <item quantity="two">%1$d seconds ago</item>
-        <item quantity="few">%1$d seconds ago</item>
-        <item quantity="other">%1$d seconds ago</item>
+        <item quantity="one">pred %1$d sekundo</item>
+        <item quantity="two">pred %1$d sekundama</item>
+        <item quantity="few">pred %1$d sekundami</item>
+        <item quantity="other">pred %1$d sekundami</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">%1$d minute ago</item>
-        <item quantity="two">%1$d minutes ago</item>
-        <item quantity="few">%1$d minutes ago</item>
-        <item quantity="other">%1$d minutes ago</item>
+        <item quantity="one">pred %1$d minuto</item>
+        <item quantity="two">pred %1$d minutama</item>
+        <item quantity="few">pred %1$d minutami</item>
+        <item quantity="other">pred %1$d minutami</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">%1$d hour ago</item>
-        <item quantity="two">%1$d hours ago</item>
-        <item quantity="few">%1$d hours ago</item>
-        <item quantity="other">%1$d hours ago</item>
+        <item quantity="one">pred %1$d uro</item>
+        <item quantity="two">pred %1$d urama</item>
+        <item quantity="few">pred %1$d urami</item>
+        <item quantity="other">pred %1$d urami</item>
     </plurals>
-    <string name="freshness_long_ago">more than a day ago</string>
-    <string name="freshness_stale">Frozen data · %1$s</string>
-    <string name="freshness_fresh">Updated %1$s</string>
-    <string name="freshness_never">Never updated</string>
+    <string name="freshness_long_ago">pred več kot enim dnevom</string>
+    <string name="freshness_stale">Zamrznjeni podatki · %1$s</string>
+    <!-- %1$s is one of the above, "pred 5 minutami" or "pravkar". -->
+    <string name="freshness_fresh">Posodobljeno %1$s</string>
+    <string name="freshness_never">Nikoli posodobljeno</string>
 
-    <string name="stations_empty_title">No stations loaded</string>
-    <string name="stations_empty_message">Pull the list down to fetch the network’s stations.</string>
-    <string name="action_refresh">Refresh</string>
-    <string name="action_retry">Try again</string>
+    <string name="stations_empty_title">Ni naloženih postaj</string>
+    <string name="stations_empty_message">Povlecite seznam navzdol, da se prenesejo postaje omrežja.</string>
+    <string name="action_refresh">Osveži</string>
+    <string name="action_retry">Poskusi znova</string>
 
-    <string name="map_open_list">See the list of stations</string>
-    <string name="map_attribution">© OpenStreetMap contributors</string>
-    <string name="map_locate_me">Locate me</string>
-    <string name="map_location_denied">Without location, pick your starting point on the map or by address.</string>
-    <string name="map_location_unavailable">Position unavailable. Check that location is switched on, then try again.</string>
-    <string name="map_outside_city_title">You are elsewhere</string>
-    <string name="map_outside_city_message">Your position falls outside the area %1$s covers, so this map cannot show it. Pick the city you are in to see its stations.</string>
-    <string name="map_outside_city_brief">Your position falls outside the area %1$s covers.</string>
-    <string name="map_needs_tiles_title">The map needs its offline tiles</string>
-    <string name="map_needs_tiles_message">Install the map data from the storage screen. In the meantime, the station list stays usable.</string>
-    <string name="map_needs_city_title">Which city?</string>
-    <string name="map_needs_city_message">Pick the conurbation you want to use. Its data is downloaded afterwards, once and for all.</string>
+    <string name="map_open_list">Prikaži seznam postaj</string>
+    <string name="map_attribution">© Sodelujoči OpenStreetMap</string>
+    <string name="map_locate_me">Poišči moj položaj</string>
+    <string name="map_location_denied">Brez lokacije izberite izhodišče na zemljevidu ali po naslovu.</string>
+    <string name="map_location_unavailable">Položaj ni na voljo. Preverite, ali je lokacija vklopljena, in poskusite znova.</string>
+    <string name="map_outside_city_title">Ste drugje</string>
+    <!-- %1$s is the network's label, and it stands in the nominative as the
+         subject of "pokriva": no ending falls on it. -->
+    <string name="map_outside_city_message">Vaš položaj je zunaj območja, ki ga pokriva %1$s, zato ga ta zemljevid ne more prikazati. Izberite mesto, v katerem ste, da vidite njegove postaje.</string>
+    <string name="map_outside_city_brief">Vaš položaj je zunaj območja, ki ga pokriva %1$s.</string>
+    <string name="map_needs_tiles_title">Zemljevid potrebuje svoje podatke</string>
+    <string name="map_needs_tiles_message">Namestite podatke zemljevida na zaslonu s shrambo. Do takrat ostane seznam postaj uporaben.</string>
+    <string name="map_needs_city_title">Katero mesto?</string>
+    <string name="map_needs_city_message">Izberite mestno območje, ki ga želite uporabljati. Njegovi podatki se prenesejo pozneje, enkrat za vselej.</string>
 
     <string name="welcome_hello_title">Roue Libre</string>
-    <string name="welcome_hello_body">This app shows shared bikes on a map and works out a door-to-door trip: walk to a station, ride, then walk the rest of the way.\n\nIt is free and open source. No account, no adverts, no tracker.</string>
-    <string name="welcome_privacy_title">Nothing leaves this phone</string>
-    <string name="welcome_privacy_body">Journeys are computed on this phone. The addresses you look up are sent to nobody, not even while you type.\n\nNo history is kept: not your trips, not your positions, not your destinations.\n\nThe only request that goes out in everyday use asks how many bikes are available.</string>
-    <string name="welcome_fleet_title">What the bike says</string>
-    <string name="welcome_fleet_body">The bike drawn tells you what your city lends.\n\nIt is read from the network\'s own feed, never guessed.</string>
-    <string name="welcome_fleet_mechanical_only">The network lends mechanical bikes only.</string>
-    <string name="welcome_fleet_electric_only">The network lends electric bikes only.</string>
-    <string name="welcome_fleet_mixed">The network lends both kinds.</string>
+    <string name="welcome_hello_body">Ta aplikacija prikazuje kolesa za souporabo na zemljevidu in izračuna pot od vrat do vrat: peš do postaje, vožnja s kolesom, nato peš do cilja.\n\nJe brezplačna in odprtokodna. Brez računa, brez oglasov, brez sledilnikov.</string>
+    <string name="welcome_privacy_title">Nič ne zapusti tega telefona</string>
+    <string name="welcome_privacy_body">Poti se izračunajo na tem telefonu. Naslovi, ki jih iščete, se ne pošljejo nikomur, niti med tipkanjem.\n\nZgodovina se ne shranjuje: ne vaše poti, ne vaši položaji, ne vaši cilji.\n\nEdina zahteva, ki v vsakdanji rabi odide ven, sprašuje, koliko koles je na voljo.</string>
+    <string name="welcome_fleet_title">Kaj pove kolo</string>
+    <string name="welcome_fleet_body">Narisano kolo pove, kaj posoja vaše mesto.\n\nPodatek prihaja iz vira samega omrežja in ni ugibanje.</string>
+    <string name="welcome_fleet_mechanical_only">Omrežje posoja samo navadna kolesa.</string>
+    <string name="welcome_fleet_electric_only">Omrežje posoja samo električna kolesa.</string>
+    <string name="welcome_fleet_mixed">Omrežje posoja obe vrsti.</string>
 
-    <string name="welcome_data_title">One city, one download</string>
-    <string name="welcome_data_body">The map, the streets and the route calculation live on the device. That is what makes them work without a network — and it means downloading your city\'s data once.\n\nSo start by choosing it. Expect around forty megabytes for a medium-sized conurbation, more for a capital; the size is announced before the download.\n\nYou can also do it later: in the meantime, the station list and their availability remain usable.</string>
-    <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d of %2$d</string>
-    <string name="welcome_continue">Continue</string>
-    <string name="welcome_skip">Skip</string>
-    <string name="welcome_choose_city">Choose my city</string>
-    <string name="welcome_later">Later</string>
-    <string name="welcome_open">Read the introduction again</string>
+    <string name="welcome_data_title">Eno mesto, en prenos</string>
+    <string name="welcome_data_body">Zemljevid, ulice in izračun poti so v napravi. Prav zato delujejo brez omrežja – in prav zato je treba podatke svojega mesta enkrat prenesti.\n\nZačnite torej z izbiro mesta. Za srednje veliko mestno območje računajte na približno štirideset megabajtov, za prestolnico več; velikost je napovedana pred prenosom.\n\nTo lahko storite tudi pozneje: do takrat ostaneta seznam postaj in njihova razpoložljivost uporabna.</string>
+    <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d od %2$d</string>
+    <string name="welcome_continue">Nadaljuj</string>
+    <string name="welcome_skip">Preskoči</string>
+    <string name="welcome_choose_city">Izberi moje mesto</string>
+    <string name="welcome_later">Pozneje</string>
+    <string name="welcome_open">Znova preberi uvod</string>
 
-    <string name="whats_new_title">What’s new</string>
-    <string name="whats_new_done">Continue</string>
-    <string name="whats_new_nothing">This version has no release notes.</string>
-    <string name="whats_new_open">See what’s new</string>
+    <string name="whats_new_title">Kaj je novega</string>
+    <string name="whats_new_done">Nadaljuj</string>
+    <string name="whats_new_nothing">Ta različica nima opomb ob izdaji.</string>
+    <string name="whats_new_open">Poglej, kaj je novega</string>
 
-    <string name="incoming_place_default_label">Received place</string>
-    <string name="incoming_show_me">Show</string>
-    <string name="incoming_needs_index">This address has to be looked up in the offline index, which is not installed.</string>
-    <string name="incoming_address_not_found">“%1$s” matches no address in the covered area.</string>
-    <string name="incoming_outside_coverage">This place lies outside the area covered by the installed data: no journey can reach it.</string>
+    <string name="incoming_place_default_label">Prejeti kraj</string>
+    <string name="incoming_show_me">Prikaži</string>
+    <string name="incoming_needs_index">Ta naslov je treba poiskati v kazalu naslovov, ki ni nameščeno.</string>
+    <string name="incoming_address_not_found">„%1$s“ se ne ujema z nobenim naslovom na pokritem območju.</string>
+    <string name="incoming_outside_coverage">Ta kraj je zunaj območja, ki ga pokrivajo nameščeni podatki: nobena pot ga ne doseže.</string>
 
-    <string name="favourites_title">Favourites</string>
-    <string name="favourites_open">See favourites</string>
-    <string name="favourites_reorder_hint">Press and hold a row to move it.</string>
+    <string name="favourites_title">Priljubljene</string>
+    <string name="favourites_open">Prikaži priljubljene</string>
+    <string name="favourites_reorder_hint">Dotaknite se vrstice in jo pridržite, da jo premaknete.</string>
 
-    <string name="settings_title">Settings</string>
-    <string name="settings_open">Settings</string>
-    <string name="settings_section_city">City</string>
-    <string name="settings_section_journey">Journey</string>
-    <string name="settings_section_display">Display</string>
-    <string name="settings_section_data">Offline data</string>
+    <string name="settings_title">Nastavitve</string>
+    <string name="settings_open">Nastavitve</string>
+    <!-- The section titles of the settings screen (SPEC §7.6), in the order
+         the screen lays them out. -->
+    <string name="settings_section_city">Mesto</string>
+    <string name="settings_section_journey">Pot</string>
+    <string name="settings_section_display">Zaslon</string>
+    <string name="settings_section_data">Podatki brez povezave</string>
 
-    <!-- The walking pace (SPEC §6, §7.6). Named in words and never in km/h: a
-         pace is something one knows about oneself, where a speed is a figure
-         nobody has measured about themselves — and a speed written on a button
-         would be read as a promise about the minutes to come. -->
-    <string name="settings_walking_pace_title">Walking pace</string>
-    <string name="settings_walking_pace_slow">Slow</string>
-    <string name="settings_walking_pace_normal">Normal</string>
-    <string name="settings_walking_pace_brisk">Brisk</string>
-    <string name="settings_walking_pace_description">Pace the walking parts of a journey are worked out at</string>
+    <!-- The walking pace (SPEC §6, §7.6). "Tempo hoje" and never a speed in
+         km/h. The three values are masculine adjectives agreeing with "tempo",
+         which is why "Počasen" and not Android's "Počasna" — that one agrees
+         with the feminine "hitrost", a word this screen deliberately avoids. -->
+    <string name="settings_walking_pace_title">Tempo hoje</string>
+    <string name="settings_walking_pace_slow">Počasen</string>
+    <string name="settings_walking_pace_normal">Običajen</string>
+    <string name="settings_walking_pace_brisk">Hiter</string>
+    <string name="settings_walking_pace_description">Tempo, po katerem se izračunajo odseki poti, prehojeni peš</string>
 
-    <string name="settings_theme_title">Theme</string>
-    <string name="settings_theme_system">System</string>
-    <string name="settings_theme_light">Light</string>
-    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_title">Tema</string>
+    <string name="settings_theme_system">Sistem</string>
+    <string name="settings_theme_light">Svetla</string>
+    <string name="settings_theme_dark">Temna</string>
 
     <!-- Units (SPEC 7.6). The buttons name the units rather than the
-         countries: what one gets is what is shown, and no system belongs to a
-         nation. -->
-    <string name="settings_units_title">Units</string>
-    <string name="settings_units_system">System</string>
+         countries. -->
+    <string name="settings_units_title">Enote</string>
+    <string name="settings_units_system">Sistem</string>
     <string name="settings_units_metric">m · km</string>
     <string name="settings_units_us">ft · mi</string>
     <string name="settings_units_uk">yd · mi</string>
-    <string name="settings_units_description">Units used for distances</string>
-    <string name="settings_units_system_description">Follow the region the device is set to</string>
-    <string name="settings_units_metric_description">Metres and kilometres</string>
-    <string name="settings_units_us_description">Feet and miles</string>
-    <string name="settings_units_uk_description">Yards and miles</string>
+    <string name="settings_units_description">Enote za razdalje</string>
+    <string name="settings_units_system_description">Sledi regiji, na katero je nastavljena naprava</string>
+    <string name="settings_units_metric_description">Metri in kilometri</string>
+    <string name="settings_units_us_description">Čevlji in milje</string>
+    <string name="settings_units_uk_description">Jardi in milje</string>
 
-    <string name="about_title">About</string>
-    <string name="about_open">About</string>
-    <string name="about_version">Version %1$s</string>
-    <string name="about_privacy_title">Privacy</string>
-    <string name="about_privacy_body">No account, no adverts, no tracker, no unique identifier. Nothing you search for or compute leaves this phone: addresses, journeys and your position stay here, and are not kept. The only request that goes out in everyday use fetches bike availability. Datasets are downloaded only when you ask.</string>
-    <string name="about_attributions_title">Data sources</string>
-    <string name="about_attribution_gbfs">Bike availability: the open data of the network served, published in the GBFS format. In France it is indexed on transport.data.gouv.fr.</string>
-    <string name="about_attribution_osm">Map, routing and landmarks: © OpenStreetMap contributors, ODbL licence.</string>
-    <string name="about_attribution_ban">Addresses and house numbers: Base Adresse Nationale, ODbL licence.</string>
-    <string name="about_attribution_brouter">Routing: BRouter, MIT licence, over OpenStreetMap data.</string>
-    <string name="about_attribution_maplibre">Map rendering: MapLibre Native, two-clause BSD licence.</string>
-    <string name="about_links_title">Opening a place from another app</string>
-    <string name="about_links_body">“geo:” links and addresses shared as plain text come straight here: pick Roue Libre in Android’s chooser. Links from mapping websites need permission: Settings → Apps → Roue Libre → Open by default → Add link.</string>
-    <string name="about_licence_title">Licence</string>
-    <string name="about_licence_body">Roue Libre is free software, released under the GNU GPL version 3. You may use it, study it, modify it and pass it on.</string>
-    <string name="about_open_repository">View the source code</string>
-    <string name="about_open_sources">Sources city by city</string>
-    <string name="about_open_licences">Component licences</string>
+    <string name="about_title">O aplikaciji</string>
+    <string name="about_open">O aplikaciji</string>
+    <string name="about_version">Različica %1$s</string>
+    <string name="about_privacy_title">Zasebnost</string>
+    <string name="about_privacy_body">Brez računa, brez oglasov, brez sledilnikov, brez enoličnega identifikatorja. Nič, kar poiščete ali izračunate, ne zapusti tega telefona: naslovi, poti in vaš položaj ostanejo tu in se ne shranjujejo. Edina zahteva, ki v vsakdanji rabi odide ven, pridobi razpoložljivost koles. Nabori podatkov se prenesejo samo, kadar to zahtevate.</string>
+    <string name="about_attributions_title">Viri podatkov</string>
+    <string name="about_attribution_gbfs">Razpoložljivost koles: odprti podatki omrežja, ki ga uporabljate, objavljeni v obliki GBFS. V Franciji so popisani na transport.data.gouv.fr.</string>
+    <string name="about_attribution_osm">Zemljevid, izračun poti in orientirji: © Sodelujoči OpenStreetMap, licenca ODbL.</string>
+    <string name="about_attribution_ban">Naslovi in hišne številke: Base Adresse Nationale, licenca ODbL.</string>
+    <string name="about_attribution_brouter">Izračun poti: BRouter, licenca MIT, na podatkih OpenStreetMap.</string>
+    <string name="about_attribution_maplibre">Izris zemljevida: MapLibre Native, licenca BSD z dvema členoma.</string>
+    <string name="about_links_title">Odpiranje kraja iz druge aplikacije</string>
+    <string name="about_links_body">Povezave „geo:“ in naslovi, deljeni kot navadno besedilo, pridejo naravnost sem: v Androidovem izbirniku izberite Roue Libre. Povezave s spletnih zemljevidov potrebujejo dovoljenje: Nastavitve → Aplikacije → Roue Libre → Privzeto odpiranje → Dodaj povezavo.</string>
+    <string name="about_licence_title">Licenca</string>
+    <string name="about_licence_body">Roue Libre je prosta programska oprema, izdana pod licenco GNU GPL različice 3. Lahko jo uporabljate, preučujete, spreminjate in posredujete naprej.</string>
+    <string name="about_open_repository">Prikaži izvorno kodo</string>
+    <string name="about_open_sources">Viri po mestih</string>
+    <string name="about_open_licences">Licence sestavnih delov</string>
 
-    <string name="sources_title">Data sources</string>
-    <string name="sources_intro">Availability comes from each city\'s network, as open data. Here is who produces it, including for the cities you have not installed.</string>
-    <string name="sources_open">Open the source</string>
-    <string name="about_licences_title">Licences</string>
-    <string name="about_no_browser">No browser is installed on this device.</string>
+    <string name="sources_title">Viri podatkov</string>
+    <string name="sources_intro">Razpoložljivost prihaja iz omrežja vsakega mesta, kot odprti podatki. Tu je zapisano, kdo jih ustvarja, tudi za mesta, ki jih niste namestili.</string>
+    <string name="sources_open">Odpri vir</string>
+    <string name="about_licences_title">Licence</string>
+    <string name="about_no_browser">V tej napravi ni nameščenega brskalnika.</string>
 
-    <string name="journey_title">Journey</string>
-    <string name="journey_open">Plan a journey</string>
-    <string name="journey_origin_empty">Starting from?</string>
-    <string name="journey_destination_empty">Going where?</string>
-    <string name="journey_choose_origin">Starting from?</string>
-    <string name="journey_choose_destination">Going where?</string>
-    <string name="journey_swap">Swap start and destination</string>
-    <string name="journey_hint">The journey is computed on the device: walk to a station, ride, then walk the rest of the way.</string>
+    <!-- The whole door-to-door thing is a "pot"; the bike leg alone is a
+         "vožnja". The two words are never swapped. -->
+    <string name="journey_title">Pot</string>
+    <string name="journey_open">Načrtuj pot</string>
+    <string name="journey_origin_empty">Od kod?</string>
+    <string name="journey_destination_empty">Kam?</string>
+    <string name="journey_choose_origin">Od kod?</string>
+    <string name="journey_choose_destination">Kam?</string>
+    <string name="journey_swap">Zamenjaj izhodišče in cilj</string>
+    <string name="journey_hint">Pot se izračuna v napravi: peš do postaje, vožnja s kolesom, nato peš do cilja.</string>
     <!-- The switch that leaves the network out of the journey, and the sentence
          that replaces the one above it when it is on (SPEC §7.3). -->
-    <string name="journey_own_bike">Ride my own bike</string>
-    <string name="journey_hint_own_bike">The journey is computed on the device: one ride from door to door, with no station on the way.</string>
+    <string name="journey_own_bike">Vozim svoje kolo</string>
+    <string name="journey_hint_own_bike">Pot se izračuna v napravi: ena sama vožnja od vrat do vrat, brez postaje na poti.</string>
 
-    <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
-         which is what the application does at rest. -->
-    <string name="journey_bike_kind_any">Any bike</string>
-    <string name="journey_bike_kind_mechanical">Mechanical</string>
-    <string name="journey_bike_kind_electric">Electric</string>
-    <string name="journey_bike_kind_any_description">Any bike, whichever kind</string>
-    <string name="journey_bike_kind_mechanical_description">A bike I pedal myself</string>
-    <string name="journey_bike_kind_electric_description">A pedal-assist bike</string>
-    <string name="journey_compute">Work out the journey</string>
-    <string name="journey_computing">Working out the best journey…</string>
+    <!-- Which bike one wants to ride (SPEC §7.3). -->
+    <string name="journey_bike_kind_any">Katero koli kolo</string>
+    <string name="journey_bike_kind_mechanical">Navadno</string>
+    <string name="journey_bike_kind_electric">Električno</string>
+    <string name="journey_bike_kind_any_description">Katero koli kolo, ne glede na vrsto</string>
+    <string name="journey_bike_kind_mechanical_description">Kolo, ki ga poganjam sam</string>
+    <string name="journey_bike_kind_electric_description">Kolo s pomožnim električnim pogonom</string>
+    <string name="journey_compute">Izračunaj pot</string>
+    <string name="journey_computing">Iskanje najboljše poti …</string>
     <!-- Nothing is being chosen here — there is one route to trace, not a pair
-         of stations to weigh — so the wait does not claim to be looking for the
-         best of anything. -->
-    <string name="journey_computing_own_bike">Working the ride out…</string>
-    <string name="journey_source_my_position">My position</string>
-    <string name="journey_locating">Finding your position…</string>
-    <string name="journey_source_favourite">A favourite station</string>
-    <string name="journey_source_on_map">A point on the map</string>
-    <string name="journey_no_favourite">No favourite station yet. Open a station and tap the star to add it.</string>
-    <string name="journey_pick_crosshair">Targeted point</string>
-    <string name="journey_pick_confirm">Choose this point</string>
-    <string name="journey_picked_point">Point on the map</string>
-    <string name="journey_frame">Show the whole journey</string>
+         of stations to weigh. -->
+    <string name="journey_computing_own_bike">Izračun vožnje …</string>
+    <string name="journey_source_my_position">Moj položaj</string>
+    <string name="journey_locating">Iskanje vašega položaja …</string>
+    <string name="journey_source_favourite">Priljubljena postaja</string>
+    <string name="journey_source_on_map">Točka na zemljevidu</string>
+    <string name="journey_no_favourite">Še nobene priljubljene postaje. Odprite postajo in se dotaknite zvezdice, da jo dodate.</string>
+    <string name="journey_pick_crosshair">Ciljana točka</string>
+    <string name="journey_pick_confirm">Izberi to točko</string>
+    <string name="journey_picked_point">Točka na zemljevidu</string>
+    <string name="journey_frame">Prikaži celotno pot</string>
 
-    <string name="journey_summary">of which %1$s walking and %2$s riding · %3$s</string>
-    <!-- Metres climbed over a leg or over the whole journey. Shown only where
-         there is relief worth naming; a flat city never reads this. -->
-    <string name="journey_climb">%1$s of climb</string>
-    <!-- What waits at the station one sets off from, hung at the end of the
-         journey summary, in a conurbation lending both kinds of bike
-         (SPEC §7.4). %1$s is the two counts, mechanical and electric, each
-         already agreed in number. -->
-    <string name="journey_bikes_at_departure">%1$s at the departure station</string>
-    <!-- The block holding the total time, the summary and the drawing opens
-         the journey in full: this is what the press does, announced to a screen
+    <string name="journey_summary">od tega %1$s peš in %2$s s kolesom · %3$s</string>
+    <!-- Metres climbed over a leg or over the whole journey. -->
+    <string name="journey_climb">%1$s vzpona</string>
+    <!-- What waits at the station one sets off from (SPEC §7.4). %1$s is the
+         two counts, mechanical and electric, each already agreed in number. -->
+    <string name="journey_bikes_at_departure">%1$s na izhodiščni postaji</string>
+    <!-- What the press on the summary block does, announced to a screen
          reader that would otherwise say only "activate". -->
-    <string name="journey_detail_open">Show the journey in detail</string>
-    <string name="journey_detail_title">The journey in detail</string>
-    <string name="journey_detail_departure_station">Departure station</string>
-    <string name="journey_detail_arrival_station">Arrival station</string>
-    <!-- The counts shown are the ones the journey was worked out on: a station
-         empties while one walks to it (SPEC §6). -->
+    <string name="journey_detail_open">Prikaži pot v podrobnostih</string>
+    <string name="journey_detail_title">Pot v podrobnostih</string>
+    <string name="journey_detail_departure_station">Izhodiščna postaja</string>
+    <string name="journey_detail_arrival_station">Ciljna postaja</string>
     <!-- The drawing of the ground the bike leg runs over. -->
-    <string name="journey_detail_profile">The ride, uphill and down</string>
+    <string name="journey_detail_profile">Vožnja, navzgor in navzdol</string>
     <!-- Read out in place of the drawing. %1$s is the climb of the ride, %2$s
          its lowest point above sea level and %3$s its highest. -->
-    <string name="journey_detail_profile_description">The ride climbs %1$s, between %2$s and %3$s above sea level.</string>
-    <string name="journey_detail_availability_note">Bikes and docks as they were when the journey was worked out.</string>
-    <!-- Hands one leg of the journey to another application: this one computes
-         journeys, it does not guide along them. -->
-    <string name="journey_navigate">Open in a navigation app</string>
-    <string name="journey_navigate_which">Which part of the journey?</string>
-    <string name="journey_step_to_station">Walk to %1$s</string>
-    <string name="journey_step_ride">Ride to %1$s</string>
-    <string name="journey_step_to_destination">Walk to the destination</string>
-    <string name="journey_step_walk_all">Walk to the destination</string>
-    <string name="journey_step_ride_all">Ride to the destination</string>
+    <string name="journey_detail_profile_description">Vožnja se vzpne za %1$s, med %2$s in %3$s nadmorske višine.</string>
+    <string name="journey_detail_availability_note">Kolesa in prosta mesta, kakršna so bila ob izračunu poti.</string>
+    <!-- Hands one leg of the journey to another application. -->
+    <string name="journey_navigate">Odpri v navigacijski aplikaciji</string>
+    <string name="journey_navigate_which">Kateri del poti?</string>
+    <!-- %1$s is a station's name. The case falls on "postaje"; the name
+         follows in apposition, in the nominative, exactly as it arrived. -->
+    <string name="journey_step_to_station">Peš do postaje %1$s</string>
+    <string name="journey_step_ride">S kolesom do postaje %1$s</string>
+    <string name="journey_step_to_destination">Peš do cilja</string>
+    <string name="journey_step_walk_all">Peš do cilja</string>
+    <string name="journey_step_ride_all">S kolesom do cilja</string>
     <!-- The summary of a journey ridden on one's own bike: it sits under the
-         total time, where the walk's own summary sits, and says the same two
-         things — how far, and how much of it goes up. -->
-    <string name="journey_own_bike_only">on your own bike, over %1$s.</string>
-    <string name="journey_own_bike_only_climb">on your own bike, over %1$s and %2$s of climb.</string>
-    <string name="journey_walk_only">on foot, over %1$s — no bike journey is possible here.</string>
-    <string name="journey_walk_only_climb">on foot, over %1$s and %2$s of climb — no bike journey is possible here.</string>
-    <string name="journey_walk_is_quicker">on foot, over %1$s — sooner than going to fetch a bike.</string>
-    <string name="journey_walk_is_quicker_climb">on foot, over %1$s and %2$s of climb — sooner than going to fetch a bike.</string>
-    <string name="journey_none_title">No journey</string>
-    <string name="journey_no_bike_nearby">No station with a bike near the start. Try again later, or start from somewhere else.</string>
+         total time and says how far, and how much of it goes up. -->
+    <string name="journey_own_bike_only">s svojim kolesom, na razdalji %1$s.</string>
+    <string name="journey_own_bike_only_climb">s svojim kolesom, na razdalji %1$s in %2$s vzpona.</string>
+    <string name="journey_walk_only">peš, na razdalji %1$s – kolesarska pot tu ni mogoča.</string>
+    <string name="journey_walk_only_climb">peš, na razdalji %1$s in %2$s vzpona – kolesarska pot tu ni mogoča.</string>
+    <string name="journey_walk_is_quicker">peš, na razdalji %1$s – hitreje kot iti po kolo.</string>
+    <string name="journey_walk_is_quicker_climb">peš, na razdalji %1$s in %2$s vzpona – hitreje kot iti po kolo.</string>
+    <string name="journey_none_title">Ni poti</string>
+    <string name="journey_no_bike_nearby">V bližini izhodišča ni postaje s kolesom. Poskusite pozneje ali pa začnite drugje.</string>
 
-    <string name="journey_no_mechanical_nearby">No station nearby has a mechanical bike right now. Ask for any bike, or try again later.</string>
-    <string name="journey_no_electric_nearby">No station nearby has an electric bike right now. Ask for any bike, or try again later.</string>
-    <string name="journey_no_dock_nearby">No station with a free dock near the destination. Try again later, or aim somewhere else.</string>
-    <string name="journey_no_route">No practicable route between these two points.</string>
-    <string name="journey_graph_missing">The routing data is not installed. Add it from the storage screen.</string>
-    <string name="journey_outside_coverage">This point lies outside the area covered by the installed data.</string>
-    <string name="journey_no_stations">No station known. Refresh the station list, then try again.</string>
+    <string name="journey_no_mechanical_nearby">Nobena postaja v bližini trenutno nima navadnega kolesa. Zahtevajte katero koli kolo ali pa poskusite pozneje.</string>
+    <string name="journey_no_electric_nearby">Nobena postaja v bližini trenutno nima električnega kolesa. Zahtevajte katero koli kolo ali pa poskusite pozneje.</string>
+    <string name="journey_no_dock_nearby">V bližini cilja ni postaje s prostim mestom. Poskusite pozneje ali pa izberite drug cilj.</string>
+    <!-- The line on the ground, not the journey that was planned over it. -->
+    <string name="journey_no_route">Med tema točkama ni prevozne poti.</string>
+    <string name="journey_graph_missing">Podatki za izračun poti niso nameščeni. Dodajte jih na zaslonu s shrambo.</string>
+    <string name="journey_outside_coverage">Ta točka je zunaj območja, ki ga pokrivajo nameščeni podatki.</string>
+    <string name="journey_no_stations">Nobena postaja ni znana. Osvežite seznam postaj in poskusite znova.</string>
 
     <string name="duration_minutes">%1$d min</string>
     <string name="duration_hours_minutes">%1$d h %2$02d</string>
 
+    <!-- The docking points a station holds, counted as a total. -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d dock</item>
-        <item quantity="two">%1$d docks</item>
-        <item quantity="few">%1$d docks</item>
-        <item quantity="other">%1$d docks</item>
+        <item quantity="one">%1$d stojalo</item>
+        <item quantity="two">%1$d stojali</item>
+        <item quantity="few">%1$d stojala</item>
+        <item quantity="other">%1$d stojal</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
-    <string name="station_address_nearby">Near %1$s</string>
-    <string name="station_favourite_add">Add to favourites</string>
-    <string name="station_favourite_remove">Remove from favourites</string>
-    <string name="station_as_origin">Start here</string>
-    <string name="station_as_destination">Go here</string>
-    <string name="station_open_in_navigation">Open in a navigation app</string>
-    <string name="station_no_navigation_app">No mapping app is installed on this device.</string>
+    <!-- "V bližini" governs the genitive and %1$s is a street or a square, as
+         the index holds it. The colon turns the line into a label, which
+         declines nothing. -->
+    <string name="station_address_nearby">V bližini: %1$s</string>
+    <string name="station_favourite_add">Dodaj med priljubljene</string>
+    <!-- Remove, not delete: the station is taken out of a list, not destroyed.
+         Android keeps the same two words apart (`settings:remove`,
+         `settings:delete`). -->
+    <string name="station_favourite_remove">Odstrani iz priljubljenih</string>
+    <string name="station_as_origin">Začni tukaj</string>
+    <string name="station_as_destination">Pojdi sem</string>
+    <string name="station_open_in_navigation">Odpri v navigacijski aplikaciji</string>
+    <string name="station_no_navigation_app">V tej napravi ni nameščene aplikacije za zemljevide.</string>
 
-    <string name="address_search_title">Search for an address</string>
-    <string name="address_search_hint">Number, street, town</string>
-    <string name="address_search_clear">Clear the search</string>
-    <string name="address_search_privacy">Everything is searched on the device. Nothing is sent, not even while you type.</string>
+    <string name="address_search_title">Iskanje naslova</string>
+    <!-- The order Slovenia writes an address in: street, then number, then
+         town. `AddressQuery.parseQuery` reads a house number standing between
+         the street and the town, which is what lets this line be written in
+         that order. No postcode is invited: Slovenia's is four digits, and a
+         second number in the query makes the parser give the first one up
+         (SPEC §4.3). -->
+    <string name="address_search_hint">Ulica, številka, kraj</string>
+    <string name="address_search_clear">Počisti iskanje</string>
+    <string name="address_search_privacy">Vse se išče v napravi. Nič se ne pošlje, niti med tipkanjem.</string>
     <string name="address_locality">%1$s %2$s</string>
     <string name="address_detail">%1$s · %2$s</string>
-    <string name="address_detail_approximate">%1$s · approximate position</string>
+    <string name="address_detail_approximate">%1$s · približen položaj</string>
     <string name="address_content_description">%1$s, %2$s</string>
-    <string name="address_search_prompt_title">Where are you going?</string>
-    <string name="address_search_prompt_message">Type a street name, with or without a number. Stations, universities and main squares can be searched too.</string>
-    <string name="address_searching_title">Searching…</string>
-    <string name="address_searching_message">Looking through the addresses installed on this device.</string>
-    <string name="address_no_match_title">No address found</string>
-    <string name="address_no_match_message">Nothing matches “%1$s”. Try the street name on its own, or add the town.</string>
-    <string name="address_needs_index_title">The search needs the address index</string>
-    <string name="address_needs_index_message">Install the index from the storage screen. It stays on the device and never goes out on the network.</string>
-    <string name="address_unreadable_title">Address index unreadable</string>
-    <string name="map_picked_place_description">%1$s. Tap to clear this point.</string>
+    <string name="address_search_prompt_title">Kam greste?</string>
+    <!-- "Stations" here means railway stations and the like, not bike
+         stations, so they are named in full. -->
+    <string name="address_search_prompt_message">Vnesite ime ulice, s številko ali brez nje. Iskati je mogoče tudi železniške postaje, univerze in glavne trge.</string>
+    <!-- Shown while a search runs and the screen has nothing else to show. -->
+    <string name="address_searching_title">Iskanje …</string>
+    <string name="address_searching_message">Pregledovanje naslovov, nameščenih v tej napravi.</string>
+    <string name="address_no_match_title">Ni najdenih naslovov</string>
+    <string name="address_no_match_message">Nič se ne ujema z „%1$s“. Poskusite samo ime ulice ali pa dodajte kraj.</string>
+    <string name="address_needs_index_title">Iskanje potrebuje kazalo naslovov</string>
+    <string name="address_needs_index_message">Namestite kazalo na zaslonu s shrambo. Ostane v napravi in nikoli ne odide v omrežje.</string>
+    <string name="address_unreadable_title">Kazala naslovov ni mogoče prebrati</string>
+    <string name="map_picked_place_description">%1$s. Dotaknite se, da počistite to točko.</string>
 
+    <!-- Distances, formatted through the localisation APIs (SPEC §9). %1$s is
+         a figure already rounded and already written in the interface's
+         language: the translation places the symbol, never the number. -->
     <string name="distance_metres">%1$s m</string>
     <string name="distance_kilometres">%1$s km</string>
-    <!-- Unit symbols. Written the same way in most languages; the string
-         exists in every one all the same, so a language that writes them
-         otherwise has somewhere to say so. -->
+    <!-- The symbols of the two imperial systems, written as English writes
+         them: Slovene has no forms of its own for them. -->
     <string name="distance_feet">%1$s ft</string>
     <string name="distance_yards">%1$s yd</string>
     <string name="distance_miles">%1$s mi</string>
-    <string name="action_back">Back</string>
+    <string name="action_back">Nazaj</string>
 
     <!-- City screen: which conurbation the application serves. -->
-    <string name="city_title">City</string>
-    <string name="city_open">Change city</string>
-    <string name="city_choose">Choose my city</string>
-    <string name="city_intro">Pick the conurbation you want to use. Its data is installed afterwards, once and for all.</string>
-    <string name="city_locate_me">Find my city</string>
-    <string name="city_active">In use</string>
+    <string name="city_title">Mesto</string>
+    <string name="city_open">Zamenjaj mesto</string>
+    <string name="city_choose">Izberi moje mesto</string>
+    <string name="city_intro">Izberite mestno območje, ki ga želite uporabljati. Njegovi podatki se namestijo pozneje, enkrat za vselej.</string>
+    <string name="city_locate_me">Poišči moje mesto</string>
+    <!-- Android's own wording, `android:media_route_status_in_use`. -->
+    <string name="city_active">V uporabi</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d station · %2$s to download</item>
-        <item quantity="two">%1$d stations · %2$s to download</item>
-        <item quantity="few">%1$d stations · %2$s to download</item>
-        <item quantity="other">%1$d stations · %2$s to download</item>
+        <item quantity="one">%1$d postaja · %2$s za prenos</item>
+        <item quantity="two">%1$d postaji · %2$s za prenos</item>
+        <item quantity="few">%1$d postaje · %2$s za prenos</item>
+        <item quantity="other">%1$d postaj · %2$s za prenos</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d station</item>
-        <item quantity="two">%1$d stations</item>
-        <item quantity="few">%1$d stations</item>
-        <item quantity="other">%1$d stations</item>
+        <item quantity="one">%1$d postaja</item>
+        <item quantity="two">%1$d postaji</item>
+        <item quantity="few">%1$d postaje</item>
+        <item quantity="other">%1$d postaj</item>
     </plurals>
-    <string name="city_detail_size_only">%1$s to download</string>
+    <string name="city_detail_size_only">%1$s za prenos</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d station · size announced before downloading</item>
-        <item quantity="two">%1$d stations · size announced before downloading</item>
-        <item quantity="few">%1$d stations · size announced before downloading</item>
-        <item quantity="other">%1$d stations · size announced before downloading</item>
+        <item quantity="one">%1$d postaja · velikost je napovedana pred prenosom</item>
+        <item quantity="two">%1$d postaji · velikost je napovedana pred prenosom</item>
+        <item quantity="few">%1$d postaje · velikost je napovedana pred prenosom</item>
+        <item quantity="other">%1$d postaj · velikost je napovedana pred prenosom</item>
     </plurals>
-    <string name="city_size_unknown">Size announced before downloading</string>
-    <string name="city_installed">%1$s installed on the device</string>
-    <string name="city_label">%1$s — %2$s</string>
-    <string name="city_delete">Delete</string>
-    <string name="city_delete_description">Delete the data for %1$s</string>
-    <string name="city_delete_title">Delete this data?</string>
-    <string name="city_delete_body">All offline data for %1$s will be erased. You will have to download it again to use it.</string>
-    <string name="city_delete_confirm">Delete</string>
-    <string name="city_deleted">Data for %1$s deleted</string>
-    <string name="city_search_hint">Search for a city</string>
-    <string name="city_search_clear">Clear the search</string>
-    <string name="city_no_match_title">No city found</string>
-    <string name="city_no_match_message">Nothing matches “%1$s”. Check the spelling, or clear the search.</string>
-    <string name="city_proposal_title">Your city</string>
-    <!-- Shown when the position says one is in another served conurbation than the one installed. -->
-    <string name="city_here_title">You are in another city</string>
-    <string name="city_here_body">%1$s serves the area you are in. Install its data to see its stations and work out journeys here.</string>
-    <string name="city_here_installed_body">%1$s serves the area you are in, and its data is already on the device.</string>
-    <string name="city_here_install">Install its data</string>
-    <string name="city_here_use">Use it</string>
-    <string name="city_proposal_body">You seem to be in the area covered by %1$s. Shall we go with that?</string>
-    <string name="city_proposal_accept">Yes</string>
-    <string name="city_none_nearby">No known network near here. Pick a city from the list.</string>
-    <string name="action_cancel">Cancel</string>
+    <string name="city_size_unknown">Velikost je napovedana pred prenosom</string>
+    <!-- %1$s is a size, "42 MB" for instance. -->
+    <string name="city_installed">%1$s nameščeno v napravi</string>
+    <string name="city_label">%1$s – %2$s</string>
+    <string name="city_delete">Izbriši</string>
+    <!-- The three lines below are handed the **network's** name, not the
+         city's: 328 of the 331 catalogue entries carry a `displayName` of
+         their own, and all five Slovene networks would read wrong behind the
+         word "mesto" — Nomago Bikes serves Ljubljana, Celje and Nova Gorica
+         alike. So the name is held at arm's length by a colon or by quotation
+         marks, and no noun is asserted about it. -->
+    <string name="city_delete_description">Izbriši podatke: %1$s</string>
+    <string name="city_delete_title">Želite izbrisati te podatke?</string>
+    <string name="city_delete_body">Vsi podatki za „%1$s“, shranjeni v napravi, bodo izbrisani. Za uporabo jih bo treba znova prenesti.</string>
+    <string name="city_delete_confirm">Izbriši</string>
+    <string name="city_deleted">Podatki izbrisani: %1$s</string>
+    <string name="city_search_hint">Iskanje mesta</string>
+    <string name="city_search_clear">Počisti iskanje</string>
+    <string name="city_no_match_title">Ni najdenih mest</string>
+    <string name="city_no_match_message">Nič se ne ujema z „%1$s“. Preverite črkovanje ali počistite iskanje.</string>
+    <string name="city_proposal_title">Vaše mesto</string>
+    <!-- Shown when the position says one is in another served conurbation than
+         the one installed. "Tega omrežja" rather than a pronoun: the
+         placeholder hides the gender of what it holds. -->
+    <string name="city_here_title">Ste v drugem mestu</string>
+    <string name="city_here_body">Območje, v katerem ste, pokriva %1$s. Namestite podatke tega omrežja, da vidite njegove postaje in tu izračunate poti.</string>
+    <string name="city_here_installed_body">Območje, v katerem ste, pokriva %1$s, in podatki tega omrežja so že v napravi.</string>
+    <string name="city_here_install">Namesti njegove podatke</string>
+    <string name="city_here_use">Uporabi</string>
+    <string name="city_proposal_body">Videti je, da ste na območju, ki ga pokriva %1$s. Ali izberemo to?</string>
+    <string name="city_proposal_accept">Da</string>
+    <string name="city_none_nearby">V bližini ni znanega omrežja. Izberite mesto s seznama.</string>
+    <string name="action_cancel">Prekliči</string>
 
     <string name="size_bytes">%1$s B</string>
     <string name="size_kilobytes">%1$s kB</string>
     <string name="size_megabytes">%1$s MB</string>
     <string name="size_gigabytes">%1$s GB</string>
 
-    <string name="storage_title">Storage</string>
-    <string name="storage_open">Manage offline data</string>
-    <string name="storage_intro">The map, the journey planner and the address search work with no network. They need three datasets, installed once.</string>
-    <string name="storage_total">%1$s used on this device</string>
-    <string name="storage_nothing_installed">No data installed</string>
-    <string name="storage_no_city">No city selected</string>
+    <string name="storage_title">Shramba</string>
+    <string name="storage_open">Upravljanje podatkov brez povezave</string>
+    <string name="storage_intro">Zemljevid, načrtovanje poti in iskanje naslovov delujejo brez omrežja. Potrebujejo tri nabore podatkov, ki se namestijo enkrat.</string>
+    <string name="storage_total">%1$s uporabljeno v tej napravi</string>
+    <string name="storage_nothing_installed">Ni nameščenih podatkov</string>
+    <string name="storage_no_city">Nobeno mesto ni izbrano</string>
 
-    <string name="dataset_tiles">Map data</string>
-    <string name="dataset_tiles_purpose">Draws the map with no network</string>
-    <string name="dataset_routing">Routing data</string>
-    <string name="dataset_routing_purpose">Works out journeys on the device</string>
-    <string name="dataset_addresses">Address index</string>
-    <string name="dataset_addresses_purpose">Searches streets without sending anything</string>
+    <string name="dataset_tiles">Podatki zemljevida</string>
+    <string name="dataset_tiles_purpose">Izriše zemljevid brez omrežja</string>
+    <string name="dataset_routing">Podatki za izračun poti</string>
+    <string name="dataset_routing_purpose">Izračuna poti v napravi</string>
+    <string name="dataset_addresses">Kazalo naslovov</string>
+    <string name="dataset_addresses_purpose">Išče ulice, ne da bi kaj poslalo</string>
 
-    <string name="storage_check_updates">Check for updates</string>
-    <string name="storage_checking">Reading the manifest…</string>
-    <string name="storage_up_to_date">Everything is up to date.</string>
-    <string name="storage_download_pending">Download %1$s</string>
-    <string name="storage_downloading">%1$s · %2$s of %3$s</string>
+    <string name="storage_check_updates">Preveri, ali so na voljo posodobitve</string>
+    <string name="storage_checking">Branje manifesta …</string>
+    <string name="storage_up_to_date">Vse je posodobljeno.</string>
+    <string name="storage_download_pending">Prenesi %1$s</string>
+    <string name="storage_downloading">%1$s · %2$s od %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
-    <string name="storage_wifi_warning">You are not on Wi-Fi. This download can weigh heavily on a mobile plan.</string>
-    <string name="dataset_update_available">Update available</string>
+    <string name="storage_wifi_warning">Niste v omrežju Wi-Fi. Ta prenos lahko močno obremeni mobilni paket.</string>
+    <string name="dataset_update_available">Na voljo je posodobitev</string>
 
-    <string name="dataset_absent">Not installed</string>
+    <string name="dataset_absent">Ni nameščeno</string>
     <string name="dataset_installed">%1$s · %2$s</string>
-    <string name="dataset_import">Import</string>
-    <string name="dataset_replace">Replace</string>
-    <string name="dataset_delete">Delete</string>
-    <string name="dataset_delete_description">Delete %1$s</string>
-    <string name="dataset_delete_title">Delete this data?</string>
+    <string name="dataset_import">Uvozi</string>
+    <string name="dataset_replace">Zamenjaj</string>
+    <string name="dataset_delete">Izbriši</string>
+    <string name="dataset_delete_description">Izbriši %1$s</string>
+    <string name="dataset_delete_title">Želite izbrisati te podatke?</string>
     <!-- %1$s is the dataset's name, %2$s the space it frees. -->
-    <string name="dataset_delete_body">The “%1$s” data will be erased, freeing %2$s. You will have to download it again to work offline.</string>
-    <string name="dataset_imported">%1$s installed</string>
-    <string name="dataset_deleted">%1$s deleted</string>
+    <string name="dataset_delete_body">Podatki „%1$s“ bodo izbrisani, kar sprosti %2$s. Za delo brez povezave jih bo treba znova prenesti.</string>
+    <!-- A label with a colon: a dataset's name is a masculine plural in two
+         cases ("Podatki zemljevida") and a neuter singular in the third
+         ("Kazalo naslovov"), so no participle can be written that agrees with
+         all three. -->
+    <string name="dataset_imported">Nameščeno: %1$s</string>
+    <string name="dataset_deleted">Izbrisano: %1$s</string>
 
-    <string name="dataset_rejected_empty">The chosen file is empty.</string>
-    <string name="dataset_rejected_format">This file is not the expected one. Choose the “%1$s” file produced by the generation scripts.</string>
-    <string name="dataset_rejected_version">This file is in format version %1$d, and this version of the app reads version %2$d. Update the app.</string>
-    <string name="dataset_rejected_checksum">The file does not match its checksum: it is incomplete or damaged. Download it again.</string>
-    <string name="dataset_rejected_transfer">Copying the file failed. Check the free space and try again.</string>
+    <string name="dataset_rejected_empty">Izbrana datoteka je prazna.</string>
+    <string name="dataset_rejected_format">To ni pričakovana datoteka. Izberite datoteko „%1$s“, ki jo ustvarijo skripti za generiranje.</string>
+    <string name="dataset_rejected_version">Ta datoteka je v različici zapisa %1$d, ta različica aplikacije pa bere različico %2$d. Posodobite aplikacijo.</string>
+    <string name="dataset_rejected_checksum">Datoteka se ne ujema s svojo kontrolno vsoto: nepopolna je ali poškodovana. Znova jo prenesite.</string>
+    <string name="dataset_rejected_transfer">Kopiranje datoteke ni uspelo. Preverite prosti prostor in poskusite znova.</string>
 
-    <string name="error_offline">No connection. The last known availability stays on screen.</string>
-    <string name="error_offline_download">No connection. The download picks up where it stopped.</string>
-    <string name="error_timeout_download">The server is not answering. The download picks up where it stopped.</string>
-    <string name="error_server_refused_download">Server error (%1$d). The download picks up where it stopped.</string>
-    <string name="error_untrusted_server_download">Invalid security certificate. The download picks up once it is renewed.</string>
-    <string name="error_malformed_download">Unreadable file received. The download picks up where it stopped.</string>
-    <string name="error_local_storage_download">The file could not be saved. Free some space and the download picks up.</string>
-    <string name="error_timeout">The network’s server is taking too long to answer. Try again in a moment.</string>
-    <string name="error_server_refused">The network’s server returned an error (%1$d). Try again later.</string>
-    <string name="error_untrusted_server">The network’s server presented an invalid security certificate. Its data cannot be fetched safely until the operator renews it.</string>
-    <string name="error_malformed">The data received is unreadable. The network’s feed is at fault; try again later.</string>
-    <string name="error_feed_unavailable">The network does not publish the “%1$s” feed.</string>
-    <string name="error_unsupported_version">This network publishes its data in version %1$s, which this version of the app cannot read. Update the app.</string>
-    <string name="error_local_storage">Unable to read the data stored on the device.</string>
-    <string name="error_no_city_chosen">No city is selected. Choose one.</string>
+    <string name="error_offline">Ni povezave. Na zaslonu ostane zadnja znana razpoložljivost.</string>
+    <!-- The same failures read on the storage screen, where a dataset
+         transfer failed rather than an availability refresh. Those files come
+         down resumably (SPEC §4.4), which is what each of these says will
+         happen next. -->
+    <string name="error_offline_download">Ni povezave. Prenos se nadaljuje tam, kjer se je ustavil.</string>
+    <string name="error_timeout_download">Strežnik se ne odziva. Prenos se nadaljuje tam, kjer se je ustavil.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_download">Napaka strežnika (%1$d). Prenos se nadaljuje tam, kjer se je ustavil.</string>
+    <string name="error_untrusted_server_download">Neveljavno varnostno potrdilo. Prenos se nadaljuje, ko bo potrdilo obnovljeno.</string>
+    <string name="error_malformed_download">Prejeta datoteka ni berljiva. Prenos se nadaljuje tam, kjer se je ustavil.</string>
+    <string name="error_local_storage_download">Datoteke ni bilo mogoče shraniti. Sprostite prostor in prenos se nadaljuje.</string>
+    <string name="error_timeout">Strežnik omrežja se odziva predolgo. Poskusite znova čez nekaj trenutkov.</string>
+    <string name="error_server_refused">Strežnik omrežja je vrnil napako (%1$d). Poskusite znova pozneje.</string>
+    <string name="error_untrusted_server">Strežnik omrežja je predložil neveljavno varnostno potrdilo. Njegovih podatkov ni mogoče varno prevzeti, dokler ga upravljavec ne obnovi.</string>
+    <string name="error_malformed">Prejeti podatki niso berljivi. Kriv je vir omrežja; poskusite znova pozneje.</string>
+    <string name="error_feed_unavailable">Omrežje ne objavlja vira „%1$s“.</string>
+    <string name="error_unsupported_version">To omrežje objavlja svoje podatke v različici %1$s, ki je ta različica aplikacije ne zna brati. Posodobite aplikacijo.</string>
+    <string name="error_local_storage">Podatkov, shranjenih v napravi, ni mogoče prebrati.</string>
+    <string name="error_no_city_chosen">Nobeno mesto ni izbrano. Izberite ga.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
-         connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. -->
-    <string name="download_unmetered_only">Download only on an unmetered connection</string>
-    <string name="download_unmetered_only_description">Usually Wi-Fi. A shared phone connection or a capped hotspot is billed by the megabyte and counts as mobile data.</string>
-    <string name="download_held_back_title">Download held back</string>
+    <!-- Unmetered-only downloads. Android's own pair of labels is
+         `settings:wifi_unmetered_label` / `settings:wifi_metered_label`:
+         "z neomejenim prenosom podatkov" against "z omejenim prenosom
+         podatkov". The setting names what is billed rather than Wi-Fi. -->
+    <string name="download_unmetered_only">Prenašaj samo prek povezave z neomejenim prenosom podatkov</string>
+    <string name="download_unmetered_only_description">Običajno Wi-Fi. Deljena povezava telefona ali dostopna točka z omejitvijo se zaračunava po megabajtih in šteje za mobilne podatke.</string>
+    <string name="download_held_back_title">Prenos je zadržan</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">This connection is billed by the megabyte. Connect to Wi-Fi to download %1$s, or download it anyway now.</string>
-    <string name="download_stopped_title">Download stopped</string>
-    <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
-         on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">This connection is now billed by the megabyte, so the download stopped. What has arrived is kept. Connect to Wi-Fi to finish the %1$s, or carry on anyway now.</string>
-    <string name="download_anyway">Download anyway</string>
+    <string name="download_held_back_body">Ta povezava se zaračunava po megabajtih. Za prenos %1$s se povežite v omrežje Wi-Fi ali pa prenesite kar zdaj.</string>
+    <string name="download_stopped_title">Prenos je ustavljen</string>
+    <!-- %1$s is a size, "340 MB" for instance. What has already arrived is
+         kept on the device and the transfer picks up from there. -->
+    <string name="download_stopped_body">Ta povezava se zdaj zaračunava po megabajtih, zato se je prenos ustavil. Kar je že prispelo, ostane shranjeno. Povežite se v omrežje Wi-Fi, da dokončate %1$s, ali pa vseeno nadaljujte zdaj.</string>
+    <string name="download_anyway">Vseeno prenesi</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Waiting for an unmetered connection to download %1$s.</string>
-    <string name="download_can_resume">This connection is no longer billed. Start the download again: it carries on where it stopped.</string>
+    <string name="download_waiting_for_unmetered">Čakanje na povezavo z neomejenim prenosom podatkov za prenos %1$s.</string>
+    <string name="download_can_resume">Ta povezava se ne zaračunava več. Znova zaženite prenos: nadaljeval se bo tam, kjer se je ustavil.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
-    <string name="settings_opening_title">Open the app by default on</string>
+    <string name="settings_opening_title">Aplikacija se privzeto odpre na</string>
     <!-- Read aloud in place of the two buttons beside it. -->
-    <string name="settings_opening_description">The screen the app opens on</string>
-    <string name="settings_opening_map">Map</string>
-    <string name="settings_opening_list">Station list</string>
+    <string name="settings_opening_description">Zaslon, na katerem se aplikacija odpre</string>
+    <string name="settings_opening_map">Zemljevid</string>
+    <string name="settings_opening_list">Seznam postaj</string>
     <!-- The way to the map from a station list opened on. -->
-    <string name="stations_open_map">See the map</string>
+    <string name="stations_open_map">Prikaži zemljevid</string>
 
     <!-- Which stations the map draws at all. Set in the settings and nowhere
          else: the map itself carries no control and no badge (SPEC 7.1). -->
-    <string name="settings_map_filters_title">Which stations the map shows</string>
-    <string name="settings_map_filters_hide_out_of_service">Hide the stations out of service</string>
+    <string name="settings_map_filters_title">Katere postaje prikazuje zemljevid</string>
+    <string name="settings_map_filters_hide_out_of_service">Skrij postaje, ki ne delujejo</string>
     <!-- One wording for both modes: this screen knows nothing of the map's
-         Bikes / Free docks button, so it may name neither. -->
-    <string name="settings_map_filters_hide_empty">Hide the stations with nothing to offer</string>
+         Kolesa / Prosta mesta button, so it may name neither. -->
+    <string name="settings_map_filters_hide_empty">Skrij postaje, ki nimajo česa ponuditi</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
-    <string name="settings_map_filters_hide_empty_hint">“Nothing” follows what the map is counting: no bike while it counts bikes, no free dock while it counts free docks.</string>
-    <!-- Under both switches. The most important rule of the two filters, and
-         the only place it is now written. -->
-    <string name="settings_map_filters_keeps_unknown">Stations the network says nothing about stay on the map: a count nobody could read is not a count of nothing.</string>
+    <string name="settings_map_filters_hide_empty_hint">„Nič“ sledi temu, kar zemljevid šteje: nobenega kolesa, dokler šteje kolesa, in nobenega prostega mesta, dokler šteje prosta mesta.</string>
+    <!-- Under both switches. The most important rule of the two filters. -->
+    <string name="settings_map_filters_keeps_unknown">Postaje, o katerih omrežje ne pove ničesar, ostanejo na zemljevidu: število, ki ga nihče ni mogel prebrati, ni število nič.</string>
 
-    <!-- The rider's OWN bike, not the network's. Keep the wording clearly
-         about the reader's own equipment: the journey screen carries a
-         separate, similar-looking choice about the bikes the network lends. -->
-    <string name="settings_own_bike_kind_title">Your own bike</string>
+    <!-- The rider's OWN bike, not the network's. -->
+    <string name="settings_own_bike_kind_title">Vaše lastno kolo</string>
     <!-- Read aloud in place of the two buttons beside it. -->
-    <string name="settings_own_bike_kind_description">The kind of bike you own</string>
-    <string name="settings_own_bike_kind_mechanical">Mechanical</string>
-    <string name="settings_own_bike_kind_electric">Electric</string>
-    <!-- Under the two buttons. Says what the declaration changes: an electric
-         bike is routed and timed as one, where a mechanical one is not. -->
-    <string name="settings_own_bike_kind_hint">Declared electric, your own bike gets its own route and its own times.</string>
+    <string name="settings_own_bike_kind_description">Vrsta kolesa, ki ga imate</string>
+    <string name="settings_own_bike_kind_mechanical">Navadno</string>
+    <string name="settings_own_bike_kind_electric">Električno</string>
+    <!-- Under the two buttons. Says what the declaration changes. -->
+    <string name="settings_own_bike_kind_hint">Če ga navedete kot električnega, dobi vaše kolo svojo pot in svoje čase.</string>
 
-    <!-- The summary of a ride on one's own bike, where that bike was said to be
-         a pedal-assist one. %1$s is a distance, %2$s a climb. -->
-    <string name="journey_own_bike_electric_only">on your own electric bike, over %1$s.</string>
-    <string name="journey_own_bike_electric_only_climb">on your own electric bike, over %1$s and %2$s of climb.</string>
+    <!-- The summary of a ride on one's own bike, where that bike was said to
+         be a pedal-assist one. %1$s is a distance, %2$s a climb. -->
+    <string name="journey_own_bike_electric_only">s svojim električnim kolesom, na razdalji %1$s.</string>
+    <string name="journey_own_bike_electric_only_climb">s svojim električnim kolesom, na razdalji %1$s in %2$s vzpona.</string>
     <!-- Application language -->
-    <string name="settings_language_title">Language</string>
+    <string name="settings_language_title">Jezik</string>
     <!-- Heads the list of languages: the interface follows the device's own
-         language, which is what it did before this setting existed. The
-         languages themselves are never translated — each is written in its own
-         language, and comes from Android rather than from this file. -->
-    <string name="settings_language_system">System</string>
-    <!-- Spoken label of the row, read aloud in place of the language alone.
-         %1$s is the language in service: "English", "Français", or the wording
-         above when the device's own is followed. -->
-    <string name="settings_language_description">Language of the interface: %1$s</string>
+         language. The languages themselves are never translated. -->
+    <string name="settings_language_system">Sistem</string>
+    <!-- Spoken label of the row. %1$s is the language in service:
+         "Slovenščina", "English", or the wording above. -->
+    <string name="settings_language_description">Jezik vmesnika: %1$s</string>
 
 </resources>
