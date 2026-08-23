@@ -19,8 +19,12 @@ dialogs put their question in the second person, as the system does
 (*Activezi Explorează prin atingere?*): **Ștergi aceste date?**
 
 It serves the three Romanian networks of the catalogue — **Alba Iulia
-Velocity**, **Hunedoara**, **Dej BikeCity** — and any other conurbation a
-reader installs, so nothing here is written for one city alone.
+Velocity**, **Hunedoara**, **dej-bikecity** — and any other conurbation a
+reader installs, so nothing here is written for one city alone. The third one
+is written that way because that is what `config/catalogue.json` holds: its
+`displayName` is the bare slug `dej-bikecity`, and the `displayName` is what
+the application puts on the screen. It is not a typo to be tidied up here; the
+place to correct it, if it is ever corrected, is the catalogue.
 
 Where Android's own Romanian has a word, that word wins: an application that
 calls the settings anything but **Setări** reads as a foreign one. The arbiter
@@ -65,14 +69,31 @@ Two consequences that a translator coming from another language gets wrong:
   biciclete*;
 - **`other` carries the preposition *de***, which is not decoration but
   grammar: *20 de stații*, *143 de secunde*. Every `other` item in the file
-  holds it.
+  holds it but two, and those two are named just below.
 
 `counterpart_bikes` and `counterpart_docks` carry no placeholder in any item,
-on purpose: the figure is already painted in the disc these words stand beside,
-and an item holding it would say it twice. `CounterpartAgreementTest` fails the
-day one comes back. Their `other` items are therefore the bare **de biciclete**
-and **de locuri libere**, which read with the figure in the disc — "20" then
-"de biciclete".
+on purpose: the figure stands right beside the word or right above it, and an
+item holding it would say it twice. `CounterpartAgreementTest` fails the day
+one comes back.
+
+They are also **the one exception to the "de"**: their `other` items are the
+bare **biciclete** and **locuri libere**, which leaves `few` and `other`
+identical, and that is deliberate. These two strings are not syntagms but
+captions under a number, and the caption is shouted:
+`TextAppearance.RoueLibre.Label` sets `textAllCaps`, and `item_station.xml`
+stacks the counterpart figure with its label underneath it — there is no disc
+beside the counterpart, the disc carries the *other* counter — so at thirty
+free docks the row read
+
+```
+              30
+DE LOCURI LIBERE
+```
+
+and a "DE" driven to the head of a capitalised line on its own is not read as
+the preposition of *30 de locuri libere*. On the station sheet the label does
+sit beside its disc and the "de" would have read there; the list row is the
+one that shows both counters, and it is the one that decides.
 
 `journey_climb` is **urcare de %1$s** and not *%1$s de urcare*: that "de"
 belongs to a count, and the placeholder there is an already formatted distance,
@@ -114,13 +135,13 @@ and the sentence keeps its article.
 | journey | traseu | The whole door-to-door thing: the screen, the settings section, the button, the store texts. It is what Romanian transport writing calls a computed trip, and it leaves *rută* free for the line on the ground. |
 | ride | etapa cu bicicleta | The bike leg alone, inside a journey — *Etapa cu bicicleta, la deal și la vale*. A different word from *traseu*, so the profile drawing and the journey detail stay about two different objects. Where the whole journey is one ride, on one's own bike, `journey_computing_own_bike` says *drumul cu bicicleta*: there is no leg there, because there is nothing else. |
 | to ride | a pedala | The bike verb where one is needed, against *a merge pe jos* for the walking legs. The five journey steps say *Pedalează până la %1$s* and *Mergi pe jos până la %1$s*, so they read as one series and no article meets the placeholder. |
-| route | rută | Only in `journey_no_route` — *Nicio rută practicabilă între aceste două puncte* — and in `settings_own_bike_kind_hint`, which mean the line on the ground rather than the planned journey. |
+| route | rută | The line on the ground rather than the planned journey, which is *traseu*. Three strings: `journey_no_route` — *Nicio rută practicabilă între aceste două puncte* —, `settings_own_bike_kind_hint`, and `station_beyond_area`, whose English reads "no map and no route can reach it" and means the routing graph, not a trip somebody asked for. `incoming_outside_coverage` beside it says *traseu* and is right to: its English says "no journey can reach it". |
 | leg (of a journey) | etapă / porțiune | *Etapă* for the ride, *porțiunile pe jos* for the walking parts in `settings_walking_pace_description`. |
 | station | stație | A bike-share station. Romanian keeps **gară** for a railway station, so the collision Italian and Spanish have to write around does not exist here: `address_search_prompt_message` says *gări* and cannot be misread. |
 | bike | bicicletă | There is no short everyday noun in Romanian — *bicla* is slang and *velo* is not Romanian — so the full word is used everywhere. It is feminine, which is what makes *mecanică* and *electrică* agree with it in every string. |
 | bike sharing (the service) | bike-sharing | The name Romanian gives the service itself, in the press and in the store, and what somebody looking for this application types. It appears in `short_description.txt` only. Inside the application, where the English says "shared bikes" — the vehicles rather than the service — it is **biciclete partajate**. |
 | dock (free) | loc liber | What a bike is returned into, counted as available. Plain, immediately read, and it is what the mode toggle is called: *Locuri libere*. |
-| dock (capacity) | doc | The same object counted as a total, which is a different figure on the screen: "12 locuri libere · 30 de docuri". English uses one word for both and Romanian needs two, since the two figures stand side by side on a list row. **This is the entry I am least sure of** — Romanian operators are small and their wording is not settled; *punct de andocare* is the descriptive alternative and is far too long for a list row. A native reviewer should confirm it. |
+| dock (capacity) | doc | The same object counted as a total, which is a different figure on the screen: "12 locuri libere · 30 de docuri". English uses one word for both and Romanian needs two, since the two figures stand side by side on a list row. It is the word one of the three Romanian networks served uses of itself: Hunedoara's own regulation (HCL 143/2024, annex *Regulament VELO CORVIN*) writes „utilizatorul pur și simplu o va întoarce spre **doc** și o împinge în **doc**”. The same text says *stație* for the station, which is what this file says too, and *punct de andocare* for the attachment point described at length — accurate, and far too long for a list row. It also calls the machine one pays at *terminal de plată*, which is the reason for the row below. |
 | dock | *never* «terminal», *never* «automat» | A terminal is what one pays at, not the point a bike attaches to. |
 | bike, electric | electrică | Pedal-assist, never a moped: `journey_bike_kind_electric_description` says *cu asistență la pedalare* in full, which is the standard Romanian term. |
 | out of service | nefuncțională | **Not Android's**: the system's *În afara ariei de acoperire* (`settings:radioInfo_service_out`) is about radio coverage, and a station out of service is one that does not work. Feminine, agreeing with *stație*. |
@@ -159,7 +180,7 @@ and the sentence keeps its article.
 | tracker | tracker / trackere | **Not Android's** either, and deliberate: it is the word Romanian privacy writing uses. *Sistem de urmărire* explains it; it does not name it. |
 | manifest | manifest | **Not Android's**: the lexicon has no row for it. Romanian technical writing says *manifest*, definite *manifestul*, which is what `storage_checking` reads. |
 | metered / unmetered | contorizată / necontorizată | Android's own wording for a metered network (`settings:wifi_metered_label`, `settings:wifi_unmetered_label`). The setting's description then explains it as billing by the megabyte, exactly as the English does. |
-| megabyte (as a unit of billing) | megaoctet | **Not Android's**: the lexicon carries only *B* (`android:byteShort`). *Megaoctet* is the standard Romanian localisation term and the one DEX recognises, where *megabyte* is an unadapted borrowing. The symbols themselves stay MB and GB. |
+| megabyte (as a unit of billing) | megaoctet | **Not Android's**: the lexicon carries only *B* (`android:byteShort`) and no row for a megabyte. **Not a dictionary's either**: dexonline has no entry for *megaoctet*, and none for *megabyte*. What the dictionaries do carry is **octet** — DEX '09, DOOM 2 and DOOM 3, s. m., pl. *octeți* — of which *megaoctet* is the regular prefixed derivation, where *megabyte* is an unadapted borrowing. And the mix this produces is deliberate rather than overlooked: the file writes the symbols **MB** and **GB**, which is what a Romanian reads on a phone bill and in a store listing, while spelling the word out as *megaoctet*, whose own symbol would be *Mo* — a pairing none of the sixteen languages already reviewed produces, French writing *Mo* with *mégaoctet* and German *MB* with *Megabyte*. Both halves are kept as they are, the symbols because they are what is actually read and the word because it is correct and understood. |
 | feed (GBFS) | flux | The network's published stream, in the errors and in the welcome. |
 | dataset | set de date | The three of them together, in `storage_intro` and in the store text. |
 | file | fișier | Android's own (`android:mime_type_generic`). |
@@ -240,7 +261,7 @@ Two things the prompt must not invite:
 ## Words that are not translated
 
 Product and network names — Roue Libre, Vélib’, V’lille, Vélo’v, Citi Bike,
-Alba Iulia Velocity, Dej BikeCity, BRouter, MapLibre, OpenStreetMap, GBFS,
+Alba Iulia Velocity, dej-bikecity, BRouter, MapLibre, OpenStreetMap, GBFS,
 Wi-Fi — the licence names, and Base Adresse Nationale, which is the proper name
 of a French dataset. Unit symbols (m, km, ft, yd, mi, min, h, B, kB, MB, GB)
 stay as they are. City names take their Romanian form where Romanian has one —

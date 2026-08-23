@@ -3,12 +3,15 @@
     Romanian translation.
 
     It serves the three Romanian networks of the catalogue — Alba Iulia
-    Velocity, Hunedoara, Dej BikeCity — and any other conurbation a reader
-    installs, so nothing here is written for one city alone. Where Android's
-    own Romanian already has a word, that word is used: an application calling
-    the settings anything but "Setări" reads as a foreign one. The arbiter is
-    the system lexicon extracted from `framework-res.apk` and `Settings.apk`.
-    It says "tu", like the system and like every other translation.
+    Velocity, Hunedoara, dej-bikecity, the last of them spelled as
+    `config/catalogue.json` spells it, since its `displayName` is that bare
+    slug and the `displayName` is what the application shows — and any other
+    conurbation a reader installs, so nothing here is written for one city
+    alone. Where Android's own Romanian already has a word, that word is used:
+    an application calling the settings anything but "Setări" reads as a
+    foreign one. The arbiter is the system lexicon extracted from
+    `framework-res.apk` and `Settings.apk`. It says "tu", like the system and
+    like every other translation.
 
     Rules, the same as everywhere: positional placeholders, <plurals> for
     anything that agrees, and the `name` attributes left untouched.
@@ -29,7 +32,9 @@
     languages draw: `one` takes 1 alone, `few` takes 0 and 2 to 19 (then 101
     to 119, and so on), `other` takes 20 and above and REQUIRES the
     preposition "de" — "20 de biciclete". Zero therefore falls in `few`, which
-    is why it reads "0 biciclete" and not "0 de biciclete".
+    is why it reads "0 biciclete" and not "0 de biciclete". Two items leave
+    that "de" out, `counterpart_bikes` and `counterpart_docks`, and the comment
+    above them says why.
 
     The definite article is a suffix in Romanian, so a sentence built around a
     placeholder cannot count on the gender or the definiteness of what lands
@@ -74,7 +79,7 @@
     <string name="station_unnamed">Stație fără nume</string>
 
     <string name="station_beyond_area_short">în afara hărții</string>
-    <string name="station_beyond_area">Această stație se află în afara zonei acoperite de datele instalate. Bicicletele ei sunt numărate în timp real, dar nicio hartă și niciun traseu nu ajung până la ea.</string>
+    <string name="station_beyond_area">Această stație se află în afara zonei acoperite de datele instalate. Bicicletele ei sunt numărate în timp real, dar nicio hartă și nicio rută nu ajung până la ea.</string>
 
     <string name="search_stations_hint">Caută o stație</string>
     <string name="search_stations_clear">Șterge căutarea</string>
@@ -96,23 +101,33 @@
     <string name="map_bikes_all_kinds_description">Se numără toate bicicletele. Atinge pentru a le număra doar pe cele mecanice.</string>
     <string name="map_bikes_mechanical_description">Se numără bicicletele mecanice. Atinge pentru a le număra doar pe cele electrice.</string>
     <string name="map_bikes_electric_description">Se numără bicicletele electrice. Atinge pentru a le număra pe toate.</string>
-    <!-- The label beside a count, on a station's sheet and on a list row.
-         No item holds a number, and none ever should: the figure is already
-         painted in the disc these words stand next to, so writing it here
-         would say it twice. The word alone agrees, which is why these are
-         plurals resolved with the count and formatted with nothing.
+    <!-- The label that names a count, on a station's sheet and on a list row.
+         No item holds a number, and none ever should: the figure stands right
+         beside the word or right above it, so writing it here would say it
+         twice. The word alone agrees, which is why these are plurals resolved
+         with the count and formatted with nothing.
          `CounterpartAgreementTest` fails the day a placeholder comes back.
-         The `other` item carries the "de" that 20 and above take in Romanian,
-         and it reads with the figure in the disc: "20" + "de biciclete". -->
+
+         These two are the one place where `other` drops the "de" that 20 and
+         above otherwise take, which leaves `few` and `other` identical. They
+         are not phrases but captions under a number, and the caption is
+         shouted: `TextAppearance.RoueLibre.Label` sets `textAllCaps`, and
+         `item_station.xml` stacks the counterpart figure with its label
+         underneath it — no disc there, the disc carries the other counter — so
+         "de locuri libere" came out as "30" over "DE LOCURI LIBERE", a
+         preposition at the head of a capitalised line that no reader joins
+         back to the figure above it. On the sheet the label sits beside its
+         disc and the "de" would have read; on the list row it does not, and
+         the list row is where both counters show at once. -->
     <plurals name="counterpart_bikes" tools:ignore="ImpliedQuantity">
         <item quantity="one">bicicletă</item>
         <item quantity="few">biciclete</item>
-        <item quantity="other">de biciclete</item>
+        <item quantity="other">biciclete</item>
     </plurals>
     <plurals name="counterpart_docks" tools:ignore="ImpliedQuantity">
         <item quantity="one">loc liber</item>
         <item quantity="few">locuri libere</item>
-        <item quantity="other">de locuri libere</item>
+        <item quantity="other">locuri libere</item>
     </plurals>
     <string name="counterpart_none">—</string>
 
@@ -305,7 +320,7 @@
     <string name="journey_bike_kind_mechanical">Mecanică</string>
     <string name="journey_bike_kind_electric">Electrică</string>
     <string name="journey_bike_kind_any_description">Orice bicicletă, indiferent de tip</string>
-    <string name="journey_bike_kind_mechanical_description">O bicicletă pe care o pedalez singur</string>
+    <string name="journey_bike_kind_mechanical_description">O bicicletă pe care o pedalez fără ajutor</string>
     <string name="journey_bike_kind_electric_description">O bicicletă cu asistență la pedalare</string>
     <string name="journey_compute">Calculează traseul</string>
     <string name="journey_computing">Se calculează cel mai bun traseu…</string>
@@ -592,7 +607,7 @@
     <string name="download_can_resume">Această conexiune nu mai este taxată. Pornește din nou descărcarea: continuă de unde a rămas.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
-    <string name="settings_opening_title">La pornire, deschide aplicația pe</string>
+    <string name="settings_opening_title">La pornire, aplicația se deschide pe</string>
     <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_opening_description">Ecranul cu care pornește aplicația</string>
     <string name="settings_opening_map">Hartă</string>
@@ -625,7 +640,7 @@
     <string name="settings_own_bike_kind_electric">Electrică</string>
     <!-- Under the two buttons. Says what the declaration changes: an electric
          bike is routed and timed as one, where a mechanical one is not. -->
-    <string name="settings_own_bike_kind_hint">Declarată electrică, bicicleta ta capătă propria rută și propriii timpi.</string>
+    <string name="settings_own_bike_kind_hint">Declarată electrică, bicicleta ta capătă propria rută și propriile durate.</string>
 
     <!-- The summary of a ride on one's own bike, where that bike was said to be
          a pedal-assist one. %1$s is a distance, %2$s a climb. -->
