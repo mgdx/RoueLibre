@@ -141,7 +141,7 @@
     <string name="map_outside_city_title">Je bent ergens anders</string>
     <string name="map_outside_city_message">Je positie valt buiten het gebied dat %1$s dekt, dus deze kaart kan die niet tonen. Kies de stad waar je bent om de stations te zien.</string>
     <string name="map_outside_city_brief">Je positie valt buiten het gebied dat %1$s dekt.</string>
-    <string name="map_needs_tiles_title">De kaart mist haar offlinetegels</string>
+    <string name="map_needs_tiles_title">De kaart mist de offlinetegels</string>
     <string name="map_needs_tiles_message">Installeer de kaartgegevens via het scherm Opslag. Ondertussen blijft de stationslijst bruikbaar.</string>
     <string name="map_needs_city_title">Welke stad?</string>
     <string name="map_needs_city_message">Kies de agglomeratie die je wilt gebruiken. De gegevens worden daarna gedownload, eens en voorgoed.</string>
@@ -158,7 +158,7 @@
     <string name="welcome_fleet_mixed">Het netwerk leent beide soorten uit.</string>
 
     <string name="welcome_data_title">Eén stad, één download</string>
-    <string name="welcome_data_body">De kaart, de straten en de routeberekening staan op het toestel. Daardoor werken ze zonder netwerk – en daarom moet je de gegevens van je stad één keer downloaden.\n\nBegin dus met die te kiezen. Reken op ongeveer veertig megabyte voor een middelgrote agglomeratie, meer voor een hoofdstad; de omvang wordt vóór het downloaden genoemd.\n\nJe kunt het ook later doen: ondertussen blijven de stationslijst en de beschikbaarheid bruikbaar.</string>
+    <string name="welcome_data_body">De kaart, de straten en de routeberekening staan op het apparaat. Daardoor werken ze zonder netwerk – en daarom moet je de gegevens van je stad één keer downloaden.\n\nBegin dus met die te kiezen. Reken op ongeveer veertig megabyte voor een middelgrote agglomeratie, meer voor een hoofdstad; de omvang wordt vóór het downloaden genoemd.\n\nJe kunt het ook later doen: ondertussen blijven de stationslijst en de beschikbaarheid bruikbaar.</string>
     <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d van %2$d</string>
     <string name="welcome_continue">Doorgaan</string>
     <string name="welcome_skip">Overslaan</string>
@@ -168,7 +168,7 @@
 
     <string name="whats_new_title">Wat is er nieuw</string>
     <string name="whats_new_done">Doorgaan</string>
-    <string name="whats_new_nothing">Deze versie heeft geen releaseopmerkingen.</string>
+    <string name="whats_new_nothing">Deze versie meldt niets nieuws.</string>
     <string name="whats_new_open">Bekijk wat er nieuw is</string>
 
     <!-- A place handed over by another application. -->
@@ -198,7 +198,7 @@
     <string name="settings_walking_pace_slow">Langzaam</string>
     <string name="settings_walking_pace_normal">Normaal</string>
     <string name="settings_walking_pace_brisk">Stevig</string>
-    <string name="settings_walking_pace_description">Tempo waarmee de loopstukken van een reis worden berekend</string>
+    <string name="settings_walking_pace_description">Tempo waarmee de loopgedeelten van een reis worden berekend</string>
 
     <string name="settings_theme_title">Thema</string>
     <string name="settings_theme_system">Systeem</string>
@@ -213,7 +213,7 @@
     <string name="settings_units_us">ft · mi</string>
     <string name="settings_units_uk">yd · mi</string>
     <string name="settings_units_description">Eenheden voor afstanden</string>
-    <string name="settings_units_system_description">Volg de regio die op het toestel is ingesteld</string>
+    <string name="settings_units_system_description">Volg de regio die op het apparaat is ingesteld</string>
     <string name="settings_units_metric_description">Meters en kilometers</string>
     <string name="settings_units_us_description">Voet en mijlen</string>
     <string name="settings_units_uk_description">Yards en mijlen</string>
@@ -222,9 +222,9 @@
     <string name="about_open">Over</string>
     <string name="about_version">Versie %1$s</string>
     <string name="about_privacy_title">Privacy</string>
-    <string name="about_privacy_body">Geen account, geen advertenties, geen tracker, geen unieke identificatie. Niets van wat je zoekt of berekent verlaat deze telefoon: adressen, reizen en je positie blijven hier en worden niet bewaard. Het enige verzoek dat in het dagelijks gebruik naar buiten gaat, haalt de beschikbaarheid van de fietsen op. Datasets worden alleen gedownload als je erom vraagt.</string>
+    <string name="about_privacy_body">Geen account, geen advertenties, geen tracker, geen unieke identificatiecode. Niets van wat je zoekt of berekent verlaat deze telefoon: adressen, reizen en je positie blijven hier en worden niet bewaard. Het enige verzoek dat in het dagelijks gebruik naar buiten gaat, haalt de beschikbaarheid van de fietsen op. Datasets worden alleen gedownload als je erom vraagt.</string>
     <string name="about_attributions_title">Gegevensbronnen</string>
-    <string name="about_attribution_gbfs">Beschikbaarheid van de fietsen: de open data van het bediende netwerk, gepubliceerd in het GBFS-formaat. In Frankrijk staan ze geïndexeerd op transport.data.gouv.fr.</string>
+    <string name="about_attribution_gbfs">Beschikbaarheid van de fietsen: de open data van het netwerk van jouw stad, gepubliceerd in het GBFS-formaat. In Frankrijk staan ze geïndexeerd op transport.data.gouv.fr.</string>
     <string name="about_attribution_osm">Kaart, routering en oriëntatiepunten: © OpenStreetMap-bijdragers, ODbL-licentie.</string>
     <string name="about_attribution_ban">Adressen en huisnummers: Base Adresse Nationale, ODbL-licentie.</string>
     <string name="about_attribution_brouter">Routering: BRouter, MIT-licentie, op OpenStreetMap-gegevens.</string>
@@ -241,23 +241,23 @@
     <string name="sources_intro">De beschikbaarheid komt van het netwerk van elke stad, als open data. Hier lees je wie ze produceert, ook voor de steden die je niet hebt geïnstalleerd.</string>
     <string name="sources_open">Open de bron</string>
     <string name="about_licences_title">Licenties</string>
-    <string name="about_no_browser">Er is geen browser op dit toestel geïnstalleerd.</string>
+    <string name="about_no_browser">Er is geen browser op dit apparaat geïnstalleerd.</string>
 
     <!-- The journey: the whole door-to-door thing, walk then ride then walk.
          One word throughout, "reis", the way a Dutch travel planner names a
          door-to-door trip. The bike leg alone is a "rit". -->
     <string name="journey_title">Reis</string>
     <string name="journey_open">Plan een reis</string>
-    <string name="journey_origin_empty">Vanaf waar?</string>
+    <string name="journey_origin_empty">Waarvandaan?</string>
     <string name="journey_destination_empty">Waarheen?</string>
-    <string name="journey_choose_origin">Vanaf waar?</string>
+    <string name="journey_choose_origin">Waarvandaan?</string>
     <string name="journey_choose_destination">Waarheen?</string>
     <string name="journey_swap">Wissel vertrek en bestemming om</string>
-    <string name="journey_hint">De reis wordt op het toestel berekend: lopen naar een station, fietsen, en het laatste stuk lopen.</string>
+    <string name="journey_hint">De reis wordt op het apparaat berekend: lopen naar een station, fietsen, en het laatste stuk lopen.</string>
     <!-- The switch that leaves the network out of the journey, and the sentence
          that replaces the one above it when it is on (SPEC §7.3). -->
     <string name="journey_own_bike">Op mijn eigen fiets</string>
-    <string name="journey_hint_own_bike">De reis wordt op het toestel berekend: één rit van deur tot deur, zonder station onderweg.</string>
+    <string name="journey_hint_own_bike">De reis wordt op het apparaat berekend: één rit van deur tot deur, zonder station onderweg.</string>
 
     <!-- Which bike one wants to ride (SPEC §7.3). -->
     <string name="journey_bike_kind_any">Elke fiets</string>
@@ -297,7 +297,7 @@
     <string name="journey_detail_profile">De rit, omhoog en omlaag</string>
     <!-- Read out in place of the drawing. -->
     <string name="journey_detail_profile_description">De rit stijgt %1$s, tussen %2$s en %3$s boven zeeniveau.</string>
-    <string name="journey_detail_availability_note">Fietsen en plaatsen zoals ze waren toen de reis werd berekend.</string>
+    <string name="journey_detail_availability_note">Fietsen en vrije plaatsen zoals ze waren toen de reis werd berekend.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Openen in een navigatie-app</string>
@@ -311,15 +311,15 @@
          total time and says how far, and how much of it goes up. -->
     <string name="journey_own_bike_only">op je eigen fiets, over %1$s.</string>
     <string name="journey_own_bike_only_climb">op je eigen fiets, over %1$s en %2$s stijging.</string>
-    <string name="journey_walk_only">te voet, over %1$s – een fietsreis is hier niet mogelijk.</string>
-    <string name="journey_walk_only_climb">te voet, over %1$s en %2$s stijging – een fietsreis is hier niet mogelijk.</string>
+    <string name="journey_walk_only">te voet, over %1$s – met de fiets is hier geen route mogelijk.</string>
+    <string name="journey_walk_only_climb">te voet, over %1$s en %2$s stijging – met de fiets is hier geen route mogelijk.</string>
     <string name="journey_walk_is_quicker">te voet, over %1$s – sneller dan een fiets gaan halen.</string>
     <string name="journey_walk_is_quicker_climb">te voet, over %1$s en %2$s stijging – sneller dan een fiets gaan halen.</string>
     <string name="journey_none_title">Geen reis</string>
-    <string name="journey_no_bike_nearby">Geen station met een fiets in de buurt van het vertrek. Probeer het later opnieuw of vertrek ergens anders.</string>
+    <string name="journey_no_bike_nearby">Geen station met een fiets in de buurt van het vertrek. Probeer het later opnieuw of vertrek ergens anders vandaan.</string>
 
-    <string name="journey_no_mechanical_nearby">Geen station in de buurt heeft nu een mechanische fiets. Vraag om elke fiets of probeer het later opnieuw.</string>
-    <string name="journey_no_electric_nearby">Geen station in de buurt heeft nu een elektrische fiets. Vraag om elke fiets of probeer het later opnieuw.</string>
+    <string name="journey_no_mechanical_nearby">Geen station in de buurt heeft nu een mechanische fiets. Kies “Elke fiets”, of probeer het later opnieuw.</string>
+    <string name="journey_no_electric_nearby">Geen station in de buurt heeft nu een elektrische fiets. Kies “Elke fiets”, of probeer het later opnieuw.</string>
     <string name="journey_no_dock_nearby">Geen station met een vrije plaats in de buurt van de bestemming. Probeer het later opnieuw of kies een andere bestemming.</string>
     <!-- The line on the ground, not the planned journey: "route" and never
          "reis". -->
@@ -346,9 +346,9 @@
     <!-- The only two buttons of the application placed side by side on one
          row: both are kept as short as Dutch allows. -->
     <string name="station_as_origin">Vanaf hier</string>
-    <string name="station_as_destination">Naar hier</string>
+    <string name="station_as_destination">Hierheen</string>
     <string name="station_open_in_navigation">Openen in een navigatie-app</string>
-    <string name="station_no_navigation_app">Er is geen kaarten-app op dit toestel geïnstalleerd.</string>
+    <string name="station_no_navigation_app">Er is geen kaarten-app op dit apparaat geïnstalleerd.</string>
 
     <string name="address_search_title">Zoek een adres</string>
     <!-- The Dutch order, street before number, which is also the order
@@ -357,7 +357,7 @@
          a second number and give the house number up (SPEC §4.3). -->
     <string name="address_search_hint">Straat, huisnummer, plaats</string>
     <string name="address_search_clear">Zoekopdracht wissen</string>
-    <string name="address_search_privacy">Alles wordt op het toestel doorzocht. Er wordt niets verstuurd, ook niet terwijl je typt.</string>
+    <string name="address_search_privacy">Alles wordt op het apparaat doorzocht. Er wordt niets verstuurd, ook niet terwijl je typt.</string>
     <!-- Dutch writes "Damrak 12": the street first, the number after. The
          placeholders are swapped for that, which is what they are positional
          for. %1$s is the number, %2$s the street. -->
@@ -373,11 +373,11 @@
     <string name="address_search_prompt_message">Typ een straatnaam, met of zonder huisnummer. Ook treinstations, universiteiten en grote pleinen kun je zoeken.</string>
     <!-- Shown while a search runs and the screen has nothing else to show. -->
     <string name="address_searching_title">Zoeken…</string>
-    <string name="address_searching_message">De adressen die op dit toestel geïnstalleerd zijn, worden doorzocht.</string>
+    <string name="address_searching_message">De adressen die op dit apparaat geïnstalleerd zijn, worden doorzocht.</string>
     <string name="address_no_match_title">Geen adres gevonden</string>
     <string name="address_no_match_message">Niets komt overeen met “%1$s”. Probeer alleen de straatnaam of voeg de plaats toe.</string>
     <string name="address_needs_index_title">Het zoeken heeft de adresindex nodig</string>
-    <string name="address_needs_index_message">Installeer de index via het scherm Opslag. Die blijft op het toestel en gaat nooit het netwerk op.</string>
+    <string name="address_needs_index_message">Installeer de index via het scherm Opslag. Die blijft op het apparaat en gaat nooit het netwerk op.</string>
     <string name="address_unreadable_title">Adresindex onleesbaar</string>
     <string name="map_picked_place_description">%1$s. Tik om dit punt te wissen.</string>
 
@@ -414,7 +414,7 @@
         <item quantity="other">%1$d stations · omvang wordt vóór het downloaden genoemd</item>
     </plurals>
     <string name="city_size_unknown">Omvang wordt vóór het downloaden genoemd</string>
-    <string name="city_installed">%1$s geïnstalleerd op het toestel</string>
+    <string name="city_installed">%1$s geïnstalleerd op het apparaat</string>
     <string name="city_label">%1$s – %2$s</string>
     <string name="city_delete">Verwijderen</string>
     <string name="city_delete_description">De gegevens van %1$s verwijderen</string>
@@ -430,7 +430,7 @@
     <!-- Shown when the position says one is in another served conurbation than the one installed. -->
     <string name="city_here_title">Je bent in een andere stad</string>
     <string name="city_here_body">%1$s bedient het gebied waar je bent. Installeer de gegevens om de stations te zien en hier reizen te berekenen.</string>
-    <string name="city_here_installed_body">%1$s bedient het gebied waar je bent, en de gegevens staan al op het toestel.</string>
+    <string name="city_here_installed_body">%1$s bedient het gebied waar je bent, en de gegevens staan al op het apparaat.</string>
     <string name="city_here_install">Installeer de gegevens</string>
     <string name="city_here_use">Gebruiken</string>
     <string name="city_proposal_body">Je lijkt in het gebied te zijn dat %1$s dekt. Zullen we die nemen?</string>
@@ -446,14 +446,14 @@
     <string name="storage_title">Opslag</string>
     <string name="storage_open">Offlinegegevens beheren</string>
     <string name="storage_intro">De kaart, de reisplanner en het zoeken naar adressen werken zonder netwerk. Ze hebben drie datasets nodig, die je één keer installeert.</string>
-    <string name="storage_total">%1$s in gebruik op dit toestel</string>
+    <string name="storage_total">%1$s gebruikt op dit apparaat</string>
     <string name="storage_nothing_installed">Geen gegevens geïnstalleerd</string>
     <string name="storage_no_city">Geen stad gekozen</string>
 
     <string name="dataset_tiles">Kaartgegevens</string>
     <string name="dataset_tiles_purpose">Tekent de kaart zonder netwerk</string>
     <string name="dataset_routing">Routegegevens</string>
-    <string name="dataset_routing_purpose">Berekent reizen op het toestel</string>
+    <string name="dataset_routing_purpose">Berekent reizen op het apparaat</string>
     <string name="dataset_addresses">Adresindex</string>
     <string name="dataset_addresses_purpose">Zoekt straten zonder iets te versturen</string>
 
@@ -501,7 +501,7 @@
     <string name="error_malformed">De ontvangen gegevens zijn onleesbaar. Het ligt aan de feed van het netwerk; probeer het later opnieuw.</string>
     <string name="error_feed_unavailable">Het netwerk publiceert de feed “%1$s” niet.</string>
     <string name="error_unsupported_version">Dit netwerk publiceert zijn gegevens in versie %1$s, die deze versie van de app niet kan lezen. Werk de app bij.</string>
-    <string name="error_local_storage">Kan de gegevens die op het toestel zijn opgeslagen niet lezen.</string>
+    <string name="error_local_storage">Kan de gegevens die op het apparaat zijn opgeslagen niet lezen.</string>
     <string name="error_no_city_chosen">Er is geen stad gekozen. Kies er een.</string>
 
     <!-- Unmetered-only downloads -->
@@ -537,7 +537,7 @@
     <string name="settings_map_filters_hide_out_of_service">Stations buiten dienst verbergen</string>
     <!-- One wording for both modes: this screen knows nothing of the map's
          Fietsen / Vrije plaatsen button, so it may name neither. -->
-    <string name="settings_map_filters_hide_empty">Stations verbergen die niets bieden</string>
+    <string name="settings_map_filters_hide_empty">Stations die niets bieden verbergen</string>
     <!-- Under the switch, saying what "niets" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">“Niets” volgt wat de kaart telt: geen fiets zolang ze fietsen telt, geen vrije plaats zolang ze vrije plaatsen telt.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
@@ -550,7 +550,7 @@
     <string name="settings_own_bike_kind_mechanical">Mechanisch</string>
     <string name="settings_own_bike_kind_electric">Elektrisch</string>
     <!-- Under the two buttons. -->
-    <string name="settings_own_bike_kind_hint">Opgegeven als elektrisch krijgt je eigen fiets een eigen route en eigen tijden.</string>
+    <string name="settings_own_bike_kind_hint">Als je fiets als elektrisch is opgegeven, krijgt hij een eigen route en eigen tijden.</string>
 
     <!-- The summary of a ride on one's own bike, where that bike was said to be
          a pedal-assist one. -->

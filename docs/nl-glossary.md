@@ -42,9 +42,9 @@ rather than the literal translation. The three places measured on screen:
 | String | Dutch | Characters |
 |---|---|---|
 | `download_unmetered_only` | Alleen downloaden zonder datalimiet | 35 |
-| `settings_map_filters_hide_empty` | Stations verbergen die niets bieden | 35 |
+| `settings_map_filters_hide_empty` | Stations die niets bieden verbergen | 35 |
 | `settings_map_filters_hide_out_of_service` | Stations buiten dienst verbergen | 32 |
-| `station_as_origin` / `station_as_destination` | Vanaf hier / Naar hier | 10 / 9 |
+| `station_as_origin` / `station_as_destination` | Vanaf hier / Hierheen | 10 / 8 |
 
 The last pair are the only two buttons of the application placed side by side
 on one row, which is why they are the shortest phrasing that still reads as a
@@ -73,7 +73,7 @@ pair.
 | Settings | Instellingen | Android's own (`settings:settings_label`), including in the system path quoted in `about_links_body`: "Instellingen → Apps → … → Standaard openen", which is Android's own Dutch for that screen (`settings:launch_by_default`). |
 | Theme | Thema | Android's own: *Donker thema* (`settings:dark_ui_mode`), *Apparaatthema* (`settings:device_theme`). Light / Dark are **Licht** / **Donker**. |
 | Display (section) | Scherm | Android's own name for the section that holds the theme and the text size (`settings:display_category_title`). |
-| Storage | Opslag | Android's own (`settings:storage_category`). Everywhere another string points at that screen it says **via het scherm Opslag** rather than translating "storage screen" literally. |
+| Storage | Opslag | Android's own (`settings:storage_category`), and *gebruikt* for the space taken, after "Gebruikte opslag" (`settings:storage_used`) and "Gebruikte ruimte" (`settings:app_info_storage_title`) — never *in gebruik*, which this file has already spent on the city in service. Everywhere another string points at that screen it says **via het scherm Opslag** rather than translating "storage screen" literally. |
 | Delete | Verwijderen | Android's own (`android:delete`, `settings:delete`), for what destroys: a city's data, a dataset. |
 | Remove (from a list) | uit … halen | **This is a departure, and it is deliberate.** Android's Dutch collapses the English pair into one verb: *Remove* is also **Verwijderen** (`settings:remove`, `android:kg_reordering_delete_drop_target_text`). Taking a station out of the favourites is not destroying it, and the file keeps the two acts apart the way English does, with **"Uit favorieten halen"** against **"Verwijderen"**. Do not "correct" it back. |
 | Clear (a search) | wissen | Android says *Zoekopdracht wissen* for the icon inside a field (`android:searchview_description_clear`), and the same wording serves the button in the empty state, so the two read as one thing. |
@@ -93,12 +93,12 @@ pair.
 | Show | Tonen | Android's own (`settings:condition_expand_show`). |
 | Hide | verbergen | Android's own (`settings:condition_expand_hide`). |
 | Language | Taal | Android's own (`settings:app_locale_preference_title`). |
-| Wi-Fi | wifi | What Android's Dutch writes throughout (`settings:wifi`), one word and lower-cased inside a sentence. |
+| Wi-Fi | wifi | Android's Dutch writes it as one word, **Wifi** (`settings:wifi`); the lower case inside a sentence is this file's own choice, after the Taalunie, which spells it *wifi*. |
 | unmetered / metered | zonder datalimiet / per megabyte afgerekend | Android labels a connection **Met datalimiet** (`settings:wifi_metered_label`); the switch takes its opposite as it stands, and the sentences explaining it say what is billed, since that is the point the English makes. Android's own *Unmetered* label is **Gratis** (`settings:wifi_unmetered_label`), which is right for a Wi-Fi list and wrong here: nothing about the download is free. |
-| Tap | Tik (op) | Android's own verb (`settings:touch_sounds_title`, `android:usb_notification_message`), in the second person like the rest. |
+| Tap | Tik (op) | Android's own verb in the imperative — "Tik voor meer opties" (`android:usb_notification_message`) — in the second person like the rest. |
 | Press and hold | Houd … ingedrukt | Android's own wording for a long press (`settings:accessibility_shortcut_type_hardware`). |
 | app | app | Android's own (`settings:apps_dashboard_title`); *toepassing* is not what a phone says. |
-| device | toestel | Kept apart from *telefoon*, which the privacy sentences use because that is what the reader is holding. |
+| device | apparaat | Android's own word for a device — "Kan niet afspelen op dit apparaat" (`settings:media_output_status_unknown_error`), "De naam van dit apparaat wijzigen" (`settings:bluetooth_rename_device`), and 96 lines of the extract besides. *Toestel* was written here first and was wrong: in this phone's Dutch it only ever appears in *hoortoestellen*, hearing aids. Kept apart from **telefoon**, which the privacy sentences use because that is the word the English uses there and it is what the reader is holding. |
 | map data / tiles | Kaartgegevens | Names the dataset on the storage screen, and every other string that points at it uses the same word. *Tegels* appears once, in `map_needs_tiles_title`, where the English says tiles. |
 | routing data | Routegegevens | Pairs with *route*: the data a route is computed from. |
 | address index | Adresindex | — |
@@ -122,6 +122,26 @@ postcode written as a single group of five digits, so "1012" would be read as a
 second number in the query — and a second number makes the house number be
 given up altogether (SPEC §4.3). Inviting the postcode would therefore break
 the reading of every query that carries one.
+
+## Two calls that could have gone the other way
+
+**`map_locate_me` = "Mijn locatie", a noun where other languages put a verb.**
+It is the spoken label of the map's locate button, and "Mijn locatie" is what
+Dutch readers meet on the same button in every mapping application they use. It
+sits one screen away from `journey_source_my_position` = "Mijn positie", and the
+two are meant to differ: *locatie* is the system feature the button asks for,
+*positie* is the point it puts on the map. Kept as a noun for that reason.
+
+**`address_number_with_suffix` = `%1$d %2$s`, with the space kept.** Dutch
+writes a suffixed house number closed up — "Damrak 12A" — and the space is
+wrong for the Netherlands and Belgium. It is kept all the same because the
+format follows the interface's language and not the city's country: a Dutch
+reader looking up a French address would otherwise get "12bis" glued together,
+where the Base Adresse Nationale writes "12 bis". Dutch and Belgian addresses
+come from OpenStreetMap, which carries "12A" inside the house number itself and
+leaves this suffix field empty, so the case that suffers is rare and the case
+that would break is not. Close the space up only if the suffix is ever split
+per country.
 
 ## Words that are not translated
 

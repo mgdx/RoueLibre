@@ -1,13 +1,13 @@
 Roue Libre toont de stations van deelfietsnetwerken op een kaart en berekent een reis van deur tot deur waarin lopen en fietsen elkaar afwisselen.
 
-Alles draait op het toestel: de kaart, het zoeken naar adressen en de routeberekening hebben helemaal geen verbinding nodig. Alleen de beschikbaarheid van de fietsen in real time gaat het netwerk op.
+Alles draait op het apparaat: de kaart, het zoeken naar adressen en de routeberekening hebben helemaal geen verbinding nodig. Alleen de beschikbaarheid van de fietsen in real time gaat het netwerk op.
 
 <b>Wat de app onderscheidt</b>
 
 • Geen enkele Google-dienst: geen Play Services, geen Firebase, geen Maps SDK. De app draait op elk Android zonder Google-diensten.
-• Geen telemetrie, geen tracker, geen unieke identificatie, geen account.
+• Geen telemetrie, geen tracker, geen unieke identificatiecode, geen account.
 • Geen reisgegevens bewaard: geen geschiedenis, geen posities, geen bestemmingen. Wat je zoekt, verlaat de telefoon niet.
-• Geen stad wordt je opgedrongen: meerdere agglomeraties staan naast elkaar op het toestel, en de gegevens van één stad kun je verwijderen zonder de andere aan te raken.
+• Geen stad wordt je opgedrongen: meerdere agglomeraties staan naast elkaar op het apparaat, en de gegevens van één stad kun je verwijderen zonder de andere aan te raken.
 • De reis kiest het beste <i>paar</i> stations – vertrek en aankomst – in plaats van genoegen te nemen met het dichtstbijzijnde, en weegt af hoe groot de kans is dat een schaars bevoorraad station leegloopt terwijl je ernaartoe loopt.
 
 <b>Goed om te weten vóór het installeren</b>
@@ -16,7 +16,7 @@ De kaart, de routegegevens en de adresindex zitten niet in de app: je downloadt 
 
 <b>De bediende steden</b>
 
-Bijna driehonderd netwerken in ongeveer dertig landen: elk netwerk dat zijn stations als open data publiceert en op wiens stallingsplaatsen een reis kan bouwen – van Vélib’ in Parijs tot Citi Bike in New York, via Praag, Barcelona, Kopenhagen, Tokio en Buenos Aires. De app stelt je die van jou voor op basis van je positie, als je daarom vraagt, en je kunt er meerdere geïnstalleerd laten en ertussen wisselen.
+Bijna driehonderd netwerken in ongeveer dertig landen: elk netwerk dat zijn stations als open data publiceert en waarvan de plaatsen een reis kunnen dragen – van Vélib’ in Parijs tot Citi Bike in New York, via Praag, Barcelona, Kopenhagen, Tokio en Buenos Aires. De app stelt je die van jou voor op basis van je positie, als je daarom vraagt, en je kunt er meerdere geïnstalleerd laten en ertussen wisselen.
 
 De offlinedatasets zijn tot nu toe voor een handvol daarvan gemaakt. Voor de rest zegt de app het gewoon in plaats van te doen alsof: de lijst toont wat er bestaat, en de bestanden kun je met de scripts van de repository maken.
 
