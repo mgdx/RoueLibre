@@ -1,0 +1,17 @@
+Dane są opublikowane, a mapa nie jest już francuska.
+
+• 306 sieci w 35 krajach — każda, która publikuje swoje stacje jako otwarte dane: Praga, Barcelona, Ryga, Prisztina, Buenos Aires. Miasto wybierasz przy pierwszym uruchomieniu i żadne nie jest domyślne.
+• Zestawy danych wreszcie da się pobrać. Gotowych jest 101 miast — siedemdziesiąt francuskich i trzydzieści jeden pozostałych — i nie trzeba ich już wytwarzać skryptami z repozytorium.
+• Wyszukiwanie adresów działa poza Francją: tam, gdzie nie ma krajowej bazy adresowej, ulice i numery domów odczytujemy z samego OpenStreetMap, w języku danego kraju.
+• Mapa kończy się na granicy tego, co zostało pobrane, zamiast pokazywać za nią pustkę.
+• Oba końce trasy zostają na ekranie wyniku i można je tam poprawić.
+• Odległości pokazujemy w jednostkach Twojego regionu: mile i stopy w Stanach Zjednoczonych, mile i jardy w Wielkiej Brytanii, kilometry wszędzie indziej. Jeśli wolisz inaczej, ustawienie czeka w Ustawieniach.
+• Mówisz, jak szybko chodzisz — wolno, normalnie albo żwawo — i trasa jest do tego liczona. Wolne tempo potrafi zmienić proponowaną stację początkową: bliższą, za cenę nieco dłuższego pedałowania. „Normalne” to tempo, w którym aplikacja liczyła dotąd, i pozostaje domyślne.
+• Mapa może pominąć stacje, z których nic nie masz: te, które nie działają, i te, które nie mają nic do zaoferowania. Oba przełączniki są w Ustawieniach, w sekcji wyświetlania, a Twój wybór zostaje zapamiętany — sama mapa nie ma żadnego przycisku filtrowania. To, co liczy się jako „nic”, zależy od przycisku Rowery / Wolne miejsca na mapie. Stacje, o których sieć nic nie mówi, zawsze zostają na mapie.
+• Pobieranie czeka na połączenie, które nie jest rozliczane za megabajty — zwykle Wi-Fi. Dane miasta mogą ważyć nawet 1,3 GB i nic z tego nie schodzi z Twojego pakietu, dopóki na to nie pozwolisz: wstrzymane pobieranie podaje swój rozmiar i proponuje ruszyć mimo to, ten jeden raz. Jeśli połączenie zacznie naliczać opłaty w połowie, pobieranie zatrzyma się, a później ruszy dalej z miejsca, w którym stanęło, zamiast zaczynać od nowa. Ustawienie jest w Ustawieniach, w sekcji danych offline.
+• Wybierasz ekran, na którym otwiera się aplikacja: mapę, jak dotąd, albo listę stacji. Otwarcie na liście nie wymaga żadnego dostępu do lokalizacji.
+• Liczby rowerów i wolnych miejsc można pokazać większe, w Ustawieniach. Aplikacja i tak podąża za rozmiarem tekstu ustawionym w telefonie; to powiększa tę jedną liczbę, nie powiększając całej reszty. Znaczniki na mapie zachowują swój rozmiar, więc stacje pozostają czytelne obok siebie.
+• Możesz podać, czy Twój własny rower jest zwykły, czy elektryczny. Zmienia to tylko sposób, w jaki trasa na własnym rowerze jest rysowana i opisywana: nie zależy od tego ani przebieg drogi, ani czas.
+• Język aplikacji wybierasz w Ustawieniach, niezależnie od języka telefonu. Proponowane są tylko języki faktycznie przetłumaczone — jak dotąd angielski i francuski. Jednostki nie idą za nim: wybierz w Bostonie francuski, a odległości zostaną w milach.
+
+Rozmiar danych każdego miasta jest podawany przed pobraniem: 3 MB dla Auray, 143 MB dla Paryża.
