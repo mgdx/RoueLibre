@@ -207,30 +207,44 @@ Before opening the merge request, run their own checks — `fdroid lint` and
 directory a git repository, since the build reads `SOURCE_DATE_EPOCH` from the
 metadata file's own last commit.
 
-### What blocks the build today
+### The Gradle version is not a problem, the JDK may be
 
-`fdroid build` gets as far as cloning the tag, fetching the submodule at its
-pinned commit and cleaning the build files, then stops:
+Running `fdroid build` from a released fdroidserver stops on:
 
 ```
 No hash for gradle version 9.5.0! Exiting...
 ```
 
-F-Droid does not run the Gradle wrapper that a repository ships — a downloaded
-wrapper is a binary nobody reviewed. It runs `gradlew-fdroid`, which carries a
-list of Gradle versions and their checksums and refuses anything absent from
-it. In fdroidserver **2.4.5**, released June 2026 and the current version, that
-list stops at **Gradle 8.14.2**, and the table mapping plugin versions to
-Gradle versions stops at **AGP 8.9**. This project builds with Gradle 9.5.0 and
-AGP 9.3.1, which `compileSdk 37` requires.
+**That is an artefact of the local tool, not of F-Droid.** F-Droid never runs
+the Gradle wrapper a repository ships — a downloaded wrapper is a binary nobody
+reviewed. It runs `gradlew-fdroid`, which used to carry its list of Gradle
+versions inline; the released fdroidserver 2.4.5 still bundles that old copy,
+and it stops at Gradle 8.14.2. The build server does not use it: it clones
+[gradlew-fdroid](https://gitlab.com/fdroid/gradlew-fdroid) from its own
+repository at image provisioning time, and that version reads its checksums
+from the [gradle transparency
+log](https://gitlab.com/fdroid/gradle-transparency-log). The log records
+`gradle-9.5.0-bin.zip` under the very SHA-256 our wrapper pins, and the tool's
+plugin table maps AGP 9.3 to Gradle 9.5.0 — this project's exact pair. So to
+test locally, clone `gradlew-fdroid` yourself rather than trusting the copy
+that came with the package.
 
-Nothing here is a defect of this project, and downgrading would mean giving up
-the platform version the application targets. The way through is to add the
-Gradle 9 checksums to `gradlew-fdroid` upstream — a mechanical merge request
-against fdroidserver, which is how that list has always grown. Until it lands,
-F-Droid cannot build Roue Libre, and the releases page and IzzyOnDroid — which
-serves the APKs published here, signed by our own key, without rebuilding them
-— are the ways to install it.
+What does have to be checked is the **JDK**. The build image is Debian trixie
+with `default-jdk-headless`, which is **JDK 21**, and it sets
+`org.gradle.java.installations.auto-download=false` — a toolchain that is not
+installed is not fetched. This repository asks for two that are not there:
+`gradle/gradle-daemon-jvm.properties` pins the Gradle daemon to **JDK 25**, and
+both modules declare `jvmToolchain(17)`. Reproduced under those conditions, the
+build fails twice over:
+
+```
+Cannot find a Java installation … matching: {languageVersion=25, …}
+Cannot find a Java installation … matching: {languageVersion=17, …}
+```
+
+Aligning both on the JDK their image carries is what unblocks it — the
+toolchain only says which compiler runs, and `sourceCompatibility` is what
+decides the bytecode the application ships.
 
 ### Being published under our own signature
 
