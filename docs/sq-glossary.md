@@ -41,6 +41,13 @@ the one format-only string that carries one. The only em dash left in the file
 is `counterpart_none`, which is a glyph standing in for an absent figure rather
 than punctuation.
 
+The preposition is **te** before a consonant and **tek** before a vowel, and
+the phone's own Albanian holds to it without exception: in 5 900 system strings
+*tek* never once stands before a consonant. `station_beyond_area` says *deri
+tek ai*; everywhere else the word after it begins with a consonant, and where
+that word is a placeholder the file puts one of its own nouns in front (see
+below).
+
 The apostrophe is **’** (U+2019), never the straight quote — in Albanian's own
 elisions (*t’i shkarkosh*, *ta hapësh*) as in a network's name (*Vélib’*,
 *V’lille*, *Vélo’v*). That is why nothing in the file is escaped.
@@ -82,6 +89,8 @@ one: the figure is already painted beside them.
 | map | **harta** | The map the reader looks at: `settings_opening_map`, `stations_open_map`. The tiles dataset is *harta bazë*, a different label on purpose; see below. |
 | conurbation | **zonë urbane** | `city_intro`, `map_needs_city_message`, `welcome_data_body`. *Qytet* stays for a city and *zonë urbane* for the wider thing a network covers, exactly as the English keeps "city" and "conurbation" apart. |
 | network | **rrjet** | The bike-share network. Which is why the routing dataset is *Grafi i itinerarëve* and never *rrjeti i rrugëve*: that would put the word *rrjet* on two unrelated objects on the same screen. |
+| received (a shared place) | **i pranuar** | `incoming_place_default_label` = *Vend i pranuar*, the label standing in for a street name at one end of a journey. Never **i marrë**, which an Albanian reader takes first as "mad" (*njeri i marrë*) and then as "taken, occupied" (*vendi është i marrë*) — the wrong two readings for a field that means "the place another application sent". |
+| any bike | **Çfarëdo** | `journey_bike_kind_any`, alone in the row it shares with *Mekanike* and *Elektrike*. *Çfarëdo biçiklete* is what the phrase wants in full, and it is what `journey_bike_kind_any_description` says to a screen reader; on the button it made a three-way row wrap onto two lines at the ordinary text size, where every sister language fits. The bare *Çfarëdo* reads on its own and the description carries the rest. |
 | Out of service | **Jashtë shërbimit** | The wording the phone's own Albanian uses for a service that is down. |
 | just now | **pikërisht tani** | `settings:time_unit_just_now` gives *Pikërisht tani*; lower-cased here because it is read inside *Përditësuar %1$s*. |
 | In use | **Në përdorim** | `android:media_route_status_in_use`, `settings:wifi_display_status_in_use`. |
@@ -137,7 +146,7 @@ are written around that rather than against it:
 
 | String | What it does | Why |
 |---|---|---|
-| `journey_step_to_station`, `journey_step_ride` | *Në këmbë deri te %1$s* | *Te* takes the nominative in Albanian, definite or not, so a station name arrives fit to stand there whatever its shape. |
+| `journey_step_to_station`, `journey_step_ride` | *Në këmbë deri te stacioni %1$s* | Two things are asked of the placeholder here and only one is the case. *Te* does take the nominative, so a station name arrives fit to stand there — but the preposition is written **tek** before a vowel, and station names starting with one are ordinary (*Ura e Tabakëve*, *Agim Ramadani*, *Universiteti*). No string can test the initial letter of what it is handed, so *stacioni* — a noun this file owns, and true at both call sites, where `%1$s` is always a station — carries the preposition and the name follows in apposition. |
 | `station_address_nearby` | *Afër: %1$s* | *Afër* governs the ablative, and `%1$s` is a raw `address.streetName` in the nominative (`StationDetailSheet.kt:219`, `JourneyDetailFragment.kt:592`): *Afër Rruga B* would be wrong. The colon makes it a label, which governs nothing. |
 | `dataset_delete_description` | *Fshi: %1$s* | Spoken on a dataset row's delete button (`DatasetAdapter.kt:79`). *Fshi* takes the accusative definite — *Fshi hartën bazë* — while the placeholder always arrives in the nominative, so the colon carries it instead. This is the line of the file where the article trap is easiest to miss; the Croatian file solved it the same way. |
 | `city_installed`, `storage_total` | *Instaluar në pajisje: %1$s* | The placeholder is a formatted size — "45 MB", "1,2 GB" — and no Albanian participle agrees with a figure this file never sees. A colon turns the line into a label, which agrees with nothing. |
@@ -189,9 +198,12 @@ is exactly what the English "Data for %1$s" does.
 
 ## The address prompt, and the layout that is not ours
 
-`address_search_hint` is **„Rruga, numri, qyteti“** — street, then number, then
+`address_search_hint` is **„Rrugë, numër, qytet“** — street, then number, then
 town, which is the order Kosovo and Albania write an address in (*Rruga Agim
-Ramadani 15, Prishtinë*). `AddressQuery.parseQuery` has read a house number
+Ramadani 15, Prishtinë*). The three are **indefinite**, because the line names
+categories rather than pointing at one street: the definite *Rruga, numri,
+qyteti* reads as *the* street of something already mentioned. Romanian, the
+other language of the wave whose article is a suffix, made the same choice. `AddressQuery.parseQuery` has read a house number
 standing between the street and the town since the pilot, precisely so that
 each language may write this line in its own order rather than in English's,
 and no stop word stands beside the number in that form.
@@ -208,13 +220,15 @@ in Japanese, and *12 rue Nationale* is how a Lyon one reads for an Albanian
 reader. The layouts live in `core/address/AddressLayout.kt`, keyed on the
 language of the **address base**.
 
-**There is no `"sq"` entry in that table yet.** An Albanian base therefore falls
-on `DEFAULT_LAYOUT` and would print *12 Rruga B*, which is neither Kosovo's
-order nor anybody's. Kosovo and Albania close with the number — *Rruga Agim
-Ramadani 15*, *Bulevardi Nënë Tereza 5* — and run a letter suffix hard against
-it, exactly as the Croatian and Polish entries do; there is no second number of
-the Czech kind. Adding the line is one entry and it belongs to whoever owns that
-file, not to this translation.
+**That table now carries an `"sq"` entry** (`AddressLayout.kt`), and it is not
+the one this file first guessed. Kosovo and Albania close with the number —
+*Rruga Agim Ramadani 15*, *Nënë Tereza 12/1* — and what follows the number is
+**a slashed second number**, not a letter: counted over the Prishtina index,
+1 109 of the 1 411 suffixes open with "/", "/1" 794 times and "/2" 152,
+against 67 letters in all. So the entry is `numberComesFirst = false`,
+`streetSeparator = " "`, `suffixSeparator = "/"`, as Czechia's and Slovakia's
+are. **Do not close that slash up**: "12/1" run together reads "121", a
+number on another block.
 
 ## The store texts
 
