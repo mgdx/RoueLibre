@@ -223,20 +223,32 @@ anything it cannot account for, and each is answered rather than silenced:
 
 ### It builds, and it reproduces
 
-Run against the `v1.0.0` tag with F-Droid's own tool, both checks pass:
+Run against the `v1.0.0` tag with F-Droid's own tool, every check passes:
 
 ```
-$ fdroid lint io.github.mgdx.rouelibre     # no output: nothing to say
-$ fdroid build io.github.mgdx.rouelibre:44
+$ fdroid lint io.github.mgdx.rouelibre               # no output: nothing to say
+$ fdroid build io.github.mgdx.rouelibre:41           # … and 42, 43, 44
 1 compilation réussie
 ```
 
-And the APK it produces is not merely equivalent to the published one, it is
-**the same file**: compared entry by entry with the release's arm64 APK, name
-and CRC, **nothing differs** — `classes.dex` included, identical byte for byte.
-Only the signature separates them, theirs being unsigned. The same holds for
-armeabi-v7a. Whatever else has to be discussed with the reviewers, the second
-phase below is not a hope: it has been measured.
+All four entries build. And what comes out is not merely equivalent to what was
+published, it is **the same file**: each of the four compared entry by entry
+with its release APK, name and CRC, and **nothing differs** — `classes.dex`
+included, identical byte for byte. Only the signature separates them, theirs
+being unsigned. The second phase below is therefore not a hope; it has been
+measured, on all four architectures.
+
+Their image preinstalls Android platforms only up to `android-33`, while this
+project compiles against 37 — which is not the obstacle it looks like. The
+image accepts the SDK licences and leaves `platforms/` and `build-tools/`
+writable precisely so that Gradle can fetch what a project needs. Built here
+against an SDK with API 37 deliberately removed, the build fetched
+`platforms/android-37.0` and `build-tools/36.0.0` by itself and succeeded.
+
+What remains untested is the container. `fdroid build --server` runs the build
+inside their Debian image, and that needs Docker or Podman. Everything above ran
+on a workstation, with their tool and under their constraints — a fresh clone,
+one JDK 21, no toolchain provisioning — but not inside their machine.
 
 ### The Gradle ceiling is a local artefact, not theirs
 
