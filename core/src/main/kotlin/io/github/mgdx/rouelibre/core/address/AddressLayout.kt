@@ -220,6 +220,85 @@ private val LAYOUTS: Map<String, AddressLayout> = mapOf(
     // `split_house_number` leaves of a range, as in Croatia, and not a second
     // number of the Czech kind, so they do not argue for a slash.
     "el" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
+
+    // "Kossuth Lajos utca 12/A, Budapest". Hungarian closes with the number
+    // and joins what follows it with a **slash**, as the plate does. Counted
+    // over Hungary: 755 003 house numbers, 88 095 carrying something after the
+    // digits, and 67 322 of those — 76 % — open with "/", against 7 231
+    // letters closed up and 12 416 dashes. Budapest alone says the same,
+    // 13 435 of 20 704. Unlike Czechia below, what the Hungarian slash carries
+    // is usually a letter, "/A" 20 299 and "/a" 9 555 against "/1" 3 534: the
+    // separator is the same, the thing separated is not. The dashes are
+    // ranges, "14-20", which `split_house_number` reduces to a bare number
+    // whatever this line says; the slash is the only form still recoverable.
+    "hu" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = "/"),
+
+    // "Maršala Tita 12a, Zenica". Bosnian closes with the number and closes
+    // the letter up, as Croatian does. Counted over Bosnia-Herzegovina:
+    // 135 445 house numbers, 10 995 carrying something, and the head of that
+    // list is letters and only letters — a 5 645, b 1 842, v 461, A 416 —
+    // against 153 slashes, 0.7 %. Zenica's own box holds 185 numbers, too few
+    // to rule on, so the country rules for it. The 1 107 values reading "bb",
+    // *bez broja*, are not suffixes but the absence of a number, and
+    // `split_house_number` drops them for want of leading digits.
+    "bs" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
+
+    // "Gedimino prospektas 9A, Vilnius". Lithuanian closes with the number and
+    // closes the letter up. This is the cleanest country in the table: over
+    // 1 065 322 house numbers, 943 511 are bare and 121 809 are a number with
+    // a single uppercase letter welded to it — A 68 502, B 21 829, C 10 871 —
+    // and that is the whole distribution. Not one slash, not one dash, not one
+    // space, and one stray value in a million. Nothing here is open to choice.
+    "lt" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
+
+    // "Brīvības iela 12A, Rīga". Latvian closes with the number and closes the
+    // letter up. Counted over Latvia: 360 367 house numbers, 79 988 carrying
+    // something, 61 347 of them a letter welded on — A 37 478, B 10 946,
+    // C 4 219. The competing form is Latvia's own: 16 862 values, 21 %, spell
+    // a *korpuss* after a space, "3 k-1", a second building on the same plot.
+    // `split_house_number` strips that space, so those come out "12k-1" under
+    // this line, tighter than the plate but still the right building; spacing
+    // instead would spoil the 78 % and print "12 A", which Latvia does not
+    // write. The same arbitration as Germany's, on a narrower margin.
+    "lv" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
+
+    // "Nënë Tereza 12/1, Prishtinë". Albanian closes with the number — the
+    // street type, *rruga*, is usually dropped in writing — and joins what
+    // follows with a slash. Kosovo's field is the emptiest counted for this
+    // table: 277 788 house numbers, 99.42 % of them bare, only 1 411 trailing
+    // anything at all. But where it trails, it is a slashed **number**: 1 109
+    // of the 1 411 open with "/", "/1" 794 and "/2" 152 against 67 letters,
+    // and the Prishtina index bears it out — its commonest suffixes are 1, 2
+    // and 3, not a, b and c. So the Czech hazard applies here too: "12/1"
+    // closed up reads "121", a number on another block. Read on 0.5 % of the
+    // base, and said so — but every one of those 0.5 % breaks without it.
+    "sq" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = "/"),
+
+    // "Mevlana Caddesi 12/A, Konya". Turkish closes with the number and
+    // slashes what follows: the plate carries the *kapı no* and then, after
+    // the slash, the *daire no* or the block letter. Counted over Turkey:
+    // 235 200 house numbers, 60 184 carrying something, 35 575 of them — 59 %
+    // — opening with "/", against 11 042 letters closed up and 8 021 spaced.
+    // "/A" 9 138 and "/1" 7 982 lead, so the slash carries both kinds and
+    // neither survives without it: "12/1" closed up reads "121". Konya's own
+    // box holds 947 numbers, too thin to rule on alone, and agrees anyway —
+    // 169 of its 276 suffixes are slashed. The *No:* a Turkish plate prints
+    // before the number is a word, not punctuation, and stays out of
+    // [streetSeparator].
+    "tr" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = "/"),
+
+    // Arabic has **no entry on purpose**, and this note is the entry. Careem
+    // BIKE's Dubai box holds 22 616 house numbers, of which 15.1 % are not
+    // numbers at all — "Tower A", "C-18", "2nd Floor", a Makani code — and
+    // only 3.3 % trail anything: 124 glued letters against 100 slashed
+    // numbers, with 334 of the 746 trailing values being a space and a
+    // district name. Two samples of the same nothing. The order is no clearer:
+    // Egypt writes "١٢ شارع طلعت حرب" and the Gulf writes "Villa 12, 25a
+    // Street", and 46.8 % of this very index's street names are in Arabic
+    // script against 53.2 % in Latin, so one order is wrong for one half
+    // either way. [DEFAULT_LAYOUT] therefore serves it, and the absence of a
+    // key says honestly that nobody has counted a real Arabic address base
+    // yet — which an entry repeating the default would hide.
 )
 
 /**
