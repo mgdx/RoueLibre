@@ -274,6 +274,23 @@ it), the `gradlew-fdroid` script from its own repository symlinked in `PATH` as
 `auto-detect=false` on a workstation, where a stray JRE under `/usr/lib/jvm`
 will otherwise be offered to Gradle as a compiler and fail the build.
 
+### What made it unreproducible
+
+Their first run rebuilt the application and found exactly one file different:
+`lib/*/libdatastore_shared_counter.so`. AGP had stripped it — 8,432 bytes down
+to 5,916 — and stripping is done by whichever NDK is installed, so two machines
+carrying different NDKs write two different files and the rebuild can never
+match. `packaging.jniLibs.keepDebugSymbols` now spares that one library: it
+travels from the AAR to the APK untouched, identical everywhere, for 2.5 kB per
+architecture. MapLibre's needs no such care — it arrives already stripped, so
+stripping it again changes nothing, which is why it was never the file to
+differ.
+
+**`META-INF/version-control-info.textproto` is the other thing to know about.**
+AGP writes the git revision the build came from into the APK, so an APK built
+from any other commit can never match — the published binaries have to be built
+from the very commit the recipe names, not merely from the same source.
+
 ### It builds, and it reproduces
 
 Run against the `v1.0.0` tag with F-Droid's own tool, every check passes:
