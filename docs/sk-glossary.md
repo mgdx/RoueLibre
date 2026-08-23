@@ -67,15 +67,22 @@ knowing before it gets "fixed":
 |---|---|---|
 | `station_address_nearby` | `V blízkosti: %1$s` | *V blízkosti* governs the genitive, and the argument is a street **or** a square (`address.streetName` reaches it as it stands). A colon turns the line into a label, which declines nothing. |
 | `journey_step_to_station`, `journey_step_ride` | `Pešo k stanici %1$s` | The case falls on *stanici*; the name follows in apposition, in the nominative, exactly as it arrived. |
-| `city_delete_description`, `city_delete_body`, `city_deleted` | `Odstrániť dáta: %1$s`, `… dáta „%1$s“ …` | **Not the apposition device, and here is why not.** All three are handed `city.displayName` (`CityAdapter.kt:111`, `CityFragment.kt:279` and `:294`), which is the **network's** name, not the city's: 328 of the 331 catalogue entries carry a `displayName` of their own, and every Slovak network in the catalogue is called *nextbike*. Writing „dáta mesta %1$s“ would have made a Bratislava reader read „dáta mesta nextbike“ — a false statement the English never makes. The colon and the quotation marks hold the name at arm's length instead, exactly as `dataset_deleted` does. |
+| `city_delete_description`, `city_delete_body`, `city_deleted` | `Odstrániť dáta: %1$s`, `… dáta „%1$s“ …` | **Not the apposition device, and here is why not.** All three are handed `city.displayName` (`CityAdapter.kt:111`, `CityFragment.kt:279` and `:294`), which is the **network's** name, not the city's: 328 of the 331 catalogue entries carry a `displayName` of their own, and **all three Slovak ones do** — *BikeKIA* serves Žilina, *Senica bajk* serves Senica, *nextbike* serves Bratislava, and not one of them is the name of its town. (Counted in `config/catalogue.json`; the thirty-six-networks-all-called-nextbike figure belongs to Czech and does not transpose.) Writing „dáta mesta %1$s“ would have made a Žilina reader read „dáta mesta BikeKIA“ — a false statement the English never makes. The colon and the quotation marks hold the name at arm's length instead, exactly as `dataset_deleted` does. |
 | `dataset_imported`, `dataset_deleted` | `Nainštalované: %1$s` | A dataset's name is masculine in one case (*register adries*) and a neuter plural in two (*mapové dáta*, *dáta na výpočet trás*), so no participle can be written that agrees with all three. A label with a colon agrees with nothing. |
-| `city_installed`, `storage_total` | `Nainštalované v zariadení: %1$s` | Same device, different reason: a **size** hides the gender and number of what it counts. *42,5 MB* is read as a genitive singular and *35 MB* as a genitive plural, so *%1$s nainštalovaných* is wrong for one figure and *%1$s nainštalovaný* for the other. The colon settles it. |
+| `city_installed`, `storage_total` | `Nainštalované v zariadení: %1$s` | Same device, different reason: a **size** hides the gender and number of what it counts. *42,5 MB* is read as a genitive singular and *35 MB* as a genitive plural, so *%1$s nainštalovaných* is wrong for one figure and *%1$s nainštalovaný* for the other. The colon settles it. **The same rule governs `download_stopped_body`**, which says *dokončite zvyšok (%1$s)* and not *dokončite tých %1$s*: *tých* is a genitive plural, right before *340 MB* and wrong before *1,3 GB* — a figure the store's own changelog announces. A size takes no agreed word anywhere in this file. |
 
 `city_here_body` and `city_here_installed_body` have the same problem in the
 other direction: they need a possessive for the network, whose gender the
 placeholder hides. They say **dáta tejto siete** and **jej stanice** — *sieť*
 is feminine and fixed — rather than a pronoun that would have to agree with
 whatever `cityLabel` produced.
+
+`city_here_installed_body` is **two sentences and not one**, which is not a
+stylistic preference. What `cityLabel` produces is *nextbike – Bratislava*, dash
+and all; joined by *a*, the sentence garden-paths into a zlučovací coordination
+where the network **and** its data both serve the area, and the comma that would
+lift the ambiguity is not allowed in that relation. A full stop is. So: *Oblasť,
+v ktorej ste, obsluhuje %1$s. Dáta tejto siete už sú v zariadení.*
 
 The English is scrupulously impersonal — "No history is kept", "It is read from
 the feed" — and the Slovak keeps it that way, with reflexive passives:
@@ -155,7 +162,8 @@ prompt says.
 | Storage | **Úložisko** | **A departure from one Android key, with a reason.** `settings:storage_settings` says *Priestor*, which is Android's name for the phone's free-space screen. Ours is a screen of installed files, and Android itself calls that *úložisko* wherever a store of files is meant: *Spravovať úložisko* (`settings:automatic_storage_manager_settings`), *Úložisko zariadenia* (`android:device_storage_monitor_notification_channel`), *Zmeniť úložisko* (`settings:change_storage`). Everywhere another string points at that screen it says **v „Úložisku“** rather than translating "storage screen" literally. |
 | erased (in a delete dialog) | **odstránené** | `city_delete_body` and `dataset_delete_body` say *budú odstránené* / *bude odstránená*, not *vymazané*: the button above them says *Odstrániť*, and a dialog whose button and whose sentence use two different verbs reads as two different actions. *Vymazať* is reserved for emptying a field. |
 | Delete / Remove | **Odstrániť / Odobrať** | *Odstrániť* destroys — a city's data, a dataset — and is Android's own (`android:delete`, and *Odstrániť dáta aplikácie?* at `settings:clear_data_dlg_title`). *Odobrať* takes out of a list, and is used for favourites only; Android writes it for taking a user off the device (`settings:user_remove_user`, `settings:user_delete_user_description`, both *Odobrať používateľa*). **Android's own Slovak does blur these** — it renders bare "Remove" as *Odstrániť* too (`android:kg_reordering_delete_drop_target_text`) — so the two-word distinction the English file demands is ours, taken from the pair Android uses when it has to tell them apart. |
-| Clear (a search) | **Vymazať hľadanie** | *Vymazať* is Android's verb for emptying a field rather than destroying an object (`settings:clear`, *Vymazať dopyt* at `settings:abc_searchview_description_clear`), which keeps a cleared search well away from a deleted dataset. „Dopyt“ itself is not used: the same English string is also a button in an empty state, where it reads as a database term. |
+| Clear (a search) | **Vymazať hľadanie** | *Vymazať* is Android's verb for emptying a field rather than destroying an object (`settings:clear`, *Vymazať dopyt* at `settings:abc_searchview_description_clear`), which keeps a cleared search well away from a deleted dataset. The verb alone is borrowed, not Android's whole *Vymazať dopyt*: the same English string is also a button in an empty state, where naming the query would read as a database term. |
+| query (what was typed) | **dopyt** | The **noun** is kept, in the four strings that report finding nothing — `stations_no_match_message`, `incoming_address_not_found`, `address_no_match_message`, `city_no_match_message` — each opening *Dopytu „%1$s“…*, the dative *zodpovedať niečomu* governs. There it names what the reader typed, which is exactly the thing being reported on, and Android uses it the same way (`settings:abc_searchview_description_clear`). Do not "correct" those four back. |
 | Refresh / Updated | **Aktualizovať / Aktualizované** | One family, so that the button and what it produces read as one thing: *Aktualizovať* on the button, *Aktualizované práve teraz* under the data, *Nikdy neaktualizované* when there is none. Android writes the same pair (`android:autofill_update_yes`, *Aktualizované pred ^2* at `settings:no_carrier_update_text`). |
 | Check for updates | **Skontrolovať aktualizácie** | Android's own is *Skontrolovať dostupnosť aktualizácie* (`android:deprecated_target_sdk_app_store`), which is a sentence rather than a button. Ours is a button, and this is the short form of the same wording. |
 | Update available | **K dispozícii je aktualizácia** | Android's own, whole (`settings:android_version_pending_update_summary`). |
@@ -194,6 +202,15 @@ attributes, always.
 
 ## Strings that come back identical to the English
 
-None. `tools/check_translations.py sk` reports no line to confirm: the two that
-tripped Czech both differ here — *Offline dáta* against "Offline data", and
-*Licencia* against "Licence".
+`tools/check_translations.py sk` reports **no line to confirm**: it
+exempts format-only strings and symbols, and every sentence in the file
+differs from its English. The two that trip Czech both differ here too —
+*Offline dáta* against "Offline data", *Licencia* against "Licence".
+
+Three values are nonetheless the same characters as the English, and the
+brief exempts all three by name:
+
+- **`app_name`** and **`welcome_hello_title`**, „Roue Libre“ — a name,
+  and names are not translated.
+- **`duration_minutes`**, `%1$d min` — a unit symbol, which Slovak writes
+  as it stands.

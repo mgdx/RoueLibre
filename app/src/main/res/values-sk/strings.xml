@@ -212,14 +212,14 @@
          not a file that is missing but the frame for everything else
          (SPEC §15.1). -->
     <string name="map_needs_city_title">Ktoré mesto?</string>
-    <string name="map_needs_city_message">Vyberte aglomeráciu, ktorú chcete používať. Jej dáta sa stiahnu potom, raz a navždy.</string>
+    <string name="map_needs_city_message">Vyberte aglomeráciu, ktorú chcete používať. Jej dáta sa potom stiahnu, raz a navždy.</string>
 
     <!-- First launch (SPEC §7.9). We explain how something works, we are not
          selling anything: short sentences, active voice, no jargon. -->
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">Táto aplikácia ukazuje zdieľané bicykle na mape a počíta trasu od dverí k dverám: pešo na stanicu, potom na bicykli a zvyšok cesty pešo.\n\nJe slobodná a má otvorený zdrojový kód. Žiadny účet, žiadne reklamy, žiadny sledovací nástroj.</string>
     <string name="welcome_privacy_title">Nič neopustí tento telefón</string>
-    <string name="welcome_privacy_body">Trasy sa počítajú v tomto telefóne. Adresy, ktoré hľadáte, sa neposielajú nikomu, ani počas písania.\n\nNeuchováva sa žiadna história: ani vaše cesty, ani vaše polohy, ani vaše ciele.\n\nJediná požiadavka, ktorá pri bežnom používaní odchádza von, sa pýta, koľko je k dispozícii bicyklov.</string>
+    <string name="welcome_privacy_body">Trasy sa počítajú v tomto telefóne. Adresy, ktoré hľadáte, sa neposielajú nikomu, ani počas písania.\n\nNeuchováva sa žiadna história: ani vaše cesty, ani vaše polohy, ani vaše ciele.\n\nJediná požiadavka, ktorá pri bežnom používaní odchádza von, sa pýta, koľko bicyklov je k dispozícii.</string>
     <string name="welcome_fleet_title">Čo prezradí bicykel</string>
     <string name="welcome_fleet_body">Nakreslený bicykel hovorí, čo vaše mesto požičiava.\n\nČíta sa to z vlastného dátového kanála siete, nikdy sa to neodhaduje.</string>
     <string name="welcome_fleet_mechanical_only">Sieť požičiava iba mechanické bicykle.</string>
@@ -437,7 +437,7 @@
     <!-- Why no bike journey was retained (SPEC §6). Each case says what
          happened, never a technical code. -->
     <string name="journey_none_title">Žiadna trasa</string>
-    <string name="journey_no_bike_nearby">V blízkosti štartu nie je žiadna stanica s bicyklom. Skúste to neskôr alebo vyrazte odinakiaľ.</string>
+    <string name="journey_no_bike_nearby">V blízkosti začiatku nie je žiadna stanica s bicyklom. Skúste to neskôr alebo vyrazte odinakiaľ.</string>
 
     <string name="journey_no_mechanical_nearby">Žiadna stanica v okolí teraz nemá mechanický bicykel. Požiadajte o akýkoľvek bicykel alebo to skúste neskôr.</string>
     <string name="journey_no_electric_nearby">Žiadna stanica v okolí teraz nemá elektrický bicykel. Požiadajte o akýkoľvek bicykel alebo to skúste neskôr.</string>
@@ -585,11 +585,15 @@
          %2$s the city. -->
     <string name="city_label">%1$s – %2$s</string>
     <string name="city_delete">Odstrániť</string>
-    <!-- %1$s is what `cityLabel` produced: a NETWORK name, not a city — 328
-         of the 331 catalogue entries have a `displayName` of their own, and
-         every Slovak network is called „nextbike“. So these three lines name
-         nothing: the quotation marks and the colon hold the name at arm's
-         length, exactly as `dataset_deleted` does. -->
+    <!-- %1$s is `city.displayName` as it stands — `CityAdapter.kt:111`,
+         `CityFragment.kt:279` and `:294` hand it over raw — so it is a
+         NETWORK name and not a city: 328 of the 331 catalogue entries
+         carry a `displayName` of their own, and all three Slovak ones do.
+         They are „BikeKIA“ for Žilina, „Senica bajk“ for Senica and
+         „nextbike“ for Bratislava — not one of them is the name of the
+         town it serves. So these three lines name nothing: the quotation
+         marks and the colon hold the name at arm's length, exactly as
+         `dataset_deleted` does. -->
     <string name="city_delete_description">Odstrániť dáta: %1$s</string>
     <string name="city_delete_title">Odstrániť tieto dáta?</string>
     <string name="city_delete_body">Všetky offline dáta „%1$s“ budú odstránené. Aby ste ich mohli používať, budete ich musieť znova stiahnuť.</string>
@@ -607,7 +611,7 @@
          with the placeholder. -->
     <string name="city_here_title">Ste v inom meste</string>
     <string name="city_here_body">Oblasť, v ktorej ste, obsluhuje %1$s. Nainštalujte dáta tejto siete, aby ste videli jej stanice a mohli tu počítať trasy.</string>
-    <string name="city_here_installed_body">Oblasť, v ktorej ste, obsluhuje %1$s a dáta tejto siete už sú v zariadení.</string>
+    <string name="city_here_installed_body">Oblasť, v ktorej ste, obsluhuje %1$s. Dáta tejto siete už sú v zariadení.</string>
     <string name="city_here_install">Nainštalovať dáta</string>
     <string name="city_here_use">Použiť</string>
     <string name="city_proposal_body">Zdá sa, že ste v oblasti, ktorú pokrýva %1$s. Ideme do toho?</string>
@@ -722,7 +726,7 @@
     <string name="download_stopped_title">Sťahovanie zastavené</string>
     <!-- %1$s is a size, „340 MB“ for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">Toto pripojenie sa teraz účtuje po megabajtoch, a preto sa sťahovanie zastavilo. Čo už dorazilo, zostáva. Pripojte sa k Wi-Fi a dokončite tých %1$s, alebo aj tak pokračujte hneď teraz.</string>
+    <string name="download_stopped_body">Toto pripojenie sa teraz účtuje po megabajtoch, a preto sa sťahovanie zastavilo. Čo už dorazilo, zostáva. Pripojte sa k Wi-Fi a dokončite zvyšok (%1$s), alebo aj tak pokračujte hneď teraz.</string>
     <string name="download_anyway">Napriek tomu stiahnuť</string>
     <!-- %1$s is a size, „340 MB“ for instance. -->
     <string name="download_waiting_for_unmetered">Čaká sa na nemerané pripojenie, aby sa stiahlo %1$s.</string>
