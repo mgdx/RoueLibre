@@ -251,12 +251,24 @@ class StationListFragment : Fragment() {
                 return@launch
             }
             if (saidWeAreElsewhere(position)) return@launch
-            // Back to the top, where the nearest station now is: the order
-            // changed under a list that may be scrolled halfway down, and an
-            // answer nobody can see reads as a button that does nothing. It
-            // happens when the reordered rows are committed, not now — see
-            // [showFromTheTop].
-            showFromTheTop = true
+            // Back to the top, where the nearest station now is: an answer
+            // nobody can see reads as a button that does nothing, and the list
+            // may be scrolled halfway down.
+            //
+            // **Whether the order changes or not**, and the two cases are not
+            // answered the same way. A press from the same street as the last
+            // one gives the same position, so the model's state does not
+            // change, nothing is emitted and no list is committed — the
+            // callback that carries the scroll would never run, which is
+            // exactly what left the reader mid-list on the second press.
+            // Nothing is moving there, so the scroll happens on the spot.
+            // Where the order does change, it waits for the reordered rows to
+            // be committed — see [showFromTheTop].
+            if (viewModel.state.value.orderingOrigin == position) {
+                binding?.stations?.scrollToPosition(0)
+            } else {
+                showFromTheTop = true
+            }
             viewModel.orderFrom(position)
         }
     }
