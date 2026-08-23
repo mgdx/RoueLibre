@@ -408,7 +408,10 @@
 
     <!-- City screen: which conurbation the application serves. -->
     <string name="city_title">By</string>
-    <string name="city_open">Skift by</string>
+    <!-- Read aloud in place of the row that opens the city list: what is
+         written on it is the network in service, which says nothing on its
+         own about what pressing it settles. %1$s is a city label. -->
+    <string name="settings_city_description">Netværk i brug: %1$s</string>
     <string name="city_choose">Vælg min by</string>
     <string name="city_intro">Vælg det byområde, du vil bruge. Dets data installeres bagefter, én gang for alle.</string>
     <string name="city_locate_me">Find min by</string>

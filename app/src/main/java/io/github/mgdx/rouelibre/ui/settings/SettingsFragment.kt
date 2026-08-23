@@ -11,6 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
+import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.journey.WalkingPace
 import io.github.mgdx.rouelibre.core.measure.UnitChoice
 import io.github.mgdx.rouelibre.data.AppTheme
@@ -20,6 +21,7 @@ import io.github.mgdx.rouelibre.databinding.FragmentSettingsBinding
 import io.github.mgdx.rouelibre.ui.about.AboutFragment
 import io.github.mgdx.rouelibre.ui.chosenLanguage
 import io.github.mgdx.rouelibre.ui.city.CityFragment
+import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.endonym
 import io.github.mgdx.rouelibre.ui.offeredLanguages
 import io.github.mgdx.rouelibre.ui.speakLanguage
@@ -98,6 +100,40 @@ class SettingsFragment : Fragment() {
     /** The city section: which network is served (SPEC §15.1). */
     private fun setUpCity(views: FragmentSettingsBinding) {
         views.openCity.setOnClickListener { show(CityFragment()) }
+        viewLifecycleOwner.lifecycleScope.launch { showCity(container.activeCity()) }
+    }
+
+    /**
+     * Writes the network in service on the row that opens the city list.
+     *
+     * The row said "change city", which is what pressing it does and not what
+     * the reader came to this section to know: the section is titled "City"
+     * and answered nothing. It now names the network, as the language row
+     * names the language, so the screen answers without being pressed.
+     *
+     * The read is asynchronous — the configuration comes off the disk — and
+     * the row is written when it returns rather than blocking the first draw
+     * for it.
+     *
+     * @param city the conurbation served, or `null` if none is chosen yet.
+     */
+    private fun showCity(city: CityConfiguration?) {
+        val views = binding ?: return
+        if (city == null) {
+            // Nothing to name. The row invites the choice instead, in the
+            // words the welcome sequence uses to ask for it.
+            views.openCity.setText(R.string.city_choose)
+            // The invitation says what pressing it does, so the eye and the
+            // ear are told the same thing and nothing is to be added.
+            views.openCity.contentDescription = null
+            return
+        }
+        val name = requireContext().cityLabel(city.network.displayName, city.network.city)
+        views.openCity.text = name
+        // The row reads as a bare network name otherwise — "V'lille — Lille"
+        // alone, with nothing saying what it settles.
+        views.openCity.contentDescription =
+            getString(R.string.settings_city_description, name)
     }
 
     /**

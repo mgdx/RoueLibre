@@ -544,7 +544,10 @@
 
     <!-- The city screen: which conurbation the application serves (SPEC §15). -->
     <string name="city_title">Cidade</string>
-    <string name="city_open">Mudar de cidade</string>
+    <!-- Read aloud in place of the row that opens the city list: what is
+         written on it is the network in service, which says nothing on its
+         own about what pressing it settles. %1$s is a city label. -->
+    <string name="settings_city_description">Rede em serviço: %1$s</string>
     <string name="city_choose">Escolher a minha cidade</string>
     <string name="city_intro">Escolha a área metropolitana que quer consultar. Os dados são instalados depois, de uma vez por todas.</string>
     <string name="city_locate_me">Encontrar a minha cidade</string>

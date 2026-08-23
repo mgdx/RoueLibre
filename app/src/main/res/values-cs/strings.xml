@@ -555,7 +555,10 @@
 
     <!-- The city screen: which conurbation the application serves (SPEC §15). -->
     <string name="city_title">Město</string>
-    <string name="city_open">Změnit město</string>
+    <!-- Read aloud in place of the row that opens the city list: what is
+         written on it is the network in service, which says nothing on its
+         own about what pressing it settles. %1$s is a city label. -->
+    <string name="settings_city_description">Obsluhovaná síť: %1$s</string>
     <string name="city_choose">Vybrat moje město</string>
     <string name="city_intro">Vyberte aglomeraci, kterou chcete používat. Její data se potom nainstalují, jednou provždy.</string>
     <string name="city_locate_me">Najít moje město</string>

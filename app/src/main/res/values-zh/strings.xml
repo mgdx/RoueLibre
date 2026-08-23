@@ -353,7 +353,10 @@
 
     <!-- City screen: which conurbation the application serves. -->
     <string name="city_title">City</string>
-    <string name="city_open">Change city</string>
+    <!-- Read aloud in place of the row that opens the city list: what is
+         written on it is the network in service, which says nothing on its
+         own about what pressing it settles. %1$s is a city label. -->
+    <string name="settings_city_description">Network served: %1$s</string>
     <string name="city_choose">Choose my city</string>
     <string name="city_intro">Pick the conurbation you want to use. Its data is installed afterwards, once and for all.</string>
     <string name="city_locate_me">Find my city</string>

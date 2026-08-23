@@ -475,7 +475,10 @@
 
     <!-- City screen: which conurbation the application serves. -->
     <string name="city_title">Miestas</string>
-    <string name="city_open">Keisti miestą</string>
+    <!-- Read aloud in place of the row that opens the city list: what is
+         written on it is the network in service, which says nothing on its
+         own about what pressing it settles. %1$s is a city label. -->
+    <string name="settings_city_description">Naudojamas tinklas: %1$s</string>
     <string name="city_choose">Pasirinkti savo miestą</string>
     <string name="city_intro">Pasirinkite aglomeraciją, kurią norite naudoti. Jos duomenys įdiegiami vėliau – kartą ir visam laikui.</string>
     <string name="city_locate_me">Rasti mano miestą</string>

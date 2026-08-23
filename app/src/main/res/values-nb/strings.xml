@@ -435,7 +435,10 @@
 
     <!-- City screen: which conurbation the application serves. -->
     <string name="city_title">By</string>
-    <string name="city_open">Bytt by</string>
+    <!-- Read aloud in place of the row that opens the city list: what is
+         written on it is the network in service, which says nothing on its
+         own about what pressing it settles. %1$s is a city label. -->
+    <string name="settings_city_description">Nettverket som vises: %1$s</string>
     <string name="city_choose">Velg byen min</string>
     <string name="city_intro">Velg byområdet du vil bruke. Dataene installeres etterpå, én gang for alle.</string>
     <string name="city_locate_me">Finn byen min</string>

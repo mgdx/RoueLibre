@@ -425,7 +425,10 @@
 
     <!-- City screen: which conurbation the application serves. -->
     <string name="city_title">Qyteti</string>
-    <string name="city_open">Ndrysho qytetin</string>
+    <!-- Read aloud in place of the row that opens the city list: what is
+         written on it is the network in service, which says nothing on its
+         own about what pressing it settles. %1$s is a city label. -->
+    <string name="settings_city_description">Rrjeti në përdorim: %1$s</string>
     <string name="city_choose">Zgjidh qytetin tim</string>
     <string name="city_intro">Zgjidh zonën urbane që do të përdorësh. Të dhënat e saj instalohen më pas, një herë e përgjithmonë.</string>
     <string name="city_locate_me">Gjej qytetin tim</string>

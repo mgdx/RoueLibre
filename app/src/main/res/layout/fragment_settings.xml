@@ -64,6 +64,13 @@
                 style="@style/Widget.RoueLibre.SettingsSection"
                 android:text="@string/settings_section_city" />
 
+            <!-- The row carries the network in service, as the language row
+                 below carries the language: the section title already says
+                 what the row settles, so writing "change city" on it spent the
+                 one line of this section saying what pressing it does instead
+                 of answering the question it is there for. Its text and its
+                 spoken label are both written by the code — what they say is
+                 the city chosen, which no resource knows. -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/open_city"
                 style="@style/Widget.RoueLibre.Toggle"
@@ -71,8 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_m"
                 android:gravity="start|center_vertical"
-                android:minHeight="@dimen/touch_target_min"
-                android:text="@string/city_open" />
+                android:minHeight="@dimen/touch_target_min" />
 
             <!-- Display: what the interface looks like and what it writes in.
                  Neither touches the data nor the journeys (SPEC §14). It comes
