@@ -56,6 +56,21 @@ class StationListFragment : Fragment() {
 
     private var binding: FragmentStationListBinding? = null
 
+    /**
+     * The message on screen, if there is one, so that it can go when the screen
+     * does.
+     *
+     * A snackbar does **not** hang from the view it is built with: Material
+     * walks up to the activity's content and attaches it there, so it outlives
+     * the fragment that raised it. On the very first launch that is not a
+     * detail — the station list is landed on, asks for the stations of a city
+     * nobody has chosen yet, and is replaced a frame later by the welcome
+     * sequence; its "no city is selected · choose one" stayed up over that
+     * sequence, and pressing it asked a fragment with no manager left for a
+     * transaction. That was a crash, on the first screen of the first launch.
+     */
+    private var message: Snackbar? = null
+
     private val viewModel: StationsViewModel by viewModels {
         val container = (requireActivity().application as RoueLibreApplication).container
         StationsViewModel.Factory(
@@ -278,6 +293,11 @@ class StationListFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        // A message about a screen that is gone is noise at best, and an
+        // action on it is a transaction asked of a fragment with no manager —
+        // see [message].
+        message?.dismiss()
+        message = null
         // The RecyclerView outlives the view through its adapter; detaching it
         // avoids holding on to the destroyed view.
         binding?.stations?.adapter = null
@@ -320,11 +340,15 @@ class StationListFragment : Fragment() {
                         Snackbar.LENGTH_LONG,
                     )
                     if (error == DataError.NoCityChosen) {
-                        bar.setAction(R.string.city_choose) { showCityChooser() }
+                        // Guarded as well as dismissed with the screen: a
+                        // snackbar animates its way out, and a press landing
+                        // during that animation would reach a fragment that
+                        // has already let go of its manager.
+                        bar.setAction(R.string.city_choose) { if (isAdded) showCityChooser() }
                     } else {
                         bar.setAction(R.string.action_retry) { viewModel.refresh(force = true) }
                     }
-                    bar.show()
+                    showMessage(bar)
                 }
             }
         }
@@ -435,9 +459,21 @@ class StationListFragment : Fragment() {
         }
     }
 
-    private fun showMessage(message: CharSequence) {
+    private fun showMessage(text: CharSequence) {
         val views = binding ?: return
-        Snackbar.make(views.root, message, Snackbar.LENGTH_LONG).show()
+        showMessage(Snackbar.make(views.root, text, Snackbar.LENGTH_LONG))
+    }
+
+    /**
+     * Puts a message on screen, and keeps hold of it.
+     *
+     * One at a time, and the one held is the one on show: a second message
+     * replaces the first on screen anyway, and the reference has to follow it
+     * or [onDestroyView] would take away a bar that has already gone.
+     */
+    private fun showMessage(bar: Snackbar) {
+        message = bar
+        bar.show()
     }
 
     private fun hideKeyboard(view: View) {
