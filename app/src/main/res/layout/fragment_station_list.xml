@@ -15,16 +15,34 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+    <!-- Nearest station first (SPEC §7.2). It stands alone at the start of the
+         row, apart from the three at the end, and that separation is the
+         reading: the three lead away from this screen, this one acts on the
+         list under it. The title and the age line move over beside it, so the
+         header keeps one left edge rather than two. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/locate_me"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginStart="@dimen/space_s"
+        android:contentDescription="@string/stations_order_by_distance"
+        app:icon="@drawable/ic_my_location"
+        app:iconTint="@color/ink"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/title" />
+
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginStart="@dimen/space_s"
         android:layout_marginTop="@dimen/space_l"
         android:text="@string/stations_title"
         android:textAppearance="@style/TextAppearance.RoueLibre.Title"
         app:layout_constraintEnd_toStartOf="@id/open_map"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/locate_me"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- The title stops at the innermost icon, not at the outermost: the three
@@ -84,16 +102,20 @@
         app:layout_constraintEnd_toStartOf="@id/open_favourites"
         app:layout_constraintTop_toTopOf="@id/title" />
 
-    <!-- The data's age, required by SPEC §4.1. -->
+    <!-- The data's age, required by SPEC §4.1. Not justified, for the reason
+         given under `Widget.RoueLibre.SettingsLabel`: it is a status line and
+         not a paragraph, and at the largest text sizes it takes two lines —
+         the first of which, spread bank to bank, reads as something other than
+         one sentence. -->
     <TextView
         android:id="@+id/freshness"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_l"
         android:layout_marginEnd="@dimen/space_l"
+        android:justificationMode="none"
         android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintTop_toBottomOf="@id/title"
         tools:text="Mis à jour il y a 12 secondes" />
 

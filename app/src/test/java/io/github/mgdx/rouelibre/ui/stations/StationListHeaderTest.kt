@@ -9,13 +9,19 @@ import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
 /**
- * The header of the station list: what it offers, and in which order (SPEC §7.6).
+ * The header of the station list: what it offers, and in which order
+ * (SPEC §7.2, §7.6).
  *
  * The way to the map used to be hidden unless this list was the screen the
  * application opened on, which left it gone on the very list one reaches from the
  * map. It is now unconditional, so nothing in the layout may take it away again.
  * The order matters as much: the title's box stops at the innermost icon, and a
  * box running under an icon is only harmless while the text is left-aligned.
+ *
+ * The row has two ends and they say different things: the three at the end lead
+ * away from this screen, and the one at the start — "nearest station first" —
+ * acts on the list under it. The title and the age line move over beside that
+ * one, so the header keeps a single left edge instead of stepping.
  *
  * The layout and the drawable are read from the files the build ships, as
  * `IndicatorScaleTest` reads the dimensions: what is checked is what the
@@ -39,6 +45,37 @@ class StationListHeaderTest {
         assertEquals("parent", viewOf("open_settings").endConstraint())
         assertEquals("@id/open_settings", viewOf("open_favourites").endConstraint())
         assertEquals("@id/open_favourites", viewOf("open_map").endConstraint())
+    }
+
+    @Test
+    fun `the ordering button stands alone at the start of the row`() {
+        val button = viewOf("locate_me")
+        assertEquals("parent", button.getAttribute("app:layout_constraintStart_toStartOf"))
+        assertEquals("@drawable/ic_my_location", button.getAttribute("app:icon"))
+        assertEquals(
+            "@string/stations_order_by_distance",
+            button.getAttribute("android:contentDescription"),
+        )
+        // It is not one more of the three: those are pinned to the end, and a
+        // fourth among them would leave the title nothing.
+        assertNull(
+            "locate_me joined the icons at the end of the row",
+            button.endConstraint().ifEmpty { null },
+        )
+    }
+
+    @Test
+    fun `the title and the age line share one left edge`() {
+        assertEquals(
+            "the title has to start after the button, not under it",
+            "@id/locate_me",
+            viewOf("title").getAttribute("app:layout_constraintStart_toEndOf"),
+        )
+        assertEquals(
+            "the age line has to sit under the title, not under the button",
+            "@id/title",
+            viewOf("freshness").getAttribute("app:layout_constraintStart_toStartOf"),
+        )
     }
 
     @Test

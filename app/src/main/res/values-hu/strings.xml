@@ -601,6 +601,11 @@
     <string name="settings_opening_list">Állomáslista</string>
     <!-- The way to the map from a station list opened on. -->
     <string name="stations_open_map">A térkép megtekintése</string>
+    <!-- The button that puts the nearest station at the top of the list
+         (SPEC 7.2), read aloud in place of its reticle, and what is said
+         when the position is refused to it. -->
+    <string name="stations_order_by_distance">A legközelebbi állomás elöl</string>
+    <string name="stations_location_denied">Helyadatok nélkül az állomások betűrendben maradnak.</string>
 
     <!-- Which stations the map draws at all. Set in the settings and nowhere
          else: the map itself carries no control and no badge (SPEC 7.1). -->

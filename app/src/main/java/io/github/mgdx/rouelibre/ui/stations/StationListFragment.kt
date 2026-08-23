@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -20,14 +21,17 @@ import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.DataError
+import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.freshnessOf
+import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentStationListBinding
 import io.github.mgdx.rouelibre.ui.MAP_BACK_STACK_ENTRY
 import io.github.mgdx.rouelibre.ui.STATION_LIST_BACK_STACK_ENTRY
 import io.github.mgdx.rouelibre.ui.ScreenBehind
 import io.github.mgdx.rouelibre.ui.backStackEntryNames
 import io.github.mgdx.rouelibre.ui.city.CityFragment
+import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.map.MapFragment
 import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
@@ -70,6 +74,27 @@ class StationListFragment : Fragment() {
             .show(parentFragmentManager, StationDetailSheet.TAG)
     }
 
+    private val container
+        get() = (requireActivity().application as RoueLibreApplication).container
+
+    /**
+     * Requests the location permission, and never insists (SPEC §10).
+     *
+     * Launched from the button and from nowhere else: this screen shows no
+     * position of its own, so opening it asks for nothing. A refusal leaves the
+     * list whole, in the alphabet, and the button is what the user has left to
+     * change their mind.
+     */
+    private val requestLocationPermission = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions(),
+    ) { granted ->
+        if (granted.values.any { it }) {
+            orderFromAFreshFix()
+        } else {
+            showMessage(getString(R.string.stations_location_denied))
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -99,6 +124,7 @@ class StationListFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+        views.locateMe.setOnClickListener { onLocateMeClicked() }
         showWayToTheMap(views)
         views.openFavourites.setOnClickListener {
             parentFragmentManager.beginTransaction()
@@ -145,6 +171,92 @@ class StationListFragment : Fragment() {
         observeErrors()
         keepAvailabilityFresh()
         showCoveredArea()
+    }
+
+    /**
+     * Answers the "nearest first" button (SPEC §7.2).
+     *
+     * The list orders itself on what the system already holds when it appears,
+     * and that is nothing at all on a phone where no other application has
+     * asked for a position: the button is what asks for one. Its three
+     * outcomes are the map's, in the same order and with the same words for
+     * two of them — the permission is missing, location is switched off, or
+     * there is a fix to wait for.
+     */
+    private fun onLocateMeClicked() {
+        val location = container.deviceLocation
+        when {
+            !location.isPermitted() ->
+                requestLocationPermission.launch(DeviceLocation.PERMISSIONS)
+
+            !location.isAvailable() -> showMessage(getString(R.string.map_location_unavailable))
+
+            else -> orderFromAFreshFix()
+        }
+    }
+
+    /**
+     * Waits for a position and puts the nearest station at the top.
+     *
+     * **A fix asked for, not the one already known**: the button is pressed by
+     * somebody who has walked somewhere, and a position from two minutes ago
+     * would order the list around the street they set off from. The wait can
+     * run to several seconds indoors, so the button goes dead meanwhile —
+     * otherwise the press reads as lost and is made again.
+     *
+     * The position serves that single ordering and is written nowhere
+     * (SPEC §2, C3).
+     */
+    private fun orderFromAFreshFix() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding?.locateMe?.isEnabled = false
+            val fix = try {
+                container.deviceLocation.current()
+            } finally {
+                binding?.locateMe?.isEnabled = true
+            }
+            val position = fix?.coordinates
+            if (position == null) {
+                showMessage(getString(R.string.map_location_unavailable))
+                return@launch
+            }
+            if (saidWeAreElsewhere(position)) return@launch
+            viewModel.orderFrom(position)
+            // Back to the top, where the nearest station now is: the order
+            // changed under a list that may be scrolled halfway down, and an
+            // answer nobody can see reads as a button that does nothing.
+            binding?.stations?.scrollToPosition(0)
+        }
+    }
+
+    /**
+     * Says so where [position] falls outside the conurbation served, and orders
+     * nothing.
+     *
+     * Distances measured from a hundred kilometres away rank the stations of a
+     * city one is not in by which end of it one is pointing at — an order that
+     * looks like an answer and is arithmetic on an irrelevance. The alphabet is
+     * kept, and the sentence names the network in service so that the button is
+     * not simply silent. Changing city is the map's offer to make, this screen
+     * having no map to be elsewhere on.
+     *
+     * A city whose configuration declares no usable box covers everything as
+     * far as this screen is concerned: there is nothing to be outside of.
+     *
+     * @return true if the user was told, in which case nothing else is to be
+     *   done with this position.
+     */
+    private suspend fun saidWeAreElsewhere(position: Coordinates): Boolean {
+        val city = container.activeCity() ?: return false
+        val area = city.boundingBox?.takeIf { it.isUsable } ?: return false
+        if (position in area) return false
+        showMessage(
+            getString(
+                R.string.map_outside_city_brief,
+                requireContext().cityLabel(city.network.displayName, city.network.city),
+            ),
+        )
+        return true
     }
 
     /**
@@ -321,6 +433,11 @@ class StationListFragment : Fragment() {
                     .commit()
             }
         }
+    }
+
+    private fun showMessage(message: CharSequence) {
+        val views = binding ?: return
+        Snackbar.make(views.root, message, Snackbar.LENGTH_LONG).show()
     }
 
     private fun hideKeyboard(view: View) {

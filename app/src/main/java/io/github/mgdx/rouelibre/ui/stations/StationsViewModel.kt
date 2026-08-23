@@ -169,16 +169,39 @@ class StationsViewModel(
      * Called by the screen when it appears. Without a usable position — unknown,
      * too old, not permitted, or outside the served city — the alphabetical
      * order stays, and nothing is asked of the user.
+     *
+     * **An order already settled is left alone.** This model outlives the
+     * screen, so a rotation calls this again over a position the user waited
+     * for at the button, and what the system holds is not always as good as
+     * what was fetched — a two-minute-old network fix would take the place of
+     * a satellite one and reshuffle the list under the eye.
      */
     fun orderByProximity() {
-        viewModelScope.launch {
-            orderingPosition = positionForOrdering()
-            mutableState.update { current ->
-                current.copy(
-                    stations = visibleStations(current.query),
-                    orderingOrigin = orderingPosition,
-                )
-            }
+        if (orderingPosition != null) return
+        viewModelScope.launch { orderFrom(positionForOrdering()) }
+    }
+
+    /**
+     * Orders the list from a position the user has just asked for.
+     *
+     * The other way in, and the one that answers a button rather than the
+     * screen appearing: what [orderByProximity] reads is whatever the system
+     * happens to hold, which is nothing at all until something else on the
+     * device has asked for a fix. The screen fetches one itself and hands it
+     * over here, so that the wait, the permission and the refusal are the
+     * screen's business and this model goes on knowing nothing of Android
+     * (SPEC §14).
+     *
+     * @param position where the user stands, or `null` to go back to the
+     *   alphabet.
+     */
+    fun orderFrom(position: Coordinates?) {
+        orderingPosition = position
+        mutableState.update { current ->
+            current.copy(
+                stations = visibleStations(current.query),
+                orderingOrigin = position,
+            )
         }
     }
 

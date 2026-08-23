@@ -718,6 +718,11 @@
     <string name="settings_opening_list">Lista de estações</string>
     <!-- The way to the map from a station list opened on. -->
     <string name="stations_open_map">Ver o mapa</string>
+    <!-- The button that puts the nearest station at the top of the list
+         (SPEC 7.2), read aloud in place of its reticle, and what is said
+         when the position is refused to it. -->
+    <string name="stations_order_by_distance">A estação mais próxima primeiro</string>
+    <string name="stations_location_denied">Sem localização, as estações ficam por ordem alfabética.</string>
 
     <!-- Which stations the map draws at all. Set in the settings and nowhere
          else: the map itself carries no control and no badge (SPEC 7.1). -->
