@@ -77,7 +77,7 @@
     <!-- Shown for a station the network publishes outside the area its data
          covers. The short form joins the rest of the row. -->
     <string name="station_beyond_area_short">jashtë hartës</string>
-    <string name="station_beyond_area">Ky stacion ndodhet jashtë zonës që mbulojnë të dhënat e instaluara. Biçikletat e tij numërohen në kohë reale, por asnjë hartë dhe asnjë itinerar nuk arrin deri te ai.</string>
+    <string name="station_beyond_area">Ky stacion ndodhet jashtë zonës që mbulojnë të dhënat e instaluara. Biçikletat e tij numërohen në kohë reale, por asnjë hartë dhe asnjë itinerar nuk arrin deri tek ai.</string>
 
     <string name="search_stations_hint">Kërko një stacion</string>
     <string name="search_stations_clear">Pastro kërkimin</string>
@@ -171,7 +171,7 @@
     <string name="map_outside_city_title">Ndodhesh diku tjetër</string>
     <string name="map_outside_city_message">Pozicioni yt bie jashtë zonës që mbulon %1$s, prandaj kjo hartë nuk mund ta tregojë. Zgjidh qytetin ku ndodhesh për të parë stacionet e tij.</string>
     <string name="map_outside_city_brief">Pozicioni yt bie jashtë zonës që mbulon %1$s.</string>
-    <string name="map_needs_tiles_title">Hartës i duhet harta bazë</string>
+    <string name="map_needs_tiles_title">Mungon harta bazë</string>
     <string name="map_needs_tiles_message">Instalo hartën bazë nga ekrani i hapësirës ruajtëse. Ndërkohë, lista e stacioneve mbetet e përdorshme.</string>
     <string name="map_needs_city_title">Cili qytet?</string>
     <string name="map_needs_city_message">Zgjidh zonën urbane që do të përdorësh. Të dhënat e saj shkarkohen më pas, një herë e përgjithmonë.</string>
@@ -200,7 +200,7 @@
     <string name="whats_new_nothing">Ky version nuk ka shënime publikimi.</string>
     <string name="whats_new_open">Shih çfarë ka të re</string>
 
-    <string name="incoming_place_default_label">Vend i marrë</string>
+    <string name="incoming_place_default_label">Vend i pranuar</string>
     <string name="incoming_show_me">Shfaq</string>
     <string name="incoming_needs_index">Kjo adresë duhet kërkuar në indeksin jashtë linje, i cili nuk është i instaluar.</string>
     <string name="incoming_address_not_found">„%1$s“ nuk përputhet me asnjë adresë në zonën e mbuluar.</string>
@@ -286,7 +286,7 @@
 
     <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
          which is what the application does at rest. -->
-    <string name="journey_bike_kind_any">Çfarëdo biçiklete</string>
+    <string name="journey_bike_kind_any">Çfarëdo</string>
     <string name="journey_bike_kind_mechanical">Mekanike</string>
     <string name="journey_bike_kind_electric">Elektrike</string>
     <string name="journey_bike_kind_any_description">Çfarëdo biçiklete, të çfarëdo lloji</string>
@@ -332,8 +332,8 @@
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Hap në një aplikacion navigimi</string>
     <string name="journey_navigate_which">Cila pjesë e udhëtimit?</string>
-    <string name="journey_step_to_station">Në këmbë deri te %1$s</string>
-    <string name="journey_step_ride">Me biçikletë deri te %1$s</string>
+    <string name="journey_step_to_station">Në këmbë deri te stacioni %1$s</string>
+    <string name="journey_step_ride">Me biçikletë deri te stacioni %1$s</string>
     <string name="journey_step_to_destination">Në këmbë deri te destinacioni</string>
     <string name="journey_step_walk_all">Në këmbë deri te destinacioni</string>
     <string name="journey_step_ride_all">Me biçikletë deri te destinacioni</string>
@@ -382,7 +382,7 @@
          a number in that middle position (SPEC §4.3). No postcode is invited:
          it is written apart from the street line and would be a second number
          in the query. -->
-    <string name="address_search_hint">Rruga, numri, qyteti</string>
+    <string name="address_search_hint">Rrugë, numër, qytet</string>
     <string name="address_search_clear">Pastro kërkimin</string>
     <string name="address_search_privacy">Gjithçka kërkohet në pajisje. Asgjë nuk dërgohet, as ndërsa shkruan.</string>
     <string name="address_locality">%1$s %2$s</string>
@@ -514,7 +514,7 @@
     <!-- %1$s is a file name, not the name of the dataset. -->
     <string name="dataset_rejected_format">Ky skedar nuk është ai që pritej. Zgjidh skedarin „%1$s“ që prodhojnë skriptet e gjenerimit.</string>
     <string name="dataset_rejected_version">Ky skedar është në versionin %1$d të formatit, ndërsa ky version i aplikacionit lexon versionin %2$d. Përditëso aplikacionin.</string>
-    <string name="dataset_rejected_checksum">Skedari nuk përputhet me shumën e tij të kontrollit: është i paplotë ose i dëmtuar. Shkarkoje sërish.</string>
+    <string name="dataset_rejected_checksum">Skedari nuk përputhet me shumën e kontrollit: është i paplotë ose i dëmtuar. Shkarkoje sërish.</string>
     <string name="dataset_rejected_transfer">Kopjimi i skedarit dështoi. Kontrollo hapësirën e lirë dhe provo përsëri.</string>
 
     <string name="error_offline">Nuk ka lidhje. Në ekran mbetet disponueshmëria e fundit e njohur.</string>
