@@ -21,9 +21,14 @@ singular (**أنت**), which is what the file uses throughout: `اختر`, `ثب
 The English is **scrupulously impersonal** — "No history is kept", "It is read
 from the feed" — and Arabic keeps it, in the passive voice it has for exactly
 this: `لا يُحفظ أي سجلّ`, `تُقرأ من تدفّق بيانات شبكة الدراجات`, `تُحسب الرحلات
-على هذا الهاتف`. Nowhere does the file say *we*. In a privacy text whose whole
-argument is that nobody is behind the application, a "we" would ask the reader
-to trust a party instead of stating a property of the software.
+على هذا الهاتف`. In a privacy text whose whole argument is that nobody is
+behind the application, a "we" would ask the reader to trust a party instead of
+stating a property of the software.
+
+The file says *we* in exactly one place, `city_proposal_body` — `هل نعتمدها؟` —
+because the English does: "Shall we go with that?" is a question the
+application asks about what to do next, not a claim about who keeps the data.
+Everywhere else the impersonal holds.
 
 The punctuation is Arabic: the comma is **،** (U+060C), the question mark
 **؟** (U+061F), and a quotation is set in **«…»**. The semicolon, where the
@@ -66,7 +71,12 @@ Arabic-Indic.
 ## Plurals: six categories, three shapes
 
 CLDR gives Arabic six cardinal categories, and the file writes all six:
-`zero`, `one`, `two`, `few` (3–10), `many` (11–99), `other` (100 and beyond).
+`zero`, `one`, `two`, `few` (n % 100 = 3–10), `many` (n % 100 = 11–99),
+`other` (all the rest: 100, 101, 102, 200…).
+
+**The rules are modulo a hundred**, and reading them without that is how a
+correct string gets "repaired": **306 is `few`**, so the store text writes
+`٣٠٦ شبكات`, and 143 is `many`. `other` is a narrow category, not a wide one.
 
 What they carry is decided by the **tamyiz**, the rule that governs a noun
 standing after a numeral — and the numeral is always written here, because
@@ -76,8 +86,8 @@ every one of these strings holds its `%1$d`:
 |---|---|---|
 | `zero`, `one`, `other` | plain singular | `٠ دراجة`, `١ دراجة`, `١٠٠ دراجة` |
 | `two` | dual | `٢ دراجتان` |
-| `few` (3–10) | plural | `٥ دراجات` |
-| `many` (11–99) | accusative singular, with tanwin | `١٥ دراجةً` |
+| `few` (n % 100 = 3–10) | plural | `٥ دراجات`, `٣٠٦ شبكات` |
+| `many` (n % 100 = 11–99) | accusative singular, with tanwin | `١٥ دراجةً`, `١٤٣ ميغابايت` |
 
 So **three of the six read alike, and that is Arabic rather than a line nobody
 reached.** `zero`, `one` and `other` all take the singular after a written
@@ -98,13 +108,23 @@ decide what goes in each item.
 so many words that an unknown count reads as the plural. So `zero` carries
 `دراجات` and `مواقف شاغرة`, not the singular a written ٠ would have taken.
 
-And `many` is written **bare**, `دراجة` and not `دراجةً`. On a list row the
-label is stacked under the figure, in `TextAppearance.RoueLibre.Label`, and is
-read as a word standing on its own line — which is the trap the English file
-records Romanian falling into. An accusative tanwin is the tamyiz of a numeral
-standing beside the noun; with the numeral on the line above, it is a
-diacritic on a word nobody is counting. `bikes_available`, where the figure
-really is in the string, keeps it.
+And the items that agree with an **absent** numeral give that agreement up. On
+a list row the label is stacked under the figure, in
+`TextAppearance.RoueLibre.Label`, and is read as a word standing on its own
+line — which is the trap the English file records Romanian falling into. So:
+
+- `many` is written **bare**, `دراجة` and not `دراجةً`. An accusative tanwin is
+  the tamyiz of a numeral standing beside the noun; with the numeral on the
+  line above, it is a diacritic on a word nobody is counting.
+- `two` drops the **dual**, `دراجات` and not `دراجتان`, for the same reason and
+  more strongly. The dual is the heaviest numeral agreement Arabic has: it says
+  "two" inside the word. Under a stacked ٢ it repeats the figure instead of
+  naming the thing counted, which is precisely the Romanian defect.
+
+`bikes_available` and `docks_available`, where the figure really is inside the
+string, keep both the dual and the tanwin. Three of the six items therefore
+read `دراجة` and three read `دراجات`: nothing here distinguishes them
+grammatically, because nothing here is being counted in the sentence.
 
 ## The vocabulary
 
@@ -131,12 +151,14 @@ really is in the string, keeps it.
 | the area a city covers | المنطقة التي يغطّيها … | One notion, one verb (غطّى), over the nine strings that carry it. |
 | pace (walking) | وتيرة | A pace is not a speed: `values/strings.xml` says so above the string, and سرعة would say the opposite. |
 | Slow / Normal / Brisk | بطيئة / عادية / نشيطة | بطيئة is the lexicon's own (`settings:speed_label_slow`) and agrees with وتيرة. نشيطة for "brisk" because المشي النشيط is what brisk walking is called in Arabic; سريعة would have made a speed of it again. |
+| Out of service (attributive) | الخارجة عن الخدمة | The same term, in the form Arabic grammar requires of an attribute: `settings_map_filters_hide_out_of_service` reads `إخفاء المحطات الخارجة عن الخدمة`. A definite plural noun takes an agreeing participle, not a bare adverbial phrase — `المحطات خارج الخدمة` would want a relative clause to be well formed. The two spellings are one term, and neither is to be aligned on the other. |
 | Out of service | خارج الخدمة | **A departure from the lexicon**, which gives خارج نطاق الخدمة (`settings:radioInfo_service_out`). That is Android's phrase for a radio blackspot — literally "outside the service *range*" — and says nothing about a station an operator has taken out of use. خارج الخدمة is what a lift or a machine says. |
 | Settings | الإعدادات | Android's own word. |
 | Display (settings section) | العرض | Android's own word for the settings category (`settings:display_category_title`). |
 | System (theme, units, language) | النظام | The English writes one word in all three settings, and so does this. |
 | Theme | المظهر | From the lexicon's المظهر الداكن (`settings:dark_ui_mode`). The two states are داكن and فاتح; only the first is in the lexicon, and the second is its obvious partner. |
 | Language | اللغة | Android's own word (`settings:app_locale_preference_title`). |
+| — | — | `settings_opening_title` is the one string that adds punctuation the English has not: `فتح التطبيق تلقائيًا على:`. The English label ends on "on" and leans on the two buttons under it to finish the phrase; Arabic `على` left bare at the end of a line simply dangles, and the colon is what hands the sentence to the buttons. |
 | Storage | التخزين | Android's own word (`settings:storage_label`). |
 | Privacy | الخصوصية | Android's own word. |
 | Version | الإصدار | Android's own word (`settings:vpn_version`), and the same word carries the data-format version in `dataset_rejected_version`. |
@@ -183,8 +205,15 @@ category to resolve against, one shape has to serve every count.
 shape.** Writing `%1$d ساعة و%2$d دقيقة` invented two agreements the English
 never asked for — `١ ساعة و٥ دقيقة` is wrong, `٢ ساعة` wants `ساعتان`,
 `٣ ساعة` wants `ساعات` — where the source writes no noun behind its minutes at
-all. The file now writes **`%1$d س %2$02d`**: `س` is CLDR's Arabic abbreviation
-for the hour, it is not a currency, and the padding comes back with it.
+all. The file now writes **`%1$d:%2$02d`**, the shape an Arabic transport
+application gives a duration, and the padding comes back with it.
+
+`%1$d س %2$02d` was written first and dropped: **`س` alone is the year** in
+Android's own Arabic — `settings:mtrl_picker_text_input_year_abbr` is the one
+row of the lexicon where it stands as an abbreviation, and it abbreviates
+سنة. The lexicon names the hour `ساعة` and `ساعات`, never `س`. That is the
+same argument that ruled out `د` for the minute below, and it had been missed
+here.
 
 **`duration_minutes` still carries the compromise**, as **`%1$d دقيقة`**: the
 singular, which is the tamyiz for 11–99 and beyond. A leg of three to ten
