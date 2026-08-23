@@ -132,16 +132,27 @@ sits one screen away from `journey_source_my_position` = "Mijn positie", and the
 two are meant to differ: *locatie* is the system feature the button asks for,
 *positie* is the point it puts on the map. Kept as a noun for that reason.
 
-**`address_number_with_suffix` = `%1$d %2$s`, with the space kept.** Dutch
-writes a suffixed house number closed up — "Damrak 12A" — and the space is
-wrong for the Netherlands and Belgium. It is kept all the same because the
-format follows the interface's language and not the city's country: a Dutch
-reader looking up a French address would otherwise get "12bis" glued together,
-where the Base Adresse Nationale writes "12 bis". Dutch and Belgian addresses
-come from OpenStreetMap, which carries "12A" inside the house number itself and
-leaves this suffix field empty, so the case that suffers is rare and the case
-that would break is not. Close the space up only if the suffix is ever split
-per country.
+**`address_number_with_suffix` = `%1$d%2$s`, closed up.** Dutch writes a
+suffixed house number without a space — "Damrak 12A" — and this format now does
+the same. The space was kept here at first on the reasoning that Dutch and
+Belgian addresses come from OpenStreetMap, which carries the letter inside the
+house number and would leave this field empty. **That was false.**
+`tools/build_address_index.py`, `split_house_number`, takes the leading digits
+as the number and puts everything after them in this very field, so OSM's "12A"
+arrives as `number=12, suffix="a"`. Counted over the generated indexes, that is
+2 902 667 lettered numbers across 307 of the catalogue's 332 cities — the
+ordinary case outside France, not an edge one.
+
+Closing the space up does glue a French repetition mark, "12bis" where the Base
+Adresse Nationale writes "12 bis", because the format follows the interface's
+language and not the city's country. That is the lesser harm: a Dutch reader
+looks up Dutch addresses far more often than French ones, and "12bis" stays
+readable where "12 a" for an Amsterdam address does not.
+
+The suffix also arrives **lower-cased**, from the same function's closing
+`.lower()`, so "12A" is shown "12a". That is a data-pipeline fault touching all
+307 cities and every language, French included. It is not worked around from
+here.
 
 ## Words that are not translated
 
