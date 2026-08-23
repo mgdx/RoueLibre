@@ -25,7 +25,7 @@
     onto a `%1$s` would be wrong the moment the vowels of the station name
     changed. Not one line here does it. What carries the weight instead is
     Turkish's bare noun-noun compound, where only the head takes the ending —
-    `%1$s kapsama alanının dışında`, `%1$s istasyonuna yürü`, `%1$s için
+    `%1$s kapsama alanının dışında`, `%1$s yakınında`, `%1$s için
     veriler` — and, where even that would not do, a label with a colon
     (`İndir: %1$s`, `Sil: %1$s`).
 
@@ -294,16 +294,19 @@
     <!-- Read out in place of the drawing. %1$s is the climb of the ride, %2$s
          its lowest point above sea level and %3$s its highest. -->
     <string name="journey_detail_profile_description">Sürüş %1$s tırmanıyor, deniz seviyesinden %2$s ile %3$s arasında.</string>
-    <string name="journey_detail_availability_note">Bisiklet ve yuva sayıları, yolculuğun hesaplandığı andaki haliyle.</string>
+    <string name="journey_detail_availability_note">Bisiklet ve boş yuva sayıları, yolculuğun hesaplandığı andaki haliyle.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Bir navigasyon uygulamasında aç</string>
     <string name="journey_navigate_which">Yolculuğun hangi bölümü?</string>
-    <!-- The five steps read as one series, so all five take the same shape:
-         the manner first, the destination after it, and the ending falls on a
-         noun of this file's own rather than on the placeholder. -->
-    <string name="journey_step_to_station">Yürüyerek %1$s istasyonuna git</string>
-    <string name="journey_step_ride">Bisikletle %1$s istasyonuna git</string>
+    <!-- The five steps read as one series. The two that name a station take
+         the colon form this file uses elsewhere rather than a compound: a feed
+         publishing no name has `station_unnamed` substituted for it
+         (`GbfsRemoteSource.kt:91`), and a compound would then stutter —
+         "Adsız istasyon istasyonuna git". Both are row labels, which a colon
+         suits. -->
+    <string name="journey_step_to_station">Yürüyerek git: %1$s</string>
+    <string name="journey_step_ride">Bisikletle git: %1$s</string>
     <string name="journey_step_to_destination">Yürüyerek hedefe git</string>
     <string name="journey_step_walk_all">Yürüyerek hedefe git</string>
     <string name="journey_step_ride_all">Bisikletle hedefe git</string>
@@ -317,8 +320,11 @@
     <string name="journey_none_title">Yolculuk yok</string>
     <string name="journey_no_bike_nearby">Başlangıcın yakınında bisikleti olan istasyon yok. Daha sonra tekrar dene ya da başka bir yerden başla.</string>
 
-    <string name="journey_no_mechanical_nearby">Yakındaki hiçbir istasyonda şu an klasik bisiklet yok. Herhangi bir bisiklet iste ya da daha sonra tekrar dene.</string>
-    <string name="journey_no_electric_nearby">Yakındaki hiçbir istasyonda şu an elektrikli bisiklet yok. Herhangi bir bisiklet iste ya da daha sonra tekrar dene.</string>
+    <!-- Both name the control the reader has to touch, and quote
+         `journey_bike_kind_any` word for word: if that button's wording
+         changes, these two change with it. -->
+    <string name="journey_no_mechanical_nearby">Yakındaki hiçbir istasyonda şu an klasik bisiklet yok. Fark etmez seçeneğini seç ya da daha sonra tekrar dene.</string>
+    <string name="journey_no_electric_nearby">Yakındaki hiçbir istasyonda şu an elektrikli bisiklet yok. Fark etmez seçeneğini seç ya da daha sonra tekrar dene.</string>
     <string name="journey_no_dock_nearby">Hedefin yakınında boş yuvası olan istasyon yok. Daha sonra tekrar dene ya da başka bir yeri hedefle.</string>
     <string name="journey_no_route">Bu iki nokta arasında geçilebilir bir rota yok.</string>
     <string name="journey_graph_missing">Rota verileri yüklü değil. Depolama ekranından ekle.</string>

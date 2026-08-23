@@ -92,7 +92,7 @@ before it gets "fixed":
 
 | String | What it does | Why |
 |---|---|---|
-| `journey_step_to_station`, `journey_step_ride` | `Yürüyerek %1$s istasyonuna git` | Turkish's **bare noun-noun compound**: only the head takes the ending, so *istasyonuna* declines and the station's name stands in front of it untouched. |
+| `journey_step_to_station`, `journey_step_ride` | `Yürüyerek git: %1$s` | The colon form, **not** a compound. *%1$s istasyonuna git* was written here first and is wrong: `GbfsRemoteSource.kt:91` does `station.copy(name = unnamedStationLabel())`, so a feed publishing no name sends *Adsız istasyon* through as `%1$s` and the compound stutters — *Adsız istasyon istasyonuna git*. Both are row labels (`JourneyDetailFragment.kt:487`, `:506`), which a colon suits. |
 | `map_outside_city_message`, `map_outside_city_brief`, `city_proposal_body` | `%1$s kapsama alanının dışında` | The same compound. What arrives is `cityLabel(...)`, a whole label — *Vélib’ Métropole — Paris* — and it modifies *kapsama alanı*, which carries every ending the sentence needs. |
 | `city_delete_description`, `city_delete_body`, `city_deleted` | `%1$s için veriler…` | The postposition **için** governs the bare nominative, which is exactly the form a network name arrives in. |
 | `storage_download_pending`, `dataset_delete_description` | `İndir: %1$s`, `Sil: %1$s` | The one place the compound would not do: an accusative object (*Harita verilerini indir*) would have to guess the vowels of a dataset name the string never sees. A colon turns the line into a label, which declines nothing. |
@@ -100,6 +100,15 @@ before it gets "fixed":
 | `dataset_imported`, `dataset_deleted` | `%1$s yüklendi`, `%1$s silindi` | Passive subject, nominative again. Nothing needs bending. |
 | `station_address_nearby` | `%1$s yakınında` | *yakın* takes the ending, the street name does not. The argument is `address.streetName` — a street **or** a square, arriving as it stands. |
 | `journey_climb`, `journey_bikes_at_departure` | `%1$s tırmanış`, `Kalkış istasyonunda %1$s` | A figure and a pair of counts, both already formatted; neither is ever inflected. |
+
+**`journey_summary` drops the English "of which", and Turkish leaves no
+choice.** Every explicit partitive in Turkish marks the part with a
+possessive — *3 saatin 1 saati yürüyerek* — and that possessive would fall on
+`%1$s`, which is the one thing this file never does. French, German, Italian,
+Polish, Romanian and Japanese all keep the link to the total above; Turkish
+carries it by position instead (*%1$s yürüyerek, %2$s bisikletle · %3$s*), the
+line sitting directly under the total time. Anybody restoring the words has to
+find a partitive that leaves the placeholder bare, and there is not one.
 
 **`city_delete_description`, `city_delete_body` and `city_deleted` are handed
 the NETWORK's name, not the city's.** `CityAdapter.kt:111`, `CityFragment.kt:279`
@@ -143,18 +152,33 @@ thing with one word.
 group of five digits (*34710*), which is exactly what `looksLikePostcode`
 filters (`POSTCODE_LENGTH = 5`), and `parseQuery` strips it **before** it
 looks for a house number — so *Bağdat Caddesi 15, 34710 Kadıköy* would keep
-its door. Turkey is one of the countries the parser handles cleanly. The
-reason it stays out is the other end of the same code: a stripped postcode
-narrows nothing, because the index does not hold it in full text. Typing it
-changes no result, and a three-word prompt should not invite a fourth thing
-the search discards.
+its door. The reason it stays out is the other end of the same code: a
+stripped postcode narrows nothing, because the index does not hold it in full
+text. Typing it changes no result, and a three-word prompt should not invite a
+fourth thing the search discards.
 
-The second guard — no stop word beside a number read between street and town —
-protects streets named after a date. Turkey has a great many of them
-(*19 Mayıs Caddesi*, *29 Ekim Bulvarı*, *100. Yıl*), and they put the figure
-at the **head** of the name rather than after it, which is the far side of the
-street from where this prompt invites a number. The prompt stacks no second
-number, so the first guard is not stressed either.
+The second guard does **not** protect these. `readLeadingNumber` runs before
+`readMedianNumber` and escapes the two-number guard by design, so a street
+whose name opens with a date — *19 Mayıs Caddesi*, *29 Ekim Bulvarı*,
+*100. Yıl* — has that date read as the house number, and the real one is left
+in the search terms, where `matchQualityOf` scores the street 0 as soon as it
+is longer than two characters. This is a hole in `readLeadingNumber`, not in
+the prompt, and it is reported rather than worked around.
+
+The class is everywhere in Turkey — *19 Mayıs*, *29 Ekim*, *23 Nisan*,
+*15 Temmuz*, *30 Ağustos*, *100. Yıl* — and the order this prompt proposes is
+what manufactures the second number: *19 Mayıs Caddesi 145 Şişli* reads its
+door as **19** and returns nothing, while *19 Mayıs Caddesi 15 Şişli* reads
+**19** and returns the wrong door.
+
+**`No:` returns nothing too, and this prompt invites the form.**
+`config/address-normalization/tr.json` expands `no → numara`, but `numara` is
+not among the `stopWords`, which hold only `ve`. So *Atatürk Caddesi No: 15
+Konya* normalises to `ataturk caddesi numara 15 konya`: the house number is
+read, and `numara` stays in the search terms, matches no indexed text, runs to
+six characters and scores the street 0. Turkey writes house numbers behind
+*No:* constantly. Reported rather than worked around — the configuration file
+is shared with every language.
 
 **The layout of an address is not this file's business.** A Konya address
 reads the way Turkey writes it whatever language the interface speaks, and a
