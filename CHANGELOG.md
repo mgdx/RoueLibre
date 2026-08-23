@@ -7,7 +7,12 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
-## [Unreleased]
+## [1.0.0]
+
+The first version published. What it adds over the alphas is written below; what
+makes it 1.0 is that it is signed by the project's own key, so that whoever
+installs it can be handed the next one. The three versions before it were tagged
+and never released.
 
 ### Added
 

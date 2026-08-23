@@ -21,13 +21,14 @@ android {
         // adaptive icons, and above all an up-to-date TLS stack (SPEC §3).
         minSdk = 26
         targetSdk = 37
-        versionCode = 3
-        // Alpha still: the application covers its subject — map, address
-        // search, door-to-door journey — over every conurbation whose network
-        // publishes its stations, and the data is published at last. What
-        // keeps it in alpha is the field: those datasets have been generated
-        // in bulk, not walked over. See CHANGELOG.md.
-        versionName = "0.3.0-alpha"
+        versionCode = 4
+        // The first version published, and the first signed by the project's
+        // own key rather than the debug one. That is what 1.0 names here: not
+        // a feature set frozen, but a build somebody can install and then
+        // update, the signature being what makes the second possible. The
+        // three alphas before it were tagged and never released.
+        // See CHANGELOG.md.
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
