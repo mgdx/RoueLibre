@@ -1,0 +1,773 @@
+{
+  "language": "hr",
+  "cases": [
+    {
+      "input": "Ulica kralja Zvonimira",
+      "normalized": "ulica kralja zvonimira",
+      "type": "ulica",
+      "name": "kralja zvonimira"
+    },
+    {
+      "input": "Trg bana Josipa Jelačića",
+      "normalized": "trg bana josipa jelacica",
+      "type": "trg",
+      "name": "bana josipa jelacica"
+    },
+    {
+      "input": "Ilica",
+      "normalized": "ilica",
+      "type": null,
+      "name": "ilica"
+    },
+    {
+      "input": "Savska cesta",
+      "normalized": "savska cesta",
+      "type": null,
+      "name": "savska cesta"
+    },
+    {
+      "input": "Šetalište Franje Tuđmana",
+      "normalized": "setaliste franje tudmana",
+      "type": "setaliste",
+      "name": "franje tudmana"
+    },
+    {
+      "input": "Obala Lazareta",
+      "normalized": "obala lazareta",
+      "type": "obala",
+      "name": "lazareta"
+    },
+    {
+      "input": "Vukovarska avenija",
+      "normalized": "vukovarska avenija",
+      "type": null,
+      "name": "vukovarska avenija"
+    },
+    {
+      "input": "Prilaz Gjure Deželića",
+      "normalized": "prilaz gjure dezelica",
+      "type": "prilaz",
+      "name": "gjure dezelica"
+    },
+    {
+      "input": "Naselje Josipin dvor",
+      "normalized": "naselje josipin dvor",
+      "type": null,
+      "name": "naselje josipin dvor"
+    },
+    {
+      "input": "Trg Lavoslava Ružičke",
+      "normalized": "trg lavoslava ruzicke",
+      "type": "trg",
+      "name": "lavoslava ruzicke"
+    },
+    {
+      "input": "Edunova - IT & Management",
+      "normalized": "edunova it management",
+      "type": null,
+      "name": "edunova it management"
+    },
+    {
+      "input": "Brijest",
+      "normalized": "brijest",
+      "type": null,
+      "name": "brijest"
+    },
+    {
+      "input": "Standard",
+      "normalized": "standard",
+      "type": null,
+      "name": "standard"
+    },
+    {
+      "input": "Josipovac",
+      "normalized": "josipovac",
+      "type": null,
+      "name": "josipovac"
+    },
+    {
+      "input": "Odjel za fiziku",
+      "normalized": "odjel za fiziku",
+      "type": null,
+      "name": "odjel za fiziku"
+    },
+    {
+      "input": "Građevinski i arhitektonski fakultet Osijek",
+      "normalized": "gradevinski i arhitektonski fakultet osijek",
+      "type": null,
+      "name": "gradevinski i arhitektonski fakultet osijek"
+    },
+    {
+      "input": "Višnjevac IPK",
+      "normalized": "visnjevac ipk",
+      "type": null,
+      "name": "visnjevac ipk"
+    },
+    {
+      "input": "Antunovačka ulica",
+      "normalized": "antunovacka ulica",
+      "type": null,
+      "name": "antunovacka ulica"
+    },
+    {
+      "input": "Bapska ulica",
+      "normalized": "bapska ulica",
+      "type": null,
+      "name": "bapska ulica"
+    },
+    {
+      "input": "Bednjanska ulica",
+      "normalized": "bednjanska ulica",
+      "type": null,
+      "name": "bednjanska ulica"
+    },
+    {
+      "input": "Biljska cesta",
+      "normalized": "biljska cesta",
+      "type": null,
+      "name": "biljska cesta"
+    },
+    {
+      "input": "Biševska ulica",
+      "normalized": "bisevska ulica",
+      "type": null,
+      "name": "bisevska ulica"
+    },
+    {
+      "input": "Blatna ulica",
+      "normalized": "blatna ulica",
+      "type": null,
+      "name": "blatna ulica"
+    },
+    {
+      "input": "Bosutsko",
+      "normalized": "bosutsko",
+      "type": null,
+      "name": "bosutsko"
+    },
+    {
+      "input": "Brodska ulica",
+      "normalized": "brodska ulica",
+      "type": null,
+      "name": "brodska ulica"
+    },
+    {
+      "input": "Čerina",
+      "normalized": "cerina",
+      "type": null,
+      "name": "cerina"
+    },
+    {
+      "input": "Creska ulica",
+      "normalized": "creska ulica",
+      "type": null,
+      "name": "creska ulica"
+    },
+    {
+      "input": "Cvjetna ulica",
+      "normalized": "cvjetna ulica",
+      "type": null,
+      "name": "cvjetna ulica"
+    },
+    {
+      "input": "Dalmatinska ulica",
+      "normalized": "dalmatinska ulica",
+      "type": null,
+      "name": "dalmatinska ulica"
+    },
+    {
+      "input": "Dinarska ulica",
+      "normalized": "dinarska ulica",
+      "type": null,
+      "name": "dinarska ulica"
+    },
+    {
+      "input": "Dravska ulica",
+      "normalized": "dravska ulica",
+      "type": null,
+      "name": "dravska ulica"
+    },
+    {
+      "input": "Duga draka",
+      "normalized": "duga draka",
+      "type": null,
+      "name": "duga draka"
+    },
+    {
+      "input": "Esperantska ulica",
+      "normalized": "esperantska ulica",
+      "type": null,
+      "name": "esperantska ulica"
+    },
+    {
+      "input": "Frankopanska ulica",
+      "normalized": "frankopanska ulica",
+      "type": null,
+      "name": "frankopanska ulica"
+    },
+    {
+      "input": "Gospićka ulica",
+      "normalized": "gospicka ulica",
+      "type": null,
+      "name": "gospicka ulica"
+    },
+    {
+      "input": "Grobljanska ulica",
+      "normalized": "grobljanska ulica",
+      "type": null,
+      "name": "grobljanska ulica"
+    },
+    {
+      "input": "Ilirska ulica",
+      "normalized": "ilirska ulica",
+      "type": null,
+      "name": "ilirska ulica"
+    },
+    {
+      "input": "Istarska ulica",
+      "normalized": "istarska ulica",
+      "type": null,
+      "name": "istarska ulica"
+    },
+    {
+      "input": "Jadranska ulica",
+      "normalized": "jadranska ulica",
+      "type": null,
+      "name": "jadranska ulica"
+    },
+    {
+      "input": "Josipin dvor",
+      "normalized": "josipin dvor",
+      "type": null,
+      "name": "josipin dvor"
+    },
+    {
+      "input": "Kapelska ulica",
+      "normalized": "kapelska ulica",
+      "type": null,
+      "name": "kapelska ulica"
+    },
+    {
+      "input": "Karlovačka ulica",
+      "normalized": "karlovacka ulica",
+      "type": null,
+      "name": "karlovacka ulica"
+    },
+    {
+      "input": "Kolodvorska ulica",
+      "normalized": "kolodvorska ulica",
+      "type": null,
+      "name": "kolodvorska ulica"
+    },
+    {
+      "input": "Kordunska ulica",
+      "normalized": "kordunska ulica",
+      "type": null,
+      "name": "kordunska ulica"
+    },
+    {
+      "input": "Kralja Zvonimira",
+      "normalized": "kralja zvonimira",
+      "type": null,
+      "name": "kralja zvonimira"
+    },
+    {
+      "input": "Krčka ulica",
+      "normalized": "krcka ulica",
+      "type": null,
+      "name": "krcka ulica"
+    },
+    {
+      "input": "Kvarnerska ulica",
+      "normalized": "kvarnerska ulica",
+      "type": null,
+      "name": "kvarnerska ulica"
+    },
+    {
+      "input": "Ledine",
+      "normalized": "ledine",
+      "type": null,
+      "name": "ledine"
+    },
+    {
+      "input": "Lokrumska ulica",
+      "normalized": "lokrumska ulica",
+      "type": null,
+      "name": "lokrumska ulica"
+    },
+    {
+      "input": "Lučki prilaz",
+      "normalized": "lucki prilaz",
+      "type": null,
+      "name": "lucki prilaz"
+    },
+    {
+      "input": "Maceljska ulica",
+      "normalized": "maceljska ulica",
+      "type": null,
+      "name": "maceljska ulica"
+    },
+    {
+      "input": "Medulinska ulica",
+      "normalized": "medulinska ulica",
+      "type": null,
+      "name": "medulinska ulica"
+    },
+    {
+      "input": "Mlinska ulica",
+      "normalized": "mlinska ulica",
+      "type": null,
+      "name": "mlinska ulica"
+    },
+    {
+      "input": "Most Drava",
+      "normalized": "most drava",
+      "type": "most",
+      "name": "drava"
+    },
+    {
+      "input": "Murterska ulica",
+      "normalized": "murterska ulica",
+      "type": null,
+      "name": "murterska ulica"
+    },
+    {
+      "input": "Naselje Miroslava Krleže",
+      "normalized": "naselje miroslava krleze",
+      "type": null,
+      "name": "naselje miroslava krleze"
+    },
+    {
+      "input": "Našičko naselje",
+      "normalized": "nasicko naselje",
+      "type": null,
+      "name": "nasicko naselje"
+    },
+    {
+      "input": "Nuštarska ulica",
+      "normalized": "nustarska ulica",
+      "type": null,
+      "name": "nustarska ulica"
+    },
+    {
+      "input": "Orahovička ulica",
+      "normalized": "orahovicka ulica",
+      "type": null,
+      "name": "orahovicka ulica"
+    },
+    {
+      "input": "Paklenička ulica",
+      "normalized": "paklenicka ulica",
+      "type": null,
+      "name": "paklenicka ulica"
+    },
+    {
+      "input": "Park kneza Branimira",
+      "normalized": "park kneza branimira",
+      "type": "park",
+      "name": "kneza branimira"
+    },
+    {
+      "input": "Pazinska ulica",
+      "normalized": "pazinska ulica",
+      "type": null,
+      "name": "pazinska ulica"
+    },
+    {
+      "input": "Pješački most",
+      "normalized": "pjesacki most",
+      "type": null,
+      "name": "pjesacki most"
+    },
+    {
+      "input": "Plješevička ulica",
+      "normalized": "pljesevicka ulica",
+      "type": null,
+      "name": "pljesevicka ulica"
+    },
+    {
+      "input": "Poljski put",
+      "normalized": "poljski put",
+      "type": null,
+      "name": "poljski put"
+    },
+    {
+      "input": "Požeška ulica",
+      "normalized": "pozeska ulica",
+      "type": null,
+      "name": "pozeska ulica"
+    },
+    {
+      "input": "Prolaz Ante Slavičeka",
+      "normalized": "prolaz ante slaviceka",
+      "type": "prolaz",
+      "name": "ante slaviceka"
+    },
+    {
+      "input": "Prolaz kod Snježne Gospe",
+      "normalized": "prolaz kod snjezne gospe",
+      "type": "prolaz",
+      "name": "kod snjezne gospe"
+    },
+    {
+      "input": "Prominska ulica",
+      "normalized": "prominska ulica",
+      "type": null,
+      "name": "prominska ulica"
+    },
+    {
+      "input": "Ramska ulica",
+      "normalized": "ramska ulica",
+      "type": null,
+      "name": "ramska ulica"
+    },
+    {
+      "input": "Reisnerova ulica",
+      "normalized": "reisnerova ulica",
+      "type": null,
+      "name": "reisnerova ulica"
+    },
+    {
+      "input": "Ritska ulica",
+      "normalized": "ritska ulica",
+      "type": null,
+      "name": "ritska ulica"
+    },
+    {
+      "input": "Sanska ulica",
+      "normalized": "sanska ulica",
+      "type": null,
+      "name": "sanska ulica"
+    },
+    {
+      "input": "Senjska ulica",
+      "normalized": "senjska ulica",
+      "type": null,
+      "name": "senjska ulica"
+    },
+    {
+      "input": "Šetnica hrvatskih dragovoljaca Domovinskog rata",
+      "normalized": "setnica hrvatskih dragovoljaca domovinskog rata",
+      "type": null,
+      "name": "setnica hrvatskih dragovoljaca domovinskog rata"
+    },
+    {
+      "input": "Sjevernodravska obala",
+      "normalized": "sjevernodravska obala",
+      "type": null,
+      "name": "sjevernodravska obala"
+    },
+    {
+      "input": "Slaz",
+      "normalized": "slaz",
+      "type": null,
+      "name": "slaz"
+    },
+    {
+      "input": "Šoltanska ulica",
+      "normalized": "soltanska ulica",
+      "type": null,
+      "name": "soltanska ulica"
+    },
+    {
+      "input": "Stadionsko naselje",
+      "normalized": "stadionsko naselje",
+      "type": null,
+      "name": "stadionsko naselje"
+    },
+    {
+      "input": "Strma ulica",
+      "normalized": "strma ulica",
+      "type": null,
+      "name": "strma ulica"
+    },
+    {
+      "input": "Svilajska ulica",
+      "normalized": "svilajska ulica",
+      "type": null,
+      "name": "svilajska ulica"
+    },
+    {
+      "input": "Trebižatska ulica",
+      "normalized": "trebizatska ulica",
+      "type": null,
+      "name": "trebizatska ulica"
+    },
+    {
+      "input": "Trg Josifa Runjanina",
+      "normalized": "trg josifa runjanina",
+      "type": "trg",
+      "name": "josifa runjanina"
+    },
+    {
+      "input": "Trg Nikole Tesle",
+      "normalized": "trg nikole tesle",
+      "type": "trg",
+      "name": "nikole tesle"
+    },
+    {
+      "input": "Trpanjska ulica",
+      "normalized": "trpanjska ulica",
+      "type": null,
+      "name": "trpanjska ulica"
+    },
+    {
+      "input": "Učka",
+      "normalized": "ucka",
+      "type": null,
+      "name": "ucka"
+    },
+    {
+      "input": "Ukrinska ulica",
+      "normalized": "ukrinska ulica",
+      "type": null,
+      "name": "ukrinska ulica"
+    },
+    {
+      "input": "Ulica Andrije Mohorovičića",
+      "normalized": "ulica andrije mohorovicica",
+      "type": "ulica",
+      "name": "andrije mohorovicica"
+    },
+    {
+      "input": "Ulica Antuna Branka Šimića",
+      "normalized": "ulica antuna branka simica",
+      "type": "ulica",
+      "name": "antuna branka simica"
+    },
+    {
+      "input": "Ulica ariša",
+      "normalized": "ulica arisa",
+      "type": "ulica",
+      "name": "arisa"
+    },
+    {
+      "input": "Ulica bana Josipa Jelačića",
+      "normalized": "ulica bana josipa jelacica",
+      "type": "ulica",
+      "name": "bana josipa jelacica"
+    },
+    {
+      "input": "Ulica braće Radića",
+      "normalized": "ulica brace radica",
+      "type": "ulica",
+      "name": "brace radica"
+    },
+    {
+      "input": "Ulica Brune Bjelinskog / Frankopanska ulica",
+      "normalized": "ulica brune bjelinskog frankopanska ulica",
+      "type": "ulica",
+      "name": "brune bjelinskog frankopanska ulica"
+    },
+    {
+      "input": "Ulica Dinka Šimunovića",
+      "normalized": "ulica dinka simunovica",
+      "type": "ulica",
+      "name": "dinka simunovica"
+    },
+    {
+      "input": "Ulica Dragutina Neumana",
+      "normalized": "ulica dragutina neumana",
+      "type": "ulica",
+      "name": "dragutina neumana"
+    },
+    {
+      "input": "Ulica Ferde Livadića",
+      "normalized": "ulica ferde livadica",
+      "type": "ulica",
+      "name": "ferde livadica"
+    },
+    {
+      "input": "Ulica Franje Antuna Blažića",
+      "normalized": "ulica franje antuna blazica",
+      "type": "ulica",
+      "name": "franje antuna blazica"
+    },
+    {
+      "input": "Ulica Franje Mückea",
+      "normalized": "ulica franje muckea",
+      "type": "ulica",
+      "name": "franje muckea"
+    },
+    {
+      "input": "Ulica Hanibala Lucića",
+      "normalized": "ulica hanibala lucica",
+      "type": "ulica",
+      "name": "hanibala lucica"
+    },
+    {
+      "input": "Ulica Huge Conrada Hoetzendorfa",
+      "normalized": "ulica huge conrada hoetzendorfa",
+      "type": "ulica",
+      "name": "huge conrada hoetzendorfa"
+    },
+    {
+      "input": "Ulica Ivana Mažuranića",
+      "normalized": "ulica ivana mazuranica",
+      "type": "ulica",
+      "name": "ivana mazuranica"
+    },
+    {
+      "input": "Ulica Izidora Kršnjavoga",
+      "normalized": "ulica izidora krsnjavoga",
+      "type": "ulica",
+      "name": "izidora krsnjavoga"
+    },
+    {
+      "input": "Ulica javora",
+      "normalized": "ulica javora",
+      "type": "ulica",
+      "name": "javora"
+    },
+    {
+      "input": "Ulica Josipa Boserdorfera",
+      "normalized": "ulica josipa boserdorfera",
+      "type": "ulica",
+      "name": "josipa boserdorfera"
+    },
+    {
+      "input": "Ulica Josipa Reihl-Kira",
+      "normalized": "ulica josipa reihl kira",
+      "type": "ulica",
+      "name": "josipa reihl kira"
+    },
+    {
+      "input": "Ulica Julija Knifera",
+      "normalized": "ulica julija knifera",
+      "type": "ulica",
+      "name": "julija knifera"
+    },
+    {
+      "input": "Ulica kestenova",
+      "normalized": "ulica kestenova",
+      "type": "ulica",
+      "name": "kestenova"
+    },
+    {
+      "input": "Ulica kneza Domagoja",
+      "normalized": "ulica kneza domagoja",
+      "type": "ulica",
+      "name": "kneza domagoja"
+    },
+    {
+      "input": "Ulica koščela",
+      "normalized": "ulica koscela",
+      "type": "ulica",
+      "name": "koscela"
+    },
+    {
+      "input": "Ulica kralja Zvonimira",
+      "normalized": "ulica kralja zvonimira",
+      "type": "ulica",
+      "name": "kralja zvonimira"
+    },
+    {
+      "input": "Ulica Ljudevita Posavskog",
+      "normalized": "ulica ljudevita posavskog",
+      "type": "ulica",
+      "name": "ljudevita posavskog"
+    },
+    {
+      "input": "Ulica Marina Držića",
+      "normalized": "ulica marina drzica",
+      "type": "ulica",
+      "name": "marina drzica"
+    },
+    {
+      "input": "Ulica Matije Petra Katančića",
+      "normalized": "ulica matije petra katancica",
+      "type": "ulica",
+      "name": "matije petra katancica"
+    },
+    {
+      "input": "Ulica Milutina Milankovića",
+      "normalized": "ulica milutina milankovica",
+      "type": "ulica",
+      "name": "milutina milankovica"
+    },
+    {
+      "input": "Ulica Nikole Tesle",
+      "normalized": "ulica nikole tesle",
+      "type": "ulica",
+      "name": "nikole tesle"
+    },
+    {
+      "input": "Ulica Papuk gore",
+      "normalized": "ulica papuk gore",
+      "type": "ulica",
+      "name": "papuk gore"
+    },
+    {
+      "input": "Ulica Petra Svačića",
+      "normalized": "ulica petra svacica",
+      "type": "ulica",
+      "name": "petra svacica"
+    },
+    {
+      "input": "Ulica princa Eugena Savojskog",
+      "normalized": "ulica princa eugena savojskog",
+      "type": "ulica",
+      "name": "princa eugena savojskog"
+    },
+    {
+      "input": "Ulica Šandora Petofia",
+      "normalized": "ulica sandora petofia",
+      "type": "ulica",
+      "name": "sandora petofia"
+    },
+    {
+      "input": "Ulica Stanka Vraza",
+      "normalized": "ulica stanka vraza",
+      "type": "ulica",
+      "name": "stanka vraza"
+    },
+    {
+      "input": "Ulica svetog Leopolda Bogdana Mandića",
+      "normalized": "ulica svetog leopolda bogdana mandica",
+      "type": "ulica",
+      "name": "svetog leopolda bogdana mandica"
+    },
+    {
+      "input": "Ulica Tina Ujevića",
+      "normalized": "ulica tina ujevica",
+      "type": "ulica",
+      "name": "tina ujevica"
+    },
+    {
+      "input": "Ulica Vatroslava Jagića",
+      "normalized": "ulica vatroslava jagica",
+      "type": "ulica",
+      "name": "vatroslava jagica"
+    },
+    {
+      "input": "Ulica Vjekoslava Majera",
+      "normalized": "ulica vjekoslava majera",
+      "type": "ulica",
+      "name": "vjekoslava majera"
+    },
+    {
+      "input": "Ulica Vlatka Mačeka",
+      "normalized": "ulica vlatka maceka",
+      "type": "ulica",
+      "name": "vlatka maceka"
+    },
+    {
+      "input": "Ulica Zmaj Jove Jovanovića",
+      "normalized": "ulica zmaj jove jovanovica",
+      "type": "ulica",
+      "name": "zmaj jove jovanovica"
+    },
+    {
+      "input": "Valpovačka ulica",
+      "normalized": "valpovacka ulica",
+      "type": null,
+      "name": "valpovacka ulica"
+    },
+    {
+      "input": "Veličanska ulica",
+      "normalized": "velicanska ulica",
+      "type": null,
+      "name": "velicanska ulica"
+    }
+  ]
+}

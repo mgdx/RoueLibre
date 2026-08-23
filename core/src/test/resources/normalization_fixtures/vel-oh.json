@@ -314,16 +314,718 @@
       "name": "aire de berchem"
     },
     {
-      "input": "Rue de l'Aciérie",
-      "normalized": "rue de l acierie",
-      "type": "rue",
-      "name": "de l acierie"
+      "input": "Marxe Knupp",
+      "normalized": "marxe knupp",
+      "type": null,
+      "name": "marxe knupp"
     },
     {
-      "input": "Um Lannestack",
-      "normalized": "um lannestack",
+      "input": "Nederlandstalige Jeugdbibliotheek Luxemburg",
+      "normalized": "nederlandstalige jeugdbibliotheek luxemburg",
       "type": null,
-      "name": "um lannestack"
+      "name": "nederlandstalige jeugdbibliotheek luxemburg"
+    },
+    {
+      "input": "Dommeldange",
+      "normalized": "dommeldange",
+      "type": null,
+      "name": "dommeldange"
+    },
+    {
+      "input": "Rout Bréck-Pafendall",
+      "normalized": "rout breck pafendall",
+      "type": null,
+      "name": "rout breck pafendall"
+    },
+    {
+      "input": "Hollerich",
+      "normalized": "hollerich",
+      "type": null,
+      "name": "hollerich"
+    },
+    {
+      "input": "Weidendall",
+      "normalized": "weidendall",
+      "type": null,
+      "name": "weidendall"
+    },
+    {
+      "input": "Allée des Résistants et des Déportés",
+      "normalized": "allee des resistants et des deportes",
+      "type": "allee",
+      "name": "des resistants et des deportes"
+    },
+    {
+      "input": "Allée Scheffer",
+      "normalized": "allee scheffer",
+      "type": "allee",
+      "name": "scheffer"
+    },
+    {
+      "input": "Am Duerf",
+      "normalized": "am duerf",
+      "type": null,
+      "name": "am duerf"
+    },
+    {
+      "input": "Am klenge Park",
+      "normalized": "am klenge park",
+      "type": null,
+      "name": "am klenge park"
+    },
+    {
+      "input": "Am Seiteschgart",
+      "normalized": "am seiteschgart",
+      "type": null,
+      "name": "am seiteschgart"
+    },
+    {
+      "input": "An de Steng",
+      "normalized": "an de steng",
+      "type": null,
+      "name": "an de steng"
+    },
+    {
+      "input": "An der Retsch",
+      "normalized": "an der retsch",
+      "type": null,
+      "name": "an der retsch"
+    },
+    {
+      "input": "Avenue Berchem",
+      "normalized": "avenue berchem",
+      "type": "avenue",
+      "name": "berchem"
+    },
+    {
+      "input": "Avenue John F. Kennedy",
+      "normalized": "avenue john f kennedy",
+      "type": "avenue",
+      "name": "john f kennedy"
+    },
+    {
+      "input": "Beim Beemchen",
+      "normalized": "beim beemchen",
+      "type": null,
+      "name": "beim beemchen"
+    },
+    {
+      "input": "Bierkewee",
+      "normalized": "bierkewee",
+      "type": null,
+      "name": "bierkewee"
+    },
+    {
+      "input": "Boulevard des Scillas",
+      "normalized": "boulevard des scillas",
+      "type": "boulevard",
+      "name": "des scillas"
+    },
+    {
+      "input": "Boulevard Kaltreis",
+      "normalized": "boulevard kaltreis",
+      "type": "boulevard",
+      "name": "kaltreis"
+    },
+    {
+      "input": "Bourgheid",
+      "normalized": "bourgheid",
+      "type": null,
+      "name": "bourgheid"
+    },
+    {
+      "input": "Chaussée Blanche",
+      "normalized": "chaussee blanche",
+      "type": "chaussee",
+      "name": "blanche"
+    },
+    {
+      "input": "Circuit de la Foire Internationale",
+      "normalized": "circuit de la foire internationale",
+      "type": null,
+      "name": "circuit de la foire internationale"
+    },
+    {
+      "input": "Cité Nicolas Spanier",
+      "normalized": "cite nicolas spanier",
+      "type": "cite",
+      "name": "nicolas spanier"
+    },
+    {
+      "input": "Dellwee",
+      "normalized": "dellwee",
+      "type": null,
+      "name": "dellwee"
+    },
+    {
+      "input": "Eechewee",
+      "normalized": "eechewee",
+      "type": null,
+      "name": "eechewee"
+    },
+    {
+      "input": "Fitnessparcours Säitert",
+      "normalized": "fitnessparcours saitert",
+      "type": null,
+      "name": "fitnessparcours saitert"
+    },
+    {
+      "input": "Grevelsbarrière",
+      "normalized": "grevelsbarriere",
+      "type": null,
+      "name": "grevelsbarriere"
+    },
+    {
+      "input": "Hourebréck",
+      "normalized": "hourebreck",
+      "type": null,
+      "name": "hourebreck"
+    },
+    {
+      "input": "In den Dielen",
+      "normalized": "in den dielen",
+      "type": null,
+      "name": "in den dielen"
+    },
+    {
+      "input": "Kiem",
+      "normalized": "kiem",
+      "type": null,
+      "name": "kiem"
+    },
+    {
+      "input": "Kohlenberg",
+      "normalized": "kohlenberg",
+      "type": null,
+      "name": "kohlenberg"
+    },
+    {
+      "input": "Lotissement Vulcalux",
+      "normalized": "lotissement vulcalux",
+      "type": "lotissement",
+      "name": "vulcalux"
+    },
+    {
+      "input": "Montée de Bridel",
+      "normalized": "montee de bridel",
+      "type": "montee",
+      "name": "de bridel"
+    },
+    {
+      "input": "Montée Thommes",
+      "normalized": "montee thommes",
+      "type": "montee",
+      "name": "thommes"
+    },
+    {
+      "input": "Onner Gard",
+      "normalized": "onner gard",
+      "type": null,
+      "name": "onner gard"
+    },
+    {
+      "input": "Op der Aeppeltaart",
+      "normalized": "op der aeppeltaart",
+      "type": null,
+      "name": "op der aeppeltaart"
+    },
+    {
+      "input": "Op der Knupp",
+      "normalized": "op der knupp",
+      "type": null,
+      "name": "op der knupp"
+    },
+    {
+      "input": "Op Mooschelt",
+      "normalized": "op mooschelt",
+      "type": null,
+      "name": "op mooschelt"
+    },
+    {
+      "input": "Parking West Side Village",
+      "normalized": "parking west side village",
+      "type": null,
+      "name": "parking west side village"
+    },
+    {
+      "input": "Piste cyclable du Centre (PC 1)",
+      "normalized": "piste cyclable du centre pc 1",
+      "type": null,
+      "name": "piste cyclable du centre pc 1"
+    },
+    {
+      "input": "Place de l'Indépendance",
+      "normalized": "place de l independance",
+      "type": "place",
+      "name": "de l independance"
+    },
+    {
+      "input": "Place Émile Mousel",
+      "normalized": "place emile mousel",
+      "type": "place",
+      "name": "emile mousel"
+    },
+    {
+      "input": "Place Saints-Pierre-et-Paul",
+      "normalized": "place saints pierre et paul",
+      "type": "place",
+      "name": "saints pierre et paul"
+    },
+    {
+      "input": "Pont Viaduc",
+      "normalized": "pont viaduc",
+      "type": "pont",
+      "name": "viaduc"
+    },
+    {
+      "input": "Rond-Point Christoph Willibald Gluck",
+      "normalized": "rond point christoph willibald gluck",
+      "type": "rond point",
+      "name": "christoph willibald gluck"
+    },
+    {
+      "input": "Route de Bettembourg",
+      "normalized": "route de bettembourg",
+      "type": "route",
+      "name": "de bettembourg"
+    },
+    {
+      "input": "Route de Trèves",
+      "normalized": "route de treves",
+      "type": "route",
+      "name": "de treves"
+    },
+    {
+      "input": "Rue Adolphe Omlor",
+      "normalized": "rue adolphe omlor",
+      "type": "rue",
+      "name": "adolphe omlor"
+    },
+    {
+      "input": "Rue Alcide de Gasperi",
+      "normalized": "rue alcide de gasperi",
+      "type": "rue",
+      "name": "alcide de gasperi"
+    },
+    {
+      "input": "Rue Am Kallek",
+      "normalized": "rue am kallek",
+      "type": "rue",
+      "name": "am kallek"
+    },
+    {
+      "input": "Rue Annette Schwall-Lacroix",
+      "normalized": "rue annette schwall lacroix",
+      "type": "rue",
+      "name": "annette schwall lacroix"
+    },
+    {
+      "input": "Rue Arthur Herchen",
+      "normalized": "rue arthur herchen",
+      "type": "rue",
+      "name": "arthur herchen"
+    },
+    {
+      "input": "Rue Basse",
+      "normalized": "rue basse",
+      "type": "rue",
+      "name": "basse"
+    },
+    {
+      "input": "Rue Bernard Haal",
+      "normalized": "rue bernard haal",
+      "type": "rue",
+      "name": "bernard haal"
+    },
+    {
+      "input": "Rue Caspar Mathias Spoo",
+      "normalized": "rue caspar mathias spoo",
+      "type": "rue",
+      "name": "caspar mathias spoo"
+    },
+    {
+      "input": "Rue Charles Schwall",
+      "normalized": "rue charles schwall",
+      "type": "rue",
+      "name": "charles schwall"
+    },
+    {
+      "input": "Rue d'Amsterdam",
+      "normalized": "rue d amsterdam",
+      "type": "rue",
+      "name": "d amsterdam"
+    },
+    {
+      "input": "Rue d'Olm",
+      "normalized": "rue d olm",
+      "type": "rue",
+      "name": "d olm"
+    },
+    {
+      "input": "Rue de Beyren",
+      "normalized": "rue de beyren",
+      "type": "rue",
+      "name": "de beyren"
+    },
+    {
+      "input": "Rue de Clausen",
+      "normalized": "rue de clausen",
+      "type": "rue",
+      "name": "de clausen"
+    },
+    {
+      "input": "Rue de Gibraltar",
+      "normalized": "rue de gibraltar",
+      "type": "rue",
+      "name": "de gibraltar"
+    },
+    {
+      "input": "Rue de Kevelaer",
+      "normalized": "rue de kevelaer",
+      "type": "rue",
+      "name": "de kevelaer"
+    },
+    {
+      "input": "Rue de l'Étang",
+      "normalized": "rue de l etang",
+      "type": "rue",
+      "name": "de l etang"
+    },
+    {
+      "input": "Rue de la Chaux",
+      "normalized": "rue de la chaux",
+      "type": "rue",
+      "name": "de la chaux"
+    },
+    {
+      "input": "Rue de la Lavande",
+      "normalized": "rue de la lavande",
+      "type": "rue",
+      "name": "de la lavande"
+    },
+    {
+      "input": "Rue de la Résistance",
+      "normalized": "rue de la resistance",
+      "type": "rue",
+      "name": "de la resistance"
+    },
+    {
+      "input": "Rue de Limana",
+      "normalized": "rue de limana",
+      "type": "rue",
+      "name": "de limana"
+    },
+    {
+      "input": "Rue de Mersch",
+      "normalized": "rue de mersch",
+      "type": "rue",
+      "name": "de mersch"
+    },
+    {
+      "input": "Rue de Paris",
+      "normalized": "rue de paris",
+      "type": "rue",
+      "name": "de paris"
+    },
+    {
+      "input": "Rue de Rome",
+      "normalized": "rue de rome",
+      "type": "rue",
+      "name": "de rome"
+    },
+    {
+      "input": "Rue de Soleuvre",
+      "normalized": "rue de soleuvre",
+      "type": "rue",
+      "name": "de soleuvre"
+    },
+    {
+      "input": "Rue de Wormeldange",
+      "normalized": "rue de wormeldange",
+      "type": "rue",
+      "name": "de wormeldange"
+    },
+    {
+      "input": "Rue des Capucines",
+      "normalized": "rue des capucines",
+      "type": "rue",
+      "name": "des capucines"
+    },
+    {
+      "input": "Rue des Écoles",
+      "normalized": "rue des ecoles",
+      "type": "rue",
+      "name": "des ecoles"
+    },
+    {
+      "input": "Rue des Grottes",
+      "normalized": "rue des grottes",
+      "type": "rue",
+      "name": "des grottes"
+    },
+    {
+      "input": "Rue des Muguets",
+      "normalized": "rue des muguets",
+      "type": "rue",
+      "name": "des muguets"
+    },
+    {
+      "input": "Rue des Promenades",
+      "normalized": "rue des promenades",
+      "type": "rue",
+      "name": "des promenades"
+    },
+    {
+      "input": "Rue des Sorbiers",
+      "normalized": "rue des sorbiers",
+      "type": "rue",
+      "name": "des sorbiers"
+    },
+    {
+      "input": "Rue Dicks",
+      "normalized": "rue dicks",
+      "type": "rue",
+      "name": "dicks"
+    },
+    {
+      "input": "Rue du 9 septembre 1867",
+      "normalized": "rue du 9 septembre 1867",
+      "type": "rue",
+      "name": "du 9 septembre 1867"
+    },
+    {
+      "input": "Rue du Couvent",
+      "normalized": "rue du couvent",
+      "type": "rue",
+      "name": "du couvent"
+    },
+    {
+      "input": "Rue du Grünewald",
+      "normalized": "rue du grunewald",
+      "type": "rue",
+      "name": "du grunewald"
+    },
+    {
+      "input": "Rue du Père Raphaël",
+      "normalized": "rue du pere raphael",
+      "type": "rue",
+      "name": "du pere raphael"
+    },
+    {
+      "input": "Rue du Stade 2000",
+      "normalized": "rue du stade 2000",
+      "type": "rue",
+      "name": "du stade 2000"
+    },
+    {
+      "input": "Rue Ehs",
+      "normalized": "rue ehs",
+      "type": "rue",
+      "name": "ehs"
+    },
+    {
+      "input": "Rue Ernest Koch",
+      "normalized": "rue ernest koch",
+      "type": "rue",
+      "name": "ernest koch"
+    },
+    {
+      "input": "Rue François Baclesse",
+      "normalized": "rue francois baclesse",
+      "type": "rue",
+      "name": "francois baclesse"
+    },
+    {
+      "input": "Rue Gabriel de Marie",
+      "normalized": "rue gabriel de marie",
+      "type": "rue",
+      "name": "gabriel de marie"
+    },
+    {
+      "input": "Rue Gerhard Mercator",
+      "normalized": "rue gerhard mercator",
+      "type": "rue",
+      "name": "gerhard mercator"
+    },
+    {
+      "input": "Rue Guillaume de Machault",
+      "normalized": "rue guillaume de machault",
+      "type": "rue",
+      "name": "guillaume de machault"
+    },
+    {
+      "input": "Rue Henri Becker",
+      "normalized": "rue henri becker",
+      "type": "rue",
+      "name": "henri becker"
+    },
+    {
+      "input": "Rue Henry Moore",
+      "normalized": "rue henry moore",
+      "type": "rue",
+      "name": "henry moore"
+    },
+    {
+      "input": "Rue Isidor Lippert",
+      "normalized": "rue isidor lippert",
+      "type": "rue",
+      "name": "isidor lippert"
+    },
+    {
+      "input": "Rue Jean-Baptiste Stiff",
+      "normalized": "rue jean baptiste stiff",
+      "type": "rue",
+      "name": "jean baptiste stiff"
+    },
+    {
+      "input": "Rue Jean Jacoby",
+      "normalized": "rue jean jacoby",
+      "type": "rue",
+      "name": "jean jacoby"
+    },
+    {
+      "input": "Rue Jean-Pierre Brasseur",
+      "normalized": "rue jean pierre brasseur",
+      "type": "rue",
+      "name": "jean pierre brasseur"
+    },
+    {
+      "input": "Rue Jean-Pierre Probst",
+      "normalized": "rue jean pierre probst",
+      "type": "rue",
+      "name": "jean pierre probst"
+    },
+    {
+      "input": "Rue Jean Wolter",
+      "normalized": "rue jean wolter",
+      "type": "rue",
+      "name": "jean wolter"
+    },
+    {
+      "input": "Rue Joseph Heintz",
+      "normalized": "rue joseph heintz",
+      "type": "rue",
+      "name": "joseph heintz"
+    },
+    {
+      "input": "Rue Jules Diederich",
+      "normalized": "rue jules diederich",
+      "type": "rue",
+      "name": "jules diederich"
+    },
+    {
+      "input": "Rue Klengliller",
+      "normalized": "rue klengliller",
+      "type": "rue",
+      "name": "klengliller"
+    },
+    {
+      "input": "Rue Léon Laval",
+      "normalized": "rue leon laval",
+      "type": "rue",
+      "name": "leon laval"
+    },
+    {
+      "input": "Rue Louis Deny",
+      "normalized": "rue louis deny",
+      "type": "rue",
+      "name": "louis deny"
+    },
+    {
+      "input": "Rue Mameranus",
+      "normalized": "rue mameranus",
+      "type": "rue",
+      "name": "mameranus"
+    },
+    {
+      "input": "Rue Marie Curie",
+      "normalized": "rue marie curie",
+      "type": "rue",
+      "name": "marie curie"
+    },
+    {
+      "input": "Rue Mathias Saur",
+      "normalized": "rue mathias saur",
+      "type": "rue",
+      "name": "mathias saur"
+    },
+    {
+      "input": "Rue Michel Lentz",
+      "normalized": "rue michel lentz",
+      "type": "rue",
+      "name": "michel lentz"
+    },
+    {
+      "input": "Rue Napoléon 1er",
+      "normalized": "rue napoleon 1er",
+      "type": "rue",
+      "name": "napoleon 1er"
+    },
+    {
+      "input": "Rue Nicolas Goedert",
+      "normalized": "rue nicolas goedert",
+      "type": "rue",
+      "name": "nicolas goedert"
+    },
+    {
+      "input": "Rue Nicolas Steffen-Pierret",
+      "normalized": "rue nicolas steffen pierret",
+      "type": "rue",
+      "name": "nicolas steffen pierret"
+    },
+    {
+      "input": "Rue Paul Eyschen",
+      "normalized": "rue paul eyschen",
+      "type": "rue",
+      "name": "paul eyschen"
+    },
+    {
+      "input": "Rue Peternelchen",
+      "normalized": "rue peternelchen",
+      "type": "rue",
+      "name": "peternelchen"
+    },
+    {
+      "input": "Rue Pierre Hentges",
+      "normalized": "rue pierre hentges",
+      "type": "rue",
+      "name": "pierre hentges"
+    },
+    {
+      "input": "Rue Prënz Charel",
+      "normalized": "rue prenz charel",
+      "type": "rue",
+      "name": "prenz charel"
+    },
+    {
+      "input": "Rue Richard Coudenhove-Kalergi",
+      "normalized": "rue richard coudenhove kalergi",
+      "type": "rue",
+      "name": "richard coudenhove kalergi"
+    },
+    {
+      "input": "Rue Ry Boissaux",
+      "normalized": "rue ry boissaux",
+      "type": "rue",
+      "name": "ry boissaux"
+    },
+    {
+      "input": "Rue Schauwenburg",
+      "normalized": "rue schauwenburg",
+      "type": "rue",
+      "name": "schauwenburg"
+    },
+    {
+      "input": "Rue Strachen",
+      "normalized": "rue strachen",
+      "type": "rue",
+      "name": "strachen"
+    },
+    {
+      "input": "Rue Uerschterhaff",
+      "normalized": "rue uerschterhaff",
+      "type": "rue",
+      "name": "uerschterhaff"
     }
   ]
 }

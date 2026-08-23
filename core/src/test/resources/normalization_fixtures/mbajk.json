@@ -1,0 +1,773 @@
+{
+  "language": "sl",
+  "cases": [
+    {
+      "input": "Slovenska cesta",
+      "normalized": "slovenska cesta",
+      "type": null,
+      "name": "slovenska cesta"
+    },
+    {
+      "input": "Trubarjeva ulica",
+      "normalized": "trubarjeva ulica",
+      "type": null,
+      "name": "trubarjeva ulica"
+    },
+    {
+      "input": "Trg republike",
+      "normalized": "trg republike",
+      "type": "trg",
+      "name": "republike"
+    },
+    {
+      "input": "Prešernov trg",
+      "normalized": "presernov trg",
+      "type": null,
+      "name": "presernov trg"
+    },
+    {
+      "input": "Dunajska c.",
+      "normalized": "dunajska c",
+      "type": null,
+      "name": "dunajska c"
+    },
+    {
+      "input": "Poljanski nasip",
+      "normalized": "poljanski nasip",
+      "type": null,
+      "name": "poljanski nasip"
+    },
+    {
+      "input": "Tržaška cesta",
+      "normalized": "trzaska cesta",
+      "type": null,
+      "name": "trzaska cesta"
+    },
+    {
+      "input": "Pot na Fužine",
+      "normalized": "pot na fuzine",
+      "type": "pot",
+      "name": "na fuzine"
+    },
+    {
+      "input": "Dupleška cesta 232h",
+      "normalized": "dupleska cesta 232h",
+      "type": null,
+      "name": "dupleska cesta 232h"
+    },
+    {
+      "input": "Dragonijeva ulica",
+      "normalized": "dragonijeva ulica",
+      "type": null,
+      "name": "dragonijeva ulica"
+    },
+    {
+      "input": "Machova ulica",
+      "normalized": "machova ulica",
+      "type": null,
+      "name": "machova ulica"
+    },
+    {
+      "input": "Slivniška cesta",
+      "normalized": "slivniska cesta",
+      "type": null,
+      "name": "slivniska cesta"
+    },
+    {
+      "input": "Ulica Zidanškove brigade",
+      "normalized": "ulica zidanskove brigade",
+      "type": "ulica",
+      "name": "zidanskove brigade"
+    },
+    {
+      "input": "Hrana in pijača",
+      "normalized": "hrana in pijaca",
+      "type": null,
+      "name": "hrana in pijaca"
+    },
+    {
+      "input": "Filozofska fakulteta",
+      "normalized": "filozofska fakulteta",
+      "type": null,
+      "name": "filozofska fakulteta"
+    },
+    {
+      "input": "Stara trta",
+      "normalized": "stara trta",
+      "type": null,
+      "name": "stara trta"
+    },
+    {
+      "input": "Mariborski rovi - cona Tezno",
+      "normalized": "mariborski rovi cona tezno",
+      "type": null,
+      "name": "mariborski rovi cona tezno"
+    },
+    {
+      "input": "Pohorska Vzpenjača - vmesna postaja",
+      "normalized": "pohorska vzpenjaca vmesna postaja",
+      "type": null,
+      "name": "pohorska vzpenjaca vmesna postaja"
+    },
+    {
+      "input": "Spodnja Selnica",
+      "normalized": "spodnja selnica",
+      "type": null,
+      "name": "spodnja selnica"
+    },
+    {
+      "input": "Apostlova ulica",
+      "normalized": "apostlova ulica",
+      "type": null,
+      "name": "apostlova ulica"
+    },
+    {
+      "input": "Baševa ulica",
+      "normalized": "baseva ulica",
+      "type": null,
+      "name": "baseva ulica"
+    },
+    {
+      "input": "Beloruska ulica",
+      "normalized": "beloruska ulica",
+      "type": null,
+      "name": "beloruska ulica"
+    },
+    {
+      "input": "Betettova ulica",
+      "normalized": "betettova ulica",
+      "type": null,
+      "name": "betettova ulica"
+    },
+    {
+      "input": "Bloudkova ulica",
+      "normalized": "bloudkova ulica",
+      "type": null,
+      "name": "bloudkova ulica"
+    },
+    {
+      "input": "Borova vas",
+      "normalized": "borova vas",
+      "type": null,
+      "name": "borova vas"
+    },
+    {
+      "input": "Brezinkova ulica",
+      "normalized": "brezinkova ulica",
+      "type": null,
+      "name": "brezinkova ulica"
+    },
+    {
+      "input": "Celjska ulica",
+      "normalized": "celjska ulica",
+      "type": null,
+      "name": "celjska ulica"
+    },
+    {
+      "input": "Cesta ob gramoznici",
+      "normalized": "cesta ob gramoznici",
+      "type": "cesta",
+      "name": "ob gramoznici"
+    },
+    {
+      "input": "Cesta XIV. divizije",
+      "normalized": "cesta xiv divizije",
+      "type": "cesta",
+      "name": "xiv divizije"
+    },
+    {
+      "input": "Crnekova ulica",
+      "normalized": "crnekova ulica",
+      "type": null,
+      "name": "crnekova ulica"
+    },
+    {
+      "input": "Damiševa ulica",
+      "normalized": "damiseva ulica",
+      "type": null,
+      "name": "damiseva ulica"
+    },
+    {
+      "input": "Dolga ulica",
+      "normalized": "dolga ulica",
+      "type": null,
+      "name": "dolga ulica"
+    },
+    {
+      "input": "Dravska pot",
+      "normalized": "dravska pot",
+      "type": null,
+      "name": "dravska pot"
+    },
+    {
+      "input": "Ekartova ulica",
+      "normalized": "ekartova ulica",
+      "type": null,
+      "name": "ekartova ulica"
+    },
+    {
+      "input": "Finžgarjeva ulica",
+      "normalized": "finzgarjeva ulica",
+      "type": null,
+      "name": "finzgarjeva ulica"
+    },
+    {
+      "input": "Frankopanova ulica",
+      "normalized": "frankopanova ulica",
+      "type": null,
+      "name": "frankopanova ulica"
+    },
+    {
+      "input": "Gašperičeva ulica",
+      "normalized": "gaspericeva ulica",
+      "type": null,
+      "name": "gaspericeva ulica"
+    },
+    {
+      "input": "Golarjeva ulica",
+      "normalized": "golarjeva ulica",
+      "type": null,
+      "name": "golarjeva ulica"
+    },
+    {
+      "input": "Gosposka ulica",
+      "normalized": "gosposka ulica",
+      "type": null,
+      "name": "gosposka ulica"
+    },
+    {
+      "input": "Gregorčičeva ulica",
+      "normalized": "gregorciceva ulica",
+      "type": null,
+      "name": "gregorciceva ulica"
+    },
+    {
+      "input": "Guličeva ulica",
+      "normalized": "guliceva ulica",
+      "type": null,
+      "name": "guliceva ulica"
+    },
+    {
+      "input": "Hočko Pohorje",
+      "normalized": "hocko pohorje",
+      "type": null,
+      "name": "hocko pohorje"
+    },
+    {
+      "input": "Ilichova ulica",
+      "normalized": "ilichova ulica",
+      "type": null,
+      "name": "ilichova ulica"
+    },
+    {
+      "input": "Iršičeva ulica",
+      "normalized": "irsiceva ulica",
+      "type": null,
+      "name": "irsiceva ulica"
+    },
+    {
+      "input": "Janežičeva ulica",
+      "normalized": "janeziceva ulica",
+      "type": null,
+      "name": "janeziceva ulica"
+    },
+    {
+      "input": "Jesenkova ulica",
+      "normalized": "jesenkova ulica",
+      "type": null,
+      "name": "jesenkova ulica"
+    },
+    {
+      "input": "K mlinu",
+      "normalized": "k mlinu",
+      "type": null,
+      "name": "k mlinu"
+    },
+    {
+      "input": "Kamniška graba",
+      "normalized": "kamniska graba",
+      "type": null,
+      "name": "kamniska graba"
+    },
+    {
+      "input": "Kekčeva ulica",
+      "normalized": "kekceva ulica",
+      "type": null,
+      "name": "kekceva ulica"
+    },
+    {
+      "input": "Klemenčičeva ulica",
+      "normalized": "klemenciceva ulica",
+      "type": null,
+      "name": "klemenciceva ulica"
+    },
+    {
+      "input": "Kocenova ulica",
+      "normalized": "kocenova ulica",
+      "type": null,
+      "name": "kocenova ulica"
+    },
+    {
+      "input": "Koprivnikova ulica",
+      "normalized": "koprivnikova ulica",
+      "type": null,
+      "name": "koprivnikova ulica"
+    },
+    {
+      "input": "Korytkova ulica",
+      "normalized": "korytkova ulica",
+      "type": null,
+      "name": "korytkova ulica"
+    },
+    {
+      "input": "Kot od Šarhove",
+      "normalized": "kot od sarhove",
+      "type": null,
+      "name": "kot od sarhove"
+    },
+    {
+      "input": "Kramarjeva ulica",
+      "normalized": "kramarjeva ulica",
+      "type": null,
+      "name": "kramarjeva ulica"
+    },
+    {
+      "input": "Krožna pot",
+      "normalized": "krozna pot",
+      "type": null,
+      "name": "krozna pot"
+    },
+    {
+      "input": "Lahova ulica",
+      "normalized": "lahova ulica",
+      "type": null,
+      "name": "lahova ulica"
+    },
+    {
+      "input": "Leona Zalaznika ulica",
+      "normalized": "leona zalaznika ulica",
+      "type": null,
+      "name": "leona zalaznika ulica"
+    },
+    {
+      "input": "Limbuška cesta",
+      "normalized": "limbuska cesta",
+      "type": null,
+      "name": "limbuska cesta"
+    },
+    {
+      "input": "Ljubljanska ulica",
+      "normalized": "ljubljanska ulica",
+      "type": null,
+      "name": "ljubljanska ulica"
+    },
+    {
+      "input": "Lucijin breg",
+      "normalized": "lucijin breg",
+      "type": null,
+      "name": "lucijin breg"
+    },
+    {
+      "input": "Majeričeva ulica",
+      "normalized": "majericeva ulica",
+      "type": null,
+      "name": "majericeva ulica"
+    },
+    {
+      "input": "Marčičeva ulica - slepi del",
+      "normalized": "marciceva ulica slepi del",
+      "type": null,
+      "name": "marciceva ulica slepi del"
+    },
+    {
+      "input": "Marxova ulica",
+      "normalized": "marxova ulica",
+      "type": null,
+      "name": "marxova ulica"
+    },
+    {
+      "input": "Mejna ulica",
+      "normalized": "mejna ulica",
+      "type": null,
+      "name": "mejna ulica"
+    },
+    {
+      "input": "Meškova ulica",
+      "normalized": "meskova ulica",
+      "type": null,
+      "name": "meskova ulica"
+    },
+    {
+      "input": "Milčinskega ulica",
+      "normalized": "milcinskega ulica",
+      "type": null,
+      "name": "milcinskega ulica"
+    },
+    {
+      "input": "Močnikova ulica",
+      "normalized": "mocnikova ulica",
+      "type": null,
+      "name": "mocnikova ulica"
+    },
+    {
+      "input": "Murnova ulica",
+      "normalized": "murnova ulica",
+      "type": null,
+      "name": "murnova ulica"
+    },
+    {
+      "input": "Na hribu",
+      "normalized": "na hribu",
+      "type": null,
+      "name": "na hribu"
+    },
+    {
+      "input": "Na prehodu",
+      "normalized": "na prehodu",
+      "type": null,
+      "name": "na prehodu"
+    },
+    {
+      "input": "Na terasi",
+      "normalized": "na terasi",
+      "type": null,
+      "name": "na terasi"
+    },
+    {
+      "input": "Nad gramoznico",
+      "normalized": "nad gramoznico",
+      "type": null,
+      "name": "nad gramoznico"
+    },
+    {
+      "input": "Naveršnikova ulica",
+      "normalized": "naversnikova ulica",
+      "type": null,
+      "name": "naversnikova ulica"
+    },
+    {
+      "input": "Novo naselje Kamnica - cesta v Ropoh",
+      "normalized": "novo naselje kamnica cesta v ropoh",
+      "type": null,
+      "name": "novo naselje kamnica cesta v ropoh"
+    },
+    {
+      "input": "Ob gozdu",
+      "normalized": "ob gozdu",
+      "type": null,
+      "name": "ob gozdu"
+    },
+    {
+      "input": "Ob potoku",
+      "normalized": "ob potoku",
+      "type": null,
+      "name": "ob potoku"
+    },
+    {
+      "input": "Obradovičeva ulica",
+      "normalized": "obradoviceva ulica",
+      "type": null,
+      "name": "obradoviceva ulica"
+    },
+    {
+      "input": "Orožnova ulica",
+      "normalized": "oroznova ulica",
+      "type": null,
+      "name": "oroznova ulica"
+    },
+    {
+      "input": "Park mladih",
+      "normalized": "park mladih",
+      "type": "park",
+      "name": "mladih"
+    },
+    {
+      "input": "Pekrska cesta",
+      "normalized": "pekrska cesta",
+      "type": null,
+      "name": "pekrska cesta"
+    },
+    {
+      "input": "Pintarjeva ulica",
+      "normalized": "pintarjeva ulica",
+      "type": null,
+      "name": "pintarjeva ulica"
+    },
+    {
+      "input": "Pivola 31 a-j",
+      "normalized": "pivola 31 a j",
+      "type": null,
+      "name": "pivola 31 a j"
+    },
+    {
+      "input": "Pobreška cesta",
+      "normalized": "pobreska cesta",
+      "type": null,
+      "name": "pobreska cesta"
+    },
+    {
+      "input": "Pod klancem",
+      "normalized": "pod klancem",
+      "type": null,
+      "name": "pod klancem"
+    },
+    {
+      "input": "Podrgrajsova ulica",
+      "normalized": "podrgrajsova ulica",
+      "type": null,
+      "name": "podrgrajsova ulica"
+    },
+    {
+      "input": "Poropatova ulica",
+      "normalized": "poropatova ulica",
+      "type": null,
+      "name": "poropatova ulica"
+    },
+    {
+      "input": "Potrčeva ulica",
+      "normalized": "potrceva ulica",
+      "type": null,
+      "name": "potrceva ulica"
+    },
+    {
+      "input": "Prelogova ulica",
+      "normalized": "prelogova ulica",
+      "type": null,
+      "name": "prelogova ulica"
+    },
+    {
+      "input": "Pri Habakuku",
+      "normalized": "pri habakuku",
+      "type": null,
+      "name": "pri habakuku"
+    },
+    {
+      "input": "Prijateljeva ulica",
+      "normalized": "prijateljeva ulica",
+      "type": null,
+      "name": "prijateljeva ulica"
+    },
+    {
+      "input": "Prvomajska ulica",
+      "normalized": "prvomajska ulica",
+      "type": null,
+      "name": "prvomajska ulica"
+    },
+    {
+      "input": "Radičevićeva ulica",
+      "normalized": "radiceviceva ulica",
+      "type": null,
+      "name": "radiceviceva ulica"
+    },
+    {
+      "input": "Raški dol",
+      "normalized": "raski dol",
+      "type": null,
+      "name": "raski dol"
+    },
+    {
+      "input": "Reiserjeva ulica",
+      "normalized": "reiserjeva ulica",
+      "type": null,
+      "name": "reiserjeva ulica"
+    },
+    {
+      "input": "Robičeva ulica do HŠ 14",
+      "normalized": "robiceva ulica do hs 14",
+      "type": null,
+      "name": "robiceva ulica do hs 14"
+    },
+    {
+      "input": "Ronkova ulica",
+      "normalized": "ronkova ulica",
+      "type": null,
+      "name": "ronkova ulica"
+    },
+    {
+      "input": "Rožletova ulica - slepi del",
+      "normalized": "rozletova ulica slepi del",
+      "type": null,
+      "name": "rozletova ulica slepi del"
+    },
+    {
+      "input": "Ruska ulica",
+      "normalized": "ruska ulica",
+      "type": null,
+      "name": "ruska ulica"
+    },
+    {
+      "input": "Šentpeterska ulica",
+      "normalized": "sentpeterska ulica",
+      "type": null,
+      "name": "sentpeterska ulica"
+    },
+    {
+      "input": "Skrita ulica",
+      "normalized": "skrita ulica",
+      "type": null,
+      "name": "skrita ulica"
+    },
+    {
+      "input": "Slovaška ulica",
+      "normalized": "slovaska ulica",
+      "type": null,
+      "name": "slovaska ulica"
+    },
+    {
+      "input": "Šober",
+      "normalized": "sober",
+      "type": null,
+      "name": "sober"
+    },
+    {
+      "input": "Splavarski prehod",
+      "normalized": "splavarski prehod",
+      "type": null,
+      "name": "splavarski prehod"
+    },
+    {
+      "input": "Stara cesta",
+      "normalized": "stara cesta",
+      "type": null,
+      "name": "stara cesta"
+    },
+    {
+      "input": "Stolni vrh",
+      "normalized": "stolni vrh",
+      "type": null,
+      "name": "stolni vrh"
+    },
+    {
+      "input": "Strma ulica",
+      "normalized": "strma ulica",
+      "type": null,
+      "name": "strma ulica"
+    },
+    {
+      "input": "Svenškova ulica",
+      "normalized": "svenskova ulica",
+      "type": null,
+      "name": "svenskova ulica"
+    },
+    {
+      "input": "Teplyevo naselje 4.del",
+      "normalized": "teplyevo naselje 4 del",
+      "type": null,
+      "name": "teplyevo naselje 4 del"
+    },
+    {
+      "input": "Titova cesta",
+      "normalized": "titova cesta",
+      "type": null,
+      "name": "titova cesta"
+    },
+    {
+      "input": "Trdinova ulica",
+      "normalized": "trdinova ulica",
+      "type": null,
+      "name": "trdinova ulica"
+    },
+    {
+      "input": "Trg svobode",
+      "normalized": "trg svobode",
+      "type": "trg",
+      "name": "svobode"
+    },
+    {
+      "input": "Tuškova ulica",
+      "normalized": "tuskova ulica",
+      "type": null,
+      "name": "tuskova ulica"
+    },
+    {
+      "input": "Ulica 30. maja",
+      "normalized": "ulica 30 maja",
+      "type": "ulica",
+      "name": "30 maja"
+    },
+    {
+      "input": "Ulica borcev za severno mejo",
+      "normalized": "ulica borcev za severno mejo",
+      "type": "ulica",
+      "name": "borcev za severno mejo"
+    },
+    {
+      "input": "Ulica Draga Kobala",
+      "normalized": "ulica draga kobala",
+      "type": "ulica",
+      "name": "draga kobala"
+    },
+    {
+      "input": "Ulica Franca Trstenjaka",
+      "normalized": "ulica franca trstenjaka",
+      "type": "ulica",
+      "name": "franca trstenjaka"
+    },
+    {
+      "input": "Ulica heroja Šaranoviča - slepi del od Meljske ceste",
+      "normalized": "ulica heroja saranovica slepi del od meljske ceste",
+      "type": "ulica",
+      "name": "heroja saranovica slepi del od meljske ceste"
+    },
+    {
+      "input": "Ulica herojev Mašere in Spasića",
+      "normalized": "ulica herojev masere in spasica",
+      "type": "ulica",
+      "name": "herojev masere in spasica"
+    },
+    {
+      "input": "Ulica Janka Sernca",
+      "normalized": "ulica janka sernca",
+      "type": "ulica",
+      "name": "janka sernca"
+    },
+    {
+      "input": "Ulica Jožice Flander",
+      "normalized": "ulica jozice flander",
+      "type": "ulica",
+      "name": "jozice flander"
+    },
+    {
+      "input": "Ulica Kraguljevških žrtev",
+      "normalized": "ulica kraguljevskih zrtev",
+      "type": "ulica",
+      "name": "kraguljevskih zrtev"
+    },
+    {
+      "input": "Ulica Marohovih",
+      "normalized": "ulica marohovih",
+      "type": "ulica",
+      "name": "marohovih"
+    },
+    {
+      "input": "Ulica miru",
+      "normalized": "ulica miru",
+      "type": "ulica",
+      "name": "miru"
+    },
+    {
+      "input": "Ulica Nade Kovačič",
+      "normalized": "ulica nade kovacic",
+      "type": "ulica",
+      "name": "nade kovacic"
+    },
+    {
+      "input": "Ulica Pohorskega odreda",
+      "normalized": "ulica pohorskega odreda",
+      "type": "ulica",
+      "name": "pohorskega odreda"
+    },
+    {
+      "input": "Ulica Ruperta Pivca",
+      "normalized": "ulica ruperta pivca",
+      "type": "ulica",
+      "name": "ruperta pivca"
+    },
+    {
+      "input": "Ulica slovenske osamosvojitve",
+      "normalized": "ulica slovenske osamosvojitve",
+      "type": "ulica",
+      "name": "slovenske osamosvojitve"
+    }
+  ]
+}
