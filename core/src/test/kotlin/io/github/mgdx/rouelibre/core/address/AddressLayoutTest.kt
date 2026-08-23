@@ -117,14 +117,50 @@ class AddressLayoutTest {
     }
 
     @Test
+    fun `the wave's five countries close with the number`() {
+        // Denmark, Finland, Slovenia, Croatia and Romania all write the street
+        // first. Each was counted over its own generated indexes before the
+        // entry was written, as the table's own rule demands.
+        assertEquals("Nørrebrogade 12", addressLayoutOf("da").write("Nørrebrogade", "12"))
+        assertEquals("Aleksanterinkatu 15", addressLayoutOf("fi").write("Aleksanterinkatu", "15"))
+        assertEquals("Trubarjeva cesta 12", addressLayoutOf("sl").write("Trubarjeva cesta", "12"))
+        assertEquals("Ilica 12", addressLayoutOf("hr").write("Ilica", "12"))
+        assertEquals(
+            "Bulevardul Magheru 12",
+            addressLayoutOf("ro").write("Bulevardul Magheru", "12"),
+        )
+    }
+
+    @Test
+    fun `a Finnish stairwell letter is spaced, where the others close up`() {
+        // The one country of the five whose letter is not run against the
+        // number: an uppercase Finnish suffix names a stairwell, and "15A"
+        // would read as a house number that does not exist.
+        assertEquals(
+            "Aleksanterinkatu 15 A",
+            addressLayoutOf("fi").write("Aleksanterinkatu", "15", "A"),
+        )
+        assertEquals("Nørrebrogade 12A", addressLayoutOf("da").write("Nørrebrogade", "12", "A"))
+        assertEquals(
+            "Trubarjeva cesta 12a",
+            addressLayoutOf("sl").write("Trubarjeva cesta", "12", "a"),
+        )
+        assertEquals("Ilica 12a", addressLayoutOf("hr").write("Ilica", "12", "a"))
+        assertEquals(
+            "Bulevardul Magheru 12A",
+            addressLayoutOf("ro").write("Bulevardul Magheru", "12", "A"),
+        )
+    }
+
+    @Test
     fun `a base the table does not name falls back on English`() {
-        // Slovene, Finnish, Japanese: no entry, and the address is still
-        // written rather than dropped. Slovene is the reminder that a language
-        // absent here is a language nobody has counted yet, not a language
-        // that writes English's way.
-        assertEquals("12 Trubarjeva cesta", addressLayoutOf("sl").write("Trubarjeva cesta", "12"))
-        assertEquals("12 Aleksanterinkatu", addressLayoutOf("fi").write("Aleksanterinkatu", "12"))
+        // Japanese and Swedish: no entry, and the address is still written
+        // rather than dropped. Swedish is the reminder that a language absent
+        // here is a language nobody has counted yet, not a language that
+        // writes English's way — Sweden closes with the number as its
+        // neighbours do, and two served networks are waiting on the count.
         assertEquals("12 Ginza", addressLayoutOf("ja").write("Ginza", "12", ""))
+        assertEquals("12 Drottninggatan", addressLayoutOf("sv").write("Drottninggatan", "12"))
     }
 
     @Test

@@ -155,6 +155,49 @@ private val LAYOUTS: Map<String, AddressLayout> = mapOf(
     // its punctuation. The layout table is keyed on the address base, not on
     // the translations that exist, and the two lists need not match.
     "sk" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = "/"),
+
+    // "Nørrebrogade 12A, København". Danish closes with the number, and what
+    // follows it is a letter and nothing but a letter: counted over the five
+    // Danish indexes, 113 081 suffixes, every one of them a letter, not one
+    // number and not one word. The letter is closed up, as the plate writes
+    // it — a Danish stairwell is written after the address, "2. th.", and
+    // never reaches this field.
+    "da" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
+
+    // "Aleksanterinkatu 15 A, Helsinki". Finnish closes with the number, and
+    // is the one country here whose letter is **spaced**. Counted over the ten
+    // Finnish indexes: 29 696 suffixes, 26 347 of them letters, 14 898
+    // lowercase against 11 449 upper. The two are not the same thing — a
+    // lowercase letter subdivides the plot, an uppercase one names the
+    // stairwell, the very thing a reader needs to reach a Finnish door — and
+    // one separator has to serve both. Spacing is what loses least: "15 a"
+    // reads as a typographic choice and still resolves, while "15A" run
+    // together reads as a different number on a plate that carries none.
+    "fi" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = " "),
+
+    // "Trubarjeva cesta 12a, Ljubljana". Slovenia closes with the number and
+    // closes the letter up against it: the *dodatek k hišni številki* of the
+    // Register prostorskih enot is a lowercase letter, and the index bears it
+    // out — 35 298 suffixes, 34 263 letters, 27 670 of them lowercase, against
+    // 624 numbers. Slovenia never had Czechoslovakia's second number, so
+    // nothing here follows the slash above it.
+    "sl" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
+
+    // "Ilica 12a, Zagreb". Croatian closes with the number — the street type,
+    // *ulica*, is usually dropped in writing — and closes the letter up, as
+    // the plates do. Counted over the four Croatian indexes: 58 491 suffixes,
+    // 51 448 letters against 5 701 numbers. Those numbers are not a second
+    // number of the Czech kind; they are what `split_house_number` leaves of a
+    // range, and they are 10 % of the field against a letter's 88 %.
+    "hr" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
+
+    // "Bulevardul Magheru 12A, București". Romanian closes with the number and
+    // closes the letter up. The three Romanian indexes are the smallest of the
+    // wave — 15 687 numbers, 2 872 suffixes — and the most uniform: 2 757
+    // letters, 2 595 of them uppercase, against 55 words and 28 numbers. The
+    // *bl.*, *sc.* and *ap.* a Romanian address carries after the number are
+    // parts of a flat's address, not of the street's, and no index holds them.
+    "ro" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
 )
 
 /**
