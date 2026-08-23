@@ -102,24 +102,30 @@
     <string name="map_bikes_electric_description">تُحتسب الدراجات الكهربائية. انقر لاحتسابها كلها.</string>
 
     <!-- The label under, or beside, a count. No item holds a number: the
-         figure is painted next to these words already. The word still agrees
-         with it, and in Arabic that agreement is the tamyiz — the accusative
-         singular after eleven and beyond, which is why `many` carries a
-         tanwin the others do not. -->
+         figure is painted next to these words already.
+         Two things decide what goes in each item, and neither is the tamyiz.
+         `zero` is what an unknown count resolves to — `StationDetailSheet`
+         and `StationAdapter` both call `getQuantityString(…, count ?: 0)` and
+         both say an unknown count reads as the plural — so it carries the
+         plural and not the singular. And on a list row the label is stacked
+         under the figure, set in `TextAppearance.RoueLibre.Label`, and read
+         as a word standing on its own: so `many` is written bare, without
+         the accusative tanwin the same word carries in `bikes_available`
+         where the numeral really is beside it. -->
     <plurals name="counterpart_bikes" tools:ignore="ImpliedQuantity">
-        <item quantity="zero">دراجة</item>
+        <item quantity="zero">دراجات</item>
         <item quantity="one">دراجة</item>
         <item quantity="two">دراجتان</item>
         <item quantity="few">دراجات</item>
-        <item quantity="many">دراجةً</item>
+        <item quantity="many">دراجة</item>
         <item quantity="other">دراجة</item>
     </plurals>
     <plurals name="counterpart_docks" tools:ignore="ImpliedQuantity">
-        <item quantity="zero">موقف شاغر</item>
+        <item quantity="zero">مواقف شاغرة</item>
         <item quantity="one">موقف شاغر</item>
         <item quantity="two">موقفان شاغران</item>
         <item quantity="few">مواقف شاغرة</item>
-        <item quantity="many">موقفًا شاغرًا</item>
+        <item quantity="many">موقف شاغر</item>
         <item quantity="other">موقف شاغر</item>
     </plurals>
     <string name="counterpart_none">—</string>
@@ -198,7 +204,7 @@
     <string name="map_location_denied">بدون الموقع الجغرافي، اختر نقطة انطلاقك على الخريطة أو بالعنوان.</string>
     <string name="map_location_unavailable">الموقع غير متاح. تأكّد من تفعيل الموقع الجغرافي، ثم أعد المحاولة.</string>
     <string name="map_outside_city_title">أنت في مكان آخر</string>
-    <!-- %1$s is the name of the network in service, not of a city. -->
+    <!-- %1$s is the network and its conurbation, "V'lille — Lille" (cityLabel). -->
     <string name="map_outside_city_message">يقع موقعك خارج المنطقة التي يغطّيها %1$s، فلا تستطيع هذه الخريطة إظهاره. اختر المدينة التي أنت فيها لرؤية محطاتها.</string>
     <string name="map_outside_city_brief">يقع موقعك خارج المنطقة التي يغطّيها %1$s.</string>
     <string name="map_needs_tiles_title">تحتاج الخريطة إلى بياناتها للعمل دون اتصال</string>
@@ -317,11 +323,12 @@
     <string name="journey_bike_kind_electric">كهربائية</string>
     <string name="journey_bike_kind_any_description">أي دراجة، مهما كان نوعها</string>
     <string name="journey_bike_kind_mechanical_description">دراجة أدوسها بنفسي</string>
-    <string name="journey_bike_kind_electric_description">دراجة تساعدك كهربائيًا حين تدوس</string>
+    <string name="journey_bike_kind_electric_description">دراجة تساعدني كهربائيًا حين أدوس</string>
     <string name="journey_compute">حساب الرحلة</string>
     <string name="journey_computing">جارٍ حساب أفضل رحلة…</string>
-    <!-- Nothing is being weighed here: one route to trace, no pair of
-         stations, so the wait claims to be looking for nothing best. -->
+    <!-- Nothing is being chosen here — one route to trace, not a pair of
+         stations to weigh — so the wait does not claim to be looking for the
+         best of anything. -->
     <string name="journey_computing_own_bike">جارٍ حساب الركوب…</string>
     <string name="journey_source_my_position">موقعي</string>
     <string name="journey_locating">جارٍ تحديد موقعك…</string>
@@ -376,11 +383,15 @@
     <string name="journey_outside_coverage">تقع هذه النقطة خارج المنطقة التي تغطّيها البيانات المثبّتة.</string>
     <string name="journey_no_stations">لا محطة معروفة. حدّث قائمة المحطات، ثم أعد المحاولة.</string>
 
-    <!-- Durations. Neither string is a plural in the source, so the noun is
-         written in the shape that serves the range actually shown: a journey
-         leg is oftener eleven-to-fifty-nine minutes than three-to-ten. -->
+    <!-- Durations. Neither is a plural in the source, which writes "min" and
+         "h" and so needs no agreement; Arabic writes the word, and the word
+         agrees. The second keeps the source's shape and its padding — `س` is
+         CLDR's abbreviation for the hour — and so asks for no agreement
+         either. The first cannot: it takes the singular, which is right from
+         eleven minutes up and wrong from three to ten. `docs/ar-glossary.md`
+         says why, and says that the repair is a <plurals> in `values/`. -->
     <string name="duration_minutes">&#x200F;%1$d دقيقة</string>
-    <string name="duration_hours_minutes">&#x200F;%1$d ساعة و%2$d دقيقة</string>
+    <string name="duration_hours_minutes">&#x200F;%1$d س %2$02d</string>
 
     <!-- The docking points a station holds, all of them. -->
     <plurals name="docks_total">
@@ -468,7 +479,7 @@
         <item quantity="other">&#x200F;%1$d محطة · يُعلَن الحجم قبل التنزيل</item>
     </plurals>
     <string name="city_size_unknown">يُعلَن الحجم قبل التنزيل</string>
-    <string name="city_installed">&#x200F;%1$s مثبّتة على الجهاز</string>
+    <string name="city_installed">&#x200F;%1$s مثبَّت على الجهاز</string>
     <string name="city_label">&#x200F;%1$s — %2$s</string>
     <string name="city_delete">حذف</string>
     <!-- In these three, %1$s is the name of the network, which is not the name
@@ -505,16 +516,16 @@
     <string name="storage_title">التخزين</string>
     <string name="storage_open">إدارة البيانات دون اتصال</string>
     <string name="storage_intro">تعمل الخريطة ومخطّط الرحلات والبحث عن العناوين بلا شبكة. وهي تحتاج إلى ثلاث مجموعات بيانات، تُثبَّت مرّة واحدة.</string>
-    <string name="storage_total">&#x200F;%1$s مستخدمة على هذا الجهاز</string>
+    <string name="storage_total">&#x200F;%1$s مستخدَم على هذا الجهاز</string>
     <string name="storage_nothing_installed">لا بيانات مثبّتة</string>
     <string name="storage_no_city">لم تُختَر أي مدينة</string>
 
     <string name="dataset_tiles">بيانات الخريطة</string>
-    <string name="dataset_tiles_purpose">ترسم الخريطة بلا شبكة</string>
+    <string name="dataset_tiles_purpose">لرسم الخريطة بلا شبكة</string>
     <string name="dataset_routing">بيانات المسارات</string>
-    <string name="dataset_routing_purpose">تحسب الرحلات على الجهاز</string>
+    <string name="dataset_routing_purpose">لحساب الرحلات على الجهاز</string>
     <string name="dataset_addresses">فهرس العناوين</string>
-    <string name="dataset_addresses_purpose">يبحث في الشوارع دون إرسال أي شيء</string>
+    <string name="dataset_addresses_purpose">للبحث في الشوارع دون إرسال أي شيء</string>
 
     <string name="storage_check_updates">البحث عن تحديثات</string>
     <string name="storage_checking">جارٍ قراءة ملف البيان…</string>
@@ -538,7 +549,7 @@
     <string name="dataset_deleted">تم حذف %1$s</string>
 
     <string name="dataset_rejected_empty">الملف المختار فارغ.</string>
-    <string name="dataset_rejected_format">هذا ليس الملف المتوقَّع. اختر ملف «%1$s» الذي تنتجه سكربتات التوليد.</string>
+    <string name="dataset_rejected_format">هذا ليس الملف المتوقَّع. اختر ملف «%1$s» الذي تنتجه النصوص البرمجية للتوليد.</string>
     <string name="dataset_rejected_version">هذا الملف بصيغة الإصدار %1$d، وهذه النسخة من التطبيق تقرأ الإصدار %2$d. حدّث التطبيق.</string>
     <string name="dataset_rejected_checksum">لا يطابق الملف مجموعه الاختباري: فهو ناقص أو تالف. نزّله من جديد.</string>
     <string name="dataset_rejected_transfer">فشل نسخ الملف. تحقّق من المساحة الحرّة وأعد المحاولة.</string>
@@ -580,7 +591,7 @@
     <string name="download_waiting_for_unmetered">في انتظار اتصال لا يفرض تكلفة استخدام لتنزيل %1$s.</string>
     <string name="download_can_resume">لم يعد هذا الاتصال يُحتسب بالميغابايت. ابدأ التنزيل من جديد: يتابع من حيث توقّف.</string>
 
-    <string name="settings_opening_title">فتح التطبيق تلقائيًا على</string>
+    <string name="settings_opening_title">فتح التطبيق تلقائيًا على:</string>
     <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_opening_description">الشاشة التي يفتح عليها التطبيق</string>
     <string name="settings_opening_map">الخريطة</string>

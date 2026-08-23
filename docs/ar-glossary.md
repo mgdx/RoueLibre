@@ -88,18 +88,30 @@ the numeral has already said "two": that redundancy is what filling the `two`
 slot means once the figure is on screen, and leaving the singular there would
 have wasted the one category Arabic has that most languages do not.
 
-`counterpart_bikes` and `counterpart_docks` hold **no** placeholder — the
-figure is painted in the disc beside them — and they still decline, because
-the agreement is with that figure. That is why `many` there reads `دراجةً`
-with a tanwin standing on its own under a numeral: it is the tamyiz of the
-count above it, not a stray diacritic.
+`counterpart_bikes` and `counterpart_docks` are the exception to the table
+above, and they hold **no** placeholder — the figure is painted in the disc
+beside them. Two things about the screen, rather than about the grammar,
+decide what goes in each item.
+
+`zero` is what an **unknown** count resolves to: `StationDetailSheet` and
+`StationAdapter` both call `getQuantityString(…, count ?: 0)`, and both say in
+so many words that an unknown count reads as the plural. So `zero` carries
+`دراجات` and `مواقف شاغرة`, not the singular a written ٠ would have taken.
+
+And `many` is written **bare**, `دراجة` and not `دراجةً`. On a list row the
+label is stacked under the figure, in `TextAppearance.RoueLibre.Label`, and is
+read as a word standing on its own line — which is the trap the English file
+records Romanian falling into. An accusative tanwin is the tamyiz of a numeral
+standing beside the noun; with the numeral on the line above, it is a
+diacritic on a word nobody is counting. `bikes_available`, where the figure
+really is in the string, keeps it.
 
 ## The vocabulary
 
 | English | Arabic | Why |
 |---|---|---|
 | journey | رحلة | The whole door-to-door thing: the screen, the settings section, the button, from `journey_title` through to `journey_no_route`. What an Arabic transit application calls a planned trip. |
-| ride | ركوب | The bike leg alone, inside a journey. Kept away from رحلة so that `journey_summary` can read `منها ١٢ دقيقة مشيًا و٨ دقائق ركوبًا` and name two different things on one line. |
+| ride | ركوب | The bike leg alone, inside a journey. Kept away from رحلة so that `journey_summary` can read `منها ١٥ دقيقة مشيًا و٢٠ دقيقة ركوبًا` and name two different things on one line. |
 | walk (a leg) | مشي / سيرًا على الأقدام | The noun in the summaries and the steps, the adverbial phrase where a whole journey is on foot (`journey_walk_only`). |
 | route | مسار | Only the line on the ground: `journey_no_route`, `journey_graph_missing`, `dataset_routing`. Never the planned journey, which is رحلة. |
 | station | محطة | A bike-share station, everywhere in the interface. |
@@ -109,7 +121,7 @@ count above it, not a stray diacritic.
 | dock | *never* مرسى | مرسى is the exact technical word — a docking station is محطة إرساء — and it was the first choice. It was dropped because **المرسى is a district of Dubai**, and Dubai is the one city Arabic serves: Careem BIKE is the only Arabic-speaking network in `config/catalogue.json`. A bike dock named after Dubai Marina is a collision no glossary entry repairs. موقف is regular, short, and `موقف دراجات` is what bike parking is called. |
 | bike | دراجة | Never دراجة نارية, which is a motorcycle. In the store texts, where the reader has no context yet, the phrase is الدراجات المشتركة. |
 | mechanical bike | تقليدية | Named against كهربائية. Not هوائية: an electric bike is a دراجة هوائية too, so the contrast would not hold. This is the form the toggles and the two-button choosers carry — `map_bikes_mechanical`, `journey_bike_kind_mechanical`, `settings_own_bike_kind_mechanical`. |
-| electric bike | كهربائية | Pedal-assist, which `journey_bike_kind_electric_description` spells out as `دراجة بمساعدة الدوّاسة` so that nobody reads it as a moped. |
+| electric bike | كهربائية | Pedal-assist, which `journey_bike_kind_electric_description` spells out as `دراجة تساعدني كهربائيًا حين أدوس` so that nobody reads it as a moped. |
 | the two counts side by side | دراجة تقليدية / دراجة كهربائية | `bikes_mechanical` and `bikes_electric` are read apart from any label — `journey_bikes_at_departure` hangs them off the end of a summary — so each carries its noun. `٣ تقليدية` is not a phrase that stands alone; `٣ دراجات تقليدية` is. |
 | network | شبكة الدراجات | **A departure worth stating.** Arabic شبكة alone is what a data network is called, and the same screens say `لا يتوفّر اتصال`; `خادم الشبكة` would have read as the data network's server. Naming it in full every time costs two words and removes the ambiguity everywhere. |
 | operator | المشغّل | The party who renews the certificate, in `error_untrusted_server`. Named apart from the network so the sentence has somebody to point at. |
@@ -159,26 +171,39 @@ count above it, not a stray diacritic.
 | bytes | بايت / كيلوبايت / ميغابايت / غيغابايت | Arabic writes these out; the lexicon has بايت (`android:byteShort`) and كيلوبايت. |
 | distance symbols | م · كم · قدم · ياردة · ميل | The one place a unit symbol was **not** left in Latin. Arabic road signs count in كم, and a Latin `km` beside an Arabic-Indic figure would be the two-systems-on-one-line defect again. |
 
-## Durations are the one place the grammar is not served
+## Five strings where a noun follows a numeral and cannot agree
 
-`duration_minutes` and `duration_hours_minutes` are plain strings in the source,
-not `<plurals>`, because English writes "min" and "h" and needs no agreement.
-Arabic does. With no category to resolve against, one shape had to be chosen
-for every count, and the file writes **`%1$d دقيقة`** and
-**`%1$d ساعة و%2$d دقيقة`** — the singular, which is the tamyiz for 11–99 and
-for 100 and beyond, and which is what a journey leg oftenest is. A count of
-three to ten minutes therefore reads `٥ دقيقة` where Arabic wants `٥ دقائق`.
+`duration_minutes`, `duration_hours_minutes`, `distance_feet`,
+`distance_yards` and `distance_miles` are plain strings in the source, not
+`<plurals>`: English writes "min", "h", "ft", "yd" and "mi", abbreviations that
+need no agreement. Arabic writes the words, and the words agree. With no
+category to resolve against, one shape has to serve every count.
 
-The alternative was an abbreviation — `%1$d د` — which sidesteps the agreement
-the way the English "min" does; it was dropped because a bare **د** beside a
-figure is read as a currency in the Gulf, and Dubai is the city this
-translation serves. Turning the two strings into `<plurals>` is the real
-repair, and it is a change to `values/strings.xml` and to the code that formats
-a duration, which a translation may not make.
+**`duration_hours_minutes` was repaired by going back to the source's own
+shape.** Writing `%1$d ساعة و%2$d دقيقة` invented two agreements the English
+never asked for — `١ ساعة و٥ دقيقة` is wrong, `٢ ساعة` wants `ساعتان`,
+`٣ ساعة` wants `ساعات` — where the source writes no noun behind its minutes at
+all. The file now writes **`%1$d س %2$02d`**: `س` is CLDR's Arabic abbreviation
+for the hour, it is not a currency, and the padding comes back with it.
 
-The padding the English writes on its minutes (`%2$02d`) is dropped: `١ ساعة
-و٠٥ دقيقة` reads as a clock, where `١ ساعة و٥ دقيقة` reads as a duration.
-`tools/check_translations.py` allows exactly this, and says why.
+**`duration_minutes` still carries the compromise**, as **`%1$d دقيقة`**: the
+singular, which is the tamyiz for 11–99 and beyond. A leg of three to ten
+minutes therefore reads `٥ دقيقة` where Arabic wants `٥ دقائق` — and that is
+the commoner case for a walk, so this is the worst of the five. The
+abbreviation `%1$d د` would sidestep it the way "min" does, and was dropped
+because a bare **د** beside a figure is read as a currency in the Gulf, and
+Dubai is the city this translation serves. **The real repair is a `<plurals>`
+in `values/strings.xml`, with `Durations.kt` moving to `getQuantityString`** —
+a change that touches every language, and one a translation may not make on
+its own. It is flagged rather than worked around.
+
+**`distance_feet`, `distance_yards` and `distance_miles` carry the same
+compromise**, as `قدم`, `ياردة` and `ميل`: `٥ قدم` wants `٥ أقدام` and
+`٣ ميل` wants `٣ أميال`. They are left as they are, and they cost less: the
+imperial systems are served to readers in the United States and the United
+Kingdom, and an invariable unit noun is tolerated in a figure-plus-unit
+reading. `distance_metres` and `distance_kilometres` have no such problem —
+`م` and `كم` are abbreviations, and abbreviations do not decline.
 
 ## The search prompt is written in the Arabic order
 
