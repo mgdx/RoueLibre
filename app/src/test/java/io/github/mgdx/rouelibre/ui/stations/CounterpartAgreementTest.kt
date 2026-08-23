@@ -136,6 +136,7 @@ class CounterpartAgreementTest {
             "ca" to setOf("one", "many", "other"),
             "cs" to setOf("one", "few", "many", "other"),
             "da" to setOf("one", "other"),
+            "el" to setOf("one", "other"),
             "de" to setOf("one", "other"),
             "es" to setOf("one", "many", "other"),
             "eu" to setOf("one", "other"),

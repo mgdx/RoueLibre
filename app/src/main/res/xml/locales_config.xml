@@ -7,8 +7,9 @@
     the two write one and the same stored choice, and a language offered in one
     place and not the other would look like a defect.
 
-    That list is TRANSLATED_LANGUAGES, in `ui/Locales.kt`, and NOT the thirty
-    folders under `res/values-*/` nor the thirty entries of `localeFilters`:
+    That list is TRANSLATED_LANGUAGES, in `ui/Locales.kt`, and NOT the folders
+    under `res/values-*/` nor the entries of `localeFilters`, of which there are
+    more:
     most of those files still hold the English text, and offering "Deutsch" to
     hand back English would be worse than offering no German at all.
 

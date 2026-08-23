@@ -24,12 +24,20 @@ class LocalesTest {
          *
          * These fixtures stood on German until German was translated, which is
          * the trouble with borrowing a real target language for the part: it
-         * gets finished. Greek has no `values-el/` folder — no network in the
-         * catalogue is served in a Greek-speaking conurbation, which is what
-         * decides whether a started file exists (SPEC §9) — and the test
-         * below fails, naming this constant, the day that changes.
+         * gets finished. They then stood on Greek, on the stated ground that
+         * no network in the catalogue is served in a Greek-speaking
+         * conurbation — which was simply false. Nicosia is served, Cyprus is
+         * Greek-speaking, and SPEC §9 therefore owed Greek a started file all
+         * along; `values-el/` now exists.
+         *
+         * Latin is the answer to both mistakes. No conurbation publishes its
+         * stations in it, so no started file will ever be owed to it (SPEC §9),
+         * and nobody will finish translating into it. The claim this constant
+         * rests on is one that cannot go stale — which is the only kind worth
+         * writing into a fixture. The test below still fails, naming this
+         * constant, if a `values-la/` ever appears.
          */
-        private val UNSPOKEN: Locale = Locale.forLanguageTag("el")
+        private val UNSPOKEN: Locale = Locale.forLanguageTag("la")
 
         /**
          * The share of strings that may come back identical to the English

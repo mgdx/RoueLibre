@@ -62,6 +62,7 @@ PLURAL_CATEGORIES = {
     "cs": {"one", "few", "many", "other"},
     "da": {"one", "other"},
     "de": {"one", "other"},
+    "el": {"one", "other"},
     "es": {"one", "many", "other"},
     "eu": {"one", "other"},
     "fi": {"one", "other"},

@@ -25,9 +25,10 @@ which has no language qualifier: it is what Android serves when nothing else
 matches, so it is always complete. French, in `values-fr/`, is a translation
 like the others.
 
-**Twenty-nine languages are already started** — Albanian, Arabic, Basque,
+**Thirty languages are already started** — Albanian, Arabic, Basque,
 Bosnian, Catalan, Chinese, Croatian, Czech, Danish, Dutch, Finnish, Galician,
-German, Hungarian, Italian, Japanese, Latvian, Lithuanian, Norwegian, Polish,
+German, Greek, Hungarian, Italian, Japanese, Latvian, Lithuanian, Norwegian,
+Polish,
 Portuguese, Romanian, Serbian, Slovak, Slovene, Spanish, Swedish, Turkish. Their files exist
 under `values-ar/`, `values-de/` and so on, but every string in them still
 holds its English text: they are a starting point, not a translation. Open the
@@ -90,7 +91,7 @@ failures name the file left behind.
 Two things are **not** on that list, and deliberately. Nothing has to be added to
 the settings screen — the chooser is built from the list, not written out beside
 it. And `values-<language>/` folders are never read to decide what is offered:
-thirty of them exist, and most still hold English.
+thirty-one of them exist, and most still hold English.
 
 ### Rules to respect
 
