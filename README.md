@@ -98,6 +98,21 @@ but the live availability of the bikes runs on your phone.
     ([why we say so](docs/architecture.md#what-the-operator-sees));
   - no telemetry, no tracker, no identifier, no history.
 
+## Installing
+
+The APKs are on the [releases page](https://github.com/mgdx/RoueLibre/releases/latest):
+one per architecture — `arm64-v8a` for any phone of the last ten years — plus a
+universal one that runs on all of them.
+
+To be told when the next version comes out, add the application to
+[Obtainium](https://github.com/ImranR98/Obtainium): it watches this
+repository's releases and downloads the APK matching your phone, with no
+account and no store in between.
+
+<p align="center">
+  <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22io.github.mgdx.rouelibre%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fmgdx%2FRoueLibre%22%2C%22author%22%3A%22mgdx%22%2C%22name%22%3A%22Roue%20Libre%22%7D"><img alt="Add to Obtainium" src="https://img.shields.io/badge/Obtainium-add%20Roue%20Libre-0F6E56?style=flat-square"></a>
+</p>
+
 ## Building from source
 
 You need a **JDK 17 or later** and the **Android SDK** (compileSdk 37). No key,

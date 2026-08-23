@@ -146,6 +146,53 @@ apksigner verify --print-certs roue-libre-1.0.0-arm64-v8a.apk
 The SHA-256 digest it prints must match the one above, character for
 character. If it does not, the file was not built by this project.
 
+## Obtainium
+
+[Obtainium](https://github.com/ImranR98/Obtainium) installs and updates an
+application straight from where its author publishes it. Here that is this
+repository's releases page, and nothing is uploaded anywhere: Obtainium reads
+the GitHub API, so the release described above is the whole of the publication.
+
+Two properties of the release — not of Obtainium — are what let it work on its
+default settings, and both must survive future versions:
+
+- the APKs are assets of a release tagged `vX.Y.Z`; that tag is where Obtainium
+  reads the version from;
+- each file names its architecture. Obtainium's `autoApkFilterByArch`, on by
+  default, keeps the assets whose name contains one of the ABIs the phone
+  reports, so a modern phone is handed `roue-libre-X.Y.Z-arm64-v8a.apk` alone
+  instead of a list of five. Renaming those files would put the choice back on
+  the user.
+
+The one-tap link, which the README carries as a badge, is the app's minimal
+configuration URL-encoded behind the site's redirector:
+
+```
+https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/<url-encoded JSON>
+```
+
+with the JSON being `{"id","url","author","name"}` — the package identifier,
+the repository, `mgdx`, and `Roue Libre`.
+
+### The catalogue
+
+[apps.obtainium.imranr.dev](https://apps.obtainium.imranr.dev) is the
+crowdsourced list Obtainium points its users to, a static site fed by one JSON
+file per application. Being listed there is what makes the application findable
+by somebody who has Obtainium but has never heard of Roue Libre.
+
+The entry is added by pull request to
+[ImranR98/apps.obtainium.imranr.dev](https://github.com/ImranR98/apps.obtainium.imranr.dev),
+as `public/data/apps/simple/io.github.mgdx.rouelibre.json` — `simple/` because
+the application needs no setting changed from the default; `complex/` is for
+those that do. Beyond the four required keys it carries an icon URL, a category
+(`maps_and_navigation`) and the description in the languages the application
+already speaks, taken from `fastlane/metadata/` rather than written again.
+
+Their `APP_CRITERIA.md` asks for two things this respects: the configuration
+points at the **official** source, never a re-upload site, and it leaves every
+setting at its default value.
+
 ## F-Droid
 
 F-Droid **rebuilds from source and signs with its own key**: the key described
