@@ -1,0 +1,8 @@
+Primeira versão instalável.
+
+• O mapa das estações funciona sem rede, uma vez instalados os dados. Só a disponibilidade das bicicletas precisa de ligação.
+• A pesquisa de endereços acontece no telefone: nada é enviado, nem sequer enquanto escreve. Tolera erros de escrita e encontra as localidades anexadas pelo seu próprio nome.
+• O cálculo compõe um percurso caminhada → bicicleta → caminhada escolhendo o melhor par de estações, e não a estação mais próxima, e propõe outros pares.
+• Um local partilhado a partir de outra aplicação abre diretamente num percurso.
+
+Ainda em falta: o ecrã de novidades que está a ler já existe, mas os dados continuam a ter de ser transferidos a partir do ecrã de armazenamento.
