@@ -28,9 +28,14 @@ escaped.
 Foreign product and brand names are set in „ “ — „OpenStreetMap“, „BRouter“,
 „MapLibre Native“, „Roue Libre“, „Android“, „Google“ — which is Lithuanian
 orthography and what Android itself does (`android:android_system_label` →
-*„Android“ sistema*). **Wi-Fi is the exception**: Android writes it bare
-(`settings:wifi` → *Wi-Fi*), so this file does too. `app_name` and
-`welcome_hello_title` are the application naming itself and stay unquoted.
+*„Android“ sistema*). **Wi-Fi is quoted with them** whenever it stands inside a sentence, which is
+every occurrence in this file: `android:wifi_available_sign_in` →
+*Prisijungti prie „Wi-Fi“ tinklo*, `settings:accessibility_wifi_off` →
+*„Wi-Fi“ išjungtas*, `android:wfc_mode_wifi_only_summary` → *Tik „Wi-Fi“*.
+The bare `settings:wifi` → *Wi-Fi* that an earlier draft of this file leaned
+on is a **label standing on its own**, and it does not license a bare Wi-Fi in
+running prose. `app_name` and `welcome_hello_title` are the application naming
+itself and stay unquoted.
 
 Lithuanian declines over seven cases, all suffixes. No case ending is ever
 glued onto a placeholder: the sentence is turned around so the placeholder
@@ -57,9 +62,11 @@ ten or more takes the genitive plural after it, *prieš 12 sekundžių*, which i
 exactly what `other` covers. So those two categories are not the same word
 twice.
 
-In `docks_available` and `counterpart_docks`, `few` and `many` are genuinely
-identical: *vieta* has the same form in the nominative plural and the genitive
-singular. That is the language, not a copied line.
+In five plurals `few` and `many` are genuinely identical, because the noun has
+one form for both the nominative plural and the genitive singular: *vieta* in
+`docks_available` and `counterpart_docks`, and *stotelė* in `city_detail`,
+`city_stations` and `city_detail_size_unknown`. **All five are the language,
+not a copied line** — do not "correct" them.
 
 ## The vocabulary
 
@@ -99,15 +106,17 @@ singular. That is the language, not a copied line.
 | Out of service | Paslaugos neteikiamos | `settings:radioInfo_service_out`. `settings_map_filters_hide_out_of_service` repeats it in full — "Slėpti stoteles, kuriose paslaugos neteikiamos" — rather than inventing a shorter *neveikiančios*, so the filter and the badge name one state. |
 | Replace | Pakeisti | `settings:vpn_replace`. |
 | Language | Kalba | `settings:app_locale_preference_title`. |
+| Open | Atidaryti | `android:whichViewApplicationLabel`, `settings:credman_button_open`, `settings:launch_instant_app`. *Atverti* is correct Lithuanian and lives in other software, but it appears **nowhere** in the phone's 5 862 lines — Android says *atidaryti*, twenty-three times. So do `sources_open`, `journey_navigate`, `station_open_in_navigation`, `settings_opening_title` and the About screen's own `about_links_title`, which sat three lines from an `about_links_body` already saying *Atidaryti*. The store changelogs follow the same rule — *atsidaro*, not *atsiveria* — since changelog 3 narrates `settings_opening_title` word for word. |
 | Open by default | Atidaryti pagal numatytuosius nustatymus | `settings:auto_launch_label`. `about_links_body` walks the reader down a real Android path, so every link of it is quoted from the phone and not translated afresh — *Atverti* appears nowhere in Settings, and the reader following the chain would stop at the one label that is not on screen. Note that this is Android's **link** setting, which is why `settings_opening_title` — this application's own opening-screen setting — is worded differently on purpose. |
 | Privacy | Privatumas | `settings:privacy_dashboard_title`. |
 | Licence | Licencija | `settings:license_title`. |
 | just now | ką tik | `settings:time_unit_just_now`, lower-cased because it lands inside "Atnaujinta ką tik". |
 | Searching… | Ieškoma… | `settings:wifi_p2p_menu_searching`. |
-| System (as a choice) | Sistemos | Genitive: *the system's* theme, units, language. Android's noun is *Sistema* (`settings:header_category_system`), but a button standing beside *Šviesi* and *Tamsi* is naming a possessor, not a category. |
+| System (on a ToggleRow) | Sistemos | Genitive: *the system's* theme, *the system's* units. Android's noun is *Sistema* (`settings:header_category_system`), but a button standing beside *Šviesi* and *Tamsi* is naming a possessor, not a category. **The exception stops at the two `ToggleRow`s**, `settings_theme_system` and `settings_units_system`, where the neighbouring buttons supply the noun. |
+| System (heading the language list) | Sistemos kalba | `settings:preference_of_system_locale_title` — Android's own wording for this very row. `settings_language_system` is not a `ToggleRow`: it heads a list of endonyms (*English*, *Français*, *Lietuvių*), where a bare genitive would have nothing to be the genitive of. Android's other rendering, *Numatytoji sistemos vertė* (`android:system_locale_title`), says the same thing more heavily. |
 | offline data | duomenys įrenginyje | *Neprisijungus* is Android's word for offline, but it is an adverb: *duomenys neprisijungus* reads "data while offline", and the participle that repairs it — *neprisijungus naudojami duomenys* — is 32 characters against English's 12, on a settings section title. What these datasets are is data held on the device, so that is what they are called. The adverb is kept where it genuinely means "while offline": `dataset_delete_body`, "Norint dirbti neprisijungus". |
 | unmetered / metered | neapmokestinamas / apmokestinamas | **A departure from Android**, which says *Nematuojamas* / *Matuojamas* (`settings:wifitrackerlib_wifi_unmetered_label`, `settings:wifi_metered_label`) — literally un/measured. The English string deliberately names **what is billed** rather than Wi-Fi, and `download_unmetered_only_description` spends a whole sentence on the billing; *nematuojamas* would name the measuring instead and lose the point. Android's own second rendering, `settings:wifi_unmetered_label` → *Neišmatuotas*, shows the term is not settled there either. |
-| Favourites | Mėgstamiausios | **Written shorter than the source is literal.** English's bare "Favourites" has no gender to agree with; Lithuanian's does, and everything in this list is a *stotelė*, so the feminine plural stands alone and the noun is left out — *Mėgstamiausios*, *Žiūrėti mėgstamiausias*. `journey_source_favourite` keeps the noun (*Mėgstamiausia stotelė*) because there it sits among *Mano buvimo vieta* and *Taškas žemėlapyje*, where the reader has not yet been told what is being listed. |
+| Favourites | Mėgstamiausios stotelės | **The noun is carried, not dropped.** English's bare "Favourites" is a noun; Lithuanian's *mėgstamiausios* is an adjective, and a substantivised Lithuanian adjective takes the pronominal (definite) form — *mėgstamiausiosios* — or keeps its noun. A bare *Mėgstamiausios* heads a screen while naming nothing, and quietly commits the whole screen to the feminine of a *stotelė* it never writes; *Žiūrėti mėgstamiausias* is half a phrase. A draft of this file shortened both and was wrong to. If length ever forces the issue, the correct short form is the generic masculine **Mėgstamiausi**, never the bare feminine. |
 | map data / tiles | žemėlapio duomenys | The name the storage screen gives the dataset, and the one every other string uses for it. |
 | routing data | maršrutų duomenys | And *maršrutų grafas* in the store text, which is the project's own more technical term, as in French. |
 | address index | adresų rodyklė | *Rodyklė* is an index, not a pointer, here. |
