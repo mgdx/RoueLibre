@@ -1,0 +1,25 @@
+Roue Libre pokazuje stacje rowerów miejskich na mapie i wyznacza trasę od drzwi do drzwi, łączącą marsz z jazdą rowerem.
+
+Wszystko dzieje się na urządzeniu: mapa, wyszukiwanie adresów i wyznaczanie trasy nie potrzebują żadnego połączenia. Do sieci wychodzi tylko bieżąca dostępność rowerów.
+
+<b>Co ją wyróżnia</b>
+
+• Żadnej usługi Google: bez Play Services, bez Firebase, bez Maps SDK. Działa na każdym Androidzie pozbawionym usług Google.
+• Bez telemetrii, bez śledzenia, bez unikalnego identyfikatora, bez konta.
+• Bez zapisywania przejazdów: żadnej historii, żadnych pozycji, żadnych celów. To, czego szukasz, nie opuszcza telefonu.
+• Żadne miasto nie jest narzucone: kilka aglomeracji może stać obok siebie na urządzeniu, a dane jednego miasta usuniesz bez ruszania pozostałych.
+• Trasa dobiera <i>parę</i> stacji — początkową i docelową — zamiast poprzestawać na najbliższej, i waży ryzyko, że słabo zaopatrzona stacja opustoszeje, zanim do niej dojdziesz.
+
+<b>Warto wiedzieć przed instalacją</b>
+
+Mapa, graf tras i indeks adresów nie są dołączone do aplikacji: pobiera się je raz, na ekranie „Pamięć”, albo instaluje ręcznie z plików przygotowanych samodzielnie. Ich rozmiar zależy od miasta — kilkadziesiąt megabajtów dla średniej aglomeracji, więcej dla stolicy — i jest podawany przed pobraniem.
+
+<b>Obsługiwane miasta</b>
+
+Blisko trzysta sieci w około trzydziestu krajach: każda, która publikuje swoje stacje jako otwarte dane i na której stojakach trasa może polegać — od Vélib’ w Paryżu po Citi Bike w Nowym Jorku, przez Pragę, Barcelonę, Kopenhagę, Tokio i Buenos Aires. Aplikacja podpowie Twoje miasto na podstawie pozycji, jeśli ją o to poprosisz, a kilka miast możesz trzymać zainstalowanych naraz i przełączać się między nimi.
+
+Zestawy danych offline powstały jak dotąd dla garstki z nich. Dla pozostałych aplikacja mówi to wprost, zamiast udawać: lista pokazuje, co istnieje, a pliki można wytworzyć skryptami z repozytorium.
+
+Aplikacja nie jest związana z żadną konkretną siecią: lista miast aktualizuje się sama, a każde miasto niesie adres własnego kanału GBFS, co pozwala używać jej z dowolną siecią GBFS na świecie.
+
+Wolne oprogramowanie na licencji GNU GPL v3.
