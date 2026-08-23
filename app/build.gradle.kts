@@ -1,3 +1,4 @@
+import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
 import java.util.Properties
 
 plugins {
@@ -8,6 +9,41 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktlint)
 }
+
+/**
+ * The version code every release is numbered from.
+ *
+ * The universal APK keeps it as it is; each architecture's APK derives its own
+ * from it below. Android compares this number and nothing else, so it only
+ * ever goes up.
+ */
+val baseVersionCode = 4
+
+/**
+ * What each architecture adds to ten times the base version code.
+ *
+ * A repository cannot hold two APKs of one application under the same version
+ * code — F-Droid publishes one file per architecture and needs to tell them
+ * apart. The order is the usual one, least capable first, so that a device
+ * able to run several is offered the highest.
+ *
+ * Ten times the base leaves the units to the architecture and keeps the
+ * numbering readable: version 4 gives 41 to 44, version 5 gives 51 to 54. Each
+ * architecture's series therefore rises with the releases, which is the only
+ * thing Android asks of it.
+ *
+ * Only the manifest's number changes: `BuildConfig.VERSION_CODE` stays at the
+ * base, and the what's-new screen keys its notes on it (SPEC §7.10). That is
+ * deliberate — a release publishes one set of notes, not one per architecture —
+ * so `changelogs/<base>.txt` is the file to write, and the two numbers are
+ * meant to differ.
+ */
+val architectureVersionCodes = mapOf(
+    "armeabi-v7a" to 1,
+    "x86" to 2,
+    "x86_64" to 3,
+    "arm64-v8a" to 4,
+)
 
 android {
     namespace = "io.github.mgdx.rouelibre"
@@ -21,7 +57,7 @@ android {
         // adaptive icons, and above all an up-to-date TLS stack (SPEC §3).
         minSdk = 26
         targetSdk = 37
-        versionCode = 4
+        versionCode = baseVersionCode
         // The first version published, and the first signed by the project's
         // own key rather than the debug one. That is what 1.0 names here: not
         // a feature set frozen, but a build somebody can install and then
@@ -312,6 +348,19 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
 
 androidComponents {
     onVariants { variant ->
+        // The architecture APKs take their own version code (see
+        // `architectureVersionCodes`). The universal one carries no ABI
+        // filter, so it keeps the base and is left alone here.
+        variant.outputs.forEach { output ->
+            val architecture = output.filters
+                .firstOrNull { it.filterType == ABI }
+                ?.identifier
+                ?: return@forEach
+            output.versionCode.set(
+                baseVersionCode * 10 + architectureVersionCodes.getValue(architecture),
+            )
+        }
+
         val copyTask = tasks.register<CopySharedConfigurationTask>(
             "copySharedConfigurationFor${variant.name.replaceFirstChar { it.uppercase() }}",
         ) {
