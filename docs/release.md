@@ -71,9 +71,16 @@ Both files are `chmod 600`, and neither is versioned.
 
 ## Releasing, step by step
 
-1. **Set the version** in `app/build.gradle.kts`. `versionCode` goes up by one
-   and never back down — it is what Android compares. `versionName` follows
-   semantic versioning.
+1. **Set the version** in `app/build.gradle.kts`: `baseVersionCode` goes up by
+   one and never back down — it is what Android compares — and `versionName`
+   follows semantic versioning.
+
+   Each architecture's APK derives its own code from the base, ten times the
+   base plus the architecture's rank: 41 to 44 for base 4, 51 to 54 for base 5.
+   A repository cannot hold two APKs of one application under the same code,
+   and F-Droid publishes one file per architecture. The universal APK keeps the
+   base, and so does `BuildConfig.VERSION_CODE` — which is why the release
+   notes are named after the base and not after any of the four.
 
 2. **Write the release notes**: `fastlane/metadata/android/en-US/changelogs/`
    and `fr/changelogs/`, named after the new `versionCode`. English is the
@@ -142,13 +149,74 @@ character. If it does not, the file was not built by this project.
 ## F-Droid
 
 F-Droid **rebuilds from source and signs with its own key**: the key described
-here does not sign what F-Droid serves. The consequence to keep in mind is that
-an APK downloaded here and the same version installed from F-Droid have
-different signatures, and cannot replace one another without removing the
-application first.
+above does not sign what F-Droid serves. The consequence to keep in mind is
+that an APK downloaded from the releases page and the same version installed
+from F-Droid have different signatures, and cannot replace one another without
+removing the application first.
 
-Reconciling them is possible and is the goal: F-Droid's *reproducible builds*
-mode has it verify that its own rebuild matches ours byte for byte, and then
-publish **ours**. That is why the APK carries no AGP dependency block
-(`dependenciesInfo` is off in `app/build.gradle.kts`), and the request is made
-with the certificate fingerprint above.
+### Getting in
+
+The metadata lives in F-Droid's own repository, not in this one. It is a file
+named after the application id, `metadata/io.github.mgdx.rouelibre.yml`, added
+to [fdroiddata](https://gitlab.com/fdroid/fdroiddata) by merge request — the
+route the maintainers prefer over opening a packaging request and waiting for
+somebody else to write it.
+
+The recipe, one build entry per architecture, each carrying the version code
+that architecture's APK actually declares:
+
+```yaml
+Categories:
+  - Navigation
+  - Sports & Health
+License: GPL-3.0-only
+AuthorName: mgdx
+SourceCode: https://github.com/mgdx/RoueLibre
+IssueTracker: https://github.com/mgdx/RoueLibre/issues
+Changelog: https://github.com/mgdx/RoueLibre/blob/main/CHANGELOG.md
+
+RepoType: git
+Repo: https://github.com/mgdx/RoueLibre.git
+
+Builds:
+  - versionName: 1.0.0
+    versionCode: 41
+    commit: v1.0.0
+    submodules: true
+    gradle:
+      - yes
+    output: app/build/outputs/apk/release/app-armeabi-v7a-release.apk
+  # … and the same for 42 x86, 43 x86_64, 44 arm64-v8a
+
+AutoUpdateMode: None
+UpdateCheckMode: Tags
+CurrentVersion: 1.0.0
+CurrentVersionCode: 44
+```
+
+`submodules: true` is what fetches BRouter, which the root `settings.gradle.kts`
+consumes as a composite build and which is pinned to a tag rather than
+following `master` — a moving submodule would make the build unreproducible.
+`AutoUpdateMode` is off because four entries cannot be generated from one tag;
+each release adds its four by hand.
+
+Before opening the merge request, run their own checks — `fdroid lint` and
+`fdroid build` from [fdroidserver](https://gitlab.com/fdroid/fdroidserver),
+which builds inside their image rather than on a machine that already has
+everything. Counting on that image is the point: the versions this project
+builds with are recent, and the build server is what decides whether they are
+buildable there.
+
+### Being published under our own signature
+
+Once the recipe builds on their server, F-Droid can be asked to publish **our**
+APKs rather than its own: it rebuilds from the recipe, compares the result to
+the file we published byte for byte, and if the two match it serves ours
+untouched. The two signatures then stop being rivals, and one can move between
+the releases page and F-Droid without removing anything.
+
+It is asked for by adding two fields to the same metadata file — `Binaries`,
+where our APKs are downloaded from, and `AllowedAPKSigningKeys`, the SHA-256
+above without its colons. It is also why the APK carries no AGP dependency
+block (`dependenciesInfo` is off in `app/build.gradle.kts`): that block is
+signed by AGP and is not reproducible.
