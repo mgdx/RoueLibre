@@ -497,8 +497,12 @@
     <string name="dataset_delete">Radera</string>
     <string name="dataset_delete_description">Radera %1$s</string>
     <string name="dataset_delete_title">Radera dessa data?</string>
-    <!-- %1$s is the dataset's name, %2$s the space it frees. -->
-    <string name="dataset_delete_body">Data för ”%1$s” raderas, vilket frigör %2$s. Du måste ladda ned dem igen för att kunna arbeta offline.</string>
+    <!-- %1$s is the dataset's own name — Kartdata, Ruttdata, Adressindex —
+         and %2$s the space it frees. Nothing here may call it ”data för”: the
+         address index *is* the data. ”Datamängden” is the file's word for a
+         dataset, is common gender, and takes ”den”, so the placeholder is
+         asked for no agreement. -->
+    <string name="dataset_delete_body">Datamängden ”%1$s” raderas, vilket frigör %2$s. Du måste ladda ned den igen för att kunna arbeta offline.</string>
     <string name="dataset_imported">%1$s har installerats</string>
     <string name="dataset_deleted">%1$s har raderats</string>
 
@@ -564,8 +568,13 @@
     <!-- One wording for both modes: this screen knows nothing of the map's
          Cyklar / Lediga platser button, so it may name neither. -->
     <string name="settings_map_filters_hide_empty">Dölj stationer utan något att erbjuda</string>
-    <!-- Under the switch, saying what ”något” is read against. -->
-    <string name="settings_map_filters_hide_empty_hint">”Något” följer det som kartan räknar: ingen cykel medan den räknar cyklar, ingen ledig plats medan den räknar lediga platser.</string>
+    <!-- Under the switch, saying what the phrase above is read against.
+         English isolates its negation in a word of its own, “Nothing”, and can
+         quote that word alone; Swedish carries the negation in ”utan”, so
+         lifting ”något” out of ”Dölj stationer utan något att erbjuda” would
+         say the opposite of what the switch does. The whole phrase is quoted
+         instead, and `changelogs/3.txt` says the same thing the same way. -->
+    <string name="settings_map_filters_hide_empty_hint">”Utan något att erbjuda” följer det som kartan räknar: ingen cykel medan den räknar cyklar, ingen ledig plats medan den räknar lediga platser.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stationer som nätverket inte säger något om stannar kvar på kartan: ett antal som ingen kunnat läsa är inte ett antal på noll.</string>
 
