@@ -55,6 +55,20 @@ nominative falls, or is introduced by a colon or by an apposition:
 says "Jedź do stacji %1$s", where *stacji* carries the case and the name stays
 as the feed wrote it.
 
+**But the apposition must be true.** Putting a noun in front of the placeholder
+is only allowed when the placeholder really holds a thing of that kind. *Jedź do
+stacji %1$s* is sound because the argument is a station's name. The three
+`city_delete_*` strings once read *dane miasta %1$s*, and that was wrong: the
+argument is `city.displayName`, which is the **network's** name and not the
+municipality's — 328 of the 331 entries in `config/catalogue.json` differ, and
+every Polish one does (*VETURILO 3.0* for Warsaw, *JasKółka* for Jastrzębie
+Zdrój). The sentence asserted something the English never says, which is "Data
+for %1$s deleted". They now use the quotation marks instead — "Usunięto dane
+„%1$s”" — which carry the apposition without claiming what the name names, and
+which is already how `dataset_delete_body` and `dataset_rejected_format` handle
+a name. The rule: before writing a noun in front of a `%1$s`, read the call
+site.
+
 ## Plurals
 
 Polish has four categories, and `few` is the one that catches people out: it
