@@ -272,7 +272,7 @@
     <string name="about_attribution_brouter">Računanje ruta: BRouter, licenca MIT, nad podacima OpenStreetMapa.</string>
     <string name="about_attribution_maplibre">Iscrtavanje karte: MapLibre Native, licenca BSD s dvije klauzule.</string>
     <string name="about_links_title">Otvaranje mjesta iz druge aplikacije</string>
-    <string name="about_links_body">Linkovi „geo:“ i adrese podijeljene kao običan tekst dolaze pravo ovdje: odaberite Roue Libre u Androidovom meniju za odabir. Linkovi s kartografskih web stranica traže dozvolu: Postavke → Aplikacije → Roue Libre → Zadano otvaranje → Dodajte link.</string>
+    <string name="about_links_body">Linkovi „geo:“ i adrese podijeljene kao običan tekst dolaze pravo ovdje: odaberite Roue Libre u Androidovom okviru za odabir. Linkovi s kartografskih web stranica traže dozvolu: Postavke → Aplikacije → Roue Libre → Zadano otvaranje → Dodajte link.</string>
     <string name="about_licence_title">Licenca</string>
     <string name="about_licence_body">Roue Libre je slobodan softver, objavljen pod licencom GNU GPL verzija 3. Možete ga koristiti, proučavati, mijenjati i prosljeđivati dalje.</string>
     <string name="about_open_repository">Pogledaj izvorni kôd</string>
@@ -300,7 +300,7 @@
 
     <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
          which is what the application does at rest. -->
-    <string name="journey_bike_kind_any">Svejedno</string>
+    <string name="journey_bike_kind_any">Bilo koji</string>
     <string name="journey_bike_kind_mechanical">Klasični</string>
     <string name="journey_bike_kind_electric">Električni</string>
     <string name="journey_bike_kind_any_description">Bilo koji bicikl, koje god vrste</string>
@@ -389,14 +389,14 @@
     <string name="station_as_origin">Kreni odavde</string>
     <string name="station_as_destination">Idi ovamo</string>
     <string name="station_open_in_navigation">Otvori u aplikaciji za navigaciju</string>
-    <string name="station_no_navigation_app">Na ovom uređaju nije instalirana nijedna aplikacija za karte.</string>
+    <string name="station_no_navigation_app">Na ovom uređaju nije instalirana nijedna aplikacija za mape.</string>
 
     <string name="address_search_title">Pretraga adrese</string>
     <!-- The order Bosnia and Herzegovina writes an address in: street, then
          number, then town (Zmaja od Bosne 4, Sarajevo). No postcode is
          invited, and not because one would break the parse: `parseQuery`
          strips a five-digit group before it looks for a house number
-         (`AddressQuery.kt:87`), which is exactly what 71000 or 78000 is. It is
+         (`AddressQuery.kt:87-88`), which is exactly what 71000 or 78000 is. It is
          left out because the prompt is a hint in a narrow field and the parser
          discards it anyway (SPEC §4.3). -->
     <string name="address_search_hint">Ulica, broj, mjesto</string>
@@ -480,8 +480,8 @@
     <string name="city_here_title">Nalazite se u drugom gradu</string>
     <string name="city_here_body">%1$s pokriva područje u kojem se nalazite. Instalirajte podatke te mreže da biste vidjeli njene stanice i ovdje računali putovanja.</string>
     <string name="city_here_installed_body">%1$s pokriva područje u kojem se nalazite, a podaci te mreže su već na uređaju.</string>
-    <string name="city_here_install">Instaliraj njene podatke</string>
-    <string name="city_here_use">Koristi ovu mrežu</string>
+    <string name="city_here_install">Instaliraj podatke</string>
+    <string name="city_here_use">Prebaci se</string>
     <string name="city_proposal_body">Izgleda da se nalazite u području koje pokriva %1$s. Idemo s tim?</string>
     <string name="city_proposal_accept">Da</string>
     <string name="city_none_nearby">Nema poznate mreže u blizini. Odaberite grad s liste.</string>
@@ -553,7 +553,7 @@
     <string name="error_feed_unavailable">Mreža ne objavljuje kanal podataka „%1$s“.</string>
     <string name="error_unsupported_version">Ova mreža objavljuje svoje podatke u verziji %1$s, koju ova verzija aplikacije ne može čitati. Ažurirajte aplikaciju.</string>
     <string name="error_local_storage">Nije moguće pročitati podatke pohranjene na uređaju.</string>
-    <string name="error_no_city_chosen">Nije odabran nijedan grad. Odaberite ga.</string>
+    <string name="error_no_city_chosen">Nije odabran nijedan grad. Odaberite jedan.</string>
 
     <!-- Unmetered-only downloads. The setting names what is billed rather than
          Wi-Fi, following the lexicon's `S naplatom` / `Bez naplate`. -->

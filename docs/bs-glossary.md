@@ -101,6 +101,22 @@ apostrophe, where a network's name carries one (*Vélib’*, *V’lille*, *Vélo
 is **’** (U+2019) and never the straight quote, which is why nothing in the
 file is escaped.
 
+## When a word here changes, this file changes in the same commit
+
+Twice already this file has quoted the strings wrongly, and both times the same
+way: a sweep corrected `values-bs/strings.xml` and `fastlane/`, the glossary was
+not in its path, and the prose went on asserting the rule as it stood *before*
+the sweep. The s/sa entry above stated the rule and then broke it in two of its
+own citations, because those citations had been copied out of the file a day
+earlier.
+
+That is worse than a plain typo. Every quotation here is what the next
+contributor will trust instead of opening the file, so a stale one does not
+merely go out of date — it invites somebody to "correct" a string that was
+already right. **Any search-and-replace over the strings has to run over
+`docs/bs-glossary.md` too**, and any entry whose wording is quoted has to be
+re-read against the file it quotes before the commit closes.
+
 ## Plurals: what each category covers, not its smallest number
 
 Bosnian has three, and each has to read correctly for **every** number that
@@ -134,8 +150,11 @@ sati*), and so does *sekunda*.
 | free dock | **slobodno mjesto** | What a bike is returned into, counted as available: `docks_available`, `counterpart_docks`, `mode_docks`. |
 | dock (capacity) | **stalak** | The same object counted as a total: `docks_total`, `station_detail_with_capacity`. The screen shows both figures side by side — *12 slobodnih mjesta · 30 stalaka* — so they cannot share a word. Never the payment terminal. |
 | bike | **bicikl** | |
+| map | **karta** | **A departure from the lexicon, and a deliberate one.** Android says *mape*: `settings:default_map_app_title` = *Aplikacija za mape*, `android:keyboard_shortcut_group_applications_maps` = *Mape*, `android:app_category_maps` = *Mape i navigacija*. This file writes *karta* in all 22 places, because *karta* is written Bosnian's word for a geographic map where *mapa* is the loan Android took for its **application category** — and this application draws a map, it is not a maps app. |
+| map app | **aplikacija za mape** | The one place the lexicon wins outright, and the distinction is worth holding: `station_no_navigation_app` is about an *application*, not about a map, and `settings:default_map_app_title` is that exact phrase. So the thing on screen is a *karta* and the thing you might not have installed is an *aplikacija za mape*. |
+| any bike | **Bilo koji** | `journey_bike_kind_any`, the first of three toggle branches. Not *Bilo koji bicikl*: the two branches beside it (*Klasični*, *Električni*) elide the noun, and repeating it here made this the longest toggle label in any language. *Svejedno* was tried and dropped — idiomatic and shorter still, but an adverb wedged between two adjectives, where *Bilo koji* agrees with the elided *bicikl* as its neighbours do. The spoken `journey_bike_kind_any_description` carries the full phrase. |
 | mechanical | **klasični** | The contrast Bosnian actually draws with *električni bicikl*, and the one the bike-share networks in the country use. *Mehanički* is the literal rendering and reads as a machine part rather than as a bike you pedal. |
-| electric | **električni** | Pedal-assist, which `journey_bike_kind_electric_description` spells out as *bicikl sa pomoćnim električnim pogonom* so nobody reads "moped". |
+| electric | **električni** | Pedal-assist, which `journey_bike_kind_electric_description` spells out as *bicikl s pomoćnim električnim pogonom* so nobody reads "moped". |
 | pace (walking) | **tempo** | Never *brzina*. `settings_walking_pace_title` is *Tempo hodanja*: a pace is something one knows about oneself, where a speed is a figure nobody has measured about themselves. The lexicon's *brzina* is reserved for the rates of machines (`settings:wifi_speed` *Brzina veze*, `settings:pointer_speed`), which is the connotation to avoid. `settings_walking_pace_brisk` is *Žustro* for the same reason — *Brzo* would drag the speed reading back in. |
 | Delete | **Izbriši** | Destroys: a city's data, a dataset. `android:deleteText`, and `android:delete` in the polite *Izbrišite*. |
 | Remove | **Ukloni** | Takes out of a list: `station_favourite_remove`, *Ukloni iz favorita*. `android:kg_reordering_delete_drop_target_text`. Two words, as Android itself has two. |
@@ -154,7 +173,7 @@ sati*), and so does *sekunda*.
 | Update available | **Dostupno je ažuriranje** | `settings:android_version_pending_update_summary`. |
 | browser | **preglednik** | `android:keyboard_shortcut_group_applications_browser`, `settings:default_browser_title`. |
 | Open by default | **Zadano otvaranje** | `settings:auto_launch_label`, quoted verbatim inside `about_links_body` because the reader has to find that row in Settings. *Dodajte link* on the same line is `settings:app_launch_add_link`, plural because that is how the system writes it. |
-| Settings / Display / Storage / Privacy / System / Language / Licence / Version | **Postavke / Prikaz / Pohrana / Privatnost / Sistem / Jezik / Licenca / Verzija** | All from the lexicon: `android:global_action_settings`, `settings:display_category_title`, `settings:storage_category`, `settings:lock_screen_notifications_title`, `android:default_audio_route_category_name`, `settings:app_locale_preference_title`, `settings:license_title`, `settings:vpn_version`. *Prikaz* rather than *Ekran* for `settings_section_display`, because the lexicon's *Prikaz* is itself a settings category title where *Ekran* names the hardware. |
+| Settings / Display / Storage / Privacy / System / Language / Licence / Version | **Postavke / Prikaz / Pohrana / Privatnost / Sistem / Jezik / Licenca / Verzija** | All from the lexicon: `android:global_action_settings`, `settings:display_category_title`, `settings:storage_category`, `settings:lock_screen_notifications_title`, `android:default_audio_route_category_name`, `settings:app_locale_preference_title`, `settings:license_title`, `settings:vpn_version`. *Prikaz* rather than *Ekran* for `settings_section_display` because *Prikaz* is the lexicon's own settings **category** title (`settings:display_category_title`), which is exactly what that string is. *Ekran* is not reserved for hardware and is not avoided: the file uses it six times for a surface of the application itself — *s ekrana za pohranu*, *Zadani ekran pri otvaranju*, *ostaje na ekranu* — and the two live side by side without colliding. |
 
 ## Two rules that are not about single words
 
@@ -192,7 +211,7 @@ kanala podataka mreže*, *skupovi podataka preuzimaju se samo kada to
 zatražite*.
 
 **One line does say *mi*, and deliberately.** `city_proposal_body` ends *Idemo
-sa tim?* — because the English ends "Shall we go with that?". That sentence is
+s tim?* — because the English ends "Shall we go with that?". That sentence is
 not a claim about what the software does with your data; it is the application
 asking a question and waiting for *Da*. The impersonal rule covers the privacy
 and behaviour texts, and this is neither.
@@ -211,7 +230,7 @@ So these lines are written around that rather than against it:
 | `dataset_imported`, `dataset_deleted` | *Instalirano: %1$s* | A dataset's name is a masculine plural in two cases (*Podaci karte*, *Podaci za rute*) and a masculine singular in the third (*Indeks adresa*), so no participle agrees with all three. |
 | `city_here_body`, `city_here_installed_body` | *%1$s pokriva područje u kojem se nalazite. Instalirajte podatke te mreže…* | The placeholder opens the sentence as the **subject**, in the nominative it arrived in, and *te mreže* carries the case the rest needs. Subject-first also settles which of the two nouns covers which, where *Područje … pokriva %1$s* could be read either way round. |
 | `dataset_delete_description` | *Izbriši: %1$s* | Spoken by TalkBack on the delete button (`DatasetAdapter.kt:79`), handed the same dataset name. A bare *Izbriši %1$s* asks the name for an accusative it cannot take — *Izbriši Podaci karte* — so the colon does the work here exactly as it does in `city_delete_description`. |
-| `city_here_use` | *Koristi ovu mrežu* | It read *Koristi je* at first. The only feminine antecedent is *mreže*, eight words back in an adnominal genitive, while the **subject** of the sentence above is `%1$s`, whose gender nobody can predict — a network label may be *Vélib’*, *nextbike*, *Bicikelj*. Naming the noun costs two words and removes the guess. |
+| `city_here_use`, `city_here_install` | *Prebaci se* / *Instaliraj podatke* | These are **one** button, not two: `MainActivity.kt:553-555` and `MapFragment.kt:899-901` pick one label or the other for the same positive button, which calls `switchTo` either way. So they take the same shape — bare imperative, no pronoun. The first draft had *Koristi je*, leaning a feminine pronoun on *mreže* eight words back while the sentence's **subject** is `%1$s`, whose gender nobody can predict (*Vélib’*, *nextbike*, *Bicikelj*); the second draft fixed that by naming the network but left the other branch on *njene podatke*, so the same button argued two different ways. *Prebaci se* is genderless and says what the button does.
 | `city_proposal_body`, `map_outside_city_message` | *…područja koje pokriva %1$s* | Same placeholder, inside a relative clause this time: *koje* is the accusative object and `%1$s` the nominative subject, so again nothing is asked of the name. |
 
 ### The three lines that must not say "grad"
