@@ -35,6 +35,12 @@
     <!-- The minimum touch target, imposed by SPEC §7. -->
     <dimen name="touch_target_min">48dp</dimen>
 
+    <!-- What a list leaves under its last row when a button floats over that
+         corner: the button's own 48 dp, plus the two 12 dp margins that hold
+         it off the edge and off the row. Without it the last station of the
+         network is unreachable, hidden under the control for good. -->
+    <dimen name="list_room_under_the_last_row">72dp</dimen>
+
     <!-- The availability indicator: the signature element. Its size is
          calibrated to stay legible at arm's length, while walking.
 

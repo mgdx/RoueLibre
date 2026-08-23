@@ -15,34 +15,16 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <!-- Nearest station first (SPEC §7.2). It stands alone at the start of the
-         row, apart from the three at the end, and that separation is the
-         reading: the three lead away from this screen, this one acts on the
-         list under it. The title and the age line move over beside it, so the
-         header keeps one left edge rather than two. -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/locate_me"
-        style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="@dimen/touch_target_min"
-        android:layout_height="@dimen/touch_target_min"
-        android:layout_marginStart="@dimen/space_s"
-        android:contentDescription="@string/stations_order_by_distance"
-        app:icon="@drawable/ic_my_location"
-        app:iconTint="@color/ink"
-        app:layout_constraintBottom_toBottomOf="@id/title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/title" />
-
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_s"
+        android:layout_marginStart="@dimen/space_l"
         android:layout_marginTop="@dimen/space_l"
         android:text="@string/stations_title"
         android:textAppearance="@style/TextAppearance.RoueLibre.Title"
         app:layout_constraintEnd_toStartOf="@id/open_map"
-        app:layout_constraintStart_toEndOf="@id/locate_me"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- The title stops at the innermost icon, not at the outermost: the three
@@ -111,11 +93,12 @@
         android:id="@+id/freshness"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
         android:layout_marginEnd="@dimen/space_l"
         android:justificationMode="none"
         android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
         tools:text="Mis à jour il y a 12 secondes" />
 
@@ -189,6 +172,7 @@
             android:layout_height="match_parent"
             android:background="?attr/colorSurface"
             android:clipToPadding="false"
+            android:paddingBottom="@dimen/list_room_under_the_last_row"
             android:scrollbars="vertical"
             tools:itemCount="6"
             tools:listitem="@layout/item_station" />
@@ -236,5 +220,35 @@
             android:layout_marginTop="@dimen/space_l"
             tools:text="Rafraîchir" />
     </LinearLayout>
+
+    <!--
+        Nearest station first (SPEC §7.2), where the thumb is: over the list,
+        at the bottom edge, as the map keeps its own controls (SPEC §7.1). It
+        is the only thing this screen offers to do to the list under it — the
+        three icons beside the title lead away from it — so it stands alone
+        and away from them.
+
+        It is the map's "locate me" in shape and in gesture, and not in colour:
+        that one is a pale disc because it sits on a map, and a pale disc on
+        this screen would be a white circle on a white list. It takes the
+        signal green, which no other control on this screen wears.
+
+        Last in the layout, so it draws over the rows: nothing is constrained
+        to it, and the list carries a bottom padding of its own so the last row
+        can be scrolled clear of it.
+    -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/locate_me"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_m"
+        android:contentDescription="@string/stations_order_by_distance"
+        app:backgroundTint="@color/signal"
+        app:icon="@drawable/ic_my_location"
+        app:iconTint="@color/surface_on_signal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

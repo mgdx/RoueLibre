@@ -18,10 +18,11 @@ import javax.xml.parsers.DocumentBuilderFactory
  * The order matters as much: the title's box stops at the innermost icon, and a
  * box running under an icon is only harmless while the text is left-aligned.
  *
- * The row has two ends and they say different things: the three at the end lead
- * away from this screen, and the one at the start — "nearest station first" —
- * acts on the list under it. The title and the age line move over beside that
- * one, so the header keeps a single left edge instead of stepping.
+ * The header holds the three ways out and nothing else. "Nearest station first"
+ * is not among them — it acts on the list rather than leading away from it, and
+ * it lives where the thumb is, floating over the bottom corner as the map keeps
+ * its own controls. What is checked here is that it stays out of the header and
+ * that the list leaves room under its last row for it.
  *
  * The layout and the drawable are read from the files the build ships, as
  * `IndicatorScaleTest` reads the dimensions: what is checked is what the
@@ -48,34 +49,32 @@ class StationListHeaderTest {
     }
 
     @Test
-    fun `the ordering button stands alone at the start of the row`() {
+    fun `the ordering button floats over the bottom corner, not in the header`() {
         val button = viewOf("locate_me")
-        assertEquals("parent", button.getAttribute("app:layout_constraintStart_toStartOf"))
+        assertEquals("parent", button.getAttribute("app:layout_constraintBottom_toBottomOf"))
+        assertEquals("parent", button.getAttribute("app:layout_constraintEnd_toEndOf"))
         assertEquals("@drawable/ic_my_location", button.getAttribute("app:icon"))
         assertEquals(
             "@string/stations_order_by_distance",
             button.getAttribute("android:contentDescription"),
         )
-        // It is not one more of the three: those are pinned to the end, and a
-        // fourth among them would leave the title nothing.
+        // Nothing anchors it to the title's row: it is not a fourth way out,
+        // and a fourth icon beside the title would leave the title nothing.
         assertNull(
-            "locate_me joined the icons at the end of the row",
-            button.endConstraint().ifEmpty { null },
+            "locate_me joined the header row",
+            button.getAttribute("app:layout_constraintTop_toTopOf").ifEmpty { null },
         )
     }
 
     @Test
-    fun `the title and the age line share one left edge`() {
+    fun `the last row can be scrolled clear of the button floating over it`() {
+        // Without this padding the last station of the network sits under the
+        // control for good, on a list that has already been scrolled to its end.
         assertEquals(
-            "the title has to start after the button, not under it",
-            "@id/locate_me",
-            viewOf("title").getAttribute("app:layout_constraintStart_toEndOf"),
+            "@dimen/list_room_under_the_last_row",
+            viewOf("stations").getAttribute("android:paddingBottom"),
         )
-        assertEquals(
-            "the age line has to sit under the title, not under the button",
-            "@id/title",
-            viewOf("freshness").getAttribute("app:layout_constraintStart_toStartOf"),
-        )
+        assertEquals("false", viewOf("stations").getAttribute("android:clipToPadding"))
     }
 
     @Test
