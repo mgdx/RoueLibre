@@ -1,534 +1,632 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Hungarian — TO BE TRANSLATED.
+    Hungarian translation.
 
-    Every string below still holds its English text: this file is a starting
-    point, not a translation. Translate the contents of the tags, never their
-    `name` attribute, and read CONTRIBUTING.md first — placeholders keep their
-    number, plurals keep the categories of this language, and apostrophes are
-    escaped.
+    The source is English, in `values/`, and this file is a translation of it —
+    never the place a string is invented. The `name` attributes, the
+    `tools:ignore` attributes and the plural categories are left exactly as
+    they stand. Hungarian has two categories, `one` and `other`, and only a
+    bare 1 falls into `one`.
 
-    While a string is left in English, that is what this language's users will
-    read. The application's default language is English, in `values/`, which is
-    what this file was copied from.
+    **A numeral leaves the noun behind it in the singular** — „3 kerékpár”,
+    never „3 kerékpárok” — so both categories of a plural read the same way
+    here. Both are still written out: `one` is what a count of 1 resolves to,
+    and a wrong `one` would be read every time a station holds a single bike.
+
+    **The definite article changes with the sound that follows** — *a* before a
+    consonant, *az* before a vowel — and a placeholder makes that
+    unpredictable: a station may be „a Batthyány tér”, a network „az MOL Bubi”.
+    Not one line in this file puts an article in front of a `%…$s`.
+
+    **Hungarian is agglutinative**, and a case ending glued onto a placeholder
+    would be wrong half the time. Not one line does that either: the ending
+    falls on a noun this file owns — *állomásig*, *hálózatnak*, *területen* —
+    and the name follows it in apposition, usually behind a colon. Read
+    docs/hu-glossary.md before rewording any of them; the table there lists
+    every line that carries the weight.
+
+    Typography: quotation marks are „ … ”; no space stands before `:` or `;`;
+    the dash that breaks a sentence is – with a space on either side, not the
+    em dash the English file uses. The apostrophe, where a network's name
+    carries one (Vélib’, Vélo’v, V’lille), is ’ (U+2019) and never the straight
+    quote, which is why nothing here is escaped.
+
+    Register: controls are nominal — *Letöltés*, *Törlés*, *Megjelenítés* —
+    like Android's own Hungarian; running prose addresses the reader informally
+    (*tegezés*). The glossary says why that departs from Android's *magázás*.
+    See CONTRIBUTING.md.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">Roue Libre</string>
 
-    <string name="stations_title">Stations</string>
+    <!-- Main screen: the station list. -->
+    <string name="stations_title">Állomások</string>
 
+    <!-- The number of bikes available to borrow at a station. A Hungarian
+         numeral leaves its noun in the singular, so both categories read
+         „%1$d kerékpár”. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d bike</item>
-        <item quantity="other">%1$d bikes</item>
+        <item quantity="one">%1$d kerékpár</item>
+        <item quantity="other">%1$d kerékpár</item>
     </plurals>
 
+    <!-- The number of free docks to return a bike into. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d dock</item>
-        <item quantity="other">%1$d docks</item>
+        <item quantity="one">%1$d szabad hely</item>
+        <item quantity="other">%1$d szabad hely</item>
     </plurals>
 
+    <!-- Spoken by screen readers on a station's indicator.
+         Example: „Batthyány tér, 6 kerékpár, 26 szabad hely”. -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
-    <string name="station_out_of_service">Out of service</string>
-    <string name="station_availability_unknown">Availability unknown</string>
+    <string name="station_out_of_service">Nem működik</string>
+    <string name="station_availability_unknown">Ismeretlen elérhetőség</string>
 
     <!-- What a station is called when its feed publishes no name for it and no
-         street to stand in for one. The station itself is kept: it is real and
-         it holds bikes, and dropping it would take it off the map over a
-         mistyped string. -->
-    <string name="station_unnamed">Unnamed station</string>
+         street to stand in for one. -->
+    <string name="station_unnamed">Névtelen állomás</string>
 
-    <string name="station_beyond_area_short">beyond the map</string>
-    <string name="station_beyond_area">This station lies outside the area the installed data covers. Its bikes are counted live, but no map and no route can reach it.</string>
+    <!-- Shown for a station the network publishes outside the area its data
+         covers. The short form joins the rest of the row, so it starts in
+         lower case. -->
+    <string name="station_beyond_area_short">a térképen kívül</string>
+    <string name="station_beyond_area">Ez az állomás a telepített adatok által lefedett területen kívül esik. A kerékpárjai élőben számolódnak, de sem térkép, sem útvonal nem ér el idáig.</string>
 
-    <string name="search_stations_hint">Search for a station</string>
-    <string name="search_stations_clear">Clear the search</string>
-    <string name="stations_no_match_title">No station found</string>
-    <string name="stations_no_match_message">Nothing matches “%1$s”. Check the spelling, or clear the search.</string>
-    <string name="action_clear_search">Clear the search</string>
+    <string name="search_stations_hint">Állomás keresése</string>
+    <string name="search_stations_clear">Keresés törlése</string>
+    <string name="stations_no_match_title">Nem található állomás</string>
+    <string name="stations_no_match_message">Erre nincs találat: „%1$s”. Ellenőrizd a helyesírást, vagy töröld a keresést.</string>
+    <string name="action_clear_search">Keresés törlése</string>
 
-    <string name="mode_bikes">Bikes</string>
-    <string name="mode_docks">Free docks</string>
-    <string name="mode_bikes_description">Show available bikes</string>
-    <string name="mode_docks_description">Show free docks</string>
+    <string name="mode_bikes">Kerékpárok</string>
+    <string name="mode_docks">Szabad helyek</string>
+    <string name="mode_bikes_description">Az elérhető kerékpárok megjelenítése</string>
+    <string name="mode_docks_description">A szabad helyek megjelenítése</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
-    <string name="map_bikes_all_kinds">All bikes</string>
-    <string name="map_bikes_mechanical">Mechanical</string>
-    <string name="map_bikes_electric">Electric</string>
-    <string name="map_bikes_all_kinds_description">Every bike is counted. Tap to count the mechanical ones only.</string>
-    <string name="map_bikes_mechanical_description">Mechanical bikes are counted. Tap to count the electric ones only.</string>
-    <string name="map_bikes_electric_description">Electric bikes are counted. Tap to count them all.</string>
+    <string name="map_bikes_all_kinds">Összes kerékpár</string>
+    <string name="map_bikes_mechanical">Hagyományos</string>
+    <string name="map_bikes_electric">Elektromos</string>
+    <string name="map_bikes_all_kinds_description">Minden kerékpár beleszámít. Koppints ide, hogy csak a hagyományosak számítsanak.</string>
+    <string name="map_bikes_mechanical_description">A hagyományos kerékpárok számítanak. Koppints ide, hogy csak az elektromosak számítsanak.</string>
+    <string name="map_bikes_electric_description">Az elektromos kerékpárok számítanak. Koppints ide, hogy mind számítson.</string>
+
+    <!-- The label under, or beside, a count. No item holds a number, and none
+         ever should: the figure is written next to these words already. On a
+         list row the label is stacked under the figure and set in capitals, so
+         it is read as a word of its own — which is exactly what a Hungarian
+         numeral wants, since the noun behind a figure stays singular anyway. -->
     <plurals name="counterpart_bikes" tools:ignore="ImpliedQuantity">
-        <item quantity="one">bike</item>
-        <item quantity="other">bikes</item>
+        <item quantity="one">kerékpár</item>
+        <item quantity="other">kerékpár</item>
     </plurals>
     <plurals name="counterpart_docks" tools:ignore="ImpliedQuantity">
-        <item quantity="one">free dock</item>
-        <item quantity="other">free docks</item>
+        <item quantity="one">szabad hely</item>
+        <item quantity="other">szabad hely</item>
     </plurals>
     <string name="counterpart_none">—</string>
 
+    <!-- The detail line under a station's name, in the list.
+         %1$s is the distance to the station when the reader's position is
+         known, and its postcode when it is not. %2$d is the number of docking
+         points — the capacity, which is *dokkoló* and not *szabad hely*: the
+         sheet shows both figures side by side. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d dock</item>
-        <item quantity="other">%1$s · %2$d docks</item>
+        <item quantity="one">%1$s · %2$d dokkoló</item>
+        <item quantity="other">%1$s · %2$d dokkoló</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
          kinds side by side. %1$s is the mechanical count, %2$s the electric
          one, each already agreed in number. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
-
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d mechanical</item>
-        <item quantity="other">%1$d mechanical</item>
+        <item quantity="one">%1$d hagyományos</item>
+        <item quantity="other">%1$d hagyományos</item>
     </plurals>
-
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d electric</item>
-        <item quantity="other">%1$d electric</item>
+        <item quantity="one">%1$d elektromos</item>
+        <item quantity="other">%1$d elektromos</item>
     </plurals>
 
-    <string name="freshness_just_now">just now</string>
+    <!-- How long ago the availability was read. All four join
+         `freshness_fresh` („Frissítve 3 perce”), so they are written as a
+         bare adverbial and start in lower case. -->
+    <string name="freshness_just_now">az imént</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">%1$d second ago</item>
-        <item quantity="other">%1$d seconds ago</item>
+        <item quantity="one">%1$d másodperce</item>
+        <item quantity="other">%1$d másodperce</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">%1$d minute ago</item>
-        <item quantity="other">%1$d minutes ago</item>
+        <item quantity="one">%1$d perce</item>
+        <item quantity="other">%1$d perce</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">%1$d hour ago</item>
-        <item quantity="other">%1$d hours ago</item>
+        <item quantity="one">%1$d órája</item>
+        <item quantity="other">%1$d órája</item>
     </plurals>
-    <string name="freshness_long_ago">more than a day ago</string>
-    <string name="freshness_stale">Frozen data · %1$s</string>
-    <string name="freshness_fresh">Updated %1$s</string>
-    <string name="freshness_never">Never updated</string>
+    <string name="freshness_long_ago">több mint egy napja</string>
+    <string name="freshness_stale">Elavult adatok · %1$s</string>
+    <string name="freshness_fresh">Frissítve %1$s</string>
+    <string name="freshness_never">Még nem frissült</string>
 
-    <string name="stations_empty_title">No stations loaded</string>
-    <string name="stations_empty_message">Pull the list down to fetch the network’s stations.</string>
-    <string name="action_refresh">Refresh</string>
-    <string name="action_retry">Try again</string>
+    <string name="stations_empty_title">Nincsenek betöltött állomások</string>
+    <string name="stations_empty_message">Húzd le a listát a hálózat állomásainak lekéréséhez.</string>
+    <string name="action_refresh">Frissítés</string>
+    <string name="action_retry">Újrapróbálkozás</string>
 
-    <string name="map_open_list">See the list of stations</string>
-    <string name="map_attribution">© OpenStreetMap contributors</string>
-    <string name="map_locate_me">Locate me</string>
-    <string name="map_location_denied">Without location, pick your starting point on the map or by address.</string>
-    <string name="map_location_unavailable">Position unavailable. Check that location is switched on, then try again.</string>
-    <string name="map_outside_city_title">You are elsewhere</string>
-    <string name="map_outside_city_message">Your position falls outside the area %1$s covers, so this map cannot show it. Pick the city you are in to see its stations.</string>
-    <string name="map_outside_city_brief">Your position falls outside the area %1$s covers.</string>
-    <string name="map_needs_tiles_title">The map needs its offline tiles</string>
-    <string name="map_needs_tiles_message">Install the map data from the storage screen. In the meantime, the station list stays usable.</string>
-    <string name="map_needs_city_title">Which city?</string>
-    <string name="map_needs_city_message">Pick the conurbation you want to use. Its data is downloaded afterwards, once and for all.</string>
+    <string name="map_open_list">Az állomások listája</string>
+    <string name="map_attribution">© OpenStreetMap-közreműködők</string>
+    <string name="map_locate_me">Helymeghatározás</string>
+    <string name="map_location_denied">Helyadatok nélkül a térképen vagy cím alapján válaszd ki a kiindulópontot.</string>
+    <string name="map_location_unavailable">A pozíció nem érhető el. Ellenőrizd, hogy be van-e kapcsolva a helymeghatározás, majd próbáld újra.</string>
+    <string name="map_outside_city_title">Máshol vagy</string>
+    <!-- %1$s is a whole label — network and city, „MOL Bubi – Budapest”. It
+         stands behind a colon, in apposition: it takes no article and no case
+         ending, both of which the name itself would decide. -->
+    <string name="map_outside_city_message">A pozíciód a lefedett területen kívül esik, ezért ez a térkép nem tudja megmutatni. A kiszolgált hálózat: %1$s. Válaszd ki azt a várost, amelyben vagy, hogy lásd az állomásait.</string>
+    <string name="map_outside_city_brief">A pozíciód a lefedett területen kívül esik. A kiszolgált hálózat: %1$s.</string>
+    <!-- The dataset is called *térképadatok* on every screen, so this title
+         names it that rather than introducing *csempe* in one place. -->
+    <string name="map_needs_tiles_title">A térképhez offline adatok kellenek</string>
+    <string name="map_needs_tiles_message">Telepítsd a térképadatokat a tárhely képernyőn. Addig is használható marad az állomáslista.</string>
+    <string name="map_needs_city_title">Melyik város?</string>
+    <string name="map_needs_city_message">Válaszd ki a használni kívánt agglomerációt. Az adatai ezután töltődnek le, egyszer s mindenkorra.</string>
 
     <string name="welcome_hello_title">Roue Libre</string>
-    <string name="welcome_hello_body">This app shows shared bikes on a map and works out a door-to-door trip: walk to a station, ride, then walk the rest of the way.\n\nIt is free and open source. No account, no adverts, no tracker.</string>
-    <string name="welcome_privacy_title">Nothing leaves this phone</string>
-    <string name="welcome_privacy_body">Journeys are computed on this phone. The addresses you look up are sent to nobody, not even while you type.\n\nNo history is kept: not your trips, not your positions, not your destinations.\n\nThe only request that goes out in everyday use asks how many bikes are available.</string>
-    <string name="welcome_fleet_title">What the bike says</string>
-    <string name="welcome_fleet_body">The bike drawn tells you what your city lends.\n\nIt is read from the network\'s own feed, never guessed.</string>
-    <string name="welcome_fleet_mechanical_only">The network lends mechanical bikes only.</string>
-    <string name="welcome_fleet_electric_only">The network lends electric bikes only.</string>
-    <string name="welcome_fleet_mixed">The network lends both kinds.</string>
+    <string name="welcome_hello_body">Ez az alkalmazás térképen mutatja a közösségi kerékpárokat, és háztól házig tartó útvonaltervet készít: gyaloglás egy állomásig, kerékpározás, majd gyaloglás a cél felé.\n\nIngyenes és nyílt forráskódú. Nincs fiók, nincs reklám, nincs nyomkövető.</string>
+    <string name="welcome_privacy_title">Semmi nem hagyja el ezt a telefont</string>
+    <!-- The English is scrupulously impersonal here, and Hungarian keeps it:
+         no *mi*, no „nem őrzünk meg”. What is stated is a property of the
+         software, not a promise from somebody. -->
+    <string name="welcome_privacy_body">Az útvonaltervek ezen a telefonon készülnek. A keresett címek senkihez nem jutnak el, még gépelés közben sem.\n\nSemmilyen előzmény nem marad meg: sem az útvonaltervek, sem a pozíciók, sem az úti célok.\n\nHétköznapi használatban az egyetlen kimenő kérés azt kérdezi meg, hány kerékpár érhető el.</string>
+    <string name="welcome_fleet_title">Amit a kerékpár elárul</string>
+    <string name="welcome_fleet_body">A rajzolt kerékpár megmutatja, mit kölcsönöz a városod.\n\nEz a hálózat saját adatfolyamából olvasható ki, sosem találgatás eredménye.</string>
+    <string name="welcome_fleet_mechanical_only">A hálózat csak hagyományos kerékpárokat kölcsönöz.</string>
+    <string name="welcome_fleet_electric_only">A hálózat csak elektromos kerékpárokat kölcsönöz.</string>
+    <string name="welcome_fleet_mixed">A hálózat mindkét fajtát kölcsönzi.</string>
 
-    <string name="welcome_data_title">One city, one download</string>
-    <string name="welcome_data_body">The map, the streets and the route calculation live on the device. That is what makes them work without a network — and it means downloading your city\'s data once.\n\nSo start by choosing it. Expect around forty megabytes for a medium-sized conurbation, more for a capital; the size is announced before the download.\n\nYou can also do it later: in the meantime, the station list and their availability remain usable.</string>
-    <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d of %2$d</string>
-    <string name="welcome_continue">Continue</string>
-    <string name="welcome_skip">Skip</string>
-    <string name="welcome_choose_city">Choose my city</string>
-    <string name="welcome_later">Later</string>
-    <string name="welcome_open">Read the introduction again</string>
+    <string name="welcome_data_title">Egy város, egy letöltés</string>
+    <string name="welcome_data_body">A térkép, az utcák és az útvonalszámítás az eszközön van. Ettől működnek hálózat nélkül – és ezért kell egyszer letölteni a városod adatait.\n\nKezdd tehát a város kiválasztásával. Egy közepes méretű agglomerációnál számíts nagyjából negyven megabájtra, egy fővárosnál többre; a méret a letöltés előtt kiderül.\n\nMeg is teheted később: addig is használható marad az állomáslista és az állomások elérhetősége.</string>
+    <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d / %2$d</string>
+    <string name="welcome_continue">Tovább</string>
+    <string name="welcome_skip">Kihagyás</string>
+    <string name="welcome_choose_city">Városom kiválasztása</string>
+    <string name="welcome_later">Később</string>
+    <string name="welcome_open">A bemutatkozás újraolvasása</string>
 
-    <string name="whats_new_title">What’s new</string>
-    <string name="whats_new_done">Continue</string>
-    <string name="whats_new_nothing">This version has no release notes.</string>
-    <string name="whats_new_open">See what’s new</string>
+    <string name="whats_new_title">Újdonságok</string>
+    <string name="whats_new_done">Tovább</string>
+    <string name="whats_new_nothing">Ehhez a verzióhoz nincsenek kiadási megjegyzések.</string>
+    <string name="whats_new_open">Az újdonságok megtekintése</string>
 
-    <string name="incoming_place_default_label">Received place</string>
-    <string name="incoming_show_me">Show</string>
-    <string name="incoming_needs_index">This address has to be looked up in the offline index, which is not installed.</string>
-    <string name="incoming_address_not_found">“%1$s” matches no address in the covered area.</string>
-    <string name="incoming_outside_coverage">This place lies outside the area covered by the installed data: no journey can reach it.</string>
+    <string name="incoming_place_default_label">Kapott hely</string>
+    <string name="incoming_show_me">Megjelenítés</string>
+    <string name="incoming_needs_index">Ezt a címet az offline indexben kell megkeresni, az pedig nincs telepítve.</string>
+    <!-- %1$s is what the other application sent: a raw string, which may start
+         with anything. It follows a colon rather than an article. -->
+    <string name="incoming_address_not_found">Nincs ilyen cím a lefedett területen: „%1$s”.</string>
+    <string name="incoming_outside_coverage">Ez a hely a telepített adatok által lefedett területen kívül esik: nem vezet ide útvonalterv.</string>
 
-    <string name="favourites_title">Favourites</string>
-    <string name="favourites_open">See favourites</string>
-    <string name="favourites_reorder_hint">Press and hold a row to move it.</string>
+    <string name="favourites_title">Kedvencek</string>
+    <string name="favourites_open">A kedvencek megtekintése</string>
+    <string name="favourites_reorder_hint">Tartsd nyomva a sort az áthelyezéséhez.</string>
 
-    <string name="settings_title">Settings</string>
-    <string name="settings_open">Settings</string>
-    <string name="settings_section_city">City</string>
-    <string name="settings_section_journey">Journey</string>
-    <string name="settings_section_display">Display</string>
-    <string name="settings_section_data">Offline data</string>
+    <string name="settings_title">Beállítások</string>
+    <string name="settings_open">Beállítások</string>
+    <!-- The section titles of the settings screen (SPEC §7.6), in the order
+         the screen lays them out. -->
+    <string name="settings_section_city">Város</string>
+    <string name="settings_section_journey">Útvonalterv</string>
+    <string name="settings_section_display">Megjelenítés</string>
+    <string name="settings_section_data">Offline adatok</string>
 
-    <!-- The walking pace (SPEC §6, §7.6). Named in words and never in km/h: a
-         pace is something one knows about oneself, where a speed is a figure
-         nobody has measured about themselves — and a speed written on a button
-         would be read as a promise about the minutes to come. -->
-    <string name="settings_walking_pace_title">Walking pace</string>
-    <string name="settings_walking_pace_slow">Slow</string>
-    <string name="settings_walking_pace_normal">Normal</string>
-    <string name="settings_walking_pace_brisk">Brisk</string>
-    <string name="settings_walking_pace_description">Pace the walking parts of a journey are worked out at</string>
+    <!-- The walking pace (SPEC §6, §7.6). *Tempó*, never *sebesség*: a pace is
+         something one knows about oneself, where a speed is a figure nobody
+         has measured about themselves. -->
+    <string name="settings_walking_pace_title">Gyaloglási tempó</string>
+    <string name="settings_walking_pace_slow">Lassú</string>
+    <string name="settings_walking_pace_normal">Normál</string>
+    <string name="settings_walking_pace_brisk">Fürge</string>
+    <string name="settings_walking_pace_description">Ezzel a tempóval készülnek az útvonalterv gyalogos szakaszai</string>
 
-    <string name="settings_theme_title">Theme</string>
-    <string name="settings_theme_system">System</string>
-    <string name="settings_theme_light">Light</string>
-    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_title">Téma</string>
+    <string name="settings_theme_system">Rendszer</string>
+    <string name="settings_theme_light">Világos</string>
+    <string name="settings_theme_dark">Sötét</string>
 
     <!-- Units (SPEC 7.6). The buttons name the units rather than the
-         countries: what one gets is what is shown, and no system belongs to a
-         nation. -->
-    <string name="settings_units_title">Units</string>
-    <string name="settings_units_system">System</string>
+         countries. -->
+    <string name="settings_units_title">Mértékegységek</string>
+    <string name="settings_units_system">Rendszer</string>
     <string name="settings_units_metric">m · km</string>
     <string name="settings_units_us">ft · mi</string>
     <string name="settings_units_uk">yd · mi</string>
-    <string name="settings_units_description">Units used for distances</string>
-    <string name="settings_units_system_description">Follow the region the device is set to</string>
-    <string name="settings_units_metric_description">Metres and kilometres</string>
-    <string name="settings_units_us_description">Feet and miles</string>
-    <string name="settings_units_uk_description">Yards and miles</string>
+    <string name="settings_units_description">A távolságok mértékegysége</string>
+    <string name="settings_units_system_description">Az eszközön beállított régió követése</string>
+    <string name="settings_units_metric_description">Méter és kilométer</string>
+    <string name="settings_units_us_description">Láb és mérföld</string>
+    <string name="settings_units_uk_description">Yard és mérföld</string>
 
-    <string name="about_title">About</string>
-    <string name="about_open">About</string>
-    <string name="about_version">Version %1$s</string>
-    <string name="about_privacy_title">Privacy</string>
-    <string name="about_privacy_body">No account, no adverts, no tracker, no unique identifier. Nothing you search for or compute leaves this phone: addresses, journeys and your position stay here, and are not kept. The only request that goes out in everyday use fetches bike availability. Datasets are downloaded only when you ask.</string>
-    <string name="about_attributions_title">Data sources</string>
-    <string name="about_attribution_gbfs">Bike availability: the open data of the network served, published in the GBFS format. In France it is indexed on transport.data.gouv.fr.</string>
-    <string name="about_attribution_osm">Map, routing and landmarks: © OpenStreetMap contributors, ODbL licence.</string>
-    <string name="about_attribution_ban">Addresses and house numbers: Base Adresse Nationale, ODbL licence.</string>
-    <string name="about_attribution_brouter">Routing: BRouter, MIT licence, over OpenStreetMap data.</string>
-    <string name="about_attribution_maplibre">Map rendering: MapLibre Native, two-clause BSD licence.</string>
-    <string name="about_links_title">Opening a place from another app</string>
-    <string name="about_links_body">“geo:” links and addresses shared as plain text come straight here: pick Roue Libre in Android’s chooser. Links from mapping websites need permission: Settings → Apps → Roue Libre → Open by default → Add link.</string>
-    <string name="about_licence_title">Licence</string>
-    <string name="about_licence_body">Roue Libre is free software, released under the GNU GPL version 3. You may use it, study it, modify it and pass it on.</string>
-    <string name="about_open_repository">View the source code</string>
-    <string name="about_open_sources">Sources city by city</string>
-    <string name="about_open_licences">Component licences</string>
+    <string name="about_title">Névjegy</string>
+    <string name="about_open">Névjegy</string>
+    <string name="about_version">Verzió: %1$s</string>
+    <string name="about_privacy_title">Adatvédelem</string>
+    <string name="about_privacy_body">Nincs fiók, nincs reklám, nincs nyomkövető, nincs egyedi azonosító. Amit keresel vagy kiszámíttatsz, nem hagyja el ezt a telefont: a címek, az útvonaltervek és a pozíciód itt maradnak, és nem őrződnek meg. Hétköznapi használatban az egyetlen kimenő kérés a kerékpárok elérhetőségét kéri le. Az adatcsomagok csak kérésre töltődnek le.</string>
+    <string name="about_attributions_title">Adatforrások</string>
+    <string name="about_attribution_gbfs">Kerékpárok elérhetősége: a kiszolgált hálózat nyílt adatai, GBFS formátumban közzétéve. Franciaországban a transport.data.gouv.fr oldalon vannak indexelve.</string>
+    <string name="about_attribution_osm">Térkép, útvonaltervezés és nevezetes pontok: © OpenStreetMap-közreműködők, ODbL licenc.</string>
+    <string name="about_attribution_ban">Címek és házszámok: Base Adresse Nationale, ODbL licenc.</string>
+    <string name="about_attribution_brouter">Útvonaltervezés: BRouter, MIT licenc, OpenStreetMap-adatok alapján.</string>
+    <string name="about_attribution_maplibre">Térkép megjelenítése: MapLibre Native, kétklauzulás BSD licenc.</string>
+    <string name="about_links_title">Hely megnyitása másik alkalmazásból</string>
+    <!-- The settings path is quoted from Android's own Hungarian:
+         settings:apps_dashboard_title, settings:launch_by_default,
+         settings:app_launch_add_link. -->
+    <string name="about_links_body">A „geo:” hivatkozások és a sima szövegként megosztott címek egyenesen ide érkeznek: válaszd a Roue Libre-t az Android választójában. A térképes webhelyek hivatkozásaihoz engedély kell: Beállítások → Alkalmazások → Roue Libre → Megnyitás alapértelmezés szerint → Link hozzáadása.</string>
+    <string name="about_licence_title">Licenc</string>
+    <string name="about_licence_body">A Roue Libre szabad szoftver, a GNU GPL 3-as verziója alatt kiadva. Használhatod, tanulmányozhatod, módosíthatod és továbbadhatod.</string>
+    <string name="about_open_repository">A forráskód megtekintése</string>
+    <string name="about_open_sources">Források városonként</string>
+    <string name="about_open_licences">Az összetevők licencei</string>
 
-    <string name="sources_title">Data sources</string>
-    <string name="sources_intro">Availability comes from each city\'s network, as open data. Here is who produces it, including for the cities you have not installed.</string>
-    <string name="sources_open">Open the source</string>
-    <string name="about_licences_title">Licences</string>
-    <string name="about_no_browser">No browser is installed on this device.</string>
+    <string name="sources_title">Adatforrások</string>
+    <string name="sources_intro">Az elérhetőség minden város hálózatától érkezik, nyílt adatként. Íme, ki állítja elő – azoknál a városoknál is, amelyeket nem telepítettél.</string>
+    <string name="sources_open">A forrás megnyitása</string>
+    <string name="about_licences_title">Licencek</string>
+    <string name="about_no_browser">Nincs böngésző telepítve ezen az eszközön.</string>
 
-    <string name="journey_title">Journey</string>
-    <string name="journey_open">Plan a journey</string>
-    <string name="journey_origin_empty">Starting from?</string>
-    <string name="journey_destination_empty">Going where?</string>
-    <string name="journey_choose_origin">Starting from?</string>
-    <string name="journey_choose_destination">Going where?</string>
-    <string name="journey_swap">Swap start and destination</string>
-    <string name="journey_hint">The journey is computed on the device: walk to a station, ride, then walk the rest of the way.</string>
+    <string name="journey_title">Útvonalterv</string>
+    <string name="journey_open">Útvonaltervezés</string>
+    <string name="journey_origin_empty">Honnan indulsz?</string>
+    <string name="journey_destination_empty">Hová mész?</string>
+    <string name="journey_choose_origin">Honnan indulsz?</string>
+    <string name="journey_choose_destination">Hová mész?</string>
+    <string name="journey_swap">Az indulás és a cél felcserélése</string>
+    <string name="journey_hint">Az útvonalterv az eszközön készül: gyaloglás egy állomásig, kerékpározás, majd gyaloglás a cél felé.</string>
     <!-- The switch that leaves the network out of the journey, and the sentence
-         that replaces the one above it when it is on (SPEC §7.3). -->
-    <string name="journey_own_bike">Ride my own bike</string>
-    <string name="journey_hint_own_bike">The journey is computed on the device: one ride from door to door, with no station on the way.</string>
+         that replaces the one above it when it is on (SPEC §7.3). The switch
+         carries no verb, so that it matches word for word the summaries it
+         produces (`journey_own_bike_only`). -->
+    <string name="journey_own_bike">Saját kerékpárral</string>
+    <string name="journey_hint_own_bike">Az útvonalterv az eszközön készül: egyetlen kerékpáros szakasz háztól házig, útközben állomás nélkül.</string>
 
-    <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
-         which is what the application does at rest. -->
-    <string name="journey_bike_kind_any">Any bike</string>
-    <string name="journey_bike_kind_mechanical">Mechanical</string>
-    <string name="journey_bike_kind_electric">Electric</string>
-    <string name="journey_bike_kind_any_description">Any bike, whichever kind</string>
-    <string name="journey_bike_kind_mechanical_description">A bike I pedal myself</string>
-    <string name="journey_bike_kind_electric_description">A pedal-assist bike</string>
-    <string name="journey_compute">Work out the journey</string>
-    <string name="journey_computing">Working out the best journey…</string>
+    <!-- Which bike one wants to ride (SPEC §7.3). Three buttons share one row
+         and truncate before they wrap, so the first drops *kerékpár*: the full
+         phrase survives in the description a screen reader announces. -->
+    <string name="journey_bike_kind_any">Bármelyik</string>
+    <string name="journey_bike_kind_mechanical">Hagyományos</string>
+    <string name="journey_bike_kind_electric">Elektromos</string>
+    <string name="journey_bike_kind_any_description">Bármelyik kerékpár, fajtától függetlenül</string>
+    <string name="journey_bike_kind_mechanical_description">Olyan kerékpár, amelyet magam hajtok</string>
+    <string name="journey_bike_kind_electric_description">Pedálrásegítéses kerékpár</string>
+    <string name="journey_compute">Az útvonalterv kiszámítása</string>
+    <string name="journey_computing">A legjobb útvonalterv kiszámítása…</string>
     <!-- Nothing is being chosen here — there is one route to trace, not a pair
-         of stations to weigh — so the wait does not claim to be looking for the
-         best of anything. -->
-    <string name="journey_computing_own_bike">Working the ride out…</string>
-    <string name="journey_source_my_position">My position</string>
-    <string name="journey_locating">Finding your position…</string>
-    <string name="journey_source_favourite">A favourite station</string>
-    <string name="journey_source_on_map">A point on the map</string>
-    <string name="journey_no_favourite">No favourite station yet. Open a station and tap the star to add it.</string>
-    <string name="journey_pick_crosshair">Targeted point</string>
-    <string name="journey_pick_confirm">Choose this point</string>
-    <string name="journey_picked_point">Point on the map</string>
-    <string name="journey_frame">Show the whole journey</string>
+         of stations to weigh — so the wait does not claim to be looking for
+         the best of anything. -->
+    <string name="journey_computing_own_bike">A kerékpáros szakasz kiszámítása…</string>
+    <string name="journey_source_my_position">A pozícióm</string>
+    <string name="journey_locating">A pozíció meghatározása…</string>
+    <string name="journey_source_favourite">Kedvenc állomás</string>
+    <string name="journey_source_on_map">Pont a térképen</string>
+    <string name="journey_no_favourite">Még nincs kedvenc állomás. Nyiss meg egy állomást, és koppints a csillagra a hozzáadásához.</string>
+    <string name="journey_pick_crosshair">Célzott pont</string>
+    <string name="journey_pick_confirm">A pont kiválasztása</string>
+    <string name="journey_picked_point">Pont a térképen</string>
+    <string name="journey_frame">A teljes útvonalterv megjelenítése</string>
 
-    <string name="journey_summary">of which %1$s walking and %2$s riding · %3$s</string>
-    <!-- Metres climbed over a leg or over the whole journey. Shown only where
-         there is relief worth naming; a flat city never reads this. -->
-    <string name="journey_climb">%1$s of climb</string>
-    <!-- What waits at the station one sets off from, hung at the end of the
-         journey summary, in a conurbation lending both kinds of bike
-         (SPEC §7.4). %1$s is the two counts, mechanical and electric, each
-         already agreed in number. -->
-    <string name="journey_bikes_at_departure">%1$s at the departure station</string>
+    <!-- %1$s and %2$s are durations, %3$s a distance. -->
+    <string name="journey_summary">ebből %1$s gyaloglás és %2$s kerékpározás · %3$s</string>
+    <!-- Metres climbed over a leg or over the whole journey. The noun stands
+         behind the figure and takes no ending, which is what Hungarian does
+         with a measured amount: „120 m szintemelkedés”. -->
+    <string name="journey_climb">%1$s szintemelkedés</string>
+    <!-- What waits at the station one sets off from (SPEC §7.4). %1$s is the
+         two counts, mechanical and electric, each already agreed in number. -->
+    <string name="journey_bikes_at_departure">%1$s az indulási állomáson</string>
     <!-- The block holding the total time, the summary and the drawing opens
-         the journey in full: this is what the press does, announced to a screen
-         reader that would otherwise say only "activate". -->
-    <string name="journey_detail_open">Show the journey in detail</string>
-    <string name="journey_detail_title">The journey in detail</string>
-    <string name="journey_detail_departure_station">Departure station</string>
-    <string name="journey_detail_arrival_station">Arrival station</string>
-    <!-- The counts shown are the ones the journey was worked out on: a station
-         empties while one walks to it (SPEC §6). -->
+         the journey in full: announced to a screen reader that would otherwise
+         say only „aktiválás”. -->
+    <string name="journey_detail_open">Az útvonalterv részletes megjelenítése</string>
+    <string name="journey_detail_title">Az útvonalterv részletesen</string>
+    <string name="journey_detail_departure_station">Indulási állomás</string>
+    <string name="journey_detail_arrival_station">Érkezési állomás</string>
     <!-- The drawing of the ground the bike leg runs over. -->
-    <string name="journey_detail_profile">The ride, uphill and down</string>
+    <string name="journey_detail_profile">A kerékpáros szakasz: emelkedők és lejtők</string>
     <!-- Read out in place of the drawing. %1$s is the climb of the ride, %2$s
-         its lowest point above sea level and %3$s its highest. -->
-    <string name="journey_detail_profile_description">The ride climbs %1$s, between %2$s and %3$s above sea level.</string>
-    <string name="journey_detail_availability_note">Bikes and docks as they were when the journey was worked out.</string>
+         its lowest point above sea level and %3$s its highest. Each of the
+         three is a subject or a bare complement: none carries a case ending,
+         which a distance symbol would take differently (m-t, ft-ot, mi-t). -->
+    <string name="journey_detail_profile_description">A kerékpáros szakasz szintemelkedése %1$s, a legalacsonyabb pontja %2$s, a legmagasabb %3$s tengerszint felett.</string>
+    <string name="journey_detail_availability_note">A kerékpárok és a szabad helyek állapota az útvonalterv kiszámításának pillanatában.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
-    <string name="journey_navigate">Open in a navigation app</string>
-    <string name="journey_navigate_which">Which part of the journey?</string>
-    <string name="journey_step_to_station">Walk to %1$s</string>
-    <string name="journey_step_ride">Ride to %1$s</string>
-    <string name="journey_step_to_destination">Walk to the destination</string>
-    <string name="journey_step_walk_all">Walk to the destination</string>
-    <string name="journey_step_ride_all">Ride to the destination</string>
+    <string name="journey_navigate">Megnyitás navigációs alkalmazásban</string>
+    <string name="journey_navigate_which">Az útvonalterv melyik része?</string>
+    <!-- %1$s is a station's name, which decides its own article and its own
+         ending. The case falls on *állomásig*, and the name follows behind a
+         colon, exactly as the feed published it. -->
+    <string name="journey_step_to_station">Gyaloglás az állomásig: %1$s</string>
+    <string name="journey_step_ride">Kerékpározás az állomásig: %1$s</string>
+    <string name="journey_step_to_destination">Gyaloglás a célig</string>
+    <string name="journey_step_walk_all">Gyaloglás a célig</string>
+    <string name="journey_step_ride_all">Kerékpározás a célig</string>
     <!-- The summary of a journey ridden on one's own bike: it sits under the
          total time, where the walk's own summary sits, and says the same two
-         things — how far, and how much of it goes up. -->
-    <string name="journey_own_bike_only">on your own bike, over %1$s.</string>
-    <string name="journey_own_bike_only_climb">on your own bike, over %1$s and %2$s of climb.</string>
-    <string name="journey_walk_only">on foot, over %1$s — no bike journey is possible here.</string>
-    <string name="journey_walk_only_climb">on foot, over %1$s and %2$s of climb — no bike journey is possible here.</string>
-    <string name="journey_walk_is_quicker">on foot, over %1$s — sooner than going to fetch a bike.</string>
-    <string name="journey_walk_is_quicker_climb">on foot, over %1$s and %2$s of climb — sooner than going to fetch a bike.</string>
-    <string name="journey_none_title">No journey</string>
-    <string name="journey_no_bike_nearby">No station with a bike near the start. Try again later, or start from somewhere else.</string>
+         things — how far, and how much of it goes up. It joins the line above
+         it, so it starts in lower case. -->
+    <string name="journey_own_bike_only">saját kerékpárral, %1$s távon.</string>
+    <string name="journey_own_bike_only_climb">saját kerékpárral, %1$s távon, %2$s szintemelkedéssel.</string>
+    <string name="journey_walk_only">gyalog, %1$s távon – itt nem lehetséges kerékpáros útvonalterv.</string>
+    <string name="journey_walk_only_climb">gyalog, %1$s távon, %2$s szintemelkedéssel – itt nem lehetséges kerékpáros útvonalterv.</string>
+    <string name="journey_walk_is_quicker">gyalog, %1$s távon – hamarabb, mint kerékpárért menni.</string>
+    <string name="journey_walk_is_quicker_climb">gyalog, %1$s távon, %2$s szintemelkedéssel – hamarabb, mint kerékpárért menni.</string>
+    <string name="journey_none_title">Nincs útvonalterv</string>
+    <string name="journey_no_bike_nearby">Az indulás közelében nincs kerékpárt kínáló állomás. Próbáld újra később, vagy indulj máshonnan.</string>
 
-    <string name="journey_no_mechanical_nearby">No station nearby has a mechanical bike right now. Ask for any bike, or try again later.</string>
-    <string name="journey_no_electric_nearby">No station nearby has an electric bike right now. Ask for any bike, or try again later.</string>
-    <string name="journey_no_dock_nearby">No station with a free dock near the destination. Try again later, or aim somewhere else.</string>
-    <string name="journey_no_route">No practicable route between these two points.</string>
-    <string name="journey_graph_missing">The routing data is not installed. Add it from the storage screen.</string>
-    <string name="journey_outside_coverage">This point lies outside the area covered by the installed data.</string>
-    <string name="journey_no_stations">No station known. Refresh the station list, then try again.</string>
+    <string name="journey_no_mechanical_nearby">A közelben egyetlen állomáson sincs most hagyományos kerékpár. Kérj bármelyik fajtát, vagy próbáld újra később.</string>
+    <string name="journey_no_electric_nearby">A közelben egyetlen állomáson sincs most elektromos kerékpár. Kérj bármelyik fajtát, vagy próbáld újra később.</string>
+    <string name="journey_no_dock_nearby">A cél közelében nincs szabad helyet kínáló állomás. Próbáld újra később, vagy válassz másik célt.</string>
+    <!-- *Útvonal* here is the line on the ground, not the planned journey,
+         which is *útvonalterv* everywhere else in this file. -->
+    <string name="journey_no_route">Nincs járható útvonal a két pont között.</string>
+    <string name="journey_graph_missing">Az útvonaladatok nincsenek telepítve. Add hozzá őket a tárhely képernyőn.</string>
+    <string name="journey_outside_coverage">Ez a pont a telepített adatok által lefedett területen kívül esik.</string>
+    <string name="journey_no_stations">Nincs ismert állomás. Frissítsd az állomáslistát, majd próbáld újra.</string>
 
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d h %2$02d</string>
+    <!-- Hungarian writes durations out: *perc*, and *ó* where the hours and
+         the minutes share one line. -->
+    <string name="duration_minutes">%1$d perc</string>
+    <string name="duration_hours_minutes">%1$d ó %2$02d</string>
 
+    <!-- A station's capacity, counted as a total. -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d dock</item>
-        <item quantity="other">%1$d docks</item>
+        <item quantity="one">%1$d dokkoló</item>
+        <item quantity="other">%1$d dokkoló</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
-    <string name="station_address_nearby">Near %1$s</string>
-    <string name="station_favourite_add">Add to favourites</string>
-    <string name="station_favourite_remove">Remove from favourites</string>
-    <string name="station_as_origin">Start here</string>
-    <string name="station_as_destination">Go here</string>
-    <string name="station_open_in_navigation">Open in a navigation app</string>
-    <string name="station_no_navigation_app">No mapping app is installed on this device.</string>
+    <!-- %1$s is `address.streetName` — a street or a square, arriving as it
+         stands. A colon turns the line into a label, which declines nothing. -->
+    <string name="station_address_nearby">A közelben: %1$s</string>
+    <string name="station_favourite_add">Hozzáadás a kedvencekhez</string>
+    <string name="station_favourite_remove">Eltávolítás a kedvencekből</string>
+    <string name="station_as_origin">Indulás innen</string>
+    <string name="station_as_destination">Irány ide</string>
+    <string name="station_open_in_navigation">Megnyitás navigációs alkalmazásban</string>
+    <string name="station_no_navigation_app">Nincs térképalkalmazás telepítve ezen az eszközön.</string>
 
-    <string name="address_search_title">Search for an address</string>
-    <string name="address_search_hint">Number, street, town</string>
-    <string name="address_search_clear">Clear the search</string>
-    <string name="address_search_privacy">Everything is searched on the device. Nothing is sent, not even while you type.</string>
+    <string name="address_search_title">Cím keresése</string>
+    <!-- The order Hungary writes an address in: street, then house number,
+         then settlement — „Széchenyi István tér 7 Budapest”.
+         `AddressQuery.parseQuery` reads a number standing between the street
+         and the town, which is what makes this order work (SPEC §4.3). The
+         postcode is left out: Hungary writes it as four digits, and
+         `looksLikePostcode` only strips a group of five. -->
+    <string name="address_search_hint">Utca, házszám, település</string>
+    <string name="address_search_clear">Keresés törlése</string>
+    <string name="address_search_privacy">Minden keresés az eszközön történik. Semmi nem megy ki, még gépelés közben sem.</string>
     <string name="address_locality">%1$s %2$s</string>
     <string name="address_detail">%1$s · %2$s</string>
-    <string name="address_detail_approximate">%1$s · approximate position</string>
+    <string name="address_detail_approximate">%1$s · hozzávetőleges pozíció</string>
     <string name="address_content_description">%1$s, %2$s</string>
-    <string name="address_search_prompt_title">Where are you going?</string>
-    <string name="address_search_prompt_message">Type a street name, with or without a number. Stations, universities and main squares can be searched too.</string>
-    <string name="address_searching_title">Searching…</string>
-    <string name="address_searching_message">Looking through the addresses installed on this device.</string>
-    <string name="address_no_match_title">No address found</string>
-    <string name="address_no_match_message">Nothing matches “%1$s”. Try the street name on its own, or add the town.</string>
-    <string name="address_needs_index_title">The search needs the address index</string>
-    <string name="address_needs_index_message">Install the index from the storage screen. It stays on the device and never goes out on the network.</string>
-    <string name="address_unreadable_title">Address index unreadable</string>
-    <string name="map_picked_place_description">%1$s. Tap to clear this point.</string>
+    <string name="address_search_prompt_title">Hová mész?</string>
+    <!-- „Stations” here means railway stations, not bike-share ones, which is
+         why this line says *vasútállomás* where the rest of the file says
+         *állomás*. -->
+    <string name="address_search_prompt_message">Írj be egy utcanevet, házszámmal vagy anélkül. Vasútállomásokra, egyetemekre és főterekre is lehet keresni.</string>
+    <!-- Shown while a search runs and the screen has nothing else to show. -->
+    <string name="address_searching_title">Keresés…</string>
+    <string name="address_searching_message">Keresés az eszközre telepített címek között.</string>
+    <string name="address_no_match_title">Nem található cím</string>
+    <string name="address_no_match_message">Erre nincs találat: „%1$s”. Próbáld önmagában az utca nevét, vagy add hozzá a települést.</string>
+    <string name="address_needs_index_title">A kereséshez címindex kell</string>
+    <string name="address_needs_index_message">Telepítsd az indexet a tárhely képernyőn. Az eszközön marad, és soha nem megy ki a hálózatra.</string>
+    <string name="address_unreadable_title">A címindex olvashatatlan</string>
+    <string name="map_picked_place_description">%1$s. Koppints ide a pont törléséhez.</string>
 
+    <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
+         five, %1$s is a figure already rounded and already written in the
+         interface's language: the translation places the symbol, never the
+         number. -->
     <string name="distance_metres">%1$s m</string>
     <string name="distance_kilometres">%1$s km</string>
-    <!-- Unit symbols. Written the same way in most languages; the string
-         exists in every one all the same, so a language that writes them
-         otherwise has somewhere to say so. -->
     <string name="distance_feet">%1$s ft</string>
     <string name="distance_yards">%1$s yd</string>
     <string name="distance_miles">%1$s mi</string>
-    <string name="action_back">Back</string>
+    <string name="action_back">Vissza</string>
 
     <!-- City screen: which conurbation the application serves. -->
-    <string name="city_title">City</string>
-    <string name="city_open">Change city</string>
-    <string name="city_choose">Choose my city</string>
-    <string name="city_intro">Pick the conurbation you want to use. Its data is installed afterwards, once and for all.</string>
-    <string name="city_locate_me">Find my city</string>
-    <string name="city_active">In use</string>
+    <string name="city_title">Város</string>
+    <string name="city_open">Városváltás</string>
+    <string name="city_choose">Városom kiválasztása</string>
+    <string name="city_intro">Válaszd ki a használni kívánt agglomerációt. Az adatai ezután települnek, egyszer s mindenkorra.</string>
+    <string name="city_locate_me">Városom megkeresése</string>
+    <string name="city_active">Használatban</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d station · %2$s to download</item>
-        <item quantity="other">%1$d stations · %2$s to download</item>
+        <item quantity="one">%1$d állomás · %2$s letöltendő</item>
+        <item quantity="other">%1$d állomás · %2$s letöltendő</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d station</item>
-        <item quantity="other">%1$d stations</item>
+        <item quantity="one">%1$d állomás</item>
+        <item quantity="other">%1$d állomás</item>
     </plurals>
-    <string name="city_detail_size_only">%1$s to download</string>
+    <string name="city_detail_size_only">%1$s letöltendő</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d station · size announced before downloading</item>
-        <item quantity="other">%1$d stations · size announced before downloading</item>
+        <item quantity="one">%1$d állomás · a méret a letöltés előtt kiderül</item>
+        <item quantity="other">%1$d állomás · a méret a letöltés előtt kiderül</item>
     </plurals>
-    <string name="city_size_unknown">Size announced before downloading</string>
-    <string name="city_installed">%1$s installed on the device</string>
-    <string name="city_label">%1$s — %2$s</string>
-    <string name="city_delete">Delete</string>
-    <string name="city_delete_description">Delete the data for %1$s</string>
-    <string name="city_delete_title">Delete this data?</string>
-    <string name="city_delete_body">All offline data for %1$s will be erased. You will have to download it again to use it.</string>
-    <string name="city_delete_confirm">Delete</string>
-    <string name="city_deleted">Data for %1$s deleted</string>
-    <string name="city_search_hint">Search for a city</string>
-    <string name="city_search_clear">Clear the search</string>
-    <string name="city_no_match_title">No city found</string>
-    <string name="city_no_match_message">Nothing matches “%1$s”. Check the spelling, or clear the search.</string>
-    <string name="city_proposal_title">Your city</string>
-    <!-- Shown when the position says one is in another served conurbation than the one installed. -->
-    <string name="city_here_title">You are in another city</string>
-    <string name="city_here_body">%1$s serves the area you are in. Install its data to see its stations and work out journeys here.</string>
-    <string name="city_here_installed_body">%1$s serves the area you are in, and its data is already on the device.</string>
-    <string name="city_here_install">Install its data</string>
-    <string name="city_here_use">Use it</string>
-    <string name="city_proposal_body">You seem to be in the area covered by %1$s. Shall we go with that?</string>
-    <string name="city_proposal_accept">Yes</string>
-    <string name="city_none_nearby">No known network near here. Pick a city from the list.</string>
-    <string name="action_cancel">Cancel</string>
+    <string name="city_size_unknown">A méret a letöltés előtt kiderül</string>
+    <string name="city_installed">%1$s telepítve az eszközre</string>
+    <!-- Network, then city. The dash is the Hungarian – with a space on either
+         side, not the em dash the English file uses. -->
+    <string name="city_label">%1$s – %2$s</string>
+    <string name="city_delete">Törlés</string>
+    <!-- These three are handed `city.displayName`, which is the NETWORK's name
+         and not the city's — `CityAdapter.kt:111`, `CityFragment.kt:279`
+         and `:294`. Every Czech network is called „nextbike”, so none of the
+         three may say *város*; the English never does either. The name stands
+         behind a colon, taking neither article nor ending. -->
+    <string name="city_delete_description">Adatok törlése: %1$s</string>
+    <string name="city_delete_title">Törlöd ezeket az adatokat?</string>
+    <string name="city_delete_body">Ennek a hálózatnak minden offline adata törlődik: %1$s. A használatához újra le kell töltened.</string>
+    <string name="city_delete_confirm">Törlés</string>
+    <string name="city_deleted">Adatok törölve: %1$s</string>
+    <string name="city_search_hint">Város keresése</string>
+    <string name="city_search_clear">Keresés törlése</string>
+    <string name="city_no_match_title">Nem található város</string>
+    <string name="city_no_match_message">Erre nincs találat: „%1$s”. Ellenőrizd a helyesírást, vagy töröld a keresést.</string>
+    <string name="city_proposal_title">A városod</string>
+    <!-- Shown when the position says one is in another served conurbation than
+         the one installed. %1$s is a whole label, network and city. -->
+    <string name="city_here_title">Másik városban vagy</string>
+    <string name="city_here_body">Ezt a területet másik hálózat szolgálja ki: %1$s. Telepítsd az adatait, hogy lásd az állomásait, és itt is tervezhess útvonalat.</string>
+    <string name="city_here_installed_body">Ezt a területet másik hálózat szolgálja ki: %1$s. Az adatai már az eszközön vannak.</string>
+    <string name="city_here_install">Az adatainak telepítése</string>
+    <string name="city_here_use">Használat</string>
+    <string name="city_proposal_body">Úgy tűnik, olyan területen vagy, amelyet ez a hálózat fed le: %1$s. Legyen ez a beállított város?</string>
+    <string name="city_proposal_accept">Igen</string>
+    <string name="city_none_nearby">A közelben nincs ismert hálózat. Válassz egy várost a listából.</string>
+    <string name="action_cancel">Mégse</string>
 
     <string name="size_bytes">%1$s B</string>
     <string name="size_kilobytes">%1$s kB</string>
     <string name="size_megabytes">%1$s MB</string>
     <string name="size_gigabytes">%1$s GB</string>
 
-    <string name="storage_title">Storage</string>
-    <string name="storage_open">Manage offline data</string>
-    <string name="storage_intro">The map, the journey planner and the address search work with no network. They need three datasets, installed once.</string>
-    <string name="storage_total">%1$s used on this device</string>
-    <string name="storage_nothing_installed">No data installed</string>
-    <string name="storage_no_city">No city selected</string>
+    <string name="storage_title">Tárhely</string>
+    <string name="storage_open">Az offline adatok kezelése</string>
+    <string name="storage_intro">A térkép, az útvonaltervező és a címkeresés hálózat nélkül működik. Ehhez három adatcsomag kell, amelyeket egyszer kell telepíteni.</string>
+    <string name="storage_total">%1$s használatban ezen az eszközön</string>
+    <string name="storage_nothing_installed">Nincsenek telepített adatok</string>
+    <string name="storage_no_city">Nincs kiválasztott város</string>
 
-    <string name="dataset_tiles">Map data</string>
-    <string name="dataset_tiles_purpose">Draws the map with no network</string>
-    <string name="dataset_routing">Routing data</string>
-    <string name="dataset_routing_purpose">Works out journeys on the device</string>
-    <string name="dataset_addresses">Address index</string>
-    <string name="dataset_addresses_purpose">Searches streets without sending anything</string>
+    <string name="dataset_tiles">Térképadatok</string>
+    <string name="dataset_tiles_purpose">Hálózat nélkül rajzolja meg a térképet</string>
+    <string name="dataset_routing">Útvonaladatok</string>
+    <string name="dataset_routing_purpose">Az eszközön számítja ki az útvonalterveket</string>
+    <string name="dataset_addresses">Címindex</string>
+    <string name="dataset_addresses_purpose">Úgy keres utcákat, hogy semmit nem küld el</string>
 
-    <string name="storage_check_updates">Check for updates</string>
-    <string name="storage_checking">Reading the manifest…</string>
-    <string name="storage_up_to_date">Everything is up to date.</string>
-    <string name="storage_download_pending">Download %1$s</string>
-    <string name="storage_downloading">%1$s · %2$s of %3$s</string>
+    <string name="storage_check_updates">Frissítések keresése</string>
+    <string name="storage_checking">A jegyzék beolvasása…</string>
+    <string name="storage_up_to_date">Minden naprakész.</string>
+    <!-- %1$s is a dataset's name, which decides its own article: *a
+         térképadatok*, but *az útvonaladatok*. It stands behind a colon. -->
+    <string name="storage_download_pending">Letöltés: %1$s</string>
+    <string name="storage_downloading">%1$s · %2$s / %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
-    <string name="storage_wifi_warning">You are not on Wi-Fi. This download can weigh heavily on a mobile plan.</string>
-    <string name="dataset_update_available">Update available</string>
+    <string name="storage_wifi_warning">Nem Wi-Fi-hálózaton vagy. Ez a letöltés komolyan megterhelheti a mobilkeretedet.</string>
+    <string name="dataset_update_available">Rendelkezésre áll frissítés</string>
 
-    <string name="dataset_absent">Not installed</string>
+    <string name="dataset_absent">Nincs telepítve</string>
     <string name="dataset_installed">%1$s · %2$s</string>
-    <string name="dataset_import">Import</string>
-    <string name="dataset_replace">Replace</string>
-    <string name="dataset_delete">Delete</string>
-    <string name="dataset_delete_description">Delete %1$s</string>
-    <string name="dataset_delete_title">Delete this data?</string>
+    <string name="dataset_import">Importálás</string>
+    <string name="dataset_replace">Csere</string>
+    <string name="dataset_delete">Törlés</string>
+    <string name="dataset_delete_description">Törlés: %1$s</string>
+    <string name="dataset_delete_title">Törlöd ezeket az adatokat?</string>
     <!-- %1$s is the dataset's name, %2$s the space it frees. -->
-    <string name="dataset_delete_body">The “%1$s” data will be erased, freeing %2$s. You will have to download it again to work offline.</string>
-    <string name="dataset_imported">%1$s installed</string>
-    <string name="dataset_deleted">%1$s deleted</string>
+    <string name="dataset_delete_body">Ez az adatcsomag törlődik: „%1$s”. Ezzel %2$s szabadul fel. Az offline használathoz újra le kell töltened.</string>
+    <string name="dataset_imported">Telepítve: %1$s</string>
+    <string name="dataset_deleted">Törölve: %1$s</string>
 
-    <string name="dataset_rejected_empty">The chosen file is empty.</string>
-    <string name="dataset_rejected_format">This file is not the expected one. Choose the “%1$s” file produced by the generation scripts.</string>
-    <string name="dataset_rejected_version">This file is in format version %1$d, and this version of the app reads version %2$d. Update the app.</string>
-    <string name="dataset_rejected_checksum">The file does not match its checksum: it is incomplete or damaged. Download it again.</string>
-    <string name="dataset_rejected_transfer">Copying the file failed. Check the free space and try again.</string>
+    <string name="dataset_rejected_empty">A kiválasztott fájl üres.</string>
+    <string name="dataset_rejected_format">Ez nem a várt fájl. Válaszd a generáló szkriptek által előállított fájlt: „%1$s”.</string>
+    <!-- No article stands in front of either figure: *az 1*, but *a 2*, and a
+         format version is a number this file cannot see. -->
+    <string name="dataset_rejected_version">A fájl formátumverziója %1$d, az alkalmazás ezen verziója pedig %2$d formátumverziót olvas. Frissítsd az alkalmazást.</string>
+    <string name="dataset_rejected_checksum">A fájl nem egyezik az ellenőrzőösszegével: hiányos vagy sérült. Töltsd le újra.</string>
+    <!-- *Tárhely* and not *szabad hely*: on this screen the free space of the
+         device is meant, where *szabad hely* is a station's free dock. -->
+    <string name="dataset_rejected_transfer">A fájl másolása nem sikerült. Ellenőrizd a szabad tárhelyet, és próbáld újra.</string>
 
-    <string name="error_offline">No connection. The last known availability stays on screen.</string>
-    <string name="error_offline_download">No connection. The download picks up where it stopped.</string>
-    <string name="error_timeout_download">The server is not answering. The download picks up where it stopped.</string>
-    <string name="error_server_refused_download">Server error (%1$d). The download picks up where it stopped.</string>
-    <string name="error_untrusted_server_download">Invalid security certificate. The download picks up once it is renewed.</string>
-    <string name="error_malformed_download">Unreadable file received. The download picks up where it stopped.</string>
-    <string name="error_local_storage_download">The file could not be saved. Free some space and the download picks up.</string>
-    <string name="error_timeout">The network’s server is taking too long to answer. Try again in a moment.</string>
-    <string name="error_server_refused">The network’s server returned an error (%1$d). Try again later.</string>
-    <string name="error_untrusted_server">The network’s server presented an invalid security certificate. Its data cannot be fetched safely until the operator renews it.</string>
-    <string name="error_malformed">The data received is unreadable. The network’s feed is at fault; try again later.</string>
-    <string name="error_feed_unavailable">The network does not publish the “%1$s” feed.</string>
-    <string name="error_unsupported_version">This network publishes its data in version %1$s, which this version of the app cannot read. Update the app.</string>
-    <string name="error_local_storage">Unable to read the data stored on the device.</string>
-    <string name="error_no_city_chosen">No city is selected. Choose one.</string>
+    <string name="error_offline">Nincs kapcsolat. Az utoljára ismert elérhetőség marad a képernyőn.</string>
+    <!-- The same failures read on the storage screen, where a dataset transfer
+         failed rather than an availability refresh. Those files come down
+         resumably (SPEC §4.4) — which is what each of these says will happen
+         next. -->
+    <string name="error_offline_download">Nincs kapcsolat. A letöltés ott folytatódik, ahol abbamaradt.</string>
+    <string name="error_timeout_download">A szerver nem válaszol. A letöltés ott folytatódik, ahol abbamaradt.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_download">Szerverhiba (%1$d). A letöltés ott folytatódik, ahol abbamaradt.</string>
+    <string name="error_untrusted_server_download">Érvénytelen biztonsági tanúsítvány. A letöltés a tanúsítvány megújítása után folytatódik.</string>
+    <string name="error_malformed_download">Olvashatatlan fájl érkezett. A letöltés ott folytatódik, ahol abbamaradt.</string>
+    <string name="error_local_storage_download">A fájlt nem sikerült menteni. Szabadíts fel tárhelyet, és a letöltés folytatódik.</string>
+    <string name="error_timeout">A hálózat szervere túl sokáig válaszol. Próbáld újra kis idő múlva.</string>
+    <string name="error_server_refused">A hálózat szervere hibát adott vissza (%1$d). Próbáld újra később.</string>
+    <string name="error_untrusted_server">A hálózat szervere érvénytelen biztonsági tanúsítványt mutatott be. Az adatai addig nem kérhetők le biztonságosan, amíg az üzemeltető meg nem újítja.</string>
+    <string name="error_malformed">A kapott adatok olvashatatlanok. A hiba a hálózat adatfolyamában van; próbáld újra később.</string>
+    <string name="error_feed_unavailable">A hálózat nem teszi közzé ezt az adatfolyamot: „%1$s”.</string>
+    <string name="error_unsupported_version">Ez a hálózat %1$s verzióban teszi közzé az adatait, és ezt a verziót az alkalmazás jelenlegi verziója nem tudja olvasni. Frissítsd az alkalmazást.</string>
+    <string name="error_local_storage">Az eszközön tárolt adatok nem olvashatók.</string>
+    <string name="error_no_city_chosen">Nincs kiválasztott város. Válassz egyet.</string>
 
     <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
-         connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. -->
-    <string name="download_unmetered_only">Download only on an unmetered connection</string>
-    <string name="download_unmetered_only_description">Usually Wi-Fi. A shared phone connection or a capped hotspot is billed by the megabyte and counts as mobile data.</string>
-    <string name="download_held_back_title">Download held back</string>
-    <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">This connection is billed by the megabyte. Connect to Wi-Fi to download %1$s, or download it anyway now.</string>
-    <string name="download_stopped_title">Download stopped</string>
-    <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
-         on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">This connection is now billed by the megabyte, so the download stopped. What has arrived is kept. Connect to Wi-Fi to finish the %1$s, or carry on anyway now.</string>
-    <string name="download_anyway">Download anyway</string>
-    <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Waiting for an unmetered connection to download %1$s.</string>
-    <string name="download_can_resume">This connection is no longer billed. Start the download again: it carries on where it stopped.</string>
+    <!-- The setting names what is billed rather than Wi-Fi, and does it with
+         Android's own word — settings:wifi_unmetered_label. -->
+    <string name="download_unmetered_only">Letöltés csak nem forgalomkorlátos kapcsolaton</string>
+    <string name="download_unmetered_only_description">Általában Wi-Fi. A megosztott telefonos kapcsolat és a forgalomkorlátos hotspot megabájtonként fizetős, és mobiladatnak számít.</string>
+    <string name="download_held_back_title">Letöltés visszatartva</string>
+    <!-- %1$s is a size, „340 MB” for instance. It is named on a line of its
+         own so that no ending falls on it: a unit symbol takes a different one
+         for each system. -->
+    <string name="download_held_back_body">Ez a kapcsolat megabájtonként fizetős. A letöltés mérete: %1$s. Csatlakozz Wi-Fi-hez, vagy töltsd le most mégis.</string>
+    <string name="download_stopped_title">A letöltés leállt</string>
+    <!-- %1$s is a size. What has already arrived is kept on the device and the
+         transfer picks up from there. -->
+    <string name="download_stopped_body">Ez a kapcsolat mostantól megabájtonként fizetős, ezért a letöltés leállt. Ami megérkezett, megmarad. A letöltés mérete: %1$s. Csatlakozz Wi-Fi-hez a befejezéshez, vagy folytasd most mégis.</string>
+    <string name="download_anyway">Letöltés mégis</string>
+    <!-- %1$s is a size, „340 MB” for instance. -->
+    <string name="download_waiting_for_unmetered">Várakozás nem forgalomkorlátos kapcsolatra. A letöltés mérete: %1$s.</string>
+    <string name="download_can_resume">Ez a kapcsolat már nem fizetős. Indítsd el újra a letöltést: ott folytatódik, ahol abbamaradt.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
-    <string name="settings_opening_title">Open the app by default on</string>
+    <string name="settings_opening_title">Az alkalmazás alapértelmezett kezdőképernyője</string>
     <!-- Read aloud in place of the two buttons beside it. -->
-    <string name="settings_opening_description">The screen the app opens on</string>
-    <string name="settings_opening_map">Map</string>
-    <string name="settings_opening_list">Station list</string>
+    <string name="settings_opening_description">Az a képernyő, amelyen az alkalmazás elindul</string>
+    <string name="settings_opening_map">Térkép</string>
+    <string name="settings_opening_list">Állomáslista</string>
     <!-- The way to the map from a station list opened on. -->
-    <string name="stations_open_map">See the map</string>
+    <string name="stations_open_map">A térkép megtekintése</string>
 
     <!-- Which stations the map draws at all. Set in the settings and nowhere
          else: the map itself carries no control and no badge (SPEC 7.1). -->
-    <string name="settings_map_filters_title">Which stations the map shows</string>
-    <string name="settings_map_filters_hide_out_of_service">Hide the stations out of service</string>
+    <string name="settings_map_filters_title">Mely állomásokat mutatja a térkép</string>
+    <string name="settings_map_filters_hide_out_of_service">A nem működő állomások elrejtése</string>
     <!-- One wording for both modes: this screen knows nothing of the map's
-         Bikes / Free docks button, so it may name neither. -->
-    <string name="settings_map_filters_hide_empty">Hide the stations with nothing to offer</string>
-    <!-- Under the switch, saying what "nothing" is read against. -->
-    <string name="settings_map_filters_hide_empty_hint">“Nothing” follows what the map is counting: no bike while it counts bikes, no free dock while it counts free docks.</string>
+         Kerékpárok / Szabad helyek button, so it may name neither. -->
+    <string name="settings_map_filters_hide_empty">Azoknak az állomásoknak az elrejtése, amelyek semmit nem kínálnak</string>
+    <!-- Under the switch, saying what „semmi” is read against. -->
+    <string name="settings_map_filters_hide_empty_hint">A „semmi” ahhoz igazodik, amit a térkép éppen számol: nincs kerékpár, amíg kerékpárokat számol, és nincs szabad hely, amíg szabad helyeket.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
-    <string name="settings_map_filters_keeps_unknown">Stations the network says nothing about stay on the map: a count nobody could read is not a count of nothing.</string>
+    <string name="settings_map_filters_keeps_unknown">Azok az állomások, amelyekről a hálózat nem mond semmit, a térképen maradnak: az olvashatatlan darabszám nem ugyanaz, mint a nulla.</string>
 
-    <!-- The rider's OWN bike, not the network's. Keep the wording clearly
-         about the reader's own equipment: the journey screen carries a
-         separate, similar-looking choice about the bikes the network lends. -->
-    <string name="settings_own_bike_kind_title">Your own bike</string>
+    <!-- The rider's OWN bike, not the network's. The journey screen carries a
+         separate, similar-looking choice about the bikes the network lends,
+         which is why this one says *saját*. -->
+    <string name="settings_own_bike_kind_title">A saját kerékpárod</string>
     <!-- Read aloud in place of the two buttons beside it. -->
-    <string name="settings_own_bike_kind_description">The kind of bike you own</string>
-    <string name="settings_own_bike_kind_mechanical">Mechanical</string>
-    <string name="settings_own_bike_kind_electric">Electric</string>
-    <!-- Under the two buttons. Says what the declaration changes: an electric
-         bike is routed and timed as one, where a mechanical one is not. -->
-    <string name="settings_own_bike_kind_hint">Declared electric, your own bike gets its own route and its own times.</string>
+    <string name="settings_own_bike_kind_description">A tulajdonodban lévő kerékpár fajtája</string>
+    <string name="settings_own_bike_kind_mechanical">Hagyományos</string>
+    <string name="settings_own_bike_kind_electric">Elektromos</string>
+    <!-- Under the two buttons. Says what the declaration changes. -->
+    <string name="settings_own_bike_kind_hint">Elektromosnak jelölve a saját kerékpárod saját útvonalat és saját időket kap.</string>
 
-    <!-- The summary of a ride on one's own bike, where that bike was said to be
-         a pedal-assist one. %1$s is a distance, %2$s a climb. -->
-    <string name="journey_own_bike_electric_only">on your own electric bike, over %1$s.</string>
-    <string name="journey_own_bike_electric_only_climb">on your own electric bike, over %1$s and %2$s of climb.</string>
+    <!-- The summary of a ride on one's own bike, where that bike was said to
+         be a pedal-assist one. %1$s is a distance, %2$s a climb. -->
+    <string name="journey_own_bike_electric_only">saját elektromos kerékpárral, %1$s távon.</string>
+    <string name="journey_own_bike_electric_only_climb">saját elektromos kerékpárral, %1$s távon, %2$s szintemelkedéssel.</string>
     <!-- Application language -->
-    <string name="settings_language_title">Language</string>
+    <string name="settings_language_title">Nyelv</string>
     <!-- Heads the list of languages: the interface follows the device's own
-         language, which is what it did before this setting existed. The
-         languages themselves are never translated — each is written in its own
-         language, and comes from Android rather than from this file. -->
-    <string name="settings_language_system">System</string>
-    <!-- Spoken label of the row, read aloud in place of the language alone.
-         %1$s is the language in service: "English", "Français", or the wording
-         above when the device's own is followed. -->
-    <string name="settings_language_description">Language of the interface: %1$s</string>
+         language. The languages themselves are never translated. -->
+    <string name="settings_language_system">Rendszer</string>
+    <!-- Spoken label of the row. %1$s is the language in service: „Magyar”,
+         „English”, or the wording above when the device's own is followed. -->
+    <string name="settings_language_description">A felület nyelve: %1$s</string>
 
 </resources>
