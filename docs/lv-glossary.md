@@ -79,7 +79,8 @@ is *1 parastais*, and the genitive plural of a definite adjective is *parasto*.
 **The three `freshness_*` plurals are the exception, and they are the
 exception on purpose.** The preposition *pirms* is built into the plural
 rather than into `freshness_fresh`, so that one template yields both
-„Atjaunināts pirms 5 minūtēm“ and „Atjaunināts tikko“ — `freshness_just_now`
+„Dati atjaunināti pirms 5 minūtēm“ and „Dati atjaunināti tikko“ —
+`freshness_just_now`
 is *tikko* (`settings:time_unit_just_now`, "Just now" → „Tikko“), which no
 preposition could precede. *Pirms* governs the **genitive singular** after
 `one` (*pirms 1 minūtes*, *pirms 21 minūtes*) and the **dative plural**
@@ -106,6 +107,7 @@ it:
 | `dataset_imported`, `dataset_deleted` | `Datu kopa instalēta: %1$s`, `Datu kopa izdzēsta: %1$s` | The colon alone was not enough here: a participle standing at the head of the line still reads as agreeing with the name that follows it. So the line supplies its own subject — *datu kopa*, feminine, which is already this file's word for a dataset in `storage_intro` — and the participle agrees with that, whatever arrives after the colon. |
 | `map_outside_city_message`, `map_outside_city_brief`, `city_proposal_body` | *apgabala, ko aptver %1$s* | The placeholder is the subject of *aptver* and stays in the nominative, which is the case it arrives in. |
 | `city_here_body`, `city_here_installed_body` | *Instalējiet šī tīkla datus … tā stacijas* | The same problem in the other direction: they need a possessive for the network, whose gender the placeholder hides. *Tīkls* is masculine and fixed, so the sentence leans on that noun rather than on a pronoun that would have to agree with whatever `cityLabel` produced. |
+| `freshness_fresh`, `freshness_never` | `Dati atjaunināti %1$s`, `Dati nekad nav atjaunināti` | One slot on the station sheet takes all three `freshness_*` lines in turn, and `freshness_stale` names its subject (*Novecojuši dati*, masculine plural). A bare masculine **singular** participle beside it — *Atjaunināts* — made the same slot agree two ways within seconds. Naming *dati* in all three settles it. |
 | `settings_opening_title` | `Lietotnes sākuma ekrāns` | **The one place the English sentence had to be recast.** "Open the app by default on" governs its two buttons, and Latvian would have had to decline them — *Karti*, *Staciju sarakstu* — which reads as nonsense on a toggle. Naming the screen instead lets the buttons stay in the nominative: *Karte*, *Staciju saraksts*. |
 
 ## Where Latvian departs from the English note
@@ -139,8 +141,12 @@ network's `displayName`, **not** the city's: 328 of the 331 entries in
 translated for is called **nextbike LV**, not *Rīga*. Writing „pilsētas %1$s
 dati“ would have made a Riga reader read „pilsētas nextbike LV dati“ — a claim
 the English never makes, since it says only "Data **for** %1$s". So the three
-lines use the colon and the quotation marks instead: *Dzēst datus: %1$s*,
-*Visi bezsaistes dati „%1$s“ …*, *Dati izdzēsti: %1$s*.
+lines hold the name at arm's length instead: *Dzēst datus: %1$s* and *Dati
+izdzēsti: %1$s* behind a colon, and `city_delete_body` naming the thing the
+name belongs to — *Visi **tīkla** „%1$s“ bezsaistes dati tiks izdzēsti*. That
+last one had read *Visi bezsaistes dati „%1$s“ …*, which invites the name to
+be read as what the **data** is called rather than whose it is; the genitive
+*tīkla* in front of it settles the question the quotation marks left open.
 
 ## The address prompt, and the number Latvia keeps
 
@@ -169,7 +175,7 @@ number makes the parser give the first one up.
 | dock, free | **brīva vieta** | What a bike is returned into, counted as available: `docks_available`, `counterpart_docks`, `mode_docks`, `journey_no_dock_nearby`. |
 | dock, capacity | **statīvs** | The same object counted as a total: `docks_total`, `station_detail_with_capacity`. English uses one word for both and the station sheet shows the two figures side by side — *12 brīvas vietas · 30 statīvi* — so they cannot share a word. *Statīvs* is the ordinary Latvian for a bike stand; it is never the word for the payment terminal. My own choice: Android has neither sense. |
 | bike | **velosipēds** | Never *ritenis*, which is colloquial and also means "wheel". |
-| mechanical / electric | **parasts / elektrisks** | The two kinds a network lends. *Parasts* — "ordinary" — rather than *mehānisks*, which in Latvian describes a mechanism rather than a bike without a motor. *Elektrisks* here is pedal-assist, which `journey_bike_kind_electric_description` says outright: *Velosipēds ar minēšanas atbalstu*. |
+| mechanical / electric | **parasts / elektrisks** | The two kinds a network lends. *Parasts* — "ordinary" — rather than *mehānisks*, which in Latvian describes a mechanism rather than a bike without a motor. *Elektrisks* here is pedal-assist, which `journey_bike_kind_electric_description` says outright: *Velosipēds ar pedāļu mīšanas atbalstu*. The verb is **mīt**, to pedal, whose verbal noun is *mīšana*; *minēšana* belongs to the homograph **minēt**, to guess, and would have promised assistance at riddles. The two verbs share *minu* in the present, which is the trap. |
 | walking pace | **gaitas temps** | Not a speed, and not in km/h: `settings_walking_pace_description` says *temps*, never *ātrums*. |
 | slow / normal / brisk | **Lēns / Normāls / Raits** | *Lēns* is Android's (`settings:speed_label_slow`, "Slow" → „Lēns“). *Raits* is **my own choice, and a departure from the obvious**: Android's word for "Fast" is *Ātrs* (`settings:speed_label_fast`), but a pace that is *ātrs* is a speed, which is the one thing this setting refuses to be. *Raits solis* is the ordinary Latvian for a brisk walk and every speaker has it. |
 | pace of a journey | — | `settings_walking_pace_title` is *Gaitas temps* and the changelog says *lēni, normāli vai raiti*: the three adverbs match the three buttons word for word, so a reader who set one recognises the other. |

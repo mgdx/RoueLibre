@@ -136,8 +136,8 @@
     </plurals>
 
     <!-- The age of the availability figures. The preposition *pirms* is built
-         into the plural so that both „Atjaunināts pirms 5 minūtēm“ and
-         „Atjaunināts tikko“ come out right from one template. It governs the
+         into the plural so that both „Dati atjaunināti pirms 5 minūtēm“ and
+         „Dati atjaunināti tikko“ come out right from one template. It governs the
          dative plural, which is one form for 5 as for 20, so `zero` and
          `other` read alike here and nowhere else in the file. -->
     <string name="freshness_just_now">tikko</string>
@@ -158,8 +158,8 @@
     </plurals>
     <string name="freshness_long_ago">pirms vairāk nekā dienas</string>
     <string name="freshness_stale">Novecojuši dati · %1$s</string>
-    <string name="freshness_fresh">Atjaunināts %1$s</string>
-    <string name="freshness_never">Nekad nav atjaunināts</string>
+    <string name="freshness_fresh">Dati atjaunināti %1$s</string>
+    <string name="freshness_never">Dati nekad nav atjaunināti</string>
 
     <string name="stations_empty_title">Nav ielādēta neviena stacija</string>
     <string name="stations_empty_message">Pavelciet sarakstu uz leju, lai ielādētu tīkla stacijas.</string>
@@ -292,8 +292,8 @@
     <string name="journey_bike_kind_mechanical">Parastais</string>
     <string name="journey_bike_kind_electric">Elektriskais</string>
     <string name="journey_bike_kind_any_description">Jebkurš velosipēds, vienalga kāda veida</string>
-    <string name="journey_bike_kind_mechanical_description">Velosipēds bez minēšanas atbalsta</string>
-    <string name="journey_bike_kind_electric_description">Velosipēds ar minēšanas atbalstu</string>
+    <string name="journey_bike_kind_mechanical_description">Velosipēds bez pedāļu mīšanas atbalsta</string>
+    <string name="journey_bike_kind_electric_description">Velosipēds ar pedāļu mīšanas atbalstu</string>
     <string name="journey_compute">Aprēķināt maršrutu</string>
     <string name="journey_computing">Notiek labākā maršruta aprēķināšana…</string>
     <!-- Nothing is being chosen here, so the wait does not claim to be looking
@@ -373,8 +373,8 @@
     <string name="station_address_nearby">Netālu: %1$s</string>
     <string name="station_favourite_add">Pievienot izlasei</string>
     <string name="station_favourite_remove">Noņemt no izlases</string>
-    <string name="station_as_origin">Sākt no šejienes</string>
-    <string name="station_as_destination">Doties uz šejieni</string>
+    <string name="station_as_origin">Sākt šeit</string>
+    <string name="station_as_destination">Doties šurp</string>
     <string name="station_open_in_navigation">Atvērt navigācijas lietotnē</string>
     <string name="station_no_navigation_app">Šajā ierīcē nav instalēta neviena karšu lietotne.</string>
 
@@ -450,7 +450,7 @@
          arrives in. -->
     <string name="city_delete_description">Dzēst datus: %1$s</string>
     <string name="city_delete_title">Vai dzēst šos datus?</string>
-    <string name="city_delete_body">Visi bezsaistes dati „%1$s“ tiks izdzēsti. Lai tos atkal lietotu, tie būs jālejupielādē no jauna.</string>
+    <string name="city_delete_body">Visi tīkla „%1$s“ bezsaistes dati tiks izdzēsti. Lai tos atkal lietotu, tie būs jālejupielādē no jauna.</string>
     <string name="city_delete_confirm">Dzēst</string>
     <string name="city_deleted">Dati izdzēsti: %1$s</string>
     <string name="city_search_hint">Meklēt pilsētu</string>
@@ -517,7 +517,7 @@
     <string name="dataset_delete_description">Dzēst: %1$s</string>
     <string name="dataset_delete_title">Vai dzēst šos datus?</string>
     <!-- %1$s is the dataset's name, %2$s the space it frees. -->
-    <string name="dataset_delete_body">Dati „%1$s“ tiks izdzēsti, atbrīvojot %2$s. Lai strādātu bezsaistē, tie būs jālejupielādē no jauna.</string>
+    <string name="dataset_delete_body">Datu kopa „%1$s“ tiks izdzēsta, atbrīvojot %2$s. Lai strādātu bezsaistē, tā būs jālejupielādē no jauna.</string>
     <string name="dataset_imported">Datu kopa instalēta: %1$s</string>
     <string name="dataset_deleted">Datu kopa izdzēsta: %1$s</string>
 
