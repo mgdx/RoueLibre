@@ -171,6 +171,7 @@ Categories:
   - Public Transport
 License: GPL-3.0-only
 AuthorName: mgdx
+WebSite: https://github.com/mgdx/RoueLibre
 SourceCode: https://github.com/mgdx/RoueLibre
 IssueTracker: https://github.com/mgdx/RoueLibre/issues
 Changelog: https://github.com/mgdx/RoueLibre/blob/HEAD/CHANGELOG.md
@@ -190,10 +191,20 @@ Builds:
     scanignore:
       - settings.gradle.kts
       - third_party/brouter/buildSrc/src/main/groovy/brouter.library-conventions.gradle
+    binary: https://github.com/mgdx/RoueLibre/releases/download/v%v/roue-libre-%v-armeabi-v7a.apk
     output: app/build/outputs/apk/release/app-armeabi-v7a-release.apk
+
   # … and the same for 42 x86, 43 x86_64, 44 arm64-v8a
 
-AutoUpdateMode: None
+AllowedAPKSigningKeys: 1de586d680f3296f2d1aa05dd5147fd3de187a5da15a1f5d887d0a82a1e6ed89
+
+VercodeOperation:
+  - '%c * 10 + 1'
+  - '%c * 10 + 2'
+  - '%c * 10 + 3'
+  - '%c * 10 + 4'
+
+AutoUpdateMode: Version v%v
 UpdateCheckMode: Tags
 CurrentVersion: 1.0.0
 CurrentVersionCode: 44
@@ -202,8 +213,20 @@ CurrentVersionCode: 44
 `submodules: true` is what fetches BRouter, which the root `settings.gradle.kts`
 consumes as a composite build and which is pinned to a tag rather than
 following `master` — a moving submodule would make the build unreproducible.
-`AutoUpdateMode` is off because four entries cannot be generated from one tag;
-each release adds its four by hand.
+`AutoUpdateMode` works despite there being four entries per version:
+`VercodeOperation` names one arithmetic expression per architecture, and their
+update checker copies the last four recipes and gives each its computed code,
+keeping the `output` and `binary` that belong to it. It reads the version off
+`app/build.gradle.kts`, which is why the version code is written there as a
+number and not as a constant — their expression wants a literal after
+`versionCode`, and a name left `fdroid checkupdates` unable to tell one release
+from the next.
+
+`AllowedAPKSigningKeys` and the four `binary` URLs are what ask F-Droid to
+verify its own rebuild against the APKs published here and serve ours. They are
+set from this first submission on purpose: **a version F-Droid signs with its
+own key can never be moved to ours afterwards**, so the choice is only offered
+once.
 
 The three scan rules exist because F-Droid's scanner refuses to build over
 anything it cannot account for, and each is answered rather than silenced:
