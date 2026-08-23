@@ -174,7 +174,21 @@ def parse_house_number(raw_number: str, raw_suffix: str) -> tuple[int, str] | No
     number = int(raw_number)
     if number <= 0:
         return None
-    return number, raw_suffix.strip().lower()
+    # **The spelling of the mark is the source's, not this script's.** It was
+    # lowercased here, which reads as harmless while France is the only country
+    # served: "12 BIS" and "12 bis" are the same mark and the BAN writes it
+    # either way. It is not harmless anywhere else. Poland, the Netherlands,
+    # Romania and Spain write the letter capitalised and glued — "12A" — where
+    # Germany writes "12a", and which of the two a country writes is a fact
+    # about that country that the source carries and a lowercased index cannot
+    # give back. 2 902 667 house numbers over 307 of the 332 cities served
+    # carry a letter in this column.
+    #
+    # Folding the two together is the **search's** business, not the file's:
+    # `AddressNormalizer` normalises the query and the index alike (SPEC §4.3),
+    # so "12a" still finds "12A". What is shown to the reader is what their own
+    # country wrote.
+    return number, raw_suffix.strip()
 
 
 def read_ban_files(
@@ -548,7 +562,7 @@ def split_house_number(raw: str) -> tuple[str, str]:
         if not character.isdecimal():
             break
         digits += character
-    return digits, raw[len(digits):].strip(" -/").lower()
+    return digits, raw[len(digits):].strip(" -/")
 
 
 def attach_municipalities(streets: dict[str, Street], places: list[Street]) -> int:
