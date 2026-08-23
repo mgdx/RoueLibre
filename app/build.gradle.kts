@@ -226,7 +226,13 @@ tasks.withType<Test>().configureEach {
 }
 
 kotlin {
-    jvmToolchain(17)
+    // Java 21, because that is what F-Droid's build image carries — Debian
+    // trixie's `default-jdk-headless` — and it builds with toolchain
+    // auto-provisioning turned off, so a version it does not already have is
+    // not fetched but refused. This says which compiler runs; what the
+    // application ships is decided by `jvmTarget` below, which stays at 11 for
+    // API 26.
+    jvmToolchain(21)
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
     }
