@@ -87,6 +87,7 @@ class StationListFragment : Fragment() {
         val container = (requireActivity().application as RoueLibreApplication).container
         StationsViewModel.Factory(
             container.stationRepository,
+            positionAlreadyKnown = { container.knownPositionInsideActiveCity() },
             positionForOrdering = { container.positionInsideActiveCity() },
             readLetterFolds = {
                 withContext(Dispatchers.IO) {
@@ -189,9 +190,11 @@ class StationListFragment : Fragment() {
             }
         }
 
-        // The nearest station first, when the position allows it (SPEC §7.2).
-        // Asked for once per appearance: a list reordering itself under the
-        // finger would be worse than one ordered a moment late.
+        // The nearest station first, when the position allows it (SPEC §7.6).
+        // What the system holds orders the list at once, then a fix is asked
+        // for and settles it — both without a word and without a prompt. Once
+        // per appearance: an order already settled is kept, so a rotation does
+        // not fetch a second time.
         viewModel.orderByProximity()
 
         observeState()

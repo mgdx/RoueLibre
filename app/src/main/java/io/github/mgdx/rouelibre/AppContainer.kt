@@ -126,19 +126,60 @@ class AppContainer(private val context: Context) {
     /**
      * The user's position, but only if it falls inside the city served.
      *
-     * Used to order the station list by proximity. It reads what the system
-     * already holds and never asks for a fix: ordering a list is not worth
-     * waking the GPS, and a screen that opened faster than a fix arrives would
-     * reorder itself under the finger.
+     * Used to order the station list by proximity when it appears (SPEC §7.6).
      *
-     * @return the position, or `null` if it is unknown, too old, not permitted,
-     *   or outside the served conurbation — cases where the alphabet serves
-     *   better than a distance to somewhere else.
+     * **It asks the device for a fix**, and until 24 August 2026 it read only
+     * what the system already held — on the grounds that ordering a list is
+     * not worth waking a radio for. On a phone where nothing else has asked
+     * for a position recently, that is nothing at all: the list came up in the
+     * alphabet for somebody standing in the middle of the network, every time,
+     * and the order the screen exists to give had to be asked for by hand. The
+     * cost accepted in exchange is a list that may reorder itself a few
+     * seconds after it is opened.
+     *
+     * **It never asks for the permission** — that belongs to a button
+     * (SPEC §10) — and answers `null` where it is missing or where location is
+     * switched off, so a screen prompts nothing by appearing.
+     *
+     * @return the position, or `null` if it could not be obtained, is not
+     *   permitted, or falls outside the served conurbation — cases where the
+     *   alphabet serves better than a distance to somewhere else.
      */
     suspend fun positionInsideActiveCity(): Coordinates? {
-        val position = deviceLocation.lastKnown()?.coordinates ?: return null
-        val box = activeCity()?.boundingBox ?: return null
-        return position.takeIf { it in box }
+        if (!deviceLocation.isPermitted() || !deviceLocation.isAvailable()) return null
+        return insideActiveCity(deviceLocation.current()?.coordinates)
+    }
+
+    /**
+     * The same, but only from what the system already holds.
+     *
+     * Immediate and free: it is the answer the station list orders itself on
+     * the instant it appears, before the fix asked for by
+     * [positionInsideActiveCity] has had time to come back. Coming from the
+     * map that is the very point the map was drawing, so the list is in order
+     * before the eye has settled on it; on a phone where nothing has asked for
+     * a position in a while it is `null`, and the fix is what serves.
+     *
+     * Nothing is woken and no permission is asked for.
+     */
+    suspend fun knownPositionInsideActiveCity(): Coordinates? =
+        insideActiveCity(deviceLocation.lastKnown()?.coordinates)
+
+    /**
+     * Keeps [position] if the conurbation served covers it.
+     *
+     * A city whose configuration declares no usable box covers everything: a
+     * box that says nothing must exclude nobody, which is the rule the map
+     * applies to the same question.
+     */
+    private suspend fun insideActiveCity(position: Coordinates?): Coordinates? {
+        if (position == null) return null
+        // Read after the position and not before: without a city there is
+        // nothing to measure against, but the read costs a file and the caller
+        // has usually just spent seconds on a fix.
+        val city = activeCity() ?: return null
+        val area = city.boundingBox?.takeIf { it.isUsable } ?: return position
+        return position.takeIf { it in area }
     }
 
     /**

@@ -83,6 +83,7 @@ enum class Emptiness {
  */
 class StationsViewModel(
     private val repository: StationRepository,
+    private val positionAlreadyKnown: suspend () -> Coordinates? = { null },
     private val positionForOrdering: suspend () -> Coordinates? = { null },
     private val readLetterFolds: suspend () -> Map<Char, String> = { emptyMap() },
 ) : ViewModel() {
@@ -166,9 +167,18 @@ class StationsViewModel(
     /**
      * Orders the list by proximity, if the position allows it.
      *
-     * Called by the screen when it appears. Without a usable position — unknown,
-     * too old, not permitted, or outside the served city — the alphabetical
-     * order stays, and nothing is asked of the user.
+     * Called by the screen when it appears, and it orders **twice**, which is
+     * one step more than it looks. What the system already holds comes first
+     * and costs nothing: arriving from the map, that is the very point the map
+     * was drawing, and the list is in order before the eye has settled on it.
+     * Then a fix is asked for, because on a phone where nothing has asked for
+     * a position in a while the first step answers nothing at all — and that
+     * one can take a few seconds, so the list is read as it stands meanwhile
+     * and settles when the fix arrives.
+     *
+     * Without a usable position — refused, switched off, not obtained, or
+     * outside the served city — the alphabetical order stays, and nothing at
+     * all is asked of the user: no permission prompt, no message.
      *
      * **An order already settled is left alone.** This model outlives the
      * screen, so a rotation calls this again over a position the user waited
@@ -178,19 +188,24 @@ class StationsViewModel(
      */
     fun orderByProximity() {
         if (orderingPosition != null) return
-        viewModelScope.launch { orderFrom(positionForOrdering()) }
+        viewModelScope.launch {
+            positionAlreadyKnown()?.let { orderFrom(it) }
+            // Kept where the fix comes to nothing: an order already given is
+            // better than the alphabet it would fall back to.
+            positionForOrdering()?.let { orderFrom(it) }
+        }
     }
 
     /**
      * Orders the list from a position the user has just asked for.
      *
      * The other way in, and the one that answers a button rather than the
-     * screen appearing: what [orderByProximity] reads is whatever the system
-     * happens to hold, which is nothing at all until something else on the
-     * device has asked for a fix. The screen fetches one itself and hands it
-     * over here, so that the wait, the permission and the refusal are the
-     * screen's business and this model goes on knowing nothing of Android
-     * (SPEC §14).
+     * screen appearing. The two differ in what they may ask of the user:
+     * [orderByProximity] takes what it can get in silence, whereas a press
+     * may put the permission dialog up and must answer a refusal in words.
+     * The screen fetches that fix itself and hands it over here, so the wait,
+     * the permission and the refusal stay its business and this model goes on
+     * knowing nothing of Android (SPEC §14).
      *
      * @param position where the user stands, or `null` to go back to the
      *   alphabet.
@@ -248,6 +263,7 @@ class StationsViewModel(
     /** Builds the model with its dependencies, without an injection framework. */
     class Factory(
         private val repository: StationRepository,
+        private val positionAlreadyKnown: suspend () -> Coordinates? = { null },
         private val positionForOrdering: suspend () -> Coordinates? = { null },
         private val readLetterFolds: suspend () -> Map<Char, String> = { emptyMap() },
     ) : ViewModelProvider.Factory {
@@ -256,7 +272,12 @@ class StationsViewModel(
             require(modelClass.isAssignableFrom(StationsViewModel::class.java)) {
                 "unexpected model: ${modelClass.name}"
             }
-            return StationsViewModel(repository, positionForOrdering, readLetterFolds) as T
+            return StationsViewModel(
+                repository,
+                positionAlreadyKnown,
+                positionForOrdering,
+                readLetterFolds,
+            ) as T
         }
     }
 }
