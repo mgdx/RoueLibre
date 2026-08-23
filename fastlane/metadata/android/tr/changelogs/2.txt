@@ -1,0 +1,9 @@
+Bir şehir yerine üç şehir.
+
+• Lille metropolü için V’lille, Lyon için Vélo’v, Paris ve çevresi için Vélib’ Métropole. Uygulama, istersen konumundan yola çıkıp seninkini önerir.
+• Birden çok şehir yan yana yüklü kalabilir. Aralarında ayarlardan geçiş yaparsın ve bir şehrin verilerini silmek ötekilere dokunmaz.
+• Verilerin boyutu, şehir şehir, indirmeden önce bildirilir.
+• Bir istasyonun sayfasında iki yeni düğme: buradan başla, buraya git. Yolculuğu, o ucu doldurulmuş olarak açarlar.
+• Önemli noktalar — metro istasyonları, kütüphaneler — sonunda hangi belediyede olduklarını gösteriyor.
+
+Hâlâ eksik: veriler yayımlanmadı, bu yüzden deponun betikleriyle üretilip depolama ekranından yüklenmeleri gerekiyor.

@@ -1,0 +1,25 @@
+Roue Libre, paylaşımlı bisiklet istasyonlarını haritada gösterir ve yürüyüşle bisikleti birleştiren, kapıdan kapıya bir yolculuk hesaplar.
+
+Her şey cihazda çalışır: harita, adres araması ve rota hesabı hiçbir bağlantı istemez. Dışarı çıkan tek şey, anlık bisiklet durumudur.
+
+<b>Onu ayıran ne</b>
+
+• Google hizmeti yok: Play Services yok, Firebase yok, Maps SDK yok. Google hizmetleri olmayan her Android sisteminde çalışır.
+• Telemetri yok, izleyici yok, benzersiz tanımlayıcı yok, hesap yok.
+• Yolculuk verisi tutulmaz: geçmiş yok, konum yok, hedef yok. Aradığın şey telefondan çıkmaz.
+• Hiçbir şehir dayatılmaz: cihazda birden çok şehir yan yana durabilir ve birinin verileri, ötekilere dokunulmadan silinebilir.
+• Yolculuk, en yakınla yetinmek yerine istasyon <i>çiftini</i> — kalkış ve varış — birlikte iyileştirir ve az bisikleti kalmış bir istasyonun, sen ona yürürken boşalma riskini hesaba katar.
+
+<b>Kurmadan önce bilinmesi gerekenler</b>
+
+Harita, rota çizgesi ve adres dizini uygulamanın içinde değildir: depolama ekranından bir kez indirilir ya da kendi ürettiğin dosyalardan elle yüklenir. Ağırlıkları şehre göre değişir — orta büyüklükte bir şehir için birkaç on megabayt, bir başkent için daha fazlası — ve indirmeden önce bildirilir.
+
+<b>Hizmet verilen şehirler</b>
+
+Otuz kadar ülkede üç yüze yakın ağ: istasyonlarını açık veri olarak yayımlayan ve yolculuğun park yerlerine güvenebileceği her ağ — Paris’te Vélib’, New York’ta Citi Bike, ayrıca Prag, Barselona, Kopenhag, Tokyo ve Buenos Aires. Uygulama, istersen konumundan yola çıkıp seninkini önerir; birden çok şehri yüklü tutup aralarında geçiş yapabilirsin.
+
+Çevrimdışı veriler şimdilik bunların bir avucu için üretildi. Ötekiler için uygulama numara yapmak yerine durumu olduğu gibi söyler: liste neyin var olduğunu gösterir ve dosyalar deponun betikleriyle üretilebilir.
+
+Belli bir ağa bağlı değildir: şehir listesi kendini günceller ve her şehir kendi GBFS akışının adresini taşır; bu da uygulamayı dünyadaki herhangi bir GBFS ağıyla kullanılabilir kılar.
+
+GNU GPL v3 lisansı altında özgür yazılım.
