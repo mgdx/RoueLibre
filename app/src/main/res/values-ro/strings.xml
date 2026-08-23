@@ -174,7 +174,16 @@
         <item quantity="few">acum %1$d ore</item>
         <item quantity="other">acum %1$d de ore</item>
     </plurals>
-    <string name="freshness_long_ago">acum mai bine de o zi</string>
+    <plurals name="freshness_days">
+        <item quantity="one">acum %1$d zi</item>
+        <item quantity="few">acum %1$d zile</item>
+        <item quantity="other">acum %1$d de zile</item>
+    </plurals>
+    <plurals name="freshness_months">
+        <item quantity="one">acum %1$d lună</item>
+        <item quantity="few">acum %1$d luni</item>
+        <item quantity="other">acum %1$d de luni</item>
+    </plurals>
     <string name="freshness_stale">Date înghețate · %1$s</string>
     <string name="freshness_fresh">Actualizat %1$s</string>
     <string name="freshness_never">Nicio actualizare</string>

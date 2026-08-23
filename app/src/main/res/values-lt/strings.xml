@@ -176,7 +176,18 @@
         <item quantity="many">prieš %1$d valandos</item>
         <item quantity="other">prieš %1$d valandų</item>
     </plurals>
-    <string name="freshness_long_ago">prieš daugiau nei parą</string>
+    <plurals name="freshness_days">
+        <item quantity="one">prieš %1$d dieną</item>
+        <item quantity="few">prieš %1$d dienas</item>
+        <item quantity="many">prieš %1$d dienos</item>
+        <item quantity="other">prieš %1$d dienų</item>
+    </plurals>
+    <plurals name="freshness_months">
+        <item quantity="one">prieš %1$d mėnesį</item>
+        <item quantity="few">prieš %1$d mėnesius</item>
+        <item quantity="many">prieš %1$d mėnesio</item>
+        <item quantity="other">prieš %1$d mėnesių</item>
+    </plurals>
     <string name="freshness_stale">Pasenę duomenys · %1$s</string>
     <string name="freshness_fresh">Atnaujinta %1$s</string>
     <string name="freshness_never">Niekada neatnaujinta</string>

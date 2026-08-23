@@ -12,6 +12,8 @@ class FreshnessTest {
 
     private fun ago(seconds: Long) = freshnessOf(now.minusSeconds(seconds), now)
 
+    private fun daysAgo(days: Long) = ago(days * 86_400)
+
     @Test
     fun `the very first seconds do not deserve a count`() {
         assertEquals(Freshness.JustNow, ago(0))
@@ -26,7 +28,19 @@ class FreshnessTest {
         assertEquals(Freshness.Minutes(59), ago(3_599))
         assertEquals(Freshness.Hours(1), ago(3_600))
         assertEquals(Freshness.Hours(23), ago(86_399))
-        assertEquals(Freshness.LongAgo, ago(86_400))
+        assertEquals(Freshness.Days(1), ago(86_400))
+    }
+
+    @Test
+    fun `beyond the day the count moves to days then to months`() {
+        assertEquals(Freshness.Days(1), daysAgo(1))
+        assertEquals(Freshness.Days(29), daysAgo(29))
+        assertEquals(Freshness.Months(1), daysAgo(30))
+        assertEquals(Freshness.Months(1), daysAgo(59))
+        assertEquals(Freshness.Months(2), daysAgo(60))
+        // The station of the Lille network that had reported nothing since
+        // 13 March 2026, which is what these two bands were added for.
+        assertEquals(Freshness.Months(5), daysAgo(164))
     }
 
     @Test
@@ -48,7 +62,8 @@ class FreshnessTest {
         assertTrue(!ago(4 * 60).isStale)
         assertTrue(ago(5 * 60).isStale)
         assertTrue(ago(3_600).isStale)
-        assertTrue(Freshness.LongAgo.isStale)
+        assertTrue(daysAgo(3).isStale)
+        assertTrue(daysAgo(164).isStale)
     }
 
     @Test

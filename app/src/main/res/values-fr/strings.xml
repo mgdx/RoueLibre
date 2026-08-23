@@ -135,7 +135,16 @@
         <item quantity="many">il y a %1$d d’heures</item>
         <item quantity="other">il y a %1$d heures</item>
     </plurals>
-    <string name="freshness_long_ago">il y a plus d’un jour</string>
+    <plurals name="freshness_days">
+        <item quantity="one">il y a %1$d jour</item>
+        <item quantity="many">il y a %1$d de jours</item>
+        <item quantity="other">il y a %1$d jours</item>
+    </plurals>
+    <plurals name="freshness_months">
+        <item quantity="one">il y a %1$d mois</item>
+        <item quantity="many">il y a %1$d de mois</item>
+        <item quantity="other">il y a %1$d mois</item>
+    </plurals>
     <!-- Attached to the age when the data is no longer current.
          Example: "Données figées · il y a 12 minutes". -->
     <string name="freshness_stale">Données figées · %1$s</string>

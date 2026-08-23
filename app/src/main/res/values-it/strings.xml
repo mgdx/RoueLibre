@@ -155,7 +155,16 @@
         <item quantity="many">%1$d di ore fa</item>
         <item quantity="other">%1$d ore fa</item>
     </plurals>
-    <string name="freshness_long_ago">più di un giorno fa</string>
+    <plurals name="freshness_days">
+        <item quantity="one">%1$d giorno fa</item>
+        <item quantity="many">%1$d di giorni fa</item>
+        <item quantity="other">%1$d giorni fa</item>
+    </plurals>
+    <plurals name="freshness_months">
+        <item quantity="one">%1$d mese fa</item>
+        <item quantity="many">%1$d di mesi fa</item>
+        <item quantity="other">%1$d mesi fa</item>
+    </plurals>
     <!-- Attached to the age when the data is no longer current.
          Example: "Dati congelati · 12 minuti fa". -->
     <string name="freshness_stale">Dati congelati · %1$s</string>

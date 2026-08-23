@@ -147,7 +147,16 @@
         <item quantity="many">hace %1$d de horas</item>
         <item quantity="other">hace %1$d horas</item>
     </plurals>
-    <string name="freshness_long_ago">hace más de un día</string>
+    <plurals name="freshness_days">
+        <item quantity="one">hace %1$d día</item>
+        <item quantity="many">hace %1$d de días</item>
+        <item quantity="other">hace %1$d días</item>
+    </plurals>
+    <plurals name="freshness_months">
+        <item quantity="one">hace %1$d mes</item>
+        <item quantity="many">hace %1$d de meses</item>
+        <item quantity="other">hace %1$d meses</item>
+    </plurals>
     <!-- Attached to the age when the data is no longer current.
          Example: "Datos congelados · hace 12 minutos". -->
     <string name="freshness_stale">Datos congelados · %1$s</string>

@@ -24,8 +24,19 @@ public sealed interface Freshness {
     /** Under a day. */
     public data class Hours(public val value: Int) : Freshness
 
-    /** Beyond a day, the exact count teaches nothing more. */
-    public data object LongAgo : Freshness
+    /** Under a month. */
+    public data class Days(public val value: Int) : Freshness
+
+    /**
+     * Beyond a month, counted in months of thirty days.
+     *
+     * Not a calendar month: nothing here needs to land on the first of
+     * anything, and at this range nobody counts the days. What the band has to
+     * carry is an order of magnitude — a station that last reported five
+     * months ago is a different thing from one that closed this morning, and
+     * "more than a day ago" said both.
+     */
+    public data class Months(public val value: Int) : Freshness
 
     /** No data has ever been received. */
     public data object Never : Freshness
@@ -45,7 +56,8 @@ public sealed interface Freshness {
             is Seconds -> false
             is Minutes -> value >= STALE_AFTER_MINUTES
             is Hours -> true
-            LongAgo -> true
+            is Days -> true
+            is Months -> true
             Never -> true
         }
 }
@@ -55,6 +67,12 @@ private const val STALE_AFTER_MINUTES = 5
 
 /** Below this, showing a count in seconds would be noise. */
 private const val JUST_NOW_SECONDS = 5
+
+/** Seconds in a day, the step at which the count stops being hours. */
+private const val SECONDS_IN_DAY = 86_400L
+
+/** Days in the month this counts in, which is a round one — see [Freshness.Months]. */
+private const val DAYS_IN_MONTH = 30
 
 /**
  * Computes the age of a piece of data.
@@ -74,7 +92,9 @@ public fun freshnessOf(fetchedAt: Instant?, now: Instant): Freshness {
         seconds < JUST_NOW_SECONDS -> Freshness.JustNow
         seconds < 60 -> Freshness.Seconds(seconds.toInt())
         seconds < 3_600 -> Freshness.Minutes((seconds / 60).toInt())
-        seconds < 86_400 -> Freshness.Hours((seconds / 3_600).toInt())
-        else -> Freshness.LongAgo
+        seconds < SECONDS_IN_DAY -> Freshness.Hours((seconds / 3_600).toInt())
+        seconds < DAYS_IN_MONTH * SECONDS_IN_DAY ->
+            Freshness.Days((seconds / SECONDS_IN_DAY).toInt())
+        else -> Freshness.Months((seconds / (DAYS_IN_MONTH * SECONDS_IN_DAY)).toInt())
     }
 }

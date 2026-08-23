@@ -147,7 +147,14 @@
         <item quantity="one">%1$d órája</item>
         <item quantity="other">%1$d órája</item>
     </plurals>
-    <string name="freshness_long_ago">több mint egy napja</string>
+    <plurals name="freshness_days">
+        <item quantity="one">%1$d napja</item>
+        <item quantity="other">%1$d napja</item>
+    </plurals>
+    <plurals name="freshness_months">
+        <item quantity="one">%1$d hónapja</item>
+        <item quantity="other">%1$d hónapja</item>
+    </plurals>
     <string name="freshness_stale">Elavult adatok · %1$s</string>
     <string name="freshness_fresh">Frissítve %1$s</string>
     <string name="freshness_never">Még nem frissült</string>

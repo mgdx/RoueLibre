@@ -18,7 +18,10 @@ fun Freshness.toRelativeText(context: Context): String = when (this) {
         context.resources.getQuantityString(R.plurals.freshness_minutes, value, value)
     is Freshness.Hours ->
         context.resources.getQuantityString(R.plurals.freshness_hours, value, value)
-    Freshness.LongAgo -> context.getString(R.string.freshness_long_ago)
+    is Freshness.Days ->
+        context.resources.getQuantityString(R.plurals.freshness_days, value, value)
+    is Freshness.Months ->
+        context.resources.getQuantityString(R.plurals.freshness_months, value, value)
     Freshness.Never -> context.getString(R.string.freshness_never)
 }
 

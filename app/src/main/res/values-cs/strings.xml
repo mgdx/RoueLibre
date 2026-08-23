@@ -176,7 +176,18 @@
         <item quantity="many">před %1$d hodiny</item>
         <item quantity="other">před %1$d hodinami</item>
     </plurals>
-    <string name="freshness_long_ago">před více než dnem</string>
+    <plurals name="freshness_days">
+        <item quantity="one">před %1$d dnem</item>
+        <item quantity="few">před %1$d dny</item>
+        <item quantity="many">před %1$d dne</item>
+        <item quantity="other">před %1$d dny</item>
+    </plurals>
+    <plurals name="freshness_months">
+        <item quantity="one">před %1$d měsícem</item>
+        <item quantity="few">před %1$d měsíci</item>
+        <item quantity="many">před %1$d měsíce</item>
+        <item quantity="other">před %1$d měsíci</item>
+    </plurals>
     <!-- Attached to the age when the data is no longer current.
          Example: „Zmrazená data · před 12 minutami“. -->
     <string name="freshness_stale">Zmrazená data · %1$s</string>

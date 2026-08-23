@@ -103,7 +103,14 @@
         <item quantity="one">%1$d hour ago</item>
         <item quantity="other">%1$d hours ago</item>
     </plurals>
-    <string name="freshness_long_ago">more than a day ago</string>
+    <plurals name="freshness_days">
+        <item quantity="one">%1$d day ago</item>
+        <item quantity="other">%1$d days ago</item>
+    </plurals>
+    <plurals name="freshness_months">
+        <item quantity="one">%1$d month ago</item>
+        <item quantity="other">%1$d months ago</item>
+    </plurals>
     <string name="freshness_stale">Frozen data · %1$s</string>
     <string name="freshness_fresh">Updated %1$s</string>
     <string name="freshness_never">Never updated</string>

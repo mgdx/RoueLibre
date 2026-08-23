@@ -123,7 +123,14 @@
         <item quantity="one">%1$d uur geleden</item>
         <item quantity="other">%1$d uur geleden</item>
     </plurals>
-    <string name="freshness_long_ago">meer dan een dag geleden</string>
+    <plurals name="freshness_days">
+        <item quantity="one">%1$d dag geleden</item>
+        <item quantity="other">%1$d dagen geleden</item>
+    </plurals>
+    <plurals name="freshness_months">
+        <item quantity="one">%1$d maand geleden</item>
+        <item quantity="other">%1$d maanden geleden</item>
+    </plurals>
     <string name="freshness_stale">Verouderde gegevens · %1$s</string>
     <string name="freshness_fresh">Vernieuwd %1$s</string>
     <string name="freshness_never">Nooit vernieuwd</string>

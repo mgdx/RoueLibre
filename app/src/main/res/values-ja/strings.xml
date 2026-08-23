@@ -135,7 +135,12 @@
     <plurals name="freshness_hours">
         <item quantity="other">%1$d時間前</item>
     </plurals>
-    <string name="freshness_long_ago">1日以上前</string>
+    <plurals name="freshness_days">
+        <item quantity="other">%1$d日前</item>
+    </plurals>
+    <plurals name="freshness_months">
+        <item quantity="other">%1$dか月前</item>
+    </plurals>
     <!-- Attached to the age when the data is no longer current.
          Example: 「古いデータ・12分前」. -->
     <string name="freshness_stale">古いデータ・%1$s</string>

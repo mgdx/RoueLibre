@@ -170,7 +170,16 @@
         <item quantity="many">há %1$d de horas</item>
         <item quantity="other">há %1$d horas</item>
     </plurals>
-    <string name="freshness_long_ago">há mais de um dia</string>
+    <plurals name="freshness_days">
+        <item quantity="one">há %1$d dia</item>
+        <item quantity="many">há %1$d de dias</item>
+        <item quantity="other">há %1$d dias</item>
+    </plurals>
+    <plurals name="freshness_months">
+        <item quantity="one">há %1$d mês</item>
+        <item quantity="many">há %1$d de meses</item>
+        <item quantity="other">há %1$d meses</item>
+    </plurals>
     <!-- Attached to the age when the data is no longer current.
          Example: "Dados congelados · há 12 minutos". -->
     <string name="freshness_stale">Dados congelados · %1$s</string>

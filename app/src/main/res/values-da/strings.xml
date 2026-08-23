@@ -127,7 +127,14 @@
         <item quantity="one">for %1$d time siden</item>
         <item quantity="other">for %1$d timer siden</item>
     </plurals>
-    <string name="freshness_long_ago">for mere end et døgn siden</string>
+    <plurals name="freshness_days">
+        <item quantity="one">for %1$d dag siden</item>
+        <item quantity="other">for %1$d dage siden</item>
+    </plurals>
+    <plurals name="freshness_months">
+        <item quantity="one">for %1$d måned siden</item>
+        <item quantity="other">for %1$d måneder siden</item>
+    </plurals>
     <string name="freshness_stale">Forældede data · %1$s</string>
     <string name="freshness_fresh">Opdateret %1$s</string>
     <string name="freshness_never">Aldrig opdateret</string>

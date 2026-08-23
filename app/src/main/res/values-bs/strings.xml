@@ -167,7 +167,16 @@
         <item quantity="few">prije %1$d sata</item>
         <item quantity="other">prije %1$d sati</item>
     </plurals>
-    <string name="freshness_long_ago">prije više od jednog dana</string>
+    <plurals name="freshness_days">
+        <item quantity="one">prije %1$d dana</item>
+        <item quantity="few">prije %1$d dana</item>
+        <item quantity="other">prije %1$d dana</item>
+    </plurals>
+    <plurals name="freshness_months">
+        <item quantity="one">prije %1$d mjeseca</item>
+        <item quantity="few">prije %1$d mjeseca</item>
+        <item quantity="other">prije %1$d mjeseci</item>
+    </plurals>
     <string name="freshness_stale">Zamrznuti podaci · %1$s</string>
     <string name="freshness_fresh">Ažurirano %1$s</string>
     <string name="freshness_never">Nikada nije ažurirano</string>
