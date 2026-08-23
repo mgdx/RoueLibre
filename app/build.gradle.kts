@@ -90,6 +90,14 @@ android {
                 keyAlias = values.getProperty("keyAlias")
                 keyPassword = values.getProperty("keyPassword")
             }
+            // The v3 scheme carries the certificate's lineage, and that is
+            // what would let the project change key one day without losing
+            // everybody who installed it: an APK signed under v3 can show the
+            // new key was itself signed by the old one. The v2 scheme alone,
+            // which is all Android needs to install from 7.0 on and therefore
+            // all AGP enables by default, offers no such way back — a key lost
+            // or compromised would end the application's upgrade path.
+            enableV3Signing = true
         }
     }
 
