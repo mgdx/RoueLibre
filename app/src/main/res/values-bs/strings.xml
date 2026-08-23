@@ -34,6 +34,13 @@
     following the lexicon where the lexicon has a word, and Bosnian usage where
     it has none.
 
+    The preposition is s and not sa, which is an orthographic rule the three
+    standards share rather than a marker of any of them: sa stands only before
+    s, š, z, ž, before mnom, and before a spelled-out abbreviation. The lexicon
+    reads 60 bare s against 15 sa, and every one of the fifteen is before a
+    sibilant or an abbreviation. Two lines here keep sa for that reason —
+    journey_no_dock_nearby and, in the store text, sa svakom GBFS mrežom.
+
     Bosnian declines, and a case is a suffix. A sentence built around a
     placeholder has to stay right whatever the placeholder holds, so several
     lines here are turned around rather than given an ending they could not
@@ -131,12 +138,12 @@
          side. %1$s is the mechanical count, %2$s the electric one. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d klasični</item>
+        <item quantity="one">%1$d klasičan</item>
         <item quantity="few">%1$d klasična</item>
         <item quantity="other">%1$d klasičnih</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d električni</item>
+        <item quantity="one">%1$d električan</item>
         <item quantity="few">%1$d električna</item>
         <item quantity="other">%1$d električnih</item>
     </plurals>
@@ -179,7 +186,7 @@
     <string name="map_outside_city_message">Vaša pozicija je izvan područja koje pokriva %1$s, pa je ova karta ne može prikazati. Odaberite grad u kojem se nalazite da biste vidjeli njegove stanice.</string>
     <string name="map_outside_city_brief">Vaša pozicija je izvan područja koje pokriva %1$s.</string>
     <string name="map_needs_tiles_title">Karti trebaju pločice za rad van mreže</string>
-    <string name="map_needs_tiles_message">Instalirajte podatke karte sa ekrana za pohranu. U međuvremenu lista stanica ostaje upotrebljiva.</string>
+    <string name="map_needs_tiles_message">Instalirajte podatke karte s ekrana za pohranu. U međuvremenu lista stanica ostaje upotrebljiva.</string>
     <string name="map_needs_city_title">Koji grad?</string>
     <string name="map_needs_city_message">Odaberite gradsko područje koje želite koristiti. Njegovi podaci se preuzimaju poslije, jednom zauvijek.</string>
 
@@ -263,9 +270,9 @@
     <string name="about_attribution_osm">Karta, rute i orijentiri: © saradnici OpenStreetMapa, licenca ODbL.</string>
     <string name="about_attribution_ban">Adrese i kućni brojevi: Base Adresse Nationale, licenca ODbL.</string>
     <string name="about_attribution_brouter">Računanje ruta: BRouter, licenca MIT, nad podacima OpenStreetMapa.</string>
-    <string name="about_attribution_maplibre">Iscrtavanje karte: MapLibre Native, BSD licenca sa dvije klauzule.</string>
+    <string name="about_attribution_maplibre">Iscrtavanje karte: MapLibre Native, licenca BSD s dvije klauzule.</string>
     <string name="about_links_title">Otvaranje mjesta iz druge aplikacije</string>
-    <string name="about_links_body">Linkovi „geo:“ i adrese podijeljene kao običan tekst dolaze pravo ovdje: odaberite Roue Libre u Androidovom meniju za odabir. Linkovi sa kartografskih web stranica traže dozvolu: Postavke → Aplikacije → Roue Libre → Zadano otvaranje → Dodajte link.</string>
+    <string name="about_links_body">Linkovi „geo:“ i adrese podijeljene kao običan tekst dolaze pravo ovdje: odaberite Roue Libre u Androidovom meniju za odabir. Linkovi s kartografskih web stranica traže dozvolu: Postavke → Aplikacije → Roue Libre → Zadano otvaranje → Dodajte link.</string>
     <string name="about_licence_title">Licenca</string>
     <string name="about_licence_body">Roue Libre je slobodan softver, objavljen pod licencom GNU GPL verzija 3. Možete ga koristiti, proučavati, mijenjati i prosljeđivati dalje.</string>
     <string name="about_open_repository">Pogledaj izvorni kôd</string>
@@ -293,12 +300,12 @@
 
     <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
          which is what the application does at rest. -->
-    <string name="journey_bike_kind_any">Bilo koji bicikl</string>
+    <string name="journey_bike_kind_any">Svejedno</string>
     <string name="journey_bike_kind_mechanical">Klasični</string>
     <string name="journey_bike_kind_electric">Električni</string>
     <string name="journey_bike_kind_any_description">Bilo koji bicikl, koje god vrste</string>
     <string name="journey_bike_kind_mechanical_description">Bicikl koji pokrećem pedalama</string>
-    <string name="journey_bike_kind_electric_description">Bicikl sa pomoćnim električnim pogonom</string>
+    <string name="journey_bike_kind_electric_description">Bicikl s pomoćnim električnim pogonom</string>
     <string name="journey_compute">Izračunaj putovanje</string>
     <string name="journey_computing">Računanje najboljeg putovanja…</string>
     <!-- Nothing is being chosen here — one route to trace, not a pair of
@@ -353,13 +360,13 @@
     <string name="journey_walk_is_quicker">pješice, %1$s – brže nego otići po bicikl.</string>
     <string name="journey_walk_is_quicker_climb">pješice, %1$s i %2$s uspona – brže nego otići po bicikl.</string>
     <string name="journey_none_title">Nema putovanja</string>
-    <string name="journey_no_bike_nearby">Nema stanice sa biciklom blizu polazišta. Pokušajte ponovo kasnije ili krenite sa drugog mjesta.</string>
+    <string name="journey_no_bike_nearby">Nema stanice s biciklom blizu polazišta. Pokušajte ponovo kasnije ili krenite s drugog mjesta.</string>
 
     <string name="journey_no_mechanical_nearby">Nijedna stanica u blizini trenutno nema klasični bicikl. Zatražite bilo koji bicikl ili pokušajte ponovo kasnije.</string>
     <string name="journey_no_electric_nearby">Nijedna stanica u blizini trenutno nema električni bicikl. Zatražite bilo koji bicikl ili pokušajte ponovo kasnije.</string>
     <string name="journey_no_dock_nearby">Nema stanice sa slobodnim mjestom blizu odredišta. Pokušajte ponovo kasnije ili odaberite drugo odredište.</string>
     <string name="journey_no_route">Nema prohodne rute između ove dvije tačke.</string>
-    <string name="journey_graph_missing">Podaci za rute nisu instalirani. Dodajte ih sa ekrana za pohranu.</string>
+    <string name="journey_graph_missing">Podaci za rute nisu instalirani. Dodajte ih s ekrana za pohranu.</string>
     <string name="journey_outside_coverage">Ova tačka je izvan područja koje pokrivaju instalirani podaci.</string>
     <string name="journey_no_stations">Nije poznata nijedna stanica. Osvježite listu stanica, pa pokušajte ponovo.</string>
 
@@ -387,9 +394,11 @@
     <string name="address_search_title">Pretraga adrese</string>
     <!-- The order Bosnia and Herzegovina writes an address in: street, then
          number, then town (Zmaja od Bosne 4, Sarajevo). No postcode is
-         invited — the parser gives a number up as soon as a second one turns
-         up, and an address that already carries a house number would lose it
-         (SPEC §4.3). -->
+         invited, and not because one would break the parse: `parseQuery`
+         strips a five-digit group before it looks for a house number
+         (`AddressQuery.kt:87`), which is exactly what 71000 or 78000 is. It is
+         left out because the prompt is a hint in a narrow field and the parser
+         discards it anyway (SPEC §4.3). -->
     <string name="address_search_hint">Ulica, broj, mjesto</string>
     <string name="address_search_clear">Obriši pretragu</string>
     <string name="address_search_privacy">Sve se pretražuje na uređaju. Ništa se ne šalje, čak ni dok kucate.</string>
@@ -401,15 +410,15 @@
     <!-- "Stations" here means railway stations, not the bike-share ones, and
          Bosnian says so in as many words so that `stanica` keeps one meaning
          in the whole file. -->
-    <string name="address_search_prompt_message">Upišite naziv ulice, sa brojem ili bez njega. Mogu se tražiti i željezničke stanice, univerziteti i glavni trgovi.</string>
+    <string name="address_search_prompt_message">Upišite naziv ulice, s brojem ili bez njega. Mogu se tražiti i željezničke stanice, univerziteti i glavni trgovi.</string>
     <!-- Shown while a search runs and the screen has nothing else to show. It
          says nothing about the outcome, which is the whole point. -->
     <string name="address_searching_title">Pretraživanje…</string>
     <string name="address_searching_message">Pretražuju se adrese instalirane na ovom uređaju.</string>
     <string name="address_no_match_title">Nema pronađenih adresa</string>
-    <string name="address_no_match_message">Ništa ne odgovara upitu „%1$s“. Pokušajte samo sa nazivom ulice ili dodajte mjesto.</string>
+    <string name="address_no_match_message">Ništa ne odgovara upitu „%1$s“. Pokušajte samo s nazivom ulice ili dodajte mjesto.</string>
     <string name="address_needs_index_title">Za pretragu je potreban indeks adresa</string>
-    <string name="address_needs_index_message">Instalirajte indeks sa ekrana za pohranu. Ostaje na uređaju i nikada ne izlazi na mrežu.</string>
+    <string name="address_needs_index_message">Instalirajte indeks s ekrana za pohranu. Ostaje na uređaju i nikada ne izlazi na mrežu.</string>
     <string name="address_unreadable_title">Indeks adresa nije čitljiv</string>
     <string name="map_picked_place_description">%1$s. Dodirnite da biste obrisali ovu tačku.</string>
 
@@ -472,10 +481,10 @@
     <string name="city_here_body">%1$s pokriva područje u kojem se nalazite. Instalirajte podatke te mreže da biste vidjeli njene stanice i ovdje računali putovanja.</string>
     <string name="city_here_installed_body">%1$s pokriva područje u kojem se nalazite, a podaci te mreže su već na uređaju.</string>
     <string name="city_here_install">Instaliraj njene podatke</string>
-    <string name="city_here_use">Koristi je</string>
-    <string name="city_proposal_body">Izgleda da se nalazite u području koje pokriva %1$s. Idemo sa tim?</string>
+    <string name="city_here_use">Koristi ovu mrežu</string>
+    <string name="city_proposal_body">Izgleda da se nalazite u području koje pokriva %1$s. Idemo s tim?</string>
     <string name="city_proposal_accept">Da</string>
-    <string name="city_none_nearby">Nema poznate mreže u blizini. Odaberite grad sa liste.</string>
+    <string name="city_none_nearby">Nema poznate mreže u blizini. Odaberite grad s liste.</string>
     <string name="action_cancel">Otkaži</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -503,7 +512,7 @@
     <string name="storage_download_pending">Preuzmi %1$s</string>
     <string name="storage_downloading">%1$s · %2$s od %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
-    <string name="storage_wifi_warning">Niste na Wi-Fiju. Ovo preuzimanje može znatno opteretiti mobilni paket.</string>
+    <string name="storage_wifi_warning">Niste na WiFi-ju. Ovo preuzimanje može znatno opteretiti mobilni paket.</string>
     <string name="dataset_update_available">Dostupno je ažuriranje</string>
 
     <string name="dataset_absent">Nije instalirano</string>
@@ -511,7 +520,7 @@
     <string name="dataset_import">Uvezi</string>
     <string name="dataset_replace">Zamijeni</string>
     <string name="dataset_delete">Izbriši</string>
-    <string name="dataset_delete_description">Izbriši %1$s</string>
+    <string name="dataset_delete_description">Izbriši: %1$s</string>
     <string name="dataset_delete_title">Izbrisati ove podatke?</string>
     <!-- %1$s is the dataset's name, %2$s the space it frees. A dataset's name
          is a masculine plural in two cases and a masculine singular in the
@@ -526,11 +535,11 @@
     <string name="dataset_rejected_checksum">Fajl ne odgovara svojoj kontrolnoj sumi: nepotpun je ili oštećen. Preuzmite ga ponovo.</string>
     <string name="dataset_rejected_transfer">Kopiranje fajla nije uspjelo. Provjerite slobodan prostor i pokušajte ponovo.</string>
 
-    <string name="error_offline">Nema veze. Posljednja poznata dostupnost ostaje na ekranu.</string>
+    <string name="error_offline">Niste povezani s mrežom. Posljednja poznata dostupnost ostaje na ekranu.</string>
     <!-- The same failures read on the storage screen, where a dataset transfer
          failed rather than an availability refresh. Those files come down
          resumably (SPEC §4.4), which is what each of these says. -->
-    <string name="error_offline_download">Nema veze. Preuzimanje se nastavlja tamo gdje je stalo.</string>
+    <string name="error_offline_download">Niste povezani s mrežom. Preuzimanje se nastavlja tamo gdje je stalo.</string>
     <string name="error_timeout_download">Server ne odgovara. Preuzimanje se nastavlja tamo gdje je stalo.</string>
     <!-- %1$d is the HTTP code the server returned. -->
     <string name="error_server_refused_download">Greška servera (%1$d). Preuzimanje se nastavlja tamo gdje je stalo.</string>
@@ -539,30 +548,30 @@
     <string name="error_local_storage_download">Fajl nije sačuvan. Oslobodite prostor i preuzimanje se nastavlja.</string>
     <string name="error_timeout">Serveru mreže treba predugo da odgovori. Pokušajte ponovo za koji trenutak.</string>
     <string name="error_server_refused">Server mreže je vratio grešku (%1$d). Pokušajte ponovo kasnije.</string>
-    <string name="error_untrusted_server">Server mreže je predstavio nevažeći sigurnosni certifikat. Njegovi podaci se ne mogu sigurno preuzeti dok ga operater ne obnovi.</string>
+    <string name="error_untrusted_server">Server mreže je ponudio nevažeći sigurnosni certifikat. Njegovi podaci se ne mogu sigurno preuzeti dok ga operater ne obnovi.</string>
     <string name="error_malformed">Primljeni podaci nisu čitljivi. Za to je kriv kanal podataka mreže; pokušajte ponovo kasnije.</string>
     <string name="error_feed_unavailable">Mreža ne objavljuje kanal podataka „%1$s“.</string>
     <string name="error_unsupported_version">Ova mreža objavljuje svoje podatke u verziji %1$s, koju ova verzija aplikacije ne može čitati. Ažurirajte aplikaciju.</string>
     <string name="error_local_storage">Nije moguće pročitati podatke pohranjene na uređaju.</string>
-    <string name="error_no_city_chosen">Nije odabran nijedan grad. Odaberite jedan.</string>
+    <string name="error_no_city_chosen">Nije odabran nijedan grad. Odaberite ga.</string>
 
     <!-- Unmetered-only downloads. The setting names what is billed rather than
          Wi-Fi, following the lexicon's `S naplatom` / `Bez naplate`. -->
     <string name="download_unmetered_only">Preuzimaj samo na vezi bez naplate</string>
-    <string name="download_unmetered_only_description">Obično Wi-Fi. Dijeljena veza sa telefona ili pristupna tačka sa ograničenjem naplaćuje se po megabajtu i računa se kao mobilni podaci.</string>
+    <string name="download_unmetered_only_description">Obično WiFi. Dijeljena veza s telefona ili pristupna tačka s ograničenjem naplaćuje se po megabajtu i računa se kao mobilni podaci.</string>
     <string name="download_held_back_title">Preuzimanje je zadržano</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Ova veza se naplaćuje po megabajtu. Povežite se na Wi-Fi da biste preuzeli %1$s ili svejedno preuzmite sada.</string>
+    <string name="download_held_back_body">Ova veza se naplaćuje po megabajtu. Povežite se s WiFi-jem da biste preuzeli %1$s ili svejedno preuzmite sada.</string>
     <string name="download_stopped_title">Preuzimanje je zaustavljeno</string>
     <!-- %1$s is a size. What has already arrived is kept on the device and the
          transfer picks up from there. -->
-    <string name="download_stopped_body">Ova veza se sada naplaćuje po megabajtu, pa je preuzimanje zaustavljeno. Ono što je stiglo je sačuvano. Povežite se na Wi-Fi da biste dovršili %1$s ili svejedno nastavite sada.</string>
+    <string name="download_stopped_body">Ova veza se sada naplaćuje po megabajtu, pa je preuzimanje zaustavljeno. Ono što je stiglo ostaje sačuvano. Povežite se s WiFi-jem da biste dovršili %1$s ili svejedno nastavite sada.</string>
     <string name="download_anyway">Preuzmi svejedno</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_waiting_for_unmetered">Čeka se veza bez naplate za preuzimanje %1$s.</string>
     <string name="download_can_resume">Ova veza se više ne naplaćuje. Pokrenite preuzimanje ponovo: nastavlja se tamo gdje je stalo.</string>
 
-    <string name="settings_opening_title">Aplikacija se po zadanom otvara na</string>
+    <string name="settings_opening_title">Zadani ekran pri otvaranju</string>
     <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_opening_description">Ekran na kojem se aplikacija otvara</string>
     <string name="settings_opening_map">Karta</string>

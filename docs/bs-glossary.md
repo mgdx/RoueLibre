@@ -70,6 +70,27 @@ plural, because they are sentences: *pa pokušajte ponovo*
 `dataset_rejected_transfer`), which is also what
 `android:lockscreen_password_wrong` writes.
 
+**The preposition is *s*, not *sa*.** This is not a Bosnian marker but an
+orthographic rule the three standards share: *sa* stands only before a word
+beginning with *s*, *š*, *z* or *ž*, before *mnom*, and before an abbreviation
+read out letter by letter. The lexicon bears it out — 60 bare *s* against 15
+*sa*, and every one of those fifteen is before a sibilant or a spelled-out
+abbreviation (*sa slušnim*, *sa serverom*, *sa SIM*, *sa SD*). So this file
+writes *s ekrana za pohranu*, *s biciklom*, *s brojem*, *s liste*, *s telefona*,
+*Idemo s tim?* — and keeps *sa* in the two places the rule asks for it,
+`journey_no_dock_nearby` (*sa slobodnim mjestom*) and the store text's *sa
+svakom GBFS mrežom*. The first draft of this file wrote *sa* in all thirteen
+places and contradicted itself between a string and a changelog; if a `sa`
+turns up in front of anything but a sibilant, it is a mistake.
+
+**Wi-Fi is spelled *WiFi* and declines with a hyphen**, which is what the
+lexicon does throughout: *Povežite se s WiFi-jem prije potpunog brisanja*
+(`settings:wifi_warning_dialog_title`), *putem WiFi-ja*
+(`android:wfc_mode_wifi_preferred_summary`), *upravlja WiFi-jem*
+(`settings:change_wifi_state_app_detail_switch`). The two `download_*` bodies
+therefore say *Povežite se s WiFi-jem*, not *na Wi-Fi*: the system governs this
+phrase with *s* and the instrumental, and the reader has met it there.
+
 Quotation marks are **„ … “**. Diacritics are written in full — **č ć ž š đ** —
 and never approximated by their bare letters. The dash that breaks a sentence
 is **–** with a space on either side, not the em dash the English file uses;
@@ -127,12 +148,36 @@ sati*), and so does *sekunda*.
 | tiles (map) | **pločice** | `map_needs_tiles_title`. `settings:quick_settings_developer_tiles` = *Pločice programera za brze postavke*. |
 | metered / unmetered | **s naplatom / bez naplate** | The five `download_*` strings name what is billed rather than Wi-Fi, and use the system's own pair: `settings:wifi_metered_label` = *S naplatom*, `settings:wifitrackerlib_wifi_unmetered_label` = *Bez naplate*. |
 | Out of service | **Ne radi** | `settings:radioInfo_service_out`. |
+| No connection | **Niste povezani s mrežom** | `settings:mobile_data_no_connection`, used verbatim to open `error_offline` and `error_offline_download`. Emphatically **not** *Nema veze*, which is first of all the idiom for "never mind, it doesn't matter" — at the head of an error message it tells the reader the opposite of what the line means. |
 | just now | **upravo sad** | `settings:time_unit_just_now` is *Upravo*, which stands alone there; here the words are swallowed by *Ažurirano %1$s*, and *Ažurirano upravo* does not close. *Sad* is added for that, and nothing else changes. |
 | In use | **U upotrebi** | `android:media_route_status_in_use`. |
 | Update available | **Dostupno je ažuriranje** | `settings:android_version_pending_update_summary`. |
 | browser | **preglednik** | `android:keyboard_shortcut_group_applications_browser`, `settings:default_browser_title`. |
 | Open by default | **Zadano otvaranje** | `settings:auto_launch_label`, quoted verbatim inside `about_links_body` because the reader has to find that row in Settings. *Dodajte link* on the same line is `settings:app_launch_add_link`, plural because that is how the system writes it. |
 | Settings / Display / Storage / Privacy / System / Language / Licence / Version | **Postavke / Prikaz / Pohrana / Privatnost / Sistem / Jezik / Licenca / Verzija** | All from the lexicon: `android:global_action_settings`, `settings:display_category_title`, `settings:storage_category`, `settings:lock_screen_notifications_title`, `android:default_audio_route_category_name`, `settings:app_locale_preference_title`, `settings:license_title`, `settings:vpn_version`. *Prikaz* rather than *Ekran* for `settings_section_display`, because the lexicon's *Prikaz* is itself a settings category title where *Ekran* names the hardware. |
+
+## Two rules that are not about single words
+
+**`Prikaži` shows something the application already has; `Pogledaj` sends the
+reader off to read something.** English uses "See", "Show" and "View" loosely
+across these, so the split is ours and it needs writing down or the next
+contributor will flatten it. *Prikaži* is the lexicon's word for revealing a
+surface (`settings:condition_expand_show`) and takes `map_open_list`,
+`favourites_open`, `stations_open_map`, `journey_frame`, `incoming_show_me` —
+each of which swaps what is on screen. *Pogledaj* takes the two that hand the
+reader a text to read rather than a view to look at: `whats_new_open` and
+`about_open_repository`, the second of which leaves the application entirely.
+
+**`bikes_mechanical` and `bikes_electric` take the indefinite adjective in
+`one`, and this is a deliberate departure from the map filter's labels.** The
+filter says *Klasični* / *Električni*, definite, because there the word is a
+nominalised category label — "the mechanical ones". The counting plurals sit
+somewhere else grammatically: the noun is elided and a bare figure stands in
+front, which is the indefinite's position. So *1 klasičan · 3 električna*, and
+not *1 klasični*, which would read as "the classic one" pointing at a bike the
+reader is supposed to already know. Only `one` distinguishes the two — *2
+klasična* and *5 klasičnih* are shared — so this is a two-item exception and
+not a general disagreement with the filter.
 
 ## The English is impersonal, and so is the Bosnian
 
@@ -165,6 +210,8 @@ So these lines are written around that rather than against it:
 | `station_address_nearby` | *Blizu: %1$s* | *Blizu* also governs the genitive, and the argument is a street **or** a square, reaching the line as it stands. A colon turns it into a label, which declines nothing. |
 | `dataset_imported`, `dataset_deleted` | *Instalirano: %1$s* | A dataset's name is a masculine plural in two cases (*Podaci karte*, *Podaci za rute*) and a masculine singular in the third (*Indeks adresa*), so no participle agrees with all three. |
 | `city_here_body`, `city_here_installed_body` | *%1$s pokriva područje u kojem se nalazite. Instalirajte podatke te mreže…* | The placeholder opens the sentence as the **subject**, in the nominative it arrived in, and *te mreže* carries the case the rest needs. Subject-first also settles which of the two nouns covers which, where *Područje … pokriva %1$s* could be read either way round. |
+| `dataset_delete_description` | *Izbriši: %1$s* | Spoken by TalkBack on the delete button (`DatasetAdapter.kt:79`), handed the same dataset name. A bare *Izbriši %1$s* asks the name for an accusative it cannot take — *Izbriši Podaci karte* — so the colon does the work here exactly as it does in `city_delete_description`. |
+| `city_here_use` | *Koristi ovu mrežu* | It read *Koristi je* at first. The only feminine antecedent is *mreže*, eight words back in an adnominal genitive, while the **subject** of the sentence above is `%1$s`, whose gender nobody can predict — a network label may be *Vélib’*, *nextbike*, *Bicikelj*. Naming the noun costs two words and removes the guess. |
 | `city_proposal_body`, `map_outside_city_message` | *…područja koje pokriva %1$s* | Same placeholder, inside a relative clause this time: *koje* is the accusative object and `%1$s` the nominative subject, so again nothing is asked of the name. |
 
 ### The three lines that must not say "grad"
@@ -191,11 +238,15 @@ Bosne 4, Sarajevo*). `AddressQuery.parseQuery` has read a house number standing
 between the street and the town since the pilot, precisely so that each
 language may write this line in its own order rather than in English's.
 
-No postcode is invited. The country's is five digits and would qualify under
-the rule in `SPEC.md` §4.3, but the parser gives a number up as soon as the
-query holds a second one — and a Bosnian address that already carries a house
-number would then lose it. Street, number, town is what the parser reads best
-and what the prompt therefore asks for.
+No postcode is invited, and the reason is not the one it is easy to assume.
+The parser does **not** choke on a second number here: `parseQuery` strips a
+five-digit group out of the words *before* it goes looking for a house number
+(`AddressQuery.kt:87-88`, `looksLikePostcode`), and a Bosnian postcode — 71000,
+78000 — is exactly a five-digit group. So *Zmaja od Bosne 4 71000 Sarajevo*
+parses fine. The postcode is left out of the prompt because the prompt is a
+hint sitting in a narrow field, and inviting something the parser throws away
+buys the reader nothing. Street, number, town is what the field has room for
+and what the index actually matches on.
 
 **The order a result is printed in is a separate matter and is not this file's
 to decide.** It belongs to the country the address is in, not to the reader's
