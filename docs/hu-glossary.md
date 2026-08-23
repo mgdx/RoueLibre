@@ -87,8 +87,8 @@ Six devices carry the whole weight, and each is worth knowing before it gets
 |---|---|---|
 | `journey_step_to_station`, `journey_step_ride` | `Gyaloglás az állomásig: %1$s` | The case falls on *állomás*, a noun this file owns, so *az* is fixed. The station's name follows behind a colon, exactly as the feed published it. |
 | `station_address_nearby` | `A közelben: %1$s` | The argument is `address.streetName` — a street **or** a square, arriving as it stands. A colon turns the line into a label, which declines nothing. |
-| `city_delete_description`, `city_deleted`, `dataset_delete_description`, `dataset_imported`, `dataset_deleted`, `storage_download_pending` | `Adatok törlése: %1$s`, `Letöltés: %1$s`, `Telepítve: %1$s` | Content descriptions, snackbars and buttons, where a label with a colon is shorter and reads better than a sentence — and takes neither article nor ending. Dataset names decide their own article too: *a térképadatok*, but *az útvonaladatok*. |
-| `map_outside_city_message`, `map_outside_city_brief`, `city_here_body`, `city_here_installed_body`, `city_proposal_body` | `… A kiszolgált hálózat: %1$s.`, `Ezt a területet másik hálózat szolgálja ki: %1$s.` | The ending falls on *hálózat* / *terület*; the whole label — *MOL Bubi – Budapest* — sits behind the colon in apposition. The English puts the label in subject position, which Hungarian cannot do without an article. |
+| `city_delete_description`, `city_deleted`, `city_proposal_body`, `dataset_delete_description`, `dataset_imported`, `dataset_deleted`, `storage_download_pending` | `Adatok törlése: %1$s`, `Letöltés: %1$s`, `Telepítve: %1$s` | Content descriptions, snackbars and buttons, where a label with a colon is shorter and reads better than a sentence — and takes neither article nor ending. Dataset names decide their own article too: *a térképadatok*, but *az útvonaladatok*. |
+| `map_outside_city_message`, `map_outside_city_brief`, `city_here_body`, `city_here_installed_body` | `A pozíciód kívül esik azon a területen, amelyet a kiszolgált hálózat lefed: %1$s.`, `Ezt a területet ez a hálózat szolgálja ki: %1$s.` | These four are handed `cityLabel(...)`, a whole label — *MOL Bubi – Budapest*. A demonstrative opens the sentence, the ending falls on *területen* / *hálózat*, and the label sits behind the colon. The English puts it in subject position, which Hungarian cannot do without an article. |
 | `journey_climb`, `journey_detail_profile_description`, `download_held_back_body`, `download_stopped_body`, `download_waiting_for_unmetered` | `%1$s szintemelkedés`, `A letöltés mérete: %1$s.` | A distance or a size is a **unit symbol**, and each symbol takes a different ending: *m-t*, *ft-ot*, *mi-t*, *km-t*. None of them is ever declined here — the figure stands before a bare noun, or behind a colon. |
 | `dataset_rejected_version` | `A fájl formátumverziója %1$d, … pedig %2$d formátumverziót olvas.` | No article stands in front of either figure: it would be *az 1*, *a 2*, *az 5*, *a 6* — decided by a number this file cannot see. |
 
@@ -98,13 +98,19 @@ placeholder, because the article agrees with what is inside the quotation
 marks. It reads **`Ennek a hálózatnak minden offline adata törlődik: %1$s.`**
 instead: a demonstrative, which is fixed, and the name behind a colon.
 
-**`city_delete_description`, `city_delete_body` and `city_deleted` are handed
-the NETWORK's name, not the city's** — `CityAdapter.kt:111`,
-`CityFragment.kt:279` and `:294` all pass `city.displayName`, and 328 of the
-331 catalogue entries carry a `displayName` of their own; every Czech network
-is called *nextbike*. Writing *a %1$s város adatai* would have made a Brno
-reader read "the data of the city nextbike". None of the three says *város*,
-and the English never does either.
+**`city_delete_description`, `city_delete_body`, `city_deleted` and
+`city_proposal_body` are handed the NETWORK's name, not the city's** —
+`CityAdapter.kt:111`, `CityFragment.kt:279`, `:294` and `:240` all pass
+`city.displayName` on its own, and 328 of the 331 catalogue entries carry a
+`displayName` of their own; every Czech network is called *nextbike*. Writing
+*a %1$s város adatai* would have made a Brno reader read "the data of the city
+nextbike". None of the four says *város*, and the English never does either.
+
+Do not confuse them with `city_here_body`, `city_here_installed_body`,
+`map_outside_city_message` and `map_outside_city_brief`, which get
+`cityLabel(...)` — network *and* city — from `MainActivity.kt:549`,
+`MapFragment.kt:884`, `:868`, `:878` and `JourneyResultFragment.kt:603`.
+Neither group may borrow the other's wording.
 
 ## The address prompt
 
@@ -160,7 +166,7 @@ separators follow the reader (SPEC §9).
 | free space (of the device) | **tárhely** | `dataset_rejected_transfer`, `error_local_storage_download`. **This is the one place the file departs from the entry above it**: writing *szabad hely* there would have said "free dock" on a screen about disk space. Android's own word is *Tárhely* (`settings:storage_label`), and it is used for the storage screen's title too. |
 | bike, mechanical | **hagyományos** | *Hagyományos* against *elektromos* is what Hungarian bike-share operators write. *Mechanikus* is an engineering word and reads as machinery, not as a bicycle without a motor. |
 | bike, electric | **elektromos** | Pedal-assist, not a moped, which `journey_bike_kind_electric_description` says: *Pedálrásegítéses kerékpár*. |
-| pace (walking) | **tempó** | A pace is not a speed: `values/strings.xml` says so above the string, and *gyaloglási sebesség* would have said the opposite. |
+| pace (walking) | **tempó**; brisk = **élénk** | A pace is not a speed: `values/strings.xml` says so above the string, and *gyaloglási sebesség* would have said the opposite. *Élénk* and not *fürge* for the third setting: *fürge* describes a person's agility, where *élénk tempó* is the pace itself — which is the distinction the string is there to keep. |
 | Delete / Remove | **Törlés** / **Eltávolítás** | Two words, and Android itself keeps them apart: *Törlés* (`android:delete`) destroys, *Eltávolítás* (`settings:remove`) takes out of a list — which is what `station_favourite_remove` does to a favourite. |
 | Clear | **törlés** (of a search field) | *Keresés törlése*, emptying a field. Android uses *Törlés* for this too (`settings:clear`). |
 | Try again | **Újrapróbálkozás** (button), **próbáld újra** (prose) | Both from the lexicon: `settings:security_settings_fingerprint_enroll_dialog_try_again` and `android:lockscreen_pattern_wrong`, the latter turned to *tegezés*. |

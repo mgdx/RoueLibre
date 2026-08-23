@@ -157,17 +157,17 @@
     <string name="action_refresh">Frissítés</string>
     <string name="action_retry">Újrapróbálkozás</string>
 
-    <string name="map_open_list">Az állomások listája</string>
+    <string name="map_open_list">Az állomáslista megtekintése</string>
     <string name="map_attribution">© OpenStreetMap-közreműködők</string>
-    <string name="map_locate_me">Helymeghatározás</string>
+    <string name="map_locate_me">A pozícióm megkeresése</string>
     <string name="map_location_denied">Helyadatok nélkül a térképen vagy cím alapján válaszd ki a kiindulópontot.</string>
     <string name="map_location_unavailable">A pozíció nem érhető el. Ellenőrizd, hogy be van-e kapcsolva a helymeghatározás, majd próbáld újra.</string>
     <string name="map_outside_city_title">Máshol vagy</string>
     <!-- %1$s is a whole label — network and city, „MOL Bubi – Budapest”. It
          stands behind a colon, in apposition: it takes no article and no case
          ending, both of which the name itself would decide. -->
-    <string name="map_outside_city_message">A pozíciód a lefedett területen kívül esik, ezért ez a térkép nem tudja megmutatni. A kiszolgált hálózat: %1$s. Válaszd ki azt a várost, amelyben vagy, hogy lásd az állomásait.</string>
-    <string name="map_outside_city_brief">A pozíciód a lefedett területen kívül esik. A kiszolgált hálózat: %1$s.</string>
+    <string name="map_outside_city_message">A pozíciód kívül esik azon a területen, amelyet a kiszolgált hálózat lefed: %1$s. Ez a térkép ezért nem tudja megmutatni. Válaszd ki azt a várost, amelyben vagy, hogy lásd az állomásait.</string>
+    <string name="map_outside_city_brief">A pozíciód kívül esik azon a területen, amelyet a kiszolgált hálózat lefed: %1$s.</string>
     <!-- The dataset is called *térképadatok* on every screen, so this title
          names it that rather than introducing *csempe* in one place. -->
     <string name="map_needs_tiles_title">A térképhez offline adatok kellenek</string>
@@ -229,7 +229,7 @@
     <string name="settings_walking_pace_title">Gyaloglási tempó</string>
     <string name="settings_walking_pace_slow">Lassú</string>
     <string name="settings_walking_pace_normal">Normál</string>
-    <string name="settings_walking_pace_brisk">Fürge</string>
+    <string name="settings_walking_pace_brisk">Élénk</string>
     <string name="settings_walking_pace_description">Ezzel a tempóval készülnek az útvonalterv gyalogos szakaszai</string>
 
     <string name="settings_theme_title">Téma</string>
@@ -459,7 +459,7 @@
         <item quantity="other">%1$d állomás · a méret a letöltés előtt kiderül</item>
     </plurals>
     <string name="city_size_unknown">A méret a letöltés előtt kiderül</string>
-    <string name="city_installed">%1$s telepítve az eszközre</string>
+    <string name="city_installed">%1$s telepítve az eszközön</string>
     <!-- Network, then city. The dash is the Hungarian – with a space on either
          side, not the em dash the English file uses. -->
     <string name="city_label">%1$s – %2$s</string>
@@ -482,10 +482,12 @@
     <!-- Shown when the position says one is in another served conurbation than
          the one installed. %1$s is a whole label, network and city. -->
     <string name="city_here_title">Másik városban vagy</string>
-    <string name="city_here_body">Ezt a területet másik hálózat szolgálja ki: %1$s. Telepítsd az adatait, hogy lásd az állomásait, és itt is tervezhess útvonalat.</string>
-    <string name="city_here_installed_body">Ezt a területet másik hálózat szolgálja ki: %1$s. Az adatai már az eszközön vannak.</string>
+    <string name="city_here_body">Ezt a területet ez a hálózat szolgálja ki: %1$s. Telepítsd az adatait, hogy lásd az állomásait, és itt is tervezhess útvonalat.</string>
+    <string name="city_here_installed_body">Ezt a területet ez a hálózat szolgálja ki: %1$s. Az adatai már az eszközön vannak.</string>
     <string name="city_here_install">Az adatainak telepítése</string>
     <string name="city_here_use">Használat</string>
+    <!-- Unlike the two above, this one is handed `city.displayName` alone —
+         `CityFragment.kt:240` — so it is a NETWORK name, not a label. -->
     <string name="city_proposal_body">Úgy tűnik, olyan területen vagy, amelyet ez a hálózat fed le: %1$s. Legyen ez a beállított város?</string>
     <string name="city_proposal_accept">Igen</string>
     <string name="city_none_nearby">A közelben nincs ismert hálózat. Válassz egy várost a listából.</string>
@@ -555,7 +557,7 @@
     <string name="error_untrusted_server_download">Érvénytelen biztonsági tanúsítvány. A letöltés a tanúsítvány megújítása után folytatódik.</string>
     <string name="error_malformed_download">Olvashatatlan fájl érkezett. A letöltés ott folytatódik, ahol abbamaradt.</string>
     <string name="error_local_storage_download">A fájlt nem sikerült menteni. Szabadíts fel tárhelyet, és a letöltés folytatódik.</string>
-    <string name="error_timeout">A hálózat szervere túl sokáig válaszol. Próbáld újra kis idő múlva.</string>
+    <string name="error_timeout">A hálózat szervere túl sokáig nem válaszol. Próbáld újra kis idő múlva.</string>
     <string name="error_server_refused">A hálózat szervere hibát adott vissza (%1$d). Próbáld újra később.</string>
     <string name="error_untrusted_server">A hálózat szervere érvénytelen biztonsági tanúsítványt mutatott be. Az adatai addig nem kérhetők le biztonságosan, amíg az üzemeltető meg nem újítja.</string>
     <string name="error_malformed">A kapott adatok olvashatatlanok. A hiba a hálózat adatfolyamában van; próbáld újra később.</string>
@@ -580,7 +582,7 @@
     <string name="download_stopped_body">Ez a kapcsolat mostantól megabájtonként fizetős, ezért a letöltés leállt. Ami megérkezett, megmarad. A letöltés mérete: %1$s. Csatlakozz Wi-Fi-hez a befejezéshez, vagy folytasd most mégis.</string>
     <string name="download_anyway">Letöltés mégis</string>
     <!-- %1$s is a size, „340 MB” for instance. -->
-    <string name="download_waiting_for_unmetered">Várakozás nem forgalomkorlátos kapcsolatra. A letöltés mérete: %1$s.</string>
+    <string name="download_waiting_for_unmetered">Várakozás nem forgalomkorlátos kapcsolatra ehhez a letöltéshez: %1$s.</string>
     <string name="download_can_resume">Ez a kapcsolat már nem fizetős. Indítsd el újra a letöltést: ott folytatódik, ahol abbamaradt.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
@@ -598,7 +600,7 @@
     <string name="settings_map_filters_hide_out_of_service">A nem működő állomások elrejtése</string>
     <!-- One wording for both modes: this screen knows nothing of the map's
          Kerékpárok / Szabad helyek button, so it may name neither. -->
-    <string name="settings_map_filters_hide_empty">Azoknak az állomásoknak az elrejtése, amelyek semmit nem kínálnak</string>
+    <string name="settings_map_filters_hide_empty">A semmit nem kínáló állomások elrejtése</string>
     <!-- Under the switch, saying what „semmi” is read against. -->
     <string name="settings_map_filters_hide_empty_hint">A „semmi” ahhoz igazodik, amit a térkép éppen számol: nincs kerékpár, amíg kerékpárokat számol, és nincs szabad hely, amíg szabad helyeket.</string>
     <!-- Under both switches. The most important rule of the two filters, and
