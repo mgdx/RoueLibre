@@ -30,7 +30,9 @@
         megabytes" — so does this file.
 
     Plurals: Arabic distinguishes six categories — `zero`, `one`, `two`,
-    `few` (3–10), `many` (11–99) and `other`. The numeral is always written
+    `few` (n % 100 = 3–10), `many` (n % 100 = 11–99) and `other` (all the
+    rest: 100, 101, 102, 200…). The rules are **modulo a hundred**, so 306
+    falls in `few` and 143 in `many`. The numeral is always written
     here, and with a numeral in front of it the noun takes three shapes and
     not six: the plural after `few`, the accusative singular after `many`, and
     the plain singular after `zero`, `one` and `other`. Those three therefore
@@ -109,13 +111,16 @@
          both say an unknown count reads as the plural — so it carries the
          plural and not the singular. And on a list row the label is stacked
          under the figure, set in `TextAppearance.RoueLibre.Label`, and read
-         as a word standing on its own: so `many` is written bare, without
+         as a word standing on its own. So `many` is written bare, without
          the accusative tanwin the same word carries in `bikes_available`
-         where the numeral really is beside it. -->
+         where the numeral really is beside it — and `two` drops the dual for
+         the same reason, the dual being the strongest numeral agreement of
+         all: it says "two" itself, and `دراجتان` stacked under a ٢ repeats
+         the figure instead of naming the thing counted. -->
     <plurals name="counterpart_bikes" tools:ignore="ImpliedQuantity">
         <item quantity="zero">دراجات</item>
         <item quantity="one">دراجة</item>
-        <item quantity="two">دراجتان</item>
+        <item quantity="two">دراجات</item>
         <item quantity="few">دراجات</item>
         <item quantity="many">دراجة</item>
         <item quantity="other">دراجة</item>
@@ -123,7 +128,7 @@
     <plurals name="counterpart_docks" tools:ignore="ImpliedQuantity">
         <item quantity="zero">مواقف شاغرة</item>
         <item quantity="one">موقف شاغر</item>
-        <item quantity="two">موقفان شاغران</item>
+        <item quantity="two">مواقف شاغرة</item>
         <item quantity="few">مواقف شاغرة</item>
         <item quantity="many">موقف شاغر</item>
         <item quantity="other">موقف شاغر</item>
@@ -295,7 +300,7 @@
     <string name="about_licence_title">الترخيص</string>
     <string name="about_licence_body">&#x200F;Roue Libre برنامج حرّ، صادر بموجب رخصة GNU GPL الإصدار الثالث. لك أن تستخدمه وتدرسه وتعدّله وتنقله إلى غيرك.</string>
     <string name="about_open_repository">عرض الشيفرة المصدرية</string>
-    <string name="about_open_sources">المصادر مدينةً مدينة</string>
+    <string name="about_open_sources">المصادر مدينةً مدينةً</string>
     <string name="about_open_licences">تراخيص المكوّنات</string>
 
     <string name="sources_title">مصادر البيانات</string>
@@ -385,13 +390,15 @@
 
     <!-- Durations. Neither is a plural in the source, which writes "min" and
          "h" and so needs no agreement; Arabic writes the word, and the word
-         agrees. The second keeps the source's shape and its padding — `س` is
-         CLDR's abbreviation for the hour — and so asks for no agreement
-         either. The first cannot: it takes the singular, which is right from
+         agrees. The second keeps the source's shape and its padding and
+         names no unit at all: `س` was tried and dropped, Android's own Arabic
+         already using it for the year (`mtrl_picker_text_input_year_abbr`),
+         which is the argument that ruled out `د` for the minute. The first
+         cannot do the same: it takes the singular, which is right from
          eleven minutes up and wrong from three to ten. `docs/ar-glossary.md`
          says why, and says that the repair is a <plurals> in `values/`. -->
     <string name="duration_minutes">&#x200F;%1$d دقيقة</string>
-    <string name="duration_hours_minutes">&#x200F;%1$d س %2$02d</string>
+    <string name="duration_hours_minutes">&#x200F;%1$d:%2$02d</string>
 
     <!-- The docking points a station holds, all of them. -->
     <plurals name="docks_total">
@@ -412,10 +419,13 @@
     <string name="station_no_navigation_app">لا يوجد تطبيق خرائط مثبّت على هذا الجهاز.</string>
 
     <string name="address_search_title">البحث عن عنوان</string>
-    <!-- Written in the order Arabic writes an address — street, then number,
-         then town — which `AddressQuery.parseQuery` reads (SPEC §4.3). It
-         invites one number and no postcode. -->
-    <string name="address_search_hint">الشارع، الرقم، المدينة</string>
+    <!-- Written in the order Arabic writes an address — number, then street,
+         then town — which `AddressQuery.parseQuery` reads first of the three
+         positions it knows (SPEC §4.3), and which is the order the results
+         under the field are laid out in, Arabic having no row of its own in
+         `AddressLayout` and falling on the default. It invites one number and
+         no postcode. -->
+    <string name="address_search_hint">الرقم، الشارع، المدينة</string>
     <string name="address_search_clear">محو البحث</string>
     <string name="address_search_privacy">يجري البحث كله على الجهاز. لا شيء يُرسل، ولا حتى أثناء الكتابة.</string>
     <string name="address_locality">&#x200F;%1$s %2$s</string>
@@ -536,7 +546,7 @@
     <string name="storage_wifi_warning">لست متصلاً بشبكة Wi-Fi. وقد يثقل هذا التنزيل على باقة الجوّال.</string>
     <string name="dataset_update_available">يتوفّر تحديث</string>
 
-    <string name="dataset_absent">غير مثبّتة</string>
+    <string name="dataset_absent">لم يتم التثبيت</string>
     <string name="dataset_installed">&#x200F;%1$s · %2$s</string>
     <string name="dataset_import">استيراد</string>
     <string name="dataset_replace">استبدال</string>
