@@ -11,9 +11,9 @@
 <p align="center">
   <a href="LICENSE"><img alt="Licence: GPLv3" src="https://img.shields.io/badge/licence-GPLv3-0F6E56?style=flat-square"></a>
   <img alt="Android 8.0 and later" src="https://img.shields.io/badge/Android-8.0%2B-0F6E56?style=flat-square">
-  <a href="docs/networks.md"><img alt="332 networks in 38 countries" src="https://img.shields.io/badge/networks-332%20in%2038%20countries-0F6E56?style=flat-square"></a>
+  <a href="docs/networks.md"><img alt="331 networks in 38 countries" src="https://img.shields.io/badge/networks-331%20in%2038%20countries-0F6E56?style=flat-square"></a>
   <img alt="No tracker" src="https://img.shields.io/badge/trackers-none-0F6E56?style=flat-square">
-  <img alt="APK: 9.3 MB" src="https://img.shields.io/badge/APK-9.3%20MB-0F6E56?style=flat-square">
+  <img alt="APK: 9.8 MB" src="https://img.shields.io/badge/APK-9.8%20MB-0F6E56?style=flat-square">
 </p>
 
 ## Description
@@ -43,7 +43,7 @@ but the live availability of the bikes runs on your phone.
 
 ## Features
 
-- 🚲 **332 bike-share networks in 38 countries**, 69,337 stations, from Vélib'
+- 🚲 **331 bike-share networks in 38 countries**, 69,329 stations, from Vélib'
   to Auch's ten, by way of New York, Montréal, Prague, Barcelona, Dubai, Buenos
   Aires and Pristina. No city is a default: the application proposes the one
   matching your position, measured on where its stations actually are, and you
@@ -68,7 +68,7 @@ but the live availability of the bikes runs on your phone.
   - the route follows the cycle ways;
   - the climb is counted and named, because a bike-share bike is heavy.
 
-- 🪶 **Light and frugal.** 9.3 MB of APK, no background service, Android 8 and
+- 🪶 **Light and frugal.** 9.8 MB of APK, no background service, Android 8 and
   later.
 
 - 🔒 **Private, and local.** Everything happens on the device:
@@ -133,7 +133,7 @@ It needs `osmium-tool`, `tippecanoe` and Python 3. The whole procedure, the
 sizes obtained and the way to add a network are in
 [`docs/offline-data.md`](docs/offline-data.md).
 
-The release APK weighs **9.28 MB on arm64-v8a** and 8.72 MB on armeabi-v7a,
+The release APK weighs **9.78 MB on arm64-v8a** and 9.21 MB on armeabi-v7a,
 map, routing, address search and journeys included, against a ceiling of 12 MB
 per architecture.
 
