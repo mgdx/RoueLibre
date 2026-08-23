@@ -358,9 +358,7 @@
     <string name="address_search_hint">Straat, huisnummer, plaats</string>
     <string name="address_search_clear">Zoekopdracht wissen</string>
     <string name="address_search_privacy">Alles wordt op het apparaat doorzocht. Er wordt niets verstuurd, ook niet terwijl je typt.</string>
-    <!-- Dutch writes "Damrak 12": the street first, the number after. The
-         placeholders are swapped for that, which is what they are positional
-         for. %1$s is the number, %2$s the street. -->
+    <!-- %1$s is a postcode, %2$s a municipality. -->
     <string name="address_locality">%1$s %2$s</string>
     <string name="address_detail">%1$s · %2$s</string>
     <string name="address_detail_approximate">%1$s · geschatte positie</string>

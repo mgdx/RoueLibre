@@ -1,0 +1,25 @@
+Roue Libre ukazuje stanice zdieľaných bicyklov na mape a počíta trasu od dverí k dverám, ktorá spája chôdzu a jazdu na bicykli.
+
+Všetko beží v zariadení: mapa, hľadanie adries aj výpočet trasy sa zaobídu úplne bez pripojenia. Do siete odchádza len dostupnosť bicyklov v reálnom čase.
+
+<b>Čím sa líši</b>
+
+• Žiadna služba Google: žiadne Play Services, žiadny Firebase, žiadne Maps SDK. Beží na akomkoľvek Androide bez služieb Google.
+• Žiadna telemetria, žiadny sledovací nástroj, žiadny jedinečný identifikátor, žiadny účet.
+• Neuchováva sa nič o vašich cestách: žiadna história, žiadne polohy, žiadne ciele. To, čo hľadáte, telefón neopustí.
+• Žiadne mesto nie je vnútené: v zariadení môže byť niekoľko aglomerácií vedľa seba a dáta jedného mesta možno odstrániť bez toho, aby sa to dotklo ostatných.
+• Trasa optimalizuje <i>dvojicu</i> staníc – východiskovú a cieľovú – namiesto toho, aby sa uspokojila s tou najbližšou, a zvažuje riziko, že sa zle zásobená stanica vyprázdni skôr, než k nej dôjdete.
+
+<b>Čo je dobré vedieť pred inštaláciou</b>
+
+Mapa, graf na výpočet trás a register adries nie sú súčasťou aplikácie: stiahnu sa raz z obrazovky úložiska, alebo sa ručne nainštalujú zo súborov, ktoré si vytvoríte sami. Ich veľkosť závisí od mesta – niekoľko desiatok megabajtov pri stredne veľkej aglomerácii, viac pri hlavnom meste – a oznámi sa pred stiahnutím.
+
+<b>Obsluhované mestá</b>
+
+Takmer tristo sietí v zhruba tridsiatich krajinách: každá, ktorá zverejňuje svoje stanice ako otvorené dáta a na ktorej stojany sa trasa môže spoľahnúť – od Vélib’ v Paríži po Citi Bike v New Yorku, cez Prahu, Barcelonu, Kodaň, Tokio a Buenos Aires. Aplikácia vám tú vašu navrhne podľa polohy, ak o to požiadate, a môžete mať nainštalovaných niekoľko miest a prepínať medzi nimi.
+
+Offline dátové sady sú zatiaľ vytvorené pre hŕstku z nich. Pri ostatných to aplikácia povie rovno, namiesto toho, aby predstierala: zoznam ukazuje, čo existuje, a súbory možno vytvoriť skriptami z repozitára.
+
+Nie je viazaná na žiadnu konkrétnu sieť: zoznam miest sa aktualizuje sám a každé mesto si nesie adresu svojho vlastného kanála GBFS, vďaka čomu je aplikácia použiteľná s akoukoľvek sieťou GBFS na svete.
+
+Slobodný softvér pod licenciou GNU GPL v3.
