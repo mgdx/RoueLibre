@@ -1,550 +1,741 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Italian — TO BE TRANSLATED.
+    Italian translation.
 
-    Every string below still holds its English text: this file is a starting
-    point, not a translation. Translate the contents of the tags, never their
-    `name` attribute, and read CONTRIBUTING.md first — placeholders keep their
-    number, plurals keep the categories of this language, and apostrophes are
-    escaped.
+    It serves Italy and Italian-speaking Switzerland (Ticino, Grigioni), so
+    nothing here is written for one of the two alone. Where Android's own
+    Italian already has a word, that is the word used — an interface calling
+    the settings anything but "Impostazioni" reads as a foreign application.
+    It says "tu", like every other translation.
 
-    While a string is left in English, that is what this language's users will
-    read. The application's default language is English, in `values/`, which is
-    what this file was copied from.
+    Rules, the same as everywhere: positional placeholders, <plurals> for
+    anything that agrees, and the `name` attributes left untouched.
+
+    The typography is Italian: the apostrophe is ’ and not the straight quote,
+    which is why nothing here is escaped; quotations are « », and no space
+    stands before `:` or `;`. Numbers keep the decimal comma and the thousands
+    point — "42,5 MB" — and the size units stay the international symbols,
+    Italian saying "byte".
+
+    Elisions and contracted articles have to hold around a placeholder whose
+    contents vary — a city, a street, a dataset. Where "lo/il/l’" or
+    "della/dell’" could not be settled in advance, the sentence is written so
+    that no article stands before the placeholder at all.
+
+    `many` is a real category of Italian and it is written out everywhere, with
+    the "di" a million takes — "1.000.000 di stazioni" — even though it is only
+    reached at a million: what a language distinguishes is a fact about the
+    language, not about the counts this application shows.
+
+    See docs/it-glossary.md for the words this file holds to, and
+    CONTRIBUTING.md to submit a correction.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">Roue Libre</string>
 
-    <string name="stations_title">Stations</string>
+    <!-- Main screen: the station list. -->
+    <string name="stations_title">Stazioni</string>
 
+    <!-- The number of bikes available to borrow at a station. "Bici" does not
+         inflect, so only the "di" of the million tells the forms apart. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d bike</item>
-        <item quantity="many">%1$d bikes</item>
-        <item quantity="other">%1$d bikes</item>
+        <item quantity="one">%1$d bici</item>
+        <item quantity="many">%1$d di bici</item>
+        <item quantity="other">%1$d bici</item>
     </plurals>
 
+    <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d dock</item>
-        <item quantity="many">%1$d docks</item>
-        <item quantity="other">%1$d docks</item>
+        <item quantity="one">%1$d posto libero</item>
+        <item quantity="many">%1$d di posti liberi</item>
+        <item quantity="other">%1$d posti liberi</item>
     </plurals>
 
+    <!-- Spoken by screen readers on a station's indicator.
+         Example: "Via Roma, 6 bici, 26 posti liberi". -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
-    <string name="station_out_of_service">Out of service</string>
-    <string name="station_availability_unknown">Availability unknown</string>
+
+    <string name="station_out_of_service">Fuori servizio</string>
+    <string name="station_availability_unknown">Disponibilità sconosciuta</string>
 
     <!-- What a station is called when its feed publishes no name for it and no
          street to stand in for one. The station itself is kept: it is real and
          it holds bikes, and dropping it would take it off the map over a
          mistyped string. -->
-    <string name="station_unnamed">Unnamed station</string>
+    <string name="station_unnamed">Stazione senza nome</string>
 
-    <string name="station_beyond_area_short">beyond the map</string>
-    <string name="station_beyond_area">This station lies outside the area the installed data covers. Its bikes are counted live, but no map and no route can reach it.</string>
+    <!-- Shown for a station the network publishes outside the area its data
+         covers: it exists and its bikes are counted, but no map and no route
+         reach it. The short form joins the rest of the row. -->
+    <string name="station_beyond_area_short">fuori mappa</string>
+    <string name="station_beyond_area">Questa stazione è fuori dall’area coperta dai dati installati. Le sue bici sono contate in tempo reale, ma nessuna mappa e nessun percorso possono raggiungerla.</string>
 
-    <string name="search_stations_hint">Search for a station</string>
-    <string name="search_stations_clear">Clear the search</string>
-    <string name="stations_no_match_title">No station found</string>
-    <string name="stations_no_match_message">Nothing matches “%1$s”. Check the spelling, or clear the search.</string>
-    <string name="action_clear_search">Clear the search</string>
+    <!-- The search field above the list. It filters stations by name; the
+         address search is a different screen (SPEC §4.3). -->
+    <string name="search_stations_hint">Cerca una stazione</string>
+    <string name="search_stations_clear">Cancella la ricerca</string>
 
-    <string name="mode_bikes">Bikes</string>
-    <string name="mode_docks">Free docks</string>
-    <string name="mode_bikes_description">Show available bikes</string>
-    <string name="mode_docks_description">Show free docks</string>
+    <!-- The list is empty because the search matches nothing.
+         %1$s is what the user typed. -->
+    <string name="stations_no_match_title">Nessuna stazione trovata</string>
+    <string name="stations_no_match_message">Nulla corrisponde a «%1$s». Controlla l’ortografia, oppure cancella la ricerca.</string>
+    <string name="action_clear_search">Cancella la ricerca</string>
+
+    <!-- Toggle between borrowing a bike and returning one (SPEC §7.1). -->
+    <string name="mode_bikes">Bici</string>
+    <string name="mode_docks">Posti liberi</string>
+    <string name="mode_bikes_description">Mostra le bici disponibili</string>
+    <string name="mode_docks_description">Mostra i posti liberi</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
-    <string name="map_bikes_all_kinds">All bikes</string>
-    <string name="map_bikes_mechanical">Mechanical</string>
-    <string name="map_bikes_electric">Electric</string>
-    <string name="map_bikes_all_kinds_description">Every bike is counted. Tap to count the mechanical ones only.</string>
-    <string name="map_bikes_mechanical_description">Mechanical bikes are counted. Tap to count the electric ones only.</string>
-    <string name="map_bikes_electric_description">Electric bikes are counted. Tap to count them all.</string>
+    <string name="map_bikes_all_kinds">Tutte le bici</string>
+    <string name="map_bikes_mechanical">Meccaniche</string>
+    <string name="map_bikes_electric">Elettriche</string>
+    <string name="map_bikes_all_kinds_description">Vengono contate tutte le bici. Tocca per contare solo quelle meccaniche.</string>
+    <string name="map_bikes_mechanical_description">Vengono contate le bici meccaniche. Tocca per contare solo quelle elettriche.</string>
+    <string name="map_bikes_electric_description">Vengono contate le bici elettriche. Tocca per contarle tutte.</string>
+
+    <!-- The label beside a count, on a station's sheet and on a list row. No
+         item holds a number, and none ever should: the figure is already
+         painted in the disc these words stand next to. Only the word agrees,
+         "many" being the million Italian writes with "di". -->
     <plurals name="counterpart_bikes" tools:ignore="ImpliedQuantity">
-        <item quantity="one">bike</item>
-        <item quantity="many">bikes</item>
-        <item quantity="other">bikes</item>
+        <item quantity="one">bici</item>
+        <item quantity="many">di bici</item>
+        <item quantity="other">bici</item>
     </plurals>
     <plurals name="counterpart_docks" tools:ignore="ImpliedQuantity">
-        <item quantity="one">free dock</item>
-        <item quantity="many">free docks</item>
-        <item quantity="other">free docks</item>
+        <item quantity="one">posto libero</item>
+        <item quantity="many">di posti liberi</item>
+        <item quantity="other">posti liberi</item>
     </plurals>
+    <!-- Shown instead of the count when the station does not provide the service. -->
     <string name="counterpart_none">—</string>
 
+    <!-- The detail line under a station's name.
+         %1$s is the distance to the station, or its postcode when the
+         position is unknown; %2$d the number of docking points. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d dock</item>
-        <item quantity="many">%1$s · %2$d docks</item>
-        <item quantity="other">%1$s · %2$d docks</item>
+        <item quantity="one">%1$s · %2$d stallo</item>
+        <item quantity="many">%1$s · %2$d di stalli</item>
+        <item quantity="other">%1$s · %2$d stalli</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
          kinds side by side. %1$s is the mechanical count, %2$s the electric
          one, each already agreed in number. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
-
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d mechanical</item>
-        <item quantity="many">%1$d mechanical</item>
-        <item quantity="other">%1$d mechanical</item>
+        <item quantity="one">%1$d meccanica</item>
+        <item quantity="many">%1$d di meccaniche</item>
+        <item quantity="other">%1$d meccaniche</item>
     </plurals>
-
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d electric</item>
-        <item quantity="many">%1$d electric</item>
-        <item quantity="other">%1$d electric</item>
+        <item quantity="one">%1$d elettrica</item>
+        <item quantity="many">%1$d di elettriche</item>
+        <item quantity="other">%1$d elettriche</item>
     </plurals>
 
-    <string name="freshness_just_now">just now</string>
+    <!-- The age of the displayed data (SPEC §4.1). -->
+    <string name="freshness_just_now">adesso</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">%1$d second ago</item>
-        <item quantity="many">%1$d seconds ago</item>
-        <item quantity="other">%1$d seconds ago</item>
+        <item quantity="one">%1$d secondo fa</item>
+        <item quantity="many">%1$d di secondi fa</item>
+        <item quantity="other">%1$d secondi fa</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">%1$d minute ago</item>
-        <item quantity="many">%1$d minutes ago</item>
-        <item quantity="other">%1$d minutes ago</item>
+        <item quantity="one">%1$d minuto fa</item>
+        <item quantity="many">%1$d di minuti fa</item>
+        <item quantity="other">%1$d minuti fa</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">%1$d hour ago</item>
-        <item quantity="many">%1$d hours ago</item>
-        <item quantity="other">%1$d hours ago</item>
+        <item quantity="one">%1$d ora fa</item>
+        <item quantity="many">%1$d di ore fa</item>
+        <item quantity="other">%1$d ore fa</item>
     </plurals>
-    <string name="freshness_long_ago">more than a day ago</string>
-    <string name="freshness_stale">Frozen data · %1$s</string>
-    <string name="freshness_fresh">Updated %1$s</string>
-    <string name="freshness_never">Never updated</string>
+    <string name="freshness_long_ago">più di un giorno fa</string>
+    <!-- Attached to the age when the data is no longer current.
+         Example: "Dati congelati · 12 minuti fa". -->
+    <string name="freshness_stale">Dati congelati · %1$s</string>
+    <string name="freshness_fresh">Aggiornato %1$s</string>
+    <string name="freshness_never">Mai aggiornato</string>
 
-    <string name="stations_empty_title">No stations loaded</string>
-    <string name="stations_empty_message">Pull the list down to fetch the network’s stations.</string>
-    <string name="action_refresh">Refresh</string>
-    <string name="action_retry">Try again</string>
+    <!-- An empty screen: an invitation to act, not a statement (SPEC §7). -->
+    <string name="stations_empty_title">Nessuna stazione caricata</string>
+    <string name="stations_empty_message">Trascina l’elenco verso il basso per scaricare le stazioni della rete.</string>
 
-    <string name="map_open_list">See the list of stations</string>
-    <string name="map_attribution">© OpenStreetMap contributors</string>
-    <string name="map_locate_me">Locate me</string>
-    <string name="map_location_denied">Without location, pick your starting point on the map or by address.</string>
-    <string name="map_location_unavailable">Position unavailable. Check that location is switched on, then try again.</string>
-    <string name="map_outside_city_title">You are elsewhere</string>
-    <string name="map_outside_city_message">Your position falls outside the area %1$s covers, so this map cannot show it. Pick the city you are in to see its stations.</string>
-    <string name="map_outside_city_brief">Your position falls outside the area %1$s covers.</string>
-    <string name="map_needs_tiles_title">The map needs its offline tiles</string>
-    <string name="map_needs_tiles_message">Install the map data from the storage screen. In the meantime, the station list stays usable.</string>
-    <string name="map_needs_city_title">Which city?</string>
-    <string name="map_needs_city_message">Pick the conurbation you want to use. Its data is downloaded afterwards, once and for all.</string>
+    <!-- Actions. One gesture keeps one name from the button to the confirmation. -->
+    <string name="action_refresh">Aggiorna</string>
+    <string name="action_retry">Riprova</string>
 
+    <!-- The map screen (SPEC §7.1). -->
+    <string name="map_open_list">Vedi l’elenco delle stazioni</string>
+    <!-- The attribution carried by the map itself (SPEC §4.5). It fits on one
+         line; the network's full attribution is in "about". -->
+    <string name="map_attribution">© i contributori di OpenStreetMap</string>
+    <!-- The "locate me" button and what it can answer (SPEC §7.1, §10). A
+         refusal never prompts again: it is noted, not argued with. -->
+    <string name="map_locate_me">Localizzami</string>
+    <string name="map_location_denied">Senza la posizione, indica il punto di partenza sulla mappa o con un indirizzo.</string>
+    <string name="map_location_unavailable">Posizione non disponibile. Controlla che la localizzazione sia attiva, poi riprova.</string>
+    <string name="map_outside_city_title">Sei altrove</string>
+    <string name="map_outside_city_message">La tua posizione è fuori dall’area coperta da %1$s, quindi questa mappa non può mostrarla. Scegli la città in cui ti trovi per vedere le sue stazioni.</string>
+    <string name="map_outside_city_brief">La tua posizione è fuori dall’area coperta da %1$s.</string>
+
+    <string name="map_needs_tiles_title">Lo sfondo cartografico non è installato</string>
+    <string name="map_needs_tiles_message">Installalo dalla schermata di archiviazione. Nel frattempo l’elenco delle stazioni resta utilizzabile.</string>
+    <!-- The same screen, but before a city has even been designated: it is
+         not a file that is missing but the frame for everything else
+         (SPEC §15.1). -->
+    <string name="map_needs_city_title">Quale città?</string>
+    <string name="map_needs_city_message">Scegli l’area urbana che vuoi consultare. I suoi dati si scaricano dopo, una volta per tutte.</string>
+
+    <!-- First launch (SPEC §7.9). We explain how something works, we are not
+         selling anything: short sentences, active voice, no jargon. -->
     <string name="welcome_hello_title">Roue Libre</string>
-    <string name="welcome_hello_body">This app shows shared bikes on a map and works out a door-to-door trip: walk to a station, ride, then walk the rest of the way.\n\nIt is free and open source. No account, no adverts, no tracker.</string>
-    <string name="welcome_privacy_title">Nothing leaves this phone</string>
-    <string name="welcome_privacy_body">Journeys are computed on this phone. The addresses you look up are sent to nobody, not even while you type.\n\nNo history is kept: not your trips, not your positions, not your destinations.\n\nThe only request that goes out in everyday use asks how many bikes are available.</string>
-    <string name="welcome_fleet_title">What the bike says</string>
-    <string name="welcome_fleet_body">The bike drawn tells you what your city lends.\n\nIt is read from the network\'s own feed, never guessed.</string>
-    <string name="welcome_fleet_mechanical_only">The network lends mechanical bikes only.</string>
-    <string name="welcome_fleet_electric_only">The network lends electric bikes only.</string>
-    <string name="welcome_fleet_mixed">The network lends both kinds.</string>
+    <string name="welcome_hello_body">Questa app mostra le bici condivise su una mappa e calcola un itinerario da porta a porta: a piedi fino a una stazione, in bici, poi a piedi fino in fondo.\n\nÈ libera e open source. Nessun account, nessuna pubblicità, nessun tracker.</string>
+    <string name="welcome_privacy_title">Niente esce da questo telefono</string>
+    <string name="welcome_privacy_body">Gli itinerari vengono calcolati su questo telefono. Gli indirizzi che cerchi non vengono inviati a nessuno, nemmeno mentre scrivi.\n\nNon viene conservata nessuna cronologia: né i tuoi itinerari, né le tue posizioni, né le tue destinazioni.\n\nL’unica richiesta che esce nell’uso di tutti i giorni chiede quante bici sono disponibili.</string>
+    <string name="welcome_fleet_title">Cosa dice la bici</string>
+    <string name="welcome_fleet_body">La bici disegnata dice cosa presta la tua città.\n\nViene letta dal flusso della rete, mai indovinata.</string>
+    <string name="welcome_fleet_mechanical_only">La rete presta solo bici meccaniche.</string>
+    <string name="welcome_fleet_electric_only">La rete presta solo bici elettriche.</string>
+    <string name="welcome_fleet_mixed">La rete presta entrambi i tipi.</string>
 
-    <string name="welcome_data_title">One city, one download</string>
-    <string name="welcome_data_body">The map, the streets and the route calculation live on the device. That is what makes them work without a network — and it means downloading your city\'s data once.\n\nSo start by choosing it. Expect around forty megabytes for a medium-sized conurbation, more for a capital; the size is announced before the download.\n\nYou can also do it later: in the meantime, the station list and their availability remain usable.</string>
-    <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d of %2$d</string>
-    <string name="welcome_continue">Continue</string>
-    <string name="welcome_skip">Skip</string>
-    <string name="welcome_choose_city">Choose my city</string>
-    <string name="welcome_later">Later</string>
-    <string name="welcome_open">Read the introduction again</string>
+    <string name="welcome_data_title">Una città, un download</string>
+    <string name="welcome_data_body">La mappa, le strade e il calcolo degli itinerari vivono sul dispositivo. È questo che li rende utilizzabili senza rete — e comporta scaricare una volta i dati della tua città.\n\nQuindi comincia scegliendola. Conta una quarantina di megabyte per un’area urbana di media grandezza, di più per una capitale; la dimensione viene annunciata prima del download.\n\nPuoi anche farlo più tardi: nel frattempo, l’elenco delle stazioni e la loro disponibilità restano utilizzabili.</string>
+    <!-- Position in the sequence: "1 di 3". This is not a number agreement
+         but a progress marker — the second number does not vary with the
+         first — hence the absence of a plural.
+         %1$d is the page number, %2$d how many there are. -->
+    <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d di %2$d</string>
+    <string name="welcome_continue">Continua</string>
+    <string name="welcome_skip">Salta</string>
+    <string name="welcome_choose_city">Scegli la mia città</string>
+    <string name="welcome_later">Più tardi</string>
+    <string name="welcome_open">Rivedi l’introduzione</string>
 
-    <string name="whats_new_title">What’s new</string>
-    <string name="whats_new_done">Continue</string>
-    <string name="whats_new_nothing">This version has no release notes.</string>
-    <string name="whats_new_open">See what’s new</string>
+    <!-- What's new after an update (SPEC §7.10). -->
+    <string name="whats_new_title">Novità</string>
+    <string name="whats_new_done">Continua</string>
+    <string name="whats_new_nothing">Questa versione non annuncia nessuna novità.</string>
+    <string name="whats_new_open">Vedi le novità</string>
 
-    <string name="incoming_place_default_label">Received place</string>
-    <string name="incoming_show_me">Show</string>
-    <string name="incoming_needs_index">This address has to be looked up in the offline index, which is not installed.</string>
-    <string name="incoming_address_not_found">“%1$s” matches no address in the covered area.</string>
-    <string name="incoming_outside_coverage">This place lies outside the area covered by the installed data: no journey can reach it.</string>
+    <!-- A place received from another application (SPEC §7.8). -->
+    <string name="incoming_place_default_label">Luogo ricevuto</string>
+    <string name="incoming_show_me">Mostra</string>
+    <string name="incoming_needs_index">Questo indirizzo va cercato nell’indice offline, che non è installato.</string>
+    <!-- %1$s is the text received from the other application. -->
+    <string name="incoming_address_not_found">«%1$s» non corrisponde a nessun indirizzo dell’area coperta.</string>
+    <string name="incoming_outside_coverage">Questo luogo è fuori dall’area coperta dai dati installati: nessun itinerario può raggiungerlo.</string>
 
-    <string name="favourites_title">Favourites</string>
-    <string name="favourites_open">See favourites</string>
-    <string name="favourites_reorder_hint">Press and hold a row to move it.</string>
+    <!-- Favourites (SPEC §7.5). -->
+    <string name="favourites_title">Preferiti</string>
+    <string name="favourites_open">Vedi i preferiti</string>
+    <string name="favourites_reorder_hint">Tieni premuta una riga per spostarla.</string>
 
-    <string name="settings_title">Settings</string>
-    <string name="settings_open">Settings</string>
-    <string name="settings_section_city">City</string>
-    <string name="settings_section_journey">Journey</string>
-    <string name="settings_section_display">Display</string>
-    <string name="settings_section_data">Offline data</string>
+    <!-- Settings (SPEC §7.6). -->
+    <string name="settings_title">Impostazioni</string>
+    <string name="settings_open">Impostazioni</string>
+    <!-- The section titles of the settings screen (SPEC §7.6), in the order
+         the screen lays them out. A section holding nothing is not shown, so a
+         title arrives with the first setting placed under it. -->
+    <string name="settings_section_city">Città</string>
+    <string name="settings_section_journey">Itinerario</string>
+    <string name="settings_section_display">Visualizzazione</string>
+    <string name="settings_section_data">Dati offline</string>
 
     <!-- The walking pace (SPEC §6, §7.6). Named in words and never in km/h: a
          pace is something one knows about oneself, where a speed is a figure
          nobody has measured about themselves — and a speed written on a button
-         would be read as a promise about the minutes to come. -->
-    <string name="settings_walking_pace_title">Walking pace</string>
-    <string name="settings_walking_pace_slow">Slow</string>
-    <string name="settings_walking_pace_normal">Normal</string>
-    <string name="settings_walking_pace_brisk">Brisk</string>
-    <string name="settings_walking_pace_description">Pace the walking parts of a journey are worked out at</string>
+         would be read as a promise about the minutes to come. "Andatura" is
+         feminine, hence the three feminine forms. -->
+    <string name="settings_walking_pace_title">Andatura a piedi</string>
+    <string name="settings_walking_pace_slow">Lenta</string>
+    <string name="settings_walking_pace_normal">Normale</string>
+    <string name="settings_walking_pace_brisk">Sostenuta</string>
+    <string name="settings_walking_pace_description">Andatura con cui vengono calcolati i tratti a piedi di un itinerario</string>
 
-    <string name="settings_theme_title">Theme</string>
-    <string name="settings_theme_system">System</string>
-    <string name="settings_theme_light">Light</string>
-    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_title">Tema</string>
+    <string name="settings_theme_system">Sistema</string>
+    <string name="settings_theme_light">Chiaro</string>
+    <string name="settings_theme_dark">Scuro</string>
 
     <!-- Units (SPEC 7.6). The buttons name the units rather than the
          countries: what one gets is what is shown, and no system belongs to a
          nation. -->
-    <string name="settings_units_title">Units</string>
-    <string name="settings_units_system">System</string>
+    <string name="settings_units_title">Unità di misura</string>
+    <string name="settings_units_system">Sistema</string>
     <string name="settings_units_metric">m · km</string>
     <string name="settings_units_us">ft · mi</string>
     <string name="settings_units_uk">yd · mi</string>
-    <string name="settings_units_description">Units used for distances</string>
-    <string name="settings_units_system_description">Follow the region the device is set to</string>
-    <string name="settings_units_metric_description">Metres and kilometres</string>
-    <string name="settings_units_us_description">Feet and miles</string>
-    <string name="settings_units_uk_description">Yards and miles</string>
+    <string name="settings_units_description">Unità usate per le distanze</string>
+    <string name="settings_units_system_description">Segui la regione impostata sul dispositivo</string>
+    <string name="settings_units_metric_description">Metri e chilometri</string>
+    <string name="settings_units_us_description">Piedi e miglia</string>
+    <string name="settings_units_uk_description">Iarde e miglia</string>
 
-    <string name="about_title">About</string>
-    <string name="about_open">About</string>
-    <string name="about_version">Version %1$s</string>
+    <!-- The "about" screen (SPEC §7.7). The attributions there are owed, not
+         offered: the data producers and the libraries used require them. -->
+    <string name="about_title">Informazioni</string>
+    <string name="about_open">Informazioni</string>
+    <!-- %1$s is the version number, "0.1.0-alpha" for instance. -->
+    <string name="about_version">Versione %1$s</string>
+
     <string name="about_privacy_title">Privacy</string>
-    <string name="about_privacy_body">No account, no adverts, no tracker, no unique identifier. Nothing you search for or compute leaves this phone: addresses, journeys and your position stay here, and are not kept. The only request that goes out in everyday use fetches bike availability. Datasets are downloaded only when you ask.</string>
-    <string name="about_attributions_title">Data sources</string>
-    <string name="about_attribution_gbfs">Bike availability: the open data of the network served, published in the GBFS format. In France it is indexed on transport.data.gouv.fr.</string>
-    <string name="about_attribution_osm">Map, routing and landmarks: © OpenStreetMap contributors, ODbL licence.</string>
-    <string name="about_attribution_ban">Addresses and house numbers: Base Adresse Nationale, ODbL licence.</string>
-    <string name="about_attribution_brouter">Routing: BRouter, MIT licence, over OpenStreetMap data.</string>
-    <string name="about_attribution_maplibre">Map rendering: MapLibre Native, two-clause BSD licence.</string>
-    <string name="about_links_title">Opening a place from another app</string>
-    <string name="about_links_body">“geo:” links and addresses shared as plain text come straight here: pick Roue Libre in Android’s chooser. Links from mapping websites need permission: Settings → Apps → Roue Libre → Open by default → Add link.</string>
-    <string name="about_licence_title">Licence</string>
-    <string name="about_licence_body">Roue Libre is free software, released under the GNU GPL version 3. You may use it, study it, modify it and pass it on.</string>
-    <string name="about_open_repository">View the source code</string>
-    <string name="about_open_sources">Sources city by city</string>
-    <string name="about_open_licences">Component licences</string>
+    <string name="about_privacy_body">Nessun account, nessuna pubblicità, nessun tracker, nessun identificatore unico. Niente di quello che cerchi o che calcoli esce da questo telefono: gli indirizzi, gli itinerari e la tua posizione restano qui, e non vengono conservati. L’unica richiesta che esce nell’uso di tutti i giorni recupera la disponibilità delle bici. I set di dati vengono scaricati solo quando lo chiedi tu.</string>
 
-    <string name="sources_title">Data sources</string>
-    <string name="sources_intro">Availability comes from each city\'s network, as open data. Here is who produces it, including for the cities you have not installed.</string>
-    <string name="sources_open">Open the source</string>
-    <string name="about_licences_title">Licences</string>
-    <string name="about_no_browser">No browser is installed on this device.</string>
+    <string name="about_attributions_title">Fonti dei dati</string>
+    <!-- Availability, described like the other sources: by what the data is
+         and where it comes from, not by the brand of one network. The
+         producer's own credit follows, and it is that one the ODbL licence
+         requires (SPEC §4.5). -->
+    <string name="about_attribution_gbfs">Disponibilità delle bici: i dati aperti della rete servita, pubblicati in formato GBFS. In Francia sono indicizzati su transport.data.gouv.fr.</string>
+    <string name="about_attribution_osm">Mappa, calcolo dei percorsi e punti di riferimento: © i contributori di OpenStreetMap, licenza ODbL.</string>
+    <string name="about_attribution_ban">Indirizzi e numeri civici: Base Adresse Nationale, licenza ODbL.</string>
+    <string name="about_attribution_brouter">Calcolo dei percorsi: BRouter, licenza MIT, su dati OpenStreetMap.</string>
+    <string name="about_attribution_maplibre">Disegno della mappa: MapLibre Native, licenza BSD a due clausole.</string>
 
-    <string name="journey_title">Journey</string>
-    <string name="journey_open">Plan a journey</string>
-    <string name="journey_origin_empty">Starting from?</string>
-    <string name="journey_destination_empty">Going where?</string>
-    <string name="journey_choose_origin">Starting from?</string>
-    <string name="journey_choose_destination">Going where?</string>
-    <string name="journey_swap">Swap start and destination</string>
-    <string name="journey_hint">The journey is computed on the device: walk to a station, ride, then walk the rest of the way.</string>
+    <!-- Web map links (SPEC §7.8): Android only hands them to the application
+         if the user allows it, and saying so keeps that behaviour from looking
+         like a defect. The Settings path is quoted word for word from Android's
+         own Italian. -->
+    <string name="about_links_title">Aprire un luogo da un’altra app</string>
+    <string name="about_links_body">I link «geo:» e gli indirizzi condivisi come testo semplice arrivano direttamente qui: scegli Roue Libre nel selettore di Android. I link dei siti di mappe, invece, richiedono un’autorizzazione: Impostazioni → App → Roue Libre → Apri per impostazione predefinita → Aggiungi link.</string>
+
+    <string name="about_licence_title">Licenza</string>
+    <string name="about_licence_body">Roue Libre è software libero, pubblicato sotto licenza GNU GPL versione 3. Puoi usarlo, studiarlo, modificarlo e ridistribuirlo.</string>
+    <string name="about_open_repository">Vedi il codice sorgente</string>
+    <string name="about_open_sources">Fonti città per città</string>
+    <string name="about_open_licences">Licenze dei componenti</string>
+
+    <!-- The page crediting the feed producers of every city served (SPEC §4.5). -->
+    <string name="sources_title">Fonti dei dati</string>
+    <string name="sources_intro">La disponibilità arriva dalla rete di ogni città, in dati aperti. Qui c’è scritto chi la produce, comprese le città che non hai installato.</string>
+    <string name="sources_open">Apri la fonte</string>
+    <string name="about_licences_title">Licenze</string>
+    <string name="about_no_browser">Su questo dispositivo non è installato nessun browser.</string>
+
+    <!-- Journey search (SPEC §7.3). -->
+    <string name="journey_title">Itinerario</string>
+    <string name="journey_open">Pianifica un itinerario</string>
+    <string name="journey_origin_empty">Da dove parti?</string>
+    <string name="journey_destination_empty">Dove vai?</string>
+    <string name="journey_choose_origin">Da dove parti?</string>
+    <string name="journey_choose_destination">Dove vai?</string>
+    <string name="journey_swap">Inverti partenza e destinazione</string>
+    <string name="journey_hint">L’itinerario è calcolato sul dispositivo: a piedi fino a una stazione, in bici, poi a piedi fino in fondo.</string>
     <!-- The switch that leaves the network out of the journey, and the sentence
          that replaces the one above it when it is on (SPEC §7.3). -->
-    <string name="journey_own_bike">Ride my own bike</string>
-    <string name="journey_hint_own_bike">The journey is computed on the device: one ride from door to door, with no station on the way.</string>
+    <string name="journey_own_bike">Con la mia bici</string>
+    <string name="journey_hint_own_bike">L’itinerario è calcolato sul dispositivo: un solo tratto in bici da porta a porta, senza passare da nessuna stazione.</string>
 
     <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
          which is what the application does at rest. -->
-    <string name="journey_bike_kind_any">Any bike</string>
-    <string name="journey_bike_kind_mechanical">Mechanical</string>
-    <string name="journey_bike_kind_electric">Electric</string>
-    <string name="journey_bike_kind_any_description">Any bike, whichever kind</string>
-    <string name="journey_bike_kind_mechanical_description">A bike I pedal myself</string>
-    <string name="journey_bike_kind_electric_description">A pedal-assist bike</string>
-    <string name="journey_compute">Work out the journey</string>
-    <string name="journey_computing">Working out the best journey…</string>
+    <string name="journey_bike_kind_any">Qualsiasi</string>
+    <string name="journey_bike_kind_mechanical">Meccanica</string>
+    <string name="journey_bike_kind_electric">Elettrica</string>
+    <string name="journey_bike_kind_any_description">Una bici qualsiasi, meccanica o elettrica</string>
+    <string name="journey_bike_kind_mechanical_description">Una bici che pedalo io</string>
+    <string name="journey_bike_kind_electric_description">Una bici a pedalata assistita</string>
+    <string name="journey_compute">Calcola l’itinerario</string>
+    <string name="journey_computing">Calcolo dell’itinerario migliore…</string>
     <!-- Nothing is being chosen here — there is one route to trace, not a pair
          of stations to weigh — so the wait does not claim to be looking for the
          best of anything. -->
-    <string name="journey_computing_own_bike">Working the ride out…</string>
-    <string name="journey_source_my_position">My position</string>
-    <string name="journey_locating">Finding your position…</string>
-    <string name="journey_source_favourite">A favourite station</string>
-    <string name="journey_source_on_map">A point on the map</string>
-    <string name="journey_no_favourite">No favourite station yet. Open a station and tap the star to add it.</string>
-    <string name="journey_pick_crosshair">Targeted point</string>
-    <string name="journey_pick_confirm">Choose this point</string>
-    <string name="journey_picked_point">Point on the map</string>
-    <string name="journey_frame">Show the whole journey</string>
+    <string name="journey_computing_own_bike">Calcolo del tratto in bici…</string>
 
-    <string name="journey_summary">of which %1$s walking and %2$s riding · %3$s</string>
+    <!-- The four ways of designating a point (SPEC §7.3). -->
+    <string name="journey_source_my_position">La mia posizione</string>
+    <string name="journey_locating">Ricerca della posizione…</string>
+    <string name="journey_source_favourite">Una stazione preferita</string>
+    <string name="journey_source_on_map">Un punto sulla mappa</string>
+    <string name="journey_no_favourite">Ancora nessuna stazione preferita. Apri una stazione e tocca la stella per aggiungerla.</string>
+    <string name="journey_pick_crosshair">Punto inquadrato</string>
+    <string name="journey_pick_confirm">Scegli questo punto</string>
+    <string name="journey_picked_point">Punto sulla mappa</string>
+
+    <!-- Journey result (SPEC §7.4). -->
+    <!-- Brings the framing back onto the whole track, after "locate me" or a
+         pan has taken it elsewhere. -->
+    <string name="journey_frame">Mostra tutto l’itinerario</string>
+    <!-- %1$s is the walking time, %2$s the cycling time, %3$s the total distance. -->
+    <string name="journey_summary">di cui %1$s a piedi e %2$s in bici · %3$s</string>
     <!-- Metres climbed over a leg or over the whole journey. Shown only where
          there is relief worth naming; a flat city never reads this. -->
-    <string name="journey_climb">%1$s of climb</string>
+    <string name="journey_climb">%1$s di dislivello</string>
     <!-- What waits at the station one sets off from, hung at the end of the
          journey summary, in a conurbation lending both kinds of bike
          (SPEC §7.4). %1$s is the two counts, mechanical and electric, each
          already agreed in number. -->
-    <string name="journey_bikes_at_departure">%1$s at the departure station</string>
+    <string name="journey_bikes_at_departure">%1$s alla stazione di partenza</string>
     <!-- The block holding the total time, the summary and the drawing opens
          the journey in full: this is what the press does, announced to a screen
          reader that would otherwise say only "activate". -->
-    <string name="journey_detail_open">Show the journey in detail</string>
-    <string name="journey_detail_title">The journey in detail</string>
-    <string name="journey_detail_departure_station">Departure station</string>
-    <string name="journey_detail_arrival_station">Arrival station</string>
+    <string name="journey_detail_open">Mostra l’itinerario in dettaglio</string>
+    <string name="journey_detail_title">L’itinerario in dettaglio</string>
+    <string name="journey_detail_departure_station">Stazione di partenza</string>
+    <string name="journey_detail_arrival_station">Stazione di arrivo</string>
     <!-- The counts shown are the ones the journey was worked out on: a station
          empties while one walks to it (SPEC §6). -->
     <!-- The drawing of the ground the bike leg runs over. -->
-    <string name="journey_detail_profile">The ride, uphill and down</string>
+    <string name="journey_detail_profile">Il tratto in bici, salite e discese</string>
     <!-- Read out in place of the drawing. %1$s is the climb of the ride, %2$s
          its lowest point above sea level and %3$s its highest. -->
-    <string name="journey_detail_profile_description">The ride climbs %1$s, between %2$s and %3$s above sea level.</string>
-    <string name="journey_detail_availability_note">Bikes and docks as they were when the journey was worked out.</string>
+    <string name="journey_detail_profile_description">Il tratto in bici sale di %1$s, tra %2$s e %3$s di quota.</string>
+    <string name="journey_detail_availability_note">Bici e posti liberi come erano al momento del calcolo dell’itinerario.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
-    <string name="journey_navigate">Open in a navigation app</string>
-    <string name="journey_navigate_which">Which part of the journey?</string>
-    <string name="journey_step_to_station">Walk to %1$s</string>
-    <string name="journey_step_ride">Ride to %1$s</string>
-    <string name="journey_step_to_destination">Walk to the destination</string>
-    <string name="journey_step_walk_all">Walk to the destination</string>
-    <string name="journey_step_ride_all">Ride to the destination</string>
+    <string name="journey_navigate">Apri in un’app di navigazione</string>
+    <string name="journey_navigate_which">Quale parte dell’itinerario?</string>
+    <!-- %1$s is the station's name. "Raggiungi %1$s" carries no preposition
+         before the placeholder, which a station name of any language would
+         have made awkward. -->
+    <string name="journey_step_to_station">Raggiungi %1$s a piedi</string>
+    <string name="journey_step_ride">Raggiungi %1$s in bici</string>
+    <string name="journey_step_to_destination">Raggiungi la destinazione a piedi</string>
+    <string name="journey_step_walk_all">Raggiungi la destinazione a piedi</string>
+    <string name="journey_step_ride_all">Raggiungi la destinazione in bici</string>
     <!-- The summary of a journey ridden on one's own bike: it sits under the
          total time, where the walk's own summary sits, and says the same two
          things — how far, and how much of it goes up. -->
-    <string name="journey_own_bike_only">on your own bike, over %1$s.</string>
-    <string name="journey_own_bike_only_climb">on your own bike, over %1$s and %2$s of climb.</string>
-    <string name="journey_walk_only">on foot, over %1$s — no bike journey is possible here.</string>
-    <string name="journey_walk_only_climb">on foot, over %1$s and %2$s of climb — no bike journey is possible here.</string>
-    <string name="journey_walk_is_quicker">on foot, over %1$s — sooner than going to fetch a bike.</string>
-    <string name="journey_walk_is_quicker_climb">on foot, over %1$s and %2$s of climb — sooner than going to fetch a bike.</string>
-    <string name="journey_none_title">No journey</string>
-    <string name="journey_no_bike_nearby">No station with a bike near the start. Try again later, or start from somewhere else.</string>
+    <string name="journey_own_bike_only">con la tua bici, per %1$s.</string>
+    <string name="journey_own_bike_only_climb">con la tua bici, per %1$s e %2$s di dislivello.</string>
+    <!-- %1$s is the walking distance. -->
+    <string name="journey_walk_only">a piedi, per %1$s: qui non è possibile nessun itinerario in bici.</string>
+    <string name="journey_walk_only_climb">a piedi, per %1$s e %2$s di dislivello: qui non è possibile nessun itinerario in bici.</string>
+    <!-- SPEC §6: when the bike saves no time, the walk is the journey offered.
+         %1$s is the walking distance. -->
+    <string name="journey_walk_is_quicker">a piedi, per %1$s: più veloce che andare a prendere una bici.</string>
+    <string name="journey_walk_is_quicker_climb">a piedi, per %1$s e %2$s di dislivello: più veloce che andare a prendere una bici.</string>
 
-    <string name="journey_no_mechanical_nearby">No station nearby has a mechanical bike right now. Ask for any bike, or try again later.</string>
-    <string name="journey_no_electric_nearby">No station nearby has an electric bike right now. Ask for any bike, or try again later.</string>
-    <string name="journey_no_dock_nearby">No station with a free dock near the destination. Try again later, or aim somewhere else.</string>
-    <string name="journey_no_route">No practicable route between these two points.</string>
-    <string name="journey_graph_missing">The routing data is not installed. Add it from the storage screen.</string>
-    <string name="journey_outside_coverage">This point lies outside the area covered by the installed data.</string>
-    <string name="journey_no_stations">No station known. Refresh the station list, then try again.</string>
+    <!-- Why no bike journey was retained (SPEC §6). Each case says what
+         happened, never a technical code. -->
+    <string name="journey_none_title">Nessun itinerario</string>
+    <string name="journey_no_bike_nearby">Nessuna stazione con una bici vicino alla partenza. Riprova più tardi, oppure parti da un altro punto.</string>
 
+    <string name="journey_no_mechanical_nearby">In questo momento nessuna stazione vicina ha una bici meccanica. Chiedi una bici qualsiasi, oppure riprova più tardi.</string>
+    <string name="journey_no_electric_nearby">In questo momento nessuna stazione vicina ha una bici elettrica. Chiedi una bici qualsiasi, oppure riprova più tardi.</string>
+    <string name="journey_no_dock_nearby">Nessuna stazione con un posto libero vicino alla destinazione. Riprova più tardi, oppure scegli un’altra destinazione.</string>
+    <string name="journey_no_route">Nessun percorso praticabile tra questi due punti.</string>
+    <string name="journey_graph_missing">Il grafo dei percorsi non è installato. Aggiungilo dalla schermata di archiviazione.</string>
+    <string name="journey_outside_coverage">Questo punto è fuori dall’area coperta dai dati installati.</string>
+    <string name="journey_no_stations">Nessuna stazione conosciuta. Aggiorna l’elenco delle stazioni, poi riprova.</string>
+
+    <!-- Durations, formatted through the localisation APIs (SPEC §9).
+         %1$d is a number of minutes; %1$d h and %2$02d min for hours. -->
     <string name="duration_minutes">%1$d min</string>
     <string name="duration_hours_minutes">%1$d h %2$02d</string>
 
+    <!-- A station's detail (SPEC §7.2). -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d dock</item>
-        <item quantity="many">%1$d docks</item>
-        <item quantity="other">%1$d docks</item>
+        <item quantity="one">%1$d stallo</item>
+        <item quantity="many">%1$d di stalli</item>
+        <item quantity="other">%1$d stalli</item>
     </plurals>
+    <!-- %1$s is the number of docking points, %2$s the age of the data. -->
     <string name="station_capacity_and_age">%1$s · %2$s</string>
-    <string name="station_address_nearby">Near %1$s</string>
-    <string name="station_favourite_add">Add to favourites</string>
-    <string name="station_favourite_remove">Remove from favourites</string>
-    <string name="station_as_origin">Start here</string>
-    <string name="station_as_destination">Go here</string>
-    <string name="station_open_in_navigation">Open in a navigation app</string>
-    <string name="station_no_navigation_app">No mapping app is installed on this device.</string>
+    <!-- A station with no address of its own — in the middle of a roundabout,
+         of a square — is placed relative to the nearest street.
+         %1$s is a street name. -->
+    <string name="station_address_nearby">Vicino a %1$s</string>
+    <string name="station_favourite_add">Aggiungi ai preferiti</string>
+    <string name="station_favourite_remove">Rimuovi dai preferiti</string>
+    <!-- The station sheet's actions: preparing a journey from this station,
+         or to it (SPEC §7.2). -->
+    <string name="station_as_origin">Parti da qui</string>
+    <string name="station_as_destination">Vai qui</string>
+    <string name="station_open_in_navigation">Apri in un’app di navigazione</string>
+    <string name="station_no_navigation_app">Su questo dispositivo non è installata nessuna app di mappe.</string>
 
-    <string name="address_search_title">Search for an address</string>
-    <string name="address_search_hint">Number, street, town</string>
-    <string name="address_search_clear">Clear the search</string>
-    <string name="address_search_privacy">Everything is searched on the device. Nothing is sent, not even while you type.</string>
-    <string name="address_with_number">%1$s %2$s</string>
+    <!-- Address search in the offline index (SPEC §4.3). Not to be confused
+         with the field that filters the station list. -->
+    <string name="address_search_title">Cerca un indirizzo</string>
+    <!-- Italian's own order — "Via Roma 12, Milano" — which the parser reads:
+         a number standing between the street and the town is recognised when
+         the query holds a single number and no stop word touches it
+         (SPEC §4.3). The prompt therefore names one number and one town, and
+         nothing that would put a second number or an article beside it. -->
+    <string name="address_search_hint">Via, numero, comune</string>
+    <string name="address_search_clear">Cancella la ricerca</string>
+    <string name="address_search_privacy">Tutto viene cercato sul dispositivo. Non viene inviato nulla, nemmeno mentre scrivi.</string>
+
+    <!-- An address found. The number and the street name are assembled through
+         a resource, never by concatenation: the order changes from one language
+         to another (SPEC §9), and Italian writes the street first — "Via Roma
+         12" where English writes "12 Via Roma".
+         %1$s is the number ("12", "12 bis"), %2$s the street name. -->
+    <string name="address_with_number">%2$s %1$s</string>
+    <!-- %1$d is the number, %2$s its repetition mark ("bis", "ter"). -->
     <string name="address_number_with_suffix">%1$d %2$s</string>
+    <!-- %1$s is a postcode, %2$s a municipality. -->
     <string name="address_locality">%1$s %2$s</string>
+    <!-- %1$s is the place, %2$s an already formatted distance. -->
     <string name="address_detail">%1$s · %2$s</string>
-    <string name="address_detail_approximate">%1$s · approximate position</string>
+    <!-- Said when the number sought is absent from the index and a neighbour
+         served as a landmark. %1$s is the detail line. -->
+    <string name="address_detail_approximate">%1$s · posizione approssimativa</string>
+    <!-- Spoken by screen readers on a result row.
+         %1$s is the address, %2$s its context. -->
     <string name="address_content_description">%1$s, %2$s</string>
-    <string name="address_search_prompt_title">Where are you going?</string>
-    <string name="address_search_prompt_message">Type a street name, with or without a number. Stations, universities and main squares can be searched too.</string>
-    <string name="address_searching_title">Searching…</string>
-    <string name="address_searching_message">Looking through the addresses installed on this device.</string>
-    <string name="address_no_match_title">No address found</string>
-    <string name="address_no_match_message">Nothing matches “%1$s”. Try the street name on its own, or add the town.</string>
-    <string name="address_needs_index_title">The search needs the address index</string>
-    <string name="address_needs_index_message">Install the index from the storage screen. It stays on the device and never goes out on the network.</string>
-    <string name="address_unreadable_title">Address index unreadable</string>
-    <string name="map_picked_place_description">%1$s. Tap to clear this point.</string>
 
+    <!-- An empty search screen: each situation calls for a different gesture.
+         The "stations" meant here are railway ones, written out in full so
+         that they cannot be read as the network's. -->
+    <string name="address_search_prompt_title">Dove vuoi andare?</string>
+    <string name="address_search_prompt_message">Scrivi il nome di una via, con o senza numero. Si possono cercare anche le stazioni ferroviarie, le università e le piazze principali.</string>
+    <!-- Shown while a search runs and the screen has nothing else to show. It
+         says nothing about the outcome, which is the whole point: on a large
+         index the answer can be seconds away. -->
+    <string name="address_searching_title">Ricerca in corso…</string>
+    <string name="address_searching_message">Ricerca tra gli indirizzi installati su questo dispositivo.</string>
+    <string name="address_no_match_title">Nessun indirizzo trovato</string>
+    <!-- %1$s is what the user typed. -->
+    <string name="address_no_match_message">Nulla corrisponde a «%1$s». Prova con il solo nome della via, oppure aggiungi il comune.</string>
+    <string name="address_needs_index_title">La ricerca ha bisogno dell’indice degli indirizzi</string>
+    <string name="address_needs_index_message">Installa l’indice dalla schermata di archiviazione. Resta sul dispositivo e non esce mai in rete.</string>
+    <string name="address_unreadable_title">Indice degli indirizzi illeggibile</string>
+
+    <!-- The point found, laid on the map. Spoken by screen readers: the
+         address first, the action second. %1$s is the address found. -->
+    <string name="map_picked_place_description">%1$s. Tocca per cancellare questo punto.</string>
+
+    <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
+         five, %1$s is a figure already rounded and already written in the
+         interface's language: the translation places the symbol, never the
+         number. Which of the five applies is the reader's unit system. -->
     <string name="distance_metres">%1$s m</string>
     <string name="distance_kilometres">%1$s km</string>
-    <!-- Unit symbols. Written the same way in most languages; the string
-         exists in every one all the same, so a language that writes them
-         otherwise has somewhere to say so. -->
+    <!-- The symbols of the two imperial systems. Written the same way in most
+         languages; the string exists in every one all the same, so a language
+         that writes them otherwise has somewhere to say so. -->
     <string name="distance_feet">%1$s ft</string>
     <string name="distance_yards">%1$s yd</string>
     <string name="distance_miles">%1$s mi</string>
-    <string name="action_back">Back</string>
 
-    <!-- City screen: which conurbation the application serves. -->
-    <string name="city_title">City</string>
-    <string name="city_open">Change city</string>
-    <string name="city_choose">Choose my city</string>
-    <string name="city_intro">Pick the conurbation you want to use. Its data is installed afterwards, once and for all.</string>
-    <string name="city_locate_me">Find my city</string>
-    <string name="city_active">In use</string>
+    <string name="action_back">Indietro</string>
+
+    <!-- The city screen: which conurbation the application serves (SPEC §15). -->
+    <string name="city_title">Città</string>
+    <string name="city_open">Cambia città</string>
+    <string name="city_choose">Scegli la mia città</string>
+    <string name="city_intro">Scegli l’area urbana che vuoi consultare. I suoi dati si installano dopo, una volta per tutte.</string>
+    <string name="city_locate_me">Trova la mia città</string>
+    <string name="city_active">In uso</string>
+    <!-- %1$d is a number of stations, %2$s an already formatted size. -->
     <plurals name="city_detail">
-        <item quantity="one">%1$d station · %2$s to download</item>
-        <item quantity="many">%1$d stations · %2$s to download</item>
-        <item quantity="other">%1$d stations · %2$s to download</item>
+        <item quantity="one">%1$d stazione · %2$s da scaricare</item>
+        <item quantity="many">%1$d di stazioni · %2$s da scaricare</item>
+        <item quantity="other">%1$d stazioni · %2$s da scaricare</item>
     </plurals>
+    <!-- Same row, once the data is installed: the weight is then announced by
+         city_installed just below, and saying "to download" would contradict
+         it. -->
     <plurals name="city_stations">
-        <item quantity="one">%1$d station</item>
-        <item quantity="many">%1$d stations</item>
-        <item quantity="other">%1$d stations</item>
+        <item quantity="one">%1$d stazione</item>
+        <item quantity="many">%1$d di stazioni</item>
+        <item quantity="other">%1$d stazioni</item>
     </plurals>
-    <string name="city_detail_size_only">%1$s to download</string>
+    <string name="city_detail_size_only">%1$s da scaricare</string>
+    <!-- Same row when the catalogue carries no size: it only says it does not
+         know, never that the data is missing. %1$d is a number of stations. -->
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d station · size announced before downloading</item>
-        <item quantity="many">%1$d stations · size announced before downloading</item>
-        <item quantity="other">%1$d stations · size announced before downloading</item>
+        <item quantity="one">%1$d stazione · dimensione annunciata prima di scaricare</item>
+        <item quantity="many">%1$d di stazioni · dimensione annunciata prima di scaricare</item>
+        <item quantity="other">%1$d stazioni · dimensione annunciata prima di scaricare</item>
     </plurals>
-    <string name="city_size_unknown">Size announced before downloading</string>
-    <string name="city_installed">%1$s installed on the device</string>
+    <string name="city_size_unknown">Dimensione annunciata prima di scaricare</string>
+    <!-- %1$s is an already formatted size, "42,5 MB" for instance. -->
+    <string name="city_installed">%1$s sul dispositivo</string>
+    <!-- A network and the conurbation it serves, "BikeMi — Milano".
+         %1$s is the network, %2$s the city. -->
     <string name="city_label">%1$s — %2$s</string>
-    <string name="city_delete">Delete</string>
-    <string name="city_delete_description">Delete the data for %1$s</string>
-    <string name="city_delete_title">Delete this data?</string>
-    <string name="city_delete_body">All offline data for %1$s will be erased. You will have to download it again to use it.</string>
-    <string name="city_delete_confirm">Delete</string>
-    <string name="city_deleted">Data for %1$s deleted</string>
-    <string name="city_search_hint">Search for a city</string>
-    <string name="city_search_clear">Clear the search</string>
-    <string name="city_no_match_title">No city found</string>
-    <string name="city_no_match_message">Nothing matches “%1$s”. Check the spelling, or clear the search.</string>
-    <string name="city_proposal_title">Your city</string>
+    <string name="city_delete">Elimina</string>
+    <!-- %1$s is a city's name. -->
+    <string name="city_delete_description">Elimina i dati di %1$s</string>
+    <string name="city_delete_title">Eliminare questi dati?</string>
+    <string name="city_delete_body">Tutti i dati offline di %1$s verranno cancellati. Dovrai scaricarli di nuovo per usarli.</string>
+    <string name="city_delete_confirm">Elimina</string>
+    <string name="city_deleted">Dati di %1$s eliminati</string>
+    <string name="city_search_hint">Cerca una città</string>
+    <string name="city_search_clear">Cancella la ricerca</string>
+    <string name="city_no_match_title">Nessuna città trovata</string>
+    <string name="city_no_match_message">Nulla corrisponde a «%1$s». Controlla l’ortografia, oppure cancella la ricerca.</string>
+    <string name="city_proposal_title">La tua città</string>
     <!-- Shown when the position says one is in another served conurbation than the one installed. -->
-    <string name="city_here_title">You are in another city</string>
-    <string name="city_here_body">%1$s serves the area you are in. Install its data to see its stations and work out journeys here.</string>
-    <string name="city_here_installed_body">%1$s serves the area you are in, and its data is already on the device.</string>
-    <string name="city_here_install">Install its data</string>
-    <string name="city_here_use">Use it</string>
-    <string name="city_proposal_body">You seem to be in the area covered by %1$s. Shall we go with that?</string>
-    <string name="city_proposal_accept">Yes</string>
-    <string name="city_none_nearby">No known network near here. Pick a city from the list.</string>
-    <string name="action_cancel">Cancel</string>
+    <string name="city_here_title">Sei in un’altra città</string>
+    <string name="city_here_body">%1$s copre la zona in cui ti trovi. Installa i suoi dati per vedere le sue stazioni e calcolare itinerari qui.</string>
+    <string name="city_here_installed_body">%1$s copre la zona in cui ti trovi, e i suoi dati sono già sul dispositivo.</string>
+    <string name="city_here_install">Installa i suoi dati</string>
+    <string name="city_here_use">Usala</string>
+    <string name="city_proposal_body">Sembra che tu sia nell’area coperta da %1$s. La usiamo?</string>
+    <string name="city_proposal_accept">Sì</string>
+    <string name="city_none_nearby">Nessuna rete conosciuta qui vicino. Scegli una città dall’elenco.</string>
+    <string name="action_cancel">Annulla</string>
 
+    <!-- File size units. Base 1000, as everywhere else in the system.
+         %1$s is a number already written in the displayed language. -->
     <string name="size_bytes">%1$s B</string>
     <string name="size_kilobytes">%1$s kB</string>
     <string name="size_megabytes">%1$s MB</string>
     <string name="size_gigabytes">%1$s GB</string>
 
-    <string name="storage_title">Storage</string>
-    <string name="storage_open">Manage offline data</string>
-    <string name="storage_intro">The map, the journey planner and the address search work with no network. They need three datasets, installed once.</string>
-    <string name="storage_total">%1$s used on this device</string>
-    <string name="storage_nothing_installed">No data installed</string>
-    <string name="storage_no_city">No city selected</string>
+    <!-- The storage screen: what the application occupies, and how to reclaim
+         it (SPEC §4.4). -->
+    <string name="storage_title">Archiviazione</string>
+    <string name="storage_open">Gestisci i dati offline</string>
+    <string name="storage_intro">La mappa, il calcolo degli itinerari e la ricerca degli indirizzi funzionano senza rete. Servono tre set di dati, da installare una volta.</string>
+    <!-- %1$s is an already formatted size, "42,5 MB" for instance. -->
+    <string name="storage_total">Occupa %1$s su questo dispositivo</string>
+    <string name="storage_nothing_installed">Nessun dato installato</string>
+    <string name="storage_no_city">Nessuna città scelta</string>
 
-    <string name="dataset_tiles">Map data</string>
-    <string name="dataset_tiles_purpose">Draws the map with no network</string>
-    <string name="dataset_routing">Routing data</string>
-    <string name="dataset_routing_purpose">Works out journeys on the device</string>
-    <string name="dataset_addresses">Address index</string>
-    <string name="dataset_addresses_purpose">Searches streets without sending anything</string>
+    <!-- The three dataset names are all masculine singular — sfondo
+         cartografico, grafo dei percorsi, indice degli indirizzi — which is
+         what lets dataset_imported and dataset_deleted agree once for all
+         three. -->
+    <string name="dataset_tiles">Sfondo cartografico</string>
+    <string name="dataset_tiles_purpose">Disegna la mappa senza rete</string>
+    <string name="dataset_routing">Grafo dei percorsi</string>
+    <string name="dataset_routing_purpose">Calcola gli itinerari sul dispositivo</string>
+    <string name="dataset_addresses">Indice degli indirizzi</string>
+    <string name="dataset_addresses_purpose">Cerca le vie senza inviare nulla</string>
 
-    <string name="storage_check_updates">Check for updates</string>
-    <string name="storage_checking">Reading the manifest…</string>
-    <string name="storage_up_to_date">Everything is up to date.</string>
-    <string name="storage_download_pending">Download %1$s</string>
-    <string name="storage_downloading">%1$s · %2$s of %3$s</string>
+    <!-- Updating the datasets (SPEC §4.4). The check is never automatic: a
+         periodic request would draw a usage profile. -->
+    <string name="storage_check_updates">Cerca aggiornamenti</string>
+    <string name="storage_checking">Lettura del manifest…</string>
+    <string name="storage_up_to_date">È tutto aggiornato.</string>
+    <!-- %1$s is an already formatted size, "42,5 MB" for instance. -->
+    <string name="storage_download_pending">Scarica %1$s</string>
+    <!-- %1$s is the file name, %2$s the part received, %3$s the total size. -->
+    <string name="storage_downloading">%1$s · %2$s di %3$s</string>
+    <!-- %1$s is the set's name, %2$s the reason for the failure. -->
     <string name="storage_download_failed">%1$s: %2$s</string>
-    <string name="storage_wifi_warning">You are not on Wi-Fi. This download can weigh heavily on a mobile plan.</string>
-    <string name="dataset_update_available">Update available</string>
+    <string name="storage_wifi_warning">Non sei connesso al Wi-Fi. Questo download può pesare molto su un piano dati mobile.</string>
+    <string name="dataset_update_available">Aggiornamento disponibile</string>
 
-    <string name="dataset_absent">Not installed</string>
+    <string name="dataset_absent">Non installato</string>
+    <!-- %1$s is a size, %2$s a date. Example: "35,0 MB · 9 agosto 2026". -->
     <string name="dataset_installed">%1$s · %2$s</string>
-    <string name="dataset_import">Import</string>
-    <string name="dataset_replace">Replace</string>
-    <string name="dataset_delete">Delete</string>
-    <string name="dataset_delete_description">Delete %1$s</string>
-    <string name="dataset_delete_title">Delete this data?</string>
+    <string name="dataset_import">Importa</string>
+    <string name="dataset_replace">Sostituisci</string>
+    <string name="dataset_delete">Elimina</string>
+    <!-- %1$s is the dataset's name. -->
+    <string name="dataset_delete_description">Elimina %1$s</string>
+    <string name="dataset_delete_title">Eliminare questi dati?</string>
     <!-- %1$s is the dataset's name, %2$s the space it frees. -->
-    <string name="dataset_delete_body">The “%1$s” data will be erased, freeing %2$s. You will have to download it again to work offline.</string>
-    <string name="dataset_imported">%1$s installed</string>
-    <string name="dataset_deleted">%1$s deleted</string>
+    <string name="dataset_delete_body">I dati «%1$s» verranno cancellati, liberando %2$s. Dovrai scaricarli di nuovo per lavorare offline.</string>
+    <!-- %1$s is the dataset's name. The three names are masculine singular, so
+         one agreement serves all three. -->
+    <string name="dataset_imported">%1$s installato</string>
+    <string name="dataset_deleted">%1$s eliminato</string>
 
-    <string name="dataset_rejected_empty">The chosen file is empty.</string>
-    <string name="dataset_rejected_format">This file is not the expected one. Choose the “%1$s” file produced by the generation scripts.</string>
-    <string name="dataset_rejected_version">This file is in format version %1$d, and this version of the app reads version %2$d. Update the app.</string>
-    <string name="dataset_rejected_checksum">The file does not match its checksum: it is incomplete or damaged. Download it again.</string>
-    <string name="dataset_rejected_transfer">Copying the file failed. Check the free space and try again.</string>
+    <!-- Import refusals: each case says what to do. -->
+    <string name="dataset_rejected_empty">Il file scelto è vuoto.</string>
+    <!-- %1$s is the expected file name, "tiles.mbtiles" for instance. -->
+    <string name="dataset_rejected_format">Questo file non è quello atteso. Scegli il file «%1$s» prodotto dagli script di generazione.</string>
+    <!-- %1$d is the version found, %2$d the one the application can read. -->
+    <string name="dataset_rejected_version">Questo file è nella versione di formato %1$d, e questa versione dell’app legge la versione %2$d. Aggiorna l’app.</string>
+    <string name="dataset_rejected_checksum">Il file non corrisponde alla sua somma di controllo: è incompleto o danneggiato. Scaricalo di nuovo.</string>
+    <string name="dataset_rejected_transfer">Copia del file non riuscita. Controlla lo spazio libero e riprova.</string>
 
-    <string name="error_offline">No connection. The last known availability stays on screen.</string>
-    <string name="error_offline_download">No connection. The download picks up where it stopped.</string>
-    <string name="error_timeout_download">The server is not answering. The download picks up where it stopped.</string>
-    <string name="error_server_refused_download">Server error (%1$d). The download picks up where it stopped.</string>
-    <string name="error_untrusted_server_download">Invalid security certificate. The download picks up once it is renewed.</string>
-    <string name="error_malformed_download">Unreadable file received. The download picks up where it stopped.</string>
-    <string name="error_local_storage_download">The file could not be saved. Free some space and the download picks up.</string>
-    <string name="error_timeout">The network’s server is taking too long to answer. Try again in a moment.</string>
-    <string name="error_server_refused">The network’s server returned an error (%1$d). Try again later.</string>
-    <string name="error_untrusted_server">The network’s server presented an invalid security certificate. Its data cannot be fetched safely until the operator renews it.</string>
-    <string name="error_malformed">The data received is unreadable. The network’s feed is at fault; try again later.</string>
-    <string name="error_feed_unavailable">The network does not publish the “%1$s” feed.</string>
-    <string name="error_unsupported_version">This network publishes its data in version %1$s, which this version of the app cannot read. Update the app.</string>
-    <string name="error_local_storage">Unable to read the data stored on the device.</string>
-    <string name="error_no_city_chosen">No city is selected. Choose one.</string>
+    <!-- Error messages: what happened, and what to do. No apologies, no
+         technical codes (SPEC §7 and §14). -->
+    <string name="error_offline">Nessuna connessione. Resta a schermo l’ultima disponibilità conosciuta.</string>
+    <!-- The same failures read on the storage screen, where a dataset
+         transfer failed rather than an availability refresh. The server
+         is the one hosting the files, not the bike network's, and those
+         files come down resumably (SPEC §4.4) — which is what each of
+         these says will happen next. -->
+    <string name="error_offline_download">Nessuna connessione. Il download riprende da dove si è fermato.</string>
+    <string name="error_timeout_download">Il server non risponde. Il download riprende da dove si è fermato.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_download">Errore del server (%1$d). Il download riprende da dove si è fermato.</string>
+    <string name="error_untrusted_server_download">Certificato di sicurezza non valido. Il download riprende quando verrà rinnovato.</string>
+    <string name="error_malformed_download">File ricevuto illeggibile. Il download riprende da dove si è fermato.</string>
+    <string name="error_local_storage_download">Impossibile salvare il file. Libera spazio e il download riprende.</string>
+    <string name="error_timeout">Il server della rete impiega troppo tempo a rispondere. Riprova tra poco.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused">Il server della rete ha restituito un errore (%1$d). Riprova più tardi.</string>
+    <string name="error_untrusted_server">Il server della rete presenta un certificato di sicurezza non valido. I suoi dati non possono essere recuperati in sicurezza finché l’operatore non lo rinnova.</string>
+    <string name="error_malformed">I dati ricevuti sono illeggibili. La colpa è del flusso della rete; riprova più tardi.</string>
+    <!-- %1$s is a GBFS feed name, "station_status" for instance. -->
+    <string name="error_feed_unavailable">La rete non pubblica il flusso «%1$s».</string>
+    <!-- %1$s is a version number, "4.0" for instance. -->
+    <string name="error_unsupported_version">Questa rete pubblica i suoi dati nella versione %1$s, che questa versione dell’app non sa leggere. Aggiorna l’app.</string>
+    <string name="error_local_storage">Impossibile leggere i dati salvati sul dispositivo.</string>
+    <string name="error_no_city_chosen">Nessuna città selezionata. Scegline una.</string>
 
     <!-- Unmetered-only downloads -->
     <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
          connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. -->
-    <string name="download_unmetered_only">Download only on an unmetered connection</string>
-    <string name="download_unmetered_only_description">Usually Wi-Fi. A shared phone connection or a capped hotspot is billed by the megabyte and counts as mobile data.</string>
-    <string name="download_held_back_title">Download held back</string>
+         declares itself billed. "A consumo" is Android's own wording for a
+         metered network. -->
+    <string name="download_unmetered_only">Scarica solo con una connessione non a consumo</string>
+    <string name="download_unmetered_only_description">Di solito il Wi-Fi. La connessione condivisa di un telefono o un hotspot con un limite di dati si paga a megabyte e conta come dati mobili.</string>
+    <string name="download_held_back_title">Download trattenuto</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">This connection is billed by the megabyte. Connect to Wi-Fi to download %1$s, or download it anyway now.</string>
-    <string name="download_stopped_title">Download stopped</string>
+    <string name="download_held_back_body">Questa connessione si paga a megabyte. Collegati al Wi-Fi per scaricare %1$s, oppure scarica lo stesso adesso.</string>
+    <string name="download_stopped_title">Download interrotto</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">This connection is now billed by the megabyte, so the download stopped. What has arrived is kept. Connect to Wi-Fi to finish the %1$s, or carry on anyway now.</string>
-    <string name="download_anyway">Download anyway</string>
+    <string name="download_stopped_body">Questa connessione ora si paga a megabyte, quindi il download si è interrotto. Quello che è arrivato viene conservato. Collegati al Wi-Fi per completare il download di %1$s, oppure prosegui lo stesso adesso.</string>
+    <string name="download_anyway">Scarica lo stesso</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Waiting for an unmetered connection to download %1$s.</string>
-    <string name="download_can_resume">This connection is no longer billed. Start the download again: it carries on where it stopped.</string>
+    <string name="download_waiting_for_unmetered">In attesa di una connessione non a consumo per scaricare %1$s.</string>
+    <string name="download_can_resume">Questa connessione non si paga più. Riavvia il download: riprende da dove si è fermato.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
-    <string name="settings_opening_title">Open the app by default on</string>
+    <string name="settings_opening_title">Apri l’app per impostazione predefinita su</string>
     <!-- Read aloud in place of the two buttons beside it. -->
-    <string name="settings_opening_description">The screen the app opens on</string>
-    <string name="settings_opening_map">Map</string>
-    <string name="settings_opening_list">Station list</string>
+    <string name="settings_opening_description">La schermata con cui si apre l’app</string>
+    <string name="settings_opening_map">Mappa</string>
+    <string name="settings_opening_list">Elenco delle stazioni</string>
     <!-- The way to the map from a station list opened on. -->
-    <string name="stations_open_map">See the map</string>
+    <string name="stations_open_map">Vedi la mappa</string>
 
     <!-- Which stations the map draws at all. Set in the settings and nowhere
          else: the map itself carries no control and no badge (SPEC 7.1). -->
-    <string name="settings_map_filters_title">Which stations the map shows</string>
-    <string name="settings_map_filters_hide_out_of_service">Hide the stations out of service</string>
+    <string name="settings_map_filters_title">Le stazioni che la mappa mostra</string>
+    <string name="settings_map_filters_hide_out_of_service">Nascondi le stazioni fuori servizio</string>
     <!-- One wording for both modes: this screen knows nothing of the map's
          Bikes / Free docks button, so it may name neither. -->
-    <string name="settings_map_filters_hide_empty">Hide the stations with nothing to offer</string>
+    <string name="settings_map_filters_hide_empty">Nascondi le stazioni che non hanno nulla da offrire</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
-    <string name="settings_map_filters_hide_empty_hint">“Nothing” follows what the map is counting: no bike while it counts bikes, no free dock while it counts free docks.</string>
+    <string name="settings_map_filters_hide_empty_hint">«Nulla» si legge in base a quello che la mappa conta: nessuna bici quando conta le bici, nessun posto libero quando conta i posti liberi.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
-    <string name="settings_map_filters_keeps_unknown">Stations the network says nothing about stay on the map: a count nobody could read is not a count of nothing.</string>
+    <string name="settings_map_filters_keeps_unknown">Le stazioni di cui la rete non dice nulla restano sulla mappa: un conteggio che nessuno ha potuto leggere non è un conteggio di zero.</string>
 
     <!-- The rider's OWN bike, not the network's. Keep the wording clearly
          about the reader's own equipment: the journey screen carries a
          separate, similar-looking choice about the bikes the network lends. -->
-    <string name="settings_own_bike_kind_title">Your own bike</string>
+    <string name="settings_own_bike_kind_title">La tua bici</string>
     <!-- Read aloud in place of the two buttons beside it. -->
-    <string name="settings_own_bike_kind_description">The kind of bike you own</string>
-    <string name="settings_own_bike_kind_mechanical">Mechanical</string>
-    <string name="settings_own_bike_kind_electric">Electric</string>
+    <string name="settings_own_bike_kind_description">Il tipo di bici che possiedi</string>
+    <string name="settings_own_bike_kind_mechanical">Meccanica</string>
+    <string name="settings_own_bike_kind_electric">Elettrica</string>
     <!-- Under the two buttons. Says what the declaration changes: an electric
          bike is routed and timed as one, where a mechanical one is not. -->
-    <string name="settings_own_bike_kind_hint">Declared electric, your own bike gets its own route and its own times.</string>
+    <string name="settings_own_bike_kind_hint">Dichiarata elettrica, la tua bici ha un percorso e dei tempi tutti suoi.</string>
 
     <!-- The summary of a ride on one's own bike, where that bike was said to be
          a pedal-assist one. %1$s is a distance, %2$s a climb. -->
-    <string name="journey_own_bike_electric_only">on your own electric bike, over %1$s.</string>
-    <string name="journey_own_bike_electric_only_climb">on your own electric bike, over %1$s and %2$s of climb.</string>
+    <string name="journey_own_bike_electric_only">con la tua bici elettrica, per %1$s.</string>
+    <string name="journey_own_bike_electric_only_climb">con la tua bici elettrica, per %1$s e %2$s di dislivello.</string>
     <!-- Application language -->
-    <string name="settings_language_title">Language</string>
+    <string name="settings_language_title">Lingua</string>
     <!-- Heads the list of languages: the interface follows the device's own
          language, which is what it did before this setting existed. The
          languages themselves are never translated — each is written in its own
          language, and comes from Android rather than from this file. -->
-    <string name="settings_language_system">System</string>
+    <string name="settings_language_system">Sistema</string>
     <!-- Spoken label of the row, read aloud in place of the language alone.
-         %1$s is the language in service: "English", "Français", or the wording
+         %1$s is the language in service: "English", "Italiano", or the wording
          above when the device's own is followed. -->
-    <string name="settings_language_description">Language of the interface: %1$s</string>
+    <string name="settings_language_description">Lingua dell’interfaccia: %1$s</string>
 
 </resources>
