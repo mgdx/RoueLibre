@@ -1,0 +1,25 @@
+A Roue Libre térképen mutatja a közösségi kerékpáros állomásokat, és háztól házig tartó, gyaloglást és kerékpározást ötvöző útvonaltervet készít.
+
+Minden az eszközön fut: a térképhez, a címkereséshez és az útvonalszámításhoz semmilyen kapcsolat nem kell. Csak a kerékpárok valós idejű elérhetősége megy ki a hálózatra.
+
+<b>Amiben más</b>
+
+• Semmilyen Google-szolgáltatás: nincs Play Services, nincs Firebase, nincs Maps SDK. Bármilyen, Google-szolgáltatások nélküli Android rendszeren fut.
+• Nincs telemetria, nincs nyomkövető, nincs egyedi azonosító, nincs fiók.
+• Az útvonaltervekről semmilyen adat nem marad meg: nincs előzmény, nincsenek pozíciók, nincsenek úti célok. Amit keresel, nem hagyja el a telefont.
+• Egyetlen város sincs rád erőltetve: több agglomeráció is megfér egymás mellett az eszközön, és az egyik város adatai a többi érintése nélkül törölhetők.
+• Az útvonalterv az állomások <i>párját</i> optimalizálja – az indulásit és az érkezésit –, ahelyett hogy beérné a legközelebbivel, és mérlegeli annak kockázatát, hogy egy gyengén ellátott állomás kiürül, amíg odagyalogolsz.
+
+<b>Amit telepítés előtt érdemes tudni</b>
+
+A térkép, az útvonalgráf és a címindex nincs benne az alkalmazásban: egyszer töltődnek le a tárhely képernyőről, vagy kézzel telepíthetők az általad előállított fájlokból. A méretük a várostól függ – egy közepes méretű agglomerációnál néhány tíz megabájt, egy fővárosnál több –, és a letöltés előtt kiderül.
+
+<b>A kiszolgált városok</b>
+
+Közel háromszáz hálózat, mintegy harminc országban: mindegyik, amely nyílt adatként teszi közzé az állomásait, és amelynek dokkolóira az útvonalterv támaszkodhat – a párizsi Vélib’-től a New York-i Citi Bike-ig, Prágán, Barcelonán, Koppenhágán, Tokión és Buenos Airesen át. Az alkalmazás a pozíciód alapján felajánlja a tiédet, ha kéred, és többet is telepítve tarthatsz, váltogatva köztük.
+
+Az offline adatcsomagok eddig egy maréknyi városhoz készültek el. A többinél az alkalmazás ezt megmondja, ahelyett hogy úgy tenne, mintha: a lista megmutatja, mi létezik, a fájlok pedig előállíthatók a projekt szkriptjeivel.
+
+Egyetlen hálózathoz sem kötődik: a városok listája magától frissül, és minden város a saját GBFS-adatfolyamának címét hordozza, ami a világ bármely GBFS-hálózatával használhatóvá teszi az alkalmazást.
+
+Szabad szoftver, GNU GPL v3 licenc alatt.
