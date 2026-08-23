@@ -178,7 +178,7 @@
     <string name="welcome_fleet_body">Piirretty pyörä kertoo, mitä kaupunkisi lainaa.\n\nTieto luetaan verkoston omasta syötteestä, sitä ei arvata.</string>
     <string name="welcome_fleet_mechanical_only">Verkosto lainaa vain tavallisia pyöriä.</string>
     <string name="welcome_fleet_electric_only">Verkosto lainaa vain sähköpyöriä.</string>
-    <string name="welcome_fleet_mixed">Verkosto lainaa kumpiakin.</string>
+    <string name="welcome_fleet_mixed">Verkosto lainaa molempia.</string>
 
     <string name="welcome_data_title">Yksi kaupunki, yksi lataus</string>
     <string name="welcome_data_body">Kartta, kadut ja reitinlaskenta ovat laitteessa. Juuri siksi ne toimivat ilman verkkoa – ja siksi kaupunkisi aineistot on ladattava kerran.\n\nAloita siis valitsemalla se. Varaudu noin neljäänkymmeneen megatavuun keskikokoisella kaupunkiseudulla, pääkaupungissa enempään; koko kerrotaan ennen latausta.\n\nVoit tehdä sen myös myöhemmin: siihen asti asemalista ja pyörien saatavuus pysyvät käytettävissä.</string>
@@ -252,10 +252,10 @@
     <string name="about_attribution_gbfs">Pyörien saatavuus: palveltavan verkoston avoin data, julkaistuna GBFS-muodossa. Ranskassa se on indeksoitu osoitteessa transport.data.gouv.fr.</string>
     <string name="about_attribution_osm">Kartta, reitinlaskenta ja maamerkit: © OpenStreetMapin tekijät, ODbL-lisenssi.</string>
     <string name="about_attribution_ban">Osoitteet ja katunumerot: Base Adresse Nationale, ODbL-lisenssi.</string>
-    <string name="about_attribution_brouter">Reitinlaskenta: BRouter, MIT-lisenssi, OpenStreetMap-datan päällä.</string>
+    <string name="about_attribution_brouter">Reitinlaskenta: BRouter, MIT-lisenssi, OpenStreetMap-datan pohjalta.</string>
     <string name="about_attribution_maplibre">Kartan piirto: MapLibre Native, kahden lausekkeen BSD-lisenssi.</string>
     <string name="about_links_title">Paikan avaaminen toisesta sovelluksesta</string>
-    <string name="about_links_body">”geo:”-linkit ja pelkkänä tekstinä jaetut osoitteet tulevat suoraan tänne: valitse Roue Libre Androidin ”Avaa sovelluksessa” -valikosta. Karttapalvelujen linkit tarvitsevat luvan: Asetukset → Sovellukset → Roue Libre → Avaa oletuksena → Lisää linkki.</string>
+    <string name="about_links_body">”geo:”-linkit ja pelkkänä tekstinä jaetut osoitteet tulevat suoraan tänne: valitse Roue Libre Androidin sovellusvalitsimesta. Karttapalvelujen linkit tarvitsevat luvan: Asetukset → Sovellukset → Roue Libre → Avaa oletuksena → Lisää linkki.</string>
     <string name="about_licence_title">Lisenssi</string>
     <string name="about_licence_body">Roue Libre on vapaa ohjelmisto, julkaistu GNU GPL -lisenssin versiolla 3. Sitä saa käyttää, tutkia, muokata ja levittää edelleen.</string>
     <string name="about_open_repository">Katso lähdekoodi</string>
@@ -278,12 +278,12 @@
     <string name="journey_hint">Reitti lasketaan laitteella: kävele asemalle, pyöräile ja kävele loppumatka.</string>
     <!-- The switch that leaves the network out of the journey, and the sentence
          that replaces the one above it when it is on (SPEC §7.3). -->
-    <string name="journey_own_bike">Aja omalla pyörällä</string>
+    <string name="journey_own_bike">Omalla pyörällä</string>
     <string name="journey_hint_own_bike">Reitti lasketaan laitteella: yksi pyöräosuus ovelta ovelle, ilman asemia matkan varrella.</string>
 
     <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
          which is what the application does at rest. -->
-    <string name="journey_bike_kind_any">Mikä tahansa pyörä</string>
+    <string name="journey_bike_kind_any">Mikä tahansa</string>
     <string name="journey_bike_kind_mechanical">Tavallinen</string>
     <string name="journey_bike_kind_electric">Sähköpyörä</string>
     <string name="journey_bike_kind_any_description">Mikä tahansa pyörä, tyypistä riippumatta</string>
@@ -299,7 +299,7 @@
     <string name="journey_locating">Haetaan sijaintia…</string>
     <string name="journey_source_favourite">Suosikkiasema</string>
     <string name="journey_source_on_map">Piste kartalla</string>
-    <string name="journey_no_favourite">Suosikkiasemia ei vielä ole. Avaa asema ja lisää se tähdellä.</string>
+    <string name="journey_no_favourite">Suosikkiasemia ei vielä ole. Avaa asema ja napauta tähteä.</string>
     <string name="journey_pick_crosshair">Kohdistettu piste</string>
     <string name="journey_pick_confirm">Valitse tämä piste</string>
     <string name="journey_picked_point">Piste kartalla</string>
@@ -356,7 +356,7 @@
     <string name="journey_no_mechanical_nearby">Lähistön asemilla ei ole juuri nyt tavallista pyörää. Pyydä mitä tahansa pyörää tai yritä myöhemmin uudelleen.</string>
     <string name="journey_no_electric_nearby">Lähistön asemilla ei ole juuri nyt sähköpyörää. Pyydä mitä tahansa pyörää tai yritä myöhemmin uudelleen.</string>
     <string name="journey_no_dock_nearby">Määränpään lähellä ei ole asemaa, jolla olisi vapaa paikka. Yritä myöhemmin uudelleen tai valitse toinen määränpää.</string>
-    <string name="journey_no_route">Näiden kahden pisteen välillä ei ole kuljettavaa väylää.</string>
+    <string name="journey_no_route">Näiden kahden pisteen välillä ei ole kuljettavaa reittiä.</string>
     <string name="journey_graph_missing">Reittiaineistoa ei ole asennettu. Lisää se Tallennustila-näytöltä.</string>
     <string name="journey_outside_coverage">Tämä piste on asennettujen aineistojen kattaman alueen ulkopuolella.</string>
     <string name="journey_no_stations">Asemia ei tunneta. Päivitä asemalista ja yritä uudelleen.</string>
@@ -383,10 +383,14 @@
     <!-- The order Finnish writes an address in: street, then number, then the
          municipality. `AddressQuery.parseQuery` reads a house number standing
          between the street and the town, which is what lets this line follow
-         Finnish rather than English. The postcode is deliberately not invited:
-         Finland writes it as five digits, and a query holding both a house
-         number and a postcode holds two numbers, which makes the parser give
-         the house number up. -->
+         Finnish rather than English. The postcode is deliberately not invited,
+         but not because it would cost the house number: `parseQuery` strips a
+         postcode BEFORE it looks for a number, and `looksLikePostcode`
+         filters exactly the group of five digits Finland writes, so
+         ”Mannerheimintie 12, 00100 Helsinki” keeps its door. It is left out
+         because the stripped postcode narrows nothing — the index does not
+         hold it in full text — and a prompt should not invite what the search
+         throws away. -->
     <string name="address_search_hint">Katu, numero, paikkakunta</string>
     <string name="address_search_clear">Tyhjennä haku</string>
     <string name="address_search_privacy">Kaikki haetaan laitteella. Mitään ei lähetetä, ei edes kirjoittaessasi.</string>
@@ -443,7 +447,7 @@
         <item quantity="other">%1$d asemaa · koko kerrotaan ennen latausta</item>
     </plurals>
     <string name="city_size_unknown">Koko kerrotaan ennen latausta</string>
-    <string name="city_installed">%1$s asennettuna laitteelle</string>
+    <string name="city_installed">Laitteella %1$s asennettuna</string>
     <string name="city_label">%1$s – %2$s</string>
     <string name="city_delete">Poista</string>
     <!-- These three are handed `city.displayName`, which is the NETWORK's name
@@ -553,11 +557,11 @@
     <string name="download_unmetered_only_description">Yleensä Wi-Fi. Puhelimen jakama yhteys tai rajallinen jakoyhteys laskutetaan megatavuittain ja lasketaan mobiilidataksi.</string>
     <string name="download_held_back_title">Lataus pidätetty</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Tämä yhteys laskutetaan megatavuittain. Yhdistä Wi-Fi-verkkoon ja lataa %1$s, tai lataa se silti nyt.</string>
+    <string name="download_held_back_body">Tämä yhteys laskutetaan megatavuittain. Yhdistä Wi-Fi-verkkoon ja lataa %1$s tai lataa se silti nyt.</string>
     <string name="download_stopped_title">Lataus pysähtyi</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">Tämä yhteys laskutetaan nyt megatavuittain, joten lataus pysähtyi. Jo saapunut osuus säilyy. Yhdistä Wi-Fi-verkkoon ja lataa %1$s loppuun, tai jatka silti nyt.</string>
+    <string name="download_stopped_body">Tämä yhteys laskutetaan nyt megatavuittain, joten lataus pysähtyi. Jo saapunut osuus säilyy. Yhdistä Wi-Fi-verkkoon ja lataa %1$s loppuun tai jatka silti nyt.</string>
     <string name="download_anyway">Lataa silti</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_waiting_for_unmetered">Odotetaan maksutonta yhteyttä, jotta %1$s voidaan ladata.</string>
@@ -609,7 +613,7 @@
          language, and comes from Android rather than from this file. -->
     <string name="settings_language_system">Järjestelmä</string>
     <!-- Spoken label of the row, read aloud in place of the language alone.
-         %1$s is the language in service: "English", "Suomi", or the wording
+         %1$s is the language in service: ”English”, ”Suomi”, or the wording
          above when the device's own is followed. -->
     <string name="settings_language_description">Käyttöliittymän kieli: %1$s</string>
 
