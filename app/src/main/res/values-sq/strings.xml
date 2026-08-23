@@ -31,8 +31,9 @@
 
     The definite article is a suffix here, so a sentence built around a
     placeholder cannot control how the placeholder ends. Several lines are
-    turned around rather than given an ending they could not answer for: the
-    figure follows a colon (`city_installed`, `storage_total`), or a noun this
+    turned around rather than given an ending they could not answer for: what
+    arrives follows a colon (`city_installed`, `storage_total`,
+    `dataset_delete_description`, `station_address_nearby`), or a noun this
     file owns carries the article while the placeholder stands beside it
     (`city_here_body`, `city_proposal_body`). The three dataset names are all
     singular for the same reason, since `dataset_imported`, `dataset_deleted`
@@ -91,7 +92,7 @@
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
-    <string name="map_bikes_all_kinds">Të gjitha biçikletat</string>
+    <string name="map_bikes_all_kinds">Të gjitha</string>
     <string name="map_bikes_mechanical">Mekanike</string>
     <string name="map_bikes_electric">Elektrike</string>
     <string name="map_bikes_all_kinds_description">Numërohen të gjitha biçikletat. Trokit për të numëruar vetëm ato mekanike.</string>
@@ -170,8 +171,8 @@
     <string name="map_outside_city_title">Ndodhesh diku tjetër</string>
     <string name="map_outside_city_message">Pozicioni yt bie jashtë zonës që mbulon %1$s, prandaj kjo hartë nuk mund ta tregojë. Zgjidh qytetin ku ndodhesh për të parë stacionet e tij.</string>
     <string name="map_outside_city_brief">Pozicioni yt bie jashtë zonës që mbulon %1$s.</string>
-    <string name="map_needs_tiles_title">Hartës i duhen të dhënat e saj jashtë linje</string>
-    <string name="map_needs_tiles_message">Instalo të dhënat e hartës nga ekrani i hapësirës ruajtëse. Ndërkohë, lista e stacioneve mbetet e përdorshme.</string>
+    <string name="map_needs_tiles_title">Hartës i duhet harta bazë</string>
+    <string name="map_needs_tiles_message">Instalo hartën bazë nga ekrani i hapësirës ruajtëse. Ndërkohë, lista e stacioneve mbetet e përdorshme.</string>
     <string name="map_needs_city_title">Cili qytet?</string>
     <string name="map_needs_city_message">Zgjidh zonën urbane që do të përdorësh. Të dhënat e saj shkarkohen më pas, një herë e përgjithmonë.</string>
 
@@ -277,7 +278,7 @@
     <string name="journey_choose_origin">Nga ku nisesh?</string>
     <string name="journey_choose_destination">Ku po shkon?</string>
     <string name="journey_swap">Këmbe nisjen me destinacionin</string>
-    <string name="journey_hint">Udhëtimi llogaritet në pajisje: në këmbë deri te një stacion, pastaj me biçikletë dhe në këmbë pjesa tjetër e rrugës.</string>
+    <string name="journey_hint">Udhëtimi llogaritet në pajisje: në këmbë deri te një stacion, pastaj me biçikletë dhe në këmbë pjesën tjetër të rrugës.</string>
     <!-- The switch that leaves the network out of the journey, and the sentence
          that replaces the one above it when it is on (SPEC §7.3). -->
     <string name="journey_own_bike">Me biçikletën time</string>
@@ -367,7 +368,7 @@
         <item quantity="other">%1$d vende parkimi</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
-    <string name="station_address_nearby">Afër %1$s</string>
+    <string name="station_address_nearby">Afër: %1$s</string>
     <string name="station_favourite_add">Shto te të preferuarat</string>
     <string name="station_favourite_remove">Hiq nga të preferuarat</string>
     <string name="station_as_origin">Nisu nga këtu</string>
@@ -481,7 +482,7 @@
     <!-- The three datasets. All three names are singular, so that the verb of
          `dataset_imported`, `dataset_deleted` and `dataset_delete_body` agrees
          with any of them. -->
-    <string name="dataset_tiles">Harta</string>
+    <string name="dataset_tiles">Harta bazë</string>
     <string name="dataset_tiles_purpose">Vizaton hartën pa rrjet</string>
     <string name="dataset_routing">Grafi i itinerarëve</string>
     <string name="dataset_routing_purpose">Llogarit udhëtimet në pajisje</string>
@@ -502,7 +503,7 @@
     <string name="dataset_import">Importo</string>
     <string name="dataset_replace">Zëvendëso</string>
     <string name="dataset_delete">Fshi</string>
-    <string name="dataset_delete_description">Fshi %1$s</string>
+    <string name="dataset_delete_description">Fshi: %1$s</string>
     <string name="dataset_delete_title">Të fshihen këto të dhëna?</string>
     <!-- %1$s is the dataset's name, %2$s the space it frees. -->
     <string name="dataset_delete_body">„%1$s“ do të fshihet dhe do të lirojë %2$s. Do të duhet ta shkarkosh sërish për të punuar jashtë linje.</string>
@@ -530,7 +531,7 @@
     <string name="error_timeout">Serveri i rrjetit po vonon shumë për t’u përgjigjur. Provo përsëri pas pak.</string>
     <string name="error_server_refused">Serveri i rrjetit ktheu një gabim (%1$d). Provo përsëri më vonë.</string>
     <string name="error_untrusted_server">Serveri i rrjetit paraqiti një certifikatë sigurie të pavlefshme. Të dhënat e tij nuk merren dot në mënyrë të sigurt derisa operatori ta rinovojë.</string>
-    <string name="error_malformed">Të dhënat e marra janë të palexueshme. Faji është i burimit të rrjetit; provo përsëri më vonë.</string>
+    <string name="error_malformed">Të dhënat e marra janë të palexueshme. Fajin e ka burimi i rrjetit; provo përsëri më vonë.</string>
     <string name="error_feed_unavailable">Rrjeti nuk e publikon burimin „%1$s“.</string>
     <string name="error_unsupported_version">Ky rrjet i publikon të dhënat në versionin %1$s, të cilin ky version i aplikacionit nuk e lexon dot. Përditëso aplikacionin.</string>
     <string name="error_local_storage">Të dhënat e ruajtura në pajisje nuk lexohen dot.</string>
@@ -553,7 +554,7 @@
     <string name="download_can_resume">Kjo lidhje nuk faturohet më. Nise sërish shkarkimin: ai vazhdon aty ku ndaloi.</string>
 
     <!-- Opening screen, large numbers, own bike kind -->
-    <string name="settings_opening_title">Ekrani i parazgjedhur i nisjes</string>
+    <string name="settings_opening_title">Aplikacioni hapet te</string>
     <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_opening_description">Ekrani me të cilin hapet aplikacioni</string>
     <string name="settings_opening_map">Harta</string>
