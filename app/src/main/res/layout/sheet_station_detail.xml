@@ -66,8 +66,15 @@
             tools:visibility="visible" />
 
         <!-- A state banner, shown only when the station does not provide its
-             service: a station that works has no need to announce itself. -->
+             service: a station that works has no need to announce itself.
+
+             `Widget.RoueLibre.Name` for the reason type.xml gives: this is a
+             label, not a paragraph, and once the closure names its age the
+             line wraps at the larger text sizes. Justified, its first line
+             came out spread bank to bank with the separator adrift in the
+             middle of it. -->
         <TextView
+            style="@style/Widget.RoueLibre.Name"
             android:id="@+id/service_state"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
