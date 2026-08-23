@@ -68,12 +68,22 @@
     <string name="map_bikes_all_kinds_description">Every bike is counted. Tap to count the mechanical ones only.</string>
     <string name="map_bikes_mechanical_description">Mechanical bikes are counted. Tap to count the electric ones only.</string>
     <string name="map_bikes_electric_description">Electric bikes are counted. Tap to count them all.</string>
-    <!-- The label beside a count, on a station's sheet and on a list row.
-         No item holds a number, and none ever should: the figure is already
-         painted in the disc these words stand next to, so writing it here
-         would say it twice. The word alone agrees, which is why these are
-         plurals resolved with the count and formatted with nothing.
-         `CounterpartAgreementTest` fails the day a placeholder comes back. -->
+    <!-- The label under, or beside, a count.
+         No item holds a number, and none ever should: the figure is written
+         next to these words already, so writing it here would say it twice.
+         The word alone agrees, which is why these are plurals resolved with
+         the count and formatted with nothing. `CounterpartAgreementTest`
+         fails the day a placeholder comes back.
+         **Where the figure sits is not the same on the two screens, and a
+         language whose grammar reaches across the gap has to know it.** On a
+         station's sheet the two are side by side. On a list row they are
+         stacked, the figure over the label, and the label is set in capitals
+         (`TextAppearance.RoueLibre.Label`): whatever stands at the head of it
+         is read as a word of its own, on its own line, and not as part of the
+         phrase the count would make. Romanian found this the hard way — its
+         grammar wants "de" after twenty, and "DE LOCURI LIBERE" alone under a
+         figure reads as nothing at all. Treat these as labels, not as the
+         tail of a sentence. -->
     <plurals name="counterpart_bikes" tools:ignore="ImpliedQuantity">
         <item quantity="one">bike</item>
         <item quantity="other">bikes</item>
