@@ -60,8 +60,9 @@
     <string name="station_beyond_area">Denne stasjonen ligger utenfor området de installerte dataene dekker. Syklene der telles med i sanntid, men verken kart eller rute når fram til den.</string>
 
     <string name="search_stations_hint">Søk etter en stasjon</string>
-    <!-- "Tøm" and not Android's own "Slett søket": on these screens the same
-         verb also erases a city's data, and one word may not do both. -->
+    <!-- "Tøm" and not Android's own "Slett søket": on the city screen the same
+         verb erases a city's data a few pixels away, and one word may not do
+         both. The four search fields keep one wording. -->
     <string name="search_stations_clear">Tøm søket</string>
     <string name="stations_no_match_title">Ingen stasjon funnet</string>
     <string name="stations_no_match_message">Ingenting samsvarer med «%1$s». Sjekk stavemåten, eller tøm søket.</string>
@@ -152,7 +153,7 @@
     <string name="map_location_denied">Uten posisjon må du velge startpunktet på kartet eller ved adresse.</string>
     <string name="map_location_unavailable">Posisjonen er ikke tilgjengelig. Sjekk at posisjon er slått på, og prøv igjen.</string>
     <string name="map_outside_city_title">Du er et annet sted</string>
-    <string name="map_outside_city_message">Posisjonen din ligger utenfor området %1$s dekker, så dette kartet kan ikke vise den. Velg byen du er i, for å se stasjonene der.</string>
+    <string name="map_outside_city_message">Posisjonen din ligger utenfor området %1$s dekker, så dette kartet kan ikke vise den. Velg byen du er i for å se stasjonene der.</string>
     <string name="map_outside_city_brief">Posisjonen din ligger utenfor området %1$s dekker.</string>
     <!-- Named after the dataset the storage screen calls "Kartdata", so the
          title and the screen it sends the reader to say the same word. -->
@@ -179,7 +180,7 @@
          does Android itself — "Ingen internettilkobling"
          (`settings:wifi_connected_no_internet`). The word is right; the
          dictionary is out of date. -->
-    <string name="welcome_data_body" tools:ignore="Typos">Kartet, gatene og ruteberegningen ligger på enheten. Det er det som gjør at de virker uten internett – og det betyr at dataene for byen din må lastes ned én gang.\n\nSå begynn med å velge den. Regn med rundt førti megabyte for et mellomstort byområde, mer for en hovedstad; størrelsen oppgis før nedlastingen.\n\nDu kan også gjøre det senere: inntil da er stasjonslisten og tilgjengeligheten fortsatt brukbar.</string>
+    <string name="welcome_data_body" tools:ignore="Typos">Kartet, gatene og ruteberegningen ligger på enheten. Det er det som gjør at de virker uten internett – og det betyr at dataene for byen din må lastes ned én gang.\n\nSå begynn med å velge den. Regn med rundt førti megabyte for et mellomstort byområde, mer for en hovedstad; størrelsen oppgis før nedlastingen.\n\nDu kan også gjøre det senere: inntil da er stasjonslisten og tilgjengeligheten fortsatt brukbare.</string>
     <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d av %2$d</string>
     <string name="welcome_continue">Fortsett</string>
     <string name="welcome_skip">Hopp over</string>
@@ -294,7 +295,7 @@
     <string name="journey_bike_kind_mechanical">Mekanisk</string>
     <string name="journey_bike_kind_electric">Elektrisk</string>
     <string name="journey_bike_kind_any_description">Enhver sykkel, uansett slag</string>
-    <string name="journey_bike_kind_mechanical_description">En sykkel jeg trår selv</string>
+    <string name="journey_bike_kind_mechanical_description">En sykkel jeg tråkker selv</string>
     <string name="journey_bike_kind_electric_description">En elsykkel med tråkkhjelp</string>
     <string name="journey_compute">Beregn reisen</string>
     <string name="journey_computing">Beregner den beste reisen …</string>
@@ -520,7 +521,7 @@
     <string name="dataset_rejected_format">Dette er ikke den forventede filen. Velg filen «%1$s» som genereringsskriptene lager.</string>
     <string name="dataset_rejected_version">Denne filen er i formatversjon %1$d, og denne versjonen av appen leser versjon %2$d. Oppdater appen.</string>
     <string name="dataset_rejected_checksum">Filen stemmer ikke med kontrollsummen sin: den er ufullstendig eller skadet. Last den ned på nytt.</string>
-    <string name="dataset_rejected_transfer">Kopieringen av filen mislyktes. Sjekk den ledige plassen, og prøv igjen.</string>
+    <string name="dataset_rejected_transfer">Kopieringen av filen mislyktes. Sjekk den ledige lagringsplassen, og prøv igjen.</string>
 
     <string name="error_offline">Ingen tilkobling. Den sist kjente tilgjengeligheten blir stående på skjermen.</string>
     <!-- The same failures read on the storage screen, where a dataset transfer
@@ -548,14 +549,14 @@
          (`settings:wifi_metered_label`, `settings:wifi_unmetered_label`); the
          switch takes the second so it stays on one line. -->
     <string name="download_unmetered_only">Last bare ned uten datamåling</string>
-    <string name="download_unmetered_only_description">Som regel wifi. En delt telefontilkobling eller et hotspot med datagrense måles per megabyte og teller som mobildata.</string>
+    <string name="download_unmetered_only_description">Som regel wifi. En delt telefontilkobling eller en wifi-sone med datagrense måles per megabyte og teller som mobildata.</string>
     <string name="download_held_back_title">Nedlastingen er holdt tilbake</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_held_back_body">Denne tilkoblingen måles per megabyte. Koble til wifi for å laste ned %1$s, eller last det ned likevel nå.</string>
     <string name="download_stopped_title">Nedlastingen stoppet</string>
     <!-- %1$s is a size. What has already arrived is kept on the device and the
          transfer picks up from there. -->
-    <string name="download_stopped_body">Denne tilkoblingen måles nå per megabyte, så nedlastingen stoppet. Det som har kommet inn, er lagret. Koble til wifi for å gjøre ferdig de %1$s, eller fortsett likevel nå.</string>
+    <string name="download_stopped_body">Denne tilkoblingen måles nå per megabyte, så nedlastingen stoppet. Det som har kommet inn, er lagret. Koble til wifi for å fullføre de %1$s, eller fortsett likevel nå.</string>
     <string name="download_anyway">Last ned likevel</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_waiting_for_unmetered">Venter på en tilkobling uten datamåling for å laste ned %1$s.</string>
