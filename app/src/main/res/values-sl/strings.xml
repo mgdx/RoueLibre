@@ -8,14 +8,15 @@
     number, and the `name` attributes left untouched.
 
     The reader is addressed with **vikanje**, and that is Android's own habit
-    rather than a house style: of the 5 900 system strings extracted from this
-    phone's `framework-res.apk` and `Settings.apk`, 174 carry a vy form
-    (Dotaknite se, Preverite, Poskusite, Izberite, Vnesite) against 95 bare
-    imperatives — and every one of those 95 is a **button or a menu label**
-    (Izberi datoteko, Namesti, Izklopi, Nastavi datum), never a sentence. This
+    rather than a house style. The system strings extracted from this phone's
+    `framework-res.apk` and `Settings.apk` share the two registers **by
+    context**, not by weight of numbers: a preference title, a button and a
+    switch take the bare imperative (Izberi datoteko, Namesti, Izklopi,
+    Nastavi datum), while the body of a dialog and an error message take the
+    vy form (Dotaknite se, Preverite, Poskusite, Izberite, Vnesite). This
     file follows the same split: a control takes the bare imperative — Prekliči,
     Izbriši, Nadaljuj, Preskoči, Poskusi znova, Osveži — and a sentence takes
-    the vy form. A confirmation dialog asks „Želite … ?“, which is what
+    the vy form. A confirmation dialog asks „Želite …?“, which is what
     Settings does (`dev_logpersist_clear_warning_title`).
 
     Typography. Quotation marks are **„ … “**. An **ellipsis stands off its
@@ -42,6 +43,13 @@
     lines here are turned around rather than given an ending they could not
     control: a name is set in apposition after a noun that carries the case
     („do postaje %1$s“), or the line becomes a label with a colon.
+
+    A **preposition** in front of a placeholder is the same trap read from the
+    other end: „z“ becomes „s“ before p, t, k, s, š, c, č, f and h, and the
+    word that follows a search placeholder is whatever the reader typed. The
+    three „no match“ lines therefore carry no preposition at all — they lean
+    on „ustrezati“, which governs the dative, and the dative falls on
+    „iskanju“, a word this file chose and can decline.
 
     See docs/sl-glossary.md for the words this file holds to, and
     CONTRIBUTING.md to submit a translation.
@@ -89,18 +97,18 @@
          covers. The short form joins the rest of the row, so it stays
          lowercase. -->
     <string name="station_beyond_area_short">zunaj zemljevida</string>
-    <string name="station_beyond_area">Ta postaja je zunaj območja, ki ga pokrivajo nameščeni podatki. Njena kolesa se štejejo v živo, do nje pa ne sežeta ne zemljevid ne izračun poti.</string>
+    <string name="station_beyond_area">Ta postaja je zunaj območja, ki ga pokrivajo nameščeni podatki. Njena kolesa se štejejo v realnem času, do nje pa ne sežeta ne zemljevid ne izračun poti.</string>
 
     <string name="search_stations_hint">Iskanje postaje</string>
     <string name="search_stations_clear">Počisti iskanje</string>
     <string name="stations_no_match_title">Ni najdenih postaj</string>
-    <string name="stations_no_match_message">Nič se ne ujema z „%1$s“. Preverite črkovanje ali počistite iskanje.</string>
+    <string name="stations_no_match_message">Nič ne ustreza iskanju „%1$s“. Preverite črkovanje ali počistite iskanje.</string>
     <string name="action_clear_search">Počisti iskanje</string>
 
     <string name="mode_bikes">Kolesa</string>
     <string name="mode_docks">Prosta mesta</string>
-    <string name="mode_bikes_description">Prikaz razpoložljivih koles</string>
-    <string name="mode_docks_description">Prikaz prostih mest</string>
+    <string name="mode_bikes_description">Prikaži razpoložljiva kolesa</string>
+    <string name="mode_docks_description">Prikaži prosta mesta</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). The three labels are neuter plural adjectives agreeing
@@ -193,7 +201,7 @@
     <string name="action_retry">Poskusi znova</string>
 
     <string name="map_open_list">Prikaži seznam postaj</string>
-    <string name="map_attribution">© Sodelujoči OpenStreetMap</string>
+    <string name="map_attribution">© sodelujoči na OpenStreetMapu</string>
     <string name="map_locate_me">Poišči moj položaj</string>
     <string name="map_location_denied">Brez lokacije izberite izhodišče na zemljevidu ali po naslovu.</string>
     <string name="map_location_unavailable">Položaj ni na voljo. Preverite, ali je lokacija vklopljena, in poskusite znova.</string>
@@ -208,7 +216,7 @@
     <string name="map_needs_city_message">Izberite mestno območje, ki ga želite uporabljati. Njegovi podatki se prenesejo pozneje, enkrat za vselej.</string>
 
     <string name="welcome_hello_title">Roue Libre</string>
-    <string name="welcome_hello_body">Ta aplikacija prikazuje kolesa za souporabo na zemljevidu in izračuna pot od vrat do vrat: peš do postaje, vožnja s kolesom, nato peš do cilja.\n\nJe brezplačna in odprtokodna. Brez računa, brez oglasov, brez sledilnikov.</string>
+    <string name="welcome_hello_body">Ta aplikacija prikazuje kolesa za souporabo na zemljevidu in izračuna pot od vrat do vrat: peš do postaje, vožnja s kolesom, nato peš do cilja.\n\nJe prosta in odprtokodna programska oprema. Brez računa, brez oglasov, brez sledilnikov.</string>
     <string name="welcome_privacy_title">Nič ne zapusti tega telefona</string>
     <string name="welcome_privacy_body">Poti se izračunajo na tem telefonu. Naslovi, ki jih iščete, se ne pošljejo nikomur, niti med tipkanjem.\n\nZgodovina se ne shranjuje: ne vaše poti, ne vaši položaji, ne vaši cilji.\n\nEdina zahteva, ki v vsakdanji rabi odide ven, sprašuje, koliko koles je na voljo.</string>
     <string name="welcome_fleet_title">Kaj pove kolo</string>
@@ -258,7 +266,7 @@
     <string name="settings_walking_pace_slow">Počasen</string>
     <string name="settings_walking_pace_normal">Običajen</string>
     <string name="settings_walking_pace_brisk">Hiter</string>
-    <string name="settings_walking_pace_description">Tempo, po katerem se izračunajo odseki poti, prehojeni peš</string>
+    <string name="settings_walking_pace_description">Tempo, s katerim se izračunajo odseki poti, prehojeni peš</string>
 
     <string name="settings_theme_title">Tema</string>
     <string name="settings_theme_system">Sistem</string>
@@ -285,12 +293,12 @@
     <string name="about_privacy_body">Brez računa, brez oglasov, brez sledilnikov, brez enoličnega identifikatorja. Nič, kar poiščete ali izračunate, ne zapusti tega telefona: naslovi, poti in vaš položaj ostanejo tu in se ne shranjujejo. Edina zahteva, ki v vsakdanji rabi odide ven, pridobi razpoložljivost koles. Nabori podatkov se prenesejo samo, kadar to zahtevate.</string>
     <string name="about_attributions_title">Viri podatkov</string>
     <string name="about_attribution_gbfs">Razpoložljivost koles: odprti podatki omrežja, ki ga uporabljate, objavljeni v obliki GBFS. V Franciji so popisani na transport.data.gouv.fr.</string>
-    <string name="about_attribution_osm">Zemljevid, izračun poti in orientirji: © Sodelujoči OpenStreetMap, licenca ODbL.</string>
+    <string name="about_attribution_osm">Zemljevid, izračun poti in orientirji: © sodelujoči na OpenStreetMapu, licenca ODbL.</string>
     <string name="about_attribution_ban">Naslovi in hišne številke: Base Adresse Nationale, licenca ODbL.</string>
     <string name="about_attribution_brouter">Izračun poti: BRouter, licenca MIT, na podatkih OpenStreetMap.</string>
     <string name="about_attribution_maplibre">Izris zemljevida: MapLibre Native, licenca BSD z dvema členoma.</string>
     <string name="about_links_title">Odpiranje kraja iz druge aplikacije</string>
-    <string name="about_links_body">Povezave „geo:“ in naslovi, deljeni kot navadno besedilo, pridejo naravnost sem: v Androidovem izbirniku izberite Roue Libre. Povezave s spletnih zemljevidov potrebujejo dovoljenje: Nastavitve → Aplikacije → Roue Libre → Privzeto odpiranje → Dodaj povezavo.</string>
+    <string name="about_links_body">Povezave „geo:“ in naslovi, deljeni kot navadno besedilo, pridejo naravnost sem: v Androidovem izbirniku izberite Roue Libre. Povezave s spletnih zemljevidov potrebujejo dovoljenje: Nastavitve → Aplikacije → Roue Libre → Privzeto odpiranje → Dodajte povezavo.</string>
     <string name="about_licence_title">Licenca</string>
     <string name="about_licence_body">Roue Libre je prosta programska oprema, izdana pod licenco GNU GPL različice 3. Lahko jo uporabljate, preučujete, spreminjate in posredujete naprej.</string>
     <string name="about_open_repository">Prikaži izvorno kodo</string>
@@ -370,12 +378,12 @@
     <string name="journey_step_ride_all">S kolesom do cilja</string>
     <!-- The summary of a journey ridden on one's own bike: it sits under the
          total time and says how far, and how much of it goes up. -->
-    <string name="journey_own_bike_only">s svojim kolesom, na razdalji %1$s.</string>
-    <string name="journey_own_bike_only_climb">s svojim kolesom, na razdalji %1$s in %2$s vzpona.</string>
-    <string name="journey_walk_only">peš, na razdalji %1$s – kolesarska pot tu ni mogoča.</string>
-    <string name="journey_walk_only_climb">peš, na razdalji %1$s in %2$s vzpona – kolesarska pot tu ni mogoča.</string>
-    <string name="journey_walk_is_quicker">peš, na razdalji %1$s – hitreje kot iti po kolo.</string>
-    <string name="journey_walk_is_quicker_climb">peš, na razdalji %1$s in %2$s vzpona – hitreje kot iti po kolo.</string>
+    <string name="journey_own_bike_only">s svojim kolesom, %1$s.</string>
+    <string name="journey_own_bike_only_climb">s svojim kolesom, %1$s in %2$s vzpona.</string>
+    <string name="journey_walk_only">peš, %1$s – pot s kolesom tu ni mogoča.</string>
+    <string name="journey_walk_only_climb">peš, %1$s in %2$s vzpona – pot s kolesom tu ni mogoča.</string>
+    <string name="journey_walk_is_quicker">peš, %1$s – hitreje, kot bi šli po kolo.</string>
+    <string name="journey_walk_is_quicker_climb">peš, %1$s in %2$s vzpona – hitreje, kot bi šli po kolo.</string>
     <string name="journey_none_title">Ni poti</string>
     <string name="journey_no_bike_nearby">V bližini izhodišča ni postaje s kolesom. Poskusite pozneje ali pa začnite drugje.</string>
 
@@ -435,7 +443,7 @@
     <string name="address_searching_title">Iskanje …</string>
     <string name="address_searching_message">Pregledovanje naslovov, nameščenih v tej napravi.</string>
     <string name="address_no_match_title">Ni najdenih naslovov</string>
-    <string name="address_no_match_message">Nič se ne ujema z „%1$s“. Poskusite samo ime ulice ali pa dodajte kraj.</string>
+    <string name="address_no_match_message">Nič ne ustreza iskanju „%1$s“. Poskusite samo ime ulice ali pa dodajte kraj.</string>
     <string name="address_needs_index_title">Iskanje potrebuje kazalo naslovov</string>
     <string name="address_needs_index_message">Namestite kazalo na zaslonu s shrambo. Ostane v napravi in nikoli ne odide v omrežje.</string>
     <string name="address_unreadable_title">Kazala naslovov ni mogoče prebrati</string>
@@ -482,7 +490,7 @@
     </plurals>
     <string name="city_size_unknown">Velikost je napovedana pred prenosom</string>
     <!-- %1$s is a size, "42 MB" for instance. -->
-    <string name="city_installed">%1$s nameščeno v napravi</string>
+    <string name="city_installed">Nameščeno v napravi: %1$s</string>
     <string name="city_label">%1$s – %2$s</string>
     <string name="city_delete">Izbriši</string>
     <!-- The three lines below are handed the **network's** name, not the
@@ -499,7 +507,7 @@
     <string name="city_search_hint">Iskanje mesta</string>
     <string name="city_search_clear">Počisti iskanje</string>
     <string name="city_no_match_title">Ni najdenih mest</string>
-    <string name="city_no_match_message">Nič se ne ujema z „%1$s“. Preverite črkovanje ali počistite iskanje.</string>
+    <string name="city_no_match_message">Nič ne ustreza iskanju „%1$s“. Preverite črkovanje ali počistite iskanje.</string>
     <string name="city_proposal_title">Vaše mesto</string>
     <!-- Shown when the position says one is in another served conurbation than
          the one installed. "Tega omrežja" rather than a pronoun: the
@@ -520,9 +528,9 @@
     <string name="size_gigabytes">%1$s GB</string>
 
     <string name="storage_title">Shramba</string>
-    <string name="storage_open">Upravljanje podatkov brez povezave</string>
+    <string name="storage_open">Upravljaj podatke brez povezave</string>
     <string name="storage_intro">Zemljevid, načrtovanje poti in iskanje naslovov delujejo brez omrežja. Potrebujejo tri nabore podatkov, ki se namestijo enkrat.</string>
-    <string name="storage_total">%1$s uporabljeno v tej napravi</string>
+    <string name="storage_total">Uporabljeno v tej napravi: %1$s</string>
     <string name="storage_nothing_installed">Ni nameščenih podatkov</string>
     <string name="storage_no_city">Nobeno mesto ni izbrano</string>
 
@@ -547,7 +555,10 @@
     <string name="dataset_import">Uvozi</string>
     <string name="dataset_replace">Zamenjaj</string>
     <string name="dataset_delete">Izbriši</string>
-    <string name="dataset_delete_description">Izbriši %1$s</string>
+    <!-- A label with a colon, for the same reason as `dataset_imported` below:
+         `DatasetAdapter` hands this line a dataset's name in the nominative,
+         and „Izbriši“ would ask it for an accusative it cannot give. -->
+    <string name="dataset_delete_description">Izbriši: %1$s</string>
     <string name="dataset_delete_title">Želite izbrisati te podatke?</string>
     <!-- %1$s is the dataset's name, %2$s the space it frees. -->
     <string name="dataset_delete_body">Podatki „%1$s“ bodo izbrisani, kar sprosti %2$s. Za delo brez povezave jih bo treba znova prenesti.</string>
@@ -586,25 +597,26 @@
     <string name="error_no_city_chosen">Nobeno mesto ni izbrano. Izberite ga.</string>
 
     <!-- Unmetered-only downloads. Android's own pair of labels is
-         `settings:wifi_unmetered_label` / `settings:wifi_metered_label`:
+         `settings:wifi_unmetered_label` /
+         `settings:wifitrackerlib_wifi_metered_label`:
          "z neomejenim prenosom podatkov" against "z omejenim prenosom
          podatkov". The setting names what is billed rather than Wi-Fi. -->
     <string name="download_unmetered_only">Prenašaj samo prek povezave z neomejenim prenosom podatkov</string>
     <string name="download_unmetered_only_description">Običajno Wi-Fi. Deljena povezava telefona ali dostopna točka z omejitvijo se zaračunava po megabajtih in šteje za mobilne podatke.</string>
     <string name="download_held_back_title">Prenos je zadržan</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Ta povezava se zaračunava po megabajtih. Za prenos %1$s se povežite v omrežje Wi-Fi ali pa prenesite kar zdaj.</string>
+    <string name="download_held_back_body">Ta povezava se zaračunava po megabajtih. Za prenos %1$s se povežite z omrežjem Wi-Fi ali pa prenesite kar zdaj.</string>
     <string name="download_stopped_title">Prenos je ustavljen</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is
          kept on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">Ta povezava se zdaj zaračunava po megabajtih, zato se je prenos ustavil. Kar je že prispelo, ostane shranjeno. Povežite se v omrežje Wi-Fi, da dokončate %1$s, ali pa vseeno nadaljujte zdaj.</string>
+    <string name="download_stopped_body">Ta povezava se zdaj zaračunava po megabajtih, zato se je prenos ustavil. Kar je že prispelo, ostane shranjeno. Povežite se z omrežjem Wi-Fi, da dokončate %1$s, ali pa vseeno nadaljujte zdaj.</string>
     <string name="download_anyway">Vseeno prenesi</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_waiting_for_unmetered">Čakanje na povezavo z neomejenim prenosom podatkov za prenos %1$s.</string>
     <string name="download_can_resume">Ta povezava se ne zaračunava več. Znova zaženite prenos: nadaljeval se bo tam, kjer se je ustavil.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
-    <string name="settings_opening_title">Aplikacija se privzeto odpre na</string>
+    <string name="settings_opening_title">Zaslon ob odprtju aplikacije</string>
     <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_opening_description">Zaslon, na katerem se aplikacija odpre</string>
     <string name="settings_opening_map">Zemljevid</string>
@@ -631,12 +643,12 @@
     <string name="settings_own_bike_kind_mechanical">Navadno</string>
     <string name="settings_own_bike_kind_electric">Električno</string>
     <!-- Under the two buttons. Says what the declaration changes. -->
-    <string name="settings_own_bike_kind_hint">Če ga navedete kot električnega, dobi vaše kolo svojo pot in svoje čase.</string>
+    <string name="settings_own_bike_kind_hint">Če svoje kolo navedete kot električno, dobi svojo pot in svoje čase.</string>
 
     <!-- The summary of a ride on one's own bike, where that bike was said to
          be a pedal-assist one. %1$s is a distance, %2$s a climb. -->
-    <string name="journey_own_bike_electric_only">s svojim električnim kolesom, na razdalji %1$s.</string>
-    <string name="journey_own_bike_electric_only_climb">s svojim električnim kolesom, na razdalji %1$s in %2$s vzpona.</string>
+    <string name="journey_own_bike_electric_only">s svojim električnim kolesom, %1$s.</string>
+    <string name="journey_own_bike_electric_only_climb">s svojim električnim kolesom, %1$s in %2$s vzpona.</string>
     <!-- Application language -->
     <string name="settings_language_title">Jezik</string>
     <!-- Heads the list of languages: the interface follows the device's own

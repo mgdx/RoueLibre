@@ -8,15 +8,15 @@ Vse teče v napravi: zemljevid, iskanje naslovov in izračun poti ne potrebujejo
 • Brez telemetrije, brez sledilnikov, brez enoličnega identifikatorja, brez računa.
 • Brez shranjenih podatkov o poteh: brez zgodovine, brez položajev, brez ciljev. Kar iščete, ne zapusti telefona.
 • Nobeno mesto ni vsiljeno: v napravi sobiva več mestnih območij, podatke enega mesta pa je mogoče izbrisati, ne da bi se to dotaknilo drugih.
-• Pot optimizira <i>par</i> postaj — izhodiščno in ciljno — namesto da bi se zadovoljila z najbližjo, in pretehta tveganje, da se slabo založena postaja izprazni, medtem ko hodite do nje.
+• Pot optimizira <i>par</i> postaj – izhodiščno in ciljno – namesto da bi se zadovoljila z najbližjo, in pretehta tveganje, da se slabo založena postaja izprazni, medtem ko hodite do nje.
 
 <b>Kar je dobro vedeti pred namestitvijo</b>
 
-Zemljevid, graf za izračun poti in kazalo naslovov niso v aplikaciji: prenesejo se enkrat, z zaslona s shrambo, ali pa jih ročno namestite iz datotek, ki jih ustvarite sami. Njihova teža je odvisna od mesta — nekaj deset megabajtov za srednje veliko mestno območje, več za prestolnico — in je napovedana pred prenosom.
+Zemljevid, graf za izračun poti in kazalo naslovov niso v aplikaciji: prenesejo se enkrat, z zaslona s shrambo, ali pa jih ročno namestite iz datotek, ki jih ustvarite sami. Njihova teža je odvisna od mesta – nekaj deset megabajtov za srednje veliko mestno območje, več za prestolnico – in je napovedana pred prenosom.
 
 <b>Mesta, ki jih aplikacija pokriva</b>
 
-Skoraj tristo omrežij v okoli tridesetih državah: vsa, ki svoje postaje objavljajo kot odprte podatke in katerih stojala so dovolj zanesljiva za izračun poti — od Vélib’ v Parizu do Citi Bike v New Yorku, mimo Prage, Barcelone, Kopenhagna, Tokia in Buenos Airesa. Aplikacija vam vaše predlaga glede na položaj, če jo za to prosite, nameščenih pa jih lahko obdržite več in med njimi preklapljate.
+Skoraj tristo omrežij v okoli tridesetih državah: vsa, ki svoje postaje objavljajo kot odprte podatke in katerih stojala so dovolj zanesljiva za izračun poti – od Vélib’ v Parizu do Citi Bike v New Yorku, mimo Prage, Barcelone, Kopenhagna, Tokia in Buenos Airesa. Aplikacija vam vaše predlaga glede na položaj, če jo za to prosite, nameščenih pa jih lahko obdržite več in med njimi preklapljate.
 
 Nabori podatkov za delo brez povezave so bili doslej ustvarjeni za peščico njih. Za druga mesta aplikacija to pove, namesto da bi se pretvarjala: seznam kaže, kaj obstaja, datoteke pa je mogoče ustvariti s skripti iz repozitorija.
 

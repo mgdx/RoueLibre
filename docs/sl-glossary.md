@@ -15,16 +15,17 @@ choice is this file's own and says so.
 ## Register and typography
 
 The reader is addressed with **vikanje**, and buttons take the **bare
-imperative**. That split is Android's own rather than a house style: of the
-5 900 system strings, 174 carry a *vy* form — *Dotaknite se*, *Preverite*,
-*Poskusite*, *Izberite*, *Vnesite* — and 95 carry a bare imperative, every one
-of which is a button or a menu label (*Izberi datoteko*, *Namesti*, *Izklopi*,
-*Nastavi datum*) and not one of which is a sentence. So this file writes
-*Prekliči*, *Izbriši*, *Nadaljuj*, *Preskoči*, *Poskusi znova*, *Osveži* on
-controls, and *Preverite črkovanje*, *Namestite kazalo*, *Izberite mesto* in
-prose.
+imperative**. That split is Android's own rather than a house style, and it is
+a split **by context, not by count**: the two registers are about equally
+common in the system strings, and what separates them is where they sit.
+A preference title, a button and a switch take the bare imperative — *Izberi
+datoteko*, *Namesti*, *Izklopi*, *Nastavi datum*. The body of a dialog and an
+error message take the *vy* form — *Dotaknite se*, *Preverite*, *Poskusite*,
+*Izberite*, *Vnesite*. So this file writes *Prekliči*, *Izbriši*, *Nadaljuj*,
+*Preskoči*, *Poskusi znova*, *Osveži* on controls, and *Preverite črkovanje*,
+*Namestite kazalo*, *Izberite mesto* in prose.
 
-A confirmation dialog asks **„Želite … ?“** — *Želite izbrisati te podatke?* —
+A confirmation dialog asks **„Želite …?“** — *Želite izbrisati te podatke?* —
 which is how Settings phrases the same question
 (`settings:dev_logpersist_clear_warning_title`, "Clear logger persistent
 storage?" → „Želite izbrisati trajno shranjevanje dnevniškega orodja?“).
@@ -90,16 +91,19 @@ one it is read in most often — which is also Android's order there
 Slovene declines, and the ending falls on the word itself. A sentence built
 around `%1$s` has to stay right whatever arrives in it, and what arrives is
 always a nominative: a station name, a street name, a network label, a size.
-Six lines are written around that rather than against it:
+Several lines are written around that rather than against it:
 
 | String | What it does | Why |
 |---|---|---|
 | `station_address_nearby` | `V bližini: %1$s` | *V bližini* governs the genitive, and the argument is a street **or** a square, as the index holds it. A colon turns the line into a label, which declines nothing. |
 | `journey_step_to_station`, `journey_step_ride` | `Peš do postaje %1$s`, `S kolesom do postaje %1$s` | The case falls on *postaje*; the name follows in apposition, in the nominative, exactly as it arrived. |
 | `city_delete_description`, `city_delete_body`, `city_deleted` | `Izbriši podatke: %1$s`, `… „%1$s“ …`, `Podatki izbrisani: %1$s` | **Not the apposition device, and here is why not.** All three are handed the **network's** `displayName`, not the city's: 328 of the 331 catalogue entries carry one of their own, and *Nomago Bikes* alone serves Ljubljana, Celje and Nova Gorica. Writing „podatki mesta %1$s“ would have made a Celje reader read „podatki mesta Nomago Bikes“ — a claim the English never makes, since it says only "Data **for** %1$s". The colon and the quotation marks hold the name at arm's length instead. |
-| `dataset_imported`, `dataset_deleted` | `Nameščeno: %1$s`, `Izbrisano: %1$s` | A dataset's name is a masculine plural in two cases (*Podatki zemljevida*, *Podatki za izračun poti*) and a neuter singular in the third (*Kazalo naslovov*), so no participle agrees with all three. A label with a colon agrees with nothing. |
+| `dataset_imported`, `dataset_deleted`, `dataset_delete_description` | `Nameščeno: %1$s`, `Izbrisano: %1$s`, `Izbriši: %1$s` | A dataset's name is a masculine plural in two cases (*Podatki zemljevida*, *Podatki za izračun poti*) and a neuter singular in the third (*Kazalo naslovov*), so no participle agrees with all three. A label with a colon agrees with nothing — and `Izbriši %1$s` had the same fault in the other case, since `DatasetAdapter` hands the name over in the nominative and the verb wanted an accusative. |
 | `city_here_body`, `city_here_installed_body` | *podatke tega omrežja*, *njegove postaje* | The same problem in the other direction: they need a possessive for the network, whose gender the placeholder hides. *Omrežje* is neuter and fixed, so the sentence leans on that noun instead of on a pronoun that would have to agree with whatever `cityLabel` produced. |
 | `map_outside_city_message`, `city_proposal_body` | *območja, ki ga pokriva %1$s* | The placeholder is the subject of *pokriva* and stays in the nominative, which is the case it arrives in. |
+| `city_installed`, `storage_total` | `Nameščeno v napravi: %1$s`, `Uporabljeno v tej napravi: %1$s` | The argument is a size, and a quantified phrase carries its own agreement: no participle written in front of *%1$s* is right for *42 MB*, *1,3 GB* and *900 B* alike. The colon again. |
+| `journey_own_bike_only`, `journey_walk_only`, `journey_walk_is_quicker`, `journey_own_bike_electric_only`, and the `_climb` half of each | *s svojim kolesom, %1$s in %2$s vzpona* | Apposition, not a preposition. *Na razdalji %1$s in %2$s vzpona* read as though the climb were a second distance — the phrase governs both placeholders — where the English hangs them off the verb separately. A bare apposition after the comma keeps them apart and declines nothing. |
+| `stations_no_match_message`, `city_no_match_message`, `address_no_match_message` | *Nič ne ustreza iskanju „%1$s“* | **The one place a preposition could not be used at all.** *Z* becomes *s* before p, t, k, s, š, c, č, f and h, and what follows here is a query the reader typed: *z „Trubarjeva“* is right and *z „Prešernova“* is wrong. So the sentence drops the preposition and takes *ustrezati*, which governs the dative — and the dative falls on *iskanju*, a word this file chose. |
 
 ## The address prompt, and the number Slovenia will lose
 
@@ -136,7 +140,7 @@ reader's language (SPEC §4.3), and it lives in
 | route | **pot**, in `journey_no_route` alone | **A departure from the rule above, deliberate.** *Prevozna pot* is the line on the ground, not the journey that was planned over it, and the alternatives are worse: *trasa* is the alignment of a road or a railway and *povezava* reads as a public-transport connection. The sense is carried by *prevozen* — negotiable, passable — and by nothing else in the sentence. |
 | station | **postaja** | A bike-share station. In `address_search_prompt_message` the English "stations" means **railway** stations, as its comment says, so that one line writes *železniške postaje* in full. |
 | dock (free) | **prosto mesto** | What a bike is returned into, counted as available: `docks_available`, `counterpart_docks`, `mode_docks`. |
-| dock (capacity) | **stojalo** | The same object counted as a total: `docks_total`, `station_detail_with_capacity`. English uses one word for both and the screen shows both figures side by side — *12 prostih mest · 30 stojal* — so Slovene needs two. Neither word is ever the payment terminal. |
+| dock (capacity) | **stojalo** | The same object counted as a total: `docks_total`, `station_detail_with_capacity`. English uses one word for both and the screen shows both figures side by side — *12 prostih mest · 30 stojal* — so Slovene needs two. Neither word is ever the payment terminal. **This one is a bet, not an obvious reading**: a *stojalo* is first of all a rack or a stand — the frame a bike is leant into — and not the single point a hire bike is locked to, for which Slovene bike-share has settled on nothing. It was taken because the screen needs a second noun beside *prosto mesto* and because *30 stojal* beside *12 prostih mest* reads as the total the screen means. A contributor who knows what the operators themselves say should replace it. |
 | bike, mechanical | **navadno kolo** | *Navadno* — ordinary — is what Slovene bike-share says, against the network's electric ones. *Mehansko* is a calque of the English and says nothing a rider recognises. |
 | bike, electric | **električno kolo** | Pedal-assist, and `journey_bike_kind_electric_description` says so: *Kolo s pomožnim električnim pogonom*. Never a moped. |
 | bike sharing | **souporaba koles** | The established Slovene calque, as in *souporaba avtomobilov*. *Mestna kolesa* was rejected: it is what Ljubljana says of BicikeLJ, but the application serves 331 networks and several of them are not a city's. |
@@ -161,13 +165,13 @@ reader's language (SPEC §4.3), and it lives in
 | Yes | **Da** | `settings:yes`. |
 | Replace | **Zamenjaj** | `settings:vpn_replace`. |
 | Tap | **Dotaknite se** | `android:usb_notification_message` and eleven more. *Tapnite* exists in Settings (`android:vpn_text`) but is the minority form. |
-| unmetered / metered | **z neomejenim / omejenim prenosom podatkov** | `settings:wifi_unmetered_label`, `settings:wifi_metered_label`. Long, and it is Android's own wording for exactly this distinction; the setting names what is billed rather than Wi-Fi, as the English does. |
+| unmetered / metered | **z neomejenim / omejenim prenosom podatkov** | `settings:wifi_unmetered_label`, `settings:wifitrackerlib_wifi_metered_label` — the plain `settings:wifi_metered_label` gives the shorter *Omejen prenos podatkov*, which is not the form used here. Long, and it is Android's own wording for exactly this distinction; the setting names what is billed rather than Wi-Fi, as the English does. |
 | offline (data, work) | **brez povezave** | No Android key: Settings never says it. *Podatki brez povezave*, *delo brez povezave*. The English loanword *offline* was rejected as looser than the thing meant, which is "with no network at all". |
 | index (of addresses) | **kazalo** | No Android key. *Kazalo* is a book's index and is the ordinary Slovene word; *indeks* reads as a database term. |
 | favourites | **priljubljene** | No Android key — Settings has no favourites. Feminine plural, agreeing with the *postaje* it always holds. |
 | conurbation | **mestno območje** | Against *mesto* for "city": the catalogue's entries are metropolitan areas, and `city_intro` and `welcome_data_body` say so. |
 | Update available | **Na voljo je posodobitev** | A **departure** from Android, which says *Na voljo je posodobljena različica* (a newer *version*) for a system update. Here what is available is an updated **dataset**, not a version of anything, so the noun changes. |
-| Show | **Prikaži** | Android's `settings:display_category_title` gives the noun *Prikaz*, which this file uses for the two map descriptions (*Prikaz razpoložljivih koles*) and not for the buttons, which take the verb. |
+| Show | **Prikaži** | **A departure from Android, and it needs saying.** Android's only bare *Show* is a noun, *Prikaz* (`settings:condition_expand_show`), the label of a link that expands a card; where Android writes the verb it writes *Pokaži* — *Pokaži vse* (`settings:network_connection_request_dialog_showall`), *Pokaži več* (`settings:abc_slice_show_more`). Both of those uncover more of what is already on the screen. The lines here open something whole instead — a list, a map, the source code, the favourites — which is *prikazati* and not *pokazati*, and the file holds to the one verb across all six: `map_open_list`, `favourites_open`, `about_open_repository`, `stations_open_map`, `mode_bikes_description`, `mode_docks_description`. The last two were written as the noun (*Prikaz razpoložljivih koles*) on the strength of `settings:condition_expand_show`, which does not carry them: they are the spoken descriptions of two buttons on the **station list**, not on the map, and they name an action exactly as `map_open_list` does. A contributor who prefers Android's *Pokaži* should move all six together. |
 
 ## What is deliberately left in English
 
