@@ -144,17 +144,24 @@ current call sites.
 
 ## The address prompt, and what it costs in Polish
 
-`address_search_hint` is **„Ulica, numer, miasto”**, and `address_with_number`
-is **`%2$s %1$s`** — the street first and the number after it, "Marszałkowska
-12", which is the only order Polish writes. The two agree with each other on
-purpose: what the prompt invites is what the result title prints back.
+`address_search_hint` is **„Ulica, numer, miasto”** — the street first and the
+number after it, which is the only order Polish writes.
 
-`address_number_with_suffix` is **`%1$d%2$s`**, with **no space**: Polish writes
-a lettered house number glued, "12A", where French writes "12 bis" apart. The
-two are the same string doing different work in different languages, and it is a
-display format, so it changes here rather than in the code. Lettered numbers are
-not an edge case in Poland — they are ordinary — so this is read far more often
-than the French repetition marks it was first written for.
+**What a result is printed as is a separate matter, and is not this file's to
+decide.** It belongs to the country the address is in, not to the reader's
+language (SPEC §4.3): "Marszałkowska 12A" is how a Warsaw address is written for
+every reader of the application, and "12 bis rue Nationale" is how a Lyon one is
+written for a Polish reader. The two formats that used to live here,
+`address_with_number` and `address_number_with_suffix`, were removed for that
+reason; the layouts are a table in `core/address/AddressLayout.kt`, keyed on the
+language of the **address base**.
+
+Poland's entry is the one that carries **no space** before the letter, "12A",
+where France's carries one, "12 bis" — which is why the table holds the suffix
+separator as a field of its own rather than reusing the one before the street
+name. Lettered numbers are not an edge case in Poland; they are ordinary, so
+that entry is read far more often than the French repetition marks the format
+was first written for.
 
 `AddressQuery.parseQuery` reads a house number standing **between the street
 and the town**, which is exactly the shape the prompt asks for, so a query typed

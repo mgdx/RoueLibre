@@ -109,12 +109,21 @@ pair.
 
 ## The address prompt, and the postcode that is not in it
 
-Dutch writes the street before the number — "Damrak 12" — and that order now
-holds on both sides of the screen: `address_search_hint` asks for
-**"Straat, huisnummer, plaats"**, and `address_with_number` prints
-**`%2$s %1$s`**, the placeholders swapped, which is what they are positional
-for. `AddressQuery.parseQuery` reads a house number standing between street and
-town, so the Dutch order is understood as typed.
+Dutch writes the street before the number — "Damrak 12" — and
+`address_search_hint` asks for **"Straat, huisnummer, plaats"** accordingly.
+`AddressQuery.parseQuery` reads a house number standing between street and town,
+so the Dutch order is understood as typed.
+
+**How a result is printed is a separate matter, and is not this file's to
+decide.** It belongs to the country the address is in, not to the reader's
+language (SPEC §4.3) — the earlier wording here, that the format follows the
+interface's language rather than the city's country, was exactly backwards.
+"Damrak 12A" is how an Amsterdam address is written for every reader of the
+application, and "12 bis rue Nationale" is how a Lyon one is written for a Dutch
+reader. The two formats that used to live here, `address_with_number` and
+`address_number_with_suffix`, were removed for that reason; the layouts are a
+table in `core/address/AddressLayout.kt`, keyed on the language of the **address
+base**.
 
 **The postcode is deliberately left out of the prompt, and must not be added.**
 A Dutch postcode is written as two groups, "1012 AB". The parser only strips a
@@ -132,11 +141,11 @@ sits one screen away from `journey_source_my_position` = "Mijn positie", and the
 two are meant to differ: *locatie* is the system feature the button asks for,
 *positie* is the point it puts on the map. Kept as a noun for that reason.
 
-**`address_number_with_suffix` = `%1$d%2$s`, closed up.** Dutch writes a
-suffixed house number without a space — "Damrak 12A" — and this format now does
-the same. The space was kept here at first on the reasoning that Dutch and
-Belgian addresses come from OpenStreetMap, which carries the letter inside the
-house number and would leave this field empty. **That was false.**
+**The Dutch suffix is closed up, "Damrak 12A", and that is now an entry in
+`core/address/AddressLayout.kt` rather than a string of this file.** The space
+was kept at first on the reasoning that Dutch and Belgian addresses come from
+OpenStreetMap, which carries the letter inside the house number and would leave
+the suffix field empty. **That was false.**
 `tools/build_address_index.py`, `split_house_number`, takes the leading digits
 as the number and puts everything after them in this very field, so OSM's "12A"
 arrives as `number=12, suffix="a"`. Counted over the generated indexes, that is

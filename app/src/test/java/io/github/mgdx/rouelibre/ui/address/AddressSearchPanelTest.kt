@@ -96,5 +96,6 @@ class AddressSearchPanelTest {
         position = Coordinates(50.6292, 3.0573),
         precision = PositionPrecision.Exact,
         distanceInMetres = 120.0,
+        language = "fr",
     )
 }

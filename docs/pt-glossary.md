@@ -212,10 +212,15 @@ The register decision is what creates this one, and it is the price of it.
 
 ## The order of an address, and why no postcode is invited
 
-`address_with_number` is written **`%2$s, %1$s`** and not `%1$s %2$s`:
-Portuguese puts the street before the number — *Rua Augusta, 12* — where English
-puts the number first. This is precisely what positional placeholders exist for,
-and it is the only string in the file whose placeholders are reordered.
+**The order of an address is not this file's to decide, and never was.** It
+belongs to the country the address is in, not to the reader's language
+(SPEC §4.3): *Rua Augusta, 12* is how a Lisbon address is written for every
+reader of the application, and *12 rue Nationale* is how a Lyon one is written
+for a Portuguese reader. The two formats that used to live here,
+`address_with_number` and `address_number_with_suffix`, were removed for that
+reason; the layouts are a table in `core/address/AddressLayout.kt`, keyed on the
+language of the **address base**, and Portugal's entry is the one that carries
+the comma.
 
 `address_search_hint` follows it — **Rua, número, localidade**, not the English
 *Number, street, town*. `AddressQuery.parseQuery` reads a house number in the

@@ -172,6 +172,7 @@ class AddressSearchViewModelTest {
             position = Coordinates(49.90, 3.60),
             precision = PositionPrecision.StreetOnly,
             distanceInMetres = null,
+            language = "fr",
         )
     }
 }

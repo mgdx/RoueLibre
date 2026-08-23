@@ -351,8 +351,8 @@
     <string name="station_no_navigation_app">Er is geen kaarten-app op dit apparaat geïnstalleerd.</string>
 
     <string name="address_search_title">Zoek een adres</string>
-    <!-- The Dutch order, street before number, which is also the order
-         `address_with_number` prints. No postcode is invited: a Dutch one is
+    <!-- The Dutch order, street before number, which is also the order a
+         Dutch address is printed in. No postcode is invited: a Dutch one is
          written in two groups, "1012 AB", and the parser would read "1012" as
          a second number and give the house number up (SPEC §4.3). -->
     <string name="address_search_hint">Straat, huisnummer, plaats</string>
@@ -361,8 +361,6 @@
     <!-- Dutch writes "Damrak 12": the street first, the number after. The
          placeholders are swapped for that, which is what they are positional
          for. %1$s is the number, %2$s the street. -->
-    <string name="address_with_number">%2$s %1$s</string>
-    <string name="address_number_with_suffix">%1$d%2$s</string>
     <string name="address_locality">%1$s %2$s</string>
     <string name="address_detail">%1$s · %2$s</string>
     <string name="address_detail_approximate">%1$s · geschatte positie</string>

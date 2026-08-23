@@ -397,8 +397,8 @@
     <!-- The order Polish writes an address in: street, number, town —
          "Marszałkowska 12 Warszawa". `AddressQuery.parseQuery` reads a number
          standing between the street and the town, so the prompt asks for what
-         the parser understands, and `address_with_number` prints the same
-         order back. One number only, and no postcode: a Polish postcode is
+         the parser understands, and a Polish address is printed back in that
+         same order. One number only, and no postcode: a Polish postcode is
          written in two groups, "00-001", which the parser does not recognise
          as one, and a second number in the query makes the house number be
          given up. -->
@@ -407,8 +407,6 @@
     <string name="address_search_privacy">Wszystko jest wyszukiwane na urządzeniu. Nic nie jest wysyłane, nawet w trakcie pisania.</string>
     <!-- %1$s is the house number, %2$s the street: Polish writes the number
          after the name, so the placeholders are swapped. -->
-    <string name="address_with_number">%2$s %1$s</string>
-    <string name="address_number_with_suffix">%1$d%2$s</string>
     <string name="address_locality">%1$s %2$s</string>
     <string name="address_detail">%1$s · %2$s</string>
     <string name="address_detail_approximate">%1$s · pozycja przybliżona</string>

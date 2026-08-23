@@ -467,9 +467,7 @@
          to another (SPEC §9), and Italian writes the street first — "Via Roma
          12" where English writes "12 Via Roma".
          %1$s is the number ("12", "12 bis"), %2$s the street name. -->
-    <string name="address_with_number">%2$s %1$s</string>
     <!-- %1$d is the number, %2$s its repetition mark ("bis", "ter"). -->
-    <string name="address_number_with_suffix">%1$d %2$s</string>
     <!-- %1$s is a postcode, %2$s a municipality. -->
     <string name="address_locality">%1$s %2$s</string>
     <!-- %1$s is the place, %2$s an already formatted distance. -->

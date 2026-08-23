@@ -4,6 +4,7 @@ import android.content.Context
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.address.AddressResult
 import io.github.mgdx.rouelibre.core.address.PositionPrecision
+import io.github.mgdx.rouelibre.core.address.addressLayoutOf
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.inServedDigits
 
@@ -12,8 +13,12 @@ import io.github.mgdx.rouelibre.ui.inServedDigits
  *
  * The business module returns fields — a number, a name, a municipality — and
  * never a sentence: here is where they are composed, through string resources
- * with positional placeholders, because the word order of an address changes
- * from one language to another (SPEC §9).
+ * with positional placeholders, because the word order of the sentence around
+ * an address changes from one language to another (SPEC §9).
+ *
+ * The address itself is the exception: number before or after the street,
+ * comma or no comma, are settled by the country the address is in rather than
+ * by the reader's language, and come from [addressLayoutOf] (SPEC §4.3).
  */
 
 /**
@@ -41,18 +46,19 @@ fun boundedQuery(query: String): String = if (query.length <= QUERY_ECHO_LIMIT) 
  */
 private const val QUERY_ECHO_LIMIT = 60
 
-/** The main line: "12 bis Rue Nationale", or the name alone. */
+/** The main line: "12 bis rue Nationale", or the name alone. */
 fun AddressResult.toTitle(context: Context): String {
     val number = houseNumber ?: return streetName
-    val written = if (houseNumberSuffix.isEmpty()) {
-        // The suffixed form has the number as a `%d`, which Android already
-        // writes in the digits of the locale served; alone, it went through
-        // `toString()` and stayed Latin beside it (SPEC §9).
-        context.inServedDigits(number)
-    } else {
-        context.getString(R.string.address_number_with_suffix, number, houseNumberSuffix)
-    }
-    return context.getString(R.string.address_with_number, written, streetName)
+    // The layout comes from the address's own base and not from the string
+    // resources: it belongs to the country the address is in, and a French
+    // address stays "12 rue Nationale" for a Polish reader (SPEC §4.3). The
+    // digits it is written in are the reader's, which is the other rule
+    // (SPEC §9), and the two are settled in two different places on purpose.
+    return addressLayoutOf(language).write(
+        streetName = streetName,
+        houseNumber = context.inServedDigits(number),
+        houseNumberSuffix = houseNumberSuffix,
+    )
 }
 
 /**

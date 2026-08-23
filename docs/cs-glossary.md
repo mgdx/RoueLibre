@@ -60,11 +60,19 @@ whatever `cityLabel` produced.
 ## The address prompt, and the number Czech will lose
 
 `address_search_hint` is **„Ulice, číslo, obec“** — street, number, town, which
-is the order Czech writes an address in, and `address_with_number` is
-**`%2$s %1$s`**, the placeholders swapped, so the result title prints
-*Národní 25* in that same order. `AddressQuery.parseQuery` has read a house
-number standing between the street and the town since the pilot, precisely so
-that each language may write this line in its own order.
+is the order Czech writes an address in. `AddressQuery.parseQuery` has read a
+house number standing between the street and the town since the pilot, precisely
+so that each language may write this line in its own order.
+
+**The order a result is printed in is a separate matter, and is not this file's
+to decide.** It belongs to the country the address is in, not to the reader's
+language (SPEC §4.3): *Národní 25a* is how a Prague address is written for every
+reader, and *12 rue Nationale* is how a Lyon one is written for a Czech reader.
+The two formats that used to live here, `address_with_number` and
+`address_number_with_suffix`, were removed for that reason; the layouts are a
+table in `core/address/AddressLayout.kt`, keyed on the language of the **address
+base**, and the Czech entry is the one that closes the letter up against the
+number.
 
 **The postcode is deliberately not invited.** Czech writes it in two groups —
 *110 00* — and `looksLikePostcode` only strips a single group of five digits.
