@@ -198,6 +198,28 @@ private val LAYOUTS: Map<String, AddressLayout> = mapOf(
     // *bl.*, *sc.* and *ap.* a Romanian address carries after the number are
     // parts of a flat's address, not of the street's, and no index holds them.
     "ro" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
+
+    // "Storgatan 12b, Malmö". Swedish closes with the number and closes the
+    // letter up. Counted over the two Swedish indexes: 10 244 suffixes, 9 964
+    // of them letters, and the case is not the wash it is elsewhere — 9 669
+    // lowercase against 295 upper, so nothing here is a stairwell of the
+    // Finnish kind and nothing argues for the space Finland takes. Sweden
+    // matters twice over: a Finnish town can be bilingual by law, and an
+    // address base built in Swedish there reads by this line, not by "fi".
+    "sv" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
+
+    // "Karl Johans gate 12A, Oslo". Norwegian closes with the number and
+    // closes the letter up. The Bergen index is the most uniform of any
+    // counted for this table: 7 900 suffixes, every one a letter, every one
+    // uppercase, not a number and not a word among them.
+    "nb" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
+
+    // "Ερμού 12α, Λευκωσία". Greek closes with the number and closes the
+    // letter up. Counted over the Nicosia index: 3 733 suffixes, 2 723
+    // letters against 611 numbers — those numbers are what
+    // `split_house_number` leaves of a range, as in Croatia, and not a second
+    // number of the Czech kind, so they do not argue for a slash.
+    "el" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
 )
 
 /**

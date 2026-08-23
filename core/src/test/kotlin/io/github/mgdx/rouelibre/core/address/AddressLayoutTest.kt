@@ -153,14 +153,25 @@ class AddressLayoutTest {
     }
 
     @Test
+    fun `Sweden, Norway and Greece close with the number too`() {
+        // Counted like the rest before they were written. Norway's index is
+        // the one place where every suffix without exception is an uppercase
+        // letter, and Sweden's the one where they are nearly all lowercase:
+        // neither leaves room for the space Finland takes.
+        assertEquals("Storgatan 12b", addressLayoutOf("sv").write("Storgatan", "12", "b"))
+        assertEquals(
+            "Karl Johans gate 12A",
+            addressLayoutOf("nb").write("Karl Johans gate", "12", "A"),
+        )
+        assertEquals("Ερμού 12α", addressLayoutOf("el").write("Ερμού", "12", "α"))
+    }
+
+    @Test
     fun `a base the table does not name falls back on English`() {
-        // Japanese and Swedish: no entry, and the address is still written
-        // rather than dropped. Swedish is the reminder that a language absent
-        // here is a language nobody has counted yet, not a language that
-        // writes English's way — Sweden closes with the number as its
-        // neighbours do, and two served networks are waiting on the count.
+        // Japanese: no entry, and the address is still written rather than
+        // dropped. A language absent here is a language nobody has counted
+        // yet, not a language that writes English's way.
         assertEquals("12 Ginza", addressLayoutOf("ja").write("Ginza", "12", ""))
-        assertEquals("12 Drottninggatan", addressLayoutOf("sv").write("Drottninggatan", "12"))
     }
 
     @Test
