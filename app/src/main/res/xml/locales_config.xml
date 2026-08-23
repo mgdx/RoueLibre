@@ -18,9 +18,14 @@
     `CONTRIBUTING.md` for the places a new translation has to be declared in.
 -->
 <locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="cs" />
     <locale android:name="de" />
     <locale android:name="en" />
     <locale android:name="es" />
     <locale android:name="fr" />
+    <locale android:name="it" />
     <locale android:name="ja" />
+    <locale android:name="nl" />
+    <locale android:name="pl" />
+    <locale android:name="pt" />
 </locale-config>

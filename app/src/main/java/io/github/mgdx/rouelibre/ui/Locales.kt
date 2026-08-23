@@ -29,7 +29,8 @@ import java.util.Locale
  * dates — and a chooser offering "Deutsch" to hand back English would be worse
  * than one offering no German at all.
  */
-internal val TRANSLATED_LANGUAGES = setOf("de", "en", "es", "fr", "ja")
+internal val TRANSLATED_LANGUAGES =
+    setOf("cs", "de", "en", "es", "fr", "it", "ja", "nl", "pl", "pt")
 
 /**
  * The language of `res/values/`, served when no matching translation exists.
