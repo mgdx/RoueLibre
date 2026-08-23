@@ -78,7 +78,7 @@ and the sentence keeps its article.
 | dock (capacity) | stallo | The same object counted as a total, which is a different figure on the screen: "12 posti liberi · 30 stalli". It is the word the Italian networks use for a docking slot, and English's single "dock" does not oblige Italian to have one either. |
 | dock | *never* «colonnina», *never* «terminale» | A terminal is what one pays at, not the point a bike attaches to. |
 | bike, electric | elettrica | Pedal-assist, never a moped: `journey_bike_kind_electric_description` says *a pedalata assistita* in full, which is the standard Italian term. |
-| pace (walking) | andatura | A pace is not a speed: `values/strings.xml` says so above the string, and *velocità di marcia* would say the opposite. *Andatura* is feminine, hence **Lenta / Normale / Sostenuta**. "Brisk" is *sostenuta*, the ordinary Italian collocation for a brisk walk, where *veloce* would name a speed again. |
+| pace (walking) | andatura | A pace is not a speed: `values/strings.xml` says so above the string, and *velocità di marcia* would say the opposite. *Andatura* is feminine, hence **Lenta / Normale / Sostenuta**. The **a piedi** is not the redundancy it looks like, and is not to be trimmed: *andatura* is said of a horse, a boat, a peloton — it does not imply walking, and in a **bicycle** application an unqualified *Andatura* would be read as a cycling pace, which is the one thing this setting is not. *Andatura di marcia* is worse still, *marcia* being the word for a bicycle gear. "Brisk" is *sostenuta*, the ordinary Italian collocation for a brisk walk, where *veloce* would name a speed again. |
 | climb | dislivello | The metres climbed over a leg or a journey, and the word Italian cycling uses for it. |
 | Settings | Impostazioni | Android's own word (`settings:settings_label`), everywhere including the system path quoted in `about_links_body`. |
 | Display (settings section) | Visualizzazione | Android's own section title (`settings:display_category_title`), over the *Display* it also uses for the screen itself. |
@@ -96,7 +96,7 @@ and the sentence keeps its article.
 | In use | In uso | Android's own word (`settings:wifi_display_status_in_use`), on the city already installed. |
 | Out of service | Fuori servizio | Android's own wording (`settings:radioInfo_service_out`). |
 | just now | adesso | Android's own wording (`settings:time_unit_just_now`), and it reads as one phrase with *Aggiornato %1$s*. |
-| Searching… | Ricerca in corso… | Android's own wording (`settings:wifi_p2p_menu_searching`). The other waits follow its nominal shape: *Calcolo dell'itinerario migliore…*, *Lettura del manifesto…*, *Ricerca della posizione…* |
+| Searching… | Ricerca in corso… | Android's own wording (`settings:wifi_p2p_menu_searching`). The other waits follow its nominal shape: *Calcolo dell'itinerario migliore…*, *Lettura del manifest…*, *Ricerca della posizione…* |
 | Update available | Aggiornamento disponibile | Android's own wording (`settings:android_version_pending_update_summary`). |
 | Check for update | Cerca aggiornamenti | Android's own wording (`android:unsupported_compile_sdk_check_update`). |
 | Replace | Sostituisci | Android's own word (`settings:vpn_replace`). |
@@ -109,6 +109,7 @@ and the sentence keeps its article.
 | app | app | Android's own word for an application (`settings:apps_dashboard_title`), including in the Settings path quoted in `about_links_body`. *Applicazione* is not wrong, but the system says *app* and so does this file, once and everywhere. |
 | offline | offline | **Not Android's**: the lexicon has no row for it. It is the word Italian actually uses, in the stores and out of them, and *senza connessione* would have made *Dati offline* and *Gestisci i dati offline* considerably heavier for nothing. |
 | tracker | tracker | **Not Android's** either, and deliberate: it is the word Italian privacy writing uses, including F-Droid's own. *Sistema di tracciamento* explains it; it does not name it. |
+| manifest | manifest | **Not Android's**: the lexicon has no row for it, and this is the third departure. Italian technical writing says *il manifest* for the file, where *manifesto* is a poster or a political text — somebody who has just tapped *Cerca aggiornamenti* would read the wrong noun. |
 | conurbation | area urbana | Neutral, where *conurbazione* is a planner's word and *area metropolitana* would be wrong about Auray, which is three megabytes and no metropolis. |
 | town (in an address) | comune | The municipality, in the address search and its failures. It is what every Italian and every Swiss address form is labelled, it is precise where *città* is not, and it keeps *città* for the conurbation the application serves — two different things one screen apart. |
 | file | file | Android's own (`android:mime_type_generic`). |
@@ -118,7 +119,8 @@ and the sentence keeps its article.
 | routing data | Grafo dei percorsi | The project's own term, used in the store text and in `journey_graph_missing` too. More technical than the English "routing data", and kept deliberately: it is one object with one name. |
 | address index | Indice degli indirizzi | — |
 | metered / unmetered | a consumo / non a consumo | Android's own wording for a metered network (`settings:wifi_metered_label`, `settings:wifi_unmetered_label`). The setting's description then explains it as billing by the megabyte, exactly as the English does. |
-| by default | per impostazione predefinita | Android's own (`settings:launch_by_default`), which is also what makes the Settings path in `about_links_body` match the system word for word. |
+| by default | per impostazione predefinita | Android's own (`settings:launch_by_default`), which is what makes the Settings path in `about_links_body` match the system word for word. It is written **once**, there: `settings_opening_title` says *All'avvio apri l'app su* instead, so that the reader does not meet the same five words twice for two different settings — one of this application's, one of Android's. |
+| one's own bike | la tua bici **personale** | The English "own" is carried, and not dropped into *la tua bici*: `values/strings.xml` asks above `settings_own_bike_kind_title` that the wording stay clearly about the reader's own equipment, because the journey screen holds a separate, similar-looking choice about the bikes the **network** lends. *Personale* is Italian's natural intensifier here — *la mia bici personale*, like *il computer personale* — where a calque of French *ton propre* would stack two possessives Italian does not stack. It is carried through all six strings, the switch, the setting and the four summaries, so the three screens stay about one object. |
 | favourites | Preferiti | The word Italian interfaces use, and the one a reader looks for. |
 
 The three dataset names are all **masculine singular** — *sfondo cartografico*,
@@ -129,6 +131,27 @@ among two masculine ones would have broken the agreement for one dataset out of
 three or forced both strings into a participle-free circumlocution. The plainer
 noun lost to the agreement, and the purpose line under it — *Disegna la mappa
 senza rete* — says what it is.
+
+## Where this file departs from its own rules
+
+Two strings do, and both on purpose:
+
+- **`welcome_data_body`** translates "the route calculation" as *il calcolo
+  **degli itinerari*** and not *dei percorsi*, which is the only place the
+  journey/route split above is crossed without the English changing word. It is
+  the right way round: what that sentence says is computed on the device is the
+  door-to-door journey, not the line on the ground. `storage_intro` and
+  `dataset_routing_purpose` say *itinerari* for the same reason; *percorso* is
+  kept for `journey_no_route`, `dataset_routing` and the attributions, which
+  really do mean the ground.
+- **`download_held_back_title`** is *Download **in attesa*** and not the
+  *trattenuto* that would mirror the French *retenu* and the Spanish
+  *retenida*. Italian holds back a person, not a transfer; and the distinction
+  the two dialogs draw is worth keeping legible — this download has **not
+  started**, where `download_stopped_title` (*Download interrotto*) had started
+  and stopped. *Sospeso* would have said the second thing. *In attesa* says the
+  first, and reads as one phrase with `download_waiting_for_unmetered`, which
+  already opens *In attesa di una connessione non a consumo*.
 
 ## Plurals
 

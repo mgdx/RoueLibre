@@ -18,7 +18,7 @@ Lo sfondo cartografico, il grafo dei percorsi e l’indice degli indirizzi non s
 
 Quasi trecento reti, in una trentina di paesi: tutte quelle che pubblicano le loro stazioni in dati aperti e i cui stalli permettono di garantire la restituzione della bici — da Vélib’ di Parigi a Citi Bike di New York, passando per Praga, Barcellona, Copenaghen, Tokyo e Buenos Aires. L’app ti propone la tua a partire dalla tua posizione, se glielo chiedi, e puoi tenerne installate più di una e passare dall’una all’altra.
 
-Per ora i set di dati offline esistono solo per una manciata di esse. Per le altre, l’app lo dice invece di fingere: l’elenco mostra quello che c’è, e i file si possono produrre con gli script del repository.
+Per ora i set di dati offline esistono solo per una manciata di città. Per le altre, l’app lo dice invece di fingere: l’elenco mostra quello che c’è, e i file si possono produrre con gli script del repository.
 
 Non è legata a nessuna rete in particolare: l’elenco delle città si aggiorna da solo, e ogni città porta con sé l’indirizzo del proprio flusso GBFS, il che rende l’app utilizzabile con qualsiasi rete GBFS al mondo.
 

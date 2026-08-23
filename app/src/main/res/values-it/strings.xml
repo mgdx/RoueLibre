@@ -205,7 +205,7 @@
     <string name="welcome_fleet_mixed">La rete presta entrambi i tipi.</string>
 
     <string name="welcome_data_title">Una città, un download</string>
-    <string name="welcome_data_body">La mappa, le strade e il calcolo degli itinerari vivono sul dispositivo. È questo che li rende utilizzabili senza rete — e comporta scaricare una volta i dati della tua città.\n\nQuindi comincia scegliendola. Conta una quarantina di megabyte per un’area urbana di media grandezza, di più per una capitale; la dimensione viene annunciata prima del download.\n\nPuoi anche farlo più tardi: nel frattempo, l’elenco delle stazioni e la loro disponibilità restano utilizzabili.</string>
+    <string name="welcome_data_body">La mappa, le strade e il calcolo degli itinerari vivono sul dispositivo. È questo che li rende utilizzabili senza rete — e comporta scaricare una volta i dati della tua città.\n\nQuindi comincia scegliendola. Aspettati una quarantina di megabyte per un’area urbana di media grandezza, di più per una capitale; la dimensione viene annunciata prima del download.\n\nPuoi anche farlo più tardi: nel frattempo, l’elenco delle stazioni e la loro disponibilità restano utilizzabili.</string>
     <!-- Position in the sequence: "1 di 3". This is not a number agreement
          but a progress marker — the second number does not vary with the
          first — hence the absence of a plural.
@@ -329,7 +329,7 @@
     <string name="journey_hint">L’itinerario è calcolato sul dispositivo: a piedi fino a una stazione, in bici, poi a piedi fino in fondo.</string>
     <!-- The switch that leaves the network out of the journey, and the sentence
          that replaces the one above it when it is on (SPEC §7.3). -->
-    <string name="journey_own_bike">Con la mia bici</string>
+    <string name="journey_own_bike">Con la mia bici personale</string>
     <string name="journey_hint_own_bike">L’itinerario è calcolato sul dispositivo: un solo tratto in bici da porta a porta, senza passare da nessuna stazione.</string>
 
     <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
@@ -401,8 +401,8 @@
     <!-- The summary of a journey ridden on one's own bike: it sits under the
          total time, where the walk's own summary sits, and says the same two
          things — how far, and how much of it goes up. -->
-    <string name="journey_own_bike_only">con la tua bici, per %1$s.</string>
-    <string name="journey_own_bike_only_climb">con la tua bici, per %1$s e %2$s di dislivello.</string>
+    <string name="journey_own_bike_only">con la tua bici personale, per %1$s.</string>
+    <string name="journey_own_bike_only_climb">con la tua bici personale, per %1$s e %2$s di dislivello.</string>
     <!-- %1$s is the walking distance. -->
     <string name="journey_walk_only">a piedi, per %1$s: qui non è possibile nessun itinerario in bici.</string>
     <string name="journey_walk_only_climb">a piedi, per %1$s e %2$s di dislivello: qui non è possibile nessun itinerario in bici.</string>
@@ -614,7 +614,7 @@
     <string name="storage_downloading">%1$s · %2$s di %3$s</string>
     <!-- %1$s is the set's name, %2$s the reason for the failure. -->
     <string name="storage_download_failed">%1$s: %2$s</string>
-    <string name="storage_wifi_warning">Non sei connesso al Wi-Fi. Questo download può pesare molto su un piano dati mobile.</string>
+    <string name="storage_wifi_warning">Non sei su una rete Wi-Fi. Questo download può pesare molto sui tuoi dati mobili.</string>
     <string name="dataset_update_available">Aggiornamento disponibile</string>
 
     <string name="dataset_absent">Non installato</string>
@@ -676,7 +676,7 @@
          metered network. -->
     <string name="download_unmetered_only">Scarica solo con una connessione non a consumo</string>
     <string name="download_unmetered_only_description">Di solito il Wi-Fi. La connessione condivisa di un telefono o un hotspot con un limite di dati si paga a megabyte e conta come dati mobili.</string>
-    <string name="download_held_back_title">Download trattenuto</string>
+    <string name="download_held_back_title">Download in attesa</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_held_back_body">Questa connessione si paga a megabyte. Collegati al Wi-Fi per scaricare %1$s, oppure scarica lo stesso adesso.</string>
     <string name="download_stopped_title">Download interrotto</string>
@@ -689,7 +689,7 @@
     <string name="download_can_resume">Questa connessione non si paga più. Riavvia il download: riprende da dove si è fermato.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
-    <string name="settings_opening_title">Apri l’app per impostazione predefinita su</string>
+    <string name="settings_opening_title">All’avvio apri l’app su</string>
     <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_opening_description">La schermata con cui si apre l’app</string>
     <string name="settings_opening_map">Mappa</string>
@@ -713,19 +713,19 @@
     <!-- The rider's OWN bike, not the network's. Keep the wording clearly
          about the reader's own equipment: the journey screen carries a
          separate, similar-looking choice about the bikes the network lends. -->
-    <string name="settings_own_bike_kind_title">La tua bici</string>
+    <string name="settings_own_bike_kind_title">La tua bici personale</string>
     <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_own_bike_kind_description">Il tipo di bici che possiedi</string>
     <string name="settings_own_bike_kind_mechanical">Meccanica</string>
     <string name="settings_own_bike_kind_electric">Elettrica</string>
     <!-- Under the two buttons. Says what the declaration changes: an electric
          bike is routed and timed as one, where a mechanical one is not. -->
-    <string name="settings_own_bike_kind_hint">Dichiarata elettrica, la tua bici ha un percorso e dei tempi tutti suoi.</string>
+    <string name="settings_own_bike_kind_hint">Dichiarata elettrica, la tua bici personale ha un percorso e dei tempi tutti suoi.</string>
 
     <!-- The summary of a ride on one's own bike, where that bike was said to be
          a pedal-assist one. %1$s is a distance, %2$s a climb. -->
-    <string name="journey_own_bike_electric_only">con la tua bici elettrica, per %1$s.</string>
-    <string name="journey_own_bike_electric_only_climb">con la tua bici elettrica, per %1$s e %2$s di dislivello.</string>
+    <string name="journey_own_bike_electric_only">con la tua bici elettrica personale, per %1$s.</string>
+    <string name="journey_own_bike_electric_only_climb">con la tua bici elettrica personale, per %1$s e %2$s di dislivello.</string>
     <!-- Application language -->
     <string name="settings_language_title">Lingua</string>
     <!-- Heads the list of languages: the interface follows the device's own
