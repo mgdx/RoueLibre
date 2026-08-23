@@ -143,7 +143,7 @@
     <string name="map_attribution">© OpenStreetMap katkıda bulunanlar</string>
     <string name="map_locate_me">Konumumu bul</string>
     <string name="map_location_denied">Konum olmadan, başlangıç noktanı haritadan ya da adresten seç.</string>
-    <string name="map_location_unavailable">Konum alınamadı. Konum servisinin açık olduğundan emin ol, sonra tekrar dene.</string>
+    <string name="map_location_unavailable">Konum alınamadı. Konum hizmetlerinin açık olduğundan emin ol, sonra tekrar dene.</string>
     <string name="map_outside_city_title">Başka yerdesin</string>
     <string name="map_outside_city_message">Konumun, %1$s kapsama alanının dışında kaldığı için bu harita onu gösteremiyor. İstasyonları görmek için bulunduğun şehri seç.</string>
     <string name="map_outside_city_brief">Konumun, %1$s kapsama alanının dışında kalıyor.</string>
@@ -153,10 +153,10 @@
     <string name="map_needs_city_message">Kullanmak istediğin şehri seç. Verileri sonrasında, bir kez ve temelli indirilir.</string>
 
     <string name="welcome_hello_title">Roue Libre</string>
-    <string name="welcome_hello_body">Bu uygulama paylaşımlı bisikletleri haritada gösterir ve kapıdan kapıya bir yolculuk hesaplar: bir istasyona yürü, bisiklete bin, kalan yolu yürü.\n\nÜcretsiz ve açık kaynaklı. Hesap yok, reklam yok, izleyici yok.</string>
+    <string name="welcome_hello_body">Bu uygulama paylaşımlı bisikletleri haritada gösterir ve kapıdan kapıya bir yolculuk hesaplar: bir istasyona yürü, bisiklete bin, kalan yolu yürü.\n\nÖzgür ve açık kaynaklı. Hesap yok, reklam yok, izleyici yok.</string>
     <string name="welcome_privacy_title">Bu telefondan hiçbir şey çıkmaz</string>
     <string name="welcome_privacy_body">Yolculuklar bu telefonda hesaplanır. Aradığın adresler kimseye gönderilmez, sen yazarken bile.\n\nHiçbir geçmiş tutulmaz: ne yolculukların, ne konumların, ne de hedeflerin.\n\nGünlük kullanımda dışarı çıkan tek istek, kaç bisiklet olduğunu sorar.</string>
-    <string name="welcome_fleet_title">Bisiklet ne anlatır</string>
+    <string name="welcome_fleet_title">Bisiklet ne anlatır?</string>
     <string name="welcome_fleet_body">Çizilen bisiklet, şehrinin ne sunduğunu gösterir.\n\nBu bilgi ağın kendi akışından okunur, asla tahmin edilmez.</string>
     <string name="welcome_fleet_mechanical_only">Ağ yalnızca klasik bisiklet sunuyor.</string>
     <string name="welcome_fleet_electric_only">Ağ yalnızca elektrikli bisiklet sunuyor.</string>
@@ -173,7 +173,7 @@
 
     <string name="whats_new_title">Yenilikler</string>
     <string name="whats_new_done">Devam et</string>
-    <string name="whats_new_nothing">Bu sürümün sürüm notu yok.</string>
+    <string name="whats_new_nothing">Bu sürümün notları yok.</string>
     <string name="whats_new_open">Yenilikleri gör</string>
 
     <string name="incoming_place_default_label">Alınan yer</string>
@@ -236,7 +236,7 @@
     <string name="about_licence_title">Lisans</string>
     <string name="about_licence_body">Roue Libre özgür yazılımdır, GNU GPL sürüm 3 ile yayımlanır. Kullanabilir, inceleyebilir, değiştirebilir ve başkasına verebilirsin.</string>
     <string name="about_open_repository">Kaynak kodu gör</string>
-    <string name="about_open_sources">Şehir şehir kaynaklar</string>
+    <string name="about_open_sources">Kaynaklar, şehir şehir</string>
     <string name="about_open_licences">Bileşen lisansları</string>
 
     <string name="sources_title">Veri kaynakları</string>
@@ -323,8 +323,8 @@
     <!-- Both name the control the reader has to touch, and quote
          `journey_bike_kind_any` word for word: if that button's wording
          changes, these two change with it. -->
-    <string name="journey_no_mechanical_nearby">Yakındaki hiçbir istasyonda şu an klasik bisiklet yok. Fark etmez seçeneğini seç ya da daha sonra tekrar dene.</string>
-    <string name="journey_no_electric_nearby">Yakındaki hiçbir istasyonda şu an elektrikli bisiklet yok. Fark etmez seçeneğini seç ya da daha sonra tekrar dene.</string>
+    <string name="journey_no_mechanical_nearby">Yakındaki hiçbir istasyonda şu an klasik bisiklet yok. “Fark etmez” seçeneğini seç ya da daha sonra tekrar dene.</string>
+    <string name="journey_no_electric_nearby">Yakındaki hiçbir istasyonda şu an elektrikli bisiklet yok. “Fark etmez” seçeneğini seç ya da daha sonra tekrar dene.</string>
     <string name="journey_no_dock_nearby">Hedefin yakınında boş yuvası olan istasyon yok. Daha sonra tekrar dene ya da başka bir yeri hedefle.</string>
     <string name="journey_no_route">Bu iki nokta arasında geçilebilir bir rota yok.</string>
     <string name="journey_graph_missing">Rota verileri yüklü değil. Depolama ekranından ekle.</string>
