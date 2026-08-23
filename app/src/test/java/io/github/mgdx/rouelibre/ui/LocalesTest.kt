@@ -226,14 +226,20 @@ class LocalesTest {
      *
      * The whole of the repair to the two numbering systems read on one line:
      * Android writes what the resources hold — `%d`, the plurals — in the
-     * digits of the configuration's locale, so a device set to `ar` was showing
-     * "٢٠ docks" beside a "1.2 km" that Kotlin had written in Latin ones. The
-     * words stay English, since `values-ar/` still holds the English text; the
-     * figures no longer disagree with the ones beside them.
+     * digits of the configuration's locale, so a device served in Arabic
+     * digits was showing "٢٠ docks" beside a "1.2 km" that Kotlin had written
+     * in Latin ones. The words stay English wherever the folder holds the
+     * English text; the figures no longer disagree with the ones beside them.
+     *
+     * **The case is read on [UNSPOKEN] rather than on `ar`, which used to
+     * carry it.** Arabic was the example while `values-ar/` still held English,
+     * and it is translated since: an example that a later wave can translate
+     * out from under the test says nothing durable. A language with no folder
+     * at all cannot stop standing for one that has no translation.
      */
     @Test
     fun `an untranslated language keeps English words and the served digits`() {
-        val figures = textLocaleFor(Locale.forLanguageTag("ar"), "arab")
+        val figures = textLocaleFor(UNSPOKEN, "arab")
 
         assertEquals(Locale.ENGLISH.language, figures.language)
         assertEquals("٢٠", NumberFormat.getIntegerInstance(figures).format(20))

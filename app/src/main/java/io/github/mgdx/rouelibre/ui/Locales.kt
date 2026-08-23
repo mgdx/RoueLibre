@@ -31,8 +31,9 @@ import java.util.Locale
  */
 internal val TRANSLATED_LANGUAGES =
     setOf(
-        "cs", "da", "de", "en", "es", "fi", "fr", "hr", "it", "ja",
-        "nl", "pl", "pt", "ro", "sk", "sl",
+        "ar", "bs", "cs", "da", "de", "el", "en", "es", "fi", "fr",
+        "hr", "hu", "it", "ja", "lt", "lv", "nb", "nl", "pl", "pt",
+        "ro", "sk", "sl", "sq", "sv", "tr",
     )
 
 /**

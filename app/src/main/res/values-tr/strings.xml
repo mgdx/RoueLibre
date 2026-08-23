@@ -236,7 +236,12 @@
     <string name="about_licence_title">Lisans</string>
     <string name="about_licence_body">Roue Libre özgür yazılımdır, GNU GPL sürüm 3 ile yayımlanır. Kullanabilir, inceleyebilir, değiştirebilir ve başkasına verebilirsin.</string>
     <string name="about_open_repository">Kaynak kodu gör</string>
-    <string name="about_open_sources">Kaynaklar, şehir şehir</string>
+    <!-- `tools:ignore="Typos"`: "şehir şehir" is not a stutter but Turkish
+         distributive reduplication, the form that says "city by city". Lint
+         reads any repeated word as a slip and cannot tell the two apart. The
+         adversarial review of this file asked for exactly this form: the
+         adverbial reduplication is what the phrase needs, an epithet is not. -->
+    <string name="about_open_sources" tools:ignore="Typos">Kaynaklar, şehir şehir</string>
     <string name="about_open_licences">Bileşen lisansları</string>
 
     <string name="sources_title">Veri kaynakları</string>
