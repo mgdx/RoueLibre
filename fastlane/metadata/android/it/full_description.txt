@@ -1,0 +1,25 @@
+Roue Libre mostra le stazioni di bike sharing su una mappa e calcola un itinerario da porta a porta che unisce tratti a piedi e tratti in bici.
+
+Tutto funziona sul dispositivo: la mappa, la ricerca degli indirizzi e il calcolo dei percorsi non hanno bisogno di nessuna connessione. Solo la disponibilità delle bici in tempo reale esce in rete.
+
+<b>Cosa la distingue</b>
+
+• Nessun servizio Google: né Play Services, né Firebase, né Maps SDK. Funziona su qualsiasi Android senza i servizi Google.
+• Nessuna telemetria, nessun tracker, nessun identificatore unico, nessun account.
+• Nessun dato sui tuoi itinerari viene conservato: né cronologia, né posizioni, né destinazioni. Quello che cerchi non esce dal telefono.
+• Nessuna città è imposta: sul dispositivo convivono più aree urbane, e i dati di una si eliminano senza toccare quelli delle altre.
+• L’itinerario ottimizza la <i>coppia</i> di stazioni — quella di partenza e quella di arrivo — invece di accontentarsi della più vicina, e tiene conto del rischio che una stazione poco fornita si svuoti mentre la raggiungi a piedi.
+
+<b>Da sapere prima di installare</b>
+
+Lo sfondo cartografico, il grafo dei percorsi e l’indice degli indirizzi non sono dentro l’app: si scaricano una volta, dalla schermata di archiviazione, oppure si installano a mano da file che produci tu. Il loro peso dipende dalla città — qualche decina di megabyte per un’area urbana di media grandezza, di più per una capitale — e viene annunciato prima del download.
+
+<b>Le città servite</b>
+
+Quasi trecento reti, in una trentina di paesi: tutte quelle che pubblicano le loro stazioni in dati aperti e i cui stalli permettono di garantire la restituzione della bici — da Vélib’ di Parigi a Citi Bike di New York, passando per Praga, Barcellona, Copenaghen, Tokyo e Buenos Aires. L’app ti propone la tua a partire dalla tua posizione, se glielo chiedi, e puoi tenerne installate più di una e passare dall’una all’altra.
+
+Per ora i set di dati offline esistono solo per una manciata di città. Per le altre, l’app lo dice invece di fingere: l’elenco mostra quello che c’è, e i file si possono produrre con gli script del repository.
+
+Non è legata a nessuna rete in particolare: l’elenco delle città si aggiorna da solo, e ogni città porta con sé l’indirizzo del proprio flusso GBFS, il che rende l’app utilizzabile con qualsiasi rete GBFS al mondo.
+
+Software libero sotto licenza GNU GPL v3.
