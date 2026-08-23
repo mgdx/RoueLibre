@@ -12,13 +12,13 @@ Minden az eszközön fut: a térképhez, a címkereséshez és az útvonalszám�
 
 <b>Amit telepítés előtt érdemes tudni</b>
 
-A térkép, az útvonalgráf és a címindex nincs benne az alkalmazásban: egyszer töltődnek le a tárhely képernyőről, vagy kézzel telepíthetők az általad előállított fájlokból. A méretük a várostól függ – egy közepes méretű agglomerációnál néhány tíz megabájt, egy fővárosnál több –, és a letöltés előtt kiderül.
+A térkép, az útvonalgráf és a címindex nincs benne az alkalmazásban: egyszer töltődnek le a Tárhely képernyőről, vagy kézzel telepíthetők az általad előállított fájlokból. A méretük a várostól függ – egy közepes méretű agglomerációnál néhány tíz megabájt, egy fővárosnál több –, és a letöltés előtt kiderül.
 
 <b>A kiszolgált városok</b>
 
 Közel háromszáz hálózat, mintegy harminc országban: mindegyik, amely nyílt adatként teszi közzé az állomásait, és amelynek dokkolóira az útvonalterv támaszkodhat – a párizsi Vélib’-től a New York-i Citi Bike-ig, Prágán, Barcelonán, Koppenhágán, Tokión és Buenos Airesen át. Az alkalmazás a pozíciód alapján felajánlja a tiédet, ha kéred, és többet is telepítve tarthatsz, váltogatva köztük.
 
-Az offline adatcsomagok eddig egy maréknyi városhoz készültek el. A többinél az alkalmazás ezt megmondja, ahelyett hogy úgy tenne, mintha: a lista megmutatja, mi létezik, a fájlok pedig előállíthatók a projekt szkriptjeivel.
+Az offline adatkészletek eddig egy maréknyi városhoz készültek el. A többinél az alkalmazás ezt megmondja, ahelyett hogy úgy tenne, mintha: a lista megmutatja, mi létezik, a fájlok pedig előállíthatók a projekt szkriptjeivel.
 
 Egyetlen hálózathoz sem kötődik: a városok listája magától frissül, és minden város a saját GBFS-adatfolyamának címét hordozza, ami a világ bármely GBFS-hálózatával használhatóvá teszi az alkalmazást.
 

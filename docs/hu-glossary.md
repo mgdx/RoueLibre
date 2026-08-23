@@ -42,7 +42,7 @@ every verb in the file, not one screen of them.
 kept — "No history is kept", "It is read from the feed" — and Hungarian keeps
 that, with the impersonal turns the language has for it: *Semmilyen előzmény
 nem marad meg*, *Az útvonaltervek ezen a telefonon készülnek*, *A keresett
-címek senkihez nem jutnak el*, *Az adatcsomagok csak kérésre töltődnek le*.
+címek senkihez nem jutnak el*, *Az adatkészletek csak kérésre töltődnek le*.
 There is no *mi* anywhere in the file and none should be added: an application
 whose argument is that nobody is behind it must not ask the reader to trust a
 "we".
@@ -88,8 +88,8 @@ Six devices carry the whole weight, and each is worth knowing before it gets
 | `journey_step_to_station`, `journey_step_ride` | `Gyaloglás az állomásig: %1$s` | The case falls on *állomás*, a noun this file owns, so *az* is fixed. The station's name follows behind a colon, exactly as the feed published it. |
 | `station_address_nearby` | `A közelben: %1$s` | The argument is `address.streetName` — a street **or** a square, arriving as it stands. A colon turns the line into a label, which declines nothing. |
 | `city_delete_description`, `city_deleted`, `city_proposal_body`, `dataset_delete_description`, `dataset_imported`, `dataset_deleted`, `storage_download_pending` | `Adatok törlése: %1$s`, `Letöltés: %1$s`, `Telepítve: %1$s` | Content descriptions, snackbars and buttons, where a label with a colon is shorter and reads better than a sentence — and takes neither article nor ending. Dataset names decide their own article too: *a térképadatok*, but *az útvonaladatok*. |
-| `map_outside_city_message`, `map_outside_city_brief`, `city_here_body`, `city_here_installed_body` | `A pozíciód kívül esik azon a területen, amelyet a kiszolgált hálózat lefed: %1$s.`, `Ezt a területet ez a hálózat szolgálja ki: %1$s.` | These four are handed `cityLabel(...)`, a whole label — *MOL Bubi – Budapest*. A demonstrative opens the sentence, the ending falls on *területen* / *hálózat*, and the label sits behind the colon. The English puts it in subject position, which Hungarian cannot do without an article. |
-| `journey_climb`, `journey_detail_profile_description`, `download_held_back_body`, `download_stopped_body`, `download_waiting_for_unmetered` | `%1$s szintemelkedés`, `A letöltés mérete: %1$s.` | A distance or a size is a **unit symbol**, and each symbol takes a different ending: *m-t*, *ft-ot*, *mi-t*, *km-t*. None of them is ever declined here — the figure stands before a bare noun, or behind a colon. |
+| `map_outside_city_message`, `map_outside_city_brief`, `city_here_body`, `city_here_installed_body` | `A pozíciód kívül esik azon a területen, amelyet ez a hálózat kiszolgál: %1$s.`, `Ezt a területet ez a hálózat szolgálja ki: %1$s.` | These four are handed `cityLabel(...)`, a whole label — *MOL Bubi – Budapest*. A demonstrative opens the sentence, the ending falls on *területen* / *hálózat*, and the label sits behind the colon. The English puts it in subject position, which Hungarian cannot do without an article. |
+| `journey_climb`, `journey_detail_profile_description`, `download_held_back_body`, `download_stopped_body`, `download_waiting_for_unmetered`, and the eight journey summaries | `%1$s szintemelkedés`, `A letöltés mérete: %1$s.`, `gyalog, %1$s hosszan` | A distance or a size is a **unit symbol**, and each symbol takes a different ending: *km-es*, *mi-s*, *ft-es*, *yd-os*. None of them is ever declined here — the figure stands before a bare noun, or behind a colon. The summaries say *%1$s hosszan* and not *%1$s távon*: *hosszan* needs no adjectival ending where *távon* wants *km-es távon*, and it is what Hungarian actually says. |
 | `dataset_rejected_version` | `A fájl formátumverziója %1$d, … pedig %2$d formátumverziót olvas.` | No article stands in front of either figure: it would be *az 1*, *a 2*, *az 5*, *a 6* — decided by a number this file cannot see. |
 
 `city_delete_body` deserves its own line. Quoting the name — *A „%1$s” hálózat
@@ -105,6 +105,13 @@ instead: a demonstrative, which is fixed, and the name behind a colon.
 `displayName` of their own; every Czech network is called *nextbike*. Writing
 *a %1$s város adatai* would have made a Brno reader read "the data of the city
 nextbike". None of the four says *város*, and the English never does either.
+
+`city_proposal_body` is the one that got this wrong and was corrected: it asked
+*Legyen ez a beállított **város**?* behind a network name, so a Brno reader was
+asked whether *nextbike* should be the configured city. It asks *a beállított
+**hálózat*** now. The lesson is the brief's: **read the call site before
+trusting the string's own name** — `city_proposal_body` sits in the `city_*`
+block and is handed a network all the same.
 
 Do not confuse them with `city_here_body`, `city_here_installed_body`,
 `map_outside_city_message` and `map_outside_city_brief`, which get
@@ -182,15 +189,17 @@ separators follow the reader (SPEC §9).
 | Unmetered | **nem forgalomkorlátos** | `settings:wifi_unmetered_label`. The setting names what is billed rather than Wi-Fi, exactly as the English does. |
 | Update available | **Rendelkezésre áll frissítés** | `settings:android_version_pending_update_summary`. |
 | Replace | **Csere** | `settings:vpn_replace`. |
+| link | **link** | Android's own word — `android:granularity_label_link`, `settings:domain_urls_title` (*Linkek megnyitása*), `settings:app_launch_supported_domain_urls_title`. *Hivatkozás* appears nowhere in the lexicon, and `about_links_body` cites *Link hozzáadása* in the same sentence, so it may not call the same thing two names. |
 | Open by default → Add link | **Megnyitás alapértelmezés szerint → Link hozzáadása** | `settings:launch_by_default` and `settings:app_launch_add_link`; `about_links_body` quotes a real path, so it must quote it in the words the phone shows. |
-| About | **Névjegy** | **No lexicon row applies**: Android's *A telefonról* (`settings:about_settings`) is the phone's about screen, not an application's. *Névjegy* is what Hungarian desktop and mobile applications call their own. |
+| About | **Az alkalmazásról** | **No lexicon row applies**: Android's *A telefonról* (`settings:about_settings`) is the *phone's* about screen. This is the same calque made for an application, which is what Android's Hungarian does. The obvious alternative, *Névjegy*, is what Hungarian desktop software says — but on this very phone **Névjegyek is Android's word for Contacts** (`android:permgrouplab_contacts`, `android:keyboard_shortcut_group_applications_contacts`, `settings:sync_contacts`, `settings:zen_mode_from_contacts`), and a menu row reading *Névjegy* beside *Kedvencek* and *Beállítások* can be read as a contact card. Android usage wins over office usage, because Android is what this project follows. |
 | Light / Dark (theme) | **Világos** / **Sötét** | *Sötét* is Android's (`settings:dark_ui_mode`, *Sötét téma*). **There is no lexicon row for a light theme**; *Világos* is this file's choice, by symmetry. |
 | conurbation | **agglomeráció** | The word Hungarian uses for a city and its ring, which is what the catalogue's entries are. |
 | offline data | **offline adatok** | *Offline* is naturalised in Hungarian and needs no translation. |
 | map data / tiles | **térképadatok** | The name the storage screen gives the dataset, and the name every other string uses for it — including `map_needs_tiles_title`, which drops the English "tiles" rather than introduce *csempe* on one screen. |
 | routing data | **útvonaladatok** | — |
 | address index | **címindex** | — |
-| dataset | **adatcsomag** | The unit the storage screen installs and deletes. |
+| the storage screen | **a Tárhely képernyő** | Six strings send the reader there. *tárhely képernyő* in two lower-case words is a compound Hungarian spelling would solder, and this file solders everywhere else (*állomáslista*, *térképadatok*). It names the screen instead, by its own title (`storage_title` = *Tárhely*), the way Android writes *a Beállítások képernyőn*. |
+| dataset | **adatkészlet** | The unit the storage screen installs and deletes. **Not *adatcsomag***, which is a mobile data plan in Android's Hungarian — *Korlátlan mobiladat**csomag*** (`settings:unrestricted_data_saver`) — and these strings stand next to `storage_wifi_warning` and `download_stopped_body`, which really are about a plan billed by the megabyte. |
 | climb | **szintemelkedés** | Metres gained, on a leg or over a whole journey. |
 | minute / hour (duration) | **perc** / **ó** | `duration_minutes` is *%1$d perc* and not *%1$d min*: Hungarian writes the word out, and it is what every Hungarian transport application shows. *ó* is the abbreviation, used only in `duration_hours_minutes` where the hours and the minutes share one narrow line. |
 
@@ -206,5 +215,5 @@ always.
 
 `fastlane/metadata/android/hu/` holds the same vocabulary as the interface:
 *útvonalterv*, *állomás*, *szabad hely*, *hagyományos* / *elektromos*,
-*agglomeráció*, *adatcsomag*. The short description is 72 characters, under the
+*agglomeráció*, *adatkészlet*. The short description is 72 characters, under the
 80 the store allows.
