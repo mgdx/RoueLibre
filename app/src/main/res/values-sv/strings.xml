@@ -147,8 +147,8 @@
     <string name="map_open_list">Visa listan över stationer</string>
     <string name="map_attribution">© OpenStreetMap-bidragsgivare</string>
     <string name="map_locate_me">Hitta min position</string>
-    <string name="map_location_denied">Utan platsbehörighet väljer du din startpunkt på kartan eller via en adress.</string>
-    <string name="map_location_unavailable">Positionen är inte tillgänglig. Kontrollera att Plats är aktiverat och försök igen.</string>
+    <string name="map_location_denied">Utan platsbehörighet får du välja din startpunkt på kartan eller via en adress.</string>
+    <string name="map_location_unavailable">Positionen är inte tillgänglig. Kontrollera att Plats har aktiverats och försök igen.</string>
     <string name="map_outside_city_title">Du är någon annanstans</string>
     <string name="map_outside_city_message">Din position ligger utanför det område som %1$s täcker, så den här kartan kan inte visa den. Välj den stad du befinner dig i för att se dess stationer.</string>
     <string name="map_outside_city_brief">Din position ligger utanför det område som %1$s täcker.</string>
@@ -193,7 +193,7 @@
 
     <string name="favourites_title">Favoriter</string>
     <string name="favourites_open">Visa favoriter</string>
-    <string name="favourites_reorder_hint">Håll en rad nedtryckt för att flytta den.</string>
+    <string name="favourites_reorder_hint">Tryck och håll ned en rad för att flytta den.</string>
 
     <string name="settings_title">Inställningar</string>
     <string name="settings_open">Inställningar</string>
@@ -330,8 +330,8 @@
          total time and says how far, and how much of it goes up. -->
     <string name="journey_own_bike_only">på din egen cykel, över %1$s.</string>
     <string name="journey_own_bike_only_climb">på din egen cykel, över %1$s och %2$s stigning.</string>
-    <string name="journey_walk_only">till fots, över %1$s – ingen cykelresa är möjlig här.</string>
-    <string name="journey_walk_only_climb">till fots, över %1$s och %2$s stigning – ingen cykelresa är möjlig här.</string>
+    <string name="journey_walk_only">till fots, över %1$s – det går inte att göra på cykel här.</string>
+    <string name="journey_walk_only_climb">till fots, över %1$s och %2$s stigning – det går inte att göra på cykel här.</string>
     <string name="journey_walk_is_quicker">till fots, över %1$s – snabbare än att gå och hämta en cykel.</string>
     <string name="journey_walk_is_quicker_climb">till fots, över %1$s och %2$s stigning – snabbare än att gå och hämta en cykel.</string>
     <string name="journey_none_title">Ingen resa</string>
@@ -483,7 +483,7 @@
     <string name="storage_download_pending">Ladda ned %1$s</string>
     <string name="storage_downloading">%1$s · %2$s av %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
-    <string name="storage_wifi_warning">Du är inte ansluten till Wifi. Den här nedladdningen kan tära hårt på ett mobilabonnemang.</string>
+    <string name="storage_wifi_warning">Du är inte ansluten till wifi. Den här nedladdningen kan tära hårt på ett mobilabonnemang.</string>
     <string name="dataset_update_available">Uppdatering finns</string>
 
     <!-- The three dataset names do not share a gender and a number — Kartdata,
@@ -539,14 +539,14 @@
          switch takes the second, and the sentences explaining it say what is
          billed, since that is the point the English makes. -->
     <string name="download_unmetered_only">Ladda ned endast utan datapriser</string>
-    <string name="download_unmetered_only_description">Vanligtvis Wifi. En delad telefonanslutning eller en surfzon med datagräns debiteras per megabyte och räknas som mobildata.</string>
+    <string name="download_unmetered_only_description">Vanligtvis wifi. En delad telefonanslutning eller en surfzon med datagräns debiteras per megabyte och räknas som mobildata.</string>
     <string name="download_held_back_title">Nedladdningen hålls tillbaka</string>
     <!-- %1$s is a size, ”340 MB” for instance. -->
-    <string name="download_held_back_body">Den här anslutningen debiteras per megabyte. Anslut till Wifi för att ladda ned %1$s, eller ladda ned ändå nu.</string>
+    <string name="download_held_back_body">Den här anslutningen debiteras per megabyte. Anslut till wifi för att ladda ned %1$s, eller ladda ned ändå nu.</string>
     <string name="download_stopped_title">Nedladdningen stoppades</string>
     <!-- %1$s is a size. What has already arrived is kept on the device and the
          transfer picks up from there. -->
-    <string name="download_stopped_body">Den här anslutningen debiteras nu per megabyte, så nedladdningen stoppades. Det som har kommit in sparas. Anslut till Wifi för att slutföra de %1$s, eller fortsätt ändå nu.</string>
+    <string name="download_stopped_body">Den här anslutningen debiteras nu per megabyte, så nedladdningen stoppades. Det som har kommit in sparas. Anslut till wifi för att slutföra de %1$s, eller fortsätt ändå nu.</string>
     <string name="download_anyway">Ladda ned ändå</string>
     <!-- %1$s is a size, ”340 MB” for instance. -->
     <string name="download_waiting_for_unmetered">Väntar på en anslutning utan datapriser för att ladda ned %1$s.</string>
