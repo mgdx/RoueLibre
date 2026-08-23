@@ -1,0 +1,17 @@
+Dati ir publicēti, un karte vairs nav tikai franču.
+
+• 306 tīkli 35 valstīs — visi, kas publicē savas stacijas kā atvērtos datus: Prāga, Barselona, Rīga, Priština, Buenosairesa. Pilsētu izvēlaties pirmajā palaišanas reizē, un neviena netiek apkalpota pēc noklusējuma.
+• Datu kopas beidzot ir lejupielādējamas. 101 pilsēta ir gatava — septiņdesmit Francijas un vēl trīsdesmit viena citur — un tās vairs nav jāizveido ar repozitorija skriptiem.
+• Adrešu meklēšana darbojas arī ārpus Francijas: kur nav valsts adrešu reģistra, ielas un māju numuri tiek nolasīti no pašas OpenStreetMap, attiecīgās valsts valodā.
+• Karte apstājas lejupielādētā apgabala malā, nevis rāda tukšumu aiz tās.
+• Maršruta abi gali paliek rezultātu ekrānā, un tos tur var izlabot.
+• Attālumi tiek rādīti jūsu reģionā lietotajās mērvienībās: jūdzes un pēdas Amerikas Savienotajās Valstīs, jūdzes un jardi Apvienotajā Karalistē, kilometri visur citur. Ja vēlaties citādi, iestatījums ir Iestatījumos.
+• Jūs pasakāt, cik ātri ejat — lēni, normāli vai raiti — un maršruts tiek aprēķināts atbilstoši. Lēna iešana var mainīt piedāvāto izbraukšanas staciju: tuvāku, par cenu pamīt nedaudz tālāk. „Normāls“ ir tas, ko lietotne darīja līdz šim, un tas ir noklusējums.
+• Karte var neattēlot stacijas, kas jums nav noderīgas: tās, kas nedarbojas, un tās, kurām nav ko piedāvāt. Abi slēdži ir Iestatījumos, sadaļā par attēlojumu, un izvēlētais tiek saglabāts — pašā kartē nav neviena filtra pogas. To, kas skaitās „nekas“, nosaka kartes poga Velosipēdi / Brīvās vietas. Stacijas, par kurām tīkls neko nesaka, vienmēr paliek kartē.
+• Lejupielādes gaida savienojumu, ko neuzskaita pa megabaitiem — parasti Wi-Fi. Pilsētas dati var svērt līdz 1,3 GB, un nekas no tā neaiziet pa jūsu mobilo datu plānu bez jūsu ziņas: aizturēta lejupielāde nosauc savu lielumu un piedāvā sākt tāpat, tikai šoreiz. Ja savienojums pusceļā kļūst maksas, lejupielāde apstājas un vēlāk turpinās no vietas, kur apstājās, nevis sākas no jauna. Iestatījums ir Iestatījumos, sadaļā par bezsaistes datiem.
+• Jūs izvēlaties ekrānu, ar kuru lietotne tiek atvērta: karti, kā līdz šim, vai staciju sarakstu. Atvēršanai ar sarakstu nav vajadzīga nekāda atrašanās vietas atļauja.
+• Velosipēdu un brīvo vietu skaitļus var rādīt lielākus — Iestatījumos. Lietotne jau seko tālrunī iestatītajam teksta lielumam; šis palielina tikai to vienu skaitli, nepalielinot visu pārējo. Kartes marķieri saglabā savu lielumu, tāpēc stacijas paliek salasāmas cita blakus citai.
+• Varat norādīt, vai jūsu paša velosipēds ir parasts vai elektrisks. Norādīts kā elektrisks, tas iegūst savu maršrutu un savus laikus; norādīts kā parasts, tas patur maršrutu, kāds tam bija līdz šim.
+• Lietotnes valodu izvēlaties pats, Iestatījumos, lai kādā valodā būtu jūsu tālrunis. Tiek piedāvātas tikai tās valodas, kas patiešām ir iztulkotas — līdz šim angļu un franču. Mērvienības līdz ar to nemainās: izvēlieties franču valodu Bostonā, un attālumi paliks jūdzēs.
+
+Katras pilsētas svars tiek paziņots pirms lejupielādes: 3 MB Auray, 143 MB Parīzei.

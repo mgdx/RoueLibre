@@ -1,0 +1,25 @@
+Roue Libre rāda koplietošanas velosipēdu stacijas kartē un aprēķina maršrutu no durvīm līdz durvīm, kurā apvienota iešana ar kājām un braukšana ar velosipēdu.
+
+Viss darbojas pašā ierīcē: kartei, adrešu meklēšanai un maršrutu aprēķinam nav vajadzīgs nekāds savienojums. Uz tīklu aiziet tikai velosipēdu pieejamība reāllaikā.
+
+<b>Kas to atšķir</b>
+
+• Neviena Google pakalpojuma: nav Play Services, nav Firebase, nav Maps SDK. Tā darbojas jebkurā Android sistēmā bez Google pakalpojumiem.
+• Bez telemetrijas, bez izsekotājiem, bez unikāla identifikatora, bez konta.
+• Netiek saglabāti nekādi maršrutu dati: ne vēsture, ne atrašanās vietas, ne galamērķi. Meklētais neaiziet no tālruņa.
+• Neviena pilsēta netiek uzspiesta: ierīcē līdzās var pastāvēt vairākas aglomerācijas, un vienas pilsētas datus var izdzēst, neaiztiekot pārējās.
+• Maršruts optimizē staciju <i>pāri</i> — izbraukšanas un ierašanās staciju — nevis apmierinās ar tuvāko, un ņem vērā risku, ka slikti apgādāta stacija paliks tukša, kamēr jūs līdz tai aizejat.
+
+<b>Ko ir vērts zināt pirms instalēšanas</b>
+
+Karte, maršrutēšanas grafs un adrešu rādītājs nav iekļauti lietotnē: tie tiek vienreiz lejupielādēti krātuves ekrānā vai instalēti ar roku no failiem, ko izveidojat pats. To lielums ir atkarīgs no pilsētas — daži desmiti megabaitu vidēji lielai aglomerācijai, vairāk galvaspilsētai — un tas tiek paziņots pirms lejupielādes.
+
+<b>Apkalpotās pilsētas</b>
+
+Gandrīz trīssimt tīklu aptuveni trīsdesmit valstīs: visi, kas publicē savas stacijas kā atvērtos datus un kuru statīviem maršruts var uzticēties — no Vélib’ Parīzē līdz Citi Bike Ņujorkā, caur Prāgu, Barselonu, Kopenhāgenu, Tokiju un Buenosairesu. Lietotne pēc jūsu atrašanās vietas piedāvās jūsējo, ja to palūgsiet, un vairākas pilsētas var paturēt instalētas un pārslēgties starp tām.
+
+Bezsaistes datu kopas līdz šim ir sagatavotas nedaudzām no tām. Par pārējām lietotne to godīgi pasaka, nevis izliekas: sarakstā ir redzams, kas ir pieejams, un failus var izveidot ar repozitorija skriptiem.
+
+Tā nav piesaistīta nevienam konkrētam tīklam: pilsētu saraksts atjaunojas pats, un katrai pilsētai ir sava GBFS datu plūsmas adrese, kas ļauj lietotni izmantot ar jebkuru GBFS tīklu pasaulē.
+
+Brīvā programmatūra ar GNU GPL v3 licenci.
