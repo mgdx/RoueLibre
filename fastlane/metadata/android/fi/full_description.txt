@@ -1,0 +1,25 @@
+Roue Libre näyttää kaupunkipyöräasemat kartalla ja laskee ovelta ovelle reitin, jossa kävely ja pyöräily yhdistyvät.
+
+Kaikki tapahtuu laitteessa: kartta, osoitehaku ja reitinlaskenta eivät tarvitse yhteyttä lainkaan. Vain pyörien reaaliaikainen saatavuus haetaan verkosta.
+
+<b>Mikä tekee siitä erilaisen</b>
+
+• Ei yhtään Google-palvelua: ei Play-palveluita, ei Firebasea, ei Maps SDK:ta. Se toimii millä tahansa Android-käyttöjärjestelmällä ilman Google-palveluita.
+• Ei telemetriaa, ei seurantaa, ei yksilöivää tunnistetta, ei tiliä.
+• Matkoista ei säilytetä mitään: ei historiaa, ei sijainteja, ei määränpäitä. Se mitä haet, ei lähde puhelimesta.
+• Mitään kaupunkia ei pakoteta: laitteella voi olla useita kaupunkiseutuja rinnakkain, ja yhden kaupungin aineistot voi poistaa muihin koskematta.
+• Reitti optimoi asemien <i>parin</i> – lähtö- ja saapumisaseman – sen sijaan että tyytyisi lähimpään, ja punnitsee riskin, että huonosti täyttynyt asema ehtii tyhjentyä sinne kävellessäsi.
+
+<b>Hyvä tietää ennen asennusta</b>
+
+Kartta, reitinlaskennan verkko ja osoitehakemisto eivät ole sovelluksen sisällä: ne ladataan kerran Tallennustila-näytöltä tai asennetaan käsin tiedostoista, jotka voit tuottaa itse. Niiden koko riippuu kaupungista – muutamia kymmeniä megatavuja keskikokoisella kaupunkiseudulla, pääkaupungissa enemmän – ja koko kerrotaan ennen latausta.
+
+<b>Palvellut kaupungit</b>
+
+Lähes kolmesataa verkostoa noin kolmessakymmenessä maassa: kaikki ne, jotka julkaisevat asemansa avoimena datana ja joiden telineisiin reitinlaskenta voi luottaa – Pariisin Vélib’istä New Yorkin Citi Bikeen, Prahan, Barcelonan, Kööpenhaminan, Tokion ja Buenos Airesin kautta. Sovellus ehdottaa sinulle omaasi sijaintisi perusteella, jos pyydät, ja voit pitää useita asennettuina ja vaihdella niiden välillä.
+
+Offline-aineistot on toistaiseksi tuotettu kourallisesta niistä. Muiden osalta sovellus sanoo sen suoraan sen sijaan että teeskentelisi: lista näyttää mitä on olemassa, ja tiedostot voi tuottaa lähdekoodivaraston skripteillä.
+
+Sovellus ei ole sidottu mihinkään yksittäiseen verkostoon: kaupunkilista päivittyy itse, ja jokainen kaupunki kantaa oman GBFS-syötteensä osoitteen, mikä tekee sovelluksesta käyttökelpoisen minkä tahansa maailman GBFS-verkoston kanssa.
+
+Vapaa ohjelmisto GNU GPL v3 -lisenssillä.
