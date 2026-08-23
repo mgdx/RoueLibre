@@ -168,12 +168,12 @@ that architecture's APK actually declares:
 ```yaml
 Categories:
   - Navigation
-  - Sports & Health
+  - Public Transport
 License: GPL-3.0-only
 AuthorName: mgdx
 SourceCode: https://github.com/mgdx/RoueLibre
 IssueTracker: https://github.com/mgdx/RoueLibre/issues
-Changelog: https://github.com/mgdx/RoueLibre/blob/main/CHANGELOG.md
+Changelog: https://github.com/mgdx/RoueLibre/blob/HEAD/CHANGELOG.md
 
 RepoType: git
 Repo: https://github.com/mgdx/RoueLibre.git
@@ -201,11 +201,36 @@ following `master` — a moving submodule would make the build unreproducible.
 each release adds its four by hand.
 
 Before opening the merge request, run their own checks — `fdroid lint` and
-`fdroid build` from [fdroidserver](https://gitlab.com/fdroid/fdroidserver),
-which builds inside their image rather than on a machine that already has
-everything. Counting on that image is the point: the versions this project
-builds with are recent, and the build server is what decides whether they are
-buildable there.
+`fdroid build` from [fdroidserver](https://gitlab.com/fdroid/fdroidserver).
+`fdroid lint` needs the category list, which is not shipped with the tool: put
+`config/categories.yml` from fdroiddata beside the metadata, and make the
+directory a git repository, since the build reads `SOURCE_DATE_EPOCH` from the
+metadata file's own last commit.
+
+### What blocks the build today
+
+`fdroid build` gets as far as cloning the tag, fetching the submodule at its
+pinned commit and cleaning the build files, then stops:
+
+```
+No hash for gradle version 9.5.0! Exiting...
+```
+
+F-Droid does not run the Gradle wrapper that a repository ships — a downloaded
+wrapper is a binary nobody reviewed. It runs `gradlew-fdroid`, which carries a
+list of Gradle versions and their checksums and refuses anything absent from
+it. In fdroidserver **2.4.5**, released June 2026 and the current version, that
+list stops at **Gradle 8.14.2**, and the table mapping plugin versions to
+Gradle versions stops at **AGP 8.9**. This project builds with Gradle 9.5.0 and
+AGP 9.3.1, which `compileSdk 37` requires.
+
+Nothing here is a defect of this project, and downgrading would mean giving up
+the platform version the application targets. The way through is to add the
+Gradle 9 checksums to `gradlew-fdroid` upstream — a mechanical merge request
+against fdroidserver, which is how that list has always grown. Until it lands,
+F-Droid cannot build Roue Libre, and the releases page and IzzyOnDroid — which
+serves the APKs published here, signed by our own key, without rebuilding them
+— are the ways to install it.
 
 ### Being published under our own signature
 
