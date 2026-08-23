@@ -176,6 +176,8 @@ SourceCode: https://github.com/mgdx/RoueLibre
 IssueTracker: https://github.com/mgdx/RoueLibre/issues
 Changelog: https://github.com/mgdx/RoueLibre/blob/HEAD/CHANGELOG.md
 
+AutoName: Roue Libre
+
 RepoType: git
 Repo: https://github.com/mgdx/RoueLibre.git
 
@@ -186,26 +188,26 @@ Builds:
     submodules: true
     gradle:
       - yes
-    scandelete:
-      - third_party/brouter/brouter-routing-app
+    output: app/build/outputs/apk/release/app-armeabi-v7a-release.apk
+    binary: 
+      https://github.com/mgdx/RoueLibre/releases/download/v%v/roue-libre-%v-armeabi-v7a.apk
     scanignore:
       - settings.gradle.kts
       - third_party/brouter/buildSrc/src/main/groovy/brouter.library-conventions.gradle
-    binary: https://github.com/mgdx/RoueLibre/releases/download/v%v/roue-libre-%v-armeabi-v7a.apk
-    output: app/build/outputs/apk/release/app-armeabi-v7a-release.apk
+    scandelete:
+      - third_party/brouter/brouter-routing-app
 
   # … and the same for 42 x86, 43 x86_64, 44 arm64-v8a
 
 AllowedAPKSigningKeys: 1de586d680f3296f2d1aa05dd5147fd3de187a5da15a1f5d887d0a82a1e6ed89
 
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
 VercodeOperation:
   - '%c * 10 + 1'
   - '%c * 10 + 2'
   - '%c * 10 + 3'
   - '%c * 10 + 4'
-
-AutoUpdateMode: Version v%v
-UpdateCheckMode: Tags
 CurrentVersion: 1.0.0
 CurrentVersionCode: 44
 ```
@@ -243,6 +245,34 @@ anything it cannot account for, and each is answered rather than silenced:
 - **`brouter.library-conventions.gradle` is ignored** for a Maven URL the
   scanner does not recognise. It sits in a `publishing` block — it is where
   BRouter pushes its own artifacts, never where a dependency is fetched from.
+
+### What their pipeline insists on
+
+The file above is not merely valid, it is the **only** shape their CI accepts,
+and three of its rules cost a round trip to learn:
+
+- `AutoUpdateMode: Version` carries **no pattern**. Their JSON schema allows
+  `None` or `Version` with an optional `+suffix` and nothing else; the commit
+  to build comes from `UpdateCheckMode: Tags`, so a pattern would have been
+  ignored anyway.
+- **`AutoName` has to be there.** Their tooling derives it from the manifest,
+  and a job ends on `git diff --exit-code`: anything their run adds that the
+  file does not already say fails the pipeline.
+- The file must be a **fixed point of `fdroid rewritemeta`**, which reorders
+  every build entry — `output`, `binary`, `scanignore`, `scandelete` — puts
+  `AutoUpdateMode` and `UpdateCheckMode` before `VercodeOperation`, and wraps
+  long values on its own terms. Do not format it by hand: run their tool and
+  commit what it writes. The wrapping depends on the `ruamel.yaml` version —
+  0.18 folds two of the four `binary` URLs, 0.19 folds all four — so match the
+  version their runner has rather than the newest.
+
+To rehearse the pipeline here rather than discovering it there, reproduce the
+build image: `fdroidserver` from **master** (the released package lags behind
+it), the `gradlew-fdroid` script from its own repository symlinked in `PATH` as
+`gradle`, a real JDK 21 in `JAVA_HOME`, and a `GRADLE_USER_HOME` holding their
+`gradle.properties` — `org.gradle.java.installations.auto-download=false`, plus
+`auto-detect=false` on a workstation, where a stray JRE under `/usr/lib/jvm`
+will otherwise be offered to Gradle as a compiler and fail the build.
 
 ### It builds, and it reproduces
 
