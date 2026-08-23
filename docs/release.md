@@ -185,6 +185,11 @@ Builds:
     submodules: true
     gradle:
       - yes
+    scandelete:
+      - third_party/brouter/brouter-routing-app
+    scanignore:
+      - settings.gradle.kts
+      - third_party/brouter/buildSrc/src/main/groovy/brouter.library-conventions.gradle
     output: app/build/outputs/apk/release/app-armeabi-v7a-release.apk
   # … and the same for 42 x86, 43 x86_64, 44 arm64-v8a
 
@@ -200,14 +205,40 @@ following `master` — a moving submodule would make the build unreproducible.
 `AutoUpdateMode` is off because four entries cannot be generated from one tag;
 each release adds its four by hand.
 
-Before opening the merge request, run their own checks — `fdroid lint` and
-`fdroid build` from [fdroidserver](https://gitlab.com/fdroid/fdroidserver).
-`fdroid lint` needs the category list, which is not shipped with the tool: put
-`config/categories.yml` from fdroiddata beside the metadata, and make the
-directory a git repository, since the build reads `SOURCE_DATE_EPOCH` from the
-metadata file's own last commit.
+The three scan rules exist because F-Droid's scanner refuses to build over
+anything it cannot account for, and each is answered rather than silenced:
 
-### The Gradle version is not a problem, the JDK may be
+- **`brouter-routing-app` is deleted** before the build. It is BRouter's own
+  Android application, and it ships two ZIP archives in its assets. We never
+  build it — BRouter's `settings.gradle` includes that module only when a
+  `local.properties` exists inside the submodule, and none does — so removing
+  it costs nothing and leaves nothing unexplained in the tree.
+- **`settings.gradle.kts` is ignored** for the `foojay-resolver` plugin, which
+  downloads a JDK when a toolchain is missing. On their machine it can do
+  nothing: the build sets `org.gradle.java.installations.auto-download=false`,
+  and the toolchain it would fetch is already installed.
+- **`brouter.library-conventions.gradle` is ignored** for a Maven URL the
+  scanner does not recognise. It sits in a `publishing` block — it is where
+  BRouter pushes its own artifacts, never where a dependency is fetched from.
+
+### It builds, and it reproduces
+
+Run against the `v1.0.0` tag with F-Droid's own tool, both checks pass:
+
+```
+$ fdroid lint io.github.mgdx.rouelibre     # no output: nothing to say
+$ fdroid build io.github.mgdx.rouelibre:44
+1 compilation réussie
+```
+
+And the APK it produces is not merely equivalent to the published one, it is
+**the same file**: compared entry by entry with the release's arm64 APK, name
+and CRC, **nothing differs** — `classes.dex` included, identical byte for byte.
+Only the signature separates them, theirs being unsigned. The same holds for
+armeabi-v7a. Whatever else has to be discussed with the reviewers, the second
+phase below is not a hope: it has been measured.
+
+### The Gradle ceiling is a local artefact, not theirs
 
 Running `fdroid build` from a released fdroidserver stops on:
 
@@ -261,7 +292,7 @@ their server is. If that command builds, so will they.
 Once the recipe builds on their server, F-Droid can be asked to publish **our**
 APKs rather than its own: it rebuilds from the recipe, compares the result to
 the file we published byte for byte, and if the two match it serves ours
-untouched. The two signatures then stop being rivals, and one can move between
+untouched — which, as the comparison above showed, is already the case. The two signatures then stop being rivals, and one can move between
 the releases page and F-Droid without removing anything.
 
 It is asked for by adding two fields to the same metadata file — `Binaries`,
