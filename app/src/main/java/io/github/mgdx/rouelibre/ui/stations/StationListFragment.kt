@@ -71,6 +71,18 @@ class StationListFragment : Fragment() {
      */
     private var message: Snackbar? = null
 
+    /**
+     * Whether the next list committed is to be shown from its first row.
+     *
+     * The order is settled by the model, the rows are handed to `ListAdapter`,
+     * and the diff that reorders them runs on another thread: scrolling
+     * straight after asking for the order scrolls the list that is still on
+     * screen, and the reordering that lands a moment later keeps the position
+     * it finds. So the scroll waits for the commit, which is what makes the
+     * nearest station the one actually looked at.
+     */
+    private var showFromTheTop = false
+
     private val viewModel: StationsViewModel by viewModels {
         val container = (requireActivity().application as RoueLibreApplication).container
         StationsViewModel.Factory(
@@ -236,11 +248,13 @@ class StationListFragment : Fragment() {
                 return@launch
             }
             if (saidWeAreElsewhere(position)) return@launch
-            viewModel.orderFrom(position)
             // Back to the top, where the nearest station now is: the order
             // changed under a list that may be scrolled halfway down, and an
-            // answer nobody can see reads as a button that does nothing.
-            binding?.stations?.scrollToPosition(0)
+            // answer nobody can see reads as a button that does nothing. It
+            // happens when the reordered rows are committed, not now — see
+            // [showFromTheTop].
+            showFromTheTop = true
+            viewModel.orderFrom(position)
         }
     }
 
@@ -311,7 +325,11 @@ class StationListFragment : Fragment() {
                 viewModel.state.collectLatest { state ->
                     val views = binding ?: return@collectLatest
                     adapter.origin = state.orderingOrigin
-                    adapter.submitList(state.stations)
+                    adapter.submitList(state.stations) {
+                        if (!showFromTheTop) return@submitList
+                        showFromTheTop = false
+                        binding?.stations?.scrollToPosition(0)
+                    }
                     views.swipeRefresh.isRefreshing = state.isRefreshing
                     showEmptyState(state)
                     showFreshness(state.fetchedAt)
