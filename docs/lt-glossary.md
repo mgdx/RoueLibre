@@ -99,19 +99,22 @@ singular. That is the language, not a copied line.
 | Out of service | Paslaugos neteikiamos | `settings:radioInfo_service_out`. `settings_map_filters_hide_out_of_service` repeats it in full — "Slėpti stoteles, kuriose paslaugos neteikiamos" — rather than inventing a shorter *neveikiančios*, so the filter and the badge name one state. |
 | Replace | Pakeisti | `settings:vpn_replace`. |
 | Language | Kalba | `settings:app_locale_preference_title`. |
+| Open by default | Atidaryti pagal numatytuosius nustatymus | `settings:auto_launch_label`. `about_links_body` walks the reader down a real Android path, so every link of it is quoted from the phone and not translated afresh — *Atverti* appears nowhere in Settings, and the reader following the chain would stop at the one label that is not on screen. Note that this is Android's **link** setting, which is why `settings_opening_title` — this application's own opening-screen setting — is worded differently on purpose. |
 | Privacy | Privatumas | `settings:privacy_dashboard_title`. |
 | Licence | Licencija | `settings:license_title`. |
 | just now | ką tik | `settings:time_unit_just_now`, lower-cased because it lands inside "Atnaujinta ką tik". |
 | Searching… | Ieškoma… | `settings:wifi_p2p_menu_searching`. |
 | System (as a choice) | Sistemos | Genitive: *the system's* theme, units, language. Android's noun is *Sistema* (`settings:header_category_system`), but a button standing beside *Šviesi* and *Tamsi* is naming a possessor, not a category. |
-| offline data | neprisijungus naudojami duomenys | *Neprisijungus* is Android's word for offline; on its own it would read "while offline", so the participle is spelled out. |
+| offline data | duomenys įrenginyje | *Neprisijungus* is Android's word for offline, but it is an adverb: *duomenys neprisijungus* reads "data while offline", and the participle that repairs it — *neprisijungus naudojami duomenys* — is 32 characters against English's 12, on a settings section title. What these datasets are is data held on the device, so that is what they are called. The adverb is kept where it genuinely means "while offline": `dataset_delete_body`, "Norint dirbti neprisijungus". |
+| unmetered / metered | neapmokestinamas / apmokestinamas | **A departure from Android**, which says *Nematuojamas* / *Matuojamas* (`settings:wifitrackerlib_wifi_unmetered_label`, `settings:wifi_metered_label`) — literally un/measured. The English string deliberately names **what is billed** rather than Wi-Fi, and `download_unmetered_only_description` spends a whole sentence on the billing; *nematuojamas* would name the measuring instead and lose the point. Android's own second rendering, `settings:wifi_unmetered_label` → *Neišmatuotas*, shows the term is not settled there either. |
+| Favourites | Mėgstamiausios | **Written shorter than the source is literal.** English's bare "Favourites" has no gender to agree with; Lithuanian's does, and everything in this list is a *stotelė*, so the feminine plural stands alone and the noun is left out — *Mėgstamiausios*, *Žiūrėti mėgstamiausias*. `journey_source_favourite` keeps the noun (*Mėgstamiausia stotelė*) because there it sits among *Mano buvimo vieta* and *Taškas žemėlapyje*, where the reader has not yet been told what is being listed. |
 | map data / tiles | žemėlapio duomenys | The name the storage screen gives the dataset, and the one every other string uses for it. |
 | routing data | maršrutų duomenys | And *maršrutų grafas* in the store text, which is the project's own more technical term, as in French. |
 | address index | adresų rodyklė | *Rodyklė* is an index, not a pointer, here. |
 | repository (the project's) | projektas | **A departure from the obvious.** A git repository is *saugykla* in Lithuanian — but `storage_title` already spends *saugykla* on the storage screen, and a store text sending the reader to "saugyklos scenarijai" would point at the wrong screen of the very application it is describing. The store texts say *projekto scenarijai* instead. |
 | source code | pirminis kodas | Distinct from *atvirasis kodas*, which is the licensing model and is what `welcome_hello_body` says. |
 | bytes | B, kB, MB, GB | The Lithuanian unit is the *baitas*; its symbols are the international ones. |
-| hour (in a duration) | val. | `duration_hours_minutes` is the only unit symbol this file rewrites: Lithuanian writes *val.*, not *h*. *min*, *m*, *km*, *ft*, *yd* and *mi* are unchanged. |
+| hour and minute (in a duration) | val. / min. | The only unit symbols this file rewrites. Lithuanian writes *val.* for the hour and *min.* **with its point** (`android:minute` → *min.*, `settings:accessibility_timeout_1min` → *1 min.*), and it spells the minutes out rather than zero-padding them behind the hour: *1 val. 5 min.*, not the *1 h 05* of the French source. Polish took the same view. *m*, *km*, *ft*, *yd* and *mi* are unchanged. |
 
 ## The impersonal voice
 
@@ -128,6 +131,13 @@ to trust a party instead of stating a property of the software.
 `AddressLayout.kt` lays an address out the way its own country writes it,
 keyed by the language of the address base (SPEC §4.3). Lithuanian decides the
 words **around** an address and nothing about the address itself.
+
+**As of this commit that table carries no `"lt"` entry**, so a Lithuanian
+address falls back to the default layout rather than to "Gedimino pr. 9". The
+entry is one line and it is not this file's to write: it belongs to whoever
+merges the language. Until it lands, the sentence above describes what
+`AddressLayout.kt` does for other countries, not yet what it does for
+Lithuania.
 
 `address_search_hint` is the one place where the order of a Lithuanian address
 shows: **"Gatvė, numeris, miestas"**, because Lithuania writes "Gedimino pr. 9,

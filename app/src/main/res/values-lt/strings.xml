@@ -78,7 +78,7 @@
          covers: it exists and its bikes are counted, but no map and no route
          reach it. The short form joins the rest of the row. -->
     <string name="station_beyond_area_short">už žemėlapio ribų</string>
-    <string name="station_beyond_area">Ši stotelė yra už teritorijos, kurią apima įdiegti duomenys. Jos dviračiai skaičiuojami tiesiogiai, bet jos nepasiekia nei žemėlapis, nei maršrutas.</string>
+    <string name="station_beyond_area">Ši stotelė yra už teritorijos, kurią apima įdiegti duomenys. Jos dviračiai skaičiuojami realiuoju laiku, bet jos nepasiekia nei žemėlapis, nei maršrutas.</string>
 
     <string name="search_stations_hint">Ieškoti stotelės</string>
     <string name="search_stations_clear">Išvalyti paiešką</string>
@@ -187,7 +187,7 @@
     <string name="map_attribution">© „OpenStreetMap“ bendraautoriai</string>
     <string name="map_locate_me">Nustatyti mano vietą</string>
     <string name="map_location_denied">Be vietovės nustatymo pradžios tašką pasirinkite žemėlapyje arba pagal adresą.</string>
-    <string name="map_location_unavailable">Buvimo vieta nepasiekiama. Patikrinkite, ar vietovės nustatymas įjungtas, ir bandykite dar kartą.</string>
+    <string name="map_location_unavailable">Buvimo vieta nepasiekiama. Patikrinkite, ar įjungta Vietovė, ir bandykite dar kartą.</string>
     <string name="map_outside_city_title">Esate kitur</string>
     <!-- %1$s is the network served and its main city, joined by city_label:
          it stays in the nominative, as the subject of "apima". -->
@@ -224,12 +224,12 @@
 
     <string name="incoming_place_default_label">Gauta vieta</string>
     <string name="incoming_show_me">Rodyti</string>
-    <string name="incoming_needs_index">Šio adreso reikia ieškoti neprisijungus naudojamoje adresų rodyklėje, o ji neįdiegta.</string>
+    <string name="incoming_needs_index">Šio adreso reikia ieškoti įrenginyje saugomoje adresų rodyklėje, o ji neįdiegta.</string>
     <string name="incoming_address_not_found">„%1$s“ neatitinka nė vieno adreso aprėptoje teritorijoje.</string>
     <string name="incoming_outside_coverage">Ši vieta yra už teritorijos, kurią apima įdiegti duomenys: jokia kelionė jos nepasiekia.</string>
 
-    <string name="favourites_title">Mėgstamiausios stotelės</string>
-    <string name="favourites_open">Žiūrėti mėgstamiausias stoteles</string>
+    <string name="favourites_title">Mėgstamiausios</string>
+    <string name="favourites_open">Žiūrėti mėgstamiausias</string>
     <string name="favourites_reorder_hint">Palieskite ir laikykite eilutę, kad ją perkeltumėte.</string>
 
     <string name="settings_title">Nustatymai</string>
@@ -240,7 +240,7 @@
     <string name="settings_section_city">Miestas</string>
     <string name="settings_section_journey">Kelionė</string>
     <string name="settings_section_display">Ekranas</string>
-    <string name="settings_section_data">Neprisijungus naudojami duomenys</string>
+    <string name="settings_section_data">Duomenys įrenginyje</string>
 
     <!-- The walking pace (SPEC §6, §7.6). Named in words and never in km/h: a
          pace is something one knows about oneself, where a speed is a figure
@@ -277,13 +277,13 @@
     <string name="about_privacy_title">Privatumas</string>
     <string name="about_privacy_body">Jokios paskyros, jokių reklamų, jokių sekimo priemonių, jokio unikalaus identifikatoriaus. Niekas, ko ieškote ar ką apskaičiuojate, neišeina iš šio telefono: adresai, kelionės ir jūsų buvimo vieta lieka čia ir nėra saugomi. Vienintelė kasdien į tinklą iškeliaujanti užklausa atsiunčia laisvų dviračių skaičių. Duomenų rinkiniai atsiunčiami tik paprašius.</string>
     <string name="about_attributions_title">Duomenų šaltiniai</string>
-    <string name="about_attribution_gbfs">Dviračių prieinamumas: aptarnaujamo tinklo atvirieji duomenys, skelbiami GBFS formatu. Prancūzijoje jie sukataloguoti transport.data.gouv.fr.</string>
+    <string name="about_attribution_gbfs">Dviračių prieinamumas: aptarnaujamo tinklo atvirieji duomenys, skelbiami GBFS formatu. Prancūzijoje jie sukataloguoti svetainėje transport.data.gouv.fr.</string>
     <string name="about_attribution_osm">Žemėlapis, maršrutai ir orientyrai: © „OpenStreetMap“ bendraautoriai, ODbL licencija.</string>
     <string name="about_attribution_ban">Adresai ir pastatų numeriai: „Base Adresse Nationale“, ODbL licencija.</string>
     <string name="about_attribution_brouter">Maršrutų skaičiavimas: „BRouter“, MIT licencija, pagal „OpenStreetMap“ duomenis.</string>
     <string name="about_attribution_maplibre">Žemėlapio piešimas: „MapLibre Native“, dviejų sąlygų BSD licencija.</string>
     <string name="about_links_title">Vietos atvėrimas iš kitos programos</string>
-    <string name="about_links_body">„geo:“ nuorodos ir paprastu tekstu bendrinami adresai patenka tiesiai čia: „Android“ parinkiklyje pasirinkite „Roue Libre“. Nuorodoms iš žemėlapių svetainių reikia leidimo: Nustatymai → Programos → „Roue Libre“ → Atverti pagal numatytuosius nustatymus → Pridėti nuorodą.</string>
+    <string name="about_links_body">„geo:“ nuorodos ir paprastu tekstu bendrinami adresai patenka tiesiai čia: „Android“ parinkiklyje pasirinkite „Roue Libre“. Nuorodoms iš žemėlapių svetainių reikia leidimo: Nustatymai → Programos → „Roue Libre“ → Atidaryti pagal numatytuosius nustatymus → Pridėti nuorodą.</string>
     <string name="about_licence_title">Licencija</string>
     <string name="about_licence_body">„Roue Libre“ yra laisva programinė įranga, išleista pagal GNU GPL 3 versijos licenciją. Galite ją naudoti, tirti, keisti ir platinti toliau.</string>
     <string name="about_open_repository">Žiūrėti pirminį kodą</string>
@@ -298,9 +298,9 @@
 
     <string name="journey_title">Kelionė</string>
     <string name="journey_open">Suplanuoti kelionę</string>
-    <string name="journey_origin_empty">Iš kur?</string>
+    <string name="journey_origin_empty">Iš kur vykstate?</string>
     <string name="journey_destination_empty">Kur vykstate?</string>
-    <string name="journey_choose_origin">Iš kur?</string>
+    <string name="journey_choose_origin">Iš kur vykstate?</string>
     <string name="journey_choose_destination">Kur vykstate?</string>
     <string name="journey_swap">Sukeisti pradžią ir tikslą</string>
     <string name="journey_hint">Kelionė apskaičiuojama įrenginyje: nueiti iki stotelės, važiuoti dviračiu, tada nueiti likusį kelią.</string>
@@ -311,7 +311,7 @@
 
     <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
          which is what the application does at rest. -->
-    <string name="journey_bike_kind_any">Bet koks dviratis</string>
+    <string name="journey_bike_kind_any">Bet koks</string>
     <string name="journey_bike_kind_mechanical">Mechaninis</string>
     <string name="journey_bike_kind_electric">Elektrinis</string>
     <string name="journey_bike_kind_any_description">Bet koks dviratis, nesvarbu, kokios rūšies</string>
@@ -385,14 +385,16 @@
     <string name="journey_no_mechanical_nearby">Netoliese nėra stotelės, kurioje dabar būtų mechaninis dviratis. Paprašykite bet kokio dviračio arba pabandykite vėliau.</string>
     <string name="journey_no_electric_nearby">Netoliese nėra stotelės, kurioje dabar būtų elektrinis dviratis. Paprašykite bet kokio dviračio arba pabandykite vėliau.</string>
     <string name="journey_no_dock_nearby">Netoli tikslo nėra stotelės su laisva vieta. Pabandykite vėliau arba rinkitės kitą tikslą.</string>
-    <string name="journey_no_route">Tarp šių dviejų taškų nėra pravažiuojamo kelio.</string>
+    <string name="journey_no_route">Tarp šių dviejų taškų nėra tinkamo kelio.</string>
     <string name="journey_graph_missing">Maršrutų duomenys neįdiegti. Pridėkite juos saugyklos ekrane.</string>
     <string name="journey_outside_coverage">Šis taškas yra už teritorijos, kurią apima įdiegti duomenys.</string>
     <string name="journey_no_stations">Nežinoma nė viena stotelė. Atnaujinkite stotelių sąrašą ir bandykite dar kartą.</string>
 
-    <string name="duration_minutes">%1$d min</string>
-    <!-- Lithuanian writes the hour "val.", not "h". -->
-    <string name="duration_hours_minutes">%1$d val. %2$02d</string>
+    <string name="duration_minutes">%1$d min.</string>
+    <!-- Lithuanian writes the hour "val." and the minute "min.", both with
+         their point (android:minute), and spells the minutes out rather than
+         zero-padding them: "1 val. 5 min.", not "1 val. 05". -->
+    <string name="duration_hours_minutes">%1$d val. %2$d min.</string>
 
     <!-- A station's whole capacity, free or not: "stovas", against the
          "laisva vieta" that is counted as available. The two figures stand
@@ -492,7 +494,7 @@
          undeclined. -->
     <string name="city_delete_description">Ištrinti „%1$s“ duomenis</string>
     <string name="city_delete_title">Ištrinti šiuos duomenis?</string>
-    <string name="city_delete_body">Visi neprisijungus naudojami „%1$s“ duomenys bus ištrinti. Norint jais vėl naudotis, teks atsisiųsti iš naujo.</string>
+    <string name="city_delete_body">Visi įrenginyje saugomi „%1$s“ duomenys bus ištrinti. Norint jais vėl naudotis, teks atsisiųsti iš naujo.</string>
     <string name="city_delete_confirm">Ištrinti</string>
     <string name="city_deleted">„%1$s“ duomenys ištrinti</string>
     <string name="city_search_hint">Ieškoti miesto</string>
@@ -517,7 +519,7 @@
     <string name="size_gigabytes">%1$s GB</string>
 
     <string name="storage_title">Saugykla</string>
-    <string name="storage_open">Tvarkyti neprisijungus naudojamus duomenis</string>
+    <string name="storage_open">Tvarkyti duomenis įrenginyje</string>
     <string name="storage_intro">Žemėlapis, kelionių planavimas ir adresų paieška veikia be tinklo. Tam reikia trijų duomenų rinkinių, įdiegiamų vieną kartą.</string>
     <string name="storage_total">Šiame įrenginyje naudojama %1$s</string>
     <string name="storage_nothing_installed">Duomenų neįdiegta</string>
@@ -579,7 +581,7 @@
     <string name="error_feed_unavailable">Tinklas neskelbia „%1$s“ duomenų srauto.</string>
     <string name="error_unsupported_version">Šis tinklas skelbia duomenis %1$s versija, kurios ši programos versija neperskaito. Atnaujinkite programą.</string>
     <string name="error_local_storage">Nepavyksta perskaityti įrenginyje saugomų duomenų.</string>
-    <string name="error_no_city_chosen">Miestas nepasirinktas. Pasirinkite jį.</string>
+    <string name="error_no_city_chosen">Miestas nepasirinktas. Pasirinkite jį iš sąrašo.</string>
 
     <!-- Unmetered-only downloads -->
     <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
@@ -593,14 +595,14 @@
     <string name="download_stopped_title">Atsisiuntimas sustabdytas</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">Šis ryšys dabar apmokestinamas už megabaitus, todėl atsisiuntimas sustojo. Kas atsiųsta, išsaugota. Prisijunkite prie Wi-Fi, kad atsisiųstumėte likusius %1$s, arba tęskite dabar vis tiek.</string>
+    <string name="download_stopped_body">Šis ryšys dabar apmokestinamas už megabaitus, todėl atsisiuntimas sustojo. Kas atsiųsta, išsaugota. Prisijunkite prie Wi-Fi, kad atsisiųstumėte %1$s, arba tęskite dabar vis tiek.</string>
     <string name="download_anyway">Vis tiek atsisiųsti</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_waiting_for_unmetered">Laukiama neapmokestinamo ryšio, kad būtų atsiųsta %1$s.</string>
     <string name="download_can_resume">Šis ryšys nebeapmokestinamas. Paleiskite atsisiuntimą iš naujo: jis tęsis nuo tos vietos, kurioje sustojo.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
-    <string name="settings_opening_title">Pagal numatytuosius nustatymus atverti</string>
+    <string name="settings_opening_title">Kuriuo ekranu atverti programą</string>
     <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_opening_description">Ekranas, kuriuo atsiveria programa</string>
     <string name="settings_opening_map">Žemėlapis</string>
