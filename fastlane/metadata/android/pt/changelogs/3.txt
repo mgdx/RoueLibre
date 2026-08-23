@@ -1,0 +1,17 @@
+Os dados estão publicados e o mapa já não é francês.
+
+• 306 redes em 35 países, todas as que publicam as suas estações em dados abertos: Praga, Barcelona, Riga, Pristina, Buenos Aires. A cidade é escolhida no primeiro arranque, e nenhuma é servida por predefinição.
+• Os conjuntos de dados são finalmente transferíveis. Há 101 cidades prontas — as setenta francesas e outras trinta e uma — que já não têm de ser produzidas a partir dos scripts do repositório.
+• A pesquisa de endereços funciona fora de França: onde não existe uma base de endereços nacional, as ruas e a sua numeração são lidas do próprio OpenStreetMap, na língua do país.
+• O mapa para na fronteira do que foi transferido, em vez de mostrar um vazio para lá dela.
+• As duas pontas de um percurso ficam no ecrã de resultado e podem ser corrigidas aí.
+• As distâncias são mostradas nas unidades da sua região: milhas e pés nos Estados Unidos, milhas e jardas no Reino Unido, quilómetros em todo o resto. A opção está nas Definições, se quiser outra coisa.
+• Diga à aplicação a que ritmo caminha — lento, normal ou rápido — e o percurso é calculado para esse ritmo. Caminhar devagar pode mudar a estação de partida proposta: uma mais perto, ao preço de pedalar um pouco mais. «Normal» é o que a aplicação fazia até agora, e é a predefinição.
+• O mapa pode deixar de fora as estações que não lhe servem de nada: as que estão fora de serviço e as que não têm nada a oferecer. Os dois interruptores estão nas Definições, na visualização, e o que escolher fica guardado — o mapa não mostra nenhum botão de filtro próprio. O que conta como nada segue o botão Bicicletas / Lugares livres do mapa. As estações sobre as quais a rede nada diz permanecem sempre no mapa.
+• As transferências esperam por uma ligação que não seja paga ao megabyte — normalmente o Wi-Fi. Os dados de uma cidade podem pesar até 1,3 GB, e nada disso sai pelo seu plano de dados móveis sem que o diga: uma transferência suspensa anuncia o seu tamanho e propõe começar mesmo assim, só dessa vez. Se a ligação passar a ser paga a meio, a transferência para e mais tarde retoma onde parou, em vez de recomeçar. A opção está nas Definições, nos dados offline.
+• Pode escolher o ecrã com que a aplicação abre: o mapa, como antes, ou a lista de estações. Abrir na lista não pede nenhuma autorização de localização.
+• As contagens de bicicletas e de lugares livres podem ser mostradas maiores, nas Definições. A aplicação já segue o tamanho de texto definido no telefone; isto aumenta esse número sem aumentar tudo o resto. Os marcadores do mapa mantêm o tamanho, para que as estações continuem legíveis lado a lado.
+• Pode dizer se a sua própria bicicleta é mecânica ou elétrica. Isso muda a forma como um percurso na sua própria bicicleta é desenhado e descrito, e mais nada: nenhum percurso e nenhuma duração dependem disso.
+• A língua da aplicação é sua para escolher, nas Definições, seja qual for a língua do telefone. Só são oferecidas as línguas realmente traduzidas — inglês e francês, por agora. As suas unidades não mudam com isso: escolha francês em Boston e as suas distâncias continuam em milhas.
+
+O peso de cada cidade é anunciado antes de transferir: 3 MB para Auray, 143 MB para Paris.
