@@ -48,6 +48,7 @@
          Example: ”Storgatan, 6 cyklar, 26 lediga platser”. -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
     <string name="station_out_of_service">Ur funktion</string>
+    <string name="station_out_of_service_since">%1$s · senast rapporterad %2$s</string>
     <string name="station_availability_unknown">Okänd tillgänglighet</string>
 
     <!-- What a station is called when its feed publishes no name for it and no

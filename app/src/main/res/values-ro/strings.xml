@@ -70,6 +70,7 @@
     <!-- Not Android's "În afara ariei de acoperire", which is about radio
          coverage: a station out of service is one that does not work. -->
     <string name="station_out_of_service">Nefuncțională</string>
+    <string name="station_out_of_service_since">%1$s · ultima raportare %2$s</string>
     <string name="station_availability_unknown">Disponibilitate necunoscută</string>
 
     <!-- What a station is called when its feed publishes no name for it and no

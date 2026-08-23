@@ -51,6 +51,7 @@
     <!-- A station the network has taken out of service. Not 圏外, which is
          Android's word for a radio blackspot and says nothing about a rack. -->
     <string name="station_out_of_service">利用停止中</string>
+    <string name="station_out_of_service_since">%1$s · 最終更新 %2$s</string>
     <string name="station_availability_unknown">空き状況不明</string>
 
     <!-- What a station is called when its feed publishes no name for it and no

@@ -58,6 +58,7 @@
          Example: ”Mannerheimintie, 6 pyörää, 26 vapaata paikkaa”. -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
     <string name="station_out_of_service">Poissa käytöstä</string>
+    <string name="station_out_of_service_since">%1$s · viimeisin tieto %2$s</string>
     <string name="station_availability_unknown">Saatavuus tuntematon</string>
 
     <!-- What a station is called when its feed publishes no name for it and no

@@ -40,6 +40,11 @@
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
 
     <string name="station_out_of_service">Hors service</string>
+    <!-- Une fermeture qui dure le dit : une station fermée ce matin et une
+         station muette depuis des mois n’appellent pas la même décision.
+         %1$s est la ligne ci-dessus, %2$s l’âge de la dernière mesure de la
+         station — « Hors service · dernier relevé il y a 5 mois ». -->
+    <string name="station_out_of_service_since">%1$s · dernier relevé %2$s</string>
     <string name="station_availability_unknown">Disponibilité inconnue</string>
 
     <!-- What a station is called when its feed publishes no name for it and no

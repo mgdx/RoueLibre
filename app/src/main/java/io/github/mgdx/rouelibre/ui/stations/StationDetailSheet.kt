@@ -36,6 +36,7 @@ import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.inServedDigits
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
+import io.github.mgdx.rouelibre.ui.toRelativeText
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -237,6 +238,15 @@ class StationDetailSheet : BottomSheetDialogFragment() {
      * rest: it is not a state of the station but of what we hold about it, it
      * will not right itself on the next refresh, and it is the reason the two
      * journey buttons below have gone quiet.
+     *
+     * A closure that has lasted says so. "Out of service" alone read the same
+     * for a station shut this morning and for one that has reported nothing
+     * for months, and the two do not call for the same decision: the first is
+     * worth waiting out, the second is worth walking past. Under a day the
+     * line stays as it was — a station closed two hours ago has nothing to add.
+     *
+     * `Unknown` gains nothing from the same treatment: a station the real-time
+     * feed ignores has no measurement to date.
      */
     private fun showServiceState(state: StationDetailUiState) {
         val views = binding ?: return
@@ -247,12 +257,19 @@ class StationDetailSheet : BottomSheetDialogFragment() {
             return
         }
         views.serviceState.isVisible = entry.serviceState != ServiceState.InService
-        views.serviceState.setText(
-            when (entry.serviceState) {
-                ServiceState.OutOfService -> R.string.station_out_of_service
-                else -> R.string.station_availability_unknown
-            },
-        )
+        val silence = entry.silentClosureAge(Instant.now())
+        views.serviceState.text = when {
+            entry.serviceState != ServiceState.OutOfService ->
+                getString(R.string.station_availability_unknown)
+
+            silence == null -> getString(R.string.station_out_of_service)
+
+            else -> getString(
+                R.string.station_out_of_service_since,
+                getString(R.string.station_out_of_service),
+                silence.toRelativeText(requireContext()),
+            )
+        }
     }
 
     /**
