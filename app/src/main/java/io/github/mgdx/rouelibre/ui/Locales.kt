@@ -30,7 +30,10 @@ import java.util.Locale
  * than one offering no German at all.
  */
 internal val TRANSLATED_LANGUAGES =
-    setOf("cs", "de", "en", "es", "fr", "it", "ja", "nl", "pl", "pt")
+    setOf(
+        "cs", "da", "de", "en", "es", "fi", "fr", "hr", "it", "ja",
+        "nl", "pl", "pt", "ro", "sk", "sl",
+    )
 
 /**
  * The language of `res/values/`, served when no matching translation exists.
