@@ -38,6 +38,13 @@ times matters more here than the internal rule, and `journey_no_stations` and
 `map_location_unavailable` end on the same words for the same reason. Do not
 "fix" it to the singular.
 
+One consequence of that split is worth knowing before either half is touched:
+**`action_refresh` (*Osvježi*) and `action_retry` (*Pokušajte ponovo*) can be on
+the station list at the same time** — the pull-to-refresh control and the error
+row's button. One is singular and one is plural, and that is not an oversight:
+each follows what Android writes for its own kind of control, and lining them up
+would mean breaking the system's wording on one of the two.
+
 Quotation marks are **„ … “**. Diacritics are written in full — **č ć ž š đ** —
 and never approximated by their bare letters. The dash that breaks a sentence
 is **–** with a space on either side, not the em dash the English file uses;
@@ -87,6 +94,8 @@ sati*).
 | Clear (a search) | **Izbriši pretraživanje** | `settings:clear` = *Izbriši*. |
 | favourites | **Favoriti** | Not in the lexicon — this is a choice, and it is the word Croatian apps put beside a star. |
 | offline | **izvanmrežni** | Not in the lexicon either, and again a choice: *offline* is unavoidable in speech but the written Croatian of the platform is *izvanmrežno*. `settings_section_data` is *Izvanmrežni podaci*. |
+| feed (GBFS) | **podatkovni kanal** | The stream a network publishes: `error_feed_unavailable`, `error_malformed`, `welcome_fleet_body`. It used to be *izvor podataka*, which collided head-on with the line below — the attributions screen was naming its sources with the same two words the error messages were naming the GBFS stream with, and English keeps *feed* and *data sources* apart. *Kanal* is what Croatian IT calls a stream one subscribes to, and nothing else in the file uses it. |
+| data sources | **izvori podataka** | The attributions screen and the city-by-city list: `about_attributions_title`, `sources_title`, `sources_open`. Who produced the data, never the pipe it comes down. |
 | address index | **kazalo adresa** | *Kazalo*, an index in a book, rather than *indeks*, which in Croatian reads as a figure or a student's record book. |
 | tiles (map) | **pločice** | `map_needs_tiles_title`. |
 | Out of service | **Ne radi** | `settings:radioInfo_service_out`. |
@@ -104,8 +113,14 @@ instead of stating a property of the software.
 
 Croatian keeps it at no cost, because the reflexive passive does the same work:
 *ne čuva se nikakva povijest*, *ne šalju se nikome*, *čita se iz vlastitog
-izvora podataka mreže*, *skupovi podataka preuzimaju se samo kad to zatražite*.
-There is not one *mi* in the file or in the store texts.
+podatkovnog kanala mreže*, *skupovi podataka preuzimaju se samo kad to
+zatražite*.
+
+**One line does say *mi*, and deliberately.** `city_proposal_body` ends
+*Idemo s tim?* — because the English ends "Shall we go with that?". That
+sentence is not a claim about what the software does with your data; it is the
+application asking a question and waiting for *Da*. The impersonal rule covers
+the privacy and behaviour texts, and this is neither.
 
 ## Cases are suffixes, and a placeholder cannot carry one
 
@@ -119,7 +134,8 @@ So these lines are written around that rather than against it:
 | `journey_step_to_station`, `journey_step_ride` | *Pješice do stanice %1$s* | *Do* governs the genitive; the case falls on *stanice* and the name follows in apposition, in the nominative it arrived in. |
 | `station_address_nearby` | *Blizu: %1$s* | *Blizu* also governs the genitive, and the argument is a street **or** a square, reaching the line as it stands. A colon turns it into a label, which declines nothing. |
 | `dataset_imported`, `dataset_deleted` | *Instalirano: %1$s* | A dataset's name is a masculine plural in two cases (*Podaci karte*, *Podaci za rute*) and a neuter singular in the third (*Kazalo adresa*), so no participle agrees with all three. |
-| `city_here_body`, `city_here_installed_body`, `city_proposal_body`, `map_outside_city_message` | *…poslužuje %1$s. Instalirajte podatke te mreže…* | The placeholder stands as the **subject**, in the nominative, and *te mreže* carries the case the rest of the sentence needs — rather than a pronoun that would have to agree with whatever the label produced. |
+| `city_here_body`, `city_here_installed_body` | *%1$s pokriva područje u kojem se nalazite. Instalirajte podatke te mreže…* | The placeholder opens the sentence as the **subject**, in the nominative it arrived in, and *te mreže* carries the case the rest needs — rather than a pronoun that would have to agree with whatever the label produced. Subject-first also settles which of the two nouns covers which, where *Područje … pokriva %1$s* could be read either way round. |
+| `city_proposal_body`, `map_outside_city_message` | *…područja koje pokriva %1$s* | Same placeholder, inside a relative clause this time: *koje* is the accusative object and `%1$s` the nominative subject, so again nothing is asked of the name. |
 
 ### The three lines that must not say "grad"
 
