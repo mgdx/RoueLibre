@@ -169,11 +169,15 @@ day one comes back.
 
 ## The order of an address
 
-`address_with_number` is written **`%2$s %1$s`** and not `%1$s %2$s`: Italian
-puts the street before the number — "Via Roma 12" — where English puts the
-number first. This is precisely what positional placeholders exist for, and it
-is the only string in the file whose placeholders are reordered. No comma
-stands between the two, which is how Poste Italiane writes an address.
+**The order of an address is not this file's to decide, and never was.** It
+belongs to the country the address is in, not to the reader's language
+(SPEC §4.3): "Via Roma 12" is how a Turin address is written for every reader of
+the application, and "12 rue Nationale" is how a Lyon one is written for an
+Italian reader. The two formats that used to live here, `address_with_number`
+and `address_number_with_suffix`, were removed for that reason; the layouts are
+a table in `core/address/AddressLayout.kt`, keyed on the language of the
+**address base**. Italy's entry puts the number after the street with no comma
+between them, which is how Poste Italiane writes an address.
 
 `address_search_hint` follows it — **Via, numero, comune**, and not the English
 *Number, street, town*. The search engine reads a house number in the three

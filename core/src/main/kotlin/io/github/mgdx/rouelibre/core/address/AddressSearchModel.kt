@@ -130,6 +130,11 @@ public data class ResolvedPosition(
  * @property position the point retained for this address.
  * @property precision what allowed it to be placed.
  * @property distanceInMetres the distance to the reference point, or `null`.
+ * @property language the language of the **address base** this address came
+ *   out of, "fr", "pl"…, read back from the index rather than decided
+ *   (SPEC §4.3). It is neither the interface's language nor the served city's:
+ *   it is what says how the address is written down where it is, and it is what
+ *   [addressLayoutOf] answers on.
  */
 public data class AddressResult(
     public val streetId: Long,
@@ -142,4 +147,5 @@ public data class AddressResult(
     public val position: Coordinates,
     public val precision: PositionPrecision,
     public val distanceInMetres: Double?,
+    public val language: String,
 )

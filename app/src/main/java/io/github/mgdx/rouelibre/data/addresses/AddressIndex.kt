@@ -215,6 +215,7 @@ class AddressIndex(
                 PositionPrecision.Exact
             },
             distanceInMetres = bestDistance,
+            language = normalizer.language,
         )
     }
 
@@ -315,6 +316,7 @@ class AddressIndex(
             position = resolved?.coordinates ?: scored.street.position,
             precision = resolved?.precision ?: PositionPrecision.StreetOnly,
             distanceInMetres = scored.distanceInMetres,
+            language = normalizer.language,
         )
     }
 

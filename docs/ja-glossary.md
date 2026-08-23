@@ -122,6 +122,11 @@ OpenStreetMap, GBFS, Wi-Fi — and the licence names. The map's own attribution,
 `© OpenStreetMap contributors`, is the wording OpenStreetMap asks for and stays
 in English. `resources` `name` attributes, always.
 
-`address_with_number` keeps the source's order, number then street. The
-addresses it formats are Lyon's and Riga's, written the way their street signs
-are; reversing them into the Japanese order would misquote the sign.
+**The order of an address is no longer a matter for this file**, and the
+instinct recorded here was the right one: the addresses shown are Lyon's and
+Riga's, written the way their street signs are, and reversing them into the
+Japanese order would misquote the sign. That is now the rule for every language
+(SPEC §4.3) — the layout comes from a table in
+`core/address/AddressLayout.kt`, keyed on the language of the **address base** —
+and `address_with_number` and `address_number_with_suffix` were removed from
+every translation.

@@ -495,10 +495,8 @@
          the street first — „Národní 25“ — which is the whole reason this line
          is a resource and its placeholders are positional, and it is the same
          order the search prompt above asks for. -->
-    <string name="address_with_number">%2$s %1$s</string>
     <!-- %1$d is the number, %2$s its repetition mark („a“, „b“). Czech
          writes it against the number, „25a“, with no space. -->
-    <string name="address_number_with_suffix">%1$d%2$s</string>
     <!-- %1$s is a postcode, %2$s a municipality. -->
     <string name="address_locality">%1$s %2$s</string>
     <!-- %1$s is the place, %2$s an already formatted distance. -->
