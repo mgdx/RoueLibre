@@ -169,7 +169,8 @@ To go further: the [architecture](docs/architecture.md), the
 [offline data](docs/offline-data.md), the
 [dependencies](docs/dependencies.md), the
 [list of networks](docs/networks.md),
-[opening a place from another application](docs/sharing-links.md), and the
+[opening a place from another application](docs/sharing-links.md), how a
+[release is published and signed](docs/release.md), and the
 [CHANGELOG](CHANGELOG.md).
 
 And if none of that is for you: a ⭐ on the repository is what makes Roue Libre
