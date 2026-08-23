@@ -405,8 +405,7 @@
     <string name="address_search_hint">Ulica, numer, miasto</string>
     <string name="address_search_clear">Wyczyść wyszukiwanie</string>
     <string name="address_search_privacy">Wszystko jest wyszukiwane na urządzeniu. Nic nie jest wysyłane, nawet w trakcie pisania.</string>
-    <!-- %1$s is the house number, %2$s the street: Polish writes the number
-         after the name, so the placeholders are swapped. -->
+    <!-- %1$s is a postcode, %2$s a municipality. -->
     <string name="address_locality">%1$s %2$s</string>
     <string name="address_detail">%1$s · %2$s</string>
     <string name="address_detail_approximate">%1$s · pozycja przybliżona</string>
