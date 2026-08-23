@@ -1,0 +1,25 @@
+Roue Libre tregon në hartë stacionet e biçikletave të përbashkëta dhe llogarit një udhëtim derë më derë që ndërthur ecjen dhe biçikletën.
+
+Gjithçka punon në pajisje: hartës, kërkimit të adresave dhe llogaritjes së itinerarit nuk u duhet asnjë lidhje. Vetëm disponueshmëria e biçikletave në kohë reale del në rrjet.
+
+<b>Çfarë e dallon</b>
+
+• Asnjë shërbim i Google-it: pa Play Services, pa Firebase, pa Maps SDK. Punon në çdo sistem Android pa shërbimet e Google-it.
+• Pa telemetri, pa gjurmues, pa identifikues unik, pa llogari.
+• Nuk ruhet asnjë e dhënë udhëtimi: pa historik, pa pozicione, pa destinacione. Ajo që kërkon nuk del nga telefoni.
+• Asnjë qytet i imponuar: disa zona urbane bashkëjetojnë në pajisje dhe të dhënat e njërit qytet fshihen pa i prekur të tjerat.
+• Udhëtimi optimizon <i>çiftin</i> e stacioneve – nisjen dhe mbërritjen – në vend që të mjaftohet me më të afërtin, dhe peshon rrezikun që një stacion me pak biçikleta të zbrazet ndërsa ti ecën drejt tij.
+
+<b>Ç’duhet ditur para se ta instalosh</b>
+
+Harta bazë, grafi i itinerarëve dhe indeksi i adresave nuk ndodhen brenda aplikacionit: shkarkohen një herë, nga ekrani i hapësirës ruajtëse, ose instalohen me dorë nga skedarë që i prodhon vetë. Pesha e tyre varet nga qyteti – disa dhjetëra megabajt për një zonë urbane mesatare, më shumë për një kryeqytet – dhe njoftohet para shkarkimit.
+
+<b>Qytetet e shërbyera</b>
+
+Afër treqind rrjete, në rreth tridhjetë shtete: të gjitha ato që i publikojnë stacionet e tyre si të dhëna të hapura dhe që ofrojnë vende parkimi ku udhëtimi mund të mbështetet – nga Vélib’ i Parisit te Citi Bike i Nju Jorkut, duke kaluar nëpër Pragë, Barcelonë, Kopenhagë, Tokio dhe Buenos Aires. Aplikacioni ta propozon tëndin sipas pozicionit, nëse ia kërkon, dhe mund të mbash disa të instaluar e të kalosh nga njëri te tjetri.
+
+Grupet e të dhënave jashtë linje janë prodhuar deri tani vetëm për disa prej tyre. Për të tjerat, aplikacioni e thotë hapur në vend që të bëjë sikur: lista tregon çfarë ekziston dhe skedarët mund të prodhohen me skriptet e depos.
+
+Nuk është i lidhur me asnjë rrjet të veçantë: lista e qyteteve përditësohet vetë dhe secili qytet mban adresën e burimit të vet GBFS, gjë që e bën aplikacionin të përdorshëm me çdo rrjet GBFS në botë.
+
+Softuer i lirë nën licencën GNU GPL v3.
