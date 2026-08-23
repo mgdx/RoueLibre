@@ -11,15 +11,6 @@ plugins {
 }
 
 /**
- * The version code every release is numbered from.
- *
- * The universal APK keeps it as it is; each architecture's APK derives its own
- * from it below. Android compares this number and nothing else, so it only
- * ever goes up.
- */
-val baseVersionCode = 4
-
-/**
  * What each architecture adds to ten times the base version code.
  *
  * A repository cannot hold two APKs of one application under the same version
@@ -57,7 +48,12 @@ android {
         // adaptive icons, and above all an up-to-date TLS stack (SPEC §3).
         minSdk = 26
         targetSdk = 37
-        versionCode = baseVersionCode
+        // Written as a number rather than read from a constant: F-Droid's
+        // update checker greps this very line for a literal, and a name here
+        // leaves it unable to tell one release from the next. The
+        // architectures derive their own codes from it below, so the value is
+        // still written once.
+        versionCode = 4
         // The first version published, and the first signed by the project's
         // own key rather than the debug one. That is what 1.0 names here: not
         // a feature set frozen, but a build somebody can install and then
@@ -357,13 +353,14 @@ androidComponents {
         // The architecture APKs take their own version code (see
         // `architectureVersionCodes`). The universal one carries no ABI
         // filter, so it keeps the base and is left alone here.
+        val base = android.defaultConfig.versionCode!!
         variant.outputs.forEach { output ->
             val architecture = output.filters
                 .firstOrNull { it.filterType == ABI }
                 ?.identifier
                 ?: return@forEach
             output.versionCode.set(
-                baseVersionCode * 10 + architectureVersionCodes.getValue(architecture),
+                base * 10 + architectureVersionCodes.getValue(architecture),
             )
         }
 
