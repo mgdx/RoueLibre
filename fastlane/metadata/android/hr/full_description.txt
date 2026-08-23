@@ -1,0 +1,25 @@
+Roue Libre prikazuje stanice javnih bicikala na karti i računa putovanje od vrata do vrata koje spaja hodanje i vožnju biciklom.
+
+Sve radi na uređaju: karta, pretraživanje adresa i izračun rute ne trebaju nikakvu vezu. Na mrežu izlazi samo dostupnost bicikala u stvarnom vremenu.
+
+<b>Po čemu se razlikuje</b>
+
+• Bez ijedne Googleove usluge: bez Play Servicesa, bez Firebasea, bez Maps SDK-a. Radi na svakom Androidu bez Googleovih usluga.
+• Bez telemetrije, bez alata za praćenje, bez jedinstvenog identifikatora, bez računa.
+• Ne čuvaju se podaci o putovanjima: ni povijest, ni položaji, ni odredišta. Ono što tražite ne napušta telefon.
+• Nijedan grad nije nametnut: više gradskih područja može stajati jedno uz drugo na uređaju, a podaci jednoga grada mogu se izbrisati bez diranja ostalih.
+• Putovanje optimizira <i>par</i> stanica — polaznu i dolaznu — umjesto da se zadovolji najbližom, i vaga rizik da se slabo popunjena stanica isprazni dok do nje hodate.
+
+<b>Vrijedi znati prije instalacije</b>
+
+Karta, graf za izračun ruta i kazalo adresa nisu u aplikaciji: preuzimaju se jedanput, sa zaslona za pohranu, ili se ručno instaliraju iz datoteka koje sami proizvedete. Njihova težina ovisi o gradu — nekoliko desetaka megabajta za srednje veliko gradsko područje, više za glavni grad — i najavljuje se prije preuzimanja.
+
+<b>Obuhvaćeni gradovi</b>
+
+Blizu tri stotine mreža u tridesetak zemalja: svaka koja svoje stanice objavljuje kao otvorene podatke i na čije se stalke putovanje može osloniti — od pariškog sustava Vélib’ do njujorškog Citi Bikea, preko Praga, Barcelone, Kopenhagena, Tokija i Buenos Airesa. Aplikacija vam prema položaju predlaže vaš grad, ako to zatražite, a možete držati instalirano više njih i prebacivati se među njima.
+
+Izvanmrežni skupovi podataka dosad su proizvedeni za njih nekolicinu. Za ostale aplikacija to i kaže umjesto da se pretvara: popis pokazuje što postoji, a datoteke se mogu proizvesti skriptama iz repozitorija.
+
+Nije vezana ni uz jednu mrežu posebno: popis gradova sam se ažurira, a svaki grad nosi adresu vlastitog izvora podataka GBFS, što aplikaciju čini upotrebljivom sa svakom GBFS mrežom na svijetu.
+
+Slobodan softver pod licencom GNU GPL v3.
