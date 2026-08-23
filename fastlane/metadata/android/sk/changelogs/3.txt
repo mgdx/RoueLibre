@@ -1,0 +1,17 @@
+Dáta sú zverejnené a mapa už nie je francúzska.
+
+• 306 sietí v 35 krajinách, každá, ktorá zverejňuje svoje stanice ako otvorené dáta: Praha, Barcelona, Riga, Priština, Buenos Aires. Svoje mesto si vyberiete pri prvom spustení a žiadne nie je nastavené vopred.
+• Dátové sady sú konečne na stiahnutie. 101 miest je pripravených – sedemdesiat francúzskych a tridsaťjeden ďalších – a už sa nemusia vytvárať skriptami z repozitára.
+• Hľadanie adries funguje aj mimo Francúzska: tam, kde neexistuje národná adresná báza, sa ulice a čísla domov čítajú priamo z OpenStreetMap, v jazyku danej krajiny.
+• Mapa končí na okraji toho, čo bolo stiahnuté, namiesto toho, aby za ním ukazovala prázdno.
+• Oba konce trasy zostávajú na obrazovke s výsledkom a dajú sa tam opraviť.
+• Vzdialenosti sa zobrazujú v jednotkách vášho regiónu: míle a stopy v Spojených štátoch, míle a yardy v Spojenom kráľovstve, kilometre všade inde. Ak chcete inak, voľba je v Nastaveniach.
+• Poviete, ako rýchlo chodíte – pomaly, normálne alebo svižne – a trasa sa tomu prispôsobí. Pomalá chôdza môže zmeniť ponúkanú východiskovú stanicu: bližšiu, za cenu dlhšieho šliapania. „Normálne“ je to, čo aplikácia robila doteraz, a je to predvolená voľba.
+• Mapa môže vynechať stanice, ktoré vám nie sú na nič: tie mimo prevádzky a tie, ktoré nemajú čo ponúknuť. Oba prepínače sú v Nastaveniach, v sekcii zobrazenia, a vaša voľba sa pamätá – mapa nemá žiadne vlastné tlačidlo filtra. Čo sa počíta ako „nič“, sa riadi tlačidlom Bicykle / Voľné miesta na mape. Stanice, o ktorých sieť nič nehovorí, na mape zostávajú vždy.
+• Sťahovanie počká na pripojenie, ktoré sa neúčtuje po megabajtoch – zvyčajne Wi-Fi. Dáta jedného mesta môžu vážiť až 1,3 GB a nič z toho neodíde cez váš mobilný paušál, kým to nedovolíte: pozastavené sťahovanie uvedie svoju veľkosť a ponúkne, že sa napriek tomu spustí, len pre tentoraz. Ak sa pripojenie začne v polovici účtovať, sťahovanie sa zastaví a neskôr bude pokračovať tam, kde skončilo, namiesto toho, aby začínalo znova. Voľba je v Nastaveniach, v sekcii offline dát.
+• Vyberiete si obrazovku, na ktorej sa aplikácia otvára: mapu ako doteraz, alebo zoznam staníc. Otvorenie na zozname nevyžaduje žiadne povolenie na prístup k polohe.
+• Počty bicyklov a voľných miest sa dajú zobraziť väčšie, z Nastavení. Aplikácia sa už riadi veľkosťou textu nastavenou v telefóne; toto zväčší len ten jeden údaj bez toho, aby zväčšilo všetko ostatné. Značky na mape si veľkosť zachovajú, takže stanice zostanú vedľa seba čitateľné.
+• Môžete povedať, či je váš vlastný bicykel mechanický, alebo elektrický. Mení to, ako sa trasa na vlastnom bicykli vykreslí a opíše. Keď ho označíte za elektrický, dostane vlastnú trasu aj vlastné časy; neurčený a mechanický dávajú rovnakú trasu.
+• Jazyk aplikácie si zvolíte v Nastaveniach, nech je telefón v akomkoľvek jazyku. Ponúkajú sa len skutočne preložené jazyky – zatiaľ angličtina a francúzština. Jednotky sa s ním nemenia: zvoľte v Bostone francúzštinu a vzdialenosti zostanú v míľach.
+
+Veľkosť každého mesta sa oznámi pred stiahnutím: 3 MB pre Auray, 143 MB pre Paríž.
