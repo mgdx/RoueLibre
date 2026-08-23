@@ -186,6 +186,16 @@ android {
             // MapLibre on arm64. On a repository like F-Droid, it is the
             // download weight that counts.
             useLegacyPackaging = true
+            // DataStore's little native library ships with its symbols, and
+            // AGP strips them here — 8,432 bytes down to 5,916 — using
+            // whichever NDK is installed. The result differs from one NDK to
+            // the next, which is enough to make the APK unreproducible:
+            // F-Droid rebuilt this version on their machine and this one file
+            // was all that differed. Kept whole it travels from the AAR to the
+            // APK untouched, at 2.5 kB per architecture. MapLibre's needs
+            // nothing: it arrives already stripped, so stripping it again
+            // changes nothing, which is why it never broke.
+            keepDebugSymbols += "**/libdatastore_shared_counter.so"
         }
         resources {
             excludes += setOf(
