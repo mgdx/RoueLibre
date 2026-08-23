@@ -1,0 +1,25 @@
+Roue Libre visar lånecykelstationer på en karta och beräknar en resa från dörr till dörr, där gång och cykling avlöser varandra.
+
+Allt körs på enheten: kartan, adressökningen och ruttberäkningen behöver ingen anslutning alls. Bara cyklarnas tillgänglighet i realtid går ut på nätet.
+
+<b>Det som skiljer den från andra</b>
+
+• Ingen Google-tjänst: inga Play Services, ingen Firebase, ingen Maps SDK. Appen fungerar på vilket Android-operativsystem som helst utan Google-tjänster.
+• Ingen telemetri, ingen spårning, inget unikt id, inget konto.
+• Inga resedata sparas: ingen historik, inga positioner, inga destinationer. Det du söker efter lämnar inte telefonen.
+• Ingen stad påtvingas dig: flera tätorter kan ligga sida vid sida på enheten, och en stads data kan raderas utan att de andra rörs.
+• Resan optimerar <i>paret</i> av stationer – start och ankomst – i stället för att nöja sig med den närmaste, och väger in risken att en dåligt försörjd station töms medan du går dit.
+
+<b>Värt att veta innan du installerar</b>
+
+Kartan, ruttgrafen och adressindexet finns inte i appen: de laddas ned en gång från skärmen Lagring, eller installeras för hand från filer du själv tar fram. Storleken följer staden – några tiotal megabyte för en medelstor tätort, mer för en huvudstad – och den anges före nedladdningen.
+
+<b>Städerna som betjänas</b>
+
+Närmare trehundra nätverk i ett trettiotal länder: alla som publicerar sina stationer som öppna data och vars lediga platser en resa kan bygga på – från Vélib’ i Paris till Citi Bike i New York, via Prag, Barcelona, Köpenhamn, Tokyo och Buenos Aires. Appen föreslår din egen utifrån din position, om du ber om det, och du kan ha flera installerade och byta mellan dem.
+
+Offlinedatamängderna har hittills tagits fram för en handfull av dem. För de övriga säger appen det rakt ut i stället för att låtsas: listan visar vad som finns, och filerna kan tas fram med kodförrådets skript.
+
+Appen är inte bunden till något särskilt nätverk: listan över städer uppdaterar sig själv, och varje stad bär adressen till sitt eget GBFS-flöde, vilket gör appen användbar med vilket GBFS-nätverk som helst i världen.
+
+Fri programvara under licensen GNU GPL v3.
