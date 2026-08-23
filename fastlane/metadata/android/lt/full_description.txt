@@ -1,0 +1,25 @@
+„Roue Libre“ rodo dalijimosi dviračių stoteles žemėlapyje ir apskaičiuoja kelionę nuo durų iki durų, derindama ėjimą pėsčiomis ir važiavimą dviračiu.
+
+Viskas veikia pačiame įrenginyje: žemėlapiui, adresų paieškai ir maršruto skaičiavimui ryšio nereikia visai. Į tinklą iškeliauja tik užklausa apie tai, kiek dviračių yra laisvų dabar.
+
+<b>Kuo ji skiriasi</b>
+
+• Jokių „Google“ paslaugų: nei „Play Services“, nei „Firebase“, nei „Maps SDK“. Ji veikia bet kokioje „Android“ operacinėje sistemoje be „Google“ paslaugų.
+• Jokios telemetrijos, jokių sekimo priemonių, jokio unikalaus identifikatoriaus, jokios paskyros.
+• Jokie kelionių duomenys nesaugomi: nei istorija, nei buvimo vietos, nei tikslai. Tai, ko ieškote, neišeina iš telefono.
+• Joks miestas nėra primetamas: įrenginyje gali sugyventi kelios aglomeracijos, o vieno miesto duomenis galima ištrinti nepaliečiant kitų.
+• Kelionė parenka geriausią stotelių <i>porą</i> – išvykimo ir atvykimo – užuot tenkinusis artimiausia, ir įvertina riziką, kad menkai užpildyta stotelė ištuštės, kol iki jos einate.
+
+<b>Verta žinoti prieš įdiegiant</b>
+
+Žemėlapio, maršrutų grafo ir adresų rodyklės programoje nėra: jie atsisiunčiami vieną kartą saugyklos ekrane arba įdiegiami ranka iš failų, kuriuos parengiate patys. Jų dydis priklauso nuo miesto – vidutinio dydžio aglomeracijai keliasdešimt megabaitų, sostinei daugiau – ir nurodomas prieš atsisiunčiant.
+
+<b>Aptarnaujami miestai</b>
+
+Beveik trys šimtai tinklų maždaug trisdešimtyje šalių: visi, kurie skelbia savo stoteles kaip atviruosius duomenis ir kurių stovais kelionė gali pasikliauti – nuo „Vélib’“ Paryžiuje iki „Citi Bike“ Niujorke, per Prahą, Barseloną, Kopenhagą, Tokiją ir Buenos Aires. Paprašyta programa pasiūlo jūsų miestą pagal buvimo vietą, o įdiegtų miestų galima laikyti kelis ir tarp jų persijungti.
+
+Įrenginyje saugomi duomenų rinkiniai kol kas parengti tik keliems iš jų. Apie kitus programa taip ir sako, o ne apsimeta: sąraše matyti, kas jau yra, o failus galima parengti projekto scenarijais.
+
+Ji nesusieta su jokiu konkrečiu tinklu: miestų sąrašas atsinaujina pats, o kiekvienas miestas nešasi savo GBFS duomenų srauto adresą – todėl programa tinka bet kuriam GBFS tinklui pasaulyje.
+
+Laisva programinė įranga pagal GNU GPL v3 licenciją.
