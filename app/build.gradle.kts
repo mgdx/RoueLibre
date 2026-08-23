@@ -68,6 +68,26 @@ android {
         manifestPlaceholders["allowBackup"] = "false"
     }
 
+    /**
+     * The NDK that strips the native libraries, named rather than inferred.
+     *
+     * The application compiles no native code of its own, so this is not about
+     * building: it is about **stripping**. AGP removes the symbols from the
+     * native libraries its dependencies ship — DataStore's counter goes from
+     * 8,432 bytes to 5,916 — and it does so with whichever NDK it finds. Two
+     * machines carrying different ones write two different files, which is
+     * enough to make the APK unreproducible: F-Droid rebuilt version 1.0.0 and
+     * that single file was all that differed.
+     *
+     * Naming the version settles it, and the F-Droid recipe names the same one
+     * in its `ndk` field, so their build strips with the tool this one did.
+     * Moving it is therefore a decision taken on both sides at once.
+     *
+     * MapLibre's library needs none of this — it arrives already stripped, so
+     * stripping it again changes nothing.
+     */
+    ndkVersion = "28.2.13676358"
+
     androidResources {
         // Declares which languages are supplied. Without it, Android does not
         // know what language `values/` holds: on an English device it served
@@ -186,16 +206,6 @@ android {
             // MapLibre on arm64. On a repository like F-Droid, it is the
             // download weight that counts.
             useLegacyPackaging = true
-            // DataStore's little native library ships with its symbols, and
-            // AGP strips them here — 8,432 bytes down to 5,916 — using
-            // whichever NDK is installed. The result differs from one NDK to
-            // the next, which is enough to make the APK unreproducible:
-            // F-Droid rebuilt this version on their machine and this one file
-            // was all that differed. Kept whole it travels from the AAR to the
-            // APK untouched, at 2.5 kB per architecture. MapLibre's needs
-            // nothing: it arrives already stripped, so stripping it again
-            // changes nothing, which is why it never broke.
-            keepDebugSymbols += "**/libdatastore_shared_counter.so"
         }
         resources {
             excludes += setOf(
