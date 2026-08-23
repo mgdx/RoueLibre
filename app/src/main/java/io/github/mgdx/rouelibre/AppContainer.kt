@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
+import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.Router
@@ -99,6 +100,27 @@ class AppContainer(private val context: Context) {
         // One conurbation's fleet says nothing about another's: leaving a mixed
         // city for a mechanical one must not carry the cog over.
         fleetRepository.forget()
+    }
+
+    /**
+     * Whether the base map is on the device, city and tiles both (SPEC §4.4).
+     *
+     * Asked before the first screen is built, so that the application never
+     * lands on a map it cannot draw — see `landingScreen`. It reads the tiles
+     * file and not the city's whole configuration: the question is whether
+     * there is something to draw, and parsing the configuration under the
+     * opening screen would be a file read nobody is waiting for.
+     *
+     * Without a chosen city there is no base map, whatever sits in the
+     * directories: the map screen says exactly that, and answers it with the
+     * city chooser rather than with tiles.
+     */
+    suspend fun hasBaseMap(): Boolean {
+        val identifier = preferences.activeCityId() ?: return false
+        // The store serves one city at a time, and nothing else has necessarily
+        // put this one into service yet: this read happens before any screen.
+        datasetStore.useCity(identifier)
+        return datasetStore.fileOf(DatasetKind.Tiles) != null
     }
 
     /**

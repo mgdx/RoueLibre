@@ -26,6 +26,7 @@ import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.intent.PlaceRequest
 import io.github.mgdx.rouelibre.data.NEVER_LAUNCHED
 import io.github.mgdx.rouelibre.data.OpeningScreen
+import io.github.mgdx.rouelibre.data.landingScreen
 import io.github.mgdx.rouelibre.databinding.ActivityMainBinding
 import io.github.mgdx.rouelibre.ui.address.toTitle
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
@@ -192,7 +193,13 @@ class MainActivity : AppCompatActivity() {
                     // screen asking for a position it never shows. The read
                     // costs a few milliseconds under the opening screen, whose
                     // six hundred are running anyway.
-                    val opening = container.preferences.openingScreen.first()
+                    // And corrected against what is installed: the map is
+                    // the default, and a default must not land on the panel
+                    // that says the tiles are missing (see landingScreen).
+                    val opening = landingScreen(
+                        container.preferences.openingScreen.first(),
+                        hasBaseMap = container.hasBaseMap(),
+                    )
                     withStarted {
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.content, openingFragment(opening))

@@ -36,3 +36,25 @@ enum class OpeningScreen(val id: String) {
         fun fromId(id: String?): OpeningScreen = entries.firstOrNull { it.id == id } ?: Map
     }
 }
+
+/**
+ * The screen actually landed on, given the choice and what is installed
+ * (SPEC §7.0, §7.6).
+ *
+ * **The map is only offered where there is a map.** Without its tiles the map
+ * screen is a full-screen panel saying they are missing, and landing on it
+ * makes the first thing the application shows an obstacle — worse still on the
+ * default setting, which nobody chose. The station list needs nothing
+ * installed: it works off the availability feed alone (SPEC §4.4), so it is
+ * what the application has to show, and its own way to the map is one press
+ * away for whoever wants to read that panel.
+ *
+ * **The choice itself is untouched**: nothing is written, and the map comes
+ * back as the screen landed on the moment its tiles are there. What is
+ * corrected is a landing, not a preference.
+ *
+ * @param chosen the screen the user asked to land on.
+ * @param hasBaseMap whether the tiles the map is drawn from are on the device.
+ */
+fun landingScreen(chosen: OpeningScreen, hasBaseMap: Boolean): OpeningScreen =
+    if (hasBaseMap) chosen else OpeningScreen.StationList
