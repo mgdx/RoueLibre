@@ -1,0 +1,25 @@
+Roue Libre ukazuje stanice sdílených kol na mapě a počítá trasu ode dveří ke dveřím, která spojuje chůzi a jízdu na kole.
+
+Vše běží v zařízení: mapa, hledání adres i výpočet trasy se obejdou zcela bez připojení. Do sítě odchází jen dostupnost kol v reálném čase.
+
+<b>Čím se liší</b>
+
+• Žádná služba Google: žádné Play Services, žádný Firebase, žádné Maps SDK. Běží na jakémkoli Androidu bez služeb Google.
+• Žádná telemetrie, žádný sledovací nástroj, žádný jedinečný identifikátor, žádný účet.
+• Neuchovává se nic o vašich cestách: žádná historie, žádné polohy, žádné cíle. To, co hledáte, telefon neopustí.
+• Žádné město není vnucené: v zařízení může být několik aglomerací vedle sebe a data jednoho města lze smazat, aniž by se to dotklo ostatních.
+• Trasa optimalizuje <i>dvojici</i> stanic – výchozí a cílovou, místo aby se spokojila s tou nejbližší, a zvažuje riziko, že se špatně zásobená stanice vyprázdní, než k ní dojdete.
+
+<b>Co je dobré vědět před instalací</b>
+
+Mapa, graf pro výpočet tras a rejstřík adres nejsou součástí aplikace: stáhnou se jednou z obrazovky úložiště, nebo se ručně nainstalují ze souborů, které si vytvoříte sami. Jejich velikost závisí na městě – několik desítek megabajtů u středně velké aglomerace, více u hlavního města – a oznámí se před stažením.
+
+<b>Obsluhovaná města</b>
+
+Téměř tři sta sítí ve zhruba třiceti zemích: každá, která zveřejňuje své stanice jako otevřená data a na jejíž stojany se trasa může spolehnout – od Vélib’ v Paříži po Citi Bike v New Yorku, přes Prahu, Barcelonu, Kodaň, Tokio a Buenos Aires. Aplikace vám tu vaši navrhne podle polohy, pokud o to požádáte, a můžete mít nainstalovaných několik měst a přepínat mezi nimi.
+
+Offline datové sady jsou zatím vytvořené pro hrstku z nich. U ostatních to aplikace řekne rovnou, místo aby předstírala: seznam ukazuje, co existuje, a soubory lze vytvořit skripty z repozitáře.
+
+Není vázaná na žádnou konkrétní síť: seznam měst se aktualizuje sám a každé město si nese adresu svého vlastního kanálu GBFS, díky čemuž je aplikace použitelná s jakoukoli sítí GBFS na světě.
+
+Svobodný software pod licencí GNU GPL v3.
