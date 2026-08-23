@@ -51,6 +51,42 @@ class AddressLayoutTest {
     }
 
     @Test
+    fun `a German letter is closed up against the number`() {
+        // The space this used to carry was chosen for the 539 spelled-out
+        // marks in the German index and paid for by its 755 188 letters:
+        // "Hauptstraße 12 a" is not how the country writes it.
+        assertEquals(
+            "Hauptstraße 12a",
+            addressLayoutOf("de").write("Hauptstraße", "12", "a"),
+        )
+    }
+
+    @Test
+    fun `an Italian letter is closed up too`() {
+        assertEquals("Via Roma 12A", addressLayoutOf("it").write("Via Roma", "12", "A"))
+    }
+
+    @Test
+    fun `a Czech address joins its two numbers with a slash`() {
+        // What follows a Czech number is a second number, not a mark: the
+        // parcel's 185 and the street's 38 are one address, "185/38". Closed
+        // up they would read "18538", which exists nowhere — the defect this
+        // entry was written against.
+        assertEquals(
+            "Gen. Štefánika 185/38",
+            addressLayoutOf("cs").write("Gen. Štefánika", "185", "38"),
+        )
+    }
+
+    @Test
+    fun `Slovak addresses are numbered the Czech way`() {
+        // Slovakia is served and its translation has not landed yet: without
+        // an entry it would fall on the English fallback and print
+        // "12 Hlavná", wrong in both order and punctuation.
+        assertEquals("Hlavná 185/38", addressLayoutOf("sk").write("Hlavná", "185", "38"))
+    }
+
+    @Test
     fun `a French repetition mark is a word and takes a space`() {
         assertEquals(
             "12 bis Rue Nationale",
@@ -68,17 +104,24 @@ class AddressLayoutTest {
 
     @Test
     fun `the suffix separator does not follow the street separator`() {
-        // Dutch and Italian both close with a plain space before the number,
-        // and part company on the mark that follows it: that is why the two
-        // separators are two fields rather than one.
+        // Dutch, French and Czech write three different things after the
+        // number — a letter closed up, a word spaced, a second number slashed
+        // — while nothing else about their layouts disagrees. That is why the
+        // two separators are two fields rather than one.
         assertEquals("Kalverstraat 12A", addressLayoutOf("nl").write("Kalverstraat", "12", "A"))
-        assertEquals("Via Roma 12 bis", addressLayoutOf("it").write("Via Roma", "12", "bis"))
+        assertEquals(
+            "12 bis Rue Nationale",
+            addressLayoutOf("fr").write("Rue Nationale", "12", "bis"),
+        )
+        assertEquals("Národní 25/17", addressLayoutOf("cs").write("Národní", "25", "17"))
     }
 
     @Test
     fun `a base the table does not name falls back on English`() {
         // Slovene, Finnish, Japanese: no entry, and the address is still
-        // written rather than dropped.
+        // written rather than dropped. Slovene is the reminder that a language
+        // absent here is a language nobody has counted yet, not a language
+        // that writes English's way.
         assertEquals("12 Trubarjeva cesta", addressLayoutOf("sl").write("Trubarjeva cesta", "12"))
         assertEquals("12 Aleksanterinkatu", addressLayoutOf("fi").write("Aleksanterinkatu", "12"))
         assertEquals("12 Ginza", addressLayoutOf("ja").write("Ginza", "12", ""))

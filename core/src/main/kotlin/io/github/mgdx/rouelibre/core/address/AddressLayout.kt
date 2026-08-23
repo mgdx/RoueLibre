@@ -11,12 +11,26 @@ package io.github.mgdx.rouelibre.core.address
  * number is written in are the reader's (SPEC §9); the order and the
  * punctuation between number and street are neither.
  *
+ * **The `suffix` field does not hold the same thing from one country to the
+ * next, and a separator cannot be chosen without going to look.** Counted over
+ * the generated indexes: France spells out a repetition mark, a word — 305 982
+ * of them against 264 074 letters, "12 bis"; Germany, the Netherlands, Poland
+ * and Italy hold a letter subdividing the number, and words in the noise —
+ * Germany 755 188 letters against 539 words; and Czechia holds **a second
+ * number**, the *číslo orientační*, which the plate joins to the first with a
+ * slash. That is why each entry below carries its count rather than an
+ * assertion: whoever adds a language reads their own data first. Getting it
+ * wrong is not a typographic blemish — a Czech address closed up reads "18538",
+ * a number that exists nowhere.
+ *
  * @property numberComesFirst true where the house number opens the address,
  *   "12 rue Nationale", false where it closes it, "Bahnhofstraße 12".
  * @property streetSeparator what stands between the number and the street name.
- * @property suffixSeparator what stands between the number and its repetition
- *   mark. It does **not** follow [streetSeparator]: France writes "12 bis" with
- *   a space and Poland "12A" without, while both are otherwise ordinary.
+ * @property suffixSeparator what stands between the number and what follows it.
+ *   It does **not** follow [streetSeparator], and the three values in use are
+ *   three different facts about a country: France spaces a word, "12 bis";
+ *   Germany closes up a letter, "12a"; Czechia slashes a second number,
+ *   "185/38".
  */
 public data class AddressLayout(
     public val numberComesFirst: Boolean,
@@ -79,12 +93,14 @@ private val LAYOUTS: Map<String, AddressLayout> = mapOf(
     // a word does.
     "fr" to AddressLayout(numberComesFirst = true, streetSeparator = " ", suffixSeparator = " "),
 
-    // "Bahnhofstraße 12, Karlsruhe". German closes with the number. The
-    // repetition mark is kept spaced, as `res/values-de/` wrote it: German
-    // does run a letter against the number, "Hauptstraße 12a", but our suffix
-    // field also carries the words the base spells out, and one separator has
-    // to serve both.
-    "de" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = " "),
+    // "Bahnhofstraße 12a, Karlsruhe". German closes with the number, and closes
+    // the letter up against it. `res/values-de/` used to space it, on the
+    // reasoning that the suffix field also carries the words a base spells out
+    // and that one separator had to serve both: counted over the generated
+    // indexes, those words are 539 entries against 755 188 letters, 0.07 %.
+    // A separator chosen for the 0.07 % spoils the rest, and "Hauptstraße 12 a"
+    // is not how Germany writes it.
+    "de" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
 
     // "Gran Vía, 12, Madrid". Spanish closes with the number **and puts a
     // comma before it**: the comma is not decoration, it is what tells the
@@ -96,9 +112,18 @@ private val LAYOUTS: Map<String, AddressLayout> = mapOf(
     // in Portugal and in Brazil alike.
     "pt" to AddressLayout(numberComesFirst = false, streetSeparator = ", ", suffixSeparator = " "),
 
-    // "Via Roma 12, Torino". Italian closes with the number, with no comma:
-    // where Spanish separates, Italian runs the two together.
-    "it" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = " "),
+    // "Via Roma 12A, Torino". Italian closes with the number, with no comma:
+    // where Spanish separates, Italian runs the two together. The letter is
+    // closed up, as in Germany — 23 858 letters against 28 words rules out the
+    // space that stood here first. Italy also writes "12/A", commonly in the
+    // north, and that form is *not* restored: the slash was in the source and
+    // `split_house_number` dropped it, so the index no longer records which
+    // addresses carried one, and slashing them all would invent it for those
+    // that never did. Closing up is exact for those and merely tighter than the
+    // plate for the others — and unlike Czechia's below, an Italian letter
+    // cannot be misread as a second number, so nothing but typography is at
+    // stake in the choice.
+    "it" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
 
     // "Kalverstraat 12A, Amsterdam". Dutch closes with the number, and runs
     // the letter that follows it hard against it: "12 A" would read as two
@@ -110,9 +135,26 @@ private val LAYOUTS: Map<String, AddressLayout> = mapOf(
     // closed up, as it is on the plates.
     "pl" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
 
-    // "Národní 12A, Praha". Czech closes with the number and closes up the
-    // letter, as Polish does.
-    "cs" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = ""),
+    // "Gen. Štefánika 185/38, Praha". Czech closes with the number, and what
+    // follows the number is **not a repetition mark at all**: a Czech address
+    // carries two numbers, the *číslo popisné* that identifies the parcel (185)
+    // and the *číslo orientační* that places it in the street (38), and the
+    // plate joins them with a slash. The index bears this out — its commonest
+    // suffixes are digits, 4, 3, 1 and 2 at around eleven thousand each,
+    // against 635 letters in all. `split_house_number` cuts at the leading
+    // digits and strips the "/" from what remains, so the slash has to be put
+    // back here: closed up, this address would read "18538", a number that
+    // exists nowhere, and spaced it would read as two addresses.
+    "cs" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = "/"),
+
+    // "Hlavná 185/38, Košice". Slovakia inherited Czechoslovakia's two-number
+    // addressing whole — *súpisné číslo* and *orientačné číslo*, same slash —
+    // so it takes the Czech entry's rule. Written before the Slovak
+    // translation lands: without it a Slovak base would fall on the English
+    // fallback and print "12 Hlavná", which is neither the country's order nor
+    // its punctuation. The layout table is keyed on the address base, not on
+    // the translations that exist, and the two lists need not match.
+    "sk" to AddressLayout(numberComesFirst = false, streetSeparator = " ", suffixSeparator = "/"),
 )
 
 /**

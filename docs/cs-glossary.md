@@ -66,13 +66,24 @@ so that each language may write this line in its own order.
 
 **The order a result is printed in is a separate matter, and is not this file's
 to decide.** It belongs to the country the address is in, not to the reader's
-language (SPEC §4.3): *Národní 25a* is how a Prague address is written for every
-reader, and *12 rue Nationale* is how a Lyon one is written for a Czech reader.
-The two formats that used to live here, `address_with_number` and
+language (SPEC §4.3): *Gen. Štefánika 185/38* is how a Prague address is written
+for every reader, and *12 rue Nationale* is how a Lyon one is written for a
+Czech reader. The two formats that used to live here, `address_with_number` and
 `address_number_with_suffix`, were removed for that reason; the layouts are a
 table in `core/address/AddressLayout.kt`, keyed on the language of the **address
-base**, and the Czech entry is the one that closes the letter up against the
-number.
+base**.
+
+**The Czech entry is the one that slashes, and the reason is not typographic.**
+What the application's `suffix` field holds for a Czech address is not a
+repetition mark but **a second number**: the *číslo popisné* identifies the
+parcel (185) and the *číslo orientační* places it in the street (38), and the
+plate joins them. The generated index bears it out — its commonest suffixes are
+the digits 4, 3, 1 and 2, around eleven thousand each, against 635 letters in
+all. `split_house_number` cuts at the leading digits and strips the slash from
+what remains, so the display puts it back. Closed up, the address would read
+*18538*, a number that exists nowhere; spaced, it would read as two addresses.
+Slovak is keyed the same way, and for the same reason, before its translation
+exists.
 
 **The postcode is deliberately not invited.** Czech writes it in two groups —
 *110 00* — and `looksLikePostcode` only strips a single group of five digits.
