@@ -1,0 +1,25 @@
+Roue Libre arată stațiile de biciclete partajate pe o hartă și calculează un traseu de la ușă la ușă, care combină mersul pe jos cu mersul cu bicicleta.
+
+Totul rulează pe dispozitiv: harta, căutarea de adrese și calculul traseelor nu au nevoie de nicio conexiune. Doar disponibilitatea bicicletelor în timp real iese în rețea.
+
+<b>Ce o deosebește</b>
+
+• Niciun serviciu Google: fără Play Services, fără Firebase, fără Maps SDK. Funcționează pe orice sistem Android fără serviciile Google.
+• Fără telemetrie, fără trackere, fără identificator unic, fără cont.
+• Nu se păstrează niciun fel de date despre trasee: niciun istoric, nicio poziție, nicio destinație. Ce cauți nu pleacă de pe telefon.
+• Niciun oraș nu îți este impus: mai multe zone urbane pot sta împreună pe dispozitiv, iar datele unui oraș se pot șterge fără a le atinge pe ale celorlalte.
+• Traseul optimizează <i>perechea</i> de stații — plecare și sosire — în loc să se mulțumească cu cea mai apropiată, și cântărește riscul ca o stație slab aprovizionată să se golească în timp ce mergi spre ea.
+
+<b>De știut înainte de instalare</b>
+
+Fondul cartografic, graful de trasee și indexul de adrese nu sunt în aplicație: se descarcă o dată, din ecranul de stocare, sau se instalează manual din fișiere pe care le produci singur. Dimensiunea lor depinde de oraș — câteva zeci de megaocteți pentru o zonă urbană mijlocie, mai mult pentru o capitală — și este anunțată înainte de descărcare.
+
+<b>Orașele servite</b>
+
+Aproape trei sute de rețele, în vreo treizeci de țări: toate cele care își publică stațiile ca date deschise și pe ale căror docuri se poate baza calculul traseelor — de la Vélib’ din Paris la Citi Bike din New York, trecând prin Praga, Barcelona, Copenhaga, Tokyo și Buenos Aires. Aplicația ți-l propune pe al tău pornind de la poziția ta, dacă îi ceri, și poți ține mai multe instalate, comutând între ele.
+
+Seturile de date offline au fost produse până acum doar pentru câteva dintre ele. Pentru celelalte, aplicația o spune deschis, în loc să se prefacă: lista arată ce există, iar fișierele pot fi produse cu scripturile din depozit.
+
+Nu este legată de nicio rețea anume: lista orașelor se actualizează singură, iar fiecare oraș poartă adresa propriului flux GBFS, ceea ce face aplicația utilizabilă cu orice rețea GBFS din lume.
+
+Software liber, sub licența GNU GPL v3.
