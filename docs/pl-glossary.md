@@ -21,6 +21,22 @@ the second person singular — *Kliknij*, *Wybierz*, *Spróbuj ponownie*,
 already carries the person. Where the reader is addressed as a possessor, the
 courtesy capital is kept: *Twoja pozycja*, *Twoje miasto*.
 
+**The application never says *we*.** English is impersonal throughout — "No
+history is kept", "It is read from the feed", "the size is announced" — and
+Polish keeps it that way, with the passive or with an agentless form: *Żadna
+historia nie jest zapisywana*, *Trasa jest wyznaczana na urządzeniu*, *Rozmiar
+podawany przed pobraniem*, *Brak znanych stacji*. This matters most in
+`welcome_privacy_body` and `about_privacy_body`: an application whose whole
+argument is that nobody is behind it must state a property of the software, not
+ask the reader to trust a *my*.
+
+The **first person singular** is a different thing and is used, for the machine
+narrating what it is doing right now: *Wyznaczam najlepszą trasę…*,
+*Przeglądam adresy…*, *Odczytuję manifest…*. That is Android's own habit —
+`pl.tsv` has *Wczytuję…* (`android:loading`), *Ładuję…*
+(`settings:loading_injected_setting_summary`), *Kończę aktualizację systemu…*
+(`android:android_upgrading_notification_title`).
+
 Quotation marks are **„ … ”**. A **non-breaking space** (U+00A0) follows every
 one-letter word — *w, i, z, a, o, u* — which Polish typography does not leave
 at the end of a line; the file holds 113 of them and they are invisible in a
@@ -64,7 +80,7 @@ current call sites.
 | English | Polish | Why |
 |---|---|---|
 | journey | trasa | The whole door-to-door thing: the screen, the settings section, the button, the errors. It is what a Polish mapping application calls a planned trip — *wyznacz trasę* — and it is short, which matters on `journey_compute` and `journey_frame`. |
-| a rider's trips (privacy texts) | przejazdy | The one place *trasa* is deliberately not used. "Nie zapisujemy tras" would collide head-on with `dataset_routing`, which **is** called *Dane tras* and **is** kept on the device: the sentence would say the opposite of the truth. `welcome_privacy_body` and the store description both say *przejazdów*, so the two read as one claim. Do not "correct" it back to *trasa*. |
+| a rider's trips (privacy texts) | przejazdy | The one place *trasa* is deliberately not used. "Nie zapisujemy tras" would collide head-on with `dataset_routing`, which **is** called *Dane tras* and **is** kept on the device: the sentence would say the opposite of the truth. **All three** privacy texts say it — `welcome_privacy_body`, `about_privacy_body` and the store description — so they read as one claim. The rule is: wherever the sentence is about what is *not* kept, the word is *przejazd*. Do not "correct" it back to *trasa*. |
 | ride | przejazd | The bike leg alone, inside a journey: `journey_computing_own_bike`, `journey_detail_profile`. A different word from *trasa*, so the elevation profile and the own-bike wait cannot be mistaken for the whole thing. |
 | route | droga | Only in `journey_no_route` — "Brak przejezdnej drogi między tymi punktami" — and in `station_beyond_area`: the line on the ground, not the planned journey. |
 | bike | rower | The ordinary word, and the one every Polish bike-share network prints. |
@@ -82,7 +98,7 @@ current call sites.
 | Theme | Motyw | Android's own: *Ciemny motyw* (`settings:dark_ui_mode`), *Motyw urządzenia* (`settings:device_theme`). Dark is **Ciemny**, from the same rows; **Jasny** for light has no row in the lexicon and is the ordinary Polish antonym. |
 | System (as a choice) | Systemowy | Agrees with what it qualifies: *Systemowy* for `settings_theme_system` and `settings_language_system` (motyw, język — both masculine), *Systemowe* for `settings_units_system` (jednostki). Android writes both forms, `settings:header_category_system` and `settings:trusted_credentials_system_tab`. |
 | Display (section) | Wyświetlanie | **A departure from Android**, which calls the hardware screen *Wyświetlacz* (`settings:display_settings`). This section holds the theme, the units, the opening screen and the map filters — how things are shown, not the panel they are shown on — so the gerund is used instead. |
-| Delete / Remove | Usuń / Usuń z ulubionych | **Polish does not have two verbs here**, and saying so is more use than inventing one: the lexicon gives *Usuń* for Delete (`android:delete`) and *Usuń* for Remove (`settings:remove`) alike. The distinction is carried by the complement instead — `station_favourite_remove` is "Usuń z ulubionych", which no Polish reader takes for destroying a station, while `city_delete` and `dataset_delete` are the bare "Usuń". Do not reach for *skasuj* or *wyrzuć* to force a contrast Polish does not draw. |
+| Delete / Remove | Usuń / Usuń z ulubionych | **Polish does not have two verbs here**, and saying so is more use than inventing one: the lexicon gives *Usuń* for Delete (`android:delete`) and *Usuń* for Remove (`settings:remove`) alike. The distinction is carried by the complement instead — `station_favourite_remove` is "Usuń z ulubionych", which no Polish reader takes for destroying a station, while `city_delete` and `dataset_delete` are the bare "Usuń". That construction is Android's own answer to the same problem: `settings:demote_conversation_summary` is "Remove from the conversation section" → **"Usuń z sekcji rozmów"**. Do not reach for *skasuj* or *wyrzuć* to force a contrast Polish does not draw. |
 | Clear (a search) | Wyczyść wyszukiwanie | Android's verb (`settings:clear`). One wording serves both the icon inside the field and the button in an empty state. |
 | Refresh | Odśwież | The lexicon has no bare "Refresh", only *odświeżać dane* inside `settings:auto_sync_account_summary`; the imperative is formed from it. *Zaktualizowano* is what the freshness line then says, so the button and its result stay one thing. |
 | Try again | Spróbuj ponownie | Android's own, `settings:network_connection_timeout_dialog_ok`. |
@@ -108,7 +124,7 @@ current call sites.
 | address index | Indeks adresów | — |
 | offline data | Dane offline | *Offline* is the word Polish uses; *bez sieci* is the phrase used when the sentence explains rather than labels. |
 | bytes | B, kB, MB, GB | Polish writes the same symbols. |
-| duration | min, h | *min* is what Polish writes. **h** is kept over *godz.* because the same string also serves a stopwatch-style "1 h 05", where a four-character abbreviation would break the alignment; both are read without difficulty. |
+| duration | min, godz. | "1 h 05" — minutes padded to two digits with no unit after them — is a **French** convention, not a universal one, and Polish writes a duration out: **"1 godz. 5 min"**. `duration_hours_minutes` is therefore `%1$d godz. %2$d min` and drops the English padding, which the validator deliberately does not compare (see `tools/check_translations.py`, `placeholders`); Japanese does the same with `%1$d時間%2$d分`. *godz.* is Android's own abbreviation, `android:time_picker_hour_label`. "1:05" was rejected: in an application full of transit information it reads as a clock time. |
 | what's new | Nowości | What the screen shows is the release notes. *Wiadomości* would read as news from elsewhere. |
 | About | O aplikacji | Android says *Informacje o telefonie* (`settings:about_settings`) for the phone's own screen; *O aplikacji* is what Polish applications put on this one, and it fits a toolbar. |
 
@@ -118,6 +134,13 @@ current call sites.
 is **`%2$s %1$s`** — the street first and the number after it, "Marszałkowska
 12", which is the only order Polish writes. The two agree with each other on
 purpose: what the prompt invites is what the result title prints back.
+
+`address_number_with_suffix` is **`%1$d%2$s`**, with **no space**: Polish writes
+a lettered house number glued, "12A", where French writes "12 bis" apart. The
+two are the same string doing different work in different languages, and it is a
+display format, so it changes here rather than in the code. Lettered numbers are
+not an edge case in Poland — they are ordinary — so this is read far more often
+than the French repetition marks it was first written for.
 
 `AddressQuery.parseQuery` reads a house number standing **between the street
 and the town**, which is exactly the shape the prompt asks for, so a query typed

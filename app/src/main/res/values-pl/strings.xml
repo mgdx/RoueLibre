@@ -180,21 +180,21 @@
     <string name="map_needs_tiles_title">Mapa potrzebuje swoich kafelków offline</string>
     <string name="map_needs_tiles_message">Zainstaluj dane mapy na ekranie „Pamięć”. Do tego czasu lista stacji nadal działa.</string>
     <string name="map_needs_city_title">Które miasto?</string>
-    <string name="map_needs_city_message">Wybierz aglomerację, z której chcesz korzystać. Jej dane pobierzemy potem, raz na zawsze.</string>
+    <string name="map_needs_city_message">Wybierz aglomerację, z której chcesz korzystać. Jej dane zostaną pobrane potem, raz na zawsze.</string>
 
     <!-- The welcome carousel, shown once on first launch. -->
     <string name="welcome_hello_title">Roue Libre</string>
-    <string name="welcome_hello_body">Ta aplikacja pokazuje rowery miejskie na mapie i wyznacza trasę od drzwi do drzwi: dojście do stacji, przejazd rowerem, a potem reszta drogi pieszo.\n\nJest wolna i otwarta. Bez konta, bez reklam, bez śledzenia.</string>
+    <string name="welcome_hello_body">Ta aplikacja pokazuje rowery miejskie na mapie i wyznacza trasę od drzwi do drzwi: dojście do stacji, przejazd rowerem, a potem reszta drogi pieszo.\n\nTo wolne oprogramowanie o otwartym kodzie. Bez konta, bez reklam, bez śledzenia.</string>
     <string name="welcome_privacy_title">Nic nie opuszcza tego telefonu</string>
-    <string name="welcome_privacy_body">Trasy są wyznaczane na tym telefonie. Adresy, których szukasz, nie trafiają do nikogo — nawet w trakcie pisania.\n\nNie zapisujemy żadnej historii: ani Twoich przejazdów, ani pozycji, ani celów.\n\nJedyne zapytanie, które w codziennym użyciu wychodzi na zewnątrz, pyta o liczbę dostępnych rowerów.</string>
+    <string name="welcome_privacy_body">Trasy są wyznaczane na tym telefonie. Adresy, których szukasz, nie trafiają do nikogo — nawet w trakcie pisania.\n\nŻadna historia nie jest zapisywana: ani Twoje przejazdy, ani pozycje, ani cele.\n\nJedyne zapytanie, które w codziennym użyciu wychodzi na zewnątrz, pyta o liczbę dostępnych rowerów.</string>
     <string name="welcome_fleet_title">Co mówi rower</string>
-    <string name="welcome_fleet_body">Narysowany rower mówi, co wypożycza Twoje miasto.\n\nOdczytujemy to z danych samej sieci, nigdy nie zgadujemy.</string>
+    <string name="welcome_fleet_body">Narysowany rower mówi, co wypożycza Twoje miasto.\n\nWynika to z danych samej sieci, nigdy ze zgadywania.</string>
     <string name="welcome_fleet_mechanical_only">Sieć wypożycza tylko zwykłe rowery.</string>
     <string name="welcome_fleet_electric_only">Sieć wypożycza tylko rowery elektryczne.</string>
     <string name="welcome_fleet_mixed">Sieć wypożycza oba rodzaje.</string>
 
     <string name="welcome_data_title">Jedno miasto, jedno pobranie</string>
-    <string name="welcome_data_body">Mapa, ulice i wyznaczanie tras działają na urządzeniu. Właśnie dlatego obywają się bez sieci — i dlatego dane Twojego miasta trzeba raz pobrać.\n\nZacznij więc od jego wyboru. Dla średniej wielkości aglomeracji to około czterdziestu megabajtów, dla stolicy więcej; rozmiar podajemy przed pobraniem.\n\nMożesz to zrobić także później: do tego czasu lista stacji i dostępność rowerów działają normalnie.</string>
+    <string name="welcome_data_body">Mapa, ulice i wyznaczanie tras działają na urządzeniu. Właśnie dlatego obywają się bez sieci — i dlatego dane Twojego miasta trzeba raz pobrać.\n\nZacznij więc od jego wyboru. Dla średniej wielkości aglomeracji to około czterdziestu megabajtów, dla stolicy więcej; rozmiar jest podawany przed pobraniem.\n\nMożesz to zrobić także później: do tego czasu lista stacji i dostępność rowerów działają normalnie.</string>
     <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d z %2$d</string>
     <string name="welcome_continue">Dalej</string>
     <string name="welcome_skip">Pomiń</string>
@@ -261,7 +261,7 @@
     <string name="about_open">O aplikacji</string>
     <string name="about_version">Wersja %1$s</string>
     <string name="about_privacy_title">Prywatność</string>
-    <string name="about_privacy_body">Bez konta, bez reklam, bez śledzenia, bez unikalnego identyfikatora. Nic z tego, czego szukasz i co liczysz, nie opuszcza tego telefonu: adresy, trasy i Twoja pozycja zostają tutaj i nie są zapisywane. Jedyne zapytanie, które w codziennym użyciu wychodzi na zewnątrz, pobiera dostępność rowerów. Zestawy danych pobierają się tylko wtedy, gdy o to poprosisz.</string>
+    <string name="about_privacy_body">Bez konta, bez reklam, bez śledzenia, bez unikalnego identyfikatora. Nic z tego, czego szukasz i co liczysz, nie opuszcza tego telefonu: adresy, przejazdy i Twoja pozycja zostają tutaj i nie są zapisywane. Jedyne zapytanie, które w codziennym użyciu wychodzi na zewnątrz, pobiera dostępność rowerów. Zestawy danych pobierają się tylko wtedy, gdy o to poprosisz.</string>
     <string name="about_attributions_title">Źródła danych</string>
     <string name="about_attribution_gbfs">Dostępność rowerów: otwarte dane obsługiwanej sieci, publikowane w formacie GBFS. We Francji są indeksowane na transport.data.gouv.fr.</string>
     <string name="about_attribution_osm">Mapa, wyznaczanie tras i punkty orientacyjne: © współtwórcy OpenStreetMap, licencja ODbL.</string>
@@ -340,7 +340,7 @@
     <!-- Read out in place of the drawing. %1$s is the climb of the ride, %2$s
          its lowest point above sea level and %3$s its highest. -->
     <string name="journey_detail_profile_description">Przejazd wznosi się o %1$s, między %2$s a %3$s nad poziomem morza.</string>
-    <string name="journey_detail_availability_note">Rowery i miejsca według stanu z chwili wyznaczania trasy.</string>
+    <string name="journey_detail_availability_note">Rowery i wolne miejsca według stanu z chwili wyznaczania trasy.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Otwórz w aplikacji nawigacyjnej</string>
@@ -367,13 +367,13 @@
     <string name="journey_no_mechanical_nearby">Żadna stacja w pobliżu nie ma teraz zwykłego roweru. Poproś o dowolny rower albo spróbuj później.</string>
     <string name="journey_no_electric_nearby">Żadna stacja w pobliżu nie ma teraz roweru elektrycznego. Poproś o dowolny rower albo spróbuj później.</string>
     <string name="journey_no_dock_nearby">W pobliżu celu nie ma stacji z wolnym miejscem. Spróbuj później albo obierz inny cel.</string>
-    <string name="journey_no_route">Brak przejezdnej drogi między tymi punktami.</string>
+    <string name="journey_no_route">Brak drogi możliwej do przebycia między tymi punktami.</string>
     <string name="journey_graph_missing">Dane tras nie są zainstalowane. Dodaj je na ekranie „Pamięć”.</string>
     <string name="journey_outside_coverage">Ten punkt leży poza obszarem, który obejmują zainstalowane dane.</string>
-    <string name="journey_no_stations">Nie znamy żadnej stacji. Odśwież listę stacji i spróbuj ponownie.</string>
+    <string name="journey_no_stations">Brak znanych stacji. Odśwież listę stacji i spróbuj ponownie.</string>
 
     <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d h %2$02d</string>
+    <string name="duration_hours_minutes">%1$d godz. %2$d min</string>
 
     <!-- A station's capacity: every dock it holds, free or not. -->
     <plurals name="docks_total">
@@ -408,7 +408,7 @@
     <!-- %1$s is the house number, %2$s the street: Polish writes the number
          after the name, so the placeholders are swapped. -->
     <string name="address_with_number">%2$s %1$s</string>
-    <string name="address_number_with_suffix">%1$d %2$s</string>
+    <string name="address_number_with_suffix">%1$d%2$s</string>
     <string name="address_locality">%1$s %2$s</string>
     <string name="address_detail">%1$s · %2$s</string>
     <string name="address_detail_approximate">%1$s · pozycja przybliżona</string>
@@ -443,7 +443,7 @@
     <string name="city_title">Miasto</string>
     <string name="city_open">Zmień miasto</string>
     <string name="city_choose">Wybierz moje miasto</string>
-    <string name="city_intro">Wybierz aglomerację, z której chcesz korzystać. Jej dane zainstalujemy potem, raz na zawsze.</string>
+    <string name="city_intro">Wybierz aglomerację, z której chcesz korzystać. Jej dane zostaną zainstalowane potem, raz na zawsze.</string>
     <string name="city_locate_me">Znajdź moje miasto</string>
     <string name="city_active">W użyciu</string>
     <plurals name="city_detail">
@@ -460,12 +460,12 @@
     </plurals>
     <string name="city_detail_size_only">%1$s do pobrania</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d stacja · rozmiar podamy przed pobraniem</item>
-        <item quantity="few">%1$d stacje · rozmiar podamy przed pobraniem</item>
-        <item quantity="many">%1$d stacji · rozmiar podamy przed pobraniem</item>
-        <item quantity="other">%1$d stacji · rozmiar podamy przed pobraniem</item>
+        <item quantity="one">%1$d stacja · rozmiar podawany przed pobraniem</item>
+        <item quantity="few">%1$d stacje · rozmiar podawany przed pobraniem</item>
+        <item quantity="many">%1$d stacji · rozmiar podawany przed pobraniem</item>
+        <item quantity="other">%1$d stacji · rozmiar podawany przed pobraniem</item>
     </plurals>
-    <string name="city_size_unknown">Rozmiar podamy przed pobraniem</string>
+    <string name="city_size_unknown">Rozmiar podawany przed pobraniem</string>
     <!-- %1$s is a size. The city is the implicit subject: "Zajmuje 143 MB na
          urządzeniu", said of the row it sits in. -->
     <string name="city_installed">Zajmuje %1$s na urządzeniu</string>
@@ -483,9 +483,9 @@
     <string name="city_proposal_title">Twoje miasto</string>
     <!-- Shown when the position says one is in another served conurbation than the one installed. -->
     <string name="city_here_title">Jesteś w innym mieście</string>
-    <string name="city_here_body">%1$s obsługuje obszar, w którym jesteś. Zainstaluj jego dane, aby zobaczyć stacje i wyznaczać tu trasy.</string>
-    <string name="city_here_installed_body">%1$s obsługuje obszar, w którym jesteś, a jego dane są już na urządzeniu.</string>
-    <string name="city_here_install">Zainstaluj jego dane</string>
+    <string name="city_here_body">%1$s obsługuje obszar, w którym jesteś. Zainstaluj dane tego miasta, aby zobaczyć stacje i wyznaczać tu trasy.</string>
+    <string name="city_here_installed_body">%1$s obsługuje obszar, w którym jesteś, a dane tego miasta są już na urządzeniu.</string>
+    <string name="city_here_install">Zainstaluj dane tego miasta</string>
     <string name="city_here_use">Użyj tego miasta</string>
     <string name="city_proposal_body">Wygląda na to, że jesteś na obszarze, który obejmuje %1$s. Zgadza się?</string>
     <string name="city_proposal_accept">Tak</string>
@@ -514,7 +514,7 @@
     <string name="storage_check_updates">Sprawdź aktualizacje</string>
     <string name="storage_checking">Odczytuję manifest…</string>
     <string name="storage_up_to_date">Wszystko jest aktualne.</string>
-    <string name="storage_download_pending">Pobierz: %1$s</string>
+    <string name="storage_download_pending">Pobierz %1$s</string>
     <string name="storage_downloading">%1$s · %2$s z %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
     <string name="storage_wifi_warning">Nie masz połączenia Wi-Fi. To pobieranie może mocno obciążyć pakiet danych.</string>
@@ -525,12 +525,12 @@
     <string name="dataset_import">Importuj</string>
     <string name="dataset_replace">Zastąp</string>
     <string name="dataset_delete">Usuń</string>
-    <string name="dataset_delete_description">Usuń: %1$s</string>
+    <string name="dataset_delete_description">Usuń %1$s</string>
     <string name="dataset_delete_title">Usunąć te dane?</string>
     <!-- %1$s is the dataset's name, %2$s the space it frees. -->
     <string name="dataset_delete_body">Dane „%1$s” zostaną usunięte i zwolnią %2$s. Aby pracować offline, trzeba je pobrać ponownie.</string>
-    <string name="dataset_imported">Zainstalowano: %1$s</string>
-    <string name="dataset_deleted">Usunięto: %1$s</string>
+    <string name="dataset_imported">Zainstalowano %1$s</string>
+    <string name="dataset_deleted">Usunięto %1$s</string>
 
     <string name="dataset_rejected_empty">Wybrany plik jest pusty.</string>
     <string name="dataset_rejected_format">To nie jest oczekiwany plik. Wybierz plik „%1$s” tworzony przez skrypty generujące.</string>
@@ -601,7 +601,7 @@
     <string name="settings_map_filters_hide_empty_hint">„Nic” zależy od tego, co liczy mapa: żadnego roweru, gdy liczy rowery, żadnego wolnego miejsca, gdy liczy wolne miejsca.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
-    <string name="settings_map_filters_keeps_unknown">Stacje, o których sieć nic nie mówi, zostają na mapie: licznik, którego nikt nie mógł odczytać, nie jest licznikiem zera.</string>
+    <string name="settings_map_filters_keeps_unknown">Stacje, o których sieć nic nie mówi, zostają na mapie: brak odczytu nie oznacza zera.</string>
 
     <!-- The rider's OWN bike, not the network's. Keep the wording clearly
          about the reader's own equipment: the journey screen carries a
