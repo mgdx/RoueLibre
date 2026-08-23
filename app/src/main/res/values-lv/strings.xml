@@ -49,7 +49,9 @@
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.
-         Example: „Brīvības iela, 6 velosipēdi, 26 statīvi“. -->
+         The third figure is `docks_available`, the FREE docks, not the
+         capacity (`StationAdapter.kt:184`).
+         Example: „Brīvības iela, 6 velosipēdi, 26 brīvas vietas“. -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
     <string name="station_out_of_service">Nedarbojas</string>
     <string name="station_availability_unknown">Pieejamība nav zināma</string>
@@ -83,9 +85,20 @@
     <string name="map_bikes_mechanical_description">Tiek skaitīti parastie velosipēdi. Pieskarieties, lai skaitītu tikai elektriskos.</string>
     <string name="map_bikes_electric_description">Tiek skaitīti elektriskie velosipēdi. Pieskarieties, lai skaitītu visus.</string>
     <!-- The label under, or beside, a count. No item holds a number: the
-         figure is written next to these words already. On a list row the
-         label is set in capitals, on its own line, so it is read as a word of
-         its own and not as the tail of a phrase. -->
+         figure is written next to these words already.
+         **Latvian departs from the English note here, and on purpose.** The
+         English treats these as labels rather than as the tail of the phrase
+         the count makes, because a language whose grammar reaches across the
+         gap can be caught out by it. Latvian marks the case on the noun and
+         nowhere else, so the agreed form IS the label: „14“ over VELOSIPĒDU
+         reads right, where a nominative plural over the same figure would be
+         plain wrong. Nothing is added at the head of the line, so the capitals
+         and the line break cost nothing.
+         The one case this leaves crooked is known: `StationAdapter.kt:167`
+         resolves the category with `counterpart ?: 0`, so a station whose
+         availability the network does not publish shows „—“ over BRĪVU VIETU,
+         a genitive plural with no figure to govern. It is the least bad of the
+         three forms there and it is accepted, but it is written down. -->
     <plurals name="counterpart_bikes" tools:ignore="ImpliedQuantity">
         <item quantity="one">velosipēds</item>
         <item quantity="zero">velosipēdu</item>
@@ -245,7 +258,7 @@
     <string name="about_attribution_osm">Karte, maršrutēšana un orientieri: © OpenStreetMap veidotāji, ODbL licence.</string>
     <string name="about_attribution_ban">Adreses un māju numuri: Base Adresse Nationale, ODbL licence.</string>
     <string name="about_attribution_brouter">Maršrutēšana: BRouter, MIT licence, uz OpenStreetMap datu pamata.</string>
-    <string name="about_attribution_maplibre">Kartes attēlošana: MapLibre Native, divu punktu BSD licence.</string>
+    <string name="about_attribution_maplibre">Kartes attēlošana: MapLibre Native, divu klauzulu BSD licence.</string>
     <string name="about_links_title">Vietas atvēršana no citas lietotnes</string>
     <string name="about_links_body">„geo:“ saites un kā vienkāršs teksts kopīgotas adreses nonāk tieši šeit: Android izvēlnē izvēlieties Roue Libre. Saitēm no karšu vietnēm ir nepieciešama atļauja: Iestatījumi → Lietotnes → Roue Libre → Atvērt pēc noklusējuma → Pievienot saiti.</string>
     <string name="about_licence_title">Licence</string>
@@ -275,11 +288,11 @@
 
     <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
          which is what the application does at rest. -->
-    <string name="journey_bike_kind_any">Jebkurš velosipēds</string>
+    <string name="journey_bike_kind_any">Jebkurš</string>
     <string name="journey_bike_kind_mechanical">Parastais</string>
     <string name="journey_bike_kind_electric">Elektriskais</string>
     <string name="journey_bike_kind_any_description">Jebkurš velosipēds, vienalga kāda veida</string>
-    <string name="journey_bike_kind_mechanical_description">Velosipēds, kuru minu pats</string>
+    <string name="journey_bike_kind_mechanical_description">Velosipēds bez minēšanas atbalsta</string>
     <string name="journey_bike_kind_electric_description">Velosipēds ar minēšanas atbalstu</string>
     <string name="journey_compute">Aprēķināt maršrutu</string>
     <string name="journey_computing">Notiek labākā maršruta aprēķināšana…</string>
@@ -291,7 +304,7 @@
     <string name="journey_source_favourite">Stacija no izlases</string>
     <string name="journey_source_on_map">Punkts kartē</string>
     <string name="journey_no_favourite">Izlasē vēl nav nevienas stacijas. Atveriet staciju un pieskarieties zvaigznītei, lai to pievienotu.</string>
-    <string name="journey_pick_crosshair">Iezīmētais punkts</string>
+    <string name="journey_pick_crosshair">Mērķa punkts</string>
     <string name="journey_pick_confirm">Izvēlēties šo punktu</string>
     <string name="journey_picked_point">Punkts kartē</string>
     <string name="journey_frame">Rādīt visu maršrutu</string>
@@ -467,7 +480,7 @@
     <string name="storage_title">Krātuve</string>
     <string name="storage_open">Pārvaldīt bezsaistes datus</string>
     <string name="storage_intro">Karte, maršrutu plānotājs un adrešu meklēšana darbojas bez tīkla. Tiem ir nepieciešamas trīs datu kopas, kas tiek instalētas vienu reizi.</string>
-    <string name="storage_total">Šajā ierīcē aizņemts: %1$s</string>
+    <string name="storage_total">Šajā ierīcē izmantotā krātuve: %1$s</string>
     <string name="storage_nothing_installed">Nav instalētu datu</string>
     <string name="storage_no_city">Nav izvēlēta pilsēta</string>
 
@@ -487,7 +500,7 @@
     <string name="storage_download_pending">Lejupielādēt: %1$s</string>
     <string name="storage_downloading">%1$s · %2$s no %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
-    <string name="storage_wifi_warning">Jūs neesat pieslēdzies Wi-Fi tīklam. Šī lejupielāde var būtiski noslogot mobilo datu plānu.</string>
+    <string name="storage_wifi_warning">Nav Wi-Fi savienojuma. Šī lejupielāde var būtiski noslogot mobilo datu plānu.</string>
     <string name="dataset_update_available">Ir pieejams atjauninājums</string>
 
     <!-- The three lines below are read straight under, or beside, a set's
@@ -573,20 +586,20 @@
          Velosipēdi / Brīvās vietas button, so it may name neither. -->
     <string name="settings_map_filters_hide_empty">Slēpt stacijas, kurām nav ko piedāvāt</string>
     <!-- Under the switch, saying what „nothing“ is read against. -->
-    <string name="settings_map_filters_hide_empty_hint">„Nekas“ nozīmē to, ko karte skaita: neviena velosipēda, kamēr tā skaita velosipēdus, un nevienas brīvas vietas, kamēr tā skaita brīvās vietas.</string>
+    <string name="settings_map_filters_hide_empty_hint">To, kas skaitās „nekas“, nosaka tas, ko karte skaita: neviena velosipēda, kamēr tā skaita velosipēdus, un nevienas brīvas vietas, kamēr tā skaita brīvās vietas.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stacijas, par kurām tīkls neko nesaka, paliek kartē: skaits, ko neviens nevarēja nolasīt, nav nulle.</string>
 
     <!-- The rider's OWN bike, not the network's. The journey screen carries a
          separate, similar-looking choice about the bikes the network lends. -->
-    <string name="settings_own_bike_kind_title">Jūsu paša velosipēds</string>
+    <string name="settings_own_bike_kind_title">Jūsu velosipēds</string>
     <!-- Read aloud in place of the two buttons beside it. -->
     <string name="settings_own_bike_kind_description">Jums piederošā velosipēda veids</string>
     <string name="settings_own_bike_kind_mechanical">Parastais</string>
     <string name="settings_own_bike_kind_electric">Elektriskais</string>
     <!-- Under the two buttons. Says what the declaration changes. -->
-    <string name="settings_own_bike_kind_hint">Ja velosipēds ir norādīts kā elektriskais, tam tiek aprēķināts savs maršruts un savi laiki.</string>
+    <string name="settings_own_bike_kind_hint">Ja velosipēds ir norādīts kā elektrisks, tam tiek aprēķināts savs maršruts un savi laiki.</string>
 
     <!-- The summary of a ride on one's own bike, where that bike was said to be
          a pedal-assist one. %1$s is a distance, %2$s a climb. -->

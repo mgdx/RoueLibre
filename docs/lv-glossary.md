@@ -99,13 +99,37 @@ it:
 |---|---|---|
 | `journey_step_to_station`, `journey_step_ride` | `Ar kājām līdz stacijai %1$s`, `Ar velosipēdu līdz stacijai %1$s` | *Līdz* governs the dative, and the dative falls on *stacijai*; the name follows in apposition, in the nominative it arrived in. |
 | `station_address_nearby` | `Netālu: %1$s` | *Netālu no* governs the genitive, and what arrives is a street **or** a square, as the index holds it. The colon turns the line into a label, which declines nothing. |
-| `city_installed`, `storage_total` | `Ierīcē instalēts: %1$s`, `Šajā ierīcē aizņemts: %1$s` | The argument is a size, and a quantified phrase carries its own agreement: no participle written in front of *%1$s* is right for *42 MB*, *1,3 GB* and *900 B* alike. |
+| `city_installed` | `Ierīcē instalēts: %1$s` | The argument is a size, and a quantified phrase carries its own agreement: no participle written in front of *%1$s* is right for *42 MB*, *1,3 GB* and *900 B* alike. The bare masculine participle before a colon is the attested label form (`settings:credential_for_vpn_and_apps`). |
+| `storage_total` | `Šajā ierīcē izmantotā krātuve: %1$s` | Same shape, different verb. *Aizņemt* appears nowhere in `lv.tsv`: Latvian Android says *izmantot* — `settings:storage_used`, "Storage used" → „Izmantotā krātuve“ — and `settings:data_used_formatted`, "Data used: ^1 ^2" → „Patērētie dati: ^1 ^2“, which is this very colon form with a noun phrase in front of it. So the line names the thing measured rather than leaning on a participle alone. |
 | `dataset_delete_description`, `storage_download_pending` | `Dzēst: %1$s`, `Lejupielādēt: %1$s` | A dataset's name is a masculine **plural** in two cases (*Kartes dati*, *Maršrutēšanas dati*) and a masculine **singular** in the third (*Adrešu rādītājs*), so no verb agreeing with it is right all three times. The infinitive behind a colon agrees with nothing. |
 | `dataset_absent` | `Nav ierīcē` | The same three names, and the state line sits **directly under** the one it describes, where a reader feels the agreement whether or not the grammar demands it. *Nav instalēts* would be right for *Adrešu rādītājs* and wrong for the two plurals; *Nav ierīcē* declines nothing and says the same thing. |
 | `dataset_imported`, `dataset_deleted` | `Datu kopa instalēta: %1$s`, `Datu kopa izdzēsta: %1$s` | The colon alone was not enough here: a participle standing at the head of the line still reads as agreeing with the name that follows it. So the line supplies its own subject — *datu kopa*, feminine, which is already this file's word for a dataset in `storage_intro` — and the participle agrees with that, whatever arrives after the colon. |
 | `map_outside_city_message`, `map_outside_city_brief`, `city_proposal_body` | *apgabala, ko aptver %1$s* | The placeholder is the subject of *aptver* and stays in the nominative, which is the case it arrives in. |
 | `city_here_body`, `city_here_installed_body` | *Instalējiet šī tīkla datus … tā stacijas* | The same problem in the other direction: they need a possessive for the network, whose gender the placeholder hides. *Tīkls* is masculine and fixed, so the sentence leans on that noun rather than on a pronoun that would have to agree with whatever `cityLabel` produced. |
 | `settings_opening_title` | `Lietotnes sākuma ekrāns` | **The one place the English sentence had to be recast.** "Open the app by default on" governs its two buttons, and Latvian would have had to decline them — *Karti*, *Staciju sarakstu* — which reads as nonsense on a toggle. Naming the screen instead lets the buttons stay in the nominative: *Karte*, *Staciju saraksts*. |
+
+## Where Latvian departs from the English note
+
+`counterpart_bikes` and `counterpart_docks` carry an instruction in the source
+file that this translation does not follow, and the departure is deliberate.
+The English asks that these be treated as **labels** rather than as the tail of
+the phrase the count makes — Romanian found that a grammar reaching across the
+gap between the figure and the word breaks on a list row, where the two are
+stacked and the label is set in capitals.
+
+Latvian marks the case on the noun itself and adds nothing at the head of the
+line, so the **agreed form is the label**: „14“ over VELOSIPĒDU reads right,
+and a nominative plural over the same figure would be plain wrong. The
+capitals and the line break cost nothing here. Keeping the forms agreed is
+therefore the same decision the English note was protecting, arrived at from
+the other side.
+
+**One case this leaves crooked, and it is written down rather than hidden.**
+`StationAdapter.kt:167` resolves the category with `counterpart ?: 0`, so a
+station whose availability the network does not publish shows „—“ over BRĪVU
+VIETU: a genitive plural with no figure to govern. Of the three forms it is
+the least bad — `one` would assert a single dock and `other` a handful — but
+it is a real seam, and a contributor who finds it should know it was seen.
 
 ## The name in the placeholder is the network's
 
