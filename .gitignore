@@ -41,3 +41,12 @@ keystore.properties
 # business inside its own history; the settings describe one contributor's
 # tooling, not the project.
 .claude/
+
+# Builds dropped at the root to be installed by hand. The APK is rebuilt from
+# the sources in one command, it weighs more than the whole history, and the
+# one thing a released binary must never be is a file somebody edits.
+/*.apk
+
+# The Kotlin compiler's own scratch directory — build errors and session
+# markers, written per machine and per run.
+.kotlin/
