@@ -101,6 +101,22 @@ apostrophe, where a network's name carries one (*Vélib’*, *V’lille*, *Vélo
 is **’** (U+2019) and never the straight quote, which is why nothing in the
 file is escaped.
 
+## When a word here changes, this file changes in the same commit
+
+Twice already this file has quoted the strings wrongly, and both times the same
+way: a sweep corrected `values-bs/strings.xml` and `fastlane/`, the glossary was
+not in its path, and the prose went on asserting the rule as it stood *before*
+the sweep. The s/sa entry above stated the rule and then broke it in two of its
+own citations, because those citations had been copied out of the file a day
+earlier.
+
+That is worse than a plain typo. Every quotation here is what the next
+contributor will trust instead of opening the file, so a stale one does not
+merely go out of date — it invites somebody to "correct" a string that was
+already right. **Any search-and-replace over the strings has to run over
+`docs/bs-glossary.md` too**, and any entry whose wording is quoted has to be
+re-read against the file it quotes before the commit closes.
+
 ## Plurals: what each category covers, not its smallest number
 
 Bosnian has three, and each has to read correctly for **every** number that
