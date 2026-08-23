@@ -419,10 +419,13 @@
     <string name="station_no_navigation_app">لا يوجد تطبيق خرائط مثبّت على هذا الجهاز.</string>
 
     <string name="address_search_title">البحث عن عنوان</string>
-    <!-- Written in the order Arabic writes an address — street, then number,
-         then town — which `AddressQuery.parseQuery` reads (SPEC §4.3). It
-         invites one number and no postcode. -->
-    <string name="address_search_hint">الشارع، الرقم، المدينة</string>
+    <!-- Written in the order Arabic writes an address — number, then street,
+         then town — which `AddressQuery.parseQuery` reads first of the three
+         positions it knows (SPEC §4.3), and which is the order the results
+         under the field are laid out in, Arabic having no row of its own in
+         `AddressLayout` and falling on the default. It invites one number and
+         no postcode. -->
+    <string name="address_search_hint">الرقم، الشارع، المدينة</string>
     <string name="address_search_clear">محو البحث</string>
     <string name="address_search_privacy">يجري البحث كله على الجهاز. لا شيء يُرسل، ولا حتى أثناء الكتابة.</string>
     <string name="address_locality">&#x200F;%1$s %2$s</string>

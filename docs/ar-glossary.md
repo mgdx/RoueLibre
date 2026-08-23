@@ -236,18 +236,38 @@ reading. `distance_metres` and `distance_kilometres` have no such problem —
 
 ## The search prompt is written in the Arabic order
 
-`address_search_hint` is **`الشارع، الرقم، المدينة`**, and not the source's
-"Number, street, town". SPEC §4.3 lets every translation write this prompt in
-the order of its own language, because `AddressQuery.parseQuery` reads a house
-number in three positions — opening the query, closing it, and **between the
-street and the town**. Arabic writes an address street-first, with the number
-after the street name and the town last (`شارع النصر ١٢ دبي`), which is exactly
-that third position.
+`address_search_hint` is **`الرقم، الشارع، المدينة`**. SPEC §4.3 lets every
+translation write this prompt in the order of its own language, because
+`AddressQuery.parseQuery` reads a house number in three positions — opening the
+query, closing it, and between the street and the town. Arabic takes the first,
+and it lands on the same order the English source writes, which is a
+coincidence rather than a translation left undone.
 
-The prompt invites **one** number and no postcode, which is what the two guards
-in SPEC §4.3 require: a number that does not open the query is given up as soon
-as a second number appears, and a number between street and town is read only
-when no stop word stands beside it.
+**Arabic puts the number in front of the street.** `١٢ شارع الملك فيصل`,
+`٢٠ شارع قصر النيل`: that is the ordinary written order across the Mashriq, and
+the Maghreb writes it the same way with French reinforcing it — an Algiers or a
+Casablanca address is a transposition of `12 rue …`. The Emirates, which is the
+one place Arabic actually serves here, are a case apart rather than a
+counter-example: a Dubai address leans on a Makani code or a PO box far more
+than on a street, and where a street address is written the number still comes
+first, with its type word in front of it (`فيلا ١٢، شارع الوصل`).
+
+This file was first written the other way round, `الشارع، الرقم، المدينة`, on
+the belief that Arabic was street-first. It is not, and the prompt would have
+taught an order the results under the field do not use: Arabic has no row in
+`core/address/AddressLayout.kt` — deliberately, the Dubai address base being
+too mixed to settle anything, 15% of its house numbers not being numbers at all
+— so it falls on `DEFAULT_LAYOUT`, which puts the number first.
+
+**The code agrees, and for its own reason.** Of the three positions the parser
+reads, the leading one is the only one with no guard on it: `readMedianNumber`
+gives a number up as soon as a second number appears in the query, and again
+when a stop word stands beside it, where `readLeadingNumber` has neither test
+to fail. A prompt that teaches the leading position teaches the position that
+survives a street whose name carries a date.
+
+The prompt invites **one** number and no postcode, which is what those same
+guards require.
 
 ## The address layout is not this file's business
 
