@@ -36,7 +36,25 @@ public enum class TravelMode(public val profileName: String) {
  * @property mode on foot or by bike.
  * @property distanceMetres the length of the track.
  * @property duration the duration the engine estimates for this mode.
- * @property ascentMetres the cumulative climb.
+ * @property ascentMetres the cumulative climb: every stretch of the leg that
+ *   goes up, added together, the descents left out. **Neither the difference
+ *   between the two ends nor the height between the lowest and the highest
+ *   reading** — a leg that gains ten metres, gives them back and gains ten more
+ *   has climbed twenty, and that is what a rider pedals.
+ *
+ *   The sum is the engine's *filtered* one (BRouter, `RoutingEngine.recalcTrack`
+ *   and its `ascend`), which is why it comes out lower than adding up the steps
+ *   of [elevationsMetres]: a descent is held in a buffer rather than closing the
+ *   climb straight away, so a dip shallower than the elevation source's own
+ *   error does not turn the rise after it into a fresh hill. The buffer is ten
+ *   metres over the three-arcsecond SRTM readings most graphs carry, five where
+ *   the graph carries one-arcsecond ones — the vertical error of the samples
+ *   themselves, which is the only honest place to put it. Without it, the saw
+ *   the sampling draws across flat ground would add up to a climb the rider
+ *   never makes.
+ *
+ *   It follows that this figure **cannot be read off a drawing of the leg**, and
+ *   is not meant to be: a filtered sum of the ups is not a height on an axis.
  * @property geometry the track, from start to finish.
  * @property elevationsMetres the height above sea level at each point of
  *   [geometry], in the same order and of the same length. `null` at a point the
