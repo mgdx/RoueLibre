@@ -203,6 +203,11 @@ class OfflineRouter(
         mode = mode,
         distanceMetres = distance,
         duration = totalSeconds.seconds,
+        // `ascend`, the engine's filtered sum of everything the leg goes up,
+        // and not `plainAscend`, which is the difference between the two ends
+        // and says nothing about the hills between them. What the filter
+        // forgives, and why the figure cannot be read off the drawn profile,
+        // is written where the property is declared.
         ascentMetres = ascend,
         geometry = nodes.map { node ->
             Coordinates(
