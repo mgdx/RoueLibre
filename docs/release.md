@@ -238,9 +238,7 @@ Builds:
     output: app/build/outputs/apk/release/app-armeabi-v7a-release.apk
     binary: 
       https://github.com/mgdx/RoueLibre/releases/download/v%v/roue-libre-%v-armeabi-v7a.apk
-    scanignore:
-      - settings.gradle.kts
-      - third_party/brouter/buildSrc/src/main/groovy/brouter.library-conventions.gradle
+    prebuild: sed -i '/^publishing {/,$d' third_party/brouter/buildSrc/src/main/groovy/brouter.library-conventions.gradle
     scandelete:
       - third_party/brouter/brouter-routing-app
     ndk: r28c
@@ -285,21 +283,42 @@ set from this first submission on purpose: **a version F-Droid signs with its
 own key can never be moved to ours afterwards**, so the choice is only offered
 once.
 
-The three scan rules exist because F-Droid's scanner refuses to build over
-anything it cannot account for, and each is answered rather than silenced:
+The scanner refuses to build over anything it cannot account for, and the
+recipe answers each of its three findings by **changing the tree it scans**.
+There is no `scanignore` here, and there must not be: a reviewer answered the
+first submission with *« Don't use scanignore »*, and they are right.
+`scanignore` does not declare one line acceptable, it switches the scanner off
+for a whole file — for this version and for every version `AutoUpdateMode`
+copies the entry into, including whatever that file gains later. It is meant
+for files a contributor cannot touch, and we can touch all three:
 
 - **`brouter-routing-app` is deleted** before the build. It is BRouter's own
   Android application, and it ships two ZIP archives in its assets. We never
   build it — BRouter's `settings.gradle` includes that module only when a
   `local.properties` exists inside the submodule, and none does — so removing
   it costs nothing and leaves nothing unexplained in the tree.
-- **`settings.gradle.kts` is ignored** for the `foojay-resolver` plugin, which
-  downloads a JDK when a toolchain is missing. On their machine it can do
-  nothing: the build sets `org.gradle.java.installations.auto-download=false`,
-  and the toolchain it would fetch is already installed.
-- **`brouter.library-conventions.gradle` is ignored** for a Maven URL the
-  scanner does not recognise. It sits in a `publishing` block — it is where
-  BRouter pushes its own artifacts, never where a dependency is fetched from.
+- **BRouter's `publishing` block is cut by `prebuild`.**
+  `brouter.library-conventions.gradle` points a Maven repository at
+  `maven.pkg.github.com` — where BRouter pushes its own artifacts, never where
+  a dependency is fetched from. The file cannot simply be deleted: five
+  submodule modules apply the plugin it defines. The block is the whole tail
+  of the file, so one `sed` removes it and leaves the `plugins` block that
+  matters. `prebuild` runs during source preparation, before the scan, so what
+  is scanned is what is compiled — the point `scanignore` was missing.
+- **The two JDK downloads left the repository.** `settings.gradle.kts` no
+  longer applies `foojay-resolver-convention`, and
+  `gradle/gradle-daemon-jvm.properties` no longer carries the ten
+  `toolchainUrl.*` entries `updateDaemonJvm` writes into it. Both existed only
+  to fetch a JDK when a toolchain is missing, which on their image never
+  happens: it carries the JDK 21 both modules ask for and builds with
+  `org.gradle.java.installations.auto-download=false`. Re-running
+  `updateDaemonJvm` puts the URLs back — strip them again.
+
+  To be exact about the second one: their source preparation deletes
+  `gradle-daemon-jvm.properties` itself, next to `gradlew` and the wrapper jar,
+  so the scanner would never have reported it. It is stripped here for whoever
+  builds this outside F-Droid, and so the repository stops carrying a download
+  it never uses.
 
 ### What their pipeline insists on
 
@@ -314,12 +333,23 @@ and three of its rules cost a round trip to learn:
   and a job ends on `git diff --exit-code`: anything their run adds that the
   file does not already say fails the pipeline.
 - The file must be a **fixed point of `fdroid rewritemeta`**, which reorders
-  every build entry — `output`, `binary`, `scanignore`, `scandelete` — puts
+  every build entry — `output`, `binary`, `prebuild`, `scandelete` — puts
   `AutoUpdateMode` and `UpdateCheckMode` before `VercodeOperation`, and wraps
-  long values on its own terms. Do not format it by hand: run their tool and
-  commit what it writes. The wrapping depends on the `ruamel.yaml` version —
-  0.18 folds two of the four `binary` URLs, 0.19 folds all four — so match the
-  version their runner has rather than the newest.
+  long values on its own terms — the 122-character `prebuild` line above it
+  leaves alone, while two of the four shorter `binary` URLs it moves to a line
+  of their own. Do not format it by hand: run their tool and commit what it
+  writes.
+
+  The wrapping depends on the `ruamel.yaml` version, and not on
+  `fdroidserver`'s. Measured against the file their CI accepted, **0.18.12 and
+  below reproduce it, 0.18.13 and above fold every long value** — including the
+  `prebuild` line and `AllowedAPKSigningKeys`. Debian trixie carries 0.18.6, so
+  pin that: `pip install 'ruamel.yaml==0.18.6'` in the same virtualenv as
+  `fdroidserver`, whatever the newest release is.
+
+`fdroid rewritemeta` needs no checkout of their repository: a directory holding
+`metadata/io.github.mgdx.rouelibre.yml` and a one-line `config.yml` is enough
+for it to run, and running it twice is how a fixed point is confirmed.
 
 To rehearse the pipeline here rather than discovering it there, reproduce the
 build image: `fdroidserver` from **master** (the released package lags behind

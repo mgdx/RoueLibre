@@ -11,9 +11,12 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-}
+
+// No `foojay-resolver-convention` here, whatever the Android Studio template
+// proposes: it resolves a missing Java toolchain by downloading a JDK, and
+// F-Droid's scanner refuses a build able to fetch one — theirs runs with
+// `org.gradle.java.installations.auto-download=false` anyway. The JDK 21 the
+// modules ask for is the one their image already carries.
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
