@@ -22,6 +22,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
+import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.CityEntry
 import io.github.mgdx.rouelibre.core.config.FleetDescription
@@ -76,6 +77,28 @@ import org.maplibre.android.style.sources.GeoJsonSource
 import org.maplibre.geojson.FeatureCollection
 import org.maplibre.geojson.Point
 import java.time.Instant
+
+/**
+ * Whether the map is to raise a banner for [error] at all.
+ *
+ * One error is held back, and only on this screen: having chosen no city. The
+ * map already says that, full width and in the middle of the screen — the panel
+ * `loadTilesFor` raises for a `null` configuration carries the sentence *and*
+ * "Choose my city", and it is raised for exactly the state this error reports,
+ * in both of the screen's roles. A banner underneath would repeat an offer
+ * already made, and repeat it every ten seconds as the refresh loop ticks.
+ *
+ * The station list answers the same error by putting the chooser on its banner
+ * instead, and for the same reason both screens have: "Try again" is no answer
+ * to having chosen no city, since nothing is being asked of any network and
+ * every press can only fail the same way (SPEC §14). The list has no panel to
+ * lean on, so it must carry the gesture itself; the map has one, so it says
+ * nothing rather than saying it twice.
+ *
+ * Nothing else is ever held back: a feed that fails says so and offers another
+ * go, city or no city.
+ */
+internal fun worthSayingOnTheMap(error: DataError): Boolean = error != DataError.NoCityChosen
 
 /**
  * The station map — the main screen (SPEC §7.1).
@@ -1281,11 +1304,19 @@ class MapFragment : Fragment() {
         }
     }
 
+    /**
+     * Says what a failed refresh has to say, when it has anything (SPEC §7.8).
+     *
+     * The one error this screen keeps quiet about is having chosen no city —
+     * see [worthSayingOnTheMap] for why the map answers it with silence where
+     * the station list answers it with the chooser.
+     */
     private fun observeErrors() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.errors.collect { error ->
                     val host = activity as? MainActivity ?: return@collect
+                    if (!worthSayingOnTheMap(error)) return@collect
                     // A refresh that failed gives way to an answer already on
                     // the banner (SPEC §7.8): offline is the ordinary state
                     // here, and this message used to wipe the one telling the
