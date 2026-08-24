@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -94,12 +93,6 @@ private const val INTRO_MINIMUM_MILLIS = 600L
 private const val INTRO_HANDOVER_DEADLINE_MILLIS = 3_000L
 
 /**
- * How the system bars look, so that the opening can borrow them for the length
- * of its green and give them back unchanged (SPEC §7.0).
- */
-private data class SystemBars(val statusBar: Int, val navigationBar: Int, val lightIcons: Boolean)
-
-/**
  * The application's single activity (SPEC §3).
  *
  * It hosts the fragments, and receives the places other applications send it
@@ -163,8 +156,14 @@ class MainActivity : AppCompatActivity() {
     private var firstScreenSettled = false
     private var heldLongEnough = false
 
-    /** The system bars as the interface's theme wants them — see [openIntro]. */
-    private var barsBeforeIntro: SystemBars? = null
+    /**
+     * The bar icon polarity the interface's theme wants — see [openIntro].
+     *
+     * The colour behind the icons needs no such note: it belongs to whatever
+     * view is drawn under the bars, and changes on its own when the opening
+     * goes.
+     */
+    private var lightIconsBeforeIntro: Boolean? = null
 
     /**
      * Whether the minimum stay is already counting — see [holdIntro].
@@ -376,8 +375,12 @@ class MainActivity : AppCompatActivity() {
      * been looking at since the launcher — the mark on its green — simply goes
      * on, now with the application's name under it.
      *
-     * The system bars come along: the theme colours them like the background,
-     * and left alone they would draw two pale strips across the green.
+     * The system bars come along. The green under them is not painted here:
+     * the opening's own view runs to the edges of the window, the application
+     * having asked for that in [onCreate], so the ground behind the bars is
+     * simply the ground of whatever is on screen. What this has to say is the
+     * one thing a view cannot say for itself — that the icons drawn over that
+     * green are to be the light ones (SPEC §7.0).
      */
     private fun openIntro() {
         val views = binding ?: return
@@ -394,18 +397,11 @@ class MainActivity : AppCompatActivity() {
             veil.postDelayed({ holdIntro() }, INTRO_HANDOVER_DEADLINE_MILLIS)
         }
         val controller = WindowInsetsControllerCompat(window, views.root)
-        // Noted as the theme has just left them. What the opening gives back
-        // has to be exactly what it borrowed, and taking a copy is surer than
-        // reading the theme again later — and than naming the colours a second
-        // time here, where the light and dark variants would drift apart.
-        barsBeforeIntro = SystemBars(
-            statusBar = window.statusBarColor,
-            navigationBar = window.navigationBarColor,
-            lightIcons = controller.isAppearanceLightStatusBars,
-        )
-        val ground = ContextCompat.getColor(this, R.color.identity_ground)
-        window.statusBarColor = ground
-        window.navigationBarColor = ground
+        // Noted as the theme has just left it. What the opening gives back has
+        // to be exactly what it borrowed, and taking a copy is surer than
+        // reading the theme again later — where the light and dark variants
+        // would drift apart.
+        lightIconsBeforeIntro = controller.isAppearanceLightStatusBars
         controller.isAppearanceLightStatusBars = false
         controller.isAppearanceLightNavigationBars = false
     }
@@ -449,16 +445,18 @@ class MainActivity : AppCompatActivity() {
     /**
      * Hands the system bars back as the opening found them.
      *
-     * Both bars carry the same colour, so the same icon polarity suits them.
+     * Only the icons are handed back. The green goes when the opening's view
+     * goes, of itself, the screen underneath being the one that reaches under
+     * the bars from then on.
+     *
+     * Both bars stand on the same ground, so the same icon polarity suits them.
      */
     private fun restoreSystemBars() {
         val views = binding ?: return
-        val bars = barsBeforeIntro ?: return
-        window.statusBarColor = bars.statusBar
-        window.navigationBarColor = bars.navigationBar
+        val lightIcons = lightIconsBeforeIntro ?: return
         WindowInsetsControllerCompat(window, views.root).run {
-            isAppearanceLightStatusBars = bars.lightIcons
-            isAppearanceLightNavigationBars = bars.lightIcons
+            isAppearanceLightStatusBars = lightIcons
+            isAppearanceLightNavigationBars = lightIcons
         }
     }
 
