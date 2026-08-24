@@ -66,10 +66,14 @@ class StationDetailSheet : BottomSheetDialogFragment() {
 
     private val viewModel: StationDetailViewModel by viewModels {
         StationDetailViewModel.Factory(
-            repository = container.stationRepository,
-            preferences = container.preferences,
-            addressIndex = container.addressIndex,
-            deviceLocation = container.deviceLocation,
+            stations = container.stationRepository.observeStations(),
+            favouriteStationIds = container.preferences.favouriteStationIds,
+            setFavourite = { container.preferences.toggleFavourite(it) },
+            nearestAddress = { container.addressIndex.nearestAddress(it) },
+            // The position filtered by the city served, the same one the
+            // station list orders itself on: outside the conurbation being
+            // consulted there is no distance worth saying (SPEC §7.6).
+            knownPositionInCity = { container.knownPositionInsideActiveCity() },
             fleet = container.fleetRepository.fleet,
             stationId = requireArguments().getString(ARGUMENT_STATION_ID).orEmpty(),
         )
