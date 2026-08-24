@@ -8,7 +8,7 @@
     against one Portuguese. So the Portuguese written here is European and
     correct, while nothing is reached for that a Brazilian reader could not
     follow: where the two norms share a word, that word is the one used. Every
-    place they genuinely part company is listed in docs/pt-glossary.md, which
+    place they genuinely part company is listed in docs/glossary/pt.md, which
     is what a `values-pt-rBR/` would be derived from — do not create that folder
     from this file without reading that list.
 
@@ -28,7 +28,7 @@
     where the same forms are "você", but the reason it is written is the
     system's own usage. This departs from the "tu" of values-fr/ and the "tú"
     of values-es/, whose languages Android addresses informally; Portuguese it
-    does not. See docs/pt-glossary.md for the count.
+    does not. See docs/glossary/pt.md for the count.
 
     Rules, the same as everywhere: positional placeholders, <plurals> for
     anything that agrees, and the `name` attributes left untouched.
@@ -43,7 +43,7 @@
     is a fact about the language, not about the counts this application shows.
     Portuguese writes those large numbers with "de" — "1000000 de bicicletas".
 
-    See docs/pt-glossary.md for the words this file holds to, and
+    See docs/glossary/pt.md for the words this file holds to, and
     CONTRIBUTING.md to submit a correction.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools">
@@ -480,7 +480,7 @@
          The prompt is written in Portuguese's own order and names no postcode:
          a Portuguese one is written "1000-001", which the parser reads as a
          second number and which then costs the house number its reading. See
-         docs/pt-glossary.md. -->
+         docs/glossary/pt.md. -->
     <string name="address_search_title">Pesquisar um endereço</string>
     <string name="address_search_hint">Rua, número, localidade</string>
     <string name="address_search_clear">Limpar a pesquisa</string>

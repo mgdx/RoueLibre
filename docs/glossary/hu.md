@@ -35,7 +35,7 @@ The reason for the departure: this application has no operator behind it, and
 its whole argument is that nobody is. *Magázás* is the register of an
 institution speaking to a customer, and Roue Libre has neither. The French,
 which set the project's tone, ships *tutoiement* for the same reason
-(`docs/french-glossary.md`). A contributor who wants magázás back must change
+(`docs/glossary/fr.md`). A contributor who wants magázás back must change
 every verb in the file, not one screen of them.
 
 **The English is scrupulously impersonal** wherever it promises that nothing is

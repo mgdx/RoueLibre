@@ -114,7 +114,7 @@ That is worse than a plain typo. Every quotation here is what the next
 contributor will trust instead of opening the file, so a stale one does not
 merely go out of date — it invites somebody to "correct" a string that was
 already right. **Any search-and-replace over the strings has to run over
-`docs/bs-glossary.md` too**, and any entry whose wording is quoted has to be
+`docs/glossary/bs.md` too**, and any entry whose wording is quoted has to be
 re-read against the file it quotes before the commit closes.
 
 ## Plurals: what each category covers, not its smallest number

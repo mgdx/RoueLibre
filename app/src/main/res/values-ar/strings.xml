@@ -9,7 +9,7 @@
     The register is Modern Standard Arabic — the register Android's own
     Settings are written in — and the vocabulary is arbitrated by the system
     lexicon taken from `framework-res.apk` and `Settings.apk`. Every term and
-    the reason it was picked are in `docs/ar-glossary.md`.
+    the reason it was picked are in `docs/glossary/ar.md`.
 
     Typography:
       · the script runs right to left; the layouts mirror on `start`/`end`;
@@ -37,7 +37,7 @@
     not six: the plural after `few`, the accusative singular after `many`, and
     the plain singular after `zero`, `one` and `other`. Those three therefore
     read alike, which is Arabic and not an oversight; `two` carries the dual.
-    `docs/ar-glossary.md` sets it out in full.
+    `docs/glossary/ar.md` sets it out in full.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools">
 
@@ -411,7 +411,7 @@
          already using it for the year (`mtrl_picker_text_input_year_abbr`),
          which is the argument that ruled out `د` for the minute. The first
          cannot do the same: it takes the singular, which is right from
-         eleven minutes up and wrong from three to ten. `docs/ar-glossary.md`
+         eleven minutes up and wrong from three to ten. `docs/glossary/ar.md`
          says why, and says that the repair is a <plurals> in `values/`. -->
     <string name="duration_minutes">&#x200F;%1$d دقيقة</string>
     <string name="duration_hours_minutes">&#x200F;%1$d:%2$02d</string>
