@@ -549,6 +549,7 @@
     <string name="dataset_rejected_transfer">Kopiranje fajla nije uspjelo. Provjerite slobodan prostor i pokušajte ponovo.</string>
 
     <string name="error_offline">Niste povezani s mrežom. Posljednja poznata dostupnost ostaje na ekranu.</string>
+    <string name="error_offline_no_availability">Niste povezani s mrežom. Dostupnost još nije primljena, pa nema šta prikazati.</string>
     <!-- The same failures read on the storage screen, where a dataset transfer
          failed rather than an availability refresh. Those files come down
          resumably (SPEC §4.4), which is what each of these says. -->

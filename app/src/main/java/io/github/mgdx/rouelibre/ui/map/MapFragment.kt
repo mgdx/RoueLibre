@@ -1345,7 +1345,10 @@ class MapFragment : Fragment() {
                     // reach. It comes back at the next tick, and the freshness
                     // line says meanwhile how old the counters are.
                     host.showMessage(
-                        error.toUserMessage(requireContext()),
+                        error.toUserMessage(
+                            requireContext(),
+                            hasKnownAvailability = viewModel.state.value.fetchedAt != null,
+                        ),
                         MessageSubject.Refresh,
                         actionLabel = R.string.action_retry,
                     ) { viewModel.refresh(force = true) }

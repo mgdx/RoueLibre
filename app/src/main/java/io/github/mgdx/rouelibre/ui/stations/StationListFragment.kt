@@ -439,7 +439,10 @@ class StationListFragment : Fragment() {
                         R.string.action_retry to { viewModel.refresh(force = true) }
                     }
                     host.showMessage(
-                        error.toUserMessage(requireContext()),
+                        error.toUserMessage(
+                            requireContext(),
+                            hasKnownAvailability = viewModel.state.value.fetchedAt != null,
+                        ),
                         MessageSubject.Refresh,
                         actionLabel = label,
                     ) {

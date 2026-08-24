@@ -505,6 +505,11 @@
     <string name="dataset_rejected_transfer">Copying the file failed. Check the free space and try again.</string>
 
     <string name="error_offline">No connection. The last known availability stays on screen.</string>
+    <!-- Said in place of the line above when nothing has ever been
+         received: promising that the last known availability stays on
+         screen, over an empty map and under a "Never updated" pill,
+         names something the reader has never had (SPEC §14). -->
+    <string name="error_offline_no_availability">No connection. No availability has been received yet, so there is nothing to show.</string>
     <!-- The same failures read on the storage screen, where a dataset
          transfer failed rather than an availability refresh. The server
          is the one hosting the files, not the bike network's, and those

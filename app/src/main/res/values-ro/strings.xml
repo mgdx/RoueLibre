@@ -579,6 +579,7 @@
     <string name="dataset_rejected_transfer">Copierea fișierului a eșuat. Verifică spațiul liber și încearcă din nou.</string>
 
     <string name="error_offline">Fără conexiune. Ultima disponibilitate cunoscută rămâne pe ecran.</string>
+    <string name="error_offline_no_availability">Fără conexiune. Nu a fost primită încă nicio disponibilitate, așa că nu este nimic de afișat.</string>
     <!-- The same failures read on the storage screen, where a dataset
          transfer failed rather than an availability refresh. The server
          is the one hosting the files, not the bike network's, and those

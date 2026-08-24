@@ -541,6 +541,7 @@
     <string name="dataset_rejected_transfer">Faila kopēšana neizdevās. Pārbaudiet brīvo vietu un mēģiniet vēlreiz.</string>
 
     <string name="error_offline">Nav savienojuma. Ekrānā paliek pēdējā zināmā pieejamība.</string>
+    <string name="error_offline_no_availability">Nav savienojuma. Pieejamība vēl nav saņemta, tāpēc nav ko rādīt.</string>
     <!-- The same failures read on the storage screen, where a dataset
          transfer failed rather than an availability refresh. Those files come
          down resumably (SPEC §4.4). -->

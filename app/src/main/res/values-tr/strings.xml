@@ -499,6 +499,7 @@
     <string name="dataset_rejected_transfer">Dosya kopyalanamadı. Boş alanı kontrol et ve tekrar dene.</string>
 
     <string name="error_offline">Bağlantı yok. Son bilinen durum ekranda kalır.</string>
+    <string name="error_offline_no_availability">Bağlantı yok. Durum bilgisi henüz alınmadı, bu yüzden gösterilecek bir şey yok.</string>
     <!-- The same failures read on the storage screen, where a dataset transfer
          failed rather than an availability refresh. The server is the one
          hosting the files, not the bike network's, and those files come down

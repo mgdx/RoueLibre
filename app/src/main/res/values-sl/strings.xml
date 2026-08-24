@@ -591,6 +591,7 @@
     <string name="dataset_rejected_transfer">Kopiranje datoteke ni uspelo. Preverite prosti prostor in poskusite znova.</string>
 
     <string name="error_offline">Ni povezave. Na zaslonu ostane zadnja znana razpoložljivost.</string>
+    <string name="error_offline_no_availability">Ni povezave. Razpoložljivost še ni bila prejeta, zato ni ničesar za prikaz.</string>
     <!-- The same failures read on the storage screen, where a dataset
          transfer failed rather than an availability refresh. Those files come
          down resumably (SPEC §4.4), which is what each of these says will
