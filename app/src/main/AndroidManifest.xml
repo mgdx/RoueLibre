@@ -69,6 +69,7 @@
         android:name=".RoueLibreApplication"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -89,6 +90,32 @@
             choice to offer. `UnusedAttribute` below is the same shape of
             answer: the attribute does nothing before Android 13, which is
             precisely why the library's own storage covers the releases beneath.
+        -->
+
+        <!--
+            android:enableOnBackInvokedCallback above hands the back gesture to
+            Android's own dispatcher, which is what draws the destination while
+            the finger is still on the edge: the screen being returned to, and
+            the launcher itself on the last one back. Without it the gesture
+            arrives all at once, having said nothing of where it led until it
+            has led there.
+
+            What it buys is Android 13 and 14, and those two alone. There the
+            framework leaves the flag false whatever the target is, so the
+            attribute is the only way in; from Android 15 on, a target of
+            SDK 35 or later is opted in already and this is left with nothing
+            to say but "no". Below Android 13 there is no such dispatcher at
+            all and it does nothing, which is the same shape of answer as the
+            locale config below, and covered by the same tools:targetApi.
+
+            Turning it on is safe here because nothing in this application
+            intercepts the back gesture: not one onBackPressed, not one
+            OnBackPressedCallback, not one key listener. Every way back is a
+            popBackStack over the fragment back stack (see ui/BackStack.kt),
+            and those are driven by the OnBackPressedDispatcher, which is
+            precisely what this flag routes the system's callback into. The
+            bottom sheets answer for themselves, each dialog holding a
+            dispatcher of its own.
         -->
 
         <!--
