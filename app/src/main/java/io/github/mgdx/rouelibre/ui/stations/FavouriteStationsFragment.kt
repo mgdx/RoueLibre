@@ -83,6 +83,9 @@ class FavouriteStationsFragment : Fragment() {
                     adapter.submitList(favourites)
                     current.empty.isVisible = favourites.isEmpty()
                     current.stations.isVisible = favourites.isNotEmpty()
+                    // Bound to the list and not set once at creation: the hint
+                    // has to appear on the second favourite and leave with it.
+                    current.hint.isVisible = canReorderFavourites(favourites.size)
                 }
             }
         }

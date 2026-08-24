@@ -33,9 +33,11 @@
         android:layout_marginBottom="@dimen/space_s"
         android:text="@string/favourites_reorder_hint"
         android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/stations"
