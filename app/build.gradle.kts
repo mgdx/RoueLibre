@@ -53,14 +53,14 @@ android {
         // leaves it unable to tell one release from the next. The
         // architectures derive their own codes from it below, so the value is
         // still written once.
-        versionCode = 4
-        // The first version published, and the first signed by the project's
-        // own key rather than the debug one. That is what 1.0 names here: not
-        // a feature set frozen, but a build somebody can install and then
-        // update, the signature being what makes the second possible. The
-        // three alphas before it were tagged and never released.
-        // See CHANGELOG.md.
-        versionName = "1.0.0"
+        versionCode = 5
+        // A minor version and not a patch: the station list now orders itself
+        // by proximity, a closed station says how long it has been silent and
+        // the settings name the network in service — additions, which
+        // semantic versioning counts in the second number however many fixes
+        // travel with them. Nothing here changes what an installed 1.0.0 can
+        // read, so the update is ordinary. See CHANGELOG.md.
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

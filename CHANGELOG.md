@@ -7,6 +7,125 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
+## [1.1.0]
+
+A version made of what the application was found doing on a real phone rather
+than of what it was meant to do. Most of it comes from a test campaign whose
+anomalies are named in the commits, and from the F-Droid review of 1.0.0. The
+station list is what changes most: it is now the screen that answers "where is
+the nearest bike?" without being asked twice.
+
+### Added
+
+- **The station list orders itself by proximity on arrival** (§7.6), wherever
+  one lands on it from, and each row says how far its station is instead of its
+  postcode. It does so in two steps: what the system already holds comes first
+  and costs nothing — arriving from the map, that is the very point the map was
+  drawing, so the list is in order before the eye has settled on it, measured at
+  one second on a Fairphone 3 — then a fix is asked for, because on a phone
+  where nothing has asked for a position in a while the first step answers
+  nothing at all. A fix that comes to nothing leaves the first step's order
+  standing rather than falling back to the alphabet. **Nothing is asked of the
+  user for any of it**: no permission prompt and no message, and where the
+  permission is missing, location is off or the position falls outside the city
+  served, the alphabet simply stays.
+
+- **A "nearest station first" button**, floating over the bottom corner of the
+  list where the map keeps its own controls and where the thumb is, in the
+  signal green rather than the map's pale disc — a pale disc on a white list
+  would be a white circle. The list leaves seventy-two dip under its last row so
+  the last station of the network is never hidden under it. It is the one place
+  this screen ever asks for the location permission (§10), it shows the wait
+  with a ring on the button itself for exactly as long as the wait lasts, and it
+  answers a refusal, a position outside the conurbation and a failed fix each in
+  one line.
+
+- **How long a closed station has been silent** (§4.1, §7.2). The GBFS
+  `last_reported` field crossed the whole application and no screen ever looked
+  at it: what was shown was the moment the feed was downloaded, so a station
+  could read "updated just now" with a five-month-old measurement underneath. A
+  station out of service now reads "Out of service · last reported 5 months
+  ago". The silence qualifies a closure and never decides one — the service
+  state stays settled by `is_installed`, `is_renting` and `is_returning` alone.
+  The threshold is a day and not the five minutes that mark a feed frozen, GBFS
+  obliging no producer to restamp a station whose count has not moved. `Days`
+  and `Months` take the place of `Freshness.LongAgo`, with their plurals in the
+  thirty translations.
+
+- **The settings name the network in service** (§7.6) — network and main city
+  both — where the city section spent its only line saying what pressing it
+  does. Before a city is chosen the row invites the choice instead, in the words
+  the welcome sequence uses.
+
+### Fixed
+
+- **The application no longer lands on a map it has no tiles for.** Somebody who
+  had deleted their offline data met the full-screen "tiles are missing" panel at
+  every launch, on a setting nobody had chosen. The station list stands in until
+  there is a map to draw, needing nothing installed but the availability feed,
+  and the stored choice is left untouched.
+- **The first launch no longer dies on its first screen.** The station list is
+  what a fresh install lands on, it asks for the stations of a city nobody has
+  chosen and is covered a frame later by the welcome sequence — but its snackbar
+  stayed up over that sequence, hid the "continue" button, and pressing it asked
+  a fragment with no manager left for a transaction. That one message is now
+  held back while the welcome is still due, and every other message is dismissed
+  with the view that raised it.
+- **A list handed back by a search is shown from its first row**, as the button's
+  is: typing a letter showed the matches from the row the reader happened to be
+  anchored on, and clearing the field brought the whole list back still shown
+  from it. The scroll is armed by the two gestures that hand back another set of
+  stations and by neither of the two that hand back the same one.
+- **The second press of "nearest station first" comes back to the top too.** The
+  same position answers the same order, a `StateFlow` emits nothing for a state
+  equal to the one it holds, and the callback carrying the scroll never ran.
+- **A station's sheet owes no distance from outside the city consulted.** A phone
+  in Lille reading Dubai's network was told "5,236.1 km" under the station's
+  name, while the list behind it refused any distance. The model is handed a
+  position already filtered by the coverage of the active city.
+- **A failed update check stops promising a download it never started.**
+  "No connection. The download picks up where it stopped" answered a check that
+  transfers nothing; checking now has a register of its own, held apart from the
+  download's and the refresh's by a test across the three languages.
+- **The answer to a gesture outlives the refresh that failed beside it.** Two
+  snackbars replace one another rather than stack, and nothing weighed them: the
+  answer to what the user had just done was wiped within a fraction of a second
+  by the ten-second refresh loop. The screen's single banner belongs to the
+  activity, and a rule in `:core` settles which message gets it — an answer
+  outranks the state of a background refresh.
+- **The reordering hint on the favourites screen waits for two rows to reorder**,
+  instead of standing over the message inviting a first favourite.
+- **The back gesture draws where it leads on Android 13 and 14**, the framework
+  leaving `enableOnBackInvokedCallback` false there whatever the target is. The
+  Fairphone 3 on Android 15 logged the same warning at every launch under this
+  target, so the flag is declared rather than inferred.
+- **The state banner is a label, so it is no longer justified**: now that a
+  closure names its age it wraps, and justified it came out with its separator
+  adrift in the middle of a line spread bank to bank.
+
+### Removed
+
+- **`ACCESS_WIFI_STATE`**, which MapLibre's manifest added to the merged one
+  while nothing here — nor MapLibre itself, neither its classes nor its four
+  native libraries — ever read the Wi-Fi state. §10 says "no others" and the
+  list a user reads is the merged manifest, so the permission is taken back out
+  with `tools:node="remove"`.
+
+### Technical notes
+
+- The F-Droid recipe carries no `scanignore` any more. It switches the scanner
+  off for a whole file rather than accounting for what it found, and for every
+  version the entry is copied into; the reviewer of the first submission refused
+  it. The two JDK downloads it hid left the repository — the `foojay-resolver`
+  plugin and the `toolchainUrl.*` entries of `gradle-daemon-jvm.properties` —
+  and BRouter's `publishing` block is cut by a `prebuild` before the scan, so
+  what is scanned is what is compiled. `fdroid scanner` runs clean over the
+  source.
+- `fdroid rewritemeta`'s wrapping depends on the `ruamel.yaml` version and not
+  on `fdroidserver`'s: 0.18.12 and below reproduce the formatting their CI
+  accepted, 0.18.13 and above fold every long value. Measured, and recorded in
+  `docs/release.md`.
+
 ## [1.0.0]
 
 The first version published. What it adds over the alphas is written below; what
