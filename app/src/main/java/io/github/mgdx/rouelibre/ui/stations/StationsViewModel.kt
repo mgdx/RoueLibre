@@ -58,6 +58,25 @@ data class StationsUiState(
             query.isNotBlank() -> Emptiness.NoMatch
             else -> Emptiness.NothingLoaded
         }
+
+    /**
+     * Whether searching for [newQuery] hands the reader another set of
+     * stations.
+     *
+     * The one question the screen has to ask before typing changes anything,
+     * and the model's own before it rebuilds the list. A search that keeps
+     * different stations is a **different list**, shown from its first row —
+     * the nearest of the stations it kept is what the reader came for, and it
+     * is at the top. A query that is not a new one keeps the list exactly as
+     * it stands, scrolled where the reader left it: the field is written to
+     * again when the screen turns over, and a list jumping back to the top for
+     * that would take them off what they were reading.
+     *
+     * It says nothing of the availability refreshed every minute, which never
+     * changes the query: those refreshes hand back the same list with fresher
+     * counts, and must leave the reader where they are.
+     */
+    fun searchWouldChangeTheList(newQuery: String): Boolean = newQuery != query
 }
 
 /** What the screen must say when the list shows nothing. */
@@ -233,7 +252,7 @@ class StationsViewModel(
      */
     fun onQueryChanged(query: String) {
         mutableState.update { current ->
-            if (current.query == query) {
+            if (!current.searchWouldChangeTheList(query)) {
                 current
             } else {
                 current.copy(query = query, stations = visibleStations(query))
