@@ -12,6 +12,21 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
+/** Below two favourites there is no order to change, so nothing to say about it. */
+private const val REORDERABLE_FROM = 2
+
+/**
+ * Whether the reordering hint has anything to talk about (SPEC §7.5).
+ *
+ * A single favourite cannot be moved anywhere, and an empty list contradicts
+ * the invitation to add one that stands in its place. Held here rather than in
+ * the fragment so that the rule can be read, and tested, without an Android
+ * runtime (SPEC §14).
+ *
+ * @param favouriteCount how many favourites the screen is showing.
+ */
+internal fun canReorderFavourites(favouriteCount: Int): Boolean = favouriteCount >= REORDERABLE_FROM
+
 /**
  * The favourite stations, with their live availability (SPEC §7.5).
  *
