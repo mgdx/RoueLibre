@@ -74,6 +74,13 @@ class StationListFragment : Fragment() {
     /**
      * Whether the next list committed is to be shown from its first row.
      *
+     * Raised by the two gestures that hand the reader **another set of
+     * stations** — the press of "nearest station first", and a search that
+     * keeps other stations than the one before it. Not by the order the list
+     * gives itself when it appears, which scrolls nothing (SPEC §7.6), and not
+     * by the availability refreshed every minute, which hands back the same
+     * stations with fresher counts.
+     *
      * The order is settled by the model, the rows are handed to `ListAdapter`,
      * and the diff that reorders them runs on another thread: scrolling
      * straight after asking for the order scrolls the list that is still on
@@ -165,7 +172,21 @@ class StationListFragment : Fragment() {
         // Filtering on every keystroke: a few hundred entries already in
         // memory, no debounce is warranted here.
         views.searchInput.doAfterTextChanged { text ->
-            viewModel.onQueryChanged(text?.toString().orEmpty())
+            val query = text?.toString().orEmpty()
+            // A search that keeps other stations hands the reader another
+            // list, and it is shown from its first row like the reordered one
+            // — see [showFromTheTop]. Without this the list kept the row it
+            // was anchored on and found it again in the next one: three
+            // matches shown from the one 1.3 km away, and the whole list
+            // brought back by clearing the field still shown from it, the
+            // station 40 m off being somewhere above the top of the screen.
+            //
+            // **Only where the query really changes**, which is what tells
+            // this gesture from the field being written to again as the
+            // screen turns over: the same question asked twice must leave the
+            // reader where they had scrolled to.
+            if (viewModel.state.value.searchWouldChangeTheList(query)) showFromTheTop = true
+            viewModel.onQueryChanged(query)
         }
         views.searchInput.setOnEditorActionListener { view, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
