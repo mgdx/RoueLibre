@@ -78,9 +78,28 @@ class DatasetDownloader(
             if (!response.isSuccessful) {
                 Outcome.Failure(DataError.ServerRefused(response.code))
             } else {
-                Outcome.Success(response.body.string())
+                // The same rule as the transfer below: an error raised while
+                // the body comes down is the connection going away, and it is
+                // the only thing here that can be. A manifest that will not
+                // parse fails after this point, in the reader, and keeps its
+                // own answer.
+                val document = try {
+                    response.body.string()
+                } catch (error: InterruptedIOException) {
+                    // An expiry, which already has its own answer.
+                    throw error
+                } catch (error: IOException) {
+                    throw ConnectionLost(error)
+                }
+                Outcome.Success(document)
             }
         }
+    } catch (_: ConnectionLost) {
+        // The connection died while the manifest was coming down. Nothing is
+        // wrong with what the host publishes, so saying the manifest is
+        // unreadable sends the reader after a fault nobody made: there is only
+        // a network to wait for, and a check to make again.
+        Outcome.Failure(DataError.Offline)
     } catch (error: SocketTimeoutException) {
         Outcome.Failure(DataError.Timeout)
     } catch (_: UnknownHostException) {
@@ -305,7 +324,7 @@ class DatasetDownloader(
     /**
      * The connection went away while the bytes were coming down.
      *
-     * It exists to carry that one fact out of the copy loop, because the type
+     * It exists to carry that one fact out of the read, because the type
      * of the underlying error does not tell it: a socket closed halfway through
      * a body surfaces as `ProtocolException: unexpected end of stream`, the
      * same family as a response whose shape makes no sense. What separates the

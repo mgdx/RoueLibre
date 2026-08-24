@@ -247,6 +247,51 @@ class DatasetDownloaderTest {
         assertEquals(1, manifest.datasets.size)
     }
 
+    @Test
+    fun `a manifest cut in the middle is a lost connection`() = runTest {
+        // The same cut as during a transfer, on the other gesture: pressing
+        // "Check for updates" as the Wi-Fi drops. What the host publishes is
+        // beyond reproach — the document below is the one the reader accepts —
+        // so answering that its manifest is unreadable sends the reader after a
+        // fault nobody made.
+        server.enqueue(
+            MockResponse.Builder()
+                .code(200)
+                .body(
+                    """
+                    {"formatVersion":2,"releaseTag":"data-2026-08","network":"vlille",
+                     "datasets":[{"id":"tiles","files":[
+                       {"name":"tiles.mbtiles","url":"https://example.org/t","sizeBytes":10,
+                        "sha256":"${"ab".repeat(32)}"}]}]}
+                    """.trimIndent(),
+                )
+                .onResponseBody(SocketEffect.CloseSocket())
+                .build(),
+        )
+
+        val outcome = downloader.fetchManifest(server.url("/manifest.json").toString())
+
+        assertTrue("expected a failure, got: $outcome", outcome is Outcome.Failure)
+        assertEquals(DataError.Offline, (outcome as Outcome.Failure).error)
+    }
+
+    @Test
+    fun `a manifest that will not parse stays an unreadable manifest`() = runTest {
+        // The counterpart of the cut above, and the reason the two cannot share
+        // one wording: the whole document came down from a host that answered
+        // perfectly, and it is not a manifest. That one is the publisher's to
+        // put right, not the reader's network.
+        server.enqueue(MockResponse.Builder().code(200).body("""{"formatVersion":""").build())
+
+        val outcome = downloader.fetchManifest(server.url("/manifest.json").toString())
+
+        assertTrue("expected a failure, got: $outcome", outcome is Outcome.Failure)
+        assertTrue(
+            "expected MalformedResponse, got $outcome",
+            (outcome as Outcome.Failure).error is DataError.MalformedResponse,
+        )
+    }
+
     private fun datasetOf(sha256: String) = ManifestDataset(
         kind = DatasetKind.Tiles,
         description = "Fond de carte",
