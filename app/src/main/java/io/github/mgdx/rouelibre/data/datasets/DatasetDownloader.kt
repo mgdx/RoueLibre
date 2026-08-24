@@ -78,9 +78,28 @@ class DatasetDownloader(
             if (!response.isSuccessful) {
                 Outcome.Failure(DataError.ServerRefused(response.code))
             } else {
-                Outcome.Success(response.body.string())
+                // The same rule as the transfer below: an error raised while
+                // the body comes down is the connection going away, and it is
+                // the only thing here that can be. A manifest that will not
+                // parse fails after this point, in the reader, and keeps its
+                // own answer.
+                val document = try {
+                    response.body.string()
+                } catch (error: InterruptedIOException) {
+                    // An expiry, which already has its own answer.
+                    throw error
+                } catch (error: IOException) {
+                    throw ConnectionLost(error)
+                }
+                Outcome.Success(document)
             }
         }
+    } catch (_: ConnectionLost) {
+        // The connection died while the manifest was coming down. Nothing is
+        // wrong with what the host publishes, so saying the manifest is
+        // unreadable sends the reader after a fault nobody made: there is only
+        // a network to wait for, and a check to make again.
+        Outcome.Failure(DataError.Offline)
     } catch (error: SocketTimeoutException) {
         Outcome.Failure(DataError.Timeout)
     } catch (_: UnknownHostException) {
@@ -219,7 +238,21 @@ class DatasetDownloader(
                         // what has arrived stays in the partial file for the
                         // resumption to pick up.
                         context.ensureActive()
-                        val read = source.read(buffer)
+                        val read = try {
+                            source.read(buffer)
+                        } catch (error: InterruptedIOException) {
+                            // An expiry, which already has its own answer.
+                            throw error
+                        } catch (error: IOException) {
+                            // Reading the socket is the only step of this
+                            // transfer that can fail because the network went
+                            // away, and the only one where the failure says
+                            // nothing about the file itself. Writing to the
+                            // device, opening the response, reading the status
+                            // line all fail for their own reasons and keep
+                            // their own answers.
+                            throw ConnectionLost(error)
+                        }
                         if (read < 0) break
                         sink.write(buffer, 0, read)
                         written += read
@@ -229,6 +262,14 @@ class DatasetDownloader(
             }
         }
         Outcome.Success(Unit)
+    } catch (_: ConnectionLost) {
+        // The connection died under the transfer. What sits in the partial file
+        // is not a corrupted file, it is an unfinished one, and it is exactly
+        // what the next attempt resumes from. Announced as unreadable — which
+        // is what a truncated body's `unexpected end of stream` used to
+        // produce — it sent the reader looking for a fault at the host's end
+        // while their Wi-Fi had simply dropped.
+        Outcome.Failure(DataError.Offline)
     } catch (_: InterruptedIOException) {
         // A deliberate interruption or an expiry: the partial file stays, which
         // is precisely what will allow resuming.
@@ -279,6 +320,17 @@ class DatasetDownloader(
         }
         return digest.digest().joinToString("") { "%02x".format(it) }
     }
+
+    /**
+     * The connection went away while the bytes were coming down.
+     *
+     * It exists to carry that one fact out of the read, because the type
+     * of the underlying error does not tell it: a socket closed halfway through
+     * a body surfaces as `ProtocolException: unexpected end of stream`, the
+     * same family as a response whose shape makes no sense. What separates the
+     * two here is **where** the error was raised, not what it is.
+     */
+    private class ConnectionLost(cause: IOException) : IOException(cause)
 
     private companion object {
         /**
