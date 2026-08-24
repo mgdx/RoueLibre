@@ -17,12 +17,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.databinding.FragmentStorageBinding
+import io.github.mgdx.rouelibre.ui.ConfirmationDialogFragment
 import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.textLocale
 import kotlinx.coroutines.launch
@@ -107,8 +107,34 @@ class StorageFragment : Fragment() {
             viewModel.checkForUpdates()
         }
 
+        listenForAnswers()
         observeState()
         observeMessages()
+    }
+
+    /**
+     * Collects the answers to the two questions this screen asks.
+     *
+     * Registered as the screen is built, and not where each question is put:
+     * a question the phone turned over on is already back up by then, and its
+     * answer would arrive with nobody listening for it.
+     */
+    private fun listenForAnswers() {
+        ConfirmationDialogFragment.onAnswer(
+            childFragmentManager,
+            viewLifecycleOwner,
+            DELETION_ANSWER,
+        ) { confirmed, payload ->
+            val kind = payload.getString(DATASET_KIND) ?: return@onAnswer
+            if (confirmed) viewModel.delete(DatasetKind.valueOf(kind))
+        }
+        ConfirmationDialogFragment.onAnswer(
+            childFragmentManager,
+            viewLifecycleOwner,
+            METERING_ANSWER,
+        ) { confirmed, _ ->
+            if (confirmed) viewModel.downloadAnyway()
+        }
     }
 
     /**
@@ -196,18 +222,18 @@ class StorageFragment : Fragment() {
             .firstOrNull { it.kind == kind }
             ?.installed
             ?: return
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.dataset_delete_title)
-            .setMessage(
-                getString(
-                    R.string.dataset_delete_body,
-                    getString(kind.nameResource()),
-                    formatBytes(requireContext(), installed.sizeBytes),
-                ),
-            )
-            .setPositiveButton(R.string.dataset_delete) { _, _ -> viewModel.delete(kind) }
-            .setNegativeButton(R.string.action_cancel, null)
-            .show()
+        ConfirmationDialogFragment.ask(
+            manager = childFragmentManager,
+            requestKey = DELETION_ANSWER,
+            title = R.string.dataset_delete_title,
+            message = getString(
+                R.string.dataset_delete_body,
+                getString(kind.nameResource()),
+                formatBytes(requireContext(), installed.sizeBytes),
+            ),
+            confirm = R.string.dataset_delete,
+            payload = Bundle().apply { putString(DATASET_KIND, kind.name) },
+        )
     }
 
     /**
@@ -222,27 +248,24 @@ class StorageFragment : Fragment() {
      * again.
      */
     private fun offerToDownloadAnyway(held: StorageMessage.HeldBackByMetering) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(
+        ConfirmationDialogFragment.ask(
+            manager = childFragmentManager,
+            requestKey = METERING_ANSWER,
+            title = if (held.wasUnderWay) {
+                R.string.download_stopped_title
+            } else {
+                R.string.download_held_back_title
+            },
+            message = getString(
                 if (held.wasUnderWay) {
-                    R.string.download_stopped_title
+                    R.string.download_stopped_body
                 } else {
-                    R.string.download_held_back_title
+                    R.string.download_held_back_body
                 },
-            )
-            .setMessage(
-                getString(
-                    if (held.wasUnderWay) {
-                        R.string.download_stopped_body
-                    } else {
-                        R.string.download_held_back_body
-                    },
-                    formatBytes(requireContext(), held.pendingBytes),
-                ),
-            )
-            .setPositiveButton(R.string.download_anyway) { _, _ -> viewModel.downloadAnyway() }
-            .setNegativeButton(R.string.action_cancel, null)
-            .show()
+                formatBytes(requireContext(), held.pendingBytes),
+            ),
+            confirm = R.string.download_anyway,
+        )
     }
 
     /**
@@ -259,6 +282,13 @@ class StorageFragment : Fragment() {
 
     companion object {
         private const val ARGUMENT_CHECK_ON_OPEN = "check-on-open"
+
+        /** The keys the two questions of this screen answer under. */
+        private const val DELETION_ANSWER = "dataset-deletion"
+        private const val METERING_ANSWER = "download-anyway"
+
+        /** Which set a deletion was asked about, across a rebuild. */
+        private const val DATASET_KIND = "dataset-kind"
 
         /** What [showMessage] lets a snackbar grow to, and no further. */
         private const val MESSAGE_LINES = 4

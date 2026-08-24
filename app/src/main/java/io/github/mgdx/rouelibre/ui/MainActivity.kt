@@ -18,7 +18,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.withStarted
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.BuildConfig
 import io.github.mgdx.rouelibre.R
@@ -204,6 +203,7 @@ class MainActivity : AppCompatActivity() {
         binding = created
         setContentView(created.root)
         followUnits()
+        listenForTheCityAnswer()
 
         // On recreation — rotation, theme change — the fragments are restored
         // by the system; replacing them would erase their state, and replaying
@@ -594,19 +594,44 @@ class MainActivity : AppCompatActivity() {
         val city = checkNotNull(here)
 
         val installed = container.datasetStore.occupiedBytesOf(city.id) > 0
-        MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.city_here_title)
-            .setMessage(
-                getString(
-                    if (installed) R.string.city_here_installed_body else R.string.city_here_body,
-                    cityLabel(city.displayName, city.mainCity),
-                ),
-            )
-            .setPositiveButton(
-                if (installed) R.string.city_here_use else R.string.city_here_install,
-            ) { _, _ -> switchTo(city.id, installed) }
-            .setNegativeButton(R.string.action_cancel) { _, _ -> declineCity(city.id) }
-            .show()
+        ConfirmationDialogFragment.ask(
+            manager = supportFragmentManager,
+            requestKey = CITY_HERE_ANSWER,
+            title = R.string.city_here_title,
+            message = getString(
+                if (installed) R.string.city_here_installed_body else R.string.city_here_body,
+                cityLabel(city.displayName, city.mainCity),
+            ),
+            confirm = if (installed) R.string.city_here_use else R.string.city_here_install,
+            payload = Bundle().apply {
+                putString(CITY_ID, city.id)
+                putBoolean(CITY_INSTALLED, installed)
+            },
+        )
+    }
+
+    /**
+     * Collects the answer to the city proposed on opening.
+     *
+     * Registered in [onCreate], and not where the question is put: after the
+     * phone is turned over the question is already back up, and its answer
+     * would arrive with nobody listening for it. Refusing is an answer like
+     * the other and is remembered as such — that is what keeps the same
+     * question from coming back at the next launch.
+     */
+    private fun listenForTheCityAnswer() {
+        ConfirmationDialogFragment.onAnswer(
+            supportFragmentManager,
+            this,
+            CITY_HERE_ANSWER,
+        ) { confirmed, payload ->
+            val cityId = payload.getString(CITY_ID) ?: return@onAnswer
+            if (confirmed) {
+                switchTo(cityId, payload.getBoolean(CITY_INSTALLED))
+            } else {
+                declineCity(cityId)
+            }
+        }
     }
 
     /**
@@ -840,5 +865,14 @@ class MainActivity : AppCompatActivity() {
             ?.bottom
             ?: 0
         return (views.root.height - bannerTop - bars).coerceAtLeast(0)
+    }
+
+    private companion object {
+        /** The key the city proposed on opening is answered under. */
+        const val CITY_HERE_ANSWER = "activity-city-here"
+
+        /** What the question carries across a rebuild about that city. */
+        const val CITY_ID = "city-id"
+        const val CITY_INSTALLED = "city-installed"
     }
 }

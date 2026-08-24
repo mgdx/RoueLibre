@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
@@ -18,6 +17,7 @@ import io.github.mgdx.rouelibre.data.AppTheme
 import io.github.mgdx.rouelibre.data.OpeningScreen
 import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.databinding.FragmentSettingsBinding
+import io.github.mgdx.rouelibre.ui.ChoiceDialogFragment
 import io.github.mgdx.rouelibre.ui.about.AboutFragment
 import io.github.mgdx.rouelibre.ui.chosenLanguage
 import io.github.mgdx.rouelibre.ui.city.CityFragment
@@ -85,6 +85,32 @@ class SettingsFragment : Fragment() {
         setUpOfflineData(views)
         setUpDownloadPolicy(views)
         setUpAbout(views)
+        listenForTheLanguageChosen()
+    }
+
+    /**
+     * Collects the language picked from the list.
+     *
+     * Registered as the screen is built, and not where the list is put up: a
+     * list the phone turned over on is already back by then, and its answer
+     * would arrive with nobody listening for it.
+     *
+     * The index is read against [offeredLanguages] rather than against a copy
+     * carried in the answer: that list is derived from the translations that
+     * exist and ordered by each language's own name — a name that does not
+     * depend on the language being spoken — so it comes back identical however
+     * many times the screen is rebuilt.
+     */
+    private fun listenForTheLanguageChosen() {
+        ChoiceDialogFragment.onAnswer(
+            childFragmentManager,
+            viewLifecycleOwner,
+            LANGUAGE_ANSWER,
+        ) { chosen, _ ->
+            // Index 0 is "follow the system", which is the absence of a
+            // language rather than one of them.
+            speakLanguage(offeredLanguages().getOrNull(chosen - 1))
+        }
     }
 
     override fun onDestroyView() {
@@ -397,22 +423,20 @@ class SettingsFragment : Fragment() {
      */
     private fun chooseLanguage() {
         val offered = offeredLanguages()
-        val names = (
+        val names =
             listOf(getString(R.string.settings_language_system)) + offered.map { it.endonym() }
-            ).toTypedArray()
         val chosen = chosenLanguage()
         val ticked =
             if (chosen == null) 0 else offered.indexOfFirst { it.language == chosen.language } + 1
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.settings_language_title)
-            .setSingleChoiceItems(names, ticked) { dialog, which ->
-                dialog.dismiss()
-                // Index 0 is "follow the system", which is the absence of a
-                // language rather than one of them.
-                speakLanguage(offered.getOrNull(which - 1))
-            }
-            .setNegativeButton(R.string.action_cancel, null)
-            .show()
+        ChoiceDialogFragment.ask(
+            manager = childFragmentManager,
+            requestKey = LANGUAGE_ANSWER,
+            title = R.string.settings_language_title,
+            labels = names,
+            // The language in service travels in the arguments, so the list
+            // that comes back after a rotation still shows it ticked.
+            ticked = ticked,
+        )
     }
 
     /**
@@ -508,5 +532,10 @@ class SettingsFragment : Fragment() {
             .replace(R.id.content, fragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    private companion object {
+        /** The key the language picked from the list is answered under. */
+        const val LANGUAGE_ANSWER = "settings-language"
     }
 }

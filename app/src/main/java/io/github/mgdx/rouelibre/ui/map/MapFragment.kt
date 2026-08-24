@@ -19,7 +19,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
@@ -38,6 +37,7 @@ import io.github.mgdx.rouelibre.core.station.stationsShownOnMap
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
+import io.github.mgdx.rouelibre.ui.ConfirmationDialogFragment
 import io.github.mgdx.rouelibre.ui.MAP_BACK_STACK_ENTRY
 import io.github.mgdx.rouelibre.ui.MainActivity
 import io.github.mgdx.rouelibre.ui.STATION_LIST_BACK_STACK_ENTRY
@@ -319,6 +319,7 @@ class MapFragment : Fragment() {
         restorePickedPlace(savedInstanceState)
         showRequestedPlace(savedInstanceState)
         listenForPickedAddress()
+        listenForAnswers()
         applySystemInsets(views)
         standClearOfTheBanner()
         views.map.getMapAsync(::onMapReady)
@@ -932,28 +933,63 @@ class MapFragment : Fragment() {
             return
         }
         if (here == null) {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.map_outside_city_title)
-                .setMessage(getString(R.string.map_outside_city_message, servedLabel))
-                .setPositiveButton(R.string.city_choose) { _, _ -> show(CityFragment()) }
-                .setNegativeButton(R.string.action_cancel, null)
-                .show()
+            ConfirmationDialogFragment.ask(
+                manager = childFragmentManager,
+                requestKey = ELSEWHERE_ANSWER,
+                title = R.string.map_outside_city_title,
+                message = getString(R.string.map_outside_city_message, servedLabel),
+                confirm = R.string.city_choose,
+            )
             return
         }
         val installed = container.datasetStore.occupiedBytesOf(here.id) > 0
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.city_here_title)
-            .setMessage(
-                getString(
-                    if (installed) R.string.city_here_installed_body else R.string.city_here_body,
-                    requireContext().cityLabel(here.displayName, here.mainCity),
-                ),
-            )
-            .setPositiveButton(
-                if (installed) R.string.city_here_use else R.string.city_here_install,
-            ) { _, _ -> serve(here.id, installed) }
-            .setNegativeButton(R.string.action_cancel) { _, _ -> declineCity(here.id) }
-            .show()
+        ConfirmationDialogFragment.ask(
+            manager = childFragmentManager,
+            requestKey = CITY_HERE_ANSWER,
+            title = R.string.city_here_title,
+            message = getString(
+                if (installed) R.string.city_here_installed_body else R.string.city_here_body,
+                requireContext().cityLabel(here.displayName, here.mainCity),
+            ),
+            confirm = if (installed) R.string.city_here_use else R.string.city_here_install,
+            payload = Bundle().apply {
+                putString(CITY_ID, here.id)
+                putBoolean(CITY_INSTALLED, installed)
+            },
+        )
+    }
+
+    /**
+     * Collects the answers to the two questions this screen asks.
+     *
+     * Registered as the screen is built, and not where each question is put:
+     * a question the phone turned over on is already back up by then, and its
+     * answer would arrive with nobody listening for it.
+     *
+     * Refusing the city one is standing in is an answer like the other, and is
+     * remembered as such: a "no" that lasted only until the screen was rebuilt
+     * would put the same question again at the next press.
+     */
+    private fun listenForAnswers() {
+        ConfirmationDialogFragment.onAnswer(
+            childFragmentManager,
+            viewLifecycleOwner,
+            ELSEWHERE_ANSWER,
+        ) { confirmed, _ ->
+            if (confirmed) show(CityFragment())
+        }
+        ConfirmationDialogFragment.onAnswer(
+            childFragmentManager,
+            viewLifecycleOwner,
+            CITY_HERE_ANSWER,
+        ) { confirmed, payload ->
+            val cityId = payload.getString(CITY_ID) ?: return@onAnswer
+            if (confirmed) {
+                serve(cityId, payload.getBoolean(CITY_INSTALLED))
+            } else {
+                declineCity(cityId)
+            }
+        }
     }
 
     /**
@@ -1491,6 +1527,14 @@ class MapFragment : Fragment() {
 
         private const val ARGUMENT_PICKING = "picking-mode"
         private const val ARGUMENT_SHOWN_PLACE = "place-to-show"
+
+        /** The keys the two questions of this screen answer under. */
+        private const val ELSEWHERE_ANSWER = "map-outside-city"
+        private const val CITY_HERE_ANSWER = "map-city-here"
+
+        /** What a question carries across a rebuild about the city it names. */
+        private const val CITY_ID = "city-id"
+        private const val CITY_INSTALLED = "city-installed"
 
         /** Opens the map to designate a point on it (SPEC §7.3). */
         fun forPicking(): MapFragment = MapFragment().apply {

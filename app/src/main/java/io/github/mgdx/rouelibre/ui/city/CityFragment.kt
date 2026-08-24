@@ -13,7 +13,6 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
@@ -23,6 +22,7 @@ import io.github.mgdx.rouelibre.core.config.CityEntry
 import io.github.mgdx.rouelibre.core.config.filterCities
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentCityBinding
+import io.github.mgdx.rouelibre.ui.ConfirmationDialogFragment
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -62,7 +62,7 @@ class CityFragment : Fragment() {
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
 
-    private val adapter = CityAdapter(onChoose = ::choose, onDelete = ::confirmDelete)
+    private val adapter = CityAdapter(onChoose = { choose(it.id) }, onDelete = ::confirmDelete)
 
     /**
      * Requests location permission, and never insists.
@@ -119,7 +119,35 @@ class CityFragment : Fragment() {
         }
         views.emptyAction.setOnClickListener { views.searchInput.text?.clear() }
 
+        listenForAnswers()
         showCatalogue()
+    }
+
+    /**
+     * Collects the answers to the two questions this screen asks.
+     *
+     * Registered as the screen is built, and not where each question is put:
+     * a question the phone turned over on is already back up by then, and its
+     * answer would arrive with nobody listening for it.
+     */
+    private fun listenForAnswers() {
+        ConfirmationDialogFragment.onAnswer(
+            childFragmentManager,
+            viewLifecycleOwner,
+            PROPOSAL_ANSWER,
+        ) { confirmed, payload ->
+            val cityId = payload.getString(CITY_ID) ?: return@onAnswer
+            if (confirmed) choose(cityId)
+        }
+        ConfirmationDialogFragment.onAnswer(
+            childFragmentManager,
+            viewLifecycleOwner,
+            DELETION_ANSWER,
+        ) { confirmed, payload ->
+            val cityId = payload.getString(CITY_ID) ?: return@onAnswer
+            val displayName = payload.getString(CITY_NAME) ?: return@onAnswer
+            if (confirmed) delete(cityId, displayName)
+        }
     }
 
     override fun onDestroyView() {
@@ -235,12 +263,14 @@ class CityFragment : Fragment() {
     }
 
     private fun confirmProposal(city: CityEntry) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.city_proposal_title)
-            .setMessage(getString(R.string.city_proposal_body, city.displayName))
-            .setPositiveButton(R.string.city_proposal_accept) { _, _ -> choose(city) }
-            .setNegativeButton(R.string.action_cancel, null)
-            .show()
+        ConfirmationDialogFragment.ask(
+            manager = childFragmentManager,
+            requestKey = PROPOSAL_ANSWER,
+            title = R.string.city_proposal_title,
+            message = getString(R.string.city_proposal_body, city.displayName),
+            confirm = R.string.city_proposal_accept,
+            payload = Bundle().apply { putString(CITY_ID, city.id) },
+        )
     }
 
     // ------------------------------------------------------------ choice --
@@ -255,9 +285,9 @@ class CityFragment : Fragment() {
      * left no way back: the first press of Back did nothing, and the second
      * left the application altogether.
      */
-    private fun choose(city: CityEntry) {
+    private fun choose(cityId: String) {
         viewLifecycleOwner.lifecycleScope.launch {
-            container.switchToCity(city.id)
+            container.switchToCity(cityId)
             parentFragmentManager.beginTransaction()
                 .replace(R.id.content, StorageFragment.checkingForUpdates())
                 .addToBackStack(null)
@@ -274,24 +304,32 @@ class CityFragment : Fragment() {
      * worth making sure of.
      */
     private fun confirmDelete(city: CityEntry) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.city_delete_title)
-            .setMessage(getString(R.string.city_delete_body, city.displayName))
-            .setPositiveButton(R.string.city_delete_confirm) { _, _ -> delete(city) }
-            .setNegativeButton(R.string.action_cancel, null)
-            .show()
+        ConfirmationDialogFragment.ask(
+            manager = childFragmentManager,
+            requestKey = DELETION_ANSWER,
+            title = R.string.city_delete_title,
+            message = getString(R.string.city_delete_body, city.displayName),
+            confirm = R.string.city_delete_confirm,
+            payload = Bundle().apply {
+                putString(CITY_ID, city.id)
+                // The name travels with the identifier because the sentence
+                // said afterwards names the city that has just gone, and the
+                // row it was read from is about to leave the list.
+                putString(CITY_NAME, city.displayName)
+            },
+        )
     }
 
-    private fun delete(city: CityEntry) {
+    private fun delete(cityId: String, displayName: String) {
         viewLifecycleOwner.lifecycleScope.launch {
-            container.datasetStore.deleteCity(city.id)
+            container.datasetStore.deleteCity(cityId)
             // Deleting the data of the city in service means serving none:
             // keeping it active would leave an empty map with nothing to
             // explain why.
-            if (container.preferences.activeCityId() == city.id) {
+            if (container.preferences.activeCityId() == cityId) {
                 container.switchToCity(null)
             }
-            showMessage(getString(R.string.city_deleted, city.displayName))
+            showMessage(getString(R.string.city_deleted, displayName))
             catalogue?.let { publish(it) }
         }
     }
@@ -311,5 +349,15 @@ class CityFragment : Fragment() {
     private fun hideKeyboard(view: View) {
         WindowCompat.getInsetsController(requireActivity().window, view)
             .hide(WindowInsetsCompat.Type.ime())
+    }
+
+    private companion object {
+        /** The keys the two questions of this screen answer under. */
+        const val PROPOSAL_ANSWER = "city-proposal"
+        const val DELETION_ANSWER = "city-deletion"
+
+        /** What a question carries across a rebuild about the city it names. */
+        const val CITY_ID = "city-id"
+        const val CITY_NAME = "city-name"
     }
 }

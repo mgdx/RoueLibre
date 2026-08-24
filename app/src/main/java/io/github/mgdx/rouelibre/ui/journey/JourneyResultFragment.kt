@@ -287,6 +287,9 @@ class JourneyResultFragment : Fragment() {
             null,
         )
         views.detail.navigate.setOnClickListener { offerNavigation() }
+        // The menu that press puts up survives a rotation, and its answer has
+        // to find a listener waiting when it does.
+        handover.listenForTheChosenLeg()
         views.origin.setOnClickListener { picker.choose(true, destination.position) }
         views.destination.setOnClickListener { picker.choose(false, origin.position) }
         views.swap.setOnClickListener { swapEndpoints() }

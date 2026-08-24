@@ -4,13 +4,14 @@ import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
+import io.github.mgdx.rouelibre.ui.ChoiceDialogFragment
 import io.github.mgdx.rouelibre.ui.MainActivity
 
 /**
@@ -55,7 +56,7 @@ class JourneyHandover(private val fragment: Fragment, private val onMessage: (St
         val targets = targetsOf(journey)
         when (targets.size) {
             0 -> return
-            1 -> handOver(targets.first())
+            1 -> targets.first().let { handOver(it.place, it.position) }
             else -> ask(targets)
         }
     }
@@ -112,12 +113,47 @@ class JourneyHandover(private val fragment: Fragment, private val onMessage: (St
     )
 
     private fun ask(targets: List<Target>) {
-        MaterialAlertDialogBuilder(fragment.requireContext())
-            .setTitle(R.string.journey_navigate_which)
-            .setItems(targets.map { it.leg }.toTypedArray()) { _, chosen ->
-                handOver(targets[chosen])
-            }
-            .show()
+        ChoiceDialogFragment.ask(
+            manager = fragment.childFragmentManager,
+            requestKey = LEG_ANSWER,
+            title = R.string.journey_navigate_which,
+            labels = targets.map { it.leg },
+            // The menu is left by the back gesture, as it always was: a
+            // "cancel" row under three legs would be a fourth thing to read.
+            dismiss = ChoiceDialogFragment.NO_BUTTON,
+            // The ends themselves travel with the question. The journey they
+            // were read from is recomputed when the screen is rebuilt, and a
+            // recomputation is a fresh reading of the availability: it can
+            // come back with other stations, and the index would then name a
+            // leg nobody chose.
+            payload = Bundle().apply {
+                putStringArray(PLACES, targets.map { it.place }.toTypedArray())
+                putDoubleArray(LATITUDES, targets.map { it.position.latitude }.toDoubleArray())
+                putDoubleArray(LONGITUDES, targets.map { it.position.longitude }.toDoubleArray())
+            },
+        )
+    }
+
+    /**
+     * Collects the leg chosen from the menu.
+     *
+     * Called where the screen is built rather than where the menu is put up:
+     * the menu is back on its own after a rotation, and its answer would
+     * otherwise arrive with nobody listening for it. That rotation used to
+     * take the menu away without a word.
+     */
+    fun listenForTheChosenLeg() {
+        ChoiceDialogFragment.onAnswer(
+            fragment.childFragmentManager,
+            fragment.viewLifecycleOwner,
+            LEG_ANSWER,
+        ) { chosen, payload ->
+            val places = payload.getStringArray(PLACES) ?: return@onAnswer
+            val latitudes = payload.getDoubleArray(LATITUDES) ?: return@onAnswer
+            val longitudes = payload.getDoubleArray(LONGITUDES) ?: return@onAnswer
+            if (chosen !in places.indices) return@onAnswer
+            handOver(places[chosen], Coordinates(latitudes[chosen], longitudes[chosen]))
+        }
     }
 
     /**
@@ -136,12 +172,12 @@ class JourneyHandover(private val fragment: Fragment, private val onMessage: (St
      * The choice itself stays Android's chooser. The application picks no
      * navigation application for the user, here no more than anywhere else.
      */
-    private fun handOver(target: Target) {
+    private fun handOver(place: String, position: Coordinates) {
         val context = fragment.requireContext()
-        val point = "${target.position.latitude},${target.position.longitude}"
+        val point = "${position.latitude},${position.longitude}"
         // A station's name holds spaces, and sometimes an ampersand: encoded,
         // or the receiving application reads a truncated label.
-        val label = Uri.encode(target.place)
+        val label = Uri.encode(place)
         val place = Intent(Intent.ACTION_VIEW, "geo:$point?q=$point($label)".toUri())
 
         val guides = context.packageManager.queryIntentActivities(place, 0)
@@ -162,5 +198,15 @@ class JourneyHandover(private val fragment: Fragment, private val onMessage: (St
             // The chooser itself can be missing on a stripped-down system.
             onMessage(fragment.getString(R.string.station_no_navigation_app))
         }
+    }
+
+    private companion object {
+        /** The key the leg chosen from the menu is answered under. */
+        const val LEG_ANSWER = "journey-leg-handover"
+
+        /** The ends the menu was put up with, carried across a rebuild. */
+        const val PLACES = "places"
+        const val LATITUDES = "latitudes"
+        const val LONGITUDES = "longitudes"
     }
 }
