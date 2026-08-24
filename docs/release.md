@@ -229,9 +229,9 @@ RepoType: git
 Repo: https://github.com/mgdx/RoueLibre.git
 
 Builds:
-  - versionName: 1.0.0
-    versionCode: 41
-    commit: 433f49c402c50253ac084d7cebf09e8db09a9440
+  - versionName: 1.1.0
+    versionCode: 51
+    commit: a49c864c329a455943c40cceb2879868e9d0dad1
     submodules: true
     gradle:
       - yes
@@ -243,7 +243,7 @@ Builds:
       - third_party/brouter/brouter-routing-app
     ndk: r28c
 
-  # … and the same for 42 x86, 43 x86_64, 44 arm64-v8a
+  # … and the same for 52 x86, 53 x86_64, 54 arm64-v8a
 
 AllowedAPKSigningKeys: 1de586d680f3296f2d1aa05dd5147fd3de187a5da15a1f5d887d0a82a1e6ed89
 
@@ -254,8 +254,8 @@ VercodeOperation:
   - '%c * 10 + 2'
   - '%c * 10 + 3'
   - '%c * 10 + 4'
-CurrentVersion: 1.0.0
-CurrentVersionCode: 44
+CurrentVersion: 1.1.0
+CurrentVersionCode: 54
 ```
 
 **`commit` names a full commit hash, never the tag.** A reviewer asked for it
