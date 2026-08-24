@@ -277,16 +277,16 @@ class JourneyResultFragment : Fragment() {
         // trace, and the wait must not claim to be looking for the best of a
         // choice that does not exist.
         if (usesOwnBike) views.computingLabel.setText(R.string.journey_computing_own_bike)
-        views.summaryBlock.setOnClickListener { openDetail() }
+        views.detail.summaryBlock.setOnClickListener { openDetail() }
         // What the press does, rather than the bare "activate" a screen reader
         // would otherwise announce over a block of four figures.
         ViewCompat.replaceAccessibilityAction(
-            views.summaryBlock,
+            views.detail.summaryBlock,
             AccessibilityActionCompat.ACTION_CLICK,
             getString(R.string.journey_detail_open),
             null,
         )
-        views.navigate.setOnClickListener { offerNavigation() }
+        views.detail.navigate.setOnClickListener { offerNavigation() }
         views.origin.setOnClickListener { picker.choose(true, destination.position) }
         views.destination.setOnClickListener { picker.choose(false, origin.position) }
         views.swap.setOnClickListener { swapEndpoints() }
@@ -344,7 +344,7 @@ class JourneyResultFragment : Fragment() {
         withBikeFleet { lent ->
             fleet = lent
             val views = binding ?: return@withBikeFleet
-            views.shape.fleet = lent
+            views.detail.shape.fleet = lent
             views.computingBike.fleet = lent
             if (styleLoaded) {
                 mapLibreMap?.style?.let {
@@ -389,14 +389,14 @@ class JourneyResultFragment : Fragment() {
         withOwnBikeKind { declared ->
             ownBikeKind = declared
             val views = binding ?: return@withOwnBikeKind
-            views.shape.ownBikeKind = declared
+            views.detail.shape.ownBikeKind = declared
             if (styleLoaded) {
                 mapLibreMap?.style?.let {
                     JourneyMarkers.registerImages(requireContext(), it, fleet, declared)
                 }
             }
             (viewModel.state.value.plan as? JourneyPlan.OwnBike)?.let {
-                views.summary.text = requireContext().ownBikeSummary(it.ride, declared)
+                views.detail.summary.text = requireContext().ownBikeSummary(it.ride, declared)
             }
         }
     }
@@ -660,7 +660,7 @@ class JourneyResultFragment : Fragment() {
     private fun show(state: JourneyUiState) {
         val views = binding ?: return
         views.computing.isVisible = state.isComputing
-        views.detail.isVisible = !state.isComputing
+        views.detail.root.isVisible = !state.isComputing
         if (state.isComputing) return
 
         drawJourney(state)
@@ -708,8 +708,8 @@ class JourneyResultFragment : Fragment() {
      */
     private fun showTotal(text: CharSequence, figure: Boolean = true) {
         val views = binding ?: return
-        views.totalTime.setSingleLine(figure)
-        views.totalTime.text = text
+        views.detail.totalTime.setSingleLine(figure)
+        views.detail.totalTime.text = text
     }
 
     /**
@@ -722,7 +722,7 @@ class JourneyResultFragment : Fragment() {
      */
     private fun showSummary(option: JourneyOption) {
         val views = binding ?: return
-        views.summary.text = requireContext().journeySummary(
+        views.detail.summary.text = requireContext().journeySummary(
             option,
             minutes = option.shownMinutes(),
             atDeparture = requireContext()
@@ -744,10 +744,10 @@ class JourneyResultFragment : Fragment() {
         val hasJourney = state.plan is JourneyPlan.Found ||
             state.plan is JourneyPlan.WalkOnly ||
             state.plan is JourneyPlan.OwnBike
-        views.summaryBlock.isClickable = hasJourney
-        views.summaryBlock.isFocusable = hasJourney
-        views.detailChevron.isVisible = hasJourney
-        views.navigate.isVisible = hasJourney
+        views.detail.summaryBlock.isClickable = hasJourney
+        views.detail.summaryBlock.isFocusable = hasJourney
+        views.detail.detailChevron.isVisible = hasJourney
+        views.detail.navigate.isVisible = hasJourney
     }
 
     /**
@@ -785,7 +785,7 @@ class JourneyResultFragment : Fragment() {
      */
     private fun showShape(option: JourneyOption, minutes: JourneyMinutes) {
         val views = binding ?: return
-        views.shape.legs = listOf(
+        views.detail.shape.legs = listOf(
             legOf(option.walkToStation, minutes.walkToStation, isRide = false),
             legOf(option.ride, minutes.ride, isRide = true),
             legOf(option.walkToDestination, minutes.walkToDestination, isRide = false),
@@ -818,7 +818,7 @@ class JourneyResultFragment : Fragment() {
         val soleLeg = ownBike?.ride ?: walkOnly?.directWalk
         val total = soleLeg?.let { requireContext().formatDuration(it.duration) }
         showTotal(total ?: getString(R.string.journey_none_title), figure = total != null)
-        views.summary.text = when {
+        views.detail.summary.text = when {
             ownBike != null -> requireContext().ownBikeSummary(ownBike.ride, ownBikeKind)
             !state.hasStations -> getString(R.string.journey_no_stations)
             walkOnly != null -> requireContext().walkSummary(
@@ -830,7 +830,7 @@ class JourneyResultFragment : Fragment() {
         // One stroke between two ends — dotted for the walk, unbroken for the
         // ride: the journey there is, with no station on the way. A single leg
         // is its own total, so there is nothing to apportion here.
-        views.shape.legs = soleLeg
+        views.detail.shape.legs = soleLeg
             ?.let {
                 listOf(legOf(it, it.duration.inShownMinutes(), isRide = ownBike != null))
             }
