@@ -50,13 +50,13 @@
     <string name="stations_title">Σταθμοί</string>
 
     <plurals name="bikes_available">
-        <item quantity="one">%1$d ποδήλατο</item>
-        <item quantity="other">%1$d ποδήλατα</item>
+        <item quantity="one">%1$d ποδήλατο</item>
+        <item quantity="other">%1$d ποδήλατα</item>
     </plurals>
 
     <plurals name="docks_available">
-        <item quantity="one">%1$d ελεύθερη θέση</item>
-        <item quantity="other">%1$d ελεύθερες θέσεις</item>
+        <item quantity="one">%1$d ελεύθερη θέση</item>
+        <item quantity="other">%1$d ελεύθερες θέσεις</item>
     </plurals>
 
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
@@ -133,8 +133,8 @@
          fifty metres away. %2$d is the number of docking points.
          `StationAdapter.whereabouts` is what decides. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d θέση</item>
-        <item quantity="other">%1$s · %2$d θέσεις</item>
+        <item quantity="one">%1$s · %2$d θέση</item>
+        <item quantity="other">%1$s · %2$d θέσεις</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
@@ -142,12 +142,12 @@
          one, each already agreed in number. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d μηχανικό</item>
-        <item quantity="other">%1$d μηχανικά</item>
+        <item quantity="one">%1$d μηχανικό</item>
+        <item quantity="other">%1$d μηχανικά</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d ηλεκτρικό</item>
-        <item quantity="other">%1$d ηλεκτρικά</item>
+        <item quantity="one">%1$d ηλεκτρικό</item>
+        <item quantity="other">%1$d ηλεκτρικά</item>
     </plurals>
 
     <!-- Greek: the whole series is built with a trailing «πριν», so that
@@ -155,24 +155,24 @@
          read as one wording. -->
     <string name="freshness_just_now">μόλις τώρα</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">%1$d δευτερόλεπτο πριν</item>
-        <item quantity="other">%1$d δευτερόλεπτα πριν</item>
+        <item quantity="one">%1$d δευτερόλεπτο πριν</item>
+        <item quantity="other">%1$d δευτερόλεπτα πριν</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">%1$d λεπτό πριν</item>
-        <item quantity="other">%1$d λεπτά πριν</item>
+        <item quantity="one">%1$d λεπτό πριν</item>
+        <item quantity="other">%1$d λεπτά πριν</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">%1$d ώρα πριν</item>
-        <item quantity="other">%1$d ώρες πριν</item>
+        <item quantity="one">%1$d ώρα πριν</item>
+        <item quantity="other">%1$d ώρες πριν</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">%1$d ημέρα πριν</item>
-        <item quantity="other">%1$d ημέρες πριν</item>
+        <item quantity="one">%1$d ημέρα πριν</item>
+        <item quantity="other">%1$d ημέρες πριν</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">%1$d μήνα πριν</item>
-        <item quantity="other">%1$d μήνες πριν</item>
+        <item quantity="one">%1$d μήνα πριν</item>
+        <item quantity="other">%1$d μήνες πριν</item>
     </plurals>
     <string name="freshness_stale">Παγωμένα δεδομένα · %1$s</string>
     <string name="freshness_fresh">Ενημερώθηκε %1$s</string>
@@ -399,12 +399,12 @@
 
     <!-- Greek: «λεπ.» rather than «λεπτά», which would be wrong at one; the
          abbreviation agrees with nothing, as the English "min" does. -->
-    <string name="duration_minutes">%1$d λεπ.</string>
-    <string name="duration_hours_minutes">%1$d ώ. %2$02d</string>
+    <string name="duration_minutes">%1$d λεπ.</string>
+    <string name="duration_hours_minutes">%1$d ώ. %2$02d</string>
 
     <plurals name="docks_total">
-        <item quantity="one">%1$d θέση</item>
-        <item quantity="other">%1$d θέσεις</item>
+        <item quantity="one">%1$d θέση</item>
+        <item quantity="other">%1$d θέσεις</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
     <!-- Greek: %1$s may be a street or a landmark — `AddressEntryKind` tells
@@ -451,14 +451,14 @@
          five, %1$s is a figure already rounded and already written in the
          interface's language: the translation places the symbol, never the
          number. Which of the five applies is the reader's unit system. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
     <!-- The symbols of the two imperial systems. Written the same way in most
          languages; the string exists in every one all the same, so a language
          that writes them otherwise has somewhere to say so. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
     <string name="action_back">Πίσω</string>
 
     <!-- City screen: which conurbation the application serves. -->
@@ -472,17 +472,17 @@
     <string name="city_locate_me">Εντοπισμός της πόλης μου</string>
     <string name="city_active">Σε χρήση</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d σταθμός · %2$s για λήψη</item>
-        <item quantity="other">%1$d σταθμοί · %2$s για λήψη</item>
+        <item quantity="one">%1$d σταθμός · %2$s για λήψη</item>
+        <item quantity="other">%1$d σταθμοί · %2$s για λήψη</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d σταθμός</item>
-        <item quantity="other">%1$d σταθμοί</item>
+        <item quantity="one">%1$d σταθμός</item>
+        <item quantity="other">%1$d σταθμοί</item>
     </plurals>
     <string name="city_detail_size_only">%1$s για λήψη</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d σταθμός · το μέγεθος ανακοινώνεται πριν από τη λήψη</item>
-        <item quantity="other">%1$d σταθμοί · το μέγεθος ανακοινώνεται πριν από τη λήψη</item>
+        <item quantity="one">%1$d σταθμός · το μέγεθος ανακοινώνεται πριν από τη λήψη</item>
+        <item quantity="other">%1$d σταθμοί · το μέγεθος ανακοινώνεται πριν από τη λήψη</item>
     </plurals>
     <string name="city_size_unknown">Το μέγεθος ανακοινώνεται πριν από τη λήψη</string>
     <string name="city_installed">%1$s στη συσκευή</string>
@@ -512,10 +512,10 @@
     <string name="city_none_nearby">Κανένα γνωστό δίκτυο εδώ κοντά. Διαλέξτε μια πόλη από τη λίστα.</string>
     <string name="action_cancel">Ακύρωση</string>
 
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <string name="storage_title">Αποθηκευτικός χώρος</string>
     <string name="storage_open">Διαχείριση των δεδομένων εκτός σύνδεσης</string>

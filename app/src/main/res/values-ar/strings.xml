@@ -48,22 +48,22 @@
 
     <!-- The number of bikes available to borrow at a station. -->
     <plurals name="bikes_available">
-        <item quantity="zero">&#x200F;%1$d دراجة</item>
-        <item quantity="one">&#x200F;%1$d دراجة</item>
-        <item quantity="two">&#x200F;%1$d دراجتان</item>
-        <item quantity="few">&#x200F;%1$d دراجات</item>
-        <item quantity="many">&#x200F;%1$d دراجةً</item>
-        <item quantity="other">&#x200F;%1$d دراجة</item>
+        <item quantity="zero">&#x200F;%1$d دراجة</item>
+        <item quantity="one">&#x200F;%1$d دراجة</item>
+        <item quantity="two">&#x200F;%1$d دراجتان</item>
+        <item quantity="few">&#x200F;%1$d دراجات</item>
+        <item quantity="many">&#x200F;%1$d دراجةً</item>
+        <item quantity="other">&#x200F;%1$d دراجة</item>
     </plurals>
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="zero">&#x200F;%1$d موقف شاغر</item>
-        <item quantity="one">&#x200F;%1$d موقف شاغر</item>
-        <item quantity="two">&#x200F;%1$d موقفان شاغران</item>
-        <item quantity="few">&#x200F;%1$d مواقف شاغرة</item>
-        <item quantity="many">&#x200F;%1$d موقفًا شاغرًا</item>
-        <item quantity="other">&#x200F;%1$d موقف شاغر</item>
+        <item quantity="zero">&#x200F;%1$d موقف شاغر</item>
+        <item quantity="one">&#x200F;%1$d موقف شاغر</item>
+        <item quantity="two">&#x200F;%1$d موقفان شاغران</item>
+        <item quantity="few">&#x200F;%1$d مواقف شاغرة</item>
+        <item quantity="many">&#x200F;%1$d موقفًا شاغرًا</item>
+        <item quantity="other">&#x200F;%1$d موقف شاغر</item>
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator. -->
@@ -140,75 +140,75 @@
          distance to the station, or its postcode when the position is not
          known. %2$d is the number of docking points, all of them. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="zero">&#x200F;%1$s · %2$d موقف</item>
-        <item quantity="one">&#x200F;%1$s · %2$d موقف</item>
-        <item quantity="two">&#x200F;%1$s · %2$d موقفان</item>
-        <item quantity="few">&#x200F;%1$s · %2$d مواقف</item>
-        <item quantity="many">&#x200F;%1$s · %2$d موقفًا</item>
-        <item quantity="other">&#x200F;%1$s · %2$d موقف</item>
+        <item quantity="zero">&#x200F;%1$s · %2$d موقف</item>
+        <item quantity="one">&#x200F;%1$s · %2$d موقف</item>
+        <item quantity="two">&#x200F;%1$s · %2$d موقفان</item>
+        <item quantity="few">&#x200F;%1$s · %2$d مواقف</item>
+        <item quantity="many">&#x200F;%1$s · %2$d موقفًا</item>
+        <item quantity="other">&#x200F;%1$s · %2$d موقف</item>
     </plurals>
 
     <!-- What a station's bikes are, where the network lends both kinds. Each
          count is read on its own, so each carries its noun. -->
     <string name="station_bikes_split">&#x200F;%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="zero">&#x200F;%1$d دراجة تقليدية</item>
-        <item quantity="one">&#x200F;%1$d دراجة تقليدية</item>
-        <item quantity="two">&#x200F;%1$d دراجتان تقليديتان</item>
-        <item quantity="few">&#x200F;%1$d دراجات تقليدية</item>
-        <item quantity="many">&#x200F;%1$d دراجةً تقليديةً</item>
-        <item quantity="other">&#x200F;%1$d دراجة تقليدية</item>
+        <item quantity="zero">&#x200F;%1$d دراجة تقليدية</item>
+        <item quantity="one">&#x200F;%1$d دراجة تقليدية</item>
+        <item quantity="two">&#x200F;%1$d دراجتان تقليديتان</item>
+        <item quantity="few">&#x200F;%1$d دراجات تقليدية</item>
+        <item quantity="many">&#x200F;%1$d دراجةً تقليديةً</item>
+        <item quantity="other">&#x200F;%1$d دراجة تقليدية</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="zero">&#x200F;%1$d دراجة كهربائية</item>
-        <item quantity="one">&#x200F;%1$d دراجة كهربائية</item>
-        <item quantity="two">&#x200F;%1$d دراجتان كهربائيتان</item>
-        <item quantity="few">&#x200F;%1$d دراجات كهربائية</item>
-        <item quantity="many">&#x200F;%1$d دراجةً كهربائيةً</item>
-        <item quantity="other">&#x200F;%1$d دراجة كهربائية</item>
+        <item quantity="zero">&#x200F;%1$d دراجة كهربائية</item>
+        <item quantity="one">&#x200F;%1$d دراجة كهربائية</item>
+        <item quantity="two">&#x200F;%1$d دراجتان كهربائيتان</item>
+        <item quantity="few">&#x200F;%1$d دراجات كهربائية</item>
+        <item quantity="many">&#x200F;%1$d دراجةً كهربائيةً</item>
+        <item quantity="other">&#x200F;%1$d دراجة كهربائية</item>
     </plurals>
 
     <!-- How old the availability figures are. -->
     <string name="freshness_just_now">للتو</string>
     <plurals name="freshness_seconds">
-        <item quantity="zero">قبل %1$d ثانية</item>
-        <item quantity="one">قبل %1$d ثانية</item>
-        <item quantity="two">قبل %1$d ثانيتين</item>
-        <item quantity="few">قبل %1$d ثوانٍ</item>
-        <item quantity="many">قبل %1$d ثانيةً</item>
-        <item quantity="other">قبل %1$d ثانية</item>
+        <item quantity="zero">قبل %1$d ثانية</item>
+        <item quantity="one">قبل %1$d ثانية</item>
+        <item quantity="two">قبل %1$d ثانيتين</item>
+        <item quantity="few">قبل %1$d ثوانٍ</item>
+        <item quantity="many">قبل %1$d ثانيةً</item>
+        <item quantity="other">قبل %1$d ثانية</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="zero">قبل %1$d دقيقة</item>
-        <item quantity="one">قبل %1$d دقيقة</item>
-        <item quantity="two">قبل %1$d دقيقتين</item>
-        <item quantity="few">قبل %1$d دقائق</item>
-        <item quantity="many">قبل %1$d دقيقةً</item>
-        <item quantity="other">قبل %1$d دقيقة</item>
+        <item quantity="zero">قبل %1$d دقيقة</item>
+        <item quantity="one">قبل %1$d دقيقة</item>
+        <item quantity="two">قبل %1$d دقيقتين</item>
+        <item quantity="few">قبل %1$d دقائق</item>
+        <item quantity="many">قبل %1$d دقيقةً</item>
+        <item quantity="other">قبل %1$d دقيقة</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="zero">قبل %1$d ساعة</item>
-        <item quantity="one">قبل %1$d ساعة</item>
-        <item quantity="two">قبل %1$d ساعتين</item>
-        <item quantity="few">قبل %1$d ساعات</item>
-        <item quantity="many">قبل %1$d ساعةً</item>
-        <item quantity="other">قبل %1$d ساعة</item>
+        <item quantity="zero">قبل %1$d ساعة</item>
+        <item quantity="one">قبل %1$d ساعة</item>
+        <item quantity="two">قبل %1$d ساعتين</item>
+        <item quantity="few">قبل %1$d ساعات</item>
+        <item quantity="many">قبل %1$d ساعةً</item>
+        <item quantity="other">قبل %1$d ساعة</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="zero">قبل %1$d يوم</item>
-        <item quantity="one">قبل %1$d يوم</item>
-        <item quantity="two">قبل %1$d يومين</item>
-        <item quantity="few">قبل %1$d أيام</item>
-        <item quantity="many">قبل %1$d يومًا</item>
-        <item quantity="other">قبل %1$d يوم</item>
+        <item quantity="zero">قبل %1$d يوم</item>
+        <item quantity="one">قبل %1$d يوم</item>
+        <item quantity="two">قبل %1$d يومين</item>
+        <item quantity="few">قبل %1$d أيام</item>
+        <item quantity="many">قبل %1$d يومًا</item>
+        <item quantity="other">قبل %1$d يوم</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="zero">قبل %1$d شهر</item>
-        <item quantity="one">قبل %1$d شهر</item>
-        <item quantity="two">قبل %1$d شهرين</item>
-        <item quantity="few">قبل %1$d أشهر</item>
-        <item quantity="many">قبل %1$d شهرًا</item>
-        <item quantity="other">قبل %1$d شهر</item>
+        <item quantity="zero">قبل %1$d شهر</item>
+        <item quantity="one">قبل %1$d شهر</item>
+        <item quantity="two">قبل %1$d شهرين</item>
+        <item quantity="few">قبل %1$d أشهر</item>
+        <item quantity="many">قبل %1$d شهرًا</item>
+        <item quantity="other">قبل %1$d شهر</item>
     </plurals>
     <string name="freshness_stale">بيانات متجمّدة · %1$s</string>
     <string name="freshness_fresh">تم التحديث %1$s</string>
@@ -413,17 +413,17 @@
          cannot do the same: it takes the singular, which is right from
          eleven minutes up and wrong from three to ten. `docs/glossary/ar.md`
          says why, and says that the repair is a <plurals> in `values/`. -->
-    <string name="duration_minutes">&#x200F;%1$d دقيقة</string>
+    <string name="duration_minutes">&#x200F;%1$d دقيقة</string>
     <string name="duration_hours_minutes">&#x200F;%1$d:%2$02d</string>
 
     <!-- The docking points a station holds, all of them. -->
     <plurals name="docks_total">
-        <item quantity="zero">&#x200F;%1$d موقف</item>
-        <item quantity="one">&#x200F;%1$d موقف</item>
-        <item quantity="two">&#x200F;%1$d موقفان</item>
-        <item quantity="few">&#x200F;%1$d مواقف</item>
-        <item quantity="many">&#x200F;%1$d موقفًا</item>
-        <item quantity="other">&#x200F;%1$d موقف</item>
+        <item quantity="zero">&#x200F;%1$d موقف</item>
+        <item quantity="one">&#x200F;%1$d موقف</item>
+        <item quantity="two">&#x200F;%1$d موقفان</item>
+        <item quantity="few">&#x200F;%1$d مواقف</item>
+        <item quantity="many">&#x200F;%1$d موقفًا</item>
+        <item quantity="other">&#x200F;%1$d موقف</item>
     </plurals>
     <string name="station_capacity_and_age">&#x200F;%1$s · %2$s</string>
     <string name="station_address_nearby">قرب %1$s</string>
@@ -465,11 +465,11 @@
          a figure already rounded and already written in the reader's digits:
          the translation places the symbol, never the number. Arabic writes
          its own symbols, which is why these five are not left in Latin. -->
-    <string name="distance_metres">&#x200F;%1$s م</string>
-    <string name="distance_kilometres">&#x200F;%1$s كم</string>
-    <string name="distance_feet">&#x200F;%1$s قدم</string>
-    <string name="distance_yards">&#x200F;%1$s ياردة</string>
-    <string name="distance_miles">&#x200F;%1$s ميل</string>
+    <string name="distance_metres">&#x200F;%1$s م</string>
+    <string name="distance_kilometres">&#x200F;%1$s كم</string>
+    <string name="distance_feet">&#x200F;%1$s قدم</string>
+    <string name="distance_yards">&#x200F;%1$s ياردة</string>
+    <string name="distance_miles">&#x200F;%1$s ميل</string>
     <string name="action_back">رجوع</string>
 
     <!-- City screen: which conurbation the application serves. -->
@@ -483,29 +483,29 @@
     <string name="city_locate_me">العثور على مدينتي</string>
     <string name="city_active">قيد الاستخدام</string>
     <plurals name="city_detail">
-        <item quantity="zero">&#x200F;%1$d محطة · %2$s للتنزيل</item>
-        <item quantity="one">&#x200F;%1$d محطة · %2$s للتنزيل</item>
-        <item quantity="two">&#x200F;%1$d محطتان · %2$s للتنزيل</item>
-        <item quantity="few">&#x200F;%1$d محطات · %2$s للتنزيل</item>
-        <item quantity="many">&#x200F;%1$d محطةً · %2$s للتنزيل</item>
-        <item quantity="other">&#x200F;%1$d محطة · %2$s للتنزيل</item>
+        <item quantity="zero">&#x200F;%1$d محطة · %2$s للتنزيل</item>
+        <item quantity="one">&#x200F;%1$d محطة · %2$s للتنزيل</item>
+        <item quantity="two">&#x200F;%1$d محطتان · %2$s للتنزيل</item>
+        <item quantity="few">&#x200F;%1$d محطات · %2$s للتنزيل</item>
+        <item quantity="many">&#x200F;%1$d محطةً · %2$s للتنزيل</item>
+        <item quantity="other">&#x200F;%1$d محطة · %2$s للتنزيل</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="zero">&#x200F;%1$d محطة</item>
-        <item quantity="one">&#x200F;%1$d محطة</item>
-        <item quantity="two">&#x200F;%1$d محطتان</item>
-        <item quantity="few">&#x200F;%1$d محطات</item>
-        <item quantity="many">&#x200F;%1$d محطةً</item>
-        <item quantity="other">&#x200F;%1$d محطة</item>
+        <item quantity="zero">&#x200F;%1$d محطة</item>
+        <item quantity="one">&#x200F;%1$d محطة</item>
+        <item quantity="two">&#x200F;%1$d محطتان</item>
+        <item quantity="few">&#x200F;%1$d محطات</item>
+        <item quantity="many">&#x200F;%1$d محطةً</item>
+        <item quantity="other">&#x200F;%1$d محطة</item>
     </plurals>
     <string name="city_detail_size_only">&#x200F;%1$s للتنزيل</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="zero">&#x200F;%1$d محطة · يُعلَن الحجم قبل التنزيل</item>
-        <item quantity="one">&#x200F;%1$d محطة · يُعلَن الحجم قبل التنزيل</item>
-        <item quantity="two">&#x200F;%1$d محطتان · يُعلَن الحجم قبل التنزيل</item>
-        <item quantity="few">&#x200F;%1$d محطات · يُعلَن الحجم قبل التنزيل</item>
-        <item quantity="many">&#x200F;%1$d محطةً · يُعلَن الحجم قبل التنزيل</item>
-        <item quantity="other">&#x200F;%1$d محطة · يُعلَن الحجم قبل التنزيل</item>
+        <item quantity="zero">&#x200F;%1$d محطة · يُعلَن الحجم قبل التنزيل</item>
+        <item quantity="one">&#x200F;%1$d محطة · يُعلَن الحجم قبل التنزيل</item>
+        <item quantity="two">&#x200F;%1$d محطتان · يُعلَن الحجم قبل التنزيل</item>
+        <item quantity="few">&#x200F;%1$d محطات · يُعلَن الحجم قبل التنزيل</item>
+        <item quantity="many">&#x200F;%1$d محطةً · يُعلَن الحجم قبل التنزيل</item>
+        <item quantity="other">&#x200F;%1$d محطة · يُعلَن الحجم قبل التنزيل</item>
     </plurals>
     <string name="city_size_unknown">يُعلَن الحجم قبل التنزيل</string>
     <string name="city_installed">&#x200F;%1$s مثبَّت على الجهاز</string>
@@ -537,10 +537,10 @@
     <string name="city_none_nearby">لا توجد شبكة دراجات معروفة قريبة من هنا. اختر مدينة من القائمة.</string>
     <string name="action_cancel">إلغاء</string>
 
-    <string name="size_bytes">&#x200F;%1$s بايت</string>
-    <string name="size_kilobytes">&#x200F;%1$s كيلوبايت</string>
-    <string name="size_megabytes">&#x200F;%1$s ميغابايت</string>
-    <string name="size_gigabytes">&#x200F;%1$s غيغابايت</string>
+    <string name="size_bytes">&#x200F;%1$s بايت</string>
+    <string name="size_kilobytes">&#x200F;%1$s كيلوبايت</string>
+    <string name="size_megabytes">&#x200F;%1$s ميغابايت</string>
+    <string name="size_gigabytes">&#x200F;%1$s غيغابايت</string>
 
     <string name="storage_title">التخزين</string>
     <string name="storage_open">إدارة البيانات دون اتصال</string>

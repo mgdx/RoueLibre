@@ -82,7 +82,11 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="24 min" />
 
+                <!-- A run of facts about one journey, not a paragraph: it
+                     wraps beside the total on a narrow screen, and justified
+                     its first line spread bank to bank. -->
                 <TextView
+                    style="@style/Widget.RoueLibre.Name"
                     android:id="@+id/summary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

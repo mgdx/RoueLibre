@@ -31,14 +31,14 @@
 
     <!-- The number of bikes available to borrow at a station. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d cykel</item>
-        <item quantity="other">%1$d cykler</item>
+        <item quantity="one">%1$d cykel</item>
+        <item quantity="other">%1$d cykler</item>
     </plurals>
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d ledig plads</item>
-        <item quantity="other">%1$d ledige pladser</item>
+        <item quantity="one">%1$d ledig plads</item>
+        <item quantity="other">%1$d ledige pladser</item>
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.
@@ -93,8 +93,8 @@
          distance to the station, or its postcode when the position is not
          known. %2$d is the number of docking points. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d stativplads</item>
-        <item quantity="other">%1$s · %2$d stativpladser</item>
+        <item quantity="one">%1$s · %2$d stativplads</item>
+        <item quantity="other">%1$s · %2$d stativpladser</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
@@ -104,12 +104,12 @@
          not. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d mekanisk</item>
-        <item quantity="other">%1$d mekaniske</item>
+        <item quantity="one">%1$d mekanisk</item>
+        <item quantity="other">%1$d mekaniske</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d elektrisk</item>
-        <item quantity="other">%1$d elektriske</item>
+        <item quantity="one">%1$d elektrisk</item>
+        <item quantity="other">%1$d elektriske</item>
     </plurals>
 
     <!-- How old the availability is. Lower-cased and carrying its own "for …
@@ -117,24 +117,24 @@
          — "Opdateret lige nu", "Forældede data · for 5 minutter siden". -->
     <string name="freshness_just_now">lige nu</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">for %1$d sekund siden</item>
-        <item quantity="other">for %1$d sekunder siden</item>
+        <item quantity="one">for %1$d sekund siden</item>
+        <item quantity="other">for %1$d sekunder siden</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">for %1$d minut siden</item>
-        <item quantity="other">for %1$d minutter siden</item>
+        <item quantity="one">for %1$d minut siden</item>
+        <item quantity="other">for %1$d minutter siden</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">for %1$d time siden</item>
-        <item quantity="other">for %1$d timer siden</item>
+        <item quantity="one">for %1$d time siden</item>
+        <item quantity="other">for %1$d timer siden</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">for %1$d dag siden</item>
-        <item quantity="other">for %1$d dage siden</item>
+        <item quantity="one">for %1$d dag siden</item>
+        <item quantity="other">for %1$d dage siden</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">for %1$d måned siden</item>
-        <item quantity="other">for %1$d måneder siden</item>
+        <item quantity="one">for %1$d måned siden</item>
+        <item quantity="other">for %1$d måneder siden</item>
     </plurals>
     <string name="freshness_stale">Forældede data · %1$s</string>
     <string name="freshness_fresh">Opdateret %1$s</string>
@@ -345,14 +345,14 @@
 
     <!-- "t" is how Danish abbreviates the hour: "1 t 05". It is the one unit
          symbol this file changes. -->
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d t %2$02d</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d t %2$02d</string>
 
     <!-- A station's capacity: the same object as a free dock, counted as a
          total, and a different word so the two figures cannot be read as one. -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d stativplads</item>
-        <item quantity="other">%1$d stativpladser</item>
+        <item quantity="one">%1$d stativplads</item>
+        <item quantity="other">%1$d stativpladser</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
     <string name="station_address_nearby">Nær %1$s</string>
@@ -397,13 +397,13 @@
     <!-- Distances, formatted through the localisation APIs (SPEC §9). %1$s is
          a figure already rounded and already written in the interface's
          language: the translation places the symbol, never the number. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
     <!-- The symbols of the two imperial systems. Danish writes them as they
          stand. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
     <string name="action_back">Tilbage</string>
 
     <!-- City screen: which conurbation the application serves. -->
@@ -417,17 +417,17 @@
     <string name="city_locate_me">Find min by</string>
     <string name="city_active">I brug</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d station · %2$s at hente</item>
-        <item quantity="other">%1$d stationer · %2$s at hente</item>
+        <item quantity="one">%1$d station · %2$s at hente</item>
+        <item quantity="other">%1$d stationer · %2$s at hente</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d station</item>
-        <item quantity="other">%1$d stationer</item>
+        <item quantity="one">%1$d station</item>
+        <item quantity="other">%1$d stationer</item>
     </plurals>
     <string name="city_detail_size_only">%1$s at hente</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d station · størrelsen oplyses før download</item>
-        <item quantity="other">%1$d stationer · størrelsen oplyses før download</item>
+        <item quantity="one">%1$d station · størrelsen oplyses før download</item>
+        <item quantity="other">%1$d stationer · størrelsen oplyses før download</item>
     </plurals>
     <string name="city_size_unknown">Størrelsen oplyses før download</string>
     <string name="city_installed">%1$s installeret på enheden</string>
@@ -456,10 +456,10 @@
     <string name="city_none_nearby">Intet kendt netværk i nærheden. Vælg en by på listen.</string>
     <string name="action_cancel">Annuller</string>
 
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <string name="storage_title">Lagerplads</string>
     <string name="storage_open">Administrer offlinedata</string>

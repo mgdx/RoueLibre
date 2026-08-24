@@ -24,13 +24,13 @@
     <string name="stations_title">Stations</string>
 
     <plurals name="bikes_available">
-        <item quantity="one">%1$d bike</item>
-        <item quantity="other">%1$d bikes</item>
+        <item quantity="one">%1$d bike</item>
+        <item quantity="other">%1$d bikes</item>
     </plurals>
 
     <plurals name="docks_available">
-        <item quantity="one">%1$d dock</item>
-        <item quantity="other">%1$d docks</item>
+        <item quantity="one">%1$d dock</item>
+        <item quantity="other">%1$d docks</item>
     </plurals>
 
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
@@ -106,8 +106,8 @@
          fifty metres away. %2$d is the number of docking points.
          `StationAdapter.whereabouts` is what decides. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d dock</item>
-        <item quantity="other">%1$s · %2$d docks</item>
+        <item quantity="one">%1$s · %2$d dock</item>
+        <item quantity="other">%1$s · %2$d docks</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
@@ -115,34 +115,34 @@
          one, each already agreed in number. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d mechanical</item>
-        <item quantity="other">%1$d mechanical</item>
+        <item quantity="one">%1$d mechanical</item>
+        <item quantity="other">%1$d mechanical</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d electric</item>
-        <item quantity="other">%1$d electric</item>
+        <item quantity="one">%1$d electric</item>
+        <item quantity="other">%1$d electric</item>
     </plurals>
 
     <string name="freshness_just_now">just now</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">%1$d second ago</item>
-        <item quantity="other">%1$d seconds ago</item>
+        <item quantity="one">%1$d second ago</item>
+        <item quantity="other">%1$d seconds ago</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">%1$d minute ago</item>
-        <item quantity="other">%1$d minutes ago</item>
+        <item quantity="one">%1$d minute ago</item>
+        <item quantity="other">%1$d minutes ago</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">%1$d hour ago</item>
-        <item quantity="other">%1$d hours ago</item>
+        <item quantity="one">%1$d hour ago</item>
+        <item quantity="other">%1$d hours ago</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">%1$d day ago</item>
-        <item quantity="other">%1$d days ago</item>
+        <item quantity="one">%1$d day ago</item>
+        <item quantity="other">%1$d days ago</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">%1$d month ago</item>
-        <item quantity="other">%1$d months ago</item>
+        <item quantity="one">%1$d month ago</item>
+        <item quantity="other">%1$d months ago</item>
     </plurals>
     <string name="freshness_stale">Frozen data · %1$s</string>
     <string name="freshness_fresh">Updated %1$s</string>
@@ -354,12 +354,12 @@
     <string name="journey_outside_coverage">This point lies outside the area covered by the installed data.</string>
     <string name="journey_no_stations">No station known. Refresh the station list, then try again.</string>
 
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d h %2$02d</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d h %2$02d</string>
 
     <plurals name="docks_total">
-        <item quantity="one">%1$d dock</item>
-        <item quantity="other">%1$d docks</item>
+        <item quantity="one">%1$d dock</item>
+        <item quantity="other">%1$d docks</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
     <string name="station_address_nearby">Near %1$s</string>
@@ -395,15 +395,19 @@
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the
          interface's language: the translation places the symbol, never the
-         number. Which of the five applies is the reader's unit system. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
+         number. Which of the five applies is the reader's unit system.
+         The space between the two is a NON-BREAKING one, here and in every
+         other resource writing a figure beside the unit naming it: a summary
+         that wrapped ended a line on "5" and opened the next on "m of climb".
+         `UnitTypographyTest` holds every language to it. -->
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
     <!-- The symbols of the two imperial systems. Written the same way in most
          languages; the string exists in every one all the same, so a language
          that writes them otherwise has somewhere to say so. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
     <string name="action_back">Back</string>
 
     <!-- City screen: which conurbation the application serves. -->
@@ -417,17 +421,17 @@
     <string name="city_locate_me">Find my city</string>
     <string name="city_active">In use</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d station · %2$s to download</item>
-        <item quantity="other">%1$d stations · %2$s to download</item>
+        <item quantity="one">%1$d station · %2$s to download</item>
+        <item quantity="other">%1$d stations · %2$s to download</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d station</item>
-        <item quantity="other">%1$d stations</item>
+        <item quantity="one">%1$d station</item>
+        <item quantity="other">%1$d stations</item>
     </plurals>
     <string name="city_detail_size_only">%1$s to download</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d station · size announced before downloading</item>
-        <item quantity="other">%1$d stations · size announced before downloading</item>
+        <item quantity="one">%1$d station · size announced before downloading</item>
+        <item quantity="other">%1$d stations · size announced before downloading</item>
     </plurals>
     <string name="city_size_unknown">Size announced before downloading</string>
     <string name="city_installed">%1$s installed on the device</string>
@@ -454,10 +458,10 @@
     <string name="city_none_nearby">No known network near here. Pick a city from the list.</string>
     <string name="action_cancel">Cancel</string>
 
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <string name="storage_title">Storage</string>
     <string name="storage_open">Manage offline data</string>

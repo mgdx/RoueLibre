@@ -47,14 +47,14 @@
          numeral leaves its noun in the singular, so both categories read
          „%1$d kerékpár”. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d kerékpár</item>
-        <item quantity="other">%1$d kerékpár</item>
+        <item quantity="one">%1$d kerékpár</item>
+        <item quantity="other">%1$d kerékpár</item>
     </plurals>
 
     <!-- The number of free docks to return a bike into. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d szabad hely</item>
-        <item quantity="other">%1$d szabad hely</item>
+        <item quantity="one">%1$d szabad hely</item>
+        <item quantity="other">%1$d szabad hely</item>
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.
@@ -115,8 +115,8 @@
          points — the capacity, which is *dokkoló* and not *szabad hely*: the
          sheet shows both figures side by side. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d dokkoló</item>
-        <item quantity="other">%1$s · %2$d dokkoló</item>
+        <item quantity="one">%1$s · %2$d dokkoló</item>
+        <item quantity="other">%1$s · %2$d dokkoló</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
@@ -124,12 +124,12 @@
          one, each already agreed in number. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d hagyományos</item>
-        <item quantity="other">%1$d hagyományos</item>
+        <item quantity="one">%1$d hagyományos</item>
+        <item quantity="other">%1$d hagyományos</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d elektromos</item>
-        <item quantity="other">%1$d elektromos</item>
+        <item quantity="one">%1$d elektromos</item>
+        <item quantity="other">%1$d elektromos</item>
     </plurals>
 
     <!-- How long ago the availability was read. All four join
@@ -137,24 +137,24 @@
          bare adverbial and start in lower case. -->
     <string name="freshness_just_now">az imént</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">%1$d másodperce</item>
-        <item quantity="other">%1$d másodperce</item>
+        <item quantity="one">%1$d másodperce</item>
+        <item quantity="other">%1$d másodperce</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">%1$d perce</item>
-        <item quantity="other">%1$d perce</item>
+        <item quantity="one">%1$d perce</item>
+        <item quantity="other">%1$d perce</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">%1$d órája</item>
-        <item quantity="other">%1$d órája</item>
+        <item quantity="one">%1$d órája</item>
+        <item quantity="other">%1$d órája</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">%1$d napja</item>
-        <item quantity="other">%1$d napja</item>
+        <item quantity="one">%1$d napja</item>
+        <item quantity="other">%1$d napja</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">%1$d hónapja</item>
-        <item quantity="other">%1$d hónapja</item>
+        <item quantity="one">%1$d hónapja</item>
+        <item quantity="other">%1$d hónapja</item>
     </plurals>
     <string name="freshness_stale">Elavult adatok · %1$s</string>
     <string name="freshness_fresh">Frissítve %1$s</string>
@@ -387,13 +387,13 @@
 
     <!-- Hungarian writes durations out: *perc*, and *ó* where the hours and
          the minutes share one line. -->
-    <string name="duration_minutes">%1$d perc</string>
-    <string name="duration_hours_minutes">%1$d ó %2$02d</string>
+    <string name="duration_minutes">%1$d perc</string>
+    <string name="duration_hours_minutes">%1$d ó %2$02d</string>
 
     <!-- A station's capacity, counted as a total. -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d dokkoló</item>
-        <item quantity="other">%1$d dokkoló</item>
+        <item quantity="one">%1$d dokkoló</item>
+        <item quantity="other">%1$d dokkoló</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
     <!-- %1$s is `address.streetName` — a street or a square, arriving as it
@@ -439,11 +439,11 @@
          five, %1$s is a figure already rounded and already written in the
          interface's language: the translation places the symbol, never the
          number. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
     <string name="action_back">Vissza</string>
 
     <!-- City screen: which conurbation the application serves. -->
@@ -457,17 +457,17 @@
     <string name="city_locate_me">Városom megkeresése</string>
     <string name="city_active">Használatban</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d állomás · %2$s letöltendő</item>
-        <item quantity="other">%1$d állomás · %2$s letöltendő</item>
+        <item quantity="one">%1$d állomás · %2$s letöltendő</item>
+        <item quantity="other">%1$d állomás · %2$s letöltendő</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d állomás</item>
-        <item quantity="other">%1$d állomás</item>
+        <item quantity="one">%1$d állomás</item>
+        <item quantity="other">%1$d állomás</item>
     </plurals>
     <string name="city_detail_size_only">%1$s letöltendő</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d állomás · a méret a letöltés előtt kiderül</item>
-        <item quantity="other">%1$d állomás · a méret a letöltés előtt kiderül</item>
+        <item quantity="one">%1$d állomás · a méret a letöltés előtt kiderül</item>
+        <item quantity="other">%1$d állomás · a méret a letöltés előtt kiderül</item>
     </plurals>
     <string name="city_size_unknown">A méret a letöltés előtt kiderül</string>
     <string name="city_installed">%1$s telepítve az eszközön</string>
@@ -504,10 +504,10 @@
     <string name="city_none_nearby">A közelben nincs ismert hálózat. Válassz egy várost a listából.</string>
     <string name="action_cancel">Mégse</string>
 
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <string name="storage_title">Tárhely</string>
     <string name="storage_open">Az offline adatok kezelése</string>

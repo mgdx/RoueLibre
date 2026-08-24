@@ -36,16 +36,16 @@
 
     <!-- The number of bikes available to borrow at a station. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d velosipēds</item>
-        <item quantity="zero">%1$d velosipēdu</item>
-        <item quantity="other">%1$d velosipēdi</item>
+        <item quantity="one">%1$d velosipēds</item>
+        <item quantity="zero">%1$d velosipēdu</item>
+        <item quantity="other">%1$d velosipēdi</item>
     </plurals>
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d brīva vieta</item>
-        <item quantity="zero">%1$d brīvu vietu</item>
-        <item quantity="other">%1$d brīvas vietas</item>
+        <item quantity="one">%1$d brīva vieta</item>
+        <item quantity="zero">%1$d brīvu vietu</item>
+        <item quantity="other">%1$d brīvas vietas</item>
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.
@@ -117,23 +117,23 @@
          distance to the station, or its postcode when the position is
          unknown; %2$d is the number of docking points. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d statīvs</item>
-        <item quantity="zero">%1$s · %2$d statīvu</item>
-        <item quantity="other">%1$s · %2$d statīvi</item>
+        <item quantity="one">%1$s · %2$d statīvs</item>
+        <item quantity="zero">%1$s · %2$d statīvu</item>
+        <item quantity="other">%1$s · %2$d statīvi</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
          kinds. %1$s is the mechanical count, %2$s the electric one. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d parastais</item>
-        <item quantity="zero">%1$d parasto</item>
-        <item quantity="other">%1$d parastie</item>
+        <item quantity="one">%1$d parastais</item>
+        <item quantity="zero">%1$d parasto</item>
+        <item quantity="other">%1$d parastie</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d elektriskais</item>
-        <item quantity="zero">%1$d elektrisko</item>
-        <item quantity="other">%1$d elektriskie</item>
+        <item quantity="one">%1$d elektriskais</item>
+        <item quantity="zero">%1$d elektrisko</item>
+        <item quantity="other">%1$d elektriskie</item>
     </plurals>
 
     <!-- The age of the availability figures. The preposition *pirms* is built
@@ -143,29 +143,29 @@
          `other` read alike here and nowhere else in the file. -->
     <string name="freshness_just_now">tikko</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">pirms %1$d sekundes</item>
-        <item quantity="zero">pirms %1$d sekundēm</item>
-        <item quantity="other">pirms %1$d sekundēm</item>
+        <item quantity="one">pirms %1$d sekundes</item>
+        <item quantity="zero">pirms %1$d sekundēm</item>
+        <item quantity="other">pirms %1$d sekundēm</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">pirms %1$d minūtes</item>
-        <item quantity="zero">pirms %1$d minūtēm</item>
-        <item quantity="other">pirms %1$d minūtēm</item>
+        <item quantity="one">pirms %1$d minūtes</item>
+        <item quantity="zero">pirms %1$d minūtēm</item>
+        <item quantity="other">pirms %1$d minūtēm</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">pirms %1$d stundas</item>
-        <item quantity="zero">pirms %1$d stundām</item>
-        <item quantity="other">pirms %1$d stundām</item>
+        <item quantity="one">pirms %1$d stundas</item>
+        <item quantity="zero">pirms %1$d stundām</item>
+        <item quantity="other">pirms %1$d stundām</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="zero">pirms %1$d dienām</item>
-        <item quantity="one">pirms %1$d dienas</item>
-        <item quantity="other">pirms %1$d dienām</item>
+        <item quantity="zero">pirms %1$d dienām</item>
+        <item quantity="one">pirms %1$d dienas</item>
+        <item quantity="other">pirms %1$d dienām</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="zero">pirms %1$d mēnešiem</item>
-        <item quantity="one">pirms %1$d mēneša</item>
-        <item quantity="other">pirms %1$d mēnešiem</item>
+        <item quantity="zero">pirms %1$d mēnešiem</item>
+        <item quantity="one">pirms %1$d mēneša</item>
+        <item quantity="other">pirms %1$d mēnešiem</item>
     </plurals>
     <string name="freshness_stale">Novecojuši dati · %1$s</string>
     <string name="freshness_fresh">Dati atjaunināti %1$s</string>
@@ -367,16 +367,16 @@
     <string name="journey_outside_coverage">Šis punkts atrodas ārpus apgabala, ko aptver instalētie dati.</string>
     <string name="journey_no_stations">Nav zināma neviena stacija. Atsvaidziniet staciju sarakstu un mēģiniet vēlreiz.</string>
 
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d h %2$02d</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d h %2$02d</string>
 
     <!-- The docking points a station holds in all, where `docks_available`
          counts the free ones. Two words, because the sheet shows both figures
          side by side. -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d statīvs</item>
-        <item quantity="zero">%1$d statīvu</item>
-        <item quantity="other">%1$d statīvi</item>
+        <item quantity="one">%1$d statīvs</item>
+        <item quantity="zero">%1$d statīvu</item>
+        <item quantity="other">%1$d statīvi</item>
     </plurals>
     <!-- %1$s is the number of docking points, %2$s the age of the data. -->
     <string name="station_capacity_and_age">%1$s · %2$s</string>
@@ -416,13 +416,13 @@
     <!-- Distances, formatted through the localisation APIs (SPEC §9). %1$s is
          a figure already rounded and already written in the interface's
          language: the translation places the symbol, never the number. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
     <!-- The symbols of the two imperial systems, written as Latvian writes
          them, which is as everyone writes them. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
     <string name="action_back">Atpakaļ</string>
 
     <!-- City screen: which conurbation the application serves. -->
@@ -436,20 +436,20 @@
     <string name="city_locate_me">Atrast manu pilsētu</string>
     <string name="city_active">Tiek lietota</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d stacija · %2$s lejupielādei</item>
-        <item quantity="zero">%1$d staciju · %2$s lejupielādei</item>
-        <item quantity="other">%1$d stacijas · %2$s lejupielādei</item>
+        <item quantity="one">%1$d stacija · %2$s lejupielādei</item>
+        <item quantity="zero">%1$d staciju · %2$s lejupielādei</item>
+        <item quantity="other">%1$d stacijas · %2$s lejupielādei</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d stacija</item>
-        <item quantity="zero">%1$d staciju</item>
-        <item quantity="other">%1$d stacijas</item>
+        <item quantity="one">%1$d stacija</item>
+        <item quantity="zero">%1$d staciju</item>
+        <item quantity="other">%1$d stacijas</item>
     </plurals>
     <string name="city_detail_size_only">%1$s lejupielādei</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d stacija · lielums tiks paziņots pirms lejupielādes</item>
-        <item quantity="zero">%1$d staciju · lielums tiks paziņots pirms lejupielādes</item>
-        <item quantity="other">%1$d stacijas · lielums tiks paziņots pirms lejupielādes</item>
+        <item quantity="one">%1$d stacija · lielums tiks paziņots pirms lejupielādes</item>
+        <item quantity="zero">%1$d staciju · lielums tiks paziņots pirms lejupielādes</item>
+        <item quantity="other">%1$d stacijas · lielums tiks paziņots pirms lejupielādes</item>
     </plurals>
     <string name="city_size_unknown">Lielums tiks paziņots pirms lejupielādes</string>
     <!-- %1$s is a size, and a quantified phrase carries its own agreement: the
@@ -485,10 +485,10 @@
     <string name="city_none_nearby">Šeit tuvumā nav neviena zināma tīkla. Izvēlieties pilsētu no saraksta.</string>
     <string name="action_cancel">Atcelt</string>
 
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <string name="storage_title">Krātuve</string>
     <string name="storage_open">Pārvaldīt bezsaistes datus</string>

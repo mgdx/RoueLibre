@@ -28,7 +28,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/role" />
 
+    <!-- The four lines of this row name a thing — a role, a station, a street,
+         what stood there — rather than run on, so all four refuse the
+         justification and the hyphenation the theme gives every text view, as
+         the station rows of item_station.xml do. -->
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/role"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -40,6 +45,7 @@
         tools:text="Departure station" />
 
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -53,6 +59,7 @@
          when the index knows nothing near enough: naming the wrong street
          would be worse than naming none. -->
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -68,6 +75,7 @@
          that it always be shown: it is what lets the user judge the risk they
          are taking on a station with a single bike left. -->
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/availability"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

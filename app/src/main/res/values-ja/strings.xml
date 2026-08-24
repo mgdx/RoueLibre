@@ -496,14 +496,14 @@
          number. Which of the five applies is the reader's unit system.
          Japanese writes these symbols exactly as English does, half-width and
          spaced off the figure. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
     <!-- The symbols of the two imperial systems. Written the same way in most
          languages; the string exists in every one all the same, so a language
          that writes them otherwise has somewhere to say so. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
 
     <string name="action_back">戻る</string>
 
@@ -564,10 +564,10 @@
 
     <!-- File size units. Base 1000, as everywhere else in the system.
          %1$s is a number already written in the displayed language. -->
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <!-- The storage screen: what the application occupies, and how to reclaim
          it (SPEC §4.4). -->

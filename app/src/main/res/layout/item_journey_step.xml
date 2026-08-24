@@ -28,7 +28,13 @@
         app:tint="@color/ink_soft"
         tools:src="@drawable/ic_walk" />
 
+    <!-- Both lines name a thing rather than run on, so both refuse the
+         justification and the hyphenation the theme gives every text view, as
+         the station rows of item_station.xml do. At the largest text sizes
+         "Ride to Theatre Sebastopol" wraps, and justified its first line came
+         out bank to bank with a hand's breadth between the words. -->
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -40,6 +46,7 @@
         tools:text="Marcher jusqu'à Gare Lille Flandres" />
 
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/detail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

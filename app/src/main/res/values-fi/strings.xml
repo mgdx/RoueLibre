@@ -44,14 +44,14 @@
 
     <!-- The number of bikes available to borrow at a station. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d pyörä</item>
-        <item quantity="other">%1$d pyörää</item>
+        <item quantity="one">%1$d pyörä</item>
+        <item quantity="other">%1$d pyörää</item>
     </plurals>
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d vapaa paikka</item>
-        <item quantity="other">%1$d vapaata paikkaa</item>
+        <item quantity="one">%1$d vapaa paikka</item>
+        <item quantity="other">%1$d vapaata paikkaa</item>
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.
@@ -117,8 +117,8 @@
          fifty metres away. %2$d is the number of docking points.
          `StationAdapter.whereabouts` is what decides. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d teline</item>
-        <item quantity="other">%1$s · %2$d telinettä</item>
+        <item quantity="one">%1$s · %2$d teline</item>
+        <item quantity="other">%1$s · %2$d telinettä</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
@@ -126,35 +126,35 @@
          one, each already agreed in number. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d tavallinen</item>
-        <item quantity="other">%1$d tavallista</item>
+        <item quantity="one">%1$d tavallinen</item>
+        <item quantity="other">%1$d tavallista</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d sähköpyörä</item>
-        <item quantity="other">%1$d sähköpyörää</item>
+        <item quantity="one">%1$d sähköpyörä</item>
+        <item quantity="other">%1$d sähköpyörää</item>
     </plurals>
 
     <!-- Always read inside `freshness_fresh`: ”Päivitetty äsken”. -->
     <string name="freshness_just_now">äsken</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">%1$d sekunti sitten</item>
-        <item quantity="other">%1$d sekuntia sitten</item>
+        <item quantity="one">%1$d sekunti sitten</item>
+        <item quantity="other">%1$d sekuntia sitten</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">%1$d minuutti sitten</item>
-        <item quantity="other">%1$d minuuttia sitten</item>
+        <item quantity="one">%1$d minuutti sitten</item>
+        <item quantity="other">%1$d minuuttia sitten</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">%1$d tunti sitten</item>
-        <item quantity="other">%1$d tuntia sitten</item>
+        <item quantity="one">%1$d tunti sitten</item>
+        <item quantity="other">%1$d tuntia sitten</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">%1$d päivä sitten</item>
-        <item quantity="other">%1$d päivää sitten</item>
+        <item quantity="one">%1$d päivä sitten</item>
+        <item quantity="other">%1$d päivää sitten</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">%1$d kuukausi sitten</item>
-        <item quantity="other">%1$d kuukautta sitten</item>
+        <item quantity="one">%1$d kuukausi sitten</item>
+        <item quantity="other">%1$d kuukautta sitten</item>
     </plurals>
     <string name="freshness_stale">Vanhentuneet tiedot · %1$s</string>
     <string name="freshness_fresh">Päivitetty %1$s</string>
@@ -369,12 +369,12 @@
     <string name="journey_outside_coverage">Tämä piste on asennettujen aineistojen kattaman alueen ulkopuolella.</string>
     <string name="journey_no_stations">Asemia ei tunneta. Päivitä asemalista ja yritä uudelleen.</string>
 
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d h %2$02d</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d h %2$02d</string>
 
     <plurals name="docks_total">
-        <item quantity="one">%1$d teline</item>
-        <item quantity="other">%1$d telinettä</item>
+        <item quantity="one">%1$d teline</item>
+        <item quantity="other">%1$d telinettä</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
     <!-- `lähellä` governs the genitive and the argument is a street name in the
@@ -424,14 +424,14 @@
          five, %1$s is a figure already rounded and already written in the
          interface's language: the translation places the symbol, never the
          number. Which of the five applies is the reader's unit system. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
     <!-- The symbols of the two imperial systems. Written the same way in most
          languages; the string exists in every one all the same, so a language
          that writes them otherwise has somewhere to say so. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
     <string name="action_back">Takaisin</string>
 
     <!-- City screen: which conurbation the application serves. -->
@@ -445,17 +445,17 @@
     <string name="city_locate_me">Etsi kaupunkini</string>
     <string name="city_active">Käytössä</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d asema · %2$s ladattavaa</item>
-        <item quantity="other">%1$d asemaa · %2$s ladattavaa</item>
+        <item quantity="one">%1$d asema · %2$s ladattavaa</item>
+        <item quantity="other">%1$d asemaa · %2$s ladattavaa</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d asema</item>
-        <item quantity="other">%1$d asemaa</item>
+        <item quantity="one">%1$d asema</item>
+        <item quantity="other">%1$d asemaa</item>
     </plurals>
     <string name="city_detail_size_only">%1$s ladattavaa</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d asema · koko kerrotaan ennen latausta</item>
-        <item quantity="other">%1$d asemaa · koko kerrotaan ennen latausta</item>
+        <item quantity="one">%1$d asema · koko kerrotaan ennen latausta</item>
+        <item quantity="other">%1$d asemaa · koko kerrotaan ennen latausta</item>
     </plurals>
     <string name="city_size_unknown">Koko kerrotaan ennen latausta</string>
     <string name="city_installed">Laitteella %1$s asennettuna</string>
@@ -492,10 +492,10 @@
          Android's own Finnish does the same (`settings:enable_16k_pages`,
          ”16 kt:n sivukoolla”), which is why these four are translated where
          the distance symbols are not. -->
-    <string name="size_bytes">%1$s t</string>
-    <string name="size_kilobytes">%1$s kt</string>
-    <string name="size_megabytes">%1$s Mt</string>
-    <string name="size_gigabytes">%1$s Gt</string>
+    <string name="size_bytes">%1$s t</string>
+    <string name="size_kilobytes">%1$s kt</string>
+    <string name="size_megabytes">%1$s Mt</string>
+    <string name="size_gigabytes">%1$s Gt</string>
 
     <string name="storage_title">Tallennustila</string>
     <string name="storage_open">Hallitse offline-aineistoja</string>
