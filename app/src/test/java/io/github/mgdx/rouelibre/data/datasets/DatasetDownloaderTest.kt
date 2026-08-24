@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
+import mockwebserver3.SocketEffect
 import okhttp3.OkHttpClient
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -104,6 +105,38 @@ class DatasetDownloaderTest {
 
         assertTrue("expected a refusal, got: $outcome", outcome is Outcome.Failure)
         assertTrue("nothing must be left to install", workDirectory.listFiles().orEmpty().isEmpty())
+        // The counterpart of the cut below, and the reason the two cannot share
+        // one wording: here the whole file came down from a host that answered
+        // perfectly, and what it contains is not what was announced. Calling
+        // that a lost connection would send the reader to their Wi-Fi settings
+        // for a file the producer published wrong.
+        assertTrue(
+            "expected MalformedResponse, got $outcome",
+            (outcome as Outcome.Failure).error is DataError.MalformedResponse,
+        )
+    }
+
+    @Test
+    fun `a transfer cut in the middle is a lost connection, not an unreadable file`() = runTest {
+        // The Wi-Fi dropping two seconds into a 44 MB download: the socket dies
+        // halfway through the body, and OkHttp reports `unexpected end of
+        // stream` — an error of the same family as a response that makes no
+        // sense. Read as such, it told the user their map file was unreadable.
+        server.enqueue(
+            MockResponse.Builder()
+                .code(200)
+                .body(okio.Buffer().write(content))
+                .onResponseBody(SocketEffect.CloseSocket())
+                .build(),
+        )
+
+        val outcome = downloader.download(datasetOf(sha256 = sha256Of(content)), workDirectory)
+
+        assertTrue("expected a failure, got: $outcome", outcome is Outcome.Failure)
+        assertEquals(DataError.Offline, (outcome as Outcome.Failure).error)
+        // And the promise that goes with the wording: what arrived is kept, so
+        // the download picks up where it stopped.
+        assertTrue("nothing was kept of the transfer", partialFiles().single().length() > 0)
     }
 
     @Test
