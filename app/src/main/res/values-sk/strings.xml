@@ -716,6 +716,17 @@
     <string name="error_untrusted_server_download">Neplatný bezpečnostný certifikát. Sťahovanie bude pokračovať, hneď ako bude obnovený.</string>
     <string name="error_malformed_download">Prijatý nečitateľný súbor. Sťahovanie bude pokračovať tam, kde skončilo.</string>
     <string name="error_local_storage_download">Súbor sa nepodarilo uložiť. Uvoľnite priestor a sťahovanie bude pokračovať.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Žiadne pripojenie. Nič sa neskontrolovalo; skúste to znova po pripojení.</string>
+    <string name="error_timeout_check">Server neodpovedá. Nič sa neskontrolovalo; skúste to o chvíľu znova.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Chyba servera (%1$d). Nič sa neskontrolovalo; skúste to neskôr.</string>
+    <string name="error_untrusted_server_check">Neplatný bezpečnostný certifikát. Kým nebude obnovený, nedá sa nič skontrolovať.</string>
+    <string name="error_malformed_check">Zverejnený zoznam údajov je nečitateľný. Nič sa neskontrolovalo; skúste to neskôr.</string>
+    <string name="error_local_storage_check">Údaje uložené v zariadení nemožno prečítať. Nebolo s čím porovnávať.</string>
     <string name="error_timeout">Server siete odpovedá príliš dlho. Skúste to o chvíľu znova.</string>
     <!-- %1$d is the HTTP code the server returned. -->
     <string name="error_server_refused">Server siete vrátil chybu (%1$d). Skúste to neskôr.</string>

@@ -627,6 +627,17 @@
     <string name="error_untrusted_server_download">Ungültiges Sicherheitszertifikat. Der Download wird fortgesetzt, sobald es erneuert ist.</string>
     <string name="error_malformed_download">Unlesbare Datei empfangen. Der Download wird dort fortgesetzt, wo er stehen geblieben ist.</string>
     <string name="error_local_storage_download">Die Datei konnte nicht gespeichert werden. Gib Speicherplatz frei, dann wird der Download fortgesetzt.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Keine Verbindung. Es wurde nichts geprüft; versuch es erneut, sobald du online bist.</string>
+    <string name="error_timeout_check">Der Server antwortet nicht. Es wurde nichts geprüft; versuch es gleich noch einmal.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Serverfehler (%1$d). Es wurde nichts geprüft; versuch es später noch einmal.</string>
+    <string name="error_untrusted_server_check">Ungültiges Sicherheitszertifikat. Es lässt sich nichts prüfen, solange es nicht erneuert ist.</string>
+    <string name="error_malformed_check">Die veröffentlichte Datenliste ist unlesbar. Es wurde nichts geprüft; versuch es später noch einmal.</string>
+    <string name="error_local_storage_check">Die auf dem Gerät gespeicherten Daten lassen sich nicht lesen. Es gab nichts zu vergleichen.</string>
     <string name="error_timeout">Der Server des Netzes braucht zu lange für eine Antwort. Versuch es gleich noch einmal.</string>
     <!-- %1$d is the HTTP code the server returned. -->
     <string name="error_server_refused">Der Server des Netzes hat einen Fehler zurückgegeben (%1$d). Versuch es später noch einmal.</string>

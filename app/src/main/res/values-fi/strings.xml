@@ -551,6 +551,17 @@
     <string name="error_untrusted_server_download">Virheellinen suojausvarmenne. Lataus jatkuu, kun varmenne on uusittu.</string>
     <string name="error_malformed_download">Vastaanotettua tiedostoa ei voi lukea. Lataus jatkuu siitä, mihin se jäi.</string>
     <string name="error_local_storage_download">Tiedostoa ei voitu tallentaa. Vapauta tilaa, niin lataus jatkuu.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Ei yhteyttä. Mitään ei tarkistettu; yritä uudelleen, kun yhteys palaa.</string>
+    <string name="error_timeout_check">Palvelin ei vastaa. Mitään ei tarkistettu; yritä hetken päästä uudelleen.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Palvelinvirhe (%1$d). Mitään ei tarkistettu; yritä myöhemmin uudelleen.</string>
+    <string name="error_untrusted_server_check">Virheellinen suojausvarmenne. Mitään ei voi tarkistaa, ennen kuin varmenne on uusittu.</string>
+    <string name="error_malformed_check">Julkaistua tietoluetteloa ei voi lukea. Mitään ei tarkistettu; yritä myöhemmin uudelleen.</string>
+    <string name="error_local_storage_check">Laitteelle tallennettuja tietoja ei voi lukea. Mitään ei voitu verrata.</string>
     <string name="error_timeout">Verkoston palvelin vastaa liian hitaasti. Yritä hetken päästä uudelleen.</string>
     <string name="error_server_refused">Verkoston palvelin palautti virheen (%1$d). Yritä myöhemmin uudelleen.</string>
     <string name="error_untrusted_server">Verkoston palvelin esitti virheellisen suojausvarmenteen. Sen tietoja ei voi hakea turvallisesti, ennen kuin operaattori uusii varmenteen.</string>

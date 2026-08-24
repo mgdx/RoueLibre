@@ -682,6 +682,17 @@
     <string name="error_untrusted_server_download">Certificado de segurança inválido. A transferência retoma assim que for renovado.</string>
     <string name="error_malformed_download">Ficheiro recebido ilegível. A transferência retoma onde parou.</string>
     <string name="error_local_storage_download">Não foi possível guardar o ficheiro. Liberte espaço e a transferência retoma.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Sem ligação à Internet. Não foi verificado nada; tente novamente quando voltar a ter ligação.</string>
+    <string name="error_timeout_check">O servidor não responde. Não foi verificado nada; tente novamente daqui a pouco.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Erro do servidor (%1$d). Não foi verificado nada; tente novamente mais tarde.</string>
+    <string name="error_untrusted_server_check">Certificado de segurança inválido. Nada pode ser verificado enquanto não for renovado.</string>
+    <string name="error_malformed_check">A lista de dados publicada está ilegível. Não foi verificado nada; tente novamente mais tarde.</string>
+    <string name="error_local_storage_check">Não foi possível ler os dados guardados no dispositivo. Não houve nada com que comparar.</string>
     <string name="error_timeout">O servidor da rede está a demorar demasiado a responder. Tente novamente daqui a pouco.</string>
     <!-- %1$d is the HTTP code the server returned. -->
     <string name="error_server_refused">O servidor da rede devolveu um erro (%1$d). Tente novamente mais tarde.</string>

@@ -539,6 +539,17 @@
     <string name="error_untrusted_server_download">Certifikatë sigurie e pavlefshme. Shkarkimi vazhdon sapo ajo të rinovohet.</string>
     <string name="error_malformed_download">U mor një skedar i palexueshëm. Shkarkimi vazhdon aty ku ndaloi.</string>
     <string name="error_local_storage_download">Skedari nuk u ruajt dot. Liro pak hapësirë dhe shkarkimi vazhdon.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Nuk ka lidhje. Nuk u kontrollua asgjë; provo përsëri kur të kthehet lidhja.</string>
+    <string name="error_timeout_check">Serveri nuk po përgjigjet. Nuk u kontrollua asgjë; provo përsëri pas pak.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Gabim serveri (%1$d). Nuk u kontrollua asgjë; provo përsëri më vonë.</string>
+    <string name="error_untrusted_server_check">Certifikatë sigurie e pavlefshme. Nuk kontrollohet dot asgjë derisa ajo të rinovohet.</string>
+    <string name="error_malformed_check">Lista e publikuar e të dhënave është e palexueshme. Nuk u kontrollua asgjë; provo përsëri më vonë.</string>
+    <string name="error_local_storage_check">Të dhënat e ruajtura në pajisje nuk lexohen dot. Nuk u krahasua asgjë.</string>
     <string name="error_timeout">Serveri i rrjetit po vonon shumë për t’u përgjigjur. Provo përsëri pas pak.</string>
     <string name="error_server_refused">Serveri i rrjetit ktheu një gabim (%1$d). Provo përsëri më vonë.</string>
     <string name="error_untrusted_server">Serveri i rrjetit paraqiti një certifikatë sigurie të pavlefshme. Të dhënat e tij nuk merren dot në mënyrë të sigurt derisa operatori ta rinovojë.</string>

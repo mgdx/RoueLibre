@@ -639,6 +639,17 @@
     <string name="error_untrusted_server_download">セキュリティ証明書が無効です。証明書が更新され次第、ダウンロードを再開します。</string>
     <string name="error_malformed_download">読み取れないファイルを受信しました。ダウンロードは中断したところから再開します。</string>
     <string name="error_local_storage_download">ファイルを保存できませんでした。空き容量を増やすと、ダウンロードを再開します。</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">接続がありません。何も確認できませんでした。接続が戻ってから、もう一度お試しください。</string>
+    <string name="error_timeout_check">サーバーが応答しません。何も確認できませんでした。しばらくしてからお試しください。</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">サーバーエラー（%1$d）。何も確認できませんでした。しばらくしてからお試しください。</string>
+    <string name="error_untrusted_server_check">セキュリティ証明書が無効です。更新されるまで確認できません。</string>
+    <string name="error_malformed_check">公開されているデータ一覧を読み取れません。何も確認できませんでした。しばらくしてからお試しください。</string>
+    <string name="error_local_storage_check">端末に保存されたデータを読み取れません。照合できませんでした。</string>
     <string name="error_timeout">サービスのサーバーの応答に時間がかかりすぎています。しばらくしてから、もう一度お試しください。</string>
     <!-- %1$d is the HTTP code the server returned. -->
     <string name="error_server_refused">サービスのサーバーがエラーを返しました（%1$d）。しばらくしてからお試しください。</string>

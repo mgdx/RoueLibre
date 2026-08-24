@@ -14,6 +14,7 @@ import io.github.mgdx.rouelibre.core.data.DatasetUpdate
 import io.github.mgdx.rouelibre.databinding.ItemDatasetBinding
 import io.github.mgdx.rouelibre.ui.textLocale
 import io.github.mgdx.rouelibre.ui.toDownloadMessage
+import io.github.mgdx.rouelibre.ui.toUpdateCheckMessage
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -155,7 +156,7 @@ fun StorageMessage.toText(context: Context): String = when (this) {
     is StorageMessage.Deleted ->
         context.getString(R.string.dataset_deleted, context.getString(kind.nameResource()))
 
-    is StorageMessage.CheckFailed -> error.toDownloadMessage(context)
+    is StorageMessage.CheckFailed -> error.toUpdateCheckMessage(context)
 
     is StorageMessage.UnsupportedFormat -> context.getString(
         R.string.dataset_rejected_version,

@@ -502,6 +502,17 @@
     <string name="error_untrusted_server_download">Ongeldig beveiligingscertificaat. De download gaat verder zodra het vernieuwd is.</string>
     <string name="error_malformed_download">Onleesbaar bestand ontvangen. De download gaat verder waar hij gestopt is.</string>
     <string name="error_local_storage_download">Het bestand kon niet worden opgeslagen. Maak ruimte vrij en de download gaat verder.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Geen verbinding. Er is niets gecontroleerd; probeer het opnieuw zodra je verbinding hebt.</string>
+    <string name="error_timeout_check">De server antwoordt niet. Er is niets gecontroleerd; probeer het zo meteen opnieuw.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Serverfout (%1$d). Er is niets gecontroleerd; probeer het later opnieuw.</string>
+    <string name="error_untrusted_server_check">Ongeldig beveiligingscertificaat. Er kan niets worden gecontroleerd tot het vernieuwd is.</string>
+    <string name="error_malformed_check">De gepubliceerde gegevenslijst is onleesbaar. Er is niets gecontroleerd; probeer het later opnieuw.</string>
+    <string name="error_local_storage_check">Kan de gegevens die op het apparaat zijn opgeslagen niet lezen. Er viel niets te vergelijken.</string>
     <string name="error_timeout">De server van het netwerk doet er te lang over om te antwoorden. Probeer het zo meteen opnieuw.</string>
     <string name="error_server_refused">De server van het netwerk gaf een fout terug (%1$d). Probeer het later opnieuw.</string>
     <string name="error_untrusted_server">De server van het netwerk heeft een ongeldig beveiligingscertificaat aangeboden. De gegevens kunnen niet veilig worden opgehaald zolang de beheerder het niet vernieuwt.</string>

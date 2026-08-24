@@ -591,6 +591,17 @@
     <string name="error_untrusted_server_download">Certificat de securitate nevalid. Descărcarea reia după înnoirea lui.</string>
     <string name="error_malformed_download">S-a primit un fișier ilizibil. Descărcarea reia de unde a rămas.</string>
     <string name="error_local_storage_download">Fișierul nu a putut fi salvat. Eliberează spațiu și descărcarea reia.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Fără conexiune. Nu s-a verificat nimic; încearcă din nou când revii online.</string>
+    <string name="error_timeout_check">Serverul nu răspunde. Nu s-a verificat nimic; încearcă din nou peste puțin timp.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Eroare de server (%1$d). Nu s-a verificat nimic; încearcă din nou mai târziu.</string>
+    <string name="error_untrusted_server_check">Certificat de securitate nevalid. Nu se poate verifica nimic până la înnoirea lui.</string>
+    <string name="error_malformed_check">Lista publicată de date este ilizibilă. Nu s-a verificat nimic; încearcă din nou mai târziu.</string>
+    <string name="error_local_storage_check">Nu se pot citi datele stocate pe dispozitiv. Nu a fost nimic de comparat.</string>
     <string name="error_timeout">Serverul rețelei răspunde prea greu. Încearcă din nou peste puțin timp.</string>
     <string name="error_server_refused">Serverul rețelei a returnat o eroare (%1$d). Încearcă din nou mai târziu.</string>
     <string name="error_untrusted_server">Serverul rețelei a prezentat un certificat de securitate nevalid. Datele lui nu pot fi aduse în siguranță până când operatorul nu îl înnoiește.</string>

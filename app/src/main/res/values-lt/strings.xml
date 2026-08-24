@@ -592,6 +592,17 @@
     <string name="error_untrusted_server_download">Netinkamas saugos sertifikatas. Atsisiuntimas tęsis, kai jis bus atnaujintas.</string>
     <string name="error_malformed_download">Gautas neperskaitomas failas. Atsisiuntimas tęsis nuo tos vietos, kurioje sustojo.</string>
     <string name="error_local_storage_download">Failo išsaugoti nepavyko. Atlaisvinkite vietos ir atsisiuntimas tęsis.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Nėra ryšio. Nieko nepatikrinta; bandykite dar kartą, kai atsiras ryšys.</string>
+    <string name="error_timeout_check">Serveris neatsako. Nieko nepatikrinta; bandykite dar kartą po akimirkos.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Serverio klaida (%1$d). Nieko nepatikrinta; bandykite vėliau.</string>
+    <string name="error_untrusted_server_check">Netinkamas saugos sertifikatas. Kol jis nebus atnaujintas, nieko patikrinti neįmanoma.</string>
+    <string name="error_malformed_check">Paskelbtas duomenų sąrašas neperskaitomas. Nieko nepatikrinta; bandykite vėliau.</string>
+    <string name="error_local_storage_check">Nepavyksta perskaityti įrenginyje saugomų duomenų. Nebuvo su kuo palyginti.</string>
     <string name="error_timeout">Tinklo serveris atsako per ilgai. Bandykite dar kartą po akimirkos.</string>
     <string name="error_server_refused">Tinklo serveris grąžino klaidą (%1$d). Bandykite vėliau.</string>
     <string name="error_untrusted_server">Tinklo serveris pateikė netinkamą saugos sertifikatą. Kol operatorius jo neatnaujins, tinklo duomenų saugiai atsisiųsti neįmanoma.</string>

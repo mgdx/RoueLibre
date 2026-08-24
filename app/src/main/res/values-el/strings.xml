@@ -579,6 +579,17 @@
     <string name="error_untrusted_server_download">Μη έγκυρο πιστοποιητικό ασφαλείας. Η λήψη συνεχίζει μόλις ανανεωθεί.</string>
     <string name="error_malformed_download">Ελήφθη μη αναγνώσιμο αρχείο. Η λήψη συνεχίζει από εκεί που σταμάτησε.</string>
     <string name="error_local_storage_download">Δεν ήταν δυνατή η αποθήκευση του αρχείου. Αποδεσμεύστε χώρο και η λήψη συνεχίζει.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Χωρίς σύνδεση. Δεν ελέγχθηκε τίποτα· δοκιμάστε ξανά μόλις συνδεθείτε.</string>
+    <string name="error_timeout_check">Ο διακομιστής δεν απαντά. Δεν ελέγχθηκε τίποτα· δοκιμάστε ξανά σε λίγο.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Σφάλμα διακομιστή (%1$d). Δεν ελέγχθηκε τίποτα· δοκιμάστε ξανά αργότερα.</string>
+    <string name="error_untrusted_server_check">Μη έγκυρο πιστοποιητικό ασφαλείας. Δεν μπορεί να γίνει έλεγχος ώσπου να ανανεωθεί.</string>
+    <string name="error_malformed_check">Η δημοσιευμένη λίστα δεδομένων δεν διαβάζεται. Δεν ελέγχθηκε τίποτα· δοκιμάστε ξανά αργότερα.</string>
+    <string name="error_local_storage_check">Δεν είναι δυνατή η ανάγνωση των δεδομένων στη συσκευή. Δεν έγινε καμία σύγκριση.</string>
     <string name="error_timeout">Ο διακομιστής του δικτύου αργεί πολύ να απαντήσει. Δοκιμάστε ξανά σε λίγο.</string>
     <string name="error_server_refused">Ο διακομιστής του δικτύου επέστρεψε σφάλμα (%1$d). Δοκιμάστε ξανά αργότερα.</string>
     <string name="error_untrusted_server">Ο διακομιστής του δικτύου παρουσίασε μη έγκυρο πιστοποιητικό ασφαλείας. Τα δεδομένα του δεν μπορούν να ληφθούν με ασφάλεια ώσπου να το ανανεώσει ο φορέας του δικτύου.</string>

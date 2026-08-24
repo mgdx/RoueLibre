@@ -89,6 +89,52 @@ fun DataError.toDownloadMessage(context: Context): String = when (this) {
 }
 
 /**
+ * The same failures again, read after a press on "Check for updates", where a
+ * manifest was being read rather than a file coming down.
+ *
+ * Checking is a third gesture, and none of the two registers above fits it.
+ * [toDownloadMessage] promises the transfer picks up where it stopped, which is
+ * exactly what a failed check cannot promise: **nothing was ever being
+ * transferred**. A single request goes out, it reads what is published, and it
+ * is over — so the whole check has to be made again, and every sentence below
+ * says so rather than announcing a resumption that would never come. That was
+ * the defect: an update check made in flight mode answered "No connection. The
+ * download picks up where it stopped.", about a download nobody had started.
+ *
+ * What it keeps from [toDownloadMessage] is whose server this is: the one
+ * hosting the datasets, never the bike network's, which this screen no more
+ * talks to when checking than when downloading. So no sentence here names the
+ * network either.
+ *
+ * The device's own refusal is the one that changes side. Downloading writes,
+ * and its wording sends the reader to free some space; checking only **reads**
+ * — the installed versions, to hold them against what is published — so freeing
+ * space answers nothing, and what is said instead is that there was nothing to
+ * compare the manifest against.
+ *
+ * Everything else, [DataError.NoCityChosen] first of all — the check's own way
+ * of saying there is no manifest to ask for — reads the same on all three and is
+ * left to [toUserMessage].
+ *
+ * @return a complete sentence, ready to be shown.
+ */
+fun DataError.toUpdateCheckMessage(context: Context): String = when (this) {
+    DataError.Offline -> context.getString(R.string.error_offline_check)
+    DataError.Timeout -> context.getString(R.string.error_timeout_check)
+    is DataError.ServerRefused ->
+        context.getString(R.string.error_server_refused_check, statusCode)
+    is DataError.UntrustedServer ->
+        context.getString(R.string.error_untrusted_server_check)
+    is DataError.MalformedResponse ->
+        // The manifest that will not parse, as for the download: the technical
+        // detail stays in the value, and the user is told what to do.
+        context.getString(R.string.error_malformed_check)
+    is DataError.LocalStorageFailure ->
+        context.getString(R.string.error_local_storage_check)
+    else -> toUserMessage(context)
+}
+
+/**
  * Turns a journey that could not be composed into a sentence for the user.
  *
  * Each says what happened **and what to do about it** (SPEC §14): the missing

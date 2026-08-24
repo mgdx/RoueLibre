@@ -534,6 +534,17 @@
     <string name="error_untrusted_server_download">Ogiltigt säkerhetscertifikat. Nedladdningen fortsätter när det har förnyats.</string>
     <string name="error_malformed_download">En oläsbar fil togs emot. Nedladdningen fortsätter där den stannade.</string>
     <string name="error_local_storage_download">Filen kunde inte sparas. Frigör utrymme, så fortsätter nedladdningen.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Ingen anslutning. Ingenting kontrollerades. Försök igen när du är uppkopplad.</string>
+    <string name="error_timeout_check">Servern svarar inte. Ingenting kontrollerades. Försök igen om en stund.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Serverfel (%1$d). Ingenting kontrollerades. Försök igen senare.</string>
+    <string name="error_untrusted_server_check">Ogiltigt säkerhetscertifikat. Ingenting kan kontrolleras förrän det har förnyats.</string>
+    <string name="error_malformed_check">Den publicerade datalistan går inte att läsa. Ingenting kontrollerades. Försök igen senare.</string>
+    <string name="error_local_storage_check">Det går inte att läsa de data som är lagrade på enheten. Ingenting kunde jämföras.</string>
     <string name="error_timeout">Nätverkets server tar för lång tid på sig att svara. Försök igen om en stund.</string>
     <string name="error_server_refused">Nätverkets server svarade med ett fel (%1$d). Försök igen senare.</string>
     <string name="error_untrusted_server">Nätverkets server visade ett ogiltigt säkerhetscertifikat. Dess data kan inte hämtas säkert förrän operatören förnyar det.</string>
