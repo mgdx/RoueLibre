@@ -8,6 +8,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -204,10 +206,42 @@ class StationListFragment : Fragment() {
         // not fetch a second time.
         viewModel.orderByProximity()
 
+        standClearOfTheBanner()
         observeState()
         observeErrors()
         keepAvailabilityFresh()
         showCoveredArea()
+    }
+
+    /**
+     * Keeps "nearest station first" clear of the banner, and the last row
+     * clear of the button (SPEC §7.2).
+     *
+     * The banner belongs to the activity and is laid over the whole window, so
+     * nothing shifts this button out of its way by itself — see
+     * `MainActivity.roomTakenByTheBanner`. It stood exactly over it, and with
+     * no network a refresh raises one every ten seconds.
+     *
+     * The room under the last row rises with the button, for the reason it
+     * exists at all: the last station of the network must stay something one
+     * can scroll into view.
+     */
+    private fun standClearOfTheBanner() {
+        val host = activity as? MainActivity ?: return
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                host.roomTakenByTheBanner.collect { room ->
+                    val views = binding ?: return@collect
+                    val roomUnderTheLastRow = R.dimen.list_room_under_the_last_row
+                    views.locateMe.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                        bottomMargin = resources.getDimensionPixelSize(R.dimen.space_m) + room
+                    }
+                    views.stations.updatePadding(
+                        bottom = resources.getDimensionPixelSize(roomUnderTheLastRow) + room,
+                    )
+                }
+            }
+        }
     }
 
     /**
@@ -405,7 +439,10 @@ class StationListFragment : Fragment() {
                         R.string.action_retry to { viewModel.refresh(force = true) }
                     }
                     host.showMessage(
-                        error.toUserMessage(requireContext()),
+                        error.toUserMessage(
+                            requireContext(),
+                            hasKnownAvailability = viewModel.state.value.fetchedAt != null,
+                        ),
                         MessageSubject.Refresh,
                         actionLabel = label,
                     ) {

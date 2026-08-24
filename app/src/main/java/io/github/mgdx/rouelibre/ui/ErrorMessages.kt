@@ -13,29 +13,44 @@ import io.github.mgdx.rouelibre.core.station.WantedBikeKind
  * not allowed to hold displayable text (SPEC §9), and every failure must say
  * what happened and what to do (SPEC §14).
  *
+ * @param hasKnownAvailability whether any availability at all has ever been
+ *   received for the network in service. Being offline reads differently on
+ *   either side of that line: "the last known availability stays on screen"
+ *   is true and useful over counters that are merely old, and is a promise of
+ *   something the reader has never had on a fresh install whose first refresh
+ *   never got through — an empty map, under a pill saying "Never updated".
+ *   The screens read it from `state.fetchedAt`, the same value the pill is
+ *   written from. It defaults to the ordinary case, availability on screen.
  * @return a complete sentence, ready to be shown.
  */
-fun DataError.toUserMessage(context: Context): String = when (this) {
-    DataError.Offline -> context.getString(R.string.error_offline)
-    DataError.Timeout -> context.getString(R.string.error_timeout)
-    is DataError.ServerRefused ->
-        context.getString(R.string.error_server_refused, statusCode)
-    is DataError.UntrustedServer ->
-        // Like the malformed case, the technical detail stays in the value: the
-        // user is told whose problem it is, not what the handshake said.
-        context.getString(R.string.error_untrusted_server)
-    is DataError.MalformedResponse ->
-        // The technical detail stays in the value, for the log and the bug
-        // report; the user gets an instruction, not a trace.
-        context.getString(R.string.error_malformed)
-    is DataError.FeedUnavailable ->
-        context.getString(R.string.error_feed_unavailable, feedName)
-    is DataError.UnsupportedFeedVersion ->
-        context.getString(R.string.error_unsupported_version, version)
-    is DataError.LocalStorageFailure ->
-        context.getString(R.string.error_local_storage)
-    DataError.NoCityChosen -> context.getString(R.string.error_no_city_chosen)
-}
+fun DataError.toUserMessage(context: Context, hasKnownAvailability: Boolean = true): String =
+    when (this) {
+        DataError.Offline -> context.getString(
+            if (hasKnownAvailability) {
+                R.string.error_offline
+            } else {
+                R.string.error_offline_no_availability
+            },
+        )
+        DataError.Timeout -> context.getString(R.string.error_timeout)
+        is DataError.ServerRefused ->
+            context.getString(R.string.error_server_refused, statusCode)
+        is DataError.UntrustedServer ->
+            // Like the malformed case, the technical detail stays in the value: the
+            // user is told whose problem it is, not what the handshake said.
+            context.getString(R.string.error_untrusted_server)
+        is DataError.MalformedResponse ->
+            // The technical detail stays in the value, for the log and the bug
+            // report; the user gets an instruction, not a trace.
+            context.getString(R.string.error_malformed)
+        is DataError.FeedUnavailable ->
+            context.getString(R.string.error_feed_unavailable, feedName)
+        is DataError.UnsupportedFeedVersion ->
+            context.getString(R.string.error_unsupported_version, version)
+        is DataError.LocalStorageFailure ->
+            context.getString(R.string.error_local_storage)
+        DataError.NoCityChosen -> context.getString(R.string.error_no_city_chosen)
+    }
 
 /**
  * The same failures, read on the storage screen, where a file was coming down

@@ -656,6 +656,7 @@
     <!-- Error messages: what happened, and what to do. No apologies, no
          technical codes (SPEC §7 and §14). -->
     <string name="error_offline">Nessuna connessione. Resta a schermo l’ultima disponibilità conosciuta.</string>
+    <string name="error_offline_no_availability">Nessuna connessione. Non è ancora arrivata alcuna disponibilità, quindi non c’è nulla da mostrare.</string>
     <!-- The same failures read on the storage screen, where a dataset
          transfer failed rather than an availability refresh. The server
          is the one hosting the files, not the bike network's, and those

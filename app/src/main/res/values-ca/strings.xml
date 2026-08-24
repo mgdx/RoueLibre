@@ -475,6 +475,7 @@
     <string name="dataset_rejected_transfer">Copying the file failed. Check the free space and try again.</string>
 
     <string name="error_offline">No connection. The last known availability stays on screen.</string>
+    <string name="error_offline_no_availability">No connection. No availability has been received yet, so there is nothing to show.</string>
     <string name="error_offline_download">No connection. The download picks up where it stopped.</string>
     <string name="error_timeout_download">The server is not answering. The download picks up where it stopped.</string>
     <string name="error_server_refused_download">Server error (%1$d). The download picks up where it stopped.</string>

@@ -580,6 +580,7 @@
     <string name="dataset_rejected_transfer">Nepavyko nukopijuoti failo. Patikrinkite laisvą vietą ir bandykite dar kartą.</string>
 
     <string name="error_offline">Nėra ryšio. Ekrane lieka paskutinis žinomas prieinamumas.</string>
+    <string name="error_offline_no_availability">Nėra ryšio. Prieinamumas dar negautas, todėl nėra ką rodyti.</string>
     <!-- The same failures read on the storage screen, where a dataset
          transfer failed rather than an availability refresh. The server
          is the one hosting the files, not the bike network's, and those

@@ -492,6 +492,7 @@
     <string name="dataset_rejected_transfer">Het kopiëren van het bestand is mislukt. Controleer de vrije ruimte en probeer het opnieuw.</string>
 
     <string name="error_offline">Geen verbinding. De laatst bekende beschikbaarheid blijft op het scherm staan.</string>
+    <string name="error_offline_no_availability">Geen verbinding. Er is nog geen beschikbaarheid ontvangen, dus er is niets te tonen.</string>
     <!-- The same failures read on the storage screen, where a dataset transfer
          failed rather than an availability refresh. Those files come down
          resumably (SPEC §4.4), which is what each of these says. -->

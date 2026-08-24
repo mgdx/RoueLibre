@@ -709,6 +709,7 @@
     <!-- Error messages: what happened, and what to do. No apologies, no
          technical codes (SPEC §7 and §14). -->
     <string name="error_offline">Žiadne pripojenie. Na obrazovke zostáva posledná známa dostupnosť.</string>
+    <string name="error_offline_no_availability">Žiadne pripojenie. Dostupnosť sa zatiaľ nenačítala, takže nie je čo zobraziť.</string>
     <string name="error_offline_download">Žiadne pripojenie. Sťahovanie bude pokračovať tam, kde skončilo.</string>
     <string name="error_timeout_download">Server neodpovedá. Sťahovanie bude pokračovať tam, kde skončilo.</string>
     <!-- %1$d is the HTTP code the server returned. -->

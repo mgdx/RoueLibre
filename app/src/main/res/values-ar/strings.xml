@@ -584,6 +584,7 @@
     <string name="dataset_rejected_transfer">فشل نسخ الملف. تحقّق من المساحة الحرّة وأعد المحاولة.</string>
 
     <string name="error_offline">لا يتوفّر اتصال. يبقى آخر توفّر معروف على الشاشة.</string>
+    <string name="error_offline_no_availability">لا يتوفّر اتصال. لم يصل أي توفّر بعد، لذا لا شيء لعرضه.</string>
     <!-- The same failures read on the storage screen, where a dataset
          transfer failed rather than an availability refresh. The server is the
          one hosting the files, not the bike network's, and those files come

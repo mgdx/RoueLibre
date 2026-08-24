@@ -627,6 +627,7 @@
     <!-- Error messages: what happened, and what to do. No apologies, no
          technical codes (SPEC §7 and §14). -->
     <string name="error_offline">接続がありません。最後に取得した空き状況を表示しています。</string>
+    <string name="error_offline_no_availability">接続がありません。空き状況をまだ一度も取得できていないため、表示できるものがありません。</string>
     <!-- The same failures read on the storage screen, where a dataset
          transfer failed rather than an availability refresh. The server
          is the one hosting the files, not the bike network's, and those

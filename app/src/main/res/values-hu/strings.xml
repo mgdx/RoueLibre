@@ -557,6 +557,7 @@
     <string name="dataset_rejected_transfer">A fájl másolása nem sikerült. Ellenőrizd a szabad tárhelyet, és próbáld újra.</string>
 
     <string name="error_offline">Nincs kapcsolat. Az utoljára ismert elérhetőség marad a képernyőn.</string>
+    <string name="error_offline_no_availability">Nincs kapcsolat. Még nem érkezett elérhetőség, így nincs mit megjeleníteni.</string>
     <!-- The same failures read on the storage screen, where a dataset transfer
          failed rather than an availability refresh. Those files come down
          resumably (SPEC §4.4) — which is what each of these says will happen

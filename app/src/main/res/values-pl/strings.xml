@@ -551,6 +551,7 @@
     <string name="dataset_rejected_transfer">Kopiowanie pliku się nie powiodło. Sprawdź wolne miejsce i spróbuj ponownie.</string>
 
     <string name="error_offline">Brak połączenia. Na ekranie zostaje ostatnia znana dostępność.</string>
+    <string name="error_offline_no_availability">Brak połączenia. Dostępność nie została jeszcze pobrana, więc nie ma czego pokazać.</string>
     <!-- The same failures read on the storage screen, where a dataset
          transfer failed rather than an availability refresh. The server
          is the one hosting the files, not the bike network's, and those

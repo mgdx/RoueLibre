@@ -567,6 +567,7 @@
     <string name="dataset_rejected_transfer">Η αντιγραφή του αρχείου απέτυχε. Ελέγξτε τον ελεύθερο χώρο και δοκιμάστε ξανά.</string>
 
     <string name="error_offline">Χωρίς σύνδεση. Η τελευταία γνωστή διαθεσιμότητα μένει στην οθόνη.</string>
+    <string name="error_offline_no_availability">Χωρίς σύνδεση. Δεν έχει ληφθεί ακόμη καμία διαθεσιμότητα, οπότε δεν υπάρχει τίποτα να εμφανιστεί.</string>
     <!-- The same failures read on the storage screen, where a dataset
          transfer failed rather than an availability refresh. The server
          is the one hosting the files, not the bike network's, and those

@@ -535,6 +535,7 @@
     <string name="dataset_rejected_transfer">Kopieringen av filen mislyktes. Sjekk den ledige lagringsplassen, og prøv igjen.</string>
 
     <string name="error_offline">Ingen tilkobling. Den sist kjente tilgjengeligheten blir stående på skjermen.</string>
+    <string name="error_offline_no_availability">Ingen tilkobling. Tilgjengeligheten er ennå ikke hentet, så det er ingenting å vise.</string>
     <!-- The same failures read on the storage screen, where a dataset transfer
          failed rather than an availability refresh. Those files come down
          resumably (SPEC §4.4), which is what each of these says. -->

@@ -539,6 +539,7 @@
     <string name="dataset_rejected_transfer">Tiedoston kopiointi epäonnistui. Tarkista vapaa tila ja yritä uudelleen.</string>
 
     <string name="error_offline">Ei yhteyttä. Viimeksi tiedetty saatavuus jää näkyviin.</string>
+    <string name="error_offline_no_availability">Ei yhteyttä. Saatavuutta ei ole vielä saatu, joten mitään ei ole näytettävänä.</string>
     <!-- The same failures read on the storage screen, where a dataset
          transfer failed rather than an availability refresh. The server
          is the one hosting the files, not the bike network's, and those
