@@ -595,6 +595,17 @@
     <string name="error_untrusted_server_download">شهادة أمان غير صالحة. يستأنف التنزيل بمجرّد تجديدها.</string>
     <string name="error_malformed_download">وصل ملف غير قابل للقراءة. يستأنف التنزيل من حيث توقّف.</string>
     <string name="error_local_storage_download">تعذّر حفظ الملف. حرّر بعض المساحة ليستأنف التنزيل.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">لا يتوفّر اتصال. لم يجرِ أي تحقّق؛ أعد المحاولة بعد عودة الاتصال.</string>
+    <string name="error_timeout_check">لا يستجيب الخادم. لم يجرِ أي تحقّق؛ أعد المحاولة بعد قليل.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">خطأ في الخادم (%1$d). لم يجرِ أي تحقّق؛ أعد المحاولة لاحقًا.</string>
+    <string name="error_untrusted_server_check">شهادة أمان غير صالحة. لا يمكن إجراء أي تحقّق حتى تُجدَّد.</string>
+    <string name="error_malformed_check">قائمة البيانات المنشورة غير قابلة للقراءة. لم يجرِ أي تحقّق؛ أعد المحاولة لاحقًا.</string>
+    <string name="error_local_storage_check">تعذّرت قراءة البيانات المخزّنة على الجهاز. فلم تجرِ أي مقارنة.</string>
     <string name="error_timeout">يستغرق خادم شبكة الدراجات وقتًا طويلاً للردّ. أعد المحاولة بعد قليل.</string>
     <string name="error_server_refused">أعاد خادم شبكة الدراجات خطأً (%1$d). أعد المحاولة لاحقًا.</string>
     <string name="error_untrusted_server">قدّم خادم شبكة الدراجات شهادة أمان غير صالحة. ولا يمكن جلب بياناته بأمان حتى يجدّدها المشغّل.</string>

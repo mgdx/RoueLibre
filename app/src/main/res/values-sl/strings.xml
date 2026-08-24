@@ -602,6 +602,17 @@
     <string name="error_untrusted_server_download">Neveljavno varnostno potrdilo. Prenos se nadaljuje, ko bo potrdilo obnovljeno.</string>
     <string name="error_malformed_download">Prejeta datoteka ni berljiva. Prenos se nadaljuje tam, kjer se je ustavil.</string>
     <string name="error_local_storage_download">Datoteke ni bilo mogoče shraniti. Sprostite prostor in prenos se nadaljuje.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Ni povezave. Nič ni bilo preverjeno; poskusite znova, ko boste povezani.</string>
+    <string name="error_timeout_check">Strežnik se ne odziva. Nič ni bilo preverjeno; poskusite znova čez nekaj trenutkov.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Napaka strežnika (%1$d). Nič ni bilo preverjeno; poskusite znova pozneje.</string>
+    <string name="error_untrusted_server_check">Neveljavno varnostno potrdilo. Ničesar ni mogoče preveriti, dokler ne bo obnovljeno.</string>
+    <string name="error_malformed_check">Objavljeni seznam podatkov ni berljiv. Nič ni bilo preverjeno; poskusite znova pozneje.</string>
+    <string name="error_local_storage_check">Podatkov, shranjenih v napravi, ni mogoče prebrati. Ni bilo s čim primerjati.</string>
     <string name="error_timeout">Strežnik omrežja se odziva predolgo. Poskusite znova čez nekaj trenutkov.</string>
     <string name="error_server_refused">Strežnik omrežja je vrnil napako (%1$d). Poskusite znova pozneje.</string>
     <string name="error_untrusted_server">Strežnik omrežja je predložil neveljavno varnostno potrdilo. Njegovih podatkov ni mogoče varno prevzeti, dokler ga upravljavec ne obnovi.</string>

@@ -516,6 +516,17 @@
     <string name="error_untrusted_server_download">Ugyldigt sikkerhedscertifikat. Downloaden fortsætter, når det er fornyet.</string>
     <string name="error_malformed_download">Der blev modtaget en ulæselig fil. Downloaden fortsætter, hvor den slap.</string>
     <string name="error_local_storage_download">Filen kunne ikke gemmes. Frigør plads, så fortsætter downloaden.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Ingen forbindelse. Der blev ikke tjekket noget. Prøv igen, når du er online.</string>
+    <string name="error_timeout_check">Serveren svarer ikke. Der blev ikke tjekket noget. Prøv igen om lidt.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Serverfejl (%1$d). Der blev ikke tjekket noget. Prøv igen senere.</string>
+    <string name="error_untrusted_server_check">Ugyldigt sikkerhedscertifikat. Der kan ikke tjekkes noget, før det er fornyet.</string>
+    <string name="error_malformed_check">Den offentliggjorte dataliste kan ikke læses. Der blev ikke tjekket noget. Prøv igen senere.</string>
+    <string name="error_local_storage_check">Kan ikke læse de data, der er gemt på enheden. Der var intet at sammenligne med.</string>
     <string name="error_timeout">Netværkets server er for lang tid om at svare. Prøv igen om lidt.</string>
     <string name="error_server_refused">Netværkets server returnerede en fejl (%1$d). Prøv igen senere.</string>
     <string name="error_untrusted_server">Netværkets server viste et ugyldigt sikkerhedscertifikat. Data derfra kan ikke hentes sikkert, før operatøren fornyer det.</string>

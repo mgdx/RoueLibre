@@ -559,6 +559,17 @@
     <string name="error_untrusted_server_download">Nevažeći sigurnosni certifikat. Preuzimanje se nastavlja čim bude obnovljen.</string>
     <string name="error_malformed_download">Primljen je nečitljiv fajl. Preuzimanje se nastavlja tamo gdje je stalo.</string>
     <string name="error_local_storage_download">Fajl nije sačuvan. Oslobodite prostor i preuzimanje se nastavlja.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Niste povezani s mrežom. Ništa nije provjereno; pokušajte ponovo kad se povežete.</string>
+    <string name="error_timeout_check">Server ne odgovara. Ništa nije provjereno; pokušajte ponovo za koji trenutak.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Greška servera (%1$d). Ništa nije provjereno; pokušajte ponovo kasnije.</string>
+    <string name="error_untrusted_server_check">Nevažeći sigurnosni certifikat. Provjera nije moguća dok ne bude obnovljen.</string>
+    <string name="error_malformed_check">Objavljeni spisak podataka nije čitljiv. Ništa nije provjereno; pokušajte ponovo kasnije.</string>
+    <string name="error_local_storage_check">Nije moguće pročitati podatke pohranjene na uređaju. Nije bilo s čim uporediti.</string>
     <string name="error_timeout">Serveru mreže treba predugo da odgovori. Pokušajte ponovo za koji trenutak.</string>
     <string name="error_server_refused">Server mreže je vratio grešku (%1$d). Pokušajte ponovo kasnije.</string>
     <string name="error_untrusted_server">Server mreže je ponudio nevažeći sigurnosni certifikat. Njegovi podaci se ne mogu sigurno preuzeti dok ga operater ne obnovi.</string>

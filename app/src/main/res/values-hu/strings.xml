@@ -568,6 +568,17 @@
     <string name="error_untrusted_server_download">Érvénytelen biztonsági tanúsítvány. A letöltés a tanúsítvány megújítása után folytatódik.</string>
     <string name="error_malformed_download">Olvashatatlan fájl érkezett. A letöltés ott folytatódik, ahol abbamaradt.</string>
     <string name="error_local_storage_download">A fájlt nem sikerült menteni. Szabadíts fel tárhelyet, és a letöltés folytatódik.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Nincs kapcsolat. Semmit sem sikerült ellenőrizni; próbáld újra, ha van kapcsolat.</string>
+    <string name="error_timeout_check">A szerver nem válaszol. Semmit sem sikerült ellenőrizni; próbáld újra kis idő múlva.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Szerverhiba (%1$d). Semmit sem sikerült ellenőrizni; próbáld újra később.</string>
+    <string name="error_untrusted_server_check">Érvénytelen biztonsági tanúsítvány. A megújításáig semmit sem lehet ellenőrizni.</string>
+    <string name="error_malformed_check">A közzétett adatlista olvashatatlan. Semmit sem sikerült ellenőrizni; próbáld újra később.</string>
+    <string name="error_local_storage_check">Az eszközön tárolt adatok nem olvashatók. Nem volt mihez hasonlítani.</string>
     <string name="error_timeout">A hálózat szervere túl sokáig nem válaszol. Próbáld újra kis idő múlva.</string>
     <string name="error_server_refused">A hálózat szervere hibát adott vissza (%1$d). Próbáld újra később.</string>
     <string name="error_untrusted_server">A hálózat szervere érvénytelen biztonsági tanúsítványt mutatott be. Az adatai addig nem kérhetők le biztonságosan, amíg az üzemeltető meg nem újítja.</string>

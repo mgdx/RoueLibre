@@ -465,6 +465,17 @@
     <string name="error_untrusted_server_download">Invalid security certificate. The download picks up once it is renewed.</string>
     <string name="error_malformed_download">Unreadable file received. The download picks up where it stopped.</string>
     <string name="error_local_storage_download">The file could not be saved. Free some space and the download picks up.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">No connection. Nothing was checked; try again once you are back online.</string>
+    <string name="error_timeout_check">The server is not answering. Nothing was checked; try again in a moment.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Server error (%1$d). Nothing was checked; try again later.</string>
+    <string name="error_untrusted_server_check">Invalid security certificate. Nothing can be checked until it is renewed.</string>
+    <string name="error_malformed_check">The published list of data is unreadable. Nothing was checked; try again later.</string>
+    <string name="error_local_storage_check">Unable to read the data stored on the device. Nothing was checked against it.</string>
     <string name="error_timeout">The network’s server is taking too long to answer. Try again in a moment.</string>
     <string name="error_server_refused">The network’s server returned an error (%1$d). Try again later.</string>
     <string name="error_untrusted_server">The network’s server presented an invalid security certificate. Its data cannot be fetched safely until the operator renews it.</string>

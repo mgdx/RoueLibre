@@ -563,6 +563,17 @@
     <string name="error_untrusted_server_download">Nieprawidłowy certyfikat bezpieczeństwa. Pobieranie ruszy dalej, gdy certyfikat zostanie odnowiony.</string>
     <string name="error_malformed_download">Otrzymano nieczytelny plik. Pobieranie ruszy dalej z miejsca, w którym stanęło.</string>
     <string name="error_local_storage_download">Nie udało się zapisać pliku. Zwolnij miejsce, a pobieranie ruszy dalej.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Brak połączenia. Nic nie zostało sprawdzone; spróbuj ponownie po połączeniu.</string>
+    <string name="error_timeout_check">Serwer nie odpowiada. Nic nie zostało sprawdzone; spróbuj ponownie za chwilę.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Błąd serwera (%1$d). Nic nie zostało sprawdzone; spróbuj ponownie później.</string>
+    <string name="error_untrusted_server_check">Nieprawidłowy certyfikat bezpieczeństwa. Nic nie da się sprawdzić, dopóki nie zostanie odnowiony.</string>
+    <string name="error_malformed_check">Opublikowana lista danych jest nieczytelna. Nic nie zostało sprawdzone; spróbuj ponownie później.</string>
+    <string name="error_local_storage_check">Nie można odczytać danych zapisanych na urządzeniu. Nie było z czym porównać.</string>
     <string name="error_timeout">Serwer sieci odpowiada zbyt długo. Spróbuj ponownie za chwilę.</string>
     <string name="error_server_refused">Serwer sieci zwrócił błąd (%1$d). Spróbuj ponownie później.</string>
     <string name="error_untrusted_server">Serwer sieci przedstawił nieprawidłowy certyfikat bezpieczeństwa. Dopóki operator go nie odnowi, nie da się bezpiecznie pobrać jego danych.</string>

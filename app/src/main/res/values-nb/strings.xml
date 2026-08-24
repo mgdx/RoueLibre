@@ -545,6 +545,17 @@
     <string name="error_untrusted_server_download">Ugyldig sikkerhetssertifikat. Nedlastingen fortsetter når det er fornyet.</string>
     <string name="error_malformed_download">Det ble mottatt en uleselig fil. Nedlastingen fortsetter der den stoppet.</string>
     <string name="error_local_storage_download">Filen kunne ikke lagres. Frigjør plass, så fortsetter nedlastingen.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Ingen tilkobling. Ingenting ble sjekket. Prøv igjen når du er tilkoblet.</string>
+    <string name="error_timeout_check">Serveren svarer ikke. Ingenting ble sjekket. Prøv igjen om litt.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Serverfeil (%1$d). Ingenting ble sjekket. Prøv igjen senere.</string>
+    <string name="error_untrusted_server_check">Ugyldig sikkerhetssertifikat. Ingenting kan sjekkes før det er fornyet.</string>
+    <string name="error_malformed_check">Den publiserte datalisten kan ikke leses. Ingenting ble sjekket. Prøv igjen senere.</string>
+    <string name="error_local_storage_check">Kan ikke lese dataene som er lagret på enheten. Ingenting ble sammenlignet.</string>
     <string name="error_timeout">Nettverkets server bruker for lang tid på å svare. Prøv igjen om litt.</string>
     <string name="error_server_refused">Nettverkets server returnerte en feil (%1$d). Prøv igjen senere.</string>
     <string name="error_untrusted_server">Nettverkets server viste et ugyldig sikkerhetssertifikat. Dataene derfra kan ikke hentes trygt før operatøren fornyer det.</string>

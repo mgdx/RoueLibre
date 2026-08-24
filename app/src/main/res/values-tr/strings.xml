@@ -510,6 +510,17 @@
     <string name="error_untrusted_server_download">Geçersiz güvenlik sertifikası. Sertifika yenilendiğinde indirme devam eder.</string>
     <string name="error_malformed_download">Okunamayan bir dosya alındı. İndirme kaldığı yerden devam eder.</string>
     <string name="error_local_storage_download">Dosya kaydedilemedi. Yer aç, indirme kaldığı yerden devam etsin.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Bağlantı yok. Hiçbir şey denetlenmedi; bağlantı gelince tekrar dene.</string>
+    <string name="error_timeout_check">Sunucu yanıt vermiyor. Hiçbir şey denetlenmedi; birazdan tekrar dene.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Sunucu hatası (%1$d). Hiçbir şey denetlenmedi; daha sonra tekrar dene.</string>
+    <string name="error_untrusted_server_check">Geçersiz güvenlik sertifikası. Sertifika yenilenene kadar hiçbir şey denetlenemez.</string>
+    <string name="error_malformed_check">Yayımlanan veri listesi okunamıyor. Hiçbir şey denetlenmedi; daha sonra tekrar dene.</string>
+    <string name="error_local_storage_check">Cihazda saklanan veriler okunamıyor. Karşılaştırılacak bir şey olmadı.</string>
     <string name="error_timeout">Ağın sunucusu yanıt vermekte çok gecikiyor. Birazdan tekrar dene.</string>
     <string name="error_server_refused">Ağın sunucusu bir hata döndürdü (%1$d). Daha sonra tekrar dene.</string>
     <string name="error_untrusted_server">Ağın sunucusu geçersiz bir güvenlik sertifikası sundu. İşletmeci onu yenileyene kadar verileri güvenle alınamaz.</string>

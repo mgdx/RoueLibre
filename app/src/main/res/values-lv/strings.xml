@@ -551,6 +551,17 @@
     <string name="error_untrusted_server_download">Nederīgs drošības sertifikāts. Lejupielāde turpināsies, tiklīdz tas būs atjaunots.</string>
     <string name="error_malformed_download">Saņemts nenolasāms fails. Lejupielāde turpināsies no vietas, kur apstājās.</string>
     <string name="error_local_storage_download">Failu neizdevās saglabāt. Atbrīvojiet vietu, un lejupielāde turpināsies.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Nav savienojuma. Nekas netika pārbaudīts; mēģiniet vēlreiz, kad būs savienojums.</string>
+    <string name="error_timeout_check">Serveris neatbild. Nekas netika pārbaudīts; mēģiniet vēlreiz pēc brīža.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Servera kļūda (%1$d). Nekas netika pārbaudīts; mēģiniet vēlāk.</string>
+    <string name="error_untrusted_server_check">Nederīgs drošības sertifikāts. Neko nevar pārbaudīt, kamēr tas nav atjaunots.</string>
+    <string name="error_malformed_check">Publicētais datu saraksts nav nolasāms. Nekas netika pārbaudīts; mēģiniet vēlāk.</string>
+    <string name="error_local_storage_check">Nevar nolasīt ierīcē saglabātos datus. Nebija ar ko salīdzināt.</string>
     <string name="error_timeout">Tīkla serveris atbild pārāk ilgi. Mēģiniet vēlreiz pēc brīža.</string>
     <string name="error_server_refused">Tīkla serveris atgrieza kļūdu (%1$d). Mēģiniet vēlāk.</string>
     <string name="error_untrusted_server">Tīkla serveris uzrādīja nederīgu drošības sertifikātu. Tā datus nevar droši saņemt, kamēr operators to nav atjaunojis.</string>

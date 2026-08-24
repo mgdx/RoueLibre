@@ -628,6 +628,17 @@
     <string name="error_untrusted_server_download">Certificat de sécurité invalide. Le téléchargement reprend une fois renouvelé.</string>
     <string name="error_malformed_download">Fichier illisible reçu. Le téléchargement reprend où il s’est arrêté.</string>
     <string name="error_local_storage_download">Enregistrement impossible. Libère de l’espace et le téléchargement reprend.</string>
+    <!-- Les mêmes échecs, lus après un appui sur « Vérifier les mises à
+         jour » : ce troisième geste lit le manifeste publié et ne transfère
+         rien, donc aucun téléchargement ne reprend, et la vérification est à
+         refaire en entier. -->
+    <string name="error_offline_check">Pas de connexion. Rien n’a été vérifié ; réessaie une fois de retour en ligne.</string>
+    <string name="error_timeout_check">Le serveur ne répond pas. Rien n’a été vérifié ; réessaie dans un moment.</string>
+    <!-- %1$d est le code HTTP renvoyé par le serveur. -->
+    <string name="error_server_refused_check">Erreur du serveur (%1$d). Rien n’a été vérifié ; réessaie plus tard.</string>
+    <string name="error_untrusted_server_check">Certificat de sécurité invalide. Rien ne peut être vérifié tant qu’il n’est pas renouvelé.</string>
+    <string name="error_malformed_check">La liste publiée des données est illisible. Rien n’a été vérifié ; réessaie plus tard.</string>
+    <string name="error_local_storage_check">Impossible de lire les données enregistrées sur l’appareil. Rien n’a pu être comparé.</string>
     <string name="error_timeout">Le serveur du réseau met trop de temps à répondre. Réessaie dans un moment.</string>
     <!-- %1$d is the HTTP code the server returned. -->
     <string name="error_server_refused">Le serveur du réseau a renvoyé une erreur (%1$d). Réessaie plus tard.</string>
@@ -651,7 +662,7 @@
     <string name="download_held_back_body">Cette connexion est facturée au mégaoctet. Connecte-toi en Wi-Fi pour télécharger %1$s, ou télécharge quand même maintenant.</string>
     <string name="download_stopped_title">Téléchargement arrêté</string>
     <!-- %1$s est une taille, « 340 Mo » par exemple. Ce qui est déjà arrivé
-         reste sur l\'appareil et le transfert repart de là. -->
+         reste sur l’appareil et le transfert repart de là. -->
     <string name="download_stopped_body">Cette connexion est maintenant facturée au mégaoctet : le téléchargement s’est arrêté. Ce qui est arrivé est conservé. Connecte-toi en Wi-Fi pour finir les %1$s, ou continue quand même maintenant.</string>
     <string name="download_anyway">Télécharger quand même</string>
     <!-- %1$s est une taille, « 340 Mo » par exemple. -->

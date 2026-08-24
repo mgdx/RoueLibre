@@ -668,6 +668,17 @@
     <string name="error_untrusted_server_download">Certificato di sicurezza non valido. Il download riprende quando verrà rinnovato.</string>
     <string name="error_malformed_download">File ricevuto illeggibile. Il download riprende da dove si è fermato.</string>
     <string name="error_local_storage_download">Impossibile salvare il file. Libera spazio e il download riprende.</string>
+    <!-- The same failures again, read after a press on "Check for updates",
+         which is a third gesture: it reads the published manifest and
+         transfers nothing, so there is no download to pick up where it
+         stopped, and the whole check has to be made again. -->
+    <string name="error_offline_check">Nessuna connessione. Non è stato controllato nulla; riprova quando torni online.</string>
+    <string name="error_timeout_check">Il server non risponde. Non è stato controllato nulla; riprova tra poco.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_check">Errore del server (%1$d). Non è stato controllato nulla; riprova più tardi.</string>
+    <string name="error_untrusted_server_check">Certificato di sicurezza non valido. Non si può controllare nulla finché non verrà rinnovato.</string>
+    <string name="error_malformed_check">L’elenco pubblicato dei dati è illeggibile. Non è stato controllato nulla; riprova più tardi.</string>
+    <string name="error_local_storage_check">Impossibile leggere i dati salvati sul dispositivo. Non c’è stato nulla da confrontare.</string>
     <string name="error_timeout">Il server della rete impiega troppo tempo a rispondere. Riprova tra poco.</string>
     <!-- %1$d is the HTTP code the server returned. -->
     <string name="error_server_refused">Il server della rete ha restituito un errore (%1$d). Riprova più tardi.</string>
