@@ -6,7 +6,9 @@ import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
@@ -41,6 +43,9 @@ import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.welcome.WelcomeFragment
 import io.github.mgdx.rouelibre.ui.welcome.WhatsNewFragment
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -115,6 +120,32 @@ class MainActivity : AppCompatActivity() {
      */
     private var bannerOnShow: Snackbar? = null
     private var subjectOnShow: MessageSubject? = null
+
+    /**
+     * How much room the banner takes at the bottom of the screen, in pixels,
+     * and nothing when there is none — see [roomTakenByTheBanner].
+     */
+    private val bannerRoom = MutableStateFlow(0)
+
+    /**
+     * The room the banner is taking, for the screens whose own controls sit
+     * where it appears (SPEC §7.1, §7.2).
+     *
+     * A `FloatingActionButton` rides above a snackbar because the two share a
+     * `CoordinatorLayout`, which shifts one out of the way of the other. This
+     * banner shares none: it belongs to the activity, deliberately — that is
+     * what lets a message outlive the fragment that raised it — and is laid
+     * over the whole window. Nothing therefore moved the map's controls, and
+     * the banner stood exactly over the button opening the station list: the
+     * button was gone from the screen, and a press where it had been reached
+     * "Try again" instead. With no network a refresh fails every ten seconds,
+     * so that was most of the time.
+     *
+     * It is counted **above the system bars** rather than above the window's
+     * edge, so that one figure serves both a screen laid out under the bars —
+     * the map — and one inset from them — the station list.
+     */
+    val roomTakenByTheBanner: StateFlow<Int> = bannerRoom.asStateFlow()
 
     /**
      * The three conditions the opening's departure waits on (SPEC §7.0): that
@@ -777,12 +808,37 @@ class MainActivity : AppCompatActivity() {
                     if (bannerOnShow === shown) {
                         bannerOnShow = null
                         subjectOnShow = null
+                        bannerRoom.value = 0
                     }
                 }
             },
         )
+        // Read from the layout rather than measured here: how tall the banner
+        // stands is settled by the sentence in it, one line or three, and it
+        // is settled again if the text size changes under it.
+        snackbar.view.addOnLayoutChangeListener { _, _, top, _, _, _, _, _, _ ->
+            if (bannerOnShow === snackbar) bannerRoom.value = roomAbove(top)
+        }
         bannerOnShow = snackbar
         subjectOnShow = subject
         snackbar.show()
+    }
+
+    /**
+     * The room a banner whose top edge is at [bannerTop] takes above the
+     * system bars.
+     *
+     * The bars are taken out of the count because the banner already clears
+     * them on its own: what is left is what a screen's controls have to rise
+     * by, and it reads the same whether that screen is laid out under the bars
+     * or inset from them.
+     */
+    private fun roomAbove(bannerTop: Int): Int {
+        val views = binding ?: return 0
+        val bars = ViewCompat.getRootWindowInsets(views.root)
+            ?.getInsets(WindowInsetsCompat.Type.systemBars())
+            ?.bottom
+            ?: 0
+        return (views.root.height - bannerTop - bars).coerceAtLeast(0)
     }
 }

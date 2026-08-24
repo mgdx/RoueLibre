@@ -139,6 +139,17 @@ class MapFragment : Fragment() {
      */
     private var servedAreaCamera: ServedAreaCamera? = null
 
+    /**
+     * The room the system bars take at the bottom, and the room the banner
+     * takes above them — see [holdTheBottomEdge].
+     *
+     * Both are held because both push the same edge up and neither knows about
+     * the other: the insets arrive from the window, the banner's room from the
+     * activity, and either may change while the other stands.
+     */
+    private var barsAtTheBottom = 0
+    private var roomForTheBanner = 0
+
     private var userPositionSource: GeoJsonSource? = null
 
     private var userAccuracySource: GeoJsonSource? = null
@@ -309,6 +320,7 @@ class MapFragment : Fragment() {
         showRequestedPlace(savedInstanceState)
         listenForPickedAddress()
         applySystemInsets(views)
+        standClearOfTheBanner()
         views.map.getMapAsync(::onMapReady)
 
         observeStations()
@@ -337,10 +349,50 @@ class MapFragment : Fragment() {
             views.openSettings.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = insets.top + baseMargin
             }
-            views.attribution.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = insets.bottom
-            }
+            barsAtTheBottom = insets.bottom
+            holdTheBottomEdge()
             windowInsets
+        }
+    }
+
+    /**
+     * Keeps the controls laid along the bottom clear of the banner, as well as
+     * of the system bars.
+     *
+     * The whole bottom of this screen hangs off the attribution — the toggles
+     * and the place found from it, the four buttons up the right-hand edge
+     * from it in turn — so raising that one view raises them all, and the
+     * constraints keep them in their order. That is the only handle there is:
+     * a `translationY` moves the view it is set on and leaves everything
+     * constrained to it where it was.
+     *
+     * The room the banner takes is added to the bars' rather than replacing
+     * it: the banner clears the bars on its own, and this margin is counted
+     * from the window's edge.
+     */
+    private fun holdTheBottomEdge() {
+        binding?.attribution?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = barsAtTheBottom + roomForTheBanner
+        }
+    }
+
+    /**
+     * Follows the room the banner takes, so the controls under it rise rather
+     * than be covered (SPEC §7.1).
+     *
+     * The banner belongs to the activity and is laid over the whole window, so
+     * nothing shifts these controls out of its way by itself — see
+     * `MainActivity.roomTakenByTheBanner`.
+     */
+    private fun standClearOfTheBanner() {
+        val host = activity as? MainActivity ?: return
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                host.roomTakenByTheBanner.collect { room ->
+                    roomForTheBanner = room
+                    holdTheBottomEdge()
+                }
+            }
         }
     }
 
