@@ -5,26 +5,31 @@ import org.junit.Test
 import java.io.File
 
 /**
- * The journey in detail writes names, not paragraphs (SPEC §7.4, §14).
+ * A journey is written out in names, not in paragraphs (SPEC §7.4, §14).
  *
  * The theme justifies every text view — `Widget.RoueLibre.Text` on
  * `android:textViewStyle` — because running text is what most of the
  * application's long lines are. A line that names one thing wants the opposite,
  * and `Widget.RoueLibre.Name` is the house answer to it: no justification, no
  * hyphenation. The station rows and the address rows have asked for it since
- * they were written; this screen had not, so at 130 % text size "Ride to
- * Theatre Sebastopol" came out as "Ride␣␣␣␣to␣␣␣␣Theatre" with "Sebastopol"
- * alone underneath.
+ * they were written; the two screens describing a journey had not, so at 130 %
+ * text size "Ride to Theatre Sebastopol" came out as "Ride␣␣␣␣to␣␣␣␣Theatre"
+ * with "Sebastopol" alone underneath.
  *
  * **The check is a width rather than a list of view names.** A text view given
  * `0dp` has been handed a share of its row and can wrap; one sized
- * `wrap_content` — the minutes on the right of a leg, the count in a disc —
- * never has a second line for justification to show on. So the rule is: on
- * these three layouts, whatever can wrap names something and refuses the
+ * `wrap_content` — the minutes on the right of a leg, the total the summary
+ * stands beside — never has a second line for justification to show on. So the
+ * rule is: on these layouts, whatever can wrap names something and refuses the
  * justification. A row added later is held to it without anyone remembering to
  * add it here.
  *
- * The paragraphs of this screen are deliberately outside the rule and keep
+ * **The result screen is held through the block it shares.** Its summary lives
+ * in `view_journey_result_detail.xml`, included by the portrait layout and by
+ * the landscape one, so the rule is checked once where the view is declared
+ * once, and neither orientation can drift from it.
+ *
+ * The paragraphs of these screens are deliberately outside the rule and keep
  * their justification: the note about frozen availability counts, and the
  * sentence read while the journey is being worked out.
  *
@@ -72,11 +77,20 @@ class JourneyDetailNamesTest {
         IDENTIFIER.find(view)?.groupValues?.get(1) ?: view.take(40)
 
     private companion object {
-        /** The screen and the two rows it is built out of. */
+        /**
+         * The detail screen and the two rows it is built out of, and the block
+         * the result screen says its own summary in.
+         *
+         * `fragment_journey_result.xml` and its `layout-land/` twin are not
+         * here and must not be: they include the block rather than declaring
+         * it, and a rule checked on the two includers would be checked twice
+         * and forgotten on whichever orientation is written next.
+         */
         private val LAYOUTS = listOf(
             "fragment_journey_detail.xml",
             "item_journey_place.xml",
             "item_journey_step.xml",
+            "view_journey_result_detail.xml",
         )
 
         private const val NAME_STYLE = """style="@style/Widget.RoueLibre.Name""""
