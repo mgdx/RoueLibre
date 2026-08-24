@@ -84,8 +84,15 @@
                      LinearLayout measuring its own height before it hands
                      the summary its share of the width: the second line of
                      a summary that wraps then falls outside the row and is
-                     cut off by the drawing under it. -->
+                     cut off by the drawing under it.
+
+                     A run of facts about one journey, not a paragraph, so it
+                     refuses the justification the theme gives every text view:
+                     wrapped beside the figure, its first line came out spread
+                     bank to bank. The detail screen writes the same sentence
+                     and asks for the same style. -->
                 <TextView
+                    style="@style/Widget.RoueLibre.Name"
                     android:id="@+id/summary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
