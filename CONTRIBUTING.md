@@ -148,6 +148,12 @@ file and `docs/` are outside it, addressing developers rather than users. Every
 other language settles its own register: choose the one that sounds like one
 person talking to another, and hold it from the first string to the last.
 
+**What a language has already settled is written down** in
+[`docs/glossary/`](docs/glossary/): one file per translated language, listing
+the terms its `strings.xml` holds to and the reason each one was picked, register
+first. Read the one for your language before rewording anything, and add to it
+whenever you settle a term the file does not yet cover.
+
 **The vocabulary stays generic**: "station", "bike", "network". A particular
 network's name appears only in the city configuration.
 
