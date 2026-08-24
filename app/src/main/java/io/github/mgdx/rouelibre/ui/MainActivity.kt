@@ -3,6 +3,7 @@ package io.github.mgdx.rouelibre.ui
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -24,6 +25,8 @@ import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.address.WordMatching
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.intent.PlaceRequest
+import io.github.mgdx.rouelibre.core.message.MessageSubject
+import io.github.mgdx.rouelibre.core.message.takesTheBanner
 import io.github.mgdx.rouelibre.data.NEVER_LAUNCHED
 import io.github.mgdx.rouelibre.data.OpeningScreen
 import io.github.mgdx.rouelibre.data.landingScreen
@@ -101,6 +104,17 @@ private data class SystemBars(val statusBar: Int, val navigationBar: Int, val li
 class MainActivity : AppCompatActivity() {
 
     private var binding: ActivityMainBinding? = null
+
+    /**
+     * The banner on show and what it is about, or `null` when the screen has
+     * none — see [showMessage].
+     *
+     * The banner itself is kept, and not only its subject, so that the one
+     * dismissal that frees the slot is its own: a replaced banner is dismissed
+     * after its successor is up.
+     */
+    private var bannerOnShow: Snackbar? = null
+    private var subjectOnShow: MessageSubject? = null
 
     /**
      * The three conditions the opening's departure waits on (SPEC §7.0): that
@@ -646,7 +660,7 @@ class MainActivity : AppCompatActivity() {
      */
     private suspend fun searchAddress(text: String): JourneyEndpoint? {
         if (!container.addressIndex.isInstalled()) {
-            showMessage(getString(R.string.incoming_needs_index)) {
+            showAnswer(getString(R.string.incoming_needs_index)) {
                 show(StorageFragment())
             }
             return null
@@ -659,7 +673,7 @@ class MainActivity : AppCompatActivity() {
         )
         val found = (outcome as? Outcome.Success)?.value?.firstOrNull()
         if (found == null) {
-            showMessage(getString(R.string.incoming_address_not_found, text)) {
+            showAnswer(getString(R.string.incoming_address_not_found, text)) {
                 show(JourneySearchFragment.newInstance())
             }
             return null
@@ -677,7 +691,7 @@ class MainActivity : AppCompatActivity() {
         val boundingBox = container.activeCity()?.boundingBox
         if (boundingBox != null && destination.position !in boundingBox) {
             show(MapFragment.showing(destination))
-            showMessage(getString(R.string.incoming_outside_coverage))
+            showAnswer(getString(R.string.incoming_outside_coverage))
             return
         }
 
@@ -715,12 +729,60 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun showMessage(message: String, action: (() -> Unit)? = null) {
+    /**
+     * Says what became of the place another application sent (SPEC §7.8), with
+     * the offer to go and look where there is something to look at.
+     */
+    private fun showAnswer(message: String, action: (() -> Unit)? = null) {
+        showMessage(
+            message,
+            MessageSubject.Answer,
+            actionLabel = R.string.incoming_show_me,
+            action = action,
+        )
+    }
+
+    /**
+     * Puts [message] on the screen's single banner, if [subject] wins it.
+     *
+     * **One banner, one message.** Snackbars replace one another rather than
+     * stack, and stacking them would bury the very map they speak of, so two
+     * messages raised at the same moment are a contest — settled by
+     * [takesTheBanner] and not here, so that the rule can be read and tested
+     * on its own.
+     *
+     * The subject on show is recorded at [Snackbar.show] and not from
+     * `onShown`, which only fires once the slide-in is over: the failed
+     * refresh this arbitration exists for arrives well inside that quarter of
+     * a second, and would find the banner still free.
+     */
+    fun showMessage(
+        message: CharSequence,
+        subject: MessageSubject,
+        @StringRes actionLabel: Int? = null,
+        action: (() -> Unit)? = null,
+    ) {
         val views = binding ?: return
+        if (!takesTheBanner(subjectOnShow, subject)) return
         val snackbar = Snackbar.make(views.root, message, Snackbar.LENGTH_LONG)
-        if (action != null) {
-            snackbar.setAction(R.string.incoming_show_me) { action() }
+        if (actionLabel != null && action != null) {
+            snackbar.setAction(actionLabel) { action() }
         }
+        snackbar.addCallback(
+            object : Snackbar.Callback() {
+                override fun onDismissed(shown: Snackbar, event: Int) {
+                    // Only the banner still on record frees the slot: one that
+                    // was replaced is dismissed *after* its successor is up,
+                    // and would otherwise hand away a banner in use.
+                    if (bannerOnShow === shown) {
+                        bannerOnShow = null
+                        subjectOnShow = null
+                    }
+                }
+            },
+        )
+        bannerOnShow = snackbar
+        subjectOnShow = subject
         snackbar.show()
     }
 }
