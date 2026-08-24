@@ -12,6 +12,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!--
+        MapLibre's own manifest asks for ACCESS_WIFI_STATE, and we take it back
+        out. SPEC §10 lists the permissions this application requests, and that
+        one is not among them: no code here reads the Wi-Fi state, while the
+        F-Droid page shows the merged list, where a permission we cannot
+        account for reads as a claim of its own. Whether the network is
+        reachable is answered by ACCESS_NETWORK_STATE, which stays.
+    -->
+    <uses-permission
+        android:name="android.permission.ACCESS_WIFI_STATE"
+        tools:node="remove" />
+    <!--
         Location: requested when the map opens, once per session, and on a
         press of "locate me" — those two moments and no other, no screen that
         never shows a position asking for one (SPEC §7.1, §10). A refusal is

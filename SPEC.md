@@ -578,6 +578,18 @@ Permissions requested, and **no others**:
 - `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCATION` — requested **when the map opens**, once per session and never again once refused, and on a press of "locate me" (§7.1) or of "nearest station first" on the station list (§7.6). Those three moments and no other, and **the last two are the same moment**: a button pressed by somebody who has just asked to be located. What the rule guards is that **no screen asks for a position it makes no use of, and none asks without being asked to** — the station list makes a plain use of one, it orders itself by it and writes each distance in its rows, and it asks at the press and never on opening
 - `ACCESS_NETWORK_STATE` — offline detection
 
+**"No others" is measured on the merged manifest.** A dependency's manifest
+adds its permissions to the application's, and the list an F-Droid or store
+page shows is the merged one, not ours. MapLibre asks for `ACCESS_WIFI_STATE`;
+nothing here reads the Wi-Fi state — the map library's own classes and native
+libraries do not reference that API either, it is a leftover of its manifest —
+and what is billed is answered by `ACCESS_NETWORK_STATE` (§7.6), so the
+permission is taken back out with `tools:node="remove"`. One entry does survive
+in the merged list without appearing above: `DYNAMIC_RECEIVER_NOT_EXPORTED_-
+PERMISSION`, which AndroidX declares against the application itself to guard
+its own receivers. It grants nothing outside the application and cannot be
+removed.
+
 **The very first launch is the exception, and it is accepted.** The map is the application's content: it is put in place as the application starts, and the welcome sequence of §7.9 is laid over it. The map has therefore opened, and it asks — so on a fresh install the system dialog appears over the first page of the welcome, before that page has been read. Two ways out were weighed on 13 August 2026 and both cost more than they save. Holding the map back until the sequence ends builds the main screen after the sequence rather than behind it, so the application arrives at its map slower at the very moment it is being judged. Moving the request to the end of the sequence asks on the same run anyway, one screen later, and buys nothing but the order. What this section actually guards is untouched: the request belongs to the map, which is where one lands the moment the sequence is over; it is made once; a refusal is never repeated; and no screen asks for a permission it makes no use of. Where there are no tiles the list is landed on instead (§7.6) and **nothing is asked at all** on that launch: that screen only asks at its button. The cost accepted is a dialog arriving before its explanation, on one launch in the life of an installation.
 
 The application must be **fully usable if location permission is denied**: the user then designates their departure and arrival points by hand. A refusal must never block a screen nor trigger an insistent prompt.
