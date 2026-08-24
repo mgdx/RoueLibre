@@ -20,7 +20,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
@@ -29,6 +28,7 @@ import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.geo.PositionFix
+import io.github.mgdx.rouelibre.core.message.MessageSubject
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.BikeKindFilter
 import io.github.mgdx.rouelibre.core.station.StationFilter
@@ -39,6 +39,7 @@ import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
 import io.github.mgdx.rouelibre.ui.MAP_BACK_STACK_ENTRY
+import io.github.mgdx.rouelibre.ui.MainActivity
 import io.github.mgdx.rouelibre.ui.STATION_LIST_BACK_STACK_ENTRY
 import io.github.mgdx.rouelibre.ui.ScreenBehind
 import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
@@ -992,13 +993,19 @@ class MapFragment : Fragment() {
     }
 
     private fun showMessage(message: Int) {
-        val views = binding ?: return
-        Snackbar.make(views.root, message, Snackbar.LENGTH_LONG).show()
+        showMessage(context?.getText(message) ?: return)
     }
 
+    /**
+     * Says something back about a gesture just made on the map.
+     *
+     * Handed to the activity, which owns the one banner the screen has: a
+     * message put up from here would be taken down by the next failed refresh
+     * without anything weighing the two (see `MainActivity.showMessage`).
+     */
     private fun showMessage(message: CharSequence) {
-        val views = binding ?: return
-        Snackbar.make(views.root, message, Snackbar.LENGTH_LONG).show()
+        val host = activity as? MainActivity ?: return
+        host.showMessage(message, MessageSubject.Answer)
     }
 
     // ---------------------------------------------------- address search --
@@ -1278,15 +1285,18 @@ class MapFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.errors.collect { error ->
-                    val views = binding ?: return@collect
-                    Snackbar
-                        .make(
-                            views.root,
-                            error.toUserMessage(requireContext()),
-                            Snackbar.LENGTH_LONG,
-                        )
-                        .setAction(R.string.action_retry) { viewModel.refresh(force = true) }
-                        .show()
+                    val host = activity as? MainActivity ?: return@collect
+                    // A refresh that failed gives way to an answer already on
+                    // the banner (SPEC §7.8): offline is the ordinary state
+                    // here, and this message used to wipe the one telling the
+                    // user that the place they had just been sent was out of
+                    // reach. It comes back at the next tick, and the freshness
+                    // line says meanwhile how old the counters are.
+                    host.showMessage(
+                        error.toUserMessage(requireContext()),
+                        MessageSubject.Refresh,
+                        actionLabel = R.string.action_retry,
+                    ) { viewModel.refresh(force = true) }
                 }
             }
         }
