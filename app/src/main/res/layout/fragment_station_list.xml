@@ -251,4 +251,49 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!--
+        That the button is working, while the fix is waited for. The press can
+        run to ten seconds indoors (`DeviceLocation.REQUEST_TIMEOUT`), and the
+        button going dead was the whole of the answer for that long: a tester
+        pressing it from outside the served city read those seconds as a button
+        that does nothing, and the sentence that came at the end of them was
+        gone before the next look.
+
+        A ring around the button rather than a banner: it lasts exactly as long
+        as the wait, where a banner fades after three seconds and a half in the
+        middle of one, and it sits under the thumb that has just pressed —
+        which is where the eye is. It takes the green button's own foreground,
+        so the pressed control reads as one thing rather than two.
+
+        **It never flashes for a wait too short to need it.** A fix obtained
+        seconds ago and precise enough comes back on the spot, and something
+        appearing and vanishing within a frame or two is worse than nothing at
+        all. `showDelay` holds it back for half a second, and `minHideDelay`
+        keeps it up for that long once shown: below half a second the press is
+        answered before anything appears, and the two are the library's own
+        doing rather than timing written by hand here.
+
+        Nothing for the screen reader to read: it announces the button, which
+        is disabled for the whole of the wait, and the answer comes as a
+        message that is spoken.
+    -->
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/locating"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:importantForAccessibility="no"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indicatorColor="@color/surface_on_signal"
+        app:indicatorInset="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/locate_me"
+        app:layout_constraintEnd_toEndOf="@id/locate_me"
+        app:layout_constraintStart_toStartOf="@id/locate_me"
+        app:layout_constraintTop_toTopOf="@id/locate_me"
+        app:minHideDelay="500"
+        app:showDelay="500"
+        app:trackColor="@android:color/transparent"
+        app:trackThickness="2dp"
+        tools:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

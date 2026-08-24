@@ -17,16 +17,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.message.MessageSubject
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentStationListBinding
 import io.github.mgdx.rouelibre.ui.MAP_BACK_STACK_ENTRY
+import io.github.mgdx.rouelibre.ui.MainActivity
 import io.github.mgdx.rouelibre.ui.STATION_LIST_BACK_STACK_ENTRY
 import io.github.mgdx.rouelibre.ui.ScreenBehind
 import io.github.mgdx.rouelibre.ui.backStackEntryNames
@@ -55,21 +56,6 @@ import java.time.Instant
 class StationListFragment : Fragment() {
 
     private var binding: FragmentStationListBinding? = null
-
-    /**
-     * The message on screen, if there is one, so that it can go when the screen
-     * does.
-     *
-     * A snackbar does **not** hang from the view it is built with: Material
-     * walks up to the activity's content and attaches it there, so it outlives
-     * the fragment that raised it. On the very first launch that is not a
-     * detail — the station list is landed on, asks for the stations of a city
-     * nobody has chosen yet, and is replaced a frame later by the welcome
-     * sequence; its "no city is selected · choose one" stayed up over that
-     * sequence, and pressing it asked a fragment with no manager left for a
-     * transaction. That was a crash, on the first screen of the first launch.
-     */
-    private var message: Snackbar? = null
 
     /**
      * Whether the next list committed is to be shown from its first row.
@@ -252,8 +238,11 @@ class StationListFragment : Fragment() {
      * **A fix asked for, not the one already known**: the button is pressed by
      * somebody who has walked somewhere, and a position from two minutes ago
      * would order the list around the street they set off from. The wait can
-     * run to several seconds indoors, so the button goes dead meanwhile —
-     * otherwise the press reads as lost and is made again.
+     * run to ten seconds indoors, so the button goes dead meanwhile and
+     * **turns a ring while it waits** — otherwise the press reads as lost and
+     * is made again. The ring shows itself only where the wait is long enough
+     * to need showing, which the layout settles rather than any timing written
+     * here.
      *
      * The position serves that single ordering and is written nowhere
      * (SPEC §2, C3).
@@ -261,9 +250,11 @@ class StationListFragment : Fragment() {
     private fun orderFromAFreshFix() {
         viewLifecycleOwner.lifecycleScope.launch {
             binding?.locateMe?.isEnabled = false
+            binding?.locating?.show()
             val fix = try {
                 container.deviceLocation.current()
             } finally {
+                binding?.locating?.hide()
                 binding?.locateMe?.isEnabled = true
             }
             val position = fix?.coordinates
@@ -343,11 +334,6 @@ class StationListFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        // A message about a screen that is gone is noise at best, and an
-        // action on it is a transaction asked of a fragment with no manager —
-        // see [message].
-        message?.dismiss()
-        message = null
         // The RecyclerView outlives the view through its adapter; detaching it
         // avoids holding on to the destroyed view.
         binding?.stations?.adapter = null
@@ -387,22 +373,38 @@ class StationListFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.errors.collect { error ->
-                    val views = binding ?: return@collect
-                    val bar = Snackbar.make(
-                        views.root,
-                        error.toUserMessage(requireContext()),
-                        Snackbar.LENGTH_LONG,
-                    )
-                    if (error == DataError.NoCityChosen) {
-                        // Guarded as well as dismissed with the screen: a
-                        // snackbar animates its way out, and a press landing
-                        // during that animation would reach a fragment that
-                        // has already let go of its manager.
-                        bar.setAction(R.string.city_choose) { if (isAdded) showCityChooser() }
+                    val host = activity as? MainActivity ?: return@collect
+                    // **A failed refresh gives way to an answer already up.**
+                    // Offline is this application's ordinary state, so this is
+                    // the message most apt to arrive at the wrong moment: with
+                    // no network the loop raises one every ten seconds, and it
+                    // wiped the sentence telling the user their position falls
+                    // outside the city they are consulting — within a fraction
+                    // of a second, so that the press of "nearest station
+                    // first" looked answered by nothing at all. It comes back
+                    // at the next tick, and the freshness line meanwhile says
+                    // how old the counters are.
+                    val (label, action) = if (error == DataError.NoCityChosen) {
+                        // "Try again" is no answer to having chosen no city:
+                        // nothing is being asked of any network and every
+                        // press can only fail the same way (SPEC §14).
+                        R.string.city_choose to { showCityChooser() }
                     } else {
-                        bar.setAction(R.string.action_retry) { viewModel.refresh(force = true) }
+                        R.string.action_retry to { viewModel.refresh(force = true) }
                     }
-                    showMessage(bar)
+                    host.showMessage(
+                        error.toUserMessage(requireContext()),
+                        MessageSubject.Refresh,
+                        actionLabel = label,
+                    ) {
+                        // The banner belongs to the activity and outlives this
+                        // screen: a press landing after it is gone would ask a
+                        // fragment with no manager for a transaction, and its
+                        // own model for a refresh. That was a crash on the
+                        // first screen of the first launch, when the list is
+                        // replaced a frame later by the welcome sequence.
+                        if (isAdded) action()
+                    }
                 }
             }
         }
@@ -513,21 +515,23 @@ class StationListFragment : Fragment() {
         }
     }
 
-    private fun showMessage(text: CharSequence) {
-        val views = binding ?: return
-        showMessage(Snackbar.make(views.root, text, Snackbar.LENGTH_LONG))
-    }
-
     /**
-     * Puts a message on screen, and keeps hold of it.
+     * Says something back about a gesture just made on this screen.
      *
-     * One at a time, and the one held is the one on show: a second message
-     * replaces the first on screen anyway, and the reference has to follow it
-     * or [onDestroyView] would take away a bar that has already gone.
+     * Handed to the activity, which owns the one banner the screen has: put up
+     * from here it would be taken down by the next failed refresh without
+     * anything weighing the two, and with no network there is one of those
+     * every ten seconds (see `MainActivity.showMessage`).
+     *
+     * Every one of these answers a press of "nearest station first" — the
+     * permission refused, location switched off, no fix obtained, or a
+     * position outside the city being consulted — so they are all
+     * [MessageSubject.Answer], and they replace one another as the later of
+     * two answers should.
      */
-    private fun showMessage(bar: Snackbar) {
-        message = bar
-        bar.show()
+    private fun showMessage(text: CharSequence) {
+        val host = activity as? MainActivity ?: return
+        host.showMessage(text, MessageSubject.Answer)
     }
 
     private fun hideKeyboard(view: View) {
