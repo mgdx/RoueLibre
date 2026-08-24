@@ -54,16 +54,16 @@
 
     <!-- The number of bikes available to borrow at a station. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d bicicletă</item>
-        <item quantity="few">%1$d biciclete</item>
-        <item quantity="other">%1$d de biciclete</item>
+        <item quantity="one">%1$d bicicletă</item>
+        <item quantity="few">%1$d biciclete</item>
+        <item quantity="other">%1$d de biciclete</item>
     </plurals>
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d loc liber</item>
-        <item quantity="few">%1$d locuri libere</item>
-        <item quantity="other">%1$d de locuri libere</item>
+        <item quantity="one">%1$d loc liber</item>
+        <item quantity="few">%1$d locuri libere</item>
+        <item quantity="other">%1$d de locuri libere</item>
     </plurals>
 
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
@@ -137,9 +137,9 @@
          known, and its postcode when it is not. %2$d is the number of docking
          points, which is the station's capacity and not what is free. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d doc</item>
-        <item quantity="few">%1$s · %2$d docuri</item>
-        <item quantity="other">%1$s · %2$d de docuri</item>
+        <item quantity="one">%1$s · %2$d doc</item>
+        <item quantity="few">%1$s · %2$d docuri</item>
+        <item quantity="other">%1$s · %2$d de docuri</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
@@ -147,43 +147,43 @@
          one, each already agreed in number. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d mecanică</item>
-        <item quantity="few">%1$d mecanice</item>
-        <item quantity="other">%1$d de mecanice</item>
+        <item quantity="one">%1$d mecanică</item>
+        <item quantity="few">%1$d mecanice</item>
+        <item quantity="other">%1$d de mecanice</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d electrică</item>
-        <item quantity="few">%1$d electrice</item>
-        <item quantity="other">%1$d de electrice</item>
+        <item quantity="one">%1$d electrică</item>
+        <item quantity="few">%1$d electrice</item>
+        <item quantity="other">%1$d de electrice</item>
     </plurals>
 
     <!-- All of these are read after "Actualizat", which is why they open with
          "acum" rather than closing with an "în urmă". -->
     <string name="freshness_just_now">chiar acum</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">acum %1$d secundă</item>
-        <item quantity="few">acum %1$d secunde</item>
-        <item quantity="other">acum %1$d de secunde</item>
+        <item quantity="one">acum %1$d secundă</item>
+        <item quantity="few">acum %1$d secunde</item>
+        <item quantity="other">acum %1$d de secunde</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">acum %1$d minut</item>
-        <item quantity="few">acum %1$d minute</item>
-        <item quantity="other">acum %1$d de minute</item>
+        <item quantity="one">acum %1$d minut</item>
+        <item quantity="few">acum %1$d minute</item>
+        <item quantity="other">acum %1$d de minute</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">acum %1$d oră</item>
-        <item quantity="few">acum %1$d ore</item>
-        <item quantity="other">acum %1$d de ore</item>
+        <item quantity="one">acum %1$d oră</item>
+        <item quantity="few">acum %1$d ore</item>
+        <item quantity="other">acum %1$d de ore</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">acum %1$d zi</item>
-        <item quantity="few">acum %1$d zile</item>
-        <item quantity="other">acum %1$d de zile</item>
+        <item quantity="one">acum %1$d zi</item>
+        <item quantity="few">acum %1$d zile</item>
+        <item quantity="other">acum %1$d de zile</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">acum %1$d lună</item>
-        <item quantity="few">acum %1$d luni</item>
-        <item quantity="other">acum %1$d de luni</item>
+        <item quantity="one">acum %1$d lună</item>
+        <item quantity="few">acum %1$d luni</item>
+        <item quantity="other">acum %1$d de luni</item>
     </plurals>
     <string name="freshness_stale">Date înghețate · %1$s</string>
     <string name="freshness_fresh">Actualizat %1$s</string>
@@ -406,14 +406,14 @@
     <string name="journey_outside_coverage">Acest punct se află în afara zonei acoperite de datele instalate.</string>
     <string name="journey_no_stations">Nicio stație cunoscută. Actualizează lista stațiilor, apoi încearcă din nou.</string>
 
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d h %2$02d</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d h %2$02d</string>
 
     <!-- A station's capacity: every docking point it holds, free or not. -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d doc</item>
-        <item quantity="few">%1$d docuri</item>
-        <item quantity="other">%1$d de docuri</item>
+        <item quantity="one">%1$d doc</item>
+        <item quantity="few">%1$d docuri</item>
+        <item quantity="other">%1$d de docuri</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
     <string name="station_address_nearby">Lângă %1$s</string>
@@ -459,14 +459,14 @@
          five, %1$s is a figure already rounded and already written in the
          interface's language: the translation places the symbol, never the
          number. Which of the five applies is the reader's unit system. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
     <!-- Unit symbols. Written the same way in most languages; the string
          exists in every one all the same, so a language that writes them
          otherwise has somewhere to say so. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
     <string name="action_back">Înapoi</string>
 
     <!-- City screen: which conurbation the application serves. -->
@@ -480,20 +480,20 @@
     <string name="city_locate_me">Găsește orașul meu</string>
     <string name="city_active">În uz</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d stație · %2$s de descărcat</item>
-        <item quantity="few">%1$d stații · %2$s de descărcat</item>
-        <item quantity="other">%1$d de stații · %2$s de descărcat</item>
+        <item quantity="one">%1$d stație · %2$s de descărcat</item>
+        <item quantity="few">%1$d stații · %2$s de descărcat</item>
+        <item quantity="other">%1$d de stații · %2$s de descărcat</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d stație</item>
-        <item quantity="few">%1$d stații</item>
-        <item quantity="other">%1$d de stații</item>
+        <item quantity="one">%1$d stație</item>
+        <item quantity="few">%1$d stații</item>
+        <item quantity="other">%1$d de stații</item>
     </plurals>
     <string name="city_detail_size_only">%1$s de descărcat</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d stație · dimensiune anunțată înainte de descărcare</item>
-        <item quantity="few">%1$d stații · dimensiune anunțată înainte de descărcare</item>
-        <item quantity="other">%1$d de stații · dimensiune anunțată înainte de descărcare</item>
+        <item quantity="one">%1$d stație · dimensiune anunțată înainte de descărcare</item>
+        <item quantity="few">%1$d stații · dimensiune anunțată înainte de descărcare</item>
+        <item quantity="other">%1$d de stații · dimensiune anunțată înainte de descărcare</item>
     </plurals>
     <string name="city_size_unknown">Dimensiune anunțată înainte de descărcare</string>
     <!-- %1$s is a size, "143 MB" for instance: no participle stands beside it,
@@ -527,10 +527,10 @@
     <string name="city_none_nearby">Nicio rețea cunoscută prin apropiere. Alege un oraș din listă.</string>
     <string name="action_cancel">Anulează</string>
 
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <string name="storage_title">Stocare</string>
     <string name="storage_open">Gestionează datele offline</string>

@@ -51,18 +51,18 @@
 
     <!-- The number of bikes available to borrow at a station. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d dviratis</item>
-        <item quantity="few">%1$d dviračiai</item>
-        <item quantity="many">%1$d dviračio</item>
-        <item quantity="other">%1$d dviračių</item>
+        <item quantity="one">%1$d dviratis</item>
+        <item quantity="few">%1$d dviračiai</item>
+        <item quantity="many">%1$d dviračio</item>
+        <item quantity="other">%1$d dviračių</item>
     </plurals>
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d laisva vieta</item>
-        <item quantity="few">%1$d laisvos vietos</item>
-        <item quantity="many">%1$d laisvos vietos</item>
-        <item quantity="other">%1$d laisvų vietų</item>
+        <item quantity="one">%1$d laisva vieta</item>
+        <item quantity="few">%1$d laisvos vietos</item>
+        <item quantity="many">%1$d laisvos vietos</item>
+        <item quantity="other">%1$d laisvų vietų</item>
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.
@@ -131,10 +131,10 @@
          label saying which. %2$d is the number of docking points, which is
          the station's whole capacity and not what is free of it. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d stovas</item>
-        <item quantity="few">%1$s · %2$d stovai</item>
-        <item quantity="many">%1$s · %2$d stovo</item>
-        <item quantity="other">%1$s · %2$d stovų</item>
+        <item quantity="one">%1$s · %2$d stovas</item>
+        <item quantity="few">%1$s · %2$d stovai</item>
+        <item quantity="many">%1$s · %2$d stovo</item>
+        <item quantity="other">%1$s · %2$d stovų</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
@@ -142,16 +142,16 @@
          one, each already agreed in number. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d mechaninis</item>
-        <item quantity="few">%1$d mechaniniai</item>
-        <item quantity="many">%1$d mechaninio</item>
-        <item quantity="other">%1$d mechaninių</item>
+        <item quantity="one">%1$d mechaninis</item>
+        <item quantity="few">%1$d mechaniniai</item>
+        <item quantity="many">%1$d mechaninio</item>
+        <item quantity="other">%1$d mechaninių</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d elektrinis</item>
-        <item quantity="few">%1$d elektriniai</item>
-        <item quantity="many">%1$d elektrinio</item>
-        <item quantity="other">%1$d elektrinių</item>
+        <item quantity="one">%1$d elektrinis</item>
+        <item quantity="few">%1$d elektriniai</item>
+        <item quantity="many">%1$d elektrinio</item>
+        <item quantity="other">%1$d elektrinių</item>
     </plurals>
 
     <!-- How old the availability figures are. All of these follow "Atnaujinta"
@@ -160,34 +160,34 @@
          it. -->
     <string name="freshness_just_now">ką tik</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">prieš %1$d sekundę</item>
-        <item quantity="few">prieš %1$d sekundes</item>
-        <item quantity="many">prieš %1$d sekundės</item>
-        <item quantity="other">prieš %1$d sekundžių</item>
+        <item quantity="one">prieš %1$d sekundę</item>
+        <item quantity="few">prieš %1$d sekundes</item>
+        <item quantity="many">prieš %1$d sekundės</item>
+        <item quantity="other">prieš %1$d sekundžių</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">prieš %1$d minutę</item>
-        <item quantity="few">prieš %1$d minutes</item>
-        <item quantity="many">prieš %1$d minutės</item>
-        <item quantity="other">prieš %1$d minučių</item>
+        <item quantity="one">prieš %1$d minutę</item>
+        <item quantity="few">prieš %1$d minutes</item>
+        <item quantity="many">prieš %1$d minutės</item>
+        <item quantity="other">prieš %1$d minučių</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">prieš %1$d valandą</item>
-        <item quantity="few">prieš %1$d valandas</item>
-        <item quantity="many">prieš %1$d valandos</item>
-        <item quantity="other">prieš %1$d valandų</item>
+        <item quantity="one">prieš %1$d valandą</item>
+        <item quantity="few">prieš %1$d valandas</item>
+        <item quantity="many">prieš %1$d valandos</item>
+        <item quantity="other">prieš %1$d valandų</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">prieš %1$d dieną</item>
-        <item quantity="few">prieš %1$d dienas</item>
-        <item quantity="many">prieš %1$d dienos</item>
-        <item quantity="other">prieš %1$d dienų</item>
+        <item quantity="one">prieš %1$d dieną</item>
+        <item quantity="few">prieš %1$d dienas</item>
+        <item quantity="many">prieš %1$d dienos</item>
+        <item quantity="other">prieš %1$d dienų</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">prieš %1$d mėnesį</item>
-        <item quantity="few">prieš %1$d mėnesius</item>
-        <item quantity="many">prieš %1$d mėnesio</item>
-        <item quantity="other">prieš %1$d mėnesių</item>
+        <item quantity="one">prieš %1$d mėnesį</item>
+        <item quantity="few">prieš %1$d mėnesius</item>
+        <item quantity="many">prieš %1$d mėnesio</item>
+        <item quantity="other">prieš %1$d mėnesių</item>
     </plurals>
     <string name="freshness_stale">Pasenę duomenys · %1$s</string>
     <string name="freshness_fresh">Atnaujinta %1$s</string>
@@ -405,20 +405,20 @@
     <string name="journey_outside_coverage">Šis taškas yra už teritorijos, kurią apima įdiegti duomenys.</string>
     <string name="journey_no_stations">Nežinoma nė viena stotelė. Atnaujinkite stotelių sąrašą ir bandykite dar kartą.</string>
 
-    <string name="duration_minutes">%1$d min.</string>
+    <string name="duration_minutes">%1$d min.</string>
     <!-- Lithuanian writes the hour "val." and the minute "min.", both with
          their point (android:minute), and spells the minutes out rather than
          zero-padding them: "1 val. 5 min.", not "1 val. 05". -->
-    <string name="duration_hours_minutes">%1$d val. %2$d min.</string>
+    <string name="duration_hours_minutes">%1$d val. %2$d min.</string>
 
     <!-- A station's whole capacity, free or not: "stovas", against the
          "laisva vieta" that is counted as available. The two figures stand
          side by side on the sheet. -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d stovas</item>
-        <item quantity="few">%1$d stovai</item>
-        <item quantity="many">%1$d stovo</item>
-        <item quantity="other">%1$d stovų</item>
+        <item quantity="one">%1$d stovas</item>
+        <item quantity="few">%1$d stovai</item>
+        <item quantity="many">%1$d stovo</item>
+        <item quantity="other">%1$d stovų</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
     <!-- %1$s is an address, laid out the way its own country writes it, so the
@@ -464,13 +464,13 @@
          five, %1$s is a figure already rounded and already written in the
          interface's language: the translation places the symbol, never the
          number. Which of the five applies is the reader's unit system. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
     <!-- The symbols of the two imperial systems, written the same way in
          Lithuanian as in English. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
     <string name="action_back">Atgal</string>
 
     <!-- City screen: which conurbation the application serves. -->
@@ -484,23 +484,23 @@
     <string name="city_locate_me">Rasti mano miestą</string>
     <string name="city_active">Naudojama</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d stotelė · atsisiuntimas %2$s</item>
-        <item quantity="few">%1$d stotelės · atsisiuntimas %2$s</item>
-        <item quantity="many">%1$d stotelės · atsisiuntimas %2$s</item>
-        <item quantity="other">%1$d stotelių · atsisiuntimas %2$s</item>
+        <item quantity="one">%1$d stotelė · atsisiuntimas %2$s</item>
+        <item quantity="few">%1$d stotelės · atsisiuntimas %2$s</item>
+        <item quantity="many">%1$d stotelės · atsisiuntimas %2$s</item>
+        <item quantity="other">%1$d stotelių · atsisiuntimas %2$s</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d stotelė</item>
-        <item quantity="few">%1$d stotelės</item>
-        <item quantity="many">%1$d stotelės</item>
-        <item quantity="other">%1$d stotelių</item>
+        <item quantity="one">%1$d stotelė</item>
+        <item quantity="few">%1$d stotelės</item>
+        <item quantity="many">%1$d stotelės</item>
+        <item quantity="other">%1$d stotelių</item>
     </plurals>
     <string name="city_detail_size_only">Atsisiuntimas – %1$s</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d stotelė · dydis nurodomas prieš atsisiunčiant</item>
-        <item quantity="few">%1$d stotelės · dydis nurodomas prieš atsisiunčiant</item>
-        <item quantity="many">%1$d stotelės · dydis nurodomas prieš atsisiunčiant</item>
-        <item quantity="other">%1$d stotelių · dydis nurodomas prieš atsisiunčiant</item>
+        <item quantity="one">%1$d stotelė · dydis nurodomas prieš atsisiunčiant</item>
+        <item quantity="few">%1$d stotelės · dydis nurodomas prieš atsisiunčiant</item>
+        <item quantity="many">%1$d stotelės · dydis nurodomas prieš atsisiunčiant</item>
+        <item quantity="other">%1$d stotelių · dydis nurodomas prieš atsisiunčiant</item>
     </plurals>
     <string name="city_size_unknown">Dydis nurodomas prieš atsisiunčiant</string>
     <string name="city_installed">Įrenginyje įdiegta %1$s</string>
@@ -531,10 +531,10 @@
     <string name="city_none_nearby">Netoliese nėra žinomo tinklo. Pasirinkite miestą iš sąrašo.</string>
     <string name="action_cancel">Atšaukti</string>
 
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <string name="storage_title">Saugykla</string>
     <string name="storage_open">Tvarkyti duomenis įrenginyje</string>

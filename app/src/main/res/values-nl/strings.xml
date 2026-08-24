@@ -28,14 +28,14 @@
 
     <!-- The number of bikes available to borrow at a station. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d fiets</item>
-        <item quantity="other">%1$d fietsen</item>
+        <item quantity="one">%1$d fiets</item>
+        <item quantity="other">%1$d fietsen</item>
     </plurals>
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d vrije plaats</item>
-        <item quantity="other">%1$d vrije plaatsen</item>
+        <item quantity="one">%1$d vrije plaats</item>
+        <item quantity="other">%1$d vrije plaatsen</item>
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.
@@ -90,8 +90,8 @@
          distance to the station, or its postcode when the position is not
          known. %2$d is the number of docking points. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d stallingsplaats</item>
-        <item quantity="other">%1$s · %2$d stallingsplaatsen</item>
+        <item quantity="one">%1$s · %2$d stallingsplaats</item>
+        <item quantity="other">%1$s · %2$d stallingsplaatsen</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
@@ -100,37 +100,37 @@
          no noun. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d mechanische</item>
-        <item quantity="other">%1$d mechanische</item>
+        <item quantity="one">%1$d mechanische</item>
+        <item quantity="other">%1$d mechanische</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d elektrische</item>
-        <item quantity="other">%1$d elektrische</item>
+        <item quantity="one">%1$d elektrische</item>
+        <item quantity="other">%1$d elektrische</item>
     </plurals>
 
     <!-- How old the availability is. Lower-cased: it is always read inside
          `freshness_fresh`, "Vernieuwd zojuist". -->
     <string name="freshness_just_now">zojuist</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">%1$d seconde geleden</item>
-        <item quantity="other">%1$d seconden geleden</item>
+        <item quantity="one">%1$d seconde geleden</item>
+        <item quantity="other">%1$d seconden geleden</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">%1$d minuut geleden</item>
-        <item quantity="other">%1$d minuten geleden</item>
+        <item quantity="one">%1$d minuut geleden</item>
+        <item quantity="other">%1$d minuten geleden</item>
     </plurals>
     <!-- "uur" keeps its singular form after a number, in both categories. -->
     <plurals name="freshness_hours">
-        <item quantity="one">%1$d uur geleden</item>
-        <item quantity="other">%1$d uur geleden</item>
+        <item quantity="one">%1$d uur geleden</item>
+        <item quantity="other">%1$d uur geleden</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">%1$d dag geleden</item>
-        <item quantity="other">%1$d dagen geleden</item>
+        <item quantity="one">%1$d dag geleden</item>
+        <item quantity="other">%1$d dagen geleden</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">%1$d maand geleden</item>
-        <item quantity="other">%1$d maanden geleden</item>
+        <item quantity="one">%1$d maand geleden</item>
+        <item quantity="other">%1$d maanden geleden</item>
     </plurals>
     <string name="freshness_stale">Verouderde gegevens · %1$s</string>
     <string name="freshness_fresh">Vernieuwd %1$s</string>
@@ -338,14 +338,14 @@
 
     <!-- "u" is how Dutch abbreviates the hour, in the Netherlands and in
          Belgium alike: "1 u 05". -->
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d u %2$02d</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d u %2$02d</string>
 
     <!-- A station's capacity: the same object as a free dock, counted as a
          total, and a different word so the two figures cannot be read as one. -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d stallingsplaats</item>
-        <item quantity="other">%1$d stallingsplaatsen</item>
+        <item quantity="one">%1$d stallingsplaats</item>
+        <item quantity="other">%1$d stallingsplaatsen</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
     <string name="station_address_nearby">Bij %1$s</string>
@@ -388,13 +388,13 @@
     <!-- Distances, formatted through the localisation APIs (SPEC §9). %1$s is
          a figure already rounded and already written in the interface's
          language: the translation places the symbol, never the number. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
     <!-- The symbols of the two imperial systems. Dutch writes them as they
          stand. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
     <string name="action_back">Terug</string>
 
     <!-- City screen: which conurbation the application serves. -->
@@ -408,17 +408,17 @@
     <string name="city_locate_me">Zoek mijn stad</string>
     <string name="city_active">In gebruik</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d station · %2$s te downloaden</item>
-        <item quantity="other">%1$d stations · %2$s te downloaden</item>
+        <item quantity="one">%1$d station · %2$s te downloaden</item>
+        <item quantity="other">%1$d stations · %2$s te downloaden</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d station</item>
-        <item quantity="other">%1$d stations</item>
+        <item quantity="one">%1$d station</item>
+        <item quantity="other">%1$d stations</item>
     </plurals>
     <string name="city_detail_size_only">%1$s te downloaden</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d station · omvang wordt vóór het downloaden genoemd</item>
-        <item quantity="other">%1$d stations · omvang wordt vóór het downloaden genoemd</item>
+        <item quantity="one">%1$d station · omvang wordt vóór het downloaden genoemd</item>
+        <item quantity="other">%1$d stations · omvang wordt vóór het downloaden genoemd</item>
     </plurals>
     <string name="city_size_unknown">Omvang wordt vóór het downloaden genoemd</string>
     <string name="city_installed">%1$s geïnstalleerd op het apparaat</string>
@@ -445,10 +445,10 @@
     <string name="city_none_nearby">Geen bekend netwerk in de buurt. Kies een stad uit de lijst.</string>
     <string name="action_cancel">Annuleren</string>
 
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <string name="storage_title">Opslag</string>
     <string name="storage_open">Offlinegegevens beheren</string>

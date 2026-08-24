@@ -33,14 +33,14 @@
 
     <!-- The number of bikes available to borrow at a station. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d Rad</item>
-        <item quantity="other">%1$d Räder</item>
+        <item quantity="one">%1$d Rad</item>
+        <item quantity="other">%1$d Räder</item>
     </plurals>
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d Platz</item>
-        <item quantity="other">%1$d Plätze</item>
+        <item quantity="one">%1$d Platz</item>
+        <item quantity="other">%1$d Plätze</item>
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.
@@ -107,8 +107,8 @@
          %1$s is a formatted distance, or a postcode when no origin is
          known; %2$d is the number of docking points. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d Stellplatz</item>
-        <item quantity="other">%1$s · %2$d Stellplätze</item>
+        <item quantity="one">%1$s · %2$d Stellplatz</item>
+        <item quantity="other">%1$s · %2$d Stellplätze</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
@@ -117,36 +117,36 @@
          "Rad" is the one the disc beside them already names. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d mechanisches</item>
-        <item quantity="other">%1$d mechanische</item>
+        <item quantity="one">%1$d mechanisches</item>
+        <item quantity="other">%1$d mechanische</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d elektrisches</item>
-        <item quantity="other">%1$d elektrische</item>
+        <item quantity="one">%1$d elektrisches</item>
+        <item quantity="other">%1$d elektrische</item>
     </plurals>
 
     <!-- The age of the displayed data (SPEC §4.1). Each of these is read
          inside a sentence, which is why they start in lower case. -->
     <string name="freshness_just_now">gerade eben</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">vor %1$d Sekunde</item>
-        <item quantity="other">vor %1$d Sekunden</item>
+        <item quantity="one">vor %1$d Sekunde</item>
+        <item quantity="other">vor %1$d Sekunden</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">vor %1$d Minute</item>
-        <item quantity="other">vor %1$d Minuten</item>
+        <item quantity="one">vor %1$d Minute</item>
+        <item quantity="other">vor %1$d Minuten</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">vor %1$d Stunde</item>
-        <item quantity="other">vor %1$d Stunden</item>
+        <item quantity="one">vor %1$d Stunde</item>
+        <item quantity="other">vor %1$d Stunden</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">vor %1$d Tag</item>
-        <item quantity="other">vor %1$d Tagen</item>
+        <item quantity="one">vor %1$d Tag</item>
+        <item quantity="other">vor %1$d Tagen</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">vor %1$d Monat</item>
-        <item quantity="other">vor %1$d Monaten</item>
+        <item quantity="one">vor %1$d Monat</item>
+        <item quantity="other">vor %1$d Monaten</item>
     </plurals>
     <!-- Attached to the age when the data is no longer current.
          Example: "Eingefrorene Daten · vor 12 Minuten". -->
@@ -415,14 +415,14 @@
     <!-- Durations, formatted through the localisation APIs (SPEC §9).
          %1$d is a number of minutes; %1$d h and %2$02d min for hours. The
          symbols are the international ones, which German writes too. -->
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d h %2$02d</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d h %2$02d</string>
 
     <!-- A station's detail (SPEC §7.2). A "Stellplatz" is a docking point
          counted as a total, where a "freier Platz" is one counted as free. -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d Stellplatz</item>
-        <item quantity="other">%1$d Stellplätze</item>
+        <item quantity="one">%1$d Stellplatz</item>
+        <item quantity="other">%1$d Stellplätze</item>
     </plurals>
     <!-- %1$s is the number of docking points, %2$s the age of the data. -->
     <string name="station_capacity_and_age">%1$s · %2$s</string>
@@ -486,14 +486,14 @@
          five, %1$s is a figure already rounded and already written in the
          interface's language: the translation places the symbol, never the
          number. Which of the five applies is the reader's unit system. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
     <!-- The symbols of the two imperial systems. Written the same way in most
          languages; the string exists in every one all the same, so a language
          that writes them otherwise has somewhere to say so. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
 
     <string name="action_back">Zurück</string>
 
@@ -509,22 +509,22 @@
     <string name="city_active">In Verwendung</string>
     <!-- %1$d is a number of stations, %2$s an already formatted size. -->
     <plurals name="city_detail">
-        <item quantity="one">%1$d Station · %2$s zum Herunterladen</item>
-        <item quantity="other">%1$d Stationen · %2$s zum Herunterladen</item>
+        <item quantity="one">%1$d Station · %2$s zum Herunterladen</item>
+        <item quantity="other">%1$d Stationen · %2$s zum Herunterladen</item>
     </plurals>
     <!-- Same row, once the data is installed: the weight is then announced by
          city_installed just below, and saying "to download" would contradict
          it. -->
     <plurals name="city_stations">
-        <item quantity="one">%1$d Station</item>
-        <item quantity="other">%1$d Stationen</item>
+        <item quantity="one">%1$d Station</item>
+        <item quantity="other">%1$d Stationen</item>
     </plurals>
     <string name="city_detail_size_only">%1$s zum Herunterladen</string>
     <!-- Same row when the catalogue carries no size: it only says it does not
          know, never that the data is missing. %1$d is a number of stations. -->
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d Station · Größe wird vor dem Download genannt</item>
-        <item quantity="other">%1$d Stationen · Größe wird vor dem Download genannt</item>
+        <item quantity="one">%1$d Station · Größe wird vor dem Download genannt</item>
+        <item quantity="other">%1$d Stationen · Größe wird vor dem Download genannt</item>
     </plurals>
     <string name="city_size_unknown">Größe wird vor dem Download genannt</string>
     <!-- %1$s is an already formatted size, "42,5 MB" for instance. -->
@@ -557,10 +557,10 @@
 
     <!-- File size units. Base 1000, as everywhere else in the system.
          %1$s is a number already written in the displayed language. -->
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <!-- The storage screen: what the application occupies, and how to reclaim
          it (SPEC §4.4). -->

@@ -35,18 +35,18 @@
 
     <!-- The number of bikes available to borrow at a station. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d rower</item>
-        <item quantity="few">%1$d rowery</item>
-        <item quantity="many">%1$d rowerów</item>
-        <item quantity="other">%1$d roweru</item>
+        <item quantity="one">%1$d rower</item>
+        <item quantity="few">%1$d rowery</item>
+        <item quantity="many">%1$d rowerów</item>
+        <item quantity="other">%1$d roweru</item>
     </plurals>
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d wolne miejsce</item>
-        <item quantity="few">%1$d wolne miejsca</item>
-        <item quantity="many">%1$d wolnych miejsc</item>
-        <item quantity="other">%1$d wolnego miejsca</item>
+        <item quantity="one">%1$d wolne miejsce</item>
+        <item quantity="few">%1$d wolne miejsca</item>
+        <item quantity="many">%1$d wolnych miejsc</item>
+        <item quantity="other">%1$d wolnego miejsca</item>
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.
@@ -114,10 +114,10 @@
          known, and its postcode when it is not — never both, and never a
          label saying which. %2$d is the number of docking points. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d stojak</item>
-        <item quantity="few">%1$s · %2$d stojaki</item>
-        <item quantity="many">%1$s · %2$d stojaków</item>
-        <item quantity="other">%1$s · %2$d stojaka</item>
+        <item quantity="one">%1$s · %2$d stojak</item>
+        <item quantity="few">%1$s · %2$d stojaki</item>
+        <item quantity="many">%1$s · %2$d stojaków</item>
+        <item quantity="other">%1$s · %2$d stojaka</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
@@ -126,16 +126,16 @@
          "zwykłe rowery" and "rowery elektryczne", elided as in English. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d zwykły</item>
-        <item quantity="few">%1$d zwykłe</item>
-        <item quantity="many">%1$d zwykłych</item>
-        <item quantity="other">%1$d zwykłego</item>
+        <item quantity="one">%1$d zwykły</item>
+        <item quantity="few">%1$d zwykłe</item>
+        <item quantity="many">%1$d zwykłych</item>
+        <item quantity="other">%1$d zwykłego</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d elektryczny</item>
-        <item quantity="few">%1$d elektryczne</item>
-        <item quantity="many">%1$d elektrycznych</item>
-        <item quantity="other">%1$d elektrycznego</item>
+        <item quantity="one">%1$d elektryczny</item>
+        <item quantity="few">%1$d elektryczne</item>
+        <item quantity="many">%1$d elektrycznych</item>
+        <item quantity="other">%1$d elektrycznego</item>
     </plurals>
 
     <!-- How old the availability figures are. `freshness_just_now` is read
@@ -143,34 +143,34 @@
          lower case. -->
     <string name="freshness_just_now">przed chwilą</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">%1$d sekundę temu</item>
-        <item quantity="few">%1$d sekundy temu</item>
-        <item quantity="many">%1$d sekund temu</item>
-        <item quantity="other">%1$d sekundy temu</item>
+        <item quantity="one">%1$d sekundę temu</item>
+        <item quantity="few">%1$d sekundy temu</item>
+        <item quantity="many">%1$d sekund temu</item>
+        <item quantity="other">%1$d sekundy temu</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">%1$d minutę temu</item>
-        <item quantity="few">%1$d minuty temu</item>
-        <item quantity="many">%1$d minut temu</item>
-        <item quantity="other">%1$d minuty temu</item>
+        <item quantity="one">%1$d minutę temu</item>
+        <item quantity="few">%1$d minuty temu</item>
+        <item quantity="many">%1$d minut temu</item>
+        <item quantity="other">%1$d minuty temu</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">%1$d godzinę temu</item>
-        <item quantity="few">%1$d godziny temu</item>
-        <item quantity="many">%1$d godzin temu</item>
-        <item quantity="other">%1$d godziny temu</item>
+        <item quantity="one">%1$d godzinę temu</item>
+        <item quantity="few">%1$d godziny temu</item>
+        <item quantity="many">%1$d godzin temu</item>
+        <item quantity="other">%1$d godziny temu</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">%1$d dzień temu</item>
-        <item quantity="few">%1$d dni temu</item>
-        <item quantity="many">%1$d dni temu</item>
-        <item quantity="other">%1$d dnia temu</item>
+        <item quantity="one">%1$d dzień temu</item>
+        <item quantity="few">%1$d dni temu</item>
+        <item quantity="many">%1$d dni temu</item>
+        <item quantity="other">%1$d dnia temu</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">%1$d miesiąc temu</item>
-        <item quantity="few">%1$d miesiące temu</item>
-        <item quantity="many">%1$d miesięcy temu</item>
-        <item quantity="other">%1$d miesiąca temu</item>
+        <item quantity="one">%1$d miesiąc temu</item>
+        <item quantity="few">%1$d miesiące temu</item>
+        <item quantity="many">%1$d miesięcy temu</item>
+        <item quantity="other">%1$d miesiąca temu</item>
     </plurals>
     <string name="freshness_stale">Zamrożone dane · %1$s</string>
     <string name="freshness_fresh">Zaktualizowano %1$s</string>
@@ -384,15 +384,15 @@
     <string name="journey_outside_coverage">Ten punkt leży poza obszarem, który obejmują zainstalowane dane.</string>
     <string name="journey_no_stations">Brak znanych stacji. Odśwież listę stacji i spróbuj ponownie.</string>
 
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d godz. %2$d min</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d godz. %2$d min</string>
 
     <!-- A station's capacity: every dock it holds, free or not. -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d stojak</item>
-        <item quantity="few">%1$d stojaki</item>
-        <item quantity="many">%1$d stojaków</item>
-        <item quantity="other">%1$d stojaka</item>
+        <item quantity="one">%1$d stojak</item>
+        <item quantity="few">%1$d stojaki</item>
+        <item quantity="many">%1$d stojaków</item>
+        <item quantity="other">%1$d stojaka</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
     <!-- %1$s is a street name read off the offline index. It follows a colon
@@ -441,11 +441,11 @@
          five, %1$s is a figure already rounded and already written in the
          interface's language: the translation places the symbol, never the
          number. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
     <string name="action_back">Wstecz</string>
 
     <!-- City screen: which conurbation the application serves. -->
@@ -459,23 +459,23 @@
     <string name="city_locate_me">Znajdź moje miasto</string>
     <string name="city_active">W użyciu</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d stacja · %2$s do pobrania</item>
-        <item quantity="few">%1$d stacje · %2$s do pobrania</item>
-        <item quantity="many">%1$d stacji · %2$s do pobrania</item>
-        <item quantity="other">%1$d stacji · %2$s do pobrania</item>
+        <item quantity="one">%1$d stacja · %2$s do pobrania</item>
+        <item quantity="few">%1$d stacje · %2$s do pobrania</item>
+        <item quantity="many">%1$d stacji · %2$s do pobrania</item>
+        <item quantity="other">%1$d stacji · %2$s do pobrania</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d stacja</item>
-        <item quantity="few">%1$d stacje</item>
-        <item quantity="many">%1$d stacji</item>
-        <item quantity="other">%1$d stacji</item>
+        <item quantity="one">%1$d stacja</item>
+        <item quantity="few">%1$d stacje</item>
+        <item quantity="many">%1$d stacji</item>
+        <item quantity="other">%1$d stacji</item>
     </plurals>
     <string name="city_detail_size_only">%1$s do pobrania</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d stacja · rozmiar podawany przed pobraniem</item>
-        <item quantity="few">%1$d stacje · rozmiar podawany przed pobraniem</item>
-        <item quantity="many">%1$d stacji · rozmiar podawany przed pobraniem</item>
-        <item quantity="other">%1$d stacji · rozmiar podawany przed pobraniem</item>
+        <item quantity="one">%1$d stacja · rozmiar podawany przed pobraniem</item>
+        <item quantity="few">%1$d stacje · rozmiar podawany przed pobraniem</item>
+        <item quantity="many">%1$d stacji · rozmiar podawany przed pobraniem</item>
+        <item quantity="other">%1$d stacji · rozmiar podawany przed pobraniem</item>
     </plurals>
     <string name="city_size_unknown">Rozmiar podawany przed pobraniem</string>
     <!-- %1$s is a size. The city is the implicit subject: "Zajmuje 143 MB na
@@ -504,10 +504,10 @@
     <string name="city_none_nearby">W pobliżu nie ma znanej sieci. Wybierz miasto z listy.</string>
     <string name="action_cancel">Anuluj</string>
 
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <string name="storage_title">Pamięć</string>
     <string name="storage_open">Zarządzaj danymi offline</string>

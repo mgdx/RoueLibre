@@ -47,14 +47,14 @@
     <!-- The number of bikes available to borrow at a station. A noun after a
          numeral stays singular in Turkish, so both items read alike. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d bisiklet</item>
-        <item quantity="other">%1$d bisiklet</item>
+        <item quantity="one">%1$d bisiklet</item>
+        <item quantity="other">%1$d bisiklet</item>
     </plurals>
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d boş yuva</item>
-        <item quantity="other">%1$d boş yuva</item>
+        <item quantity="one">%1$d boş yuva</item>
+        <item quantity="other">%1$d boş yuva</item>
     </plurals>
 
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
@@ -103,40 +103,40 @@
          distance or a postcode, %2$d the number of docking points — the
          capacity figure, which is `park yeri` here and never `boş yuva`. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d park yeri</item>
-        <item quantity="other">%1$s · %2$d park yeri</item>
+        <item quantity="one">%1$s · %2$d park yeri</item>
+        <item quantity="other">%1$s · %2$d park yeri</item>
     </plurals>
 
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d klasik</item>
-        <item quantity="other">%1$d klasik</item>
+        <item quantity="one">%1$d klasik</item>
+        <item quantity="other">%1$d klasik</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d elektrikli</item>
-        <item quantity="other">%1$d elektrikli</item>
+        <item quantity="one">%1$d elektrikli</item>
+        <item quantity="other">%1$d elektrikli</item>
     </plurals>
 
     <string name="freshness_just_now">az önce</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">%1$d saniye önce</item>
-        <item quantity="other">%1$d saniye önce</item>
+        <item quantity="one">%1$d saniye önce</item>
+        <item quantity="other">%1$d saniye önce</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">%1$d dakika önce</item>
-        <item quantity="other">%1$d dakika önce</item>
+        <item quantity="one">%1$d dakika önce</item>
+        <item quantity="other">%1$d dakika önce</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">%1$d saat önce</item>
-        <item quantity="other">%1$d saat önce</item>
+        <item quantity="one">%1$d saat önce</item>
+        <item quantity="other">%1$d saat önce</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">%1$d gün önce</item>
-        <item quantity="other">%1$d gün önce</item>
+        <item quantity="one">%1$d gün önce</item>
+        <item quantity="other">%1$d gün önce</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">%1$d ay önce</item>
-        <item quantity="other">%1$d ay önce</item>
+        <item quantity="one">%1$d ay önce</item>
+        <item quantity="other">%1$d ay önce</item>
     </plurals>
     <string name="freshness_stale">Donmuş veri · %1$s</string>
     <string name="freshness_fresh">%1$s güncellendi</string>
@@ -345,13 +345,13 @@
     <string name="journey_no_stations">Bilinen istasyon yok. İstasyon listesini yenile, sonra tekrar dene.</string>
 
     <!-- Turkish abbreviates the two units itself: dakika → dk, saat → sa. -->
-    <string name="duration_minutes">%1$d dk</string>
-    <string name="duration_hours_minutes">%1$d sa %2$02d</string>
+    <string name="duration_minutes">%1$d dk</string>
+    <string name="duration_hours_minutes">%1$d sa %2$02d</string>
 
     <!-- A station's docking points counted as a total, beside the free ones. -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d park yeri</item>
-        <item quantity="other">%1$d park yeri</item>
+        <item quantity="one">%1$d park yeri</item>
+        <item quantity="other">%1$d park yeri</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
     <string name="station_address_nearby">%1$s yakınında</string>
@@ -390,11 +390,11 @@
     <!-- Distances. %1$s is a figure already rounded and already written in the
          interface's language: the translation places the symbol, never the
          number. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
     <string name="action_back">Geri</string>
 
     <!-- City screen: which conurbation the application serves. -->
@@ -408,17 +408,17 @@
     <string name="city_locate_me">Şehrimi bul</string>
     <string name="city_active">Kullanımda</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d istasyon · %2$s indirilecek</item>
-        <item quantity="other">%1$d istasyon · %2$s indirilecek</item>
+        <item quantity="one">%1$d istasyon · %2$s indirilecek</item>
+        <item quantity="other">%1$d istasyon · %2$s indirilecek</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d istasyon</item>
-        <item quantity="other">%1$d istasyon</item>
+        <item quantity="one">%1$d istasyon</item>
+        <item quantity="other">%1$d istasyon</item>
     </plurals>
     <string name="city_detail_size_only">%1$s indirilecek</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d istasyon · boyut indirmeden önce bildirilir</item>
-        <item quantity="other">%1$d istasyon · boyut indirmeden önce bildirilir</item>
+        <item quantity="one">%1$d istasyon · boyut indirmeden önce bildirilir</item>
+        <item quantity="other">%1$d istasyon · boyut indirmeden önce bildirilir</item>
     </plurals>
     <string name="city_size_unknown">Boyut indirmeden önce bildirilir</string>
     <string name="city_installed">Cihazda %1$s yüklü</string>
@@ -449,10 +449,10 @@
     <string name="city_none_nearby">Buraya yakın bilinen bir ağ yok. Listeden bir şehir seç.</string>
     <string name="action_cancel">İptal</string>
 
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <string name="storage_title">Depolama</string>
     <string name="storage_open">Çevrimdışı verileri yönet</string>

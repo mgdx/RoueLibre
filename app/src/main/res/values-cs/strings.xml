@@ -44,18 +44,18 @@
          "many" is Czech's decimal category, hence the genitive singular:
          1,5 kola. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d kolo</item>
-        <item quantity="few">%1$d kola</item>
-        <item quantity="many">%1$d kola</item>
-        <item quantity="other">%1$d kol</item>
+        <item quantity="one">%1$d kolo</item>
+        <item quantity="few">%1$d kola</item>
+        <item quantity="many">%1$d kola</item>
+        <item quantity="other">%1$d kol</item>
     </plurals>
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d volné místo</item>
-        <item quantity="few">%1$d volná místa</item>
-        <item quantity="many">%1$d volného místa</item>
-        <item quantity="other">%1$d volných míst</item>
+        <item quantity="one">%1$d volné místo</item>
+        <item quantity="few">%1$d volná místa</item>
+        <item quantity="many">%1$d volného místa</item>
+        <item quantity="other">%1$d volných míst</item>
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.
@@ -129,10 +129,10 @@
          point counted as a total, where a „volné místo“ is one counted as
          free. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d stojan</item>
-        <item quantity="few">%1$s · %2$d stojany</item>
-        <item quantity="many">%1$s · %2$d stojanu</item>
-        <item quantity="other">%1$s · %2$d stojanů</item>
+        <item quantity="one">%1$s · %2$d stojan</item>
+        <item quantity="few">%1$s · %2$d stojany</item>
+        <item quantity="many">%1$s · %2$d stojanu</item>
+        <item quantity="other">%1$s · %2$d stojanů</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
@@ -142,16 +142,16 @@
          adjective carries the agreement alone. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d mechanické</item>
-        <item quantity="few">%1$d mechanická</item>
-        <item quantity="many">%1$d mechanického</item>
-        <item quantity="other">%1$d mechanických</item>
+        <item quantity="one">%1$d mechanické</item>
+        <item quantity="few">%1$d mechanická</item>
+        <item quantity="many">%1$d mechanického</item>
+        <item quantity="other">%1$d mechanických</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d elektrické</item>
-        <item quantity="few">%1$d elektrická</item>
-        <item quantity="many">%1$d elektrického</item>
-        <item quantity="other">%1$d elektrických</item>
+        <item quantity="one">%1$d elektrické</item>
+        <item quantity="few">%1$d elektrická</item>
+        <item quantity="many">%1$d elektrického</item>
+        <item quantity="other">%1$d elektrických</item>
     </plurals>
 
     <!-- The age of the displayed data (SPEC §4.1). Each of these is read
@@ -160,34 +160,34 @@
          a decimal quantity takes the genitive instead. -->
     <string name="freshness_just_now">právě teď</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">před %1$d sekundou</item>
-        <item quantity="few">před %1$d sekundami</item>
-        <item quantity="many">před %1$d sekundy</item>
-        <item quantity="other">před %1$d sekundami</item>
+        <item quantity="one">před %1$d sekundou</item>
+        <item quantity="few">před %1$d sekundami</item>
+        <item quantity="many">před %1$d sekundy</item>
+        <item quantity="other">před %1$d sekundami</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">před %1$d minutou</item>
-        <item quantity="few">před %1$d minutami</item>
-        <item quantity="many">před %1$d minuty</item>
-        <item quantity="other">před %1$d minutami</item>
+        <item quantity="one">před %1$d minutou</item>
+        <item quantity="few">před %1$d minutami</item>
+        <item quantity="many">před %1$d minuty</item>
+        <item quantity="other">před %1$d minutami</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">před %1$d hodinou</item>
-        <item quantity="few">před %1$d hodinami</item>
-        <item quantity="many">před %1$d hodiny</item>
-        <item quantity="other">před %1$d hodinami</item>
+        <item quantity="one">před %1$d hodinou</item>
+        <item quantity="few">před %1$d hodinami</item>
+        <item quantity="many">před %1$d hodiny</item>
+        <item quantity="other">před %1$d hodinami</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">před %1$d dnem</item>
-        <item quantity="few">před %1$d dny</item>
-        <item quantity="many">před %1$d dne</item>
-        <item quantity="other">před %1$d dny</item>
+        <item quantity="one">před %1$d dnem</item>
+        <item quantity="few">před %1$d dny</item>
+        <item quantity="many">před %1$d dne</item>
+        <item quantity="other">před %1$d dny</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">před %1$d měsícem</item>
-        <item quantity="few">před %1$d měsíci</item>
-        <item quantity="many">před %1$d měsíce</item>
-        <item quantity="other">před %1$d měsíci</item>
+        <item quantity="one">před %1$d měsícem</item>
+        <item quantity="few">před %1$d měsíci</item>
+        <item quantity="many">před %1$d měsíce</item>
+        <item quantity="other">před %1$d měsíci</item>
     </plurals>
     <!-- Attached to the age when the data is no longer current.
          Example: „Zmrazená data · před 12 minutami“. -->
@@ -460,15 +460,15 @@
     <!-- Durations, formatted through the localisation APIs (SPEC §9).
          %1$d is a number of minutes; %1$d h and %2$02d min for hours. The
          symbols are the international ones, which Czech writes too. -->
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d h %2$02d</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d h %2$02d</string>
 
     <!-- A station's detail (SPEC §7.2). -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d stojan</item>
-        <item quantity="few">%1$d stojany</item>
-        <item quantity="many">%1$d stojanu</item>
-        <item quantity="other">%1$d stojanů</item>
+        <item quantity="one">%1$d stojan</item>
+        <item quantity="few">%1$d stojany</item>
+        <item quantity="many">%1$d stojanu</item>
+        <item quantity="other">%1$d stojanů</item>
     </plurals>
     <!-- %1$s is the number of docking points, %2$s the age of the data. -->
     <string name="station_capacity_and_age">%1$s · %2$s</string>
@@ -542,14 +542,14 @@
          five, %1$s is a figure already rounded and already written in the
          interface's language: the translation places the symbol, never the
          number. Which of the five applies is the reader's unit system. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
     <!-- The symbols of the two imperial systems. Written the same way in most
          languages; the string exists in every one all the same, so a language
          that writes them otherwise has somewhere to say so. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
 
     <string name="action_back">Zpět</string>
 
@@ -567,28 +567,28 @@
          „Stanice“ is the same form for one, few and many, and only the
          genitive plural differs; that is the language, not a copied line. -->
     <plurals name="city_detail">
-        <item quantity="one">%1$d stanice · %2$s ke stažení</item>
-        <item quantity="few">%1$d stanice · %2$s ke stažení</item>
-        <item quantity="many">%1$d stanice · %2$s ke stažení</item>
-        <item quantity="other">%1$d stanic · %2$s ke stažení</item>
+        <item quantity="one">%1$d stanice · %2$s ke stažení</item>
+        <item quantity="few">%1$d stanice · %2$s ke stažení</item>
+        <item quantity="many">%1$d stanice · %2$s ke stažení</item>
+        <item quantity="other">%1$d stanic · %2$s ke stažení</item>
     </plurals>
     <!-- Same row, once the data is installed: the weight is then announced by
          city_installed just below, and saying "to download" would contradict
          it. -->
     <plurals name="city_stations">
-        <item quantity="one">%1$d stanice</item>
-        <item quantity="few">%1$d stanice</item>
-        <item quantity="many">%1$d stanice</item>
-        <item quantity="other">%1$d stanic</item>
+        <item quantity="one">%1$d stanice</item>
+        <item quantity="few">%1$d stanice</item>
+        <item quantity="many">%1$d stanice</item>
+        <item quantity="other">%1$d stanic</item>
     </plurals>
     <string name="city_detail_size_only">%1$s ke stažení</string>
     <!-- Same row when the catalogue carries no size: it only says it does not
          know, never that the data is missing. %1$d is a number of stations. -->
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d stanice · velikost se oznámí před stažením</item>
-        <item quantity="few">%1$d stanice · velikost se oznámí před stažením</item>
-        <item quantity="many">%1$d stanice · velikost se oznámí před stažením</item>
-        <item quantity="other">%1$d stanic · velikost se oznámí před stažením</item>
+        <item quantity="one">%1$d stanice · velikost se oznámí před stažením</item>
+        <item quantity="few">%1$d stanice · velikost se oznámí před stažením</item>
+        <item quantity="many">%1$d stanice · velikost se oznámí před stažením</item>
+        <item quantity="other">%1$d stanic · velikost se oznámí před stažením</item>
     </plurals>
     <string name="city_size_unknown">Velikost se oznámí před stažením</string>
     <!-- %1$s is an already formatted size, „42,5 MB“ for instance. -->
@@ -630,10 +630,10 @@
 
     <!-- File size units. Base 1000, as everywhere else in the system.
          %1$s is a number already written in the displayed language. -->
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <!-- The storage screen: what the application occupies, and how to reclaim
          it (SPEC §4.4). -->

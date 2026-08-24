@@ -34,14 +34,14 @@
 
     <!-- The number of bikes available to borrow at a station. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d cykel</item>
-        <item quantity="other">%1$d cyklar</item>
+        <item quantity="one">%1$d cykel</item>
+        <item quantity="other">%1$d cyklar</item>
     </plurals>
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d ledig plats</item>
-        <item quantity="other">%1$d lediga platser</item>
+        <item quantity="one">%1$d ledig plats</item>
+        <item quantity="other">%1$d lediga platser</item>
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.
@@ -100,8 +100,8 @@
          capacity and not what is free: a different word, so the two figures
          cannot be read as one. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d cykelplats</item>
-        <item quantity="other">%1$s · %2$d cykelplatser</item>
+        <item quantity="one">%1$s · %2$d cykelplats</item>
+        <item quantity="other">%1$s · %2$d cykelplatser</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
@@ -111,12 +111,12 @@
          not. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d mekanisk</item>
-        <item quantity="other">%1$d mekaniska</item>
+        <item quantity="one">%1$d mekanisk</item>
+        <item quantity="other">%1$d mekaniska</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d elektrisk</item>
-        <item quantity="other">%1$d elektriska</item>
+        <item quantity="one">%1$d elektrisk</item>
+        <item quantity="other">%1$d elektriska</item>
     </plurals>
 
     <!-- How old the availability is. Lower-cased and carrying its own ”för …
@@ -124,24 +124,24 @@
          — ”Uppdaterad nyss”, ”Föråldrade data · för 5 minuter sedan”. -->
     <string name="freshness_just_now">nyss</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">för %1$d sekund sedan</item>
-        <item quantity="other">för %1$d sekunder sedan</item>
+        <item quantity="one">för %1$d sekund sedan</item>
+        <item quantity="other">för %1$d sekunder sedan</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">för %1$d minut sedan</item>
-        <item quantity="other">för %1$d minuter sedan</item>
+        <item quantity="one">för %1$d minut sedan</item>
+        <item quantity="other">för %1$d minuter sedan</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">för %1$d timme sedan</item>
-        <item quantity="other">för %1$d timmar sedan</item>
+        <item quantity="one">för %1$d timme sedan</item>
+        <item quantity="other">för %1$d timmar sedan</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">för %1$d dag sedan</item>
-        <item quantity="other">för %1$d dagar sedan</item>
+        <item quantity="one">för %1$d dag sedan</item>
+        <item quantity="other">för %1$d dagar sedan</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">för %1$d månad sedan</item>
-        <item quantity="other">för %1$d månader sedan</item>
+        <item quantity="one">för %1$d månad sedan</item>
+        <item quantity="other">för %1$d månader sedan</item>
     </plurals>
     <string name="freshness_stale">Föråldrade data · %1$s</string>
     <string name="freshness_fresh">Uppdaterad %1$s</string>
@@ -357,14 +357,14 @@
 
     <!-- ”tim” is how Swedish abbreviates the hour: ”1 tim 05”. It is the one
          unit symbol this file changes. -->
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d tim %2$02d</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d tim %2$02d</string>
 
     <!-- A station's capacity: the same object as a free dock, counted as a
          total, and a different word so the two figures cannot be read as one. -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d cykelplats</item>
-        <item quantity="other">%1$d cykelplatser</item>
+        <item quantity="one">%1$d cykelplats</item>
+        <item quantity="other">%1$d cykelplatser</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
     <string name="station_address_nearby">Nära %1$s</string>
@@ -410,13 +410,13 @@
     <!-- Distances, formatted through the localisation APIs (SPEC §9). %1$s is
          a figure already rounded and already written in the interface's
          language: the translation places the symbol, never the number. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
     <!-- The symbols of the two imperial systems. Swedish writes them as they
          stand. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
     <string name="action_back">Tillbaka</string>
 
     <!-- City screen: which conurbation the application serves. -->
@@ -430,17 +430,17 @@
     <string name="city_locate_me">Hitta min stad</string>
     <string name="city_active">Används</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d station · %2$s att ladda ned</item>
-        <item quantity="other">%1$d stationer · %2$s att ladda ned</item>
+        <item quantity="one">%1$d station · %2$s att ladda ned</item>
+        <item quantity="other">%1$d stationer · %2$s att ladda ned</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d station</item>
-        <item quantity="other">%1$d stationer</item>
+        <item quantity="one">%1$d station</item>
+        <item quantity="other">%1$d stationer</item>
     </plurals>
     <string name="city_detail_size_only">%1$s att ladda ned</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d station · storleken anges före nedladdning</item>
-        <item quantity="other">%1$d stationer · storleken anges före nedladdning</item>
+        <item quantity="one">%1$d station · storleken anges före nedladdning</item>
+        <item quantity="other">%1$d stationer · storleken anges före nedladdning</item>
     </plurals>
     <string name="city_size_unknown">Storleken anges före nedladdning</string>
     <string name="city_installed">%1$s installerat på enheten</string>
@@ -469,10 +469,10 @@
     <string name="city_none_nearby">Inget känt nätverk i närheten. Välj en stad i listan.</string>
     <string name="action_cancel">Avbryt</string>
 
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <string name="storage_title">Lagring</string>
     <string name="storage_open">Hantera offlinedata</string>

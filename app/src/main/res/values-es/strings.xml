@@ -32,16 +32,16 @@
 
     <!-- The number of bikes available to borrow at a station. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d bici</item>
-        <item quantity="many">%1$d de bicis</item>
-        <item quantity="other">%1$d bicis</item>
+        <item quantity="one">%1$d bici</item>
+        <item quantity="many">%1$d de bicis</item>
+        <item quantity="other">%1$d bicis</item>
     </plurals>
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d espacio libre</item>
-        <item quantity="many">%1$d de espacios libres</item>
-        <item quantity="other">%1$d espacios libres</item>
+        <item quantity="one">%1$d espacio libre</item>
+        <item quantity="many">%1$d de espacios libres</item>
+        <item quantity="other">%1$d espacios libres</item>
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.
@@ -111,9 +111,9 @@
          %1$s is the distance to the station, or its postcode when the
          position is unknown; %2$d the number of docking points. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d anclaje</item>
-        <item quantity="many">%1$s · %2$d de anclajes</item>
-        <item quantity="other">%1$s · %2$d anclajes</item>
+        <item quantity="one">%1$s · %2$d anclaje</item>
+        <item quantity="many">%1$s · %2$d de anclajes</item>
+        <item quantity="other">%1$s · %2$d anclajes</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
@@ -121,42 +121,42 @@
          one, each already agreed in number. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d mecánica</item>
-        <item quantity="many">%1$d de mecánicas</item>
-        <item quantity="other">%1$d mecánicas</item>
+        <item quantity="one">%1$d mecánica</item>
+        <item quantity="many">%1$d de mecánicas</item>
+        <item quantity="other">%1$d mecánicas</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d eléctrica</item>
-        <item quantity="many">%1$d de eléctricas</item>
-        <item quantity="other">%1$d eléctricas</item>
+        <item quantity="one">%1$d eléctrica</item>
+        <item quantity="many">%1$d de eléctricas</item>
+        <item quantity="other">%1$d eléctricas</item>
     </plurals>
 
     <!-- The age of the displayed data (SPEC §4.1). -->
     <string name="freshness_just_now">justo ahora</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">hace %1$d segundo</item>
-        <item quantity="many">hace %1$d de segundos</item>
-        <item quantity="other">hace %1$d segundos</item>
+        <item quantity="one">hace %1$d segundo</item>
+        <item quantity="many">hace %1$d de segundos</item>
+        <item quantity="other">hace %1$d segundos</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">hace %1$d minuto</item>
-        <item quantity="many">hace %1$d de minutos</item>
-        <item quantity="other">hace %1$d minutos</item>
+        <item quantity="one">hace %1$d minuto</item>
+        <item quantity="many">hace %1$d de minutos</item>
+        <item quantity="other">hace %1$d minutos</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">hace %1$d hora</item>
-        <item quantity="many">hace %1$d de horas</item>
-        <item quantity="other">hace %1$d horas</item>
+        <item quantity="one">hace %1$d hora</item>
+        <item quantity="many">hace %1$d de horas</item>
+        <item quantity="other">hace %1$d horas</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">hace %1$d día</item>
-        <item quantity="many">hace %1$d de días</item>
-        <item quantity="other">hace %1$d días</item>
+        <item quantity="one">hace %1$d día</item>
+        <item quantity="many">hace %1$d de días</item>
+        <item quantity="other">hace %1$d días</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">hace %1$d mes</item>
-        <item quantity="many">hace %1$d de meses</item>
-        <item quantity="other">hace %1$d meses</item>
+        <item quantity="one">hace %1$d mes</item>
+        <item quantity="many">hace %1$d de meses</item>
+        <item quantity="other">hace %1$d meses</item>
     </plurals>
     <!-- Attached to the age when the data is no longer current.
          Example: "Datos congelados · hace 12 minutos". -->
@@ -424,14 +424,14 @@
 
     <!-- Durations, formatted through the localisation APIs (SPEC §9).
          %1$d is a number of minutes; %1$d h and %2$02d min for hours. -->
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d h %2$02d</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d h %2$02d</string>
 
     <!-- A station's detail (SPEC §7.2). -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d anclaje</item>
-        <item quantity="many">%1$d de anclajes</item>
-        <item quantity="other">%1$d anclajes</item>
+        <item quantity="one">%1$d anclaje</item>
+        <item quantity="many">%1$d de anclajes</item>
+        <item quantity="other">%1$d anclajes</item>
     </plurals>
     <!-- %1$s is the number of docking points, %2$s the age of the data. -->
     <string name="station_capacity_and_age">%1$s · %2$s</string>
@@ -496,14 +496,14 @@
          five, %1$s is a figure already rounded and already written in the
          interface's language: the translation places the symbol, never the
          number. Which of the five applies is the reader's unit system. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
     <!-- The symbols of the two imperial systems. Written the same way in most
          languages; the string exists in every one all the same, so a language
          that writes them otherwise has somewhere to say so. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
 
     <string name="action_back">Atrás</string>
 
@@ -519,25 +519,25 @@
     <string name="city_active">En uso</string>
     <!-- %1$d is a number of stations, %2$s an already formatted size. -->
     <plurals name="city_detail">
-        <item quantity="one">%1$d estación · %2$s para descargar</item>
-        <item quantity="many">%1$d de estaciones · %2$s para descargar</item>
-        <item quantity="other">%1$d estaciones · %2$s para descargar</item>
+        <item quantity="one">%1$d estación · %2$s para descargar</item>
+        <item quantity="many">%1$d de estaciones · %2$s para descargar</item>
+        <item quantity="other">%1$d estaciones · %2$s para descargar</item>
     </plurals>
     <!-- Same row, once the data is installed: the weight is then announced by
          city_installed just below, and saying "to download" would contradict
          it. -->
     <plurals name="city_stations">
-        <item quantity="one">%1$d estación</item>
-        <item quantity="many">%1$d de estaciones</item>
-        <item quantity="other">%1$d estaciones</item>
+        <item quantity="one">%1$d estación</item>
+        <item quantity="many">%1$d de estaciones</item>
+        <item quantity="other">%1$d estaciones</item>
     </plurals>
     <string name="city_detail_size_only">%1$s para descargar</string>
     <!-- Same row when the catalogue carries no size: it only says it does not
          know, never that the data is missing. %1$d is a number of stations. -->
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d estación · tamaño anunciado antes de descargar</item>
-        <item quantity="many">%1$d de estaciones · tamaño anunciado antes de descargar</item>
-        <item quantity="other">%1$d estaciones · tamaño anunciado antes de descargar</item>
+        <item quantity="one">%1$d estación · tamaño anunciado antes de descargar</item>
+        <item quantity="many">%1$d de estaciones · tamaño anunciado antes de descargar</item>
+        <item quantity="other">%1$d estaciones · tamaño anunciado antes de descargar</item>
     </plurals>
     <string name="city_size_unknown">Tamaño anunciado antes de descargar</string>
     <!-- %1$s is an already formatted size, "42,5 MB" for instance. -->
@@ -570,10 +570,10 @@
 
     <!-- File size units. Base 1000, as everywhere else in the system.
          %1$s is a number already written in the displayed language. -->
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <!-- The storage screen: what the application occupies, and how to reclaim
          it (SPEC §4.4). -->

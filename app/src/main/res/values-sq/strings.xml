@@ -54,14 +54,14 @@
 
     <!-- The number of bikes available to borrow at a station. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d biçikletë</item>
-        <item quantity="other">%1$d biçikleta</item>
+        <item quantity="one">%1$d biçikletë</item>
+        <item quantity="other">%1$d biçikleta</item>
     </plurals>
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d vend i lirë</item>
-        <item quantity="other">%1$d vende të lira</item>
+        <item quantity="one">%1$d vend i lirë</item>
+        <item quantity="other">%1$d vende të lira</item>
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.
@@ -122,8 +122,8 @@
          known. %2$d is the number of docking points, counted as a total: the
          parking place itself, not the free spot a bike goes into. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d vend parkimi</item>
-        <item quantity="other">%1$s · %2$d vende parkimi</item>
+        <item quantity="one">%1$s · %2$d vend parkimi</item>
+        <item quantity="other">%1$s · %2$d vende parkimi</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
@@ -131,36 +131,36 @@
          one, each already agreed in number. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d mekanike</item>
-        <item quantity="other">%1$d mekanike</item>
+        <item quantity="one">%1$d mekanike</item>
+        <item quantity="other">%1$d mekanike</item>
     </plurals>
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d elektrike</item>
-        <item quantity="other">%1$d elektrike</item>
+        <item quantity="one">%1$d elektrike</item>
+        <item quantity="other">%1$d elektrike</item>
     </plurals>
 
     <!-- How old the availability is. All of these are read inside another
          sentence — "Përditësuar %1$s" — so they start in lower case. -->
     <string name="freshness_just_now">pikërisht tani</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">%1$d sekondë më parë</item>
-        <item quantity="other">%1$d sekonda më parë</item>
+        <item quantity="one">%1$d sekondë më parë</item>
+        <item quantity="other">%1$d sekonda më parë</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">%1$d minutë më parë</item>
-        <item quantity="other">%1$d minuta më parë</item>
+        <item quantity="one">%1$d minutë më parë</item>
+        <item quantity="other">%1$d minuta më parë</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">%1$d orë më parë</item>
-        <item quantity="other">%1$d orë më parë</item>
+        <item quantity="one">%1$d orë më parë</item>
+        <item quantity="other">%1$d orë më parë</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">%1$d ditë më parë</item>
-        <item quantity="other">%1$d ditë më parë</item>
+        <item quantity="one">%1$d ditë më parë</item>
+        <item quantity="other">%1$d ditë më parë</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">%1$d muaj më parë</item>
-        <item quantity="other">%1$d muaj më parë</item>
+        <item quantity="one">%1$d muaj më parë</item>
+        <item quantity="other">%1$d muaj më parë</item>
     </plurals>
     <string name="freshness_stale">Të dhëna të ngrira · %1$s</string>
     <string name="freshness_fresh">Përditësuar %1$s</string>
@@ -365,15 +365,15 @@
     <string name="journey_outside_coverage">Kjo pikë ndodhet jashtë zonës që mbulojnë të dhënat e instaluara.</string>
     <string name="journey_no_stations">Nuk njihet asnjë stacion. Rifresko listën e stacioneve, pastaj provo përsëri.</string>
 
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d h %2$02d</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d h %2$02d</string>
 
     <!-- The docking points a station has in all, the rack rather than the free
          spot: shown beside the free ones, "12 vende të lira · 30 vende
          parkimi". -->
     <plurals name="docks_total">
-        <item quantity="one">%1$d vend parkimi</item>
-        <item quantity="other">%1$d vende parkimi</item>
+        <item quantity="one">%1$d vend parkimi</item>
+        <item quantity="other">%1$d vende parkimi</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
     <string name="station_address_nearby">Afër: %1$s</string>
@@ -416,11 +416,11 @@
          five, %1$s is a figure already rounded and already written in the
          interface's language: the translation places the symbol, never the
          number. -->
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
     <string name="action_back">Prapa</string>
 
     <!-- City screen: which conurbation the application serves. -->
@@ -434,17 +434,17 @@
     <string name="city_locate_me">Gjej qytetin tim</string>
     <string name="city_active">Në përdorim</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d stacion · %2$s për shkarkim</item>
-        <item quantity="other">%1$d stacione · %2$s për shkarkim</item>
+        <item quantity="one">%1$d stacion · %2$s për shkarkim</item>
+        <item quantity="other">%1$d stacione · %2$s për shkarkim</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d stacion</item>
-        <item quantity="other">%1$d stacione</item>
+        <item quantity="one">%1$d stacion</item>
+        <item quantity="other">%1$d stacione</item>
     </plurals>
     <string name="city_detail_size_only">%1$s për shkarkim</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d stacion · madhësia njoftohet para shkarkimit</item>
-        <item quantity="other">%1$d stacione · madhësia njoftohet para shkarkimit</item>
+        <item quantity="one">%1$d stacion · madhësia njoftohet para shkarkimit</item>
+        <item quantity="other">%1$d stacione · madhësia njoftohet para shkarkimit</item>
     </plurals>
     <string name="city_size_unknown">Madhësia njoftohet para shkarkimit</string>
     <!-- %1$s is a size. The label is turned around so that no ending has to
@@ -476,10 +476,10 @@
     <string name="city_none_nearby">Asnjë rrjet i njohur këtu afër. Zgjidh një qytet nga lista.</string>
     <string name="action_cancel">Anulo</string>
 
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
     <string name="storage_title">Hapësira ruajtëse</string>
     <string name="storage_open">Menaxho të dhënat jashtë linje</string>
