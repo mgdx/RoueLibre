@@ -5,14 +5,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.github.mgdx.rouelibre.core.address.AddressResult
 import io.github.mgdx.rouelibre.core.config.FleetDescription
+import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.geo.distanceInMetresTo
 import io.github.mgdx.rouelibre.core.station.BikeSplit
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.splitByKind
-import io.github.mgdx.rouelibre.data.AppPreferences
-import io.github.mgdx.rouelibre.data.StationRepository
-import io.github.mgdx.rouelibre.data.addresses.AddressIndex
-import io.github.mgdx.rouelibre.data.location.DeviceLocation
+import io.github.mgdx.rouelibre.data.StationsSnapshot
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +28,8 @@ import java.time.Instant
  * @property address the station's address, derived from the offline index, or
  *   `null` if the index is absent or knows nothing near enough.
  * @property distanceInMetres the straight-line distance from the user's
- *   position, or `null` if they have not shared it.
+ *   position, or `null` if they have not shared it or stand outside the
+ *   conurbation being consulted.
  * @property isFavourite the station is among the favourites.
  * @property fetchedAt when the last successful fetch happened.
  * @property bikeSplit how the bikes divide between mechanical and electric, or
@@ -53,13 +52,19 @@ data class StationDetailUiState(
  * repository's stream, it is not frozen at opening time. That is what avoids
  * offering a station that emptied while one was looking at it.
  *
+ * Its dependencies arrive as streams and as functions rather than as the
+ * objects behind them: the rules held here — what the split says, when a
+ * distance is owed — are then settled on the JVM, where they can be tested
+ * (SPEC §14).
+ *
  * @property stationId the station described.
  */
 class StationDetailViewModel(
-    private val repository: StationRepository,
-    private val preferences: AppPreferences,
-    private val addressIndex: AddressIndex,
-    private val deviceLocation: DeviceLocation,
+    private val stations: Flow<StationsSnapshot>,
+    private val favouriteStationIds: Flow<List<String>>,
+    private val setFavourite: suspend (String) -> Unit,
+    private val nearestAddress: suspend (Coordinates) -> AddressResult?,
+    private val knownPositionInCity: suspend () -> Coordinates?,
     private val fleet: Flow<FleetDescription?>,
     private val stationId: String,
 ) : ViewModel() {
@@ -77,7 +82,7 @@ class StationDetailViewModel(
             // Followed rather than read once: the first refresh may be what
             // establishes that the network lends both kinds, and the split is
             // then owed to a sheet already open (SPEC §4.1).
-            combine(repository.observeStations(), fleet, ::Pair).collect { (snapshot, lent) ->
+            combine(stations, fleet, ::Pair).collect { (snapshot, lent) ->
                 val entry = snapshot.stations.firstOrNull { it.station.id == stationId }
                 mutableState.update {
                     it.copy(
@@ -93,7 +98,7 @@ class StationDetailViewModel(
             }
         }
         viewModelScope.launch {
-            preferences.favouriteStationIds.collect { favourites ->
+            favouriteStationIds.collect { favourites ->
                 mutableState.update { it.copy(isFavourite = stationId in favourites) }
             }
         }
@@ -124,7 +129,7 @@ class StationDetailViewModel(
     private suspend fun resolveAddressOnce(entry: StationWithAvailability) {
         if (addressResolved) return
         addressResolved = true
-        val address = addressIndex.nearestAddress(entry.station.position)
+        val address = nearestAddress(entry.station.position)
         mutableState.update { it.copy(address = address) }
     }
 
@@ -135,26 +140,34 @@ class StationDetailViewModel(
      * the moment to demand location, and a missing distance deprives the user
      * of nothing (SPEC §10). Only the last known position is read, which turns
      * on no sensor.
+     *
+     * And it is read only where it means something: [knownPositionInCity]
+     * hands over a position the conurbation being consulted covers, or nothing
+     * at all. A phone in Lille still holding this morning's fix, opened on a
+     * Dubai station, was answered "5,236.1 km" — a true figure measuring a
+     * journey nobody is making, under the name of a station the list behind it
+     * rightly refused any distance to. Both screens now apply the one rule.
      */
-    private fun showDistanceOnce(entry: StationWithAvailability) {
+    private suspend fun showDistanceOnce(entry: StationWithAvailability) {
         if (distanceResolved) return
         distanceResolved = true
-        val here = deviceLocation.lastKnown()?.coordinates ?: return
+        val here = knownPositionInCity() ?: return
         val distance = here.distanceInMetresTo(entry.station.position)
         mutableState.update { it.copy(distanceInMetres = distance) }
     }
 
     /** Marks the station as a favourite, or takes it out (SPEC §7.2). */
     fun toggleFavourite() {
-        viewModelScope.launch { preferences.toggleFavourite(stationId) }
+        viewModelScope.launch { setFavourite(stationId) }
     }
 
     /** Builds the model with its dependencies, without an injection framework. */
     class Factory(
-        private val repository: StationRepository,
-        private val preferences: AppPreferences,
-        private val addressIndex: AddressIndex,
-        private val deviceLocation: DeviceLocation,
+        private val stations: Flow<StationsSnapshot>,
+        private val favouriteStationIds: Flow<List<String>>,
+        private val setFavourite: suspend (String) -> Unit,
+        private val nearestAddress: suspend (Coordinates) -> AddressResult?,
+        private val knownPositionInCity: suspend () -> Coordinates?,
         private val fleet: Flow<FleetDescription?>,
         private val stationId: String,
     ) : ViewModelProvider.Factory {
@@ -164,10 +177,11 @@ class StationDetailViewModel(
                 "unexpected model: ${modelClass.name}"
             }
             return StationDetailViewModel(
-                repository,
-                preferences,
-                addressIndex,
-                deviceLocation,
+                stations,
+                favouriteStationIds,
+                setFavourite,
+                nearestAddress,
+                knownPositionInCity,
                 fleet,
                 stationId,
             ) as T
