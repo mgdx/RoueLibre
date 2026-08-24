@@ -9,6 +9,7 @@ import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.filterStations
 import io.github.mgdx.rouelibre.core.station.orderStations
+import io.github.mgdx.rouelibre.data.NEVER_LAUNCHED
 import io.github.mgdx.rouelibre.data.StationRepository
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
@@ -78,6 +79,32 @@ data class StationsUiState(
      */
     fun searchWouldChangeTheList(newQuery: String): Boolean = newQuery != query
 }
+
+/**
+ * Whether the station list is to say [error] at all, on a launch whose last
+ * seen version code is [lastSeenVersionCode].
+ *
+ * One error is held back, and only while one thing is true of the launch.
+ * Without a base map installed one lands on this list whatever screen was
+ * chosen (see `landingScreen`), so on a first launch the list is built, asks
+ * for the stations of a city nobody has chosen yet, and is covered a frame
+ * later by the welcome sequence. Its "no city is selected · choose one" then
+ * stood over that sequence and hid the button that carries it forward, with an
+ * action that could do nothing: the chooser it offers is the very thing the
+ * sequence is about to offer properly.
+ *
+ * [NEVER_LAUNCHED] is what says the welcome is still due — it is written down
+ * when the sequence is **finished**, so that leaving in the middle of it brings
+ * it back, and that is exactly the span during which this list must stay quiet.
+ * A launch that has seen it says everything: somebody who has deleted their
+ * city's data is told there is none, and "choose my city" works, which is the
+ * whole point of the message.
+ *
+ * Nothing else is ever held back. A feed that fails says so and offers another
+ * go, welcome or no welcome.
+ */
+fun worthSaying(error: DataError, lastSeenVersionCode: Int): Boolean =
+    error != DataError.NoCityChosen || lastSeenVersionCode != NEVER_LAUNCHED
 
 /** What the screen must say when the list shows nothing. */
 enum class Emptiness {

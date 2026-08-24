@@ -368,12 +368,24 @@ class StationListFragment : Fragment() {
      * to having chosen no city: nothing is being asked of any network, and every
      * press can only fail the same way. That one failure is offered the city
      * chooser instead, which is the gesture the sentence asks for (SPEC §14).
+     *
+     * And on a launch that has not seen the welcome yet, that one failure is
+     * not said at all — see [worthSaying].
      */
     private fun observeErrors() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.errors.collect { error ->
                     val host = activity as? MainActivity ?: return@collect
+                    // Nothing is said under the welcome sequence, which is
+                    // about to cover this list on a first launch and offers
+                    // the city chooser itself — see [worthSaying]. The banner
+                    // belongs to the activity and outlives this screen, so it
+                    // stood over the sequence and hid the button carrying it
+                    // forward, offering an action that could do nothing.
+                    if (!worthSaying(error, container.preferences.lastSeenVersionCode())) {
+                        return@collect
+                    }
                     // **A failed refresh gives way to an answer already up.**
                     // Offline is this application's ordinary state, so this is
                     // the message most apt to arrive at the wrong moment: with
