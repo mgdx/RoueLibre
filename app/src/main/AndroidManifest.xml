@@ -100,13 +100,21 @@
             arrives all at once, having said nothing of where it led until it
             has led there.
 
-            What it buys is Android 13 and 14, and those two alone. There the
-            framework leaves the flag false whatever the target is, so the
-            attribute is the only way in; from Android 15 on, a target of
-            SDK 35 or later is opted in already and this is left with nothing
-            to say but "no". Below Android 13 there is no such dispatcher at
-            all and it does nothing, which is the same shape of answer as the
-            locale config below, and covered by the same tools:targetApi.
+            What it buys starts at Android 13, where the framework leaves
+            the flag false whatever the target is, so the attribute is the
+            only way in. The documentation has it that from Android 15 a
+            target of SDK 35 or later is opted in already, which would leave
+            this with nothing to say there — but that is not what the devices
+            say. On a Fairphone 3 running Android 15 (SDK 35) against this
+            very target, the log carried "OnBackInvokedCallback is not enabled
+            for the application" at every launch until the attribute was
+            declared, and carried it no more afterwards, the back stack's
+            animation callbacks turning up in its place. So it is declared
+            rather than inferred: a default that holds on one build and not on
+            the next is not a thing a manifest should be resting on. Below
+            Android 13 there is no such dispatcher at all and it does nothing,
+            which is the same shape of answer as the locale config below, and
+            covered by the same tools:targetApi.
 
             Turning it on is safe here because nothing in this application
             intercepts the back gesture: not one onBackPressed, not one
