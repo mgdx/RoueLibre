@@ -510,6 +510,96 @@ class JourneyPlannerTest {
     }
 
     @Test
+    fun `a walk already traced prunes every ride it beats`() = runTest {
+        // Four hundred metres to cover, the stations behind the departure and
+        // beyond the arrival: every pair's legs at their most optimistic
+        // already lose to the direct walk, which on this short trip was traced
+        // alongside the access walks. Not one ride is worth computing to learn
+        // what the bound already proves.
+        val closeDestination = at(0.0, 400.0)
+        val stations = listOf(
+            station("derriere", at(0.0, -300.0)),
+            station("au-dela", at(0.0, 700.0)),
+        )
+        val router = FakeRouter()
+        val planner = JourneyPlanner(router)
+
+        val plan = planner.plan(origin, closeDestination, stations)
+
+        assertTrue("expected WalkOnly, got $plan", plan is JourneyPlan.WalkOnly)
+        assertEquals(
+            NoBikeJourney.WalkingIsQuicker,
+            (plan as JourneyPlan.WalkOnly).reason,
+        )
+        assertEquals("no ride should have been computed", 0, router.cyclingCalls)
+        // Each station stands as a candidate at both ends, so four access
+        // walks — and the direct walk once: the one already traced is the one
+        // offered.
+        assertEquals(5, router.walkingCalls)
+    }
+
+    @Test
+    fun `the pruning bound follows the bike asked for`() = runTest {
+        // An assisted ride's duration is scaled by the factor before any pair
+        // is compared, so the bound must scale with it: left at the mechanical
+        // pace, it overestimates the best an assisted pair can do, and here it
+        // would discard the true optimum unseen. The second arrival costs a
+        // longer walk but a stated ride quick enough to win — only a bound
+        // that rides the asked-for bike lets it be computed at all.
+        val farDestination = at(0.0, 12_000.0)
+        val departure = at(0.0, 100.0)
+        val nearArrival = at(0.0, 11_800.0)
+        val farArrival = at(0.0, 11_500.0)
+        val stations = listOf(
+            station("depart", departure),
+            station("arrivee-proche", nearArrival),
+            station("arrivee-lointaine", farArrival),
+        )
+        val router = FakeRouter(
+            rideSeconds = mapOf(
+                FakeRouter.key(departure, nearArrival) to 2_000,
+                FakeRouter.key(departure, farArrival) to 1_650,
+            ),
+        )
+        val planner = JourneyPlanner(
+            router,
+            JourneySettings(
+                maxRideEvaluations = 1,
+                extraRideEvaluations = 1,
+                riddenBike = RiddenBike.ElectricallyAssisted,
+            ),
+        )
+
+        val plan = planner.plan(origin, farDestination, stations) as JourneyPlan.Found
+
+        assertEquals("arrivee-lointaine", plan.best.arrivalStation.id)
+        assertEquals("both pairs deserved computing", 2, router.cyclingCalls)
+    }
+
+    @Test
+    fun `the walk of last resort is not traced twice`() = runTest {
+        // A single station cannot serve both ends, so no pair exists and the
+        // walk is the answer. On this short trip it was already traced
+        // alongside the access walks: handing it back must not cost a second
+        // computation of the same streets.
+        val closeDestination = at(0.0, 1_000.0)
+        val stations = listOf(station("seule", at(0.0, 500.0)))
+        val router = FakeRouter()
+        val planner = JourneyPlanner(router)
+
+        val plan = planner.plan(origin, closeDestination, stations)
+
+        assertTrue("expected WalkOnly, got $plan", plan is JourneyPlan.WalkOnly)
+        assertEquals(
+            NoBikeJourney.NoRouteBetweenStations,
+            (plan as JourneyPlan.WalkOnly).reason,
+        )
+        // The walk to the station, the walk from it, and the direct walk —
+        // already in hand when the pairs came up empty.
+        assertEquals(3, router.walkingCalls)
+    }
+
+    @Test
     fun `the announced time excludes the risk penalty`() = runTest {
         // The penalty serves to rank, never to be announced: the user would
         // see a duration they will not experience.

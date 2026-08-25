@@ -47,7 +47,10 @@ import kotlin.time.Duration.Companion.seconds
  * beats the best journey found, or when a failed leg left options missing —
  * within the hard extra budget of [JourneySettings.extraRideEvaluations]. In
  * the usual case the answer is thus a proven optimum, for a fraction of the
- * twenty-five pairs' cost.
+ * twenty-five pairs' cost. On a short trip the direct walk, traced alongside
+ * the access walks, prunes before any of that: a pair whose bound already
+ * loses to it is never computed, and a trip the walk wins outright costs no
+ * ride computation at all.
  *
  * It then computes them **in parallel**. Those six legs are independent, and a
  * phone has several cores; chaining them would only add up their durations —
@@ -176,12 +179,29 @@ public class JourneyPlanner(
 
         val pairs = buildPairs(departures, arrivals, walksToStation, walksToDestination)
         if (pairs.isEmpty()) {
-            return giveUp(origin, destination, NoBikeJourney.NoRouteBetweenStations)
+            return giveUp(origin, destination, NoBikeJourney.NoRouteBetweenStations, directWalk)
         }
 
-        val options = evaluate(pairs)
+        // A walk already traced prunes before anything is computed: a pair
+        // whose legs at their most optimistic — risk left out, since the
+        // comparison below leaves it out too — cannot add up to less than the
+        // walk would only be computed to be discarded by that comparison. On
+        // a short trip the walk often beats every pair, and this is where the
+        // whole first wave of rides is spared.
+        val contenders = if (directWalk == null) {
+            pairs
+        } else {
+            pairs.filter { it.travelLowerBound <= directWalk.duration }
+        }
+        if (contenders.isEmpty()) {
+            // Only reachable with a walk in hand: without one, every pair is
+            // a contender.
+            return JourneyPlan.WalkOnly(checkNotNull(directWalk), NoBikeJourney.WalkingIsQuicker)
+        }
+
+        val options = evaluate(contenders)
         if (options.isEmpty()) {
-            return giveUp(origin, destination, NoBikeJourney.NoRouteBetweenStations)
+            return giveUp(origin, destination, NoBikeJourney.NoRouteBetweenStations, directWalk)
         }
 
         val best = options.minBy { it.rankingTime }
@@ -399,10 +419,31 @@ public class JourneyPlanner(
         get() = OPTIMISTIC_WALKING_METRES_PER_SECOND / settings.walkingPace.durationFactor
 
     /**
-     * Prepares the usable pairs, each with its lower bound.
+     * The pace no ride beats, for the bike this journey is asked for.
+     *
+     * The bound of [OPTIMISTIC_CYCLING_METRES_PER_SECOND] is stated against
+     * the profiles' own ceiling, and an assisted ride's duration is multiplied
+     * by [RiddenBike.durationFactor] before any pair is compared: a bound that
+     * ignored that would overtake the quickest real ride — the engine at its
+     * ceiling down a straight boulevard, scaled — and prune the optimum
+     * unseen. Divided by the same factor the ride is multiplied by, exactly as
+     * [optimisticWalkingMetresPerSecond] is by the walking pace's, it stays as
+     * optimistic as it was, whichever bike is asked for.
+     */
+    private val optimisticCyclingMetresPerSecond: Double
+        get() = OPTIMISTIC_CYCLING_METRES_PER_SECOND / settings.riddenBike.durationFactor
+
+    /**
+     * Prepares the usable pairs, each with its two lower bounds.
      *
      * A pair whose walking legs could not both be computed is dropped: without
      * one of them, the complete journey cannot be composed.
+     *
+     * Both bounds must be **optimistic** — overestimate, and the best journey
+     * may be discarded without ever being computed. [Pair.lowerBound] adds the
+     * risk penalty of the fastest conceivable legs and ranks the pairs against
+     * one another; [Pair.travelLowerBound] leaves the risk out, because it is
+     * measured against the direct walk, which carries none — see [plan].
      */
     private fun buildPairs(
         departures: List<Candidate>,
@@ -414,34 +455,32 @@ public class JourneyPlanner(
         arrivals.mapNotNull { arrival ->
             if (arrival.station.id == departure.station.id) return@mapNotNull null
             val walkFrom = walksToDestination[arrival] ?: return@mapNotNull null
+            val fastestRide = fastestRideBetween(departure, arrival)
+            val travel = walkTo.duration + fastestRide + walkFrom.duration
             Pair(
                 departure = departure,
                 arrival = arrival,
                 walkToStation = walkTo,
                 walkToDestination = walkFrom,
-                lowerBound = lowerBoundOf(departure, arrival, walkTo, walkFrom),
+                travelLowerBound = travel,
+                lowerBound = travel +
+                    riskOf(departure, arrival, walkTo.duration, fastestRide),
             )
         }
     }.sortedBy { it.lowerBound }
 
     /**
-     * Lower bound on a pair's ranking time.
+     * The quickest a bike leg between two stations could possibly be.
      *
      * It must be **optimistic**: were it to overestimate, we might discard the
-     * best journey without ever computing it. The bike leg is therefore assumed
-     * to be a straight line ridden at a speed nobody really reaches in town.
+     * best journey without ever computing it. The leg is therefore assumed to
+     * be a straight line ridden at a pace no ride beats — see
+     * [optimisticCyclingMetresPerSecond].
      */
-    private fun lowerBoundOf(
-        departure: Candidate,
-        arrival: Candidate,
-        walkToStation: RouteLeg,
-        walkToDestination: RouteLeg,
-    ): Duration {
+    private fun fastestRideBetween(departure: Candidate, arrival: Candidate): Duration {
         val asTheCrowFlies = departure.station.position
             .distanceInMetresTo(arrival.station.position)
-        val fastestRide = (asTheCrowFlies / OPTIMISTIC_CYCLING_METRES_PER_SECOND).seconds
-        val travel = walkToStation.duration + fastestRide + walkToDestination.duration
-        return travel + riskOf(departure, arrival, walkToStation.duration, fastestRide)
+        return (asTheCrowFlies / optimisticCyclingMetresPerSecond).seconds
     }
 
     /**
@@ -609,23 +648,28 @@ public class JourneyPlanner(
      *
      * It is computed here even if the distance made it useless for comparison:
      * without a bike it is the only answer we can give, and giving it is worth
-     * the time it costs.
+     * the time it costs. A walk [alreadyTraced] on a short trip is simply
+     * handed back — the route would come out the same, and recomputing it
+     * spent a route computation on an answer already in hand.
      *
-     * **That last walk is also where the engine's own reason is recovered.**
-     * Every leg above comes back through [legOrNull], which keeps the track and
-     * drops why it failed — a loss of no consequence while a single pair simply
-     * cannot be joined, and a wrong answer when nothing could be traced at all.
-     * The walk asked for here crosses the same ground with the same data, so its
-     * failure carries the cause the whole computation stumbled on, and
-     * [decisiveOver] says when that cause outweighs the one the station search
-     * had reached.
+     * **When the walk does have to be asked for, its failure is also where the
+     * engine's own reason is recovered.** Every leg above comes back through
+     * [legOrNull], which keeps the track and drops why it failed — a loss of
+     * no consequence while a single pair simply cannot be joined, and a wrong
+     * answer when nothing could be traced at all. The walk asked for here
+     * crosses the same ground with the same data, so its failure carries the
+     * cause the whole computation stumbled on, and [decisiveOver] says when
+     * that cause outweighs the one the station search had reached. A walk
+     * already traced *succeeded*: there is no failure to read a cause from.
      */
     private suspend fun giveUp(
         origin: Coordinates,
         destination: Coordinates,
         reason: NoBikeJourney,
+        alreadyTraced: RouteLeg? = null,
     ): JourneyPlan {
         coroutineContext.ensureActive()
+        if (alreadyTraced != null) return JourneyPlan.WalkOnly(alreadyTraced, reason)
         return when (val walk = router.route(origin, destination, TravelMode.Walking)) {
             is RouteResult.Success -> JourneyPlan.WalkOnly(walk.leg.atThePacesAsked(), reason)
             is RouteResult.Failure -> JourneyPlan.Impossible(walk.reason.decisiveOver(reason))
@@ -655,23 +699,37 @@ public class JourneyPlanner(
         val straightLineMetres: Double,
     )
 
-    /** A pair of stations, with its walking legs and its lower bound. */
+    /**
+     * A pair of stations, with its walking legs and its lower bounds.
+     *
+     * @property travelLowerBound the quickest the three legs could possibly
+     *   add up to, risk left out: what the direct walk is measured against.
+     * @property lowerBound the same with the risk penalty added: what the
+     *   pairs are ranked against one another on.
+     */
     private data class Pair(
         val departure: Candidate,
         val arrival: Candidate,
         val walkToStation: RouteLeg,
         val walkToDestination: RouteLeg,
+        val travelLowerBound: Duration,
         val lowerBound: Duration,
     )
 
     private companion object {
         /**
-         * The speed used for the lower bound, in metres per second —
-         * twenty-five kilometres an hour.
+         * The speed used for the lower bound, in metres per second — a shade
+         * over twenty-five kilometres an hour.
          *
-         * Deliberately unreachable on a share bike in town, where the average
-         * hovers around thirteen. The bound must stay optimistic: a realistic
-         * speed would risk discarding the best pair before ever computing it.
+         * Unreachable on a share bike in town, where the average hovers
+         * around thirteen — and provably so since 26 August 2026: the bike
+         * profiles cap the engine at 25 km/h, the pace a descent would
+         * otherwise be the one place to beat this bound at. The bound must
+         * stay optimistic — a realistic speed would risk discarding the best
+         * pair before ever computing it — and it is stated against the
+         * engine's own pace, so the ride factor divides it exactly as the
+         * walking pace divides the bound below; see
+         * [optimisticCyclingMetresPerSecond].
          */
         const val OPTIMISTIC_CYCLING_METRES_PER_SECOND = 7.0
 
