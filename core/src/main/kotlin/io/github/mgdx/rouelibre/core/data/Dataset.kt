@@ -71,6 +71,27 @@ public sealed interface DatasetRejection {
     public data class WrongFormat(public val detail: String) : DatasetRejection
 
     /**
+     * The file is none of the three datasets: a photograph, an archive, a
+     * document.
+     *
+     * Told apart from [WrongDatasetKind] because the way out differs. Here the
+     * file has nothing to do with the application and the answer is to go and
+     * find the right one; there, the file is one of ours and simply came in by
+     * the wrong door.
+     */
+    public data object NotADataset : DatasetRejection
+
+    /**
+     * The file is one of the datasets, but not the one it was offered as.
+     *
+     * The commonest mistake of a manual import, and the one worth naming: three
+     * files are downloaded together and picked from the same folder.
+     *
+     * @property actual which of the three this file really is.
+     */
+    public data class WrongDatasetKind(public val actual: DatasetKind) : DatasetRejection
+
+    /**
      * The file is of a format version this version of the application cannot
      * read. It has to be said, with an invitation to update the application,
      * not fail when opening it (SPEC §4.4).

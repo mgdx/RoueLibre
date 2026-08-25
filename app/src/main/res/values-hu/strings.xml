@@ -548,6 +548,10 @@
 
     <string name="dataset_rejected_empty">A kiválasztott fájl üres.</string>
     <string name="dataset_rejected_format">Ez nem a várt fájl. Válaszd a generáló szkriptek által előállított fájlt: „%1$s”.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Ez a fájl nem „%1$s”, és nem is más adat, amelyet az alkalmazás olvas. Válaszd a generáló szkriptek által előállított fájlt: „%2$s”.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Ez a fájl „%1$s”, nem „%2$s”. Importáld a saját sorában.</string>
     <!-- No article stands in front of either figure: *az 1*, but *a 2*, and a
          format version is a number this file cannot see. -->
     <string name="dataset_rejected_version">A fájl formátumverziója %1$d, az alkalmazás ezen verziója pedig %2$d formátumverziót olvas. Frissítsd az alkalmazást.</string>

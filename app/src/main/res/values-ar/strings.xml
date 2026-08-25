@@ -579,6 +579,10 @@
 
     <string name="dataset_rejected_empty">الملف المختار فارغ.</string>
     <string name="dataset_rejected_format">هذا ليس الملف المتوقَّع. اختر ملف «%1$s» الذي تنتجه النصوص البرمجية للتوليد.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">هذا الملف ليس «%1$s» ولا أي بيانات أخرى يقرأها التطبيق. اختر ملف «%2$s» الذي تنتجه النصوص البرمجية للتوليد.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">هذا الملف هو «%1$s» وليس «%2$s». استورده من سطره الخاص.</string>
     <string name="dataset_rejected_version">هذا الملف بصيغة الإصدار %1$d، وهذه النسخة من التطبيق تقرأ الإصدار %2$d. حدّث التطبيق.</string>
     <string name="dataset_rejected_checksum">لا يطابق الملف مجموعه الاختباري: فهو ناقص أو تالف. نزّله من جديد.</string>
     <string name="dataset_rejected_transfer">فشل نسخ الملف. تحقّق من المساحة الحرّة وأعد المحاولة.</string>

@@ -534,6 +534,10 @@
 
     <string name="dataset_rejected_empty">Valittu tiedosto on tyhjä.</string>
     <string name="dataset_rejected_format">Tämä ei ole odotettu tiedosto. Valitse generointiskriptien tuottama tiedosto ”%1$s”.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Tämä tiedosto ei ole ”%1$s” eikä mitään muutakaan sovelluksen lukemaa aineistoa. Valitse generointiskriptien tuottama tiedosto ”%2$s”.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Tämä tiedosto on ”%1$s”, ei ”%2$s”. Tuo se omalta riviltään.</string>
     <string name="dataset_rejected_version">Tämä tiedosto on muotoversiota %1$d, ja tämä sovellusversio lukee versiota %2$d. Päivitä sovellus.</string>
     <string name="dataset_rejected_checksum">Tiedosto ei vastaa tarkistussummaansa: se on puutteellinen tai vioittunut. Lataa se uudelleen.</string>
     <string name="dataset_rejected_transfer">Tiedoston kopiointi epäonnistui. Tarkista vapaa tila ja yritä uudelleen.</string>

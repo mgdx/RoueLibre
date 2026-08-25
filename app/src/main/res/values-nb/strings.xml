@@ -530,6 +530,10 @@
 
     <string name="dataset_rejected_empty">Den valgte filen er tom.</string>
     <string name="dataset_rejected_format">Dette er ikke den forventede filen. Velg filen «%1$s» som genereringsskriptene lager.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Denne filen er verken «%1$s» eller andre data appen leser. Velg filen «%2$s» som genereringsskriptene lager.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Denne filen er «%1$s», ikke «%2$s». Importer den på sin egen linje.</string>
     <string name="dataset_rejected_version">Denne filen er i formatversjon %1$d, og denne versjonen av appen leser versjon %2$d. Oppdater appen.</string>
     <string name="dataset_rejected_checksum">Filen stemmer ikke med kontrollsummen sin: den er ufullstendig eller skadet. Last den ned på nytt.</string>
     <string name="dataset_rejected_transfer">Kopieringen av filen mislyktes. Sjekk den ledige lagringsplassen, og prøv igjen.</string>

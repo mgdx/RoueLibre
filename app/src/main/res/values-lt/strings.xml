@@ -575,6 +575,10 @@
 
     <string name="dataset_rejected_empty">Pasirinktas failas tuščias.</string>
     <string name="dataset_rejected_format">Tai ne tas failas. Pasirinkite failą „%1$s“, sukurtą generavimo scenarijų.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Šis failas nėra nei „%1$s“, nei kiti programos skaitomi duomenys. Pasirinkite failą „%2$s“, sukurtą generavimo scenarijų.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Šis failas yra „%1$s“, o ne „%2$s“. Importuokite jį savo eilutėje.</string>
     <string name="dataset_rejected_version">Šio failo formato versija – %1$d, o ši programos versija skaito %2$d versiją. Atnaujinkite programą.</string>
     <string name="dataset_rejected_checksum">Failas neatitinka savo kontrolinės sumos: jis nepilnas arba sugadintas. Atsisiųskite jį iš naujo.</string>
     <string name="dataset_rejected_transfer">Nepavyko nukopijuoti failo. Patikrinkite laisvą vietą ir bandykite dar kartą.</string>

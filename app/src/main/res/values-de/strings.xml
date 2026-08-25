@@ -612,6 +612,10 @@
     <string name="dataset_rejected_empty">Die gewählte Datei ist leer.</string>
     <!-- %1$s is the expected file name, "tiles.mbtiles" for instance. -->
     <string name="dataset_rejected_format">Diese Datei ist nicht die erwartete. Wähle die Datei „%1$s“, die die Generierungsskripte erzeugen.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Diese Datei ist weder „%1$s“ noch andere Daten, die die App liest. Wähle die Datei „%2$s“, die die Generierungsskripte erzeugen.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Diese Datei ist „%1$s“, nicht „%2$s“. Importiere sie stattdessen in ihrer eigenen Zeile.</string>
     <!-- %1$d is the version found, %2$d the one the application can read. -->
     <string name="dataset_rejected_version">Diese Datei hat die Formatversion %1$d, und diese Version der App liest Version %2$d. Aktualisiere die App.</string>
     <string name="dataset_rejected_checksum">Die Datei passt nicht zu ihrer Prüfsumme: Sie ist unvollständig oder beschädigt. Lade sie erneut herunter.</string>

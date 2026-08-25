@@ -494,6 +494,10 @@
 
     <string name="dataset_rejected_empty">Seçilen dosya boş.</string>
     <string name="dataset_rejected_format">Bu dosya beklenen dosya değil. Üretim betiklerinin oluşturduğu “%1$s” dosyasını seç.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Bu dosya “%1$s” değil, uygulamanın okuduğu başka bir veri de değil. Üretim betiklerinin oluşturduğu “%2$s” dosyasını seç.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Bu dosya “%1$s”, “%2$s” değil. Onu kendi satırından içe aktar.</string>
     <string name="dataset_rejected_version">Bu dosya %1$d numaralı biçim sürümünde, uygulamanın bu sürümü ise %2$d numaralı sürümü okuyor. Uygulamayı güncelle.</string>
     <string name="dataset_rejected_checksum">Dosya sağlama toplamıyla uyuşmuyor: eksik ya da bozuk. Yeniden indir.</string>
     <string name="dataset_rejected_transfer">Dosya kopyalanamadı. Boş alanı kontrol et ve tekrar dene.</string>

@@ -648,6 +648,10 @@
     <string name="dataset_rejected_empty">Il file scelto è vuoto.</string>
     <!-- %1$s is the expected file name, "tiles.mbtiles" for instance. -->
     <string name="dataset_rejected_format">Questo file non è quello atteso. Scegli il file «%1$s» prodotto dagli script di generazione.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Questo file non è «%1$s», né altri dati che l’app legge. Scegli il file «%2$s» prodotto dagli script di generazione.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Questo file è «%1$s», non «%2$s». Importalo nella sua riga.</string>
     <!-- %1$d is the version found, %2$d the one the application can read. -->
     <string name="dataset_rejected_version">Questo file è nella versione di formato %1$d, e questa versione dell’app legge la versione %2$d. Aggiorna l’app.</string>
     <string name="dataset_rejected_checksum">Il file non corrisponde alla sua somma di controllo: è incompleto o danneggiato. Scaricalo di nuovo.</string>

@@ -5,10 +5,13 @@ import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.provider.OpenableColumns
 import io.github.mgdx.rouelibre.core.config.isUsableCityId
+import io.github.mgdx.rouelibre.core.data.DATASET_HEADER_BYTES
+import io.github.mgdx.rouelibre.core.data.DatasetFileSignature
 import io.github.mgdx.rouelibre.core.data.DatasetImportResult
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.data.DatasetRejection
 import io.github.mgdx.rouelibre.core.data.InstalledDataset
+import io.github.mgdx.rouelibre.core.data.datasetFileSignature
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -275,7 +278,7 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             } catch (error: RuntimeException) {
                 Inspection.Invalid(
                     DatasetRejection.WrongFormat(
-                        error.message?.take(MAX_REJECTION_DETAIL) ?: "fichier illisible",
+                        error.message?.take(MAX_REJECTION_DETAIL) ?: "unreadable file",
                     ),
                 )
             }
@@ -384,23 +387,95 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
      * as an address index would fail the first search, long afterwards, with no
      * visible connection to the cause.
      *
+     * **What the file is comes before what it contains.** Handing a screenshot
+     * straight to SQLite only ever yields "file is not a database", a sentence
+     * written for a developer, and the screen had nothing to add to it. The
+     * signature of the first bytes settles instead whether this is one of our
+     * files and which one, so that the refusal can be named.
+     *
      * @return the format version read from the file, or `null` if it carries
      *   none.
      */
-    private fun inspect(kind: DatasetKind, file: File): Inspection = when (kind) {
-        DatasetKind.Tiles -> inspectTiles(file)
-        DatasetKind.Addresses -> inspectAddresses(file)
-        DatasetKind.Routing -> inspectRouting(file)
+    private fun inspect(kind: DatasetKind, file: File): Inspection {
+        val header = try {
+            headerOf(file)
+        } catch (error: IOException) {
+            return Inspection.Invalid(
+                DatasetRejection.TransferFailed(error.message ?: "cannot read"),
+            )
+        }
+        return when (datasetFileSignature(header, file.length())) {
+            DatasetFileSignature.Empty -> Inspection.Invalid(DatasetRejection.Empty)
+
+            DatasetFileSignature.Unrecognised -> Inspection.Invalid(DatasetRejection.NotADataset)
+
+            DatasetFileSignature.RoutingGraph -> if (kind == DatasetKind.Routing) {
+                Inspection.Valid(null)
+            } else {
+                Inspection.Invalid(DatasetRejection.WrongDatasetKind(DatasetKind.Routing))
+            }
+
+            DatasetFileSignature.SqliteDatabase -> inspectDatabase(kind, file)
+        }
     }
 
-    private fun inspectTiles(file: File): Inspection = readingSqlite(file) { database ->
+    /** The head of a file, or the whole of it when it is shorter than that. */
+    private fun headerOf(file: File): ByteArray = file.inputStream().use { stream ->
+        val buffer = ByteArray(DATASET_HEADER_BYTES)
+        var filled = 0
+        while (filled < buffer.size) {
+            val read = stream.read(buffer, filled, buffer.size - filled)
+            if (read < 0) break
+            filled += read
+        }
+        buffer.copyOf(filled)
+    }
+
+    /**
+     * Which of the two databases a SQLite file holds, and the table that says so.
+     *
+     * The base map and the address index share a container and nothing else, so
+     * only their tables tell them apart: that is the one question a file's first
+     * bytes cannot settle. A view counts as well as a table, because some
+     * MBTiles writers publish `tiles` as one.
+     */
+    private enum class Database(val kind: DatasetKind, val ownTable: String) {
+        Tiles(DatasetKind.Tiles, "tiles"),
+        Addresses(DatasetKind.Addresses, "street"),
+    }
+
+    /**
+     * Reads a SQLite file: which of the two it is first, then what is in it.
+     *
+     * Naming the file before reading it is what turns "this file is not the
+     * expected one" into "this is the address index, not the base map".
+     */
+    private fun inspectDatabase(expected: DatasetKind, file: File): Inspection =
+        readingSqlite(file) { database ->
+            val actual = Database.entries.firstOrNull { holdsTable(database, it.ownTable) }
+                ?: return@readingSqlite Inspection.Invalid(DatasetRejection.NotADataset)
+            when {
+                actual.kind != expected ->
+                    Inspection.Invalid(DatasetRejection.WrongDatasetKind(actual.kind))
+
+                actual == Database.Tiles -> inspectTiles(database)
+                else -> inspectAddresses(database)
+            }
+        }
+
+    private fun holdsTable(database: SQLiteDatabase, name: String): Boolean = database.rawQuery(
+        "SELECT 1 FROM sqlite_master WHERE type IN ('table', 'view') AND name = ?",
+        arrayOf(name),
+    ).use { it.moveToFirst() }
+
+    private fun inspectTiles(database: SQLiteDatabase): Inspection {
         val format = database.rawQuery(
             "SELECT value FROM metadata WHERE name = ?",
             arrayOf("format"),
         ).use { if (it.moveToFirst()) it.getString(0) else null }
 
         if (format != EXPECTED_TILE_FORMAT) {
-            return@readingSqlite Inspection.Invalid(
+            return Inspection.Invalid(
                 DatasetRejection.WrongFormat(
                     "tiles in \"${format ?: "unknown"}\" format instead of " +
                         "\"$EXPECTED_TILE_FORMAT\"",
@@ -410,24 +485,24 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         val tileCount = database.rawQuery("SELECT COUNT(*) FROM tiles", null)
             .use { if (it.moveToFirst()) it.getLong(0) else 0L }
         if (tileCount == 0L) {
-            return@readingSqlite Inspection.Invalid(
+            return Inspection.Invalid(
                 DatasetRejection.WrongFormat("the file contains no tile at all"),
             )
         }
-        Inspection.Valid(null)
+        return Inspection.Valid(null)
     }
 
-    private fun inspectAddresses(file: File): Inspection = readingSqlite(file) { database ->
+    private fun inspectAddresses(database: SQLiteDatabase): Inspection {
         val version = database.rawQuery(
             "SELECT value FROM metadata WHERE key = ?",
             arrayOf("formatVersion"),
         ).use { if (it.moveToFirst()) it.getString(0)?.toIntOrNull() else null }
-            ?: return@readingSqlite Inspection.Invalid(
+            ?: return Inspection.Invalid(
                 DatasetRejection.WrongFormat("address index without a format version"),
             )
 
         if (version != SUPPORTED_ADDRESS_FORMAT_VERSION) {
-            return@readingSqlite Inspection.Invalid(
+            return Inspection.Invalid(
                 DatasetRejection.UnsupportedFormatVersion(
                     found = version,
                     supported = SUPPORTED_ADDRESS_FORMAT_VERSION,
@@ -437,36 +512,11 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         val streetCount = database.rawQuery("SELECT COUNT(*) FROM street", null)
             .use { if (it.moveToFirst()) it.getLong(0) else 0L }
         if (streetCount == 0L) {
-            return@readingSqlite Inspection.Invalid(
+            return Inspection.Invalid(
                 DatasetRejection.WrongFormat("the index contains no street at all"),
             )
         }
-        Inspection.Valid(version)
-    }
-
-    /**
-     * The routing graph is a binary format of BRouter's own, with no header
-     * recognisable at low cost. We therefore settle for ruling out the
-     * commonest mistake: having picked one of the other two sets, which are
-     * SQLite databases.
-     */
-    private fun inspectRouting(file: File): Inspection {
-        val header = ByteArray(SQLITE_MAGIC.size)
-        val read = try {
-            file.inputStream().use { it.read(header) }
-        } catch (error: IOException) {
-            return Inspection.Invalid(
-                DatasetRejection.TransferFailed(error.message ?: "cannot read"),
-            )
-        }
-        if (read == SQLITE_MAGIC.size && header.contentEquals(SQLITE_MAGIC)) {
-            return Inspection.Invalid(
-                DatasetRejection.WrongFormat(
-                    "this file is a SQLite database, not a routing graph",
-                ),
-            )
-        }
-        return Inspection.Valid(null)
+        return Inspection.Valid(version)
     }
 
     /**
@@ -497,13 +547,22 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         // corrupted file as well as a missing table.
         Inspection.Invalid(
             DatasetRejection.WrongFormat(
-                error.message?.take(MAX_REJECTION_DETAIL) ?: "fichier illisible",
+                error.message?.take(MAX_REJECTION_DETAIL) ?: "unreadable file",
             ),
         )
     }
 
+    /**
+     * Gives up on an import, leaving nothing of it behind.
+     *
+     * The staged copy goes, and with it the directory it was staged in when
+     * that directory holds nothing else: a refused import used to leave an
+     * empty `tiles/` on the disk, which reads as a half-installed dataset to
+     * anybody looking at the files.
+     */
     private fun rejected(staged: File, reason: DatasetRejection): DatasetImportResult {
         staged.delete()
+        staged.parentFile?.takeIf { it.list()?.isEmpty() == true }?.delete()
         return DatasetImportResult.Rejected(reason)
     }
 
@@ -572,15 +631,6 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
          * index is not readable and must be refused with a word about why.
          */
         const val SUPPORTED_ADDRESS_FORMAT_VERSION = 2
-
-        /**
-         * The first sixteen bytes of every SQLite file.
-         *
-         * The terminating NUL is written as an escape rather than as a raw
-         * byte: it used to be an invisible character in the source, which no
-         * review could see and any reformatting could have eaten.
-         */
-        val SQLITE_MAGIC: ByteArray = "SQLite format 3\u0000".toByteArray(Charsets.US_ASCII)
     }
 }
 

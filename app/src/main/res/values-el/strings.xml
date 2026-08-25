@@ -562,6 +562,10 @@
 
     <string name="dataset_rejected_empty">Το αρχείο που διαλέξατε είναι κενό.</string>
     <string name="dataset_rejected_format">Αυτό το αρχείο δεν είναι το αναμενόμενο. Διαλέξτε το αρχείο «%1$s» που παράγουν τα σενάρια δημιουργίας.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Αυτό το αρχείο δεν είναι ούτε «%1$s» ούτε άλλα δεδομένα που διαβάζει η εφαρμογή. Διαλέξτε το αρχείο «%2$s» που παράγουν τα σενάρια δημιουργίας.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Αυτό το αρχείο είναι «%1$s», όχι «%2$s». Εισαγάγετέ το στη δική του γραμμή.</string>
     <string name="dataset_rejected_version">Αυτό το αρχείο είναι σε μορφή έκδοσης %1$d, ενώ αυτή η έκδοση της εφαρμογής διαβάζει την έκδοση %2$d. Ενημερώστε την εφαρμογή.</string>
     <string name="dataset_rejected_checksum">Το αρχείο δεν ταιριάζει με το άθροισμα ελέγχου του: είναι ελλιπές ή κατεστραμμένο. Κατεβάστε το ξανά.</string>
     <string name="dataset_rejected_transfer">Η αντιγραφή του αρχείου απέτυχε. Ελέγξτε τον ελεύθερο χώρο και δοκιμάστε ξανά.</string>

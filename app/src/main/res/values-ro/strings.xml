@@ -574,6 +574,10 @@
 
     <string name="dataset_rejected_empty">Fișierul ales este gol.</string>
     <string name="dataset_rejected_format">Acest fișier nu este cel așteptat. Alege fișierul „%1$s” produs de scripturile de generare.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Acest fișier nu este „%1$s” și nici alte date pe care aplicația le citește. Alege fișierul „%2$s” produs de scripturile de generare.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Acest fișier este „%1$s”, nu „%2$s”. Importă-l pe linia lui.</string>
     <string name="dataset_rejected_version">Acest fișier este în versiunea de format %1$d, iar această versiune a aplicației citește versiunea %2$d. Actualizează aplicația.</string>
     <string name="dataset_rejected_checksum">Fișierul nu se potrivește cu suma lui de control: este incomplet sau deteriorat. Descarcă-l din nou.</string>
     <string name="dataset_rejected_transfer">Copierea fișierului a eșuat. Verifică spațiul liber și încearcă din nou.</string>

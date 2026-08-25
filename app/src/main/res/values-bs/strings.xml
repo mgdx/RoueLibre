@@ -544,6 +544,10 @@
 
     <string name="dataset_rejected_empty">Odabrani fajl je prazan.</string>
     <string name="dataset_rejected_format">Ovo nije očekivani fajl. Odaberite fajl „%1$s“ koji proizvode skripte za generiranje.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Ovaj fajl nije „%1$s“ niti bilo koji drugi podaci koje aplikacija čita. Odaberite fajl „%2$s“ koji proizvode skripte za generiranje.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Ovaj fajl je „%1$s“, a ne „%2$s“. Uvezite ga u njegovom vlastitom redu.</string>
     <string name="dataset_rejected_version">Ovaj fajl je u verziji formata %1$d, a ova verzija aplikacije čita verziju %2$d. Ažurirajte aplikaciju.</string>
     <string name="dataset_rejected_checksum">Fajl ne odgovara svojoj kontrolnoj sumi: nepotpun je ili oštećen. Preuzmite ga ponovo.</string>
     <string name="dataset_rejected_transfer">Kopiranje fajla nije uspjelo. Provjerite slobodan prostor i pokušajte ponovo.</string>
