@@ -586,6 +586,10 @@
 
     <string name="dataset_rejected_empty">Izbrana datoteka je prazna.</string>
     <string name="dataset_rejected_format">To ni pričakovana datoteka. Izberite datoteko „%1$s“, ki jo ustvarijo skripti za generiranje.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Ta datoteka ni „%1$s“ niti drugi podatki, ki jih aplikacija bere. Izberite datoteko „%2$s“, ki jo ustvarijo skripti za generiranje.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Ta datoteka je „%1$s“, ne „%2$s“. Uvozite jo v njeni lastni vrstici.</string>
     <string name="dataset_rejected_version">Ta datoteka je v različici zapisa %1$d, ta različica aplikacije pa bere različico %2$d. Posodobite aplikacijo.</string>
     <string name="dataset_rejected_checksum">Datoteka se ne ujema s svojo kontrolno vsoto: nepopolna je ali poškodovana. Znova jo prenesite.</string>
     <string name="dataset_rejected_transfer">Kopiranje datoteke ni uspelo. Preverite prosti prostor in poskusite znova.</string>

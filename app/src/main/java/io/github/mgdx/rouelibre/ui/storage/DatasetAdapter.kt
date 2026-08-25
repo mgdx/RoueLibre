@@ -181,6 +181,21 @@ fun StorageMessage.toText(context: Context): String = when (this) {
 
     is StorageMessage.Rejected -> when (val cause = reason) {
         DatasetRejection.Empty -> context.getString(R.string.dataset_rejected_empty)
+        // The two that name the refusal rather than the file expected: what
+        // was picked has nothing to do with the application, or it is one of
+        // ours offered on the wrong line.
+        DatasetRejection.NotADataset -> context.getString(
+            R.string.dataset_rejected_not_data,
+            context.getString(kind.nameResource()),
+            kind.fileName ?: EXPECTED_ROUTING_FILE,
+        )
+
+        is DatasetRejection.WrongDatasetKind -> context.getString(
+            R.string.dataset_rejected_other_dataset,
+            context.getString(cause.actual.nameResource()),
+            context.getString(kind.nameResource()),
+        )
+
         is DatasetRejection.WrongFormat ->
             context.getString(
                 R.string.dataset_rejected_format,

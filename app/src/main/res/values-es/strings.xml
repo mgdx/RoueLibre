@@ -627,6 +627,10 @@
     <string name="dataset_rejected_empty">El archivo elegido está vacío.</string>
     <!-- %1$s is the expected file name, "tiles.mbtiles" for instance. -->
     <string name="dataset_rejected_format">Este archivo no es el esperado. Elige el archivo «%1$s» que producen los scripts de generación.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Este archivo no es «%1$s» ni ningún otro dato que lea la aplicación. Elige el archivo «%2$s» que producen los scripts de generación.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Este archivo es «%1$s», no «%2$s». Impórtalo en su propia línea.</string>
     <!-- %1$d is the version found, %2$d the one the application can read. -->
     <string name="dataset_rejected_version">Este archivo está en la versión de formato %1$d y esta versión de la aplicación lee la versión %2$d. Actualiza la aplicación.</string>
     <string name="dataset_rejected_checksum">El archivo no coincide con su suma de verificación: está incompleto o dañado. Descárgalo de nuevo.</string>

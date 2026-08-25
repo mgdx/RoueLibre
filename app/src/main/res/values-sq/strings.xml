@@ -524,6 +524,10 @@
     <string name="dataset_rejected_empty">Skedari i zgjedhur është bosh.</string>
     <!-- %1$s is a file name, not the name of the dataset. -->
     <string name="dataset_rejected_format">Ky skedar nuk është ai që pritej. Zgjidh skedarin „%1$s“ që prodhojnë skriptet e gjenerimit.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Ky skedar nuk është „%1$s“ dhe as ndonjë e dhënë tjetër që aplikacioni lexon. Zgjidh skedarin „%2$s“ që prodhojnë skriptet e gjenerimit.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Ky skedar është „%1$s“, jo „%2$s“. Importoje në rreshtin e vet.</string>
     <string name="dataset_rejected_version">Ky skedar është në versionin %1$d të formatit, ndërsa ky version i aplikacionit lexon versionin %2$d. Përditëso aplikacionin.</string>
     <string name="dataset_rejected_checksum">Skedari nuk përputhet me shumën e kontrollit: është i paplotë ose i dëmtuar. Shkarkoje sërish.</string>
     <string name="dataset_rejected_transfer">Kopjimi i skedarit dështoi. Kontrollo hapësirën e lirë dhe provo përsëri.</string>

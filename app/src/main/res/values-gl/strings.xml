@@ -454,6 +454,10 @@
 
     <string name="dataset_rejected_empty">The chosen file is empty.</string>
     <string name="dataset_rejected_format">This file is not the expected one. Choose the “%1$s” file produced by the generation scripts.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">This file is not “%1$s”, nor any other data this app reads. Choose the “%2$s” file produced by the generation scripts.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">This file is “%1$s”, not “%2$s”. Import it on its own line instead.</string>
     <string name="dataset_rejected_version">This file is in format version %1$d, and this version of the app reads version %2$d. Update the app.</string>
     <string name="dataset_rejected_checksum">The file does not match its checksum: it is incomplete or damaged. Download it again.</string>
     <string name="dataset_rejected_transfer">Copying the file failed. Check the free space and try again.</string>

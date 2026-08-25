@@ -487,6 +487,10 @@
 
     <string name="dataset_rejected_empty">Het gekozen bestand is leeg.</string>
     <string name="dataset_rejected_format">Dit is niet het verwachte bestand. Kies het bestand “%1$s” dat de generatiescripts maken.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Dit bestand is niet “%1$s” en ook geen andere gegevens die de app leest. Kies het bestand “%2$s” dat de generatiescripts maken.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Dit bestand is “%1$s”, niet “%2$s”. Importeer het op de eigen regel.</string>
     <string name="dataset_rejected_version">Dit bestand heeft formaatversie %1$d, en deze versie van de app leest versie %2$d. Werk de app bij.</string>
     <string name="dataset_rejected_checksum">Het bestand komt niet overeen met zijn controlesom: het is onvolledig of beschadigd. Download het opnieuw.</string>
     <string name="dataset_rejected_transfer">Het kopiëren van het bestand is mislukt. Controleer de vrije ruimte en probeer het opnieuw.</string>

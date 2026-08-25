@@ -546,6 +546,10 @@
 
     <string name="dataset_rejected_empty">Wybrany plik jest pusty.</string>
     <string name="dataset_rejected_format">To nie jest oczekiwany plik. Wybierz plik „%1$s” tworzony przez skrypty generujące.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Ten plik to nie „%1$s” ani żadne inne dane, które aplikacja odczytuje. Wybierz plik „%2$s” tworzony przez skrypty generujące.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Ten plik to „%1$s”, nie „%2$s”. Zaimportuj go w jego własnym wierszu.</string>
     <string name="dataset_rejected_version">Ten plik ma format w wersji %1$d, a ta wersja aplikacji odczytuje wersję %2$d. Zaktualizuj aplikację.</string>
     <string name="dataset_rejected_checksum">Plik nie zgadza się ze swoją sumą kontrolną: jest niekompletny albo uszkodzony. Pobierz go ponownie.</string>
     <string name="dataset_rejected_transfer">Kopiowanie pliku się nie powiodło. Sprawdź wolne miejsce i spróbuj ponownie.</string>

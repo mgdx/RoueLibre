@@ -690,6 +690,10 @@
     <string name="dataset_rejected_empty">Vybraný soubor je prázdný.</string>
     <!-- %1$s is the expected file name, „tiles.mbtiles“ for instance. -->
     <string name="dataset_rejected_format">Tento soubor není ten očekávaný. Vyberte soubor „%1$s“, který vytvářejí generovací skripty.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Tento soubor není „%1$s“ ani jiná data, která aplikace čte. Vyberte soubor „%2$s“, který vytvářejí generovací skripty.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Tento soubor je „%1$s“, ne „%2$s“. Naimportujte jej na jeho vlastním řádku.</string>
     <!-- %1$d is the version found, %2$d the one the application can read. -->
     <string name="dataset_rejected_version">Tento soubor je ve verzi formátu %1$d a tato verze aplikace čte verzi %2$d. Aktualizujte aplikaci.</string>
     <string name="dataset_rejected_checksum">Soubor neodpovídá svému kontrolnímu součtu: je neúplný nebo poškozený. Stáhněte ho znovu.</string>

@@ -536,6 +536,10 @@
 
     <string name="dataset_rejected_empty">Izvēlētais fails ir tukšs.</string>
     <string name="dataset_rejected_format">Šis nav gaidītais fails. Izvēlieties failu „%1$s“, ko izveido ģenerēšanas skripti.</string>
+    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Šis fails nav ne „%1$s“, ne citi dati, ko lietotne lasa. Izvēlieties failu „%2$s“, ko izveido ģenerēšanas skripti.</string>
+    <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
+    <string name="dataset_rejected_other_dataset">Šis fails ir „%1$s“, nevis „%2$s“. Importējiet to savā rindā.</string>
     <string name="dataset_rejected_version">Šis fails ir formāta %1$d. versijā, bet šī lietotnes versija nolasa %2$d. versiju. Atjauniniet lietotni.</string>
     <string name="dataset_rejected_checksum">Fails neatbilst savai kontrolsummai: tas ir nepilnīgs vai bojāts. Lejupielādējiet to vēlreiz.</string>
     <string name="dataset_rejected_transfer">Faila kopēšana neizdevās. Pārbaudiet brīvo vietu un mēģiniet vēlreiz.</string>
