@@ -16,6 +16,12 @@
     The fleet page is the exception, and it hides that drawing: its three marks
     each carry a sentence, so they belong to the text (SPEC §7.9).
 
+    This is the page standing up. Lying down it is laid out otherwise — see
+    `layout-land/fragment_welcome.xml`, where the reason is written: stacked
+    over a sideways screen, these same parts left the paragraph two lines and
+    a half. The views are the same there and carry the same identifiers, and
+    what they write comes from the same `view_welcome_page_text.xml`.
+
     The side spacing is set with margins on each child, not with padding on the
     root: fitsSystemWindows replaces the padding of the view it is set on with
     the window insets, and the padding declared here used to be silently
@@ -110,127 +116,14 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0">
 
-            <LinearLayout
+            <!-- The paragraph and, on the fleet page, the three marks. They
+                 live in a layout of their own, shared with the arrangement of
+                 `layout-land`, so that the two cannot drift apart. -->
+            <include
+                android:id="@+id/page_text"
+                layout="@layout/view_welcome_page_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/body"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="4dp"
-                    android:textAppearance="@style/TextAppearance.RoueLibre.Body"
-                    tools:text="Application libre et ouverte, sans compte, sans publicité, sans mouchard." />
-
-                <!-- The three station marks, shown by the fleet page alone.
-
-                     They are the very discs the map draws for a journey's
-                     stations, at their own size, so the reader meets the mark here
-                     and recognises it there rather than learning a symbol twice.
-
-                     They sit in the text that scrolls and not in the drawing's
-                     place below: that place is meant to shrink and then go
-                     altogether at the largest font sizes, which is right for a
-                     decoration and wrong for a sentence carrying the meaning.
-
-                     The mark is an image beside the sentence and not the
-                     sentence's own leading drawable, which is what `lint` would
-                     rather see here: a compound drawable is laid out at the
-                     resource's intrinsic size and there is no attribute to change
-                     it, and at the map's 36dp the cog and the bolt — the very
-                     thing this page teaches — came out the height of a line and
-                     could not be told apart. A view of our own takes the size we
-                     give it.
-
-                     Each mark is decorative, the sentence beside it saying what it
-                     says, so a screen reader stops on three lines and reads each in
-                     one piece. The sentence has its own column, weighted, so it
-                     wraps within it instead of running back under the mark. -->
-                <LinearLayout
-                    android:id="@+id/fleet_marks"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_l"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    tools:visibility="visible">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:baselineAligned="false"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        tools:ignore="UseCompoundDrawables">
-
-                        <ImageView
-                            android:layout_width="@dimen/welcome_mark"
-                            android:layout_height="@dimen/welcome_mark"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/marker_journey_station" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/space_m"
-                            android:layout_weight="1"
-                            android:lineSpacingExtra="4dp"
-                            android:text="@string/welcome_fleet_mechanical_only"
-                            android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/space_m"
-                        android:baselineAligned="false"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        tools:ignore="UseCompoundDrawables">
-
-                        <ImageView
-                            android:layout_width="@dimen/welcome_mark"
-                            android:layout_height="@dimen/welcome_mark"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/marker_journey_station_electric" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/space_m"
-                            android:layout_weight="1"
-                            android:lineSpacingExtra="4dp"
-                            android:text="@string/welcome_fleet_electric_only"
-                            android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/space_m"
-                        android:baselineAligned="false"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        tools:ignore="UseCompoundDrawables">
-
-                        <ImageView
-                            android:layout_width="@dimen/welcome_mark"
-                            android:layout_height="@dimen/welcome_mark"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/marker_journey_station_mixed" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/space_m"
-                            android:layout_weight="1"
-                            android:lineSpacingExtra="4dp"
-                            android:text="@string/welcome_fleet_mixed"
-                            android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
+                android:layout_height="wrap_content" />
         </androidx.core.widget.NestedScrollView>
 
         <!-- The drawing of the current page. Purely decorative: it repeats
