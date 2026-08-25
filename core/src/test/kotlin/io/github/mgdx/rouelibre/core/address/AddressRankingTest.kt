@@ -291,4 +291,76 @@ class AddressRankingTest {
             ),
         )
     }
+
+    @Test
+    fun `inside a sentence, the street answering the most words comes first`() {
+        // Measured on the real index of Lille, with this fallback's first
+        // shape: the sentence of the report offered five landmarks named after
+        // the town — "HEI Lille - Junia", "Supinfo Lille", "Port de Lille" —
+        // and not the street it names. Each answered the single word "lille",
+        // and a word passed over cost them nothing; "Rue Nationale" answered
+        // three words at the unequal weights of a name, a type and a
+        // municipality, and came out lower for it.
+        //
+        // The trap entries are created first, so that they hold the lower
+        // identifiers: on an equal score they would come first, and only a
+        // score of its own puts the street the sentence names at the top.
+        val trap = listOf(
+            street("HEI Lille - Junia"),
+            street("Supinfo Lille"),
+            street("Port de Lille"),
+            street("ESME - Lille"),
+            street("ISG Lille"),
+        )
+        val nationale = street("Rue Nationale")
+
+        assertEquals(
+            nationale.id,
+            rank(
+                "Rendez-vous ici : 12 rue Nationale, Lille",
+                trap + nationale,
+                matching = WordMatching.WholeWordsInSentence,
+            ).first(),
+        )
+    }
+
+    @Test
+    fun `inside a sentence, the street type still tells two namesakes apart`() {
+        // The same sentence without its municipality, the report's second
+        // reading: "Route Nationale" answers "nationale" alone and answered it
+        // perfectly, where "Rue Nationale" answers the type as well. The word
+        // the second one has and the first one lacks must count for it.
+        val route = street("Route Nationale")
+        val pasteur = street("Rue Pasteur")
+        val nationale = street("Rue Nationale")
+
+        assertEquals(
+            nationale.id,
+            rank(
+                "Rendez-vous ici : 12 rue Nationale",
+                listOf(route, pasteur, nationale),
+                matching = WordMatching.WholeWordsInSentence,
+            ).first(),
+        )
+    }
+
+    @Test
+    fun `the sentence's own words weigh on every street alike`() {
+        // Where the streets answer the same single word, the sentence around it
+        // charges them all the same and decides nothing between them: the name
+        // that stops where the query stops still comes first, and the others
+        // follow in the order they were already in.
+        val paul = street("Rue Paul")
+        val lafargue = street("Rue Paul Lafargue")
+        val ramadier = street("Rue Paul Ramadier")
+
+        assertEquals(
+            listOf(paul.id, lafargue.id, ramadier.id),
+            rank(
+                "Rendez-vous demain matin devant chez Paul",
+                listOf(paul, lafargue, ramadier),
+                matching = WordMatching.WholeWordsInSentence,
+            ),
+        )
+    }
 }

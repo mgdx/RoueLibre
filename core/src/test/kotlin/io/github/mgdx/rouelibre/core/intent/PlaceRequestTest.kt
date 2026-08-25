@@ -211,6 +211,13 @@ class PlaceRequestTest {
     private val nationaleLille = street("Rue Nationale", "Lille", lille)
     private val nationaleRoubaix = street("Rue Nationale", "Roubaix", roubaix)
 
+    // Two of the landmarks the real index answered the report's sentence with,
+    // and the reason it did: their proper name holds the town's own name, so
+    // the one word "lille" matches them in full. They stand in the corpus so
+    // that a shared sentence has to beat them rather than avoid them.
+    private val hei = street("HEI Lille - Junia", "Lille", lille)
+    private val portDeLille = street("Port de Lille", "Lille", lille)
+
     private val corpus = listOf(
         toul,
         onzeNovembre,
@@ -218,6 +225,8 @@ class PlaceRequestTest {
         victorHugo,
         nationaleLille,
         nationaleRoubaix,
+        hei,
+        portDeLille,
     )
 
     /**
@@ -309,8 +318,16 @@ class PlaceRequestTest {
         val sentence = "Rendez-vous ici : 12 rue Nationale, Lille"
 
         assertNull(destinationOf(sentence, WordMatching.WholeWords))
+        // First, and not merely present: the street answers three words of the
+        // sentence where the landmarks named after the town answer one.
         assertEquals(nationaleLille, candidatesOf(sentence).firstOrNull())
         assertTrue(candidatesOf(sentence).size > 1)
+        // And without the municipality, where the town's name no longer helps
+        // anybody: the report's second reading.
+        assertEquals(
+            nationaleLille,
+            candidatesOf("Rendez-vous ici : 12 rue Nationale").firstOrNull(),
+        )
     }
 
     @Test

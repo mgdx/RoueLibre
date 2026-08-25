@@ -108,10 +108,11 @@ public enum class WordMatching {
      *
      * "Meet me here: 12 rue Nationale, Lille" is how an address is really
      * shared — almost nobody sends a bare one — and [WholeWords] refuses it
-     * whole, one unknown word being enough to rule every street out. Here a
-     * word the index knows nothing about is **set aside** rather than fatal:
-     * what is left has to name a street by a word of its proper name, written
-     * in full, so that a sentence naming no address still comes back empty.
+     * whole, one unknown word being enough to rule every street out. Here such
+     * a word is no longer fatal — it lowers the street's score instead, so
+     * that the street answering the most words of the query still comes first
+     * — and what is left has to name a street by a word of its proper name,
+     * written in full, so that a sentence naming no address comes back empty.
      *
      * It is only ever asked **after** [WholeWords] has answered nothing, and
      * what it brings back is a list to choose from and never a destination:
@@ -177,8 +178,9 @@ private fun qualityTierOf(quality: Double): Int = floor(quality / QUALITY_TIER).
  * @return a score from 0 to 1, or 0 if a meaningful word remains unmatched: a
  *   query one of whose words matches nothing does not describe this street.
  *   Read out of a sentence ([WordMatching.WholeWordsInSentence]), an unmatched
- *   word is set aside instead, and the score is 0 unless a word of the proper
- *   name was found in full.
+ *   word lowers the score instead of cancelling it — so that the street
+ *   answering the most words of the query comes first — and the score is 0
+ *   unless a word of the proper name was found in full.
  */
 private fun matchQualityOf(
     street: SearchableStreet,
@@ -197,8 +199,9 @@ private fun matchQualityOf(
     var weightedScore = 0.0
     var totalWeight = 0.0
     val coveredNameWords = HashSet<String>()
-    // In a sentence, the words that match nothing are the sentence's own and
-    // are set aside; what is left must still name the street outright, or every
+    // In a sentence, a word that matches nothing may be one of the sentence's
+    // own rather than a word the street fails to answer; it no longer rules the
+    // street out. What is left must still name the street outright, or every
     // street of the index would answer a text that names none.
     val sentence = matching == WordMatching.WholeWordsInSentence
     var namedInFull = false
@@ -221,12 +224,19 @@ private fun matchQualityOf(
             bestScoreAmong(term, cityWords, matching, isWeak).score * CITY_WEIGHT,
         )
         // A word found nowhere is a word the street does not answer to, and it
-        // rules the street out — except in a sentence, where it is one of the
-        // words written around the address and weighs neither way.
-        if (best <= 0.0) {
-            if (sentence) continue
-            if (!isWeak) return 0.0
-        }
+        // rules the street out — except in a sentence, where it may belong to
+        // the phrase written around the address rather than to the address.
+        //
+        // **It still weighs, there and everywhere else**: the term is counted
+        // in the total below with a score of zero, so a street that answers
+        // fewer words of the query scores lower than one that answers more.
+        // Passing over it instead made the opposite true, and that is what put
+        // "Rue Nationale, Lille" out of the list for "Rendez-vous ici : 12 rue
+        // Nationale, Lille": a landmark named "HEI Lille - Junia" answered the
+        // single word "lille", scored a perfect 1 on the one term it was
+        // charged for, and beat the street answering three words at the
+        // unequal weights of a name, a type and a municipality.
+        if (best <= 0.0 && !isWeak && !sentence) return 0.0
         if (!isWeak && againstName.score == EXACT_WORD_SCORE) namedInFull = true
         againstName.word?.let(coveredNameWords::add)
 
