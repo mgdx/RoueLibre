@@ -80,7 +80,7 @@
 
     <!-- The map takes what the fields and the detail leave: no fixed ratio, so
          a short detail widens the map instead of leaving a gap. -->
-    <org.maplibre.android.maps.MapView
+    <io.github.mgdx.rouelibre.ui.map.DescribedMapView
         android:id="@+id/map"
         android:layout_width="0dp"
         android:layout_height="0dp"

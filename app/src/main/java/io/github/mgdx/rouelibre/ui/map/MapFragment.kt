@@ -395,7 +395,18 @@ class MapFragment : Fragment() {
      * from the window's edge.
      */
     private fun holdTheBottomEdge() {
-        binding?.attribution?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        val attribution = binding?.attribution ?: return
+        // How tall the banner stands is read from the banner's own layout, so
+        // this is called in the middle of the window's layout pass. A view that
+        // asks for a new layout during one makes Android throw the pass away
+        // and run it again — `requestLayout() improperly called ... running
+        // second layout pass`. Waiting for the pass to end costs the one frame
+        // the banner spends sliding in, and nothing is drawn differently.
+        if (attribution.isInLayout) {
+            attribution.post { holdTheBottomEdge() }
+            return
+        }
+        attribution.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = barsAtTheBottom + roomForTheBanner
         }
     }

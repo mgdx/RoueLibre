@@ -100,7 +100,7 @@
 
     <!-- The map takes the whole height the fields leave, and its half of the
          width. -->
-    <org.maplibre.android.maps.MapView
+    <io.github.mgdx.rouelibre.ui.map.DescribedMapView
         android:id="@+id/map"
         android:layout_width="0dp"
         android:layout_height="0dp"

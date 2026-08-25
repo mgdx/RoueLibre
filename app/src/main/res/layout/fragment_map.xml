@@ -12,7 +12,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <org.maplibre.android.maps.MapView
+    <io.github.mgdx.rouelibre.ui.map.DescribedMapView
         android:id="@+id/map"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -162,13 +162,21 @@
         tools:text="12 bis Rue Nationale"
         tools:visibility="visible" />
 
+    <!--
+        Bikes against free docks (SPEC §7.1). Its height is a floor and not a
+        measurement: the label is written in `sp` and grows with the system
+        text size, while 48 dp is only what the finger needs. Fixed, that
+        figure cut the bottom off "Free docks" at ×2.0 — SPEC §7 has the height
+        give way, never the letters.
+    -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mode_toggle"
         style="@style/Widget.RoueLibre.Toggle"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/touch_target_min"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_m"
         android:layout_marginBottom="@dimen/space_m"
+        android:minHeight="@dimen/touch_target_min"
         app:layout_constraintBottom_toTopOf="@id/attribution"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Vélos" />
@@ -184,8 +192,9 @@
         android:id="@+id/bike_kind_filter"
         style="@style/Widget.RoueLibre.Toggle"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/touch_target_min"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_s"
+        android:minHeight="@dimen/touch_target_min"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/mode_toggle"
         app:layout_constraintStart_toEndOf="@id/mode_toggle"
@@ -267,16 +276,18 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/missing_tiles_storage"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/touch_target_min"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_l"
+            android:minHeight="@dimen/touch_target_min"
             android:text="@string/storage_open" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/missing_tiles_list"
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/touch_target_min"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_xs"
+            android:minHeight="@dimen/touch_target_min"
             android:text="@string/map_open_list"
             android:textColor="@color/signal" />
     </LinearLayout>
