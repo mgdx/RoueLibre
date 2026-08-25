@@ -4,9 +4,10 @@
 # §5, §6). It describes the same bike-share bike as `city-bike.brf` — same
 # twenty-odd kilos of frame, same upright position, same narrow tyres, same
 # absent gears — carrying a motor and a battery. Everything about the streets
-# it may take, the surfaces it dislikes and the turns it pays for is therefore
-# copied from that profile unchanged: the assistance changes how a hill and a
-# distance are paid for, never where a bicycle is allowed to go.
+# it may take, the surfaces it dislikes, the provision it reads on them and
+# the turns it pays for is therefore copied from that profile unchanged: the
+# assistance changes how a hill and a distance are paid for, never where a
+# bicycle is allowed to go.
 #
 # Three assignments, and only three, differ from `city-bike.brf`. Each is
 # justified where it stands, and nothing else here should be read as a
@@ -22,6 +23,13 @@
 assign validForBikes = true
 
 assign turnInstructionMode = 0
+
+# Which side of the road the law puts a rider on. It decides which of the
+# per-side cycleway tags serves which direction of travel, and nothing else.
+# The application injects it from the city's country (SPEC §15); the profile
+# itself assumes the right, so a run without the injection — a desktop
+# measurement, an older caller — reads the side most of the fleet drives on.
+assign leftHandTraffic = false # %leftHandTraffic% | Set true where traffic drives on the left | boolean
 
 # --- what the motor changes ----------------------------------------------
 
@@ -125,6 +133,116 @@ assign surface_penalty =
   # Surface not stated: in town, it is asphalt nine times out of ten.
   1.0
 
+# --- cycling provision on the carriageway --------------------------------
+
+# A road carrying a cycle track, a shared bus lane or a painted lane is not
+# the road it would be bare, and until 25 August 2026 it was priced as if it
+# were: no cycleway tag was read, and the router detoured around boulevards
+# whose provision is real. Measured over twelve legs of the Lille graph on
+# that date, reading these tags returns 136 s over the set — including 14 %
+# of one crossing — and moves 3.8 more points of the linear onto equipped
+# ways; the one leg that slows (+42 s) trades residential contraflows and
+# cobbled pedestrian areas for bus corridors and a track. The motor changes
+# none of it — comfort and safety are the rider's, not the wheel's — so this
+# whole section is the mechanical profile's, unchanged.
+#
+# What is read is the side the tag serves. Provision on the with-traffic side
+# serves the forward direction; the against-traffic side serves contraflow.
+# The distinction is measured, not stylistic: reading the tags blind to their
+# side sent one campaign leg down 240 m of street whose lane runs the other
+# way — comfort claimed that is not there. leftHandTraffic says which side is
+# which.
+
+assign track_with_traffic =
+  if leftHandTraffic then cycleway:left=track
+  else cycleway:right=track
+
+# The against-traffic side also answers in its explicit opposite_* spelling.
+assign track_against_traffic =
+  if leftHandTraffic then cycleway:right=track|opposite_track
+  else cycleway:left=track|opposite_track
+
+# A two-way track on the with-traffic side serves contraflow riders as well.
+assign track_both_ways_aside =
+  if leftHandTraffic then and cycleway:left=track cycleway:left:oneway=no|-1
+  else and cycleway:right=track cycleway:right:oneway=no|-1
+
+assign has_track =
+  or and not reversedirection=yes
+    or cycleway=track or cycleway:both=track track_with_traffic
+  and reversedirection=yes
+    or cycleway=opposite_track
+    or cycleway:both=track
+    or track_against_traffic track_both_ways_aside
+
+assign busway_with_traffic =
+  if leftHandTraffic then cycleway:left=share_busway
+  else cycleway:right=share_busway
+
+assign busway_against_traffic =
+  if leftHandTraffic then cycleway:right=share_busway
+  else cycleway:left=share_busway
+
+assign has_busway =
+  or and not reversedirection=yes
+    or cycleway=share_busway or cycleway:both=share_busway busway_with_traffic
+  and reversedirection=yes
+    or cycleway:both=share_busway busway_against_traffic
+
+assign lane_with_traffic =
+  if leftHandTraffic then cycleway:left=lane
+  else cycleway:right=lane
+
+assign lane_against_traffic =
+  if leftHandTraffic then cycleway:right=lane|opposite_lane
+  else cycleway:left=lane|opposite_lane
+
+assign has_lane =
+  or and not reversedirection=yes
+    or cycleway=lane or cycleway:both=lane lane_with_traffic
+  and reversedirection=yes
+    or cycleway=opposite_lane
+    or cycleway:both=lane
+    lane_against_traffic
+
+assign sharrow_with_traffic =
+  if leftHandTraffic then cycleway:left=shared_lane
+  else cycleway:right=shared_lane
+
+assign sharrow_against_traffic =
+  if leftHandTraffic then cycleway:right=shared_lane
+  else cycleway:left=shared_lane
+
+assign has_sharrow =
+  or and not reversedirection=yes
+    or cycleway=shared_lane|unmarked_lane
+    or cycleway:both=shared_lane sharrow_with_traffic
+  and reversedirection=yes
+    or cycleway:both=shared_lane sharrow_against_traffic
+
+# Each figure is a remission on the road's own class, stated against the
+# ladder road_cost lays below (calm 1.2 · tertiary 1.5 · secondary 2.1 ·
+# primary 3.0) so that it reads as a statement rather than a constant:
+#
+#  - track ×0.40 — a protected track along any road rides like a calm street:
+#    every class lands at or under the 1.2 floor. Never like the open
+#    cycleway's 1.0, because every junction still crosses the road's traffic.
+#  - share_busway ×0.50 — a reserved corridor moves the road about two
+#    classes down: primary to tertiary's 1.5, the rest to the floor. Few
+#    vehicles and professional drivers, but buses stop where the rider rides.
+#  - lane ×0.65 — paint that reserves moves the road about one class down:
+#    primary 1.95 ≈ secondary, secondary 1.37 ≈ tertiary, tertiary at the
+#    floor. Space of one's own, nothing between it and the traffic.
+#  - shared_lane ×0.85 — paint that shares reserves nothing: under half a
+#    class. Splitting it from the lane changed no route on the campaign legs;
+#    the tag's meaning requires the split, not the outcome.
+assign provision_discount =
+  switch has_track 0.40
+  switch has_busway 0.50
+  switch has_lane 0.65
+  switch has_sharrow 0.85
+  1.0
+
 # --- kind of way ---------------------------------------------------------
 
 # Infrastructure built for cycling.
@@ -136,6 +254,16 @@ assign cycle_way =
 
 # Calmed streets where a bike mixes well with cars.
 assign calm_way = highway=living_street|residential|service|unclassified|road
+
+# The class ladder of the roads a bike shares with cars, extracted from
+# base_cost so the provision discount has one thing to multiply. The last
+# line is a road of no recognised class.
+assign road_cost =
+  switch calm_way 1.2
+  switch highway=tertiary|tertiary_link 1.5
+  switch highway=secondary|secondary_link 2.1
+  switch highway=primary|primary_link 3.0
+  2.5
 
 assign base_cost
 
@@ -152,14 +280,12 @@ assign base_cost
   switch and highway=footway not bicycle=designated|yes 8.0
 
   switch cycle_way 1.0
-  switch calm_way 1.2
   switch highway=track 1.8
 
-  switch highway=tertiary|tertiary_link 1.5
-  switch highway=secondary|secondary_link 2.1
-  switch highway=primary|primary_link 3.0
-
-  2.5
+  # The roads, at their class discounted by their provision — floored at the
+  # calm street's 1.2: provision corrects a road, it does not make it better
+  # than the absence of traffic.
+  max 1.2 multiply road_cost provision_discount
 
 # The final cost combines the kind of way with its surface: a cobbled cycle
 # track is not a smooth cycle track.

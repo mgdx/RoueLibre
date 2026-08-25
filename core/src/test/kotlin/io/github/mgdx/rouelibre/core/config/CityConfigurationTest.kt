@@ -87,6 +87,31 @@ class CityConfigurationTest {
         assertEquals("example", configuration.network.id)
     }
 
+    @Test
+    fun `every configuration names its country`() {
+        // The routing profiles read the per-side cycleway tags, and which side
+        // serves which direction is the country's business (SPEC §5): a
+        // configuration without one would silently fall back on the right-hand
+        // default, wrong in Dublin or Canterbury without a line of log.
+        publishedConfigurations().forEach { (name, configuration) ->
+            val country = configuration.country
+            assertTrue("no country in $name", country != null)
+            assertTrue(
+                "country of $name is not an ISO 3166-1 alpha-2 code",
+                country!!.length == 2 && country.all { it in 'A'..'Z' },
+            )
+        }
+    }
+
+    @Test
+    fun `a configuration naming no country is read all the same`() {
+        // A country is a convenience the routing profiles read, never a reason
+        // to refuse a city: absent, the profiles keep their right-hand default.
+        val outcome = CityConfigurationReader.read(MINIMAL_CONFIGURATION)
+
+        assertEquals(null, (outcome as Outcome.Success).value.country)
+    }
+
     private fun publishedConfigurations(): List<Pair<String, CityConfiguration>> {
         val directory = checkNotNull(System.getProperty("rouelibre.cityConfigurations")) {
             "configuration directory not supplied by the build"

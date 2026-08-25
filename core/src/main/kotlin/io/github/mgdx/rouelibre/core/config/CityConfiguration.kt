@@ -18,6 +18,18 @@ import kotlinx.serialization.json.Json
  */
 public data class CityConfiguration(
     public val configVersion: Int,
+    /**
+     * The country the conurbation is in, as an ISO 3166-1 alpha-2 code, or
+     * null when the configuration names none.
+     *
+     * What hangs on it is the side of the road traffic drives on, which the
+     * routing profiles need to read the per-side cycleway tags (SPEC §5): a
+     * lane painted on the with-traffic side serves the forward direction, and
+     * which side that is belongs to the country, not to the city. Read but
+     * absent means the right-hand default — the commoner side, and the
+     * behaviour of every version before the tags were read at all.
+     */
+    public val country: String?,
     public val network: NetworkDescription,
     public val fleet: FleetDescription,
     public val gbfs: GbfsSettings,
@@ -160,6 +172,10 @@ public object CityConfigurationReader {
 @Serializable
 private data class CityConfigurationDocument(
     val configVersion: Int = 1,
+    // Absent from no configuration the tools write, but tolerated all the
+    // same: a country is a convenience the routing profiles read, never a
+    // reason to refuse a city.
+    val country: String? = null,
     val network: NetworkDocument,
     val fleet: FleetDocument = FleetDocument(),
     val gbfs: GbfsDocument,
@@ -169,6 +185,10 @@ private data class CityConfigurationDocument(
 ) {
     fun toDomain(): CityConfiguration = CityConfiguration(
         configVersion = configVersion,
+        // Uppercased once here so that every reader compares ISO codes and
+        // never spellings; Kotlin's uppercase() is locale-invariant, which is
+        // what a country code needs.
+        country = country?.trim()?.takeIf { it.isNotEmpty() }?.uppercase(),
         network = NetworkDescription(
             id = network.id,
             displayName = network.displayName,

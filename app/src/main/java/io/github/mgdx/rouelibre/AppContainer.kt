@@ -11,6 +11,7 @@ import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.Router
+import io.github.mgdx.rouelibre.core.routing.DrivingSide
 import io.github.mgdx.rouelibre.core.routing.RouteResult
 import io.github.mgdx.rouelibre.core.routing.TravelMode
 import io.github.mgdx.rouelibre.data.AppPreferences
@@ -304,7 +305,17 @@ class AppContainer(private val context: Context) {
      * meant for that, not on the IO one.
      */
     val router: OfflineRouter by lazy {
-        OfflineRouter(context, datasetStore, Dispatchers.Default)
+        OfflineRouter(
+            context,
+            datasetStore,
+            Dispatchers.Default,
+            // Asked at every computation rather than wired once: the city can
+            // change under a long-lived router, and the side of the road is
+            // the active city's country's business (SPEC §5).
+            ridesOnTheLeft = {
+                DrivingSide.ofCountry(activeCity()?.country) == DrivingSide.Left
+            },
+        )
     }
 
     /**

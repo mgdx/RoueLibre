@@ -32,11 +32,17 @@ import kotlin.time.Duration.Companion.seconds
  * @property datasets gives access to the installed routing graph.
  * @property computeDispatcher the execution context. The computation is purely
  *   processor-bound and can last several hundred milliseconds.
+ * @property ridesOnTheLeft whether the city served drives on the left, asked
+ *   at every computation because the city can change between two. It reaches
+ *   the profiles as the `leftHandTraffic` parameter, which decides which of
+ *   the per-side cycleway tags serves which direction of travel (SPEC §5).
+ *   The default is the profiles' own: the right, the commoner side.
  */
 class OfflineRouter(
     private val context: Context,
     private val datasets: DatasetStore,
     private val computeDispatcher: CoroutineDispatcher,
+    private val ridesOnTheLeft: suspend () -> Boolean = { false },
 ) {
 
     /** The profiles only need laying down once per run. */
@@ -73,7 +79,15 @@ class OfflineRouter(
                 RoutingFailure.EngineFailure("profile \"${mode.profileName}\" unreadable"),
             )
 
-        val routingContext = RoutingContext().apply { localFunction = profile.absolutePath }
+        val onTheLeft = ridesOnTheLeft()
+        val routingContext = RoutingContext().apply {
+            localFunction = profile.absolutePath
+            // Injected as an assignment when the profile compiles, and folded
+            // into the engine's profile-cache key: two cities on opposite
+            // sides never share a compiled profile. The engine parses injected
+            // values as numbers, so a boolean travels as 0 or 1.
+            keyValues = hashMapOf(LEFT_HAND_TRAFFIC_PARAMETER to if (onTheLeft) "1" else "0")
+        }
         val waypoints = listOf(waypointOf(from, "origin"), waypointOf(to, "destination"))
 
         val engine = try {
@@ -225,6 +239,9 @@ class OfflineRouter(
     )
 
     private companion object {
+        /** The profile parameter naming the side of the road driven on. */
+        const val LEFT_HAND_TRAFFIC_PARAMETER = "leftHandTraffic"
+
         const val ASSET_DIRECTORY = "routing"
         const val PROFILE_DIRECTORY = "routing/profiles2"
         const val LOOKUPS_NAME = "lookups.dat"
