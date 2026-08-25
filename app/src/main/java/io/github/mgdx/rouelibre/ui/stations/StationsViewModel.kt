@@ -118,6 +118,43 @@ enum class Emptiness {
     NoMatch,
 }
 
+/** The gesture an empty list has to offer, if any. */
+enum class EmptyListOffer {
+    /** There are stations on screen: nothing is offered. */
+    None,
+
+    /** No conurbation is in service, so there is no network to fetch from. */
+    ChooseCity,
+
+    /** A city is in service and its availability has still to be fetched. */
+    Refresh,
+
+    /** The search kept nothing: the field is what stands in the way. */
+    ClearSearch,
+}
+
+/**
+ * What an empty list is to offer, given [emptiness] and whether a conurbation
+ * is in service.
+ *
+ * "Pull the list down to fetch the network's stations" is written for somebody
+ * who has a network: with no city chosen the gesture asks nothing of anybody
+ * and can only come back to the same empty screen, which is what it did. That
+ * one case is offered the city chooser instead, in the map's own words — the
+ * map already tells the two apart at the same instant, and the two screens must
+ * not diagnose the same phone differently.
+ *
+ * The refresh invitation stays exactly where it belongs: a city is chosen, and
+ * its availability has not been fetched yet.
+ */
+fun offerForEmptyList(emptiness: Emptiness, cityChosen: Boolean): EmptyListOffer =
+    when (emptiness) {
+        Emptiness.None -> EmptyListOffer.None
+        Emptiness.NoMatch -> EmptyListOffer.ClearSearch
+        Emptiness.NothingLoaded ->
+            if (cityChosen) EmptyListOffer.Refresh else EmptyListOffer.ChooseCity
+    }
+
 /**
  * Presents the stations and drives their refreshing.
  *

@@ -40,11 +40,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
+        <!-- `flagNoExtractUi`: in landscape the keyboard otherwise takes the
+             whole screen for a copy of this field, and the results that
+             follow every keystroke stay hidden until it is folded away. -->
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionSearch"
+            android:imeOptions="actionSearch|flagNoExtractUi"
             android:inputType="textPostalAddress"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
