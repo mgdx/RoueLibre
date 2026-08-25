@@ -71,13 +71,13 @@ class WelcomeFragment : Fragment() {
         val views = binding ?: return
         val current = PAGES[page]
         views.title.setText(current.title)
-        views.body.setText(current.body)
+        views.pageText.body.setText(current.body)
         val shows = current.shows
         views.illustration.isVisible = shows is Shown.Drawing
         if (shows is Shown.Drawing) {
             views.illustration.setImageResource(shows.drawable)
         }
-        views.fleetMarks.isVisible = shows is Shown.StationMarks
+        views.pageText.fleetMarks.isVisible = shows is Shown.StationMarks
         views.step.text = getString(R.string.welcome_step, page + 1, PAGES.size)
         views.next.setText(current.next)
         views.skip.setText(current.skip)

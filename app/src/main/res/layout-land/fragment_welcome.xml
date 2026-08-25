@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    First launch (SPEC §7.9), lying down.
+
+    Same screen, same views, same reading — what changes is what competes with
+    what. Stacked as in portrait, the page spends its height on things that
+    cost the same dp whichever way the phone is held: a title, a step label and
+    two buttons one under the other. On a Fairphone 3 turned sideways that left
+    the paragraph 318 px of the 1080 the screen has — two lines and a half, the
+    third cut through the middle, on the screen the application is read on
+    once and never again.
+
+    So the two things that can give way do. The paragraph and the drawing share
+    the width instead of the height, each half of the room, as the journey
+    result's own sideways arrangement has them share it; and the two buttons
+    share a row instead of stacking. The paragraph comes out with some 260 dp
+    of height against 121, and it is the whole height between the title and the
+    buttons rather than a share of it.
+
+    Half the width and not some finer split, for the reason written in
+    `layout-land/fragment_journey_result.xml`: the column then has the width
+    the portrait screen gives the same paragraph, so the text wraps and the
+    drawing reads as they always have, and a half is its own mirror, which
+    keeps the split honest in a right-to-left language. The split is a chain
+    rather than a guideline so that it mirrors on its own — and so that the
+    fleet page, which hides the drawing, leaves the paragraph the whole width
+    exactly as it leaves it the whole room in portrait.
+
+    Nothing is renamed and nothing is added: the views are the portrait ones,
+    under the same identifiers, so the binding and the page restored after a
+    rotation or a death of the process know as much about this arrangement as
+    about the other, which is nothing.
+
+    The side spacing is set with margins on each child, not with padding on the
+    root, for the reason written in the portrait file: fitsSystemWindows
+    replaces the padding of the view it is set on with the window insets.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <!-- The title keeps the whole width, above both columns: it names the page
+         and not one of its halves.
+
+         Its margin above is the ordinary one and not the portrait file's wide
+         one. That space is a quarter of what a sideways screen has to give,
+         and the room it would take is the room this arrangement exists to give
+         back to the text.
+
+         It refuses justification for the reason written in the portrait
+         file: a word too wide for the line is broken to reach the far bank,
+         and a title broken between two letters reads as one cut off at the
+         edge of the screen. -->
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
+        android:justificationMode="none"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Roue Libre" />
+
+    <!-- The room the text and the drawing share, between the title and the
+         step label — the same room as in portrait, and they share it side by
+         side rather than one above the other.
+
+         Both take the whole of its height here, so neither is measured against
+         what the other leaves: the paragraph cannot spill over what comes
+         after it, whatever the text size, because its height is the room's and
+         what does not fit is scrolled. That is what the portrait file gets
+         from capping a `wrap` container, and it is why the drawing does not
+         need to shrink and go here as it does there — it costs width, and the
+         width it costs is not the paragraph's height.
+
+         The spacing above and below is this layout's padding rather than the
+         children's margins, as in portrait, and it is the narrower one: what
+         is being counted here is height. -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/page_body"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
+        android:paddingTop="@dimen/space_m"
+        android:paddingBottom="@dimen/space_m"
+        app:layout_constraintBottom_toTopOf="@id/step"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title">
+
+        <!-- The paragraph, on the start side and over the whole height of the
+             room.
+
+             It and the drawing constrain one another, which makes them a
+             chain, and a chain is what the fleet page needs: that page hides
+             the drawing, the chain then holds one view, and the paragraph and
+             its three marks are left the whole width — the same answer
+             portrait gives, turned on its side. -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/body_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/illustration"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- The paragraph and, on the fleet page, the three marks. They
+                 live in a layout of their own, shared with the portrait
+                 arrangement, so that the two cannot drift apart. -->
+            <include
+                android:id="@+id/page_text"
+                layout="@layout/view_welcome_page_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- The drawing of the current page, in the other half. Purely
+             decorative, as in portrait: it repeats what the text says, so a
+             screen reader must not read it a second time.
+
+             Beside the text rather than under it, which is where a sideways
+             screen has room to put it: the drawings are half again as wide as
+             they are tall, and a column of this shape is the one place on this
+             screen where they are read at their own proportions.
+
+             It is the second link of the chain, so the fleet page hiding it
+             gives the text the width back. -->
+        <ImageView
+            android:id="@+id/illustration"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/space_l"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/body_container"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/illustration_welcome_hello" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Where one is in the sequence, above the buttons and on the start side,
+         exactly as in portrait.
+
+         It stays on a line of its own rather than joining the buttons on
+         theirs, and the twenty-odd dp that costs are paid on purpose: set
+         beside them it would be squeezed between the start edge and a button
+         that grows with the text size, in a language whose words are not
+         English's, and a step label one cannot read whole is a step label for
+         nothing. -->
+    <TextView
+        android:id="@+id/step"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginBottom="@dimen/space_s"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Label"
+        app:layout_constraintBottom_toTopOf="@id/next"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="1 OF 4" />
+
+    <!-- The two buttons share the bottom row, at the end of it, and they are
+         as wide as their words rather than as wide as the screen: a button
+         stretched over a sideways screen is a target the size of a sentence
+         for a press the thumb makes in one place.
+
+         The order is the row's own and not the portrait column's: what
+         postpones comes first, what carries on comes last, in the corner the
+         hand holding the phone sideways already rests in. They keep the
+         minimum height of a touch target, which is the whole of what the
+         resized row may not give up. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/skip"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/space_m"
+        android:minHeight="@dimen/touch_target_min"
+        android:textColor="@color/signal"
+        app:layout_constraintBottom_toBottomOf="@id/next"
+        app:layout_constraintEnd_toStartOf="@id/next"
+        app:layout_constraintTop_toTopOf="@id/next"
+        tools:text="Skip" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/space_l"
+        android:layout_marginBottom="@dimen/space_l"
+        android:minHeight="@dimen/touch_target_min"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Continue" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

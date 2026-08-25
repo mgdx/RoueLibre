@@ -39,12 +39,21 @@ class WelcomeFleetMarksTest {
         File(resources, "layout/fragment_welcome.xml").readText()
     }
 
+    /**
+     * What a page writes, held apart from the two arrangements that place it:
+     * the pages stack their parts in portrait and set them side by side lying
+     * down, and the paragraph and the marks they move around are the same.
+     */
+    private val pageText by lazy {
+        File(resources, "layout/view_welcome_page_text.xml").readText()
+    }
+
     @Test
     fun `each mark is drawn with the disc the map uses for that fleet`() {
         for ((_, marker) in MARKS) {
             assertTrue(
                 "The fleet page draws $marker, the map's own disc, rather than one of its own",
-                """android:src="@drawable/$marker"""" in welcomeLayout,
+                """android:src="@drawable/$marker"""" in pageText,
             )
         }
     }
@@ -54,7 +63,7 @@ class WelcomeFleetMarksTest {
         for ((sentence, _) in MARKS) {
             assertTrue(
                 "The fleet page shows $sentence",
-                """android:text="@string/$sentence"""" in welcomeLayout,
+                """android:text="@string/$sentence"""" in pageText,
             )
         }
     }
@@ -65,17 +74,25 @@ class WelcomeFleetMarksTest {
      */
     @Test
     fun `the marks stand inside the container that scrolls`() {
-        val scroller = welcomeLayout.indexOf("<androidx.core.widget.NestedScrollView")
-        val closed = welcomeLayout.indexOf("</androidx.core.widget.NestedScrollView>")
-        assertTrue("The page still has a scrolling container", scroller in 0 until closed)
+        for (arrangement in listOf("layout", "layout-land")) {
+            val page = File(resources, "$arrangement/fragment_welcome.xml").readText()
+            val scroller = page.indexOf("<androidx.core.widget.NestedScrollView")
+            val closed = page.indexOf("</androidx.core.widget.NestedScrollView>")
+            assertTrue("$arrangement still has a scrolling container", scroller in 0 until closed)
+
+            val included = page.indexOf("""layout="@layout/view_welcome_page_text"""")
+            assertTrue(
+                "$arrangement puts the paragraph and its marks where a drawing goes, which " +
+                    "disappears at the largest font sizes",
+                included in scroller until closed,
+            )
+        }
 
         for ((sentence, marker) in MARKS) {
             for (declaration in listOf("""@string/$sentence"""", """@drawable/$marker"""")) {
-                val at = welcomeLayout.indexOf(declaration)
                 assertTrue(
-                    "$declaration is placed where a drawing goes, which disappears at the " +
-                        "largest font sizes",
-                    at in scroller until closed,
+                    "$declaration is not written where a page's text is",
+                    declaration in pageText,
                 )
             }
         }
@@ -96,7 +113,7 @@ class WelcomeFleetMarksTest {
         assertEquals(
             "Each mark is sized by the page, not by the drawable",
             MARKS.size * 2,
-            """@dimen/welcome_mark"""".toRegex().findAll(welcomeLayout).count(),
+            """@dimen/welcome_mark"""".toRegex().findAll(pageText).count(),
         )
     }
 
