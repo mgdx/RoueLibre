@@ -91,3 +91,31 @@ fun AddressResult.toDetail(context: Context): String {
         withDistance
     }
 }
+
+/**
+ * The one row a chooser offers for an address (SPEC §7.8).
+ *
+ * The address search shows a found address on two lines — what it is called,
+ * then what tells it from another of the same name — and a dialog's list has
+ * room for one. Both lines go into it all the same, and that is the whole
+ * point: the conurbation holds a "12 rue Nationale" in several of its
+ * municipalities, and a list of five rows all reading "12 Rue Nationale" is
+ * not a choice, it is a draw.
+ *
+ * @param title the address as it is written — [toTitle].
+ * @param detail what tells it apart — [toDetail]; empty where the index knows
+ *   nothing more, and the row is then the title alone rather than a title
+ *   trailing an empty half.
+ * @param write joins the two, through the string resource that owns their
+ *   order and their punctuation (SPEC §9). Taken as a function rather than
+ *   read here, so that the rule this holds — that a row carries what tells it
+ *   apart — is pinned on the JVM, where no `Context` writes anything.
+ */
+fun addressChoiceRow(title: String, detail: String, write: (String, String) -> String): String =
+    if (detail.isBlank()) title else write(title, detail)
+
+/** The same row, as the device writes it. */
+fun AddressResult.toChoiceRow(context: Context): String =
+    addressChoiceRow(toTitle(context), toDetail(context)) { title, detail ->
+        context.getString(R.string.incoming_address_choice, title, detail)
+    }
