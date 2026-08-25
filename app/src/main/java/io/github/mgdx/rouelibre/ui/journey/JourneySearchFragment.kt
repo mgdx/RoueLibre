@@ -184,6 +184,28 @@ class JourneySearchFragment : Fragment() {
         setUpBikeKind()
         views.missingDataAction.setOnClickListener { openStorage() }
         showInstalledData()
+        openSearchForTheReceivedText()
+    }
+
+    /**
+     * Hands the text received from another application to the address search
+     * (SPEC §7.8).
+     *
+     * It reaches this screen because the index placed nothing in it: a sentence
+     * around an address, or an address the city does not hold. Opening the field
+     * with it already written there is what lets it be pruned; the screen used
+     * to be opened empty, and the whole text had to be typed again from a
+     * message the user had left.
+     *
+     * The argument is spent on the way, and that is what keeps the field from
+     * opening again: the round trip back from the search rebuilds this view
+     * with no saved state, and the text would be pushed in front of the user a
+     * second time — over the very point they had just chosen.
+     */
+    private fun openSearchForTheReceivedText() {
+        val text = arguments?.getString(ARGUMENT_DESTINATION_QUERY) ?: return
+        arguments?.remove(ARGUMENT_DESTINATION_QUERY)
+        picker.choose(isOrigin = false, otherEnd = origin?.position, query = text)
     }
 
     /**
@@ -425,6 +447,7 @@ class JourneySearchFragment : Fragment() {
         private const val STATE_DESTINATION = "destination"
         private const val ARGUMENT_DESTINATION = "received-destination"
         private const val ARGUMENT_ORIGIN = "received-origin"
+        private const val ARGUMENT_DESTINATION_QUERY = "received-destination-query"
 
         /**
          * Opens the search, possibly with one end already known.
@@ -432,15 +455,22 @@ class JourneySearchFragment : Fragment() {
          * @param origin the point one leaves from, if it is already designated.
          * @param destination the point one goes to, if it is already
          *   designated. Both null gives a blank screen.
+         * @param destinationQuery a text naming the destination that the index
+         *   could not place — a sentence shared from another application
+         *   (SPEC §7.8). It opens the address search with that text already in
+         *   the field: the screen is reached because nothing was found in it,
+         *   and it is pruned there rather than typed again.
          */
         fun newInstance(
             origin: JourneyEndpoint? = null,
             destination: JourneyEndpoint? = null,
+            destinationQuery: String? = null,
         ): JourneySearchFragment = JourneySearchFragment().apply {
-            if (origin == null && destination == null) return@apply
+            if (origin == null && destination == null && destinationQuery == null) return@apply
             arguments = Bundle().apply {
                 origin?.writeTo(this, ARGUMENT_ORIGIN)
                 destination?.writeTo(this, ARGUMENT_DESTINATION)
+                destinationQuery?.let { putString(ARGUMENT_DESTINATION_QUERY, it) }
             }
         }
     }

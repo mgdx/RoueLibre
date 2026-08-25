@@ -103,6 +103,15 @@ class AddressSearchFragment : Fragment() {
 
         // The keyboard opens with the screen: one only comes here to type.
         if (savedInstanceState == null) {
+            // A text handed over by whoever opened this screen is written in
+            // before the keyboard comes up, and the cursor is left at its end:
+            // it arrives to be corrected, not to be read (SPEC §7.8). Written
+            // after the listener above, so that the search runs on it at once
+            // rather than waiting for a letter to be typed.
+            arguments?.getString(ARGUMENT_QUERY)?.let { received ->
+                views.searchInput.setText(received)
+                views.searchInput.setSelection(received.length)
+            }
             views.searchInput.requestFocus()
             views.searchInput.post { insetsController(views.searchInput).show(ime()) }
         }
@@ -293,6 +302,7 @@ class AddressSearchFragment : Fragment() {
         private const val ARGUMENT_ORIGIN_LATITUDE = "origin-latitude"
         private const val ARGUMENT_ORIGIN_LONGITUDE = "origin-longitude"
         private const val ARGUMENT_IS_ORIGIN = "is-origin"
+        private const val ARGUMENT_QUERY = "query"
 
         /**
          * Opens the search.
@@ -316,14 +326,22 @@ class AddressSearchFragment : Fragment() {
          *
          * @param isOrigin true for the point one leaves from.
          * @param origin the reference point for ranking results by proximity.
+         * @param query what to open the field with, where the designation
+         *   started elsewhere: the text another application shared, which named
+         *   no address the index holds and is here to be pruned rather than
+         *   typed again (SPEC §7.8).
          */
-        fun forJourneyEndpoint(isOrigin: Boolean, origin: Coordinates?): AddressSearchFragment =
-            AddressSearchFragment().apply {
-                arguments = Bundle().apply {
-                    putBoolean(ARGUMENT_IS_ORIGIN, isOrigin)
-                    origin?.let { putOrigin(it) }
-                }
+        fun forJourneyEndpoint(
+            isOrigin: Boolean,
+            origin: Coordinates?,
+            query: String? = null,
+        ): AddressSearchFragment = AddressSearchFragment().apply {
+            arguments = Bundle().apply {
+                putBoolean(ARGUMENT_IS_ORIGIN, isOrigin)
+                origin?.let { putOrigin(it) }
+                query?.let { putString(ARGUMENT_QUERY, it) }
             }
+        }
 
         private fun Bundle.putOrigin(origin: Coordinates) {
             putDouble(ARGUMENT_ORIGIN_LATITUDE, origin.latitude)

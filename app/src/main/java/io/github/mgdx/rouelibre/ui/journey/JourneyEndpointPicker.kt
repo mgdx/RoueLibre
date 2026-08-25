@@ -79,11 +79,19 @@ class JourneyEndpointPicker(
      * @param isOrigin the field being filled.
      * @param otherEnd the end already known, if there is one: the results are
      *   then ranked by proximity to it, which is usually the right guess.
+     * @param query a text to open the field with, for a designation that comes
+     *   from elsewhere and still has to be worked on — the sentence shared by
+     *   another application (SPEC §7.8). Nothing is chosen from it: it is
+     *   written in the field, and the user searches from there.
      */
-    fun choose(isOrigin: Boolean, otherEnd: Coordinates?) {
+    fun choose(isOrigin: Boolean, otherEnd: Coordinates?, query: String? = null) {
         awaitingOrigin = isOrigin
         show(
-            AddressSearchFragment.forJourneyEndpoint(isOrigin = isOrigin, origin = otherEnd),
+            AddressSearchFragment.forJourneyEndpoint(
+                isOrigin = isOrigin,
+                origin = otherEnd,
+                query = query,
+            ),
         )
     }
 

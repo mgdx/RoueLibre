@@ -30,10 +30,20 @@ public sealed interface PlaceRequest {
      * A place described in words, to be looked up in the index.
      *
      * The text is **finished**: it comes whole from another application, and
-     * nobody is going to add a letter to it or pick from a list of guesses. The
-     * index is therefore searched for the words themselves — see
-     * `WordMatching.WholeWords` — failing which a sentence naming no address at
-     * all would still be fitted to the street it happens to begin like.
+     * nobody is going to add a letter to it. The index is therefore searched
+     * for the words themselves — see `WordMatching.WholeWords` — failing which
+     * a sentence naming no address at all would still be fitted to the street
+     * it happens to begin like.
+     *
+     * **And the text is usually more than an address.** "Meet me here: 12 rue
+     * Nationale, Lille" is what a share really looks like; asked for whole, it
+     * matched nothing, one word of the phrase being enough to rule out the
+     * street the rest of it names. So where the finished text answers nothing,
+     * the sentence is read through a second time —
+     * `WordMatching.WholeWordsInSentence` — and what that finds is **offered**:
+     * the words around the address were not read, so the street they surround
+     * is a guess, and a guess is put to the user rather than followed
+     * (SPEC §7.8).
      *
      * @property text what the sender wrote.
      */
@@ -240,10 +250,11 @@ private fun decodeUriComponent(value: String): String {
  * URI are picked out of the middle of a sentence; anything else is handed on as
  * it came, for the index to answer or not.
  *
- * Nothing here decides whether the text holds an address: the index alone knows
- * the streets, and it is asked the question in the terms of a finished text
- * (see [PlaceRequest.Search]). A sentence naming no address then comes back
- * empty, which is what the screen has to say.
+ * Nothing here decides whether the text holds an address, nor cuts the sentence
+ * down to one: the index alone knows the streets, and it is asked the question
+ * in the terms of a finished text, then of a sentence (see
+ * [PlaceRequest.Search]). A text naming no address comes back empty from both,
+ * which is what the screen has to say.
  *
  * @param text the shared text, as it came.
  * @return the place recognised, or `null` if the text is empty.
