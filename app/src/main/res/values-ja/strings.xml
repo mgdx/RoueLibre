@@ -219,6 +219,7 @@
     <!-- %1$s is the text received from the other application. -->
     <string name="incoming_address_not_found">「%1$s」は、対象とする範囲のどの住所とも一致しません。</string>
     <string name="incoming_address_choices_title">このテキストで見つかった住所</string>
+    <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">この場所は、インストール済みのデータが対象とする範囲の外にあります。ここへ向かう経路は計算できません。</string>
 
     <!-- Favourites (SPEC §7.5). -->

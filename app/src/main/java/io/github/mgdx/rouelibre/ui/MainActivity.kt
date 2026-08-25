@@ -33,6 +33,7 @@ import io.github.mgdx.rouelibre.data.NEVER_LAUNCHED
 import io.github.mgdx.rouelibre.data.OpeningScreen
 import io.github.mgdx.rouelibre.data.landingScreen
 import io.github.mgdx.rouelibre.databinding.ActivityMainBinding
+import io.github.mgdx.rouelibre.ui.address.toChoiceRow
 import io.github.mgdx.rouelibre.ui.address.toTitle
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneyResultFragment
@@ -831,9 +832,19 @@ class MainActivity : AppCompatActivity() {
      * Puts up the addresses read out of a shared sentence (SPEC §7.8).
      *
      * A list, and never a choice made for the user: the sentence's own words
-     * were set aside to find these, so nothing says which of them the sender
+     * were not read to find these, so nothing says which of them the sender
      * meant — and the first one becoming a journey by itself is exactly what
      * whole-word matching exists to prevent.
+     *
+     * **Each row carries what tells it apart**, the address and its supporting
+     * line, exactly as the address search shows the two (see [toChoiceRow]).
+     * The conurbation holds a "12 rue Nationale" in several of its
+     * municipalities, and the list offered five rows reading "12 Rue
+     * Nationale": nobody chooses from that, they draw lots.
+     *
+     * What names the journey afterwards is the address's **title** alone, which
+     * is why the payload carries the two apart: the supporting line is there to
+     * tell two rows apart, not to name a destination.
      *
      * The chosen row is read back from the payload rather than from a list held
      * here: the answer may arrive after the phone has been turned over, and the
@@ -841,14 +852,16 @@ class MainActivity : AppCompatActivity() {
      * search that has already run (SPEC §8 forbids keeping it).
      */
     private fun offerTheAddressesInTheSentence(addresses: List<AddressResult>) {
-        val labels = addresses.map { it.toTitle(this) }
         ChoiceDialogFragment.ask(
             manager = supportFragmentManager,
             requestKey = ADDRESS_IN_TEXT_ANSWER,
             title = R.string.incoming_address_choices_title,
-            labels = labels,
+            labels = addresses.map { it.toChoiceRow(this) },
             payload = Bundle().apply {
-                putStringArray(ADDRESS_LABELS, labels.toTypedArray())
+                putStringArray(
+                    ADDRESS_LABELS,
+                    addresses.map { it.toTitle(this@MainActivity) }.toTypedArray(),
+                )
                 putDoubleArray(
                     ADDRESS_LATITUDES,
                     addresses.map { it.position.latitude }.toDoubleArray(),
@@ -874,6 +887,8 @@ class MainActivity : AppCompatActivity() {
             this,
             ADDRESS_IN_TEXT_ANSWER,
         ) { chosen, payload ->
+            // The titles, and not the rows the list showed: what names a
+            // journey is the address, not what told it from its namesakes.
             val labels = payload.getStringArray(ADDRESS_LABELS) ?: return@onAnswer
             val latitudes = payload.getDoubleArray(ADDRESS_LATITUDES) ?: return@onAnswer
             val longitudes = payload.getDoubleArray(ADDRESS_LONGITUDES) ?: return@onAnswer
@@ -1027,7 +1042,12 @@ class MainActivity : AppCompatActivity() {
         /** The key the addresses read out of a shared text are answered under. */
         const val ADDRESS_IN_TEXT_ANSWER = "activity-address-in-text"
 
-        /** What that list carries across a rebuild about what it offers. */
+        /**
+         * What that list carries across a rebuild about what it offers: the
+         * addresses' **titles**, which name the journey, and not the rows the
+         * list showed, which carry besides the title what tells two namesakes
+         * apart.
+         */
         const val ADDRESS_LABELS = "address-labels"
         const val ADDRESS_LATITUDES = "address-latitudes"
         const val ADDRESS_LONGITUDES = "address-longitudes"

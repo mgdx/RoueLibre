@@ -224,6 +224,7 @@
     <!-- %1$s is the text received from the other application. -->
     <string name="incoming_address_not_found">« %1$s » ne correspond à aucune adresse de la zone couverte.</string>
     <string name="incoming_address_choices_title">Adresses trouvées dans ce texte</string>
+    <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Ce lieu est hors de la zone couverte par les données installées : aucun itinéraire ne peut y mener.</string>
 
     <!-- Favourites (SPEC §7.5). -->
