@@ -48,9 +48,11 @@ assign leftHandTraffic = false # %leftHandTraffic% | Set true where traffic driv
 # the value that puts this profile's free-running speed on the flat at the
 # cut-off itself — which is where a pedelec settles on an open flat street,
 # and the reason its ceiling is a figure riders recognise. Above it the motor
-# gives nothing and gravity still gives what it gives, which is why no ceiling
-# is written here: on a descent this bike coasts like any other, and capping it
-# at 25 would have made the assisted bike the slower one downhill.
+# gives nothing; what a descent then gives is capped by maxSpeed below, the
+# same ceiling as the mechanical profile's and for its reasons, so neither
+# bike is the slower one downhill. Until 26 August 2026 no ceiling was
+# written in either profile, on the grounds that capping this one alone
+# would have slowed it unfairly — true, and answered by capping both.
 assign bikerPower = 140
 
 # DIFFERS FROM city-bike.brf (2/3). Motor and battery weigh some five kilos
@@ -77,6 +79,11 @@ assign downhillcost = 0
 assign downhillcutoff = 2.0
 assign uphillcost = 10
 assign uphillcutoff = 2.0
+
+# The descent ceiling, identical to the mechanical profile's and justified
+# there (see city-bike.brf): the law's cut-off is where any share bike's
+# rider brakes, and the journey algorithm's pruning bound rests on it.
+assign maxSpeed = 25
 
 ---context:way
 

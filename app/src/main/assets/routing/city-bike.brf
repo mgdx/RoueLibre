@@ -33,6 +33,17 @@ assign downhillcutoff = 2.0
 assign uphillcost = 40
 assign uphillcutoff = 2.0
 
+# Left alone, the engine's kinematic model coasts any bike downhill to its
+# default ceiling of 45 km/h — a speed nobody reaches on twenty kilos of
+# upright share bike with drum brakes, least of all in town, so every minute
+# announced on a descent was too few. Capped since 26 August 2026 at the
+# 25 km/h of the assistance cut-off law: a figure a city descent does reach,
+# and past which a share bike's rider brakes. The cap also underwrites the
+# journey algorithm's pruning — its lower bound rides a straight line at
+# 25.2 km/h (see JourneyPlanner), a bound only sound while the engine can
+# trace nothing faster.
+assign maxSpeed = 25
+
 ---context:way
 
 # Every change of direction costs: slowing down, looking, and getting a heavy

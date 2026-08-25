@@ -22,13 +22,17 @@ import io.github.mgdx.rouelibre.core.routing.TravelMode
  *
  * The profile gives the engine's free-running estimate, and that estimate is
  * unobstructed: no lights, no traffic, no getting going again. Measured over
- * eleven legs of the Lille graph on 17 August 2026 — 331 m to 15.2 km — the two
- * profiles trace the **same tracks** and the assisted one takes 0.829 to 0.891
- * of the mechanical one's time, 0.840 over the whole set. What is left to the
- * factor is only the gap between that and the ratio actually observed in town,
- * where a share bike averages some 15 km/h against 18 to 19 for an assisted one.
- * **The two do not stack blindly**: the factor carries what the profile does not,
- * and nothing more.
+ * twelve legs of the Lille graph on 26 August 2026 — 1.3 to 18.4 km, the day
+ * both profiles gained their 25 km/h descent ceiling, which is why the earlier
+ * figures of 17 August no longer stand — the two profiles trace the **same
+ * tracks** and the assisted one takes 0.864 to 0.893 of the mechanical one's
+ * time, 0.872 over the whole set. What is left to the factor is only the gap
+ * between that and the ratio actually observed in town, where a share bike
+ * averages some 15 km/h against 18 to 19 for an assisted one. **The two do not
+ * stack blindly**: the factor carries what the profile does not, and nothing
+ * more — which is also why capping the profiles moved it, from 0.95 to 0.92:
+ * the cap enlarged the profile's own share of the gap, and the factor shrank
+ * by exactly what the profile took over.
  *
  * ## Where it enters, and why there
  *
@@ -75,14 +79,17 @@ public enum class RiddenBike(
      * A pedal-assist bike — about twenty per cent quicker, all told.
      *
      * **The factor is what the profile does not already give, and no more.**
-     * Measured over eleven legs of the Lille graph on 17 August 2026, 331 m to
-     * 15.2 km, [TravelMode.ElectricCycling] alone takes ×0.8406 of the
-     * mechanical profile's time; 0.95 on top of it brings the whole to ×0.80,
+     * Measured over twelve legs of the Lille graph on 26 August 2026, 1.3 to
+     * 18.4 km, [TravelMode.ElectricCycling] alone takes ×0.8722 of the
+     * mechanical profile's time; 0.92 on top of it brings the whole to ×0.80,
      * which is the ratio observed in town between a share bike at some 15 km/h
-     * and an assisted one at 18 to 19.
+     * and an assisted one at 18 to 19. It was 0.95 until that date, against
+     * profiles whose descents ran uncapped: the ceiling both gained then
+     * enlarged the profile's share of the gap, and this figure gave back
+     * exactly that much.
      *
      * Rounded to two figures, like [WalkingPace]'s: a third would claim a
      * precision the measurement behind it does not have.
      */
-    ElectricallyAssisted(TravelMode.ElectricCycling, 0.95),
+    ElectricallyAssisted(TravelMode.ElectricCycling, 0.92),
 }
