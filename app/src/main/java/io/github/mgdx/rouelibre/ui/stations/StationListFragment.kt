@@ -78,6 +78,16 @@ class StationListFragment : Fragment() {
      */
     private var showFromTheTop = false
 
+    /**
+     * Whether a conurbation is in service — see [followTheChosenCity].
+     *
+     * Taken as chosen until the setting has been read, which is the state the
+     * screen is built for: the empty list only appears once the cache has been
+     * read, by which time the read below has long answered, and a wrong guess
+     * held for that instant would flash the wrong sentence on every launch.
+     */
+    private var cityChosen = true
+
     private val viewModel: StationsViewModel by viewModels {
         val container = (requireActivity().application as RoueLibreApplication).container
         StationsViewModel.Factory(
@@ -207,6 +217,7 @@ class StationListFragment : Fragment() {
         viewModel.orderByProximity()
 
         standClearOfTheBanner()
+        followTheChosenCity()
         observeState()
         observeErrors()
         keepAvailabilityFresh()
@@ -231,17 +242,32 @@ class StationListFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 host.roomTakenByTheBanner.collect { room ->
-                    val views = binding ?: return@collect
-                    val roomUnderTheLastRow = R.dimen.list_room_under_the_last_row
-                    views.locateMe.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                        bottomMargin = resources.getDimensionPixelSize(R.dimen.space_m) + room
-                    }
-                    views.stations.updatePadding(
-                        bottom = resources.getDimensionPixelSize(roomUnderTheLastRow) + room,
-                    )
+                    // **Not on the spot.** That figure is read off the banner's
+                    // own layout — `MainActivity` measures it from a layout
+                    // listener — and this collector resumes inside that very
+                    // pass, the two views sharing one window. A margin and a
+                    // padding set there ask for a layout while one is running,
+                    // which Android answers by starting the whole pass again:
+                    // "requestLayout() improperly called ... running second
+                    // layout pass", once for the button and once for the list,
+                    // on every banner. The next message queue turn is outside
+                    // the pass, and lands the same figures a frame later.
+                    binding?.root?.post { makeRoomForTheBanner(room) }
                 }
             }
         }
+    }
+
+    /** Lifts the button and the last row by [room], the banner's height. */
+    private fun makeRoomForTheBanner(room: Int) {
+        val views = binding ?: return
+        val roomUnderTheLastRow = R.dimen.list_room_under_the_last_row
+        views.locateMe.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = resources.getDimensionPixelSize(R.dimen.space_m) + room
+        }
+        views.stations.updatePadding(
+            bottom = resources.getDimensionPixelSize(roomUnderTheLastRow) + room,
+        )
     }
 
     /**
@@ -493,26 +519,57 @@ class StationListFragment : Fragment() {
     }
 
     /**
+     * Follows the conurbation in service, for the words the empty list uses.
+     *
+     * Watched rather than read once when the screen appears: the chooser this
+     * screen now offers comes back to this very list, which must then be
+     * inviting a refresh rather than still asking which city.
+     */
+    private fun followTheChosenCity() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                container.preferences.activeCityIdFlow.collect { identifier ->
+                    cityChosen = identifier != null
+                    showEmptyState(viewModel.state.value)
+                }
+            }
+        }
+    }
+
+    /**
      * Shows, where applicable, why the list holds nothing.
      *
-     * Two situations, two gestures: an empty cache is refreshed, a fruitless
-     * search is cleared. Offering "Refresh" to somebody who made a typo would
-     * send them looking for a breakdown that does not exist.
+     * Three situations, three gestures: an empty cache is refreshed, a
+     * fruitless search is cleared, and a phone serving no conurbation is sent
+     * to the city chooser. Offering "Refresh" to somebody who made a typo would
+     * send them looking for a breakdown that does not exist; offering it to
+     * somebody who has chosen no city offers a gesture that cannot succeed —
+     * see [offerForEmptyList].
      */
     private fun showEmptyState(state: StationsUiState) {
         val views = binding ?: return
         views.emptyState.isVisible = state.emptiness != Emptiness.None
-        when (state.emptiness) {
-            Emptiness.None -> Unit
+        when (offerForEmptyList(state.emptiness, cityChosen)) {
+            EmptyListOffer.None -> Unit
 
-            Emptiness.NothingLoaded -> {
+            // The map's own words at the same instant, and its own button: the
+            // two screens are looking at the same phone and must not diagnose
+            // it differently (SPEC §7.1).
+            EmptyListOffer.ChooseCity -> {
+                views.emptyTitle.setText(R.string.map_needs_city_title)
+                views.emptyMessage.setText(R.string.map_needs_city_message)
+                views.emptyAction.setText(R.string.city_choose)
+                views.emptyAction.setOnClickListener { showCityChooser() }
+            }
+
+            EmptyListOffer.Refresh -> {
                 views.emptyTitle.setText(R.string.stations_empty_title)
                 views.emptyMessage.setText(R.string.stations_empty_message)
                 views.emptyAction.setText(R.string.action_refresh)
                 views.emptyAction.setOnClickListener { viewModel.refresh(force = true) }
             }
 
-            Emptiness.NoMatch -> {
+            EmptyListOffer.ClearSearch -> {
                 views.emptyTitle.setText(R.string.stations_no_match_title)
                 views.emptyMessage.text =
                     getString(R.string.stations_no_match_message, state.query)

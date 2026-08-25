@@ -46,7 +46,7 @@ class DataSourcesSearchTest {
             "@+id/search_input",
             "@style/Widget.RoueLibre.SearchField",
             "app:endIconMode=\"clear_text\"",
-            "android:imeOptions=\"actionSearch\"",
+            "android:imeOptions=\"actionSearch|flagNoExtractUi\"",
             "android:maxLines=\"1\"",
         ).forEach { expected ->
             assertTrue(
