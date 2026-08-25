@@ -23,6 +23,7 @@ import io.github.mgdx.rouelibre.BuildConfig
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.Outcome
+import io.github.mgdx.rouelibre.core.address.AddressResult
 import io.github.mgdx.rouelibre.core.address.WordMatching
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.intent.PlaceRequest
@@ -213,6 +214,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(created.root)
         followUnits()
         listenForTheCityAnswer()
+        listenForTheAddressChosen()
 
         // On recreation — rotation, theme change — the fragments are restored
         // by the system; replacing them would erase their state, and replaying
@@ -763,6 +765,14 @@ class MainActivity : AppCompatActivity() {
      * is typing it, and its first result becomes a journey without anyone
      * choosing it, so a word must not stand for a longer one (SPEC §7.8).
      *
+     * **A share is usually a sentence, not an address.** "Meet me here: 12 rue
+     * Nationale, Lille" answered nothing at all, one word of the phrase being
+     * enough to rule out the street the rest of it names. So where the finished
+     * text finds nothing, the sentence is read through a second time, and what
+     * that finds is put to the user as a list: those words were not read, so
+     * the street picked out of them is a guess, and a guess is offered rather
+     * than turned into a journey — see [offerTheAddressesInTheSentence].
+     *
      * Without an index, that has to be said, with an offer to install one,
      * rather than failing (SPEC §7.8).
      */
@@ -774,19 +784,106 @@ class MainActivity : AppCompatActivity() {
             return null
         }
         val origin = defaultOrigin() ?: return null
-        val outcome = container.addressIndex.search(
+        val found = addressesFor(text, origin, WordMatching.WholeWords).firstOrNull()
+        if (found != null) return JourneyEndpoint(found.toTitle(this), found.position)
+
+        val inTheSentence = addressesFor(
             text,
-            origin = origin,
-            matching = WordMatching.WholeWords,
+            origin,
+            WordMatching.WholeWordsInSentence,
+            limit = ADDRESSES_OFFERED,
         )
-        val found = (outcome as? Outcome.Success)?.value?.firstOrNull()
-        if (found == null) {
-            showAnswer(getString(R.string.incoming_address_not_found, text)) {
-                show(JourneySearchFragment.newInstance())
-            }
+        if (inTheSentence.isNotEmpty()) {
+            offerTheAddressesInTheSentence(inTheSentence)
             return null
         }
-        return JourneyEndpoint(found.toTitle(this), found.position)
+        // Nothing was found either way: the text goes on to the search field
+        // rather than being dropped, so that it is pruned instead of typed
+        // again (SPEC §7.8).
+        showAnswer(getString(R.string.incoming_address_not_found, text)) {
+            show(JourneySearchFragment.newInstance(destinationQuery = text))
+        }
+        return null
+    }
+
+    /**
+     * The addresses the index holds for a received text, best first.
+     *
+     * @param limit how many to bring back, or `null` for as many as the address
+     *   box asks for — the same search asked in the same terms.
+     */
+    private suspend fun addressesFor(
+        text: String,
+        origin: Coordinates,
+        matching: WordMatching,
+        limit: Int? = null,
+    ): List<AddressResult> {
+        val index = container.addressIndex
+        val outcome = if (limit == null) {
+            index.search(text, origin, matching)
+        } else {
+            index.search(text, origin, matching, limit)
+        }
+        return (outcome as? Outcome.Success)?.value.orEmpty()
+    }
+
+    /**
+     * Puts up the addresses read out of a shared sentence (SPEC §7.8).
+     *
+     * A list, and never a choice made for the user: the sentence's own words
+     * were set aside to find these, so nothing says which of them the sender
+     * meant — and the first one becoming a journey by itself is exactly what
+     * whole-word matching exists to prevent.
+     *
+     * The chosen row is read back from the payload rather than from a list held
+     * here: the answer may arrive after the phone has been turned over, and the
+     * question is put back by its fragment manager while nothing puts back a
+     * search that has already run (SPEC §8 forbids keeping it).
+     */
+    private fun offerTheAddressesInTheSentence(addresses: List<AddressResult>) {
+        val labels = addresses.map { it.toTitle(this) }
+        ChoiceDialogFragment.ask(
+            manager = supportFragmentManager,
+            requestKey = ADDRESS_IN_TEXT_ANSWER,
+            title = R.string.incoming_address_choices_title,
+            labels = labels,
+            payload = Bundle().apply {
+                putStringArray(ADDRESS_LABELS, labels.toTypedArray())
+                putDoubleArray(
+                    ADDRESS_LATITUDES,
+                    addresses.map { it.position.latitude }.toDoubleArray(),
+                )
+                putDoubleArray(
+                    ADDRESS_LONGITUDES,
+                    addresses.map { it.position.longitude }.toDoubleArray(),
+                )
+            },
+        )
+    }
+
+    /**
+     * Collects the address chosen among those a shared sentence held.
+     *
+     * Registered in [onCreate] for the reason [listenForTheCityAnswer] gives:
+     * after a rotation the list is already back up, and its answer would
+     * otherwise arrive with nobody listening for it.
+     */
+    private fun listenForTheAddressChosen() {
+        ChoiceDialogFragment.onAnswer(
+            supportFragmentManager,
+            this,
+            ADDRESS_IN_TEXT_ANSWER,
+        ) { chosen, payload ->
+            val labels = payload.getStringArray(ADDRESS_LABELS) ?: return@onAnswer
+            val latitudes = payload.getDoubleArray(ADDRESS_LATITUDES) ?: return@onAnswer
+            val longitudes = payload.getDoubleArray(ADDRESS_LONGITUDES) ?: return@onAnswer
+            if (chosen !in labels.indices) return@onAnswer
+            val destination = JourneyEndpoint(
+                label = labels[chosen],
+                position = Coordinates(latitudes[chosen], longitudes[chosen]),
+            )
+            lifecycleScope.launch { openFor(destination) }
+        }
     }
 
     /**
@@ -926,5 +1023,23 @@ class MainActivity : AppCompatActivity() {
         /** What the question carries across a rebuild about that city. */
         const val CITY_ID = "city-id"
         const val CITY_INSTALLED = "city-installed"
+
+        /** The key the addresses read out of a shared text are answered under. */
+        const val ADDRESS_IN_TEXT_ANSWER = "activity-address-in-text"
+
+        /** What that list carries across a rebuild about what it offers. */
+        const val ADDRESS_LABELS = "address-labels"
+        const val ADDRESS_LATITUDES = "address-latitudes"
+        const val ADDRESS_LONGITUDES = "address-longitudes"
+
+        /**
+         * How many addresses a shared sentence is allowed to offer.
+         *
+         * Fewer than the search box's eight, and deliberately: these are read
+         * through words nobody vouched for, and a list one glance takes in is
+         * a choice, where a list to scroll is a search of its own — which is
+         * what the address screen the message offers already is.
+         */
+        const val ADDRESSES_OFFERED = 5
     }
 }

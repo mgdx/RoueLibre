@@ -9,6 +9,7 @@ import io.github.mgdx.rouelibre.core.geo.Coordinates
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -228,8 +229,12 @@ class PlaceRequestTest {
      *
      * @return the street retained, or `null` if the text designates none.
      */
-    private fun destinationOf(text: String, matching: WordMatching): SearchableStreet? {
-        val request = findPlaceInText(text) as? PlaceRequest.Search ?: return null
+    private fun destinationOf(text: String, matching: WordMatching): SearchableStreet? =
+        streetsIn(text, matching).firstOrNull()
+
+    /** The same resolution, kept whole: what a list is offered from. */
+    private fun streetsIn(text: String, matching: WordMatching): List<SearchableStreet> {
+        val request = findPlaceInText(text) as? PlaceRequest.Search ?: return emptyList()
         return rankStreets(
             corpus,
             normalizer.parseQuery(request.text),
@@ -239,7 +244,20 @@ class PlaceRequestTest {
             origin = lille,
             limit = 8,
             matching = matching,
-        ).firstOrNull()?.street
+        ).map { it.street }
+    }
+
+    /**
+     * What a shared text offers, the way the application offers it (SPEC §7.8).
+     *
+     * The finished text is asked for first, and its answer is the journey. Only
+     * where it answers nothing is the sentence read through, and what that
+     * brings back is a list the user chooses from.
+     */
+    private fun candidatesOf(text: String): List<SearchableStreet> {
+        val found = destinationOf(text, WordMatching.WholeWords)
+        if (found != null) return listOf(found)
+        return streetsIn(text, WordMatching.WholeWordsInSentence)
     }
 
     @Test
@@ -280,6 +298,43 @@ class PlaceRequestTest {
             nationaleLille,
             destinationOf("12 rue Nationale, Lille", WordMatching.WholeWords),
         )
+    }
+
+    @Test
+    fun `an address written into a sentence is offered rather than lost`() {
+        // How an address is really shared: a phrase around it. The finished
+        // text finds nothing there, and the sentence read through offers the
+        // street it names — the street in Lille first, the namesake in Roubaix
+        // behind it, since the sentence's own words say nothing either way.
+        val sentence = "Rendez-vous ici : 12 rue Nationale, Lille"
+
+        assertNull(destinationOf(sentence, WordMatching.WholeWords))
+        assertEquals(nationaleLille, candidatesOf(sentence).firstOrNull())
+        assertTrue(candidatesOf(sentence).size > 1)
+    }
+
+    @Test
+    fun `the address alone is resolved exactly as it was`() {
+        // The two shapes that already worked: the sentence path must never be
+        // reached for them, and their answer must not move by a street.
+        assertEquals(
+            listOf(nationaleLille),
+            candidatesOf("12 rue Nationale, Lille"),
+        )
+        assertEquals(
+            listOf(nationaleLille),
+            candidatesOf("12 rue Nationale\n59000 Lille"),
+        )
+    }
+
+    @Test
+    fun `a sentence naming no address is still refused`() {
+        // Reading through the words around an address must not turn a text
+        // holding none into a destination: nothing is offered, and the screen
+        // says so (SPEC §7.8).
+        assertEquals(emptyList<SearchableStreet>(), candidatesOf("coucou"))
+        assertEquals(emptyList<SearchableStreet>(), candidatesOf("on se voit demain"))
+        assertEquals(emptyList<SearchableStreet>(), candidatesOf("merci beaucoup"))
     }
 
     @Test

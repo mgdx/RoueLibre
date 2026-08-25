@@ -220,4 +220,75 @@ class AddressRankingTest {
             rank("rue nationale", jumelles.reversed()),
         )
     }
+
+    @Test
+    fun `an address is found inside the sentence written around it`() {
+        // The commonest shape of a real share: nobody sends a bare address
+        // (SPEC §7.8). "Rendez-vous ici" names no street, and demanding every
+        // word of the text ruled out the one it does name.
+        val nationale = street("Rue Nationale")
+        val others = listOf(street("Rue Gambetta"), street("Boulevard de la Liberté"))
+        val sentence = "Rendez-vous ici : 12 rue Nationale, Lille"
+
+        assertEquals(
+            emptyList<Long>(),
+            rank(sentence, others + nationale, matching = WordMatching.WholeWords),
+        )
+        assertEquals(
+            listOf(nationale.id),
+            rank(sentence, others + nationale, matching = WordMatching.WholeWordsInSentence),
+        )
+    }
+
+    @Test
+    fun `a sentence naming no address brings nothing back`() {
+        // The counterpart, and the reason the sentence still has to name a
+        // street outright: setting the unknown words aside must not leave an
+        // empty query that every street answers.
+        val streets = listOf(
+            street("Rue Nationale"),
+            street("Rue Gambetta"),
+            street("Boulevard de la Liberté"),
+            street("Place du Lion d'Or"),
+        )
+
+        for (text in listOf("coucou", "on se voit demain", "merci beaucoup")) {
+            assertEquals(
+                emptyList<Long>(),
+                rank(text, streets, matching = WordMatching.WholeWordsInSentence),
+            )
+        }
+    }
+
+    @Test
+    fun `a municipality alone does not designate a street`() {
+        // What a sentence readily leaves behind once its own words are set
+        // aside: a town, a street type, and no street.
+        val streets = listOf(street("Rue Nationale"), street("Rue Gambetta"))
+
+        assertEquals(
+            emptyList<Long>(),
+            rank("à demain à Lille", streets, matching = WordMatching.WholeWordsInSentence),
+        )
+        assertEquals(
+            emptyList<Long>(),
+            rank("dans la rue à Lille", streets, matching = WordMatching.WholeWordsInSentence),
+        )
+    }
+
+    @Test
+    fun `a word begun is not read as a street inside a sentence either`() {
+        // The rule [WholeWords] exists for is kept: only the words the sentence
+        // holds in full may pick a street out of it.
+        val gambetta = street("Rue Gambetta")
+
+        assertEquals(
+            emptyList<Long>(),
+            rank(
+                "on passe par gamb",
+                listOf(gambetta),
+                matching = WordMatching.WholeWordsInSentence,
+            ),
+        )
+    }
 }
