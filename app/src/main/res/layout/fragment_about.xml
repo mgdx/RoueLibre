@@ -95,6 +95,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_s"
+                android:text="@string/about_attribution_geonames"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
                 android:text="@string/about_attribution_brouter"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
 
