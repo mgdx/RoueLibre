@@ -298,7 +298,7 @@ writing one is a pull request against a single JSON file.
 
 | Source | Use | Licence |
 |---|---|---|
-| The GBFS feed of each network served, named in its configuration | station availability | ODbL, as a rule |
+| The GBFS feed of each network served, named in its configuration | station availability | whatever the feed states — see below |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) | base map, routing, landmarks | ODbL |
 | [Base Adresse Nationale](https://adresse.data.gouv.fr/) | house numbers, France | ODbL |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) | house numbers, everywhere else | ODbL |
@@ -306,3 +306,19 @@ writing one is a pull request against a single JSON file.
 | [GeoNames](https://www.geonames.org/) | the municipalities a network covers | CC BY 4.0 |
 | [BRouter](https://github.com/abrensch/brouter) | routing engine and generator | MIT |
 | SRTM through [terrain-tiles](https://registry.opendata.aws/terrain-tiles/) | the graph's elevation data | public domain |
+
+**The availability feeds are not under one licence, and two thirds of them name
+none.** Surveyed on 26 August 2026 over the 331 networks served: 164 CC0 1.0,
+40 Licence Ouverte 2.0, 22 CDLA-Permissive-2.0, 22 ODbL, 15 Licence Ouverte,
+one CC BY 4.0 — and 67 that publish no `license_id` and no `license_url`, and
+whose catalogue entry names no licence either.
+
+The licence is read from the feed rather than assumed, and a feed naming none
+is credited as naming none: the attribution written into each configuration
+ends in *"licence not stated by the operator"*, in French where the network is
+French. That clause is a finding, not a gap — it says the feed was read and
+said nothing, which is what a reader of the sources page needs to know, and
+what a licence guessed from the operator's country would have hidden. A third
+of the licences that ARE named are named by address alone, with no code beside
+them; `tools/discover_networks.py` holds the table that turns those addresses
+into names, and each entry in it was read off the document the address serves.

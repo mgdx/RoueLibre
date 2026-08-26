@@ -183,6 +183,35 @@ LICENCE_NAMES = {
     "other-open": "",
 }
 
+# Licences named by their address alone. GBFS lets a feed publish a
+# "license_url" and no "license_id", and a third of the networks that name a
+# licence at all do it that way: the address is then the only statement there
+# is, and dropping it left a hundred configurations crediting an operator for
+# data under no licence anybody could read (§4.5).
+#
+# Each entry below was read off the document the address serves, not deduced
+# from the address itself — cdla.dev/permissive-2-0 is titled "Community Data
+# License Agreement - Permissive, Version 2.0", and JCDecaux's PDF is Etalab's
+# "LICENCE OUVERTE / OPEN LICENCE", whose version it does not print. A licence
+# guessed wrong is worse than one left unnamed, so an address absent from this
+# table names nothing and the attribution says as much.
+LICENCE_URL_NAMES = (
+    ("cdla.dev/permissive-2-0", "CDLA-Permissive-2.0"),
+    ("developer.jcdecaux.com/files/open-licence", "Licence Ouverte"),
+    ("etalab.gouv.fr/licence-ouverte", "Licence Ouverte"),
+    ("creativecommons.org/licenses/by-sa/4.0", "CC BY-SA 4.0"),
+    ("creativecommons.org/licenses/by/4.0", "CC BY 4.0"),
+    ("creativecommons.org/publicdomain/zero/1.0", "CC0 1.0"),
+    ("opendatacommons.org/licenses/odbl", "ODbL"),
+)
+
+# What the attribution says when nothing names a licence — neither the feed nor
+# the catalogue. The clause is written rather than left out: an attribution
+# stopping after the operator reads as an unfinished sentence, and says nothing
+# about whether anybody looked. This one says somebody did (§4.5).
+UNSTATED_LICENCE_FR = "licence non précisée par l'opérateur"
+UNSTATED_LICENCE = "licence not stated by the operator"
+
 # Vehicle forms this application is about. A network whose fleet is cars is not
 # a bike-share network, whatever its stations look like; a network mixing bikes
 # with standing scooters at the same docks is one, and is kept.
@@ -1241,6 +1270,23 @@ def language_of(survey: dict) -> str:
     return declared if declared in officials else officials[0]
 
 
+def licence_from_url(url: str) -> str:
+    """Name the licence a "license_url" points at, or nothing (§4.5).
+
+    Matched on the address stripped of its scheme and of anything a producer
+    appends without changing the document — a trailing slash, Creative Commons'
+    "deed.ja" translation suffix. An address this table does not hold names
+    nothing: the caller then says the licence is unstated, which is true, where
+    a guess from the address would be a claim nobody checked.
+    """
+    address = url.strip().lower()
+    address = address.split("://", 1)[-1].removeprefix("www.")
+    for fragment, name in LICENCE_URL_NAMES:
+        if fragment in address:
+            return name
+    return ""
+
+
 def attribution_of(survey: dict) -> None:
     """Compose what the "about" screen must credit for this feed (§4.5).
 
@@ -1260,15 +1306,25 @@ def attribution_of(survey: dict) -> None:
         survey.get("licence") or "",
         LICENCE_NAMES.get(survey.get("licenceId") or "", survey.get("licence") or ""),
     )
+    if not licence:
+        licence = licence_from_url(survey.get("licenceUrl") or "")
     survey["licenceName"] = licence
 
+    # The attribution is written the way the country publishing the data writes
+    # it, as an address is (§15.1): a French network credits "Données", and one
+    # translated into the language of whoever happens to be reading would credit
+    # nobody by the name the producer uses.
+    french = survey.get("country") == "FR"
     credited = operator or survey.get("displayName", "")
-    attribution = f"Data {survey.get('displayName', '')} — {credited}"
+    lead = "Données" if french else "Data"
+    attribution = f"{lead} {survey.get('displayName', '')} — {credited}"
     if licence:
         # "licence Licence Ouverte 2.0" reads as a stammer; some licence names
         # already carry the word.
         article = "" if normalised(licence).startswith("licence") else "licence "
         attribution += f", {article}{licence}"
+    else:
+        attribution += f", {UNSTATED_LICENCE_FR if french else UNSTATED_LICENCE}"
     survey["attribution"] = attribution
     survey["attributionUrl"] = (
         survey.get("datasetPageUrl")
