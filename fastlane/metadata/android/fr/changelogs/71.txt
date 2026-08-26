@@ -1,0 +1,3 @@
+La carte s'affiche de nouveau pour tous les téléphones.
+
+• La version 1.2.0 refusait de s'installer sur les téléphones sans Vulkan, parce que la bibliothèque de carte en avait fait une exigence. La carte s'affiche désormais par OpenGL ES, que tout téléphone pris en charge possède — même carte, même moteur, et l'application est environ deux mégaoctets plus légère.

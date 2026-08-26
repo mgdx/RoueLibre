@@ -1,0 +1,3 @@
+The map renders for every phone again.
+
+• Version 1.2.0 refused to install on phones without Vulkan, because the map library had made it a requirement. The map now renders through OpenGL ES, which every supported phone carries — same map, same engine, and the application is about two megabytes lighter.

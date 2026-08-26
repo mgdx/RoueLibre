@@ -53,14 +53,13 @@ android {
         // leaves it unable to tell one release from the next. The
         // architectures derive their own codes from it below, so the value is
         // still written once.
-        versionCode = 6
-        // A minor version and not a patch: the bike profiles now read the
-        // cycling provision a road carries and a shared text is read as a
-        // sentence — additions, which semantic versioning counts in the
-        // second number however many fixes travel with them. Nothing here
-        // changes what an installed 1.1.0 can read: the published graphs
-        // already carry the tags the profiles read. See CHANGELOG.md.
-        versionName = "1.2.0"
+        versionCode = 7
+        // A patch: one fix and nothing added. MapLibre is shipped as its
+        // OpenGL ES artefact rather than the default one, whose manifest
+        // marks Vulkan 1.0 as a required feature and barred installation on
+        // API 26+ devices without it — against the promise of minSdk 26.
+        // See CHANGELOG.md.
+        versionName = "1.2.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

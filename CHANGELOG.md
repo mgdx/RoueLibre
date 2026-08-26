@@ -7,6 +7,31 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
+## [1.2.1]
+
+A patch answering the F-Droid review of 1.2.0: one fix in the application,
+the rest in what the stores read. Nothing a working installation notices —
+this version exists for the phones 1.2.0 refused.
+
+### Fixed
+
+- **MapLibre ships as its OpenGL ES artefact** (`android-sdk-opengl`), not the
+  default `android-sdk`. Since MapLibre 13 the default renders through Vulkan
+  only and its manifest marks Vulkan 1.0 as a required feature — merged into
+  the APK, it refused installation on API 26+ devices without Vulkan, against
+  the promise of minSdk 26. The OpenGL ES artefact is the same engine at the
+  same version without that requirement, and its native library is about two
+  megabytes lighter per ABI.
+
+### Technical notes
+
+- **The release notes also carry the codes F-Droid serves.** F-Droid publishes
+  one APK per architecture under its own version code — 71 to 74 for base 7 —
+  and reads the notes under that exact code, falling back on nothing. The
+  hand-written base file is now expanded into per-architecture copies by
+  `tools/expand_changelogs.py`, and the copies for every published version
+  were backfilled.
+
 ## [1.2.0]
 
 A version whose centre of gravity is the routing: the bike profiles now read
