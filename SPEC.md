@@ -38,7 +38,7 @@ The application must pass the **F-Droid / Exodus Privacy** scan with no tracker 
 - **UI:** XML views + ViewBinding + Material Components. **No Jetpack Compose** (weight, constraint C4)
 - **minSdk: 26** (Android 8.0) — **targetSdk:** the latest stable version. Rationale: `java.time` available natively (no desugaring to configure), adaptive icons, and above all an up-to-date TLS stack, indispensable for downloading the datasets without running into the obsolete certificate stores of earlier versions. Check that the minSdk required by MapLibre Native is not higher.
 - **Network:** OkHttp + `kotlinx.serialization`. No Retrofit, no Gson, no Moshi
-- **Mapping:** MapLibre Native, fed by a **local** vector tile file (see §4.2). It is the project's only native dependency, and the only accepted departure from constraint C4: it is the price of offline operation
+- **Mapping:** MapLibre Native, fed by a **local** vector tile file (see §4.2). It is the project's only native dependency, and the only accepted departure from constraint C4: it is the price of offline operation. **The `android-sdk-opengl` artefact**, not the default `android-sdk`: since MapLibre 13 the default renders through Vulkan only and marks Vulkan 1.0 as a required manifest feature, which would refuse installation on API 26+ devices without it
 - **Asynchrony:** Coroutines + Flow
 - **Persistence:** Room for the station cache, `DataStore` (Preferences) for settings
 - **Architecture:** simple MVVM, a single activity, fragment-based navigation. No dependency injection framework (Hilt/Koin): manual instantiation through an `AppContainer`
