@@ -83,10 +83,24 @@ Both files are `chmod 600`, and neither is versioned.
    notes are named after the base and not after any of the four.
 
 2. **Write the release notes**: `fastlane/metadata/android/en-US/changelogs/`
-   and `fr/changelogs/`, named after the new `versionCode`. English is the
-   source, the other languages are translations. They are not optional: the
-   what's-new screen reads these very files (`SPEC.md` §7.10), so a version
-   published without them shows an empty screen to whoever updates.
+   and `fr/changelogs/`, named after the new base `versionCode`. English is
+   the source, the other languages are translations. They are not optional:
+   the what's-new screen reads these very files (`SPEC.md` §7.10), so a
+   version published without them shows an empty screen to whoever updates.
+
+   Then **derive the per-architecture copies** — F-Droid reads the notes
+   under the exact code of the APK it serves, 61 to 64 for base 6, and falls
+   back on nothing, so a release without them shows no notes on its F-Droid
+   page:
+
+   ```bash
+   python3 tools/expand_changelogs.py           # writes what is missing or stale
+   python3 tools/expand_changelogs.py --check   # exit 1 instead of writing
+   ```
+
+   The base file stays the one written by hand and the one the application
+   reads; the copies are real files rather than symbolic links, because
+   nothing guarantees `fdroid update` follows a link.
 
 3. **Move the changelog on**: `CHANGELOG.md`'s `[Unreleased]` section becomes
    the new version, with a paragraph saying what the version is.
