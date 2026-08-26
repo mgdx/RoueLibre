@@ -89,7 +89,7 @@ Both files are `chmod 600`, and neither is versioned.
    version published without them shows an empty screen to whoever updates.
 
    Then **derive the per-architecture copies** — F-Droid reads the notes
-   under the exact code of the APK it serves, 61 to 64 for base 6, and falls
+   under the exact code of the APK it serves, 81 to 84 for base 8, and falls
    back on nothing, so a release without them shows no notes on its F-Droid
    page:
 
@@ -243,9 +243,9 @@ RepoType: git
 Repo: https://github.com/mgdx/RoueLibre.git
 
 Builds:
-  - versionName: 1.2.1
-    versionCode: 71
-    commit: 3fdbd0346aa28520cf4b3ba0e50bdb16e37eda4b
+  - versionName: 1.2.2
+    versionCode: 81
+    commit: 5e6d57850717628b27e76969107711a7f8a1acdc
     subdir: app
     submodules: true
     gradle:
@@ -259,9 +259,9 @@ Builds:
       - third_party/brouter/brouter-routing-app
     ndk: r28c
 
-  - versionName: 1.2.1
-    versionCode: 72
-    commit: 3fdbd0346aa28520cf4b3ba0e50bdb16e37eda4b
+  - versionName: 1.2.2
+    versionCode: 82
+    commit: 5e6d57850717628b27e76969107711a7f8a1acdc
     subdir: app
     submodules: true
     gradle:
@@ -274,9 +274,9 @@ Builds:
       - third_party/brouter/brouter-routing-app
     ndk: r28c
 
-  - versionName: 1.2.1
-    versionCode: 73
-    commit: 3fdbd0346aa28520cf4b3ba0e50bdb16e37eda4b
+  - versionName: 1.2.2
+    versionCode: 83
+    commit: 5e6d57850717628b27e76969107711a7f8a1acdc
     subdir: app
     submodules: true
     gradle:
@@ -289,9 +289,9 @@ Builds:
       - third_party/brouter/brouter-routing-app
     ndk: r28c
 
-  - versionName: 1.2.1
-    versionCode: 74
-    commit: 3fdbd0346aa28520cf4b3ba0e50bdb16e37eda4b
+  - versionName: 1.2.2
+    versionCode: 84
+    commit: 5e6d57850717628b27e76969107711a7f8a1acdc
     subdir: app
     submodules: true
     gradle:
@@ -314,8 +314,8 @@ VercodeOperation:
   - '%c * 10 + 2'
   - '%c * 10 + 3'
   - '%c * 10 + 4'
-CurrentVersion: 1.2.1
-CurrentVersionCode: 74
+CurrentVersion: 1.2.2
+CurrentVersionCode: 84
 ```
 
 **`commit` names a full commit hash, never the tag.** A reviewer asked for it
