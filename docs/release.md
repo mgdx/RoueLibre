@@ -243,9 +243,9 @@ RepoType: git
 Repo: https://github.com/mgdx/RoueLibre.git
 
 Builds:
-  - versionName: 1.2.0
-    versionCode: 61
-    commit: edfc4d6578895a150227c6c57c010d4a5609cb60
+  - versionName: 1.2.1
+    versionCode: 71
+    commit: 3fdbd0346aa28520cf4b3ba0e50bdb16e37eda4b
     subdir: app
     submodules: true
     gradle:
@@ -259,7 +259,51 @@ Builds:
       - third_party/brouter/brouter-routing-app
     ndk: r28c
 
-  # … and the same for 62 x86, 63 x86_64, 64 arm64-v8a
+  - versionName: 1.2.1
+    versionCode: 72
+    commit: 3fdbd0346aa28520cf4b3ba0e50bdb16e37eda4b
+    subdir: app
+    submodules: true
+    gradle:
+      - yes
+    output: build/outputs/apk/release/app-x86-release.apk
+    binary: https://github.com/mgdx/RoueLibre/releases/download/v%v/roue-libre-%v-x86.apk
+    prebuild: sed -i '/^publishing {/,$d' 
+      ../third_party/brouter/buildSrc/src/main/groovy/brouter.library-conventions.gradle
+    scandelete:
+      - third_party/brouter/brouter-routing-app
+    ndk: r28c
+
+  - versionName: 1.2.1
+    versionCode: 73
+    commit: 3fdbd0346aa28520cf4b3ba0e50bdb16e37eda4b
+    subdir: app
+    submodules: true
+    gradle:
+      - yes
+    output: build/outputs/apk/release/app-x86_64-release.apk
+    binary: https://github.com/mgdx/RoueLibre/releases/download/v%v/roue-libre-%v-x86_64.apk
+    prebuild: sed -i '/^publishing {/,$d' 
+      ../third_party/brouter/buildSrc/src/main/groovy/brouter.library-conventions.gradle
+    scandelete:
+      - third_party/brouter/brouter-routing-app
+    ndk: r28c
+
+  - versionName: 1.2.1
+    versionCode: 74
+    commit: 3fdbd0346aa28520cf4b3ba0e50bdb16e37eda4b
+    subdir: app
+    submodules: true
+    gradle:
+      - yes
+    output: build/outputs/apk/release/app-arm64-v8a-release.apk
+    binary: 
+      https://github.com/mgdx/RoueLibre/releases/download/v%v/roue-libre-%v-arm64-v8a.apk
+    prebuild: sed -i '/^publishing {/,$d' 
+      ../third_party/brouter/buildSrc/src/main/groovy/brouter.library-conventions.gradle
+    scandelete:
+      - third_party/brouter/brouter-routing-app
+    ndk: r28c
 
 AllowedAPKSigningKeys: 1de586d680f3296f2d1aa05dd5147fd3de187a5da15a1f5d887d0a82a1e6ed89
 
@@ -270,8 +314,8 @@ VercodeOperation:
   - '%c * 10 + 2'
   - '%c * 10 + 3'
   - '%c * 10 + 4'
-CurrentVersion: 1.2.0
-CurrentVersionCode: 64
+CurrentVersion: 1.2.1
+CurrentVersionCode: 74
 ```
 
 **`commit` names a full commit hash, never the tag.** A reviewer asked for it
