@@ -1,0 +1,15 @@
+The station list puts the nearest station first, on its own.
+
+• The list orders itself by proximity the moment it appears, wherever you come to it from, and each row says how far its station is. Nothing is asked of you for that — no permission prompt, no message — and where a position is not to be had, the alphabet stays.
+• A "nearest station first" button now floats over the bottom corner of the list, where your thumb is. It is the one place this screen ever asks for your location, it shows the wait while a fix is coming, and it brings the reordered list back to its first row.
+• A station out of service says how long it has been silent: "Out of service · last reported 5 months ago", read from the very measurement the network published. A station shut this morning is worth waiting out; one that has said nothing for months has left the pavement.
+• The settings name the network in service, where the city row used only to offer to change it.
+• Without a base map installed, the application no longer opens on the panel saying the tiles are missing. It lands on the station list, which needs nothing downloaded, and goes back to the map the moment there is one to draw.
+• The very first launch no longer dies when the message about choosing a city is pressed over the welcome sequence — that message now waits for the welcome to be over.
+• A search, like the button, shows its list from the first row instead of leaving you several kilometres of stations further down.
+• A station's sheet no longer measures a distance from a city you are not in: consulting a network on the other side of the world announced thousands of kilometres under the station's name.
+• "Check for updates" with no connection no longer promises that a download will pick up where it stopped: nothing had been started.
+• The answer to what you have just done is no longer wiped a fraction of a second later by a refresh failing beside it.
+• On the favourites screen, the hint about holding a row to move it waits until there are two rows to move.
+• The back gesture draws where it leads on Android 13 and 14.
+• One permission less: the Wi-Fi one, which came from the map library and which nothing here ever read.

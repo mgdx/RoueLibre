@@ -136,6 +136,7 @@ machine, most of which is downloading the sources.
 | `refresh_normalization_fixtures.py` | Recomputes the normalisation reference cases after the shared rules change |
 | `publish_data.py` | Uploads the generated sets to the `RoueLibre-data` releases, at the addresses the manifests name |
 | `update_readme_figures.py` | Copies the counts, the median dataset size and the APK sizes into `README.md` and `docs/offline-data.md` |
+| `expand_changelogs.py` | Copies each release's fastlane notes to the per-architecture version codes F-Droid reads them under |
 
 Shared modules: `city_config.py` (reading the city configuration and the box's
 geometry) and `address_normalization.py` (street-name normalisation, applied by

@@ -1,0 +1,15 @@
+La liste des stations met la plus proche en tête, toute seule.
+
+• La liste s'ordonne par proximité dès qu'elle apparaît, d'où que tu y arrives, et chaque ligne dit à quelle distance est sa station. Rien ne t'est demandé pour cela — aucune autorisation, aucun message — et là où aucune position n'est disponible, l'ordre alphabétique reste.
+• Un bouton « la station la plus proche d'abord » flotte désormais sur le coin bas de la liste, là où est ton pouce. C'est le seul endroit où cet écran demande ta position, il montre l'attente pendant que le point arrive, et il ramène la liste réordonnée sur sa première ligne.
+• Une station hors service dit depuis combien de temps elle est muette : « Hors service · dernier relevé il y a 5 mois », lu sur la mesure que le réseau a lui-même publiée. Une station fermée ce matin vaut la peine d'être attendue ; une qui n'a rien dit depuis des mois a quitté le trottoir.
+• Les réglages nomment le réseau en service, là où la ligne de la ville se contentait de proposer d'en changer.
+• Sans fond de carte installé, l'application ne s'ouvre plus sur le panneau qui annonce l'absence de tuiles. Elle arrive sur la liste des stations, qui n'a besoin d'aucun téléchargement, et revient à la carte dès qu'il y en a une à dessiner.
+• Le tout premier lancement ne meurt plus quand on presse le message sur le choix d'une ville par-dessus la séquence d'accueil — ce message attend maintenant que l'accueil soit terminé.
+• Une recherche, comme le bouton, montre sa liste depuis la première ligne au lieu de te laisser plusieurs kilomètres de stations plus bas.
+• La fiche d'une station ne mesure plus de distance depuis une ville où tu n'es pas : consulter un réseau à l'autre bout du monde annonçait des milliers de kilomètres sous le nom de la station.
+• « Vérifier les mises à jour » sans connexion ne promet plus qu'un téléchargement reprendra où il s'est arrêté : rien n'avait été commencé.
+• La réponse à ce que tu viens de faire n'est plus effacée une fraction de seconde plus tard par un rafraîchissement qui échoue à côté.
+• Sur l'écran des favoris, l'indication sur le maintien d'une ligne pour la déplacer attend qu'il y ait deux lignes à déplacer.
+• Le geste de retour dessine où il mène, sur Android 13 et 14.
+• Une autorisation de moins : celle du Wi-Fi, qui venait de la bibliothèque de carte et que rien ici n'a jamais lue.
