@@ -63,7 +63,10 @@ androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "s
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
-maplibre = { group = "org.maplibre.gl", name = "android-sdk", version.ref = "maplibre" }
+# The OpenGL ES artefact, not the default "android-sdk": since MapLibre 13 the
+# default renders through Vulkan only and its manifest marks Vulkan 1.0 as a
+# required feature, which would bar installation on API 26+ devices without it.
+maplibre = { group = "org.maplibre.gl", name = "android-sdk-opengl", version.ref = "maplibre" }
 
 # Resolved by substitution to the submodule, never downloaded: this artefact
 # is published on no Maven repository.
