@@ -7,6 +7,56 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
+## [1.2.2]
+
+A patch answering the F-Droid review of 1.2.1, and a reviewer's count of the
+credits the city configurations carry. Four fixes, nothing added: three of them
+are about giving each source what its licence asks for, and the fourth about
+taking a refusal for an answer.
+
+### Fixed
+
+- **A refused location permission is never asked for unprompted again.** The
+  map put the request on every new session, so a "no" pronounced on the city
+  screen's find-my-city button was answered by a second dialog as soon as the
+  map opened — two dialogs for one refusal, which an F-Droid Permissions review
+  reads as insistence. A refusal, wherever it is pronounced, is now written
+  down in the settings and outlives the session: only the buttons that need a
+  position still put the question. The decision lives in
+  `AutomaticLocationRequest`, pure Kotlin and tested on the JVM.
+
+- **Every attribution names the licence its data is published under.** A
+  reviewer counted 104 configurations out of 331 crediting an operator for data
+  under no licence anybody could read. Re-reading those feeds, 37 do publish
+  one — through `license_url` alone, with no `license_id` beside it, which the
+  generator dropped on the floor — and 67 name nothing at all. The generator
+  now reads a licence out of its address against a table whose every entry was
+  read off the document that address serves, never guessed from the address;
+  an address the table does not hold still names nothing, a licence guessed
+  wrong being worse than one left unnamed. A feed that publishes none is now
+  credited as publishing none, which says somebody read it, where a blank said
+  only that nobody had looked. The credit is also written the way the
+  producer's country writes it, as an address is (`SPEC.md` §15.1).
+
+- **GeoNames is credited among the data sources.** The city catalogue's
+  municipality names come from the GeoNames gazetteer, under CC BY 4.0 — a
+  licence that requires attribution — and the About screen credited OSM, BAN,
+  GBFS, BRouter and MapLibre but not it. The line is added in every locale.
+
+- **The licences screen carries two notices it was missing.** MapLibre Native's
+  BSD-2-Clause licence asks for its notice to be reproduced in binary
+  distributions, and the Public Suffix List that OkHttp embeds is under
+  MPL-2.0; both were only named in a sentence of the About screen. Their exact
+  upstream texts now sit in `assets/licences/`, which the screen already reads
+  in alphabetical order.
+
+### Technical notes
+
+- **The fdroiddata recipe quoted in `docs/release.md` is the one submitted.**
+  It had drifted a version behind, showing the 1.2.0 entries while the merge
+  request carried 1.2.1; the quoted block is now verified byte for byte against
+  the file at the merge request's head commit.
+
 ## [1.2.1]
 
 A patch answering the F-Droid review of 1.2.0: one fix in the application,

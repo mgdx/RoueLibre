@@ -53,13 +53,14 @@ android {
         // leaves it unable to tell one release from the next. The
         // architectures derive their own codes from it below, so the value is
         // still written once.
-        versionCode = 7
-        // A patch: one fix and nothing added. MapLibre is shipped as its
-        // OpenGL ES artefact rather than the default one, whose manifest
-        // marks Vulkan 1.0 as a required feature and barred installation on
-        // API 26+ devices without it — against the promise of minSdk 26.
+        versionCode = 8
+        // A patch: four fixes and nothing added. Three answer the F-Droid
+        // review of 1.2.1 — the notices two licences ask to be reproduced,
+        // the gazetteer the city names come from credited, and a refused
+        // location permission never asked for unprompted again — and the
+        // fourth names the licence each network publishes its data under.
         // See CHANGELOG.md.
-        versionName = "1.2.1"
+        versionName = "1.2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
