@@ -246,13 +246,15 @@ Builds:
   - versionName: 1.2.0
     versionCode: 61
     commit: edfc4d6578895a150227c6c57c010d4a5609cb60
+    subdir: app
     submodules: true
     gradle:
       - yes
-    output: app/build/outputs/apk/release/app-armeabi-v7a-release.apk
+    output: build/outputs/apk/release/app-armeabi-v7a-release.apk
     binary: 
       https://github.com/mgdx/RoueLibre/releases/download/v%v/roue-libre-%v-armeabi-v7a.apk
-    prebuild: sed -i '/^publishing {/,$d' third_party/brouter/buildSrc/src/main/groovy/brouter.library-conventions.gradle
+    prebuild: sed -i '/^publishing {/,$d' 
+      ../third_party/brouter/buildSrc/src/main/groovy/brouter.library-conventions.gradle
     scandelete:
       - third_party/brouter/brouter-routing-app
     ndk: r28c
@@ -279,6 +281,14 @@ the hash off the tag rather than off `HEAD` — `git rev-parse v1.0.0^{commit}`,
 which resolves the annotated tag to the commit it points at, not to the tag
 object.
 
+**`subdir: app` names the directory their pipeline builds from** — a reviewer
+asked for it on 1.1.0 — and it moves the paths written beside it: `output` is
+resolved from that directory, hence `build/outputs/…` without the leading
+`app/`, and the `prebuild` command runs there too, reaching the submodule as
+`../third_party/…`. Only `scandelete` stays rooted at the repository. The
+three travel together: quoting one with the old paths and another with the
+new builds nothing.
+
 `submodules: true` is what fetches BRouter, which the root `settings.gradle.kts`
 consumes as a composite build and which is pinned to a tag rather than
 following `master` — a moving submodule would make the build unreproducible.
@@ -289,7 +299,10 @@ keeping the `output` and `binary` that belong to it. It reads the version off
 `app/build.gradle.kts`, which is why the version code is written there as a
 number and not as a constant — their expression wants a literal after
 `versionCode`, and a name left `fdroid checkupdates` unable to tell one release
-from the next.
+from the next. One refinement the submitted file does not carry yet: the
+repository also holds the `v0.3.0-alpha` tag, which a plain `Tags` matches,
+and `UpdateCheckMode: Tags ^v[0-9.]+$` would keep the checker to release tags
+— worth carrying in the next fdroiddata change.
 
 `AllowedAPKSigningKeys` and the four `binary` URLs are what ask F-Droid to
 verify its own rebuild against the APKs published here and serve ours. They are
@@ -349,15 +362,14 @@ and three of its rules cost a round trip to learn:
 - The file must be a **fixed point of `fdroid rewritemeta`**, which reorders
   every build entry — `output`, `binary`, `prebuild`, `scandelete` — puts
   `AutoUpdateMode` and `UpdateCheckMode` before `VercodeOperation`, and wraps
-  long values on its own terms — the 122-character `prebuild` line above it
-  leaves alone, while two of the four shorter `binary` URLs it moves to a line
-  of their own. Do not format it by hand: run their tool and commit what it
-  writes.
+  long values on its own terms — the `prebuild` command and two of the four
+  `binary` URLs above are folded onto a continuation line by its hand, not
+  ours. Do not format it by hand: run their tool and commit what it writes.
 
   The wrapping depends on the `ruamel.yaml` version, and not on
   `fdroidserver`'s. Measured against the file their CI accepted, **0.18.12 and
-  below reproduce it, 0.18.13 and above fold every long value** — including the
-  `prebuild` line and `AllowedAPKSigningKeys`. Debian trixie carries 0.18.6, so
+  below reproduce it, 0.18.13 and above fold every long value** —
+  `AllowedAPKSigningKeys` included. Debian trixie carries 0.18.6, so
   pin that: `pip install 'ruamel.yaml==0.18.6'` in the same virtualenv as
   `fdroidserver`, whatever the newest release is.
 
