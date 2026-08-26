@@ -521,6 +521,32 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * Whether a location permission request has ever been refused (SPEC §10).
+     *
+     * Kept from one session to the next, because a refusal that only lasted
+     * until the application was closed was no refusal at all: the map asks
+     * unprompted when it opens, and a dialog that returned at every launch
+     * after a "no" would be the insistence §10 forbids, read exactly so by an
+     * F-Droid Permissions review. Once this is true, only the buttons ask —
+     * see `AutomaticLocationRequest`.
+     *
+     * False by default and false for anything unreadable: an installation
+     * that has never refused is one the map may still ask on, once.
+     *
+     * **A yes or a no about a dialog, not a journey**: no point, no time, no
+     * destination goes with it (SPEC §2, C3). It is never cleared — granted,
+     * it is simply without effect, since nothing asks unprompted for a
+     * permission already held.
+     */
+    suspend fun locationRequestDeclined(): Boolean =
+        dataStore.data.first().readFlag(LOCATION_REQUEST_DECLINED, ifUnanswered = false)
+
+    /** Records that a location permission request was refused. */
+    suspend fun setLocationRequestDeclined() {
+        dataStore.edit { it[LOCATION_REQUEST_DECLINED] = true }
+    }
+
+    /**
      * The last version code the user has seen (SPEC §7.9, §7.10).
      *
      * Zero means "never launched": the welcome screen applies then, never the
@@ -566,6 +592,9 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         val ACTIVE_CITY_ID = stringPreferencesKey("active_city_id")
         val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
         val DECLINED_CITY_PROPOSAL_ID = stringPreferencesKey("declined_city_proposal_id")
+
+        /** A location request was refused; the map no longer asks unprompted. */
+        val LOCATION_REQUEST_DECLINED = booleanPreferencesKey("location_request_declined")
         val MEASURED_FLEET = stringPreferencesKey("measured_fleet")
     }
 }

@@ -124,6 +124,11 @@ class StationListFragment : Fragment() {
         if (granted.values.any { it }) {
             orderFromAFreshFix()
         } else {
+            // Written down for good: a refusal pronounced here must also keep
+            // the map from asking unprompted when it opens next (SPEC §10).
+            viewLifecycleOwner.lifecycleScope.launch {
+                container.automaticLocationRequest.noteRefused()
+            }
             showMessage(getString(R.string.stations_location_denied))
         }
     }
