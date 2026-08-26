@@ -24,6 +24,7 @@ import io.github.mgdx.rouelibre.data.cities.CityCatalogueSource
 import io.github.mgdx.rouelibre.data.datasets.DatasetDownloader
 import io.github.mgdx.rouelibre.data.datasets.DatasetStore
 import io.github.mgdx.rouelibre.data.local.StationDatabase
+import io.github.mgdx.rouelibre.data.location.AutomaticLocationRequest
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.data.network.ConnectionCost
 import io.github.mgdx.rouelibre.data.network.GbfsRemoteSource
@@ -231,25 +232,23 @@ class AppContainer(private val context: Context) {
     private val proposedCityIds = mutableSetOf<String>()
 
     /**
-     * Says whether location may still be asked for, and notes that it was.
+     * Whether the map may still ask for the location permission unprompted,
+     * and the memory of the refusals (SPEC §10).
      *
      * The map asks for the permission when it opens (SPEC §7.1): the point
      * that follows the device is the screen's own subject, and reaching it
-     * through a button first is a detour. Asking again at every return to the
-     * map would turn a request into insistence, which SPEC §10 forbids — hence
-     * once, after which the "locate me" button is what remains.
-     *
-     * In memory and for the session alone, like the city proposal above.
-     *
-     * @return true the first time, false afterwards.
+     * through a button first is a detour. Asking again — at every return to
+     * the map, or at the next launch after a refusal — would turn that request
+     * into insistence, which SPEC §10 forbids. Hence once per session, held in
+     * memory like the city proposal above, and never again once a refusal has
+     * been written down, which the settings hold so it survives a restart.
      */
-    fun rememberLocationRequest(): Boolean {
-        if (locationRequested) return false
-        locationRequested = true
-        return true
+    val automaticLocationRequest: AutomaticLocationRequest by lazy {
+        AutomaticLocationRequest(
+            isRefusalRemembered = { preferences.locationRequestDeclined() },
+            rememberRefusal = { preferences.setLocationRequestDeclined() },
+        )
     }
-
-    private var locationRequested = false
 
     /**
      * The active city as of the last call to [activeCity].

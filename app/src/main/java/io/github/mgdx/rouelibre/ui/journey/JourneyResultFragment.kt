@@ -211,6 +211,11 @@ class JourneyResultFragment : Fragment() {
             // was nothing to follow it with (SPEC §10).
             followUserPosition()
         } else {
+            // Written down for good: a refusal pronounced here must also keep
+            // the map from asking unprompted when it opens next (SPEC §10).
+            viewLifecycleOwner.lifecycleScope.launch {
+                container.automaticLocationRequest.noteRefused()
+            }
             showMessage(getString(R.string.map_location_denied))
         }
     }

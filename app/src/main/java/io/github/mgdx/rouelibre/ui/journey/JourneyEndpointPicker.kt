@@ -65,6 +65,11 @@ class JourneyEndpointPicker(
         if (granted.values.any { it }) {
             useMyPosition()
         } else {
+            // Written down for good: a refusal pronounced here must also keep
+            // the map from asking unprompted when it opens next (SPEC §10).
+            fragment.viewLifecycleOwner.lifecycleScope.launch {
+                container.automaticLocationRequest.noteRefused()
+            }
             onMessage(fragment.getString(R.string.map_location_denied))
         }
     }

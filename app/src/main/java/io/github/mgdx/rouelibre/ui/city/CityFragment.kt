@@ -76,6 +76,12 @@ class CityFragment : Fragment() {
         if (granted.values.any { it }) {
             proposeFromPosition()
         } else {
+            // Written down for good, so the map does not ask again unprompted
+            // when it opens on this very refusal's heels (SPEC §10) — two
+            // dialogs for one "no" is what an F-Droid review calls insisting.
+            viewLifecycleOwner.lifecycleScope.launch {
+                container.automaticLocationRequest.noteRefused()
+            }
             showMessage(getString(R.string.map_location_denied))
         }
     }

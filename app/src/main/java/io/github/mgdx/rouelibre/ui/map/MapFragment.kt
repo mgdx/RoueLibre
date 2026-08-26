@@ -226,6 +226,12 @@ class MapFragment : Fragment() {
             // was nothing to follow it with (SPEC §10).
             locationPermitted.value = true
         } else {
+            // Written down for good: after this, nothing asks unprompted
+            // again — here or on any other screen, this launch or the next
+            // (SPEC §10). The buttons remain the way to change one's mind.
+            viewLifecycleOwner.lifecycleScope.launch {
+                container.automaticLocationRequest.noteRefused()
+            }
             showMessage(R.string.map_location_denied)
         }
     }
@@ -848,16 +854,20 @@ class MapFragment : Fragment() {
     /**
      * Asks for the location permission when the map opens (SPEC §7.1).
      *
-     * **Once per session, and only if it has never been granted.** The point
-     * that follows the device is what this screen is for; asking again at each
-     * return to the map, on the other hand, is the insistence SPEC §10
-     * forbids. After a refusal the map stays whole, without a point, and the
-     * "locate me" button is the way back.
+     * **Once per session, only if it has never been granted, and not at all
+     * once a refusal has been recorded — this session or any earlier one.**
+     * The point that follows the device is what this screen is for; asking
+     * again at each return to the map, or at the launch after a "no", is the
+     * insistence SPEC §10 forbids. After a refusal the map stays whole,
+     * without a point, and the "locate me" button is the way back.
      */
     private fun askForLocation() {
         if (container.deviceLocation.isPermitted()) return
-        if (!container.rememberLocationRequest()) return
-        requestLocationPermission.launch(DeviceLocation.PERMISSIONS)
+        viewLifecycleOwner.lifecycleScope.launch {
+            if (container.automaticLocationRequest.mayAskUnprompted()) {
+                requestLocationPermission.launch(DeviceLocation.PERMISSIONS)
+            }
+        }
     }
 
     /**
