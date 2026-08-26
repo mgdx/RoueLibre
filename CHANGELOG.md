@@ -7,6 +7,160 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
+## [1.2.0]
+
+A version whose centre of gravity is the routing: the bike profiles now read
+the cycling provision a road carries, hold the speed a share bike actually
+holds, and the planner's own arithmetic loses three defects found by reading
+it. The rest closes a second QA campaign run on the device — what an
+application does when a file is wrong, a connection dies, a phone turns over
+or is held sideways, and a text arrives with a sentence around its address.
+
+### Added
+
+- **The bike profiles read the provision a road carries** (§6). A road with a
+  protected track, a shared bus lane, a painted lane or a pictogram was priced
+  as the bare road, and the router detoured around boulevards whose provision
+  is real. Each discount is a remission on the road's own class ladder — a
+  track rides like a calm street (×0.40), a bus corridor drops the road two
+  classes (×0.50), a lane one (×0.65), a pictogram under half (×0.85) — and
+  nothing beats the calm street's 1.2: provision corrects a road, it does not
+  outdo the absence of traffic. The side the tag serves is read too, and which
+  side is which belongs to the country: the profiles carry a `leftHandTraffic`
+  parameter, injected through the engine's `keyValues` — folded into its
+  profile-cache key — from the country the city configuration already names,
+  resolved by a `DrivingSide` table in `:core`. Measured over twelve legs of
+  the Lille graph, reading the tags returns 136 s over the set and moves 3.8
+  more points of the linear onto equipped ways. **No dataset changes**: the
+  published graphs carry the tags already, verified on Lille and Canterbury.
+- **A text shared with a sentence around its address resolves** (§4.3, §7.8).
+  "Rendez-vous ici : 12 rue Nationale, Lille" resolved to nothing, every word
+  of a query having to match. Where the finished text finds nothing it is now
+  read a second time as a sentence: a word the index knows nothing about stops
+  being fatal but still weighs in the score, so the street answering the most
+  words of the query comes first and a landmark answering the one word
+  "lille" no longer beats the street the text names. What remains must still
+  name a street by a word of its proper name written in full — "coucou" still
+  answers nothing. That reading never chooses: at most five candidates are put
+  up as a list, and each row carries what tells it apart — municipality,
+  postcode, distance — through the `incoming_address_choice` resource, in the
+  thirty-one files, because five rows reading "12 Rue Nationale" are a draw,
+  not a choice. The message that says nothing was found now carries the
+  received text to the address search field.
+
+### Changed
+
+- **Both bike profiles stop at 25 km/h** — the figure the assistance law names
+  and the one a city rider brakes at. Left alone the engine coasted any bike
+  downhill to its default 45 km/h, which nobody reaches on twenty kilos of
+  upright share bike, and the minutes announced came out 2 to 3 % too few
+  even across flat Lille. The cap enlarges what the profile accounts for, so
+  the assistance factor gives back exactly that much: ×0.95 becomes ×0.92,
+  measured to land the whole at the observed ×0.80. The ceiling also
+  underwrites the pruning bound, which rides a straight line at 25.2 km/h.
+- **Three corrections to the planner's arithmetic**, none touching what a
+  journey is: the pruning bound rides the bike the journey is asked for — a
+  bound left at the mechanical pace could overtake the quickest assisted ride
+  and discard the optimum unseen; the direct walk prunes pairs before their
+  legs are computed rather than after; and when the pairs come up empty on a
+  short trip, the walk already in hand is the one offered instead of being
+  traced a second time.
+
+### Fixed
+
+- **A refused import names what the file really is.** What a file is is
+  decided from its first bytes, in pure Kotlin, before anything opens it, and
+  the two cases the user can act on are told apart: a file that is none of the
+  three datasets, and a dataset offered on the wrong line. A SQLite file is
+  named by its tables; the routing graph stops accepting anything that merely
+  is not SQLite — a screenshot offered as the graph was accepted and
+  installed. A refused import also stops leaving its staging directory behind.
+- **A connection lost mid-transfer is not an unreadable file.** A socket dying
+  halfway through a body fell into the same catch as a response whose shape
+  makes no sense, so turning the Wi-Fi off two seconds into a 44 MB download
+  answered "Unreadable file received". Only the read of the socket answers
+  Offline; a digest that does not match keeps `MalformedResponse`. The
+  manifest read follows the same rule, so "check for updates" on a dying
+  connection stops blaming the host too.
+- **A question survives the phone turning over.** All nine dialogs were built
+  where they were asked and belonged to no fragment manager, so a rotation
+  wiped "Delete this data?" with neither a deletion nor a cancellation to show
+  for it. `ConfirmationDialogFragment` takes the seven questions with two
+  answers, `ChoiceDialogFragment` the two that offer a list; the answer comes
+  back as a fragment result, and what a caller needs in order to act on it
+  travels in a payload rather than being read again from a list refreshed
+  meanwhile.
+- **The offline banner lifts the controls it used to cover.** It stood exactly
+  over the map's "station list" button and the list's "nearest station
+  first". The activity now reports the room the banner takes, counted above
+  the system bars; the map raises the attribution its bottom cluster is
+  constrained to, the list raises the button and the room kept under its last
+  row.
+- **Offline says so differently when nothing was ever received.** "The last
+  known availability stays on screen" was said over a map that had never
+  shown one. `DataError.toUserMessage` takes `hasKnownAvailability`, read from
+  the very value the freshness pill is written from, and a test holds the two
+  sentences apart in every started file.
+- **The map stops repeating, on a banner, what its own panel says.** With no
+  city chosen the map raised the panel that asks for one and then laid a
+  banner under it saying the same thing with an inert "Try again" on it. The
+  station list, which has no panel to lean on, carries the chooser on its
+  banner instead of "Try again"; and with no conurbation in service its empty
+  state now asks "Which city?" with the button that opens the chooser, rather
+  than inviting a pull that fetches nothing.
+- **Held sideways, the screens read once give their height back.** The welcome
+  page showed two lines and a half of the paragraph everybody reads once; a
+  `layout-land` arrangement has the paragraph and the drawing share the width,
+  and the two buttons share the bottom row. The journey result gave the track
+  a band of 109 px; its landscape arrangement puts the map and the detail side
+  by side, half the width each, and the detail moves to
+  `view_journey_result_detail.xml`, included by both orientations so the two
+  cannot drift apart.
+- **The four search fields carry `flagNoExtractUi`**: in landscape the soft
+  keyboard took the whole window for its own copy of the field, and results
+  updated at every keystroke were invisible until it was folded away.
+- **A run of facts is a name, not a paragraph.** The journey detail and the
+  result screen's summary opt out of the theme's justification through
+  `Widget.RoueLibre.Name`, so "Ride to Theatre Sebastopol" wraps instead of
+  spreading its first line bank to bank; `JourneyDetailNamesTest` holds every
+  text view that can wrap on those layouts to the style.
+- **A figure and its unit stay on one line.** The space between a number and
+  the symbol naming it becomes a non-breaking one in the twenty-six translated
+  folders — lengths, durations, file sizes, bikes, docking points, stations
+  and the age of a reading — and `UnitTypographyTest` holds every language to
+  it. The rest of each sentence keeps ordinary spaces, which is what leaves
+  the line somewhere to break.
+- **The labelled map controls trade their fixed height for a floor.** The mode
+  toggle capped its height at the 48 dp of a touch target while its label is
+  written in sp, so the largest text sizes cut the letters on the button's own
+  outline; the figure moves to `minHeight` on the four labelled buttons.
+- **The map speaks the application's languages.** MapLibre sets its own
+  `contentDescription` inside the MapView constructor, after the layout's
+  attributes are read, so under an Arabic interface the map spoke English.
+  `DescribedMapView` sets ours once the superclass is built.
+- **No layout is asked for in the middle of one.** The room the banner takes
+  is read from its own layout pass, and the margins applied from it now wait
+  for the pass to end — Android was throwing the pass away and running it
+  again.
+
+### Technical notes
+
+- `Window.statusBarColor` and `Window.navigationBarColor`, deprecated from API
+  35 and ignored under this target, are gone from the opening — the view
+  already paints the green they painted. They survive under a single version
+  test for Android 8 to 14, where the window still lays its own opaque bands
+  over that place, and go the day minSdk reaches 35.
+- The glossaries live in `docs/glossary/`, one file per language code, with an
+  index naming the register each language settled; CONTRIBUTING points at it
+  from its register rule.
+- The announced climb's definition — BRouter's filtered ascend, descents left
+  out, a ten-metre buffer against the elevation samples' own error — is
+  written down where the figure enters the model. A tester could not make
+  "10 m of climb" agree with a profile drawn between 20 m and 31 m; they do
+  agree, and now the code says why.
+- The F-Droid recipe quoted in `docs/release.md` is the one submitted for
+  1.1.0, codes 51 to 54 and the hash read off the tag.
+
 ## [1.1.0]
 
 A version made of what the application was found doing on a real phone rather
