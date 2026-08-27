@@ -116,8 +116,10 @@ class DeviceLocation(private val context: Context) {
      *
      * The subscription lives and dies with the collection: nothing runs in the
      * background, and nothing is written down (SPEC §2, C3). The flow completes
-     * without emitting when the permission is missing or every provider is off
-     * — the caller then simply shows nothing.
+     * without emitting when the permission is missing — the caller then simply
+     * shows nothing. Providers switched off do not end it: it stays subscribed
+     * to them, silently and at no cost, so the point appears the moment
+     * location is switched on rather than at the next rebuild of the screen.
      *
      * @return the last known fix first, when there is a fresh one, then every
      *   fix that improves on the one being shown. The fixes whole: the map
@@ -125,7 +127,7 @@ class DeviceLocation(private val context: Context) {
      */
     fun positions(): Flow<PositionFix> = flow {
         val manager = locationManager?.takeIf { isPermitted() } ?: return@flow
-        val providers = enabledProviders(manager)
+        val providers = presentProviders(manager)
         if (providers.isEmpty()) return@flow
 
         // What the system already holds, straight away: waiting for the first
@@ -266,6 +268,22 @@ class DeviceLocation(private val context: Context) {
     private fun enabledProviders(manager: LocationManager): List<String> =
         USABLE_PROVIDERS.filter { provider ->
             runCatching { manager.isProviderEnabled(provider) }.getOrDefault(false)
+        }
+
+    /**
+     * The usable providers this device has at all, enabled or not.
+     *
+     * What a long-lived subscription must enumerate, where a one-shot request
+     * wants [enabledProviders]: subscribing to a disabled provider costs
+     * nothing and delivers nothing until the user switches location on, at
+     * which point the fixes simply start. Enumerating the enabled ones instead
+     * froze the subscription's world at its first instant — location switched
+     * on while the map was up delivered no point until the screen was rebuilt,
+     * because the flow had ended on an empty list that was no longer true.
+     */
+    private fun presentProviders(manager: LocationManager): List<String> =
+        USABLE_PROVIDERS.filter { provider ->
+            runCatching { provider in manager.allProviders }.getOrDefault(false)
         }
 
     private fun lastKnownFrom(manager: LocationManager, provider: String): Location? = try {
