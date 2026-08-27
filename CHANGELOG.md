@@ -7,6 +7,78 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
+## [1.2.3]
+
+The point that stands for the user on the map, taken seriously. It used to be
+a disc redrawn wherever the last fix landed, saying the same thing whether the
+fix was a second or an hour old and never saying which way its owner was
+facing. It now moves, ages and points. Two fixes beside them keep the following
+alive where it used to need the screen rebuilt.
+
+### Added
+
+- **The point glides from fix to fix instead of jumping.** Fixes arrive a
+  couple of seconds and a few metres apart, and a disc redrawn where each one
+  lands teleports — an eight-metre jump every two seconds reads as a glitch,
+  where a point that walks reads as "me". `UserPositionDisplay` animates the
+  point from the position drawn to the fix received, over one second of the two
+  separating fixes, the circle of uncertainty travelling with it. The
+  interpolation is pure Kotlin in `core` and tested on the JVM; the glide runs
+  through `ValueAnimator`, so the system's remove-animations setting collapses
+  it back to the plain jump. Both maps — the main screen and the journey result
+  — draw through it.
+
+- **The point greys once the fixes have deserted it.** A disc still drawn full
+  a minute after the last fix asserts a position nobody is measuring any more:
+  at a walking pace the device is some eighty metres away by then, often a
+  street over. The ink drains to the soft grey at that age — "last seen here"
+  rather than "you are here" — and the point is not withdrawn, where the device
+  was last seen still being worth showing. The age is measured on the fix's own
+  forward-only clock, so a point restored after a rebuild of the view comes back
+  already grey when it deserves to.
+
+- **The point says which way it is going, while that is measured.** A cone
+  peeks out from under the disc, pointing along the direction of travel the
+  satellites deduce from the movement itself. It exists only in motion: a walker
+  who stops loses it and the disc goes back to bare — the uncertainty circle's
+  rule that a thing nobody measured is not one to draw. The bearing rides on the
+  fixes already listened to, so no sensor is added and nothing new is asked of
+  the system, and the glide turns it by the shorter way round the compass. A
+  stale point loses its cone with its ink.
+
+- **The wait for a first fix is visible on the locate-me button.** Indoors that
+  wait can run to ten seconds, and for that long the button was merely disabled
+  — a button dead for ten seconds reads as broken, not as searching. It now
+  breathes while the fix is waited for, and the screen reader is told the same
+  thing in words. Where the system's remove-animations setting is on, the button
+  holds the faded state instead of breathing it.
+
+### Fixed
+
+- **The followed point survives location being switched on mid-screen.**
+  `positions()` enumerated the enabled providers once and completed when the
+  list was empty, so a map opened with location off never showed a point until
+  its screen was rebuilt, however quickly the user switched location back on.
+  The subscription now covers every provider the device has, enabled or not: a
+  disabled provider costs nothing to listen to, and its fixes simply start when
+  the user enables it. One-shot requests keep the enabled-only list — a button's
+  answer should not wait ten seconds on a radio that is off.
+
+- **The journey result screen starts following after a permission granted away
+  from the screen.** It checked the permission once, when its view was built, so
+  a permission granted later from the Android settings started nothing on
+  return. The map screen already re-checked on resume; the journey screen now
+  does the same.
+
+### Technical notes
+
+- **The journey screen's following opens on a permission gate, as the map's
+  does.** Calling `repeatOnLifecycle` from `onResume` is what lint rightly
+  refuses: one subscription per resume, guarded only by a job reference. The
+  screen now follows the map screen's own pattern — a single subscription for
+  the life of the view, opened and closed by a `StateFlow` re-reading the
+  permission on every resume and set by the button's answer.
+
 ## [1.2.2]
 
 A patch answering the F-Droid review of 1.2.1, and a reviewer's count of the

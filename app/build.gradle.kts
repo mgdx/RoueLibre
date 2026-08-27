@@ -53,14 +53,14 @@ android {
         // leaves it unable to tell one release from the next. The
         // architectures derive their own codes from it below, so the value is
         // still written once.
-        versionCode = 8
-        // A patch: four fixes and nothing added. Three answer the F-Droid
-        // review of 1.2.1 — the notices two licences ask to be reproduced,
-        // the gazetteer the city names come from credited, and a refused
-        // location permission never asked for unprompted again — and the
-        // fourth names the licence each network publishes its data under.
+        versionCode = 9
+        // The point that stands for the user on the map, taken seriously:
+        // it glides from fix to fix instead of jumping, greys once the
+        // fixes have deserted it, and shows the direction of travel while
+        // that direction is being measured. Two fixes beside them keep the
+        // following alive when location is switched on mid-screen.
         // See CHANGELOG.md.
-        versionName = "1.2.2"
+        versionName = "1.2.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

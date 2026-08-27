@@ -1,0 +1,7 @@
+The point that stands for you on the map now behaves like you do.
+
+• It walks instead of teleporting: between two fixes it glides to the new position rather than jumping to it.
+• It goes grey when the last fix is a minute old — "last seen here" rather than "you are here".
+• It shows which way you are going, as a cone under the disc, for as long as your movement says so. Stop, and the cone goes.
+• The locate-me button breathes while a first fix is being waited for, instead of merely sitting there disabled.
+• The point keeps following you when location is switched on while the map is open, and after the permission is granted from the Android settings.
