@@ -1,5 +1,6 @@
 package io.github.mgdx.rouelibre.core.geo
 
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -72,5 +73,37 @@ class PositionFixTest {
         assertTrue(fix(0, 25.0).isPreciseEnough)
         assertFalse(fix(0, 25.1).isPreciseEnough)
         assertFalse(fix(0, null).isPreciseEnough)
+    }
+
+    @Test
+    fun `the glide walks the straight line between two fixes`() {
+        val from = PositionFix(Coordinates(50.0, 3.0), 40.0, 1_000)
+        val to = PositionFix(Coordinates(50.2, 3.4), 20.0, 3_000)
+        val midway = from.interpolatedTowards(to, 0.5)
+        assertEquals(50.1, midway.coordinates.latitude, 1e-9)
+        assertEquals(3.2, midway.coordinates.longitude, 1e-9)
+        assertEquals(30.0, midway.accuracyMetres!!, 1e-9)
+        // An intermediate step is a way of drawing the target fix, not a
+        // third measurement: it carries the target's clock.
+        assertEquals(3_000, midway.takenAtMillis)
+    }
+
+    @Test
+    fun `the glide starts and ends exactly on its two fixes`() {
+        val from = PositionFix(Coordinates(50.0, 3.0), 40.0, 1_000)
+        val to = PositionFix(Coordinates(50.2, 3.4), 20.0, 3_000)
+        assertEquals(from.coordinates, from.interpolatedTowards(to, 0.0).coordinates)
+        assertEquals(to.coordinates, from.interpolatedTowards(to, 1.0).coordinates)
+        // An animator may overshoot its nominal range; the walk may not.
+        assertEquals(from.coordinates, from.interpolatedTowards(to, -0.1).coordinates)
+        assertEquals(to.coordinates, from.interpolatedTowards(to, 1.1).coordinates)
+    }
+
+    @Test
+    fun `a fix without accuracy hands the circle's width to the other fix`() {
+        val from = PositionFix(Coordinates(50.0, 3.0), null, 1_000)
+        val to = PositionFix(Coordinates(50.2, 3.4), 20.0, 3_000)
+        assertEquals(20.0, from.interpolatedTowards(to, 0.5).accuracyMetres!!, 1e-9)
+        assertEquals(null, to.interpolatedTowards(from, 0.5).accuracyMetres)
     }
 }

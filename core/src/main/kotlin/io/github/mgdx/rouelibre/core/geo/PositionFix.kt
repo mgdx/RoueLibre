@@ -54,6 +54,41 @@ public fun PositionFix.improvesOn(shown: PositionFix?): Boolean {
 }
 
 /**
+ * Where the point stands, [fraction] of the way from this fix to [target].
+ *
+ * What the marker glides along between two fixes: fixes arrive a couple of
+ * seconds and a few metres apart, and a point redrawn at each arrival
+ * teleports from one to the next instead of walking. The screens draw the
+ * intermediate steps this computes, so the point moves the way the person
+ * carrying it does.
+ *
+ * Straight lines in degrees: over the tens of metres separating two fixes
+ * they are indistinguishable from the geodesic. The one place they are not —
+ * two fixes astride the antimeridian — no served city straddles, and the
+ * glide would merely take the long way round for a second.
+ *
+ * The width of the doubt travels too, so the uncertainty circle shrinks or
+ * grows with the point instead of jumping after it; a fix that announces no
+ * accuracy hands the question to the other one. The timestamp is [target]'s:
+ * an intermediate step is a way of drawing that fix, not a third measurement.
+ */
+public fun PositionFix.interpolatedTowards(target: PositionFix, fraction: Double): PositionFix {
+    val walked = fraction.coerceIn(0.0, 1.0)
+    return PositionFix(
+        coordinates = Coordinates(
+            latitude = coordinates.latitude +
+                (target.coordinates.latitude - coordinates.latitude) * walked,
+            longitude = coordinates.longitude +
+                (target.coordinates.longitude - coordinates.longitude) * walked,
+        ),
+        accuracyMetres = accuracyMetres?.let { from ->
+            target.accuracyMetres?.let { to -> from + (to - from) * walked }
+        } ?: target.accuracyMetres,
+        takenAtMillis = target.takenAtMillis,
+    )
+}
+
+/**
  * True when the fix is accurate enough to stop waiting for a better one.
  *
  * Twenty-five metres: the width of a boulevard with its pavements. Below that,

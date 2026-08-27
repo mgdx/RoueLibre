@@ -173,9 +173,8 @@ class MapFragment : Fragment() {
     private var barsAtTheBottom = 0
     private var roomForTheBanner = 0
 
-    private var userPositionSource: GeoJsonSource? = null
-
-    private var userAccuracySource: GeoJsonSource? = null
+    /** Draws the user's point, gliding it between fixes — see [UserPositionDisplay]. */
+    private var userPosition: UserPositionDisplay? = null
 
     /**
      * The city this map is drawn for, as soon as it is known.
@@ -674,17 +673,16 @@ class MapFragment : Fragment() {
             UserPositionMarker.ACCURACY_SOURCE_ID,
             UserPositionMarker.accuracyFeatureFor(null),
         )
-        userAccuracySource = userAccuracy
         style.addSource(userAccuracy)
         style.addLayer(UserPositionMarker.accuracyLayer(context))
 
-        val userPosition = GeoJsonSource(
+        val userPoint = GeoJsonSource(
             UserPositionMarker.SOURCE_ID,
             UserPositionMarker.featureFor(null),
         )
-        userPositionSource = userPosition
-        style.addSource(userPosition)
+        style.addSource(userPoint)
         style.addLayer(UserPositionMarker.layer(context))
+        userPosition = UserPositionDisplay(userPoint, userAccuracy)
         // The known position is shown again after the view is rebuilt, without
         // asking the system afresh.
         showPosition(lastKnownPosition)
@@ -1116,12 +1114,11 @@ class MapFragment : Fragment() {
     /**
      * Draws the point and, when the fix is a coarse one, the circle around it.
      *
-     * The two sources are set together: a circle left behind by the point it
-     * belongs to would circle a place the user has left (SPEC §7.1).
+     * Point and circle move together, and they glide rather than jump — see
+     * [UserPositionDisplay] (SPEC §7.1).
      */
     private fun showPosition(fix: PositionFix?) {
-        userPositionSource?.setGeoJson(UserPositionMarker.featureFor(fix))
-        userAccuracySource?.setGeoJson(UserPositionMarker.accuracyFeatureFor(fix))
+        userPosition?.show(fix)
     }
 
     private fun showMessage(message: Int) {
@@ -1561,8 +1558,8 @@ class MapFragment : Fragment() {
         binding?.map?.onDestroy()
         stationSource = null
         pickedPlaceSource = null
-        userPositionSource = null
-        userAccuracySource = null
+        userPosition?.cancel()
+        userPosition = null
         servedAreaCamera = null
         mapLibreMap = null
         styleLoaded = false

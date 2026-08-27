@@ -42,6 +42,7 @@ import io.github.mgdx.rouelibre.ui.formatDuration
 import io.github.mgdx.rouelibre.ui.formatMinutes
 import io.github.mgdx.rouelibre.ui.map.MapStyleLoader
 import io.github.mgdx.rouelibre.ui.map.ServedAreaCamera
+import io.github.mgdx.rouelibre.ui.map.UserPositionDisplay
 import io.github.mgdx.rouelibre.ui.map.UserPositionMarker
 import io.github.mgdx.rouelibre.ui.toUserMessage
 import io.github.mgdx.rouelibre.ui.withBikeFleet
@@ -76,8 +77,9 @@ class JourneyResultFragment : Fragment() {
     private var walkSource: GeoJsonSource? = null
     private var rideSource: GeoJsonSource? = null
     private var markerSource: GeoJsonSource? = null
-    private var userPositionSource: GeoJsonSource? = null
-    private var userAccuracySource: GeoJsonSource? = null
+
+    /** Draws the user's point, gliding it between fixes — see [UserPositionDisplay]. */
+    private var userPosition: UserPositionDisplay? = null
     private var styleLoaded = false
 
     /**
@@ -494,14 +496,13 @@ class JourneyResultFragment : Fragment() {
             // Its circle of uncertainty goes just under it, above the tracks:
             // it is a doubt about the point, not about the journey.
             val userAccuracy = GeoJsonSource(UserPositionMarker.ACCURACY_SOURCE_ID)
-            userAccuracySource = userAccuracy
             style.addSource(userAccuracy)
             style.addLayer(UserPositionMarker.accuracyLayer(requireContext()))
 
-            val userPosition = GeoJsonSource(UserPositionMarker.SOURCE_ID)
-            userPositionSource = userPosition
-            style.addSource(userPosition)
+            val userPoint = GeoJsonSource(UserPositionMarker.SOURCE_ID)
+            style.addSource(userPoint)
             style.addLayer(UserPositionMarker.layer(requireContext()))
+            userPosition = UserPositionDisplay(userPoint, userAccuracy)
             showPosition(lastKnownPosition)
 
             styleLoaded = true
@@ -657,12 +658,11 @@ class JourneyResultFragment : Fragment() {
     /**
      * Draws the point and, when the fix is a coarse one, the circle around it.
      *
-     * The two sources are set together: a circle left behind by the point it
-     * belongs to would circle a place the user has left (SPEC §7.4).
+     * Point and circle move together, and they glide rather than jump — see
+     * [UserPositionDisplay] (SPEC §7.4).
      */
     private fun showPosition(fix: PositionFix?) {
-        userPositionSource?.setGeoJson(UserPositionMarker.featureFor(fix))
-        userAccuracySource?.setGeoJson(UserPositionMarker.accuracyFeatureFor(fix))
+        userPosition?.show(fix)
     }
 
     private fun show(state: JourneyUiState) {
@@ -1043,8 +1043,8 @@ class JourneyResultFragment : Fragment() {
         walkSource = null
         rideSource = null
         markerSource = null
-        userPositionSource = null
-        userAccuracySource = null
+        userPosition?.cancel()
+        userPosition = null
         servedArea = null
         mapLibreMap = null
         styleLoaded = false
