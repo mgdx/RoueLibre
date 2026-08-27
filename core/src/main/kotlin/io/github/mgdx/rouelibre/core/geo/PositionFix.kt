@@ -89,6 +89,27 @@ public fun PositionFix.interpolatedTowards(target: PositionFix, fraction: Double
 }
 
 /**
+ * True when the fix no longer says "you are here", only "you were here".
+ *
+ * A minute without a fresh fix: at a walking pace the device is some eighty
+ * metres away by then, often a street over, and a disc still drawn full
+ * asserts a position nobody is measuring any more. Past this age the marker
+ * turns grey rather than vanish — where the device was last seen is still
+ * worth showing, it is the certainty that has expired (SPEC §7.1). Twice the
+ * age at which [improvesOn] lets any fresh fix take over: that one arbitrates
+ * between two measurements, this one admits there is no second measurement to
+ * arbitrate with.
+ *
+ * @param nowMillis the present instant, on the same forward-only clock the
+ *   fix was stamped with.
+ */
+public fun PositionFix.isStaleAt(nowMillis: Long): Boolean = nowMillis >= staleAtMillis
+
+/** The instant this fix starts being stale, on the fix's own clock. */
+public val PositionFix.staleAtMillis: Long
+    get() = takenAtMillis + STALE_AGE_MILLIS
+
+/**
  * True when the fix is accurate enough to stop waiting for a better one.
  *
  * Twenty-five metres: the width of a boulevard with its pavements. Below that,
@@ -101,6 +122,9 @@ public val PositionFix.isPreciseEnough: Boolean
 
 /** How old the displayed point has to be for any fresh fix to replace it. */
 private const val SUPERSEDING_AGE_MILLIS = 30_000L
+
+/** How long a fix keeps passing for "you are here" when nothing follows it. */
+private const val STALE_AGE_MILLIS = 60_000L
 
 /** How much worse than the displayed fix a newer one may be, as a factor. */
 private const val TOLERATED_WORSENING = 1.5

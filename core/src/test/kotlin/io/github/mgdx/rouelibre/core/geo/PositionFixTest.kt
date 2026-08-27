@@ -100,6 +100,14 @@ class PositionFixTest {
     }
 
     @Test
+    fun `a fix stops passing for the present position after a minute`() {
+        val taken = fix(10_000, 9.0)
+        assertFalse(taken.isStaleAt(69_999))
+        assertTrue(taken.isStaleAt(70_000))
+        assertEquals(70_000, taken.staleAtMillis)
+    }
+
+    @Test
     fun `a fix without accuracy hands the circle's width to the other fix`() {
         val from = PositionFix(Coordinates(50.0, 3.0), null, 1_000)
         val to = PositionFix(Coordinates(50.2, 3.4), 20.0, 3_000)

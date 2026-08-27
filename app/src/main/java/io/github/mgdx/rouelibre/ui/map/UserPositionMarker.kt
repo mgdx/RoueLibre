@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.geo.PositionFix
 import io.github.mgdx.rouelibre.core.geo.uncertaintyCircle
+import org.maplibre.android.style.expressions.Expression
 import org.maplibre.android.style.layers.CircleLayer
 import org.maplibre.android.style.layers.FillLayer
 import org.maplibre.android.style.layers.PropertyFactory
@@ -42,11 +43,26 @@ object UserPositionMarker {
     /** The circle of uncertainty's layer. */
     const val ACCURACY_LAYER_ID: String = "user-position-accuracy"
 
-    /** The disc, laid above the stations. */
+    /** The property that says the fix has aged past being believed. */
+    const val STALE_PROPERTY: String = "stale"
+
+    /**
+     * The disc, laid above the stations.
+     *
+     * Its ink drains to grey when the fix goes stale: a disc still drawn full
+     * a minute after the last fix asserts a position nobody is measuring any
+     * more, and grey is how it says "last seen here" instead (SPEC §7.1).
+     */
     fun layer(context: Context): CircleLayer = CircleLayer(LAYER_ID, SOURCE_ID)
         .withProperties(
             PropertyFactory.circleRadius(7f),
-            PropertyFactory.circleColor(ContextCompat.getColor(context, R.color.ink)),
+            PropertyFactory.circleColor(
+                Expression.switchCase(
+                    Expression.toBool(Expression.get(STALE_PROPERTY)),
+                    Expression.color(ContextCompat.getColor(context, R.color.ink_soft)),
+                    Expression.color(ContextCompat.getColor(context, R.color.ink)),
+                ),
+            ),
             PropertyFactory.circleStrokeWidth(3f),
             PropertyFactory.circleStrokeColor(ContextCompat.getColor(context, R.color.surface)),
         )
@@ -68,15 +84,20 @@ object UserPositionMarker {
                 PropertyFactory.fillOpacity(ACCURACY_OPACITY),
             )
 
-    /** The source's contents: the position, or nothing. */
-    fun featureFor(fix: PositionFix?): FeatureCollection {
+    /**
+     * The source's contents: the position, or nothing.
+     *
+     * @param stale whether the fix is only where the device was last seen —
+     *   the disc then greys, see [layer].
+     */
+    fun featureFor(fix: PositionFix?, stale: Boolean = false): FeatureCollection {
         if (fix == null) return FeatureCollection.fromFeatures(emptyList())
         val position = fix.coordinates
-        return FeatureCollection.fromFeatures(
-            listOf(
-                Feature.fromGeometry(Point.fromLngLat(position.longitude, position.latitude)),
-            ),
+        val point = Feature.fromGeometry(
+            Point.fromLngLat(position.longitude, position.latitude),
         )
+        point.addBooleanProperty(STALE_PROPERTY, stale)
+        return FeatureCollection.fromFeatures(listOf(point))
     }
 
     /** The circle's contents: the ring around the position, or nothing. */

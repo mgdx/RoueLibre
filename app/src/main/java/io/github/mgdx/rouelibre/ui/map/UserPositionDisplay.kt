@@ -3,13 +3,19 @@ package io.github.mgdx.rouelibre.ui.map
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import android.view.animation.LinearInterpolator
 import io.github.mgdx.rouelibre.core.geo.PositionFix
 import io.github.mgdx.rouelibre.core.geo.interpolatedTowards
+import io.github.mgdx.rouelibre.core.geo.isStaleAt
+import io.github.mgdx.rouelibre.core.geo.staleAtMillis
 import org.maplibre.android.style.sources.GeoJsonSource
 
 /**
- * Draws the user's point on a map, gliding it from fix to fix.
+ * Draws the user's point on a map, gliding it from fix to fix and letting it
+ * age when no fix follows.
  *
  * The following delivers a fix every couple of seconds and five metres at
  * best (see `DeviceLocation`), and a point redrawn at each arrival teleports:
@@ -23,6 +29,12 @@ import org.maplibre.android.style.sources.GeoJsonSource
  * "remove animations" accessibility setting respected without a line here:
  * with the animator scale at zero the glide collapses back to the plain jump.
  *
+ * When the fixes stop coming — the device under a roof, location switched
+ * off — the point greys at the age [isStaleAt] sets rather than keep
+ * asserting a position nobody is measuring (SPEC §7.1). The age is measured
+ * on the fix's own forward-only clock, so a point restored after a rebuild
+ * of the view comes back already grey when it deserves to.
+ *
  * One instance per loaded map style, cancelled with the view: a frame drawn
  * into a destroyed map's sources would reach freed native memory.
  */
@@ -32,6 +44,9 @@ class UserPositionDisplay(
 ) {
 
     private var glide: ValueAnimator? = null
+
+    /** The pending greying, on the thread the map is drawn from. */
+    private val greying = Handler(Looper.getMainLooper())
 
     /** The fix the sources hold at this instant — mid-glide, an interpolated one. */
     private var drawn: PositionFix? = null
@@ -45,9 +60,10 @@ class UserPositionDisplay(
      */
     fun show(fix: PositionFix?) {
         glide?.cancel()
+        greying.removeCallbacksAndMessages(null)
         val from = drawn
         if (fix == null || from == null) {
-            draw(fix)
+            settle(fix)
             return
         }
         glide = ValueAnimator.ofFloat(0f, 1f).apply {
@@ -56,7 +72,12 @@ class UserPositionDisplay(
             // person walks, and an eased one reads as stop-and-go.
             interpolator = LinearInterpolator()
             addUpdateListener {
-                draw(from.interpolatedTowards(fix, (it.animatedValue as Float).toDouble()))
+                // Never stale mid-walk: a point on its way to a fix is being
+                // fed by one.
+                draw(
+                    from.interpolatedTowards(fix, (it.animatedValue as Float).toDouble()),
+                    stale = false,
+                )
             }
             addListener(object : AnimatorListenerAdapter() {
                 private var cancelled = false
@@ -68,22 +89,43 @@ class UserPositionDisplay(
                 override fun onAnimationEnd(animation: Animator) {
                     // A cancelled glide must not land: the fix it was walking
                     // to has been replaced by the one that cancelled it.
-                    if (!cancelled) draw(fix)
+                    if (!cancelled) settle(fix)
                 }
             })
             start()
         }
     }
 
-    /** Stops any glide under way; the display is then inert. */
+    /** Stops any pending drawing — glide and greying; the display is then inert. */
     fun cancel() {
         glide?.cancel()
         glide = null
+        greying.removeCallbacksAndMessages(null)
     }
 
-    private fun draw(fix: PositionFix?) {
+    /**
+     * Draws [fix] where it is, and arms its greying.
+     *
+     * The next fix disarms it; its absence is exactly what the greying is
+     * there to show.
+     */
+    private fun settle(fix: PositionFix?) {
+        if (fix == null) {
+            draw(null, stale = false)
+            return
+        }
+        val now = SystemClock.elapsedRealtime()
+        if (fix.isStaleAt(now)) {
+            draw(fix, stale = true)
+            return
+        }
+        draw(fix, stale = false)
+        greying.postDelayed({ draw(fix, stale = true) }, fix.staleAtMillis - now)
+    }
+
+    private fun draw(fix: PositionFix?, stale: Boolean) {
         drawn = fix
-        positionSource.setGeoJson(UserPositionMarker.featureFor(fix))
+        positionSource.setGeoJson(UserPositionMarker.featureFor(fix, stale))
         accuracySource.setGeoJson(UserPositionMarker.accuracyFeatureFor(fix))
     }
 
