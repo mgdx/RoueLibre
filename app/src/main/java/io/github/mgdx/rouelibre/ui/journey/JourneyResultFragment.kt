@@ -47,8 +47,8 @@ import io.github.mgdx.rouelibre.ui.map.UserPositionMarker
 import io.github.mgdx.rouelibre.ui.toUserMessage
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -114,8 +114,16 @@ class JourneyResultFragment : Fragment() {
      */
     private var lastKnownPosition: PositionFix? = null
 
-    /** The subscription that moves the point, while the screen is displayed. */
-    private var following: Job? = null
+    /**
+     * Whether the point may follow the device: the permission as it stands.
+     *
+     * A flow rather than a call, for the map screen's own reason: the answer
+     * changes while the screen is up — granted from the button, or from the
+     * Android settings while the application was away — and the one
+     * subscription has to start on that answer rather than be stacked again
+     * at each return.
+     */
+    private val locationPermitted = MutableStateFlow(false)
 
     /**
      * Whether the network served lends pedal-assist bikes (SPEC §15).
@@ -211,7 +219,7 @@ class JourneyResultFragment : Fragment() {
             locateMe()
             // Only now may the point start following: before this answer there
             // was nothing to follow it with (SPEC §10).
-            followUserPosition()
+            locationPermitted.value = true
         } else {
             // Written down for good: a refusal pronounced here must also keep
             // the map from asking unprompted when it opens next (SPEC §10).
@@ -633,23 +641,26 @@ class JourneyResultFragment : Fragment() {
     /**
      * Follows the position and moves the point on the map (SPEC §7.4).
      *
-     * Only if the permission has already been granted: opening this screen asks
-     * for nothing (SPEC §10). Without the permission, or with location switched
-     * off, no point is shown and nothing says otherwise — and it is the "locate
-     * me" button, once answered, that starts the following.
+     * Only if the permission has been granted: opening this screen asks for
+     * nothing (SPEC §10). Without the permission, or with location switched
+     * off, no point is shown and nothing says otherwise — the "locate me"
+     * button, once answered, opens the gate, and so does a permission granted
+     * from the Android settings while the application was away, which the
+     * resume re-reads (see [onResume]).
      *
-     * The subscription stops with the screen, and the position is written
-     * nowhere: it lives in the display source, for as long as it is displayed
-     * (SPEC §2, C3).
+     * Subscribed once for the life of the view, like the map screen's own
+     * following, and the position is written nowhere: it lives in the display
+     * source, for as long as it is displayed (SPEC §2, C3).
      */
     private fun followUserPosition() {
-        if (following?.isActive == true) return
-        if (!container.deviceLocation.isPermitted()) return
-        following = viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                container.deviceLocation.positions().collect { fix ->
-                    lastKnownPosition = fix
-                    showPosition(fix)
+                locationPermitted.collectLatest { permitted ->
+                    if (!permitted) return@collectLatest
+                    container.deviceLocation.positions().collect { fix ->
+                        lastKnownPosition = fix
+                        showPosition(fix)
+                    }
                 }
             }
         }
@@ -1002,10 +1013,9 @@ class JourneyResultFragment : Fragment() {
         super.onResume()
         binding?.map?.onResume()
         // The permission may have been granted from the Android settings while
-        // the application was away: the following then starts here, the view
-        // having been built when there was nothing to follow with. The map
-        // screen does the same re-check on its resume (SPEC §7.4, §10).
-        followUserPosition()
+        // the application was away: the following then starts on this answer,
+        // exactly as on the map screen's own resume (SPEC §7.4, §10).
+        locationPermitted.value = container.deviceLocation.isPermitted()
     }
 
     override fun onPause() {
@@ -1037,9 +1047,6 @@ class JourneyResultFragment : Fragment() {
 
     override fun onDestroyView() {
         binding?.map?.onDestroy()
-        // The subscription dies with the view's scope; the reference must go
-        // with it, or the next view would believe the point already followed.
-        following = null
         walkSource = null
         rideSource = null
         markerSource = null
