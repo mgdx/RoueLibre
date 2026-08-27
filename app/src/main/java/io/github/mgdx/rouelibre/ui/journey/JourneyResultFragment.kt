@@ -509,6 +509,9 @@ class JourneyResultFragment : Fragment() {
 
             val userPoint = GeoJsonSource(UserPositionMarker.SOURCE_ID)
             style.addSource(userPoint)
+            // The direction cone goes under the disc, as on the main screen.
+            UserPositionMarker.registerImage(requireContext(), style)
+            style.addLayer(UserPositionMarker.bearingLayer())
             style.addLayer(UserPositionMarker.layer(requireContext()))
             userPosition = UserPositionDisplay(userPoint, userAccuracy)
             showPosition(lastKnownPosition)

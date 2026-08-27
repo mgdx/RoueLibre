@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The direction of travel, on the user's position marker: a cone whose tip
+    peeks out from under the disc (SPEC §7.1).
+
+    Drawn pointing north in a square viewport, centred on the disc's own
+    centre: the map layer rotates it to the measured bearing, so the geometry
+    here never encodes a direction. The rim keeps the tip legible on the dark
+    ground and the pale one alike, as the disc's own stroke does.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+    <path
+        android:fillColor="@color/surface"
+        android:pathData="M16,0.8L9.4,13.8L22.6,13.8Z" />
+    <path
+        android:fillColor="@color/ink"
+        android:pathData="M16,3.4L11.5,12.4L20.5,12.4Z" />
+</vector>

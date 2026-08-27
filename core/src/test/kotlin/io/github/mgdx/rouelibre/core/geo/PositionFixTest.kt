@@ -114,4 +114,27 @@ class PositionFixTest {
         assertEquals(20.0, from.interpolatedTowards(to, 0.5).accuracyMetres!!, 1e-9)
         assertEquals(null, to.interpolatedTowards(from, 0.5).accuracyMetres)
     }
+
+    @Test
+    fun `the bearing turns by the shorter way round`() {
+        // From 350° to 10° the short way passes through north: halfway is 0°,
+        // where plain averaging would say 180° — due south, the exact
+        // opposite of both headings.
+        val from = PositionFix(Coordinates(50.0, 3.0), 10.0, 1_000, bearingDegrees = 350.0)
+        val to = PositionFix(Coordinates(50.2, 3.4), 10.0, 3_000, bearingDegrees = 10.0)
+        assertEquals(0.0, from.interpolatedTowards(to, 0.5).bearingDegrees!!, 1e-9)
+        assertEquals(0.0, to.interpolatedTowards(from, 0.5).bearingDegrees!!, 1e-9)
+        assertEquals(355.0, from.interpolatedTowards(to, 0.25).bearingDegrees!!, 1e-9)
+        assertEquals(10.0, from.interpolatedTowards(to, 1.0).bearingDegrees!!, 1e-9)
+    }
+
+    @Test
+    fun `a fix without a bearing hands the direction to the other fix`() {
+        // A walker who stops loses the cone at once: the glide toward a
+        // bearingless fix must not keep pointing the old way.
+        val moving = PositionFix(Coordinates(50.0, 3.0), 10.0, 1_000, bearingDegrees = 90.0)
+        val standing = PositionFix(Coordinates(50.2, 3.4), 10.0, 3_000)
+        assertEquals(null, moving.interpolatedTowards(standing, 0.5).bearingDegrees)
+        assertEquals(90.0, standing.interpolatedTowards(moving, 0.5).bearingDegrees!!, 1e-9)
+    }
 }

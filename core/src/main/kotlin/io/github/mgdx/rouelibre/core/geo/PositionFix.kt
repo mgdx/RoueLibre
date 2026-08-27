@@ -15,11 +15,17 @@ package io.github.mgdx.rouelibre.core.geo
  * @property takenAtMillis when the fix was taken, on a clock that only goes
  *   forward — the device's uptime, never the wall clock, which a time-zone
  *   change or a clock correction can move backwards under our feet.
+ * @property bearingDegrees which way the device is moving, in degrees
+ *   clockwise from north, when the provider measured it. The satellites
+ *   deduce it from the movement itself, so it exists only in motion: standing
+ *   still there is none, and `null` says so — a direction nobody measured is
+ *   not one to draw, the rule the uncertainty circle already follows.
  */
 public data class PositionFix(
     public val coordinates: Coordinates,
     public val accuracyMetres: Double?,
     public val takenAtMillis: Long,
+    public val bearingDegrees: Double? = null,
 )
 
 /**
@@ -68,9 +74,11 @@ public fun PositionFix.improvesOn(shown: PositionFix?): Boolean {
  * glide would merely take the long way round for a second.
  *
  * The width of the doubt travels too, so the uncertainty circle shrinks or
- * grows with the point instead of jumping after it; a fix that announces no
- * accuracy hands the question to the other one. The timestamp is [target]'s:
- * an intermediate step is a way of drawing that fix, not a third measurement.
+ * grows with the point instead of jumping after it, and so does the bearing,
+ * turning by the shorter way round — from 350° to 10° through north, never
+ * the long way through south; a fix that announces no accuracy or no bearing
+ * hands that question to the other one. The timestamp is [target]'s: an
+ * intermediate step is a way of drawing that fix, not a third measurement.
  */
 public fun PositionFix.interpolatedTowards(target: PositionFix, fraction: Double): PositionFix {
     val walked = fraction.coerceIn(0.0, 1.0)
@@ -85,7 +93,23 @@ public fun PositionFix.interpolatedTowards(target: PositionFix, fraction: Double
             target.accuracyMetres?.let { to -> from + (to - from) * walked }
         } ?: target.accuracyMetres,
         takenAtMillis = target.takenAtMillis,
+        bearingDegrees = bearingDegrees?.let { from ->
+            target.bearingDegrees?.let { to -> interpolatedBearing(from, to, walked) }
+        } ?: target.bearingDegrees,
     )
+}
+
+/**
+ * The bearing [fraction] of the way from [from] to [to], by the shorter arc.
+ *
+ * Degrees live on a circle: averaging 350° and 10° as plain numbers points
+ * south, the exact opposite of the two headings averaged. The turn is
+ * therefore measured as a signed angle within a half-turn either way, and
+ * the result folded back onto [0°, 360°).
+ */
+private fun interpolatedBearing(from: Double, to: Double, fraction: Double): Double {
+    val turn = (to - from + HALF_TURN_DEGREES).mod(FULL_TURN_DEGREES) - HALF_TURN_DEGREES
+    return (from + turn * fraction).mod(FULL_TURN_DEGREES)
 }
 
 /**
@@ -125,6 +149,12 @@ private const val SUPERSEDING_AGE_MILLIS = 30_000L
 
 /** How long a fix keeps passing for "you are here" when nothing follows it. */
 private const val STALE_AGE_MILLIS = 60_000L
+
+/** A full turn of the compass, in degrees. */
+private const val FULL_TURN_DEGREES = 360.0
+
+/** And half of one: the furthest a shortest turn can be. */
+private const val HALF_TURN_DEGREES = 180.0
 
 /** How much worse than the displayed fix a newer one may be, as a factor. */
 private const val TOLERATED_WORSENING = 1.5

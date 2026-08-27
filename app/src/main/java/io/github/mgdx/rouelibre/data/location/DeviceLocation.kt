@@ -301,6 +301,9 @@ class DeviceLocation(private val context: Context) {
         // a perfect fix and shut out every other provider for good.
         accuracyMetres = if (hasAccuracy()) accuracy.toDouble() else null,
         takenAtMillis = takenAtUptimeMillis(),
+        // Same guard for the bearing: unmeasured, the field reads zero, which
+        // is due north — a direction, and a wrong one, where there is none.
+        bearingDegrees = if (hasBearing()) bearing.toDouble() else null,
     )
 
     /**

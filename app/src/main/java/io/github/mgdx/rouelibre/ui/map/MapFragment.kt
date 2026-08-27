@@ -684,6 +684,10 @@ class MapFragment : Fragment() {
             UserPositionMarker.featureFor(null),
         )
         style.addSource(userPoint)
+        // The direction cone goes under the disc: its tip peeks out, its base
+        // is the disc's business.
+        UserPositionMarker.registerImage(context, style)
+        style.addLayer(UserPositionMarker.bearingLayer())
         style.addLayer(UserPositionMarker.layer(context))
         userPosition = UserPositionDisplay(userPoint, userAccuracy)
         // The known position is shown again after the view is rebuilt, without
