@@ -173,6 +173,7 @@
     <!-- The "locate me" button and what it can answer (SPEC §7.1, §10). A
          refusal never prompts again: it is noted, not argued with. -->
     <string name="map_locate_me">Me localiser</string>
+    <string name="map_locating">Recherche de ta position…</string>
     <string name="map_location_denied">Sans localisation, désigne ton point de départ sur la carte ou par une adresse.</string>
     <string name="map_location_unavailable">Position introuvable. Vérifie que la localisation est activée, puis réessaie.</string>
     <string name="map_outside_city_title">Tu es ailleurs</string>

@@ -168,6 +168,7 @@
     <!-- The "locate me" button and what it can answer (SPEC §7.1, §10). A
          refusal never prompts again: it is noted, not argued with. -->
     <string name="map_locate_me">現在地</string>
+    <string name="map_locating">現在地を取得しています…</string>
     <string name="map_location_denied">位置情報がないので、出発地点を地図か住所で指定してください。</string>
     <string name="map_location_unavailable">現在地を取得できません。位置情報がオンになっているか確かめて、もう一度お試しください。</string>
     <string name="map_outside_city_title">別の地域にいます</string>

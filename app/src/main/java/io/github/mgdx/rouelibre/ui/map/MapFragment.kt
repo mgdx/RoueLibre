@@ -1,5 +1,8 @@
 package io.github.mgdx.rouelibre.ui.map
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.graphics.PointF
 import android.graphics.RectF
 import android.os.Bundle
@@ -897,11 +900,18 @@ class MapFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             // A first fix can take several seconds indoors. Disabling the
             // button meanwhile avoids suggesting the press was lost — and
-            // avoids stacking several of them.
+            // avoids stacking several of them — and the breathing says the
+            // wait is a search, a button merely dead for ten seconds reading
+            // as a button that is broken (SPEC §7.1). The screen reader is
+            // told the same thing in words.
             binding?.locateMe?.isEnabled = false
+            val searching = binding?.locateMe?.let(::breathe)
+            binding?.locateMe?.announceForAccessibility(getString(R.string.map_locating))
             val fix = try {
                 container.deviceLocation.current()
             } finally {
+                searching?.cancel()
+                binding?.locateMe?.alpha = 1f
                 binding?.locateMe?.isEnabled = true
             }
             if (fix == null) {
@@ -921,6 +931,27 @@ class MapFragment : Fragment() {
                 return@launch
             }
             moveCameraTo(LatLng(position.latitude, position.longitude), USER_POSITION_ZOOM)
+        }
+    }
+
+    /**
+     * Makes [button] breathe until the returned animation is cancelled.
+     *
+     * What waiting for a fix looks like. Where the system's "remove
+     * animations" setting is on, the button holds the faded state instead:
+     * still a sign of life, without the movement the user asked to be spared.
+     * The caller restores the alpha, whichever of the two was in force.
+     */
+    private fun breathe(button: View): Animator? {
+        if (!ValueAnimator.areAnimatorsEnabled()) {
+            button.alpha = BREATH_FLOOR_ALPHA
+            return null
+        }
+        return ObjectAnimator.ofFloat(button, View.ALPHA, 1f, BREATH_FLOOR_ALPHA).apply {
+            duration = BREATH_MILLIS
+            repeatMode = ValueAnimator.REVERSE
+            repeatCount = ValueAnimator.INFINITE
+            start()
         }
     }
 
@@ -1647,5 +1678,22 @@ class MapFragment : Fragment() {
         const val CLUSTER_MAX_ZOOM = 13
 
         const val FRESHNESS_TICK_MILLIS = 10_000L
+
+        /**
+         * The "locate me" button's breathing, one way, in milliseconds.
+         *
+         * Six hundred: the pace of a calm breath — fast enough to read as
+         * work under way, slow enough not to read as an alarm.
+         */
+        const val BREATH_MILLIS = 600L
+
+        /**
+         * How far the breathing fades the button.
+         *
+         * Forty per cent: faded enough for the movement to be seen in
+         * sunlight, present enough for the control to remain visibly a
+         * button.
+         */
+        const val BREATH_FLOOR_ALPHA = 0.4f
     }
 }
