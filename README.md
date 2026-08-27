@@ -16,6 +16,10 @@
   <img alt="APK: 9.2 MB" src="https://img.shields.io/badge/APK-9.2%20MB-0F6E56?style=flat-square">
 </p>
 
+<p align="center">
+  <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22io.github.mgdx.rouelibre%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fmgdx%2FRoueLibre%22%2C%22author%22%3A%22mgdx%22%2C%22name%22%3A%22Roue%20Libre%22%7D"><img alt="Get it on Obtainium" src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" height="100"></a>
+</p>
+
 ## Description
 
 **Roue Libre** is an Android application that shows the bike-share stations of
@@ -110,7 +114,7 @@ repository's releases and downloads the APK matching your phone, with no
 account and no store in between.
 
 <p align="center">
-  <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22io.github.mgdx.rouelibre%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fmgdx%2FRoueLibre%22%2C%22author%22%3A%22mgdx%22%2C%22name%22%3A%22Roue%20Libre%22%7D"><img alt="Add to Obtainium" src="https://img.shields.io/badge/Obtainium-add%20Roue%20Libre-0F6E56?style=flat-square"></a>
+  <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22io.github.mgdx.rouelibre%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fmgdx%2FRoueLibre%22%2C%22author%22%3A%22mgdx%22%2C%22name%22%3A%22Roue%20Libre%22%7D"><img alt="Get it on Obtainium" src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" height="100"></a>
 </p>
 
 ## Building from source
