@@ -1001,6 +1001,11 @@ class JourneyResultFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding?.map?.onResume()
+        // The permission may have been granted from the Android settings while
+        // the application was away: the following then starts here, the view
+        // having been built when there was nothing to follow with. The map
+        // screen does the same re-check on its resume (SPEC §7.4, §10).
+        followUserPosition()
     }
 
     override fun onPause() {
