@@ -216,7 +216,19 @@ UNSTATED_LICENCE = "licence not stated by the operator"
 # a bike-share network, whatever its stations look like; a network mixing bikes
 # with standing scooters at the same docks is one, and is kept.
 BICYCLE_FORM_FACTORS = frozenset({"bicycle", "cargo_bicycle"})
-DISQUALIFYING_FORM_FACTORS = frozenset({"car", "moped", "other"})
+MOTOR_VEHICLE_FORM_FACTORS = frozenset({"car", "moped"})
+
+# GBFS has no form factor for a handbike, a tricycle or a bike trailer, so
+# operators declare them "other" — and "other" was read here as a motor vehicle
+# until 31 August 2026, which rejected six networks over vehicles that are
+# pedalled: Wrocław's WRM and Sibiu's BikeCity over a handbike, Bogotá's over a
+# MANOCLETA, Buzau's and Slobozia's over a handbike again, Ortenaukreis's over a
+# Radanhänger. A form nobody named is therefore judged on its propulsion rather
+# than on its name, and only these two mean the rider turns the pedals —
+# "electric" on such a form is a throttle vehicle, which on a bicycle form
+# factor is still a bike but here is not.
+UNNAMED_FORM_FACTOR = "other"
+PEDALLED_PROPULSIONS = frozenset({"human", "electric_assist"})
 
 # GBFS propulsion values that mean a motor helps the rider. A bicycle declaring
 # one of them is a pedal-assist bike, which the interface draws with a bolt
@@ -428,6 +440,17 @@ def probe_feeds(candidate: dict) -> dict:
             survey["formFactors"] = sorted(
                 {kind.get("form_factor", "unknown") for kind in types}
             )
+            # The evidence behind the verdict below, and not merely its
+            # conclusion: "other" covers a Peugeot 208 as readily as a
+            # handbike, so the survey records which vehicles were read as
+            # motorised and a rejection can be checked against the feed.
+            survey["motorVehicleTypes"] = sorted(
+                {
+                    localised(kind.get("name")) or kind.get("form_factor", "unknown")
+                    for kind in types
+                    if is_motor_vehicle(kind)
+                }
+            )
             # Only the bicycles are looked at: a network's electric SCOOTERS
             # say nothing about the bikes one borrows at its docks. Absent
             # from the survey when no vehicle type is declared, which is how a
@@ -574,6 +597,22 @@ def record_reference_area(survey: dict) -> None:
         )
 
 
+def is_motor_vehicle(declared: dict) -> bool:
+    """Whether a declared vehicle type is one nobody pedals.
+
+    A car and a moped are named as such by the standard and need no reading of
+    their propulsion. What has no name of its own is declared "other", and that
+    covers both a Citroën Berlingo and a handbike: there, and only there, the
+    propulsion settles it.
+    """
+    form = declared.get("form_factor")
+    if form in MOTOR_VEHICLE_FORM_FACTORS:
+        return True
+    if form != UNNAMED_FORM_FACTOR:
+        return False
+    return declared.get("propulsion_type") not in PEDALLED_PROPULSIONS
+
+
 def verdict_of(survey: dict) -> str:
     """Decide whether a surveyed network is one this application can serve.
 
@@ -586,7 +625,7 @@ def verdict_of(survey: dict) -> str:
     forms = set(survey.get("formFactors") or [])
     if forms and not forms & BICYCLE_FORM_FACTORS:
         return "no-bicycle"
-    if forms & DISQUALIFYING_FORM_FACTORS:
+    if survey.get("motorVehicleTypes"):
         # Cars and mopeds share the docks with the bikes here: the availability
         # figure shown on a marker would count vehicles nobody can pedal.
         return "mixed-with-motor-vehicles"
