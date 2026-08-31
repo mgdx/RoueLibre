@@ -318,6 +318,16 @@ CurrentVersion: 1.2.4
 CurrentVersionCode: 104
 ```
 
+**A release needs nothing done here.** The two fields at the foot of the recipe
+say so: `UpdateCheckMode: Tags` has their updater watch this repository's tags,
+and `AutoUpdateMode: Version` has it write the new build entries itself, so a
+version bump reaches F-Droid without a merge request and without anybody
+touching this file. What still needs one is a change to the **recipe** rather
+than to the version — another NDK, a new `prebuild` step, a moved `subdir` —
+and that is the only reason to open one. The recipe quoted above is the one
+prepared for the version named in it; upstream carries the entries their
+updater has copied forward since.
+
 **`commit` names a full commit hash, never the tag.** A reviewer asked for it
 and they are right: a tag is a name somebody can move, and this one was moved
 four times before the recipe was right, while a hash is the thing itself. Read
