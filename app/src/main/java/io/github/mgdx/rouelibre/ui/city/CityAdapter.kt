@@ -19,8 +19,16 @@ import io.github.mgdx.rouelibre.ui.textLocale
  * @property entry the city from the catalogue.
  * @property isActive true if it is the one the application serves.
  * @property installedBytes the space its data already occupies, `0` if none.
+ * @property isSupported whether this build carries the city's configuration.
+ *   A downloaded catalogue can name cities added after this release, and those
+ *   cannot be served: the row says so rather than leading somewhere empty.
  */
-data class CityRow(val entry: CityEntry, val isActive: Boolean, val installedBytes: Long)
+data class CityRow(
+    val entry: CityEntry,
+    val isActive: Boolean,
+    val installedBytes: Long,
+    val isSupported: Boolean = true,
+)
 
 /** Shows the catalogue's cities, the one in service first. */
 class CityAdapter(
@@ -46,6 +54,15 @@ class CityAdapter(
         private val onDelete: (CityEntry) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        /**
+         * The touch feedback the layout gave this row, kept to be put back.
+         *
+         * A refused row loses it, and rows are recycled: without this the
+         * ripple would disappear for good from the first row that reused a
+         * refused one's view.
+         */
+        private val selectableBackground = binding.root.foreground
+
         /** Fills the row from a city's state. */
         fun bind(row: CityRow) {
             val context = binding.root.context
@@ -54,6 +71,15 @@ class CityAdapter(
 
             binding.cityName.text = context.cityLabel(city.displayName, city.mainCity)
             binding.cityActive.isVisible = row.isActive
+
+            // A city this build does not know is shown and refused, never
+            // hidden: somebody who has heard their city is served must find it
+            // and read why it is not here yet, rather than conclude it is
+            // missing from the catalogue (SPEC §15).
+            if (!row.isSupported) {
+                bindUnsupported()
+                return
+            }
 
             val stations = city.stationCount
             // The weight announced before any download, as SPEC §11.9
@@ -112,10 +138,46 @@ class CityAdapter(
             binding.cityDelete.setOnClickListener { onDelete(city) }
 
             binding.root.setOnClickListener { onChoose(city) }
+            binding.root.isEnabled = true
+            binding.root.alpha = FULLY_LEGIBLE
+            binding.root.foreground = selectableBackground
+        }
+
+        /**
+         * Dresses the row of a city this version cannot serve.
+         *
+         * Everything the row would offer goes with it: the weight to download,
+         * what is installed, the button that deletes it. What is left is the
+         * name, dimmed, and the sentence that explains it — and a row that does
+         * not answer a tap, since there is nothing behind it. The touch
+         * feedback goes too: a ripple on a row that leads nowhere reads as a
+         * screen that failed to open.
+         */
+        private fun bindUnsupported() {
+            val context = binding.root.context
+            binding.cityDetail.isVisible = true
+            binding.cityDetail.text = context.getString(R.string.city_needs_newer_version)
+            binding.cityInstalled.isVisible = false
+            binding.cityDelete.isVisible = false
+            binding.root.setOnClickListener(null)
+            binding.root.isClickable = false
+            binding.root.isEnabled = false
+            binding.root.alpha = DIMMED
+            binding.root.foreground = null
         }
     }
 
     private companion object {
+        /**
+         * How far a refused row is dimmed.
+         *
+         * Enough to read as unavailable beside its neighbours, not so far that
+         * the name stops being legible — the name is the whole point of showing
+         * the row at all.
+         */
+        const val DIMMED = 0.45f
+        const val FULLY_LEGIBLE = 1f
+
         val DIFF = object : DiffUtil.ItemCallback<CityRow>() {
             override fun areItemsTheSame(oldItem: CityRow, newItem: CityRow): Boolean =
                 oldItem.entry.id == newItem.entry.id

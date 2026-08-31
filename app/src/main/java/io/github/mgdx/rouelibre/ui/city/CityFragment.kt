@@ -188,21 +188,17 @@ class CityFragment : Fragment() {
         catalogue = loaded
         val activeId = container.preferences.activeCityId()
         val store = container.datasetStore
+        val known = container.cityCatalogueSource.knownCityIds()
         rows = loaded.cities
             .map { city ->
                 CityRow(
                     entry = city,
                     isActive = city.id == activeId,
                     installedBytes = store.occupiedBytesOf(city.id),
+                    isSupported = isCitySupported(city.id, known),
                 )
             }
-            // The city in service at the head, then those whose data is
-            // already there: these are the rows one comes back to.
-            .sortedWith(
-                compareByDescending<CityRow> { it.isActive }
-                    .thenByDescending { it.installedBytes > 0 }
-                    .thenBy { it.entry.displayName },
-            )
+            .sortedWith(cityDisplayOrder())
         showRows()
     }
 
@@ -262,6 +258,14 @@ class CityFragment : Fragment() {
             val proposed = catalogue?.suggestionFor(position)
             if (proposed == null) {
                 showMessage(getString(R.string.city_none_nearby))
+                return@launch
+            }
+            // The nearest network can be one this build does not carry. Naming
+            // it and then failing to install it would be the very trap the
+            // greyed rows exist to avoid, so it is said here too.
+            val known = container.cityCatalogueSource.knownCityIds()
+            if (known.isNotEmpty() && proposed.id !in known) {
+                showMessage(getString(R.string.city_needs_newer_version))
                 return@launch
             }
             confirmProposal(proposed)

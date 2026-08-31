@@ -37,6 +37,10 @@ class CityCatalogueSource(
     private val cacheFile: File
         get() = File(context.filesDir, CACHE_FILE_NAME)
 
+    /** The shipped configurations' identifiers, read on first use. */
+    @Volatile
+    private var knownIds: Set<String>? = null
+
     /**
      * The catalogue to use right now, without network access.
      *
@@ -85,6 +89,34 @@ class CityCatalogueSource(
         } catch (_: IOException) {
             Outcome.Failure(DataError.Offline)
         }
+    }
+
+    /**
+     * The cities this build carries a configuration for.
+     *
+     * The catalogue and the configurations do not travel together: the first is
+     * refreshed over the network, the second ships in the APK. A catalogue more
+     * recent than the application therefore names cities it cannot serve, and
+     * this is what lets the list say so instead of offering a city that would
+     * come up empty (SPEC §15).
+     *
+     * Read once from the asset directory and kept: the list is fixed for the
+     * lifetime of a build, and the city screen asks for it on every keystroke.
+     */
+    suspend fun knownCityIds(): Set<String> = withContext(ioDispatcher) {
+        knownIds ?: readKnownCityIds().also { knownIds = it }
+    }
+
+    private fun readKnownCityIds(): Set<String> = try {
+        context.assets.list(CITIES_ASSET_DIRECTORY).orEmpty()
+            .filter { it.endsWith(CONFIGURATION_SUFFIX) }
+            .map { it.removeSuffix(CONFIGURATION_SUFFIX) }
+            .toSet()
+    } catch (_: IOException) {
+        // An unreadable asset directory is a manufacturing defect, and the
+        // answer that costs the user least is "none is missing": the list then
+        // behaves exactly as it did before this was written.
+        emptySet()
     }
 
     /**
@@ -152,6 +184,7 @@ class CityCatalogueSource(
     private companion object {
         const val CATALOGUE_ASSET = "catalogue.json"
         const val CITIES_ASSET_DIRECTORY = "cities"
+        const val CONFIGURATION_SUFFIX = ".json"
         const val CACHE_FILE_NAME = "catalogue.json"
     }
 }

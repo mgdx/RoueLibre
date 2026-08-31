@@ -441,6 +441,11 @@
         <item quantity="other">%1$d stations · size announced before downloading</item>
     </plurals>
     <string name="city_size_unknown">Size announced before downloading</string>
+    <!-- Said on the row of a city the downloaded catalogue names and this
+         build carries no configuration for. The catalogue is refreshed over
+         the network, the configurations ship in the APK, and the first can
+         run ahead of the second (SPEC §15). -->
+    <string name="city_needs_newer_version">Not available in this version of the application</string>
     <string name="city_installed">%1$s installed on the device</string>
     <string name="city_label">%1$s — %2$s</string>
     <string name="city_delete">Delete</string>
