@@ -53,14 +53,14 @@ android {
         // leaves it unable to tell one release from the next. The
         // architectures derive their own codes from it below, so the value is
         // still written once.
-        versionCode = 9
-        // The point that stands for the user on the map, taken seriously:
-        // it glides from fix to fix instead of jumping, greys once the
-        // fixes have deserted it, and shows the direction of travel while
-        // that direction is being measured. Two fixes beside them keep the
-        // following alive when location is switched on mid-screen.
+        versionCode = 10
+        // Six conurbations more — Wrocław, Bogotá, Offenburg, Sibiu, Buzău
+        // and Slobozia — freed by a survey rule that read a handbike as a
+        // motor vehicle, and Bogotá the first city served in South America.
+        // A city the catalogue names and this build cannot serve now says so
+        // instead of leaving every screen as though no city were chosen.
         // See CHANGELOG.md.
-        versionName = "1.2.3"
+        versionName = "1.2.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

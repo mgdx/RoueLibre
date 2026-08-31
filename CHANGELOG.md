@@ -7,7 +7,7 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
-## [Unreleased]
+## [1.2.4]
 
 Six conurbations added, and the two ways the catalogue and the application can
 fall out of step over them.
