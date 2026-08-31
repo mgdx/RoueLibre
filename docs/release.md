@@ -243,9 +243,9 @@ RepoType: git
 Repo: https://github.com/mgdx/RoueLibre.git
 
 Builds:
-  - versionName: 1.2.3
-    versionCode: 91
-    commit: 61f7600a587beeadb0f147080fcf3a7627e42a5f
+  - versionName: 1.2.4
+    versionCode: 101
+    commit: d89151ac1de9b37bf96e279b79a80c2664b41743
     subdir: app
     submodules: true
     gradle:
@@ -259,9 +259,9 @@ Builds:
       - third_party/brouter/brouter-routing-app
     ndk: r28c
 
-  - versionName: 1.2.3
-    versionCode: 92
-    commit: 61f7600a587beeadb0f147080fcf3a7627e42a5f
+  - versionName: 1.2.4
+    versionCode: 102
+    commit: d89151ac1de9b37bf96e279b79a80c2664b41743
     subdir: app
     submodules: true
     gradle:
@@ -274,9 +274,9 @@ Builds:
       - third_party/brouter/brouter-routing-app
     ndk: r28c
 
-  - versionName: 1.2.3
-    versionCode: 93
-    commit: 61f7600a587beeadb0f147080fcf3a7627e42a5f
+  - versionName: 1.2.4
+    versionCode: 103
+    commit: d89151ac1de9b37bf96e279b79a80c2664b41743
     subdir: app
     submodules: true
     gradle:
@@ -289,9 +289,9 @@ Builds:
       - third_party/brouter/brouter-routing-app
     ndk: r28c
 
-  - versionName: 1.2.3
-    versionCode: 94
-    commit: 61f7600a587beeadb0f147080fcf3a7627e42a5f
+  - versionName: 1.2.4
+    versionCode: 104
+    commit: d89151ac1de9b37bf96e279b79a80c2664b41743
     subdir: app
     submodules: true
     gradle:
@@ -314,8 +314,8 @@ VercodeOperation:
   - '%c * 10 + 2'
   - '%c * 10 + 3'
   - '%c * 10 + 4'
-CurrentVersion: 1.2.3
-CurrentVersionCode: 94
+CurrentVersion: 1.2.4
+CurrentVersionCode: 104
 ```
 
 **`commit` names a full commit hash, never the tag.** A reviewer asked for it
