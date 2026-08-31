@@ -7,6 +7,52 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
+## [Unreleased]
+
+Six conurbations added, and the two ways the catalogue and the application can
+fall out of step over them.
+
+### Added
+
+- **Six cities: Wrocław, Bogotá, Offenburg, Sibiu, Buzău and Slobozia.** They
+  were rejected by `tools/discover_networks.py` over a form factor GBFS has no
+  name for. The standard describes a handbike, a tricycle and a bike trailer as
+  `other`, and `other` was read here as a motor vehicle: Wrocław's WRM and
+  Sibiu's BikeCity were turned away over a handbike, Bogotá's over a
+  MANOCLETA, Ortenaukreis's over a `Radanhänger`. A form nobody named is now
+  judged on its propulsion — `human` and `electric_assist` mean the rider turns
+  the pedals — while `car` and `moped` disqualify as before. The survey also
+  records `motorVehicleTypes`, the names of the vehicles read as motorised, so
+  a rejection can be checked against the feed instead of being taken on trust.
+  Bogotá is the catalogue's first city in South America.
+- **A city the catalogue names and this build cannot serve is shown, dimmed and
+  refused** (SPEC §15.1). The catalogue is refreshed over the network and each
+  city's configuration ships in the APK, so a catalogue published after a
+  release names cities that release has nothing for; choosing one used to leave
+  `activeCity()` with no configuration and the screen with nothing to say. The
+  row now carries one sentence — "Not available in this version of the
+  application" — answers no tap, and loses its touch feedback, a ripple leading
+  nowhere reading as a screen that failed to open. "Find my city" says the same
+  rather than proposing a city it cannot install. An asset directory that
+  cannot be listed refuses nobody: that failure must not become an application
+  turning away every one of its own cities.
+
+### Changed
+
+- **The catalogue is published before the application release that serves its
+  new cities — except for this one** (SPEC §15.1). Dimming is what makes a
+  catalogue ahead of the application harmless, and 1.2.3 does not have it: it
+  would list the six, let one be chosen, find no configuration for it and read
+  as though no city had been chosen at all. So this release goes out before its
+  catalogue, and the ordinary order resumes afterwards. The six cities' heavy
+  files were published on 31 August 2026 ahead of both: nothing names them
+  until the catalogue does. The downloaded catalogue replaces the shipped one,
+  so a catalogue lagging behind an APK silently hides cities that APK carries —
+  six of them, on a phone that held all six, on 31 August 2026. The replacement
+  is kept, since removing a city from the published catalogue is the only lever
+  that retires a dead network without an application release; what changes is
+  the order of the two publications.
+
 ## [1.2.3]
 
 The point that stands for the user on the map, taken seriously. It used to be

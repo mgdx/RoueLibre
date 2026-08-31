@@ -279,6 +279,15 @@ def main() -> int:
     parser.add_argument("--repo", default="mgdx/RoueLibre-data")
     parser.add_argument("--tag", default="data-2026-08")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--network", action="append", default=[],
+                        help="publish the heavy files of these networks only, "
+                             "by identifier; repeatable. The index release "
+                             "still carries every generated city")
+    parser.add_argument("--no-index", action="store_true",
+                        help="leave the index release alone. The catalogue is "
+                             "what makes a city visible to every installation, "
+                             "including those too old to serve it, so it can "
+                             "have to wait for an application release")
     arguments = parser.parse_args()
 
     try:
@@ -303,7 +312,16 @@ def main() -> int:
 
         print("\n── Country releases ──")
         staging = REPO_ROOT / "data" / "release" / "staging"
+        # Named networks only, where they are asked for. The comparison against
+        # what is already online would otherwise carry along every file
+        # regenerated since the last publication, in countries nobody meant to
+        # touch: publishing six cities must send six cities.
+        wanted = set(arguments.network)
         for country, group in sorted(by_country.items()):
+            if wanted:
+                group = [city for city in group if city["id"] in wanted]
+                if not group:
+                    continue
             files = [pair for city in group for pair in heavy_files(city)]
             upload(f"{arguments.tag}-{country}", arguments.repo,
                    f"Data of {len(group)} conurbations — {country.upper()}",
@@ -316,6 +334,10 @@ def main() -> int:
         # by being the newest, and the application's manifest URLs depend on
         # this one holding that place.
         print("\n── Index release, published last ──")
+        if arguments.no_index:
+            print("  left alone (--no-index): the catalogue online still "
+                  "describes the previous set of cities")
+            return 0
         if existing_assets(arguments.tag, arguments.repo) is not None:
             print(f"  removing the previous {arguments.tag}")
             run(["gh", "release", "delete", arguments.tag, "--repo", arguments.repo,
