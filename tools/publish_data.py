@@ -22,8 +22,8 @@ Usage:
     python3 tools/publish_data.py [--dry-run] [--tag data-2026-08]
                                   [--repo mgdx/RoueLibre-data]
 
-Re-runnable: an asset already online is left alone, so an interrupted upload is
-finished by running the command again.
+Re-runnable: an asset already online under the digest its manifest announces is
+left alone, so an interrupted upload is finished by running the command again.
 """
 
 from __future__ import annotations
@@ -35,6 +35,8 @@ import sys
 import urllib.request
 from collections import defaultdict
 from pathlib import Path
+
+from build_manifest import sha256_of
 
 TOOLS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = TOOLS_DIR.parent
@@ -58,22 +60,42 @@ def run(command: list[str], dry_run: bool = False) -> str:
     return result.stdout
 
 
-def existing_assets(tag: str, repo: str) -> dict[str, int] | None:
-    """The names already online and their sizes, or None when there is no
+def online_digests(tag: str, repo: str) -> dict[str, str] | None:
+    """The names already online and their SHA-256, or None when there is no
     such release.
 
-    The size is what tells a file that is merely already there from one that
-    has been regenerated since: the routing graphs rebuilt with their elevation
-    kept the name they were published under and weigh some ten per cent more.
+    **The digest, and never the size.** The size answers "is there a file of
+    that name weighing about that much", which is not the question the phone
+    asks: it recomputes the digest its manifest announces and throws away
+    anything else. A regeneration that leaves the weight untouched is ordinary
+    — keeping the house-number mark as its own country writes it changed the
+    content of 245 address indexes and the size of not one of them — and while
+    the comparison was made on sizes, every one of those stayed online beneath
+    a manifest rewritten to describe the new file. 253 conurbations then
+    downloaded an index their application refused, address search and routing
+    graph alike.
+
+    An asset GitHub gives no digest for is reported as unknown, which sends it
+    up again: re-sending a file that was already right costs bandwidth, leaving
+    a stale one costs a city its address search.
     """
-    result = subprocess.run(
-        ["gh", "release", "view", tag, "--repo", repo, "--json", "assets"],
+    identifier = subprocess.run(
+        ["gh", "api", f"repos/{repo}/releases/tags/{tag}", "--jq", ".id"],
         capture_output=True, text=True,
     )
-    if result.returncode != 0:
+    if identifier.returncode != 0:
         return None
-    return {asset["name"]: asset["size"]
-            for asset in json.loads(result.stdout)["assets"]}
+    # The assets embedded in the release answer are not a paginated list; the
+    # endpoint devoted to them is, and a country release may hold a thousand.
+    listing = run(["gh", "api", "--paginate",
+                   f"repos/{repo}/releases/{identifier.stdout.strip()}"
+                   f"/assets?per_page=100",
+                   "--jq", ".[] | [.name, .digest] | @tsv"])
+    digests = {}
+    for line in listing.splitlines():
+        name, _, digest = line.partition("\t")
+        digests[name] = digest.removeprefix("sha256:")
+    return digests
 
 
 def read_cities() -> list[dict]:
@@ -205,7 +227,7 @@ def check_catalogue(cities: list[dict], stamped: set[str], dry_run: bool) -> Non
 def upload(tag: str, repo: str, title: str, notes: str,
            files: list[tuple[Path, str]], staging: Path, dry_run: bool) -> int:
     """Create the release if needed and upload what is not already there."""
-    online = existing_assets(tag, repo)
+    online = online_digests(tag, repo)
     if online is None:
         print(f"  creating release {tag}")
         run(["gh", "release", "create", tag, "--repo", repo,
@@ -220,7 +242,9 @@ def upload(tag: str, repo: str, title: str, notes: str,
         stale.unlink()
     pending = []
     for source, name in files:
-        if online.get(name) == source.stat().st_size:
+        # Hashed only where there is something to compare it with: a file whose
+        # name is not online yet goes up whatever its content.
+        if name in online and online[name] == sha256_of(source):
             continue
         link = staging / name
         link.hardlink_to(source)
@@ -237,6 +261,45 @@ def upload(tag: str, repo: str, title: str, notes: str,
     return len(pending)
 
 
+def check_published(cities: list[dict], tag: str, repo: str) -> None:
+    """Refuse to publish a manifest describing a file that is not online.
+
+    This runs between the country releases and the index, which is the last
+    moment anything can be stopped: the index release is deleted and re-created
+    rather than updated, and once its manifests are out they are what every
+    installation reads.
+
+    A manifest is a list of digests, and the application believes it to the
+    byte. So a manifest may only go out once the files it names are online
+    *under those very digests* — the case this guard exists for being a run
+    that stamps a manifest without sending what it describes, which is what
+    ``--network`` does to every city it does not name.
+    """
+    disagreements = []
+    for country in sorted({city["country"] for city in cities}):
+        online = online_digests(f"{tag}-{country}", repo) or {}
+        for city in (c for c in cities if c["country"] == country):
+            for dataset in city["manifest"]["datasets"]:
+                for entry in dataset["files"]:
+                    name = entry["url"].rsplit("/", 1)[-1]
+                    if online.get(name) != entry["sha256"]:
+                        disagreements.append(
+                            f"{city['id']}: {name} is "
+                            f"{'absent' if name not in online else 'another file'} "
+                            f"in {tag}-{country}")
+    if not disagreements:
+        print(f"  the files of {len(cities)} cities are online, digests included")
+        return
+    for line in disagreements[:10]:
+        print(f"    {line}")
+    if len(disagreements) > 10:
+        print(f"    … and {len(disagreements) - 10} more")
+    raise PublishError(
+        f"{len(disagreements)} files named by a manifest are not online as that "
+        f"manifest describes them: publish those cities' files — without "
+        f"--network, or with it naming them — before their manifests go out")
+
+
 def verify(cities: list[dict], repo: str) -> bool:
     """Ask for the addresses the application will ask for, and read one whole.
 
@@ -246,6 +309,16 @@ def verify(cities: list[dict], repo: str) -> bool:
     """
     import hashlib
     failures = []
+    # One listing per release, kept: a manifest names the release its files are
+    # in through their URLs, and a country is asked about once.
+    listings: dict[str, dict[str, str]] = {}
+
+    def digest_online(url: str) -> str | None:
+        release_tag, name = url.rsplit("/", 2)[-2:]
+        if release_tag not in listings:
+            listings[release_tag] = online_digests(release_tag, repo) or {}
+        return listings[release_tag].get(name)
+
     for city in cities:
         url = (f"https://github.com/{repo}/releases/latest/download/"
                f"manifest-{city['id']}.json")
@@ -257,8 +330,21 @@ def verify(cities: list[dict], repo: str) -> bool:
             continue
         if published.get("network") != city["id"]:
             failures.append((city["id"], "manifest names another network"))
-    print(f"  {len(cities) - len(failures)}/{len(cities)} manifests answer")
+            continue
+        # What the published manifest promises, against what is really at the
+        # end of the URLs it gives. Reporting on what was sent proves nothing,
+        # and one city read whole proves it of one city: this compares all of
+        # them, and costs one call per country.
+        for dataset in published.get("datasets", []):
+            for entry in dataset["files"]:
+                if digest_online(entry["url"]) != entry["sha256"]:
+                    name = entry["url"].rsplit("/", 1)[-1]
+                    failures.append((city["id"], f"digest announced: {name}"))
+    print(f"  {len(cities) - len({city for city, _ in failures})}/{len(cities)} "
+          f"manifests answer and describe the files that are online")
 
+    # The whole of one city, downloaded rather than asked about: the digest
+    # GitHub reports is not the digest of what it hands over.
     sample = min(cities, key=lambda city: sum(
         entry["sizeBytes"] for dataset in city["manifest"]["datasets"]
         for entry in dataset["files"]))
@@ -302,8 +388,15 @@ def main() -> int:
             by_country[city["country"]].append(city)
         print(f"{len(cities)} cities, {len(by_country)} countries\n")
 
+        # A run named by "--network" concerns those networks and no others:
+        # stamping a manifest whose files are not going out is what leaves a
+        # city announcing a digest nothing online carries.
+        wanted = set(arguments.network)
+        published = [city for city in cities
+                     if not wanted or city["id"] in wanted]
+
         print("── Manifests ──")
-        stamped = stamp_manifests(cities, arguments.tag, arguments.dry_run)
+        stamped = stamp_manifests(published, arguments.tag, arguments.dry_run)
 
         # Before anything is sent: a catalogue that lies about a city is worth
         # catching here rather than after 5.6 GB have gone out.
@@ -316,7 +409,6 @@ def main() -> int:
         # what is already online would otherwise carry along every file
         # regenerated since the last publication, in countries nobody meant to
         # touch: publishing six cities must send six cities.
-        wanted = set(arguments.network)
         for country, group in sorted(by_country.items()):
             if wanted:
                 group = [city for city in group if city["id"] in wanted]
@@ -338,7 +430,14 @@ def main() -> int:
             print("  left alone (--no-index): the catalogue online still "
                   "describes the previous set of cities")
             return 0
-        if existing_assets(arguments.tag, arguments.repo) is not None:
+
+        # The last moment anything can be stopped, and only where the manifests
+        # are really going out: past this point they are what a phone obeys.
+        if arguments.dry_run:
+            print("  dry run: nothing was sent, so nothing is compared")
+        else:
+            check_published(cities, arguments.tag, arguments.repo)
+        if online_digests(arguments.tag, arguments.repo) is not None:
             print(f"  removing the previous {arguments.tag}")
             run(["gh", "release", "delete", arguments.tag, "--repo", arguments.repo,
                  "--yes", "--cleanup-tag"], arguments.dry_run)

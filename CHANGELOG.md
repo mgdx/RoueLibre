@@ -7,6 +7,34 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
+## [Unreleased]
+
+### Fixed
+
+- **The publisher decides what to send on the digest, and no manifest goes out
+  ahead of the files it names** (`tools/publish_data.py`, SPEC §4.4). An asset
+  already online was left alone when it weighed what the local file weighed,
+  while a manifest was rewritten whenever that file was newer than it. The two
+  rules parted company on 23 August 2026: keeping the house-number mark as its
+  own country writes it changed the content of 245 address indexes and the size
+  of not one of them, so none were sent, and the index release went out
+  carrying the manifests that described the new files. 253 of the 337
+  conurbations — Limoges and Konya among them — then downloaded an address
+  index, and 72 of them a routing graph, whose digest the application
+  recomputed, refused and deleted, which is exactly what it must do: the fault
+  was never on the phone. What the publisher compares is now the SHA-256 GitHub
+  reports for each asset, which is the very question the phone asks;
+  `--network` no longer stamps the manifests of the cities it does not name;
+  and `check_published` refuses, between the country releases and the index, to
+  publish a manifest whose files are not online under the announced digests —
+  the last moment anything can be stopped, since that release is deleted and
+  re-created rather than updated. `verify` compares every published manifest to
+  what is online instead of reading the single smallest city whole, which is
+  the blind spot that let the run report success. The 317 files were published
+  again on 31 August 2026; no application release is involved, the manifest
+  being re-read at every attempt and a rejected file leaving the installation
+  it failed to replace untouched.
+
 ## [1.2.4]
 
 Six conurbations added, and the two ways the catalogue and the application can
