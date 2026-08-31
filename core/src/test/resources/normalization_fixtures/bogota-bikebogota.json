@@ -1,0 +1,809 @@
+{
+  "language": "es",
+  "cases": [
+    {
+      "input": "Calle Mayor",
+      "normalized": "calle mayor",
+      "type": "calle",
+      "name": "mayor"
+    },
+    {
+      "input": "Avenida de la Constitución",
+      "normalized": "avenida de la constitucion",
+      "type": "avenida",
+      "name": "de la constitucion"
+    },
+    {
+      "input": "Plaza del Sol",
+      "normalized": "plaza del sol",
+      "type": "plaza",
+      "name": "del sol"
+    },
+    {
+      "input": "Paseo de Gracia",
+      "normalized": "paseo de gracia",
+      "type": "paseo",
+      "name": "de gracia"
+    },
+    {
+      "input": "C/ Alcalá",
+      "normalized": "calle alcala",
+      "type": "calle",
+      "name": "alcala"
+    },
+    {
+      "input": "Avda. de América",
+      "normalized": "avenida de america",
+      "type": "avenida",
+      "name": "de america"
+    },
+    {
+      "input": "Gran Vía",
+      "normalized": "gran via",
+      "type": null,
+      "name": "gran via"
+    },
+    {
+      "input": "Camino Viejo del Puerto",
+      "normalized": "camino viejo del puerto",
+      "type": "camino",
+      "name": "viejo del puerto"
+    },
+    {
+      "input": "Callejón de la Cruz",
+      "normalized": "callejon de la cruz",
+      "type": "callejon",
+      "name": "de la cruz"
+    },
+    {
+      "input": "Ronda de Toledo",
+      "normalized": "ronda de toledo",
+      "type": "ronda",
+      "name": "de toledo"
+    },
+    {
+      "input": "Calzada de Tlalpan",
+      "normalized": "calzada de tlalpan",
+      "type": "calzada",
+      "name": "de tlalpan"
+    },
+    {
+      "input": "Pasaje Peatonal Norte",
+      "normalized": "pasaje peatonal norte",
+      "type": "pasaje",
+      "name": "peatonal norte"
+    },
+    {
+      "input": "Travesía de Santa Ana",
+      "normalized": "travesia de santa ana",
+      "type": "travesia",
+      "name": "de santa ana"
+    },
+    {
+      "input": "Cañada Real",
+      "normalized": "canada real",
+      "type": null,
+      "name": "canada real"
+    },
+    {
+      "input": "Calle 14 S",
+      "normalized": "calle 14 s",
+      "type": "calle",
+      "name": "14 s"
+    },
+    {
+      "input": "Avenida de los Cerros",
+      "normalized": "avenida de los cerros",
+      "type": "avenida",
+      "name": "de los cerros"
+    },
+    {
+      "input": "Carrera 103F #151",
+      "normalized": "carrera 103f 151",
+      "type": null,
+      "name": "carrera 103f 151"
+    },
+    {
+      "input": "Calle 17 B",
+      "normalized": "calle 17 b",
+      "type": "calle",
+      "name": "17 b"
+    },
+    {
+      "input": "Papeleria Diagrama",
+      "normalized": "papeleria diagrama",
+      "type": null,
+      "name": "papeleria diagrama"
+    },
+    {
+      "input": "UNINPAHU Sede cultural 10",
+      "normalized": "uninpahu sede cultural 10",
+      "type": null,
+      "name": "uninpahu sede cultural 10"
+    },
+    {
+      "input": "CIDCA",
+      "normalized": "cidca",
+      "type": null,
+      "name": "cidca"
+    },
+    {
+      "input": "SacaCorchos",
+      "normalized": "sacacorchos",
+      "type": null,
+      "name": "sacacorchos"
+    },
+    {
+      "input": "Ingenieria Ambiental",
+      "normalized": "ingenieria ambiental",
+      "type": null,
+      "name": "ingenieria ambiental"
+    },
+    {
+      "input": "Totalfarma",
+      "normalized": "totalfarma",
+      "type": null,
+      "name": "totalfarma"
+    },
+    {
+      "input": "Auditorio SD",
+      "normalized": "auditorio sd",
+      "type": null,
+      "name": "auditorio sd"
+    },
+    {
+      "input": "113",
+      "normalized": "113",
+      "type": null,
+      "name": "113"
+    },
+    {
+      "input": "Autopista Norte;Avenida Paseo los Libertadores;Carrera 45",
+      "normalized": "autopista norte avenida paseo los libertadores carrera 45",
+      "type": null,
+      "name": "autopista norte avenida paseo los libertadores carrera 45"
+    },
+    {
+      "input": "Avenida Calle 25",
+      "normalized": "avenida calle 25",
+      "type": "avenida",
+      "name": "calle 25"
+    },
+    {
+      "input": "Avenida Carlos Holguin",
+      "normalized": "avenida carlos holguin",
+      "type": "avenida",
+      "name": "carlos holguin"
+    },
+    {
+      "input": "Avenida Carrera 53",
+      "normalized": "avenida carrera 53",
+      "type": "avenida",
+      "name": "carrera 53"
+    },
+    {
+      "input": "Avenida Laureano Gomez - Carrera 9",
+      "normalized": "avenida laureano gomez carrera 9",
+      "type": "avenida",
+      "name": "laureano gomez carrera 9"
+    },
+    {
+      "input": "Calle 103B",
+      "normalized": "calle 103b",
+      "type": "calle",
+      "name": "103b"
+    },
+    {
+      "input": "Calle 110",
+      "normalized": "calle 110",
+      "type": "calle",
+      "name": "110"
+    },
+    {
+      "input": "Calle 11D",
+      "normalized": "calle 11d",
+      "type": "calle",
+      "name": "11d"
+    },
+    {
+      "input": "Calle 127A Bis",
+      "normalized": "calle 127a bis",
+      "type": "calle",
+      "name": "127a bis"
+    },
+    {
+      "input": "Calle 129B",
+      "normalized": "calle 129b",
+      "type": "calle",
+      "name": "129b"
+    },
+    {
+      "input": "Calle 130D Bis",
+      "normalized": "calle 130d bis",
+      "type": "calle",
+      "name": "130d bis"
+    },
+    {
+      "input": "Calle 134F",
+      "normalized": "calle 134f",
+      "type": "calle",
+      "name": "134f"
+    },
+    {
+      "input": "Calle 13A",
+      "normalized": "calle 13a",
+      "type": "calle",
+      "name": "13a"
+    },
+    {
+      "input": "Calle 143B",
+      "normalized": "calle 143b",
+      "type": "calle",
+      "name": "143b"
+    },
+    {
+      "input": "Calle 14A Sur",
+      "normalized": "calle 14a sur",
+      "type": "calle",
+      "name": "14a sur"
+    },
+    {
+      "input": "Calle 153A",
+      "normalized": "calle 153a",
+      "type": "calle",
+      "name": "153a"
+    },
+    {
+      "input": "Calle 16",
+      "normalized": "calle 16",
+      "type": "calle",
+      "name": "16"
+    },
+    {
+      "input": "Calle 164B",
+      "normalized": "calle 164b",
+      "type": "calle",
+      "name": "164b"
+    },
+    {
+      "input": "Calle 16I",
+      "normalized": "calle 16i",
+      "type": "calle",
+      "name": "16i"
+    },
+    {
+      "input": "Calle 17B Bis Sur",
+      "normalized": "calle 17b bis sur",
+      "type": "calle",
+      "name": "17b bis sur"
+    },
+    {
+      "input": "Calle 185 Bis",
+      "normalized": "calle 185 bis",
+      "type": "calle",
+      "name": "185 bis"
+    },
+    {
+      "input": "Calle 1C Bis",
+      "normalized": "calle 1c bis",
+      "type": "calle",
+      "name": "1c bis"
+    },
+    {
+      "input": "Calle 22 Bis",
+      "normalized": "calle 22 bis",
+      "type": "calle",
+      "name": "22 bis"
+    },
+    {
+      "input": "Calle 23D",
+      "normalized": "calle 23d",
+      "type": "calle",
+      "name": "23d"
+    },
+    {
+      "input": "Calle 25C",
+      "normalized": "calle 25c",
+      "type": "calle",
+      "name": "25c"
+    },
+    {
+      "input": "Calle 28 Sur",
+      "normalized": "calle 28 sur",
+      "type": "calle",
+      "name": "28 sur"
+    },
+    {
+      "input": "Calle 3 Bis Sur",
+      "normalized": "calle 3 bis sur",
+      "type": "calle",
+      "name": "3 bis sur"
+    },
+    {
+      "input": "Calle 32A Bis A Sur",
+      "normalized": "calle 32a bis a sur",
+      "type": "calle",
+      "name": "32a bis a sur"
+    },
+    {
+      "input": "Calle 36 Sur",
+      "normalized": "calle 36 sur",
+      "type": "calle",
+      "name": "36 sur"
+    },
+    {
+      "input": "Calle 38F Sur",
+      "normalized": "calle 38f sur",
+      "type": "calle",
+      "name": "38f sur"
+    },
+    {
+      "input": "Calle 3B",
+      "normalized": "calle 3b",
+      "type": "calle",
+      "name": "3b"
+    },
+    {
+      "input": "Calle 42 Sur",
+      "normalized": "calle 42 sur",
+      "type": "calle",
+      "name": "42 sur"
+    },
+    {
+      "input": "Calle 45 Sur",
+      "normalized": "calle 45 sur",
+      "type": "calle",
+      "name": "45 sur"
+    },
+    {
+      "input": "Calle 49Am",
+      "normalized": "calle 49am",
+      "type": "calle",
+      "name": "49am"
+    },
+    {
+      "input": "Calle 52B Bis A",
+      "normalized": "calle 52b bis a",
+      "type": "calle",
+      "name": "52b bis a"
+    },
+    {
+      "input": "Calle 57",
+      "normalized": "calle 57",
+      "type": "calle",
+      "name": "57"
+    },
+    {
+      "input": "Calle 60 Bis A",
+      "normalized": "calle 60 bis a",
+      "type": "calle",
+      "name": "60 bis a"
+    },
+    {
+      "input": "Calle 64",
+      "normalized": "calle 64",
+      "type": "calle",
+      "name": "64"
+    },
+    {
+      "input": "Calle 67A",
+      "normalized": "calle 67a",
+      "type": "calle",
+      "name": "67a"
+    },
+    {
+      "input": "Calle 6A Bis",
+      "normalized": "calle 6a bis",
+      "type": "calle",
+      "name": "6a bis"
+    },
+    {
+      "input": "Calle 71 Bis",
+      "normalized": "calle 71 bis",
+      "type": "calle",
+      "name": "71 bis"
+    },
+    {
+      "input": "Calle 74 Bis",
+      "normalized": "calle 74 bis",
+      "type": "calle",
+      "name": "74 bis"
+    },
+    {
+      "input": "Calle 78 Bis",
+      "normalized": "calle 78 bis",
+      "type": "calle",
+      "name": "78 bis"
+    },
+    {
+      "input": "Calle 80A",
+      "normalized": "calle 80a",
+      "type": "calle",
+      "name": "80a"
+    },
+    {
+      "input": "Calle 85A",
+      "normalized": "calle 85a",
+      "type": "calle",
+      "name": "85a"
+    },
+    {
+      "input": "Calle 8B Bis",
+      "normalized": "calle 8b bis",
+      "type": "calle",
+      "name": "8b bis"
+    },
+    {
+      "input": "Calle 96A",
+      "normalized": "calle 96a",
+      "type": "calle",
+      "name": "96a"
+    },
+    {
+      "input": "Camino San Luis las Moyas",
+      "normalized": "camino san luis las moyas",
+      "type": "camino",
+      "name": "san luis las moyas"
+    },
+    {
+      "input": "Carrera 102",
+      "normalized": "carrera 102",
+      "type": null,
+      "name": "carrera 102"
+    },
+    {
+      "input": "Carrera 105A Bis",
+      "normalized": "carrera 105a bis",
+      "type": null,
+      "name": "carrera 105a bis"
+    },
+    {
+      "input": "Carrera 10A Este",
+      "normalized": "carrera 10a este",
+      "type": null,
+      "name": "carrera 10a este"
+    },
+    {
+      "input": "Carrera 112",
+      "normalized": "carrera 112",
+      "type": null,
+      "name": "carrera 112"
+    },
+    {
+      "input": "Carrera 114G",
+      "normalized": "carrera 114g",
+      "type": null,
+      "name": "carrera 114g"
+    },
+    {
+      "input": "Carrera 11B",
+      "normalized": "carrera 11b",
+      "type": null,
+      "name": "carrera 11b"
+    },
+    {
+      "input": "Carrera 123B",
+      "normalized": "carrera 123b",
+      "type": null,
+      "name": "carrera 123b"
+    },
+    {
+      "input": "Carrera 12B Bis",
+      "normalized": "carrera 12b bis",
+      "type": null,
+      "name": "carrera 12b bis"
+    },
+    {
+      "input": "Carrera 136A",
+      "normalized": "carrera 136a",
+      "type": null,
+      "name": "carrera 136a"
+    },
+    {
+      "input": "Carrera 140B",
+      "normalized": "carrera 140b",
+      "type": null,
+      "name": "carrera 140b"
+    },
+    {
+      "input": "Carrera 149C",
+      "normalized": "carrera 149c",
+      "type": null,
+      "name": "carrera 149c"
+    },
+    {
+      "input": "Carrera 154A Bis",
+      "normalized": "carrera 154a bis",
+      "type": null,
+      "name": "carrera 154a bis"
+    },
+    {
+      "input": "Carrera 17 Este",
+      "normalized": "carrera 17 este",
+      "type": null,
+      "name": "carrera 17 este"
+    },
+    {
+      "input": "Carrera 1E",
+      "normalized": "carrera 1e",
+      "type": null,
+      "name": "carrera 1e"
+    },
+    {
+      "input": "Carrera 22B Este",
+      "normalized": "carrera 22b este",
+      "type": null,
+      "name": "carrera 22b este"
+    },
+    {
+      "input": "Carrera 25",
+      "normalized": "carrera 25",
+      "type": null,
+      "name": "carrera 25"
+    },
+    {
+      "input": "Carrera 29A Bis",
+      "normalized": "carrera 29a bis",
+      "type": null,
+      "name": "carrera 29a bis"
+    },
+    {
+      "input": "Carrera 32C",
+      "normalized": "carrera 32c",
+      "type": null,
+      "name": "carrera 32c"
+    },
+    {
+      "input": "Carrera 39A",
+      "normalized": "carrera 39a",
+      "type": null,
+      "name": "carrera 39a"
+    },
+    {
+      "input": "Carrera 42A",
+      "normalized": "carrera 42a",
+      "type": null,
+      "name": "carrera 42a"
+    },
+    {
+      "input": "Carrera 4B",
+      "normalized": "carrera 4b",
+      "type": null,
+      "name": "carrera 4b"
+    },
+    {
+      "input": "Carrera 53 Bis",
+      "normalized": "carrera 53 bis",
+      "type": null,
+      "name": "carrera 53 bis"
+    },
+    {
+      "input": "Carrera 57 Bis",
+      "normalized": "carrera 57 bis",
+      "type": null,
+      "name": "carrera 57 bis"
+    },
+    {
+      "input": "Carrera 60 Bis A",
+      "normalized": "carrera 60 bis a",
+      "type": null,
+      "name": "carrera 60 bis a"
+    },
+    {
+      "input": "Carrera 68B Sur",
+      "normalized": "carrera 68b sur",
+      "type": null,
+      "name": "carrera 68b sur"
+    },
+    {
+      "input": "Carrera 69H",
+      "normalized": "carrera 69h",
+      "type": null,
+      "name": "carrera 69h"
+    },
+    {
+      "input": "Carrera 70G",
+      "normalized": "carrera 70g",
+      "type": null,
+      "name": "carrera 70g"
+    },
+    {
+      "input": "Carrera 72I Bis A",
+      "normalized": "carrera 72i bis a",
+      "type": null,
+      "name": "carrera 72i bis a"
+    },
+    {
+      "input": "Carrera 75D",
+      "normalized": "carrera 75d",
+      "type": null,
+      "name": "carrera 75d"
+    },
+    {
+      "input": "Carrera 7B",
+      "normalized": "carrera 7b",
+      "type": null,
+      "name": "carrera 7b"
+    },
+    {
+      "input": "Carrera 81F",
+      "normalized": "carrera 81f",
+      "type": null,
+      "name": "carrera 81f"
+    },
+    {
+      "input": "Carrera 87A",
+      "normalized": "carrera 87a",
+      "type": null,
+      "name": "carrera 87a"
+    },
+    {
+      "input": "Carrera 9",
+      "normalized": "carrera 9",
+      "type": null,
+      "name": "carrera 9"
+    },
+    {
+      "input": "Carrera 93D Bis",
+      "normalized": "carrera 93d bis",
+      "type": null,
+      "name": "carrera 93d bis"
+    },
+    {
+      "input": "Carrera 95D",
+      "normalized": "carrera 95d",
+      "type": null,
+      "name": "carrera 95d"
+    },
+    {
+      "input": "Carrera 97A Bis A",
+      "normalized": "carrera 97a bis a",
+      "type": null,
+      "name": "carrera 97a bis a"
+    },
+    {
+      "input": "Cicloruta Avenida Córdoba",
+      "normalized": "cicloruta avenida cordoba",
+      "type": null,
+      "name": "cicloruta avenida cordoba"
+    },
+    {
+      "input": "Diagonal 108A",
+      "normalized": "diagonal 108a",
+      "type": "diagonal",
+      "name": "108a"
+    },
+    {
+      "input": "Diagonal 152",
+      "normalized": "diagonal 152",
+      "type": "diagonal",
+      "name": "152"
+    },
+    {
+      "input": "Diagonal 2",
+      "normalized": "diagonal 2",
+      "type": "diagonal",
+      "name": "2"
+    },
+    {
+      "input": "Diagonal 3",
+      "normalized": "diagonal 3",
+      "type": "diagonal",
+      "name": "3"
+    },
+    {
+      "input": "Diagonal 38A Sur",
+      "normalized": "diagonal 38a sur",
+      "type": "diagonal",
+      "name": "38a sur"
+    },
+    {
+      "input": "Diagonal 44 Bis",
+      "normalized": "diagonal 44 bis",
+      "type": "diagonal",
+      "name": "44 bis"
+    },
+    {
+      "input": "Diagonal 49 Sur",
+      "normalized": "diagonal 49 sur",
+      "type": "diagonal",
+      "name": "49 sur"
+    },
+    {
+      "input": "Diagonal 5C Bis",
+      "normalized": "diagonal 5c bis",
+      "type": "diagonal",
+      "name": "5c bis"
+    },
+    {
+      "input": "Diagonal 6F Sur",
+      "normalized": "diagonal 6f sur",
+      "type": "diagonal",
+      "name": "6f sur"
+    },
+    {
+      "input": "Diagonal 81",
+      "normalized": "diagonal 81",
+      "type": "diagonal",
+      "name": "81"
+    },
+    {
+      "input": "Diagonal 92",
+      "normalized": "diagonal 92",
+      "type": "diagonal",
+      "name": "92"
+    },
+    {
+      "input": "Estación General Santander",
+      "normalized": "estacion general santander",
+      "type": null,
+      "name": "estacion general santander"
+    },
+    {
+      "input": "Peaje Patios Vía alterna",
+      "normalized": "peaje patios via alterna",
+      "type": null,
+      "name": "peaje patios via alterna"
+    },
+    {
+      "input": "TransMilenio - Troncal Carrera 10",
+      "normalized": "transmilenio troncal carrera 10",
+      "type": null,
+      "name": "transmilenio troncal carrera 10"
+    },
+    {
+      "input": "Transversal 123",
+      "normalized": "transversal 123",
+      "type": null,
+      "name": "transversal 123"
+    },
+    {
+      "input": "Transversal 12H",
+      "normalized": "transversal 12h",
+      "type": null,
+      "name": "transversal 12h"
+    },
+    {
+      "input": "Transversal 144 Bis",
+      "normalized": "transversal 144 bis",
+      "type": null,
+      "name": "transversal 144 bis"
+    },
+    {
+      "input": "Transversal 23",
+      "normalized": "transversal 23",
+      "type": null,
+      "name": "transversal 23"
+    },
+    {
+      "input": "Transversal 34 Bis",
+      "normalized": "transversal 34 bis",
+      "type": null,
+      "name": "transversal 34 bis"
+    },
+    {
+      "input": "Transversal 49",
+      "normalized": "transversal 49",
+      "type": null,
+      "name": "transversal 49"
+    },
+    {
+      "input": "Transversal 59A",
+      "normalized": "transversal 59a",
+      "type": null,
+      "name": "transversal 59a"
+    },
+    {
+      "input": "Transversal 69H",
+      "normalized": "transversal 69h",
+      "type": null,
+      "name": "transversal 69h"
+    },
+    {
+      "input": "Transversal 75",
+      "normalized": "transversal 75",
+      "type": null,
+      "name": "transversal 75"
+    }
+  ]
+}
