@@ -555,11 +555,22 @@ class MapFragment : Fragment() {
 
         map.uiSettings.isAttributionEnabled = false
         map.uiSettings.isLogoEnabled = false
-        // The map turns under two fingers, and the compass puts it back
+        // The library's own compass, off: ours is the one in the column of
+        // controls (SPEC §7.1). MapLibre's is on by default and fades itself
+        // away while the map faces north, so it lay hidden for as long as the
+        // map could not be turned and appeared the day it could — a black disc
+        // in the top right corner, half under the status bar and over the
+        // settings button, where nothing in the layout expects a view. It is
+        // refused for the reason DescribedMapView exists: a view of the
+        // library describes itself in the library's languages and not in ours,
+        // and the screen reader read out its sentence beside ours.
+        map.uiSettings.isCompassEnabled = false
+        // The map turns under two fingers, and our compass puts it back
         // (SPEC §7.1). It does not tilt: the base map is drawn flat and its
         // labels are laid flat on it, so a tilted map only makes them harder
         // to read. Said rather than left to the library's default, so that
-        // both are read as decisions.
+        // both are read as decisions — a default is not one, as the compass
+        // above has just proved.
         map.uiSettings.isRotateGesturesEnabled = true
         map.uiSettings.isTiltGesturesEnabled = false
         map.setMinZoomPreference(configuration.map.minZoom.toDouble())

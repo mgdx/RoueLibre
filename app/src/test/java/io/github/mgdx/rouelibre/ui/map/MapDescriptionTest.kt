@@ -33,6 +33,12 @@ class MapDescriptionTest {
 
     private val sources = File(resources.parentFile, "java/io/github/mgdx/rouelibre")
 
+    /** The two screens whose map answers to a two-finger turn (SPEC §7.1, §7.4). */
+    private val screensWithATurnableMap = listOf(
+        "ui/map/MapFragment.kt",
+        "ui/journey/JourneyResultFragment.kt",
+    )
+
     /** The three layouts that show a map: the map screen and both journey results. */
     private val layoutsShowingAMap = listOf(
         "layout/fragment_map.xml",
@@ -66,6 +72,45 @@ class MapDescriptionTest {
             "It is set in an initialiser, which runs once the superclass is built",
             view.substringAfter("init {").contains("contentDescription"),
         )
+    }
+
+    /**
+     * The library draws three views of its own over the map — the attribution,
+     * the logo and a compass — and all three are refused for the same reason
+     * the description above is: they speak the library's languages, they look
+     * like nothing else on the screen, and they land where the layout expects
+     * nothing.
+     *
+     * The compass is the one that had to be found on a phone. It is on by
+     * default and fades itself out while the map faces north, so it lay
+     * invisible for as long as rotation was refused and appeared the day
+     * rotation was allowed: a black disc in the top right corner, half under
+     * the status bar and over the settings button, announcing itself as
+     * "Compass. Activate to reset the map's orientation to north" beside our
+     * own button saying the same thing in the interface's language.
+     *
+     * Nothing on the JVM can raise a `MapView`, so what is pinned here is the
+     * line itself: a screen that lets its map turn is a screen that turns the
+     * library's compass off. The check is on the source, as the one above is.
+     */
+    @Test
+    fun `a map that can be turned turns off the library's own compass`() {
+        for (path in screensWithATurnableMap) {
+            val fragment = File(sources, path).readText()
+            assertTrue(
+                "$path lets its map be turned",
+                fragment.contains("uiSettings.isRotateGesturesEnabled = true"),
+            )
+            assertTrue(
+                "$path turns off the compass the library would draw for it",
+                fragment.contains("uiSettings.isCompassEnabled = false"),
+            )
+            assertTrue(
+                "$path draws none of the library's other views either",
+                fragment.contains("uiSettings.isAttributionEnabled = false") &&
+                    fragment.contains("uiSettings.isLogoEnabled = false"),
+            )
+        }
     }
 
     @Test
