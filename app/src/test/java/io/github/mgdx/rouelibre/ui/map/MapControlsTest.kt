@@ -23,6 +23,7 @@ class MapControlsTest {
             assertFalse("picking=$isPicking", controls.browsing)
             assertFalse("picking=$isPicking", controls.picking)
             assertFalse("picking=$isPicking", controls.locateMe)
+            assertFalse("picking=$isPicking", controls.compass)
         }
     }
 
@@ -32,6 +33,7 @@ class MapControlsTest {
         assertTrue(controls.picking)
         assertFalse("one came to aim, not to browse availability", controls.browsing)
         assertTrue("aiming at where one stands is the point of it", controls.locateMe)
+        assertTrue("one can turn the map one is aiming on", controls.compass)
     }
 
     @Test
@@ -40,5 +42,6 @@ class MapControlsTest {
         assertTrue(controls.browsing)
         assertFalse("no point is being designated", controls.picking)
         assertTrue(controls.locateMe)
+        assertTrue(controls.compass)
     }
 }

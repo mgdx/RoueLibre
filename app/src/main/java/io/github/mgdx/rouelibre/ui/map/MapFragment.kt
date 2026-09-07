@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
@@ -296,6 +297,24 @@ class MapFragment : Fragment() {
      */
     private var showsMapControls = false
 
+    /**
+     * Whether the compass is allowed on the screen at all (SPEC §7.1).
+     *
+     * Being allowed is not being shown: the button only appears once the map
+     * has been turned. Held like [showsMapControls], and for the same reason —
+     * the base map's arrival and the map's bearing are settled apart from each
+     * other, and each has to be able to decide without reading the other.
+     */
+    private var showsCompass = false
+
+    /**
+     * The listener that follows the map's bearing while it turns.
+     *
+     * Kept so that it can be taken off the map with the view, as the other
+     * listeners of this screen are.
+     */
+    private var bearingListener: MapLibreMap.OnCameraMoveListener? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -318,6 +337,16 @@ class MapFragment : Fragment() {
         views.openList.setOnClickListener { showTheList() }
         views.openSearch.setOnClickListener { openAddressSearch() }
         views.locateMe.setOnClickListener { onLocateMeClicked() }
+        views.faceNorth.setOnClickListener { faceNorth() }
+        // What the press does, said apart from the description: that one is
+        // spent saying how far the map is turned, and a screen reader would
+        // otherwise announce a bare "activate" over it.
+        ViewCompat.replaceAccessibilityAction(
+            views.faceNorth,
+            AccessibilityActionCompat.ACTION_CLICK,
+            getString(R.string.map_face_north),
+            null,
+        )
         views.openJourney.setOnClickListener { show(JourneySearchFragment()) }
         views.modeToggle.setOnClickListener { toggleMode() }
         views.bikeKindFilter.setOnClickListener { toggleBikeKind() }
@@ -518,12 +547,20 @@ class MapFragment : Fragment() {
         views.pickCrosshair.isVisible = controls.picking
         views.pickConfirm.isVisible = controls.picking
         views.locateMe.isVisible = controls.locateMe
+        showsCompass = controls.compass
+        showTheBearing()
         showBikeKindFilter()
         if (tiles == null || configuration == null) return
 
         map.uiSettings.isAttributionEnabled = false
         map.uiSettings.isLogoEnabled = false
-        map.uiSettings.isRotateGesturesEnabled = false
+        // The map turns under two fingers, and the compass puts it back
+        // (SPEC §7.1). It does not tilt: the base map is drawn flat and its
+        // labels are laid flat on it, so a tilted map only makes them harder
+        // to read. Said rather than left to the library's default, so that
+        // both are read as decisions.
+        map.uiSettings.isRotateGesturesEnabled = true
+        map.uiSettings.isTiltGesturesEnabled = false
         map.setMinZoomPreference(configuration.map.minZoom.toDouble())
         // Past the tiles' maximum zoom, MapLibre scales up the last ones it
         // has. Allowing one step lets the user come a little closer without the
@@ -534,6 +571,7 @@ class MapFragment : Fragment() {
         holdCameraOverServedArea(map, configuration)
 
         map.addOnMapClickListener(::onMapClicked)
+        followTheBearing(map)
 
         map.setStyle(
             Style.Builder().fromJson(MapStyleLoader.load(requireContext(), tiles)),
@@ -577,6 +615,87 @@ class MapFragment : Fragment() {
         // before they are laid on top of it.
         servedAreaCamera = camera
         view.doOnLayout { camera.hold() }
+    }
+
+    /**
+     * Follows the map's bearing, so that the compass says what the map does.
+     *
+     * `addOnCameraMoveListener` and not `addOnCameraIdleListener`: the needle
+     * is a reading of the map's own state, and one that only caught up at the
+     * end of the gesture would point at a north the map had already left —
+     * for the whole length of the turn, which is exactly when it is being
+     * looked at. What each frame costs is a comparison and two view
+     * properties, beside the frame the map is drawing anyway.
+     *
+     * A move the screen orders itself is followed by its own callback rather
+     * than by this listener (see [faceNorth]): the listener hears the
+     * gestures, and the callback guarantees the state the map settles in.
+     */
+    private fun followTheBearing(map: MapLibreMap) {
+        // The tiles are loaded again on every return to the screen, on the same
+        // map: without this the same map would carry a second listener, and a
+        // third, each turn of the map costing what they all add up to.
+        bearingListener?.let(map::removeOnCameraMoveListener)
+        val listener = MapLibreMap.OnCameraMoveListener { showTheBearing() }
+        bearingListener = listener
+        map.addOnCameraMoveListener(listener)
+    }
+
+    /**
+     * Shows the compass for the bearing the map now has, or takes it away.
+     *
+     * The whole button turns rather than the drawing inside it: its ground is
+     * a disc, so the needle is the only thing that can be seen to move, and
+     * turning the view spares a second drawable and a redraw of the icon.
+     *
+     * The description says how far the map is turned and not only what the
+     * button does. This button is the one sign that the map is off north, so
+     * a reader who cannot see it turned would learn nothing from "face north"
+     * alone (SPEC §11).
+     */
+    private fun showTheBearing() {
+        val views = binding ?: return
+        val needle = compassNeedle(mapLibreMap?.cameraPosition?.bearing ?: 0.0)
+        views.faceNorth.isVisible = showsCompass && needle.isShown
+        views.faceNorth.rotation = needle.iconRotationDegrees
+        views.faceNorth.contentDescription = resources.getQuantityString(
+            R.plurals.map_bearing_description,
+            needle.degreesFromNorth,
+            needle.degreesFromNorth,
+        )
+    }
+
+    /**
+     * Puts the map back the way it opened (SPEC §7.1).
+     *
+     * Turned rather than snapped: a map that jumps to north leaves the reader
+     * to find again where they were looking, where one that turns carries
+     * their place round with it. Under "remove animations" it snaps, as every
+     * other camera move on this screen does.
+     *
+     * The limits penning the camera are not stood down for it, unlike
+     * [moveCameraTo]: the target does not move, and coming back to north can
+     * only shrink what the screen covers of the served area.
+     */
+    private fun faceNorth() {
+        val map = mapLibreMap ?: return
+        val update = CameraUpdateFactory.bearingTo(0.0)
+        if (requireContext().prefersReducedMotion()) {
+            map.moveCamera(update)
+            showTheBearing()
+            return
+        }
+        map.animateCamera(
+            update,
+            FACE_NORTH_ANIMATION_MILLIS,
+            object : MapLibreMap.CancelableCallback {
+                override fun onFinish() = showTheBearing()
+
+                // A turn cut short by a finger back on the map leaves the map
+                // wherever it stopped, and the needle has to say so.
+                override fun onCancel() = showTheBearing()
+            },
+        )
     }
 
     /**
@@ -1313,9 +1432,13 @@ class MapFragment : Fragment() {
     /**
      * Takes back the framing the screen had before the phone was turned.
      *
-     * Only the target and the zoom: the tilt and the bearing are not the
-     * user's to set here — the map holds neither — and restoring them would be
-     * restoring nothing.
+     * Only the target and the zoom. The map can be turned now (SPEC §7.1), and
+     * the bearing is left out of what is saved all the same. A screen rebuilt
+     * from this bundle is one the phone was turned under, or one the system
+     * had thrown away in the meantime: a map found lying askew by somebody who
+     * does not remember turning it reads as a map that has broken, not as one
+     * they set. It comes back facing north, and the compass goes with it. The
+     * tilt is not restored either, the map holding none: it does not tilt.
      */
     private fun restoreCamera(savedInstanceState: Bundle?) {
         val saved = savedInstanceState ?: return
@@ -1590,6 +1713,8 @@ class MapFragment : Fragment() {
 
     override fun onDestroyView() {
         lastCamera = mapLibreMap?.cameraPosition
+        bearingListener?.let { mapLibreMap?.removeOnCameraMoveListener(it) }
+        bearingListener = null
         binding?.map?.onDestroy()
         stationSource = null
         pickedPlaceSource = null

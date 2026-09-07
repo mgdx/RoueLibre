@@ -40,10 +40,13 @@ import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.formatDuration
 import io.github.mgdx.rouelibre.ui.formatMinutes
+import io.github.mgdx.rouelibre.ui.map.FACE_NORTH_ANIMATION_MILLIS
 import io.github.mgdx.rouelibre.ui.map.MapStyleLoader
 import io.github.mgdx.rouelibre.ui.map.ServedAreaCamera
 import io.github.mgdx.rouelibre.ui.map.UserPositionDisplay
 import io.github.mgdx.rouelibre.ui.map.UserPositionMarker
+import io.github.mgdx.rouelibre.ui.map.compassNeedle
+import io.github.mgdx.rouelibre.ui.prefersReducedMotion
 import io.github.mgdx.rouelibre.ui.toUserMessage
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
@@ -96,6 +99,14 @@ class JourneyResultFragment : Fragment() {
      * measured again on the map as it then stands.
      */
     private var servedArea: ServedAreaCamera? = null
+
+    /**
+     * The listener that follows the map's bearing while it turns.
+     *
+     * Kept so that it can be taken off the map with the view, as this screen's
+     * other listeners are.
+     */
+    private var bearingListener: MapLibreMap.OnCameraMoveListener? = null
 
     /**
      * The city this map is drawn for, once it has been read from disk.
@@ -313,6 +324,15 @@ class JourneyResultFragment : Fragment() {
         // the framing the screen lays by itself: this one answers a press, and
         // the move is what says the press was heard.
         views.frameJourney.setOnClickListener { applyFrame(animated = true) }
+        views.faceNorth.setOnClickListener { faceNorth() }
+        // What the press does, said apart from the description: that one is
+        // spent saying how far the map is turned.
+        ViewCompat.replaceAccessibilityAction(
+            views.faceNorth,
+            AccessibilityActionCompat.ACTION_CLICK,
+            getString(R.string.map_face_north),
+            null,
+        )
 
         views.map.onCreate(savedInstanceState)
         views.map.getMapAsync(::onMapReady)
@@ -472,7 +492,13 @@ class JourneyResultFragment : Fragment() {
         val tiles = container.datasetStore.fileOf(DatasetKind.Tiles)
         map.uiSettings.isAttributionEnabled = false
         map.uiSettings.isLogoEnabled = false
-        map.uiSettings.isRotateGesturesEnabled = false
+        // Turned by hand and never tilted, exactly as the main map is
+        // (SPEC §7.1, §7.4): a map one learns to handle on one screen must
+        // answer the same way on the other. Both are said rather than left to
+        // the library's defaults, so that both read as decisions.
+        map.uiSettings.isRotateGesturesEnabled = true
+        map.uiSettings.isTiltGesturesEnabled = false
+        followTheBearing(map)
         limitCamera(map, hasTiles = tiles != null)
         // Without a base map the track is still drawn on an empty background:
         // less telling, but the route is computed and the detail reads.
@@ -933,6 +959,76 @@ class JourneyResultFragment : Fragment() {
     }
 
     /**
+     * Follows the map's bearing, so that the compass says what the map does.
+     *
+     * `addOnCameraMoveListener` and not `addOnCameraIdleListener`, as on the
+     * main map: a needle that only caught up at the end of the gesture would
+     * point at a north the map had already left, for the whole length of the
+     * turn — which is when it is being looked at. A move this screen orders
+     * itself is followed by its own callback instead (see [faceNorth]).
+     */
+    private fun followTheBearing(map: MapLibreMap) {
+        val listener = MapLibreMap.OnCameraMoveListener { showTheBearing() }
+        bearingListener = listener
+        map.addOnCameraMoveListener(listener)
+    }
+
+    /**
+     * Shows the compass for the bearing the map now has, or takes it away.
+     *
+     * The whole button turns rather than the drawing inside it: its ground is
+     * a disc, so the needle is the only thing that can be seen to move.
+     *
+     * The description says how far the map is turned and not only what the
+     * button does: this button is the one sign that the map is off north, and
+     * a reader who cannot see it turned would learn nothing from "face north"
+     * alone (SPEC §11).
+     */
+    private fun showTheBearing() {
+        val views = binding ?: return
+        val needle = compassNeedle(mapLibreMap?.cameraPosition?.bearing ?: 0.0)
+        views.faceNorth.isVisible = needle.isShown
+        views.faceNorth.rotation = needle.iconRotationDegrees
+        views.faceNorth.contentDescription = resources.getQuantityString(
+            R.plurals.map_bearing_description,
+            needle.degreesFromNorth,
+            needle.degreesFromNorth,
+        )
+    }
+
+    /**
+     * Puts the map back the way it opened (SPEC §7.1, §7.4).
+     *
+     * Turned rather than snapped: a map that jumps to north leaves the reader
+     * to find the journey again, where one that turns carries it round with
+     * them. Under "remove animations" it snaps.
+     *
+     * The camera limits are not stood down for it, unlike [applyFrame]: the
+     * target does not move, and coming back to north can only shrink what the
+     * screen covers of the served area.
+     */
+    private fun faceNorth() {
+        val map = mapLibreMap ?: return
+        val update = CameraUpdateFactory.bearingTo(0.0)
+        if (requireContext().prefersReducedMotion()) {
+            map.moveCamera(update)
+            showTheBearing()
+            return
+        }
+        map.animateCamera(
+            update,
+            FACE_NORTH_ANIMATION_MILLIS,
+            object : MapLibreMap.CancelableCallback {
+                override fun onFinish() = showTheBearing()
+
+                // A turn cut short by a finger back on the map leaves the map
+                // wherever it stopped, and the needle has to say so.
+                override fun onCancel() = showTheBearing()
+            },
+        )
+    }
+
+    /**
      * Brings the camera onto the track, for the map as it stands right now.
      *
      * The detail underneath is as tall as the journey it describes, and it is
@@ -1049,6 +1145,8 @@ class JourneyResultFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        bearingListener?.let { mapLibreMap?.removeOnCameraMoveListener(it) }
+        bearingListener = null
         binding?.map?.onDestroy()
         walkSource = null
         rideSource = null
