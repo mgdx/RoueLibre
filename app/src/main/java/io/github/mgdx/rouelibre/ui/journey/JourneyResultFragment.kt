@@ -492,10 +492,19 @@ class JourneyResultFragment : Fragment() {
         val tiles = container.datasetStore.fileOf(DatasetKind.Tiles)
         map.uiSettings.isAttributionEnabled = false
         map.uiSettings.isLogoEnabled = false
+        // The library's own compass, off, as on the main map: MapLibre's is on
+        // by default and hides itself while the map faces north, so it stayed
+        // out of sight for as long as the map could not be turned and came up
+        // the day it could — a black disc of its own in the corner, where the
+        // layout expects nothing. Ours is the button in the column of
+        // controls, and the library's is refused for the reason
+        // DescribedMapView exists: it would describe itself in the library's
+        // languages rather than in the application's.
+        map.uiSettings.isCompassEnabled = false
         // Turned by hand and never tilted, exactly as the main map is
         // (SPEC §7.1, §7.4): a map one learns to handle on one screen must
-        // answer the same way on the other. Both are said rather than left to
-        // the library's defaults, so that both read as decisions.
+        // answer the same way on the other. All three are said rather than
+        // left to the library's defaults, so that all three read as decisions.
         map.uiSettings.isRotateGesturesEnabled = true
         map.uiSettings.isTiltGesturesEnabled = false
         followTheBearing(map)
