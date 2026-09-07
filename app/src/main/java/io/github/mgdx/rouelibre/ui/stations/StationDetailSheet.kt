@@ -1,14 +1,10 @@
 package io.github.mgdx.rouelibre.ui.stations
 
 import android.app.Dialog
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -33,6 +29,7 @@ import io.github.mgdx.rouelibre.core.station.isBeyondCoveredArea
 import io.github.mgdx.rouelibre.databinding.SheetStationDetailBinding
 import io.github.mgdx.rouelibre.ui.address.toTitle
 import io.github.mgdx.rouelibre.ui.formatDistance
+import io.github.mgdx.rouelibre.ui.handOverToNavigation
 import io.github.mgdx.rouelibre.ui.inServedDigits
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
@@ -353,28 +350,18 @@ class StationDetailSheet : BottomSheetDialogFragment() {
     /**
      * Hands the station over to a navigation application (SPEC §7.2).
      *
-     * The `geo:` URI carries the station's name alongside its coordinates: the
-     * application receiving the intent then shows a named landmark rather than
-     * an anonymous point.
+     * The handover itself is shared with the other screens that offer one, and
+     * with it the reason this application is kept out of the chooser: it
+     * answers `geo:` too (SPEC §7.8), and the press used to reopen Roue Libre
+     * on the very station one was leaving (see [handOverToNavigation]).
      */
     private fun openInNavigationApp() {
         val station = viewModel.state.value.entry?.station ?: return
-        val label = Uri.encode(station.name)
-        val uri = (
-            "geo:${station.position.latitude},${station.position.longitude}" +
-                "?q=${station.position.latitude},${station.position.longitude}($label)"
-            ).toUri()
-        try {
-            startActivity(Intent(Intent.ACTION_VIEW, uri))
-        } catch (_: ActivityNotFoundException) {
-            // On a device with no mapping application at all, saying so beats
-            // doing nothing whatsoever.
-            val views = binding ?: return
-            Snackbar.make(
-                views.root,
-                R.string.station_no_navigation_app,
-                Snackbar.LENGTH_LONG,
-            ).show()
+        handOverToNavigation(station.name, station.position) { message ->
+            // On a device with nothing to guide with, saying so beats doing
+            // nothing whatsoever — on the sheet's own root, where the press was.
+            val views = binding ?: return@handOverToNavigation
+            Snackbar.make(views.root, message, Snackbar.LENGTH_LONG).show()
         }
     }
 
