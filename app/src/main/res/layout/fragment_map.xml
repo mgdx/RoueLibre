@@ -99,8 +99,35 @@
         app:backgroundTint="@color/signal"
         app:icon="@drawable/ic_bike"
         app:iconTint="@color/surface_on_signal"
-        app:layout_constraintBottom_toTopOf="@id/locate_me"
+        app:layout_constraintBottom_toTopOf="@id/face_north"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <!--
+        Face north (SPEC §7.1). It appears only once the map has been turned,
+        which is why it sits above "locate me" rather than below: a button that
+        comes and goes must not push the ones that stay.
+
+        Ours and not MapLibre's own compass, though the library offers one.
+        MapLibre describes its views in its own languages, not in the
+        application's — the reason DescribedMapView exists — so its compass
+        would speak English under an Arabic interface, and it would look like
+        nothing else on this screen.
+    -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/face_north"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_s"
+        android:contentDescription="@string/map_face_north"
+        android:visibility="gone"
+        app:backgroundTint="@color/surface"
+        app:icon="@drawable/ic_compass"
+        app:iconTint="@color/ink"
+        app:layout_constraintBottom_toTopOf="@id/locate_me"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
 
     <!-- Locate me (SPEC §7.1). The permission is requested here alone, at
          the moment the user understands why (SPEC §10). -->

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    A compass needle: face north.
+
+    The two halves are told apart by their shape and never by their colour
+    alone (SPEC §7.1): north is the long solid point, south the short hollow
+    one. The button tints the whole drawing with a single ink, so a north told
+    by colour would not be told at all — and the needle keeps its meaning for a
+    reader who sees no colour, which is the rule the station markers follow too.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:tint="@color/ink"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M12,3 L16.5,12 L7.5,12 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M12,20.5 L16.5,12 L7.5,12 Z M12,18.3 L14.8,13.1 L9.2,13.1 Z" />
+</vector>

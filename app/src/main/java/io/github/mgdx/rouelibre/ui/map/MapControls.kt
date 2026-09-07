@@ -18,6 +18,15 @@ internal data class MapControls(val browsing: Boolean, val picking: Boolean) {
 
     /** Serves both roles, and neither of them without a map to look at. */
     val locateMe: Boolean get() = browsing || picking
+
+    /**
+     * The compass, which serves both roles too: a map one can turn is a map
+     * one can be lost on, whether one is browsing it or aiming at a point.
+     *
+     * This says the button is allowed on the screen, not that it is on it: it
+     * only ever appears once the map is off north (see [compassNeedle]).
+     */
+    val compass: Boolean get() = browsing || picking
 }
 
 /**
