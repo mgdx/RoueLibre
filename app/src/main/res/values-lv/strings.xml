@@ -177,7 +177,7 @@
     <string name="action_retry">Mēģināt vēlreiz</string>
 
     <string name="map_open_list">Skatīt staciju sarakstu</string>
-    <string name="map_description">Karte. Velciet ar diviem pirkstiem, lai to pārvietotu, un savelciet vai izpletiet divus pirkstus, lai tuvinātu vai tālinātu.</string>
+    <string name="map_description">Karte. Velciet ar diviem pirkstiem, lai to pārvietotu, savelciet vai izpletiet divus pirkstus, lai tuvinātu vai tālinātu, un pagrieziet divus pirkstus, lai mainītu tās virzienu.</string>
     <string name="map_attribution">© OpenStreetMap veidotāji</string>
     <string name="map_locate_me">Noteikt manu atrašanās vietu</string>
     <string name="map_locating">Notiek jūsu atrašanās vietas noteikšana…</string>
@@ -190,6 +190,13 @@
     <string name="map_needs_tiles_message">Instalējiet kartes datus krātuves ekrānā. Pa to laiku staciju saraksts paliek lietojams.</string>
     <string name="map_needs_city_title">Kura pilsēta?</string>
     <string name="map_needs_city_message">Izvēlieties aglomerāciju, kuru vēlaties lietot. Tās dati tiek lejupielādēti pēc tam, vienu reizi uz visiem laikiem.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Pagriezt uz ziemeļiem</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">Kartes pagrieziens no ziemeļiem: %1$d grāds. Pieskarieties, lai to pagrieztu uz ziemeļiem.</item>
+        <item quantity="zero">Kartes pagrieziens no ziemeļiem: %1$d grādu. Pieskarieties, lai to pagrieztu uz ziemeļiem.</item>
+        <item quantity="other">Kartes pagrieziens no ziemeļiem: %1$d grādi. Pieskarieties, lai to pagrieztu uz ziemeļiem.</item>
+    </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">Šī lietotne rāda koplietošanas velosipēdus kartē un aprēķina maršrutu no durvīm līdz durvīm: ar kājām līdz stacijai, ar velosipēdu, tad pārējo ceļu ar kājām.\n\nTā ir bezmaksas un atvērtā pirmkoda lietotne. Bez konta, bez reklāmām, bez izsekotājiem.</string>
@@ -314,6 +321,8 @@
     <!-- Nothing is being chosen here, so the wait does not claim to be looking
          for the best of anything. -->
     <string name="journey_computing_own_bike">Notiek brauciena aprēķināšana…</string>
+    <string name="journey_source_home">Mājas</string>
+    <string name="journey_source_work">Darbs</string>
     <string name="journey_source_my_position">Mana atrašanās vieta</string>
     <string name="journey_locating">Notiek jūsu atrašanās vietas noteikšana…</string>
     <string name="journey_source_favourite">Stacija no izlases</string>
@@ -416,7 +425,12 @@
     <string name="address_needs_index_title">Meklēšanai ir nepieciešams adrešu rādītājs</string>
     <string name="address_needs_index_message">Instalējiet rādītāju krātuves ekrānā. Tas paliek ierīcē un nekad neaiziet uz tīklu.</string>
     <string name="address_unreadable_title">Adrešu rādītājs nav nolasāms</string>
-    <string name="map_picked_place_description">%1$s. Pieskarieties, lai notīrītu šo punktu.</string>
+    <string name="map_picked_place_description">%1$s. Pieskarieties, lai redzētu, ko var darīt ar šo vietu.</string>
+
+    <string name="place_sheet_title">Šī vieta</string>
+    <string name="place_go_there">Doties turp</string>
+    <string name="place_leave_from_here">Sākt šeit</string>
+    <string name="place_clear">Notīrīt šo punktu</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). %1$s is
          a figure already rounded and already written in the interface's
@@ -654,5 +668,19 @@
          %1$s is the language in service: „English“, „Latviešu“, or the wording
          above when the device's own is followed. -->
     <string name="settings_language_description">Saskarnes valoda: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Manas vietas</string>
+    <string name="settings_place_home">Mājas</string>
+    <string name="settings_place_work">Darbs</string>
+    <string name="settings_place_none">Nav iestatīts</string>
+    <string name="settings_place_outside_city">Ārpus apkalpotās pilsētas</string>
+    <!-- %1$s is the setting, "Mājas" or "Darbs". -->
+    <string name="settings_place_set">Iestatīt: %1$s</string>
+    <string name="settings_place_change">Mainīt: %1$s</string>
+    <string name="settings_place_clear">Aizmirst: %1$s</string>
+    <string name="settings_place_cleared">Vieta aizmirsta: %1$s</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

@@ -205,7 +205,7 @@
 
     <!-- The map screen (SPEC §7.1). -->
     <string name="map_open_list">Zobraziť zoznam staníc</string>
-    <string name="map_description">Mapa. Posuňte ju potiahnutím dvoma prstami a priblížte alebo oddiaľte ju stiahnutím dvoch prstov.</string>
+    <string name="map_description">Mapa. Posuňte ju potiahnutím dvoma prstami, priblížte alebo oddiaľte ju stiahnutím dvoch prstov a otočte ju otáčaním dvoch prstov.</string>
     <!-- The attribution carried by the map itself (SPEC §4.5). It fits on one
          line; the network's full attribution is in „O aplikácii“. -->
     <string name="map_attribution">© prispievatelia OpenStreetMap</string>
@@ -227,6 +227,14 @@
          (SPEC §15.1). -->
     <string name="map_needs_city_title">Ktoré mesto?</string>
     <string name="map_needs_city_message">Vyberte aglomeráciu, ktorú chcete používať. Jej dáta sa potom stiahnu, raz a navždy.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Otočiť na sever</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">Mapa je otočená o %1$d stupeň od severu. Klepnutím ju otočíte na sever.</item>
+        <item quantity="few">Mapa je otočená o %1$d stupne od severu. Klepnutím ju otočíte na sever.</item>
+        <item quantity="many">Mapa je otočená o %1$d stupňa od severu. Klepnutím ju otočíte na sever.</item>
+        <item quantity="other">Mapa je otočená o %1$d stupňov od severu. Klepnutím ju otočíte na sever.</item>
+    </plurals>
 
     <!-- First launch (SPEC §7.9). We explain how something works, we are not
          selling anything: short sentences, active voice, no jargon. -->
@@ -387,7 +395,9 @@
          best of anything. -->
     <string name="journey_computing_own_bike">Počíta sa jazda…</string>
 
-    <!-- The four ways of designating a point (SPEC §7.3). -->
+    <!-- The ways of designating a point (SPEC §7.3). -->
+    <string name="journey_source_home">Domov</string>
+    <string name="journey_source_work">Práca</string>
     <string name="journey_source_my_position">Moja poloha</string>
     <string name="journey_locating">Zisťuje sa vaša poloha…</string>
     <string name="journey_source_favourite">Obľúbená stanica</string>
@@ -538,7 +548,12 @@
 
     <!-- The point found, laid on the map. Spoken by screen readers: the
          address first, the action second. %1$s is the address found. -->
-    <string name="map_picked_place_description">%1$s. Klepnutím tento bod vymažete.</string>
+    <string name="map_picked_place_description">%1$s. Klepnutím zobrazíte, čo sa dá s týmto miestom urobiť.</string>
+
+    <string name="place_sheet_title">Toto miesto</string>
+    <string name="place_go_there">Ísť tam</string>
+    <string name="place_leave_from_here">Vyraziť odtiaľto</string>
+    <string name="place_clear">Vymazať tento bod</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the
@@ -823,5 +838,19 @@
          %1$s is the language in service: „English“, „Slovenčina“, or the
          wording above when the device's own is followed. -->
     <string name="settings_language_description">Jazyk rozhrania: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Moje miesta</string>
+    <string name="settings_place_home">Domov</string>
+    <string name="settings_place_work">Práca</string>
+    <string name="settings_place_none">Nenastavené</string>
+    <string name="settings_place_outside_city">Mimo obsluhovaného mesta</string>
+    <!-- %1$s is the setting, "Domov" or "Práca". -->
+    <string name="settings_place_set">Nastaviť: %1$s</string>
+    <string name="settings_place_change">Zmeniť: %1$s</string>
+    <string name="settings_place_clear">Zabudnúť: %1$s</string>
+    <string name="settings_place_cleared">Zabudnuté: %1$s</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

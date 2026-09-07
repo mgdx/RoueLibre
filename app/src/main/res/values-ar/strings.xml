@@ -220,7 +220,7 @@
     <string name="action_retry">إعادة المحاولة</string>
 
     <string name="map_open_list">عرض قائمة المحطات</string>
-    <string name="map_description">خريطة. اسحبها بإصبعين لتحريكها، واقرص بإصبعين للتكبير أو التصغير.</string>
+    <string name="map_description">خريطة. اسحبها بإصبعين لتحريكها، واقرص بإصبعين للتكبير أو التصغير، وأدر إصبعيك لتدويرها.</string>
     <string name="map_attribution">&#x200F;© مساهمو OpenStreetMap</string>
     <string name="map_locate_me">تحديد موقعي</string>
     <string name="map_locating">جارٍ تحديد موقعك…</string>
@@ -234,6 +234,16 @@
     <string name="map_needs_tiles_message">ثبّت بيانات الخريطة من شاشة التخزين. وفي هذه الأثناء تبقى قائمة المحطات صالحة للاستخدام.</string>
     <string name="map_needs_city_title">أي مدينة؟</string>
     <string name="map_needs_city_message">اختر التجمّع الحضري الذي تريد استخدامه. تُنزَّل بياناته بعد ذلك، مرّة واحدة نهائيًا.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">التوجيه نحو الشمال</string>
+    <plurals name="map_bearing_description">
+        <item quantity="zero">الخريطة مائلة عن الشمال بمقدار %1$d درجة. انقر لتوجيهها نحو الشمال.</item>
+        <item quantity="one">الخريطة مائلة عن الشمال بمقدار %1$d درجة. انقر لتوجيهها نحو الشمال.</item>
+        <item quantity="two">الخريطة مائلة عن الشمال بمقدار %1$d درجتين. انقر لتوجيهها نحو الشمال.</item>
+        <item quantity="few">الخريطة مائلة عن الشمال بمقدار %1$d درجات. انقر لتوجيهها نحو الشمال.</item>
+        <item quantity="many">الخريطة مائلة عن الشمال بمقدار %1$d درجةً. انقر لتوجيهها نحو الشمال.</item>
+        <item quantity="other">الخريطة مائلة عن الشمال بمقدار %1$d درجة. انقر لتوجيهها نحو الشمال.</item>
+    </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">يعرض هذا التطبيق الدراجات المشتركة على خريطة، ويحسب رحلة من الباب إلى الباب: مشي إلى محطة، ثم ركوب، ثم مشي لبقية الطريق.\n\nهو حرّ ومفتوح المصدر. لا حساب، لا إعلانات، لا متتبّعات.</string>
@@ -356,6 +366,8 @@
          stations to weigh — so the wait does not claim to be looking for the
          best of anything. -->
     <string name="journey_computing_own_bike">جارٍ حساب الركوب…</string>
+    <string name="journey_source_home">المنزل</string>
+    <string name="journey_source_work">العمل</string>
     <string name="journey_source_my_position">موقعي</string>
     <string name="journey_locating">جارٍ تحديد موقعك…</string>
     <string name="journey_source_favourite">محطة مفضّلة</string>
@@ -464,7 +476,12 @@
     <string name="address_needs_index_title">يحتاج البحث إلى فهرس العناوين</string>
     <string name="address_needs_index_message">ثبّت الفهرس من شاشة التخزين. يبقى على الجهاز ولا يخرج أبدًا على الشبكة.</string>
     <string name="address_unreadable_title">فهرس العناوين غير قابل للقراءة</string>
-    <string name="map_picked_place_description">&#x200F;%1$s. انقر لمحو هذه النقطة.</string>
+    <string name="map_picked_place_description">&#x200F;%1$s. انقر لمعرفة ما يمكنك فعله بهذا المكان.</string>
+
+    <string name="place_sheet_title">هذا المكان</string>
+    <string name="place_go_there">الذهاب إلى هناك</string>
+    <string name="place_leave_from_here">الانطلاق من هنا</string>
+    <string name="place_clear">محو هذه النقطة</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). %1$s is
          a figure already rounded and already written in the reader's digits:
@@ -688,5 +705,19 @@
     <string name="settings_language_system">النظام</string>
     <!-- Spoken label of the row. %1$s is the language in service. -->
     <string name="settings_language_description">لغة الواجهة: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">أماكني</string>
+    <string name="settings_place_home">المنزل</string>
+    <string name="settings_place_work">العمل</string>
+    <string name="settings_place_none">غير محدد</string>
+    <string name="settings_place_outside_city">خارج المدينة المخدومة</string>
+    <!-- %1$s is the setting, "المنزل" or "العمل". -->
+    <string name="settings_place_set">تعيين: %1$s</string>
+    <string name="settings_place_change">تغيير: %1$s</string>
+    <string name="settings_place_clear">حذف: %1$s</string>
+    <string name="settings_place_cleared">تم حذف %1$s</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">&#x200F;%1$s: %2$s</string>
 
 </resources>

@@ -166,7 +166,7 @@
     <string name="action_retry">Yritä uudelleen</string>
 
     <string name="map_open_list">Näytä asemalista</string>
-    <string name="map_description">Kartta. Siirrä karttaa vetämällä kahdella sormella ja lähennä tai loitonna nipistämällä kahdella sormella.</string>
+    <string name="map_description">Kartta. Siirrä karttaa vetämällä kahdella sormella, lähennä tai loitonna nipistämällä kahdella sormella ja käännä karttaa kiertämällä kahta sormea.</string>
     <string name="map_attribution">© OpenStreetMapin tekijät</string>
     <string name="map_locate_me">Paikanna minut</string>
     <string name="map_locating">Haetaan sijaintia…</string>
@@ -179,6 +179,12 @@
     <string name="map_needs_tiles_message">Asenna kartta-aineisto Tallennustila-näytöltä. Sillä välin asemalista pysyy käytettävissä.</string>
     <string name="map_needs_city_title">Mikä kaupunki?</string>
     <string name="map_needs_city_message">Valitse kaupunkiseutu, jota haluat käyttää. Sen aineistot ladataan sen jälkeen, kerran ja lopullisesti.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Suuntaa pohjoiseen</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">Kartta on kääntynyt %1$d asteen pohjoisesta. Napauta, niin kartta kääntyy pohjoiseen.</item>
+        <item quantity="other">Kartta on kääntynyt %1$d astetta pohjoisesta. Napauta, niin kartta kääntyy pohjoiseen.</item>
+    </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">Tämä sovellus näyttää kaupunkipyörät kartalla ja laskee reitin ovelta ovelle: kävele asemalle, pyöräile ja kävele loppumatka.\n\nSe on ilmainen ja avointa lähdekoodia. Ei tiliä, ei mainoksia, ei seurantaa.</string>
@@ -308,6 +314,8 @@
          of stations to weigh — so the wait does not claim to be looking for the
          best of anything. -->
     <string name="journey_computing_own_bike">Lasketaan pyöräosuutta…</string>
+    <string name="journey_source_home">Koti</string>
+    <string name="journey_source_work">Työ</string>
     <string name="journey_source_my_position">Oma sijainti</string>
     <string name="journey_locating">Haetaan sijaintia…</string>
     <string name="journey_source_favourite">Suosikkiasema</string>
@@ -423,7 +431,12 @@
     <string name="address_needs_index_title">Haku tarvitsee osoitehakemiston</string>
     <string name="address_needs_index_message">Asenna hakemisto Tallennustila-näytöltä. Se pysyy laitteella eikä lähde koskaan verkkoon.</string>
     <string name="address_unreadable_title">Osoitehakemistoa ei voi lukea</string>
-    <string name="map_picked_place_description">%1$s. Napauta, niin tämä piste poistetaan.</string>
+    <string name="map_picked_place_description">%1$s. Napauta, niin näet mitä tälle paikalle voi tehdä.</string>
+
+    <string name="place_sheet_title">Tämä paikka</string>
+    <string name="place_go_there">Mene sinne</string>
+    <string name="place_leave_from_here">Lähde tästä</string>
+    <string name="place_clear">Poista tämä piste</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the
@@ -654,5 +667,19 @@
          %1$s is the language in service: ”English”, ”Suomi”, or the wording
          above when the device's own is followed. -->
     <string name="settings_language_description">Käyttöliittymän kieli: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Omat paikat</string>
+    <string name="settings_place_home">Koti</string>
+    <string name="settings_place_work">Työ</string>
+    <string name="settings_place_none">Ei asetettu</string>
+    <string name="settings_place_outside_city">Katetun kaupungin ulkopuolella</string>
+    <!-- %1$s is the setting, "Koti" or "Työ". -->
+    <string name="settings_place_set">Aseta: %1$s</string>
+    <string name="settings_place_change">Vaihda: %1$s</string>
+    <string name="settings_place_clear">Unohda: %1$s</string>
+    <string name="settings_place_cleared">%1$s unohdettu</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

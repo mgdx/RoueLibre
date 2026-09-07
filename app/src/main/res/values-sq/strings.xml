@@ -172,7 +172,7 @@
     <string name="action_retry">Provo përsëri</string>
 
     <string name="map_open_list">Shih listën e stacioneve</string>
-    <string name="map_description">Hartë. Rrëshqite me dy gishta që ta lëvizësh, bashko ose ndaj dy gishtat për ta zmadhuar ose zvogëluar.</string>
+    <string name="map_description">Hartë. Rrëshqite me dy gishta që ta lëvizësh, bashko ose ndaj dy gishtat për ta zmadhuar ose zvogëluar, rrotullo dy gishtat për ta kthyer.</string>
     <string name="map_attribution">© kontribuuesit e OpenStreetMap</string>
     <string name="map_locate_me">Gjej vendndodhjen time</string>
     <string name="map_locating">Po gjendet pozicioni yt…</string>
@@ -185,6 +185,12 @@
     <string name="map_needs_tiles_message">Instalo hartën bazë nga ekrani i hapësirës ruajtëse. Ndërkohë, lista e stacioneve mbetet e përdorshme.</string>
     <string name="map_needs_city_title">Cili qytet?</string>
     <string name="map_needs_city_message">Zgjidh zonën urbane që do të përdorësh. Të dhënat e saj shkarkohen më pas, një herë e përgjithmonë.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Drejtoje nga veriu</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">Harta është kthyer %1$d gradë nga veriu. Trokit që ta drejtosh nga veriu.</item>
+        <item quantity="other">Harta është kthyer %1$d gradë nga veriu. Trokit që ta drejtosh nga veriu.</item>
+    </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">Ky aplikacion tregon biçikletat e përbashkëta në hartë dhe llogarit një udhëtim derë më derë: në këmbë deri te një stacion, pastaj me biçikletë dhe në këmbë pjesën tjetër të rrugës.\n\nËshtë falas dhe me kod të hapur. Pa llogari, pa reklama, pa gjurmues.</string>
@@ -311,6 +317,8 @@
          stations to weigh — so the wait does not claim to be looking for the
          best of anything. -->
     <string name="journey_computing_own_bike">Po llogaritet ngasja…</string>
+    <string name="journey_source_home">Shtëpia</string>
+    <string name="journey_source_work">Puna</string>
     <string name="journey_source_my_position">Pozicioni im</string>
     <string name="journey_locating">Po gjendet pozicioni yt…</string>
     <string name="journey_source_favourite">Një stacion i preferuar</string>
@@ -415,7 +423,12 @@
     <string name="address_needs_index_title">Kërkimit i duhet indeksi i adresave</string>
     <string name="address_needs_index_message">Instalo indeksin nga ekrani i hapësirës ruajtëse. Ai qëndron në pajisje dhe nuk del kurrë në rrjet.</string>
     <string name="address_unreadable_title">Indeksi i adresave nuk lexohet</string>
-    <string name="map_picked_place_description">%1$s. Trokit për ta hequr këtë pikë.</string>
+    <string name="map_picked_place_description">%1$s. Trokit për të parë çfarë mund të bësh me këtë vend.</string>
+
+    <string name="place_sheet_title">Ky vend</string>
+    <string name="place_go_there">Shko atje</string>
+    <string name="place_leave_from_here">Nisu nga këtu</string>
+    <string name="place_clear">Hiqe këtë pikë</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the
@@ -634,5 +647,19 @@
     <!-- Spoken label of the row. %1$s is the language in service: "English",
          "Shqip", or the wording above when the device's own is followed. -->
     <string name="settings_language_description">Gjuha e ndërfaqes: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Vendet e mia</string>
+    <string name="settings_place_home">Shtëpia</string>
+    <string name="settings_place_work">Puna</string>
+    <string name="settings_place_none">Nuk është caktuar</string>
+    <string name="settings_place_outside_city">Jashtë qytetit të mbuluar</string>
+    <!-- %1$s is the setting, "Shtëpia" or "Puna". -->
+    <string name="settings_place_set">Cakto: %1$s</string>
+    <string name="settings_place_change">Ndrysho: %1$s</string>
+    <string name="settings_place_clear">Hiq: %1$s</string>
+    <string name="settings_place_cleared">U hoq: %1$s</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

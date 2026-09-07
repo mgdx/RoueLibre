@@ -160,7 +160,7 @@
 
     <!-- The map screen (SPEC §7.1). -->
     <string name="map_open_list">ステーションの一覧を見る</string>
-    <string name="map_description">地図。2 本の指でドラッグすると移動し、2 本の指でピンチすると拡大・縮小します。</string>
+    <string name="map_description">地図。2 本の指でドラッグすると移動し、2 本の指でピンチすると拡大・縮小し、2 本の指でひねると回転します。</string>
     <!-- The attribution carried by the map itself (SPEC §4.5). It is left in
          English: this is the wording OpenStreetMap asks for, and it fits on
          one line. The full attribution is in "about". -->
@@ -182,6 +182,11 @@
          (SPEC §15.1). -->
     <string name="map_needs_city_title">どの都市にしますか？</string>
     <string name="map_needs_city_message">利用する都市圏を選んでください。データはそのあとで、一度だけダウンロードします。</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">北を上にする</string>
+    <plurals name="map_bearing_description">
+        <item quantity="other">地図は北から %1$d 度回転しています。タップすると北が上になります。</item>
+    </plurals>
 
     <!-- First launch (SPEC §7.9). We explain how something works, we are not
          selling anything: short sentences, active voice, no jargon. -->
@@ -340,7 +345,9 @@
          best of anything. -->
     <string name="journey_computing_own_bike">自転車での走行を計算しています…</string>
 
-    <!-- The four ways of designating a point (SPEC §7.3). -->
+    <!-- The ways of designating a point (SPEC §7.3). -->
+    <string name="journey_source_home">自宅</string>
+    <string name="journey_source_work">職場</string>
     <string name="journey_source_my_position">現在地</string>
     <string name="journey_locating">現在地を取得しています…</string>
     <string name="journey_source_favourite">お気に入りのステーション</string>
@@ -493,7 +500,12 @@
 
     <!-- The point found, laid on the map. Spoken by screen readers: the
          address first, the action second. %1$s is the address found. -->
-    <string name="map_picked_place_description">%1$s。タップするとこの地点を消去します。</string>
+    <string name="map_picked_place_description">%1$s。タップするとこの地点でできることが表示されます。</string>
+
+    <string name="place_sheet_title">この地点</string>
+    <string name="place_go_there">ここへ行く</string>
+    <string name="place_leave_from_here">ここから出発</string>
+    <string name="place_clear">この地点を消去</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the
@@ -746,5 +758,19 @@
          %1$s is the language in service: "English", "日本語", or the wording
          above when the device's own is followed. -->
     <string name="settings_language_description">アプリの表示言語：%1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">マイプレイス</string>
+    <string name="settings_place_home">自宅</string>
+    <string name="settings_place_work">職場</string>
+    <string name="settings_place_none">未設定</string>
+    <string name="settings_place_outside_city">対象の都市の外</string>
+    <!-- %1$s is the setting, "自宅" or "職場". -->
+    <string name="settings_place_set">%1$sを設定</string>
+    <string name="settings_place_change">%1$sを変更</string>
+    <string name="settings_place_clear">%1$sを削除</string>
+    <string name="settings_place_cleared">%1$sを削除しました</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s：%2$s</string>
 
 </resources>

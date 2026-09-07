@@ -182,7 +182,7 @@
     <string name="action_retry">Spróbuj ponownie</string>
 
     <string name="map_open_list">Zobacz listę stacji</string>
-    <string name="map_description">Mapa. Przesuwaj ją dwoma palcami, a ściągając lub rozsuwając dwa palce, przybliżysz lub oddalisz widok.</string>
+    <string name="map_description">Mapa. Przesuwaj ją dwoma palcami, a ściągając lub rozsuwając dwa palce, przybliżysz lub oddalisz widok; obracając dwa palce, obrócisz mapę.</string>
     <string name="map_attribution">© współtwórcy OpenStreetMap</string>
     <string name="map_locate_me">Ustal moją pozycję</string>
     <string name="map_locating">Ustalam Twoją pozycję…</string>
@@ -195,6 +195,14 @@
     <string name="map_needs_tiles_message">Zainstaluj dane mapy na ekranie „Pamięć”. Do tego czasu lista stacji nadal działa.</string>
     <string name="map_needs_city_title">Które miasto?</string>
     <string name="map_needs_city_message">Wybierz aglomerację, z której chcesz korzystać. Jej dane zostaną pobrane potem, raz na zawsze.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Skieruj na północ</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">Mapa jest obrócona o %1$d stopień od północy. Kliknij, aby skierować ją na północ.</item>
+        <item quantity="few">Mapa jest obrócona o %1$d stopnie od północy. Kliknij, aby skierować ją na północ.</item>
+        <item quantity="many">Mapa jest obrócona o %1$d stopni od północy. Kliknij, aby skierować ją na północ.</item>
+        <item quantity="other">Mapa jest obrócona o %1$d stopnia od północy. Kliknij, aby skierować ją na północ.</item>
+    </plurals>
 
     <!-- The welcome carousel, shown once on first launch. -->
     <string name="welcome_hello_title">Roue Libre</string>
@@ -326,6 +334,8 @@
          of stations to weigh — so the wait does not claim to be looking for the
          best of anything. -->
     <string name="journey_computing_own_bike">Wyznaczam przejazd…</string>
+    <string name="journey_source_home">Dom</string>
+    <string name="journey_source_work">Praca</string>
     <string name="journey_source_my_position">Moja pozycja</string>
     <string name="journey_locating">Ustalam Twoją pozycję…</string>
     <string name="journey_source_favourite">Ulubiona stacja</string>
@@ -440,7 +450,12 @@
     <string name="address_needs_index_title">Wyszukiwanie wymaga indeksu adresów</string>
     <string name="address_needs_index_message">Zainstaluj indeks na ekranie „Pamięć”. Zostaje on na urządzeniu i nigdy nie wychodzi do sieci.</string>
     <string name="address_unreadable_title">Nie można odczytać indeksu adresów</string>
-    <string name="map_picked_place_description">%1$s. Kliknij, aby usunąć ten punkt.</string>
+    <string name="map_picked_place_description">%1$s. Kliknij, aby zobaczyć, co możesz zrobić z tym miejscem.</string>
+
+    <string name="place_sheet_title">To miejsce</string>
+    <string name="place_go_there">Jedź tam</string>
+    <string name="place_leave_from_here">Wyrusz stąd</string>
+    <string name="place_clear">Usuń ten punkt</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the
@@ -669,5 +684,19 @@
          %1$s is the language in service: "English", "Polski", or the wording
          above when the device's own is followed. -->
     <string name="settings_language_description">Język interfejsu: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Moje miejsca</string>
+    <string name="settings_place_home">Dom</string>
+    <string name="settings_place_work">Praca</string>
+    <string name="settings_place_none">Nie ustawiono</string>
+    <string name="settings_place_outside_city">Poza obsługiwanym miastem</string>
+    <!-- %1$s is the setting, "Dom" or "Praca". -->
+    <string name="settings_place_set">Ustaw: %1$s</string>
+    <string name="settings_place_change">Zmień: %1$s</string>
+    <string name="settings_place_clear">Zapomnij: %1$s</string>
+    <string name="settings_place_cleared">Zapomniano: %1$s</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

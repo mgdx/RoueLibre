@@ -166,7 +166,7 @@
     <string name="action_retry">Újrapróbálkozás</string>
 
     <string name="map_open_list">Az állomáslista megtekintése</string>
-    <string name="map_description">Térkép. Két ujjal húzva mozgathatod, két ujjal csippentve nagyíthatsz vagy kicsinyíthetsz.</string>
+    <string name="map_description">Térkép. Két ujjal húzva mozgathatod, két ujjal csippentve nagyíthatsz vagy kicsinyíthetsz, két ujjal elforgatva pedig elfordíthatod.</string>
     <string name="map_attribution">© OpenStreetMap-közreműködők</string>
     <string name="map_locate_me">A pozícióm megkeresése</string>
     <string name="map_locating">A pozíció meghatározása…</string>
@@ -184,6 +184,12 @@
     <string name="map_needs_tiles_message">Telepítsd a térképadatokat a Tárhely képernyőn. Addig is használható marad az állomáslista.</string>
     <string name="map_needs_city_title">Melyik város?</string>
     <string name="map_needs_city_message">Válaszd ki a használni kívánt agglomerációt. Az adatai ezután töltődnek le, egyszer s mindenkorra.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Északra tájolás</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">A térkép %1$d fokkal el van forgatva az északi iránytól. Koppints az északra tájoláshoz.</item>
+        <item quantity="other">A térkép %1$d fokkal el van forgatva az északi iránytól. Koppints az északra tájoláshoz.</item>
+    </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">Ez az alkalmazás térképen mutatja a közösségi kerékpárokat, és háztól házig tartó útvonaltervet készít: gyaloglás egy állomásig, kerékpározás, majd gyaloglás a célig.\n\nIngyenes és nyílt forráskódú. Nincs fiók, nincs reklám, nincs nyomkövető.</string>
@@ -321,6 +327,8 @@
          of stations to weigh — so the wait does not claim to be looking for
          the best of anything. -->
     <string name="journey_computing_own_bike">A kerékpáros szakasz kiszámítása…</string>
+    <string name="journey_source_home">Otthon</string>
+    <string name="journey_source_work">Munkahely</string>
     <string name="journey_source_my_position">A pozícióm</string>
     <string name="journey_locating">A pozíció meghatározása…</string>
     <string name="journey_source_favourite">Kedvenc állomás</string>
@@ -438,7 +446,12 @@
     <string name="address_needs_index_title">A kereséshez címindex kell</string>
     <string name="address_needs_index_message">Telepítsd az indexet a Tárhely képernyőn. Az eszközön marad, és soha nem megy ki a hálózatra.</string>
     <string name="address_unreadable_title">A címindex olvashatatlan</string>
-    <string name="map_picked_place_description">%1$s. Koppints ide a pont törléséhez.</string>
+    <string name="map_picked_place_description">%1$s. Koppints ide, hogy lásd, mit tehetsz ezzel a hellyel.</string>
+
+    <string name="place_sheet_title">Ez a hely</string>
+    <string name="place_go_there">Irány oda</string>
+    <string name="place_leave_from_here">Indulás innen</string>
+    <string name="place_clear">A pont törlése</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the
@@ -668,5 +681,19 @@
     <!-- Spoken label of the row. %1$s is the language in service: „Magyar”,
          „English”, or the wording above when the device's own is followed. -->
     <string name="settings_language_description">A felület nyelve: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Saját helyek</string>
+    <string name="settings_place_home">Otthon</string>
+    <string name="settings_place_work">Munkahely</string>
+    <string name="settings_place_none">Nincs beállítva</string>
+    <string name="settings_place_outside_city">A lefedett városon kívül</string>
+    <!-- %1$s is the setting, "Otthon" or "Munkahely". -->
+    <string name="settings_place_set">%1$s beállítása</string>
+    <string name="settings_place_change">%1$s módosítása</string>
+    <string name="settings_place_clear">%1$s törlése</string>
+    <string name="settings_place_cleared">%1$s törölve</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

@@ -156,7 +156,7 @@
     <string name="action_retry">Prøv igjen</string>
 
     <string name="map_open_list">Se listen over stasjoner</string>
-    <string name="map_description">Kart. Dra med to fingre for å flytte det, og knip med to fingre for å zoome inn eller ut.</string>
+    <string name="map_description">Kart. Dra med to fingre for å flytte det, knip med to fingre for å zoome inn eller ut, og vri to fingre for å rotere det.</string>
     <string name="map_attribution">© OpenStreetMap-bidragsytere</string>
     <string name="map_locate_me">Finn posisjonen min</string>
     <string name="map_locating">Finner posisjonen din …</string>
@@ -171,6 +171,12 @@
     <string name="map_needs_tiles_message">Installer kartdataene fra Lagring-skjermen. Inntil da er stasjonslisten fortsatt brukbar.</string>
     <string name="map_needs_city_title">Hvilken by?</string>
     <string name="map_needs_city_message">Velg byområdet du vil bruke. Dataene lastes ned etterpå, én gang for alle.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Vend mot nord</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">Kartet er dreid %1$d grad fra nord. Trykk for å vende det mot nord.</item>
+        <item quantity="other">Kartet er dreid %1$d grader fra nord. Trykk for å vende det mot nord.</item>
+    </plurals>
 
     <!-- The welcome carousel, shown once on first launch. -->
     <string name="welcome_hello_title">Roue Libre</string>
@@ -316,6 +322,8 @@
          stations to weigh – so the wait does not claim to look for the best of
          anything. -->
     <string name="journey_computing_own_bike">Beregner sykkelturen …</string>
+    <string name="journey_source_home">Hjem</string>
+    <string name="journey_source_work">Jobb</string>
     <string name="journey_source_my_position">Posisjonen min</string>
     <string name="journey_locating">Finner posisjonen din …</string>
     <string name="journey_source_favourite">En favorittstasjon</string>
@@ -424,7 +432,12 @@
     <string name="address_needs_index_title">Søket krever adresseindeksen</string>
     <string name="address_needs_index_message">Installer indeksen fra Lagring-skjermen. Den blir på enheten og går aldri ut på nettet.</string>
     <string name="address_unreadable_title">Adresseindeksen kan ikke leses</string>
-    <string name="map_picked_place_description">%1$s. Trykk for å fjerne dette punktet.</string>
+    <string name="map_picked_place_description">%1$s. Trykk for å se hva du kan gjøre med dette stedet.</string>
+
+    <string name="place_sheet_title">Dette stedet</string>
+    <string name="place_go_there">Dit</string>
+    <string name="place_leave_from_here">Herfra</string>
+    <string name="place_clear">Fjern dette punktet</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). %1$s is
          a figure already rounded and already written in the interface's
@@ -644,5 +657,19 @@
     <string name="settings_language_system">System</string>
     <!-- Spoken label of the row. %1$s is the language in service. -->
     <string name="settings_language_description">Språket i grensesnittet: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Stedene mine</string>
+    <string name="settings_place_home">Hjem</string>
+    <string name="settings_place_work">Jobb</string>
+    <string name="settings_place_none">Ikke angitt</string>
+    <string name="settings_place_outside_city">Utenfor byen som dekkes</string>
+    <!-- %1$s is the setting, "Hjem" or "Jobb". -->
+    <string name="settings_place_set">Angi %1$s</string>
+    <string name="settings_place_change">Endre %1$s</string>
+    <string name="settings_place_clear">Glem %1$s</string>
+    <string name="settings_place_cleared">%1$s er glemt</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

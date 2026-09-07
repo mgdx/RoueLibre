@@ -174,7 +174,7 @@
     <string name="action_retry">Pokušajte ponovo</string>
 
     <string name="map_open_list">Pogledaj popis stanica</string>
-    <string name="map_description">Karta. Povucite s dva prsta da je pomaknete, uštipnite s dva prsta za približavanje ili udaljavanje.</string>
+    <string name="map_description">Karta. Povucite s dva prsta da je pomaknete, uštipnite s dva prsta za približavanje ili udaljavanje, zarotirajte dva prsta da je okrenete.</string>
     <string name="map_attribution">© Suradnici OpenStreetMapa</string>
     <string name="map_locate_me">Pronađi me</string>
     <string name="map_locating">Traženje vašeg položaja…</string>
@@ -187,6 +187,13 @@
     <string name="map_needs_tiles_message">Instalirajte podatke karte sa zaslona za pohranu. U međuvremenu popis stanica ostaje upotrebljiv.</string>
     <string name="map_needs_city_title">Koji grad?</string>
     <string name="map_needs_city_message">Odaberite gradsko područje koje želite upotrebljavati. Njegovi se podaci preuzimaju poslije, jednom zauvijek.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Okreni prema sjeveru</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">Karta je okrenuta %1$d stupanj od sjevera. Dodirnite da je okrenete prema sjeveru.</item>
+        <item quantity="few">Karta je okrenuta %1$d stupnja od sjevera. Dodirnite da je okrenete prema sjeveru.</item>
+        <item quantity="other">Karta je okrenuta %1$d stupnjeva od sjevera. Dodirnite da je okrenete prema sjeveru.</item>
+    </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">Ova aplikacija prikazuje javne bicikle na karti i računa putovanje od vrata do vrata: pješice do stanice, zatim biciklom, pa pješice do kraja.\n\nBesplatna je i otvorenog koda. Bez računa, bez oglasa, bez alata za praćenje.</string>
@@ -312,6 +319,8 @@
          of stations to weigh — so the wait does not claim to be looking for the
          best of anything. -->
     <string name="journey_computing_own_bike">Računanje vožnje…</string>
+    <string name="journey_source_home">Dom</string>
+    <string name="journey_source_work">Posao</string>
     <string name="journey_source_my_position">Moj položaj</string>
     <string name="journey_locating">Traženje vašeg položaja…</string>
     <string name="journey_source_favourite">Stanica iz favorita</string>
@@ -415,7 +424,12 @@
     <string name="address_needs_index_title">Za pretraživanje je potrebno kazalo adresa</string>
     <string name="address_needs_index_message">Instalirajte kazalo sa zaslona za pohranu. Ostaje na uređaju i nikad ne odlazi na mrežu.</string>
     <string name="address_unreadable_title">Kazalo adresa nije čitljivo</string>
-    <string name="map_picked_place_description">%1$s. Dodirnite da biste izbrisali ovu točku.</string>
+    <string name="map_picked_place_description">%1$s. Dodirnite da vidite što možete učiniti s ovim mjestom.</string>
+
+    <string name="place_sheet_title">Ovo mjesto</string>
+    <string name="place_go_there">Idi onamo</string>
+    <string name="place_leave_from_here">Kreni odavde</string>
+    <string name="place_clear">Izbriši ovu točku</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the
@@ -644,5 +658,19 @@
     <!-- Spoken label of the row. %1$s is the language in service: "English",
          "Hrvatski", or the wording above when the device's own is followed. -->
     <string name="settings_language_description">Jezik sučelja: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Moja mjesta</string>
+    <string name="settings_place_home">Dom</string>
+    <string name="settings_place_work">Posao</string>
+    <string name="settings_place_none">Nije postavljeno</string>
+    <string name="settings_place_outside_city">Izvan pokrivenog grada</string>
+    <!-- %1$s is the setting, "Dom" or "Posao". -->
+    <string name="settings_place_set">Postavi: %1$s</string>
+    <string name="settings_place_change">Promijeni: %1$s</string>
+    <string name="settings_place_clear">Zaboravi: %1$s</string>
+    <string name="settings_place_cleared">Zaboravljeno: %1$s</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

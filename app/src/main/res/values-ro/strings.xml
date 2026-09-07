@@ -195,7 +195,7 @@
     <string name="action_retry">Încearcă din nou</string>
 
     <string name="map_open_list">Vezi lista stațiilor</string>
-    <string name="map_description">Hartă. Trage cu două degete pentru a o muta, apropie sau depărtează două degete pentru a mări sau a micșora.</string>
+    <string name="map_description">Hartă. Trage cu două degete pentru a o muta, apropie sau depărtează două degete pentru a mări sau a micșora, rotește două degete pentru a o roti.</string>
     <string name="map_attribution">© colaboratorii OpenStreetMap</string>
     <string name="map_locate_me">Localizează-mă</string>
     <string name="map_locating">Se caută poziția ta…</string>
@@ -209,6 +209,13 @@
     <string name="map_needs_tiles_message">Instalează fondul cartografic din ecranul de stocare. Între timp, lista stațiilor rămâne utilizabilă.</string>
     <string name="map_needs_city_title">Care oraș?</string>
     <string name="map_needs_city_message">Alege zona urbană pe care vrei să o folosești. Datele ei se descarcă apoi, o dată pentru totdeauna.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Orientează spre nord</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">Harta este rotită cu %1$d grad față de nord. Atinge pentru a o orienta spre nord.</item>
+        <item quantity="few">Harta este rotită cu %1$d grade față de nord. Atinge pentru a o orienta spre nord.</item>
+        <item quantity="other">Harta este rotită cu %1$d de grade față de nord. Atinge pentru a o orienta spre nord.</item>
+    </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">Aplicația arată bicicletele partajate pe o hartă și calculează un traseu de la ușă la ușă: mergi pe jos până la o stație, pedalezi, apoi mergi pe jos restul drumului.\n\nEste gratuită și cu sursă deschisă. Fără cont, fără reclame, fără trackere.</string>
@@ -343,6 +350,8 @@
          of stations to weigh — so the wait does not claim to be looking for the
          best of anything. -->
     <string name="journey_computing_own_bike">Se calculează drumul cu bicicleta…</string>
+    <string name="journey_source_home">Acasă</string>
+    <string name="journey_source_work">Serviciu</string>
     <string name="journey_source_my_position">Poziția mea</string>
     <string name="journey_locating">Se caută poziția ta…</string>
     <string name="journey_source_favourite">O stație favorită</string>
@@ -458,7 +467,12 @@
     <string name="address_needs_index_title">Căutarea are nevoie de indexul de adrese</string>
     <string name="address_needs_index_message">Instalează indexul de adrese din ecranul de stocare. Rămâne pe dispozitiv și nu iese niciodată în rețea.</string>
     <string name="address_unreadable_title">Index de adrese ilizibil</string>
-    <string name="map_picked_place_description">%1$s. Atinge pentru a șterge acest punct.</string>
+    <string name="map_picked_place_description">%1$s. Atinge pentru a vedea ce poți face cu acest loc.</string>
+
+    <string name="place_sheet_title">Acest loc</string>
+    <string name="place_go_there">Mergi acolo</string>
+    <string name="place_leave_from_here">Pleacă de aici</string>
+    <string name="place_clear">Șterge acest punct</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the
@@ -697,5 +711,19 @@
          %1$s is the language in service: "English", "Română", or the wording
          above when the device's own is followed. -->
     <string name="settings_language_description">Limba interfeței: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Locurile mele</string>
+    <string name="settings_place_home">Acasă</string>
+    <string name="settings_place_work">Serviciu</string>
+    <string name="settings_place_none">Nedefinit</string>
+    <string name="settings_place_outside_city">În afara orașului acoperit</string>
+    <!-- %1$s is the setting, "Acasă" or "Serviciu". -->
+    <string name="settings_place_set">Setează %1$s</string>
+    <string name="settings_place_change">Schimbă %1$s</string>
+    <string name="settings_place_clear">Șterge %1$s</string>
+    <string name="settings_place_cleared">Loc șters: %1$s</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>
