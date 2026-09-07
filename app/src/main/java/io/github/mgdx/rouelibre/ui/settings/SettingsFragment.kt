@@ -71,9 +71,10 @@ class SettingsFragment : Fragment() {
     /**
      * Which of the two places the address search was opened for, if it was.
      *
-     * Kept across a rebuild of the screen: the phone can be turned over while
-     * one searches, and the answer that comes back afterwards would otherwise
-     * have no row to land on.
+     * Kept across both ways this screen goes away while one searches — the
+     * unstacking, which leaves this very field standing, and the rebuild, which
+     * does not and is what [onSaveInstanceState] is for. [awaitedPlace] weighs
+     * the two, and must: an answer that comes back to no row writes nothing.
      */
     private var placeBeingNamed: SavedPlaceKind? = null
 
@@ -91,8 +92,17 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val views = checkNotNull(binding)
 
-        placeBeingNamed = savedInstanceState?.getString(STATE_PLACE_BEING_NAMED)
-            ?.let { name -> SavedPlaceKind.entries.firstOrNull { it.name == name } }
+        // The bundle answers where it has an answer, and never erases what the
+        // instance is still holding — [awaitedPlace] carries the why, and it is
+        // not a simplification waiting to happen: reading the bundle straight
+        // into the field is the version that shipped and that made this screen
+        // unable to save a place at all. Going to the address search only
+        // unstacks this screen, so the instance survives with its field set and
+        // comes back with no bundle whatsoever.
+        placeBeingNamed = awaitedPlace(
+            held = placeBeingNamed,
+            savedName = savedInstanceState?.getString(STATE_PLACE_BEING_NAMED),
+        )
 
         setUpToolbar(views)
         // In the order the screen reads them (SPEC §7.6): city, display,
