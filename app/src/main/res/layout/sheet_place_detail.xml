@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    What can be done with a place found on the map (SPEC §7.2, §7.3).
+
+    The station sheet's own layout, with the counts taken out: a place has no
+    bikes to show, and everything else it offers a station offers too — an end
+    of a journey, or a point handed to a navigation application. Two sheets that
+    do the same thing are read as one when they look alike, so the wording, the
+    order of the buttons and their hierarchy are that sheet's and not a second
+    arrangement invented here.
+
+    The root is a scroll view for the reason sheet_station_detail gives: the
+    sheet opens expanded, and in landscape at the largest system text sizes what
+    does not fit must be reachable rather than cut off.
+-->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/space_l"
+        android:paddingTop="@dimen/space_m"
+        android:paddingEnd="@dimen/space_l"
+        android:paddingBottom="@dimen/space_l">
+
+        <TextView
+            style="@style/Widget.RoueLibre.Name"
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="12 Rue Nationale" />
+
+        <!-- Shown only for a point the installed data does not reach, where it
+             is the reason the two journey buttons below have gone quiet. -->
+        <TextView
+            style="@style/Widget.RoueLibre.Name"
+            android:id="@+id/beyond_area"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_m"
+            android:background="@drawable/pill_surface"
+            android:paddingStart="@dimen/space_m"
+            android:paddingTop="@dimen/space_s"
+            android:paddingEnd="@dimen/space_m"
+            android:paddingBottom="@dimen/space_s"
+            android:text="@string/incoming_outside_coverage"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+            android:textColor="@color/alert"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            tools:visibility="visible" />
+
+        <!--
+            Origin and destination side by side, in the station sheet's order:
+            they are two faces of one gesture, and separating them would send
+            the user looking for the second elsewhere (SPEC §7.2).
+        -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/set_as_origin"
+            style="@style/Widget.RoueLibre.Toggle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_l"
+            android:layout_marginEnd="@dimen/space_s"
+            android:minHeight="@dimen/touch_target_min"
+            android:text="@string/place_leave_from_here"
+            app:layout_constraintEnd_toStartOf="@id/set_as_destination"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/beyond_area"
+            app:layout_goneMarginTop="@dimen/space_l" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/set_as_destination"
+            style="@style/Widget.RoueLibre.Toggle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_s"
+            android:minHeight="@dimen/touch_target_min"
+            android:text="@string/place_go_there"
+            app:layout_constraintBottom_toBottomOf="@id/set_as_origin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/set_as_origin"
+            app:layout_constraintTop_toTopOf="@id/set_as_origin" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/open_in_navigation"
+            style="@style/Widget.RoueLibre.Toggle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_s"
+            android:minHeight="@dimen/touch_target_min"
+            android:text="@string/station_open_in_navigation"
+            app:icon="@drawable/ic_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/set_as_origin" />
+
+        <!-- The gesture the pill carried on its own before this sheet existed:
+             the point goes, and the map is bare again. Last, because it is the
+             one action that undoes rather than leads somewhere. -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/clear"
+            style="@style/Widget.RoueLibre.Toggle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_s"
+            android:minHeight="@dimen/touch_target_min"
+            android:text="@string/place_clear"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/open_in_navigation" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

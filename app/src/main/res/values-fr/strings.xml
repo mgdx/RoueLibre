@@ -483,7 +483,12 @@
 
     <!-- The point found, laid on the map. Spoken by screen readers: the
          address first, the action second. %1$s is the address found. -->
-    <string name="map_picked_place_description">%1$s. Appuie pour effacer ce point.</string>
+    <string name="map_picked_place_description">%1$s. Appuie pour voir ce que tu peux faire de ce lieu.</string>
+
+    <string name="place_sheet_title">Ce lieu</string>
+    <string name="place_go_there">Y aller</string>
+    <string name="place_leave_from_here">Partir d’ici</string>
+    <string name="place_clear">Effacer ce point</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the
