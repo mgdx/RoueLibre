@@ -14,8 +14,9 @@ import io.github.mgdx.rouelibre.databinding.ItemSearchShortcutBinding
  * A way of designating a point without typing an address (SPEC §7.3).
  *
  * The specification wants four ways of naming a journey's end, and typing is
- * only one of them. The others head the result list, where they stay whatever
- * is typed.
+ * only one of them; the two places the user has named of themselves (SPEC §7.6)
+ * were added to those since. The others head the result list, where they stay
+ * whatever is typed.
  *
  * **The declaration order is the order they are shown in, and it is the order
  * of use.** One goes home and to work oftener than one aims at a spot on a map,

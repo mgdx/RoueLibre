@@ -72,6 +72,11 @@ class MapDescriptionTest {
     fun `the description is written in every language the interface speaks`() {
         val english = descriptionIn("values")
         assertTrue("The English sentence explains the drag", english.contains("two fingers"))
+        // The map turns under two fingers too, and a compass comes up to put it
+        // back north (SPEC §7.1). This sentence is the whole of what a screen
+        // reader is told about the map: a gesture left out of it is a gesture
+        // hidden from the one reader who cannot see the compass appear.
+        assertTrue("The English sentence explains the turn", english.contains("turn"))
         for (language in TRANSLATED_LANGUAGES - ENGLISH) {
             val translation = descriptionIn("values-$language")
             assertNotEquals(
