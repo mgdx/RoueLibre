@@ -665,9 +665,19 @@ class MapFragment : Fragment() {
      * a reader who cannot see it turned would learn nothing from "face north"
      * alone (SPEC §11).
      */
-    private fun showTheBearing() {
+    private fun showTheBearing() =
+        showBearing(mapLibreMap?.cameraPosition?.bearing ?: NORTH_BEARING)
+
+    /**
+     * Shows the compass for a bearing, or takes it away.
+     *
+     * @param bearingDegrees what the map is turned by. It comes from the map
+     *   while the map is the only one who knows, and from what the screen
+     *   ordered once the screen knows better — see [bearingAfterOrderingNorth].
+     */
+    private fun showBearing(bearingDegrees: Double) {
         val views = binding ?: return
-        val needle = compassNeedle(mapLibreMap?.cameraPosition?.bearing ?: 0.0)
+        val needle = compassNeedle(bearingDegrees)
         views.faceNorth.isVisible = showsCompass && needle.isShown
         views.faceNorth.rotation = needle.iconRotationDegrees
         views.faceNorth.contentDescription = resources.getQuantityString(
@@ -676,6 +686,14 @@ class MapFragment : Fragment() {
             needle.degreesFromNorth,
         )
     }
+
+    /** Shows what [bearingAfterOrderingNorth] says the bearing now is. */
+    private fun showBearingAfterOrderingNorth(theOrderStands: Boolean) = showBearing(
+        bearingAfterOrderingNorth(
+            theOrderStands = theOrderStands,
+            mapBearing = mapLibreMap?.cameraPosition?.bearing ?: NORTH_BEARING,
+        ),
+    )
 
     /**
      * Puts the map back the way it opened (SPEC §7.1).
@@ -691,21 +709,26 @@ class MapFragment : Fragment() {
      */
     private fun faceNorth() {
         val map = mapLibreMap ?: return
-        val update = CameraUpdateFactory.bearingTo(0.0)
+        // The button goes at the press and not at the end of the turn: from
+        // here on the map is bound for north, so the compass has nothing left
+        // to undo, and the screen has no reason to read back an order it gave
+        // itself (see [bearingAfterOrderingNorth]).
+        showBearingAfterOrderingNorth(theOrderStands = true)
+        val update = CameraUpdateFactory.bearingTo(NORTH_BEARING)
         if (requireContext().prefersReducedMotion()) {
             map.moveCamera(update)
-            showTheBearing()
             return
         }
         map.animateCamera(
             update,
             FACE_NORTH_ANIMATION_MILLIS,
             object : MapLibreMap.CancelableCallback {
-                override fun onFinish() = showTheBearing()
+                override fun onFinish() = showBearingAfterOrderingNorth(theOrderStands = true)
 
                 // A turn cut short by a finger back on the map leaves the map
-                // wherever it stopped, and the needle has to say so.
-                override fun onCancel() = showTheBearing()
+                // wherever it stopped, and the needle has to come back and say
+                // so. This is the one case where the map knows and we do not.
+                override fun onCancel() = showBearingAfterOrderingNorth(theOrderStands = false)
             },
         )
     }
