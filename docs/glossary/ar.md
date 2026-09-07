@@ -192,6 +192,13 @@ grammatically, because nothing here is being counted in the sentence.
 | Location | الموقع الجغرافي | Android's own word for the permission and the setting (`android:permgrouplab_location`); the reader's own position is simply موقعك. |
 | bytes | بايت / كيلوبايت / ميغابايت / غيغابايت | Arabic writes these out; the lexicon has بايت (`android:byteShort`) and كيلوبايت. |
 | distance symbols | م · كم · قدم · ياردة · ميل | The one place a unit symbol was **not** left in Latin. Arabic road signs count in كم, and a Latin `km` beside an Arabic-Indic figure would be the two-systems-on-one-line defect again. |
+| Home (the place) | المنزل | Where the reader lives, named by them (`settings_place_home`, `journey_source_home`, the same word in both). **Never الرئيسية**, which is an application's opening screen; المنزل is the dwelling one rides home to. |
+| Work (the place) | العمل | Where they work (`settings_place_work`, `journey_source_work`). The place, not the occupation: it stands beside المنزل under أماكني, which settles the reading; مكان العمل says it outright and is twice the width on a row that already carries an address. |
+| My places | أماكني | The settings section that holds the two (`settings_section_places`). The possessive is the suffix ـي, not a word of its own, and مكان is the noun `place_sheet_title` uses as well. |
+| outside the city served | خارج المدينة المخدومة | Under a place the conurbation in use does not cover (`settings_place_outside_city`). خارج is the preposition `station_beyond_area` already uses for the same idea. The application serves several conurbations side by side: a home named in Lille is out of reach while القاهرة is in use. The place is kept and stays erasable — out of reach, not wrong. |
+| Face north | التوجيه نحو الشمال | `map_face_north`, on the compass, which shows only while the map is turned; the masdar, as the file's controls are. `map_bearing_description` counts the turn in درجة and carries all six categories, `two` and `few` included. |
+| this place | هذا المكان | `place_sheet_title`, the sheet a point found on the map opens — the same noun as أماكني. `place_clear` is محو هذه النقطة, which keeps محو for emptying against حذف, which destroys. |
+| Go there / Leave from here | الذهاب إلى هناك / الانطلاق من هنا | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already الانطلاق من هنا, word for word, and `station_as_destination` الذهاب إلى هنا, of which الذهاب إلى هناك is the same masdar with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
 
 ## Five strings where a noun follows a numeral and cannot agree
 

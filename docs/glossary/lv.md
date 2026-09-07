@@ -194,6 +194,13 @@ number makes the parser give the first one up.
 | Out of service | **Nedarbojas** | `settings:radioInfo_service_out`. |
 | In use | **Tiek lietota** | `settings:wifi_display_status_in_use`. Feminine: `city_active` badges a **pilsēta**. |
 | Licence | **Licence** | `settings:license_title`. Identical to the English, and right — one of the two lines the validator asks a reader to confirm, with `about_licences_title` („Licences“). |
+| Home (the place) | **Mājas** | Where the reader lives, named by them (`settings_place_home`, `journey_source_home`, the same word in both). Plural in form, as Latvian has it. Never an application's opening screen. |
+| Work (the place) | **Darbs** | Where they work (`settings_place_work`, `journey_source_work`). The place, not the occupation: it stands beside *Mājas* under *Manas vietas*, which settles the reading; *Darbavieta* names the workplace outright and is twice the width on a row that already carries an address. |
+| My places | **Manas vietas** | The settings section that holds the two (`settings_section_places`). *Vieta* is the noun `place_sheet_title` uses as well. |
+| outside the city served | **Ārpus apkalpotās pilsētas** | Under a place the conurbation in use does not cover (`settings_place_outside_city`), *ārpus* with the genitive, the frame `station_beyond_area` already uses. *Apkalpotā*, served, rather than *aptvertā*, which the station line keeps for the area the installed data covers. The application serves several conurbations side by side: *Mājas* named in Lille are out of reach while Rīga is in use. The place is kept and stays erasable — out of reach, not wrong. |
+| Face north | **Pagriezt uz ziemeļiem** | `map_face_north`, on the compass, which shows only while the map is turned; the infinitive, as the file's controls are. `map_bearing_description` counts the turn in degrees and carries the `zero` category the section above is about — *grādu*, the genitive plural, for 10 to 19 and for every round ten. |
+| this place | **Šī vieta** | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Manas vietas*. `place_clear` is *Notīrīt šo punktu*, which empties a selection rather than destroying data. |
+| Go there / Leave from here | **Doties turp / Sākt šeit** | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already *Sākt šeit*, word for word, and `station_as_destination` *Doties šurp*, of which *Doties turp* is the same verb with *šurp* giving way to *turp* — the pair of directional adverbs Latvian has and English has not. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
 
 ## What is not translated
 

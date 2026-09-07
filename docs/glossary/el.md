@@ -141,7 +141,7 @@ Android's say so in their own row.
 | Display (section) | Οθόνη | `settings:display_category_title`. Android also has *Προβολή* (`settings:display_settings`), which names the entry point rather than the section; the section is *Οθόνη*. |
 | Theme | Θέμα | *Σκούρο θέμα* is Android's (`settings:dark_ui_mode`, `settings:keywords_systemui_theme`). Light / Dark are **Ανοιχτό** / **Σκούρο**, standing alone because the title above them already says *Θέμα*. |
 | Delete / Remove | Διαγραφή / Κατάργηση | Two words, because Android has two. *Διαγραφή* destroys — a city's data, a dataset, a picked point (`android:delete`, `settings:delete`). *Κατάργηση* takes out of a list, and is used for favourites only (`settings:remove`, `android:kg_reordering_delete_drop_target_text`). |
-| Clear (a search) | Διαγραφή | Android writes *Διαγραφή* for clearing a field (`settings:clear`, `settings:searchview_clear_text_content_description`), and `map_picked_place_description` uses the same verb for clearing a picked point, so that clearing is one word everywhere. |
+| Clear (a search) | Διαγραφή | Android writes *Διαγραφή* for clearing a field (`settings:clear`, `settings:searchview_clear_text_content_description`), and `place_clear` uses the same verb for clearing a picked point, so that clearing is one word everywhere. |
 | Refresh | Ανανέωση | And *Ανανεώστε τη λίστα* in `journey_no_stations`, so the button and the instruction pointing at it read as one thing. |
 | Back | Πίσω | `android:back_button_label`, `settings:back`. |
 | In use | Σε χρήση | Android's own, twice: `android:media_route_status_in_use` and `settings:wifi_display_status_in_use`. On the city already selected. |
@@ -162,6 +162,13 @@ Android's say so in their own row.
 | what's new | Τι νέο υπάρχει | What the screen shows is the release notes. *Νέα* alone would also read as news from elsewhere, which is why `changelogs/1.txt` names the screen rather than describing it. |
 | licences (components) | Άδειες των βιβλιοθηκών | *Συστατικά* is what a recipe has. What the screen lists is the licences of the libraries the application is built from. |
 | bytes | B, kB, MB, GB | Greek writes the same international symbols and says *byte*. |
+| Home (the place) | Σπίτι | Where the reader lives, named by them (`settings_place_home`, `journey_source_home`, the same word in both). **Never *Αρχική***, which is an application's opening screen and not a place one rides home to. |
+| Work (the place) | Εργασία | Where they work (`settings_place_work`, `journey_source_work`). The place, not the occupation: it stands beside *Σπίτι* under *Οι τοποθεσίες μου*, which settles the reading. |
+| My places | Οι τοποθεσίες μου | The settings section that holds the two (`settings_section_places`). *Τοποθεσία* is the noun `place_sheet_title` uses as well. |
+| outside the city served | Εκτός της πόλης που καλύπτεται | Under a place the conurbation in use does not cover (`settings_place_outside_city`). *Καλύπτω* is the verb `station_beyond_area` already uses, and the relative clause keeps it light where a participle would not be. The application serves several conurbations side by side: a *Σπίτι* named in Lille is out of reach while Αθήνα is in use. The place is kept and stays erasable — out of reach, not wrong. |
+| Face north | Προσανατολισμός στον βορρά | `map_face_north`, on the compass, which shows only while the map is turned; nominal, as the file's controls are. `map_bearing_description` counts the turn in *μοίρες*. |
+| this place | Αυτή η τοποθεσία | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Οι τοποθεσίες μου*. `place_clear` is *Διαγραφή αυτού του σημείου*, the one verb for clearing that the row above settles on. |
+| Go there / Leave from here | Μετάβαση εκεί / Αναχώρηση από εδώ | Leaving is the station sheet's own word: `station_as_origin` is already *Αναχώρηση από εδώ*, word for word. **Going is not**, and that is worth recording — `station_as_destination` says *Άφιξη εδώ*, the arrival that pairs with *Αναχώρηση* on a station row, where the place sheet says *Μετάβαση εκεί*, the going-to, because a place is somewhere one heads for rather than arrives at. If either is ever reworded, decide then whether the two pairs should be closed up. |
 
 ## Free docks and total docks: one noun, two phrases
 

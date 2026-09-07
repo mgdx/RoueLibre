@@ -91,6 +91,13 @@ says *byte*, not *octeto*.
 | dataset | conjunto de datos | — |
 | unmetered connection | conexión de uso no medido | Android's own *uso medido* for a metered network. The setting's description then explains it as billing by the megabyte, exactly as the English does. |
 | by default | por defecto | For the application's own setting. The one place *de forma predeterminada* appears is `about_links_body`, which quotes an Android Settings path and has to match the system word for word. |
+| Home (the place) | Casa | Where the reader lives, named by them (`settings_place_home`, `journey_source_home`, the same word in both). **Never *Inicio***, which is an application's first screen and not a place one rides home to. |
+| Work (the place) | Trabajo | Where they work (`settings_place_work`, `journey_source_work`). The place, not the occupation: it stands beside *Casa* under *Mis lugares*, which settles the reading; *Lugar de trabajo* is three times the width on a row that already carries an address. |
+| My places | Mis lugares | The settings section that holds the two (`settings_section_places`). *Lugar* is the noun `place_sheet_title` uses as well. |
+| outside the city served | Fuera de la ciudad cubierta | Under a place the conurbation in use does not cover (`settings_place_outside_city`). *Fuera de* and *cubrir* are what `station_beyond_area` already says. The application serves several conurbations side by side: a *Casa* named in Lille is out of reach while Madrid is in use. The place is kept and stays erasable — out of reach, not wrong. |
+| Face north | Orientar al norte | `map_face_north`, on the compass, which shows only while the map is turned; `map_bearing_description` counts the turn in *grados*. |
+| this place | Este lugar | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Mis lugares*. `place_clear` is *Borrar este punto*, which keeps *Borrar* for emptying against *Eliminar*, which destroys. |
+| Go there / Leave from here | Ir allí / Partir de aquí | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already *Partir de aquí*, word for word, and `station_as_destination` *Ir aquí*, of which *Ir allí* is the same verb with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
 
 The three dataset names are all **masculine singular** — *mapa base*, *grafo de
 rutas*, *índice de direcciones* — which is what lets `dataset_imported` and

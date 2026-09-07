@@ -85,13 +85,20 @@ by no space, the glyph carrying its own.
 | System (theme, units, language) | システム | The English writes one word in all three settings, and so does this. Not システムのデフォルト: the buttons beside it are ライト and ダーク, and one long label among short ones reads as a different kind of choice. |
 | Theme | テーマ / ライト / ダーク | Android's own word for the setting; the two states are what Japanese applications write in a three-way theme picker. |
 | Language | 言語 | Android's own word. |
-| the area a city covers | 対象とする範囲 / 対象とする | One notion, one word, over the nine strings that carry it. カバー appears nowhere: it would have made a third dressing of the same idea beside 対象範囲 and 対象とする範囲. |
+| the area a city covers | 対象とする範囲 / 対象とする | One notion, one word, over the ten strings that carry it. カバー appears nowhere: it would have made a third dressing of the same idea beside 対象範囲 and 対象とする範囲. |
 | offline data | オフラインデータ | — |
 | map data / tiles | 地図データ | The name the storage screen gives the dataset, and the one every other string must use for it. |
 | routing data | 経路データ | Built on 経路, so that `journey_graph_missing` names the thing the journey screen is about. More legible than ルーティングデータ. |
 | address index | 住所インデックス | — |
 | metered / unmetered | 従量制 / 定額制 | Android's own words for the two, from the Wi-Fi settings. The setting names the billing rather than Wi-Fi, as the English does. |
 | bytes | B, kB, MB, GB | Left as they are: Japanese writes the symbols in Latin. |
+| Home (the place) | 自宅 | `settings_place_home`, `journey_source_home`, the same word in both. **Not ホーム**, which is an application's opening screen; 自宅 is the dwelling, and it is what Japanese map applications label the same row. |
+| Work (the place) | 職場 | `settings_place_work`, `journey_source_work`. The workplace, which 職場 names outright; 仕事 would be the work itself, which is not a point on a map. |
+| My places | マイプレイス | `settings_section_places`, the settings section that holds the two. Katakana, as Japanese map applications write the same list; 自分の場所 reads as a description of a section rather than its name. |
+| outside the city served | 対象の都市の外 | `settings_place_outside_city`, written under a place the conurbation in use does not cover. Built on 対象, the entry above, so it says what `station_beyond_area` and `map_outside_city_brief` say. The application serves several conurbations side by side: a 自宅 named in Lille is out of reach while Toyama is in use. The place is kept and stays erasable. |
+| Face north | 北を上にする | `map_face_north`, on the compass, which shows only while the map is turned. Not 北向き and not 北に回転: what the button does is put the north at the top, which is how a Japanese map application says it. `map_bearing_description` counts the turn in 度. |
+| this place | この地点 | `place_sheet_title`, the sheet a point found on the map opens. 地点 rather than 場所: what was tapped is a coordinate, and `map_picked_place_description` already reads この地点. `place_clear` is この地点を消去, keeping 消去 for emptying against 削除 for destroying. |
+| Go there / Leave from here | ここへ行く / ここから出発 | Word for word what the station sheet says: `station_as_destination` is ここへ行く and `station_as_origin` ここから出発. Japanese moves no deictic here, so the two sheets carry the identical pair — which is the point. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
 
 ## The search prompt names no house number
 

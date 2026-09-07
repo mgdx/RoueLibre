@@ -163,6 +163,13 @@ to protect a handful of named squares.
 | offline data | **offline data** | Both words are Czech as they stand, which is why `settings_section_data` comes back identical to the English and is right. |
 | what's new | **novinky** | What the screen shows is the release notes. |
 | tracker | **sledovací nástroj** | Used in the interface and in the store's short description alike, so the promise reads the same before and after installing. |
+| Home (the place) | **Domov** | Where the reader lives, named by them (`settings_place_home`, `journey_source_home`, the same word in both). **Never *Domů***, which is the direction and the button that goes back to the phone's first screen; *Domov* is the dwelling. |
+| Work (the place) | **Práce** | Where they work (`settings_place_work`, `journey_source_work`). The place, not the occupation: it stands beside *Domov* under *Moje místa*, which settles the reading; *Pracoviště* names the workplace outright and is longer on a row that already carries an address. |
+| My places | **Moje místa** | The settings section that holds the two (`settings_section_places`). *Místo* is the noun `place_sheet_title` uses as well. |
+| outside the city served | **Mimo obsluhované město** | Under a place the conurbation in use does not cover (`settings_place_outside_city`). *Obsluhované*, served, rather than *pokrývané*, which `station_beyond_area` keeps for the area the installed data covers. The application serves several conurbations side by side: a *Domov* named in Lille is out of reach while Brno is in use. The place is kept and stays erasable — out of reach, not wrong. |
+| Face north | **Otočit k severu** | `map_face_north`, on the compass, which shows only while the map is turned; the infinitive, as the file's buttons are. `map_bearing_description` counts the turn in degrees, over all four categories. |
+| this place | **Toto místo** | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Moje místa*. `place_clear` is *Smazat tento bod*, which is the picked point the *Smazat / Odebrat* row above already names. |
+| Go there / Leave from here | **Jet tam / Vyrazit odsud** | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already *Vyrazit odsud*, word for word, and `station_as_destination` *Jet sem*, of which *Jet tam* is the same verb with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
 
 ## Words that are not translated
 
