@@ -10,9 +10,12 @@ import org.junit.Test
 /**
  * Tests of which shortcuts a journey's end is offered, and in what order.
  *
- * Two questions, and the second is the one that would go wrong quietly: a row
+ * Three questions. The second is the one that would go wrong quietly: a row
  * offered for a place no journey can reach fails only once the route has been
- * asked for, by which time the user has been promised something.
+ * asked for, by which time the user has been promised something. The third is
+ * whether anything has been typed, which since 7 September 2026 takes every row
+ * away — and it is a rule the list beyond this file leans on, so what it does
+ * on an empty field is pinned as firmly as what it does on a full one.
  */
 class SearchShortcutsTest {
 
@@ -20,7 +23,7 @@ class SearchShortcutsTest {
     fun `no place named leaves the three that need no place`() {
         assertEquals(
             listOf(SearchShortcut.MyPosition, SearchShortcut.Favourite, SearchShortcut.OnMap),
-            searchShortcutsFor(home = null, work = null, coveredArea = LILLE),
+            searchShortcutsFor(home = null, work = null, coveredArea = LILLE, query = ""),
         )
     }
 
@@ -33,7 +36,12 @@ class SearchShortcutsTest {
                 SearchShortcut.Favourite,
                 SearchShortcut.OnMap,
             ),
-            searchShortcutsFor(home = aPlaceIn(LILLE), work = null, coveredArea = LILLE),
+            searchShortcutsFor(
+                home = aPlaceIn(LILLE),
+                work = null,
+                coveredArea = LILLE,
+                query = "",
+            ),
         )
     }
 
@@ -46,7 +54,12 @@ class SearchShortcutsTest {
                 SearchShortcut.Favourite,
                 SearchShortcut.OnMap,
             ),
-            searchShortcutsFor(home = null, work = aPlaceIn(LILLE), coveredArea = LILLE),
+            searchShortcutsFor(
+                home = null,
+                work = aPlaceIn(LILLE),
+                coveredArea = LILLE,
+                query = "",
+            ),
         )
     }
 
@@ -60,7 +73,12 @@ class SearchShortcutsTest {
                 SearchShortcut.Favourite,
                 SearchShortcut.OnMap,
             ),
-            searchShortcutsFor(home = aPlaceIn(LILLE), work = aPlaceIn(LILLE), coveredArea = LILLE),
+            searchShortcutsFor(
+                home = aPlaceIn(LILLE),
+                work = aPlaceIn(LILLE),
+                coveredArea = LILLE,
+                query = "",
+            ),
         )
     }
 
@@ -72,6 +90,7 @@ class SearchShortcutsTest {
             home = SavedPlace("Somewhere in Paris", Coordinates(48.8566, 2.3522)),
             work = aPlaceIn(LILLE),
             coveredArea = LILLE,
+            query = "",
         )
         assertEquals(
             listOf(
@@ -90,6 +109,7 @@ class SearchShortcutsTest {
             home = aPlaceIn(LILLE),
             work = SavedPlace("Somewhere in Paris", Coordinates(48.8566, 2.3522)),
             coveredArea = LILLE,
+            query = "",
         )
         assertEquals(
             listOf(
@@ -119,6 +139,7 @@ class SearchShortcutsTest {
                 home = aPlaceIn(LILLE),
                 work = SavedPlace("Somewhere in Paris", Coordinates(48.8566, 2.3522)),
                 coveredArea = null,
+                query = "",
             ),
         )
     }
@@ -130,7 +151,7 @@ class SearchShortcutsTest {
         for (home in places) {
             for (work in places) {
                 for (area in areas) {
-                    val shortcuts = searchShortcutsFor(home, work, area)
+                    val shortcuts = searchShortcutsFor(home, work, area, query = "")
                     assertEquals(
                         "the rows keep the order they are declared in",
                         shortcuts.sortedBy { it.ordinal },
@@ -142,23 +163,90 @@ class SearchShortcutsTest {
     }
 
     @Test
-    fun `the ways that ask the data for nothing are never withdrawn`() {
-        // What AddressSearchPanel leans on: a screen filling a journey's end
-        // always has something to press, whatever is named and whatever is
-        // installed. Were this to become false, panelFor would answer None to a
-        // screen showing an empty list.
+    fun `on an empty field the ways that ask the data for nothing are never withdrawn`() {
+        // The guarantee still holds over what is named and what is installed —
+        // it is what keeps an empty field from ever facing an empty list. It no
+        // longer holds over what is typed, which is the whole of the change of
+        // 7 September 2026, and why the query is pinned at empty here.
         val places = listOf(null, aPlaceIn(LILLE), SavedPlace("Paris", Coordinates(48.85, 2.35)))
         for (home in places) {
             for (work in places) {
                 for (area in listOf(null, LILLE)) {
                     assertTrue(
-                        searchShortcutsFor(home, work, area).containsAll(
+                        searchShortcutsFor(home, work, area, query = "").containsAll(
                             listOf(
                                 SearchShortcut.MyPosition,
                                 SearchShortcut.Favourite,
                                 SearchShortcut.OnMap,
                             ),
                         ),
+                    )
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `one character takes every shortcut away`() {
+        // Somebody who has begun to type has answered the question the rows
+        // were asking. All five go, the two named places included.
+        assertEquals(
+            emptyList<SearchShortcut>(),
+            searchShortcutsFor(
+                home = aPlaceIn(LILLE),
+                work = aPlaceIn(LILLE),
+                coveredArea = LILLE,
+                query = "r",
+            ),
+        )
+    }
+
+    @Test
+    fun `a field holding nothing but spaces has asked nothing and keeps them`() {
+        // The line the rest of the screen already draws: no search is run on a
+        // blank query and no panel concludes anything about one. A space
+        // brushed by accident must not leave a screen with nothing found and
+        // nothing left to press.
+        assertEquals(
+            listOf(
+                SearchShortcut.Home,
+                SearchShortcut.Work,
+                SearchShortcut.MyPosition,
+                SearchShortcut.Favourite,
+                SearchShortcut.OnMap,
+            ),
+            searchShortcutsFor(
+                home = aPlaceIn(LILLE),
+                work = aPlaceIn(LILLE),
+                coveredArea = LILLE,
+                query = "   ",
+            ),
+        )
+    }
+
+    @Test
+    fun `emptying the field brings all five back`() {
+        // Nothing is taken away by typing, only put aside: the rows are a
+        // function of the field's content, so clearing it restores exactly what
+        // stood there before the first keystroke.
+        val places = Triple(aPlaceIn(LILLE), aPlaceIn(LILLE), LILLE)
+        val before = searchShortcutsFor(places.first, places.second, places.third, query = "")
+        val whileTyping = searchShortcutsFor(places.first, places.second, places.third, "rue nat")
+        val after = searchShortcutsFor(places.first, places.second, places.third, query = "")
+        assertEquals(emptyList<SearchShortcut>(), whileTyping)
+        assertEquals(before, after)
+        assertEquals(5, after.size)
+    }
+
+    @Test
+    fun `typing withdraws the rows without regard to what is named`() {
+        val places = listOf(null, aPlaceIn(LILLE), SavedPlace("Paris", Coordinates(48.85, 2.35)))
+        for (home in places) {
+            for (work in places) {
+                for (area in listOf(null, LILLE)) {
+                    assertEquals(
+                        emptyList<SearchShortcut>(),
+                        searchShortcutsFor(home, work, area, query = "a"),
                     )
                 }
             }

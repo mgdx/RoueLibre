@@ -26,8 +26,10 @@ import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.databinding.FragmentAddressSearchBinding
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.toUserMessage
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 /**
@@ -75,14 +77,12 @@ class AddressSearchFragment : Fragment() {
         titleResource()?.let(views.toolbar::setTitle)
 
         views.results.layoutManager = LinearLayoutManager(requireContext())
-        views.results.adapter = if (showsShortcuts()) {
-            // The three ways that need nothing read from the disk are shown at
-            // once, before the places are known: they are what the list holds
-            // whatever the answer, and waiting for a read to draw them would
-            // blink them in.
-            shortcutAdapter.submitList(searchShortcutsFor(null, null, null))
+        views.results.adapter = if (fillsJourneyEndpoint()) {
             // The shortcuts head the list, and the addresses follow: two
-            // adapters rather than one, so neither knows about the other.
+            // adapters rather than one, so neither knows about the other. What
+            // the first one holds is left to [screen] — priming it here would
+            // draw five rows on a screen opened with a query already in the
+            // field, only to take them away as the first state arrives.
             ConcatAdapter(shortcutAdapter, adapter)
         } else {
             adapter
@@ -122,7 +122,6 @@ class AddressSearchFragment : Fragment() {
         }
 
         observeState()
-        observeShortcuts()
     }
 
     override fun onDestroyView() {
@@ -131,46 +130,59 @@ class AddressSearchFragment : Fragment() {
         super.onDestroyView()
     }
 
-    /**
-     * Keeps the shortcut rows in step with the places the user has named.
-     *
-     * Through the flows rather than a read taken once: a place erased in the
-     * settings has to leave this list without the settings screen knowing this
-     * one exists (SPEC §7.6). The covered area is read once beside them — it
-     * changes with the city, and changing the city closes this screen.
-     */
-    private fun observeShortcuts() {
-        if (!showsShortcuts()) return
-        val container = (requireActivity().application as RoueLibreApplication).container
+    private fun observeState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val coveredArea = container.activeCity()?.boundingBox
-                combine(
-                    container.preferences.homePlace,
-                    container.preferences.workPlace,
-                ) { home, work -> searchShortcutsFor(home, work, coveredArea) }
-                    .collectLatest(shortcutAdapter::submitList)
+                screen().collectLatest { (state, shortcuts) -> show(state, shortcuts) }
             }
         }
     }
 
-    private fun observeState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collectLatest { state ->
-                    val views = binding ?: return@collectLatest
-                    adapter.submitList(state.results)
-                    val panel = panelFor(state, showsShortcuts())
-                    showEmptyState(panel, state)
-                    // The shortcuts are part of the list: it therefore has
-                    // something to show even before a single letter is typed.
-                    // Whether they survive the panel above them is the panel's
-                    // own answer, and it is not the same for all of them.
-                    views.results.isVisible = panel.keepsList &&
-                        (state.results.isNotEmpty() || showsShortcuts())
-                }
-            }
+    /**
+     * The two things the list is made of, read as one.
+     *
+     * One flow rather than two, because the shortcuts now depend on the query
+     * (SPEC §7.3) and the panel now depends on the shortcuts: collected apart,
+     * a keystroke would wake both and the panel could be decided against a list
+     * that had not yet emptied. Combined, there is one answer and no order to
+     * get right.
+     *
+     * The places are read through their flows rather than once: one erased in
+     * the settings has to leave this list without the settings screen knowing
+     * this one exists (SPEC §7.6). The covered area is read once beside them —
+     * it changes only with the city, and changing the city closes this screen.
+     */
+    private suspend fun screen(): Flow<Pair<AddressSearchUiState, List<SearchShortcut>>> {
+        if (!fillsJourneyEndpoint()) return viewModel.state.map { it to emptyList() }
+        val container = (requireActivity().application as RoueLibreApplication).container
+        val coveredArea = container.activeCity()?.boundingBox
+        return combine(
+            viewModel.state,
+            container.preferences.homePlace,
+            container.preferences.workPlace,
+        ) { state, home, work ->
+            state to searchShortcutsFor(home, work, coveredArea, state.query)
         }
+    }
+
+    /**
+     * Draws the list and whatever stands above it.
+     *
+     * The shortcuts are asked for their own count rather than the screen for
+     * its purpose: they head the list on an empty field and are gone on the
+     * next keystroke, so only the list can say whether it holds anything.
+     */
+    private fun show(state: AddressSearchUiState, shortcuts: List<SearchShortcut>) {
+        val views = binding ?: return
+        adapter.submitList(state.results)
+        shortcutAdapter.submitList(shortcuts)
+        val panel = panelFor(state, shortcutsOnShow = shortcuts.isNotEmpty())
+        showEmptyState(panel, state)
+        // Two conditions and they answer different things: whether the panel
+        // above allows a list beside it, and whether there is a row to draw.
+        // A missing index met with a typed query allows one and has none.
+        views.results.isVisible = panel.keepsList &&
+            (state.results.isNotEmpty() || shortcuts.isNotEmpty())
     }
 
     /**
@@ -262,8 +274,14 @@ class AddressSearchFragment : Fragment() {
         parentFragmentManager.popBackStack()
     }
 
-    /** True when the screen serves to fill a journey's end (SPEC §7.3). */
-    private fun showsShortcuts(): Boolean = arguments?.containsKey(ARGUMENT_IS_ORIGIN) == true
+    /**
+     * True when the screen serves to fill a journey's end (SPEC §7.3).
+     *
+     * It says what the screen is for, and no longer whether the shortcuts are
+     * on show: since 7 September 2026 those go as soon as anything is typed,
+     * and only the list itself can say whether it is holding any.
+     */
+    private fun fillsJourneyEndpoint(): Boolean = arguments?.containsKey(ARGUMENT_IS_ORIGIN) == true
 
     /**
      * The screen's title.
@@ -272,7 +290,7 @@ class AddressSearchFragment : Fragment() {
      * designated: the field one left is no longer on screen to say it.
      */
     private fun titleResource(): Int? = when {
-        !showsShortcuts() -> null
+        !fillsJourneyEndpoint() -> null
         arguments?.getBoolean(ARGUMENT_IS_ORIGIN) == true -> R.string.journey_choose_origin
         else -> R.string.journey_choose_destination
     }

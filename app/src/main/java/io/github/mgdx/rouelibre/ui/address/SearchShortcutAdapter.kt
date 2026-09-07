@@ -15,8 +15,9 @@ import io.github.mgdx.rouelibre.databinding.ItemSearchShortcutBinding
  *
  * The specification wants four ways of naming a journey's end, and typing is
  * only one of them; the two places the user has named of themselves (SPEC §7.6)
- * were added to those since. The others head the result list, where they stay
- * whatever is typed.
+ * were added to those since. The others head the result list on an empty field,
+ * and go as soon as anything is typed: the question they ask has been answered
+ * by then.
  *
  * **The declaration order is the order they are shown in, and it is the order
  * of use.** One goes home and to work oftener than one aims at a spot on a map,

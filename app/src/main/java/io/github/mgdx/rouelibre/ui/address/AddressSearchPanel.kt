@@ -9,12 +9,17 @@ package io.github.mgdx.rouelibre.ui.address
  * holding no data at all, where two of the three were the only ways left of
  * naming a point.
  *
- * @property keepsList whether the list may stay on screen below the panel.
+ * @property keepsList whether the list **may** stay on screen below the panel —
+ *   not whether it has anything to put there, which is the caller's to know.
  *   A panel that reports the **outcome of a search** takes the screen: what it
  *   has to say is about the very rows it replaces. A panel that reports an
  *   **absent capacity** does not: the address index has nothing to do with
  *   pointing at the map or with one's own position, and taking those away
  *   because an index is missing punishes the user for the lack twice over.
+ *   Since 7 September 2026 the shortcuts also go as soon as anything is typed
+ *   (SPEC §7.3), so a missing index met with a typed query keeps a list that is
+ *   empty: the permission stands, and there is simply nothing left to grant it
+ *   to.
  */
 enum class AddressSearchPanel(val keepsList: Boolean) {
 
@@ -46,15 +51,16 @@ enum class AddressSearchPanel(val keepsList: Boolean) {
  * can be said to have matched nothing.
  *
  * @param state what the screen knows.
- * @param showsShortcuts whether the list carries ways of naming a point that do
- *   not go through the index (SPEC §7.3). It stays a property of what the
- *   screen is for, not a count of rows, and it may: the list varies with the
- *   places the user has named, but [searchShortcutsFor] never filters the three
- *   that ask the installed data for nothing. A screen filling a journey's end
- *   therefore always has something to press, which is precisely the promise
- *   this parameter carries.
+ * @param shortcutsOnShow whether the list is, at this instant, carrying ways of
+ *   naming a point that do not go through the index (SPEC §7.3). **It is the
+ *   list's own answer and not the screen's purpose**, and it had to become one:
+ *   until 7 September 2026 a screen filling a journey's end always carried
+ *   those rows, so the two questions were interchangeable and the cheaper one
+ *   was asked. The shortcuts now go as soon as anything is typed, and a screen
+ *   that shows them on an empty field shows none a keystroke later — asking
+ *   what the screen is for would answer for a list that had emptied.
  */
-fun panelFor(state: AddressSearchUiState, showsShortcuts: Boolean): AddressSearchPanel = when {
+fun panelFor(state: AddressSearchUiState, shortcutsOnShow: Boolean): AddressSearchPanel = when {
     state.results.isNotEmpty() -> AddressSearchPanel.None
     state.isSearching && state.query.isNotBlank() -> AddressSearchPanel.Searching
     !state.isIndexInstalled -> AddressSearchPanel.NeedsIndex
@@ -62,6 +68,6 @@ fun panelFor(state: AddressSearchUiState, showsShortcuts: Boolean): AddressSearc
     state.hasNoMatch -> AddressSearchPanel.NoMatch
     // Nothing typed yet. With the shortcuts on screen there is nothing to
     // invite: the invitation would stand above the very rows that answer it.
-    showsShortcuts -> AddressSearchPanel.None
+    shortcutsOnShow -> AddressSearchPanel.None
     else -> AddressSearchPanel.Prompt
 }

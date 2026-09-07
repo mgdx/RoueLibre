@@ -5,8 +5,9 @@
     favourite station, a point on the map.
 
     The same grammar as an address row — icon, then label — because these rows
-    sit at the head of the same list: they are proposals like the others, and
-    the first of them is always there, whatever is typed.
+    sit at the head of the same list: they are proposals like the others. They
+    stand while the field is empty and give the list back on the first
+    keystroke, so this row is never drawn beside an address.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
