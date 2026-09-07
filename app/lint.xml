@@ -23,19 +23,4 @@
         <ignore path="src/main/res/values-pt/strings.xml" />
         <ignore path="src/main/res/values-zh/strings.xml" />
     </issue>
-
-    <!--
-        "My places" (SPEC §7.6) arrived written in English and in French, and
-        the other thirty started files are owed it. They are a translation of
-        their own (SPEC §9) and are written in one pass, by whoever writes the
-        language rather than by whoever wrote the screen — seeding thirty files
-        with English text would only make the gap harder to find.
-
-        This is the one deliberate state on the list that is meant to be
-        short-lived: delete this whole block the day those strings are
-        translated, and lint will name any that were missed.
-    -->
-    <issue id="MissingTranslation">
-        <ignore regexp="&quot;settings_place_|&quot;settings_section_places&quot;" />
-    </issue>
 </lint>
