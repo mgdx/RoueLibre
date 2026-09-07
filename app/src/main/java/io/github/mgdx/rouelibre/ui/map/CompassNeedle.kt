@@ -48,6 +48,37 @@ internal fun compassNeedle(bearingDegrees: Double): CompassNeedle {
 }
 
 /**
+ * The bearing the screen knows the map to have, once it has ordered it north.
+ *
+ * **The screen does not read the map back to learn what it has just asked it
+ * for.** `MapLibreMap.cameraPosition` is a value cached in the library's
+ * `Transform`, refreshed only by a gesture and at the end of a move the
+ * library itself is animating — the frames of that move refresh nothing. A
+ * press on the compass therefore left the button on screen: everything read
+ * from the map at that moment still described the map as it stood before the
+ * press, and only the next touch, which goes through the gesture detector,
+ * brought the reading up to date and took the button away. The button lingered
+ * over a map already facing north, which is the one thing it means the
+ * opposite of.
+ *
+ * The screen has no need of that reading. It ordered the bearing to nought, so
+ * nought is what it knows — the exact value the animation lands on, not one
+ * near it. The single case where the order does not hold is the turn cut short
+ * by a finger back on the map, and the library reports that one by itself,
+ * through `onCancel`: there, and there alone, the map is the only one who
+ * knows where it stopped, and it is asked.
+ *
+ * @param theOrderStands false only for a turn that was cut short.
+ * @param mapBearing what the map reports, believed only when the order was not
+ *   carried through.
+ */
+internal fun bearingAfterOrderingNorth(theOrderStands: Boolean, mapBearing: Double): Double =
+    if (theOrderStands) NORTH_BEARING else mapBearing
+
+/** The bearing of a map facing north, and the one "face north" orders. */
+internal const val NORTH_BEARING = 0.0
+
+/**
  * How long the map takes to turn back to north.
  *
  * The same on both screens that can be turned, this being the same control:

@@ -54,6 +54,45 @@ class CompassNeedleTest {
         assertEquals(0, compassNeedle(359.7).degreesFromNorth)
     }
 
+    /**
+     * The defect this pins was found on a phone: the map came back to north on
+     * a press and the button stayed, going only when a finger touched the map
+     * again. `MapLibreMap.cameraPosition` is cached in the library and is
+     * refreshed by a gesture, not by the frames of a move the library is
+     * animating — so everything the screen read at the end of its own turn
+     * still described the map as it stood before the press.
+     *
+     * The answer is not to read later but not to read at all: the screen
+     * ordered the bearing to nought and knows it. What is checked here is that
+     * rule composed with the needle, on the very reading that misled it.
+     */
+    @Test
+    fun `the compass goes as soon as north is ordered, whatever the map still says`() {
+        val stale = 137.0
+        val needle =
+            compassNeedle(bearingAfterOrderingNorth(theOrderStands = true, mapBearing = stale))
+        assertFalse("the screen believes its own order and not that reading", needle.isShown)
+        assertEquals(0, needle.degreesFromNorth)
+    }
+
+    @Test
+    fun `a turn cut short leaves the needle where the map stopped`() {
+        val needle =
+            compassNeedle(bearingAfterOrderingNorth(theOrderStands = false, mapBearing = 137.0))
+        assertTrue("the map is the only one who knows where the finger stopped it", needle.isShown)
+        assertEquals(137, needle.degreesFromNorth)
+    }
+
+    @Test
+    fun `north ordered and reached says the same thing twice`() {
+        assertEquals(
+            compassNeedle(NORTH_BEARING),
+            compassNeedle(
+                bearingAfterOrderingNorth(theOrderStands = true, mapBearing = NORTH_BEARING),
+            ),
+        )
+    }
+
     @Test
     fun `a bearing from outside the reported range is folded back into it`() {
         // Nothing in the application produces one, but the reading must not

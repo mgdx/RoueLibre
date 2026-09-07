@@ -123,15 +123,23 @@
         app:backgroundTint="@color/surface"
         app:icon="@drawable/ic_frame_journey"
         app:iconTint="@color/ink"
-        app:layout_constraintBottom_toTopOf="@id/face_north"
+        app:layout_constraintBottom_toTopOf="@id/locate_me"
         app:layout_constraintEnd_toEndOf="@id/locate_me"
         tools:visibility="visible" />
 
     <!--
         Face north (SPEC §7.1, §7.4), the same control as on the main map: a
         map one can turn is turned the same way on both screens, and put back
-        the same way. It appears only once the map has been turned, hence its
-        place above "locate me", which stays.
+        the same way. It appears only once the map has been turned.
+
+        The main map seats it on the top row, to the left of the settings.
+        This screen has no settings button — one journey, one conurbation, and
+        nothing here to set — so what is carried over is the place and not the
+        neighbour: the map's own top corner, on the same side. The reason is
+        the one that put it there: a button that comes and goes must not push
+        about the ones that stay, and on that corner there is nothing under it
+        to push. Here the corner is the map's and not the screen's, the map
+        being only a part of this screen.
 
         Ours and not MapLibre's own compass, for the reason DescribedMapView
         gives: the library describes its views in its own languages rather than
@@ -142,14 +150,15 @@
         style="@style/Widget.Material3.Button.IconButton.Filled"
         android:layout_width="@dimen/touch_target_min"
         android:layout_height="@dimen/touch_target_min"
-        android:layout_marginBottom="@dimen/space_s"
+        android:layout_marginTop="@dimen/space_m"
+        android:layout_marginEnd="@dimen/space_m"
         android:contentDescription="@string/map_face_north"
         android:visibility="gone"
         app:backgroundTint="@color/surface"
         app:icon="@drawable/ic_compass"
         app:iconTint="@color/ink"
-        app:layout_constraintBottom_toTopOf="@id/locate_me"
-        app:layout_constraintEnd_toEndOf="@id/locate_me"
+        app:layout_constraintEnd_toEndOf="@id/map"
+        app:layout_constraintTop_toTopOf="@id/map"
         tools:visibility="visible" />
 
     <!-- Locate me, at the corner of the map the thumb reaches: it brings the

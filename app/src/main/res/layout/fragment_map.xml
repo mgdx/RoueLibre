@@ -43,7 +43,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- The data's age, required by SPEC §4.1, laid over the map. -->
+    <!-- The data's age, required by SPEC §4.1, laid over the map. It stops
+         where the controls of the top row begin: the buttons are declared
+         after it and are drawn over it, so an age spelt out at a large text
+         size used to slide under them and lose its last words. Held to the
+         start rather than centred between its two constraints, which is what
+         a constrained wrap would otherwise do. -->
     <TextView
         android:id="@+id/freshness"
         android:layout_width="wrap_content"
@@ -55,6 +60,9 @@
         android:paddingEnd="@dimen/space_m"
         android:paddingBottom="@dimen/space_s"
         android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@id/face_north"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Mis à jour il y a 12 secondes" />
@@ -99,13 +107,20 @@
         app:backgroundTint="@color/signal"
         app:icon="@drawable/ic_bike"
         app:iconTint="@color/surface_on_signal"
-        app:layout_constraintBottom_toTopOf="@id/face_north"
+        app:layout_constraintBottom_toTopOf="@id/locate_me"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!--
-        Face north (SPEC §7.1). It appears only once the map has been turned,
-        which is why it sits above "locate me" rather than below: a button that
-        comes and goes must not push the ones that stay.
+        Face north (SPEC §7.1), on the top row and to the left of the settings.
+        It appears only once the map has been turned, and a button that comes
+        and goes must not push about the ones that stay: on this row there is
+        nothing under it to push, where in the thumb's column every button
+        below it would have shifted a place each time the map left north.
+
+        It takes its top and bottom edges from the settings button rather than
+        margins of its own, so the room the status bar and a display cutout
+        ask for — laid on the settings button by `applySystemInsets` — carries
+        it along without a second measurement to keep in step.
 
         Ours and not MapLibre's own compass, though the library offers one.
         MapLibre describes its views in its own languages, not in the
@@ -118,15 +133,15 @@
         style="@style/Widget.Material3.Button.IconButton.Filled"
         android:layout_width="@dimen/touch_target_min"
         android:layout_height="@dimen/touch_target_min"
-        android:layout_marginEnd="@dimen/space_m"
-        android:layout_marginBottom="@dimen/space_s"
+        android:layout_marginEnd="@dimen/space_s"
         android:contentDescription="@string/map_face_north"
         android:visibility="gone"
         app:backgroundTint="@color/surface"
         app:icon="@drawable/ic_compass"
         app:iconTint="@color/ink"
-        app:layout_constraintBottom_toTopOf="@id/locate_me"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/open_settings"
+        app:layout_constraintEnd_toStartOf="@id/open_settings"
+        app:layout_constraintTop_toTopOf="@id/open_settings"
         tools:visibility="visible" />
 
     <!-- Locate me (SPEC §7.1). The permission is requested here alone, at
