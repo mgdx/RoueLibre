@@ -46,8 +46,13 @@ enum class AddressSearchPanel(val keepsList: Boolean) {
  * can be said to have matched nothing.
  *
  * @param state what the screen knows.
- * @param showsShortcuts whether the list carries the three ways of naming a
- *   point that do not go through the index (SPEC §7.3).
+ * @param showsShortcuts whether the list carries ways of naming a point that do
+ *   not go through the index (SPEC §7.3). It stays a property of what the
+ *   screen is for, not a count of rows, and it may: the list varies with the
+ *   places the user has named, but [searchShortcutsFor] never filters the three
+ *   that ask the installed data for nothing. A screen filling a journey's end
+ *   therefore always has something to press, which is precisely the promise
+ *   this parameter carries.
  */
 fun panelFor(state: AddressSearchUiState, showsShortcuts: Boolean): AddressSearchPanel = when {
     state.results.isNotEmpty() -> AddressSearchPanel.None

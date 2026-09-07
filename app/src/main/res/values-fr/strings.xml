@@ -345,7 +345,9 @@
          best of anything. -->
     <string name="journey_computing_own_bike">Calcul du trajet à vélo…</string>
 
-    <!-- The four ways of designating a point (SPEC §7.3). -->
+    <!-- The ways of designating a point (SPEC §7.3). -->
+    <string name="journey_source_home">Domicile</string>
+    <string name="journey_source_work">Travail</string>
     <string name="journey_source_my_position">Ma position</string>
     <string name="journey_locating">Recherche de ta position…</string>
     <string name="journey_source_favourite">Une station favorite</string>

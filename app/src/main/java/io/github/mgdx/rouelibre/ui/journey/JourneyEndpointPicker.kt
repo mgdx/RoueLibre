@@ -8,19 +8,22 @@ import androidx.lifecycle.lifecycleScope
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.data.SavedPlaceKind
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
 import io.github.mgdx.rouelibre.ui.address.SearchShortcut
 import io.github.mgdx.rouelibre.ui.map.MapFragment
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
- * The four ways of designating an end of a journey, wired to a screen (SPEC §7.3).
+ * The ways of designating an end of a journey, wired to a screen (SPEC §7.3).
  *
  * Two screens fill those two fields — the search screen, and the result screen
  * where one corrects a point without going back. They fill them identically:
- * straight to the address search, which heads its list with one's position, a
- * point on the map and a favourite station. This holds that wiring once, rather
+ * straight to the address search, which heads its list with the places the user
+ * has named, one's position, a favourite station and a point on the map. This
+ * holds that wiring once, rather
  * than in each of them: the round trip through the other screens, the field
  * that is waiting for the answer, and the permission asked for only at the
  * moment the user has understood what it is for (SPEC §10).
@@ -56,8 +59,8 @@ class JourneyEndpointPicker(
      * Requests the location permissions, and never insists.
      *
      * SPEC §10 is explicit: a refusal must neither block a screen nor trigger a
-     * second prompt. A user who says no keeps the three other ways of
-     * designating a point, whole.
+     * second prompt. A user who says no keeps every other way of designating a
+     * point, whole.
      */
     private val requestLocationPermission = fragment.registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions(),
@@ -116,6 +119,8 @@ class JourneyEndpointPicker(
             owner,
         ) { _, result ->
             when (result.getString(AddressSearchFragment.RESULT_SHORTCUT)) {
+                SearchShortcut.Home.name -> useSavedPlace(SavedPlaceKind.Home)
+                SearchShortcut.Work.name -> useSavedPlace(SavedPlaceKind.Work)
                 SearchShortcut.MyPosition.name -> askForMyPosition()
                 SearchShortcut.OnMap.name -> show(MapFragment.forPicking())
                 SearchShortcut.Favourite.name -> openFavourites()
@@ -155,6 +160,37 @@ class JourneyEndpointPicker(
     }
 
     private fun accept(endpoint: JourneyEndpoint) = onPicked(endpoint, awaitingOrigin)
+
+    /**
+     * Fills the waiting field with a place the user has named (SPEC §7.6).
+     *
+     * The simplest of the ways on offer: the point is already known, so there
+     * is no permission to ask for, no second screen to open and no satellite to
+     * wait for — it goes straight to the field.
+     *
+     * The turn into a [JourneyEndpoint] is made here, on this side of the
+     * application. A [io.github.mgdx.rouelibre.data.SavedPlace] is something
+     * written down; an endpoint is something a screen is showing and that SPEC
+     * §8 wants gone with it. Letting `data/` build one would put the second
+     * within reach of the first, and the two are kept apart on purpose.
+     *
+     * The field is settled before the read, as [useMyPosition] settles it: the
+     * shortcut arrives as a name in a bundle, the place is read from disk after
+     * that, and the user may have designated the other end in between.
+     *
+     * A place erased between the press and the read yields nothing rather than
+     * a journey towards a point that no longer exists. It takes an erasure in
+     * that very window to happen — the row would not have been offered
+     * otherwise — so nothing is said about it: there is no mishap to report,
+     * only an instruction that no longer means anything.
+     */
+    private fun useSavedPlace(kind: SavedPlaceKind) {
+        val isOrigin = awaitingOrigin
+        fragment.viewLifecycleOwner.lifecycleScope.launch {
+            val place = container.preferences.savedPlace(kind).first() ?: return@launch
+            onPicked(JourneyEndpoint(place.label, place.position), isOrigin)
+        }
+    }
 
     private fun askForMyPosition() {
         if (container.deviceLocation.isPermitted()) {

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    A briefcase, as a line icon: the workplace the user has named for themselves
+    (SPEC §7.6), where a journey's end is being designated.
+
+    Hollow for the reason ic_home gives, and drawn on the same 24 by 24 grid as
+    the rest of the list, so the two new rows weigh no more than the three that
+    follow them.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M20,6h-4V4c0,-1.11 -0.89,-2 -2,-2h-4c-1.11,0 -2,0.89 -2,2v2H4c-1.11,0 -1.99,0.89 -1.99,2L2,19c0,1.11 0.89,2 2,2h16c1.11,0 2,-0.89 2,-2V8c0,-1.11 -0.89,-2 -2,-2zM10,4h4v2h-4V4zM20,19H4V8h16v11z" />
+</vector>
