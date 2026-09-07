@@ -190,7 +190,8 @@
     <string name="map_needs_tiles_message">Instalējiet kartes datus krātuves ekrānā. Pa to laiku staciju saraksts paliek lietojams.</string>
     <string name="map_needs_city_title">Kura pilsēta?</string>
     <string name="map_needs_city_message">Izvēlieties aglomerāciju, kuru vēlaties lietot. Tās dati tiek lejupielādēti pēc tam, vienu reizi uz visiem laikiem.</string>
-    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <!-- The compass, shown while the map is turned or tilted, and gone once
+         both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Pagriezt uz ziemeļiem un izlīdzināt karti</string>
     <plurals name="map_bearing_description">
         <item quantity="one">Kartes pagrieziens no ziemeļiem: %1$d grāds.</item>

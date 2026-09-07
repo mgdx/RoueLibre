@@ -203,7 +203,8 @@
          (SPEC §15.1). -->
     <string name="map_needs_city_title">Quale città?</string>
     <string name="map_needs_city_message">Scegli l’area urbana che vuoi consultare. I suoi dati si scaricano dopo, una volta per tutte.</string>
-    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <!-- The compass, shown while the map is turned or tilted, and gone once
+         both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Orienta a nord e appiattisci la mappa</string>
     <plurals name="map_bearing_description">
         <item quantity="one">La mappa è ruotata di %1$d grado rispetto al nord.</item>

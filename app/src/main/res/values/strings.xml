@@ -169,9 +169,9 @@
     <string name="map_needs_tiles_message">Install the map data from the storage screen. In the meantime, the station list stays usable.</string>
     <string name="map_needs_city_title">Which city?</string>
     <string name="map_needs_city_message">Pick the conurbation you want to use. Its data is downloaded afterwards, once and for all.</string>
-    <!-- The compass, shown only while the map is turned (SPEC §7.1). The
-         description says how far it is turned, the button being the only sign
-         of it. -->
+    <!-- The compass, shown while the map is turned or tilted, and gone once
+         both are back as the screen opened (SPEC §7.1). The descriptions say
+         which of the two it is, the button being the only sign of either. -->
     <!-- What one press of the compass does, and it does both at once: the map
          comes back to the attitude it opened with. Said as the button's
          accessibility action, so the descriptions below are left to say the

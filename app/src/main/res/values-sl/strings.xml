@@ -228,7 +228,8 @@
     <string name="map_needs_tiles_message">Namestite podatke zemljevida na zaslonu s shrambo. Do takrat ostane seznam postaj uporaben.</string>
     <string name="map_needs_city_title">Katero mesto?</string>
     <string name="map_needs_city_message">Izberite mestno območje, ki ga želite uporabljati. Njegovi podatki se prenesejo pozneje, enkrat za vselej.</string>
-    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <!-- The compass, shown while the map is turned or tilted, and gone once
+         both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Obrni proti severu in poravnaj zemljevid</string>
     <plurals name="map_bearing_description">
         <item quantity="one">Zemljevid je zavrten za %1$d stopinjo od severa.</item>

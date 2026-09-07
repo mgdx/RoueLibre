@@ -234,7 +234,8 @@
     <string name="map_needs_tiles_message">ثبّت بيانات الخريطة من شاشة التخزين. وفي هذه الأثناء تبقى قائمة المحطات صالحة للاستخدام.</string>
     <string name="map_needs_city_title">أي مدينة؟</string>
     <string name="map_needs_city_message">اختر التجمّع الحضري الذي تريد استخدامه. تُنزَّل بياناته بعد ذلك، مرّة واحدة نهائيًا.</string>
-    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <!-- The compass, shown while the map is turned or tilted, and gone once
+         both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">التوجيه نحو الشمال وتسوية الخريطة</string>
     <plurals name="map_bearing_description">
         <item quantity="zero">الخريطة مُدارة بمقدار %1$d درجة عن الشمال.</item>

@@ -218,7 +218,8 @@
          (SPEC §15.1). -->
     <string name="map_needs_city_title">Que cidade?</string>
     <string name="map_needs_city_message">Escolha a área metropolitana que quer consultar. Os dados são transferidos depois, de uma vez por todas.</string>
-    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <!-- The compass, shown while the map is turned or tilted, and gone once
+         both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Orientar para norte e aplanar o mapa</string>
     <plurals name="map_bearing_description">
         <item quantity="one">O mapa está rodado %1$d grau em relação ao norte.</item>

@@ -155,7 +155,8 @@
     <string name="map_needs_tiles_message">Installeer de kaartgegevens via het scherm Opslag. Ondertussen blijft de stationslijst bruikbaar.</string>
     <string name="map_needs_city_title">Welke stad?</string>
     <string name="map_needs_city_message">Kies de agglomeratie die je wilt gebruiken. De gegevens worden daarna gedownload, eens en voorgoed.</string>
-    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <!-- The compass, shown while the map is turned or tilted, and gone once
+         both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Op het noorden richten en de kaart vlak leggen</string>
     <plurals name="map_bearing_description">
         <item quantity="one">De kaart staat %1$d graad gedraaid ten opzichte van het noorden.</item>

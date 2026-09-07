@@ -199,7 +199,8 @@
     <string name="map_needs_tiles_message">Εγκαταστήστε τα δεδομένα του χάρτη από την οθόνη αποθηκευτικού χώρου. Στο μεταξύ, η λίστα των σταθμών παραμένει χρησιμοποιήσιμη.</string>
     <string name="map_needs_city_title">Ποια πόλη;</string>
     <string name="map_needs_city_message">Διαλέξτε την αστική περιοχή που θέλετε να χρησιμοποιήσετε. Τα δεδομένα της κατεβαίνουν μετά, μία φορά και για πάντα.</string>
-    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <!-- The compass, shown while the map is turned or tilted, and gone once
+         both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Προσανατολισμός στον βορρά και επίπεδη προβολή</string>
     <plurals name="map_bearing_description">
         <item quantity="one">Ο χάρτης είναι στραμμένος %1$d μοίρα από τον βορρά.</item>

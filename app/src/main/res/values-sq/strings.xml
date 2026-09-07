@@ -185,7 +185,8 @@
     <string name="map_needs_tiles_message">Instalo hartën bazë nga ekrani i hapësirës ruajtëse. Ndërkohë, lista e stacioneve mbetet e përdorshme.</string>
     <string name="map_needs_city_title">Cili qytet?</string>
     <string name="map_needs_city_message">Zgjidh zonën urbane që do të përdorësh. Të dhënat e saj shkarkohen më pas, një herë e përgjithmonë.</string>
-    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <!-- The compass, shown while the map is turned or tilted, and gone once
+         both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Drejtoje nga veriu dhe rrafshoje hartën</string>
     <plurals name="map_bearing_description">
         <item quantity="one">Harta është kthyer %1$d gradë nga veriu.</item>

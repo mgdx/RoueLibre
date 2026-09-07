@@ -171,7 +171,8 @@
     <string name="map_needs_tiles_message">Installer kartdataene fra Lagring-skjermen. Inntil da er stasjonslisten fortsatt brukbar.</string>
     <string name="map_needs_city_title">Hvilken by?</string>
     <string name="map_needs_city_message">Velg byområdet du vil bruke. Dataene lastes ned etterpå, én gang for alle.</string>
-    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <!-- The compass, shown while the map is turned or tilted, and gone once
+         both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Vend mot nord og legg kartet flatt</string>
     <plurals name="map_bearing_description">
         <item quantity="one">Kartet er dreid %1$d grad fra nord.</item>

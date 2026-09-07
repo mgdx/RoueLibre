@@ -168,7 +168,8 @@
     <string name="map_needs_tiles_message">Installera kartdata från skärmen Lagring. Under tiden går stationslistan att använda.</string>
     <string name="map_needs_city_title">Vilken stad?</string>
     <string name="map_needs_city_message">Välj den tätort du vill använda. Dess data laddas ned efteråt, en gång för alla.</string>
-    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <!-- The compass, shown while the map is turned or tilted, and gone once
+         both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Rikta mot norr och lägg kartan platt</string>
     <plurals name="map_bearing_description">
         <item quantity="one">Kartan är vriden %1$d grad från norr.</item>

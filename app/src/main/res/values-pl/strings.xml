@@ -195,7 +195,8 @@
     <string name="map_needs_tiles_message">Zainstaluj dane mapy na ekranie „Pamięć”. Do tego czasu lista stacji nadal działa.</string>
     <string name="map_needs_city_title">Które miasto?</string>
     <string name="map_needs_city_message">Wybierz aglomerację, z której chcesz korzystać. Jej dane zostaną pobrane potem, raz na zawsze.</string>
-    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <!-- The compass, shown while the map is turned or tilted, and gone once
+         both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Skieruj na północ i wypoziomuj mapę</string>
     <plurals name="map_bearing_description">
         <item quantity="one">Mapa jest obrócona o %1$d stopień od północy.</item>

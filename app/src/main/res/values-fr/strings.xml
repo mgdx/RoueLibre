@@ -187,7 +187,8 @@
          (SPEC §15.1). -->
     <string name="map_needs_city_title">Quelle ville ?</string>
     <string name="map_needs_city_message">Choisis l’agglomération que tu veux consulter. Ses données se téléchargent ensuite, une fois pour toutes.</string>
-    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <!-- The compass, shown while the map is turned or tilted, and gone once
+         both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Orienter au nord et remettre la carte à plat</string>
     <plurals name="map_bearing_description">
         <item quantity="one">Carte tournée de %1$d degré par rapport au nord.</item>
