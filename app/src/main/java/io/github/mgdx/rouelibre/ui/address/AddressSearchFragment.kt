@@ -27,6 +27,7 @@ import io.github.mgdx.rouelibre.databinding.FragmentAddressSearchBinding
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.toUserMessage
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 /**
@@ -75,7 +76,11 @@ class AddressSearchFragment : Fragment() {
 
         views.results.layoutManager = LinearLayoutManager(requireContext())
         views.results.adapter = if (showsShortcuts()) {
-            shortcutAdapter.submitList(SearchShortcut.entries)
+            // The three ways that need nothing read from the disk are shown at
+            // once, before the places are known: they are what the list holds
+            // whatever the answer, and waiting for a read to draw them would
+            // blink them in.
+            shortcutAdapter.submitList(searchShortcutsFor(null, null, null))
             // The shortcuts head the list, and the addresses follow: two
             // adapters rather than one, so neither knows about the other.
             ConcatAdapter(shortcutAdapter, adapter)
@@ -117,12 +122,36 @@ class AddressSearchFragment : Fragment() {
         }
 
         observeState()
+        observeShortcuts()
     }
 
     override fun onDestroyView() {
         binding?.results?.adapter = null
         binding = null
         super.onDestroyView()
+    }
+
+    /**
+     * Keeps the shortcut rows in step with the places the user has named.
+     *
+     * Through the flows rather than a read taken once: a place erased in the
+     * settings has to leave this list without the settings screen knowing this
+     * one exists (SPEC §7.6). The covered area is read once beside them — it
+     * changes with the city, and changing the city closes this screen.
+     */
+    private fun observeShortcuts() {
+        if (!showsShortcuts()) return
+        val container = (requireActivity().application as RoueLibreApplication).container
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                val coveredArea = container.activeCity()?.boundingBox
+                combine(
+                    container.preferences.homePlace,
+                    container.preferences.workPlace,
+                ) { home, work -> searchShortcutsFor(home, work, coveredArea) }
+                    .collectLatest(shortcutAdapter::submitList)
+            }
+        }
     }
 
     private fun observeState() {
@@ -219,9 +248,10 @@ class AddressSearchFragment : Fragment() {
     /**
      * Returns the chosen shortcut to the screen that opened this one.
      *
-     * The screen does not act on it itself: designating a point through the
-     * position, a favourite or the map are three journeys of their own, and
-     * they belong to the search screen that knows which field is waiting.
+     * The screen does not act on it itself, not even on the two that need
+     * nothing more than a read: each way of designating a point ends in a field
+     * this screen cannot see, and which one is waiting is known only to the
+     * screen that opened this one.
      */
     private fun pick(shortcut: SearchShortcut) {
         setFragmentResult(

@@ -14,14 +14,33 @@ import io.github.mgdx.rouelibre.databinding.ItemSearchShortcutBinding
  * A way of designating a point without typing an address (SPEC §7.3).
  *
  * The specification wants four ways of naming a journey's end, and typing is
- * only one of them. The other three head the result list, where they stay
- * whatever is typed: one's position above all, which is what somebody setting
- * off usually means by "from here".
+ * only one of them. The others head the result list, where they stay whatever
+ * is typed.
+ *
+ * **The declaration order is the order they are shown in, and it is the order
+ * of use.** One goes home and to work oftener than one aims at a spot on a map,
+ * so the two places the user has named of themselves (SPEC §7.6) come first:
+ * where they are set, they answer the question before it is asked, and they
+ * answer it with a single press. "My position" keeps its place ahead of the two
+ * remaining ways, both of which open a second screen before anything is
+ * designated — it is what somebody setting off means by "from here", and it
+ * costs no detour.
+ *
+ * Which of them a given screen actually offers is not this enumeration's to
+ * say: a place that is not named, or that no installed data can reach, has no
+ * row at all. [searchShortcutsFor] decides that, and it decides it away from
+ * Android so the reasoning can be read on the JVM.
  *
  * @property label what the row reads.
- * @property icon what it shows, so the three tell themselves apart at a glance.
+ * @property icon what it shows, so they tell themselves apart at a glance.
  */
 enum class SearchShortcut(@StringRes val label: Int, @DrawableRes val icon: Int) {
+
+    /** The place the user has named as home (SPEC §7.6). */
+    Home(R.string.journey_source_home, R.drawable.ic_home),
+
+    /** The place the user has named as work (SPEC §7.6). */
+    Work(R.string.journey_source_work, R.drawable.ic_work),
 
     /** Where the device says one is. */
     MyPosition(R.string.journey_source_my_position, R.drawable.ic_my_location),
