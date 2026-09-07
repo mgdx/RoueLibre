@@ -9,7 +9,83 @@ also records what has no visible effect.
 
 ## [Unreleased]
 
+### Added
+
+- **The map turns under two fingers, and a compass puts it back north** (SPEC
+  §7.1, §7.4). Both maps refused rotation outright: the main screen and the
+  journey result now accept the twist, and a map one learns to handle on one
+  screen answers the same way on the other. **Neither tilts**, and that is
+  said rather than left to the library's default: the base map is drawn flat
+  and its labels are laid flat on it, so a tilt has no relief to reveal and
+  takes the legibility of every name in exchange. The compass appears only
+  once the map is off north and goes when the bearing comes back — a control
+  whose only office is to undo something belongs on the screen while there is
+  something to undo — and it sits above "locate me", so a button that comes
+  and goes never pushes about the ones that stay. Its tolerance is **two
+  degrees**, a threshold of legibility and not of precision: a pair of fingers
+  settles a degree either way while the hand rests on the glass, and two
+  degrees tips the far edge of a thousand-pixel screen by some eighteen
+  pixels, less than a station marker is wide. Above it the map visibly is
+  turned; the press puts it back exactly on north, over six hundred
+  milliseconds — the length of every other camera move of that screen — and
+  snaps under "remove animations". The compass is the application's own and
+  not MapLibre's, for the reason `DescribedMapView` exists: a view of the
+  library describes itself in the library's languages and not in ours. What
+  the saved state carries is the centring and the zoom and nothing else, so
+  the phone being turned or the application being started again opens on a map
+  facing north. The map's spoken description names the twist beside the drag
+  and the pinch, a gesture being no use to somebody never told it exists.
+
+- **A home and a work to name, in a fifth settings section** (SPEC §7.6, §7.3,
+  §8). "My places" sits between the journey section and the offline data:
+  these are points the user names, they qualify the journeys they will ask for
+  as the section above does, and they are no more downloaded data than a
+  walking pace is. Each row names the place and not the press — the city row's
+  rule — and invites the choice where nothing is named; a button beside it
+  forgets the place without asking first, as a favourite is dropped without
+  asking, and says afterwards what it did. A place the city in service does
+  not cover stays, is said to be outside it, and stays erasable: somebody who
+  named their home in Lille and is looking at Lyon today has not moved house.
+  Named, the two places head the shortcuts of the address search, ahead of
+  one's position, a favourite and a point on the map — one goes home and to
+  work oftener than one aims at a spot on a map, and both answer in a single
+  press, with no permission asked and no fix waited for. A place not named has
+  no row, and neither has one the installed data cannot reach: not greyed out,
+  absent. **Constraint C3 is narrowed rather than relaxed by this**, and the
+  distinction is now written into SPEC §2 and §8 with its date: what the
+  constraint forbids is what the application *observes* of somebody — a
+  journey made, a destination looked up, a position passed through — and what
+  it allows is what somebody *declares* of themselves, at their own request
+  and erasable with one press, as the favourites already were. No journey data
+  is kept, and nothing observed ever becomes a declaration.
+
+- **A place found on the map opens a sheet of what to do with it** (SPEC §7.1,
+  §7.8). The pill under the map knew one answer — it erased the point — so an
+  address one had just found could be looked at and nothing else. The sheet is
+  the station sheet's counterpart for a point no network put a stand on, in
+  that sheet's own wording, button order and hierarchy: leave from here, go
+  there, hand the place to a navigation application, clear it. **One sheet
+  serves the three ways a point reaches the map** — the address the search
+  found, the place another application sent, the point retrieved after the
+  phone was turned — and its title is the place's own label, "This place" only
+  where a `geo:` link carried none. **A place beyond the installed data is
+  offered no journey at all**: the route runs over a graph cut from the city's
+  box, and offering the button to answer "no usable route" once the
+  computation is done tells the user they got something wrong when nothing was
+  ever on offer. Handing the place to a navigation application stays, that one
+  not running on our graph.
+
 ### Fixed
+
+- **The station sheet handed a station to what guides, not back to Roue
+  Libre** (SPEC §7.2, §7.8). The sheet built its `geo:` intent by hand and
+  started it plainly, so this application stood in the chooser among the ones
+  that guide — it answers `geo:` itself. On a phone where it is the only one
+  to answer, or the one kept as the default, "open in a navigation
+  application" reopened the station one was leaving, and the press looked like
+  it had done nothing. The sheet now goes through the shared handover, which
+  encodes the label, takes this application out of the chooser and hands back
+  the sentence to say where nothing can guide.
 
 - **The publisher decides what to send on the digest, and no manifest goes out
   ahead of the files it names** (`tools/publish_data.py`, SPEC §4.4). An asset
