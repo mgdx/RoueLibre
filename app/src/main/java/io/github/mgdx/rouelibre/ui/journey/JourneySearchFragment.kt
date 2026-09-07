@@ -29,7 +29,8 @@ import kotlinx.coroutines.launch
 /**
  * Journey search: from where to where (SPEC §7.3).
  *
- * Two points to designate, each in four ways, a button to swap them, and a
+ * Two points to designate — by typing an address, or by one of the shortcuts
+ * heading the result list (SPEC §7.3, §7.6) — a button to swap them, and a
  * switch saying whether the bike is the network's or the user's own.
  * Nothing is computed here: the screen only gathers what the computation needs,
  * and that happens on the result screen.

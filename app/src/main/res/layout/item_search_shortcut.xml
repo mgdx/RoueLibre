@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     One way of designating a point other than by typing its address
-    (SPEC §7.3): one's position, a favourite station, a point on the map.
+    (SPEC §7.3): the home and the work the user has named, one's position, a
+    favourite station, a point on the map.
 
     The same grammar as an address row — icon, then label — because these rows
     sit at the head of the same list: they are proposals like the others, and

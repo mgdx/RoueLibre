@@ -351,8 +351,7 @@ class AddressSearchFragment : Fragment() {
          *
          * The field of the search screen leads straight here rather than
          * through a menu of ways: one nearly always knows the address, and the
-         * other three ways head the list, where a press reaches them just as
-         * fast.
+         * other ways head the list, where a press reaches them just as fast.
          *
          * @param isOrigin true for the point one leaves from.
          * @param origin the reference point for ranking results by proximity.

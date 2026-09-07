@@ -81,8 +81,9 @@ class JourneyEndpointPicker(
      * Opens what fills a field (SPEC §7.3).
      *
      * Straight to the address search, without a menu of ways in between: one
-     * nearly always knows the address one is going to, and the three other ways
-     * — one's position first — head the result list, a press away.
+     * nearly always knows the address one is going to, and the other ways —
+     * the places named of oneself, then one's position — head the result list,
+     * a press away.
      *
      * @param isOrigin the field being filled.
      * @param otherEnd the end already known, if there is one: the results are
