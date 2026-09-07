@@ -148,7 +148,7 @@
     <string name="action_retry">Tekrar dene</string>
 
     <string name="map_open_list">İstasyon listesini gör</string>
-    <string name="map_description">Harita. İki parmağınla sürükleyerek kaydır, yakınlaştırmak veya uzaklaştırmak için iki parmağını kıstır, döndürmek için iki parmağını çevir.</string>
+    <string name="map_description">Harita. İki parmağınla sürükleyerek kaydır, yakınlaştırmak veya uzaklaştırmak için iki parmağını kıstır, döndürmek için iki parmağını çevir, eğmek için iki parmağını yukarı veya aşağı kaydır.</string>
     <string name="map_attribution">© OpenStreetMap katkıda bulunanlar</string>
     <string name="map_locate_me">Konumumu bul</string>
     <string name="map_locating">Konumun bulunuyor…</string>
@@ -162,10 +162,15 @@
     <string name="map_needs_city_title">Hangi şehir?</string>
     <string name="map_needs_city_message">Kullanmak istediğin şehri seç. Verileri sonrasında, bir kez ve temelli indirilir.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Kuzeye çevir</string>
+    <string name="map_face_north">Kuzeye çevir ve haritayı düzleştir</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">Harita kuzeyden %1$d derece döndürülmüş. Kuzeye çevirmek için dokun.</item>
-        <item quantity="other">Harita kuzeyden %1$d derece döndürülmüş. Kuzeye çevirmek için dokun.</item>
+        <item quantity="one">Harita kuzeyden %1$d derece döndürülmüş.</item>
+        <item quantity="other">Harita kuzeyden %1$d derece döndürülmüş.</item>
+    </plurals>
+    <string name="map_tilted_description">Harita eğik.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">Harita kuzeyden %1$d derece döndürülmüş ve eğik.</item>
+        <item quantity="other">Harita kuzeyden %1$d derece döndürülmüş ve eğik.</item>
     </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>

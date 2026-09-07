@@ -166,7 +166,7 @@
     <string name="action_retry">Újrapróbálkozás</string>
 
     <string name="map_open_list">Az állomáslista megtekintése</string>
-    <string name="map_description">Térkép. Két ujjal húzva mozgathatod, két ujjal csippentve nagyíthatsz vagy kicsinyíthetsz, két ujjal elforgatva pedig elfordíthatod.</string>
+    <string name="map_description">Térkép. Két ujjal húzva mozgathatod, két ujjal csippentve nagyíthatsz vagy kicsinyíthetsz, két ujjal elforgatva elfordíthatod, két ujjal fel vagy le húzva pedig megdöntheted.</string>
     <string name="map_attribution">© OpenStreetMap-közreműködők</string>
     <string name="map_locate_me">A pozícióm megkeresése</string>
     <string name="map_locating">A pozíció meghatározása…</string>
@@ -185,10 +185,15 @@
     <string name="map_needs_city_title">Melyik város?</string>
     <string name="map_needs_city_message">Válaszd ki a használni kívánt agglomerációt. Az adatai ezután töltődnek le, egyszer s mindenkorra.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Északra tájolás</string>
+    <string name="map_face_north">Északra tájolás és a térkép vízszintbe állítása</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">A térkép %1$d fokkal el van forgatva az északi iránytól. Koppints az északra tájoláshoz.</item>
-        <item quantity="other">A térkép %1$d fokkal el van forgatva az északi iránytól. Koppints az északra tájoláshoz.</item>
+        <item quantity="one">A térkép %1$d fokkal el van forgatva az északi iránytól.</item>
+        <item quantity="other">A térkép %1$d fokkal el van forgatva az északi iránytól.</item>
+    </plurals>
+    <string name="map_tilted_description">A térkép meg van döntve.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">A térkép %1$d fokkal el van forgatva az északi iránytól, és meg van döntve.</item>
+        <item quantity="other">A térkép %1$d fokkal el van forgatva az északi iránytól, és meg van döntve.</item>
     </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>

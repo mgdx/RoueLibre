@@ -153,7 +153,7 @@
     <string name="action_retry">Försök igen</string>
 
     <string name="map_open_list">Visa listan över stationer</string>
-    <string name="map_description">Karta. Dra med två fingrar för att flytta den, nyp med två fingrar för att zooma in eller ut och vrid med två fingrar för att rotera den.</string>
+    <string name="map_description">Karta. Dra med två fingrar för att flytta den, nyp med två fingrar för att zooma in eller ut, vrid med två fingrar för att rotera den och dra två fingrar uppåt eller nedåt för att luta den.</string>
     <string name="map_attribution">© OpenStreetMap-bidragsgivare</string>
     <string name="map_locate_me">Hitta min position</string>
     <string name="map_locating">Hittar din position …</string>
@@ -169,10 +169,15 @@
     <string name="map_needs_city_title">Vilken stad?</string>
     <string name="map_needs_city_message">Välj den tätort du vill använda. Dess data laddas ned efteråt, en gång för alla.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Rikta mot norr</string>
+    <string name="map_face_north">Rikta mot norr och lägg kartan platt</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">Kartan är vriden %1$d grad från norr. Tryck för att rikta den mot norr.</item>
-        <item quantity="other">Kartan är vriden %1$d grader från norr. Tryck för att rikta den mot norr.</item>
+        <item quantity="one">Kartan är vriden %1$d grad från norr.</item>
+        <item quantity="other">Kartan är vriden %1$d grader från norr.</item>
+    </plurals>
+    <string name="map_tilted_description">Kartan är lutad.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">Kartan är vriden %1$d grad från norr och lutad.</item>
+        <item quantity="other">Kartan är vriden %1$d grader från norr och lutad.</item>
     </plurals>
 
     <!-- The welcome carousel, shown once on first launch. -->

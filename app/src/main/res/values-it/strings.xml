@@ -182,7 +182,7 @@
 
     <!-- The map screen (SPEC §7.1). -->
     <string name="map_open_list">Vedi l’elenco delle stazioni</string>
-    <string name="map_description">Mappa. Trascinala con due dita per spostarla, avvicina o allontana due dita per ingrandire o ridurre, ruota due dita per girarla.</string>
+    <string name="map_description">Mappa. Trascinala con due dita per spostarla, avvicina o allontana due dita per ingrandire o ridurre, ruota due dita per girarla, fai scorrere due dita verso l’alto o verso il basso per inclinarla.</string>
     <!-- The attribution carried by the map itself (SPEC §4.5). It fits on one
          line; the network's full attribution is in "about". -->
     <string name="map_attribution">© i contributori di OpenStreetMap</string>
@@ -204,11 +204,17 @@
     <string name="map_needs_city_title">Quale città?</string>
     <string name="map_needs_city_message">Scegli l’area urbana che vuoi consultare. I suoi dati si scaricano dopo, una volta per tutte.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Orienta a nord</string>
+    <string name="map_face_north">Orienta a nord e appiattisci la mappa</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">La mappa è ruotata di %1$d grado rispetto al nord. Tocca per orientarla a nord.</item>
-        <item quantity="many">La mappa è ruotata di %1$d gradi rispetto al nord. Tocca per orientarla a nord.</item>
-        <item quantity="other">La mappa è ruotata di %1$d gradi rispetto al nord. Tocca per orientarla a nord.</item>
+        <item quantity="one">La mappa è ruotata di %1$d grado rispetto al nord.</item>
+        <item quantity="many">La mappa è ruotata di %1$d gradi rispetto al nord.</item>
+        <item quantity="other">La mappa è ruotata di %1$d gradi rispetto al nord.</item>
+    </plurals>
+    <string name="map_tilted_description">La mappa è inclinata.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">La mappa è ruotata di %1$d grado rispetto al nord ed è inclinata.</item>
+        <item quantity="many">La mappa è ruotata di %1$d gradi rispetto al nord ed è inclinata.</item>
+        <item quantity="other">La mappa è ruotata di %1$d gradi rispetto al nord ed è inclinata.</item>
     </plurals>
 
     <!-- First launch (SPEC §7.9). We explain how something works, we are not

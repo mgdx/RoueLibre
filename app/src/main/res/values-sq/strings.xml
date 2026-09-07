@@ -172,7 +172,7 @@
     <string name="action_retry">Provo përsëri</string>
 
     <string name="map_open_list">Shih listën e stacioneve</string>
-    <string name="map_description">Hartë. Rrëshqite me dy gishta që ta lëvizësh, bashko ose ndaj dy gishtat për ta zmadhuar ose zvogëluar, rrotullo dy gishtat për ta kthyer.</string>
+    <string name="map_description">Hartë. Rrëshqite me dy gishta që ta lëvizësh, bashko ose ndaj dy gishtat për ta zmadhuar ose zvogëluar, rrotullo dy gishtat për ta kthyer, rrëshqit dy gishtat lart ose poshtë që ta pjerrësosh.</string>
     <string name="map_attribution">© kontribuuesit e OpenStreetMap</string>
     <string name="map_locate_me">Gjej vendndodhjen time</string>
     <string name="map_locating">Po gjendet pozicioni yt…</string>
@@ -186,10 +186,15 @@
     <string name="map_needs_city_title">Cili qytet?</string>
     <string name="map_needs_city_message">Zgjidh zonën urbane që do të përdorësh. Të dhënat e saj shkarkohen më pas, një herë e përgjithmonë.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Drejtoje nga veriu</string>
+    <string name="map_face_north">Drejtoje nga veriu dhe rrafshoje hartën</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">Harta është kthyer %1$d gradë nga veriu. Trokit që ta drejtosh nga veriu.</item>
-        <item quantity="other">Harta është kthyer %1$d gradë nga veriu. Trokit që ta drejtosh nga veriu.</item>
+        <item quantity="one">Harta është kthyer %1$d gradë nga veriu.</item>
+        <item quantity="other">Harta është kthyer %1$d gradë nga veriu.</item>
+    </plurals>
+    <string name="map_tilted_description">Harta është e pjerrët.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">Harta është kthyer %1$d gradë nga veriu dhe është e pjerrët.</item>
+        <item quantity="other">Harta është kthyer %1$d gradë nga veriu dhe është e pjerrët.</item>
     </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>

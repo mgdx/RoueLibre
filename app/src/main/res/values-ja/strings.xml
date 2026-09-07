@@ -160,7 +160,7 @@
 
     <!-- The map screen (SPEC §7.1). -->
     <string name="map_open_list">ステーションの一覧を見る</string>
-    <string name="map_description">地図。2 本の指でドラッグすると移動し、2 本の指でピンチすると拡大・縮小し、2 本の指でひねると回転します。</string>
+    <string name="map_description">地図。2 本の指でドラッグすると移動し、2 本の指でピンチすると拡大・縮小し、2 本の指でひねると回転し、2 本の指を上下にスライドすると傾きます。</string>
     <!-- The attribution carried by the map itself (SPEC §4.5). It is left in
          English: this is the wording OpenStreetMap asks for, and it fits on
          one line. The full attribution is in "about". -->
@@ -183,9 +183,13 @@
     <string name="map_needs_city_title">どの都市にしますか？</string>
     <string name="map_needs_city_message">利用する都市圏を選んでください。データはそのあとで、一度だけダウンロードします。</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">北を上にする</string>
+    <string name="map_face_north">北を上にして地図を平らにする</string>
     <plurals name="map_bearing_description">
-        <item quantity="other">地図は北から %1$d 度回転しています。タップすると北が上になります。</item>
+        <item quantity="other">地図は北から %1$d 度回転しています。</item>
+    </plurals>
+    <string name="map_tilted_description">地図が傾いています。</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="other">地図は北から %1$d 度回転し、傾いています。</item>
     </plurals>
 
     <!-- First launch (SPEC §7.9). We explain how something works, we are not

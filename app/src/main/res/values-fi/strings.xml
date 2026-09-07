@@ -166,7 +166,7 @@
     <string name="action_retry">Yritä uudelleen</string>
 
     <string name="map_open_list">Näytä asemalista</string>
-    <string name="map_description">Kartta. Siirrä karttaa vetämällä kahdella sormella, lähennä tai loitonna nipistämällä kahdella sormella ja käännä karttaa kiertämällä kahta sormea.</string>
+    <string name="map_description">Kartta. Siirrä karttaa vetämällä kahdella sormella, lähennä tai loitonna nipistämällä kahdella sormella, käännä karttaa kiertämällä kahta sormea ja kallista sitä vetämällä kahta sormea ylös tai alas.</string>
     <string name="map_attribution">© OpenStreetMapin tekijät</string>
     <string name="map_locate_me">Paikanna minut</string>
     <string name="map_locating">Haetaan sijaintia…</string>
@@ -180,10 +180,15 @@
     <string name="map_needs_city_title">Mikä kaupunki?</string>
     <string name="map_needs_city_message">Valitse kaupunkiseutu, jota haluat käyttää. Sen aineistot ladataan sen jälkeen, kerran ja lopullisesti.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Suuntaa pohjoiseen</string>
+    <string name="map_face_north">Suuntaa pohjoiseen ja tasaa kartta</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">Kartta on kääntynyt %1$d asteen pohjoisesta. Napauta, niin kartta kääntyy pohjoiseen.</item>
-        <item quantity="other">Kartta on kääntynyt %1$d astetta pohjoisesta. Napauta, niin kartta kääntyy pohjoiseen.</item>
+        <item quantity="one">Kartta on kääntynyt %1$d asteen pohjoisesta.</item>
+        <item quantity="other">Kartta on kääntynyt %1$d astetta pohjoisesta.</item>
+    </plurals>
+    <string name="map_tilted_description">Kartta on kallistettu.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">Kartta on kääntynyt %1$d asteen pohjoisesta ja on kallistettu.</item>
+        <item quantity="other">Kartta on kääntynyt %1$d astetta pohjoisesta ja on kallistettu.</item>
     </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>
