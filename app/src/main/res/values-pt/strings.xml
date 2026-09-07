@@ -197,7 +197,7 @@
 
     <!-- The map screen (SPEC §7.1). -->
     <string name="map_open_list">Ver a lista de estações</string>
-    <string name="map_description">Mapa. Arraste com dois dedos para o mover, junte ou afaste dois dedos para ampliar ou reduzir e rode dois dedos para o girar.</string>
+    <string name="map_description">Mapa. Arraste com dois dedos para o mover, junte ou afaste dois dedos para ampliar ou reduzir, rode dois dedos para o girar e deslize dois dedos para cima ou para baixo para o inclinar.</string>
     <!-- The attribution carried by the map itself (SPEC §4.5). It fits on one
          line; the network's full attribution is in "about". -->
     <string name="map_attribution">© colaboradores do OpenStreetMap</string>
@@ -219,11 +219,17 @@
     <string name="map_needs_city_title">Que cidade?</string>
     <string name="map_needs_city_message">Escolha a área metropolitana que quer consultar. Os dados são transferidos depois, de uma vez por todas.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Orientar para norte</string>
+    <string name="map_face_north">Orientar para norte e aplanar o mapa</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">O mapa está rodado %1$d grau em relação ao norte. Toque para o orientar para norte.</item>
-        <item quantity="many">O mapa está rodado %1$d graus em relação ao norte. Toque para o orientar para norte.</item>
-        <item quantity="other">O mapa está rodado %1$d graus em relação ao norte. Toque para o orientar para norte.</item>
+        <item quantity="one">O mapa está rodado %1$d grau em relação ao norte.</item>
+        <item quantity="many">O mapa está rodado %1$d graus em relação ao norte.</item>
+        <item quantity="other">O mapa está rodado %1$d graus em relação ao norte.</item>
+    </plurals>
+    <string name="map_tilted_description">O mapa está inclinado.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">O mapa está rodado %1$d grau em relação ao norte e inclinado.</item>
+        <item quantity="many">O mapa está rodado %1$d graus em relação ao norte e inclinado.</item>
+        <item quantity="other">O mapa está rodado %1$d graus em relação ao norte e inclinado.</item>
     </plurals>
 
     <!-- First launch (SPEC §7.9). We explain how something works, we are not

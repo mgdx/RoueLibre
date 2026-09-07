@@ -220,7 +220,7 @@
     <string name="action_retry">إعادة المحاولة</string>
 
     <string name="map_open_list">عرض قائمة المحطات</string>
-    <string name="map_description">خريطة. اسحبها بإصبعين لتحريكها، واقرص بإصبعين للتكبير أو التصغير، وأدر إصبعيك لتدويرها.</string>
+    <string name="map_description">خريطة. اسحبها بإصبعين لتحريكها، واقرص بإصبعين للتكبير أو التصغير، وأدر إصبعيك لتدويرها، واسحب إصبعيك لأعلى أو لأسفل لإمالتها.</string>
     <string name="map_attribution">&#x200F;© مساهمو OpenStreetMap</string>
     <string name="map_locate_me">تحديد موقعي</string>
     <string name="map_locating">جارٍ تحديد موقعك…</string>
@@ -235,14 +235,23 @@
     <string name="map_needs_city_title">أي مدينة؟</string>
     <string name="map_needs_city_message">اختر التجمّع الحضري الذي تريد استخدامه. تُنزَّل بياناته بعد ذلك، مرّة واحدة نهائيًا.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">التوجيه نحو الشمال</string>
+    <string name="map_face_north">التوجيه نحو الشمال وتسوية الخريطة</string>
     <plurals name="map_bearing_description">
-        <item quantity="zero">الخريطة مائلة عن الشمال بمقدار %1$d درجة. انقر لتوجيهها نحو الشمال.</item>
-        <item quantity="one">الخريطة مائلة عن الشمال بمقدار %1$d درجة. انقر لتوجيهها نحو الشمال.</item>
-        <item quantity="two">الخريطة مائلة عن الشمال بمقدار %1$d درجتين. انقر لتوجيهها نحو الشمال.</item>
-        <item quantity="few">الخريطة مائلة عن الشمال بمقدار %1$d درجات. انقر لتوجيهها نحو الشمال.</item>
-        <item quantity="many">الخريطة مائلة عن الشمال بمقدار %1$d درجةً. انقر لتوجيهها نحو الشمال.</item>
-        <item quantity="other">الخريطة مائلة عن الشمال بمقدار %1$d درجة. انقر لتوجيهها نحو الشمال.</item>
+        <item quantity="zero">الخريطة مُدارة بمقدار %1$d درجة عن الشمال.</item>
+        <item quantity="one">الخريطة مُدارة بمقدار %1$d درجة عن الشمال.</item>
+        <item quantity="two">الخريطة مُدارة بمقدار %1$d درجتين عن الشمال.</item>
+        <item quantity="few">الخريطة مُدارة بمقدار %1$d درجات عن الشمال.</item>
+        <item quantity="many">الخريطة مُدارة بمقدار %1$d درجةً عن الشمال.</item>
+        <item quantity="other">الخريطة مُدارة بمقدار %1$d درجة عن الشمال.</item>
+    </plurals>
+    <string name="map_tilted_description">الخريطة مائلة.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="zero">الخريطة مُدارة بمقدار %1$d درجة عن الشمال، وهي مائلة.</item>
+        <item quantity="one">الخريطة مُدارة بمقدار %1$d درجة عن الشمال، وهي مائلة.</item>
+        <item quantity="two">الخريطة مُدارة بمقدار %1$d درجتين عن الشمال، وهي مائلة.</item>
+        <item quantity="few">الخريطة مُدارة بمقدار %1$d درجات عن الشمال، وهي مائلة.</item>
+        <item quantity="many">الخريطة مُدارة بمقدار %1$d درجةً عن الشمال، وهي مائلة.</item>
+        <item quantity="other">الخريطة مُدارة بمقدار %1$d درجة عن الشمال، وهي مائلة.</item>
     </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>

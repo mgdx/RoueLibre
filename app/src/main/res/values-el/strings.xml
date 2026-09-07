@@ -184,7 +184,7 @@
     <string name="action_retry">Δοκιμάστε ξανά</string>
 
     <string name="map_open_list">Δείτε τη λίστα των σταθμών</string>
-    <string name="map_description">Χάρτης. Σύρετε με δύο δάχτυλα για να τον μετακινήσετε, τσιμπήστε με δύο δάχτυλα για μεγέθυνση ή σμίκρυνση και περιστρέψτε δύο δάχτυλα για να τον στρέψετε.</string>
+    <string name="map_description">Χάρτης. Σύρετε με δύο δάχτυλα για να τον μετακινήσετε, τσιμπήστε με δύο δάχτυλα για μεγέθυνση ή σμίκρυνση, περιστρέψτε δύο δάχτυλα για να τον στρέψετε και σύρετε δύο δάχτυλα προς τα πάνω ή προς τα κάτω για να του δώσετε κλίση.</string>
     <string name="map_attribution">© συνεισφέροντες του OpenStreetMap</string>
     <string name="map_locate_me">Εντοπισμός της θέσης μου</string>
     <string name="map_locating">Εντοπισμός της θέσης σας…</string>
@@ -200,10 +200,15 @@
     <string name="map_needs_city_title">Ποια πόλη;</string>
     <string name="map_needs_city_message">Διαλέξτε την αστική περιοχή που θέλετε να χρησιμοποιήσετε. Τα δεδομένα της κατεβαίνουν μετά, μία φορά και για πάντα.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Προσανατολισμός στον βορρά</string>
+    <string name="map_face_north">Προσανατολισμός στον βορρά και επίπεδη προβολή</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">Ο χάρτης είναι στραμμένος %1$d μοίρα από τον βορρά. Πατήστε για προσανατολισμό στον βορρά.</item>
-        <item quantity="other">Ο χάρτης είναι στραμμένος %1$d μοίρες από τον βορρά. Πατήστε για προσανατολισμό στον βορρά.</item>
+        <item quantity="one">Ο χάρτης είναι στραμμένος %1$d μοίρα από τον βορρά.</item>
+        <item quantity="other">Ο χάρτης είναι στραμμένος %1$d μοίρες από τον βορρά.</item>
+    </plurals>
+    <string name="map_tilted_description">Ο χάρτης έχει κλίση.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">Ο χάρτης είναι στραμμένος %1$d μοίρα από τον βορρά και έχει κλίση.</item>
+        <item quantity="other">Ο χάρτης είναι στραμμένος %1$d μοίρες από τον βορρά και έχει κλίση.</item>
     </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>

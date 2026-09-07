@@ -156,7 +156,7 @@
     <string name="action_retry">Prøv igjen</string>
 
     <string name="map_open_list">Se listen over stasjoner</string>
-    <string name="map_description">Kart. Dra med to fingre for å flytte det, knip med to fingre for å zoome inn eller ut, og vri to fingre for å rotere det.</string>
+    <string name="map_description">Kart. Dra med to fingre for å flytte det, knip med to fingre for å zoome inn eller ut, vri to fingre for å rotere det, og dra to fingre opp eller ned for å vippe det.</string>
     <string name="map_attribution">© OpenStreetMap-bidragsytere</string>
     <string name="map_locate_me">Finn posisjonen min</string>
     <string name="map_locating">Finner posisjonen din …</string>
@@ -172,10 +172,15 @@
     <string name="map_needs_city_title">Hvilken by?</string>
     <string name="map_needs_city_message">Velg byområdet du vil bruke. Dataene lastes ned etterpå, én gang for alle.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Vend mot nord</string>
+    <string name="map_face_north">Vend mot nord og legg kartet flatt</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">Kartet er dreid %1$d grad fra nord. Trykk for å vende det mot nord.</item>
-        <item quantity="other">Kartet er dreid %1$d grader fra nord. Trykk for å vende det mot nord.</item>
+        <item quantity="one">Kartet er dreid %1$d grad fra nord.</item>
+        <item quantity="other">Kartet er dreid %1$d grader fra nord.</item>
+    </plurals>
+    <string name="map_tilted_description">Kartet er vippet.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">Kartet er dreid %1$d grad fra nord og vippet.</item>
+        <item quantity="other">Kartet er dreid %1$d grader fra nord og vippet.</item>
     </plurals>
 
     <!-- The welcome carousel, shown once on first launch. -->

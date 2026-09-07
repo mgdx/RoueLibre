@@ -174,7 +174,7 @@
     <string name="action_retry">Pokušajte ponovo</string>
 
     <string name="map_open_list">Pogledaj popis stanica</string>
-    <string name="map_description">Karta. Povucite s dva prsta da je pomaknete, uštipnite s dva prsta za približavanje ili udaljavanje, zarotirajte dva prsta da je okrenete.</string>
+    <string name="map_description">Karta. Povucite s dva prsta da je pomaknete, uštipnite s dva prsta za približavanje ili udaljavanje, zarotirajte dva prsta da je okrenete, povucite dva prsta prema gore ili prema dolje da je nagnete.</string>
     <string name="map_attribution">© Suradnici OpenStreetMapa</string>
     <string name="map_locate_me">Pronađi me</string>
     <string name="map_locating">Traženje vašeg položaja…</string>
@@ -188,11 +188,17 @@
     <string name="map_needs_city_title">Koji grad?</string>
     <string name="map_needs_city_message">Odaberite gradsko područje koje želite upotrebljavati. Njegovi se podaci preuzimaju poslije, jednom zauvijek.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Okreni prema sjeveru</string>
+    <string name="map_face_north">Okreni prema sjeveru i poravnaj kartu</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">Karta je okrenuta %1$d stupanj od sjevera. Dodirnite da je okrenete prema sjeveru.</item>
-        <item quantity="few">Karta je okrenuta %1$d stupnja od sjevera. Dodirnite da je okrenete prema sjeveru.</item>
-        <item quantity="other">Karta je okrenuta %1$d stupnjeva od sjevera. Dodirnite da je okrenete prema sjeveru.</item>
+        <item quantity="one">Karta je okrenuta %1$d stupanj od sjevera.</item>
+        <item quantity="few">Karta je okrenuta %1$d stupnja od sjevera.</item>
+        <item quantity="other">Karta je okrenuta %1$d stupnjeva od sjevera.</item>
+    </plurals>
+    <string name="map_tilted_description">Karta je nagnuta.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">Karta je okrenuta %1$d stupanj od sjevera i nagnuta.</item>
+        <item quantity="few">Karta je okrenuta %1$d stupnja od sjevera i nagnuta.</item>
+        <item quantity="other">Karta je okrenuta %1$d stupnjeva od sjevera i nagnuta.</item>
     </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>

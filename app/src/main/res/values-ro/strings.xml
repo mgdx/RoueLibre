@@ -195,7 +195,7 @@
     <string name="action_retry">Încearcă din nou</string>
 
     <string name="map_open_list">Vezi lista stațiilor</string>
-    <string name="map_description">Hartă. Trage cu două degete pentru a o muta, apropie sau depărtează două degete pentru a mări sau a micșora, rotește două degete pentru a o roti.</string>
+    <string name="map_description">Hartă. Trage cu două degete pentru a o muta, apropie sau depărtează două degete pentru a mări sau a micșora, rotește două degete pentru a o roti, glisează două degete în sus sau în jos pentru a o înclina.</string>
     <string name="map_attribution">© colaboratorii OpenStreetMap</string>
     <string name="map_locate_me">Localizează-mă</string>
     <string name="map_locating">Se caută poziția ta…</string>
@@ -210,11 +210,17 @@
     <string name="map_needs_city_title">Care oraș?</string>
     <string name="map_needs_city_message">Alege zona urbană pe care vrei să o folosești. Datele ei se descarcă apoi, o dată pentru totdeauna.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Orientează spre nord</string>
+    <string name="map_face_north">Orientează spre nord și aplatizează harta</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">Harta este rotită cu %1$d grad față de nord. Atinge pentru a o orienta spre nord.</item>
-        <item quantity="few">Harta este rotită cu %1$d grade față de nord. Atinge pentru a o orienta spre nord.</item>
-        <item quantity="other">Harta este rotită cu %1$d de grade față de nord. Atinge pentru a o orienta spre nord.</item>
+        <item quantity="one">Harta este rotită cu %1$d grad față de nord.</item>
+        <item quantity="few">Harta este rotită cu %1$d grade față de nord.</item>
+        <item quantity="other">Harta este rotită cu %1$d de grade față de nord.</item>
+    </plurals>
+    <string name="map_tilted_description">Harta este înclinată.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">Harta este rotită cu %1$d grad față de nord și înclinată.</item>
+        <item quantity="few">Harta este rotită cu %1$d grade față de nord și înclinată.</item>
+        <item quantity="other">Harta este rotită cu %1$d de grade față de nord și înclinată.</item>
     </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>

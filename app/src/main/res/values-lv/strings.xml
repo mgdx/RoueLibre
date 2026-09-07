@@ -177,7 +177,7 @@
     <string name="action_retry">Mēģināt vēlreiz</string>
 
     <string name="map_open_list">Skatīt staciju sarakstu</string>
-    <string name="map_description">Karte. Velciet ar diviem pirkstiem, lai to pārvietotu, savelciet vai izpletiet divus pirkstus, lai tuvinātu vai tālinātu, un pagrieziet divus pirkstus, lai mainītu tās virzienu.</string>
+    <string name="map_description">Karte. Velciet ar diviem pirkstiem, lai to pārvietotu, savelciet vai izpletiet divus pirkstus, lai tuvinātu vai tālinātu, pagrieziet divus pirkstus, lai mainītu tās virzienu, un velciet divus pirkstus uz augšu vai uz leju, lai to sasvērtu.</string>
     <string name="map_attribution">© OpenStreetMap veidotāji</string>
     <string name="map_locate_me">Noteikt manu atrašanās vietu</string>
     <string name="map_locating">Notiek jūsu atrašanās vietas noteikšana…</string>
@@ -191,11 +191,17 @@
     <string name="map_needs_city_title">Kura pilsēta?</string>
     <string name="map_needs_city_message">Izvēlieties aglomerāciju, kuru vēlaties lietot. Tās dati tiek lejupielādēti pēc tam, vienu reizi uz visiem laikiem.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Pagriezt uz ziemeļiem</string>
+    <string name="map_face_north">Pagriezt uz ziemeļiem un izlīdzināt karti</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">Kartes pagrieziens no ziemeļiem: %1$d grāds. Pieskarieties, lai to pagrieztu uz ziemeļiem.</item>
-        <item quantity="zero">Kartes pagrieziens no ziemeļiem: %1$d grādu. Pieskarieties, lai to pagrieztu uz ziemeļiem.</item>
-        <item quantity="other">Kartes pagrieziens no ziemeļiem: %1$d grādi. Pieskarieties, lai to pagrieztu uz ziemeļiem.</item>
+        <item quantity="one">Kartes pagrieziens no ziemeļiem: %1$d grāds.</item>
+        <item quantity="zero">Kartes pagrieziens no ziemeļiem: %1$d grādu.</item>
+        <item quantity="other">Kartes pagrieziens no ziemeļiem: %1$d grādi.</item>
+    </plurals>
+    <string name="map_tilted_description">Karte ir sasvērta.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">Karte ir sasvērta, un tās pagrieziens no ziemeļiem ir %1$d grāds.</item>
+        <item quantity="zero">Karte ir sasvērta, un tās pagrieziens no ziemeļiem ir %1$d grādu.</item>
+        <item quantity="other">Karte ir sasvērta, un tās pagrieziens no ziemeļiem ir %1$d grādi.</item>
     </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>

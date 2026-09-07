@@ -213,7 +213,7 @@
     <string name="action_retry">Poskusi znova</string>
 
     <string name="map_open_list">Prikaži seznam postaj</string>
-    <string name="map_description">Zemljevid. Povlecite z dvema prstoma, da ga premaknete, uščipnite z dvema prstoma za približanje ali oddaljitev, zavrtite dva prsta, da ga obrnete.</string>
+    <string name="map_description">Zemljevid. Povlecite z dvema prstoma, da ga premaknete, uščipnite z dvema prstoma za približanje ali oddaljitev, zavrtite dva prsta, da ga obrnete, povlecite dva prsta navzgor ali navzdol, da ga nagnete.</string>
     <string name="map_attribution">© sodelujoči na OpenStreetMapu</string>
     <string name="map_locate_me">Poišči moj položaj</string>
     <string name="map_locating">Iskanje vašega položaja …</string>
@@ -229,12 +229,19 @@
     <string name="map_needs_city_title">Katero mesto?</string>
     <string name="map_needs_city_message">Izberite mestno območje, ki ga želite uporabljati. Njegovi podatki se prenesejo pozneje, enkrat za vselej.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Obrni proti severu</string>
+    <string name="map_face_north">Obrni proti severu in poravnaj zemljevid</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">Zemljevid je zavrten za %1$d stopinjo od severa. Dotaknite se, da ga obrnete proti severu.</item>
-        <item quantity="two">Zemljevid je zavrten za %1$d stopinji od severa. Dotaknite se, da ga obrnete proti severu.</item>
-        <item quantity="few">Zemljevid je zavrten za %1$d stopinje od severa. Dotaknite se, da ga obrnete proti severu.</item>
-        <item quantity="other">Zemljevid je zavrten za %1$d stopinj od severa. Dotaknite se, da ga obrnete proti severu.</item>
+        <item quantity="one">Zemljevid je zavrten za %1$d stopinjo od severa.</item>
+        <item quantity="two">Zemljevid je zavrten za %1$d stopinji od severa.</item>
+        <item quantity="few">Zemljevid je zavrten za %1$d stopinje od severa.</item>
+        <item quantity="other">Zemljevid je zavrten za %1$d stopinj od severa.</item>
+    </plurals>
+    <string name="map_tilted_description">Zemljevid je nagnjen.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">Zemljevid je zavrten za %1$d stopinjo od severa in nagnjen.</item>
+        <item quantity="two">Zemljevid je zavrten za %1$d stopinji od severa in nagnjen.</item>
+        <item quantity="few">Zemljevid je zavrten za %1$d stopinje od severa in nagnjen.</item>
+        <item quantity="other">Zemljevid je zavrten za %1$d stopinj od severa in nagnjen.</item>
     </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>

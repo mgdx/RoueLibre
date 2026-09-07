@@ -199,7 +199,7 @@
     <string name="action_retry">Bandyti dar kartą</string>
 
     <string name="map_open_list">Žiūrėti stotelių sąrašą</string>
-    <string name="map_description">Žemėlapis. Vilkite dviem pirštais, kad jį pastumtumėte, suglauskite arba išskėskite du pirštus, kad priartintumėte arba nutolintumėte, pasukite du pirštus, kad jį apsuktumėte.</string>
+    <string name="map_description">Žemėlapis. Vilkite dviem pirštais, kad jį pastumtumėte, suglauskite arba išskėskite du pirštus, kad priartintumėte arba nutolintumėte, pasukite du pirštus, kad jį apsuktumėte, braukite dviem pirštais aukštyn arba žemyn, kad jį pakreiptumėte.</string>
     <string name="map_attribution">© „OpenStreetMap“ bendraautoriai</string>
     <string name="map_locate_me">Nustatyti mano buvimo vietą</string>
     <string name="map_locating">Nustatoma jūsų buvimo vieta…</string>
@@ -215,12 +215,19 @@
     <string name="map_needs_city_title">Kuris miestas?</string>
     <string name="map_needs_city_message">Pasirinkite aglomeraciją, kurią norite naudoti. Jos duomenys atsiunčiami vėliau – kartą ir visam laikui.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Nukreipti į šiaurę</string>
+    <string name="map_face_north">Nukreipti į šiaurę ir ištiesinti žemėlapį</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">Žemėlapis pasuktas nuo šiaurės: %1$d laipsnis. Palieskite, kad jį nukreiptumėte į šiaurę.</item>
-        <item quantity="few">Žemėlapis pasuktas nuo šiaurės: %1$d laipsniai. Palieskite, kad jį nukreiptumėte į šiaurę.</item>
-        <item quantity="many">Žemėlapis pasuktas nuo šiaurės: %1$d laipsnio. Palieskite, kad jį nukreiptumėte į šiaurę.</item>
-        <item quantity="other">Žemėlapis pasuktas nuo šiaurės: %1$d laipsnių. Palieskite, kad jį nukreiptumėte į šiaurę.</item>
+        <item quantity="one">Žemėlapis pasuktas nuo šiaurės: %1$d laipsnis.</item>
+        <item quantity="few">Žemėlapis pasuktas nuo šiaurės: %1$d laipsniai.</item>
+        <item quantity="many">Žemėlapis pasuktas nuo šiaurės: %1$d laipsnio.</item>
+        <item quantity="other">Žemėlapis pasuktas nuo šiaurės: %1$d laipsnių.</item>
+    </plurals>
+    <string name="map_tilted_description">Žemėlapis pakreiptas.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">Žemėlapis pakreiptas ir pasuktas nuo šiaurės: %1$d laipsnis.</item>
+        <item quantity="few">Žemėlapis pakreiptas ir pasuktas nuo šiaurės: %1$d laipsniai.</item>
+        <item quantity="many">Žemėlapis pakreiptas ir pasuktas nuo šiaurės: %1$d laipsnio.</item>
+        <item quantity="other">Žemėlapis pakreiptas ir pasuktas nuo šiaurės: %1$d laipsnių.</item>
     </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>

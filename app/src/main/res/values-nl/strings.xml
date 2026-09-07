@@ -142,7 +142,7 @@
     <string name="action_retry">Opnieuw proberen</string>
 
     <string name="map_open_list">Bekijk de lijst met stations</string>
-    <string name="map_description">Kaart. Sleep met twee vingers om hem te verplaatsen, knijp met twee vingers om in of uit te zoomen en draai met twee vingers om hem te roteren.</string>
+    <string name="map_description">Kaart. Sleep met twee vingers om hem te verplaatsen, knijp met twee vingers om in of uit te zoomen, draai met twee vingers om hem te roteren en veeg met twee vingers omhoog of omlaag om hem te kantelen.</string>
     <string name="map_attribution">© OpenStreetMap-bijdragers</string>
     <string name="map_locate_me">Mijn locatie</string>
     <string name="map_locating">Je positie bepalen…</string>
@@ -156,10 +156,15 @@
     <string name="map_needs_city_title">Welke stad?</string>
     <string name="map_needs_city_message">Kies de agglomeratie die je wilt gebruiken. De gegevens worden daarna gedownload, eens en voorgoed.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Op het noorden richten</string>
+    <string name="map_face_north">Op het noorden richten en de kaart vlak leggen</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">De kaart staat %1$d graad gedraaid ten opzichte van het noorden. Tik om hem op het noorden te richten.</item>
-        <item quantity="other">De kaart staat %1$d graden gedraaid ten opzichte van het noorden. Tik om hem op het noorden te richten.</item>
+        <item quantity="one">De kaart staat %1$d graad gedraaid ten opzichte van het noorden.</item>
+        <item quantity="other">De kaart staat %1$d graden gedraaid ten opzichte van het noorden.</item>
+    </plurals>
+    <string name="map_tilted_description">De kaart is gekanteld.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">De kaart staat %1$d graad gedraaid ten opzichte van het noorden en is gekanteld.</item>
+        <item quantity="other">De kaart staat %1$d graden gedraaid ten opzichte van het noorden en is gekanteld.</item>
     </plurals>
 
     <!-- The welcome carousel, shown once on first launch. -->

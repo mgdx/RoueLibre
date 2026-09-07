@@ -164,7 +164,7 @@
 
     <!-- The map screen (SPEC §7.1). -->
     <string name="map_open_list">Stationsliste anzeigen</string>
-    <string name="map_description">Karte. Zieh sie mit zwei Fingern, um sie zu verschieben, führe zwei Finger zusammen oder auseinander, um zu zoomen, und dreh sie mit zwei Fingern.</string>
+    <string name="map_description">Karte. Zieh sie mit zwei Fingern, um sie zu verschieben, führe zwei Finger zusammen oder auseinander, um zu zoomen, dreh sie mit zwei Fingern, und schieb zwei Finger nach oben oder unten, um sie zu neigen.</string>
     <!-- The attribution carried by the map itself (SPEC §4.5). It fits on one
          line; the network's full attribution is in "about". -->
     <string name="map_attribution">© OpenStreetMap-Mitwirkende</string>
@@ -186,10 +186,15 @@
     <string name="map_needs_city_title">Welche Stadt?</string>
     <string name="map_needs_city_message">Wähle den Ballungsraum, den du nutzen willst. Seine Daten werden danach heruntergeladen, ein für alle Mal.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Nach Norden ausrichten</string>
+    <string name="map_face_north">Nach Norden ausrichten und flach legen</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">Karte %1$d Grad von Norden gedreht. Tippe, um sie nach Norden auszurichten.</item>
-        <item quantity="other">Karte %1$d Grad von Norden gedreht. Tippe, um sie nach Norden auszurichten.</item>
+        <item quantity="one">Karte %1$d Grad von Norden gedreht.</item>
+        <item quantity="other">Karte %1$d Grad von Norden gedreht.</item>
+    </plurals>
+    <string name="map_tilted_description">Karte geneigt.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">Karte %1$d Grad von Norden gedreht und geneigt.</item>
+        <item quantity="other">Karte %1$d Grad von Norden gedreht und geneigt.</item>
     </plurals>
 
     <!-- First launch (SPEC §7.9). We explain how something works, we are not
