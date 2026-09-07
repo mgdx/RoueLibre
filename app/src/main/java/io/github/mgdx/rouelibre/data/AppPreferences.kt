@@ -3,12 +3,14 @@ package io.github.mgdx.rouelibre.data
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import io.github.mgdx.rouelibre.core.config.FleetDescription
+import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.WalkingPace
 import io.github.mgdx.rouelibre.core.measure.UnitChoice
 import io.github.mgdx.rouelibre.core.station.VehicleKind
@@ -173,6 +175,96 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
             return stored.split(SEPARATOR).filter { it.isNotBlank() }
         }
         return preferences[FAVOURITE_STATION_IDS].orEmpty().sorted()
+    }
+
+    /**
+     * The place the user has named as home, or `null` if they have named none.
+     *
+     * **This is the first place of the user's own that the application writes
+     * down, and it does not contradict constraint C3** (SPEC §2, §8). What that
+     * constraint forbids is what the application *observes* of somebody — a
+     * journey made, a destination looked up, a position passed through. What it
+     * allows is what somebody *declares* of themselves, at their own request and
+     * erasable with one press: the favourites beside it are already of that
+     * kind. Nothing here is ever written from a journey, from the map, or from a
+     * search: only from the user saying "this is my home".
+     *
+     * A flow rather than a read, for the reason [favouriteStationIds] gives: a
+     * place changed in the settings must reach every screen that shows it
+     * without the screens having to tell one another.
+     */
+    val homePlace: Flow<SavedPlace?> = savedPlace(SavedPlaceKind.Home)
+
+    /**
+     * The place the user has named as work, or `null` if they have named none.
+     *
+     * Declared and not observed, and a flow rather than a read, both for the
+     * reasons [homePlace] gives.
+     */
+    val workPlace: Flow<SavedPlace?> = savedPlace(SavedPlaceKind.Work)
+
+    /**
+     * The two of them read together, for a screen that shows both.
+     *
+     * @param kind which of the two places is wanted.
+     */
+    fun savedPlace(kind: SavedPlaceKind): Flow<SavedPlace?> =
+        dataStore.data.map { it.readSavedPlace(kind) }
+
+    /**
+     * Writes one of the two places, replacing whatever stood there.
+     *
+     * @param kind which of the two places is being named.
+     * @param place what the user has just declared.
+     */
+    suspend fun setSavedPlace(kind: SavedPlaceKind, place: SavedPlace) {
+        dataStore.edit { preferences ->
+            preferences[kind.labelKey] = place.label
+            preferences[kind.latitudeKey] = place.position.latitude
+            preferences[kind.longitudeKey] = place.position.longitude
+        }
+    }
+
+    /**
+     * Forgets one of the two places.
+     *
+     * All three keys go, so that no half of a place is left for a later version
+     * to make something of.
+     *
+     * @param kind which of the two places is being forgotten.
+     */
+    suspend fun clearSavedPlace(kind: SavedPlaceKind) {
+        dataStore.edit { preferences ->
+            preferences.remove(kind.labelKey)
+            preferences.remove(kind.latitudeKey)
+            preferences.remove(kind.longitudeKey)
+        }
+    }
+
+    /**
+     * Reads a place back, `null` unless all three of its keys read.
+     *
+     * **A missing or unreadable part is no place at all, never a default
+     * point.** Latitude zero is a real spot in the Gulf of Guinea, and a home
+     * that landed there would be worse than a home that was never named: a
+     * journey would be worked out, drawn and timed, to somewhere the user has
+     * never been. A blank label reads the same way, since a place with nothing
+     * to show is a place no screen can offer.
+     *
+     * Going through [Preferences.asMap] is what makes the casts checkable: a
+     * typed key hands back a value nobody verified, and a settings file holding
+     * a string where a number belongs — written by a version that stored it
+     * differently, or truncated by a device out of space — would take a screen
+     * down. Coordinates out of their range are refused here for the same
+     * reason, [Coordinates] rejecting them by throwing.
+     */
+    private fun Preferences.readSavedPlace(kind: SavedPlaceKind): SavedPlace? {
+        val label = asMap()[kind.labelKey] as? String ?: return null
+        if (label.isBlank()) return null
+        val latitude = asMap()[kind.latitudeKey] as? Double ?: return null
+        val longitude = asMap()[kind.longitudeKey] as? Double ?: return null
+        if (latitude !in -90.0..90.0 || longitude !in -180.0..180.0) return null
+        return SavedPlace(label, Coordinates(latitude, longitude))
     }
 
     /**
@@ -571,6 +663,43 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
 
         /** No GBFS identifier contains a newline. */
         const val SEPARATOR = "\n"
+
+        /**
+         * Three keys per place rather than one composed string.
+         *
+         * The favourites above may join their identifiers with a newline
+         * because no GBFS identifier contains one. An address is the opposite:
+         * it holds commas, dashes, apostrophes, sometimes a line break, and
+         * whatever separator were chosen would eventually fall inside somebody's
+         * label and cut their home in two.
+         */
+        val SAVED_PLACE_HOME_LABEL = stringPreferencesKey("saved_place_home_label")
+        val SAVED_PLACE_HOME_LATITUDE = doublePreferencesKey("saved_place_home_latitude")
+        val SAVED_PLACE_HOME_LONGITUDE = doublePreferencesKey("saved_place_home_longitude")
+        val SAVED_PLACE_WORK_LABEL = stringPreferencesKey("saved_place_work_label")
+        val SAVED_PLACE_WORK_LATITUDE = doublePreferencesKey("saved_place_work_latitude")
+        val SAVED_PLACE_WORK_LONGITUDE = doublePreferencesKey("saved_place_work_longitude")
+
+        /** The key each place's label is written under. */
+        val SavedPlaceKind.labelKey: Preferences.Key<String>
+            get() = when (this) {
+                SavedPlaceKind.Home -> SAVED_PLACE_HOME_LABEL
+                SavedPlaceKind.Work -> SAVED_PLACE_WORK_LABEL
+            }
+
+        /** The key each place's latitude is written under. */
+        val SavedPlaceKind.latitudeKey: Preferences.Key<Double>
+            get() = when (this) {
+                SavedPlaceKind.Home -> SAVED_PLACE_HOME_LATITUDE
+                SavedPlaceKind.Work -> SAVED_PLACE_WORK_LATITUDE
+            }
+
+        /** The key each place's longitude is written under. */
+        val SavedPlaceKind.longitudeKey: Preferences.Key<Double>
+            get() = when (this) {
+                SavedPlaceKind.Home -> SAVED_PLACE_HOME_LONGITUDE
+                SavedPlaceKind.Work -> SAVED_PLACE_WORK_LONGITUDE
+            }
         val THEME = stringPreferencesKey("theme")
 
         /** Which stations the map draws at all (SPEC §7.1). */
