@@ -4,21 +4,31 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
+import io.github.mgdx.rouelibre.core.geo.BoundingBox
+import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.WalkingPace
 import io.github.mgdx.rouelibre.core.measure.UnitChoice
 import io.github.mgdx.rouelibre.data.AppTheme
 import io.github.mgdx.rouelibre.data.OpeningScreen
 import io.github.mgdx.rouelibre.data.OwnBikeKind
+import io.github.mgdx.rouelibre.data.SavedPlace
+import io.github.mgdx.rouelibre.data.SavedPlaceKind
 import io.github.mgdx.rouelibre.databinding.FragmentSettingsBinding
 import io.github.mgdx.rouelibre.ui.ChoiceDialogFragment
 import io.github.mgdx.rouelibre.ui.about.AboutFragment
+import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
 import io.github.mgdx.rouelibre.ui.chosenLanguage
 import io.github.mgdx.rouelibre.ui.city.CityFragment
 import io.github.mgdx.rouelibre.ui.cityLabel
@@ -26,6 +36,7 @@ import io.github.mgdx.rouelibre.ui.endonym
 import io.github.mgdx.rouelibre.ui.offeredLanguages
 import io.github.mgdx.rouelibre.ui.speakLanguage
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -57,6 +68,15 @@ class SettingsFragment : Fragment() {
     /** True while a field is being filled by the code, so as not to rewrite it. */
     private var isFilling = false
 
+    /**
+     * Which of the two places the address search was opened for, if it was.
+     *
+     * Kept across a rebuild of the screen: the phone can be turned over while
+     * one searches, and the answer that comes back afterwards would otherwise
+     * have no row to land on.
+     */
+    private var placeBeingNamed: SavedPlaceKind? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -71,6 +91,9 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val views = checkNotNull(binding)
 
+        placeBeingNamed = savedInstanceState?.getString(STATE_PLACE_BEING_NAMED)
+            ?.let { name -> SavedPlaceKind.entries.firstOrNull { it.name == name } }
+
         setUpToolbar(views)
         // In the order the screen reads them (SPEC §7.6): city, display,
         // journey, offline data, then the way to "about".
@@ -82,10 +105,12 @@ class SettingsFragment : Fragment() {
         setUpStationFilters(views)
         setUpOwnBikeKind(views)
         setUpWalkingPace(views)
+        setUpSavedPlaces(views)
         setUpOfflineData(views)
         setUpDownloadPolicy(views)
         setUpAbout(views)
         listenForTheLanguageChosen()
+        listenForTheAddressChosen()
     }
 
     /**
@@ -111,6 +136,48 @@ class SettingsFragment : Fragment() {
             // language rather than one of them.
             speakLanguage(offeredLanguages().getOrNull(chosen - 1))
         }
+    }
+
+    /**
+     * Collects the address picked for a saved place (SPEC §7.6).
+     *
+     * Registered as the screen is built, and not where the search is put up,
+     * for the reason [io.github.mgdx.rouelibre.ui.journey.JourneyHandover]
+     * gives of its own listener: the screen is destroyed while one searches —
+     * a rotation is enough — so an answer collected at the press would arrive
+     * with nobody listening for it. The mistake has been made in this
+     * repository before.
+     *
+     * Nothing is written unless a row was waiting: the map and the journey
+     * screens return their address under this same key, and a result meant for
+     * one of them must not be taken for a home.
+     */
+    private fun listenForTheAddressChosen() {
+        parentFragmentManager.setFragmentResultListener(
+            AddressSearchFragment.REQUEST_KEY,
+            viewLifecycleOwner,
+        ) { _, result ->
+            val kind = placeBeingNamed ?: return@setFragmentResultListener
+            placeBeingNamed = null
+            val label = result.getString(AddressSearchFragment.RESULT_LABEL).orEmpty()
+            // A place with nothing to show is a place no screen can offer, and
+            // AppPreferences reads it back as no place at all: better never
+            // written than written and silently lost.
+            if (label.isBlank()) return@setFragmentResultListener
+            val place = SavedPlace(
+                label = label,
+                position = Coordinates(
+                    result.getDouble(AddressSearchFragment.RESULT_LATITUDE),
+                    result.getDouble(AddressSearchFragment.RESULT_LONGITUDE),
+                ),
+            )
+            viewLifecycleOwner.lifecycleScope.launch { preferences.setSavedPlace(kind, place) }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        placeBeingNamed?.let { outState.putString(STATE_PLACE_BEING_NAMED, it.name) }
     }
 
     override fun onDestroyView() {
@@ -248,6 +315,126 @@ class SettingsFragment : Fragment() {
                     isFilling = false
                 }
             }
+        }
+    }
+
+    /**
+     * The places the user names for themselves (SPEC §7.6).
+     *
+     * **Declared, never observed.** Nothing here is written from a journey,
+     * from the map or from a search history: the row is pressed, an address is
+     * chosen, and that is the only way either place is ever filled — which is
+     * what keeps constraint C3 whole (SPEC §2, §8) and what
+     * [io.github.mgdx.rouelibre.data.SavedPlace] says at greater length.
+     *
+     * The served area is read once, from the city in service and the way the
+     * station sheet reads it. It cannot go stale under this screen: changing
+     * city means leaving for the city list, which rebuilds this view on the way
+     * back and reads the box again.
+     */
+    private fun setUpSavedPlaces(views: FragmentSettingsBinding) {
+        views.placeHome.setOnClickListener { nameThePlace(SavedPlaceKind.Home) }
+        views.placeWork.setOnClickListener { nameThePlace(SavedPlaceKind.Work) }
+        views.forgetPlaceHome.setOnClickListener { forgetThePlace(SavedPlaceKind.Home) }
+        views.forgetPlaceWork.setOnClickListener { forgetThePlace(SavedPlaceKind.Work) }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                val area = container.activeCity()?.boundingBox
+                // The two are collected together so that both rows are written
+                // from one reading of the area, and neither can lag the other.
+                combine(preferences.homePlace, preferences.workPlace, ::Pair)
+                    .collect { (home, work) ->
+                        showPlace(SavedPlaceKind.Home, home, area)
+                        showPlace(SavedPlaceKind.Work, work, area)
+                    }
+            }
+        }
+    }
+
+    /**
+     * Writes one row of "my places".
+     *
+     * **A place the city in service does not cover stays on the screen, is said
+     * to be outside it, and stays erasable.** It is the rule SPEC §7.3 lays down
+     * for the kind of bike asked of a network that lends one kind — "ignored,
+     * never applied in silence — and never erased either" — and it holds for the
+     * same reason: somebody who named their home in Lille and is looking at Lyon
+     * today has not moved house, and coming back to Lille must find it again.
+     *
+     * @param kind which of the two rows is being written.
+     * @param place what the user named, or `null` if they have named nothing.
+     * @param area the reference box of the city in service, `null` when no city
+     *   is chosen — and nothing is then outside anything.
+     */
+    private fun showPlace(kind: SavedPlaceKind, place: SavedPlace?, area: BoundingBox?) {
+        val views = binding ?: return
+        val setting = getString(kind.settingName)
+        val row = settingsPlaceRow(
+            setting = setting,
+            place = place,
+            coveredArea = area,
+            none = getString(R.string.settings_place_none),
+            invite = { getString(R.string.settings_place_set, it) },
+            describe = { named, value ->
+                getString(R.string.settings_place_description, named, value)
+            },
+        )
+        val isHome = kind == SavedPlaceKind.Home
+        val button = if (isHome) views.placeHome else views.placeWork
+        val forget = if (isHome) views.forgetPlaceHome else views.forgetPlaceWork
+        val outside = if (isHome) views.placeHomeOutside else views.placeWorkOutside
+
+        button.text = row.label
+        button.contentDescription = row.spokenLabel
+        // The row names the place and not the press, so what the press does is
+        // said as the label of the click action instead: a screen reader would
+        // otherwise offer an address with nothing about where activating it
+        // leads. Where no place is named the label is the invitation itself, so
+        // the eye and the ear are told the same thing.
+        ViewCompat.replaceAccessibilityAction(
+            button,
+            AccessibilityActionCompat.ACTION_CLICK,
+            getString(
+                if (place == null) R.string.settings_place_set else R.string.settings_place_change,
+                setting,
+            ),
+            null,
+        )
+        forget.isVisible = row.canBeForgotten
+        forget.contentDescription = getString(R.string.settings_place_clear, setting)
+        outside.isVisible = row.isOutsideCityServed
+    }
+
+    /**
+     * Opens the address search for one of the two places.
+     *
+     * No origin travels with it: that argument ranks the results by proximity to
+     * a point one is composing a journey from, and there is no such point here.
+     */
+    private fun nameThePlace(kind: SavedPlaceKind) {
+        placeBeingNamed = kind
+        show(AddressSearchFragment.newInstance(origin = null))
+    }
+
+    /**
+     * Forgets one of the two places.
+     *
+     * **Nothing is confirmed first**, as nothing is when a favourite station is
+     * taken off the list: the press is undone by naming the place again, and a
+     * dialog guarding a value one retypes in two presses costs more than it
+     * protects. What it did is said afterwards instead, in the snackbar the
+     * screens around this one answer a gesture with.
+     */
+    private fun forgetThePlace(kind: SavedPlaceKind) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            preferences.clearSavedPlace(kind)
+            val views = binding ?: return@launch
+            Snackbar.make(
+                views.root,
+                getString(R.string.settings_place_cleared, getString(kind.settingName)),
+                Snackbar.LENGTH_LONG,
+            ).show()
         }
     }
 
@@ -537,5 +724,16 @@ class SettingsFragment : Fragment() {
     private companion object {
         /** The key the language picked from the list is answered under. */
         const val LANGUAGE_ANSWER = "settings-language"
+
+        /** The key the row awaiting an address is kept under across a rebuild. */
+        const val STATE_PLACE_BEING_NAMED = "settings-place-being-named"
     }
 }
+
+/** How a saved place's row names its setting: "Home", "Work" (SPEC §7.6). */
+@get:StringRes
+private val SavedPlaceKind.settingName: Int
+    get() = when (this) {
+        SavedPlaceKind.Home -> R.string.settings_place_home
+        SavedPlaceKind.Work -> R.string.settings_place_work
+    }

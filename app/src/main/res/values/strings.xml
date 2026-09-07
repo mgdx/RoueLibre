@@ -652,4 +652,35 @@
          above when the device's own is followed. -->
     <string name="settings_language_description">Language of the interface: %1$s</string>
 
+    <!-- My places (SPEC §7.6): the home and the work the user names for
+         themselves. Between the journey section and the offline data: these
+         are points the user names, they qualify the journeys they will ask
+         for, and they are no more downloaded data than a walking pace is. -->
+    <string name="settings_section_places">My places</string>
+    <string name="settings_place_home">Home</string>
+    <string name="settings_place_work">Work</string>
+    <!-- Read aloud in place of the address where no place is named. The eye
+         reads the invitation below instead, which is a call to act rather
+         than a state. -->
+    <string name="settings_place_none">Not set</string>
+    <!-- Under a place the city in service does not cover. The place stays and
+         stays erasable: coming back to its own city must find it again. -->
+    <string name="settings_place_outside_city">Outside the city served</string>
+    <!-- Written on the row where no place is named. %1$s is the setting,
+         "Home" or "Work": this one names the action, being an invitation. -->
+    <string name="settings_place_set">Set %1$s</string>
+    <!-- What pressing the row does once a place is named, announced as the
+         label of its click action. The row itself names the place, so a
+         screen reader would otherwise offer an address with nothing said
+         about what activating it leads to. %1$s is the setting. -->
+    <string name="settings_place_change">Change %1$s</string>
+    <!-- Spoken label of the button that forgets a place. %1$s is the setting. -->
+    <string name="settings_place_clear">Forget %1$s</string>
+    <!-- Said once the place is forgotten. %1$s is the setting. -->
+    <string name="settings_place_cleared">%1$s forgotten</string>
+    <!-- Spoken label of the row: %1$s is the setting, %2$s the place named or
+         the wording above where none is. An address on its own does not say
+         what question it answers, and this screen puts the same one twice. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
+
 </resources>

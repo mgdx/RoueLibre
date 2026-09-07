@@ -744,4 +744,18 @@
          libellé ci-dessus quand c\'est celle de l\'appareil qui est suivie. -->
     <string name="settings_language_description">Langue de l’interface : %1$s</string>
 
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Mes lieux</string>
+    <string name="settings_place_home">Domicile</string>
+    <string name="settings_place_work">Travail</string>
+    <string name="settings_place_none">Non défini</string>
+    <string name="settings_place_outside_city">Hors de la ville servie</string>
+    <!-- %1$s is the setting, "Domicile" or "Travail". -->
+    <string name="settings_place_set">Définir : %1$s</string>
+    <string name="settings_place_change">Modifier : %1$s</string>
+    <string name="settings_place_clear">Oublier : %1$s</string>
+    <string name="settings_place_cleared">%1$s oublié</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s : %2$s</string>
+
 </resources>

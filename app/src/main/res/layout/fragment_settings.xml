@@ -376,6 +376,97 @@
                     android:text="@string/settings_walking_pace_brisk" />
             </io.github.mgdx.rouelibre.ui.ToggleRow>
 
+            <!-- My places (SPEC §7.6), between the journey section above and
+                 the offline data below. These are points the user names, and
+                 they qualify the journeys they will ask for exactly as the
+                 journey section over them does — a home is where a journey
+                 starts from. They are not downloaded data either: nothing here
+                 comes off a server or occupies a dataset, so the section under
+                 them, which is about what was fetched and what it costs, is not
+                 where they belong. -->
+            <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle
+                style="@style/Widget.RoueLibre.SettingsSection"
+                android:text="@string/settings_section_places" />
+
+            <!-- The row names the place and not the action, as the city row
+                 above does: the section says what it settles, so writing
+                 "change home" on it would spend the line saying what pressing
+                 it does. Where nothing is named there is nothing to name, and
+                 the row invites instead. Its text and its spoken label are both
+                 written by the code — what they say is an address, which no
+                 resource knows. The button beside it forgets the place, and
+                 exists only where there is something to forget. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/place_home"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start|center_vertical"
+                    android:minHeight="@dimen/touch_target_min" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/forget_place_home"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="@dimen/touch_target_min"
+                    android:layout_height="@dimen/touch_target_min"
+                    android:layout_marginStart="@dimen/space_s"
+                    app:icon="@drawable/ic_forget"
+                    app:iconTint="@color/ink" />
+            </LinearLayout>
+
+            <!-- Said under a place the city in service does not cover. The
+                 place is never erased for it (SPEC §7.3): coming back to its
+                 own city has to find it again. -->
+            <TextView
+                android:id="@+id/place_home_outside"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="@string/settings_place_outside_city"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/place_work"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start|center_vertical"
+                    android:minHeight="@dimen/touch_target_min" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/forget_place_work"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="@dimen/touch_target_min"
+                    android:layout_height="@dimen/touch_target_min"
+                    android:layout_marginStart="@dimen/space_s"
+                    app:icon="@drawable/ic_forget"
+                    app:iconTint="@color/ink" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/place_work_outside"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="@string/settings_place_outside_city"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
+
             <!-- Offline data: what the application occupies, and how to
                  reclaim it (SPEC §4.4). -->
             <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle
