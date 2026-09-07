@@ -146,7 +146,7 @@
     <string name="action_retry">Prøv igen</string>
 
     <string name="map_open_list">Se listen over stationer</string>
-    <string name="map_description">Kort. Træk med to fingre for at flytte det, og knib med to fingre for at zoome ind eller ud.</string>
+    <string name="map_description">Kort. Træk med to fingre for at flytte det, knib med to fingre for at zoome ind eller ud, og drej med to fingre for at rotere det.</string>
     <string name="map_attribution">© OpenStreetMap-bidragydere</string>
     <string name="map_locate_me">Find min position</string>
     <string name="map_locating">Finder din position…</string>
@@ -161,6 +161,12 @@
     <string name="map_needs_tiles_message">Installer kortdataene fra skærmen Lagerplads. Indtil da er stationslisten stadig brugbar.</string>
     <string name="map_needs_city_title">Hvilken by?</string>
     <string name="map_needs_city_message">Vælg det byområde, du vil bruge. Dets data hentes bagefter, én gang for alle.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Vend mod nord</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">Kortet er drejet %1$d grad fra nord. Tryk for at vende det mod nord.</item>
+        <item quantity="other">Kortet er drejet %1$d grader fra nord. Tryk for at vende det mod nord.</item>
+    </plurals>
 
     <!-- The welcome carousel, shown once on first launch. -->
     <string name="welcome_hello_title">Roue Libre</string>
@@ -292,6 +298,8 @@
          stations to weigh – so the wait does not claim to look for the best of
          anything. -->
     <string name="journey_computing_own_bike">Beregner cykelturen…</string>
+    <string name="journey_source_home">Hjem</string>
+    <string name="journey_source_work">Arbejde</string>
     <string name="journey_source_my_position">Min position</string>
     <string name="journey_locating">Finder din position…</string>
     <string name="journey_source_favourite">En favoritstation</string>
@@ -397,7 +405,12 @@
     <string name="address_needs_index_title">Søgningen kræver adresseindekset</string>
     <string name="address_needs_index_message">Installer indekset fra skærmen Lagerplads. Det bliver på enheden og går aldrig ud på nettet.</string>
     <string name="address_unreadable_title">Adresseindekset kan ikke læses</string>
-    <string name="map_picked_place_description">%1$s. Tryk for at rydde dette punkt.</string>
+    <string name="map_picked_place_description">%1$s. Tryk for at se, hvad du kan gøre med dette sted.</string>
+
+    <string name="place_sheet_title">Dette sted</string>
+    <string name="place_go_there">Dertil</string>
+    <string name="place_leave_from_here">Herfra</string>
+    <string name="place_clear">Ryd dette punkt</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). %1$s is
          a figure already rounded and already written in the interface's
@@ -612,5 +625,19 @@
     <string name="settings_language_system">System</string>
     <!-- Spoken label of the row. %1$s is the language in service. -->
     <string name="settings_language_description">Grænsefladens sprog: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Mine steder</string>
+    <string name="settings_place_home">Hjem</string>
+    <string name="settings_place_work">Arbejde</string>
+    <string name="settings_place_none">Ikke angivet</string>
+    <string name="settings_place_outside_city">Uden for den dækkede by</string>
+    <!-- %1$s is the setting, "Hjem" or "Arbejde". -->
+    <string name="settings_place_set">Angiv %1$s</string>
+    <string name="settings_place_change">Skift %1$s</string>
+    <string name="settings_place_clear">Glem %1$s</string>
+    <string name="settings_place_cleared">%1$s er glemt</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

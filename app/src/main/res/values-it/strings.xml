@@ -182,7 +182,7 @@
 
     <!-- The map screen (SPEC §7.1). -->
     <string name="map_open_list">Vedi l’elenco delle stazioni</string>
-    <string name="map_description">Mappa. Trascinala con due dita per spostarla, avvicina o allontana due dita per ingrandire o ridurre.</string>
+    <string name="map_description">Mappa. Trascinala con due dita per spostarla, avvicina o allontana due dita per ingrandire o ridurre, ruota due dita per girarla.</string>
     <!-- The attribution carried by the map itself (SPEC §4.5). It fits on one
          line; the network's full attribution is in "about". -->
     <string name="map_attribution">© i contributori di OpenStreetMap</string>
@@ -203,6 +203,13 @@
          (SPEC §15.1). -->
     <string name="map_needs_city_title">Quale città?</string>
     <string name="map_needs_city_message">Scegli l’area urbana che vuoi consultare. I suoi dati si scaricano dopo, una volta per tutte.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Orienta a nord</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">La mappa è ruotata di %1$d grado rispetto al nord. Tocca per orientarla a nord.</item>
+        <item quantity="many">La mappa è ruotata di %1$d gradi rispetto al nord. Tocca per orientarla a nord.</item>
+        <item quantity="other">La mappa è ruotata di %1$d gradi rispetto al nord. Tocca per orientarla a nord.</item>
+    </plurals>
 
     <!-- First launch (SPEC §7.9). We explain how something works, we are not
          selling anything: short sentences, active voice, no jargon. -->
@@ -362,7 +369,9 @@
          best of anything. -->
     <string name="journey_computing_own_bike">Calcolo del tratto in bici…</string>
 
-    <!-- The four ways of designating a point (SPEC §7.3). -->
+    <!-- The ways of designating a point (SPEC §7.3). -->
+    <string name="journey_source_home">Casa</string>
+    <string name="journey_source_work">Lavoro</string>
     <string name="journey_source_my_position">La mia posizione</string>
     <string name="journey_locating">Ricerca della posizione…</string>
     <string name="journey_source_favourite">Una stazione preferita</string>
@@ -513,7 +522,12 @@
 
     <!-- The point found, laid on the map. Spoken by screen readers: the
          address first, the action second. %1$s is the address found. -->
-    <string name="map_picked_place_description">%1$s. Tocca per cancellare questo punto.</string>
+    <string name="map_picked_place_description">%1$s. Tocca per vedere cosa puoi fare con questo luogo.</string>
+
+    <string name="place_sheet_title">Questo luogo</string>
+    <string name="place_go_there">Vai lì</string>
+    <string name="place_leave_from_here">Parti da qui</string>
+    <string name="place_clear">Cancella questo punto</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the
@@ -775,5 +789,19 @@
          %1$s is the language in service: "English", "Italiano", or the wording
          above when the device's own is followed. -->
     <string name="settings_language_description">Lingua dell’interfaccia: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">I miei luoghi</string>
+    <string name="settings_place_home">Casa</string>
+    <string name="settings_place_work">Lavoro</string>
+    <string name="settings_place_none">Non impostato</string>
+    <string name="settings_place_outside_city">Fuori dalla città coperta</string>
+    <!-- %1$s is the setting, "Casa" or "Lavoro". -->
+    <string name="settings_place_set">Imposta %1$s</string>
+    <string name="settings_place_change">Modifica %1$s</string>
+    <string name="settings_place_clear">Dimentica %1$s</string>
+    <string name="settings_place_cleared">Luogo dimenticato: %1$s</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

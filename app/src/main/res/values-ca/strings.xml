@@ -147,6 +147,13 @@
     <string name="map_needs_tiles_message">Install the map data from the storage screen. In the meantime, the station list stays usable.</string>
     <string name="map_needs_city_title">Which city?</string>
     <string name="map_needs_city_message">Pick the conurbation you want to use. Its data is downloaded afterwards, once and for all.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Face north</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">Map turned %1$d degree from north. Tap to face north.</item>
+        <item quantity="many">Map turned %1$d degrees from north. Tap to face north.</item>
+        <item quantity="other">Map turned %1$d degrees from north. Tap to face north.</item>
+    </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">This app shows shared bikes on a map and works out a door-to-door trip: walk to a station, ride, then walk the rest of the way.\n\nIt is free and open source. No account, no adverts, no tracker.</string>
@@ -273,6 +280,8 @@
          of stations to weigh — so the wait does not claim to be looking for the
          best of anything. -->
     <string name="journey_computing_own_bike">Working the ride out…</string>
+    <string name="journey_source_home">Home</string>
+    <string name="journey_source_work">Work</string>
     <string name="journey_source_my_position">My position</string>
     <string name="journey_locating">Finding your position…</string>
     <string name="journey_source_favourite">A favourite station</string>
@@ -370,7 +379,12 @@
     <string name="address_needs_index_title">The search needs the address index</string>
     <string name="address_needs_index_message">Install the index from the storage screen. It stays on the device and never goes out on the network.</string>
     <string name="address_unreadable_title">Address index unreadable</string>
-    <string name="map_picked_place_description">%1$s. Tap to clear this point.</string>
+    <string name="map_picked_place_description">%1$s. Tap to see what you can do with this place.</string>
+
+    <string name="place_sheet_title">This place</string>
+    <string name="place_go_there">Go there</string>
+    <string name="place_leave_from_here">Leave from here</string>
+    <string name="place_clear">Clear this point</string>
 
     <string name="distance_metres">%1$s m</string>
     <string name="distance_kilometres">%1$s km</string>
@@ -584,5 +598,19 @@
          %1$s is the language in service: "English", "Français", or the wording
          above when the device's own is followed. -->
     <string name="settings_language_description">Language of the interface: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">My places</string>
+    <string name="settings_place_home">Home</string>
+    <string name="settings_place_work">Work</string>
+    <string name="settings_place_none">Not set</string>
+    <string name="settings_place_outside_city">Outside the city served</string>
+    <!-- %1$s is the setting, "Home" or "Work". -->
+    <string name="settings_place_set">Set %1$s</string>
+    <string name="settings_place_change">Change %1$s</string>
+    <string name="settings_place_clear">Forget %1$s</string>
+    <string name="settings_place_cleared">%1$s forgotten</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

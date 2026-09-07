@@ -148,7 +148,7 @@
     <string name="action_retry">Tekrar dene</string>
 
     <string name="map_open_list">İstasyon listesini gör</string>
-    <string name="map_description">Harita. İki parmağınla sürükleyerek kaydır, yakınlaştırmak veya uzaklaştırmak için iki parmağını kıstır.</string>
+    <string name="map_description">Harita. İki parmağınla sürükleyerek kaydır, yakınlaştırmak veya uzaklaştırmak için iki parmağını kıstır, döndürmek için iki parmağını çevir.</string>
     <string name="map_attribution">© OpenStreetMap katkıda bulunanlar</string>
     <string name="map_locate_me">Konumumu bul</string>
     <string name="map_locating">Konumun bulunuyor…</string>
@@ -161,6 +161,12 @@
     <string name="map_needs_tiles_message">Harita verilerini depolama ekranından yükle. O zamana kadar istasyon listesi kullanılabilir kalır.</string>
     <string name="map_needs_city_title">Hangi şehir?</string>
     <string name="map_needs_city_message">Kullanmak istediğin şehri seç. Verileri sonrasında, bir kez ve temelli indirilir.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Kuzeye çevir</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">Harita kuzeyden %1$d derece döndürülmüş. Kuzeye çevirmek için dokun.</item>
+        <item quantity="other">Harita kuzeyden %1$d derece döndürülmüş. Kuzeye çevirmek için dokun.</item>
+    </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">Bu uygulama paylaşımlı bisikletleri haritada gösterir ve kapıdan kapıya bir yolculuk hesaplar: bir istasyona yürü, bisiklete bin, kalan yolu yürü.\n\nÖzgür ve açık kaynaklı. Hesap yok, reklam yok, izleyici yok.</string>
@@ -287,6 +293,8 @@
     <string name="journey_compute">Yolculuğu hesapla</string>
     <string name="journey_computing">En iyi yolculuk hesaplanıyor…</string>
     <string name="journey_computing_own_bike">Sürüş hesaplanıyor…</string>
+    <string name="journey_source_home">Ev</string>
+    <string name="journey_source_work">İş</string>
     <string name="journey_source_my_position">Konumum</string>
     <string name="journey_locating">Konumun bulunuyor…</string>
     <string name="journey_source_favourite">Favori bir istasyon</string>
@@ -390,7 +398,12 @@
     <string name="address_needs_index_title">Aramanın adres dizinine ihtiyacı var</string>
     <string name="address_needs_index_message">Dizini depolama ekranından yükle. Cihazda kalır ve hiçbir zaman dışarı gönderilmez.</string>
     <string name="address_unreadable_title">Adres dizini okunamıyor</string>
-    <string name="map_picked_place_description">%1$s. Bu noktayı temizlemek için dokun.</string>
+    <string name="map_picked_place_description">%1$s. Bu yerle neler yapabileceğini görmek için dokun.</string>
+
+    <string name="place_sheet_title">Bu yer</string>
+    <string name="place_go_there">Oraya git</string>
+    <string name="place_leave_from_here">Buradan başla</string>
+    <string name="place_clear">Bu noktayı temizle</string>
 
     <!-- Distances. %1$s is a figure already rounded and already written in the
          interface's language: the translation places the symbol, never the
@@ -606,5 +619,19 @@
     <!-- Spoken label of the row. %1$s is the language in service: "English",
          "Türkçe", or the wording above when the device's own is followed. -->
     <string name="settings_language_description">Arayüz dili: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Yerlerim</string>
+    <string name="settings_place_home">Ev</string>
+    <string name="settings_place_work">İş</string>
+    <string name="settings_place_none">Ayarlanmadı</string>
+    <string name="settings_place_outside_city">Kapsanan şehrin dışında</string>
+    <!-- %1$s is the setting, "Ev" or "İş". -->
+    <string name="settings_place_set">Ayarla: %1$s</string>
+    <string name="settings_place_change">Değiştir: %1$s</string>
+    <string name="settings_place_clear">Unut: %1$s</string>
+    <string name="settings_place_cleared">%1$s unutuldu</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

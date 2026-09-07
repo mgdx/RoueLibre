@@ -142,7 +142,7 @@
     <string name="action_retry">Opnieuw proberen</string>
 
     <string name="map_open_list">Bekijk de lijst met stations</string>
-    <string name="map_description">Kaart. Sleep met twee vingers om hem te verplaatsen en knijp met twee vingers om in of uit te zoomen.</string>
+    <string name="map_description">Kaart. Sleep met twee vingers om hem te verplaatsen, knijp met twee vingers om in of uit te zoomen en draai met twee vingers om hem te roteren.</string>
     <string name="map_attribution">© OpenStreetMap-bijdragers</string>
     <string name="map_locate_me">Mijn locatie</string>
     <string name="map_locating">Je positie bepalen…</string>
@@ -155,6 +155,12 @@
     <string name="map_needs_tiles_message">Installeer de kaartgegevens via het scherm Opslag. Ondertussen blijft de stationslijst bruikbaar.</string>
     <string name="map_needs_city_title">Welke stad?</string>
     <string name="map_needs_city_message">Kies de agglomeratie die je wilt gebruiken. De gegevens worden daarna gedownload, eens en voorgoed.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Op het noorden richten</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">De kaart staat %1$d graad gedraaid ten opzichte van het noorden. Tik om hem op het noorden te richten.</item>
+        <item quantity="other">De kaart staat %1$d graden gedraaid ten opzichte van het noorden. Tik om hem op het noorden te richten.</item>
+    </plurals>
 
     <!-- The welcome carousel, shown once on first launch. -->
     <string name="welcome_hello_title">Roue Libre</string>
@@ -285,6 +291,8 @@
          stations to weigh – so the wait does not claim to look for the best of
          anything. -->
     <string name="journey_computing_own_bike">De rit berekenen…</string>
+    <string name="journey_source_home">Thuis</string>
+    <string name="journey_source_work">Werk</string>
     <string name="journey_source_my_position">Mijn positie</string>
     <string name="journey_locating">Je positie bepalen…</string>
     <string name="journey_source_favourite">Een favoriet station</string>
@@ -388,7 +396,12 @@
     <string name="address_needs_index_title">Het zoeken heeft de adresindex nodig</string>
     <string name="address_needs_index_message">Installeer de index via het scherm Opslag. Die blijft op het apparaat en gaat nooit het netwerk op.</string>
     <string name="address_unreadable_title">Adresindex onleesbaar</string>
-    <string name="map_picked_place_description">%1$s. Tik om dit punt te wissen.</string>
+    <string name="map_picked_place_description">%1$s. Tik om te zien wat je met deze plaats kunt doen.</string>
+
+    <string name="place_sheet_title">Deze plaats</string>
+    <string name="place_go_there">Daarheen</string>
+    <string name="place_leave_from_here">Vanaf hier</string>
+    <string name="place_clear">Dit punt wissen</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). %1$s is
          a figure already rounded and already written in the interface's
@@ -597,5 +610,19 @@
     <string name="settings_language_system">Systeem</string>
     <!-- Spoken label of the row. %1$s is the language in service. -->
     <string name="settings_language_description">Taal van de interface: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Mijn plaatsen</string>
+    <string name="settings_place_home">Thuis</string>
+    <string name="settings_place_work">Werk</string>
+    <string name="settings_place_none">Niet ingesteld</string>
+    <string name="settings_place_outside_city">Buiten de gedekte stad</string>
+    <!-- %1$s is the setting, "Thuis" or "Werk". -->
+    <string name="settings_place_set">%1$s instellen</string>
+    <string name="settings_place_change">%1$s wijzigen</string>
+    <string name="settings_place_clear">%1$s vergeten</string>
+    <string name="settings_place_cleared">%1$s is vergeten</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

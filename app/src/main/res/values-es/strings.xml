@@ -174,7 +174,7 @@
 
     <!-- The map screen (SPEC §7.1). -->
     <string name="map_open_list">Ver la lista de estaciones</string>
-    <string name="map_description">Mapa. Arrástralo con dos dedos para moverlo y pellízcalo con dos dedos para acercar o alejar.</string>
+    <string name="map_description">Mapa. Arrástralo con dos dedos para moverlo, pellízcalo con dos dedos para acercar o alejar y gira dos dedos para rotarlo.</string>
     <!-- The attribution carried by the map itself (SPEC §4.5). It fits on one
          line; the network's full attribution is in "about". -->
     <string name="map_attribution">© los colaboradores de OpenStreetMap</string>
@@ -195,6 +195,13 @@
          (SPEC §15.1). -->
     <string name="map_needs_city_title">¿Qué ciudad?</string>
     <string name="map_needs_city_message">Elige el área metropolitana que quieras consultar. Sus datos se descargan después, de una vez por todas.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Orientar al norte</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">El mapa está girado %1$d grado respecto al norte. Toca para orientarlo al norte.</item>
+        <item quantity="many">El mapa está girado %1$d grados respecto al norte. Toca para orientarlo al norte.</item>
+        <item quantity="other">El mapa está girado %1$d grados respecto al norte. Toca para orientarlo al norte.</item>
+    </plurals>
 
     <!-- First launch (SPEC §7.9). We explain how something works, we are not
          selling anything: short sentences, active voice, no jargon. -->
@@ -352,7 +359,9 @@
          best of anything. -->
     <string name="journey_computing_own_bike">Calculando el trayecto en bici…</string>
 
-    <!-- The four ways of designating a point (SPEC §7.3). -->
+    <!-- The ways of designating a point (SPEC §7.3). -->
+    <string name="journey_source_home">Casa</string>
+    <string name="journey_source_work">Trabajo</string>
     <string name="journey_source_my_position">Mi ubicación</string>
     <string name="journey_locating">Buscando tu ubicación…</string>
     <string name="journey_source_favourite">Una estación favorita</string>
@@ -495,7 +504,12 @@
 
     <!-- The point found, laid on the map. Spoken by screen readers: the
          address first, the action second. %1$s is the address found. -->
-    <string name="map_picked_place_description">%1$s. Toca para borrar este punto.</string>
+    <string name="map_picked_place_description">%1$s. Toca para ver qué puedes hacer con este lugar.</string>
+
+    <string name="place_sheet_title">Este lugar</string>
+    <string name="place_go_there">Ir allí</string>
+    <string name="place_leave_from_here">Partir de aquí</string>
+    <string name="place_clear">Borrar este punto</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the
@@ -753,5 +767,19 @@
          %1$s is the language in service: "English", "Español", or the wording
          above when the device's own is followed. -->
     <string name="settings_language_description">Idioma de la interfaz: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Mis lugares</string>
+    <string name="settings_place_home">Casa</string>
+    <string name="settings_place_work">Trabajo</string>
+    <string name="settings_place_none">Sin definir</string>
+    <string name="settings_place_outside_city">Fuera de la ciudad cubierta</string>
+    <!-- %1$s is the setting, "Casa" or "Trabajo". -->
+    <string name="settings_place_set">Definir %1$s</string>
+    <string name="settings_place_change">Cambiar %1$s</string>
+    <string name="settings_place_clear">Olvidar %1$s</string>
+    <string name="settings_place_cleared">Se ha olvidado %1$s</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

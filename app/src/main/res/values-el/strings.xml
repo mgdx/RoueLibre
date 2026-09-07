@@ -184,7 +184,7 @@
     <string name="action_retry">Δοκιμάστε ξανά</string>
 
     <string name="map_open_list">Δείτε τη λίστα των σταθμών</string>
-    <string name="map_description">Χάρτης. Σύρετε με δύο δάχτυλα για να τον μετακινήσετε και τσιμπήστε με δύο δάχτυλα για μεγέθυνση ή σμίκρυνση.</string>
+    <string name="map_description">Χάρτης. Σύρετε με δύο δάχτυλα για να τον μετακινήσετε, τσιμπήστε με δύο δάχτυλα για μεγέθυνση ή σμίκρυνση και περιστρέψτε δύο δάχτυλα για να τον στρέψετε.</string>
     <string name="map_attribution">© συνεισφέροντες του OpenStreetMap</string>
     <string name="map_locate_me">Εντοπισμός της θέσης μου</string>
     <string name="map_locating">Εντοπισμός της θέσης σας…</string>
@@ -199,6 +199,12 @@
     <string name="map_needs_tiles_message">Εγκαταστήστε τα δεδομένα του χάρτη από την οθόνη αποθηκευτικού χώρου. Στο μεταξύ, η λίστα των σταθμών παραμένει χρησιμοποιήσιμη.</string>
     <string name="map_needs_city_title">Ποια πόλη;</string>
     <string name="map_needs_city_message">Διαλέξτε την αστική περιοχή που θέλετε να χρησιμοποιήσετε. Τα δεδομένα της κατεβαίνουν μετά, μία φορά και για πάντα.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Προσανατολισμός στον βορρά</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">Ο χάρτης είναι στραμμένος %1$d μοίρα από τον βορρά. Πατήστε για προσανατολισμό στον βορρά.</item>
+        <item quantity="other">Ο χάρτης είναι στραμμένος %1$d μοίρες από τον βορρά. Πατήστε για προσανατολισμό στον βορρά.</item>
+    </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">Αυτή η εφαρμογή δείχνει τα κοινόχρηστα ποδήλατα σε έναν χάρτη και υπολογίζει μια διαδρομή από πόρτα σε πόρτα: με τα πόδια μέχρι έναν σταθμό, μετά με ποδήλατο και μετά με τα πόδια μέχρι τον προορισμό.\n\nΕίναι δωρεάν και ανοιχτού κώδικα. Χωρίς λογαριασμό, χωρίς διαφημίσεις, χωρίς ιχνηλάτες.</string>
@@ -332,6 +338,8 @@
          of stations to weigh — so the wait does not claim to be looking for the
          best of anything. -->
     <string name="journey_computing_own_bike">Υπολογισμός του ποδηλατικού σκέλους…</string>
+    <string name="journey_source_home">Σπίτι</string>
+    <string name="journey_source_work">Εργασία</string>
     <string name="journey_source_my_position">Η θέση μου</string>
     <string name="journey_locating">Εντοπισμός της θέσης σας…</string>
     <string name="journey_source_favourite">Ένας αγαπημένος σταθμός</string>
@@ -450,7 +458,12 @@
     <string name="address_needs_index_title">Η αναζήτηση χρειάζεται το ευρετήριο διευθύνσεων</string>
     <string name="address_needs_index_message">Εγκαταστήστε το ευρετήριο από την οθόνη αποθηκευτικού χώρου. Μένει στη συσκευή και δεν βγαίνει ποτέ στο δίκτυο.</string>
     <string name="address_unreadable_title">Το ευρετήριο διευθύνσεων δεν διαβάζεται</string>
-    <string name="map_picked_place_description">%1$s. Πατήστε για να διαγράψετε αυτό το σημείο.</string>
+    <string name="map_picked_place_description">%1$s. Πατήστε για να δείτε τι μπορείτε να κάνετε με αυτήν την τοποθεσία.</string>
+
+    <string name="place_sheet_title">Αυτή η τοποθεσία</string>
+    <string name="place_go_there">Μετάβαση εκεί</string>
+    <string name="place_leave_from_here">Αναχώρηση από εδώ</string>
+    <string name="place_clear">Διαγραφή αυτού του σημείου</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the
@@ -685,5 +698,19 @@
          %1$s is the language in service: "English", "Français", or the wording
          above when the device's own is followed. -->
     <string name="settings_language_description">Γλώσσα της διεπαφής: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Οι τοποθεσίες μου</string>
+    <string name="settings_place_home">Σπίτι</string>
+    <string name="settings_place_work">Εργασία</string>
+    <string name="settings_place_none">Δεν έχει οριστεί</string>
+    <string name="settings_place_outside_city">Εκτός της πόλης που καλύπτεται</string>
+    <!-- %1$s is the setting, "Σπίτι" or "Εργασία". -->
+    <string name="settings_place_set">Ορισμός: %1$s</string>
+    <string name="settings_place_change">Αλλαγή: %1$s</string>
+    <string name="settings_place_clear">Διαγραφή: %1$s</string>
+    <string name="settings_place_cleared">Διαγράφηκε: %1$s</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

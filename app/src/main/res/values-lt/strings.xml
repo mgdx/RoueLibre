@@ -199,7 +199,7 @@
     <string name="action_retry">Bandyti dar kartą</string>
 
     <string name="map_open_list">Žiūrėti stotelių sąrašą</string>
-    <string name="map_description">Žemėlapis. Vilkite dviem pirštais, kad jį pastumtumėte, suglauskite arba išskėskite du pirštus, kad priartintumėte arba nutolintumėte.</string>
+    <string name="map_description">Žemėlapis. Vilkite dviem pirštais, kad jį pastumtumėte, suglauskite arba išskėskite du pirštus, kad priartintumėte arba nutolintumėte, pasukite du pirštus, kad jį apsuktumėte.</string>
     <string name="map_attribution">© „OpenStreetMap“ bendraautoriai</string>
     <string name="map_locate_me">Nustatyti mano buvimo vietą</string>
     <string name="map_locating">Nustatoma jūsų buvimo vieta…</string>
@@ -214,6 +214,14 @@
     <string name="map_needs_tiles_message">Įdiekite žemėlapio duomenis saugyklos ekrane. Kol kas galima naudotis stotelių sąrašu.</string>
     <string name="map_needs_city_title">Kuris miestas?</string>
     <string name="map_needs_city_message">Pasirinkite aglomeraciją, kurią norite naudoti. Jos duomenys atsiunčiami vėliau – kartą ir visam laikui.</string>
+    <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
+    <string name="map_face_north">Nukreipti į šiaurę</string>
+    <plurals name="map_bearing_description">
+        <item quantity="one">Žemėlapis pasuktas nuo šiaurės: %1$d laipsnis. Palieskite, kad jį nukreiptumėte į šiaurę.</item>
+        <item quantity="few">Žemėlapis pasuktas nuo šiaurės: %1$d laipsniai. Palieskite, kad jį nukreiptumėte į šiaurę.</item>
+        <item quantity="many">Žemėlapis pasuktas nuo šiaurės: %1$d laipsnio. Palieskite, kad jį nukreiptumėte į šiaurę.</item>
+        <item quantity="other">Žemėlapis pasuktas nuo šiaurės: %1$d laipsnių. Palieskite, kad jį nukreiptumėte į šiaurę.</item>
+    </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>
     <string name="welcome_hello_body">Ši programa rodo dalijimosi dviračius žemėlapyje ir apskaičiuoja kelionę nuo durų iki durų: nueiti iki stotelės, važiuoti dviračiu, tada nueiti likusį kelią.\n\nJi nemokama ir atvirojo kodo. Jokios paskyros, jokių reklamų, jokių sekimo priemonių.</string>
@@ -343,6 +351,8 @@
          of stations to weigh — so the wait does not claim to be looking for the
          best of anything. -->
     <string name="journey_computing_own_bike">Skaičiuojamas važiavimas…</string>
+    <string name="journey_source_home">Namai</string>
+    <string name="journey_source_work">Darbas</string>
     <string name="journey_source_my_position">Mano buvimo vieta</string>
     <string name="journey_locating">Nustatoma jūsų buvimo vieta…</string>
     <string name="journey_source_favourite">Mėgstamiausia stotelė</string>
@@ -463,7 +473,12 @@
     <string name="address_needs_index_title">Paieškai reikia adresų rodyklės</string>
     <string name="address_needs_index_message">Įdiekite rodyklę saugyklos ekrane. Ji lieka įrenginyje ir niekada neiškeliauja į tinklą.</string>
     <string name="address_unreadable_title">Adresų rodyklė neperskaitoma</string>
-    <string name="map_picked_place_description">%1$s. Palieskite, kad pašalintumėte šį tašką.</string>
+    <string name="map_picked_place_description">%1$s. Palieskite, kad pamatytumėte, ką galima daryti su šia vieta.</string>
+
+    <string name="place_sheet_title">Ši vieta</string>
+    <string name="place_go_there">Vykti ten</string>
+    <string name="place_leave_from_here">Pradėti čia</string>
+    <string name="place_clear">Pašalinti šį tašką</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the
@@ -695,5 +710,19 @@
          %1$s is the language in service: "English", "Lietuvių", or the wording
          above when the device's own is followed. -->
     <string name="settings_language_description">Sąsajos kalba: %1$s</string>
+
+    <!-- My places (SPEC §7.6). -->
+    <string name="settings_section_places">Mano vietos</string>
+    <string name="settings_place_home">Namai</string>
+    <string name="settings_place_work">Darbas</string>
+    <string name="settings_place_none">Nenustatyta</string>
+    <string name="settings_place_outside_city">Už aptarnaujamo miesto ribų</string>
+    <!-- %1$s is the setting, "Namai" or "Darbas". -->
+    <string name="settings_place_set">Nustatyti: %1$s</string>
+    <string name="settings_place_change">Keisti: %1$s</string>
+    <string name="settings_place_clear">Pamiršti: %1$s</string>
+    <string name="settings_place_cleared">Pamiršta: %1$s</string>
+    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>
