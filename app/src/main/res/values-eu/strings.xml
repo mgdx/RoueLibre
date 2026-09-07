@@ -122,7 +122,7 @@
     <string name="action_retry">Try again</string>
 
     <string name="map_open_list">See the list of stations</string>
-    <string name="map_description">Map. Drag with two fingers to move it, pinch with two fingers to zoom in or out, twist with two fingers to turn it.</string>
+    <string name="map_description">Map. Drag with two fingers to move it, pinch with two fingers to zoom in or out, twist with two fingers to turn it, slide two fingers up or down to tilt it.</string>
     <string name="map_attribution">© OpenStreetMap contributors</string>
     <string name="map_locate_me">Locate me</string>
     <string name="map_locating">Finding your position…</string>
@@ -136,10 +136,15 @@
     <string name="map_needs_city_title">Which city?</string>
     <string name="map_needs_city_message">Pick the conurbation you want to use. Its data is downloaded afterwards, once and for all.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Face north</string>
+    <string name="map_face_north">Face north and lay the map flat</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">Map turned %1$d degree from north. Tap to face north.</item>
-        <item quantity="other">Map turned %1$d degrees from north. Tap to face north.</item>
+        <item quantity="one">Map turned %1$d degree from north.</item>
+        <item quantity="other">Map turned %1$d degrees from north.</item>
+    </plurals>
+    <string name="map_tilted_description">Map tilted.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">Map turned %1$d degree from north, and tilted.</item>
+        <item quantity="other">Map turned %1$d degrees from north, and tilted.</item>
     </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>

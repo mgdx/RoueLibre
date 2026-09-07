@@ -337,7 +337,7 @@ class MapFragment : Fragment() {
         views.openList.setOnClickListener { showTheList() }
         views.openSearch.setOnClickListener { openAddressSearch() }
         views.locateMe.setOnClickListener { onLocateMeClicked() }
-        views.faceNorth.setOnClickListener { faceNorth() }
+        views.faceNorth.setOnClickListener { faceNorthAndLayFlat() }
         // What the press does, said apart from the description: that one is
         // spent saying how far the map is turned, and a screen reader would
         // otherwise announce a bare "activate" over it.
@@ -565,14 +565,25 @@ class MapFragment : Fragment() {
         // library describes itself in the library's languages and not in ours,
         // and the screen reader read out its sentence beside ours.
         map.uiSettings.isCompassEnabled = false
-        // The map turns under two fingers, and our compass puts it back
-        // (SPEC §7.1). It does not tilt: the base map is drawn flat and its
-        // labels are laid flat on it, so a tilted map only makes them harder
-        // to read. Said rather than left to the library's default, so that
-        // both are read as decisions — a default is not one, as the compass
-        // above has just proved.
+        // The map turns under two fingers and tilts under two more, and our
+        // compass gives back both (SPEC §7.1). Said rather than left to the
+        // library's defaults, so that both are read as decisions — a default
+        // is not one, as the compass above has just proved.
+        //
+        // The tilt was refused between 7 September 2026 and the same day, on
+        // the grounds that the base map is drawn flat and its labels are laid
+        // flat on it, so a tilt reveals no relief and only makes the names
+        // harder to read. That is true of the drawing and it was not true of
+        // the use: it is how somebody riding reads the street ahead of them,
+        // and it was in daily use before it was taken away.
         map.uiSettings.isRotateGesturesEnabled = true
-        map.uiSettings.isTiltGesturesEnabled = false
+        map.uiSettings.isTiltGesturesEnabled = true
+        // How far it may tilt, and the figure is derived rather than chosen —
+        // see MAX_PITCH_DEGREES. A tilt looks towards the horizon, so it
+        // lengthens what the screen covers of the ground, and the served
+        // area's edge, which SPEC §7.1 forbids showing, comes into view for
+        // far less panning than on a flat map.
+        map.setMaxPitchPreference(MAX_PITCH_DEGREES)
         map.setMinZoomPreference(configuration.map.minZoom.toDouble())
         // Past the tiles' maximum zoom, MapLibre scales up the last ones it
         // has. Allowing one step lets the user come a little closer without the
@@ -665,33 +676,53 @@ class MapFragment : Fragment() {
      * a reader who cannot see it turned would learn nothing from "face north"
      * alone (SPEC §11).
      */
-    private fun showTheBearing() =
-        showBearing(mapLibreMap?.cameraPosition?.bearing ?: NORTH_BEARING)
+    private fun showTheBearing() = showAttitude(mapAttitude())
 
     /**
-     * Shows the compass for a bearing, or takes it away.
+     * Shows the compass for an attitude of the map, or takes it away.
      *
-     * @param bearingDegrees what the map is turned by. It comes from the map
-     *   while the map is the only one who knows, and from what the screen
-     *   ordered once the screen knows better — see [bearingAfterOrderingNorth].
+     * The sentence follows the state and not the deed: the turn is given in
+     * degrees, the tilt is named, and what the press does is said once as the
+     * button's accessibility action rather than at the end of every reading
+     * (SPEC §11).
+     *
+     * @param attitude how the map is held. It comes from the map while the map
+     *   is the only one who knows, and from what the screen ordered once the
+     *   screen knows better — see [attitudeAfterOrderingNorthAndFlat].
      */
-    private fun showBearing(bearingDegrees: Double) {
+    private fun showAttitude(attitude: MapAttitude) {
         val views = binding ?: return
-        val needle = compassNeedle(bearingDegrees)
+        val needle = compassNeedle(attitude)
         views.faceNorth.isVisible = showsCompass && needle.isShown
         views.faceNorth.rotation = needle.iconRotationDegrees
-        views.faceNorth.contentDescription = resources.getQuantityString(
-            R.plurals.map_bearing_description,
-            needle.degreesFromNorth,
-            needle.degreesFromNorth,
-        )
+        views.faceNorth.contentDescription = when {
+            needle.isTurned && needle.isTilted -> resources.getQuantityString(
+                R.plurals.map_bearing_tilted_description,
+                needle.degreesFromNorth,
+                needle.degreesFromNorth,
+            )
+
+            needle.isTilted -> getString(R.string.map_tilted_description)
+
+            else -> resources.getQuantityString(
+                R.plurals.map_bearing_description,
+                needle.degreesFromNorth,
+                needle.degreesFromNorth,
+            )
+        }
     }
 
-    /** Shows what [bearingAfterOrderingNorth] says the bearing now is. */
-    private fun showBearingAfterOrderingNorth(theOrderStands: Boolean) = showBearing(
-        bearingAfterOrderingNorth(
+    /** How the map reports itself held, or the opening attitude for want of a map. */
+    private fun mapAttitude(): MapAttitude {
+        val camera = mapLibreMap?.cameraPosition ?: return NORTH_AND_FLAT
+        return MapAttitude(bearingDegrees = camera.bearing, pitchDegrees = camera.tilt)
+    }
+
+    /** Shows what [attitudeAfterOrderingNorthAndFlat] says the attitude now is. */
+    private fun showAttitudeAfterOrdering(theOrderStands: Boolean) = showAttitude(
+        attitudeAfterOrderingNorthAndFlat(
             theOrderStands = theOrderStands,
-            mapBearing = mapLibreMap?.cameraPosition?.bearing ?: NORTH_BEARING,
+            mapAttitude = mapAttitude(),
         ),
     )
 
@@ -707,14 +738,19 @@ class MapFragment : Fragment() {
      * [moveCameraTo]: the target does not move, and coming back to north can
      * only shrink what the screen covers of the served area.
      */
-    private fun faceNorth() {
+    private fun faceNorthAndLayFlat() {
         val map = mapLibreMap ?: return
-        // The button goes at the press and not at the end of the turn: from
-        // here on the map is bound for north, so the compass has nothing left
-        // to undo, and the screen has no reason to read back an order it gave
-        // itself (see [bearingAfterOrderingNorth]).
-        showBearingAfterOrderingNorth(theOrderStands = true)
-        val update = CameraUpdateFactory.bearingTo(NORTH_BEARING)
+        // The button goes at the press and not at the end of the move: from
+        // here on the map is bound for north and flat, so the compass has
+        // nothing left to undo, and the screen has no reason to read back an
+        // order it gave itself (see [attitudeAfterOrderingNorthAndFlat]).
+        showAttitudeAfterOrdering(theOrderStands = true)
+        // One update carrying both, rather than two moves racing each other:
+        // a position whose target and zoom are left unset keeps the ones the
+        // map has, which is what `bearingTo` was already doing on its own.
+        val update = CameraUpdateFactory.newCameraPosition(
+            CameraPosition.Builder().bearing(NORTH_BEARING).tilt(FLAT_PITCH).build(),
+        )
         if (requireContext().prefersReducedMotion()) {
             map.moveCamera(update)
             return
@@ -723,12 +759,12 @@ class MapFragment : Fragment() {
             update,
             FACE_NORTH_ANIMATION_MILLIS,
             object : MapLibreMap.CancelableCallback {
-                override fun onFinish() = showBearingAfterOrderingNorth(theOrderStands = true)
+                override fun onFinish() = showAttitudeAfterOrdering(theOrderStands = true)
 
-                // A turn cut short by a finger back on the map leaves the map
+                // A move cut short by a finger back on the map leaves the map
                 // wherever it stopped, and the needle has to come back and say
                 // so. This is the one case where the map knows and we do not.
-                override fun onCancel() = showBearingAfterOrderingNorth(theOrderStands = false)
+                override fun onCancel() = showAttitudeAfterOrdering(theOrderStands = false)
             },
         )
     }
@@ -1521,13 +1557,13 @@ class MapFragment : Fragment() {
     /**
      * Takes back the framing the screen had before the phone was turned.
      *
-     * Only the target and the zoom. The map can be turned now (SPEC §7.1), and
-     * the bearing is left out of what is saved all the same. A screen rebuilt
-     * from this bundle is one the phone was turned under, or one the system
-     * had thrown away in the meantime: a map found lying askew by somebody who
-     * does not remember turning it reads as a map that has broken, not as one
-     * they set. It comes back facing north, and the compass goes with it. The
-     * tilt is not restored either, the map holding none: it does not tilt.
+     * Only the target and the zoom. The map can be turned and tilted now
+     * (SPEC §7.1), and neither the bearing nor the pitch is saved all the
+     * same. A screen rebuilt from this bundle is one the phone was turned
+     * under, or one the system had thrown away in the meantime: a map found
+     * lying askew, or leaning, by somebody who does not remember setting it
+     * that way reads as a map that has broken and not as one they set. It
+     * comes back facing north and flat, and the compass goes with it.
      */
     private fun restoreCamera(savedInstanceState: Bundle?) {
         val saved = savedInstanceState ?: return

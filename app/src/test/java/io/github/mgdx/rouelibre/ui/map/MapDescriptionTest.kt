@@ -113,6 +113,31 @@ class MapDescriptionTest {
         }
     }
 
+    /**
+     * The tilt was taken away on 7 September 2026 by a lot that had only the
+     * drawing in view — flat base map, flat labels, no relief to reveal — and
+     * put back the same day, the use having the last word: it is how somebody
+     * riding reads the street ahead of them. What is pinned is that it is
+     * *said* on both screens, not left to the library's default, which has
+     * twice now turned out to be a decision nobody made; and that where it is
+     * allowed it is capped, the tilt otherwise showing the edge of the served
+     * area that SPEC §7.1 forbids.
+     */
+    @Test
+    fun `a map that can be turned can be tilted, and never past the ceiling`() {
+        for (path in screensWithATurnableMap) {
+            val fragment = File(sources, path).readText()
+            assertTrue(
+                "$path lets its map be tilted, and says so",
+                fragment.contains("uiSettings.isTiltGesturesEnabled = true"),
+            )
+            assertTrue(
+                "$path holds the tilt to the derived ceiling",
+                fragment.contains("setMaxPitchPreference(MAX_PITCH_DEGREES)"),
+            )
+        }
+    }
+
     @Test
     fun `the description is written in every language the interface speaks`() {
         val english = descriptionIn("values")

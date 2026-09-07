@@ -166,7 +166,7 @@
 
     <!-- The map screen (SPEC §7.1). -->
     <string name="map_open_list">Voir la liste des stations</string>
-    <string name="map_description">Carte. Fais-la glisser à deux doigts pour la déplacer, pince à deux doigts pour zoomer ou dézoomer, pivote à deux doigts pour la tourner.</string>
+    <string name="map_description">Carte. Fais-la glisser à deux doigts pour la déplacer, pince à deux doigts pour zoomer ou dézoomer, pivote à deux doigts pour la tourner, fais glisser deux doigts vers le haut ou vers le bas pour l’incliner.</string>
     <!-- The attribution carried by the map itself (SPEC §4.5). It fits on one
          line; the network's full attribution is in "about". -->
     <string name="map_attribution">© les contributeurs OpenStreetMap</string>
@@ -188,11 +188,17 @@
     <string name="map_needs_city_title">Quelle ville ?</string>
     <string name="map_needs_city_message">Choisis l’agglomération que tu veux consulter. Ses données se téléchargent ensuite, une fois pour toutes.</string>
     <!-- The compass, shown only while the map is turned (SPEC §7.1). -->
-    <string name="map_face_north">Orienter au nord</string>
+    <string name="map_face_north">Orienter au nord et remettre la carte à plat</string>
     <plurals name="map_bearing_description">
-        <item quantity="one">Carte tournée de %1$d degré par rapport au nord. Appuie pour l’orienter au nord.</item>
-        <item quantity="many">Carte tournée de %1$d degrés par rapport au nord. Appuie pour l’orienter au nord.</item>
-        <item quantity="other">Carte tournée de %1$d degrés par rapport au nord. Appuie pour l’orienter au nord.</item>
+        <item quantity="one">Carte tournée de %1$d degré par rapport au nord.</item>
+        <item quantity="many">Carte tournée de %1$d de degrés par rapport au nord.</item>
+        <item quantity="other">Carte tournée de %1$d degrés par rapport au nord.</item>
+    </plurals>
+    <string name="map_tilted_description">Carte inclinée.</string>
+    <plurals name="map_bearing_tilted_description">
+        <item quantity="one">Carte tournée de %1$d degré par rapport au nord, et inclinée.</item>
+        <item quantity="many">Carte tournée de %1$d de degrés par rapport au nord, et inclinée.</item>
+        <item quantity="other">Carte tournée de %1$d degrés par rapport au nord, et inclinée.</item>
     </plurals>
 
     <!-- First launch (SPEC §7.9). We explain how something works, we are not

@@ -31,6 +31,16 @@ import kotlin.math.abs
  * only hears of the moves that went through its gesture detector — a zoom
  * coming from a mouse wheel or a plugged-in trackpad slipped past it, and the
  * edge showed for as long as the camera stayed there.
+ *
+ * **A tilted camera is measured the same way, and that holds only because the
+ * tilt is capped** ([MAX_PITCH_DEGREES]). MapLibre builds its visible region by
+ * unprojecting the four corners of the screen: a tilt looks towards the
+ * horizon, so the region grows — three times the ground at the library's own
+ * maximum — and the limits below tighten with it, which is right. But past the
+ * pitch where the top of the screen leaves the ground the corners unproject to
+ * points that are not on the screen at all, and every reach computed from them
+ * would be a fiction. The ceiling stands twenty-six degrees short of that, so
+ * the region this reads is always a real quadrilateral of ground.
  */
 class ServedAreaCamera(
     private val view: MapView,
