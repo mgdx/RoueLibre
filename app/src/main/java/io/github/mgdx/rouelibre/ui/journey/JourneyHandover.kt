@@ -1,18 +1,13 @@
 package io.github.mgdx.rouelibre.ui.journey
 
-import android.content.ActivityNotFoundException
-import android.content.ComponentName
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
 import io.github.mgdx.rouelibre.ui.ChoiceDialogFragment
-import io.github.mgdx.rouelibre.ui.MainActivity
+import io.github.mgdx.rouelibre.ui.handOverToNavigation
 
 /**
  * Hands a journey over to a navigation application (SPEC §7.4).
@@ -157,47 +152,14 @@ class JourneyHandover(private val fragment: Fragment, private val onMessage: (St
     }
 
     /**
-     * Opens the point in whichever application answers `geo:` — but this one.
+     * Hands the chosen leg's end over to a navigation application.
      *
-     * The label travels with the coordinates so the receiving application shows
-     * a named place rather than an anonymous point.
-     *
-     * **This application answers `geo:` itself** (SPEC §7.8), and on a phone
-     * where it is the only one to, or the one kept as the default, handing a
-     * leg over reopened Roue Libre and started the journey again — the press
-     * looked like it had done nothing. It is therefore taken out of the
-     * choice: what is offered is the applications that guide, and when there
-     * is none the screen says so rather than looping back on itself.
-     *
-     * The choice itself stays Android's chooser. The application picks no
-     * navigation application for the user, here no more than anywhere else.
+     * The `geo:` handover itself is shared with the other screens that offer
+     * it, and with it the reason this application is kept out of the chooser
+     * (see [handOverToNavigation]).
      */
     private fun handOver(place: String, position: Coordinates) {
-        val context = fragment.requireContext()
-        val point = "${position.latitude},${position.longitude}"
-        // A station's name holds spaces, and sometimes an ampersand: encoded,
-        // or the receiving application reads a truncated label.
-        val label = Uri.encode(place)
-        val place = Intent(Intent.ACTION_VIEW, "geo:$point?q=$point($label)".toUri())
-
-        val guides = context.packageManager.queryIntentActivities(place, 0)
-            .any { it.activityInfo.packageName != context.packageName }
-        if (!guides) {
-            onMessage(fragment.getString(R.string.station_no_navigation_app))
-            return
-        }
-
-        val chooser = Intent.createChooser(place, fragment.getString(R.string.journey_navigate))
-            .putExtra(
-                Intent.EXTRA_EXCLUDE_COMPONENTS,
-                arrayOf(ComponentName(context, MainActivity::class.java)),
-            )
-        try {
-            fragment.startActivity(chooser)
-        } catch (_: ActivityNotFoundException) {
-            // The chooser itself can be missing on a stripped-down system.
-            onMessage(fragment.getString(R.string.station_no_navigation_app))
-        }
+        fragment.handOverToNavigation(place, position, onMessage)
     }
 
     private companion object {

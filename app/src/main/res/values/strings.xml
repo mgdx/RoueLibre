@@ -410,7 +410,15 @@
     <string name="address_needs_index_title">The search needs the address index</string>
     <string name="address_needs_index_message">Install the index from the storage screen. It stays on the device and never goes out on the network.</string>
     <string name="address_unreadable_title">Address index unreadable</string>
-    <string name="map_picked_place_description">%1$s. Tap to clear this point.</string>
+    <string name="map_picked_place_description">%1$s. Tap to see what you can do with this place.</string>
+
+    <!-- The sheet a place found on the map opens (SPEC §7.2, §7.3). It is the station
+         sheet's counterpart for a point no network put a stand on, so the wording stays
+         as plain as that one's. -->
+    <string name="place_sheet_title">This place</string>
+    <string name="place_go_there">Go there</string>
+    <string name="place_leave_from_here">Leave from here</string>
+    <string name="place_clear">Clear this point</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
          five, %1$s is a figure already rounded and already written in the

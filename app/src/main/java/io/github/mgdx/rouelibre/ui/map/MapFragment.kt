@@ -350,7 +350,7 @@ class MapFragment : Fragment() {
         views.openJourney.setOnClickListener { show(JourneySearchFragment()) }
         views.modeToggle.setOnClickListener { toggleMode() }
         views.bikeKindFilter.setOnClickListener { toggleBikeKind() }
-        views.pickedPlace.setOnClickListener { showPickedPlace(null) }
+        views.pickedPlace.setOnClickListener { openPickedPlaceSheet() }
         applyModeLabel()
         applyBikeKindLabel()
         followStationFilters()
@@ -379,6 +379,7 @@ class MapFragment : Fragment() {
         restorePickedPlace(savedInstanceState)
         showRequestedPlace(savedInstanceState)
         listenForPickedAddress()
+        listenForPlaceActions()
         listenForAnswers()
         applySystemInsets(views)
         standClearOfTheBanner()
@@ -1323,6 +1324,59 @@ class MapFragment : Fragment() {
     }
 
     /**
+     * Opens what can be done with the point resting on the map (SPEC §7.2).
+     *
+     * The pill used to have one answer — it erased the point — which is all a
+     * found address was ever good for. The sheet is where the point becomes an
+     * end of a journey, is handed to a navigation application, or goes.
+     *
+     * **Not while the map serves to designate a point** (SPEC §7.3): that
+     * screen already asks one question and carries its own "choose this point"
+     * button, and a sheet offering to compose a journey would answer a question
+     * nobody put. The pill is in fact never shown there — the picker opens no
+     * address search and receives no place — so this is the guard that keeps
+     * that true rather than a case met today.
+     */
+    private fun openPickedPlaceSheet() {
+        if (isPicking()) return
+        val place = pickedPlace ?: return
+        val endpoint = JourneyEndpoint(
+            label = place.label,
+            position = Coordinates(place.position.latitude, place.position.longitude),
+        )
+        PlaceDetailSheet.newInstance(endpoint).show(childFragmentManager, PlaceDetailSheet.TAG)
+    }
+
+    /**
+     * Collects what the place's sheet was asked for.
+     *
+     * Registered where the screen is built rather than where the sheet is put
+     * up, for the reason [io.github.mgdx.rouelibre.ui.journey.JourneyHandover]
+     * gives of its own menu: the sheet comes back on its own after the phone is
+     * turned, and its answer would otherwise arrive with nobody listening.
+     *
+     * The point comes back with the answer rather than being read from the
+     * field: the two agree, and it is the sheet that was asked about it.
+     */
+    private fun listenForPlaceActions() {
+        childFragmentManager.setFragmentResultListener(
+            PlaceDetailSheet.REQUEST_KEY,
+            viewLifecycleOwner,
+        ) { _, result ->
+            val place = JourneyEndpoint.readFrom(result, PlaceDetailSheet.RESULT_PLACE)
+                ?: return@setFragmentResultListener
+            when (result.getString(PlaceDetailSheet.RESULT_ACTION)) {
+                PlaceAction.Clear.name -> showPickedPlace(null)
+                PlaceAction.LeaveFromHere.name ->
+                    show(JourneySearchFragment.newInstance(origin = place))
+
+                PlaceAction.GoThere.name ->
+                    show(JourneySearchFragment.newInstance(destination = place))
+            }
+        }
+    }
+
+    /**
      * Lays the point found on the map, or clears it.
      *
      * @param place the chosen address, or `null` to remove the marker.
@@ -1338,8 +1392,9 @@ class MapFragment : Fragment() {
      * Shows the label of the point found.
      *
      * The label is part of what a screen reader must speak: replacing the text
-     * with the "clear" action alone would make the address vanish for anyone
-     * who only has the voice.
+     * with the action alone would make the address vanish for anyone who only
+     * has the voice. The action named beside it is what a press now does —
+     * open the sheet of §7.2 — and not what the pill used to do on its own.
      */
     private fun showPickedPlaceLabel(place: PickedPlace?) {
         val pill = binding?.pickedPlace ?: return
