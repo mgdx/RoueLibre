@@ -120,6 +120,13 @@ word apart.
 | over (a distance) | over | The eight journey summaries keep the English preposition — "på din egen cykel, over 3,2 km" — because the fragment is read after a duration: "24 min · på din egen cykel, 3,2 km" would juxtapose the figure instead of saying it was covered. |
 | bytes | B, kB, MB, GB | Danish writes the same symbols. |
 | hour (in a duration) | t | `duration_hours_minutes` is `%1$d t %2$02d`. **t** is how Danish abbreviates the hour — "1 t 05" — where `h` reads as foreign. It is the one unit symbol this file changes. |
+| Home (the place) | Hjem | Where the reader lives, named by them (`settings_place_home`, `journey_source_home`, the same word in both). Not an application's first screen, which is *startskærmen* — a different word for a different thing. |
+| Work (the place) | Arbejde | Where they work (`settings_place_work`, `journey_source_work`). The place, not the occupation: it stands beside *Hjem* under *Mine steder*, which settles the reading. |
+| My places | Mine steder | The settings section that holds the two (`settings_section_places`). *Sted* is the noun `place_sheet_title` uses as well. |
+| outside the city served | Uden for den dækkede by | Under a place the conurbation in use does not cover (`settings_place_outside_city`). *Uden for* and *dække* are what `station_beyond_area` already says. The application serves several conurbations side by side: a *Hjem* named in Lille is out of reach while København is in use. The place is kept and stays erasable — out of reach, not wrong. |
+| Face north | Vend mod nord | `map_face_north`, on the compass, which shows only while the map is turned; `map_bearing_description` counts the turn in *grader*. |
+| this place | Dette sted | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Mine steder*. `place_clear` is *Ryd dette punkt*, which keeps *Ryd* for emptying against *Slet*, which destroys. |
+| Go there / Leave from here | Dertil / Herfra | The two shortest buttons of the application, listed above at 6 characters each. The place sheet takes the station sheet's own words: `station_as_origin` is already *Herfra*, word for word, and `station_as_destination` *Hertil*, of which *Dertil* is the same adverb with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
 
 ## One departure from the English, in two strings
 

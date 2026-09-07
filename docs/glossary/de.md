@@ -74,6 +74,13 @@ than the literal translation.
 | offline data | Offline-Daten | — |
 | bytes | B, kB, MB, GB | German writes the same symbols. |
 | what's new | Neuerungen | What the screen shows is the release notes. *Neuigkeiten* would also read as news from elsewhere. |
+| Home (the place) | Zuhause | Where the reader lives, named by them (`settings_place_home`, `journey_source_home`, the same word in both). **Never *Startseite*, and never *Home***: an application's first screen is not a place one rides to. One word, *das Zuhause*, the noun — *zu Hause* would be the adverb. |
+| Work (the place) | Arbeit | Where they work (`settings_place_work`, `journey_source_work`). The place, not the occupation: it stands beside *Zuhause* under *Meine Orte*, which settles the reading. *Arbeitsplatz* names the workplace outright and is six characters longer on a row that already carries an address. |
+| My places | Meine Orte | The settings section that holds the two (`settings_section_places`). *Ort* is the noun `place_sheet_title` uses as well, so the section and the sheet name the same kind of thing. |
+| outside the city served | Außerhalb der abgedeckten Stadt | Under a place the conurbation in use does not cover (`settings_place_outside_city`). *Außerhalb* and *abgedeckt* are the words `station_beyond_area` already uses — „außerhalb des Gebiets, das die installierten Daten abdecken“ — so the two out-of-reach lines read as one idea. The application serves several conurbations side by side: a *Zuhause* named in Lille is out of reach while Karlsruhe is in use. The place is kept and stays erasable; the line says out of reach, not wrong. |
+| Face north | Nach Norden ausrichten | `map_face_north`, on the compass, which appears only while the map is turned; `map_bearing_description` says how far, in *Grad*. *Grad* does not inflect after a numeral, so both plural forms of that string are the same sentence — that is the language, not a slip. |
+| this place | Dieser Ort | `place_sheet_title`, the sheet a point found on the map opens. `place_clear` is *Diesen Punkt löschen*, which is what the *Löschen / Entfernen* row above already anticipated: the point is thrown away, not taken out of a list. |
+| Go there / Leave from here | Dorthin fahren / Von hier starten | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already *Von hier starten*, word for word, and `station_as_destination` *Hierher fahren*, of which *Dorthin fahren* is the same verb with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
 
 ## Words that are not translated
 
