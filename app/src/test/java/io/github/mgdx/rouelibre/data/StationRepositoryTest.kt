@@ -3,6 +3,7 @@ package io.github.mgdx.rouelibre.data
 import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
+import io.github.mgdx.rouelibre.core.station.FleetReading
 import io.github.mgdx.rouelibre.data.local.StationAvailabilityEntity
 import io.github.mgdx.rouelibre.data.local.StationDao
 import io.github.mgdx.rouelibre.data.local.StationEntity
@@ -10,12 +11,14 @@ import io.github.mgdx.rouelibre.data.network.GbfsRemoteSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
 import okhttp3.OkHttpClient
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -38,6 +41,9 @@ class StationRepositoryTest {
     private lateinit var timestamps: FakeRefreshTimestampStore
     private var now: Instant = Instant.parse("2026-08-09T12:00:00Z")
 
+    /** The auto-discovery document in force, which a change of city moves. */
+    private var discoveryPath: String = "/gbfs.json"
+
     @Before
     fun startServer() {
         server = MockWebServer()
@@ -51,32 +57,73 @@ class StationRepositoryTest {
         server.close()
     }
 
-    private fun repository(): StationRepository = StationRepository(
-        remote = GbfsRemoteSource(
-            client = OkHttpClient(),
-            parser = GbfsParser(),
-            userAgent = "RoueLibre-test/1.0",
-            unnamedStationLabel = { "Unnamed station" },
-            ioDispatcher = Dispatchers.IO,
-        ),
-        dao = dao,
-        refreshTimestamps = timestamps,
-        discoveryUrlProvider = { server.url("/gbfs.json").toString() },
-        clock = object : Clock() {
-            override fun getZone() = ZoneOffset.UTC
-            override fun withZone(zone: java.time.ZoneId) = this
-            override fun instant() = now
-        },
-    )
+    private fun repository(recordFleet: suspend (FleetReading) -> Unit = {}): StationRepository =
+        StationRepository(
+            remote = GbfsRemoteSource(
+                client = OkHttpClient(),
+                parser = GbfsParser(),
+                userAgent = "RoueLibre-test/1.0",
+                unnamedStationLabel = { "Unnamed station" },
+                ioDispatcher = Dispatchers.IO,
+            ),
+            dao = dao,
+            refreshTimestamps = timestamps,
+            discoveryUrlProvider = { server.url(discoveryPath).toString() },
+            recordFleet = recordFleet,
+            clock = object : Clock() {
+                override fun getZone() = ZoneOffset.UTC
+                override fun withZone(zone: java.time.ZoneId) = this
+                override fun instant() = now
+            },
+        )
 
-    private fun enqueueDiscovery() {
+    private fun enqueueDiscovery(streetBikes: Boolean = false, vehicleTypes: Boolean = false) {
+        val feeds = buildList {
+            add("station_information" to "/information.json")
+            add("station_status" to "/status.json")
+            if (vehicleTypes) add("vehicle_types" to "/vehicle_types.json")
+            if (streetBikes) add("free_bike_status" to "/free_bike_status.json")
+        }.joinToString(",") { (name, path) ->
+            """{"name":"$name","url":"${server.url(path)}"}"""
+        }
         val body = """
-            {"last_updated":1786264920,"ttl":0,"version":"2.3","data":{"en":{"feeds":[
-              {"name":"station_information","url":"${server.url("/information.json")}"},
-              {"name":"station_status","url":"${server.url("/status.json")}"}
-            ]}}}
+            {"last_updated":1786264920,"ttl":0,"version":"2.3","data":{"en":{"feeds":[$feeds]}}}
         """.trimIndent()
         server.enqueue(MockResponse(body = body))
+    }
+
+    /** nextbike's table: a mechanical type, an electric one, and a scooter. */
+    private fun enqueueVehicleTypes() {
+        server.enqueue(
+            MockResponse(
+                body = """
+                    {"version":"2.3","data":{"vehicle_types":[
+                      {"vehicle_type_id":"346","form_factor":"bicycle","propulsion_type":"human"},
+                      {"vehicle_type_id":"348","form_factor":"bicycle",
+                       "propulsion_type":"electric_assist","max_range_meters":60000},
+                      {"vehicle_type_id":"360","form_factor":"scooter","propulsion_type":"electric"}
+                    ]}}
+                """.trimIndent(),
+            ),
+        )
+    }
+
+    /** Two bikes on the street, a scooter beside them, and a bike at a station. */
+    private fun enqueueStreetBikes() {
+        server.enqueue(
+            MockResponse(
+                body = """
+                    {"version":"2.3","data":{"bikes":[
+                      {"bike_id":"e1","lat":50.633,"lon":3.053,"vehicle_type_id":"348",
+                       "current_fuel_percent":0.67,"current_range_meters":0},
+                      {"bike_id":"m1","lat":50.634,"lon":3.054,"vehicle_type_id":"346"},
+                      {"bike_id":"s1","lat":50.635,"lon":3.055,"vehicle_type_id":"360"},
+                      {"bike_id":"d1","lat":50.636,"lon":3.071,"vehicle_type_id":"346",
+                       "station_id":"2"}
+                    ]}}
+                """.trimIndent(),
+            ),
+        )
     }
 
     private fun enqueueInformation() {
@@ -263,6 +310,151 @@ class StationRepositoryTest {
 
         assertTrue(outcome is Outcome.Failure)
         assertTrue((outcome as Outcome.Failure).error is DataError.MalformedResponse)
+    }
+
+    // ------------------------------------------- the bikes outside stations --
+
+    @Test
+    fun `the street bikes are read on request and kept in memory alone`() = runTest {
+        enqueueDiscovery(streetBikes = true)
+        enqueueStreetBikes()
+        val repository = repository()
+
+        val outcome = repository.refreshStreetBikes()
+
+        assertEquals(Outcome.Success(Unit), outcome)
+        // Discovery and the feed: the table is unavailable here, and nothing
+        // else is asked for.
+        assertEquals(2, server.requestCount)
+        val snapshot = repository.observeStreetBikes().first()
+        assertEquals(listOf("e1", "m1", "s1"), snapshot.bikes.map { it.id })
+        assertEquals(now, snapshot.fetchedAt)
+        assertEquals(true, snapshot.published)
+        assertTrue("nothing of them reaches the database", dao.availabilities.value.isEmpty())
+    }
+
+    @Test
+    fun `nothing is said of the street bikes before they are asked for`() = runTest {
+        val snapshot = repository().observeStreetBikes().first()
+
+        assertTrue(snapshot.bikes.isEmpty())
+        assertNull(snapshot.fetchedAt)
+        assertNull(snapshot.published)
+    }
+
+    @Test
+    fun `a second read of the street bikes within five minutes does not go out`() = runTest {
+        // The feed weighs twenty times the station feed and little moves in
+        // it (SPEC §4.1).
+        enqueueDiscovery(streetBikes = true)
+        enqueueStreetBikes()
+        val repository = repository()
+        repository.refreshStreetBikes()
+        val afterFirst = server.requestCount
+
+        now += Duration.ofMinutes(4)
+        val outcome = repository.refreshStreetBikes()
+
+        assertEquals(Outcome.Success(Unit), outcome)
+        assertEquals(afterFirst, server.requestCount)
+
+        now += Duration.ofMinutes(1)
+        enqueueStreetBikes()
+        repository.refreshStreetBikes()
+
+        assertEquals(afterFirst + 1, server.requestCount)
+    }
+
+    @Test
+    fun `pull to refresh overrides the five minutes`() = runTest {
+        enqueueDiscovery(streetBikes = true)
+        enqueueStreetBikes()
+        val repository = repository()
+        repository.refreshStreetBikes()
+
+        now += Duration.ofSeconds(5)
+        enqueueStreetBikes()
+        repository.refreshStreetBikes(force = true)
+
+        assertEquals(3, server.requestCount)
+        assertEquals(now, repository.observeStreetBikes().first().fetchedAt)
+    }
+
+    @Test
+    fun `a network publishing no such feed is remembered as publishing none`() = runTest {
+        // An ordinary answer for a docked fleet, not a failure — and not a
+        // question to ask again, even on a pull to refresh.
+        enqueueDiscovery(streetBikes = false)
+        val repository = repository()
+
+        val outcome = repository.refreshStreetBikes()
+
+        assertEquals(Outcome.Success(Unit), outcome)
+        assertEquals(false, repository.observeStreetBikes().first().published)
+        assertEquals(1, server.requestCount)
+
+        repository.refreshStreetBikes(force = true)
+
+        assertEquals(1, server.requestCount)
+    }
+
+    @Test
+    fun `forgetting the city drops the street bikes`() = runTest {
+        enqueueDiscovery(streetBikes = true)
+        enqueueStreetBikes()
+        val repository = repository()
+        repository.refreshStreetBikes()
+
+        repository.forget()
+
+        val snapshot = repository.observeStreetBikes().first()
+        assertTrue(snapshot.bikes.isEmpty())
+        assertNull(snapshot.published)
+    }
+
+    @Test
+    fun `one city's street bikes, and its silence, are not read as another's`() = runTest {
+        // Lille publishes no such feed; the traveller then switches to a
+        // network that does, and must neither keep Lille's answer nor wait
+        // five minutes for the new city's bikes.
+        enqueueDiscovery(streetBikes = false)
+        val repository = repository()
+        repository.refreshStreetBikes()
+        assertEquals(false, repository.observeStreetBikes().first().published)
+
+        discoveryPath = "/berlin/gbfs.json"
+        enqueueDiscovery(streetBikes = true)
+        enqueueStreetBikes()
+        repository.refreshStreetBikes()
+
+        val snapshot = repository.observeStreetBikes().first()
+        assertEquals(true, snapshot.published)
+        assertEquals(3, snapshot.bikes.size)
+    }
+
+    @Test
+    fun `the street bikes are counted with the stations' bikes, scooters left out`() = runTest {
+        // Every electric bike out on the street and none at a station: counted
+        // from the stations alone the network reads as mechanical, and the
+        // bolt is wrong on every marker (SPEC §4.1).
+        val readings = mutableListOf<FleetReading>()
+        enqueueDiscovery(streetBikes = true, vehicleTypes = true)
+        enqueueStreetBikes()
+        enqueueVehicleTypes()
+        val repository = repository(recordFleet = { readings += it })
+        repository.refreshStreetBikes()
+
+        val shown = repository.observeStreetBikes().first().bikes
+        assertEquals("the scooter is not a bike", listOf("e1", "m1"), shown.map { it.id })
+
+        enqueueInformation()
+        enqueueStatus(bikesAtFirstStation = 0)
+        repository.refresh()
+
+        val reading = readings.single()
+        assertTrue(reading.hasElectricBikes)
+        assertEquals(2, reading.bikesCounted)
+        assertEquals(mapOf("348" to 60_000), reading.maxRangeMetresByType)
     }
 }
 

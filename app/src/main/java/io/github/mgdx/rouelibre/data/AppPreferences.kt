@@ -336,6 +336,52 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * Whether the map draws the bikes the network reports outside its
+     * stations (SPEC §4.1, §7.6).
+     *
+     * Off by default and off for anything unreadable, because it is opt-in
+     * twice over: it draws markers whose meaning the application cannot vouch
+     * for — whether one may take such a bike is the network's rule, and the
+     * feed does not carry it — and it reads a feed twenty times the weight of
+     * the station feed, every five minutes. Kept from one session to the
+     * next, and a flow so the map follows it without a restart, for the
+     * reasons [hideOutOfServiceStations] gives.
+     *
+     * **A way of looking, not a journey** (SPEC §2, C3): a yes or a no, and
+     * no bike, no position, no time goes with it. It carries no per-network
+     * state either — a network publishing no such feed simply shows nothing.
+     */
+    val showStreetBikes: Flow<Boolean> =
+        dataStore.data.map { it.readFlag(SHOW_STREET_BIKES, ifUnanswered = false) }
+
+    /** Remembers whether the map draws the bikes outside stations. */
+    suspend fun setShowStreetBikes(show: Boolean) {
+        dataStore.edit { it[SHOW_STREET_BIKES] = show }
+    }
+
+    /**
+     * Whether the dialog explaining what the bikes outside stations are has
+     * been shown once (SPEC §7.6).
+     *
+     * It informs and does not confirm, and it is shown the first time the
+     * setting is switched on and never again unprompted — the bike's sheet
+     * carries a row to read it again. False by default and false for anything
+     * unreadable: the cost of a wrong reading is one dialog, where the other
+     * way round it is an explanation nobody ever sees.
+     *
+     * A fact the user declared by closing a window, not something the
+     * application observed (SPEC §8): it is never cleared on a city change,
+     * the words being the same in every city.
+     */
+    suspend fun streetBikesExplained(): Boolean =
+        dataStore.data.first().readFlag(STREET_BIKES_EXPLAINED, ifUnanswered = false)
+
+    /** Records that the explanation of the bikes outside stations was shown. */
+    suspend fun setStreetBikesExplained() {
+        dataStore.edit { it[STREET_BIKES_EXPLAINED] = true }
+    }
+
+    /**
      * Reads a yes-or-no setting, anything else counting as "never answered".
      *
      * Screens are built on these settings, and a settings file holding something
@@ -708,6 +754,12 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         val HIDE_OUT_OF_SERVICE_STATIONS =
             booleanPreferencesKey("hide_out_of_service_stations")
         val HIDE_EMPTY_STATIONS = booleanPreferencesKey("hide_empty_stations")
+
+        /** Whether the map draws the bikes outside stations (SPEC §7.6). */
+        val SHOW_STREET_BIKES = booleanPreferencesKey("show_street_bikes")
+
+        /** The explanation of those bikes was shown once; it is not shown again unprompted. */
+        val STREET_BIKES_EXPLAINED = booleanPreferencesKey("street_bikes_explained")
         val UNITS = stringPreferencesKey("units")
         val DOWNLOAD_ON_UNMETERED_ONLY = booleanPreferencesKey("download_on_unmetered_only")
         val USES_OWN_BIKE = booleanPreferencesKey("uses_own_bike")

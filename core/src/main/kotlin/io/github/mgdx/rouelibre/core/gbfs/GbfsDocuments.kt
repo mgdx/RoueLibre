@@ -41,6 +41,8 @@ import java.time.format.DateTimeParseException
  * | timestamp | POSIX integer | RFC 3339 string |
  * | station name | string | `{text, language}` array |
  * | bikes available | `num_bikes_available` | `num_vehicles_available` |
+ * | bikes outside stations | `free_bike_status`, `data.bikes` | `vehicle_status`, `data.vehicles` |
+ * | bike identifier | `bike_id` | `vehicle_id` |
  *
  * Feeds predating GBFS 2.0 add two liberties the format has since forbidden: a
  * station identifier published as a number, and flags published as `0` and `1`.
@@ -305,6 +307,69 @@ internal data class GbfsVehicleType(
     val vehicleTypeId: String,
     @SerialName("form_factor") val formFactor: String? = null,
     @SerialName("propulsion_type") val propulsionType: String? = null,
+    /**
+     * How far a full battery goes, in metres, where the producer says so.
+     *
+     * A double rather than an integer for the same reason as
+     * [GbfsVehicleStatus.currentRangeMetres]: the two are read against each
+     * other, and a producer writing one as a decimal writes both so.
+     */
+    @SerialName("max_range_meters") val maxRangeMetres: Double? = null,
+)
+
+/**
+ * A vehicle as published by `free_bike_status` (GBFS 1.x, 2.x) or by
+ * `vehicle_status` (GBFS 3.0), which renamed the feed, its list and its
+ * identifier field. Both names are read.
+ *
+ * Every field that decides whether the vehicle is a bike on the street
+ * (SPEC §4.1) has a default: the standard makes most of them conditionally
+ * required, and a missing one must drop the vehicle, never the feed.
+ */
+@OptIn(ExperimentalSerializationApi::class)
+@Serializable
+internal data class GbfsVehicleStatus(
+    @SerialName("bike_id")
+    @JsonNames("vehicle_id")
+    @Serializable(with = FlexibleIdSerializer::class)
+    val id: String,
+    /**
+     * The position, absent by design on a bike standing at a station: the
+     * standard requires it only of a vehicle away from one. Not a number
+     * rather than an error, so that [GbfsParser.parseVehicleStatus] can drop
+     * the vehicle through the same check as an absurd position.
+     */
+    val lat: Double = Double.NaN,
+    val lon: Double = Double.NaN,
+    @SerialName("is_reserved")
+    @Serializable(with = LenientBooleanSerializer::class)
+    val isReserved: Boolean = false,
+    @SerialName("is_disabled")
+    @Serializable(with = LenientBooleanSerializer::class)
+    val isDisabled: Boolean = false,
+    @SerialName("vehicle_type_id")
+    @Serializable(with = FlexibleIdSerializer::class)
+    val vehicleTypeId: String? = null,
+    /**
+     * The station the vehicle stands at, and the one field read as text
+     * rather than as an identifier: Fifteen writes `""` on every bike on the
+     * street, and an empty identifier is a malformed entry everywhere else.
+     * Here it means what its absence means — no station — and the parser
+     * reads a blank one so.
+     */
+    @SerialName("station_id")
+    @Serializable(with = FlexibleTextSerializer::class)
+    val stationId: String? = null,
+    /** The charge, as a ratio from 0 to 1 (GBFS 2.3 and later). */
+    @SerialName("current_fuel_percent") val currentFuelPercent: Double? = null,
+    /**
+     * How far the vehicle can still go, in metres (GBFS 2.1 and later).
+     *
+     * A double although the standard says a non-negative integer: some
+     * producers write it as a decimal, and a feed of two thousand bikes must
+     * not be refused over the way one figure is written.
+     */
+    @SerialName("current_range_meters") val currentRangeMetres: Double? = null,
 )
 
 /** The contents of `vehicle_types`. */
@@ -312,6 +377,15 @@ internal data class GbfsVehicleType(
 internal data class GbfsVehicleTypesData(
     @SerialName("vehicle_types")
     val vehicleTypes: List<GbfsVehicleType> = emptyList(),
+)
+
+/** The contents of `free_bike_status`, or of `vehicle_status` as GBFS 3.0 calls it. */
+@OptIn(ExperimentalSerializationApi::class)
+@Serializable
+internal data class GbfsVehicleStatusData(
+    @SerialName("bikes")
+    @JsonNames("vehicles")
+    val bikes: List<GbfsVehicleStatus> = emptyList(),
 )
 
 /** The contents of `station_information`. */

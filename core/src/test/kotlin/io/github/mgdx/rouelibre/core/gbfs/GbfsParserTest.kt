@@ -504,4 +504,209 @@ class GbfsParserTest {
         assertTrue(feed.kinds.isEmpty())
         assertFalse(feed.declaresElectricBikes)
     }
+
+    @Test
+    fun `reads how far each type goes, and which types are cargo bikes`() {
+        // Vienna's shape: nextbike declares max_range_meters as 0 on its own
+        // electric type and a real figure on the city's, and one producer
+        // writes the figure as a decimal.
+        val feed = assertSuccess(parser.parseVehicleTypes(fixture("vehicle_types_v2_ranges.json")))
+
+        assertEquals(
+            mapOf("351" to 60_000, "353" to 45_000, "360" to 30_000),
+            feed.maxRangeMetresByType,
+        )
+        assertEquals(setOf("353"), feed.cargoVehicleTypeIds)
+        // A cargo bike is a bicycle in the kinds like any other.
+        assertEquals(VehicleKind.Electric, feed.kinds["353"])
+    }
+
+    // ------------------------------------------- the bikes outside stations --
+
+    @Test
+    fun `reads the street bikes of a nextbike feed in GBFS 2`() {
+        // Berlin's shape: a bike at a station carries its station_id, a street
+        // bike carries none, the electric ones publish a percentage and a
+        // range of zero.
+        val feed = assertSuccess(
+            parser.parseVehicleStatus(fixture("free_bike_status_v2_nextbike.json")),
+        )
+
+        assertEquals(Instant.ofEpochSecond(1788432120), feed.lastUpdated)
+        assertEquals("2.3", feed.version)
+        assertEquals(
+            listOf(
+                "nextbike_bb_20412",
+                "nextbike_bb_20587",
+                "nextbike_bb_11023",
+                "nextbike_bb_11340",
+                "nextbike_bb_12777",
+                "nextbike_bb_21150",
+                "nextbike_bb_13419",
+            ),
+            feed.bikes.map { it.id },
+        )
+        val electric = feed.bikes.first()
+        assertEquals("348", electric.vehicleTypeId)
+        assertEquals(0.67, electric.chargeRatio!!, 1e-9)
+        assertNull("a range of zero is no range", electric.rangeMetres)
+        assertEquals(52.516278, electric.position.latitude, 1e-9)
+        val mechanical = feed.bikes[2]
+        assertEquals("346", mechanical.vehicleTypeId)
+        assertNull(mechanical.chargeRatio)
+        assertNull(mechanical.rangeMetres)
+    }
+
+    @Test
+    fun `a blank station identifier means no station`() {
+        // Fifteen writes station_id as "" on every bike on the street: read
+        // as a station, it would empty the feed of Marseille's 647 bikes.
+        val feed = assertSuccess(
+            parser.parseVehicleStatus(fixture("free_bike_status_v2_fifteen.json")),
+        )
+
+        assertEquals(4, feed.bikes.size)
+        assertEquals(listOf(42_000, 18_500, 27_300, 12_750), feed.bikes.map { it.rangeMetres })
+        assertTrue(feed.bikes.all { it.chargeRatio == null })
+    }
+
+    @Test
+    fun `reads the renamed feed of GBFS 3`() {
+        // vehicles rather than bikes, vehicle_id rather than bike_id, and both
+        // charge figures published.
+        val feed = assertSuccess(
+            parser.parseVehicleStatus(fixture("vehicle_status_v3_ecovelo.json")),
+        )
+
+        assertEquals(Instant.parse("2026-09-08T10:02:10Z"), feed.lastUpdated)
+        assertEquals(6, feed.bikes.size)
+        val first = feed.bikes.first()
+        assertEquals("4b6d2e8a-1f3c-4a5b-9c7d-0e2f4a6b8c1d", first.id)
+        assertEquals(0.5, first.chargeRatio!!, 1e-9)
+        assertEquals(30_000, first.rangeMetres)
+        assertEquals("cargo", feed.bikes[3].vehicleTypeId)
+    }
+
+    @Test
+    fun `a bike within a station but without a station_id is a street bike`() {
+        // Vel'in Calais publishes its whole fleet so: every bike within thirty
+        // metres of a station, none with a station_id. They are read as what
+        // the feed says they are, and drawn beside their stations: guessing
+        // them back into one would be a distance heuristic with a coefficient
+        // nobody measured, which SPEC §4.1 refuses — as §7.1 refuses the same
+        // for the depots. The identifiers are numbers written as strings.
+        val feed = assertSuccess(
+            parser.parseVehicleStatus(fixture("free_bike_status_v2_all_docked.json")),
+        )
+
+        assertEquals(9, feed.bikes.size)
+        assertEquals("10234", feed.bikes.first().id)
+    }
+
+    @Test
+    fun `a disabled or a reserved vehicle is dropped`() {
+        val document = """
+            {"version":"2.3","data":{"bikes":[
+              {"bike_id":"a","lat":50.63,"lon":3.05,"is_reserved":true,"is_disabled":false},
+              {"bike_id":"b","lat":50.63,"lon":3.05,"is_reserved":false,"is_disabled":true},
+              {"bike_id":"c","lat":50.63,"lon":3.05,"is_reserved":1,"is_disabled":0},
+              {"bike_id":"d","lat":50.63,"lon":3.05}
+            ]}}
+        """.trimIndent()
+
+        val feed = assertSuccess(parser.parseVehicleStatus(document))
+
+        // The flags default to false where a producer omits them, and read
+        // 0 and 1 as the station flags do.
+        assertEquals(listOf("d"), feed.bikes.map { it.id })
+    }
+
+    @Test
+    fun `a vehicle without a usable position is dropped, not the feed`() {
+        val document = """
+            {"version":"2.3","data":{"bikes":[
+              {"bike_id":"docked","station_id":"12"},
+              {"bike_id":"nowhere"},
+              {"bike_id":"gulf","lat":0,"lon":0},
+              {"bike_id":"here","lat":50.63,"lon":3.05}
+            ]}}
+        """.trimIndent()
+
+        val feed = assertSuccess(parser.parseVehicleStatus(document))
+
+        assertEquals(listOf("here"), feed.bikes.map { it.id })
+    }
+
+    @Test
+    fun `a charge that cannot be believed is left out rather than guessed`() {
+        // A producer writing 67 for 67 % is not rescaled: the standard says a
+        // ratio, and a guess about a battery is a promise to somebody walking.
+        val document = """
+            {"version":"2.3","data":{"bikes":[
+              {"bike_id":"a","lat":50.63,"lon":3.05,"current_fuel_percent":67},
+              {"bike_id":"b","lat":50.63,"lon":3.05,"current_fuel_percent":-0.1},
+              {"bike_id":"c","lat":50.63,"lon":3.05,"current_range_meters":0},
+              {"bike_id":"d","lat":50.63,"lon":3.05,"current_range_meters":-5},
+              {"bike_id":"e","lat":50.63,"lon":3.05,"current_fuel_percent":1,
+               "current_range_meters":12345.6}
+            ]}}
+        """.trimIndent()
+
+        val feed = assertSuccess(parser.parseVehicleStatus(document))
+
+        assertEquals(listOf(null, null, null, null, 1.0), feed.bikes.map { it.chargeRatio })
+        assertEquals(listOf(null, null, null, null, 12_345), feed.bikes.map { it.rangeMetres })
+    }
+
+    @Test
+    fun `accepts vehicle and station identifiers published as numbers`() {
+        val document = """
+            {"version":"2.0","data":{"bikes":[
+              {"bike_id":41230,"lat":50.63,"lon":3.05,"vehicle_type_id":346},
+              {"bike_id":41231,"lat":50.63,"lon":3.05,"station_id":3140}
+            ]}}
+        """.trimIndent()
+
+        val feed = assertSuccess(parser.parseVehicleStatus(document))
+
+        val bike = feed.bikes.single()
+        assertEquals("41230", bike.id)
+        assertEquals("346", bike.vehicleTypeId)
+    }
+
+    @Test
+    fun `finds the feed under its GBFS 3 name first, then under the older one`() {
+        val both = GbfsDiscovery(
+            version = "3.0",
+            feedUrlsByName = mapOf(
+                "free_bike_status" to "https://example.invalid/free_bike_status.json",
+                "vehicle_status" to "https://example.invalid/vehicle_status.json",
+            ),
+        )
+        val older = GbfsDiscovery(
+            version = "2.3",
+            feedUrlsByName = mapOf(
+                "free_bike_status" to "https://example.invalid/free_bike_status.json",
+            ),
+        )
+
+        assertEquals(
+            "https://example.invalid/vehicle_status.json",
+            assertSuccess(both.urlOfVehicleStatus()),
+        )
+        assertEquals(
+            "https://example.invalid/free_bike_status.json",
+            assertSuccess(older.urlOfVehicleStatus()),
+        )
+    }
+
+    @Test
+    fun `a network publishing the feed under neither name says so under one`() {
+        val discovery = assertSuccess(parser.parseDiscovery(fixture("discovery_v2_real.json")))
+
+        assertEquals(
+            Outcome.Failure(DataError.FeedUnavailable("vehicle_status")),
+            discovery.urlOfVehicleStatus(),
+        )
+    }
 }

@@ -123,6 +123,8 @@ class FleetRepository(
             hasElectricBikes = reading.hasElectricBikes,
             isMixed = reading.isMixed,
             vehicleTypes = reading.vehicleTypes,
+            maxRangeMetresByType = reading.maxRangeMetresByType,
+            cargoVehicleTypeIds = reading.cargoVehicleTypeIds,
         ),
     )
 
@@ -133,12 +135,17 @@ class FleetRepository(
      * outright on the identifiers it names: an operator that reassigns an
      * identifier to another kind is describing its own fleet, and the feed is
      * more recent than the survey. Identifiers it does not name are kept, since
-     * losing one silences a station's split.
+     * losing one silences a station's split. The ranges and the cargo types
+     * follow the same rule, being columns of the same table; they are held
+     * for the session and not remembered, the bikes they describe reaching
+     * no disk either (SPEC §8).
      */
     private fun merge(known: FleetDescription, fresh: FleetDescription) = FleetDescription(
         hasElectricBikes = known.hasElectricBikes || fresh.hasElectricBikes,
         isMixed = known.isMixed || fresh.isMixed,
         vehicleTypes = known.vehicleTypes + fresh.vehicleTypes,
+        maxRangeMetresByType = known.maxRangeMetresByType + fresh.maxRangeMetresByType,
+        cargoVehicleTypeIds = known.cargoVehicleTypeIds + fresh.cargoVehicleTypeIds,
     )
 }
 

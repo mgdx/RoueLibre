@@ -13,12 +13,20 @@ package io.github.mgdx.rouelibre.core.station
  * @property bikesCounted how many bikes the reading rests on, both kinds
  *   together. Zero means nothing could be counted, and the reading is then the
  *   declaration's rather than the network's.
+ * @property maxRangeMetresByType how far a full battery of each type goes,
+ *   where the network declares it above zero. Not counted but carried, so
+ *   that the sheet of a bike outside stations reads its charge from the same
+ *   table it reads its kind from (SPEC §7.2.1).
+ * @property cargoVehicleTypeIds the types the network declares as cargo
+ *   bikes, carried for the same reason.
  */
 public data class FleetReading(
     public val vehicleTypes: Map<String, VehicleKind>,
     public val hasElectricBikes: Boolean,
     public val isMixed: Boolean,
     public val bikesCounted: Int,
+    public val maxRangeMetresByType: Map<String, Int> = emptyMap(),
+    public val cargoVehicleTypeIds: Set<String> = emptySet(),
 )
 
 /**
@@ -45,27 +53,45 @@ public data class FleetReading(
  *   feed: the kinds are then read from the names Vélib' publishes inline.
  * @param declaresElectricBikes whether that feed declares a pedal-assist
  *   bicycle. Used only when nothing can be counted.
+ * @param streetBikes the bikes the network reports outside its stations, when
+ *   the setting that reads them is on (SPEC §4.1, §7.6), and nothing
+ *   otherwise. Counted with the stations' bikes through the same table:
+ *   a network whose electric bikes are all out on the street would otherwise
+ *   read as a mechanical one, and the bolt would be wrong on every marker.
+ *   The script does not see them — it seeds from the stations alone — and the
+ *   reading only ever adds, so the two still agree on what they both count.
  */
 public fun countFleet(
     availabilities: List<StationAvailability>,
     declaredVehicleTypes: Map<String, VehicleKind>,
     declaresElectricBikes: Boolean,
+    streetBikes: List<StreetBike> = emptyList(),
 ): FleetReading {
     var mechanical = 0
     var electric = 0
-    for (availability in availabilities) {
-        for ((identifier, count) in availability.bikesByVehicleType) {
-            // The declaration wins over the Vélib' names: a network declaring a
-            // type of its own called "mechanical" means its own, not Vélib's.
-            // An identifier in neither is ignored rather than guessed — five
-            // networks publish at their stations a type they never declared,
-            // and a bike of unknown propulsion belongs in neither column.
-            when (declaredVehicleTypes[identifier] ?: VELIB_VEHICLE_TYPES[identifier]) {
-                VehicleKind.Mechanical -> mechanical += count
-                VehicleKind.Electric -> electric += count
-                VehicleKind.Other, null -> Unit
-            }
+
+    // The declaration wins over the Vélib' names: a network declaring a type
+    // of its own called "mechanical" means its own, not Vélib's. An identifier
+    // in neither is ignored rather than guessed — five networks publish at
+    // their stations a type they never declared, and a bike of unknown
+    // propulsion belongs in neither column.
+    fun count(identifier: String, bikes: Int) {
+        when (declaredVehicleTypes[identifier] ?: VELIB_VEHICLE_TYPES[identifier]) {
+            VehicleKind.Mechanical -> mechanical += bikes
+            VehicleKind.Electric -> electric += bikes
+            VehicleKind.Other, null -> Unit
         }
+    }
+    for (availability in availabilities) {
+        for ((identifier, bikes) in availability.bikesByVehicleType) {
+            count(identifier, bikes)
+        }
+    }
+    for (bike in streetBikes) {
+        // A street bike declaring no type is a bike of unknown propulsion, and
+        // it belongs in neither column for the same reason as above.
+        val identifier = bike.vehicleTypeId ?: continue
+        count(identifier, 1)
     }
 
     val counted = mechanical + electric

@@ -102,6 +102,21 @@ public data class FleetDescription(
      * five networks publish at their stations a type they never declared.
      */
     public val vehicleTypes: Map<String, VehicleKind>,
+    /**
+     * How far a full battery of each type goes, in metres, for the types the
+     * network declares it above zero for.
+     *
+     * Read from the live `vehicle_types` feed and never seeded: it serves the
+     * sheet of a bike outside stations (SPEC §7.2.1), which exists only once
+     * that feed has been reached, so a configuration has nothing to say here.
+     */
+    public val maxRangeMetresByType: Map<String, Int> = emptyMap(),
+    /**
+     * The types the network declares as cargo bikes, which the sheet of a
+     * bike outside stations names as such (SPEC §7.2.1). Read live like
+     * [maxRangeMetresByType], and for the same reason.
+     */
+    public val cargoVehicleTypeIds: Set<String> = emptySet(),
 )
 
 /** Access to the real-time feed. */

@@ -1,0 +1,99 @@
+{
+  "last_updated": 1788432140,
+  "ttl": 60,
+  "version": "2.3",
+  "data": {
+    "bikes": [
+      {
+        "bike_id": "10234",
+        "lat": 50.951042,
+        "lon": 1.858311,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "1",
+        "current_range_meters": 0
+      },
+      {
+        "bike_id": "10251",
+        "lat": 50.951061,
+        "lon": 1.858330,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "1",
+        "current_range_meters": 0
+      },
+      {
+        "bike_id": "10267",
+        "lat": 50.951077,
+        "lon": 1.858352,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "2",
+        "current_range_meters": 0
+      },
+      {
+        "bike_id": "10302",
+        "lat": 50.956714,
+        "lon": 1.851903,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "1",
+        "current_range_meters": 0
+      },
+      {
+        "bike_id": "10318",
+        "lat": 50.956731,
+        "lon": 1.851921,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "1",
+        "current_range_meters": 0
+      },
+      {
+        "bike_id": "10455",
+        "lat": 50.947605,
+        "lon": 1.869384,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "2",
+        "current_range_meters": 0
+      },
+      {
+        "bike_id": "10471",
+        "lat": 50.947621,
+        "lon": 1.869402,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "1",
+        "current_range_meters": 0
+      },
+      {
+        "bike_id": "10488",
+        "lat": 50.947639,
+        "lon": 1.869421,
+        "is_reserved": false,
+        "is_disabled": true,
+        "vehicle_type_id": "1",
+        "current_range_meters": 0
+      },
+      {
+        "bike_id": "10529",
+        "lat": 50.961988,
+        "lon": 1.863250,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "1",
+        "current_range_meters": 0
+      },
+      {
+        "bike_id": "10546",
+        "lat": 50.962004,
+        "lon": 1.863271,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "2",
+        "current_range_meters": 0
+      }
+    ]
+  }
+}

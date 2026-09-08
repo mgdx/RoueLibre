@@ -5,6 +5,7 @@ import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.StationAvailability
+import io.github.mgdx.rouelibre.core.station.StreetBike
 import io.github.mgdx.rouelibre.core.station.VehicleKind
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -16,7 +17,7 @@ import kotlinx.serialization.json.jsonObject
 import java.time.Instant
 
 /**
- * Parses the three GBFS documents the application needs.
+ * Parses the GBFS documents the application needs.
  *
  * Nothing here touches the network: the parser takes text and returns domain
  * objects, which makes it entirely testable on the JVM from real captures of
@@ -144,12 +145,18 @@ public class GbfsParser {
             GbfsEnvelope.serializer(GbfsVehicleTypesData.serializer()),
             document,
         )
-        val kinds = envelope.data.vehicleTypes.associate { declared ->
-            declared.vehicleTypeId to kindOf(declared)
-        }
+        val declared = envelope.data.vehicleTypes
+        val kinds = declared.associate { it.vehicleTypeId to kindOf(it) }
         VehicleTypesFeed(
             kinds = kinds,
             declaresElectricBikes = kinds.containsValue(VehicleKind.Electric),
+            maxRangeMetresByType = declared.mapNotNull { type ->
+                positiveMetresOrNull(type.maxRangeMetres)?.let { type.vehicleTypeId to it }
+            }.toMap(),
+            cargoVehicleTypeIds = declared
+                .filter { it.formFactor == CARGO_FORM_FACTOR }
+                .map { it.vehicleTypeId }
+                .toSet(),
             lastUpdated = envelope.lastUpdated,
             version = envelope.version,
         )
@@ -241,6 +248,65 @@ public class GbfsParser {
     }
 
     /**
+     * Reads `free_bike_status` — `vehicle_status` in GBFS 3.0 — and returns the
+     * bikes standing outside the stations (SPEC §4.1).
+     *
+     * The filtering is done here, at parse time, so that nothing else ever
+     * sees what is dropped: a vehicle at a station is already counted by the
+     * station feed and would be counted twice; a disabled or a reserved one
+     * cannot be taken; a vehicle without a position is on no map. What kind of
+     * vehicle it is — a scooter is not what this application shows — is not
+     * decided here, since it takes the network's table
+     * (`streetBikesShown`).
+     *
+     * @param document the raw contents of `free_bike_status.json` or of
+     *   `vehicle_status.json`.
+     */
+    public fun parseVehicleStatus(document: String): Outcome<VehicleStatusFeed> = parsing {
+        val envelope = json.decodeFromString(
+            GbfsEnvelope.serializer(GbfsVehicleStatusData.serializer()),
+            document,
+        )
+        VehicleStatusFeed(
+            bikes = envelope.data.bikes.mapNotNull(::streetBikeOrNull),
+            lastUpdated = envelope.lastUpdated,
+            version = envelope.version,
+        )
+    }
+
+    /**
+     * One published vehicle as a bike on the street, or `null` if it is not
+     * one.
+     *
+     * A `station_id` that is blank counts as absent: Fifteen writes `""` on
+     * every bike on the street, and reading that as a station would empty
+     * the feed. The charge figures are kept only where they can be believed
+     * — the ratio within 0 and 1, the range above zero — rather than
+     * rescaled: a producer writing `67` for 67 % gets no charge, not a guess.
+     */
+    private fun streetBikeOrNull(entry: GbfsVehicleStatus): StreetBike? {
+        if (!entry.stationId.isNullOrBlank()) return null
+        if (entry.isDisabled || entry.isReserved) return null
+        val position = coordinatesOrNull(entry.lat, entry.lon) ?: return null
+        return StreetBike(
+            id = entry.id,
+            position = position,
+            vehicleTypeId = entry.vehicleTypeId,
+            chargeRatio = entry.currentFuelPercent?.takeIf { it in 0.0..1.0 },
+            rangeMetres = positiveMetresOrNull(entry.currentRangeMetres),
+        )
+    }
+
+    /**
+     * A distance published as a number, as a whole number of metres, or `null`
+     * where it is absent, not a distance at all, or zero — nextbike writes a
+     * range of zero on every one of its electric bikes, and a zero would read
+     * as a flat battery.
+     */
+    private fun positiveMetresOrNull(metres: Double?): Int? =
+        metres?.takeIf { it.isFinite() && it > 0.0 }?.toInt()
+
+    /**
      * Runs [block], converting any parsing failure into a [DataError].
      *
      * Serialization libraries report their problems through exceptions; the
@@ -308,8 +374,11 @@ public class GbfsParser {
     }
 
     private companion object {
+        /** The form factor of a cargo bike, which the sheet names as such (SPEC §7.2.1). */
+        const val CARGO_FORM_FACTOR = "cargo_bicycle"
+
         /** The vehicle forms this application is about. */
-        val BICYCLE_FORM_FACTORS = setOf("bicycle", "cargo_bicycle")
+        val BICYCLE_FORM_FACTORS = setOf("bicycle", CARGO_FORM_FACTOR)
 
         /** The GBFS propulsion values that mean a motor helps the rider. */
         val ELECTRIC_PROPULSIONS = setOf("electric_assist", "electric")
@@ -335,6 +404,25 @@ public data class GbfsDiscovery(
     public fun urlOf(feedName: String): Outcome<String> = feedUrlsByName[feedName]
         ?.let { Outcome.Success(it) }
         ?: Outcome.Failure(DataError.FeedUnavailable(feedName))
+
+    /**
+     * The URL of the feed listing the bikes outside stations, under whichever
+     * of its two names the producer publishes it.
+     *
+     * The 3.0 name is tried first and the older one after it, as
+     * `num_vehicles_available` is tried before `num_bikes_available`
+     * (SPEC §4.1). A producer publishing neither is reported under the 3.0
+     * name: the feed missing is one feed, whatever it is called.
+     *
+     * @return the URL, or `FeedUnavailable(VEHICLE_STATUS)` when the network
+     *   publishes no such feed — an ordinary answer for a docked fleet.
+     */
+    public fun urlOfVehicleStatus(): Outcome<String> {
+        val url = feedUrlsByName[GbfsFeedNames.VEHICLE_STATUS]
+            ?: feedUrlsByName[GbfsFeedNames.FREE_BIKE_STATUS]
+            ?: return Outcome.Failure(DataError.FeedUnavailable(GbfsFeedNames.VEHICLE_STATUS))
+        return Outcome.Success(url)
+    }
 }
 
 /** The useful contents of `station_information`. */
@@ -358,10 +446,33 @@ public data class StationStatusFeed(
  *   publishes the feed with nothing in it.
  * @property declaresElectricBikes whether a pedal-assist bicycle is among the
  *   types declared. All there is to go on when nothing can be counted.
+ * @property maxRangeMetresByType how far a full battery of each type goes, in
+ *   metres, for the types declaring a `max_range_meters` above zero. What
+ *   gives a street bike's range a scale to be read on (SPEC §7.2.1); nextbike
+ *   declares `0`, and its types are therefore absent here.
+ * @property cargoVehicleTypeIds the types whose form factor is a cargo bike,
+ *   which the sheet of a street bike names as such (SPEC §7.2.1). They are
+ *   mechanical or electric in [kinds] like any other bicycle.
  */
 public data class VehicleTypesFeed(
     public val kinds: Map<String, VehicleKind>,
     public val declaresElectricBikes: Boolean,
+    public val maxRangeMetresByType: Map<String, Int>,
+    public val cargoVehicleTypeIds: Set<String>,
+    public val lastUpdated: Instant?,
+    public val version: String?,
+)
+
+/**
+ * The useful contents of `free_bike_status` or `vehicle_status`.
+ *
+ * @property bikes the bikes standing outside the stations, and those alone:
+ *   a vehicle with a `station_id`, disabled, reserved or without a position
+ *   has been dropped at parse time (SPEC §4.1). Whether each is a bicycle is
+ *   not settled here — see `streetBikesShown`.
+ */
+public data class VehicleStatusFeed(
+    public val bikes: List<StreetBike>,
     public val lastUpdated: Instant?,
     public val version: String?,
 )
@@ -382,4 +493,19 @@ public object GbfsFeedNames {
      * instead, and the fleet is counted through those names.
      */
     public const val VEHICLE_TYPES: String = "vehicle_types"
+
+    /**
+     * The bikes outside stations, under the name GBFS 3.0 gave the feed.
+     *
+     * Tried first, as the 3.0 field names are (SPEC §4.1): the Ecovelo
+     * networks publish it so.
+     */
+    public const val VEHICLE_STATUS: String = "vehicle_status"
+
+    /**
+     * The same feed under its name in GBFS 1.x and 2.x, which is where most
+     * networks publishing it still are — nextbike and Fifteen among them.
+     * Tried when [VEHICLE_STATUS] is absent.
+     */
+    public const val FREE_BIKE_STATUS: String = "free_bike_status"
 }
