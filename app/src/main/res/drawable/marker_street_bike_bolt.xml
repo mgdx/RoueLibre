@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The bolt laid on the marker of a bike outside stations whose type the
+    network reads as electric (SPEC §7.1).
+
+    The very path of ic_bike_electric's bolt, scaled to fill a canvas of its
+    own: the marker is a disc a few pixels across and has no room for the bike
+    the glyph is normally attached to, so what is kept is the detail that says
+    "pedal-assist" — the same shape the station markers, the journey stations
+    and the welcome page carry, and one the eye has already been taught.
+
+    It is drawn in the ink the availability scale lays on its strongest fill,
+    which is the disc under it: the pair inverts from one theme to the other
+    together, and the bolt never has to be tinted in code.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="12dp"
+    android:height="12dp"
+    android:viewportWidth="12"
+    android:viewportHeight="12">
+
+    <!-- The bolt is 5.3 by 7.2 units in the icon it comes from: enlarged by
+         1.389 it stands 10 units tall, and the two translations centre it in
+         the 12-unit square rather than leaving it in the corner the bike used
+         to occupy. -->
+    <group
+        android:scaleX="1.389"
+        android:scaleY="1.389"
+        android:translateX="0.51"
+        android:translateY="-0.667">
+        <path
+            android:fillColor="@color/availability_good_ink"
+            android:pathData="M4.5,1.2L1.3,5L3.8,5L3.4,8.4L6.6,4.6L4.1,4.6z" />
+    </group>
+</vector>
