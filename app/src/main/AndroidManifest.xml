@@ -181,11 +181,28 @@
             at — and a sending application that starts this one inside its own
             task aims elsewhere. The intent then reaches `onNewIntent`, which
             is where MainActivity reads it.
+
+            `taskAffinity` is emptied, and that empties nothing else: the
+            attribute names the task an activity belongs to, and left unwritten
+            it is the package name — a name any application may declare as its
+            own. One that does, with `allowTaskReparenting`, has its activities
+            moved into this task and shown in its place on the way back to it.
+            Android 11 narrowed that, and minSdk 26 still serves the four
+            releases it did not. What is at stake here is measured, this
+            application asking for neither identifier nor payment; what a
+            counterfeit screen would be shown is somebody's home address
+            (SPEC §7.6). An affinity of its own is worth nothing to an
+            application holding one activity and never naming a task, so it is
+            given up rather than left to be claimed. `singleTask` above still
+            holds and still does what it says: a task with no affinity is a
+            task all the same, and an incoming link still joins the instance
+            already living rather than building a second one.
         -->
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
+            android:taskAffinity=""
             android:theme="@style/Theme.RoueLibre.Intro"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
