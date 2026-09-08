@@ -52,7 +52,20 @@ class DatasetAdapter(
             binding.datasetPurpose.setText(row.kind.purposeResource())
 
             val installed = row.installed
+            val failure = row.failure
             binding.datasetState.text = when {
+                // Ahead of everything else, and of the installed state as much
+                // as of the absent one: a transfer that failed used to leave
+                // the row reading "Not installed", the very words a set nobody
+                // asked for reads, and the snackbar that said otherwise was
+                // gone within seconds. What is shown is the reason, which
+                // already says what happens next — the button below reads
+                // "Download …" for what is still missing.
+                failure != null -> context.getString(
+                    R.string.dataset_download_failed,
+                    failure.toDownloadMessage(context),
+                )
+
                 installed == null -> context.getString(R.string.dataset_absent)
 
                 // The manifest has been checked and announces something else:
@@ -162,6 +175,12 @@ fun StorageMessage.toText(context: Context): String = when (this) {
         R.string.dataset_rejected_version,
         found,
         supported,
+    )
+
+    is StorageMessage.OtherNetwork -> context.getString(
+        R.string.storage_manifest_other_network,
+        announced,
+        served,
     )
 
     StorageMessage.AlreadyUpToDate -> context.getString(R.string.storage_up_to_date)

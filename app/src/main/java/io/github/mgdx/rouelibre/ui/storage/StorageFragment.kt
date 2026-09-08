@@ -21,10 +21,10 @@ import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.data.DatasetKind
+import io.github.mgdx.rouelibre.data.datasets.DownloadProgress
 import io.github.mgdx.rouelibre.databinding.FragmentStorageBinding
 import io.github.mgdx.rouelibre.ui.ConfirmationDialogFragment
 import io.github.mgdx.rouelibre.ui.cityLabel
-import io.github.mgdx.rouelibre.ui.textLocale
 import kotlinx.coroutines.launch
 
 /**
@@ -51,6 +51,7 @@ class StorageFragment : Fragment() {
             manifestUrl = { container.dataManifestUrl() },
             workDirectory = container.downloadWorkDirectory,
             supportedFormatVersion = { container.activeCity()?.dataRelease?.formatVersion },
+            servedNetwork = { container.activeCity()?.network?.id },
             connectionCost = container.connectionCost,
             unmeteredOnly = container.preferences.downloadOnUnmeteredOnly,
         )
@@ -326,9 +327,11 @@ class StorageFragment : Fragment() {
                             formatBytes(requireContext(), state.pendingBytes),
                         )
                     }
-                    views.checkUpdates.isEnabled =
-                        !state.isChecking &&
-                        state.downloading == null
+                    // For the whole of a transfer, and not only from its first
+                    // byte: a second press would find the job already running
+                    // and do nothing at all, which is what a dead button looks
+                    // like.
+                    views.checkUpdates.isEnabled = !state.isChecking && !state.isDownloading
                     views.storageTotal.text = state.totalBytes
                         ?.let {
                             getString(
@@ -358,37 +361,62 @@ class StorageFragment : Fragment() {
         }
     }
 
-    /** Shows what the transfer in progress has already received. */
+    /**
+     * Shows where the transfer stands, from the press onwards.
+     *
+     * **From the press, and not from the first byte.** A download asked for
+     * with no network showed nothing at all until the request gave up: no line,
+     * no bar, no button that had moved, for the ten seconds a connection takes
+     * to fail. The screen now says a transfer has begun as soon as one has, and
+     * an indeterminate bar carries the wait until the first byte turns it into
+     * a real proportion.
+     */
     private fun showDownload(state: StorageUiState) {
         val views = binding ?: return
         val progress = state.downloading
-        views.downloadState.isVisible =
-            progress != null ||
-            state.isChecking ||
-            state.heldBackByMetering
-        views.downloadProgress.isVisible = progress != null
-        if (state.isChecking) {
+        val line = state.transferLine()
+
+        // Settled before the bar is shown: Material refuses to switch a visible
+        // indicator between its two modes.
+        val indeterminate = progress == null || progress.totalBytes <= 0
+        if (views.downloadProgress.isIndeterminate != indeterminate) {
+            views.downloadProgress.isVisible = false
+            views.downloadProgress.isIndeterminate = indeterminate
+        }
+        views.downloadState.isVisible = line != TransferLine.None
+        views.downloadProgress.isVisible =
+            line == TransferLine.Starting ||
+            line == TransferLine.UnderWay
+
+        when (line) {
+            TransferLine.None -> Unit
+
             // A check lasts only a moment, but it goes over the network:
             // saying so avoids the impression that the press was lost.
-            views.downloadState.setText(R.string.storage_checking)
-        } else if (progress == null && state.heldBackByMetering) {
+            TransferLine.Checking -> views.downloadState.setText(R.string.storage_checking)
+
+            TransferLine.Starting ->
+                views.downloadState.setText(R.string.storage_download_starting)
+
             // The line stays for as long as the wait does: a bar that has gone
             // away leaves a screen that looks idle for no stated reason.
-            views.downloadState.text = getString(
+            TransferLine.WaitingForUnmetered -> views.downloadState.text = getString(
                 R.string.download_waiting_for_unmetered,
                 formatBytes(requireContext(), state.pendingBytes),
             )
-        }
-        if (progress == null) return
 
-        val locale = requireContext().textLocale()
+            TransferLine.UnderWay -> progress?.let { showProgress(views, it) }
+        }
+    }
+
+    /** Names the file coming down and how much of it has arrived. */
+    private fun showProgress(views: FragmentStorageBinding, progress: DownloadProgress) {
         views.downloadState.text = getString(
             R.string.storage_downloading,
             progress.fileName,
             formatBytes(requireContext(), progress.downloadedBytes),
             formatBytes(requireContext(), progress.totalBytes),
         )
-        views.downloadProgress.isIndeterminate = progress.totalBytes <= 0
         if (progress.totalBytes > 0) {
             views.downloadProgress.setProgressCompat(
                 ((progress.downloadedBytes * 100) / progress.totalBytes).toInt(),
