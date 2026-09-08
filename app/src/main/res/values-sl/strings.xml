@@ -360,6 +360,20 @@
     <string name="journey_own_bike">Vozim svoje kolo</string>
     <string name="journey_hint_own_bike">Pot se izračuna v napravi: ena sama vožnja od vrat do vrat, brez postaje na poti.</string>
 
+    <!-- A journey asked for from a bike the network reports outside its
+         stations (SPEC §7.2.1, §7.3, §7.4). The first names that departure in
+         the origin field of the two journey screens: the producer rotates a
+         bike's identifier after every rental, so there is no name to show and
+         what the reader needs is what kind of point it is. The second says why
+         that field cannot be pressed — editing it would be asking an ordinary
+         journey, which the ordinary way already offers. -->
+    <string name="journey_departure_street_bike">Kolo zunaj postaj</string>
+    <string name="journey_origin_street_bike_locked">Pot se začne pri kolesu, ki ste ga izbrali.</string>
+    <!-- And the sentence that replaces the two above it on that journey: there
+         is no walk to the bike, one is standing beside it, and the ride ends at
+         a station because that is where a bike goes back (SPEC §6). -->
+    <string name="journey_hint_street_bike">Pot se izračuna v napravi: vožnja s kolesom od tod, kolo pustite na postaji, nato peš do cilja.</string>
+
     <!-- Which bike one wants to ride (SPEC §7.3). -->
     <string name="journey_bike_kind_any">Katero koli kolo</string>
     <string name="journey_bike_kind_mechanical">Navadno</string>
@@ -713,6 +727,56 @@
     <string name="settings_map_filters_hide_empty_hint">„Nič“ sledi temu, kar zemljevid šteje: nobenega kolesa, dokler šteje kolesa, in nobenega prostega mesta, dokler šteje prosta mesta.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Postaje, o katerih omrežje ne pove ničesar, ostanejo na zemljevidu: število, ki ga nihče ni mogel prebrati, ni število nič.</string>
+
+    <!-- The bikes a network reports outside its stations (SPEC §4.1, §7.1,
+         §7.6), and everything said about them. Off by default: the setting is
+         opt-in twice over, for the markers it draws — whether one may take
+         such a bike where it stands is the network's rule, and the feed does
+         not carry it — and for the feed it reads, twenty times the weight of
+         the station feed.
+
+         The sentence under the switch is the whole of what the row says about
+         a network: one that publishes no such feed shows nothing at all, and
+         the map says that by drawing nothing. -->
+    <string name="settings_street_bikes">Prikaži kolesa zunaj postaj</string>
+    <string name="settings_street_bikes_description">Ali ga smete izposoditi tam, kjer stoji, določa omrežje.</string>
+
+    <!-- Shown once, the first time the switch above is turned on, and readable
+         again from the sheet of any such bike. It informs and does not
+         confirm: the switch is already on when it opens, and one button closes
+         it. Three short paragraphs, kept short because a modal window is no
+         place for dense text (SPEC §7.9) — what they are, what the application
+         cannot vouch for, and where a journey from one ends. -->
+    <string name="street_bike_intro_title">Kolesa zunaj postaj</string>
+    <string name="street_bike_intro_body">Omrežje javlja ta kolesa daleč od svojih postaj. Nekatera je tam pustil uporabnik, druga čakajo v skladišču upravljavca.\n\nRoue Libre ne ve, ali smete kolo vzeti tam, kjer stoji: to povedo pravila omrežja, nekatera omrežja pa zaračunajo kazen za kolo, vrnjeno zunaj postaje.\n\nPot, predlagana od kolesa, se vedno konča na postaji.</string>
+    <string name="street_bike_intro_dismiss">Razumem</string>
+
+    <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
+         sheet's shape and with less to say: a bike is one bike, and nothing is
+         counted on it. The row below reopens the explanation above, so its
+         words are readable again without switching the setting off and on. -->
+    <string name="street_bike_intro_reopen">Kaj so ta kolesa</string>
+    <string name="street_bike_title">Kolo zunaj postaj</string>
+    <string name="street_bike_kind_mechanical">Navadno kolo</string>
+    <string name="street_bike_kind_electric">Električno kolo</string>
+    <string name="street_bike_kind_cargo">Tovorno kolo</string>
+    <!-- %1$d is the charge as a whole percentage, read from the feed's own
+         figure. The doubled sign is a literal per cent, not a placeholder. -->
+    <string name="street_bike_charge">Baterija %1$d %%</string>
+    <!-- Said in place of the line above where the network publishes no
+         percentage. %1$s is a distance, already rounded and written in the
+         reader's units. -->
+    <string name="street_bike_range">Ostane še približno %1$s dosega</string>
+    <!-- The bike has left the feed while its sheet was open. It is said rather
+         than the sheet closing under the reader's finger. -->
+    <string name="street_bike_gone">To kolo tu ni več javljeno.</string>
+    <string name="street_bike_journey_from_here">Pot od tega kolesa</string>
+    <!-- What such a bike is called wherever it has to be named rather than
+         drawn — the label handed to the navigation application, which shows a
+         place and not a point. The second is for a bike the network's type
+         table reads as electric, which is the one the map marks with a bolt. -->
+    <string name="street_bike_marker_description">Kolo zunaj postaj</string>
+    <string name="street_bike_marker_description_electric">Električno kolo zunaj postaj</string>
 
     <!-- The rider's OWN bike, not the network's. -->
     <string name="settings_own_bike_kind_title">Vaše lastno kolo</string>
