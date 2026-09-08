@@ -29,6 +29,7 @@ import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.data.network.ConnectionCost
 import io.github.mgdx.rouelibre.data.network.GbfsRemoteSource
 import io.github.mgdx.rouelibre.data.network.HttpsOnlyInterceptor
+import io.github.mgdx.rouelibre.data.network.HttpsOnlyRedirectInterceptor
 import io.github.mgdx.rouelibre.data.network.SystemConnectionCost
 import io.github.mgdx.rouelibre.data.routing.OfflineRouter
 import kotlinx.coroutines.Dispatchers
@@ -264,8 +265,14 @@ class AppContainer(private val context: Context) {
             .connectTimeout(CONNECT_TIMEOUT)
             .readTimeout(READ_TIMEOUT)
             // Every address the application calls goes out in TLS, whatever
-            // scheme it was published with (SPEC §4.1).
+            // scheme it was published with (SPEC §4.1). Two interceptors for
+            // one rule because OkHttp shows each of them a different half of
+            // the call: the application one is run once, on the address asked
+            // for, before a redirection has been followed; the network one is
+            // run for every request that really goes out, and is the only
+            // place from which a `301` towards cleartext can be corrected.
             .addInterceptor(HttpsOnlyInterceptor())
+            .addNetworkInterceptor(HttpsOnlyRedirectInterceptor())
             // No disk cache: the freshness policy is the repository's
             // (SPEC §4.1), and an HTTP cache on top would make it impossible to
             // reason about.

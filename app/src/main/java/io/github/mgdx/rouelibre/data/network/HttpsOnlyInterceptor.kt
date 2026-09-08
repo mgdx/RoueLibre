@@ -5,7 +5,8 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 /**
- * Sends every request over TLS, whatever scheme its address carried.
+ * Sends the address the application asked for over TLS, whatever scheme it
+ * carried.
  *
  * The application permits no cleartext traffic — it declares no network
  * security exception, so Android refuses an `http://` call outright. An address
@@ -26,6 +27,13 @@ import okhttp3.Response
  * Applied to the shared client rather than to the GBFS reader, because it holds
  * of the same reason for every address the application calls — a feed, a
  * manifest, a dataset file.
+ *
+ * It rewrites the address the call started from and nothing else: an
+ * application interceptor is run once per call, before OkHttp has followed a
+ * single redirect, so a `301` towards cleartext went past it. That half is
+ * [HttpsOnlyRedirectInterceptor]'s, and the two are needed together — this one
+ * because the rewriting has to happen before the connection is opened, the
+ * other because by then the redirections have not been read yet.
  */
 class HttpsOnlyInterceptor : Interceptor {
 
@@ -34,6 +42,41 @@ class HttpsOnlyInterceptor : Interceptor {
         val secured = request.url.overHttps()
         if (secured == request.url) return chain.proceed(request)
         return chain.proceed(request.newBuilder().url(secured).build())
+    }
+}
+
+/**
+ * Sends over TLS the address a redirection points the call towards.
+ *
+ * Placed as a network interceptor, so that it is run for every request that
+ * really goes out — the redirections and the retries included, which is what
+ * [HttpsOnlyInterceptor] cannot see from where it stands.
+ *
+ * What it rewrites is the `Location` of the answer, not the address of the
+ * request that follows from it. A network interceptor is run once the
+ * connection is already open, and OkHttp holds it to the host and the port that
+ * connection was made to; the cleartext address it would have had to rewrite is
+ * moreover refused by Android before ever reaching here, the platform's policy
+ * turning it down at connection time. Correcting the `Location` on its way back
+ * up is earlier than both: OkHttp reads the header we hand it, and the request
+ * it builds from it is in TLS from the start.
+ *
+ * Only a redirection's `Location` is touched. The header means something else
+ * on a `201`, where it names what has just been created rather than where to go
+ * next, and rewriting that would be answering a question nobody asked.
+ */
+class HttpsOnlyRedirectInterceptor : Interceptor {
+
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val response = chain.proceed(chain.request())
+        if (!response.isRedirect) return response
+        val location = response.header("Location") ?: return response
+        // An address OkHttp cannot resolve is one it will not follow either:
+        // left as it stands, it ends the call rather than opening a connection.
+        val target = response.request.url.resolve(location) ?: return response
+        val secured = target.overHttps()
+        if (secured == target) return response
+        return response.newBuilder().header("Location", secured.toString()).build()
     }
 }
 
