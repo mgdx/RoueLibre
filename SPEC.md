@@ -562,7 +562,7 @@ After a new version is installed, a **what's new** screen appears **once only**,
 - **Room**: a station table (static data) + a table of the last known state.
 - **DataStore**: settings, favourites (station identifiers), and the two places the user names for themselves (§7.6).
 - **No journey data is kept**: no history, no positions, no destinations. Computed journeys live in memory for the duration of the session.
-- No automatic cloud backup: `android:allowBackup="false"`.
+- No automatic cloud backup: `android:allowBackup="false"`. That attribute answers for the cloud alone: from Android 12 on, and on the devices of some manufacturers, the **device-to-device transfer** runs whatever it says, and would carry the settings — the two places of §7.6 among them — to a new telephone. So `res/xml/data_extraction_rules.xml` and `res/xml/backup_rules.xml` exclude every domain Android can extract, in every section: nothing of this application is copied anywhere, by either of the two ways it could be.
 
 **What is forbidden is what the application observes; what is allowed is what the user declares.** The line forbidding journey data, above, is unchanged and stands as it always did; this distinction is what keeps it true, and it was written down on **7 September 2026**, the day the user gained a home and a work to name (§7.6). Until then the only thing of the user's own that the application kept was a list of favourite stations, and the rule could be read as "nothing of the user is written down" without that reading ever being tested. It is tested now, so it is said plainly:
 

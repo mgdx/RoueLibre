@@ -1,19 +1,50 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-   Sample data extraction rules file; uncomment and customize as necessary.
-   See https://developer.android.com/about/versions/12/backup-restore#xml-changes
-   for details.
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    What Android may carry out of this application, from Android 12 on:
+    nothing, by either of the two ways it asks.
+
+    `android:allowBackup="false"` in the manifest answers for the cloud, and
+    that is the only thing it answers for. Android's own documentation is plain
+    about it: for an application targeting Android 12 or later, on the devices
+    of some manufacturers, that attribute turns down the backup to the cloud
+    and leaves the device-to-device transfer running. That transfer is not an
+    attacker — it is the user setting up a new telephone — but it copies
+    whatever it has not been told to leave behind, and SPEC §8 has the two
+    places somebody names for themselves (§7.6) written on the device, read on
+    the device, erased on the device, and sent nowhere. A telephone one no
+    longer holds is nowhere.
+
+    So every domain Android knows how to extract is excluded, one by one, in
+    both sections: what is not named here is taken, and an omission would be a
+    decision nobody took. The four `device_` domains name the direct-boot
+    storage, which this application does not use; they are named all the same,
+    so that the rule holds whole rather than resting on that staying true.
+
+    Nothing is included, and nothing is meant to be. The datasets are
+    downloaded again in a few minutes, the settings are a few taps, and neither
+    is worth carrying to another telephone without being asked.
 -->
 <data-extraction-rules>
     <cloud-backup>
-        <!-- TODO: Use <include> and <exclude> to control what is backed up.
-        <include .../>
-        <exclude .../>
-        -->
+        <exclude domain="root" path="." />
+        <exclude domain="file" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="external" path="." />
+        <exclude domain="device_root" path="." />
+        <exclude domain="device_file" path="." />
+        <exclude domain="device_database" path="." />
+        <exclude domain="device_sharedpref" path="." />
     </cloud-backup>
-    <!--
     <device-transfer>
-        <include .../>
-        <exclude .../>
+        <exclude domain="root" path="." />
+        <exclude domain="file" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="external" path="." />
+        <exclude domain="device_root" path="." />
+        <exclude domain="device_file" path="." />
+        <exclude domain="device_database" path="." />
+        <exclude domain="device_sharedpref" path="." />
     </device-transfer>
-    -->
 </data-extraction-rules>

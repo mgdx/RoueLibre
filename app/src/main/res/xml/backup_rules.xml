@@ -1,13 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-   Sample backup rules file; uncomment and customize as necessary.
-   See https://developer.android.com/guide/topics/data/autobackup
-   for details.
-   Note: This file is ignored for devices older than API 31
-   See https://developer.android.com/about/versions/12/backup-restore
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The same answer as `data_extraction_rules.xml`, for the releases that read
+    this file instead: nothing of this application is backed up.
+
+    Android 11 and below read `android:fullBackupContent`, Android 12 and above
+    read `android:dataExtractionRules`, and the manifest declares both because
+    minSdk 26 serves both. Below Android 12 `android:allowBackup="false"` is
+    already the whole answer — there is no device-to-device transfer there for
+    it to miss — so this file changes nothing on its own. It is written out all
+    the same: a rule that holds only because another attribute happens to be
+    set is a rule nobody can read, and the empty template Android Studio leaves
+    here said nothing at all.
+
+    Every domain is excluded one by one, for the reason given in the other
+    file: what is not named is taken.
 -->
 <full-backup-content>
-    <!--
-   <include domain="sharedpref" path="."/>
-   <exclude domain="sharedpref" path="device.xml"/>
--->
+    <exclude domain="root" path="." />
+    <exclude domain="file" path="." />
+    <exclude domain="database" path="." />
+    <exclude domain="sharedpref" path="." />
+    <exclude domain="external" path="." />
+    <exclude domain="device_root" path="." />
+    <exclude domain="device_file" path="." />
+    <exclude domain="device_database" path="." />
+    <exclude domain="device_sharedpref" path="." />
 </full-backup-content>
