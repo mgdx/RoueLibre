@@ -287,9 +287,10 @@
     <string name="incoming_show_me">Erakutsi</string>
     <string name="incoming_needs_index">Helbide hau lineaz kanpoko aurkibidean bilatu behar da, eta ez dago instalatuta.</string>
     <string name="incoming_address_not_found">Ez dago «%1$s» testuarekin bat datorren helbiderik estalitako eremuan.</string>
-    <string name="incoming_address_choices_title">Testu honetan aurkitutako helbideak</string>
+    <string name="incoming_address_choices_title">Helbide hauetakoren bat esan nahi zenuen?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Toki hau instalatutako datuek estaltzen duten eremutik kanpo dago: ezin da bertaraino ibilbiderik egin.</string>
+    <string name="incoming_unreadable_link">Esteka honek ez du esaten nora joan: haren tokia ezin izan da irakurri.</string>
 
     <string name="favourites_title">Gogokoak</string>
     <string name="favourites_open">Ikusi gogokoak</string>
@@ -475,6 +476,9 @@
     <string name="journey_no_route">Ez dago bi puntu hauen artean egin daitekeen biderik.</string>
     <string name="journey_graph_missing">Ibilbideen datuak ez daude instalatuta. Gehitu itzazu Memoria pantailatik.</string>
     <string name="journey_outside_coverage">Puntu hau instalatutako datuek estaltzen duten eremutik kanpo dago.</string>
+    <string name="journey_outside_coverage_start">Abiapuntua instalatutako datuek estaltzen duten eremutik kanpo dago. Abiatu eremu horren barruko puntu batetik.</string>
+    <string name="journey_outside_coverage_destination">Helmuga instalatutako datuek estaltzen duten eremutik kanpo dago. Aukeratu eremu horren barruko helmuga bat.</string>
+    <string name="journey_outside_coverage_both">Bi muturretako bat ere ez dago instalatutako datuek estaltzen duten eremuan. Instalatu bidaiatzen ari zaren hiriaren datuak.</string>
     <string name="journey_no_stations">Ez da geltokirik ezagutzen. Eguneratu geltokien zerrenda eta saiatu berriro.</string>
 
     <string name="duration_minutes">%1$d min</string>
@@ -614,6 +618,7 @@
     <string name="city_proposal_body">Badirudi sare honek estaltzen duen eremuan zaudela: %1$s. Hori erabili nahi duzu?</string>
     <string name="city_proposal_accept">Bai</string>
     <string name="city_none_nearby">Ez dago sare ezagunik hemendik gertu. Aukeratu hiri bat zerrendatik.</string>
+    <string name="city_location_denied">Kokapenik gabe, aukeratu zure hiria zerrendatik edo bilatu izenaren arabera.</string>
     <string name="action_cancel">Utzi</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -641,12 +646,15 @@
     <!-- %1$s is a size. It is the object of an imperative, which takes the
          bare absolutive, so nothing has to be bent here. -->
     <string name="storage_download_pending">Deskargatu %1$s</string>
+    <string name="storage_download_starting">Deskarga hasten…</string>
     <!-- "%2$s / %3$s" and not "%3$s-tik %2$s": the ablative on a size would
          change shape with the unit symbol, which is not known here. -->
     <string name="storage_downloading">%1$s · %2$s / %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Argitaratutako datuak %1$s sarearenak dira, ez %2$s sarearenak. Ez da ezer deskargatu: beste hiri baten mapa eta helbideak izango zenituzke.</string>
     <string name="storage_wifi_warning">Ez zaude wifi-sare batera konektatuta. Deskarga honek asko kontsumi dezake sare mugikorreko tarifan.</string>
     <string name="dataset_update_available">Eguneratu egin daiteke</string>
+    <string name="dataset_download_failed">Deskargak huts egin du. %1$s</string>
 
     <string name="dataset_absent">Instalatu gabe</string>
     <string name="dataset_installed">%1$s · %2$s</string>

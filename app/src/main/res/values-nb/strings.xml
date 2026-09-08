@@ -220,9 +220,10 @@
     <string name="incoming_show_me">Vis</string>
     <string name="incoming_needs_index">Denne adressen må slås opp i adresseindeksen, som ikke er installert.</string>
     <string name="incoming_address_not_found">«%1$s» samsvarer ikke med noen adresse i det dekkede området.</string>
-    <string name="incoming_address_choices_title">Adresser funnet i denne teksten</string>
+    <string name="incoming_address_choices_title">Mente du en av disse adressene?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Dette stedet ligger utenfor området de installerte dataene dekker: ingen reise kan nå fram dit.</string>
+    <string name="incoming_unreadable_link">Denne lenken sier ikke hvor du skal: stedet i den kunne ikke leses.</string>
 
     <string name="favourites_title">Favoritter</string>
     <string name="favourites_open">Se favoritter</string>
@@ -387,6 +388,9 @@
     <string name="journey_no_route">Ingen farbar rute mellom disse to punktene.</string>
     <string name="journey_graph_missing">Rutedataene er ikke installert. Legg dem til fra Lagring-skjermen.</string>
     <string name="journey_outside_coverage">Dette punktet ligger utenfor området de installerte dataene dekker.</string>
+    <string name="journey_outside_coverage_start">Startpunktet ligger utenfor området de installerte dataene dekker. Start fra et sted innenfor det.</string>
+    <string name="journey_outside_coverage_destination">Målet ligger utenfor området de installerte dataene dekker. Velg et mål innenfor det.</string>
+    <string name="journey_outside_coverage_both">Ingen av endepunktene ligger innenfor området de installerte dataene dekker. Installer dataene for byen du reiser i.</string>
     <string name="journey_no_stations">Ingen stasjon er kjent. Oppdater stasjonslisten, og prøv igjen.</string>
 
     <!-- "t" is how Norwegian abbreviates the hour: "1 t 05". It is the one
@@ -506,6 +510,7 @@
     <string name="city_proposal_body">Det ser ut til at du er i området %1$s dekker. Skal vi bruke det?</string>
     <string name="city_proposal_accept">Ja</string>
     <string name="city_none_nearby">Ingen kjente nettverk i nærheten. Velg en by fra listen.</string>
+    <string name="city_location_denied">Uten posisjon kan du velge byen din fra listen eller søke etter den med navn.</string>
     <string name="action_cancel">Avbryt</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -531,12 +536,15 @@
     <string name="storage_checking">Leser manifestet …</string>
     <string name="storage_up_to_date">Alt er oppdatert.</string>
     <string name="storage_download_pending">Last ned %1$s</string>
+    <string name="storage_download_starting">Starter nedlastingen …</string>
     <string name="storage_downloading">%1$s · %2$s av %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">De publiserte dataene tilhører %1$s, ikke %2$s. Ingenting er lastet ned: du ville ha fått kartet og adressene til en annen by.</string>
     <!-- Android's Norwegian writes the word "wifi", lower-cased inside a
          sentence (`settings:wifi`, `settings:wifi_calling_settings_activation_instructions`). -->
     <string name="storage_wifi_warning">Du er ikke på wifi. Denne nedlastingen kan tære hardt på et mobilabonnement.</string>
     <string name="dataset_update_available">Oppdatering tilgjengelig</string>
+    <string name="dataset_download_failed">Nedlastingen mislyktes. %1$s</string>
 
     <string name="dataset_absent">Ikke installert</string>
     <string name="dataset_installed">%1$s · %2$s</string>

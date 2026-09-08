@@ -259,9 +259,10 @@
     <string name="incoming_show_me">Rodyti</string>
     <string name="incoming_needs_index">Šio adreso reikia ieškoti įrenginyje saugomoje adresų rodyklėje, o ji neįdiegta.</string>
     <string name="incoming_address_not_found">„%1$s“ neatitinka nė vieno adreso aprėptoje teritorijoje.</string>
-    <string name="incoming_address_choices_title">Šiame tekste rasti adresai</string>
+    <string name="incoming_address_choices_title">Gal turėjote omenyje vieną iš šių adresų?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Ši vieta yra už teritorijos, kurią apima įdiegti duomenys: jokia kelionė jos nepasiekia.</string>
+    <string name="incoming_unreadable_link">Ši nuoroda nenurodo, kur eiti: jos vietos nepavyko perskaityti.</string>
 
     <string name="favourites_title">Mėgstamiausios stotelės</string>
     <string name="favourites_open">Žiūrėti mėgstamiausias stoteles</string>
@@ -426,6 +427,9 @@
     <string name="journey_no_route">Tarp šių dviejų taškų nėra tinkamo kelio.</string>
     <string name="journey_graph_missing">Maršrutų duomenys neįdiegti. Pridėkite juos saugyklos ekrane.</string>
     <string name="journey_outside_coverage">Šis taškas yra už teritorijos, kurią apima įdiegti duomenys.</string>
+    <string name="journey_outside_coverage_start">Išvykimo taškas yra už teritorijos, kurią apima įdiegti duomenys. Išvykite iš taško, esančio jos viduje.</string>
+    <string name="journey_outside_coverage_destination">Kelionės tikslas yra už teritorijos, kurią apima įdiegti duomenys. Pasirinkite tikslą jos viduje.</string>
+    <string name="journey_outside_coverage_both">Nė vienas iš dviejų taškų nėra teritorijoje, kurią apima įdiegti duomenys. Įdiekite miesto, kuriame keliaujate, duomenis.</string>
     <string name="journey_no_stations">Nežinoma nė viena stotelė. Atnaujinkite stotelių sąrašą ir bandykite dar kartą.</string>
 
     <string name="duration_minutes">%1$d min.</string>
@@ -558,6 +562,7 @@
     <string name="city_proposal_body">Panašu, kad esate teritorijoje, kurią apima %1$s. Ar tinka?</string>
     <string name="city_proposal_accept">Taip</string>
     <string name="city_none_nearby">Netoliese nėra žinomo tinklo. Pasirinkite miestą iš sąrašo.</string>
+    <string name="city_location_denied">Be vietos nustatymo pasirinkite savo miestą iš sąrašo arba ieškokite jo pagal pavadinimą.</string>
     <string name="action_cancel">Atšaukti</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -583,10 +588,13 @@
     <string name="storage_checking">Skaitomas manifestas…</string>
     <string name="storage_up_to_date">Viskas atnaujinta.</string>
     <string name="storage_download_pending">Atsisiųsti %1$s</string>
+    <string name="storage_download_starting">Pradedamas atsisiuntimas…</string>
     <string name="storage_downloading">%1$s · %2$s iš %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Paskelbti duomenys priklauso tinklui %1$s, o ne %2$s. Nieko neatsisiųsta: būtumėte gavę kito miesto žemėlapį ir adresus.</string>
     <string name="storage_wifi_warning">Nesate prisijungę prie „Wi-Fi“. Šis atsisiuntimas gali stipriai apkrauti mobiliojo ryšio planą.</string>
     <string name="dataset_update_available">Pasiekiamas naujinys</string>
+    <string name="dataset_download_failed">Atsisiųsti nepavyko. %1$s</string>
 
     <string name="dataset_absent">Neįdiegta</string>
     <string name="dataset_installed">%1$s · %2$s</string>

@@ -273,9 +273,10 @@
     <string name="incoming_show_me">Prikaži</string>
     <string name="incoming_needs_index">Ta naslov je treba poiskati v kazalu naslovov, ki ni nameščeno.</string>
     <string name="incoming_address_not_found">„%1$s“ se ne ujema z nobenim naslovom na pokritem območju.</string>
-    <string name="incoming_address_choices_title">Naslovi, najdeni v tem besedilu</string>
+    <string name="incoming_address_choices_title">Ali ste mislili enega od teh naslovov?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Ta kraj je zunaj območja, ki ga pokrivajo nameščeni podatki: nobena pot ga ne doseže.</string>
+    <string name="incoming_unreadable_link">Ta povezava ne pove, kam iti: kraja v njej ni bilo mogoče prebrati.</string>
 
     <string name="favourites_title">Priljubljene</string>
     <string name="favourites_open">Prikaži priljubljene</string>
@@ -429,6 +430,9 @@
     <string name="journey_no_route">Med tema točkama ni prevozne poti.</string>
     <string name="journey_graph_missing">Podatki za izračun poti niso nameščeni. Dodajte jih na zaslonu s shrambo.</string>
     <string name="journey_outside_coverage">Ta točka je zunaj območja, ki ga pokrivajo nameščeni podatki.</string>
+    <string name="journey_outside_coverage_start">Izhodišče je zunaj območja, ki ga pokrivajo nameščeni podatki. Krenite s točke znotraj njega.</string>
+    <string name="journey_outside_coverage_destination">Cilj je zunaj območja, ki ga pokrivajo nameščeni podatki. Izberite cilj znotraj njega.</string>
+    <string name="journey_outside_coverage_both">Nobeden od obeh koncev ni znotraj območja, ki ga pokrivajo nameščeni podatki. Namestite podatke mesta, po katerem potujete.</string>
     <string name="journey_no_stations">Nobena postaja ni znana. Osvežite seznam postaj in poskusite znova.</string>
 
     <string name="duration_minutes">%1$d min</string>
@@ -564,6 +568,7 @@
     <string name="city_proposal_body">Videti je, da ste na območju, ki ga pokriva %1$s. Ali izberemo to?</string>
     <string name="city_proposal_accept">Da</string>
     <string name="city_none_nearby">V bližini ni znanega omrežja. Izberite mesto s seznama.</string>
+    <string name="city_location_denied">Brez lokacije izberite svoje mesto s seznama ali ga poiščite po imenu.</string>
     <string name="action_cancel">Prekliči</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -589,10 +594,13 @@
     <string name="storage_checking">Branje manifesta …</string>
     <string name="storage_up_to_date">Vse je posodobljeno.</string>
     <string name="storage_download_pending">Prenesi %1$s</string>
+    <string name="storage_download_starting">Prenos se začenja …</string>
     <string name="storage_downloading">%1$s · %2$s od %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Objavljeni podatki pripadajo omrežju %1$s, ne %2$s. Ničesar ni bilo prenesenega: dobili bi zemljevid in naslove drugega mesta.</string>
     <string name="storage_wifi_warning">Niste v omrežju Wi-Fi. Ta prenos lahko močno obremeni mobilni paket.</string>
     <string name="dataset_update_available">Na voljo je posodobitev</string>
+    <string name="dataset_download_failed">Prenos ni uspel. %1$s</string>
 
     <string name="dataset_absent">Ni nameščeno</string>
     <string name="dataset_installed">%1$s · %2$s</string>

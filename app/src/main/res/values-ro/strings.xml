@@ -252,9 +252,10 @@
     <string name="incoming_show_me">Afișează</string>
     <string name="incoming_needs_index">Această adresă trebuie căutată în indexul offline, care nu este instalat.</string>
     <string name="incoming_address_not_found">„%1$s” nu se potrivește cu nicio adresă din zona acoperită.</string>
-    <string name="incoming_address_choices_title">Adrese găsite în acest text</string>
+    <string name="incoming_address_choices_title">Te refereai la una dintre aceste adrese?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Acest loc se află în afara zonei acoperite de datele instalate: niciun traseu nu ajunge până acolo.</string>
+    <string name="incoming_unreadable_link">Acest link nu spune unde să mergi: locul din el nu a putut fi citit.</string>
 
     <string name="favourites_title">Favorite</string>
     <string name="favourites_open">Vezi favoritele</string>
@@ -425,6 +426,9 @@
     <string name="journey_no_route">Nicio rută practicabilă între aceste două puncte.</string>
     <string name="journey_graph_missing">Graful de trasee nu este instalat. Adaugă-l din ecranul de stocare.</string>
     <string name="journey_outside_coverage">Acest punct se află în afara zonei acoperite de datele instalate.</string>
+    <string name="journey_outside_coverage_start">Punctul de plecare se află în afara zonei acoperite de datele instalate. Pleacă dintr-un punct aflat în interiorul ei.</string>
+    <string name="journey_outside_coverage_destination">Destinația se află în afara zonei acoperite de datele instalate. Alege o destinație în interiorul ei.</string>
+    <string name="journey_outside_coverage_both">Niciunul dintre cele două capete nu se află în zona acoperită de datele instalate. Instalează datele orașului prin care călătorești.</string>
     <string name="journey_no_stations">Nicio stație cunoscută. Actualizează lista stațiilor, apoi încearcă din nou.</string>
 
     <string name="duration_minutes">%1$d min</string>
@@ -552,6 +556,7 @@
     <string name="city_proposal_body">Se pare că ești în zona acoperită de %1$s. Alegem această zonă?</string>
     <string name="city_proposal_accept">Da</string>
     <string name="city_none_nearby">Nicio rețea cunoscută prin apropiere. Alege un oraș din listă.</string>
+    <string name="city_location_denied">Fără locație, alege-ți orașul din listă sau caută-l după nume.</string>
     <string name="action_cancel">Anulează</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -582,10 +587,13 @@
     <string name="storage_checking">Se citește manifestul…</string>
     <string name="storage_up_to_date">Totul este la zi.</string>
     <string name="storage_download_pending">Descarcă %1$s</string>
+    <string name="storage_download_starting">Se pornește descărcarea…</string>
     <string name="storage_downloading">%1$s · %2$s din %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Datele publicate sunt cele ale %1$s, nu ale %2$s. Nu s-a descărcat nimic: ai fi primit harta și adresele altui oraș.</string>
     <string name="storage_wifi_warning">Nu ești pe Wi-Fi. Această descărcare poate consuma mult dintr-un abonament de date mobile.</string>
     <string name="dataset_update_available">Actualizare disponibilă</string>
+    <string name="dataset_download_failed">Descărcarea a eșuat. %1$s</string>
 
     <string name="dataset_absent">Neinstalat</string>
     <string name="dataset_installed">%1$s · %2$s</string>

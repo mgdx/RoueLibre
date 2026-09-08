@@ -220,9 +220,10 @@
     <string name="incoming_show_me">Näytä</string>
     <string name="incoming_needs_index">Tämä osoite on haettava offline-hakemistosta, jota ei ole asennettu.</string>
     <string name="incoming_address_not_found">”%1$s” ei vastaa mitään osoitetta katetulla alueella.</string>
-    <string name="incoming_address_choices_title">Tästä tekstistä löytyneet osoitteet</string>
+    <string name="incoming_address_choices_title">Tarkoititko jotakin näistä osoitteista?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Tämä paikka on asennettujen aineistojen kattaman alueen ulkopuolella: sinne ei voi laskea reittiä.</string>
+    <string name="incoming_unreadable_link">Tämä linkki ei kerro, minne mennä: sen paikkaa ei voitu lukea.</string>
 
     <string name="favourites_title">Suosikit</string>
     <string name="favourites_open">Näytä suosikit</string>
@@ -386,6 +387,9 @@
     <string name="journey_no_route">Näiden kahden pisteen välillä ei ole kuljettavaa reittiä.</string>
     <string name="journey_graph_missing">Reittiaineistoa ei ole asennettu. Lisää se Tallennustila-näytöltä.</string>
     <string name="journey_outside_coverage">Tämä piste on asennettujen aineistojen kattaman alueen ulkopuolella.</string>
+    <string name="journey_outside_coverage_start">Lähtöpiste on asennettujen aineistojen kattaman alueen ulkopuolella. Lähde alueen sisäpuolelta.</string>
+    <string name="journey_outside_coverage_destination">Määränpää on asennettujen aineistojen kattaman alueen ulkopuolella. Valitse määränpää alueen sisäpuolelta.</string>
+    <string name="journey_outside_coverage_both">Kumpikaan pää ei ole asennettujen aineistojen kattamalla alueella. Asenna sen kaupungin aineistot, jossa matkustat.</string>
     <string name="journey_no_stations">Asemia ei tunneta. Päivitä asemalista ja yritä uudelleen.</string>
 
     <string name="duration_minutes">%1$d min</string>
@@ -511,6 +515,7 @@
     <string name="city_proposal_body">Näytät olevan alueella, jonka %1$s kattaa. Käykö se?</string>
     <string name="city_proposal_accept">Kyllä</string>
     <string name="city_none_nearby">Lähellä ei tunneta verkostoa. Valitse kaupunki listalta.</string>
+    <string name="city_location_denied">Ilman sijaintia valitse kaupunkisi listalta tai hae sitä nimellä.</string>
     <string name="action_cancel">Peru</string>
 
     <!-- Finnish writes the byte units with a `t`, for `tavu`: kt, Mt, Gt.
@@ -540,10 +545,13 @@
     <string name="storage_checking">Luetaan manifestia…</string>
     <string name="storage_up_to_date">Kaikki on ajan tasalla.</string>
     <string name="storage_download_pending">Lataa %1$s</string>
+    <string name="storage_download_starting">Aloitetaan latausta…</string>
     <string name="storage_downloading">%1$s · %2$s / %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Julkaistut aineistot ovat verkoston %1$s, eivät verkoston %2$s. Mitään ei ladattu: olisit saanut toisen kaupungin kartan ja osoitteet.</string>
     <string name="storage_wifi_warning">Et ole Wi-Fi-verkossa. Tämä lataus voi kuormittaa mobiililiittymää raskaasti.</string>
     <string name="dataset_update_available">Päivitys saatavilla</string>
+    <string name="dataset_download_failed">Lataus epäonnistui. %1$s</string>
 
     <string name="dataset_absent">Ei asennettu</string>
     <string name="dataset_installed">%1$s · %2$s</string>

@@ -202,9 +202,10 @@
     <string name="incoming_show_me">Göster</string>
     <string name="incoming_needs_index">Bu adresin, yüklü olmayan çevrimdışı dizinde aranması gerekiyor.</string>
     <string name="incoming_address_not_found">“%1$s”, kapsanan alandaki hiçbir adresle eşleşmiyor.</string>
-    <string name="incoming_address_choices_title">Bu metinde bulunan adresler</string>
+    <string name="incoming_address_choices_title">Şu adreslerden birini mi demek istedin?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Bu yer, yüklü verilerin kapsadığı alanın dışında kalıyor: ona ulaşan bir yolculuk kurulamaz.</string>
+    <string name="incoming_unreadable_link">Bu bağlantı nereye gidileceğini söylemiyor: içindeki yer okunamadı.</string>
 
     <string name="favourites_title">Favoriler</string>
     <string name="favourites_open">Favorileri gör</string>
@@ -361,6 +362,9 @@
     <string name="journey_no_route">Bu iki nokta arasında geçilebilir bir rota yok.</string>
     <string name="journey_graph_missing">Rota verileri yüklü değil. Depolama ekranından ekle.</string>
     <string name="journey_outside_coverage">Bu nokta, yüklü verilerin kapsadığı alanın dışında kalıyor.</string>
+    <string name="journey_outside_coverage_start">Kalkış noktası, yüklü verilerin kapsadığı alanın dışında kalıyor. Alanın içindeki bir noktadan yola çık.</string>
+    <string name="journey_outside_coverage_destination">Varış noktası, yüklü verilerin kapsadığı alanın dışında kalıyor. Alanın içinden bir varış noktası seç.</string>
+    <string name="journey_outside_coverage_both">İki uç da yüklü verilerin kapsadığı alanın içinde değil. Yolculuk ettiğin şehrin verilerini yükle.</string>
     <string name="journey_no_stations">Bilinen istasyon yok. İstasyon listesini yenile, sonra tekrar dene.</string>
 
     <!-- Turkish abbreviates the two units itself: dakika → dk, saat → sa. -->
@@ -472,6 +476,7 @@
     <string name="city_proposal_body">%1$s kapsama alanında görünüyorsun. Bununla devam edelim mi?</string>
     <string name="city_proposal_accept">Evet</string>
     <string name="city_none_nearby">Buraya yakın bilinen bir ağ yok. Listeden bir şehir seç.</string>
+    <string name="city_location_denied">Konum olmadan şehrini listeden seç ya da adıyla ara.</string>
     <string name="action_cancel">İptal</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -500,10 +505,13 @@
          declines nothing; an accusative ending would have to guess the vowels
          of a name this string never sees. -->
     <string name="storage_download_pending">İndir: %1$s</string>
+    <string name="storage_download_starting">İndirme başlatılıyor…</string>
     <string name="storage_downloading">%1$s · %2$s / %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Yayımlanan veriler %2$s ağının değil, %1$s ağının verileri. Hiçbir şey indirilmedi: başka bir şehrin haritasını ve adreslerini almış olacaktın.</string>
     <string name="storage_wifi_warning">Kablosuz bağlantıda değilsin. Bu indirme mobil veri paketine ağır gelebilir.</string>
     <string name="dataset_update_available">Güncelleme var</string>
+    <string name="dataset_download_failed">İndirme başarısız oldu. %1$s</string>
 
     <string name="dataset_absent">Yüklü değil</string>
     <string name="dataset_installed">%1$s · %2$s</string>

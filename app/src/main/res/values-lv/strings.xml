@@ -233,9 +233,10 @@
     <string name="incoming_show_me">Rādīt</string>
     <string name="incoming_needs_index">Šī adrese ir jāmeklē bezsaistes rādītājā, kurš nav instalēts.</string>
     <string name="incoming_address_not_found">„%1$s“ neatbilst nevienai adresei aptvertajā apgabalā.</string>
-    <string name="incoming_address_choices_title">Šajā tekstā atrastās adreses</string>
+    <string name="incoming_address_choices_title">Vai domājāt kādu no šīm adresēm?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Šī vieta atrodas ārpus apgabala, ko aptver instalētie dati: neviens maršruts to nesasniedz.</string>
+    <string name="incoming_unreadable_link">Šī saite nenorāda, kurp doties: tajā minēto vietu neizdevās nolasīt.</string>
 
     <string name="favourites_title">Izlase</string>
     <string name="favourites_open">Skatīt izlasi</string>
@@ -386,6 +387,9 @@
     <string name="journey_no_route">Starp šiem diviem punktiem nav izbraucama ceļa.</string>
     <string name="journey_graph_missing">Maršrutēšanas dati nav instalēti. Pievienojiet tos krātuves ekrānā.</string>
     <string name="journey_outside_coverage">Šis punkts atrodas ārpus apgabala, ko aptver instalētie dati.</string>
+    <string name="journey_outside_coverage_start">Sākumpunkts atrodas ārpus apgabala, ko aptver instalētie dati. Sāciet no punkta, kas ir tā iekšpusē.</string>
+    <string name="journey_outside_coverage_destination">Galamērķis atrodas ārpus apgabala, ko aptver instalētie dati. Izvēlieties galamērķi tā iekšpusē.</string>
+    <string name="journey_outside_coverage_both">Neviens no abiem punktiem neatrodas apgabalā, ko aptver instalētie dati. Instalējiet tās pilsētas datus, kurā ceļojat.</string>
     <string name="journey_no_stations">Nav zināma neviena stacija. Atsvaidziniet staciju sarakstu un mēģiniet vēlreiz.</string>
 
     <string name="duration_minutes">%1$d min</string>
@@ -510,6 +514,7 @@
     <string name="city_proposal_body">Šķiet, ka atrodaties apgabalā, ko aptver %1$s. Vai turpināt ar to?</string>
     <string name="city_proposal_accept">Jā</string>
     <string name="city_none_nearby">Šeit tuvumā nav neviena zināma tīkla. Izvēlieties pilsētu no saraksta.</string>
+    <string name="city_location_denied">Bez atrašanās vietas izvēlieties savu pilsētu no saraksta vai meklējiet to pēc nosaukuma.</string>
     <string name="action_cancel">Atcelt</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -538,10 +543,13 @@
          singular in the third („Adrešu rādītājs“), so no verb agrees with all
          three: the colon agrees with nothing. -->
     <string name="storage_download_pending">Lejupielādēt: %1$s</string>
+    <string name="storage_download_starting">Sākas lejupielāde…</string>
     <string name="storage_downloading">%1$s · %2$s no %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Publicētie dati pieder tīklam %1$s, nevis %2$s. Nekas netika lejupielādēts: jūs saņemtu citas pilsētas karti un adreses.</string>
     <string name="storage_wifi_warning">Nav Wi-Fi savienojuma. Šī lejupielāde var būtiski noslogot mobilo datu plānu.</string>
     <string name="dataset_update_available">Ir pieejams atjauninājums</string>
+    <string name="dataset_download_failed">Lejupielāde neizdevās. %1$s</string>
 
     <!-- The three lines below are read straight under, or beside, a set's
          own name — a masculine plural in two cases („Kartes dati“,

@@ -270,9 +270,10 @@
     <string name="incoming_needs_index">Este endereço tem de ser procurado no índice de endereços offline, que não está instalado.</string>
     <!-- %1$s is the text received from the other application. -->
     <string name="incoming_address_not_found">«%1$s» não corresponde a nenhum endereço da área coberta.</string>
-    <string name="incoming_address_choices_title">Endereços encontrados neste texto</string>
+    <string name="incoming_address_choices_title">Queria dizer um destes endereços?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Este local fica fora da área que os dados instalados cobrem: nenhum percurso lá chega.</string>
+    <string name="incoming_unreadable_link">Esta ligação não diz para onde ir: não foi possível ler o local que indica.</string>
 
     <!-- Favourites (SPEC §7.5). -->
     <string name="favourites_title">Favoritos</string>
@@ -468,6 +469,9 @@
     <string name="journey_no_route">Não há nenhum caminho praticável entre estes dois pontos.</string>
     <string name="journey_graph_missing">O grafo de percursos não está instalado. Adicione-o a partir do ecrã de armazenamento.</string>
     <string name="journey_outside_coverage">Este ponto fica fora da área que os dados instalados cobrem.</string>
+    <string name="journey_outside_coverage_start">O ponto de partida fica fora da área que os dados instalados cobrem. Parta de um ponto dentro dela.</string>
+    <string name="journey_outside_coverage_destination">O destino fica fora da área que os dados instalados cobrem. Escolha um destino dentro dela.</string>
+    <string name="journey_outside_coverage_both">Nenhuma das duas extremidades fica dentro da área que os dados instalados cobrem. Instale os dados da cidade onde viaja.</string>
     <string name="journey_no_stations">Não se conhece nenhuma estação. Atualize a lista de estações e tente novamente.</string>
 
     <!-- Durations, formatted through the localisation APIs (SPEC §9).
@@ -628,6 +632,7 @@
     <string name="city_proposal_body">Parece estar na área que %1$s cobre. Usamos esta cidade?</string>
     <string name="city_proposal_accept">Sim</string>
     <string name="city_none_nearby">Não há nenhuma rede conhecida por perto. Escolha uma cidade da lista.</string>
+    <string name="city_location_denied">Sem localização, escolha a sua cidade da lista ou procure-a pelo nome.</string>
     <string name="action_cancel">Cancelar</string>
 
     <!-- File size units. Base 1000, as everywhere else in the system.
@@ -661,12 +666,15 @@
     <string name="storage_up_to_date">Está tudo atualizado.</string>
     <!-- %1$s is an already formatted size, "42,5 MB" for instance. -->
     <string name="storage_download_pending">Transferir %1$s</string>
+    <string name="storage_download_starting">A iniciar a transferência…</string>
     <!-- %1$s is the file name, %2$s the part received, %3$s the total size. -->
     <string name="storage_downloading">%1$s · %2$s de %3$s</string>
     <!-- %1$s is the set's name, %2$s the reason for the failure. -->
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Os dados publicados são os de %1$s, não os de %2$s. Não foi transferido nada: ficaria com o mapa e os endereços de outra cidade.</string>
     <string name="storage_wifi_warning">Não está em Wi-Fi. Esta transferência pode pesar muito num plano de dados móveis.</string>
     <string name="dataset_update_available">Atualização disponível</string>
+    <string name="dataset_download_failed">A transferência falhou. %1$s</string>
 
     <string name="dataset_absent">Não instalado</string>
     <!-- %1$s is a size, %2$s a date. Example: "35,0 MB · 9 de agosto de 2026". -->

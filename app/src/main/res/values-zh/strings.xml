@@ -212,9 +212,10 @@
     <string name="incoming_show_me">显示</string>
     <string name="incoming_needs_index">该地址需要在离线索引中查找，而索引尚未安装。</string>
     <string name="incoming_address_not_found">“%1$s”在覆盖范围内没有匹配的地址。</string>
-    <string name="incoming_address_choices_title">在这段文字中找到的地址</string>
+    <string name="incoming_address_choices_title">您要找的是以下地址之一吗？</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">该地点位于已安装数据覆盖的范围之外：没有路线能够到达。</string>
+    <string name="incoming_unreadable_link">该链接没有说明去往何处：其中的地点无法读取。</string>
 
     <string name="favourites_title">收藏</string>
     <string name="favourites_open">查看收藏</string>
@@ -374,6 +375,9 @@
     <string name="journey_no_route">这两点之间没有可通行的道路。</string>
     <string name="journey_graph_missing">未安装路线数据。请在存储空间界面添加。</string>
     <string name="journey_outside_coverage">该点位于已安装数据覆盖的范围之外。</string>
+    <string name="journey_outside_coverage_start">起点位于已安装数据覆盖的范围之外。请从范围之内的地点出发。</string>
+    <string name="journey_outside_coverage_destination">终点位于已安装数据覆盖的范围之外。请选择范围之内的地点。</string>
+    <string name="journey_outside_coverage_both">两端都不在已安装数据覆盖的范围之内。请安装您出行所在城市的数据。</string>
     <string name="journey_no_stations">没有已知的站点。请刷新站点列表，然后重试。</string>
 
     <string name="duration_minutes">%1$d 分钟</string>
@@ -471,6 +475,7 @@
     <string name="city_proposal_body">您似乎在 %1$s 覆盖的范围内。就用它吗？</string>
     <string name="city_proposal_accept">是</string>
     <string name="city_none_nearby">这附近没有已知的系统。请从列表中选一座城市。</string>
+    <string name="city_location_denied">没有定位时，可以从列表中选择您的城市，或按名称搜索。</string>
     <string name="action_cancel">取消</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -496,10 +501,13 @@
     <string name="storage_checking">正在读取清单…</string>
     <string name="storage_up_to_date">一切都是最新的。</string>
     <string name="storage_download_pending">下载%1$s</string>
+    <string name="storage_download_starting">正在开始下载…</string>
     <string name="storage_downloading">%1$s · %2$s，共 %3$s</string>
     <string name="storage_download_failed">%1$s：%2$s</string>
+    <string name="storage_manifest_other_network">已发布的数据属于 %1$s，而不是 %2$s。没有下载任何内容：否则设备上会换成另一座城市的地图和地址。</string>
     <string name="storage_wifi_warning">您当前不在 WLAN 上。此次下载可能会大量占用移动流量。</string>
     <string name="dataset_update_available">有可用更新</string>
+    <string name="dataset_download_failed">下载失败。%1$s</string>
 
     <string name="dataset_absent">未安装</string>
     <string name="dataset_installed">%1$s · %2$s</string>

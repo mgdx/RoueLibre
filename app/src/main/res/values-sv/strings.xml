@@ -211,9 +211,10 @@
     <string name="incoming_show_me">Visa</string>
     <string name="incoming_needs_index">Den här adressen måste slås upp i adressindexet, som inte är installerat.</string>
     <string name="incoming_address_not_found">”%1$s” motsvarar ingen adress i det täckta området.</string>
-    <string name="incoming_address_choices_title">Adresser som hittades i den här texten</string>
+    <string name="incoming_address_choices_title">Menade du någon av dessa adresser?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Den här platsen ligger utanför det område som installerade data täcker: ingen resa kan nå dit.</string>
+    <string name="incoming_unreadable_link">Den här länken säger inte vart du ska: platsen i den gick inte att läsa.</string>
 
     <string name="favourites_title">Favoriter</string>
     <string name="favourites_open">Visa favoriter</string>
@@ -372,6 +373,9 @@
     <string name="journey_no_route">Ingen framkomlig rutt mellan de här två punkterna.</string>
     <string name="journey_graph_missing">Ruttdata är inte installerade. Lägg till dem från skärmen Lagring.</string>
     <string name="journey_outside_coverage">Den här punkten ligger utanför det område som installerade data täcker.</string>
+    <string name="journey_outside_coverage_start">Startpunkten ligger utanför det område som installerade data täcker. Utgå från en plats inom det.</string>
+    <string name="journey_outside_coverage_destination">Målet ligger utanför det område som installerade data täcker. Välj ett mål inom det.</string>
+    <string name="journey_outside_coverage_both">Ingen av ändpunkterna ligger inom det område som installerade data täcker. Installera data för den stad du reser i.</string>
     <string name="journey_no_stations">Ingen station känd. Uppdatera stationslistan och försök igen.</string>
 
     <!-- ”tim” is how Swedish abbreviates the hour: ”1 tim 05”. It is the one
@@ -492,6 +496,7 @@
     <string name="city_proposal_body">Du verkar befinna dig i det område som %1$s täcker. Ska vi använda det?</string>
     <string name="city_proposal_accept">Ja</string>
     <string name="city_none_nearby">Inget känt nätverk i närheten. Välj en stad i listan.</string>
+    <string name="city_location_denied">Utan plats kan du välja din stad i listan eller söka efter den med namn.</string>
     <string name="action_cancel">Avbryt</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -517,10 +522,13 @@
     <string name="storage_checking">Läser manifestet …</string>
     <string name="storage_up_to_date">Allt är uppdaterat.</string>
     <string name="storage_download_pending">Ladda ned %1$s</string>
+    <string name="storage_download_starting">Startar nedladdningen …</string>
     <string name="storage_downloading">%1$s · %2$s av %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">De publicerade uppgifterna tillhör %1$s, inte %2$s. Ingenting har laddats ned: du hade fått kartan och adresserna för en annan stad.</string>
     <string name="storage_wifi_warning">Du är inte ansluten till wifi. Den här nedladdningen kan tära hårt på ett mobilabonnemang.</string>
     <string name="dataset_update_available">Uppdatering finns</string>
+    <string name="dataset_download_failed">Nedladdningen misslyckades. %1$s</string>
 
     <!-- The three dataset names do not share a gender and a number — Kartdata,
          Ruttdata, Adressindex — and no one Swedish participle agrees with all
