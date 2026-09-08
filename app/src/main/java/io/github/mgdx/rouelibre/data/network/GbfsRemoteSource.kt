@@ -8,6 +8,7 @@ import io.github.mgdx.rouelibre.core.gbfs.GbfsFeedNames
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
 import io.github.mgdx.rouelibre.core.gbfs.StationInformationFeed
 import io.github.mgdx.rouelibre.core.gbfs.StationStatusFeed
+import io.github.mgdx.rouelibre.core.gbfs.VehicleStatusFeed
 import io.github.mgdx.rouelibre.core.gbfs.VehicleTypesFeed
 import io.github.mgdx.rouelibre.core.map
 import kotlinx.coroutines.CoroutineDispatcher
@@ -111,6 +112,31 @@ class GbfsRemoteSource(
         discovery.urlOf(GbfsFeedNames.VEHICLE_TYPES)
             .flatMap { fetchText(it) }
             .flatMap(parser::parseVehicleTypes)
+
+    /**
+     * Reads the bikes the network reports outside its stations (SPEC §4.1).
+     *
+     * Under whichever of its two names the producer publishes the feed, and
+     * only while the setting of SPEC §7.6 is on — the caller's business. A
+     * network publishing none answers `FeedUnavailable`, an ordinary answer
+     * for a docked fleet. **So does a feed announced and not served**: a
+     * producer that lists the feed in its discovery document and answers 404
+     * on it is, for this session, a producer publishing none. There is
+     * nothing the user can do about it, and reading it as a server failure
+     * would put a sentence on the screen every five minutes for a feed the
+     * map can only do without.
+     */
+    suspend fun fetchVehicleStatus(discovery: GbfsDiscovery): Outcome<VehicleStatusFeed> =
+        discovery.urlOfVehicleStatus()
+            .flatMap { fetchText(it) }
+            .flatMap(parser::parseVehicleStatus)
+            .let { outcome ->
+                if (outcome is Outcome.Failure && outcome.error == DataError.ServerRefused(404)) {
+                    Outcome.Failure(DataError.FeedUnavailable(GbfsFeedNames.VEHICLE_STATUS))
+                } else {
+                    outcome
+                }
+            }
 
     /**
      * Runs a GET and returns the response body.

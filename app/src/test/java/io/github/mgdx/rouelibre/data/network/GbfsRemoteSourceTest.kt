@@ -143,6 +143,70 @@ class GbfsRemoteSourceTest {
         )
     }
 
+    @Test
+    fun `reads the bikes outside stations from the feed the discovery names`() = runTest {
+        val server = MockWebServer()
+        server.start()
+        server.enqueue(
+            MockResponse(
+                code = 200,
+                body = """
+                    {"last_updated":1788432120,"ttl":60,"version":"2.3","data":{"bikes":[
+                      {"bike_id":"a","lat":52.516,"lon":13.377,"vehicle_type_id":"348",
+                       "current_fuel_percent":0.67,"current_range_meters":0},
+                      {"bike_id":"b","lat":52.520,"lon":13.404,"station_id":"3140"}
+                    ]}}
+                """.trimIndent(),
+            ),
+        )
+        val discovery = GbfsDiscovery(
+            version = "2.3",
+            feedUrlsByName = mapOf(
+                GbfsFeedNames.FREE_BIKE_STATUS to server.url("/free_bike_status.json").toString(),
+            ),
+        )
+
+        val feed = sourceOn(server).fetchVehicleStatus(discovery).valueOrNull()
+
+        server.close()
+        val bike = checkNotNull(feed).bikes.single()
+        assertEquals("a", bike.id)
+        assertEquals(0.67, checkNotNull(bike.chargeRatio), 1e-9)
+    }
+
+    @Test
+    fun `a street bike feed announced and not served is read as none published`() = runTest {
+        // The discovery document is the producer's word and the 404 its
+        // correction: for this session the network publishes none, and the
+        // map is not to say a server failed every five minutes over a feed it
+        // can only do without.
+        val server = MockWebServer()
+        server.start()
+        server.enqueue(MockResponse(code = 404))
+        val discovery = GbfsDiscovery(
+            version = "3.0",
+            feedUrlsByName = mapOf(
+                GbfsFeedNames.VEHICLE_STATUS to server.url("/vehicle_status.json").toString(),
+            ),
+        )
+
+        val outcome = sourceOn(server).fetchVehicleStatus(discovery)
+
+        server.close()
+        assertEquals(
+            Outcome.Failure(DataError.FeedUnavailable(GbfsFeedNames.VEHICLE_STATUS)),
+            outcome,
+        )
+    }
+
+    private fun sourceOn(server: MockWebServer): GbfsRemoteSource = GbfsRemoteSource(
+        client = OkHttpClient(),
+        parser = GbfsParser(),
+        userAgent = "RoueLibre/test",
+        unnamedStationLabel = { UNNAMED },
+        ioDispatcher = Dispatchers.IO,
+    )
+
     private companion object {
         /** Stands in for `R.string.station_unnamed`, which no JVM test resolves. */
         const val UNNAMED = "Unnamed station"

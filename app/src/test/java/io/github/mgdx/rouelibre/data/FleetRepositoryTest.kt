@@ -181,4 +181,22 @@ class FleetRepositoryTest {
         val fleet = checkNotNull(repository.fleet.first())
         assertEquals(lyonTypes + mapOf("cargo" to VehicleKind.Electric), fleet.vehicleTypes)
     }
+
+    @Test
+    fun `the ranges and the cargo types of the table reach the fleet`() = runTest {
+        // The sheet of a bike outside stations reads its charge and its kind
+        // from the one table the map already reads (SPEC §7.2.1).
+        val repository = repository()
+
+        repository.record(
+            reading(electric = true, mixed = true).copy(
+                maxRangeMetresByType = mapOf("electrical" to 60_000),
+                cargoVehicleTypeIds = setOf("cargo"),
+            ),
+        )
+
+        val fleet = checkNotNull(repository.fleet.first())
+        assertEquals(mapOf("electrical" to 60_000), fleet.maxRangeMetresByType)
+        assertEquals(setOf("cargo"), fleet.cargoVehicleTypeIds)
+    }
 }

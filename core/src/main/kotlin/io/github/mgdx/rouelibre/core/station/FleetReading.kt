@@ -13,12 +13,20 @@ package io.github.mgdx.rouelibre.core.station
  * @property bikesCounted how many bikes the reading rests on, both kinds
  *   together. Zero means nothing could be counted, and the reading is then the
  *   declaration's rather than the network's.
+ * @property maxRangeMetresByType how far a full battery of each type goes,
+ *   where the network declares it above zero. Not counted but carried, so
+ *   that the sheet of a bike outside stations reads its charge from the same
+ *   table it reads its kind from (SPEC §7.2.1).
+ * @property cargoVehicleTypeIds the types the network declares as cargo
+ *   bikes, carried for the same reason.
  */
 public data class FleetReading(
     public val vehicleTypes: Map<String, VehicleKind>,
     public val hasElectricBikes: Boolean,
     public val isMixed: Boolean,
     public val bikesCounted: Int,
+    public val maxRangeMetresByType: Map<String, Int> = emptyMap(),
+    public val cargoVehicleTypeIds: Set<String> = emptySet(),
 )
 
 /**
