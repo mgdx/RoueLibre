@@ -346,7 +346,7 @@ class AddressRankingTest {
 
     @Test
     fun `the sentence's own words weigh on every street alike`() {
-        // Where the streets answer the same single word, the sentence around it
+        // Where the streets answer the same words, the sentence around them
         // charges them all the same and decides nothing between them: the name
         // that stops where the query stops still comes first, and the others
         // follow in the order they were already in.
@@ -357,8 +357,36 @@ class AddressRankingTest {
         assertEquals(
             listOf(paul.id, lafargue.id, ramadier.id),
             rank(
-                "Rendez-vous demain matin devant chez Paul",
+                "Rendez-vous demain matin rue Paul",
                 listOf(paul, lafargue, ramadier),
+                matching = WordMatching.WholeWordsInSentence,
+            ),
+        )
+    }
+
+    @Test
+    fun `one word of a sentence is not enough to guess a street from`() {
+        // The sentence above named the street twice — its type and its name —
+        // and that is what a shared address always does. "devant chez Paul"
+        // names it once, which is what any sentence hands out by accident:
+        // "merci beaucoup et bonne journée" was offered "Chemin Bonne Nouvelle"
+        // on the strength of "bonne" alone (SPEC §7.8).
+        val paul = street("Rue Paul")
+        val bonneNouvelle = street("Chemin Bonne Nouvelle")
+
+        assertEquals(
+            emptyList<Long>(),
+            rank(
+                "Rendez-vous demain matin devant chez Paul",
+                listOf(paul, bonneNouvelle),
+                matching = WordMatching.WholeWordsInSentence,
+            ),
+        )
+        assertEquals(
+            emptyList<Long>(),
+            rank(
+                "merci beaucoup et bonne journee",
+                listOf(paul, bonneNouvelle),
                 matching = WordMatching.WholeWordsInSentence,
             ),
         )

@@ -189,6 +189,39 @@ class AddressQueryTest {
         assertEquals(listOf("via", "roma", "12", "a", "milano"), query.terms)
     }
 
+    @Test
+    fun `an article before the number does not hide the address a sentence carries`() {
+        // How a share really reads (SPEC §7.8): the sentence's own words stand
+        // in front of the address, and the last of them is an article. The
+        // number was dropped on that ground alone, so a text naming
+        // "171 rue Nationale" was answered with the street and no doorway.
+        val query = parse("Rendez-vous au 171 rue Nationale, 59800 Lille")
+
+        assertEquals(171, query.houseNumber)
+        assertEquals(
+            listOf("rendez", "vous", "au", "rue", "nationale", "lille"),
+            query.terms,
+        )
+    }
+
+    @Test
+    fun `the street type is what tells that address from a name holding a date`() {
+        // The article before the number is given up only because a street type
+        // opens what follows it. A date carries its type in front of itself
+        // instead, so these keep their numbers — which the test above depends
+        // on being still true.
+        assertNamesTheStreet(
+            normalizer,
+            "Place du 4 Septembre",
+            listOf("place", "du", "4", "septembre"),
+        )
+        assertNamesTheStreet(
+            TestRules.of("de"),
+            "Straße des 17. Juni",
+            listOf("strasse", "des", "17", "juni"),
+        )
+    }
+
     /** A query naming a street with a number in it keeps that name whole. */
     private fun assertNamesTheStreet(
         rules: AddressNormalizer,
