@@ -1,0 +1,178 @@
+{
+  "last_updated": 1788432120,
+  "ttl": 60,
+  "version": "2.3",
+  "data": {
+    "bikes": [
+      {
+        "bike_id": "nextbike_bb_20412",
+        "lat": 52.516278,
+        "lon": 13.377704,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "348",
+        "current_range_meters": 0,
+        "current_fuel_percent": 0.67,
+        "rental_uris": {
+          "android": "https://nextbike.net/rent?bike=20412",
+          "ios": "https://nextbike.net/rent?bike=20412",
+          "web": "https://nextbike.net/rent?bike=20412"
+        }
+      },
+      {
+        "bike_id": "nextbike_bb_20587",
+        "lat": 52.520008,
+        "lon": 13.404954,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "348",
+        "current_range_meters": 0,
+        "current_fuel_percent": 0.31,
+        "rental_uris": {
+          "android": "https://nextbike.net/rent?bike=20587",
+          "ios": "https://nextbike.net/rent?bike=20587",
+          "web": "https://nextbike.net/rent?bike=20587"
+        }
+      },
+      {
+        "bike_id": "nextbike_bb_11023",
+        "lat": 52.507103,
+        "lon": 13.392412,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "346",
+        "rental_uris": {
+          "android": "https://nextbike.net/rent?bike=11023",
+          "ios": "https://nextbike.net/rent?bike=11023",
+          "web": "https://nextbike.net/rent?bike=11023"
+        }
+      },
+      {
+        "bike_id": "nextbike_bb_11340",
+        "lat": 52.531677,
+        "lon": 13.384533,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "346",
+        "rental_uris": {
+          "android": "https://nextbike.net/rent?bike=11340",
+          "ios": "https://nextbike.net/rent?bike=11340",
+          "web": "https://nextbike.net/rent?bike=11340"
+        }
+      },
+      {
+        "bike_id": "nextbike_bb_11875",
+        "lat": 52.498451,
+        "lon": 13.418907,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "346",
+        "station_id": "3140",
+        "rental_uris": {
+          "android": "https://nextbike.net/rent?bike=11875",
+          "ios": "https://nextbike.net/rent?bike=11875",
+          "web": "https://nextbike.net/rent?bike=11875"
+        }
+      },
+      {
+        "bike_id": "nextbike_bb_20911",
+        "lat": 52.498451,
+        "lon": 13.418907,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "348",
+        "station_id": "3140",
+        "current_range_meters": 0,
+        "current_fuel_percent": 0.92,
+        "rental_uris": {
+          "android": "https://nextbike.net/rent?bike=20911",
+          "ios": "https://nextbike.net/rent?bike=20911",
+          "web": "https://nextbike.net/rent?bike=20911"
+        }
+      },
+      {
+        "bike_id": "nextbike_bb_12206",
+        "lat": 52.543012,
+        "lon": 13.351240,
+        "is_reserved": true,
+        "is_disabled": false,
+        "vehicle_type_id": "346",
+        "rental_uris": {
+          "android": "https://nextbike.net/rent?bike=12206",
+          "ios": "https://nextbike.net/rent?bike=12206",
+          "web": "https://nextbike.net/rent?bike=12206"
+        }
+      },
+      {
+        "bike_id": "nextbike_bb_20034",
+        "lat": 52.489764,
+        "lon": 13.365118,
+        "is_reserved": false,
+        "is_disabled": true,
+        "vehicle_type_id": "348",
+        "current_range_meters": 0,
+        "current_fuel_percent": 0.05,
+        "rental_uris": {
+          "android": "https://nextbike.net/rent?bike=20034",
+          "ios": "https://nextbike.net/rent?bike=20034",
+          "web": "https://nextbike.net/rent?bike=20034"
+        }
+      },
+      {
+        "bike_id": "nextbike_bb_12777",
+        "lat": 52.512590,
+        "lon": 13.454216,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "346",
+        "rental_uris": {
+          "android": "https://nextbike.net/rent?bike=12777",
+          "ios": "https://nextbike.net/rent?bike=12777",
+          "web": "https://nextbike.net/rent?bike=12777"
+        }
+      },
+      {
+        "bike_id": "nextbike_bb_21150",
+        "lat": 52.524873,
+        "lon": 13.437201,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "348",
+        "current_range_meters": 0,
+        "current_fuel_percent": 1,
+        "rental_uris": {
+          "android": "https://nextbike.net/rent?bike=21150",
+          "ios": "https://nextbike.net/rent?bike=21150",
+          "web": "https://nextbike.net/rent?bike=21150"
+        }
+      },
+      {
+        "bike_id": "nextbike_bb_13002",
+        "lat": 52.478329,
+        "lon": 13.443590,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "346",
+        "station_id": "3208",
+        "rental_uris": {
+          "android": "https://nextbike.net/rent?bike=13002",
+          "ios": "https://nextbike.net/rent?bike=13002",
+          "web": "https://nextbike.net/rent?bike=13002"
+        }
+      },
+      {
+        "bike_id": "nextbike_bb_13419",
+        "lat": 52.551204,
+        "lon": 13.412668,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "346",
+        "rental_uris": {
+          "android": "https://nextbike.net/rent?bike=13419",
+          "ios": "https://nextbike.net/rent?bike=13419",
+          "web": "https://nextbike.net/rent?bike=13419"
+        }
+      }
+    ]
+  }
+}

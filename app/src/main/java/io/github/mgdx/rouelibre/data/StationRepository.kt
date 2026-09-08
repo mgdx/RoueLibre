@@ -250,6 +250,8 @@ class StationRepository(
         val NO_VEHICLE_TYPES = VehicleTypesFeed(
             kinds = emptyMap(),
             declaresElectricBikes = false,
+            maxRangeMetresByType = emptyMap(),
+            cargoVehicleTypeIds = emptySet(),
             lastUpdated = null,
             version = null,
         )

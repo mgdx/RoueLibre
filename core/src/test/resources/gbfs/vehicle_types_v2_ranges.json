@@ -1,0 +1,43 @@
+{
+  "last_updated": 1788432100,
+  "ttl": 86400,
+  "version": "2.3",
+  "data": {
+    "vehicle_types": [
+      {
+        "vehicle_type_id": "346",
+        "form_factor": "bicycle",
+        "propulsion_type": "human",
+        "name": "Fahrrad"
+      },
+      {
+        "vehicle_type_id": "348",
+        "form_factor": "bicycle",
+        "propulsion_type": "electric_assist",
+        "max_range_meters": 0,
+        "name": "E-Bike"
+      },
+      {
+        "vehicle_type_id": "351",
+        "form_factor": "bicycle",
+        "propulsion_type": "electric_assist",
+        "max_range_meters": 60000,
+        "name": "WienMobil Rad E-Bike"
+      },
+      {
+        "vehicle_type_id": "353",
+        "form_factor": "cargo_bicycle",
+        "propulsion_type": "electric_assist",
+        "max_range_meters": 45000.0,
+        "name": "Lastenrad"
+      },
+      {
+        "vehicle_type_id": "360",
+        "form_factor": "scooter",
+        "propulsion_type": "electric",
+        "max_range_meters": 30000,
+        "name": "E-Scooter"
+      }
+    ]
+  }
+}

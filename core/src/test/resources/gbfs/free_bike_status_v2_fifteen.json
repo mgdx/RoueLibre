@@ -1,0 +1,159 @@
+{
+  "last_updated": 1788432130,
+  "ttl": 30,
+  "version": "2.2",
+  "data": {
+    "bikes": [
+      {
+        "bike_id": "6f1c3a2e-5b8d-4e07-9a61-2c4d8f0b1e33",
+        "lat": 43.296482,
+        "lon": 5.369780,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "levelo-electric",
+        "current_range_meters": 42000,
+        "station_id": "",
+        "last_reported": 1788432130,
+        "rental_uris": {
+          "android": "https://app.levelo.marseille.fr/rent",
+          "ios": "https://app.levelo.marseille.fr/rent"
+        }
+      },
+      {
+        "bike_id": "0a7e9d54-1c2b-4f6a-8e3d-7b5c9a1f2d40",
+        "lat": 43.300710,
+        "lon": 5.382315,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "levelo-electric",
+        "current_range_meters": 18500,
+        "station_id": "",
+        "last_reported": 1788432130,
+        "rental_uris": {
+          "android": "https://app.levelo.marseille.fr/rent",
+          "ios": "https://app.levelo.marseille.fr/rent"
+        }
+      },
+      {
+        "bike_id": "b3d2e1f0-9a8c-4d7e-b6f5-4a3c2b1d0e59",
+        "lat": 43.334120,
+        "lon": 5.379855,
+        "is_reserved": false,
+        "is_disabled": true,
+        "vehicle_type_id": "levelo-electric",
+        "current_range_meters": 0,
+        "station_id": "",
+        "last_reported": 1788432130,
+        "rental_uris": {
+          "android": "https://app.levelo.marseille.fr/rent",
+          "ios": "https://app.levelo.marseille.fr/rent"
+        }
+      },
+      {
+        "bike_id": "c4e3f2a1-0b9d-4e8f-a7c6-5b4d3c2e1f60",
+        "lat": 43.334301,
+        "lon": 5.380122,
+        "is_reserved": false,
+        "is_disabled": true,
+        "vehicle_type_id": "levelo-electric",
+        "current_range_meters": 3200,
+        "station_id": "",
+        "last_reported": 1788432130,
+        "rental_uris": {
+          "android": "https://app.levelo.marseille.fr/rent",
+          "ios": "https://app.levelo.marseille.fr/rent"
+        }
+      },
+      {
+        "bike_id": "d5f4a3b2-1c0e-4f9a-b8d7-6c5e4d3f2a71",
+        "lat": 43.288950,
+        "lon": 5.394611,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "levelo-electric",
+        "current_range_meters": 27300,
+        "station_id": "",
+        "last_reported": 1788432130,
+        "rental_uris": {
+          "android": "https://app.levelo.marseille.fr/rent",
+          "ios": "https://app.levelo.marseille.fr/rent"
+        }
+      },
+      {
+        "bike_id": "e6a5b4c3-2d1f-4a0b-c9e8-7d6f5e4a3b82",
+        "lat": 43.302355,
+        "lon": 5.366098,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "levelo-electric",
+        "current_range_meters": 9800,
+        "station_id": "MRS-0142",
+        "last_reported": 1788432130,
+        "rental_uris": {
+          "android": "https://app.levelo.marseille.fr/rent",
+          "ios": "https://app.levelo.marseille.fr/rent"
+        }
+      },
+      {
+        "bike_id": "f7b6c5d4-3e2a-4b1c-d0f9-8e7a6f5b4c93",
+        "lat": 43.302355,
+        "lon": 5.366098,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "levelo-electric",
+        "current_range_meters": 51000,
+        "station_id": "MRS-0142",
+        "last_reported": 1788432130,
+        "rental_uris": {
+          "android": "https://app.levelo.marseille.fr/rent",
+          "ios": "https://app.levelo.marseille.fr/rent"
+        }
+      },
+      {
+        "bike_id": "a8c7d6e5-4f3b-4c2d-e1a0-9f8b7a6c5d04",
+        "lat": 43.310876,
+        "lon": 5.401237,
+        "is_reserved": true,
+        "is_disabled": false,
+        "vehicle_type_id": "levelo-electric",
+        "current_range_meters": 36400,
+        "station_id": "",
+        "last_reported": 1788432130,
+        "rental_uris": {
+          "android": "https://app.levelo.marseille.fr/rent",
+          "ios": "https://app.levelo.marseille.fr/rent"
+        }
+      },
+      {
+        "bike_id": "b9d8e7f6-5a4c-4d3e-f2b1-0a9c8b7d6e15",
+        "lat": 43.279013,
+        "lon": 5.388442,
+        "is_reserved": false,
+        "is_disabled": false,
+        "vehicle_type_id": "levelo-electric",
+        "current_range_meters": 12750,
+        "station_id": "",
+        "last_reported": 1788432130,
+        "rental_uris": {
+          "android": "https://app.levelo.marseille.fr/rent",
+          "ios": "https://app.levelo.marseille.fr/rent"
+        }
+      },
+      {
+        "bike_id": "c0e9f8a7-6b5d-4e4f-a3c2-1b0d9c8e7f26",
+        "lat": 43.334455,
+        "lon": 5.379901,
+        "is_reserved": false,
+        "is_disabled": true,
+        "vehicle_type_id": "levelo-electric",
+        "current_range_meters": 0,
+        "station_id": "",
+        "last_reported": 1788432130,
+        "rental_uris": {
+          "android": "https://app.levelo.marseille.fr/rent",
+          "ios": "https://app.levelo.marseille.fr/rent"
+        }
+      }
+    ]
+  }
+}
