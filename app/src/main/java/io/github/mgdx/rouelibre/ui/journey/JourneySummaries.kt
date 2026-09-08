@@ -3,6 +3,7 @@ package io.github.mgdx.rouelibre.ui.journey
 import android.content.Context
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.config.FleetDescription
+import io.github.mgdx.rouelibre.core.journey.DeparturePoint
 import io.github.mgdx.rouelibre.core.journey.JourneyMinutes
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.journey.shownMinutes
@@ -66,8 +67,15 @@ fun Context.journeySummary(
  * both kinds in numbers that make an offer — elsewhere the split announces a
  * shortage that does not exist (SPEC §7.2) — and silent again wherever the
  * feed's own breakdown cannot be trusted.
+ *
+ * **Silent too on a journey begun at a bike outside the stations**, where there
+ * is no departure station and so nothing waiting at one (SPEC §7.4): the option
+ * does carry that single bike under the producer's type identifier, and a
+ * sentence saying "1 electric at the departure station" would name a station
+ * that is not in the journey.
  */
 fun JourneyOption.bikeSplitAtDeparture(fleet: FleetDescription?): BikeSplit? {
+    if (departure !is DeparturePoint.AtStation) return null
     if (fleet == null || !fleet.isMixed) return null
     return splitBikesByKind(bikesByVehicleTypeAtDeparture, bikesAtDeparture, fleet.vehicleTypes)
 }

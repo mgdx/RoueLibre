@@ -91,6 +91,17 @@ class JourneySearchFragment : Fragment() {
     private var ownBikeKind: OwnBikeKind = OwnBikeKind.Mechanical
 
     /**
+     * The bike outside the stations this journey sets off from, or `null`
+     * (SPEC §7.2.1, §7.3).
+     *
+     * It comes from the sheet that bike opened and never from this screen: the
+     * origin is then settled, and what is left to ask is where one is going.
+     * Read from the arguments alone, so it survives a rotation with the
+     * fragment rather than with its view.
+     */
+    private var streetBike: StreetBikeHandle? = null
+
+    /**
      * Whether the network in service really lends both kinds (SPEC §15).
      *
      * It decides whether the selector exists at all. Read from a flow, so a
@@ -127,6 +138,9 @@ class JourneySearchFragment : Fragment() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // The bike comes from the arguments in both cases: it is the question
+        // this screen was opened with, and a rotation does not reopen it.
+        streetBike = StreetBikeHandle.readFrom(arguments, ARGUMENT_STREET_BIKE)
         if (savedInstanceState != null) {
             origin = JourneyEndpoint.readFrom(savedInstanceState, STATE_ORIGIN)
             destination = JourneyEndpoint.readFrom(savedInstanceState, STATE_DESTINATION)
@@ -135,6 +149,7 @@ class JourneySearchFragment : Fragment() {
         }
         origin = JourneyEndpoint.readFrom(arguments, ARGUMENT_ORIGIN)
         destination = JourneyEndpoint.readFrom(arguments, ARGUMENT_DESTINATION)
+        streetBike?.let { origin = originOf(it) }
     }
 
     override fun onCreateView(
@@ -157,6 +172,7 @@ class JourneySearchFragment : Fragment() {
         views.destination.setOnClickListener { picker.choose(false, origin?.position) }
         views.swap.setOnClickListener { swap() }
         views.compute.setOnClickListener { openResult() }
+        lockTheOriginOnTheBike()
 
         picker.listen(viewLifecycleOwner)
         showEndpoints()
@@ -187,6 +203,53 @@ class JourneySearchFragment : Fragment() {
         showInstalledData()
         openSearchForTheReceivedText()
     }
+
+    /**
+     * Settles this screen on the bike the journey was asked from (SPEC §7.3).
+     *
+     * Three things go together and for one reason: **the origin row cannot be
+     * edited**, editing it being a way of asking an ordinary journey, which the
+     * ordinary way already offers and which never departs from a street bike
+     * (SPEC §6); **the swap button goes with that editing**, since there is
+     * nothing to exchange when only one of the two ends may move; and **the
+     * own-bike switch and the kind chooser are hidden**, the bike's kind being
+     * known from the feed — there is nothing to declare and nothing to ask for.
+     * The switch and the kind kept for the ordinary journey are neither read
+     * nor written by this journey.
+     *
+     * The row is left readable and unpressable rather than disabled: a screen
+     * reader still meets it, and the sentence it carries says why it does not
+     * answer.
+     *
+     * Everything else on the screen is untouched: the destination is named in
+     * the six ways of SPEC §7.3, and the button at the bottom asks for the
+     * journey.
+     */
+    private fun lockTheOriginOnTheBike() {
+        if (streetBike == null) return
+        val views = binding ?: return
+        views.origin.setOnClickListener(null)
+        views.origin.isClickable = false
+        views.origin.contentDescription = getString(
+            R.string.address_detail,
+            getString(R.string.journey_departure_street_bike),
+            getString(R.string.journey_origin_street_bike_locked),
+        )
+        views.swap.isVisible = false
+        views.ownBike.isVisible = false
+    }
+
+    /**
+     * The bike as one end of a journey, named as both journey screens name it.
+     *
+     * A bike has no name of its own to show: the producer's identifier is
+     * rotated after every rental and says nothing to anybody (SPEC §4.1), so
+     * what the field carries is what kind of point this is.
+     */
+    private fun originOf(bike: StreetBikeHandle) = JourneyEndpoint(
+        label = getString(R.string.journey_departure_street_bike),
+        position = bike.position,
+    )
 
     /**
      * Hands the text received from another application to the address search
@@ -269,8 +332,14 @@ class JourneySearchFragment : Fragment() {
      * be taken for a press and write back what was just read. Until the read
      * lands — a few milliseconds off disk — the screen says the station
      * journey, which is what the switch says at rest.
+     *
+     * **A journey asked from a bike outside the stations does not read it at
+     * all** (SPEC §7.3): the switch is not on the screen, and the answer kept
+     * for the ordinary journey must not turn this one into a ride from door to
+     * door — the bike is the network's and it goes back to a station.
      */
     private fun setUpOwnBike() {
+        if (streetBike != null) return
         viewLifecycleOwner.lifecycleScope.launch {
             usesOwnBike = preferences.usesOwnBike.first()
             val current = binding ?: return@launch
@@ -295,8 +364,13 @@ class JourneySearchFragment : Fragment() {
      * reasons [setUpOwnBike] gives. The buttons are listened to only after the
      * stored answer has been put on them, or checking one would be taken for a
      * press and write back what was just read.
+     *
+     * Not read either on a journey asked from a bike outside the stations, and
+     * for the same reason: that bike's kind is the feed's answer, not a
+     * request (SPEC §7.3).
      */
     private fun setUpBikeKind() {
+        if (streetBike != null) return
         viewLifecycleOwner.lifecycleScope.launch {
             wantedBikeKind = preferences.wantedBikeKind.first()
             val current = binding ?: return@launch
@@ -319,14 +393,16 @@ class JourneySearchFragment : Fragment() {
     /**
      * Shows the selector where it means something, and hides it elsewhere.
      *
-     * Two things take it away, and neither greys it out: a network lending one
-     * kind, which could not satisfy the choice (SPEC §7.2), and one's own bike,
-     * which looks at no station at all. Offering a choice nobody can collect is
-     * a promise the application must not make.
+     * Three things take it away, and none of them greys it out: a network
+     * lending one kind, which could not satisfy the choice (SPEC §7.2); one's
+     * own bike, which looks at no station at all; and a journey asked from a
+     * bike outside the stations, whose kind the feed has already settled
+     * (SPEC §7.3). Offering a choice nobody can collect is a promise the
+     * application must not make.
      */
     private fun showBikeKindSelector() {
         val views = binding ?: return
-        views.bikeKind.isVisible = lendsBothKinds && !usesOwnBike
+        views.bikeKind.isVisible = lendsBothKinds && !usesOwnBike && streetBike == null
     }
 
     /** The button standing for a kind, the leftmost one asking for nothing. */
@@ -431,9 +507,16 @@ class JourneySearchFragment : Fragment() {
     private fun openResult() {
         val from = origin ?: return
         val to = destination ?: return
+        // A journey from a bike outside the stations carries neither the switch
+        // nor the kind: the departure is settled and the ride is traced on that
+        // bike's own kind, so neither was read here in the first place (see
+        // [setUpOwnBike]) and both go on as what they are at rest (SPEC §7.3).
         val kind = wantedBikeKind.takeIf { lendsBothKinds && !usesOwnBike }
         parentFragmentManager.beginTransaction()
-            .replace(R.id.content, JourneyResultFragment.newInstance(from, to, usesOwnBike, kind))
+            .replace(
+                R.id.content,
+                JourneyResultFragment.newInstance(from, to, usesOwnBike, kind, streetBike),
+            )
             .addToBackStack(null)
             .commit()
     }
@@ -449,6 +532,7 @@ class JourneySearchFragment : Fragment() {
         private const val ARGUMENT_DESTINATION = "received-destination"
         private const val ARGUMENT_ORIGIN = "received-origin"
         private const val ARGUMENT_DESTINATION_QUERY = "received-destination-query"
+        private const val ARGUMENT_STREET_BIKE = "received-street-bike"
 
         /**
          * Opens the search, possibly with one end already known.
@@ -461,17 +545,29 @@ class JourneySearchFragment : Fragment() {
          *   (SPEC §7.8). It opens the address search with that text already in
          *   the field: the screen is reached because nothing was found in it,
          *   and it is pruned there rather than typed again.
+         * @param streetBike the bike outside the stations the journey sets off
+         *   from (SPEC §7.2.1). It fills the origin itself and locks it: the
+         *   screen then asks where one is going and nothing else.
          */
         fun newInstance(
             origin: JourneyEndpoint? = null,
             destination: JourneyEndpoint? = null,
             destinationQuery: String? = null,
+            streetBike: StreetBikeHandle? = null,
         ): JourneySearchFragment = JourneySearchFragment().apply {
-            if (origin == null && destination == null && destinationQuery == null) return@apply
+            if (
+                origin == null &&
+                destination == null &&
+                destinationQuery == null &&
+                streetBike == null
+            ) {
+                return@apply
+            }
             arguments = Bundle().apply {
                 origin?.writeTo(this, ARGUMENT_ORIGIN)
                 destination?.writeTo(this, ARGUMENT_DESTINATION)
                 destinationQuery?.let { putString(ARGUMENT_DESTINATION_QUERY, it) }
+                streetBike?.writeTo(this, ARGUMENT_STREET_BIKE)
             }
         }
     }

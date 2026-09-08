@@ -2,11 +2,13 @@ package io.github.mgdx.rouelibre.ui.journey
 
 import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.journey.DeparturePoint
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.routing.TravelMode
 import io.github.mgdx.rouelibre.core.station.BikeSplit
 import io.github.mgdx.rouelibre.core.station.Station
+import io.github.mgdx.rouelibre.core.station.StreetBike
 import io.github.mgdx.rouelibre.core.station.VehicleKind
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -46,7 +48,7 @@ class JourneySummariesTest {
     )
 
     private fun option(bikes: Int, byType: Map<String, Int>) = JourneyOption(
-        departureStation = station("departure"),
+        departure = DeparturePoint.AtStation(station("departure")),
         arrivalStation = station("arrival"),
         bikesAtDeparture = bikes,
         bikesByVehicleTypeAtDeparture = byType,
@@ -114,6 +116,32 @@ class JourneySummariesTest {
         // breakdown does not. A wrong split sends somebody to a station for a
         // bike that is not there.
         val split = option(bikes = 9, byType = mapOf("mecanique" to 3, "electrique" to 1))
+            .bikeSplitAtDeparture(fleet(isMixed = true))
+
+        assertNull(split)
+    }
+
+    @Test
+    fun `says nothing of a journey begun on a bike outside the stations`() {
+        // There is no departure station on that journey, so "1 electric at the
+        // departure station" would name a station that is not in it (SPEC
+        // §7.4). The option does carry that single bike under the producer's
+        // own type identifier — the algorithm counts what it sets off on — and
+        // this is what keeps it off the sentence.
+        val split = option(bikes = 1, byType = mapOf("electrique" to 1))
+            .copy(
+                departure = DeparturePoint.AtStreetBike(
+                    StreetBike(
+                        id = "velo-de-rue",
+                        position = Coordinates(50.63, 3.06),
+                        vehicleTypeId = "electrique",
+                        chargeRatio = null,
+                        rangeMetres = null,
+                    ),
+                    VehicleKind.Electric,
+                ),
+                walkToStation = null,
+            )
             .bikeSplitAtDeparture(fleet(isMixed = true))
 
         assertNull(split)

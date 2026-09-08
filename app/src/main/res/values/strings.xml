@@ -311,6 +311,16 @@
     <string name="journey_own_bike">Ride my own bike</string>
     <string name="journey_hint_own_bike">The journey is computed on the device: one ride from door to door, with no station on the way.</string>
 
+    <!-- A journey asked for from a bike the network reports outside its
+         stations (SPEC §7.2.1, §7.3, §7.4). The first names that departure in
+         the origin field of the two journey screens: the producer rotates a
+         bike's identifier after every rental, so there is no name to show and
+         what the reader needs is what kind of point it is. The second says why
+         that field cannot be pressed — editing it would be asking an ordinary
+         journey, which the ordinary way already offers. -->
+    <string name="journey_departure_street_bike">Bike outside stations</string>
+    <string name="journey_origin_street_bike_locked">The journey starts on the bike you chose.</string>
+
     <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
          which is what the application does at rest. -->
     <string name="journey_bike_kind_any">Any bike</string>

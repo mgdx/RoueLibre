@@ -12,6 +12,8 @@ import io.github.mgdx.rouelibre.core.station.BikeKindFilter
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.StationAvailability
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
+import io.github.mgdx.rouelibre.core.station.StreetBike
+import io.github.mgdx.rouelibre.core.station.VehicleKind
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -78,6 +80,17 @@ import kotlin.time.Duration.Companion.seconds
  * The **time announced** moves with it too, since 17 August 2026, and only when
  * an assisted bike was asked for: that is [JourneySettings.riddenBike]'s doing
  * rather than this filter's, and the application layer is what joins the two.
+ *
+ * ## A journey from a bike outside the stations
+ *
+ * [planFromStreetBike] answers the one journey this class never composes of its
+ * own accord (SPEC §6, §7.2.1). Nothing in the feed says a bike standing in the
+ * street may be taken, so the departure candidates of [plan] stay stations and
+ * one of those bikes is never chosen for anybody; that method computes the
+ * journey somebody asked for from a bike they picked themselves. It reopens
+ * nothing: the same candidates at the arrival end, the same reliability penalty,
+ * the same comparison with walking — with no access walk in front of it, and the
+ * ride traced on the kind the network's table read that bike as.
  *
  * ## At the paces asked for
  *
@@ -261,6 +274,185 @@ public class JourneyPlanner(
     }
 
     /**
+     * The journey from a bike the user chose on the map (SPEC §6, §7.2.1).
+     *
+     * The own-bike path of [planWithOwnBike] with an arrival station added: **no
+     * access walk**, the rider standing in front of the bike they chose; the
+     * ride traced on that bike's own kind; the best of the nearest stations that
+     * can take a bike back, weighed by the same reliability penalty as ever; the
+     * final walk; and the comparison with walking straight there, made at every
+     * distance exactly as [plan] makes it. No coefficient is added and none is
+     * changed.
+     *
+     * **The ordinary search never comes here, and that is the point.** Nothing
+     * in the feed says a bike standing in the street may be taken — the rules
+     * are the operator's and GBFS does not carry them (SPEC §4.1) — so the
+     * application never chooses one for anybody. The departure candidates of
+     * [plan] stay stations, and a street bike on the doorstep is not one of
+     * them. This method exists for the one journey somebody asked for
+     * themselves.
+     *
+     * **The kind asked for on the search screen is ignored here.** It narrows
+     * which station may be departed from (SPEC §6), and no station is departed
+     * from: the bike is the one that was picked, whatever kind it turns out to
+     * be.
+     *
+     * @param bike the bike picked on the map, as the feed reported it.
+     * @param kind what the network's vehicle type table reads it as (SPEC §4.1).
+     * @param destination arrival point.
+     * @param stations the known stations and their last state.
+     * @return the chosen journey, or what prevented it from being composed.
+     */
+    public suspend fun planFromStreetBike(
+        bike: StreetBike,
+        kind: VehicleKind,
+        destination: Coordinates,
+        stations: List<StationWithAvailability>,
+    ): JourneyPlan {
+        val origin = bike.position
+        outsideCoverage(origin, destination)?.let { return it }
+        val ridden = riddenBikeFor(kind)
+        val tripMetres = origin.distanceInMetresTo(destination)
+
+        // The kind asked for reaches nothing here, at either end: the departure
+        // is settled, and a free dock takes back any bike (SPEC §6).
+        val arrivals = candidates(
+            stations = stations,
+            near = destination,
+            limit = settings.arrivalCandidates,
+            countOf = { it.availability?.takeIf { state -> state.canAcceptBike }?.docksAvailable },
+        )
+        if (arrivals.isEmpty()) return giveUp(origin, destination, NoBikeJourney.NoDockNearby)
+
+        // The final walks and, on a short trip, the direct walk: the same scope
+        // and the same reason as in [plan] — independent legs, one core each,
+        // and a walk in hand prunes rides before they are traced.
+        val couldWalkAllTheWay = tripMetres <= settings.directWalkThresholdMetres
+        val ways = coroutineScope {
+            val direct = async {
+                if (couldWalkAllTheWay) {
+                    legOrNull(origin, destination, TravelMode.Walking)
+                } else {
+                    null
+                }
+            }
+            val toDestination = arrivals.associateWith { candidate ->
+                async { legOrNull(candidate.station.position, destination, TravelMode.Walking) }
+            }
+            WaysHome(
+                directWalk = direct.await(),
+                arrivals = toDestination.mapNotNull { (candidate, walk) ->
+                    // A station the destination cannot be walked from is no
+                    // arrival at all: without that leg the journey has no end.
+                    walk.await()?.let { ArrivalLeg(candidate, it) }
+                },
+            )
+        }
+        val directWalk = ways.directWalk
+        if (ways.arrivals.isEmpty()) {
+            return giveUp(origin, destination, NoBikeJourney.NoRouteBetweenStations, directWalk)
+        }
+        // Pruned by the walk already traced, exactly as a pair of stations is:
+        // an arrival whose ride and walk at their most optimistic cannot add up
+        // to less than the walk would only be computed to be discarded.
+        val contenders = if (directWalk == null) {
+            ways.arrivals
+        } else {
+            ways.arrivals.filter {
+                val bound = fastestRide(origin, it.arrival.station.position, ridden) +
+                    it.walkToDestination.duration
+                bound <= directWalk.duration
+            }
+        }
+        if (contenders.isEmpty()) {
+            // Only reachable with a walk in hand: without one, every arrival is
+            // a contender.
+            return JourneyPlan.WalkOnly(checkNotNull(directWalk), NoBikeJourney.WalkingIsQuicker)
+        }
+
+        val options = rideTo(bike, kind, ridden, contenders)
+        if (options.isEmpty()) {
+            return giveUp(origin, destination, NoBikeJourney.NoRouteBetweenStations, directWalk)
+        }
+
+        val best = options.minBy { it.rankingTime }
+        // The same comparison [plan] ends on, and for the same reason: somebody
+        // who would get there sooner on foot is offered the walk, not a ride
+        // with a note under it (SPEC §6).
+        val walk = directWalk ?: directWalkIfItCouldWin(origin, destination, tripMetres, best)
+        if (walk != null && walk.duration < best.travelTime) {
+            return JourneyPlan.WalkOnly(walk, NoBikeJourney.WalkingIsQuicker)
+        }
+        return JourneyPlan.Found(best)
+    }
+
+    /**
+     * The rides from one bike to each of the stations that could take it back.
+     *
+     * At most [JourneySettings.arrivalCandidates] of them — five by default,
+     * fewer than the twelve legs a search over pairs of stations may spend — so
+     * they are all computed, in one wave and in parallel: there is a single
+     * departure here, and nothing to rank the rides against but one another.
+     */
+    private suspend fun rideTo(
+        bike: StreetBike,
+        kind: VehicleKind,
+        ridden: RiddenBike,
+        contenders: List<ArrivalLeg>,
+    ): List<JourneyOption> = coroutineScope {
+        contenders.map { (arrival, walkFrom) ->
+            async {
+                val ride = legOrNull(
+                    bike.position,
+                    arrival.station.position,
+                    ridden.travelMode,
+                    ridden,
+                ) ?: return@async null
+                JourneyOption(
+                    departure = DeparturePoint.AtStreetBike(bike, kind),
+                    arrivalStation = arrival.station,
+                    bikesAtDeparture = 1,
+                    // The one bike, under the producer's own type identifier
+                    // where it declared one: the breakdown is carried in the
+                    // terms the feed publishes it in, as a station's is, and
+                    // read by the interface alone (SPEC §15).
+                    bikesByVehicleTypeAtDeparture = bike.vehicleTypeId
+                        ?.let { mapOf(it to 1) }
+                        .orEmpty(),
+                    docksAtArrival = arrival.count,
+                    walkToStation = null,
+                    ride = ride,
+                    walkToDestination = walkFrom,
+                    riskPenalty = riskOf(
+                        bikesAtRisk = 1,
+                        docksAtRisk = arrival.countAtRisk,
+                        walkToStation = Duration.ZERO,
+                        ride = ride.duration,
+                    ),
+                )
+            }
+        }
+            .awaitAll()
+            .filterNotNull()
+    }
+
+    /**
+     * The profile a bike found outside the stations is ridden with (SPEC §6).
+     *
+     * The kind the network's table reads it as, and nothing else: assisted where
+     * it is assisted, the plain bike everywhere else — a type the table does not
+     * know included, which `StreetBike.kind` already reads as mechanical. It is
+     * the same factor and the same profile the own-bike path applies to a bike
+     * the rider declared assisted, for the same reason (see [RiddenBike]): no
+     * speed is added here for the motor, the engine traces the ride with the
+     * profile of that bike.
+     */
+    private fun riddenBikeFor(kind: VehicleKind): RiddenBike = when (kind) {
+        VehicleKind.Electric -> RiddenBike.ElectricallyAssisted
+        VehicleKind.Mechanical, VehicleKind.Other -> RiddenBike.Mechanical
+    }
+
+    /**
      * Refuses, before anything is computed, a journey with an end outside the
      * data (SPEC §4, §7.8).
      *
@@ -439,9 +631,12 @@ public class JourneyPlanner(
      * unseen. Divided by the same factor the ride is multiplied by, exactly as
      * [optimisticWalkingMetresPerSecond] is by the walking pace's, it stays as
      * optimistic as it was, whichever bike is asked for.
+     *
+     * @param bike the bike this ride is traced on — the one asked for, or the
+     *   one a street bike turns out to be (SPEC §7.2.1).
      */
-    private val optimisticCyclingMetresPerSecond: Double
-        get() = OPTIMISTIC_CYCLING_METRES_PER_SECOND / settings.riddenBike.durationFactor
+    private fun optimisticCyclingMetresPerSecond(bike: RiddenBike): Double =
+        OPTIMISTIC_CYCLING_METRES_PER_SECOND / bike.durationFactor
 
     /**
      * Prepares the usable pairs, each with its two lower bounds.
@@ -465,7 +660,7 @@ public class JourneyPlanner(
         arrivals.mapNotNull { arrival ->
             if (arrival.station.id == departure.station.id) return@mapNotNull null
             val walkFrom = walksToDestination[arrival] ?: return@mapNotNull null
-            val fastestRide = fastestRideBetween(departure, arrival)
+            val fastestRide = fastestRide(departure.station.position, arrival.station.position)
             val travel = walkTo.duration + fastestRide + walkFrom.duration
             Pair(
                 departure = departure,
@@ -474,7 +669,12 @@ public class JourneyPlanner(
                 walkToDestination = walkFrom,
                 travelLowerBound = travel,
                 lowerBound = travel +
-                    riskOf(departure, arrival, walkTo.duration, fastestRide),
+                    riskOf(
+                        departure.countAtRisk,
+                        arrival.countAtRisk,
+                        walkTo.duration,
+                        fastestRide,
+                    ),
             )
         }
     }.sortedBy { it.lowerBound }
@@ -486,12 +686,15 @@ public class JourneyPlanner(
      * best journey without ever computing it. The leg is therefore assumed to
      * be a straight line ridden at a pace no ride beats — see
      * [optimisticCyclingMetresPerSecond].
+     *
+     * @param bike the bike it is ridden on, which is what that pace is stated
+     *   against.
      */
-    private fun fastestRideBetween(departure: Candidate, arrival: Candidate): Duration {
-        val asTheCrowFlies = departure.station.position
-            .distanceInMetresTo(arrival.station.position)
-        return (asTheCrowFlies / optimisticCyclingMetresPerSecond).seconds
-    }
+    private fun fastestRide(
+        from: Coordinates,
+        to: Coordinates,
+        bike: RiddenBike = settings.riddenBike,
+    ): Duration = (from.distanceInMetresTo(to) / optimisticCyclingMetresPerSecond(bike)).seconds
 
     /**
      * Computes the most promising pairs for real.
@@ -566,7 +769,7 @@ public class JourneyPlanner(
                 ) ?: return@async null
 
                 JourneyOption(
-                    departureStation = pair.departure.station,
+                    departure = DeparturePoint.AtStation(pair.departure.station),
                     arrivalStation = pair.arrival.station,
                     bikesAtDeparture = pair.departure.count,
                     bikesByVehicleTypeAtDeparture = pair.departure.bikesByVehicleType,
@@ -575,8 +778,8 @@ public class JourneyPlanner(
                     ride = ride,
                     walkToDestination = pair.walkToDestination,
                     riskPenalty = riskOf(
-                        pair.departure,
-                        pair.arrival,
+                        pair.departure.countAtRisk,
+                        pair.arrival.countAtRisk,
                         pair.walkToStation.duration,
                         ride.duration,
                     ),
@@ -594,32 +797,51 @@ public class JourneyPlanner(
      * asked for** after the access walk — see [countAtRisk]. At the arrival end,
      * finding it full — and the exposure is longer, since one gets there after
      * the walk and the ride.
+     *
+     * **A journey from a bike outside stations pays nothing at the departure
+     * end**, and the formula says so on its own: its access walk is nil, so the
+     * exposure is nil and the penalty with it (SPEC §6). Nobody can take the
+     * bike one is already standing beside.
+     *
+     * @param bikesAtRisk the stock the departure end is weighed on, which is
+     *   one for a single bike outside stations.
+     * @param docksAtRisk the free docks the arrival station was seen holding.
      */
     private fun riskOf(
-        departure: Candidate,
-        arrival: Candidate,
+        bikesAtRisk: Int,
+        docksAtRisk: Int,
         walkToStation: Duration,
         ride: Duration,
     ): Duration {
         val departureRisk = availabilityRiskPenalty(
-            count = departure.countAtRisk,
+            count = bikesAtRisk,
             exposure = walkToStation,
             settings = settings,
         )
         val arrivalRisk = availabilityRiskPenalty(
-            count = arrival.countAtRisk,
+            count = docksAtRisk,
             exposure = walkToStation + ride,
             settings = settings,
         )
         return departureRisk + arrivalRisk
     }
 
+    /**
+     * A leg as the engine traced it, at the paces this journey is asked for, or
+     * `null` where it could not be traced.
+     *
+     * @param bike the bike a cycling leg is ridden on. It defaults to the one
+     *   the journey was asked for, and is named only where the bike is not the
+     *   rider's choice but the feed's — a bike found outside the stations is
+     *   whatever kind the network says it is (SPEC §7.2.1).
+     */
     private suspend fun legOrNull(
         from: Coordinates,
         to: Coordinates,
         mode: TravelMode,
+        bike: RiddenBike = settings.riddenBike,
     ): RouteLeg? = when (val result = router.route(from, to, mode)) {
-        is RouteResult.Success -> result.leg.atThePacesAsked()
+        is RouteResult.Success -> result.leg.atThePacesAsked(bike)
         is RouteResult.Failure -> null
     }
 
@@ -639,6 +861,10 @@ public class JourneyPlanner(
      * walks carry [WalkingPace]'s alone — a motor says nothing about how one
      * walks — and the ride carries [RiddenBike]'s alone.
      *
+     * @param bike the bike the ride is on, which is [JourneySettings.riddenBike]
+     *   for every journey the rider asked a kind of, and the kind read from the
+     *   feed for a bike picked up outside the stations (SPEC §7.2.1).
+     *
      * **The geometry is not recomputed here, and there is no profile per pace.**
      * The same streets are walked whether one dawdles or hurries: what changes is
      * how long they take, so the track, its distance and its climb are the
@@ -647,11 +873,12 @@ public class JourneyPlanner(
      * leg was traced with, chosen before this point — never by a correction
      * applied after the fact.
      */
-    private fun RouteLeg.atThePacesAsked(): RouteLeg = when (mode) {
-        TravelMode.Walking -> copy(duration = duration * settings.walkingPace.durationFactor)
-        TravelMode.Cycling, TravelMode.ElectricCycling ->
-            copy(duration = duration * settings.riddenBike.durationFactor)
-    }
+    private fun RouteLeg.atThePacesAsked(bike: RiddenBike = settings.riddenBike): RouteLeg =
+        when (mode) {
+            TravelMode.Walking -> copy(duration = duration * settings.walkingPace.durationFactor)
+            TravelMode.Cycling, TravelMode.ElectricCycling ->
+                copy(duration = duration * bike.durationFactor)
+        }
 
     /**
      * Returns the direct walk when no bike journey is possible.
@@ -708,6 +935,25 @@ public class JourneyPlanner(
         val bikesByVehicleType: Map<String, Int>,
         val straightLineMetres: Double,
     )
+
+    /**
+     * A station that can take the bike back, with the walk that ends there.
+     *
+     * The counterpart of [Pair] for a journey that has no departure station to
+     * pair anything with (SPEC §7.2.1): one bike, and as many candidates as
+     * there are stations near the destination.
+     */
+    private data class ArrivalLeg(val arrival: Candidate, val walkToDestination: RouteLeg)
+
+    /**
+     * What was traced towards the destination before any ride was.
+     *
+     * @property directWalk the walk straight there, on a trip short enough to
+     *   have it traced up front, and `null` beyond.
+     * @property arrivals the stations the destination can actually be walked
+     *   from, with that walk.
+     */
+    private data class WaysHome(val directWalk: RouteLeg?, val arrivals: List<ArrivalLeg>)
 
     /**
      * A pair of stations, with its walking legs and its lower bounds.

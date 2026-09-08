@@ -59,9 +59,12 @@ object JourneyLines {
             PropertyFactory.lineDasharray(arrayOf(0.6f, 1.6f)),
         )
 
-    /** An option's two walking legs. */
+    /**
+     * An option's walking legs: the two of an ordinary journey, and the one
+     * that ends a journey begun on a bike outside stations (SPEC §7.2.1).
+     */
     fun walkFeatures(option: JourneyOption): FeatureCollection = FeatureCollection.fromFeatures(
-        listOf(option.walkToStation, option.walkToDestination).mapNotNull(::toFeature),
+        listOfNotNull(option.walkToStation, option.walkToDestination).mapNotNull(::toFeature),
     )
 
     /** An option's bike leg. */

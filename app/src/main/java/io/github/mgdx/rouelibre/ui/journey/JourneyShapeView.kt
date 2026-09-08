@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import io.github.mgdx.rouelibre.R
@@ -127,6 +128,26 @@ class JourneyShapeView @JvmOverloads constructor(
             invalidate()
         }
 
+    /**
+     * The disc the journey sets off from, where it is neither an end one walks
+     * from nor a station (SPEC §7.4).
+     *
+     * A journey begun on a bike outside the stations puts that bike's own glyph
+     * there — smaller than a station's disc, bearing no count — and the drawing
+     * then holds three discs and two strokes rather than four and three. `null`
+     * everywhere else, which is every journey that walks to its first point.
+     */
+    @DrawableRes
+    var departureMarker: Int? = null
+        set(value) {
+            if (field == value) return
+            field = value
+            departureDrawable = value?.let { AppCompatResources.getDrawable(context, it) }
+            invalidate()
+        }
+
+    private var departureDrawable: Drawable? = null
+
     private var stationMarker: Drawable? =
         AppCompatResources.getDrawable(context, R.drawable.marker_journey_station)
 
@@ -223,8 +244,14 @@ class JourneyShapeView @JvmOverloads constructor(
         // rather than crossing the disc it points at.
         repeat(nodes) { index ->
             // The ends are where the user stands, the ones between are
-            // stations: the same distinction the illustration draws.
-            val marker = if (index == 0 || index == nodes - 1) ends else stationMarker
+            // stations: the same distinction the illustration draws. The first
+            // of them yields to the bike a journey may set off on, where there
+            // is one (SPEC §7.4).
+            val marker = when {
+                index == 0 -> departureDrawable ?: ends
+                index == nodes - 1 -> ends
+                else -> stationMarker
+            }
             val left = nodeLeft(index).toInt()
             marker?.setBounds(left, top, left + nodeSize, top + nodeSize)
             marker?.draw(canvas)

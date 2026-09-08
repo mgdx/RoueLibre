@@ -7,6 +7,7 @@ import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.journey.DeparturePoint
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
 import io.github.mgdx.rouelibre.core.journey.JourneyPlanner
 import io.github.mgdx.rouelibre.core.journey.Router
@@ -127,13 +128,16 @@ class JourneyPlannerOnDeviceTest {
         val plan = planner.plan(lilleCentre, roubaix, stations) as JourneyPlan.Found
         val best = plan.best
 
-        assertTrue(TravelMode.Walking == best.walkToStation.mode)
+        // The ordinary journey always walks to its departure station: this
+        // path never comes back without that leg (SPEC §6).
+        val accessWalk = checkNotNull(best.walkToStation)
+        assertTrue(TravelMode.Walking == accessWalk.mode)
         assertTrue(TravelMode.Cycling == best.ride.mode)
         assertTrue(TravelMode.Walking == best.walkToDestination.mode)
         // The access walks must stay access walks.
         assertTrue(
-            "access walk out of all proportion: ${best.walkToStation.distanceMetres} m",
-            best.walkToStation.distanceMetres < 2_000,
+            "access walk out of all proportion: ${accessWalk.distanceMetres} m",
+            accessWalk.distanceMetres < 2_000,
         )
         assertTrue("empty bike leg", best.ride.distanceMetres > 500)
     }
@@ -142,9 +146,10 @@ class JourneyPlannerOnDeviceTest {
     fun the_two_stations_of_a_journey_are_never_the_same() = runBlocking {
         val plan = planner.plan(lilleCentre, roubaix, stations) as JourneyPlan.Found
 
+        val departure = plan.best.departure as DeparturePoint.AtStation
         assertTrue(
             "the journey starts and ends at the same station",
-            plan.best.departureStation.id != plan.best.arrivalStation.id,
+            departure.station.id != plan.best.arrivalStation.id,
         )
     }
 

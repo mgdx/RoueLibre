@@ -77,7 +77,11 @@ public fun apportionMinutes(durations: List<Duration>): List<Int> {
 /**
  * A journey's three legs, in the whole minutes every screen shows them in.
  *
- * @property walkToStation the walk to the departure station.
+ * @property walkToStation the walk to the departure station, and zero on a
+ *   journey that begins at a bike outside stations: there is no such walk to
+ *   apportion anything to (SPEC §6, §7.2.1). Zero rather than a null, because
+ *   this is a figure to add up and not a leg to draw — the legs are read off
+ *   the journey itself.
  * @property ride the bike leg.
  * @property walkToDestination the walk that ends the journey.
  */
@@ -102,12 +106,21 @@ public data class JourneyMinutes(
  * and the detail screen cannot round the same journey differently.
  */
 public fun JourneyOption.shownMinutes(): JourneyMinutes {
-    val (toStation, ride, toDestination) = apportionMinutes(
-        listOf(walkToStation.duration, this.ride.duration, walkToDestination.duration),
+    // The access walk is apportioned with the others where there is one, and
+    // left out of the sharing altogether where there is not: a leg of no
+    // duration would still be given its minute by `apportionMinutes`, which
+    // never shows less than one, and that minute would be added to a total
+    // nobody spends (SPEC §7.2.1).
+    val legs = listOfNotNull(
+        walkToStation?.duration,
+        this.ride.duration,
+        walkToDestination.duration,
     )
+    val minutes = apportionMinutes(legs)
+    val hasAccessWalk = walkToStation != null
     return JourneyMinutes(
-        walkToStation = toStation,
-        ride = ride,
-        walkToDestination = toDestination,
+        walkToStation = if (hasAccessWalk) minutes.first() else 0,
+        ride = minutes[if (hasAccessWalk) 1 else 0],
+        walkToDestination = minutes.last(),
     )
 }
