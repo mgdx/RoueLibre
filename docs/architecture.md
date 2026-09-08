@@ -67,6 +67,23 @@ breaking a release. The whole chain is three files: `CityCatalogueSource`, which
 gives the city its configuration, `GbfsRemoteSource`, which fetches, and
 `StationRepository`, which decides when.
 
+A fifth feed is read from the same document, and only on request: the bikes a
+network reports **outside its stations**, `free_bike_status.json` in GBFS 1.x
+and 2.x, `vehicle_status.json` in 3.0, the newer name tried first. It is read
+only while the "bikes outside stations" setting is on, with the station feed
+when the map opens and on pull-to-refresh, then at most once every five minutes
+while the map is on screen — it weighs some twenty times the station feed on
+every read, and what it lists are parked bikes rather than rentals in progress.
+What is kept from it is decided at parse time in `:core`: a bike without a
+`station_id`, not disabled, not reserved, of a bicycle form factor. A network
+publishing no such feed is remembered as publishing none for the session, as
+`vehicle_types` is. Those bikes **live in memory and not in Room**: they are
+held by a repository for the session, under the identifier of the city they
+were read in, and dropped with it — the standard rotates a bike's identifier
+after every rental, and a stale bike position is a wrong answer where a stale
+rack count is a rough one. `SPEC.md` §4.1 and §8 give the measurements and the
+reasons.
+
 Those addresses are the operators' own: `gbfs.nextbike.net` for the 128 nextbike
 networks, `stables.donkey.bike` for Donkey Republic's 40, the 40
 `*.publicbikesystem.net` of PBSC, `api.gbfs.v3.0.ecovelo.mobi`,
@@ -96,7 +113,8 @@ identifier of the device or of the user.
 
 Nothing is fetched in the background. Every request comes from a screen being
 shown or from a gesture: at most one state refresh a minute, one static refresh a
-day, and pull-to-refresh forces the first.
+day, one read of the bikes outside stations every five minutes while that
+setting is on, and pull-to-refresh forces the first and the last.
 
 ## What the operator sees
 

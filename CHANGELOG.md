@@ -7,6 +7,46 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
+## [Unreleased]
+
+### Added
+
+- **The bikes a network reports outside its stations, shown on request** (SPEC
+  §4.1, §6, §7.1, §7.2.1, §7.3, §7.4, §7.6, §8, §15). GBFS lists them in a
+  fifth file, `free_bike_status.json`, renamed `vehicle_status.json` in 3.0,
+  and on 8 September 2026 262 of the 335 networks served declared it while 164
+  held at least one bicycle without a `station_id` — 3,292 on the streets of
+  Berlin, 1,875 in Nuremberg, 1,853 in Cologne, 647 in Marseille. A switch in
+  the display section, **off by default**, draws them: a marker smaller than a
+  station's disc, no count, the bolt where the type table reads the bike as
+  electric, clustered with the stations and indifferent to the filters, which
+  act on counts. Its sheet gives the kind, the charge — the percentage where
+  `current_fuel_percent` is published, the range only where it and the type's
+  maximum are both above zero, nextbike writing a range of zero on every one of
+  its 448 Berlin e-bikes — the distance, and the age of the **feed**, never of
+  the bike, since nextbike stamps nothing and Fifteen stamps the instant
+  served. No favourite, the standard rotating the identifier after every
+  rental. **What those bikes are, GBFS does not say**: nextbike lets one return
+  a bike anywhere in a "Flexzone", levélo Marseille fines a bike left off a
+  dock 30 EUR, and `geofencing_zones` and `return_constraint` are published by
+  51 and 31 of 405 feeds and by no nextbike network. So the application states
+  nothing about the right to take such a bike, says the network's rules
+  decide, and a dialog says as much the first time the switch goes on — it
+  informs and does not confirm, and the bike sheet reopens it. **Depots are
+  drawn as they are**: the 145 bikes levélo parks in the Arnavaux industrial
+  zone are drawn like the others, no heuristic telling a depot from a street.
+  A journey **from** a bike is the own-bike path with an arrival station —
+  no access walk, the ride on the bike's own kind, the usual penalty on the
+  docks, the comparison with walking — and the ordinary search never picks a
+  street bike as a departure; §6's algorithm is untouched. The feed is read
+  only while the switch is on, with the station feed on opening and on
+  pull-to-refresh, then **at most every five minutes**: one read weighs
+  twenty times the station feed — Berlin 1,846 KiB, 182 gzipped — and two
+  Marseille snapshots 5.7 minutes apart found 662 of 674 bikes where they
+  were. The bikes live in memory for the session, under the city's
+  identifier, and reach no disk; a network publishing no such feed shows
+  nothing, and the city configuration gains no field.
+
 ## [1.3.0]
 
 The maps answer the hand — they turn, they tilt, and one compass gives both
