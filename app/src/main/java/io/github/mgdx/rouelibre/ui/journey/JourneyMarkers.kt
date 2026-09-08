@@ -1,11 +1,14 @@
 package io.github.mgdx.rouelibre.ui.journey
 
 import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toBitmap
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.journey.DeparturePoint
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
+import io.github.mgdx.rouelibre.core.station.VehicleKind
 import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
@@ -47,9 +50,23 @@ object JourneyMarkers {
     /** An end of a journey ridden from one end to the other (SPEC §7.3). */
     private const val KIND_ENDPOINT_OWN_BIKE = "endpoint-own-bike"
 
+    /**
+     * The bike a journey sets off on, standing outside the stations
+     * (SPEC §7.2.1, §7.4).
+     *
+     * Two of them, and the bike's own kind decides which: the bolt here comes
+     * from the feed, where a station's comes from the fleet and a ride on one's
+     * own bike from the rider (SPEC §4.1). It is the only badge such a marker
+     * ever takes — a bike is one bike, so there is no rack to bear a cog.
+     */
+    private const val KIND_STREET_BIKE = "street-bike"
+    private const val KIND_STREET_BIKE_ELECTRIC = "street-bike-electric"
+
     private const val STATION_IMAGE_ID = "journey-station-marker"
     private const val ENDPOINT_IMAGE_ID = "journey-endpoint-marker"
     private const val ENDPOINT_OWN_BIKE_IMAGE_ID = "journey-endpoint-own-bike-marker"
+    private const val STREET_BIKE_IMAGE_ID = "journey-street-bike-marker"
+    private const val STREET_BIKE_ELECTRIC_IMAGE_ID = "journey-street-bike-electric-marker"
 
     /**
      * Registers the two drawings in the style.
@@ -85,6 +102,36 @@ object JourneyMarkers {
             ENDPOINT_OWN_BIKE_IMAGE_ID,
             imageOf(context, OwnBikeGlyphs.endpointMarker(ownBikeKind)),
         )
+        // The bike a journey may set off on, outside the stations (SPEC §7.4).
+        // Both drawings are registered whatever the journey shown: which of
+        // them is used is read off that bike's own kind, feature by feature,
+        // and neither depends on an answer arriving from disk.
+        style.addImage(
+            STREET_BIKE_IMAGE_ID,
+            imageOf(context, R.drawable.marker_journey_street_bike),
+        )
+        style.addImage(
+            STREET_BIKE_ELECTRIC_IMAGE_ID,
+            imageOf(context, R.drawable.marker_journey_street_bike_electric),
+        )
+    }
+
+    /**
+     * The disc a journey's departure takes, for the drawings the map does not
+     * hold — the shape under the summary, on the result screen and on its
+     * detail (SPEC §7.4).
+     *
+     * `null` for a station, which those drawings already draw for themselves:
+     * only a bike outside the stations replaces the first disc, and it is the
+     * same glyph the map lays on that same point.
+     */
+    @DrawableRes
+    fun departureMarkerOf(departure: DeparturePoint): Int? = when (departure) {
+        is DeparturePoint.AtStation -> null
+        is DeparturePoint.AtStreetBike -> when (departure.kind) {
+            VehicleKind.Electric -> R.drawable.marker_journey_street_bike_electric
+            VehicleKind.Mechanical, VehicleKind.Other -> R.drawable.marker_journey_street_bike
+        }
     }
 
     /** The markers' layer, each disc centred on its point. */
@@ -97,6 +144,8 @@ object JourneyMarkers {
                     Expression.stop(KIND_STATION, STATION_IMAGE_ID),
                     Expression.stop(KIND_ENDPOINT, ENDPOINT_IMAGE_ID),
                     Expression.stop(KIND_ENDPOINT_OWN_BIKE, ENDPOINT_OWN_BIKE_IMAGE_ID),
+                    Expression.stop(KIND_STREET_BIKE, STREET_BIKE_IMAGE_ID),
+                    Expression.stop(KIND_STREET_BIKE_ELECTRIC, STREET_BIKE_ELECTRIC_IMAGE_ID),
                 ),
             ),
             PropertyFactory.iconAnchor(Property.ICON_ANCHOR_CENTER),
@@ -112,8 +161,11 @@ object JourneyMarkers {
      *
      * @param origin where the user sets off from, if it is known.
      * @param destination where they are going.
-     * @param option the station pair shown, or `null` when the journey comes
-     *   down to a single leg — the two ends are then still worth drawing.
+     * @param option the journey shown, or `null` when it comes down to a
+     *   single leg — the two ends are then still worth drawing. Its departure
+     *   carries its own drawing: a station's disc, or the bike glyph where the
+     *   journey sets off on a bike outside the stations (SPEC §7.4), which is
+     *   why such a journey puts three points on the map and not four.
      * @param isRidden true when that single leg is ridden on the user's own
      *   bike (SPEC §7.3): the two ends then bear a bike rather than a walking
      *   figure, since nothing of that journey is walked.
@@ -128,11 +180,27 @@ object JourneyMarkers {
         return FeatureCollection.fromFeatures(
             listOfNotNull(
                 origin?.let { pointAt(it, end) },
-                option?.let { pointAt(it.departureStation.position, KIND_STATION) },
+                option?.let { pointAt(it.departure.position, departureKindOf(it.departure)) },
                 option?.let { pointAt(it.arrivalStation.position, KIND_STATION) },
                 destination?.let { pointAt(it, end) },
             ),
         )
+    }
+
+    /**
+     * The drawing the point a journey sets off from takes.
+     *
+     * The station disc where it is a station; the bike glyph, smaller and
+     * countless, where the rider chose a bike outside them — bearing the bolt
+     * only where the network's own type table reads that bike as electric
+     * (SPEC §4.1, §7.4).
+     */
+    private fun departureKindOf(departure: DeparturePoint): String = when (departure) {
+        is DeparturePoint.AtStation -> KIND_STATION
+        is DeparturePoint.AtStreetBike -> when (departure.kind) {
+            VehicleKind.Electric -> KIND_STREET_BIKE_ELECTRIC
+            VehicleKind.Mechanical, VehicleKind.Other -> KIND_STREET_BIKE
+        }
     }
 
     private fun pointAt(position: Coordinates, kind: String): Feature =

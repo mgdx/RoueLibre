@@ -52,9 +52,11 @@ data class JourneyUiState(
  * algorithm, and it is cancellable: leaving the screen while it runs interrupts
  * it along with the model.
  *
- * Two questions can be asked of it, and it is [usesOwnBike] that says which:
- * the walk → bike → walk journey through the network's stations, or the single
- * ride of somebody on their own bike (SPEC §7.3).
+ * Three questions can be asked of it. A [streetBike] settles it outright: the
+ * journey from a bike the user chose on the map, which no other question can be
+ * asked of (SPEC §7.2.1). Failing one, [usesOwnBike] says which of the other
+ * two — the walk → bike → walk journey through the network's stations, or the
+ * single ride of somebody on their own bike (SPEC §7.3).
  *
  * Nothing is kept: neither the journey nor its points. SPEC §8 wants computed
  * routes to live in memory, for the session only.
@@ -72,6 +74,12 @@ data class JourneyUiState(
  *   the same way and for the same reason. It reaches the ride of somebody on
  *   their own bike and nothing else: what the network lends says nothing about
  *   the bike in one's hallway, and the reverse holds just as firmly.
+ * @property streetBike the bike outside the stations this journey sets off
+ *   from, or `null` for every other journey (SPEC §7.2.1). It overrides
+ *   [usesOwnBike] and [wantedBikeKind] rather than combining with them: the
+ *   departure is settled and the ride is traced on that bike's own kind, so
+ *   there is nothing left for either to decide — and the search screen hides
+ *   both of them for that very reason (SPEC §7.3).
  * @property coveredArea the box the city's data was cut from, read at each
  *   computation like the rest. It is what lets a journey with an end outside
  *   that box be refused before anything is computed (SPEC §4, §7.8), and it is
@@ -90,6 +98,7 @@ class JourneyViewModel(
     private val walkingPace: Flow<WalkingPace> = flowOf(WalkingPace.Normal),
     private val ownBikeKind: Flow<OwnBikeKind> = flowOf(OwnBikeKind.Mechanical),
     private val coveredArea: Flow<BoundingBox?> = flowOf(null),
+    private val streetBike: StreetBikeHandle? = null,
 ) : ViewModel() {
 
     /** The two ends, as the result screen may correct them without going back. */
@@ -147,6 +156,42 @@ class JourneyViewModel(
             // and it is the one setting that reaches this ride: it decides the
             // profile it is traced with (SPEC §7.6). The walking pace is not
             // passed on, this journey being one leg and no step of it walked.
+            // A journey asked from a bike chosen on the map answers before
+            // either of the other two questions is put: the departure is that
+            // bike, whatever the switch and the kind kept for the ordinary
+            // journey happen to say — this one neither reads nor writes them
+            // (SPEC §7.3). The stations are still needed, the journey ending at
+            // one of them.
+            val bike = streetBike
+            if (bike != null) {
+                val stations = repository.observeStations().first().stations
+                if (stations.isEmpty()) {
+                    mutableState.update {
+                        it.copy(isComputing = false, hasStations = false, plan = null)
+                    }
+                    return@launch
+                }
+                // The walking pace reaches the walk that ends this journey and
+                // the comparison with walking straight there, exactly as it
+                // does on the ordinary path. The bike is not the rider's to
+                // declare, so `ownBikeKind` says nothing here: the ride is
+                // traced on the kind the network's table read (SPEC §6).
+                val planner = JourneyPlanner(
+                    router = router,
+                    settings = JourneySettings(walkingPace = walkingPace.first()),
+                    coveredArea = coveredArea.first(),
+                )
+                val fromTheBike = planner.planFromStreetBike(
+                    bike = bike.toStreetBike(),
+                    kind = bike.kind,
+                    destination = destination,
+                    stations = stations,
+                )
+                mutableState.update {
+                    it.copy(plan = fromTheBike, isComputing = false, hasStations = true)
+                }
+                return@launch
+            }
             if (usesOwnBike) {
                 val settings = JourneySettings(riddenBike = ownBikeKind.first().asRiddenBike())
                 val ride = JourneyPlanner(router, settings, coveredArea = coveredArea.first())
@@ -219,6 +264,7 @@ class JourneyViewModel(
         private val walkingPace: Flow<WalkingPace> = flowOf(WalkingPace.Normal),
         private val ownBikeKind: Flow<OwnBikeKind> = flowOf(OwnBikeKind.Mechanical),
         private val coveredArea: Flow<BoundingBox?> = flowOf(null),
+        private val streetBike: StreetBikeHandle? = null,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -236,6 +282,7 @@ class JourneyViewModel(
                 walkingPace,
                 ownBikeKind,
                 coveredArea,
+                streetBike,
             ) as T
         }
     }

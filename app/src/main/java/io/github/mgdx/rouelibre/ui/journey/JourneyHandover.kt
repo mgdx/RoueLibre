@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.journey.DeparturePoint
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
 import io.github.mgdx.rouelibre.ui.ChoiceDialogFragment
@@ -85,15 +86,20 @@ class JourneyHandover(private val fragment: Fragment, private val onMessage: (St
      *
      * The wording is the step list's own: the same journey, described the same
      * way from one screen to the next.
+     *
+     * **The first leg stands even where no walk was computed** (SPEC §7.4): a
+     * journey begun at a bike outside stations assumes the rider is beside it,
+     * but somebody who chose that bike from across a neighbourhood is owed the
+     * way to it, and a `geo:` URI carries its point as well as any other.
      */
     private fun legsOf(option: JourneyOption, destination: JourneyEndpoint) = listOf(
         Target(
             leg = fragment.getString(
                 R.string.journey_step_to_station,
-                option.departureStation.name,
+                departureName(option.departure),
             ),
-            place = option.departureStation.name,
-            position = option.departureStation.position,
+            place = departureName(option.departure),
+            position = option.departure.position,
         ),
         Target(
             leg = fragment.getString(R.string.journey_step_ride, option.arrivalStation.name),
@@ -106,6 +112,19 @@ class JourneyHandover(private val fragment: Fragment, private val onMessage: (St
             position = destination.position,
         ),
     )
+
+    /**
+     * What the point a journey sets off from is called (SPEC §7.4).
+     *
+     * A station by its own name; a bike outside the stations by the words the
+     * two journey screens already put in the origin field, the producer's
+     * identifier for it naming nothing anybody could read (SPEC §4.1).
+     */
+    private fun departureName(departure: DeparturePoint): String = when (departure) {
+        is DeparturePoint.AtStation -> departure.station.name
+        is DeparturePoint.AtStreetBike ->
+            fragment.getString(R.string.journey_departure_street_bike)
+    }
 
     private fun ask(targets: List<Target>) {
         ChoiceDialogFragment.ask(

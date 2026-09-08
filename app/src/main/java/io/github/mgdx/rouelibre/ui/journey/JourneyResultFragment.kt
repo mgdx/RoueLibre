@@ -208,6 +208,17 @@ class JourneyResultFragment : Fragment() {
      */
     private var wantedBikeKind: WantedBikeKind? = null
 
+    /**
+     * The bike outside the stations this journey sets off from, or `null`
+     * (SPEC §7.2.1).
+     *
+     * It travels with the two ends and for the same reason: a rotation, or a
+     * process killed and restored, must ask the same question again — a journey
+     * worked out from a bike must not come back as a journey worked out from
+     * the point it stood on.
+     */
+    private var streetBike: StreetBikeHandle? = null
+
     private val picker = JourneyEndpointPicker(
         fragment = this,
         onMessage = ::showMessage,
@@ -260,6 +271,7 @@ class JourneyResultFragment : Fragment() {
             walkingPace = container.preferences.walkingPace,
             ownBikeKind = container.preferences.ownBikeKind,
             coveredArea = container.coveredArea(),
+            streetBike = streetBike,
         )
     }
 
@@ -286,6 +298,8 @@ class JourneyResultFragment : Fragment() {
             savedInstanceState?.getString(STATE_WANTED_BIKE_KIND)
                 ?: arguments?.getString(ARGUMENT_WANTED_BIKE_KIND),
         )
+        streetBike = StreetBikeHandle.readFrom(savedInstanceState, STATE_STREET_BIKE)
+            ?: StreetBikeHandle.readFrom(arguments, ARGUMENT_STREET_BIKE)
         picker.readFrom(savedInstanceState)
     }
 
@@ -326,6 +340,7 @@ class JourneyResultFragment : Fragment() {
         views.origin.setOnClickListener { picker.choose(true, destination.position) }
         views.destination.setOnClickListener { picker.choose(false, origin.position) }
         views.swap.setOnClickListener { swapEndpoints() }
+        lockTheOriginOnTheBike()
         views.locateMe.setOnClickListener { onLocateMeClicked() }
         // The way back from wherever the map has been taken to. Animated, unlike
         // the framing the screen lays by itself: this one answers a press, and
@@ -472,6 +487,32 @@ class JourneyResultFragment : Fragment() {
         val views = binding ?: return
         views.origin.text = origin.label
         views.destination.text = destination.label
+    }
+
+    /**
+     * Holds the origin on the bike the journey was asked from (SPEC §7.3).
+     *
+     * The same rule as on the search screen, and it has to be the same: this
+     * screen offers to correct a point without going back, and correcting this
+     * one would be asking an ordinary journey, which never departs from a
+     * street bike (SPEC §6). The swap button goes with the editing, there being
+     * nothing to exchange when one of the two ends cannot move — and a bike is
+     * the one kind of point one only ever leaves from (SPEC §7.2.1).
+     *
+     * The row stays readable and stops answering, rather than being disabled: a
+     * screen reader still meets it, and the sentence it carries says why.
+     */
+    private fun lockTheOriginOnTheBike() {
+        if (streetBike == null) return
+        val views = binding ?: return
+        views.origin.setOnClickListener(null)
+        views.origin.isClickable = false
+        views.origin.contentDescription = getString(
+            R.string.address_detail,
+            getString(R.string.journey_departure_street_bike),
+            getString(R.string.journey_origin_street_bike_locked),
+        )
+        views.swap.isVisible = false
     }
 
     /**
@@ -851,8 +892,12 @@ class JourneyResultFragment : Fragment() {
      */
     private fun showShape(option: JourneyOption, minutes: JourneyMinutes) {
         val views = binding ?: return
-        views.detail.shape.legs = listOf(
-            legOf(option.walkToStation, minutes.walkToStation, isRide = false),
+        // A journey begun at a bike outside the stations has no access walk to
+        // draw, so the drawing holds two strokes and three discs — the bike,
+        // the arrival station, the destination (SPEC §7.4).
+        views.detail.shape.departureMarker = JourneyMarkers.departureMarkerOf(option.departure)
+        views.detail.shape.legs = listOfNotNull(
+            option.walkToStation?.let { legOf(it, minutes.walkToStation, isRide = false) },
             legOf(option.ride, minutes.ride, isRide = true),
             legOf(option.walkToDestination, minutes.walkToDestination, isRide = false),
         )
@@ -896,6 +941,7 @@ class JourneyResultFragment : Fragment() {
         // One stroke between two ends — dotted for the walk, unbroken for the
         // ride: the journey there is, with no station on the way. A single leg
         // is its own total, so there is nothing to apportion here.
+        views.detail.shape.departureMarker = null
         views.detail.shape.legs = soleLeg
             ?.let {
                 listOf(legOf(it, it.duration.inShownMinutes(), isRide = ownBike != null))
@@ -955,7 +1001,7 @@ class JourneyResultFragment : Fragment() {
         ride.setGeoJson(JourneyLines.rideFeatures(option))
         frameOn(
             (
-                option.walkToStation.geometry + option.ride.geometry +
+                option.walkToStation?.geometry.orEmpty() + option.ride.geometry +
                     option.walkToDestination.geometry
                 )
                 .map { LatLng(it.latitude, it.longitude) },
@@ -1201,6 +1247,7 @@ class JourneyResultFragment : Fragment() {
         destination.writeTo(outState, STATE_DESTINATION)
         outState.putBoolean(STATE_OWN_BIKE, usesOwnBike)
         outState.putString(STATE_WANTED_BIKE_KIND, wantedBikeKind?.wireName)
+        streetBike?.writeTo(outState, STATE_STREET_BIKE)
         picker.writeTo(outState)
     }
 
@@ -1230,10 +1277,12 @@ class JourneyResultFragment : Fragment() {
         private const val ARGUMENT_DESTINATION = "destination"
         private const val ARGUMENT_OWN_BIKE = "own-bike"
         private const val ARGUMENT_WANTED_BIKE_KIND = "wanted-bike-kind"
+        private const val ARGUMENT_STREET_BIKE = "street-bike"
         private const val STATE_ORIGIN = "state-origin"
         private const val STATE_DESTINATION = "state-destination"
         private const val STATE_OWN_BIKE = "state-own-bike"
         private const val STATE_WANTED_BIKE_KIND = "state-wanted-bike-kind"
+        private const val STATE_STREET_BIKE = "state-street-bike"
 
         /** The margin around the track, in dp, so it does not touch the edges. */
         private const val FRAME_PADDING_DP = 32
@@ -1247,18 +1296,24 @@ class JourneyResultFragment : Fragment() {
          * @param wantedBikeKind the kind of bike asked for, or `null` for no
          *   kind at all — which is what a point arriving from another
          *   application asks for, nobody having chosen anything on its behalf.
+         * @param streetBike the bike outside the stations the journey sets off
+         *   from (SPEC §7.2.1). It settles the question on its own: the two
+         *   arguments above are then what they are at rest, and neither is
+         *   read.
          */
         fun newInstance(
             origin: JourneyEndpoint,
             destination: JourneyEndpoint,
             usesOwnBike: Boolean = false,
             wantedBikeKind: WantedBikeKind? = null,
+            streetBike: StreetBikeHandle? = null,
         ): JourneyResultFragment = JourneyResultFragment().apply {
             arguments = Bundle().apply {
                 origin.writeTo(this, ARGUMENT_ORIGIN)
                 destination.writeTo(this, ARGUMENT_DESTINATION)
                 putBoolean(ARGUMENT_OWN_BIKE, usesOwnBike)
                 putString(ARGUMENT_WANTED_BIKE_KIND, wantedBikeKind?.wireName)
+                streetBike?.writeTo(this, ARGUMENT_STREET_BIKE)
             }
         }
     }
