@@ -221,9 +221,20 @@ class JourneySearchFragment : Fragment() {
      * reader still meets it, and the sentence it carries says why it does not
      * answer.
      *
-     * Everything else on the screen is untouched: the destination is named in
-     * the six ways of SPEC §7.3, and the button at the bottom asks for the
-     * journey.
+     * **The sentence under the fields is this journey's own**: there is no walk
+     * to the bike and the ride ends at a station, which is neither of the two
+     * journeys the other sentences describe.
+     *
+     * **The illustration goes.** It draws walk → bike → walk, and the two
+     * drawings the interface holds beside it — the station journey's and the
+     * one-stroke ride on one's own bike — describe two other journeys just as
+     * wrongly. A picture that says something false is worse than no picture:
+     * this one is decoration, marked as such for a screen reader, and the
+     * sentence above carries the whole of the meaning. Nothing is constrained
+     * to it, so the screen simply closes up.
+     *
+     * Everything else is untouched: the destination is named in the six ways of
+     * SPEC §7.3, and the button at the bottom asks for the journey.
      */
     private fun lockTheOriginOnTheBike() {
         if (streetBike == null) return
@@ -237,6 +248,8 @@ class JourneySearchFragment : Fragment() {
         )
         views.swap.isVisible = false
         views.ownBike.isVisible = false
+        views.hint.setText(R.string.journey_hint_street_bike)
+        views.shape.isVisible = false
     }
 
     /**
@@ -313,7 +326,11 @@ class JourneySearchFragment : Fragment() {
         val views = binding ?: return
         views.missingData.isVisible = !isGraphInstalled
         views.missingDataAction.isVisible = !isGraphInstalled
-        views.shape.isVisible = isGraphInstalled
+        // And the drawing stays away for good on a journey from a bike, which
+        // none of the three illustrations describes — see
+        // [lockTheOriginOnTheBike]. This is a flow, so the answer has to be
+        // repeated here rather than set once.
+        views.shape.isVisible = isGraphInstalled && streetBike == null
     }
 
     private fun openStorage() {

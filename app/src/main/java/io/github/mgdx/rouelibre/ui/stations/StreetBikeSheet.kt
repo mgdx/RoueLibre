@@ -23,6 +23,8 @@ import io.github.mgdx.rouelibre.core.station.isBeyondCoveredArea
 import io.github.mgdx.rouelibre.databinding.SheetStreetBikeBinding
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.handOverToNavigation
+import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
+import io.github.mgdx.rouelibre.ui.journey.StreetBikeHandle
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -101,14 +103,7 @@ class StreetBikeSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         val views = checkNotNull(binding)
 
-        // The journey from a bike is the business of the lot that wires the
-        // journey screens to a street bike (SPEC §7.3, §6). Until it lands the
-        // button is there and dead, rather than absent: the sheet's shape is
-        // settled, and a button appearing later would move everything under it.
-        // What that lot has to read is in `showState`, which already knows the
-        // two conditions withdrawing the journey — the bike gone, and the bike
-        // standing beyond the installed data.
-        views.journeyFromHere.isEnabled = false
+        views.journeyFromHere.setOnClickListener { prepareJourney() }
         views.openInNavigation.setOnClickListener { openInNavigationApp() }
         views.whatTheseBikesAre.setOnClickListener {
             StreetBikeIntroDialogFragment.explain(parentFragmentManager)
@@ -210,6 +205,7 @@ class StreetBikeSheet : BottomSheetDialogFragment() {
         } else if (beyond) {
             views.state.setText(R.string.journey_outside_coverage)
         }
+        views.journeyFromHere.isEnabled = bike != null && !state.isGone && !beyond
         views.openInNavigation.isEnabled = bike != null && !state.isGone
     }
 
@@ -224,6 +220,39 @@ class StreetBikeSheet : BottomSheetDialogFragment() {
         val views = binding ?: return
         val freshness = freshnessOf(fetchedAt, Instant.now())
         views.freshness.text = freshness.toStatusLine(requireContext(), freshness.isStale)
+    }
+
+    /**
+     * Opens the journey search on this bike (SPEC §7.2.1, §7.3).
+     *
+     * The station sheet's move, with the one difference that makes this journey
+     * what it is: a station is handed over as a point like any other, to be
+     * placed at either end, where a bike is handed over as **the bike the
+     * journey sets off on** — the only journey a street bike is ever part of
+     * (SPEC §6). The search screen fills its origin from it and holds it there,
+     * and what is left to ask is where one is going.
+     *
+     * The sheet closes first, as that one does: left open over the search
+     * screen it would hide the field that has just been filled. The manager is
+     * captured before dismissing, the sheet no longer being attached after it.
+     */
+    private fun prepareJourney() {
+        val bike = viewModel.state.value.bike ?: return
+        val handle = StreetBikeHandle(
+            id = bike.id,
+            position = bike.position,
+            // The kind the ride is traced on, which is not always the word the
+            // sheet says above it — see `StreetBikeUiState.rideKind`.
+            kind = viewModel.state.value.rideKind,
+            chargeRatio = bike.chargeRatio,
+            rangeMetres = bike.rangeMetres,
+        )
+        val manager = requireActivity().supportFragmentManager
+        dismiss()
+        manager.beginTransaction()
+            .replace(R.id.content, JourneySearchFragment.newInstance(streetBike = handle))
+            .addToBackStack(null)
+            .commit()
     }
 
     /**
