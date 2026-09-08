@@ -44,11 +44,14 @@ object JourneyMarkers {
     /** The property saying which of the two drawings a point takes. */
     const val KIND_PROPERTY: String = "kind"
 
-    private const val KIND_STATION = "station"
-    private const val KIND_ENDPOINT = "endpoint"
+    /** A station of the journey: the filled disc bearing a bike. */
+    const val KIND_STATION: String = "station"
+
+    /** An end of the journey: the outlined disc bearing a walking figure. */
+    const val KIND_ENDPOINT: String = "endpoint"
 
     /** An end of a journey ridden from one end to the other (SPEC §7.3). */
-    private const val KIND_ENDPOINT_OWN_BIKE = "endpoint-own-bike"
+    const val KIND_ENDPOINT_OWN_BIKE: String = "endpoint-own-bike"
 
     /**
      * The bike a journey sets off on, standing outside the stations
@@ -59,8 +62,8 @@ object JourneyMarkers {
      * own bike from the rider (SPEC §4.1). It is the only badge such a marker
      * ever takes — a bike is one bike, so there is no rack to bear a cog.
      */
-    private const val KIND_STREET_BIKE = "street-bike"
-    private const val KIND_STREET_BIKE_ELECTRIC = "street-bike-electric"
+    const val KIND_STREET_BIKE: String = "street-bike"
+    const val KIND_STREET_BIKE_ELECTRIC: String = "street-bike-electric"
 
     private const val STATION_IMAGE_ID = "journey-station-marker"
     private const val ENDPOINT_IMAGE_ID = "journey-endpoint-marker"
@@ -159,7 +162,9 @@ object JourneyMarkers {
     /**
      * The points to show for the journey being displayed.
      *
-     * @param origin where the user sets off from, if it is known.
+     * @param origin where the user sets off from, if it is known. It is left
+     *   undrawn on a journey that sets off on a bike outside the stations,
+     *   where the departure marker below stands on that very point.
      * @param destination where they are going.
      * @param option the journey shown, or `null` when it comes down to a
      *   single leg — the two ends are then still worth drawing. Its departure
@@ -177,9 +182,18 @@ object JourneyMarkers {
         isRidden: Boolean = false,
     ): FeatureCollection {
         val end = if (isRidden) KIND_ENDPOINT_OWN_BIKE else KIND_ENDPOINT
+        // A journey that sets off on a bike outside the stations has that bike
+        // for its origin: the search screen locked the field on it, so the two
+        // points coincide exactly. Emitting both would lay the walking disc and
+        // the bike glyph on the very same spot — and overlap being allowed
+        // here, both are drawn, the walker over the bike, which is the one
+        // thing this marker had to say. The bike stays and the walker goes:
+        // nothing of that departure is walked, and the map carries three points
+        // and not four (SPEC §7.4).
+        val setsOffOnABike = option?.departure is DeparturePoint.AtStreetBike
         return FeatureCollection.fromFeatures(
             listOfNotNull(
-                origin?.let { pointAt(it, end) },
+                origin.takeUnless { setsOffOnABike }?.let { pointAt(it, end) },
                 option?.let { pointAt(it.departure.position, departureKindOf(it.departure)) },
                 option?.let { pointAt(it.arrivalStation.position, KIND_STATION) },
                 destination?.let { pointAt(it, end) },
