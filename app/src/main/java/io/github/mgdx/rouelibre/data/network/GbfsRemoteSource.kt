@@ -14,6 +14,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.ResponseBody
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -140,7 +141,12 @@ class GbfsRemoteSource(
                         DataError.ServerRefused(response.code),
                     )
                 }
-                val body = response.body.string()
+                val body = response.body.textUpTo()
+                    ?: return@withContext Outcome.Failure(
+                        DataError.MalformedResponse(
+                            "feed larger than $MAXIMUM_DOCUMENT_BYTES bytes",
+                        ),
+                    )
                 if (body.isBlank()) {
                     return@withContext Outcome.Failure(
                         DataError.MalformedResponse("empty response"),
@@ -168,4 +174,40 @@ class GbfsRemoteSource(
             )
         }
     }
+}
+
+/**
+ * The most a JSON document read into memory may weigh, in bytes.
+ *
+ * Sixteen mebibytes. The documents concerned — a GBFS feed, the catalogue, a
+ * release manifest — are all read whole into a string, and the largest of them
+ * is the `station_information` of the largest network served: sharedmobility.ch
+ * publishes 12,896 stations, a few megabytes of JSON. This leaves that feed room
+ * to grow several times over before anyone notices a ceiling, while keeping the
+ * memory a host can make the application allocate to a known figure.
+ *
+ * Known matters more than generous here: these feeds come from 337 third-party
+ * hosts the project has no hold over, and a body of a few hundred megabytes
+ * raises an `OutOfMemoryError` — an `Error`, which none of the `catch` blocks
+ * around these reads would see go by, so the application closes.
+ */
+internal const val MAXIMUM_DOCUMENT_BYTES: Long = 16L * 1024 * 1024
+
+/**
+ * The body as text, or `null` if it goes past [limit].
+ *
+ * Read through the buffered source rather than with `string()`: the latter has
+ * the whole body in memory before its size can be looked at, which is precisely
+ * what has to be avoided. Asking the source for one byte more than the ceiling
+ * fills the buffer no further than that, so an endless response is stopped
+ * having cost the ceiling and nothing beyond it — and the rest is never fetched.
+ *
+ * The announced length is deliberately not consulted: a chunked response
+ * declares none, and a host that means harm declares whatever suits it.
+ */
+internal fun ResponseBody.textUpTo(limit: Long = MAXIMUM_DOCUMENT_BYTES): String? {
+    val source = source()
+    if (source.request(limit + 1)) return null
+    // The charset the response declares, as `string()` would have honoured it.
+    return source.readString(contentType()?.charset(Charsets.UTF_8) ?: Charsets.UTF_8)
 }

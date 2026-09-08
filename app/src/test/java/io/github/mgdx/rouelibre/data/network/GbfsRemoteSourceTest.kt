@@ -12,6 +12,7 @@ import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okio.Buffer
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -105,6 +106,41 @@ class GbfsRemoteSourceTest {
 
         assertTrue(outcome is Outcome.Failure)
         assertTrue((outcome as Outcome.Failure).error is DataError.MalformedResponse)
+    }
+
+    @Test
+    fun `a feed past the ceiling is refused rather than read into memory`() = runTest {
+        // These feeds come from hosts the project has no hold over. One of them
+        // answering with hundreds of megabytes used to raise an
+        // OutOfMemoryError — an Error, which none of the catch blocks here sees
+        // go by — and close the application on the most ordinary operation it
+        // has. The body is served larger than the ceiling and never fully read.
+        val server = MockWebServer()
+        server.start()
+        val oversized = Buffer().apply {
+            val megabyte = ByteArray(1024 * 1024) { '.'.code.toByte() }
+            repeat((MAXIMUM_DOCUMENT_BYTES / megabyte.size).toInt() + 1) { write(megabyte) }
+        }
+        server.enqueue(MockResponse.Builder().code(200).body(oversized).build())
+        val source = GbfsRemoteSource(
+            client = OkHttpClient(),
+            parser = GbfsParser(),
+            userAgent = "RoueLibre/test",
+            unnamedStationLabel = { UNNAMED },
+            ioDispatcher = Dispatchers.IO,
+        )
+
+        val outcome = source.fetchDiscovery(server.url("/gbfs.json").toString())
+
+        server.close()
+        assertTrue("expected a failure, got: $outcome", outcome is Outcome.Failure)
+        // The ceiling by name, not merely a failure: a body read whole and then
+        // found not to be JSON fails too, and would pass a laxer assertion
+        // while having allocated everything the host chose to send.
+        assertEquals(
+            DataError.MalformedResponse("feed larger than $MAXIMUM_DOCUMENT_BYTES bytes"),
+            (outcome as Outcome.Failure).error,
+        )
     }
 
     private companion object {

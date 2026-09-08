@@ -512,6 +512,10 @@
     <string name="city_proposal_body">You seem to be in the area covered by %1$s. Shall we go with that?</string>
     <string name="city_proposal_accept">Yes</string>
     <string name="city_none_nearby">No known network near here. Pick a city from the list.</string>
+    <!-- Said when "Find my city" is pressed and location is refused. It names
+         what this screen offers instead — the list and the search — where the
+         map's own sentence spoke of a starting point there is none of here. -->
+    <string name="city_location_denied">Without location, pick your city from the list or search it by name.</string>
     <string name="action_cancel">Cancel</string>
 
     <string name="size_bytes">%1$s B</string>

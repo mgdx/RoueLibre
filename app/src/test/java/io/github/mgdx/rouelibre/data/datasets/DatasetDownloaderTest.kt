@@ -292,6 +292,36 @@ class DatasetDownloaderTest {
         )
     }
 
+    @Test
+    fun `a manifest naming an address nobody can fetch is refused, not thrown on`() = runTest {
+        // The client accepts http and https and throws on anything else. That
+        // exception left this coroutine and closed the application — on the
+        // storage screen, and again at every attempt while the document was
+        // cached. It is now a failure like any other, and the manifest is
+        // refused whole before a request goes out.
+        server.enqueue(
+            MockResponse.Builder()
+                .code(200)
+                .body(
+                    """
+                    {"formatVersion":2,"releaseTag":"data-2026-08","network":"vlille",
+                     "datasets":[{"id":"tiles","files":[
+                       {"name":"tiles.mbtiles","url":"ftp://example.org/t","sizeBytes":10,
+                        "sha256":"${"ab".repeat(32)}"}]}]}
+                    """.trimIndent(),
+                )
+                .build(),
+        )
+
+        val outcome = downloader.fetchManifest(server.url("/manifest.json").toString())
+
+        assertTrue("expected a failure, got: $outcome", outcome is Outcome.Failure)
+        assertTrue(
+            "expected MalformedResponse, got $outcome",
+            (outcome as Outcome.Failure).error is DataError.MalformedResponse,
+        )
+    }
+
     private fun datasetOf(sha256: String) = ManifestDataset(
         kind = DatasetKind.Tiles,
         description = "Fond de carte",

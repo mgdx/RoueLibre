@@ -8,6 +8,8 @@ import io.github.mgdx.rouelibre.core.config.CityCatalogueReader
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.CityConfigurationReader
 import io.github.mgdx.rouelibre.core.config.isUsableCityId
+import io.github.mgdx.rouelibre.data.network.MAXIMUM_DOCUMENT_BYTES
+import io.github.mgdx.rouelibre.data.network.textUpTo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -58,21 +60,48 @@ class CityCatalogueSource(
     /**
      * Downloads the catalogue again and keeps it if it is readable.
      *
-     * @param url the address of the published catalogue.
-     * @return the catalogue in force after the operation — the one that just
-     *   arrived, or the previous one if the download failed.
+     * **The address comes from the catalogue shipped in the APK, and from
+     * nowhere else.** It used to be read from the catalogue in force, which is
+     * the downloaded one as soon as there is one: a single hostile document
+     * then named where every later catalogue would be fetched from, and the
+     * cache that carried it outlives an application update — a server
+     * compromised once kept the client for good. What a downloaded catalogue
+     * says still decides the **list of cities**; it no longer decides where the
+     * next one comes from. Moving the publication address therefore takes a
+     * release, as it already does for every other address of the project
+     * (SPEC §15).
+     *
+     * @return the catalogue that just arrived, or the reason nothing did. The
+     *   caller keeps showing the one in force in that case.
      */
-    suspend fun refresh(url: String): Outcome<CityCatalogue> = withContext(ioDispatcher) {
-        val request = Request.Builder()
-            .url(url)
-            .header("User-Agent", userAgent)
-            .build()
+    suspend fun refresh(): Outcome<CityCatalogue> = withContext(ioDispatcher) {
+        val url = embeddedCatalogue().catalogueUrl
+            ?: return@withContext Outcome.Failure(
+                DataError.MalformedResponse("no publication address in the shipped catalogue"),
+            )
+        val request = try {
+            Request.Builder()
+                .url(url)
+                .header("User-Agent", userAgent)
+                .build()
+        } catch (_: IllegalArgumentException) {
+            // The shipped catalogue is produced by tools/build_catalogue.py and
+            // verified, so this is a manufacturing defect rather than a user
+            // situation. Said rather than thrown all the same: an address the
+            // client refuses must never be what closes the application.
+            return@withContext Outcome.Failure(DataError.MalformedResponse("invalid URL: $url"))
+        }
         try {
             httpClient.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
                     return@withContext Outcome.Failure(DataError.ServerRefused(response.code))
                 }
-                val document = response.body.string()
+                val document = response.body.textUpTo()
+                    ?: return@withContext Outcome.Failure(
+                        DataError.MalformedResponse(
+                            "catalogue larger than $MAXIMUM_DOCUMENT_BYTES bytes",
+                        ),
+                    )
                 when (val outcome = CityCatalogueReader.read(document)) {
                     is Outcome.Failure -> outcome
                     is Outcome.Success -> {

@@ -82,7 +82,10 @@ class CityFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 container.automaticLocationRequest.noteRefused()
             }
-            showMessage(getString(R.string.map_location_denied))
+            // This screen's own sentence, not the map's: there is neither map
+            // nor address search here, and "pick your starting point" answers a
+            // question nobody asked on the screen where one chooses a city.
+            showMessage(getString(R.string.city_location_denied))
         }
     }
 
@@ -178,8 +181,9 @@ class CityFragment : Fragment() {
                 container.addressNormalizers.searchLetterFolds()
             }
             publish(container.cityCatalogueSource.catalogue())
-            val url = catalogue?.catalogueUrl ?: return@launch
-            val refreshed = container.cityCatalogueSource.refresh(url)
+            // No address is passed: where the catalogue is fetched from is
+            // settled by the build, never by the document last downloaded.
+            val refreshed = container.cityCatalogueSource.refresh()
             if (refreshed is Outcome.Success) publish(refreshed.value)
         }
     }
