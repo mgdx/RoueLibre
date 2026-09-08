@@ -83,6 +83,23 @@ private const val TWO_MISTAKES_SCORE = 0.35
 private const val COVERAGE_WEIGHT = 0.15
 
 /**
+ * How many words of a sentence a street has to answer in full before it may be
+ * guessed at (SPEC §4.3, §7.8).
+ *
+ * One was enough, and one is what an ordinary sentence hands out by accident:
+ * "merci beaucoup et bonne journée" was offered "Chemin Bonne Nouvelle" on the
+ * strength of the single word "bonne", and "coucou sans aucune adresse dedans"
+ * was offered "Rue Jean Sans Peur" on "sans". A street named by one common
+ * adjective is not a reading of the sentence, it is a coincidence in the index.
+ *
+ * Two is where the coincidences stop and an address begins: an address written
+ * into a sentence carries its street type, its municipality or its number
+ * beside the name — "12 rue Nationale, Lille" answers three — and a word that
+ * had to be corrected to match still counts for none of them.
+ */
+private const val WORDS_A_GUESS_NEEDS = 2
+
+/**
  * How far a query word may reach into an indexed one (SPEC §4.3, §7.8).
  *
  * Not a matter of strictness but of what the text is. A query typed into the
@@ -111,8 +128,9 @@ public enum class WordMatching {
      * whole, one unknown word being enough to rule every street out. Here such
      * a word is no longer fatal — it lowers the street's score instead, so
      * that the street answering the most words of the query still comes first
-     * — and what is left has to name a street by a word of its proper name,
-     * written in full, so that a sentence naming no address comes back empty.
+     * — and what is left has to name a street by [WORDS_A_GUESS_NEEDS] of its
+     * words written in full, one of them a word of its proper name, so that a
+     * sentence naming no address comes back empty.
      *
      * It is only ever asked **after** [WholeWords] has answered nothing, and
      * what it brings back is a list to choose from and never a destination:
@@ -180,7 +198,8 @@ private fun qualityTierOf(quality: Double): Int = floor(quality / QUALITY_TIER).
  *   Read out of a sentence ([WordMatching.WholeWordsInSentence]), an unmatched
  *   word lowers the score instead of cancelling it — so that the street
  *   answering the most words of the query comes first — and the score is 0
- *   unless a word of the proper name was found in full.
+ *   unless [WORDS_A_GUESS_NEEDS] words were found in full, one of them a word
+ *   of the proper name.
  */
 private fun matchQualityOf(
     street: SearchableStreet,
@@ -205,6 +224,7 @@ private fun matchQualityOf(
     // street of the index would answer a text that names none.
     val sentence = matching == WordMatching.WholeWordsInSentence
     var namedInFull = false
+    var wordsFoundInFull = 0
 
     for (term in terms) {
         // A stop word, or a two-letter fragment, does not carry enough meaning
@@ -218,10 +238,12 @@ private fun matchQualityOf(
         // would designate a street nobody named (SPEC §7.8).
         val isWeak = term in stopWords || term.length <= SHORT_TERM_LENGTH
         val againstName = bestScoreAmong(term, nameWords, matching, isWeak)
+        val againstType = bestScoreAmong(term, typeWords, matching, isWeak)
+        val againstCity = bestScoreAmong(term, cityWords, matching, isWeak)
         val best = maxOf(
             againstName.score * PROPER_NAME_WEIGHT,
-            bestScoreAmong(term, typeWords, matching, isWeak).score * STREET_TYPE_WEIGHT,
-            bestScoreAmong(term, cityWords, matching, isWeak).score * CITY_WEIGHT,
+            againstType.score * STREET_TYPE_WEIGHT,
+            againstCity.score * CITY_WEIGHT,
         )
         // A word found nowhere is a word the street does not answer to, and it
         // rules the street out — except in a sentence, where it may belong to
@@ -237,6 +259,11 @@ private fun matchQualityOf(
         // charged for, and beat the street answering three words at the
         // unequal weights of a name, a type and a municipality.
         if (best <= 0.0 && !isWeak && !sentence) return 0.0
+        // Found in full, and in full only: a word reached through a correction
+        // is a word the sentence did not write, and counting it would let two
+        // near-misses stand for the two words a guess is asked for below.
+        val bestUnweighted = maxOf(againstName.score, againstType.score, againstCity.score)
+        if (!isWeak && bestUnweighted == EXACT_WORD_SCORE) wordsFoundInFull++
         if (!isWeak && againstName.score == EXACT_WORD_SCORE) namedInFull = true
         againstName.word?.let(coveredNameWords::add)
 
@@ -248,7 +275,12 @@ private fun matchQualityOf(
     // The whole word of a proper name, and nothing less: a municipality, a
     // street type or a corrected word designates no street on its own, and
     // those three are all a sentence naming no address ever leaves behind.
-    if (sentence && !namedInFull) return 0.0
+    //
+    // And that word cannot stand alone either, or an ordinary sentence goes on
+    // designating streets by accident — "bonne journée" offering "Chemin Bonne
+    // Nouvelle". An address written into a sentence never arrives as one bare
+    // word: see [WORDS_A_GUESS_NEEDS].
+    if (sentence && (!namedInFull || wordsFoundInFull < WORDS_A_GUESS_NEEDS)) return 0.0
 
     val termScore = weightedScore / totalWeight
     // The share of the name's words the query actually asked for: it rewards

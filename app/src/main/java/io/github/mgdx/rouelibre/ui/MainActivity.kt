@@ -532,11 +532,15 @@ class MainActivity : AppCompatActivity() {
      * walking back out through every itinerary they had ever been sent. What
      * remains under the journey is the screen the application opens on, which
      * is exactly what a link opening the application from cold leaves under it.
+     *
+     * A link that carries no readable place drops nothing: there is no journey
+     * to put in the place of what the user was reading, and clearing the screen
+     * to say so would cost them more than the link did.
      */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        if (intent.toPlaceRequest() != null) {
+        if (intent.toIncomingRequest() is IncomingRequest.Place) {
             supportFragmentManager.popBackStack(
                 null,
                 FragmentManager.POP_BACK_STACK_INCLUSIVE,
@@ -630,7 +634,7 @@ class MainActivity : AppCompatActivity() {
         // The application was opened for a place, not by its user: they came
         // for that journey, and a dialog about another city would be in the
         // way.
-        if (intent.toPlaceRequest() != null) return
+        if (intent.toIncomingRequest() != null) return
         // Before the first city is chosen, it is the welcome screen's job to
         // propose one: two proposals in a row would be one too many.
         val servedCityId = container.preferences.activeCityId() ?: return
@@ -728,12 +732,22 @@ class MainActivity : AppCompatActivity() {
      *
      * Nothing is sent over the network on that occasion: an address in words is
      * resolved by the local index, as everywhere else.
+     *
+     * **A link whose place cannot be read is answered, not ignored.** It opened
+     * this application on purpose, and the map coming up in silence was read as
+     * the application doing nothing at all (SPEC §7.8).
      */
     private fun welcome(intent: Intent) {
-        val request = intent.toPlaceRequest() ?: return
-        lifecycleScope.launch {
-            val destination = resolve(request) ?: return@launch
-            openFor(destination)
+        when (val incoming = intent.toIncomingRequest()) {
+            null -> return
+
+            IncomingRequest.Unreadable ->
+                showAnswer(getString(R.string.incoming_unreadable_link))
+
+            is IncomingRequest.Place -> lifecycleScope.launch {
+                val destination = resolve(incoming.request) ?: return@launch
+                openFor(destination)
+            }
         }
     }
 
@@ -835,6 +849,13 @@ class MainActivity : AppCompatActivity() {
      * were not read to find these, so nothing says which of them the sender
      * meant — and the first one becoming a journey by itself is exactly what
      * whole-word matching exists to prevent.
+     *
+     * **And it asks rather than announces.** The list was headed "Addresses
+     * found in this text", which claimed of a guess what only a reading could
+     * claim: "merci beaucoup et bonne journée" was offered "Chemin Bonne
+     * Nouvelle" under that heading, and the heading was the part that was
+     * wrong. What the guess itself now takes to be made at all is in
+     * `WordMatching.WholeWordsInSentence`.
      *
      * **Each row carries what tells it apart**, the address and its supporting
      * line, exactly as the address search shows the two (see [toChoiceRow]).

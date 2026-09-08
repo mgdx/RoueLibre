@@ -71,8 +71,9 @@ private const val POSTCODE_LENGTH = 5
  * Two things keep them whole — a number that does not **open** the query is
  * given up as soon as a second one appears, a date carrying two of them; and a
  * number is only read between the street and the town when neither of its
- * neighbours is an article, which is what a name puts around a date. See
- * [readMedianNumber].
+ * neighbours is an article, which is what a name puts around a date — unless a
+ * street type opens what follows the number, which a name's date never does.
+ * See [readMedianNumber].
  *
  * A postcode typed in is removed from the searched words rather than kept: the
  * index does not hold it in full text, and leaving it in the search would fail
@@ -90,7 +91,7 @@ public fun AddressNormalizer.parseQuery(raw: String): AddressQuery {
 
     val recognized = readLeadingNumber(words)
         ?: readTrailingNumber(words)
-        ?: readMedianNumber(words, stopWords)
+        ?: readMedianNumber(words)
 
     val remaining = if (recognized == null) {
         words
@@ -153,6 +154,15 @@ private fun readTrailingNumber(words: List<String>): RecognizedNumber? {
  *   "Avenida 9 **de** Julio", "Calle 20 **de** Noviembre", where a town simply
  *   follows the number. The words meant are the stop words already written
  *   down per language for ranking (SPEC §4.3), not a second list to keep.
+ *   **Unless a street type opens what follows the number**: "Rendez-vous au 171
+ *   rue Nationale" is the leading order of §7.8's shared sentence, merely with
+ *   the sentence's own words in front of it, and the article before the number
+ *   belongs to the sentence rather than to a street's name. No date puts its
+ *   street type *after* itself — "rue du 8 Mai" carries it before — so the word
+ *   following the number tells the two apart where the word preceding it
+ *   cannot. Without this the number was simply dropped, and the address offered
+ *   read "Rue Nationale" where the search box, given the same address alone,
+ *   answered "171 Rue Nationale".
  *
  * What that does not catch is a date written without a preposition, as Polish
  * and Czech write theirs — "Aleja 3 Maja", "náměstí 28. října" — which reads
@@ -162,14 +172,14 @@ private fun readTrailingNumber(words: List<String>): RecognizedNumber? {
  * the street, and only the point inside it being taken from a number that was
  * never one.
  */
-private fun readMedianNumber(words: List<String>, stopWords: Set<String>): RecognizedNumber? {
+private fun AddressNormalizer.readMedianNumber(words: List<String>): RecognizedNumber? {
     if (holdsSeveralNumbers(words)) return null
     val position = words.indexOfFirst { it.isDigitsOnly() }
     // The first and the last word are the two orders already examined.
     if (position <= 0 || position >= words.size - 1) return null
     val number = words[position].toHouseNumberOrNull() ?: return null
 
-    if (words[position - 1] in stopWords) return null
+    if (words[position - 1] in stopWords && !opensAnAddress(words, position)) return null
     // Tested before the repetition mark, and not after: a lone "a" is a mark in
     // German and an article in Italian and Spanish, and reading "via Roma 12 a
     // Milano" the first way would eat the preposition. Giving up the mark costs
@@ -179,6 +189,18 @@ private fun readMedianNumber(words: List<String>, stopWords: Set<String>): Recog
 
     val suffix = next.takeIf { isSuffix(it) && position + 2 < words.size }
     return RecognizedNumber(number, suffix.orEmpty(), position, if (suffix == null) 1 else 2)
+}
+
+/**
+ * True if a street type opens the words standing after [position].
+ *
+ * That is what a house number is followed by when the address begins there —
+ * "…au **171 rue** Nationale" — and what a street name carrying a date never
+ * is: its own type stands before the date, not after it.
+ */
+private fun AddressNormalizer.opensAnAddress(words: List<String>, position: Int): Boolean {
+    val after = words.subList(position + 1, words.size).joinToString(" ")
+    return splitStreetType(after).streetType != null
 }
 
 /**

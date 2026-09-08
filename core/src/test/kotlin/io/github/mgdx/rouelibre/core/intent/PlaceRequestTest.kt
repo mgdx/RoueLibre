@@ -102,6 +102,17 @@ class PlaceRequestTest {
     }
 
     @Test
+    fun `coordinates off the earth or not written as numbers are refused`() {
+        // The three links the report opened the application with, each of which
+        // put up a map and said nothing. Refused here, they are told apart from
+        // "no link at all" by the caller, which is what earns them a sentence
+        // (see `IncomingLinkTest`).
+        assertNull(parsePlaceUri("geo:999,999"))
+        assertNull(parsePlaceUri("geo:abc,def"))
+        assertNull(parsePlaceUri("geo:-91.5,181.7"))
+    }
+
+    @Test
     fun `a web map link is recognised when the place appears in it`() {
         // These links only reach the application if the user allows it in the
         // system settings (SPEC §7.8).
@@ -218,6 +229,15 @@ class PlaceRequestTest {
     private val hei = street("HEI Lille - Junia", "Lille", lille)
     private val portDeLille = street("Port de Lille", "Lille", lille)
 
+    // The four streets the report's two innocent sentences were fitted to, on
+    // one common adjective each: "bonne" in "bonne journée", "sans" in "sans
+    // aucune adresse". They stand in the corpus so that a sentence naming no
+    // address has to walk past them.
+    private val cheminBonneNouvelle = street("Chemin Bonne Nouvelle", "Lille", lille)
+    private val rueBonneNouvelle = street("Rue Bonne Nouvelle", "Lille", lille)
+    private val jeanSansPeur = street("Rue Jean Sans Peur", "Lille", lille)
+    private val sansPave = street("Rue Sans Pavé", "Lille", lille)
+
     private val corpus = listOf(
         toul,
         onzeNovembre,
@@ -227,6 +247,10 @@ class PlaceRequestTest {
         nationaleRoubaix,
         hei,
         portDeLille,
+        cheminBonneNouvelle,
+        rueBonneNouvelle,
+        jeanSansPeur,
+        sansPave,
     )
 
     /**
@@ -352,6 +376,33 @@ class PlaceRequestTest {
         assertEquals(emptyList<SearchableStreet>(), candidatesOf("coucou"))
         assertEquals(emptyList<SearchableStreet>(), candidatesOf("on se voit demain"))
         assertEquals(emptyList<SearchableStreet>(), candidatesOf("merci beaucoup"))
+    }
+
+    @Test
+    fun `one common word of a sentence names no street`() {
+        // What the report opened on: an ordinary sentence, and a list headed as
+        // if its streets had been read out of it. One word matched in each —
+        // "bonne", then "sans" — and one word is what any sentence hands out by
+        // accident. Two are what an address always carries (SPEC §7.8).
+        assertEquals(
+            emptyList<SearchableStreet>(),
+            candidatesOf("merci beaucoup et bonne journee"),
+        )
+        assertEquals(
+            emptyList<SearchableStreet>(),
+            candidatesOf("coucou sans aucune adresse dedans"),
+        )
+    }
+
+    @Test
+    fun `the doorway written into a sentence is not lost with it`() {
+        // The article the sentence ends on used to swallow the number: the
+        // address offered read "Rue Nationale" where the same address typed
+        // into the search box answered "171 Rue Nationale".
+        val sentence = "Rendez-vous au 171 rue Nationale, 59800 Lille"
+
+        assertEquals(171, normalizer.parseQuery(sentence).houseNumber)
+        assertEquals(nationaleLille, candidatesOf(sentence).firstOrNull())
     }
 
     @Test

@@ -239,9 +239,12 @@
     <string name="incoming_needs_index">Cette adresse doit être cherchée dans l’index hors ligne, qui n’est pas installé.</string>
     <!-- %1$s is the text received from the other application. -->
     <string name="incoming_address_not_found">« %1$s » ne correspond à aucune adresse de la zone couverte.</string>
-    <string name="incoming_address_choices_title">Adresses trouvées dans ce texte</string>
+    <!-- The list is a guess read out of the words around an address, never a
+         reading of the text itself: it asks rather than announces. -->
+    <string name="incoming_address_choices_title">Tu voulais dire l’une de ces adresses ?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Ce lieu est hors de la zone couverte par les données installées : aucun itinéraire ne peut y mener.</string>
+    <string name="incoming_unreadable_link">Ce lien ne dit pas où aller : son lieu n’a pas pu être lu.</string>
 
     <!-- Favourites (SPEC §7.5). -->
     <string name="favourites_title">Favoris</string>
