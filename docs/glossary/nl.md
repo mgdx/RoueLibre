@@ -41,9 +41,9 @@ rather than the literal translation. The three places measured on screen:
 
 | String | Dutch | Characters |
 |---|---|---|
-| `download_unmetered_only` | Alleen downloaden zonder datalimiet | 35 |
 | `settings_map_filters_hide_empty` | Stations die niets bieden verbergen | 35 |
 | `settings_map_filters_hide_out_of_service` | Stations buiten dienst verbergen | 32 |
+| `download_unmetered_only` | Alleen downloaden via wifi | 26 |
 | `station_as_origin` / `station_as_destination` | Vanaf hier / Hierheen | 10 / 8 |
 
 The last pair are the only two buttons of the application placed side by side
@@ -94,7 +94,7 @@ pair.
 | Hide | verbergen | Android's own (`settings:condition_expand_hide`). |
 | Language | Taal | Android's own (`settings:app_locale_preference_title`). |
 | Wi-Fi | wifi | Android's Dutch writes it as one word, **Wifi** (`settings:wifi`); the lower case inside a sentence is this file's own choice, after the Taalunie, which spells it *wifi*. |
-| unmetered / metered | zonder datalimiet / per megabyte afgerekend | Android labels a connection **Met datalimiet** (`settings:wifi_metered_label`); the switch takes its opposite as it stands, and the sentences explaining it say what is billed, since that is the point the English makes. Android's own *Unmetered* label is **Gratis** (`settings:wifi_unmetered_label`), which is right for a Wi-Fi list and wrong here: nothing about the download is free. |
+| unmetered / metered | zonder datalimiet / per megabyte afgerekend | Android labels a connection **Met datalimiet** (`settings:wifi_metered_label`). The switch no longer takes its opposite: it names wifi, "Alleen downloaden via wifi", as the English now does, and *datalimiet* stays where it belongs, on the capped network of `download_unmetered_only_description`. The sentences explaining it still say what is billed, since that is the point the English makes. Android's own *Unmetered* label is **Gratis** (`settings:wifi_unmetered_label`), which is right for a Wi-Fi list and wrong here: nothing about the download is free. **The modal *kan* renders "may be billed"**: *kan per megabyte worden afgerekend*, since the phone reads only that the connection declares itself metered, never what the abonnement charges. |
 | Tap | Tik (op) | Android's own verb in the imperative — "Tik voor meer opties" (`android:usb_notification_message`) — in the second person like the rest. |
 | Press and hold | Houd … ingedrukt | Android's own wording for a long press (`settings:accessibility_shortcut_type_hardware`). |
 | app | app | Android's own (`settings:apps_dashboard_title`); *toepassing* is not what a phone says. |

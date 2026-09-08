@@ -646,23 +646,24 @@
     <string name="error_local_storage">Nepavyksta perskaityti įrenginyje saugomų duomenų.</string>
     <string name="error_no_city_chosen">Miestas nepasirinktas. Pasirinkite jį iš sąrašo.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
-         connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. -->
-    <string name="download_unmetered_only">Atsisiųsti tik neapmokestinamu ryšiu</string>
-    <string name="download_unmetered_only_description">Paprastai tai „Wi-Fi“. Bendrinamas telefono ryšys ar ribojamas viešosios interneto prieigos taškas apmokestinami už megabaitus ir laikomi mobiliojo ryšio duomenimis.</string>
-    <string name="download_held_back_title">Atsisiuntimas sulaikytas</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names Wi-Fi, which is the word everybody has, while what is
+         read stays the billing (SPEC §4.4): a phone's shared connection is
+         Wi-Fi and is a mobile plan, and a capped hotspot declares itself
+         billed. The line under the switch says as much in ordinary words. -->
+    <string name="download_unmetered_only">Atsisiųsti tik per „Wi-Fi“</string>
+    <string name="download_unmetered_only_description">Bendrinamas telefono ryšys ar „Wi-Fi“ su duomenų limitu gali būti apmokestinamas už megabaitus ir laikomas mobiliojo ryšio tinklu.</string>
+    <string name="download_held_back_title">Atsisiuntimas mobiliojo ryšio tinklu</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Šis ryšys apmokestinamas už megabaitus. Prisijunkite prie „Wi-Fi“, kad atsisiųstumėte %1$s, arba atsisiųskite dabar vis tiek.</string>
+    <string name="download_held_back_body">Šis ryšys gali būti apmokestinamas už megabaitus. Prisijunkite prie „Wi-Fi“, kad atsisiųstumėte %1$s, arba atsisiųskite dabar vis tiek.</string>
     <string name="download_stopped_title">Atsisiuntimas sustabdytas</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">Šis ryšys dabar apmokestinamas už megabaitus, todėl atsisiuntimas sustojo. Kas atsiųsta, išsaugota. Prisijunkite prie „Wi-Fi“, kad atsisiųstumėte %1$s, arba tęskite dabar vis tiek.</string>
+    <string name="download_stopped_body">Šis ryšys gali būti apmokestinamas už megabaitus, todėl atsisiuntimas sustojo. Kas atsiųsta, išsaugota. Prisijunkite prie „Wi-Fi“, kad užbaigtumėte %1$s, arba tęskite dabar vis tiek.</string>
     <string name="download_anyway">Vis tiek atsisiųsti</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Laukiama neapmokestinamo ryšio, kad būtų atsiųsta %1$s.</string>
-    <string name="download_can_resume">Šis ryšys nebeapmokestinamas. Paleiskite atsisiuntimą iš naujo: jis tęsis nuo tos vietos, kurioje sustojo.</string>
+    <string name="download_waiting_for_unmetered">Laukiama „Wi-Fi“, kad būtų atsiųsta %1$s.</string>
+    <string name="download_can_resume">Šis ryšys nebėra mobiliojo ryšio tinklas. Paleiskite atsisiuntimą iš naujo: jis tęsis nuo tos vietos, kurioje sustojo.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Kuriuo ekranu atidaryti programą</string>

@@ -737,24 +737,26 @@
     <string name="error_local_storage">Não foi possível ler os dados guardados no dispositivo.</string>
     <string name="error_no_city_chosen">Não há nenhuma cidade selecionada. Escolha uma.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
-         connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. "Acesso limitado" / "Acesso ilimitado" is
-         Android's own wording for a metered network. -->
-    <string name="download_unmetered_only">Transferir apenas numa ligação de acesso ilimitado</string>
-    <string name="download_unmetered_only_description">Normalmente o Wi-Fi. A ligação partilhada de um telefone ou um ponto de acesso com acesso limitado é paga ao megabyte e conta como dados móveis.</string>
-    <string name="download_held_back_title">Transferência suspensa</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names Wi-Fi, which is the word everybody has, while what is
+         read stays the billing (SPEC §4.4): a phone's shared connection is
+         Wi-Fi and is a mobile plan, and a capped hotspot declares itself
+         billed. The line under the switch says as much in ordinary words.
+         "Acesso limitado" / "Acesso ilimitado" is Android's own wording for a
+         metered network; those sentences say the billing outright instead. -->
+    <string name="download_unmetered_only">Transferir apenas por Wi-Fi</string>
+    <string name="download_unmetered_only_description">A ligação partilhada de um telefone ou uma rede Wi-Fi com limite de dados pode ser paga ao megabyte e conta como rede móvel.</string>
+    <string name="download_held_back_title">Transferência numa rede móvel</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Esta ligação é paga ao megabyte. Ligue-se a uma rede Wi-Fi para transferir %1$s ou transfira mesmo assim agora.</string>
+    <string name="download_held_back_body">Esta ligação pode ser paga ao megabyte. Ligue-se a uma rede Wi-Fi para transferir %1$s ou transfira mesmo assim agora.</string>
     <string name="download_stopped_title">Transferência interrompida</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">Esta ligação passou a ser paga ao megabyte, por isso a transferência foi interrompida. O que já chegou fica guardado. Ligue-se a uma rede Wi-Fi para terminar os %1$s ou continue mesmo assim agora.</string>
+    <string name="download_stopped_body">Esta ligação pode ser paga ao megabyte, por isso a transferência foi interrompida. O que já chegou fica guardado. Ligue-se a uma rede Wi-Fi para terminar os %1$s ou continue mesmo assim agora.</string>
     <string name="download_anyway">Transferir mesmo assim</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">À espera de uma ligação de acesso ilimitado para transferir %1$s.</string>
-    <string name="download_can_resume">Esta ligação já não é paga. Inicie novamente a transferência: retoma onde parou.</string>
+    <string name="download_waiting_for_unmetered">À espera de Wi-Fi para transferir %1$s.</string>
+    <string name="download_can_resume">Esta ligação já não é uma rede móvel. Inicie novamente a transferência: retoma onde parou.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Abrir a aplicação por predefinição em</string>

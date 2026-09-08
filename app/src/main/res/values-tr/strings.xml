@@ -560,21 +560,28 @@
     <string name="error_local_storage">Cihazda saklanan veriler okunamıyor.</string>
     <string name="error_no_city_chosen">Seçili şehir yok. Bir tane seç.</string>
 
-    <!-- Unmetered-only downloads. The setting names what is billed rather than
-         Wi-Fi: a phone's shared connection is Wi-Fi and is a mobile plan. -->
-    <string name="download_unmetered_only">Yalnızca sayaçsız bağlantıda indir</string>
-    <string name="download_unmetered_only_description">Genellikle kablosuz bağlantı. Paylaşılan bir telefon bağlantısı ya da kotalı bir hotspot megabayt başına ücretlendirilir ve mobil veri sayılır.</string>
-    <string name="download_held_back_title">İndirme bekletildi</string>
+    <!-- Wi-Fi-only downloads. The setting names Wi-Fi, which is the word
+         everybody has, while what is read stays the billing (SPEC §4.4): a
+         phone's shared connection is Wi-Fi and is a mobile plan, and a capped
+         hotspot declares itself billed. The line under the switch names those
+         two cases in ordinary words. Turkish says Wi-Fi the way Android's
+         Turkish does, "kablosuz bağlantı" (`settings:wifi` = Kablosuz), so the
+         switch reads that and not the loanword everyday speech would use;
+         "sayaçlı" still names a metered network and belongs to the explaining
+         lines rather than to the switch. -->
+    <string name="download_unmetered_only">Yalnızca kablosuz bağlantıda indir</string>
+    <string name="download_unmetered_only_description">Paylaşılan bir telefon bağlantısı ya da veri sınırı olan bir kablosuz ağ megabayt başına ücretlendirilebilir ve mobil ağ sayılır.</string>
+    <string name="download_held_back_title">Mobil ağda indirme</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Bu bağlantı megabayt başına ücretlendiriliyor. %1$s indirmek için kablosuz bağlantıya geç ya da yine de şimdi indir.</string>
+    <string name="download_held_back_body">Bu bağlantı megabayt başına ücretlendirilebilir. %1$s indirmek için kablosuz bağlantıya geç ya da yine de şimdi indir.</string>
     <string name="download_stopped_title">İndirme durdu</string>
     <!-- %1$s is a size. What has already arrived is kept on the device and the
          transfer picks up from there. -->
-    <string name="download_stopped_body">Bu bağlantı artık megabayt başına ücretlendiriliyor, bu yüzden indirme durdu. Gelenler saklandı. Toplam %1$s olan indirmeyi bitirmek için kablosuz bağlantıya geç ya da yine de şimdi sürdür.</string>
+    <string name="download_stopped_body">Bu bağlantı megabayt başına ücretlendirilebilir, bu yüzden indirme durdu. Gelenler saklandı. Toplam %1$s olan indirmeyi bitirmek için kablosuz bağlantıya geç ya da yine de şimdi sürdür.</string>
     <string name="download_anyway">Yine de indir</string>
     <!-- %1$s is a size. -->
-    <string name="download_waiting_for_unmetered">%1$s indirmek için sayaçsız bir bağlantı bekleniyor.</string>
-    <string name="download_can_resume">Bu bağlantı artık ücretlendirilmiyor. İndirmeyi yeniden başlat: kaldığı yerden devam eder.</string>
+    <string name="download_waiting_for_unmetered">%1$s indirmek için kablosuz bağlantı bekleniyor.</string>
+    <string name="download_can_resume">Bu bağlantı artık bir mobil ağ değil. İndirmeyi yeniden başlat: kaldığı yerden devam eder.</string>
 
     <string name="settings_opening_title">Uygulama açılışta şunu göstersin</string>
     <!-- Read aloud in place of the two buttons beside it. -->

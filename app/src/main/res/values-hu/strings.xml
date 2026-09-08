@@ -618,24 +618,29 @@
     <string name="error_local_storage">Az eszközön tárolt adatok nem olvashatók.</string>
     <string name="error_no_city_chosen">Nincs kiválasztott város. Válassz egyet.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi, and does it with
-         Android's own word — settings:wifi_unmetered_label. -->
-    <string name="download_unmetered_only">Letöltés csak nem forgalomkorlátos kapcsolaton</string>
-    <string name="download_unmetered_only_description">Általában Wi-Fi. A megosztott telefonos kapcsolat és a forgalomkorlátos hotspot megabájtonként fizetős, és mobiladatnak számít.</string>
-    <string name="download_held_back_title">Letöltés visszatartva</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names Wi-Fi, which is the word everybody has, while what is
+         read stays the billing (SPEC §4.4): a phone's shared connection is
+         Wi-Fi and is a mobile plan, and a capped hotspot declares itself
+         billed. The line under the switch names those two cases in ordinary
+         words. Android's own word — settings:wifi_unmetered_label — still
+         names what is read, and so belongs to those explaining lines rather
+         than to the switch. -->
+    <string name="download_unmetered_only">Letöltés csak Wi-Fin</string>
+    <string name="download_unmetered_only_description">A megosztott telefonos kapcsolat és a forgalomkorlátos Wi-Fi megabájtonként fizetős lehet, és mobilhálózatnak számít.</string>
+    <string name="download_held_back_title">Letöltés mobilhálózaton</string>
     <!-- %1$s is a size, „340 MB” for instance. It is named on a line of its
          own so that no ending falls on it: a unit symbol takes a different one
          for each system. -->
-    <string name="download_held_back_body">Ez a kapcsolat megabájtonként fizetős. A letöltés mérete: %1$s. Csatlakozz Wi-Fi-hez, vagy töltsd le most mégis.</string>
+    <string name="download_held_back_body">Ez a kapcsolat megabájtonként fizetős lehet. A letöltés mérete: %1$s. Csatlakozz Wi-Fi-hez, vagy töltsd le most mégis.</string>
     <string name="download_stopped_title">A letöltés leállt</string>
     <!-- %1$s is a size. What has already arrived is kept on the device and the
          transfer picks up from there. -->
-    <string name="download_stopped_body">Ez a kapcsolat mostantól megabájtonként fizetős, ezért a letöltés leállt. Ami megérkezett, megmarad. A letöltés mérete: %1$s. Csatlakozz Wi-Fi-hez a befejezéshez, vagy folytasd most mégis.</string>
+    <string name="download_stopped_body">Ez a kapcsolat megabájtonként fizetős lehet, ezért a letöltés leállt. Ami megérkezett, megmarad. A letöltés mérete: %1$s. Csatlakozz Wi-Fi-hez a befejezéshez, vagy folytasd most mégis.</string>
     <string name="download_anyway">Letöltés mégis</string>
     <!-- %1$s is a size, „340 MB” for instance. -->
-    <string name="download_waiting_for_unmetered">Várakozás nem forgalomkorlátos kapcsolatra ehhez a letöltéshez: %1$s.</string>
-    <string name="download_can_resume">Ez a kapcsolat már nem fizetős. Indítsd el újra a letöltést: ott folytatódik, ahol abbamaradt.</string>
+    <string name="download_waiting_for_unmetered">Várakozás Wi-Fi-re ehhez a letöltéshez: %1$s.</string>
+    <string name="download_can_resume">Ez a kapcsolat már nem mobilhálózat. Indítsd el újra a letöltést: ott folytatódik, ahol abbamaradt.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Az alkalmazás alapértelmezett kezdőképernyője</string>

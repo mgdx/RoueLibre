@@ -241,11 +241,12 @@ class StorageFragment : Fragment() {
      * (SPEC §4.4).
      *
      * **Never a dead end**: somebody in a hotel with no Wi-Fi must be able to
-     * install their city. The question names what the transfer weighs — that is
-     * what is at stake on a connection billed by the megabyte — and tells what
-     * to do about it rather than stating a fact. Answering yes covers this
-     * transfer only: the setting is not touched, and the next download asks
-     * again.
+     * install their city. The question is headed by the situation — a download
+     * on a mobile network — rather than by what the application is doing about
+     * it, names what the transfer weighs, which is what is at stake where the
+     * megabyte may be billed, and tells what to do about it rather than stating
+     * a fact. Answering yes covers this transfer only: the setting is not
+     * touched, and the next download asks again.
      */
     private fun offerToDownloadAnyway(held: StorageMessage.HeldBackByMetering) {
         ConfirmationDialogFragment.ask(

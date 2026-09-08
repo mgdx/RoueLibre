@@ -690,24 +690,26 @@
     <string name="error_local_storage">端末に保存されたデータを読み取れません。</string>
     <string name="error_no_city_chosen">都市が選択されていません。ひとつ選んでください。</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
-         connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. 従量制 and 定額制 are the words Android's own
-         Wi-Fi settings use for the two. -->
-    <string name="download_unmetered_only">定額制の接続でのみダウンロードする</string>
-    <string name="download_unmetered_only_description">通常は Wi-Fi です。スマートフォンのテザリングや上限つきの Wi-Fi は従量制で、モバイルデータとして扱われます。</string>
-    <string name="download_held_back_title">ダウンロードを保留しました</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names Wi-Fi, which is the word everybody has, while what is
+         read stays the billing (SPEC §4.4): a phone's shared connection is
+         Wi-Fi and is a mobile plan, and a capped hotspot declares itself
+         billed. The line under the switch says as much in ordinary words, and
+         従量制 and 定額制, the words Android's own Wi-Fi settings use for the
+         two, are what those sentences keep. -->
+    <string name="download_unmetered_only">Wi-Fi でのみダウンロードする</string>
+    <string name="download_unmetered_only_description">スマートフォンのテザリングや上限つきの Wi-Fi は従量制の場合があり、モバイルネットワークとして扱われます。</string>
+    <string name="download_held_back_title">モバイルネットワークでのダウンロード</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">この接続は従量制です。%1$sをダウンロードするには Wi-Fi に接続するか、このまま今すぐダウンロードしてください。</string>
+    <string name="download_held_back_body">この接続は従量制の場合があります。%1$sをダウンロードするには Wi-Fi に接続するか、このまま今すぐダウンロードしてください。</string>
     <string name="download_stopped_title">ダウンロードを停止しました</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">この接続が従量制になったため、ダウンロードを停止しました。受信済みの分は残してあります。%1$sを最後まで受け取るには Wi-Fi に接続するか、このまま今すぐ続けてください。</string>
+    <string name="download_stopped_body">この接続は従量制の場合があるため、ダウンロードを停止しました。受信済みの分は残してあります。%1$sを最後まで受け取るには Wi-Fi に接続するか、このまま今すぐ続けてください。</string>
     <string name="download_anyway">このままダウンロード</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">%1$sをダウンロードするため、定額制の接続を待っています。</string>
-    <string name="download_can_resume">この接続は従量制ではなくなりました。ダウンロードをもう一度開始すると、中断したところから続きます。</string>
+    <string name="download_waiting_for_unmetered">%1$sをダウンロードするため、Wi-Fi を待っています。</string>
+    <string name="download_can_resume">この接続はモバイルネットワークではなくなりました。ダウンロードをもう一度開始すると、中断したところから続きます。</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">起動時に開く画面</string>

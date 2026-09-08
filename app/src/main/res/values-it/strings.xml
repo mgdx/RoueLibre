@@ -723,24 +723,26 @@
     <string name="error_local_storage">Impossibile leggere i dati salvati sul dispositivo.</string>
     <string name="error_no_city_chosen">Nessuna città selezionata. Scegline una.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
-         connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. "A consumo" is Android's own wording for a
-         metered network. -->
-    <string name="download_unmetered_only">Scarica solo con una connessione non a consumo</string>
-    <string name="download_unmetered_only_description">Di solito il Wi-Fi. La connessione condivisa di un telefono o un hotspot con un limite di dati si paga a megabyte e conta come dati mobili.</string>
-    <string name="download_held_back_title">Download in attesa</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names Wi-Fi, which is the word everybody has, while what is
+         read stays the billing (SPEC §4.4): a phone's shared connection is
+         Wi-Fi and is a mobile plan, and a capped hotspot declares itself
+         billed. The line under the switch names those two cases in ordinary
+         words. Android's *a consumo* still names a metered network, and so
+         belongs to those explaining lines rather than to the switch. -->
+    <string name="download_unmetered_only">Scarica solo con il Wi-Fi</string>
+    <string name="download_unmetered_only_description">La connessione condivisa di un telefono o un Wi-Fi con un limite di dati si può pagare a megabyte e conta come una rete mobile.</string>
+    <string name="download_held_back_title">Download su rete mobile</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Questa connessione si paga a megabyte. Collegati al Wi-Fi per scaricare %1$s, oppure scarica lo stesso adesso.</string>
+    <string name="download_held_back_body">Questa connessione si può pagare a megabyte. Collegati al Wi-Fi per scaricare %1$s, oppure scarica lo stesso adesso.</string>
     <string name="download_stopped_title">Download interrotto</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">Questa connessione ora si paga a megabyte, quindi il download si è interrotto. Quello che è arrivato viene conservato. Collegati al Wi-Fi per completare il download di %1$s, oppure prosegui lo stesso adesso.</string>
+    <string name="download_stopped_body">Questa connessione si può pagare a megabyte, quindi il download si è interrotto. Quello che è arrivato viene conservato. Collegati al Wi-Fi per completare il download di %1$s, oppure prosegui lo stesso adesso.</string>
     <string name="download_anyway">Scarica lo stesso</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">In attesa di una connessione non a consumo per scaricare %1$s.</string>
-    <string name="download_can_resume">Questa connessione non si paga più. Riavvia il download: riprende da dove si è fermato.</string>
+    <string name="download_waiting_for_unmetered">In attesa del Wi-Fi per scaricare %1$s.</string>
+    <string name="download_can_resume">Questa connessione non è più una rete mobile. Riavvia il download: riprende da dove si è fermato.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">All’avvio apri l’app su</string>

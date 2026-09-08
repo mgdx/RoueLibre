@@ -534,10 +534,12 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
      * that leaves on a mobile plan nobody meant to spend costs more than a
      * download put off for an hour.
      *
-     * **Billing, not Wi-Fi.** What Android answers is what a network bills, and
-     * that is the truer notion: a phone's shared connection is Wi-Fi and is a
-     * mobile plan, while a capped hotel Wi-Fi declares itself billed. The word
-     * written here says so, and so does the switch that sets it.
+     * **Billing under the hood, Wi-Fi on the switch.** What Android answers is
+     * what a network bills, and that is the truer notion: a phone's shared
+     * connection is Wi-Fi and is a mobile plan, while a capped hotel Wi-Fi
+     * declares itself billed. The value written here is that answer. The switch
+     * says Wi-Fi all the same, because that is the word everybody has, and the
+     * line under it names the two cases where the two part company (SPEC §7.6).
      *
      * **It is never a dead end**: the storage screen offers to download anyway,
      * for that one transfer, and doing so leaves this value untouched.

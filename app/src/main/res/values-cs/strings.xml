@@ -762,24 +762,26 @@
     <string name="error_local_storage">Data uložená v zařízení nelze přečíst.</string>
     <string name="error_no_city_chosen">Není vybráno žádné město. Vyberte si nějaké.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
-         connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. „Neměřené“ is Android's own word for an
-         unmetered connection. -->
-    <string name="download_unmetered_only">Stahovat jen přes neměřené připojení</string>
-    <string name="download_unmetered_only_description">Obvykle Wi-Fi. Sdílené připojení z telefonu nebo hotspot s limitem se účtuje po megabajtech a počítá se jako mobilní data.</string>
-    <string name="download_held_back_title">Stahování pozastaveno</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names Wi-Fi, the word everybody has, while what is read
+         stays the billing; the line under the switch names the two cases
+         where they part ways: a phone's shared connection, which is Wi-Fi and
+         is a mobile plan, and a Wi-Fi with a data cap, which declares itself
+         billed. „Neměřené“, Android's own word for an unmetered connection,
+         stays with the sentences that speak of billing. -->
+    <string name="download_unmetered_only">Stahovat jen přes Wi-Fi</string>
+    <string name="download_unmetered_only_description">Sdílené připojení z telefonu nebo Wi-Fi s datovým limitem se může účtovat po megabajtech a počítá se jako mobilní síť.</string>
+    <string name="download_held_back_title">Stahování v mobilní síti</string>
     <!-- %1$s is a size, „340 MB“ for instance. -->
-    <string name="download_held_back_body">Toto připojení se účtuje po megabajtech. Připojte se k Wi-Fi a stáhněte %1$s, nebo stahování spusťte i tak hned teď.</string>
+    <string name="download_held_back_body">Toto připojení se může účtovat po megabajtech. Připojte se k Wi-Fi a stáhněte %1$s, nebo stahování spusťte i tak hned teď.</string>
     <string name="download_stopped_title">Stahování zastaveno</string>
     <!-- %1$s is a size, „340 MB“ for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">Toto připojení se nyní účtuje po megabajtech, a proto se stahování zastavilo. Co už dorazilo, zůstává. Připojte se k Wi-Fi a dokončete těch %1$s, nebo i tak pokračujte hned teď.</string>
+    <string name="download_stopped_body">Toto připojení se může účtovat po megabajtech, a proto se stahování zastavilo. Co už dorazilo, zůstává. Připojte se k Wi-Fi a dokončete těch %1$s, nebo i tak pokračujte hned teď.</string>
     <string name="download_anyway">Přesto stáhnout</string>
     <!-- %1$s is a size, „340 MB“ for instance. -->
-    <string name="download_waiting_for_unmetered">Čeká se na neměřené připojení, aby se stáhlo %1$s.</string>
-    <string name="download_can_resume">Toto připojení se už neúčtuje. Spusťte stahování znovu: bude pokračovat tam, kde skončilo.</string>
+    <string name="download_waiting_for_unmetered">Čeká se na Wi-Fi, aby se stáhlo %1$s.</string>
+    <string name="download_can_resume">Toto připojení už není mobilní síť. Spusťte stahování znovu: bude pokračovat tam, kde skončilo.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Výchozí obrazovka po spuštění</string>

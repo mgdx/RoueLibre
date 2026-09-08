@@ -584,25 +584,29 @@
     <string name="error_local_storage">Det går inte att läsa de data som är lagrade på enheten.</string>
     <string name="error_no_city_chosen">Ingen stad är vald. Välj en.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wifi. Android's Swedish
-         labels a connection ”Med datapriser” / ”Utan datapriser”
-         (`settings:wifi_metered_label`, `settings:wifi_unmetered_label`); the
-         switch takes the second, and the sentences explaining it say what is
-         billed, since that is the point the English makes. -->
-    <string name="download_unmetered_only">Ladda ned endast utan datapriser</string>
-    <string name="download_unmetered_only_description">Vanligtvis wifi. En delad telefonanslutning eller en surfzon med datagräns debiteras per megabyte och räknas som mobildata.</string>
-    <string name="download_held_back_title">Nedladdningen hålls tillbaka</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names wifi, which is the word everybody has, while what is
+         read stays the billing (SPEC §4.4): a phone's shared connection is
+         wifi and is a mobile plan, and a capped hotspot declares itself
+         billed. The line under the switch names those two cases in ordinary
+         words. Android's Swedish labels such a connection ”Med datapriser” /
+         ”Utan datapriser” (`settings:wifi_metered_label`,
+         `settings:wifi_unmetered_label`); the switch no longer takes either,
+         but the explaining lines still say what is billed. Lower-case wifi
+         mid-sentence, as Android's Swedish writes it. -->
+    <string name="download_unmetered_only">Ladda ned endast via wifi</string>
+    <string name="download_unmetered_only_description">En delad telefonanslutning eller ett wifi-nätverk med datagräns kan debiteras per megabyte och räknas som ett mobilt nätverk.</string>
+    <string name="download_held_back_title">Nedladdning via mobilt nätverk</string>
     <!-- %1$s is a size, ”340 MB” for instance. -->
-    <string name="download_held_back_body">Den här anslutningen debiteras per megabyte. Anslut till wifi för att ladda ned %1$s, eller ladda ned ändå nu.</string>
+    <string name="download_held_back_body">Den här anslutningen kan debiteras per megabyte. Anslut till wifi för att ladda ned %1$s, eller ladda ned ändå nu.</string>
     <string name="download_stopped_title">Nedladdningen stoppades</string>
     <!-- %1$s is a size. What has already arrived is kept on the device and the
          transfer picks up from there. -->
-    <string name="download_stopped_body">Den här anslutningen debiteras nu per megabyte, så nedladdningen stoppades. Det som har kommit in sparas. Anslut till wifi för att slutföra de %1$s, eller fortsätt ändå nu.</string>
+    <string name="download_stopped_body">Den här anslutningen kan debiteras per megabyte, så nedladdningen stoppades. Det som har kommit in sparas. Anslut till wifi för att slutföra de %1$s, eller fortsätt ändå nu.</string>
     <string name="download_anyway">Ladda ned ändå</string>
     <!-- %1$s is a size, ”340 MB” for instance. -->
-    <string name="download_waiting_for_unmetered">Väntar på en anslutning utan datapriser för att ladda ned %1$s.</string>
-    <string name="download_can_resume">Den här anslutningen debiteras inte längre. Starta nedladdningen igen: den fortsätter där den stannade.</string>
+    <string name="download_waiting_for_unmetered">Väntar på wifi för att ladda ned %1$s.</string>
+    <string name="download_can_resume">Den här anslutningen är inte längre ett mobilt nätverk. Starta nedladdningen igen: den fortsätter där den stannade.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Öppna appen som standard på</string>

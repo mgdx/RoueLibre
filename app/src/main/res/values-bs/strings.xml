@@ -611,21 +611,25 @@
     <string name="error_local_storage">Nije moguće pročitati podatke pohranjene na uređaju.</string>
     <string name="error_no_city_chosen">Nije odabran nijedan grad. Odaberite jedan.</string>
 
-    <!-- Unmetered-only downloads. The setting names what is billed rather than
-         Wi-Fi, following the lexicon's `S naplatom` / `Bez naplate`. -->
-    <string name="download_unmetered_only">Preuzimaj samo na vezi bez naplate</string>
-    <string name="download_unmetered_only_description">Obično WiFi. Dijeljena veza s telefona ili pristupna tačka s ograničenjem naplaćuje se po megabajtu i računa se kao mobilni podaci.</string>
-    <string name="download_held_back_title">Preuzimanje je zadržano</string>
+    <!-- Wi-Fi-only downloads. The setting names WiFi, the word everybody
+         has, while what is read stays the billing; the line under the switch
+         names the two cases where they part ways: a phone's shared
+         connection, which is WiFi and is a mobile plan, and a WiFi with a
+         data cap, which declares itself billed. The lexicon's `S naplatom` /
+         `Bez naplate` stay with the sentences that speak of billing. -->
+    <string name="download_unmetered_only">Preuzimaj samo na WiFi-ju</string>
+    <string name="download_unmetered_only_description">Dijeljena veza s telefona ili WiFi s ograničenjem podataka može se naplaćivati po megabajtu i računa se kao mobilna mreža.</string>
+    <string name="download_held_back_title">Preuzimanje na mobilnoj mreži</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Ova veza se naplaćuje po megabajtu. Povežite se s WiFi-jem da biste preuzeli %1$s ili svejedno preuzmite sada.</string>
+    <string name="download_held_back_body">Ova veza se možda naplaćuje po megabajtu. Povežite se s WiFi-jem da biste preuzeli %1$s ili svejedno preuzmite sada.</string>
     <string name="download_stopped_title">Preuzimanje je zaustavljeno</string>
     <!-- %1$s is a size. What has already arrived is kept on the device and the
          transfer picks up from there. -->
-    <string name="download_stopped_body">Ova veza se sada naplaćuje po megabajtu, pa je preuzimanje zaustavljeno. Ono što je stiglo ostaje sačuvano. Povežite se s WiFi-jem da biste dovršili %1$s ili svejedno nastavite sada.</string>
+    <string name="download_stopped_body">Ova veza se možda naplaćuje po megabajtu, pa je preuzimanje zaustavljeno. Ono što je stiglo ostaje sačuvano. Povežite se s WiFi-jem da biste dovršili %1$s ili svejedno nastavite sada.</string>
     <string name="download_anyway">Preuzmi svejedno</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Čeka se veza bez naplate za preuzimanje %1$s.</string>
-    <string name="download_can_resume">Ova veza se više ne naplaćuje. Pokrenite preuzimanje ponovo: nastavlja se tamo gdje je stalo.</string>
+    <string name="download_waiting_for_unmetered">Čeka se WiFi za preuzimanje %1$s.</string>
+    <string name="download_can_resume">Ova veza više nije mobilna mreža. Pokrenite preuzimanje ponovo: nastavlja se tamo gdje je stalo.</string>
 
     <string name="settings_opening_title">Zadani ekran pri otvaranju</string>
     <!-- Read aloud in place of the two buttons beside it. -->

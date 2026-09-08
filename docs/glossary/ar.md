@@ -186,7 +186,7 @@ grammatically, because nothing here is being counted in the sentence.
 | map data / tiles | بيانات الخريطة | The name the storage screen gives the dataset, and the one every other string must use for it. |
 | routing data | بيانات المسارات | Built on مسار, so that `journey_graph_missing` names the thing the journey screen is about. |
 | address index | فهرس العناوين | — |
-| metered / unmetered | يفرض تكلفة استخدام / لا يفرض تكلفة استخدام | Android's own phrasing (`settings:wifi_metered_label`, `settings:wifitrackerlib_wifi_unmetered_label`). Like the English, the setting names what is billed rather than Wi-Fi; the sentences under it say `يُحتسب بالميغابايت`, which is the English's own image. |
+| metered / unmetered | يفرض تكلفة استخدام / لا يفرض تكلفة استخدام | Android's own phrasing (`settings:wifi_metered_label`, `settings:wifitrackerlib_wifi_unmetered_label`). The pair no longer stands on the switch: like the English, that one names Wi-Fi — التنزيل عبر Wi-Fi فقط — and the pair is left to the sentences under it, which say `يُحتسب بالميغابايت`, the English's own image. Those sentences say the connection **may** be billed, `قد يُحتسب`: قد before an imperfect verb is Arabic's ordinary "may", and the device reads only that the connection declares itself metered, never what the plan behind it charges. |
 | climb | صعود | A journey's metres of ascent, in `journey_climb` and the four `…_climb` summaries. |
 | favourites | المفضّلة | — |
 | Location | الموقع الجغرافي | Android's own word for the permission and the setting (`android:permgrouplab_location`); the reader's own position is simply موقعك. |

@@ -151,7 +151,7 @@ Android's say so in their own row.
 | Storage | Αποθηκευτικός χώρος | `settings:storage_label`. Everywhere another string points at that screen it says *από την οθόνη αποθηκευτικού χώρου*. |
 | Download | Λήψη | The noun on buttons and labels, and the verb *κατεβάζω* where a sentence needs one. |
 | offline | εκτός σύνδεσης | The settings section, the datasets, the address index, the store texts. |
-| unmetered / metered | χωρίς ογκοχρέωση / με ογκοχρέωση | Android has three renderings of "metered" — *Με περιορισμούς*, *Μέτρηση με βάση τη χρήση*, *Με ογκοχρέωση* (`settings:wifitrackerlib_wifi_metered_label`). The third is the one that says what is actually meant: billed by the megabyte, which is the point the English makes. |
+| unmetered / metered | χωρίς ογκοχρέωση / με ογκοχρέωση | Android has three renderings of "metered" — *Με περιορισμούς*, *Μέτρηση με βάση τη χρήση*, *Με ογκοχρέωση* (`settings:wifitrackerlib_wifi_metered_label`). The third is the one that says what is actually meant: billed by the megabyte, which is the point the English makes. The switch itself no longer carries it: it names Wi-Fi, as the English does — *Λήψη μόνο μέσω Wi-Fi* — and the charge is left to the sentences under it, which say it **may** be charged, *μπορεί να χρεωθεί* and *μπορεί να χρεώνεται*, because the device reads only that the connection declares itself metered, never what the plan behind it charges. |
 | Wi-Fi | Wi-Fi | Untranslated, as Android's Greek leaves it (`settings:wifi`). |
 | Language | Γλώσσα | `settings:app_locale_preference_title`. |
 | Privacy | Απόρρητο | `settings:privacy_dashboard_title`. |

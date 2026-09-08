@@ -90,7 +90,7 @@ by no space, the glyph carrying its own.
 | map data / tiles | 地図データ | The name the storage screen gives the dataset, and the one every other string must use for it. |
 | routing data | 経路データ | Built on 経路, so that `journey_graph_missing` names the thing the journey screen is about. More legible than ルーティングデータ. |
 | address index | 住所インデックス | — |
-| metered / unmetered | 従量制 / 定額制 | Android's own words for the two, from the Wi-Fi settings. The setting names the billing rather than Wi-Fi, as the English does. |
+| metered / unmetered | 従量制 / 定額制 | Android's own words for the two, from the Wi-Fi settings. The switch itself names Wi-Fi — 「Wi-Fi でのみダウンロードする」, as the English now does — and 従量制 stays in the sentences that explain the billing, where it is the point. **「場合があります」 renders "may be billed"**: the phone reads only that the connection declares itself metered, never what the plan behind it charges, and a flat 「従量制です」 would state as fact what only the operator knows. |
 | bytes | B, kB, MB, GB | Left as they are: Japanese writes the symbols in Latin. |
 | Home (the place) | 自宅 | `settings_place_home`, `journey_source_home`, the same word in both. **Not ホーム**, which is an application's opening screen; 自宅 is the dwelling, and it is what Japanese map applications label the same row. |
 | Work (the place) | 職場 | `settings_place_work`, `journey_source_work`. The workplace, which 職場 names outright; 仕事 would be the work itself, which is not a point on a map. |

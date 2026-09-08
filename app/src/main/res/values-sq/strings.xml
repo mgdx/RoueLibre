@@ -589,21 +589,26 @@
     <string name="error_local_storage">Të dhënat e ruajtura në pajisje nuk lexohen dot.</string>
     <string name="error_no_city_chosen">Nuk është zgjedhur asnjë qytet. Zgjidh një qytet.</string>
 
-    <!-- Unmetered-only downloads. The setting names what is billed rather than
-         Wi-Fi, and follows Android's own pair: me matje / pa matje. -->
-    <string name="download_unmetered_only">Shkarko vetëm në një lidhje pa matje</string>
-    <string name="download_unmetered_only_description">Zakonisht Wi-Fi. Një lidhje e ndarë nga telefoni ose një zonë qasjeje me kufi trafiku faturohet me megabajt dhe llogaritet si të dhëna celulare.</string>
-    <string name="download_held_back_title">Shkarkimi u pezullua</string>
+    <!-- Wi-Fi-only downloads. The setting names Wi-Fi, which is the word
+         everybody has, while what is read stays the billing (SPEC §4.4): a
+         phone's shared connection is Wi-Fi and is a mobile plan, and a capped
+         hotspot declares itself billed. The line under the switch names those
+         two cases in ordinary words. Android's own pair, me matje / pa matje,
+         still names a metered network, and so belongs to those explaining
+         lines rather than to the switch. -->
+    <string name="download_unmetered_only">Shkarko vetëm në Wi-Fi</string>
+    <string name="download_unmetered_only_description">Një lidhje e ndarë nga telefoni ose një Wi-Fi me kufi trafiku mund të faturohet me megabajt dhe llogaritet si rrjet celular.</string>
+    <string name="download_held_back_title">Shkarkim në rrjet celular</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Kjo lidhje faturohet me megabajt. Lidhu në Wi-Fi për të shkarkuar %1$s ose shkarkoje gjithsesi tani.</string>
+    <string name="download_held_back_body">Kjo lidhje mund të faturohet me megabajt. Lidhu në Wi-Fi për të shkarkuar %1$s ose shkarkoje gjithsesi tani.</string>
     <string name="download_stopped_title">Shkarkimi u ndal</string>
     <!-- %1$s is a size. What has already arrived is kept on the device and the
          transfer picks up from there. -->
-    <string name="download_stopped_body">Kjo lidhje tani faturohet me megabajt, prandaj shkarkimi u ndal. Ajo që ka mbërritur ruhet. Lidhu në Wi-Fi për të përfunduar %1$s ose vazhdo gjithsesi tani.</string>
+    <string name="download_stopped_body">Kjo lidhje mund të faturohet me megabajt, prandaj shkarkimi u ndal. Ajo që ka mbërritur ruhet. Lidhu në Wi-Fi për të përfunduar %1$s ose vazhdo gjithsesi tani.</string>
     <string name="download_anyway">Shkarko gjithsesi</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Në pritje të një lidhjeje pa matje për të shkarkuar %1$s.</string>
-    <string name="download_can_resume">Kjo lidhje nuk faturohet më. Nise sërish shkarkimin: ai vazhdon aty ku ndaloi.</string>
+    <string name="download_waiting_for_unmetered">Në pritje të Wi-Fi për të shkarkuar %1$s.</string>
+    <string name="download_can_resume">Kjo lidhje nuk është më rrjet celular. Nise sërish shkarkimin: ai vazhdon aty ku ndaloi.</string>
 
     <!-- Opening screen, large numbers, own bike kind -->
     <string name="settings_opening_title">Aplikacioni hapet te</string>

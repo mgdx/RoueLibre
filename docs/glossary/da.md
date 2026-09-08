@@ -46,7 +46,6 @@ labels the screens carry:
 | String | Danish | Characters |
 |---|---|---|
 | `settings_map_filters_hide_empty` | Skjul stationer, der intet byder på | 35 |
-| `download_unmetered_only` | Hent kun uden forbrugsafregning | 31 |
 | `settings_map_filters_hide_out_of_service` | Skjul stationer ude af drift | 28 |
 | `settings_opening_title` | Åbn appen som standard på | 25 |
 | `about_open_licences` | Komponenternes licenser | 23 |
@@ -104,7 +103,7 @@ word apart.
 | Hide | Skjul | Android's own (`settings:condition_expand_hide`). |
 | Language | Sprog | Android's own (`settings:app_locale_preference_title`). |
 | Wi-Fi | Wi-Fi | Android's Danish writes it exactly so, hyphen included (`settings:wifi`). |
-| unmetered / metered | uden forbrugsafregning / afregnes pr. megabyte | Android labels a connection **Forbrugsafregnet** / **Ikke forbrugsafregnet** (`settings:wifi_metered_label`, `settings:wifi_unmetered_label`). The switch takes the second, shortened to "Hent kun uden forbrugsafregning" so it stays on one line; the sentences explaining it say what is billed — *afregnes pr. megabyte* — since that is the point the English makes. |
+| unmetered / metered | uden forbrugsafregning / afregnes pr. megabyte | Android labels a connection **Forbrugsafregnet** / **Ikke forbrugsafregnet** (`settings:wifi_metered_label`, `settings:wifi_unmetered_label`). The switch takes neither any more: it names Wi-Fi, as the English does — *Hent kun via Wi-Fi*, eighteen characters, which is what took it off the table of longest labels above, where the old wording sat at 31. The pair is left to the sentences explaining it, which say what is billed — *afregnes pr. megabyte* — since that is the point the English makes, and which say it **may** be billed: *kan blive afregnet*, the modal *kunne* carrying the doubt, because the device reads only that the connection declares itself metered, never what the plan behind it charges. |
 | download (noun) / to download | download / hente | Danish keeps the loan as a noun — "Én by, én download", "Downloaden fortsætter, hvor den slap" — and uses the native verb for the act: "Hent %1$s", "Hent alligevel", "%2$s at hente". That is how Danish actually writes it, and it keeps the buttons short. What a download costs is said with **tære på**, not *veje tungt*: in Danish something weighs heavily on a decision, never on a data plan. |
 | Tap | Tryk (på) | Android's own verb in the imperative — "Tryk for at se flere muligheder" (`android:usb_notification_message`) — in the second person like the rest. |
 | Press and hold | Hold … nede | For the long press that reorders the favourites. |

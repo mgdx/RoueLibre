@@ -629,23 +629,26 @@
     <string name="error_local_storage">Δεν είναι δυνατή η ανάγνωση των δεδομένων που είναι αποθηκευμένα στη συσκευή.</string>
     <string name="error_no_city_chosen">Δεν έχει επιλεγεί πόλη. Διαλέξτε μία.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
-         connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. -->
-    <string name="download_unmetered_only">Λήψη μόνο σε σύνδεση χωρίς ογκοχρέωση</string>
-    <string name="download_unmetered_only_description">Συνήθως Wi-Fi. Η κοινόχρηστη σύνδεση ενός τηλεφώνου ή ένα hotspot με όριο χρεώνεται με το megabyte και μετράει ως δεδομένα κινητής τηλεφωνίας.</string>
-    <string name="download_held_back_title">Η λήψη κρατήθηκε πίσω</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names Wi-Fi, left untranslated as Android's Greek leaves
+         it and the word everybody has, while what is read stays the billing;
+         the line under the switch names the two cases where they part ways: a
+         phone's shared connection, which is Wi-Fi and is a mobile plan, and a
+         Wi-Fi with a data cap, which declares itself billed. Android's
+         "Με ογκοχρέωση" stays with the sentences that speak of billing. -->
+    <string name="download_unmetered_only">Λήψη μόνο μέσω Wi-Fi</string>
+    <string name="download_unmetered_only_description">Η κοινόχρηστη σύνδεση ενός τηλεφώνου ή ένα Wi-Fi με όριο δεδομένων μπορεί να χρεωθεί με το megabyte και μετράει ως δίκτυο κινητής τηλεφωνίας.</string>
+    <string name="download_held_back_title">Λήψη σε δίκτυο κινητής τηλεφωνίας</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Αυτή η σύνδεση χρεώνεται με το megabyte. Συνδεθείτε σε Wi-Fi για να κατεβάσετε %1$s ή κατεβάστε τα δεδομένα έτσι κι αλλιώς τώρα.</string>
+    <string name="download_held_back_body">Αυτή η σύνδεση μπορεί να χρεώνεται με το megabyte. Συνδεθείτε σε Wi-Fi για να κατεβάσετε %1$s ή κατεβάστε τα δεδομένα έτσι κι αλλιώς τώρα.</string>
     <string name="download_stopped_title">Η λήψη σταμάτησε</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">Αυτή η σύνδεση χρεώνεται πλέον με το megabyte, οπότε η λήψη σταμάτησε. Ό,τι έχει έρθει διατηρείται. Συνδεθείτε σε Wi-Fi για να ολοκληρώσετε τα %1$s ή συνεχίστε έτσι κι αλλιώς τώρα.</string>
+    <string name="download_stopped_body">Αυτή η σύνδεση μπορεί να χρεώνεται με το megabyte, οπότε η λήψη σταμάτησε. Ό,τι έχει έρθει διατηρείται. Συνδεθείτε σε Wi-Fi για να ολοκληρώσετε τα %1$s ή συνεχίστε έτσι κι αλλιώς τώρα.</string>
     <string name="download_anyway">Λήψη έτσι κι αλλιώς</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Αναμονή σύνδεσης χωρίς ογκοχρέωση, για τη λήψη των %1$s.</string>
-    <string name="download_can_resume">Αυτή η σύνδεση δεν χρεώνεται πλέον. Ξεκινήστε ξανά τη λήψη: συνεχίζει από εκεί που σταμάτησε.</string>
+    <string name="download_waiting_for_unmetered">Αναμονή Wi-Fi για τη λήψη των %1$s.</string>
+    <string name="download_can_resume">Αυτή η σύνδεση δεν είναι πλέον δίκτυο κινητής τηλεφωνίας. Ξεκινήστε ξανά τη λήψη: συνεχίζει από εκεί που σταμάτησε.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <!-- Greek: named as the screen rather than as a sentence with a dangling

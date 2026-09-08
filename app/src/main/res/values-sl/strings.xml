@@ -656,24 +656,29 @@
     <string name="error_local_storage">Podatkov, shranjenih v napravi, ni mogoče prebrati.</string>
     <string name="error_no_city_chosen">Nobeno mesto ni izbrano. Izberite ga.</string>
 
-    <!-- Unmetered-only downloads. Android's own pair of labels is
+    <!-- Wi-Fi-only downloads. The setting names Wi-Fi, which is the word
+         everybody has, while what is read stays the billing (SPEC §4.4): a
+         phone's shared connection is Wi-Fi and is a mobile plan, and a capped
+         hotspot declares itself billed. The line under the switch names those
+         two cases in ordinary words. Android's own pair of labels —
          `settings:wifi_unmetered_label` /
-         `settings:wifitrackerlib_wifi_metered_label`:
-         "z neomejenim prenosom podatkov" against "z omejenim prenosom
-         podatkov". The setting names what is billed rather than Wi-Fi. -->
-    <string name="download_unmetered_only">Prenašaj samo prek povezave z neomejenim prenosom podatkov</string>
-    <string name="download_unmetered_only_description">Običajno Wi-Fi. Deljena povezava telefona ali dostopna točka z omejitvijo se zaračunava po megabajtih in šteje za mobilne podatke.</string>
-    <string name="download_held_back_title">Prenos je zadržan</string>
+         `settings:wifitrackerlib_wifi_metered_label`, "z neomejenim prenosom
+         podatkov" against "z omejenim prenosom podatkov" — still names a
+         metered network, and so belongs to those explaining lines rather than
+         to the switch. -->
+    <string name="download_unmetered_only">Prenašaj samo prek omrežja Wi-Fi</string>
+    <string name="download_unmetered_only_description">Deljena povezava telefona ali omrežje Wi-Fi z omejitvijo prenosa podatkov se lahko zaračunava po megabajtih in šteje za mobilno omrežje.</string>
+    <string name="download_held_back_title">Prenos prek mobilnega omrežja</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Ta povezava se zaračunava po megabajtih. Za prenos %1$s se povežite z omrežjem Wi-Fi ali pa prenesite kar zdaj.</string>
+    <string name="download_held_back_body">Ta povezava se lahko zaračunava po megabajtih. Za prenos %1$s se povežite z omrežjem Wi-Fi ali pa prenesite kar zdaj.</string>
     <string name="download_stopped_title">Prenos je ustavljen</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is
          kept on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">Ta povezava se zdaj zaračunava po megabajtih, zato se je prenos ustavil. Kar je že prispelo, ostane shranjeno. Povežite se z omrežjem Wi-Fi, da dokončate %1$s, ali pa vseeno nadaljujte zdaj.</string>
+    <string name="download_stopped_body">Ta povezava se lahko zaračunava po megabajtih, zato se je prenos ustavil. Kar je že prispelo, ostane shranjeno. Povežite se z omrežjem Wi-Fi, da dokončate %1$s, ali pa vseeno nadaljujte zdaj.</string>
     <string name="download_anyway">Vseeno prenesi</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Čakanje na povezavo z neomejenim prenosom podatkov za prenos %1$s.</string>
-    <string name="download_can_resume">Ta povezava se ne zaračunava več. Znova zaženite prenos: nadaljeval se bo tam, kjer se je ustavil.</string>
+    <string name="download_waiting_for_unmetered">Čakanje na omrežje Wi-Fi za prenos %1$s.</string>
+    <string name="download_can_resume">Ta povezava ni več mobilno omrežje. Znova zaženite prenos: nadaljeval se bo tam, kjer se je ustavil.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Zaslon ob odprtju aplikacije</string>

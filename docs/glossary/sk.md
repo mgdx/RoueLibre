@@ -179,7 +179,8 @@ prompt says.
 | Yes | **Áno** | Android's own (`settings:yes`). |
 | Language | **Jazyk** | Android's own (`settings:app_locale_preference_title`). |
 | Wi-Fi | **Wi-Fi** | Untranslated in Android's Slovak too (`settings:wifi`). |
-| unmetered / metered | **nemerané / účtované po megabajtoch** | Android labels a connection *Nemerané* / *Merané* (`settings:wifitrackerlib_wifi_unmetered_label`, `settings:wifi_metered_label`). The sentences explaining the setting say what is billed — *účtuje sa po megabajtoch* — since that is the point the English makes. |
+| unmetered / metered | **nemerané / účtované po megabajtoch** | Android labels a connection *Nemerané* / *Merané* (`settings:wifitrackerlib_wifi_unmetered_label`, `settings:wifi_metered_label`). The switch itself names Wi-Fi — *Sťahovať len cez Wi-Fi* — as the English does, that being the word every reader already has; the pair stays the name of what the code reads, and the sentences under the switch say what is billed, *účtuje sa po megabajtoch*. |
+| may be billed | **môže sa účtovať** | The phone knows only that the connection declares itself metered, never what the plan behind it charges, so the three sentences read *sa môže účtovať po megabajtoch* rather than the flat *sa účtuje*. *Môcť* is the ordinary Slovak modal for a possibility and leaves the warning its force. |
 | Tap | **Klepnutím** | Android's verb is *Klepnite na* (`settings:accessibility_shortcut_edit_dialog_summary_floating_button`); the instrumental *Klepnutím* is what fits the "do X and Y happens" shape these lines have, and is Android's own too (*Klepnutím zobrazíte ďalšie možnosti*, `android:usb_notification_message`). |
 | Press and hold | **stlačením a pridržaním** | The gesture, in the same instrumental shape. *Pridržanie* is Android's noun for it (`settings:power_menu_setting_name`, `android:content_description_sliding_handle`). |
 | app | **aplikácia** | Android's own (`settings:apps_dashboard_title`). |

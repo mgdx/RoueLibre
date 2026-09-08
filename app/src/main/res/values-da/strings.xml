@@ -566,23 +566,27 @@
     <string name="error_local_storage">Kan ikke læse de data, der er gemt på enheden.</string>
     <string name="error_no_city_chosen">Der er ikke valgt nogen by. Vælg en.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi. Android's Danish
-         labels a connection "Forbrugsafregnet"; the switch takes its opposite,
-         shortened so it stays on one line. -->
-    <string name="download_unmetered_only">Hent kun uden forbrugsafregning</string>
-    <string name="download_unmetered_only_description">Som regel Wi-Fi. En delt telefonforbindelse eller et hotspot med datagrænse afregnes pr. megabyte og tæller som mobildata.</string>
-    <string name="download_held_back_title">Download holdt tilbage</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names Wi-Fi, the word everybody has, while what is read
+         stays the billing; the line under the switch names the two cases
+         where they part ways: a phone's shared connection, which is Wi-Fi and
+         is a mobile plan, and a Wi-Fi with a data cap, which declares itself
+         billed. "Forbrugsafregnet", Android's Danish for a metered
+         connection, stays with the sentences that speak of billing; the
+         switch says Wi-Fi and fits on one line. -->
+    <string name="download_unmetered_only">Hent kun via Wi-Fi</string>
+    <string name="download_unmetered_only_description">En delt telefonforbindelse eller et Wi-Fi med datagrænse kan blive afregnet pr. megabyte og tæller som et mobilnetværk.</string>
+    <string name="download_held_back_title">Download på et mobilnetværk</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Denne forbindelse afregnes pr. megabyte. Opret forbindelse til Wi-Fi for at hente %1$s, eller hent det alligevel nu.</string>
+    <string name="download_held_back_body">Denne forbindelse kan blive afregnet pr. megabyte. Opret forbindelse til Wi-Fi for at hente %1$s, eller hent det alligevel nu.</string>
     <string name="download_stopped_title">Download stoppet</string>
     <!-- %1$s is a size. What has already arrived is kept on the device and the
          transfer picks up from there. -->
-    <string name="download_stopped_body">Denne forbindelse afregnes nu pr. megabyte, så downloaden stoppede. Det, der er kommet ind, er gemt. Opret forbindelse til Wi-Fi for at gøre de %1$s færdige, eller fortsæt alligevel nu.</string>
+    <string name="download_stopped_body">Denne forbindelse kan blive afregnet pr. megabyte, så downloaden stoppede. Det, der er kommet ind, er gemt. Opret forbindelse til Wi-Fi for at gøre de %1$s færdige, eller fortsæt alligevel nu.</string>
     <string name="download_anyway">Hent alligevel</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Venter på en forbindelse uden forbrugsafregning for at hente %1$s.</string>
-    <string name="download_can_resume">Denne forbindelse afregnes ikke længere. Start downloaden igen: den fortsætter, hvor den slap.</string>
+    <string name="download_waiting_for_unmetered">Venter på Wi-Fi for at hente %1$s.</string>
+    <string name="download_can_resume">Denne forbindelse er ikke længere et mobilnetværk. Start downloaden igen: den fortsætter, hvor den slap.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Åbn appen som standard på</string>

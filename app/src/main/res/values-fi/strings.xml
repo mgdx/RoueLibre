@@ -601,23 +601,25 @@
     <string name="error_local_storage">Laitteelle tallennettuja tietoja ei voi lukea.</string>
     <string name="error_no_city_chosen">Kaupunkia ei ole valittu. Valitse jokin.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
-         connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. -->
-    <string name="download_unmetered_only">Lataa vain maksuttomassa yhteydessä</string>
-    <string name="download_unmetered_only_description">Yleensä Wi-Fi. Puhelimen jakama yhteys tai rajallinen jakoyhteys laskutetaan megatavuittain ja lasketaan mobiilidataksi.</string>
-    <string name="download_held_back_title">Lataus pidätetty</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names Wi-Fi, which is the word everybody has, while what is
+         read stays the billing (SPEC §4.4): a phone's shared connection is
+         Wi-Fi and is a mobile plan, and a capped hotspot declares itself
+         billed. The line under the switch names those two cases in ordinary
+         words. -->
+    <string name="download_unmetered_only">Lataa vain Wi-Fi-verkossa</string>
+    <string name="download_unmetered_only_description">Puhelimen jakama yhteys tai datarajallinen Wi-Fi voidaan laskuttaa megatavuittain, ja se lasketaan mobiiliverkoksi.</string>
+    <string name="download_held_back_title">Lataus mobiiliverkossa</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Tämä yhteys laskutetaan megatavuittain. Yhdistä Wi-Fi-verkkoon ja lataa %1$s tai lataa se silti nyt.</string>
+    <string name="download_held_back_body">Tämä yhteys voidaan laskuttaa megatavuittain. Yhdistä Wi-Fi-verkkoon ja lataa %1$s tai lataa se silti nyt.</string>
     <string name="download_stopped_title">Lataus pysähtyi</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">Tämä yhteys laskutetaan nyt megatavuittain, joten lataus pysähtyi. Jo saapunut osuus säilyy. Yhdistä Wi-Fi-verkkoon ja lataa %1$s loppuun tai jatka silti nyt.</string>
+    <string name="download_stopped_body">Tämä yhteys voidaan laskuttaa megatavuittain, joten lataus pysähtyi. Jo saapunut osuus säilyy. Yhdistä Wi-Fi-verkkoon ja lataa %1$s loppuun tai jatka silti nyt.</string>
     <string name="download_anyway">Lataa silti</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Odotetaan maksutonta yhteyttä, jotta %1$s voidaan ladata.</string>
-    <string name="download_can_resume">Tätä yhteyttä ei enää laskuteta. Käynnistä lataus uudelleen: se jatkuu siitä, mihin se jäi.</string>
+    <string name="download_waiting_for_unmetered">Odotetaan Wi-Fi-verkkoa, jotta %1$s voidaan ladata.</string>
+    <string name="download_can_resume">Tämä yhteys ei ole enää mobiiliverkko. Käynnistä lataus uudelleen: se jatkuu siitä, mihin se jäi.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Sovellus avautuu oletuksena</string>

@@ -595,24 +595,27 @@
     <string name="error_local_storage">Kan ikke lese dataene som er lagret på enheten.</string>
     <string name="error_no_city_chosen">Ingen by er valgt. Velg en.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than wifi. Android's Norwegian
-         labels a connection "Med datamåling" / "Uten datamåling"
-         (`settings:wifi_metered_label`, `settings:wifi_unmetered_label`); the
-         switch takes the second so it stays on one line. -->
-    <string name="download_unmetered_only">Last bare ned uten datamåling</string>
-    <string name="download_unmetered_only_description">Som regel wifi. En delt telefontilkobling eller en wifi-sone med datagrense måles per megabyte og teller som mobildata.</string>
-    <string name="download_held_back_title">Nedlastingen er holdt tilbake</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names Wi-Fi, which is the word everybody has, while what is
+         read stays the billing (SPEC §4.4): a phone's shared connection is
+         Wi-Fi and is a mobile plan, and a capped hotspot declares itself
+         billed. The line under the switch says as much in ordinary words, in
+         the vocabulary Android's Norwegian uses to label a connection, "Med
+         datamåling" / "Uten datamåling" (`settings:wifi_metered_label`,
+         `settings:wifi_unmetered_label`). -->
+    <string name="download_unmetered_only">Last bare ned på wifi</string>
+    <string name="download_unmetered_only_description">En delt telefontilkobling eller et wifi-nett med datagrense kan måles per megabyte og teller som mobilnett.</string>
+    <string name="download_held_back_title">Nedlasting på mobilnett</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Denne tilkoblingen måles per megabyte. Koble til wifi for å laste ned %1$s, eller last det ned likevel nå.</string>
+    <string name="download_held_back_body">Denne tilkoblingen kan måles per megabyte. Koble til wifi for å laste ned %1$s, eller last det ned likevel nå.</string>
     <string name="download_stopped_title">Nedlastingen stoppet</string>
     <!-- %1$s is a size. What has already arrived is kept on the device and the
          transfer picks up from there. -->
-    <string name="download_stopped_body">Denne tilkoblingen måles nå per megabyte, så nedlastingen stoppet. Det som har kommet inn, er lagret. Koble til wifi for å fullføre de %1$s, eller fortsett likevel nå.</string>
+    <string name="download_stopped_body">Denne tilkoblingen kan måles per megabyte, så nedlastingen stoppet. Det som har kommet inn, er lagret. Koble til wifi for å fullføre de %1$s, eller fortsett likevel nå.</string>
     <string name="download_anyway">Last ned likevel</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Venter på en tilkobling uten datamåling for å laste ned %1$s.</string>
-    <string name="download_can_resume">Denne tilkoblingen måles ikke lenger. Start nedlastingen på nytt: den fortsetter der den stoppet.</string>
+    <string name="download_waiting_for_unmetered">Venter på wifi for å laste ned %1$s.</string>
+    <string name="download_can_resume">Denne tilkoblingen er ikke lenger et mobilnett. Start nedlastingen på nytt: den fortsetter der den stoppet.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Åpne appen som standard på</string>

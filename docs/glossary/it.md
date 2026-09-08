@@ -118,7 +118,8 @@ and the sentence keeps its article.
 | map data / tiles | Sfondo cartografico | The name the storage screen gives the dataset, and the one every other string must use for it, `map_needs_tiles_title` included. *Mappa di base* would have read more plainly and is feminine, which is the reason it was not chosen — see below. |
 | routing data | Grafo dei percorsi | The project's own term, used in the store text and in `journey_graph_missing` too. More technical than the English "routing data", and kept deliberately: it is one object with one name. |
 | address index | Indice degli indirizzi | — |
-| metered / unmetered | a consumo / non a consumo | Android's own wording for a metered network (`settings:wifi_metered_label`, `settings:wifi_unmetered_label`). The setting's description then explains it as billing by the megabyte, exactly as the English does. |
+| metered / unmetered | a consumo / non a consumo | Android's own wording for a metered network (`settings:wifi_metered_label`, `settings:wifi_unmetered_label`). **No string uses the pair any more**: the switch reads *Scarica solo con il Wi-Fi*, as the English now does, Wi-Fi being the word every reader has, and `download_waiting_for_unmetered` follows it with *In attesa del Wi-Fi*. The pair stays here as the name of what the code reads, and the lines under the switch keep explaining it as paying by the megabyte. |
+| may be billed | si può pagare | Never the flat *si paga*. The phone reads only that the connection declares itself metered; what the plan behind it charges, no device can know. `download_held_back_title` names the situation for the same reason — *Download su rete mobile*, not a verdict on the connection — and `download_can_resume` drops the modal because there the device does state what it knows: *non è più una rete mobile*. |
 | by default | per impostazione predefinita | Android's own (`settings:launch_by_default`), which is what makes the Settings path in `about_links_body` match the system word for word. It is written **once**, there: `settings_opening_title` says *All'avvio apri l'app su* instead, so that the reader does not meet the same five words twice for two different settings — one of this application's, one of Android's. |
 | one's own bike | la tua bici **personale** | The English "own" is carried, and not dropped into *la tua bici*: `values/strings.xml` asks above `settings_own_bike_kind_title` that the wording stay clearly about the reader's own equipment, because the journey screen holds a separate, similar-looking choice about the bikes the **network** lends. *Personale* is Italian's natural intensifier here — *la mia bici personale*, like *il computer personale* — where a calque of French *ton propre* would stack two possessives Italian does not stack. It is carried through all six strings, the switch, the setting and the four summaries, so the three screens stay about one object. |
 | favourites | Preferiti | The word Italian interfaces use, and the one a reader looks for. |
@@ -142,7 +143,7 @@ senza rete* — says what it is.
 
 ## Where this file departs from its own rules
 
-Two strings do, and both on purpose:
+One string does, and on purpose:
 
 - **`welcome_data_body`** translates "the route calculation" as *il calcolo
   **degli itinerari*** and not *dei percorsi*, which is the only place the
@@ -152,14 +153,6 @@ Two strings do, and both on purpose:
   `dataset_routing_purpose` say *itinerari* for the same reason; *percorso* is
   kept for `journey_no_route`, `dataset_routing` and the attributions, which
   really do mean the ground.
-- **`download_held_back_title`** is *Download **in attesa*** and not the
-  *trattenuto* that would mirror the French *retenu* and the Spanish
-  *retenida*. Italian holds back a person, not a transfer; and the distinction
-  the two dialogs draw is worth keeping legible — this download has **not
-  started**, where `download_stopped_title` (*Download interrotto*) had started
-  and stopped. *Sospeso* would have said the second thing. *In attesa* says the
-  first, and reads as one phrase with `download_waiting_for_unmetered`, which
-  already opens *In attesa di una connessione non a consumo*.
 
 ## Plurals
 

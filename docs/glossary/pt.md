@@ -57,7 +57,7 @@ second one rots silently:
 | Voltar | **Anterior** | `android:back_button_label`, `settings:back`, `settings:wizard_back`. `action_back` is the toolbar's back-arrow content description in eleven fragments and a visible back button in a twelfth — exactly the two things those keys name. One row does say *Voltar* (`android:input_method_nav_back_button_desc`), against five for *Anterior*. |
 | Em uso | **Em utilização** | `android:media_route_status_in_use`, `settings:wifi_display_status_in_use`. Longer than *Em uso* on the city row's badge, and taken anyway: length is not a reason to call a thing by a different name than the system does. |
 | Definições → **Aplicações** → … | Definições → **Apps** → … | `settings:apps_dashboard_title` and `settings:keywords_applications_settings` are both *Apps*. `about_links_body` quotes a Settings path and has to match the device word for word; *Aplicações* does exist in the lexicon, but only at `android:keyboard_shortcut_group_applications`, which is not this screen. |
-| ligação ilimitada | ligação de **acesso ilimitado** | `settings:wifi_unmetered_label` is *Acesso ilimitado* and `settings:wifi_metered_label` *Acesso limitado* — not the bare adjectives assumed. |
+| ligação ilimitada | ligação de **acesso ilimitado** | `settings:wifi_unmetered_label` is *Acesso ilimitado* and `settings:wifi_metered_label` *Acesso limitado* — not the bare adjectives assumed. Since retired from the interface: the switch and the waiting line name Wi-Fi, as the English now does. |
 
 Everything else held. Citations in the table below give the key actually
 grepped; where this file departs from a row, it says so, and says why.
@@ -179,7 +179,7 @@ not a citation — the lexicon has no *lhe* at all, having little occasion for o
 | routing data | grafo de percursos | The project's own term, used in `journey_graph_missing` and in the store text too. More technical than the English "routing data", and kept deliberately: it is one object with one name, and it reuses *percurso* so the dataset and the thing it computes are visibly the same subject. |
 | address index | índice de endereços | — |
 | dataset | conjunto de dados | — |
-| unmetered connection | ligação de acesso ilimitado | Android's own pair is *Acesso limitado* / *Acesso ilimitado* — `settings:wifi_metered_label`, `settings:wifi_unmetered_label` — and not the bare adjectives this file first assumed. The setting's description then explains it as billing by the megabyte, in plain words, exactly as the English does. |
+| unmetered connection | rede Wi-Fi | The switch and the waiting line name Wi-Fi, as the English now does — *Transferir apenas por Wi-Fi*, *À espera de Wi-Fi* — so Android's own pair *Acesso limitado* / *Acesso ilimitado* (`settings:wifi_metered_label`, `settings:wifi_unmetered_label`) no longer reaches the screen. It is recorded because it is what this file first got wrong, assuming the bare adjectives. The billing stays in the sentences, in plain words, exactly as the English does. **Pode ser paga, not é paga** — the phone reads only that the connection declares itself limited, never what the plan behind it charges. |
 | by default | por predefinição | Android's own — `settings:launch_by_default` and `settings:auto_launch_label` are both *Abrir por predefinição*, which is the exact step `about_links_body` quotes. Brazil writes *por padrão*. |
 | Home (the place) | Casa | Where the reader lives, named by them (`settings_place_home`, `journey_source_home`, the same word in both). **Never *Início***, which is an application's first screen and not a place one rides home to. |
 | Work (the place) | Trabalho | Where they work (`settings_place_work`, `journey_source_work`). The place, not the occupation: it stands beside *Casa* under *Os meus locais*, which settles the reading; *Local de trabalho* is three times the width on a row that already carries an address. |
@@ -266,7 +266,6 @@ change, and nothing else in the file should.
 | noutro, noutra | em outro, em outra | `map_outside_city_title`, `city_here_title` — European Portuguese contracts *em* with the following word far more readily than Brazilian |
 | Anterior | Voltar | `action_back`. Both are Android's own word in their own norm, which is why this one is invisible without the lexicon: *Voltar* is what a European reader would guess and what a Brazilian device actually says |
 | Em utilização | Em uso | `city_active` |
-| acesso ilimitado, acesso limitado | ilimitada, limitada | `download_unmetered_only`, `download_waiting_for_unmetered` — Android names the metered state differently in each norm |
 | ecrã | tela | `map_needs_tiles_message`, `journey_graph_missing`, `address_needs_index_message`, `settings_opening_description`, `error_offline`, and the store texts |
 | ficheiro | arquivo | the five `dataset_rejected_*`, `error_malformed_download`, `error_local_storage_download` |
 | transferir, transferência | baixar, download | the whole storage screen, `city_detail*`, `download_*`, `welcome_data_*`, and the store texts |

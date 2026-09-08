@@ -617,23 +617,24 @@
     <string name="error_local_storage">Nie można odczytać danych zapisanych na urządzeniu.</string>
     <string name="error_no_city_chosen">Nie wybrano żadnego miasta. Wybierz jedno.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
-         connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. -->
-    <string name="download_unmetered_only">Pobieraj tylko przez połączenie bez naliczania opłat</string>
-    <string name="download_unmetered_only_description">Zwykle Wi-Fi. Udostępnione połączenie z telefonu i hotspot z limitem są rozliczane za megabajty i liczą się jak dane mobilne.</string>
-    <string name="download_held_back_title">Pobieranie wstrzymane</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names Wi-Fi, which is the word everybody has, while what is
+         read stays the billing (SPEC §4.4): a phone's shared connection is
+         Wi-Fi and is a mobile plan, and a capped hotspot declares itself
+         billed. The line under the switch says as much in ordinary words. -->
+    <string name="download_unmetered_only">Pobieraj tylko przez Wi-Fi</string>
+    <string name="download_unmetered_only_description">Udostępnione połączenie z telefonu lub Wi-Fi z limitem danych może być rozliczane za megabajty i liczy się jak sieć komórkowa.</string>
+    <string name="download_held_back_title">Pobieranie w sieci komórkowej</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">To połączenie jest rozliczane za megabajty. Połącz się z Wi-Fi, aby pobrać %1$s, albo pobierz mimo to teraz.</string>
+    <string name="download_held_back_body">To połączenie może być rozliczane za megabajty. Połącz się z Wi-Fi, aby pobrać %1$s, albo pobierz mimo to teraz.</string>
     <string name="download_stopped_title">Pobieranie zatrzymane</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">To połączenie jest teraz rozliczane za megabajty, więc pobieranie się zatrzymało. To, co już dotarło, zostaje zachowane. Połącz się z Wi-Fi, aby dokończyć %1$s, albo mimo to kontynuuj teraz.</string>
+    <string name="download_stopped_body">To połączenie może być rozliczane za megabajty, więc pobieranie się zatrzymało. To, co już dotarło, zostaje zachowane. Połącz się z Wi-Fi, aby dokończyć %1$s, albo mimo to kontynuuj teraz.</string>
     <string name="download_anyway">Pobierz mimo to</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Czekam na połączenie bez naliczania opłat, aby pobrać %1$s.</string>
-    <string name="download_can_resume">To połączenie nie jest już rozliczane. Uruchom pobieranie ponownie: ruszy z miejsca, w którym stanęło.</string>
+    <string name="download_waiting_for_unmetered">Czekam na Wi-Fi, aby pobrać %1$s.</string>
+    <string name="download_can_resume">To połączenie nie jest już siecią komórkową. Uruchom pobieranie ponownie: ruszy z miejsca, w którym stanęło.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <!-- Not Android's "Otwieraj domyślnie", which names link handling and is

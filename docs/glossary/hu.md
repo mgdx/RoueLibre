@@ -186,7 +186,8 @@ separators follow the reader (SPEC §9).
 | Privacy | **Adatvédelem** | `settings:privacy_dashboard_title`. |
 | Storage | **Tárhely** | `settings:storage_label`. |
 | Language | **Nyelv** | `settings:app_locale_preference_title`. |
-| Unmetered | **nem forgalomkorlátos** | `settings:wifi_unmetered_label`. The setting names what is billed rather than Wi-Fi, exactly as the English does. |
+| Unmetered | **nem forgalomkorlátos** | `settings:wifi_unmetered_label`. **The switch itself no longer says it**: it reads *Letöltés csak Wi-Fin*, as the English now does, Wi-Fi being the word every reader has. The word stays for `download_unmetered_only_description`, which names the capped hotspot the switch is guarding against. |
+| may be billed | **fizetős lehet** | Never the bare *fizetős*. The phone reads only that the connection declares itself metered; what the plan behind it charges, no device can know, and *lehet* carries exactly that much. `download_held_back_title` names the situation for the same reason — *Letöltés mobilhálózaton*, not a verdict on the connection — and `download_can_resume` drops the modal because there the device does state what it knows: *Ez a kapcsolat már nem mobilhálózat*. |
 | Update available | **Rendelkezésre áll frissítés** | `settings:android_version_pending_update_summary`. |
 | Replace | **Csere** | `settings:vpn_replace`. |
 | link | **link** | Android's own word — `android:granularity_label_link`, `settings:domain_urls_title` (*Linkek megnyitása*), `settings:app_launch_supported_domain_urls_title`. *Hivatkozás* appears nowhere in the lexicon, and `about_links_body` cites *Link hozzáadása* in the same sentence, so it may not call the same thing two names. |

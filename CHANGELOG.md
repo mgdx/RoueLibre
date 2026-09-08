@@ -75,6 +75,28 @@ also records what has no visible effect.
   ever on offer. Handing the place to a navigation application stays, that one
   not running on our graph.
 
+### Changed
+
+- **The download setting says Wi-Fi, and the warning stops claiming a bill**
+  (SPEC §4.4, §7.6). "Download only on an unmetered connection" named what
+  Android actually decides on, and named it in a word nobody uses: the switch
+  now reads **"Download only on Wi-Fi"**, with the accuracy moved to the line
+  under it — a shared phone connection or a Wi-Fi with a data cap counts as a
+  mobile network. What the code reads has not moved an inch, and stays
+  `NET_CAPABILITY_NOT_METERED`; the common word is the label, the exact one the
+  explanation. The question that comes up before a transfer is headed by the
+  situation — **"Download on a mobile network"** — rather than by what the
+  application is doing about it: what is at stake is where the bytes would
+  travel, not that something is being held back. And the three sentences that
+  asserted the connection **is** billed by the megabyte now say it **may** be:
+  the device knows a network declares itself metered, never what the plan
+  behind it charges, and stating a bill nobody may be paying is telling
+  somebody something about their own contract that we do not know. The wait
+  line and the resumption notice follow, dropping "unmetered connection" for
+  the Wi-Fi and the mobile network. Translated in the twenty-eight other
+  languages, each keeping its own register and its own word for a metered
+  network.
+
 ### Fixed
 
 - **The station sheet handed a station to what guides, not back to Roue

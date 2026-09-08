@@ -552,23 +552,26 @@
     <string name="error_local_storage">Kan de gegevens die op het apparaat zijn opgeslagen niet lezen.</string>
     <string name="error_no_city_chosen">Er is geen stad gekozen. Kies er een.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi. Android's Dutch
-         labels a connection "Met datalimiet"; the switch takes its opposite,
-         and stays short enough for one line. -->
-    <string name="download_unmetered_only">Alleen downloaden zonder datalimiet</string>
-    <string name="download_unmetered_only_description">Meestal wifi. Een gedeelde telefoonverbinding of een hotspot met datalimiet wordt per megabyte afgerekend en telt als mobiele data.</string>
-    <string name="download_held_back_title">Download tegengehouden</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names Wi-Fi, which is the word everybody has, while what is
+         read stays the billing (SPEC §4.4): a phone's shared connection is
+         Wi-Fi and is a mobile plan, and a capped hotspot declares itself
+         billed. The line under the switch says as much in ordinary words, in
+         the vocabulary Android's Dutch uses to label a connection, "Met
+         datalimiet" (`settings:wifi_metered_label`). -->
+    <string name="download_unmetered_only">Alleen downloaden via wifi</string>
+    <string name="download_unmetered_only_description">Een gedeelde telefoonverbinding of een wifinetwerk met datalimiet kan per megabyte worden afgerekend en telt als mobiel netwerk.</string>
+    <string name="download_held_back_title">Downloaden via een mobiel netwerk</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Deze verbinding wordt per megabyte afgerekend. Maak verbinding met wifi om %1$s te downloaden, of download het nu toch.</string>
+    <string name="download_held_back_body">Deze verbinding kan per megabyte worden afgerekend. Maak verbinding met wifi om %1$s te downloaden, of download het nu toch.</string>
     <string name="download_stopped_title">Download gestopt</string>
     <!-- %1$s is a size. What has already arrived is kept on the device and the
          transfer picks up from there. -->
-    <string name="download_stopped_body">Deze verbinding wordt nu per megabyte afgerekend, dus de download is gestopt. Wat binnen is, blijft bewaard. Maak verbinding met wifi om de %1$s af te maken, of ga nu toch verder.</string>
+    <string name="download_stopped_body">Deze verbinding kan per megabyte worden afgerekend, dus de download is gestopt. Wat binnen is, blijft bewaard. Maak verbinding met wifi om de %1$s af te maken, of ga nu toch verder.</string>
     <string name="download_anyway">Toch downloaden</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Wachten op een verbinding zonder datalimiet om %1$s te downloaden.</string>
-    <string name="download_can_resume">Deze verbinding wordt niet meer afgerekend. Start de download opnieuw: hij gaat verder waar hij gestopt is.</string>
+    <string name="download_waiting_for_unmetered">Wachten op wifi om %1$s te downloaden.</string>
+    <string name="download_can_resume">Deze verbinding is geen mobiel netwerk meer. Start de download opnieuw: hij gaat verder waar hij gestopt is.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">App standaard openen op</string>

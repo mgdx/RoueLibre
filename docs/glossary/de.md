@@ -64,7 +64,7 @@ than the literal translation.
 | Check for updates | Auf Updates prüfen | Android's own. |
 | Storage | Speicher | Android's own, and the name the screen carries. Everywhere another string points at that screen it says **unter „Speicher“** rather than translating "storage screen" literally. |
 | Wi-Fi | WLAN | What Android's German writes throughout, and what a German reader says. This is the one product-looking name that *is* translated. |
-| unmetered / metered | ohne Datenlimit / pro Megabyte abgerechnet | Android labels a connection *Ohne Datenlimit* and *Kostenpflichtig*. The setting takes the first as it stands; the sentences explaining it say what is billed, since that is the point the English makes. |
+| unmetered / metered | ohne Datenlimit / pro Megabyte abgerechnet | Android labels a connection *Ohne Datenlimit* and *Kostenpflichtig*. The switch takes neither any more: it names WLAN, where the English names Wi-Fi — *Nur über WLAN herunterladen*. The pair is left to the sentences explaining it, which say what is billed, since that is the point the English makes, and which say it **may** be billed: *kann pro Megabyte abgerechnet werden*, the modal *können* carrying the doubt, because the device reads only that the connection declares itself metered, never what the plan behind it charges. |
 | Tap | Tippe (auf) | Android's own verb, in the second person like the rest. |
 | Press and hold | Halte … gedrückt | Android's own wording for a long press. |
 | app | App | Android's own; *Anwendung* is not what a phone says. |

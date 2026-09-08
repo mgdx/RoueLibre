@@ -680,24 +680,27 @@
     <string name="error_local_storage">Die auf dem Gerät gespeicherten Daten lassen sich nicht lesen.</string>
     <string name="error_no_city_chosen">Es ist keine Stadt ausgewählt. Wähle eine aus.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
-         connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. "Ohne Datenlimit" is Android's own word for
-         an unmetered connection. -->
-    <string name="download_unmetered_only">Nur über eine Verbindung ohne Datenlimit herunterladen</string>
-    <string name="download_unmetered_only_description">Meist WLAN. Ein geteilter Handy-Anschluss oder ein Hotspot mit Datenlimit wird pro Megabyte abgerechnet und zählt als mobile Daten.</string>
-    <string name="download_held_back_title">Download zurückgehalten</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names WLAN, which is what German calls Wi-Fi and the word
+         everybody has, while what is read stays the billing; the line under
+         the switch names the two cases where they part ways: a phone's shared
+         connection, which is WLAN and is a mobile plan, and a WLAN with a
+         data cap, which declares itself billed. "Ohne Datenlimit", Android's
+         own word for an unmetered connection, stays with the sentences that
+         speak of billing. -->
+    <string name="download_unmetered_only">Nur über WLAN herunterladen</string>
+    <string name="download_unmetered_only_description">Ein geteilter Handy-Anschluss oder ein WLAN mit Datenlimit kann pro Megabyte abgerechnet werden und zählt als Mobilfunknetz.</string>
+    <string name="download_held_back_title">Download über ein Mobilfunknetz</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">Diese Verbindung wird pro Megabyte abgerechnet. Verbinde dich mit dem WLAN, um %1$s herunterzuladen, oder starte den Download jetzt trotzdem.</string>
+    <string name="download_held_back_body">Diese Verbindung kann pro Megabyte abgerechnet werden. Verbinde dich mit dem WLAN, um %1$s herunterzuladen, oder starte den Download jetzt trotzdem.</string>
     <string name="download_stopped_title">Download gestoppt</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">Diese Verbindung wird jetzt pro Megabyte abgerechnet, deshalb wurde der Download gestoppt. Was angekommen ist, bleibt erhalten. Verbinde dich mit dem WLAN, um die %1$s fertig zu laden, oder mach jetzt trotzdem weiter.</string>
+    <string name="download_stopped_body">Diese Verbindung kann pro Megabyte abgerechnet werden, deshalb wurde der Download gestoppt. Was angekommen ist, bleibt erhalten. Verbinde dich mit dem WLAN, um die %1$s fertig zu laden, oder mach jetzt trotzdem weiter.</string>
     <string name="download_anyway">Trotzdem herunterladen</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Warten auf eine Verbindung ohne Datenlimit, um %1$s herunterzuladen.</string>
-    <string name="download_can_resume">Diese Verbindung wird nicht mehr abgerechnet. Starte den Download erneut: Er wird dort fortgesetzt, wo er stehen geblieben ist.</string>
+    <string name="download_waiting_for_unmetered">Warten auf WLAN, um %1$s herunterzuladen.</string>
+    <string name="download_can_resume">Diese Verbindung ist kein Mobilfunknetz mehr. Starte den Download erneut: Er wird dort fortgesetzt, wo er stehen geblieben ist.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">App standardmäßig starten mit</string>

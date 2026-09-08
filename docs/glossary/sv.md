@@ -55,14 +55,14 @@ labels the screens carry:
 | String | Swedish | Characters |
 |---|---|---|
 | `settings_map_filters_hide_empty` | Dölj stationer utan något att erbjuda | 37 |
-| `download_unmetered_only` | Ladda ned endast utan datapriser | 32 |
 | `city_size_unknown` | Storleken anges före nedladdning | 32 |
 | `address_unreadable_title` | Adressindexet går inte att läsa | 31 |
 | `address_needs_index_title` | Sökningen kräver adressindexet | 30 |
-| `download_held_back_title` | Nedladdningen hålls tillbaka | 28 |
+| `download_held_back_title` | Nedladdning via mobilt nätverk | 30 |
 | `settings_map_filters_title` | Vilka stationer kartan visar | 28 |
 | `settings_opening_title` | Öppna appen som standard på | 27 |
 | `settings_map_filters_hide_out_of_service` | Dölj stationer ur funktion | 26 |
+| `download_unmetered_only` | Ladda ned endast via wifi | 25 |
 | `journey_navigate` / `station_open_in_navigation` | Öppna i en navigationsapp | 25 |
 | `about_open_licences` | Komponenternas licenser | 23 |
 | `station_as_origin` / `station_as_destination` | Härifrån / Hit | 8 / 3 |
@@ -121,8 +121,9 @@ better.
 | Show | Visa | Android's own (`settings:condition_expand_show`). |
 | Hide | Dölj | Android's own (`settings:condition_expand_hide`). |
 | Language | Språk | Android's own (`settings:app_locale_preference_title`). |
-| Wi-Fi | wifi | **Android's Swedish writes it as one word with no hyphen** — `settings:wifi` = "Wifi" — where the English file and most other translations write "Wi-Fi". **The capital belongs to the label, not to the word.** Counted over the extract: 42 lines carry *wifi* with a word before it in the sentence, every one of them lowercase — "Anslut till wifi innan du rensar", "Ring via wifi", "för wifi" — against none capitalised. The capitalised lines are all a bare label (`settings:wifi`), the head of a sentence, or the head of a compound ("Wifi-samtal"). So the four strings that name it mid-sentence write **wifi**. |
-| unmetered / metered | utan datapriser / debiteras per megabyte | Android labels a connection **Med datapriser** / **Utan datapriser** (`settings:wifi_metered_label`, `settings:wifi_unmetered_label`, `settings:wifitrackerlib_wifi_metered_label`). The switch takes the second — "Ladda ned endast utan datapriser" — and the sentences explaining it say what is billed, *debiteras per megabyte*, since that is the point the English makes. |
+| Wi-Fi | wifi | **Android's Swedish writes it as one word with no hyphen** — `settings:wifi` = "Wifi" — where the English file and most other translations write "Wi-Fi". **The capital belongs to the label, not to the word.** Counted over the extract: 42 lines carry *wifi* with a word before it in the sentence, every one of them lowercase — "Anslut till wifi innan du rensar", "Ring via wifi", "för wifi" — against none capitalised. The capitalised lines are all a bare label (`settings:wifi`), the head of a sentence, or the head of a compound ("Wifi-samtal"). So the five strings that name it mid-sentence write **wifi**. |
+| unmetered / metered | utan datapriser / debiteras per megabyte | Android labels a connection **Med datapriser** / **Utan datapriser** (`settings:wifi_metered_label`, `settings:wifi_unmetered_label`, `settings:wifitrackerlib_wifi_metered_label`). The switch no longer takes either: it names wifi — "Ladda ned endast via wifi" — as the English does, which is the word every reader already has and seven characters shorter into the bargain. The pair stays the name of what the code reads, and the sentences under the switch say what is billed, *debiteras per megabyte*. |
+| may be billed | kan debiteras | The phone knows only that the connection declares itself metered, never what the plan behind it charges, so the three sentences read "kan debiteras per megabyte" and not the flat *debiteras*. *Kan* is the plain Swedish possibility; *skulle kunna* would soften the warning into something not worth reading. |
 | download (noun) / to download | nedladdning / ladda ned | Swedish has native words for both and uses them: "En stad, en nedladdning", "Nedladdningen fortsätter där den stannade" against "Ladda ned %1$s", "Ladda ned ändå", "%2$s att ladda ned". *Ladda ned* is Android's own verb (`android:install_carrier_app_notification_button`, "Ladda ned appen"). What a download costs is said with **tära på**, not *väga tungt*: in Swedish something weighs heavily on a decision, never on a data plan. |
 | dataset | datamängd | Three of them, named on the storage screen. |
 | Tap | Tryck (på) | The imperative, in the second person like the rest of the file. |

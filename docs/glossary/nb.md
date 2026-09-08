@@ -56,10 +56,10 @@ labels the screens carry:
 |---|---|---|
 | `settings_map_filters_hide_empty` | Skjul stasjoner uten noe å tilby | 32 |
 | `settings_map_filters_hide_out_of_service` | Skjul stasjoner ute av drift | 28 |
-| `download_unmetered_only` | Last bare ned uten datamåling | 29 |
 | `settings_opening_title` | Åpne appen som standard på | 26 |
 | `about_open_licences` | Lisenser for komponentene | 25 |
 | `station_open_in_navigation` | Åpne i en navigasjonsapp | 24 |
+| `download_unmetered_only` | Last bare ned på wifi | 21 |
 | `station_as_origin` / `station_as_destination` | Herfra / Hit | 6 / 3 |
 
 The last pair are the only two buttons of the application placed side by side
@@ -117,8 +117,8 @@ nothing the row does not already say, and it doubled the width of both.
 | Language | Språk | Android's own (`settings:app_locale_preference_title`). |
 | Install / Installed | Installer / Installert | Android's own (`settings:install_text`, `settings:installed`). |
 | Wi-Fi | wifi | **Android's Norwegian does not write the hyphen.** `settings:wifi` and `settings:wifi_settings` are both **Wifi**, one word, and inside a sentence the extract lower-cases it — *Aktivér wifi-anrop* (`settings:wifi_calling_settings_activation_instructions`). The file follows: "Du er ikke på wifi", "Koble til wifi". |
-| hotspot | wifi-sone | Android has the word and it is not the English loan: `settings:wifi_hotspot_checkbox_text` = **Wifi-sone**, `settings:tether_settings_title_all` = *Wifi-sone og internettdeling*, `settings:hotspot_connection_category` = *Tilkobling til wifi-sone*. It is common gender, which is what settles the article in `download_unmetered_only_description`: *en wifi-sone med datagrense*. |
-| unmetered / metered | uten datamåling / måles per megabyte | Android labels a connection **Med datamåling** / **Uten datamåling** (`settings:wifi_metered_label`, `settings:wifi_unmetered_label`). The switch takes the second, as "Last bare ned uten datamåling" so it stays on one line; the sentences explaining it say what is billed — *måles per megabyte* — since that is the point the English makes. |
+| hotspot | wifi-sone | Android has the word and it is not the English loan: `settings:wifi_hotspot_checkbox_text` = **Wifi-sone**, `settings:tether_settings_title_all` = *Wifi-sone og internettdeling*, `settings:hotspot_connection_category` = *Tilkobling til wifi-sone*. It no longer reaches the screen: `download_unmetered_only_description` follows the English, which widened the capped hotspot into any capped network — *et wifi-nett med datagrense*, neuter after *nett*. |
+| unmetered / metered | uten datamåling / måles per megabyte | Android labels a connection **Med datamåling** / **Uten datamåling** (`settings:wifi_metered_label`, `settings:wifi_unmetered_label`). The switch no longer takes the second: it names wifi, "Last bare ned på wifi", as the English now does, and is eight characters shorter for it. The pair is kept for the sentences explaining it, which still say what is billed — *måles per megabyte* — since that is the point the English makes. **The modal *kan* renders "may be billed"**: *kan måles per megabyte*, since the phone reads only that the connection declares itself metered, never what the subscription charges. |
 | download (noun) / to download | nedlasting / laste ned | Norwegian has its own noun and does not need the loan Danish keeps: "Én by, én nedlasting", "Nedlastingen fortsetter der den stoppet", "Last ned %1$s", "Last ned likevel", "%2$s å laste ned". What a download costs is said with **tære på**, not *veie tungt*: in Norwegian something weighs heavily on a decision, never on a data plan. |
 | Tap | Trykk (på) | Android's own verb in the imperative — "Trykk for flere alternativer." (`android:usb_notification_message`) — in the second person like the rest. |
 | Press and hold | Trykk og hold inne | Android's own phrasing (`android:content_description_sliding_handle` = *Trykk og hold inne.*), for the long press that reorders the favourites. |

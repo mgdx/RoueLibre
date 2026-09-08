@@ -603,24 +603,27 @@
     <string name="error_local_storage">Nevar nolasīt ierīcē saglabātos datus.</string>
     <string name="error_no_city_chosen">Nav izvēlēta neviena pilsēta. Izvēlieties kādu.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
-         connection is Wi-Fi and is a mobile plan. Android calls the two
-         *Maksas* and *Bezmaksas* (settings:wifi_metered_label,
-         settings:wifi_unmetered_label). -->
-    <string name="download_unmetered_only">Lejupielādēt tikai bezmaksas savienojumā</string>
-    <string name="download_unmetered_only_description">Parasti tas ir Wi-Fi. Kopīgots tālruņa savienojums vai tīklājs ar datu ierobežojumu ir maksas savienojums un skaitās mobilie dati.</string>
-    <string name="download_held_back_title">Lejupielāde aizturēta</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names Wi-Fi, which is the word everybody has, while what is
+         read stays the billing (SPEC §4.4): a phone's shared connection is
+         Wi-Fi and is a mobile plan, and a capped hotspot declares itself
+         billed. The line under the switch says as much in ordinary words,
+         drawing on *Maksas*, which is what Android calls a metered connection
+         (settings:wifi_metered_label, settings:wifi_unmetered_label gives
+         *Bezmaksas* for the other). -->
+    <string name="download_unmetered_only">Lejupielādēt tikai Wi-Fi tīklā</string>
+    <string name="download_unmetered_only_description">Kopīgots tālruņa savienojums vai Wi-Fi ar datu ierobežojumu var būt maksas savienojums, ko uzskaita pa megabaitiem, un skaitās mobilais tīkls.</string>
+    <string name="download_held_back_title">Lejupielāde mobilajā tīklā</string>
     <!-- %1$s is a size, „340 MB“ for instance. -->
-    <string name="download_held_back_body">Šis ir maksas savienojums, ko uzskaita pa megabaitiem. Pieslēdzieties Wi-Fi, lai lejupielādētu %1$s, vai lejupielādējiet tāpat tagad.</string>
+    <string name="download_held_back_body">Šis var būt maksas savienojums, ko uzskaita pa megabaitiem. Pieslēdzieties Wi-Fi, lai lejupielādētu %1$s, vai lejupielādējiet tāpat tagad.</string>
     <string name="download_stopped_title">Lejupielāde apturēta</string>
     <!-- %1$s is a size. What has already arrived is kept on the device and the
          transfer picks up from there. -->
-    <string name="download_stopped_body">Šis savienojums tagad ir maksas savienojums, ko uzskaita pa megabaitiem, tāpēc lejupielāde apstājās. Saņemtais ir saglabāts. Pieslēdzieties Wi-Fi, lai pabeigtu %1$s, vai turpiniet tāpat tagad.</string>
+    <string name="download_stopped_body">Šis var būt maksas savienojums, ko uzskaita pa megabaitiem, tāpēc lejupielāde apstājās. Saņemtais ir saglabāts. Pieslēdzieties Wi-Fi, lai pabeigtu %1$s, vai turpiniet tāpat tagad.</string>
     <string name="download_anyway">Lejupielādēt tāpat</string>
     <!-- %1$s is a size. -->
-    <string name="download_waiting_for_unmetered">Gaida bezmaksas savienojumu, lai lejupielādētu %1$s.</string>
-    <string name="download_can_resume">Šis savienojums vairs nav maksas savienojums. Sāciet lejupielādi vēlreiz: tā turpināsies no vietas, kur apstājās.</string>
+    <string name="download_waiting_for_unmetered">Gaida Wi-Fi, lai lejupielādētu %1$s.</string>
+    <string name="download_can_resume">Šis savienojums vairs nav mobilais tīkls. Sāciet lejupielādi vēlreiz: tā turpināsies no vietas, kur apstājās.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <!-- The English governs its two buttons — „open on the map“ — where

@@ -653,21 +653,24 @@
     <string name="error_local_storage">تعذّرت قراءة البيانات المخزّنة على الجهاز.</string>
     <string name="error_no_city_chosen">لم تُختَر أي مدينة. اختر واحدة.</string>
 
-    <!-- Unmetered-only downloads. The setting names what is billed rather than
-         Wi-Fi, in Android's own words: a phone's shared connection is Wi-Fi
-         and is a mobile plan. -->
-    <string name="download_unmetered_only">التنزيل فقط عبر اتصال لا يفرض تكلفة استخدام</string>
-    <string name="download_unmetered_only_description">عادةً Wi-Fi. أما اتصال هاتف مشارَك أو نقطة اتصال محدودة الباقة فيُحتسب بالميغابايت ويُعدّ بيانات جوّال.</string>
-    <string name="download_held_back_title">تنزيل مؤجَّل</string>
+    <!-- Wi-Fi-only downloads. The setting names Wi-Fi, the word everybody
+         has, while what is read stays the billing; the line under the switch
+         names the two cases where they part ways: a phone's shared
+         connection, which is Wi-Fi and is a mobile plan, and a Wi-Fi with a
+         data cap, which declares itself billed. Android's own words for the
+         billing stay in that line and in the dialogues. -->
+    <string name="download_unmetered_only">التنزيل عبر Wi-Fi فقط</string>
+    <string name="download_unmetered_only_description">قد يُحتسب اتصال هاتف مشارَك أو شبكة Wi-Fi محدودة الباقة بالميغابايت، ويُعدّ شبكة جوّال.</string>
+    <string name="download_held_back_title">التنزيل عبر شبكة جوّال</string>
     <!-- %1$s is a size. -->
-    <string name="download_held_back_body">يُحتسب هذا الاتصال بالميغابايت. اتصل بشبكة Wi-Fi لتنزيل %1$s، أو نزّله الآن على أي حال.</string>
+    <string name="download_held_back_body">قد يُحتسب هذا الاتصال بالميغابايت. اتصل بشبكة Wi-Fi لتنزيل %1$s، أو نزّله الآن على أي حال.</string>
     <string name="download_stopped_title">توقّف التنزيل</string>
     <!-- %1$s is a size. What has already arrived is kept on the device. -->
-    <string name="download_stopped_body">صار هذا الاتصال يُحتسب بالميغابايت، فتوقّف التنزيل. وما وصل محفوظ. اتصل بشبكة Wi-Fi لإكمال %1$s، أو تابع الآن على أي حال.</string>
+    <string name="download_stopped_body">قد يُحتسب هذا الاتصال بالميغابايت، فتوقّف التنزيل. وما وصل محفوظ. اتصل بشبكة Wi-Fi لإكمال %1$s، أو تابع الآن على أي حال.</string>
     <string name="download_anyway">التنزيل على أي حال</string>
     <!-- %1$s is a size. -->
-    <string name="download_waiting_for_unmetered">في انتظار اتصال لا يفرض تكلفة استخدام لتنزيل %1$s.</string>
-    <string name="download_can_resume">لم يعد هذا الاتصال يُحتسب بالميغابايت. ابدأ التنزيل من جديد: يتابع من حيث توقّف.</string>
+    <string name="download_waiting_for_unmetered">في انتظار شبكة Wi-Fi لتنزيل %1$s.</string>
+    <string name="download_can_resume">لم يعد هذا الاتصال شبكة جوّال. ابدأ التنزيل من جديد: يتابع من حيث توقّف.</string>
 
     <string name="settings_opening_title">فتح التطبيق تلقائيًا على:</string>
     <!-- Read aloud in place of the two buttons beside it. -->
