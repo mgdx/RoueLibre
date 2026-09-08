@@ -77,13 +77,14 @@ public data class ManifestDataset(
  *
  * @property name the name it is published under, and the name it will be stored
  *   under. It must be a plain file name — see [requirePlainFileName].
- * @property url where to get it.
+ * @property url where to get it. It must be an address a client can fetch —
+ *   see [requireFetchableUrl].
  * @property sizeBytes the announced size, shown before asking for confirmation.
  * @property sha256 the digest, re-verified after download (SPEC §4.4). It is
  *   required — see [requireDigest].
- * @throws IllegalArgumentException if [name] is not a plain file name, or if
- *   [sha256] is not a digest. The reader turns that into a refusal of the whole
- *   manifest.
+ * @throws IllegalArgumentException if [name] is not a plain file name, if [url]
+ *   cannot be fetched, or if [sha256] is not a digest. The reader turns that
+ *   into a refusal of the whole manifest.
  */
 public data class ManifestFile(
     public val name: String,
@@ -93,6 +94,7 @@ public data class ManifestFile(
 ) {
     init {
         requirePlainFileName(name)
+        requireFetchableUrl(url, name)
         requireDigest(sha256, name)
     }
 }
@@ -134,6 +136,41 @@ private fun requirePlainFileName(name: String) {
             '\u0000' !in name,
     ) { "unusable file name in the manifest: \"$name\"" }
 }
+
+/**
+ * Refuses a file whose address no client can fetch.
+ *
+ * This address arrives in a **downloaded** document and is handed straight to
+ * the HTTP client, which knows two schemes and refuses every other one — a
+ * `file:`, `ftp:` or `content:` address makes it reject the address rather than
+ * the request. That rejection then travelled up as an exception through code
+ * watching for network failures, and closed the application instead of saying
+ * the manifest was unreadable.
+ *
+ * Refusing here, at the reading, is what makes the refusal cost nothing: a
+ * manifest carrying an address nobody can fetch is not one to be patched up, it
+ * is one to be rejected whole, before a single request goes out. It holds the
+ * same line further down as well — nothing downloaded gets to name a `file:`
+ * address for the application to go and read.
+ *
+ * The check stops at the scheme and at something following it. What comes after
+ * is the producer's business: this module carries no URL parser — it is
+ * Android-free Kotlin (SPEC §14) — and inventing one to judge a host or a path
+ * would refuse legitimate addresses over their shape. That TLS is required of
+ * what actually goes out is a rule of its own, enforced where the requests are
+ * made.
+ *
+ * @param name the file concerned, so the refusal says which one.
+ */
+private fun requireFetchableUrl(url: String, name: String) {
+    val scheme = FETCHABLE_SCHEMES.firstOrNull { url.startsWith(it, ignoreCase = true) }
+    require(scheme != null && url.length > scheme.length) {
+        "unusable address for \"$name\": \"$url\""
+    }
+}
+
+/** The schemes an HTTP client will fetch, and the only ones. */
+private val FETCHABLE_SCHEMES = listOf("https://", "http://")
 
 /**
  * Refuses a file announced without a usable digest.

@@ -6,6 +6,8 @@ import io.github.mgdx.rouelibre.core.data.DataManifest
 import io.github.mgdx.rouelibre.core.data.DataManifestReader
 import io.github.mgdx.rouelibre.core.data.ManifestDataset
 import io.github.mgdx.rouelibre.core.data.ManifestFile
+import io.github.mgdx.rouelibre.data.network.MAXIMUM_DOCUMENT_BYTES
+import io.github.mgdx.rouelibre.data.network.textUpTo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
@@ -84,14 +86,22 @@ class DatasetDownloader(
                 // parse fails after this point, in the reader, and keeps its
                 // own answer.
                 val document = try {
-                    response.body.string()
+                    response.body.textUpTo()
                 } catch (error: InterruptedIOException) {
                     // An expiry, which already has its own answer.
                     throw error
                 } catch (error: IOException) {
                     throw ConnectionLost(error)
                 }
-                Outcome.Success(document)
+                if (document == null) {
+                    Outcome.Failure(
+                        DataError.MalformedResponse(
+                            "manifest larger than $MAXIMUM_DOCUMENT_BYTES bytes",
+                        ),
+                    )
+                } else {
+                    Outcome.Success(document)
+                }
             }
         }
     } catch (_: ConnectionLost) {
@@ -282,6 +292,13 @@ class DatasetDownloader(
         Outcome.Failure(DataError.UntrustedServer(error.message ?: "TLS handshake refused"))
     } catch (error: IOException) {
         Outcome.Failure(DataError.MalformedResponse(error.message ?: "transfer interrupted"))
+    } catch (error: IllegalArgumentException) {
+        // The client refuses an address whose scheme is not http or https, and
+        // this address comes from a downloaded manifest. The reader rejects such
+        // a manifest whole, so nothing should reach here; but an exception
+        // escaping this coroutine closes the application, and no address in a
+        // document produced elsewhere is worth that.
+        Outcome.Failure(DataError.MalformedResponse(error.message ?: "invalid address"))
     }
 
     /**

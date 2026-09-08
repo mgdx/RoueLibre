@@ -136,6 +136,45 @@ class DataManifestTest {
     }
 
     @Test
+    fun `a file whose address cannot be fetched has the whole manifest refused`() {
+        // The address goes straight to the HTTP client, which accepts http and
+        // https and refuses every other scheme — by throwing, which used to
+        // close the application rather than say the manifest was unreadable.
+        // Refused here, the manifest costs no request at all.
+        for (address in listOf("file:///etc/passwd", "ftp://example.org/t", "content://x", "")) {
+            val forged = document.replace(
+                "\"url\": \"https://example.org/data-2026-08/tiles.mbtiles\"",
+                "\"url\": \"$address\"",
+            )
+
+            assertTrue(
+                "the address \"$address\" should have been refused",
+                DataManifestReader.read(forged) is Outcome.Failure,
+            )
+        }
+    }
+
+    @Test
+    fun `an address a client can fetch is still accepted`() {
+        // The counterpart: the rule bears on the scheme, not on what the rest of
+        // the address looks like. A host on a port and a query string are
+        // ordinary, and so is a release served in clear over a local mirror —
+        // what actually goes out in TLS is settled where the requests are made.
+        for (address in listOf("http://127.0.0.1:8080/t.mbtiles", "HTTPS://example.org/t?v=2")) {
+            val forged = document.replace(
+                "\"url\": \"https://example.org/data-2026-08/tiles.mbtiles\"",
+                "\"url\": \"$address\"",
+            )
+
+            assertEquals(
+                address,
+                DataManifestReader.read(forged).valueOrNull()
+                    ?.datasetFor(DatasetKind.Tiles)?.files?.first()?.url,
+            )
+        }
+    }
+
+    @Test
     fun `a file announced without a usable digest has the manifest refused`() {
         // The digest is what the whole download rests on (SPEC §4.4): what
         // arrives is hashed and put against what was announced. Leaving it
