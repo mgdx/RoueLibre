@@ -384,7 +384,17 @@
     <string name="journey_no_dock_nearby">No station with a free dock near the destination. Try again later, or aim somewhere else.</string>
     <string name="journey_no_route">No practicable route between these two points.</string>
     <string name="journey_graph_missing">The routing data is not installed. Add it from the storage screen.</string>
+    <!-- An end of the journey falls outside the box the city's data was cut
+         from. Said of one end or of the other whenever the check knows which,
+         and only left unattributed when the refusal came back from the routing
+         engine, which answers for a whole leg. Naming the end matters: a
+         journey prepared before setting off starts from the device's position,
+         so it is usually the departure that fails while the arrival just
+         chosen is perfectly serviceable. -->
     <string name="journey_outside_coverage">This point lies outside the area covered by the installed data.</string>
+    <string name="journey_outside_coverage_start">The starting point lies outside the area covered by the installed data. Start from somewhere inside it.</string>
+    <string name="journey_outside_coverage_destination">The destination lies outside the area covered by the installed data. Aim at somewhere inside it.</string>
+    <string name="journey_outside_coverage_both">Neither end lies inside the area covered by the installed data. Install the data of the city you are travelling in.</string>
     <string name="journey_no_stations">No station known. Refresh the station list, then try again.</string>
 
     <string name="duration_minutes">%1$d min</string>

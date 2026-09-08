@@ -994,7 +994,9 @@ class JourneyPlannerTest {
 
         val plan = planner.plan(origin, destination, departureAndArrival())
 
-        assertEquals(JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage), plan)
+        // No end is named: the engine refused a whole leg, and nothing here
+        // knows which of its two points it stumbled on.
+        assertEquals(JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage(null)), plan)
     }
 
     @Test
@@ -1040,7 +1042,10 @@ class JourneyPlannerTest {
 
         val plan = planner.plan(at(2001.0, 0.0), destination, departureAndArrival())
 
-        assertEquals(JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage), plan)
+        assertEquals(
+            JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage(UncoveredEnds.Origin)),
+            plan,
+        )
         assertEquals(0, router.walkingCalls)
         assertEquals(0, router.cyclingCalls)
     }
@@ -1065,7 +1070,10 @@ class JourneyPlannerTest {
 
         val plan = planner.planWithOwnBike(origin, at(0.0, 6001.0))
 
-        assertEquals(JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage), plan)
+        assertEquals(
+            JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage(UncoveredEnds.Destination)),
+            plan,
+        )
         assertEquals(0, router.cyclingCalls)
     }
 
@@ -1076,6 +1084,67 @@ class JourneyPlannerTest {
             .plan(at(2001.0, 0.0), destination, departureAndArrival())
 
         assertTrue("expected a journey, got $plan", plan is JourneyPlan.Found)
+    }
+
+    @Test
+    fun `a start outside the box accuses the start, not the destination`() = runTest {
+        // The defect this names: someone preparing a journey before setting off
+        // starts from the device's position, which is elsewhere, towards a
+        // destination they have just picked inside the city. The refusal used
+        // to say "this point", and the point they were looking at was the one
+        // that was right.
+        val planner = JourneyPlanner(FakeRouter(), coveredArea = servedArea)
+
+        val plan = planner.plan(at(9000.0, 0.0), destination, departureAndArrival())
+
+        assertEquals(
+            JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage(UncoveredEnds.Origin)),
+            plan,
+        )
+    }
+
+    @Test
+    fun `a destination outside the box accuses the destination`() = runTest {
+        // The symmetrical case, and the only one the old wording ever got
+        // right by accident.
+        val planner = JourneyPlanner(FakeRouter(), coveredArea = servedArea)
+
+        val plan = planner.plan(origin, at(0.0, 9000.0), departureAndArrival())
+
+        assertEquals(
+            JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage(UncoveredEnds.Destination)),
+            plan,
+        )
+    }
+
+    @Test
+    fun `two ends outside the box accuse both`() = runTest {
+        // Naming one end here would be naming the wrong one half the time:
+        // nothing about this journey is inside the installed data, and what is
+        // owed is a different city rather than a different point.
+        val planner = JourneyPlanner(FakeRouter(), coveredArea = servedArea)
+
+        val plan = planner.plan(at(9000.0, 0.0), at(0.0, 9000.0), departureAndArrival())
+
+        assertEquals(
+            JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage(UncoveredEnds.BothEnds)),
+            plan,
+        )
+    }
+
+    @Test
+    fun `on one's own bike, a start outside the box accuses the start`() = runTest {
+        // The own-bike screen runs the same check on the same two points, and
+        // must come back with the same answer: it is reached from the very same
+        // planner screen, with the very same implicit departure.
+        val planner = JourneyPlanner(FakeRouter(), coveredArea = servedArea)
+
+        val plan = planner.planWithOwnBike(at(9000.0, 0.0), destination)
+
+        assertEquals(
+            JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage(UncoveredEnds.Origin)),
+            plan,
+        )
     }
 
     // ------------------------------------------------------ walking pace --
