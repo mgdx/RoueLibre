@@ -541,10 +541,23 @@
     <string name="storage_checking">Reading the manifest…</string>
     <string name="storage_up_to_date">Everything is up to date.</string>
     <string name="storage_download_pending">Download %1$s</string>
+    <!-- The line shown between the press and the first byte received: a
+         request may take ten seconds to give up where the connection is gone,
+         and a screen saying nothing for that long reads as a press that was
+         lost. -->
+    <string name="storage_download_starting">Starting the download…</string>
     <string name="storage_downloading">%1$s · %2$s of %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <!-- %1$s is the network the manifest names, %2$s the one in service. Both
+         are the identifiers the city configurations are keyed by, such as
+         "nextbike-stirling". -->
+    <string name="storage_manifest_other_network">The published data is that of %1$s, not of %2$s. Nothing has been downloaded: it would have put the map and the addresses of another city in place of yours.</string>
     <string name="storage_wifi_warning">You are not on Wi-Fi. This download can weigh heavily on a mobile plan.</string>
     <string name="dataset_update_available">Update available</string>
+    <!-- Said on the row of a set whose transfer failed, in place of "Not
+         installed", which is what a set nobody ever asked for says. %1$s is
+         the reason, which already says what happens next. -->
+    <string name="dataset_download_failed">Download failed. %1$s</string>
 
     <string name="dataset_absent">Not installed</string>
     <string name="dataset_installed">%1$s · %2$s</string>

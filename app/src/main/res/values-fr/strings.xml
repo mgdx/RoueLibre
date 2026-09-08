@@ -622,12 +622,17 @@
     <string name="storage_up_to_date">Tout est à jour.</string>
     <!-- %1$s is an already formatted size, "42,5 Mo" for instance. -->
     <string name="storage_download_pending">Télécharger %1$s</string>
+    <string name="storage_download_starting">Démarrage du téléchargement…</string>
     <!-- %1$s is the file name, %2$s the part received, %3$s the total size. -->
     <string name="storage_downloading">%1$s · %2$s sur %3$s</string>
     <!-- %1$s is the set's name, %2$s the reason for the failure. -->
     <string name="storage_download_failed">%1$s : %2$s</string>
     <string name="storage_wifi_warning">Tu n’es pas en Wi-Fi. Ce téléchargement peut peser lourd sur un forfait mobile.</string>
+    <!-- %1$s is the network the manifest names, %2$s the one in service. -->
+    <string name="storage_manifest_other_network">Les données publiées sont celles de %1$s, pas de %2$s. Rien n’a été téléchargé : tu aurais eu la carte et les adresses d’une autre ville.</string>
     <string name="dataset_update_available">Mise à jour disponible</string>
+    <!-- %1$s is the reason the transfer failed. -->
+    <string name="dataset_download_failed">Échec du téléchargement. %1$s</string>
 
     <string name="dataset_absent">Pas installé</string>
     <!-- %1$s is a size, %2$s a date. Example: "35,0 Mo · 9 août 2026". -->
