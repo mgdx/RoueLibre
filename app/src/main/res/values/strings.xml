@@ -320,6 +320,10 @@
          journey, which the ordinary way already offers. -->
     <string name="journey_departure_street_bike">Bike outside stations</string>
     <string name="journey_origin_street_bike_locked">The journey starts on the bike you chose.</string>
+    <!-- And the sentence that replaces the two above it on that journey: there
+         is no walk to the bike, one is standing beside it, and the ride ends at
+         a station because that is where a bike goes back (SPEC §6). -->
+    <string name="journey_hint_street_bike">The journey is computed on the device: ride from the bike, leave it at a station, then walk the rest of the way.</string>
 
     <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
          which is what the application does at rest. -->
