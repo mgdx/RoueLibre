@@ -1,5 +1,6 @@
 package io.github.mgdx.rouelibre.core.station
 
+import io.github.mgdx.rouelibre.core.geo.Coordinates
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -192,5 +193,51 @@ class FleetReadingTest {
         )
 
         assertTrue(reading.isMixed)
+    }
+
+    @Test
+    fun `the electric bikes out on the street turn a mechanical reading into a mixed one`() {
+        // Berlin on 8 September 2026: 448 electric bikes on the street and, at
+        // that hour, none at the stations. Counted from the stations alone the
+        // network reads as mechanical, and the bolt is wrong on every marker.
+        val streetBike = StreetBike(
+            id = "b",
+            position = Coordinates(52.52, 13.405),
+            vehicleTypeId = "348",
+            chargeRatio = 0.67,
+            rangeMetres = null,
+        )
+        val reading = countFleet(
+            availabilities = listOf(availability(mapOf("346" to 40))),
+            declaredVehicleTypes = munich,
+            declaresElectricBikes = true,
+            streetBikes = List(10) { streetBike },
+        )
+
+        assertTrue(reading.isMixed)
+        assertTrue(reading.hasElectricBikes)
+        assertEquals(50, reading.bikesCounted)
+    }
+
+    @Test
+    fun `a street bike declaring no type is counted in neither column`() {
+        // A bike of unknown propulsion says nothing about what the network
+        // lends, exactly as an undeclared identifier at a station.
+        val untyped = StreetBike(
+            id = "b",
+            position = Coordinates(52.52, 13.405),
+            vehicleTypeId = null,
+            chargeRatio = null,
+            rangeMetres = null,
+        )
+        val reading = countFleet(
+            availabilities = listOf(availability(mapOf("346" to 5))),
+            declaredVehicleTypes = munich,
+            declaresElectricBikes = true,
+            streetBikes = listOf(untyped),
+        )
+
+        assertFalse(reading.hasElectricBikes)
+        assertEquals(5, reading.bikesCounted)
     }
 }
