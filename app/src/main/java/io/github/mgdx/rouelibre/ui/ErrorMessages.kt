@@ -4,6 +4,7 @@ import android.content.Context
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.journey.NoBikeJourney
+import io.github.mgdx.rouelibre.core.journey.UncoveredEnds
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 
 /**
@@ -159,6 +160,13 @@ fun DataError.toUpdateCheckMessage(context: Context): String = when (this) {
  * an electric bike right now" leaves something to do, where "no bike found"
  * leaves one looking for another address.
  *
+ * A point outside the covered area names the **end** at fault for the same
+ * reason. "This point lies outside the area covered" left the reader to guess,
+ * and they guessed the arrival, which was the end they had just chosen and the
+ * one that was right; the departure, filled in from the device's position, is
+ * the one that usually fails. That sentence is kept for the one case where the
+ * end is genuinely unknown — see [NoBikeJourney.OutsideCoverage].
+ *
  * [NoBikeJourney.WalkingIsQuicker] is not a failure and never reaches here: it
  * comes with a walk of its own, which the summary describes (SPEC §6).
  */
@@ -173,7 +181,13 @@ fun NoBikeJourney.toUserMessage(context: Context): String = context.getString(
         NoBikeJourney.NoDockNearby -> R.string.journey_no_dock_nearby
         NoBikeJourney.NoRouteBetweenStations -> R.string.journey_no_route
         NoBikeJourney.GraphMissing -> R.string.journey_graph_missing
-        NoBikeJourney.OutsideCoverage -> R.string.journey_outside_coverage
+        is NoBikeJourney.OutsideCoverage -> when (uncovered) {
+            UncoveredEnds.Origin -> R.string.journey_outside_coverage_start
+            UncoveredEnds.Destination -> R.string.journey_outside_coverage_destination
+            UncoveredEnds.BothEnds -> R.string.journey_outside_coverage_both
+            null -> R.string.journey_outside_coverage
+        }
+
         NoBikeJourney.WalkingIsQuicker -> R.string.journey_no_route
     },
 )

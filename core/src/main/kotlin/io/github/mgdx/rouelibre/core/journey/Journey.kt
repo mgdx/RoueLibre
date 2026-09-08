@@ -183,6 +183,39 @@ public sealed interface NoBikeJourney {
     /** The routing graph is not installed. */
     public data object GraphMissing : NoBikeJourney
 
-    /** One of the two points lies outside the covered area. */
-    public data object OutsideCoverage : NoBikeJourney
+    /**
+     * An end of the journey lies outside the covered area.
+     *
+     * **Which end is carried, because the two are not the same news.** The
+     * departure point is the one that usually fails, and it is the one the
+     * user did not choose: a journey prepared before setting off starts from
+     * the device's position, still at home, while the destination just picked
+     * is perfectly serviceable. A refusal naming neither end is read against
+     * the end the user was looking at — the arrival — and sends them to
+     * correct the one point that was right.
+     *
+     * @property uncovered the end the installed data cannot serve, or `null`
+     *   when the refusal came back from the routing engine, which answers for
+     *   a leg rather than for one of its two points and cannot say which of
+     *   them it stumbled on.
+     */
+    public data class OutsideCoverage(public val uncovered: UncoveredEnds? = null) : NoBikeJourney
+}
+
+/**
+ * Which ends of a journey the installed data does not cover.
+ *
+ * There is no case for "neither": that is a journey rather than a refusal, and
+ * it comes back as one.
+ */
+public enum class UncoveredEnds {
+
+    /** The departure point alone. */
+    Origin,
+
+    /** The arrival point alone. */
+    Destination,
+
+    /** Both of them. */
+    BothEnds,
 }

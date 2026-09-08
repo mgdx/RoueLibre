@@ -275,14 +275,24 @@ public class JourneyPlanner(
      * inside it that no way reaches is another matter entirely, and it is left
      * to the engine to answer for it.
      *
+     * **The refusal names the end at fault**, which is known here and nowhere
+     * else: the box is read against each point in turn, so the answer can say
+     * which of the two the data was never cut to reach (see
+     * [NoBikeJourney.OutsideCoverage]).
+     *
      * @return the refusal, or `null` when both ends can be served.
      */
-    private fun outsideCoverage(origin: Coordinates, destination: Coordinates): JourneyPlan? =
-        if (coveredArea.covers(origin) && coveredArea.covers(destination)) {
-            null
-        } else {
-            JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage)
+    private fun outsideCoverage(origin: Coordinates, destination: Coordinates): JourneyPlan? {
+        val startIsOut = !coveredArea.covers(origin)
+        val endIsOut = !coveredArea.covers(destination)
+        val uncovered = when {
+            startIsOut && endIsOut -> UncoveredEnds.BothEnds
+            startIsOut -> UncoveredEnds.Origin
+            endIsOut -> UncoveredEnds.Destination
+            else -> return null
         }
+        return JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage(uncovered))
+    }
 
     /**
      * Keeps the nearest stations that actually provide the service.
@@ -754,10 +764,14 @@ public class JourneyPlanner(
  *
  * Used by the calling layer when no route could be traced: a missing graph and
  * a destination outside the covered area do not call for the same message.
+ *
+ * The end at fault is left unnamed here, and deliberately: the engine answers
+ * for a whole leg and never says which of its two points it choked on. Only
+ * the box check knows that, and when it knows it the engine is never asked.
  */
 public fun RoutingFailure.toNoBikeJourney(): NoBikeJourney = when (this) {
     RoutingFailure.GraphMissing -> NoBikeJourney.GraphMissing
-    RoutingFailure.OutsideCoverage -> NoBikeJourney.OutsideCoverage
+    RoutingFailure.OutsideCoverage -> NoBikeJourney.OutsideCoverage()
     else -> NoBikeJourney.NoRouteBetweenStations
 }
 

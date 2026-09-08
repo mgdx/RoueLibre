@@ -433,7 +433,14 @@
     <string name="journey_no_dock_nearby">Aucune station avec une place libre près de l’arrivée. Réessaie plus tard, ou vise un autre point.</string>
     <string name="journey_no_route">Aucun chemin praticable entre ces deux points.</string>
     <string name="journey_graph_missing">Le graphe de routage n’est pas installé. Ajoute-le depuis l’écran de stockage.</string>
+    <!-- An end of the journey falls outside the box the city's data was cut
+         from. Said of one end or of the other whenever the check knows which,
+         and only left unattributed when the refusal came back from the routing
+         engine, which answers for a whole leg. -->
     <string name="journey_outside_coverage">Ce point est hors de la zone couverte par les données installées.</string>
+    <string name="journey_outside_coverage_start">Le point de départ est hors de la zone couverte par les données installées. Pars d’un point qui s’y trouve.</string>
+    <string name="journey_outside_coverage_destination">L’arrivée est hors de la zone couverte par les données installées. Vise un point qui s’y trouve.</string>
+    <string name="journey_outside_coverage_both">Aucun des deux points n’est dans la zone couverte par les données installées. Installe les données de la ville où tu voyages.</string>
     <string name="journey_no_stations">Aucune station connue. Actualise la liste des stations, puis réessaie.</string>
 
     <!-- Durations, formatted through the localisation APIs (SPEC §9).
