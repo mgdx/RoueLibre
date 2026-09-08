@@ -204,9 +204,10 @@
     <string name="incoming_show_me">Vis</string>
     <string name="incoming_needs_index">Denne adresse skal slås op i adresseindekset, som ikke er installeret.</string>
     <string name="incoming_address_not_found">»%1$s« svarer ikke til nogen adresse i det dækkede område.</string>
-    <string name="incoming_address_choices_title">Adresser fundet i denne tekst</string>
+    <string name="incoming_address_choices_title">Mente du en af disse adresser?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Dette sted ligger uden for det område, de installerede data dækker: ingen rejse kan nå dertil.</string>
+    <string name="incoming_unreadable_link">Dette link siger ikke, hvor man skal hen: stedet i det kunne ikke læses.</string>
 
     <string name="favourites_title">Favoritter</string>
     <string name="favourites_open">Se favoritter</string>
@@ -360,6 +361,9 @@
     <string name="journey_no_route">Ingen farbar rute mellem disse to punkter.</string>
     <string name="journey_graph_missing">Rutedataene er ikke installeret. Tilføj dem fra skærmen Lagerplads.</string>
     <string name="journey_outside_coverage">Dette punkt ligger uden for det område, de installerede data dækker.</string>
+    <string name="journey_outside_coverage_start">Startpunktet ligger uden for det område, de installerede data dækker. Start fra et sted inden for det.</string>
+    <string name="journey_outside_coverage_destination">Destinationen ligger uden for det område, de installerede data dækker. Sigt efter et sted inden for det.</string>
+    <string name="journey_outside_coverage_both">Ingen af de to ender ligger inden for det område, de installerede data dækker. Installer data for den by, du rejser i.</string>
     <string name="journey_no_stations">Ingen station kendt. Opdater stationslisten, og prøv igen.</string>
 
     <!-- "t" is how Danish abbreviates the hour: "1 t 05". It is the one unit
@@ -479,6 +483,7 @@
     <string name="city_proposal_body">Du ser ud til at være i det område, %1$s dækker. Skal vi bruge det?</string>
     <string name="city_proposal_accept">Ja</string>
     <string name="city_none_nearby">Intet kendt netværk i nærheden. Vælg en by på listen.</string>
+    <string name="city_location_denied">Uden placering kan du vælge din by på listen eller søge efter den ved navn.</string>
     <string name="action_cancel">Annuller</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -504,10 +509,13 @@
     <string name="storage_checking">Læser manifestet…</string>
     <string name="storage_up_to_date">Alt er opdateret.</string>
     <string name="storage_download_pending">Hent %1$s</string>
+    <string name="storage_download_starting">Starter downloaden…</string>
     <string name="storage_downloading">%1$s · %2$s af %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">De offentliggjorte data tilhører %1$s, ikke %2$s. Der er ikke hentet noget: du ville have fået kort og adresser for en anden by.</string>
     <string name="storage_wifi_warning">Du er ikke på Wi-Fi. Denne download kan tære hårdt på et mobilabonnement.</string>
     <string name="dataset_update_available">Opdatering tilgængelig</string>
+    <string name="dataset_download_failed">Download mislykkedes. %1$s</string>
 
     <string name="dataset_absent">Ikke installeret</string>
     <string name="dataset_installed">%1$s · %2$s</string>

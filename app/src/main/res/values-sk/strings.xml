@@ -281,9 +281,10 @@
     <string name="incoming_needs_index">Túto adresu treba vyhľadať v offline registri adries, ktorý však nie je nainštalovaný.</string>
     <!-- %1$s is the text received from the other application. -->
     <string name="incoming_address_not_found">Dopytu „%1$s“ nezodpovedá žiadna adresa v pokrytej oblasti.</string>
-    <string name="incoming_address_choices_title">Adresy nájdené v tomto texte</string>
+    <string name="incoming_address_choices_title">Máte na mysli niektorú z týchto adries?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Toto miesto leží mimo oblasti, ktorú pokrývajú nainštalované dáta: nedostane sa k nemu žiadna trasa.</string>
+    <string name="incoming_unreadable_link">Tento odkaz nehovorí, kam ísť: jeho miesto sa nepodarilo prečítať.</string>
 
     <!-- Favourites (SPEC §7.5). -->
     <string name="favourites_title">Obľúbené</string>
@@ -480,6 +481,9 @@
     <string name="journey_no_route">Medzi týmito dvoma bodmi nevedie žiadna zjazdná cesta.</string>
     <string name="journey_graph_missing">Dáta na výpočet trás nie sú nainštalované. Pridajte ich v „Úložisku“.</string>
     <string name="journey_outside_coverage">Tento bod leží mimo oblasti, ktorú pokrývajú nainštalované dáta.</string>
+    <string name="journey_outside_coverage_start">Východiskový bod leží mimo oblasti, ktorú pokrývajú nainštalované dáta. Vyjdite z bodu v jej vnútri.</string>
+    <string name="journey_outside_coverage_destination">Cieľ leží mimo oblasti, ktorú pokrývajú nainštalované dáta. Zvoľte cieľ v jej vnútri.</string>
+    <string name="journey_outside_coverage_both">Ani jeden z bodov neleží v oblasti, ktorú pokrývajú nainštalované dáta. Nainštalujte dáta mesta, v ktorom cestujete.</string>
     <string name="journey_no_stations">Nie je známa žiadna stanica. Aktualizujte zoznam staníc a skúste to znova.</string>
 
     <!-- Durations, formatted through the localisation APIs (SPEC §9).
@@ -661,6 +665,7 @@
     <string name="city_proposal_body">Zdá sa, že ste v oblasti, ktorú pokrýva %1$s. Ideme do toho?</string>
     <string name="city_proposal_accept">Áno</string>
     <string name="city_none_nearby">V okolí nie je známa žiadna sieť. Vyberte mesto zo zoznamu.</string>
+    <string name="city_location_denied">Bez polohy vyberte svoje mesto zo zoznamu alebo ho nájdite podľa názvu.</string>
     <string name="action_cancel">Zrušiť</string>
 
     <!-- File size units. Base 1000, as everywhere else in the system.
@@ -698,12 +703,15 @@
     <string name="storage_up_to_date">Všetko je aktuálne.</string>
     <!-- %1$s is an already formatted size, „42,5 MB“ for instance. -->
     <string name="storage_download_pending">Stiahnuť %1$s</string>
+    <string name="storage_download_starting">Spúšťa sa sťahovanie…</string>
     <!-- %1$s is the file name, %2$s the part received, %3$s the total size. -->
     <string name="storage_downloading">%1$s · %2$s z %3$s</string>
     <!-- %1$s is the set's name, %2$s the reason for the failure. -->
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Zverejnené dáta patria sieti %1$s, nie %2$s. Nestiahlo sa nič: mali by ste mapu a adresy iného mesta.</string>
     <string name="storage_wifi_warning">Nie ste na Wi-Fi. Toto sťahovanie môže výrazne zaťažiť mobilný paušál.</string>
     <string name="dataset_update_available">K dispozícii je aktualizácia</string>
+    <string name="dataset_download_failed">Sťahovanie zlyhalo. %1$s</string>
 
     <string name="dataset_absent">Nenainštalované</string>
     <!-- %1$s is a size, %2$s a date. Example: „35,0 MB · 9. augusta 2026“. -->

@@ -242,9 +242,10 @@
     <string name="incoming_show_me">Pokaż</string>
     <string name="incoming_needs_index">Ten adres trzeba odnaleźć w indeksie offline, którego nie zainstalowano.</string>
     <string name="incoming_address_not_found">„%1$s” nie pasuje do żadnego adresu w obsługiwanym obszarze.</string>
-    <string name="incoming_address_choices_title">Adresy znalezione w tym tekście</string>
+    <string name="incoming_address_choices_title">Czy chodziło o jeden z tych adresów?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">To miejsce leży poza obszarem, który obejmują zainstalowane dane: żadna trasa do niego nie dociera.</string>
+    <string name="incoming_unreadable_link">Ten odnośnik nie mówi, dokąd iść: nie udało się odczytać jego miejsca.</string>
 
     <string name="favourites_title">Ulubione</string>
     <string name="favourites_open">Zobacz ulubione</string>
@@ -405,6 +406,9 @@
     <string name="journey_no_route">Brak drogi możliwej do przebycia między tymi punktami.</string>
     <string name="journey_graph_missing">Dane tras nie są zainstalowane. Dodaj je na ekranie „Pamięć”.</string>
     <string name="journey_outside_coverage">Ten punkt leży poza obszarem, który obejmują zainstalowane dane.</string>
+    <string name="journey_outside_coverage_start">Punkt początkowy leży poza obszarem, który obejmują zainstalowane dane. Wyrusz z miejsca w jego wnętrzu.</string>
+    <string name="journey_outside_coverage_destination">Cel leży poza obszarem, który obejmują zainstalowane dane. Wybierz cel w jego wnętrzu.</string>
+    <string name="journey_outside_coverage_both">Żaden z dwóch końców nie leży w obszarze, który obejmują zainstalowane dane. Zainstaluj dane miasta, po którym podróżujesz.</string>
     <string name="journey_no_stations">Brak znanych stacji. Odśwież listę stacji i spróbuj ponownie.</string>
 
     <string name="duration_minutes">%1$d min</string>
@@ -531,6 +535,7 @@
     <string name="city_proposal_body">Wygląda na to, że jesteś na obszarze, który obejmuje %1$s. Zgadza się?</string>
     <string name="city_proposal_accept">Tak</string>
     <string name="city_none_nearby">W pobliżu nie ma znanej sieci. Wybierz miasto z listy.</string>
+    <string name="city_location_denied">Bez lokalizacji wybierz swoje miasto z listy albo poszukaj go po nazwie.</string>
     <string name="action_cancel">Anuluj</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -556,10 +561,13 @@
     <string name="storage_checking">Odczytuję manifest…</string>
     <string name="storage_up_to_date">Wszystko jest aktualne.</string>
     <string name="storage_download_pending">Pobierz %1$s</string>
+    <string name="storage_download_starting">Rozpoczynanie pobierania…</string>
     <string name="storage_downloading">%1$s · %2$s z %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Opublikowane dane należą do sieci %1$s, a nie %2$s. Nic nie pobrano: na urządzeniu znalazłyby się mapa i adresy innego miasta.</string>
     <string name="storage_wifi_warning">Nie masz połączenia Wi-Fi. To pobieranie może mocno obciążyć pakiet danych.</string>
     <string name="dataset_update_available">Dostępna aktualizacja</string>
+    <string name="dataset_download_failed">Pobieranie nie powiodło się. %1$s</string>
 
     <string name="dataset_absent">Nie zainstalowano</string>
     <string name="dataset_installed">%1$s · %2$s</string>

@@ -240,9 +240,10 @@
     <string name="incoming_show_me">Εμφάνιση</string>
     <string name="incoming_needs_index">Αυτή η διεύθυνση πρέπει να αναζητηθεί στο ευρετήριο εκτός σύνδεσης, το οποίο δεν είναι εγκατεστημένο.</string>
     <string name="incoming_address_not_found">Το «%1$s» δεν αντιστοιχεί σε καμία διεύθυνση της καλυπτόμενης περιοχής.</string>
-    <string name="incoming_address_choices_title">Διευθύνσεις που βρέθηκαν σε αυτό το κείμενο</string>
+    <string name="incoming_address_choices_title">Μήπως εννοείτε μία από αυτές τις διευθύνσεις;</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Αυτό το σημείο βρίσκεται έξω από την περιοχή που καλύπτουν τα εγκατεστημένα δεδομένα: καμία διαδρομή δεν φτάνει μέχρι εκεί.</string>
+    <string name="incoming_unreadable_link">Αυτός ο σύνδεσμος δεν λέει πού να πάτε: δεν ήταν δυνατή η ανάγνωση του τόπου του.</string>
 
     <string name="favourites_title">Αγαπημένα</string>
     <string name="favourites_open">Δείτε τα αγαπημένα</string>
@@ -414,6 +415,9 @@
     <string name="journey_no_route">Δεν υπάρχει βατός δρόμος ανάμεσα σε αυτά τα δύο σημεία.</string>
     <string name="journey_graph_missing">Τα δεδομένα δρομολόγησης δεν είναι εγκατεστημένα. Προσθέστε τα από την οθόνη αποθηκευτικού χώρου.</string>
     <string name="journey_outside_coverage">Αυτό το σημείο βρίσκεται έξω από την περιοχή που καλύπτουν τα εγκατεστημένα δεδομένα.</string>
+    <string name="journey_outside_coverage_start">Το σημείο αφετηρίας βρίσκεται έξω από την περιοχή που καλύπτουν τα εγκατεστημένα δεδομένα. Ξεκινήστε από ένα σημείο μέσα σε αυτήν.</string>
+    <string name="journey_outside_coverage_destination">Ο προορισμός βρίσκεται έξω από την περιοχή που καλύπτουν τα εγκατεστημένα δεδομένα. Διαλέξτε προορισμό μέσα σε αυτήν.</string>
+    <string name="journey_outside_coverage_both">Κανένα από τα δύο άκρα δεν βρίσκεται μέσα στην περιοχή που καλύπτουν τα εγκατεστημένα δεδομένα. Εγκαταστήστε τα δεδομένα της πόλης στην οποία ταξιδεύετε.</string>
     <string name="journey_no_stations">Κανένας γνωστός σταθμός. Ανανεώστε τη λίστα των σταθμών και δοκιμάστε ξανά.</string>
 
     <!-- Greek: «λεπ.» rather than «λεπτά», which would be wrong at one; the
@@ -535,6 +539,7 @@
     <string name="city_proposal_body">Φαίνεται πως βρίσκεστε στην περιοχή που καλύπτει το %1$s. Να το χρησιμοποιήσουμε;</string>
     <string name="city_proposal_accept">Ναι</string>
     <string name="city_none_nearby">Κανένα γνωστό δίκτυο εδώ κοντά. Διαλέξτε μια πόλη από τη λίστα.</string>
+    <string name="city_location_denied">Χωρίς τοποθεσία, διαλέξτε την πόλη σας από τη λίστα ή αναζητήστε την με το όνομά της.</string>
     <string name="action_cancel">Ακύρωση</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -564,10 +569,13 @@
     <string name="storage_up_to_date">Όλα είναι ενημερωμένα.</string>
     <!-- %1$s is a size, "340 MB" for instance, and never a dataset's name. -->
     <string name="storage_download_pending">Λήψη %1$s</string>
+    <string name="storage_download_starting">Έναρξη της λήψης…</string>
     <string name="storage_downloading">%1$s · %2$s από %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Τα δημοσιευμένα δεδομένα είναι του %1$s, όχι του %2$s. Δεν έγινε καμία λήψη: θα παίρνατε τον χάρτη και τις διευθύνσεις μιας άλλης πόλης.</string>
     <string name="storage_wifi_warning">Δεν είστε σε Wi-Fi. Αυτή η λήψη μπορεί να βαρύνει πολύ ένα πρόγραμμα κινητής τηλεφωνίας.</string>
     <string name="dataset_update_available">Διαθέσιμη ενημέρωση</string>
+    <string name="dataset_download_failed">Η λήψη απέτυχε. %1$s</string>
 
     <string name="dataset_absent">Δεν είναι εγκατεστημένο</string>
     <string name="dataset_installed">%1$s · %2$s</string>

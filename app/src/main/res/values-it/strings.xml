@@ -255,9 +255,10 @@
     <string name="incoming_needs_index">Questo indirizzo va cercato nell’indice offline, che non è installato.</string>
     <!-- %1$s is the text received from the other application. -->
     <string name="incoming_address_not_found">«%1$s» non corrisponde a nessun indirizzo dell’area coperta.</string>
-    <string name="incoming_address_choices_title">Indirizzi trovati in questo testo</string>
+    <string name="incoming_address_choices_title">Intendevi uno di questi indirizzi?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Questo luogo è fuori dall’area coperta dai dati installati: nessun itinerario può raggiungerlo.</string>
+    <string name="incoming_unreadable_link">Questo link non dice dove andare: non è stato possibile leggere il luogo che indica.</string>
 
     <!-- Favourites (SPEC §7.5). -->
     <string name="favourites_title">Preferiti</string>
@@ -453,6 +454,9 @@
     <string name="journey_no_route">Nessun percorso praticabile tra questi due punti.</string>
     <string name="journey_graph_missing">Il grafo dei percorsi non è installato. Aggiungilo dalla schermata di archiviazione.</string>
     <string name="journey_outside_coverage">Questo punto è fuori dall’area coperta dai dati installati.</string>
+    <string name="journey_outside_coverage_start">Il punto di partenza è fuori dall’area coperta dai dati installati. Parti da un punto che vi rientri.</string>
+    <string name="journey_outside_coverage_destination">La destinazione è fuori dall’area coperta dai dati installati. Scegline una che vi rientri.</string>
+    <string name="journey_outside_coverage_both">Nessuno dei due estremi rientra nell’area coperta dai dati installati. Installa i dati della città in cui ti sposti.</string>
     <string name="journey_no_stations">Nessuna stazione conosciuta. Aggiorna l’elenco delle stazioni, poi riprova.</string>
 
     <!-- Durations, formatted through the localisation APIs (SPEC §9).
@@ -611,6 +615,7 @@
     <string name="city_proposal_body">Sembra che tu sia nell’area coperta da %1$s. La usiamo?</string>
     <string name="city_proposal_accept">Sì</string>
     <string name="city_none_nearby">Nessuna rete conosciuta qui vicino. Scegli una città dall’elenco.</string>
+    <string name="city_location_denied">Senza posizione, scegli la tua città dall’elenco o cercala per nome.</string>
     <string name="action_cancel">Annulla</string>
 
     <!-- File size units. Base 1000, as everywhere else in the system.
@@ -648,12 +653,15 @@
     <string name="storage_up_to_date">È tutto aggiornato.</string>
     <!-- %1$s is an already formatted size, "42,5 MB" for instance. -->
     <string name="storage_download_pending">Scarica %1$s</string>
+    <string name="storage_download_starting">Avvio del download…</string>
     <!-- %1$s is the file name, %2$s the part received, %3$s the total size. -->
     <string name="storage_downloading">%1$s · %2$s di %3$s</string>
     <!-- %1$s is the set's name, %2$s the reason for the failure. -->
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">I dati pubblicati sono quelli di %1$s, non di %2$s. Non è stato scaricato nulla: avresti avuto la mappa e gli indirizzi di un’altra città.</string>
     <string name="storage_wifi_warning">Non sei su una rete Wi-Fi. Questo download può pesare molto sui tuoi dati mobili.</string>
     <string name="dataset_update_available">Aggiornamento disponibile</string>
+    <string name="dataset_download_failed">Download non riuscito. %1$s</string>
 
     <string name="dataset_absent">Non installato</string>
     <!-- %1$s is a size, %2$s a date. Example: "35,0 MB · 9 agosto 2026". -->

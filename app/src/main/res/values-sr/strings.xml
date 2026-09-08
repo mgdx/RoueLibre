@@ -271,9 +271,10 @@
     <string name="incoming_show_me">Прикажи</string>
     <string name="incoming_needs_index">Ову адресу треба потражити у индексу за рад ван мреже, који није инсталиран.</string>
     <string name="incoming_address_not_found">„%1$s“ не одговара ниједној адреси у покривеном подручју.</string>
-    <string name="incoming_address_choices_title">Адресе пронађене у овом тексту</string>
+    <string name="incoming_address_choices_title">Мислите ли на неку од ових адреса?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Ово место је изван подручја које покривају инсталирани подаци: до њега не води ниједно путовање.</string>
+    <string name="incoming_unreadable_link">Ова веза не каже куда треба ићи: њено место није било могуће прочитати.</string>
 
     <string name="favourites_title">Фаворити</string>
     <string name="favourites_open">Погледај фаворите</string>
@@ -434,6 +435,9 @@
     <string name="journey_no_route">Између ове две тачке нема проходне руте.</string>
     <string name="journey_graph_missing">Подаци за руте нису инсталирани. Додајте их са екрана Меморијски простор.</string>
     <string name="journey_outside_coverage">Ова тачка је изван подручја које покривају инсталирани подаци.</string>
+    <string name="journey_outside_coverage_start">Полазна тачка је изван подручја које покривају инсталирани подаци. Крените са тачке унутар њега.</string>
+    <string name="journey_outside_coverage_destination">Одредиште је изван подручја које покривају инсталирани подаци. Изаберите одредиште унутар њега.</string>
+    <string name="journey_outside_coverage_both">Ниједан од два краја није у подручју које покривају инсталирани подаци. Инсталирајте податке града кроз који путујете.</string>
     <string name="journey_no_stations">Није позната ниједна станица. Освежите листу станица, па пробајте поново.</string>
 
     <string name="duration_minutes">%1$d min</string>
@@ -568,6 +572,7 @@
     <string name="city_proposal_body">Изгледа да се налазите у подручју које покрива %1$s. Идемо са тим?</string>
     <string name="city_proposal_accept">Да</string>
     <string name="city_none_nearby">У близини нема познате мреже. Изаберите град са листе.</string>
+    <string name="city_location_denied">Без локације изаберите свој град са листе или га потражите по имену.</string>
     <string name="action_cancel">Откажи</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -593,10 +598,13 @@
     <string name="storage_checking">Читање манифеста…</string>
     <string name="storage_up_to_date">Све је ажурно.</string>
     <string name="storage_download_pending">Преузми %1$s</string>
+    <string name="storage_download_starting">Покретање преузимања…</string>
     <string name="storage_downloading">%1$s · %2$s од %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Објављени подаци припадају мрежи %1$s, а не %2$s. Ништа није преузето: добили бисте мапу и адресе другог града.</string>
     <string name="storage_wifi_warning">Нисте на Wi-Fi мрежи. Ово преузимање може знатно да оптерети мобилни пакет.</string>
     <string name="dataset_update_available">Доступно је ажурирање</string>
+    <string name="dataset_download_failed">Преузимање није успело. %1$s</string>
 
     <string name="dataset_absent">Није инсталирано</string>
     <string name="dataset_installed">%1$s · %2$s</string>

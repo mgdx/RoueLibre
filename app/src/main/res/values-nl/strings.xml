@@ -198,9 +198,10 @@
     <string name="incoming_show_me">Tonen</string>
     <string name="incoming_needs_index">Dit adres moet worden opgezocht in de adresindex, en die is niet geïnstalleerd.</string>
     <string name="incoming_address_not_found">Geen enkel adres in het gedekte gebied komt overeen met “%1$s”.</string>
-    <string name="incoming_address_choices_title">Adressen gevonden in deze tekst</string>
+    <string name="incoming_address_choices_title">Bedoelde je een van deze adressen?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Deze plek ligt buiten het gebied dat de geïnstalleerde gegevens dekken: geen enkele reis kan er komen.</string>
+    <string name="incoming_unreadable_link">Deze link zegt niet waar je heen moet: de plek erin kon niet worden gelezen.</string>
 
     <string name="favourites_title">Favorieten</string>
     <string name="favourites_open">Bekijk favorieten</string>
@@ -353,6 +354,9 @@
     <string name="journey_no_route">Geen begaanbare route tussen deze twee punten.</string>
     <string name="journey_graph_missing">De routegegevens zijn niet geïnstalleerd. Voeg ze toe via het scherm Opslag.</string>
     <string name="journey_outside_coverage">Dit punt ligt buiten het gebied dat de geïnstalleerde gegevens dekken.</string>
+    <string name="journey_outside_coverage_start">Het startpunt ligt buiten het gebied dat de geïnstalleerde gegevens dekken. Vertrek vanaf een plek daarbinnen.</string>
+    <string name="journey_outside_coverage_destination">De bestemming ligt buiten het gebied dat de geïnstalleerde gegevens dekken. Kies een bestemming daarbinnen.</string>
+    <string name="journey_outside_coverage_both">Geen van beide uiteinden ligt binnen het gebied dat de geïnstalleerde gegevens dekken. Installeer de gegevens van de stad waar je reist.</string>
     <string name="journey_no_stations">Geen station bekend. Vernieuw de stationslijst en probeer het opnieuw.</string>
 
     <!-- "u" is how Dutch abbreviates the hour, in the Netherlands and in
@@ -468,6 +472,7 @@
     <string name="city_proposal_body">Je lijkt in het gebied te zijn dat %1$s dekt. Zullen we die nemen?</string>
     <string name="city_proposal_accept">Ja</string>
     <string name="city_none_nearby">Geen bekend netwerk in de buurt. Kies een stad uit de lijst.</string>
+    <string name="city_location_denied">Zonder locatie kun je je stad uit de lijst kiezen of haar op naam zoeken.</string>
     <string name="action_cancel">Annuleren</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -493,10 +498,13 @@
     <string name="storage_checking">Het manifest lezen…</string>
     <string name="storage_up_to_date">Alles is up-to-date.</string>
     <string name="storage_download_pending">%1$s downloaden</string>
+    <string name="storage_download_starting">De download starten…</string>
     <string name="storage_downloading">%1$s · %2$s van %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">De gepubliceerde gegevens zijn die van %1$s, niet die van %2$s. Er is niets gedownload: je zou de kaart en de adressen van een andere stad hebben gekregen.</string>
     <string name="storage_wifi_warning">Je zit niet op wifi. Deze download kan zwaar wegen op een mobiel abonnement.</string>
     <string name="dataset_update_available">Update beschikbaar</string>
+    <string name="dataset_download_failed">Downloaden mislukt. %1$s</string>
 
     <string name="dataset_absent">Niet geïnstalleerd</string>
     <string name="dataset_installed">%1$s · %2$s</string>

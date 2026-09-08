@@ -230,9 +230,10 @@
     <string name="incoming_needs_index">この住所はオフラインの住所インデックスで調べる必要がありますが、インストールされていません。</string>
     <!-- %1$s is the text received from the other application. -->
     <string name="incoming_address_not_found">「%1$s」は、対象とする範囲のどの住所とも一致しません。</string>
-    <string name="incoming_address_choices_title">このテキストで見つかった住所</string>
+    <string name="incoming_address_choices_title">もしかして、次のいずれかの住所ですか？</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">この場所は、インストール済みのデータが対象とする範囲の外にあります。ここへ向かう経路は計算できません。</string>
+    <string name="incoming_unreadable_link">このリンクは行き先を示していません。含まれている場所を読み取れませんでした。</string>
 
     <!-- Favourites (SPEC §7.5). -->
     <string name="favourites_title">お気に入り</string>
@@ -425,6 +426,9 @@
     <string name="journey_no_route">この2地点を結ぶ通行可能な道がありません。</string>
     <string name="journey_graph_missing">経路データがインストールされていません。ストレージ画面から追加してください。</string>
     <string name="journey_outside_coverage">この地点は、インストール済みのデータが対象とする範囲の外にあります。</string>
+    <string name="journey_outside_coverage_start">出発地は、インストール済みのデータが対象とする範囲の外にあります。範囲内の地点から出発してください。</string>
+    <string name="journey_outside_coverage_destination">目的地は、インストール済みのデータが対象とする範囲の外にあります。範囲内の地点を選んでください。</string>
+    <string name="journey_outside_coverage_both">どちらの地点も、インストール済みのデータが対象とする範囲に入っていません。移動する都市のデータをインストールしてください。</string>
     <string name="journey_no_stations">ステーションの情報がありません。ステーションの一覧を更新して、もう一度お試しください。</string>
 
     <!-- Durations, formatted through the localisation APIs (SPEC §9). Japanese
@@ -583,6 +587,7 @@
     <string name="city_proposal_body">%1$sが対象とする地域にいるようです。これで進めますか？</string>
     <string name="city_proposal_accept">はい</string>
     <string name="city_none_nearby">この近くに、対応するサービスはありません。一覧から都市を選んでください。</string>
+    <string name="city_location_denied">位置情報がなくても、一覧から都市を選ぶか、名前で検索できます。</string>
     <string name="action_cancel">キャンセル</string>
 
     <!-- File size units. Base 1000, as everywhere else in the system.
@@ -616,12 +621,15 @@
     <string name="storage_up_to_date">すべて最新です。</string>
     <!-- %1$s is an already formatted size, "42.5 MB" for instance. -->
     <string name="storage_download_pending">%1$sをダウンロード</string>
+    <string name="storage_download_starting">ダウンロードを開始しています…</string>
     <!-- %1$s is the file name, %2$s the part received, %3$s the total size. -->
     <string name="storage_downloading">%1$s・%2$s / %3$s</string>
     <!-- %1$s is the set's name, %2$s the reason for the failure. -->
     <string name="storage_download_failed">%1$s：%2$s</string>
+    <string name="storage_manifest_other_network">公開されているデータは %2$s ではなく %1$s のものです。何もダウンロードしていません。別の都市の地図と住所に入れ替わるところでした。</string>
     <string name="storage_wifi_warning">Wi-Fi に接続していません。このダウンロードはモバイルデータを大きく消費することがあります。</string>
     <string name="dataset_update_available">アップデートを利用できます</string>
+    <string name="dataset_download_failed">ダウンロードに失敗しました。%1$s</string>
 
     <string name="dataset_absent">未インストール</string>
     <!-- %1$s is a size, %2$s a date. Example: 「35.0 MB・2026年8月9日」. -->

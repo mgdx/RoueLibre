@@ -235,9 +235,10 @@
     <string name="incoming_needs_index">Diese Adresse muss im Offline-Index nachgeschlagen werden, und der ist nicht installiert.</string>
     <!-- %1$s is the text received from the other application. -->
     <string name="incoming_address_not_found">„%1$s“ passt zu keiner Adresse im abgedeckten Gebiet.</string>
-    <string name="incoming_address_choices_title">In diesem Text gefundene Adressen</string>
+    <string name="incoming_address_choices_title">Meinst du eine dieser Adressen?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Dieser Ort liegt außerhalb des Gebiets, das die installierten Daten abdecken: Keine Route kann dorthin führen.</string>
+    <string name="incoming_unreadable_link">Dieser Link sagt nicht, wohin es gehen soll: Sein Ort ließ sich nicht lesen.</string>
 
     <!-- Favourites (SPEC §7.5). -->
     <string name="favourites_title">Favoriten</string>
@@ -429,6 +430,9 @@
     <string name="journey_no_route">Kein befahrbarer Weg zwischen diesen beiden Punkten.</string>
     <string name="journey_graph_missing">Die Routendaten sind nicht installiert. Füge sie unter „Speicher“ hinzu.</string>
     <string name="journey_outside_coverage">Dieser Punkt liegt außerhalb des Gebiets, das die installierten Daten abdecken.</string>
+    <string name="journey_outside_coverage_start">Der Startpunkt liegt außerhalb des Gebiets, das die installierten Daten abdecken. Starte an einem Punkt innerhalb davon.</string>
+    <string name="journey_outside_coverage_destination">Das Ziel liegt außerhalb des Gebiets, das die installierten Daten abdecken. Wähle ein Ziel innerhalb davon.</string>
+    <string name="journey_outside_coverage_both">Keiner der beiden Punkte liegt in dem Gebiet, das die installierten Daten abdecken. Installiere die Daten der Stadt, in der du unterwegs bist.</string>
     <string name="journey_no_stations">Keine Station bekannt. Aktualisiere die Stationsliste und versuch es dann noch einmal.</string>
 
     <!-- Durations, formatted through the localisation APIs (SPEC §9).
@@ -578,6 +582,7 @@
     <string name="city_proposal_body">Du scheinst in dem Gebiet zu sein, das %1$s abdeckt. Nehmen wir das?</string>
     <string name="city_proposal_accept">Ja</string>
     <string name="city_none_nearby">Kein bekanntes Netz in der Nähe. Wähle eine Stadt aus der Liste.</string>
+    <string name="city_location_denied">Ohne Standort kannst du deine Stadt aus der Liste wählen oder nach ihrem Namen suchen.</string>
     <string name="action_cancel">Abbrechen</string>
 
     <!-- File size units. Base 1000, as everywhere else in the system.
@@ -611,12 +616,15 @@
     <string name="storage_up_to_date">Alles ist aktuell.</string>
     <!-- %1$s is an already formatted size, "42,5 MB" for instance. -->
     <string name="storage_download_pending">%1$s herunterladen</string>
+    <string name="storage_download_starting">Download wird gestartet…</string>
     <!-- %1$s is the file name, %2$s the part received, %3$s the total size. -->
     <string name="storage_downloading">%1$s · %2$s von %3$s</string>
     <!-- %1$s is the set's name, %2$s the reason for the failure. -->
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Die veröffentlichten Daten sind die von %1$s, nicht die von %2$s. Es wurde nichts heruntergeladen: Du hättest die Karte und die Adressen einer anderen Stadt bekommen.</string>
     <string name="storage_wifi_warning">Du bist nicht im WLAN. Dieser Download kann einen Mobilfunktarif schwer belasten.</string>
     <string name="dataset_update_available">Update verfügbar</string>
+    <string name="dataset_download_failed">Download fehlgeschlagen. %1$s</string>
 
     <string name="dataset_absent">Nicht installiert</string>
     <!-- %1$s is a size, %2$s a date. Example: "35,0 MB · 9. August 2026". -->

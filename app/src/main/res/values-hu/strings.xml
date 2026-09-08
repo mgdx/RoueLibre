@@ -230,9 +230,10 @@
     <!-- %1$s is what the other application sent: a raw string, which may start
          with anything. It follows a colon rather than an article. -->
     <string name="incoming_address_not_found">Nincs ilyen cím a lefedett területen: „%1$s”.</string>
-    <string name="incoming_address_choices_title">Ebben a szövegben talált címek</string>
+    <string name="incoming_address_choices_title">Ezek közül valamelyik címre gondoltál?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Ez a hely a telepített adatok által lefedett területen kívül esik: nem vezet ide útvonalterv.</string>
+    <string name="incoming_unreadable_link">Ez a hivatkozás nem mondja meg, hová kell menni: a benne lévő helyet nem sikerült beolvasni.</string>
 
     <string name="favourites_title">Kedvencek</string>
     <string name="favourites_open">A kedvencek megtekintése</string>
@@ -402,6 +403,9 @@
     <string name="journey_no_route">Nincs járható útvonal a két pont között.</string>
     <string name="journey_graph_missing">Az útvonaladatok nincsenek telepítve. Add hozzá őket a Tárhely képernyőn.</string>
     <string name="journey_outside_coverage">Ez a pont a telepített adatok által lefedett területen kívül esik.</string>
+    <string name="journey_outside_coverage_start">A kiindulási pont a telepített adatok által lefedett területen kívül esik. Indulj a területen belülről.</string>
+    <string name="journey_outside_coverage_destination">A célpont a telepített adatok által lefedett területen kívül esik. Válassz célt a területen belül.</string>
+    <string name="journey_outside_coverage_both">Egyik végpont sincs a telepített adatok által lefedett területen. Telepítsd annak a városnak az adatait, amelyikben utazol.</string>
     <string name="journey_no_stations">Nincs ismert állomás. Frissítsd az állomáslistát, majd próbáld újra.</string>
 
     <!-- Hungarian writes durations out: *perc*, and *ó* where the hours and
@@ -527,6 +531,7 @@
     <string name="city_proposal_body">Úgy tűnik, olyan területen vagy, amelyet ez a hálózat fed le: %1$s. Legyen ez a beállított hálózat?</string>
     <string name="city_proposal_accept">Igen</string>
     <string name="city_none_nearby">A közelben nincs ismert hálózat. Válassz egy várost a listából.</string>
+    <string name="city_location_denied">Helymeghatározás nélkül válaszd ki a városodat a listából, vagy keress rá a nevével.</string>
     <string name="action_cancel">Mégse</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -554,10 +559,13 @@
     <!-- %1$s is a dataset's name, which decides its own article: *a
          térképadatok*, but *az útvonaladatok*. It stands behind a colon. -->
     <string name="storage_download_pending">Letöltés: %1$s</string>
+    <string name="storage_download_starting">A letöltés indul…</string>
     <string name="storage_downloading">%1$s · %2$s / %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">A közzétett adatok ehhez a hálózathoz tartoznak: %1$s – nem ehhez: %2$s. Nem töltődött le semmi: egy másik város térképét és címeit kaptad volna.</string>
     <string name="storage_wifi_warning">Nem Wi-Fi-hálózaton vagy. Ez a letöltés komolyan megterhelheti a mobiladat-keretedet.</string>
     <string name="dataset_update_available">Rendelkezésre áll frissítés</string>
+    <string name="dataset_download_failed">A letöltés nem sikerült. %1$s</string>
 
     <string name="dataset_absent">Nincs telepítve</string>
     <string name="dataset_installed">%1$s · %2$s</string>

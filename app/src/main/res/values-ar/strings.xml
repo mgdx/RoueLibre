@@ -283,9 +283,10 @@
     <string name="incoming_show_me">إظهار</string>
     <string name="incoming_needs_index">يجب البحث عن هذا العنوان في فهرس العناوين، وهو غير مثبّت.</string>
     <string name="incoming_address_not_found">&#x200F;«%1$s» لا يطابق أي عنوان في المنطقة المغطّاة.</string>
-    <string name="incoming_address_choices_title">العناوين الموجودة في هذا النص</string>
+    <string name="incoming_address_choices_title">هل تقصد أحد هذه العناوين؟</string>
     <string name="incoming_address_choice">&#x200F;%1$s\n&#x200F;%2$s</string>
     <string name="incoming_outside_coverage">يقع هذا المكان خارج المنطقة التي تغطّيها البيانات المثبّتة: لا يمكن لأي رحلة الوصول إليه.</string>
+    <string name="incoming_unreadable_link">لا يقول هذا الرابط إلى أين نذهب: تعذّرت قراءة المكان الوارد فيه.</string>
 
     <string name="favourites_title">المفضّلة</string>
     <string name="favourites_open">عرض المفضّلة</string>
@@ -429,6 +430,9 @@
     <string name="journey_no_route">لا مسار سالك بين هاتين النقطتين.</string>
     <string name="journey_graph_missing">بيانات المسارات غير مثبّتة. أضفها من شاشة التخزين.</string>
     <string name="journey_outside_coverage">تقع هذه النقطة خارج المنطقة التي تغطّيها البيانات المثبّتة.</string>
+    <string name="journey_outside_coverage_start">تقع نقطة الانطلاق خارج المنطقة التي تغطّيها البيانات المثبّتة. انطلق من نقطة داخلها.</string>
+    <string name="journey_outside_coverage_destination">تقع الوجهة خارج المنطقة التي تغطّيها البيانات المثبّتة. اختر وجهة داخلها.</string>
+    <string name="journey_outside_coverage_both">لا تقع أي من النقطتين داخل المنطقة التي تغطّيها البيانات المثبّتة. ثبّت بيانات المدينة التي تتنقّل فيها.</string>
     <string name="journey_no_stations">لا محطة معروفة. حدّث قائمة المحطات، ثم أعد المحاولة.</string>
 
     <!-- Durations. Neither is a plural in the source, which writes "min" and
@@ -568,6 +572,7 @@
     <string name="city_proposal_body">يبدو أنك في المنطقة التي يغطّيها %1$s. هل نعتمدها؟</string>
     <string name="city_proposal_accept">نعم</string>
     <string name="city_none_nearby">لا توجد شبكة دراجات معروفة قريبة من هنا. اختر مدينة من القائمة.</string>
+    <string name="city_location_denied">بدون تحديد الموقع، اختر مدينتك من القائمة أو ابحث عنها بالاسم.</string>
     <string name="action_cancel">إلغاء</string>
 
     <string name="size_bytes">&#x200F;%1$s بايت</string>
@@ -593,10 +598,13 @@
     <string name="storage_checking">جارٍ قراءة ملف البيان…</string>
     <string name="storage_up_to_date">كل شيء محدَّث.</string>
     <string name="storage_download_pending">تنزيل %1$s</string>
+    <string name="storage_download_starting">جارٍ بدء التنزيل…</string>
     <string name="storage_downloading">&#x200F;%1$s · %2$s من %3$s</string>
     <string name="storage_download_failed">&#x200F;%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">البيانات المنشورة هي بيانات %1$s وليست بيانات %2$s. لم يُنزَّل أي شيء: كنت ستحصل على خريطة مدينة أخرى وعناوينها بدلاً من مدينتك.</string>
     <string name="storage_wifi_warning">لست متصلاً بشبكة Wi-Fi. وقد يثقل هذا التنزيل على باقة الجوّال.</string>
     <string name="dataset_update_available">يتوفّر تحديث</string>
+    <string name="dataset_download_failed">فشل التنزيل. %1$s</string>
 
     <string name="dataset_absent">لم يتم التثبيت</string>
     <string name="dataset_installed">&#x200F;%1$s · %2$s</string>

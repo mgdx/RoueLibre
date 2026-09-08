@@ -277,9 +277,10 @@
     <string name="incoming_show_me">Mostra</string>
     <string name="incoming_needs_index">Aquesta adreça s’ha de cercar a l’índex sense connexió, que no està instal·lat.</string>
     <string name="incoming_address_not_found">«%1$s» no coincideix amb cap adreça de la zona coberta.</string>
-    <string name="incoming_address_choices_title">Adreces trobades en aquest text</string>
+    <string name="incoming_address_choices_title">Volies dir alguna d’aquestes adreces?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Aquest lloc és fora de la zona que cobreixen les dades instal·lades: no hi pot arribar cap ruta.</string>
+    <string name="incoming_unreadable_link">Aquest enllaç no diu on anar: no s’ha pogut llegir el lloc que indica.</string>
 
     <string name="favourites_title">Preferits</string>
     <string name="favourites_open">Mostra els preferits</string>
@@ -446,6 +447,9 @@
     <string name="journey_no_route">No hi ha cap camí practicable entre aquests dos punts.</string>
     <string name="journey_graph_missing">El graf de rutes no està instal·lat. Afegeix-lo des de la pantalla d’emmagatzematge.</string>
     <string name="journey_outside_coverage">Aquest punt és fora de la zona que cobreixen les dades instal·lades.</string>
+    <string name="journey_outside_coverage_start">El punt de partida és fora de la zona que cobreixen les dades instal·lades. Surt d’un punt que hi sigui dins.</string>
+    <string name="journey_outside_coverage_destination">La destinació és fora de la zona que cobreixen les dades instal·lades. Tria’n una que hi sigui dins.</string>
+    <string name="journey_outside_coverage_both">Cap dels dos extrems no és dins la zona que cobreixen les dades instal·lades. Instal·la les dades de la ciutat on viatges.</string>
     <string name="journey_no_stations">No es coneix cap estació. Actualitza la llista d’estacions i torna-ho a provar.</string>
 
     <!-- %1$d is a number of minutes; %1$d h and %2$02d min for hours. -->
@@ -588,6 +592,7 @@
     <string name="city_proposal_body">Sembla que ets a la zona que cobreix %1$s. La fem servir?</string>
     <string name="city_proposal_accept">Sí</string>
     <string name="city_none_nearby">No hi ha cap xarxa coneguda a prop d’aquí. Tria una ciutat de la llista.</string>
+    <string name="city_location_denied">Sense ubicació, tria la teva ciutat de la llista o cerca-la pel nom.</string>
     <string name="action_cancel">Cancel·la</string>
 
     <!-- %1$s is a number already written in the displayed language. -->
@@ -617,10 +622,13 @@
     <string name="storage_checking">S’està consultant el manifest…</string>
     <string name="storage_up_to_date">Tot està actualitzat.</string>
     <string name="storage_download_pending">Baixa %1$s</string>
+    <string name="storage_download_starting">S’està iniciant la baixada…</string>
     <string name="storage_downloading">%1$s · %2$s de %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Les dades publicades són les de %1$s, no les de %2$s. No s’ha baixat res: hauries obtingut el mapa i les adreces d’una altra ciutat.</string>
     <string name="storage_wifi_warning">No estàs en una xarxa Wi-Fi. Aquesta baixada pot consumir moltes dades mòbils.</string>
     <string name="dataset_update_available">Actualització disponible</string>
+    <string name="dataset_download_failed">La baixada ha fallat. %1$s</string>
 
     <string name="dataset_absent">No instal·lat</string>
     <string name="dataset_installed">%1$s · %2$s</string>

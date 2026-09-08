@@ -284,9 +284,10 @@
     <string name="incoming_show_me">Ver</string>
     <string name="incoming_needs_index">Este enderezo hai que buscalo no índice sen conexión, que non está instalado.</string>
     <string name="incoming_address_not_found">«%1$s» non coincide con ningún enderezo da zona cuberta.</string>
-    <string name="incoming_address_choices_title">Enderezos atopados neste texto</string>
+    <string name="incoming_address_choices_title">Querías dicir algún destes enderezos?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Este lugar queda fóra da zona que cobren os datos instalados: ningunha ruta pode chegar ata el.</string>
+    <string name="incoming_unreadable_link">Esta ligazón non di a onde ir: non se puido ler o lugar que indica.</string>
 
     <string name="favourites_title">Favoritos</string>
     <string name="favourites_open">Ver os favoritos</string>
@@ -455,6 +456,9 @@
     <string name="journey_no_route">Non hai ningún camiño practicable entre estes dous puntos.</string>
     <string name="journey_graph_missing">O grafo de rutas non está instalado. Engádeo desde a pantalla de almacenamento.</string>
     <string name="journey_outside_coverage">Este punto queda fóra da zona que cobren os datos instalados.</string>
+    <string name="journey_outside_coverage_start">O punto de partida queda fóra da zona que cobren os datos instalados. Parte dun punto que estea dentro.</string>
+    <string name="journey_outside_coverage_destination">O destino queda fóra da zona que cobren os datos instalados. Escolle un que estea dentro.</string>
+    <string name="journey_outside_coverage_both">Ningún dos dous extremos queda dentro da zona que cobren os datos instalados. Instala os datos da cidade pola que viaxas.</string>
     <string name="journey_no_stations">Non se coñece ningunha estación. Actualiza a lista de estacións e téntao de novo.</string>
 
     <string name="duration_minutes">%1$d min</string>
@@ -582,6 +586,7 @@
     <string name="city_proposal_body">Parece que estás na zona que cobre %1$s. Usámola?</string>
     <string name="city_proposal_accept">Si</string>
     <string name="city_none_nearby">Non hai ningunha rede coñecida preto de aquí. Escolle unha cidade da lista.</string>
+    <string name="city_location_denied">Sen localización, escolle a túa cidade da lista ou búscaa polo seu nome.</string>
     <string name="action_cancel">Cancelar</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -610,10 +615,13 @@
     <string name="storage_checking">Lendo o manifesto…</string>
     <string name="storage_up_to_date">Todo está actualizado.</string>
     <string name="storage_download_pending">Descargar %1$s</string>
+    <string name="storage_download_starting">Iniciando a descarga…</string>
     <string name="storage_downloading">%1$s · %2$s de %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Os datos publicados son os de %1$s, non os de %2$s. Non se descargou nada: terías o mapa e os enderezos doutra cidade.</string>
     <string name="storage_wifi_warning">Non estás na wifi. Esta descarga pode consumir moitos datos móbiles.</string>
     <string name="dataset_update_available">Actualización dispoñible</string>
+    <string name="dataset_download_failed">A descarga fallou. %1$s</string>
 
     <string name="dataset_absent">Non instalado</string>
     <string name="dataset_installed">%1$s · %2$s</string>

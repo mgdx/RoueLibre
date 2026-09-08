@@ -226,9 +226,10 @@
     <string name="incoming_show_me">Shfaq</string>
     <string name="incoming_needs_index">Kjo adresë duhet kërkuar në indeksin jashtë linje, i cili nuk është i instaluar.</string>
     <string name="incoming_address_not_found">„%1$s“ nuk përputhet me asnjë adresë në zonën e mbuluar.</string>
-    <string name="incoming_address_choices_title">Adresat e gjetura në këtë tekst</string>
+    <string name="incoming_address_choices_title">Mos doje të thoshe një nga këto adresa?</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
     <string name="incoming_outside_coverage">Ky vend ndodhet jashtë zonës që mbulojnë të dhënat e instaluara: asnjë udhëtim nuk arrin deri atje.</string>
+    <string name="incoming_unreadable_link">Kjo lidhje nuk thotë ku të shkosh: vendi i saj nuk u lexua dot.</string>
 
     <string name="favourites_title">Të preferuarat</string>
     <string name="favourites_open">Shih të preferuarat</string>
@@ -382,6 +383,9 @@
     <string name="journey_no_route">Nuk ka rrugë të kalueshme mes këtyre dy pikave.</string>
     <string name="journey_graph_missing">Grafi i itinerarëve nuk është i instaluar. Shtoje nga ekrani i hapësirës ruajtëse.</string>
     <string name="journey_outside_coverage">Kjo pikë ndodhet jashtë zonës që mbulojnë të dhënat e instaluara.</string>
+    <string name="journey_outside_coverage_start">Pika e nisjes ndodhet jashtë zonës që mbulojnë të dhënat e instaluara. Nisu nga një pikë brenda saj.</string>
+    <string name="journey_outside_coverage_destination">Destinacioni ndodhet jashtë zonës që mbulojnë të dhënat e instaluara. Zgjidh një destinacion brenda saj.</string>
+    <string name="journey_outside_coverage_both">Asnjëri nga të dy skajet nuk ndodhet brenda zonës që mbulojnë të dhënat e instaluara. Instalo të dhënat e qytetit ku po udhëton.</string>
     <string name="journey_no_stations">Nuk njihet asnjë stacion. Rifresko listën e stacioneve, pastaj provo përsëri.</string>
 
     <string name="duration_minutes">%1$d min</string>
@@ -499,6 +503,7 @@
     <string name="city_proposal_body">Duket se ndodhesh në zonën që mbulon %1$s. Të përdoret ky rrjet?</string>
     <string name="city_proposal_accept">Po</string>
     <string name="city_none_nearby">Asnjë rrjet i njohur këtu afër. Zgjidh një qytet nga lista.</string>
+    <string name="city_location_denied">Pa vendndodhje, zgjidh qytetin tënd nga lista ose kërkoje sipas emrit.</string>
     <string name="action_cancel">Anulo</string>
 
     <string name="size_bytes">%1$s B</string>
@@ -529,10 +534,13 @@
     <string name="storage_checking">Po lexohet manifesti…</string>
     <string name="storage_up_to_date">Gjithçka është e përditësuar.</string>
     <string name="storage_download_pending">Shkarko %1$s</string>
+    <string name="storage_download_starting">Po niset shkarkimi…</string>
     <string name="storage_downloading">%1$s · %2$s nga %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
+    <string name="storage_manifest_other_network">Të dhënat e publikuara janë të %1$s, jo të %2$s. Nuk u shkarkua asgjë: do të kishe marrë hartën dhe adresat e një qyteti tjetër.</string>
     <string name="storage_wifi_warning">Nuk je në Wi-Fi. Ky shkarkim mund të rëndojë shumë mbi një plan celular.</string>
     <string name="dataset_update_available">Ofrohet përditësim</string>
+    <string name="dataset_download_failed">Shkarkimi dështoi. %1$s</string>
 
     <string name="dataset_absent">Nuk është instaluar</string>
     <string name="dataset_installed">%1$s · %2$s</string>
