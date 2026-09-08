@@ -9,8 +9,8 @@ import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
 /**
- * What the rules the manifest names promise about data leaving the device
- * (SPEC §2, C3; SPEC §8).
+ * What the manifest and the rules it names promise about data leaving the
+ * device (SPEC §2, C3; SPEC §8).
  *
  * These are files rather than code, and Android reads them from the resources,
  * so nothing on the JVM can be asked what the application does with them. The
@@ -48,6 +48,9 @@ class ManifestTest {
             "The resource directory was not handed to the test."
         },
     )
+
+    /** The manifest, sibling of the resource directory the build names. */
+    private val manifest = resources.resolveSibling("AndroidManifest.xml")
 
     private fun rules(name: String): Element = DocumentBuilderFactory.newInstance()
         .newDocumentBuilder()
@@ -105,5 +108,16 @@ class ManifestTest {
             val text = resources.resolve("xml/$name.xml").readText()
             assertFalse("$name still holds the template's TODO", text.contains("TODO"))
         }
+    }
+
+    @Test
+    fun `the activity claims no task affinity`() {
+        // Left unwritten, the affinity is the package name, which any
+        // application may declare as its own and reparent itself into. What a
+        // counterfeit screen would be shown here is a home address (SPEC §7.6).
+        assertTrue(
+            "MainActivity does not empty android:taskAffinity",
+            manifest.readText().contains("""android:taskAffinity=""""),
+        )
     }
 }
