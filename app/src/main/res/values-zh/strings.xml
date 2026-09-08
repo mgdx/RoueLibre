@@ -1,587 +1,662 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Chinese — TO BE TRANSLATED.
+    Chinese translation, in **Simplified characters**, mainland vocabulary.
 
-    Every string below still holds its English text: this file is a starting
-    point, not a translation. Translate the contents of the tags, never their
-    `name` attribute, and read CONTRIBUTING.md first — placeholders keep their
-    number, plurals keep the categories of this language, and apostrophes are
-    escaped.
+    Translated from `values/strings.xml`, which is the source (SPEC §9). Its
+    comments are carried over here, so that whoever touches a string next
+    reads what its placeholders stand for and on which screen it appears.
 
-    While a string is left in English, that is what this language's users will
-    read. The application's default language is English, in `values/`, which is
-    what this file was copied from.
+    The folder is `values-zh`, with no region: Android serves it to every
+    Chinese reader whose more precise folder is missing, and its own default
+    for a bare `zh` is Simplified. Writing Traditional here would reach a
+    Hong Kong or Taiwan reader in their script and a Beijing one in the
+    wrong one, where Simplified reaches the largest readership correctly and
+    leaves `values-zh-rTW` and `values-zh-rHK` free for whoever writes them.
+    The vocabulary follows the same region: 自行车 rather than 單車,
+    存储空间 rather than 儲存空間, 应用 rather than 應用程式 — and the
+    Simplified Android lexicon throughout.
+
+    The typography is Chinese:
+      · no spaces between words, and full-width punctuation — ，。：、（）
+        「」“” — which already carries the space a Latin mark would need
+        beside it, so nothing is padded around it;
+      · figures, unit symbols and Latin names stay half-width, and a
+        **half-width space separates Chinese characters from a Latin run or
+        a figure**: 「仅通过 WLAN 下载」, 「GBFS 格式」, 「ODbL 许可」,
+        「版本 %1$s」, 「第 %1$d 步，共 %2$d 步」. That is what Android's own
+        Simplified strings do — 「%1$d 个应用正在消耗电量」, 「Enter 键」 —
+        and a placeholder follows the same rule by what it **holds**: a city,
+        a station, an address, a size or a count takes the space, a fragment
+        this file wrote itself does not — 「设置%1$s」, where %1$s is 家;
+      · the space between a figure and the unit or classifier naming it is a
+        **non-breaking one** (U+00A0), here as in every language:
+        `UnitTypographyTest` holds the whole file to it, so that a summary
+        never ends a line on 「5」 and opens the next on 「m 爬升」;
+      · a question keeps its mark, and the mark is the full-width ？;
+      · a quoted name is set in the full-width “ ”, tight, as Android writes
+        「已将“%1$s”复制到剪贴板。」;
+      · the separator the English writes `·` is kept as `·` (U+00B7), which
+        is the interpunct a Chinese reader already knows, with the ordinary
+        spaces the source gives it;
+      · **Wi-Fi is written WLAN.** Simplified Android says WLAN wherever the
+        English says Wi-Fi — `settings:wifi` is 「WLAN」 — and the switch that
+        names it here has to be the word the reader will look for in their
+        own settings;
+      · no apostrophe is written anywhere, so nothing here is escaped;
+      · Chinese has **one plural category, `other`**, and CLDR gives it no
+        other. A noun does not agree in number, so the single item reads
+        correctly for nought, one and a thousand alike — but only if the
+        **classifier** is right, and that is where the work went: 辆 for
+        bikes, 个 for docking places and for stations, 秒 · 分钟 · 小时 · 天 ·
+        个月 for the age of the data;
+      · the register is neutral and plain, addressing the reader as 您 where
+        a pronoun is unavoidable and dropping it where Chinese would. SPEC §9
+        asks the French for `tu`; Chinese has no such choice to make, and
+        Android's own Simplified strings write 您.
+
+    The words settled on, and why, are in docs/glossary/zh.md. See
+    CONTRIBUTING.md to submit a correction.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">Roue Libre</string>
 
-    <string name="stations_title">Stations</string>
+    <string name="stations_title">站点</string>
 
     <plurals name="bikes_available">
-        <item quantity="other">%1$d bikes</item>
+        <item quantity="other">%1$d 辆车</item>
     </plurals>
 
     <plurals name="docks_available">
-        <item quantity="other">%1$d docks</item>
+        <item quantity="other">%1$d 个空位</item>
     </plurals>
 
-    <string name="station_content_description">%1$s, %2$s, %3$s</string>
-    <string name="station_out_of_service">Out of service</string>
-    <string name="station_out_of_service_since">%1$s · last reported %2$s</string>
-    <string name="station_availability_unknown">Availability unknown</string>
+    <string name="station_content_description">%1$s、%2$s、%3$s</string>
+    <string name="station_out_of_service">暂停服务</string>
+    <string name="station_out_of_service_since">%1$s · %2$s上报</string>
+    <string name="station_availability_unknown">可用情况未知</string>
 
     <!-- What a station is called when its feed publishes no name for it and no
          street to stand in for one. The station itself is kept: it is real and
          it holds bikes, and dropping it would take it off the map over a
          mistyped string. -->
-    <string name="station_unnamed">Unnamed station</string>
+    <string name="station_unnamed">未命名站点</string>
 
-    <string name="station_beyond_area_short">beyond the map</string>
-    <string name="station_beyond_area">This station lies outside the area the installed data covers. Its bikes are counted live, but no map and no route can reach it.</string>
+    <string name="station_beyond_area_short">超出地图范围</string>
+    <string name="station_beyond_area">该站点位于已安装数据覆盖的范围之外。它的车辆数量仍会实时统计，但地图和路线都无法到达。</string>
 
-    <string name="search_stations_hint">Search for a station</string>
-    <string name="search_stations_clear">Clear the search</string>
-    <string name="stations_no_match_title">No station found</string>
-    <string name="stations_no_match_message">Nothing matches “%1$s”. Check the spelling, or clear the search.</string>
-    <string name="action_clear_search">Clear the search</string>
+    <string name="search_stations_hint">搜索站点</string>
+    <string name="search_stations_clear">清除搜索内容</string>
+    <string name="stations_no_match_title">未找到站点</string>
+    <string name="stations_no_match_message">没有与“%1$s”匹配的结果。请检查拼写，或清除搜索内容。</string>
+    <string name="action_clear_search">清除搜索内容</string>
 
-    <string name="mode_bikes">Bikes</string>
-    <string name="mode_docks">Free docks</string>
-    <string name="mode_bikes_description">Show available bikes</string>
-    <string name="mode_docks_description">Show free docks</string>
+    <string name="mode_bikes">可借车辆</string>
+    <string name="mode_docks">可还空位</string>
+    <string name="mode_bikes_description">显示可借的车辆</string>
+    <string name="mode_docks_description">显示可还的空位</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
-         (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
-    <string name="map_bikes_all_kinds">All bikes</string>
-    <string name="map_bikes_mechanical">Mechanical</string>
-    <string name="map_bikes_electric">Electric</string>
-    <string name="map_bikes_all_kinds_description">Every bike is counted. Tap to count the mechanical ones only.</string>
-    <string name="map_bikes_mechanical_description">Mechanical bikes are counted. Tap to count the electric ones only.</string>
-    <string name="map_bikes_electric_description">Electric bikes are counted. Tap to count them all.</string>
+         (SPEC §7.1). Named after what is shown, like the toggle beside it.
+         普通车 and 助力车 are the short forms; the full nouns, 普通自行车 and
+         电动助力自行车, are written where the sentence has room. -->
+    <string name="map_bikes_all_kinds">全部车辆</string>
+    <string name="map_bikes_mechanical">普通车</string>
+    <string name="map_bikes_electric">助力车</string>
+    <string name="map_bikes_all_kinds_description">正在统计全部车辆。点按即可只统计普通车。</string>
+    <string name="map_bikes_mechanical_description">正在统计普通车。点按即可只统计助力车。</string>
+    <string name="map_bikes_electric_description">正在统计助力车。点按即可统计全部车辆。</string>
     <plurals name="counterpart_bikes" tools:ignore="ImpliedQuantity">
-        <item quantity="other">bikes</item>
+        <item quantity="other">车辆</item>
     </plurals>
     <plurals name="counterpart_docks" tools:ignore="ImpliedQuantity">
-        <item quantity="other">free docks</item>
+        <item quantity="other">空位</item>
     </plurals>
     <string name="counterpart_none">—</string>
 
     <plurals name="station_detail_with_capacity">
-        <item quantity="other">%1$s · %2$d docks</item>
+        <item quantity="other">%1$s · %2$d 个车位</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
          kinds side by side. %1$s is the mechanical count, %2$s the electric
-         one, each already agreed in number. -->
+         one, each already carrying its own classifier. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
 
     <plurals name="bikes_mechanical">
-        <item quantity="other">%1$d mechanical</item>
+        <item quantity="other">%1$d 辆普通车</item>
     </plurals>
 
     <plurals name="bikes_electric">
-        <item quantity="other">%1$d electric</item>
+        <item quantity="other">%1$d 辆助力车</item>
     </plurals>
 
-    <string name="freshness_just_now">just now</string>
+    <string name="freshness_just_now">刚刚</string>
     <plurals name="freshness_seconds">
-        <item quantity="other">%1$d seconds ago</item>
+        <item quantity="other">%1$d 秒前</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="other">%1$d minutes ago</item>
+        <item quantity="other">%1$d 分钟前</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="other">%1$d hours ago</item>
+        <item quantity="other">%1$d 小时前</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="other">%1$d days ago</item>
+        <item quantity="other">%1$d 天前</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="other">%1$d months ago</item>
+        <item quantity="other">%1$d 个月前</item>
     </plurals>
-    <string name="freshness_stale">Frozen data · %1$s</string>
-    <string name="freshness_fresh">Updated %1$s</string>
-    <string name="freshness_never">Never updated</string>
+    <string name="freshness_stale">数据已停滞 · %1$s</string>
+    <string name="freshness_fresh">%1$s更新</string>
+    <string name="freshness_never">从未更新</string>
 
-    <string name="stations_empty_title">No stations loaded</string>
-    <string name="stations_empty_message">Pull the list down to fetch the network’s stations.</string>
-    <string name="action_refresh">Refresh</string>
-    <string name="action_retry">Try again</string>
+    <string name="stations_empty_title">未加载任何站点</string>
+    <string name="stations_empty_message">下拉列表即可获取该系统的站点。</string>
+    <string name="action_refresh">刷新</string>
+    <string name="action_retry">重试</string>
 
-    <string name="map_open_list">See the list of stations</string>
-    <string name="map_description">Map. Drag with two fingers to move it, pinch with two fingers to zoom in or out, twist with two fingers to turn it, slide two fingers up or down to tilt it.</string>
+    <string name="map_open_list">查看站点列表</string>
+    <string name="map_description">地图。双指拖动可平移，双指开合可缩放，双指旋转可转动，双指上下滑动可倾斜。</string>
     <string name="map_attribution">© OpenStreetMap contributors</string>
-    <string name="map_locate_me">Locate me</string>
-    <string name="map_locating">Finding your position…</string>
-    <string name="map_location_denied">Without location, pick your starting point on the map or by address.</string>
-    <string name="map_location_unavailable">Position unavailable. Check that location is switched on, then try again.</string>
-    <string name="map_outside_city_title">You are elsewhere</string>
-    <string name="map_outside_city_message">Your position falls outside the area %1$s covers, so this map cannot show it. Pick the city you are in to see its stations.</string>
-    <string name="map_outside_city_brief">Your position falls outside the area %1$s covers.</string>
-    <string name="map_needs_tiles_title">The map needs its offline tiles</string>
-    <string name="map_needs_tiles_message">Install the map data from the storage screen. In the meantime, the station list stays usable.</string>
-    <string name="map_needs_city_title">Which city?</string>
-    <string name="map_needs_city_message">Pick the conurbation you want to use. Its data is downloaded afterwards, once and for all.</string>
+    <string name="map_locate_me">定位到我的位置</string>
+    <string name="map_locating">正在获取您的位置…</string>
+    <string name="map_location_denied">没有位置信息，请在地图上选择起点，或按地址选择。</string>
+    <string name="map_location_unavailable">无法获取位置信息。请检查定位是否已开启，然后重试。</string>
+    <string name="map_outside_city_title">您在别处</string>
+    <string name="map_outside_city_message">您所在的位置超出了 %1$s 覆盖的范围，因此这张地图无法显示它。请选择您所在的城市，以查看它的站点。</string>
+    <string name="map_outside_city_brief">您所在的位置超出了 %1$s 覆盖的范围。</string>
+    <string name="map_needs_tiles_title">地图需要它的离线瓦片</string>
+    <string name="map_needs_tiles_message">请在存储空间界面安装地图数据。在此期间，站点列表仍可使用。</string>
+    <string name="map_needs_city_title">哪座城市？</string>
+    <string name="map_needs_city_message">请选择您要使用的城市。它的数据随后一次下载，一劳永逸。</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
-         both are back as the screen opened (SPEC §7.1). -->
-    <string name="map_face_north">Face north and lay the map flat</string>
+         both are back as the screen opened (SPEC §7.1). One press gives back
+         both at once — the north and the flat — which is why 正北朝上 and
+         放平 are written side by side rather than one standing for the pair.
+         The turn is counted in 度; the tilt is named and never measured. -->
+    <string name="map_face_north">正北朝上并放平地图</string>
     <plurals name="map_bearing_description">
-        <item quantity="other">Map turned %1$d degrees from north.</item>
+        <item quantity="other">地图已偏离正北 %1$d 度。</item>
     </plurals>
-    <string name="map_tilted_description">Map tilted.</string>
+    <string name="map_tilted_description">地图已倾斜。</string>
     <plurals name="map_bearing_tilted_description">
-        <item quantity="other">Map turned %1$d degrees from north, and tilted.</item>
+        <item quantity="other">地图已偏离正北 %1$d 度，并已倾斜。</item>
     </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>
-    <string name="welcome_hello_body">This app shows shared bikes on a map and works out a door-to-door trip: walk to a station, ride, then walk the rest of the way.\n\nIt is free and open source. No account, no adverts, no tracker.</string>
-    <string name="welcome_privacy_title">Nothing leaves this phone</string>
-    <string name="welcome_privacy_body">Journeys are computed on this phone. The addresses you look up are sent to nobody, not even while you type.\n\nNo history is kept: not your trips, not your positions, not your destinations.\n\nThe only request that goes out in everyday use asks how many bikes are available.</string>
-    <string name="welcome_fleet_title">What the bike says</string>
-    <string name="welcome_fleet_body">The bike drawn tells you what your city lends.\n\nIt is read from the network\'s own feed, never guessed.</string>
-    <string name="welcome_fleet_mechanical_only">The network lends mechanical bikes only.</string>
-    <string name="welcome_fleet_electric_only">The network lends electric bikes only.</string>
-    <string name="welcome_fleet_mixed">The network lends both kinds.</string>
+    <string name="welcome_hello_body">本应用在地图上显示共享单车，并规划一趟门到门的出行：步行到站点，骑行，再步行走完剩下的路。\n\n它是免费的自由软件。无需账号，没有广告，没有跟踪器。</string>
+    <string name="welcome_privacy_title">没有任何东西离开这部手机</string>
+    <string name="welcome_privacy_body">路线在这部手机上计算。您查找的地址不会发给任何人，输入时也不会。\n\n不保留任何记录：您的行程、您的位置、您的目的地，一概不留。\n\n日常使用中唯一发出的请求，是询问有多少车可借。</string>
+    <string name="welcome_fleet_title">车辆图案说明什么</string>
+    <string name="welcome_fleet_body">画出来的车辆告诉您，您所在的城市出借的是什么。\n\n它读自该系统自己的数据源，绝不猜测。</string>
+    <string name="welcome_fleet_mechanical_only">该系统只出借普通自行车。</string>
+    <string name="welcome_fleet_electric_only">该系统只出借电动助力自行车。</string>
+    <string name="welcome_fleet_mixed">该系统两种车都出借。</string>
 
-    <string name="welcome_data_title">One city, one download</string>
-    <string name="welcome_data_body">The map, the streets and the route calculation live on the device. That is what makes them work without a network — and it means downloading your city\'s data once.\n\nSo start by choosing it. Expect around forty megabytes for a medium-sized conurbation, more for a capital; the size is announced before the download.\n\nYou can also do it later: in the meantime, the station list and their availability remain usable.</string>
-    <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d of %2$d</string>
-    <string name="welcome_continue">Continue</string>
-    <string name="welcome_skip">Skip</string>
-    <string name="welcome_choose_city">Choose my city</string>
-    <string name="welcome_later">Later</string>
-    <string name="welcome_open">Read the introduction again</string>
+    <string name="welcome_data_title">一座城市，一次下载</string>
+    <string name="welcome_data_body">地图、街道和路线计算都在设备上。正因如此它们无需联网即可使用——代价是要把您所在城市的数据下载一次。\n\n所以请先选择城市。中等规模的城市大约 40 MB，首都更多；下载前会告知具体大小。\n\n您也可以稍后再做：在此期间，站点列表和它们的可借情况仍可使用。</string>
+    <string name="welcome_step" tools:ignore="PluralsCandidate">第 %1$d 步，共 %2$d 步</string>
+    <string name="welcome_continue">继续</string>
+    <string name="welcome_skip">跳过</string>
+    <string name="welcome_choose_city">选择我的城市</string>
+    <string name="welcome_later">稍后</string>
+    <string name="welcome_open">重新阅读简介</string>
 
-    <string name="whats_new_title">What’s new</string>
-    <string name="whats_new_done">Continue</string>
-    <string name="whats_new_nothing">This version has no release notes.</string>
-    <string name="whats_new_open">See what’s new</string>
+    <string name="whats_new_title">新变化</string>
+    <string name="whats_new_done">继续</string>
+    <string name="whats_new_nothing">此版本没有发布说明。</string>
+    <string name="whats_new_open">查看新变化</string>
 
-    <string name="incoming_place_default_label">Received place</string>
-    <string name="incoming_show_me">Show</string>
-    <string name="incoming_needs_index">This address has to be looked up in the offline index, which is not installed.</string>
-    <string name="incoming_address_not_found">“%1$s” matches no address in the covered area.</string>
-    <string name="incoming_address_choices_title">Addresses found in this text</string>
+    <string name="incoming_place_default_label">收到的地点</string>
+    <string name="incoming_show_me">显示</string>
+    <string name="incoming_needs_index">该地址需要在离线索引中查找，而索引尚未安装。</string>
+    <string name="incoming_address_not_found">“%1$s”在覆盖范围内没有匹配的地址。</string>
+    <string name="incoming_address_choices_title">在这段文字中找到的地址</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
-    <string name="incoming_outside_coverage">This place lies outside the area covered by the installed data: no journey can reach it.</string>
+    <string name="incoming_outside_coverage">该地点位于已安装数据覆盖的范围之外：没有路线能够到达。</string>
 
-    <string name="favourites_title">Favourites</string>
-    <string name="favourites_open">See favourites</string>
-    <string name="favourites_reorder_hint">Press and hold a row to move it.</string>
+    <string name="favourites_title">收藏</string>
+    <string name="favourites_open">查看收藏</string>
+    <string name="favourites_reorder_hint">长按某一行即可移动它。</string>
 
-    <string name="settings_title">Settings</string>
-    <string name="settings_open">Settings</string>
-    <string name="settings_section_city">City</string>
-    <string name="settings_section_journey">Journey</string>
-    <string name="settings_section_display">Display</string>
-    <string name="settings_section_data">Offline data</string>
+    <string name="settings_title">设置</string>
+    <string name="settings_open">设置</string>
+    <string name="settings_section_city">城市</string>
+    <string name="settings_section_journey">路线</string>
+    <string name="settings_section_display">显示</string>
+    <string name="settings_section_data">离线数据</string>
 
     <!-- The walking pace (SPEC §6, §7.6). Named in words and never in km/h: a
          pace is something one knows about oneself, where a speed is a figure
          nobody has measured about themselves — and a speed written on a button
-         would be read as a promise about the minutes to come. -->
-    <string name="settings_walking_pace_title">Walking pace</string>
-    <string name="settings_walking_pace_slow">Slow</string>
-    <string name="settings_walking_pace_normal">Normal</string>
-    <string name="settings_walking_pace_brisk">Brisk</string>
-    <string name="settings_walking_pace_description">Pace the walking parts of a journey are worked out at</string>
+         would be read as a promise about the minutes to come. 步速 is the pace
+         itself; 速度 would be the figure this refuses to write. -->
+    <string name="settings_walking_pace_title">步速</string>
+    <string name="settings_walking_pace_slow">慢</string>
+    <string name="settings_walking_pace_normal">正常</string>
+    <string name="settings_walking_pace_brisk">快</string>
+    <string name="settings_walking_pace_description">计算路线中步行部分所用的步速</string>
 
-    <string name="settings_theme_title">Theme</string>
-    <string name="settings_theme_system">System</string>
-    <string name="settings_theme_light">Light</string>
-    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_title">主题</string>
+    <string name="settings_theme_system">跟随系统</string>
+    <string name="settings_theme_light">浅色</string>
+    <string name="settings_theme_dark">深色</string>
 
     <!-- Units (SPEC 7.6). The buttons name the units rather than the
          countries: what one gets is what is shown, and no system belongs to a
-         nation. -->
-    <string name="settings_units_title">Units</string>
-    <string name="settings_units_system">System</string>
+         nation. The symbols stay international, as the units button itself
+         writes them; the line under each one names them in Chinese. -->
+    <string name="settings_units_title">单位</string>
+    <string name="settings_units_system">跟随系统</string>
     <string name="settings_units_metric">m · km</string>
     <string name="settings_units_us">ft · mi</string>
     <string name="settings_units_uk">yd · mi</string>
-    <string name="settings_units_description">Units used for distances</string>
-    <string name="settings_units_system_description">Follow the region the device is set to</string>
-    <string name="settings_units_metric_description">Metres and kilometres</string>
-    <string name="settings_units_us_description">Feet and miles</string>
-    <string name="settings_units_uk_description">Yards and miles</string>
+    <string name="settings_units_description">距离所用的单位</string>
+    <string name="settings_units_system_description">跟随设备设定的地区</string>
+    <string name="settings_units_metric_description">米和千米</string>
+    <string name="settings_units_us_description">英尺和英里</string>
+    <string name="settings_units_uk_description">码和英里</string>
 
-    <string name="about_title">About</string>
-    <string name="about_open">About</string>
-    <string name="about_version">Version %1$s</string>
-    <string name="about_privacy_title">Privacy</string>
-    <string name="about_privacy_body">No account, no adverts, no tracker, no unique identifier. Nothing you search for or compute leaves this phone: addresses, journeys and your position stay here, and are not kept. The only request that goes out in everyday use fetches bike availability. Datasets are downloaded only when you ask.</string>
-    <string name="about_attributions_title">Data sources</string>
-    <string name="about_attribution_gbfs">Bike availability: the open data of the network served, published in the GBFS format. In France it is indexed on transport.data.gouv.fr.</string>
-    <string name="about_attribution_osm">Map, routing and landmarks: © OpenStreetMap contributors, ODbL licence.</string>
-    <string name="about_attribution_ban">Addresses and house numbers: Base Adresse Nationale, ODbL licence.</string>
-    <string name="about_attribution_geonames">Municipality names: GeoNames, CC BY 4.0 licence.</string>
-    <string name="about_attribution_brouter">Routing: BRouter, MIT licence, over OpenStreetMap data.</string>
-    <string name="about_attribution_maplibre">Map rendering: MapLibre Native, two-clause BSD licence.</string>
-    <string name="about_links_title">Opening a place from another app</string>
-    <string name="about_links_body">“geo:” links and addresses shared as plain text come straight here: pick Roue Libre in Android’s chooser. Links from mapping websites need permission: Settings → Apps → Roue Libre → Open by default → Add link.</string>
-    <string name="about_licence_title">Licence</string>
-    <string name="about_licence_body">Roue Libre is free software, released under the GNU GPL version 3. You may use it, study it, modify it and pass it on.</string>
-    <string name="about_open_repository">View the source code</string>
-    <string name="about_open_sources">Sources city by city</string>
-    <string name="about_open_licences">Component licences</string>
+    <string name="about_title">关于</string>
+    <string name="about_open">关于</string>
+    <string name="about_version">版本 %1$s</string>
+    <string name="about_privacy_title">隐私</string>
+    <string name="about_privacy_body">无需账号，没有广告，没有跟踪器，没有唯一标识符。您搜索或计算的一切都不会离开这部手机：地址、路线和您的位置都留在本地，而且不会保存。日常使用中唯一发出的请求，是获取车辆的可借情况。数据包只在您要求时才下载。</string>
+    <string name="about_attributions_title">数据来源</string>
+    <string name="about_attribution_gbfs">车辆可借情况：所服务系统的开放数据，以 GBFS 格式发布。在法国，这些数据编入 transport.data.gouv.fr。</string>
+    <string name="about_attribution_osm">地图、路线和地标：© OpenStreetMap contributors，ODbL 许可。</string>
+    <string name="about_attribution_ban">地址和门牌号：Base Adresse Nationale，ODbL 许可。</string>
+    <string name="about_attribution_geonames">行政区名称：GeoNames，CC BY 4.0 许可。</string>
+    <string name="about_attribution_brouter">路线计算：BRouter，MIT 许可，基于 OpenStreetMap 数据。</string>
+    <string name="about_attribution_maplibre">地图渲染：MapLibre Native，二句版 BSD 许可。</string>
+    <string name="about_links_title">从其他应用打开一个地点</string>
+    <string name="about_links_body">“geo:”链接和以纯文本分享的地址会直接送到这里：在 Android 的选择器里选 Roue Libre。来自地图网站的链接需要授权：设置 → 应用 → Roue Libre → 默认打开 → 添加链接。</string>
+    <string name="about_licence_title">许可协议</string>
+    <string name="about_licence_body">Roue Libre 是自由软件，依据 GNU GPL 第 3 版发布。您可以使用它、研究它、修改它，并把它传给别人。</string>
+    <string name="about_open_repository">查看源代码</string>
+    <string name="about_open_sources">各城市的数据来源</string>
+    <string name="about_open_licences">组件的许可协议</string>
 
-    <string name="sources_title">Data sources</string>
-    <string name="sources_intro">Availability comes from each city\'s network, as open data. Here is who produces it, including for the cities you have not installed.</string>
-    <string name="sources_open">Open the source</string>
-    <string name="about_licences_title">Licences</string>
-    <string name="about_no_browser">No browser is installed on this device.</string>
+    <string name="sources_title">数据来源</string>
+    <string name="sources_intro">可借情况来自各城市自己的系统，以开放数据发布。以下是它们的提供方，也包括您尚未安装的城市。</string>
+    <string name="sources_open">打开数据来源</string>
+    <string name="about_licences_title">许可协议</string>
+    <string name="about_no_browser">此设备上未安装浏览器。</string>
 
-    <string name="journey_title">Journey</string>
-    <string name="journey_open">Plan a journey</string>
-    <string name="journey_origin_empty">Starting from?</string>
-    <string name="journey_destination_empty">Going where?</string>
-    <string name="journey_choose_origin">Starting from?</string>
-    <string name="journey_choose_destination">Going where?</string>
-    <string name="journey_swap">Swap start and destination</string>
-    <string name="journey_hint">The journey is computed on the device: walk to a station, ride, then walk the rest of the way.</string>
+    <string name="journey_title">路线</string>
+    <string name="journey_open">规划路线</string>
+    <string name="journey_origin_empty">从哪里出发？</string>
+    <string name="journey_destination_empty">要去哪里？</string>
+    <string name="journey_choose_origin">从哪里出发？</string>
+    <string name="journey_choose_destination">要去哪里？</string>
+    <string name="journey_swap">交换起点和终点</string>
+    <string name="journey_hint">路线在设备上计算：步行到站点，骑行，再步行走完剩下的路。</string>
     <!-- The switch that leaves the network out of the journey, and the sentence
          that replaces the one above it when it is on (SPEC §7.3). -->
-    <string name="journey_own_bike">Ride my own bike</string>
-    <string name="journey_hint_own_bike">The journey is computed on the device: one ride from door to door, with no station on the way.</string>
+    <string name="journey_own_bike">骑我自己的车</string>
+    <string name="journey_hint_own_bike">路线在设备上计算：从门到门一路骑行，中途不经过站点。</string>
 
     <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
          which is what the application does at rest. -->
-    <string name="journey_bike_kind_any">Any bike</string>
-    <string name="journey_bike_kind_mechanical">Mechanical</string>
-    <string name="journey_bike_kind_electric">Electric</string>
-    <string name="journey_bike_kind_any_description">Any bike, whichever kind</string>
-    <string name="journey_bike_kind_mechanical_description">A bike I pedal myself</string>
-    <string name="journey_bike_kind_electric_description">A pedal-assist bike</string>
-    <string name="journey_compute">Work out the journey</string>
-    <string name="journey_computing">Working out the best journey…</string>
+    <string name="journey_bike_kind_any">不限车型</string>
+    <string name="journey_bike_kind_mechanical">普通车</string>
+    <string name="journey_bike_kind_electric">助力车</string>
+    <string name="journey_bike_kind_any_description">哪种车都行，不限车型</string>
+    <string name="journey_bike_kind_mechanical_description">自己蹬的普通自行车</string>
+    <string name="journey_bike_kind_electric_description">带电助力的自行车</string>
+    <string name="journey_compute">计算路线</string>
+    <string name="journey_computing">正在计算最佳路线…</string>
     <!-- Nothing is being chosen here — there is one route to trace, not a pair
          of stations to weigh — so the wait does not claim to be looking for the
          best of anything. -->
-    <string name="journey_computing_own_bike">Working the ride out…</string>
-    <string name="journey_source_home">Home</string>
-    <string name="journey_source_work">Work</string>
-    <string name="journey_source_my_position">My position</string>
-    <string name="journey_locating">Finding your position…</string>
-    <string name="journey_source_favourite">A favourite station</string>
-    <string name="journey_source_on_map">A point on the map</string>
-    <string name="journey_no_favourite">No favourite station yet. Open a station and tap the star to add it.</string>
-    <string name="journey_pick_crosshair">Targeted point</string>
-    <string name="journey_pick_confirm">Choose this point</string>
-    <string name="journey_picked_point">Point on the map</string>
-    <string name="journey_frame">Show the whole journey</string>
+    <string name="journey_computing_own_bike">正在计算骑行路线…</string>
+    <string name="journey_source_home">家</string>
+    <string name="journey_source_work">公司</string>
+    <string name="journey_source_my_position">我的位置</string>
+    <string name="journey_locating">正在获取您的位置…</string>
+    <string name="journey_source_favourite">收藏的站点</string>
+    <string name="journey_source_on_map">地图上的一个点</string>
+    <string name="journey_no_favourite">还没有收藏任何站点。打开一个站点，点按星标即可添加。</string>
+    <string name="journey_pick_crosshair">瞄准的点</string>
+    <string name="journey_pick_confirm">选择这个点</string>
+    <string name="journey_picked_point">地图上的点</string>
+    <string name="journey_frame">显示整条路线</string>
 
-    <string name="journey_summary">of which %1$s walking and %2$s riding · %3$s</string>
+    <string name="journey_summary">其中步行 %1$s，骑行 %2$s · %3$s</string>
     <!-- Metres climbed over a leg or over the whole journey. Shown only where
          there is relief worth naming; a flat city never reads this. -->
-    <string name="journey_climb">%1$s of climb</string>
+    <string name="journey_climb">爬升 %1$s</string>
     <!-- What waits at the station one sets off from, hung at the end of the
          journey summary, in a conurbation lending both kinds of bike
          (SPEC §7.4). %1$s is the two counts, mechanical and electric, each
-         already agreed in number. -->
-    <string name="journey_bikes_at_departure">%1$s at the departure station</string>
+         already carrying its own classifier. -->
+    <string name="journey_bikes_at_departure">起点站有 %1$s</string>
     <!-- The block holding the total time, the summary and the drawing opens
          the journey in full: this is what the press does, announced to a screen
          reader that would otherwise say only "activate". -->
-    <string name="journey_detail_open">Show the journey in detail</string>
-    <string name="journey_detail_title">The journey in detail</string>
-    <string name="journey_detail_departure_station">Departure station</string>
-    <string name="journey_detail_arrival_station">Arrival station</string>
+    <string name="journey_detail_open">查看路线详情</string>
+    <string name="journey_detail_title">路线详情</string>
+    <string name="journey_detail_departure_station">起点站</string>
+    <string name="journey_detail_arrival_station">终点站</string>
     <!-- The counts shown are the ones the journey was worked out on: a station
          empties while one walks to it (SPEC §6). -->
     <!-- The drawing of the ground the bike leg runs over. -->
-    <string name="journey_detail_profile">The ride, uphill and down</string>
+    <string name="journey_detail_profile">骑行段的起伏</string>
     <!-- Read out in place of the drawing. %1$s is the climb of the ride, %2$s
          its lowest point above sea level and %3$s its highest. -->
-    <string name="journey_detail_profile_description">The ride climbs %1$s, between %2$s and %3$s above sea level.</string>
-    <string name="journey_detail_availability_note">Bikes and docks as they were when the journey was worked out.</string>
+    <string name="journey_detail_profile_description">骑行段爬升 %1$s，海拔在 %2$s 到 %3$s 之间。</string>
+    <string name="journey_detail_availability_note">车辆和空位为计算路线时的数量。</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
-    <string name="journey_navigate">Open in a navigation app</string>
-    <string name="journey_navigate_which">Which part of the journey?</string>
-    <string name="journey_step_to_station">Walk to %1$s</string>
-    <string name="journey_step_ride">Ride to %1$s</string>
-    <string name="journey_step_to_destination">Walk to the destination</string>
-    <string name="journey_step_walk_all">Walk to the destination</string>
-    <string name="journey_step_ride_all">Ride to the destination</string>
+    <string name="journey_navigate">在导航应用中打开</string>
+    <string name="journey_navigate_which">路线的哪一段？</string>
+    <string name="journey_step_to_station">步行至 %1$s</string>
+    <string name="journey_step_ride">骑行至 %1$s</string>
+    <string name="journey_step_to_destination">步行至终点</string>
+    <string name="journey_step_walk_all">步行至终点</string>
+    <string name="journey_step_ride_all">骑行至终点</string>
     <!-- The summary of a journey ridden on one's own bike: it sits under the
          total time, where the walk's own summary sits, and says the same two
          things — how far, and how much of it goes up. -->
-    <string name="journey_own_bike_only">on your own bike, over %1$s.</string>
-    <string name="journey_own_bike_only_climb">on your own bike, over %1$s and %2$s of climb.</string>
-    <string name="journey_walk_only">on foot, over %1$s — no bike journey is possible here.</string>
-    <string name="journey_walk_only_climb">on foot, over %1$s and %2$s of climb — no bike journey is possible here.</string>
-    <string name="journey_walk_is_quicker">on foot, over %1$s — sooner than going to fetch a bike.</string>
-    <string name="journey_walk_is_quicker_climb">on foot, over %1$s and %2$s of climb — sooner than going to fetch a bike.</string>
-    <string name="journey_none_title">No journey</string>
-    <string name="journey_no_bike_nearby">No station with a bike near the start. Try again later, or start from somewhere else.</string>
+    <string name="journey_own_bike_only">骑您自己的车，全程 %1$s。</string>
+    <string name="journey_own_bike_only_climb">骑您自己的车，全程 %1$s，爬升 %2$s。</string>
+    <string name="journey_walk_only">步行，全程 %1$s——此处无法规划骑行路线。</string>
+    <string name="journey_walk_only_climb">步行，全程 %1$s，爬升 %2$s——此处无法规划骑行路线。</string>
+    <string name="journey_walk_is_quicker">步行，全程 %1$s——比去取车更快。</string>
+    <string name="journey_walk_is_quicker_climb">步行，全程 %1$s，爬升 %2$s——比去取车更快。</string>
+    <string name="journey_none_title">没有路线</string>
+    <string name="journey_no_bike_nearby">起点附近没有车可借的站点。请稍后重试，或换个地方出发。</string>
 
-    <string name="journey_no_mechanical_nearby">No station nearby has a mechanical bike right now. Ask for any bike, or try again later.</string>
-    <string name="journey_no_electric_nearby">No station nearby has an electric bike right now. Ask for any bike, or try again later.</string>
-    <string name="journey_no_dock_nearby">No station with a free dock near the destination. Try again later, or aim somewhere else.</string>
-    <string name="journey_no_route">No practicable route between these two points.</string>
-    <string name="journey_graph_missing">The routing data is not installed. Add it from the storage screen.</string>
-    <string name="journey_outside_coverage">This point lies outside the area covered by the installed data.</string>
-    <string name="journey_no_stations">No station known. Refresh the station list, then try again.</string>
+    <string name="journey_no_mechanical_nearby">附近的站点目前都没有普通车。可以不限车型，或稍后重试。</string>
+    <string name="journey_no_electric_nearby">附近的站点目前都没有助力车。可以不限车型，或稍后重试。</string>
+    <string name="journey_no_dock_nearby">终点附近没有空位可还的站点。请稍后重试，或换个地方前往。</string>
+    <string name="journey_no_route">这两点之间没有可通行的道路。</string>
+    <string name="journey_graph_missing">未安装路线数据。请在存储空间界面添加。</string>
+    <string name="journey_outside_coverage">该点位于已安装数据覆盖的范围之外。</string>
+    <string name="journey_no_stations">没有已知的站点。请刷新站点列表，然后重试。</string>
 
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d h %2$02d</string>
+    <string name="duration_minutes">%1$d 分钟</string>
+    <string name="duration_hours_minutes">%1$d 小时 %2$02d 分</string>
 
     <plurals name="docks_total">
-        <item quantity="other">%1$d docks</item>
+        <item quantity="other">%1$d 个车位</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
-    <string name="station_address_nearby">Near %1$s</string>
-    <string name="station_favourite_add">Add to favourites</string>
-    <string name="station_favourite_remove">Remove from favourites</string>
-    <string name="station_as_origin">Start here</string>
-    <string name="station_as_destination">Go here</string>
-    <string name="station_open_in_navigation">Open in a navigation app</string>
-    <string name="station_no_navigation_app">No mapping app is installed on this device.</string>
+    <string name="station_address_nearby">%1$s 附近</string>
+    <string name="station_favourite_add">添加到收藏</string>
+    <string name="station_favourite_remove">从收藏中移除</string>
+    <string name="station_as_origin">从这里出发</string>
+    <string name="station_as_destination">去这里</string>
+    <string name="station_open_in_navigation">在导航应用中打开</string>
+    <string name="station_no_navigation_app">此设备上未安装地图应用。</string>
 
-    <string name="address_search_title">Search for an address</string>
-    <string name="address_search_hint">Number, street, town</string>
-    <string name="address_search_clear">Clear the search</string>
-    <string name="address_search_privacy">Everything is searched on the device. Nothing is sent, not even while you type.</string>
+    <string name="address_search_title">搜索地址</string>
+    <string name="address_search_hint">街道、门牌号、城市</string>
+    <string name="address_search_clear">清除搜索内容</string>
+    <string name="address_search_privacy">一切都在设备上搜索。什么都不会发送，输入时也不会。</string>
     <string name="address_locality">%1$s %2$s</string>
     <string name="address_detail">%1$s · %2$s</string>
-    <string name="address_detail_approximate">%1$s · approximate position</string>
-    <string name="address_content_description">%1$s, %2$s</string>
-    <string name="address_search_prompt_title">Where are you going?</string>
-    <string name="address_search_prompt_message">Type a street name, with or without a number. Stations, universities and main squares can be searched too.</string>
-    <string name="address_searching_title">Searching…</string>
-    <string name="address_searching_message">Looking through the addresses installed on this device.</string>
-    <string name="address_no_match_title">No address found</string>
-    <string name="address_no_match_message">Nothing matches “%1$s”. Try the street name on its own, or add the town.</string>
-    <string name="address_needs_index_title">The search needs the address index</string>
-    <string name="address_needs_index_message">Install the index from the storage screen. It stays on the device and never goes out on the network.</string>
-    <string name="address_unreadable_title">Address index unreadable</string>
-    <string name="map_picked_place_description">%1$s. Tap to see what you can do with this place.</string>
+    <string name="address_detail_approximate">%1$s · 大致位置</string>
+    <string name="address_content_description">%1$s、%2$s</string>
+    <string name="address_search_prompt_title">您要去哪里？</string>
+    <string name="address_search_prompt_message">输入街道名称，带不带门牌号都可以。车站、大学和主要广场也能搜到。</string>
+    <string name="address_searching_title">正在搜索…</string>
+    <string name="address_searching_message">正在查找此设备上已安装的地址。</string>
+    <string name="address_no_match_title">未找到地址</string>
+    <string name="address_no_match_message">没有与“%1$s”匹配的结果。请只输入街道名称，或加上城市。</string>
+    <string name="address_needs_index_title">搜索需要地址索引</string>
+    <string name="address_needs_index_message">请在存储空间界面安装索引。它留在设备上，绝不会发到网络上。</string>
+    <string name="address_unreadable_title">地址索引无法读取</string>
+    <string name="map_picked_place_description">%1$s。点按即可查看这个地点能做什么。</string>
 
-    <string name="place_sheet_title">This place</string>
-    <string name="place_go_there">Go there</string>
-    <string name="place_leave_from_here">Leave from here</string>
-    <string name="place_clear">Clear this point</string>
+    <string name="place_sheet_title">这个地点</string>
+    <string name="place_go_there">去这里</string>
+    <string name="place_leave_from_here">从这里出发</string>
+    <string name="place_clear">清除这个点</string>
 
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
     <!-- Unit symbols. Written the same way in most languages; the string
          exists in every one all the same, so a language that writes them
-         otherwise has somewhere to say so. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
-    <string name="action_back">Back</string>
+         otherwise has somewhere to say so. Chinese keeps the international
+         symbols, which is what the units button itself shows; 米 and 千米
+         are written out only in the descriptions beside it. -->
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
+    <string name="action_back">返回</string>
 
     <!-- City screen: which conurbation the application serves. -->
-    <string name="city_title">City</string>
+    <string name="city_title">城市</string>
     <!-- Read aloud in place of the row that opens the city list: what is
          written on it is the network in service, which says nothing on its
          own about what pressing it settles. %1$s is a city label. -->
-    <string name="settings_city_description">Network served: %1$s</string>
-    <string name="city_choose">Choose my city</string>
-    <string name="city_intro">Pick the conurbation you want to use. Its data is installed afterwards, once and for all.</string>
-    <string name="city_locate_me">Find my city</string>
-    <string name="city_active">In use</string>
+    <string name="settings_city_description">所服务的系统：%1$s</string>
+    <string name="city_choose">选择我的城市</string>
+    <string name="city_intro">请选择您要使用的城市。它的数据随后一次安装，一劳永逸。</string>
+    <string name="city_locate_me">定位我所在的城市</string>
+    <string name="city_active">正在使用</string>
     <plurals name="city_detail">
-        <item quantity="other">%1$d stations · %2$s to download</item>
+        <item quantity="other">%1$d 个站点 · 需下载 %2$s</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="other">%1$d stations</item>
+        <item quantity="other">%1$d 个站点</item>
     </plurals>
-    <string name="city_detail_size_only">%1$s to download</string>
+    <string name="city_detail_size_only">需下载 %1$s</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="other">%1$d stations · size announced before downloading</item>
+        <item quantity="other">%1$d 个站点 · 下载前告知大小</item>
     </plurals>
-    <string name="city_size_unknown">Size announced before downloading</string>
+    <string name="city_size_unknown">下载前告知大小</string>
     <string name="city_needs_newer_version">此版本的应用中不可用</string>
-    <string name="city_installed">%1$s installed on the device</string>
+    <string name="city_installed">设备上已安装 %1$s</string>
     <string name="city_label">%1$s — %2$s</string>
-    <string name="city_delete">Delete</string>
-    <string name="city_delete_description">Delete the data for %1$s</string>
-    <string name="city_delete_title">Delete this data?</string>
-    <string name="city_delete_body">All offline data for %1$s will be erased. You will have to download it again to use it.</string>
-    <string name="city_delete_confirm">Delete</string>
-    <string name="city_deleted">Data for %1$s deleted</string>
-    <string name="city_search_hint">Search for a city</string>
-    <string name="city_search_clear">Clear the search</string>
-    <string name="city_no_match_title">No city found</string>
-    <string name="city_no_match_message">Nothing matches “%1$s”. Check the spelling, or clear the search.</string>
-    <string name="city_proposal_title">Your city</string>
+    <string name="city_delete">删除</string>
+    <string name="city_delete_description">删除 %1$s 的数据</string>
+    <string name="city_delete_title">要删除这些数据吗？</string>
+    <string name="city_delete_body">%1$s 的所有离线数据都将被清除。要再次使用，您需要重新下载。</string>
+    <string name="city_delete_confirm">删除</string>
+    <string name="city_deleted">已删除 %1$s 的数据</string>
+    <string name="city_search_hint">搜索城市</string>
+    <string name="city_search_clear">清除搜索内容</string>
+    <string name="city_no_match_title">未找到城市</string>
+    <string name="city_no_match_message">没有与“%1$s”匹配的结果。请检查拼写，或清除搜索内容。</string>
+    <string name="city_proposal_title">您的城市</string>
     <!-- Shown when the position says one is in another served conurbation than the one installed. -->
-    <string name="city_here_title">You are in another city</string>
-    <string name="city_here_body">%1$s serves the area you are in. Install its data to see its stations and work out journeys here.</string>
-    <string name="city_here_installed_body">%1$s serves the area you are in, and its data is already on the device.</string>
-    <string name="city_here_install">Install its data</string>
-    <string name="city_here_use">Use it</string>
-    <string name="city_proposal_body">You seem to be in the area covered by %1$s. Shall we go with that?</string>
-    <string name="city_proposal_accept">Yes</string>
-    <string name="city_none_nearby">No known network near here. Pick a city from the list.</string>
-    <string name="action_cancel">Cancel</string>
+    <string name="city_here_title">您在另一座城市</string>
+    <string name="city_here_body">%1$s 服务您所在的区域。安装它的数据，即可查看这里的站点并规划路线。</string>
+    <string name="city_here_installed_body">%1$s 服务您所在的区域，而且它的数据已在设备上。</string>
+    <string name="city_here_install">安装它的数据</string>
+    <string name="city_here_use">改用它</string>
+    <string name="city_proposal_body">您似乎在 %1$s 覆盖的范围内。就用它吗？</string>
+    <string name="city_proposal_accept">是</string>
+    <string name="city_none_nearby">这附近没有已知的系统。请从列表中选一座城市。</string>
+    <string name="action_cancel">取消</string>
 
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
-    <string name="storage_title">Storage</string>
-    <string name="storage_open">Manage offline data</string>
-    <string name="storage_intro">The map, the journey planner and the address search work with no network. They need three datasets, installed once.</string>
-    <string name="storage_total">%1$s used on this device</string>
-    <string name="storage_nothing_installed">No data installed</string>
-    <string name="storage_no_city">No city selected</string>
+    <string name="storage_title">存储空间</string>
+    <string name="storage_open">管理离线数据</string>
+    <string name="storage_intro">地图、路线规划和地址搜索都无需联网。它们需要三份数据包，安装一次即可。</string>
+    <string name="storage_total">此设备上已占用 %1$s</string>
+    <string name="storage_nothing_installed">未安装任何数据</string>
+    <string name="storage_no_city">未选择城市</string>
 
-    <string name="dataset_tiles">Map data</string>
-    <string name="dataset_tiles_purpose">Draws the map with no network</string>
-    <string name="dataset_routing">Routing data</string>
-    <string name="dataset_routing_purpose">Works out journeys on the device</string>
-    <string name="dataset_addresses">Address index</string>
-    <string name="dataset_addresses_purpose">Searches streets without sending anything</string>
+    <string name="dataset_tiles">地图数据</string>
+    <string name="dataset_tiles_purpose">无需联网即可绘制地图</string>
+    <string name="dataset_routing">路线数据</string>
+    <string name="dataset_routing_purpose">在设备上计算路线</string>
+    <string name="dataset_addresses">地址索引</string>
+    <string name="dataset_addresses_purpose">搜索街道而不发送任何内容</string>
 
-    <string name="storage_check_updates">Check for updates</string>
-    <string name="storage_checking">Reading the manifest…</string>
-    <string name="storage_up_to_date">Everything is up to date.</string>
-    <string name="storage_download_pending">Download %1$s</string>
-    <string name="storage_downloading">%1$s · %2$s of %3$s</string>
-    <string name="storage_download_failed">%1$s: %2$s</string>
-    <string name="storage_wifi_warning">You are not on Wi-Fi. This download can weigh heavily on a mobile plan.</string>
-    <string name="dataset_update_available">Update available</string>
+    <string name="storage_check_updates">检查更新</string>
+    <string name="storage_checking">正在读取清单…</string>
+    <string name="storage_up_to_date">一切都是最新的。</string>
+    <string name="storage_download_pending">下载%1$s</string>
+    <string name="storage_downloading">%1$s · %2$s，共 %3$s</string>
+    <string name="storage_download_failed">%1$s：%2$s</string>
+    <string name="storage_wifi_warning">您当前不在 WLAN 上。此次下载可能会大量占用移动流量。</string>
+    <string name="dataset_update_available">有可用更新</string>
 
-    <string name="dataset_absent">Not installed</string>
+    <string name="dataset_absent">未安装</string>
     <string name="dataset_installed">%1$s · %2$s</string>
-    <string name="dataset_import">Import</string>
-    <string name="dataset_replace">Replace</string>
-    <string name="dataset_delete">Delete</string>
-    <string name="dataset_delete_description">Delete %1$s</string>
-    <string name="dataset_delete_title">Delete this data?</string>
+    <string name="dataset_import">导入</string>
+    <string name="dataset_replace">替换</string>
+    <string name="dataset_delete">删除</string>
+    <string name="dataset_delete_description">删除%1$s</string>
+    <string name="dataset_delete_title">要删除这些数据吗？</string>
     <!-- %1$s is the dataset's name, %2$s the space it frees. -->
-    <string name="dataset_delete_body">The “%1$s” data will be erased, freeing %2$s. You will have to download it again to work offline.</string>
-    <string name="dataset_imported">%1$s installed</string>
-    <string name="dataset_deleted">%1$s deleted</string>
+    <string name="dataset_delete_body">“%1$s”将被清除，可释放 %2$s。要离线使用，您需要重新下载。</string>
+    <string name="dataset_imported">已安装%1$s</string>
+    <string name="dataset_deleted">已删除%1$s</string>
 
-    <string name="dataset_rejected_empty">The chosen file is empty.</string>
-    <string name="dataset_rejected_format">This file is not the expected one. Choose the “%1$s” file produced by the generation scripts.</string>
+    <string name="dataset_rejected_empty">所选文件为空。</string>
+    <string name="dataset_rejected_format">此文件不是所需的文件。请选择由生成脚本产出的“%1$s”文件。</string>
     <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
-    <string name="dataset_rejected_not_data">This file is not “%1$s”, nor any other data this app reads. Choose the “%2$s” file produced by the generation scripts.</string>
+    <string name="dataset_rejected_not_data">此文件不是“%1$s”，也不是本应用能读取的其他数据。请选择由生成脚本产出的“%2$s”文件。</string>
     <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
-    <string name="dataset_rejected_other_dataset">This file is “%1$s”, not “%2$s”. Import it on its own line instead.</string>
-    <string name="dataset_rejected_version">This file is in format version %1$d, and this version of the app reads version %2$d. Update the app.</string>
-    <string name="dataset_rejected_checksum">The file does not match its checksum: it is incomplete or damaged. Download it again.</string>
-    <string name="dataset_rejected_transfer">Copying the file failed. Check the free space and try again.</string>
+    <string name="dataset_rejected_other_dataset">此文件是“%1$s”，不是“%2$s”。请在它自己的那一行导入。</string>
+    <string name="dataset_rejected_version">此文件是格式版本 %1$d，而此版本的应用读取版本 %2$d。请更新应用。</string>
+    <string name="dataset_rejected_checksum">文件与它的校验和不符：它不完整或已损坏。请重新下载。</string>
+    <string name="dataset_rejected_transfer">复制文件失败。请检查可用空间后重试。</string>
 
-    <string name="error_offline">No connection. The last known availability stays on screen.</string>
-    <string name="error_offline_no_availability">No connection. No availability has been received yet, so there is nothing to show.</string>
-    <string name="error_offline_download">No connection. The download picks up where it stopped.</string>
-    <string name="error_timeout_download">The server is not answering. The download picks up where it stopped.</string>
-    <string name="error_server_refused_download">Server error (%1$d). The download picks up where it stopped.</string>
-    <string name="error_untrusted_server_download">Invalid security certificate. The download picks up once it is renewed.</string>
-    <string name="error_malformed_download">Unreadable file received. The download picks up where it stopped.</string>
-    <string name="error_local_storage_download">The file could not be saved. Free some space and the download picks up.</string>
-    <!-- The same failures again, read after a press on "Check for updates",
+    <string name="error_offline">无网络连接。屏幕上仍显示最后已知的可借情况。</string>
+    <!-- Said in place of the line above when nothing has ever been
+         received: promising that the last known availability stays on
+         screen, over an empty map and under a "从未更新" pill, names
+         something the reader has never had (SPEC §14). -->
+    <string name="error_offline_no_availability">无网络连接。还没有收到过任何可借情况，因此没有内容可显示。</string>
+    <!-- The same failures read on the storage screen, where a dataset
+         transfer failed rather than an availability refresh. The server
+         is the one hosting the files, not the bike system's, and those
+         files come down resumably (SPEC §4.4) — which is what each of
+         these says will happen next. -->
+    <string name="error_offline_download">无网络连接。下载将从中断处继续。</string>
+    <string name="error_timeout_download">服务器没有响应。下载将从中断处继续。</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_download">服务器错误（%1$d）。下载将从中断处继续。</string>
+    <string name="error_untrusted_server_download">安全证书无效。证书更新后下载会继续。</string>
+    <string name="error_malformed_download">收到的文件无法读取。下载将从中断处继续。</string>
+    <string name="error_local_storage_download">文件无法保存。请释放一些空间，下载便会继续。</string>
+    <!-- The same failures again, read after a press on "检查更新",
          which is a third gesture: it reads the published manifest and
          transfers nothing, so there is no download to pick up where it
          stopped, and the whole check has to be made again. -->
-    <string name="error_offline_check">No connection. Nothing was checked; try again once you are back online.</string>
-    <string name="error_timeout_check">The server is not answering. Nothing was checked; try again in a moment.</string>
+    <string name="error_offline_check">无网络连接。什么都没有检查；恢复联网后请重试。</string>
+    <string name="error_timeout_check">服务器没有响应。什么都没有检查；请稍后重试。</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_check">Server error (%1$d). Nothing was checked; try again later.</string>
-    <string name="error_untrusted_server_check">Invalid security certificate. Nothing can be checked until it is renewed.</string>
-    <string name="error_malformed_check">The published list of data is unreadable. Nothing was checked; try again later.</string>
-    <string name="error_local_storage_check">Unable to read the data stored on the device. Nothing was checked against it.</string>
-    <string name="error_timeout">The network’s server is taking too long to answer. Try again in a moment.</string>
-    <string name="error_server_refused">The network’s server returned an error (%1$d). Try again later.</string>
-    <string name="error_untrusted_server">The network’s server presented an invalid security certificate. Its data cannot be fetched safely until the operator renews it.</string>
-    <string name="error_malformed">The data received is unreadable. The network’s feed is at fault; try again later.</string>
-    <string name="error_feed_unavailable">The network does not publish the “%1$s” feed.</string>
-    <string name="error_unsupported_version">This network publishes its data in version %1$s, which this version of the app cannot read. Update the app.</string>
-    <string name="error_local_storage">Unable to read the data stored on the device.</string>
-    <string name="error_no_city_chosen">No city is selected. Choose one.</string>
+    <string name="error_server_refused_check">服务器错误（%1$d）。什么都没有检查；请稍后重试。</string>
+    <string name="error_untrusted_server_check">安全证书无效。证书更新之前什么都检查不了。</string>
+    <string name="error_malformed_check">发布的数据列表无法读取。什么都没有检查；请稍后重试。</string>
+    <string name="error_local_storage_check">无法读取设备上存储的数据。没有据此做任何检查。</string>
+    <string name="error_timeout">该系统的服务器响应太慢。请稍后重试。</string>
+    <string name="error_server_refused">该系统的服务器返回了错误（%1$d）。请稍后重试。</string>
+    <string name="error_untrusted_server">该系统的服务器提供的安全证书无效。在运营方更新证书之前，无法安全地获取它的数据。</string>
+    <string name="error_malformed">收到的数据无法读取。问题出在该系统的数据源；请稍后重试。</string>
+    <string name="error_feed_unavailable">该系统未发布“%1$s”数据源。</string>
+    <string name="error_unsupported_version">该系统以 %1$s 版本发布数据，而此版本的应用无法读取。请更新应用。</string>
+    <string name="error_local_storage">无法读取设备上存储的数据。</string>
+    <string name="error_no_city_chosen">未选择城市。请选一座。</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
-         connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. -->
-    <string name="download_unmetered_only">Download only on an unmetered connection</string>
-    <string name="download_unmetered_only_description">Usually Wi-Fi. A shared phone connection or a capped hotspot is billed by the megabyte and counts as mobile data.</string>
-    <string name="download_held_back_title">Download held back</string>
-    <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">This connection is billed by the megabyte. Connect to Wi-Fi to download %1$s, or download it anyway now.</string>
-    <string name="download_stopped_title">Download stopped</string>
+    <!-- WLAN-only downloads -->
+    <!-- The setting names WLAN, which is the word everybody has — and the word
+         Simplified Android itself writes where the English says Wi-Fi — while
+         what is read stays the billing (SPEC §4.4): a phone's shared
+         connection is WLAN and is a mobile plan, and a capped hotspot declares
+         itself billed. The line under the switch says as much in ordinary
+         words, and 可能 keeps it a possibility: the phone reads only that the
+         connection declares itself 按流量计费, never what the plan charges. -->
+    <string name="download_unmetered_only">仅通过 WLAN 下载</string>
+    <string name="download_unmetered_only_description">手机分享出来的连接，或有流量上限的 WLAN，可能按流量计费，会被当作移动网络。</string>
+    <!-- Nothing has left yet: the title names the situation, not a verdict on
+         the connection, which nobody but the operator can give. -->
+    <string name="download_held_back_title">在移动网络上下载</string>
+    <!-- %1$s is a size, "340 MB" for instance. "可能按流量计费": the device
+         knows the connection declares itself metered, never what the plan
+         behind it actually charges. -->
+    <string name="download_held_back_body">此连接可能按流量计费。请连接 WLAN 后下载 %1$s，或现在就直接下载。</string>
+    <string name="download_stopped_title">下载已停止</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">This connection is now billed by the megabyte, so the download stopped. What has arrived is kept. Connect to Wi-Fi to finish the %1$s, or carry on anyway now.</string>
-    <string name="download_anyway">Download anyway</string>
+    <string name="download_stopped_body">此连接可能按流量计费，因此下载已停止。已经下载的部分会保留。请连接 WLAN 后下完剩下的 %1$s，或现在就直接继续。</string>
+    <string name="download_anyway">仍要下载</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Waiting for an unmetered connection to download %1$s.</string>
-    <string name="download_can_resume">This connection is no longer billed. Start the download again: it carries on where it stopped.</string>
+    <string name="download_waiting_for_unmetered">正在等待 WLAN，以便下载 %1$s。</string>
+    <string name="download_can_resume">此连接不再是移动网络。请重新开始下载：它会从中断处继续。</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
-    <string name="settings_opening_title">Open the app by default on</string>
+    <string name="settings_opening_title">应用默认打开的界面</string>
     <!-- Read aloud in place of the two buttons beside it. -->
-    <string name="settings_opening_description">The screen the app opens on</string>
-    <string name="settings_opening_map">Map</string>
-    <string name="settings_opening_list">Station list</string>
+    <string name="settings_opening_description">应用启动时打开的界面</string>
+    <string name="settings_opening_map">地图</string>
+    <string name="settings_opening_list">站点列表</string>
     <!-- The way to the map from a station list opened on. -->
-    <string name="stations_open_map">See the map</string>
+    <string name="stations_open_map">查看地图</string>
     <!-- The button that puts the nearest station at the top of the list
          (SPEC 7.2), read aloud in place of its reticle, and what is said
          when the position is refused to it. -->
-    <string name="stations_order_by_distance">Nearest station first</string>
-    <string name="stations_location_denied">Without location, the stations stay in alphabetical order.</string>
+    <string name="stations_order_by_distance">最近的站点排在最前</string>
+    <string name="stations_location_denied">没有位置信息，站点将保持按字母顺序排列。</string>
 
     <!-- Which stations the map draws at all. Set in the settings and nowhere
          else: the map itself carries no control and no badge (SPEC 7.1). -->
-    <string name="settings_map_filters_title">Which stations the map shows</string>
-    <string name="settings_map_filters_hide_out_of_service">Hide the stations out of service</string>
+    <string name="settings_map_filters_title">地图显示哪些站点</string>
+    <string name="settings_map_filters_hide_out_of_service">隐藏暂停服务的站点</string>
     <!-- One wording for both modes: this screen knows nothing of the map's
-         Bikes / Free docks button, so it may name neither. -->
-    <string name="settings_map_filters_hide_empty">Hide the stations with nothing to offer</string>
-    <!-- Under the switch, saying what "nothing" is read against. -->
-    <string name="settings_map_filters_hide_empty_hint">“Nothing” follows what the map is counting: no bike while it counts bikes, no free dock while it counts free docks.</string>
+         可借车辆 / 可还空位 button, so it may name neither. 可用数 is the one
+         word that covers both counts without naming either. -->
+    <string name="settings_map_filters_hide_empty">隐藏可用数为零的站点</string>
+    <!-- Under the switch, saying what "可用数" is read against. -->
+    <string name="settings_map_filters_hide_empty_hint">“可用数”随地图当前统计的内容而定：统计车辆时是没有车可借，统计空位时是没有位可还。</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
-    <string name="settings_map_filters_keeps_unknown">Stations the network says nothing about stay on the map: a count nobody could read is not a count of nothing.</string>
+    <string name="settings_map_filters_keeps_unknown">该系统没有说明情况的站点仍留在地图上：谁都读不到的数量，不等于数量为零。</string>
 
     <!-- The rider's OWN bike, not the network's. Keep the wording clearly
          about the reader's own equipment: the journey screen carries a
          separate, similar-looking choice about the bikes the network lends. -->
-    <string name="settings_own_bike_kind_title">Your own bike</string>
+    <string name="settings_own_bike_kind_title">您自己的车</string>
     <!-- Read aloud in place of the two buttons beside it. -->
-    <string name="settings_own_bike_kind_description">The kind of bike you own</string>
-    <string name="settings_own_bike_kind_mechanical">Mechanical</string>
-    <string name="settings_own_bike_kind_electric">Electric</string>
+    <string name="settings_own_bike_kind_description">您拥有的车辆类型</string>
+    <string name="settings_own_bike_kind_mechanical">普通车</string>
+    <string name="settings_own_bike_kind_electric">助力车</string>
     <!-- Under the two buttons. Says what the declaration changes: an electric
          bike is routed and timed as one, where a mechanical one is not. -->
-    <string name="settings_own_bike_kind_hint">Declared electric, your own bike gets its own route and its own times.</string>
+    <string name="settings_own_bike_kind_hint">声明为助力车后，您自己的车会按助力车来规划路线、计算时间。</string>
 
     <!-- The summary of a ride on one's own bike, where that bike was said to be
          a pedal-assist one. %1$s is a distance, %2$s a climb. -->
-    <string name="journey_own_bike_electric_only">on your own electric bike, over %1$s.</string>
-    <string name="journey_own_bike_electric_only_climb">on your own electric bike, over %1$s and %2$s of climb.</string>
+    <string name="journey_own_bike_electric_only">骑您自己的助力车，全程 %1$s。</string>
+    <string name="journey_own_bike_electric_only_climb">骑您自己的助力车，全程 %1$s，爬升 %2$s。</string>
     <!-- Application language -->
-    <string name="settings_language_title">Language</string>
+    <string name="settings_language_title">语言</string>
     <!-- Heads the list of languages: the interface follows the device's own
          language, which is what it did before this setting existed. The
          languages themselves are never translated — each is written in its own
          language, and comes from Android rather than from this file. -->
-    <string name="settings_language_system">System</string>
+    <string name="settings_language_system">跟随系统</string>
     <!-- Spoken label of the row, read aloud in place of the language alone.
          %1$s is the language in service: "English", "Français", or the wording
          above when the device's own is followed. -->
-    <string name="settings_language_description">Language of the interface: %1$s</string>
+    <string name="settings_language_description">界面语言：%1$s</string>
 
-    <!-- My places (SPEC §7.6). -->
-    <string name="settings_section_places">My places</string>
-    <string name="settings_place_home">Home</string>
-    <string name="settings_place_work">Work</string>
-    <string name="settings_place_none">Not set</string>
-    <string name="settings_place_outside_city">Outside the city served</string>
-    <!-- %1$s is the setting, "Home" or "Work". -->
-    <string name="settings_place_set">Set %1$s</string>
-    <string name="settings_place_change">Change %1$s</string>
-    <string name="settings_place_clear">Forget %1$s</string>
-    <string name="settings_place_cleared">%1$s forgotten</string>
+    <!-- My places (SPEC §7.6). 家 and 公司 are the two words Chinese map
+         applications label the same pair with; the placeholder %1$s below
+         holds one of them, so it is set tight against the verb. -->
+    <string name="settings_section_places">我的地点</string>
+    <string name="settings_place_home">家</string>
+    <string name="settings_place_work">公司</string>
+    <string name="settings_place_none">未设置</string>
+    <string name="settings_place_outside_city">在所服务的城市之外</string>
+    <!-- %1$s is the setting, "家" or "公司". -->
+    <string name="settings_place_set">设置%1$s</string>
+    <string name="settings_place_change">更改%1$s</string>
+    <string name="settings_place_clear">忘记%1$s</string>
+    <string name="settings_place_cleared">已忘记%1$s</string>
     <!-- %1$s is the setting, %2$s the place named or the wording above. -->
-    <string name="settings_place_description">%1$s: %2$s</string>
+    <string name="settings_place_description">%1$s：%2$s</string>
 
 </resources>

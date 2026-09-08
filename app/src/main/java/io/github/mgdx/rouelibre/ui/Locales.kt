@@ -27,13 +27,18 @@ import java.util.Locale
  * The languages whose file exists but still holds the English text are
  * deliberately absent: as long as one reads English, one is owed English
  * dates — and a chooser offering "Deutsch" to hand back English would be worse
- * than one offering no German at all.
+ * than one offering no German at all. **There is none at present**, every
+ * started file having been finished, so this list and the `values-<language>/`
+ * folders happen to name the same thirty languages. That is a coincidence of
+ * the moment and not a rule: the next language begun will sit in a folder and
+ * outside this list until somebody finishes it.
  */
 internal val TRANSLATED_LANGUAGES =
     setOf(
-        "ar", "bs", "cs", "da", "de", "el", "en", "es", "fi", "fr",
-        "hr", "hu", "it", "ja", "lt", "lv", "nb", "nl", "pl", "pt",
-        "ro", "sk", "sl", "sq", "sv", "tr",
+        "ar", "bs", "ca", "cs", "da", "de", "el", "en", "es", "eu",
+        "fi", "fr", "gl", "hr", "hu", "it", "ja", "lt", "lv", "nb",
+        "nl", "pl", "pt", "ro", "sk", "sl", "sq", "sr", "sv", "tr",
+        "zh",
     )
 
 /**

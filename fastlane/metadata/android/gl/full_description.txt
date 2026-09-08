@@ -1,0 +1,25 @@
+Roue Libre mostra as estacións de bicis compartidas nun mapa e calcula unha ruta porta a porta que combina camiñar e pedalar.
+
+Todo funciona no dispositivo: o mapa, a busca de enderezos e o cálculo de rutas non precisan ningunha conexión. Só a dispoñibilidade das bicis en tempo real sae á rede.
+
+<b>O que a distingue</b>
+
+• Ningún servizo de Google: nin Play Services, nin Firebase, nin Maps SDK. Funciona en calquera Android sen os servizos de Google.
+• Sen telemetría, sen rastrexadores, sen identificador único, sen conta.
+• Non se garda ningún dato das túas rutas: nin historial, nin posicións, nin destinos. O que buscas non sae do teléfono.
+• Non se impón ningunha cidade: varias áreas metropolitanas conviven no dispositivo, e os datos dunha bórranse sen tocar os das demais.
+• A ruta optimiza o <i>par</i> de estacións — a de saída e a de chegada — no canto de quedar coa máis próxima, e ten en conta o risco de que unha estación pouco abastecida se baleire mentres camiñas cara a ela.
+
+<b>Convén sabelo antes de instalar</b>
+
+O mapa, o grafo de rutas e o índice de enderezos non están na aplicación: descárganse unha vez, desde a pantalla de almacenamento, ou instálanse a man desde ficheiros que produces ti mesmo. O seu peso depende da cidade — unhas decenas de megabytes para unha área metropolitana mediana, máis para unha capital — e anúnciase antes de descargar.
+
+<b>As cidades servidas</b>
+
+Preto de trescentas redes, nunha trintena de países: todas as que publican as súas estacións en datos abertos e cuxas ancoraxes permiten contar coa devolución da bici — de Vélib' en París a Citi Bike en Nova York, pasando por Praga, Barcelona, Copenhague, Tokio e Bos Aires. A aplicación proponche a túa a partir da túa posición, se llo pides, e podes manter varias instaladas e pasar dunha a outra.
+
+Por agora, os conxuntos de datos sen conexión só existen para unhas poucas. Para as demais, a aplicación dío no canto de disimular: a lista mostra o que existe, e os ficheiros pódense producir cos scripts do repositorio.
+
+Non está ligada a ningunha rede en particular: a lista de cidades actualízase soa, e cada cidade leva o enderezo do seu propio fluxo GBFS, o que a fai utilizable con calquera rede GBFS do mundo.
+
+Software libre baixo a licenza GNU GPL v3.

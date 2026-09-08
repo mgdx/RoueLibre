@@ -25,13 +25,17 @@ differs from one row to the next.
 |---|---|---|
 | Albanian | [sq.md](sq.md) | second person singular |
 | Arabic | [ar.md](ar.md) | Modern Standard Arabic, no T/V distinction to settle |
+| Basque | [eu.md](eu.md) | *zuka*, the ordinary second person; *hika* is gendered and refused |
 | Bosnian | [bs.md](bs.md) | *persiranje*, the polite plural |
+| Catalan | [ca.md](ca.md) | *tu*, which is what Android's Catalan does |
+| Chinese | [zh.md](zh.md) | neutral, 您 only where a pronoun cannot be dropped |
 | Croatian | [hr.md](hr.md) | *persiranje*, the polite plural |
 | Czech | [cs.md](cs.md) | *vykání* — the reader is *vy* |
 | Danish | [da.md](da.md) | *du*, the one address Danish has |
 | Dutch | [nl.md](nl.md) | *je / jij* |
 | Finnish | [fi.md](fi.md) | second person singular, imperative on buttons |
 | French | [fr.md](fr.md) | *tu* (`SPEC.md` §9) |
+| Galician | [gl.md](gl.md) | *ti*, second person singular |
 | German | [de.md](de.md) | *du* |
 | Greek | [el.md](el.md) | *εσείς*, the plural of politeness |
 | Hungarian | [hu.md](hu.md) | nominal controls, *tegezés* in running prose |
@@ -43,20 +47,22 @@ differs from one row to the next.
 | Polish | [pl.md](pl.md) | informal, bare imperative, no *Pan/Pani* |
 | Portuguese | [pt.md](pt.md) | third person singular, never *tu* |
 | Romanian | [ro.md](ro.md) | *tu*, never the plural of politeness |
+| Serbian | [sr.md](sr.md) | *персирање*, the polite plural |
 | Slovak | [sk.md](sk.md) | *vykanie* — the reader is *vy* |
 | Slovenian | [sl.md](sl.md) | *vikanje*, bare imperative on buttons |
 | Spanish | [es.md](es.md) | *tú*, never *usted* and never *vos* |
 | Swedish | [sv.md](sv.md) | *du*, the one address Swedish has |
 | Turkish | [tr.md](tr.md) | singular, *sen* |
 
-## The languages still waiting
+No language is waiting: the last five started files — Basque, Catalan,
+Chinese, Galician and Serbian — were finished on 8 September 2026, so every
+`values-<code>/` folder in the repository is a translation and every one of
+them has its glossary here.
 
-Five started files have no glossary yet, because they have no translation yet:
-Basque (`eu`), Catalan (`ca`), Chinese (`zh`), Galician (`gl`) and Serbian
-(`sr`). Their `strings.xml` still holds English text throughout. Whoever
-translates one of them writes its glossary in the same breath — the register is
-decided by the first screen translated, whether or not anybody writes it down,
-and writing it down is what lets the next contributor agree with it.
+Whoever begins a thirty-first writes its glossary in the same breath. The
+register is decided by the first screen translated, whether or not anybody
+writes it down, and writing it down is what lets the next contributor agree
+with it.
 
 English needs none: it is the source, in
 [`app/src/main/res/values/strings.xml`](../../app/src/main/res/values/strings.xml).

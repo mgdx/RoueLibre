@@ -75,6 +75,27 @@ also records what has no visible effect.
   ever on offer. Handing the place to a navigation application stays, that one
   not running on our graph.
 
+- **The last five started files are translations, and the application speaks
+  thirty languages** (SPEC §9, `CONTRIBUTING.md`). Basque, Catalan, Chinese,
+  Galician and Serbian held the English text in every one of their 365 strings
+  — a `values-eu/` that answered in English, which is the state SPEC §9 calls
+  worse than no folder at all. They are now written end to end, each with the
+  glossary the other twenty-five carry, and declared in the three places a
+  translation has to be declared in, so their dates, their figures and their
+  distances stop being formatted in English and the language chooser offers
+  them. **Each was settled against the language's own Android**, read off a
+  device rather than recalled: Catalan's system strings say *tu* 663 times
+  against 11 plurals of politeness, so the file says *tu* where the style
+  guides ask for *vós*; Serbian's are Cyrillic to the last one, which is what
+  `values-sr/` without a script qualifier is served under; Basque refuses
+  *hika* because it is gendered and an interface cannot know who holds the
+  phone. The store metadata follows in all five — description, short
+  description and the three release notes — so the what's-new screen speaks
+  them too. With that, no `values-<language>/` folder holds the English text
+  any more; the texts that described the repository as mostly-started, from the
+  README to `Locales.kt`, say instead that the three lists happen to name the
+  same thirty languages and will part company again at the thirty-first.
+
 ### Changed
 
 - **The download setting says Wi-Fi, and the warning stops claiming a bill**

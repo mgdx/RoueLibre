@@ -1,0 +1,17 @@
+Les dades estan publicades, i el mapa ja no és francès.
+
+• 306 xarxes en 35 països, totes les que publiquen les seves estacions en dades obertes: Praga, Barcelona, Riga, Pristina, Buenos Aires. Tries la teva ciutat el primer cop que obres l’aplicació, i cap no se serveix per defecte.
+• Els conjunts de dades per fi es poden baixar. Hi ha 101 ciutats a punt — les setanta franceses i trenta-una més — i ja no s’han de produir amb els scripts del repositori.
+• La cerca d’adreces funciona fora de França: on no hi ha cap base d’adreces nacional, els carrers i els números es llegeixen del mateix OpenStreetMap, en la llengua del país.
+• El mapa s’atura a la vora del que s’ha baixat, en lloc de mostrar el buit que hi ha més enllà.
+• Els dos extrems d’una ruta es queden a la pantalla de resultat, i allà es corregeixen.
+• Les distàncies es mostren en les unitats de la teva regió: milles i peus als Estats Units, milles i iardes al Regne Unit, quilòmetres a la resta. L’opció és a la Configuració si en prefereixes unes altres.
+• Dius a quin ritme camines — lent, normal o ràpid — i la ruta es calcula per a aquest ritme. Caminar a poc a poc pot canviar l’estació de sortida que se’t proposa: una de més propera, a canvi de pedalar una mica més. «Normal» és el que l’aplicació feia fins ara, i és el valor per defecte.
+• El mapa pot deixar fora les estacions que no et serveixen de res: les que estan fora de servei i les que no tenen res a oferir. Els dos interruptors són a la Configuració, a la secció Visualització, i el que triïs es conserva: el mapa no porta cap botó de filtre propi. El que compta com a «res» segueix el botó Bicis / Espais lliures del mapa. Les estacions de què la xarxa no diu res es queden sempre al mapa.
+• Les baixades esperen una connexió que no es facturi per megabyte, normalment el Wi-Fi. Les dades d’una ciutat poden pesar fins a 1,3 GB, i no en surt res amb les teves dades mòbils si tu no ho dius: una baixada retinguda anuncia la seva mida i ofereix engegar-la igualment, només aquella vegada. Si la connexió comença a facturar-se a mig camí, la baixada s’atura i després es reprèn on s’havia aturat en lloc de començar de zero. L’opció és a la Configuració, a les dades sense connexió.
+• Tries la pantalla amb què s’obre l’aplicació: el mapa, com abans, o la llista d’estacions. Obrir amb la llista no demana cap permís d’ubicació.
+• Els recomptes de bicis i d’espais lliures es poden mostrar més grans, des de la Configuració. L’aplicació ja segueix la mida de text configurada al teu telèfon; això engrandeix aquesta sola xifra sense engrandir tota la resta. Les marques del mapa mantenen la mida, perquè les estacions continuïn sent llegibles l’una al costat de l’altra.
+• Pots dir si la teva pròpia bici és mecànica o elèctrica. Declarada elèctrica, obté la seva pròpia ruta i els seus propis temps; declarada mecànica, conserva el trajecte que sempre ha tingut.
+• L’idioma de l’aplicació el tries tu, a la Configuració, sigui quin sigui el del telèfon. Només s’ofereixen els idiomes realment traduïts: l’anglès i el francès de moment. Les teves unitats no canvien amb ell: triar el francès a Boston deixa les teves distàncies en milles.
+
+El pes de cada ciutat s’anuncia abans de baixar-la: 3 MB per a Auray, 143 MB per a París.

@@ -25,18 +25,21 @@ which has no language qualifier: it is what Android serves when nothing else
 matches, so it is always complete. French, in `values-fr/`, is a translation
 like the others.
 
-**Thirty languages are already started** — Albanian, Arabic, Basque,
-Bosnian, Catalan, Chinese, Croatian, Czech, Danish, Dutch, Finnish, Galician,
+**Thirty languages are translated** — Albanian, Arabic, Basque, Bosnian,
+Catalan, Chinese, Croatian, Czech, Danish, Dutch, Finnish, French, Galician,
 German, Greek, Hungarian, Italian, Japanese, Latvian, Lithuanian, Norwegian,
-Polish,
-Portuguese, Romanian, Serbian, Slovak, Slovene, Spanish, Swedish, Turkish. Their files exist
-under `values-ar/`, `values-de/` and so on, but every string in them still
-holds its English text: they are a starting point, not a translation. Open the
-one for your language and translate it in place.
+Polish, Portuguese, Romanian, Serbian, Slovak, Slovene, Spanish, Swedish,
+Turkish. Their files sit under `values-ar/`, `values-de/` and so on, and each
+has a glossary in [`docs/glossary/`](docs/glossary/) saying which word was
+picked for what, and why. **The most useful thing to do with a finished
+translation is to keep it finished**: the English file grows, and a string
+added there reaches its readers in English until somebody carries it across.
+`python3 tools/check_translations.py` names what is missing, language by
+language.
 
-The list follows the catalogue: there is a started file for every language
-spoken where a network is served, so that arriving in Ljubljana or Pristina
-with the application means arriving in a language somebody can finish rather
+The list follows the catalogue: there is a file for every language spoken where
+a network is served, so that arriving in Ljubljana or Pristina with the
+application means arriving in a language somebody has already written rather
 than in a folder somebody must create.
 
 For a language that has no file yet:
@@ -90,8 +93,11 @@ failures name the file left behind.
 
 Two things are **not** on that list, and deliberately. Nothing has to be added to
 the settings screen — the chooser is built from the list, not written out beside
-it. And `values-<language>/` folders are never read to decide what is offered:
-thirty-one of them exist, and most still hold English.
+it. And `values-<language>/` folders are never read to decide what is offered.
+The two lists name the same thirty languages today, every started file having
+been finished, but they answer different questions: a folder holding the
+English text is not a translation, and the day a thirty-first language is begun
+its folder will exist while the list rightly ignores it.
 
 ### Rules to respect
 

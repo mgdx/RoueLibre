@@ -72,9 +72,15 @@ class LocalesTest {
     }
 
     /**
-     * A `values-xx/` folder is no proof of a translation: most of the thirty in
-     * this repository still hold the English text, and offering their language
-     * would be offering English under another name.
+     * A `values-xx/` folder is no proof of a translation: one may hold the
+     * English text it was copied from, and offering its language would be
+     * offering English under another name.
+     *
+     * The thirty folders are thirty translations at present, every started file
+     * having been finished, so the loop below runs entirely on the offered
+     * half — which is the half that bites, since it is what catches a
+     * translation declared before it was written. The other half wakes up on
+     * its own the day a thirty-first language is begun.
      */
     @Test
     fun `a language whose folder exists but holds English is not offered`() {
@@ -92,11 +98,9 @@ class LocalesTest {
             "Every language offered needs its own folder",
             started.containsAll(offered - BASE_LOCALE.language),
         )
-        assertTrue(
-            "The repository holds started files beyond its translations, and this test is " +
-                "about them",
-            started.size > offered.size,
-        )
+        // Nothing is asserted about started files still being left over: there
+        // are none, and a test that demanded some would fail the day the last
+        // one was finished — which is a success, not a regression.
         assertFalse(
             "UNSPOKEN stands for a language with no folder, and ${UNSPOKEN.language} now has one",
             UNSPOKEN.language in started,

@@ -1,0 +1,25 @@
+Roue Libre mostra les estacions de bicis compartides en un mapa i calcula una ruta porta a porta que combina caminar i pedalar.
+
+Tot funciona al dispositiu: el mapa, la cerca d’adreces i el càlcul de rutes no necessiten cap connexió. Només la disponibilitat de bicis en temps real surt a la xarxa.
+
+<b>El que la distingeix</b>
+
+• Cap servei de Google: ni Play Services, ni Firebase, ni Maps SDK. Funciona en qualsevol Android sense els serveis de Google.
+• Sense telemetria, sense rastrejadors, sense identificador únic, sense compte.
+• No es conserva cap dada de les teves rutes: ni historial, ni ubicacions, ni destinacions. El que cerques no surt del telèfon.
+• No s’imposa cap ciutat: al dispositiu conviuen diverses àrees metropolitanes, i les dades d’una s’esborren sense tocar les de les altres.
+• La ruta optimitza la <i>parella</i> d’estacions — la de sortida i la d’arribada — en lloc de quedar-se amb la més propera, i té en compte el risc que una estació poc proveïda es buidi mentre hi vas a peu.
+
+<b>Convé saber-ho abans d’instal·lar-la</b>
+
+El mapa base, el graf de rutes i l’índex d’adreces no són dins de l’aplicació: es baixen una vegada, des de la pantalla d’emmagatzematge, o s’instal·len a mà des de fitxers que produeixes tu mateix. El seu pes depèn de la ciutat — unes desenes de megabytes per a una àrea metropolitana mitjana, més per a una capital — i s’anuncia abans de baixar-los.
+
+<b>Les ciutats servides</b>
+
+Prop de tres-centes xarxes, en una trentena de països: totes les que publiquen les seves estacions en dades obertes i els ancoratges de les quals permeten garantir la devolució de la bici — de Vélib’ a París a Citi Bike a Nova York, passant per Praga, Barcelona, Copenhaguen, Tòquio i Buenos Aires. L’aplicació et proposa la teva a partir de la teva ubicació, si l’hi demanes, i en pots mantenir diverses instal·lades i passar d’una a l’altra.
+
+De moment, els conjunts de dades sense connexió només existeixen per a unes poques. Per a les altres, l’aplicació ho diu en lloc de dissimular: la llista mostra el que hi ha, i els fitxers es poden produir amb els scripts del repositori.
+
+No està lligada a cap xarxa en particular: la llista de ciutats s’actualitza sola, i cada ciutat porta l’adreça del seu propi flux GBFS, cosa que la fa utilitzable amb qualsevol xarxa GBFS del món.
+
+Programari lliure sota la llicència GNU GPL v3.

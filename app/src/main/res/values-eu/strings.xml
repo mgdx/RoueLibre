@@ -1,605 +1,840 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Basque — TO BE TRANSLATED.
+    Basque translation.
 
-    Every string below still holds its English text: this file is a starting
-    point, not a translation. Translate the contents of the tags, never their
-    `name` attribute, and read CONTRIBUTING.md first — placeholders keep their
-    number, plurals keep the categories of this language, and apostrophes are
-    escaped.
+    It serves the whole of the Basque-speaking country — the Basque
+    Autonomous Community, Navarre and the Northern Basque Country — so
+    nothing here is written for one of the three alone: this is `batua`, the
+    standard, and no dialect. Where Android's own Basque already has a word,
+    that is the word used — an interface calling the settings anything but
+    "Ezarpenak" reads as a foreign application.
 
-    While a string is left in English, that is what this language's users will
-    read. The application's default language is English, in `values/`, which is
-    what this file was copied from.
+    The register is `zuka`, the ordinary second person, which is Android's own
+    and carries no formality either way; `hika` is intimate address between
+    two people who know each other and has no place in an interface. Controls
+    take the bare imperative, as Android's do: Utzi, Ezabatu, Bilatu, Aukeratu.
+
+    Rules, the same as everywhere: positional placeholders, <plurals> for
+    anything that agrees, and the `name` attributes left untouched.
+
+    The typography is Basque: quotations are « », with no space inside them;
+    the dash that breaks a sentence is – with a space on either side, not the
+    em dash the English file uses, and that is the one change made inside a
+    format-only string, `city_label` (`%1$s – %2$s`). No space stands before
+    `?`, `!`, `:` or `;`. Nothing here is escaped, because nothing here needs
+    an apostrophe. Numbers keep the decimal comma and the thousands point —
+    "42,5 MB" — and the unit symbols stay international: m, km, ft, yd, mi,
+    B, kB, MB, GB, min.
+
+    **Basque declines by suffix, and the suffix depends on the last letter of
+    the word it lands on** — `-ra` after a vowel against `-era` after a
+    consonant, `-ren` against `-en`, `-k` against `-ek`. What arrives in a
+    placeholder is a station name, a street, a network label, a dataset name
+    or a size, and none of them is known when this file is written. So not one
+    line here glues an ending onto a placeholder. Android's own Basque does
+    not either: there is no `%1$s`-plus-suffix anywhere in the 8 675 system
+    strings, and eighty of them use the device this file uses instead — a noun
+    of one's own carrying the case, and the placeholder behind a colon
+    ("Hornitzailea: %1$s.", "Erabiltzailea: %1$s.", "Azken eguneratzea: %1$s").
+    Where a case was needed the sentence turns on a demonstrative — "sare
+    honek", "toki hau" — and the name follows behind the colon. See
+    docs/glossary/eu.md, which lists every one of them.
+
+    The plural categories are Basque's two, `one` and `other`. **A noun
+    counted by a numeral stays in the indefinite singular** — 1 bizikleta,
+    3 bizikleta — so both items of every <plurals> here carry the same text.
+    Android's own Basque writes its plurals the same way ("{count,plural,
+    =1{{time} segundo}other{{time} segundo}}"). Neither item may be removed:
+    the scaffolding is CLDR's.
+
+    See docs/glossary/eu.md for the words this file holds to, and
+    CONTRIBUTING.md to submit a correction.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">Roue Libre</string>
 
-    <string name="stations_title">Stations</string>
+    <!-- Main screen: the station list. -->
+    <string name="stations_title">Geltokiak</string>
 
+    <!-- A numeral leaves the noun in the indefinite singular, so both forms
+         are the same sentence. The space before the noun is non-breaking:
+         a figure and what it counts stay on one line. -->
     <plurals name="bikes_available">
-        <item quantity="one">%1$d bike</item>
-        <item quantity="other">%1$d bikes</item>
+        <item quantity="one">%1$d bizikleta</item>
+        <item quantity="other">%1$d bizikleta</item>
     </plurals>
 
     <plurals name="docks_available">
-        <item quantity="one">%1$d dock</item>
-        <item quantity="other">%1$d docks</item>
+        <item quantity="one">%1$d leku libre</item>
+        <item quantity="other">%1$d leku libre</item>
     </plurals>
 
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
-    <string name="station_out_of_service">Out of service</string>
-    <string name="station_out_of_service_since">%1$s · last reported %2$s</string>
-    <string name="station_availability_unknown">Availability unknown</string>
+    <string name="station_out_of_service">Zerbitzuz kanpo</string>
+    <!-- A closure that has lasted says so, since a station shut this morning
+         and one silent for months do not call for the same decision. %1$s is
+         the line above, %2$s the age of the station's own last measurement —
+         "Zerbitzuz kanpo · azken datua duela 5 hilabete". The age arrives
+         already written ("duela 5 hilabete") and stands bare after a noun of
+         this file's own, which is what carries the case. -->
+    <string name="station_out_of_service_since">%1$s · azken datua %2$s</string>
+    <string name="station_availability_unknown">Erabilgarritasun ezezaguna</string>
 
     <!-- What a station is called when its feed publishes no name for it and no
          street to stand in for one. The station itself is kept: it is real and
          it holds bikes, and dropping it would take it off the map over a
          mistyped string. -->
-    <string name="station_unnamed">Unnamed station</string>
+    <string name="station_unnamed">Izenik gabeko geltokia</string>
 
-    <string name="station_beyond_area_short">beyond the map</string>
-    <string name="station_beyond_area">This station lies outside the area the installed data covers. Its bikes are counted live, but no map and no route can reach it.</string>
+    <!-- Shown for a station the network publishes outside the area its data
+         covers: it exists and its bikes are counted, but no map and no route
+         reach it. The short form joins the rest of the row. -->
+    <string name="station_beyond_area_short">mapatik kanpo</string>
+    <string name="station_beyond_area">Geltoki hau instalatutako datuek estaltzen duten eremutik kanpo dago. Haren bizikletak zuzenean zenbatzen dira, baina ez mapak ez ibilbideek ezin dute bertaraino iritsi.</string>
 
-    <string name="search_stations_hint">Search for a station</string>
-    <string name="search_stations_clear">Clear the search</string>
-    <string name="stations_no_match_title">No station found</string>
-    <string name="stations_no_match_message">Nothing matches “%1$s”. Check the spelling, or clear the search.</string>
-    <string name="action_clear_search">Clear the search</string>
+    <string name="search_stations_hint">Bilatu geltoki bat</string>
+    <string name="search_stations_clear">Garbitu bilaketa</string>
+    <string name="stations_no_match_title">Ez da geltokirik aurkitu</string>
+    <!-- What was typed cannot take a case ending, so it is held at arm's
+         length inside quotation marks and a noun of this file's own —
+         "testuarekin" — carries the comitative. -->
+    <string name="stations_no_match_message">Ez dago «%1$s» testuarekin bat datorrenik. Begiratu ondo idatzita dagoen, edo garbitu bilaketa.</string>
+    <string name="action_clear_search">Garbitu bilaketa</string>
 
-    <string name="mode_bikes">Bikes</string>
-    <string name="mode_docks">Free docks</string>
-    <string name="mode_bikes_description">Show available bikes</string>
-    <string name="mode_docks_description">Show free docks</string>
+    <string name="mode_bikes">Bizikletak</string>
+    <string name="mode_docks">Leku libreak</string>
+    <string name="mode_bikes_description">Erakutsi bizikleta erabilgarriak</string>
+    <string name="mode_docks_description">Erakutsi leku libreak</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
-         (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
-    <string name="map_bikes_all_kinds">All bikes</string>
-    <string name="map_bikes_mechanical">Mechanical</string>
-    <string name="map_bikes_electric">Electric</string>
-    <string name="map_bikes_all_kinds_description">Every bike is counted. Tap to count the mechanical ones only.</string>
-    <string name="map_bikes_mechanical_description">Mechanical bikes are counted. Tap to count the electric ones only.</string>
-    <string name="map_bikes_electric_description">Electric bikes are counted. Tap to count them all.</string>
+         (SPEC §7.1). Named after what is shown, like the toggle beside it.
+         "Arrunta" against "Elektrikoa" is what Basque says of a bicycle
+         without a motor; "mekanikoa" describes machinery. -->
+    <string name="map_bikes_all_kinds">Bizikleta guztiak</string>
+    <string name="map_bikes_mechanical">Arruntak</string>
+    <string name="map_bikes_electric">Elektrikoak</string>
+    <!-- "Sakatu … -tzeko" is Android's own shape for "tap and this happens"
+         (android:adb_active_notification_message). -->
+    <string name="map_bikes_all_kinds_description">Bizikleta guztiak zenbatzen dira. Sakatu arruntak bakarrik zenbatzeko.</string>
+    <string name="map_bikes_mechanical_description">Bizikleta arruntak zenbatzen dira. Sakatu elektrikoak bakarrik zenbatzeko.</string>
+    <string name="map_bikes_electric_description">Bizikleta elektrikoak zenbatzen dira. Sakatu denak zenbatzeko.</string>
+    <!-- The label under, or beside, a count.
+         No item holds a number, and none ever should: the figure is written
+         next to these words already, so writing it here would say it twice.
+         The word alone agrees, which is why these are plurals resolved with
+         the count and formatted with nothing. `CounterpartAgreementTest`
+         fails the day a placeholder comes back.
+         **Where the figure sits is not the same on the two screens.** On a
+         station's sheet the two are side by side. On a list row they are
+         stacked, the figure over the label, and the label is set in capitals:
+         whatever stands at the head of it is read as a word of its own. In
+         Basque neither reading is at risk — a numeral leaves the noun in the
+         indefinite singular, so "bizikleta" and "leku libre" are read the
+         same way with a figure above them as beside them. -->
     <plurals name="counterpart_bikes" tools:ignore="ImpliedQuantity">
-        <item quantity="one">bike</item>
-        <item quantity="other">bikes</item>
+        <item quantity="one">bizikleta</item>
+        <item quantity="other">bizikleta</item>
     </plurals>
     <plurals name="counterpart_docks" tools:ignore="ImpliedQuantity">
-        <item quantity="one">free dock</item>
-        <item quantity="other">free docks</item>
+        <item quantity="one">leku libre</item>
+        <item quantity="other">leku libre</item>
     </plurals>
     <string name="counterpart_none">—</string>
 
+    <!-- The detail line under a station's name, in the list.
+         %1$s is the distance to the station when the reader's position is
+         known, and its postcode when it is not — never both, and never a
+         label saying which: a postcode says nothing to somebody standing
+         fifty metres away. %2$d is the number of docking points, which is a
+         capacity and not a count of what is free: "ainguraleku", the anchor
+         point itself, and never "leku libre".
+         `StationAdapter.whereabouts` is what decides. -->
     <plurals name="station_detail_with_capacity">
-        <item quantity="one">%1$s · %2$d dock</item>
-        <item quantity="other">%1$s · %2$d docks</item>
+        <item quantity="one">%1$s · %2$d ainguraleku</item>
+        <item quantity="other">%1$s · %2$d ainguraleku</item>
     </plurals>
 
     <!-- What a station's bikes are, shown only where the network lends both
          kinds side by side. %1$s is the mechanical count, %2$s the electric
-         one, each already agreed in number. -->
+         one, each already agreed in number. The two counts are elliptical —
+         "6 arrunt · 4 elektriko" stands for "6 bizikleta arrunt" — because
+         the noun is written once already, on the line above. -->
     <string name="station_bikes_split">%1$s · %2$s</string>
-
     <plurals name="bikes_mechanical">
-        <item quantity="one">%1$d mechanical</item>
-        <item quantity="other">%1$d mechanical</item>
+        <item quantity="one">%1$d arrunt</item>
+        <item quantity="other">%1$d arrunt</item>
     </plurals>
-
     <plurals name="bikes_electric">
-        <item quantity="one">%1$d electric</item>
-        <item quantity="other">%1$d electric</item>
+        <item quantity="one">%1$d elektriko</item>
+        <item quantity="other">%1$d elektriko</item>
     </plurals>
 
-    <string name="freshness_just_now">just now</string>
+    <string name="freshness_just_now">oraintxe</string>
     <plurals name="freshness_seconds">
-        <item quantity="one">%1$d second ago</item>
-        <item quantity="other">%1$d seconds ago</item>
+        <item quantity="one">duela %1$d segundo</item>
+        <item quantity="other">duela %1$d segundo</item>
     </plurals>
     <plurals name="freshness_minutes">
-        <item quantity="one">%1$d minute ago</item>
-        <item quantity="other">%1$d minutes ago</item>
+        <item quantity="one">duela %1$d minutu</item>
+        <item quantity="other">duela %1$d minutu</item>
     </plurals>
     <plurals name="freshness_hours">
-        <item quantity="one">%1$d hour ago</item>
-        <item quantity="other">%1$d hours ago</item>
+        <item quantity="one">duela %1$d ordu</item>
+        <item quantity="other">duela %1$d ordu</item>
     </plurals>
     <plurals name="freshness_days">
-        <item quantity="one">%1$d day ago</item>
-        <item quantity="other">%1$d days ago</item>
+        <item quantity="one">duela %1$d egun</item>
+        <item quantity="other">duela %1$d egun</item>
     </plurals>
     <plurals name="freshness_months">
-        <item quantity="one">%1$d month ago</item>
-        <item quantity="other">%1$d months ago</item>
+        <item quantity="one">duela %1$d hilabete</item>
+        <item quantity="other">duela %1$d hilabete</item>
     </plurals>
-    <string name="freshness_stale">Frozen data · %1$s</string>
-    <string name="freshness_fresh">Updated %1$s</string>
-    <string name="freshness_never">Never updated</string>
+    <string name="freshness_stale">Datu izoztuak · %1$s</string>
+    <string name="freshness_fresh">Eguneratua %1$s</string>
+    <string name="freshness_never">Ez da inoiz eguneratu</string>
 
-    <string name="stations_empty_title">No stations loaded</string>
-    <string name="stations_empty_message">Pull the list down to fetch the network’s stations.</string>
-    <string name="action_refresh">Refresh</string>
-    <string name="action_retry">Try again</string>
+    <string name="stations_empty_title">Ez da geltokirik kargatu</string>
+    <string name="stations_empty_message">Arrastatu zerrenda behera sarearen geltokiak eskuratzeko.</string>
+    <string name="action_refresh">Eguneratu</string>
+    <string name="action_retry">Saiatu berriro</string>
 
-    <string name="map_open_list">See the list of stations</string>
-    <string name="map_description">Map. Drag with two fingers to move it, pinch with two fingers to zoom in or out, twist with two fingers to turn it, slide two fingers up or down to tilt it.</string>
-    <string name="map_attribution">© OpenStreetMap contributors</string>
-    <string name="map_locate_me">Locate me</string>
-    <string name="map_locating">Finding your position…</string>
-    <string name="map_location_denied">Without location, pick your starting point on the map or by address.</string>
-    <string name="map_location_unavailable">Position unavailable. Check that location is switched on, then try again.</string>
-    <string name="map_outside_city_title">You are elsewhere</string>
-    <string name="map_outside_city_message">Your position falls outside the area %1$s covers, so this map cannot show it. Pick the city you are in to see its stations.</string>
-    <string name="map_outside_city_brief">Your position falls outside the area %1$s covers.</string>
-    <string name="map_needs_tiles_title">The map needs its offline tiles</string>
-    <string name="map_needs_tiles_message">Install the map data from the storage screen. In the meantime, the station list stays usable.</string>
-    <string name="map_needs_city_title">Which city?</string>
-    <string name="map_needs_city_message">Pick the conurbation you want to use. Its data is downloaded afterwards, once and for all.</string>
+    <string name="map_open_list">Ikusi geltokien zerrenda</string>
+    <string name="map_description">Mapa. Mugitzeko, arrastatu bi hatzekin; handitzeko edo txikitzeko, atximurkatu bi hatzekin; biratzeko, bihurritu bi hatzekin; okertzeko, lerratu bi hatz gora edo behera.</string>
+    <string name="map_attribution">© OpenStreetMap-eko kolaboratzaileak</string>
+    <string name="map_locate_me">Aurkitu nire kokapena</string>
+    <!-- Said to the screen reader when "locate me" starts waiting for a fix;
+         the button breathes for the same wait. -->
+    <string name="map_locating">Zure kokapena bilatzen…</string>
+    <string name="map_location_denied">Kokapenik gabe, aukeratu abiapuntua mapan edo helbidearen bidez.</string>
+    <string name="map_location_unavailable">Kokapena ez dago erabilgarri. Egiaztatu kokapena aktibatuta dagoela eta saiatu berriro.</string>
+    <string name="map_outside_city_title">Beste toki batean zaude</string>
+    <!-- %1$s is a whole city label — "Bilbaobizi – Bilbao". English puts it in
+         subject position, where Basque would need an ergative -k or -ek on a
+         word it cannot see. A demonstrative opens the sentence instead, the
+         case falls on "sare", and the label follows behind the colon. -->
+    <string name="map_outside_city_message">Zure kokapena sare honek estaltzen duen eremutik kanpo dago: %1$s. Aukeratu zauden hiria bertako geltokiak ikusteko.</string>
+    <string name="map_outside_city_brief">Zure kokapena sare honek estaltzen duen eremutik kanpo dago: %1$s.</string>
+    <!-- "Lauza", the tile itself, is dropped rather than introduced on one
+         screen: what the reader installs is called "maparen datuak"
+         everywhere else in the application, storage screen included. -->
+    <string name="map_needs_tiles_title">Mapak lineaz kanpoko datuak behar ditu</string>
+    <string name="map_needs_tiles_message">Instalatu maparen datuak Memoria pantailatik. Bitartean, geltokien zerrenda erabilgarri geratuko da.</string>
+    <string name="map_needs_city_title">Zein hiri?</string>
+    <string name="map_needs_city_message">Aukeratu erabili nahi duzun hiri-eremua. Haren datuak gero deskargatzen dira, behin betiko.</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
-         both are back as the screen opened (SPEC §7.1). -->
-    <string name="map_face_north">Face north and lay the map flat</string>
+         both are back as the screen opened (SPEC §7.1). The descriptions say
+         which of the two it is, the button being the only sign of either. -->
+    <!-- What one press of the compass does, and it does both at once: the map
+         comes back to the attitude it opened with. Said as the button's
+         accessibility action, so the descriptions below are left to say the
+         state and need not repeat the deed. Imperative, as this file's
+         controls are. -->
+    <string name="map_face_north">Jarri iparraldera begira eta lautu mapa</string>
+    <!-- What the compass says the map is doing, one sentence per state it can
+         be in. The turn is given in degrees, which a reader can picture off
+         the compass rose; the tilt is named and not measured, a degree of it
+         comparing to nothing.
+         Plurals, though the compass never speaks of nought or one degree: the
+         tolerance below which it does not appear is two. Basque leaves the
+         noun singular after any numeral, so both forms are the same sentence;
+         both are written out because CLDR asks for both. -->
     <plurals name="map_bearing_description">
-        <item quantity="one">Map turned %1$d degree from north.</item>
-        <item quantity="other">Map turned %1$d degrees from north.</item>
+        <item quantity="one">Mapa iparraldetik %1$d gradu biratuta dago.</item>
+        <item quantity="other">Mapa iparraldetik %1$d gradu biratuta dago.</item>
     </plurals>
-    <string name="map_tilted_description">Map tilted.</string>
+    <string name="map_tilted_description">Mapa okertuta dago.</string>
     <plurals name="map_bearing_tilted_description">
-        <item quantity="one">Map turned %1$d degree from north, and tilted.</item>
-        <item quantity="other">Map turned %1$d degrees from north, and tilted.</item>
+        <item quantity="one">Mapa iparraldetik %1$d gradu biratuta eta okertuta dago.</item>
+        <item quantity="other">Mapa iparraldetik %1$d gradu biratuta eta okertuta dago.</item>
     </plurals>
 
     <string name="welcome_hello_title">Roue Libre</string>
-    <string name="welcome_hello_body">This app shows shared bikes on a map and works out a door-to-door trip: walk to a station, ride, then walk the rest of the way.\n\nIt is free and open source. No account, no adverts, no tracker.</string>
-    <string name="welcome_privacy_title">Nothing leaves this phone</string>
-    <string name="welcome_privacy_body">Journeys are computed on this phone. The addresses you look up are sent to nobody, not even while you type.\n\nNo history is kept: not your trips, not your positions, not your destinations.\n\nThe only request that goes out in everyday use asks how many bikes are available.</string>
-    <string name="welcome_fleet_title">What the bike says</string>
-    <string name="welcome_fleet_body">The bike drawn tells you what your city lends.\n\nIt is read from the network\'s own feed, never guessed.</string>
-    <string name="welcome_fleet_mechanical_only">The network lends mechanical bikes only.</string>
-    <string name="welcome_fleet_electric_only">The network lends electric bikes only.</string>
-    <string name="welcome_fleet_mixed">The network lends both kinds.</string>
+    <string name="welcome_hello_body">Aplikazio honek partekatutako bizikletak erakusten ditu mapa batean, eta atez ateko ibilbidea kalkulatzen du: oinez geltokiraino, bizikletaz, eta oinez gainerako bidea.\n\nSoftware librea eta kode irekikoa da. Konturik ez, iragarkirik ez, jarraipen-tresnarik ez.</string>
+    <string name="welcome_privacy_title">Ezer ez da telefono honetatik ateratzen</string>
+    <!-- The English is scrupulously impersonal wherever it promises that
+         nothing is kept, and Basque keeps that with the impersonal forms the
+         language has for it: "ez da gordetzen", "kalkulatzen dira". There is
+         no "gu" anywhere in this file and none should be added — an
+         application whose argument is that nobody is behind it must not ask
+         the reader to trust a "we". -->
+    <string name="welcome_privacy_body">Ibilbideak telefono honetan bertan kalkulatzen dira. Bilatzen dituzun helbideak ez zaizkio inori bidaltzen, ezta idatzi ahala ere.\n\nEz da historiarik gordetzen: ez zure bidaiak, ez zure kokapenak, ez zure helmugak.\n\nEguneroko erabileran ateratzen den eskaera bakarrak zenbat bizikleta dauden galdetzen du.</string>
+    <string name="welcome_fleet_title">Bizikletak zer dioen</string>
+    <string name="welcome_fleet_body">Marraztutako bizikletak zure hiriak zer eskaintzen duen adierazten du.\n\nSarearen jariotik bertatik irakurtzen da, ez da inoiz asmatzen.</string>
+    <string name="welcome_fleet_mechanical_only">Sareak bizikleta arruntak baino ez ditu eskaintzen.</string>
+    <string name="welcome_fleet_electric_only">Sareak bizikleta elektrikoak baino ez ditu eskaintzen.</string>
+    <string name="welcome_fleet_mixed">Sareak bi motatakoak eskaintzen ditu.</string>
 
-    <string name="welcome_data_title">One city, one download</string>
-    <string name="welcome_data_body">The map, the streets and the route calculation live on the device. That is what makes them work without a network — and it means downloading your city\'s data once.\n\nSo start by choosing it. Expect around forty megabytes for a medium-sized conurbation, more for a capital; the size is announced before the download.\n\nYou can also do it later: in the meantime, the station list and their availability remain usable.</string>
-    <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d of %2$d</string>
-    <string name="welcome_continue">Continue</string>
-    <string name="welcome_skip">Skip</string>
-    <string name="welcome_choose_city">Choose my city</string>
-    <string name="welcome_later">Later</string>
-    <string name="welcome_open">Read the introduction again</string>
+    <string name="welcome_data_title">Hiri bat, deskarga bat</string>
+    <string name="welcome_data_body">Mapa, kaleak eta ibilbideen kalkulua gailuan bertan daude. Horri esker funtzionatzen dute sarerik gabe – eta horrek esan nahi du zure hiriaren datuak behin deskargatu behar direla.\n\nBeraz, hasi hiria aukeratzen. Kontatu berrogei bat megabyterekin tamaina ertaineko hiri-eremu batentzat, gehiago hiriburu batentzat; tamaina deskargatu aurretik jakinarazten da.\n\nGeroago ere egin dezakezu: bitartean, geltokien zerrenda eta haien erabilgarritasuna erabil ditzakezu.</string>
+    <!-- "3 / 5" and not "5etik 3": a suffix glued to a numeral changes shape
+         with how that numeral is read aloud — 2tik, 5etik, 1etik — and the
+         figure is not known here. -->
+    <string name="welcome_step" tools:ignore="PluralsCandidate">%1$d / %2$d</string>
+    <string name="welcome_continue">Aurrera</string>
+    <string name="welcome_skip">Saltatu</string>
+    <string name="welcome_choose_city">Aukeratu nire hiria</string>
+    <string name="welcome_later">Geroago</string>
+    <string name="welcome_open">Irakurri sarrera berriro</string>
 
-    <string name="whats_new_title">What’s new</string>
-    <string name="whats_new_done">Continue</string>
-    <string name="whats_new_nothing">This version has no release notes.</string>
-    <string name="whats_new_open">See what’s new</string>
+    <string name="whats_new_title">Berritasunak</string>
+    <string name="whats_new_done">Aurrera</string>
+    <string name="whats_new_nothing">Bertsio honek ez du oharrik.</string>
+    <string name="whats_new_open">Ikusi berritasunak</string>
 
-    <string name="incoming_place_default_label">Received place</string>
-    <string name="incoming_show_me">Show</string>
-    <string name="incoming_needs_index">This address has to be looked up in the offline index, which is not installed.</string>
-    <string name="incoming_address_not_found">“%1$s” matches no address in the covered area.</string>
-    <string name="incoming_address_choices_title">Addresses found in this text</string>
+    <string name="incoming_place_default_label">Jasotako tokia</string>
+    <string name="incoming_show_me">Erakutsi</string>
+    <string name="incoming_needs_index">Helbide hau lineaz kanpoko aurkibidean bilatu behar da, eta ez dago instalatuta.</string>
+    <string name="incoming_address_not_found">Ez dago «%1$s» testuarekin bat datorren helbiderik estalitako eremuan.</string>
+    <string name="incoming_address_choices_title">Testu honetan aurkitutako helbideak</string>
     <string name="incoming_address_choice">%1$s\n%2$s</string>
-    <string name="incoming_outside_coverage">This place lies outside the area covered by the installed data: no journey can reach it.</string>
+    <string name="incoming_outside_coverage">Toki hau instalatutako datuek estaltzen duten eremutik kanpo dago: ezin da bertaraino ibilbiderik egin.</string>
 
-    <string name="favourites_title">Favourites</string>
-    <string name="favourites_open">See favourites</string>
-    <string name="favourites_reorder_hint">Press and hold a row to move it.</string>
+    <string name="favourites_title">Gogokoak</string>
+    <string name="favourites_open">Ikusi gogokoak</string>
+    <string name="favourites_reorder_hint">Eduki sakatuta lerro bat lekuz aldatzeko.</string>
 
-    <string name="settings_title">Settings</string>
-    <string name="settings_open">Settings</string>
-    <string name="settings_section_city">City</string>
-    <string name="settings_section_journey">Journey</string>
-    <string name="settings_section_display">Display</string>
-    <string name="settings_section_data">Offline data</string>
+    <string name="settings_title">Ezarpenak</string>
+    <string name="settings_open">Ezarpenak</string>
+    <!-- The section titles of the settings screen (SPEC §7.6), in the order
+         the screen lays them out. A section holding nothing is not shown, so a
+         title arrives with the first setting placed under it. -->
+    <string name="settings_section_city">Hiria</string>
+    <string name="settings_section_journey">Ibilbidea</string>
+    <string name="settings_section_display">Bistaratzea</string>
+    <string name="settings_section_data">Lineaz kanpoko datuak</string>
 
     <!-- The walking pace (SPEC §6, §7.6). Named in words and never in km/h: a
          pace is something one knows about oneself, where a speed is a figure
          nobody has measured about themselves — and a speed written on a button
-         would be read as a promise about the minutes to come. -->
-    <string name="settings_walking_pace_title">Walking pace</string>
-    <string name="settings_walking_pace_slow">Slow</string>
-    <string name="settings_walking_pace_normal">Normal</string>
-    <string name="settings_walking_pace_brisk">Brisk</string>
-    <string name="settings_walking_pace_description">Pace the walking parts of a journey are worked out at</string>
+         would be read as a promise about the minutes to come. "Erritmoa" is a
+         pace; "abiadura" is the figure, and is not used. -->
+    <string name="settings_walking_pace_title">Oinezko erritmoa</string>
+    <string name="settings_walking_pace_slow">Motela</string>
+    <string name="settings_walking_pace_normal">Normala</string>
+    <string name="settings_walking_pace_brisk">Bizkorra</string>
+    <string name="settings_walking_pace_description">Ibilbideko oinezko zatiak zein erritmotan kalkulatzen diren</string>
 
-    <string name="settings_theme_title">Theme</string>
-    <string name="settings_theme_system">System</string>
-    <string name="settings_theme_light">Light</string>
-    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_title">Gaia</string>
+    <string name="settings_theme_system">Sistema</string>
+    <string name="settings_theme_light">Argia</string>
+    <string name="settings_theme_dark">Iluna</string>
 
     <!-- Units (SPEC 7.6). The buttons name the units rather than the
          countries: what one gets is what is shown, and no system belongs to a
-         nation. -->
-    <string name="settings_units_title">Units</string>
-    <string name="settings_units_system">System</string>
+         nation. The symbols are international and stay as they are. -->
+    <string name="settings_units_title">Unitateak</string>
+    <string name="settings_units_system">Sistema</string>
     <string name="settings_units_metric">m · km</string>
     <string name="settings_units_us">ft · mi</string>
     <string name="settings_units_uk">yd · mi</string>
-    <string name="settings_units_description">Units used for distances</string>
-    <string name="settings_units_system_description">Follow the region the device is set to</string>
-    <string name="settings_units_metric_description">Metres and kilometres</string>
-    <string name="settings_units_us_description">Feet and miles</string>
-    <string name="settings_units_uk_description">Yards and miles</string>
+    <string name="settings_units_description">Distantzietarako erabiltzen diren unitateak</string>
+    <string name="settings_units_system_description">Jarraitu gailuan ezarritako eskualdeari</string>
+    <string name="settings_units_metric_description">Metroak eta kilometroak</string>
+    <string name="settings_units_us_description">Oinak eta miliak</string>
+    <string name="settings_units_uk_description">Yardak eta miliak</string>
 
-    <string name="about_title">About</string>
-    <string name="about_open">About</string>
-    <string name="about_version">Version %1$s</string>
-    <string name="about_privacy_title">Privacy</string>
-    <string name="about_privacy_body">No account, no adverts, no tracker, no unique identifier. Nothing you search for or compute leaves this phone: addresses, journeys and your position stay here, and are not kept. The only request that goes out in everyday use fetches bike availability. Datasets are downloaded only when you ask.</string>
-    <string name="about_attributions_title">Data sources</string>
-    <string name="about_attribution_gbfs">Bike availability: the open data of the network served, published in the GBFS format. In France it is indexed on transport.data.gouv.fr.</string>
-    <string name="about_attribution_osm">Map, routing and landmarks: © OpenStreetMap contributors, ODbL licence.</string>
-    <string name="about_attribution_ban">Addresses and house numbers: Base Adresse Nationale, ODbL licence.</string>
-    <string name="about_attribution_geonames">Municipality names: GeoNames, CC BY 4.0 licence.</string>
-    <string name="about_attribution_brouter">Routing: BRouter, MIT licence, over OpenStreetMap data.</string>
-    <string name="about_attribution_maplibre">Map rendering: MapLibre Native, two-clause BSD licence.</string>
-    <string name="about_links_title">Opening a place from another app</string>
-    <string name="about_links_body">“geo:” links and addresses shared as plain text come straight here: pick Roue Libre in Android’s chooser. Links from mapping websites need permission: Settings → Apps → Roue Libre → Open by default → Add link.</string>
-    <string name="about_licence_title">Licence</string>
-    <string name="about_licence_body">Roue Libre is free software, released under the GNU GPL version 3. You may use it, study it, modify it and pass it on.</string>
-    <string name="about_open_repository">View the source code</string>
-    <string name="about_open_sources">Sources city by city</string>
-    <string name="about_open_licences">Component licences</string>
+    <string name="about_title">Aplikazioari buruz</string>
+    <string name="about_open">Aplikazioari buruz</string>
+    <string name="about_version">%1$s bertsioa</string>
+    <string name="about_privacy_title">Pribatutasuna</string>
+    <string name="about_privacy_body">Konturik ez, iragarkirik ez, jarraipen-tresnarik ez, identifikatzaile bakarrik ez. Bilatzen edo kalkulatzen duzun ezerk ez du telefono hau uzten: helbideak, bidaiak eta zure kokapena hemen geratzen dira, eta ez dira gordetzen. Eguneroko erabileran ateratzen den eskaera bakarrak bizikleten erabilgarritasuna eskuratzen du. Datu-multzoak eskatzen dituzunean bakarrik deskargatzen dira.</string>
+    <string name="about_attributions_title">Datu-iturriak</string>
+    <string name="about_attribution_gbfs">Bizikleten erabilgarritasuna: zerbitzatzen den sarearen datu irekiak, GBFS formatuan argitaratuak. Frantzian transport.data.gouv.fr atarian daude indexatuta.</string>
+    <string name="about_attribution_osm">Mapa, ibilbideak eta erreferentzia-puntuak: © OpenStreetMap-eko kolaboratzaileak, ODbL lizentzia.</string>
+    <string name="about_attribution_ban">Helbideak eta etxe-zenbakiak: Base Adresse Nationale, ODbL lizentzia.</string>
+    <string name="about_attribution_geonames">Udalerrien izenak: GeoNames, CC BY 4.0 lizentzia.</string>
+    <string name="about_attribution_brouter">Ibilbideen kalkulua: BRouter, MIT lizentzia, OpenStreetMap-eko datuen gainean.</string>
+    <string name="about_attribution_maplibre">Maparen errendatzea: MapLibre Native, bi klausulako BSD lizentzia.</string>
+    <string name="about_links_title">Toki bat beste aplikazio batetik irekitzea</string>
+    <!-- The path is quoted in the words the phone itself shows, key for key:
+         settings:settings_label, settings:apps_dashboard_title,
+         settings:launch_by_default, settings:app_launch_add_link. -->
+    <string name="about_links_body">«geo:» estekak eta testu soil gisa partekatutako helbideak zuzenean hona iristen dira: aukeratu Roue Libre Androiden hautatzailean. Mapa-webguneetako estekek baimena behar dute: Ezarpenak → Aplikazioak → Roue Libre → Ireki modu lehenetsian → Gehitu esteka bat.</string>
+    <string name="about_licence_title">Lizentzia</string>
+    <string name="about_licence_body">Roue Libre software librea da, GNU GPL 3. bertsioaren pean argitaratua. Erabiltzeko, aztertzeko, aldatzeko eta besteei emateko eskubidea duzu.</string>
+    <string name="about_open_repository">Ikusi iturburu-kodea</string>
+    <string name="about_open_sources">Iturriak, hiriz hiri</string>
+    <string name="about_open_licences">Osagaien lizentziak</string>
 
-    <string name="sources_title">Data sources</string>
-    <string name="sources_intro">Availability comes from each city\'s network, as open data. Here is who produces it, including for the cities you have not installed.</string>
-    <string name="sources_open">Open the source</string>
-    <string name="about_licences_title">Licences</string>
-    <string name="about_no_browser">No browser is installed on this device.</string>
+    <string name="sources_title">Datu-iturriak</string>
+    <string name="sources_intro">Erabilgarritasuna hiri bakoitzaren saretik dator, datu ireki gisa. Hona hemen nork sortzen dituen, instalatu ez dituzun hirienak barne.</string>
+    <string name="sources_open">Ireki iturria</string>
+    <string name="about_licences_title">Lizentziak</string>
+    <string name="about_no_browser">Gailu honetan ez dago arakatzailerik instalatuta.</string>
 
-    <string name="journey_title">Journey</string>
-    <string name="journey_open">Plan a journey</string>
-    <string name="journey_origin_empty">Starting from?</string>
-    <string name="journey_destination_empty">Going where?</string>
-    <string name="journey_choose_origin">Starting from?</string>
-    <string name="journey_choose_destination">Going where?</string>
-    <string name="journey_swap">Swap start and destination</string>
-    <string name="journey_hint">The journey is computed on the device: walk to a station, ride, then walk the rest of the way.</string>
+    <string name="journey_title">Ibilbidea</string>
+    <string name="journey_open">Prestatu ibilbide bat</string>
+    <string name="journey_origin_empty">Nondik?</string>
+    <string name="journey_destination_empty">Nora?</string>
+    <string name="journey_choose_origin">Nondik?</string>
+    <string name="journey_choose_destination">Nora?</string>
+    <string name="journey_swap">Trukatu abiapuntua eta helmuga</string>
+    <string name="journey_hint">Ibilbidea gailuan bertan kalkulatzen da: oinez geltokiraino, bizikletaz, eta oinez gainerako bidea.</string>
     <!-- The switch that leaves the network out of the journey, and the sentence
-         that replaces the one above it when it is on (SPEC §7.3). -->
-    <string name="journey_own_bike">Ride my own bike</string>
-    <string name="journey_hint_own_bike">The journey is computed on the device: one ride from door to door, with no station on the way.</string>
+         that replaces the one above it when it is on (SPEC §7.3). It labels a
+         switch and not a button, so it takes no imperative: it reads as the
+         summaries it produces do, "zure bizikletan". -->
+    <string name="journey_own_bike">Nire bizikletan</string>
+    <string name="journey_hint_own_bike">Ibilbidea gailuan bertan kalkulatzen da: atez ateko ibilaldi bakarra, bidean geltokirik gabe.</string>
 
     <!-- Which bike one wants to ride (SPEC §7.3). The first asks for nothing,
-         which is what the application does at rest. -->
-    <string name="journey_bike_kind_any">Any bike</string>
-    <string name="journey_bike_kind_mechanical">Mechanical</string>
-    <string name="journey_bike_kind_electric">Electric</string>
-    <string name="journey_bike_kind_any_description">Any bike, whichever kind</string>
-    <string name="journey_bike_kind_mechanical_description">A bike I pedal myself</string>
-    <string name="journey_bike_kind_electric_description">A pedal-assist bike</string>
-    <string name="journey_compute">Work out the journey</string>
-    <string name="journey_computing">Working out the best journey…</string>
+         which is what the application does at rest. It is shortened to
+         "Edozein": three buttons share one row and truncate before they wrap,
+         and "bizikleta" is redundant beside "Arrunta" and "Elektrikoa". The
+         full phrase survives in the description below, which is what a screen
+         reader announces. -->
+    <string name="journey_bike_kind_any">Edozein</string>
+    <string name="journey_bike_kind_mechanical">Arrunta</string>
+    <string name="journey_bike_kind_electric">Elektrikoa</string>
+    <string name="journey_bike_kind_any_description">Edozein bizikleta, edozein motatakoa</string>
+    <string name="journey_bike_kind_mechanical_description">Neuk pedalei eragiten diedan bizikleta</string>
+    <string name="journey_bike_kind_electric_description">Laguntza elektrikoa duen bizikleta</string>
+    <string name="journey_compute">Kalkulatu ibilbidea</string>
+    <string name="journey_computing">Ibilbiderik onena kalkulatzen…</string>
     <!-- Nothing is being chosen here — there is one route to trace, not a pair
          of stations to weigh — so the wait does not claim to be looking for the
          best of anything. -->
-    <string name="journey_computing_own_bike">Working the ride out…</string>
-    <string name="journey_source_home">Home</string>
-    <string name="journey_source_work">Work</string>
-    <string name="journey_source_my_position">My position</string>
-    <string name="journey_locating">Finding your position…</string>
-    <string name="journey_source_favourite">A favourite station</string>
-    <string name="journey_source_on_map">A point on the map</string>
-    <string name="journey_no_favourite">No favourite station yet. Open a station and tap the star to add it.</string>
-    <string name="journey_pick_crosshair">Targeted point</string>
-    <string name="journey_pick_confirm">Choose this point</string>
-    <string name="journey_picked_point">Point on the map</string>
-    <string name="journey_frame">Show the whole journey</string>
+    <string name="journey_computing_own_bike">Ibilaldia kalkulatzen…</string>
+    <string name="journey_source_home">Etxea</string>
+    <string name="journey_source_work">Lantokia</string>
+    <string name="journey_source_my_position">Nire kokapena</string>
+    <string name="journey_locating">Zure kokapena bilatzen…</string>
+    <string name="journey_source_favourite">Gogoko geltoki bat</string>
+    <string name="journey_source_on_map">Mapako puntu bat</string>
+    <string name="journey_no_favourite">Oraindik ez duzu gogoko geltokirik. Ireki geltoki bat eta sakatu izarra gehitzeko.</string>
+    <string name="journey_pick_crosshair">Seinalatutako puntua</string>
+    <string name="journey_pick_confirm">Aukeratu puntu hau</string>
+    <string name="journey_picked_point">Mapako puntua</string>
+    <string name="journey_frame">Erakutsi ibilbide osoa</string>
 
-    <string name="journey_summary">of which %1$s walking and %2$s riding · %3$s</string>
+    <string name="journey_summary">horietatik %1$s oinez eta %2$s bizikletaz · %3$s</string>
     <!-- Metres climbed over a leg or over the whole journey. Shown only where
-         there is relief worth naming; a flat city never reads this. -->
-    <string name="journey_climb">%1$s of climb</string>
+         there is relief worth naming; a flat city never reads this. The figure
+         stands before a bare noun, so no ending lands on a unit symbol —
+         "km-ko" against "m-ko" is decided by a word this file cannot see. -->
+    <string name="journey_climb">%1$s igoera</string>
     <!-- What waits at the station one sets off from, hung at the end of the
          journey summary, in a conurbation lending both kinds of bike
          (SPEC §7.4). %1$s is the two counts, mechanical and electric, each
-         already agreed in number. -->
-    <string name="journey_bikes_at_departure">%1$s at the departure station</string>
+         already agreed in number, and it follows a colon: the case falls on
+         "geltokian", a noun of this file's own. -->
+    <string name="journey_bikes_at_departure">Irteerako geltokian: %1$s</string>
     <!-- The block holding the total time, the summary and the drawing opens
          the journey in full: this is what the press does, announced to a screen
          reader that would otherwise say only "activate". -->
-    <string name="journey_detail_open">Show the journey in detail</string>
-    <string name="journey_detail_title">The journey in detail</string>
-    <string name="journey_detail_departure_station">Departure station</string>
-    <string name="journey_detail_arrival_station">Arrival station</string>
+    <string name="journey_detail_open">Erakutsi ibilbidea xehetasunez</string>
+    <string name="journey_detail_title">Ibilbidea xehetasunez</string>
+    <string name="journey_detail_departure_station">Irteerako geltokia</string>
+    <string name="journey_detail_arrival_station">Iritsierako geltokia</string>
+    <!-- The drawing of the ground the bike leg runs over. The leg as an object
+         is "bizikletazko zatia"; the act of riding is "ibilaldia". -->
+    <string name="journey_detail_profile">Bizikletazko zatia, gora eta behera</string>
+    <!-- Read out in place of the drawing. %1$s is the climb of the ride, %2$s
+         its lowest point above sea level and %3$s its highest. All three are
+         distances already written with their unit, and none of them takes an
+         ending here. -->
+    <string name="journey_detail_profile_description">Bizikletazko zatiak %1$s igotzen ditu, itsas mailatik gorako %2$s eta %3$s bitartean.</string>
     <!-- The counts shown are the ones the journey was worked out on: a station
          empties while one walks to it (SPEC §6). -->
-    <!-- The drawing of the ground the bike leg runs over. -->
-    <string name="journey_detail_profile">The ride, uphill and down</string>
-    <!-- Read out in place of the drawing. %1$s is the climb of the ride, %2$s
-         its lowest point above sea level and %3$s its highest. -->
-    <string name="journey_detail_profile_description">The ride climbs %1$s, between %2$s and %3$s above sea level.</string>
-    <string name="journey_detail_availability_note">Bikes and docks as they were when the journey was worked out.</string>
+    <string name="journey_detail_availability_note">Bizikletak eta leku libreak ibilbidea kalkulatu zeneko unekoak dira.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
-    <string name="journey_navigate">Open in a navigation app</string>
-    <string name="journey_navigate_which">Which part of the journey?</string>
-    <string name="journey_step_to_station">Walk to %1$s</string>
-    <string name="journey_step_ride">Ride to %1$s</string>
-    <string name="journey_step_to_destination">Walk to the destination</string>
-    <string name="journey_step_walk_all">Walk to the destination</string>
-    <string name="journey_step_ride_all">Ride to the destination</string>
+    <string name="journey_navigate">Ireki nabigazio-aplikazio batean</string>
+    <string name="journey_navigate_which">Ibilbidearen zein zati?</string>
+    <!-- %1$s is a station's name, exactly as its feed published it. The case
+         falls on "geltokira", a noun of this file's own, and the name follows
+         behind a colon: "Bilboko Udaletxea" and "Areatza" would not take the
+         same ending. -->
+    <string name="journey_step_to_station">Oinez geltokira: %1$s</string>
+    <string name="journey_step_ride">Bizikletaz geltokira: %1$s</string>
+    <string name="journey_step_to_destination">Oinez helmugara</string>
+    <string name="journey_step_walk_all">Oinez helmugara</string>
+    <string name="journey_step_ride_all">Bizikletaz helmugara</string>
     <!-- The summary of a journey ridden on one's own bike: it sits under the
          total time, where the walk's own summary sits, and says the same two
-         things — how far, and how much of it goes up. -->
-    <string name="journey_own_bike_only">on your own bike, over %1$s.</string>
-    <string name="journey_own_bike_only_climb">on your own bike, over %1$s and %2$s of climb.</string>
-    <string name="journey_walk_only">on foot, over %1$s — no bike journey is possible here.</string>
-    <string name="journey_walk_only_climb">on foot, over %1$s and %2$s of climb — no bike journey is possible here.</string>
-    <string name="journey_walk_is_quicker">on foot, over %1$s — sooner than going to fetch a bike.</string>
-    <string name="journey_walk_is_quicker_climb">on foot, over %1$s and %2$s of climb — sooner than going to fetch a bike.</string>
-    <string name="journey_none_title">No journey</string>
-    <string name="journey_no_bike_nearby">No station with a bike near the start. Try again later, or start from somewhere else.</string>
+         things — how far, and how much of it goes up. "Guztira" carries the
+         English "over": a distance behind it needs no ending, where "%1$s-ko
+         ibilbidean" would have wanted one that depends on the unit symbol. -->
+    <string name="journey_own_bike_only">zure bizikletan, guztira %1$s.</string>
+    <string name="journey_own_bike_only_climb">zure bizikletan, guztira %1$s eta %2$s igoera.</string>
+    <string name="journey_walk_only">oinez, guztira %1$s – hemen ezin da bizikletazko ibilbiderik egin.</string>
+    <string name="journey_walk_only_climb">oinez, guztira %1$s eta %2$s igoera – hemen ezin da bizikletazko ibilbiderik egin.</string>
+    <string name="journey_walk_is_quicker">oinez, guztira %1$s – bizikleta bila joatea baino azkarrago.</string>
+    <string name="journey_walk_is_quicker_climb">oinez, guztira %1$s eta %2$s igoera – bizikleta bila joatea baino azkarrago.</string>
+    <string name="journey_none_title">Ez dago ibilbiderik</string>
+    <string name="journey_no_bike_nearby">Ez dago bizikletarik duen geltokirik abiapuntutik gertu. Saiatu geroago, edo abiatu beste toki batetik.</string>
 
-    <string name="journey_no_mechanical_nearby">No station nearby has a mechanical bike right now. Ask for any bike, or try again later.</string>
-    <string name="journey_no_electric_nearby">No station nearby has an electric bike right now. Ask for any bike, or try again later.</string>
-    <string name="journey_no_dock_nearby">No station with a free dock near the destination. Try again later, or aim somewhere else.</string>
-    <string name="journey_no_route">No practicable route between these two points.</string>
-    <string name="journey_graph_missing">The routing data is not installed. Add it from the storage screen.</string>
-    <string name="journey_outside_coverage">This point lies outside the area covered by the installed data.</string>
-    <string name="journey_no_stations">No station known. Refresh the station list, then try again.</string>
+    <string name="journey_no_mechanical_nearby">Inguruko geltokietan ez dago bizikleta arruntik une honetan. Eskatu edozein bizikleta, edo saiatu geroago.</string>
+    <string name="journey_no_electric_nearby">Inguruko geltokietan ez dago bizikleta elektrikorik une honetan. Eskatu edozein bizikleta, edo saiatu geroago.</string>
+    <string name="journey_no_dock_nearby">Ez dago leku librerik duen geltokirik helmugatik gertu. Saiatu geroago, edo jo beste toki batera.</string>
+    <!-- "Bide" and not "ibilbide": the line on the ground, not the planned
+         journey. That is why "ibilbide" is left to the journey everywhere
+         else in this file. -->
+    <string name="journey_no_route">Ez dago bi puntu hauen artean egin daitekeen biderik.</string>
+    <string name="journey_graph_missing">Ibilbideen datuak ez daude instalatuta. Gehitu itzazu Memoria pantailatik.</string>
+    <string name="journey_outside_coverage">Puntu hau instalatutako datuek estaltzen duten eremutik kanpo dago.</string>
+    <string name="journey_no_stations">Ez da geltokirik ezagutzen. Eguneratu geltokien zerrenda eta saiatu berriro.</string>
 
-    <string name="duration_minutes">%1$d min</string>
-    <string name="duration_hours_minutes">%1$d h %2$02d</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d h %2$02d</string>
 
     <plurals name="docks_total">
-        <item quantity="one">%1$d dock</item>
-        <item quantity="other">%1$d docks</item>
+        <item quantity="one">%1$d ainguraleku</item>
+        <item quantity="other">%1$d ainguraleku</item>
     </plurals>
     <string name="station_capacity_and_age">%1$s · %2$s</string>
-    <string name="station_address_nearby">Near %1$s</string>
-    <string name="station_favourite_add">Add to favourites</string>
-    <string name="station_favourite_remove">Remove from favourites</string>
-    <string name="station_as_origin">Start here</string>
-    <string name="station_as_destination">Go here</string>
-    <string name="station_open_in_navigation">Open in a navigation app</string>
-    <string name="station_no_navigation_app">No mapping app is installed on this device.</string>
+    <!-- The argument is `address.streetName` — a street, an avenue or a square,
+         reaching the string exactly as it stands. "…tik gertu" would want an
+         ablative on it, so the line becomes a label with a colon, which
+         declines nothing. -->
+    <string name="station_address_nearby">Gertu: %1$s</string>
+    <string name="station_favourite_add">Gehitu gogokoetara</string>
+    <string name="station_favourite_remove">Kendu gogokoetatik</string>
+    <string name="station_as_origin">Abiatu hemendik</string>
+    <string name="station_as_destination">Joan hona</string>
+    <string name="station_open_in_navigation">Ireki nabigazio-aplikazio batean</string>
+    <string name="station_no_navigation_app">Gailu honetan ez dago mapa-aplikaziorik instalatuta.</string>
 
-    <string name="address_search_title">Search for an address</string>
-    <string name="address_search_hint">Number, street, town</string>
-    <string name="address_search_clear">Clear the search</string>
-    <string name="address_search_privacy">Everything is searched on the device. Nothing is sent, not even while you type.</string>
+    <string name="address_search_title">Bilatu helbide bat</string>
+    <!-- Street, then number, then town, which is the order an address is
+         written in the Basque Country: "Gran Via 25, Bilbo". The parser has
+         read a house number standing between the street and the town since the
+         pilot, precisely so that each language may write this line in its own
+         order rather than in English's. -->
+    <string name="address_search_hint">Kalea, zenbakia, herria</string>
+    <string name="address_search_clear">Garbitu bilaketa</string>
+    <string name="address_search_privacy">Dena gailuan bertan bilatzen da. Ez da ezer bidaltzen, ezta idatzi ahala ere.</string>
     <string name="address_locality">%1$s %2$s</string>
     <string name="address_detail">%1$s · %2$s</string>
-    <string name="address_detail_approximate">%1$s · approximate position</string>
+    <string name="address_detail_approximate">%1$s · gutxi gorabeherako kokapena</string>
     <string name="address_content_description">%1$s, %2$s</string>
-    <string name="address_search_prompt_title">Where are you going?</string>
-    <string name="address_search_prompt_message">Type a street name, with or without a number. Stations, universities and main squares can be searched too.</string>
-    <string name="address_searching_title">Searching…</string>
-    <string name="address_searching_message">Looking through the addresses installed on this device.</string>
-    <string name="address_no_match_title">No address found</string>
-    <string name="address_no_match_message">Nothing matches “%1$s”. Try the street name on its own, or add the town.</string>
-    <string name="address_needs_index_title">The search needs the address index</string>
-    <string name="address_needs_index_message">Install the index from the storage screen. It stays on the device and never goes out on the network.</string>
-    <string name="address_unreadable_title">Address index unreadable</string>
-    <string name="map_picked_place_description">%1$s. Tap to see what you can do with this place.</string>
+    <string name="address_search_prompt_title">Nora zoaz?</string>
+    <!-- "Stations" here means railway stations, which Basque has its own
+         compound for: writing "geltokiak" would have offered to search for
+         bike stations, the one thing this screen does not do. -->
+    <string name="address_search_prompt_message">Idatzi kale baten izena, zenbakiarekin edo gabe. Tren-geltokiak, unibertsitateak eta plaza nagusiak ere bila daitezke.</string>
+    <!-- Shown while a search runs and the screen has nothing else to show. It
+         says nothing about the outcome, which is the whole point: on a large
+         index the answer can be seconds away. -->
+    <string name="address_searching_title">Bilatzen…</string>
+    <string name="address_searching_message">Gailu honetan instalatutako helbideen artean begiratzen.</string>
+    <string name="address_no_match_title">Ez da helbiderik aurkitu</string>
+    <string name="address_no_match_message">Ez dago «%1$s» testuarekin bat datorrenik. Saiatu kalearen izenarekin bakarrik, edo gehitu herria.</string>
+    <string name="address_needs_index_title">Bilaketak helbideen aurkibidea behar du</string>
+    <string name="address_needs_index_message">Instalatu aurkibidea Memoria pantailatik. Gailuan geratzen da eta ez da inoiz sarera ateratzen.</string>
+    <string name="address_unreadable_title">Helbideen aurkibidea ezin da irakurri</string>
+    <string name="map_picked_place_description">%1$s. Sakatu toki honekin zer egin dezakezun ikusteko.</string>
 
-    <string name="place_sheet_title">This place</string>
-    <string name="place_go_there">Go there</string>
-    <string name="place_leave_from_here">Leave from here</string>
-    <string name="place_clear">Clear this point</string>
+    <!-- The sheet a place found on the map opens (SPEC §7.2, §7.3). It is the station
+         sheet's counterpart for a point no network put a stand on, so the wording stays
+         as plain as that one's: "Abiatu hemendik" is word for word what the station
+         sheet already says, and "Joan hara" is its "Joan hona" with the deictic moved.
+         Neither pair is reworded without the other. -->
+    <string name="place_sheet_title">Toki hau</string>
+    <string name="place_go_there">Joan hara</string>
+    <string name="place_leave_from_here">Abiatu hemendik</string>
+    <string name="place_clear">Kendu puntu hau</string>
 
-    <string name="distance_metres">%1$s m</string>
-    <string name="distance_kilometres">%1$s km</string>
-    <!-- Unit symbols. Written the same way in most languages; the string
-         exists in every one all the same, so a language that writes them
-         otherwise has somewhere to say so. -->
-    <string name="distance_feet">%1$s ft</string>
-    <string name="distance_yards">%1$s yd</string>
-    <string name="distance_miles">%1$s mi</string>
-    <string name="action_back">Back</string>
+    <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
+         five, %1$s is a figure already rounded and already written in the
+         interface's language: the translation places the symbol, never the
+         number. Which of the five applies is the reader's unit system.
+         The space between the two is a NON-BREAKING one, here and in every
+         other resource writing a figure beside the unit naming it: a summary
+         that wrapped ended a line on "5" and opened the next on "m igoera".
+         `UnitTypographyTest` holds every language to it. -->
+    <string name="distance_metres">%1$s m</string>
+    <string name="distance_kilometres">%1$s km</string>
+    <!-- The symbols of the two imperial systems. Written the same way in most
+         languages, Basque included; the string exists all the same, so a
+         language that writes them otherwise has somewhere to say so. -->
+    <string name="distance_feet">%1$s ft</string>
+    <string name="distance_yards">%1$s yd</string>
+    <string name="distance_miles">%1$s mi</string>
+    <string name="action_back">Atzera</string>
 
     <!-- City screen: which conurbation the application serves. -->
-    <string name="city_title">City</string>
+    <string name="city_title">Hiria</string>
     <!-- Read aloud in place of the row that opens the city list: what is
          written on it is the network in service, which says nothing on its
-         own about what pressing it settles. %1$s is a city label. -->
-    <string name="settings_city_description">Network served: %1$s</string>
-    <string name="city_choose">Choose my city</string>
-    <string name="city_intro">Pick the conurbation you want to use. Its data is installed afterwards, once and for all.</string>
-    <string name="city_locate_me">Find my city</string>
-    <string name="city_active">In use</string>
+         own about what pressing it settles. %1$s is a city label, behind a
+         colon as every whole label in this file is. -->
+    <string name="settings_city_description">Zerbitzatzen den sarea: %1$s</string>
+    <string name="city_choose">Aukeratu nire hiria</string>
+    <string name="city_intro">Aukeratu erabili nahi duzun hiri-eremua. Haren datuak gero instalatzen dira, behin betiko.</string>
+    <string name="city_locate_me">Aurkitu nire hiria</string>
+    <string name="city_active">Erabiltzen</string>
     <plurals name="city_detail">
-        <item quantity="one">%1$d station · %2$s to download</item>
-        <item quantity="other">%1$d stations · %2$s to download</item>
+        <item quantity="one">%1$d geltoki · %2$s deskargatzeko</item>
+        <item quantity="other">%1$d geltoki · %2$s deskargatzeko</item>
     </plurals>
     <plurals name="city_stations">
-        <item quantity="one">%1$d station</item>
-        <item quantity="other">%1$d stations</item>
+        <item quantity="one">%1$d geltoki</item>
+        <item quantity="other">%1$d geltoki</item>
     </plurals>
-    <string name="city_detail_size_only">%1$s to download</string>
+    <string name="city_detail_size_only">%1$s deskargatzeko</string>
     <plurals name="city_detail_size_unknown">
-        <item quantity="one">%1$d station · size announced before downloading</item>
-        <item quantity="other">%1$d stations · size announced before downloading</item>
+        <item quantity="one">%1$d geltoki · tamaina deskargatu aurretik jakinaraziko da</item>
+        <item quantity="other">%1$d geltoki · tamaina deskargatu aurretik jakinaraziko da</item>
     </plurals>
-    <string name="city_size_unknown">Size announced before downloading</string>
+    <string name="city_size_unknown">Tamaina deskargatu aurretik jakinaraziko da</string>
+    <!-- Said on the row of a city the downloaded catalogue names and this
+         build carries no configuration for. The catalogue is refreshed over
+         the network, the configurations ship in the APK, and the first can
+         run ahead of the second (SPEC §15). -->
     <string name="city_needs_newer_version">Ez dago erabilgarri aplikazioaren bertsio honetan</string>
-    <string name="city_installed">%1$s installed on the device</string>
-    <string name="city_label">%1$s — %2$s</string>
-    <string name="city_delete">Delete</string>
-    <string name="city_delete_description">Delete the data for %1$s</string>
-    <string name="city_delete_title">Delete this data?</string>
-    <string name="city_delete_body">All offline data for %1$s will be erased. You will have to download it again to use it.</string>
-    <string name="city_delete_confirm">Delete</string>
-    <string name="city_deleted">Data for %1$s deleted</string>
-    <string name="city_search_hint">Search for a city</string>
-    <string name="city_search_clear">Clear the search</string>
-    <string name="city_no_match_title">No city found</string>
-    <string name="city_no_match_message">Nothing matches “%1$s”. Check the spelling, or clear the search.</string>
-    <string name="city_proposal_title">Your city</string>
+    <!-- %1$s is a size, "340 MB". A size cannot take an ending — "MB-tan" and
+         "GB-tan" are read differently and the symbol is not known here — so
+         the case falls on "gailuan" and the figure follows the colon. -->
+    <string name="city_installed">Gailuan instalatuta: %1$s</string>
+    <string name="city_label">%1$s – %2$s</string>
+    <string name="city_delete">Ezabatu</string>
+    <!-- These four are handed the NETWORK's name, not the city's: every Czech
+         network is called "nextbike", so none of them may say "hiri". The name
+         takes no ending either — it sits behind a colon, or behind a
+         demonstrative that carries the case for it. -->
+    <string name="city_delete_description">Ezabatu datuak: %1$s</string>
+    <string name="city_delete_title">Datu hauek ezabatu nahi dituzu?</string>
+    <string name="city_delete_body">Sare honen lineaz kanpoko datu guztiak ezabatuko dira: %1$s. Berriro deskargatu beharko dituzu erabiltzeko.</string>
+    <string name="city_delete_confirm">Ezabatu</string>
+    <string name="city_deleted">Datuak ezabatuta: %1$s</string>
+    <string name="city_search_hint">Bilatu hiri bat</string>
+    <string name="city_search_clear">Garbitu bilaketa</string>
+    <string name="city_no_match_title">Ez da hiririk aurkitu</string>
+    <string name="city_no_match_message">Ez dago «%1$s» testuarekin bat datorrenik. Begiratu ondo idatzita dagoen, edo garbitu bilaketa.</string>
+    <string name="city_proposal_title">Zure hiria</string>
     <!-- Shown when the position says one is in another served conurbation than the one installed. -->
-    <string name="city_here_title">You are in another city</string>
-    <string name="city_here_body">%1$s serves the area you are in. Install its data to see its stations and work out journeys here.</string>
-    <string name="city_here_installed_body">%1$s serves the area you are in, and its data is already on the device.</string>
-    <string name="city_here_install">Install its data</string>
-    <string name="city_here_use">Use it</string>
-    <string name="city_proposal_body">You seem to be in the area covered by %1$s. Shall we go with that?</string>
-    <string name="city_proposal_accept">Yes</string>
-    <string name="city_none_nearby">No known network near here. Pick a city from the list.</string>
-    <string name="action_cancel">Cancel</string>
+    <string name="city_here_title">Beste hiri batean zaude</string>
+    <string name="city_here_body">Sare honek ematen dio zerbitzua zauden eremuari: %1$s. Instalatu haren datuak bertako geltokiak ikusteko eta hemen ibilbideak kalkulatzeko.</string>
+    <string name="city_here_installed_body">Sare honek ematen dio zerbitzua zauden eremuari: %1$s. Haren datuak gailuan daude jada.</string>
+    <string name="city_here_install">Instalatu haren datuak</string>
+    <string name="city_here_use">Erabili</string>
+    <string name="city_proposal_body">Badirudi sare honek estaltzen duen eremuan zaudela: %1$s. Hori erabili nahi duzu?</string>
+    <string name="city_proposal_accept">Bai</string>
+    <string name="city_none_nearby">Ez dago sare ezagunik hemendik gertu. Aukeratu hiri bat zerrendatik.</string>
+    <string name="action_cancel">Utzi</string>
 
-    <string name="size_bytes">%1$s B</string>
-    <string name="size_kilobytes">%1$s kB</string>
-    <string name="size_megabytes">%1$s MB</string>
-    <string name="size_gigabytes">%1$s GB</string>
+    <string name="size_bytes">%1$s B</string>
+    <string name="size_kilobytes">%1$s kB</string>
+    <string name="size_megabytes">%1$s MB</string>
+    <string name="size_gigabytes">%1$s GB</string>
 
-    <string name="storage_title">Storage</string>
-    <string name="storage_open">Manage offline data</string>
-    <string name="storage_intro">The map, the journey planner and the address search work with no network. They need three datasets, installed once.</string>
-    <string name="storage_total">%1$s used on this device</string>
-    <string name="storage_nothing_installed">No data installed</string>
-    <string name="storage_no_city">No city selected</string>
+    <string name="storage_title">Memoria</string>
+    <string name="storage_open">Kudeatu lineaz kanpoko datuak</string>
+    <string name="storage_intro">Mapak, ibilbideen kalkuluak eta helbideen bilaketak sarerik gabe funtzionatzen dute. Hiru datu-multzo behar dituzte, behin instalatuta.</string>
+    <string name="storage_total">%1$s erabilita gailu honetan</string>
+    <string name="storage_nothing_installed">Ez dago daturik instalatuta</string>
+    <string name="storage_no_city">Ez dago hiririk hautatuta</string>
 
-    <string name="dataset_tiles">Map data</string>
-    <string name="dataset_tiles_purpose">Draws the map with no network</string>
-    <string name="dataset_routing">Routing data</string>
-    <string name="dataset_routing_purpose">Works out journeys on the device</string>
-    <string name="dataset_addresses">Address index</string>
-    <string name="dataset_addresses_purpose">Searches streets without sending anything</string>
+    <string name="dataset_tiles">Maparen datuak</string>
+    <string name="dataset_tiles_purpose">Mapa marrazten du sarerik gabe</string>
+    <string name="dataset_routing">Ibilbideen datuak</string>
+    <string name="dataset_routing_purpose">Ibilbideak gailuan kalkulatzen ditu</string>
+    <string name="dataset_addresses">Helbideen aurkibidea</string>
+    <string name="dataset_addresses_purpose">Kaleak bilatzen ditu ezer bidali gabe</string>
 
-    <string name="storage_check_updates">Check for updates</string>
-    <string name="storage_checking">Reading the manifest…</string>
-    <string name="storage_up_to_date">Everything is up to date.</string>
-    <string name="storage_download_pending">Download %1$s</string>
-    <string name="storage_downloading">%1$s · %2$s of %3$s</string>
+    <string name="storage_check_updates">Bilatu eguneratzeak</string>
+    <string name="storage_checking">Manifestua irakurtzen…</string>
+    <string name="storage_up_to_date">Dena eguneratuta dago.</string>
+    <!-- %1$s is a size. It is the object of an imperative, which takes the
+         bare absolutive, so nothing has to be bent here. -->
+    <string name="storage_download_pending">Deskargatu %1$s</string>
+    <!-- "%2$s / %3$s" and not "%3$s-tik %2$s": the ablative on a size would
+         change shape with the unit symbol, which is not known here. -->
+    <string name="storage_downloading">%1$s · %2$s / %3$s</string>
     <string name="storage_download_failed">%1$s: %2$s</string>
-    <string name="storage_wifi_warning">You are not on Wi-Fi. This download can weigh heavily on a mobile plan.</string>
-    <string name="dataset_update_available">Update available</string>
+    <string name="storage_wifi_warning">Ez zaude wifi-sare batera konektatuta. Deskarga honek asko kontsumi dezake sare mugikorreko tarifan.</string>
+    <string name="dataset_update_available">Eguneratu egin daiteke</string>
 
-    <string name="dataset_absent">Not installed</string>
+    <string name="dataset_absent">Instalatu gabe</string>
     <string name="dataset_installed">%1$s · %2$s</string>
-    <string name="dataset_import">Import</string>
-    <string name="dataset_replace">Replace</string>
-    <string name="dataset_delete">Delete</string>
-    <string name="dataset_delete_description">Delete %1$s</string>
-    <string name="dataset_delete_title">Delete this data?</string>
-    <!-- %1$s is the dataset's name, %2$s the space it frees. -->
-    <string name="dataset_delete_body">The “%1$s” data will be erased, freeing %2$s. You will have to download it again to work offline.</string>
-    <string name="dataset_imported">%1$s installed</string>
-    <string name="dataset_deleted">%1$s deleted</string>
+    <string name="dataset_import">Inportatu</string>
+    <string name="dataset_replace">Ordeztu</string>
+    <string name="dataset_delete">Ezabatu</string>
+    <string name="dataset_delete_description">Ezabatu %1$s</string>
+    <string name="dataset_delete_title">Datu hauek ezabatu nahi dituzu?</string>
+    <!-- %1$s is the dataset's name, %2$s the space it frees. The name is held
+         inside quotation marks and the size sits behind a colon: a verb
+         agreeing with "340 MB" would have to know whether the figure is one or
+         many, and the dataset names differ in number too ("maparen datuak" is
+         plural, "helbideen aurkibidea" singular). -->
+    <string name="dataset_delete_body">«%1$s» datuak ezabatuko dira. Libratuko den tokia: %2$s. Berriro deskargatu beharko dituzu lineaz kanpo lan egiteko.</string>
+    <!-- Same reason for the colon here: "maparen datuak instalatu dira" and
+         "helbideen aurkibidea instalatu da" do not take the same verb. -->
+    <string name="dataset_imported">Instalatuta: %1$s</string>
+    <string name="dataset_deleted">Ezabatuta: %1$s</string>
 
-    <string name="dataset_rejected_empty">The chosen file is empty.</string>
-    <string name="dataset_rejected_format">This file is not the expected one. Choose the “%1$s” file produced by the generation scripts.</string>
-    <!-- %1$s is the dataset’s name, %2$s the file expected for it. -->
-    <string name="dataset_rejected_not_data">This file is not “%1$s”, nor any other data this app reads. Choose the “%2$s” file produced by the generation scripts.</string>
+    <string name="dataset_rejected_empty">Aukeratutako fitxategia hutsik dago.</string>
+    <string name="dataset_rejected_format">Fitxategi hau ez da espero zena. Aukeratu «%1$s» fitxategia, sortze-scriptek ekoitzitakoa.</string>
+    <!-- %1$s is the dataset's name, %2$s the file expected for it. -->
+    <string name="dataset_rejected_not_data">Fitxategi hau ez da «%1$s», ezta aplikazio honek irakurtzen duen beste daturik ere. Aukeratu «%2$s» fitxategia, sortze-scriptek ekoitzitakoa.</string>
     <!-- %1$s is what the file really is, %2$s the dataset it was offered as. -->
-    <string name="dataset_rejected_other_dataset">This file is “%1$s”, not “%2$s”. Import it on its own line instead.</string>
-    <string name="dataset_rejected_version">This file is in format version %1$d, and this version of the app reads version %2$d. Update the app.</string>
-    <string name="dataset_rejected_checksum">The file does not match its checksum: it is incomplete or damaged. Download it again.</string>
-    <string name="dataset_rejected_transfer">Copying the file failed. Check the free space and try again.</string>
+    <string name="dataset_rejected_other_dataset">Fitxategi hau «%1$s» da, ez «%2$s». Inportatu dagokion lerroan.</string>
+    <!-- The figures stand before a bare noun: a suffix glued to a numeral
+         changes shape with how the numeral is read aloud, and neither figure
+         is known here. -->
+    <string name="dataset_rejected_version">Fitxategiaren formatu-bertsioa %1$d da, eta aplikazioaren bertsio honek %2$d bertsioa irakurtzen du. Eguneratu aplikazioa.</string>
+    <string name="dataset_rejected_checksum">Fitxategia ez dator bat bere kontrol-baturarekin: osatu gabe edo hondatuta dago. Deskargatu berriro.</string>
+    <string name="dataset_rejected_transfer">Ez da lortu fitxategia kopiatzea. Begiratu zenbat memoria libre dagoen eta saiatu berriro.</string>
 
-    <string name="error_offline">No connection. The last known availability stays on screen.</string>
-    <string name="error_offline_no_availability">No connection. No availability has been received yet, so there is nothing to show.</string>
-    <string name="error_offline_download">No connection. The download picks up where it stopped.</string>
-    <string name="error_timeout_download">The server is not answering. The download picks up where it stopped.</string>
-    <string name="error_server_refused_download">Server error (%1$d). The download picks up where it stopped.</string>
-    <string name="error_untrusted_server_download">Invalid security certificate. The download picks up once it is renewed.</string>
-    <string name="error_malformed_download">Unreadable file received. The download picks up where it stopped.</string>
-    <string name="error_local_storage_download">The file could not be saved. Free some space and the download picks up.</string>
-    <!-- The same failures again, read after a press on "Check for updates",
+    <string name="error_offline">Ez dago konexiorik. Azken erabilgarritasun ezaguna pantailan geratuko da.</string>
+    <!-- Said in place of the line above when nothing has ever been
+         received: promising that the last known availability stays on
+         screen, over an empty map and under a "Ez da inoiz eguneratu" pill,
+         names something the reader has never had (SPEC §14). -->
+    <string name="error_offline_no_availability">Ez dago konexiorik. Oraindik ez da erabilgarritasunik jaso, beraz ez dago ezer erakusteko.</string>
+    <!-- The same failures read on the storage screen, where a dataset
+         transfer failed rather than an availability refresh. The server
+         is the one hosting the files, not the bike network's, and those
+         files come down resumably (SPEC §4.4) — which is what each of
+         these says will happen next. -->
+    <string name="error_offline_download">Ez dago konexiorik. Deskargak gelditu zen tokitik jarraituko du.</string>
+    <string name="error_timeout_download">Zerbitzariak ez du erantzuten. Deskargak gelditu zen tokitik jarraituko du.</string>
+    <!-- %1$d is the HTTP code the server returned. -->
+    <string name="error_server_refused_download">Zerbitzariaren errorea (%1$d). Deskargak gelditu zen tokitik jarraituko du.</string>
+    <string name="error_untrusted_server_download">Segurtasun-ziurtagiria baliogabea da. Berritzen denean jarraituko du deskargak.</string>
+    <string name="error_malformed_download">Irakurri ezin den fitxategia jaso da. Deskargak gelditu zen tokitik jarraituko du.</string>
+    <string name="error_local_storage_download">Ezin izan da fitxategia gorde. Libratu memoria eta deskargak jarraituko du.</string>
+    <!-- The same failures again, read after a press on "Bilatu eguneratzeak",
          which is a third gesture: it reads the published manifest and
          transfers nothing, so there is no download to pick up where it
          stopped, and the whole check has to be made again. -->
-    <string name="error_offline_check">No connection. Nothing was checked; try again once you are back online.</string>
-    <string name="error_timeout_check">The server is not answering. Nothing was checked; try again in a moment.</string>
+    <string name="error_offline_check">Ez dago konexiorik. Ez da ezer egiaztatu; saiatu berriro linean zaudenean.</string>
+    <string name="error_timeout_check">Zerbitzariak ez du erantzuten. Ez da ezer egiaztatu; saiatu berriro handik gutxira.</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_check">Server error (%1$d). Nothing was checked; try again later.</string>
-    <string name="error_untrusted_server_check">Invalid security certificate. Nothing can be checked until it is renewed.</string>
-    <string name="error_malformed_check">The published list of data is unreadable. Nothing was checked; try again later.</string>
-    <string name="error_local_storage_check">Unable to read the data stored on the device. Nothing was checked against it.</string>
-    <string name="error_timeout">The network’s server is taking too long to answer. Try again in a moment.</string>
-    <string name="error_server_refused">The network’s server returned an error (%1$d). Try again later.</string>
-    <string name="error_untrusted_server">The network’s server presented an invalid security certificate. Its data cannot be fetched safely until the operator renews it.</string>
-    <string name="error_malformed">The data received is unreadable. The network’s feed is at fault; try again later.</string>
-    <string name="error_feed_unavailable">The network does not publish the “%1$s” feed.</string>
-    <string name="error_unsupported_version">This network publishes its data in version %1$s, which this version of the app cannot read. Update the app.</string>
-    <string name="error_local_storage">Unable to read the data stored on the device.</string>
-    <string name="error_no_city_chosen">No city is selected. Choose one.</string>
+    <string name="error_server_refused_check">Zerbitzariaren errorea (%1$d). Ez da ezer egiaztatu; saiatu berriro geroago.</string>
+    <string name="error_untrusted_server_check">Segurtasun-ziurtagiria baliogabea da. Ezin da ezer egiaztatu berritu arte.</string>
+    <string name="error_malformed_check">Argitaratutako datuen zerrenda ezin da irakurri. Ez da ezer egiaztatu; saiatu berriro geroago.</string>
+    <string name="error_local_storage_check">Ezin dira irakurri gailuan gordetako datuak. Ez da ezer haiekin alderatu.</string>
+    <string name="error_timeout">Sarearen zerbitzariak luzeegi hartzen du erantzuteko. Saiatu berriro handik gutxira.</string>
+    <string name="error_server_refused">Sarearen zerbitzariak errore bat itzuli du (%1$d). Saiatu geroago.</string>
+    <string name="error_untrusted_server">Sarearen zerbitzariak segurtasun-ziurtagiri baliogabea aurkeztu du. Haren datuak ezin dira modu seguruan eskuratu operadoreak berritu arte.</string>
+    <string name="error_malformed">Jasotako datuak ezin dira irakurri. Sarearen jarioan dago akatsa; saiatu geroago.</string>
+    <string name="error_feed_unavailable">Sareak ez du «%1$s» jarioa argitaratzen.</string>
+    <string name="error_unsupported_version">Sare honek %1$s bertsioan argitaratzen ditu datuak, eta aplikazioaren bertsio honek ezin du hori irakurri. Eguneratu aplikazioa.</string>
+    <string name="error_local_storage">Ezin dira irakurri gailuan gordetako datuak.</string>
+    <string name="error_no_city_chosen">Ez dago hiririk hautatuta. Aukeratu bat.</string>
 
-    <!-- Unmetered-only downloads -->
-    <!-- The setting names what is billed rather than Wi-Fi: a phone's shared
-         connection is Wi-Fi and is a mobile plan, and a capped hotspot
-         declares itself billed. -->
-    <string name="download_unmetered_only">Download only on an unmetered connection</string>
-    <string name="download_unmetered_only_description">Usually Wi-Fi. A shared phone connection or a capped hotspot is billed by the megabyte and counts as mobile data.</string>
-    <string name="download_held_back_title">Download held back</string>
-    <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_held_back_body">This connection is billed by the megabyte. Connect to Wi-Fi to download %1$s, or download it anyway now.</string>
-    <string name="download_stopped_title">Download stopped</string>
+    <!-- Wi-Fi-only downloads -->
+    <!-- The setting names Wi-Fi, which is the word everybody has, while what is
+         read stays the billing (SPEC §4.4): a phone's shared connection is
+         Wi-Fi and is a mobile plan, and a capped hotspot declares itself
+         billed. The line under the switch says as much in ordinary words. -->
+    <string name="download_unmetered_only">Deskargatu wifi bidez soilik</string>
+    <string name="download_unmetered_only_description">Telefono baten konexio partekatua edo datu-muga duen wifi bat megabyteka ordaindu behar izan daiteke, eta sare mugikortzat hartzen da.</string>
+    <!-- Nothing has left yet: the title names the situation, not a verdict on
+         the connection, which nobody but the operator can give. -->
+    <string name="download_held_back_title">Deskarga sare mugikorrean</string>
+    <!-- %1$s is a size, "340 MB" for instance, and it is the object of an
+         imperative, which takes the bare absolutive. "Baliteke … ordaindu
+         behar izatea" is Android's own shape for "charges may apply"
+         (android:network_switch_metered_detail): the device knows the
+         connection declares itself metered, never what the plan behind it
+         actually charges. -->
+    <string name="download_held_back_body">Baliteke konexio honengatik megabyteka ordaindu behar izatea. Konektatu wifi batera %1$s deskargatzeko, edo deskargatu orain hala ere.</string>
+    <string name="download_stopped_title">Deskarga gelditu da</string>
     <!-- %1$s is a size, "340 MB" for instance. What has already arrived is kept
          on the device and the transfer picks up from there. -->
-    <string name="download_stopped_body">This connection is now billed by the megabyte, so the download stopped. What has arrived is kept. Connect to Wi-Fi to finish the %1$s, or carry on anyway now.</string>
-    <string name="download_anyway">Download anyway</string>
+    <string name="download_stopped_body">Baliteke konexio honengatik megabyteka ordaindu behar izatea, eta horregatik gelditu da deskarga. Iritsi dena gorde egiten da. Konektatu wifi batera %1$s amaitzeko, edo jarraitu orain hala ere.</string>
+    <string name="download_anyway">Deskargatu hala ere</string>
     <!-- %1$s is a size, "340 MB" for instance. -->
-    <string name="download_waiting_for_unmetered">Waiting for an unmetered connection to download %1$s.</string>
-    <string name="download_can_resume">This connection is no longer billed. Start the download again: it carries on where it stopped.</string>
+    <string name="download_waiting_for_unmetered">Wifiaren zain %1$s deskargatzeko.</string>
+    <string name="download_can_resume">Konexio hau ez da jada sare mugikorra. Hasi deskarga berriro: gelditu zen tokitik jarraituko du.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
-    <string name="settings_opening_title">Open the app by default on</string>
+    <string name="settings_opening_title">Zein pantailatan ireki aplikazioa</string>
     <!-- Read aloud in place of the two buttons beside it. -->
-    <string name="settings_opening_description">The screen the app opens on</string>
-    <string name="settings_opening_map">Map</string>
-    <string name="settings_opening_list">Station list</string>
+    <string name="settings_opening_description">Aplikazioa irekitzean agertzen den pantaila</string>
+    <string name="settings_opening_map">Mapa</string>
+    <string name="settings_opening_list">Geltokien zerrenda</string>
     <!-- The way to the map from a station list opened on. -->
-    <string name="stations_open_map">See the map</string>
+    <string name="stations_open_map">Ikusi mapa</string>
     <!-- The button that puts the nearest station at the top of the list
          (SPEC 7.2), read aloud in place of its reticle, and what is said
          when the position is refused to it. -->
-    <string name="stations_order_by_distance">Nearest station first</string>
-    <string name="stations_location_denied">Without location, the stations stay in alphabetical order.</string>
+    <string name="stations_order_by_distance">Geltoki hurbilena lehenengo</string>
+    <string name="stations_location_denied">Kokapenik gabe, geltokiak alfabetikoki ordenatuta geratuko dira.</string>
 
     <!-- Which stations the map draws at all. Set in the settings and nowhere
          else: the map itself carries no control and no badge (SPEC 7.1). -->
-    <string name="settings_map_filters_title">Which stations the map shows</string>
-    <string name="settings_map_filters_hide_out_of_service">Hide the stations out of service</string>
+    <string name="settings_map_filters_title">Mapak zein geltoki erakusten dituen</string>
+    <string name="settings_map_filters_hide_out_of_service">Ezkutatu zerbitzuz kanpoko geltokiak</string>
     <!-- One wording for both modes: this screen knows nothing of the map's
-         Bikes / Free docks button, so it may name neither. -->
-    <string name="settings_map_filters_hide_empty">Hide the stations with nothing to offer</string>
+         Bizikletak / Leku libreak button, so it may name neither. -->
+    <string name="settings_map_filters_hide_empty">Ezkutatu ezer eskaintzen ez duten geltokiak</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
-    <string name="settings_map_filters_hide_empty_hint">“Nothing” follows what the map is counting: no bike while it counts bikes, no free dock while it counts free docks.</string>
+    <string name="settings_map_filters_hide_empty_hint">«Ezer ez» mapak zenbatzen duenaren araberakoa da: bizikletarik ez bizikletak zenbatzen dituenean, leku librerik ez leku libreak zenbatzen dituenean.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
-    <string name="settings_map_filters_keeps_unknown">Stations the network says nothing about stay on the map: a count nobody could read is not a count of nothing.</string>
+    <string name="settings_map_filters_keeps_unknown">Sareak ezer esaten ez duen geltokiak mapan geratzen dira: inork irakurri ezin duen kontaketa ez da hutsaren kontaketa.</string>
 
     <!-- The rider's OWN bike, not the network's. Keep the wording clearly
          about the reader's own equipment: the journey screen carries a
          separate, similar-looking choice about the bikes the network lends. -->
-    <string name="settings_own_bike_kind_title">Your own bike</string>
+    <string name="settings_own_bike_kind_title">Zure bizikleta</string>
     <!-- Read aloud in place of the two buttons beside it. -->
-    <string name="settings_own_bike_kind_description">The kind of bike you own</string>
-    <string name="settings_own_bike_kind_mechanical">Mechanical</string>
-    <string name="settings_own_bike_kind_electric">Electric</string>
+    <string name="settings_own_bike_kind_description">Zure bizikleta zein motatakoa den</string>
+    <string name="settings_own_bike_kind_mechanical">Arrunta</string>
+    <string name="settings_own_bike_kind_electric">Elektrikoa</string>
     <!-- Under the two buttons. Says what the declaration changes: an electric
          bike is routed and timed as one, where a mechanical one is not. -->
-    <string name="settings_own_bike_kind_hint">Declared electric, your own bike gets its own route and its own times.</string>
+    <string name="settings_own_bike_kind_hint">Elektrikotzat emanda, zure bizikletak bere ibilbidea eta bere denborak izango ditu.</string>
 
     <!-- The summary of a ride on one's own bike, where that bike was said to be
          a pedal-assist one. %1$s is a distance, %2$s a climb. -->
-    <string name="journey_own_bike_electric_only">on your own electric bike, over %1$s.</string>
-    <string name="journey_own_bike_electric_only_climb">on your own electric bike, over %1$s and %2$s of climb.</string>
+    <string name="journey_own_bike_electric_only">zure bizikleta elektrikoan, guztira %1$s.</string>
+    <string name="journey_own_bike_electric_only_climb">zure bizikleta elektrikoan, guztira %1$s eta %2$s igoera.</string>
     <!-- Application language -->
-    <string name="settings_language_title">Language</string>
+    <string name="settings_language_title">Hizkuntza</string>
     <!-- Heads the list of languages: the interface follows the device's own
          language, which is what it did before this setting existed. The
          languages themselves are never translated — each is written in its own
          language, and comes from Android rather than from this file. -->
-    <string name="settings_language_system">System</string>
+    <string name="settings_language_system">Sistema</string>
     <!-- Spoken label of the row, read aloud in place of the language alone.
-         %1$s is the language in service: "English", "Français", or the wording
-         above when the device's own is followed. -->
-    <string name="settings_language_description">Language of the interface: %1$s</string>
+         %1$s is the language in service: "English", "Euskara", or the wording
+         above when the device's own is followed. A language name takes no
+         ending here: it stands behind a colon, as every name does in this
+         file. -->
+    <string name="settings_language_description">Interfazearen hizkuntza: %1$s</string>
 
-    <!-- My places (SPEC §7.6). -->
-    <string name="settings_section_places">My places</string>
-    <string name="settings_place_home">Home</string>
-    <string name="settings_place_work">Work</string>
-    <string name="settings_place_none">Not set</string>
-    <string name="settings_place_outside_city">Outside the city served</string>
-    <!-- %1$s is the setting, "Home" or "Work". -->
-    <string name="settings_place_set">Set %1$s</string>
-    <string name="settings_place_change">Change %1$s</string>
-    <string name="settings_place_clear">Forget %1$s</string>
-    <string name="settings_place_cleared">%1$s forgotten</string>
-    <!-- %1$s is the setting, %2$s the place named or the wording above. -->
+    <!-- My places (SPEC §7.6): the home and the work the user names for
+         themselves. Between the journey section and the offline data: these
+         are points the user names, they qualify the journeys they will ask
+         for, and they are no more downloaded data than a walking pace is.
+         "Etxea" is the dwelling and never an application's opening screen,
+         which Basque calls "pantaila nagusia". -->
+    <string name="settings_section_places">Nire tokiak</string>
+    <string name="settings_place_home">Etxea</string>
+    <string name="settings_place_work">Lantokia</string>
+    <!-- Read aloud in place of the address where no place is named. The eye
+         reads the invitation below instead, which is a call to act rather
+         than a state. -->
+    <string name="settings_place_none">Ezarri gabe</string>
+    <!-- Under a place the city in service does not cover. The place stays and
+         stays erasable: coming back to its own city must find it again. -->
+    <string name="settings_place_outside_city">Zerbitzatzen den hiritik kanpo</string>
+    <!-- Written on the row where no place is named. %1$s is the setting,
+         "Etxea" or "Lantokia": this one names the action, being an invitation.
+         The setting is the object of an imperative, which takes the bare
+         absolutive, so the three lines below need no bending. -->
+    <string name="settings_place_set">Ezarri %1$s</string>
+    <!-- What pressing the row does once a place is named, announced as the
+         label of its click action. The row itself names the place, so a
+         screen reader would otherwise offer an address with nothing said
+         about what activating it leads to. %1$s is the setting. -->
+    <string name="settings_place_change">Aldatu %1$s</string>
+    <!-- Spoken label of the button that forgets a place. %1$s is the setting. -->
+    <string name="settings_place_clear">Ahaztu %1$s</string>
+    <!-- Said once the place is forgotten. %1$s is the setting, behind a colon:
+         "Etxea ahaztu da" and "Lantokia ahaztu da" would agree, but the label
+         is shorter and reads better in a snackbar. -->
+    <string name="settings_place_cleared">Ahaztuta: %1$s</string>
+    <!-- Spoken label of the row: %1$s is the setting, %2$s the place named or
+         the wording above where none is. An address on its own does not say
+         what question it answers, and this screen puts the same one twice. -->
     <string name="settings_place_description">%1$s: %2$s</string>
 
 </resources>

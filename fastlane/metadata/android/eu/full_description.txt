@@ -1,0 +1,25 @@
+Roue Librek bizikleta partekatuen geltokiak erakusten ditu mapa batean, eta atez ateko ibilbidea kalkulatzen du, oinez eta bizikletaz konbinatuta.
+
+Dena gailuan bertan gertatzen da: mapak, helbideen bilaketak eta ibilbideen kalkuluak ez dute inolako konexiorik behar. Bizikleten erabilgarritasuna baino ez da sarera ateratzen, denbora errealean.
+
+<b>Zerk bereizten duen</b>
+
+• Google-ren zerbitzurik ez: ez Play Services, ez Firebase, ez Maps SDK. Google-ren zerbitzurik gabeko edozein Android sistematan funtzionatzen du.
+• Telemetriarik ez, jarraipen-tresnarik ez, identifikatzaile bakarrik ez, konturik ez.
+• Ez da bidaien daturik gordetzen: ez historiarik, ez kokapenik, ez helmugarik. Bilatzen duzunak ez du telefonoa uzten.
+• Ez da hiririk inposatzen: hainbat hiri-eremu bizi daitezke batera gailuan, eta hiri baten datuak ezaba daitezke besteei ukitu gabe.
+• Ibilbideak geltoki <i>bikotea</i> optimizatzen du — irteerakoa eta iritsierakoa — hurbilenarekin konformatu beharrean, eta kontuan hartzen du gutxi hornitutako geltoki bat hustu daitekeela zu oinez bertaraino zoazen bitartean.
+
+<b>Instalatu aurretik jakitea komeni dena</b>
+
+Mapa, ibilbideak kalkulatzeko grafoa eta helbideen aurkibidea ez daude aplikazioaren barruan: behin deskargatzen dira, Memoria pantailatik, edo eskuz instalatzen dira zeuk sortutako fitxategietatik. Haien pisua hiriaren araberakoa da — hamarnaka megabyte tamaina ertaineko hiri-eremu batentzat, gehiago hiriburu batentzat — eta deskargatu aurretik jakinarazten da.
+
+<b>Zerbitzatzen diren hiriak</b>
+
+Hirurehun bat sare, hogeita hamar bat herrialdetan: beren geltokiak datu ireki gisa argitaratzen dituzten guztiak, ibilbidearen kalkulua haien ainguralekuetan fida daitekeenak — Parisko Vélib’ eta New Yorkeko Citi Bike barne, Praga, Bartzelona, Kopenhage, Tokio eta Buenos Aires tarteko. Aplikazioak zeurea proposatzen dizu zure kokapenetik abiatuta, hala eskatzen badiozu, eta hainbat eduki ditzakezu instalatuta, batetik bestera aldatuz.
+
+Lineaz kanpoko datu-multzoak eskukada batentzat sortu dira oraingoz. Gainerakoen kasuan, aplikazioak hala esaten du itxurak egin beharrean: zerrendak zer dagoen erakusten du, eta fitxategiak biltegiko scriptekin sor daitezke.
+
+Ez dago inongo sare jakini lotuta: hirien zerrenda bera eguneratzen da, eta hiri bakoitzak bere GBFS jarioaren helbidea darama; horrek munduko edozein GBFS sarerekin erabilgarri bihurtzen du aplikazioa.
+
+Software librea, GNU GPL v3 lizentziapean.

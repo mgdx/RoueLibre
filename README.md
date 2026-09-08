@@ -178,7 +178,9 @@ Contributions are welcome — see **[CONTRIBUTING.md](CONTRIBUTING.md)**, and op
 an issue before a large change.
 
 - 🌍 **Translate.** The most useful contribution if you do not write code.
-  Twenty-nine languages have a file waiting, still holding its English text.
+  Thirty languages are translated, each with its glossary in
+  [`docs/glossary/`](docs/glossary/); keeping one current as the English file
+  grows is worth as much as starting a thirty-first.
 - 🏙️ **Add a network,** or teach the address search the abbreviations of your
   language — one JSON file each, no code. See
   [`docs/offline-data.md`](docs/offline-data.md).
