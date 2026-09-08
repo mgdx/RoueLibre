@@ -41,7 +41,7 @@ class ShownMinutesTest {
     )
 
     private fun option(walkTo: Duration, ride: Duration, walkFrom: Duration) = JourneyOption(
-        departureStation = station("departure"),
+        departure = DeparturePoint.AtStation(station("departure")),
         arrivalStation = station("arrival"),
         bikesAtDeparture = 5,
         docksAtArrival = 5,
@@ -181,5 +181,24 @@ class ShownMinutesTest {
             minutes.total,
             minutes.walkToStation + minutes.ride + minutes.walkToDestination,
         )
+    }
+
+    @Test
+    fun `a journey with no access walk shares its minutes between two legs`() {
+        // A journey begun on a bike outside the stations has two legs, and the
+        // sharing must not invent a third: `apportionMinutes` never shows less
+        // than a minute, so an access walk of no duration would have taken one
+        // out of a total nobody spends (SPEC §6, §7.2.1).
+        val journey = option(
+            walkTo = 2.minutes + 5.seconds,
+            ride = 21.minutes + 30.seconds,
+            walkFrom = 2.minutes + 6.seconds,
+        ).copy(walkToStation = null)
+        val minutes = journey.shownMinutes()
+
+        assertEquals(0, minutes.walkToStation)
+        assertEquals(journey.travelTime.inShownMinutes(), minutes.total)
+        assertEquals(minutes.walkToDestination, minutes.walking)
+        assertEquals(minutes.total, minutes.ride + minutes.walkToDestination)
     }
 }

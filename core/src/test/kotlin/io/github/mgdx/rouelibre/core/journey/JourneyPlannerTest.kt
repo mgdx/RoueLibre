@@ -11,6 +11,7 @@ import io.github.mgdx.rouelibre.core.station.BikeKindFilter
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.StationAvailability
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
+import io.github.mgdx.rouelibre.core.station.StreetBike
 import io.github.mgdx.rouelibre.core.station.VehicleKind
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import kotlinx.coroutines.test.runTest
@@ -632,7 +633,7 @@ class JourneyPlannerTest {
 
         val best = plan.best
         assertEquals(
-            best.walkToStation.duration + best.ride.duration + best.walkToDestination.duration,
+            best.accessWalk.duration + best.ride.duration + best.walkToDestination.duration,
             best.travelTime,
         )
     }
@@ -1181,14 +1182,14 @@ class JourneyPlannerTest {
         assertEquals(before.best.departureStation.id, now.best.departureStation.id)
         assertEquals(before.best.arrivalStation.id, now.best.arrivalStation.id)
         assertEquals(before.best.travelTime, now.best.travelTime)
-        assertEquals(before.best.walkToStation.duration, now.best.walkToStation.duration)
+        assertEquals(before.best.accessWalk.duration, now.best.accessWalk.duration)
         assertEquals(before.best.ride.duration, now.best.ride.duration)
         assertEquals(before.best.walkToDestination.duration, now.best.walkToDestination.duration)
 
         // Then that a walking leg carries the engine's own figure, untouched.
         // The comparison above would still pass if both sides were scaled by the
         // same wrong factor; this pins the figure to what the engine returned.
-        for (walk in listOf(now.best.walkToStation, now.best.walkToDestination)) {
+        for (walk in listOf(now.best.accessWalk, now.best.walkToDestination)) {
             val asTheEngineTraced =
                 (walk.distanceMetres / FakeRouter.WALKING_METRES_PER_SECOND).roundToInt().seconds
             assertEquals(asTheEngineTraced, walk.duration)
@@ -1247,7 +1248,7 @@ class JourneyPlannerTest {
         assertEquals(1, legs.map { it.ride.distanceMetres }.distinct().size)
         // And the walks did move, without which the assertion above proves
         // nothing at all.
-        assertEquals(3, legs.map { it.walkToStation.duration }.distinct().size)
+        assertEquals(3, legs.map { it.accessWalk.duration }.distinct().size)
     }
 
     @Test
@@ -1411,7 +1412,7 @@ class JourneyPlannerTest {
             plain.best.ride.duration * RiddenBike.ElectricallyAssisted.durationFactor,
             assisted.best.ride.duration,
         )
-        assertEquals(plain.best.walkToStation.duration, assisted.best.walkToStation.duration)
+        assertEquals(plain.best.accessWalk.duration, assisted.best.accessWalk.duration)
         assertEquals(
             plain.best.walkToDestination.duration,
             assisted.best.walkToDestination.duration,
@@ -1529,6 +1530,204 @@ class JourneyPlannerTest {
         assertEquals(emptyList<String>(), profiles.filter { it.isBlank() })
     }
 
+    // -------------------------------- a bike found outside the stations --
+
+    /** A bike standing in the street, as the feed reported it (SPEC §4.1). */
+    private fun streetBike(position: Coordinates, typeId: String? = null) = StreetBike(
+        id = "velo-de-rue",
+        position = position,
+        vehicleTypeId = typeId,
+        chargeRatio = null,
+        rangeMetres = null,
+    )
+
+    @Test
+    fun `a journey from a street bike walks to nothing before riding`() = runTest {
+        // The whole of what SPEC §6 says this path adds to the own-bike one:
+        // the rider is standing in front of the bike they chose, so the access
+        // walk is not shortened — it does not exist, and no leg is traced for
+        // it. The one walk computed is the one that ends the journey.
+        val router = FakeRouter()
+        val planner = JourneyPlanner(router)
+
+        val plan = planner.planFromStreetBike(
+            bike = streetBike(origin, typeId = "electrique"),
+            kind = VehicleKind.Electric,
+            destination = destination,
+            stations = listOf(station("arrivee", at(0.0, 3900.0))),
+        ) as JourneyPlan.Found
+
+        val best = plan.best
+        assertEquals(null, best.walkToStation)
+        assertEquals(1, router.walkingCalls)
+        assertEquals("arrivee", best.arrivalStation.id)
+        assertEquals(
+            DeparturePoint.AtStreetBike(
+                streetBike(origin, typeId = "electrique"),
+                VehicleKind.Electric,
+            ),
+            best.departure,
+        )
+        // One bike, counted under the producer's own type identifier: a bike is
+        // one bike, and nothing else is standing there (SPEC §7.2.1).
+        assertEquals(1, best.bikesAtDeparture)
+        assertEquals(mapOf("electrique" to 1), best.bikesByVehicleTypeAtDeparture)
+        assertEquals(best.ride.duration + best.walkToDestination.duration, best.travelTime)
+    }
+
+    @Test
+    fun `the arrival is chosen for its docks and not for its nearness`() = runTest {
+        // The reliability penalty of SPEC §6, at the one end this journey has:
+        // the nearest station holds a single dock and can fill while one rides,
+        // so a slightly further one with a dozen wins. The station holding none
+        // at all is not a candidate to begin with.
+        val stations = listOf(
+            station("pleine", at(0.0, 3990.0), docks = 0),
+            station("un-seul-dock", at(0.0, 3900.0), docks = 1),
+            station("bien-fournie", at(0.0, 3780.0), docks = 12),
+        )
+        val planner = JourneyPlanner(FakeRouter())
+
+        val plan = planner.planFromStreetBike(
+            bike = streetBike(origin),
+            kind = VehicleKind.Mechanical,
+            destination = destination,
+            stations = stations,
+        ) as JourneyPlan.Found
+
+        assertEquals("bien-fournie", plan.best.arrivalStation.id)
+        assertEquals(12, plan.best.docksAtArrival)
+    }
+
+    @Test
+    fun `the bike's own kind decides the profile and the minutes`() = runTest {
+        // The ride is traced on what the network's table says that bike is —
+        // nothing is asked of the rider here (SPEC §6). The fake router draws
+        // both profiles alike, so the whole of the difference read below comes
+        // from `RiddenBike.durationFactor` and from nothing else.
+        val stations = listOf(station("arrivee", at(0.0, 3900.0)))
+        val plainRouter = FakeRouter()
+        val assistedRouter = FakeRouter()
+
+        suspend fun ridden(router: FakeRouter, kind: VehicleKind) =
+            JourneyPlanner(router).planFromStreetBike(
+                bike = streetBike(origin),
+                kind = kind,
+                destination = destination,
+                stations = stations,
+            ) as JourneyPlan.Found
+
+        val plain = ridden(plainRouter, VehicleKind.Mechanical)
+        val assisted = ridden(assistedRouter, VehicleKind.Electric)
+
+        assertTrue(TravelMode.Cycling in plainRouter.modesAsked)
+        assertTrue(TravelMode.ElectricCycling in assistedRouter.modesAsked)
+        assertEquals(
+            plain.best.ride.duration * RiddenBike.ElectricallyAssisted.durationFactor,
+            assisted.best.ride.duration,
+        )
+    }
+
+    @Test
+    fun `walking straight there beats going to fetch the bike's station`() = runTest {
+        // The comparison of SPEC §6, made at every distance on this path too:
+        // three hundred metres to walk against a ride out to a station two
+        // kilometres the wrong way. The walk is what is offered, and the ride
+        // is not shown at all.
+        val router = FakeRouter()
+        val planner = JourneyPlanner(router)
+
+        val plan = planner.planFromStreetBike(
+            bike = streetBike(origin),
+            kind = VehicleKind.Mechanical,
+            destination = at(0.0, 300.0),
+            stations = listOf(station("arrivee-a-contresens", at(0.0, 2000.0))),
+        )
+
+        assertTrue("expected a walk, got $plan", plan is JourneyPlan.WalkOnly)
+        assertEquals(NoBikeJourney.WalkingIsQuicker, (plan as JourneyPlan.WalkOnly).reason)
+        // The walk already in hand pruned the ride before it was traced.
+        assertEquals(0, router.cyclingCalls)
+    }
+
+    @Test
+    fun `a bike with nowhere to be handed back offers the walk, and says why`() = runTest {
+        // No station in service with a free dock: the journey cannot be
+        // composed, and the reason is the one the ordinary search already
+        // gives. The walk is offered with it, being then the only answer there
+        // is (SPEC §6).
+        val stations = listOf(station("pleine", at(0.0, 3900.0), docks = 0))
+
+        val offered = JourneyPlanner(FakeRouter()).planFromStreetBike(
+            bike = streetBike(origin),
+            kind = VehicleKind.Mechanical,
+            destination = destination,
+            stations = stations,
+        )
+
+        assertEquals(NoBikeJourney.NoDockNearby, (offered as JourneyPlan.WalkOnly).reason)
+
+        // And where even that walk cannot be traced, the reason stands alone.
+        val refused = JourneyPlanner(
+            FakeRouter(unreachable = setOf(FakeRouter.key(origin, destination))),
+        ).planFromStreetBike(
+            bike = streetBike(origin),
+            kind = VehicleKind.Mechanical,
+            destination = destination,
+            stations = stations,
+        )
+
+        assertEquals(JourneyPlan.Impossible(NoBikeJourney.NoDockNearby), refused)
+    }
+
+    @Test
+    fun `a bike outside the covered area is refused without computing`() = runTest {
+        // The same refusal as everywhere else, and the same reason for it: past
+        // the box there is no graph to ride on (SPEC §4, §7.8). A bike may well
+        // be drawn out there — the feed puts it where it puts it — and the sheet
+        // says so rather than letting a computation fail (SPEC §7.2.1).
+        val router = FakeRouter()
+        val planner = JourneyPlanner(router, coveredArea = servedArea)
+
+        val plan = planner.planFromStreetBike(
+            bike = streetBike(at(2001.0, 0.0)),
+            kind = VehicleKind.Mechanical,
+            destination = destination,
+            stations = departureAndArrival(),
+        )
+
+        assertEquals(
+            JourneyPlan.Impossible(NoBikeJourney.OutsideCoverage(UncoveredEnds.Origin)),
+            plan,
+        )
+        assertEquals(0, router.walkingCalls)
+        assertEquals(0, router.cyclingCalls)
+    }
+
+    @Test
+    fun `the kind asked for narrows nothing on this path`() = runTest {
+        // The kind asked for on the search screen filters departure stations
+        // and nothing else (SPEC §6), and this journey departs from no station:
+        // the bike is the one that was picked, whatever kind it turns out to be
+        // — which is why the screen hides the chooser altogether (SPEC §7.3).
+        // Not one of these stations lends a single bike, and the journey is
+        // found all the same.
+        val stations = listOf(station("arrivee", at(0.0, 3900.0), bikes = 0, docks = 8))
+        val planner = JourneyPlanner(
+            FakeRouter(),
+            wantedBike = BikeKindFilter(WantedBikeKind.Electric, vehicleTypes),
+        )
+
+        val plan = planner.planFromStreetBike(
+            bike = streetBike(origin),
+            kind = VehicleKind.Mechanical,
+            destination = destination,
+            stations = stations,
+        )
+
+        assertTrue("expected a journey, got $plan", plan is JourneyPlan.Found)
+    }
+
     // ------------------------------------------------------------- units --
 
     @Test
@@ -1580,3 +1779,22 @@ class JourneyPlannerTest {
         assertEquals("units reached the algorithm through $leaked", emptyList<Any>(), leaked)
     }
 }
+
+/**
+ * The station a journey sets off from, on the ordinary path where there is one.
+ *
+ * Every test below asks for the walk → bike → walk journey of SPEC §6, whose
+ * departure is always a station; the cast is what says so, and what fails
+ * loudly the day one of them stops being that journey.
+ */
+private val JourneyOption.departureStation: Station
+    get() = (departure as DeparturePoint.AtStation).station
+
+/**
+ * The access walk of an ordinary journey, which always has one (SPEC §6).
+ *
+ * It is `null` only on the journey from a bike outside stations, which is
+ * asked for by name and never comes back from [JourneyPlanner.plan].
+ */
+private val JourneyOption.accessWalk: RouteLeg
+    get() = checkNotNull(walkToStation) { "an ordinary journey walks to its departure station" }

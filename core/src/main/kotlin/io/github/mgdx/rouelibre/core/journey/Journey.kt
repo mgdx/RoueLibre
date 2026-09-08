@@ -5,6 +5,8 @@ import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.routing.RouteResult
 import io.github.mgdx.rouelibre.core.routing.TravelMode
 import io.github.mgdx.rouelibre.core.station.Station
+import io.github.mgdx.rouelibre.core.station.StreetBike
+import io.github.mgdx.rouelibre.core.station.VehicleKind
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import kotlin.time.Duration
 
@@ -23,12 +25,60 @@ public interface Router {
 }
 
 /**
+ * Where a journey's bike is taken (SPEC §6, §7.4).
+ *
+ * Two answers, and the algorithm only ever chooses the first of them. The
+ * ordinary search departs from a station and never from a bike standing in the
+ * street: nothing in the feed says that such a bike may be taken (SPEC §4.1),
+ * so the application does not pick one for anybody. The second is the journey
+ * somebody asked for themselves, from a bike they chose on the map
+ * (SPEC §7.2.1).
+ *
+ * The other end is a [Station] and stays one, whichever of these the journey
+ * begins at: a bike has to be handed back, and a free dock is the only place
+ * that takes it (SPEC §6).
+ */
+public sealed interface DeparturePoint {
+
+    /** Where the bike stands, which is where the journey begins. */
+    public val position: Coordinates
+
+    /**
+     * A station of the network, the ordinary way a journey begins.
+     *
+     * @property station the station the bike is picked up at.
+     */
+    public data class AtStation(public val station: Station) : DeparturePoint {
+        override val position: Coordinates
+            get() = station.position
+    }
+
+    /**
+     * A bike the network reports away from its stations (SPEC §7.2.1).
+     *
+     * @property bike the bike chosen on the map, as the feed reported it.
+     * @property kind what the network's vehicle type table reads that bike as
+     *   (SPEC §4.1). Carried beside the bike rather than read from it here:
+     *   the table is the network's and this algorithm knows no network
+     *   (SPEC §15). It is what the ride is traced on.
+     */
+    public data class AtStreetBike(public val bike: StreetBike, public val kind: VehicleKind) :
+        DeparturePoint {
+        override val position: Coordinates
+            get() = bike.position
+    }
+}
+
+/**
  * A complete walk → bike → walk journey.
  *
- * @property departureStation the station where the bike is picked up.
+ * @property departure where the bike is picked up: a station, or a bike the
+ *   rider chose outside them (SPEC §7.2.1).
  * @property arrivalStation the station where it is returned.
  * @property bikesAtDeparture bikes available when the journey was computed.
  *   Always shown, so the user can judge the risk for themselves (SPEC §6).
+ *   One, on a journey beginning at a bike outside stations: a bike is one
+ *   bike, and nothing is counted on it (SPEC §7.2.1).
  * @property bikesByVehicleTypeAtDeparture how those bikes divided between the
  *   network's own vehicle type identifiers at that same instant, and empty
  *   where the feed publishes no breakdown. Carried raw, because turning
@@ -36,8 +86,12 @@ public interface Router {
  *   no business knowing (SPEC §15): it is the interface that reads it, to say
  *   how many of the bikes waiting are electric (SPEC §7.4).
  * @property docksAtArrival free docks when the journey was computed.
- * @property walkToStation the access walk to the departure station.
- * @property ride the bike leg between the two stations.
+ * @property walkToStation the access walk to the departure station, and
+ *   `null` on a journey beginning at a bike outside stations: the rider is
+ *   standing in front of the bike they chose, so there is no walk to it and
+ *   none is computed (SPEC §6).
+ * @property ride the bike leg, from wherever the bike stands to the arrival
+ *   station.
  * @property walkToDestination the walk from the arrival station to the
  *   destination.
  * @property riskPenalty the reliability penalty, expressed in time. It serves
@@ -45,19 +99,20 @@ public interface Router {
  *   the user is [travelTime].
  */
 public data class JourneyOption(
-    public val departureStation: Station,
+    public val departure: DeparturePoint,
     public val arrivalStation: Station,
     public val bikesAtDeparture: Int,
     public val bikesByVehicleTypeAtDeparture: Map<String, Int> = emptyMap(),
     public val docksAtArrival: Int,
-    public val walkToStation: RouteLeg,
+    public val walkToStation: RouteLeg?,
     public val ride: RouteLeg,
     public val walkToDestination: RouteLeg,
     public val riskPenalty: Duration,
 ) {
-    /** The duration actually expected, penalty excluded: the three legs, and nothing else. */
+    /** The duration actually expected, penalty excluded: the legs, and nothing else. */
     public val travelTime: Duration
-        get() = walkToStation.duration + ride.duration + walkToDestination.duration
+        get() = (walkToStation?.duration ?: Duration.ZERO) + ride.duration +
+            walkToDestination.duration
 
     /** The duration used for ranking: the expected time, raised by the risk. */
     public val rankingTime: Duration
@@ -65,7 +120,7 @@ public data class JourneyOption(
 
     /** The total distance covered, walking included. */
     public val distanceMetres: Int
-        get() = walkToStation.distanceMetres + ride.distanceMetres +
+        get() = (walkToStation?.distanceMetres ?: 0) + ride.distanceMetres +
             walkToDestination.distanceMetres
 
     /**
@@ -79,7 +134,7 @@ public data class JourneyOption(
      * data.
      */
     public val climbMetres: Int
-        get() = walkToStation.ascentMetres + ride.ascentMetres +
+        get() = (walkToStation?.ascentMetres ?: 0) + ride.ascentMetres +
             walkToDestination.ascentMetres
 }
 
@@ -95,6 +150,10 @@ public sealed interface JourneyPlan {
      * The runners-up are not carried, because they are not offered — a second
      * list of station pairs asked the user to arbitrate a choice the risk
      * penalty has already made for them.
+     *
+     * It is also what a journey from a bike outside stations comes back as
+     * (SPEC §7.2.1): a ride, a station and a walk, with no access walk in
+     * front of it — see [JourneyOption.departure].
      *
      * @property best the chosen option.
      */
