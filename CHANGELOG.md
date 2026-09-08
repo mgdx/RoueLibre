@@ -7,34 +7,52 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
-## [Unreleased]
+## [1.3.0]
+
+The maps answer the hand — they turn, they tilt, and one compass gives both
+back — a home and a work are places one names once and reaches in a press, five
+started translations become real ones, and a campaign of eight corrections
+closes what a security audit and a test report found on the same day.
 
 ### Added
 
-- **The map turns under two fingers, and a compass puts it back north** (SPEC
-  §7.1, §7.4). Both maps refused rotation outright: the main screen and the
-  journey result now accept the twist, and a map one learns to handle on one
-  screen answers the same way on the other. **Neither tilts**, and that is
-  said rather than left to the library's default: the base map is drawn flat
-  and its labels are laid flat on it, so a tilt has no relief to reveal and
-  takes the legibility of every name in exchange. The compass appears only
-  once the map is off north and goes when the bearing comes back — a control
-  whose only office is to undo something belongs on the screen while there is
-  something to undo — and it sits above "locate me", so a button that comes
-  and goes never pushes about the ones that stay. Its tolerance is **two
-  degrees**, a threshold of legibility and not of precision: a pair of fingers
-  settles a degree either way while the hand rests on the glass, and two
-  degrees tips the far edge of a thousand-pixel screen by some eighteen
-  pixels, less than a station marker is wide. Above it the map visibly is
-  turned; the press puts it back exactly on north, over six hundred
-  milliseconds — the length of every other camera move of that screen — and
-  snaps under "remove animations". The compass is the application's own and
-  not MapLibre's, for the reason `DescribedMapView` exists: a view of the
-  library describes itself in the library's languages and not in ours. What
-  the saved state carries is the centring and the zoom and nothing else, so
-  the phone being turned or the application being started again opens on a map
-  facing north. The map's spoken description names the twist beside the drag
-  and the pinch, a gesture being no use to somebody never told it exists.
+- **The map turns under two fingers and tilts under two, and one compass gives
+  both back** (SPEC §7.1, §7.4). Both maps refused rotation outright: the main
+  screen and the journey result now accept the twist, and a map one learns to
+  handle on one screen answers the same way on the other. **The tilt is capped
+  at forty-five degrees**, and the ceiling is derived rather than chosen: a
+  tilt looks towards the horizon, so it lengthens what the screen covers of the
+  ground and takes room from where `ServedAreaCamera` will let the map be
+  panned. MapLibre's camera stands one and a half screen heights from the point
+  it looks at — its published field of view of 36.87 degrees — and past 71.57
+  degrees the top of the screen is sky, an edge no bounding box can hide.
+  Forty-five is where the arithmetic closes and the curve is still gentle: the
+  map reaches exactly twice as far ahead of its centre as behind it and covers
+  1.59 screen heights of ground, which a city's three kilometres of margin
+  carries; where a conurbation has not that room the zoom floor rises by two
+  thirds of a step. `MapPitch.kt` holds the derivation and `MapPitchTest` every
+  step of it. The compass appears once the map is off north **or** off flat and
+  goes when both come back — a control whose only office is to undo something
+  belongs on the screen while there is something to undo — and it sits in the
+  top row beside the settings, so a button that comes and goes never pushes
+  about the ones that stay. Its tolerance on the bearing is **two degrees**, a
+  threshold of legibility and not of precision: a pair of fingers settles a
+  degree either way while the hand rests on the glass, and two degrees tips the
+  far edge of a thousand-pixel screen by some eighteen pixels, less than a
+  station marker is wide. Above it the map visibly is turned; one press puts it
+  back exactly on north and flat at once, over six hundred milliseconds — the
+  length of every other camera move of that screen — and snaps under "remove
+  animations". The bearing and the pitch travel together as a `MapAttitude`,
+  which is also what generalises the rule that the screen believes its own
+  order rather than a cached camera position. The compass is the application's
+  own and not MapLibre's, for the reason `DescribedMapView` exists: a view of
+  the library describes itself in the library's languages and not in ours. What
+  the saved state carries is the centring and the zoom and nothing else, so the
+  phone being turned or the application being started again opens on a map
+  facing north and lying flat. The map's spoken description names the twist and
+  the tilt beside the drag and the pinch, a gesture being no use to somebody
+  never told it exists, and the tilt is named there and never measured, a
+  degree of it comparing to nothing a reader could picture.
 
 - **A home and a work to name, in a fifth settings section** (SPEC §7.6, §7.3,
   §8). "My places" sits between the journey section and the offline data:
@@ -94,7 +112,11 @@ also records what has no visible effect.
   them too. With that, no `values-<language>/` folder holds the English text
   any more; the texts that described the repository as mostly-started, from the
   README to `Locales.kt`, say instead that the three lists happen to name the
-  same thirty languages and will part company again at the thirty-first.
+  same thirty languages and will part company again at the thirty-first. Every
+  sentence this version adds travels with them: the compass, "my places" and
+  the sheet of a found place, then the eight strings the correction campaign
+  wrote, are said in the twenty-nine other languages rather than waiting a
+  release in English.
 
 ### Changed
 
@@ -119,6 +141,117 @@ also records what has no visible effect.
   network.
 
 ### Fixed
+
+- **Nothing the application holds leaves the device with the device** (SPEC §8,
+  security audit V6). `android:allowBackup="false"` answers for the cloud
+  alone: Android's own documentation has it that, for an application targeting
+  Android 12 or later, on the devices of some manufacturers the
+  **device-to-device transfer** runs whatever that attribute says. The two rule
+  files were still the samples Android Studio writes, TODO included, while the
+  manifest named them; every domain Android can extract is now excluded, in
+  every section of both, and nothing is included anywhere — the datasets
+  download again and the settings are a few taps. What the transfer would
+  otherwise have carried is the settings, and with them the home and the work
+  somebody has just been given the means to name. SPEC §8 now says which of the
+  two questions the attribute answers, and a unit test reads the two files the
+  way `LocalesTest` reads the locale configuration.
+
+- **The main activity leaves no task affinity to be claimed** (security audit
+  V7). The activity is exported, in `singleTask`, and its affinity was the
+  package name by default — a name any application may declare as its own and,
+  with `allowTaskReparenting`, use to place its own activities inside this
+  task. Android 11 narrowed that and `minSdk` 26 still serves the releases it
+  did not, and what a counterfeit screen would be shown here is a home address.
+  An affinity of its own is worth nothing to an application holding one
+  activity and never naming a task, so it is given up; `singleTask` is
+  untouched and still needed, a task with no affinity being a task all the same
+  and an incoming link still joining the instance already living.
+
+- **A redirection towards cleartext is sent back to TLS** (SPEC §2, security
+  audit V5). `HttpsOnlyInterceptor` was registered as an application
+  interceptor, which OkHttp runs once per call and never on what a redirection
+  leads to: a `301` towards `http://` went out in cleartext, or rather failed
+  at the platform's policy, which is not the same as being answered — the rule
+  the file announces was held by Android and not by this code. A network
+  interceptor is added beside it, correcting the `Location` of a redirection
+  rather than the address of the request built from it.
+
+- **A downloaded document decides neither the next address nor the memory**
+  (SPEC §4.4, security audit V1 to V3). The address the city catalogue is
+  fetched from now comes from the catalogue shipped in the APK and from nowhere
+  else: a catalogue downloaded once could name where every later one would be
+  fetched, and the cache carrying it outlives an application update. The list
+  of cities still comes from the downloaded document; the address no longer
+  does. An address no client can fetch is refused at the reading, the manifest
+  rejected whole before a request goes out, and caught in defence where the
+  requests are built instead of closing the application. And every JSON body
+  read whole into memory is now read through a bounded source, refused past
+  sixteen mebibytes, so a host answering with hundreds of megabytes fails the
+  refresh rather than the application.
+
+- **A manifest is not acted on until it names the city in service** (SPEC
+  §4.4, security audit V4). A host serving city A's address index with city B's
+  release would have installed B's map and B's addresses in A's folder,
+  silently. The network named by the manifest is now held against the active
+  city's identifier before a single file is asked for, and the refusal is said
+  in its own words rather than in the unreadable format's. A manifest naming no
+  network at all is not refused: the field defaults to the empty string, and an
+  installation that works must not stop working over a missing line.
+
+- **The storage screen says a transfer has begun, and remembers that one
+  failed** (SPEC §7.7, QA anomalies A1 and A7). A press on "Download 9.1 MB"
+  with no network showed nothing at all until the request gave up — the line
+  above the button only ever spoke of bytes that had arrived, and where the
+  connection is gone none ever does. The press itself now puts the state on an
+  indeterminate bar and quiets the button, and the failure that follows is the
+  one that was already written. A set whose transfer failed fell back to "Not
+  installed", word for word what a set nobody ever asked for says, as soon as
+  the snackbar went away; the row keeps the reason until that set's own state
+  changes.
+
+- **The refusal outside the covered area names which end is at fault** (SPEC
+  §7.5, QA anomaly A5). One sentence served both ends of a journey and the
+  reader supplied the wrong one: a journey prepared before setting off departs
+  from the device's position, still elsewhere, towards an arrival just chosen
+  inside the city, and the sentence sent them to correct the one point that was
+  right. The box check knows which end it refused and now carries it — three
+  sentences replace the one, the old one staying for the case the routing
+  engine answers for, which is a whole leg.
+
+- **The handover button stops being the part that falls off the edge** (SPEC
+  §7.5, QA anomaly A6). The result panel is as tall as its content and no
+  taller, and past the ceiling the layout gives it the whole block scrolled,
+  button included: on a 360 x 640 dp screen at a text scale of 1.6 the block
+  asks for 370 dp and is given 325, so the missing 45 came off the bottom of
+  "Open in a navigation application", its last line cut through the middle at
+  the very edge of the screen with nothing to say a swipe would mend it. The
+  reading and the handover are laid one above the other now and only the
+  reading carries the weight: a block handed less room than it asked for takes
+  the shortage out of what is written, and the button keeps its full height at
+  the bottom edge. Where the block already fits, nothing moves.
+
+- **A shared sentence is read as a guess, and a link that says nothing is
+  answered** (SPEC §7.8, QA anomalies A3 and A4). Sharing an ordinary text put
+  up a list headed "Addresses found in this text", offering streets the text
+  does not hold: *« merci beaucoup et bonne journée »* was answered with
+  "Chemin Bonne Nouvelle" on the single word *bonne*. That second reading
+  stays — it is what finds the address in "Meet me here: 12 rue Nationale,
+  Lille" — but it now asks rather than announces, and a street has to be named
+  by **two** words of the text written in full instead of one: two is what an
+  address always carries and one is what any sentence hands out by accident.
+  The doorway that reading used to lose comes back with it, a street type
+  opening what follows the number telling a house number from the date a street
+  is named after — "rue du 8 Mai", "Straße des 17. Juni" — since a date carries
+  its type in front of itself and never behind. And a `geo:` link whose
+  coordinates cannot be read — `geo:999,999`, `geo:abc,def` — opened the
+  application on its map and said nothing at all; every `VIEW` filter the
+  manifest declares is a map link, so a link nobody can read is now told apart
+  from no link at all and gets the same kind of sentence a readable point
+  outside the covered area already had.
+
+- **The city screen answers a refused position in its own words** (QA anomaly
+  A2). It used to borrow the map's talk of a starting point, of which there is
+  none on that screen; it now names the list and the search.
 
 - **The station sheet handed a station to what guides, not back to Roue
   Libre** (SPEC §7.2, §7.8). The sheet built its `geo:` intent by hand and

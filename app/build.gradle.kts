@@ -53,14 +53,16 @@ android {
         // leaves it unable to tell one release from the next. The
         // architectures derive their own codes from it below, so the value is
         // still written once.
-        versionCode = 10
-        // Six conurbations more — Wrocław, Bogotá, Offenburg, Sibiu, Buzău
-        // and Slobozia — freed by a survey rule that read a handbike as a
-        // motor vehicle, and Bogotá the first city served in South America.
-        // A city the catalogue names and this build cannot serve now says so
-        // instead of leaving every screen as though no city were chosen.
+        versionCode = 11
+        // Both maps answer the hand now: they turn under two fingers and tilt
+        // up to forty-five degrees, and a single compass puts back the north
+        // and the flat. A home and a work are named once in the settings and
+        // head the ends a journey can be given. A place found on the map opens
+        // a sheet of what to do with it. Five started translations become real
+        // ones, thirty languages spoken. And eight corrections close what a
+        // security audit and a test report found on 8 September 2026.
         // See CHANGELOG.md.
-        versionName = "1.2.4"
+        versionName = "1.3.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
