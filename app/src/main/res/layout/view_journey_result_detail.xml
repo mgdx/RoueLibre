@@ -13,21 +13,42 @@
     It is as tall as it needs to be and no taller, hence the wrap. Where it
     stands and how much room it may take belong to the layout including it, and
     past that room it scrolls rather than eating the map.
+
+    What scrolls, though, is the reading and never the handover. The two are
+    laid one above the other and only the reading is given the weight, so a
+    block that has been handed less room than it asked for takes the shortage
+    out of the drawing at its foot and leaves the button whole: measured on a
+    360 × 640 dp screen at a text scale of 1.6, the block asks for 370 dp and
+    is given 325, and with everything in one scrolling column those 45 dp were
+    taken off the bottom of the button — its last line cut through the middle,
+    at the very edge of the screen, with nothing to say a scroll would mend it.
+    A cut sentence one can read around; a cut action is an action one cannot
+    see one has. The reading fades out at the edge where it is cut instead,
+    which is the sign the screen owed and did not give.
 -->
-<androidx.core.widget.NestedScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorSurface">
+    android:background="?attr/colorSurface"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/space_m"
+    android:paddingBottom="@dimen/space_m">
 
-    <LinearLayout
+    <!-- The reading, and the only part of the block that gives way when the
+         room runs short: the weight is here and nowhere else, so the shortage
+         is taken from what is written rather than from the button under it.
+         Nothing moves as long as the block fits — a weight only ever shares
+         out what is left over, and a block given exactly the height it asked
+         for has nothing left over to share. -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/space_m"
-        android:paddingBottom="@dimen/space_m">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fadingEdgeLength="@dimen/space_l"
+        android:requiresFadingEdge="vertical">
 
         <!--
             Everything the screen has to say, and the way to the rest of it.
@@ -129,31 +150,31 @@
                 android:layout_marginTop="@dimen/space_m"
                 android:importantForAccessibility="no" />
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <!-- Hands a leg of the journey to whichever application guides
-             along it: this one computes journeys, it does not guide
-             (SPEC §13). Last of the reading — everything the screen offers
-             to do comes after everything it has to say — and absent when
-             there is no journey to hand over.
+    <!-- Hands a leg of the journey to whichever application guides
+         along it: this one computes journeys, it does not guide
+         (SPEC §13). Last of the reading — everything the screen offers
+         to do comes after everything it has to say — and absent when
+         there is no journey to hand over.
 
-             Its height is a floor, not a measurement: nailed to the minimum
-             touch target, the label was cut off mid-sentence — "Open in a
-             navigation" — as soon as the system font passed 130%, with no
-             ellipsis to even say so. The forty-eight density-independent
-             pixels are what a finger needs, never what a sentence needs;
-             every button in the application that carries a sentence is laid
-             the same way. -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/navigate"
-            style="@style/Widget.RoueLibre.Toggle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="@dimen/touch_target_min"
-            android:layout_marginStart="@dimen/space_l"
-            android:layout_marginTop="@dimen/space_m"
-            android:layout_marginEnd="@dimen/space_l"
-            android:text="@string/journey_navigate"
-            app:icon="@drawable/ic_navigation"
-            app:iconGravity="textStart" />
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+         Its height is a floor, not a measurement: nailed to the minimum
+         touch target, the label was cut off mid-sentence — "Open in a
+         navigation" — as soon as the system font passed 130%, with no
+         ellipsis to even say so. The forty-eight density-independent
+         pixels are what a finger needs, never what a sentence needs;
+         every button in the application that carries a sentence is laid
+         the same way. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/navigate"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/touch_target_min"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_m"
+        android:layout_marginEnd="@dimen/space_l"
+        android:text="@string/journey_navigate"
+        app:icon="@drawable/ic_navigation"
+        app:iconGravity="textStart" />
+</LinearLayout>
