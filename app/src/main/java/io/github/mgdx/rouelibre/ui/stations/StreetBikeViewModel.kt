@@ -48,7 +48,12 @@ enum class StreetBikeKind {
  *   emptying under the reader.
  * @property isGone the bike is no longer in the feed. A refresh dropped it —
  *   somebody took it — and both actions go with it.
- * @property kind what the type table reads the bike as.
+ * @property kind what the type table reads the bike as, in the three words
+ *   this sheet says it in.
+ * @property rideKind what the same table reads it as for a ride: cargo is a
+ *   form factor and not a motor, so an electric cargo bike is assisted here
+ *   where [kind] calls it a cargo bike. It is what the journey from this bike
+ *   is traced with (SPEC §6), and the two must not be read off one another.
  * @property charge what may be said of the charge, or `null` where nothing
  *   reliable can be said.
  * @property distanceInMetres the straight-line distance from the user's
@@ -62,6 +67,7 @@ data class StreetBikeUiState(
     val bike: StreetBike? = null,
     val isGone: Boolean = false,
     val kind: StreetBikeKind = StreetBikeKind.Mechanical,
+    val rideKind: VehicleKind = VehicleKind.Mechanical,
     val charge: BikeCharge? = null,
     val distanceInMetres: Double? = null,
     val fetchedAt: Instant? = null,
@@ -117,6 +123,7 @@ class StreetBikeViewModel(
                         // from.
                         isGone = found == null && snapshot.fetchedAt != null,
                         kind = kindOf(shown, lent),
+                        rideKind = rideKindOf(shown, lent),
                         charge = chargeOf(shown, lent),
                         fetchedAt = snapshot.fetchedAt,
                     )
@@ -142,6 +149,23 @@ class StreetBikeViewModel(
             VehicleKind.Electric -> StreetBikeKind.Electric
             else -> StreetBikeKind.Mechanical
         }
+    }
+
+    /**
+     * What the bike is to the journey algorithm (SPEC §6).
+     *
+     * `core`'s own reading, in `core`'s own words: assisted where the table
+     * says so, the plain bike everywhere else — an unknown type and an
+     * undeclared one included. It is deliberately **not** [kindOf] narrowed
+     * down: that one answers "what am I walking towards", where a cargo bike is
+     * a different object from an ordinary one, and it hides the motor of an
+     * electric cargo bike behind its form factor. The ride is traced on the
+     * motor, and announcing a plain bike's minutes for an assisted one would be
+     * announcing minutes the journey was not worked out on.
+     */
+    private fun rideKindOf(bike: StreetBike?, fleet: FleetDescription?): VehicleKind {
+        if (bike == null || fleet == null) return VehicleKind.Mechanical
+        return bike.kind(fleet.vehicleTypes)
     }
 
     /**
