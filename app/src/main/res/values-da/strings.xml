@@ -292,6 +292,20 @@
     <string name="journey_own_bike">På min egen cykel</string>
     <string name="journey_hint_own_bike">Rejsen beregnes på enheden: én cykeltur fra dør til dør, uden station undervejs.</string>
 
+    <!-- A journey asked for from a bike the network reports outside its
+         stations (SPEC §7.2.1, §7.3, §7.4). The first names that departure in
+         the origin field of the two journey screens: the producer rotates a
+         bike's identifier after every rental, so there is no name to show and
+         what the reader needs is what kind of point it is. The second says why
+         that field cannot be pressed — editing it would be asking an ordinary
+         journey, which the ordinary way already offers. -->
+    <string name="journey_departure_street_bike">Cykel uden for stationerne</string>
+    <string name="journey_origin_street_bike_locked">Rejsen begynder på den cykel, du valgte.</string>
+    <!-- And the sentence that replaces the two above it on that journey: there
+         is no walk to the bike, one is standing beside it, and the ride ends at
+         a station because that is where a bike goes back (SPEC §6). -->
+    <string name="journey_hint_street_bike">Rejsen beregnes på enheden: cykl herfra, stil cyklen på en station, og gå det sidste stykke.</string>
+
     <!-- Which bike one wants to ride (SPEC §7.3). -->
     <string name="journey_bike_kind_any">Enhver cykel</string>
     <string name="journey_bike_kind_mechanical">Mekanisk</string>
@@ -621,6 +635,56 @@
     <string name="settings_map_filters_hide_empty_hint">»Intet« følger det, kortet tæller: ingen cykel, mens det tæller cykler, ingen ledig plads, mens det tæller ledige pladser.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stationer, som netværket intet siger om, bliver på kortet: en optælling, ingen kunne læse, er ikke en optælling af ingenting.</string>
+
+    <!-- The bikes a network reports outside its stations (SPEC §4.1, §7.1,
+         §7.6), and everything said about them. Off by default: the setting is
+         opt-in twice over, for the markers it draws — whether one may take
+         such a bike where it stands is the network's rule, and the feed does
+         not carry it — and for the feed it reads, twenty times the weight of
+         the station feed.
+
+         The sentence under the switch is the whole of what the row says about
+         a network: one that publishes no such feed shows nothing at all, and
+         the map says that by drawing nothing. -->
+    <string name="settings_street_bikes">Vis cyklerne uden for stationerne</string>
+    <string name="settings_street_bikes_description">Om du må låne en, hvor den står, afhænger af netværket.</string>
+
+    <!-- Shown once, the first time the switch above is turned on, and readable
+         again from the sheet of any such bike. It informs and does not
+         confirm: the switch is already on when it opens, and one button closes
+         it. Three short paragraphs, kept short because a modal window is no
+         place for dense text (SPEC §7.9) — what they are, what the application
+         cannot vouch for, and where a journey from one ends. -->
+    <string name="street_bike_intro_title">Cykler uden for stationerne</string>
+    <string name="street_bike_intro_body">Netværket melder disse cykler langt fra sine stationer. Nogle er efterladt af en bruger, andre venter på operatørens depot.\n\nRoue Libre ved ikke, om du må tage en, hvor den står: det siger netværkets regler, og nogle netværk opkræver et gebyr for en cykel, der afleveres uden for en station.\n\nEn rejse, der foreslås fra en cykel, ender altid ved en station.</string>
+    <string name="street_bike_intro_dismiss">Forstået</string>
+
+    <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
+         sheet's shape and with less to say: a bike is one bike, and nothing is
+         counted on it. The row below reopens the explanation above, so its
+         words are readable again without switching the setting off and on. -->
+    <string name="street_bike_intro_reopen">Hvad disse cykler er</string>
+    <string name="street_bike_title">Cykel uden for stationerne</string>
+    <string name="street_bike_kind_mechanical">Mekanisk cykel</string>
+    <string name="street_bike_kind_electric">Elcykel</string>
+    <string name="street_bike_kind_cargo">Ladcykel</string>
+    <!-- %1$d is the charge as a whole percentage, read from the feed's own
+         figure. The doubled sign is a literal per cent, not a placeholder. -->
+    <string name="street_bike_charge">Batteri %1$d %%</string>
+    <!-- Said in place of the line above where the network publishes no
+         percentage. %1$s is a distance, already rounded and written in the
+         reader's units. -->
+    <string name="street_bike_range">Cirka %1$s rækkevidde tilbage</string>
+    <!-- The bike has left the feed while its sheet was open. It is said rather
+         than the sheet closing under the reader's finger. -->
+    <string name="street_bike_gone">Denne cykel meldes ikke længere her.</string>
+    <string name="street_bike_journey_from_here">Rejse fra denne cykel</string>
+    <!-- What such a bike is called wherever it has to be named rather than
+         drawn — the label handed to the navigation application, which shows a
+         place and not a point. The second is for a bike the network's type
+         table reads as electric, which is the one the map marks with a bolt. -->
+    <string name="street_bike_marker_description">Cykel uden for stationerne</string>
+    <string name="street_bike_marker_description_electric">Elcykel uden for stationerne</string>
 
     <!-- The rider's OWN bike, not the network's. -->
     <string name="settings_own_bike_kind_title">Din egen cykel</string>

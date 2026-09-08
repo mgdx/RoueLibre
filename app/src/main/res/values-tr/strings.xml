@@ -289,6 +289,20 @@
     <string name="journey_own_bike">Kendi bisikletimle</string>
     <string name="journey_hint_own_bike">Yolculuk cihazda hesaplanır: kapıdan kapıya tek sürüş, yolda istasyon yok.</string>
 
+    <!-- A journey asked for from a bike the network reports outside its
+         stations (SPEC §7.2.1, §7.3, §7.4). The first names that departure in
+         the origin field of the two journey screens: the producer rotates a
+         bike's identifier after every rental, so there is no name to show and
+         what the reader needs is what kind of point it is. The second says why
+         that field cannot be pressed — editing it would be asking an ordinary
+         journey, which the ordinary way already offers. -->
+    <string name="journey_departure_street_bike">İstasyon dışındaki bisiklet</string>
+    <string name="journey_origin_street_bike_locked">Yolculuk seçtiğin bisikletten başlar.</string>
+    <!-- And the sentence that replaces the two above it on that journey: there
+         is no walk to the bike, one is standing beside it, and the ride ends at
+         a station because that is where a bike goes back (SPEC §6). -->
+    <string name="journey_hint_street_bike">Yolculuk cihazda hesaplanır: bisikletle buradan git, onu bir istasyona bırak, kalan yolu yürü.</string>
+
     <!-- Which bike one wants to ride. The first asks for nothing, which is
          what the application does at rest. -->
     <string name="journey_bike_kind_any">Fark etmez</string>
@@ -615,6 +629,56 @@
     <string name="settings_map_filters_hide_empty_hint">“Bir şey”, haritanın o an neyi saydığına göre değişir: bisiklet sayarken bisikleti olmayan, boş yuva sayarken boş yuvası olmayan istasyon.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Ağın haklarında bir şey söylemediği istasyonlar haritada kalır: kimsenin okuyamadığı bir sayı, sıfır demek değildir.</string>
+
+    <!-- The bikes a network reports outside its stations (SPEC §4.1, §7.1,
+         §7.6), and everything said about them. Off by default: the setting is
+         opt-in twice over, for the markers it draws — whether one may take
+         such a bike where it stands is the network's rule, and the feed does
+         not carry it — and for the feed it reads, twenty times the weight of
+         the station feed.
+
+         The sentence under the switch is the whole of what the row says about
+         a network: one that publishes no such feed shows nothing at all, and
+         the map says that by drawing nothing. -->
+    <string name="settings_street_bikes">İstasyon dışındaki bisikletleri göster</string>
+    <string name="settings_street_bikes_description">Onu durduğu yerden alıp alamayacağın ağa bağlıdır.</string>
+
+    <!-- Shown once, the first time the switch above is turned on, and readable
+         again from the sheet of any such bike. It informs and does not
+         confirm: the switch is already on when it opens, and one button closes
+         it. Three short paragraphs, kept short because a modal window is no
+         place for dense text (SPEC §7.9) — what they are, what the application
+         cannot vouch for, and where a journey from one ends. -->
+    <string name="street_bike_intro_title">İstasyon dışındaki bisikletler</string>
+    <string name="street_bike_intro_body">Ağ bu bisikletleri istasyonlarının uzağında bildiriyor. Bir kısmını oraya bir kullanıcı bırakmış, bir kısmı işletmecinin deposunda bekliyor.\n\nRoue Libre, bisikleti durduğu yerden alma hakkın olup olmadığını bilemez: bunu ağın kuralları söyler ve bazı ağlar istasyon dışına bırakılan bisiklet için ceza uygular.\n\nBir bisikletten önerilen yolculuk her zaman bir istasyonda biter.</string>
+    <string name="street_bike_intro_dismiss">Anladım</string>
+
+    <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
+         sheet's shape and with less to say: a bike is one bike, and nothing is
+         counted on it. The row below reopens the explanation above, so its
+         words are readable again without switching the setting off and on. -->
+    <string name="street_bike_intro_reopen">Bu bisikletler nedir</string>
+    <string name="street_bike_title">İstasyon dışındaki bisiklet</string>
+    <string name="street_bike_kind_mechanical">Klasik bisiklet</string>
+    <string name="street_bike_kind_electric">Elektrikli bisiklet</string>
+    <string name="street_bike_kind_cargo">Yük bisikleti</string>
+    <!-- %1$d is the charge as a whole percentage, read from the feed's own
+         figure. The doubled sign is a literal per cent, not a placeholder. -->
+    <string name="street_bike_charge">Pil %%%1$d</string>
+    <!-- Said in place of the line above where the network publishes no
+         percentage. %1$s is a distance, already rounded and written in the
+         reader's units. -->
+    <string name="street_bike_range">Yaklaşık %1$s menzil kaldı</string>
+    <!-- The bike has left the feed while its sheet was open. It is said rather
+         than the sheet closing under the reader's finger. -->
+    <string name="street_bike_gone">Bu bisiklet artık burada bildirilmiyor.</string>
+    <string name="street_bike_journey_from_here">Bu bisikletten yolculuk</string>
+    <!-- What such a bike is called wherever it has to be named rather than
+         drawn — the label handed to the navigation application, which shows a
+         place and not a point. The second is for a bike the network's type
+         table reads as electric, which is the one the map marks with a bolt. -->
+    <string name="street_bike_marker_description">İstasyon dışındaki bisiklet</string>
+    <string name="street_bike_marker_description_electric">İstasyon dışındaki elektrikli bisiklet</string>
 
     <!-- The rider's OWN bike, not the network's. The journey screen carries a
          separate, similar-looking choice about the bikes the network lends. -->
