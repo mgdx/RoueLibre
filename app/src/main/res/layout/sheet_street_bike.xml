@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The detail of a bike the network reports outside its stations (SPEC §7.2.1),
+    in a sheet sliding up from the bottom.
+
+    It is `sheet_station_detail` with less in it, deliberately: the same root,
+    the same paddings, the same button order. A bike outside stations is a
+    point one may leave from, like a station, and a second arrangement for what
+    is nearly the same object would be a second thing to learn.
+
+    What is missing is what a bike has not. No two counts, since nothing is
+    counted on one bike; no favourite, since the standard rotates a bike's
+    identifier after every rental; no address, a bike standing wherever it was
+    left having none.
+
+    The root is a scroll view for the reason the station sheet gives: the sheet
+    opens expanded, and at the largest system text sizes what does not fit must
+    be reachable rather than cut off.
+-->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/space_l"
+        android:paddingTop="@dimen/space_m"
+        android:paddingEnd="@dimen/space_l"
+        android:paddingBottom="@dimen/space_l">
+
+        <TextView
+            style="@style/Widget.RoueLibre.Name"
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/street_bike_title"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- What the bike is, as the network's type table reads it: the first
+             thing one wants to know before walking to it, as it is of a
+             station. -->
+        <TextView
+            style="@style/Widget.RoueLibre.Name"
+            android:id="@+id/kind"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_s"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            tools:text="Electric bike" />
+
+        <!-- The charge, where it can be read at all: a percentage, else a range,
+             else nothing. Hidden rather than written as a nought — nextbike
+             publishes a range of zero on every one of its electric bikes, and
+             "0 km" would say the bike is flat when it is not. -->
+        <TextView
+            style="@style/Widget.RoueLibre.Name"
+            android:id="@+id/charge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/kind"
+            tools:text="Battery 67 %"
+            tools:visibility="visible" />
+
+        <!-- How far it is, where the system already holds a position inside the
+             city served. No permission is asked for it. -->
+        <TextView
+            style="@style/Widget.RoueLibre.Name"
+            android:id="@+id/distance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/charge"
+            tools:text="250 m"
+            tools:visibility="visible" />
+
+        <!-- The one banner of this sheet, and it carries two states that both
+             withdraw the journey: a bike that has left the feed, and a bike
+             standing beyond the installed data. Dressed like the station
+             sheet's, for the same reason it exists there. -->
+        <TextView
+            style="@style/Widget.RoueLibre.Name"
+            android:id="@+id/state"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_m"
+            android:background="@drawable/pill_surface"
+            android:paddingStart="@dimen/space_m"
+            android:paddingTop="@dimen/space_s"
+            android:paddingEnd="@dimen/space_m"
+            android:paddingBottom="@dimen/space_s"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+            android:textColor="@color/alert"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/distance"
+            tools:text="This bike is no longer reported here."
+            tools:visibility="visible" />
+
+        <!-- The age of the FEED, never of the bike (SPEC §7.2.1). -->
+        <TextView
+            style="@style/Widget.RoueLibre.Name"
+            android:id="@+id/freshness"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_m"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/state"
+            tools:text="updated 12 seconds ago" />
+
+        <!--
+            The actions, in the station sheet's order. There is no "go here":
+            a journey ends at a station (SPEC §6), and a bike is the one kind of
+            point one only ever leaves from — so the first button takes the
+            whole width the station sheet gives to a pair.
+        -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/journey_from_here"
+            style="@style/Widget.RoueLibre.Toggle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_l"
+            android:minHeight="@dimen/touch_target_min"
+            android:text="@string/street_bike_journey_from_here"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/freshness" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/open_in_navigation"
+            style="@style/Widget.RoueLibre.Toggle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_s"
+            android:minHeight="@dimen/touch_target_min"
+            android:text="@string/station_open_in_navigation"
+            app:icon="@drawable/ic_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/journey_from_here" />
+
+        <!-- A row and not a third action: it settles nothing and opens a
+             window, which is why it wears no outline. It is what makes the
+             explanation of SPEC §7.6 readable again without switching the
+             setting off and on to find it. -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/what_these_bikes_are"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:minHeight="@dimen/touch_target_min"
+            android:text="@string/street_bike_intro_reopen"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+            android:textColor="@color/signal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/open_in_navigation" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

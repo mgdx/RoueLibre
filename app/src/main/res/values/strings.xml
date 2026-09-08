@@ -672,6 +672,56 @@
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stations the network says nothing about stay on the map: a count nobody could read is not a count of nothing.</string>
 
+    <!-- The bikes a network reports outside its stations (SPEC §4.1, §7.1,
+         §7.6), and everything said about them. Off by default: the setting is
+         opt-in twice over, for the markers it draws — whether one may take
+         such a bike where it stands is the network's rule, and the feed does
+         not carry it — and for the feed it reads, twenty times the weight of
+         the station feed.
+
+         The sentence under the switch is the whole of what the row says about
+         a network: one that publishes no such feed shows nothing at all, and
+         the map says that by drawing nothing. -->
+    <string name="settings_street_bikes">Show the bikes outside stations</string>
+    <string name="settings_street_bikes_description">Whether you may borrow one where it stands depends on the network.</string>
+
+    <!-- Shown once, the first time the switch above is turned on, and readable
+         again from the sheet of any such bike. It informs and does not
+         confirm: the switch is already on when it opens, and one button closes
+         it. Three short paragraphs, kept short because a modal window is no
+         place for dense text (SPEC §7.9) — what they are, what the application
+         cannot vouch for, and where a journey from one ends. -->
+    <string name="street_bike_intro_title">Bikes outside stations</string>
+    <string name="street_bike_intro_body">The network reports these bikes away from its stations. Some were left there by a rider, others are waiting at the operator\'s depot.\n\nRoue Libre cannot tell whether you may take one where it stands: the network\'s rules say so, and some networks charge a penalty for a bike returned outside a station.\n\nA journey proposed from a bike always ends at a station.</string>
+    <string name="street_bike_intro_dismiss">Got it</string>
+
+    <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
+         sheet's shape and with less to say: a bike is one bike, and nothing is
+         counted on it. The row below reopens the explanation above, so its
+         words are readable again without switching the setting off and on. -->
+    <string name="street_bike_intro_reopen">What these bikes are</string>
+    <string name="street_bike_title">Bike outside stations</string>
+    <string name="street_bike_kind_mechanical">Mechanical bike</string>
+    <string name="street_bike_kind_electric">Electric bike</string>
+    <string name="street_bike_kind_cargo">Cargo bike</string>
+    <!-- %1$d is the charge as a whole percentage, read from the feed's own
+         figure. The doubled sign is a literal per cent, not a placeholder. -->
+    <string name="street_bike_charge">Battery %1$d %%</string>
+    <!-- Said in place of the line above where the network publishes no
+         percentage. %1$s is a distance, already rounded and written in the
+         reader's units. -->
+    <string name="street_bike_range">About %1$s of range left</string>
+    <!-- The bike has left the feed while its sheet was open. It is said rather
+         than the sheet closing under the reader's finger. -->
+    <string name="street_bike_gone">This bike is no longer reported here.</string>
+    <string name="street_bike_journey_from_here">Journey from this bike</string>
+    <!-- What such a bike is called wherever it has to be named rather than
+         drawn — the label handed to the navigation application, which shows a
+         place and not a point. The second is for a bike the network's type
+         table reads as electric, which is the one the map marks with a bolt. -->
+    <string name="street_bike_marker_description">Bike outside stations</string>
+    <string name="street_bike_marker_description_electric">Electric bike outside stations</string>
+
     <!-- The rider's OWN bike, not the network's. Keep the wording clearly
          about the reader's own equipment: the journey screen carries a
          separate, similar-looking choice about the bikes the network lends. -->

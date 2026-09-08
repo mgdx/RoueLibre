@@ -1,6 +1,26 @@
 package io.github.mgdx.rouelibre.core.station
 
 import io.github.mgdx.rouelibre.core.geo.BoundingBox
+import io.github.mgdx.rouelibre.core.geo.Coordinates
+
+/**
+ * Whether the installed data reaches a point at all (SPEC §4).
+ *
+ * The rule of [Station.isBeyondCoveredArea] below, read on the bare position
+ * it was always about: the tiles, the graph and the address index are cut from
+ * one box, and what falls outside it is beyond them whatever kind of thing
+ * stands there. A bike the network reports outside its stations is the second
+ * such thing (SPEC §7.2.1), and it is answered exactly as a station is —
+ * shown, said to be beyond the data, offered no journey — so the two screens
+ * cannot drift apart over one comparison written twice.
+ *
+ * @param area the reference box of the city in service, or `null` when none is
+ *   known. Nothing is beyond a box that does not exist.
+ */
+public fun Coordinates.isBeyondCoveredArea(area: BoundingBox?): Boolean {
+    if (area == null || !area.isUsable) return false
+    return this !in area
+}
 
 /**
  * Whether the installed data reaches a station at all (SPEC §4).
@@ -35,7 +55,5 @@ import io.github.mgdx.rouelibre.core.geo.BoundingBox
  *   known. Nothing is beyond a box that does not exist: with no box the
  *   application has no ground to call a station unreachable.
  */
-public fun Station.isBeyondCoveredArea(area: BoundingBox?): Boolean {
-    if (area == null || !area.isUsable) return false
-    return position !in area
-}
+public fun Station.isBeyondCoveredArea(area: BoundingBox?): Boolean =
+    position.isBeyondCoveredArea(area)

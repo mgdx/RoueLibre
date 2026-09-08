@@ -35,6 +35,7 @@ import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.endonym
 import io.github.mgdx.rouelibre.ui.offeredLanguages
 import io.github.mgdx.rouelibre.ui.speakLanguage
+import io.github.mgdx.rouelibre.ui.stations.StreetBikeIntroDialogFragment
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -113,6 +114,7 @@ class SettingsFragment : Fragment() {
         setUpUnits(views)
         setUpOpeningScreen(views)
         setUpStationFilters(views)
+        setUpStreetBikes(views)
         setUpOwnBikeKind(views)
         setUpWalkingPace(views)
         setUpSavedPlaces(views)
@@ -718,6 +720,45 @@ class SettingsFragment : Fragment() {
                     val current = binding ?: return@collect
                     isFilling = true
                     current.hideEmptyStations.isChecked = hide
+                    isFilling = false
+                }
+            }
+        }
+    }
+
+    /**
+     * Whether the map draws the bikes outside stations (SPEC §4.1, §7.6).
+     *
+     * The last setting of the display section, and the one that reaches a feed
+     * rather than a drawing: switched on, the map reads a file twenty times
+     * the weight of the station feed, every five minutes. Written the moment
+     * it is pressed and kept from one session to the next, like the two
+     * filters above it, and the map follows the stored value itself.
+     *
+     * **The explanation comes after the writing, and only the first time.** It
+     * informs and does not confirm (SPEC §7.6): the switch is already on when
+     * the window opens, so nothing waits on it and closing it changes nothing.
+     * What it says is the one thing no feed carries — whether such a bike may
+     * be taken where it stands — and it stays readable afterwards from the
+     * sheet of any of those bikes.
+     */
+    private fun setUpStreetBikes(views: FragmentSettingsBinding) {
+        views.showStreetBikes.setOnCheckedChangeListener { _, isChecked ->
+            if (isFilling) return@setOnCheckedChangeListener
+            viewLifecycleOwner.lifecycleScope.launch {
+                preferences.setShowStreetBikes(isChecked)
+                if (isChecked && !preferences.streetBikesExplained()) {
+                    StreetBikeIntroDialogFragment.explain(parentFragmentManager)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preferences.showStreetBikes.collect { show ->
+                    val current = binding ?: return@collect
+                    isFilling = true
+                    current.showStreetBikes.isChecked = show
                     isFilling = false
                 }
             }

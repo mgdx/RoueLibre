@@ -41,6 +41,16 @@ class StationCoverageTest {
     }
 
     @Test
+    fun `a bare position is read by the same rule as a station`() {
+        // What the sheet of a bike outside stations asks (SPEC §7.2.1): the
+        // bike is a position and nothing else, and it must be told covered
+        // from uncovered exactly as a station is.
+        assertFalse(Coordinates(45.75, 22.90).isBeyondCoveredArea(hunedoara))
+        assertTrue(Coordinates(44.43, 26.10).isBeyondCoveredArea(hunedoara))
+        assertFalse(Coordinates(44.43, 26.10).isBeyondCoveredArea(null))
+    }
+
+    @Test
     fun `nothing is beyond a box that is not known`() {
         // With no box the application has no ground to call a station
         // unreachable, and saying so would be worse than saying nothing.

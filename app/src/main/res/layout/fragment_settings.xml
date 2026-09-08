@@ -281,6 +281,37 @@
                 android:text="@string/settings_map_filters_keeps_unknown"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
 
+            <!--
+                The bikes the network reports outside its stations (SPEC §4.1,
+                §7.1), closing the display section. Off by default: it draws
+                markers whose meaning the application cannot vouch for, and it
+                reads a feed twenty times the weight of the station feed.
+
+                The row carries no per-network state. A network publishing no
+                such feed shows nothing — no marker, no sentence here, no
+                disabled row — and the setting simply has no effect there:
+                saying otherwise would have this screen read a feed to describe
+                a city, and the map already says it by drawing nothing.
+            -->
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/show_street_bikes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:minHeight="@dimen/touch_target_min"
+                android:text="@string/settings_street_bikes"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+
+            <!-- The one sentence under it, and the only thing said about the
+                 right to take such a bike: the network's rules decide it, and
+                 GBFS does not carry them. -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="@string/settings_street_bikes_description"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
+
             <!-- Journey: what qualifies a journey before it is asked for
                  (SPEC §7.6). Unlike the display section above, what stands here
                  reaches the algorithm of §6 and changes which stations it

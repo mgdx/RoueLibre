@@ -3,6 +3,7 @@ package io.github.mgdx.rouelibre.ui.map
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.content.Context
 import android.graphics.PointF
 import android.graphics.RectF
 import android.os.Bundle
@@ -36,6 +37,7 @@ import io.github.mgdx.rouelibre.core.message.MessageSubject
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.BikeKindFilter
 import io.github.mgdx.rouelibre.core.station.StationFilter
+import io.github.mgdx.rouelibre.core.station.StreetBike
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.core.station.stationsShownOnMap
@@ -59,6 +61,7 @@ import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
 import io.github.mgdx.rouelibre.ui.stations.StationDetailSheet
 import io.github.mgdx.rouelibre.ui.stations.StationListFragment
 import io.github.mgdx.rouelibre.ui.stations.StationsViewModel
+import io.github.mgdx.rouelibre.ui.stations.StreetBikeSheet
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
@@ -120,6 +123,7 @@ class MapFragment : Fragment() {
     private var binding: FragmentMapBinding? = null
     private var mapLibreMap: MapLibreMap? = null
     private var stationSource: GeoJsonSource? = null
+    private var streetBikeSource: GeoJsonSource? = null
     private var pickedPlaceSource: GeoJsonSource? = null
     private var styleLoaded = false
 
@@ -287,6 +291,25 @@ class MapFragment : Fragment() {
     private var lentFleet: FleetDescription? = null
 
     /**
+     * The bikes outside stations last read, and empty while they are not shown.
+     *
+     * Held because two things settle what is drawn and they arrive apart: the
+     * feed, and the vehicle type table that says which of those bikes bear the
+     * bolt (SPEC §4.1). Whichever lands second redraws from this.
+     */
+    private var streetBikes: List<StreetBike> = emptyList()
+
+    /**
+     * Whether the setting of SPEC §7.6 has the bikes outside stations drawn.
+     *
+     * Read from the settings and followed, like the two station filters. What
+     * it decides here is not only the markers but whether the feed is asked for
+     * at all: it weighs twenty times the station feed, and a map that is not
+     * showing those bikes has no business fetching them.
+     */
+    private var showsStreetBikes = false
+
+    /**
      * Whether the controls laid over the map are up at all.
      *
      * False until the base map is known to be installed, and false while a point
@@ -354,6 +377,7 @@ class MapFragment : Fragment() {
         applyModeLabel()
         applyBikeKindLabel()
         followStationFilters()
+        followStreetBikes()
         // The button that opens the journey search carries the bike of the
         // network served: with a bolt where that network lends pedal-assist
         // bikes (SPEC §15).
@@ -368,6 +392,9 @@ class MapFragment : Fragment() {
             lentFleet = lent
             showBikeKindFilter()
             publishStations()
+            // The same reading says which bikes outside stations bear the
+            // bolt, and it may arrive after they are drawn.
+            publishStreetBikes()
         }
 
         // The target depends on what is missing, and it is set together with
@@ -843,6 +870,10 @@ class MapFragment : Fragment() {
         style.addSource(source)
 
         val context = requireContext()
+        // The bikes outside stations go down FIRST, so the stations are drawn
+        // over them: a rack of bikes is what this map is for, and a marker
+        // standing for one bike must never hide one standing for twenty.
+        addStreetBikeLayers(style, context)
         style.addLayer(StationMarkers.circleLayer(context))
         style.addLayer(StationMarkers.countLayer(context))
         style.addLayer(StationMarkers.clusterLayer(context))
@@ -886,6 +917,40 @@ class MapFragment : Fragment() {
     }
 
     /**
+     * Installs the source and the layers of the bikes outside stations.
+     *
+     * They are installed whatever the setting says, and the source is simply
+     * left empty while the bikes are not shown: that is one state of one
+     * object, where layers coming and going with a switch set on another
+     * screen would be a style rebuilt from under the map.
+     *
+     * Clustering is MapLibre's, with the stations' own radius and zoom
+     * (SPEC §7.1): the two kinds of marker collapse at the same moment, so the
+     * map does not read as two maps laid on each other.
+     */
+    private fun addStreetBikeLayers(style: Style, context: Context) {
+        val source = GeoJsonSource(
+            StreetBikeMarkers.SOURCE_ID,
+            FeatureCollection.fromFeatures(emptyList()),
+            GeoJsonOptions()
+                .withCluster(true)
+                .withClusterRadius(CLUSTER_RADIUS)
+                .withClusterMaxZoom(CLUSTER_MAX_ZOOM),
+        )
+        streetBikeSource = source
+        style.addSource(source)
+
+        style.addLayer(StreetBikeMarkers.circleLayer(context))
+        StreetBikeMarkers.registerImage(context, style)
+        style.addLayer(StreetBikeMarkers.boltLayer())
+        style.addLayer(StreetBikeMarkers.clusterLayer(context))
+        style.addLayer(StreetBikeMarkers.clusterCountLayer(context))
+        // The view may have been rebuilt over bikes already read: they are put
+        // back without the feed being asked again.
+        publishStreetBikes()
+    }
+
+    /**
      * Redraws the markers for the stations the filter leaves standing.
      *
      * The stations are sifted **before** the features are built rather than by
@@ -897,6 +962,75 @@ class MapFragment : Fragment() {
         val shown = stationsShownOnMap(viewModel.state.value.stations, mapFilter, mode, kind)
         val source = stationSource ?: return
         source.setGeoJson(StationMarkers.toFeatureCollection(shown, mode, kind))
+    }
+
+    /**
+     * Redraws the bikes outside stations, or clears them.
+     *
+     * They answer to no filter of this screen — neither the two station
+     * filters nor the kind, nor the Bikes / Free docks toggle. Those act on
+     * counts, and there is no count here to hide or to narrow: a marker
+     * standing for one bike of one kind is either drawn or not, and the
+     * setting alone decides (SPEC §7.1).
+     */
+    private fun publishStreetBikes() {
+        val source = streetBikeSource ?: return
+        source.setGeoJson(
+            StreetBikeMarkers.toFeatureCollection(
+                streetBikes,
+                lentFleet?.vehicleTypes.orEmpty(),
+            ),
+        )
+    }
+
+    /**
+     * Follows the setting that draws the bikes outside stations (SPEC §7.6).
+     *
+     * Switched on, the feed is asked for on the spot — coming back from the
+     * settings must find the bikes already on the map — and then followed;
+     * switched off, the markers go and nothing is fetched again. The
+     * five-minute gate between two reads is the repository's, not this
+     * screen's (SPEC §4.1).
+     */
+    private fun followStreetBikes() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                container.preferences.showStreetBikes.collectLatest { show ->
+                    showsStreetBikes = show
+                    if (!show) {
+                        streetBikes = emptyList()
+                        publishStreetBikes()
+                        return@collectLatest
+                    }
+                    // Asked for beside the following rather than before it: the
+                    // stream never ends, so a read awaited here would be a read
+                    // the markers wait on.
+                    launch { refreshStreetBikes() }
+                    container.stationRepository.observeStreetBikes().collect { snapshot ->
+                        streetBikes = snapshot.bikes
+                        publishStreetBikes()
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Asks for the bikes outside stations, while they are being shown.
+     *
+     * The outcome is deliberately not raised on the banner. A network that
+     * cannot be reached is already being said by the station refresh made in
+     * the same breath, and a network publishing no such feed is an ordinary
+     * answer the repository remembers for the session rather than a failure
+     * (SPEC §4.1) — the map says that one by drawing nothing, which is the
+     * whole of what the setting promises there.
+     *
+     * @param force ignores the five-minute gate. Reserved for the refresh
+     *   asked for by hand, as it is for the stations.
+     */
+    private suspend fun refreshStreetBikes(force: Boolean = false) {
+        if (!showsStreetBikes) return
+        container.stationRepository.refreshStreetBikes(force = force)
     }
 
     /**
@@ -950,6 +1084,8 @@ class MapFragment : Fragment() {
             touchArea,
             StationMarkers.STATION_CIRCLE_LAYER,
             StationMarkers.CLUSTER_CIRCLE_LAYER,
+            StreetBikeMarkers.CIRCLE_LAYER,
+            StreetBikeMarkers.CLUSTER_CIRCLE_LAYER,
         ).firstOrNull() ?: return false
 
         // A cluster describes no station in particular: touching it zooms in,
@@ -959,10 +1095,19 @@ class MapFragment : Fragment() {
             return true
         }
 
+        // In "pick a point" mode, opening a sheet of either kind would divert
+        // the gesture from what the user came to do.
+        val bikeId = touched.getStringProperty(StreetBikeMarkers.BIKE_ID_PROPERTY)
+        if (bikeId != null) {
+            if (isPicking()) return false
+            (touched.geometry() as? Point)?.let { centreOnStation(map, it) }
+            StreetBikeSheet.newInstance(bikeId)
+                .show(parentFragmentManager, StreetBikeSheet.TAG)
+            return true
+        }
+
         val stationId = touched.getStringProperty(StationMarkers.STATION_ID_PROPERTY)
             ?: return false
-        // In "pick a point" mode, opening a station sheet would divert the
-        // gesture from what the user came to do.
         if (isPicking()) return false
         (touched.geometry() as? Point)?.let { centreOnStation(map, it) }
         StationDetailSheet.newInstance(stationId)
@@ -1719,7 +1864,14 @@ class MapFragment : Fragment() {
                         ),
                         MessageSubject.Refresh,
                         actionLabel = R.string.action_retry,
-                    ) { viewModel.refresh(force = true) }
+                    ) {
+                        viewModel.refresh(force = true)
+                        // Asked for by hand: the gate that spares the feed is
+                        // stood down, as it is for the stations.
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            refreshStreetBikes(force = true)
+                        }
+                    }
                 }
             }
         }
@@ -1731,6 +1883,10 @@ class MapFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 while (true) {
                     viewModel.refresh()
+                    // The same tick asks for the bikes outside stations, which
+                    // the repository serves from memory until its own five
+                    // minutes are up (SPEC §4.1).
+                    refreshStreetBikes()
                     showFreshness(viewModel.state.value.fetchedAt)
                     delay(FRESHNESS_TICK_MILLIS)
                 }
@@ -1842,6 +1998,7 @@ class MapFragment : Fragment() {
         bearingListener = null
         binding?.map?.onDestroy()
         stationSource = null
+        streetBikeSource = null
         pickedPlaceSource = null
         userPosition?.cancel()
         userPosition = null
