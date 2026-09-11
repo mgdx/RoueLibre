@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -87,6 +88,38 @@ class AppPreferencesStreetBikesTest {
 
         assertFalse(AppPreferences(store).showStreetBikes.first())
         assertFalse(AppPreferences(store).streetBikesExplained())
+    }
+
+    @Test
+    fun `the feed is read every five minutes until the user says otherwise`() = runTest {
+        val store = newStore()
+
+        assertEquals(5, AppPreferences(store).vehicleFeedRefreshMinutes.first())
+
+        AppPreferences(store).setVehicleFeedRefreshMinutes(12)
+
+        assertEquals(12, AppPreferences(store).vehicleFeedRefreshMinutes.first())
+    }
+
+    @Test
+    fun `a cadence outside one to thirty minutes is neither kept nor read`() = runTest {
+        // A zero would read the feed on every tick of the map; a value a
+        // version wrote differently falls back on the default rather than
+        // on a silence nobody can see.
+        val store = newStore()
+        val preferences = AppPreferences(store)
+
+        preferences.setVehicleFeedRefreshMinutes(0)
+        assertEquals(1, preferences.vehicleFeedRefreshMinutes.first())
+
+        preferences.setVehicleFeedRefreshMinutes(90)
+        assertEquals(30, preferences.vehicleFeedRefreshMinutes.first())
+
+        store.edit { it[intPreferencesKey("vehicle_feed_refresh_minutes")] = 45 }
+        assertEquals(5, preferences.vehicleFeedRefreshMinutes.first())
+
+        store.edit { it[stringPreferencesKey("vehicle_feed_refresh_minutes")] = "7" }
+        assertEquals(5, preferences.vehicleFeedRefreshMinutes.first())
     }
 
     @Test

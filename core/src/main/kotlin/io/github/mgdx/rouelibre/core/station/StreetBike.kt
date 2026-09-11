@@ -63,7 +63,20 @@ public sealed interface BikeCharge {
  * @param maxRangeMetres the `max_range_meters` of the bike's declared type,
  *   or `null` when the type declares none.
  */
-public fun StreetBike.charge(maxRangeMetres: Int?): BikeCharge? {
+public fun StreetBike.charge(maxRangeMetres: Int?): BikeCharge? =
+    bikeCharge(chargeRatio, rangeMetres, maxRangeMetres)
+
+/**
+ * The one reading of a charge, shared by a bike on the street and a bike at a
+ * station: the two are the same entry of the same feed, and the figures they
+ * publish cannot be believed on different terms.
+ *
+ * @param chargeRatio `current_fuel_percent`, already kept within 0 and 1.
+ * @param rangeMetres `current_range_meters`, already kept above zero.
+ * @param maxRangeMetres the `max_range_meters` of the bike's declared type,
+ *   or `null` when the type declares none.
+ */
+public fun bikeCharge(chargeRatio: Double?, rangeMetres: Int?, maxRangeMetres: Int?): BikeCharge? {
     chargeRatio?.let { return BikeCharge.Ratio(it) }
     val range = rangeMetres ?: return null
     val maximum = maxRangeMetres ?: return null

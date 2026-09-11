@@ -68,6 +68,7 @@ class StreetBikeSheetStateTest {
 
     private fun snapshot(vararg bikes: StreetBike, read: Boolean = true) = StreetBikesSnapshot(
         bikes = bikes.toList(),
+        dockedBikes = emptyMap(),
         fetchedAt = if (read) Instant.parse("2026-09-08T10:00:00Z") else null,
         published = if (read) true else null,
     )

@@ -8,9 +8,12 @@ import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.geo.distanceInMetresTo
 import io.github.mgdx.rouelibre.core.station.BikeSplit
+import io.github.mgdx.rouelibre.core.station.StationBikesDetail
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
+import io.github.mgdx.rouelibre.core.station.chargesAtStation
 import io.github.mgdx.rouelibre.core.station.splitByKind
 import io.github.mgdx.rouelibre.data.StationsSnapshot
+import io.github.mgdx.rouelibre.data.StreetBikesSnapshot
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,6 +38,10 @@ import java.time.Instant
  * @property bikeSplit how the bikes divide between mechanical and electric, or
  *   `null` where the city does not lend both or where the feed's breakdown
  *   cannot be trusted — the total then stands alone.
+ * @property bikesDetail what the vehicle feed says of the bikes standing
+ *   there — the charge of each electric one, how many are out of service —
+ *   or `null` where the setting of SPEC §7.6 is off, the network publishes
+ *   no such feed, or it says nothing of this station.
  */
 data class StationDetailUiState(
     val entry: StationWithAvailability? = null,
@@ -43,6 +50,7 @@ data class StationDetailUiState(
     val isFavourite: Boolean = false,
     val fetchedAt: Instant? = null,
     val bikeSplit: BikeSplit? = null,
+    val bikesDetail: StationBikesDetail? = null,
 )
 
 /**
@@ -57,6 +65,10 @@ data class StationDetailUiState(
  * distance is owed — are then settled on the JVM, where they can be tested
  * (SPEC §14).
  *
+ * @property vehicles what the vehicle feed last said, the bikes at the
+ *   stations included (SPEC §4.1).
+ * @property bikesDetailWanted the setting of SPEC §7.6, followed: switched
+ *   off, the line goes at once, whatever the repository still holds.
  * @property stationId the station described.
  */
 class StationDetailViewModel(
@@ -66,6 +78,8 @@ class StationDetailViewModel(
     private val nearestAddress: suspend (Coordinates) -> AddressResult?,
     private val knownPositionInCity: suspend () -> Coordinates?,
     private val fleet: Flow<FleetDescription?>,
+    private val vehicles: Flow<StreetBikesSnapshot>,
+    private val bikesDetailWanted: Flow<Boolean>,
     private val stationId: String,
 ) : ViewModel() {
 
@@ -81,21 +95,24 @@ class StationDetailViewModel(
         viewModelScope.launch {
             // Followed rather than read once: the first refresh may be what
             // establishes that the network lends both kinds, and the split is
-            // then owed to a sheet already open (SPEC §4.1).
-            combine(stations, fleet, ::Pair).collect { (snapshot, lent) ->
-                val entry = snapshot.stations.firstOrNull { it.station.id == stationId }
-                mutableState.update {
-                    it.copy(
-                        entry = entry,
-                        fetchedAt = snapshot.fetchedAt,
-                        bikeSplit = splitOf(entry, lent),
-                    )
+            // then owed to a sheet already open (SPEC §4.1). The vehicle feed
+            // lands later still, on its own cadence, and the detail with it.
+            combine(stations, fleet, vehicles, bikesDetailWanted, ::StationSources)
+                .collect { (snapshot, lent, vehicles, detailWanted) ->
+                    val entry = snapshot.stations.firstOrNull { it.station.id == stationId }
+                    mutableState.update {
+                        it.copy(
+                            entry = entry,
+                            fetchedAt = snapshot.fetchedAt,
+                            bikeSplit = splitOf(entry, lent),
+                            bikesDetail = detailOf(vehicles, lent, detailWanted),
+                        )
+                    }
+                    if (entry != null) {
+                        resolveAddressOnce(entry)
+                        showDistanceOnce(entry)
+                    }
                 }
-                if (entry != null) {
-                    resolveAddressOnce(entry)
-                    showDistanceOnce(entry)
-                }
-            }
         }
         viewModelScope.launch {
             favouriteStationIds.collect { favourites ->
@@ -117,6 +134,27 @@ class StationDetailViewModel(
     private fun splitOf(entry: StationWithAvailability?, fleet: FleetDescription?): BikeSplit? {
         if (fleet == null || !fleet.isMixed) return null
         return entry?.availability?.splitByKind(fleet.vehicleTypes)
+    }
+
+    /**
+     * Says what the vehicle feed knows of the bikes standing here, where the
+     * setting asks for it (SPEC §7.2, §7.6).
+     *
+     * Three silences, and none of them is an error: the setting is off — the
+     * repository may still hold a read made before it was switched off, and
+     * that read must not outlive the answer it was asked under; the table is
+     * not in hand yet, without which no bike can be told electric; or the
+     * feed puts no vehicle at this station. What is said is `core`'s reading,
+     * charges fullest first and the out-of-service count beside them.
+     */
+    private fun detailOf(
+        vehicles: StreetBikesSnapshot,
+        fleet: FleetDescription?,
+        wanted: Boolean,
+    ): StationBikesDetail? {
+        if (!wanted || fleet == null) return null
+        val bikes = vehicles.dockedBikes[stationId] ?: return null
+        return chargesAtStation(bikes, fleet.vehicleTypes, fleet.maxRangeMetresByType)
     }
 
     /**
@@ -169,6 +207,8 @@ class StationDetailViewModel(
         private val nearestAddress: suspend (Coordinates) -> AddressResult?,
         private val knownPositionInCity: suspend () -> Coordinates?,
         private val fleet: Flow<FleetDescription?>,
+        private val vehicles: Flow<StreetBikesSnapshot>,
+        private val bikesDetailWanted: Flow<Boolean>,
         private val stationId: String,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -183,8 +223,18 @@ class StationDetailViewModel(
                 nearestAddress,
                 knownPositionInCity,
                 fleet,
+                vehicles,
+                bikesDetailWanted,
                 stationId,
             ) as T
         }
     }
 }
+
+/** The four streams the sheet is drawn from, combined into one emission. */
+private data class StationSources(
+    val stations: StationsSnapshot,
+    val fleet: FleetDescription?,
+    val vehicles: StreetBikesSnapshot,
+    val detailWanted: Boolean,
+)

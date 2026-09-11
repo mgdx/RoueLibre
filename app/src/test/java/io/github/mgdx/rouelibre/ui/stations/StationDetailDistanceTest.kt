@@ -4,6 +4,7 @@ import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.data.StationsSnapshot
+import io.github.mgdx.rouelibre.data.StreetBikesSnapshot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -71,6 +72,10 @@ class StationDetailDistanceTest {
         nearestAddress = { null },
         knownPositionInCity = knownPositionInCity,
         fleet = flowOf(null),
+        vehicles = flowOf(
+            StreetBikesSnapshot(emptyList(), emptyMap(), fetchedAt = null, published = null),
+        ),
+        bikesDetailWanted = flowOf(false),
         stationId = station.id,
     )
 

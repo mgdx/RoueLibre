@@ -11,6 +11,24 @@ also records what has no visible effect.
 
 ### Added
 
+- **The battery of the bikes standing at a station, on its sheet** (SPEC
+  §4.1, §7.2, §7.6). The same vehicle feed lists the docked bikes with their
+  `station_id` since GBFS 2.1, and on 11 September 2026 232 of the 337
+  networks configured listed theirs, 144 with a charge and 95 with a
+  percentage — nextbike's Munich, Vienna and Warsaw, Fifteen's Marseille and
+  Montpellier, none of the JCDecaux and Smovengo networks, which publish no
+  such file. Under the split, one line: the charge of each electric bike
+  fullest first, and the bikes the network says are out of service. Read on
+  the street bike's terms, and only on a bike the type table calls electric,
+  Fifteen writing a range on every one of Helsinki's 3,947 mechanical bikes.
+  The switch that reads the feed now says what it reads — "Show the battery
+  of the bikes at stations, and the bikes outside stations" — and what it
+  costs, and stays off by default; a slider under it sets the minutes between
+  two reads, five by default and one to thirty, applied to the next read. The
+  sheet asks for the feed when it opens, through the same gate as the map, so
+  one opened from the list finds it. French and English carry the eight new
+  strings; the other twenty-eight languages read them in English until
+  translated.
 - **The bikes a network reports outside its stations, shown on request** (SPEC
   §4.1, §6, §7.1, §7.2.1, §7.3, §7.4, §7.6, §8, §15). GBFS lists them in a
   fifth file, `free_bike_status.json`, renamed `vehicle_status.json` in 3.0,

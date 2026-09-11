@@ -622,6 +622,43 @@ class GbfsParserTest {
     }
 
     @Test
+    fun `the bikes at a station are kept apart, whatever their state`() {
+        // Berlin's shape again: three bikes carry a station_id, two of them
+        // at station 3140, one electric with its percentage. A station's
+        // sheet says which bikes are out of service, so the flags are kept
+        // rather than used to drop the entry as they are on the street.
+        val feed = assertSuccess(
+            parser.parseVehicleStatus(fixture("free_bike_status_v2_nextbike.json")),
+        )
+
+        assertEquals(listOf("3140", "3140", "3208"), feed.dockedBikes.map { it.stationId })
+        val electric = feed.dockedBikes[1]
+        assertEquals("348", electric.vehicleTypeId)
+        assertEquals(0.92, electric.chargeRatio!!, 1e-9)
+        assertNull("a range of zero is no range", electric.rangeMetres)
+        assertFalse(electric.isDisabled)
+    }
+
+    @Test
+    fun `a docked bike needs no position, and keeps its flags`() {
+        val document = """
+            {"version":"2.3","data":{"bikes":[
+              {"bike_id":"a","station_id":"12","is_disabled":true},
+              {"bike_id":"b","station_id":"12","is_reserved":1},
+              {"bike_id":"c","station_id":"","lat":50.63,"lon":3.05},
+              {"bike_id":"d","lat":50.63,"lon":3.05}
+            ]}}
+        """.trimIndent()
+
+        val feed = assertSuccess(parser.parseVehicleStatus(document))
+
+        assertEquals(listOf(true, false), feed.dockedBikes.map { it.isDisabled })
+        assertEquals(listOf(false, true), feed.dockedBikes.map { it.isReserved })
+        // A blank station_id is a street bike here as it is above.
+        assertEquals(listOf("c", "d"), feed.bikes.map { it.id })
+    }
+
+    @Test
     fun `a vehicle without a usable position is dropped, not the feed`() {
         val document = """
             {"version":"2.3","data":{"bikes":[

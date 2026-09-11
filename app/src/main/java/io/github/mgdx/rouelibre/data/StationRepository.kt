@@ -5,6 +5,7 @@ import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.gbfs.GbfsDiscovery
 import io.github.mgdx.rouelibre.core.gbfs.VehicleTypesFeed
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.station.DockedBike
 import io.github.mgdx.rouelibre.core.station.FleetReading
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.StationAvailability
@@ -30,10 +31,11 @@ import java.time.Instant
  * The single source of the stations and their availability.
  *
  * It applies the refresh policy of SPEC §4.1, which fits in four rules: static
- * data at most once a day, real-time state at most once a minute, the bikes
- * outside stations at most every five minutes and only on request, and
- * **never anything in the background**. No periodic task is scheduled: every
- * call comes from a screen on display or from a user's gesture.
+ * data at most once a day, real-time state at most once a minute, the vehicle
+ * feed at most every five minutes — or as often as the user has settled on —
+ * and only on request, and **never anything in the background**. No periodic
+ * task is scheduled: every call comes from a screen on display or from a
+ * user's gesture.
  *
  * @property remote access to the GBFS feeds.
  * @property dao the local cache.
@@ -46,6 +48,9 @@ import java.time.Instant
  *   lends. Reported rather than stored here: this repository counts, and what
  *   is made of the count — remembered, merged with earlier readings, shown — is
  *   the fleet repository's business.
+ * @property streetBikesMinimumInterval the least time between two reads of
+ *   the vehicle feed. A function and not a value because it is a setting
+ *   (SPEC §7.6), read at each call so a change applies to the next read.
  * @property clock the clock, injected to keep the policy testable.
  */
 class StationRepository(
@@ -54,6 +59,9 @@ class StationRepository(
     private val refreshTimestamps: RefreshTimestampStore,
     private val discoveryUrlProvider: suspend () -> String?,
     private val recordFleet: suspend (FleetReading) -> Unit = {},
+    private val streetBikesMinimumInterval: suspend () -> Duration = {
+        DEFAULT_STREET_BIKES_MINIMUM_INTERVAL
+    },
     private val clock: Clock = Clock.systemUTC(),
 ) {
 
@@ -176,7 +184,8 @@ class StationRepository(
     }
 
     /**
-     * The bikes outside stations of the city served, re-emitted on every read.
+     * The vehicles of the city served — the bikes outside stations and those
+     * standing at one — re-emitted on every read.
      *
      * Empty, and answering nothing about the network, until [refreshStreetBikes]
      * has been asked once: the feed is read only while the setting of SPEC §7.6
@@ -185,15 +194,17 @@ class StationRepository(
     fun observeStreetBikes(): Flow<StreetBikesSnapshot> = streetBikes
 
     /**
-     * Reads the bikes outside stations from the network if the policy allows
-     * it (SPEC §4.1).
+     * Reads the vehicle feed from the network if the policy allows it
+     * (SPEC §4.1).
      *
-     * At most every five minutes, and only on request: the feed weighs twenty
-     * times the station feed and little moves in it — see
-     * [STREET_BIKES_MINIMUM_INTERVAL]. A network publishing no such feed is
-     * remembered as publishing none for the session and is not asked again,
-     * exactly as the vehicle types are; that answer is a success, the absence
-     * being an ordinary fact about a docked fleet rather than a failure.
+     * At most every [streetBikesMinimumInterval], five minutes unless the user
+     * has settled on another figure, and only on request: the feed weighs
+     * twenty times the station feed and little moves in it — see
+     * [DEFAULT_STREET_BIKES_MINIMUM_INTERVAL]. A network publishing no such
+     * feed is remembered as publishing none for the session and is not asked
+     * again, exactly as the vehicle types are; that answer is a success, the
+     * absence being an ordinary fact about a docked fleet rather than a
+     * failure.
      *
      * The scooters a network lists in the same feed are dropped here, through
      * the session's vehicle type table, so that what the snapshot holds are
@@ -225,6 +236,7 @@ class StationRepository(
                         outcome.value.bikes,
                         vehicleTypes(discovery).kinds,
                     ),
+                    dockedBikes = outcome.value.dockedBikes.groupBy { it.stationId },
                     fetchedAt = now,
                     published = true,
                 )
@@ -349,9 +361,9 @@ class StationRepository(
         return Duration.between(last, now) >= STATUS_MINIMUM_INTERVAL
     }
 
-    private fun streetBikesRefreshIsDue(now: Instant): Boolean {
+    private suspend fun streetBikesRefreshIsDue(now: Instant): Boolean {
         val last = lastStreetBikesRefresh ?: return true
-        return Duration.between(last, now) >= STREET_BIKES_MINIMUM_INTERVAL
+        return Duration.between(last, now) >= streetBikesMinimumInterval()
     }
 
     private suspend fun stationInformationRefreshIsDue(now: Instant): Boolean {
@@ -384,22 +396,25 @@ class StationRepository(
         val STATION_INFORMATION_MAXIMUM_AGE: Duration = Duration.ofDays(1)
 
         /**
-         * Five minutes between two reads of the bikes outside stations, and
-         * the figure is the feed's weight set against what moves in it
-         * (SPEC §4.1). One read weighs Berlin 1,846 KiB (182 gzipped),
-         * Marseille 1,167 (120), where the station feed of the same networks
-         * weighs 2 to 9 KiB gzipped: twenty times the station feed, on every
-         * read. And little moves in it — two snapshots of the Marseille feed
-         * 5.7 minutes apart found 662 of 674 street bikes still there. Those
-         * are parked bikes, not rentals in progress. Five minutes is also the
-         * age past which a feed is marked frozen, so one read that often is
-         * never shown stale by its own rule.
+         * Five minutes between two reads of the vehicle feed unless the user
+         * says otherwise, and the figure is the feed's weight set against
+         * what moves in it (SPEC §4.1). One read weighs Berlin 1,846 KiB (182
+         * gzipped), Marseille 1,167 (120), where the station feed of the same
+         * networks weighs 2 to 9 KiB gzipped: twenty times the station feed,
+         * on every read. And little moves in it — two snapshots of the
+         * Marseille feed 5.7 minutes apart found 662 of 674 street bikes
+         * still there. Those are parked bikes, not rentals in progress. Five
+         * minutes is also the age past which a feed is marked frozen, so one
+         * read that often is never shown stale by its own rule. The user may
+         * move it between one and thirty minutes (SPEC §7.6), and the bounds
+         * are the preferences' business.
          */
-        val STREET_BIKES_MINIMUM_INTERVAL: Duration = Duration.ofMinutes(5)
+        val DEFAULT_STREET_BIKES_MINIMUM_INTERVAL: Duration = Duration.ofMinutes(5)
 
         /** What the flow holds before any read, and after the city is forgotten. */
         val NO_STREET_BIKES = StreetBikesSnapshot(
             bikes = emptyList(),
+            dockedBikes = emptyMap(),
             fetchedAt = null,
             published = null,
         )
@@ -407,11 +422,15 @@ class StationRepository(
 }
 
 /**
- * What the application knows of the bikes outside stations of the active city,
- * in memory only (SPEC §8).
+ * What the application knows of the vehicle feed of the active city, in
+ * memory only (SPEC §8).
  *
  * @property bikes the bikes standing outside the stations, scooters already
  *   dropped, and empty until a read has been made.
+ * @property dockedBikes the vehicles standing at a station, by the station's
+ *   identifier, for the station's sheet to describe (SPEC §7.2). Not sorted
+ *   into bikes and scooters here: the sheet reads them through the type table
+ *   as it reads the charge, and a station holding none has no entry.
  * @property fetchedAt when they were read, or `null` if they never were. It is
  *   the one age the bike's sheet shows (SPEC §7.2.1): a bike gets no age of
  *   its own.
@@ -421,6 +440,7 @@ class StationRepository(
  */
 data class StreetBikesSnapshot(
     val bikes: List<StreetBike>,
+    val dockedBikes: Map<String, List<DockedBike>>,
     val fetchedAt: Instant?,
     val published: Boolean?,
 )

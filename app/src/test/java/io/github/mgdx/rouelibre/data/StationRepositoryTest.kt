@@ -57,25 +57,28 @@ class StationRepositoryTest {
         server.close()
     }
 
-    private fun repository(recordFleet: suspend (FleetReading) -> Unit = {}): StationRepository =
-        StationRepository(
-            remote = GbfsRemoteSource(
-                client = OkHttpClient(),
-                parser = GbfsParser(),
-                userAgent = "RoueLibre-test/1.0",
-                unnamedStationLabel = { "Unnamed station" },
-                ioDispatcher = Dispatchers.IO,
-            ),
-            dao = dao,
-            refreshTimestamps = timestamps,
-            discoveryUrlProvider = { server.url(discoveryPath).toString() },
-            recordFleet = recordFleet,
-            clock = object : Clock() {
-                override fun getZone() = ZoneOffset.UTC
-                override fun withZone(zone: java.time.ZoneId) = this
-                override fun instant() = now
-            },
-        )
+    private fun repository(
+        recordFleet: suspend (FleetReading) -> Unit = {},
+        streetBikesMinimumInterval: suspend () -> Duration = { Duration.ofMinutes(5) },
+    ): StationRepository = StationRepository(
+        remote = GbfsRemoteSource(
+            client = OkHttpClient(),
+            parser = GbfsParser(),
+            userAgent = "RoueLibre-test/1.0",
+            unnamedStationLabel = { "Unnamed station" },
+            ioDispatcher = Dispatchers.IO,
+        ),
+        dao = dao,
+        refreshTimestamps = timestamps,
+        discoveryUrlProvider = { server.url(discoveryPath).toString() },
+        recordFleet = recordFleet,
+        streetBikesMinimumInterval = streetBikesMinimumInterval,
+        clock = object : Clock() {
+            override fun getZone() = ZoneOffset.UTC
+            override fun withZone(zone: java.time.ZoneId) = this
+            override fun instant() = now
+        },
+    )
 
     private fun enqueueDiscovery(streetBikes: Boolean = false, vehicleTypes: Boolean = false) {
         val feeds = buildList {
@@ -363,6 +366,42 @@ class StationRepositoryTest {
         repository.refreshStreetBikes()
 
         assertEquals(afterFirst + 1, server.requestCount)
+    }
+
+    @Test
+    fun `the minutes between two reads are the user's, read at each call`() = runTest {
+        // The slider in the settings applies to the next read, not to the
+        // next launch (SPEC §7.6): the interval is asked for every time.
+        var minutes = 1L
+        enqueueDiscovery(streetBikes = true)
+        enqueueStreetBikes()
+        val repository = repository(streetBikesMinimumInterval = { Duration.ofMinutes(minutes) })
+        repository.refreshStreetBikes()
+        val afterFirst = server.requestCount
+
+        now += Duration.ofSeconds(90)
+        enqueueStreetBikes()
+        repository.refreshStreetBikes()
+        assertEquals("one minute has passed", afterFirst + 1, server.requestCount)
+
+        minutes = 30
+        now += Duration.ofMinutes(20)
+        repository.refreshStreetBikes()
+        assertEquals("thirty minutes have not", afterFirst + 1, server.requestCount)
+    }
+
+    @Test
+    fun `the bikes at the stations travel with the street bikes, by station`() = runTest {
+        enqueueDiscovery(streetBikes = true)
+        enqueueStreetBikes()
+        val repository = repository()
+
+        repository.refreshStreetBikes()
+
+        val docked = repository.observeStreetBikes().first().dockedBikes
+        assertEquals(setOf("2"), docked.keys)
+        assertEquals("346", docked.getValue("2").single().vehicleTypeId)
+        assertTrue("nothing of them reaches the database", dao.availabilities.value.isEmpty())
     }
 
     @Test

@@ -70,12 +70,15 @@ gives the city its configuration, `GbfsRemoteSource`, which fetches, and
 A fifth feed is read from the same document, and only on request: the bikes a
 network reports **outside its stations**, `free_bike_status.json` in GBFS 1.x
 and 2.x, `vehicle_status.json` in 3.0, the newer name tried first. It is read
-only while the "bikes outside stations" setting is on, with the station feed
-when the map opens and on pull-to-refresh, then at most once every five minutes
-while the map is on screen — it weighs some twenty times the station feed on
-every read, and what it lists are parked bikes rather than rentals in progress.
-What is kept from it is decided at parse time in `:core`: a bike without a
-`station_id`, not disabled, not reserved, of a bicycle form factor. A network
+only while the vehicle feed setting is on, with the station feed when the map
+or a station's sheet opens and on pull-to-refresh, then at most once every five
+minutes — one to thirty, as the user has set it — while a screen is on show. It
+weighs some twenty times the station feed on every read, and what it lists are
+parked bikes rather than rentals in progress. What is kept from it is decided
+at parse time in `:core`: on the street, a bike without a `station_id`, not
+disabled, not reserved, of a bicycle form factor; at a station, every vehicle
+with its `station_id`, so the station's sheet can list the charge of its
+electric bikes and count those out of service. A network
 publishing no such feed is remembered as publishing none for the session, as
 `vehicle_types` is. Those bikes **live in memory and not in Room**: they are
 held by a repository for the session, under the identifier of the city they
@@ -113,8 +116,9 @@ identifier of the device or of the user.
 
 Nothing is fetched in the background. Every request comes from a screen being
 shown or from a gesture: at most one state refresh a minute, one static refresh a
-day, one read of the bikes outside stations every five minutes while that
-setting is on, and pull-to-refresh forces the first and the last.
+day, one read of the vehicle feed every five minutes — or as the user has set
+it — while that setting is on, and pull-to-refresh forces the first and the
+last.
 
 ## What the operator sees
 

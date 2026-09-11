@@ -1,6 +1,7 @@
 package io.github.mgdx.rouelibre.ui.stations
 
 import android.app.Dialog
+import android.icu.text.ListFormatter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,9 +21,11 @@ import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.address.AddressResult
 import io.github.mgdx.rouelibre.core.geo.BoundingBox
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
+import io.github.mgdx.rouelibre.core.station.BikeCharge
 import io.github.mgdx.rouelibre.core.station.BikeSplit
 import io.github.mgdx.rouelibre.core.station.ServiceState
 import io.github.mgdx.rouelibre.core.station.Station
+import io.github.mgdx.rouelibre.core.station.StationBikesDetail
 import io.github.mgdx.rouelibre.core.station.displayFor
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.core.station.isBeyondCoveredArea
@@ -36,8 +39,10 @@ import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.toRelativeText
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.Instant
+import kotlin.math.roundToInt
 
 /**
  * A station's detail, in a sheet sliding up from the bottom (SPEC §7.2).
@@ -72,6 +77,8 @@ class StationDetailSheet : BottomSheetDialogFragment() {
             // consulted there is no distance worth saying (SPEC §7.6).
             knownPositionInCity = { container.knownPositionInsideActiveCity() },
             fleet = container.fleetRepository.fleet,
+            vehicles = container.stationRepository.observeStreetBikes(),
+            bikesDetailWanted = container.preferences.showStreetBikes,
             stationId = requireArguments().getString(ARGUMENT_STATION_ID).orEmpty(),
         )
     }
@@ -126,6 +133,7 @@ class StationDetailSheet : BottomSheetDialogFragment() {
             // whether the journey it offers can exist at all.
             show(viewModel.state.value)
         }
+        askForBikesDetail()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -137,6 +145,23 @@ class StationDetailSheet : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         binding = null
         super.onDestroyView()
+    }
+
+    /**
+     * Asks for the vehicle feed, where the setting of SPEC §7.6 wants it.
+     *
+     * The map asks on its own tick, but this sheet also opens from the list
+     * and from the favourites, where nobody has asked yet; and the
+     * repository's gate holds either way, so a sheet opened twice in a minute
+     * costs one read. The outcome is not raised: a network publishing no
+     * such feed is an ordinary answer, and the line simply stays away.
+     */
+    private fun askForBikesDetail() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            if (container.preferences.showStreetBikes.first()) {
+                container.stationRepository.refreshStreetBikes()
+            }
+        }
     }
 
     private fun show(state: StationDetailUiState) {
@@ -158,6 +183,7 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         views.docksLabel.text =
             resources.getQuantityString(R.plurals.counterpart_docks, docks.count ?: 0)
         showBikeSplit(state.bikeSplit)
+        showBikesDetail(state.bikesDetail)
         showAddress(state.address, state.distanceInMetres)
         showServiceState(state)
         showJourneyOffer(state)
@@ -191,6 +217,48 @@ class StationDetailSheet : BottomSheetDialogFragment() {
                 split.electric,
             ),
         )
+    }
+
+    /**
+     * Says what the vehicle feed adds about the bikes standing there
+     * (SPEC §7.2): the charge of each electric bike, fullest first, and how
+     * many are out of service. One line, at most three parts, and absent
+     * whenever the model has nothing to say — the setting is off, the
+     * network publishes no such feed, or it lists no vehicle here.
+     *
+     * The percentages are one part and the ranges another, since a producer
+     * publishes one or the other; each is a list the system's own formatter
+     * joins in the reader's language, so that "92 %, 78 % and 40 %" is not
+     * three strings glued with a comma.
+     */
+    private fun showBikesDetail(detail: StationBikesDetail?) {
+        val views = binding ?: return
+        views.bikesDetail.isVisible = detail != null
+        if (detail == null) return
+        val listFormatter = ListFormatter.getInstance(resources.configuration.locales[0])
+        val parts = buildList {
+            detail.charges.filterIsInstance<BikeCharge.Ratio>()
+                .map {
+                    getString(R.string.station_bike_charge_value, (it.value * PERCENT).roundToInt())
+                }
+                .takeIf { it.isNotEmpty() }
+                ?.let { add(getString(R.string.station_bikes_battery, listFormatter.format(it))) }
+            detail.charges.filterIsInstance<BikeCharge.Range>()
+                .map { requireContext().formatDistance(it.metres.toDouble()) }
+                .takeIf { it.isNotEmpty() }
+                ?.let { add(getString(R.string.station_bikes_range, listFormatter.format(it))) }
+            if (detail.outOfService > 0) {
+                add(
+                    resources.getQuantityString(
+                        R.plurals.station_bikes_out_of_service,
+                        detail.outOfService,
+                        detail.outOfService,
+                    ),
+                )
+            }
+        }
+        views.bikesDetail.text =
+            parts.joinToString(getString(R.string.station_bikes_detail_separator))
     }
 
     private fun showAddress(address: AddressResult?, distanceInMetres: Double?) {
@@ -366,6 +434,9 @@ class StationDetailSheet : BottomSheetDialogFragment() {
     }
 
     companion object {
+        /** A ratio from the feed, written as a percentage. */
+        private const val PERCENT = 100
+
         private const val ARGUMENT_STATION_ID = "station-id"
 
         /** The tag the sheet is added to the manager under. */

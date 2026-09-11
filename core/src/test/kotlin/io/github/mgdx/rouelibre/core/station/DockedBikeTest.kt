@@ -1,0 +1,120 @@
+package io.github.mgdx.rouelibre.core.station
+
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+/**
+ * What a station's sheet says of the bikes standing there (SPEC §7.2).
+ *
+ * The figures are those of the live feeds read on 11 September 2026: nextbike
+ * Munich's percentages from 0.2 to 1 on its 1,674 electric bikes, Fifteen's
+ * ranges on Marseille's 2,162 and on Helsinki's 3,947 bikes with no battery
+ * at all. The rules under test keep the sheet silent rather than wrong: a
+ * charge listed is a promise to somebody about to walk there.
+ */
+class DockedBikeTest {
+
+    /** nextbike's table: a mechanical type, an electric one, and a scooter. */
+    private val types = mapOf(
+        "346" to VehicleKind.Mechanical,
+        "348" to VehicleKind.Electric,
+        "360" to VehicleKind.Other,
+    )
+
+    private val maxRanges = mapOf("348" to 60_000)
+
+    private fun bike(
+        typeId: String? = "348",
+        ratio: Double? = null,
+        range: Int? = null,
+        disabled: Boolean = false,
+        reserved: Boolean = false,
+    ) = DockedBike(
+        stationId = "3140",
+        vehicleTypeId = typeId,
+        chargeRatio = ratio,
+        rangeMetres = range,
+        isDisabled = disabled,
+        isReserved = reserved,
+    )
+
+    @Test
+    fun `the charges are listed fullest first`() {
+        val detail = chargesAtStation(
+            listOf(bike(ratio = 0.4), bike(ratio = 0.92), bike(ratio = 0.78)),
+            types,
+            maxRanges,
+        )
+
+        assertEquals(
+            listOf(BikeCharge.Ratio(0.92), BikeCharge.Ratio(0.78), BikeCharge.Ratio(0.4)),
+            detail!!.charges,
+        )
+        assertEquals(0, detail.outOfService)
+    }
+
+    @Test
+    fun `a range on a bike with no battery is a figure about nothing`() {
+        // Helsinki: every one of its mechanical bikes carries a
+        // current_range_meters. The table says what has a battery.
+        val detail = chargesAtStation(
+            listOf(bike(typeId = "346", range = 24_400), bike(typeId = "346", range = 40_000)),
+            types,
+            mapOf("346" to 40_000),
+        )
+
+        assertNull(detail)
+    }
+
+    @Test
+    fun `a type the table does not know is left out of a count`() {
+        assertNull(chargesAtStation(listOf(bike(typeId = "999", ratio = 0.5)), types, maxRanges))
+        assertNull(chargesAtStation(listOf(bike(typeId = null, ratio = 0.5)), types, maxRanges))
+    }
+
+    @Test
+    fun `a bike out of service or reserved is not on offer, and is counted apart`() {
+        val detail = chargesAtStation(
+            listOf(
+                bike(ratio = 0.9, disabled = true),
+                bike(ratio = 0.8, reserved = true),
+                bike(typeId = "346", disabled = true),
+                bike(ratio = 0.3),
+            ),
+            types,
+            maxRanges,
+        )
+
+        assertEquals(listOf(BikeCharge.Ratio(0.3)), detail!!.charges)
+        assertEquals(2, detail.outOfService)
+    }
+
+    @Test
+    fun `a range is read on the same terms as a street bike's`() {
+        // Marseille publishes a range and no percentage, with the type's
+        // maximum behind it; nextbike publishes a range of zero, which the
+        // parser has already dropped, so the percentage stands alone.
+        val detail = chargesAtStation(
+            listOf(bike(range = 2_800), bike(range = 28_800), bike(ratio = 0.5)),
+            types,
+            maxRanges,
+        )
+
+        assertEquals(
+            listOf(BikeCharge.Ratio(0.5), BikeCharge.Range(28_800), BikeCharge.Range(2_800)),
+            detail!!.charges,
+        )
+    }
+
+    @Test
+    fun `a range without a maximum behind it says nothing`() {
+        assertNull(chargesAtStation(listOf(bike(range = 28_800)), types, emptyMap()))
+    }
+
+    @Test
+    fun `bikes with nothing to say give no detail at all`() {
+        assertNull(chargesAtStation(emptyList(), types, maxRanges))
+        assertNull(chargesAtStation(listOf(bike(typeId = "346"), bike()), types, maxRanges))
+    }
+}

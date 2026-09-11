@@ -184,6 +184,27 @@
             tools:text="3 mécaniques · 1 électrique"
             tools:visibility="visible" />
 
+        <!-- What the vehicle feed adds, where the setting of SPEC §7.6 asks
+             for it: the charge of each electric bike, fullest first, and the
+             bikes out of service. Under the split because it refines it — the
+             split says how many are electric, this line says which one to
+             walk to — and hidden on the same rule: the line disappears rather
+             than lie. -->
+        <TextView
+            style="@style/Widget.RoueLibre.Name"
+            android:id="@+id/bikes_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bikes_split"
+            app:layout_goneMarginTop="@dimen/space_s"
+            tools:text="Batterie 92 %, 78 % et 40 % · 1 vélo hors service"
+            tools:visibility="visible" />
+
         <TextView
             style="@style/Widget.RoueLibre.Name"
             android:id="@+id/capacity"
@@ -193,7 +214,7 @@
             android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bikes_split"
+            app:layout_constraintTop_toBottomOf="@id/bikes_detail"
             app:layout_goneMarginTop="@dimen/space_m"
             tools:text="40 points d'attache · mis à jour il y a 12 secondes" />
 

@@ -123,6 +123,27 @@
         <item quantity="other">%1$d électriques</item>
     </plurals>
 
+    <!-- What the vehicle feed adds under the split, where the setting that
+         reads it is on (SPEC §7.2, §7.6): the charge of each electric bike,
+         fullest first, and the bikes out of service. Up to three parts, joined
+         by the separator; the lists inside a part are joined by the system in
+         the reader's language, so the placeholder receives "92 %, 78 % et
+         40 %" already written. -->
+    <string name="station_bikes_detail_separator">" · "</string>
+    <!-- %1$d is one bike's charge as a whole percentage. The doubled sign is a
+         literal per cent, not a placeholder. -->
+    <string name="station_bike_charge_value">%1$d %%</string>
+    <!-- %1$s is the list of percentages, one per electric bike on offer. -->
+    <string name="station_bikes_battery">Batterie %1$s</string>
+    <!-- Said where the network publishes ranges and no percentage. %1$s is the
+         list of distances, each already written in the reader's units. -->
+    <string name="station_bikes_range">Environ %1$s d’autonomie restante</string>
+    <plurals name="station_bikes_out_of_service">
+        <item quantity="one">%1$d vélo hors service</item>
+        <item quantity="many">%1$d de vélos hors service</item>
+        <item quantity="other">%1$d vélos hors service</item>
+    </plurals>
+
     <!-- The age of the displayed data (SPEC §4.1). -->
     <string name="freshness_just_now">à l’instant</string>
     <plurals name="freshness_seconds">
@@ -770,8 +791,17 @@
          The sentence under the switch is the whole of what the row says about
          a network: one that publishes no such feed shows nothing at all, and
          the map says that by drawing nothing. -->
-    <string name="settings_street_bikes">Afficher les vélos hors station</string>
-    <string name="settings_street_bikes_description">Selon le réseau, tu peux les emprunter là où ils sont, ou non.</string>
+    <string name="settings_street_bikes">Voir la batterie des vélos en station, et les vélos hors station</string>
+    <string name="settings_street_bikes_description">Selon le réseau, tu peux emprunter un vélo hors station là où il est, ou non. Cela lit un flux bien plus lourd que celui des stations, et seuls les réseaux qui le publient affichent quelque chose.</string>
+    <!-- The slider under the switch, and the line naming its value: how many
+         minutes go by between two reads of that feed. Five by default, one to
+         thirty (SPEC §4.1, §7.6). -->
+    <plurals name="settings_vehicle_feed_refresh">
+        <item quantity="one">%1$d minute entre deux rafraîchissements</item>
+        <item quantity="many">%1$d de minutes entre deux rafraîchissements</item>
+        <item quantity="other">%1$d minutes entre deux rafraîchissements</item>
+    </plurals>
+    <string name="settings_vehicle_feed_refresh_description">La carte et les fiches de station le demandent au plus à ce rythme.</string>
 
     <!-- Shown once, the first time the switch above is turned on, and readable
          again from the sheet of any such bike. It informs and does not

@@ -3,6 +3,7 @@ package io.github.mgdx.rouelibre.core.gbfs
 import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.station.DockedBike
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.StationAvailability
 import io.github.mgdx.rouelibre.core.station.StreetBike
@@ -249,15 +250,18 @@ public class GbfsParser {
 
     /**
      * Reads `free_bike_status` — `vehicle_status` in GBFS 3.0 — and returns the
-     * bikes standing outside the stations (SPEC §4.1).
+     * bikes standing outside the stations and, apart, those standing at one
+     * (SPEC §4.1).
      *
-     * The filtering is done here, at parse time, so that nothing else ever
-     * sees what is dropped: a vehicle at a station is already counted by the
-     * station feed and would be counted twice; a disabled or a reserved one
-     * cannot be taken; a vehicle without a position is on no map. What kind of
-     * vehicle it is — a scooter is not what this application shows — is not
-     * decided here, since it takes the network's table
-     * (`streetBikesShown`).
+     * The sorting is done here, at parse time, so that nothing else ever sees
+     * what is dropped. A vehicle with a `station_id` is already counted by the
+     * station feed: it is not a street bike, and it is kept as a docked one
+     * whatever its state, since the station's sheet says which are out of
+     * service. A vehicle on the street that is disabled or reserved cannot be
+     * taken, and one without a position is on no map. What kind of vehicle it
+     * is — a scooter is not what this application shows — is not decided
+     * here, since it takes the network's table (`streetBikesShown`,
+     * `chargesAtStation`).
      *
      * @param document the raw contents of `free_bike_status.json` or of
      *   `vehicle_status.json`.
@@ -269,8 +273,30 @@ public class GbfsParser {
         )
         VehicleStatusFeed(
             bikes = envelope.data.bikes.mapNotNull(::streetBikeOrNull),
+            dockedBikes = envelope.data.bikes.mapNotNull(::dockedBikeOrNull),
             lastUpdated = envelope.lastUpdated,
             version = envelope.version,
+        )
+    }
+
+    /**
+     * One published vehicle as a bike at a station, or `null` if it stands at
+     * none.
+     *
+     * The same charge figures as a street bike's, believed on the same terms:
+     * a docked bike and a street bike are one kind of entry, and the sheet
+     * reading them must not find the ratio kept on one and rescaled on the
+     * other.
+     */
+    private fun dockedBikeOrNull(entry: GbfsVehicleStatus): DockedBike? {
+        val stationId = entry.stationId?.takeUnless { it.isBlank() } ?: return null
+        return DockedBike(
+            stationId = stationId,
+            vehicleTypeId = entry.vehicleTypeId,
+            chargeRatio = entry.currentFuelPercent?.takeIf { it in 0.0..1.0 },
+            rangeMetres = positiveMetresOrNull(entry.currentRangeMetres),
+            isDisabled = entry.isDisabled,
+            isReserved = entry.isReserved,
         )
     }
 
@@ -470,9 +496,13 @@ public data class VehicleTypesFeed(
  *   a vehicle with a `station_id`, disabled, reserved or without a position
  *   has been dropped at parse time (SPEC §4.1). Whether each is a bicycle is
  *   not settled here — see `streetBikesShown`.
+ * @property dockedBikes the vehicles standing at a station, whatever their
+ *   state, for the station's sheet to describe (SPEC §7.2). Whether each is
+ *   an electric bicycle is not settled here either — see `chargesAtStation`.
  */
 public data class VehicleStatusFeed(
     public val bikes: List<StreetBike>,
+    public val dockedBikes: List<DockedBike>,
     public val lastUpdated: Instant?,
     public val version: String?,
 )

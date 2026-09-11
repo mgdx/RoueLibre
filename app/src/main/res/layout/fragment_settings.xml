@@ -302,14 +302,52 @@
                 android:text="@string/settings_street_bikes"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
 
-            <!-- The one sentence under it, and the only thing said about the
-                 right to take such a bike: the network's rules decide it, and
-                 GBFS does not carry them. -->
+            <!-- The two sentences under it: the only thing said about the
+                 right to take such a bike — the network's rules decide it, and
+                 GBFS does not carry them — and the price of the feed, which is
+                 what justifies the switch being off by default. -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_xs"
                 android:text="@string/settings_street_bikes_description"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
+
+            <!--
+                How often that feed may be read, in minutes (SPEC §4.1, §7.6).
+                A slider and not three named levels, unlike the walking pace
+                below: this one is a dial in the plain sense — a number of
+                minutes one is willing to pay the feed for — and not a fact
+                about oneself. One to thirty, five by default, and a line above
+                it naming the value, since a slider's own label only shows
+                while it is held. No tick marks: thirty dots on a track read
+                as a pattern rather than as steps, and the line above says
+                where the thumb stands. Greyed out while the switch above is off:
+                the feed is not read then, and a cadence for a read that
+                never happens would be a setting with no effect.
+            -->
+            <TextView
+                android:id="@+id/vehicle_feed_refresh_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/vehicle_feed_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/settings_vehicle_feed_refresh_description"
+                android:stepSize="1"
+                android:valueFrom="1"
+                android:valueTo="30"
+                android:value="5"
+                app:tickVisible="false" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_vehicle_feed_refresh_description"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
 
             <!-- Journey: what qualifies a journey before it is asked for
