@@ -149,6 +149,7 @@ better.
 | tilt / lay flat | luta / lutad, lägga platt | *Luta* is the tilt and *vrida* the turn, kept apart so that the four gestures of `map_description` stay four. `map_tilted_description` is ”Kartan är lutad.”, and `map_face_north` says *lägg kartan platt* for the other half of what the press does. |
 | this place | Den här platsen | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Mina platser*. `place_clear` is *Rensa den här punkten*, which keeps *Rensa* for emptying against *Radera* and *Ta bort*. |
 | Go there / Leave from here | Dit / Härifrån | The two shortest buttons of the application, listed above at 8 and 3 characters. The place sheet takes the station sheet's own words: `station_as_origin` is already *Härifrån*, word for word, and `station_as_destination` *Hit*, of which *Dit* is the same adverb with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | Reserverad | `station_bike_reserved`, the one word a line of the station sheet adds where the vehicle feed says the bike is booked. In the common gender, agreeing with the *cykel* it stands beside; *bokad* is what a ticket or a hotel room is, not a bike held at a station. |
 
 ## One departure from the English, in two strings
 

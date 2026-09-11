@@ -127,6 +127,7 @@ word apart.
 | tilt / lay flat | vippe / vippet, lægge fladt | *Vippe* is the tilt and *dreje* the turn, kept apart so that the four gestures of `map_description` stay four. `map_tilted_description` is „Kortet er vippet.“, and `map_face_north` says *læg kortet fladt* for the other half of what the press does. |
 | this place | Dette sted | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Mine steder*. `place_clear` is *Ryd dette punkt*, which keeps *Ryd* for emptying against *Slet*, which destroys. |
 | Go there / Leave from here | Dertil / Herfra | The two shortest buttons of the application, listed above at 6 characters each. The place sheet takes the station sheet's own words: `station_as_origin` is already *Herfra*, word for word, and `station_as_destination` *Hertil*, of which *Dertil* is the same adverb with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | Reserveret | `station_bike_reserved`, the one word a line of the station sheet adds where the vehicle feed says the bike is booked. The participle Danish puts on a booked seat, table or vehicle; *booket* is the loan the same sentence would take in speech, and the written form is this one. |
 
 ## One departure from the English, in two strings
 

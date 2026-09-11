@@ -143,6 +143,7 @@ nothing the row does not already say, and it doubled the width of both.
 | tilt / lay flat | vippe / vippet, legge flatt | *Vippe* is the tilt and *dreie* the turn, kept apart so that the four gestures of `map_description` stay four. `map_tilted_description` is «Kartet er vippet.», and `map_face_north` says *legg kartet flatt* for the other half of what the press does. |
 | this place | Dette stedet | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Stedene mine*. `place_clear` is *Fjern dette punktet*: the point is taken off the map, which is what *Fjern* covers, while *Slett* stays for data and *Tøm* for a search field. |
 | Go there / Leave from here | Dit / Herfra | The two buttons the section above calls the only pair placed side by side on one row, at 6 and 3 characters. The place sheet takes their words: `station_as_origin` is already *Herfra*, word for word, and `station_as_destination` *Hit*, of which *Dit* is the same adverb with the deictic moved — one adverb of place each, as there. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | Reservert | `station_bike_reserved`, the one word a line of the station sheet adds where the vehicle feed says the bike is booked. The participle Norwegian puts on a booked seat, table or vehicle; *booket* is the loan speech takes, and the written form is this one. |
 
 ## Two departures the checker cannot see
 

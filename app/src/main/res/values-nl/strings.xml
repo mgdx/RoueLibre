@@ -108,6 +108,38 @@
         <item quantity="other">%1$d elektrische</item>
     </plurals>
 
+    <!-- What the vehicle feed adds under the split, where the setting that
+         reads it is on (SPEC §7.2, §7.6): the charge of each electric bike,
+         fullest first, and the bikes out of service. Up to three parts, joined
+         by the separator; the lists inside a part are joined by the system in
+         the reader's language, so the placeholder receives "92 %, 78 % and
+         40 %" already written. -->
+    <string name="station_bikes_detail_separator">" · "</string>
+    <!-- %1$d is one bike's charge as a whole percentage. The doubled sign is a
+         literal per cent, not a placeholder. -->
+    <string name="station_bike_charge_value">%1$d%%</string>
+    <!-- %1$s is the list of percentages, one per electric bike on offer. -->
+    <string name="station_bikes_battery">Batterij %1$s</string>
+    <!-- Said where the network publishes ranges and no percentage. %1$s is the
+         list of distances, each already written in the reader's units. -->
+    <string name="station_bikes_range">Nog ongeveer %1$s actieradius</string>
+    <!-- Said instead of the two lists above past four bikes: %1$s is the
+         lowest figure, %2$s the highest, each already written. -->
+    <string name="station_bikes_battery_spread">Batterij %1$s tot %2$s</string>
+    <string name="station_bikes_range_spread">Nog ongeveer %1$s tot %2$s actieradius</string>
+    <!-- The row unfolding the bike-by-bike list under the summary, and the
+         one word a line adds where the feed says the bike is booked; "out of
+         service" reuses the station's own word. -->
+    <plurals name="station_bikes_list_title">
+        <item quantity="one">%1$d fiets bij dit station</item>
+        <item quantity="other">%1$d fietsen bij dit station</item>
+    </plurals>
+    <string name="station_bike_reserved">Gereserveerd</string>
+    <plurals name="station_bikes_out_of_service">
+        <item quantity="one">%1$d fiets buiten dienst</item>
+        <item quantity="other">%1$d fietsen buiten dienst</item>
+    </plurals>
+
     <!-- How old the availability is. Lower-cased: it is always read inside
          `freshness_fresh`, "Vernieuwd zojuist". -->
     <string name="freshness_just_now">zojuist</string>

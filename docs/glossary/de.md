@@ -82,6 +82,7 @@ than the literal translation.
 | tilt / lay flat | neigen / geneigt, flach legen | *Neigen* is the tilt and *drehen* the turn — the two words a German mapping application keeps apart, and they must stay apart here or the four gestures of `map_description` read as three. `map_tilted_description` is „Karte geneigt.“, and `map_face_north` says *flach legen*; *Karte* is left out of that label, which the compass already names. |
 | this place | Dieser Ort | `place_sheet_title`, the sheet a point found on the map opens. `place_clear` is *Diesen Punkt löschen*, which is what the *Löschen / Entfernen* row above already anticipated: the point is thrown away, not taken out of a list. |
 | Go there / Leave from here | Dorthin fahren / Von hier starten | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already *Von hier starten*, word for word, and `station_as_destination` *Hierher fahren*, of which *Dorthin fahren* is the same verb with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | Reserviert | `station_bike_reserved`, the one word a line of the station sheet adds where the vehicle feed says the bike is booked. The participle German puts on a booked seat, table or vehicle, and what a German bike-share application shows on a bike somebody has reserved ahead; *gebucht* would name the act rather than the state the line reports. |
 
 ## Words that are not translated
 
