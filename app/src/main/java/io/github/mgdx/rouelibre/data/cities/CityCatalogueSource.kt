@@ -1,6 +1,7 @@
 package io.github.mgdx.rouelibre.data.cities
 
 import android.content.Context
+import android.content.res.AssetManager
 import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.config.CityCatalogue
@@ -12,6 +13,8 @@ import io.github.mgdx.rouelibre.data.network.MAXIMUM_DOCUMENT_BYTES
 import io.github.mgdx.rouelibre.data.network.textUpTo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
@@ -39,9 +42,9 @@ class CityCatalogueSource(
     private val cacheFile: File
         get() = File(context.filesDir, CACHE_FILE_NAME)
 
-    /** The shipped configurations' identifiers, read on first use. */
+    /** Where the shipped configurations lie in `cities.json`, read on first use. */
     @Volatile
-    private var knownIds: Set<String>? = null
+    private var index: Map<String, List<Int>>? = null
 
     /**
      * The catalogue to use right now, without network access.
@@ -129,23 +132,39 @@ class CityCatalogueSource(
      * this is what lets the list say so instead of offering a city that would
      * come up empty (SPEC §15).
      *
-     * Read once from the asset directory and kept: the list is fixed for the
-     * lifetime of a build, and the city screen asks for it on every keystroke.
+     * Read once from the index and kept: the list is fixed for the lifetime of
+     * a build, and the city screen asks for it on every keystroke.
      */
     suspend fun knownCityIds(): Set<String> = withContext(ioDispatcher) {
-        knownIds ?: readKnownCityIds().also { knownIds = it }
+        configurationIndex().keys
     }
 
-    private fun readKnownCityIds(): Set<String> = try {
-        context.assets.list(CITIES_ASSET_DIRECTORY).orEmpty()
-            .filter { it.endsWith(CONFIGURATION_SUFFIX) }
-            .map { it.removeSuffix(CONFIGURATION_SUFFIX) }
-            .toSet()
+    /**
+     * Where each city's configuration begins in `cities.json`, and how long it
+     * is.
+     *
+     * The configurations ship as one stream rather than as one file each: three
+     * hundred and thirty-seven files of the same shape, each compressed on its
+     * own in the APK, took three and a half times the room the same bytes take
+     * together. This index is what buys back the direct access that a folder of
+     * files gave for free, and it is the only one of the two files ever read
+     * whole.
+     */
+    private fun configurationIndex(): Map<String, List<Int>> =
+        index ?: readConfigurationIndex().also { index = it }
+
+    private fun readConfigurationIndex(): Map<String, List<Int>> = try {
+        val document = context.assets.open(CITIES_INDEX_ASSET)
+            .bufferedReader()
+            .use { it.readText() }
+        json.decodeFromString<Map<String, List<Int>>>(document)
     } catch (_: IOException) {
-        // An unreadable asset directory is a manufacturing defect, and the
-        // answer that costs the user least is "none is missing": the list then
-        // behaves exactly as it did before this was written.
-        emptySet()
+        // An unreadable asset is a manufacturing defect, and the answer that
+        // costs the user least is "no city is known": the list then says so
+        // instead of offering cities whose configuration cannot be read either.
+        emptyMap()
+    } catch (_: SerializationException) {
+        emptyMap()
     }
 
     /**
@@ -164,10 +183,9 @@ class CityCatalogueSource(
         // data store. It is read back from the settings, where an older version
         // may have written one the catalogue reader would refuse today.
         if (!isUsableCityId(cityId)) return@withContext null
+        val slice = configurationIndex()[cityId] ?: return@withContext null
         val document = try {
-            context.assets.open("$CITIES_ASSET_DIRECTORY/$cityId.json")
-                .bufferedReader()
-                .use { it.readText() }
+            readConfigurationSlice(offset = slice[0], length = slice[1])
         } catch (_: IOException) {
             return@withContext null
         }
@@ -198,6 +216,32 @@ class CityCatalogueSource(
         }
     }
 
+    /**
+     * The [length] bytes of `cities.json` that start at [offset].
+     *
+     * Read by hand rather than through a reader: a stream gives no guarantee
+     * of skipping or reading as far as asked in one go, and a configuration
+     * read short would fail to parse for a reason that has nothing to do with
+     * its contents. Both loops run until the count is met or the stream ends.
+     */
+    private fun readConfigurationSlice(offset: Int, length: Int): String =
+        context.assets.open(CITIES_ASSET, AssetManager.ACCESS_RANDOM).use { stream ->
+            var skipped = 0L
+            while (skipped < offset) {
+                val step = stream.skip(offset - skipped)
+                if (step <= 0L) throw IOException("Cities asset shorter than its index")
+                skipped += step
+            }
+            val bytes = ByteArray(length)
+            var filled = 0
+            while (filled < length) {
+                val read = stream.read(bytes, filled, length - filled)
+                if (read < 0) throw IOException("Cities asset shorter than its index")
+                filled += read
+            }
+            String(bytes, Charsets.UTF_8)
+        }
+
     private fun writeCache(document: String) {
         val staging = File(context.filesDir, "$CACHE_FILE_NAME.partial")
         try {
@@ -212,8 +256,11 @@ class CityCatalogueSource(
 
     private companion object {
         const val CATALOGUE_ASSET = "catalogue.json"
-        const val CITIES_ASSET_DIRECTORY = "cities"
-        const val CONFIGURATION_SUFFIX = ".json"
+        const val CITIES_ASSET = "cities.json"
+        const val CITIES_INDEX_ASSET = "cities-index.json"
         const val CACHE_FILE_NAME = "catalogue.json"
+
+        /** Reads the index alone, whose shape this file owns. */
+        val json = Json
     }
 }

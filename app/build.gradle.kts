@@ -1,4 +1,5 @@
 import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
+import java.io.File
 import java.util.Properties
 
 plugins {
@@ -322,40 +323,106 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
     @get:OutputDirectory
     abstract val outputDirectory: DirectoryProperty
 
+    /**
+     * The same document with every `$comment` key removed, however deep.
+     *
+     * The recursion is the whole point: a city configuration is headed by one
+     * such block, then carries one more inside each section a contributor may
+     * edit — the fleet, the bounding box, the centring, the network. Filtering
+     * the top level alone left five sixths of them in place, and the 337
+     * configurations shipped weighed 704 KB instead of 241.
+     */
+    private fun stripComments(node: Any?): Any? = when (node) {
+        is Map<*, *> ->
+            node.filterKeys { it != "\$comment" }
+                .mapValues { stripComments(it.value) }
+
+        is List<*> -> node.map { stripComments(it) }
+        else -> node
+    }
+
+    /**
+     * Writes a JSON file into the assets stripped of what only a human reads.
+     *
+     * The files under `config/` are laid out for a contributor: indented, and
+     * commented. The application reads none of it — every reader of these
+     * files ignores the keys it does not know — and repeated over every
+     * configuration shipped it costs half a megabyte of APK. The source keeps
+     * its layout, the copy loses it, so the file one edits stays the readable
+     * one.
+     */
+    private fun copyStripped(source: File, destination: File) {
+        val document = groovy.json.JsonSlurper().parse(source)
+        destination.writeText(groovy.json.JsonOutput.toJson(stripComments(document)))
+    }
+
+    /**
+     * Writes the city configurations as one file, and an index into it.
+     *
+     * They used to ship one file per city, filed under the network identifier
+     * the catalogue carries. Three hundred and thirty-seven files of the same
+     * shape, and each one an entry of the APK's zip compressed on its own,
+     * blind to the three hundred and thirty-six others it repeats almost word
+     * for word: 247 KB where a single stream holding the same bytes takes 71.
+     *
+     * So the configurations are concatenated, in the order of their
+     * identifiers, and `cities-index.json` says where each one begins and how
+     * far it runs. The index is small and read at startup to know which cities
+     * this build serves; the big file is never read whole, only the slice a
+     * chosen city needs.
+     */
+    private fun writeCityConfigurations(target: File) {
+        val configurations = cityConfigurations.get().asFile.listFiles()
+            ?.filter { it.isFile && it.extension == "json" }
+            ?.map { source ->
+                val document = groovy.json.JsonSlurper().parse(source)
+                val network = (document as Map<*, *>)["network"] as Map<*, *>
+                network["id"] as String to groovy.json.JsonOutput.toJson(stripComments(document))
+            }
+            // Sorted so that two builds of the same sources write the same two
+            // files, byte for byte, as F-Droid's rebuild asks (SPEC §2, C1).
+            ?.sortedBy { it.first }
+            .orEmpty()
+
+        val index = linkedMapOf<String, List<Int>>()
+        val stream = target.resolve("cities.json").outputStream().buffered()
+        stream.use { output ->
+            var offset = 0
+            configurations.forEach { (identifier, document) ->
+                val bytes = document.toByteArray(Charsets.UTF_8)
+                output.write(bytes)
+                index[identifier] = listOf(offset, bytes.size)
+                offset += bytes.size
+            }
+        }
+        target.resolve("cities-index.json")
+            .writeText(groovy.json.JsonOutput.toJson(index))
+    }
+
     @TaskAction
     fun copyConfiguration() {
         val target = outputDirectory.get().asFile
+        // Emptied rather than written over: the task keeps its output between
+        // runs, so a file it no longer produces would go on shipping. The day
+        // the configurations became one stream, the folder of three hundred and
+        // thirty-seven files stayed in the APK beside it, and the assets grew
+        // instead of shrinking.
+        target.deleteRecursively()
         target.mkdirs()
-        cityCatalogue.get().asFile.copyTo(target.resolve("catalogue.json"), overwrite = true)
+        copyStripped(cityCatalogue.get().asFile, target.resolve("catalogue.json"))
 
-        // Each configuration is filed under its network identifier rather
-        // than under its file name: that identifier is the one the catalogue
-        // carries, so the application has nothing to guess when looking up the
-        // configuration of a city just chosen.
-        val cities = target.resolve("cities")
-        cities.deleteRecursively()
-        cities.mkdirs()
-        cityConfigurations.get().asFile.listFiles()
-            ?.filter { it.isFile && it.extension == "json" }
-            ?.forEach { configuration ->
-                val document = groovy.json.JsonSlurper().parse(configuration)
-                val network = (document as Map<*, *>)["network"] as Map<*, *>
-                val identifier = network["id"] as String
-                configuration.copyTo(cities.resolve("$identifier.json"), overwrite = true)
-            }
+        writeCityConfigurations(target)
 
         val rules = target.resolve("address-normalization")
-        rules.deleteRecursively()
         rules.mkdirs()
         normalizationRules.get().asFile.listFiles()
             ?.filter { it.isFile && it.extension == "json" }
-            ?.forEach { it.copyTo(rules.resolve(it.name), overwrite = true) }
+            ?.forEach { copyStripped(it, rules.resolve(it.name)) }
 
         // One folder per locale published — changelogs/en-US, changelogs/fr —
         // keeping the store's own directory names, which is what lets the
         // screen match them against the device's language.
         val notes = target.resolve("changelogs")
-        notes.deleteRecursively()
         notes.mkdirs()
         storeMetadata.orNull?.asFile?.listFiles()
             ?.filter { it.isDirectory }
