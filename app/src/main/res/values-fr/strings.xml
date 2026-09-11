@@ -146,9 +146,9 @@
          one word a line adds where the feed says the bike is booked; "out of
          service" reuses the station's own word. -->
     <plurals name="station_bikes_list_title">
-        <item quantity="one">%1$d vélo à cette station</item>
-        <item quantity="many">%1$d de vélos à cette station</item>
-        <item quantity="other">%1$d vélos à cette station</item>
+        <item quantity="one">%1$d vélo à cette station</item>
+        <item quantity="many">%1$d de vélos à cette station</item>
+        <item quantity="other">%1$d vélos à cette station</item>
     </plurals>
     <string name="station_bike_reserved">Réservé</string>
     <plurals name="station_bikes_out_of_service">
