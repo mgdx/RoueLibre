@@ -63,6 +63,7 @@ by no space, the glyph carrying its own.
 | pace (walking) | ペース | A pace is not a speed: `values/strings.xml` says so above the string, and 速度 would say the opposite. |
 | Slow (pace) | ゆっくり | A **departure from the lexicon**, which gives 遅い for Android's "Slow". 遅い judges — it is what a slow charger is — where ゆっくり describes how somebody walks. 速め rather than 速い for the same reason. |
 | Out of service | 利用停止中 | A **departure from the lexicon**, which gives 圏外. 圏外 is Android's word for a radio blackspot and says nothing about a rack; a station taken out of service by its operator is 利用停止中. |
+| Reserved (a bike) | 予約済み | `station_bike_reserved`, the one word a line of the station sheet's bike list adds where the feed says the bike is booked. 予約 is what every Japanese sharing service calls booking a bike ahead of walking to it, and 〜済み is how Android's own Japanese marks a state already reached — インストール済み, which this file writes too. |
 | Settings | 設定 | Android's own word. |
 | Search | 検索 | Android's own word for the action and the field. |
 | Searching… | 検索しています… | A **departure from the lexicon**, which has 検索中 (`settings:progress_scanning`). This string titles an otherwise empty screen, where the sentence form Android uses for its own waits — 検索しています…, デバイスを検索しています… (`android:media_route_chooser_searching`) — reads as an account of what is happening rather than as a status badge. |

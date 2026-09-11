@@ -123,6 +123,7 @@ are Android's own, from `%dd ago` and `1 month ago` in the lexicon.
 | climb | 爬升 | Metres gained. The word the Chinese cycling and hiking applications write, and the one `journey_climb` and `journey_detail_profile_description` share. |
 | pace (walking) | 步速 | A pace is not a speed: `values/strings.xml` says so above the string, and 速度 would say the opposite. The three settings are 慢 / 正常 / 快 — `settings:speed_label_slow` is 慢 and `speed_label_fast` 快, and "Brisk" lands on 快 rather than on 较快, which would read as a comparison with nothing to compare to. |
 | Out of service | 暂停服务 | A **departure from the lexicon**, which gives 不在服务区 (`settings:radioInfo_service_out`). That is Android's phrase for a radio blackspot and says nothing about a rack; a station its operator has taken out is 暂停服务. |
+| Reserved (a bike) | 已预约 | `station_bike_reserved`, the one word a line of the station sheet's bike list adds where the feed says the bike is booked. 预约 is the word mainland bike-share services put on booking a bike ahead of walking to it; 预订 is a hotel room or a ticket. 已 + verb is Android's own shape for a state reached — 已安装, 已删除, which this file writes too. |
 | Settings | 设置 | Android's own word, `android:global_action_settings`. |
 | Search | 搜索 | Android's own word for the action and the field, `android:search_go`. |
 | Searching… | 正在搜索… | `settings:progress_scanning`. The 正在… form, which Android uses for every wait it narrates — 正在加载, 正在读取 — reads as an account of what is happening rather than as a badge. |
