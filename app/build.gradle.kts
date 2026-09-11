@@ -110,12 +110,16 @@ android {
         // the French texts with English dates. It also prunes the libraries'
         // translations along the way, which weigh more than ours.
         //
-        // The languages beyond French and English are started files, whose
-        // strings are still the English ones. Listing them here is what makes
-        // a device set to German serve `values-de/` — without it the folder
-        // would be dropped from the APK and the file would be dead weight.
-        // Every language a translation exists in, started or finished: a folder
-        // absent from this list is dropped from the APK (SPEC §9). The set
+        // Listing a language here is what makes a device set to German serve
+        // `values-de/` — without it the folder is dropped from the APK and the
+        // file becomes dead weight. Every language a translation exists in
+        // therefore belongs here (SPEC §9).
+        //
+        // They are real translations, not English text waiting for one: every
+        // file was compared string by string against `values/` on 11 September
+        // 2026, and the closest to English is Danish, at thirteen per cent of
+        // shared values — the application's name, "km", a dash, a positional
+        // format. The set
         // follows the catalogue — one entry per language spoken where a
         // network is served — plus the widely spoken ones the project started
         // with.

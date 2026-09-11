@@ -5,26 +5,6 @@
 -->
 <lint>
     <!--
-        The started translation files still hold their English text, which a
-        per-language spellchecker reads as a string of misspellings — "area"
-        offered as "área" in the Spanish file, and so on for every word.
-
-        The check is switched off for those files only, and comes back the
-        moment a language is really translated: `values/` and `values-en/`
-        keep it. Remove a folder from this list when its translation lands.
-    -->
-    <issue id="Typos">
-        <ignore path="src/main/res/values-ar/strings.xml" />
-        <ignore path="src/main/res/values-de/strings.xml" />
-        <ignore path="src/main/res/values-es/strings.xml" />
-        <ignore path="src/main/res/values-it/strings.xml" />
-        <ignore path="src/main/res/values-nl/strings.xml" />
-        <ignore path="src/main/res/values-pl/strings.xml" />
-        <ignore path="src/main/res/values-pt/strings.xml" />
-        <ignore path="src/main/res/values-zh/strings.xml" />
-    </issue>
-
-    <!--
         `maplibre_logo_icon` and `maplibre_compass_icon` are MapLibre's, not
         ours, and nothing here names them: that is the point. Both maps turn
         the library's logo and compass off, but MapView loads the pictures

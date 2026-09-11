@@ -37,10 +37,13 @@ const DEFAULT_OUTPUT = path.join(REPO_ROOT, 'app/src/main/assets/glyphs');
  * whose streets are named "Piața Gării" has its Ș and Ț in 512–767, which was
  * not shipped, and its map came up empty over a perfectly good tile set.
  *
- * The cost is small, because fontnik answers for a range the font does not
- * cover with a valid empty file of forty-four bytes. Only the ranges the font
- * really carries weigh anything — Latin, its extensions and the punctuation —
- * and the two hundred and fifty others amount to eleven kilobytes together.
+ * The cost is not nothing, and it is worth saying plainly. fontnik answers for
+ * a range the font does not cover with a valid empty file of forty-four bytes,
+ * so the two hundred and fifty others hold eleven kilobytes of data between
+ * them — but each is an entry of the APK's zip, whose header and directory
+ * record carry a fifty-three character path, and the four hundred and
+ * ninety-six empty files therefore cost about a hundred and fifteen kilobytes
+ * of APK, ninety-four of them headers alone.
  * That is what buys a base map that cannot be blanked by a place name, in
  * Japanese as in Romanian: what the font cannot draw stays blank, which is
  * what a missing character was always supposed to cost.
