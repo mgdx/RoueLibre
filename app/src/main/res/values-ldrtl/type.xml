@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Typographic tokens for a right-to-left interface — SPEC.md §7, §9.
+
+    One token changes, and only under this qualifier: the tightening the
+    titles are set with.
+
+    Bricolage Grotesque holds no Arabic letter — its character map stops at
+    527 glyphs, none of them in the Arabic block — so an Arabic title is drawn
+    by the system's fallback face. The hundredth of an em the titles are drawn
+    together by was decided for Bricolage's own letterforms; on letters it
+    does not draw, it is an instruction about a drawing that is not there.
+
+    It also breaks the title. Arabic is cursive: its letters join, and their
+    shapes depend on their neighbours. Asking for letter spacing changes how
+    that run is shaped, and the two ways Android measures a line stop
+    agreeing. `Toolbar` builds its title as a single-line, end-ellipsized
+    `TextView`, and sizes it to exactly the width the measuring path returns —
+    197 px for "settings" on a 1080 px screen, kerning or no kerning, which is
+    the measuring path telling us it never applied the kerning at all. The
+    laying-out path does apply it, comes out some eight pixels wider than the
+    box it was given, and the ellipsis fires: the settings screen read
+    "الإعدادا…" and the journey screen "الرح…", each with most of the bar
+    empty beside it.
+
+    Latin, Greek, Chinese and Japanese titles are untouched by the whole
+    thing — measured whole and drawn whole, kerning included — because their
+    characters map one to one onto glyphs and the two paths agree. Which is
+    why the token is withdrawn here rather than everywhere: the tightening is
+    the project's typography and it stays exactly as it was on every script
+    that can carry it.
+
+    Zero rather than a smaller negative: there is no kerning that is safe on a
+    cursive script, only one that has not yet been caught out by a longer
+    title.
+-->
+<resources>
+
+    <item name="title_letter_spacing" format="float" type="dimen">0.0</item>
+
+</resources>
