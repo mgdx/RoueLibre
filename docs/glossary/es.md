@@ -100,6 +100,7 @@ says *byte*, not *octeto*.
 | tilt / lay flat | inclinar / inclinado, aplanar | *Inclinar* is the tilt and *girar* the turn, kept apart so that the four gestures of `map_description` stay four. `map_tilted_description` is «El mapa está inclinado.», and `map_face_north` says *aplanar* for laying it flat again. In `map_bearing_tilted_description` the conjunction is **e**, not *y*, before *inclinado*. |
 | this place | Este lugar | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Mis lugares*. `place_clear` is *Borrar este punto*, which keeps *Borrar* for emptying against *Eliminar*, which destroys. |
 | Go there / Leave from here | Ir allí / Partir de aquí | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already *Partir de aquí*, word for word, and `station_as_destination` *Ir aquí*, of which *Ir allí* is the same verb with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | Reservada | On a bike's own line of the station sheet (`station_bike_reserved`), where the feed says the bike is booked. Feminine, agreeing with *bici* as every word said of one bike does. |
 
 The three dataset names are all **masculine singular** — *mapa base*, *grafo de
 rutas*, *índice de direcciones* — which is what lets `dataset_imported` and
