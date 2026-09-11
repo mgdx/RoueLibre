@@ -174,6 +174,7 @@ prompt says.
 | Cancel | **Zrušiť** | Android's own (`android:cancel`). |
 | In use | **Používa sa** | Android's own (`android:media_route_status_in_use`), on the city already selected. |
 | Out of service | **Mimo prevádzky** | Android's own (`settings:radioInfo_service_out`). |
+| Reserved | **Rezervované** | On a bike line of the station sheet, where the feed says the bike is booked. The impersonal status form, like *Mimo prevádzky* beside it, rather than an adjective that would have to agree with *bicykel*. |
 | just now | **práve teraz** | Lower-cased because it is always read inside `freshness_fresh`: *Aktualizované práve teraz*. Android's `settings:time_unit_just_now` is the bare *Teraz*, which stands alone in a list; read inside our sentence it would come out as *Aktualizované teraz*, which is not how the moment is said. Android's own full sentence for it is *Práve aktualizované* (`settings:no_carrier_update_now_text`), and this keeps that adverb. |
 | Replace | **Nahradiť** | Android's own (`settings:vpn_replace`). |
 | Yes | **Áno** | Android's own (`settings:yes`). |

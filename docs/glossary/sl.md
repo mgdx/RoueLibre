@@ -149,6 +149,7 @@ reader's language (SPEC §4.3), and it lives in
 | Remove | **Odstrani** | `settings:remove`, `android:kg_reordering_delete_drop_target_text`. Takes out of a list: *Odstrani iz priljubljenih*. Android keeps the two apart and so does this file. |
 | Clear | **Počisti** | `settings:clear`, `settings:proxy_clear_text`. Empties a search field without destroying anything — a third verb, and the reason *Izbriši* is not stretched over it. |
 | Out of service | **Ne deluje** | `settings:radioInfo_service_out`. |
+| Reserved | **Rezervirano** | On a bike line of the station sheet, where the feed says the bike is booked. Neuter, agreeing with *kolo*, which is also the impersonal status form. |
 | In use | **V uporabi** | `android:media_route_status_in_use`. |
 | just now | **pravkar** | `settings:time_unit_just_now`. Lowercase here, since it lands inside *Posodobljeno %1$s*. |
 | Try again | **Poskusi znova** | `settings:audio_streams_dialog_retry` — the button form. The sentences say *Poskusite znova* (`android:fingerprint_error_unable_to_process`). |

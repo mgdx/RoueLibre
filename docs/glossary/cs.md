@@ -148,6 +148,7 @@ to protect a handful of named squares.
 | Cancel | **Zrušit** | Android's own (`android:cancel`). *Storno* exists in the lexicon but only on the print dialog. |
 | In use | **Používá se** | Android's own (`android:media_route_status_in_use`), on the city already selected. |
 | Out of service | **Mimo provoz** | The ordinary Czech for a machine that is not working. |
+| Reserved | **Rezervováno** | On a bike line of the station sheet, where the feed says the bike is booked. The impersonal status form, like *Mimo provoz* beside it, rather than an adjective that would have to agree with *kolo*. |
 | just now | **právě teď** | Lower-cased because it is always read inside `freshness_fresh`: *Aktualizováno právě teď*. |
 | Replace | **Nahradit** | Android's own (`settings:vpn_replace`). |
 | Yes | **Ano** | Android's own (`settings:yes`). |

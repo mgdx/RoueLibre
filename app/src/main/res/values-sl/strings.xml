@@ -165,6 +165,42 @@
         <item quantity="other">%1$d električnih</item>
     </plurals>
 
+    <!-- What the vehicle feed adds under the split, where the setting that
+         reads it is on (SPEC §7.2, §7.6): the charge of each electric bike,
+         fullest first, and the bikes out of service. Up to three parts, joined
+         by the separator; the lists inside a part are joined by the system in
+         the reader's language, so the placeholder receives "92 %, 78 % and
+         40 %" already written. -->
+    <string name="station_bikes_detail_separator">" · "</string>
+    <!-- %1$d is one bike's charge as a whole percentage. The doubled sign is a
+         literal per cent, not a placeholder. -->
+    <string name="station_bike_charge_value">%1$d %%</string>
+    <!-- %1$s is the list of percentages, one per electric bike on offer. -->
+    <string name="station_bikes_battery">Baterija %1$s</string>
+    <!-- Said where the network publishes ranges and no percentage. %1$s is the
+         list of distances, each already written in the reader's units. -->
+    <string name="station_bikes_range">Ostane še približno %1$s dosega</string>
+    <!-- Said instead of the two lists above past four bikes: %1$s is the
+         lowest figure, %2$s the highest, each already written. -->
+    <string name="station_bikes_battery_spread">Baterija od %1$s do %2$s</string>
+    <string name="station_bikes_range_spread">Ostane še približno %1$s do %2$s dosega</string>
+    <!-- The row unfolding the bike-by-bike list under the summary, and the
+         one word a line adds where the feed says the bike is booked; "out of
+         service" reuses the station's own word. -->
+    <plurals name="station_bikes_list_title">
+        <item quantity="one">%1$d kolo na tej postaji</item>
+        <item quantity="two">%1$d kolesi na tej postaji</item>
+        <item quantity="few">%1$d kolesa na tej postaji</item>
+        <item quantity="other">%1$d koles na tej postaji</item>
+    </plurals>
+    <string name="station_bike_reserved">Rezervirano</string>
+    <plurals name="station_bikes_out_of_service">
+        <item quantity="one">%1$d kolo ne deluje</item>
+        <item quantity="two">%1$d kolesi ne delujeta</item>
+        <item quantity="few">%1$d kolesa ne delujejo</item>
+        <item quantity="other">%1$d koles ne deluje</item>
+    </plurals>
+
     <!-- How old the availability figures are. Android writes this "pred 2
          dnevoma" (`settings:color_contrast_preview_email_send_date`), so
          "pred" carries the instrumental and the whole phrase is built here

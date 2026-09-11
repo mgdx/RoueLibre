@@ -121,6 +121,7 @@ current call sites.
 | Back | Wstecz | Android's own on the toolbar arrow, `settings:back`. |
 | In use | W użyciu | Android's own, `android:media_route_status_in_use`, on the city already selected. |
 | Out of service | Nie działa | Android's own, `settings:radioInfo_service_out`. |
+| Reserved | Zarezerwowany | On a bike line of the station sheet, where the feed says the bike is booked. Agrees with *rower*, as *elektryczny* does on the line above it. |
 | just now | przed chwilą | Android's own, `settings:time_unit_just_now`, lower-cased because it is always read inside `freshness_fresh`: "Zaktualizowano przed chwilą". |
 | Update available | Dostępna aktualizacja | Android's own, `settings:android_version_pending_update_summary`. |
 | Check for updates | Sprawdź aktualizacje | Shortened from Android's *Sprawdź dostępność aktualizacji* (`android:unsupported_compile_sdk_check_update`), which is twenty-eight characters on a button that has to sit beside a progress line. |

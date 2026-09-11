@@ -101,6 +101,7 @@ sati*).
 | address index | **kazalo adresa** | *Kazalo*, an index in a book, rather than *indeks*, which in Croatian reads as a figure or a student's record book. |
 | tiles (map) | **pločice** | `map_needs_tiles_title`. |
 | Out of service | **Ne radi** | `settings:radioInfo_service_out`. |
+| Reserved | **Rezerviran** | On a bike line of the station sheet, where the feed says the bike is booked. Agrees with *bicikl*, as *električni* does on the line above it. |
 | just now | **upravo sad** | `settings:time_unit_just_now`, lowercased because it is embedded in *Ažurirano %1$s*. |
 | In use | **U upotrebi** | `android:media_route_status_in_use`. |
 | Settings / Display / Storage / Privacy / System / Language | **Postavke / Zaslon / Pohrana / Privatnost / Sustav / Jezik** | All from the lexicon, keys `android:global_action_settings`, `settings:display_settings`, `settings:storage_category`, `settings:privacy_dashboard_title`, `android:default_audio_route_category_name`, `settings:app_locale_preference_title`. |
