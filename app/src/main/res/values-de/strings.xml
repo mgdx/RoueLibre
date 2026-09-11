@@ -125,6 +125,38 @@
         <item quantity="other">%1$d elektrische</item>
     </plurals>
 
+    <!-- What the vehicle feed adds under the split, where the setting that
+         reads it is on (SPEC §7.2, §7.6): the charge of each electric bike,
+         fullest first, and the bikes out of service. Up to three parts, joined
+         by the separator; the lists inside a part are joined by the system in
+         the reader's language, so the placeholder receives "92 %, 78 % and
+         40 %" already written. -->
+    <string name="station_bikes_detail_separator">" · "</string>
+    <!-- %1$d is one bike's charge as a whole percentage. The doubled sign is a
+         literal per cent, not a placeholder. -->
+    <string name="station_bike_charge_value">%1$d %%</string>
+    <!-- %1$s is the list of percentages, one per electric bike on offer. -->
+    <string name="station_bikes_battery">Akku %1$s</string>
+    <!-- Said where the network publishes ranges and no percentage. %1$s is the
+         list of distances, each already written in the reader's units. -->
+    <string name="station_bikes_range">Noch etwa %1$s Reichweite</string>
+    <!-- Said instead of the two lists above past four bikes: %1$s is the
+         lowest figure, %2$s the highest, each already written. -->
+    <string name="station_bikes_battery_spread">Akku %1$s bis %2$s</string>
+    <string name="station_bikes_range_spread">Noch etwa %1$s bis %2$s Reichweite</string>
+    <!-- The row unfolding the bike-by-bike list under the summary, and the
+         one word a line adds where the feed says the bike is booked; "out of
+         service" reuses the station's own word. -->
+    <plurals name="station_bikes_list_title">
+        <item quantity="one">%1$d Rad an dieser Station</item>
+        <item quantity="other">%1$d Räder an dieser Station</item>
+    </plurals>
+    <string name="station_bike_reserved">Reserviert</string>
+    <plurals name="station_bikes_out_of_service">
+        <item quantity="one">%1$d Rad außer Betrieb</item>
+        <item quantity="other">%1$d Räder außer Betrieb</item>
+    </plurals>
+
     <!-- The age of the displayed data (SPEC §4.1). Each of these is read
          inside a sentence, which is why they start in lower case. -->
     <string name="freshness_just_now">gerade eben</string>

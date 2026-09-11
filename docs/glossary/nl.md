@@ -114,6 +114,7 @@ pair.
 | tilt / lay flat | kantelen / gekanteld, vlak leggen | *Kantelen* is the tilt and *draaien* the turn — the two words a Dutch mapping application keeps apart, and they must stay apart here or the four gestures of `map_description` read as three. `map_tilted_description` is „De kaart is gekanteld.”, and `map_face_north` says *vlak leggen* for laying it flat again. |
 | this place | Deze plaats | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Mijn plaatsen*. `place_clear` is *Dit punt wissen*, which keeps *wissen* for emptying against *verwijderen*, which destroys. |
 | Go there / Leave from here | Daarheen / Vanaf hier | The two shortest buttons of the application, listed above at 10 and 8 characters. The place sheet takes the station sheet's own words: `station_as_origin` is already *Vanaf hier*, word for word, and `station_as_destination` *Hierheen*, of which *Daarheen* is the same adverb with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | Gereserveerd | `station_bike_reserved`, the one word a line of the station sheet adds where the vehicle feed says the bike is booked. The participle Dutch puts on a booked seat, table or vehicle; *geboekt* reads as a trip paid for rather than a bike held for someone. |
 
 ## The address prompt, and the postcode that is not in it
 
