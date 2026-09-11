@@ -25,6 +25,12 @@
         app:title="@string/journey_title"
         app:titleTextAppearance="@style/TextAppearance.RoueLibre.Title" />
 
+    <!-- The end margin is carried twice, and it has to be: the swap button is
+         gone on a journey departing from a bike (SPEC §7.3), a gone view is a
+         point with no margin of its own, and the field then ran to the physical
+         edge of the screen while everything around it kept its sixteen. The
+         gone margin takes the swap button's over, so the screen's edge is the
+         same whether the button is there or not. -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/origin"
         style="@style/Widget.RoueLibre.Toggle"
@@ -37,7 +43,8 @@
         android:text="@string/journey_origin_empty"
         app:layout_constraintEnd_toStartOf="@id/swap"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_goneMarginEnd="@dimen/space_l" />
 
     <!-- No start margin here: this field's edges are those of the one above.
          A margin, applied on top of a constraint that already carries it,

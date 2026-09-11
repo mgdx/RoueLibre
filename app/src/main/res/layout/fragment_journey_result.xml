@@ -34,7 +34,14 @@
         app:navigationIcon="@drawable/ic_back" />
 
     <!-- The two ends, in the shape the search screen gave them: a press
-         reopens the address search, and the answer recomputes the journey. -->
+         reopens the address search, and the answer recomputes the journey.
+
+         The end margin is carried twice, and it has to be: the swap button is
+         gone on a journey departing from a bike (SPEC §7.3), a gone view is a
+         point with no margin of its own, and the field then ran to the physical
+         edge of the screen while everything around it kept its sixteen. The
+         gone margin takes the swap button's over, so the screen's edge is the
+         same whether the button is there or not. -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/origin"
         style="@style/Widget.RoueLibre.Toggle"
@@ -46,6 +53,7 @@
         app:layout_constraintEnd_toStartOf="@id/swap"
         app:layout_constraintStart_toEndOf="@id/toolbar"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginEnd="@dimen/space_l"
         tools:text="12 bis Rue Nationale" />
 
     <!-- No start margin here: this field's edges are those of the one above. -->
