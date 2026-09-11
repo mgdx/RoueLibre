@@ -169,6 +169,40 @@
         <item quantity="other">%1$d електричних</item>
     </plurals>
 
+    <!-- What the vehicle feed adds under the split, where the setting that
+         reads it is on (SPEC §7.2, §7.6): the charge of each electric bike,
+         fullest first, and the bikes out of service. Up to three parts, joined
+         by the separator; the lists inside a part are joined by the system in
+         the reader's language, so the placeholder receives "92 %, 78 % and
+         40 %" already written. -->
+    <string name="station_bikes_detail_separator">" · "</string>
+    <!-- %1$d is one bike's charge as a whole percentage. The doubled sign is a
+         literal per cent, not a placeholder. -->
+    <string name="station_bike_charge_value">%1$d %%</string>
+    <!-- %1$s is the list of percentages, one per electric bike on offer. -->
+    <string name="station_bikes_battery">Батерија %1$s</string>
+    <!-- Said where the network publishes ranges and no percentage. %1$s is the
+         list of distances, each already written in the reader's units. -->
+    <string name="station_bikes_range">Преостало је око %1$s домета</string>
+    <!-- Said instead of the two lists above past four bikes: %1$s is the
+         lowest figure, %2$s the highest, each already written. -->
+    <string name="station_bikes_battery_spread">Батерија од %1$s до %2$s</string>
+    <string name="station_bikes_range_spread">Преостало је око %1$s до %2$s домета</string>
+    <!-- The row unfolding the bike-by-bike list under the summary, and the
+         one word a line adds where the feed says the bike is booked; "out of
+         service" reuses the station's own word. -->
+    <plurals name="station_bikes_list_title">
+        <item quantity="one">%1$d бицикл на овој станици</item>
+        <item quantity="few">%1$d бицикла на овој станици</item>
+        <item quantity="other">%1$d бицикала на овој станици</item>
+    </plurals>
+    <string name="station_bike_reserved">Резервисан</string>
+    <plurals name="station_bikes_out_of_service">
+        <item quantity="one">%1$d бицикл не ради</item>
+        <item quantity="few">%1$d бицикла не раде</item>
+        <item quantity="other">%1$d бицикала не ради</item>
+    </plurals>
+
     <!-- How old the availability figures are. `пре` governs the genitive,
          which is what decides the endings below and why three of the five
          read the same in `one` and `few`. -->
