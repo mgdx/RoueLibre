@@ -143,6 +143,41 @@
         <item name="materialButtonStyle">@style/Widget.RoueLibre.Button</item>
     </style>
 
+    <!--
+        The theme a toolbar is dressed by. Like the sheet's overlay above, it
+        exists to undo one inheritance.
+
+        A toolbar builds its own title: `Toolbar.setTitle` creates an
+        `AppCompatTextView`, gives it `setSingleLine()` and an end ellipsis,
+        and that view — like every `AppCompatTextView` — takes its default
+        style from `android:textViewStyle`. The theme points that at
+        `Widget.RoueLibre.Text`, so the title of every screen arrives
+        justified and hyphenated: two settings decided for paragraphs, landing
+        on a line that can never have a line after it.
+
+        On Latin text nothing shows. `BoringLayout.isBoring` accepts a
+        left-to-right title, and a `BoringLayout` knows neither justification
+        nor hyphenation, so the width measured and the width drawn are the
+        same one. The first right-to-left character refuses that path — Arabic,
+        Hebrew — and the title is then measured by `Layout.getDesiredWidth`,
+        which honours neither setting, and laid out by a `StaticLayout`, which
+        honours both. The title view is made exactly as wide as the first
+        measurement, so the second one overflowing it by a hair is enough for
+        the ellipsis to fire: in Arabic the journey screen's title lost its
+        last two letters with three quarters of the bar empty beside it.
+
+        `Widget.RoueLibre.Name` is what the rest of the application already
+        gives a line that names one thing, and it refuses both settings for
+        that very reason. Pointing `android:textViewStyle` at it inside the
+        toolbar puts the title, the subtitle and the menu labels back on it.
+        Nothing else moves: the two styles share a parent, and the face, the
+        size and the colour of a title still come from
+        `app:titleTextAppearance`.
+    -->
+    <style name="ThemeOverlay.RoueLibre.Toolbar" parent="">
+        <item name="android:textViewStyle">@style/Widget.RoueLibre.Name</item>
+    </style>
+
     <style name="ShapeAppearance.RoueLibre" parent="ShapeAppearance.Material3.Corner.None">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/radius</item>
