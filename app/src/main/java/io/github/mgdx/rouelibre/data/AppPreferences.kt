@@ -343,7 +343,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
      * twice over: it draws markers whose meaning the application cannot vouch
      * for — whether one may take such a bike is the network's rule, and the
      * feed does not carry it — and it reads a feed twenty times the weight of
-     * the station feed, every five minutes. Kept from one session to the
+     * the station feed, every minute. Kept from one session to the
      * next, and a flow so the map follows it without a restart, for the
      * reasons [hideOutOfServiceStations] gives.
      *
@@ -357,38 +357,6 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     /** Remembers whether the map draws the bikes outside stations. */
     suspend fun setShowStreetBikes(show: Boolean) {
         dataStore.edit { it[SHOW_STREET_BIKES] = show }
-    }
-
-    /**
-     * How many minutes go by between two reads of the vehicle feed, while
-     * [showStreetBikes] is on (SPEC §4.1, §7.6).
-     *
-     * Five by default, the figure §4.1 measured the feed's weight against
-     * what moves in it; and never outside one to thirty, whatever the file
-     * holds — a zero would read the feed on every tick of the map, and a
-     * value a version wrote differently falls back on the default rather
-     * than on a silence nobody can see. Kept from one session to the next,
-     * and a flow so a change takes effect on the next read without a restart.
-     *
-     * A number of minutes and nothing else (SPEC §2, C3): it says how often
-     * one is willing to pay for the feed, not where one is or what one rides.
-     */
-    val vehicleFeedRefreshMinutes: Flow<Int> = dataStore.data.map { preferences ->
-        val stored = preferences.asMap()[VEHICLE_FEED_REFRESH_MINUTES] as? Int
-        stored?.takeIf { it in VEHICLE_FEED_REFRESH_MINUTES_RANGE }
-            ?: DEFAULT_VEHICLE_FEED_REFRESH_MINUTES
-    }
-
-    /**
-     * Remembers how often the vehicle feed may be read, in minutes.
-     *
-     * Kept within the same bounds the reader applies, so that the slider
-     * and the file never disagree on what was asked for.
-     */
-    suspend fun setVehicleFeedRefreshMinutes(minutes: Int) {
-        dataStore.edit {
-            it[VEHICLE_FEED_REFRESH_MINUTES] = minutes.coerceIn(VEHICLE_FEED_REFRESH_MINUTES_RANGE)
-        }
     }
 
     /**
@@ -792,19 +760,6 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
 
         /** The explanation of those bikes was shown once; it is not shown again unprompted. */
         val STREET_BIKES_EXPLAINED = booleanPreferencesKey("street_bikes_explained")
-
-        /** Minutes between two reads of the vehicle feed (SPEC §4.1, §7.6). */
-        val VEHICLE_FEED_REFRESH_MINUTES = intPreferencesKey("vehicle_feed_refresh_minutes")
-
-        /** What [vehicleFeedRefreshMinutes] answers until the user has said otherwise. */
-        const val DEFAULT_VEHICLE_FEED_REFRESH_MINUTES: Int = 5
-
-        /**
-         * The bounds the setting is kept within. One minute is the station
-         * feed's own cadence, and nothing is produced faster; thirty is the
-         * age past which what the feed showed is no longer what is there.
-         */
-        val VEHICLE_FEED_REFRESH_MINUTES_RANGE: IntRange = 1..30
         val UNITS = stringPreferencesKey("units")
         val DOWNLOAD_ON_UNMETERED_ONLY = booleanPreferencesKey("download_on_unmetered_only")
         val USES_OWN_BIKE = booleanPreferencesKey("uses_own_bike")

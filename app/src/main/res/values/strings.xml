@@ -734,14 +734,6 @@
          the map says that by drawing nothing. -->
     <string name="settings_street_bikes">Show the battery of the bikes at stations, and the bikes outside stations</string>
     <string name="settings_street_bikes_description">Whether you may borrow a bike where it stands outside a station depends on the network. This reads a feed far heavier than the station one, and only the networks that publish it show anything.</string>
-    <!-- The slider under the switch, and the line naming its value: how many
-         minutes go by between two reads of that feed. Five by default, one to
-         thirty (SPEC §4.1, §7.6). -->
-    <plurals name="settings_vehicle_feed_refresh" tools:ignore="MissingTranslation">
-        <item quantity="one">%1$d minute between two refreshes</item>
-        <item quantity="other">%1$d minutes between two refreshes</item>
-    </plurals>
-    <string name="settings_vehicle_feed_refresh_description" tools:ignore="MissingTranslation">The map and the station sheets ask for it at most that often.</string>
 
     <!-- Shown once, the first time the switch above is turned on, and readable
          again from the sheet of any such bike. It informs and does not

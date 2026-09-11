@@ -33,7 +33,6 @@ import io.github.mgdx.rouelibre.data.network.HttpsOnlyRedirectInterceptor
 import io.github.mgdx.rouelibre.data.network.SystemConnectionCost
 import io.github.mgdx.rouelibre.data.routing.OfflineRouter
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import okhttp3.OkHttpClient
 import java.io.File
 import java.time.Duration
@@ -425,11 +424,6 @@ class AppContainer(private val context: Context) {
             // take effect without a restart (SPEC §4.1).
             discoveryUrlProvider = { activeCity()?.gbfs?.discoveryUrl },
             recordFleet = { fleetRepository.record(it) },
-            // Read at each call, like the URL above: the slider in the settings
-            // must apply to the next read, not to the next launch (SPEC §7.6).
-            streetBikesMinimumInterval = {
-                Duration.ofMinutes(preferences.vehicleFeedRefreshMinutes.first().toLong())
-            },
         )
     }
 

@@ -27,9 +27,11 @@ also records what has no visible effect.
   Fifteen writing a range on every one of Helsinki's 3,947 mechanical bikes.
   The switch that reads the feed now says what it reads — "Show the battery
   of the bikes at stations, and the bikes outside stations" — and what it
-  costs, and stays off by default; a slider under it sets the minutes between
-  two reads, five by default and one to thirty, applied to the next read. The
-  sheet asks for the feed when it opens, through the same gate as the map, so
+  costs, and stays off by default. **The feed is read on the station feed's
+  own minute**, no longer every five: the sheet reads both on one line, and
+  a charge five minutes older than the count beside it was two moments
+  passed off as one; gzip is asked for on every request, and a test now
+  says so. The sheet asks for the feed when it opens, through the same gate as the map, so
   one opened from the list finds it. French and English carry the eight new
   strings; the other twenty-eight languages read them in English until
   translated.

@@ -72,7 +72,6 @@ class StationRepositoryTest {
         refreshTimestamps = timestamps,
         discoveryUrlProvider = { server.url(discoveryPath).toString() },
         recordFleet = recordFleet,
-        streetBikesMinimumInterval = streetBikesMinimumInterval,
         clock = object : Clock() {
             override fun getZone() = ZoneOffset.UTC
             override fun withZone(zone: java.time.ZoneId) = this
@@ -346,22 +345,22 @@ class StationRepositoryTest {
     }
 
     @Test
-    fun `a second read of the street bikes within five minutes does not go out`() = runTest {
-        // The feed weighs twenty times the station feed and little moves in
-        // it (SPEC §4.1).
+    fun `a second read of the vehicle feed within the minute does not go out`() = runTest {
+        // The station feed's own minute: the feed is produced no faster, and
+        // the sheet reads both on one line (SPEC §4.1).
         enqueueDiscovery(streetBikes = true)
         enqueueStreetBikes()
         val repository = repository()
         repository.refreshStreetBikes()
         val afterFirst = server.requestCount
 
-        now += Duration.ofMinutes(4)
+        now += Duration.ofSeconds(45)
         val outcome = repository.refreshStreetBikes()
 
         assertEquals(Outcome.Success(Unit), outcome)
         assertEquals(afterFirst, server.requestCount)
 
-        now += Duration.ofMinutes(1)
+        now += Duration.ofSeconds(15)
         enqueueStreetBikes()
         repository.refreshStreetBikes()
 
@@ -369,25 +368,18 @@ class StationRepositoryTest {
     }
 
     @Test
-    fun `the minutes between two reads are the user's, read at each call`() = runTest {
-        // The slider in the settings applies to the next read, not to the
-        // next launch (SPEC §7.6): the interval is asked for every time.
-        var minutes = 1L
+    fun `every feed is asked for compressed`() = runTest {
+        // Twenty times the station feed on every read is bearable only
+        // gzipped — Berlin's 1,846 KiB travel as 182 — and OkHttp asks for
+        // it on every request unless the application says otherwise, which
+        // it must not.
         enqueueDiscovery(streetBikes = true)
         enqueueStreetBikes()
-        val repository = repository(streetBikesMinimumInterval = { Duration.ofMinutes(minutes) })
-        repository.refreshStreetBikes()
-        val afterFirst = server.requestCount
+        repository().refreshStreetBikes()
 
-        now += Duration.ofSeconds(90)
-        enqueueStreetBikes()
-        repository.refreshStreetBikes()
-        assertEquals("one minute has passed", afterFirst + 1, server.requestCount)
-
-        minutes = 30
-        now += Duration.ofMinutes(20)
-        repository.refreshStreetBikes()
-        assertEquals("thirty minutes have not", afterFirst + 1, server.requestCount)
+        repeat(2) {
+            assertEquals("gzip", server.takeRequest().headers["Accept-Encoding"])
+        }
     }
 
     @Test
@@ -405,7 +397,7 @@ class StationRepositoryTest {
     }
 
     @Test
-    fun `pull to refresh overrides the five minutes`() = runTest {
+    fun `pull to refresh overrides the minute`() = runTest {
         enqueueDiscovery(streetBikes = true)
         enqueueStreetBikes()
         val repository = repository()

@@ -989,7 +989,7 @@ class MapFragment : Fragment() {
      * Switched on, the feed is asked for on the spot — coming back from the
      * settings must find the bikes already on the map — and then followed;
      * switched off, the markers go and nothing is fetched again. The
-     * five-minute gate between two reads is the repository's, not this
+     * one-minute gate between two reads is the repository's, not this
      * screen's (SPEC §4.1).
      */
     private fun followStreetBikes() {
@@ -1025,7 +1025,7 @@ class MapFragment : Fragment() {
      * (SPEC §4.1) — the map says that one by drawing nothing, which is the
      * whole of what the setting promises there.
      *
-     * @param force ignores the five-minute gate. Reserved for the refresh
+     * @param force ignores the one-minute gate. Reserved for the refresh
      *   asked for by hand, as it is for the stations.
      */
     private suspend fun refreshStreetBikes(force: Boolean = false) {
@@ -1883,9 +1883,9 @@ class MapFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 while (true) {
                     viewModel.refresh()
-                    // The same tick asks for the bikes outside stations, which
-                    // the repository serves from memory until its own five
-                    // minutes are up (SPEC §4.1).
+                    // The same tick asks for the vehicle feed, which the
+                    // repository serves from memory until the same minute is
+                    // up (SPEC §4.1).
                     refreshStreetBikes()
                     showFreshness(viewModel.state.value.fetchedAt)
                     delay(FRESHNESS_TICK_MILLIS)

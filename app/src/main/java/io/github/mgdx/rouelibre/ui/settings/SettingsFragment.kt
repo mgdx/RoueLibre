@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
@@ -732,7 +731,7 @@ class SettingsFragment : Fragment() {
      *
      * The last setting of the display section, and the one that reaches a feed
      * rather than a drawing: switched on, the map reads a file twenty times
-     * the weight of the station feed, every five minutes. Written the moment
+     * the weight of the station feed, every minute. Written the moment
      * it is pressed and kept from one session to the next, like the two
      * filters above it, and the map follows the stored value itself.
      *
@@ -760,60 +759,11 @@ class SettingsFragment : Fragment() {
                     val current = binding ?: return@collect
                     isFilling = true
                     current.showStreetBikes.isChecked = show
-                    current.vehicleFeedRefresh.isEnabled = show
-                    current.vehicleFeedRefreshLabel.isEnabled = show
-                    isFilling = false
-                }
-            }
-        }
-        setUpVehicleFeedRefresh(views)
-    }
-
-    /**
-     * The cadence the vehicle feed is read at, in minutes (SPEC §4.1, §7.6).
-     *
-     * Written on release rather than on every step: a thumb dragged across
-     * the slider passes twenty values, and the repository reads the setting
-     * on its next tick, so only the value the thumb is left on is one that
-     * was asked for. The line above the slider follows every step all the
-     * same, since that is what one is looking at while dragging. Nothing
-     * else waits on it: a change applies to the next read, wherever it comes
-     * from.
-     */
-    private fun setUpVehicleFeedRefresh(views: FragmentSettingsBinding) {
-        views.vehicleFeedRefresh.setLabelFormatter { value -> refreshLine(value.toInt()) }
-        views.vehicleFeedRefresh.addOnChangeListener { _, value, _ ->
-            binding?.vehicleFeedRefreshLabel?.text = refreshLine(value.toInt())
-        }
-        views.vehicleFeedRefresh.addOnSliderTouchListener(
-            object : Slider.OnSliderTouchListener {
-                override fun onStartTrackingTouch(slider: Slider) = Unit
-
-                override fun onStopTrackingTouch(slider: Slider) {
-                    if (isFilling) return
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        preferences.setVehicleFeedRefreshMinutes(slider.value.toInt())
-                    }
-                }
-            },
-        )
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                preferences.vehicleFeedRefreshMinutes.collect { minutes ->
-                    val current = binding ?: return@collect
-                    isFilling = true
-                    current.vehicleFeedRefresh.value = minutes.toFloat()
-                    current.vehicleFeedRefreshLabel.text = refreshLine(minutes)
                     isFilling = false
                 }
             }
         }
     }
-
-    /** "5 minutes between two refreshes", agreed in number. */
-    private fun refreshLine(minutes: Int): String =
-        resources.getQuantityString(R.plurals.settings_vehicle_feed_refresh, minutes, minutes)
 
     private fun show(fragment: Fragment) {
         parentFragmentManager.beginTransaction()
