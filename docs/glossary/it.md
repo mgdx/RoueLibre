@@ -131,6 +131,7 @@ and the sentence keeps its article.
 | tilt / lay flat | inclinare / inclinata, appiattire | *Inclinare* is the tilt and *ruotare* the turn, kept apart so that the four gestures of `map_description` stay four. `map_tilted_description` is «La mappa è inclinata.», and `map_face_north` says *appiattisci* for laying it flat again. |
 | this place | Questo luogo | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *I miei luoghi*. `place_clear` is *Cancella questo punto*, which keeps *Cancella* for emptying against *Elimina*, which destroys. |
 | Go there / Leave from here | Vai lì / Parti da qui | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already *Parti da qui*, word for word, and `station_as_destination` *Vai qui*, of which *Vai lì* is the same verb with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | Prenotata | On a bike's own line of the station sheet (`station_bike_reserved`), where the feed says the bike is booked. *Prenotare* is what Italian bike sharing calls booking a bike — BikeMi's own button is *Prenota* — where *riservata* is a thing set aside rather than booked. Feminine, agreeing with *bici*. |
 
 The three dataset names are all **masculine singular** — *sfondo cartografico*,
 *grafo dei percorsi*, *indice degli indirizzi* — and that is why the first one

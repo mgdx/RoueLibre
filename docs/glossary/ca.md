@@ -123,6 +123,7 @@ Typography:
 | tilt / turn / lay flat | inclinar / girar / aplanar | Three verbs kept apart so that the four gestures of `map_description` stay four: *moure*, *acostar o allunyar*, *fer girar*, *inclinar*. `map_tilted_description` is «El mapa està inclinat.», `map_bearing_description` counts the turn in *graus*, and `map_face_north` says *aplana* for laying it flat again. |
 | this place | Aquest lloc | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Els meus llocs*. |
 | Go there / Leave from here | Vés-hi / Surt d'aquí | The place sheet's two actions take the station sheet's own words, word for word: `station_as_destination` is *Vés-hi* and `station_as_origin` *Surt d'aquí*. English writes four labels where Catalan has two verbs; the sheets are sisters and must read as one, so neither pair is reworded without the other. |
+| Reserved | Reservada | On a bike's own line of the station sheet (`station_bike_reserved`), where the feed says the bike is booked. Feminine, agreeing with *bici* as every word said of one bike does. |
 
 The three dataset names are all **masculine singular** — *mapa base*, *graf de
 rutes*, *índex d'adreces* — which is what lets `dataset_imported`,

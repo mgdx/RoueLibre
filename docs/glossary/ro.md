@@ -196,6 +196,7 @@ and the sentence keeps its article.
 | tilt / lay flat | înclina / înclinată, aplatiza | *A înclina* is the tilt and *a roti* the turn, kept apart so that the four gestures of `map_description` stay four. `map_tilted_description` is „Harta este înclinată.”, and `map_face_north` says *aplatizează*, in the *tu* imperative the file's buttons take. `map_bearing_tilted_description` keeps *de grade* in its third form, as the bearing string does. |
 | this place | Acest loc | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Locurile mele*. `place_clear` is *Șterge acest punct*, which keeps *Șterge* for emptying against *Elimină*. |
 | Go there / Leave from here | Mergi acolo / Pleacă de aici | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already *Pleacă de aici*, word for word, and `station_as_destination` *Mergi aici*, of which *Mergi acolo* is the same verb with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | Rezervată | On a bike's own line of the station sheet (`station_bike_reserved`), where the feed says the bike is booked. Feminine, agreeing with *bicicletă* as every word said of one bike does. |
 
 ## The three dataset names
 
