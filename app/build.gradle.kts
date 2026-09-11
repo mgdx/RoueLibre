@@ -320,6 +320,17 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
     @get:Optional
     abstract val storeMetadata: DirectoryProperty
 
+    /**
+     * The version code of the build, which bounds the notes worth shipping.
+     *
+     * The store publishes one note per architecture version code — 41 to 44
+     * repeat word for word what 4 says — while the what's-new screen only ever
+     * reads the base codes (see `architectureVersionCodes`). Carrying the
+     * repeats would ship every note five times over, in every language.
+     */
+    @get:Input
+    abstract val versionCode: Property<Int>
+
     @get:OutputDirectory
     abstract val outputDirectory: DirectoryProperty
 
@@ -430,6 +441,13 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
                 val published = locale.resolve("changelogs").listFiles()
                     .orEmpty()
                     .filter { it.isFile && it.extension == "txt" }
+                    // The same filter the screen applies when it reads them:
+                    // beyond the base version code lie the architecture codes,
+                    // which repeat notes already shipped.
+                    .filter {
+                        val code = it.nameWithoutExtension.toIntOrNull()
+                        code != null && code <= versionCode.get()
+                    }
                 if (published.isEmpty()) return@forEach
                 val target = notes.resolve(locale.name).apply { mkdirs() }
                 published.forEach { it.copyTo(target.resolve(it.name), overwrite = true) }
@@ -461,6 +479,7 @@ androidComponents {
             normalizationRules.set(rootProject.file("config/address-normalization"))
             val metadata = rootProject.file("fastlane/metadata/android")
             if (metadata.isDirectory) storeMetadata.set(metadata)
+            versionCode.set(base)
         }
         variant.sources.assets?.addGeneratedSourceDirectory(
             copyTask,
