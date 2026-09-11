@@ -61,11 +61,11 @@ BROUTER_RELEASE_SHA256 = (
 )
 
 # Profiles the map creator itself needs. They decide which OSM ways enter the
-# graph at all, and are not the profiles used at routing time.
+# graph at all, and are not the profiles used at routing time. They are taken
+# from the pinned archive, never from BRouter's master branch: a profile that
+# drifts upstream would change which ways enter the graph, and two machines
+# generating the same city on different days would no longer agree.
 MAP_CREATION_PROFILES = ("all.brf", "trekking.brf", "softaccess.brf")
-BROUTER_PROFILE_BASE_URL = (
-    "https://raw.githubusercontent.com/abrensch/brouter/master/misc/profiles2/"
-)
 
 # Public, authentication-free mirror of the SRTM 1 arc-second tiles.
 ELEVATION_TILE_URL = (
@@ -167,11 +167,8 @@ def ensure_brouter(cache_dir: Path) -> tuple[Path, Path]:
         raise GenerationError(f"BRouter jar not found after unpacking: {jar}")
 
     profiles.mkdir(parents=True, exist_ok=True)
-    shutil.copy(unpacked / "profiles2" / "lookups.dat", profiles / "lookups.dat")
-    for name in MAP_CREATION_PROFILES:
-        target = profiles / name
-        if not target.exists():
-            download(BROUTER_PROFILE_BASE_URL + name, target)
+    for name in ("lookups.dat", *MAP_CREATION_PROFILES):
+        shutil.copy(unpacked / "profiles2" / name, profiles / name)
 
     print(f"[0/4] BRouter {BROUTER_VERSION} ready (digest verified).")
     return jar, profiles
