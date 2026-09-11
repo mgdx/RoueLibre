@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -26,6 +27,7 @@ import io.github.mgdx.rouelibre.core.station.BikeSplit
 import io.github.mgdx.rouelibre.core.station.ServiceState
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.StationBikesDetail
+import io.github.mgdx.rouelibre.core.station.VehicleKind
 import io.github.mgdx.rouelibre.core.station.displayFor
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.core.station.isBeyondCoveredArea
@@ -126,6 +128,7 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         views.setAsOrigin.setOnClickListener { prepareJourney(asOrigin = true) }
         views.setAsDestination.setOnClickListener { prepareJourney(asOrigin = false) }
         views.openInNavigation.setOnClickListener { openInNavigationApp() }
+        views.bikesListToggle.setOnClickListener { viewModel.toggleBikesList() }
 
         viewLifecycleOwner.lifecycleScope.launch {
             coveredArea = container.activeCity()?.boundingBox
@@ -184,6 +187,7 @@ class StationDetailSheet : BottomSheetDialogFragment() {
             resources.getQuantityString(R.plurals.counterpart_docks, docks.count ?: 0)
         showBikeSplit(state.bikeSplit)
         showBikesDetail(state.bikesDetail)
+        showBikesList(state.bikesDetail, state.isBikesListUnfolded)
         showAddress(state.address, state.distanceInMetres)
         showServiceState(state)
         showJourneyOffer(state)
@@ -227,26 +231,29 @@ class StationDetailSheet : BottomSheetDialogFragment() {
      * network publishes no such feed, or it lists no vehicle here.
      *
      * The percentages are one part and the ranges another, since a producer
-     * publishes one or the other; each is a list the system's own formatter
-     * joins in the reader's language, so that "92 %, 78 % and 40 %" is not
-     * three strings glued with a comma.
+     * publishes one or the other. Up to [CHARGES_LISTED] bikes each is named
+     * — the reader is comparing them — and beyond that only the spread, "91 %
+     * to 99 %": ten figures on a line are no longer read one by one, and the
+     * list below names them all. Each list is joined by the system's own
+     * formatter in the reader's language, so that "92 %, 78 % and 40 %" is
+     * not three strings glued with a comma.
      */
     private fun showBikesDetail(detail: StationBikesDetail?) {
         val views = binding ?: return
-        views.bikesDetail.isVisible = detail != null
-        if (detail == null) return
-        val listFormatter = ListFormatter.getInstance(resources.configuration.locales[0])
+        val hasSummary = detail?.hasSummary == true
+        views.bikesDetail.isVisible = hasSummary
+        if (detail == null || !hasSummary) return
         val parts = buildList {
-            detail.charges.filterIsInstance<BikeCharge.Ratio>()
-                .map {
-                    getString(R.string.station_bike_charge_value, (it.value * PERCENT).roundToInt())
-                }
-                .takeIf { it.isNotEmpty() }
-                ?.let { add(getString(R.string.station_bikes_battery, listFormatter.format(it))) }
-            detail.charges.filterIsInstance<BikeCharge.Range>()
-                .map { requireContext().formatDistance(it.metres.toDouble()) }
-                .takeIf { it.isNotEmpty() }
-                ?.let { add(getString(R.string.station_bikes_range, listFormatter.format(it))) }
+            chargesLine(
+                detail.charges.filterIsInstance<BikeCharge.Ratio>().map { chargeText(it) },
+                listed = R.string.station_bikes_battery,
+                spread = R.string.station_bikes_battery_spread,
+            )?.let(::add)
+            chargesLine(
+                detail.charges.filterIsInstance<BikeCharge.Range>().map { chargeText(it) },
+                listed = R.string.station_bikes_range,
+                spread = R.string.station_bikes_range_spread,
+            )?.let(::add)
             if (detail.outOfService > 0) {
                 add(
                     resources.getQuantityString(
@@ -259,6 +266,70 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         }
         views.bikesDetail.text =
             parts.joinToString(getString(R.string.station_bikes_detail_separator))
+    }
+
+    /**
+     * One part of the summary: the charges named, or their spread, or
+     * nothing where there is none. The charges arrive fullest first, so the
+     * spread runs from the last to the first.
+     */
+    private fun chargesLine(
+        charges: List<String>,
+        @StringRes listed: Int,
+        @StringRes spread: Int,
+    ): String? = when {
+        charges.isEmpty() -> null
+        charges.size <= CHARGES_LISTED -> getString(
+            listed,
+            ListFormatter.getInstance(resources.configuration.locales[0]).format(charges),
+        )
+
+        else -> getString(spread, charges.last(), charges.first())
+    }
+
+    /** "92 %" or "12 km", the figure a bike's charge is written as. */
+    private fun chargeText(charge: BikeCharge): String = when (charge) {
+        is BikeCharge.Ratio -> getString(
+            R.string.station_bike_charge_value,
+            (charge.value * PERCENT).roundToInt(),
+        )
+        is BikeCharge.Range -> requireContext().formatDistance(charge.metres.toDouble())
+    }
+
+    /**
+     * The bike-by-bike list under the summary, unfolded on request
+     * (SPEC §7.2): a row naming how many bikes stand there, and under it one
+     * line per bike — the producer's identifier, its kind where the table
+     * knows it, its charge where one can be read, and "reserved" or "out of
+     * service" where the feed says so. Absent with the summary's own
+     * silences, since it is read from the same feed.
+     */
+    private fun showBikesList(detail: StationBikesDetail?, unfolded: Boolean) {
+        val views = binding ?: return
+        val bikes = detail?.bikes.orEmpty()
+        views.bikesListToggle.isVisible = bikes.isNotEmpty()
+        views.bikesList.isVisible = bikes.isNotEmpty() && unfolded
+        if (bikes.isEmpty()) return
+        views.bikesListToggle.text =
+            resources.getQuantityString(R.plurals.station_bikes_list_title, bikes.size, bikes.size)
+        views.bikesListToggle.setIconResource(
+            if (unfolded) R.drawable.ic_fold else R.drawable.ic_unfold,
+        )
+        if (!unfolded) return
+        val separator = getString(R.string.station_bikes_detail_separator)
+        views.bikesList.text = bikes.joinToString("\n") { bike ->
+            buildList {
+                add(bike.id)
+                when (bike.kind) {
+                    VehicleKind.Mechanical -> add(getString(R.string.street_bike_kind_mechanical))
+                    VehicleKind.Electric -> add(getString(R.string.street_bike_kind_electric))
+                    VehicleKind.Other, null -> Unit
+                }
+                bike.charge?.let { add(chargeText(it)) }
+                if (bike.isDisabled) add(getString(R.string.station_out_of_service))
+                if (bike.isReserved) add(getString(R.string.station_bike_reserved))
+            }.joinToString(separator)
+        }
     }
 
     private fun showAddress(address: AddressResult?, distanceInMetres: Double?) {
@@ -436,6 +507,15 @@ class StationDetailSheet : BottomSheetDialogFragment() {
     companion object {
         /** A ratio from the feed, written as a percentage. */
         private const val PERCENT = 100
+
+        /**
+         * How many charges the summary names before giving their spread
+         * instead. Four is what one compares at a glance — the reader is
+         * choosing a bike among them — and past it the figures were read as a
+         * row of near-identical numbers on the Berlin hubs, ten times "99 %".
+         * The list under the line names every bike, so nothing is lost.
+         */
+        private const val CHARGES_LISTED = 4
 
         private const val ARGUMENT_STATION_ID = "station-id"
 

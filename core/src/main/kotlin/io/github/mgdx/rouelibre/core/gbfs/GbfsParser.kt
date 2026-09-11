@@ -291,6 +291,7 @@ public class GbfsParser {
     private fun dockedBikeOrNull(entry: GbfsVehicleStatus): DockedBike? {
         val stationId = entry.stationId?.takeUnless { it.isBlank() } ?: return null
         return DockedBike(
+            id = entry.id,
             stationId = stationId,
             vehicleTypeId = entry.vehicleTypeId,
             chargeRatio = entry.currentFuelPercent?.takeIf { it in 0.0..1.0 },

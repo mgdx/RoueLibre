@@ -21,7 +21,9 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.time.Instant
@@ -60,6 +62,7 @@ class StationDetailBikesDetailTest {
 
     private fun docked(typeId: String, ratio: Double? = null, disabled: Boolean = false) =
         DockedBike(
+            id = "bike-$typeId-$ratio",
             stationId = station.id,
             vehicleTypeId = typeId,
             chargeRatio = ratio,
@@ -125,6 +128,23 @@ class StationDetailBikesDetailTest {
             assertEquals(listOf(BikeCharge.Ratio(0.92), BikeCharge.Ratio(0.4)), detail.charges)
             assertEquals(1, detail.outOfService)
         }
+
+    @Test
+    fun `the list is folded on opening, and stays as left across a read`() = runTest(dispatcher) {
+        val vehicles = MutableStateFlow(vehicles(docked("348", ratio = 0.5)))
+        val model = model(vehicles = vehicles, wanted = flowOf(true))
+        advanceUntilIdle()
+        assertFalse(model.state.value.isBikesListUnfolded)
+
+        model.toggleBikesList()
+        // The feed re-emits every few minutes: what the reader opened must
+        // not fold itself under their eyes.
+        vehicles.value = vehicles(docked("348", ratio = 0.6))
+        advanceUntilIdle()
+
+        assertTrue(model.state.value.isBikesListUnfolded)
+        assertEquals("bike-348-0.6", model.state.value.bikesDetail!!.bikes.single().id)
+    }
 
     @Test
     fun `switching the setting off empties the line at once`() = runTest(dispatcher) {

@@ -42,6 +42,9 @@ import java.time.Instant
  *   there — the charge of each electric one, how many are out of service —
  *   or `null` where the setting of SPEC §7.6 is off, the network publishes
  *   no such feed, or it says nothing of this station.
+ * @property isBikesListUnfolded the bike-by-bike list under the summary is
+ *   open. Folded when the sheet opens: the summary is the answer most
+ *   readers came for, and the list is there for the one choosing a bike.
  */
 data class StationDetailUiState(
     val entry: StationWithAvailability? = null,
@@ -51,6 +54,7 @@ data class StationDetailUiState(
     val fetchedAt: Instant? = null,
     val bikeSplit: BikeSplit? = null,
     val bikesDetail: StationBikesDetail? = null,
+    val isBikesListUnfolded: Boolean = false,
 )
 
 /**
@@ -197,6 +201,17 @@ class StationDetailViewModel(
     /** Marks the station as a favourite, or takes it out (SPEC §7.2). */
     fun toggleFavourite() {
         viewModelScope.launch { setFavourite(stationId) }
+    }
+
+    /**
+     * Opens the bike-by-bike list, or folds it back (SPEC §7.2).
+     *
+     * Held here and not in the view so that it outlives a rotation and the
+     * feed's re-emissions alike: a list the reader opened must not fold
+     * itself on the next read.
+     */
+    fun toggleBikesList() {
+        mutableState.update { it.copy(isBikesListUnfolded = !it.isBikesListUnfolded) }
     }
 
     /** Builds the model with its dependencies, without an injection framework. */

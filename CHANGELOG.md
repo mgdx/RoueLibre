@@ -18,8 +18,10 @@ also records what has no visible effect.
   percentage — nextbike's Munich, Vienna and Warsaw, Fifteen's Marseille and
   Montpellier, none of the JCDecaux and Smovengo networks, which publish no
   such file. Under the split, one line: the charge of each electric bike
-  fullest first, and the bikes the network says are out of service. Read on
-  the street bike's terms, and only on a bike the type table calls electric,
+  fullest first — past four bikes, the spread from the lowest to the
+  highest — and the bikes the network says are out of service; under it, a
+  row unfolds the station bike by bike, identifier, kind, charge and state,
+  those on offer first. Read on the street bike's terms, and only on a bike the type table calls electric,
   Fifteen writing a range on every one of Helsinki's 3,947 mechanical bikes.
   The switch that reads the feed now says what it reads — "Show the battery
   of the bikes at stations, and the bikes outside stations" — and what it

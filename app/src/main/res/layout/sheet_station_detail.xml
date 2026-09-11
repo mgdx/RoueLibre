@@ -205,6 +205,45 @@
             tools:text="Batterie 92 %, 78 % et 40 % · 1 vélo hors service"
             tools:visibility="visible" />
 
+        <!-- The bike-by-bike list, folded by default (SPEC §7.2): a row naming
+             how many bikes stand there, wearing no outline since it settles
+             nothing, and under it one line per bike. The summary above is the
+             answer most readers came for; this is for the one choosing a
+             bike, and it outlives a rotation because the model holds it. -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bikes_list_toggle"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:minHeight="@dimen/touch_target_min"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+            android:textColor="@color/signal"
+            android:visibility="gone"
+            app:icon="@drawable/ic_unfold"
+            app:iconGravity="end"
+            app:iconTint="@color/signal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bikes_detail"
+            app:layout_goneMarginTop="@dimen/space_s"
+            tools:text="15 vélos à cette station"
+            tools:visibility="visible" />
+
+        <TextView
+            style="@style/Widget.RoueLibre.Name"
+            android:id="@+id/bikes_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bikes_list_toggle"
+            tools:text="nextbike_bb_20911 · Vélo électrique · 99 %\nnextbike_bb_11875 · Vélo mécanique"
+            tools:visibility="visible" />
+
         <TextView
             style="@style/Widget.RoueLibre.Name"
             android:id="@+id/capacity"
@@ -214,7 +253,7 @@
             android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bikes_detail"
+            app:layout_constraintTop_toBottomOf="@id/bikes_list"
             app:layout_goneMarginTop="@dimen/space_m"
             tools:text="40 points d'attache · mis à jour il y a 12 secondes" />
 

@@ -1,6 +1,7 @@
 package io.github.mgdx.rouelibre.core.station
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Test
 
@@ -30,7 +31,9 @@ class DockedBikeTest {
         range: Int? = null,
         disabled: Boolean = false,
         reserved: Boolean = false,
+        id: String = "bike",
     ) = DockedBike(
+        id = id,
         stationId = "3140",
         vehicleTypeId = typeId,
         chargeRatio = ratio,
@@ -64,13 +67,26 @@ class DockedBikeTest {
             mapOf("346" to 40_000),
         )
 
-        assertNull(detail)
+        assertFalse(detail!!.hasSummary)
+        assertNull(detail.bikes.first().charge)
     }
 
     @Test
     fun `a type the table does not know is left out of a count`() {
-        assertNull(chargesAtStation(listOf(bike(typeId = "999", ratio = 0.5)), types, maxRanges))
-        assertNull(chargesAtStation(listOf(bike(typeId = null, ratio = 0.5)), types, maxRanges))
+        val unknown = chargesAtStation(
+            listOf(bike(typeId = "999", ratio = 0.5)),
+            types,
+            maxRanges,
+        )!!
+        val undeclared = chargesAtStation(
+            listOf(bike(typeId = null, ratio = 0.5)),
+            types,
+            maxRanges,
+        )!!
+
+        assertFalse(unknown.hasSummary)
+        assertFalse(undeclared.hasSummary)
+        assertNull(unknown.bikes.single().kind)
     }
 
     @Test
@@ -109,12 +125,48 @@ class DockedBikeTest {
 
     @Test
     fun `a range without a maximum behind it says nothing`() {
-        assertNull(chargesAtStation(listOf(bike(range = 28_800)), types, emptyMap()))
+        assertFalse(chargesAtStation(listOf(bike(range = 28_800)), types, emptyMap())!!.hasSummary)
     }
 
     @Test
-    fun `bikes with nothing to say give no detail at all`() {
+    fun `bikes with nothing to say in a summary are still listed`() {
         assertNull(chargesAtStation(emptyList(), types, maxRanges))
-        assertNull(chargesAtStation(listOf(bike(typeId = "346"), bike()), types, maxRanges))
+        assertNull(
+            "a scooter is not a bike",
+            chargesAtStation(listOf(bike(typeId = "360")), types, maxRanges),
+        )
+
+        val detail = chargesAtStation(listOf(bike(typeId = "346"), bike()), types, maxRanges)!!
+
+        assertFalse(detail.hasSummary)
+        assertEquals(2, detail.bikes.size)
+    }
+
+    @Test
+    fun `the list names every bike, those on offer first`() {
+        // Berlin's shape: numbered bikes, a mechanical one out of service, an
+        // electric one booked, the rest on offer with the fullest first and
+        // an unknown type naming no kind.
+        val detail = chargesAtStation(
+            listOf(
+                bike(id = "m-off", typeId = "346", disabled = true),
+                bike(id = "e-booked", ratio = 0.9, reserved = true),
+                bike(id = "e-low", ratio = 0.3),
+                bike(id = "m", typeId = "346"),
+                bike(id = "e-full", ratio = 0.99),
+                bike(id = "unknown", typeId = "999"),
+            ),
+            types,
+            maxRanges,
+        )!!
+
+        assertEquals(
+            listOf("e-full", "e-low", "m", "unknown", "e-booked", "m-off"),
+            detail.bikes.map { it.id },
+        )
+        assertEquals(VehicleKind.Mechanical, detail.bikes[2].kind)
+        assertNull(detail.bikes[3].kind)
+        assertEquals(BikeCharge.Ratio(0.9), detail.bikes[4].charge)
+        assertEquals(listOf(BikeCharge.Ratio(0.99), BikeCharge.Ratio(0.3)), detail.charges)
     }
 }
