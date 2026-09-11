@@ -17,10 +17,14 @@ import kotlinx.coroutines.withContext
  *
  * This is not a courtesy: SPEC §5 requires **keeping BRouter's copyright notice
  * and MIT licence text** in the legal notices; the fonts are under the SIL
- * Open Font License, MapLibre Native under BSD-2-Clause and the Public Suffix
- * List embedded by OkHttp under MPL-2.0, all of which ask the same. The texts
- * live in the APK's resources and are read as they are — rewording them would
- * alter them.
+ * Open Font License, MapLibre Native under BSD-2-Clause, the AndroidX libraries
+ * and OkHttp under Apache 2.0 and protobuf under BSD-3-Clause, all of which ask
+ * the same. The texts live in the APK's resources and are read as they are —
+ * rewording them would alter them.
+ *
+ * The Apache and BSD-3 texts are carried here rather than left in the eight
+ * copies the AndroidX artefacts each bring: the notice travels with the
+ * application either way, and the copies are dropped in `app/build.gradle.kts`.
  */
 class LicencesFragment : Fragment() {
 

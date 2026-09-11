@@ -92,6 +92,19 @@ android {
     ndkVersion = "28.2.13676358"
 
     androidResources {
+        // The list of public suffixes OkHttp ships as an asset — a hundred and
+        // thirty kilobytes of it. OkHttp reads it in two places only: the
+        // cookie jar, and `HttpUrl.topPrivateDomain()`. The application
+        // installs no cookie jar, so the default one keeps no cookie and never
+        // asks a domain its suffix, and R8 confirms it by removing every caller
+        // of the reader from the minified code.
+        //
+        // Should a request ever need cookies, or the private domain of a URL,
+        // OkHttp would fail on its first call and this line is what to undo.
+        // An asset of a library cannot be dropped any other way: packaging
+        // excludes filter Java resources, not assets.
+        ignoreAssetsPatterns += "PublicSuffixDatabase.list"
+
         // Declares which languages are supplied. Without it, Android does not
         // know what language `values/` holds: on an English device it served
         // the French texts with English dates. It also prunes the libraries'
@@ -215,6 +228,25 @@ android {
                 "/META-INF/{AL2.0,LGPL2.1}",
                 "/META-INF/*.kotlin_module",
                 "DebugProbesKt.bin",
+                // Eight AndroidX artefacts each ship the Apache 2.0 text, byte
+                // for byte the same 10,175 of them, and a ninth ships
+                // protobuf's BSD notice. The licence still has to travel with
+                // the application, so the two texts are carried once, in
+                // `assets/licences/`, where the licences screen already reads
+                // MapLibre's, BRouter's and the fonts'. Redistribution keeps
+                // its notices and the APK loses eight copies of them.
+                "/META-INF/androidx/**",
+                // One file per AndroidX artefact holding its version number,
+                // six to thirteen bytes each. Google's own SDKs read them to
+                // report what an application was built with; nothing here does,
+                // and there is no telemetry to serve (SPEC §2, C3). Sixty-nine
+                // directory entries cost more than the numbers they hold.
+                "/META-INF/*.version",
+                // The metadata Kotlin's reflection reads to rebuild the types
+                // of the standard library. Full reflection is not on the
+                // release classpath, and `kotlin_builtins` appears nowhere in
+                // the minified code: nothing shipped can open these files.
+                "/kotlin/**",
             )
         }
     }
