@@ -7,10 +7,12 @@ import io.github.mgdx.rouelibre.core.address.AddressResult
 import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.geo.distanceInMetresTo
+import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.BikeSplit
 import io.github.mgdx.rouelibre.core.station.StationBikesDetail
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.chargesAtStation
+import io.github.mgdx.rouelibre.core.station.displayFor
 import io.github.mgdx.rouelibre.core.station.splitByKind
 import io.github.mgdx.rouelibre.data.StationsSnapshot
 import io.github.mgdx.rouelibre.data.StreetBikesSnapshot
@@ -45,6 +47,9 @@ import java.time.Instant
  * @property isBikesListUnfolded the bike-by-bike list under the summary is
  *   open. Folded when the sheet opens: the summary is the answer most
  *   readers came for, and the list is there for the one choosing a bike.
+ * @property bikesFeedsDisagree the count in the disc and the list under it
+ *   cannot both be right (SPEC §7.2). Said only where the reader can see the
+ *   contradiction, which is with the list unfolded.
  */
 data class StationDetailUiState(
     val entry: StationWithAvailability? = null,
@@ -55,6 +60,7 @@ data class StationDetailUiState(
     val bikeSplit: BikeSplit? = null,
     val bikesDetail: StationBikesDetail? = null,
     val isBikesListUnfolded: Boolean = false,
+    val bikesFeedsDisagree: Boolean = false,
 )
 
 /**
@@ -104,12 +110,14 @@ class StationDetailViewModel(
             combine(stations, fleet, vehicles, bikesDetailWanted, ::StationSources)
                 .collect { (snapshot, lent, vehicles, detailWanted) ->
                     val entry = snapshot.stations.firstOrNull { it.station.id == stationId }
+                    val detail = detailOf(vehicles, lent, detailWanted)
                     mutableState.update {
                         it.copy(
                             entry = entry,
                             fetchedAt = snapshot.fetchedAt,
                             bikeSplit = splitOf(entry, lent),
-                            bikesDetail = detailOf(vehicles, lent, detailWanted),
+                            bikesDetail = detail,
+                            bikesFeedsDisagree = feedsDisagree(entry, detail),
                         )
                     }
                     if (entry != null) {
@@ -159,6 +167,24 @@ class StationDetailViewModel(
         if (!wanted || fleet == null) return null
         val bikes = vehicles.dockedBikes[stationId] ?: return null
         return chargesAtStation(bikes, fleet.vehicleTypes, fleet.maxRangeMetresByType)
+    }
+
+    /**
+     * Whether the station's two feeds contradict each other here
+     * (SPEC §7.2).
+     *
+     * The comparison is made against **the figure the disc shows**, not
+     * against the raw count: where the station is out of service or the feed
+     * says nothing of it, the disc shows no figure, there is nothing for the
+     * list to contradict, and a warning would be pointing at a disagreement
+     * the reader cannot see. Everything else is [StationBikesDetail]'s rule.
+     */
+    private fun feedsDisagree(
+        entry: StationWithAvailability?,
+        detail: StationBikesDetail?,
+    ): Boolean {
+        val counted = entry?.displayFor(AvailabilityMode.Bikes)?.count ?: return false
+        return detail?.disagreesWith(counted) == true
     }
 
     /**

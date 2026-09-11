@@ -187,7 +187,7 @@ class StationDetailSheet : BottomSheetDialogFragment() {
             resources.getQuantityString(R.plurals.counterpart_docks, docks.count ?: 0)
         showBikeSplit(state.bikeSplit)
         showBikesDetail(state.bikesDetail)
-        showBikesList(state.bikesDetail, state.isBikesListUnfolded)
+        showBikesList(state.bikesDetail, state.isBikesListUnfolded, state.bikesFeedsDisagree)
         showAddress(state.address, state.distanceInMetres)
         showServiceState(state)
         showJourneyOffer(state)
@@ -298,21 +298,37 @@ class StationDetailSheet : BottomSheetDialogFragment() {
 
     /**
      * The bike-by-bike list under the summary, unfolded on request
-     * (SPEC §7.2): a row naming how many bikes stand there, and under it one
+     * (SPEC §7.2): a row opening the list, and under it one
      * line per bike — the producer's identifier, cut down past twenty
      * characters, its kind where the table
      * knows it, its charge where one can be read, and "reserved" or "out of
      * service" where the feed says so. Absent with the summary's own
      * silences, since it is read from the same feed.
+     *
+     * The row names no figure. It used to count the bikes it was about to
+     * show — "15 bikes at this station" — and that was a second count on a
+     * screen that already carries one, read from the other feed: where the
+     * two are out of step, the row contradicted the disc three lines above
+     * it, and a reader had no way of telling which of the two was the
+     * network's mistake.
+     *
+     * That disagreement is now said in words rather than left to be
+     * discovered, and only with the list open: folded, there is nothing on
+     * the screen for the count to contradict.
      */
-    private fun showBikesList(detail: StationBikesDetail?, unfolded: Boolean) {
+    private fun showBikesList(
+        detail: StationBikesDetail?,
+        unfolded: Boolean,
+        feedsDisagree: Boolean,
+    ) {
         val views = binding ?: return
         val bikes = detail?.bikes.orEmpty()
         views.bikesListToggle.isVisible = bikes.isNotEmpty()
         views.bikesList.isVisible = bikes.isNotEmpty() && unfolded
+        views.bikesListWarning.isVisible = bikes.isNotEmpty() && unfolded && feedsDisagree
         if (bikes.isEmpty()) return
-        views.bikesListToggle.text =
-            resources.getQuantityString(R.plurals.station_bikes_list_title, bikes.size, bikes.size)
+        views.bikesListToggle.setText(R.string.station_bikes_list_title)
+        views.bikesListWarning.setText(R.string.station_bikes_feeds_disagree)
         views.bikesListToggle.setIconResource(
             if (unfolded) R.drawable.ic_fold else R.drawable.ic_unfold,
         )

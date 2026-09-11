@@ -189,13 +189,16 @@
          lowest figure, %2$s the highest, each already written. -->
     <string name="station_bikes_battery_spread">Bateria %1$s eta %2$s artean</string>
     <string name="station_bikes_range_spread">%1$s eta %2$s inguruko autonomia geratzen da</string>
-    <!-- The row unfolding the bike-by-bike list under the summary, and the
-         one word a line adds where the feed says the bike is booked; "out of
-         service" reuses the station's own word. -->
-    <plurals name="station_bikes_list_title">
-        <item quantity="one">%1$d bizikleta geltoki honetan</item>
-        <item quantity="other">%1$d bizikleta geltoki honetan</item>
-    </plurals>
+    <!-- The row unfolding the bike-by-bike list under the summary. It
+         names no figure: the count already stands in the disc above, and a
+         second one here read as a contradiction wherever the network's two
+         feeds are out of step. -->
+    <string name="station_bikes_list_title">Geltoki honetako bizikleten xehetasunak</string>
+    <!-- Said under that row, with the list open, where the count above and
+         the list below cannot both be right. -->
+    <string name="station_bikes_feeds_disagree">Sareak zerrenda hau bere jario batean argitaratzen du, goiko kopurutik bereizita, eta hemen biak kontraesanean daude. Roue Librek biak argitaratu bezala erakusten ditu, bien artean aukeratu beharrean.</string>
+    <!-- The one word a line of the list adds where the feed says the bike
+         is booked; "out of service" reuses the station's own word. -->
     <string name="station_bike_reserved">Erreserbatuta</string>
     <plurals name="station_bikes_out_of_service">
         <item quantity="one">%1$d bizikleta zerbitzuz kanpo</item>

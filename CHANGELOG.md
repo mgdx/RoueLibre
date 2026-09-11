@@ -32,9 +32,14 @@ also records what has no visible effect.
   a charge five minutes older than the count beside it was two moments
   passed off as one; gzip is asked for on every request, and a test now
   says so. The sheet asks for the feed when it opens, through the same gate as the map, so
-  one opened from the list finds it. French and English carry the eight new
-  strings; the other twenty-eight languages read them in English until
-  translated.
+  one opened from the list finds it. **The row opening the list names no
+  figure** — "Bike details at this station" — and **where the station feed's
+  count cannot be reconciled with the bikes the vehicle feed lists, the
+  unfolded list says so**: the two files are written apart, and on
+  11 September 2026 Reims put 24 of its 53 stations outside any reading of
+  its own list, Angoulême 30 of 54, where thirty-nine of the forty-seven
+  networks that could be compared that day had not one such station. The
+  thirty languages carry the strings.
 - **The bikes a network reports outside its stations, shown on request** (SPEC
   §4.1, §6, §7.1, §7.2.1, §7.3, §7.4, §7.6, §8, §15). GBFS lists them in a
   fifth file, `free_bike_status.json`, renamed `vehicle_status.json` in 3.0,

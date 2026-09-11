@@ -150,12 +150,16 @@
          lowest figure, %2$s the highest, each already written. -->
     <string name="station_bikes_battery_spread">电量 %1$s 到 %2$s</string>
     <string name="station_bikes_range_spread">约剩 %1$s 到 %2$s 续航</string>
-    <!-- The row unfolding the bike-by-bike list under the summary, and the
-         one word a line adds where the feed says the bike is booked; "out of
-         service" reuses the station's own word. -->
-    <plurals name="station_bikes_list_title">
-        <item quantity="other">该站点有 %1$d 辆车</item>
-    </plurals>
+    <!-- The row unfolding the bike-by-bike list under the summary. It
+         names no figure: the count already stands in the disc above, and a
+         second one here read as a contradiction wherever the network's two
+         feeds are out of step. -->
+    <string name="station_bikes_list_title">该站点自行车明细</string>
+    <!-- Said under that row, with the list open, where the count above and
+         the list below cannot both be right. -->
+    <string name="station_bikes_feeds_disagree">该列表来自与上方数量不同的数据源，两者在此并不一致。Roue Libre 不做取舍，按发布的原样同时呈现。</string>
+    <!-- The one word a line of the list adds where the feed says the bike
+         is booked; "out of service" reuses the station's own word. -->
     <string name="station_bike_reserved">已预约</string>
     <plurals name="station_bikes_out_of_service">
         <item quantity="other">%1$d 辆车暂停服务</item>

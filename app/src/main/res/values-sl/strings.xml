@@ -184,15 +184,16 @@
          lowest figure, %2$s the highest, each already written. -->
     <string name="station_bikes_battery_spread">Baterija od %1$s do %2$s</string>
     <string name="station_bikes_range_spread">Ostane še približno %1$s do %2$s dosega</string>
-    <!-- The row unfolding the bike-by-bike list under the summary, and the
-         one word a line adds where the feed says the bike is booked; "out of
-         service" reuses the station's own word. -->
-    <plurals name="station_bikes_list_title">
-        <item quantity="one">%1$d kolo na tej postaji</item>
-        <item quantity="two">%1$d kolesi na tej postaji</item>
-        <item quantity="few">%1$d kolesa na tej postaji</item>
-        <item quantity="other">%1$d koles na tej postaji</item>
-    </plurals>
+    <!-- The row unfolding the bike-by-bike list under the summary. It
+         names no figure: the count already stands in the disc above, and a
+         second one here read as a contradiction wherever the network's two
+         feeds are out of step. -->
+    <string name="station_bikes_list_title">Podrobnosti o kolesih na tej postaji</string>
+    <!-- Said under that row, with the list open, where the count above and
+         the list below cannot both be right. -->
+    <string name="station_bikes_feeds_disagree">Omrežje objavlja ta seznam v svojem viru, ločeno od števila zgoraj, in tu si oba nasprotujeta. Roue Libre prikazuje oba tako, kot sta objavljena, namesto da bi izbiral med njima.</string>
+    <!-- The one word a line of the list adds where the feed says the bike
+         is booked; "out of service" reuses the station's own word. -->
     <string name="station_bike_reserved">Rezervirano</string>
     <plurals name="station_bikes_out_of_service">
         <item quantity="one">%1$d kolo ne deluje</item>

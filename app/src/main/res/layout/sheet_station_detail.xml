@@ -227,7 +227,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bikes_detail"
             app:layout_goneMarginTop="@dimen/space_s"
-            tools:text="15 vélos à cette station"
+            tools:text="Détails des vélos à cette station"
+            tools:visibility="visible" />
+
+        <!-- Said only with the list open, and only where the count in the disc
+             above cannot be reconciled with the bikes listed under it
+             (SPEC §7.2): the reader has just unfolded a contradiction, and it
+             is the network's, not the application's. In the alert hue, on no
+             pill: it explains a line already on the screen, it does not stop
+             anybody from walking to the station. -->
+        <TextView
+            style="@style/Widget.RoueLibre.Name"
+            android:id="@+id/bikes_list_warning"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+            android:textColor="@color/alert"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bikes_list_toggle"
+            tools:text="Le réseau publie cette liste dans un flux distinct de celui du compte ci-dessus, et ici les deux se contredisent."
             tools:visibility="visible" />
 
         <TextView
@@ -240,7 +261,8 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bikes_list_toggle"
+            app:layout_constraintTop_toBottomOf="@id/bikes_list_warning"
+            app:layout_goneMarginTop="@dimen/space_xs"
             tools:text="nextbike_bb_20911 · Vélo électrique · 99 %\nnextbike_bb_11875 · Vélo mécanique"
             tools:visibility="visible" />
 

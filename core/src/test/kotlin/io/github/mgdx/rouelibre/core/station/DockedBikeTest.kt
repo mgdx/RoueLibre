@@ -3,6 +3,7 @@ package io.github.mgdx.rouelibre.core.station
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -168,6 +169,50 @@ class DockedBikeTest {
         assertNull(detail.bikes[3].kind)
         assertEquals(BikeCharge.Ratio(0.9), detail.bikes[4].charge)
         assertEquals(listOf(BikeCharge.Ratio(0.99), BikeCharge.Ratio(0.3)), detail.charges)
+    }
+
+    // ------------------------------------------- the two feeds disagreeing --
+
+    @Test
+    fun `a count the list can account for is not a disagreement`() {
+        // Reims' own convention: a bike somebody has booked is still counted
+        // as available at the station. Both readings of the standard are
+        // defensible, so both ends of the interval are accepted.
+        val detail = chargesAtStation(
+            listOf(bike(ratio = 0.9), bike(ratio = 0.8, reserved = true), bike(ratio = 0.3)),
+            types,
+            maxRanges,
+        )!!
+
+        assertFalse("the bikes on offer", detail.disagreesWith(2))
+        assertFalse("every bike standing there", detail.disagreesWith(3))
+    }
+
+    @Test
+    fun `a count no reading of the list can account for is a disagreement`() {
+        val detail = chargesAtStation(
+            listOf(bike(ratio = 0.9), bike(ratio = 0.3)),
+            types,
+            maxRanges,
+        )!!
+
+        assertTrue("more announced than listed", detail.disagreesWith(5))
+        assertTrue("fewer announced than listed", detail.disagreesWith(0))
+    }
+
+    @Test
+    fun `the scooters parked at a station count towards the station's own figure`() {
+        // The station feed counts every vehicle it lends; the list shows the
+        // bikes alone. Setting one against the other would read a scooter as
+        // a feed out of step.
+        val detail = chargesAtStation(
+            listOf(bike(ratio = 0.9), bike(typeId = "360"), bike(typeId = "360")),
+            types,
+            maxRanges,
+        )!!
+
+        assertEquals(1, detail.bikes.size)
+        assertFalse(detail.disagreesWith(3))
     }
 
     // -------------------------------------------------------------- label --

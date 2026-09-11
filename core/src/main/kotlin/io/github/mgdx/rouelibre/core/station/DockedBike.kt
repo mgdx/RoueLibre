@@ -52,15 +52,52 @@ public data class DockedBike(
  *   the sheet unfolds on request: those on offer first, the electric ones by
  *   charge, then the reserved, then the disabled. The scooters a network
  *   parks at the same station are not among them.
+ * @property vehiclesListed how many vehicles the feed puts at this station,
+ *   the scooters included — [bikes] leaves them out, and a comparison with
+ *   the station feed must count what that feed counts.
+ * @property vehiclesOnOffer how many of those the feed says one could take,
+ *   being neither disabled nor reserved.
  */
 public data class StationBikesDetail(
     public val charges: List<BikeCharge>,
     public val outOfService: Int,
     public val bikes: List<DockedBikeLine>,
+    public val vehiclesListed: Int,
+    public val vehiclesOnOffer: Int,
 ) {
     /** Whether the summary line, above the list, has anything to say. */
     public val hasSummary: Boolean
         get() = charges.isNotEmpty() || outOfService > 0
+
+    /**
+     * Whether the count the station feed publishes cannot be reconciled with
+     * the bikes this feed lists (SPEC §7.2).
+     *
+     * The two feeds are two files, written apart and refreshed apart, and
+     * nothing obliges a producer to keep them in step. Measured on
+     * 11 September 2026: of the 53 stations of Reims holding either a count
+     * or a vehicle, 24 published a figure no reading of the list could
+     * account for — 5 bikes announced and 3 listed, 0 announced and 3
+     * listed — and Angoulême 30 of 54, which is a second producer. Of sixty
+     * networks read that day, forty-seven could be compared at all, and
+     * thirty-nine of those had not one station in that position. It is
+     * therefore the fault of certain producers and never the ordinary state
+     * of affairs.
+     *
+     * **The test is an interval and not an equality**, because the standard
+     * leaves one thing genuinely open: whether a bike somebody has booked is
+     * still "available" at the station. Reims counts it, others do not, and
+     * both readings are defensible. The count is therefore accepted anywhere
+     * between the bikes on offer and every vehicle standing there; only a
+     * count outside that range says something no arrangement of the list can
+     * support. Read strictly, Reims would have shown 39 stations of 53
+     * rather than 24, and Berlin's nextbike 4 of 686 either way.
+     *
+     * @param bikesCounted the figure the station feed publishes, as the sheet
+     *   shows it in its disc.
+     */
+    public fun disagreesWith(bikesCounted: Int): Boolean =
+        bikesCounted !in vehiclesOnOffer..vehiclesListed
 }
 
 /**
@@ -153,6 +190,10 @@ public fun chargesAtStation(
         charges = lines.filter { it.isOnOffer }.mapNotNull { it.charge }.sortedWith(CHARGE_ORDER),
         outOfService = lines.count { it.isDisabled },
         bikes = lines,
+        // Counted before the scooters are dropped: the station feed counts
+        // every vehicle it lends, and only like may be set against like.
+        vehiclesListed = bikes.size,
+        vehiclesOnOffer = bikes.count { !it.isDisabled && !it.isReserved },
     )
 }
 
