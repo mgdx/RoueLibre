@@ -132,6 +132,7 @@ not a copied line** — do not "correct" them.
 | tilt / lay flat | pakreipti / pakreiptas, ištiesinti | *Pakreipti* is the tilt and *pasukti* the turn, kept apart so that the four gestures of `map_description` stay four. `map_tilted_description` is „Žemėlapis pakreiptas.“, and `map_face_north` says *ištiesinti* for laying it flat again. In `map_bearing_tilted_description` the tilt is said **first**, because the bearing string ends on its figure and nothing may follow it. |
 | this place | Ši vieta | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Mano vietos*. `place_clear` is *Pašalinti šį tašką*: the point is taken out, which is *Pašalinti*, not destroyed, which is *Ištrinti*. |
 | Go there / Leave from here | Vykti ten / Pradėti čia | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already *Pradėti čia*, word for word, and `station_as_destination` *Vykti čia*, of which *Vykti ten* is the same verb with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | Rezervuotas | The one word a bike's line adds where the feed says it is booked (`station_bike_reserved`). Masculine singular, agreeing with *dviratis*. This file's own choice: the lexicon has no row for a booked vehicle. |
 
 ## The impersonal voice
 

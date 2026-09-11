@@ -288,6 +288,7 @@ purpose.
 | what's new | **Berritasunak** | What the screen shows is the release notes. *Nobedadeak* is the loan a Basque speaker would also recognise; *Berritasunak* is the batua word and is what this file writes. |
 | tracker | **jarraipen-tresna** | Used in the interface and in the store texts alike, so the promise reads the same before and after installing. |
 | free software / open source | **software librea / kode irekikoa** | `welcome_hello_body` and `about_licence_body`. |
+| Reserved | **Erreserbatuta** | The one word a bike's line adds where the feed says it is booked (`station_bike_reserved`). The stative *-ta* form, a state the bike is in rather than an act done to it, as *okertuta* and *instalatuta* are elsewhere in this file. This file's own choice: the lexicon has no row for a booked vehicle. |
 
 ## Words that are not translated
 

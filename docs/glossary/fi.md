@@ -206,6 +206,7 @@ same object — see the note under *staircase letter* below.
 | tilt / lay flat | **kallistaa / kallistettu**, tasata | *Kallistaa* is the tilt and *kääntää* the turn, kept apart so that the four gestures of `map_description` stay four. `map_tilted_description` is ”Kartta on kallistettu.”, and `map_face_north` says *tasaa* for laying it flat again. |
 | this place | **Tämä paikka** | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Omat paikat*. `place_clear` is *Poista tämä piste*, the one verb Finnish has here, as the *Poista* row above says. |
 | Go there / Leave from here | **Mene sinne / Lähde tästä** | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already *Lähde tästä*, word for word, and `station_as_destination` *Mene tänne*, of which *Mene sinne* is the same verb with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | **Varattu** | The one word a bike's line adds where the feed says it is booked (`station_bike_reserved`). The ordinary Finnish for a thing somebody has taken for themselves, and what Finnish booking interfaces write beside it. This file's own choice: the lexicon has no row for a booked vehicle. |
 
 ## Units, and the one set that is translated
 
