@@ -299,7 +299,8 @@ class StationDetailSheet : BottomSheetDialogFragment() {
     /**
      * The bike-by-bike list under the summary, unfolded on request
      * (SPEC §7.2): a row naming how many bikes stand there, and under it one
-     * line per bike — the producer's identifier, its kind where the table
+     * line per bike — the producer's identifier, cut down past twenty
+     * characters, its kind where the table
      * knows it, its charge where one can be read, and "reserved" or "out of
      * service" where the feed says so. Absent with the summary's own
      * silences, since it is read from the same feed.
@@ -319,7 +320,7 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         val separator = getString(R.string.station_bikes_detail_separator)
         views.bikesList.text = bikes.joinToString("\n") { bike ->
             buildList {
-                add(bike.id)
+                add(bike.label)
                 when (bike.kind) {
                     VehicleKind.Mechanical -> add(getString(R.string.street_bike_kind_mechanical))
                     VehicleKind.Electric -> add(getString(R.string.street_bike_kind_electric))

@@ -169,4 +169,31 @@ class DockedBikeTest {
         assertEquals(BikeCharge.Ratio(0.9), detail.bikes[4].charge)
         assertEquals(listOf(BikeCharge.Ratio(0.99), BikeCharge.Ratio(0.3)), detail.charges)
     }
+
+    // -------------------------------------------------------------- label --
+
+    @Test
+    fun `an identifier past twenty characters keeps its two ends`() {
+        assertEquals("3e279…5fbd2", abbreviateIdentifier("3e279687-add4-458d-8d37-5a6386b5fbd2"))
+        assertEquals("fdifj…oigrg", abbreviateIdentifier("fdifjregoerigjrogsigersoigrg"))
+        // nextbike's number painted on the frame is in the last five
+        // characters, and the whole identifier fits under the ceiling.
+        assertEquals("nextbike_bb_20911", abbreviateIdentifier("nextbike_bb_20911"))
+        assertEquals("exactly-twenty-chars", abbreviateIdentifier("exactly-twenty-chars"))
+    }
+
+    @Test
+    fun `the label is the identifier, abbreviated where it is long`() {
+        val detail = chargesAtStation(
+            listOf(
+                bike(id = "nextbike_bb_20911"),
+                bike(id = "3e279687-add4-458d-8d37-5a6386b5fbd2"),
+            ),
+            types,
+            maxRanges,
+        )!!
+
+        assertEquals(listOf("nextbike_bb_20911", "3e279…5fbd2"), detail.bikes.map { it.label })
+        assertEquals("3e279687-add4-458d-8d37-5a6386b5fbd2", detail.bikes.last().id)
+    }
 }

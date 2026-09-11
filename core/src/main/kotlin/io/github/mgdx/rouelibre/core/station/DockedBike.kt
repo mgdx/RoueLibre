@@ -67,6 +67,8 @@ public data class StationBikesDetail(
  * One bike of the list a station's sheet unfolds (SPEC §7.2).
  *
  * @property id the producer's identifier, as the feed writes it.
+ * @property label what the sheet names the bike by: the identifier, cut down
+ *   past twenty characters, see [abbreviateIdentifier].
  * @property kind what the type table reads the bike as, or `null` where the
  *   type is undeclared or unknown to the table — the line then names no kind
  *   rather than guessing one.
@@ -77,6 +79,7 @@ public data class StationBikesDetail(
  */
 public data class DockedBikeLine(
     public val id: String,
+    public val label: String,
     public val kind: VehicleKind?,
     public val charge: BikeCharge?,
     public val isDisabled: Boolean,
@@ -128,6 +131,7 @@ public fun chargesAtStation(
             val kind = bike.vehicleTypeId?.let { vehicleTypes[it] }
             DockedBikeLine(
                 id = bike.id,
+                label = abbreviateIdentifier(bike.id),
                 kind = kind,
                 // A charge is read on an electric bike alone, see above.
                 charge = if (kind == VehicleKind.Electric) {
@@ -151,6 +155,32 @@ public fun chargesAtStation(
         bikes = lines,
     )
 }
+
+/**
+ * An identifier short enough to read, or its two ends around an ellipsis.
+ *
+ * Twenty characters is the ceiling, and past it the first five and the last
+ * five are kept: a UUID such as `3e279687-add4-458d-8d37-5a6386b5fbd2` is not
+ * something one reads, it is something one matches against the sticker on
+ * the bike, and the two ends are what one matches. Under the ceiling the
+ * identifier is left whole: nextbike's `nextbike_bb_20911` carries the
+ * number painted on the frame in its last five characters, and twenty is
+ * what lets it through untouched where twelve would have cut the number.
+ */
+public fun abbreviateIdentifier(identifier: String): String {
+    if (identifier.length <= IDENTIFIER_LENGTH_SHOWN_WHOLE) return identifier
+    return identifier.take(IDENTIFIER_END_KEPT) + ELLIPSIS +
+        identifier.takeLast(IDENTIFIER_END_KEPT)
+}
+
+/** Past this many characters an identifier is abbreviated. */
+private const val IDENTIFIER_LENGTH_SHOWN_WHOLE = 20
+
+/** How many characters each end of an abbreviated identifier keeps. */
+private const val IDENTIFIER_END_KEPT = 5
+
+/** One character, so the abbreviation costs no more than it saves. */
+private const val ELLIPSIS = "…"
 
 /** Percentages before ranges, then the fullest first. */
 private val CHARGE_ORDER: Comparator<BikeCharge> =
