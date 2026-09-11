@@ -23,4 +23,27 @@
         <ignore path="src/main/res/values-pt/strings.xml" />
         <ignore path="src/main/res/values-zh/strings.xml" />
     </issue>
+
+    <!--
+        `maplibre_logo_icon` and `maplibre_compass_icon` are MapLibre's, not
+        ours, and nothing here names them: that is the point. Both maps turn
+        the library's logo and compass off, but MapView loads the pictures
+        before it reads the flags, so they cannot simply be dropped. Empty
+        files under the library's own names are what stops sixty-eight
+        kilobytes of invisible pictures from shipping, and lint sees exactly
+        what it should — resources no code of ours uses.
+    -->
+    <issue id="UnusedResources">
+        <ignore regexp="maplibre_(logo|compass)_icon" />
+    </issue>
+
+    <!--
+        Same two pictures, and the same reason. MapLibre ships its logo both as
+        a vector for any density and as a bitmap per density, so the empty
+        files that shadow it have to stand in both shapes: leaving the vector
+        out would let the real one through, since it is the one Android picks.
+    -->
+    <issue id="IconXmlAndPng">
+        <ignore regexp="maplibre_(logo|compass)_icon" />
+    </issue>
 </lint>

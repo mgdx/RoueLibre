@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    MapLibre's own logo, emptied.
+
+    Both maps turn the library's logo, attribution and compass off the moment
+    they are ready: ours is the compass in the column of controls, and the
+    attribution is reproduced in the data sources screen (SPEC §7.1). The
+    images are drawn by MapView before those flags are read, though, so the
+    resource shrinker cannot see that nothing keeps them — they were shipping
+    at six densities apiece, sixty-eight kilobytes of pictures nobody can see.
+
+    An entry that is emptied rather than discarded is what keeps MapView
+    finding what it looks up: discarding them outright raises
+    Resources.NotFoundException as the map is inflated. The PNG beside this
+    file, in each density folder, is one transparent pixel for the same reason.
+
+    These files answer names that belong to the library. If a future version of
+    MapLibre renames them, the stubs stop covering anything and the real images
+    come back in silence, weighing what they weighed. Raising the MapLibre
+    version is therefore the moment to check the names again — docs/dependencies.md
+    says so beside the version itself.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="88dp"
+    android:height="23dp"
+    android:viewportWidth="88"
+    android:viewportHeight="23" />
