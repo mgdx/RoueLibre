@@ -30,12 +30,25 @@
 -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
 
+    <!--
+        How tightly a title's letters are set, in ems. A hundredth of an em is
+        the tightening Bricolage's wide, open letterforms ask for at title
+        size, and it belongs to the face: it is a decision about how these
+        drawings sit beside one another.
+
+        It is therefore withdrawn where the face does not draw the letters —
+        see values-ldrtl/type.xml, which explains what letter spacing does to
+        a cursive script and why the title then stopped fitting the width
+        Android had measured for it.
+    -->
+    <item name="title_letter_spacing" format="float" type="dimen">-0.01</item>
+
     <!-- Screen and section titles. -->
     <style name="TextAppearance.RoueLibre.Title" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:fontFamily">@font/bricolage_semibold</item>
         <item name="android:textSize">@dimen/text_title</item>
         <item name="android:textColor">@color/ink</item>
-        <item name="android:letterSpacing">-0.01</item>
+        <item name="android:letterSpacing">@dimen/title_letter_spacing</item>
     </style>
 
     <!-- Body text, station names. -->
