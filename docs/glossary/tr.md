@@ -277,6 +277,7 @@ not the translator's to write, so it is **reported** here rather than added.
 | tilt / lay flat | **eğmek / eğik**, düzleştirmek | *Eğmek* is the tilt and *döndürmek* the turn, kept apart so that the four gestures of `map_description` stay four. `map_tilted_description` is „Harita eğik.”, and `map_face_north` says *düzleştir*, in the bare *sen* imperative the file's buttons take. |
 | this place | **Bu yer** | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Yerlerim*. `place_clear` is *Bu noktayı temizle*, which is exactly what the *Aramayı temizle* row asks for: a selection is *temizle*, never *Sil*. |
 | Go there / Leave from here | **Oraya git / Buradan başla** | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already *Buradan başla*, word for word, and `station_as_destination` *Buraya git*, of which *Oraya git* is the same verb with *bura-* giving way to *ora-*. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | **Rezerve** | The one word a bike's line adds where the feed says it is booked (`station_bike_reserved`). The word a Turkish booking interface puts beside a taken seat or table; *Ayrılmış* would read as "set apart" rather than booked. This file's own choice: the lexicon has no row for a booked vehicle. |
 
 ## Units, and the two that are translated
 

@@ -202,6 +202,7 @@ number makes the parser give the first one up.
 | tilt / lay flat | **sasvērt / sasvērta**, izlīdzināt | *Sasvērt* is the tilt and *pagriezt* the turn, kept apart so that the four gestures of `map_description` stay four. `map_tilted_description` is „Karte ir sasvērta.“, and `map_face_north` says *izlīdzināt* for laying it flat again. In `map_bearing_tilted_description` the tilt is said **first**, because the bearing string ends on its figure and nothing may follow it. |
 | this place | **Šī vieta** | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Manas vietas*. `place_clear` is *Notīrīt šo punktu*, which empties a selection rather than destroying data. |
 | Go there / Leave from here | **Doties turp / Sākt šeit** | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already *Sākt šeit*, word for word, and `station_as_destination` *Doties šurp*, of which *Doties turp* is the same verb with *šurp* giving way to *turp* — the pair of directional adverbs Latvian has and English has not. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | **Rezervēts** | The one word a bike's line adds where the feed says it is booked (`station_bike_reserved`). Masculine singular, agreeing with *velosipēds*. My own choice: `lv.tsv` has no row for a booked vehicle. |
 
 ## What is not translated
 
