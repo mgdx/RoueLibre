@@ -211,6 +211,7 @@ separators follow the reader (SPEC §9).
 | tilt / lay flat | **megdönteni / meg van döntve**, vízszintbe állítás | *Dönteni* is the tilt and *elforgatni* the turn, kept apart so that the four gestures of `map_description` stay four. `map_tilted_description` is „A térkép meg van döntve.”, and `map_face_north` says *vízszintbe állítása*, nominal like the rest of the file's controls. |
 | this place | **Ez a hely** | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Saját helyek*. `place_clear` is *A pont törlése*, nominal again and on *törlés*, as the row above. |
 | Go there / Leave from here | **Irány oda / Indulás innen** | Nominal, both, and the station sheet's own words: `station_as_origin` is already *Indulás innen*, word for word, and `station_as_destination` *Irány ide*, of which *Irány oda* is the same noun with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | **Lefoglalva** | `station_bike_reserved`, the one word a bike's line carries where the feed says it is booked. The state participle, nominal like *Telepítve* and *Törölve*. Not *Foglalt*, which on a phone is a busy line or an occupied seat. |
 
 ## Words that are not translated
 

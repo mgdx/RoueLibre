@@ -170,6 +170,7 @@ Android's say so in their own row.
 | tilt / lay flat | κλίση, επίπεδη προβολή | Greek names the tilt with the noun: *δίνω κλίση* for the gesture, *έχει κλίση* for the state (`map_tilted_description`), against *στρέφω* for the turn. `map_face_north` says *επίπεδη προβολή* for the flat the press gives back, nominal like the rest of the file's controls. |
 | this place | Αυτή η τοποθεσία | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Οι τοποθεσίες μου*. `place_clear` is *Διαγραφή αυτού του σημείου*, the one verb for clearing that the row above settles on. |
 | Go there / Leave from here | Μετάβαση εκεί / Αναχώρηση από εδώ | Leaving is the station sheet's own word: `station_as_origin` is already *Αναχώρηση από εδώ*, word for word. **Going is not**, and that is worth recording — `station_as_destination` says *Άφιξη εδώ*, the arrival that pairs with *Αναχώρηση* on a station row, where the place sheet says *Μετάβαση εκεί*, the going-to, because a place is somewhere one heads for rather than arrives at. If either is ever reworded, decide then whether the two pairs should be closed up. |
+| Reserved | Κρατημένο | `station_bike_reserved`, the one word a bike's line carries where the feed says it is booked. Neuter, agreeing with «ποδήλατο», and from *κράτηση*, the everyday Greek word for a booking. Not *δεσμευμένο*, which reads as committed or bound rather than booked. |
 
 ## Free docks and total docks: one noun, two phrases
 

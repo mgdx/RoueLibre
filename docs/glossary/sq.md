@@ -113,6 +113,7 @@ one: the figure is already painted beside them.
 | tilt / lay flat | **pjerrësoj / i pjerrët**, rrafshoj | *Pjerrësoj* is the tilt and *kthej* the turn, kept apart so that the four gestures of `map_description` stay four. `map_tilted_description` is «Harta është e pjerrët.», and `map_face_north` says *rrafshoje*, with the clitic *-e* the file's buttons take. |
 | this place | **Ky vend** | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Vendet e mia*. `place_clear` is *Hiqe këtë pikë*: the point is taken off the map, which is *Hiq*, not destroyed, which is *Fshi*. |
 | Go there / Leave from here | **Shko atje / Nisu nga këtu** | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already *Nisu nga këtu*, word for word, and `station_as_destination` *Shko këtu*, of which *Shko atje* is the same verb with the deictic moved. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | **E rezervuar** | `station_bike_reserved`, the one word a bike's line carries where the feed says it is booked. Feminine, agreeing with *biçikletë*. Not in the lexicon; the participle Albanian uses for a booking. |
 
 ### One word deliberately said two ways
 

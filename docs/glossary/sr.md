@@ -211,6 +211,7 @@ reason, so all three sister files agree.
 | tilt / lay flat | **нагнути / нагнута**, поравнати | *Нагнути* is the tilt and *окренути* the turn, kept apart so that the four gestures of `map_description` stay four. `map_tilted_description` is „Мапа је нагнута.“, and `map_face_north` says *поравнај* for laying it flat again. |
 | this place | **Ово место** | `place_sheet_title`, the sheet a point found on the map opens — the same noun as *Моја места*. `place_clear` is *Обриши ову тачку*. |
 | Go there / Leave from here | **Иди онамо / Крени одавде** | The place sheet's two actions take the station sheet's own words: `station_as_origin` is already *Крени одавде*, word for word, and `station_as_destination` *Иди овамо*, of which *Иди онамо* is the same verb with the far deictic Serbian has and English has not. The place sheet is the station sheet's sister and the two must read as one, so neither pair is reworded without the other. |
+| Reserved | **Резервисан** | `station_bike_reserved`, the one word a bike's line carries where the feed says it is booked. Masculine, agreeing with *бицикл*, the noun the line is about. Not in the lexicon; the ordinary Serbian participle for a booking. |
 
 ## Android's own words for the path through its settings
 
