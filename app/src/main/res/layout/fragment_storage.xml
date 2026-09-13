@@ -43,7 +43,7 @@
         android:layout_marginStart="@dimen/space_l"
         android:layout_marginTop="@dimen/space_m"
         android:layout_marginEnd="@dimen/space_l"
-        android:textAppearance="@style/TextAppearance.RoueLibre.Label"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Label.Value"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/storage_intro"

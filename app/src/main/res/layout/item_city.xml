@@ -54,7 +54,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_xs"
-        android:textAppearance="@style/TextAppearance.RoueLibre.Label"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Label.Value"
         app:layout_constraintEnd_toStartOf="@id/city_delete"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/city_detail"
