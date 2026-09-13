@@ -185,6 +185,19 @@ class StationDetailSheet : BottomSheetDialogFragment() {
             resources.getQuantityString(R.plurals.counterpart_bikes, bikes.count ?: 0)
         views.docksLabel.text =
             resources.getQuantityString(R.plurals.counterpart_docks, docks.count ?: 0)
+
+        // Both discs are painted onto a canvas, and a painted figure reaches no
+        // screen reader: the sheet announced "BIKES" and "FREE DOCKS" and
+        // neither count, which is what the screen is for (SPEC §7.1). The
+        // sentence goes on the pair rather than on each disc — the two counts
+        // answer one question, "can I leave from here, can I arrive here", and
+        // are read as the one phrase they make — and the layout takes the discs
+        // and their labels out of the tree so that no word is said twice. It is
+        // the sentence the list row speaks, built by [spokenAvailability].
+        views.counts.contentDescription = requireContext().spokenAvailability(
+            entry,
+            isOutOfService = entry.serviceState == ServiceState.OutOfService,
+        )
         showBikeSplit(state.bikeSplit)
         showBikesDetail(state.bikesDetail)
         showBikesList(state.bikesDetail, state.isBikesListUnfolded, state.bikesFeedsDisagree)

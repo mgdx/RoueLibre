@@ -106,6 +106,14 @@
             Each pair is a block of its own, so a word never leaves its disc: what
             is read is a figure and the word naming it, and a label that had stepped
             below its own disc would be saying something else.
+
+            **A screen reader is given the row and not the pairs.** The discs paint
+            their figures onto a canvas, so the tree held "BIKES" and "FREE DOCKS"
+            and neither count. The sentence carrying both is set on this row by
+            StationDetailSheet, and the two pairs below are taken out of the tree so
+            that a label is not read a second time out of its figure's company. The
+            words themselves are not lost: they are in that sentence, agreeing with
+            the counts through the same plurals.
         -->
         <io.github.mgdx.rouelibre.ui.StackingRow
             android:id="@+id/counts"
@@ -124,13 +132,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:importantForAccessibility="noHideDescendants"
                 android:orientation="horizontal">
 
                 <io.github.mgdx.rouelibre.ui.stations.AvailabilityIndicatorView
                     android:id="@+id/bikes_indicator"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:importantForAccessibility="no" />
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     style="@style/Widget.RoueLibre.Name"
@@ -147,13 +155,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space_xl"
                 android:gravity="center_vertical"
+                android:importantForAccessibility="noHideDescendants"
                 android:orientation="horizontal">
 
                 <io.github.mgdx.rouelibre.ui.stations.AvailabilityIndicatorView
                     android:id="@+id/docks_indicator"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:importantForAccessibility="no" />
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     style="@style/Widget.RoueLibre.Name"
@@ -283,32 +291,59 @@
             Origin and destination side by side: they are two faces of one
             gesture, and separating them would send the user looking for the second
             elsewhere (SPEC §7.2).
-        -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/set_as_origin"
-            style="@style/Widget.RoueLibre.Toggle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="@dimen/touch_target_min"
-            android:layout_marginTop="@dimen/space_l"
-            android:layout_marginEnd="@dimen/space_s"
-            android:text="@string/station_as_origin"
-            app:layout_constraintEnd_toStartOf="@id/set_as_destination"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/capacity" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/set_as_destination"
-            style="@style/Widget.RoueLibre.Toggle"
+            A row of their own rather than two buttons holding each other: the
+            second used to hang by its top and its bottom on the first, which
+            centres it in the first's height instead of giving it that height. At
+            ×2.0 "Partir d'ici" takes two lines where "Aller ici" takes one, and
+            the two buttons then ended at different depths. A `LinearLayout`
+            measures its row once and hands every child asking for `match_parent`
+            the height of the tallest, so whichever of the two labels wraps —
+            and which one it is changes with the language — both buttons follow
+            it. Nothing is frozen: the height is still the one the text asks for
+            at the size the system is set to.
+
+            The alternative within the constraints, hanging the shorter button on
+            the taller one with a height of `0dp`, was refused for being
+            one-directional: it repairs the pair only while it is the first label
+            that wraps.
+
+            `baselineAligned="false"` because a row of buttons has no baseline to
+            share: left on, the row would line up the two labels' first lines and
+            push the one-line button down by the height of the other's second.
+        -->
+        <LinearLayout
+            android:id="@+id/journey_actions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/touch_target_min"
-            android:layout_marginStart="@dimen/space_s"
-            android:text="@string/station_as_destination"
-            app:layout_constraintBottom_toBottomOf="@id/set_as_origin"
+            android:layout_marginTop="@dimen/space_l"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/set_as_origin"
-            app:layout_constraintTop_toTopOf="@id/set_as_origin" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/capacity">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/set_as_origin"
+                style="@style/Widget.RoueLibre.Toggle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/space_s"
+                android:layout_weight="1"
+                android:minHeight="@dimen/touch_target_min"
+                android:text="@string/station_as_origin" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/set_as_destination"
+                style="@style/Widget.RoueLibre.Toggle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/space_s"
+                android:layout_weight="1"
+                android:minHeight="@dimen/touch_target_min"
+                android:text="@string/station_as_destination" />
+
+        </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/open_in_navigation"
@@ -321,7 +356,7 @@
             app:icon="@drawable/ic_navigation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/set_as_origin" />
+            app:layout_constraintTop_toBottomOf="@id/journey_actions" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
