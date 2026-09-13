@@ -18,6 +18,8 @@ Usage:
     python3 tools/add_city.py --all               # every eligible network
     python3 tools/add_city.py --network zebullo   # one, by survey identifier
     python3 tools/add_city.py --list              # what would be written
+    python3 tools/add_city.py --refresh-names     # name the cities still
+                                                  # showing their identifier
 """
 
 from __future__ import annotations
@@ -32,6 +34,7 @@ from pathlib import Path
 
 from city_config import FLEET_COMMENT, BoundingBox, CityConfig, OpeningView
 from compute_bbox import bounding_box_of_stations, load_stations, survey_stations
+from discover_networks import display_name_of
 
 TOOLS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = TOOLS_DIR.parent
@@ -310,6 +313,10 @@ def parse_arguments() -> argparse.Namespace:
                         help="update only the \"dataSources\" block of the "
                              "configurations already written, leaving "
                              "everything settled by hand alone")
+    parser.add_argument("--refresh-names", action="store_true",
+                        help="give a name to the configurations whose "
+                             "\"displayName\" is still their identifier, "
+                             "leaving every other name alone")
     return parser.parse_args()
 
 
@@ -351,10 +358,74 @@ def refresh_data_sources(networks: list[dict], configurations: dict[str, dict]) 
     return changed
 
 
+def refresh_display_names(networks: list[dict], configurations: dict[str, dict]) -> int:
+    """Name the cities whose configuration still carries an identifier.
+
+    Where none of a producer's three spellings published a name, the survey
+    used to hand back the identifier itself, and the city list read
+    "bogota-bikebogota — Bogotá". It derives a name now, but a configuration is
+    written once and for all: nothing carries that correction to the cities
+    already served, and the identifier would go on being shown in the city
+    list, in the settings and at the head of the storage screen.
+
+    **Only a configuration whose name IS its identifier is touched.** That is
+    the defect exactly, and the names settled by hand — or derived correctly on
+    the day the city was added — are none of this pass's business.
+
+    The identifier itself never moves: it names the directory a city's data
+    lives in on the device, the manifest published for it and the URL of every
+    file it downloads. Renaming it would strand an installation that already
+    holds the city, for the sake of a label.
+
+    A configuration is matched on its auto-discovery address and on nothing
+    else, where `already_served` falls back on the box and the station count.
+    That fallback answers "is this conurbation served already?", which tolerates
+    a near miss; naming asks "whose name is this?", which does not — Köln's two
+    networks share a box and a fleet, and the looser question hung KVB Rad's
+    name on welo's configuration.
+    """
+    by_address = {
+        existing["document"]["gbfs"]["discoveryUrl"]: identifier
+        for identifier, existing in configurations.items()
+    }
+    changed = 0
+    for network in networks:
+        addresses = {network["discoveryUrl"], *network.get("alternateUrls", [])}
+        identifier = next(
+            (by_address[address] for address in addresses if address in by_address),
+            None,
+        )
+        if identifier is None:
+            continue
+        existing = configurations[identifier]
+        block = existing["document"]["network"]
+        if block["displayName"] != identifier:
+            continue
+        # Derived again here rather than read from the survey file: the file
+        # holds the name as the run that wrote it spelled one, and this pass
+        # exists precisely because that spelling has been corrected since.
+        name = display_name_of(network)
+        if not name or name == identifier:
+            continue
+        was = block["displayName"]
+        block["displayName"] = name
+        # The operator is seeded from the name where the survey knows no
+        # authority, so it carries the same identifier and the same defect —
+        # and it is what the sources page credits the feed to (§4.5).
+        if block.get("operator") == was:
+            block["operator"] = name
+        with existing["path"].open("w", encoding="utf-8") as stream:
+            json.dump(existing["document"], stream, ensure_ascii=False, indent=2)
+            stream.write("\n")
+        print(f"  ~ {identifier:<26} {was} → {name}")
+        changed += 1
+    return changed
+
+
 def main() -> int:
     arguments = parse_arguments()
     if not (arguments.all or arguments.network or arguments.list
-            or arguments.refresh_sources):
+            or arguments.refresh_sources or arguments.refresh_names):
         print("Nothing to do: pass --all, --network or --list.", file=sys.stderr)
         return 1
 
@@ -372,6 +443,13 @@ def main() -> int:
     if arguments.refresh_sources:
         changed = refresh_data_sources(networks, configurations)
         print(f"\n{changed} configuration(s) brought up to the survey")
+        return 0
+
+    if arguments.refresh_names:
+        changed = refresh_display_names(networks, configurations)
+        print(f"\n{changed} configuration(s) given a name")
+        if changed:
+            print("Next: python3 tools/build_catalogue.py")
         return 0
 
     taken_identifiers = set(configurations)
