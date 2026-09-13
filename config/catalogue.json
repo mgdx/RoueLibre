@@ -1,7 +1,7 @@
 {
   "catalogueVersion": 1,
   "catalogueUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/catalogue.json",
-  "generatedAt": "2026-08-31T10:04:46Z",
+  "generatedAt": "2026-09-13T08:43:02Z",
   "cities": [
     {
       "id": "aar-bike",
@@ -704,6 +704,60 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bayern-komplett.json",
       "dataSizeBytes": 226823704,
       "releaseTag": "data-2026-08-de"
+    },
+    {
+      "id": "bentonville-bcycle",
+      "displayName": "Bentonville BCycle",
+      "operator": "Bentonville BCycle",
+      "mainCity": "Bentonville",
+      "country": "US",
+      "stationCount": 30,
+      "stationSamples": [
+        [
+          36.34648,
+          -94.19562
+        ],
+        [
+          36.36249,
+          -94.18195
+        ],
+        [
+          36.34104,
+          -94.19988
+        ],
+        [
+          36.34618,
+          -94.18602
+        ],
+        [
+          36.36528,
+          -94.19141
+        ],
+        [
+          36.36551,
+          -94.18853
+        ],
+        [
+          36.36442,
+          -94.19446
+        ],
+        [
+          36.36283,
+          -94.19481
+        ]
+      ],
+      "boundingBox": {
+        "south": 36.314091,
+        "west": -94.234303,
+        "north": 36.396449,
+        "east": -94.147097
+      },
+      "centreLatitude": 36.36308,
+      "centreLongitude": -94.191285,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_bentonville/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bentonville-bcycle.json",
+      "dataSizeBytes": 3210103,
+      "releaseTag": "data-2026-09"
     },
     {
       "id": "bergen-bysykkel",
@@ -7186,6 +7240,60 @@
       "releaseTag": "data-2026-08-fr"
     },
     {
+      "id": "indego",
+      "displayName": "Indego",
+      "operator": "Indego",
+      "mainCity": "Philadelphia",
+      "country": "US",
+      "stationCount": 319,
+      "stationSamples": [
+        [
+          39.95371,
+          -75.16423
+        ],
+        [
+          39.97669,
+          -75.15813
+        ],
+        [
+          39.97522,
+          -75.18669
+        ],
+        [
+          39.95509,
+          -75.15172
+        ],
+        [
+          39.95946,
+          -75.14745
+        ],
+        [
+          40.02237,
+          -75.218
+        ],
+        [
+          39.97012,
+          -75.14666
+        ],
+        [
+          39.93931,
+          -75.20336
+        ]
+      ],
+      "boundingBox": {
+        "south": 39.862991,
+        "west": -75.284159,
+        "north": 40.057499,
+        "east": -75.066051
+      },
+      "centreLatitude": 39.95523,
+      "centreLongitude": -75.16978,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_indego/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-indego.json",
+      "dataSizeBytes": 46156868,
+      "releaseTag": "data-2026-09"
+    },
+    {
       "id": "jaskolka",
       "displayName": "JasKółka",
       "operator": "Nextbike Polska S.A. ul. Przasnyska 6B",
@@ -9560,6 +9668,60 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-rlv-lib.json",
       "dataSizeBytes": 4193690,
       "releaseTag": "data-2026-08-fr"
+    },
+    {
+      "id": "rtc-bike-share",
+      "displayName": "RTC Bike Share",
+      "operator": "RTC Bike Share",
+      "mainCity": "Las Vegas",
+      "country": "US",
+      "stationCount": 38,
+      "stationSamples": [
+        [
+          36.14383,
+          -115.15682
+        ],
+        [
+          36.16202,
+          -115.14483
+        ],
+        [
+          36.16684,
+          -115.13488
+        ],
+        [
+          36.1655,
+          -115.13303
+        ],
+        [
+          36.1684,
+          -115.1386
+        ],
+        [
+          36.16845,
+          -115.13233
+        ],
+        [
+          36.16363,
+          -115.16487
+        ],
+        [
+          36.16828,
+          -115.13545
+        ]
+      ],
+      "boundingBox": {
+        "south": 36.116881,
+        "west": -115.204238,
+        "north": 36.199609,
+        "east": -115.081322
+      },
+      "centreLatitude": 36.163905,
+      "centreLongitude": -115.14851,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_rtcbikeshare/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-rtc-bike-share.json",
+      "dataSizeBytes": 6827733,
+      "releaseTag": "data-2026-09"
     },
     {
       "id": "rubis-velo",
