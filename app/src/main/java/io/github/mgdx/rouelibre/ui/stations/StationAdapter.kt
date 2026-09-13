@@ -168,31 +168,11 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
             )
 
             // A screen reader must hear the same thing an eye sees: the name,
-            // then both counts, never a colour (SPEC §7).
-            val availability = entry.availability
-            val spokenState = when {
-                display.isOutOfService -> context.getString(R.string.station_out_of_service)
-                availability == null -> context.getString(R.string.station_availability_unknown)
-                else -> context.getString(
-                    R.string.station_content_description,
-                    entry.station.name,
-                    resources.getQuantityString(
-                        R.plurals.bikes_available,
-                        availability.bikesAvailable,
-                        availability.bikesAvailable,
-                    ),
-                    resources.getQuantityString(
-                        R.plurals.docks_available,
-                        availability.docksAvailable,
-                        availability.docksAvailable,
-                    ),
-                )
-            }
-            binding.root.contentDescription = when {
-                availability == null || display.isOutOfService ->
-                    "${entry.station.name}, $spokenState"
-                else -> spokenState
-            }
+            // then both counts, never a colour (SPEC §7). The sentence is built
+            // outside this class because the station's sheet draws the same two
+            // figures and owes the same words (see [spokenAvailability]).
+            binding.root.contentDescription =
+                context.spokenAvailability(entry, isOutOfService = display.isOutOfService)
             binding.root.setOnClickListener { onOpen(entry) }
         }
     }
