@@ -10,6 +10,7 @@ import io.github.mgdx.rouelibre.core.station.StreetBike
 import io.github.mgdx.rouelibre.core.station.VehicleKind
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.intOrNull
@@ -236,16 +237,18 @@ public class GbfsParser {
             count.vehicleTypeId to count.count.coerceAtLeast(0)
         }
         if (standard.isNotEmpty()) return standard
-        // Vélib' publishes one single-key object per kind, the key being the
-        // kind's name: [{"mechanical": 3}, {"ebike": 0}].
-        return entry.legacyBikesByKind
-            ?.flatMap { element -> (element as? JsonObject)?.entries.orEmpty() }
-            ?.mapNotNull { (kind, count) ->
-                val bikes = (count as? JsonPrimitive)?.intOrNull ?: return@mapNotNull null
-                kind to bikes.coerceAtLeast(0)
-            }
-            ?.toMap()
-            .orEmpty()
+        // Two shapes are published and both are read: Vélib' sends a list of
+        // single-key objects, [{"mechanical": 3}, {"ebike": 0}], and BCycle one
+        // object naming every kind, {"electric": 1, "classic": 0}.
+        val named = when (val kinds = entry.legacyBikesByKind) {
+            is JsonArray -> kinds.flatMap { element -> (element as? JsonObject)?.entries.orEmpty() }
+            is JsonObject -> kinds.entries
+            else -> emptyList()
+        }
+        return named.mapNotNull { (kind, count) ->
+            val bikes = (count as? JsonPrimitive)?.intOrNull ?: return@mapNotNull null
+            kind to bikes.coerceAtLeast(0)
+        }.toMap()
     }
 
     /**

@@ -746,4 +746,36 @@ class GbfsParserTest {
             discovery.urlOfVehicleStatus(),
         )
     }
+
+    // ------------------------------------------------ GBFS 1.1, BCycle --
+
+    @Test
+    fun `reads a breakdown published as one object naming every kind`() {
+        // Indego, in Philadelphia, and every other BCycle network: the kinds
+        // arrive as {"electric": 1, "smart": 0, "classic": 0} where Vélib'
+        // sends a list of single-key objects. Declaring the list alone made
+        // the whole document unreadable, so the station list showed question
+        // marks for a network whose counts were there all along.
+        val status =
+            assertSuccess(parser.parseStationStatus(fixture("station_status_v1_indego.json")))
+
+        val first = status.availabilities.first { it.stationId == "bcycle_indego_3004" }
+        assertEquals(1, first.bikesAvailable)
+        assertEquals(22, first.docksAvailable)
+        assertEquals(1, first.bikesByVehicleType["electric"])
+        assertEquals(0, first.bikesByVehicleType["classic"])
+    }
+
+    @Test
+    fun `reads a BCycle station list that publishes no capacity`() {
+        // The field the whole family omits, and the reason the survey long
+        // refused them: the live free-dock count says the size instead.
+        val information = assertSuccess(
+            parser.parseStationInformation(fixture("station_information_v1_indego.json")),
+        )
+
+        val first = information.stations.first()
+        assertEquals("Municipal Services Building Plaza", first.name)
+        assertNull(first.capacity)
+    }
 }

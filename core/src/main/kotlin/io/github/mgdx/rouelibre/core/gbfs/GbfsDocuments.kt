@@ -11,6 +11,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNames
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -268,15 +269,21 @@ internal data class GbfsStationStatus(
     /**
      * The breakdown as Vélib' Métropole publishes it, kept raw.
      *
-     * An extension, not the standard: the network is on GBFS 1.0, which has no
-     * `vehicle_types` feed to point identifiers at, so it names the kinds
-     * inline — `[{"mechanical": 3}, {"ebike": 0}]`. A list of objects with
-     * arbitrary keys has no shape to declare, hence the raw element, read by
-     * the parser. Refusing it would hide the 7854 electric bikes of the
-     * largest network in France.
+     * An extension, not the standard: the network is on GBFS 1.0 or 1.1, which
+     * has no `vehicle_types` feed to point identifiers at, so it names the
+     * kinds inline. Arbitrary keys have no shape to declare, hence the raw
+     * element, read by the parser. Refusing it would hide the 7854 electric
+     * bikes of the largest network in France.
+     *
+     * **Two shapes are in the field, and both are read.** Vélib' publishes a
+     * list of single-key objects — `[{"mechanical": 3}, {"ebike": 0}]` — while
+     * every BCycle network publishes one object naming all the kinds at once:
+     * `{"electric": 1, "smart": 0, "classic": 0}`. Declaring the list alone
+     * made the whole document unreadable for the second, which is a station
+     * list of question marks rather than one missing breakdown.
      */
     @SerialName("num_bikes_available_types")
-    val legacyBikesByKind: JsonArray? = null,
+    val legacyBikesByKind: JsonElement? = null,
     @SerialName("num_docks_available") val docksAvailable: Int = 0,
     @SerialName("is_installed")
     @Serializable(with = LenientBooleanSerializer::class)

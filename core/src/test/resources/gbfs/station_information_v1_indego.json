@@ -1,0 +1,45 @@
+{
+ "ttl": 60,
+ "data": {
+  "stations": [
+   {
+    "lon": -75.16423,
+    "lat": 39.95371,
+    "rental_uris": {
+     "ios": "https://www.bcycle.com/applink?system_id=bcycle_indego&station_id=bcycle_indego_3004&platform=iOS",
+     "android": "https://www.bcycle.com/applink?system_id=bcycle_indego&station_id=bcycle_indego_3004&platform=android"
+    },
+    "_bcycle_station_type": "Kiosk and Station",
+    "address": "1401 John F. Kennedy Blvd.",
+    "name": "Municipal Services Building Plaza",
+    "station_id": "bcycle_indego_3004"
+   },
+   {
+    "lon": -75.14403,
+    "lat": 39.94733,
+    "rental_uris": {
+     "ios": "https://www.bcycle.com/applink?system_id=bcycle_indego&station_id=bcycle_indego_3005&platform=iOS",
+     "android": "https://www.bcycle.com/applink?system_id=bcycle_indego&station_id=bcycle_indego_3005&platform=android"
+    },
+    "_bcycle_station_type": "Kiosk and Station",
+    "address": "191 S. 2nd St.",
+    "name": "Welcome Park, NPS",
+    "station_id": "bcycle_indego_3005"
+   },
+   {
+    "lon": -75.20311,
+    "lat": 39.9522,
+    "rental_uris": {
+     "ios": "https://www.bcycle.com/applink?system_id=bcycle_indego&station_id=bcycle_indego_3006&platform=iOS",
+     "android": "https://www.bcycle.com/applink?system_id=bcycle_indego&station_id=bcycle_indego_3006&platform=android"
+    },
+    "_bcycle_station_type": "Kiosk and Station",
+    "address": "246 S. 40th St.",
+    "name": "40th & Spruce",
+    "station_id": "bcycle_indego_3006"
+   }
+  ]
+ },
+ "version": "1.1",
+ "last_updated": 1789288752
+}
