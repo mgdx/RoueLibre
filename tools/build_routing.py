@@ -61,11 +61,29 @@ BROUTER_RELEASE_SHA256 = (
 )
 
 # Profiles the map creator itself needs. They decide which OSM ways enter the
-# graph at all, and are not the profiles used at routing time. They are taken
-# from the pinned archive, never from BRouter's master branch: a profile that
-# drifts upstream would change which ways enter the graph, and two machines
-# generating the same city on different days would no longer agree.
-MAP_CREATION_PROFILES = ("all.brf", "trekking.brf", "softaccess.brf")
+# graph at all, and are not the profiles used at routing time. None of them may
+# come from BRouter's master branch: a profile that drifts upstream would change
+# which ways enter the graph, and two machines generating the same city on
+# different days would no longer agree.
+#
+# They do not all live in the same place, and assuming they did broke every
+# generation between 11 and 13 September 2026. The release archive ships
+# `trekking.brf` and `lookups.dat` in its `profiles2` directory and nothing
+# else; `all.brf` and `softaccess.brf` exist only under `misc/profiles2` in the
+# source tree, which the archive omits. So those two are read from the **tag**
+# rather than from the archive — a tag does not move, which is the whole point
+# — and each is checked against its digest, as the archive is. The digests below
+# are those of the profiles that generated every city published so far, so no
+# graph shifts under a city already on someone's phone.
+ARCHIVED_MAP_CREATION_PROFILES = ("lookups.dat", "trekking.brf")
+TAGGED_MAP_CREATION_PROFILES = {
+    "all.brf": "87d49d6a2850db277e2c86a81de5e2e6727e0498e47f10662ababa0a9b56f144",
+    "softaccess.brf": "0c04a5889d61bef88b62a8abd22e76555b2d3a2299e33811b2f7e15ac7587190",
+}
+BROUTER_TAGGED_PROFILE_URL = (
+    f"https://raw.githubusercontent.com/abrensch/brouter/v{BROUTER_VERSION}"
+    "/misc/profiles2/"
+)
 
 # Public, authentication-free mirror of the SRTM 1 arc-second tiles.
 ELEVATION_TILE_URL = (
@@ -167,8 +185,20 @@ def ensure_brouter(cache_dir: Path) -> tuple[Path, Path]:
         raise GenerationError(f"BRouter jar not found after unpacking: {jar}")
 
     profiles.mkdir(parents=True, exist_ok=True)
-    for name in ("lookups.dat", *MAP_CREATION_PROFILES):
+    for name in ARCHIVED_MAP_CREATION_PROFILES:
         shutil.copy(unpacked / "profiles2" / name, profiles / name)
+    for name, expected in TAGGED_MAP_CREATION_PROFILES.items():
+        target = profiles / name
+        if not target.exists() or sha256_of(target) != expected:
+            download(BROUTER_TAGGED_PROFILE_URL + name, target)
+        actual = sha256_of(target)
+        if actual != expected:
+            target.unlink()
+            raise GenerationError(
+                f"The downloaded profile {name} does not match the expected "
+                f"digest.\n  expected: {expected}\n  got     : {actual}\n"
+                "Profile deleted; run the script again."
+            )
 
     print(f"[0/4] BRouter {BROUTER_VERSION} ready (digest verified).")
     return jar, profiles
