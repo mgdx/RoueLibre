@@ -892,14 +892,19 @@ class JourneyResultFragment : Fragment() {
      */
     private fun showShape(option: JourneyOption, minutes: JourneyMinutes) {
         val views = binding ?: return
-        // A journey begun at a bike outside the stations has no access walk to
-        // draw, so the drawing holds two strokes and three discs — the bike,
-        // the arrival station, the destination (SPEC §7.4).
+        // Either walk may be missing, and the drawing then holds two strokes
+        // and three discs. No access walk on a journey begun at a bike outside
+        // the stations — the bike, the arrival station, the destination
+        // (SPEC §7.4); no final walk where the destination is the arrival
+        // station itself, where the last disc is an end of the journey and is
+        // drawn as one (SPEC §7.4.1).
         views.detail.shape.departureMarker = JourneyMarkers.departureMarkerOf(option.departure)
         views.detail.shape.legs = listOfNotNull(
             option.walkToStation?.let { legOf(it, minutes.walkToStation, isRide = false) },
             legOf(option.ride, minutes.ride, isRide = true),
-            legOf(option.walkToDestination, minutes.walkToDestination, isRide = false),
+            option.walkToDestination?.let {
+                legOf(it, minutes.walkToDestination, isRide = false)
+            },
         )
     }
 
@@ -1002,7 +1007,7 @@ class JourneyResultFragment : Fragment() {
         frameOn(
             (
                 option.walkToStation?.geometry.orEmpty() + option.ride.geometry +
-                    option.walkToDestination.geometry
+                    option.walkToDestination?.geometry.orEmpty()
                 )
                 .map { LatLng(it.latitude, it.longitude) },
         )

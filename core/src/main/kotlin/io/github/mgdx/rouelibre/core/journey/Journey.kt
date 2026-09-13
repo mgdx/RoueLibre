@@ -93,7 +93,12 @@ public sealed interface DeparturePoint {
  * @property ride the bike leg, from wherever the bike stands to the arrival
  *   station.
  * @property walkToDestination the walk from the arrival station to the
- *   destination.
+ *   destination, and `null` where there is no ground between them: a journey
+ *   whose destination **is** the arrival station ends when the bike is handed
+ *   back, and a leg of no length is not a leg (SPEC §7.4.1). The mirror of
+ *   [walkToStation] above, and silent for the same reason — a leg nobody walks
+ *   would still be shown as a minute, since no duration is ever shown as less
+ *   than one.
  * @property riskPenalty the reliability penalty, expressed in time. It serves
  *   to rank the options, never to be announced as a duration: the time shown to
  *   the user is [travelTime].
@@ -106,13 +111,13 @@ public data class JourneyOption(
     public val docksAtArrival: Int,
     public val walkToStation: RouteLeg?,
     public val ride: RouteLeg,
-    public val walkToDestination: RouteLeg,
+    public val walkToDestination: RouteLeg?,
     public val riskPenalty: Duration,
 ) {
     /** The duration actually expected, penalty excluded: the legs, and nothing else. */
     public val travelTime: Duration
         get() = (walkToStation?.duration ?: Duration.ZERO) + ride.duration +
-            walkToDestination.duration
+            (walkToDestination?.duration ?: Duration.ZERO)
 
     /** The duration used for ranking: the expected time, raised by the risk. */
     public val rankingTime: Duration
@@ -121,7 +126,7 @@ public data class JourneyOption(
     /** The total distance covered, walking included. */
     public val distanceMetres: Int
         get() = (walkToStation?.distanceMetres ?: 0) + ride.distanceMetres +
-            walkToDestination.distanceMetres
+            (walkToDestination?.distanceMetres ?: 0)
 
     /**
      * The metres climbed over the whole journey, the two walks included.
@@ -135,7 +140,7 @@ public data class JourneyOption(
      */
     public val climbMetres: Int
         get() = (walkToStation?.ascentMetres ?: 0) + ride.ascentMetres +
-            walkToDestination.ascentMetres
+            (walkToDestination?.ascentMetres ?: 0)
 }
 
 /**

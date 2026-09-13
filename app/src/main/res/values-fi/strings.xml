@@ -406,6 +406,12 @@
     <!-- Read out in place of the drawing. %1$s is the climb of the ride, %2$s
          its lowest point above sea level and %3$s its highest. -->
     <string name="journey_detail_profile_description">Pyöräosuus nousee %1$s ja kulkee korkeudella %2$s–%3$s merenpinnan yläpuolella.</string>
+    <!-- The same sentence where the climb is too small, or the ride too short,
+         for the elevation samples to name one (SPEC §7.4): the drawing is worth
+         showing, the figure is not, and the sentence says only what is read off
+         the drawing. %1$s is the lowest point above sea level and %2$s the
+         highest. -->
+    <string name="journey_detail_profile_description_no_climb">Pyöräosuus kulkee korkeudella %1$s–%2$s merenpinnan yläpuolella.</string>
     <string name="journey_detail_availability_note">Pyörät ja paikat sellaisina kuin ne olivat reittiä laskettaessa.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->

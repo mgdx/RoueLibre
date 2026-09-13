@@ -171,6 +171,26 @@ class LengthsTest {
         assertTrue(!isReliefWorthDrawing(overMetres = 3_000, rangeMetres = 4.9))
     }
 
+    @Test
+    fun `a relief worth drawing may still have no climb to name`() {
+        // The two silences are not the same silence: the drawing is judged on
+        // the height between the lowest and the highest reading, the figure on
+        // the metres actually gained. A ride that runs down a valley, from
+        // ninety metres to seventy-five, has fifteen metres of shape to draw
+        // and nothing to call a climb.
+        //
+        // This is why the sentence read out in place of that drawing exists in
+        // two wordings (SPEC §7.4.1). The one naming a climb was read out with
+        // the climb missing — "the ride climbs null" — because a null argument
+        // is what `String.format` writes as "null"; the case is reachable, and
+        // it is this one.
+        assertTrue(isReliefWorthDrawing(overMetres = 4_000, rangeMetres = 15.0))
+        for (system in UnitSystem.entries) {
+            assertEquals(null, climb(0, overMetres = 4_000, system = system))
+            assertEquals(null, climb(4, overMetres = 4_000, system = system))
+        }
+    }
+
     // --------------------------------------------------------- no false precision --
 
     @Test

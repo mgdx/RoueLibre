@@ -60,8 +60,10 @@ object JourneyLines {
         )
 
     /**
-     * An option's walking legs: the two of an ordinary journey, and the one
-     * that ends a journey begun on a bike outside stations (SPEC §7.2.1).
+     * An option's walking legs: the two of an ordinary journey, and whichever
+     * of them the journey actually makes — a journey begun on a bike outside
+     * stations has no access walk (SPEC §7.2.1), and one whose destination is
+     * the arrival station has no final one (SPEC §7.4.1).
      */
     fun walkFeatures(option: JourneyOption): FeatureCollection = FeatureCollection.fromFeatures(
         listOfNotNull(option.walkToStation, option.walkToDestination).mapNotNull(::toFeature),

@@ -486,6 +486,12 @@
          distances already written with their unit, and none of them takes an
          ending here. -->
     <string name="journey_detail_profile_description">Bizikletazko zatiak %1$s igotzen ditu, itsas mailatik gorako %2$s eta %3$s bitartean.</string>
+    <!-- The same sentence where the climb is too small, or the ride too short,
+         for the elevation samples to name one (SPEC §7.4): the drawing is worth
+         showing, the figure is not, and the sentence says only what is read off
+         the drawing. %1$s is the lowest point above sea level and %2$s the
+         highest. -->
+    <string name="journey_detail_profile_description_no_climb">Bizikletazko zatia itsas mailatik gorako %1$s eta %2$s bitartean doa.</string>
     <!-- The counts shown are the ones the journey was worked out on: a station
          empties while one walks to it (SPEC §6). -->
     <string name="journey_detail_availability_note">Bizikletak eta leku libreak ibilbidea kalkulatu zeneko unekoak dira.</string>

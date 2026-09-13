@@ -201,4 +201,23 @@ class ShownMinutesTest {
         assertEquals(minutes.walkToDestination, minutes.walking)
         assertEquals(minutes.total, minutes.ride + minutes.walkToDestination)
     }
+
+    @Test
+    fun `a journey with no final walk shares its minutes between two legs`() {
+        // The mirror of the case above, at the other end: a journey whose
+        // destination is the arrival station is over when the bike is handed
+        // back, and a walk of no duration would have been given a minute the
+        // total then announced (SPEC §7.4.1).
+        val journey = option(
+            walkTo = 2.minutes + 5.seconds,
+            ride = 21.minutes + 30.seconds,
+            walkFrom = 2.minutes + 6.seconds,
+        ).copy(walkToDestination = null)
+        val minutes = journey.shownMinutes()
+
+        assertEquals(0, minutes.walkToDestination)
+        assertEquals(journey.travelTime.inShownMinutes(), minutes.total)
+        assertEquals(minutes.walkToStation, minutes.walking)
+        assertEquals(minutes.total, minutes.walkToStation + minutes.ride)
+    }
 }

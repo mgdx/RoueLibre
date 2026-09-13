@@ -381,6 +381,12 @@
     <string name="journey_detail_profile">Cykelturen, op og ned</string>
     <!-- Read out in place of the drawing. -->
     <string name="journey_detail_profile_description">Cykelturen stiger %1$s, mellem %2$s og %3$s over havets overflade.</string>
+    <!-- The same sentence where the climb is too small, or the ride too short,
+         for the elevation samples to name one (SPEC §7.4): the drawing is worth
+         showing, the figure is not, and the sentence says only what is read off
+         the drawing. %1$s is the lowest point above sea level and %2$s the
+         highest. -->
+    <string name="journey_detail_profile_description_no_climb">Cykelturen forløber mellem %1$s og %2$s over havets overflade.</string>
     <string name="journey_detail_availability_note">Cykler og ledige pladser, som de var, da rejsen blev beregnet.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
