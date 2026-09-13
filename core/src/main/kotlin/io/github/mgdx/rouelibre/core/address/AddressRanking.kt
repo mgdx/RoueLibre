@@ -100,6 +100,25 @@ private const val COVERAGE_WEIGHT = 0.15
 private const val WORDS_A_GUESS_NEEDS = 2
 
 /**
+ * How many words a finished text must write before its first result becomes a
+ * journey without anyone choosing it (SPEC §7.8).
+ *
+ * The same two, and for the same reason read the other way round. "Reims" was
+ * answered with "Rue De Reims", a street of another municipality altogether,
+ * and "rue" with "Grande Rue": one word is what a share hands out by accident
+ * just as a sentence does, and a finished text is only finished in the sense
+ * that nobody is going to add a letter to it — it is not thereby an address.
+ * What §7.8 calls finished text is **an address written in full**, and an
+ * address written in full never arrives as one bare word: its type, its
+ * municipality or its number stands beside the name.
+ *
+ * A lone word is not dropped for that, it merely stops choosing: it falls to
+ * the second reading, which offers what it finds as a list. "Boulingrin" is a
+ * street name entire, and the answer to it is to ask.
+ */
+private const val WORDS_A_DESTINATION_NEEDS = 2
+
+/**
  * How far a query word may reach into an indexed one (SPEC §4.3, §7.8).
  *
  * Not a matter of strictness but of what the text is. A query typed into the
@@ -117,6 +136,11 @@ public enum class WordMatching {
      *
      * What a finished text calls for: "on" is not "Onze Novembre", and taking
      * it for that would invent a destination out of a sentence that names none.
+     *
+     * And the text has to write an address, not a word: its first result
+     * becomes the journey, so it must carry [WORDS_A_DESTINATION_NEEDS] words
+     * of its own before it may designate one. Below that it designates
+     * nothing here, and the sentence reading takes over with a list.
      */
     WholeWords,
 
@@ -130,7 +154,9 @@ public enum class WordMatching {
      * that the street answering the most words of the query still comes first
      * — and what is left has to name a street by [WORDS_A_GUESS_NEEDS] of its
      * words written in full, one of them a word of its proper name, so that a
-     * sentence naming no address comes back empty.
+     * sentence naming no address comes back empty — one word where the whole
+     * of the text is that one word, a share of "Boulingrin" having no sentence
+     * to have picked it out of by accident.
      *
      * It is only ever asked **after** [WholeWords] has answered nothing, and
      * what it brings back is a list to choose from and never a destination:
@@ -162,8 +188,19 @@ public fun rankStreets(
 ): List<ScoredStreet> {
     if (query.isEmpty || limit <= 0) return emptyList()
 
+    // What the query itself designates a street by, the words that carry no
+    // meaning of their own set aside. A finished text needs enough of it to
+    // name an address outright before its first result may become a journey;
+    // and a text made of a single such word is read as the sentence it is not,
+    // so that it is offered rather than dropped (SPEC §7.8).
+    val designating = query.designatingWordCount(stopWords)
+    if (matching == WordMatching.WholeWords && designating < WORDS_A_DESTINATION_NEEDS) {
+        return emptyList()
+    }
+    val wordsAGuessNeeds = minOf(WORDS_A_GUESS_NEEDS, designating)
+
     val scored = candidates.mapNotNull { street ->
-        val quality = matchQualityOf(street, query.terms, stopWords, matching)
+        val quality = matchQualityOf(street, query.terms, stopWords, matching, wordsAGuessNeeds)
         if (quality <= 0.0) {
             null
         } else {
@@ -187,6 +224,20 @@ public fun rankStreets(
         .take(limit)
 }
 
+/**
+ * How many words of the query designate a street by themselves.
+ *
+ * The stop words and the two-letter fragments are left out, being what
+ * [matchQualityOf] already refuses to rule a street in or out on; the house
+ * number is counted in, being exactly what stands beside a street's name in an
+ * address written in full — "12 Boulingrin" names one where "Boulingrin" alone
+ * only proposes it.
+ */
+private fun AddressQuery.designatingWordCount(stopWords: Set<String>): Int {
+    val words = terms.count { it !in stopWords && it.length > SHORT_TERM_LENGTH }
+    return words + if (houseNumber == null) 0 else 1
+}
+
 /** The tier a match score belongs to. */
 private fun qualityTierOf(quality: Double): Int = floor(quality / QUALITY_TIER).toInt()
 
@@ -198,14 +249,15 @@ private fun qualityTierOf(quality: Double): Int = floor(quality / QUALITY_TIER).
  *   Read out of a sentence ([WordMatching.WholeWordsInSentence]), an unmatched
  *   word lowers the score instead of cancelling it — so that the street
  *   answering the most words of the query comes first — and the score is 0
- *   unless [WORDS_A_GUESS_NEEDS] words were found in full, one of them a word
- *   of the proper name.
+ *   unless [wordsAGuessNeeds] words were found in full, one of them a word of
+ *   the proper name.
  */
 private fun matchQualityOf(
     street: SearchableStreet,
     terms: List<String>,
     stopWords: Set<String>,
     matching: WordMatching,
+    wordsAGuessNeeds: Int,
 ): Double {
     val nameWords = street.normalizedName.split(' ').filter { it.isNotEmpty() }
     val typeWords = street.normalizedType?.split(' ')?.filter { it.isNotEmpty() }.orEmpty()
@@ -279,8 +331,10 @@ private fun matchQualityOf(
     // And that word cannot stand alone either, or an ordinary sentence goes on
     // designating streets by accident — "bonne journée" offering "Chemin Bonne
     // Nouvelle". An address written into a sentence never arrives as one bare
-    // word: see [WORDS_A_GUESS_NEEDS].
-    if (sentence && (!namedInFull || wordsFoundInFull < WORDS_A_GUESS_NEEDS)) return 0.0
+    // word: see [WORDS_A_GUESS_NEEDS]. A text that is itself one word is the
+    // exception, and [rankStreets] lowers the count for it: there the word was
+    // not handed out by a sentence, it is the whole of what was shared.
+    if (sentence && (!namedInFull || wordsFoundInFull < wordsAGuessNeeds)) return 0.0
 
     val termScore = weightedScore / totalWeight
     // The share of the name's words the query actually asked for: it rewards

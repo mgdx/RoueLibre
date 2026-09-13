@@ -2,6 +2,7 @@ package io.github.mgdx.rouelibre.core.address
 
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -390,5 +391,86 @@ class AddressRankingTest {
                 matching = WordMatching.WholeWordsInSentence,
             ),
         )
+    }
+
+    // ------------------------------- a text shared from another application --
+
+    /**
+     * The street a shared text is taken to name, if any (SPEC §7.8).
+     *
+     * The first of the two readings the screen runs: a finished text, whose
+     * first result becomes a journey without anybody choosing it.
+     */
+    private fun chosenFor(text: String, candidates: List<SearchableStreet>): Long? =
+        rank(text, candidates, origin = centre, matching = WordMatching.WholeWords)
+            .firstOrNull()
+
+    /**
+     * The streets a shared text is offered, if any (SPEC §7.8).
+     *
+     * The second reading, in the order the screen runs the two: it is only ever
+     * reached where the finished text answered nothing, and what it brings back
+     * is a list of at most five the user picks from or leaves.
+     */
+    private fun offeredFor(text: String, candidates: List<SearchableStreet>): List<Long> =
+        if (chosenFor(text, candidates) != null) {
+            emptyList()
+        } else {
+            rank(
+                text,
+                candidates,
+                origin = centre,
+                limit = 5,
+                matching = WordMatching.WholeWordsInSentence,
+            )
+        }
+
+    /** The streets of the report, in the conurbation it was written in. */
+    private val rueDeReims = street("Rue De Reims", city = "Champigny")
+    private val grandeRue = street("Grande Rue", city = "Reims")
+    private val vesle = street("Rue de Vesle", city = "Reims")
+    private val jeanSansPeur = street("Rue Jean Sans Peur", city = "Reims")
+    private val reimsStreets = listOf(rueDeReims, grandeRue, vesle, jeanSansPeur)
+
+    @Test
+    fun `a shared word alone is not turned into a destination`() {
+        // What the report opened on: "Reims" became a journey to "Rue De
+        // Reims", a street of another municipality, and "rue" one to "Grande
+        // Rue" — neither of them chosen by anybody. One word is what a share
+        // hands out by accident exactly as a sentence does (SPEC §7.8).
+        assertNull(chosenFor("Reims", reimsStreets))
+        assertNull(chosenFor("rue", reimsStreets))
+    }
+
+    @Test
+    fun `a shared word alone is offered instead of being dropped`() {
+        // It stops choosing, it does not stop answering: the street whose own
+        // name holds the word is put up as a list, and the user takes it or
+        // leaves it. A street type names no street, there as anywhere else,
+        // and "rue" only reaches "Grande Rue" because that is the whole of
+        // that street's proper name.
+        assertEquals(listOf(rueDeReims.id), offeredFor("Reims", reimsStreets))
+        assertEquals(listOf(grandeRue.id), offeredFor("rue", reimsStreets))
+        // And a word the index knows nothing about still answers nothing.
+        assertEquals(emptyList<Long>(), offeredFor("coucou", reimsStreets))
+    }
+
+    @Test
+    fun `a shared address written in full still names its street outright`() {
+        // The counterpart, and what must not move: an address written whole
+        // carries its type, its municipality and its number beside the name,
+        // and it becomes the journey without a question being asked.
+        assertEquals(vesle.id, chosenFor("12 rue de Vesle, Reims", reimsStreets))
+        assertEquals(emptyList<Long>(), offeredFor("12 rue de Vesle, Reims", reimsStreets))
+    }
+
+    @Test
+    fun `a shared sentence naming no address goes on designating nothing`() {
+        // The sentence the two-word rule was written for: "sans" matches "Rue
+        // Jean Sans Peur" in full and is one word all the same.
+        val text = "coucou sans aucune adresse dedans"
+
+        assertNull(chosenFor(text, reimsStreets))
+        assertEquals(emptyList<Long>(), offeredFor(text, reimsStreets))
     }
 }
