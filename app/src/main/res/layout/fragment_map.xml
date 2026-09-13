@@ -210,6 +210,16 @@
         text size, while 48 dp is only what the finger needs. Fixed, that
         figure cut the bottom off "Free docks" at ×2.0 — SPEC §7 has the height
         give way, never the letters.
+
+        It fills its outline with the theme's surface, which `Widget.RoueLibre.
+        Toggle` leaves transparent everywhere else. A toggle on a settings
+        screen stands on that surface already; this one stands on the map, and
+        the map is drawn behind the word — a station's disc crossed the middle
+        of "Bikes", and streets and parks ran through the rest of it. The five
+        icon buttons of this screen are filled for the same reason, and the
+        freshness label beside them carries `pill_surface`, which is this same
+        colour under another name. The token holds in both themes, the map
+        being very pale in one and very dark in the other.
     -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mode_toggle"
@@ -219,6 +229,7 @@
         android:layout_marginStart="@dimen/space_m"
         android:layout_marginBottom="@dimen/space_m"
         android:minHeight="@dimen/touch_target_min"
+        app:backgroundTint="@color/surface"
         app:layout_constraintBottom_toTopOf="@id/attribution"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Vélos" />
@@ -229,6 +240,10 @@
         here changes nothing about the journey screen, and the other way round.
         Shown only where the network lends both kinds, and only while bikes are
         being counted — a kind has nothing to say about a free dock.
+
+        Filled like the toggle it stands beside, and for that toggle's reason:
+        the two are one row over the map, and one of them left see-through
+        would read as the broken half of a pair.
     -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bike_kind_filter"
@@ -238,6 +253,7 @@
         android:layout_marginStart="@dimen/space_s"
         android:minHeight="@dimen/touch_target_min"
         android:visibility="gone"
+        app:backgroundTint="@color/surface"
         app:layout_constraintBottom_toBottomOf="@id/mode_toggle"
         app:layout_constraintStart_toEndOf="@id/mode_toggle"
         app:layout_constraintTop_toTopOf="@id/mode_toggle"

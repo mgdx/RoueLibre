@@ -87,6 +87,33 @@
     </style>
 
     <!--
+        The same label where the line carries a formatted value — a size, a
+        date — and not words alone.
+
+        Capitals are not neutral over a unit symbol. French writes a megabyte
+        "Mo" and a kilobyte "ko", and upper-cased they stop being symbols and
+        start being words: "10,8 MO" on the storage screen, beside a "9,1 Mo à
+        télécharger" set in ordinary text that had it right. English never
+        showed the fault, "MB" and "KB" being capitals already, which is how it
+        shipped.
+
+        The other way out was to cut the value away from the words around it
+        and shout only the words — but "%1$s installed on the device" would
+        then be two views and two strings, and the order of the two is the
+        translator's to choose, not the layout's. So the capitals go, on the
+        lines that carry a value and on no others: a label made of words alone
+        keeps them, the small spaced capitals being a decision of the project
+        rather than an accident.
+
+        Everything else is the parent's, letter spacing included, so a line
+        giving up its capitals keeps the size, the colour and the rhythm of the
+        labels standing beside it.
+    -->
+    <style name="TextAppearance.RoueLibre.Label.Value">
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!--
         Every piece of running text in the application, justified.
 
         Hung on the theme's `android:textViewStyle` rather than written into
