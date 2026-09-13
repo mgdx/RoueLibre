@@ -633,9 +633,39 @@ class JourneyPlannerTest {
 
         val best = plan.best
         assertEquals(
-            best.accessWalk.duration + best.ride.duration + best.walkToDestination.duration,
+            best.accessWalk.duration + best.ride.duration + best.finalWalk.duration,
             best.travelTime,
         )
+    }
+
+    @Test
+    fun `carries no final walk when the destination is the arrival station`() = runTest {
+        // "Go here" pressed on a station's own sheet: the journey ends when the
+        // bike is handed back, and the leg from that station to that station
+        // covers no ground at all. Carried, it would reach the screens as
+        // "walk to the destination · 0 m · 1 min" — no duration is ever shown
+        // as less than a minute — and that minute would be added to a total
+        // nobody spends (SPEC §7.4.1).
+        val arrival = station("arrivee", at(0.0, 3900.0))
+        val stations = listOf(station("depart", at(0.0, 100.0)), arrival)
+        val planner = JourneyPlanner(FakeRouter())
+
+        val plan = planner.plan(
+            origin,
+            arrival.station.position,
+            stations,
+        ) as JourneyPlan.Found
+
+        val best = plan.best
+        assertEquals(null, best.walkToDestination)
+        assertEquals(best.accessWalk.duration + best.ride.duration, best.travelTime)
+        assertEquals(best.accessWalk.distanceMetres + best.ride.distanceMetres, best.distanceMetres)
+        // And the minutes every screen reads: the walk is worth none, so the
+        // total is the two legs that are lived and the figures still add up.
+        val minutes = best.shownMinutes()
+        assertEquals(0, minutes.walkToDestination)
+        assertEquals(minutes.walkToStation, minutes.walking)
+        assertEquals(minutes.walkToStation + minutes.ride, minutes.total)
     }
 
     @Test
@@ -1184,12 +1214,12 @@ class JourneyPlannerTest {
         assertEquals(before.best.travelTime, now.best.travelTime)
         assertEquals(before.best.accessWalk.duration, now.best.accessWalk.duration)
         assertEquals(before.best.ride.duration, now.best.ride.duration)
-        assertEquals(before.best.walkToDestination.duration, now.best.walkToDestination.duration)
+        assertEquals(before.best.finalWalk.duration, now.best.finalWalk.duration)
 
         // Then that a walking leg carries the engine's own figure, untouched.
         // The comparison above would still pass if both sides were scaled by the
         // same wrong factor; this pins the figure to what the engine returned.
-        for (walk in listOf(now.best.accessWalk, now.best.walkToDestination)) {
+        for (walk in listOf(now.best.accessWalk, now.best.finalWalk)) {
             val asTheEngineTraced =
                 (walk.distanceMetres / FakeRouter.WALKING_METRES_PER_SECOND).roundToInt().seconds
             assertEquals(asTheEngineTraced, walk.duration)
@@ -1414,8 +1444,8 @@ class JourneyPlannerTest {
         )
         assertEquals(plain.best.accessWalk.duration, assisted.best.accessWalk.duration)
         assertEquals(
-            plain.best.walkToDestination.duration,
-            assisted.best.walkToDestination.duration,
+            plain.best.finalWalk.duration,
+            assisted.best.finalWalk.duration,
         )
     }
 
@@ -1572,7 +1602,7 @@ class JourneyPlannerTest {
         // one bike, and nothing else is standing there (SPEC §7.2.1).
         assertEquals(1, best.bikesAtDeparture)
         assertEquals(mapOf("electrique" to 1), best.bikesByVehicleTypeAtDeparture)
-        assertEquals(best.ride.duration + best.walkToDestination.duration, best.travelTime)
+        assertEquals(best.ride.duration + best.finalWalk.duration, best.travelTime)
     }
 
     @Test
@@ -1798,3 +1828,12 @@ private val JourneyOption.departureStation: Station
  */
 private val JourneyOption.accessWalk: RouteLeg
     get() = checkNotNull(walkToStation) { "an ordinary journey walks to its departure station" }
+
+/**
+ * The walk that ends a journey, which every journey below makes (SPEC §6).
+ *
+ * It is `null` only where the destination is the arrival station itself, and
+ * the one test that asks for such a journey checks that directly.
+ */
+private val JourneyOption.finalWalk: RouteLeg
+    get() = checkNotNull(walkToDestination) { "this journey walks to its destination" }

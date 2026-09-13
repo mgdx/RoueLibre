@@ -431,26 +431,52 @@ class JourneyDetailFragment : Fragment() {
         views.profile.profile = profile
         // A drawing says nothing to a screen reader: the sentence it stands for
         // is read instead, and it is the one the drawing draws.
-        views.profile.contentDescription = getString(
-            R.string.journey_detail_profile_description,
-            requireContext().formatClimb(ride.ascentMetres, ride.distanceMetres),
-            views.profile.lowestLabel,
-            views.profile.highestLabel,
-        )
+        //
+        // Two sentences, because the climb is not always sayable while the
+        // drawing is worth showing. What silences the figure is measured on the
+        // metres gained — under five of them, or over less than three hundred
+        // metres of ground, they are the error between two SRTM samples rather
+        // than the ground (see `writeClimb`) — while what silences the drawing
+        // is measured on the height between its lowest and its highest reading.
+        // A ride that mostly goes down has a shape to draw and no climb to
+        // name. The clause is then dropped rather than filled with nothing: a
+        // null argument is written "null" by `String.format`, which is what the
+        // screen reader used to say — "the ride climbs null" — and an empty one
+        // would leave the comma behind it with nothing to separate.
+        val climb = requireContext().formatClimb(ride.ascentMetres, ride.distanceMetres)
+        val lowestRead = views.profile.lowestLabel
+        val highestRead = views.profile.highestLabel
+        views.profile.contentDescription = if (climb == null) {
+            getString(
+                R.string.journey_detail_profile_description_no_climb,
+                lowestRead,
+                highestRead,
+            )
+        } else {
+            getString(
+                R.string.journey_detail_profile_description,
+                climb,
+                lowestRead,
+                highestRead,
+            )
+        }
     }
 
     /** One leg of the journey, and whether a bike is ridden along it. */
     private data class Leg(val route: RouteLeg, val isRide: Boolean)
 
     private fun legsOf(plan: JourneyPlan): List<Leg> = when (plan) {
-        // The access walk is absent from a journey begun at a bike outside
-        // stations: the rider is standing beside it, and no walk to it was
-        // computed (SPEC §6). The journey then reads as a ride, a station and
-        // a walk.
+        // Either walk may be absent, and the journey then reads in two legs.
+        // The access walk goes on a journey begun at a bike outside stations:
+        // the rider is standing beside it, and no walk to it was computed
+        // (SPEC §6). The final one goes where the destination is the arrival
+        // station itself: the journey ends when the bike is handed back, and a
+        // leg of no length would be shown as a minute nobody spends
+        // (SPEC §7.4.1).
         is JourneyPlan.Found -> listOfNotNull(
             plan.best.walkToStation?.let { Leg(it, isRide = false) },
             Leg(plan.best.ride, isRide = true),
-            Leg(plan.best.walkToDestination, isRide = false),
+            plan.best.walkToDestination?.let { Leg(it, isRide = false) },
         )
 
         is JourneyPlan.WalkOnly -> listOf(Leg(plan.directWalk, isRide = false))
@@ -572,12 +598,17 @@ class JourneyDetailFragment : Fragment() {
                 station = option.arrivalStation,
             ),
         )
-        addLeg(
-            icon = R.drawable.ic_walk,
-            label = getString(R.string.journey_step_to_destination),
-            leg = option.walkToDestination,
-            minutes = minutes.last(),
-        )
+        // Nothing follows the arrival station where the destination is that
+        // station: the journey is over, and a row saying "walk to the
+        // destination · 0 m · 1 min" would invent a minute (SPEC §7.4.1).
+        option.walkToDestination?.let { walk ->
+            addLeg(
+                icon = R.drawable.ic_walk,
+                label = getString(R.string.journey_step_to_destination),
+                leg = walk,
+                minutes = minutes.last(),
+            )
+        }
     }
 
     /**

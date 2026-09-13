@@ -429,6 +429,12 @@
     <!-- Read out in place of the drawing. %1$s is the climb of the ride, %2$s
          its lowest point above sea level and %3$s its highest. -->
     <string name="journey_detail_profile_description">Το ποδηλατικό σκέλος ανεβαίνει %1$s, ανάμεσα σε %2$s και %3$s πάνω από την επιφάνεια της θάλασσας.</string>
+    <!-- The same sentence where the climb is too small, or the ride too short,
+         for the elevation samples to name one (SPEC §7.4): the drawing is worth
+         showing, the figure is not, and the sentence says only what is read off
+         the drawing. %1$s is the lowest point above sea level and %2$s the
+         highest. -->
+    <string name="journey_detail_profile_description_no_climb">Το ποδηλατικό σκέλος κινείται ανάμεσα σε %1$s και %2$s πάνω από την επιφάνεια της θάλασσας.</string>
     <!-- Greek: the figures beside this note are `bikes_available` and
          `docks_available`, so the docks named here are the free ones. -->
     <string name="journey_detail_availability_note">Ποδήλατα και ελεύθερες θέσεις όπως ήταν τη στιγμή που υπολογίστηκε η διαδρομή.</string>

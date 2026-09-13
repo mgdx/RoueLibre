@@ -374,6 +374,12 @@
     <string name="journey_detail_profile">De rit, omhoog en omlaag</string>
     <!-- Read out in place of the drawing. -->
     <string name="journey_detail_profile_description">De rit stijgt %1$s, tussen %2$s en %3$s boven zeeniveau.</string>
+    <!-- The same sentence where the climb is too small, or the ride too short,
+         for the elevation samples to name one (SPEC §7.4): the drawing is worth
+         showing, the figure is not, and the sentence says only what is read off
+         the drawing. %1$s is the lowest point above sea level and %2$s the
+         highest. -->
+    <string name="journey_detail_profile_description_no_climb">De rit loopt tussen %1$s en %2$s boven zeeniveau.</string>
     <string name="journey_detail_availability_note">Fietsen en vrije plaatsen zoals ze waren toen de reis werd berekend.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->

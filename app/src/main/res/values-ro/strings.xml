@@ -446,6 +446,12 @@
     <!-- Read out in place of the drawing. %1$s is the climb of the ride, %2$s
          its lowest point above sea level and %3$s its highest. -->
     <string name="journey_detail_profile_description">Etapa cu bicicleta urcă %1$s, între %2$s și %3$s deasupra nivelului mării.</string>
+    <!-- The same sentence where the climb is too small, or the ride too short,
+         for the elevation samples to name one (SPEC §7.4): the drawing is worth
+         showing, the figure is not, and the sentence says only what is read off
+         the drawing. %1$s is the lowest point above sea level and %2$s the
+         highest. -->
+    <string name="journey_detail_profile_description_no_climb">Etapa cu bicicleta se desfășoară între %1$s și %2$s deasupra nivelului mării.</string>
     <string name="journey_detail_availability_note">Bicicletele și locurile libere, așa cum erau când s-a calculat traseul.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->

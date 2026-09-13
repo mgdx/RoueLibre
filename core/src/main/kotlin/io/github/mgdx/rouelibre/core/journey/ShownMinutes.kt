@@ -83,7 +83,9 @@ public fun apportionMinutes(durations: List<Duration>): List<Int> {
  *   this is a figure to add up and not a leg to draw — the legs are read off
  *   the journey itself.
  * @property ride the bike leg.
- * @property walkToDestination the walk that ends the journey.
+ * @property walkToDestination the walk that ends the journey, and zero where
+ *   the destination is the arrival station itself: there is no such walk
+ *   either, and for the same reason (SPEC §7.4.1).
  */
 public data class JourneyMinutes(
     public val walkToStation: Int,
@@ -106,21 +108,23 @@ public data class JourneyMinutes(
  * and the detail screen cannot round the same journey differently.
  */
 public fun JourneyOption.shownMinutes(): JourneyMinutes {
-    // The access walk is apportioned with the others where there is one, and
-    // left out of the sharing altogether where there is not: a leg of no
-    // duration would still be given its minute by `apportionMinutes`, which
-    // never shows less than one, and that minute would be added to a total
-    // nobody spends (SPEC §7.2.1).
+    // A walk the journey does not make is left out of the sharing altogether
+    // rather than apportioned as a leg of no duration: `apportionMinutes` never
+    // shows less than one minute, so such a leg would be given a minute, and
+    // that minute would be added to a total nobody spends. Either end may be
+    // missing — no access walk on a journey begun at a bike outside stations
+    // (SPEC §7.2.1), no final walk where the destination is the arrival station
+    // itself (SPEC §7.4.1).
     val legs = listOfNotNull(
         walkToStation?.duration,
         this.ride.duration,
-        walkToDestination.duration,
+        walkToDestination?.duration,
     )
     val minutes = apportionMinutes(legs)
     val hasAccessWalk = walkToStation != null
     return JourneyMinutes(
         walkToStation = if (hasAccessWalk) minutes.first() else 0,
         ride = minutes[if (hasAccessWalk) 1 else 0],
-        walkToDestination = minutes.last(),
+        walkToDestination = if (walkToDestination != null) minutes.last() else 0,
     )
 }

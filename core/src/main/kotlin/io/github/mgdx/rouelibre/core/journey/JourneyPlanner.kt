@@ -422,7 +422,7 @@ public class JourneyPlanner(
                     docksAtArrival = arrival.count,
                     walkToStation = null,
                     ride = ride,
-                    walkToDestination = walkFrom,
+                    walkToDestination = walkFrom.takeIfItCoversGround(),
                     riskPenalty = riskOf(
                         bikesAtRisk = 1,
                         docksAtRisk = arrival.countAtRisk,
@@ -776,7 +776,7 @@ public class JourneyPlanner(
                     docksAtArrival = pair.arrival.count,
                     walkToStation = pair.walkToStation,
                     ride = ride,
-                    walkToDestination = pair.walkToDestination,
+                    walkToDestination = pair.walkToDestination.takeIfItCoversGround(),
                     riskPenalty = riskOf(
                         pair.departure.countAtRisk,
                         pair.arrival.countAtRisk,
@@ -1039,3 +1039,29 @@ private fun RoutingFailure.decisiveOver(reason: NoBikeJourney): NoBikeJourney = 
     RoutingFailure.GraphMissing, RoutingFailure.OutsideCoverage -> toNoBikeJourney()
     else -> reason
 }
+
+/**
+ * The leg, or nothing at all where there is no ground to cover (SPEC §7.4.1).
+ *
+ * The final walk of a journey whose destination **is** the arrival station —
+ * "go here" pressed on a station's own sheet — runs from that station to that
+ * station: the engine traces it, and it is zero metres long. A leg of no length
+ * is not a leg. Left in, it reaches the screens as "walk to the destination ·
+ * 0 m · 1 min", no duration ever being shown as less than a minute
+ * (see `inShownMinutes`), and that minute is then added to a total nobody
+ * spends.
+ *
+ * It is dropped here rather than on the screens so that every reading of the
+ * journey drops it the same way: the result card, its detail, the drawing of
+ * the steps and the walking figure of the summary all count the legs this
+ * option carries. It changes no choice of pair — a leg of no length takes no
+ * time, so it weighed nothing in the comparison that picked this option.
+ *
+ * **The threshold is zero metres exactly, and deliberately not a few.** What is
+ * recognised here is the absence of ground between two points, which the engine
+ * reports as no ground at all; any wider a margin would be a coefficient
+ * nobody measured (SPEC §14) and would silence a walk somebody really makes.
+ * Four metres of pavement are four metres, and they are shown as the minute
+ * every other short leg is shown as.
+ */
+private fun RouteLeg.takeIfItCoversGround(): RouteLeg? = takeIf { it.distanceMetres > 0 }

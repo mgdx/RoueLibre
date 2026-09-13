@@ -457,6 +457,12 @@
     <!-- Read out in place of the drawing. %1$s is the climb of the ride, %2$s
          its lowest point above sea level and %3$s its highest. -->
     <string name="journey_detail_profile_description">El trayecto en bici sube %1$s, entre %2$s y %3$s de altitud.</string>
+    <!-- The same sentence where the climb is too small, or the ride too short,
+         for the elevation samples to name one (SPEC §7.4): the drawing is worth
+         showing, the figure is not, and the sentence says only what is read off
+         the drawing. %1$s is the lowest point above sea level and %2$s the
+         highest. -->
+    <string name="journey_detail_profile_description_no_climb">El trayecto en bici discurre entre %1$s y %2$s de altitud.</string>
     <string name="journey_detail_availability_note">Bicis y espacios libres tal como estaban al calcular la ruta.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
