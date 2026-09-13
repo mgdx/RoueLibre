@@ -45,6 +45,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import collections
 import csv
 import io
 import json
@@ -144,6 +145,50 @@ MINIMUM_STATIONS = 10
 # big to serve: it is waiting to be split into the conurbations it covers, each
 # of which is an ordinary city of this catalogue.
 COUNTRY_WIDE_AREA = 500_000
+
+# GBFS lets a producer say outright that a station is a painted zone and not a
+# rack: `is_virtual_station`. Bird and Flamingo set it on every station they
+# publish, Indego, HELLO CYCLING, OV-fiets and Styr & Ställ on none, so the
+# answer is read rather than guessed at. A network holding a few virtual
+# stations among its racks is still a docked network, which is why this reads a
+# majority and not a single one.
+VIRTUAL_STATION_SHARE = 0.5
+
+# A station is a dock whether or not a bike stands in it, so a network counting
+# real docks implies a slot at essentially every station. Measured on the feeds
+# on 12 September 2026: not one station implies none at Indego in Philadelphia,
+# at Los Angeles, Milwaukee, Las Vegas, Buffalo or the Dutch OV-fiets, and the
+# two smallest of that set reach 3.2% (Toruń) and 4.5% (AW-bike). A fleet left
+# anywhere inside a zone implies none wherever no bike happens to stand, which
+# is 19.6% of Veloleo's stations in Braunschweig, 24.6% of meinSiggi's in
+# Bielefeld, 34.4% of Sprintrad's in Hanover and 41.7% of Roche's. This line
+# sits at twice the highest docked network and half the lowest free-floating
+# one, so neither side is decided by where exactly it was drawn.
+EMPTY_DOCK_SHARE = 0.1
+
+# The free-dock count is the one figure §6 actually consumes, and some feeds
+# publish it frozen: OV-fiets answers one free dock at each of its 284 stations,
+# Styr & Ställ, Toruń, AW-bike and five others answer nought at every one of
+# theirs. Frozen at nought, no journey can ever end anywhere in the network,
+# `canAcceptBike` requiring a free dock; frozen at one, every station promises
+# room it never measured. Neither is caught by the two lines below, which read
+# the bikes and the free docks added together and see that sum move as bikes
+# come and go. Measured on the networks that do count: the commonest value
+# covers 60% of Mława's stations, the most uniform of them, 46% of Redding's
+# and 27% of Tokyo's, against 94% to 100% for every frozen feed.
+FROZEN_FREE_DOCK_SHARE = 0.8
+
+# A free-dock count repeated at nearly every station of a network was written
+# once for all of them rather than counted at each. MobiData BW publishes forty
+# docks at 1,620 of Call a Bike's 1,621 stations, and at every RegioRad
+# Stuttgart station that answers; the figure is a placeholder, and believing it
+# would have §6 promise room at an arrival station nobody measured. A network
+# that counts its own docks never looks like that, because its stations differ:
+# the commonest figure covers 12% of Indego's stations in Philadelphia, 13% of
+# Milwaukee's and 11% of the Dutch OV-fiets. This line sits far above every
+# measured network and far below both placeholders, which is what lets it tell
+# them apart without arbitrating anything in between.
+PLACEHOLDER_DOCK_SHARE = 0.9
 
 # Every attempt is retried once: a name resolution that fails for a second is
 # not a network that does not exist, and a single miss would drop a real
@@ -493,6 +538,10 @@ def probe_feeds(candidate: dict) -> dict:
     survey["stationCount"] = len(positioned)
     survey["unpositionedStations"] = len(stations) - len(positioned)
     survey["capacityTotal"] = sum(whole_number(station.get("capacity")) for station in stations)
+    if stations:
+        survey["virtualStationShare"] = round(
+            sum(1 for station in stations if station.get("is_virtual_station")) / len(stations), 4
+        )
     if positioned:
         box = {
             "south": min(latitude for latitude, _ in positioned),
@@ -512,9 +561,6 @@ def probe_feeds(candidate: dict) -> dict:
     if "station_status" in feeds:
         try:
             live = fetch_json(feeds["station_status"])["data"]["stations"]
-            survey["reportsDocks"] = any(
-                "num_docks_available" in station for station in live
-            )
             survey["bikesAvailable"] = sum(
                 whole_number(
                     station.get("num_bikes_available")
@@ -522,6 +568,39 @@ def probe_feeds(candidate: dict) -> dict:
                 )
                 for station in live
             )
+            # A station's docks are the bikes standing in it plus the slots
+            # left free. That sum is what a feed omitting the static `capacity`
+            # field still says about the station, and many docked networks omit
+            # it — Philadelphia's Indego, Los Angeles, the Dutch OV-fiets.
+            docks = [
+                whole_number(
+                    station.get("num_bikes_available")
+                    or station.get("num_vehicles_available")
+                )
+                + whole_number(station.get("num_docks_available"))
+                for station in live
+                if station.get("num_docks_available") is not None
+            ]
+            survey["reportsDocks"] = bool(docks)
+            survey["dockedStations"] = len(docks)
+            survey["dockTotal"] = sum(docks)
+            if docks:
+                commonest = collections.Counter(docks).most_common(1)[0][1]
+                survey["commonestDockShare"] = round(commonest / len(docks), 4)
+                survey["emptyDockShare"] = round(
+                    sum(1 for slots in docks if slots == 0) / len(docks), 4
+                )
+            # The free docks on their own, which is the figure §6 reads to
+            # promise the bike can be returned. A feed can publish it frozen
+            # while the sum above still moves, the bikes moving underneath it.
+            free = [
+                station["num_docks_available"]
+                for station in live
+                if station.get("num_docks_available") is not None
+            ]
+            if free:
+                commonest = collections.Counter(free).most_common(1)[0][1]
+                survey["commonestFreeDockShare"] = round(commonest / len(free), 4)
         except Exception:  # noqa: BLE001 — optional enrichment
             pass
 
@@ -613,6 +692,52 @@ def is_motor_vehicle(declared: dict) -> bool:
     return declared.get("propulsion_type") not in PEDALLED_PROPULSIONS
 
 
+def dock_verdict(survey: dict) -> str | None:
+    """Say what is wrong with a network's docks, or nothing if they are real.
+
+    §6 promises that the arrival station can take the bike, so the live count
+    of free docks is required of every network and nothing replaces it: a feed
+    declaring forty docks a station and never saying how many are free leaves
+    the promise unverifiable at the moment somebody rides there.
+
+    What that count is weighed against has changed. A declared `capacity`
+    settles it where the producer publishes one. Where the field is absent the
+    live count answers alone, since a station's docks are its bikes plus its
+    free slots, and that reading is new: an absent capacity was read as a
+    free-floating fleet until 12 September 2026, which refused Philadelphia,
+    Los Angeles, Milwaukee and the Dutch OV-fiets over a field they simply do
+    not publish.
+
+    Read alone, the count is only believed of stations the producer does not
+    itself call painted zones, and then only when it tells them apart, because
+    it lies in three recognisable ways. A fleet left anywhere inside a zone
+    implies no slot at all wherever no bike stands, which `EMPTY_DOCK_SHARE`
+    catches. An aggregator writes one figure for a whole network, which
+    `PLACEHOLDER_DOCK_SHARE` catches. And a feed can freeze the free docks
+    themselves while the sum still moves under it, which
+    `FROZEN_FREE_DOCK_SHARE` catches — the sharpest of the three, since a
+    frozen nought makes every journey in the network impossible to plan.
+
+    All four of those readings are skipped where a capacity is declared, and
+    that is what leaves the networks already served exactly where they were:
+    Donkey Republic publishes nothing but virtual stations and gives each one a
+    capacity, and that declared figure has always been the thing believed.
+    """
+    if not survey.get("dockedStations"):
+        return "no-docks"
+    if survey.get("capacityTotal", 0) > 0:
+        return None
+    if survey.get("virtualStationShare", 0.0) > VIRTUAL_STATION_SHARE:
+        return "no-docks"
+    if survey.get("emptyDockShare", 1.0) >= EMPTY_DOCK_SHARE:
+        return "no-docks"
+    if survey.get("commonestDockShare", 1.0) >= PLACEHOLDER_DOCK_SHARE:
+        return "placeholder-docks"
+    if survey.get("commonestFreeDockShare", 1.0) >= FROZEN_FREE_DOCK_SHARE:
+        return "frozen-free-docks"
+    return None
+
+
 def verdict_of(survey: dict) -> str:
     """Decide whether a surveyed network is one this application can serve.
 
@@ -630,13 +755,9 @@ def verdict_of(survey: dict) -> str:
         # figure shown on a marker would count vehicles nobody can pedal.
         return "mixed-with-motor-vehicles"
 
-    # Free-floating operators publish their parking areas as stations. Two
-    # signs give them away, and both must be absent: a fleet declaring no
-    # capacity at all, and one whose live feed never mentions a free dock.
-    if survey.get("capacityTotal", 0) <= 0:
-        return "no-capacity"
-    if survey.get("reportsDocks") is False:
-        return "no-docks"
+    wrong_with_docks = dock_verdict(survey)
+    if wrong_with_docks:
+        return wrong_with_docks
 
     if survey["stationCount"] < MINIMUM_STATIONS:
         return "too-few-stations"
@@ -1393,13 +1514,21 @@ VERDICT_EXPLANATIONS = {
     ),
     "no-docks": (
         "Parking areas, not docks",
-        "The stations are drop zones: the live feed never reports a free dock, "
-        "so §6 cannot guarantee the arrival station can take the bike.",
+        "The stations are drop zones: no declared capacity, and a live feed "
+        "reporting no free dock anywhere, so §6 cannot guarantee the arrival "
+        "station can take the bike.",
     ),
-    "no-capacity": (
-        "Stations without capacity",
-        "Every station declares a capacity of zero — the mark of a free-floating "
-        "operator publishing its parking areas as stations.",
+    "placeholder-docks": (
+        "One dock count written for a whole network",
+        "Every station reports the same number of docks, which was filled in "
+        "rather than counted: §6 would be promising room at a station nobody "
+        "measured.",
+    ),
+    "frozen-free-docks": (
+        "Free docks frozen at one figure",
+        "The count of free docks never moves from station to station: frozen "
+        "at nought no journey can end anywhere in the network, and frozen "
+        "above it every station promises room the feed never measured.",
     ),
     "no-bicycle": (
         "No bicycle in the fleet",
@@ -1494,8 +1623,9 @@ def write_report(surveys: list[dict], path: Path, generated_at: str) -> None:
         "",
         "1. it publishes `station_information` with positioned stations;",
         "2. its fleet holds bicycles, and no car or moped shares those stations;",
-        "3. its stations are real docks — a declared capacity, and a live count of",
-        "   free docks, both of which §6 needs to promise the bike can be returned;",
+        "3. its stations are real docks — a declared capacity, or a live free-dock",
+        "   count that tells its stations apart, either of which §6 needs to promise",
+        "   the bike can be returned;",
         f"4. it has at least {MINIMUM_STATIONS} stations;",
         "5. its feed needs no key, since the application hard-codes no secret.",
         "",
@@ -1552,7 +1682,7 @@ def write_report(surveys: list[dict], path: Path, generated_at: str) -> None:
                 f"| {survey.get('mainCity') or survey.get('location') or '—'} "
                 f"| {covered or '—'} "
                 f"| {survey.get('stationCount', 0)} "
-                f"| {survey.get('capacityTotal', 0)} "
+                f"| {survey.get('capacityTotal') or survey.get('dockTotal', 0)} "
                 f"| {survey.get('gbfsVersion', '?')} "
                 f"| {survey.get('areaSquareKilometres', 0)} km² "
                 f"| {regions or '—'} |"
