@@ -1370,6 +1370,55 @@ def strip_territory(name: str, forgettable: frozenset[str]) -> str:
     return " ".join(words)
 
 
+# An identifier soldered by an underscore — "bike_share_toronto", "Bixi_MTL":
+# no brand writes itself with one, whatever case surrounds it. Lowercase words
+# soldered by a hyphen are the same thing — "bogota-bikebogota" — where a
+# hyphen between words that carry a capital may well belong to a brand, as
+# "WE-cycle" does.
+SOLDERED_IDENTIFIER = re.compile(
+    r"[A-Za-z0-9]+(?:_[A-Za-z0-9]+)+|[a-z0-9]+(?:-[a-z0-9]+)+"
+)
+
+# A single lowercase ASCII word — "fortworth", "nike", "kitchen". It may be a
+# brand written that way — "nextbike", "welo", "bibo" — so it is never
+# rewritten, only passed over: where another source holds a real name it wins,
+# and where none does the word stands as its producer published it.
+BARE_LOWERCASE_WORD = re.compile(r"[a-z0-9]+")
+
+
+def name_from_identifier(identifier: str, forgettable: frozenset[str]) -> str:
+    """Spell an identifier as a name, for a network that published none.
+
+    The last resort, and it invents nothing: it re-punctuates what the producer
+    already wrote. Separators become spaces and each word takes an initial
+    capital, keeping any internal one it already had — "avelo-quebec" reads
+    "Avelo", "bogota-bikebogota" reads "Bikebogota".
+
+    The words that only repeat the territory go, as they go from the tail of a
+    published title, and against the same `territory_words` list: Bogotá's
+    network serves Bogotá, so the "bogota" its identifier opens on says nothing
+    the column beside it does not. Here **every** word is weighed and not only
+    the trailing ones, which is `strip_territory`'s rule: an identifier is a
+    sort key, city first, where a title carries a brand that may legitimately
+    open on a place name.
+
+    Where every word is territory — "fortworth" serving Fort Worth — the
+    identifier is kept whole rather than emptied. A name that repeats the city
+    reads poorly; an empty one leaves the row with nothing to read at all, and
+    would ask every screen naming a network to invent an answer.
+
+    A word with no separator in it is returned exactly as it came, capital or
+    no capital: it is the spelling all three sources published, which makes it
+    the producer's own — "nextbike" is written lowercase by the operator whose
+    brand it is, in fifty-three of the networks surveyed.
+    """
+    words = [word for word in re.split(r"[-_]+", identifier) if word]
+    if len(words) < 2:
+        return identifier
+    kept = [word for word in words if normalised(word) not in forgettable]
+    return " ".join(word[:1].upper() + word[1:] for word in kept or words)
+
+
 def display_name_of(survey: dict) -> str:
     """The name to show for a network, as short as it can be while still true.
 
@@ -1383,15 +1432,18 @@ def display_name_of(survey: dict) -> str:
     "Valenciennes", a title reading "Tarbes Lourdes Pyrénées" — is refused and
     the next source tried: the interface already shows the conurbation, and a
     network named after it twice tells the user nothing.
+
+    A candidate that is an identifier rather than a name is refused the same
+    way, but it is remembered: where no source publishes a name, it is spelled
+    out rather than shown as it stands. "bogota-bikebogota — Bogotá" is what
+    the city list read before, which is a row of the producer's database and
+    not an answer to the question the reader came with.
     """
     forgettable = territory_words(survey)
+    identifier = ""
     for key in ("catalogueTitle", "systemName", "catalogueName"):
         raw = (survey.get(key) or "").strip()
         if not raw:
-            continue
-        # A feed naming itself "bike_share_toronto" has given its identifier,
-        # not its name. The catalogue holds the name in that case.
-        if "_" in raw and " " not in raw:
             continue
         # "Regensburg, Augsburg, Straubing, Tuttlingen" is the list of towns an
         # operator serves under one feed, not a name. The next source gives the
@@ -1412,8 +1464,19 @@ def display_name_of(survey: dict) -> str:
         # (avec stations)" describes an offer. The next source states the brand.
         if len(candidate.split()) > MAXIMUM_NAME_WORDS:
             continue
+        # A feed calling itself "bike_share_toronto" or "fortworth" has given
+        # its identifier, not its name: the registry holds "Trinity Metro
+        # Bikes" for that one. The first identifier met is kept in reserve for
+        # the networks whose three sources hold nothing else.
+        if SOLDERED_IDENTIFIER.fullmatch(candidate) or BARE_LOWERCASE_WORD.fullmatch(
+            candidate
+        ):
+            identifier = identifier or candidate
+            continue
         return candidate
-    return survey.get("catalogueName", "").strip()
+    return name_from_identifier(identifier, forgettable) or survey.get(
+        "catalogueName", ""
+    ).strip()
 
 
 def language_of(survey: dict) -> str:

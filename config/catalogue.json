@@ -1,7 +1,7 @@
 {
   "catalogueVersion": 1,
   "catalogueUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/catalogue.json",
-  "generatedAt": "2026-09-13T08:43:02Z",
+  "generatedAt": "2026-09-13T10:00:20Z",
   "cities": [
     {
       "id": "aar-bike",
@@ -2704,6 +2704,60 @@
       "releaseTag": "data-2026-08-sk"
     },
     {
+      "id": "bogota-bikebogota",
+      "displayName": "Bikebogota",
+      "operator": "Bikebogota",
+      "mainCity": "Bogotá",
+      "country": "CO",
+      "stationCount": 251,
+      "stationSamples": [
+        [
+          4.6658,
+          -74.05284
+        ],
+        [
+          4.66818,
+          -74.04962
+        ],
+        [
+          4.63641,
+          -74.07911
+        ],
+        [
+          4.70607,
+          -74.05263
+        ],
+        [
+          4.72992,
+          -74.04542
+        ],
+        [
+          4.68214,
+          -74.0603
+        ],
+        [
+          4.70193,
+          -74.03636
+        ],
+        [
+          4.72408,
+          -74.03295
+        ]
+      ],
+      "boundingBox": {
+        "south": 4.56714,
+        "west": -74.146771,
+        "north": 4.763449,
+        "east": -73.999232
+      },
+      "centreLatitude": 4.675372,
+      "centreLongitude": -74.05425,
+      "gbfsDiscoveryUrl": "https://bogota.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bogota-bikebogota.json",
+      "dataSizeBytes": 15774514,
+      "releaseTag": "data-2026-08-co"
+    },
+    {
       "id": "biketown",
       "displayName": "Biketown",
       "operator": "Biketown",
@@ -4214,6 +4268,60 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-dbizi.json",
       "dataSizeBytes": 6110987,
       "releaseTag": "data-2026-08-es"
+    },
+    {
+      "id": "dej-bikecity",
+      "displayName": "Dej Velo",
+      "operator": "Dej Velo",
+      "mainCity": "Dej",
+      "country": "RO",
+      "stationCount": 16,
+      "stationSamples": [
+        [
+          47.14319,
+          23.87528
+        ],
+        [
+          47.14422,
+          23.87585
+        ],
+        [
+          47.1417,
+          23.89278
+        ],
+        [
+          47.1509,
+          23.87664
+        ],
+        [
+          47.11878,
+          23.88969
+        ],
+        [
+          47.1311,
+          23.8821
+        ],
+        [
+          47.1409,
+          23.87799
+        ],
+        [
+          47.14755,
+          23.87012
+        ]
+      ],
+      "boundingBox": {
+        "south": 47.091832,
+        "west": 23.830502,
+        "north": 47.186694,
+        "east": 23.935708
+      },
+      "centreLatitude": 47.139263,
+      "centreLongitude": 23.883105,
+      "gbfsDiscoveryUrl": "https://dej.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-dej-bikecity.json",
+      "dataSizeBytes": 1270848,
+      "releaseTag": "data-2026-08-ro"
     },
     {
       "id": "divvy",
@@ -6320,6 +6428,60 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-drechtsteden.json",
       "dataSizeBytes": 39667631,
       "releaseTag": "data-2026-08-nl"
+    },
+    {
+      "id": "dublinbikes",
+      "displayName": "Dublinbikes",
+      "operator": "Dublinbikes",
+      "mainCity": "Dublin",
+      "country": "IE",
+      "stationCount": 116,
+      "stationSamples": [
+        [
+          53.34093,
+          -6.2625
+        ],
+        [
+          53.35547,
+          -6.26442
+        ],
+        [
+          53.34611,
+          -6.26835
+        ],
+        [
+          53.33009,
+          -6.26804
+        ],
+        [
+          53.33922,
+          -6.24064
+        ],
+        [
+          53.34311,
+          -6.27717
+        ],
+        [
+          53.34748,
+          -6.28525
+        ],
+        [
+          53.35029,
+          -6.27351
+        ]
+      ],
+      "boundingBox": {
+        "south": 53.303142,
+        "west": -6.355157,
+        "north": 53.386916,
+        "east": -6.18571
+      },
+      "centreLatitude": 53.345029,
+      "centreLongitude": -6.270433,
+      "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/dublin/gbfs/v3/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-dublinbikes.json",
+      "dataSizeBytes": 16337130,
+      "releaseTag": "data-2026-08-ie"
     },
     {
       "id": "edeka",
@@ -8590,6 +8752,60 @@
       "releaseTag": "data-2026-08-ar"
     },
     {
+      "id": "kitchen",
+      "displayName": "Mibici",
+      "operator": "Mibici",
+      "mainCity": "Zapopan",
+      "country": "MX",
+      "stationCount": 466,
+      "stationSamples": [
+        [
+          20.66638,
+          -103.34882
+        ],
+        [
+          20.67178,
+          -103.36127
+        ],
+        [
+          20.66313,
+          -103.40791
+        ],
+        [
+          20.6755,
+          -103.38415
+        ],
+        [
+          20.66318,
+          -103.32942
+        ],
+        [
+          20.65427,
+          -103.31592
+        ],
+        [
+          20.7031,
+          -103.35335
+        ],
+        [
+          20.67916,
+          -103.39565
+        ]
+      ],
+      "boundingBox": {
+        "south": 20.609181,
+        "west": -103.462022,
+        "north": 20.766472,
+        "east": -103.268305
+      },
+      "centreLatitude": 20.687826,
+      "centreLongitude": -103.365163,
+      "gbfsDiscoveryUrl": "https://guadalajara.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kitchen.json",
+      "dataSizeBytes": 14891024,
+      "releaseTag": "data-2026-08-mx"
+    },
+    {
       "id": "mobi-by-rogers",
       "displayName": "Mobi by Rogers",
       "operator": "Vancouver Bike Share",
@@ -9074,6 +9290,60 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nemovelo.json",
       "dataSizeBytes": 8451083,
       "releaseTag": "data-2026-08-fr"
+    },
+    {
+      "id": "nike",
+      "displayName": "Nike Biketown",
+      "operator": "Nike Biketown",
+      "mainCity": "Beaverton",
+      "country": "US",
+      "stationCount": 25,
+      "stationSamples": [
+        [
+          45.51536,
+          -122.83796
+        ],
+        [
+          45.5125,
+          -122.83306
+        ],
+        [
+          45.51063,
+          -122.83668
+        ],
+        [
+          45.51041,
+          -122.82933
+        ],
+        [
+          45.5075,
+          -122.8321
+        ],
+        [
+          45.51127,
+          -122.8387
+        ],
+        [
+          45.50082,
+          -122.83309
+        ],
+        [
+          45.50863,
+          -122.82766
+        ]
+      ],
+      "boundingBox": {
+        "south": 45.466384,
+        "west": -122.877154,
+        "north": 45.542309,
+        "east": -122.778395
+      },
+      "centreLatitude": 45.504346,
+      "centreLongitude": -122.827774,
+      "gbfsDiscoveryUrl": "https://nike.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nike.json",
+      "dataSizeBytes": 7744146,
+      "releaseTag": "data-2026-08-us"
     },
     {
       "id": "nomago-bikes",
@@ -9994,6 +10264,60 @@
       "releaseTag": "data-2026-08-es"
     },
     {
+      "id": "sibiu-bikecity",
+      "displayName": "Sibiu BikeCity",
+      "operator": "Sibiu BikeCity",
+      "mainCity": "Sibiu",
+      "country": "RO",
+      "stationCount": 57,
+      "stationSamples": [
+        [
+          45.79372,
+          24.12293
+        ],
+        [
+          45.78661,
+          24.14903
+        ],
+        [
+          45.76828,
+          24.12617
+        ],
+        [
+          45.79923,
+          24.14532
+        ],
+        [
+          45.79975,
+          24.16143
+        ],
+        [
+          45.77825,
+          24.15232
+        ],
+        [
+          45.78957,
+          24.18003
+        ],
+        [
+          45.79896,
+          24.08283
+        ]
+      ],
+      "boundingBox": {
+        "south": 45.733521,
+        "west": 24.044187,
+        "north": 45.840849,
+        "east": 24.241487
+      },
+      "centreLatitude": 45.79045,
+      "centreLongitude": 24.148186,
+      "gbfsDiscoveryUrl": "https://sibiu.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-sibiu-bikecity.json",
+      "dataSizeBytes": 4355860,
+      "releaseTag": "data-2026-08-ro"
+    },
+    {
       "id": "slobozia-bike",
       "displayName": "Slobozia Bike",
       "operator": "Slobozia Bike",
@@ -10586,6 +10910,60 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-ti-velo.json",
       "dataSizeBytes": 5142444,
       "releaseTag": "data-2026-08-fr"
+    },
+    {
+      "id": "fortworth",
+      "displayName": "Trinity Metro Bikes",
+      "operator": "Trinity Metro Bikes",
+      "mainCity": "Fort Worth",
+      "country": "US",
+      "stationCount": 57,
+      "stationSamples": [
+        [
+          32.7,
+          -97.41501
+        ],
+        [
+          32.70601,
+          -97.35943
+        ],
+        [
+          32.72579,
+          -97.34539
+        ],
+        [
+          32.74245,
+          -97.32567
+        ],
+        [
+          32.7368,
+          -97.3596
+        ],
+        [
+          32.78105,
+          -97.36402
+        ],
+        [
+          32.75316,
+          -97.3432
+        ],
+        [
+          32.74681,
+          -97.32732
+        ]
+      ],
+      "boundingBox": {
+        "south": 32.653251,
+        "west": -97.447049,
+        "north": 32.823109,
+        "east": -97.229231
+      },
+      "centreLatitude": 32.73818,
+      "centreLongitude": -97.33814,
+      "gbfsDiscoveryUrl": "https://fortworth.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-fortworth.json",
+      "dataSizeBytes": 19421545,
+      "releaseTag": "data-2026-08-us"
     },
     {
       "id": "twisto-velolib",
@@ -13072,60 +13450,6 @@
       "releaseTag": "data-2026-08-fr"
     },
     {
-      "id": "avelo-quebec",
-      "displayName": "avelo-quebec",
-      "operator": "avelo-quebec",
-      "mainCity": "Québec",
-      "country": "CA",
-      "stationCount": 225,
-      "stationSamples": [
-        [
-          46.82513,
-          -71.22855
-        ],
-        [
-          46.8111,
-          -71.2176
-        ],
-        [
-          46.78332,
-          -71.27606
-        ],
-        [
-          46.82423,
-          -71.24043
-        ],
-        [
-          46.83925,
-          -71.24585
-        ],
-        [
-          46.85061,
-          -71.25009
-        ],
-        [
-          46.75668,
-          -71.31011
-        ],
-        [
-          46.81535,
-          -71.23186
-        ]
-      ],
-      "boundingBox": {
-        "south": 46.720561,
-        "west": -71.407974,
-        "north": 46.919039,
-        "east": -71.104949
-      },
-      "centreLatitude": 46.8198,
-      "centreLongitude": -71.256461,
-      "gbfsDiscoveryUrl": "https://quebec.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-avelo-quebec.json",
-      "dataSizeBytes": 18117355,
-      "releaseTag": "data-2026-08-ca"
-    },
-    {
       "id": "bibo",
       "displayName": "bibo",
       "operator": "Movilidad Urbana Sostenible S.L MOVUS",
@@ -13396,60 +13720,6 @@
       "releaseTag": "data-2026-08-es"
     },
     {
-      "id": "bogota-bikebogota",
-      "displayName": "bogota-bikebogota",
-      "operator": "bogota-bikebogota",
-      "mainCity": "Bogotá",
-      "country": "CO",
-      "stationCount": 251,
-      "stationSamples": [
-        [
-          4.6658,
-          -74.05284
-        ],
-        [
-          4.66818,
-          -74.04962
-        ],
-        [
-          4.63641,
-          -74.07911
-        ],
-        [
-          4.70607,
-          -74.05263
-        ],
-        [
-          4.72992,
-          -74.04542
-        ],
-        [
-          4.68214,
-          -74.0603
-        ],
-        [
-          4.70193,
-          -74.03636
-        ],
-        [
-          4.72408,
-          -74.03295
-        ]
-      ],
-      "boundingBox": {
-        "south": 4.56714,
-        "west": -74.146771,
-        "north": 4.763449,
-        "east": -73.999232
-      },
-      "centreLatitude": 4.675372,
-      "centreLongitude": -74.05425,
-      "gbfsDiscoveryUrl": "https://bogota.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bogota-bikebogota.json",
-      "dataSizeBytes": 15774514,
-      "releaseTag": "data-2026-08-co"
-    },
-    {
       "id": "city-bike",
       "displayName": "city bike",
       "operator": "City Bike Linz Rental Service GmbH",
@@ -13504,60 +13774,6 @@
       "releaseTag": "data-2026-08-at"
     },
     {
-      "id": "dej-bikecity",
-      "displayName": "dej-bikecity",
-      "operator": "dej-bikecity",
-      "mainCity": "Dej",
-      "country": "RO",
-      "stationCount": 16,
-      "stationSamples": [
-        [
-          47.14319,
-          23.87528
-        ],
-        [
-          47.14422,
-          23.87585
-        ],
-        [
-          47.1417,
-          23.89278
-        ],
-        [
-          47.1509,
-          23.87664
-        ],
-        [
-          47.11878,
-          23.88969
-        ],
-        [
-          47.1311,
-          23.8821
-        ],
-        [
-          47.1409,
-          23.87799
-        ],
-        [
-          47.14755,
-          23.87012
-        ]
-      ],
-      "boundingBox": {
-        "south": 47.091832,
-        "west": 23.830502,
-        "north": 47.186694,
-        "east": 23.935708
-      },
-      "centreLatitude": 47.139263,
-      "centreLongitude": 23.883105,
-      "gbfsDiscoveryUrl": "https://dej.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-dej-bikecity.json",
-      "dataSizeBytes": 1270848,
-      "releaseTag": "data-2026-08-ro"
-    },
-    {
       "id": "docomo-bike-share-service",
       "displayName": "docomo bike share service",
       "operator": "docomo bike share service",
@@ -13610,60 +13826,6 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-docomo-bike-share-service.json",
       "dataSizeBytes": 124444007,
       "releaseTag": "data-2026-08-jp"
-    },
-    {
-      "id": "dublinbikes",
-      "displayName": "dublinbikes",
-      "operator": "dublinbikes",
-      "mainCity": "Dublin",
-      "country": "IE",
-      "stationCount": 116,
-      "stationSamples": [
-        [
-          53.34093,
-          -6.2625
-        ],
-        [
-          53.35547,
-          -6.26442
-        ],
-        [
-          53.34611,
-          -6.26835
-        ],
-        [
-          53.33009,
-          -6.26804
-        ],
-        [
-          53.33922,
-          -6.24064
-        ],
-        [
-          53.34311,
-          -6.27717
-        ],
-        [
-          53.34748,
-          -6.28525
-        ],
-        [
-          53.35029,
-          -6.27351
-        ]
-      ],
-      "boundingBox": {
-        "south": 53.303142,
-        "west": -6.355157,
-        "north": 53.386916,
-        "east": -6.18571
-      },
-      "centreLatitude": 53.345029,
-      "centreLongitude": -6.270433,
-      "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/dublin/gbfs/v3/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-dublinbikes.json",
-      "dataSizeBytes": 16337130,
-      "releaseTag": "data-2026-08-ie"
     },
     {
       "id": "emobi",
@@ -13826,60 +13988,6 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-flux-bikesharing.json",
       "dataSizeBytes": 10539930,
       "releaseTag": "data-2026-08-de"
-    },
-    {
-      "id": "fortworth",
-      "displayName": "fortworth",
-      "operator": "fortworth",
-      "mainCity": "Fort Worth",
-      "country": "US",
-      "stationCount": 57,
-      "stationSamples": [
-        [
-          32.7,
-          -97.41501
-        ],
-        [
-          32.70601,
-          -97.35943
-        ],
-        [
-          32.72579,
-          -97.34539
-        ],
-        [
-          32.74245,
-          -97.32567
-        ],
-        [
-          32.7368,
-          -97.3596
-        ],
-        [
-          32.78105,
-          -97.36402
-        ],
-        [
-          32.75316,
-          -97.3432
-        ],
-        [
-          32.74681,
-          -97.32732
-        ]
-      ],
-      "boundingBox": {
-        "south": 32.653251,
-        "west": -97.447049,
-        "north": 32.823109,
-        "east": -97.229231
-      },
-      "centreLatitude": 32.73818,
-      "centreLongitude": -97.33814,
-      "gbfsDiscoveryUrl": "https://fortworth.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-fortworth.json",
-      "dataSizeBytes": 19421545,
-      "releaseTag": "data-2026-08-us"
     },
     {
       "id": "invia-bikeshare",
@@ -14420,60 +14528,6 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kitchen-tucson.json",
       "dataSizeBytes": 9146507,
       "releaseTag": "data-2026-08-us"
-    },
-    {
-      "id": "kitchen",
-      "displayName": "kitchen",
-      "operator": "kitchen",
-      "mainCity": "Zapopan",
-      "country": "MX",
-      "stationCount": 466,
-      "stationSamples": [
-        [
-          20.66638,
-          -103.34882
-        ],
-        [
-          20.67178,
-          -103.36127
-        ],
-        [
-          20.66313,
-          -103.40791
-        ],
-        [
-          20.6755,
-          -103.38415
-        ],
-        [
-          20.66318,
-          -103.32942
-        ],
-        [
-          20.65427,
-          -103.31592
-        ],
-        [
-          20.7031,
-          -103.35335
-        ],
-        [
-          20.67916,
-          -103.39565
-        ]
-      ],
-      "boundingBox": {
-        "south": 20.609181,
-        "west": -103.462022,
-        "north": 20.766472,
-        "east": -103.268305
-      },
-      "centreLatitude": 20.687826,
-      "centreLongitude": -103.365163,
-      "gbfsDiscoveryUrl": "https://guadalajara.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-kitchen.json",
-      "dataSizeBytes": 14891024,
-      "releaseTag": "data-2026-08-mx"
     },
     {
       "id": "mobic",
@@ -17770,60 +17824,6 @@
       "releaseTag": "data-2026-08-cz"
     },
     {
-      "id": "nike",
-      "displayName": "nike",
-      "operator": "nike",
-      "mainCity": "Beaverton",
-      "country": "US",
-      "stationCount": 25,
-      "stationSamples": [
-        [
-          45.51536,
-          -122.83796
-        ],
-        [
-          45.5125,
-          -122.83306
-        ],
-        [
-          45.51063,
-          -122.83668
-        ],
-        [
-          45.51041,
-          -122.82933
-        ],
-        [
-          45.5075,
-          -122.8321
-        ],
-        [
-          45.51127,
-          -122.8387
-        ],
-        [
-          45.50082,
-          -122.83309
-        ],
-        [
-          45.50863,
-          -122.82766
-        ]
-      ],
-      "boundingBox": {
-        "south": 45.466384,
-        "west": -122.877154,
-        "north": 45.542309,
-        "east": -122.778395
-      },
-      "centreLatitude": 45.504346,
-      "centreLongitude": -122.827774,
-      "gbfsDiscoveryUrl": "https://nike.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nike.json",
-      "dataSizeBytes": 7744146,
-      "releaseTag": "data-2026-08-us"
-    },
-    {
       "id": "pony",
       "displayName": "pony",
       "operator": "pony",
@@ -17930,60 +17930,6 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-sharedmobility-ch.json",
       "dataSizeBytes": 1646129862,
       "releaseTag": "data-2026-08-ch"
-    },
-    {
-      "id": "sibiu-bikecity",
-      "displayName": "sibiu-bikecity",
-      "operator": "sibiu-bikecity",
-      "mainCity": "Sibiu",
-      "country": "RO",
-      "stationCount": 57,
-      "stationSamples": [
-        [
-          45.79372,
-          24.12293
-        ],
-        [
-          45.78661,
-          24.14903
-        ],
-        [
-          45.76828,
-          24.12617
-        ],
-        [
-          45.79923,
-          24.14532
-        ],
-        [
-          45.79975,
-          24.16143
-        ],
-        [
-          45.77825,
-          24.15232
-        ],
-        [
-          45.78957,
-          24.18003
-        ],
-        [
-          45.79896,
-          24.08283
-        ]
-      ],
-      "boundingBox": {
-        "south": 45.733521,
-        "west": 24.044187,
-        "north": 45.840849,
-        "east": 24.241487
-      },
-      "centreLatitude": 45.79045,
-      "centreLongitude": 24.148186,
-      "gbfsDiscoveryUrl": "https://sibiu.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-sibiu-bikecity.json",
-      "dataSizeBytes": 4355860,
-      "releaseTag": "data-2026-08-ro"
     },
     {
       "id": "swabi",
@@ -18308,6 +18254,60 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-wupsirad.json",
       "dataSizeBytes": 30959554,
       "releaseTag": "data-2026-08-de"
+    },
+    {
+      "id": "avelo-quebec",
+      "displayName": "àVélo",
+      "operator": "àVélo",
+      "mainCity": "Québec",
+      "country": "CA",
+      "stationCount": 225,
+      "stationSamples": [
+        [
+          46.82513,
+          -71.22855
+        ],
+        [
+          46.8111,
+          -71.2176
+        ],
+        [
+          46.78332,
+          -71.27606
+        ],
+        [
+          46.82423,
+          -71.24043
+        ],
+        [
+          46.83925,
+          -71.24585
+        ],
+        [
+          46.85061,
+          -71.25009
+        ],
+        [
+          46.75668,
+          -71.31011
+        ],
+        [
+          46.81535,
+          -71.23186
+        ]
+      ],
+      "boundingBox": {
+        "south": 46.720561,
+        "west": -71.407974,
+        "north": 46.919039,
+        "east": -71.104949
+      },
+      "centreLatitude": 46.8198,
+      "centreLongitude": -71.256461,
+      "gbfsDiscoveryUrl": "https://quebec.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-avelo-quebec.json",
+      "dataSizeBytes": 18117355,
+      "releaseTag": "data-2026-08-ca"
     },
     {
       "id": "loker",

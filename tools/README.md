@@ -52,6 +52,16 @@ address, network and authority names, licence, reference box recomputed against
 the live feed, opening framing, and the sources a generation run needs. It
 never touches a configuration that already exists unless told to.
 
+Two passes say otherwise, each over the cities already served and each narrow
+enough to leave the rest of the file alone. `--refresh-sources` brings the
+`dataSources` block up to the survey, a network having extended over a border
+since. `--refresh-names` names the configurations whose `displayName` is still
+their own identifier — the city list read "bogota-bikebogota — Bogotá" — and
+touches nothing else: a name derived correctly, or settled by hand, is none of
+its business, and the identifier itself never moves, since it names the
+directory a city's data lives in on the device. Run
+`python3 tools/build_catalogue.py` after it.
+
 ## Publishing what was generated
 
 ```bash
