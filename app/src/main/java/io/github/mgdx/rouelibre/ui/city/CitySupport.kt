@@ -1,5 +1,7 @@
 package io.github.mgdx.rouelibre.ui.city
 
+import java.text.Collator
+
 /**
  * Whether the build can actually serve a city the catalogue names.
  *
@@ -30,8 +32,13 @@ fun isCitySupported(cityId: String, known: Set<String>): Boolean =
  * question and the second**, which is to say to the foot of the list: they are
  * shown so that somebody looking for their city finds it and reads why it is
  * not here yet, never so that they are chosen from.
+ *
+ * @param byName how city names are compared. A collator and not the plain order
+ *   of the characters, which files every accented initial after "Z": "Évreux"
+ *   sat at the foot of the alphabet instead of among the "E"s.
  */
-fun cityDisplayOrder(): Comparator<CityRow> = compareByDescending<CityRow> { it.isActive }
-    .thenByDescending { it.isSupported }
-    .thenByDescending { it.installedBytes > 0 }
-    .thenBy { it.entry.displayName }
+fun cityDisplayOrder(byName: Comparator<in String> = Collator.getInstance()): Comparator<CityRow> =
+    compareByDescending<CityRow> { it.isActive }
+        .thenByDescending { it.isSupported }
+        .thenByDescending { it.installedBytes > 0 }
+        .thenBy(byName) { it.entry.displayName }
