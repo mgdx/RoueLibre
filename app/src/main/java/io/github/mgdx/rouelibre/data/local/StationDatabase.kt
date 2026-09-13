@@ -69,8 +69,16 @@ data class StationAvailabilityEntity(
 @Dao
 interface StationDao {
 
-    /** The known stations, re-emitted whenever the cache changes. */
-    @Query("SELECT * FROM station ORDER BY name")
+    /**
+     * The known stations, re-emitted whenever the cache changes.
+     *
+     * In no particular order, and deliberately so: this used to end on
+     * `ORDER BY name`, which sorts the bytes. "ÉPINETTES" then came after
+     * "TINQUEUX" because U+00C9 is past "Z", and `COLLATE NOCASE` knows only
+     * ASCII, so it would have changed nothing. The alphabet is the reader's
+     * and not the database's — `orderStations` applies it with a collator.
+     */
+    @Query("SELECT * FROM station")
     fun observeStations(): Flow<List<StationEntity>>
 
     /** The last known state of each station. */

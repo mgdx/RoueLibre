@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.text.Collator
 import java.time.Instant
 
 /**
@@ -163,12 +164,19 @@ fun offerForEmptyList(emptiness: Emptiness, cityChosen: Boolean): EmptyListOffer
  *
  * The model knows neither view nor resource: it exposes a state and events, and
  * the view chooses how to show them.
+ *
+ * @param nameOrder how station names are compared when the list is
+ *   alphabetical. A [Collator] and not the plain order of the characters, which
+ *   would file "ÉPINETTES" after "TINQUEUX". It defaults to the process's
+ *   locale, which is the language the interface speaks wherever the system
+ *   carries the choice; a screen that knows better hands its own over.
  */
 class StationsViewModel(
     private val repository: StationRepository,
     private val positionAlreadyKnown: suspend () -> Coordinates? = { null },
     private val positionForOrdering: suspend () -> Coordinates? = { null },
     private val readLetterFolds: suspend () -> Map<Char, String> = { emptyMap() },
+    private val nameOrder: Collator = Collator.getInstance(),
 ) : ViewModel() {
 
     private val mutableState = MutableStateFlow(StationsUiState())
@@ -304,8 +312,11 @@ class StationsViewModel(
     }
 
     /** The stations to show: those the search keeps, in the order that suits. */
-    private fun visibleStations(query: String): List<StationWithAvailability> =
-        orderStations(filterStations(allStations, query, letterFolds), orderingPosition)
+    private fun visibleStations(query: String): List<StationWithAvailability> = orderStations(
+        filterStations(allStations, query, letterFolds),
+        orderingPosition,
+        nameOrder,
+    )
 
     /**
      * Takes a new search query into account.
@@ -349,6 +360,7 @@ class StationsViewModel(
         private val positionAlreadyKnown: suspend () -> Coordinates? = { null },
         private val positionForOrdering: suspend () -> Coordinates? = { null },
         private val readLetterFolds: suspend () -> Map<Char, String> = { emptyMap() },
+        private val nameOrder: Collator = Collator.getInstance(),
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -360,6 +372,7 @@ class StationsViewModel(
                 positionAlreadyKnown,
                 positionForOrdering,
                 readLetterFolds,
+                nameOrder,
             ) as T
         }
     }
