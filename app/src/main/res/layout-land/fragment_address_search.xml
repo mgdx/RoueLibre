@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Address search (SPEC §4.3), lying down.
+
+    Same screen, same views, same reading — what changes is what the answers
+    are measured against. Stacked as in portrait, everything above the list
+    costs the same dp whichever way the phone is held: a bar, a field, a line
+    of reassurance. On a Fairphone 3 turned sideways with the keyboard open
+    there is barely two hundred dp of window left, the three of them take all
+    of it, and the list this screen exists for was drawn nowhere: the answers
+    to `vesle` only appeared once the keyboard was folded away, which is the
+    one moment the reader no longer needs them. `adjustResize` cannot fix that
+    — it hands back a window the stack has already spent.
+
+    So the field and the answers share the width instead of the height: the
+    field in a column on the start side, the list beside it over the whole
+    height the bar leaves. Half and not some finer split for the reason
+    written in `layout-land/fragment_welcome.xml` — half a sideways Fairphone 3
+    is 411 dp, which is exactly the width the portrait screen gives the same
+    rows, so an address wraps and reads as it always has; and a half is its own
+    mirror, which keeps the split honest in a right-to-left language. The split
+    is a chain rather than a guideline so that it mirrors on its own and so
+    that no identifier is added here that portrait has not got.
+
+    The bar keeps the whole width and the whole title. It is the way back, and
+    a way back that moves house between two ways of holding the phone is one
+    more thing to look for.
+
+    What does go is the line of reassurance: the search is explained where
+    there is room to explain it, and the sentence about nothing leaving the
+    device is worth more than the answers it would push off a sideways screen.
+    It keeps its identifier, gone rather than absent, since a view missing from
+    one configuration is generated nullable and the fragment would stop
+    compiling.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/address_search_title"
+        app:titleTextAppearance="@style/TextAppearance.RoueLibre.Title" />
+
+    <!-- The field, first link of the chain: it takes its half of the width and
+         stays where it is in portrait, at the top, under the thumb that is
+         about to type into it.
+
+         `flagNoExtractUi`, as in portrait: it is what refuses the keyboard's
+         own full-screen copy of this field, and this arrangement would be for
+         nothing under one. -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_field"
+        style="@style/Widget.RoueLibre.SearchField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_s"
+        android:layout_marginEnd="@dimen/space_l"
+        android:hint="@string/address_search_hint"
+        app:endIconContentDescription="@string/address_search_clear"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toStartOf="@id/results"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionSearch|flagNoExtractUi"
+            android:inputType="textPostalAddress"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Gone, and under the field where portrait keeps it, so that the day a
+         sideways screen has room for it again it is already in its place. -->
+    <TextView
+        android:id="@+id/privacy_note"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_s"
+        android:text="@string/address_search_privacy"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/search_field"
+        app:layout_constraintStart_toStartOf="@id/search_field"
+        app:layout_constraintTop_toBottomOf="@id/search_field" />
+
+    <!-- The answers, second link of the chain, over the whole height the bar
+         leaves. Nothing above them costs height any more, so what the keyboard
+         gives back is theirs. -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/results"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/space_s"
+        android:background="?attr/colorSurface"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/search_field"
+        app:layout_constraintTop_toBottomOf="@id/empty_state"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_address" />
+
+    <!-- An empty screen: an invitation to act, not a statement (SPEC §7).
+
+         Above the list and not over it, exactly as in portrait and for the
+         reasons written there — what changes is only that "above" now means
+         at the top of the list's column rather than at the top of the screen.
+         Its side spacing is the ordinary one and not portrait's wide one: the
+         column it centres itself in is already half a screen. -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/empty_state"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_s"
+        android:layout_marginEnd="@dimen/space_l"
+        android:visibility="gone"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/search_field"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintVertical_bias="0"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/empty_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Title"
+                tools:text="Aucune adresse trouvée" />
+
+            <TextView
+                android:id="@+id/empty_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+                tools:text="Rien ne correspond à « rue de la lune »." />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/empty_action"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/touch_target_min"
+                android:layout_marginTop="@dimen/space_l"
+                android:visibility="gone"
+                tools:text="Gérer les données hors ligne"
+                tools:visibility="visible" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
