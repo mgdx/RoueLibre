@@ -148,6 +148,58 @@ class SearchLandscapeTest {
     }
 
     /**
+     * The header stays inside the field's column; nothing bands the screen.
+     *
+     * This is the whole of the second defect. A bar, or a title and a
+     * freshness line, kept across the top costs the rows the same height it
+     * costs in portrait — 140 px of a 302 px window on a sideways Fairphone 3
+     * with Gboard open, which is a row and a truncated second — and it leaves
+     * the floating button hanging from a column that short, high enough to
+     * bite into the first station's name. A header that reaches across both
+     * columns is the thing being refused here, whatever it is made of.
+     */
+    @Test
+    fun `nothing of the header reaches across the screen`() {
+        SCREENS.forEach { screen ->
+            HEADER_OF.getValue(screen).forEach { id ->
+                assertTrue(
+                    "$screen: $id still bands the screen instead of sitting in its column",
+                    viewOf("layout-land", screen, id)
+                        .getAttribute("app:layout_constraintEnd_toEndOf") != "parent",
+                )
+            }
+        }
+    }
+
+    /**
+     * The answers start at the top of the window.
+     *
+     * The other half of the same thing: their column having no header above
+     * it, it begins where the screen begins, and the rows get the height the
+     * band used to take. On the address search the panel that speaks for the
+     * whole screen still stands above the list rather than over it, exactly as
+     * in portrait — so it is the panel that holds the top, and the list
+     * follows it.
+     */
+    @Test
+    fun `the answers start at the top of the window`() {
+        SCREENS.forEach { screen ->
+            assertEquals(
+                "$screen: something is still taking the top of the answers' column",
+                "parent",
+                viewOf("layout-land", screen, TOP_OF.getValue(screen))
+                    .getAttribute("app:layout_constraintTop_toTopOf"),
+            )
+        }
+        assertEquals(
+            "The panel no longer stands above the answers it speaks for",
+            "@id/empty_state",
+            viewOf("layout-land", "fragment_address_search.xml", "results")
+                .getAttribute("app:layout_constraintTop_toBottomOf"),
+        )
+    }
+
+    /**
      * The line of reassurance steps aside sideways.
      *
      * It is the one thing on the address search that explains rather than
@@ -233,6 +285,26 @@ class SearchLandscapeTest {
         val LIST_OF = mapOf(
             "fragment_address_search.xml" to "results",
             "fragment_station_list.xml" to "swipe_refresh",
+        )
+
+        /** What holds the top of the answers' column on each of them. */
+        val TOP_OF = mapOf(
+            "fragment_address_search.xml" to "empty_state",
+            "fragment_station_list.xml" to "swipe_refresh",
+        )
+
+        /** Everything that is header rather than answer on each of them. */
+        val HEADER_OF = mapOf(
+            "fragment_address_search.xml" to listOf("toolbar", "search_field", "privacy_note"),
+            "fragment_station_list.xml" to listOf(
+                "title",
+                "freshness",
+                "open_settings",
+                "open_favourites",
+                "open_map",
+                "search_field",
+                "mode_toggle",
+            ),
         )
     }
 }
