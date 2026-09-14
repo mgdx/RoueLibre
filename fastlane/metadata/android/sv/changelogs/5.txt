@@ -1,0 +1,15 @@
+Stationslistan sätter den närmaste stationen först, alldeles av sig själv.
+
+• Listan ordnar sig efter närhet så snart den visas, varifrån du än kommer, och varje rad anger hur långt bort dess station ligger. Inget begärs av dig för det – ingen behörighet, inget meddelande – och där ingen position går att få står bokstavsordningen kvar.
+• En knapp ”närmaste stationen först” svävar nu över listans nedre hörn, där din tumme är. Det är den enda plats där den här skärmen någonsin ber om din plats, den visar väntan medan en position är på väg, och den hämtar tillbaka den omordnade listan till dess första rad.
+• En station ur funktion anger hur länge den har tigit: ”Ur funktion · senast rapporterad för 5 månader sedan”, läst ur just den mätning nätverket själv publicerat. En station som stängde i morse är värd att vänta ut; en som inte sagt något på månader har lämnat trottoaren.
+• Inställningarna namnger nätverket som används, där stadens rad förut bara erbjöd att byta stad.
+• Utan kartdata installerade öppnas appen inte längre på rutan som säger att kartdata saknas. Den landar på stationslistan, som inte kräver något nedladdat, och går tillbaka till kartan så snart det finns en att rita.
+• Den allra första starten dör inte längre när man trycker på meddelandet om att välja en stad ovanpå välkomstsekvensen – det meddelandet väntar nu tills välkomsten är över.
+• En sökning visar sin lista från första raden, precis som knappen gör, i stället för att lämna dig flera kilometer stationer längre ned.
+• En stations detaljer mäter inte längre ett avstånd från en stad du inte är i: att titta på ett nätverk på andra sidan jorden angav tusentals kilometer under stationens namn.
+• ”Sök efter uppdateringar” utan anslutning lovar inte längre att en nedladdning fortsätter där den stannade: inget hade påbörjats.
+• Svaret på det du just gjort raderas inte längre en bråkdel av en sekund senare av en uppdatering som misslyckas bredvid.
+• På favoritskärmen väntar tipset om att hålla en rad nedtryckt för att flytta den tills det finns två rader att flytta.
+• Bakåtgesten ritar vart den leder, på Android 13 och 14.
+• En behörighet mindre: den för wifi, som kom från kartbiblioteket och som inget här någonsin läst.

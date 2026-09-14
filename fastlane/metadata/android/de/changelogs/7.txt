@@ -1,0 +1,3 @@
+Die Karte wird wieder auf jedem Telefon gezeichnet.
+
+• Version 1.2.0 ließ sich auf Telefonen ohne Vulkan nicht installieren, weil die Kartenbibliothek das zur Voraussetzung gemacht hatte. Die Karte wird jetzt über OpenGL ES gezeichnet, das jedes unterstützte Telefon mitbringt – dieselbe Karte, dieselbe Engine, und die App ist etwa zwei Megabyte leichter.
