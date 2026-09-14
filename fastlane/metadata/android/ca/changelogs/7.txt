@@ -1,0 +1,3 @@
+El mapa es torna a dibuixar a tots els telèfons.
+
+• La versió 1.2.0 es negava a instal·lar-se als telèfons sense Vulkan, perquè la biblioteca de mapes n’havia fet una exigència. El mapa es dibuixa ara amb OpenGL ES, que tots els telèfons compatibles porten — el mateix mapa, el mateix motor, i l’aplicació pesa uns dos megabytes menys.
