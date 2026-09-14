@@ -11,9 +11,9 @@
 <p align="center">
   <a href="LICENSE"><img alt="Licence: GPLv3" src="https://img.shields.io/badge/licence-GPLv3-0F6E56?style=flat-square"></a>
   <img alt="Android 8.0 and later" src="https://img.shields.io/badge/Android-8.0%2B-0F6E56?style=flat-square">
-  <a href="docs/networks.md"><img alt="337 networks in 39 countries" src="https://img.shields.io/badge/networks-337%20in%2039%20countries-0F6E56?style=flat-square"></a>
+  <a href="docs/networks.md"><img alt="340 networks in 39 countries" src="https://img.shields.io/badge/networks-340%20in%2039%20countries-0F6E56?style=flat-square"></a>
   <img alt="No tracker" src="https://img.shields.io/badge/trackers-none-0F6E56?style=flat-square">
-  <img alt="APK: 9.4 MB" src="https://img.shields.io/badge/APK-9.4%20MB-0F6E56?style=flat-square">
+  <img alt="APK: 7.9 MB" src="https://img.shields.io/badge/APK-7.9%20MB-0F6E56?style=flat-square">
 </p>
 
 <p align="center">
@@ -48,7 +48,7 @@ but the live availability of the bikes runs on your phone.
 
 ## Features
 
-- 🚲 **337 bike-share networks in 39 countries**, 70,074 stations, from Vélib'
+- 🚲 **340 bike-share networks in 39 countries**, 70,461 stations, from Vélib'
   to Auch's ten, by way of New York, Montréal, Prague, Barcelona, Dubai, Buenos
   Aires and Pristina. No city is a default: the application proposes the one
   matching your position, measured on where its stations actually are, and you
@@ -73,11 +73,11 @@ but the live availability of the bikes runs on your phone.
   - the route follows the cycle ways;
   - the climb is counted and named, because a bike-share bike is heavy.
 
-- 🪶 **Light and frugal.** 9.4 MB of APK, no background service, Android 8 and
+- 🪶 **Light and frugal.** 7.9 MB of APK, no background service, Android 8 and
   later.
 
 - 🔒 **Private, and local.** Everything happens on the device:
-  - the map, streets and routing data are downloaded **once** — 10.7 MB for a
+  - the map, streets and routing data are downloaded **once** — 10.6 MB for a
     median city — from the releases of
     [`RoueLibre-data`](https://github.com/mgdx/RoueLibre-data), a repository of
     this project, and that is it. What comes down is **static files and nothing
@@ -161,7 +161,7 @@ It needs `osmium-tool`, `tippecanoe` and Python 3. The whole procedure, the
 sizes obtained and the way to add a network are in
 [`docs/offline-data.md`](docs/offline-data.md).
 
-The release APK weighs **9.43 MB on arm64-v8a** and 8.89 MB on armeabi-v7a,
+The release APK weighs **7.91 MB on arm64-v8a** and 7.38 MB on armeabi-v7a,
 map, routing, address search and journeys included, against a ceiling of 12 MB
 per architecture.
 

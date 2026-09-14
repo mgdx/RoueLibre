@@ -54,16 +54,16 @@ android {
         // leaves it unable to tell one release from the next. The
         // architectures derive their own codes from it below, so the value is
         // still written once.
-        versionCode = 11
-        // Both maps answer the hand now: they turn under two fingers and tilt
-        // up to forty-five degrees, and a single compass puts back the north
-        // and the flat. A home and a work are named once in the settings and
-        // head the ends a journey can be given. A place found on the map opens
-        // a sheet of what to do with it. Five started translations become real
-        // ones, thirty languages spoken. And eight corrections close what a
-        // security audit and a test report found on 8 September 2026.
-        // See CHANGELOG.md.
-        versionName = "1.3.0"
+        versionCode = 12
+        // The bikes a network leaves outside its stations are drawn on
+        // request, and a journey may set off from one. A station's sheet says
+        // how full the batteries standing at it are. Three American networks
+        // join the catalogue, admitted by a dock rule that no longer asks a
+        // producer to publish a capacity it measures live. The APK sheds half
+        // a megabyte it was carrying for nothing. And a test campaign's
+        // eleven anomalies are closed, the sideways search screens and the
+        // Arabic titles among them. See CHANGELOG.md.
+        versionName = "1.4.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

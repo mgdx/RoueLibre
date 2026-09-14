@@ -7,7 +7,17 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
-## [Unreleased]
+## [1.4.0]
+
+The bikes a network leaves outside its stations are drawn on request, and a
+journey may set off from one. A station's sheet says how full the batteries
+standing at it are. A dock rule that no longer asks a producer for a capacity
+it measures live opens the catalogue to Philadelphia, Las Vegas and
+Bentonville. The APK sheds half a megabyte it was carrying for nothing —
+configurations laid out for a contributor, licence texts repeated eight times,
+glyphs never drawn and pictures no map ever shows. And a test report of eleven
+anomalies closes, from the two search screens a sideways phone got nothing
+from, to the Arabic titles cut short with the bar half empty.
 
 ### Added
 
@@ -23,7 +33,8 @@ also records what has no visible effect.
   row unfolds the station bike by bike, identifier, kind, charge and state,
   those on offer first — the identifier cut to its two ends past twenty
   characters, a Fifteen UUID reading `3e279…5fbd2` while nextbike's
-  `nextbike_bb_20911` passes whole with its painted number. Read on the street bike's terms, and only on a bike the type table calls electric,
+  `nextbike_bb_20911` passes whole with its painted number. Read on the street
+  bike's terms, and only on a bike the type table calls electric,
   Fifteen writing a range on every one of Helsinki's 3,947 mechanical bikes.
   The switch that reads the feed now says what it reads — "Show the battery
   of the bikes at stations, and the bikes outside stations" — and what it
@@ -31,7 +42,8 @@ also records what has no visible effect.
   own minute**, no longer every five: the sheet reads both on one line, and
   a charge five minutes older than the count beside it was two moments
   passed off as one; gzip is asked for on every request, and a test now
-  says so. The sheet asks for the feed when it opens, through the same gate as the map, so
+  says so. The sheet asks for the feed when it opens, through the same gate as
+  the map, so
   one opened from the list finds it. **The row opening the list names no
   figure** — "Bike details at this station" — and **where the station feed's
   count cannot be reconciled with the bikes the vehicle feed lists, the
@@ -75,6 +87,305 @@ also records what has no visible effect.
   were. The bikes live in memory for the session, under the city's
   identifier, and reach no disk; a network publishing no such feed shows
   nothing, and the city configuration gains no field.
+
+- **Philadelphia, Las Vegas and Bentonville, and the dock rule that let them
+  in** (SPEC §4.1, §15). The network survey refused any feed whose
+  `station_information` omits `capacity`, reading the absent field as the mark
+  of a free-floating operator publishing its parking areas as stations. That
+  reading cost the catalogue Indego, Los Angeles, Milwaukee, Buffalo, Salt Lake
+  City and the whole BCycle family, the Dutch OV-fiets, Gothenburg and Toruń —
+  networks whose docks are perfectly real and which simply do not publish the
+  static figure, where the application has always treated that capacity as
+  optional: the sheet writes the age alone when it is missing, and the
+  availability disc fills on the bikes plus the free docks. **The live free-dock
+  count now answers where the field is absent**, and three readings decide
+  whether it can be believed, each threshold sitting far from both families it
+  separates, on the figures the feeds published on 12 September 2026.
+  `is_virtual_station` is the standard's own word for a painted zone: Bird and
+  Flamingo set it on every station they publish, Indego, HELLO CYCLING, OV-fiets
+  and Styr & Ställ on none. A dock exists whether or not a bike stands in it, so
+  a network counting real docks offers a slot at essentially every station — not
+  one at Indego, Los Angeles, Milwaukee, Buffalo or OV-fiets, 3.2 % at Toruń —
+  where a fleet left anywhere inside a zone implies one only where a bike
+  happens to stand: 19.6 % of Veloleo's stations in Braunschweig, 34.4 % of
+  Sprintrad's in Hanover. And the free docks must tell the stations apart, twice
+  over: MobiData BW fills the field in with forty at 1,620 of Call a Bike's
+  1,621 stations, OV-fiets answers one free dock at each of its 284, and
+  Gothenburg and seven more answer nought at every one of theirs — frozen at
+  nought no journey can end anywhere in the network, since `canAcceptBike` asks
+  for a free dock, and frozen above it every station promises room nobody
+  measured. All of it is skipped where a capacity is declared, which leaves the
+  networks already served exactly where they were: Donkey Republic publishes
+  nothing but virtual stations, gives each one a capacity, and that declared
+  figure is what has always been believed. **Three of the networks admitted are
+  served from this version**, chosen to be tried on a real phone rather than
+  argued about: Indego and its 319 stations, RTC Bike Share with 38, Bentonville
+  BCycle with 30 — 46.2, 6.8 and 3.2 MB of data. Philadelphia's box reaches
+  across the Delaware, so its extract is Pennsylvania and New Jersey merged, and
+  the address index finds Camden's Market Street beside Center City's 8th &
+  Market. The catalogue holds 340 networks in 39 countries.
+
+### Changed
+
+- **The APK stops carrying what nothing in it reads** (SPEC §3). Six
+  measurements, each verified rather than assumed, and each leaving the
+  application identical on screen. The **city configurations** are laid out for
+  a contributor — indented, commented at every level a hand may edit — which the
+  application never reads, every reader of these files ignoring the keys it does
+  not know; the copy in the assets now loses the layout recursively, the file
+  one edits keeps it, and the address normalisation rules go the same way. They
+  also stop being three hundred and forty files: each entry of a zip is
+  compressed on its own, blind to the others it repeats almost word for word, so
+  one stream takes 71 KB where the folder took 247, and `cities-index.json` says
+  where each configuration begins and how far it runs, read at startup in place
+  of the directory listing. The packaging task now empties its output directory
+  before writing, too — it kept it between runs, so the folder of individual
+  files had gone on shipping beside the stream that replaced it. The **release
+  notes** ship once instead of once per architecture: the store publishes one
+  note per architecture code, 41 to 44 repeating word for word what 4 says,
+  while the what's-new screen only ever reads the base codes, and carrying the
+  repeats shipped every note five times over in thirty-one languages.
+  **OkHttp's public suffix list** goes, a hundred and thirty kilobytes read in
+  two places only — the cookie jar, and `HttpUrl.topPrivateDomain()` — of which
+  the application installs neither; an asset of a library is out of reach of a
+  packaging exclude, which filters Java resources, so `ignoreAssetsPatterns` is
+  what reaches it, and the build file says which line to undo should a request
+  ever need cookies. Eight AndroidX artefacts each carried the Apache 2.0 text,
+  byte for byte the same ten thousand of them, and a ninth protobuf's BSD
+  notice: the two texts now travel once, in `assets/licences/`, where the
+  licences screen already reads MapLibre's and BRouter's — redistribution keeps
+  its notices and the APK loses eight copies. With them go Kotlin's reflection
+  metadata, full reflection not being on the release classpath, and one file per
+  AndroidX artefact holding its version number, which Google's own SDKs read to
+  report what an application was built with and nothing here does. **MapLibre's
+  logo and compass** ship empty: both maps turn them off the moment they are
+  ready — ours is the compass in the column of controls, and the attribution is
+  reproduced in the data sources screen — but `MapView` loads the pictures as it
+  is inflated, before those flags are read, so six densities apiece plus a
+  vector were shipped where nobody can see them and where the resource shrinker
+  cannot reach. They are shadowed by transparent files under the library's own
+  names and dimensions, emptied rather than discarded, discarding the entries
+  outright raising `Resources.NotFoundException` as the map is inflated. And the
+  **figures typeface** carries the nineteen characters it draws: Bricolage
+  Grotesque Bold writes the availability indicator and the counts on the map's
+  markers and nothing else, and carried five hundred and twenty-seven glyphs to
+  do it — the ten figures, a space, a full stop, a comma, plus and minus, k K
+  and M for the abbreviated cluster counts and the question mark of an unknown
+  count are what is left, and the glyph range the map is built from follows,
+  `build_glyphs.js` reading that very file. Using it for a word would now show
+  that word blank, and `docs/dependencies.md` says so. Typeface 91 KB to 14, its
+  glyph range 77 KB to 7, the assets 704 KB to 71, the libraries 99 438 bytes,
+  MapLibre's two pictures 68 682.
+
+- **The minification rules stop repeating what the libraries declare** (SPEC
+  §3). The principle of that file is to add no rule without a reason; the same
+  principle asks that one which has stopped being needed be taken out.
+  Twenty-four lines kept kotlinx.serialization's generated serialisers, which R8
+  used to prune — parsing the GBFS feeds then failed at run time in the release
+  build alone — and since version 1.9 the library ships those very rules inside
+  its own artefact, word for word and wider. Four more silenced warnings OkHttp
+  silences itself, and a fifth named OpenJSSE, which OkHttp 5 dropped
+  altogether: it matched nothing at all. Removing the twenty-nine leaves the APK
+  identical to the byte, which is the point. The blanket rule on the
+  `(Context, AttributeSet)` constructor goes with them — aapt2 writes one keep
+  rule per class a layout names, our nine custom views included, while the
+  blanket rule matched every view of every library and kept MotionLayout, Slider
+  and TabLayout from being removed. One measurement contradicted the tidying and
+  is now written down: narrowing `-keeppackagenames` to `btools.router`, the
+  only package imported here, costs 908 bytes, the rest of BRouter then landing
+  in the root package where the names R8 has to invent are longer than the
+  prefix it saved. The wildcard stays, and says why.
+
+### Fixed
+
+- **Sideways, the two search screens give their answers back** (SPEC §7.6, test
+  report). Lying down, both screens spent their height on a header costing the
+  same density-independent pixels whichever way the phone is held, and a
+  Fairphone 3 turned sideways with the keyboard open has some two hundred of
+  them to spend: the address search drew none of its answers while they were
+  being typed for, and the station list drew a row and a half. The "nearest
+  station first" button, hanging from a bottom edge the keyboard had pushed up
+  into the header, ended over the search field and half covered the cross that
+  clears it. Both are answered as `layout-land/fragment_welcome.xml` and
+  `layout-land/fragment_journey_result.xml` already answer their own: the header
+  and the list share the **width** instead of the height, half a sideways
+  Fairphone 3 being the width the portrait screen gives the same rows, so they
+  read as they always have. **Nothing spans both columns** — the bar, the title,
+  the data's age and the three ways out all sit in the field's column, where a
+  band across the top had been costing the answers the first 140 to 168 px of a
+  302 px window, one row cut through the middle. Two things had to be decided:
+  the data's age joins the title's row rather than keeping a line of its own,
+  that line being 53 px and 53 px the difference between a field one can type
+  into and a field the keyboard cuts through; and the way back stays in the top
+  corner, the one corner a keyboard never reaches. **The header then gives way
+  in height and never in letters** (SPEC §7): seated inside the row of three
+  icons, whose height is 48 dp of touch target, the data's age was centred in a
+  height it stopped having at a text size of ×2.0, and what did not fit was lost
+  off the top of the screen — "Aktualisiert vor 59 Sekunden" measured
+  [457,0][670,320] on a Fairphone 3, its first word cut above the edge. The
+  header now lives in a column that scrolls, the row wraps its tallest child so
+  the age takes a second and a third line rather than losing one, and the field,
+  being focused, is brought back into sight when the keyboard opens. At ×2.0 the
+  header is simply taller than a sideways window holds — 36 dp of inset, a 64 dp
+  row and a 72 dp field against 151 dp — and the choice is between letters lost
+  and a column one scrolls. The portrait arrangements are untouched and the two
+  configurations name exactly the same views, which is what the binding and the
+  query restored after a rotation depend on.
+
+- **An accented name is filed under its own letter** (test report). The station
+  list was ordered by the cache's `ORDER BY name`, and SQLite compares the
+  bytes: "ÉPINETTES" came after "TINQUEUX LA HAUBETTE" because U+00C9 is past
+  "Z", and `COLLATE NOCASE` would have changed nothing, knowing only ASCII. The
+  alphabet now belongs to `orderStations`, which sorts on the collation keys of
+  a `java.text.Collator` the screen supplies — one key per station rather than a
+  rule walk per comparison, for a list several hundred long rebuilt on every
+  availability refresh and every keystroke. The collator comes from the caller
+  because **the alphabet is the reader's, not the network's**: Romanian files
+  "ă" after "a" where French reads it as an "a", and Turkish keeps "ı" and "İ"
+  apart. The city chooser sorted its names the same way and is corrected with
+  it — "Évreux" sat below "Zurich".
+
+- **An Arabic title is no longer cut short with the bar half empty** (test
+  report). `TextAppearance.RoueLibre.Title` draws its letters a hundredth of an
+  em together, a figure decided for Bricolage Grotesque's wide, open letterforms
+  — and Bricolage holds no Arabic letter, its character map stopping at 527
+  glyphs. An Arabic title is drawn by the system's fallback face and the
+  tightening reached it all the same. Arabic being cursive, its letters joining
+  and their shapes depending on their neighbours, asking for letter spacing
+  there changes how the run is shaped and the two ways Android sizes a line stop
+  agreeing: a toolbar builds its title as a single-line, end-ellipsized
+  `TextView` and gives it exactly the width the measuring path returns. Measured
+  on the FP3: 197 px for the settings title with the tightening and without it,
+  which is the measuring path saying it never applied it, while the laying-out
+  path does and comes out some eight pixels past the box it was handed. The
+  settings screen read "الإعدادا…" and the journey screen "الرح…". The
+  tightening becomes a token of its own, `title_letter_spacing`, which
+  `values-ldrtl` withdraws — a folder rather than a second copy of the style,
+  so the face, the size and the colour stay written once. **A first answer was
+  reverted before this one**: it read the truncation as the justification and
+  the hyphenation the theme hands every text view, measured on the device,
+  screenshot against screenshot, to change nothing at all — justification only
+  ever moves a line that has a line after it, and a title never has one.
+  Thirteen shared layouts touched for no effect are worse than the defect, so
+  they were put back.
+
+- **A shared word alone asks rather than chooses a destination** (SPEC §7.8,
+  test report). A text shared into the application was read as "finished text"
+  and its first result became a journey with nobody choosing it — including when
+  that text was a single word. "Reims" opened a journey to "Rue De Reims", a
+  street of another municipality, and "rue" one to "Grande Rue". Finished only
+  ever meant that nobody was going to add a letter to the text; it did not mean
+  the text wrote an address, and one word is what a share hands out by accident
+  exactly as a sentence does. The first reading now asks for **two words the
+  query designates a street by** — the stop words and the two-letter fragments
+  aside, the house number counting as one of them — before its result may become
+  a destination. Below that the text falls to the second reading, which never
+  chooses and offers at most five addresses: a lone word is thereby asked about
+  rather than dropped, "Boulingrin" being a street name entire and having no
+  sentence to have been picked out of by accident. That second reading lowers
+  its own two-word requirement to one in that single case, and in that case
+  only.
+
+- **A network is listed under a name, never under an identifier** (test report).
+  Eighteen of the three hundred and forty catalogued networks were shown as
+  "bogota-bikebogota — Bogotá", in the city list, on the settings row naming the
+  network in service and at the head of the storage screen. The survey was not
+  falling back on an identifier: it was **accepting one as a name**. "fortworth"
+  and "kitchen" — a feed software's template value — are what those producers
+  write in their own `name` field, and the reading took them at step two and
+  never reached the registry, which holds "Trinity Metro Bikes" and "Mibici
+  Guadalajara". An identifier is now refused like a candidate that only names
+  the territory, and the next source is tried; where none of the three publishes
+  a name, the identifier is spelled out rather than shown raw — separators
+  become spaces, each word takes a capital, and the words repeating the
+  conurbation go. A bare lowercase word is refused as a first answer but never
+  rewritten: it may be the brand itself, "nextbike" being written that way by
+  the operator of fifty-three of the networks surveyed, and where no other
+  source holds better it stands exactly as published. Eight cities gained a
+  name — àVélo, Bikebogota, Dej Velo, Dublinbikes, Mibici, Nike Biketown, Sibiu
+  BikeCity, Trinity Metro Bikes — and `cityLabel` gains the guard symmetric to
+  the one it already had, a downloaded catalogue naming no network showing the
+  conurbation alone rather than a dash with nothing before it.
+
+- **The station sheet says its two counts out loud, and its buttons end level**
+  (SPEC §7.2, test report). The sheet drew both figures onto a canvas and named
+  neither, so a screen reader was given "BIKES" and "FREE DOCKS" and no number
+  at all — the one thing that screen is for. The row holding the two discs now
+  carries the sentence the station list already spoke, built once in
+  `spokenAvailability` so the two screens cannot drift apart, and each disc and
+  its label leave the accessibility tree rather than say a word twice out of its
+  figure's company. The two journey buttons hung on each other, the second
+  centred in the first's height instead of given it, so at the system's largest
+  text size "Partir d'ici" wrapped onto two lines and the pair ended at
+  different depths; they stand in a row of their own now, each taking the height
+  of the tallest.
+
+- **The detail screen stops reading "null", and stops counting a walk of no
+  length** (SPEC §7.4, test report). The sentence read out in place of the
+  elevation drawing was built with `formatClimb`'s result as its first argument,
+  and that result is null wherever the climb is too small, or the ride too
+  short, for the SRTM samples to name one — which `String.format` writes as the
+  word "null": "the ride climbs null, between 75 m and 90 m above sea level".
+  The two silences are not the same silence, the drawing being judged on the
+  height between its lowest and its highest reading and the figure on the metres
+  gained, so a ride that mostly goes down has a shape to draw and no climb to
+  name: a second resource carries the sentence without that clause, rather than
+  an empty argument leaving an orphaned comma behind it. And a journey whose
+  destination is the arrival station — "go here" pressed on a station's own
+  sheet — ended on a leg running from that station to that station, zero metres
+  long, shown as "walk to the destination · 0 m · 1 min" because no duration is
+  ever shown as less than a minute, and that minute was added to the total
+  announced above it. The leg is dropped where it is built, in `JourneyPlanner`,
+  so that every reading of the journey drops it the same way rather than one
+  screen being corrected and the others left disagreeing. **The threshold is
+  zero metres exactly**: a wider margin would be a coefficient nobody measured
+  (SPEC §14), and it would silence a walk somebody really makes.
+
+- **A unit symbol keeps its case, and the map's toggles a ground** (test
+  report). A line written in the small spaced capitals of
+  `TextAppearance.RoueLibre.Label` upper-cased whatever it carried, values
+  included: the storage screen read "3,7 MO · 31 AOÛT 2026" and the city list
+  "10,8 MO INSTALLÉS SUR L'APPAREIL", where French writes "Mo" and "ko" and a
+  capitalised symbol is no longer a symbol. English hid it, "MB" and "KB" being
+  capitals already. The three lines carrying a formatted value take a
+  `Label.Value` appearance which gives up the capitals and nothing else, the
+  shared style untouched and the sixteen labels made of words keeping the
+  typography the project chose; splitting each string into a shouted half and a
+  quiet one was weighed and refused, since it turns one string into two views
+  and takes the word order away from the translator. The two toggles at the
+  bottom left of the map had an outline and no fill, so streets, greenery and a
+  station's disc were read through the word; they now carry the surface token
+  the five icon buttons of the same screen already use, defined in
+  `values-night/` as well.
+
+- **A breakdown of bikes by kind is read as an object as well as a list** (SPEC
+  §4.1). `num_bikes_available_types` is an extension rather than the standard —
+  a network on GBFS 1.x has no `vehicle_types` feed to point identifiers at, so
+  it names the kinds inline — and two shapes are in the field where only one was
+  declared: Vélib' sends a list of single-key objects, `[{"mechanical": 3},
+  {"ebike": 0}]`, which the model took for the shape, while every BCycle network
+  sends one object naming all the kinds at once. Deserialising an object into a
+  `JsonArray` fails, and it fails for the whole document rather than for one
+  field, so `station_status` became unreadable and the list showed a question
+  mark against every station of a network whose counts were sitting there all
+  along — found on the device, on Philadelphia, where the error banner read "the
+  data received is unreadable — the network's feed is at fault". It was ours.
+
+- **The map-creation profiles come from the pinned BRouter archive, not from
+  master** (SPEC §5). `build_routing.py` pinned the map creator to 1.7.10 by
+  digest but fetched `all.brf`, `trekking.brf` and `softaccess.brf` from
+  BRouter's master branch, which already differs from the tag; those profiles
+  decide which OSM ways enter the graph, so two machines generating the same
+  city on different days could produce different graphs. They now come from the
+  v1.7.10 tag, each checked against its digest — the release archive turned out
+  to ship only two of the three, `all.brf` and `softaccess.brf` living under
+  `misc/profiles2` in the source tree, which the zip omits, and a first attempt
+  to read them from the archive left every city failing to generate. The digests
+  recorded are those of the profiles that generated every city published so far,
+  so no graph shifts under a city already on somebody's phone. A test now ties
+  the generator's BRouter version to the submodule's, the engine in the APK
+  coming from one and the map creator from the other while both said 1.7.10 by
+  convention alone.
 
 ## [1.3.0]
 

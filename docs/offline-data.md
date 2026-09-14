@@ -8,8 +8,8 @@ generation is entirely scripted and versioned in [`tools/`](../tools/README.md):
 tools/generate_all.sh
 ```
 
-**All 337 networks served have their data produced: 12.9 GB in all**,
-median 10.7 MB a city. Sizes actually obtained, under the same rules for all:
+**All 340 networks served have their data produced: 12.9 GB in all**,
+median 10.6 MB a city. Sizes actually obtained, under the same rules for all:
 
 | Network | Stations | Area | Base map | Routing | Addresses | Total |
 |---|---|---|---|---|---|---|
