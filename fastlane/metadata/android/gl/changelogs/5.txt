@@ -1,0 +1,15 @@
+A lista de estacións pon a máis próxima á cabeza, ela soa.
+
+• A lista ordénase por proximidade en canto aparece, veñas de onde veñas, e cada liña di a que distancia está a súa estación. Non se che pide nada para iso — ningún permiso, ningunha mensaxe — e onde non hai ningunha posición dispoñible, queda a orde alfabética.
+• Un botón «A estación máis próxima primeiro» flota agora sobre a esquina inferior da lista, onde tes o polgar. É o único sitio onde esta pantalla pide a túa localización, mostra a espera mentres chega o punto, e devolve a lista reordenada á primeira liña.
+• Unha estación fóra de servizo di canto tempo leva calada: «Fóra de servizo · última medición hai 5 meses», lida da medida que a propia rede publica. Unha estación pechada esta mañá paga a pena agardala; unha que leva meses sen dicir nada xa deixou a beirarrúa.
+• A Configuración nomea a rede en servizo, onde a liña da cidade só ofrecía cambiala.
+• Sen mapa base instalado, a aplicación xa non se abre no panel que anuncia que falta. Chega á lista de estacións, que non precisa ningunha descarga, e volve ao mapa en canto hai un que debuxar.
+• O primeiro arranque xa non morre cando se preme a mensaxe sobre a escolla dunha cidade por riba da secuencia de benvida — esa mensaxe agarda agora a que a benvida remate.
+• Unha busca, coma o botón, mostra a lista desde a primeira liña, e xa non varios quilómetros de estacións máis abaixo.
+• A ficha dunha estación xa non mide ningunha distancia desde unha cidade na que non estás: consultar unha rede na outra punta do mundo anunciaba miles de quilómetros baixo o nome da estación.
+• «Buscar actualizacións» sen conexión xa non promete que unha descarga continuará onde parou: non se comezara nada.
+• A resposta ao que acabas de facer xa non se borra unha fracción de segundo despois por unha actualización que falla ao lado.
+• Na pantalla de favoritos, a indicación sobre manter premida unha liña para movela agarda a que haxa dúas liñas que mover.
+• O xesto de volver atrás debuxa onde leva, en Android 13 e 14.
+• Un permiso menos: o da wifi, que viña da biblioteca de mapas e que aquí nunca leu nada.
