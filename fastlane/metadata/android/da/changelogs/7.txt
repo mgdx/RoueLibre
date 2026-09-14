@@ -1,0 +1,3 @@
+Kortet tegnes igen på alle telefoner.
+
+• Version 1.2.0 nægtede at blive installeret på telefoner uden Vulkan, fordi kortbiblioteket havde gjort det til et krav. Kortet tegnes nu gennem OpenGL ES, som enhver understøttet telefon har – samme kort, samme motor, og appen er omkring to megabyte lettere.
