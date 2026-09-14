@@ -9,8 +9,10 @@ somebody.
 Android identifies an application by two things: its `applicationId` and the
 **certificate its APK is signed with**. An update is accepted only if it
 carries the same signature as the version already installed. There is no
-authority to appeal to and, this application being published outside Google
-Play, no recovery scheme either.
+authority to appeal to and, for the two channels this key serves — the releases
+page and F-Droid — no recovery scheme either. Google Play is the exception, and
+only for itself: it signs what it serves with a key of its own, which is a
+separate installation and a separate story (`docs/play-store.md`).
 
 So the key is not a password one rotates. **It is the identity of Roue Libre**,
 and it holds for as long as the project does. Lose it and nobody who installed
@@ -65,7 +67,17 @@ storeFile=/absolute/path/to/roue-libre-release.jks
 storePassword=…
 keyAlias=…
 keyPassword=…
+
+# Google Play only, and not the same key at all: see docs/play-store.md.
+uploadStoreFile=/absolute/path/to/roue-libre-play-upload.jks
+uploadStorePassword=…
+uploadKeyAlias=…
+uploadKeyPassword=…
 ```
+
+The four `upload` lines are read by `bundleRelease` alone. Absent, the bundle
+falls back on the publishing key, and `assembleRelease` never looks at them:
+the five APKs are signed by the key above whatever happens.
 
 Both files are `chmod 600`, and neither is versioned.
 
@@ -145,7 +157,11 @@ Both files are `chmod 600`, and neither is versioned.
    carries the certificate fingerprint, so that a reader can check what they
    downloaded.
 
-8. **The data is released separately** (`SPEC.md` §4.4): the datasets live in
+8. **Google Play**, if the release goes there too: `./gradlew bundleRelease`
+   and the steps of `docs/play-store.md`. It is a separate installation, signed
+   by a key Google holds, and it waits on nothing here.
+
+9. **The data is released separately** (`SPEC.md` §4.4): the datasets live in
    [RoueLibre-data](https://github.com/mgdx/RoueLibre-data/releases) under their
    own tags, so updating the base map does not force an application release, and
    the other way round.
@@ -210,11 +226,15 @@ setting at its default value.
 
 ## F-Droid
 
-F-Droid **rebuilds from source and signs with its own key**: the key described
-above does not sign what F-Droid serves. The consequence to keep in mind is
-that an APK downloaded from the releases page and the same version installed
-from F-Droid have different signatures, and cannot replace one another without
-removing the application first.
+F-Droid **rebuilds from source and checks the result against the published
+file**, then serves that very file: the recipe names this project's certificate
+in `AllowedAPKSigningKeys` and each build entry carries a `binary:` line
+pointing at the release asset. So F-Droid distributes the APKs signed above
+rather than APKs of its own, and the releases page and F-Droid are one
+installation — an update passes from either to either.
+
+That is what makes the reproducibility of the build a requirement and not a
+nicety: the day a rebuild stops matching, F-Droid publishes nothing at all.
 
 ### Getting in
 
