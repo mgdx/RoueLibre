@@ -12,30 +12,33 @@
     needs them. `adjustResize` cannot fix that — it hands back a window the
     stack has already spent.
 
-    So the field and the answers share the width instead of the height, and
-    **the bar goes down into the field's column with it**. That last part is
-    what a first sideways arrangement got wrong: the bar kept the whole width,
-    which cost the answers the top 168 px of a 302 px window and left them one
-    row, cut through the middle. Nothing spans both columns now. The answers
-    start at the top of the screen and end at the bottom of it, and what the
-    keyboard gives back is theirs alone.
+    So the bar and the field share the width with the answers instead of the
+    height. Nothing spans both columns: the answers start at the top of the
+    screen and end at the bottom of it, and what the keyboard gives back is
+    theirs alone.
 
     Half and not some finer split for the reason written in
-    `layout-land/fragment_welcome.xml` — half a sideways Fairphone 3 is 411 dp,
+    `layout-land/fragment_welcome.xml`: half a sideways Fairphone 3 is 411 dp,
     which is exactly the width the portrait screen gives the same rows, so an
-    address wraps and reads as it always has; and a half is its own mirror,
-    which keeps the split honest in a right-to-left language. The split is a
-    chain rather than a guideline or a percentage: a chain is built on start
-    and end and so mirrors on its own, where a bias is measured from the left
-    whichever way the language runs, and it adds no identifier here that
-    portrait has not got.
+    address wraps and reads as it always has. **The half is a percentage
+    anchored to one edge, and no bias**: a bias is measured from the left
+    whichever way the language runs, and this screen is read right to left in
+    Arabic. Each column carries one anchor and its own half, so the two mirror
+    together with the language.
 
-    **The way back stays in the top corner**, which is where portrait keeps it
-    and the one corner a keyboard never reaches: it rises from the bottom edge,
-    and everything it can cover is at the bottom of the screen. A way back that
-    moved house between two ways of holding the phone would be one more thing
-    to look for, and one that hid under the keyboard would be a way back only
-    for somebody who had finished typing.
+    **The way back stays in the top corner and does not scroll**, which is
+    where portrait keeps it and the one corner a keyboard never reaches: the
+    keyboard rises from the bottom edge, and everything it can cover is at the
+    bottom of the screen. A way back that moved house between two ways of
+    holding the phone would be one more thing to look for, and one that scrolled
+    out of the column would be a way back only for somebody who had not typed.
+
+    **Under it the column scrolls**, which is what a text size can do to it
+    rather than what it can do to the letters (SPEC §7, and the comment beside
+    `mode_toggle` in `fragment_map.xml`). At ×2.0 a bar and a field come to
+    more than a sideways window holds once the keyboard is up; the field, being
+    the focused view, is scrolled back into sight by the scroll view itself
+    when the keyboard opens, and nothing is cut.
 
     What does go is the line of reassurance: the search is explained where
     there is room to explain it, and the sentence about nothing leaving the
@@ -52,69 +55,80 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <!-- The bar, at the top of the field's column and no wider than it. Its
-         end is the field's own, so the column reads as one thing. -->
+    <!-- The bar, at the top of the field's column and no wider than it. -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@id/search_field"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5"
         app:navigationIcon="@drawable/ic_back"
         app:title="@string/address_search_title"
         app:titleTextAppearance="@style/TextAppearance.RoueLibre.Title" />
 
-    <!-- The field, first link of the chain: it takes its half of the width and
-         stays where it is in portrait, under the bar, under the thumb that is
-         about to type into it.
-
-         `flagNoExtractUi`, as in portrait: it is what refuses the keyboard's
-         own full-screen copy of this field, and this arrangement would be for
-         nothing under one. -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/search_field"
-        style="@style/Widget.RoueLibre.SearchField"
+    <!-- What is left of the column under the bar, and as much height as the
+         field asks for. -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_l"
-        android:layout_marginTop="@dimen/space_s"
-        android:layout_marginEnd="@dimen/space_l"
-        android:hint="@string/address_search_hint"
-        app:endIconContentDescription="@string/address_search_clear"
-        app:endIconMode="clear_text"
-        app:layout_constraintEnd_toStartOf="@id/results"
-        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_input"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionSearch|flagNoExtractUi"
-            android:inputType="textPostalAddress"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:orientation="vertical"
+            android:paddingTop="@dimen/space_s"
+            android:paddingBottom="@dimen/space_m">
 
-    <!-- Gone, and under the field where portrait keeps it, so that the day a
-         sideways screen has room for it again it is already in its place. -->
-    <TextView
-        android:id="@+id/privacy_note"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_s"
-        android:text="@string/address_search_privacy"
-        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@id/search_field"
-        app:layout_constraintStart_toStartOf="@id/search_field"
-        app:layout_constraintTop_toBottomOf="@id/search_field" />
+            <!-- `flagNoExtractUi`, as in portrait: it is what refuses the
+                 keyboard's own full-screen copy of this field, and this
+                 arrangement would be for nothing under one. -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/search_field"
+                style="@style/Widget.RoueLibre.SearchField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_l"
+                android:layout_marginEnd="@dimen/space_l"
+                android:hint="@string/address_search_hint"
+                app:endIconContentDescription="@string/address_search_clear"
+                app:endIconMode="clear_text">
 
-    <!-- The answers, second link of the chain, from the top of the screen to
-         the bottom of it. Nothing costs them height any more, neither the bar
-         nor the field, so what the keyboard gives back is theirs. -->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/search_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionSearch|flagNoExtractUi"
+                    android:inputType="textPostalAddress"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Gone, and under the field where portrait keeps it, so that the
+                 day a sideways screen has room for it again it is already in
+                 its place. -->
+            <TextView
+                android:id="@+id/privacy_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_l"
+                android:layout_marginTop="@dimen/space_s"
+                android:layout_marginEnd="@dimen/space_l"
+                android:text="@string/address_search_privacy"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+                android:visibility="gone" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- The answers, in the other half, from the top of the screen to the
+         bottom of it. Nothing costs them height any more, neither the bar nor
+         the field, so what the keyboard gives back is theirs. -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/results"
         android:layout_width="0dp"
@@ -124,9 +138,9 @@
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@id/search_field"
         app:layout_constraintTop_toBottomOf="@id/empty_state"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5"
         tools:itemCount="4"
         tools:listitem="@layout/item_address" />
 
@@ -136,7 +150,9 @@
          reasons written there — what changes is only that "above" now means at
          the top of the answers' column, which is also the top of the screen.
          Its side spacing is the ordinary one and not portrait's wide one: the
-         column it centres itself in is already half a screen. -->
+         column it centres itself in is already half a screen, and it takes its
+         edges from the list rather than a half of its own, so the two cannot
+         come apart. -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/empty_state"
         android:layout_width="0dp"
@@ -147,8 +163,8 @@
         android:visibility="gone"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/search_field"
+        app:layout_constraintEnd_toEndOf="@id/results"
+        app:layout_constraintStart_toStartOf="@id/results"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
         tools:visibility="visible">

@@ -11,41 +11,44 @@
     the bottom edge the keyboard has just pushed up, ended over the field it
     had nothing to do with, half covering the cross that clears it.
 
-    So the header and the rows share the width instead of the height, and
-    **the whole header goes down into the field's column**: the title, the data's
-    age and the three ways out with it. That last part is what a first sideways
-    arrangement got wrong. Keeping the title band across the top cost the rows
-    their first 140 px of a 302 px window, which is one row and a truncated
-    second; and it left the button hanging from a short column, high enough to
-    bite into a station's name. Nothing spans both columns now. The rows start
-    at the top of the screen and end at the bottom of it, and the button hangs
-    from a column as tall as the window.
+    So the header and the rows share the width instead of the height, and the
+    whole header — the title, the data's age, the three ways out, the field and
+    the toggle — lives in the column on the start side. Nothing spans both:
+    the rows start at the top of the screen and end at the bottom of it, and
+    the button hangs from a column as tall as the window.
 
     Half and not some finer split for the reason written in
-    `layout-land/fragment_welcome.xml` — half a sideways Fairphone 3 is 411 dp,
+    `layout-land/fragment_welcome.xml`: half a sideways Fairphone 3 is 411 dp,
     exactly the width the portrait screen gives the same rows, so a station's
-    name and its counts wrap and read as they always have; and a half is its
-    own mirror, which keeps the split honest in a right-to-left language. The
-    split is a chain rather than a guideline or a percentage: a chain is built
-    on start and end and so mirrors on its own, where a bias is measured from
-    the left whichever way the language runs, and it adds no identifier here
-    that portrait has not got.
+    name and its counts wrap and read as they always have. **The half is a
+    percentage anchored to the start edge, and no bias**: a bias is measured
+    from the left whichever way the language runs, and this screen is read
+    right to left in Arabic. Each column carries one anchor and its own half,
+    so the two mirror together with the language. A chain would mirror too, but
+    a chain needs both its links to be children of this layout, and the header
+    is no longer one child.
 
-    **The data's age joins the title's row**, which portrait gives it a line of
-    its own. That line is 53 px, and 53 px is the difference between a field
-    one can type into and a field the keyboard cuts through: the column has
-    302 px to seat a 126 px row of icons and a 147 px field, and nothing to
-    spare. It is a status line and not a paragraph — the very argument the
-    portrait file makes for refusing to justify it — so the title's row is
-    where it belongs when a row is what there is. Two lines of it still fit
-    inside the height of the icons beside it.
+    **The header column scrolls, and that is the whole of what a text size can
+    do to it.** The first sideways arrangement seated the title and the data's
+    age inside the row of icons, whose height is 48 dp of touch target: at a
+    text size of ×2.0 the freshness no longer fitted, and being centred in that
+    row it lost what did not fit off the top of the screen — "Aktualisiert vor
+    59 Sekunden" measured `[457,0][670,320]`, its first word cut above the edge.
+    SPEC §7 has the height give way, never the letters, and the comment beside
+    `mode_toggle` in `fragment_map.xml` records the same defect being fixed the
+    same way on the map.
 
-    **The toggle is the one thing that goes below the fold while one types**,
-    and it is the right one: it is the only part of the header the reader is
-    not using at that moment, it comes back whole the moment the keyboard goes
-    down, and with the keyboard down the column has 985 px for 510 px of
-    header. Nothing is hidden and nothing is dropped — SPEC §7.1 keeps its
-    toggle.
+    Here nothing is centred in a fixed height any more. The row of the title is
+    an ordinary row that wraps its tallest child, so the data's age keeps the
+    title's line where it fits on it — which is what buys the field the 53 px
+    it needs at the ordinary text sizes — and takes a second and a third line
+    when it does not, the row growing under it. What the growing pushes past
+    the bottom of a window a keyboard has shortened is scrolled to, and the
+    field, being the focused view, is scrolled back into sight by the scroll
+    view itself when the keyboard opens. At ×2.0 the header is simply taller
+    than a sideways window: 36 dp of inset, a 64 dp row, a 72 dp field. There
+    is no arrangement that fits it, and the choice is between letters lost and
+    a column one scrolls.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -55,160 +58,165 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <!-- The three ways out keep the order they have in portrait — settings at
-         the edge, the map innermost — and they now sit at the end of the
-         field's column rather than at the edge of the screen. A header one has
-         to relearn between two ways of holding the phone is one more thing to
-         look for; a header that reaches across a screen the rows need is the
-         defect this file exists for.
-
-         They are what the row's height is: 48 dp of touch target, whatever the
-         title and the freshness beside them come to. -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/open_settings"
-        style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="@dimen/touch_target_min"
-        android:layout_height="@dimen/touch_target_min"
-        android:layout_marginTop="@dimen/space_s"
-        android:contentDescription="@string/settings_open"
-        app:icon="@drawable/ic_settings"
-        app:iconTint="@color/ink"
-        app:layout_constraintEnd_toEndOf="@id/search_field"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/open_favourites"
-        style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="@dimen/touch_target_min"
-        android:layout_height="@dimen/touch_target_min"
-        android:contentDescription="@string/favourites_open"
-        app:icon="@drawable/ic_favourite"
-        app:iconTint="@color/ink"
-        app:layout_constraintBottom_toBottomOf="@id/open_settings"
-        app:layout_constraintEnd_toStartOf="@id/open_settings"
-        app:layout_constraintTop_toTopOf="@id/open_settings" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/open_map"
-        style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="@dimen/touch_target_min"
-        android:layout_height="@dimen/touch_target_min"
-        android:contentDescription="@string/stations_open_map"
-        app:icon="@drawable/ic_map_place"
-        app:iconTint="@color/ink"
-        app:layout_constraintBottom_toBottomOf="@id/open_settings"
-        app:layout_constraintEnd_toStartOf="@id/open_favourites"
-        app:layout_constraintTop_toTopOf="@id/open_settings" />
-
-    <!-- The title, on the icons' row and no wider than its own words: what
-         follows it on that row is the freshness, and the box has to stop where
-         the text does or it would print under it in a right-to-left language,
-         which is the trap the portrait file records. -->
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_l"
-        android:text="@string/stations_title"
-        android:textAppearance="@style/TextAppearance.RoueLibre.Title"
-        app:layout_constraintBottom_toBottomOf="@id/open_settings"
-        app:layout_constraintEnd_toStartOf="@id/freshness"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/open_settings" />
-
-    <!-- The data's age, required by SPEC §4.1, beside the title and inside the
-         icons' row. Not justified, for the reason given in the portrait file:
-         it is a status line and not a paragraph. -->
-    <TextView
-        android:id="@+id/freshness"
+    <!-- The header's half of the width, and as much height as it asks for. -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_m"
-        android:layout_marginEnd="@dimen/space_m"
-        android:justificationMode="none"
-        android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
-        app:layout_constraintBottom_toBottomOf="@id/open_settings"
-        app:layout_constraintEnd_toStartOf="@id/open_map"
-        app:layout_constraintStart_toEndOf="@id/title"
-        app:layout_constraintTop_toTopOf="@id/open_settings"
-        tools:text="Mis à jour il y a 12 secondes" />
-
-    <!-- The field, first link of the chain: its half of the width, directly
-         under the row of icons, which is as high as a keyboard leaves room
-         for.
-
-         `flagNoExtractUi`, as in portrait: it is what refuses the keyboard's
-         own full-screen copy of this field, and this arrangement would be for
-         nothing under one. -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/search_field"
-        style="@style/Widget.RoueLibre.SearchField"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_l"
-        android:layout_marginTop="@dimen/space_s"
-        android:layout_marginEnd="@dimen/space_l"
-        android:hint="@string/search_stations_hint"
-        app:endIconContentDescription="@string/search_stations_clear"
-        app:endIconMode="clear_text"
-        app:layout_constraintEnd_toStartOf="@id/swipe_refresh"
-        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/open_settings">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_input"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionSearch|flagNoExtractUi"
-            android:inputType="text"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:orientation="vertical"
+            android:paddingTop="@dimen/space_s"
+            android:paddingBottom="@dimen/space_m">
 
-    <!-- The "bikes" / "docks" toggle (SPEC §7.1), under the field and in its
-         column: the two of them are what one does to the list, and they stay
-         together. Its edges are the field's, so the column reads as one thing.
-         It is the part of the header a keyboard reaches, for the reason given
-         at the head of this file. -->
-    <io.github.mgdx.rouelibre.ui.ToggleRow
-        android:id="@+id/mode_toggle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_m"
-        app:layout_constraintEnd_toEndOf="@id/search_field"
-        app:layout_constraintStart_toStartOf="@id/search_field"
-        app:layout_constraintTop_toBottomOf="@id/search_field"
-        app:selectionRequired="true"
-        app:singleSelection="true">
+            <!-- The title, the data's age and the three ways out on one row,
+                 which portrait gives three. The row wraps its tallest child:
+                 the icons are 48 dp of touch target and the two texts are
+                 written in `sp`, so at the ordinary sizes the row is the
+                 icons' and at ×2.0 it is the freshness's. Nothing is centred
+                 in a height it cannot have, which is the defect this file was
+                 rewritten for.
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mode_bikes"
-            style="@style/Widget.RoueLibre.Toggle.Choice"
-            android:text="@string/mode_bikes" />
+                 The three keep the order they have in portrait — settings
+                 outermost, the map innermost — and a row lays its children out
+                 from the start, so the order mirrors with the language on its
+                 own. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/space_l"
+                android:paddingEnd="@dimen/space_s">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mode_docks"
-            style="@style/Widget.RoueLibre.Toggle.Choice"
-            android:text="@string/mode_docks" />
-    </io.github.mgdx.rouelibre.ui.ToggleRow>
+                <!-- No wider than its own words: what follows it on this row is
+                     the freshness, and a title box running under the text
+                     beside it is only harmless while the text is left-aligned.
+                     In Arabic it is right-aligned. -->
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stations_title"
+                    android:textAppearance="@style/TextAppearance.RoueLibre.Title" />
 
-    <!-- The rows, second link of the chain, from the top of the screen to the
-         bottom of it. Nothing costs them height any more, so what the keyboard
-         gives back is theirs.
+                <!-- The data's age, required by SPEC §4.1. It takes what the
+                     title and the icons leave and wraps inside it, however many
+                     lines that comes to. Not justified, for the reason given in
+                     the portrait file: it is a status line and not a
+                     paragraph. -->
+                <TextView
+                    android:id="@+id/freshness"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_m"
+                    android:layout_marginEnd="@dimen/space_m"
+                    android:layout_weight="1"
+                    android:justificationMode="none"
+                    android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+                    tools:text="Mis à jour il y a 12 secondes" />
 
-         The room under the last row is kept, and has to be: the button still
-         floats over this column's bottom corner, and `StationListFragment`
-         still raises both by the height of the banner when there is one. -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/open_map"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="@dimen/touch_target_min"
+                    android:layout_height="@dimen/touch_target_min"
+                    android:contentDescription="@string/stations_open_map"
+                    app:icon="@drawable/ic_map_place"
+                    app:iconTint="@color/ink" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/open_favourites"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="@dimen/touch_target_min"
+                    android:layout_height="@dimen/touch_target_min"
+                    android:contentDescription="@string/favourites_open"
+                    app:icon="@drawable/ic_favourite"
+                    app:iconTint="@color/ink" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/open_settings"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="@dimen/touch_target_min"
+                    android:layout_height="@dimen/touch_target_min"
+                    android:contentDescription="@string/settings_open"
+                    app:icon="@drawable/ic_settings"
+                    app:iconTint="@color/ink" />
+            </LinearLayout>
+
+            <!-- `flagNoExtractUi`, as in portrait: it is what refuses the
+                 keyboard's own full-screen copy of this field, and this
+                 arrangement would be for nothing under one. -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/search_field"
+                style="@style/Widget.RoueLibre.SearchField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_l"
+                android:layout_marginTop="@dimen/space_s"
+                android:layout_marginEnd="@dimen/space_l"
+                android:hint="@string/search_stations_hint"
+                app:endIconContentDescription="@string/search_stations_clear"
+                app:endIconMode="clear_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/search_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionSearch|flagNoExtractUi"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- The "bikes" / "docks" toggle (SPEC §7.1), under the field: the
+                 two of them are what one does to the list, and they stay
+                 together. -->
+            <io.github.mgdx.rouelibre.ui.ToggleRow
+                android:id="@+id/mode_toggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_l"
+                android:layout_marginTop="@dimen/space_m"
+                android:layout_marginEnd="@dimen/space_l"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/mode_bikes"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
+                    android:text="@string/mode_bikes" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/mode_docks"
+                    style="@style/Widget.RoueLibre.Toggle.Choice"
+                    android:text="@string/mode_docks" />
+            </io.github.mgdx.rouelibre.ui.ToggleRow>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- The rows, in the other half, from the top of the screen to the bottom
+         of it. Nothing costs them height any more, so what the keyboard gives
+         back is theirs.
+
+         The room under the last row is kept, and has to be: the button floats
+         over this column's bottom corner, and `StationListFragment` still
+         raises both by the height of the banner when there is one. -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@id/search_field"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/stations"
@@ -269,13 +277,13 @@
 
     <!--
         Nearest station first (SPEC §7.2), over the bottom corner of the rows'
-        column as in portrait — of the column, not of the screen, and the
-        column now runs the whole height of the window. That is what settles
-        where it lands: hanging from a column the header had shortened to
-        302 px, it sat 239 px down and bit into the first station's name; over
-        a column that starts at the top of the screen it is back among the last
-        rows, where the padding under the last one is what lets them be
-        scrolled clear of it.
+        column as in portrait — of the column, not of the screen, and the column
+        runs the whole height of the window. That is what settles where it
+        lands: hanging from a column a header had shortened to 302 px, it sat
+        239 px down and bit into the first station's name; over a column that
+        starts at the top of the screen it is back among the last rows, where
+        the padding under the last one is what lets them be scrolled clear of
+        it.
 
         It is still the screen's own end edge, the columns being laid out with
         the rows against it, so the thumb finds it where it found it. Last in

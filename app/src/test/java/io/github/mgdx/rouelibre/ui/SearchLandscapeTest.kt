@@ -4,6 +4,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.w3c.dom.Element
+import org.w3c.dom.Node
 import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -12,20 +13,22 @@ import javax.xml.parsers.DocumentBuilderFactory
  *
  * Stacked as in portrait, both spend their height on things that cost the same
  * dp whichever way the phone is held — a bar, a title, a freshness line, a
- * field, a toggle — and a sideways Fairphone 3 with the keyboard open has some
- * two hundred dp of window to spend. Measured there, the address search drew
- * none of its answers while they were being typed for, and the station list
- * drew a row and a half; the "nearest station first" button, hanging from a
- * bottom edge the keyboard had pushed up into the header, ended over the
- * search field and half covered the cross that clears it.
+ * field, a toggle — and a sideways Fairphone 3 with Gboard open stops at
+ * 397 px. Measured there, the address search drew none of its answers while
+ * they were being typed for, and the station list drew a row and a half; the
+ * "nearest station first" button, hanging from a bottom edge the keyboard had
+ * pushed up into the header, ended over the search field and half covered the
+ * cross that clears it.
  *
- * Both sideways arrangements answer the same way: the header and the list
- * share the width instead of the height. What is held here is the reasoning
- * they rest on — that they are still the same screens, same views and same
- * identifiers, and that they still do the things the height they give back is
- * bought with. The geometry itself is measured on a device; what a file read
- * from the disk can say is that the arrangement has not been quietly stacked
- * again. No Android runtime is involved (SPEC §14).
+ * Both sideways arrangements answer the same way: the header and the list take
+ * a column each, and the header's column scrolls. What is held here is the
+ * reasoning they rest on — that they are still the same screens, same views
+ * and same identifiers, that the answers own the whole height of the window,
+ * and that a text size makes the header taller rather than making its letters
+ * fewer. The geometry itself is measured on a device; what a file read from
+ * the disk can say is that the arrangement has not been quietly stacked, or
+ * banded, or pinned to a height again. No Android runtime is involved
+ * (SPEC §14).
  */
 class SearchLandscapeTest {
 
@@ -54,8 +57,8 @@ class SearchLandscapeTest {
      * for and does not find is a page that comes back from a rotation with
      * nothing on it, which is the one thing SPEC §7.6 asks of these two: the
      * typed query survives the screen turning over, and so does the place
-     * chosen afterwards. The sideways arrangements move the views around; they
-     * add none and lose none.
+     * chosen afterwards. The sideways arrangements move the views around and
+     * nest them; they add no identifier and lose none.
      */
     @Test
     fun `lying down and standing up name the same views`() {
@@ -94,44 +97,47 @@ class SearchLandscapeTest {
     }
 
     /**
-     * On each screen the field and the list share the width, as a chain.
+     * The answers take half the width, and take it in a way that mirrors.
      *
-     * A chain rather than a guideline for two reasons, both written in
-     * `layout-land/fragment_welcome.xml`: it mirrors on its own, so the split
-     * stays honest in a right-to-left language, and it adds no identifier that
-     * portrait has not got. Two weights of one are what makes the halves
-     * halves.
+     * Half because half a sideways Fairphone 3 is the width the portrait
+     * screen gives the same rows. Anchored by one edge and sized by a
+     * percentage, and never by a bias: a bias is measured from the left
+     * whichever way the language runs, and both screens are read right to left
+     * in Arabic. One anchor and one half is what mirrors with the language.
      */
     @Test
-    fun `the field and the list share the width rather than the height`() {
+    fun `the answers take a mirrored half of the width`() {
         SCREENS.forEach { screen ->
-            val land = arrangement("layout-land", screen)
-            val list = LIST_OF.getValue(screen)
-            assertTrue(
-                "$screen: the field is constrained across to the list",
-                """app:layout_constraintEnd_toStartOf="@id/$list"""" in land,
-            )
-            assertTrue(
-                "$screen: the list is constrained back across to the field, which makes a chain",
-                """app:layout_constraintStart_toEndOf="@id/search_field"""" in land,
+            val list = viewOf("layout-land", screen, LIST_OF.getValue(screen))
+            assertEquals(
+                "$screen: the answers no longer take half the width",
+                "0.5",
+                list.getAttribute("app:layout_constraintWidth_percent"),
             )
             assertEquals(
-                "$screen: the two halves are halves, and a half is its own mirror",
-                2,
-                """app:layout_constraintHorizontal_weight="1"""".toRegex().findAll(land).count(),
+                "$screen: the answers' half is not anchored to the end edge",
+                "parent",
+                list.getAttribute("app:layout_constraintEnd_toEndOf"),
+            )
+            assertTrue(
+                "$screen: a bias is measured from the left whichever way the language runs",
+                "layout_constraintHorizontal_bias" !in arrangement("layout-land", screen),
             )
         }
     }
 
     /**
-     * The list is given the whole height of its column.
+     * The list is given the whole height of the window, top and bottom.
      *
      * That is the whole of the answer to a keyboard: nothing above the list
-     * costs height any more, so the rows take whatever the window is left
-     * with instead of what a stack of headers has not already spent.
+     * costs height any more, so the rows take whatever the window is left with
+     * instead of what a stack of headers has not already spent. On the address
+     * search the panel that speaks for the whole screen still stands above the
+     * list rather than over it, exactly as in portrait — so it is the panel
+     * that holds the top, and the list follows it.
      */
     @Test
-    fun `the list reaches the bottom of the window on both screens`() {
+    fun `the answers run from the top of the window to the bottom`() {
         SCREENS.forEach { screen ->
             val list = viewOf("layout-land", screen, LIST_OF.getValue(screen))
             assertEquals(
@@ -144,46 +150,6 @@ class SearchLandscapeTest {
                 "0dp",
                 list.getAttribute("android:layout_height"),
             )
-        }
-    }
-
-    /**
-     * The header stays inside the field's column; nothing bands the screen.
-     *
-     * This is the whole of the second defect. A bar, or a title and a
-     * freshness line, kept across the top costs the rows the same height it
-     * costs in portrait — 140 px of a 302 px window on a sideways Fairphone 3
-     * with Gboard open, which is a row and a truncated second — and it leaves
-     * the floating button hanging from a column that short, high enough to
-     * bite into the first station's name. A header that reaches across both
-     * columns is the thing being refused here, whatever it is made of.
-     */
-    @Test
-    fun `nothing of the header reaches across the screen`() {
-        SCREENS.forEach { screen ->
-            HEADER_OF.getValue(screen).forEach { id ->
-                assertTrue(
-                    "$screen: $id still bands the screen instead of sitting in its column",
-                    viewOf("layout-land", screen, id)
-                        .getAttribute("app:layout_constraintEnd_toEndOf") != "parent",
-                )
-            }
-        }
-    }
-
-    /**
-     * The answers start at the top of the window.
-     *
-     * The other half of the same thing: their column having no header above
-     * it, it begins where the screen begins, and the rows get the height the
-     * band used to take. On the address search the panel that speaks for the
-     * whole screen still stands above the list rather than over it, exactly as
-     * in portrait — so it is the panel that holds the top, and the list
-     * follows it.
-     */
-    @Test
-    fun `the answers start at the top of the window`() {
-        SCREENS.forEach { screen ->
             assertEquals(
                 "$screen: something is still taking the top of the answers' column",
                 "parent",
@@ -196,6 +162,90 @@ class SearchLandscapeTest {
             "@id/empty_state",
             viewOf("layout-land", "fragment_address_search.xml", "results")
                 .getAttribute("app:layout_constraintTop_toBottomOf"),
+        )
+    }
+
+    /**
+     * Nothing of the header bands the screen.
+     *
+     * A bar, or a title and a freshness line, kept across the top costs the
+     * rows the same height it costs in portrait — 140 px of a 302 px window on
+     * a sideways Fairphone 3 with Gboard open, which is a row and a truncated
+     * second — and it leaves the floating button hanging from a column that
+     * short, high enough to bite into the first station's name. Whatever the
+     * header is made of, it either sits inside the column or, where it is a
+     * child of this layout in its own right, takes no more than its half.
+     */
+    @Test
+    fun `nothing of the header reaches across the screen`() {
+        SCREENS.forEach { screen ->
+            HEADER_OF.getValue(screen).forEach { id ->
+                val view = viewOf("layout-land", screen, id)
+                val isAChildOfTheScreen = view.parentNode.nodeName
+                    .startsWith("androidx.constraintlayout")
+                val takesAHalf = view.getAttribute("app:layout_constraintWidth_percent") == "0.5"
+                assertTrue(
+                    "$screen: $id bands the screen instead of taking its column",
+                    !isAChildOfTheScreen || takesAHalf,
+                )
+            }
+        }
+    }
+
+    /**
+     * The header's column gives way in height, never in letters.
+     *
+     * A text size of ×2.0 makes every part of that column taller — the title,
+     * the data's age, the field itself — and a sideways window with a keyboard
+     * in it has 151 dp. There is no arrangement that fits 36 dp of inset, a
+     * 64 dp row and a 72 dp field into that, so the choice is between letters
+     * lost and a column one scrolls; SPEC §7 settles it, and the comment beside
+     * `mode_toggle` in `fragment_map.xml` records the same defect being fixed
+     * the same way on the map. Scrolled, the field is also brought back into
+     * sight by the scroll view when it takes the focus and the keyboard opens.
+     */
+    @Test
+    fun `the header column scrolls rather than losing its letters`() {
+        SCREENS.forEach { screen ->
+            assertTrue(
+                "$screen: the header's column cannot grow, so a large text size is cut off it",
+                viewOf("layout-land", screen, "search_field")
+                    .ancestors()
+                    .any { it.tagName.endsWith("NestedScrollView") },
+            )
+        }
+    }
+
+    /**
+     * The data's age is never centred inside a height it cannot have.
+     *
+     * Seated inside the row of icons — 48 dp of touch target — it was centred
+     * there, and at ×2.0 what did not fit was lost off the top of the screen:
+     * "Aktualisiert vor 59 Sekunden" measured `[457,0][670,320]`, its first
+     * word cut above the edge, in French as much as in German. It keeps the
+     * title's line, which is what buys the field the 53 px a sideways column
+     * has not got to spare, but it keeps it in a row that wraps its tallest
+     * child instead of one pinned to the icons beside it.
+     */
+    @Test
+    fun `the data's age gives way in height rather than in letters`() {
+        val freshness = viewOf("layout-land", "fragment_station_list.xml", "freshness")
+        VERTICAL_PINS.forEach { attribute ->
+            assertEquals(
+                "The data's age is pinned again by $attribute, which is a height it cannot refuse",
+                "",
+                freshness.getAttribute(attribute),
+            )
+        }
+        assertEquals(
+            "The data's age is measured by something other than its own lines",
+            "wrap_content",
+            freshness.getAttribute("android:layout_height"),
+        )
+        assertEquals(
+            "The row the data's age is on cannot grow under it",
+            "wrap_content",
+            (freshness.parentNode as Element).getAttribute("android:layout_height"),
         )
     }
 
@@ -275,6 +325,12 @@ class SearchLandscapeTest {
     private fun Element.descendants(): List<Element> =
         children() + children().flatMap { it.descendants() }
 
+    /** Every element this one is nested in, nearest first. */
+    private fun Element.ancestors(): List<Element> = generateSequence(parentNode) { it.parentNode }
+        .filter { it.nodeType == Node.ELEMENT_NODE }
+        .filterIsInstance<Element>()
+        .toList()
+
     private companion object {
         const val NO_EXTRACT = "flagNoExtractUi"
 
@@ -305,6 +361,12 @@ class SearchLandscapeTest {
                 "search_field",
                 "mode_toggle",
             ),
+        )
+
+        /** The two ways a view is held to a height decided somewhere else. */
+        val VERTICAL_PINS = listOf(
+            "app:layout_constraintTop_toTopOf",
+            "app:layout_constraintBottom_toBottomOf",
         )
     }
 }
