@@ -193,9 +193,9 @@ android {
         }
     }
 
-    // MapLibre's native libraries must not ship four times in the same APK
-    // (SPEC §3). The 12 MB ceiling is per architecture, the 15 MB one is for
-    // the universal APK.
+    // MapLibre's native libraries must not ship four times in the APK anybody
+    // installs (SPEC §3). The 12 MB ceiling is per architecture; the universal
+    // APK, which does stack the four, is held to 30 MB instead.
     splits {
         abi {
             isEnable = true

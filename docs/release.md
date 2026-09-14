@@ -114,7 +114,8 @@ Both files are `chmod 600`, and neither is versioned.
 
    Five APKs come out of `app/build/outputs/apk/release/`: one per
    architecture, plus the universal one. A single architecture must stay under
-   12 MB, the universal one under 15 MB compressed (`SPEC.md` §3).
+   12 MB, which is the file anybody installs, and the universal one under
+   30 MB — it stacks the four architectures' native libraries (`SPEC.md` §3).
 
 5. **Re-derive the quoted figures**, which are never written by hand:
 

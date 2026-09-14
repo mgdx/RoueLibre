@@ -22,7 +22,8 @@ real-time availability.
 2. **No telemetry, no tracker, no unique identifier.** No journey data is kept.
 3. **Offline by default.** Map, address search and route computation all run on
    the device. Only the GBFS feed goes out on the network.
-4. **Lightness.** APK under 15 MB. Every dependency added must be justified in
+4. **Lightness.** APK under 12 MB per architecture, under 30 MB for the
+   universal one. Every dependency added must be justified in
    `docs/dependencies.md`.
 5. **Nothing specific to a city hard-coded**: URLs, bounding box, centring and
    network name all live in the city configuration. See `SPEC.md` §15.
