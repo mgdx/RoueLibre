@@ -1,0 +1,15 @@
+La lista de estaciones pone la más cercana en cabeza, ella sola.
+
+• La lista se ordena por proximidad en cuanto aparece, vengas de donde vengas, y cada fila dice a qué distancia está su estación. Nada se te pide para eso — ningún permiso, ningún mensaje — y donde no hay ninguna ubicación disponible, se queda el orden alfabético.
+• Un botón «La estación más cercana primero» flota ahora sobre la esquina inferior de la lista, donde está tu pulgar. Es el único sitio donde esta pantalla pide tu ubicación, muestra la espera mientras llega el punto, y devuelve la lista reordenada a su primera fila.
+• Una estación fuera de servicio dice cuánto tiempo lleva callada: «Fuera de servicio · última medición hace 5 meses», leído de la medida que la propia red publica. Una estación cerrada esta mañana merece la espera; una que lleva meses sin decir nada ya dejó la acera.
+• Los Ajustes nombran la red en servicio, donde la fila de la ciudad solo ofrecía cambiarla.
+• Sin mapa base instalado, la aplicación ya no se abre en el panel que anuncia que falta. Llega a la lista de estaciones, que no necesita ninguna descarga, y vuelve al mapa en cuanto hay uno que dibujar.
+• El primer arranque ya no muere cuando se pulsa el mensaje sobre la elección de una ciudad por encima de la secuencia de bienvenida — ese mensaje espera ahora a que la bienvenida termine.
+• Una búsqueda, como el botón, muestra su lista desde la primera fila en vez de dejarte varios kilómetros de estaciones más abajo.
+• La ficha de una estación ya no mide una distancia desde una ciudad en la que no estás: consultar una red al otro lado del mundo anunciaba miles de kilómetros bajo el nombre de la estación.
+• «Buscar actualizaciones» sin conexión ya no promete que una descarga se reanudará donde se detuvo: nada se había empezado.
+• La respuesta a lo que acabas de hacer ya no se borra una fracción de segundo después por una actualización que falla al lado.
+• En la pantalla de favoritos, la indicación sobre mantener pulsada una fila para moverla espera a que haya dos filas que mover.
+• El gesto de volver atrás dibuja adónde lleva, en Android 13 y 14.
+• Un permiso menos: el del Wi-Fi, que venía de la biblioteca de mapas y que aquí nunca leía nada.

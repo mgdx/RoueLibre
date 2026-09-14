@@ -1,0 +1,3 @@
+Karte atkal attēlojas visos tālruņos.
+
+• Versija 1.2.0 atteicās instalēties tālruņos bez Vulkan, jo kartes bibliotēka to bija padarījusi par prasību. Tagad karte attēlojas caur OpenGL ES, kas ir katrā atbalstītajā tālrunī — tā pati karte, tas pats dzinējs, un lietotne ir apmēram par diviem megabaitiem vieglāka.

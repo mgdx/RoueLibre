@@ -1,0 +1,3 @@
+Kartan ritas åter på alla telefoner.
+
+• Version 1.2.0 vägrade installeras på telefoner utan Vulkan, eftersom kartbiblioteket hade gjort det till ett krav. Kartan ritas nu genom OpenGL ES, som varje telefon som stöds har – samma karta, samma motor, och appen är ungefär två megabyte lättare.

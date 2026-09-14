@@ -1,0 +1,3 @@
+Žemėlapis vėl atvaizduojamas visuose telefonuose.
+
+• 1.2.0 versija atsisakydavo diegtis telefonuose be „Vulkan“, nes žemėlapio biblioteka buvo padariusi tai reikalavimu. Dabar žemėlapis atvaizduojamas per „OpenGL ES“, kurį turi kiekvienas palaikomas telefonas, – tas pats žemėlapis, tas pats variklis, o programa maždaug dviem megabaitais lengvesnė.

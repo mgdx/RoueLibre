@@ -1,0 +1,3 @@
+Zemljevid se spet izriše na vsakem telefonu.
+
+• Različica 1.2.0 se ni hotela namestiti na telefone brez Vulkana, ker je knjižnica za zemljevide iz njega naredila zahtevo. Zemljevid se zdaj izrisuje prek OpenGL ES, ki ga ima vsak podprt telefon – isti zemljevid, isti pogon, aplikacija pa je približno dva megabajta lažja.

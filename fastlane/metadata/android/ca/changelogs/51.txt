@@ -1,0 +1,15 @@
+La llista d’estacions posa la més propera al capdavant, tota sola.
+
+• La llista s’ordena per proximitat així que apareix, vinguis d’on vinguis, i cada fila diu a quina distància és la seva estació. No se’t demana res per a això — cap permís, cap missatge — i on no hi ha cap ubicació disponible, es queda l’ordre alfabètic.
+• Un botó «L’estació més propera primer» flota ara sobre el racó inferior de la llista, on tens el polze. És l’únic lloc on aquesta pantalla demana la teva ubicació, mostra l’espera mentre arriba el punt, i torna la llista reordenada a la primera fila.
+• Una estació fora de servei diu quant fa que calla: «Fora de servei · última mesura fa 5 mesos», llegida de la mesura que la mateixa xarxa publica. Una estació tancada aquest matí val la pena esperar-la; una que fa mesos que no diu res ja ha deixat la vorera.
+• La Configuració anomena la xarxa en servei, on la fila de la ciutat només oferia canviar-la.
+• Sense mapa base instal·lat, l’aplicació ja no s’obre al plafó que anuncia que hi falta. Arriba a la llista d’estacions, que no necessita cap baixada, i torna al mapa així que n’hi ha un per dibuixar.
+• El primer inici ja no mor quan es prem el missatge sobre la tria d’una ciutat per damunt de la seqüència de benvinguda — aquest missatge espera ara que la benvinguda s’acabi.
+• Una cerca, com el botó, mostra la llista des de la primera fila, i ja no diversos quilòmetres d’estacions més avall.
+• La fitxa d’una estació ja no mesura cap distància des d’una ciutat on no ets: consultar una xarxa a l’altra punta del món anunciava milers de quilòmetres sota el nom de l’estació.
+• «Cerca actualitzacions» sense connexió ja no promet que una baixada es reprendrà on s’havia aturat: no s’havia començat res.
+• La resposta al que acabes de fer ja no s’esborra una fracció de segon després per una actualització que falla al costat.
+• A la pantalla de preferits, la indicació sobre mantenir premuda una fila per moure-la espera que hi hagi dues files per moure.
+• El gest de tornar enrere dibuixa on mena, a Android 13 i 14.
+• Un permís menys: el del Wi-Fi, que venia de la biblioteca de mapes i que aquí no ha llegit mai res.

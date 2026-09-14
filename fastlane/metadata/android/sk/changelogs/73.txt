@@ -1,0 +1,3 @@
+Mapa sa zase vykresľuje na každom telefóne.
+
+• Verzia 1.2.0 sa odmietala nainštalovať na telefóny bez Vulkanu, pretože z neho mapová knižnica urobila požiadavku. Mapa sa teraz vykresľuje cez OpenGL ES, ktorý má každý podporovaný telefón – tá istá mapa, ten istý engine, a aplikácia je asi o dva megabajty ľahšia.

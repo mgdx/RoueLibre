@@ -1,0 +1,15 @@
+Zoznam staníc dáva najbližšiu stanicu na prvé miesto, sám od seba.
+
+• Zoznam sa zoradí podľa vzdialenosti hneď, ako sa objaví, nech k nemu prídete odkiaľkoľvek, a každý riadok hovorí, ako ďaleko jeho stanica je. Nič sa od vás kvôli tomu nežiada – žiadna žiadosť o povolenie, žiadna hláška – a tam, kde sa poloha nedá zistiť, zostáva abeceda.
+• Nad spodným rohom zoznamu teraz pláva tlačidlo „Najbližšia stanica ako prvá“, tam, kde máte palec. Je to jediné miesto, kde si táto obrazovka vôbec vypýta polohu; ukazuje čakanie, kým poloha nedorazí, a preskladaný zoznam vráti na prvý riadok.
+• Stanica mimo prevádzky hovorí, ako dlho mlčí: „Mimo prevádzky · posledné hlásenie pred 5 mesiacmi“, načítané priamo z údaja, ktorý sieť sama zverejnila. Stanicu zatvorenú dnes ráno má zmysel prečkať; tá, ktorá celé mesiace nič nepovedala, z chodníka zmizla.
+• Nastavenia pomenujú sieť, ktorá sa používa, tam kde riadok mesta doteraz len ponúkal jej zmenu.
+• Bez nainštalovaného podkladu mapy sa aplikácia už neotvára na paneli, ktorý hlási chýbajúce mapové dáta. Pristane na zozname staníc, ktorý nepotrebuje nič sťahovať, a k mape sa vráti, len čo je čo vykresliť.
+• Úplne prvé spustenie už neskončí pádom, keď sa správa o voľbe mesta stlačí cez uvítaciu sekvenciu – tá správa teraz počká, kým uvítanie skončí.
+• Hľadanie, rovnako ako tlačidlo, ukáže svoj zoznam od prvého riadku, namiesto toho, aby vás nechalo o niekoľko kilometrov staníc nižšie.
+• Karta stanice už nemeria vzdialenosť z mesta, v ktorom nie ste: prezeranie siete na druhom konci sveta hlásilo pod názvom stanice tisíce kilometrov.
+• „Skontrolovať aktualizácie“ bez pripojenia už nesľubuje, že sťahovanie bude pokračovať tam, kde skončilo: nič sa nezačalo.
+• Odpoveď na to, čo ste práve urobili, už nezmaže zlomok sekundy nato obnovenie, ktoré vedľa nej zlyhalo.
+• Na obrazovke Obľúbené počká pomôcka o presune riadku stlačením a pridržaním, kým nebudú riadky dva.
+• Gesto späť kreslí, kam vedie, na Androide 13 a 14.
+• O jedno povolenie menej: to k Wi-Fi, ktoré prišlo s mapovou knižnicou a ktoré tu nikdy nič nečítalo.

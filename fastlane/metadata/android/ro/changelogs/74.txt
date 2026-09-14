@@ -1,0 +1,3 @@
+Harta se afișează din nou pe toate telefoanele.
+
+• Versiunea 1.2.0 refuza să se instaleze pe telefoanele fără Vulkan, pentru că biblioteca hărții făcuse din asta o cerință. Harta se afișează acum prin OpenGL ES, pe care îl are orice telefon acceptat — aceeași hartă, același motor, iar aplicația este cu vreo doi megaocteți mai ușoară.

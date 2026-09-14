@@ -1,0 +1,3 @@
+De kaart wordt weer op elke telefoon getekend.
+
+• Versie 1.2.0 wilde zich niet installeren op telefoons zonder Vulkan, omdat de kaartbibliotheek daar een vereiste van had gemaakt. De kaart wordt nu via OpenGL ES getekend, dat elke ondersteunde telefoon heeft – dezelfde kaart, dezelfde motor, en de app is ongeveer twee megabyte lichter.
