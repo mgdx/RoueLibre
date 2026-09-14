@@ -89,6 +89,12 @@ certificate as the one it expects uploads from.
 | Screenshots | composed by the same script, 1080×1920 |
 | Category | Maps & Navigation |
 | Privacy policy | `docs/privacy-policy.md`, served by GitHub |
+| Contact address | `leo@magadoux.fr` |
+| Website | `https://github.com/mgdx/RoueLibre` |
+
+The contact address is **shown publicly on the listing**, which Play requires
+and does not let one hide. It is the address the commits are authored under, so
+it is already public in the repository's history and publishes nothing new.
 
 The descriptions link to no other store and to no downloadable APK, which Play
 forbids in a listing. Keep it that way when they are next edited.
