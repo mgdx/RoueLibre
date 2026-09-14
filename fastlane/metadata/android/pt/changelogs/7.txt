@@ -1,0 +1,3 @@
+O mapa volta a ser desenhado em todos os telefones.
+
+• A versão 1.2.0 recusava-se a instalar nos telefones sem Vulkan, porque a biblioteca de mapas tinha feito disso uma exigência. O mapa é agora desenhado através de OpenGL ES, que todos os telefones suportados têm — o mesmo mapa, o mesmo motor, e a aplicação fica cerca de dois megabytes mais leve.
