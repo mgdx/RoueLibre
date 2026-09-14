@@ -30,6 +30,29 @@ plugins {
  * so `changelogs/<base>.txt` is the file to write, and the two numbers are
  * meant to differ.
  */
+/**
+ * Whether this invocation builds an app bundle rather than APKs.
+ *
+ * The two cannot be built together: asked for a bundle while the ABI splits
+ * below are on, AGP 9 stops at `buildReleasePreBundle` with "Multiple
+ * shrunk-resources files found", having shrunk the resources once per
+ * architecture and finding no single file to put in the bundle
+ * (issuetracker.google.com/402800800). Its own advice is to turn the splits
+ * off for that build.
+ *
+ * Nothing is lost by doing so: a bundle already carries every architecture and
+ * Google Play cuts it per device, which is what the splits do for the APKs
+ * published everywhere else. So the splits stay on for `assembleRelease`, the
+ * five files of SPEC §3 and of the F-Droid recipe, and step aside for
+ * `bundleRelease` alone.
+ *
+ * Read from the task names rather than from a property, so that no release
+ * command has to be remembered differently from the one in `docs/release.md`.
+ */
+val buildsAnAppBundle = gradle.startParameter.taskNames.any {
+    it.contains("bundle", ignoreCase = true)
+}
+
 val architectureVersionCodes = mapOf(
     "armeabi-v7a" to 1,
     "x86" to 2,
@@ -141,15 +164,26 @@ android {
     /**
      * Signing of the release builds made here.
      *
-     * F-Droid rebuilds and signs for itself: this key therefore never signs
-     * what will be published there. It only signs the versions one installs
-     * oneself to try them out, like this alpha.
+     * Two keys, and they do not do the same work.
      *
-     * The `keystore.properties` file is ignored by Git and usually does not
-     * exist. Without it, the release is signed by the debug key — enough to
-     * install a trial build, and above all **no key is invented on the sly**:
-     * the day the project has its publishing key, that will be a decision
-     * taken, not a file that appeared by itself.
+     * The **publishing key** is the identity of Roue Libre: the APKs of the
+     * releases page carry it, and F-Droid carries it too — its recipe names
+     * the certificate in `AllowedAPKSigningKeys` and checks its own rebuild
+     * against the published file rather than signing one of its own. So the
+     * two channels are one installation, and an update passes from either to
+     * either.
+     *
+     * The **upload key** is not an identity at all. Google Play signs what it
+     * serves with a key it holds itself, and this one only proves who is
+     * uploading. That is why it is a separate key: it is replaceable — a lost
+     * upload key is a ticket to Google, where a lost publishing key would end
+     * the upgrade path of every installation outside Play — and the fewer
+     * places the publishing key is used, the better.
+     *
+     * Both are read from `keystore.properties`, which Git ignores and which
+     * usually does not exist. Without it the release is signed by the debug
+     * key — enough to install a trial build, and above all **no key is
+     * invented on the sly**.
      */
     val signingProperties = rootProject.file("keystore.properties")
     signingConfigs {
@@ -171,6 +205,22 @@ android {
             // or compromised would end the application's upgrade path.
             enableV3Signing = true
         }
+        create("playUpload") {
+            if (signingProperties.exists()) {
+                val values = Properties()
+                signingProperties.inputStream().use { values.load(it) }
+                // Absent from the file on a machine that never uploads to
+                // Play, and then this configuration signs nothing: the bundle
+                // falls back on the publishing key below.
+                values.getProperty("uploadStoreFile")?.let {
+                    storeFile = rootProject.file(it)
+                    storePassword = values.getProperty("uploadStorePassword")
+                    keyAlias = values.getProperty("uploadKeyAlias")
+                    keyPassword = values.getProperty("uploadKeyPassword")
+                }
+            }
+            enableV3Signing = true
+        }
     }
 
     buildTypes {
@@ -181,10 +231,20 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            signingConfig = if (signingProperties.exists()) {
-                signingConfigs.getByName("selfSigned")
-            } else {
-                signingConfigs.getByName("debug")
+            // Which key signs depends on where the artefact is going. A
+            // bundle goes to Google Play alone, and to Play one uploads under
+            // the upload key; everything else — the five APKs of the releases
+            // page, which F-Droid verifies against — is signed by the
+            // publishing key. Should the upload key be missing from
+            // `keystore.properties`, the bundle is signed by the publishing
+            // key, and Play would then register that certificate as the one it
+            // expects uploads from: it still works, and it spends the key in
+            // one more place than it needs to be.
+            signingConfig = when {
+                !signingProperties.exists() -> signingConfigs.getByName("debug")
+                buildsAnAppBundle && signingConfigs.getByName("playUpload").storeFile != null ->
+                    signingConfigs.getByName("playUpload")
+                else -> signingConfigs.getByName("selfSigned")
             }
         }
         debug {
@@ -198,7 +258,7 @@ android {
     // APK, which does stack the four, is held to 30 MB instead.
     splits {
         abi {
-            isEnable = true
+            isEnable = !buildsAnAppBundle
             reset()
             include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
             isUniversalApk = true
