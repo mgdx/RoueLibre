@@ -1,0 +1,3 @@
+Mapa znów wyświetla się na każdym telefonie.
+
+• Wersja 1.2.0 odmawiała instalacji na telefonach bez Vulkana, bo biblioteka mapy uczyniła z niego wymóg. Mapa wyświetla się teraz przez OpenGL ES, który ma każdy obsługiwany telefon — ta sama mapa, ten sam silnik, a aplikacja jest o jakieś dwa megabajty lżejsza.
