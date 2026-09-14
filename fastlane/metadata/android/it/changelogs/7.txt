@@ -1,0 +1,3 @@
+La mappa si disegna di nuovo su tutti i telefoni.
+
+• La versione 1.2.0 si rifiutava di installarsi sui telefoni senza Vulkan, perché la libreria della mappa ne aveva fatto un requisito. La mappa si disegna ora con OpenGL ES, che ogni telefono supportato possiede — stessa mappa, stesso motore, e l’app è più leggera di circa due megabyte.
