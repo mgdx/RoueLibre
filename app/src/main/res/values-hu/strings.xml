@@ -742,8 +742,8 @@
          The sentence under the switch is the whole of what the row says about
          a network: one that publishes no such feed shows nothing at all, and
          the map says that by drawing nothing. -->
-    <string name="settings_street_bikes">Az állomásokon kívüli kerékpárok megjelenítése</string>
-    <string name="settings_street_bikes_description">Hogy elviheted-e onnan, ahol áll, a hálózaton múlik.</string>
+    <string name="settings_street_bikes">Az állomásokon álló kerékpárok akkumulátorának és az állomásokon kívüli kerékpároknak a megjelenítése</string>
+    <string name="settings_street_bikes_description">Hogy elvihetsz-e egy állomáson kívül álló kerékpárt onnan, ahol áll, a hálózaton múlik. Ez az állomásokénál jóval nehezebb adatfolyamot olvas be, és csak azok a hálózatok mutatnak valamit, amelyek közzéteszik.</string>
 
     <!-- Shown once, the first time the switch above is turned on, and readable
          again from the sheet of any such bike. It informs and does not

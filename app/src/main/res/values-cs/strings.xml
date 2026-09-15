@@ -885,8 +885,8 @@
          The sentence under the switch is the whole of what the row says about
          a network: one that publishes no such feed shows nothing at all, and
          the map says that by drawing nothing. -->
-    <string name="settings_street_bikes">Zobrazovat kola mimo stanice</string>
-    <string name="settings_street_bikes_description">Zda si ho smíte půjčit tam, kde stojí, záleží na síti.</string>
+    <string name="settings_street_bikes">Zobrazovat baterii kol na stanicích a kola mimo stanice</string>
+    <string name="settings_street_bikes_description">Zda si smíte kolo mimo stanici půjčit tam, kde stojí, záleží na síti. Čte se tím kanál mnohem větší než kanál stanic a něco zobrazí jen sítě, které ho zveřejňují.</string>
 
     <!-- Shown once, the first time the switch above is turned on, and readable
          again from the sheet of any such bike. It informs and does not

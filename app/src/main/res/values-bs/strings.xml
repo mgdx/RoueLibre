@@ -730,8 +730,8 @@
          The sentence under the switch is the whole of what the row says about
          a network: one that publishes no such feed shows nothing at all, and
          the map says that by drawing nothing. -->
-    <string name="settings_street_bikes">Prikaži bicikle izvan stanica</string>
-    <string name="settings_street_bikes_description">Da li ga smijete posuditi tu gdje jeste, ovisi o mreži.</string>
+    <string name="settings_street_bikes">Prikaži bateriju bicikala na stanicama i bicikle izvan stanica</string>
+    <string name="settings_street_bikes_description">Da li smijete bicikl izvan stanice posuditi tu gdje jeste, ovisi o mreži. Pri tome se čita kanal podataka mnogo veći od onog sa stanicama, a nešto prikazuju samo mreže koje ga objavljuju.</string>
 
     <!-- Shown once, the first time the switch above is turned on, and readable
          again from the sheet of any such bike. It informs and does not

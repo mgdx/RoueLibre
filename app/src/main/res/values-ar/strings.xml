@@ -774,8 +774,8 @@
          The sentence under the switch is the whole of what the row says about
          a network: one that publishes no such feed shows nothing at all, and
          the map says that by drawing nothing. -->
-    <string name="settings_street_bikes">إظهار الدراجات خارج المحطات</string>
-    <string name="settings_street_bikes_description">تحدّد شبكة الدراجات ما إذا كان يمكنك استعارة واحدة حيث هي.</string>
+    <string name="settings_street_bikes">إظهار بطارية الدراجات في المحطات، والدراجات خارج المحطات</string>
+    <string name="settings_street_bikes_description">تحدّد شبكة الدراجات ما إذا كان يمكنك استعارة دراجة خارج المحطة حيث هي. يقرأ هذا تدفّق بيانات أثقل بكثير من تدفّق المحطات، ولا تُظهر شيئًا إلا شبكات الدراجات التي تنشره.</string>
 
     <!-- Shown once, the first time the switch above is turned on, and readable
          again from the sheet of any such bike. It informs and does not

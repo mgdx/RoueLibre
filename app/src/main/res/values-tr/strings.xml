@@ -681,8 +681,8 @@
          The sentence under the switch is the whole of what the row says about
          a network: one that publishes no such feed shows nothing at all, and
          the map says that by drawing nothing. -->
-    <string name="settings_street_bikes">İstasyon dışındaki bisikletleri göster</string>
-    <string name="settings_street_bikes_description">Onu durduğu yerden alıp alamayacağın ağa bağlıdır.</string>
+    <string name="settings_street_bikes">İstasyondaki bisikletlerin pilini ve istasyon dışındaki bisikletleri göster</string>
+    <string name="settings_street_bikes_description">Bir bisikleti istasyon dışında durduğu yerden alıp alamayacağın ağa bağlıdır. Bu, istasyon akışından çok daha ağır bir akış okur ve yalnızca onu yayımlayan ağlar bir şey gösterir.</string>
 
     <!-- Shown once, the first time the switch above is turned on, and readable
          again from the sheet of any such bike. It informs and does not
