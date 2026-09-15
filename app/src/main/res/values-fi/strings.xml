@@ -721,8 +721,8 @@
          The sentence under the switch is the whole of what the row says about
          a network: one that publishes no such feed shows nothing at all, and
          the map says that by drawing nothing. -->
-    <string name="settings_street_bikes">Näytä asemien ulkopuoliset pyörät</string>
-    <string name="settings_street_bikes_description">Verkosto ratkaisee, saatko lainata pyörän siitä, missä se seisoo.</string>
+    <string name="settings_street_bikes">Näytä asemilla olevien pyörien akku ja asemien ulkopuoliset pyörät</string>
+    <string name="settings_street_bikes_description">Verkosto ratkaisee, saatko lainata aseman ulkopuolella olevan pyörän siitä, missä se seisoo. Tällöin luetaan syöte, joka on paljon asemien syötettä raskaampi, ja vain ne verkostot, jotka sen julkaisevat, näyttävät jotain.</string>
 
     <!-- Shown once, the first time the switch above is turned on, and readable
          again from the sheet of any such bike. It informs and does not
