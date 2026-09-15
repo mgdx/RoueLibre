@@ -767,8 +767,8 @@
          The sentence under the switch is the whole of what the row says about
          a network: one that publishes no such feed shows nothing at all, and
          the map says that by drawing nothing. -->
-    <string name="settings_street_bikes">Rodyti dviračius ne stotelėse</string>
-    <string name="settings_street_bikes_description">Ar galite jį pasiimti ten, kur jis stovi, sprendžia tinklas.</string>
+    <string name="settings_street_bikes">Rodyti stotelėse stovinčių dviračių akumuliatorių ir dviračius ne stotelėse</string>
+    <string name="settings_street_bikes_description">Ar galite pasiimti ne stotelėje paliktą dviratį ten, kur jis stovi, sprendžia tinklas. Tam skaitomas daug sunkesnis duomenų srautas nei stotelių, ir ką nors rodo tik tie tinklai, kurie jį skelbia.</string>
 
     <!-- Shown once, the first time the switch above is turned on, and readable
          again from the sheet of any such bike. It informs and does not
