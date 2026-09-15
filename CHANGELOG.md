@@ -25,9 +25,39 @@ also records what has no visible effect.
   long side is more than twice its short one, which every telephone screenshot
   is. It writes nothing under `fastlane/metadata/`: F-Droid keeps the raw
   screen.
+- **The release notes of every version, in all thirty-one languages**
+  (`SPEC.md` §7.10, §9). Versions 4 to 12 existed in English and French alone,
+  and that was worse than a missing translation: the what's-new screen picks
+  the device's language as soon as that folder holds anything, so the
+  twenty-nine other languages landed in a folder whose newest note was version
+  3, found nothing in the range asked for, and **did not open at all** — an
+  update since 1.0.0 said nothing to anybody but a French or English reader,
+  and F-Droid's pages in those languages were as empty. 261 notes written
+  against the English source and each language's glossary, then 1,044
+  per-architecture copies derived by `tools/expand_changelogs.py`. The APK
+  gains 215 kB for it, and the what's-new screen was read back on a telephone
+  in German and in Arabic.
 
 ### Fixed
 
+- **The switch of the bikes outside stations said half of what it turns on**,
+  in twenty-nine languages. `98ceb03e` rewrote its label and its description
+  when the battery of the docked bikes joined it, in English and in French
+  only; everywhere else the label still promised the street bikes alone, and
+  the description dropped the two facts the English had gained — that the feed
+  read is far heavier than the station one, and that only the networks
+  publishing it show anything. Fifty-eight strings, each taken from its own
+  glossary rather than calqued: "far heavier" is *much larger* in the Slavic
+  languages and 大得多 in Chinese, where the weight of a thing and the volume
+  of a stream are not the same word.
+- **Spanish stopped saying *coger***, in that description at least. The
+  glossary rules the verb out as a regionalism — the application is read in
+  Spain, Mexico, Argentina and Chile — and the string shipped it anyway since
+  1.4.0. It now says *tomar*, which is unmarked in all four.
+- **Danish distances become miles, not Scandinavian ones.** The note on
+  version 3 said a French interface in Boston turns the distances *i mil*, and
+  the Danish *mil* is ten kilometres; the same file already said "miles og fod
+  i USA" two lines above.
 - **`docs/release.md` said F-Droid signs with its own key.** It has not since
   the recipe was merged: it names this project's certificate in
   `AllowedAPKSigningKeys` and verifies its rebuild against the published APK,
