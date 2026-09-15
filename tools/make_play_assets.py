@@ -140,7 +140,20 @@ def compose_feature_graphic(language: str) -> Image.Image:
     name = font("atkinson_bold.ttf", 76)
     tagline = font("atkinson_regular.ttf", 32)
     draw.text((408, 178), "Roue Libre", font=name, fill=PAPER)
-    draw.text((412, 282), TAGLINE[language], font=tagline, fill="#9CC4B6")
+
+    # The tagline is a sentence in whatever language the listing is written in,
+    # and one that fits in English overruns in French: at 32 px the French runs
+    # 685 pixels where the English runs 500, and Pillow draws it past the right
+    # edge rather than complaining — the first French banner reached Play with
+    # "sans mouchard" cut off. It is therefore wrapped to the margin the icon
+    # keeps on the left, so that a longer language takes a second line instead
+    # of being lost. The English still fits on one, and its banner is unchanged.
+    text_left = 412
+    margin = 96
+    for index, line in enumerate(
+        wrap(draw, TAGLINE[language], tagline, width - text_left - margin)
+    ):
+        draw.text((text_left, 282 + index * 40), line, font=tagline, fill="#9CC4B6")
     return banner
 
 
