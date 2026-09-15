@@ -729,8 +729,8 @@
          The sentence under the switch is the whole of what the row says about
          a network: one that publishes no such feed shows nothing at all, and
          the map says that by drawing nothing. -->
-    <string name="settings_street_bikes">Rādīt velosipēdus ārpus stacijām</string>
-    <string name="settings_street_bikes_description">Vai to drīkst aizņemties turpat, kur tas stāv, nosaka tīkls.</string>
+    <string name="settings_street_bikes">Rādīt stacijās novietoto velosipēdu akumulatoru un velosipēdus ārpus stacijām</string>
+    <string name="settings_street_bikes_description">Vai velosipēdu ārpus stacijas drīkst aizņemties turpat, kur tas stāv, nosaka tīkls. Šim tiek nolasīta datu plūsma, kas ir daudz smagāka par staciju plūsmu, un kaut ko rāda tikai tie tīkli, kas to publicē.</string>
 
     <!-- Shown once, the first time the switch above is turned on, and readable
          again from the sheet of any such bike. It informs and does not
