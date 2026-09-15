@@ -802,8 +802,8 @@
          The sentence under the switch is the whole of what the row says about
          a network: one that publishes no such feed shows nothing at all, and
          the map says that by drawing nothing. -->
-    <string name="settings_street_bikes">Räder außerhalb der Stationen anzeigen</string>
-    <string name="settings_street_bikes_description">Ob du eines dort ausleihen darfst, wo es steht, hängt vom Netz ab.</string>
+    <string name="settings_street_bikes">Den Akku der Räder an den Stationen und die Räder außerhalb der Stationen anzeigen</string>
+    <string name="settings_street_bikes_description">Ob du ein Rad dort ausleihen darfst, wo es außerhalb einer Station steht, hängt vom Netz ab. Dafür wird ein Feed gelesen, der weit schwerer wiegt als der Stationsfeed, und nur die Netze, die ihn veröffentlichen, zeigen etwas an.</string>
 
     <!-- Shown once, the first time the switch above is turned on, and readable
          again from the sheet of any such bike. It informs and does not
