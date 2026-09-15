@@ -1,0 +1,3 @@
+Karta se opet iscrtava na svakom telefonu.
+
+• Verzija 1.2.0 odbijala se instalirati na telefone bez Vulkana, jer je biblioteka za kartu to učinila uvjetom. Karta se sada iscrtava kroz OpenGL ES, koji ima svaki podržani telefon – ista karta, isti pogon, a aplikacija je lakša za otprilike dva megabajta.

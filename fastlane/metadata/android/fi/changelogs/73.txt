@@ -1,0 +1,3 @@
+Kartta piirtyy taas jokaiselle puhelimelle.
+
+• Versio 1.2.0 kieltäytyi asentumasta puhelimiin, joissa ei ole Vulkania, koska karttakirjasto oli tehnyt siitä vaatimuksen. Kartta piirtyy nyt OpenGL ES:llä, joka on jokaisessa tuetussa puhelimessa – sama kartta, sama moottori, ja sovellus on noin kaksi megatavua kevyempi.

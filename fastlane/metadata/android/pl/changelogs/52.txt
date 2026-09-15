@@ -1,0 +1,15 @@
+Lista stacji sama stawia najbliższą stację na początku.
+
+• Lista porządkuje się według odległości od razu, gdy się pojawia, skądkolwiek do niej trafisz, a każdy wiersz mówi, jak daleko jest jego stacja. Nic nie jest do tego wymagane — żadnej prośby o uprawnienie, żadnego komunikatu — a tam, gdzie pozycji nie da się ustalić, zostaje porządek alfabetyczny.
+• Przycisk „Najbliższa stacja na początku” unosi się teraz nad dolnym rogiem listy, tam gdzie jest Twój kciuk. To jedyne miejsce, w którym ten ekran w ogóle prosi o lokalizację; pokazuje oczekiwanie, póki pozycja nie dotrze, i sprowadza przeporządkowaną listę na pierwszy wiersz.
+• Stacja, która nie działa, mówi, od jak dawna milczy: „Nie działa · ostatni odczyt 5 miesięcy temu”, odczytane z pomiaru, który sama sieć opublikowała. Stację zamkniętą dziś rano warto przeczekać; ta, która nie odezwała się od miesięcy, zniknęła z chodnika.
+• Ustawienia nazywają sieć w użyciu, tam gdzie wiersz miasta proponował dotąd tylko jej zmianę.
+• Bez zainstalowanego podkładu mapy aplikacja nie otwiera się już na panelu z informacją o braku kafelków. Ląduje na liście stacji, która nie potrzebuje żadnego pobierania, i wraca do mapy, gdy tylko jest co narysować.
+• Pierwsze uruchomienie nie kończy się już śmiercią aplikacji, gdy komunikat o wyborze miasta zostanie naciśnięty w trakcie sekwencji powitalnej — ten komunikat czeka teraz, aż powitanie się skończy.
+• Wyszukiwanie, tak jak przycisk, pokazuje swoją listę od pierwszego wiersza, zamiast zostawiać cię kilka kilometrów stacji niżej.
+• Karta stacji nie mierzy już odległości z miasta, w którym nie jesteś: przeglądanie sieci na drugim końcu świata ogłaszało tysiące kilometrów pod nazwą stacji.
+• „Sprawdź aktualizacje” bez połączenia nie obiecuje już, że pobieranie ruszy dalej z miejsca, w którym stanęło: nic nie zostało zaczęte.
+• Odpowiedź na to, co przed chwilą zrobiono, nie znika już ułamek sekundy później, starta przez odświeżenie, które obok się nie powiodło.
+• Na ekranie Ulubione wskazówka o przeniesieniu wiersza przez naciśnięcie i przytrzymanie czeka, aż wiersze będą dwa.
+• Gest powrotu rysuje, dokąd prowadzi, na Androidzie 13 i 14.
+• O jedno uprawnienie mniej: to do Wi-Fi, które przyszło z biblioteką mapy i którego nic tutaj nigdy nie odczytywało.

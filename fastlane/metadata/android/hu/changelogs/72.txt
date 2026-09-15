@@ -1,0 +1,3 @@
+A térkép megint minden telefonon megjelenik.
+
+• Az 1.2.0-s verzió nem volt hajlandó feltelepülni a Vulkan nélküli telefonokra, mert a térképkönyvtár követelménnyé tette. A térkép mostantól OpenGL ES-en jelenik meg, amely minden támogatott telefonon megvan – ugyanaz a térkép, ugyanaz a motor, és az alkalmazás körülbelül két megabájttal könnyebb.

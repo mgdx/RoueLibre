@@ -1,0 +1,7 @@
+Kola nechaná mimo stanice jsou na mapě a od jednoho z nich můžete vyrazit.
+
+• Síť často hlásí kola mimo své stojany. Přepínač v sekci zobrazení je vykreslí, ve výchozím stavu vypnutý: jejich značka je menší než značka stanice, klepnutí otevře, co je to za kolo a kolik má nabito, a trasa od něj může začít – stojíte vedle kola, takže k němu nevede žádná chůze, a jízda končí ve stanici, kam se kolo vrací. Co jsou tato kola a jestli si nějaké smíte vzít, říkají pravidla sítě, která její datový kanál nenese: aplikace to říká rovnou a netvrdí nic.
+• Karta stanice říká, jak nabité jsou baterie, které u ní stojí, od nejplnější, a kolik kol síť hlásí mimo provoz. Nad čtyři kola uvede oba konce a jeden řádek rozbalí stanici kolo po kole. Čte stejný datový kanál jako výše, pod stejným přepínačem.
+• Filadelfie, Las Vegas a Bentonville se přidávají do katalogu: 340 sítí v 39 zemích. Sítě, jejichž stojany jsou zcela skutečné, ale jejichž datový kanál nezveřejňuje žádnou pevnou kapacitu, byly odmítány; teď za ni odpovídá jejich počet volných míst měřený živě.
+• Aplikace je o půl megabajtu lehčí: nenese už texty licencí, které opakovala osmkrát, ani písmena, která nikdy nevykresluje, ani obrázky, které žádná mapa neukazuje.
+• Na šířku vrací vyhledávání adres i seznam stanic své odpovědi, místo aby utratily obrazovku za vlastní záhlaví; stanice, jejíž název začíná písmenem s diakritikou, se řadí pod své vlastní písmeno; arabský nadpis už není useknutý; obě čísla stanice se čtou nahlas; a osmnáct sítí bylo uvedeno pod identifikátorem místo pod svým názvem.

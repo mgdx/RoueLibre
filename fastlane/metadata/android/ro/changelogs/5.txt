@@ -1,0 +1,15 @@
+Lista stațiilor pune prima cea mai apropiată stație, de la sine.
+
+• Lista se ordonează după apropiere de îndată ce apare, de oriunde ai ajunge la ea, iar fiecare rând spune la ce distanță este stația lui. Nu ți se cere nimic pentru asta — nicio permisiune, niciun mesaj — iar acolo unde nu există o poziție, rămâne ordinea alfabetică.
+• Un buton „Cea mai apropiată stație prima” plutește acum peste colțul de jos al listei, acolo unde îți stă degetul mare. Este singurul loc în care ecranul acesta îți cere locația, arată așteptarea cât timp vine poziția și readuce lista reordonată la primul ei rând.
+• O stație nefuncțională spune de cât timp tace: „Nefuncțională · ultima raportare acum 5 luni”, citit chiar din măsurătoarea pe care rețeaua a publicat-o. O stație închisă azi-dimineață merită așteptată; una care nu a mai spus nimic de luni de zile a plecat de pe trotuar.
+• Setările numesc rețeaua în uz, acolo unde rândul orașului se mulțumea să propună schimbarea lui.
+• Fără fond cartografic instalat, aplicația nu se mai deschide pe panoul care îi anunță lipsa. Ajunge pe lista stațiilor, care nu are nevoie de nicio descărcare, și revine la hartă de îndată ce există una de desenat.
+• Prima pornire nu mai moare când se apasă mesajul despre alegerea unui oraș peste secvența de întâmpinare — mesajul acela așteaptă acum ca întâmpinarea să se termine.
+• O căutare, ca și butonul, își arată lista de la primul rând, în loc să te lase cu câțiva kilometri de stații mai jos.
+• Fișa unei stații nu mai măsoară o distanță dintr-un oraș în care nu ești: consultarea unei rețele de la celălalt capăt al lumii anunța mii de kilometri sub numele stației.
+• „Caută actualizări” fără conexiune nu mai promite că o descărcare va relua de unde a rămas: nu fusese începută niciuna.
+• Răspunsul la ceea ce tocmai ai făcut nu mai este șters o fracțiune de secundă mai târziu de o actualizare care eșuează alături.
+• Pe ecranul favoritelor, indicația despre ținerea apăsată a unui rând ca să îl muți așteaptă să existe două rânduri de mutat.
+• Gestul de întoarcere desenează unde duce, pe Android 13 și 14.
+• O permisiune în minus: cea pentru Wi-Fi, care venea din biblioteca hărții și pe care nimic de aici nu a citit-o vreodată.

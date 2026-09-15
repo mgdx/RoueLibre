@@ -1,0 +1,3 @@
+Harita yeniden her telefonda çiziliyor.
+
+• 1.2.0 sürümü, harita kitaplığı Vulkan’ı zorunlu kıldığı için Vulkan’ı olmayan telefonlara kurulmayı reddediyordu. Harita artık desteklenen her telefonun taşıdığı OpenGL ES üzerinden çiziliyor — aynı harita, aynı motor — ve uygulama yaklaşık iki megabayt hafifledi.

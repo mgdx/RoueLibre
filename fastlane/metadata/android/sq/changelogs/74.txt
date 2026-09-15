@@ -1,0 +1,3 @@
+Harta shfaqet sërish për çdo telefon.
+
+• Versioni 1.2.0 refuzonte të instalohej në telefonat pa Vulkan, sepse biblioteka e hartës e kishte bërë atë kusht. Harta shfaqet tani përmes OpenGL ES, të cilin e ka çdo telefon i mbështetur – e njëjta hartë, i njëjti motor, dhe aplikacioni është rreth dy megabajt më i lehtë.
