@@ -687,8 +687,8 @@
          The sentence under the switch is the whole of what the row says about
          a network: one that publishes no such feed shows nothing at all, and
          the map says that by drawing nothing. -->
-    <string name="settings_street_bikes">显示站点外的自行车</string>
-    <string name="settings_street_bikes_description">能否就地借用，取决于该系统的规定。</string>
+    <string name="settings_street_bikes">显示站点内自行车的电量，以及站点外的自行车</string>
+    <string name="settings_street_bikes_description">能否将站点外的自行车就地借走，取决于该系统的规定。它读取的数据源比站点数据源大得多，且只有发布该数据源的系统才会显示内容。</string>
 
     <!-- Shown once, the first time the switch above is turned on, and readable
          again from the sheet of any such bike. It informs and does not
