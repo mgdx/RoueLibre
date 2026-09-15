@@ -32,6 +32,8 @@ The application is a personal tool, plain and fast. It is not a booking applicat
 
 The application must pass the **F-Droid / Exodus Privacy** scan with no tracker detected.
 
+**C2 is about what is inside the application, not about where it is handed out.** Since 14 September 2026 the application is also published on **Google Play**, and that changes not one line of what it contains: the artefact uploaded there is the code F-Droid rebuilds, carrying no Play Services, no Firebase and no Play Integrity, and it still runs on a device with no Google services at all. A store is a way in, for the people who only ever install from one; a dependency is what C2 forbids, and none is added. Two consequences are accepted with it, and written down so they are not rediscovered as defects: Play signs what it serves with **a key Google holds**, which makes the Play installation a **separate one** — somebody who installed from the releases page or F-Droid cannot update to it, nor the other way round, without removing the application and losing their downloaded cities — and Play requires an **app bundle**, which `assembleRelease` does not produce and which changes nothing about the five APKs it does. The whole of it is in `docs/play-store.md`.
+
 ## 3. Technical stack
 
 - **Language:** Kotlin

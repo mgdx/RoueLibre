@@ -7,6 +7,32 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
+## [Unreleased]
+
+### Added
+
+- **The application can be built as an app bundle, for Google Play**
+  (`SPEC.md` §2, `docs/play-store.md`). `bundleRelease` turns the ABI splits
+  off for its own build — AGP refuses a bundle while they are on — and signs
+  with a **separate upload key**, Google holding the key that signs what Play
+  serves. `assembleRelease` is untouched: the same five APKs, under the same
+  publishing certificate F-Droid verifies against.
+- **A privacy policy in the repository** (`docs/privacy-policy.md`), which Play
+  requires as a public address and which says in plain words what the "about"
+  screen already says on the telephone.
+- **`tools/make_play_assets.py`**, which composes the images a Play listing
+  asks for from the screenshots already taken — Play refusing an image whose
+  long side is more than twice its short one, which every telephone screenshot
+  is. It writes nothing under `fastlane/metadata/`: F-Droid keeps the raw
+  screen.
+
+### Fixed
+
+- **`docs/release.md` said F-Droid signs with its own key.** It has not since
+  the recipe was merged: it names this project's certificate in
+  `AllowedAPKSigningKeys` and verifies its rebuild against the published APK,
+  so the releases page and F-Droid are one installation.
+
 ## [1.4.0]
 
 The bikes a network leaves outside its stations are drawn on request, and a
