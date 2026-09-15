@@ -859,8 +859,8 @@
          The sentence under the switch is the whole of what the row says about
          a network: one that publishes no such feed shows nothing at all, and
          the map says that by drawing nothing. -->
-    <string name="settings_street_bikes">Mostrar as bicicletas fora de estação</string>
-    <string name="settings_street_bikes_description">Se a pode levar onde está depende da rede.</string>
+    <string name="settings_street_bikes">Mostrar a bateria das bicicletas em estação, e as bicicletas fora de estação</string>
+    <string name="settings_street_bikes_description">Conforme a rede, pode levar uma bicicleta fora de estação onde ela está, ou não. Isto lê um fluxo bem mais pesado do que o das estações, e só as redes que o publicam mostram alguma coisa.</string>
 
     <!-- Shown once, the first time the switch above is turned on, and readable
          again from the sheet of any such bike. It informs and does not
