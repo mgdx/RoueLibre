@@ -38,6 +38,22 @@ also records what has no visible effect.
   gains 215 kB for it, and the what's-new screen was read back on a telephone
   in German and in Arabic.
 
+### Changed
+
+- **The catalogue is asked for conditionally, instead of being downloaded again
+  on every opening of the city list** (`SPEC.md` §15). It was already cached in
+  `filesDir`, but the refresh that follows the list opening fetched the whole
+  document unconditionally — four hundred kilobytes that the publication host
+  serves uncompressed, reparsed and rewritten identical. The `ETag` and
+  `Last-Modified` the response carried are now kept beside that copy and sent
+  back as `If-None-Match` and `If-Modified-Since`; the release host answers
+  `304`, and `refresh()` says `Unchanged` rather than handing the screen a list
+  to rebuild — which also spares it measuring the data installed for each of
+  several hundred cities. The validators are written and forgotten with the
+  document they describe, so a stale one can never earn a `304` for a copy that
+  is gone, and a host publishing neither is served by the full download as
+  before. First refresh after an update downloads once, then settles.
+
 ### Fixed
 
 - **The switch of the bikes outside stations said half of what it turns on**,
