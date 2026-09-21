@@ -17,8 +17,8 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.io.File
 import java.io.IOException
+import java.net.HttpURLConnection.HTTP_NOT_MODIFIED
 import java.net.SocketTimeoutException
 
 /**
@@ -39,8 +39,8 @@ class CityCatalogueSource(
     private val ioDispatcher: CoroutineDispatcher,
 ) {
 
-    private val cacheFile: File
-        get() = File(context.filesDir, CACHE_FILE_NAME)
+    private val cache: CatalogueCache
+        get() = CatalogueCache(context.filesDir)
 
     /** Where the shipped configurations lie in `cities.json`, read on first use. */
     @Volatile
@@ -61,7 +61,7 @@ class CityCatalogueSource(
     }
 
     /**
-     * Downloads the catalogue again and keeps it if it is readable.
+     * Downloads the catalogue again, unless the host says it has not changed.
      *
      * **The address comes from the catalogue shipped in the APK, and from
      * nowhere else.** It used to be read from the catalogue in force, which is
@@ -74,52 +74,93 @@ class CityCatalogueSource(
      * release, as it already does for every other address of the project
      * (SPEC §15).
      *
-     * @return the catalogue that just arrived, or the reason nothing did. The
-     *   caller keeps showing the one in force in that case.
+     * **The document is asked for conditionally.** The city list calls this
+     * every time it opens, while the catalogue only moves when a data release is
+     * published — once a month or so, against four hundred kilobytes that the
+     * publication host serves uncompressed. So the validators that came with the
+     * copy held go back out as `If-None-Match` and `If-Modified-Since`, and a
+     * `304` costs its headers instead of the whole document. Nothing does this
+     * for us: the HTTP client is built with `cache(null)` on purpose, so that
+     * the freshness policy is read here rather than guessed at (SPEC §4.1).
+     *
+     * @return the catalogue that just arrived, [CatalogueRefresh.Unchanged] if
+     *   the copy held is still current, or the reason nothing came. The caller
+     *   keeps showing the one in force in both of the last two cases.
      */
-    suspend fun refresh(): Outcome<CityCatalogue> = withContext(ioDispatcher) {
+    suspend fun refresh(): CatalogueRefresh = withContext(ioDispatcher) {
         val url = embeddedCatalogue().catalogueUrl
-            ?: return@withContext Outcome.Failure(
+            ?: return@withContext CatalogueRefresh.Failed(
                 DataError.MalformedResponse("no publication address in the shipped catalogue"),
             )
+        // Read before the request goes out, and parsed rather than merely looked
+        // for: a validator is only worth offering while the document it
+        // describes can still be shown. Offered without that, a `304` would
+        // leave the screen with nothing the server has vouched for.
+        val held = downloadedCatalogue()
+        val validators = if (held == null) null else cache.validators()
         val request = try {
             Request.Builder()
                 .url(url)
                 .header("User-Agent", userAgent)
+                .apply {
+                    // Both when both are known: RFC 9110 §13.1.3 has the server
+                    // ignore the date as soon as an entity tag is present, and
+                    // the date is what remains for a host that publishes none.
+                    validators?.etag?.let { header("If-None-Match", it) }
+                    validators?.lastModified?.let { header("If-Modified-Since", it) }
+                }
                 .build()
         } catch (_: IllegalArgumentException) {
             // The shipped catalogue is produced by tools/build_catalogue.py and
             // verified, so this is a manufacturing defect rather than a user
             // situation. Said rather than thrown all the same: an address the
             // client refuses must never be what closes the application.
-            return@withContext Outcome.Failure(DataError.MalformedResponse("invalid URL: $url"))
+            return@withContext CatalogueRefresh.Failed(
+                DataError.MalformedResponse("invalid URL: $url"),
+            )
         }
         try {
             httpClient.newCall(request).execute().use { response ->
+                if (response.code == HTTP_NOT_MODIFIED) {
+                    // A host answering this without having been asked
+                    // conditionally has sent no document and there is no copy to
+                    // fall back on, which is a refusal like any other.
+                    return@withContext if (held != null) {
+                        CatalogueRefresh.Unchanged
+                    } else {
+                        CatalogueRefresh.Failed(DataError.ServerRefused(response.code))
+                    }
+                }
                 if (!response.isSuccessful) {
-                    return@withContext Outcome.Failure(DataError.ServerRefused(response.code))
+                    return@withContext CatalogueRefresh.Failed(
+                        DataError.ServerRefused(response.code),
+                    )
                 }
                 val document = response.body.textUpTo()
-                    ?: return@withContext Outcome.Failure(
+                    ?: return@withContext CatalogueRefresh.Failed(
                         DataError.MalformedResponse(
                             "catalogue larger than $MAXIMUM_DOCUMENT_BYTES bytes",
                         ),
                     )
                 when (val outcome = CityCatalogueReader.read(document)) {
-                    is Outcome.Failure -> outcome
+                    is Outcome.Failure -> CatalogueRefresh.Failed(outcome.error)
                     is Outcome.Success -> {
-                        // Written only after a successful parse: an invalid
-                        // cache file would condemn every later launch to fall
-                        // back on the APK's without saying so.
-                        writeCache(document)
-                        outcome
+                        // Kept only after a successful parse: an invalid cache
+                        // file would condemn every later launch to fall back on
+                        // the APK's without saying so.
+                        cache.keep(
+                            document = document,
+                            etag = response.header("ETag"),
+                            lastModified = response.header("Last-Modified"),
+                        )
+                        CatalogueRefresh.Updated(outcome.value)
                     }
                 }
             }
         } catch (error: SocketTimeoutException) {
-            Outcome.Failure(DataError.Timeout)
+            CatalogueRefresh.Failed(DataError.Timeout)
         } catch (_: IOException) {
-            Outcome.Failure(DataError.Offline)
+            CatalogueRefresh.Failed(DataError.Offline)
         }
     }
 
@@ -196,13 +237,7 @@ class CityCatalogueSource(
     }
 
     private fun downloadedCatalogue(): CityCatalogue? {
-        val file = cacheFile
-        if (!file.isFile) return null
-        val document = try {
-            file.readText()
-        } catch (_: IOException) {
-            return null
-        }
+        val document = cache.document() ?: return null
         return (CityCatalogueReader.read(document) as? Outcome.Success)?.value
     }
 
@@ -242,23 +277,10 @@ class CityCatalogueSource(
             String(bytes, Charsets.UTF_8)
         }
 
-    private fun writeCache(document: String) {
-        val staging = File(context.filesDir, "$CACHE_FILE_NAME.partial")
-        try {
-            staging.writeText(document)
-            // Atomic rename: a cut in the middle of the write leaves the
-            // previous catalogue intact rather than a half-written file.
-            if (!staging.renameTo(cacheFile)) staging.delete()
-        } catch (_: IOException) {
-            staging.delete()
-        }
-    }
-
     private companion object {
         const val CATALOGUE_ASSET = "catalogue.json"
         const val CITIES_ASSET = "cities.json"
         const val CITIES_INDEX_ASSET = "cities-index.json"
-        const val CACHE_FILE_NAME = "catalogue.json"
 
         /** Reads the index alone, whose shape this file owns. */
         val json = Json

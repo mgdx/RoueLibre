@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
-import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.config.CityCatalogue
 import io.github.mgdx.rouelibre.core.config.CityEntry
 import io.github.mgdx.rouelibre.core.config.filterCities
+import io.github.mgdx.rouelibre.data.cities.CatalogueRefresh
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentCityBinding
 import io.github.mgdx.rouelibre.ui.ConfirmationDialogFragment
@@ -171,7 +171,9 @@ class CityFragment : Fragment() {
      * The shipped catalogue shows first: the list is there immediately, offline
      * included. The request that follows is this screen's only one, and it
      * happens because the screen has just been opened to learn which cities
-     * exist — never in the background (SPEC §4.1).
+     * exist — never in the background (SPEC §4.1). It is conditional, so the
+     * usual answer is that nothing has changed, and the list is then left
+     * exactly as it is rather than rebuilt from the same document.
      */
     private fun showCatalogue() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -184,7 +186,7 @@ class CityFragment : Fragment() {
             // No address is passed: where the catalogue is fetched from is
             // settled by the build, never by the document last downloaded.
             val refreshed = container.cityCatalogueSource.refresh()
-            if (refreshed is Outcome.Success) publish(refreshed.value)
+            if (refreshed is CatalogueRefresh.Updated) publish(refreshed.catalogue)
         }
     }
 

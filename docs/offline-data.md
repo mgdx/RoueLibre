@@ -171,9 +171,19 @@ same shape:
 are what an entry cannot do without; the rest may be left out, and an entry
 missing one of them is **dropped on its own** rather than costing the catalogue
 its other three hundred. `catalogueUrl` is where the application will look next
-time, so a catalogue can move itself. `stationSamples` are eight positions taken
-through the network, and they are what "find my city" measures against — the
-reference box of a network serving a whole region is mostly empty.
+time — read from the copy shipped in the APK and from nowhere else, so a
+downloaded catalogue names the cities but never where the following one comes
+from; moving the address takes a build. `stationSamples` are eight positions
+taken through the network, and they are what "find my city" measures against —
+the reference box of a network serving a whole region is mostly empty.
+
+**Serve `ETag` or `Last-Modified` if the host can.** The application asks for
+the catalogue each time its city list opens, and it asks conditionally: whatever
+validator came with the copy it holds goes back out as `If-None-Match` or
+`If-Modified-Since`, and a `304` then costs its headers instead of the four
+hundred kilobytes of the document. Any ordinary static file server does this
+without being configured for it, GitHub's release assets included. A host that
+publishes neither is served just as well, for the price of the full download.
 
 ### The manifest
 
