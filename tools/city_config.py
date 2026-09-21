@@ -160,6 +160,15 @@ class BoundingBox:
         """Format as ``left,bottom,right,top``, the order osmium expects."""
         return f"{self.west},{self.south},{self.east},{self.north}"
 
+    def as_dictionary(self) -> dict[str, float]:
+        """The four edges under their names, the form a configuration holds."""
+        return {
+            "south": self.south,
+            "west": self.west,
+            "north": self.north,
+            "east": self.east,
+        }
+
     def contains(self, latitude: float, longitude: float) -> bool:
         return (
             self.south <= latitude <= self.north

@@ -34,7 +34,7 @@ from pathlib import Path
 
 from city_config import FLEET_COMMENT, BoundingBox, CityConfig, OpeningView
 from compute_bbox import bounding_box_of_stations, load_stations, survey_stations
-from discover_networks import display_name_of
+from discover_networks import Extracts, display_name_of
 
 TOOLS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = TOOLS_DIR.parent
@@ -126,7 +126,8 @@ def unique(candidate: str, taken: set[str], qualifier: str) -> str:
 
 
 def build_document(survey: dict, network_id: str, box: BoundingBox,
-                   station_count: int, opening: OpeningView) -> dict:
+                   station_count: int, opening: OpeningView,
+                   extracts: Extracts) -> dict:
     """Assemble a city configuration from a surveyed network and its box."""
     versions = survey.get("declaredVersions") or survey.get("gbfsVersion", "")
     # No block at all where the feed declares no vehicle type: the application
@@ -229,7 +230,7 @@ def build_document(survey: dict, network_id: str, box: BoundingBox,
                 "foresaw: the addresses are then read from the very extract",
                 "listed above, and no second download is needed.",
             ],
-            "osmRegions": survey.get("osmRegions", []),
+            "osmRegions": extracts.for_box(box.as_dictionary()),
             "addressSource": address_source_of(survey),
             "banDepartments": survey.get("banDepartments", []),
         },
@@ -320,40 +321,60 @@ def parse_arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def refresh_data_sources(networks: list[dict], configurations: dict[str, dict]) -> int:
-    """Bring the "dataSources" block of the served cities up to the survey.
+def refresh_data_sources(networks: list[dict], configurations: dict[str, dict],
+                         extracts: Extracts) -> int:
+    """Bring the "dataSources" block of the served cities up to their box.
 
     Where a configuration comes from is settled once; where its data is CUT
-    FROM is not. The survey learns it again on every run, from the stations
-    themselves, and it changes: a network extends over a border and its box
-    starts reaching an extract it did not reach before. Lille's reaches into
-    Belgium, Strasbourg's into Germany, and a map cut without them would stop
-    dead at the frontier while the stations carry on.
+    FROM is not. It follows the box, and the box moves: tools/compute_bbox.py
+    recomputes it from the live feed on every regeneration, a network extends
+    over a border, another loses the far-off town that stretched it. Lille's
+    box reaches into Belgium, Strasbourg's into Germany, and a map cut without
+    them would stop dead at the frontier while the stations carry on.
+
+    **The extracts are derived from the box this very configuration carries**,
+    and not from the one the survey held when it ran. Those are two different
+    rectangles: a configuration is written against the live feed, days after
+    the survey that proposed it, and recomputed again later. Washington was
+    written with the extracts of a box 300 m from its own, and the District of
+    Columbia — one extract of the three its box reaches — was not among them.
+    The city shipped with no map, no routing and no addresses over its centre.
+
+    Which department a French box reaches is still read from the survey: only
+    the state's API can answer it, and this pass goes out on no network.
 
     Nothing else in the file is touched: the names, the comments and the
     addresses of the three conurbations settled by hand stay as they are.
     """
-    changed = 0
+    by_identifier = {}
     for network in networks:
         identifier = already_served(network, configurations)
-        if identifier is None:
+        if identifier is not None:
+            by_identifier[identifier] = network
+    changed = 0
+    for identifier, existing in configurations.items():
+        document = existing["document"]
+        box = document.get("boundingBox") or {}
+        if box.get("south") is None:
             continue
-        existing = configurations[identifier]
-        sources = existing["document"].setdefault("dataSources", {})
-        wanted = {
-            "osmRegions": network.get("osmRegions", []),
-            "addressSource": address_source_of(network),
-            "banDepartments": network.get("banDepartments", []),
-        }
+        sources = document.setdefault("dataSources", {})
+        network = by_identifier.get(identifier)
+        wanted = {"osmRegions": extracts.for_box(box)}
+        # A city whose network has dropped out of the survey keeps the address
+        # source it was written with: the survey is what knows about it, and
+        # silence is not an answer.
+        if network is not None:
+            wanted["addressSource"] = address_source_of(network)
+            wanted["banDepartments"] = network.get("banDepartments", [])
         if all(sources.get(key) == value for key, value in wanted.items()):
             continue
         was = ", ".join(region.rsplit("/", 1)[-1] for region in sources.get("osmRegions", []))
         sources.update(wanted)
         with existing["path"].open("w", encoding="utf-8") as stream:
-            json.dump(existing["document"], stream, ensure_ascii=False, indent=2)
+            json.dump(document, stream, ensure_ascii=False, indent=2)
             stream.write("\n")
         now = ", ".join(region.rsplit("/", 1)[-1] for region in wanted["osmRegions"])
-        print(f"  ~ {network['displayName']:<26} {was or '—'} → {now or '—'}")
+        print(f"  ~ {document['network']['displayName']:<26} {was or '—'} → {now or '—'}")
         changed += 1
     return changed
 
@@ -441,7 +462,7 @@ def main() -> int:
     configurations = existing_configurations(arguments.cities_dir)
 
     if arguments.refresh_sources:
-        changed = refresh_data_sources(networks, configurations)
+        changed = refresh_data_sources(networks, configurations, Extracts.download())
         print(f"\n{changed} configuration(s) brought up to the survey")
         return 0
 
@@ -454,6 +475,12 @@ def main() -> int:
 
     taken_identifiers = set(configurations)
     taken_files = {path.stem for path in arguments.cities_dir.glob("*.json")}
+
+    # The extracts every box below is to be cut from. Derived here against the
+    # box this run computes, and never copied from the survey: the two are
+    # days apart and are not the same rectangle (see `refresh_data_sources`).
+    # The index is downloaded once and kept in `data/cache`.
+    extracts = Extracts.download()
 
     written = skipped = failed = 0
     for network in networks:
@@ -496,7 +523,9 @@ def main() -> int:
             print(f"  ! {network['displayName']:<26} {type(error).__name__}: {error}")
             continue
 
-        document = build_document(network, identifier, box, len(stations), opening)
+        document = build_document(
+            network, identifier, box, len(stations), opening, extracts
+        )
         path = arguments.cities_dir / f"{file_name}.json"
         with path.open("w", encoding="utf-8") as stream:
             json.dump(document, stream, ensure_ascii=False, indent=2)

@@ -56,6 +56,34 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **Washington's map, routing and addresses stopped at the edge of the District
+  of Columbia**, and eight other cities carried a hole of the same kind
+  ([issue #4](https://github.com/mgdx/RoueLibre/issues/4), reported by
+  @mhebant). The three datasets are cut from the OpenStreetMap extracts a
+  city's configuration names, and `washington.json` named Maryland and Virginia
+  alone — where four of its eight sampled stations stand in the district
+  itself. Two defects, each enough on its own. **The box was sampled at
+  twenty-five points**, whatever its size: at thirteen kilometres between
+  samples exactly one of them fell inside a district sixteen kilometres across,
+  and on the day that configuration was written it fell just outside. The box
+  is now sampled every kilometre of ground, which is well under the 5.8 km of
+  Melilla, the narrowest extract Geofabrik publishes. **And the extracts were
+  derived from a box other than the one the data is cut to**: the survey
+  proposes a box, `add_city.py` recomputes it against the live feed days later,
+  `compute_bbox.py` recomputes it again on every regeneration, and nothing ever
+  went back to ask which extracts the new rectangle reached.
+  `--refresh-sources` now derives them from the configuration's own box, and
+  `tools/tests/test_city_extracts.py` fails on a configuration that has drifted
+  from it again. Brive-la-Gaillarde gains the Aquitaine, Épinal the
+  Franche-Comté, Niort the Pays de la Loire, Zurich the Liechtenstein and the
+  Italian north-east, Zagreb that north-east, Vienna's regional network
+  Hungary, Blue-bike the Picardy, the Champagne-Ardenne and Luxembourg. Four
+  cities also drop extracts their box has not reached since it was last
+  recomputed — the two Nuremberg networks five apiece, Vélo Fluo three, Chicago
+  the whole of the American Midwest — which is several gigabytes nobody
+  downloads again. **The datasets published for those cities still carry the
+  hole**: they are cut from these lists, and have to be generated and published
+  again.
 - **The switch of the bikes outside stations said half of what it turns on**,
   in twenty-nine languages. `98ceb03e` rewrote its label and its description
   when the battery of the docked bikes joined it, in English and in French

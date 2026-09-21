@@ -199,10 +199,50 @@ ATTEMPTS_PER_URL = 2
 # every municipality a network reaches without storing the whole feed.
 STATION_SAMPLES = 25
 
-# The reference box is sampled on a grid as well, to find the extracts it
-# reaches. The stations alone would not do: the box carries a 3 km margin
-# around them, and what is downloaded is cut to the box, not to the stations.
-BOX_GRID_SIDE = 5
+# The reference box is sampled as well, to find the extracts it reaches. The
+# stations alone would not do: the box carries a 3 km margin around them, and
+# what is downloaded is cut to the box, not to the stations.
+#
+# A kilometre of ground between two samples, and not a fixed number of them:
+# an extract narrower than the step falls between two samples and is never
+# downloaded, which leaves a hole of exactly its shape in the map, in the
+# routing graph and in the addresses alike. Washington shipped with such a
+# hole over the District of Columbia: of the twenty-five samples the old
+# five-by-five grid took, one fell inside the district, and on the day that
+# configuration was written it fell just outside it. A kilometre is well under
+# the 5.8 km of Melilla, the narrowest extract Geofabrik publishes.
+BOX_SAMPLE_METRES = 1000.0
+
+# Floor and ceiling on the samples taken along one side. The floor keeps a
+# conurbation of a few kilometres sampled as the old grid sampled it; the
+# ceiling bounds a national box, which would otherwise run to hundreds of
+# thousands of samples for extracts the size of a country.
+BOX_SAMPLES_MINIMUM = 5
+BOX_SAMPLES_MAXIMUM = 200
+
+# Points of an extract's outline tested against another to tell whether the
+# second holds the first (see `Extracts._mark_bundles`). Two extracts that
+# merely overlap part a point outside almost immediately, so a few settle
+# nearly every pair, and Europe's outline carries thirty thousand of them.
+# Agreement is asked of nine points in ten rather than of all of them: the two
+# outlines were simplified apart, and a hole cut around an enclave belongs to
+# one of the pair only — Italy's is cut around San Marino, its own north-east
+# is not.
+CONTAINMENT_SAMPLES = 24
+CONTAINMENT_AGREEMENT = 0.9
+
+# What a bundle is made of, as a share of its own surface. An extract holding
+# the extracts that tile it is a bundle — Germany its Länder, Britain and
+# Ireland the isles. An extract holding an enclave and nothing else is not:
+# Berlin is one thirtieth of Brandenburg, and Brandenburg is the only extract
+# holding the ground around it.
+BUNDLE_SHARE = 0.5
+
+# The French departments a box reaches are sampled on a plain grid, and this
+# one stays coarse on purpose: every sample there is a call to the state's
+# geographic API, where a sample of the box against the extracts is arithmetic
+# on a file already in hand.
+DEPARTMENT_GRID_SIDE = 5
 
 # Past this, a title has stopped being a name and started describing an offer.
 MAXIMUM_NAME_WORDS = 4
@@ -1055,6 +1095,12 @@ class Extracts:
 
     The smallest extract that covers a point wins. Downloading Bavaria to serve
     Munich is a gigabyte; downloading Europe would be sixty.
+
+    Two things decide whether a box is served whole: how finely it is sampled,
+    and which extracts are eligible. Sample too coarsely and a small extract
+    falls between two samples — the District of Columbia did, and Washington
+    shipped with no map over its centre. Let the bundles stand for ground and a
+    box that dips into the sea pulls a continent down behind it.
     """
 
     def __init__(self, features: list[dict]) -> None:
@@ -1077,6 +1123,64 @@ class Extracts:
                 "envelope": envelope,
                 "area": (envelope[2] - envelope[0]) * (envelope[3] - envelope[1]),
             })
+        self._mark_bundles()
+
+    def _mark_bundles(self) -> None:
+        """Say which extracts are bundles of finer ones, and which stand alone.
+
+        Geofabrik publishes both. `europe/germany` holds its Länder,
+        `europe/britain-and-ireland` holds Great Britain and Ireland whole,
+        `europe` holds the lot: those exist to spare a run several downloads,
+        and they add no ground — whatever land they hold, a finer extract holds
+        it too. Luxembourg, Picardie or the District of Columbia hold ground
+        nothing else holds.
+
+        The distinction is what keeps the sea out. A territory is cut to its
+        territorial waters, so the corner of a box reaching into the North Sea
+        falls inside Britain and Ireland and inside nothing finer: six
+        gigabytes downloaded for the water off Ostend. A sample whose finest
+        extract is a bundle stands on no extract's land, and `for_box` leaves
+        it out.
+
+        Containment is read from the geometry rather than from the download
+        paths, which do not express it: `europe/great-britain` holds
+        `europe/united-kingdom/england` without being anywhere above it. An
+        enclave cut out of its neighbour is not held by it — Berlin is a hole
+        in Brandenburg, and `_covers` honours holes.
+        """
+        for holder in self.regions:
+            held = sum(
+                region["area"] for region in self.regions
+                if region is not holder and self._holds(holder, region)
+            )
+            holder["bundle"] = held >= BUNDLE_SHARE * holder["area"]
+
+    def _holds(self, holder: dict, held: dict) -> bool:
+        """Whether one extract lies inside another.
+
+        The outline is tested at a handful of its points rather than at every
+        one: a neighbour overlapping an extract leaves a point outside it
+        almost at once, and the pairs that survive that are the ones Geofabrik
+        cut one inside the other. A few points may fall outside all the same
+        and the pair still be one of those — the two outlines were simplified
+        apart, and a hole cut for an enclave belongs to one of them only.
+        """
+        if held["area"] >= holder["area"]:
+            return False
+        west, south, east, north = holder["envelope"]
+        if not (west <= held["envelope"][0] and held["envelope"][2] <= east
+                and south <= held["envelope"][1] and held["envelope"][3] <= north):
+            return False
+        # Every part, not the mainland alone: Croatia is its coast and a
+        # thousand islands, and an extract holding the coast without them
+        # holds nothing whole.
+        outline = [point for polygon in held["polygons"] for point in polygon[0]]
+        step = max(1, len(outline) // CONTAINMENT_SAMPLES)
+        points = outline[::step]
+        inside = sum(
+            1 for point in points if self._covers(holder, point[1], point[0])
+        )
+        return inside >= CONTAINMENT_AGREEMENT * len(points)
 
     @classmethod
     def download(cls) -> "Extracts":
@@ -1123,37 +1227,82 @@ class Extracts:
             return True
         return False
 
-    def covering(self, latitude: float, longitude: float) -> str | None:
-        """The smallest extract holding this point, as a download path."""
-        candidates = [
-            region for region in self.regions
+    def _smallest_covering(
+        self, regions: list[dict], latitude: float, longitude: float
+    ) -> str | None:
+        """The smallest of these extracts holding this point, as a download path."""
+        holding = [
+            region for region in regions
             if self._covers(region, latitude, longitude)
         ]
-        if not candidates:
+        if not holding:
             return None
-        return min(candidates, key=lambda region: region["area"])["path"]
+        return min(holding, key=lambda region: region["area"])["path"]
+
+    def covering(self, latitude: float, longitude: float) -> str | None:
+        """The smallest extract holding this point, as a download path."""
+        return self._smallest_covering(self.regions, latitude, longitude)
+
+    def _reaching(self, box: dict) -> list[dict]:
+        """The extracts that stand on their own and whose envelope reaches the box.
+
+        Five hundred envelopes compared once, rather than at every sample: the
+        box is sampled by the thousand, and all but a handful of the world's
+        extracts are nowhere near it. The bundles are left out here rather than
+        at every sample too, which spares the ray casting the outlines of
+        Europe and of half a dozen countries.
+        """
+        return [
+            region for region in self.regions
+            if not region["bundle"]
+            and not (region["envelope"][2] < box["west"]
+                     or region["envelope"][0] > box["east"]
+                     or region["envelope"][3] < box["south"]
+                     or region["envelope"][1] > box["north"])
+        ]
+
+    @staticmethod
+    def _samples_along(span_metres: float) -> int:
+        """How many samples one side of the box takes, floor and ceiling applied."""
+        return max(
+            BOX_SAMPLES_MINIMUM,
+            min(BOX_SAMPLES_MAXIMUM, int(abs(span_metres) // BOX_SAMPLE_METRES) + 1),
+        )
 
     def for_box(self, box: dict) -> list[str]:
-        """The extracts a reference box reaches, sampled on a grid.
+        """The extracts a reference box reaches, sampled over its whole surface.
 
         A box straddling two of them needs both, merged: Avignon's reaches into
         Languedoc-Roussillon, Basel's into Germany. Sampling the box rather
         than the stations is deliberate — what gets cut is the box, margin
         included.
+
+        The samples are a kilometre apart on the ground, which is what keeps a
+        small extract from falling between two of them — see
+        `BOX_SAMPLE_METRES`.
         """
+        reaching = self._reaching(box)
+        centre_latitude = math.radians((box["south"] + box["north"]) / 2.0)
+        rows = self._samples_along((box["north"] - box["south"]) * 111_320.0)
+        columns = self._samples_along(
+            (box["east"] - box["west"]) * 111_320.0 * math.cos(centre_latitude)
+        )
         found: list[str] = []
-        for row in range(BOX_GRID_SIDE):
-            for column in range(BOX_GRID_SIDE):
-                latitude = box["south"] + (box["north"] - box["south"]) * row / (
-                    BOX_GRID_SIDE - 1)
+        for row in range(rows):
+            latitude = box["south"] + (box["north"] - box["south"]) * row / (rows - 1)
+            for column in range(columns):
                 longitude = box["west"] + (box["east"] - box["west"]) * column / (
-                    BOX_GRID_SIDE - 1)
-                path = self.covering(latitude, longitude)
+                    columns - 1)
+                path = self._smallest_covering(reaching, latitude, longitude)
                 if path and path not in found:
                     found.append(path)
         # A point out at sea is inside no county but inside the country that
         # county belongs to, and the country would then be downloaded beside
-        # it — England beside Hampshire, for a box reaching into the Solent.
+        # it — the Netherlands beside Zeeland, for a box reaching into the
+        # Westerschelde. `_mark_bundles` catches most of those before the
+        # sampling; it misses the few whose envelope spans half the world for
+        # holding an island — the United States has Alaska, the Netherlands
+        # has Bonaire — and their own download paths say what they are.
         # An extract that is an ancestor of another already chosen adds
         # nothing but its own gigabyte.
         return sorted(
@@ -1256,12 +1405,12 @@ def french_departments(survey: dict) -> None:
         return
     widened = widen(box, DEFAULT_MARGIN_METRES)
     departments: set[str] = set()
-    for row in range(BOX_GRID_SIDE):
-        for column in range(BOX_GRID_SIDE):
+    for row in range(DEPARTMENT_GRID_SIDE):
+        for column in range(DEPARTMENT_GRID_SIDE):
             latitude = widened["south"] + (widened["north"] - widened["south"]) * row / (
-                BOX_GRID_SIDE - 1)
+                DEPARTMENT_GRID_SIDE - 1)
             longitude = widened["west"] + (widened["east"] - widened["west"]) * column / (
-                BOX_GRID_SIDE - 1)
+                DEPARTMENT_GRID_SIDE - 1)
             try:
                 found = fetch_json(
                     f"{GEO_API_COMMUNES}?lat={latitude}&lon={longitude}"
