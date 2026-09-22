@@ -7,7 +7,17 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
-## [Unreleased]
+## [1.4.1]
+
+Ten cities were cut from less ground than their box covers, and Washington
+stopped at the edge of the District of Columbia. The three datasets are
+derived from the OpenStreetMap extracts a box reaches, and that box was
+sampled at twenty-five points whatever its size; it is now read every
+kilometre of ground, the extracts are named by the very run that moves the
+box, and the ten cities have been generated and published again. Around that,
+what an update shows of itself: the what's-new screen keeps the three most
+recent versions, names each one, and opens in all thirty-one languages rather
+than in English and French alone.
 
 ### Added
 
