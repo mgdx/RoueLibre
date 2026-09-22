@@ -540,6 +540,16 @@ class MapFragment : Fragment() {
         // the style has already been loaded.
         val previousCity = servedCity
         servedCity = configuration
+        // A designated point belongs to the city it was designated in, and
+        // serving another one leaves it naming ground this telephone has not
+        // got: an address of Washington stayed at the bottom of the map of
+        // Lille, marker and all, after the city was changed under it. Cleared
+        // here rather than below because everything below may return early,
+        // and a return having already moved `servedCity` on would make the
+        // change of city invisible to every call that follows.
+        if (!designatedPlaceSurvives(previousCity?.network?.id, configuration?.network?.id)) {
+            showPickedPlace(null)
+        }
         val views = binding ?: return
         val map = mapLibreMap ?: return
 
@@ -1769,17 +1779,39 @@ class MapFragment : Fragment() {
             .build()
     }
 
+    /**
+     * Lays down again the point the screen was designating when it went away.
+     *
+     * **Unless the city has changed in the meantime.** The change of city
+     * clears the point while the map is up, but a process killed between the
+     * two — the point saved under one city, the application coming back under
+     * another — is beyond that clearing: the city is applied to a fresh screen
+     * there, so nothing has changed to be noticed. The identifier saved beside
+     * the point is what closes that case, and [designatedPlaceSurvives] holds
+     * the rule both halves share.
+     *
+     * The active city is read from disk, so the point can only be laid down
+     * when that read returns; the marker is published here as well as labelled
+     * because the style may have finished loading during it.
+     */
     private fun restorePickedPlace(savedInstanceState: Bundle?) {
         val saved = savedInstanceState ?: return
         if (!saved.containsKey(STATE_PICKED_LATITUDE)) return
-        pickedPlace = PickedPlace(
+        val restored = PickedPlace(
             position = LatLng(
                 saved.getDouble(STATE_PICKED_LATITUDE),
                 saved.getDouble(STATE_PICKED_LONGITUDE),
             ),
             label = saved.getString(STATE_PICKED_LABEL).orEmpty(),
         )
-        showPickedPlaceLabel(pickedPlace)
+        val cityItWasPickedIn = saved.getString(STATE_PICKED_CITY)
+        viewLifecycleOwner.lifecycleScope.launch {
+            val cityNowServed = container.activeCity()?.network?.id
+            if (!designatedPlaceSurvives(cityItWasPickedIn, cityNowServed)) return@launch
+            pickedPlace = restored
+            showPickedPlaceLabel(restored)
+            publishPickedPlace()
+        }
     }
 
     private fun toggleMode() {
@@ -2047,10 +2079,17 @@ class MapFragment : Fragment() {
         }
         // The chosen point survives a rotation, and nothing else: it is
         // written nowhere on disk (SPEC §8).
+        //
+        // The city it belongs to travels with it, and is no more a history
+        // than the point itself: this bundle dies with the task, and what it
+        // serves is the opposite of keeping anything — it is how a point
+        // designated in another city is recognised and thrown away when the
+        // process comes back (see [restorePickedPlace]).
         pickedPlace?.let { place ->
             outState.putDouble(STATE_PICKED_LATITUDE, place.position.latitude)
             outState.putDouble(STATE_PICKED_LONGITUDE, place.position.longitude)
             outState.putString(STATE_PICKED_LABEL, place.label)
+            outState.putString(STATE_PICKED_CITY, servedCity?.network?.id)
         }
     }
 
@@ -2145,6 +2184,13 @@ class MapFragment : Fragment() {
         const val STATE_PICKED_LATITUDE = "picked-latitude"
         const val STATE_PICKED_LONGITUDE = "picked-longitude"
         const val STATE_PICKED_LABEL = "picked-label"
+
+        /**
+         * The city the saved point was designated in — see
+         * [MapFragment.onSaveInstanceState] for why an identifier travels with
+         * it, and why that is not a history.
+         */
+        const val STATE_PICKED_CITY = "picked-city"
 
         /**
          * The clustering radius, in pixels. Fifty keeps the stations of central

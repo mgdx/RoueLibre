@@ -7,6 +7,23 @@ The notes meant for users live in `fastlane/metadata/android/fr/changelogs/` and
 are written for them, not for developers. This file addresses contributors and
 also records what has no visible effect.
 
+## [Unreleased]
+
+### Fixed
+
+- **A designated point no longer outlives the city it was designated in**
+  (`SPEC.md` §7.2, §8). An address found under Capital Bikeshare stayed named
+  at the bottom of the map and marked on it once V'lille was served, pointing
+  at ground absent from the installed data, and a process killed after the
+  change brought it back from the state bundle. `MapFragment` now clears the
+  point when `loadTilesFor` is given another city than the one it was serving,
+  and the state carries the network identifier of the city the point belongs
+  to, which `restorePickedPlace` holds against the active city before laying
+  it down again. The rule the two halves share is the pure
+  `designatedPlaceSurvives`, tested on the JVM — the first application of a
+  configuration is not a change of city, and must not destroy what a rotation
+  restores. Nothing of this is written to disk.
+
 ## [1.4.1]
 
 Ten cities were cut from less ground than their box covers, and Washington
