@@ -538,6 +538,7 @@ class MapFragment : Fragment() {
         // Noted before anything may return early: the served area is what
         // "locate me" measures itself against, and it is known here even when
         // the style has already been loaded.
+        val previousCity = servedCity
         servedCity = configuration
         val views = binding ?: return
         val map = mapLibreMap ?: return
@@ -556,10 +557,16 @@ class MapFragment : Fragment() {
         // holds the MBTiles it opened for as long as the process lives, so a
         // map left pointing at the old one goes on drawing it.
         if (styleLoaded && tiles?.path == loadedTilesPath) return
-        if (styleLoaded && tiles != null) {
+        if (styleLoaded &&
+            tiles != null &&
+            configuration?.network?.id == previousCity?.network?.id
+        ) {
             // Everything below has been done once already, and doing it twice
             // would register a second click listener and move the camera out
             // from under the user. Only the style is built again.
+            //
+            // The same city, though: another one brings its own framing, its
+            // own zoom limits and its own served area, and those are set below.
             applyStyle(map, tiles)
             return
         }
