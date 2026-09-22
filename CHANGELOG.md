@@ -15,14 +15,17 @@ also records what has no visible effect.
   (`SPEC.md` §7.2, §8). An address found under Capital Bikeshare stayed named
   at the bottom of the map and marked on it once V'lille was served, pointing
   at ground absent from the installed data, and a process killed after the
-  change brought it back from the state bundle. `MapFragment` now clears the
-  point when `loadTilesFor` is given another city than the one it was serving,
-  and the state carries the network identifier of the city the point belongs
-  to, which `restorePickedPlace` holds against the active city before laying
-  it down again. The rule the two halves share is the pure
-  `designatedPlaceSurvives`, tested on the JVM — the first application of a
-  configuration is not a change of city, and must not destroy what a rotation
-  restores. Nothing of this is written to disk.
+  change brought it back from the state bundle. `MapFragment` now holds the
+  network identifier of the city the point was designated in beside the point
+  itself — laid down with it, and restored with it from the state — and asks
+  one question in one place: `loadTilesFor` puts that identifier against the
+  city it is given, through the pure `designatedPlaceSurvives`, tested on the
+  JVM. Since a configuration reaches that function on a change of city as well
+  as on the first application to a screen rebuilt from scratch, the same
+  question covers the map that is up and the process that was killed;
+  `restorePickedPlace` stays a synchronous reading of the bundle, deciding
+  nothing. A rotation under the same city gives the point back, as before.
+  Nothing of this is written to disk.
 
 ## [1.4.1]
 

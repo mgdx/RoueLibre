@@ -9,21 +9,23 @@ package io.github.mgdx.rouelibre.ui.map
  * the telephone has not got — an address of Washington was seen still named at
  * the bottom of the map of Lille, with its marker on it.
  *
- * The decision is written here, apart from the screen, because both halves of
- * the rule need it and neither could be tested inside the fragment: the change
- * of city while the map is up, and the state an instance is rebuilt from after
- * the process has been killed on the other side of that change.
+ * The decision is written here, apart from the screen, because it is the whole
+ * of the rule and could not be tested inside the fragment. It is asked once,
+ * where a city is applied to the map, and that single question covers the city
+ * changed under a map that is up as well as the state a screen is rebuilt from
+ * after the process has been killed.
  *
  * Pure Kotlin, no Android (SPEC §14).
  *
- * @param cityItWasPickedIn the network identifier of the city the point was
- *   designated in, or `null` when that is not known — the first time a
- *   configuration is applied to a screen, where no city has been served yet
- *   and nothing has changed, and a state bundle written before this identifier
- *   was recorded. Not knowing is not a reason to throw away what the user
- *   designated, so the point stands.
- * @param cityNowServed the network identifier of the active city, or `null`
- *   when none is chosen.
+ * @param cityOfTheDesignatedPlace the network identifier of the city the point
+ *   was designated in, or `null` when no point is designated — there is then
+ *   nothing to throw away — and when the state bundle a point came from was
+ *   written before this identifier was recorded. Not knowing is no reason to
+ *   destroy what the user designated, so the point stands.
+ * @param cityNowServed the network identifier of the city being served, or
+ *   `null` when none is chosen.
  */
-internal fun designatedPlaceSurvives(cityItWasPickedIn: String?, cityNowServed: String?): Boolean =
-    cityItWasPickedIn == null || cityItWasPickedIn == cityNowServed
+internal fun designatedPlaceSurvives(
+    cityOfTheDesignatedPlace: String?,
+    cityNowServed: String?,
+): Boolean = cityOfTheDesignatedPlace == null || cityOfTheDesignatedPlace == cityNowServed

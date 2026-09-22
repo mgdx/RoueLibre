@@ -149,6 +149,19 @@ class MapFragment : Fragment() {
     private var pickedPlace: PickedPlace? = null
 
     /**
+     * The network identifier of the city [pickedPlace] was designated in.
+     *
+     * Held beside the point, and laid down whenever the point is, so that the
+     * one question [designatedPlaceSurvives] asks — does this point belong to
+     * the city we serve now? — can be put where a city is applied to the map,
+     * without anything having to be read back from disk to answer it.
+     *
+     * `null` when no point is designated, and when the point came from a state
+     * bundle written before this was recorded.
+     */
+    private var pickedPlaceCity: String? = null
+
+    /**
      * The framing to restore when the view is rebuilt.
      *
      * Going through the list, the storage screen or the search destroys the
@@ -540,14 +553,23 @@ class MapFragment : Fragment() {
         // the style has already been loaded.
         val previousCity = servedCity
         servedCity = configuration
-        // A designated point belongs to the city it was designated in, and
-        // serving another one leaves it naming ground this telephone has not
-        // got: an address of Washington stayed at the bottom of the map of
-        // Lille, marker and all, after the city was changed under it. Cleared
-        // here rather than below because everything below may return early,
-        // and a return having already moved `servedCity` on would make the
-        // change of city invisible to every call that follows.
-        if (!designatedPlaceSurvives(previousCity?.network?.id, configuration?.network?.id)) {
+        // One question, put where the answer is already to hand: does the
+        // point designated on the map belong to the city we are serving now?
+        // An address found under Capital Bikeshare was seen still named at the
+        // bottom of the map of Lille, marker and all, naming ground this
+        // telephone has not got.
+        //
+        // Put here because this is where a city reaches the screen, on both
+        // the paths that can turn the answer to "no": a city changed under a
+        // map that is up, and a first configuration applied to a screen
+        // rebuilt after the process was killed — the point then coming from
+        // the state bundle with the city it was designated in. Nothing
+        // designated, or the same city as before a turn of the phone, leaves
+        // the point where it is, which is what the user expects of a rotation.
+        //
+        // Before every early return below: whether the point still has a right
+        // to be there has nothing to do with there being a style to redraw.
+        if (!designatedPlaceSurvives(pickedPlaceCity, configuration?.network?.id)) {
             showPickedPlace(null)
         }
         val views = binding ?: return
@@ -1653,6 +1675,10 @@ class MapFragment : Fragment() {
      */
     private fun showPickedPlace(place: PickedPlace?) {
         pickedPlace = place
+        // Noted as the point is laid down, from the city the map is serving at
+        // that moment: asking later which city an address came from would mean
+        // asking after the answer has changed.
+        pickedPlaceCity = place?.let { servedCity?.network?.id }
         publishPickedPlace()
         showPickedPlaceLabel(place)
         if (place != null) moveCameraTo(place.position)
@@ -1782,36 +1808,25 @@ class MapFragment : Fragment() {
     /**
      * Lays down again the point the screen was designating when it went away.
      *
-     * **Unless the city has changed in the meantime.** The change of city
-     * clears the point while the map is up, but a process killed between the
-     * two — the point saved under one city, the application coming back under
-     * another — is beyond that clearing: the city is applied to a fresh screen
-     * there, so nothing has changed to be noticed. The identifier saved beside
-     * the point is what closes that case, and [designatedPlaceSurvives] holds
-     * the rule both halves share.
-     *
-     * The active city is read from disk, so the point can only be laid down
-     * when that read returns; the marker is published here as well as labelled
-     * because the style may have finished loading during it.
+     * A reading of the bundle and nothing else, decided synchronously with the
+     * rest of the screen's rebuilding: whether the point has a right to be
+     * there is asked once, in [loadTilesFor], where the city being served is
+     * known without waiting. The city the point was designated in comes back
+     * with it, which is what lets that question be put to a screen rebuilt
+     * from scratch.
      */
     private fun restorePickedPlace(savedInstanceState: Bundle?) {
         val saved = savedInstanceState ?: return
         if (!saved.containsKey(STATE_PICKED_LATITUDE)) return
-        val restored = PickedPlace(
+        pickedPlace = PickedPlace(
             position = LatLng(
                 saved.getDouble(STATE_PICKED_LATITUDE),
                 saved.getDouble(STATE_PICKED_LONGITUDE),
             ),
             label = saved.getString(STATE_PICKED_LABEL).orEmpty(),
         )
-        val cityItWasPickedIn = saved.getString(STATE_PICKED_CITY)
-        viewLifecycleOwner.lifecycleScope.launch {
-            val cityNowServed = container.activeCity()?.network?.id
-            if (!designatedPlaceSurvives(cityItWasPickedIn, cityNowServed)) return@launch
-            pickedPlace = restored
-            showPickedPlaceLabel(restored)
-            publishPickedPlace()
-        }
+        pickedPlaceCity = saved.getString(STATE_PICKED_CITY)
+        showPickedPlaceLabel(pickedPlace)
     }
 
     private fun toggleMode() {
@@ -2084,12 +2099,12 @@ class MapFragment : Fragment() {
         // than the point itself: this bundle dies with the task, and what it
         // serves is the opposite of keeping anything — it is how a point
         // designated in another city is recognised and thrown away when the
-        // process comes back (see [restorePickedPlace]).
+        // process comes back (see [loadTilesFor]).
         pickedPlace?.let { place ->
             outState.putDouble(STATE_PICKED_LATITUDE, place.position.latitude)
             outState.putDouble(STATE_PICKED_LONGITUDE, place.position.longitude)
             outState.putString(STATE_PICKED_LABEL, place.label)
-            outState.putString(STATE_PICKED_CITY, servedCity?.network?.id)
+            outState.putString(STATE_PICKED_CITY, pickedPlaceCity)
         }
     }
 
