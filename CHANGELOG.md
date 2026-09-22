@@ -74,6 +74,89 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **An updated city kept drawing the map it had just replaced**, until the
+  application was killed and started again — found by Leo the morning
+  Washington's corrected data went out, on the very update that was supposed to
+  fill the hole. MapLibre opens the MBTiles itself and keeps it open for as
+  long as the process lives, indexed on the path it was handed; building the
+  style again gives back the same path and gets back the same database. An
+  install replaces the file by writing the new one beside it and renaming it
+  over — the one form of replacement that leaves nothing broken behind when it
+  is interrupted — so that open database was left reading a file that had been
+  unlinked, and the screen went on drawing the version that had been replaced.
+  Reproduced on a telephone three ways, the deciding one being through the
+  settings screen, which destroys the map's view and rebuilds it: not enough.
+  The base map is therefore installed under a name carrying the digest of what
+  it holds, `tiles-3b57b038.mbtiles`, so that its path changes whenever its
+  content does and the library opens the new file. An installation written by
+  an earlier version keeps the plain name and goes on being read until its next
+  update renames it. The address index needed none of this — the connection
+  there is the application's own and `AddressIndex` already reopens it when the
+  file's signature changes — and the routing graph is read afresh for every
+  journey. The map also watches what is installed now: a download started from
+  the storage screen runs on after the user has left it, since that screen
+  stays on the back stack with its view model, so an install can land while the
+  map is the screen in front and nothing about coming back to it would have
+  reloaded anything.
+- **Washington's map, routing and addresses stopped at the edge of the District
+  of Columbia**, and eight other cities carried a hole of the same kind
+  ([issue #4](https://github.com/mgdx/RoueLibre/issues/4), reported by
+  @mhebant). The three datasets are cut from the OpenStreetMap extracts a
+  city's configuration names, and `washington.json` named Maryland and Virginia
+  alone — where four of its eight sampled stations stand in the district
+  itself. Two defects, each enough on its own. **The box was sampled at
+  twenty-five points**, whatever its size: at thirteen kilometres between
+  samples exactly one of them fell inside a district sixteen kilometres across,
+  and on the day that configuration was written it fell just outside. The box
+  is now sampled every kilometre of ground, which is well under the 5.8 km of
+  Melilla, the narrowest extract Geofabrik publishes. **And the extracts were
+  derived from a box other than the one the data is cut to**: the survey
+  proposes a box, `add_city.py` recomputes it against the live feed days later,
+  `compute_bbox.py` recomputes it again on every regeneration, and nothing ever
+  went back to ask which extracts the new rectangle reached.
+  `--refresh-sources` now derives them from the configuration's own box;
+  `tools/compute_bbox.py`, which is what moves a box, names the extracts again
+  in the same breath, so the two can no longer be written by different runs;
+  `tools/generate_all.sh` computes the box before reading what to download
+  rather than after it; and `tools/tests/test_city_extracts.py` fails on a
+  configuration that has drifted from its box again. Brive-la-Gaillarde gains
+  the Aquitaine, Épinal the Franche-Comté, Niort the Pays de la Loire, Zurich
+  the Liechtenstein and the Italian north-east, Zagreb that north-east,
+  Vienna's regional network Hungary, Blue-bike the Picardy, the
+  Champagne-Ardenne and Luxembourg. Four
+  cities also drop extracts their box has not reached since it was last
+  recomputed — the two Nuremberg networks five apiece, Vélo Fluo three, Chicago
+  the whole of the American Midwest — which is several gigabytes nobody
+  downloads again. **The datasets published for those cities still carry the
+  hole**: they are cut from these lists, and have to be generated and published
+  again.
+- **The French address base was asked for the departments of a box on the same
+  coarse grid**, and with the same result. Brive-la-Gaillarde reaches one square
+  kilometre of the Dordogne, at La Feuillade, in the south-west corner of its
+  box; its configuration named the Corrèze alone, and those streets had no
+  house number. The state's geographic API is now asked every kilometre of
+  ground as well, up to a thousand times for one box — a sample there is a
+  network call, where a sample against the extracts is arithmetic on a file
+  already in hand, so a network the size of the Grand Est is asked every six
+  kilometres instead. `compute_bbox.py` asks again whenever it moves a French
+  box. A failure of that API no longer passes silently either: it was caught
+  and stepped over, which over a thousand calls would shorten the list of
+  departments exactly as the coarse grid did, and a point outside France is
+  answered with an empty list rather than an error anyway. Épinal gains the
+  Haute-Saône, Brive the Dordogne, Toulouse the Gers.
+- **A city whose box straddles several extracts could not be generated at all
+  when Geofabrik was between two cuts.** Its regions are recut on a rolling
+  schedule, so two `-latest` files fetched in the same minute can be of two
+  different days — on 22 September the centre of Italy was of the 21st while
+  Croatia, Slovenia and Bosnia were still of the 20th. `osmium merge` then
+  keeps the same node under two versions and every later step rejects the file,
+  which `generate_all.sh` caught, and it told the operator to delete the
+  extracts and fetch them again — a remedy for nothing, the server being what
+  held them apart. It now takes the dated files Geofabrik keeps beside the
+  latest ones: the oldest day the parts show is a day every one of them was
+  cut, since the region lagging behind is the slowest to be recut, so whatever
+  disagrees is fetched again at that date. Zagreb, which could not be
+  regenerated at all this morning, goes through.
 - **The switch of the bikes outside stations said half of what it turns on**,
   in twenty-nine languages. `98ceb03e` rewrote its label and its description
   when the battery of the docked bikes joined it, in English and in French

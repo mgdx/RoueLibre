@@ -525,6 +525,45 @@ def main() -> int:
             f"{opening['defaultCenterLongitude']:.6f} at zoom "
             f"{opening['defaultZoom']} — the former one showed no station"
         )
+
+    # The extracts the datasets are cut from follow the box, so the run that
+    # moves the box is the one that must name them again. They did not: the
+    # box was recomputed here on every regeneration while the list of extracts
+    # stayed as some earlier survey had left it, and Washington's data was cut
+    # from a list that predated its own rectangle — the District of Columbia
+    # missing from it, and the centre of the city blank on the map (issue #4).
+    #
+    # Imported here and not at the head of the file: tools/discover_networks.py
+    # reads this module for its clustering, and the two would import each other.
+    from discover_networks import Extracts, departments_of_box
+
+    sources = config.document.setdefault("dataSources", {})
+    box = reference_box.as_dictionary()
+    reached = Extracts.download().for_box(box)
+    if reached != sources.get("osmRegions"):
+        former = ", ".join(
+            path.rsplit("/", 1)[-1] for path in sources.get("osmRegions", [])
+        )
+        sources["osmRegions"] = reached
+        print(
+            f"Extracts to cut from  : "
+            f"{', '.join(path.rsplit('/', 1)[-1] for path in reached)}"
+            f" — was {former or 'none'}"
+        )
+
+    # And the departments of the address base, where that is where the house
+    # numbers come from. Same reasoning, and the same defect had been left in
+    # them: Brive's box reaches one square kilometre of the Dordogne, and its
+    # addresses stopped at the Corrèze.
+    if sources.get("addressSource") == "ban":
+        departments = departments_of_box(box)
+        if departments and departments != sources.get("banDepartments"):
+            former = ", ".join(sources.get("banDepartments", []))
+            sources["banDepartments"] = departments
+            print(
+                f"Address base          : departments {', '.join(departments)}"
+                f" — was {former or 'none'}"
+            )
     config.save()
     print(f"\nWritten to {config.path}")
     return 0

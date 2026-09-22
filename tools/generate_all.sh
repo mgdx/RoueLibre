@@ -10,11 +10,13 @@
 #                         [--release-tag data-AAAA-MM]
 #                         [--skip-download]
 #
-# The OpenStreetMap extract and, in France, the Base Adresse Nationale
-# departments are read from the city configuration's "dataSources" block, which
-# tools/discover_networks.py derives from the reference box. Passing --region
-# or --departments overrides them, for a box that reaches a sliver of a
-# neighbouring department the sampling missed.
+# The OpenStreetMap extracts and, in France, the Base Adresse Nationale
+# departments are read from the city configuration's "dataSources" block. The
+# extracts are derived from the reference box, by the very step that recomputes
+# that box below — a box and the extracts it is cut from must come from one
+# run, or the data is cut from a list that describes another rectangle.
+# Passing --region or --departments overrides them, for a box that reaches a
+# sliver of a neighbouring department the sampling missed.
 #
 # Outside France the addresses come from the OSM extract itself (SPEC §15):
 # there is no national base to download, and the configuration says so with
@@ -65,6 +67,32 @@ for tool in osmium tippecanoe tile-join java curl; do
   }
 done
 
+echo "════════════════════════════════════════════════════════════"
+echo " Roue Libre — generating the offline datasets"
+echo " city       : $CITY_CONFIG"
+echo " release    : $RELEASE_TAG"
+echo "════════════════════════════════════════════════════════════"
+
+# Each city has its own output directory: generating Paris must not erase
+# Lille. The name comes from the network identifier in the configuration, the
+# only place it is written (§15).
+NETWORK_ID="$("$PYTHON" -c "
+import json, sys
+print(json.load(open(sys.argv[1]))['network']['id'])" "$CITY_CONFIG")"
+OUT_DIR="data/out/$NETWORK_ID"
+mkdir -p "$OUT_DIR"
+echo " output     : $OUT_DIR"
+
+# The box comes first, and before the sources rather than after them: the three
+# datasets are cut to it, and WHICH EXTRACTS they are cut FROM follows from it
+# as well. Read the sources first and a box that has grown since the last run
+# is cut out of an extract that no longer holds all of it — which is how
+# Washington's data came to be cut without the District of Columbia. The step
+# below rewrites both in the configuration, together (issue #4).
+echo
+echo "── 1/4 · Reference box ──"
+"$PYTHON" tools/compute_bbox.py --config "$CITY_CONFIG"
+
 # Where a city's data comes from is part of its configuration (§15), so that
 # generating another conurbation stays a single command. The flags above win
 # when they are given.
@@ -105,13 +133,8 @@ else
   OSM_FILE="data/osm/$(IFS=+; echo "${REGIONS[*]##*/}")-latest.osm.pbf"
 fi
 
-echo "════════════════════════════════════════════════════════════"
-echo " Roue Libre — generating the offline datasets"
-echo " city       : $CITY_CONFIG"
 echo " OSM region : $OSM_REGION"
 echo " addresses  : $ADDRESS_SOURCE${DEPARTMENTS:+ ($DEPARTMENTS)}"
-echo " release    : $RELEASE_TAG"
-echo "════════════════════════════════════════════════════════════"
 
 # Is this file whole? Asked of the format itself, not of the size, which the
 # server never announced reliably enough to compare.
@@ -158,6 +181,71 @@ download_verified() {
   return 1
 }
 
+# Geofabrik recuts its regions on a rolling schedule, so two "-latest" files
+# fetched in the same minute can be of two different days: on 22 September the
+# centre of Italy was of the 21st while Croatia, Slovenia and Bosnia were still
+# of the 20th. Merging those keeps the same node under two versions and every
+# later step rejects the file — and fetching them again changes nothing, since
+# it is the server that holds them apart.
+#
+# Geofabrik keeps dated files beside the latest ones, and the oldest day the
+# parts show is a day EVERY one of them was cut: the region lagging behind is
+# the slowest to be recut, and the others, recut more often, were cut that day
+# as well. So whatever disagrees is fetched again at that date, under the name
+# the rest of the script looks for — what the file holds is read from its
+# header, never from what it is called. Only the last week is kept day by day,
+# so that pass is worth nothing on extracts that have sat here for a month:
+# those are taken again from "-latest" first, and the dated files settle what
+# is left.
+SNAPSHOT_DATES=()
+
+snapshot_dates() {
+  SNAPSHOT_DATES=()
+  local part
+  for part in "${PARTS[@]}"; do
+    SNAPSHOT_DATES+=(
+      "$(osmium fileinfo -e -g header.option.timestamp "$part" | cut -c1-10)"
+    )
+  done
+}
+
+snapshots_agree() {
+  [[ "$(printf '%s\n' "${SNAPSHOT_DATES[@]}" | sort -u | wc -l)" -eq 1 ]]
+}
+
+align_snapshots() {
+  local index oldest dated
+  snapshot_dates
+  snapshots_agree && return 0
+
+  # First, the ordinary case: the parts have been on disk for weeks and were
+  # fetched on different days. Taking them all again brings them within a day
+  # of each other, and a fresh cut is what a regeneration wants anyway.
+  echo "The extracts are of several days; taking them all again…"
+  for index in "${!PARTS[@]}"; do
+    rm -f "${PARTS[$index]}"
+    download_verified \
+      "https://download.geofabrik.de/${REGIONS[$index]}-latest.osm.pbf" \
+      "${PARTS[$index]}" pbf "OpenStreetMap extract ${REGIONS[$index]}"
+  done
+  snapshot_dates
+  snapshots_agree && return 0
+
+  # What survives that is the server's own rolling cut, a day at most, and the
+  # dated files settle it. Geofabrik keeps the last week day by day, which is
+  # why this pass comes second: a date a month old is no longer served.
+  oldest="$(printf '%s\n' "${SNAPSHOT_DATES[@]}" | sort | head -1)"
+  dated="${oldest:2:2}${oldest:5:2}${oldest:8:2}"
+  echo "One of them is of another day; taking that one of $oldest…"
+  for index in "${!PARTS[@]}"; do
+    [[ "${SNAPSHOT_DATES[$index]}" == "$oldest" ]] && continue
+    rm -f "${PARTS[$index]}"
+    download_verified \
+      "https://download.geofabrik.de/${REGIONS[$index]}-${dated}.osm.pbf" \
+      "${PARTS[$index]}" pbf "OpenStreetMap extract ${REGIONS[$index]} of $oldest"
+  done
+}
+
 if [[ "$SKIP_DOWNLOAD" -eq 0 ]]; then
   echo
   echo "── Sources ──"
@@ -178,13 +266,14 @@ if [[ "$SKIP_DOWNLOAD" -eq 0 ]]; then
       # Merging two extracts cut from different daily snapshots leaves the same
       # node under two versions, which osmium merge keeps both of and every
       # later step rejects as "Node ID twice in input". Same day, same cut.
+      align_snapshots
       SNAPSHOTS="$(for part in "${PARTS[@]}"; do
         osmium fileinfo -e -g header.option.timestamp "$part"
       done | sort -u | wc -l)"
       if [[ "$SNAPSHOTS" -gt 1 ]]; then
-        echo "Error: the extracts to merge come from different snapshots." >&2
-        echo "         Delete them from data/osm/ and let this script fetch" >&2
-        echo "         them again, so that all of them are of one day." >&2
+        echo "Error: the extracts to merge are still of several days, which" >&2
+        echo "         the dated files were meant to settle. Delete them from" >&2
+        echo "         data/osm/ and run this again." >&2
         exit 1
       fi
       echo "Merging ${#PARTS[@]} extracts…"
@@ -211,21 +300,6 @@ if [[ "$SKIP_DOWNLOAD" -eq 0 ]]; then
     fi
   done
 fi
-
-# Each city has its own output directory: generating Paris must not erase
-# Lille. The name comes from the network identifier in the configuration, the
-# only place it is written (§15).
-NETWORK_ID="$("$PYTHON" -c "
-import json, sys
-print(json.load(open(sys.argv[1]))['network']['id'])" "$CITY_CONFIG")"
-OUT_DIR="data/out/$NETWORK_ID"
-mkdir -p "$OUT_DIR"
-echo " output     : $OUT_DIR"
-
-# The box comes first: the three datasets that follow take it as input.
-echo
-echo "── 1/4 · Reference box ──"
-"$PYTHON" tools/compute_bbox.py --config "$CITY_CONFIG"
 
 echo
 echo "── 2/4 · Base map ──"

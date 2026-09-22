@@ -72,6 +72,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraPosition
@@ -83,6 +84,7 @@ import org.maplibre.android.style.sources.GeoJsonOptions
 import org.maplibre.android.style.sources.GeoJsonSource
 import org.maplibre.geojson.FeatureCollection
 import org.maplibre.geojson.Point
+import java.io.File
 import java.time.Instant
 
 /**
@@ -126,6 +128,17 @@ class MapFragment : Fragment() {
     private var streetBikeSource: GeoJsonSource? = null
     private var pickedPlaceSource: GeoJsonSource? = null
     private var styleLoaded = false
+
+    /**
+     * The base map the style in place was built from.
+     *
+     * A city's data can be replaced under the screen, and the file that
+     * replaces it carries another name — `DatasetStore` names the base map
+     * after its digest precisely so that its path changes with its content.
+     * Comparing paths is therefore how this screen knows whether the style it
+     * holds still describes what is on disk.
+     */
+    private var loadedTilesPath: String? = null
 
     /**
      * The address found by the search, until it is cleared.
@@ -414,6 +427,7 @@ class MapFragment : Fragment() {
 
         observeStations()
         observeErrors()
+        followTheInstalledMap()
         keepAvailabilityFresh()
         followUserPosition()
         askForLocation()
@@ -524,10 +538,10 @@ class MapFragment : Fragment() {
         // Noted before anything may return early: the served area is what
         // "locate me" measures itself against, and it is known here even when
         // the style has already been loaded.
+        val previousCity = servedCity
         servedCity = configuration
         val views = binding ?: return
         val map = mapLibreMap ?: return
-        if (styleLoaded) return
 
         // Without a chosen city there is no base map to load: that is the same
         // screen as without installed tiles, inviting the user to get some.
@@ -535,6 +549,26 @@ class MapFragment : Fragment() {
             null
         } else {
             container.datasetStore.fileOf(DatasetKind.Tiles)
+        }
+        // A style already built over this very file: there is nothing to do,
+        // and this is the common case, every return to the screen going
+        // through here. A style built over ANOTHER file is a city whose data
+        // has been updated since, and it has to be built again — MapLibre
+        // holds the MBTiles it opened for as long as the process lives, so a
+        // map left pointing at the old one goes on drawing it.
+        if (styleLoaded && tiles?.path == loadedTilesPath) return
+        if (styleLoaded &&
+            tiles != null &&
+            configuration?.network?.id == previousCity?.network?.id
+        ) {
+            // Everything below has been done once already, and doing it twice
+            // would register a second click listener and move the camera out
+            // from under the user. Only the style is built again.
+            //
+            // The same city, though: another one brings its own framing, its
+            // own zoom limits and its own served area, and those are set below.
+            applyStyle(map, tiles)
+            return
         }
         views.missingTiles.isVisible = tiles == null
         views.attribution.isVisible = tiles != null
@@ -623,10 +657,21 @@ class MapFragment : Fragment() {
         map.addOnMapClickListener(::onMapClicked)
         followTheBearing(map)
 
+        applyStyle(map, tiles)
+    }
+
+    /**
+     * Builds the style over a base map and puts the map's own layers back.
+     *
+     * Called again whenever the file changes: the layers are the style's, so
+     * they go with it and have to be added to the new one.
+     */
+    private fun applyStyle(map: MapLibreMap, tiles: File) {
         map.setStyle(
             Style.Builder().fromJson(MapStyleLoader.load(requireContext(), tiles)),
         ) { style ->
             styleLoaded = true
+            loadedTilesPath = tiles.path
             addStationLayers(style)
             publishStations()
             // An address chosen while the map did not exist: now is when it
@@ -1827,6 +1872,28 @@ class MapFragment : Fragment() {
         )
     }
 
+    /**
+     * Rebuilds the map when the city's base map is replaced under the screen.
+     *
+     * A download started from the storage screen runs on after the user has
+     * left it: that screen stays on the back stack, so its view model — and
+     * the job it holds — outlive its view. The install can therefore land
+     * while the map is the screen in front, and nothing about coming back to
+     * the map would then reload it; it would draw the version that was
+     * replaced until the application was killed, which is what Washington's
+     * update did.
+     */
+    private fun followTheInstalledMap() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                container.datasetStore.installed
+                    .map { it[DatasetKind.Tiles]?.sha256 }
+                    .distinctUntilChanged()
+                    .collect { loadTilesFor(container.activeCity()) }
+            }
+        }
+    }
+
     private fun observeStations() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -2005,6 +2072,7 @@ class MapFragment : Fragment() {
         servedAreaCamera = null
         mapLibreMap = null
         styleLoaded = false
+        loadedTilesPath = null
         binding = null
         super.onDestroyView()
     }

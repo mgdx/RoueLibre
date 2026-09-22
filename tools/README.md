@@ -53,9 +53,11 @@ the live feed, opening framing, and the sources a generation run needs. It
 never touches a configuration that already exists unless told to.
 
 Two passes say otherwise, each over the cities already served and each narrow
-enough to leave the rest of the file alone. `--refresh-sources` brings the
-`dataSources` block up to the survey, a network having extended over a border
-since. `--refresh-names` names the configurations whose `displayName` is still
+enough to leave the rest of the file alone. `--refresh-sources` derives the
+`dataSources` block again from the box each configuration carries, a network
+having extended over a border since — or, as Washington had, having been
+written against extracts that were never those of its own box.
+`--refresh-names` names the configurations whose `displayName` is still
 their own identifier — the city list read "bogota-bikebogota — Bogotá" — and
 touches nothing else: a name derived correctly, or settled by hand, is none of
 its business, and the identifier itself never moves, since it names the
@@ -354,6 +356,34 @@ present" test takes for a complete download, every later run reusing it and
 failing three steps away. That host is also asked in HTTP/1.1, which it
 survives; Geofabrik served 164 extracts over HTTP/2 without one failure and is
 left alone.
+
+**Which extracts a box is cut from.** The box is sampled every kilometre of
+ground and each sample takes the smallest extract holding it. Every kilometre
+because an extract narrower than the step falls between two samples and is
+never downloaded, which leaves a hole of exactly its shape in the map, in the
+routing graph and in the addresses at once: Washington shipped with such a hole
+over the District of Columbia, missed by a grid of twenty-five samples
+([issue #4](https://github.com/mgdx/RoueLibre/issues/4)). And the smallest
+extract because Geofabrik publishes bundles beside territories — `europe/dach`,
+`europe/britain-and-ireland`, `north-america/us-south` — which add no ground:
+whatever land they hold, a finer extract holds too. They are set aside before
+the sampling, or the corner of a box reaching into the North Sea would pull six
+gigabytes down behind it for the water off Ostend.
+
+`tools/tests/test_city_extracts.py` asks of every configuration whether it
+names the extracts its own box reaches. It needs Geofabrik's index in
+`data/cache/`, and is skipped where that file is not.
+
+**Which departments a French box reaches** is the same question asked of the
+state's geographic API, and sampled the same way — every kilometre of ground,
+Brive's box holding one square kilometre of the Dordogne where its addresses
+used to stop at the Corrèze. A sample there is a network call and not
+arithmetic, so a box is asked a thousand times at most: six kilometres apart
+over a network the size of the Grand Est, where a sliver of a department may
+still be missed.
+
+Both lists are written by `compute_bbox.py`, which is what moves the box they
+follow from, and `generate_all.sh` runs it before it downloads anything.
 
 **Merging two extracts.** Geofabrik cuts all its regions from the same daily
 snapshot, and two extracts downloaded on different days hold the same node

@@ -76,11 +76,13 @@ By hand, for a network the catalogues do not list:
    ```bash
    tools/generate_all.sh --city config/cities/<city>.json
    ```
-   `--region` and `--departments` override them where a box reaches a sliver of
-   a neighbouring department the sampling missed. The bounding box is derived
-   from the network's stations, then widened by 3 km; it therefore covers the
-   whole conurbation — Vélib's box reaches into eight departments, Avignon's
-   into three — and follows extensions of the network by itself.
+   `--region` and `--departments` override them, which the run should not need:
+   the box is recomputed from the live feed before anything is downloaded, and
+   both lists are derived again from it in the same step, by sampling it every
+   kilometre of ground. The bounding box itself comes from the network's
+   stations, widened by 3 km; it therefore covers the whole conurbation —
+   Vélib's box reaches into eight departments, Avignon's into three — and
+   follows extensions of the network by itself.
 4. **Regenerate the catalogue**, which tells the application what exists and
    what it weighs:
    ```bash

@@ -133,7 +133,11 @@ class JourneyPlannerOnDeviceTest {
         val accessWalk = checkNotNull(best.walkToStation)
         assertTrue(TravelMode.Walking == accessWalk.mode)
         assertTrue(TravelMode.Cycling == best.ride.mode)
-        assertTrue(TravelMode.Walking == best.walkToDestination.mode)
+        // Both walks became legs a journey may do without — one setting off
+        // from a bike already in hand has no access walk, one ending at its
+        // arrival station no final walk. This journey has both, and says so.
+        val finalWalk = checkNotNull(best.walkToDestination)
+        assertTrue(TravelMode.Walking == finalWalk.mode)
         // The access walks must stay access walks.
         assertTrue(
             "access walk out of all proportion: ${accessWalk.distanceMetres} m",
