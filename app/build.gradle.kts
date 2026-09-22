@@ -92,6 +92,7 @@ val publishedVersionNames = mapOf(
     10 to "1.2.4",
     11 to "1.3.0",
     12 to "1.4.0",
+    13 to "1.4.1",
 )
 
 /**
@@ -131,16 +132,16 @@ android {
         // leaves it unable to tell one release from the next. The
         // architectures derive their own codes from it below, so the value is
         // still written once.
-        versionCode = 12
-        // The bikes a network leaves outside its stations are drawn on
-        // request, and a journey may set off from one. A station's sheet says
-        // how full the batteries standing at it are. Three American networks
-        // join the catalogue, admitted by a dock rule that no longer asks a
-        // producer to publish a capacity it measures live. The APK sheds half
-        // a megabyte it was carrying for nothing. And a test campaign's
-        // eleven anomalies are closed, the sideways search screens and the
-        // Arabic titles among them. See CHANGELOG.md.
-        versionName = "1.4.0"
+        versionCode = 13
+        // Ten cities were cut from less ground than their box covers —
+        // Washington stopped at the edge of the District of Columbia — and
+        // their data has been generated and published again. An updated city
+        // draws the map it has just installed instead of the one it replaced.
+        // The what's-new screen keeps the three most recent versions and
+        // names each one, and it opens in all thirty-one languages, every
+        // version's notes having been translated. The catalogue is fetched
+        // only when it has changed. See CHANGELOG.md.
+        versionName = "1.4.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
