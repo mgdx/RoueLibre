@@ -40,6 +40,24 @@ also records what has no visible effect.
 
 ### Changed
 
+- **The what's-new screen shows the three most recent versions, each headed by
+  the version it belongs to** (`SPEC.md` §7.10). It presented every version
+  since the one last seen, which was right while there were four of them and
+  is a wall of text now that there are twelve: whoever opens "see what's new"
+  from the "about" screen was handed the whole history at once, oldest notes
+  included, describing an application nobody has been running since spring.
+  Three is where that stops — the versions left out stay on the F-Droid page,
+  which keeps one note per version, and in this file. The heading is the
+  wording the "about" screen already uses, "Version 1.4.0", in bold above the
+  note's first line, and it answers a question the screen could not answer
+  before: the notes are filed under the version **code**, which is no name to
+  show anybody, so `app/build.gradle.kts` now carries the correspondence
+  between the two beside `versionCode` itself, the build writes it into the
+  assets with the notes, and it refuses to configure while the version being
+  released is missing from it. The APK loses 150 kB with the notes it no longer
+  carries — thirty-one languages times twelve versions was 215 kB of them
+  (`SPEC.md` §2, lightness).
+
 - **The catalogue is asked for conditionally, instead of being downloaded again
   on every opening of the city list** (`SPEC.md` §15). It was already cached in
   `filesDir`, but the refresh that follows the list opening fetched the whole

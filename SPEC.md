@@ -589,11 +589,12 @@ The map lies under this sequence, already in place, and its own request for the 
 
 After a new version is installed, a **what's new** screen appears **once only**, listing fixes and improvements since the previously installed version.
 
-- The application remembers the last version code seen. If the gap spans several versions, present the notes of **all** the intermediate versions, from newest to oldest.
+- The application remembers the last version code seen. If the gap spans several versions, present the notes of the **three most recent**, from newest to oldest. All the intermediate ones were shown until 22 September 2026, and past three the screen stopped being read: a note four versions old describes an application nobody has been running for months, and it arrives under a heap that is scrolled past. The versions left out are on the F-Droid page, which keeps one note per version, and in `CHANGELOG.md`. The APK carries those three alone — thirty-one languages times twelve versions was 215 kB of notes, four fifths of them never opened (§2).
+- **Each note is headed by the version it belongs to**, in the wording the "about" screen uses — "Version 1.4.0" — and in bold above its first line. The store names its files after the version *code*, which is no name to show anybody, so the correspondence between the two is written down in `app/build.gradle.kts` beside `versionCode` itself, carried into the assets by the same build step as the notes, and the build fails when the version being released is missing from it.
 - **Never shown on a first installation**: the §7.9 screen applies then.
 - Always reachable afterwards from "about".
 - The notes are **embedded in the APK**, never downloaded: no network request may be triggered by that screen.
-- **Single source of truth**: the release notes of the F-Droid metadata (`fastlane/metadata/android/fr/changelogs/<versionCode>.txt`). They are converted into an embedded resource **at build time**, so that F-Droid and the application show exactly the same text without double entry.
+- **Single source of truth**: the release notes of the F-Droid metadata (`fastlane/metadata/android/fr/changelogs/<versionCode>.txt`). They are converted into an embedded resource **at build time**, so that F-Droid and the application show exactly the same text without double entry. The build carries the three most recent of them, in every language published.
 - Write those notes **for the user, not for the developer**: "address search now tolerates typos", not "refactored the geocoding module". Translatable like everything else.
 
 ## 8. Storage and data model

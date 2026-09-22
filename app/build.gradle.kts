@@ -60,6 +60,60 @@ val architectureVersionCodes = mapOf(
     "arm64-v8a" to 4,
 )
 
+/**
+ * The version name each base version code was published under.
+ *
+ * The what's-new screen heads every note with the version it belongs to
+ * (SPEC §7.10), and a note is filed under the version **code**: that is how
+ * the store names its files, and `BuildConfig` carries no name but the one
+ * being built. So the correspondence has to be written down somewhere, and
+ * this is that place — the released names exist in `CHANGELOG.md` for a
+ * reader and in the git tags for a reviewer, neither of which a build may go
+ * asking.
+ *
+ * The whole history is kept rather than the notes actually shipped, so that
+ * showing one version more never means going back through the tags for its
+ * name.
+ *
+ * The line for the version being built is not optional: the check below fails
+ * the build when it is missing or disagrees with `versionName`, which is what
+ * keeps this table from ageing.
+ */
+val publishedVersionNames = mapOf(
+    1 to "0.1.0-alpha",
+    2 to "0.2.0-alpha",
+    3 to "0.3.0-alpha",
+    4 to "1.0.0",
+    5 to "1.1.0",
+    6 to "1.2.0",
+    7 to "1.2.1",
+    8 to "1.2.2",
+    9 to "1.2.3",
+    10 to "1.2.4",
+    11 to "1.3.0",
+    12 to "1.4.0",
+)
+
+/**
+ * How many versions of release notes the APK carries, and the screen shows.
+ *
+ * Three. An update may span more versions than that — somebody who has not
+ * opened F-Droid for a season updates across four or five — and the notes of
+ * the oldest describe an application nobody has been running for months,
+ * under a heap the reader scrolls past rather than reads. The full history
+ * stays on the F-Droid page, which keeps one note per version, and in
+ * `CHANGELOG.md`.
+ *
+ * It is also what the notes weigh: thirty-one languages times twelve versions
+ * is 215 kB of APK, four fifths of it for versions the screen never opens
+ * (SPEC §2, lightness).
+ *
+ * The screen applies the same limit of its own accord (`RELEASES_SHOWN` in
+ * `WhatsNewFragment`), so that what it shows is a decision it takes rather
+ * than a consequence of what happened to be copied.
+ */
+val publishedNotesKept = 3
+
 android {
     namespace = "io.github.mgdx.rouelibre"
     compileSdk {
@@ -322,6 +376,17 @@ android {
     }
 }
 
+// The table of release names is only of use if it names the version being
+// built: the what's-new screen would head the newest note with nothing, which
+// is the one note everybody updating reads. Checked at configuration time, so
+// the omission surfaces on the first build after the version is moved rather
+// than on a telephone.
+val builtVersionCode = android.defaultConfig.versionCode!!
+check(publishedVersionNames[builtVersionCode] == android.defaultConfig.versionName) {
+    "publishedVersionNames must name version code $builtVersionCode as " +
+        "\"${android.defaultConfig.versionName}\" (see SPEC §7.10)."
+}
+
 // The glyphs the map draws its labels with. The test reads the very directory
 // tools/build_glyphs.js writes, because a range missing there does not blank a
 // character but the whole tile that needed it (SPEC §4.2).
@@ -427,6 +492,24 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
     @get:Input
     abstract val versionCode: Property<Int>
 
+    /**
+     * The version name of each base version code (see `publishedVersionNames`).
+     *
+     * Written beside the notes as `changelog-versions.properties`, from which
+     * the screen heads each note with its version. Only the versions shipped
+     * are named there: the rest would be a table about files the APK does not
+     * carry.
+     */
+    @get:Input
+    abstract val releaseVersionNames: MapProperty<Int, String>
+
+    /**
+     * How many versions of notes to ship, most recent first (see
+     * `publishedNotesKept`).
+     */
+    @get:Input
+    abstract val releaseNotesKept: Property<Int>
+
     @get:OutputDirectory
     abstract val outputDirectory: DirectoryProperty
 
@@ -531,23 +614,40 @@ abstract class CopySharedConfigurationTask : DefaultTask() {
         // screen match them against the device's language.
         val notes = target.resolve("changelogs")
         notes.mkdirs()
+
+        // The versions whose notes ship: the most recent, and no more of them
+        // than the screen shows. Read from the table of release names rather
+        // than from the files, so that a version shipped is a version the
+        // screen can name; beyond the base version code lie the architecture
+        // codes, which repeat notes already shipped, and the table holds none
+        // of them.
+        val shipped = releaseVersionNames.get().keys
+            .filter { it <= versionCode.get() }
+            .sortedDescending()
+            .take(releaseNotesKept.get())
+
         storeMetadata.orNull?.asFile?.listFiles()
             ?.filter { it.isDirectory }
             ?.forEach { locale ->
                 val published = locale.resolve("changelogs").listFiles()
                     .orEmpty()
                     .filter { it.isFile && it.extension == "txt" }
-                    // The same filter the screen applies when it reads them:
-                    // beyond the base version code lie the architecture codes,
-                    // which repeat notes already shipped.
-                    .filter {
-                        val code = it.nameWithoutExtension.toIntOrNull()
-                        code != null && code <= versionCode.get()
-                    }
+                    .filter { it.nameWithoutExtension.toIntOrNull() in shipped }
                 if (published.isEmpty()) return@forEach
                 val target = notes.resolve(locale.name).apply { mkdirs() }
                 published.forEach { it.copyTo(target.resolve(it.name), overwrite = true) }
             }
+
+        // Written line by line rather than through `Properties.store`, which
+        // heads the file with the date it was written: the APK must be
+        // reproducible, and F-Droid rebuilds it months later (docs/release.md).
+        // Beside the folders rather than inside `changelogs/`, where the
+        // screen lists the locales published and would find this among them.
+        target.resolve("changelog-versions.properties").writeText(
+            shipped.joinToString(separator = "\n", postfix = "\n") { version ->
+                "$version=${releaseVersionNames.get().getValue(version)}"
+            },
+        )
     }
 }
 
@@ -576,6 +676,8 @@ androidComponents {
             val metadata = rootProject.file("fastlane/metadata/android")
             if (metadata.isDirectory) storeMetadata.set(metadata)
             versionCode.set(base)
+            releaseVersionNames.set(publishedVersionNames)
+            releaseNotesKept.set(publishedNotesKept)
         }
         variant.sources.assets?.addGeneratedSourceDirectory(
             copyTask,

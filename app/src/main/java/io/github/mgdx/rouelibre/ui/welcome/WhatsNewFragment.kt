@@ -1,7 +1,11 @@
 package io.github.mgdx.rouelibre.ui.welcome
 
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +19,7 @@ import io.github.mgdx.rouelibre.ui.textLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Properties
 
 /**
  * What has changed since the previously installed version (SPEC §7.10).
@@ -26,6 +31,10 @@ import kotlinx.coroutines.withContext
  * into a resource at build time. F-Droid and the application therefore show
  * exactly the same text, without double entry — and without the risk of the
  * second copy ending up lying.
+ *
+ * The store files are named after the version **code** they belong to, which
+ * is no name to show anybody, so the build writes the version names beside
+ * them and each note is headed by its own.
  */
 class WhatsNewFragment : Fragment() {
 
@@ -57,7 +66,8 @@ class WhatsNewFragment : Fragment() {
             val notes = withContext(Dispatchers.IO) {
                 readNotes(requireContext(), since, BuildConfig.VERSION_CODE)
             }
-            binding?.notes?.text = notes.ifEmpty { getString(R.string.whats_new_nothing) }
+            binding?.notes?.text =
+                if (notes.isEmpty()) getString(R.string.whats_new_nothing) else notes
         }
     }
 
@@ -86,13 +96,34 @@ class WhatsNewFragment : Fragment() {
         /** The locale read when the device's language publishes no notes. */
         private const val DEFAULT_NOTES_LOCALE = "en-US"
 
+        /** The version name of each note, written into the assets by the build. */
+        private const val VERSION_NAMES = "changelog-versions.properties"
+
+        /**
+         * How many versions of notes the screen shows at most.
+         *
+         * An update can span several versions, and the notes of all of them
+         * used to be shown so that nothing that changed was hidden. Three is
+         * where that stops: past them a note describes an application nobody
+         * has been running for months, and it arrives under a heap that is
+         * scrolled past rather than read. The versions left out are on the
+         * F-Droid page, which keeps one note per version, and in
+         * `CHANGELOG.md`.
+         *
+         * The APK carries exactly these three as well — the build applies the
+         * same limit, `publishedNotesKept` in `app/build.gradle.kts` — so
+         * reading further would find nothing. The limit is written here too
+         * rather than deduced from what was copied, so that what the screen
+         * shows is a decision of its own.
+         */
+        private const val RELEASES_SHOWN = 3
+
         /**
          * Opens the what's-new screen.
          *
-         * @param since the last version code seen. Every note published since
-         *   is shown, from the most recent to the oldest: an update can span
-         *   several versions, and skipping them would amount to hiding what
-         *   changed.
+         * @param since the last version code seen. The notes published since
+         *   are shown, from the most recent to the oldest, up to
+         *   [RELEASES_SHOWN] of them.
          */
         fun since(since: Int): WhatsNewFragment = WhatsNewFragment().apply {
             arguments = Bundle().apply { putInt(ARGUMENT_SINCE, since) }
@@ -112,6 +143,7 @@ class WhatsNewFragment : Fragment() {
                 .mapNotNull { it.removeSuffix(".txt").toIntOrNull() }
                 .filter { it in (since + 1)..until }
                 .sortedDescending()
+                .take(RELEASES_SHOWN)
 
         /**
          * The folder of notes to read, in the language the interface speaks.
@@ -128,16 +160,57 @@ class WhatsNewFragment : Fragment() {
             return "$NOTES_DIRECTORY/${match ?: DEFAULT_NOTES_LOCALE}"
         }
 
-        /** The notes of the versions concerned, most recent first. */
-        private fun readNotes(context: Context, since: Int, until: Int): String {
+        /**
+         * The version name each note belongs to, keyed by version code.
+         *
+         * Only the versions shipped are named. An absent or unreadable file
+         * leaves the notes unheaded rather than showing a version code, which
+         * would name nothing anybody recognises.
+         */
+        private fun versionNames(context: Context): Map<Int, String> {
+            val read = runCatching {
+                context.assets.open(VERSION_NAMES).use { stream ->
+                    Properties().apply { load(stream) }
+                }
+            }.getOrNull() ?: return emptyMap()
+            return read.stringPropertyNames()
+                .mapNotNull { name ->
+                    val version = name.toIntOrNull() ?: return@mapNotNull null
+                    read.getProperty(name)?.let { version to it }
+                }
+                .toMap()
+        }
+
+        /**
+         * The notes of the versions concerned, most recent first, each headed
+         * by the version it belongs to.
+         *
+         * The heading is the wording of the "about" screen, "Version 1.4.0",
+         * and deliberately the same resource: one phrase, translated once, and
+         * two screens that cannot come to name the same thing differently.
+         */
+        private fun readNotes(context: Context, since: Int, until: Int): CharSequence {
             val directory = notesDirectory(context)
-            return versionsToShow(context, since, until)
-                .joinToString(separator = "\n\n") { version ->
+            val names = versionNames(context)
+            val notes = SpannableStringBuilder()
+            versionsToShow(context, since, until).forEach { version ->
+                if (notes.isNotEmpty()) notes.append("\n\n")
+                names[version]?.let { name ->
+                    notes.append(
+                        context.getString(R.string.about_version, name),
+                        StyleSpan(Typeface.BOLD),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    )
+                    notes.append("\n")
+                }
+                notes.append(
                     context.assets.open("$directory/$version.txt")
                         .bufferedReader()
                         .use { it.readText() }
-                        .trim()
-                }
+                        .trim(),
+                )
+            }
+            return notes
         }
     }
 }
