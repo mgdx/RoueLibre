@@ -168,7 +168,10 @@ Both files are `chmod 600`, and neither is versioned.
    downloaded.
 
 8. **Google Play**, if the release goes there too: `./gradlew bundleRelease`
-   and the steps of `docs/play-store.md`. It is a separate installation, signed
+   and the steps of `docs/play-store.md`. It is a command of its own, never
+   appended to step 4's: the ABI splits are turned off for the whole invocation
+   that asks for a bundle, and `assembleRelease` then writes one APK instead of
+   five. It is a separate installation, signed
    by a key Google holds, and it waits on nothing here.
 
 9. **The data is released separately** (`SPEC.md` §4.4): the datasets live in

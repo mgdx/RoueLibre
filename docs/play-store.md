@@ -62,6 +62,13 @@ and the upload key signs instead of the publishing key. `assembleRelease` is
 untouched — the same five APKs, under the same certificate, which is what
 F-Droid's verification rests on.
 
+**The two tasks do not go in one Gradle invocation.** Whether the splits are on
+is decided once, at configuration time, from the task graph the invocation
+carries: ask for `assembleRelease bundleRelease` together and the splits are off
+for both, so `assembleRelease` writes a single `app-release.apk` instead of the
+five the release needs. Nothing fails and nothing warns — the directory simply
+holds one file. Run them one after the other, as two commands.
+
 The bundle carries the four architectures at once; Play cuts it per device, so
 what a telephone downloads is of the order of the per-architecture APK, not of
 the bundle's own twenty megabytes.
