@@ -94,11 +94,21 @@ Both files are `chmod 600`, and neither is versioned.
    base, and so does `BuildConfig.VERSION_CODE` — which is why the release
    notes are named after the base and not after any of the four.
 
+   Then **name the new version in `publishedVersionNames`**, the table in the
+   same file mapping each base code to the version name it was published
+   under. The what's-new screen heads every note with it, and a note is filed
+   under the code alone, so the correspondence exists nowhere else. It is not
+   a step one may forget: the build refuses to configure while the table does
+   not name the version being built.
+
 2. **Write the release notes**: `fastlane/metadata/android/en-US/changelogs/`
    and `fr/changelogs/`, named after the new base `versionCode`. English is
    the source, the other languages are translations. They are not optional:
    the what's-new screen reads these very files (`SPEC.md` §7.10), so a
    version published without them shows an empty screen to whoever updates.
+   The screen shows the three most recent versions and the APK carries those
+   alone; the older notes are not deleted, they stay for the F-Droid page,
+   which keeps one per version.
 
    Then **derive the per-architecture copies** — F-Droid reads the notes
    under the exact code of the APK it serves, 91 to 94 for base 9, and falls
