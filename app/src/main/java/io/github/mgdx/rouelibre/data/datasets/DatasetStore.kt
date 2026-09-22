@@ -143,7 +143,47 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
     fun fileOf(kind: DatasetKind): File? {
         val name = kind.fileName ?: return null
         val directory = directoryOf(kind) ?: return null
-        return File(directory, name).takeIf { it.isFile && it.length() > 0 }
+        val underTheName = File(directory, name)
+        if (underTheName.isFile && underTheName.length() > 0) return underTheName
+        // The base map carries the digest of the version installed in its name
+        // (see `installedNameOf`), so the file is looked for by its extension
+        // rather than by the name the manifest gave it. The plain name is
+        // tried first all the same: that is what an earlier version installed,
+        // and it must go on being read until the next update renames it.
+        val extension = ".${name.substringAfterLast('.')}"
+        return directory.listFiles()
+            ?.firstOrNull { it.isFile && it.length() > 0 && it.name.endsWith(extension) }
+    }
+
+    /**
+     * The name a file takes once installed.
+     *
+     * The base map's carries the digest of the set it belongs to, so that its
+     * path changes whenever its content does. Everything else keeps the name
+     * the manifest gave it.
+     *
+     * **Why the map and not the rest.** MapLibre opens the MBTiles itself and
+     * keeps it open for as long as the process lives, indexed on the path it
+     * was given; building the style again hands back the same path and gets
+     * back the same database. An update replaces the file by writing the new
+     * one beside it and renaming it over — the only form of replacement an
+     * interrupted update leaves nothing broken behind — so that open database
+     * is left reading a file that has been unlinked, and the map goes on
+     * drawing the version that was replaced until the application is killed.
+     * Washington, updated to gain the District of Columbia it had been
+     * missing, kept the hole. A path that changes with the content is what
+     * makes the library open the new file, and it costs nothing else.
+     *
+     * The address index has the same shape of problem and does not need this:
+     * the connection there is the application's own, and `AddressIndex` closes
+     * and reopens it when the file's signature changes. The routing graph is
+     * read afresh for every journey.
+     */
+    private fun installedNameOf(kind: DatasetKind, name: String, digest: String): String {
+        if (kind != DatasetKind.Tiles) return name
+        val stem = name.substringBeforeLast('.')
+        val extension = name.substringAfterLast('.')
+        return "$stem-${digest.take(NAME_DIGEST_CHARACTERS)}.$extension"
     }
 
     /**
@@ -219,8 +259,19 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             }
 
             // The replacement happens only here, once everything is checked.
-            val target = File(destination, targetName)
-            target.delete()
+            val target = File(destination, installedNameOf(kind, targetName, digest))
+            if (kind == DatasetKind.Tiles) {
+                // The map's name carries its digest, so what is being replaced
+                // hardly ever bears the name of what replaces it; and two base
+                // maps left side by side would leave `fileOf` to choose.
+                destination.listFiles()
+                    ?.filter { it != staged && it != target }
+                    ?.forEach { it.delete() }
+            } else {
+                // A routing segment imported by hand replaces that segment and
+                // leaves the others where they are.
+                target.delete()
+            }
             if (!staged.renameTo(target)) {
                 return@withContext rejected(
                     staged,
@@ -295,7 +346,7 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
         // becoming obsolete would still be read by the engine.
         destination.listFiles()?.forEach { it.delete() }
         for (file in files) {
-            val target = File(destination, file.name)
+            val target = File(destination, installedNameOf(kind, file.name, fingerprint))
             if (!file.renameTo(target) && !copyInto(file, target)) {
                 return@withContext DatasetImportResult.Rejected(
                     DatasetRejection.TransferFailed("cannot put ${file.name} into place"),
@@ -622,6 +673,16 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
 
         /** The length past which a technical detail becomes noise. */
         const val MAX_REJECTION_DETAIL = 200
+
+        /**
+         * Characters of the digest the base map's file name carries.
+         *
+         * Eight of them, which is what a person reading `adb shell ls` can
+         * compare against a manifest at a glance. They are not there to tell
+         * two sets apart — one directory holds one base map — but to make the
+         * path change when the content does; see `installedNameOf`.
+         */
+        const val NAME_DIGEST_CHARACTERS = 8
 
         /**
          * The address index version this build can read.

@@ -56,6 +56,30 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **An updated city kept drawing the map it had just replaced**, until the
+  application was killed and started again — found by Leo the morning
+  Washington's corrected data went out, on the very update that was supposed to
+  fill the hole. MapLibre opens the MBTiles itself and keeps it open for as
+  long as the process lives, indexed on the path it was handed; building the
+  style again gives back the same path and gets back the same database. An
+  install replaces the file by writing the new one beside it and renaming it
+  over — the one form of replacement that leaves nothing broken behind when it
+  is interrupted — so that open database was left reading a file that had been
+  unlinked, and the screen went on drawing the version that had been replaced.
+  Reproduced on a telephone three ways, the deciding one being through the
+  settings screen, which destroys the map's view and rebuilds it: not enough.
+  The base map is therefore installed under a name carrying the digest of what
+  it holds, `tiles-3b57b038.mbtiles`, so that its path changes whenever its
+  content does and the library opens the new file. An installation written by
+  an earlier version keeps the plain name and goes on being read until its next
+  update renames it. The address index needed none of this — the connection
+  there is the application's own and `AddressIndex` already reopens it when the
+  file's signature changes — and the routing graph is read afresh for every
+  journey. The map also watches what is installed now: a download started from
+  the storage screen runs on after the user has left it, since that screen
+  stays on the back stack with its view model, so an install can land while the
+  map is the screen in front and nothing about coming back to it would have
+  reloaded anything.
 - **Washington's map, routing and addresses stopped at the edge of the District
   of Columbia**, and eight other cities carried a hole of the same kind
   ([issue #4](https://github.com/mgdx/RoueLibre/issues/4), reported by
