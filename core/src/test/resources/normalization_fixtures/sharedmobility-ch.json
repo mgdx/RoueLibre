@@ -1,0 +1,797 @@
+{
+  "language": "de",
+  "cases": [
+    {
+      "input": "Bahnhofstraße",
+      "normalized": "bahnhofstrasse",
+      "type": null,
+      "name": "bahnhofstrasse"
+    },
+    {
+      "input": "Bahnhofstrasse",
+      "normalized": "bahnhofstrasse",
+      "type": null,
+      "name": "bahnhofstrasse"
+    },
+    {
+      "input": "Marienplatz",
+      "normalized": "marienplatz",
+      "type": null,
+      "name": "marienplatz"
+    },
+    {
+      "input": "Unter den Linden",
+      "normalized": "unter den linden",
+      "type": null,
+      "name": "unter den linden"
+    },
+    {
+      "input": "Kurfürstendamm",
+      "normalized": "kurfurstendamm",
+      "type": null,
+      "name": "kurfurstendamm"
+    },
+    {
+      "input": "Große Freiheit",
+      "normalized": "grosse freiheit",
+      "type": null,
+      "name": "grosse freiheit"
+    },
+    {
+      "input": "St.-Pauli-Landungsbrücken",
+      "normalized": "sankt pauli landungsbrucken",
+      "type": null,
+      "name": "sankt pauli landungsbrucken"
+    },
+    {
+      "input": "Am Hauptbahnhof",
+      "normalized": "am hauptbahnhof",
+      "type": null,
+      "name": "am hauptbahnhof"
+    },
+    {
+      "input": "Prinzregentenstraße",
+      "normalized": "prinzregentenstrasse",
+      "type": null,
+      "name": "prinzregentenstrasse"
+    },
+    {
+      "input": "Karl-Marx-Allee",
+      "normalized": "karl marx allee",
+      "type": null,
+      "name": "karl marx allee"
+    },
+    {
+      "input": "Schloßplatz",
+      "normalized": "schlossplatz",
+      "type": null,
+      "name": "schlossplatz"
+    },
+    {
+      "input": "Gr. Bleichen",
+      "normalized": "gross bleichen",
+      "type": null,
+      "name": "gross bleichen"
+    },
+    {
+      "input": "Ottenleuebad",
+      "normalized": "ottenleuebad",
+      "type": null,
+      "name": "ottenleuebad"
+    },
+    {
+      "input": "Six-Fontaines",
+      "normalized": "six fontaines",
+      "type": null,
+      "name": "six fontaines"
+    },
+    {
+      "input": "Sous les Champs Morlat",
+      "normalized": "sous les champs morlat",
+      "type": null,
+      "name": "sous les champs morlat"
+    },
+    {
+      "input": "61b",
+      "normalized": "61b",
+      "type": null,
+      "name": "61b"
+    },
+    {
+      "input": "Wilzichummu",
+      "normalized": "wilzichummu",
+      "type": null,
+      "name": "wilzichummu"
+    },
+    {
+      "input": "Chemin Mont-d'Eau-du-Milieu",
+      "normalized": "chemin mont d eau du milieu",
+      "type": null,
+      "name": "chemin mont d eau du milieu"
+    },
+    {
+      "input": "Ratzmatt",
+      "normalized": "ratzmatt",
+      "type": null,
+      "name": "ratzmatt"
+    },
+    {
+      "input": "Dreien",
+      "normalized": "dreien",
+      "type": null,
+      "name": "dreien"
+    },
+    {
+      "input": "Steiweid",
+      "normalized": "steiweid",
+      "type": null,
+      "name": "steiweid"
+    },
+    {
+      "input": "Chnollen",
+      "normalized": "chnollen",
+      "type": null,
+      "name": "chnollen"
+    },
+    {
+      "input": "Ober-Bernern",
+      "normalized": "ober bernern",
+      "type": null,
+      "name": "ober bernern"
+    },
+    {
+      "input": "l'azimut",
+      "normalized": "l azimut",
+      "type": null,
+      "name": "l azimut"
+    },
+    {
+      "input": "Lavatoio di Ceredo",
+      "normalized": "lavatoio di ceredo",
+      "type": null,
+      "name": "lavatoio di ceredo"
+    },
+    {
+      "input": "Mairie de Gondenans-Montby",
+      "normalized": "mairie de gondenans montby",
+      "type": null,
+      "name": "mairie de gondenans montby"
+    },
+    {
+      "input": "Médiathèque Valais - Martigny",
+      "normalized": "mediatheque valais martigny",
+      "type": null,
+      "name": "mediatheque valais martigny"
+    },
+    {
+      "input": "Le Fayet - Gare",
+      "normalized": "le fayet gare",
+      "type": null,
+      "name": "le fayet gare"
+    },
+    {
+      "input": "Friedrichshafen Stadt",
+      "normalized": "friedrichshafen stadt",
+      "type": null,
+      "name": "friedrichshafen stadt"
+    },
+    {
+      "input": "Aiguille du Midi 1",
+      "normalized": "aiguille du midi 1",
+      "type": null,
+      "name": "aiguille du midi 1"
+    },
+    {
+      "input": "Les Granges-Gérignoz",
+      "normalized": "les granges gerignoz",
+      "type": null,
+      "name": "les granges gerignoz"
+    },
+    {
+      "input": "Hof Schönenberg",
+      "normalized": "hof schonenberg",
+      "type": null,
+      "name": "hof schonenberg"
+    },
+    {
+      "input": "Fallernhof",
+      "normalized": "fallernhof",
+      "type": null,
+      "name": "fallernhof"
+    },
+    {
+      "input": "Allmerüti",
+      "normalized": "allmeruti",
+      "type": null,
+      "name": "allmeruti"
+    },
+    {
+      "input": "Heitibode",
+      "normalized": "heitibode",
+      "type": null,
+      "name": "heitibode"
+    },
+    {
+      "input": "Pro Planino",
+      "normalized": "pro planino",
+      "type": null,
+      "name": "pro planino"
+    },
+    {
+      "input": "Obergrath",
+      "normalized": "obergrath",
+      "type": null,
+      "name": "obergrath"
+    },
+    {
+      "input": "Äckerli",
+      "normalized": "ackerli",
+      "type": null,
+      "name": "ackerli"
+    },
+    {
+      "input": "Allée des Carts",
+      "normalized": "allee des carts",
+      "type": "allee",
+      "name": "des carts"
+    },
+    {
+      "input": "Alte Landstrasse A",
+      "normalized": "alte landstrasse a",
+      "type": null,
+      "name": "alte landstrasse a"
+    },
+    {
+      "input": "Am Wasserfall",
+      "normalized": "am wasserfall",
+      "type": null,
+      "name": "am wasserfall"
+    },
+    {
+      "input": "Ausserdorfstrasse",
+      "normalized": "ausserdorfstrasse",
+      "type": null,
+      "name": "ausserdorfstrasse"
+    },
+    {
+      "input": "Bädli",
+      "normalized": "badli",
+      "type": null,
+      "name": "badli"
+    },
+    {
+      "input": "Bergsteigweg",
+      "normalized": "bergsteigweg",
+      "type": null,
+      "name": "bergsteigweg"
+    },
+    {
+      "input": "Bodeächer",
+      "normalized": "bodeacher",
+      "type": null,
+      "name": "bodeacher"
+    },
+    {
+      "input": "Bruggacher",
+      "normalized": "bruggacher",
+      "type": null,
+      "name": "bruggacher"
+    },
+    {
+      "input": "Bürgmattweg",
+      "normalized": "burgmattweg",
+      "type": null,
+      "name": "burgmattweg"
+    },
+    {
+      "input": "Chatzetöbeli",
+      "normalized": "chatzetobeli",
+      "type": null,
+      "name": "chatzetobeli"
+    },
+    {
+      "input": "Chemin de Chouard",
+      "normalized": "chemin de chouard",
+      "type": null,
+      "name": "chemin de chouard"
+    },
+    {
+      "input": "Chemin de la Chaussée",
+      "normalized": "chemin de la chaussee",
+      "type": null,
+      "name": "chemin de la chaussee"
+    },
+    {
+      "input": "Chemin de la Ramasse",
+      "normalized": "chemin de la ramasse",
+      "type": null,
+      "name": "chemin de la ramasse"
+    },
+    {
+      "input": "Chemin de Pré Bachet",
+      "normalized": "chemin de pre bachet",
+      "type": null,
+      "name": "chemin de pre bachet"
+    },
+    {
+      "input": "Chemin des Chalets des Brasses",
+      "normalized": "chemin des chalets des brasses",
+      "type": null,
+      "name": "chemin des chalets des brasses"
+    },
+    {
+      "input": "Chemin des Marmottons",
+      "normalized": "chemin des marmottons",
+      "type": null,
+      "name": "chemin des marmottons"
+    },
+    {
+      "input": "Chemin dit des Tattes de Lanovaz",
+      "normalized": "chemin dit des tattes de lanovaz",
+      "type": null,
+      "name": "chemin dit des tattes de lanovaz"
+    },
+    {
+      "input": "Chemin du Grand Remblai",
+      "normalized": "chemin du grand remblai",
+      "type": null,
+      "name": "chemin du grand remblai"
+    },
+    {
+      "input": "Chemin du Téléphérique",
+      "normalized": "chemin du telepherique",
+      "type": null,
+      "name": "chemin du telepherique"
+    },
+    {
+      "input": "Chemin Victor-Duret",
+      "normalized": "chemin victor duret",
+      "type": null,
+      "name": "chemin victor duret"
+    },
+    {
+      "input": "Clos du Carro",
+      "normalized": "clos du carro",
+      "type": null,
+      "name": "clos du carro"
+    },
+    {
+      "input": "Diezenberg",
+      "normalized": "diezenberg",
+      "type": null,
+      "name": "diezenberg"
+    },
+    {
+      "input": "Eichenberg",
+      "normalized": "eichenberg",
+      "type": null,
+      "name": "eichenberg"
+    },
+    {
+      "input": "Eschenrain",
+      "normalized": "eschenrain",
+      "type": null,
+      "name": "eschenrain"
+    },
+    {
+      "input": "Fischeracherstrasse",
+      "normalized": "fischeracherstrasse",
+      "type": null,
+      "name": "fischeracherstrasse"
+    },
+    {
+      "input": "Fuchshübel",
+      "normalized": "fuchshubel",
+      "type": null,
+      "name": "fuchshubel"
+    },
+    {
+      "input": "Geissewägli",
+      "normalized": "geissewagli",
+      "type": null,
+      "name": "geissewagli"
+    },
+    {
+      "input": "Grabenmösli",
+      "normalized": "grabenmosli",
+      "type": null,
+      "name": "grabenmosli"
+    },
+    {
+      "input": "Gulantschiweg",
+      "normalized": "gulantschiweg",
+      "type": null,
+      "name": "gulantschiweg"
+    },
+    {
+      "input": "Härigstrasse",
+      "normalized": "harigstrasse",
+      "type": null,
+      "name": "harigstrasse"
+    },
+    {
+      "input": "Herznacherstrasse",
+      "normalized": "herznacherstrasse",
+      "type": null,
+      "name": "herznacherstrasse"
+    },
+    {
+      "input": "Hofstatt-Alp Selun",
+      "normalized": "hofstatt alp selun",
+      "type": null,
+      "name": "hofstatt alp selun"
+    },
+    {
+      "input": "Hüserenstrasse",
+      "normalized": "huserenstrasse",
+      "type": null,
+      "name": "huserenstrasse"
+    },
+    {
+      "input": "Im Muracher",
+      "normalized": "im muracher",
+      "type": null,
+      "name": "im muracher"
+    },
+    {
+      "input": "Impasse de la Cotote",
+      "normalized": "impasse de la cotote",
+      "type": null,
+      "name": "impasse de la cotote"
+    },
+    {
+      "input": "Impasse des Prailles",
+      "normalized": "impasse des prailles",
+      "type": null,
+      "name": "impasse des prailles"
+    },
+    {
+      "input": "Impasse Paul Verlaine",
+      "normalized": "impasse paul verlaine",
+      "type": null,
+      "name": "impasse paul verlaine"
+    },
+    {
+      "input": "Josefweg",
+      "normalized": "josefweg",
+      "type": null,
+      "name": "josefweg"
+    },
+    {
+      "input": "Kirchstalden",
+      "normalized": "kirchstalden",
+      "type": null,
+      "name": "kirchstalden"
+    },
+    {
+      "input": "Kürnberg",
+      "normalized": "kurnberg",
+      "type": null,
+      "name": "kurnberg"
+    },
+    {
+      "input": "Langensteinenstrasse",
+      "normalized": "langensteinenstrasse",
+      "type": null,
+      "name": "langensteinenstrasse"
+    },
+    {
+      "input": "Leiackerstrasse",
+      "normalized": "leiackerstrasse",
+      "type": null,
+      "name": "leiackerstrasse"
+    },
+    {
+      "input": "Lindenbergwaldstrasse",
+      "normalized": "lindenbergwaldstrasse",
+      "type": null,
+      "name": "lindenbergwaldstrasse"
+    },
+    {
+      "input": "Luss",
+      "normalized": "luss",
+      "type": null,
+      "name": "luss"
+    },
+    {
+      "input": "Messenriet",
+      "normalized": "messenriet",
+      "type": null,
+      "name": "messenriet"
+    },
+    {
+      "input": "Mühlemoos",
+      "normalized": "muhlemoos",
+      "type": null,
+      "name": "muhlemoos"
+    },
+    {
+      "input": "Niderwisstrasse",
+      "normalized": "niderwisstrasse",
+      "type": null,
+      "name": "niderwisstrasse"
+    },
+    {
+      "input": "Obere Zollgasse",
+      "normalized": "obere zollgasse",
+      "type": null,
+      "name": "obere zollgasse"
+    },
+    {
+      "input": "Ölistrasse",
+      "normalized": "olistrasse",
+      "type": null,
+      "name": "olistrasse"
+    },
+    {
+      "input": "Perlenstrasse",
+      "normalized": "perlenstrasse",
+      "type": null,
+      "name": "perlenstrasse"
+    },
+    {
+      "input": "Pista Alpe Layet Stazione Superiore Lago Blu",
+      "normalized": "pista alpe layet stazione superiore lago blu",
+      "type": null,
+      "name": "pista alpe layet stazione superiore lago blu"
+    },
+    {
+      "input": "Pontarlier par les Rochers d'Escalades",
+      "normalized": "pontarlier par les rochers d escalades",
+      "type": null,
+      "name": "pontarlier par les rochers d escalades"
+    },
+    {
+      "input": "Rahnstrasse",
+      "normalized": "rahnstrasse",
+      "type": null,
+      "name": "rahnstrasse"
+    },
+    {
+      "input": "Riedbödelistrasse",
+      "normalized": "riedbodelistrasse",
+      "type": null,
+      "name": "riedbodelistrasse"
+    },
+    {
+      "input": "Rösslistäge",
+      "normalized": "rosslistage",
+      "type": null,
+      "name": "rosslistage"
+    },
+    {
+      "input": "Route de Cléron",
+      "normalized": "route de cleron",
+      "type": null,
+      "name": "route de cleron"
+    },
+    {
+      "input": "Route de la Ray",
+      "normalized": "route de la ray",
+      "type": null,
+      "name": "route de la ray"
+    },
+    {
+      "input": "Route de Thonon les Bains",
+      "normalized": "route de thonon les bains",
+      "type": null,
+      "name": "route de thonon les bains"
+    },
+    {
+      "input": "Route des Sérès",
+      "normalized": "route des seres",
+      "type": null,
+      "name": "route des seres"
+    },
+    {
+      "input": "Route Les Encoches",
+      "normalized": "route les encoches",
+      "type": null,
+      "name": "route les encoches"
+    },
+    {
+      "input": "Rue de Beaucourt",
+      "normalized": "rue de beaucourt",
+      "type": null,
+      "name": "rue de beaucourt"
+    },
+    {
+      "input": "Rue de la Courroie d'Argent",
+      "normalized": "rue de la courroie d argent",
+      "type": null,
+      "name": "rue de la courroie d argent"
+    },
+    {
+      "input": "Rue de Place",
+      "normalized": "rue de place",
+      "type": null,
+      "name": "rue de place"
+    },
+    {
+      "input": "Rue des Fayets",
+      "normalized": "rue des fayets",
+      "type": null,
+      "name": "rue des fayets"
+    },
+    {
+      "input": "Rue du 6e Régiment de Tirailleurs Marocains",
+      "normalized": "rue du 6e regiment de tirailleurs marocains",
+      "type": null,
+      "name": "rue du 6e regiment de tirailleurs marocains"
+    },
+    {
+      "input": "Rue du Lot",
+      "normalized": "rue du lot",
+      "type": null,
+      "name": "rue du lot"
+    },
+    {
+      "input": "Rue Feldeck / Feldeckstrasse",
+      "normalized": "rue feldeck feldeckstrasse",
+      "type": null,
+      "name": "rue feldeck feldeckstrasse"
+    },
+    {
+      "input": "Rue Panloup",
+      "normalized": "rue panloup",
+      "type": null,
+      "name": "rue panloup"
+    },
+    {
+      "input": "Ruelle du Petit Pont",
+      "normalized": "ruelle du petit pont",
+      "type": null,
+      "name": "ruelle du petit pont"
+    },
+    {
+      "input": "Sandrainweg",
+      "normalized": "sandrainweg",
+      "type": null,
+      "name": "sandrainweg"
+    },
+    {
+      "input": "Schlegel",
+      "normalized": "schlegel",
+      "type": null,
+      "name": "schlegel"
+    },
+    {
+      "input": "Schützewisstrasse",
+      "normalized": "schutzewisstrasse",
+      "type": null,
+      "name": "schutzewisstrasse"
+    },
+    {
+      "input": "Sentier Dirrggässle",
+      "normalized": "sentier dirrggassle",
+      "type": null,
+      "name": "sentier dirrggassle"
+    },
+    {
+      "input": "Spengmattstrasse",
+      "normalized": "spengmattstrasse",
+      "type": null,
+      "name": "spengmattstrasse"
+    },
+    {
+      "input": "Steinradstrasse",
+      "normalized": "steinradstrasse",
+      "type": null,
+      "name": "steinradstrasse"
+    },
+    {
+      "input": "Strada Provinciale 394dir",
+      "normalized": "strada provinciale 394dir",
+      "type": null,
+      "name": "strada provinciale 394dir"
+    },
+    {
+      "input": "Taleze",
+      "normalized": "taleze",
+      "type": null,
+      "name": "taleze"
+    },
+    {
+      "input": "Trettachstraße",
+      "normalized": "trettachstrasse",
+      "type": null,
+      "name": "trettachstrasse"
+    },
+    {
+      "input": "Untere Brügglistrasse",
+      "normalized": "untere brugglistrasse",
+      "type": null,
+      "name": "untere brugglistrasse"
+    },
+    {
+      "input": "Vadusis",
+      "normalized": "vadusis",
+      "type": null,
+      "name": "vadusis"
+    },
+    {
+      "input": "Via alle Terme",
+      "normalized": "via alle terme",
+      "type": null,
+      "name": "via alle terme"
+    },
+    {
+      "input": "Via Caleggio",
+      "normalized": "via caleggio",
+      "type": null,
+      "name": "via caleggio"
+    },
+    {
+      "input": "Via Crano",
+      "normalized": "via crano",
+      "type": null,
+      "name": "via crano"
+    },
+    {
+      "input": "Via Don Bartolomeo Calzaferri",
+      "normalized": "via don bartolomeo calzaferri",
+      "type": null,
+      "name": "via don bartolomeo calzaferri"
+    },
+    {
+      "input": "Via Gesiolo",
+      "normalized": "via gesiolo",
+      "type": null,
+      "name": "via gesiolo"
+    },
+    {
+      "input": "Via maestri campionesi",
+      "normalized": "via maestri campionesi",
+      "type": null,
+      "name": "via maestri campionesi"
+    },
+    {
+      "input": "Via Palembri",
+      "normalized": "via palembri",
+      "type": null,
+      "name": "via palembri"
+    },
+    {
+      "input": "Via privata John Fitzgerald Kennedy",
+      "normalized": "via privata john fitzgerald kennedy",
+      "type": null,
+      "name": "via privata john fitzgerald kennedy"
+    },
+    {
+      "input": "Via Seneria",
+      "normalized": "via seneria",
+      "type": null,
+      "name": "via seneria"
+    },
+    {
+      "input": "Via Vignole",
+      "normalized": "via vignole",
+      "type": null,
+      "name": "via vignole"
+    },
+    {
+      "input": "Vie du Fahiney",
+      "normalized": "vie du fahiney",
+      "type": null,
+      "name": "vie du fahiney"
+    },
+    {
+      "input": "Waldried",
+      "normalized": "waldried",
+      "type": null,
+      "name": "waldried"
+    },
+    {
+      "input": "Wichtrachstrasse",
+      "normalized": "wichtrachstrasse",
+      "type": null,
+      "name": "wichtrachstrasse"
+    },
+    {
+      "input": "Wylstrasse",
+      "normalized": "wylstrasse",
+      "type": null,
+      "name": "wylstrasse"
+    }
+  ]
+}

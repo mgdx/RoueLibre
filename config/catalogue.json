@@ -1,7 +1,7 @@
 {
   "catalogueVersion": 1,
   "catalogueUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/catalogue.json",
-  "generatedAt": "2026-09-14T20:20:39Z",
+  "generatedAt": "2026-09-22T02:15:48Z",
   "cities": [
     {
       "id": "aar-bike",
@@ -2925,7 +2925,7 @@
       "operator": "Blue-bike",
       "mainCity": "Brussels",
       "country": "BE",
-      "stationCount": 319,
+      "stationCount": 322,
       "stationSamples": [
         [
           51.21761,
@@ -2970,8 +2970,8 @@
       "centreLongitude": 4.262117,
       "gbfsDiscoveryUrl": "https://api.delijn.be/gbfs/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-blue-bike.json",
-      "dataSizeBytes": 1498186402,
-      "releaseTag": "data-2026-08-be"
+      "dataSizeBytes": 1533685421,
+      "releaseTag": "data-2026-09"
     },
     {
       "id": "bluebikes",
@@ -3627,7 +3627,7 @@
       "operator": "Lyft",
       "mainCity": "Washington",
       "country": "US",
-      "stationCount": 863,
+      "stationCount": 866,
       "stationSamples": [
         [
           38.80552,
@@ -3672,8 +3672,8 @@
       "centreLongitude": -77.122445,
       "gbfsDiscoveryUrl": "https://gbfs.capitalbikeshare.com/gbfs/2.3/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-capital-bikeshare.json",
-      "dataSizeBytes": 146135113,
-      "releaseTag": "data-2026-08-us"
+      "dataSizeBytes": 169313506,
+      "releaseTag": "data-2026-09"
     },
     {
       "id": "careem-bike",
@@ -10701,7 +10701,7 @@
       "operator": "réseau tanlib",
       "mainCity": "Niort",
       "country": "FR",
-      "stationCount": 58,
+      "stationCount": 61,
       "stationSamples": [
         [
           46.32659,
@@ -10746,8 +10746,8 @@
       "centreLongitude": -0.438933,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/tanlib/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-tanlib.json",
-      "dataSizeBytes": 10500061,
-      "releaseTag": "data-2026-08-fr"
+      "dataSizeBytes": 10508338,
+      "releaseTag": "data-2026-09"
     },
     {
       "id": "tarnowski-rower-miejski",
@@ -11934,8 +11934,8 @@
       "centreLongitude": 6.40814,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/epinal/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-vivolt.json",
-      "dataSizeBytes": 25937937,
-      "releaseTag": "data-2026-08-fr"
+      "dataSizeBytes": 25967897,
+      "releaseTag": "data-2026-09"
     },
     {
       "id": "velostan-lib",
@@ -12312,8 +12312,8 @@
       "centreLongitude": 1.51574,
       "gbfsDiscoveryUrl": "https://api.gbfs.v3.0.ecovelo.mobi/velibeo/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velibeo.json",
-      "dataSizeBytes": 7105384,
-      "releaseTag": "data-2026-08-fr"
+      "dataSizeBytes": 7130245,
+      "releaseTag": "data-2026-09"
     },
     {
       "id": "velo-fluo",
@@ -12358,7 +12358,7 @@
       ],
       "boundingBox": {
         "south": 47.563611,
-        "west": 5.54802,
+        "west": 5.548057,
         "north": 49.434389,
         "east": 7.99044
       },
@@ -12366,8 +12366,8 @@
       "centreLongitude": 7.58407,
       "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/velo-fluo/en/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velo-fluo.json",
-      "dataSizeBytes": 798078949,
-      "releaseTag": "data-2026-08-fr"
+      "dataSizeBytes": 806521677,
+      "releaseTag": "data-2026-09"
     },
     {
       "id": "velo-modalis",
@@ -13023,7 +13023,7 @@
       "operator": "Toulouse métropole",
       "mainCity": "Toulouse",
       "country": "FR",
-      "stationCount": 465,
+      "stationCount": 466,
       "stationSamples": [
         [
           43.60419,
@@ -13060,7 +13060,7 @@
       ],
       "boundingBox": {
         "south": 43.512267,
-        "west": 1.282817,
+        "west": 0.962959,
         "north": 43.694456,
         "east": 1.554249
       },
@@ -13068,8 +13068,8 @@
       "centreLongitude": 1.418533,
       "gbfsDiscoveryUrl": "https://api.cyclocity.fr/contracts/toulouse/gbfs/v3/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-velotoulouse.json",
-      "dataSizeBytes": 38981822,
-      "releaseTag": "data-2026-08-fr"
+      "dataSizeBytes": 51447837,
+      "releaseTag": "data-2026-09"
     },
     {
       "id": "wrm-nextbike-poland",
@@ -17442,8 +17442,8 @@
       "centreLongitude": 13.851051,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_hr/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-zagreb.json",
-      "dataSizeBytes": 619246171,
-      "releaseTag": "data-2026-08-hr"
+      "dataSizeBytes": 630193943,
+      "releaseTag": "data-2026-09"
     },
     {
       "id": "nextbike-zlin",
@@ -17721,7 +17721,7 @@
       "operator": "Radland GmbH",
       "mainCity": "Vienna",
       "country": "AT",
-      "stationCount": 250,
+      "stationCount": 251,
       "stationSamples": [
         [
           48.20852,
@@ -17766,8 +17766,8 @@
       "centreLongitude": 15.872974,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_la/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-niederosterreich.json",
-      "dataSizeBytes": 413099902,
-      "releaseTag": "data-2026-08-at"
+      "dataSizeBytes": 418686782,
+      "releaseTag": "data-2026-09"
     },
     {
       "id": "nextbike-olbramovicevotice",
@@ -17883,7 +17883,7 @@
       "operator": "Swiss Federal Office of Energy",
       "mainCity": "Zürich",
       "country": "CH",
-      "stationCount": 12896,
+      "stationCount": 11658,
       "stationSamples": [
         [
           47.13307,
@@ -17928,8 +17928,8 @@
       "centreLongitude": 7.600948,
       "gbfsDiscoveryUrl": "https://www.sharedmobility.ch/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-sharedmobility-ch.json",
-      "dataSizeBytes": 1646129862,
-      "releaseTag": "data-2026-08-ch"
+      "dataSizeBytes": 1667335524,
+      "releaseTag": "data-2026-09"
     },
     {
       "id": "swabi",
