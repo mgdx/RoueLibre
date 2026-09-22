@@ -72,18 +72,49 @@ also records what has no visible effect.
   proposes a box, `add_city.py` recomputes it against the live feed days later,
   `compute_bbox.py` recomputes it again on every regeneration, and nothing ever
   went back to ask which extracts the new rectangle reached.
-  `--refresh-sources` now derives them from the configuration's own box, and
-  `tools/tests/test_city_extracts.py` fails on a configuration that has drifted
-  from it again. Brive-la-Gaillarde gains the Aquitaine, Épinal the
-  Franche-Comté, Niort the Pays de la Loire, Zurich the Liechtenstein and the
-  Italian north-east, Zagreb that north-east, Vienna's regional network
-  Hungary, Blue-bike the Picardy, the Champagne-Ardenne and Luxembourg. Four
+  `--refresh-sources` now derives them from the configuration's own box;
+  `tools/compute_bbox.py`, which is what moves a box, names the extracts again
+  in the same breath, so the two can no longer be written by different runs;
+  `tools/generate_all.sh` computes the box before reading what to download
+  rather than after it; and `tools/tests/test_city_extracts.py` fails on a
+  configuration that has drifted from its box again. Brive-la-Gaillarde gains
+  the Aquitaine, Épinal the Franche-Comté, Niort the Pays de la Loire, Zurich
+  the Liechtenstein and the Italian north-east, Zagreb that north-east,
+  Vienna's regional network Hungary, Blue-bike the Picardy, the
+  Champagne-Ardenne and Luxembourg. Four
   cities also drop extracts their box has not reached since it was last
   recomputed — the two Nuremberg networks five apiece, Vélo Fluo three, Chicago
   the whole of the American Midwest — which is several gigabytes nobody
   downloads again. **The datasets published for those cities still carry the
   hole**: they are cut from these lists, and have to be generated and published
   again.
+- **The French address base was asked for the departments of a box on the same
+  coarse grid**, and with the same result. Brive-la-Gaillarde reaches one square
+  kilometre of the Dordogne, at La Feuillade, in the south-west corner of its
+  box; its configuration named the Corrèze alone, and those streets had no
+  house number. The state's geographic API is now asked every kilometre of
+  ground as well, up to a thousand times for one box — a sample there is a
+  network call, where a sample against the extracts is arithmetic on a file
+  already in hand, so a network the size of the Grand Est is asked every six
+  kilometres instead. `compute_bbox.py` asks again whenever it moves a French
+  box. A failure of that API no longer passes silently either: it was caught
+  and stepped over, which over a thousand calls would shorten the list of
+  departments exactly as the coarse grid did, and a point outside France is
+  answered with an empty list rather than an error anyway. Épinal gains the
+  Haute-Saône, Brive the Dordogne, Toulouse the Gers.
+- **A city whose box straddles several extracts could not be generated at all
+  when Geofabrik was between two cuts.** Its regions are recut on a rolling
+  schedule, so two `-latest` files fetched in the same minute can be of two
+  different days — on 22 September the centre of Italy was of the 21st while
+  Croatia, Slovenia and Bosnia were still of the 20th. `osmium merge` then
+  keeps the same node under two versions and every later step rejects the file,
+  which `generate_all.sh` caught, and it told the operator to delete the
+  extracts and fetch them again — a remedy for nothing, the server being what
+  held them apart. It now takes the dated files Geofabrik keeps beside the
+  latest ones: the oldest day the parts show is a day every one of them was
+  cut, since the region lagging behind is the slowest to be recut, so whatever
+  disagrees is fetched again at that date. Zagreb, which could not be
+  regenerated at all this morning, goes through.
 - **The switch of the bikes outside stations said half of what it turns on**,
   in twenty-nine languages. `98ceb03e` rewrote its label and its description
   when the battery of the docked bikes joined it, in English and in French

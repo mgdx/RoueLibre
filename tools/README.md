@@ -374,6 +374,17 @@ gigabytes down behind it for the water off Ostend.
 names the extracts its own box reaches. It needs Geofabrik's index in
 `data/cache/`, and is skipped where that file is not.
 
+**Which departments a French box reaches** is the same question asked of the
+state's geographic API, and sampled the same way — every kilometre of ground,
+Brive's box holding one square kilometre of the Dordogne where its addresses
+used to stop at the Corrèze. A sample there is a network call and not
+arithmetic, so a box is asked a thousand times at most: six kilometres apart
+over a network the size of the Grand Est, where a sliver of a department may
+still be missed.
+
+Both lists are written by `compute_bbox.py`, which is what moves the box they
+follow from, and `generate_all.sh` runs it before it downloads anything.
+
 **Merging two extracts.** Geofabrik cuts all its regions from the same daily
 snapshot, and two extracts downloaded on different days hold the same node
 under two versions. `osmium merge` keeps both, and everything downstream stops

@@ -64,6 +64,7 @@ from pathlib import Path
 # and the generation must agree on which stations make the box, or a network
 # would be judged on one rectangle and served on another.
 from compute_bbox import outlying_positions
+from city_config import METRES_PER_DEGREE_LATITUDE as METRES_PER_DEGREE
 
 TOOLS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = TOOLS_DIR.parent
@@ -238,11 +239,19 @@ CONTAINMENT_AGREEMENT = 0.9
 # holding the ground around it.
 BUNDLE_SHARE = 0.5
 
-# The French departments a box reaches are sampled on a plain grid, and this
-# one stays coarse on purpose: every sample there is a call to the state's
-# geographic API, where a sample of the box against the extracts is arithmetic
-# on a file already in hand.
-DEPARTMENT_GRID_SIDE = 5
+# The French departments a box reaches are sampled the same way, and for the
+# same reason: a department the box touches over a corner is a stretch of the
+# conurbation with no house number, and Brive's box reaches La Feuillade, in
+# the Dordogne, over a single square kilometre of its south-west corner.
+#
+# The ceiling is what differs. A sample here is a call to the state's
+# geographic API, where a sample against the extracts is arithmetic on a file
+# already in hand, so a box is asked about a thousand times and no more: a
+# kilometre apart over a conurbation, six over a network the size of the Grand
+# Est. Below that ceiling the sampling is the extracts', and above it a sliver
+# of a department may still be missed.
+DEPARTMENT_SAMPLE_METRES = 1000.0
+DEPARTMENT_SAMPLES_MAXIMUM = 1000
 
 # Past this, a title has stopped being a name and started describing an offer.
 MAXIMUM_NAME_WORDS = 4
@@ -683,7 +692,7 @@ def whole_number(value) -> int:
 def widen(box: dict, margin_metres: float) -> dict:
     """Grow a box by a margin on all four sides, as §4 does around the stations."""
     centre_latitude = math.radians((box["south"] + box["north"]) / 2.0)
-    latitude_margin = margin_metres / 111_320.0
+    latitude_margin = margin_metres / METRES_PER_DEGREE
     longitude_margin = latitude_margin / max(math.cos(centre_latitude), 0.01)
     return {
         "south": box["south"] - latitude_margin,
@@ -693,12 +702,29 @@ def widen(box: dict, margin_metres: float) -> dict:
     }
 
 
+def box_span_metres(box: dict) -> tuple[float, float]:
+    """The height and the width of a box on the ground, in metres.
+
+    Near enough to sample and to measure by: the longitude is taken at the
+    latitude of the centre, which over a conurbation varies by less than a
+    percent from edge to edge.
+    """
+    centre_latitude = math.radians((box["south"] + box["north"]) / 2.0)
+    return (
+        abs(box["north"] - box["south"]) * METRES_PER_DEGREE,
+        abs(box["east"] - box["west"]) * METRES_PER_DEGREE * math.cos(centre_latitude),
+    )
+
+
+def samples_along(span_metres: float, step_metres: float) -> int:
+    """How many samples a side of that length takes, one every `step_metres`."""
+    return max(BOX_SAMPLES_MINIMUM, int(span_metres // step_metres) + 1)
+
+
 def area_square_kilometres(box: dict) -> float:
     """The area of a bounding box, near enough for a size check."""
-    centre_latitude = math.radians((box["south"] + box["north"]) / 2.0)
-    height = (box["north"] - box["south"]) * 111.32
-    width = (box["east"] - box["west"]) * 111.32 * math.cos(centre_latitude)
-    return abs(height * width)
+    height, width = box_span_metres(box)
+    return height * width / 1_000_000.0
 
 
 def record_reference_area(survey: dict) -> None:
@@ -1261,14 +1287,6 @@ class Extracts:
                      or region["envelope"][1] > box["north"])
         ]
 
-    @staticmethod
-    def _samples_along(span_metres: float) -> int:
-        """How many samples one side of the box takes, floor and ceiling applied."""
-        return max(
-            BOX_SAMPLES_MINIMUM,
-            min(BOX_SAMPLES_MAXIMUM, int(abs(span_metres) // BOX_SAMPLE_METRES) + 1),
-        )
-
     def for_box(self, box: dict) -> list[str]:
         """The extracts a reference box reaches, sampled over its whole surface.
 
@@ -1282,11 +1300,9 @@ class Extracts:
         `BOX_SAMPLE_METRES`.
         """
         reaching = self._reaching(box)
-        centre_latitude = math.radians((box["south"] + box["north"]) / 2.0)
-        rows = self._samples_along((box["north"] - box["south"]) * 111_320.0)
-        columns = self._samples_along(
-            (box["east"] - box["west"]) * 111_320.0 * math.cos(centre_latitude)
-        )
+        height, width = box_span_metres(box)
+        rows = min(BOX_SAMPLES_MAXIMUM, samples_along(height, BOX_SAMPLE_METRES))
+        columns = min(BOX_SAMPLES_MAXIMUM, samples_along(width, BOX_SAMPLE_METRES))
         found: list[str] = []
         for row in range(rows):
             latitude = box["south"] + (box["north"] - box["south"]) * row / (rows - 1)
@@ -1388,39 +1404,64 @@ class Gazetteer:
         return towns[0][2] if towns else ""
 
 
-def french_departments(survey: dict) -> None:
-    """Fill in the Base Adresse Nationale extracts a French box reaches (§4.3).
+def departments_of_box(box: dict) -> list[str]:
+    """The French departments a reference box reaches, asked of the state (§4.3).
 
     France's address base is published department by department, so a French
     city configuration has to name them. The state's own geographic API
-    answers, for a position, which department it falls in.
+    answers, for a position, which department it falls in — and it is asked
+    about the box rather than about the stations, the box carrying the 3 km
+    margin and routinely crossing into a department the intercommunality does
+    not include: Lyon's reaches into the Ain, Avignon's into the Gard.
 
-    The reference box is what is sampled, not the stations: the box carries the
-    3 km margin, and it routinely crosses into a neighbouring department the
-    intercommunality does not include — Lyon's reaches into the Ain,
-    Avignon's into the Gard.
+    The grid is sized in `DEPARTMENT_SAMPLE_METRES` and capped in
+    `DEPARTMENT_SAMPLES_MAXIMUM`, the samples being network calls here.
     """
-    box = survey.get("boundingBox")
-    if not box:
-        return
-    widened = widen(box, DEFAULT_MARGIN_METRES)
+    rows, columns = department_grid(box)
     departments: set[str] = set()
-    for row in range(DEPARTMENT_GRID_SIDE):
-        for column in range(DEPARTMENT_GRID_SIDE):
-            latitude = widened["south"] + (widened["north"] - widened["south"]) * row / (
-                DEPARTMENT_GRID_SIDE - 1)
-            longitude = widened["west"] + (widened["east"] - widened["west"]) * column / (
-                DEPARTMENT_GRID_SIDE - 1)
-            try:
-                found = fetch_json(
-                    f"{GEO_API_COMMUNES}?lat={latitude}&lon={longitude}"
-                    "&fields=nom,code,codeDepartement"
-                )
-            except Exception:  # noqa: BLE001 — a point at sea returns nothing
-                continue
+    for row in range(rows):
+        latitude = box["south"] + (box["north"] - box["south"]) * row / (rows - 1)
+        for column in range(columns):
+            longitude = box["west"] + (box["east"] - box["west"]) * column / (
+                columns - 1)
+            # Nothing is caught here. A point at sea, or over the border,
+            # is answered with an empty list and a 200; a failure is a real
+            # failure, and swallowing one over a thousand calls would quietly
+            # shorten the list of departments — the very hole this sampling
+            # exists to close.
+            found = fetch_json(
+                f"{GEO_API_COMMUNES}?lat={latitude}&lon={longitude}"
+                "&fields=nom,code,codeDepartement"
+            )
             departments.update(
                 municipality["codeDepartement"] for municipality in found
             )
+    return sorted(departments)
+
+
+def department_grid(box: dict) -> tuple[int, int]:
+    """How many samples a box takes each way, the ceiling shared between them.
+
+    A box twice as wide as it is tall keeps that shape once the ceiling has
+    been applied: the two sides are scaled by the same factor, so the samples
+    stay square on the ground.
+    """
+    height, width = box_span_metres(box)
+    rows = samples_along(height, DEPARTMENT_SAMPLE_METRES)
+    columns = samples_along(width, DEPARTMENT_SAMPLE_METRES)
+    if rows * columns > DEPARTMENT_SAMPLES_MAXIMUM:
+        scale = math.sqrt(DEPARTMENT_SAMPLES_MAXIMUM / (rows * columns))
+        rows = max(BOX_SAMPLES_MINIMUM, int(rows * scale))
+        columns = max(BOX_SAMPLES_MINIMUM, int(columns * scale))
+    return rows, columns
+
+
+def french_departments(survey: dict) -> None:
+    """Fill in the Base Adresse Nationale extracts a French box reaches (§4.3)."""
+    box = survey.get("boundingBox")
+    if not box:
+        return
+    departments = departments_of_box(widen(box, DEFAULT_MARGIN_METRES))
     if departments:
         survey["banDepartments"] = sorted(departments)
 
