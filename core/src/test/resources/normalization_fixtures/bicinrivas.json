@@ -86,496 +86,46 @@
       "name": "canada real"
     },
     {
-      "input": "Carretera de Madrid a Rivas del Jarama",
-      "normalized": "carretera de madrid a rivas del jarama",
-      "type": "carretera",
-      "name": "de madrid a rivas del jarama"
-    },
-    {
-      "input": "Plaza de la Regenta",
-      "normalized": "plaza de la regenta",
-      "type": "plaza",
-      "name": "de la regenta"
-    },
-    {
-      "input": "Plaza de Pablo Picasso",
-      "normalized": "plaza de pablo picasso",
-      "type": "plaza",
-      "name": "de pablo picasso"
-    },
-    {
-      "input": "Plaza del Monte Ciruelo",
-      "normalized": "plaza del monte ciruelo",
-      "type": "plaza",
-      "name": "del monte ciruelo"
-    },
-    {
-      "input": "Plaza de Blas de Otero",
-      "normalized": "plaza de blas de otero",
-      "type": "plaza",
-      "name": "de blas de otero"
-    },
-    {
-      "input": "Calle Océano Antártico",
-      "normalized": "calle oceano antartico",
-      "type": "calle",
-      "name": "oceano antartico"
-    },
-    {
-      "input": "Plaza de Blimea",
-      "normalized": "plaza de blimea",
-      "type": "plaza",
-      "name": "de blimea"
-    },
-    {
-      "input": "Plaza de Galicia",
-      "normalized": "plaza de galicia",
-      "type": "plaza",
-      "name": "de galicia"
-    },
-    {
-      "input": "Plaza de Violeta Parra",
-      "normalized": "plaza de violeta parra",
-      "type": "plaza",
-      "name": "de violeta parra"
-    },
-    {
-      "input": "Antiguo puente de la N-III de Arganda",
-      "normalized": "antiguo puente de la n iii de arganda",
-      "type": null,
-      "name": "antiguo puente de la n iii de arganda"
-    },
-    {
-      "input": "Avenida de Bonn",
-      "normalized": "avenida de bonn",
+      "input": "Avenida de Concha García Campoy",
+      "normalized": "avenida de concha garcia campoy",
       "type": "avenida",
-      "name": "de bonn"
+      "name": "de concha garcia campoy"
     },
     {
-      "input": "Avenida de Francisco de Quevedo",
-      "normalized": "avenida de francisco de quevedo",
+      "input": "Calle del Amanecer",
+      "normalized": "calle del amanecer",
+      "type": "calle",
+      "name": "del amanecer"
+    },
+    {
+      "input": "Avenida de las Víctimas del Terrorismo",
+      "normalized": "avenida de las victimas del terrorismo",
       "type": "avenida",
-      "name": "de francisco de quevedo"
+      "name": "de las victimas del terrorismo"
     },
     {
-      "input": "Avenida de la Democracia",
-      "normalized": "avenida de la democracia",
-      "type": "avenida",
-      "name": "de la democracia"
-    },
-    {
-      "input": "Avenida de Levante",
-      "normalized": "avenida de levante",
-      "type": "avenida",
-      "name": "de levante"
-    },
-    {
-      "input": "Avenida de Miguel Hernández",
-      "normalized": "avenida de miguel hernandez",
-      "type": "avenida",
-      "name": "de miguel hernandez"
-    },
-    {
-      "input": "Avenida del Arco Iris",
-      "normalized": "avenida del arco iris",
-      "type": "avenida",
-      "name": "del arco iris"
-    },
-    {
-      "input": "Avenida Juan Gris",
-      "normalized": "avenida juan gris",
-      "type": "avenida",
-      "name": "juan gris"
-    },
-    {
-      "input": "Calle África",
-      "normalized": "calle africa",
-      "type": "calle",
-      "name": "africa"
-    },
-    {
-      "input": "Calle Antonio López",
-      "normalized": "calle antonio lopez",
-      "type": "calle",
-      "name": "antonio lopez"
-    },
-    {
-      "input": "Calle Batalla de Salamina",
-      "normalized": "calle batalla de salamina",
-      "type": "calle",
-      "name": "batalla de salamina"
-    },
-    {
-      "input": "Calle Brasil",
-      "normalized": "calle brasil",
-      "type": "calle",
-      "name": "brasil"
-    },
-    {
-      "input": "Calle Canarios",
-      "normalized": "calle canarios",
-      "type": "calle",
-      "name": "canarios"
-    },
-    {
-      "input": "Calle Cerro del Monte",
-      "normalized": "calle cerro del monte",
-      "type": "calle",
-      "name": "cerro del monte"
-    },
-    {
-      "input": "Calle Conchita Montenegro",
-      "normalized": "calle conchita montenegro",
-      "type": "calle",
-      "name": "conchita montenegro"
-    },
-    {
-      "input": "Calle de Afrodita",
-      "normalized": "calle de afrodita",
-      "type": "calle",
-      "name": "de afrodita"
-    },
-    {
-      "input": "Calle de Ámsterdam",
-      "normalized": "calle de amsterdam",
-      "type": "calle",
-      "name": "de amsterdam"
-    },
-    {
-      "input": "Calle de Anna Frank",
-      "normalized": "calle de anna frank",
-      "type": "calle",
-      "name": "de anna frank"
-    },
-    {
-      "input": "Calle de Asterix",
-      "normalized": "calle de asterix",
-      "type": "calle",
-      "name": "de asterix"
-    },
-    {
-      "input": "Calle de Bernardo Atxaga",
-      "normalized": "calle de bernardo atxaga",
-      "type": "calle",
-      "name": "de bernardo atxaga"
-    },
-    {
-      "input": "Calle de Carlos Bousoño",
-      "normalized": "calle de carlos bousono",
-      "type": "calle",
-      "name": "de carlos bousono"
-    },
-    {
-      "input": "Calle de Castilla",
-      "normalized": "calle de castilla",
-      "type": "calle",
-      "name": "de castilla"
-    },
-    {
-      "input": "Calle de Colón",
-      "normalized": "calle de colon",
-      "type": "calle",
-      "name": "de colon"
-    },
-    {
-      "input": "Calle de Diana",
-      "normalized": "calle de diana",
-      "type": "calle",
-      "name": "de diana"
-    },
-    {
-      "input": "Calle de Eduardo López Hernando",
-      "normalized": "calle de eduardo lopez hernando",
-      "type": "calle",
-      "name": "de eduardo lopez hernando"
-    },
-    {
-      "input": "Calle de Federica Montseny",
-      "normalized": "calle de federica montseny",
-      "type": "calle",
-      "name": "de federica montseny"
-    },
-    {
-      "input": "Calle de Francisco Brines",
-      "normalized": "calle de francisco brines",
-      "type": "calle",
-      "name": "de francisco brines"
-    },
-    {
-      "input": "Calle de Gonzalo Sierra",
-      "normalized": "calle de gonzalo sierra",
-      "type": "calle",
-      "name": "de gonzalo sierra"
-    },
-    {
-      "input": "Calle de Guadarrama",
-      "normalized": "calle de guadarrama",
-      "type": "calle",
-      "name": "de guadarrama"
-    },
-    {
-      "input": "Calle de Ignacio Zuloaga",
-      "normalized": "calle de ignacio zuloaga",
-      "type": "calle",
-      "name": "de ignacio zuloaga"
-    },
-    {
-      "input": "Calle de Javier Marías",
-      "normalized": "calle de javier marias",
-      "type": "calle",
-      "name": "de javier marias"
-    },
-    {
-      "input": "Calle de José María Rodero",
-      "normalized": "calle de jose maria rodero",
-      "type": "calle",
-      "name": "de jose maria rodero"
-    },
-    {
-      "input": "Calle de Juan Genovés",
-      "normalized": "calle de juan genoves",
-      "type": "calle",
-      "name": "de juan genoves"
-    },
-    {
-      "input": "Calle de Junkal",
-      "normalized": "calle de junkal",
-      "type": "calle",
-      "name": "de junkal"
-    },
-    {
-      "input": "Calle de la Biodiversidad",
-      "normalized": "calle de la biodiversidad",
-      "type": "calle",
-      "name": "de la biodiversidad"
-    },
-    {
-      "input": "Calle de la Ciudad de Roma",
-      "normalized": "calle de la ciudad de roma",
-      "type": "calle",
-      "name": "de la ciudad de roma"
-    },
-    {
-      "input": "Calle de la Enseñanza",
-      "normalized": "calle de la ensenanza",
-      "type": "calle",
-      "name": "de la ensenanza"
-    },
-    {
-      "input": "Calle de la Hiedra",
-      "normalized": "calle de la hiedra",
-      "type": "calle",
-      "name": "de la hiedra"
-    },
-    {
-      "input": "Calle de la Libertad",
-      "normalized": "calle de la libertad",
-      "type": "calle",
-      "name": "de la libertad"
-    },
-    {
-      "input": "Calle de la Osa Mayor",
-      "normalized": "calle de la osa mayor",
-      "type": "calle",
-      "name": "de la osa mayor"
-    },
-    {
-      "input": "Calle de la Prensa",
-      "normalized": "calle de la prensa",
-      "type": "calle",
-      "name": "de la prensa"
-    },
-    {
-      "input": "Calle de la Simiente",
-      "normalized": "calle de la simiente",
-      "type": "calle",
-      "name": "de la simiente"
-    },
-    {
-      "input": "Calle de la Vereda de la Cebolla",
-      "normalized": "calle de la vereda de la cebolla",
-      "type": "calle",
-      "name": "de la vereda de la cebolla"
-    },
-    {
-      "input": "Calle de las Casas Blancas",
-      "normalized": "calle de las casas blancas",
-      "type": "calle",
-      "name": "de las casas blancas"
-    },
-    {
-      "input": "Calle de Las Trece Rosas",
-      "normalized": "calle de las trece rosas",
-      "type": "calle",
-      "name": "de las trece rosas"
-    },
-    {
-      "input": "Calle de los Areneros",
-      "normalized": "calle de los areneros",
-      "type": "calle",
-      "name": "de los areneros"
-    },
-    {
-      "input": "Calle de los Escayolistas",
-      "normalized": "calle de los escayolistas",
-      "type": "calle",
-      "name": "de los escayolistas"
-    },
-    {
-      "input": "Calle de los Naranjos",
-      "normalized": "calle de los naranjos",
-      "type": "calle",
-      "name": "de los naranjos"
-    },
-    {
-      "input": "Calle de los Pirineos",
-      "normalized": "calle de los pirineos",
-      "type": "calle",
-      "name": "de los pirineos"
-    },
-    {
-      "input": "Calle de Luis Mateo Díez",
-      "normalized": "calle de luis mateo diez",
-      "type": "calle",
-      "name": "de luis mateo diez"
-    },
-    {
-      "input": "Calle de Manuel Patarroyo",
-      "normalized": "calle de manuel patarroyo",
-      "type": "calle",
-      "name": "de manuel patarroyo"
-    },
-    {
-      "input": "Calle de María Moliner",
-      "normalized": "calle de maria moliner",
-      "type": "calle",
-      "name": "de maria moliner"
-    },
-    {
-      "input": "Calle de Marie Curie",
-      "normalized": "calle de marie curie",
-      "type": "calle",
-      "name": "de marie curie"
-    },
-    {
-      "input": "Calle de Miguel Hernández",
-      "normalized": "calle de miguel hernandez",
-      "type": "calle",
-      "name": "de miguel hernandez"
-    },
-    {
-      "input": "Calle de Murcia",
-      "normalized": "calle de murcia",
-      "type": "calle",
-      "name": "de murcia"
-    },
-    {
-      "input": "Calle de Pablo Picasso",
-      "normalized": "calle de pablo picasso",
-      "type": "calle",
-      "name": "de pablo picasso"
-    },
-    {
-      "input": "Calle de Pilar Bardem",
-      "normalized": "calle de pilar bardem",
-      "type": "calle",
-      "name": "de pilar bardem"
-    },
-    {
-      "input": "Calle de Ramón y Cajal",
-      "normalized": "calle de ramon y cajal",
-      "type": "calle",
-      "name": "de ramon y cajal"
-    },
-    {
-      "input": "Calle de Rosa Regás",
-      "normalized": "calle de rosa regas",
-      "type": "calle",
-      "name": "de rosa regas"
-    },
-    {
-      "input": "Calle de San Marcos",
-      "normalized": "calle de san marcos",
-      "type": "calle",
-      "name": "de san marcos"
-    },
-    {
-      "input": "Calle de Sevilla",
-      "normalized": "calle de sevilla",
-      "type": "calle",
-      "name": "de sevilla"
-    },
-    {
-      "input": "Calle de Suiza",
-      "normalized": "calle de suiza",
-      "type": "calle",
-      "name": "de suiza"
-    },
-    {
-      "input": "Calle de Valdeolmos-Alalpardo",
-      "normalized": "calle de valdeolmos alalpardo",
-      "type": "calle",
-      "name": "de valdeolmos alalpardo"
-    },
-    {
-      "input": "Calle de Viena",
-      "normalized": "calle de viena",
-      "type": "calle",
-      "name": "de viena"
-    },
-    {
-      "input": "Calle Dehesa Vieja",
-      "normalized": "calle dehesa vieja",
-      "type": "calle",
-      "name": "dehesa vieja"
-    },
-    {
-      "input": "Calle del Aloe",
-      "normalized": "calle del aloe",
-      "type": "calle",
-      "name": "del aloe"
-    },
-    {
-      "input": "Calle del Arte Abstracto",
-      "normalized": "calle del arte abstracto",
-      "type": "calle",
-      "name": "del arte abstracto"
-    },
-    {
-      "input": "Calle del Camino de Berrocales",
-      "normalized": "calle del camino de berrocales",
-      "type": "calle",
-      "name": "del camino de berrocales"
-    },
-    {
-      "input": "Calle del Ciprés",
-      "normalized": "calle del cipres",
-      "type": "calle",
-      "name": "del cipres"
-    },
-    {
-      "input": "Calle del Cristo de Rivas",
-      "normalized": "calle del cristo de rivas",
+      "input": "Calle de Rosario Sánchez Mora",
+      "normalized": "calle de rosario sanchez mora",
       "type": "calle",
-      "name": "del cristo de rivas"
+      "name": "de rosario sanchez mora"
     },
     {
-      "input": "Calle del Ecosistema",
-      "normalized": "calle del ecosistema",
+      "input": "Calle de Cervantes",
+      "normalized": "calle de cervantes",
       "type": "calle",
-      "name": "del ecosistema"
+      "name": "de cervantes"
     },
     {
-      "input": "Calle del Girasol",
-      "normalized": "calle del girasol",
+      "input": "Calle de la Paz",
+      "normalized": "calle de la paz",
       "type": "calle",
-      "name": "del girasol"
+      "name": "de la paz"
     },
     {
-      "input": "Calle del Jarama",
-      "normalized": "calle del jarama",
+      "input": "Calle del Alcalde Francisco Santero",
+      "normalized": "calle del alcalde francisco santero",
       "type": "calle",
-      "name": "del jarama"
+      "name": "del alcalde francisco santero"
     },
     {
       "input": "Calle del Lago Eyre",
@@ -584,52 +134,88 @@
       "name": "del lago eyre"
     },
     {
-      "input": "Calle del Manzanares",
-      "normalized": "calle del manzanares",
-      "type": "calle",
-      "name": "del manzanares"
+      "input": "Camino Real De Madrid a Aranjuez",
+      "normalized": "camino real de madrid a aranjuez",
+      "type": "camino",
+      "name": "real de madrid a aranjuez"
     },
     {
-      "input": "Calle del Océano Ártico",
-      "normalized": "calle del oceano artico",
+      "input": "Calle de Santander",
+      "normalized": "calle de santander",
       "type": "calle",
-      "name": "del oceano artico"
+      "name": "de santander"
     },
     {
-      "input": "Calle del Parador Manchego",
-      "normalized": "calle del parador manchego",
+      "input": "Calle de Logroño",
+      "normalized": "calle de logrono",
       "type": "calle",
-      "name": "del parador manchego"
+      "name": "de logrono"
     },
     {
-      "input": "Calle del Pintor Zurbarán",
-      "normalized": "calle del pintor zurbaran",
-      "type": "calle",
-      "name": "del pintor zurbaran"
+      "input": "Avenida de Bonn",
+      "normalized": "avenida de bonn",
+      "type": "avenida",
+      "name": "de bonn"
     },
     {
-      "input": "Calle del Río Jarama",
-      "normalized": "calle del rio jarama",
+      "input": "Calle Columba",
+      "normalized": "calle columba",
       "type": "calle",
-      "name": "del rio jarama"
+      "name": "columba"
     },
     {
-      "input": "Calle del Segura",
-      "normalized": "calle del segura",
+      "input": "Calle de Maicara",
+      "normalized": "calle de maicara",
       "type": "calle",
-      "name": "del segura"
+      "name": "de maicara"
     },
     {
-      "input": "Calle del Tornillo",
-      "normalized": "calle del tornillo",
+      "input": "Calle del Jengibre",
+      "normalized": "calle del jengibre",
       "type": "calle",
-      "name": "del tornillo"
+      "name": "del jengibre"
     },
     {
-      "input": "Calle Diálogo",
-      "normalized": "calle dialogo",
+      "input": "Calle Teleférico de las Canteras",
+      "normalized": "calle teleferico de las canteras",
       "type": "calle",
-      "name": "dialogo"
+      "name": "teleferico de las canteras"
+    },
+    {
+      "input": "Puente ferroviario la Poveda",
+      "normalized": "puente ferroviario la poveda",
+      "type": "puente",
+      "name": "ferroviario la poveda"
+    },
+    {
+      "input": "Calle de las Casas Romanas",
+      "normalized": "calle de las casas romanas",
+      "type": "calle",
+      "name": "de las casas romanas"
+    },
+    {
+      "input": "Calle de Valladolid",
+      "normalized": "calle de valladolid",
+      "type": "calle",
+      "name": "de valladolid"
+    },
+    {
+      "input": "Calle Buendía",
+      "normalized": "calle buendia",
+      "type": "calle",
+      "name": "buendia"
+    },
+    {
+      "input": "Calle Jazmín",
+      "normalized": "calle jazmin",
+      "type": "calle",
+      "name": "jazmin"
+    },
+    {
+      "input": "Calle Tamarindo",
+      "normalized": "calle tamarindo",
+      "type": "calle",
+      "name": "tamarindo"
     },
     {
       "input": "Calle Esla",
@@ -638,172 +224,586 @@
       "name": "esla"
     },
     {
-      "input": "Calle Fuerteventura",
-      "normalized": "calle fuerteventura",
-      "type": "calle",
-      "name": "fuerteventura"
-    },
-    {
-      "input": "Calle Gran Vía",
-      "normalized": "calle gran via",
-      "type": "calle",
-      "name": "gran via"
-    },
-    {
-      "input": "Calle Iglesia",
-      "normalized": "calle iglesia",
-      "type": "calle",
-      "name": "iglesia"
-    },
-    {
-      "input": "Calle Jarama",
-      "normalized": "calle jarama",
-      "type": "calle",
-      "name": "jarama"
-    },
-    {
-      "input": "Calle La Cultura",
-      "normalized": "calle la cultura",
-      "type": "calle",
-      "name": "la cultura"
-    },
-    {
-      "input": "Calle Lisboa",
-      "normalized": "calle lisboa",
-      "type": "calle",
-      "name": "lisboa"
-    },
-    {
-      "input": "Calle María Zambrano",
-      "normalized": "calle maria zambrano",
-      "type": "calle",
-      "name": "maria zambrano"
-    },
-    {
-      "input": "Calle Milanos",
-      "normalized": "calle milanos",
-      "type": "calle",
-      "name": "milanos"
-    },
-    {
-      "input": "Calle Monte Igueldo",
-      "normalized": "calle monte igueldo",
-      "type": "calle",
-      "name": "monte igueldo"
-    },
-    {
-      "input": "Calle Montes Universales",
-      "normalized": "calle montes universales",
-      "type": "calle",
-      "name": "montes universales"
-    },
-    {
-      "input": "Calle Olivos",
-      "normalized": "calle olivos",
-      "type": "calle",
-      "name": "olivos"
-    },
-    {
-      "input": "Calle Peña de Francia",
-      "normalized": "calle pena de francia",
-      "type": "calle",
-      "name": "pena de francia"
-    },
-    {
-      "input": "Calle Pintor Sorolla",
-      "normalized": "calle pintor sorolla",
-      "type": "calle",
-      "name": "pintor sorolla"
-    },
-    {
-      "input": "Calle Puerto de Navacerrada",
-      "normalized": "calle puerto de navacerrada",
-      "type": "calle",
-      "name": "puerto de navacerrada"
-    },
-    {
-      "input": "Calle Río Tajuña",
-      "normalized": "calle rio tajuna",
-      "type": "calle",
-      "name": "rio tajuna"
-    },
-    {
-      "input": "Calle San Juan",
-      "normalized": "calle san juan",
-      "type": "calle",
-      "name": "san juan"
-    },
-    {
-      "input": "Calle Sierra de la Cabrera",
-      "normalized": "calle sierra de la cabrera",
-      "type": "calle",
-      "name": "sierra de la cabrera"
-    },
-    {
-      "input": "Calle Sur",
-      "normalized": "calle sur",
-      "type": "calle",
-      "name": "sur"
-    },
-    {
-      "input": "Calle Varsovia",
-      "normalized": "calle varsovia",
-      "type": "calle",
-      "name": "varsovia"
-    },
-    {
-      "input": "Calle Virgen de las Angustias",
-      "normalized": "calle virgen de las angustias",
-      "type": "calle",
-      "name": "virgen de las angustias"
-    },
-    {
-      "input": "Camino de la Vaquera",
-      "normalized": "camino de la vaquera",
+      "input": "Camino del Sotillo",
+      "normalized": "camino del sotillo",
       "type": "camino",
-      "name": "de la vaquera"
+      "name": "del sotillo"
     },
     {
-      "input": "Camino de Quintano",
-      "normalized": "camino de quintano",
-      "type": "camino",
-      "name": "de quintano"
+      "input": "Avenida de Constantino Mediavilla",
+      "normalized": "avenida de constantino mediavilla",
+      "type": "avenida",
+      "name": "de constantino mediavilla"
     },
     {
-      "input": "Camino del Molino viejo",
-      "normalized": "camino del molino viejo",
-      "type": "camino",
-      "name": "del molino viejo"
+      "input": "Calle de Eduardo Chillida",
+      "normalized": "calle de eduardo chillida",
+      "type": "calle",
+      "name": "de eduardo chillida"
     },
     {
-      "input": "Camino Real de Velilla de San Antonio",
-      "normalized": "camino real de velilla de san antonio",
-      "type": "camino",
-      "name": "real de velilla de san antonio"
+      "input": "Calle de las Esterillas",
+      "normalized": "calle de las esterillas",
+      "type": "calle",
+      "name": "de las esterillas"
     },
     {
-      "input": "Carretera de Arganda",
-      "normalized": "carretera de arganda",
-      "type": "carretera",
-      "name": "de arganda"
+      "input": "Calle de Villanueva de la Cañada",
+      "normalized": "calle de villanueva de la canada",
+      "type": "calle",
+      "name": "de villanueva de la canada"
     },
     {
-      "input": "Cuesta del Caz",
-      "normalized": "cuesta del caz",
-      "type": "cuesta",
-      "name": "del caz"
+      "input": "Calle del Camino de Berrocales",
+      "normalized": "calle del camino de berrocales",
+      "type": "calle",
+      "name": "del camino de berrocales"
     },
     {
-      "input": "Madrid",
-      "normalized": "madrid",
+      "input": "Avenida de Valdeculebras",
+      "normalized": "avenida de valdeculebras",
+      "type": "avenida",
+      "name": "de valdeculebras"
+    },
+    {
+      "input": "Calle Casa de Tilly",
+      "normalized": "calle casa de tilly",
+      "type": "calle",
+      "name": "casa de tilly"
+    },
+    {
+      "input": "Calle de Ferenc Puskás",
+      "normalized": "calle de ferenc puskas",
+      "type": "calle",
+      "name": "de ferenc puskas"
+    },
+    {
+      "input": "Calle de María Pita",
+      "normalized": "calle de maria pita",
+      "type": "calle",
+      "name": "de maria pita"
+    },
+    {
+      "input": "Calle del Arte Hiperrealista",
+      "normalized": "calle del arte hiperrealista",
+      "type": "calle",
+      "name": "del arte hiperrealista"
+    },
+    {
+      "input": "Calle Mayorazgo de Duarte",
+      "normalized": "calle mayorazgo de duarte",
+      "type": "calle",
+      "name": "mayorazgo de duarte"
+    },
+    {
+      "input": "Avenida de la Concordia",
+      "normalized": "avenida de la concordia",
+      "type": "avenida",
+      "name": "de la concordia"
+    },
+    {
+      "input": "Calle Alcalde Guillermo Ortiz",
+      "normalized": "calle alcalde guillermo ortiz",
+      "type": "calle",
+      "name": "alcalde guillermo ortiz"
+    },
+    {
+      "input": "Calle de Adolfo Marsillach",
+      "normalized": "calle de adolfo marsillach",
+      "type": "calle",
+      "name": "de adolfo marsillach"
+    },
+    {
+      "input": "Calle de Colón",
+      "normalized": "calle de colon",
+      "type": "calle",
+      "name": "de colon"
+    },
+    {
+      "input": "Calle de Hernán Cortés",
+      "normalized": "calle de hernan cortes",
+      "type": "calle",
+      "name": "de hernan cortes"
+    },
+    {
+      "input": "Calle de la Ciudad de Roma",
+      "normalized": "calle de la ciudad de roma",
+      "type": "calle",
+      "name": "de la ciudad de roma"
+    },
+    {
+      "input": "Calle de la Virgen de la Soledad",
+      "normalized": "calle de la virgen de la soledad",
+      "type": "calle",
+      "name": "de la virgen de la soledad"
+    },
+    {
+      "input": "Calle de los Reyes Católicos",
+      "normalized": "calle de los reyes catolicos",
+      "type": "calle",
+      "name": "de los reyes catolicos"
+    },
+    {
+      "input": "Calle de Navacerrada",
+      "normalized": "calle de navacerrada",
+      "type": "calle",
+      "name": "de navacerrada"
+    },
+    {
+      "input": "Calle de Santa Rosa",
+      "normalized": "calle de santa rosa",
+      "type": "calle",
+      "name": "de santa rosa"
+    },
+    {
+      "input": "Calle del Doctor Fleming",
+      "normalized": "calle del doctor fleming",
+      "type": "calle",
+      "name": "del doctor fleming"
+    },
+    {
+      "input": "Calle del Parque Norte",
+      "normalized": "calle del parque norte",
+      "type": "calle",
+      "name": "del parque norte"
+    },
+    {
+      "input": "Calle Doctor Barraquer",
+      "normalized": "calle doctor barraquer",
+      "type": "calle",
+      "name": "doctor barraquer"
+    },
+    {
+      "input": "Calle Mayor",
+      "normalized": "calle mayor",
+      "type": "calle",
+      "name": "mayor"
+    },
+    {
+      "input": "Calle Vega del Jarama",
+      "normalized": "calle vega del jarama",
+      "type": "calle",
+      "name": "vega del jarama"
+    },
+    {
+      "input": "Castilla",
+      "normalized": "castilla",
       "type": null,
-      "name": "madrid"
+      "name": "castilla"
     },
     {
-      "input": "Paseo de la Chopera",
-      "normalized": "paseo de la chopera",
+      "input": "Plaza del 1 de Mayo",
+      "normalized": "plaza del 1 de mayo",
+      "type": "plaza",
+      "name": "del 1 de mayo"
+    },
+    {
+      "input": "Travesía Gustavo Torner",
+      "normalized": "travesia gustavo torner",
+      "type": "travesia",
+      "name": "gustavo torner"
+    },
+    {
+      "input": "Plaza de Gabriel Celaya",
+      "normalized": "plaza de gabriel celaya",
+      "type": "plaza",
+      "name": "de gabriel celaya"
+    },
+    {
+      "input": "Plaza de Madrid",
+      "normalized": "plaza de madrid",
+      "type": "plaza",
+      "name": "de madrid"
+    },
+    {
+      "input": "Plaza del Naranjo de Bulnes",
+      "normalized": "plaza del naranjo de bulnes",
+      "type": "plaza",
+      "name": "del naranjo de bulnes"
+    },
+    {
+      "input": "Plaza de Miguel Hernández",
+      "normalized": "plaza de miguel hernandez",
+      "type": "plaza",
+      "name": "de miguel hernandez"
+    },
+    {
+      "input": "Acceso CSIC",
+      "normalized": "acceso csic",
+      "type": null,
+      "name": "acceso csic"
+    },
+    {
+      "input": "Calle Coronas",
+      "normalized": "calle coronas",
+      "type": "calle",
+      "name": "coronas"
+    },
+    {
+      "input": "Calle Formentera",
+      "normalized": "calle formentera",
+      "type": "calle",
+      "name": "formentera"
+    },
+    {
+      "input": "Calle Islas Canarias",
+      "normalized": "calle islas canarias",
+      "type": "calle",
+      "name": "islas canarias"
+    },
+    {
+      "input": "Calle Monte Caro",
+      "normalized": "calle monte caro",
+      "type": "calle",
+      "name": "monte caro"
+    },
+    {
+      "input": "Calle Montes de Toledo",
+      "normalized": "calle montes de toledo",
+      "type": "calle",
+      "name": "montes de toledo"
+    },
+    {
+      "input": "Calle Pico de Mulhacén",
+      "normalized": "calle pico de mulhacen",
+      "type": "calle",
+      "name": "pico de mulhacen"
+    },
+    {
+      "input": "Calle Puerto de Somosierra",
+      "normalized": "calle puerto de somosierra",
+      "type": "calle",
+      "name": "puerto de somosierra"
+    },
+    {
+      "input": "Calle Sierra de las Alpujarras",
+      "normalized": "calle sierra de las alpujarras",
+      "type": "calle",
+      "name": "sierra de las alpujarras"
+    },
+    {
+      "input": "Camino de Pajares y Porcal",
+      "normalized": "camino de pajares y porcal",
+      "type": "camino",
+      "name": "de pajares y porcal"
+    },
+    {
+      "input": "Parque de Bomberos Arganda",
+      "normalized": "parque de bomberos arganda",
+      "type": "parque",
+      "name": "de bomberos arganda"
+    },
+    {
+      "input": "Calle Albert Boadella",
+      "normalized": "calle albert boadella",
+      "type": "calle",
+      "name": "albert boadella"
+    },
+    {
+      "input": "Calle de Carmen Laforet",
+      "normalized": "calle de carmen laforet",
+      "type": "calle",
+      "name": "de carmen laforet"
+    },
+    {
+      "input": "Calle de Fernando Fernán Gómez",
+      "normalized": "calle de fernando fernan gomez",
+      "type": "calle",
+      "name": "de fernando fernan gomez"
+    },
+    {
+      "input": "Calle de Juan Carlos Onetti",
+      "normalized": "calle de juan carlos onetti",
+      "type": "calle",
+      "name": "de juan carlos onetti"
+    },
+    {
+      "input": "Calle de Miguel Delibes",
+      "normalized": "calle de miguel delibes",
+      "type": "calle",
+      "name": "de miguel delibes"
+    },
+    {
+      "input": "Calle de Pilar Bardem",
+      "normalized": "calle de pilar bardem",
+      "type": "calle",
+      "name": "de pilar bardem"
+    },
+    {
+      "input": "Calle de Sócrates",
+      "normalized": "calle de socrates",
+      "type": "calle",
+      "name": "de socrates"
+    },
+    {
+      "input": "Calle del Haya",
+      "normalized": "calle del haya",
+      "type": "calle",
+      "name": "del haya"
+    },
+    {
+      "input": "Paseo de Alicia Alonso",
+      "normalized": "paseo de alicia alonso",
       "type": "paseo",
-      "name": "de la chopera"
+      "name": "de alicia alonso"
+    },
+    {
+      "input": "Avenida de los Profesionales de la Sanidad Pública",
+      "normalized": "avenida de los profesionales de la sanidad publica",
+      "type": "avenida",
+      "name": "de los profesionales de la sanidad publica"
+    },
+    {
+      "input": "Calle de Eduardo Galeano",
+      "normalized": "calle de eduardo galeano",
+      "type": "calle",
+      "name": "de eduardo galeano"
+    },
+    {
+      "input": "Calle de Juan de la Cierva",
+      "normalized": "calle de juan de la cierva",
+      "type": "calle",
+      "name": "de juan de la cierva"
+    },
+    {
+      "input": "Calle de Marie Curie",
+      "normalized": "calle de marie curie",
+      "type": "calle",
+      "name": "de marie curie"
+    },
+    {
+      "input": "Calle del Lago Como",
+      "normalized": "calle del lago como",
+      "type": "calle",
+      "name": "del lago como"
+    },
+    {
+      "input": "Calle Clara Campoamor",
+      "normalized": "calle clara campoamor",
+      "type": "calle",
+      "name": "clara campoamor"
+    },
+    {
+      "input": "Avenida de Aurelio Álvarez",
+      "normalized": "avenida de aurelio alvarez",
+      "type": "avenida",
+      "name": "de aurelio alvarez"
+    },
+    {
+      "input": "Avenida de la Técnica",
+      "normalized": "avenida de la tecnica",
+      "type": "avenida",
+      "name": "de la tecnica"
+    },
+    {
+      "input": "Avenida de Velázquez",
+      "normalized": "avenida de velazquez",
+      "type": "avenida",
+      "name": "de velazquez"
+    },
+    {
+      "input": "Calle de Agustín Sánchez Millán",
+      "normalized": "calle de agustin sanchez millan",
+      "type": "calle",
+      "name": "de agustin sanchez millan"
+    },
+    {
+      "input": "Calle de Boros",
+      "normalized": "calle de boros",
+      "type": "calle",
+      "name": "de boros"
+    },
+    {
+      "input": "Calle de Doris Lessing",
+      "normalized": "calle de doris lessing",
+      "type": "calle",
+      "name": "de doris lessing"
+    },
+    {
+      "input": "Calle de Garajonay",
+      "normalized": "calle de garajonay",
+      "type": "calle",
+      "name": "de garajonay"
+    },
+    {
+      "input": "Calle de José Isbert",
+      "normalized": "calle de jose isbert",
+      "type": "calle",
+      "name": "de jose isbert"
+    },
+    {
+      "input": "Calle de la Bujía",
+      "normalized": "calle de la bujia",
+      "type": "calle",
+      "name": "de la bujia"
+    },
+    {
+      "input": "Calle de la Fresadora",
+      "normalized": "calle de la fresadora",
+      "type": "calle",
+      "name": "de la fresadora"
+    },
+    {
+      "input": "Calle de la Música",
+      "normalized": "calle de la musica",
+      "type": "calle",
+      "name": "de la musica"
+    },
+    {
+      "input": "Calle de la Primavera",
+      "normalized": "calle de la primavera",
+      "type": "calle",
+      "name": "de la primavera"
+    },
+    {
+      "input": "Calle de la Vid",
+      "normalized": "calle de la vid",
+      "type": "calle",
+      "name": "de la vid"
+    },
+    {
+      "input": "Calle de los Bohemios",
+      "normalized": "calle de los bohemios",
+      "type": "calle",
+      "name": "de los bohemios"
+    },
+    {
+      "input": "Calle de Marguerite Duras",
+      "normalized": "calle de marguerite duras",
+      "type": "calle",
+      "name": "de marguerite duras"
+    },
+    {
+      "input": "Calle de Ordesa",
+      "normalized": "calle de ordesa",
+      "type": "calle",
+      "name": "de ordesa"
+    },
+    {
+      "input": "Calle de Toledo",
+      "normalized": "calle de toledo",
+      "type": "calle",
+      "name": "de toledo"
+    },
+    {
+      "input": "Calle del Cincel",
+      "normalized": "calle del cincel",
+      "type": "calle",
+      "name": "del cincel"
+    },
+    {
+      "input": "Calle del Girasol",
+      "normalized": "calle del girasol",
+      "type": "calle",
+      "name": "del girasol"
+    },
+    {
+      "input": "Calle del Océano Ártico",
+      "normalized": "calle del oceano artico",
+      "type": "calle",
+      "name": "del oceano artico"
+    },
+    {
+      "input": "Calle del Tulipán",
+      "normalized": "calle del tulipan",
+      "type": "calle",
+      "name": "del tulipan"
+    },
+    {
+      "input": "Calle Veintiocho de junio",
+      "normalized": "calle veintiocho de junio",
+      "type": "calle",
+      "name": "veintiocho de junio"
+    },
+    {
+      "input": "Plaza de Blas de Otero",
+      "normalized": "plaza de blas de otero",
+      "type": "plaza",
+      "name": "de blas de otero"
+    },
+    {
+      "input": "Plaza de Europa",
+      "normalized": "plaza de europa",
+      "type": "plaza",
+      "name": "de europa"
+    },
+    {
+      "input": "Plaza de la Constitución",
+      "normalized": "plaza de la constitucion",
+      "type": "plaza",
+      "name": "de la constitucion"
+    },
+    {
+      "input": "Plaza de Luis Buñuel",
+      "normalized": "plaza de luis bunuel",
+      "type": "plaza",
+      "name": "de luis bunuel"
+    },
+    {
+      "input": "Plaza del Arándano",
+      "normalized": "plaza del arandano",
+      "type": "plaza",
+      "name": "del arandano"
+    },
+    {
+      "input": "Ronda de Gloria Fuertes",
+      "normalized": "ronda de gloria fuertes",
+      "type": "ronda",
+      "name": "de gloria fuertes"
+    },
+    {
+      "input": "Calle de Jaén",
+      "normalized": "calle de jaen",
+      "type": "calle",
+      "name": "de jaen"
+    },
+    {
+      "input": "Calle del Duratón",
+      "normalized": "calle del duraton",
+      "type": "calle",
+      "name": "del duraton"
+    },
+    {
+      "input": "Calle de la Libertad",
+      "normalized": "calle de la libertad",
+      "type": "calle",
+      "name": "de la libertad"
+    },
+    {
+      "input": "Calle del Azahar",
+      "normalized": "calle del azahar",
+      "type": "calle",
+      "name": "del azahar"
+    },
+    {
+      "input": "Calle Ámsterdam",
+      "normalized": "calle amsterdam",
+      "type": "calle",
+      "name": "amsterdam"
+    },
+    {
+      "input": "Calle de la Siega",
+      "normalized": "calle de la siega",
+      "type": "calle",
+      "name": "de la siega"
+    },
+    {
+      "input": "Calle del Segura",
+      "normalized": "calle del segura",
+      "type": "calle",
+      "name": "del segura"
+    },
+    {
+      "input": "Calle Londres",
+      "normalized": "calle londres",
+      "type": "calle",
+      "name": "londres"
+    },
+    {
+      "input": "Calle Sofía",
+      "normalized": "calle sofia",
+      "type": "calle",
+      "name": "sofia"
     }
   ]
 }

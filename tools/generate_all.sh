@@ -9,6 +9,7 @@
 #                         [--departments 35]
 #                         [--release-tag data-AAAA-MM]
 #                         [--skip-download]
+#                         [--addresses-only]
 #
 # The OpenStreetMap extracts and, in France, the Base Adresse Nationale
 # departments are read from the city configuration's "dataSources" block. The
@@ -24,6 +25,12 @@
 #
 # The source downloads (OSM extract, BAN extracts) are kept in data/ and
 # reused from one run to the next.
+#
+# --addresses-only regenerates the address index and the manifest alone, for a
+# change to the index builder that leaves the map and the routing graph as they
+# are published. The reference box is then NOT recomputed: the index has to be
+# cut from the very rectangle the published tiles and graph were, and a box
+# grown since would describe data nobody generated.
 
 set -euo pipefail
 
@@ -35,6 +42,7 @@ OSM_REGION=""
 DEPARTMENTS=""
 RELEASE_TAG="data-$(date -u +%Y-%m)"
 SKIP_DOWNLOAD=0
+ADDRESSES_ONLY=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -43,7 +51,8 @@ while [[ $# -gt 0 ]]; do
     --departments)  DEPARTMENTS="$2"; shift 2 ;;
     --release-tag)  RELEASE_TAG="$2"; shift 2 ;;
     --skip-download) SKIP_DOWNLOAD=1; shift ;;
-    -h|--help)      sed -n '2,20p' "$0"; exit 0 ;;
+    --addresses-only) ADDRESSES_ONLY=1; shift ;;
+    -h|--help)      sed -n '2,27p' "$0"; exit 0 ;;
     *) echo "Unknown option: $1" >&2; exit 1 ;;
   esac
 done
@@ -91,7 +100,11 @@ echo " output     : $OUT_DIR"
 # below rewrites both in the configuration, together (issue #4).
 echo
 echo "── 1/4 · Reference box ──"
-"$PYTHON" tools/compute_bbox.py --config "$CITY_CONFIG"
+if [[ "$ADDRESSES_ONLY" -eq 1 ]]; then
+  echo "Kept as it is (--addresses-only): the published tiles were cut to it."
+else
+  "$PYTHON" tools/compute_bbox.py --config "$CITY_CONFIG"
+fi
 
 # Where a city's data comes from is part of its configuration (§15), so that
 # generating another conurbation stays a single command. The flags above win
@@ -301,15 +314,21 @@ if [[ "$SKIP_DOWNLOAD" -eq 0 ]]; then
   done
 fi
 
-echo
-echo "── 2/4 · Base map ──"
-"$PYTHON" tools/build_tiles.py --config "$CITY_CONFIG" --osm-extract "$OSM_FILE" \
-  --output "$OUT_DIR/tiles.mbtiles"
+if [[ "$ADDRESSES_ONLY" -eq 1 ]]; then
+  echo
+  echo "── 2/4 · Base map, 3/4 · Routing graph ──"
+  echo "Left as they are (--addresses-only)."
+else
+  echo
+  echo "── 2/4 · Base map ──"
+  "$PYTHON" tools/build_tiles.py --config "$CITY_CONFIG" --osm-extract "$OSM_FILE" \
+    --output "$OUT_DIR/tiles.mbtiles"
 
-echo
-echo "── 3/4 · Routing graph ──"
-"$PYTHON" tools/build_routing.py --config "$CITY_CONFIG" --osm-extract "$OSM_FILE" \
-  --output-dir "$OUT_DIR/routing"
+  echo
+  echo "── 3/4 · Routing graph ──"
+  "$PYTHON" tools/build_routing.py --config "$CITY_CONFIG" --osm-extract "$OSM_FILE" \
+    --output-dir "$OUT_DIR/routing"
+fi
 
 echo
 echo "── 4/4 · Address index ──"
