@@ -415,13 +415,15 @@ two. The former municipality's code is part of the key, otherwise two homonymous
 streets of a merged municipality end up conflated.
 
 **Address grouping, from OpenStreetMap.** There is no national identifier to
-group on, so the key is (normalised municipality, normalised street name). A
-house number naming a municipality its street does not is attached to the
-street all the same rather than opening a second one beside it: OpenStreetMap
-tags `addr:city` on the numbers far more often than on the ways. Streets left
-without a municipality — most of them — take the name of the nearest inhabited
-place, which is an approximation of a boundary by a distance, and the
-alternative was a blank in the results list.
+group on, so the key is (normalised municipality, normalised street name), and
+the municipality is found from where each piece lies. OpenStreetMap tags
+`addr:city` on the numbers and almost never on the ways, so a piece without one
+joins the nearest same-named piece that has one within 500 m, and failing that
+takes the name of the nearest inhabited place. The municipality was once left
+to the ways themselves, and every homonym in the box became one street: the
+four Massachusetts Avenues of Boston, Cambridge, Arlington and Lexington came
+out as a single one labelled "Lexington", and a number repeated along them was
+placed in whichever town won.
 
 **House-number positions.** Each number is stored as a delta from its street's
 representative point, in hundred-thousandths of a degree. Round-trip error

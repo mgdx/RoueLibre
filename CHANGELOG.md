@@ -11,6 +11,17 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **Two streets of one name in two municipalities are two streets again**
+  (`SPEC.md` §4.3, issue #5). The OpenStreetMap address index keyed a way on
+  its name alone, since ways almost never carry `addr:city`, so every homonym
+  in the box became one street: Bluebikes held 18 043 streets for 17 969
+  names, Massachusetts Avenue came out as a single street labelled
+  "Lexington", nobody in Cambridge found their address by typing "Cambridge",
+  and "77 Massachusetts Avenue" was placed in Arlington rather than at MIT.
+  `group_osm_streets` now takes the municipality from the house numbers'
+  `addr:city`, hands it to the same-named ways within 500 m, and falls back on
+  the nearest inhabited place only beyond. Every network whose addresses come
+  from OpenStreetMap needs its index regenerated.
 - **A designated point no longer outlives the city it was designated in**
   (`SPEC.md` §7.2, §8). An address found under Capital Bikeshare stayed named
   at the bottom of the map and marked on it once V'lille was served, pointing
