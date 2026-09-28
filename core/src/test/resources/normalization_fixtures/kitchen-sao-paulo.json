@@ -68,562 +68,640 @@
       "name": "doutor antonio luis gomes"
     },
     {
-      "input": "Praça Nossa Senhora dos Remédios",
-      "normalized": "praca nossa senhora dos remedios",
-      "type": "praca",
-      "name": "nossa senhora dos remedios"
-    },
-    {
-      "input": "DeRose Method Campo Belo",
-      "normalized": "derose method campo belo",
-      "type": null,
-      "name": "derose method campo belo"
-    },
-    {
-      "input": "Universidade Anhembi-Morumbi",
-      "normalized": "universidade anhembi morumbi",
-      "type": null,
-      "name": "universidade anhembi morumbi"
-    },
-    {
-      "input": "Agora Teatro",
-      "normalized": "agora teatro",
-      "type": null,
-      "name": "agora teatro"
-    },
-    {
-      "input": "Rua Padre Vieira, 151",
-      "normalized": "rua padre vieira 151",
+      "input": "Rua Fagundes Dias",
+      "normalized": "rua fagundes dias",
       "type": "rua",
-      "name": "padre vieira 151"
+      "name": "fagundes dias"
     },
     {
-      "input": "Largo dos Pinheiros",
-      "normalized": "largo dos pinheiros",
+      "input": "Rua Luís Simões",
+      "normalized": "rua luis simoes",
+      "type": "rua",
+      "name": "luis simoes"
+    },
+    {
+      "input": "Rua Doutor Theophilo Ribeiro de Andrade",
+      "normalized": "rua doutor theophilo ribeiro de andrade",
+      "type": "rua",
+      "name": "doutor theophilo ribeiro de andrade"
+    },
+    {
+      "input": "Passarela Palmeiras Arrancada Heróica 1942",
+      "normalized": "passarela palmeiras arrancada heroica 1942",
+      "type": null,
+      "name": "passarela palmeiras arrancada heroica 1942"
+    },
+    {
+      "input": "Viela",
+      "normalized": "viela",
+      "type": null,
+      "name": "viela"
+    },
+    {
+      "input": "Ciclovia Avenida Olavo Fontoura",
+      "normalized": "ciclovia avenida olavo fontoura",
+      "type": null,
+      "name": "ciclovia avenida olavo fontoura"
+    },
+    {
+      "input": "Vila Barros",
+      "normalized": "vila barros",
+      "type": null,
+      "name": "vila barros"
+    },
+    {
+      "input": "Rua Joaquim Lima de Moraes",
+      "normalized": "rua joaquim lima de moraes",
+      "type": "rua",
+      "name": "joaquim lima de moraes"
+    },
+    {
+      "input": "Rua Ana Maria Ramos",
+      "normalized": "rua ana maria ramos",
+      "type": "rua",
+      "name": "ana maria ramos"
+    },
+    {
+      "input": "Rua Alves Ribeiro",
+      "normalized": "rua alves ribeiro",
+      "type": "rua",
+      "name": "alves ribeiro"
+    },
+    {
+      "input": "Rua Francisco Antônio Gonçalves",
+      "normalized": "rua francisco antonio goncalves",
+      "type": "rua",
+      "name": "francisco antonio goncalves"
+    },
+    {
+      "input": "Rua Amancio Klein",
+      "normalized": "rua amancio klein",
+      "type": "rua",
+      "name": "amancio klein"
+    },
+    {
+      "input": "Rua Curumim",
+      "normalized": "rua curumim",
+      "type": "rua",
+      "name": "curumim"
+    },
+    {
+      "input": "Rua João Bernardo Vieira",
+      "normalized": "rua joao bernardo vieira",
+      "type": "rua",
+      "name": "joao bernardo vieira"
+    },
+    {
+      "input": "Rua Ricardina Campelo Fonseca Rodrigues",
+      "normalized": "rua ricardina campelo fonseca rodrigues",
+      "type": "rua",
+      "name": "ricardina campelo fonseca rodrigues"
+    },
+    {
+      "input": "Praça Campo de Bagatelle",
+      "normalized": "praca campo de bagatelle",
+      "type": "praca",
+      "name": "campo de bagatelle"
+    },
+    {
+      "input": "Rua Dobrada",
+      "normalized": "rua dobrada",
+      "type": "rua",
+      "name": "dobrada"
+    },
+    {
+      "input": "Rua Emílio Pedutti",
+      "normalized": "rua emilio pedutti",
+      "type": "rua",
+      "name": "emilio pedutti"
+    },
+    {
+      "input": "Avenida Desembargador Arthur Whitaker",
+      "normalized": "avenida desembargador arthur whitaker",
+      "type": "avenida",
+      "name": "desembargador arthur whitaker"
+    },
+    {
+      "input": "Rua Doutor Mamede Gomes da Silva",
+      "normalized": "rua doutor mamede gomes da silva",
+      "type": "rua",
+      "name": "doutor mamede gomes da silva"
+    },
+    {
+      "input": "Rua Comendador Joaquim Gomes de Oliveira",
+      "normalized": "rua comendador joaquim gomes de oliveira",
+      "type": "rua",
+      "name": "comendador joaquim gomes de oliveira"
+    },
+    {
+      "input": "Rua dos Cravos",
+      "normalized": "rua dos cravos",
+      "type": "rua",
+      "name": "dos cravos"
+    },
+    {
+      "input": "Rua Clermont",
+      "normalized": "rua clermont",
+      "type": "rua",
+      "name": "clermont"
+    },
+    {
+      "input": "Rua 16",
+      "normalized": "rua 16",
+      "type": "rua",
+      "name": "16"
+    },
+    {
+      "input": "Rua José Gaiba",
+      "normalized": "rua jose gaiba",
+      "type": "rua",
+      "name": "jose gaiba"
+    },
+    {
+      "input": "Rua Alenquer",
+      "normalized": "rua alenquer",
+      "type": "rua",
+      "name": "alenquer"
+    },
+    {
+      "input": "Rua Francisco Carvalho Henriques",
+      "normalized": "rua francisco carvalho henriques",
+      "type": "rua",
+      "name": "francisco carvalho henriques"
+    },
+    {
+      "input": "Rua Nibe Perobelli",
+      "normalized": "rua nibe perobelli",
+      "type": "rua",
+      "name": "nibe perobelli"
+    },
+    {
+      "input": "Rua Antônio de Sá",
+      "normalized": "rua antonio de sa",
+      "type": "rua",
+      "name": "antonio de sa"
+    },
+    {
+      "input": "Rua Doutor Rubens Gomes Bueno",
+      "normalized": "rua doutor rubens gomes bueno",
+      "type": "rua",
+      "name": "doutor rubens gomes bueno"
+    },
+    {
+      "input": "Rua Juruena",
+      "normalized": "rua juruena",
+      "type": "rua",
+      "name": "juruena"
+    },
+    {
+      "input": "Rua Maria Adelaide Freire Trindade",
+      "normalized": "rua maria adelaide freire trindade",
+      "type": "rua",
+      "name": "maria adelaide freire trindade"
+    },
+    {
+      "input": "Rua Embaixador Nelson Tabajara de Oliveira",
+      "normalized": "rua embaixador nelson tabajara de oliveira",
+      "type": "rua",
+      "name": "embaixador nelson tabajara de oliveira"
+    },
+    {
+      "input": "Rua Antônio Olivo Rodrigues",
+      "normalized": "rua antonio olivo rodrigues",
+      "type": "rua",
+      "name": "antonio olivo rodrigues"
+    },
+    {
+      "input": "Travessa Abacateiro",
+      "normalized": "travessa abacateiro",
+      "type": "travessa",
+      "name": "abacateiro"
+    },
+    {
+      "input": "Rua Elizabetta Lips",
+      "normalized": "rua elizabetta lips",
+      "type": "rua",
+      "name": "elizabetta lips"
+    },
+    {
+      "input": "Rua Laurindo Rabelo",
+      "normalized": "rua laurindo rabelo",
+      "type": "rua",
+      "name": "laurindo rabelo"
+    },
+    {
+      "input": "Rua Pierre Curie",
+      "normalized": "rua pierre curie",
+      "type": "rua",
+      "name": "pierre curie"
+    },
+    {
+      "input": "Rua Antônio Boz Mareil",
+      "normalized": "rua antonio boz mareil",
+      "type": "rua",
+      "name": "antonio boz mareil"
+    },
+    {
+      "input": "Rua Puerto Maldonado",
+      "normalized": "rua puerto maldonado",
+      "type": "rua",
+      "name": "puerto maldonado"
+    },
+    {
+      "input": "Rua Correa Bittencourt",
+      "normalized": "rua correa bittencourt",
+      "type": "rua",
+      "name": "correa bittencourt"
+    },
+    {
+      "input": "Rua Vitorino Ribeiro",
+      "normalized": "rua vitorino ribeiro",
+      "type": "rua",
+      "name": "vitorino ribeiro"
+    },
+    {
+      "input": "Rua William Kent",
+      "normalized": "rua william kent",
+      "type": "rua",
+      "name": "william kent"
+    },
+    {
+      "input": "Rua Benedito Carneiro de Freitas",
+      "normalized": "rua benedito carneiro de freitas",
+      "type": "rua",
+      "name": "benedito carneiro de freitas"
+    },
+    {
+      "input": "Travessa Maria Lúcia",
+      "normalized": "travessa maria lucia",
+      "type": "travessa",
+      "name": "maria lucia"
+    },
+    {
+      "input": "Rua Savério Fittipaldi",
+      "normalized": "rua saverio fittipaldi",
+      "type": "rua",
+      "name": "saverio fittipaldi"
+    },
+    {
+      "input": "Rua Maestro Antão Fernandes",
+      "normalized": "rua maestro antao fernandes",
+      "type": "rua",
+      "name": "maestro antao fernandes"
+    },
+    {
+      "input": "Rua Guatemala",
+      "normalized": "rua guatemala",
+      "type": "rua",
+      "name": "guatemala"
+    },
+    {
+      "input": "Rua Fagundes",
+      "normalized": "rua fagundes",
+      "type": "rua",
+      "name": "fagundes"
+    },
+    {
+      "input": "Travessa do Limão",
+      "normalized": "travessa do limao",
+      "type": "travessa",
+      "name": "do limao"
+    },
+    {
+      "input": "Largo da Batalha",
+      "normalized": "largo da batalha",
       "type": "largo",
-      "name": "dos pinheiros"
+      "name": "da batalha"
     },
     {
-      "input": "Rua Ricardo Avenários",
-      "normalized": "rua ricardo avenarios",
+      "input": "Praça Vitória Régia",
+      "normalized": "praca vitoria regia",
+      "type": "praca",
+      "name": "vitoria regia"
+    },
+    {
+      "input": "Rua Mário Wallace Simonsen Cochrane",
+      "normalized": "rua mario wallace simonsen cochrane",
       "type": "rua",
-      "name": "ricardo avenarios"
+      "name": "mario wallace simonsen cochrane"
     },
     {
-      "input": "Alameda dos Nhambiquaras",
-      "normalized": "alameda dos nhambiquaras",
-      "type": "alameda",
-      "name": "dos nhambiquaras"
-    },
-    {
-      "input": "Avenida Autonomistas",
-      "normalized": "avenida autonomistas",
-      "type": "avenida",
-      "name": "autonomistas"
-    },
-    {
-      "input": "Avenida dos Semaneiros",
-      "normalized": "avenida dos semaneiros",
-      "type": "avenida",
-      "name": "dos semaneiros"
-    },
-    {
-      "input": "Avenida Inajar de Souza",
-      "normalized": "avenida inajar de souza",
-      "type": "avenida",
-      "name": "inajar de souza"
-    },
-    {
-      "input": "Avenida Morvan Dias de Figueiredo (Local)",
-      "normalized": "avenida morvan dias de figueiredo local",
-      "type": "avenida",
-      "name": "morvan dias de figueiredo local"
-    },
-    {
-      "input": "Avenida Radial Leste-Oeste",
-      "normalized": "avenida radial leste oeste",
-      "type": "avenida",
-      "name": "radial leste oeste"
-    },
-    {
-      "input": "Ciclopassarela Jornalista Erika Sallum",
-      "normalized": "ciclopassarela jornalista erika sallum",
+      "input": "Instituto Bardi",
+      "normalized": "instituto bardi",
       "type": null,
-      "name": "ciclopassarela jornalista erika sallum"
+      "name": "instituto bardi"
     },
     {
-      "input": "Cruzamento Calipal",
-      "normalized": "cruzamento calipal",
+      "input": "Paulista",
+      "normalized": "paulista",
       "type": null,
-      "name": "cruzamento calipal"
+      "name": "paulista"
     },
     {
-      "input": "Parada Ponte Freguesia do Ó",
-      "normalized": "parada ponte freguesia do o",
+      "input": "Biblioteca Monteiro Lobato",
+      "normalized": "biblioteca monteiro lobato",
       "type": null,
-      "name": "parada ponte freguesia do o"
+      "name": "biblioteca monteiro lobato"
     },
     {
-      "input": "Praça Alfredo Paulino",
-      "normalized": "praca alfredo paulino",
+      "input": "Igreja do Mosteiro da Luz",
+      "normalized": "igreja do mosteiro da luz",
+      "type": null,
+      "name": "igreja do mosteiro da luz"
+    },
+    {
+      "input": "Pedro II",
+      "normalized": "pedro ii",
+      "type": null,
+      "name": "pedro ii"
+    },
+    {
+      "input": "Rua Doutor Getúlio de Paula Santos",
+      "normalized": "rua doutor getulio de paula santos",
+      "type": "rua",
+      "name": "doutor getulio de paula santos"
+    },
+    {
+      "input": "Viela Santo Antônio",
+      "normalized": "viela santo antonio",
+      "type": "viela",
+      "name": "santo antonio"
+    },
+    {
+      "input": "Travessa Vera de Oliveira Coutinho",
+      "normalized": "travessa vera de oliveira coutinho",
+      "type": "travessa",
+      "name": "vera de oliveira coutinho"
+    },
+    {
+      "input": "Rua Edilia Souza Lima",
+      "normalized": "rua edilia souza lima",
+      "type": "rua",
+      "name": "edilia souza lima"
+    },
+    {
+      "input": "Rua Doutor Milton de Souza Meirelles",
+      "normalized": "rua doutor milton de souza meirelles",
+      "type": "rua",
+      "name": "doutor milton de souza meirelles"
+    },
+    {
+      "input": "Rua Bragança",
+      "normalized": "rua braganca",
+      "type": "rua",
+      "name": "braganca"
+    },
+    {
+      "input": "Rua Cotinguiba",
+      "normalized": "rua cotinguiba",
+      "type": "rua",
+      "name": "cotinguiba"
+    },
+    {
+      "input": "Travessa Gondoleiro do Amor",
+      "normalized": "travessa gondoleiro do amor",
+      "type": "travessa",
+      "name": "gondoleiro do amor"
+    },
+    {
+      "input": "Rua Abílio Pereira de Almeida",
+      "normalized": "rua abilio pereira de almeida",
+      "type": "rua",
+      "name": "abilio pereira de almeida"
+    },
+    {
+      "input": "Rua Elias Martin",
+      "normalized": "rua elias martin",
+      "type": "rua",
+      "name": "elias martin"
+    },
+    {
+      "input": "Rua Marco Antônio Dias Batista",
+      "normalized": "rua marco antonio dias batista",
+      "type": "rua",
+      "name": "marco antonio dias batista"
+    },
+    {
+      "input": "Travessa Iapu",
+      "normalized": "travessa iapu",
+      "type": "travessa",
+      "name": "iapu"
+    },
+    {
+      "input": "Rua Jupaguá",
+      "normalized": "rua jupagua",
+      "type": "rua",
+      "name": "jupagua"
+    },
+    {
+      "input": "Avenida Bráz Leme",
+      "normalized": "avenida braz leme",
+      "type": "avenida",
+      "name": "braz leme"
+    },
+    {
+      "input": "Avenida Guilherme",
+      "normalized": "avenida guilherme",
+      "type": "avenida",
+      "name": "guilherme"
+    },
+    {
+      "input": "Av. Paulista;Avenida Paulista",
+      "normalized": "avenida paulista avenida paulista",
+      "type": "avenida",
+      "name": "paulista avenida paulista"
+    },
+    {
+      "input": "Estrada do Campo Limpo",
+      "normalized": "estrada do campo limpo",
+      "type": "estrada",
+      "name": "do campo limpo"
+    },
+    {
+      "input": "Praça General Enéias Martins Nogueira",
+      "normalized": "praca general eneias martins nogueira",
       "type": "praca",
-      "name": "alfredo paulino"
+      "name": "general eneias martins nogueira"
     },
     {
-      "input": "Praça Delegado Amoroso Neto",
-      "normalized": "praca delegado amoroso neto",
+      "input": "Rua Agrário de Sousa",
+      "normalized": "rua agrario de sousa",
+      "type": "rua",
+      "name": "agrario de sousa"
+    },
+    {
+      "input": "Rua Antônio das Chagas",
+      "normalized": "rua antonio das chagas",
+      "type": "rua",
+      "name": "antonio das chagas"
+    },
+    {
+      "input": "Rua Baltazar Carrasco",
+      "normalized": "rua baltazar carrasco",
+      "type": "rua",
+      "name": "baltazar carrasco"
+    },
+    {
+      "input": "Rua Boticário",
+      "normalized": "rua boticario",
+      "type": "rua",
+      "name": "boticario"
+    },
+    {
+      "input": "Rua Carlos de Sousa Nazaré",
+      "normalized": "rua carlos de sousa nazare",
+      "type": "rua",
+      "name": "carlos de sousa nazare"
+    },
+    {
+      "input": "Rua Conrado Moreschi",
+      "normalized": "rua conrado moreschi",
+      "type": "rua",
+      "name": "conrado moreschi"
+    },
+    {
+      "input": "Rua da Praia dos Lavadores",
+      "normalized": "rua da praia dos lavadores",
+      "type": "rua",
+      "name": "da praia dos lavadores"
+    },
+    {
+      "input": "Rua Dom Manoel da Ressureição",
+      "normalized": "rua dom manoel da ressureicao",
+      "type": "rua",
+      "name": "dom manoel da ressureicao"
+    },
+    {
+      "input": "Rua Doutor Américo de Campos",
+      "normalized": "rua doutor americo de campos",
+      "type": "rua",
+      "name": "doutor americo de campos"
+    },
+    {
+      "input": "Rua Doutor Miguel Paulo Capalbo",
+      "normalized": "rua doutor miguel paulo capalbo",
+      "type": "rua",
+      "name": "doutor miguel paulo capalbo"
+    },
+    {
+      "input": "Rua Ernest Renan",
+      "normalized": "rua ernest renan",
+      "type": "rua",
+      "name": "ernest renan"
+    },
+    {
+      "input": "Rua Frei Paulo de Sorocaba",
+      "normalized": "rua frei paulo de sorocaba",
+      "type": "rua",
+      "name": "frei paulo de sorocaba"
+    },
+    {
+      "input": "Rua Harmonia",
+      "normalized": "rua harmonia",
+      "type": "rua",
+      "name": "harmonia"
+    },
+    {
+      "input": "Rua Itamirindiba",
+      "normalized": "rua itamirindiba",
+      "type": "rua",
+      "name": "itamirindiba"
+    },
+    {
+      "input": "Rua Joaquim Murtinho",
+      "normalized": "rua joaquim murtinho",
+      "type": "rua",
+      "name": "joaquim murtinho"
+    },
+    {
+      "input": "Rua Loefgreen",
+      "normalized": "rua loefgreen",
+      "type": "rua",
+      "name": "loefgreen"
+    },
+    {
+      "input": "Rua Marambaia",
+      "normalized": "rua marambaia",
+      "type": "rua",
+      "name": "marambaia"
+    },
+    {
+      "input": "Rua Miguel Estefno",
+      "normalized": "rua miguel estefno",
+      "type": "rua",
+      "name": "miguel estefno"
+    },
+    {
+      "input": "Rua Oscar Horta",
+      "normalized": "rua oscar horta",
+      "type": "rua",
+      "name": "oscar horta"
+    },
+    {
+      "input": "Rua Pedro de Toledo",
+      "normalized": "rua pedro de toledo",
+      "type": "rua",
+      "name": "pedro de toledo"
+    },
+    {
+      "input": "Rua Professora Gioconda Mussolini",
+      "normalized": "rua professora gioconda mussolini",
+      "type": "rua",
+      "name": "professora gioconda mussolini"
+    },
+    {
+      "input": "Rua Sansão Alves dos Santos",
+      "normalized": "rua sansao alves dos santos",
+      "type": "rua",
+      "name": "sansao alves dos santos"
+    },
+    {
+      "input": "Rua Sousa Filho",
+      "normalized": "rua sousa filho",
+      "type": "rua",
+      "name": "sousa filho"
+    },
+    {
+      "input": "Rua Venceslau Flexa",
+      "normalized": "rua venceslau flexa",
+      "type": "rua",
+      "name": "venceslau flexa"
+    },
+    {
+      "input": "Travessa Gonzales Pecotche",
+      "normalized": "travessa gonzales pecotche",
+      "type": "travessa",
+      "name": "gonzales pecotche"
+    },
+    {
+      "input": "Viaduto Mercúrio",
+      "normalized": "viaduto mercurio",
+      "type": null,
+      "name": "viaduto mercurio"
+    },
+    {
+      "input": "Estrada São Francisco",
+      "normalized": "estrada sao francisco",
+      "type": "estrada",
+      "name": "sao francisco"
+    },
+    {
+      "input": "Rua Rishin Matsuda",
+      "normalized": "rua rishin matsuda",
+      "type": "rua",
+      "name": "rishin matsuda"
+    },
+    {
+      "input": "Rua Doutor Antônio Ferreira de Castilho Filho",
+      "normalized": "rua doutor antonio ferreira de castilho filho",
+      "type": "rua",
+      "name": "doutor antonio ferreira de castilho filho"
+    },
+    {
+      "input": "Praça Ernâni Braga",
+      "normalized": "praca ernani braga",
       "type": "praca",
-      "name": "delegado amoroso neto"
-    },
-    {
-      "input": "Praça Georges Braque",
-      "normalized": "praca georges braque",
-      "type": "praca",
-      "name": "georges braque"
-    },
-    {
-      "input": "Praça Monteiro Lobato",
-      "normalized": "praca monteiro lobato",
-      "type": "praca",
-      "name": "monteiro lobato"
-    },
-    {
-      "input": "Praça São Francisco da Glória",
-      "normalized": "praca sao francisco da gloria",
-      "type": "praca",
-      "name": "sao francisco da gloria"
-    },
-    {
-      "input": "Rua 9",
-      "normalized": "rua 9",
-      "type": "rua",
-      "name": "9"
-    },
-    {
-      "input": "Rua Adoniran Barbosa",
-      "normalized": "rua adoniran barbosa",
-      "type": "rua",
-      "name": "adoniran barbosa"
-    },
-    {
-      "input": "Rua Albatroz",
-      "normalized": "rua albatroz",
-      "type": "rua",
-      "name": "albatroz"
-    },
-    {
-      "input": "Rua Alfredo Cunha Ribas",
-      "normalized": "rua alfredo cunha ribas",
-      "type": "rua",
-      "name": "alfredo cunha ribas"
-    },
-    {
-      "input": "Rua Amadeu da Ressurreição",
-      "normalized": "rua amadeu da ressurreicao",
-      "type": "rua",
-      "name": "amadeu da ressurreicao"
-    },
-    {
-      "input": "Rua André Mendes",
-      "normalized": "rua andre mendes",
-      "type": "rua",
-      "name": "andre mendes"
-    },
-    {
-      "input": "Rua Antônio Alves Magan",
-      "normalized": "rua antonio alves magan",
-      "type": "rua",
-      "name": "antonio alves magan"
-    },
-    {
-      "input": "Rua Antônio José Bastos",
-      "normalized": "rua antonio jose bastos",
-      "type": "rua",
-      "name": "antonio jose bastos"
-    },
-    {
-      "input": "Rua Aquianés",
-      "normalized": "rua aquianes",
-      "type": "rua",
-      "name": "aquianes"
-    },
-    {
-      "input": "Rua Armindo Hahne",
-      "normalized": "rua armindo hahne",
-      "type": "rua",
-      "name": "armindo hahne"
-    },
-    {
-      "input": "Rua Augusto Severo",
-      "normalized": "rua augusto severo",
-      "type": "rua",
-      "name": "augusto severo"
-    },
-    {
-      "input": "Rua Barão de Casa Branca",
-      "normalized": "rua barao de casa branca",
-      "type": "rua",
-      "name": "barao de casa branca"
-    },
-    {
-      "input": "Rua Batista Caetano",
-      "normalized": "rua batista caetano",
-      "type": "rua",
-      "name": "batista caetano"
-    },
-    {
-      "input": "Rua Bento de Faria",
-      "normalized": "rua bento de faria",
-      "type": "rua",
-      "name": "bento de faria"
-    },
-    {
-      "input": "Rua Boytac",
-      "normalized": "rua boytac",
-      "type": "rua",
-      "name": "boytac"
-    },
-    {
-      "input": "Rua Caetano de Oliveira",
-      "normalized": "rua caetano de oliveira",
-      "type": "rua",
-      "name": "caetano de oliveira"
-    },
-    {
-      "input": "Rua Cândido Augusto Bresser Borges",
-      "normalized": "rua candido augusto bresser borges",
-      "type": "rua",
-      "name": "candido augusto bresser borges"
-    },
-    {
-      "input": "Rua Caraibuna",
-      "normalized": "rua caraibuna",
-      "type": "rua",
-      "name": "caraibuna"
-    },
-    {
-      "input": "Rua Carlos Villalva",
-      "normalized": "rua carlos villalva",
-      "type": "rua",
-      "name": "carlos villalva"
-    },
-    {
-      "input": "Rua Cearuni",
-      "normalized": "rua cearuni",
-      "type": "rua",
-      "name": "cearuni"
-    },
-    {
-      "input": "Rua Cincinato Braga",
-      "normalized": "rua cincinato braga",
-      "type": "rua",
-      "name": "cincinato braga"
-    },
-    {
-      "input": "Rua Comandante Lira",
-      "normalized": "rua comandante lira",
-      "type": "rua",
-      "name": "comandante lira"
-    },
-    {
-      "input": "Rua Conselheiro Olegário",
-      "normalized": "rua conselheiro olegario",
-      "type": "rua",
-      "name": "conselheiro olegario"
-    },
-    {
-      "input": "Rua Coronel Melo de Oliveira",
-      "normalized": "rua coronel melo de oliveira",
-      "type": "rua",
-      "name": "coronel melo de oliveira"
-    },
-    {
-      "input": "Rua Curupaiti",
-      "normalized": "rua curupaiti",
-      "type": "rua",
-      "name": "curupaiti"
-    },
-    {
-      "input": "Rua das Margaridas",
-      "normalized": "rua das margaridas",
-      "type": "rua",
-      "name": "das margaridas"
-    },
-    {
-      "input": "Rua Desembargador Joaquim Barbosa de Almeida",
-      "normalized": "rua desembargador joaquim barbosa de almeida",
-      "type": "rua",
-      "name": "desembargador joaquim barbosa de almeida"
-    },
-    {
-      "input": "Rua do Imperador",
-      "normalized": "rua do imperador",
-      "type": "rua",
-      "name": "do imperador"
-    },
-    {
-      "input": "Rua Domingo Alves",
-      "normalized": "rua domingo alves",
-      "type": "rua",
-      "name": "domingo alves"
-    },
-    {
-      "input": "Rua dos Amaribas",
-      "normalized": "rua dos amaribas",
-      "type": "rua",
-      "name": "dos amaribas"
-    },
-    {
-      "input": "Rua Doutor Agapito Xavier da Costa",
-      "normalized": "rua doutor agapito xavier da costa",
-      "type": "rua",
-      "name": "doutor agapito xavier da costa"
-    },
-    {
-      "input": "Rua Doutor Carlos Norberto de Souza Aranha",
-      "normalized": "rua doutor carlos norberto de souza aranha",
-      "type": "rua",
-      "name": "doutor carlos norberto de souza aranha"
-    },
-    {
-      "input": "Rua Doutor Freire Cisneiro",
-      "normalized": "rua doutor freire cisneiro",
-      "type": "rua",
-      "name": "doutor freire cisneiro"
-    },
-    {
-      "input": "Rua Doutor Levindo de Paiva Duque",
-      "normalized": "rua doutor levindo de paiva duque",
-      "type": "rua",
-      "name": "doutor levindo de paiva duque"
-    },
-    {
-      "input": "Rua Doutor Pedro Martinelli",
-      "normalized": "rua doutor pedro martinelli",
-      "type": "rua",
-      "name": "doutor pedro martinelli"
-    },
-    {
-      "input": "Rua Dronsfield",
-      "normalized": "rua dronsfield",
-      "type": "rua",
-      "name": "dronsfield"
-    },
-    {
-      "input": "Rua Elvira Ferraz",
-      "normalized": "rua elvira ferraz",
-      "type": "rua",
-      "name": "elvira ferraz"
-    },
-    {
-      "input": "Rua Engenheiro Saraiva de Oliveira",
-      "normalized": "rua engenheiro saraiva de oliveira",
-      "type": "rua",
-      "name": "engenheiro saraiva de oliveira"
-    },
-    {
-      "input": "Rua Eugene Carriere",
-      "normalized": "rua eugene carriere",
-      "type": "rua",
-      "name": "eugene carriere"
-    },
-    {
-      "input": "Rua Fernando Portugal",
-      "normalized": "rua fernando portugal",
-      "type": "rua",
-      "name": "fernando portugal"
-    },
-    {
-      "input": "Rua Francisco Bibiano",
-      "normalized": "rua francisco bibiano",
-      "type": "rua",
-      "name": "francisco bibiano"
-    },
-    {
-      "input": "Rua Francisco Romeiro Sobrinho",
-      "normalized": "rua francisco romeiro sobrinho",
-      "type": "rua",
-      "name": "francisco romeiro sobrinho"
-    },
-    {
-      "input": "Rua Galatea",
-      "normalized": "rua galatea",
-      "type": "rua",
-      "name": "galatea"
-    },
-    {
-      "input": "Rua Geórgia",
-      "normalized": "rua georgia",
-      "type": "rua",
-      "name": "georgia"
-    },
-    {
-      "input": "Rua Gracindo de Sá",
-      "normalized": "rua gracindo de sa",
-      "type": "rua",
-      "name": "gracindo de sa"
-    },
-    {
-      "input": "Rua Guilherme Paraense",
-      "normalized": "rua guilherme paraense",
-      "type": "rua",
-      "name": "guilherme paraense"
-    },
-    {
-      "input": "Rua Henrique Elkis",
-      "normalized": "rua henrique elkis",
-      "type": "rua",
-      "name": "henrique elkis"
-    },
-    {
-      "input": "Rua Ibiaté",
-      "normalized": "rua ibiate",
-      "type": "rua",
-      "name": "ibiate"
-    },
-    {
-      "input": "Rua Iracema de Jesus Marquesine",
-      "normalized": "rua iracema de jesus marquesine",
-      "type": "rua",
-      "name": "iracema de jesus marquesine"
-    },
-    {
-      "input": "Rua Itambé",
-      "normalized": "rua itambe",
-      "type": "rua",
-      "name": "itambe"
-    },
-    {
-      "input": "Rua Jacob Maris",
-      "normalized": "rua jacob maris",
-      "type": "rua",
-      "name": "jacob maris"
-    },
-    {
-      "input": "Rua Jeremy Bentham",
-      "normalized": "rua jeremy bentham",
-      "type": "rua",
-      "name": "jeremy bentham"
-    },
-    {
-      "input": "Rua João Della Manna",
-      "normalized": "rua joao della manna",
-      "type": "rua",
-      "name": "joao della manna"
-    },
-    {
-      "input": "Rua João Siqueira Brito",
-      "normalized": "rua joao siqueira brito",
-      "type": "rua",
-      "name": "joao siqueira brito"
-    },
-    {
-      "input": "Rua Jorge Chammas",
-      "normalized": "rua jorge chammas",
-      "type": "rua",
-      "name": "jorge chammas"
-    },
-    {
-      "input": "Rua José de Andrade Maciel",
-      "normalized": "rua jose de andrade maciel",
-      "type": "rua",
-      "name": "jose de andrade maciel"
-    },
-    {
-      "input": "Rua José Miguel Castello",
-      "normalized": "rua jose miguel castello",
-      "type": "rua",
-      "name": "jose miguel castello"
-    },
-    {
-      "input": "Rua Júlia Bresser",
-      "normalized": "rua julia bresser",
-      "type": "rua",
-      "name": "julia bresser"
-    },
-    {
-      "input": "Rua Lauro Freire",
-      "normalized": "rua lauro freire",
-      "type": "rua",
-      "name": "lauro freire"
-    },
-    {
-      "input": "Rua Lomas Valentinas",
-      "normalized": "rua lomas valentinas",
-      "type": "rua",
-      "name": "lomas valentinas"
-    },
-    {
-      "input": "Rua Luís Grassman",
-      "normalized": "rua luis grassman",
-      "type": "rua",
-      "name": "luis grassman"
-    },
-    {
-      "input": "Rua Maestro Torquato Amoré",
-      "normalized": "rua maestro torquato amore",
-      "type": "rua",
-      "name": "maestro torquato amore"
-    },
-    {
-      "input": "Rua Mantiqueira",
-      "normalized": "rua mantiqueira",
-      "type": "rua",
-      "name": "mantiqueira"
-    },
-    {
-      "input": "Rua Marechal Maurício Cardoso",
-      "normalized": "rua marechal mauricio cardoso",
-      "type": "rua",
-      "name": "marechal mauricio cardoso"
-    },
-    {
-      "input": "Rua Maria Teresa da Costa Naufal",
-      "normalized": "rua maria teresa da costa naufal",
-      "type": "rua",
-      "name": "maria teresa da costa naufal"
-    },
-    {
-      "input": "Rua Martim Cabral",
-      "normalized": "rua martim cabral",
-      "type": "rua",
-      "name": "martim cabral"
-    },
-    {
-      "input": "Rua Mesquita",
-      "normalized": "rua mesquita",
-      "type": "rua",
-      "name": "mesquita"
-    },
-    {
-      "input": "Rua Miriam",
-      "normalized": "rua miriam",
-      "type": "rua",
-      "name": "miriam"
-    },
-    {
-      "input": "Rua Murtinho Nobre",
-      "normalized": "rua murtinho nobre",
-      "type": "rua",
-      "name": "murtinho nobre"
-    },
-    {
-      "input": "Rua Nilza Medeiros Martins",
-      "normalized": "rua nilza medeiros martins",
-      "type": "rua",
-      "name": "nilza medeiros martins"
-    },
-    {
-      "input": "Rua Olivina",
-      "normalized": "rua olivina",
-      "type": "rua",
-      "name": "olivina"
-    },
-    {
-      "input": "Rua Pablo Picasso",
-      "normalized": "rua pablo picasso",
-      "type": "rua",
-      "name": "pablo picasso"
+      "name": "ernani braga"
     },
     {
       "input": "Rua Palmital",
@@ -632,160 +710,82 @@
       "name": "palmital"
     },
     {
-      "input": "Rua Paulo Ferraz",
-      "normalized": "rua paulo ferraz",
+      "input": "Rua Honório Serpa",
+      "normalized": "rua honorio serpa",
       "type": "rua",
-      "name": "paulo ferraz"
+      "name": "honorio serpa"
     },
     {
-      "input": "Rua Pedro Rissato",
-      "normalized": "rua pedro rissato",
+      "input": "Avenida Engenheiro Araci",
+      "normalized": "avenida engenheiro araci",
+      "type": "avenida",
+      "name": "engenheiro araci"
+    },
+    {
+      "input": "Rua Aziz Jorge",
+      "normalized": "rua aziz jorge",
       "type": "rua",
-      "name": "pedro rissato"
+      "name": "aziz jorge"
     },
     {
-      "input": "Rua Pirauba",
-      "normalized": "rua pirauba",
+      "input": "Rua Barão de Taquari",
+      "normalized": "rua barao de taquari",
       "type": "rua",
-      "name": "pirauba"
+      "name": "barao de taquari"
     },
     {
-      "input": "Rua Professor Aníbal Monteiro Machado",
-      "normalized": "rua professor anibal monteiro machado",
+      "input": "Rua Coerana",
+      "normalized": "rua coerana",
       "type": "rua",
-      "name": "professor anibal monteiro machado"
+      "name": "coerana"
     },
     {
-      "input": "Rua Professor José Benedito de Camargo",
-      "normalized": "rua professor jose benedito de camargo",
+      "input": "Rua Oásis",
+      "normalized": "rua oasis",
       "type": "rua",
-      "name": "professor jose benedito de camargo"
+      "name": "oasis"
     },
     {
-      "input": "Rua Professora Guaraciaba Mourão Trindade",
-      "normalized": "rua professora guaraciaba mourao trindade",
+      "input": "Rua Joana de Gusmão",
+      "normalized": "rua joana de gusmao",
       "type": "rua",
-      "name": "professora guaraciaba mourao trindade"
+      "name": "joana de gusmao"
     },
     {
-      "input": "Rua Raul Cintra Leite",
-      "normalized": "rua raul cintra leite",
+      "input": "Rua Iraíba",
+      "normalized": "rua iraiba",
       "type": "rua",
-      "name": "raul cintra leite"
+      "name": "iraiba"
     },
     {
-      "input": "Rua Rocha Galvão",
-      "normalized": "rua rocha galvao",
+      "input": "Rua Conde de Irajá",
+      "normalized": "rua conde de iraja",
       "type": "rua",
-      "name": "rocha galvao"
+      "name": "conde de iraja"
     },
     {
-      "input": "Rua Sabiá Branco",
-      "normalized": "rua sabia branco",
+      "input": "Rua Cangalha",
+      "normalized": "rua cangalha",
       "type": "rua",
-      "name": "sabia branco"
+      "name": "cangalha"
     },
     {
-      "input": "Rua Santa Judite",
-      "normalized": "rua santa judite",
+      "input": "Rua Julio Cesar Rocca",
+      "normalized": "rua julio cesar rocca",
       "type": "rua",
-      "name": "santa judite"
+      "name": "julio cesar rocca"
     },
     {
-      "input": "Rua São Paulino",
-      "normalized": "rua sao paulino",
-      "type": "rua",
-      "name": "sao paulino"
-    },
-    {
-      "input": "Rua Senhor Bom Jesus dos Passos",
-      "normalized": "rua senhor bom jesus dos passos",
-      "type": "rua",
-      "name": "senhor bom jesus dos passos"
-    },
-    {
-      "input": "Rua Solange silva",
-      "normalized": "rua solange silva",
-      "type": "rua",
-      "name": "solange silva"
-    },
-    {
-      "input": "Rua Tejo",
-      "normalized": "rua tejo",
-      "type": "rua",
-      "name": "tejo"
-    },
-    {
-      "input": "Rua Tomás Gonçalves",
-      "normalized": "rua tomas goncalves",
-      "type": "rua",
-      "name": "tomas goncalves"
-    },
-    {
-      "input": "Rua Urano",
-      "normalized": "rua urano",
-      "type": "rua",
-      "name": "urano"
-    },
-    {
-      "input": "Rua Vicente Leporace",
-      "normalized": "rua vicente leporace",
-      "type": "rua",
-      "name": "vicente leporace"
-    },
-    {
-      "input": "Rua Vitorino de Carvalho",
-      "normalized": "rua vitorino de carvalho",
-      "type": "rua",
-      "name": "vitorino de carvalho"
-    },
-    {
-      "input": "Rua Zuma de Sá Fernandes",
-      "normalized": "rua zuma de sa fernandes",
-      "type": "rua",
-      "name": "zuma de sa fernandes"
-    },
-    {
-      "input": "Travessa Besançon",
-      "normalized": "travessa besancon",
-      "type": "travessa",
-      "name": "besancon"
-    },
-    {
-      "input": "Travessa dos Nomes Mágicos",
-      "normalized": "travessa dos nomes magicos",
-      "type": "travessa",
-      "name": "dos nomes magicos"
-    },
-    {
-      "input": "Travessa Jerônimo Peraza",
-      "normalized": "travessa jeronimo peraza",
-      "type": "travessa",
-      "name": "jeronimo peraza"
-    },
-    {
-      "input": "Travessa Padre Mariano de La Mata",
-      "normalized": "travessa padre mariano de la mata",
-      "type": "travessa",
-      "name": "padre mariano de la mata"
-    },
-    {
-      "input": "Travessa Tutoia",
-      "normalized": "travessa tutoia",
-      "type": "travessa",
-      "name": "tutoia"
-    },
-    {
-      "input": "Viaduto Doutor Plínio de Queiroz",
-      "normalized": "viaduto doutor plinio de queiroz",
+      "input": "Ciclovia Rio Pinheiros",
+      "normalized": "ciclovia rio pinheiros",
       "type": null,
-      "name": "viaduto doutor plinio de queiroz"
+      "name": "ciclovia rio pinheiros"
     },
     {
-      "input": "Viela Francisco Fortes",
-      "normalized": "viela francisco fortes",
-      "type": "viela",
-      "name": "francisco fortes"
+      "input": "Rua Salvador Cardoso",
+      "normalized": "rua salvador cardoso",
+      "type": "rua",
+      "name": "salvador cardoso"
     }
   ]
 }

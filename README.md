@@ -77,7 +77,7 @@ but the live availability of the bikes runs on your phone.
   later.
 
 - 🔒 **Private, and local.** Everything happens on the device:
-  - the map, streets and routing data are downloaded **once** — 10.6 MB for a
+  - the map, streets and routing data are downloaded **once** — 10.7 MB for a
     median city — from the releases of
     [`RoueLibre-data`](https://github.com/mgdx/RoueLibre-data), a repository of
     this project, and that is it. What comes down is **static files and nothing

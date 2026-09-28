@@ -86,10 +86,70 @@
       "name": "canada real"
     },
     {
-      "input": "As Cernadas",
-      "normalized": "as cernadas",
+      "input": "calle Pereira nouche",
+      "normalized": "calle pereira nouche",
+      "type": "calle",
+      "name": "pereira nouche"
+    },
+    {
+      "input": "Rúa Aguceira",
+      "normalized": "rua aguceira",
       "type": null,
-      "name": "as cernadas"
+      "name": "rua aguceira"
+    },
+    {
+      "input": "Rúa das Roxiñas",
+      "normalized": "rua das roxinas",
+      "type": null,
+      "name": "rua das roxinas"
+    },
+    {
+      "input": "Rúa do Castelo",
+      "normalized": "rua do castelo",
+      "type": null,
+      "name": "rua do castelo"
+    },
+    {
+      "input": "Avenida Alcalde Alfonso Molina",
+      "normalized": "avenida alcalde alfonso molina",
+      "type": "avenida",
+      "name": "alcalde alfonso molina"
+    },
+    {
+      "input": "Avenida de Enrique Salgado Torres",
+      "normalized": "avenida de enrique salgado torres",
+      "type": "avenida",
+      "name": "de enrique salgado torres"
+    },
+    {
+      "input": "Avenida do Dique de Abrigo",
+      "normalized": "avenida do dique de abrigo",
+      "type": "avenida",
+      "name": "do dique de abrigo"
+    },
+    {
+      "input": "Avenida Salvador de Madariaga",
+      "normalized": "avenida salvador de madariaga",
+      "type": "avenida",
+      "name": "salvador de madariaga"
+    },
+    {
+      "input": "Camiño de Mons",
+      "normalized": "camino de mons",
+      "type": "camino",
+      "name": "de mons"
+    },
+    {
+      "input": "Escaleira Rafael del Río",
+      "normalized": "escaleira rafael del rio",
+      "type": null,
+      "name": "escaleira rafael del rio"
+    },
+    {
+      "input": "Glorieta da Paz",
+      "normalized": "glorieta da paz",
+      "type": "glorieta",
+      "name": "da paz"
     },
     {
       "input": "Lugar da Moura",
@@ -98,610 +158,274 @@
       "name": "lugar da moura"
     },
     {
-      "input": "Lugar do Birloque",
-      "normalized": "lugar do birloque",
+      "input": "Lugar de Vío",
+      "normalized": "lugar de vio",
       "type": null,
-      "name": "lugar do birloque"
+      "name": "lugar de vio"
     },
     {
-      "input": "Praza de San Andrés",
-      "normalized": "praza de san andres",
-      "type": null,
-      "name": "praza de san andres"
-    },
-    {
-      "input": "Rúa Lagares",
-      "normalized": "rua lagares",
-      "type": null,
-      "name": "rua lagares"
-    },
-    {
-      "input": "Aparcadoiro Pazo da Ópera",
-      "normalized": "aparcadoiro pazo da opera",
-      "type": null,
-      "name": "aparcadoiro pazo da opera"
-    },
-    {
-      "input": "Paseo da ría do Burgo",
-      "normalized": "paseo da ria do burgo",
+      "input": "Paseo Alcalde Francisco Vázquez",
+      "normalized": "paseo alcalde francisco vazquez",
       "type": "paseo",
-      "name": "da ria do burgo"
+      "name": "alcalde francisco vazquez"
     },
     {
-      "input": "Parking Espacio Coruña",
-      "normalized": "parking espacio coruna",
+      "input": "Polígono de Pocomaco Sexta Avenida",
+      "normalized": "poligono de pocomaco sexta avenida",
       "type": null,
-      "name": "parking espacio coruna"
+      "name": "poligono de pocomaco sexta avenida"
     },
     {
-      "input": "Biblioteca da ETS de Náutica e Máquinas",
-      "normalized": "biblioteca da ets de nautica e maquinas",
+      "input": "Praza da Cubela",
+      "normalized": "praza da cubela",
       "type": null,
-      "name": "biblioteca da ets de nautica e maquinas"
+      "name": "praza da cubela"
     },
     {
-      "input": "Aeroporto de Alvedro",
-      "normalized": "aeroporto de alvedro",
+      "input": "Praza de Pontevedra",
+      "normalized": "praza de pontevedra",
       "type": null,
-      "name": "aeroporto de alvedro"
+      "name": "praza de pontevedra"
     },
     {
-      "input": "Avenida Corveira",
-      "normalized": "avenida corveira",
-      "type": "avenida",
-      "name": "corveira"
-    },
-    {
-      "input": "Avenida de Almeiras",
-      "normalized": "avenida de almeiras",
-      "type": "avenida",
-      "name": "de almeiras"
-    },
-    {
-      "input": "Avenida de Miguel González Garcés",
-      "normalized": "avenida de miguel gonzalez garces",
-      "type": "avenida",
-      "name": "de miguel gonzalez garces"
-    },
-    {
-      "input": "Avenida de Vilaboa",
-      "normalized": "avenida de vilaboa",
-      "type": "avenida",
-      "name": "de vilaboa"
-    },
-    {
-      "input": "Avenida Gramela",
-      "normalized": "avenida gramela",
-      "type": "avenida",
-      "name": "gramela"
-    },
-    {
-      "input": "Avenida San Roque de Fóra",
-      "normalized": "avenida san roque de fora",
-      "type": "avenida",
-      "name": "san roque de fora"
-    },
-    {
-      "input": "Camiño da Fontaíña",
-      "normalized": "camino da fontaina",
-      "type": "camino",
-      "name": "da fontaina"
-    },
-    {
-      "input": "Camiño de Saramelos",
-      "normalized": "camino de saramelos",
-      "type": "camino",
-      "name": "de saramelos"
-    },
-    {
-      "input": "Campus da Zapateira",
-      "normalized": "campus da zapateira",
-      "type": null,
-      "name": "campus da zapateira"
-    },
-    {
-      "input": "Entrada ó Aquarium",
-      "normalized": "entrada o aquarium",
-      "type": null,
-      "name": "entrada o aquarium"
-    },
-    {
-      "input": "Estrada do Cemiterio de Feáns",
-      "normalized": "estrada do cemiterio de feans",
-      "type": null,
-      "name": "estrada do cemiterio de feans"
-    },
-    {
-      "input": "Glorieta de Ramón y Cajal",
-      "normalized": "glorieta de ramon y cajal",
-      "type": "glorieta",
-      "name": "de ramon y cajal"
-    },
-    {
-      "input": "Lugar da Lama de Oza",
-      "normalized": "lugar da lama de oza",
-      "type": null,
-      "name": "lugar da lama de oza"
-    },
-    {
-      "input": "O Paraugas",
-      "normalized": "o paraugas",
-      "type": null,
-      "name": "o paraugas"
-    },
-    {
-      "input": "Paseo das Ciencias",
-      "normalized": "paseo das ciencias",
-      "type": "paseo",
-      "name": "das ciencias"
-    },
-    {
-      "input": "Paseo Sir John Moore",
-      "normalized": "paseo sir john moore",
-      "type": "paseo",
-      "name": "sir john moore"
-    },
-    {
-      "input": "Polígono de Pocomaco Quinta Avenida",
-      "normalized": "poligono de pocomaco quinta avenida",
-      "type": null,
-      "name": "poligono de pocomaco quinta avenida"
-    },
-    {
-      "input": "Praza Alcalde Iglesias Corral",
-      "normalized": "praza alcalde iglesias corral",
-      "type": null,
-      "name": "praza alcalde iglesias corral"
-    },
-    {
-      "input": "Praza da Fariña",
-      "normalized": "praza da farina",
-      "type": null,
-      "name": "praza da farina"
-    },
-    {
-      "input": "Praza de Chico Mendes",
-      "normalized": "praza de chico mendes",
-      "type": null,
-      "name": "praza de chico mendes"
-    },
-    {
-      "input": "Praza do 1º de Maio",
-      "normalized": "praza do 1º de maio",
-      "type": null,
-      "name": "praza do 1º de maio"
-    },
-    {
-      "input": "Praza dos Freixos",
-      "normalized": "praza dos freixos",
-      "type": null,
-      "name": "praza dos freixos"
-    },
-    {
-      "input": "Praza Manuel Leiras Pulpeiro",
-      "normalized": "praza manuel leiras pulpeiro",
-      "type": null,
-      "name": "praza manuel leiras pulpeiro"
-    },
-    {
-      "input": "Praza Varsovia",
-      "normalized": "praza varsovia",
-      "type": null,
-      "name": "praza varsovia"
-    },
-    {
-      "input": "Rúa A",
-      "normalized": "rua a",
-      "type": null,
-      "name": "rua a"
-    },
-    {
-      "input": "Rúa Agarimo",
-      "normalized": "rua agarimo",
-      "type": null,
-      "name": "rua agarimo"
-    },
-    {
-      "input": "Rúa Alberto Garaizabal Macazaga",
-      "normalized": "rua alberto garaizabal macazaga",
-      "type": null,
-      "name": "rua alberto garaizabal macazaga"
-    },
-    {
-      "input": "Rúa Alcalde Peñamaría de Llano",
-      "normalized": "rua alcalde penamaria de llano",
-      "type": null,
-      "name": "rua alcalde penamaria de llano"
-    },
-    {
-      "input": "Rúa Alfredo Vicenti",
-      "normalized": "rua alfredo vicenti",
-      "type": null,
-      "name": "rua alfredo vicenti"
-    },
-    {
-      "input": "Rúa Ana M. Matute",
-      "normalized": "rua ana m matute",
-      "type": null,
-      "name": "rua ana m matute"
-    },
-    {
-      "input": "Rúa Antonio Carballo",
-      "normalized": "rua antonio carballo",
-      "type": null,
-      "name": "rua antonio carballo"
-    },
-    {
-      "input": "Rúa Anxo",
-      "normalized": "rua anxo",
-      "type": null,
-      "name": "rua anxo"
-    },
-    {
-      "input": "Rúa As Figueiras",
-      "normalized": "rua as figueiras",
-      "type": null,
-      "name": "rua as figueiras"
-    },
-    {
-      "input": "Rúa Bandurria",
-      "normalized": "rua bandurria",
-      "type": null,
-      "name": "rua bandurria"
-    },
-    {
-      "input": "Rúa Bidueiro",
-      "normalized": "rua bidueiro",
-      "type": null,
-      "name": "rua bidueiro"
-    },
-    {
-      "input": "Rúa Brasil",
-      "normalized": "rua brasil",
-      "type": null,
-      "name": "rua brasil"
-    },
-    {
-      "input": "Rúa Cádiz",
-      "normalized": "rua cadiz",
-      "type": null,
-      "name": "rua cadiz"
-    },
-    {
-      "input": "Rúa Cancela de Fóra",
-      "normalized": "rua cancela de fora",
-      "type": null,
-      "name": "rua cancela de fora"
-    },
-    {
-      "input": "Rúa Carmen Bravo Villasante",
-      "normalized": "rua carmen bravo villasante",
-      "type": null,
-      "name": "rua carmen bravo villasante"
-    },
-    {
-      "input": "Rúa Catas",
-      "normalized": "rua catas",
-      "type": null,
-      "name": "rua catas"
-    },
-    {
-      "input": "Rúa Choupana",
-      "normalized": "rua choupana",
-      "type": null,
-      "name": "rua choupana"
-    },
-    {
-      "input": "Rúa Condes de Traba",
-      "normalized": "rua condes de traba",
-      "type": null,
-      "name": "rua condes de traba"
-    },
-    {
-      "input": "Rúa Correlo",
-      "normalized": "rua correlo",
-      "type": null,
-      "name": "rua correlo"
-    },
-    {
-      "input": "Rúa da Agra do Bico",
-      "normalized": "rua da agra do bico",
-      "type": null,
-      "name": "rua da agra do bico"
-    },
-    {
-      "input": "Rúa da Ermida",
-      "normalized": "rua da ermida",
-      "type": null,
-      "name": "rua da ermida"
-    },
-    {
-      "input": "Rúa da Marea",
-      "normalized": "rua da marea",
-      "type": null,
-      "name": "rua da marea"
-    },
-    {
-      "input": "Rúa da Sella",
-      "normalized": "rua da sella",
-      "type": null,
-      "name": "rua da sella"
-    },
-    {
-      "input": "Rúa das Cigarreiras",
-      "normalized": "rua das cigarreiras",
-      "type": null,
-      "name": "rua das cigarreiras"
-    },
-    {
-      "input": "Rúa das Petunias",
-      "normalized": "rua das petunias",
-      "type": null,
-      "name": "rua das petunias"
-    },
-    {
-      "input": "Rúa de Nosa Señora do Rosario",
-      "normalized": "rua de nosa senora do rosario",
-      "type": null,
-      "name": "rua de nosa senora do rosario"
-    },
-    {
-      "input": "Rúa Diego Romay",
-      "normalized": "rua diego romay",
-      "type": null,
-      "name": "rua diego romay"
-    },
-    {
-      "input": "Rúa do Catecismo",
-      "normalized": "rua do catecismo",
-      "type": null,
-      "name": "rua do catecismo"
-    },
-    {
-      "input": "Rúa do Monte",
-      "normalized": "rua do monte",
-      "type": null,
-      "name": "rua do monte"
-    },
-    {
-      "input": "Rúa do Repeso",
-      "normalized": "rua do repeso",
+      "input": "Praza do Museo Nacional de Ciencia",
+      "normalized": "praza do museo nacional de ciencia",
       "type": null,
-      "name": "rua do repeso"
+      "name": "praza do museo nacional de ciencia"
     },
     {
-      "input": "Rúa Dolores Ibárruri",
-      "normalized": "rua dolores ibarruri",
+      "input": "Praza Indalecio Prieto",
+      "normalized": "praza indalecio prieto",
       "type": null,
-      "name": "rua dolores ibarruri"
+      "name": "praza indalecio prieto"
     },
     {
-      "input": "Rúa dos Lirios",
-      "normalized": "rua dos lirios",
+      "input": "Praza Pintor Laxeiro",
+      "normalized": "praza pintor laxeiro",
       "type": null,
-      "name": "rua dos lirios"
+      "name": "praza pintor laxeiro"
     },
     {
-      "input": "Rúa Doutor Enrique Hervada",
-      "normalized": "rua doutor enrique hervada",
+      "input": "Rúa Adelaida Muro",
+      "normalized": "rua adelaida muro",
       "type": null,
-      "name": "rua doutor enrique hervada"
+      "name": "rua adelaida muro"
     },
     {
-      "input": "Rúa Eirís de Arriba",
-      "normalized": "rua eiris de arriba",
+      "input": "Rúa Alcalde Manuel Casas",
+      "normalized": "rua alcalde manuel casas",
       "type": null,
-      "name": "rua eiris de arriba"
+      "name": "rua alcalde manuel casas"
     },
     {
-      "input": "Rúa Epígrafe",
-      "normalized": "rua epigrafe",
+      "input": "Rúa Almirante Eulate",
+      "normalized": "rua almirante eulate",
       "type": null,
-      "name": "rua epigrafe"
+      "name": "rua almirante eulate"
     },
     {
-      "input": "Rúa Eusebio da Guarda",
-      "normalized": "rua eusebio da guarda",
+      "input": "Rúa Antonio Durán Cao",
+      "normalized": "rua antonio duran cao",
       "type": null,
-      "name": "rua eusebio da guarda"
+      "name": "rua antonio duran cao"
     },
     {
-      "input": "Rúa Fernando de Sande y Lago",
-      "normalized": "rua fernando de sande y lago",
+      "input": "Rúa Arzobispo Xelmírez",
+      "normalized": "rua arzobispo xelmirez",
       "type": null,
-      "name": "rua fernando de sande y lago"
+      "name": "rua arzobispo xelmirez"
     },
     {
-      "input": "Rúa Florencia",
-      "normalized": "rua florencia",
+      "input": "Rúa Berlín",
+      "normalized": "rua berlin",
       "type": null,
-      "name": "rua florencia"
+      "name": "rua berlin"
     },
     {
-      "input": "Rúa Fontenla",
-      "normalized": "rua fontenla",
+      "input": "Rúa Cal de Moreiras",
+      "normalized": "rua cal de moreiras",
       "type": null,
-      "name": "rua fontenla"
+      "name": "rua cal de moreiras"
     },
     {
-      "input": "Rúa Francisco Sánchez",
-      "normalized": "rua francisco sanchez",
+      "input": "Rúa Castelo",
+      "normalized": "rua castelo",
       "type": null,
-      "name": "rua francisco sanchez"
+      "name": "rua castelo"
     },
     {
-      "input": "Rúa Galatea",
-      "normalized": "rua galatea",
+      "input": "Rúa Compostela",
+      "normalized": "rua compostela",
       "type": null,
-      "name": "rua galatea"
+      "name": "rua compostela"
     },
     {
-      "input": "Rúa H",
-      "normalized": "rua h",
+      "input": "Rúa Costa Rica",
+      "normalized": "rua costa rica",
       "type": null,
-      "name": "rua h"
+      "name": "rua costa rica"
     },
     {
-      "input": "Rúa Igrexa de Elviña",
-      "normalized": "rua igrexa de elvina",
+      "input": "Rúa da Cortadoría",
+      "normalized": "rua da cortadoria",
       "type": null,
-      "name": "rua igrexa de elvina"
+      "name": "rua da cortadoria"
     },
     {
-      "input": "Rúa J",
-      "normalized": "rua j",
+      "input": "Rúa das Bombas",
+      "normalized": "rua das bombas",
       "type": null,
-      "name": "rua j"
+      "name": "rua das bombas"
     },
     {
-      "input": "Rúa José Cornide",
-      "normalized": "rua jose cornide",
+      "input": "Rúa de Ferrarías",
+      "normalized": "rua de ferrarias",
       "type": null,
-      "name": "rua jose cornide"
+      "name": "rua de ferrarias"
     },
     {
-      "input": "Rúa José Sardina Muíños",
-      "normalized": "rua jose sardina muinos",
+      "input": "Rúa do Canedo",
+      "normalized": "rua do canedo",
       "type": null,
-      "name": "rua jose sardina muinos"
+      "name": "rua do canedo"
     },
     {
-      "input": "Rúa Juana de Vega",
-      "normalized": "rua juana de vega",
+      "input": "Rúa do Príncipe",
+      "normalized": "rua do principe",
       "type": null,
-      "name": "rua juana de vega"
+      "name": "rua do principe"
     },
     {
-      "input": "Rúa Laxeiro",
-      "normalized": "rua laxeiro",
+      "input": "Rúa dos Xasmíns",
+      "normalized": "rua dos xasmins",
       "type": null,
-      "name": "rua laxeiro"
+      "name": "rua dos xasmins"
     },
     {
-      "input": "Rúa Luciano Caño",
-      "normalized": "rua luciano cano",
+      "input": "Rúa Emilio González López",
+      "normalized": "rua emilio gonzalez lopez",
       "type": null,
-      "name": "rua luciano cano"
+      "name": "rua emilio gonzalez lopez"
     },
     {
-      "input": "Rúa Madame Curie",
-      "normalized": "rua madame curie",
+      "input": "Rúa Farellas",
+      "normalized": "rua farellas",
       "type": null,
-      "name": "rua madame curie"
+      "name": "rua farellas"
     },
     {
-      "input": "Rúa Manuel García Canzobre",
-      "normalized": "rua manuel garcia canzobre",
+      "input": "Rúa Ferrol",
+      "normalized": "rua ferrol",
       "type": null,
-      "name": "rua manuel garcia canzobre"
+      "name": "rua ferrol"
     },
     {
-      "input": "Rúa María Callas",
-      "normalized": "rua maria callas",
+      "input": "Rúa Fragas do Eume",
+      "normalized": "rua fragas do eume",
       "type": null,
-      "name": "rua maria callas"
+      "name": "rua fragas do eume"
     },
     {
-      "input": "Rúa Marismas do Río de Bañobre",
-      "normalized": "rua marismas do rio de banobre",
+      "input": "Rúa Galileo Galilei",
+      "normalized": "rua galileo galilei",
       "type": null,
-      "name": "rua marismas do rio de banobre"
+      "name": "rua galileo galilei"
     },
     {
-      "input": "Rúa Mauritania",
-      "normalized": "rua mauritania",
+      "input": "Rúa Igualdade",
+      "normalized": "rua igualdade",
       "type": null,
-      "name": "rua mauritania"
+      "name": "rua igualdade"
     },
     {
-      "input": "Rúa Mestre Anta",
-      "normalized": "rua mestre anta",
+      "input": "Rúa Joaquín Galiacho",
+      "normalized": "rua joaquin galiacho",
       "type": null,
-      "name": "rua mestre anta"
+      "name": "rua joaquin galiacho"
     },
     {
-      "input": "Rúa Modesta Goicouría",
-      "normalized": "rua modesta goicouria",
+      "input": "Rúa José Pascual López Cortón",
+      "normalized": "rua jose pascual lopez corton",
       "type": null,
-      "name": "rua modesta goicouria"
+      "name": "rua jose pascual lopez corton"
     },
     {
-      "input": "Rúa Montroig",
-      "normalized": "rua montroig",
+      "input": "Rúa Julia Minguillón",
+      "normalized": "rua julia minguillon",
       "type": null,
-      "name": "rua montroig"
+      "name": "rua julia minguillon"
     },
     {
-      "input": "Rúa Nabás",
-      "normalized": "rua nabas",
+      "input": "Rúa Luciano Yordi de Carricarte",
+      "normalized": "rua luciano yordi de carricarte",
       "type": null,
-      "name": "rua nabas"
+      "name": "rua luciano yordi de carricarte"
     },
     {
-      "input": "Rúa Nosa Señora do Perpetuo Socorro",
-      "normalized": "rua nosa senora do perpetuo socorro",
+      "input": "Rúa Manuel Díaz",
+      "normalized": "rua manuel diaz",
       "type": null,
-      "name": "rua nosa senora do perpetuo socorro"
+      "name": "rua manuel diaz"
     },
     {
-      "input": "Rúa Oidor Gregorio Tovar",
-      "normalized": "rua oidor gregorio tovar",
+      "input": "Rúa Mariñas",
+      "normalized": "rua marinas",
       "type": null,
-      "name": "rua oidor gregorio tovar"
+      "name": "rua marinas"
     },
     {
-      "input": "Rúa Padre Feijoo",
-      "normalized": "rua padre feijoo",
+      "input": "Rúa Melide",
+      "normalized": "rua melide",
       "type": null,
-      "name": "rua padre feijoo"
+      "name": "rua melide"
     },
     {
-      "input": "Rúa Pascual Veiga",
-      "normalized": "rua pascual veiga",
+      "input": "Rúa Monte das Moas",
+      "normalized": "rua monte das moas",
       "type": null,
-      "name": "rua pascual veiga"
+      "name": "rua monte das moas"
     },
     {
-      "input": "Rúa Pena",
-      "normalized": "rua pena",
+      "input": "Rúa Nantín",
+      "normalized": "rua nantin",
       "type": null,
-      "name": "rua pena"
+      "name": "rua nantin"
     },
     {
-      "input": "Rúa Picavia",
-      "normalized": "rua picavia",
+      "input": "Rúa O Coidal",
+      "normalized": "rua o coidal",
       "type": null,
-      "name": "rua picavia"
+      "name": "rua o coidal"
     },
     {
-      "input": "Rúa Pintor Villar Chao",
-      "normalized": "rua pintor villar chao",
+      "input": "Rúa Pan de Soraluce",
+      "normalized": "rua pan de soraluce",
       "type": null,
-      "name": "rua pintor villar chao"
+      "name": "rua pan de soraluce"
     },
     {
-      "input": "Rúa Pozo",
-      "normalized": "rua pozo",
+      "input": "Rúa Pedroso",
+      "normalized": "rua pedroso",
       "type": null,
-      "name": "rua pozo"
+      "name": "rua pedroso"
     },
     {
-      "input": "Rúa Rafael Baixeras",
-      "normalized": "rua rafael baixeras",
+      "input": "Rúa Pintor Seijo Rubio",
+      "normalized": "rua pintor seijo rubio",
       "type": null,
-      "name": "rua rafael baixeras"
+      "name": "rua pintor seijo rubio"
     },
     {
-      "input": "Rúa Real",
-      "normalized": "rua real",
+      "input": "Rúa Primavera",
+      "normalized": "rua primavera",
       "type": null,
-      "name": "rua real"
+      "name": "rua primavera"
     },
     {
-      "input": "Rúa Riazor",
-      "normalized": "rua riazor",
+      "input": "Rúa República Dominicana",
+      "normalized": "rua republica dominicana",
       "type": null,
-      "name": "rua riazor"
+      "name": "rua republica dominicana"
     },
     {
       "input": "Rúa Río Eo",
@@ -710,100 +434,376 @@
       "name": "rua rio eo"
     },
     {
-      "input": "Rúa Río Ulla",
-      "normalized": "rua rio ulla",
+      "input": "Rúa Rodrigo Alfredo de Santiago",
+      "normalized": "rua rodrigo alfredo de santiago",
       "type": null,
-      "name": "rua rio ulla"
+      "name": "rua rodrigo alfredo de santiago"
     },
     {
-      "input": "Rúa Rufana",
-      "normalized": "rua rufana",
+      "input": "Rúa San José de Calasanz",
+      "normalized": "rua san jose de calasanz",
       "type": null,
-      "name": "rua rufana"
+      "name": "rua san jose de calasanz"
     },
     {
-      "input": "Rúa San Ignacio",
-      "normalized": "rua san ignacio",
+      "input": "Rúa San Vicente de Paul",
+      "normalized": "rua san vicente de paul",
       "type": null,
-      "name": "rua san ignacio"
+      "name": "rua san vicente de paul"
     },
     {
-      "input": "Rúa San Pedro de Visma",
-      "normalized": "rua san pedro de visma",
+      "input": "Rúa Sarxento Veiga Pérez",
+      "normalized": "rua sarxento veiga perez",
       "type": null,
-      "name": "rua san pedro de visma"
+      "name": "rua sarxento veiga perez"
     },
     {
-      "input": "Rúa Santa Lucía",
-      "normalized": "rua santa lucia",
+      "input": "Rúa Tomás Fábregas",
+      "normalized": "rua tomas fabregas",
       "type": null,
-      "name": "rua santa lucia"
+      "name": "rua tomas fabregas"
     },
     {
-      "input": "Rúa Senra",
-      "normalized": "rua senra",
+      "input": "Rúa Varela Silvari",
+      "normalized": "rua varela silvari",
       "type": null,
-      "name": "rua senra"
+      "name": "rua varela silvari"
     },
     {
-      "input": "Rúa Suevos",
-      "normalized": "rua suevos",
+      "input": "Rúa Vila de Cee",
+      "normalized": "rua vila de cee",
       "type": null,
-      "name": "rua suevos"
+      "name": "rua vila de cee"
     },
     {
-      "input": "Rúa Touriñana",
-      "normalized": "rua tourinana",
+      "input": "Rúa Xeneral Rubín",
+      "normalized": "rua xeneral rubin",
       "type": null,
-      "name": "rua tourinana"
+      "name": "rua xeneral rubin"
     },
     {
-      "input": "Rúa Vaamonde Lores",
-      "normalized": "rua vaamonde lores",
+      "input": "San Cristovo das Viñas",
+      "normalized": "san cristovo das vinas",
       "type": null,
-      "name": "rua vaamonde lores"
+      "name": "san cristovo das vinas"
     },
     {
-      "input": "Rúa Víctor Fernández",
-      "normalized": "rua victor fernandez",
-      "type": null,
-      "name": "rua victor fernandez"
-    },
-    {
-      "input": "Rúa Vila de Padrón",
-      "normalized": "rua vila de padron",
-      "type": null,
-      "name": "rua vila de padron"
-    },
-    {
-      "input": "Rúa Xafonte",
-      "normalized": "rua xafonte",
-      "type": null,
-      "name": "rua xafonte"
-    },
-    {
-      "input": "Rúa Xoán Montes",
-      "normalized": "rua xoan montes",
-      "type": null,
-      "name": "rua xoan montes"
-    },
-    {
-      "input": "Ruela dos Cristais",
-      "normalized": "ruela dos cristais",
-      "type": null,
-      "name": "ruela dos cristais"
-    },
-    {
-      "input": "Travesía Atocha Baixa",
-      "normalized": "travesia atocha baixa",
+      "input": "Travesía de Padilla",
+      "normalized": "travesia de padilla",
       "type": "travesia",
-      "name": "atocha baixa"
+      "name": "de padilla"
     },
     {
-      "input": "Travesía de Cordonería",
-      "normalized": "travesia de cordoneria",
+      "input": "Travesía República Dominicana",
+      "normalized": "travesia republica dominicana",
       "type": "travesia",
-      "name": "de cordoneria"
+      "name": "republica dominicana"
+    },
+    {
+      "input": "Rúa Eduardo Pondal",
+      "normalized": "rua eduardo pondal",
+      "type": null,
+      "name": "rua eduardo pondal"
+    },
+    {
+      "input": "Pasadizo Eduardo Vila",
+      "normalized": "pasadizo eduardo vila",
+      "type": null,
+      "name": "pasadizo eduardo vila"
+    },
+    {
+      "input": "Rúa C",
+      "normalized": "rua c",
+      "type": null,
+      "name": "rua c"
+    },
+    {
+      "input": "Rúa Flauta",
+      "normalized": "rua flauta",
+      "type": null,
+      "name": "rua flauta"
+    },
+    {
+      "input": "Rúa Polvorín",
+      "normalized": "rua polvorin",
+      "type": null,
+      "name": "rua polvorin"
+    },
+    {
+      "input": "Rúa Gregorio Hernández",
+      "normalized": "rua gregorio hernandez",
+      "type": null,
+      "name": "rua gregorio hernandez"
+    },
+    {
+      "input": "Rúa Chan das Viñas",
+      "normalized": "rua chan das vinas",
+      "type": null,
+      "name": "rua chan das vinas"
+    },
+    {
+      "input": "Estrada Cambre-Temple",
+      "normalized": "estrada cambre temple",
+      "type": null,
+      "name": "estrada cambre temple"
+    },
+    {
+      "input": "Rúa Lamiño",
+      "normalized": "rua lamino",
+      "type": null,
+      "name": "rua lamino"
+    },
+    {
+      "input": "Rúa Alcalde Manuel Lastres Abente",
+      "normalized": "rua alcalde manuel lastres abente",
+      "type": null,
+      "name": "rua alcalde manuel lastres abente"
+    },
+    {
+      "input": "Rúa Manuel Candamio Fernández",
+      "normalized": "rua manuel candamio fernandez",
+      "type": null,
+      "name": "rua manuel candamio fernandez"
+    },
+    {
+      "input": "Rúa Virxe da O",
+      "normalized": "rua virxe da o",
+      "type": null,
+      "name": "rua virxe da o"
+    },
+    {
+      "input": "Praza da Fariña",
+      "normalized": "praza da farina",
+      "type": null,
+      "name": "praza da farina"
+    },
+    {
+      "input": "Rúa José Gómez Bao",
+      "normalized": "rua jose gomez bao",
+      "type": null,
+      "name": "rua jose gomez bao"
+    },
+    {
+      "input": "Avenida de Galicia",
+      "normalized": "avenida de galicia",
+      "type": "avenida",
+      "name": "de galicia"
+    },
+    {
+      "input": "Rúa Ángel del Castillo",
+      "normalized": "rua angel del castillo",
+      "type": null,
+      "name": "rua angel del castillo"
+    },
+    {
+      "input": "Rúa Ferrocarril",
+      "normalized": "rua ferrocarril",
+      "type": null,
+      "name": "rua ferrocarril"
+    },
+    {
+      "input": "Rúa Ramón Cabanillas",
+      "normalized": "rua ramon cabanillas",
+      "type": null,
+      "name": "rua ramon cabanillas"
+    },
+    {
+      "input": "Camiño dos Pozos",
+      "normalized": "camino dos pozos",
+      "type": "camino",
+      "name": "dos pozos"
+    },
+    {
+      "input": "Rúa Miguel Hernández",
+      "normalized": "rua miguel hernandez",
+      "type": null,
+      "name": "rua miguel hernandez"
+    },
+    {
+      "input": "Rúa Polvorín",
+      "normalized": "rua polvorin",
+      "type": null,
+      "name": "rua polvorin"
+    },
+    {
+      "input": "Pasarela O Veleiro",
+      "normalized": "pasarela o veleiro",
+      "type": null,
+      "name": "pasarela o veleiro"
+    },
+    {
+      "input": "Rúa Carmen Bravo Villasante",
+      "normalized": "rua carmen bravo villasante",
+      "type": null,
+      "name": "rua carmen bravo villasante"
+    },
+    {
+      "input": "Rúa Monte Rabadeira",
+      "normalized": "rua monte rabadeira",
+      "type": null,
+      "name": "rua monte rabadeira"
+    },
+    {
+      "input": "Calle Ángel Rebollo",
+      "normalized": "calle angel rebollo",
+      "type": "calle",
+      "name": "angel rebollo"
+    },
+    {
+      "input": "Travesía da Xesteira",
+      "normalized": "travesia da xesteira",
+      "type": "travesia",
+      "name": "da xesteira"
+    },
+    {
+      "input": "Urbanización O Cruceiro",
+      "normalized": "urbanizacion o cruceiro",
+      "type": null,
+      "name": "urbanizacion o cruceiro"
+    },
+    {
+      "input": "Rúa Escondite",
+      "normalized": "rua escondite",
+      "type": null,
+      "name": "rua escondite"
+    },
+    {
+      "input": "Túnel Juana de Vega",
+      "normalized": "tunel juana de vega",
+      "type": null,
+      "name": "tunel juana de vega"
+    },
+    {
+      "input": "Rúa de Ricardo Carballo Calero",
+      "normalized": "rua de ricardo carballo calero",
+      "type": null,
+      "name": "rua de ricardo carballo calero"
+    },
+    {
+      "input": "Rúa da Fonte",
+      "normalized": "rua da fonte",
+      "type": null,
+      "name": "rua da fonte"
+    },
+    {
+      "input": "Paseo Marítimo",
+      "normalized": "paseo maritimo",
+      "type": "paseo",
+      "name": "maritimo"
+    },
+    {
+      "input": "Rúa Padre Feijóo",
+      "normalized": "rua padre feijoo",
+      "type": null,
+      "name": "rua padre feijoo"
+    },
+    {
+      "input": "Praza da Canteira",
+      "normalized": "praza da canteira",
+      "type": null,
+      "name": "praza da canteira"
+    },
+    {
+      "input": "Rúa Cormorán",
+      "normalized": "rua cormoran",
+      "type": null,
+      "name": "rua cormoran"
+    },
+    {
+      "input": "Rúa do Cántaro",
+      "normalized": "rua do cantaro",
+      "type": null,
+      "name": "rua do cantaro"
+    },
+    {
+      "input": "Rúa Gaia",
+      "normalized": "rua gaia",
+      "type": null,
+      "name": "rua gaia"
+    },
+    {
+      "input": "Rúa Nelson Mandela",
+      "normalized": "rua nelson mandela",
+      "type": null,
+      "name": "rua nelson mandela"
+    },
+    {
+      "input": "Rúa Zeus",
+      "normalized": "rua zeus",
+      "type": null,
+      "name": "rua zeus"
+    },
+    {
+      "input": "Rúa Río Anllóns",
+      "normalized": "rua rio anllons",
+      "type": null,
+      "name": "rua rio anllons"
+    },
+    {
+      "input": "Rúa María Wonenburger",
+      "normalized": "rua maria wonenburger",
+      "type": null,
+      "name": "rua maria wonenburger"
+    },
+    {
+      "input": "Los Rosales",
+      "normalized": "los rosales",
+      "type": null,
+      "name": "los rosales"
+    },
+    {
+      "input": "Museo Didáctico das Telecomunicacións",
+      "normalized": "museo didactico das telecomunicacions",
+      "type": null,
+      "name": "museo didactico das telecomunicacions"
+    },
+    {
+      "input": "Biblioteca de Dereito",
+      "normalized": "biblioteca de dereito",
+      "type": null,
+      "name": "biblioteca de dereito"
+    },
+    {
+      "input": "Muelle Dársena de Oza",
+      "normalized": "muelle darsena de oza",
+      "type": "muelle",
+      "name": "darsena de oza"
+    },
+    {
+      "input": "Rúa do Rexidoiro",
+      "normalized": "rua do rexidoiro",
+      "type": null,
+      "name": "rua do rexidoiro"
+    },
+    {
+      "input": "Vial Intercampus",
+      "normalized": "vial intercampus",
+      "type": null,
+      "name": "vial intercampus"
+    },
+    {
+      "input": "Rúa Rosales",
+      "normalized": "rua rosales",
+      "type": null,
+      "name": "rua rosales"
+    },
+    {
+      "input": "Travesía de Suevos",
+      "normalized": "travesia de suevos",
+      "type": "travesia",
+      "name": "de suevos"
+    },
+    {
+      "input": "O Camiño do Bormeiral",
+      "normalized": "o camino do bormeiral",
+      "type": null,
+      "name": "o camino do bormeiral"
+    },
+    {
+      "input": "Rúa Ameneiro",
+      "normalized": "rua ameneiro",
+      "type": null,
+      "name": "rua ameneiro"
     }
   ]
 }
