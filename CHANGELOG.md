@@ -19,9 +19,13 @@ also records what has no visible effect.
   "Lexington", nobody in Cambridge found their address by typing "Cambridge",
   and "77 Massachusetts Avenue" was placed in Arlington rather than at MIT.
   `group_osm_streets` now takes the municipality from the house numbers'
-  `addr:city`, hands it to the same-named ways within 500 m, and falls back on
-  the nearest inhabited place only beyond. Every network whose addresses come
-  from OpenStreetMap needs its index regenerated.
+  `addr:city`, hands it to the same-named ways within 500 m and along the
+  stretches they touch, and falls back on the nearest inhabited place only for
+  a street with no number at all; a street whose numbers name their town two
+  ways is folded back into one. Checked against main on the same extracts:
+  Lille's BAN index comes out byte for byte identical, and Boston, Bergen,
+  Québec and Barcelona lose no street and no house number. Every network whose
+  addresses come from OpenStreetMap needs its index regenerated.
 - **A designated point no longer outlives the city it was designated in**
   (`SPEC.md` §7.2, §8). An address found under Capital Bikeshare stayed named
   at the bottom of the map and marked on it once V'lille was served, pointing

@@ -418,8 +418,12 @@ streets of a merged municipality end up conflated.
 group on, so the key is (normalised municipality, normalised street name), and
 the municipality is found from where each piece lies. OpenStreetMap tags
 `addr:city` on the numbers and almost never on the ways, so a piece without one
-joins the nearest same-named piece that has one within 500 m, and failing that
-takes the name of the nearest inhabited place. The municipality was once left
+joins the nearest same-named piece that has one within 500 m, then passes it on
+to the stretches of the same name it touches, and a street with no number
+anywhere takes the name of the inhabited place nearest its middle. Two halves
+of one street whose numbers name their town two ways — "Boston" and "Allston"
+house by house — are folded back together when most of the smaller lies along
+the larger. The municipality was once left
 to the ways themselves, and every homonym in the box became one street: the
 four Massachusetts Avenues of Boston, Cambridge, Arlington and Lexington came
 out as a single one labelled "Lexington", and a number repeated along them was

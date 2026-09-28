@@ -44,7 +44,7 @@ import subprocess
 import sys
 import tempfile
 import time
-from collections import defaultdict
+from collections import Counter, defaultdict, deque
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -480,6 +480,7 @@ def read_osm_addresses(
             city=(properties.get("addr:city") or "").strip(),
             postcode=(properties.get("addr:postcode") or "").strip(),
             positions=positions,
+            is_way=True,
         ))
 
     addresses = osmium_export(
@@ -531,6 +532,10 @@ class OsmPiece:
     postcode: str
     positions: list[tuple[float, float]]
     number: tuple[int, str] | None = None
+    # The way's own name is the spelling the map shows, and the one a street is
+    # displayed under; an addr:street is typed number by number and drifts —
+    # "Georgernes verft" on the numbers of Bergen's "Georgernes Verft".
+    is_way: bool = False
 
 
 # How far a piece carrying no municipality may sit from a same-named street
@@ -541,6 +546,12 @@ class OsmPiece:
 # municipalities meet on one avenue the nearer side wins, which is what the
 # boundary would have said to within a block.
 SAME_STREET_RADIUS_METERS = 500.0
+
+# How close two stretches without a municipality must come to be one street.
+# The pieces of one road share their end nodes, so the distance is nil almost
+# always; the margin covers a street interrupted by a square or a roundabout,
+# and stays far below the gap between two homonymous lanes of two villages.
+CONNECTED_METERS = 100.0
 
 # Metres per degree of latitude; the longitude is scaled by the cosine.
 METERS_PER_DEGREE = 111_320.0
@@ -556,6 +567,14 @@ def radius_cell(position: tuple[float, float]) -> tuple[int, int]:
     east = position[1] * METERS_PER_DEGREE * math.cos(math.radians(position[0]))
     return (int(north // SAME_STREET_RADIUS_METERS),
             int(east // SAME_STREET_RADIUS_METERS))
+
+
+def neighbouring_cells(position: tuple[float, float]):
+    """The cell of a point and the eight around it."""
+    row, column = radius_cell(position)
+    for delta_row in (-1, 0, 1):
+        for delta_column in (-1, 0, 1):
+            yield row + delta_row, column + delta_column
 
 
 def squared_meters(
@@ -592,19 +611,20 @@ def group_osm_streets(
     2. failing that, the same-named street nearest to it that has one, if it
        lies within `SAME_STREET_RADIUS_METERS` — this is how a way joins the
        numbers mapped along it;
-    3. failing that, the nearest inhabited place, as a last resort: a boundary
-       is not a distance, but the alternative is a blank.
+    3. failing that, the municipality reached first by walking along the
+       stretches of the same name that touch it, so that an unnumbered stretch
+       of Massachusetts Avenue goes with the numbered stretch it continues;
+    4. failing all of it, the nearest inhabited place to the middle of the
+       whole unnumbered street: a boundary is not a distance, but the
+       alternative is a blank.
+
+    None of it depends on the order the extract lists the pieces in.
 
     Returns:
         The streets by key, and how many took their municipality from a place.
     """
     streets: dict[str, Street] = {}
-    # Points of the streets whose municipality is known, by folded name and
-    # grid cell: what a piece without one is measured against. A grid, because
-    # a region holds thousands of numbers on its Hauptstraßen and comparing
-    # every piece with every one of them would take hours.
-    anchored: dict[tuple[str, tuple[int, int]], list[tuple[tuple[float, float], str]]]
-    anchored = defaultdict(list)
+    named_by_way: set[str] = set()
 
     def key_of(name: str, city: str) -> str:
         return f"{normalizer.normalize(city)}|{normalizer.normalize(name)}"
@@ -613,6 +633,9 @@ def group_osm_streets(
         street = streets.setdefault(key, Street(
             display_name=piece.name, city=city, postcode="", kind=KIND_STREET,
         ))
+        if piece.is_way and key not in named_by_way:
+            street.display_name = piece.name
+            named_by_way.add(key)
         street.postcode = street.postcode or piece.postcode
         # A street is mapped in several pieces — one per junction, or per
         # change of surface. Every piece's points go in: the median of the
@@ -622,49 +645,143 @@ def group_osm_streets(
         if piece.number is not None:
             street.numbers.setdefault(piece.number, []).extend(piece.positions)
 
-    def anchor(piece: OsmPiece, key: str) -> None:
-        name = normalizer.normalize(piece.name)
-        for position in piece.positions:
-            anchored[(name, radius_cell(position))].append((position, key))
-
-    unplaced = []
+    # Grids by folded name and cell, so that a piece is only ever measured
+    # against its own neighbourhood: a region holds thousands of numbers on its
+    # Hauptstraßen, and comparing every piece with every one of them would take
+    # hours.
+    anchored: dict[tuple[str, tuple[int, int]], list[tuple[tuple[float, float], str]]]
+    anchored = defaultdict(list)
+    loose: dict[tuple[str, tuple[int, int]], list[tuple[tuple[float, float], int]]]
+    loose = defaultdict(list)
+    unplaced: list[OsmPiece] = []
     for piece in pieces:
-        if not piece.city:
-            unplaced.append(piece)
-            continue
-        key = key_of(piece.name, piece.city)
-        add(piece, key, piece.city)
-        anchor(piece, key)
-
-    limit = SAME_STREET_RADIUS_METERS ** 2
-    from_places: set[str] = set()
-    for piece in unplaced:
         name = normalizer.normalize(piece.name)
-        best_key, best = None, limit
+        if piece.city:
+            key = key_of(piece.name, piece.city)
+            add(piece, key, piece.city)
+            for position in piece.positions:
+                anchored[(name, radius_cell(position))].append((position, key))
+        else:
+            for position in piece.positions:
+                loose[(name, radius_cell(position))].append((position, len(unplaced)))
+            unplaced.append(piece)
+
+    # For each piece without a municipality: the nearest anchored street within
+    # the radius, and the other such pieces it touches.
+    radius = SAME_STREET_RADIUS_METERS ** 2
+    connected = CONNECTED_METERS ** 2
+    assigned: list[str | None] = [None] * len(unplaced)
+    touching: list[set[int]] = [set() for _ in unplaced]
+    for index, piece in enumerate(unplaced):
+        name = normalizer.normalize(piece.name)
+        best = radius
         for point in piece.positions:
-            row, column = radius_cell(point)
-            for delta_row in (-1, 0, 1):
-                for delta_column in (-1, 0, 1):
-                    cell = (row + delta_row, column + delta_column)
-                    for position, key in anchored.get((name, cell), ()):
-                        distance = squared_meters(point, position)
-                        if distance <= best:
-                            best_key, best = key, distance
-        if best_key is not None:
-            add(piece, best_key, streets[best_key].city)
+            for cell in neighbouring_cells(point):
+                for position, key in anchored.get((name, cell), ()):
+                    distance = squared_meters(point, position)
+                    if distance <= best:
+                        assigned[index], best = key, distance
+                for position, other in loose.get((name, cell), ()):
+                    if other != index and squared_meters(point, position) <= connected:
+                        touching[index].add(other)
+
+    # Walk outwards from the stretches that found a municipality, breadth
+    # first, so each unnumbered stretch takes the one nearest along the street.
+    queue = deque(index for index, key in enumerate(assigned) if key is not None)
+    while queue:
+        index = queue.popleft()
+        for other in sorted(touching[index]):
+            if assigned[other] is None:
+                assigned[other] = assigned[index]
+                queue.append(other)
+    for index, key in enumerate(assigned):
+        if key is not None:
+            add(unplaced[index], key, streets[key].city)
+
+    # What is left are whole streets with no number anywhere along them. Each
+    # is named once, from its middle, rather than stretch by stretch.
+    from_places = 0
+    for start, _ in enumerate(unplaced):
+        if assigned[start] is not None:
             continue
-        centre = piece.positions[len(piece.positions) // 2]
-        city = nearest_place_name(centre, municipalities)
-        key = key_of(piece.name, city)
-        if key not in streets and city:
-            from_places.add(key)
-        add(piece, key, city)
-        # Anchored in turn, so that the next stretch of the same unnumbered
-        # street joins this one rather than asking the places again: a long
-        # road runs past several suburbs, and would otherwise come out in as
-        # many pieces, each labelled after a different one.
-        anchor(piece, key)
-    return streets, len(from_places)
+        component, queue = [start], deque([start])
+        assigned[start] = ""
+        while queue:
+            for other in sorted(touching[queue.popleft()]):
+                if assigned[other] is None:
+                    assigned[other] = ""
+                    component.append(other)
+                    queue.append(other)
+        points = [point for index in component for point in unplaced[index].positions]
+        middle = (statistics.median(point[0] for point in points),
+                  statistics.median(point[1] for point in points))
+        city = nearest_place_name(middle, municipalities)
+        key = key_of(unplaced[start].name, city)
+        if city and key not in streets:
+            from_places += 1
+        for index in component:
+            add(unplaced[index], key, city)
+    merge_interleaved_streets(streets)
+    return streets, from_places
+
+
+# Share of a street's points lying along a same-named street of another
+# municipality beyond which the two are one street tagged two ways. Boston
+# numbers some houses of Athol Street "Boston" and their neighbours "Allston",
+# both valid mailing names; a municipal boundary, by contrast, only meets the
+# next town's street at one end, where a handful of points at most are close.
+INTERLEAVED_SHARE = 0.5
+
+
+def merge_interleaved_streets(streets: dict[str, Street]) -> None:
+    """Fold back together a street its own numbers name two ways.
+
+    `group_osm_streets` separates a name by municipality, which is what keeps
+    Cambridge's Massachusetts Avenue apart from Arlington's. It also separates,
+    wrongly, a street whose numbers disagree on what to call their town — a
+    district for some, the city for others — and each half then holds only
+    part of the numbers. The smaller half joins the larger when most of its
+    points lie along it, and is then known by the larger's municipality.
+    """
+    by_name: dict[str, list[str]] = defaultdict(list)
+    for key, street in streets.items():
+        if street.kind == KIND_STREET:
+            by_name[key.split("|", 1)[1]].append(key)
+
+    connected = CONNECTED_METERS ** 2
+    for keys in by_name.values():
+        if len(keys) < 2:
+            continue
+        keys.sort(key=lambda key: (-len(streets[key].latitudes), key))
+        kept: list[str] = []
+        cells: dict[tuple[int, int], list[tuple[tuple[float, float], str]]]
+        cells = defaultdict(list)
+        for key in keys:
+            street = streets[key]
+            points = list(zip(street.latitudes, street.longitudes))
+            along: Counter[str] = Counter()
+            for point in points:
+                near = {
+                    other
+                    for cell in neighbouring_cells(point)
+                    for position, other in cells.get(cell, ())
+                    if squared_meters(point, position) <= connected
+                }
+                along.update(near)
+            target = next((other for other, count in along.most_common()
+                           if count >= INTERLEAVED_SHARE * len(points)), None)
+            if target is None:
+                kept.append(key)
+                for point in points:
+                    cells[radius_cell(point)].append((point, key))
+                continue
+            merged = streets[target]
+            merged.latitudes.extend(street.latitudes)
+            merged.longitudes.extend(street.longitudes)
+            merged.postcode = merged.postcode or street.postcode
+            for number, positions in street.numbers.items():
+                merged.numbers.setdefault(number, []).extend(positions)
+            del streets[key]
 
 
 def nearest_place_name(
