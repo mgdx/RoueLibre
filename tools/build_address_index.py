@@ -36,6 +36,7 @@ import argparse
 import csv
 import gzip
 import json
+import math
 import shutil
 import sqlite3
 import statistics
@@ -43,7 +44,7 @@ import subprocess
 import sys
 import tempfile
 import time
-from collections import defaultdict
+from collections import Counter, defaultdict, deque
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -412,8 +413,8 @@ def positions_of(geometry: dict) -> list[tuple[float, float]]:
 
 def read_osm_addresses(
     osm_extract: Path, box: BoundingBox, work_dir: Path,
-    normalizer: AddressNormalizer,
-) -> tuple[dict[str, Street], int, int]:
+    normalizer: AddressNormalizer, municipalities: list[Street],
+) -> tuple[dict[str, Street], int, int, int]:
     """Read streets and house numbers from OpenStreetMap (SPEC.md §4.3, §15).
 
     France publishes a national address base and the script reads that one
@@ -422,7 +423,7 @@ def read_osm_addresses(
     OpenStreetMap. The extract is already on disk — the map and the routing
     graph are cut from it — so a city costs one download rather than two.
 
-    What is read, and why in this order:
+    What is read:
 
     1. the named ways, which give the streets themselves. A street with no
        house number mapped on it is still a street somebody types into a
@@ -432,12 +433,16 @@ def read_osm_addresses(
        one takes over, which is how villages without street names are
        addressed in the Nordic countries and in much of central Europe.
 
+    Which municipality each of them belongs to is `group_osm_streets`'s
+    business; this function only reads.
+
     The coverage is not the BAN's, and it varies from one city to the next —
     that is the honest cost of the substitution, and the figures printed at the
     end of a run say what it came to for this conurbation.
 
     Returns:
-        The streets by key, the number of objects read and the number kept.
+        The streets by key, the number of objects read, the number kept, and
+        how many streets took their municipality from the nearest place.
     """
     if shutil.which("osmium") is None:
         raise GenerationError(
@@ -452,12 +457,8 @@ def read_osm_addresses(
         check=True, capture_output=True,
     )
 
-    streets: dict[str, Street] = {}
-    read = kept = 0
-
-    def key_of(name: str, city: str) -> str:
-        return f"{normalizer.normalize(city)}|{normalizer.normalize(name)}"
-
+    read = 0
+    pieces: list[OsmPiece] = []
     ways = osmium_export(
         clipped, ADDRESSABLE_HIGHWAYS,
         ["name", "addr:city", "addr:postcode"], "linestring", work_dir, "ways",
@@ -474,19 +475,13 @@ def read_osm_addresses(
         ]
         if not positions:
             continue
-        city = (properties.get("addr:city") or "").strip()
-        street = streets.setdefault(key_of(name, city), Street(
-            display_name=name,
-            city=city,
+        pieces.append(OsmPiece(
+            name=name,
+            city=(properties.get("addr:city") or "").strip(),
             postcode=(properties.get("addr:postcode") or "").strip(),
-            kind=KIND_STREET,
+            positions=positions,
+            is_way=True,
         ))
-        # A street is mapped in several pieces — one per junction, or per
-        # change of surface. Every piece's points go in: the median of the
-        # whole is the point that ends up representing the street.
-        street.latitudes.extend(latitude for latitude, _ in positions)
-        street.longitudes.extend(longitude for _, longitude in positions)
-        kept += 1
 
     addresses = osmium_export(
         clipped, ADDRESSED_OBJECTS,
@@ -510,38 +505,295 @@ def read_osm_addresses(
         longitude = sum(position[1] for position in positions) / len(positions)
         if not box.contains(latitude, longitude):
             continue
+        pieces.append(OsmPiece(
+            name=name,
+            city=(properties.get("addr:city") or "").strip(),
+            postcode=(properties.get("addr:postcode") or "").strip(),
+            positions=[(latitude, longitude)],
+            number=parse_house_number(
+                *split_house_number(properties.get("addr:housenumber") or "")
+            ),
+        ))
 
-        city = (properties.get("addr:city") or "").strip()
-        street = streets.get(key_of(name, city))
-        if street is None and city:
-            # The number names its municipality and the street does not, which
-            # is the common case: the street is looked up without it rather
-            # than a second, empty-municipality street being created beside it.
-            street = streets.get(key_of(name, ""))
-        if street is None:
-            street = Street(
-                display_name=name,
-                city=city,
-                postcode=(properties.get("addr:postcode") or "").strip(),
-                kind=KIND_STREET,
-            )
-            streets[key_of(name, city)] = street
-        if not street.city and city:
-            street.city = city
-        if not street.postcode:
-            street.postcode = (properties.get("addr:postcode") or "").strip()
+    streets, named = group_osm_streets(pieces, municipalities, normalizer)
+    return streets, read, len(pieces), named
 
-        street.latitudes.append(latitude)
-        street.longitudes.append(longitude)
-        kept += 1
 
-        parsed = parse_house_number(
-            *split_house_number(properties.get("addr:housenumber") or "")
-        )
-        if parsed is not None:
-            street.numbers.setdefault(parsed, []).append((latitude, longitude))
+@dataclass
+class OsmPiece:
+    """One thing OpenStreetMap says about a street: a stretch of it, or a number.
 
-    return streets, read, kept
+    A way carries its whole line and no number; an addressed object carries a
+    single point and, when it can be read, its number.
+    """
+
+    name: str
+    city: str
+    postcode: str
+    positions: list[tuple[float, float]]
+    number: tuple[int, str] | None = None
+    # The way's own name is the spelling the map shows, and the one a street is
+    # displayed under; an addr:street is typed number by number and drifts —
+    # "Georgernes verft" on the numbers of Bergen's "Georgernes Verft".
+    is_way: bool = False
+
+
+# How far a piece carrying no municipality may sit from a same-named street
+# that does carry one, and still be taken as part of it. A few blocks: a stretch
+# of road between two numbered ones is rarely longer, while two homonymous
+# streets of two municipalities — the Main Streets of Cambridge and Medford, the
+# Hauptstraßen of two Bavarian villages — are kilometres apart. Where two
+# municipalities meet on one avenue the nearer side wins, which is what the
+# boundary would have said to within a block.
+SAME_STREET_RADIUS_METERS = 500.0
+
+# How close two stretches without a municipality must come to be one street.
+# The pieces of one road share their end nodes, so the distance is nil almost
+# always; the margin covers a street interrupted by a square or a roundabout,
+# and stays far below the gap between two homonymous lanes of two villages.
+CONNECTED_METERS = 100.0
+
+# Metres per degree of latitude; the longitude is scaled by the cosine.
+METERS_PER_DEGREE = 111_320.0
+
+
+def radius_cell(position: tuple[float, float]) -> tuple[int, int]:
+    """The grid cell, one `SAME_STREET_RADIUS_METERS` on a side, of a point.
+
+    The cells are square on the ground rather than in degrees, so that the
+    eight around a point always cover the radius, from Seville to Tromsø.
+    """
+    north = position[0] * METERS_PER_DEGREE
+    east = position[1] * METERS_PER_DEGREE * math.cos(math.radians(position[0]))
+    return (int(north // SAME_STREET_RADIUS_METERS),
+            int(east // SAME_STREET_RADIUS_METERS))
+
+
+def neighbouring_cells(position: tuple[float, float]):
+    """The cell of a point and the eight around it."""
+    row, column = radius_cell(position)
+    for delta_row in (-1, 0, 1):
+        for delta_column in (-1, 0, 1):
+            yield row + delta_row, column + delta_column
+
+
+def squared_meters(
+    first: tuple[float, float], second: tuple[float, float]
+) -> float:
+    """The squared distance between two points, flat-earth, in square metres.
+
+    Exact enough over the few hundred metres it is compared against, and
+    squared because only the order and one threshold are ever needed.
+    """
+    delta_north = (first[0] - second[0]) * METERS_PER_DEGREE
+    delta_east = ((first[1] - second[1]) * METERS_PER_DEGREE
+                  * math.cos(math.radians(first[0])))
+    return delta_north ** 2 + delta_east ** 2
+
+
+def group_osm_streets(
+    pieces: list[OsmPiece], municipalities: list[Street],
+    normalizer: AddressNormalizer,
+) -> tuple[dict[str, Street], int]:
+    """Gather the pieces of OpenStreetMap into streets, one per municipality.
+
+    **A name alone does not make a street.** OpenStreetMap tags ``addr:city`` on
+    the house numbers and almost never on the ways, so keying the ways on their
+    name alone made one street of every homonym in the box: the Massachusetts
+    Avenues of Boston, Cambridge, Arlington and Lexington became one, labelled
+    after whichever town was read first, and "77 Massachusetts Avenue" landed
+    in Arlington rather than at MIT. Nobody in Cambridge found their street by
+    typing "Cambridge", and every repeated number was one guess out of several.
+
+    The municipality therefore comes from where a piece lies, in this order:
+
+    1. its own ``addr:city``, which the house numbers nearly always carry;
+    2. failing that, the same-named street nearest to it that has one, if it
+       lies within `SAME_STREET_RADIUS_METERS` — this is how a way joins the
+       numbers mapped along it;
+    3. failing that, the municipality reached first by walking along the
+       stretches of the same name that touch it, so that an unnumbered stretch
+       of Massachusetts Avenue goes with the numbered stretch it continues;
+    4. failing all of it, the nearest inhabited place to the middle of the
+       whole unnumbered street: a boundary is not a distance, but the
+       alternative is a blank.
+
+    None of it depends on the order the extract lists the pieces in.
+
+    Returns:
+        The streets by key, and how many took their municipality from a place.
+    """
+    streets: dict[str, Street] = {}
+    named_by_way: set[str] = set()
+
+    def key_of(name: str, city: str) -> str:
+        return f"{normalizer.normalize(city)}|{normalizer.normalize(name)}"
+
+    def add(piece: OsmPiece, key: str, city: str) -> None:
+        street = streets.setdefault(key, Street(
+            display_name=piece.name, city=city, postcode="", kind=KIND_STREET,
+        ))
+        if piece.is_way and key not in named_by_way:
+            street.display_name = piece.name
+            named_by_way.add(key)
+        street.postcode = street.postcode or piece.postcode
+        # A street is mapped in several pieces — one per junction, or per
+        # change of surface. Every piece's points go in: the median of the
+        # whole is the point that ends up representing the street.
+        street.latitudes.extend(latitude for latitude, _ in piece.positions)
+        street.longitudes.extend(longitude for _, longitude in piece.positions)
+        if piece.number is not None:
+            street.numbers.setdefault(piece.number, []).extend(piece.positions)
+
+    # Grids by folded name and cell, so that a piece is only ever measured
+    # against its own neighbourhood: a region holds thousands of numbers on its
+    # Hauptstraßen, and comparing every piece with every one of them would take
+    # hours.
+    anchored: dict[tuple[str, tuple[int, int]], list[tuple[tuple[float, float], str]]]
+    anchored = defaultdict(list)
+    loose: dict[tuple[str, tuple[int, int]], list[tuple[tuple[float, float], int]]]
+    loose = defaultdict(list)
+    unplaced: list[OsmPiece] = []
+    for piece in pieces:
+        name = normalizer.normalize(piece.name)
+        if piece.city:
+            key = key_of(piece.name, piece.city)
+            add(piece, key, piece.city)
+            for position in piece.positions:
+                anchored[(name, radius_cell(position))].append((position, key))
+        else:
+            for position in piece.positions:
+                loose[(name, radius_cell(position))].append((position, len(unplaced)))
+            unplaced.append(piece)
+
+    # For each piece without a municipality: the nearest anchored street within
+    # the radius, and the other such pieces it touches.
+    radius = SAME_STREET_RADIUS_METERS ** 2
+    connected = CONNECTED_METERS ** 2
+    assigned: list[str | None] = [None] * len(unplaced)
+    touching: list[set[int]] = [set() for _ in unplaced]
+    for index, piece in enumerate(unplaced):
+        name = normalizer.normalize(piece.name)
+        best = radius
+        for point in piece.positions:
+            for cell in neighbouring_cells(point):
+                for position, key in anchored.get((name, cell), ()):
+                    distance = squared_meters(point, position)
+                    if distance <= best:
+                        assigned[index], best = key, distance
+                for position, other in loose.get((name, cell), ()):
+                    if other != index and squared_meters(point, position) <= connected:
+                        touching[index].add(other)
+
+    # Walk outwards from the stretches that found a municipality, breadth
+    # first, so each unnumbered stretch takes the one nearest along the street.
+    queue = deque(index for index, key in enumerate(assigned) if key is not None)
+    while queue:
+        index = queue.popleft()
+        for other in sorted(touching[index]):
+            if assigned[other] is None:
+                assigned[other] = assigned[index]
+                queue.append(other)
+    for index, key in enumerate(assigned):
+        if key is not None:
+            add(unplaced[index], key, streets[key].city)
+
+    # What is left are whole streets with no number anywhere along them. Each
+    # is named once, from its middle, rather than stretch by stretch.
+    from_places = 0
+    for start, _ in enumerate(unplaced):
+        if assigned[start] is not None:
+            continue
+        component, queue = [start], deque([start])
+        assigned[start] = ""
+        while queue:
+            for other in sorted(touching[queue.popleft()]):
+                if assigned[other] is None:
+                    assigned[other] = ""
+                    component.append(other)
+                    queue.append(other)
+        points = [point for index in component for point in unplaced[index].positions]
+        middle = (statistics.median(point[0] for point in points),
+                  statistics.median(point[1] for point in points))
+        city = nearest_place_name(middle, municipalities)
+        key = key_of(unplaced[start].name, city)
+        if city and key not in streets:
+            from_places += 1
+        for index in component:
+            add(unplaced[index], key, city)
+    merge_interleaved_streets(streets)
+    return streets, from_places
+
+
+# Share of a street's points lying along a same-named street of another
+# municipality beyond which the two are one street tagged two ways. Boston
+# numbers some houses of Athol Street "Boston" and their neighbours "Allston",
+# both valid mailing names; a municipal boundary, by contrast, only meets the
+# next town's street at one end, where a handful of points at most are close.
+INTERLEAVED_SHARE = 0.5
+
+
+def merge_interleaved_streets(streets: dict[str, Street]) -> None:
+    """Fold back together a street its own numbers name two ways.
+
+    `group_osm_streets` separates a name by municipality, which is what keeps
+    Cambridge's Massachusetts Avenue apart from Arlington's. It also separates,
+    wrongly, a street whose numbers disagree on what to call their town — a
+    district for some, the city for others — and each half then holds only
+    part of the numbers. The smaller half joins the larger when most of its
+    points lie along it, and is then known by the larger's municipality.
+    """
+    by_name: dict[str, list[str]] = defaultdict(list)
+    for key, street in streets.items():
+        if street.kind == KIND_STREET:
+            by_name[key.split("|", 1)[1]].append(key)
+
+    connected = CONNECTED_METERS ** 2
+    for keys in by_name.values():
+        if len(keys) < 2:
+            continue
+        keys.sort(key=lambda key: (-len(streets[key].latitudes), key))
+        kept: list[str] = []
+        cells: dict[tuple[int, int], list[tuple[tuple[float, float], str]]]
+        cells = defaultdict(list)
+        for key in keys:
+            street = streets[key]
+            points = list(zip(street.latitudes, street.longitudes))
+            along: Counter[str] = Counter()
+            for point in points:
+                near = {
+                    other
+                    for cell in neighbouring_cells(point)
+                    for position, other in cells.get(cell, ())
+                    if squared_meters(point, position) <= connected
+                }
+                along.update(near)
+            target = next((other for other, count in along.most_common()
+                           if count >= INTERLEAVED_SHARE * len(points)), None)
+            if target is None:
+                kept.append(key)
+                for point in points:
+                    cells[radius_cell(point)].append((point, key))
+                continue
+            merged = streets[target]
+            merged.latitudes.extend(street.latitudes)
+            merged.longitudes.extend(street.longitudes)
+            merged.postcode = merged.postcode or street.postcode
+            for number, positions in street.numbers.items():
+                merged.numbers.setdefault(number, []).extend(positions)
+            del streets[key]
+
+
+def nearest_place_name(
+    position: tuple[float, float], places: list[Street]
+) -> str:
+    """The name of the inhabited place nearest to a point, or a blank."""
+    if not places:
+        return ""
+    nearest = min(places, key=lambda place: squared_meters(
+        position, (place.latitudes[0], place.longitudes[0])
+    ))
+    return nearest.display_name
 
 
 def split_house_number(raw: str) -> tuple[str, str]:
@@ -563,35 +815,6 @@ def split_house_number(raw: str) -> tuple[str, str]:
             break
         digits += character
     return digits, raw[len(digits):].strip(" -/")
-
-
-def attach_municipalities(streets: dict[str, Street], places: list[Street]) -> int:
-    """Name the municipality of the streets that carry none.
-
-    OpenStreetMap tags ``addr:city`` on the house numbers, rarely on the street
-    itself, and in some countries on neither. A street with no municipality is
-    still findable, but the results list would show it against a blank, and two
-    streets of the same name in two towns would be indistinguishable.
-
-    The nearest inhabited place gives its name. It is an approximation — a
-    boundary is not a distance — and it is the same one `fill_missing_places_communes`
-    makes for landmarks, for the same reason: the alternative is a blank.
-    """
-    if not places:
-        return 0
-    named = 0
-    for street in streets.values():
-        if street.city or not street.latitudes:
-            continue
-        latitude = statistics.median(street.latitudes)
-        longitude = statistics.median(street.longitudes)
-        nearest = min(places, key=lambda place: (
-            (place.latitudes[0] - latitude) ** 2
-            + (place.longitudes[0] - longitude) ** 2
-        ))
-        street.city = nearest.display_name
-        named += 1
-    return named
 
 
 def read_osm_municipalities(
@@ -980,13 +1203,13 @@ def main() -> int:
             # from the extract the map is already cut from (§15).
             print("[1/3] Reading the addresses of the OpenStreetMap extract…")
             with tempfile.TemporaryDirectory() as work:
-                streets, rows_read, rows_kept = read_osm_addresses(
-                    arguments.osm_extract, box, Path(work), normalizer
-                )
                 municipalities = read_osm_municipalities(
                     arguments.osm_extract, box, Path(work)
                 )
-            named = attach_municipalities(streets, municipalities)
+                streets, rows_read, rows_kept, named = read_osm_addresses(
+                    arguments.osm_extract, box, Path(work), normalizer,
+                    municipalities,
+                )
             numbered = sum(len(street.numbers) for street in streets.values())
             print(f"      {rows_read} objects read, {rows_kept} inside the box, "
                   f"{len(streets)} streets, {numbered} house numbers")
