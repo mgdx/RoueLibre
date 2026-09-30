@@ -40,13 +40,20 @@
          written in the state line's own style, it read as one more state and
          went unseen. Shown only for a set the manifest calls outdated. The
          mark is a compound drawable, which TalkBack does not announce: the
-         label is what is read, and it says everything the mark does. -->
+         label is what is read, and it says everything the mark does.
+
+         Its text starts at the start: a label wrapped on two lines fills its
+         half of the row, and text pushed to the end left the mark at the
+         other edge, far from the words it goes with. On one line the view is
+         as wide as its text, and the bias keeps it at the end of the row.
+         Aligned on the name's baseline rather than its top: the smaller type
+         set against the top read as floating above the name. -->
     <TextView
         android:id="@+id/dataset_update_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawablePadding="@dimen/space_xs"
-        android:gravity="end|center_vertical"
+        android:gravity="start|center_vertical"
         android:justificationMode="none"
         android:text="@string/dataset_update_available"
         android:textAppearance="@style/TextAppearance.RoueLibre.Label.Value"
@@ -58,7 +65,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="@id/dataset_badge_limit"
-        app:layout_constraintTop_toTopOf="@id/dataset_name"
+        app:layout_constraintBaseline_toBaselineOf="@id/dataset_name"
         tools:visibility="visible" />
 
     <!-- The purpose starts below whichever of the name and the badge ends

@@ -85,6 +85,28 @@ class UpdateBadgeTest {
         }
     }
 
+    /**
+     * The mark stays against its text, and the label sits on the name's line.
+     *
+     * Text pushed to the end of a two-line badge left the mark at the other
+     * edge of the view; a badge set against the top of the name, in smaller
+     * type, read as floating above it.
+     */
+    @Test
+    fun `the mark stays against the label, on the name's baseline`() {
+        assertTrue(badge.contains("""android:gravity="start|center_vertical""""))
+        val baseline = """app:layout_constraintBaseline_toBaselineOf="@id/dataset_name""""
+        assertTrue(badge.contains(baseline))
+        assertFalse(badge.contains("layout_constraintTop_toTopOf"))
+        val layout = File(resources, "layout/item_dataset.xml").readText()
+        val heading = """app:constraint_referenced_ids="dataset_name,dataset_update_badge""""
+        val below = """app:layout_constraintTop_toBottomOf="@id/dataset_heading_bottom""""
+        assertTrue(
+            "The purpose starts below the badge as well as the name",
+            layout.contains(heading) && layout.contains(below),
+        )
+    }
+
     /** A long label wraps within its half of the row, beside a name it leaves be. */
     @Test
     fun `a long label cannot squeeze the name`() {
