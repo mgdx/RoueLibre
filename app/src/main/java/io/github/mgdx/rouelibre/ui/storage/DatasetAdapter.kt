@@ -68,11 +68,6 @@ class DatasetAdapter(
 
                 installed == null -> context.getString(R.string.dataset_absent)
 
-                // The manifest has been checked and announces something else:
-                // say so on the row concerned, rather than in bulk (SPEC §4.4).
-                row.update == DatasetUpdate.Outdated ->
-                    context.getString(R.string.dataset_update_available)
-
                 else -> context.getString(
                     R.string.dataset_installed,
                     formatBytes(context, installed.sizeBytes),
@@ -80,6 +75,12 @@ class DatasetAdapter(
                         .format(installed.installedAt.atZone(ZoneId.systemDefault())),
                 )
             }
+
+            // The manifest has been checked and announces something else: say
+            // so on the row concerned, rather than in bulk (SPEC §4.4). A badge
+            // beside the name, and the state line kept below it: what is
+            // installed, and when, is what tells an old set from a new one.
+            binding.datasetUpdateBadge.isVisible = row.announcesUpdate
 
             // The label says what will happen: install where there is nothing,
             // replace where something is already there.
@@ -115,6 +116,16 @@ class DatasetAdapter(
         }
     }
 }
+
+/**
+ * Whether the row carries the "update available" badge.
+ *
+ * Only for a set that is on the device and that the manifest announces in
+ * another version. The installed set is checked as well as the verdict: a set
+ * deleted since the check has nothing left to update.
+ */
+internal val DatasetRow.announcesUpdate: Boolean
+    get() = installed != null && update == DatasetUpdate.Outdated
 
 /** A dataset's displayed name. */
 fun DatasetKind.nameResource(): Int = when (this) {
