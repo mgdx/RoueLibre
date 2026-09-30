@@ -15,12 +15,67 @@
         android:id="@+id/dataset_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/space_s"
         android:textAppearance="@style/TextAppearance.RoueLibre.Body"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/dataset_update_badge"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginEnd="0dp"
         tools:text="Fond de carte" />
+
+    <!-- The furthest the badge may reach towards the name: half the row. A
+         label as long as the Slovak or the Hungarian one wraps inside its half
+         rather than squeezing the name, which keeps the other half whatever
+         the language. -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/dataset_badge_limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <!-- An update announced by the manifest, on the row concerned (SPEC §4.4).
+         A badge beside the name rather than a replacement of the state line:
+         written in the state line's own style, it read as one more state and
+         went unseen. Shown only for a set the manifest calls outdated. The
+         mark is a compound drawable, which TalkBack does not announce: the
+         label is what is read, and it says everything the mark does.
+
+         Its text starts at the start: a label wrapped on two lines fills its
+         half of the row, and text pushed to the end left the mark at the
+         other edge, far from the words it goes with. On one line the view is
+         as wide as its text, and the bias keeps it at the end of the row.
+         Aligned on the name's baseline rather than its top: the smaller type
+         set against the top read as floating above the name. -->
+    <TextView
+        android:id="@+id/dataset_update_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="@dimen/space_xs"
+        android:gravity="start|center_vertical"
+        android:justificationMode="none"
+        android:text="@string/dataset_update_available"
+        android:textAppearance="@style/TextAppearance.RoueLibre.Label.Value"
+        android:textColor="@color/alert"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:drawableStartCompat="@drawable/ic_update_available"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="@id/dataset_badge_limit"
+        app:layout_constraintBaseline_toBaselineOf="@id/dataset_name"
+        tools:visibility="visible" />
+
+    <!-- The purpose starts below whichever of the name and the badge ends
+         lower: a badge wrapped on two lines must not run into it. -->
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/dataset_heading_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="dataset_name,dataset_update_badge" />
 
     <TextView
         android:id="@+id/dataset_purpose"
@@ -29,7 +84,7 @@
         android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dataset_name"
+        app:layout_constraintTop_toBottomOf="@id/dataset_heading_bottom"
         tools:text="Affiche la carte sans réseau" />
 
     <TextView
