@@ -14,6 +14,7 @@
   <a href="docs/networks.md"><img alt="340 networks in 39 countries" src="https://img.shields.io/badge/networks-340%20in%2039%20countries-0F6E56?style=flat-square"></a>
   <img alt="No tracker" src="https://img.shields.io/badge/trackers-none-0F6E56?style=flat-square">
   <img alt="APK: 7.9 MB" src="https://img.shields.io/badge/APK-7.9%20MB-0F6E56?style=flat-square">
+  <a href="https://liberapay.com/mgdx/donate"><img alt="Donate on Liberapay" src="https://img.shields.io/badge/donate-Liberapay-0F6E56?style=flat-square&logo=liberapay&logoColor=white"></a>
 </p>
 
 <p align="center">
