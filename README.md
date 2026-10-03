@@ -207,6 +207,13 @@ And if none of that is for you: a ⭐ on the repository is what makes Roue Libre
 visible to the next person looking for a bike-share application that spies on
 nobody.
 
+And to support the work itself, you can make a donation on
+[Liberapay](https://liberapay.com/mgdx).
+
+<p align="center">
+  <a href="https://liberapay.com/mgdx/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
+</p>
+
 ## What "Roue Libre" means
 
 *Roue libre* is French for **freewheel**: the ratchet that lets a bicycle carry
