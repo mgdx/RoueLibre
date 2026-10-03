@@ -544,18 +544,29 @@
                 android:text="@string/download_unmetered_only_description"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
 
-            <!-- "About" heads no section of its own: it settles nothing and
-                 changes nothing, it opens a screen, and a title above it would
-                 only repeat the word written on it. What says it belongs to no
-                 section is the air above it, one rung wider than the gap a
-                 section title takes: read on the phone, at the section's own
-                 gap it passed for a second offline-data setting. -->
+            <!-- The donation and "about" head no section of their own: they
+                 settle nothing and change nothing, each opens a page, and a
+                 title above them would only repeat the words written on them.
+                 What says they belong to no section is the air above them, one
+                 rung wider than the gap a section title takes: read on the
+                 phone, at the section's own gap they passed for more
+                 offline-data settings. -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/open_donate"
+                style="@style/Widget.RoueLibre.Toggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xxl"
+                android:gravity="start|center_vertical"
+                android:minHeight="@dimen/touch_target_min"
+                android:text="@string/donate_open" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/open_about"
                 style="@style/Widget.RoueLibre.Toggle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_xxl"
+                android:layout_marginTop="@dimen/space_s"
                 android:gravity="start|center_vertical"
                 android:minHeight="@dimen/touch_target_min"
                 android:text="@string/about_open" />

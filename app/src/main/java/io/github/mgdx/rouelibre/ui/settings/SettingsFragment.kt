@@ -1,10 +1,13 @@
 package io.github.mgdx.rouelibre.ui.settings
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat
 import androidx.core.view.isVisible
@@ -107,7 +110,7 @@ class SettingsFragment : Fragment() {
 
         setUpToolbar(views)
         // In the order the screen reads them (SPEC §7.6): city, display,
-        // journey, offline data, then the way to "about".
+        // journey, offline data, then the donation and the way to "about".
         setUpCity(views)
         setUpLanguage(views)
         setUpTheme(views)
@@ -120,6 +123,7 @@ class SettingsFragment : Fragment() {
         setUpSavedPlaces(views)
         setUpOfflineData(views)
         setUpDownloadPolicy(views)
+        setUpDonate(views)
         setUpAbout(views)
         listenForTheLanguageChosen()
         listenForTheAddressChosen()
@@ -484,6 +488,22 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    /**
+     * The way to the donation page, which belongs to no section either.
+     *
+     * It opens the browser and nothing else: the page is the user's to visit,
+     * and nothing leaves this phone without them having pressed.
+     */
+    private fun setUpDonate(views: FragmentSettingsBinding) {
+        views.openDonate.setOnClickListener {
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, DONATE_URL.toUri()))
+            } catch (_: ActivityNotFoundException) {
+                Snackbar.make(views.root, R.string.about_no_browser, Snackbar.LENGTH_LONG).show()
+            }
+        }
+    }
+
     /** The way to "about" (SPEC §7.7), which belongs to no section. */
     private fun setUpAbout(views: FragmentSettingsBinding) {
         views.openAbout.setOnClickListener { show(AboutFragment()) }
@@ -778,6 +798,9 @@ class SettingsFragment : Fragment() {
 
         /** The key the row awaiting an address is kept under across a rebuild. */
         const val STATE_PLACE_BEING_NAMED = "settings-place-being-named"
+
+        /** Where the donation button leads: the maintainer's Liberapay page. */
+        const val DONATE_URL = "https://liberapay.com/mgdx/donate"
     }
 }
 

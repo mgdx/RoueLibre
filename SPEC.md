@@ -502,6 +502,8 @@ The order is the reading: the city frames everything under it — the network se
 
 The way to "about" (§7.7) **closes the screen and belongs to no section**. It settles nothing and changes nothing, it opens a screen, and a title above it would only repeat the word written on it. What says it stands outside the sections is the air above it, one rung of the spacing scale wider than the gap a section takes: read on the phone, at the section's own gap it passed for a second offline-data setting.
 
+**The way to the donation page stands just above it, outside the sections as well**, added on 4 October 2026. It opens the maintainer's Liberapay page in the browser, and only when pressed: the application itself sends nothing. It shares the air that sets "about" apart rather than taking a title, for the same reason — it settles nothing, and a heading would only repeat its words.
+
 **A section holding nothing is not shown, and is not written into the layout either.** A title followed by nothing promises a setting the screen does not have, and §14 wants no view built against a feature that has not arrived. "Journey" was in that case when this was written, and it stopped being so on 16 August 2026: the walking pace, the first setting placed there, brought its title with it. What a setting costs is therefore its own views under the right title, and nothing above or below them.
 
 **A section title is announced as a heading**, so a screen reader can jump from one to the next instead of reading the screen end to end. The attribute that declares a heading in a layout arrived in API 28, two releases above this application's floor, so the title is a small view of its own that sets it in code and holds on every device served.
