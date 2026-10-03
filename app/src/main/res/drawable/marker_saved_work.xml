@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The work the user has named (SPEC §7.1, §7.6), laid on the map: the disc
+    marker_saved_home is drawn on, carrying the briefcase instead of the house.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/surface"
+        android:pathData="M12,0a12,12 0,1 1,0 24a12,12 0,1 1,0 -24z" />
+    <path
+        android:fillColor="@color/ink"
+        android:pathData="M12,1.6a10.4,10.4 0,1 1,0 20.8a10.4,10.4 0,1 1,0 -20.8z" />
+    <group
+        android:scaleX="0.6"
+        android:scaleY="0.6"
+        android:translateX="4.8"
+        android:translateY="4.8">
+        <path
+            android:fillColor="@color/surface"
+            android:pathData="M20,6h-4V4c0,-1.11 -0.89,-2 -2,-2h-4c-1.11,0 -2,0.89 -2,2v2H4c-1.11,0 -1.99,0.89 -1.99,2L2,19c0,1.11 0.89,2 2,2h16c1.11,0 2,-0.89 2,-2V8c0,-1.11 -0.89,-2 -2,-2zM14,6h-4V4h4v2z" />
+    </group>
+</vector>

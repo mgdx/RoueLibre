@@ -499,6 +499,37 @@
                 android:text="@string/settings_place_outside_city"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Secondary" />
 
+            <!-- How the named places show on the map (SPEC §7.1): a marker
+                 each, and a button each that brings the map onto it. Two
+                 switches rather than one, a marker and a control over the
+                 stations being two different costs. Shown only once a place
+                 is named: before that, both would settle nothing. -->
+            <LinearLayout
+                android:id="@+id/places_on_map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/show_places_on_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_m"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:text="@string/settings_places_markers"
+                    android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/place_buttons_on_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_s"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:text="@string/settings_places_buttons"
+                    android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+            </LinearLayout>
+
             <!-- Offline data: what the application occupies, and how to
                  reclaim it (SPEC §4.4). -->
             <io.github.mgdx.rouelibre.ui.settings.SettingsSectionTitle

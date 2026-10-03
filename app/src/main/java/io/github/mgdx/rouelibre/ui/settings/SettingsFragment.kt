@@ -121,6 +121,7 @@ class SettingsFragment : Fragment() {
         setUpOwnBikeKind(views)
         setUpWalkingPace(views)
         setUpSavedPlaces(views)
+        setUpPlacesOnMap(views)
         setUpOfflineData(views)
         setUpDownloadPolicy(views)
         setUpDonate(views)
@@ -363,7 +364,47 @@ class SettingsFragment : Fragment() {
                     .collect { (home, work) ->
                         showPlace(SavedPlaceKind.Home, home, area)
                         showPlace(SavedPlaceKind.Work, work, area)
+                        binding?.placesOnMap?.isVisible = home != null || work != null
                     }
+            }
+        }
+    }
+
+    /**
+     * How the named places show on the map: a marker each, and a button each
+     * that brings the map onto it (SPEC §7.1, §7.6).
+     *
+     * Written the moment a switch is pressed, and the map follows the stored
+     * values itself, like the station filters. The two switches only stand
+     * once a place is named — see [setUpSavedPlaces], which shows them.
+     */
+    private fun setUpPlacesOnMap(views: FragmentSettingsBinding) {
+        views.showPlacesOnMap.setOnCheckedChangeListener { _, isChecked ->
+            if (isFilling) return@setOnCheckedChangeListener
+            viewLifecycleOwner.lifecycleScope.launch {
+                preferences.setShowSavedPlacesOnMap(isChecked)
+            }
+        }
+        views.placeButtonsOnMap.setOnCheckedChangeListener { _, isChecked ->
+            if (isFilling) return@setOnCheckedChangeListener
+            viewLifecycleOwner.lifecycleScope.launch {
+                preferences.setSavedPlaceButtonsOnMap(isChecked)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                combine(
+                    preferences.showSavedPlacesOnMap,
+                    preferences.savedPlaceButtonsOnMap,
+                    ::Pair,
+                ).collect { (markers, buttons) ->
+                    val current = binding ?: return@collect
+                    isFilling = true
+                    current.showPlacesOnMap.isChecked = markers
+                    current.placeButtonsOnMap.isChecked = buttons
+                    isFilling = false
+                }
             }
         }
     }
