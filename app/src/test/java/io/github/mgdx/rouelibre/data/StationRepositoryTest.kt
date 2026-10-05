@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
+import mockwebserver3.QueueDispatcher
+import mockwebserver3.RecordedRequest
 import okhttp3.OkHttpClient
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -169,6 +171,36 @@ class StationRepositoryTest {
         assertEquals(3, server.requestCount)
         assertEquals(2, dao.stations.value.size)
         assertEquals(7, dao.availabilities.value.single().bikesAvailable)
+    }
+
+    @Test
+    fun `a new network's stations land with their state, stamped when it arrived`() = runTest {
+        // Paris after Lille: its state takes seconds to come down. Written
+        // before it, the stations stood on the map that long with no state
+        // and "never updated" above them, then aged at once by the whole
+        // download.
+        var stationsWhileStateDownloads = -1
+        val stateArrivesAt = now + Duration.ofSeconds(7)
+        server.dispatcher = object : QueueDispatcher() {
+            override fun dispatch(request: RecordedRequest): MockResponse {
+                if (request.url.encodedPath == "/status.json") {
+                    stationsWhileStateDownloads = dao.stations.value.size
+                    now = stateArrivesAt
+                }
+                return super.dispatch(request)
+            }
+        }
+        enqueueDiscovery()
+        enqueueInformation()
+        enqueueStatus(bikesAtFirstStation = 7)
+        val repository = repository()
+
+        repository.refresh()
+
+        assertEquals(0, stationsWhileStateDownloads)
+        val snapshot = repository.observeStations().first()
+        assertEquals(2, snapshot.stations.size)
+        assertEquals(stateArrivesAt, snapshot.fetchedAt)
     }
 
     @Test

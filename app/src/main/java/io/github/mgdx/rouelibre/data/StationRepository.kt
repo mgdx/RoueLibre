@@ -146,6 +146,7 @@ class StationRepository(
 
         // Static data first: without it, a real-time state has no station to
         // describe.
+        var receivedStations: List<Station>? = null
         if (stationInformationRefreshIsDue(now)) {
             when (val outcome = remote.fetchStationInformation(discovery)) {
                 is Outcome.Failure -> {
@@ -155,21 +156,33 @@ class StationRepository(
                     if (dao.stationCount() == 0) return@withLock outcome
                 }
 
-                is Outcome.Success -> {
-                    dao.replaceStations(outcome.value.stations.map(Station::toEntity))
-                    refreshTimestamps.setStationInformationFetchedAt(now)
-                }
+                is Outcome.Success -> receivedStations = outcome.value.stations
             }
         }
 
-        when (val outcome = remote.fetchStationStatus(discovery)) {
-            is Outcome.Failure -> return@withLock outcome
+        // The stations are written only once their state is in hand, and just
+        // before it. Written as soon as they arrived, a large network's
+        // stations sat on the map for the whole download of its state — seconds
+        // for Paris's 1,519 — with no availability and the freshness line
+        // saying "never updated" above them.
+        val status = remote.fetchStationStatus(discovery)
+        receivedStations?.let { stations ->
+            dao.replaceStations(stations.map(Station::toEntity))
+            refreshTimestamps.setStationInformationFetchedAt(now)
+        }
+
+        when (status) {
+            is Outcome.Failure -> return@withLock status
             is Outcome.Success -> {
+                // Stamped when the state arrived, not when the refresh began:
+                // the age shown is that of the counts on screen, and a slow
+                // download must not make them look older than they are.
+                val fetchedAt = clock.instant()
                 dao.replaceAvailabilities(
-                    outcome.value.availabilities.map { it.toEntity(fetchedAt = now) },
+                    status.value.availabilities.map { it.toEntity(fetchedAt = fetchedAt) },
                 )
                 lastStatusRefresh = now
-                countFleetFrom(discovery, outcome.value.availabilities)
+                countFleetFrom(discovery, status.value.availabilities)
             }
         }
 
