@@ -2,8 +2,8 @@
 <resources>
 
     <!-- The buttons for home and work, lying down (SPEC §7.1): a second
-         column just to the start of the right-hand one, home level with the
-         journey button and work above it.
+         column just to the start of the right-hand one, home level with
+         "locate me" and work level with the journey button.
 
          Standing up they head the right-hand column, but a phone on its side
          has some 410dp of height, and seven buttons of 48dp with their gaps do
@@ -11,6 +11,12 @@
          came to lie over the settings, which could no longer be pressed. Beside
          the column, nothing they add climbs towards the top row, and a button
          that comes or goes still moves none of the others.
+
+         They start at "locate me" rather than at the journey button so as to
+         leave the compass its row. With home level with the journey button,
+         work rose into the height of the top row, in the very column the
+         compass appears in once the map is turned, and on a Fairphone 3 the
+         two overlapped by 14 px.
 
          The shift is one button and one gap (touch_target_min plus space_s);
          values/dimens.xml says how the two figures are read. -->

@@ -16,10 +16,11 @@ import java.io.File
  * the settings, which a press then never reached: it brought the map onto
  * work instead.
  *
- * Lying down they now stand in a second column beside the right-hand one. One
- * layout serves both orientations, the two arrangements differing only by two
+ * Lying down they now stand in a second column beside the right-hand one, a
+ * row below the journey button so as to leave the compass its row. One layout
+ * serves both orientations, the two arrangements differing only by two
  * distances that `values-land` overrides; what is held here is that the
- * buttons hang from the journey button by those distances, and that the
+ * buttons hang from "locate me" by those distances, and that the
  * distances still say "head of the column" standing up and "beside it" lying
  * down. The geometry itself is measured on a device. No Android runtime is
  * involved (SPEC §14).
@@ -71,11 +72,11 @@ class SavedPlaceButtonsLandscapeTest {
     }
 
     @Test
-    fun `home hangs from the journey button by the two distances`() {
+    fun `home hangs from locate me by the two distances`() {
         val home = attributesOf("centre_on_home")
         listOf(
-            """app:layout_constraintEnd_toEndOf="@id/open_journey"""",
-            """app:layout_constraintBottom_toBottomOf="@id/open_journey"""",
+            """app:layout_constraintEnd_toEndOf="@id/locate_me"""",
+            """app:layout_constraintBottom_toBottomOf="@id/locate_me"""",
             """android:layout_marginEnd="@dimen/saved_place_button_shift"""",
             """android:layout_marginBottom="@dimen/saved_place_button_lift"""",
         ).forEach { expected ->
@@ -100,12 +101,21 @@ class SavedPlaceButtonsLandscapeTest {
         }
     }
 
+    /**
+     * Two places above "locate me": the journey button's, then home's, just
+     * over it — where home stood when it was chained up from that button.
+     */
     @Test
     fun `standing up, the buttons head the right-hand column`() {
         assertEquals(0, standingUp["saved_place_button_shift"])
-        assertEquals(onePlace, standingUp["saved_place_button_lift"])
+        assertEquals(2 * onePlace, standingUp["saved_place_button_lift"])
     }
 
+    /**
+     * Home level with "locate me", and so work level with the journey button:
+     * a row higher, work rose into the height of the top row, in the column
+     * where the compass appears once the map is turned.
+     */
     @Test
     fun `lying down, the buttons stand in a column beside it`() {
         assertEquals(onePlace, lyingDown["saved_place_button_shift"])

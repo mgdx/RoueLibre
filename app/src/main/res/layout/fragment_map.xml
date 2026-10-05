@@ -124,9 +124,10 @@
         nearest the others, being the one pressed most.
 
         Lying down, the column has no room for them: they stand in a second
-        column beside it instead, home level with the journey button. Both
-        arrangements are one set of constraints on the journey button, moved
-        by `saved_place_button_shift` and `saved_place_button_lift` — see
+        column beside it instead, home level with "locate me" and work level
+        with the journey button. Both arrangements are one set of constraints
+        on "locate me", which is up whenever these are, moved by
+        `saved_place_button_shift` and `saved_place_button_lift` — see
         values/dimens.xml and values-land/dimens.xml for why.
     -->
     <com.google.android.material.button.MaterialButton
@@ -141,8 +142,8 @@
         app:backgroundTint="@color/surface"
         app:icon="@drawable/ic_home"
         app:iconTint="@color/ink"
-        app:layout_constraintBottom_toBottomOf="@id/open_journey"
-        app:layout_constraintEnd_toEndOf="@id/open_journey"
+        app:layout_constraintBottom_toBottomOf="@id/locate_me"
+        app:layout_constraintEnd_toEndOf="@id/locate_me"
         tools:visibility="visible" />
 
     <com.google.android.material.button.MaterialButton
