@@ -1,0 +1,10 @@
+Twój dom i twoja praca są na mapie, o jedno stuknięcie.
+
+• Gdy nadasz nazwę swojemu domowi lub pracy, zostaje on oznaczony na mapie, a przycisk obok przycisku trasy przenosi tam mapę od razu. Dwa przełączniki w sekcji „Moje miejsca” wyłączają znaczniki i przyciski, każde osobno.
+• Poprawiono: w miastach, których adresy pochodzą z OpenStreetMap, dwie ulice o tej samej nazwie w dwóch miejscowościach były łączone w jedną — Massachusetts Avenue była jedną ulicą, a adres mógł trafić do niewłaściwej miejscowości. Wyszukiwanie adresów w tych miastach zostało zbudowane od nowa: otwórz Pamięć, sprawdź aktualizacje i pobierz ponownie „Indeks adresów”.
+• Poprawiono: adres wybrany w jednym mieście pozostawał oznaczony na mapie po przełączeniu na inne.
+• Ekran „Pamięć” miasta, w którym nic jeszcze nie pobrano, proponuje pobieranie od razu po otwarciu, zamiast przycisku „Sprawdź aktualizacje”, który trzeba było najpierw nacisnąć. Dostępna aktualizacja jest teraz pokazywana jako plakietka obok nazwy, gdzie ją widać.
+• Stacje dużej sieci potrzebują kilku sekund, żeby dotrzeć: wiersz nad mapą mówi teraz „Wczytuję stacje…” zamiast „Nigdy nie aktualizowano”, a stacje pojawiają się razem ze swoimi rowerami. Wiek pokazywany potem to wiek danych.
+• Poprawiono: zastąpienie stacji bardzo dużej sieci mogło się nie udać.
+• W poziomie przyciski domu i pracy nie zasłaniają już przycisku ustawień; przy bardzo dużym tekście wiersz nad mapą nie rozciąga już słów na całą szerokość.
+• Przycisk „Wesprzyj przez Liberapay” w ustawieniach otwiera stronę projektu w Liberapay. To tylko link, nic więcej: aplikacja niczego nie wysyła.

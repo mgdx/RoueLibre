@@ -1,0 +1,10 @@
+Ton domicile et ton travail sont sur la carte, à portée de doigt.
+
+• Une fois ton domicile ou ton travail nommé, il est marqué sur la carte, et un bouton à côté de celui de l’itinéraire y amène la carte directement. Deux interrupteurs dans « Mes lieux » désactivent les marqueurs et les boutons, séparément.
+• Corrigé : dans les villes dont les adresses viennent d’OpenStreetMap, deux rues du même nom dans deux communes étaient fusionnées en une seule — Massachusetts Avenue ne faisait qu’une rue, et une adresse pouvait être placée dans la mauvaise commune. La recherche d’adresses de ces villes a été refaite : ouvre Stockage, vérifie les mises à jour et retélécharge l’« Index d’adresses ».
+• Corrigé : une adresse choisie dans une ville restait marquée sur la carte quand tu passais à une autre.
+• L’écran Stockage d’une ville où rien n’est encore téléchargé propose le téléchargement dès son ouverture, au lieu d’un bouton « Vérifier les mises à jour » à presser d’abord. Une mise à jour disponible s’affiche maintenant en badge à côté du nom, là où on la voit.
+• Les stations d’un grand réseau mettent quelques secondes à arriver : la ligne au-dessus de la carte dit maintenant « Chargement des stations… » au lieu de « Jamais mis à jour », et les stations apparaissent avec leurs vélos. L’âge affiché ensuite est celui des données.
+• Corrigé : remplacer les stations d’un très grand réseau pouvait échouer.
+• En paysage, les boutons du domicile et du travail ne recouvrent plus celui des réglages ; en très grand texte, la ligne au-dessus de la carte n’étire plus ses mots sur toute la largeur.
+• Un bouton « Faire un don sur Liberapay » dans les réglages ouvre la page Liberapay du projet. C’est un lien, rien de plus : l’application n’envoie rien.

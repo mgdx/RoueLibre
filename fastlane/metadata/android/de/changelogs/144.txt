@@ -1,0 +1,10 @@
+Dein Zuhause und deine Arbeit sind auf der Karte, nur einen Fingertipp entfernt.
+
+• Sobald du dein Zuhause oder deine Arbeit benannt hast, ist es auf der Karte markiert, und eine Schaltfläche neben der Routen-Schaltfläche bringt die Karte direkt dorthin. Zwei Schalter in „Meine Orte“ schalten die Markierungen und die Schaltflächen aus, getrennt voneinander.
+• Behoben: In Städten, deren Adressen aus OpenStreetMap stammen, wurden zwei gleichnamige Straßen in zwei Orten zu einer einzigen zusammengelegt – die Massachusetts Avenue war eine einzige Straße, und eine Adresse konnte im falschen Ort landen. Die Adresssuche dieser Städte wurde neu erstellt: Öffne Speicher, prüfe auf Updates und lade den „Adressindex“ erneut herunter.
+• Behoben: Eine in einer Stadt gewählte Adresse blieb auf der Karte markiert, nachdem du zu einer anderen gewechselt hattest.
+• Der Bildschirm Speicher einer Stadt, in der noch nichts heruntergeladen ist, bietet den Download gleich beim Öffnen an, statt einer Schaltfläche „Auf Updates prüfen“, die man zuerst drücken musste. Ein verfügbares Update erscheint jetzt als Plakette neben dem Namen, wo man es sieht.
+• Die Stationen eines großen Netzes brauchen ein paar Sekunden: Die Zeile über der Karte zeigt jetzt „Stationen werden geladen…“ statt „Nie aktualisiert“, und die Stationen erscheinen zusammen mit ihren Rädern. Das danach angezeigte Alter ist das Alter der Daten.
+• Behoben: Das Ersetzen der Stationen eines sehr großen Netzes konnte fehlschlagen.
+• Im Querformat verdecken die Schaltflächen für Zuhause und Arbeit nicht mehr die Einstellungen-Schaltfläche; bei sehr großer Schrift verteilt die Zeile über der Karte ihre Wörter nicht mehr über die ganze Breite.
+• Eine Schaltfläche „Über Liberapay spenden“ in den Einstellungen öffnet die Liberapay-Seite des Projekts. Sie ist ein Link, mehr nicht: Die App sendet nichts.

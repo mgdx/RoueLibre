@@ -1,0 +1,10 @@
+Kotisi ja työpaikkasi ovat kartalla yhden napautuksen päässä.
+
+• Kun olet nimennyt kotisi tai työpaikkasi, se merkitään kartalle, ja reittipainikkeen vieressä oleva painike vie kartan suoraan sen kohdalle. Kaksi kytkintä kohdassa ”Omat paikat” poistaa merkit ja painikkeet käytöstä, kummankin erikseen.
+• Korjattu: kaupungeissa, joiden osoitteet tulevat OpenStreetMapista, kaksi samannimistä katua kahdessa eri kunnassa yhdistettiin yhdeksi – Massachusetts Avenue oli yksi ainoa katu, ja osoite saattoi sijoittua väärään kuntaan. Näiden kaupunkien osoitehaku on tehty uudelleen: avaa Tallennustila, tarkista päivitykset ja lataa ”Osoitehakemisto” uudelleen.
+• Korjattu: yhdessä kaupungissa valittu osoite jäi merkityksi kartalle, kun vaihdoit toiseen kaupunkiin.
+• Tallennustila-näyttö tarjoaa kaupungille, josta ei ole vielä ladattu mitään, latausta heti avautuessaan sen sijaan, että ensin pitäisi painaa ”Tarkista päivitykset” -painiketta. Saatavilla oleva päivitys näkyy nyt merkkinä nimen vieressä, jossa sen huomaa.
+• Suuren verkoston asemien saapuminen kestää muutaman sekunnin: kartan yläpuolella oleva rivi sanoo nyt ”Ladataan asemia…” eikä ”Ei päivitetty koskaan”, ja asemat ilmestyvät yhdessä pyöriensä kanssa. Sen jälkeen näytetty ikä on tietojen ikä.
+• Korjattu: hyvin suuren verkoston asemien korvaaminen saattoi epäonnistua.
+• Vaakatilassa kodin ja työpaikan painikkeet eivät enää peitä asetuspainiketta; hyvin suurella tekstillä kartan yläpuolinen rivi ei enää levitä sanojaan koko leveydelle.
+• Asetusten ”Lahjoita Liberapayn kautta” -painike avaa projektin Liberapay-sivun. Se on pelkkä linkki: sovellus ei lähetä mitään.

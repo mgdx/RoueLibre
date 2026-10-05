@@ -1,0 +1,10 @@
+Your home and your work are on the map, one tap away.
+
+• Once you have named your home or your work, it is marked on the map, and a button beside the journey button brings the map straight onto it. Two switches in "My places" turn the markers and the buttons off, separately.
+• Fixed: in cities whose addresses come from OpenStreetMap, two streets of the same name in two towns were merged into one — Massachusetts Avenue was a single street, and an address could be placed in the wrong town. The address search of those cities has been rebuilt: open Storage, check for updates, and download the "Address index" again.
+• Fixed: an address picked in one city stayed marked on the map after you switched to another.
+• The Storage screen of a city with nothing downloaded yet offers the download as soon as it opens, instead of a "Check for updates" button to press first. An available update is now shown as a badge beside the name, where it can be seen.
+• A large network's stations take a few seconds to arrive: the line above the map now says "Loading stations…" instead of "Never updated", and the stations appear together with their bikes. The age it then shows is the age of the data.
+• Fixed: replacing a very large network's stations could fail.
+• Lying sideways, the home and work buttons no longer cover the settings button; with very large text, the line above the map no longer spreads its words across the width.
+• A "Donate on Liberapay" button in the settings opens the project's Liberapay page. It is a link, nothing more: the application sends nothing.

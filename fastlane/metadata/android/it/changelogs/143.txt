@@ -1,0 +1,10 @@
+La tua casa e il tuo lavoro sono sulla mappa, a portata di dito.
+
+• Una volta dato un nome alla tua casa o al tuo lavoro, viene segnato sulla mappa, e un pulsante accanto a quello dell'itinerario porta la mappa direttamente lì. Due interruttori in «I miei luoghi» disattivano gli indicatori e i pulsanti, separatamente.
+• Risolto: nelle città i cui indirizzi provengono da OpenStreetMap, due vie con lo stesso nome in due comuni venivano fuse in una sola — Massachusetts Avenue era un'unica via, e un indirizzo poteva finire nel comune sbagliato. La ricerca di indirizzi di queste città è stata rifatta: apri Archiviazione, cerca aggiornamenti e scarica di nuovo l'«Indice degli indirizzi».
+• Risolto: un indirizzo scelto in una città restava segnato sulla mappa dopo essere passati a un'altra.
+• La schermata Archiviazione di una città in cui non è ancora stato scaricato nulla propone il download appena si apre, invece di un pulsante «Cerca aggiornamenti» da premere prima. Un aggiornamento disponibile ora appare come un badge accanto al nome, dove si vede.
+• Le stazioni di una grande rete impiegano qualche secondo ad arrivare: la riga sopra la mappa ora dice «Caricamento delle stazioni…» invece di «Mai aggiornato», e le stazioni compaiono insieme alle loro bici. L'età mostrata dopo è quella dei dati.
+• Risolto: la sostituzione delle stazioni di una rete molto grande poteva non riuscire.
+• In orizzontale, i pulsanti di casa e lavoro non coprono più il pulsante delle impostazioni; con il testo molto grande, la riga sopra la mappa non sparpaglia più le parole su tutta la larghezza.
+• Un pulsante «Dona su Liberapay» nelle impostazioni apre la pagina Liberapay del progetto. È un link, niente di più: l'app non invia nulla.
