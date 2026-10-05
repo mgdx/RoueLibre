@@ -182,6 +182,11 @@
     <string name="freshness_stale">Frozen data · %1$s</string>
     <string name="freshness_fresh">Updated %1$s</string>
     <string name="freshness_never">Never updated</string>
+    <!-- Shown in place of freshness_never while the stations of a network are
+         being fetched for the first time, on the map and the list: a large
+         network takes a dozen seconds to arrive, over an empty map. Once any
+         availability has arrived, the line gives its age instead. -->
+    <string name="freshness_loading">Loading stations…</string>
 
     <string name="stations_empty_title">No stations loaded</string>
     <string name="stations_empty_message">Pull the list down to fetch the network’s stations.</string>
