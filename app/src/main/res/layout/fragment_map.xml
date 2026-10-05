@@ -48,8 +48,14 @@
          after it and are drawn over it, so an age spelt out at a large text
          size used to slide under them and lose its last words. Held to the
          start rather than centred between its two constraints, which is what
-         a constrained wrap would otherwise do. -->
+         a constrained wrap would otherwise do.
+
+         Not justified, for the reason `Widget.RoueLibre.Name` gives: at
+         twice the system text size the age takes two lines, and the theme's
+         justification spread the first of them bank to bank, "Updated" and
+         "ago" a hand's breadth apart. -->
     <TextView
+        style="@style/Widget.RoueLibre.Name"
         android:id="@+id/freshness"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
