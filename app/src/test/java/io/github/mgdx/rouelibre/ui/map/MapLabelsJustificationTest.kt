@@ -42,7 +42,7 @@ class MapLabelsJustificationTest {
 
     @Test
     fun `the labels over the map are set as names, not as paragraphs`() {
-        for (label in listOf("freshness", "picked_place", "attribution")) {
+        for (label in listOf("freshness", "picked_place", "attribution", "missing_tiles_title")) {
             assertTrue(
                 "$label wears the style that refuses justification",
                 tagOf(label).contains("""style="@style/Widget.RoueLibre.Name""""),

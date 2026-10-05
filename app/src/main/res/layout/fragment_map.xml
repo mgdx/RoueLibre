@@ -367,7 +367,12 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible">
 
+        <!-- A heading, set as a name for the reason the freshness label is:
+             wrapped at a large text size, its first line must not be spread
+             bank to bank. The message under it is running text and keeps
+             the theme's justification. -->
         <TextView
+            style="@style/Widget.RoueLibre.Name"
             android:id="@+id/missing_tiles_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
