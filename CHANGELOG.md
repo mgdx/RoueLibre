@@ -99,8 +99,10 @@ together with their state.
   rests on is lowered in a `finally`, so a cancelled refresh never leaves it
   raised.
 - **Replacing a very large network's stations no longer exceeds SQLite's
-  bound-variable limit**: stale stations are deleted in chunks, and a test
-  replaces a network large enough to have failed before.
+  bound-variable limit**
+  ([pull request #6](https://github.com/mgdx/RoueLibre/pull/6), by
+  @alanpoulain): stale stations are deleted in chunks, and a test replaces a
+  network large enough to have failed before.
 - **An announced update shows as a badge beside the dataset's name** instead of
   replacing its state line in that line's own style, where nobody saw it. The
   badge takes at most half the row and wraps inside it.

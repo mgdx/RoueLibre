@@ -165,7 +165,11 @@ Both files are `chmod 600`, and neither is versioned.
    renamed `roue-libre-<version>-<abi>.apk` — the build's own names say nothing
    about which application or which version they hold — and the release body
    carries the certificate fingerprint, so that a reader can check what they
-   downloaded.
+   downloaded. Every line owed to someone outside the project names them, as
+   the changelog does: `([#5](…/issues/5), reported by @login)` for an issue,
+   `([#6](…/pull/6), by @login)` for a pull request. `gh pr list --state
+   merged --search "merged:>=<date of the previous tag>"` lists the pull
+   requests the release holds.
 
 8. **Google Play**, if the release goes there too: `./gradlew bundleRelease`
    and the steps of `docs/play-store.md`. It is a command of its own, never
