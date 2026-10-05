@@ -841,7 +841,7 @@ class SettingsFragment : Fragment() {
         const val STATE_PLACE_BEING_NAMED = "settings-place-being-named"
 
         /** Where the donation button leads: the maintainer's Liberapay page. */
-        const val DONATE_URL = "https://liberapay.com/mgdx/donate"
+        const val DONATE_URL = "https://liberapay.com/mgdx"
     }
 }
 
