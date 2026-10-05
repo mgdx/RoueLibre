@@ -9,6 +9,38 @@ also records what has no visible effect.
 
 ## [Unreleased]
 
+## [1.5.0]
+
+The home and the work a user names now stand on the map, each with a button
+that brings the map onto it — the first feature to make the places of "My
+places" visible outside the journey form. Underneath, the OpenStreetMap
+address indexes stopped folding two same-named streets of two municipalities
+into one, and the 269 cities drawing on them were regenerated and published
+again. Around that, what a first opening and a large network look like: the
+storage screen of an empty city offers its download, the freshness line says
+the stations are loading rather than "never updated", and the stations arrive
+together with their state.
+
+### Added
+
+- **Home and work are marked on the map, with a button bringing the map onto
+  each** (`SPEC.md` §7.1, §7.6). A named place is drawn as an ink disc carrying
+  its house or briefcase, over the stations and under the point searched for.
+  Its button stands at the head of the right-hand column, above the journey
+  button, so that one appearing or going never moves the others; lying down
+  the two stand in a second column, since seven buttons do not fit the height.
+  A place the city in service does not cover keeps its marker but gets no
+  button, the camera being penned inside the city. Two switches in "My
+  places", shown once a place is named, turn markers and buttons off
+  independently; both are on by default.
+- **A donation button in the settings, above "about"**, opening the
+  maintainer's Liberapay page in the browser when pressed, and a Liberapay
+  badge in the README. The application sends nothing.
+- **`tools/generate_all.sh --addresses-only`** rebuilds a city's address
+  index and manifest alone, keeping its reference box, base map and routing
+  graph as published: the index must be cut from the very rectangle the
+  published tiles were.
+
 ### Fixed
 
 - **Two streets of one name in two municipalities are two streets again**
@@ -54,6 +86,27 @@ also records what has no visible effect.
   with one set installed still checks on a press. Offline, the check fails
   with the message it always gave; without a city it says nothing, as the
   subtitle already does.
+
+- **A large network's stations are written with their state, stamped when it
+  arrived.** A refresh wrote the stations as soon as `station_information`
+  came down, then fetched `station_status`: on Paris's 1,519 stations they
+  stood on the map without availability for the whole download, and the state
+  was then stamped with the instant the refresh began, inflating its age. A
+  failed state fetch still writes the stations received.
+- **The freshness line says "Loading stations…" until a network's first
+  availability arrives**, rather than "never updated" over an empty map. The
+  decision lives beside `Freshness`, tested on the JVM, and the refresh flag it
+  rests on is lowered in a `finally`, so a cancelled refresh never leaves it
+  raised.
+- **Replacing a very large network's stations no longer exceeds SQLite's
+  bound-variable limit**: stale stations are deleted in chunks, and a test
+  replaces a network large enough to have failed before.
+- **An announced update shows as a badge beside the dataset's name** instead of
+  replacing its state line in that line's own style, where nobody saw it. The
+  badge takes at most half the row and wraps inside it.
+- **Two justification leaks**: the data's age over the map, at twice the system
+  text size, and the missing-map heading spread their first line bank to bank;
+  both now wear `Widget.RoueLibre.Name`.
 
 ## [1.4.1]
 
