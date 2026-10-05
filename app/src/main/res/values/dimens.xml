@@ -128,6 +128,26 @@
          which is what carries the meaning. -->
     <dimen name="welcome_mark">64dp</dimen>
 
+    <!-- Where the buttons for home and work stand (SPEC §7.1), counted from
+         the "locate me" button they hang from: how far towards the start of
+         the screen, and how far above that button's bottom edge. "Locate me"
+         is on the screen whenever they are, being one of the main screen's
+         controls; the journey button above it is too.
+
+         Standing up, they head the right-hand column: no shift, and a lift of
+         two places, each one button and one gap (touch_target_min plus
+         space_s), which sets home just over the journey button, exactly where
+         a bottom-to-top constraint on it with a space_s margin would. Lying
+         down, values-land moves them into a second column.
+
+         Two distances rather than two sets of constraints, so that one layout
+         serves both orientations: fragment_map.xml is long, and a copy of it
+         in layout-land would have to be kept in step by hand. The same two
+         figures are the gone margins of the work button, so that with home
+         hidden it drops into home's place in either arrangement. -->
+    <dimen name="saved_place_button_shift">0dp</dimen>
+    <dimen name="saved_place_button_lift">112dp</dimen>
+
     <!-- Typographic scale. -->
     <dimen name="text_title">22sp</dimen>
     <!-- The name on the opening screen, and the one rung of the scale that
