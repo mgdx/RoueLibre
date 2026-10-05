@@ -122,21 +122,27 @@
         button, so that a button which comes and goes with the settings never
         pushes the ones below it out of the place the thumb knows. Home
         nearest the others, being the one pressed most.
+
+        Lying down, the column has no room for them: they stand in a second
+        column beside it instead, home level with the journey button. Both
+        arrangements are one set of constraints on the journey button, moved
+        by `saved_place_button_shift` and `saved_place_button_lift` — see
+        values/dimens.xml and values-land/dimens.xml for why.
     -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/centre_on_home"
         style="@style/Widget.Material3.Button.IconButton.Filled"
         android:layout_width="@dimen/touch_target_min"
         android:layout_height="@dimen/touch_target_min"
-        android:layout_marginEnd="@dimen/space_m"
-        android:layout_marginBottom="@dimen/space_s"
+        android:layout_marginEnd="@dimen/saved_place_button_shift"
+        android:layout_marginBottom="@dimen/saved_place_button_lift"
         android:contentDescription="@string/map_centre_on_home"
         android:visibility="gone"
         app:backgroundTint="@color/surface"
         app:icon="@drawable/ic_home"
         app:iconTint="@color/ink"
-        app:layout_constraintBottom_toTopOf="@id/open_journey"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/open_journey"
+        app:layout_constraintEnd_toEndOf="@id/open_journey"
         tools:visibility="visible" />
 
     <com.google.android.material.button.MaterialButton
@@ -144,7 +150,6 @@
         style="@style/Widget.Material3.Button.IconButton.Filled"
         android:layout_width="@dimen/touch_target_min"
         android:layout_height="@dimen/touch_target_min"
-        android:layout_marginEnd="@dimen/space_m"
         android:layout_marginBottom="@dimen/space_s"
         android:contentDescription="@string/map_centre_on_work"
         android:visibility="gone"
@@ -152,7 +157,9 @@
         app:icon="@drawable/ic_work"
         app:iconTint="@color/ink"
         app:layout_constraintBottom_toTopOf="@id/centre_on_home"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/centre_on_home"
+        app:layout_goneMarginBottom="@dimen/saved_place_button_lift"
+        app:layout_goneMarginEnd="@dimen/saved_place_button_shift"
         tools:visibility="visible" />
 
     <!--
