@@ -1,0 +1,10 @@
+Váš domov a vaša práca sú na mape, na jedno ťuknutie.
+
+• Keď pomenujete svoj domov alebo prácu, označí sa na mape a tlačidlo vedľa tlačidla trasy na ne mapu hneď presunie. Dva prepínače v sekcii „Moje miesta“ vypínajú značky a tlačidlá, každé zvlášť.
+• Opravené: v mestách, ktorých adresy pochádzajú z OpenStreetMap, sa dve ulice s rovnakým názvom v dvoch obciach zlúčili do jednej – Massachusetts Avenue bola jedinou ulicou a adresa sa mohla ocitnúť v nesprávnej obci. Vyhľadávanie adries v týchto mestách bolo vytvorené znova: otvorte Úložisko, skontrolujte aktualizácie a znova stiahnite súbor „Register adries“.
+• Opravené: adresa vybraná v jednom meste zostávala označená na mape aj po prepnutí na iné.
+• Obrazovka Úložisko mesta, v ktorom ešte nie je nič stiahnuté, ponúkne stiahnutie hneď po otvorení, namiesto tlačidla „Skontrolovať aktualizácie“, ktoré bolo treba najprv stlačiť. Dostupná aktualizácia sa teraz zobrazuje ako odznak vedľa názvu, kde ju vidno.
+• Stanice veľkej siete prichádzajú niekoľko sekúnd: riadok nad mapou teraz hovorí „Načítavajú sa stanice…“ namiesto „Nikdy neaktualizované“ a stanice sa zobrazia spolu so svojimi bicyklami. Vek, ktorý potom ukazuje, je vek dát.
+• Opravené: nahradenie staníc veľmi veľkej siete mohlo zlyhať.
+• Na šírku už tlačidlá domova a práce neprekrývajú tlačidlo nastavení; pri veľmi veľkom texte už riadok nad mapou neroztiahne svoje slová na celú šírku.
+• Tlačidlo „Prispieť cez Liberapay“ v nastaveniach otvorí stránku projektu na Liberapay. Je to odkaz, nič viac: aplikácia nič neodosiela.

@@ -1,0 +1,10 @@
+Vaš dom i vaš posao su na karti, na jedan dodir.
+
+• Kada imenujete svoj dom ili posao, označen je na karti, a gumb pokraj gumba za putovanje vodi kartu izravno do njega. Dva prekidača u odjeljku „Moja mjesta“ isključuju oznake i gumbe, svaki zasebno.
+• Ispravljeno: u gradovima čije adrese dolaze iz OpenStreetMapa, dvije ulice istog imena u dvama naseljima spajale su se u jednu – Massachusetts Avenue bila je jedna jedina ulica, a adresa je mogla biti smještena u pogrešno naselje. Pretraživanje adresa tih gradova ponovno je izrađeno: otvorite Pohranu, provjerite ažuriranja i ponovno preuzmite „Kazalo adresa“.
+• Ispravljeno: adresa odabrana u jednom gradu ostajala je označena na karti nakon prelaska na drugi.
+• Zaslon Pohrana za grad u kojem još ništa nije preuzeto nudi preuzimanje čim se otvori, umjesto gumba „Provjeri ažuriranja“ koji je prvo trebalo pritisnuti. Dostupno ažuriranje sada se prikazuje kao značka pokraj naziva, gdje se vidi.
+• Stanicama velike mreže treba nekoliko sekundi da stignu: redak iznad karte sada kaže „Učitavanje stanica…“ umjesto „Nikad ažurirano“, a stanice se pojavljuju zajedno sa svojim biciklima. Starost koja se zatim prikazuje starost je podataka.
+• Ispravljeno: zamjena stanica vrlo velike mreže mogla je ne uspjeti.
+• U vodoravnom položaju gumbi za dom i posao više ne prekrivaju gumb postavki; s vrlo velikim tekstom redak iznad karte više ne razvlači riječi preko cijele širine.
+• Gumb „Doniraj putem Liberapaya“ u postavkama otvara Liberapay stranicu projekta. To je samo poveznica, ništa više: aplikacija ništa ne šalje.

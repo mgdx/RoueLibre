@@ -1,0 +1,10 @@
+Evin ve işin haritada, bir dokunuş uzağında.
+
+• Evine ya da işine bir ad verdiğinde haritada işaretleniyor ve yolculuk düğmesinin yanındaki bir düğme haritayı doğrudan oraya götürüyor. “Yerlerim” içindeki iki anahtar, işaretleri ve düğmeleri ayrı ayrı kapatıyor.
+• Düzeltildi: adresleri OpenStreetMap'ten gelen şehirlerde, iki ayrı yerleşimdeki aynı adlı iki sokak tek bir sokakta birleştiriliyordu; Massachusetts Avenue tek bir sokaktı ve bir adres yanlış yerleşime konabiliyordu. Bu şehirlerin adres araması yeniden oluşturuldu: Depolama'yı aç, güncellemeleri denetle ve “Adres dizini” verisini yeniden indir.
+• Düzeltildi: bir şehirde seçilen adres, başka bir şehre geçtikten sonra da haritada işaretli kalıyordu.
+• Henüz hiçbir şey indirilmemiş bir şehrin Depolama ekranı, önce basılması gereken bir “Güncellemeleri denetle” düğmesi yerine, açılır açılmaz indirmeyi öneriyor. Mevcut bir güncelleme artık adın yanında, görülebileceği yerde bir rozet olarak gösteriliyor.
+• Büyük bir ağın istasyonlarının gelmesi birkaç saniye sürüyor: haritanın üstündeki satır artık “Hiç güncellenmedi” yerine “İstasyonlar yükleniyor…” diyor ve istasyonlar bisikletleriyle birlikte beliriyor. Ardından gösterilen yaş, verinin yaşıdır.
+• Düzeltildi: çok büyük bir ağın istasyonlarını değiştirmek başarısız olabiliyordu.
+• Yatay konumda ev ve iş düğmeleri artık ayarlar düğmesini örtmüyor; çok büyük metinde haritanın üstündeki satır artık sözcüklerini tüm genişliğe yaymıyor.
+• Ayarlardaki “Liberapay ile bağış yap” düğmesi projenin Liberapay sayfasını açıyor. Bu yalnızca bir bağlantı, fazlası değil: uygulama hiçbir şey göndermiyor.

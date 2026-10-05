@@ -1,0 +1,10 @@
+A sua casa e o seu trabalho estão no mapa, à distância de um toque.
+
+• Depois de dar um nome à sua casa ou ao seu trabalho, fica marcado no mapa, e um botão ao lado do botão do percurso leva o mapa diretamente até lá. Dois interruptores em «Os meus locais» desativam os marcadores e os botões, separadamente.
+• Corrigido: nas cidades cujos endereços vêm do OpenStreetMap, duas ruas com o mesmo nome em duas localidades eram fundidas numa só — a Massachusetts Avenue era uma única rua, e um endereço podia ficar na localidade errada. A pesquisa de endereços dessas cidades foi refeita: abra Armazenamento, procure atualizações e transfira novamente o «Índice de endereços».
+• Corrigido: um endereço escolhido numa cidade continuava marcado no mapa depois de mudar para outra.
+• O ecrã Armazenamento de uma cidade sem nada transferido propõe a transferência assim que abre, em vez de um botão «Procurar atualizações» a premir primeiro. Uma atualização disponível aparece agora como um emblema ao lado do nome, onde se vê.
+• As estações de uma rede grande demoram alguns segundos a chegar: a linha por cima do mapa diz agora «A carregar as estações…» em vez de «Nunca atualizado», e as estações aparecem juntamente com as suas bicicletas. A idade mostrada a seguir é a idade dos dados.
+• Corrigido: substituir as estações de uma rede muito grande podia falhar.
+• Na horizontal, os botões da casa e do trabalho já não tapam o botão das definições; com texto muito grande, a linha por cima do mapa já não espalha as palavras por toda a largura.
+• Um botão «Fazer um donativo no Liberapay» nas definições abre a página do projeto no Liberapay. É uma ligação, nada mais: a aplicação não envia nada.

@@ -1,0 +1,10 @@
+La teva casa i la teva feina són al mapa, a un toc.
+
+• Un cop has posat nom a casa teva o a la feina, queda marcat al mapa, i un botó al costat del de la ruta hi porta el mapa directament. Dos interruptors a «Els meus llocs» desactiven els marcadors i els botons, per separat.
+• Corregit: a les ciutats les adreces de les quals provenen d'OpenStreetMap, dos carrers amb el mateix nom en dos municipis es fusionaven en un de sol — Massachusetts Avenue era un únic carrer, i una adreça es podia situar al municipi equivocat. La cerca d'adreces d'aquestes ciutats s'ha refet: obre Emmagatzematge, cerca actualitzacions i torna a baixar l'«Índex d’adreces».
+• Corregit: una adreça triada en una ciutat continuava marcada al mapa després de canviar a una altra.
+• La pantalla Emmagatzematge d'una ciutat on encara no s'ha baixat res ofereix la baixada tan bon punt s'obre, en lloc d'un botó «Cerca actualitzacions» que calia prémer primer. Una actualització disponible es mostra ara com una insígnia al costat del nom, on es veu.
+• Les estacions d'una xarxa gran triguen uns segons a arribar: la línia de sobre el mapa diu ara «S’estan carregant les estacions…» en lloc de «Mai actualitzat», i les estacions apareixen juntament amb les seves bicis. L'antiguitat que mostra després és la de les dades.
+• Corregit: substituir les estacions d'una xarxa molt gran podia fallar.
+• En horitzontal, els botons de casa i de la feina ja no tapen el botó d'ajustos; amb el text molt gran, la línia de sobre el mapa ja no escampa les paraules per tota l'amplada.
+• Un botó «Fes un donatiu a Liberapay» als ajustos obre la pàgina de Liberapay del projecte. És un enllaç, res més: l'aplicació no envia res.
