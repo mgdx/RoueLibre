@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The home the user has named (SPEC §7.1, §7.6), laid on the map.
+
+    A disc like the stations, filled with ink where theirs carry a colour of
+    availability and a figure: what tells it apart is the house inside and the
+    absence of a number. Rimmed with the surface colour so it holds on a dark
+    map as on a pale one.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/surface"
+        android:pathData="M12,0a12,12 0,1 1,0 24a12,12 0,1 1,0 -24z" />
+    <path
+        android:fillColor="@color/ink"
+        android:pathData="M12,1.6a10.4,10.4 0,1 1,0 20.8a10.4,10.4 0,1 1,0 -20.8z" />
+    <group
+        android:scaleX="0.6"
+        android:scaleY="0.6"
+        android:translateX="4.8"
+        android:translateY="4.8">
+        <path
+            android:fillColor="@color/surface"
+            android:pathData="M10,20v-6h4v6h5v-8h3L12,3 2,12h3v8z" />
+    </group>
+</vector>

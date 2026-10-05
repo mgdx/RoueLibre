@@ -41,6 +41,8 @@ import io.github.mgdx.rouelibre.core.station.StreetBike
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.core.station.stationsShownOnMap
+import io.github.mgdx.rouelibre.data.SavedPlace
+import io.github.mgdx.rouelibre.data.SavedPlaceKind
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
@@ -127,6 +129,7 @@ class MapFragment : Fragment() {
     private var stationSource: GeoJsonSource? = null
     private var streetBikeSource: GeoJsonSource? = null
     private var pickedPlaceSource: GeoJsonSource? = null
+    private var savedPlaceSource: GeoJsonSource? = null
     private var styleLoaded = false
 
     /**
@@ -364,6 +367,29 @@ class MapFragment : Fragment() {
      */
     private var bearingListener: MapLibreMap.OnCameraMoveListener? = null
 
+    /**
+     * The places the user has named, as the settings last said, with whether
+     * the map marks them and whether it offers a button for each (SPEC §7.1).
+     *
+     * Held because the markers are drawn into a style that may not exist yet,
+     * and the buttons hang on a served area that is learnt apart: whichever
+     * arrives second redraws from this.
+     */
+    private var savedPlaces = SavedPlacesOnMap()
+
+    /** What the settings say of the named places, as far as the map cares. */
+    private data class SavedPlacesOnMap(
+        val home: SavedPlace? = null,
+        val work: SavedPlace? = null,
+        val markers: Boolean = false,
+        val buttons: Boolean = false,
+    ) {
+        fun of(kind: SavedPlaceKind): SavedPlace? = when (kind) {
+            SavedPlaceKind.Home -> home
+            SavedPlaceKind.Work -> work
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -400,10 +426,13 @@ class MapFragment : Fragment() {
         views.modeToggle.setOnClickListener { toggleMode() }
         views.bikeKindFilter.setOnClickListener { toggleBikeKind() }
         views.pickedPlace.setOnClickListener { openPickedPlaceSheet() }
+        views.centreOnHome.setOnClickListener { centreOn(SavedPlaceKind.Home) }
+        views.centreOnWork.setOnClickListener { centreOn(SavedPlaceKind.Work) }
         applyModeLabel()
         applyBikeKindLabel()
         followStationFilters()
         followStreetBikes()
+        followSavedPlaces()
         // The button that opens the journey search carries the bike of the
         // network served: with a bolt where that network lends pedal-assist
         // bikes (SPEC §15).
@@ -644,6 +673,7 @@ class MapFragment : Fragment() {
         showsCompass = controls.compass
         showTheBearing()
         showBikeKindFilter()
+        showSavedPlaceButtons()
         if (tiles == null || configuration == null) return
 
         map.uiSettings.isAttributionEnabled = false
@@ -956,6 +986,18 @@ class MapFragment : Fragment() {
         style.addLayer(StationMarkers.clusterLayer(context))
         style.addLayer(StationMarkers.clusterCountLayer(context))
 
+        // The named places go over the stations, and under the point searched
+        // for: that one is what the user has just asked for.
+        val saved = GeoJsonSource(
+            SavedPlaceMarkers.SOURCE_ID,
+            SavedPlaceMarkers.featuresFor(emptyMap()),
+        )
+        savedPlaceSource = saved
+        style.addSource(saved)
+        SavedPlaceMarkers.registerImages(context, style)
+        style.addLayer(SavedPlaceMarkers.layer())
+        publishSavedPlaces()
+
         // The searched point is laid down AFTER the stations: it is what the
         // user has just asked for, so it goes in front.
         val picked = GeoJsonSource(
@@ -1136,6 +1178,73 @@ class MapFragment : Fragment() {
                     }
             }
         }
+    }
+
+    /**
+     * Follows the places the user has named and the two settings that say how
+     * the map shows them (SPEC §7.1, §7.6).
+     *
+     * Followed rather than read once: a home named or forgotten in the settings
+     * must be on the map — or off it — on the way back, without a rebuild.
+     */
+    private fun followSavedPlaces() {
+        val preferences = container.preferences
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                combine(
+                    preferences.homePlace,
+                    preferences.workPlace,
+                    preferences.showSavedPlacesOnMap,
+                    preferences.savedPlaceButtonsOnMap,
+                    ::SavedPlacesOnMap,
+                )
+                    .distinctUntilChanged()
+                    .collect { places ->
+                        savedPlaces = places
+                        publishSavedPlaces()
+                        showSavedPlaceButtons()
+                    }
+            }
+        }
+    }
+
+    /** Draws the named places, or clears them where the setting says so. */
+    private fun publishSavedPlaces() {
+        val source = savedPlaceSource ?: return
+        val shown = if (savedPlaces.markers) {
+            SavedPlaceKind.entries.mapNotNull { kind ->
+                savedPlaces.of(kind)?.let { kind to it }
+            }.toMap()
+        } else {
+            emptyMap()
+        }
+        source.setGeoJson(SavedPlaceMarkers.featuresFor(shown))
+    }
+
+    /** Puts up the button of each named place the map can bring itself onto. */
+    private fun showSavedPlaceButtons() {
+        val views = binding ?: return
+        for (kind in SavedPlaceKind.entries) {
+            val button = when (kind) {
+                SavedPlaceKind.Home -> views.centreOnHome
+                SavedPlaceKind.Work -> views.centreOnWork
+            }
+            button.isVisible = offersCentringOn(
+                place = savedPlaces.of(kind)?.position,
+                wanted = savedPlaces.buttons,
+                browsing = showsMapControls,
+                servedArea = servedCity?.boundingBox,
+            )
+        }
+    }
+
+    /**
+     * Brings the map onto a named place, at the zoom of an address found: it
+     * is one, and the stations around it are what one came to see.
+     */
+    private fun centreOn(kind: SavedPlaceKind) {
+        val place = savedPlaces.of(kind) ?: return
+        moveCameraTo(LatLng(place.position.latitude, place.position.longitude))
     }
 
     /**
@@ -2121,6 +2230,7 @@ class MapFragment : Fragment() {
         stationSource = null
         streetBikeSource = null
         pickedPlaceSource = null
+        savedPlaceSource = null
         userPosition?.cancel()
         userPosition = null
         servedAreaCamera = null

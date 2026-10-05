@@ -111,6 +111,45 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!--
+        The places the user has named (SPEC §7.1, §7.6): one press brings the
+        camera onto each. At the head of the thumb's column, over the journey
+        button, so that a button which comes and goes with the settings never
+        pushes the ones below it out of the place the thumb knows. Home
+        nearest the others, being the one pressed most.
+    -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/centre_on_home"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_s"
+        android:contentDescription="@string/map_centre_on_home"
+        android:visibility="gone"
+        app:backgroundTint="@color/surface"
+        app:icon="@drawable/ic_home"
+        app:iconTint="@color/ink"
+        app:layout_constraintBottom_toTopOf="@id/open_journey"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/centre_on_work"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_s"
+        android:contentDescription="@string/map_centre_on_work"
+        android:visibility="gone"
+        app:backgroundTint="@color/surface"
+        app:icon="@drawable/ic_work"
+        app:iconTint="@color/ink"
+        app:layout_constraintBottom_toTopOf="@id/centre_on_home"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
+
+    <!--
         Face north (SPEC §7.1), on the top row and to the left of the settings.
         It appears only once the map has been turned, and a button that comes
         and goes must not push about the ones that stay: on this row there is

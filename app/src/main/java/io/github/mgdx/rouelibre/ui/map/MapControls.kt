@@ -1,5 +1,9 @@
 package io.github.mgdx.rouelibre.ui.map
 
+import io.github.mgdx.rouelibre.core.geo.BoundingBox
+import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.geo.covers
+
 /**
  * The controls the map screen lays over its map, in the role it is serving.
  *
@@ -42,3 +46,28 @@ internal fun mapControls(hasBaseMap: Boolean, isPicking: Boolean): MapControls =
     browsing = hasBaseMap && !isPicking,
     picking = hasBaseMap && isPicking,
 )
+
+/**
+ * Whether the map offers a button that brings the camera onto a named place
+ * (SPEC §7.1).
+ *
+ * Only among the main screen's controls, only for a place the user has
+ * named, and only while the setting asks for it. **A place the city in service
+ * does not cover has no button**: the camera is penned inside that city
+ * (see [ServedAreaCamera]), so the press would stop at the nearest edge and
+ * pass that off as home — the reading "locate me" already refuses for a
+ * position off the map. The place itself is kept, and its button comes back
+ * with its city.
+ *
+ * @param place the place named, or `null` when none is.
+ * @param wanted whether the settings ask for the buttons.
+ * @param browsing whether the main screen's controls are up at all.
+ * @param servedArea the box of the city in service, `null` when it declares
+ *   none — and nothing is then outside anything.
+ */
+internal fun offersCentringOn(
+    place: Coordinates?,
+    wanted: Boolean,
+    browsing: Boolean,
+    servedArea: BoundingBox?,
+): Boolean = place != null && wanted && browsing && servedArea.covers(place)

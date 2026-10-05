@@ -268,6 +268,42 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * Whether the map marks the places the user has named (SPEC §7.1, §7.6).
+     *
+     * **On by default**, and on for anything unreadable: naming one's home is
+     * asking to find it again, and the marker is the first place one looks.
+     * Without a place named it draws nothing, so the default costs a map that
+     * has nothing to mark nothing at all.
+     *
+     * **A way of looking, not a journey**, like [hideOutOfServiceStations]: a
+     * yes or a no about drawing, and the places it draws are the ones the user
+     * declared, never one the application observed (SPEC §2, C3).
+     */
+    val showSavedPlacesOnMap: Flow<Boolean> =
+        dataStore.data.map { it.readFlag(SHOW_SAVED_PLACES_ON_MAP, ifUnanswered = true) }
+
+    /** Remembers whether the map marks the places the user has named. */
+    suspend fun setShowSavedPlacesOnMap(show: Boolean) {
+        dataStore.edit { it[SHOW_SAVED_PLACES_ON_MAP] = show }
+    }
+
+    /**
+     * Whether the map carries a button per named place that brings the camera
+     * onto it (SPEC §7.1, §7.6).
+     *
+     * On by default, and kept apart from [showSavedPlacesOnMap]: the marker
+     * costs the map a symbol, the button costs it a control over the stations,
+     * and somebody may want one without the other.
+     */
+    val savedPlaceButtonsOnMap: Flow<Boolean> =
+        dataStore.data.map { it.readFlag(SAVED_PLACE_BUTTONS_ON_MAP, ifUnanswered = true) }
+
+    /** Remembers whether the map carries a button per named place. */
+    suspend fun setSavedPlaceButtonsOnMap(show: Boolean) {
+        dataStore.edit { it[SAVED_PLACE_BUTTONS_ON_MAP] = show }
+    }
+
+    /**
      * The chosen theme: light, dark, or the system's (SPEC §7.6).
      *
      * The default follows the system, the only choice that respects a
@@ -748,6 +784,10 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
                 SavedPlaceKind.Home -> SAVED_PLACE_HOME_LONGITUDE
                 SavedPlaceKind.Work -> SAVED_PLACE_WORK_LONGITUDE
             }
+
+        /** How the named places show on the map (SPEC §7.1). */
+        val SHOW_SAVED_PLACES_ON_MAP = booleanPreferencesKey("show_saved_places_on_map")
+        val SAVED_PLACE_BUTTONS_ON_MAP = booleanPreferencesKey("saved_place_buttons_on_map")
         val THEME = stringPreferencesKey("theme")
 
         /** Which stations the map draws at all (SPEC §7.1). */

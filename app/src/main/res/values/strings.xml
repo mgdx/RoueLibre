@@ -837,4 +837,14 @@
          what question it answers, and this screen puts the same one twice. -->
     <string name="settings_place_description">%1$s: %2$s</string>
 
+    <!-- Spoken label of the map button that brings the map onto the home
+         the user has named (SPEC §7.1). -->
+    <string name="map_centre_on_home">Show my home on the map</string>
+    <!-- The same, for the work. -->
+    <string name="map_centre_on_work">Show my work on the map</string>
+    <!-- Settings switch: a marker on the map for each place named. -->
+    <string name="settings_places_markers">Mark my places on the map</string>
+    <!-- Settings switch: a button on the map, for each place named, that
+         brings the map onto it. -->
+    <string name="settings_places_buttons">A button on the map for each place</string>
 </resources>

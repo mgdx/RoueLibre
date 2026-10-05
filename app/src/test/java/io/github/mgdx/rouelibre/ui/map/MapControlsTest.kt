@@ -1,5 +1,7 @@
 package io.github.mgdx.rouelibre.ui.map
 
+import io.github.mgdx.rouelibre.core.geo.BoundingBox
+import io.github.mgdx.rouelibre.core.geo.Coordinates
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -43,5 +45,32 @@ class MapControlsTest {
         assertFalse("no point is being designated", controls.picking)
         assertTrue(controls.locateMe)
         assertTrue(controls.compass)
+    }
+
+    private val lille = BoundingBox(south = 50.5, west = 2.9, north = 50.8, east = 3.3)
+    private val home = Coordinates(50.63, 3.06)
+
+    @Test
+    fun `a named place inside the city served has its button`() {
+        assertTrue(offersCentringOn(home, wanted = true, browsing = true, servedArea = lille))
+    }
+
+    @Test
+    fun `no button without a place, without the setting, or off the main screen`() {
+        assertFalse(offersCentringOn(null, wanted = true, browsing = true, servedArea = lille))
+        assertFalse(offersCentringOn(home, wanted = false, browsing = true, servedArea = lille))
+        assertFalse(offersCentringOn(home, wanted = true, browsing = false, servedArea = lille))
+    }
+
+    @Test
+    fun `a place the camera cannot reach has no button`() {
+        val lyon = Coordinates(45.76, 4.84)
+        assertFalse(offersCentringOn(lyon, wanted = true, browsing = true, servedArea = lille))
+    }
+
+    @Test
+    fun `a city declaring no box leaves nothing outside`() {
+        val lyon = Coordinates(45.76, 4.84)
+        assertTrue(offersCentringOn(lyon, wanted = true, browsing = true, servedArea = null))
     }
 }
