@@ -65,6 +65,9 @@ data class StationAvailabilityEntity(
     val fetchedAtEpochSeconds: Long,
 )
 
+/** Kept under the oldest SQLite limit of 999 bound variables, with margin. */
+private const val DELETE_CHUNK_SIZE = 500
+
 /** Read and write access to the station cache. */
 @Dao
 interface StationDao {
@@ -96,8 +99,11 @@ interface StationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStations(stations: List<StationEntity>)
 
-    @Query("DELETE FROM station WHERE id NOT IN (:keptIds)")
-    suspend fun deleteStationsMissingFrom(keptIds: List<String>)
+    @Query("SELECT id FROM station")
+    suspend fun stationIds(): List<String>
+
+    @Query("DELETE FROM station WHERE id IN (:ids)")
+    suspend fun deleteStationsByIds(ids: List<String>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAvailabilities(availabilities: List<StationAvailabilityEntity>)
@@ -113,12 +119,19 @@ interface StationDao {
      *
      * In a single transaction, so that an interruption never leaves a
      * half-written cache — the list must be consistent at every instant.
+     *
+     * Stale stations are found by a difference computed here, then deleted in
+     * chunks: a `NOT IN` over every received id binds one variable per station,
+     * and a large network exceeds SQLite's limit on bound variables (999 before
+     * Android 11). Chunking is only sound for `IN`, which is additive.
      */
     @Transaction
     suspend fun replaceStations(stations: List<StationEntity>) {
         insertStations(stations)
         if (stations.isNotEmpty()) {
-            deleteStationsMissingFrom(stations.map { it.id })
+            val receivedIds = stations.mapTo(HashSet()) { it.id }
+            val staleIds = stationIds().filter { it !in receivedIds }
+            staleIds.chunked(DELETE_CHUNK_SIZE).forEach { deleteStationsByIds(it) }
         }
     }
 
