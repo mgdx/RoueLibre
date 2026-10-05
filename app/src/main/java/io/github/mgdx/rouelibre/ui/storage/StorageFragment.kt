@@ -103,7 +103,9 @@ class StorageFragment : Fragment() {
 
         // Opened from the welcome screen, this one checks straight away: the
         // user has just pressed the download button, and asking them to confirm
-        // it again here would be one more door.
+        // it again here would be one more door. A city with nothing installed
+        // is checked on opening whatever the way in — the model decides that
+        // on the store's own reading (see `OpeningCheck`).
         if (savedInstanceState == null && arguments?.getBoolean(ARGUMENT_CHECK_ON_OPEN) == true) {
             viewModel.checkForUpdates()
         }
@@ -299,7 +301,9 @@ class StorageFragment : Fragment() {
          * Opens the screen and checks the manifest immediately (SPEC §7.9).
          *
          * Reserved for the sequence coming from the welcome screen: elsewhere,
-         * the check stays triggered by a press.
+         * the check stays triggered by a press — unless the city has nothing
+         * installed, in which case opening the screen checks on its own,
+         * whatever the way in (see `OpeningCheck`).
          */
         fun checkingForUpdates(): StorageFragment = StorageFragment().apply {
             arguments = Bundle().apply { putBoolean(ARGUMENT_CHECK_ON_OPEN, true) }

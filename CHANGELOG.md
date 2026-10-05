@@ -41,6 +41,19 @@ also records what has no visible effect.
   `restorePickedPlace` stays a synchronous reading of the bundle, deciding
   nothing. A rotation under the same city gives the point back, as before.
   Nothing of this is written to disk.
+- **The storage screen of a city with nothing installed offers the download
+  as it opens** (`SPEC.md` §4.4). Reached from "the map needs its offline
+  tiles", the settings or a search, it showed three "Not installed" and a
+  button reading "Check for updates", and the "Download 4.1 MB" only came after
+  a press on a word that promised something else; choosing the city alone
+  checked on opening. `StorageViewModel` now reads the manifest as the screen
+  opens whenever the store's first inventory for the city in service is empty,
+  whatever the way in, through the pure `OpeningCheck`, tested on the JVM: once
+  per opening, not again on a rotation, a dialogue answered or a last set
+  deleted, and not doubled when the way in already asked for the check. A city
+  with one set installed still checks on a press. Offline, the check fails
+  with the message it always gave; without a city it says nothing, as the
+  subtitle already does.
 
 ## [1.4.1]
 

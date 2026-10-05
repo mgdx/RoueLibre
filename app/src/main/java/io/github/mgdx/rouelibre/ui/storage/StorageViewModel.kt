@@ -245,12 +245,55 @@ fun DataManifest.refusalFor(supportedFormatVersion: Int, servedNetwork: String?)
     }
 
 /**
+ * Whether opening the storage screen is itself the check (SPEC §4.4).
+ *
+ * It is when the city in service has none of its three sets: the screen then
+ * has nothing else to offer than installing them, and a reader sent here by
+ * "the map needs its offline tiles" was left before three "Not installed" and
+ * a button reading "Check for updates", with no way to guess that an update
+ * was the way to a first download. Where anything at all is installed, the
+ * check stays a press.
+ *
+ * **Once per opening, and on the store's own reading.** The screen's state
+ * starts with three empty rows before the store has said anything, and
+ * deciding on that would check for a city whose sets are all there; the
+ * decision is therefore taken on the first inventory the store hands over,
+ * and never again — a rotation, a dialogue answered or a set deleted on the
+ * screen does not ask a second time. A check already asked for by whoever
+ * opened the screen spends it as well.
+ *
+ * Kept out of the view model so that a test can hold the rule.
+ */
+class OpeningCheck {
+
+    private var spent = false
+
+    /**
+     * Whether this inventory, read as the screen opens, calls for a check.
+     *
+     * `true` at most once, and only on the first inventory seen.
+     */
+    fun calledFor(installed: Map<DatasetKind, InstalledDataset>): Boolean {
+        if (spent) return false
+        spent = true
+        return installed.isEmpty()
+    }
+
+    /** A check has been asked for: opening the screen has nothing left to ask. */
+    fun checkAsked() {
+        spent = true
+    }
+}
+
+/**
  * Drives the installation, updating and deletion of the offline datasets
  * (SPEC §4.4).
  *
- * **The check is never automatic.** It happens on an explicit action, from this
- * screen: a periodic request would draw a usage profile of the application,
- * which constraint C3 rules out.
+ * **The check is never automatic in the background.** It happens on an explicit
+ * action, from this screen: a periodic request would draw a usage profile of
+ * the application, which constraint C3 rules out. Opening this screen for a city
+ * with nothing installed is such an action, and checks at once — see
+ * [OpeningCheck].
  *
  * **Nothing goes out on a billed connection** while the setting asks otherwise
  * (SPEC §4.4, §7.6): a transfer is refused before its first byte, or stopped
@@ -289,6 +332,9 @@ class StorageViewModel(
 
     /** The transfer under way, kept so that a billed connection can stop it. */
     private var downloadJob: Job? = null
+
+    /** Whether opening the screen still has a check to ask for. */
+    private val openingCheck = OpeningCheck()
 
     init {
         viewModelScope.launch {
@@ -330,6 +376,7 @@ class StorageViewModel(
                             .takeIf { it > 0 },
                     ).withManifestApplied()
                 }
+                if (openingCheck.calledFor(installed)) readManifest(announceMissingCity = false)
             }
         }
     }
@@ -362,6 +409,19 @@ class StorageViewModel(
      * the user first sees what changed and what it weighs.
      */
     fun checkForUpdates() {
+        readManifest(announceMissingCity = true)
+    }
+
+    /**
+     * Reads the manifest.
+     *
+     * @param announceMissingCity whether to say that there is no city to check
+     *   for. A press is answered; a check asked by opening the screen is not —
+     *   the screen already says no city is chosen, and a message nobody asked
+     *   for would only repeat it.
+     */
+    private fun readManifest(announceMissingCity: Boolean) {
+        openingCheck.checkAsked()
         if (mutableState.value.isChecking) return
         viewModelScope.launch {
             mutableState.update { it.copy(isChecking = true) }
@@ -370,7 +430,9 @@ class StorageViewModel(
             val url = manifestUrl()
             if (url == null) {
                 mutableState.update { it.copy(isChecking = false) }
-                messageChannel.send(StorageMessage.CheckFailed(DataError.NoCityChosen))
+                if (announceMissingCity) {
+                    messageChannel.send(StorageMessage.CheckFailed(DataError.NoCityChosen))
+                }
                 return@launch
             }
             val outcome = downloader.fetchManifest(url)
