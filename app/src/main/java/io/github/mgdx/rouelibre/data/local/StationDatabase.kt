@@ -122,7 +122,7 @@ interface StationDao {
      *
      * Stale stations are found by a difference computed here, then deleted in
      * chunks: a `NOT IN` over every received id binds one variable per station,
-     * and a large network exceeds SQLite's limit on bound variables (999 before
+     * and a large network exceeds SQLite's limit on bound variables (999 up to
      * Android 11). Chunking is only sound for `IN`, which is additive.
      */
     @Transaction
