@@ -507,8 +507,10 @@ private class FakeStationDao : StationDao {
         this.stations.value = merged.values.toList()
     }
 
-    override suspend fun deleteStationsMissingFrom(keptIds: List<String>) {
-        stations.value = stations.value.filter { it.id in keptIds }
+    override suspend fun stationIds(): List<String> = stations.value.map { it.id }
+
+    override suspend fun deleteStationsByIds(ids: List<String>) {
+        stations.value = stations.value.filter { it.id !in ids }
     }
 
     override suspend fun insertAvailabilities(availabilities: List<StationAvailabilityEntity>) {
