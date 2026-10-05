@@ -28,7 +28,9 @@ import java.time.Instant
  *
  * @property stations the stations the search kept, ready to be displayed.
  * @property query what the user typed into the search field.
- * @property isRefreshing a fetch is under way.
+ * @property isRefreshing a fetch is under way. Besides the list's pull ring,
+ *   it lets the age line say "loading" while a network's first availability
+ *   is on its way (SPEC §4.1).
  * @property fetchedAt when the last successful fetch happened, or `null`. The
  *   age that follows from it is recomputed by the view on every tick, otherwise
  *   a state ageing on screen would stay marked as fresh.
@@ -346,8 +348,14 @@ class StationsViewModel(
         if (mutableState.value.isRefreshing) return
         viewModelScope.launch {
             mutableState.update { it.copy(isRefreshing = true) }
-            val outcome = repository.refresh(force = force)
-            mutableState.update { it.copy(isRefreshing = false) }
+            // Lowered whatever the end, cancellation included: the age line
+            // says "loading" while this is up and no data exists, and a flag
+            // left raised would keep saying so over a refresh long given up.
+            val outcome = try {
+                repository.refresh(force = force)
+            } finally {
+                mutableState.update { it.copy(isRefreshing = false) }
+            }
             if (outcome is Outcome.Failure) {
                 failures.tryEmit(outcome.error)
             }

@@ -98,3 +98,23 @@ public fun freshnessOf(fetchedAt: Instant?, now: Instant): Freshness {
         else -> Freshness.Months((seconds / (DAYS_IN_MONTH * SECONDS_IN_DAY)).toInt())
     }
 }
+
+/**
+ * Whether the age line is to say that the stations are on their way, rather
+ * than give an age (SPEC §4.1).
+ *
+ * Only before the very first availability of the network has arrived. A large
+ * network takes seconds to download — Paris's 1,519 stations, a dozen of them
+ * — and "never updated" over an empty map read as a breakdown, when the answer
+ * was simply on its way. Once some availability exists, its age is the more
+ * useful thing to say during a refresh: switching the line to "loading" every
+ * minute would make it flicker and hide how old the counters on screen are.
+ *
+ * Decided here rather than in the view so that it is tested on the JVM, next
+ * to the bands it overrides (SPEC §14).
+ *
+ * @param freshness the age of the displayed availability.
+ * @param isRefreshing true while a refresh of that availability is under way.
+ */
+public fun isLoadingFirstAvailability(freshness: Freshness, isRefreshing: Boolean): Boolean =
+    freshness == Freshness.Never && isRefreshing

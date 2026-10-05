@@ -419,7 +419,7 @@ class StationListFragment : Fragment() {
                     }
                     views.swipeRefresh.isRefreshing = state.isRefreshing
                     showEmptyState(state)
-                    showFreshness(state.fetchedAt)
+                    showFreshness(state)
                 }
             }
         }
@@ -516,7 +516,7 @@ class StationListFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 while (true) {
                     viewModel.refresh()
-                    showFreshness(viewModel.state.value.fetchedAt)
+                    showFreshness(viewModel.state.value)
                     delay(FRESHNESS_TICK_MILLIS)
                 }
             }
@@ -655,12 +655,14 @@ class StationListFragment : Fragment() {
      *
      * Recomputed on every tick rather than frozen into the state: without that,
      * a screen left open would go on announcing "updated just now" half an hour
-     * later.
+     * later. Before a network's first availability has arrived, a refresh
+     * under way is said as "loading" instead (SPEC §4.1).
      */
-    private fun showFreshness(fetchedAt: Instant?) {
+    private fun showFreshness(state: StationsUiState) {
         val views = binding ?: return
-        val freshness = freshnessOf(fetchedAt, Instant.now())
-        views.freshness.text = freshness.toStatusLine(requireContext(), freshness.isStale)
+        val freshness = freshnessOf(state.fetchedAt, Instant.now())
+        views.freshness.text =
+            freshness.toStatusLine(requireContext(), freshness.isStale, state.isRefreshing)
     }
 
     private fun requireBinding(): FragmentStationListBinding =

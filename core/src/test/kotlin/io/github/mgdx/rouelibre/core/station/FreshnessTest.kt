@@ -1,6 +1,7 @@
 package io.github.mgdx.rouelibre.core.station
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.Instant
@@ -69,5 +70,21 @@ class FreshnessTest {
     @Test
     fun `without any data the state is frozen by definition`() {
         assertTrue(Freshness.Never.isStale)
+    }
+
+    @Test
+    fun `the line says loading only while the first availability is on its way`() {
+        assertTrue(isLoadingFirstAvailability(Freshness.Never, isRefreshing = true))
+        // A refresh that ended without data, failed or not: "never updated" is
+        // the truth again, and the error message says the rest.
+        assertFalse(isLoadingFirstAvailability(Freshness.Never, isRefreshing = false))
+    }
+
+    @Test
+    fun `a refresh over data already received keeps the age on the line`() {
+        // Every minute's refresh would otherwise make the line flicker.
+        assertFalse(isLoadingFirstAvailability(ago(30), isRefreshing = true))
+        assertFalse(isLoadingFirstAvailability(daysAgo(3), isRefreshing = true))
+        assertFalse(isLoadingFirstAvailability(ago(30), isRefreshing = false))
     }
 }

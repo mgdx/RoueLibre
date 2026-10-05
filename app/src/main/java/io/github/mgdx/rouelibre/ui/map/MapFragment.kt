@@ -62,6 +62,7 @@ import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
 import io.github.mgdx.rouelibre.ui.stations.StationDetailSheet
 import io.github.mgdx.rouelibre.ui.stations.StationListFragment
+import io.github.mgdx.rouelibre.ui.stations.StationsUiState
 import io.github.mgdx.rouelibre.ui.stations.StationsViewModel
 import io.github.mgdx.rouelibre.ui.stations.StreetBikeSheet
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
@@ -2055,7 +2056,7 @@ class MapFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
                     publishStations()
-                    showFreshness(state.fetchedAt)
+                    showFreshness(state)
                 }
             }
         }
@@ -2110,17 +2111,24 @@ class MapFragment : Fragment() {
                     // repository serves from memory until the same minute is
                     // up (SPEC §4.1).
                     refreshStreetBikes()
-                    showFreshness(viewModel.state.value.fetchedAt)
+                    showFreshness(viewModel.state.value)
                     delay(FRESHNESS_TICK_MILLIS)
                 }
             }
         }
     }
 
-    private fun showFreshness(fetchedAt: Instant?) {
+    /**
+     * Rewrites the age line, or says the stations are loading while a network's
+     * first availability is on its way (SPEC §4.1). Called on every emission of
+     * the state as well as on the tick, so that the start and the end of that
+     * first refresh show at once.
+     */
+    private fun showFreshness(state: StationsUiState) {
         val views = binding ?: return
-        val freshness = freshnessOf(fetchedAt, Instant.now())
-        views.freshness.text = freshness.toStatusLine(requireContext(), freshness.isStale)
+        val freshness = freshnessOf(state.fetchedAt, Instant.now())
+        views.freshness.text =
+            freshness.toStatusLine(requireContext(), freshness.isStale, state.isRefreshing)
     }
 
     private fun show(fragment: Fragment) {
