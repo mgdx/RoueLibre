@@ -3,6 +3,7 @@ package io.github.mgdx.rouelibre.ui
 import android.content.Context
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.station.Freshness
+import io.github.mgdx.rouelibre.core.station.isLoadingFirstAvailability
 
 /**
  * Puts the displayed data's age into words (SPEC §4.1).
@@ -33,8 +34,16 @@ fun Freshness.toRelativeText(context: Context): String = when (this) {
  * (SPEC §4.1).
  *
  * @param isStale true when the state is too old to pass for current.
+ * @param isRefreshing true while a refresh is under way; it changes the line
+ *   only before any availability has arrived — see
+ *   [isLoadingFirstAvailability].
  */
-fun Freshness.toStatusLine(context: Context, isStale: Boolean): String = when {
+fun Freshness.toStatusLine(
+    context: Context,
+    isStale: Boolean,
+    isRefreshing: Boolean = false,
+): String = when {
+    isLoadingFirstAvailability(this, isRefreshing) -> context.getString(R.string.freshness_loading)
     this is Freshness.Never -> context.getString(R.string.freshness_never)
     isStale -> context.getString(R.string.freshness_stale, toRelativeText(context))
     else -> context.getString(R.string.freshness_fresh, toRelativeText(context))
