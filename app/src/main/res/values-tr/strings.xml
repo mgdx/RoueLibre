@@ -607,13 +607,13 @@
          failed rather than an availability refresh. The server is the one
          hosting the files, not the bike network's, and those files come down
          resumably. -->
-    <string name="error_offline_download">Bağlantı yok. İndirme kaldığı yerden devam eder.</string>
-    <string name="error_timeout_download">Sunucu yanıt vermiyor. İndirme kaldığı yerden devam eder.</string>
+    <string name="error_offline_download">Bağlantı yok. Yeniden bağlandığında, kaldığı yerden devam etmek için “İndir”e dokun.</string>
+    <string name="error_timeout_download">Sunucu yanıt vermiyor. Kaldığı yerden devam etmek için daha sonra “İndir”e dokun.</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_download">Sunucu hatası (%1$d). İndirme kaldığı yerden devam eder.</string>
-    <string name="error_untrusted_server_download">Geçersiz güvenlik sertifikası. Sertifika yenilendiğinde indirme devam eder.</string>
-    <string name="error_malformed_download">Okunamayan bir dosya alındı. İndirme kaldığı yerden devam eder.</string>
-    <string name="error_local_storage_download">Dosya kaydedilemedi. Yer aç, indirme kaldığı yerden devam etsin.</string>
+    <string name="error_server_refused_download">Sunucu hatası (%1$d). Kaldığı yerden devam etmek için daha sonra “İndir”e dokun.</string>
+    <string name="error_untrusted_server_download">Geçersiz güvenlik sertifikası. Sertifika yenilendiğinde devam etmek için “İndir”e dokun.</string>
+    <string name="error_malformed_download">Okunamayan bir dosya alındı. Kaldığı yerden devam etmek için daha sonra “İndir”e dokun.</string>
+    <string name="error_local_storage_download">Dosya kaydedilemedi. Yer aç, ardından devam etmek için “İndir”e dokun.</string>
     <!-- The same failures again, read after a press on "Check for updates",
          which is a third gesture: it reads the published manifest and
          transfers nothing, so there is no download to pick up where it
@@ -656,6 +656,7 @@
     <!-- %1$s is a size. -->
     <string name="download_waiting_for_unmetered">%1$s indirmek için kablosuz bağlantı bekleniyor.</string>
     <string name="download_can_resume">Bu bağlantı artık bir mobil ağ değil. İndirmeyi yeniden başlat: kaldığı yerden devam eder.</string>
+    <string name="download_connection_back">Bağlantı geri geldi. İndirmeye kaldığı yerden devam etmek için “İndir”e dokun.</string>
 
     <string name="settings_opening_title">Uygulama açılışta şunu göstersin</string>
     <!-- Read aloud in place of the two buttons beside it. -->

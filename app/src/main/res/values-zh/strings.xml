@@ -607,13 +607,13 @@
          is the one hosting the files, not the bike system's, and those
          files come down resumably (SPEC §4.4) — which is what each of
          these says will happen next. -->
-    <string name="error_offline_download">无网络连接。下载将从中断处继续。</string>
-    <string name="error_timeout_download">服务器没有响应。下载将从中断处继续。</string>
+    <string name="error_offline_download">无网络连接。恢复联网后，点按“下载”即可从中断处继续。</string>
+    <string name="error_timeout_download">服务器没有响应。请稍后点按“下载”，从中断处继续。</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_download">服务器错误（%1$d）。下载将从中断处继续。</string>
-    <string name="error_untrusted_server_download">安全证书无效。证书更新后下载会继续。</string>
-    <string name="error_malformed_download">收到的文件无法读取。下载将从中断处继续。</string>
-    <string name="error_local_storage_download">文件无法保存。请释放一些空间，下载便会继续。</string>
+    <string name="error_server_refused_download">服务器错误（%1$d）。请稍后点按“下载”，从中断处继续。</string>
+    <string name="error_untrusted_server_download">安全证书无效。证书更新后，点按“下载”即可继续。</string>
+    <string name="error_malformed_download">收到的文件无法读取。请稍后点按“下载”，从中断处继续。</string>
+    <string name="error_local_storage_download">文件无法保存。请释放一些空间，然后点按“下载”继续。</string>
     <!-- The same failures again, read after a press on "检查更新",
          which is a third gesture: it reads the published manifest and
          transfers nothing, so there is no download to pick up where it
@@ -659,6 +659,7 @@
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_waiting_for_unmetered">正在等待 WLAN，以便下载 %1$s。</string>
     <string name="download_can_resume">此连接不再是移动网络。请重新开始下载：它会从中断处继续。</string>
+    <string name="download_connection_back">网络连接已恢复。点按“下载”即可从中断处继续。</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">应用默认打开的界面</string>

@@ -4,7 +4,9 @@ import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.data.datasets.DownloadProgress
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -77,6 +79,34 @@ class TransferStateTest {
         )
         assertNull(state.datasets.first { it.kind == DatasetKind.Tiles }.failure)
         assertNull(state.datasets.first { it.kind == DatasetKind.Addresses }.failure)
+    }
+
+    /**
+     * The connection a transfer failed for has come back: the row stops saying
+     * the device is offline, and says so on the row that failed offline only.
+     */
+    @Test
+    fun `a connection come back is written on the rows that failed for want of it`() {
+        val state = StorageUiState()
+            .withFailure(DatasetKind.Tiles, DataError.Offline)
+            .withFailure(DatasetKind.Routing, DataError.ServerRefused(503))
+            .withConnectionBack(true)
+
+        assertTrue(state.datasets.first { it.kind == DatasetKind.Tiles }.connectionBack)
+        assertFalse(state.datasets.first { it.kind == DatasetKind.Routing }.connectionBack)
+        assertFalse(state.datasets.first { it.kind == DatasetKind.Addresses }.connectionBack)
+        // An offer, not a start: nothing is under way until somebody presses.
+        assertEquals(TransferLine.None, state.transferLine())
+    }
+
+    @Test
+    fun `a connection lost again takes the offer back`() {
+        val state = StorageUiState()
+            .withFailure(DatasetKind.Tiles, DataError.Offline)
+            .withConnectionBack(true)
+            .withConnectionBack(false)
+
+        assertFalse(state.datasets.first { it.kind == DatasetKind.Tiles }.connectionBack)
     }
 
     /**

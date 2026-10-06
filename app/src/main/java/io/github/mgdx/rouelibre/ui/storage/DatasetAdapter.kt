@@ -61,6 +61,12 @@ class DatasetAdapter(
                 // gone within seconds. What is shown is the reason, which
                 // already says what happens next — the button below reads
                 // "Download …" for what is still missing.
+                //
+                // Once the connection it failed for has come back, saying the
+                // device is offline is no longer true: the row says it is back
+                // and points to the press that resumes (SPEC §4.4).
+                row.connectionBack -> context.getString(R.string.download_connection_back)
+
                 failure != null -> context.getString(
                     R.string.dataset_download_failed,
                     failure.toDownloadMessage(context),
@@ -202,6 +208,9 @@ fun StorageMessage.toText(context: Context): String = when (this) {
     )
 
     StorageMessage.CanResumeOnUnmetered -> context.getString(R.string.download_can_resume)
+
+    StorageMessage.CanResumeOnReconnection ->
+        context.getString(R.string.download_connection_back)
 
     is StorageMessage.DownloadFailed -> context.getString(
         R.string.storage_download_failed,

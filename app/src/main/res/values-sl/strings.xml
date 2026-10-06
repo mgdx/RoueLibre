@@ -705,13 +705,13 @@
          transfer failed rather than an availability refresh. Those files come
          down resumably (SPEC §4.4), which is what each of these says will
          happen next. -->
-    <string name="error_offline_download">Ni povezave. Prenos se nadaljuje tam, kjer se je ustavil.</string>
-    <string name="error_timeout_download">Strežnik se ne odziva. Prenos se nadaljuje tam, kjer se je ustavil.</string>
+    <string name="error_offline_download">Ni povezave. Ko boste spet povezani, se dotaknite „Prenesi“ in prenos se bo nadaljeval tam, kjer se je ustavil.</string>
+    <string name="error_timeout_download">Strežnik se ne odziva. Pozneje se dotaknite „Prenesi“ in prenos se bo nadaljeval tam, kjer se je ustavil.</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_download">Napaka strežnika (%1$d). Prenos se nadaljuje tam, kjer se je ustavil.</string>
-    <string name="error_untrusted_server_download">Neveljavno varnostno potrdilo. Prenos se nadaljuje, ko bo potrdilo obnovljeno.</string>
-    <string name="error_malformed_download">Prejeta datoteka ni berljiva. Prenos se nadaljuje tam, kjer se je ustavil.</string>
-    <string name="error_local_storage_download">Datoteke ni bilo mogoče shraniti. Sprostite prostor in prenos se nadaljuje.</string>
+    <string name="error_server_refused_download">Napaka strežnika (%1$d). Pozneje se dotaknite „Prenesi“ in prenos se bo nadaljeval tam, kjer se je ustavil.</string>
+    <string name="error_untrusted_server_download">Neveljavno varnostno potrdilo. Ko bo obnovljeno, se dotaknite „Prenesi“ in prenos se bo nadaljeval.</string>
+    <string name="error_malformed_download">Prejeta datoteka ni berljiva. Pozneje se dotaknite „Prenesi“ in prenos se bo nadaljeval tam, kjer se je ustavil.</string>
+    <string name="error_local_storage_download">Datoteke ni bilo mogoče shraniti. Sprostite prostor in se dotaknite „Prenesi“, da nadaljujete.</string>
     <!-- The same failures again, read after a press on "Check for updates",
          which is a third gesture: it reads the published manifest and
          transfers nothing, so there is no download to pick up where it
@@ -755,6 +755,7 @@
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_waiting_for_unmetered">Čakanje na omrežje Wi-Fi za prenos %1$s.</string>
     <string name="download_can_resume">Ta povezava ni več mobilno omrežje. Znova zaženite prenos: nadaljeval se bo tam, kjer se je ustavil.</string>
+    <string name="download_connection_back">Povezava je spet vzpostavljena. Dotaknite se „Prenesi“ in prenos se bo nadaljeval tam, kjer se je ustavil.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Zaslon ob odprtju aplikacije</string>

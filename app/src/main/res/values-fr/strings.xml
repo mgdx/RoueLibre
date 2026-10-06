@@ -736,13 +736,13 @@
          technical codes (SPEC §7 and §14). -->
     <string name="error_offline">Pas de connexion. Les dernières disponibilités connues restent affichées.</string>
     <string name="error_offline_no_availability">Pas de connexion. Aucune disponibilité n’a encore été reçue, il n’y a donc rien à afficher.</string>
-    <string name="error_offline_download">Pas de connexion. Le téléchargement reprend où il s’est arrêté.</string>
-    <string name="error_timeout_download">Le serveur ne répond pas. Le téléchargement reprend où il s’est arrêté.</string>
+    <string name="error_offline_download">Pas de connexion. Une fois en ligne, appuie sur « Télécharger » pour reprendre.</string>
+    <string name="error_timeout_download">Le serveur ne répond pas. Appuie sur « Télécharger » plus tard pour reprendre.</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_download">Erreur du serveur (%1$d). Le téléchargement reprend où il s’est arrêté.</string>
-    <string name="error_untrusted_server_download">Certificat de sécurité invalide. Le téléchargement reprend une fois renouvelé.</string>
-    <string name="error_malformed_download">Fichier illisible reçu. Le téléchargement reprend où il s’est arrêté.</string>
-    <string name="error_local_storage_download">Enregistrement impossible. Libère de l’espace et le téléchargement reprend.</string>
+    <string name="error_server_refused_download">Erreur du serveur (%1$d). Appuie sur « Télécharger » plus tard pour reprendre.</string>
+    <string name="error_untrusted_server_download">Certificat invalide. Une fois renouvelé, reprends avec « Télécharger ».</string>
+    <string name="error_malformed_download">Fichier illisible reçu. Appuie sur « Télécharger » plus tard pour reprendre.</string>
+    <string name="error_local_storage_download">Enregistrement impossible. Libère de l’espace et reprends avec « Télécharger ».</string>
     <!-- Les mêmes échecs, lus après un appui sur « Vérifier les mises à
          jour » : ce troisième geste lit le manifeste publié et ne transfère
          rien, donc aucun téléchargement ne reprend, et la vérification est à
@@ -785,6 +785,7 @@
     <!-- %1$s est une taille, « 340 Mo » par exemple. -->
     <string name="download_waiting_for_unmetered">En attente du Wi-Fi pour télécharger %1$s.</string>
     <string name="download_can_resume">Cette connexion n’est plus un réseau mobile. Relance le téléchargement : il reprend où il s’est arrêté.</string>
+    <string name="download_connection_back">La connexion est revenue. Appuie sur « Télécharger » pour reprendre où le téléchargement s’est arrêté.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Ouvrir l’application par défaut sur</string>

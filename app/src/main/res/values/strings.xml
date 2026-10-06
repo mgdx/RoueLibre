@@ -673,14 +673,16 @@
          transfer failed rather than an availability refresh. The server
          is the one hosting the files, not the bike network's, and those
          files come down resumably (SPEC §4.4) — which is what each of
-         these says will happen next. -->
-    <string name="error_offline_download">No connection. The download picks up where it stopped.</string>
-    <string name="error_timeout_download">The server is not answering. The download picks up where it stopped.</string>
+         these says will happen next, and on whose press: nothing starts
+         again from the background, so none of them may read as if the
+         download carried on by itself. "Download" is the button below. -->
+    <string name="error_offline_download">No connection. Once back online, press “Download” to pick up where it stopped.</string>
+    <string name="error_timeout_download">The server is not answering. Press “Download” later to pick up where it stopped.</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_download">Server error (%1$d). The download picks up where it stopped.</string>
-    <string name="error_untrusted_server_download">Invalid security certificate. The download picks up once it is renewed.</string>
-    <string name="error_malformed_download">Unreadable file received. The download picks up where it stopped.</string>
-    <string name="error_local_storage_download">The file could not be saved. Free some space and the download picks up.</string>
+    <string name="error_server_refused_download">Server error (%1$d). Press “Download” later to pick up where it stopped.</string>
+    <string name="error_untrusted_server_download">Invalid security certificate. Once it is renewed, press “Download” to pick up.</string>
+    <string name="error_malformed_download">Unreadable file received. Press “Download” later to pick up where it stopped.</string>
+    <string name="error_local_storage_download">The file could not be saved. Free some space, then press “Download” to pick up.</string>
     <!-- The same failures again, read after a press on "Check for updates",
          which is a third gesture: it reads the published manifest and
          transfers nothing, so there is no download to pick up where it
@@ -723,6 +725,10 @@
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_waiting_for_unmetered">Waiting for Wi-Fi to download %1$s.</string>
     <string name="download_can_resume">This connection is no longer a mobile network. Start the download again: it carries on where it stopped.</string>
+    <!-- Said on the failed row, and once in passing, when the connection a
+         download failed for comes back while the storage screen is open. It
+         offers the resumption; the press stays the reader's (SPEC §4.4). -->
+    <string name="download_connection_back">The connection is back. Press “Download” to pick up where the download stopped.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Open the app by default on</string>

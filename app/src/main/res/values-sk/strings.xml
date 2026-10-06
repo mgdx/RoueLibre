@@ -819,13 +819,13 @@
          technical codes (SPEC §7 and §14). -->
     <string name="error_offline">Žiadne pripojenie. Na obrazovke zostáva posledná známa dostupnosť.</string>
     <string name="error_offline_no_availability">Žiadne pripojenie. Dostupnosť sa zatiaľ nenačítala, takže nie je čo zobraziť.</string>
-    <string name="error_offline_download">Žiadne pripojenie. Sťahovanie bude pokračovať tam, kde skončilo.</string>
-    <string name="error_timeout_download">Server neodpovedá. Sťahovanie bude pokračovať tam, kde skončilo.</string>
+    <string name="error_offline_download">Žiadne pripojenie. Keď budete online, klepnite na „Stiahnuť“ a sťahovanie bude pokračovať tam, kde skončilo.</string>
+    <string name="error_timeout_download">Server neodpovedá. Neskôr klepnite na „Stiahnuť“ a sťahovanie bude pokračovať tam, kde skončilo.</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_download">Chyba servera (%1$d). Sťahovanie bude pokračovať tam, kde skončilo.</string>
-    <string name="error_untrusted_server_download">Neplatný bezpečnostný certifikát. Sťahovanie bude pokračovať, hneď ako bude obnovený.</string>
-    <string name="error_malformed_download">Prijatý nečitateľný súbor. Sťahovanie bude pokračovať tam, kde skončilo.</string>
-    <string name="error_local_storage_download">Súbor sa nepodarilo uložiť. Uvoľnite priestor a sťahovanie bude pokračovať.</string>
+    <string name="error_server_refused_download">Chyba servera (%1$d). Neskôr klepnite na „Stiahnuť“ a sťahovanie bude pokračovať tam, kde skončilo.</string>
+    <string name="error_untrusted_server_download">Neplatný bezpečnostný certifikát. Keď bude obnovený, klepnite na „Stiahnuť“ a sťahovanie bude pokračovať.</string>
+    <string name="error_malformed_download">Prijatý nečitateľný súbor. Neskôr klepnite na „Stiahnuť“ a sťahovanie bude pokračovať tam, kde skončilo.</string>
+    <string name="error_local_storage_download">Súbor sa nepodarilo uložiť. Uvoľnite priestor a klepnite na „Stiahnuť“, sťahovanie bude pokračovať.</string>
     <!-- The same failures again, read after a press on "Check for updates",
          which is a third gesture: it reads the published manifest and
          transfers nothing, so there is no download to pick up where it
@@ -869,6 +869,7 @@
     <!-- %1$s is a size, „340 MB“ for instance. -->
     <string name="download_waiting_for_unmetered">Čaká sa na Wi-Fi, aby sa stiahlo %1$s.</string>
     <string name="download_can_resume">Toto pripojenie už nie je mobilná sieť. Spustite sťahovanie znova: bude pokračovať tam, kde skončilo.</string>
+    <string name="download_connection_back">Pripojenie je späť. Klepnite na „Stiahnuť“ a sťahovanie bude pokračovať tam, kde skončilo.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Predvolená obrazovka po spustení</string>

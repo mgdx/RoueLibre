@@ -66,7 +66,8 @@ fun DataError.toUserMessage(context: Context, hasKnownAvailability: Boolean = tr
  * while downloading a map would go looking for a breakdown at the wrong end.
  *
  * **The transfer is resumable** (SPEC §4.4), so the answer to "what now" is
- * never "start over". That is what each of these says will happen next, and it
+ * never "start over". That is what each of these says will happen next — on a
+ * press of the button, since nothing starts again from the background — and it
  * is what the refresh's wordings cannot say — a refresh that fails leaves the
  * last availability on screen, which is the sentence a stopped download was
  * being answered with.

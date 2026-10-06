@@ -646,13 +646,13 @@
          transfer failed rather than an availability refresh. Those files come
          down resumably (SPEC §4.4), which is what each of these says will
          happen next. -->
-    <string name="error_offline_download">Niste povezani. Preuzimanje se nastavlja ondje gdje je stalo.</string>
-    <string name="error_timeout_download">Poslužitelj ne odgovara. Preuzimanje se nastavlja ondje gdje je stalo.</string>
+    <string name="error_offline_download">Niste povezani. Kad se povežete, dodirnite „Preuzmi“ da biste nastavili ondje gdje je stalo.</string>
+    <string name="error_timeout_download">Poslužitelj ne odgovara. Kasnije dodirnite „Preuzmi“ da biste nastavili ondje gdje je stalo.</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_download">Pogreška poslužitelja (%1$d). Preuzimanje se nastavlja ondje gdje je stalo.</string>
-    <string name="error_untrusted_server_download">Nevažeći sigurnosni certifikat. Preuzimanje se nastavlja kad se obnovi.</string>
-    <string name="error_malformed_download">Primljena je nečitljiva datoteka. Preuzimanje se nastavlja ondje gdje je stalo.</string>
-    <string name="error_local_storage_download">Datoteku nije bilo moguće spremiti. Oslobodite prostor i preuzimanje se nastavlja.</string>
+    <string name="error_server_refused_download">Pogreška poslužitelja (%1$d). Kasnije dodirnite „Preuzmi“ da biste nastavili ondje gdje je stalo.</string>
+    <string name="error_untrusted_server_download">Nevažeći sigurnosni certifikat. Kad se obnovi, dodirnite „Preuzmi“ da biste nastavili.</string>
+    <string name="error_malformed_download">Primljena je nečitljiva datoteka. Kasnije dodirnite „Preuzmi“ da biste nastavili ondje gdje je stalo.</string>
+    <string name="error_local_storage_download">Datoteku nije bilo moguće spremiti. Oslobodite prostor i dodirnite „Preuzmi“ da biste nastavili.</string>
     <!-- The same failures again, read after a press on "Check for updates",
          which is a third gesture: it reads the published manifest and
          transfers nothing, so there is no download to pick up where it
@@ -692,6 +692,7 @@
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_waiting_for_unmetered">Preuzimanje %1$s čeka Wi-Fi.</string>
     <string name="download_can_resume">Ova veza više nije mobilna mreža. Pokrenite preuzimanje ponovo: nastavit će se ondje gdje je stalo.</string>
+    <string name="download_connection_back">Veza je ponovno uspostavljena. Dodirnite „Preuzmi“ da biste nastavili ondje gdje je stalo.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Aplikacija se otvara na</string>

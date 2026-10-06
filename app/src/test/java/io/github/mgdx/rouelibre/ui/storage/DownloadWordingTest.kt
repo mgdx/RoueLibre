@@ -102,6 +102,23 @@ class DownloadWordingTest {
     }
 
     /**
+     * Picking up is the reader's press, never the application's (SPEC §4.4):
+     * nothing starts again from the background. "The download picks up where
+     * it stopped" read as a promise that it would, and a download cut by a
+     * lost Wi-Fi then sat under that sentence for minutes after the Wi-Fi was
+     * back, waiting for a press nobody had been asked for. Each sentence now
+     * names the button that resumes.
+     */
+    @Test
+    fun `every sentence of the family hands the resumption to a press`() {
+        LOCALES.forEach { folder ->
+            val button = BUTTON.getValue(folder)
+            val waiting = FAMILY.filterNot { stringOf(folder, it).contains(button) }
+            assertEquals("$folder leaves the resumption to nobody", emptyList<String>(), waiting)
+        }
+    }
+
+    /**
      * The sentences were right and unreadable: the four written for the server
      * failures ran to 119 characters where the bar showed about eighty, and
      * were cut at an ellipsis — the very defect this campaign fixed on the
@@ -192,6 +209,12 @@ class DownloadWordingTest {
         val RESUMPTION = mapOf(
             "values" to Regex("picks up|pick up"),
             "values-fr" to Regex("reprend|reprendra"),
+        )
+
+        /** The button that resumes, as each language names it in a sentence. */
+        val BUTTON = mapOf(
+            "values" to "“Download”",
+            "values-fr" to "« Télécharger »",
         )
     }
 }

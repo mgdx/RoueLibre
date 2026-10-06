@@ -31,6 +31,19 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **A download cut by a lost connection is offered again when it comes back**
+  (`SPEC.md` §4.4). The storage screen kept saying "No connection. The
+  download picks up where it stopped." more than three minutes after the
+  Wi-Fi had returned, and nothing picked up: nothing may restart from the
+  background, and the sentence promised what only a press does. The watch
+  that already followed billing now also follows whether there is a
+  connection at all (`ConnectionCost.connected`, read from the same callback,
+  under the `ACCESS_NETWORK_STATE` already declared), and `ReconnectionWatch`
+  in `:core` decides when an offline failure becomes an offer: the failed row
+  and a snackbar then say the connection is back and point to "Download", which
+  resumes from the offset reached. The six failure sentences of a dataset
+  transfer name that button instead of reading as if the download carried on
+  by itself, in all thirty-one languages.
 - **The more recent catalogue decides, not the downloaded one** (`SPEC.md`
   §15.1). The copy downloaded into the application's files outlives an
   update, and it replaced the shipped catalogue however old it was: a phone
