@@ -33,6 +33,16 @@ data class StationEntity(
     val longitude: Double,
     val capacity: Int?,
     val postalCode: String?,
+    /**
+     * The station is virtual — a parking zone, not a rack (GBFS
+     * `is_virtual_station`).
+     *
+     * Kept with the static data because that is the only feed saying it, and
+     * it is read once a day while the state comes every minute: without it in
+     * the cache, a restart would close every station of a network such as
+     * Pony's in Limoges until the next daily read (`Station.isVirtual`).
+     */
+    val isVirtual: Boolean,
 )
 
 /**
@@ -180,7 +190,7 @@ object VehicleTypeCountsConverter {
 /** The local database of stations and their last known state. */
 @Database(
     entities = [StationEntity::class, StationAvailabilityEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = true,
 )
 @TypeConverters(VehicleTypeCountsConverter::class)
@@ -204,6 +214,22 @@ abstract class StationDatabase : RoomDatabase() {
                 connection.execSQL(
                     "ALTER TABLE station_availability " +
                         "ADD COLUMN bikesByVehicleType TEXT NOT NULL DEFAULT ''",
+                )
+            }
+        }
+
+        /**
+         * Adds the virtual flag to the cached stations.
+         *
+         * Migrated rather than rebuilt, for the same reason as [MIGRATION_1_2].
+         * The existing rows are marked physical, which is how they were already
+         * read; the next daily read of the static data corrects the virtual
+         * ones.
+         */
+        val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+            override fun migrate(connection: SQLiteConnection) {
+                connection.execSQL(
+                    "ALTER TABLE station ADD COLUMN isVirtual INTEGER NOT NULL DEFAULT 0",
                 )
             }
         }

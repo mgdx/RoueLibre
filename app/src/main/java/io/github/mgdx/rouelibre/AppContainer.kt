@@ -290,7 +290,7 @@ class AppContainer(private val context: Context) {
             context,
             StationDatabase::class.java,
             StationDatabase.FILE_NAME,
-        ).addMigrations(StationDatabase.MIGRATION_1_2)
+        ).addMigrations(StationDatabase.MIGRATION_1_2, StationDatabase.MIGRATION_2_3)
             .build()
     }
 

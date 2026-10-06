@@ -460,6 +460,7 @@ private fun StationEntity.toDomain() = Station(
     position = Coordinates(latitude, longitude),
     capacity = capacity,
     postalCode = postalCode,
+    isVirtual = isVirtual,
 )
 
 private fun Station.toEntity() = StationEntity(
@@ -469,6 +470,7 @@ private fun Station.toEntity() = StationEntity(
     longitude = position.longitude,
     capacity = capacity,
     postalCode = postalCode,
+    isVirtual = isVirtual,
 )
 
 private fun StationAvailabilityEntity.toDomain() = StationAvailability(

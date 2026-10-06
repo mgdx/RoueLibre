@@ -69,6 +69,7 @@ class StationDaoOnDeviceTest {
             longitude = 2.35,
             capacity = null,
             postalCode = null,
+            isVirtual = false,
         )
     }
 }
