@@ -373,6 +373,7 @@ class StationRepository(
 
     private suspend fun stationInformationRefreshIsDue(now: Instant): Boolean {
         if (dao.stationCount() == 0) return true
+        if (dao.unreadVirtualFlagCount() > 0) return true
         val last = refreshTimestamps.stationInformationFetchedAt() ?: return true
         return Duration.between(last, now) >= STATION_INFORMATION_MAXIMUM_AGE
     }
@@ -460,7 +461,7 @@ private fun StationEntity.toDomain() = Station(
     position = Coordinates(latitude, longitude),
     capacity = capacity,
     postalCode = postalCode,
-    isVirtual = isVirtual,
+    isVirtual = isVirtual ?: false,
 )
 
 private fun Station.toEntity() = StationEntity(

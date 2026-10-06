@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "a266ed7ab1fc0daddb224bce3415317a",
+    "identityHash": "20f9983b321c569b5e149a972a09e5f1",
     "entities": [
       {
         "tableName": "station",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `capacity` INTEGER, `postalCode` TEXT, `isVirtual` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `capacity` INTEGER, `postalCode` TEXT, `isVirtual` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -45,8 +45,7 @@
           {
             "fieldPath": "isVirtual",
             "columnName": "isVirtual",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "INTEGER"
           }
         ],
         "primaryKey": {
@@ -124,7 +123,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a266ed7ab1fc0daddb224bce3415317a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '20f9983b321c569b5e149a972a09e5f1')"
     ]
   }
 }

@@ -89,6 +89,10 @@ private class VariableLimitedStationDao : StationDao {
     override suspend fun mostRecentFetchTime(): Long? = null
     override suspend fun stationCount(): Int = stations.value.size
 
+    override suspend fun unreadVirtualFlagCount(): Int = stations.value.values.count {
+        it.isVirtual == null
+    }
+
     override suspend fun insertStations(stations: List<StationEntity>) {
         // Room inserts row by row with one prepared statement: a handful of
         // variables per row, never one per station.

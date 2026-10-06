@@ -245,6 +245,43 @@ class StationRepositoryTest {
         }
 
     @Test
+    fun `stations carried over from before the virtual flag have their static data read again`() =
+        runTest {
+            // The 2 → 3 migration leaves the flag unread. Without a read at the
+            // next refresh, Limoges would stay closed after the update for up
+            // to a day — the static data being otherwise read once a day.
+            val information = """
+            {"version":"3.0","data":{"stations":[
+              {"station_id":"p1","name":"Place Jourdan","lat":45.83,"lon":1.264,
+               "is_virtual_station":true}
+            ]}}
+            """.trimIndent()
+            val status = """
+            {"version":"3.0","data":{"stations":[
+              {"station_id":"p1","num_vehicles_available":4,"num_docks_available":0,
+               "is_installed":false,"is_renting":true,"is_returning":true}
+            ]}}
+            """.trimIndent()
+            enqueueDiscovery()
+            server.enqueue(MockResponse(body = information))
+            server.enqueue(MockResponse(body = status))
+            repository().refresh()
+            dao.stations.value = dao.stations.value.map { it.copy(isVirtual = null) }
+
+            now += Duration.ofMinutes(5)
+            enqueueDiscovery()
+            server.enqueue(MockResponse(body = information))
+            server.enqueue(MockResponse(body = status))
+            val updated = repository()
+            updated.refresh()
+
+            assertEquals("the static data read again", 6, server.requestCount)
+            val station = updated.observeStations().first().stations.single()
+            assertEquals(ServiceState.InService, station.serviceState)
+            assertEquals(true, dao.stations.value.single().isVirtual)
+        }
+
+    @Test
     fun `changing city leaves none of the previous city's stations`() = runTest {
         // They have no business on another conurbation's map, and offline
         // nothing would come to replace them (SPEC §15.1).
@@ -573,6 +610,10 @@ private class FakeStationDao : StationDao {
         availabilities.value.maxOfOrNull { it.fetchedAtEpochSeconds }
 
     override suspend fun stationCount(): Int = stations.value.size
+
+    override suspend fun unreadVirtualFlagCount(): Int = stations.value.count {
+        it.isVirtual == null
+    }
 
     override suspend fun insertStations(stations: List<StationEntity>) {
         val merged = this.stations.value.associateBy { it.id }.toMutableMap()

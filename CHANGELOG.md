@@ -19,8 +19,9 @@ also records what has no visible effect.
   `station_information`, and for such a station only `is_renting` and
   `is_returning` decide; a physical station not installed, as at Cergy and
   Mulhouse, stays out of service. The flag is cached with the stations, the
-  database going to version 3 through a migration that marks the existing
-  rows physical until the next daily read of the static data.
+  database going to version 3 through a migration that leaves the existing
+  rows unread, so that the static data is read again at the first refresh
+  after the update rather than up to a day later.
 
 ## [1.5.0]
 
