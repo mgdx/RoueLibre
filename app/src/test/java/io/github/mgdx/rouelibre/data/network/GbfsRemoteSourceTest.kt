@@ -14,6 +14,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okio.Buffer
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import javax.net.ssl.SSLHandshakeException
@@ -199,6 +200,111 @@ class GbfsRemoteSourceTest {
         )
     }
 
+    @Test
+    fun `a feed whose announced host is gone is read from the discovery's host`() = runTest {
+        // GraouLib', Metz, October 2026: the discovery document answers on the
+        // network's new host and still lists every feed on the old one, which
+        // answers 500 to everything; the same paths answer on the new host.
+        val oldHost = MockWebServer().apply { start() }
+        val newHost = MockWebServer().apply { start() }
+        oldHost.enqueue(MockResponse(code = 500, body = "not_found"))
+        newHost.enqueue(MockResponse(code = 200, body = discoveryListingStatusOn(oldHost)))
+        newHost.enqueue(MockResponse(code = 200, body = STATION_STATUS))
+        val source = sourceOn(newHost)
+
+        val discovery =
+            checkNotNull(source.fetchDiscovery(newHost.url(GBFS_PATH).toString()).valueOrNull())
+        val feed = source.fetchStationStatus(discovery).valueOrNull()
+
+        oldHost.close()
+        newHost.close()
+        assertEquals("1", checkNotNull(feed).availabilities.single().stationId)
+        assertEquals(1, oldHost.requestCount)
+        assertEquals(2, newHost.requestCount)
+    }
+
+    @Test
+    fun `when the discovery's host fails too the announced failure is reported`() = runTest {
+        // It is the producer's address that is broken, and that is what the
+        // user is told — not whatever the second, guessed address answered.
+        val oldHost = MockWebServer().apply { start() }
+        val newHost = MockWebServer().apply { start() }
+        oldHost.enqueue(MockResponse(code = 500))
+        newHost.enqueue(MockResponse(code = 200, body = discoveryListingStatusOn(oldHost)))
+        newHost.enqueue(MockResponse(code = 404))
+        val source = sourceOn(newHost)
+
+        val discovery =
+            checkNotNull(source.fetchDiscovery(newHost.url(GBFS_PATH).toString()).valueOrNull())
+        val outcome = source.fetchStationStatus(discovery)
+
+        oldHost.close()
+        newHost.close()
+        assertEquals(Outcome.Failure(DataError.ServerRefused(500)), outcome)
+    }
+
+    @Test
+    fun `a healthy feed on another host costs no second request`() = runTest {
+        val feedHost = MockWebServer().apply { start() }
+        val discoveryHost = MockWebServer().apply { start() }
+        feedHost.enqueue(MockResponse(code = 200, body = STATION_STATUS))
+        discoveryHost.enqueue(MockResponse(code = 200, body = discoveryListingStatusOn(feedHost)))
+        val source = sourceOn(discoveryHost)
+
+        val discovery = checkNotNull(
+            source.fetchDiscovery(discoveryHost.url(GBFS_PATH).toString()).valueOrNull(),
+        )
+        val outcome = source.fetchStationStatus(discovery)
+
+        feedHost.close()
+        discoveryHost.close()
+        assertTrue(outcome is Outcome.Success)
+        assertEquals(1, discoveryHost.requestCount)
+    }
+
+    @Test
+    fun `a feed failing on the discovery's own host is not tried twice`() = runTest {
+        val server = MockWebServer().apply { start() }
+        server.enqueue(MockResponse(code = 200, body = discoveryListingStatusOn(server)))
+        server.enqueue(MockResponse(code = 500))
+        val source = sourceOn(server)
+
+        val discovery =
+            checkNotNull(source.fetchDiscovery(server.url(GBFS_PATH).toString()).valueOrNull())
+        val outcome = source.fetchStationStatus(discovery)
+
+        server.close()
+        assertEquals(Outcome.Failure(DataError.ServerRefused(500)), outcome)
+        assertEquals(2, server.requestCount)
+    }
+
+    @Test
+    fun `an address is moved onto the discovery's host with its path and query kept`() {
+        assertEquals(
+            "https://gbfs.graoulib.fifteen.eu/gbfs/2.2/metz/en/station_status.json?lang=en",
+            "https://gbfs.partners.fifteen.eu/gbfs/2.2/metz/en/station_status.json?lang=en"
+                .onHostOf("https://gbfs.graoulib.fifteen.eu/gbfs/metz/gbfs.json"),
+        )
+    }
+
+    @Test
+    fun `an address only announced in cleartext on the same host is not moved`() {
+        // Mi Bici Tu Bici's case (SPEC §4.1): every request is taken over TLS
+        // already, so the "other" address would be the very same one.
+        assertNull(
+            "http://example.org/gbfs/station_status.json".onHostOf(
+                "https://example.org/gbfs/gbfs.json",
+            ),
+        )
+        assertNull("https://example.org/a.json".onHostOf(null))
+    }
+
+    private fun discoveryListingStatusOn(server: MockWebServer): String = """
+        {"last_updated":1791276806,"ttl":60,"version":"2.2","data":{"en":{"feeds":[
+          {"name":"station_status","url":"${server.url("/gbfs/2.2/metz/en/station_status.json")}"}
+        ]}}}
+    """.trimIndent()
+
     private fun sourceOn(server: MockWebServer): GbfsRemoteSource = GbfsRemoteSource(
         client = OkHttpClient(),
         parser = GbfsParser(),
@@ -210,5 +316,14 @@ class GbfsRemoteSourceTest {
     private companion object {
         /** Stands in for `R.string.station_unnamed`, which no JVM test resolves. */
         const val UNNAMED = "Unnamed station"
+
+        const val GBFS_PATH = "/gbfs/metz/gbfs.json"
+
+        const val STATION_STATUS = """
+            {"last_updated":1791276806,"ttl":60,"version":"2.2","data":{"stations":[
+              {"station_id":"1","num_bikes_available":3,"num_docks_available":2,
+               "is_installed":true,"is_renting":true,"is_returning":true,"last_reported":1791276800}
+            ]}}
+        """
     }
 }

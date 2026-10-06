@@ -13,6 +13,7 @@ import io.github.mgdx.rouelibre.core.gbfs.VehicleTypesFeed
 import io.github.mgdx.rouelibre.core.map
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
@@ -54,7 +55,9 @@ class GbfsRemoteSource(
      *   from the user setting.
      */
     suspend fun fetchDiscovery(discoveryUrl: String): Outcome<GbfsDiscovery> =
-        fetchText(discoveryUrl).flatMap(parser::parseDiscovery)
+        fetchText(discoveryUrl)
+            .flatMap(parser::parseDiscovery)
+            .map { it.copy(sourceUrl = discoveryUrl) }
 
     /**
      * Reads the stations' static data.
@@ -66,7 +69,7 @@ class GbfsRemoteSource(
     suspend fun fetchStationInformation(
         discovery: GbfsDiscovery,
     ): Outcome<StationInformationFeed> = discovery.urlOf(GbfsFeedNames.STATION_INFORMATION)
-        .flatMap { fetchText(it) }
+        .flatMap { fetchFeed(it, discovery) }
         .flatMap(parser::parseStationInformation)
         .map(::named)
 
@@ -98,7 +101,7 @@ class GbfsRemoteSource(
     /** Reads the stations' real-time state. */
     suspend fun fetchStationStatus(discovery: GbfsDiscovery): Outcome<StationStatusFeed> =
         discovery.urlOf(GbfsFeedNames.STATION_STATUS)
-            .flatMap { fetchText(it) }
+            .flatMap { fetchFeed(it, discovery) }
             .flatMap(parser::parseStationStatus)
 
     /**
@@ -110,7 +113,7 @@ class GbfsRemoteSource(
      */
     suspend fun fetchVehicleTypes(discovery: GbfsDiscovery): Outcome<VehicleTypesFeed> =
         discovery.urlOf(GbfsFeedNames.VEHICLE_TYPES)
-            .flatMap { fetchText(it) }
+            .flatMap { fetchFeed(it, discovery) }
             .flatMap(parser::parseVehicleTypes)
 
     /**
@@ -128,7 +131,7 @@ class GbfsRemoteSource(
      */
     suspend fun fetchVehicleStatus(discovery: GbfsDiscovery): Outcome<VehicleStatusFeed> =
         discovery.urlOfVehicleStatus()
-            .flatMap { fetchText(it) }
+            .flatMap { fetchFeed(it, discovery) }
             .flatMap(parser::parseVehicleStatus)
             .let { outcome ->
                 if (outcome is Outcome.Failure && outcome.error == DataError.ServerRefused(404)) {
@@ -137,6 +140,34 @@ class GbfsRemoteSource(
                     outcome
                 }
             }
+
+    /**
+     * Reads a feed the discovery document names, from where it names it or,
+     * failing that, from the host the document itself was read on.
+     *
+     * The second attempt answers a producer that moves its network to a new
+     * host and forgets to rewrite the addresses inside its discovery document.
+     * Fifteen did exactly that to GraouLib', in Metz, by October 2026: the
+     * published `gbfs.json` answers on `gbfs.graoulib.fifteen.eu`, every feed
+     * it lists sits on `gbfs.partners.fifteen.eu`, which answers 500 to
+     * everything, and the very same paths answer on the new host. Without it
+     * the network shows no station, ever, over a link the producer forgot.
+     *
+     * **Nothing new is ever contacted**: the host tried again is the one the
+     * discovery document came from, which is the city configuration's or the
+     * user's own. **A healthy network pays nothing**: the second request only
+     * goes out after the first has failed, and only when it would go
+     * somewhere else. When it fails too, the first failure is the one
+     * reported — it is the producer's address that is broken, and that is
+     * what the user is told.
+     */
+    private suspend fun fetchFeed(url: String, discovery: GbfsDiscovery): Outcome<String> {
+        val announced = fetchText(url)
+        if (announced is Outcome.Success) return announced
+        val relocated = url.onHostOf(discovery.sourceUrl) ?: return announced
+        val retried = fetchText(relocated)
+        return if (retried is Outcome.Success) retried else announced
+    }
 
     /**
      * Runs a GET and returns the response body.
@@ -200,6 +231,25 @@ class GbfsRemoteSource(
             )
         }
     }
+}
+
+/**
+ * This address with the scheme, host and port of [source] in place of its own,
+ * path and query kept; `null` when either cannot be read or when the two would
+ * reach the same server — once both are taken over TLS, as every request is
+ * (SPEC §4.1), so that a feed merely announced in cleartext on the right host
+ * is not tried a second time for nothing.
+ */
+internal fun String.onHostOf(source: String?): String? {
+    val feed = toHttpUrlOrNull() ?: return null
+    val origin = source?.toHttpUrlOrNull() ?: return null
+    val relocated = feed.newBuilder()
+        .scheme(origin.scheme)
+        .host(origin.host)
+        .port(origin.port)
+        .build()
+    if (relocated.overHttps() == feed.overHttps()) return null
+    return relocated.toString()
 }
 
 /**
