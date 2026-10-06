@@ -3,11 +3,10 @@ package io.github.mgdx.rouelibre.ui
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.doOnPreDraw
@@ -169,15 +168,6 @@ class MainActivity : AppCompatActivity() {
     private var lightIconsBeforeIntro: Boolean? = null
 
     /**
-     * The two bar colours the theme left, on the versions where the window
-     * still paints them itself — see [paintBarsForIntro].
-     */
-    private var barColoursBeforeIntro: BarColours? = null
-
-    /** What the window paints its two bars, where it still paints them. */
-    private data class BarColours(val statusBar: Int, val navigationBar: Int)
-
-    /**
      * Whether the minimum stay is already counting — see [holdIntro].
      *
      * Not a fourth condition of the opening's departure: it guards the way
@@ -206,9 +196,13 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.Theme_RoueLibre)
         super.onCreate(savedInstanceState)
         handOverSplashWithoutFading()
-        // The content runs under the system bars, which the theme colours like
-        // the background: the screen reads as one piece.
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        // The content runs under the system bars, which are left transparent
+        // so that the screen reads as one piece. AndroidX does this the same
+        // way on every version: below Android 15 the window would otherwise
+        // paint opaque bands of its own over the content — the theme's
+        // `paper`, across the opening's green (SPEC §7.0) — and the only way
+        // round them by hand is the bar-colour API Android 15 deprecates.
+        enableEdgeToEdge()
 
         val created = ActivityMainBinding.inflate(layoutInflater)
         binding = created
@@ -417,38 +411,6 @@ class MainActivity : AppCompatActivity() {
         lightIconsBeforeIntro = controller.isAppearanceLightStatusBars
         controller.isAppearanceLightStatusBars = false
         controller.isAppearanceLightNavigationBars = false
-        paintBarsForIntro()
-    }
-
-    /**
-     * Paints the two system bars with the opening's ground, on the versions
-     * where the window still paints them at all.
-     *
-     * From Android 15 this is not needed and would do nothing: an application
-     * that draws under the bars — this one asks for that in [onCreate] —
-     * leaves the ground there to whichever view reaches it, which during the
-     * opening is the opening's own, green to all four edges.
-     *
-     * Below Android 15 the window is not so accommodating. It lays its own
-     * opaque bands from the theme over the content where the bars stand, and
-     * `Theme.RoueLibre` — which [onCreate] puts back before the first
-     * inflation, the launch theme having served its purpose by then — paints
-     * those bands `paper`. Without what follows, the opening would show two
-     * pale strips across its green on Android 8 to 14, and SPEC §7.0 promises
-     * bars green for as long as the opening lasts.
-     *
-     * So the deprecated pair survives, here and nowhere else, under the one
-     * version test that says where it still means something. It goes the day
-     * minSdk reaches 35, and not before: an API that is the only one doing the
-     * job is not dead code, whatever its annotation says.
-     */
-    @Suppress("DEPRECATION")
-    private fun paintBarsForIntro() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) return
-        barColoursBeforeIntro = BarColours(window.statusBarColor, window.navigationBarColor)
-        val ground = ContextCompat.getColor(this, R.color.identity_ground)
-        window.statusBarColor = ground
-        window.navigationBarColor = ground
     }
 
     /**
@@ -490,12 +452,9 @@ class MainActivity : AppCompatActivity() {
     /**
      * Hands the system bars back as the opening found them.
      *
-     * From Android 15 only the icons are handed back: the green goes when the
-     * opening's view goes, of itself, the screen underneath being the one that
-     * reaches under the bars from then on. Below that, the colours borrowed by
-     * [paintBarsForIntro] are given back too, and to nothing else — a window
-     * that paints its own bands keeps painting them, so the theme's `paper`
-     * has to be put back by hand where it was taken away.
+     * Only the icons are handed back: the bars are transparent, so the green
+     * goes when the opening's view goes, of itself, the screen underneath
+     * being the one that reaches under the bars from then on.
      *
      * Both bars stand on the same ground, so the same icon polarity suits them.
      */
@@ -506,15 +465,6 @@ class MainActivity : AppCompatActivity() {
             isAppearanceLightStatusBars = lightIcons
             isAppearanceLightNavigationBars = lightIcons
         }
-        restoreBarColours()
-    }
-
-    /** Gives back what [paintBarsForIntro] borrowed, where it borrowed it. */
-    @Suppress("DEPRECATION")
-    private fun restoreBarColours() {
-        val colours = barColoursBeforeIntro ?: return
-        window.statusBarColor = colours.statusBar
-        window.navigationBarColor = colours.navigationBar
     }
 
     /**
