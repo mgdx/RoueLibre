@@ -420,10 +420,15 @@ public class GbfsParser {
  *
  * @property version the GBFS revision announced, if the producer publishes it.
  * @property feedUrlsByName the URL of each feed, keyed by its GBFS name.
+ * @property sourceUrl the address the document itself was read from, when it
+ *   was read from the network. It is what a feed whose announced host no
+ *   longer answers is tried again on (SPEC §4.1); the parser cannot know it,
+ *   so it is the reader of the document that fills it in.
  */
 public data class GbfsDiscovery(
     public val version: String?,
     public val feedUrlsByName: Map<String, String>,
+    public val sourceUrl: String? = null,
 ) {
     /**
      * The URL of the feed named [feedName].
