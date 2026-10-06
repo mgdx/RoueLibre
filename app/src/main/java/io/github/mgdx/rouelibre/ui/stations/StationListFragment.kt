@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.DataError
+import io.github.mgdx.rouelibre.core.config.ActiveCity
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.message.MessageSubject
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
@@ -36,6 +37,7 @@ import io.github.mgdx.rouelibre.ui.backStackEntryNames
 import io.github.mgdx.rouelibre.ui.city.CityFragment
 import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.map.MapFragment
+import io.github.mgdx.rouelibre.ui.noLongerServedMessage
 import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
@@ -87,6 +89,13 @@ class StationListFragment : Fragment() {
      * held for that instant would flash the wrong sentence on every launch.
      */
     private var cityChosen = true
+
+    /**
+     * The city chosen, when this build serves it no more (SPEC §15.1) — see
+     * [followTheChosenCity]. The empty list then says so itself, and nothing
+     * here offers to fetch a network that is gone.
+     */
+    private var withdrawnCity: ActiveCity.NoLongerServed? = null
 
     private val viewModel: StationsViewModel by viewModels {
         val container = (requireActivity().application as RoueLibreApplication).container
@@ -417,7 +426,7 @@ class StationListFragment : Fragment() {
                         showFromTheTop = false
                         binding?.stations?.scrollToPosition(0)
                     }
-                    views.swipeRefresh.isRefreshing = state.isRefreshing
+                    views.swipeRefresh.isRefreshing = state.isRefreshing && withdrawnCity == null
                     showEmptyState(state)
                     showFreshness(state)
                 }
@@ -468,6 +477,15 @@ class StationListFragment : Fragment() {
                         R.string.city_choose to { showCityChooser() }
                     } else {
                         R.string.action_retry to { viewModel.refresh(force = true) }
+                    }
+                    // Served by none may be a city chosen and since withdrawn:
+                    // the empty list says that in full, and a banner repeating
+                    // it at every tick, cut short, would only be noise
+                    // (SPEC §15.1).
+                    if (error == DataError.NoCityChosen &&
+                        container.activeCityState() is ActiveCity.NoLongerServed
+                    ) {
+                        return@collect
                     }
                     host.showMessage(
                         error.toUserMessage(
@@ -535,6 +553,10 @@ class StationListFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 container.preferences.activeCityIdFlow.collect { identifier ->
                     cityChosen = identifier != null
+                    withdrawnCity = container.activeCityState() as? ActiveCity.NoLongerServed
+                    // A pull would refresh a feed that no longer exists, and
+                    // only bring back the sentence the list already shows.
+                    binding?.swipeRefresh?.isEnabled = withdrawnCity == null
                     showEmptyState(viewModel.state.value)
                 }
             }
@@ -554,8 +576,24 @@ class StationListFragment : Fragment() {
     private fun showEmptyState(state: StationsUiState) {
         val views = binding ?: return
         views.emptyState.isVisible = state.emptiness != Emptiness.None
-        when (offerForEmptyList(state.emptiness, cityChosen)) {
+        when (
+            offerForEmptyList(
+                state.emptiness,
+                cityChosen,
+                cityWithdrawn = withdrawnCity != null,
+            )
+        ) {
             EmptyListOffer.None -> Unit
+
+            // The map panel's words, in full: a banner cut them short, and the
+            // list underneath still invited a refresh that could do nothing.
+            EmptyListOffer.ChooseAnotherCity -> {
+                views.emptyTitle.setText(R.string.map_city_withdrawn_title)
+                views.emptyMessage.text =
+                    withdrawnCity?.let { requireContext().noLongerServedMessage(it) }
+                views.emptyAction.setText(R.string.city_choose_another)
+                views.emptyAction.setOnClickListener { showCityChooser() }
+            }
 
             // The map's own words at the same instant, and its own button: the
             // two screens are looking at the same phone and must not diagnose

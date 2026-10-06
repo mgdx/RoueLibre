@@ -221,6 +221,10 @@
          (SPEC §15.1). -->
     <string name="map_needs_city_title">Welche Stadt?</string>
     <string name="map_needs_city_message">Wähle den Ballungsraum, den du nutzen willst. Seine Daten werden danach heruntergeladen, ein für alle Mal.</string>
+    <string name="map_city_withdrawn_title">Netz nicht mehr verfügbar</string>
+    <string name="map_city_withdrawn_message">%1$s ist nicht mehr verfügbar, und die Stationen werden nicht mehr angezeigt. Wähle eine andere Stadt. Die Daten, die auf diesem Gerät zurückgeblieben sind, kannst du in der Liste der Städte löschen.</string>
+    <string name="map_city_withdrawn_message_unnamed">Das gewählte Netz ist nicht mehr verfügbar, und die Stationen werden nicht mehr angezeigt. Wähle eine andere Stadt. Die Daten, die auf diesem Gerät zurückgeblieben sind, kannst du in der Liste der Städte löschen.</string>
+    <string name="city_choose_another">Andere Stadt wählen</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Nach Norden ausrichten und flach legen</string>
@@ -623,6 +627,8 @@
     <string name="city_delete_description">Die Daten von %1$s löschen</string>
     <string name="city_delete_title">Diese Daten löschen?</string>
     <string name="city_delete_body">Alle Offline-Daten von %1$s werden gelöscht. Du musst sie erneut herunterladen, um sie wieder zu nutzen.</string>
+    <string name="city_withdrawn">Nicht mehr verfügbar</string>
+    <string name="city_withdrawn_delete_body">Alle Offline-Daten von %1$s werden gelöscht. Das Netz ist nicht mehr verfügbar, die Daten sind also zu nichts mehr nütze.</string>
     <string name="city_delete_confirm">Löschen</string>
     <string name="city_deleted">Daten von %1$s gelöscht</string>
     <string name="city_search_hint">Stadt suchen</string>
@@ -658,6 +664,7 @@
     <string name="storage_total">%1$s auf diesem Gerät belegt</string>
     <string name="storage_nothing_installed">Keine Daten installiert</string>
     <string name="storage_no_city">Keine Stadt gewählt</string>
+    <string name="city_withdrawn_label">%1$s · nicht mehr verfügbar</string>
 
     <string name="dataset_tiles">Kartendaten</string>
     <string name="dataset_tiles_purpose">Zeichnet die Karte ohne Netz</string>

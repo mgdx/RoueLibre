@@ -255,6 +255,10 @@
          (SPEC §15.1). -->
     <string name="map_needs_city_title">Que cidade?</string>
     <string name="map_needs_city_message">Escolha a área metropolitana que quer consultar. Os dados são transferidos depois, de uma vez por todas.</string>
+    <string name="map_city_withdrawn_title">Rede já não disponível</string>
+    <string name="map_city_withdrawn_message">%1$s já não está disponível e as suas estações deixaram de ser mostradas. Escolha outra cidade. Os dados que deixou neste dispositivo podem ser apagados a partir da lista de cidades.</string>
+    <string name="map_city_withdrawn_message_unnamed">A rede que escolheu já não está disponível e as suas estações deixaram de ser mostradas. Escolha outra cidade. Os dados que deixou neste dispositivo podem ser apagados a partir da lista de cidades.</string>
+    <string name="city_choose_another">Escolher outra cidade</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Orientar para norte e aplanar o mapa</string>
@@ -674,6 +678,8 @@
     <string name="city_delete_description">Eliminar os dados de %1$s</string>
     <string name="city_delete_title">Eliminar estes dados?</string>
     <string name="city_delete_body">Todos os dados offline de %1$s serão apagados. Terá de os transferir novamente para os voltar a usar.</string>
+    <string name="city_withdrawn">Já não disponível</string>
+    <string name="city_withdrawn_delete_body">Todos os dados offline de %1$s serão apagados. A rede já não está disponível, por isso estes dados deixaram de ter utilidade.</string>
     <string name="city_delete_confirm">Eliminar</string>
     <string name="city_deleted">Dados de %1$s eliminados</string>
     <string name="city_search_hint">Pesquisar uma cidade</string>
@@ -709,6 +715,7 @@
     <string name="storage_total">Ocupa %1$s neste dispositivo</string>
     <string name="storage_nothing_installed">Nenhum dado instalado</string>
     <string name="storage_no_city">Nenhuma cidade escolhida</string>
+    <string name="city_withdrawn_label">%1$s · já não disponível</string>
 
     <string name="dataset_tiles">Mapa base</string>
     <string name="dataset_tiles_purpose">Desenha o mapa sem ligação</string>

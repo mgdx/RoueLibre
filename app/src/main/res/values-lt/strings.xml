@@ -252,6 +252,10 @@
     <string name="map_needs_tiles_message">Įdiekite žemėlapio duomenis saugyklos ekrane. Kol kas galima naudotis stotelių sąrašu.</string>
     <string name="map_needs_city_title">Kuris miestas?</string>
     <string name="map_needs_city_message">Pasirinkite aglomeraciją, kurią norite naudoti. Jos duomenys atsiunčiami vėliau – kartą ir visam laikui.</string>
+    <string name="map_city_withdrawn_title">Tinklas nebepasiekiamas</string>
+    <string name="map_city_withdrawn_message">„%1$s“ nebepasiekiamas, o jo stotelės nebeberodomos. Pasirinkite kitą miestą. Šiame įrenginyje likusius duomenis galima ištrinti miestų sąraše.</string>
+    <string name="map_city_withdrawn_message_unnamed">Jūsų pasirinktas tinklas nebepasiekiamas, o jo stotelės nebeberodomos. Pasirinkite kitą miestą. Šiame įrenginyje likusius duomenis galima ištrinti miestų sąraše.</string>
+    <string name="city_choose_another">Pasirinkti kitą miestą</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Nukreipti į šiaurę ir ištiesinti žemėlapį</string>
@@ -605,6 +609,8 @@
     <string name="city_delete_description">Ištrinti „%1$s“ duomenis</string>
     <string name="city_delete_title">Ištrinti šiuos duomenis?</string>
     <string name="city_delete_body">Visi įrenginyje saugomi „%1$s“ duomenys bus ištrinti. Norint jais vėl naudotis, teks atsisiųsti iš naujo.</string>
+    <string name="city_withdrawn">Nebepasiekiama</string>
+    <string name="city_withdrawn_delete_body">Visi įrenginyje saugomi „%1$s“ duomenys bus ištrinti. Tinklas nebepasiekiamas, todėl šie duomenys nebeturi jokios naudos.</string>
     <string name="city_delete_confirm">Ištrinti</string>
     <string name="city_deleted">„%1$s“ duomenys ištrinti</string>
     <string name="city_search_hint">Ieškoti miesto</string>
@@ -635,6 +641,7 @@
     <string name="storage_total">Šiame įrenginyje naudojama %1$s</string>
     <string name="storage_nothing_installed">Duomenų neįdiegta</string>
     <string name="storage_no_city">Miestas nepasirinktas</string>
+    <string name="city_withdrawn_label">„%1$s“ · nebepasiekiama</string>
 
     <string name="dataset_tiles">Žemėlapio duomenys</string>
     <string name="dataset_tiles_purpose">Piešia žemėlapį be tinklo</string>

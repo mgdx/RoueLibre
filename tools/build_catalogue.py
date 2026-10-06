@@ -13,13 +13,15 @@ as a city that cannot be installed.
 
 Usage:
     python3 tools/build_catalogue.py [--cities-dir PATH] [--data-dir PATH]
-                                     [--output PATH]
+                                     [--withdrawn PATH] [--output PATH]
 """
 
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
+import re
 import sys
 import time
 from pathlib import Path
@@ -29,6 +31,11 @@ REPO_ROOT = TOOLS_DIR.parent
 DEFAULT_CITIES_DIR = REPO_ROOT / "config" / "cities"
 DEFAULT_DATA_DIR = REPO_ROOT / "data" / "out"
 DEFAULT_OUTPUT = REPO_ROOT / "config" / "catalogue.json"
+DEFAULT_WITHDRAWN = REPO_ROOT / "config" / "withdrawn-cities.json"
+
+# The alphabet of a network identifier, the one `isUsableCityId` reads on the
+# application's side: the identifier names a directory on the device.
+CITY_ID = re.compile(r"[a-z0-9-]{1,64}")
 
 # Where the published catalogue lives. Written into the document itself so the
 # application knows where to refresh from without carrying a URL in its code
@@ -122,10 +129,58 @@ def describe(config_path: Path, data_dir: Path) -> dict:
     }
 
 
+def read_withdrawn(path: Path, configured_ids: set[str]) -> list[dict]:
+    """The networks served once and no more, as the catalogue lists them.
+
+    They go under a key of their own and never among `cities`: every build
+    published before this list ignores the keys it does not know, and one that
+    still carries such a network's configuration would offer it again if it
+    stood among the cities with a mark it cannot read (SPEC §15.1).
+
+    Refused rather than repaired, because each mistake here misleads someone: a
+    network both withdrawn and configured would be served and announced gone at
+    once, a date that does not parse says nothing about when, and an identifier
+    outside the application's alphabet can never match the one it holds.
+    """
+    if not path.is_file():
+        return []
+    document = json.loads(path.read_text(encoding="utf-8"))
+    entries = []
+    seen = set()
+    for record in document.get("withdrawn", []):
+        city_id = record.get("id", "")
+        if not CITY_ID.fullmatch(city_id):
+            raise CatalogueError(f"{path.name}: unusable identifier {city_id!r}")
+        if city_id in seen:
+            raise CatalogueError(f"{path.name}: {city_id} listed twice")
+        if city_id in configured_ids:
+            raise CatalogueError(
+                f"{path.name}: {city_id} is withdrawn and still has a "
+                f"configuration in config/cities/ — delete one or the other"
+            )
+        if not record.get("displayName", "").strip():
+            raise CatalogueError(f"{path.name}: {city_id} has no displayName")
+        try:
+            datetime.date.fromisoformat(record.get("withdrawnOn", ""))
+        except ValueError:
+            raise CatalogueError(
+                f"{path.name}: {city_id} has no withdrawnOn date (YYYY-MM-DD)"
+            ) from None
+        seen.add(city_id)
+        entries.append({
+            "id": city_id,
+            "displayName": record["displayName"],
+            "mainCity": record.get("mainCity"),
+            "withdrawnOn": record["withdrawnOn"],
+        })
+    return sorted(entries, key=lambda entry: entry["id"])
+
+
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cities-dir", type=Path, default=DEFAULT_CITIES_DIR)
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
+    parser.add_argument("--withdrawn", type=Path, default=DEFAULT_WITHDRAWN)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--catalogue-url", default=DEFAULT_CATALOGUE_URL)
     return parser.parse_args()
@@ -139,11 +194,17 @@ def main() -> int:
             raise CatalogueError(f"No configuration in {arguments.cities_dir}")
 
         entries = [describe(path, arguments.data_dir) for path in configs]
+        withdrawn = read_withdrawn(
+            arguments.withdrawn, {entry["id"] for entry in entries},
+        )
         catalogue = {
+            # Not bumped for `withdrawnCities`: a build that cannot read the key
+            # loses nothing it ever had, so there is no update to invite it to.
             "catalogueVersion": CATALOGUE_VERSION,
             "catalogueUrl": arguments.catalogue_url,
             "generatedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "cities": sorted(entries, key=lambda entry: entry["displayName"]),
+            "withdrawnCities": withdrawn,
         }
         arguments.output.parent.mkdir(parents=True, exist_ok=True)
         with arguments.output.open("w", encoding="utf-8") as stream:
@@ -156,6 +217,8 @@ def main() -> int:
             weight = f"{size / 1e6:>6.1f} MB" if size else "  not generated"
             print(f"  {entry['displayName']:<22} {entry['stationCount']:>5} stations "
                   f"{weight}")
+        for entry in withdrawn:
+            print(f"  {entry['displayName']:<22} withdrawn on {entry['withdrawnOn']}")
         return 0
 
     except (CatalogueError, KeyError) as error:

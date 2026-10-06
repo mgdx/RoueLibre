@@ -220,6 +220,10 @@
     <string name="map_needs_tiles_message">Telepítsd a térképadatokat a Tárhely képernyőn. Addig is használható marad az állomáslista.</string>
     <string name="map_needs_city_title">Melyik város?</string>
     <string name="map_needs_city_message">Válaszd ki a használni kívánt agglomerációt. Az adatai ezután töltődnek le, egyszer s mindenkorra.</string>
+    <string name="map_city_withdrawn_title">A hálózat már nem érhető el</string>
+    <string name="map_city_withdrawn_message">Ez a hálózat már nem érhető el, és az állomásai már nem jelennek meg: %1$s. Válassz másik várost. Az eszközön maradt adatait a városok listájában törölheted.</string>
+    <string name="map_city_withdrawn_message_unnamed">A választott hálózat már nem érhető el, és az állomásai már nem jelennek meg. Válassz másik várost. Az eszközön maradt adatait a városok listájában törölheted.</string>
+    <string name="city_choose_another">Másik város kiválasztása</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Északra tájolás és a térkép vízszintbe állítása</string>
@@ -569,6 +573,8 @@
     <string name="city_delete_description">Adatok törlése: %1$s</string>
     <string name="city_delete_title">Törlöd ezeket az adatokat?</string>
     <string name="city_delete_body">Ennek a hálózatnak minden offline adata törlődik: %1$s. A használatához újra le kell töltened.</string>
+    <string name="city_withdrawn">Már nem érhető el</string>
+    <string name="city_withdrawn_delete_body">Ennek a hálózatnak minden offline adata törlődik: %1$s. A hálózat már nem érhető el, így ezeknek az adatoknak már nincs hasznuk.</string>
     <string name="city_delete_confirm">Törlés</string>
     <string name="city_deleted">Adatok törölve: %1$s</string>
     <string name="city_search_hint">Város keresése</string>
@@ -602,6 +608,7 @@
     <string name="storage_total">%1$s használatban ezen az eszközön</string>
     <string name="storage_nothing_installed">Nincsenek telepített adatok</string>
     <string name="storage_no_city">Nincs kiválasztott város</string>
+    <string name="city_withdrawn_label">%1$s · már nem érhető el</string>
 
     <string name="dataset_tiles">Térképadatok</string>
     <string name="dataset_tiles_purpose">Hálózat nélkül rajzolja meg a térképet</string>

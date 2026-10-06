@@ -144,7 +144,7 @@ machine, most of which is downloading the sources.
 | `build_routing.py` | Produces the BRouter `*.rd5` graph |
 | `build_address_index.py` | Produces `addresses.sqlite`, from the Base Adresse Nationale in France and from the OpenStreetMap extract everywhere else |
 | `build_manifest.py` | Describes the release: sizes, SHA-256 digests, URLs |
-| `build_catalogue.py` | Derives the catalogue of served cities from their configurations |
+| `build_catalogue.py` | Derives the catalogue of served cities from their configurations, and lists the withdrawn ones from `config/withdrawn-cities.json` |
 | `refresh_normalization_fixtures.py` | Recomputes the normalisation reference cases after the shared rules change |
 | `publish_data.py` | Uploads the generated sets to the `RoueLibre-data` releases, at the addresses the manifests name |
 | `update_readme_figures.py` | Copies the counts, the median dataset size and the APK sizes into `README.md` and `docs/offline-data.md` |

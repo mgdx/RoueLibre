@@ -217,6 +217,10 @@
          (SPEC §15.1). -->
     <string name="map_needs_city_title">どの都市にしますか？</string>
     <string name="map_needs_city_message">利用する都市圏を選んでください。データはそのあとで、一度だけダウンロードします。</string>
+    <string name="map_city_withdrawn_title">ネットワークは利用できなくなりました</string>
+    <string name="map_city_withdrawn_message">%1$sは利用できなくなったため、そのステーションは表示されなくなりました。別の都市を選んでください。この端末に残っているデータは、都市の一覧から削除できます。</string>
+    <string name="map_city_withdrawn_message_unnamed">選んだネットワークは利用できなくなったため、そのステーションは表示されなくなりました。別の都市を選んでください。この端末に残っているデータは、都市の一覧から削除できます。</string>
+    <string name="city_choose_another">別の都市を選ぶ</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">北を上にして地図を平らにする</string>
@@ -627,6 +631,8 @@
     <string name="city_delete_description">%1$sのデータを削除</string>
     <string name="city_delete_title">このデータを削除しますか？</string>
     <string name="city_delete_body">%1$sのオフラインデータをすべて消去します。もう一度使うには、データをダウンロードし直す必要があります。</string>
+    <string name="city_withdrawn">利用できなくなりました</string>
+    <string name="city_withdrawn_delete_body">%1$sのオフラインデータをすべて消去します。このネットワークは利用できなくなったため、このデータはもう使い道がありません。</string>
     <string name="city_delete_confirm">削除</string>
     <string name="city_deleted">%1$sのデータを削除しました</string>
     <string name="city_search_hint">都市を検索</string>
@@ -662,6 +668,7 @@
     <string name="storage_total">この端末で%1$sを使用中</string>
     <string name="storage_nothing_installed">データがインストールされていません</string>
     <string name="storage_no_city">都市が選択されていません</string>
+    <string name="city_withdrawn_label">%1$s・利用できなくなりました</string>
 
     <string name="dataset_tiles">地図データ</string>
     <string name="dataset_tiles_purpose">通信なしで地図を描画します</string>

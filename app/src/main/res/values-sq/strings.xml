@@ -221,6 +221,10 @@
     <string name="map_needs_tiles_message">Instalo hartën bazë nga ekrani i hapësirës ruajtëse. Ndërkohë, lista e stacioneve mbetet e përdorshme.</string>
     <string name="map_needs_city_title">Cili qytet?</string>
     <string name="map_needs_city_message">Zgjidh zonën urbane që do të përdorësh. Të dhënat e saj shkarkohen më pas, një herë e përgjithmonë.</string>
+    <string name="map_city_withdrawn_title">Rrjeti nuk është më i disponueshëm</string>
+    <string name="map_city_withdrawn_message">%1$s nuk është më i disponueshëm dhe stacionet e tij nuk shfaqen më. Zgjidh një qytet tjetër. Të dhënat që la në këtë pajisje mund të fshihen nga lista e qyteteve.</string>
+    <string name="map_city_withdrawn_message_unnamed">Rrjeti që zgjodhe nuk është më i disponueshëm dhe stacionet e tij nuk shfaqen më. Zgjidh një qytet tjetër. Të dhënat që la në këtë pajisje mund të fshihen nga lista e qyteteve.</string>
+    <string name="city_choose_another">Zgjidh një qytet tjetër</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Drejtoje nga veriu dhe rrafshoje hartën</string>
@@ -543,6 +547,8 @@
     <string name="city_delete_description">Fshi të dhënat për %1$s</string>
     <string name="city_delete_title">Të fshihen këto të dhëna?</string>
     <string name="city_delete_body">Të gjitha të dhënat jashtë linje për %1$s do të fshihen. Do të duhet t’i shkarkosh sërish për t’i përdorur.</string>
+    <string name="city_withdrawn">Jo më e disponueshme</string>
+    <string name="city_withdrawn_delete_body">Të gjitha të dhënat jashtë linje për %1$s do të fshihen. Rrjeti nuk është më i disponueshëm, prandaj këto të dhëna nuk shërbejnë më për asgjë.</string>
     <string name="city_delete_confirm">Fshi</string>
     <string name="city_deleted">Të dhënat për %1$s u fshinë</string>
     <string name="city_search_hint">Kërko një qytet</string>
@@ -576,6 +582,7 @@
     <string name="storage_total">Hapësirë e përdorur në këtë pajisje: %1$s</string>
     <string name="storage_nothing_installed">Nuk ka të dhëna të instaluara</string>
     <string name="storage_no_city">Nuk është zgjedhur asnjë qytet</string>
+    <string name="city_withdrawn_label">%1$s · jo më e disponueshme</string>
 
     <!-- The three datasets. All three names are singular, so that the verb of
          `dataset_imported`, `dataset_deleted` and `dataset_delete_body` agrees

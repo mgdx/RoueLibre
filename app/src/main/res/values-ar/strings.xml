@@ -274,6 +274,10 @@
     <string name="map_needs_tiles_message">ثبّت بيانات الخريطة من شاشة التخزين. وفي هذه الأثناء تبقى قائمة المحطات صالحة للاستخدام.</string>
     <string name="map_needs_city_title">أي مدينة؟</string>
     <string name="map_needs_city_message">اختر التجمّع الحضري الذي تريد استخدامه. تُنزَّل بياناته بعد ذلك، مرّة واحدة نهائيًا.</string>
+    <string name="map_city_withdrawn_title">الشبكة لم تعد متاحة</string>
+    <string name="map_city_withdrawn_message">لم تعد %1$s متاحة، ولم تعد محطاتها تُعرض. اختر مدينة أخرى. يمكن حذف البيانات التي تركتها على هذا الجهاز من قائمة المدن.</string>
+    <string name="map_city_withdrawn_message_unnamed">الشبكة التي اخترتها لم تعد متاحة، ولم تعد محطاتها تُعرض. اختر مدينة أخرى. يمكن حذف البيانات التي تركتها على هذا الجهاز من قائمة المدن.</string>
+    <string name="city_choose_another">اختيار مدينة أخرى</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">التوجيه نحو الشمال وتسوية الخريطة</string>
@@ -616,6 +620,8 @@
     <string name="city_delete_description">حذف بيانات %1$s</string>
     <string name="city_delete_title">حذف هذه البيانات؟</string>
     <string name="city_delete_body">ستُمحى كل بيانات %1$s المتاحة دون اتصال. وسيتعيّن عليك تنزيلها من جديد لاستخدامها.</string>
+    <string name="city_withdrawn">لم تعد متاحة</string>
+    <string name="city_withdrawn_delete_body">ستُمحى كل بيانات %1$s المتاحة دون اتصال. لم تعد هذه الشبكة متاحة، فلم يعد لهذه البيانات أي نفع.</string>
     <string name="city_delete_confirm">حذف</string>
     <string name="city_deleted">تم حذف بيانات %1$s</string>
     <string name="city_search_hint">البحث عن مدينة</string>
@@ -647,6 +653,7 @@
     <string name="storage_total">&#x200F;%1$s مستخدَم على هذا الجهاز</string>
     <string name="storage_nothing_installed">لا بيانات مثبّتة</string>
     <string name="storage_no_city">لم تُختَر أي مدينة</string>
+    <string name="city_withdrawn_label">%1$s · لم تعد متاحة</string>
 
     <string name="dataset_tiles">بيانات الخريطة</string>
     <string name="dataset_tiles_purpose">لرسم الخريطة بلا شبكة</string>

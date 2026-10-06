@@ -18,7 +18,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
-import io.github.mgdx.rouelibre.core.config.CityConfiguration
+import io.github.mgdx.rouelibre.core.config.ActiveCity
 import io.github.mgdx.rouelibre.core.geo.BoundingBox
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.WalkingPace
@@ -36,6 +36,7 @@ import io.github.mgdx.rouelibre.ui.chosenLanguage
 import io.github.mgdx.rouelibre.ui.city.CityFragment
 import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.endonym
+import io.github.mgdx.rouelibre.ui.noLongerServedLabel
 import io.github.mgdx.rouelibre.ui.offeredLanguages
 import io.github.mgdx.rouelibre.ui.speakLanguage
 import io.github.mgdx.rouelibre.ui.stations.StreetBikeIntroDialogFragment
@@ -210,7 +211,7 @@ class SettingsFragment : Fragment() {
     /** The city section: which network is served (SPEC §15.1). */
     private fun setUpCity(views: FragmentSettingsBinding) {
         views.openCity.setOnClickListener { show(CityFragment()) }
-        viewLifecycleOwner.lifecycleScope.launch { showCity(container.activeCity()) }
+        viewLifecycleOwner.lifecycleScope.launch { showCity(container.activeCityState()) }
     }
 
     /**
@@ -227,18 +228,24 @@ class SettingsFragment : Fragment() {
      *
      * @param city the conurbation served, or `null` if none is chosen yet.
      */
-    private fun showCity(city: CityConfiguration?) {
+    private fun showCity(city: ActiveCity) {
         val views = binding ?: return
-        if (city == null) {
-            // Nothing to name. The row invites the choice instead, in the
-            // words the welcome sequence uses to ask for it.
-            views.openCity.setText(R.string.city_choose)
-            // The invitation says what pressing it does, so the eye and the
-            // ear are told the same thing and nothing is to be added.
-            views.openCity.contentDescription = null
-            return
+        val name = when (city) {
+            ActiveCity.None -> {
+                // Nothing to name. The row invites the choice instead, in the
+                // words the welcome sequence uses to ask for it.
+                views.openCity.setText(R.string.city_choose)
+                // The invitation says what pressing it does, so the eye and the
+                // ear are told the same thing and nothing is to be added.
+                views.openCity.contentDescription = null
+                return
+            }
+            is ActiveCity.Served -> city.configuration.network.let {
+                requireContext().cityLabel(it.displayName, it.city)
+            }
+            // A choice was made, and "Choose my city" denied it (SPEC §15.1).
+            is ActiveCity.NoLongerServed -> requireContext().noLongerServedLabel(city)
         }
-        val name = requireContext().cityLabel(city.network.displayName, city.network.city)
         views.openCity.text = name
         // The row reads as a bare network name otherwise — "V'lille — Lille"
         // alone, with nothing saying what it settles.

@@ -259,6 +259,10 @@
     <string name="map_needs_tiles_message">Instalatu maparen datuak Memoria pantailatik. Bitartean, geltokien zerrenda erabilgarri geratuko da.</string>
     <string name="map_needs_city_title">Zein hiri?</string>
     <string name="map_needs_city_message">Aukeratu erabili nahi duzun hiri-eremua. Haren datuak gero deskargatzen dira, behin betiko.</string>
+    <string name="map_city_withdrawn_title">Sarea ez dago erabilgarri jada</string>
+    <string name="map_city_withdrawn_message">%1$s ez dago erabilgarri jada, eta haren geltokiak ez dira gehiago erakusten. Aukeratu beste hiri bat. Gailu honetan utzitako datuak hirien zerrendatik ezaba daitezke.</string>
+    <string name="map_city_withdrawn_message_unnamed">Aukeratu zenuen sarea ez dago erabilgarri jada, eta haren geltokiak ez dira gehiago erakusten. Aukeratu beste hiri bat. Gailu honetan utzitako datuak hirien zerrendatik ezaba daitezke.</string>
+    <string name="city_choose_another">Aukeratu beste hiri bat</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). The descriptions say
          which of the two it is, the button being the only sign of either. -->
@@ -659,6 +663,8 @@
     <string name="city_delete_description">Ezabatu datuak: %1$s</string>
     <string name="city_delete_title">Datu hauek ezabatu nahi dituzu?</string>
     <string name="city_delete_body">Sare honen lineaz kanpoko datu guztiak ezabatuko dira: %1$s. Berriro deskargatu beharko dituzu erabiltzeko.</string>
+    <string name="city_withdrawn">Ez dago erabilgarri jada</string>
+    <string name="city_withdrawn_delete_body">Sare honen lineaz kanpoko datu guztiak ezabatuko dira: %1$s. Sarea ez dago erabilgarri jada, eta datu horiek ez dute ezertarako balio.</string>
     <string name="city_delete_confirm">Ezabatu</string>
     <string name="city_deleted">Datuak ezabatuta: %1$s</string>
     <string name="city_search_hint">Bilatu hiri bat</string>
@@ -689,6 +695,7 @@
     <string name="storage_total">%1$s erabilita gailu honetan</string>
     <string name="storage_nothing_installed">Ez dago daturik instalatuta</string>
     <string name="storage_no_city">Ez dago hiririk hautatuta</string>
+    <string name="city_withdrawn_label">%1$s · ez dago erabilgarri jada</string>
 
     <string name="dataset_tiles">Maparen datuak</string>
     <string name="dataset_tiles_purpose">Mapa marrazten du sarerik gabe</string>

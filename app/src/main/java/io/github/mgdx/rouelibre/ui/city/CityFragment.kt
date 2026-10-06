@@ -6,23 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.StringRes
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.config.CityCatalogue
 import io.github.mgdx.rouelibre.core.config.CityEntry
+import io.github.mgdx.rouelibre.core.config.WithdrawnCity
 import io.github.mgdx.rouelibre.core.config.filterCities
 import io.github.mgdx.rouelibre.data.cities.CatalogueRefresh
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentCityBinding
 import io.github.mgdx.rouelibre.ui.ConfirmationDialogFragment
+import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -62,7 +66,21 @@ class CityFragment : Fragment() {
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
 
-    private val adapter = CityAdapter(onChoose = { choose(it.id) }, onDelete = ::confirmDelete)
+    private val adapter = CityAdapter(
+        onChoose = { choose(it.id) },
+        onDelete = { confirmDelete(it.id, it.displayName, R.string.city_delete_body) },
+    )
+
+    /**
+     * The withdrawn networks whose data is still here (SPEC §15.1): the one
+     * still chosen heads the list, being where its user came to leave it from,
+     * and the others follow the cities that can be chosen.
+     */
+    private val chosenWithdrawnAdapter = WithdrawnCityAdapter(onDelete = ::confirmWithdrawnDelete)
+    private val otherWithdrawnAdapter = WithdrawnCityAdapter(onDelete = ::confirmWithdrawnDelete)
+
+    /** Those networks' rows, before the search hides them. */
+    private var withdrawnRows: List<WithdrawnCityRow> = emptyList()
 
     /**
      * Requests location permission, and never insists.
@@ -106,7 +124,7 @@ class CityFragment : Fragment() {
         views.toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
         views.toolbar.navigationContentDescription = getString(R.string.action_back)
         views.cities.layoutManager = LinearLayoutManager(requireContext())
-        views.cities.adapter = adapter
+        views.cities.adapter = ConcatAdapter(chosenWithdrawnAdapter, adapter, otherWithdrawnAdapter)
         views.locateMe.setOnClickListener { onLocateMeClicked() }
 
         // Filtering on every keystroke: a few hundred entries already in
@@ -205,6 +223,21 @@ class CityFragment : Fragment() {
                 )
             }
             .sortedWith(cityDisplayOrder())
+        val listed = loaded.cities.mapTo(HashSet()) { it.id }
+        withdrawnRows = container.cityCatalogueSource.withdrawnCities()
+            // A catalogue that serves a network again outranks the record of
+            // its withdrawal: its own row already says what can be done.
+            .filter { it.id !in listed }
+            .map { city ->
+                WithdrawnCityRow(
+                    city = city,
+                    isActive = city.id == activeId,
+                    installedBytes = store.occupiedBytesOf(city.id),
+                )
+            }
+            // Listed only for what there is to delete, or to say why the city
+            // still chosen is no longer served.
+            .filter { it.isActive || it.installedBytes > 0 }
         showRows()
     }
 
@@ -220,6 +253,10 @@ class CityFragment : Fragment() {
         val shown = filterCities(rows.map { it.entry }, query, letterFolds)
             .mapNotNull { byIdentifier[it.id] }
         adapter.submitList(shown)
+        // A search looks for a city to choose, and these cannot be chosen.
+        val withdrawn = withdrawnRows.takeIf { query.isBlank() }.orEmpty()
+        chosenWithdrawnAdapter.submitList(withdrawn.filter { it.isActive })
+        otherWithdrawnAdapter.submitList(withdrawn.filterNot { it.isActive })
 
         // Only once the catalogue has arrived: an empty list before that is a
         // screen still loading, and there would be nothing to clear.
@@ -319,20 +356,36 @@ class CityFragment : Fragment() {
      * Tens of megabytes that will have to be downloaded again: it is a gesture
      * worth making sure of.
      */
-    private fun confirmDelete(city: CityEntry) {
+    private fun confirmDelete(cityId: String, displayName: String, @StringRes body: Int) {
         ConfirmationDialogFragment.ask(
             manager = childFragmentManager,
             requestKey = DELETION_ANSWER,
             title = R.string.city_delete_title,
-            message = getString(R.string.city_delete_body, city.displayName),
+            message = getString(body, displayName),
             confirm = R.string.city_delete_confirm,
             payload = Bundle().apply {
-                putString(CITY_ID, city.id)
+                putString(CITY_ID, cityId)
                 // The name travels with the identifier because the sentence
                 // said afterwards names the city that has just gone, and the
                 // row it was read from is about to leave the list.
-                putString(CITY_NAME, city.displayName)
+                putString(CITY_NAME, displayName)
             },
+        )
+    }
+
+    /**
+     * The same question about a withdrawn network, which differs in two words.
+     *
+     * Its data cannot be downloaded again, so the sentence says it is of no
+     * further use rather than that it will have to come down a second time.
+     * And it is named with its conurbation: six of the networks withdrawn on
+     * 6 October 2026 were all called "Donkey Republic".
+     */
+    private fun confirmWithdrawnDelete(city: WithdrawnCity) {
+        confirmDelete(
+            cityId = city.id,
+            displayName = requireContext().cityLabel(city.displayName, city.mainCity),
+            body = R.string.city_withdrawn_delete_body,
         )
     }
 
