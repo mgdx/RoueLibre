@@ -1,0 +1,797 @@
+{
+  "language": "en",
+  "cases": [
+    {
+      "input": "Abbey Rd",
+      "normalized": "abbey road",
+      "type": null,
+      "name": "abbey road"
+    },
+    {
+      "input": "Baker Street",
+      "normalized": "baker street",
+      "type": null,
+      "name": "baker street"
+    },
+    {
+      "input": "St James's Park",
+      "normalized": "saint james south park",
+      "type": null,
+      "name": "saint james south park"
+    },
+    {
+      "input": "Queen's Crescent",
+      "normalized": "queen south crescent",
+      "type": null,
+      "name": "queen south crescent"
+    },
+    {
+      "input": "Kensington High St",
+      "normalized": "kensington high st",
+      "type": null,
+      "name": "kensington high st"
+    },
+    {
+      "input": "Dr Martin Luther King Jr Blvd",
+      "normalized": "doctor martin luther king jr boulevard",
+      "type": null,
+      "name": "doctor martin luther king jr boulevard"
+    },
+    {
+      "input": "N Michigan Ave",
+      "normalized": "north michigan avenue",
+      "type": null,
+      "name": "north michigan avenue"
+    },
+    {
+      "input": "The Mall",
+      "normalized": "the mall",
+      "type": null,
+      "name": "the mall"
+    },
+    {
+      "input": "Hyde Park Corner",
+      "normalized": "hyde park corner",
+      "type": null,
+      "name": "hyde park corner"
+    },
+    {
+      "input": "Cherry Ln",
+      "normalized": "cherry lane",
+      "type": null,
+      "name": "cherry lane"
+    },
+    {
+      "input": "Mt Pleasant Ter",
+      "normalized": "mount pleasant terrace",
+      "type": null,
+      "name": "mount pleasant terrace"
+    },
+    {
+      "input": "Fifth Avenue",
+      "normalized": "fifth avenue",
+      "type": null,
+      "name": "fifth avenue"
+    },
+    {
+      "input": "262nd st",
+      "normalized": "262nd st",
+      "type": null,
+      "name": "262nd st"
+    },
+    {
+      "input": "Alcorn Avenue",
+      "normalized": "alcorn avenue",
+      "type": null,
+      "name": "alcorn avenue"
+    },
+    {
+      "input": "Chevro Lane",
+      "normalized": "chevro lane",
+      "type": null,
+      "name": "chevro lane"
+    },
+    {
+      "input": "Forbes Drive",
+      "normalized": "forbes drive",
+      "type": null,
+      "name": "forbes drive"
+    },
+    {
+      "input": "Jewell Circle",
+      "normalized": "jewell circle",
+      "type": null,
+      "name": "jewell circle"
+    },
+    {
+      "input": "Martin Drive",
+      "normalized": "martin drive",
+      "type": null,
+      "name": "martin drive"
+    },
+    {
+      "input": "Robin Drive",
+      "normalized": "robin drive",
+      "type": null,
+      "name": "robin drive"
+    },
+    {
+      "input": "South 38th Street",
+      "normalized": "south 38th street",
+      "type": null,
+      "name": "south 38th street"
+    },
+    {
+      "input": "West 18th Avenue",
+      "normalized": "west 18th avenue",
+      "type": null,
+      "name": "west 18th avenue"
+    },
+    {
+      "input": "Avenue R",
+      "normalized": "avenue r",
+      "type": "avenue",
+      "name": "r"
+    },
+    {
+      "input": "North 4th Avenue",
+      "normalized": "north 4th avenue",
+      "type": null,
+      "name": "north 4th avenue"
+    },
+    {
+      "input": "Allan Street",
+      "normalized": "allan street",
+      "type": null,
+      "name": "allan street"
+    },
+    {
+      "input": "Entrance D",
+      "normalized": "entrance d",
+      "type": null,
+      "name": "entrance d"
+    },
+    {
+      "input": "Ohern Street",
+      "normalized": "ohern street",
+      "type": null,
+      "name": "ohern street"
+    },
+    {
+      "input": "South 140th Court",
+      "normalized": "south 140th court",
+      "type": null,
+      "name": "south 140th court"
+    },
+    {
+      "input": "South 173rd Street",
+      "normalized": "south 173rd street",
+      "type": null,
+      "name": "south 173rd street"
+    },
+    {
+      "input": "Weir Circle",
+      "normalized": "weir circle",
+      "type": null,
+      "name": "weir circle"
+    },
+    {
+      "input": "Hubbard Road",
+      "normalized": "hubbard road",
+      "type": null,
+      "name": "hubbard road"
+    },
+    {
+      "input": "13th Street Avenue",
+      "normalized": "13th street avenue",
+      "type": null,
+      "name": "13th street avenue"
+    },
+    {
+      "input": "Bay Street",
+      "normalized": "bay street",
+      "type": null,
+      "name": "bay street"
+    },
+    {
+      "input": "Cryer Circle",
+      "normalized": "cryer circle",
+      "type": null,
+      "name": "cryer circle"
+    },
+    {
+      "input": "Grant Street",
+      "normalized": "grant street",
+      "type": null,
+      "name": "grant street"
+    },
+    {
+      "input": "Lakewood Lane",
+      "normalized": "lakewood lane",
+      "type": null,
+      "name": "lakewood lane"
+    },
+    {
+      "input": "North 20th Street",
+      "normalized": "north 20th street",
+      "type": null,
+      "name": "north 20th street"
+    },
+    {
+      "input": "Sabrina Circle",
+      "normalized": "sabrina circle",
+      "type": null,
+      "name": "sabrina circle"
+    },
+    {
+      "input": "Timber Lane",
+      "normalized": "timber lane",
+      "type": null,
+      "name": "timber lane"
+    },
+    {
+      "input": "Ingwerson Lane",
+      "normalized": "ingwerson lane",
+      "type": null,
+      "name": "ingwerson lane"
+    },
+    {
+      "input": "Big Lake Road",
+      "normalized": "big lake road",
+      "type": null,
+      "name": "big lake road"
+    },
+    {
+      "input": "Appaloosa Drive",
+      "normalized": "appaloosa drive",
+      "type": null,
+      "name": "appaloosa drive"
+    },
+    {
+      "input": "Davenport Plaza",
+      "normalized": "davenport plaza",
+      "type": null,
+      "name": "davenport plaza"
+    },
+    {
+      "input": "Grey Fawn Plaza",
+      "normalized": "grey fawn plaza",
+      "type": null,
+      "name": "grey fawn plaza"
+    },
+    {
+      "input": "Manderson Street",
+      "normalized": "manderson street",
+      "type": null,
+      "name": "manderson street"
+    },
+    {
+      "input": "North 156th Court",
+      "normalized": "north 156th court",
+      "type": null,
+      "name": "north 156th court"
+    },
+    {
+      "input": "North 176th Plaza",
+      "normalized": "north 176th plaza",
+      "type": null,
+      "name": "north 176th plaza"
+    },
+    {
+      "input": "North 202nd Street",
+      "normalized": "north 202nd street",
+      "type": null,
+      "name": "north 202nd street"
+    },
+    {
+      "input": "Pinto Circle",
+      "normalized": "pinto circle",
+      "type": null,
+      "name": "pinto circle"
+    },
+    {
+      "input": "South 198th Street",
+      "normalized": "south 198th street",
+      "type": null,
+      "name": "south 198th street"
+    },
+    {
+      "input": "Western Avenue",
+      "normalized": "western avenue",
+      "type": null,
+      "name": "western avenue"
+    },
+    {
+      "input": "North 27th Park Street",
+      "normalized": "north 27th park street",
+      "type": null,
+      "name": "north 27th park street"
+    },
+    {
+      "input": "Tucker Street",
+      "normalized": "tucker street",
+      "type": null,
+      "name": "tucker street"
+    },
+    {
+      "input": "Camelback Avenue",
+      "normalized": "camelback avenue",
+      "type": null,
+      "name": "camelback avenue"
+    },
+    {
+      "input": "Hazeltine Avenue",
+      "normalized": "hazeltine avenue",
+      "type": null,
+      "name": "hazeltine avenue"
+    },
+    {
+      "input": "Prairie Ridge Road",
+      "normalized": "prairie ridge road",
+      "type": null,
+      "name": "prairie ridge road"
+    },
+    {
+      "input": "South 194th Court",
+      "normalized": "south 194th court",
+      "type": null,
+      "name": "south 194th court"
+    },
+    {
+      "input": "South 230th Plz Circle",
+      "normalized": "south 230th plz circle",
+      "type": null,
+      "name": "south 230th plz circle"
+    },
+    {
+      "input": "93rd Street",
+      "normalized": "93rd street",
+      "type": null,
+      "name": "93rd street"
+    },
+    {
+      "input": "Curtis Plaza",
+      "normalized": "curtis plaza",
+      "type": null,
+      "name": "curtis plaza"
+    },
+    {
+      "input": "Kansas Avenue",
+      "normalized": "kansas avenue",
+      "type": null,
+      "name": "kansas avenue"
+    },
+    {
+      "input": "North 104th Circle",
+      "normalized": "north 104th circle",
+      "type": null,
+      "name": "north 104th circle"
+    },
+    {
+      "input": "North 124th Avenue",
+      "normalized": "north 124th avenue",
+      "type": null,
+      "name": "north 124th avenue"
+    },
+    {
+      "input": "North 148th Street",
+      "normalized": "north 148th street",
+      "type": null,
+      "name": "north 148th street"
+    },
+    {
+      "input": "North 84th Plaza",
+      "normalized": "north 84th plaza",
+      "type": null,
+      "name": "north 84th plaza"
+    },
+    {
+      "input": "Park Lane Circle",
+      "normalized": "park lane circle",
+      "type": "park",
+      "name": "lane circle"
+    },
+    {
+      "input": "Stone Avenue",
+      "normalized": "stone avenue",
+      "type": null,
+      "name": "stone avenue"
+    },
+    {
+      "input": "Burr Oak Drive",
+      "normalized": "burr oak drive",
+      "type": null,
+      "name": "burr oak drive"
+    },
+    {
+      "input": "Jason Drive",
+      "normalized": "jason drive",
+      "type": null,
+      "name": "jason drive"
+    },
+    {
+      "input": "South 23rd Avenue",
+      "normalized": "south 23rd avenue",
+      "type": null,
+      "name": "south 23rd avenue"
+    },
+    {
+      "input": "Amy Circle",
+      "normalized": "amy circle",
+      "type": null,
+      "name": "amy circle"
+    },
+    {
+      "input": "Frederick Street",
+      "normalized": "frederick street",
+      "type": null,
+      "name": "frederick street"
+    },
+    {
+      "input": "Old South 48th Street",
+      "normalized": "old south 48th street",
+      "type": null,
+      "name": "old south 48th street"
+    },
+    {
+      "input": "South 65th Street",
+      "normalized": "south 65th street",
+      "type": null,
+      "name": "south 65th street"
+    },
+    {
+      "input": "Tupelo Lane",
+      "normalized": "tupelo lane",
+      "type": null,
+      "name": "tupelo lane"
+    },
+    {
+      "input": "Main Street",
+      "normalized": "main street",
+      "type": null,
+      "name": "main street"
+    },
+    {
+      "input": "132nd Frontage Road",
+      "normalized": "132nd frontage road",
+      "type": null,
+      "name": "132nd frontage road"
+    },
+    {
+      "input": "Chicago Street",
+      "normalized": "chicago street",
+      "type": null,
+      "name": "chicago street"
+    },
+    {
+      "input": "Harry Andersen Avenue",
+      "normalized": "harry andersen avenue",
+      "type": null,
+      "name": "harry andersen avenue"
+    },
+    {
+      "input": "Lloyd Street",
+      "normalized": "lloyd street",
+      "type": null,
+      "name": "lloyd street"
+    },
+    {
+      "input": "North 141st Street",
+      "normalized": "north 141st street",
+      "type": null,
+      "name": "north 141st street"
+    },
+    {
+      "input": "Pasadena Plaza",
+      "normalized": "pasadena plaza",
+      "type": null,
+      "name": "pasadena plaza"
+    },
+    {
+      "input": "South 115th Avenue",
+      "normalized": "south 115th avenue",
+      "type": null,
+      "name": "south 115th avenue"
+    },
+    {
+      "input": "South 138th Avenue Circle",
+      "normalized": "south 138th avenue circle",
+      "type": null,
+      "name": "south 138th avenue circle"
+    },
+    {
+      "input": "South 159th Avenue",
+      "normalized": "south 159th avenue",
+      "type": null,
+      "name": "south 159th avenue"
+    },
+    {
+      "input": "Washington Plaza",
+      "normalized": "washington plaza",
+      "type": null,
+      "name": "washington plaza"
+    },
+    {
+      "input": "Atlas Plaza",
+      "normalized": "atlas plaza",
+      "type": null,
+      "name": "atlas plaza"
+    },
+    {
+      "input": "Charles Plaza",
+      "normalized": "charles plaza",
+      "type": null,
+      "name": "charles plaza"
+    },
+    {
+      "input": "Elm Plaza",
+      "normalized": "elm plaza",
+      "type": null,
+      "name": "elm plaza"
+    },
+    {
+      "input": "Harney Street",
+      "normalized": "harney street",
+      "type": null,
+      "name": "harney street"
+    },
+    {
+      "input": "Laurel Avenue",
+      "normalized": "laurel avenue",
+      "type": null,
+      "name": "laurel avenue"
+    },
+    {
+      "input": "Nicholas Street",
+      "normalized": "nicholas street",
+      "type": null,
+      "name": "nicholas street"
+    },
+    {
+      "input": "North 156th Avenue",
+      "normalized": "north 156th avenue",
+      "type": null,
+      "name": "north 156th avenue"
+    },
+    {
+      "input": "North 32nd Street",
+      "normalized": "north 32nd street",
+      "type": null,
+      "name": "north 32nd street"
+    },
+    {
+      "input": "North 76th Street",
+      "normalized": "north 76th street",
+      "type": null,
+      "name": "north 76th street"
+    },
+    {
+      "input": "Patrick Avenue",
+      "normalized": "patrick avenue",
+      "type": null,
+      "name": "patrick avenue"
+    },
+    {
+      "input": "Sigwart Avenue",
+      "normalized": "sigwart avenue",
+      "type": null,
+      "name": "sigwart avenue"
+    },
+    {
+      "input": "South 148th Street",
+      "normalized": "south 148th street",
+      "type": null,
+      "name": "south 148th street"
+    },
+    {
+      "input": "South 185th Court",
+      "normalized": "south 185th court",
+      "type": null,
+      "name": "south 185th court"
+    },
+    {
+      "input": "South 3rd Plaza",
+      "normalized": "south 3rd plaza",
+      "type": null,
+      "name": "south 3rd plaza"
+    },
+    {
+      "input": "Southbound Frontage Road",
+      "normalized": "southbound frontage road",
+      "type": null,
+      "name": "southbound frontage road"
+    },
+    {
+      "input": "Wiesman Drive",
+      "normalized": "wiesman drive",
+      "type": null,
+      "name": "wiesman drive"
+    },
+    {
+      "input": "Pygmy Goat Kraal",
+      "normalized": "pygmy goat kraal",
+      "type": null,
+      "name": "pygmy goat kraal"
+    },
+    {
+      "input": "Mills Avenue",
+      "normalized": "mills avenue",
+      "type": null,
+      "name": "mills avenue"
+    },
+    {
+      "input": "Chennault Street",
+      "normalized": "chennault street",
+      "type": null,
+      "name": "chennault street"
+    },
+    {
+      "input": "Edgewater Drive",
+      "normalized": "edgewater drive",
+      "type": null,
+      "name": "edgewater drive"
+    },
+    {
+      "input": "Jacqueline Drive",
+      "normalized": "jacqueline drive",
+      "type": null,
+      "name": "jacqueline drive"
+    },
+    {
+      "input": "Marilyn Drive",
+      "normalized": "marilyn drive",
+      "type": null,
+      "name": "marilyn drive"
+    },
+    {
+      "input": "Quail Drive",
+      "normalized": "quail drive",
+      "type": null,
+      "name": "quail drive"
+    },
+    {
+      "input": "South 113th Street",
+      "normalized": "south 113th street",
+      "type": null,
+      "name": "south 113th street"
+    },
+    {
+      "input": "South 97th Court",
+      "normalized": "south 97th court",
+      "type": null,
+      "name": "south 97th court"
+    },
+    {
+      "input": "West Halleck Street",
+      "normalized": "west halleck street",
+      "type": null,
+      "name": "west halleck street"
+    },
+    {
+      "input": "Hampton Court",
+      "normalized": "hampton court",
+      "type": null,
+      "name": "hampton court"
+    },
+    {
+      "input": "84th St Frontage Road",
+      "normalized": "84th st frontage road",
+      "type": null,
+      "name": "84th st frontage road"
+    },
+    {
+      "input": "H Street",
+      "normalized": "h street",
+      "type": null,
+      "name": "h street"
+    },
+    {
+      "input": "Ohern Plaza",
+      "normalized": "ohern plaza",
+      "type": null,
+      "name": "ohern plaza"
+    },
+    {
+      "input": "South 51st Circle",
+      "normalized": "south 51st circle",
+      "type": null,
+      "name": "south 51st circle"
+    },
+    {
+      "input": "South 86th Avenue Circle",
+      "normalized": "south 86th avenue circle",
+      "type": null,
+      "name": "south 86th avenue circle"
+    },
+    {
+      "input": "V Street",
+      "normalized": "v street",
+      "type": null,
+      "name": "v street"
+    },
+    {
+      "input": "Lookingglass Drive",
+      "normalized": "lookingglass drive",
+      "type": null,
+      "name": "lookingglass drive"
+    },
+    {
+      "input": "South River Rock Drive",
+      "normalized": "south river rock drive",
+      "type": null,
+      "name": "south river rock drive"
+    },
+    {
+      "input": "180th Street South Trail",
+      "normalized": "180th street south trail",
+      "type": null,
+      "name": "180th street south trail"
+    },
+    {
+      "input": "Lisa Plaza",
+      "normalized": "lisa plaza",
+      "type": null,
+      "name": "lisa plaza"
+    },
+    {
+      "input": "South 179th Court",
+      "normalized": "south 179th court",
+      "type": null,
+      "name": "south 179th court"
+    },
+    {
+      "input": "South 209th Court",
+      "normalized": "south 209th court",
+      "type": null,
+      "name": "south 209th court"
+    },
+    {
+      "input": "West Q Road",
+      "normalized": "west q road",
+      "type": null,
+      "name": "west q road"
+    },
+    {
+      "input": "Citta Circle",
+      "normalized": "citta circle",
+      "type": null,
+      "name": "citta circle"
+    },
+    {
+      "input": "J Street",
+      "normalized": "j street",
+      "type": null,
+      "name": "j street"
+    },
+    {
+      "input": "Rammelle Drive",
+      "normalized": "rammelle drive",
+      "type": null,
+      "name": "rammelle drive"
+    },
+    {
+      "input": "South 42nd Avenue",
+      "normalized": "south 42nd avenue",
+      "type": null,
+      "name": "south 42nd avenue"
+    },
+    {
+      "input": "Chestnut Street",
+      "normalized": "chestnut street",
+      "type": null,
+      "name": "chestnut street"
+    },
+    {
+      "input": "Ida Street",
+      "normalized": "ida street",
+      "type": null,
+      "name": "ida street"
+    },
+    {
+      "input": "Douglas Circle",
+      "normalized": "douglas circle",
+      "type": null,
+      "name": "douglas circle"
+    }
+  ]
+}

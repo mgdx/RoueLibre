@@ -1,7 +1,7 @@
 {
   "catalogueVersion": 1,
   "catalogueUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/catalogue.json",
-  "generatedAt": "2026-09-28T14:16:56Z",
+  "generatedAt": "2026-10-06T12:13:47Z",
   "cities": [
     {
       "id": "aar-bike",
@@ -2704,6 +2704,60 @@
       "releaseTag": "data-2026-08-sk"
     },
     {
+      "id": "bikelnk",
+      "displayName": "BikeLNK",
+      "operator": "BikeLNK",
+      "mainCity": "Lincoln",
+      "country": "US",
+      "stationCount": 21,
+      "stationSamples": [
+        [
+          40.81712,
+          -96.70084
+        ],
+        [
+          40.82413,
+          -96.70149
+        ],
+        [
+          40.83054,
+          -96.67008
+        ],
+        [
+          40.8159,
+          -96.69074
+        ],
+        [
+          40.81118,
+          -96.70281
+        ],
+        [
+          40.81415,
+          -96.7028
+        ],
+        [
+          40.81232,
+          -96.69521
+        ],
+        [
+          40.81487,
+          -96.70576
+        ]
+      ],
+      "boundingBox": {
+        "south": 40.757251,
+        "west": -96.747715,
+        "north": 40.859199,
+        "east": -96.595095
+      },
+      "centreLatitude": 40.81483,
+      "centreLongitude": -96.70107,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_bikelnk/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bikelnk.json",
+      "dataSizeBytes": 10303120,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
       "id": "bogota-bikebogota",
       "displayName": "Bikebogota",
       "operator": "Bikebogota",
@@ -3082,6 +3136,60 @@
       "releaseTag": "data-2026-08-pt"
     },
     {
+      "id": "boulder-bcycle",
+      "displayName": "Boulder BCycle",
+      "operator": "Boulder BCycle",
+      "mainCity": "Boulder",
+      "country": "US",
+      "stationCount": 76,
+      "stationSamples": [
+        [
+          40.00811,
+          -105.26385
+        ],
+        [
+          40.01491,
+          -105.26061
+        ],
+        [
+          40.01453,
+          -105.26732
+        ],
+        [
+          40.0149,
+          -105.23558
+        ],
+        [
+          40.02161,
+          -105.25388
+        ],
+        [
+          40.0106,
+          -105.27658
+        ],
+        [
+          40.02003,
+          -105.2188
+        ],
+        [
+          40.03154,
+          -105.24611
+        ]
+      ],
+      "boundingBox": {
+        "south": 39.902721,
+        "west": -105.330176,
+        "north": 40.199199,
+        "east": -105.062484
+      },
+      "centreLatitude": 40.014905,
+      "centreLongitude": -105.258635,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_boulder/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-boulder-bcycle.json",
+      "dataSizeBytes": 20974572,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
       "id": "bre-bike",
       "displayName": "Bre.Bike",
       "operator": "nextbike GmbH",
@@ -3195,7 +3303,7 @@
       "operator": "Inurba",
       "mainCity": "Budapest",
       "country": "HU",
-      "stationCount": 209,
+      "stationCount": 701,
       "stationSamples": [
         [
           47.5531,
@@ -3231,17 +3339,71 @@
         ]
       ],
       "boundingBox": {
-        "south": 47.429277,
-        "west": 18.969077,
-        "north": 47.580053,
-        "east": 19.156202
+        "south": 47.417105,
+        "west": 18.953313,
+        "north": 47.575363,
+        "east": 19.298479
       },
       "centreLatitude": 47.504665,
       "centreLongitude": 19.062639,
       "gbfsDiscoveryUrl": "https://gbfs.urbansharing.com/molbubi.hu/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bubi-3-0.json",
-      "dataSizeBytes": 22790478,
+      "dataSizeBytes": 33356982,
       "releaseTag": "data-2026-08-hu"
+    },
+    {
+      "id": "bublr-bikes",
+      "displayName": "Bublr Bikes",
+      "operator": "Bublr Bikes",
+      "mainCity": "Milwaukee",
+      "country": "US",
+      "stationCount": 168,
+      "stationSamples": [
+        [
+          43.0369,
+          -87.89667
+        ],
+        [
+          43.05658,
+          -87.91448
+        ],
+        [
+          42.99339,
+          -87.87989
+        ],
+        [
+          43.04453,
+          -88.01952
+        ],
+        [
+          43.02425,
+          -87.94758
+        ],
+        [
+          42.99582,
+          -87.8969
+        ],
+        [
+          43.065,
+          -87.87851
+        ],
+        [
+          43.03872,
+          -87.90534
+        ]
+      ],
+      "boundingBox": {
+        "south": 42.966441,
+        "west": -88.080287,
+        "north": 43.127099,
+        "east": -87.840423
+      },
+      "centreLatitude": 43.04446,
+      "centreLongitude": -87.912505,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_bublr/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-bublr-bikes.json",
+      "dataSizeBytes": 32709080,
+      "releaseTag": "data-2026-08-us"
     },
     {
       "id": "buzau-velocity",
@@ -3946,6 +4108,60 @@
       "releaseTag": "data-2026-08-fi"
     },
     {
+      "id": "clemson-bikeshare",
+      "displayName": "Clemson BikeShare",
+      "operator": "Clemson BikeShare",
+      "mainCity": "Clemson",
+      "country": "US",
+      "stationCount": 11,
+      "stationSamples": [
+        [
+          34.67914,
+          -82.83481
+        ],
+        [
+          34.67891,
+          -82.839
+        ],
+        [
+          34.67906,
+          -82.81758
+        ],
+        [
+          34.67598,
+          -82.83735
+        ],
+        [
+          34.67713,
+          -82.82367
+        ],
+        [
+          34.68045,
+          -82.8301
+        ],
+        [
+          34.68145,
+          -82.84146
+        ],
+        [
+          34.67297,
+          -82.8295
+        ]
+      ],
+      "boundingBox": {
+        "south": 34.646021,
+        "west": -82.87771,
+        "north": 34.708399,
+        "east": -82.78481
+      },
+      "centreLatitude": 34.67906,
+      "centreLongitude": -82.83481,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_clemson/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-clemson-bikeshare.json",
+      "dataSizeBytes": 1507153,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
       "id": "compte-mobilite",
       "displayName": "Compte Mobilité",
       "operator": "Compte Mobilité",
@@ -4322,6 +4538,60 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-dej-bikecity.json",
       "dataSizeBytes": 1266752,
       "releaseTag": "data-2026-08-ro"
+    },
+    {
+      "id": "des-moines-street-collective",
+      "displayName": "Des Moines Street Collective",
+      "operator": "Des Moines Street Collective",
+      "mainCity": "Des Moines",
+      "country": "US",
+      "stationCount": 31,
+      "stationSamples": [
+        [
+          41.58974,
+          -93.61675
+        ],
+        [
+          41.58939,
+          -93.61215
+        ],
+        [
+          41.58588,
+          -93.64441
+        ],
+        [
+          41.60212,
+          -93.6586
+        ],
+        [
+          41.58425,
+          -93.63943
+        ],
+        [
+          41.57617,
+          -93.61681
+        ],
+        [
+          41.57008,
+          -93.64577
+        ],
+        [
+          41.59344,
+          -93.64266
+        ]
+      ],
+      "boundingBox": {
+        "south": 41.519821,
+        "west": -93.824156,
+        "north": 41.636599,
+        "east": -93.525404
+      },
+      "centreLatitude": 41.58588,
+      "centreLongitude": -93.6326,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_desmoines/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-des-moines-street-collective.json",
+      "dataSizeBytes": 11114874,
+      "releaseTag": "data-2026-08-us"
     },
     {
       "id": "divvy",
@@ -4702,114 +4972,6 @@
       "releaseTag": "data-2026-08-de"
     },
     {
-      "id": "donkey-prignitz",
-      "displayName": "Donkey Prignitz",
-      "operator": "TGZ Prignitz",
-      "mainCity": "Wittenberge",
-      "country": "DE",
-      "stationCount": 25,
-      "stationSamples": [
-        [
-          53.07107,
-          11.86859
-        ],
-        [
-          52.98989,
-          11.75003
-        ],
-        [
-          53.00055,
-          11.76336
-        ],
-        [
-          53.0703,
-          11.87129
-        ],
-        [
-          53.07437,
-          11.87001
-        ],
-        [
-          52.95568,
-          11.94509
-        ],
-        [
-          52.99907,
-          11.74183
-        ],
-        [
-          53.0715,
-          11.85279
-        ]
-      ],
-      "boundingBox": {
-        "south": 52.890896,
-        "west": 11.697055,
-        "north": 53.106759,
-        "east": 11.994628
-      },
-      "centreLatitude": 52.998828,
-      "centreLongitude": 11.845841,
-      "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/Donkey-Prignitz/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-prignitz.json",
-      "dataSizeBytes": 7164302,
-      "releaseTag": "data-2026-08-de"
-    },
-    {
-      "id": "donkey-republic-aalborg",
-      "displayName": "Donkey Republic",
-      "operator": "Donkey Republic",
-      "mainCity": "Aalborg",
-      "country": "DK",
-      "stationCount": 55,
-      "stationSamples": [
-        [
-          57.06556,
-          9.9004
-        ],
-        [
-          57.04814,
-          9.92321
-        ],
-        [
-          57.06005,
-          9.91868
-        ],
-        [
-          57.04618,
-          9.93327
-        ],
-        [
-          57.04057,
-          9.95159
-        ],
-        [
-          57.04525,
-          9.94201
-        ],
-        [
-          57.04512,
-          9.92373
-        ],
-        [
-          57.04649,
-          9.92915
-        ]
-      ],
-      "boundingBox": {
-        "south": 56.989238,
-        "west": 9.823542,
-        "north": 57.113042,
-        "east": 10.040668
-      },
-      "centreLatitude": 57.05114,
-      "centreLongitude": 9.932105,
-      "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_aalborg/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-aalborg.json",
-      "dataSizeBytes": 9529524,
-      "releaseTag": "data-2026-08-dk"
-    },
-    {
       "id": "donkey-republic-antwerp",
       "displayName": "Donkey Republic",
       "operator": "Donkey Republic",
@@ -4970,60 +5132,6 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-augsburg.json",
       "dataSizeBytes": 10225367,
       "releaseTag": "data-2026-08-de"
-    },
-    {
-      "id": "donkey-republic-budapest",
-      "displayName": "Donkey Republic",
-      "operator": "Donkey Republic",
-      "mainCity": "Budapest",
-      "country": "HU",
-      "stationCount": 97,
-      "stationSamples": [
-        [
-          47.48522,
-          19.07218
-        ],
-        [
-          47.47776,
-          19.07481
-        ],
-        [
-          47.5085,
-          19.09486
-        ],
-        [
-          47.48925,
-          19.06721
-        ],
-        [
-          47.48282,
-          19.06248
-        ],
-        [
-          47.49958,
-          19.05512
-        ],
-        [
-          47.49558,
-          19.06559
-        ],
-        [
-          47.48943,
-          19.07837
-        ]
-      ],
-      "boundingBox": {
-        "south": 47.449552,
-        "west": 18.986703,
-        "north": 47.543028,
-        "east": 19.134752
-      },
-      "centreLatitude": 47.49629,
-      "centreLongitude": 19.060727,
-      "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_budapest/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-budapest.json",
-      "dataSizeBytes": 13498303,
-      "releaseTag": "data-2026-08-hu"
     },
     {
       "id": "donkey-republic-copenhagen",
@@ -5674,60 +5782,6 @@
       "releaseTag": "data-2026-08-fi"
     },
     {
-      "id": "donkey-republic-malmo",
-      "displayName": "Donkey Republic",
-      "operator": "Donkey Republic",
-      "mainCity": "Malmö",
-      "country": "SE",
-      "stationCount": 192,
-      "stationSamples": [
-        [
-          55.59995,
-          13.01149
-        ],
-        [
-          55.61129,
-          12.99772
-        ],
-        [
-          55.60795,
-          13.00068
-        ],
-        [
-          55.59866,
-          12.98122
-        ],
-        [
-          55.60867,
-          12.97785
-        ],
-        [
-          55.60827,
-          12.99494
-        ],
-        [
-          55.61151,
-          13.00153
-        ],
-        [
-          55.60065,
-          13.02583
-        ]
-      ],
-      "boundingBox": {
-        "south": 55.521097,
-        "west": 12.905051,
-        "north": 55.644824,
-        "east": 13.078083
-      },
-      "centreLatitude": 55.58296,
-      "centreLongitude": 12.991567,
-      "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_malmoe/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-malmo.json",
-      "dataSizeBytes": 8196774,
-      "releaseTag": "data-2026-08-se"
-    },
-    {
       "id": "donkey-republic-neuchatel",
       "displayName": "Donkey Republic",
       "operator": "Donkey Republic",
@@ -5782,60 +5836,6 @@
       "releaseTag": "data-2026-08-ch"
     },
     {
-      "id": "donkey-republic-odense",
-      "displayName": "Donkey Republic",
-      "operator": "Donkey Republic",
-      "mainCity": "Odense",
-      "country": "DK",
-      "stationCount": 355,
-      "stationSamples": [
-        [
-          55.3982,
-          10.38149
-        ],
-        [
-          55.39726,
-          10.40052
-        ],
-        [
-          55.39635,
-          10.40572
-        ],
-        [
-          55.40086,
-          10.3853
-        ],
-        [
-          55.40726,
-          10.34919
-        ],
-        [
-          55.4031,
-          10.39483
-        ],
-        [
-          55.36799,
-          10.43067
-        ],
-        [
-          55.39396,
-          10.35626
-        ]
-      ],
-      "boundingBox": {
-        "south": 55.327013,
-        "west": 9.998295,
-        "north": 55.465377,
-        "east": 10.518668
-      },
-      "centreLatitude": 55.396195,
-      "centreLongitude": 10.258481,
-      "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_odense/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-odense.json",
-      "dataSizeBytes": 18438107,
-      "releaseTag": "data-2026-08-dk"
-    },
-    {
       "id": "donkey-republic-oxford",
       "displayName": "Donkey Republic",
       "operator": "Donkey Republic",
@@ -5888,60 +5888,6 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-oxford.json",
       "dataSizeBytes": 13081418,
       "releaseTag": "data-2026-08-gb"
-    },
-    {
-      "id": "donkey-republic-porvoo",
-      "displayName": "Donkey Republic",
-      "operator": "Donkey Republic",
-      "mainCity": "Porvoo",
-      "country": "FI",
-      "stationCount": 40,
-      "stationSamples": [
-        [
-          60.39344,
-          25.66379
-        ],
-        [
-          60.39365,
-          25.67774
-        ],
-        [
-          60.3888,
-          25.65789
-        ],
-        [
-          60.38014,
-          25.61943
-        ],
-        [
-          60.37833,
-          25.70365
-        ],
-        [
-          60.39249,
-          25.66989
-        ],
-        [
-          60.39919,
-          25.68425
-        ],
-        [
-          60.4084,
-          25.66877
-        ]
-      ],
-      "boundingBox": {
-        "south": 60.319591,
-        "west": 25.564906,
-        "north": 60.435344,
-        "east": 25.758175
-      },
-      "centreLatitude": 60.377468,
-      "centreLongitude": 25.661541,
-      "gbfsDiscoveryUrl": "https://stables.donkey.bike/api/public/gbfs/3.0/donkey_porvoo/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-donkey-republic-porvoo.json",
-      "dataSizeBytes": 4622618,
-      "releaseTag": "data-2026-08-fi"
     },
     {
       "id": "donkey-republic-regensburg",
@@ -6754,6 +6700,114 @@
       "releaseTag": "data-2026-08-de"
     },
     {
+      "id": "el-paso-b-cycle",
+      "displayName": "El Paso B-cycle",
+      "operator": "El Paso B-cycle",
+      "mainCity": "El Paso",
+      "country": "US",
+      "stationCount": 20,
+      "stationSamples": [
+        [
+          31.76148,
+          -106.48507
+        ],
+        [
+          31.75327,
+          -106.48934
+        ],
+        [
+          31.76782,
+          -106.50485
+        ],
+        [
+          31.7606,
+          -106.48985
+        ],
+        [
+          31.77752,
+          -106.50218
+        ],
+        [
+          31.76663,
+          -106.50209
+        ],
+        [
+          31.75836,
+          -106.4934
+        ],
+        [
+          31.75877,
+          -106.48395
+        ]
+      ],
+      "boundingBox": {
+        "south": 31.726321,
+        "west": -106.53928,
+        "north": 31.818999,
+        "east": -106.36992
+      },
+      "centreLatitude": 31.7627,
+      "centreLongitude": -106.49436,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_elpaso/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-el-paso-b-cycle.json",
+      "dataSizeBytes": 5536221,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
+      "id": "explore-bike-share",
+      "displayName": "Explore Bike Share",
+      "operator": "Explore Bike Share",
+      "mainCity": "Memphis",
+      "country": "US",
+      "stationCount": 30,
+      "stationSamples": [
+        [
+          35.1384,
+          -89.83259
+        ],
+        [
+          35.14655,
+          -89.98254
+        ],
+        [
+          35.18082,
+          -90.05621
+        ],
+        [
+          35.14953,
+          -90.05888
+        ],
+        [
+          35.1401,
+          -90.05431
+        ],
+        [
+          35.15093,
+          -90.0505
+        ],
+        [
+          35.1369,
+          -89.99206
+        ],
+        [
+          35.14041,
+          -90.03011
+        ]
+      ],
+      "boundingBox": {
+        "south": 35.099061,
+        "west": -90.118421,
+        "north": 35.207769,
+        "east": -89.799629
+      },
+      "centreLatitude": 35.143085,
+      "centreLongitude": -90.050455,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_memphis/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-explore-bike-share.json",
+      "dataSizeBytes": 14699949,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
       "id": "fa-mo-se",
       "displayName": "Fa.Mo.Se",
       "operator": "TIER Mobility SE Filiale Italiana",
@@ -6860,6 +6914,60 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-frelo.json",
       "dataSizeBytes": 67126168,
       "releaseTag": "data-2026-08-de"
+    },
+    {
+      "id": "greenbike",
+      "displayName": "GREENbike",
+      "operator": "GREENbike",
+      "mainCity": "Salt Lake City",
+      "country": "US",
+      "stationCount": 72,
+      "stationSamples": [
+        [
+          40.76704,
+          -111.88774
+        ],
+        [
+          40.77132,
+          -111.90874
+        ],
+        [
+          40.76746,
+          -111.87664
+        ],
+        [
+          40.76816,
+          -111.90809
+        ],
+        [
+          40.76265,
+          -111.88568
+        ],
+        [
+          40.77107,
+          -111.9258
+        ],
+        [
+          41.2226,
+          -111.97315
+        ],
+        [
+          40.76284,
+          -111.89713
+        ]
+      ],
+      "boundingBox": {
+        "south": 40.696441,
+        "west": -112.015927,
+        "north": 41.263509,
+        "east": -111.820983
+      },
+      "centreLatitude": 40.76342,
+      "centreLongitude": -111.894265,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_greenbikeslc/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-greenbike.json",
+      "dataSizeBytes": 37389512,
+      "releaseTag": "data-2026-08-us"
     },
     {
       "id": "grm-grodzisk-poland",
@@ -7078,6 +7186,60 @@
       "releaseTag": "data-2026-08-fr"
     },
     {
+      "id": "greenville-bcycle",
+      "displayName": "Greenville BCycle",
+      "operator": "Greenville BCycle",
+      "mainCity": "Greenville",
+      "country": "US",
+      "stationCount": 13,
+      "stationSamples": [
+        [
+          34.85399,
+          -82.39797
+        ],
+        [
+          34.84841,
+          -82.40027
+        ],
+        [
+          34.85028,
+          -82.40107
+        ],
+        [
+          34.84717,
+          -82.38581
+        ],
+        [
+          34.8429,
+          -82.40897
+        ],
+        [
+          34.84043,
+          -82.39883
+        ],
+        [
+          34.84511,
+          -82.40491
+        ],
+        [
+          34.8451,
+          -82.4049
+        ]
+      ],
+      "boundingBox": {
+        "south": 34.813481,
+        "west": -82.454411,
+        "north": 34.896209,
+        "east": -82.352969
+      },
+      "centreLatitude": 34.84841,
+      "centreLongitude": -82.4049,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_greenville/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-greenville-bcycle.json",
+      "dataSizeBytes": 5668183,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
       "id": "hibike",
       "displayName": "HIBike",
       "operator": "HIBike",
@@ -7132,6 +7294,60 @@
       "releaseTag": "data-2026-08-us"
     },
     {
+      "id": "hamilton-bike-share",
+      "displayName": "Hamilton Bike Share",
+      "operator": "Hamilton Bike Share",
+      "mainCity": "Hamilton",
+      "country": "CA",
+      "stationCount": 199,
+      "stationSamples": [
+        [
+          43.25632,
+          -79.86866
+        ],
+        [
+          43.25657,
+          -79.90117
+        ],
+        [
+          43.24952,
+          -79.92344
+        ],
+        [
+          43.26378,
+          -79.86604
+        ],
+        [
+          43.25812,
+          -79.87936
+        ],
+        [
+          43.25148,
+          -79.81602
+        ],
+        [
+          43.25764,
+          -79.86849
+        ],
+        [
+          43.25876,
+          -79.92103
+        ]
+      ],
+      "boundingBox": {
+        "south": 43.208106,
+        "west": -79.990761,
+        "north": 43.316429,
+        "east": -79.728703
+      },
+      "centreLatitude": 43.259011,
+      "centreLongitude": -79.882737,
+      "gbfsDiscoveryUrl": "https://hamilton.socialbicycles.com/opendata/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-hamilton-bike-share.json",
+      "dataSizeBytes": 11028700,
+      "releaseTag": "data-2026-08-ca"
+    },
+    {
       "id": "hannover-gvh",
       "displayName": "Hannover-GVH",
       "operator": "Hannover-GVH",
@@ -7184,6 +7400,60 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-hannover-gvh.json",
       "dataSizeBytes": 24620654,
       "releaseTag": "data-2026-08-de"
+    },
+    {
+      "id": "heartland-bike-share",
+      "displayName": "Heartland Bike Share",
+      "operator": "Heartland Bike Share",
+      "mainCity": "Omaha",
+      "country": "US",
+      "stationCount": 84,
+      "stationSamples": [
+        [
+          41.24497,
+          -96.01573
+        ],
+        [
+          41.26511,
+          -95.99068
+        ],
+        [
+          41.2096,
+          -95.9466
+        ],
+        [
+          41.2271,
+          -95.92997
+        ],
+        [
+          41.25941,
+          -95.93301
+        ],
+        [
+          41.27009,
+          -95.93319
+        ],
+        [
+          41.27207,
+          -95.97327
+        ],
+        [
+          41.26066,
+          -95.88124
+        ]
+      ],
+      "boundingBox": {
+        "south": 41.003431,
+        "west": -96.347642,
+        "north": 41.343099,
+        "east": -95.781568
+      },
+      "centreLatitude": 41.25761,
+      "centreLongitude": -95.9477,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_heartland/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-heartland-bike-share.json",
+      "dataSizeBytes": 42742830,
+      "releaseTag": "data-2026-08-us"
     },
     {
       "id": "helbi",
@@ -7292,60 +7562,6 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-hunedoara.json",
       "dataSizeBytes": 1164561,
       "releaseTag": "data-2026-08-ro"
-    },
-    {
-      "id": "idecycle",
-      "displayName": "IDEcycle",
-      "operator": "Fifteen / Pau Béarn Pyrénées Mobilités",
-      "mainCity": "Pau",
-      "country": "FR",
-      "stationCount": 40,
-      "stationSamples": [
-        [
-          43.29187,
-          -0.36974
-        ],
-        [
-          43.30552,
-          -0.37722
-        ],
-        [
-          43.30763,
-          -0.3575
-        ],
-        [
-          43.30664,
-          -0.32711
-        ],
-        [
-          43.29639,
-          -0.37303
-        ],
-        [
-          43.30987,
-          -0.38821
-        ],
-        [
-          43.33072,
-          -0.43503
-        ],
-        [
-          43.29066,
-          -0.31073
-        ]
-      ],
-      "boundingBox": {
-        "south": 43.253151,
-        "west": -0.475535,
-        "north": 43.363359,
-        "east": -0.262415
-      },
-      "centreLatitude": 43.308255,
-      "centreLongitude": -0.368975,
-      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/pau/en/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-idecycle.json",
-      "dataSizeBytes": 10838836,
-      "releaseTag": "data-2026-08-fr"
     },
     {
       "id": "impulsyon",
@@ -8212,6 +8428,60 @@
       "releaseTag": "data-2026-08-fr"
     },
     {
+      "id": "long-beach-ca-bikeshare",
+      "displayName": "Long Beach CA Bikeshare",
+      "operator": "Long Beach CA Bikeshare",
+      "mainCity": "Long Beach",
+      "country": "US",
+      "stationCount": 107,
+      "stationSamples": [
+        [
+          33.76315,
+          -118.19626
+        ],
+        [
+          33.75811,
+          -118.13013
+        ],
+        [
+          33.76333,
+          -118.19893
+        ],
+        [
+          33.76597,
+          -118.1669
+        ],
+        [
+          33.78463,
+          -118.11609
+        ],
+        [
+          33.81915,
+          -118.19382
+        ],
+        [
+          33.76839,
+          -118.16529
+        ],
+        [
+          33.81839,
+          -118.21556
+        ]
+      ],
+      "boundingBox": {
+        "south": 33.718982,
+        "west": -118.24804,
+        "north": 33.901921,
+        "east": -118.065416
+      },
+      "centreLatitude": 33.775507,
+      "centreLongitude": -118.176563,
+      "gbfsDiscoveryUrl": "https://www.longbeachbikeshare.com/opendata/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-long-beach-ca-bikeshare.json",
+      "dataSizeBytes": 31682824,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
       "id": "lovesharing",
       "displayName": "Lovesharing",
       "operator": "lovesharing",
@@ -8698,6 +8968,114 @@
       "releaseTag": "data-2026-08-de"
     },
     {
+      "id": "madison-bcycle",
+      "displayName": "Madison BCycle",
+      "operator": "Madison BCycle",
+      "mainCity": "Madison",
+      "country": "US",
+      "stationCount": 112,
+      "stationSamples": [
+        [
+          43.07571,
+          -89.38527
+        ],
+        [
+          43.09245,
+          -89.35138
+        ],
+        [
+          43.05711,
+          -89.42874
+        ],
+        [
+          43.08005,
+          -89.37374
+        ],
+        [
+          43.07459,
+          -89.38806
+        ],
+        [
+          43.015,
+          -89.45722
+        ],
+        [
+          43.00655,
+          -89.39946
+        ],
+        [
+          43.05595,
+          -89.38085
+        ]
+      ],
+      "boundingBox": {
+        "south": 42.969971,
+        "west": -89.520257,
+        "north": 43.156839,
+        "east": -89.270963
+      },
+      "centreLatitude": 43.073745,
+      "centreLongitude": -89.394135,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_madison/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-madison-bcycle.json",
+      "dataSizeBytes": 16582534,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
+      "id": "metro-bike-share",
+      "displayName": "Metro Bike Share",
+      "operator": "Metro Bike Share",
+      "mainCity": "Los Angeles",
+      "country": "US",
+      "stationCount": 224,
+      "stationSamples": [
+        [
+          34.0485,
+          -118.25854
+        ],
+        [
+          34.04169,
+          -118.23535
+        ],
+        [
+          33.98493,
+          -118.46996
+        ],
+        [
+          34.06699,
+          -118.29088
+        ],
+        [
+          34.10936,
+          -118.27181
+        ],
+        [
+          34.10338,
+          -118.34919
+        ],
+        [
+          34.02339,
+          -118.39922
+        ],
+        [
+          34.10185,
+          -118.32514
+        ]
+      ],
+      "boundingBox": {
+        "south": 33.901511,
+        "west": -118.523887,
+        "north": 34.204599,
+        "east": -118.192883
+      },
+      "centreLatitude": 34.04617,
+      "centreLongitude": -118.29179,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_lametro/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-metro-bike-share.json",
+      "dataSizeBytes": 124695685,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
       "id": "mi-bici-tu-bici",
       "displayName": "Mi Bici Tu Bici",
       "operator": "Bike to Bike",
@@ -8966,6 +9344,60 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-montenvelo.json",
       "dataSizeBytes": 9898163,
       "releaseTag": "data-2026-08-fr"
+    },
+    {
+      "id": "mugibike",
+      "displayName": "MugiBIKE",
+      "operator": "Fifteen and Movus",
+      "mainCity": "Gasteiz / Vitoria",
+      "country": "ES",
+      "stationCount": 12,
+      "stationSamples": [
+        [
+          42.85966,
+          -2.6839
+        ],
+        [
+          42.8453,
+          -2.66529
+        ],
+        [
+          42.85277,
+          -2.66641
+        ],
+        [
+          42.84985,
+          -2.68082
+        ],
+        [
+          42.83719,
+          -2.68702
+        ],
+        [
+          42.83859,
+          -2.672
+        ],
+        [
+          42.84399,
+          -2.65206
+        ],
+        [
+          42.86727,
+          -2.69607
+        ]
+      ],
+      "boundingBox": {
+        "south": 42.810241,
+        "west": -2.74186,
+        "north": 42.894219,
+        "east": -2.6153
+      },
+      "centreLatitude": 42.845557,
+      "centreLongitude": -2.682361,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/vitoria/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-mugibike.json",
+      "dataSizeBytes": 5813184,
+      "releaseTag": "data-2026-08-es"
     },
     {
       "id": "myradl",
@@ -9238,6 +9670,60 @@
       "releaseTag": "data-2026-08-fr"
     },
     {
+      "id": "nashville-bcycle",
+      "displayName": "Nashville BCycle",
+      "operator": "Nashville BCycle",
+      "mainCity": "Nashville",
+      "country": "US",
+      "stationCount": 36,
+      "stationSamples": [
+        [
+          36.16309,
+          -86.77612
+        ],
+        [
+          36.16395,
+          -86.76938
+        ],
+        [
+          36.1565,
+          -86.78228
+        ],
+        [
+          36.17089,
+          -86.78847
+        ],
+        [
+          36.12072,
+          -86.79042
+        ],
+        [
+          36.18049,
+          -86.78968
+        ],
+        [
+          36.15954,
+          -86.77962
+        ],
+        [
+          36.15232,
+          -86.84192
+        ]
+      ],
+      "boundingBox": {
+        "south": 36.093771,
+        "west": -86.875297,
+        "north": 36.216139,
+        "east": -86.671863
+      },
+      "centreLatitude": 36.16116,
+      "centreLongitude": -86.78503,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_nashville/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nashville-bcycle.json",
+      "dataSizeBytes": 10680984,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
       "id": "nemovelo",
       "displayName": "NemoVélo",
       "operator": "Ecovelo",
@@ -9405,7 +9891,7 @@
       "operator": "Nomago d.o.o.",
       "mainCity": "Ljubljana",
       "country": "SI",
-      "stationCount": 49,
+      "stationCount": 68,
       "stationSamples": [
         [
           46.05593,
@@ -9441,16 +9927,16 @@
         ]
       ],
       "boundingBox": {
-        "south": 45.993672,
-        "west": 14.3716,
-        "north": 46.166977,
+        "south": 45.925106,
+        "west": 14.33701,
+        "north": 46.237406,
         "east": 14.652611
       },
       "centreLatitude": 46.080325,
       "centreLongitude": 14.512106,
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_cc/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nomago-bikes-ljubljana.json",
-      "dataSizeBytes": 26236101,
+      "dataSizeBytes": 40570032,
       "releaseTag": "data-2026-08-si"
     },
     {
@@ -9505,6 +9991,60 @@
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_ce/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nomago-bikes-nova-gorica.json",
       "dataSizeBytes": 6103547,
+      "releaseTag": "data-2026-08-si"
+    },
+    {
+      "id": "nomago-bikes-ravne-na-koroskem",
+      "displayName": "Nomago Bikes",
+      "operator": "Nomago d.o.o.",
+      "mainCity": "Ravne na Koroškem",
+      "country": "SI",
+      "stationCount": 11,
+      "stationSamples": [
+        [
+          46.54442,
+          14.96226
+        ],
+        [
+          46.54043,
+          14.95755
+        ],
+        [
+          46.54244,
+          14.97162
+        ],
+        [
+          46.54204,
+          14.96454
+        ],
+        [
+          46.54423,
+          14.94346
+        ],
+        [
+          46.55653,
+          14.95747
+        ],
+        [
+          46.52151,
+          14.98582
+        ],
+        [
+          46.54538,
+          14.9295
+        ]
+      ],
+      "boundingBox": {
+        "south": 46.494558,
+        "west": 14.873096,
+        "north": 46.583477,
+        "east": 15.025001
+      },
+      "centreLatitude": 46.544227,
+      "centreLongitude": 14.957471,
+      "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_cx/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nomago-bikes-ravne-na-koroskem.json",
+      "dataSizeBytes": 2321021,
       "releaseTag": "data-2026-08-si"
     },
     {
@@ -9616,6 +10156,60 @@
       "releaseTag": "data-2026-08-fr"
     },
     {
+      "id": "oslo-bysykkel",
+      "displayName": "Oslo Bysykkel",
+      "operator": "UIP Bauer Media Outdoor Norge AS",
+      "mainCity": "Oslo",
+      "country": "NO",
+      "stationCount": 267,
+      "stationSamples": [
+        [
+          59.9105,
+          10.75051
+        ],
+        [
+          59.90591,
+          10.77866
+        ],
+        [
+          59.91662,
+          10.78331
+        ],
+        [
+          59.93348,
+          10.72629
+        ],
+        [
+          59.9363,
+          10.70545
+        ],
+        [
+          59.9378,
+          10.7541
+        ],
+        [
+          59.93507,
+          10.76915
+        ],
+        [
+          59.92026,
+          10.76063
+        ]
+      ],
+      "boundingBox": {
+        "south": 59.87149,
+        "west": 10.59734,
+        "north": 59.980361,
+        "east": 10.868093
+      },
+      "centreLatitude": 59.920553,
+      "centreLongitude": 10.747282,
+      "gbfsDiscoveryUrl": "https://gbfs.urbansharing.com/oslobysykkel.no/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-oslo-bysykkel.json",
+      "dataSizeBytes": 23284190,
+      "releaseTag": "data-2026-08-no"
+    },
+    {
       "id": "otwocki-rower-miejski",
       "displayName": "Otwocki Rower Miejski",
       "operator": "Nextbike Polska S.A. ul. Przasnyska 6B",
@@ -9668,6 +10262,114 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-otwocki-rower-miejski.json",
       "dataSizeBytes": 7116831,
       "releaseTag": "data-2026-08-pl"
+    },
+    {
+      "id": "pacers-bikeshare",
+      "displayName": "Pacers Bikeshare",
+      "operator": "Pacers Bikeshare",
+      "mainCity": "Indianapolis",
+      "country": "US",
+      "stationCount": 56,
+      "stationSamples": [
+        [
+          39.76593,
+          -86.16216
+        ],
+        [
+          39.76724,
+          -86.15432
+        ],
+        [
+          39.77224,
+          -86.1526
+        ],
+        [
+          39.76885,
+          -86.15736
+        ],
+        [
+          39.87002,
+          -86.14594
+        ],
+        [
+          39.8009,
+          -86.19122
+        ],
+        [
+          39.77451,
+          -86.17848
+        ],
+        [
+          39.76802,
+          -86.14095
+        ]
+      ],
+      "boundingBox": {
+        "south": 39.703451,
+        "west": -86.241928,
+        "north": 39.898129,
+        "east": -86.078702
+      },
+      "centreLatitude": 39.774205,
+      "centreLongitude": -86.155645,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_pacersbikeshare/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-pacers-bikeshare.json",
+      "dataSizeBytes": 19692116,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
+      "id": "peacehealth-rides",
+      "displayName": "PeaceHealth Rides",
+      "operator": "PeaceHealth Rides",
+      "mainCity": "Eugene",
+      "country": "US",
+      "stationCount": 167,
+      "stationSamples": [
+        [
+          44.03785,
+          -123.08354
+        ],
+        [
+          44.04586,
+          -123.07854
+        ],
+        [
+          44.04902,
+          -123.09432
+        ],
+        [
+          44.04554,
+          -123.09156
+        ],
+        [
+          44.02683,
+          -123.08968
+        ],
+        [
+          44.04624,
+          -123.02085
+        ],
+        [
+          44.03419,
+          -123.08824
+        ],
+        [
+          44.04417,
+          -123.07057
+        ]
+      ],
+      "boundingBox": {
+        "south": 43.99583,
+        "west": -123.151928,
+        "north": 44.114706,
+        "east": -122.978469
+      },
+      "centreLatitude": 44.045557,
+      "centreLongitude": -123.082286,
+      "gbfsDiscoveryUrl": "https://peacehealthrides.com/opendata/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-peacehealth-rides.json",
+      "dataSizeBytes": 10964929,
+      "releaseTag": "data-2026-08-us"
     },
     {
       "id": "pogoh",
@@ -9832,60 +10534,6 @@
       "releaseTag": "data-2026-08-xk"
     },
     {
-      "id": "pruszkowski-rower-miejski",
-      "displayName": "Pruszkowski Rower Miejski",
-      "operator": "Nextbike Polska S.A. ul. Przasnyska 6B",
-      "mainCity": "Pruszków",
-      "country": "PL",
-      "stationCount": 16,
-      "stationSamples": [
-        [
-          52.15006,
-          20.81991
-        ],
-        [
-          52.18273,
-          20.80043
-        ],
-        [
-          52.16895,
-          20.79879
-        ],
-        [
-          52.17003,
-          20.81185
-        ],
-        [
-          52.16177,
-          20.8161
-        ],
-        [
-          52.15134,
-          20.79615
-        ],
-        [
-          52.16384,
-          20.79971
-        ],
-        [
-          52.1707,
-          20.82827
-        ]
-      ],
-      "boundingBox": {
-        "south": 52.123111,
-        "west": 20.744613,
-        "north": 52.210526,
-        "east": 20.882647
-      },
-      "centreLatitude": 52.166819,
-      "centreLongitude": 20.81363,
-      "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_or/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-pruszkowski-rower-miejski.json",
-      "dataSizeBytes": 10087605,
-      "releaseTag": "data-2026-08-pl"
-    },
-    {
       "id": "rlv-lib",
       "displayName": "RLV'Lib",
       "operator": "RLV'Lib",
@@ -9991,6 +10639,168 @@
       "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_rtcbikeshare/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-rtc-bike-share.json",
       "dataSizeBytes": 6856405,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
+      "id": "red-bike",
+      "displayName": "Red Bike",
+      "operator": "Red Bike",
+      "mainCity": "Cincinnati",
+      "country": "US",
+      "stationCount": 80,
+      "stationSamples": [
+        [
+          39.10435,
+          -84.51894
+        ],
+        [
+          39.1052,
+          -84.50746
+        ],
+        [
+          39.13134,
+          -84.52042
+        ],
+        [
+          39.11904,
+          -84.52666
+        ],
+        [
+          39.09325,
+          -84.49064
+        ],
+        [
+          39.11487,
+          -84.41667
+        ],
+        [
+          39.10338,
+          -84.51533
+        ],
+        [
+          39.16577,
+          -84.53806
+        ]
+      ],
+      "boundingBox": {
+        "south": 39.056111,
+        "west": -84.588118,
+        "north": 39.192719,
+        "east": -84.381932
+      },
+      "centreLatitude": 39.10855,
+      "centreLongitude": -84.51123,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_cincyredbike/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-red-bike.json",
+      "dataSizeBytes": 18900084,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
+      "id": "redding-bikeshare",
+      "displayName": "Redding Bikeshare",
+      "operator": "Redding Bikeshare",
+      "mainCity": "Redding",
+      "country": "US",
+      "stationCount": 22,
+      "stationSamples": [
+        [
+          40.58178,
+          -122.3882
+        ],
+        [
+          40.58576,
+          -122.39697
+        ],
+        [
+          40.57365,
+          -122.38518
+        ],
+        [
+          40.59106,
+          -122.37755
+        ],
+        [
+          40.58568,
+          -122.39303
+        ],
+        [
+          40.59502,
+          -122.4015
+        ],
+        [
+          40.58352,
+          -122.39042
+        ],
+        [
+          40.58318,
+          -122.39529
+        ]
+      ],
+      "boundingBox": {
+        "south": 40.546421,
+        "west": -122.436985,
+        "north": 40.621969,
+        "east": -122.342065
+      },
+      "centreLatitude": 40.58357,
+      "centreLongitude": -122.39103,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_redding/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-redding-bikeshare.json",
+      "dataSizeBytes": 3711735,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
+      "id": "reddy-bikeshare",
+      "displayName": "Reddy Bikeshare",
+      "operator": "Reddy Bikeshare",
+      "mainCity": "Buffalo",
+      "country": "US",
+      "stationCount": 143,
+      "stationSamples": [
+        [
+          42.89335,
+          -78.83768
+        ],
+        [
+          43.00232,
+          -78.78565
+        ],
+        [
+          42.88373,
+          -78.87241
+        ],
+        [
+          42.93984,
+          -78.88607
+        ],
+        [
+          43.08607,
+          -79.06061
+        ],
+        [
+          42.90024,
+          -78.85889
+        ],
+        [
+          42.93577,
+          -78.84875
+        ],
+        [
+          43.02024,
+          -78.87708
+        ]
+      ],
+      "boundingBox": {
+        "south": 42.818319,
+        "west": -79.107031,
+        "north": 43.159873,
+        "east": -78.740275
+      },
+      "centreLatitude": 42.935299,
+      "centreLongitude": -78.873132,
+      "gbfsDiscoveryUrl": "https://reddybikeshare.socialbicycles.com/opendata/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-reddy-bikeshare.json",
+      "dataSizeBytes": 33609373,
       "releaseTag": "data-2026-08-us"
     },
     {
@@ -10100,6 +10910,168 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-star.json",
       "dataSizeBytes": 12155727,
       "releaseTag": "data-2026-08-fr"
+    },
+    {
+      "id": "san-antonio-bcycle",
+      "displayName": "San Antonio BCycle",
+      "operator": "San Antonio BCycle",
+      "mainCity": "San Antonio",
+      "country": "US",
+      "stationCount": 18,
+      "stationSamples": [
+        [
+          29.42479,
+          -98.49442
+        ],
+        [
+          29.40917,
+          -98.49482
+        ],
+        [
+          29.41909,
+          -98.48803
+        ],
+        [
+          29.40452,
+          -98.49091
+        ],
+        [
+          29.42188,
+          -98.48961
+        ],
+        [
+          29.31931,
+          -98.4511
+        ],
+        [
+          29.39322,
+          -98.49746
+        ],
+        [
+          29.40618,
+          -98.49344
+        ]
+      ],
+      "boundingBox": {
+        "south": 29.292361,
+        "west": -98.528385,
+        "north": 29.453449,
+        "east": -98.420175
+      },
+      "centreLatitude": 29.39157,
+      "centreLongitude": -98.488705,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_sanantonio/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-san-antonio-bcycle.json",
+      "dataSizeBytes": 5851612,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
+      "id": "santa-barbara-bcycle",
+      "displayName": "Santa Barbara BCycle",
+      "operator": "Santa Barbara BCycle",
+      "mainCity": "Santa Barbara",
+      "country": "US",
+      "stationCount": 103,
+      "stationSamples": [
+        [
+          34.4179,
+          -119.69708
+        ],
+        [
+          34.4184,
+          -119.6976
+        ],
+        [
+          34.42919,
+          -119.70985
+        ],
+        [
+          34.4088,
+          -119.69294
+        ],
+        [
+          34.43695,
+          -119.72661
+        ],
+        [
+          34.41328,
+          -119.70841
+        ],
+        [
+          34.42119,
+          -119.64788
+        ],
+        [
+          34.43475,
+          -119.72422
+        ]
+      ],
+      "boundingBox": {
+        "south": 34.372971,
+        "west": -119.784999,
+        "north": 34.468309,
+        "east": -119.615211
+      },
+      "centreLatitude": 34.42174,
+      "centreLongitude": -119.70116,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_santabarbara/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-santa-barbara-bcycle.json",
+      "dataSizeBytes": 5677409,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
+      "id": "santa-cruz-bcycle",
+      "displayName": "Santa Cruz BCycle",
+      "operator": "Santa Cruz BCycle",
+      "mainCity": "Santa Cruz",
+      "country": "US",
+      "stationCount": 72,
+      "stationSamples": [
+        [
+          36.98856,
+          -122.05488
+        ],
+        [
+          36.9982,
+          -122.0542
+        ],
+        [
+          36.97698,
+          -122.01577
+        ],
+        [
+          36.99003,
+          -122.06328
+        ],
+        [
+          36.96768,
+          -122.00773
+        ],
+        [
+          36.95975,
+          -122.05757
+        ],
+        [
+          36.9765,
+          -122.04992
+        ],
+        [
+          36.96476,
+          -122.02647
+        ]
+      ],
+      "boundingBox": {
+        "south": 36.900021,
+        "west": -122.100538,
+        "north": 37.028759,
+        "east": -121.729952
+      },
+      "centreLatitude": 36.97517,
+      "centreLongitude": -122.049545,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_santacruz/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-santa-cruz-bcycle.json",
+      "dataSizeBytes": 9537957,
+      "releaseTag": "data-2026-08-us"
     },
     {
       "id": "semo",
@@ -10750,60 +11722,6 @@
       "releaseTag": "data-2026-08-fr"
     },
     {
-      "id": "tarnowski-rower-miejski",
-      "displayName": "Tarnowski Rower Miejski",
-      "operator": "Nextbike Polska S.A. ul. Przasnyska 6B",
-      "mainCity": "Tarnów",
-      "country": "PL",
-      "stationCount": 18,
-      "stationSamples": [
-        [
-          50.01196,
-          20.98686
-        ],
-        [
-          50.00609,
-          20.97524
-        ],
-        [
-          50.02256,
-          21.01271
-        ],
-        [
-          49.99246,
-          21.00106
-        ],
-        [
-          50.00974,
-          20.92561
-        ],
-        [
-          50.02666,
-          21.00299
-        ],
-        [
-          50.01163,
-          20.96975
-        ],
-        [
-          50.01906,
-          20.97496
-        ]
-      ],
-      "boundingBox": {
-        "south": 49.965507,
-        "west": 20.881761,
-        "north": 50.07126,
-        "east": 21.054654
-      },
-      "centreLatitude": 50.018383,
-      "centreLongitude": 20.968207,
-      "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tn/gbfs.json",
-      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-tarnowski-rower-miejski.json",
-      "dataSizeBytes": 9417719,
-      "releaseTag": "data-2026-08-pl"
-    },
-    {
       "id": "tempo-velo",
       "displayName": "Tempo Vélo",
       "operator": "Tempo Vélo",
@@ -10963,6 +11881,114 @@
       "gbfsDiscoveryUrl": "https://fortworth.publicbikesystem.net/customer/gbfs/v3.0/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-fortworth.json",
       "dataSizeBytes": 19478889,
+      "releaseTag": "data-2026-08-us"
+    },
+    {
+      "id": "trondheim-bysykkel",
+      "displayName": "Trondheim Bysykkel",
+      "operator": "UIP Bauer Media Outdoor Norge AS",
+      "mainCity": "Trondheim",
+      "country": "NO",
+      "stationCount": 75,
+      "stationSamples": [
+        [
+          63.4287,
+          10.40334
+        ],
+        [
+          63.43242,
+          10.3938
+        ],
+        [
+          63.39836,
+          10.3973
+        ],
+        [
+          63.42066,
+          10.43735
+        ],
+        [
+          63.42221,
+          10.42791
+        ],
+        [
+          63.41581,
+          10.39905
+        ],
+        [
+          63.42825,
+          10.39663
+        ],
+        [
+          63.4218,
+          10.39891
+        ]
+      ],
+      "boundingBox": {
+        "south": 63.371413,
+        "west": 10.297287,
+        "north": 63.473008,
+        "east": 10.51951
+      },
+      "centreLatitude": 63.430499,
+      "centreLongitude": 10.403337,
+      "gbfsDiscoveryUrl": "https://gbfs.urbansharing.com/trondheimbysykkel.no/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-trondheim-bysykkel.json",
+      "dataSizeBytes": 10608463,
+      "releaseTag": "data-2026-08-no"
+    },
+    {
+      "id": "truckee-bcycle",
+      "displayName": "Truckee BCycle",
+      "operator": "Truckee BCycle",
+      "mainCity": "Truckee",
+      "country": "US",
+      "stationCount": 20,
+      "stationSamples": [
+        [
+          39.31682,
+          -120.14636
+        ],
+        [
+          39.32637,
+          -120.20142
+        ],
+        [
+          39.32866,
+          -120.18184
+        ],
+        [
+          39.32723,
+          -120.18662
+        ],
+        [
+          39.32496,
+          -120.28267
+        ],
+        [
+          39.32744,
+          -120.18702
+        ],
+        [
+          39.32624,
+          -120.21301
+        ],
+        [
+          39.33677,
+          -120.2086
+        ]
+      ],
+      "boundingBox": {
+        "south": 39.289871,
+        "west": -120.325713,
+        "north": 39.381419,
+        "east": -120.079907
+      },
+      "centreLatitude": 39.32683,
+      "centreLongitude": -120.18618,
+      "gbfsDiscoveryUrl": "https://gbfs.bcycle.com/bcycle_truckee/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-truckee-bcycle.json",
+      "dataSizeBytes": 4797579,
       "releaseTag": "data-2026-08-us"
     },
     {
@@ -17281,6 +18307,60 @@
       "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tt/gbfs.json",
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-uherske-hradiste.json",
       "dataSizeBytes": 4961250,
+      "releaseTag": "data-2026-08-cz"
+    },
+    {
+      "id": "nextbike-unicov",
+      "displayName": "nextbike",
+      "operator": "nextbike Czech Republic",
+      "mainCity": "Uničov",
+      "country": "CZ",
+      "stationCount": 19,
+      "stationSamples": [
+        [
+          49.77893,
+          17.11584
+        ],
+        [
+          49.74952,
+          17.09164
+        ],
+        [
+          49.76653,
+          17.11919
+        ],
+        [
+          49.77502,
+          17.11422
+        ],
+        [
+          49.76734,
+          17.12166
+        ],
+        [
+          49.77575,
+          17.12237
+        ],
+        [
+          49.78177,
+          17.12206
+        ],
+        [
+          49.7668,
+          17.11645
+        ]
+      ],
+      "boundingBox": {
+        "south": 49.722576,
+        "west": 17.03255,
+        "north": 49.825608,
+        "east": 17.183026
+      },
+      "centreLatitude": 49.771797,
+      "centreLongitude": 17.119186,
+      "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_nu/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-nextbike-unicov.json",
+      "dataSizeBytes": 2084835,
       "releaseTag": "data-2026-08-cz"
     },
     {

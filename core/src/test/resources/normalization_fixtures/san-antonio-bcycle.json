@@ -1,0 +1,797 @@
+{
+  "language": "en",
+  "cases": [
+    {
+      "input": "Abbey Rd",
+      "normalized": "abbey road",
+      "type": null,
+      "name": "abbey road"
+    },
+    {
+      "input": "Baker Street",
+      "normalized": "baker street",
+      "type": null,
+      "name": "baker street"
+    },
+    {
+      "input": "St James's Park",
+      "normalized": "saint james south park",
+      "type": null,
+      "name": "saint james south park"
+    },
+    {
+      "input": "Queen's Crescent",
+      "normalized": "queen south crescent",
+      "type": null,
+      "name": "queen south crescent"
+    },
+    {
+      "input": "Kensington High St",
+      "normalized": "kensington high st",
+      "type": null,
+      "name": "kensington high st"
+    },
+    {
+      "input": "Dr Martin Luther King Jr Blvd",
+      "normalized": "doctor martin luther king jr boulevard",
+      "type": null,
+      "name": "doctor martin luther king jr boulevard"
+    },
+    {
+      "input": "N Michigan Ave",
+      "normalized": "north michigan avenue",
+      "type": null,
+      "name": "north michigan avenue"
+    },
+    {
+      "input": "The Mall",
+      "normalized": "the mall",
+      "type": null,
+      "name": "the mall"
+    },
+    {
+      "input": "Hyde Park Corner",
+      "normalized": "hyde park corner",
+      "type": null,
+      "name": "hyde park corner"
+    },
+    {
+      "input": "Cherry Ln",
+      "normalized": "cherry lane",
+      "type": null,
+      "name": "cherry lane"
+    },
+    {
+      "input": "Mt Pleasant Ter",
+      "normalized": "mount pleasant terrace",
+      "type": null,
+      "name": "mount pleasant terrace"
+    },
+    {
+      "input": "Fifth Avenue",
+      "normalized": "fifth avenue",
+      "type": null,
+      "name": "fifth avenue"
+    },
+    {
+      "input": "10th Street",
+      "normalized": "10th street",
+      "type": null,
+      "name": "10th street"
+    },
+    {
+      "input": "Armstrong Place",
+      "normalized": "armstrong place",
+      "type": null,
+      "name": "armstrong place"
+    },
+    {
+      "input": "Beebe Loop",
+      "normalized": "beebe loop",
+      "type": null,
+      "name": "beebe loop"
+    },
+    {
+      "input": "Can't Stop Street",
+      "normalized": "can t stop street",
+      "type": null,
+      "name": "can t stop street"
+    },
+    {
+      "input": "Commissary Road",
+      "normalized": "commissary road",
+      "type": null,
+      "name": "commissary road"
+    },
+    {
+      "input": "Dickman Road",
+      "normalized": "dickman road",
+      "type": null,
+      "name": "dickman road"
+    },
+    {
+      "input": "East Martin Street",
+      "normalized": "east martin street",
+      "type": null,
+      "name": "east martin street"
+    },
+    {
+      "input": "Eva Jo Street",
+      "normalized": "eva jo street",
+      "type": null,
+      "name": "eva jo street"
+    },
+    {
+      "input": "Gillespie Street",
+      "normalized": "gillespie street",
+      "type": null,
+      "name": "gillespie street"
+    },
+    {
+      "input": "Hedges Street",
+      "normalized": "hedges street",
+      "type": null,
+      "name": "hedges street"
+    },
+    {
+      "input": "Isleta Street",
+      "normalized": "isleta street",
+      "type": null,
+      "name": "isleta street"
+    },
+    {
+      "input": "Lawton Road",
+      "normalized": "lawton road",
+      "type": null,
+      "name": "lawton road"
+    },
+    {
+      "input": "McAdoo Alley",
+      "normalized": "mcadoo alley",
+      "type": null,
+      "name": "mcadoo alley"
+    },
+    {
+      "input": "North Alamo Street Right Turn",
+      "normalized": "north alamo street right turn",
+      "type": null,
+      "name": "north alamo street right turn"
+    },
+    {
+      "input": "Officers Loop East",
+      "normalized": "officers loop east",
+      "type": null,
+      "name": "officers loop east"
+    },
+    {
+      "input": "Reno Street",
+      "normalized": "reno street",
+      "type": null,
+      "name": "reno street"
+    },
+    {
+      "input": "Road S-7 West",
+      "normalized": "road south 7 west",
+      "type": null,
+      "name": "road south 7 west"
+    },
+    {
+      "input": "Schaffer Road",
+      "normalized": "schaffer road",
+      "type": null,
+      "name": "schaffer road"
+    },
+    {
+      "input": "Splashdown Drive",
+      "normalized": "splashdown drive",
+      "type": null,
+      "name": "splashdown drive"
+    },
+    {
+      "input": "Terrell Street",
+      "normalized": "terrell street",
+      "type": null,
+      "name": "terrell street"
+    },
+    {
+      "input": "Willowwood Boulevard",
+      "normalized": "willowwood boulevard",
+      "type": null,
+      "name": "willowwood boulevard"
+    },
+    {
+      "input": "boat ride boarding",
+      "normalized": "boat ride boarding",
+      "type": null,
+      "name": "boat ride boarding"
+    },
+    {
+      "input": "Girl General",
+      "normalized": "girl general",
+      "type": null,
+      "name": "girl general"
+    },
+    {
+      "input": "Albert Walk",
+      "normalized": "albert walk",
+      "type": null,
+      "name": "albert walk"
+    },
+    {
+      "input": "Avant Avenue",
+      "normalized": "avant avenue",
+      "type": null,
+      "name": "avant avenue"
+    },
+    {
+      "input": "Bill Miller Plaza",
+      "normalized": "bill miller plaza",
+      "type": null,
+      "name": "bill miller plaza"
+    },
+    {
+      "input": "Buckingham Avenue",
+      "normalized": "buckingham avenue",
+      "type": null,
+      "name": "buckingham avenue"
+    },
+    {
+      "input": "Casanova",
+      "normalized": "casanova",
+      "type": null,
+      "name": "casanova"
+    },
+    {
+      "input": "Claggett Street",
+      "normalized": "claggett street",
+      "type": null,
+      "name": "claggett street"
+    },
+    {
+      "input": "Culebra Road",
+      "normalized": "culebra road",
+      "type": null,
+      "name": "culebra road"
+    },
+    {
+      "input": "Dreiss Street",
+      "normalized": "dreiss street",
+      "type": null,
+      "name": "dreiss street"
+    },
+    {
+      "input": "East Evergreen Street",
+      "normalized": "east evergreen street",
+      "type": null,
+      "name": "east evergreen street"
+    },
+    {
+      "input": "East Nueva Street",
+      "normalized": "east nueva street",
+      "type": null,
+      "name": "east nueva street"
+    },
+    {
+      "input": "Espada Road",
+      "normalized": "espada road",
+      "type": null,
+      "name": "espada road"
+    },
+    {
+      "input": "Galitzen Street",
+      "normalized": "galitzen street",
+      "type": null,
+      "name": "galitzen street"
+    },
+    {
+      "input": "Guadalupe Street",
+      "normalized": "guadalupe street",
+      "type": null,
+      "name": "guadalupe street"
+    },
+    {
+      "input": "Hiawatha Street",
+      "normalized": "hiawatha street",
+      "type": null,
+      "name": "hiawatha street"
+    },
+    {
+      "input": "J Street",
+      "normalized": "j street",
+      "type": null,
+      "name": "j street"
+    },
+    {
+      "input": "Kingfisher Road",
+      "normalized": "kingfisher road",
+      "type": null,
+      "name": "kingfisher road"
+    },
+    {
+      "input": "Lindbergh Landing",
+      "normalized": "lindbergh landing",
+      "type": null,
+      "name": "lindbergh landing"
+    },
+    {
+      "input": "March Avenue",
+      "normalized": "march avenue",
+      "type": null,
+      "name": "march avenue"
+    },
+    {
+      "input": "Micklejohn Street",
+      "normalized": "micklejohn street",
+      "type": null,
+      "name": "micklejohn street"
+    },
+    {
+      "input": "Nathan Street",
+      "normalized": "nathan street",
+      "type": null,
+      "name": "nathan street"
+    },
+    {
+      "input": "North Elmendorf Street",
+      "normalized": "north elmendorf street",
+      "type": null,
+      "name": "north elmendorf street"
+    },
+    {
+      "input": "North Park Boulevard",
+      "normalized": "north park boulevard",
+      "type": null,
+      "name": "north park boulevard"
+    },
+    {
+      "input": "North Zarzamora Street",
+      "normalized": "north zarzamora street",
+      "type": null,
+      "name": "north zarzamora street"
+    },
+    {
+      "input": "Pewee Court",
+      "normalized": "pewee court",
+      "type": null,
+      "name": "pewee court"
+    },
+    {
+      "input": "Riebe Alley",
+      "normalized": "riebe alley",
+      "type": null,
+      "name": "riebe alley"
+    },
+    {
+      "input": "Saint James",
+      "normalized": "saint james",
+      "type": null,
+      "name": "saint james"
+    },
+    {
+      "input": "Santos Street",
+      "normalized": "santos street",
+      "type": null,
+      "name": "santos street"
+    },
+    {
+      "input": "South Comal Street",
+      "normalized": "south comal street",
+      "type": null,
+      "name": "south comal street"
+    },
+    {
+      "input": "South Pan Am Expressway",
+      "normalized": "south pan am expressway",
+      "type": null,
+      "name": "south pan am expressway"
+    },
+    {
+      "input": "South Street Mary's Street",
+      "normalized": "south street mary south street",
+      "type": null,
+      "name": "south street mary south street"
+    },
+    {
+      "input": "Texas Avenue",
+      "normalized": "texas avenue",
+      "type": null,
+      "name": "texas avenue"
+    },
+    {
+      "input": "Vera Cruz Street",
+      "normalized": "vera cruz street",
+      "type": null,
+      "name": "vera cruz street"
+    },
+    {
+      "input": "West Craig Place",
+      "normalized": "west craig place",
+      "type": null,
+      "name": "west craig place"
+    },
+    {
+      "input": "West Laurel Street",
+      "normalized": "west laurel street",
+      "type": null,
+      "name": "west laurel street"
+    },
+    {
+      "input": "West Travis Street",
+      "normalized": "west travis street",
+      "type": null,
+      "name": "west travis street"
+    },
+    {
+      "input": "94th Street",
+      "normalized": "94th street",
+      "type": null,
+      "name": "94th street"
+    },
+    {
+      "input": "Adina Street",
+      "normalized": "adina street",
+      "type": null,
+      "name": "adina street"
+    },
+    {
+      "input": "Ana Heights",
+      "normalized": "ana heights",
+      "type": null,
+      "name": "ana heights"
+    },
+    {
+      "input": "Ardenwood Street",
+      "normalized": "ardenwood street",
+      "type": null,
+      "name": "ardenwood street"
+    },
+    {
+      "input": "Babel Lane",
+      "normalized": "babel lane",
+      "type": null,
+      "name": "babel lane"
+    },
+    {
+      "input": "Belden Avenue",
+      "normalized": "belden avenue",
+      "type": null,
+      "name": "belden avenue"
+    },
+    {
+      "input": "Big Spring Lane",
+      "normalized": "big spring lane",
+      "type": null,
+      "name": "big spring lane"
+    },
+    {
+      "input": "Bouchu Ridge",
+      "normalized": "bouchu ridge",
+      "type": null,
+      "name": "bouchu ridge"
+    },
+    {
+      "input": "Brooksdale Drive",
+      "normalized": "brooksdale drive",
+      "type": null,
+      "name": "brooksdale drive"
+    },
+    {
+      "input": "Butterfly Bend",
+      "normalized": "butterfly bend",
+      "type": null,
+      "name": "butterfly bend"
+    },
+    {
+      "input": "Carroll Avenue",
+      "normalized": "carroll avenue",
+      "type": null,
+      "name": "carroll avenue"
+    },
+    {
+      "input": "Chevalier Frost",
+      "normalized": "chevalier frost",
+      "type": null,
+      "name": "chevalier frost"
+    },
+    {
+      "input": "Club House Boulevard",
+      "normalized": "club house boulevard",
+      "type": null,
+      "name": "club house boulevard"
+    },
+    {
+      "input": "Corbin Bend",
+      "normalized": "corbin bend",
+      "type": null,
+      "name": "corbin bend"
+    },
+    {
+      "input": "Cuney Way",
+      "normalized": "cuney way",
+      "type": null,
+      "name": "cuney way"
+    },
+    {
+      "input": "Desoto Street",
+      "normalized": "desoto street",
+      "type": null,
+      "name": "desoto street"
+    },
+    {
+      "input": "Drake Avenue",
+      "normalized": "drake avenue",
+      "type": null,
+      "name": "drake avenue"
+    },
+    {
+      "input": "East Boyer Street",
+      "normalized": "east boyer street",
+      "type": null,
+      "name": "east boyer street"
+    },
+    {
+      "input": "East Lubbock Street",
+      "normalized": "east lubbock street",
+      "type": null,
+      "name": "east lubbock street"
+    },
+    {
+      "input": "Edris Street",
+      "normalized": "edris street",
+      "type": null,
+      "name": "edris street"
+    },
+    {
+      "input": "Emmet Avenue",
+      "normalized": "emmet avenue",
+      "type": null,
+      "name": "emmet avenue"
+    },
+    {
+      "input": "Farm Oak",
+      "normalized": "farm oak",
+      "type": null,
+      "name": "farm oak"
+    },
+    {
+      "input": "Flato Street",
+      "normalized": "flato street",
+      "type": null,
+      "name": "flato street"
+    },
+    {
+      "input": "Fuente Alley",
+      "normalized": "fuente alley",
+      "type": null,
+      "name": "fuente alley"
+    },
+    {
+      "input": "Gk Anderson",
+      "normalized": "gk anderson",
+      "type": null,
+      "name": "gk anderson"
+    },
+    {
+      "input": "Grapeland Avenue",
+      "normalized": "grapeland avenue",
+      "type": null,
+      "name": "grapeland avenue"
+    },
+    {
+      "input": "Hallie Avenue",
+      "normalized": "hallie avenue",
+      "type": null,
+      "name": "hallie avenue"
+    },
+    {
+      "input": "Haynes Avenue",
+      "normalized": "haynes avenue",
+      "type": null,
+      "name": "haynes avenue"
+    },
+    {
+      "input": "Hole In One",
+      "normalized": "hole in one",
+      "type": null,
+      "name": "hole in one"
+    },
+    {
+      "input": "Ilene Lynn Street",
+      "normalized": "ilene lynn street",
+      "type": null,
+      "name": "ilene lynn street"
+    },
+    {
+      "input": "Joanna Cove",
+      "normalized": "joanna cove",
+      "type": null,
+      "name": "joanna cove"
+    },
+    {
+      "input": "Kelly Drive",
+      "normalized": "kelly drive",
+      "type": null,
+      "name": "kelly drive"
+    },
+    {
+      "input": "Lacey Street",
+      "normalized": "lacey street",
+      "type": null,
+      "name": "lacey street"
+    },
+    {
+      "input": "Lee Street",
+      "normalized": "lee street",
+      "type": null,
+      "name": "lee street"
+    },
+    {
+      "input": "Lodge Pole",
+      "normalized": "lodge pole",
+      "type": null,
+      "name": "lodge pole"
+    },
+    {
+      "input": "Madero Street",
+      "normalized": "madero street",
+      "type": null,
+      "name": "madero street"
+    },
+    {
+      "input": "Marshy Oak",
+      "normalized": "marshy oak",
+      "type": null,
+      "name": "marshy oak"
+    },
+    {
+      "input": "Meadowlark Avenue",
+      "normalized": "meadowlark avenue",
+      "type": null,
+      "name": "meadowlark avenue"
+    },
+    {
+      "input": "Minnetonka Street",
+      "normalized": "minnetonka street",
+      "type": null,
+      "name": "minnetonka street"
+    },
+    {
+      "input": "Mission Verde",
+      "normalized": "mission verde",
+      "type": null,
+      "name": "mission verde"
+    },
+    {
+      "input": "Morrow Street",
+      "normalized": "morrow street",
+      "type": null,
+      "name": "morrow street"
+    },
+    {
+      "input": "New Alley",
+      "normalized": "new alley",
+      "type": null,
+      "name": "new alley"
+    },
+    {
+      "input": "Octavia Place",
+      "normalized": "octavia place",
+      "type": null,
+      "name": "octavia place"
+    },
+    {
+      "input": "Palmer",
+      "normalized": "palmer",
+      "type": null,
+      "name": "palmer"
+    },
+    {
+      "input": "Peck Avenue",
+      "normalized": "peck avenue",
+      "type": null,
+      "name": "peck avenue"
+    },
+    {
+      "input": "Pleasanton Heights",
+      "normalized": "pleasanton heights",
+      "type": null,
+      "name": "pleasanton heights"
+    },
+    {
+      "input": "Prestwick Boulevard",
+      "normalized": "prestwick boulevard",
+      "type": null,
+      "name": "prestwick boulevard"
+    },
+    {
+      "input": "Ray Avenue",
+      "normalized": "ray avenue",
+      "type": null,
+      "name": "ray avenue"
+    },
+    {
+      "input": "Riverfront Parkway",
+      "normalized": "riverfront parkway",
+      "type": null,
+      "name": "riverfront parkway"
+    },
+    {
+      "input": "Sadie Street",
+      "normalized": "sadie street",
+      "type": null,
+      "name": "sadie street"
+    },
+    {
+      "input": "San Rafael Street",
+      "normalized": "san rafael street",
+      "type": null,
+      "name": "san rafael street"
+    },
+    {
+      "input": "Sexauer Drive",
+      "normalized": "sexauer drive",
+      "type": null,
+      "name": "sexauer drive"
+    },
+    {
+      "input": "Skylark Avenue",
+      "normalized": "skylark avenue",
+      "type": null,
+      "name": "skylark avenue"
+    },
+    {
+      "input": "South Nueces Street",
+      "normalized": "south nueces street",
+      "type": null,
+      "name": "south nueces street"
+    },
+    {
+      "input": "Star Vista",
+      "normalized": "star vista",
+      "type": null,
+      "name": "star vista"
+    },
+    {
+      "input": "Surrey Avenue",
+      "normalized": "surrey avenue",
+      "type": null,
+      "name": "surrey avenue"
+    },
+    {
+      "input": "Tidewind Street",
+      "normalized": "tidewind street",
+      "type": null,
+      "name": "tidewind street"
+    },
+    {
+      "input": "Two Iron",
+      "normalized": "two iron",
+      "type": null,
+      "name": "two iron"
+    },
+    {
+      "input": "Vermont Avenue",
+      "normalized": "vermont avenue",
+      "type": null,
+      "name": "vermont avenue"
+    },
+    {
+      "input": "Wales Street",
+      "normalized": "wales street",
+      "type": null,
+      "name": "wales street"
+    },
+    {
+      "input": "West Baetz Boulevard",
+      "normalized": "west baetz boulevard",
+      "type": null,
+      "name": "west baetz boulevard"
+    },
+    {
+      "input": "West High Street",
+      "normalized": "west high street",
+      "type": null,
+      "name": "west high street"
+    }
+  ]
+}

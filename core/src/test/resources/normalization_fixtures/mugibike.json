@@ -1,0 +1,809 @@
+{
+  "language": "es",
+  "cases": [
+    {
+      "input": "Calle Mayor",
+      "normalized": "calle mayor",
+      "type": "calle",
+      "name": "mayor"
+    },
+    {
+      "input": "Avenida de la Constitución",
+      "normalized": "avenida de la constitucion",
+      "type": "avenida",
+      "name": "de la constitucion"
+    },
+    {
+      "input": "Plaza del Sol",
+      "normalized": "plaza del sol",
+      "type": "plaza",
+      "name": "del sol"
+    },
+    {
+      "input": "Paseo de Gracia",
+      "normalized": "paseo de gracia",
+      "type": "paseo",
+      "name": "de gracia"
+    },
+    {
+      "input": "C/ Alcalá",
+      "normalized": "calle alcala",
+      "type": "calle",
+      "name": "alcala"
+    },
+    {
+      "input": "Avda. de América",
+      "normalized": "avenida de america",
+      "type": "avenida",
+      "name": "de america"
+    },
+    {
+      "input": "Gran Vía",
+      "normalized": "gran via",
+      "type": null,
+      "name": "gran via"
+    },
+    {
+      "input": "Camino Viejo del Puerto",
+      "normalized": "camino viejo del puerto",
+      "type": "camino",
+      "name": "viejo del puerto"
+    },
+    {
+      "input": "Callejón de la Cruz",
+      "normalized": "callejon de la cruz",
+      "type": "callejon",
+      "name": "de la cruz"
+    },
+    {
+      "input": "Ronda de Toledo",
+      "normalized": "ronda de toledo",
+      "type": "ronda",
+      "name": "de toledo"
+    },
+    {
+      "input": "Calzada de Tlalpan",
+      "normalized": "calzada de tlalpan",
+      "type": "calzada",
+      "name": "de tlalpan"
+    },
+    {
+      "input": "Pasaje Peatonal Norte",
+      "normalized": "pasaje peatonal norte",
+      "type": "pasaje",
+      "name": "peatonal norte"
+    },
+    {
+      "input": "Travesía de Santa Ana",
+      "normalized": "travesia de santa ana",
+      "type": "travesia",
+      "name": "de santa ana"
+    },
+    {
+      "input": "Cañada Real",
+      "normalized": "canada real",
+      "type": null,
+      "name": "canada real"
+    },
+    {
+      "input": "Abetxuko",
+      "normalized": "abetxuko",
+      "type": null,
+      "name": "abetxuko"
+    },
+    {
+      "input": "Trikitixa kalea",
+      "normalized": "trikitixa kalea",
+      "type": null,
+      "name": "trikitixa kalea"
+    },
+    {
+      "input": "Euskal Herriaren adiskideen elkartearen kalea",
+      "normalized": "euskal herriaren adiskideen elkartearen kalea",
+      "type": null,
+      "name": "euskal herriaren adiskideen elkartearen kalea"
+    },
+    {
+      "input": "Karlos I enperadorearen plaza",
+      "normalized": "karlos i enperadorearen plaza",
+      "type": null,
+      "name": "karlos i enperadorearen plaza"
+    },
+    {
+      "input": "Elorrio kalea",
+      "normalized": "elorrio kalea",
+      "type": null,
+      "name": "elorrio kalea"
+    },
+    {
+      "input": "Europa ibilbidea",
+      "normalized": "europa ibilbidea",
+      "type": null,
+      "name": "europa ibilbidea"
+    },
+    {
+      "input": "Bustaldea kalea",
+      "normalized": "bustaldea kalea",
+      "type": null,
+      "name": "bustaldea kalea"
+    },
+    {
+      "input": "Mendiluzeko gazteluaren kalea",
+      "normalized": "mendiluzeko gazteluaren kalea",
+      "type": null,
+      "name": "mendiluzeko gazteluaren kalea"
+    },
+    {
+      "input": "Salburuko parkea",
+      "normalized": "salburuko parkea",
+      "type": null,
+      "name": "salburuko parkea"
+    },
+    {
+      "input": "Gurutzelarre kalea",
+      "normalized": "gurutzelarre kalea",
+      "type": null,
+      "name": "gurutzelarre kalea"
+    },
+    {
+      "input": "Maliz kalea",
+      "normalized": "maliz kalea",
+      "type": null,
+      "name": "maliz kalea"
+    },
+    {
+      "input": "Alfonso Parada plaza",
+      "normalized": "alfonso parada plaza",
+      "type": null,
+      "name": "alfonso parada plaza"
+    },
+    {
+      "input": "Kutaisi kalea",
+      "normalized": "kutaisi kalea",
+      "type": null,
+      "name": "kutaisi kalea"
+    },
+    {
+      "input": "Larrinpea kalea",
+      "normalized": "larrinpea kalea",
+      "type": null,
+      "name": "larrinpea kalea"
+    },
+    {
+      "input": "Harrobi kalea",
+      "normalized": "harrobi kalea",
+      "type": null,
+      "name": "harrobi kalea"
+    },
+    {
+      "input": "Bergarako errepidea",
+      "normalized": "bergarako errepidea",
+      "type": null,
+      "name": "bergarako errepidea"
+    },
+    {
+      "input": "Iturribero kalea",
+      "normalized": "iturribero kalea",
+      "type": null,
+      "name": "iturribero kalea"
+    },
+    {
+      "input": "Elorriaga",
+      "normalized": "elorriaga",
+      "type": null,
+      "name": "elorriaga"
+    },
+    {
+      "input": "Bastobi kalea",
+      "normalized": "bastobi kalea",
+      "type": null,
+      "name": "bastobi kalea"
+    },
+    {
+      "input": "Iturgana kalea",
+      "normalized": "iturgana kalea",
+      "type": null,
+      "name": "iturgana kalea"
+    },
+    {
+      "input": "Galarreta kalea",
+      "normalized": "galarreta kalea",
+      "type": null,
+      "name": "galarreta kalea"
+    },
+    {
+      "input": "Gometxa",
+      "normalized": "gometxa",
+      "type": null,
+      "name": "gometxa"
+    },
+    {
+      "input": "Guillermo Elio Molinuevo plaza",
+      "normalized": "guillermo elio molinuevo plaza",
+      "type": null,
+      "name": "guillermo elio molinuevo plaza"
+    },
+    {
+      "input": "Ajanalde kalea",
+      "normalized": "ajanalde kalea",
+      "type": null,
+      "name": "ajanalde kalea"
+    },
+    {
+      "input": "Maria Teresa Leon kalea",
+      "normalized": "maria teresa leon kalea",
+      "type": null,
+      "name": "maria teresa leon kalea"
+    },
+    {
+      "input": "Iturbide kalea",
+      "normalized": "iturbide kalea",
+      "type": null,
+      "name": "iturbide kalea"
+    },
+    {
+      "input": "Zubitaga kalea",
+      "normalized": "zubitaga kalea",
+      "type": null,
+      "name": "zubitaga kalea"
+    },
+    {
+      "input": "Joaquin Jose Landazuri pasabidea",
+      "normalized": "joaquin jose landazuri pasabidea",
+      "type": null,
+      "name": "joaquin jose landazuri pasabidea"
+    },
+    {
+      "input": "Almena kalea",
+      "normalized": "almena kalea",
+      "type": null,
+      "name": "almena kalea"
+    },
+    {
+      "input": "Olarizu hiribidea",
+      "normalized": "olarizu hiribidea",
+      "type": null,
+      "name": "olarizu hiribidea"
+    },
+    {
+      "input": "Martin Fiz kalea",
+      "normalized": "martin fiz kalea",
+      "type": null,
+      "name": "martin fiz kalea"
+    },
+    {
+      "input": "Biblioteca CC Sansomendi",
+      "normalized": "biblioteca cc sansomendi",
+      "type": null,
+      "name": "biblioteca cc sansomendi"
+    },
+    {
+      "input": "Fournier Naipe Museoa",
+      "normalized": "fournier naipe museoa",
+      "type": null,
+      "name": "fournier naipe museoa"
+    },
+    {
+      "input": "El horno Merino",
+      "normalized": "el horno merino",
+      "type": null,
+      "name": "el horno merino"
+    },
+    {
+      "input": "Angostoko Ama Birjina kalea",
+      "normalized": "angostoko ama birjina kalea",
+      "type": null,
+      "name": "angostoko ama birjina kalea"
+    },
+    {
+      "input": "Entzinako Ama Birjina kalea",
+      "normalized": "entzinako ama birjina kalea",
+      "type": null,
+      "name": "entzinako ama birjina kalea"
+    },
+    {
+      "input": "Calle de San José",
+      "normalized": "calle de san jose",
+      "type": "calle",
+      "name": "de san jose"
+    },
+    {
+      "input": "Juan Garai kalea",
+      "normalized": "juan garai kalea",
+      "type": null,
+      "name": "juan garai kalea"
+    },
+    {
+      "input": "Paris hiribidea",
+      "normalized": "paris hiribidea",
+      "type": null,
+      "name": "paris hiribidea"
+    },
+    {
+      "input": "Justo Velez de Elorriaga kalea",
+      "normalized": "justo velez de elorriaga kalea",
+      "type": null,
+      "name": "justo velez de elorriaga kalea"
+    },
+    {
+      "input": "Alonso Sarria zidorra",
+      "normalized": "alonso sarria zidorra",
+      "type": null,
+      "name": "alonso sarria zidorra"
+    },
+    {
+      "input": "Abendaño kalea",
+      "normalized": "abendano kalea",
+      "type": null,
+      "name": "abendano kalea"
+    },
+    {
+      "input": "Agirre Lehendakariaren kalea",
+      "normalized": "agirre lehendakariaren kalea",
+      "type": null,
+      "name": "agirre lehendakariaren kalea"
+    },
+    {
+      "input": "Alaba Jeneralaren kalea",
+      "normalized": "alaba jeneralaren kalea",
+      "type": null,
+      "name": "alaba jeneralaren kalea"
+    },
+    {
+      "input": "Alfontso XI.aren kalea",
+      "normalized": "alfontso xi aren kalea",
+      "type": null,
+      "name": "alfontso xi aren kalea"
+    },
+    {
+      "input": "Andaluzia kalea",
+      "normalized": "andaluzia kalea",
+      "type": null,
+      "name": "andaluzia kalea"
+    },
+    {
+      "input": "Anorbin kantoia",
+      "normalized": "anorbin kantoia",
+      "type": null,
+      "name": "anorbin kantoia"
+    },
+    {
+      "input": "Antonio Miranda kalea",
+      "normalized": "antonio miranda kalea",
+      "type": null,
+      "name": "antonio miranda kalea"
+    },
+    {
+      "input": "Aralar mendiaren kalea",
+      "normalized": "aralar mendiaren kalea",
+      "type": null,
+      "name": "aralar mendiaren kalea"
+    },
+    {
+      "input": "Areitio kalea",
+      "normalized": "areitio kalea",
+      "type": null,
+      "name": "areitio kalea"
+    },
+    {
+      "input": "Arkupeko ibilbidea",
+      "normalized": "arkupeko ibilbidea",
+      "type": null,
+      "name": "arkupeko ibilbidea"
+    },
+    {
+      "input": "Artapadura kalea",
+      "normalized": "artapadura kalea",
+      "type": null,
+      "name": "artapadura kalea"
+    },
+    {
+      "input": "Atenas ibilbidea",
+      "normalized": "atenas ibilbidea",
+      "type": null,
+      "name": "atenas ibilbidea"
+    },
+    {
+      "input": "Badaia kalea",
+      "normalized": "badaia kalea",
+      "type": null,
+      "name": "badaia kalea"
+    },
+    {
+      "input": "Barnekale Berria",
+      "normalized": "barnekale berria",
+      "type": null,
+      "name": "barnekale berria"
+    },
+    {
+      "input": "Basaldea kalea",
+      "normalized": "basaldea kalea",
+      "type": null,
+      "name": "basaldea kalea"
+    },
+    {
+      "input": "Behenafarroa kalea",
+      "normalized": "behenafarroa kalea",
+      "type": null,
+      "name": "behenafarroa kalea"
+    },
+    {
+      "input": "Bernal Diaz de Luco kalea",
+      "normalized": "bernal diaz de luco kalea",
+      "type": null,
+      "name": "bernal diaz de luco kalea"
+    },
+    {
+      "input": "Biosferaren ibilbidea",
+      "normalized": "biosferaren ibilbidea",
+      "type": null,
+      "name": "biosferaren ibilbidea"
+    },
+    {
+      "input": "Borinbizkarra kalea",
+      "normalized": "borinbizkarra kalea",
+      "type": null,
+      "name": "borinbizkarra kalea"
+    },
+    {
+      "input": "Buesatarren kalea",
+      "normalized": "buesatarren kalea",
+      "type": null,
+      "name": "buesatarren kalea"
+    },
+    {
+      "input": "C/ Venta de la Estrella",
+      "normalized": "calle venta de la estrella",
+      "type": "calle",
+      "name": "venta de la estrella"
+    },
+    {
+      "input": "Clara Campoamor kalea",
+      "normalized": "clara campoamor kalea",
+      "type": null,
+      "name": "clara campoamor kalea"
+    },
+    {
+      "input": "Damaso Alonso kalea",
+      "normalized": "damaso alonso kalea",
+      "type": null,
+      "name": "damaso alonso kalea"
+    },
+    {
+      "input": "Domingo Martinez de Aragon kalea",
+      "normalized": "domingo martinez de aragon kalea",
+      "type": null,
+      "name": "domingo martinez de aragon kalea"
+    },
+    {
+      "input": "Eduardo Belasko kalea",
+      "normalized": "eduardo belasko kalea",
+      "type": null,
+      "name": "eduardo belasko kalea"
+    },
+    {
+      "input": "Elexalde kalea",
+      "normalized": "elexalde kalea",
+      "type": null,
+      "name": "elexalde kalea"
+    },
+    {
+      "input": "Erentxun kalea",
+      "normalized": "erentxun kalea",
+      "type": null,
+      "name": "erentxun kalea"
+    },
+    {
+      "input": "Errioxa kalea",
+      "normalized": "errioxa kalea",
+      "type": null,
+      "name": "errioxa kalea"
+    },
+    {
+      "input": "Eskola kalea",
+      "normalized": "eskola kalea",
+      "type": null,
+      "name": "eskola kalea"
+    },
+    {
+      "input": "Estrasburgo ibilbidea",
+      "normalized": "estrasburgo ibilbidea",
+      "type": null,
+      "name": "estrasburgo ibilbidea"
+    },
+    {
+      "input": "Europar Batasunaren plaza",
+      "normalized": "europar batasunaren plaza",
+      "type": null,
+      "name": "europar batasunaren plaza"
+    },
+    {
+      "input": "Felix Gonzalez Petite kalea",
+      "normalized": "felix gonzalez petite kalea",
+      "type": null,
+      "name": "felix gonzalez petite kalea"
+    },
+    {
+      "input": "Forondako atea",
+      "normalized": "forondako atea",
+      "type": null,
+      "name": "forondako atea"
+    },
+    {
+      "input": "Gabriel Aresti kalea",
+      "normalized": "gabriel aresti kalea",
+      "type": null,
+      "name": "gabriel aresti kalea"
+    },
+    {
+      "input": "Gamarrako atea",
+      "normalized": "gamarrako atea",
+      "type": null,
+      "name": "gamarrako atea"
+    },
+    {
+      "input": "Gernikako Arbolaren kalea",
+      "normalized": "gernikako arbolaren kalea",
+      "type": null,
+      "name": "gernikako arbolaren kalea"
+    },
+    {
+      "input": "Goro plazatxoa",
+      "normalized": "goro plazatxoa",
+      "type": null,
+      "name": "goro plazatxoa"
+    },
+    {
+      "input": "Gustavo Maeztu margolariaren kalea",
+      "normalized": "gustavo maeztu margolariaren kalea",
+      "type": null,
+      "name": "gustavo maeztu margolariaren kalea"
+    },
+    {
+      "input": "Henry Morton Stanley kalea",
+      "normalized": "henry morton stanley kalea",
+      "type": null,
+      "name": "henry morton stanley kalea"
+    },
+    {
+      "input": "Herrería",
+      "normalized": "herreria",
+      "type": null,
+      "name": "herreria"
+    },
+    {
+      "input": "Ignacio Aldekoa plaza",
+      "normalized": "ignacio aldekoa plaza",
+      "type": null,
+      "name": "ignacio aldekoa plaza"
+    },
+    {
+      "input": "Intxaurrondo kalea",
+      "normalized": "intxaurrondo kalea",
+      "type": null,
+      "name": "intxaurrondo kalea"
+    },
+    {
+      "input": "Isaac Puente Amestoy kalea",
+      "normalized": "isaac puente amestoy kalea",
+      "type": null,
+      "name": "isaac puente amestoy kalea"
+    },
+    {
+      "input": "Izardui Komandantearen kalea",
+      "normalized": "izardui komandantearen kalea",
+      "type": null,
+      "name": "izardui komandantearen kalea"
+    },
+    {
+      "input": "Jesus Guridi kalea",
+      "normalized": "jesus guridi kalea",
+      "type": null,
+      "name": "jesus guridi kalea"
+    },
+    {
+      "input": "Jorge Guillen kalea",
+      "normalized": "jorge guillen kalea",
+      "type": null,
+      "name": "jorge guillen kalea"
+    },
+    {
+      "input": "Jose Luis Gonzalo-Bilbao zidorra",
+      "normalized": "jose luis gonzalo bilbao zidorra",
+      "type": null,
+      "name": "jose luis gonzalo bilbao zidorra"
+    },
+    {
+      "input": "Jose San Martin kalea",
+      "normalized": "jose san martin kalea",
+      "type": null,
+      "name": "jose san martin kalea"
+    },
+    {
+      "input": "Juan XXIII.aren kalea",
+      "normalized": "juan xxiii aren kalea",
+      "type": null,
+      "name": "juan xxiii aren kalea"
+    },
+    {
+      "input": "Kañabenta plaza",
+      "normalized": "kanabenta plaza",
+      "type": null,
+      "name": "kanabenta plaza"
+    },
+    {
+      "input": "Kolonbia kalea",
+      "normalized": "kolonbia kalea",
+      "type": null,
+      "name": "kolonbia kalea"
+    },
+    {
+      "input": "La Paloma kalea",
+      "normalized": "la paloma kalea",
+      "type": null,
+      "name": "la paloma kalea"
+    },
+    {
+      "input": "Lapuebla de Labarca kalea",
+      "normalized": "lapuebla de labarca kalea",
+      "type": null,
+      "name": "lapuebla de labarca kalea"
+    },
+    {
+      "input": "Laskarai kalea",
+      "normalized": "laskarai kalea",
+      "type": null,
+      "name": "laskarai kalea"
+    },
+    {
+      "input": "Leza kalea",
+      "normalized": "leza kalea",
+      "type": null,
+      "name": "leza kalea"
+    },
+    {
+      "input": "Lorenzo Prestamero kalea",
+      "normalized": "lorenzo prestamero kalea",
+      "type": null,
+      "name": "lorenzo prestamero kalea"
+    },
+    {
+      "input": "Mahatma Ghandi kalea",
+      "normalized": "mahatma ghandi kalea",
+      "type": null,
+      "name": "mahatma ghandi kalea"
+    },
+    {
+      "input": "Mariana Pineda Muñoz kalea",
+      "normalized": "mariana pineda munoz kalea",
+      "type": null,
+      "name": "mariana pineda munoz kalea"
+    },
+    {
+      "input": "Mateo Benigno Moraza kalea",
+      "normalized": "mateo benigno moraza kalea",
+      "type": null,
+      "name": "mateo benigno moraza kalea"
+    },
+    {
+      "input": "Mendigalai kalea",
+      "normalized": "mendigalai kalea",
+      "type": null,
+      "name": "mendigalai kalea"
+    },
+    {
+      "input": "Miguel Latourneur kalea",
+      "normalized": "miguel latourneur kalea",
+      "type": null,
+      "name": "miguel latourneur kalea"
+    },
+    {
+      "input": "Nafarroa kalea",
+      "normalized": "nafarroa kalea",
+      "type": null,
+      "name": "nafarroa kalea"
+    },
+    {
+      "input": "Nikosia kalea",
+      "normalized": "nikosia kalea",
+      "type": null,
+      "name": "nikosia kalea"
+    },
+    {
+      "input": "Omecillo ibaiaren kalea",
+      "normalized": "omecillo ibaiaren kalea",
+      "type": null,
+      "name": "omecillo ibaiaren kalea"
+    },
+    {
+      "input": "Osegarpe ibaiaren kalea",
+      "normalized": "osegarpe ibaiaren kalea",
+      "type": null,
+      "name": "osegarpe ibaiaren kalea"
+    },
+    {
+      "input": "Pablo Neruda kalea",
+      "normalized": "pablo neruda kalea",
+      "type": null,
+      "name": "pablo neruda kalea"
+    },
+    {
+      "input": "Paraguai kalea",
+      "normalized": "paraguai kalea",
+      "type": null,
+      "name": "paraguai kalea"
+    },
+    {
+      "input": "Peru kalea",
+      "normalized": "peru kalea",
+      "type": null,
+      "name": "peru kalea"
+    },
+    {
+      "input": "Pozoa kalea",
+      "normalized": "pozoa kalea",
+      "type": null,
+      "name": "pozoa kalea"
+    },
+    {
+      "input": "Puron ibaiaren kalea",
+      "normalized": "puron ibaiaren kalea",
+      "type": null,
+      "name": "puron ibaiaren kalea"
+    },
+    {
+      "input": "Riga kalea",
+      "normalized": "riga kalea",
+      "type": null,
+      "name": "riga kalea"
+    },
+    {
+      "input": "Salvador Garcia del Diestro kalea",
+      "normalized": "salvador garcia del diestro kalea",
+      "type": null,
+      "name": "salvador garcia del diestro kalea"
+    },
+    {
+      "input": "San Frantzisko aldapa",
+      "normalized": "san frantzisko aldapa",
+      "type": null,
+      "name": "san frantzisko aldapa"
+    },
+    {
+      "input": "San Migel Atxakoaren kalea",
+      "normalized": "san migel atxakoaren kalea",
+      "type": null,
+      "name": "san migel atxakoaren kalea"
+    },
+    {
+      "input": "San Viator kalea",
+      "normalized": "san viator kalea",
+      "type": null,
+      "name": "san viator kalea"
+    },
+    {
+      "input": "Santa Maria kantoia",
+      "normalized": "santa maria kantoia",
+      "type": null,
+      "name": "santa maria kantoia"
+    },
+    {
+      "input": "Sebastian Hurtado de Corcuera kalea",
+      "normalized": "sebastian hurtado de corcuera kalea",
+      "type": null,
+      "name": "sebastian hurtado de corcuera kalea"
+    },
+    {
+      "input": "Sofia kalea",
+      "normalized": "sofia kalea",
+      "type": null,
+      "name": "sofia kalea"
+    },
+    {
+      "input": "Teodoro Olarte Aizpuru kalea",
+      "normalized": "teodoro olarte aizpuru kalea",
+      "type": null,
+      "name": "teodoro olarte aizpuru kalea"
+    }
+  ]
+}

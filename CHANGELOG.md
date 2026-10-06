@@ -9,7 +9,36 @@ also records what has no visible effect.
 
 ## [Unreleased]
 
+### Changed
+
+- **Twenty-nine networks join the catalogue, nine dead ones leave it**
+  (`SPEC.md` §4.1, §15). A live check of the 340 configured feeds on
+  6 October 2026 found Pruszków and Tarnów answering 404, the Donkey Republic
+  feeds of Odense, Aalborg, Malmö, Budapest, Porvoo and Prignitz publishing no
+  station at all, and Pau's IDEcycle down to 7 stations, none renting — under
+  the ten the survey asks for. They are withdrawn, configurations and
+  normalisation fixtures alike. The survey run the same day adds Oslo,
+  Trondheim, Long Beach, Vitoria-Gasteiz, Uničov and Ravne na Koroškem, and the
+  twenty-three networks the dock rule of 12 September had admitted without
+  serving: Los Angeles, Hamilton, Milwaukee, Eugene, Buffalo, Madison, Santa
+  Barbara, Omaha, Cincinnati, Boulder, Salt Lake City, Santa Cruz,
+  Indianapolis, Nashville, Des Moines, Memphis, Redding, Lincoln, El Paso,
+  Truckee, San Antonio, Greenville and Clemson. The two Japanese feeds it
+  also admits, HELLO CYCLING and docomo, each cover the whole country and are
+  left out. Budapest's Bubi, grown from 209 to 701 stations, Ljubljana's
+  Nomago, Zagreb's nextbike and Vélo Fluo are regenerated. The catalogue
+  holds 360 networks.
+
 ### Fixed
+
+- **The fleet survey reads BCycle's breakdown of bikes by kind** (`SPEC.md`
+  §15). `tools/read_fleet.py` read `num_bikes_available_types` in Vélib's
+  shape alone, a list of single-key objects, and stopped on BCycle's single
+  object naming every kind — the shape the application had read since 1.4.0.
+  Philadelphia, Las Vegas and Bentonville therefore shipped with no `fleet`
+  block, so no bolt on a launch that reaches no network, and twenty-three
+  more BCycle and Lyft networks would have joined them. "classic" and
+  "smart" are read as mechanical, "electric" as electric.
 
 - **A virtual station is no longer closed by `is_installed`** (`SPEC.md`
   §4.1). Pony's Limoges network publishes every one of its 265 stations as

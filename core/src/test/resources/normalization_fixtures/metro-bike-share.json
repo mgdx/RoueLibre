@@ -1,0 +1,797 @@
+{
+  "language": "en",
+  "cases": [
+    {
+      "input": "Abbey Rd",
+      "normalized": "abbey road",
+      "type": null,
+      "name": "abbey road"
+    },
+    {
+      "input": "Baker Street",
+      "normalized": "baker street",
+      "type": null,
+      "name": "baker street"
+    },
+    {
+      "input": "St James's Park",
+      "normalized": "saint james south park",
+      "type": null,
+      "name": "saint james south park"
+    },
+    {
+      "input": "Queen's Crescent",
+      "normalized": "queen south crescent",
+      "type": null,
+      "name": "queen south crescent"
+    },
+    {
+      "input": "Kensington High St",
+      "normalized": "kensington high st",
+      "type": null,
+      "name": "kensington high st"
+    },
+    {
+      "input": "Dr Martin Luther King Jr Blvd",
+      "normalized": "doctor martin luther king jr boulevard",
+      "type": null,
+      "name": "doctor martin luther king jr boulevard"
+    },
+    {
+      "input": "N Michigan Ave",
+      "normalized": "north michigan avenue",
+      "type": null,
+      "name": "north michigan avenue"
+    },
+    {
+      "input": "The Mall",
+      "normalized": "the mall",
+      "type": null,
+      "name": "the mall"
+    },
+    {
+      "input": "Hyde Park Corner",
+      "normalized": "hyde park corner",
+      "type": null,
+      "name": "hyde park corner"
+    },
+    {
+      "input": "Cherry Ln",
+      "normalized": "cherry lane",
+      "type": null,
+      "name": "cherry lane"
+    },
+    {
+      "input": "Mt Pleasant Ter",
+      "normalized": "mount pleasant terrace",
+      "type": null,
+      "name": "mount pleasant terrace"
+    },
+    {
+      "input": "Fifth Avenue",
+      "normalized": "fifth avenue",
+      "type": null,
+      "name": "fifth avenue"
+    },
+    {
+      "input": "Brighton Avenue",
+      "normalized": "brighton avenue",
+      "type": null,
+      "name": "brighton avenue"
+    },
+    {
+      "input": "Crosby Place",
+      "normalized": "crosby place",
+      "type": null,
+      "name": "crosby place"
+    },
+    {
+      "input": "East 5th Street",
+      "normalized": "east 5th street",
+      "type": null,
+      "name": "east 5th street"
+    },
+    {
+      "input": "South Orchard Avenue",
+      "normalized": "south orchard avenue",
+      "type": null,
+      "name": "south orchard avenue"
+    },
+    {
+      "input": "Legion Lane",
+      "normalized": "legion lane",
+      "type": null,
+      "name": "legion lane"
+    },
+    {
+      "input": "Kalsman Drive",
+      "normalized": "kalsman drive",
+      "type": null,
+      "name": "kalsman drive"
+    },
+    {
+      "input": "Lindamere Place",
+      "normalized": "lindamere place",
+      "type": null,
+      "name": "lindamere place"
+    },
+    {
+      "input": "Dellwood Lane",
+      "normalized": "dellwood lane",
+      "type": null,
+      "name": "dellwood lane"
+    },
+    {
+      "input": "South Ogden Drive",
+      "normalized": "south ogden drive",
+      "type": null,
+      "name": "south ogden drive"
+    },
+    {
+      "input": "Hilary Lane",
+      "normalized": "hilary lane",
+      "type": null,
+      "name": "hilary lane"
+    },
+    {
+      "input": "South Clark Drive",
+      "normalized": "south clark drive",
+      "type": null,
+      "name": "south clark drive"
+    },
+    {
+      "input": "Lara Street",
+      "normalized": "lara street",
+      "type": null,
+      "name": "lara street"
+    },
+    {
+      "input": "Alley 91020",
+      "normalized": "alley 91020",
+      "type": null,
+      "name": "alley 91020"
+    },
+    {
+      "input": "Little Park Lane",
+      "normalized": "little park lane",
+      "type": null,
+      "name": "little park lane"
+    },
+    {
+      "input": "Tweed Lane",
+      "normalized": "tweed lane",
+      "type": null,
+      "name": "tweed lane"
+    },
+    {
+      "input": "Alley n/o Fairmount Road",
+      "normalized": "alley north o fairmount road",
+      "type": null,
+      "name": "alley north o fairmount road"
+    },
+    {
+      "input": "East Spazier Avenue",
+      "normalized": "east spazier avenue",
+      "type": null,
+      "name": "east spazier avenue"
+    },
+    {
+      "input": "North Park Drive",
+      "normalized": "north park drive",
+      "type": null,
+      "name": "north park drive"
+    },
+    {
+      "input": "Verdugo Avenue",
+      "normalized": "verdugo avenue",
+      "type": null,
+      "name": "verdugo avenue"
+    },
+    {
+      "input": "Avenue A",
+      "normalized": "avenue a",
+      "type": "avenue",
+      "name": "a"
+    },
+    {
+      "input": "Motor Place",
+      "normalized": "motor place",
+      "type": null,
+      "name": "motor place"
+    },
+    {
+      "input": "North Long Beach Boulevard",
+      "normalized": "north long beach boulevard",
+      "type": null,
+      "name": "north long beach boulevard"
+    },
+    {
+      "input": "Higuera Street",
+      "normalized": "higuera street",
+      "type": null,
+      "name": "higuera street"
+    },
+    {
+      "input": "Wesley Street",
+      "normalized": "wesley street",
+      "type": null,
+      "name": "wesley street"
+    },
+    {
+      "input": "Shelburn Court",
+      "normalized": "shelburn court",
+      "type": null,
+      "name": "shelburn court"
+    },
+    {
+      "input": "West 127th Place",
+      "normalized": "west 127th place",
+      "type": null,
+      "name": "west 127th place"
+    },
+    {
+      "input": "La Cumbre Drive",
+      "normalized": "la cumbre drive",
+      "type": null,
+      "name": "la cumbre drive"
+    },
+    {
+      "input": "Caspar Avenue",
+      "normalized": "caspar avenue",
+      "type": null,
+      "name": "caspar avenue"
+    },
+    {
+      "input": "Medlow Avenue",
+      "normalized": "medlow avenue",
+      "type": null,
+      "name": "medlow avenue"
+    },
+    {
+      "input": "Wicopee Avenue",
+      "normalized": "wicopee avenue",
+      "type": null,
+      "name": "wicopee avenue"
+    },
+    {
+      "input": "Recreation Lodge Drive",
+      "normalized": "recreation lodge drive",
+      "type": null,
+      "name": "recreation lodge drive"
+    },
+    {
+      "input": "Whiting Street",
+      "normalized": "whiting street",
+      "type": null,
+      "name": "whiting street"
+    },
+    {
+      "input": "Tillie Street",
+      "normalized": "tillie street",
+      "type": null,
+      "name": "tillie street"
+    },
+    {
+      "input": "Clear Oak Drive",
+      "normalized": "clear oak drive",
+      "type": null,
+      "name": "clear oak drive"
+    },
+    {
+      "input": "Milbank Street",
+      "normalized": "milbank street",
+      "type": null,
+      "name": "milbank street"
+    },
+    {
+      "input": "Harvard Walk",
+      "normalized": "harvard walk",
+      "type": null,
+      "name": "harvard walk"
+    },
+    {
+      "input": "Center Street",
+      "normalized": "center street",
+      "type": null,
+      "name": "center street"
+    },
+    {
+      "input": "Arrowood Drive",
+      "normalized": "arrowood drive",
+      "type": null,
+      "name": "arrowood drive"
+    },
+    {
+      "input": "Van Ness Avenue",
+      "normalized": "van ness avenue",
+      "type": null,
+      "name": "van ness avenue"
+    },
+    {
+      "input": "Merriman Drive",
+      "normalized": "merriman drive",
+      "type": null,
+      "name": "merriman drive"
+    },
+    {
+      "input": "Central Avenue",
+      "normalized": "central avenue",
+      "type": null,
+      "name": "central avenue"
+    },
+    {
+      "input": "North Howard Street",
+      "normalized": "north howard street",
+      "type": null,
+      "name": "north howard street"
+    },
+    {
+      "input": "Cimarron Street",
+      "normalized": "cimarron street",
+      "type": null,
+      "name": "cimarron street"
+    },
+    {
+      "input": "129th Place",
+      "normalized": "129th place",
+      "type": null,
+      "name": "129th place"
+    },
+    {
+      "input": "Aldama Terrace",
+      "normalized": "aldama terrace",
+      "type": null,
+      "name": "aldama terrace"
+    },
+    {
+      "input": "Starling Way",
+      "normalized": "starling way",
+      "type": null,
+      "name": "starling way"
+    },
+    {
+      "input": "Ascension Drive",
+      "normalized": "ascension drive",
+      "type": null,
+      "name": "ascension drive"
+    },
+    {
+      "input": "Mirror Lake Drive",
+      "normalized": "mirror lake drive",
+      "type": null,
+      "name": "mirror lake drive"
+    },
+    {
+      "input": "Alley 81821",
+      "normalized": "alley 81821",
+      "type": null,
+      "name": "alley 81821"
+    },
+    {
+      "input": "Holly Oak Drive",
+      "normalized": "holly oak drive",
+      "type": null,
+      "name": "holly oak drive"
+    },
+    {
+      "input": "Arbutus Avenue",
+      "normalized": "arbutus avenue",
+      "type": null,
+      "name": "arbutus avenue"
+    },
+    {
+      "input": "Mecham Way",
+      "normalized": "mecham way",
+      "type": null,
+      "name": "mecham way"
+    },
+    {
+      "input": "Pine Court",
+      "normalized": "pine court",
+      "type": null,
+      "name": "pine court"
+    },
+    {
+      "input": "West 38th Street",
+      "normalized": "west 38th street",
+      "type": null,
+      "name": "west 38th street"
+    },
+    {
+      "input": "Flintridge Circle",
+      "normalized": "flintridge circle",
+      "type": null,
+      "name": "flintridge circle"
+    },
+    {
+      "input": "Thurlene Road",
+      "normalized": "thurlene road",
+      "type": null,
+      "name": "thurlene road"
+    },
+    {
+      "input": "West 59th Street",
+      "normalized": "west 59th street",
+      "type": null,
+      "name": "west 59th street"
+    },
+    {
+      "input": "Birmingham High School Driveway",
+      "normalized": "birmingham high school driveway",
+      "type": null,
+      "name": "birmingham high school driveway"
+    },
+    {
+      "input": "West 43rd Street",
+      "normalized": "west 43rd street",
+      "type": null,
+      "name": "west 43rd street"
+    },
+    {
+      "input": "Eastlake Avenue",
+      "normalized": "eastlake avenue",
+      "type": null,
+      "name": "eastlake avenue"
+    },
+    {
+      "input": "Alcazar Street",
+      "normalized": "alcazar street",
+      "type": null,
+      "name": "alcazar street"
+    },
+    {
+      "input": "Castilian Drive",
+      "normalized": "castilian drive",
+      "type": null,
+      "name": "castilian drive"
+    },
+    {
+      "input": "East 8th Street",
+      "normalized": "east 8th street",
+      "type": null,
+      "name": "east 8th street"
+    },
+    {
+      "input": "Harlem Place",
+      "normalized": "harlem place",
+      "type": null,
+      "name": "harlem place"
+    },
+    {
+      "input": "Marlton Avenue",
+      "normalized": "marlton avenue",
+      "type": null,
+      "name": "marlton avenue"
+    },
+    {
+      "input": "North Madison Avenue",
+      "normalized": "north madison avenue",
+      "type": null,
+      "name": "north madison avenue"
+    },
+    {
+      "input": "Saint Cloud Road",
+      "normalized": "saint cloud road",
+      "type": null,
+      "name": "saint cloud road"
+    },
+    {
+      "input": "South Lake Street",
+      "normalized": "south lake street",
+      "type": null,
+      "name": "south lake street"
+    },
+    {
+      "input": "Victory Boulevard",
+      "normalized": "victory boulevard",
+      "type": null,
+      "name": "victory boulevard"
+    },
+    {
+      "input": "West Fifth Street",
+      "normalized": "west fifth street",
+      "type": null,
+      "name": "west fifth street"
+    },
+    {
+      "input": "Deloz Avenue",
+      "normalized": "deloz avenue",
+      "type": null,
+      "name": "deloz avenue"
+    },
+    {
+      "input": "Bradfield Avenue",
+      "normalized": "bradfield avenue",
+      "type": null,
+      "name": "bradfield avenue"
+    },
+    {
+      "input": "Orchard Avenue",
+      "normalized": "orchard avenue",
+      "type": null,
+      "name": "orchard avenue"
+    },
+    {
+      "input": "Colbert Street",
+      "normalized": "colbert street",
+      "type": null,
+      "name": "colbert street"
+    },
+    {
+      "input": "Alley 88437",
+      "normalized": "alley 88437",
+      "type": null,
+      "name": "alley 88437"
+    },
+    {
+      "input": "Union Jack Mall",
+      "normalized": "union jack mall",
+      "type": null,
+      "name": "union jack mall"
+    },
+    {
+      "input": "South Orange Grove Avenue",
+      "normalized": "south orange grove avenue",
+      "type": null,
+      "name": "south orange grove avenue"
+    },
+    {
+      "input": "Kensley Drive",
+      "normalized": "kensley drive",
+      "type": null,
+      "name": "kensley drive"
+    },
+    {
+      "input": "Alley 80872",
+      "normalized": "alley 80872",
+      "type": null,
+      "name": "alley 80872"
+    },
+    {
+      "input": "Alley 86091",
+      "normalized": "alley 86091",
+      "type": null,
+      "name": "alley 86091"
+    },
+    {
+      "input": "Bessemer Street",
+      "normalized": "bessemer street",
+      "type": null,
+      "name": "bessemer street"
+    },
+    {
+      "input": "Vanowen Place",
+      "normalized": "vanowen place",
+      "type": null,
+      "name": "vanowen place"
+    },
+    {
+      "input": "Skyspace LA",
+      "normalized": "skyspace la",
+      "type": null,
+      "name": "skyspace la"
+    },
+    {
+      "input": "Koreatown",
+      "normalized": "koreatown",
+      "type": null,
+      "name": "koreatown"
+    },
+    {
+      "input": "LAX/Metro Transit Center",
+      "normalized": "lax metro transit center",
+      "type": null,
+      "name": "lax metro transit center"
+    },
+    {
+      "input": "Oregon Avenue",
+      "normalized": "oregon avenue",
+      "type": null,
+      "name": "oregon avenue"
+    },
+    {
+      "input": "West 15th Street",
+      "normalized": "west 15th street",
+      "type": null,
+      "name": "west 15th street"
+    },
+    {
+      "input": "LeVecke Bridge",
+      "normalized": "levecke bridge",
+      "type": null,
+      "name": "levecke bridge"
+    },
+    {
+      "input": "3rd Street",
+      "normalized": "3rd street",
+      "type": null,
+      "name": "3rd street"
+    },
+    {
+      "input": "Ranch Lane",
+      "normalized": "ranch lane",
+      "type": null,
+      "name": "ranch lane"
+    },
+    {
+      "input": "Alley 81111",
+      "normalized": "alley 81111",
+      "type": null,
+      "name": "alley 81111"
+    },
+    {
+      "input": "Camino de Solana",
+      "normalized": "camino de solana",
+      "type": null,
+      "name": "camino de solana"
+    },
+    {
+      "input": "Riverside Drive",
+      "normalized": "riverside drive",
+      "type": null,
+      "name": "riverside drive"
+    },
+    {
+      "input": "Alley 81581",
+      "normalized": "alley 81581",
+      "type": null,
+      "name": "alley 81581"
+    },
+    {
+      "input": "Childs Court",
+      "normalized": "childs court",
+      "type": null,
+      "name": "childs court"
+    },
+    {
+      "input": "Duane Way",
+      "normalized": "duane way",
+      "type": null,
+      "name": "duane way"
+    },
+    {
+      "input": "West 49th Place",
+      "normalized": "west 49th place",
+      "type": null,
+      "name": "west 49th place"
+    },
+    {
+      "input": "Fryman Place",
+      "normalized": "fryman place",
+      "type": null,
+      "name": "fryman place"
+    },
+    {
+      "input": "Alfred Hitchcock Lane",
+      "normalized": "alfred hitchcock lane",
+      "type": null,
+      "name": "alfred hitchcock lane"
+    },
+    {
+      "input": "Bluffside Drive",
+      "normalized": "bluffside drive",
+      "type": null,
+      "name": "bluffside drive"
+    },
+    {
+      "input": "North Moorpark Street",
+      "normalized": "north moorpark street",
+      "type": null,
+      "name": "north moorpark street"
+    },
+    {
+      "input": "Orchard Avenue",
+      "normalized": "orchard avenue",
+      "type": null,
+      "name": "orchard avenue"
+    },
+    {
+      "input": "Alley 86097",
+      "normalized": "alley 86097",
+      "type": null,
+      "name": "alley 86097"
+    },
+    {
+      "input": "Irvine Avenue",
+      "normalized": "irvine avenue",
+      "type": null,
+      "name": "irvine avenue"
+    },
+    {
+      "input": "Babcock Avenue",
+      "normalized": "babcock avenue",
+      "type": null,
+      "name": "babcock avenue"
+    },
+    {
+      "input": "Alley 81304",
+      "normalized": "alley 81304",
+      "type": null,
+      "name": "alley 81304"
+    },
+    {
+      "input": "Hazeltine Avenue",
+      "normalized": "hazeltine avenue",
+      "type": null,
+      "name": "hazeltine avenue"
+    },
+    {
+      "input": "Alley 84160",
+      "normalized": "alley 84160",
+      "type": null,
+      "name": "alley 84160"
+    },
+    {
+      "input": "Maple Street",
+      "normalized": "maple street",
+      "type": null,
+      "name": "maple street"
+    },
+    {
+      "input": "Windward Avenue",
+      "normalized": "windward avenue",
+      "type": null,
+      "name": "windward avenue"
+    },
+    {
+      "input": "West 109th Street",
+      "normalized": "west 109th street",
+      "type": null,
+      "name": "west 109th street"
+    },
+    {
+      "input": "Columbarium Road",
+      "normalized": "columbarium road",
+      "type": null,
+      "name": "columbarium road"
+    },
+    {
+      "input": "Independence Avenue",
+      "normalized": "independence avenue",
+      "type": null,
+      "name": "independence avenue"
+    },
+    {
+      "input": "Opal Way",
+      "normalized": "opal way",
+      "type": null,
+      "name": "opal way"
+    },
+    {
+      "input": "North Kenilworth Avenue",
+      "normalized": "north kenilworth avenue",
+      "type": null,
+      "name": "north kenilworth avenue"
+    },
+    {
+      "input": "Jewett Drive",
+      "normalized": "jewett drive",
+      "type": null,
+      "name": "jewett drive"
+    },
+    {
+      "input": "Stebbins Terrace",
+      "normalized": "stebbins terrace",
+      "type": null,
+      "name": "stebbins terrace"
+    },
+    {
+      "input": "Columbia Avenue",
+      "normalized": "columbia avenue",
+      "type": null,
+      "name": "columbia avenue"
+    },
+    {
+      "input": "Anzac Avenue",
+      "normalized": "anzac avenue",
+      "type": null,
+      "name": "anzac avenue"
+    },
+    {
+      "input": "North Mona Boulevard",
+      "normalized": "north mona boulevard",
+      "type": null,
+      "name": "north mona boulevard"
+    }
+  ]
+}
