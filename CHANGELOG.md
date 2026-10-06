@@ -9,6 +9,16 @@ also records what has no visible effect.
 
 ## [Unreleased]
 
+## [1.5.1]
+
+Twenty-nine networks join the catalogue and nine dead ones leave it, and a
+user whose network was withdrawn is now told so rather than greeted as a
+first installation. Around the storage screen, a download no longer depends
+on the screen staying open, and one cut by a lost connection is offered
+again once the connection returns. Two networks that showed no usable
+station — Limoges's virtual stations, Metz's moved GraouLib' — are served
+again.
+
 ### Changed
 
 - **Twenty-nine networks join the catalogue, nine dead ones leave it**
