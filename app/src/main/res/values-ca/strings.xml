@@ -258,6 +258,7 @@
     <string name="map_city_withdrawn_title">Xarxa ja no disponible</string>
     <string name="map_city_withdrawn_message">%1$s ja no està disponible i les seves estacions ja no es mostren. Tria una altra ciutat. Les dades que ha deixat en aquest dispositiu es poden esborrar des de la llista de ciutats.</string>
     <string name="map_city_withdrawn_message_unnamed">La xarxa que vas triar ja no està disponible i les seves estacions ja no es mostren. Tria una altra ciutat. Les dades que ha deixat en aquest dispositiu es poden esborrar des de la llista de ciutats.</string>
+    <string name="map_city_newer_version_message">%1$s està disponible en una versió més recent de l’aplicació, i les seves estacions no es mostren en aquesta. Actualitza l’aplicació o tria una altra ciutat.</string>
     <string name="city_choose_another">Tria una altra ciutat</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). The descriptions say
@@ -672,6 +673,7 @@
     <string name="storage_nothing_installed">No hi ha dades instal·lades</string>
     <string name="storage_no_city">No hi ha cap ciutat triada</string>
     <string name="city_withdrawn_label">%1$s · ja no disponible</string>
+    <string name="city_newer_version_label">%1$s · cal actualitzar</string>
 
     <!-- The three datasets, and they are all masculine singular — el mapa
          base, el graf de rutes, l’índex d’adreces — which is what lets

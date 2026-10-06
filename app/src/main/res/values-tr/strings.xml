@@ -200,6 +200,7 @@
     <string name="map_city_withdrawn_title">Ağ artık kullanılamıyor</string>
     <string name="map_city_withdrawn_message">%1$s artık kullanılamıyor ve istasyonları artık gösterilmiyor. Başka bir şehir seç. Bu cihazda kalan verilerini şehir listesinden silebilirsin.</string>
     <string name="map_city_withdrawn_message_unnamed">Seçtiğin ağ artık kullanılamıyor ve istasyonları artık gösterilmiyor. Başka bir şehir seç. Bu cihazda kalan verilerini şehir listesinden silebilirsin.</string>
+    <string name="map_city_newer_version_message">%1$s uygulamanın daha yeni bir sürümünde kullanılabiliyor ve istasyonları bu sürümde gösterilmiyor. Uygulamayı güncelle veya başka bir şehir seç.</string>
     <string name="city_choose_another">Başka bir şehir seç</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -554,6 +555,7 @@
     <string name="storage_nothing_installed">Yüklü veri yok</string>
     <string name="storage_no_city">Şehir seçilmedi</string>
     <string name="city_withdrawn_label">%1$s · artık kullanılamıyor</string>
+    <string name="city_newer_version_label">%1$s · güncelleme gerekiyor</string>
 
     <string name="dataset_tiles">Harita verileri</string>
     <string name="dataset_tiles_purpose">Haritayı bağlantı olmadan çizer</string>

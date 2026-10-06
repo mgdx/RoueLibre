@@ -203,7 +203,9 @@ class CityFragment : Fragment() {
             publish(container.cityCatalogueSource.catalogue())
             // No address is passed: where the catalogue is fetched from is
             // settled by the build, never by the document last downloaded.
-            val refreshed = container.cityCatalogueSource.refresh()
+            // Through the container, which forgets the active city's verdict
+            // when a new catalogue comes into force.
+            val refreshed = container.refreshCatalogue()
             if (refreshed is CatalogueRefresh.Updated) publish(refreshed.catalogue)
         }
     }
@@ -223,11 +225,9 @@ class CityFragment : Fragment() {
                 )
             }
             .sortedWith(cityDisplayOrder())
-        val listed = loaded.cities.mapTo(HashSet()) { it.id }
+        // A network the catalogue in force serves again is not among them: its
+        // own row already says what can be done.
         withdrawnRows = container.cityCatalogueSource.withdrawnCities()
-            // A catalogue that serves a network again outranks the record of
-            // its withdrawal: its own row already says what can be done.
-            .filter { it.id !in listed }
             .map { city ->
                 WithdrawnCityRow(
                     city = city,

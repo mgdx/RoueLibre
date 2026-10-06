@@ -38,6 +38,7 @@ import io.github.mgdx.rouelibre.ui.city.CityFragment
 import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.map.MapFragment
 import io.github.mgdx.rouelibre.ui.noLongerServedMessage
+import io.github.mgdx.rouelibre.ui.noLongerServedTitle
 import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
@@ -588,7 +589,9 @@ class StationListFragment : Fragment() {
             // The map panel's words, in full: a banner cut them short, and the
             // list underneath still invited a refresh that could do nothing.
             EmptyListOffer.ChooseAnotherCity -> {
-                views.emptyTitle.setText(R.string.map_city_withdrawn_title)
+                views.emptyTitle.setText(
+                    withdrawnCity?.let(::noLongerServedTitle) ?: R.string.map_city_withdrawn_title,
+                )
                 views.emptyMessage.text =
                     withdrawnCity?.let { requireContext().noLongerServedMessage(it) }
                 views.emptyAction.setText(R.string.city_choose_another)

@@ -208,6 +208,7 @@
     <string name="map_city_withdrawn_title">网络已不再提供</string>
     <string name="map_city_withdrawn_message">%1$s 已不再提供，其站点也不再显示。请选择其他城市。它留在本设备上的数据可以在城市列表中删除。</string>
     <string name="map_city_withdrawn_message_unnamed">您选择的网络已不再提供，其站点也不再显示。请选择其他城市。它留在本设备上的数据可以在城市列表中删除。</string>
+    <string name="map_city_newer_version_message">%1$s 可在本应用的较新版本中使用，此版本不显示其站点。请更新应用，或选择其他城市。</string>
     <string name="city_choose_another">选择其他城市</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). One press gives back
@@ -552,6 +553,7 @@
     <string name="storage_nothing_installed">未安装任何数据</string>
     <string name="storage_no_city">未选择城市</string>
     <string name="city_withdrawn_label">%1$s · 已不再提供</string>
+    <string name="city_newer_version_label">%1$s · 需要更新</string>
 
     <string name="dataset_tiles">地图数据</string>
     <string name="dataset_tiles_purpose">无需联网即可绘制地图</string>

@@ -220,6 +220,7 @@
     <string name="map_city_withdrawn_title">ネットワークは利用できなくなりました</string>
     <string name="map_city_withdrawn_message">%1$sは利用できなくなったため、そのステーションは表示されなくなりました。別の都市を選んでください。この端末に残っているデータは、都市の一覧から削除できます。</string>
     <string name="map_city_withdrawn_message_unnamed">選んだネットワークは利用できなくなったため、そのステーションは表示されなくなりました。別の都市を選んでください。この端末に残っているデータは、都市の一覧から削除できます。</string>
+    <string name="map_city_newer_version_message">%1$sはアプリの新しいバージョンで利用できます。このバージョンではステーションは表示されません。アプリを更新するか、別の都市を選んでください。</string>
     <string name="city_choose_another">別の都市を選ぶ</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -669,6 +670,7 @@
     <string name="storage_nothing_installed">データがインストールされていません</string>
     <string name="storage_no_city">都市が選択されていません</string>
     <string name="city_withdrawn_label">%1$s・利用できなくなりました</string>
+    <string name="city_newer_version_label">%1$s・アップデートが必要です</string>
 
     <string name="dataset_tiles">地図データ</string>
     <string name="dataset_tiles_purpose">通信なしで地図を描画します</string>

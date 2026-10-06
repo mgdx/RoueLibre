@@ -59,6 +59,7 @@ import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.noLongerServedMessage
+import io.github.mgdx.rouelibre.ui.noLongerServedTitle
 import io.github.mgdx.rouelibre.ui.prefersReducedMotion
 import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
@@ -644,7 +645,7 @@ class MapFragment : Fragment() {
             // Not the first launch's question: this user chose, and what they
             // chose went away. Asking "Which city?" over their own tiles read
             // as the application having forgotten them (SPEC §15.1).
-            views.missingTilesTitle.setText(R.string.map_city_withdrawn_title)
+            views.missingTilesTitle.setText(noLongerServedTitle(city))
             views.missingTilesMessage.text = requireContext().noLongerServedMessage(city)
             views.missingTilesStorage.setText(R.string.city_choose_another)
             views.missingTilesStorage.setOnClickListener { show(CityFragment()) }

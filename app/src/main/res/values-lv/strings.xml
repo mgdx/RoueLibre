@@ -230,6 +230,7 @@
     <string name="map_city_withdrawn_title">Tīkls vairs nav pieejams</string>
     <string name="map_city_withdrawn_message">Tīkls „%1$s“ vairs nav pieejams, un tā stacijas vairs netiek rādītas. Izvēlieties citu pilsētu. Šajā ierīcē palikušos datus var izdzēst pilsētu sarakstā.</string>
     <string name="map_city_withdrawn_message_unnamed">Jūsu izvēlētais tīkls vairs nav pieejams, un tā stacijas vairs netiek rādītas. Izvēlieties citu pilsētu. Šajā ierīcē palikušos datus var izdzēst pilsētu sarakstā.</string>
+    <string name="map_city_newer_version_message">Tīkls „%1$s“ ir pieejams jaunākā lietotnes versijā, un tā stacijas šajā versijā netiek rādītas. Atjauniniet lietotni vai izvēlieties citu pilsētu.</string>
     <string name="city_choose_another">Izvēlēties citu pilsētu</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -593,6 +594,7 @@
     <string name="storage_nothing_installed">Nav instalētu datu</string>
     <string name="storage_no_city">Nav izvēlēta pilsēta</string>
     <string name="city_withdrawn_label">„%1$s“ · vairs nav pieejama</string>
+    <string name="city_newer_version_label">„%1$s“ · nepieciešams atjauninājums</string>
 
     <string name="dataset_tiles">Kartes dati</string>
     <string name="dataset_tiles_purpose">Zīmē karti bez tīkla</string>

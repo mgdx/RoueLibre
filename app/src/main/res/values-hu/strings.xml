@@ -223,6 +223,7 @@
     <string name="map_city_withdrawn_title">A hálózat már nem érhető el</string>
     <string name="map_city_withdrawn_message">Ez a hálózat már nem érhető el, és az állomásai már nem jelennek meg: %1$s. Válassz másik várost. Az eszközön maradt adatait a városok listájában törölheted.</string>
     <string name="map_city_withdrawn_message_unnamed">A választott hálózat már nem érhető el, és az állomásai már nem jelennek meg. Válassz másik várost. Az eszközön maradt adatait a városok listájában törölheted.</string>
+    <string name="map_city_newer_version_message">Ez a hálózat az alkalmazás újabb verziójában érhető el, és az állomásai ebben a verzióban nem jelennek meg: %1$s. Frissítsd az alkalmazást, vagy válassz másik várost.</string>
     <string name="city_choose_another">Másik város kiválasztása</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -609,6 +610,7 @@
     <string name="storage_nothing_installed">Nincsenek telepített adatok</string>
     <string name="storage_no_city">Nincs kiválasztott város</string>
     <string name="city_withdrawn_label">%1$s · már nem érhető el</string>
+    <string name="city_newer_version_label">%1$s · frissítés szükséges</string>
 
     <string name="dataset_tiles">Térképadatok</string>
     <string name="dataset_tiles_purpose">Hálózat nélkül rajzolja meg a térképet</string>

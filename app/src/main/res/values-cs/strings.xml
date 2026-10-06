@@ -268,6 +268,7 @@
     <string name="map_city_withdrawn_title">Síť už není k dispozici</string>
     <string name="map_city_withdrawn_message">„%1$s“ už není k dispozici a jeho stanice se už nezobrazují. Vyberte jiné město. Data, která v tomto zařízení zůstala, můžete smazat ze seznamu měst.</string>
     <string name="map_city_withdrawn_message_unnamed">Síť, kterou jste vybrali, už není k dispozici a její stanice se už nezobrazují. Vyberte jiné město. Data, která v tomto zařízení zůstala, můžete smazat ze seznamu měst.</string>
+    <string name="map_city_newer_version_message">„%1$s“ je k dispozici v novější verzi aplikace a jeho stanice se v této verzi nezobrazují. Aktualizujte aplikaci nebo vyberte jiné město.</string>
     <string name="city_choose_another">Vybrat jiné město</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -744,6 +745,7 @@
     <string name="storage_nothing_installed">Nejsou nainstalovaná žádná data</string>
     <string name="storage_no_city">Není vybráno žádné město</string>
     <string name="city_withdrawn_label">„%1$s“ · už není k dispozici</string>
+    <string name="city_newer_version_label">„%1$s“ · vyžaduje aktualizaci</string>
 
     <!-- Each purpose line agrees with the dataset it stands under: „mapová
          data“ and „data pro výpočet tras“ are neuter plurals, „rejstřík

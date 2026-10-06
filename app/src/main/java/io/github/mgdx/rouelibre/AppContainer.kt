@@ -21,6 +21,8 @@ import io.github.mgdx.rouelibre.data.FleetRepository
 import io.github.mgdx.rouelibre.data.StationRepository
 import io.github.mgdx.rouelibre.data.addresses.AddressIndex
 import io.github.mgdx.rouelibre.data.addresses.AddressNormalizers
+import io.github.mgdx.rouelibre.data.cities.ActiveCityMemo
+import io.github.mgdx.rouelibre.data.cities.CatalogueRefresh
 import io.github.mgdx.rouelibre.data.cities.CityCatalogueSource
 import io.github.mgdx.rouelibre.data.datasets.DatasetDownloader
 import io.github.mgdx.rouelibre.data.datasets.DatasetStore
@@ -34,8 +36,6 @@ import io.github.mgdx.rouelibre.data.network.HttpsOnlyRedirectInterceptor
 import io.github.mgdx.rouelibre.data.network.SystemConnectionCost
 import io.github.mgdx.rouelibre.data.routing.OfflineRouter
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import okhttp3.OkHttpClient
 import java.io.File
 import java.time.Duration
@@ -78,9 +78,9 @@ class AppContainer(private val context: Context) {
      *
      * The result is held in memory, keyed by the identifier read from the
      * settings: changing city therefore invalidates the cache by itself,
-     * without any screen having to remember to clear it. Settled under a lock,
-     * because a launch asks from several screens at once and settling it reads
-     * the catalogues as well as the configuration.
+     * without any screen having to remember to clear it. A new catalogue put in
+     * force by [refreshCatalogue] invalidates it too, the verdict depending on
+     * the catalogue as much as on the identifier (see [ActiveCityMemo]).
      */
     suspend fun activeCityState(): ActiveCity {
         val identifier = preferences.activeCityId()
@@ -91,12 +91,20 @@ class AppContainer(private val context: Context) {
         // what the storage screen lists, and offers to delete.
         datasetStore.useCity(identifier)
         if (identifier == null) return ActiveCity.None
-        return cityResolution.withLock {
-            cachedCity?.takeIf { it.first == identifier }?.second
-                ?: cityCatalogueSource.activeCity(identifier)
-                    .also { cachedCity = identifier to it }
-        }
+        return activeCityMemo.of(identifier) { cityCatalogueSource.activeCity(it) }
     }
+
+    /**
+     * Downloads the catalogue again, unless the host says it has not changed —
+     * see [CityCatalogueSource.refresh].
+     *
+     * Goes through here rather than to the source directly so that a new
+     * catalogue in force is never read against a verdict settled from the old
+     * one: a network brought back or withdrawn by this very refresh must read
+     * so on every screen, without restarting the application.
+     */
+    suspend fun refreshCatalogue(): CatalogueRefresh =
+        activeCityMemo.after(cityCatalogueSource.refresh())
 
     /**
      * Changes the city served.
@@ -112,7 +120,7 @@ class AppContainer(private val context: Context) {
     suspend fun switchToCity(id: String?) {
         if (preferences.activeCityId() == id) return
         preferences.setActiveCityId(id)
-        cachedCity = null
+        activeCityMemo.forget()
         datasetStore.useCity(id)
         stationRepository.forget()
         // One conurbation's fleet says nothing about another's: leaving a mixed
@@ -266,17 +274,8 @@ class AppContainer(private val context: Context) {
         )
     }
 
-    /**
-     * The active city as of the last call to [activeCityState].
-     *
-     * `@Volatile` because the read comes from the main thread and the write
-     * from the IO dispatcher.
-     */
-    @Volatile
-    private var cachedCity: Pair<String, ActiveCity>? = null
-
-    /** Settles the active city once per identifier, see [activeCityState]. */
-    private val cityResolution = Mutex()
+    /** The active city as last settled, see [activeCityState]. */
+    private val activeCityMemo = ActiveCityMemo()
 
     private val httpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()

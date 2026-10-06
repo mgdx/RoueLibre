@@ -2,14 +2,14 @@ package io.github.mgdx.rouelibre.core.config
 
 import io.github.mgdx.rouelibre.core.Outcome
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 
 /**
- * Tests of the networks the catalogue withdraws, and of what a chosen city
- * resolves to (SPEC §15.1).
+ * Tests of how the catalogue reads the networks it withdraws (SPEC §15.1).
+ * What a chosen city resolves to, between the two catalogues a device holds,
+ * is [HeldCataloguesTest]'s.
  *
  * What matters most is held by the first two: the catalogue's cities read the
  * same with the withdrawals as without them, which is what an older build
@@ -76,71 +76,6 @@ class WithdrawnCityTest {
 
         assertTrue("idecycle is not listed as withdrawn", "idecycle" in withdrawn)
         assertEquals(emptySet<String>(), cities.map { it.id }.toSet() intersect withdrawn.toSet())
-    }
-
-    @Test
-    fun `no chosen city is none`() {
-        assertEquals(
-            ActiveCity.None,
-            resolveActiveCity(null, configuration = null, withdrawal = null),
-        )
-    }
-
-    @Test
-    fun `a chosen city this build carries is served`() {
-        val configuration = configuration()
-
-        assertEquals(
-            ActiveCity.Served(configuration),
-            resolveActiveCity("example", configuration, withdrawal = null),
-        )
-    }
-
-    @Test
-    fun `a chosen city this build does not know is no longer served, and is not none`() {
-        val resolved = resolveActiveCity("idecycle", configuration = null, withdrawal = null)
-
-        assertEquals(ActiveCity.NoLongerServed("idecycle", withdrawal = null), resolved)
-        assertFalse(resolved == ActiveCity.None)
-    }
-
-    @Test
-    fun `a chosen city the catalogue withdrew is no longer served, and named`() {
-        val withdrawal = WithdrawnCity("idecycle", "IDEcycle", "Pau")
-
-        assertEquals(
-            ActiveCity.NoLongerServed("idecycle", withdrawal),
-            resolveActiveCity("idecycle", configuration = null, withdrawal = withdrawal),
-        )
-    }
-
-    @Test
-    fun `a withdrawal outweighs a configuration the build still carries`() {
-        val withdrawal = WithdrawnCity("example", "Example", mainCity = null)
-
-        assertEquals(
-            ActiveCity.NoLongerServed("example", withdrawal),
-            resolveActiveCity("example", configuration(), withdrawal),
-        )
-    }
-
-    private fun configuration(): CityConfiguration {
-        val document = """
-            {
-              "configVersion": 1,
-              "network": {
-                "id": "example", "displayName": "Example",
-                "operator": "Example", "defaultLanguage": "en"
-              },
-              "gbfs": { "discoveryUrl": "https://example.org/gbfs.json" },
-              "map": {
-                "defaultCenterLatitude": 50.0, "defaultCenterLongitude": 3.0,
-                "defaultZoom": 12.0, "minZoom": 10, "maxZoom": 16
-              },
-              "dataRelease": { "manifestUrl": "https://example.org/manifest.json" }
-            }
-        """.trimIndent()
-        return (CityConfigurationReader.read(document) as Outcome.Success).value
     }
 
     private companion object {

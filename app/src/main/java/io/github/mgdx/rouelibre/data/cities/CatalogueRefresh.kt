@@ -15,10 +15,17 @@ import io.github.mgdx.rouelibre.core.config.CityCatalogue
  */
 sealed interface CatalogueRefresh {
 
-    /** A catalogue arrived, and is from now on the one in force. */
+    /**
+     * The catalogue in force changed, and [catalogue] is the one in force from
+     * now on: the one that arrived, or the shipped one when what arrived is
+     * older than it and replaced the copy that was in force.
+     */
     data class Updated(val catalogue: CityCatalogue) : CatalogueRefresh
 
-    /** The host answered `304`: the copy on the device is still the current one. */
+    /**
+     * The catalogue in force did not change: the host answered `304`, or sent a
+     * document older than the shipped catalogue, which outranks it.
+     */
     data object Unchanged : CatalogueRefresh
 
     /**

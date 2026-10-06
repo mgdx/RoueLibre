@@ -200,6 +200,7 @@
     <string name="map_city_withdrawn_title">Netværket er ikke længere tilgængeligt</string>
     <string name="map_city_withdrawn_message">%1$s er ikke længere tilgængeligt, og stationerne vises ikke længere. Vælg en anden by. De data, det har efterladt på denne enhed, kan slettes fra listen over byer.</string>
     <string name="map_city_withdrawn_message_unnamed">Det netværk, du valgte, er ikke længere tilgængeligt, og stationerne vises ikke længere. Vælg en anden by. De data, det har efterladt på denne enhed, kan slettes fra listen over byer.</string>
+    <string name="map_city_newer_version_message">%1$s er tilgængeligt i en nyere version af appen, og stationerne vises ikke i denne version. Opdater appen, eller vælg en anden by.</string>
     <string name="city_choose_another">Vælg en anden by</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -561,6 +562,7 @@
     <string name="storage_nothing_installed">Ingen data installeret</string>
     <string name="storage_no_city">Ingen by valgt</string>
     <string name="city_withdrawn_label">%1$s · ikke længere tilgængelig</string>
+    <string name="city_newer_version_label">%1$s · kræver opdatering</string>
 
     <string name="dataset_tiles">Kortdata</string>
     <string name="dataset_tiles_purpose">Tegner kortet uden internet</string>

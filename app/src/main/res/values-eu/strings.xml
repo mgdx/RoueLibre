@@ -262,6 +262,7 @@
     <string name="map_city_withdrawn_title">Sarea ez dago erabilgarri jada</string>
     <string name="map_city_withdrawn_message">%1$s ez dago erabilgarri jada, eta haren geltokiak ez dira gehiago erakusten. Aukeratu beste hiri bat. Gailu honetan utzitako datuak hirien zerrendatik ezaba daitezke.</string>
     <string name="map_city_withdrawn_message_unnamed">Aukeratu zenuen sarea ez dago erabilgarri jada, eta haren geltokiak ez dira gehiago erakusten. Aukeratu beste hiri bat. Gailu honetan utzitako datuak hirien zerrendatik ezaba daitezke.</string>
+    <string name="map_city_newer_version_message">%1$s aplikazioaren bertsio berriago batean dago erabilgarri, eta haren geltokiak ez dira bertsio honetan erakusten. Eguneratu aplikazioa edo aukeratu beste hiri bat.</string>
     <string name="city_choose_another">Aukeratu beste hiri bat</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). The descriptions say
@@ -696,6 +697,7 @@
     <string name="storage_nothing_installed">Ez dago daturik instalatuta</string>
     <string name="storage_no_city">Ez dago hiririk hautatuta</string>
     <string name="city_withdrawn_label">%1$s · ez dago erabilgarri jada</string>
+    <string name="city_newer_version_label">%1$s · eguneratu behar da</string>
 
     <string name="dataset_tiles">Maparen datuak</string>
     <string name="dataset_tiles_purpose">Mapa marrazten du sarerik gabe</string>

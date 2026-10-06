@@ -243,6 +243,7 @@
     <string name="map_city_withdrawn_title">Rete non più disponibile</string>
     <string name="map_city_withdrawn_message">%1$s non è più disponibile e le sue stazioni non vengono più mostrate. Scegli un’altra città. I dati che ha lasciato su questo dispositivo si possono cancellare dall’elenco delle città.</string>
     <string name="map_city_withdrawn_message_unnamed">La rete che hai scelto non è più disponibile e le sue stazioni non vengono più mostrate. Scegli un’altra città. I dati che ha lasciato su questo dispositivo si possono cancellare dall’elenco delle città.</string>
+    <string name="map_city_newer_version_message">%1$s è disponibile in una versione più recente dell’applicazione, e le sue stazioni non vengono mostrate in questa. Aggiorna l’applicazione o scegli un’altra città.</string>
     <string name="city_choose_another">Scegli un’altra città</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -699,6 +700,7 @@
     <string name="storage_nothing_installed">Nessun dato installato</string>
     <string name="storage_no_city">Nessuna città scelta</string>
     <string name="city_withdrawn_label">%1$s · non più disponibile</string>
+    <string name="city_newer_version_label">%1$s · aggiornamento necessario</string>
 
     <!-- The three dataset names are all masculine singular — sfondo
          cartografico, grafo dei percorsi, indice degli indirizzi — which is

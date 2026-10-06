@@ -218,6 +218,7 @@
     <string name="map_city_withdrawn_title">Verkosto ei ole enää saatavilla</string>
     <string name="map_city_withdrawn_message">Verkosto ”%1$s” ei ole enää saatavilla, eikä sen asemia enää näytetä. Valitse toinen kaupunki. Sen tähän laitteeseen jättämät tiedot voi poistaa kaupunkiluettelosta.</string>
     <string name="map_city_withdrawn_message_unnamed">Valitsemasi verkosto ei ole enää saatavilla, eikä sen asemia enää näytetä. Valitse toinen kaupunki. Sen tähän laitteeseen jättämät tiedot voi poistaa kaupunkiluettelosta.</string>
+    <string name="map_city_newer_version_message">Verkosto ”%1$s” on saatavilla sovelluksen uudemmassa versiossa, eikä sen asemia näytetä tässä versiossa. Päivitä sovellus tai valitse toinen kaupunki.</string>
     <string name="city_choose_another">Valitse toinen kaupunki</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -597,6 +598,7 @@
     <string name="storage_nothing_installed">Aineistoja ei ole asennettu</string>
     <string name="storage_no_city">Kaupunkia ei ole valittu</string>
     <string name="city_withdrawn_label">%1$s · ei enää saatavilla</string>
+    <string name="city_newer_version_label">%1$s · vaatii päivityksen</string>
 
     <string name="dataset_tiles">Kartta-aineisto</string>
     <string name="dataset_tiles_purpose">Piirtää kartan ilman verkkoa</string>
