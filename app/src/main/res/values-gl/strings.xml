@@ -265,6 +265,10 @@
     <string name="map_needs_tiles_message">Instálao desde a pantalla de almacenamento. Mentres tanto, a lista de estacións segue sendo utilizable.</string>
     <string name="map_needs_city_title">Que cidade?</string>
     <string name="map_needs_city_message">Escolle a área metropolitana que queiras usar. Os seus datos descárganse despois, dunha vez por todas.</string>
+    <string name="map_city_withdrawn_title">Rede xa non dispoñible</string>
+    <string name="map_city_withdrawn_message">%1$s xa non está dispoñible e as súas estacións xa non se amosan. Escolle outra cidade. Os datos que deixou neste dispositivo pódense borrar desde a lista de cidades.</string>
+    <string name="map_city_withdrawn_message_unnamed">A rede que escolliches xa non está dispoñible e as súas estacións xa non se amosan. Escolle outra cidade. Os datos que deixou neste dispositivo pódense borrar desde a lista de cidades.</string>
+    <string name="city_choose_another">Escoller outra cidade</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). The descriptions say
          which of the two it is, the button being the only sign of either. -->
@@ -627,6 +631,8 @@
     <string name="city_delete_description">Eliminar os datos de %1$s</string>
     <string name="city_delete_title">Eliminar estes datos?</string>
     <string name="city_delete_body">Borraranse todos os datos sen conexión de %1$s. Terás que descargalos de novo para usalos.</string>
+    <string name="city_withdrawn">Xa non dispoñible</string>
+    <string name="city_withdrawn_delete_body">Borraranse todos os datos sen conexión de %1$s. A rede xa non está dispoñible, así que estes datos xa non serven para nada.</string>
     <string name="city_delete_confirm">Eliminar</string>
     <string name="city_deleted">Datos de %1$s eliminados</string>
     <string name="city_search_hint">Buscar unha cidade</string>
@@ -657,6 +663,7 @@
     <string name="storage_total">Ocupa %1$s neste dispositivo</string>
     <string name="storage_nothing_installed">Non hai datos instalados</string>
     <string name="storage_no_city">Non hai ningunha cidade escollida</string>
+    <string name="storage_city_withdrawn">%1$s · xa non dispoñible</string>
 
     <!-- The three datasets. All three names are masculine singular — "mapa
          base", "grafo de rutas", "índice de enderezos" — which is what lets

@@ -179,6 +179,23 @@ from; moving the address takes a build. `stationSamples` are eight positions
 taken through the network, and they are what "find my city" measures against —
 the reference box of a network serving a whole region is mostly empty.
 
+**A network that is withdrawn leaves `cities` and is listed under
+`withdrawnCities`**, a key of its own beside it:
+
+```json
+"withdrawnCities": [
+  { "id": "idecycle", "displayName": "IDEcycle", "mainCity": "Pau",
+    "withdrawnOn": "2026-10-06" }
+]
+```
+
+To withdraw one, delete its configuration from `config/cities/`, add it to
+`config/withdrawn-cities.json` under the name the catalogue last gave it, and
+run `build_catalogue.py`, which refuses a network both withdrawn and
+configured. The application then tells whoever had chosen it that it is gone,
+and offers to delete its data. Never put the record among `cities` with a mark:
+an older build ignores the mark and would offer the network again.
+
 **Serve `ETag` or `Last-Modified` if the host can.** The application asks for
 the catalogue each time its city list opens, and it asks conditionally: whatever
 validator came with the copy it holds goes back out as `If-None-Match` or

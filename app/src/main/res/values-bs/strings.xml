@@ -238,6 +238,10 @@
     <string name="map_needs_tiles_message">Instalirajte podatke karte s ekrana za pohranu. U međuvremenu lista stanica ostaje upotrebljiva.</string>
     <string name="map_needs_city_title">Koji grad?</string>
     <string name="map_needs_city_message">Odaberite gradsko područje koje želite koristiti. Njegovi podaci se preuzimaju poslije, jednom zauvijek.</string>
+    <string name="map_city_withdrawn_title">Mreža više nije dostupna</string>
+    <string name="map_city_withdrawn_message">„%1$s“ više nije dostupno i njegove stanice se više ne prikazuju. Odaberite drugi grad. Podatke koji su ostali na ovom uređaju možete izbrisati s liste gradova.</string>
+    <string name="map_city_withdrawn_message_unnamed">Mreža koju ste odabrali više nije dostupna i njene stanice se više ne prikazuju. Odaberite drugi grad. Podatke koji su ostali na ovom uređaju možete izbrisati s liste gradova.</string>
+    <string name="city_choose_another">Odaberi drugi grad</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Okreni prema sjeveru i poravnaj kartu</string>
@@ -569,6 +573,8 @@
     <string name="city_delete_description">Izbriši podatke: %1$s</string>
     <string name="city_delete_title">Izbrisati ove podatke?</string>
     <string name="city_delete_body">Svi podaci za rad van mreže za „%1$s“ bit će izbrisani. Morat ćete ih ponovo preuzeti da biste ih koristili.</string>
+    <string name="city_withdrawn">Više nije dostupno</string>
+    <string name="city_withdrawn_delete_body">Svi podaci za rad van mreže za „%1$s“ bit će izbrisani. Mreža više nije dostupna, pa ti podaci više ničemu ne služe.</string>
     <string name="city_delete_confirm">Izbriši</string>
     <string name="city_deleted">Podaci „%1$s“ su izbrisani</string>
     <string name="city_search_hint">Pretražite gradove</string>
@@ -601,6 +607,7 @@
     <string name="storage_total">%1$s zauzeto na ovom uređaju</string>
     <string name="storage_nothing_installed">Nema instaliranih podataka</string>
     <string name="storage_no_city">Nije odabran nijedan grad</string>
+    <string name="storage_city_withdrawn">„%1$s“ · više nije dostupno</string>
 
     <string name="dataset_tiles">Podaci karte</string>
     <string name="dataset_tiles_purpose">Iscrtava kartu bez mreže</string>

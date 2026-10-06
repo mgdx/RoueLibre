@@ -1,0 +1,77 @@
+{
+  "$comment": [
+    "Networks this project served once and serves no more — SPEC.md §15.1.",
+    "",
+    "Deleting a city's configuration takes it out of the catalogue, and that is",
+    "the lever that retires a dead network. It also leaves whoever had chosen it",
+    "with nothing to read: their build either still carries the configuration",
+    "and keeps serving a feed that is gone, or no longer does and cannot even",
+    "name what it lost. Each network withdrawn is therefore listed here, with",
+    "the day it went, and tools/build_catalogue.py copies the list into the",
+    "catalogue under `withdrawnCities` — a key of its own, beside `cities` and",
+    "never inside it, so that a build older than this list, which ignores the",
+    "keys it does not know, can never be offered one of these networks again.",
+    "",
+    "A network listed here must have no configuration in config/cities/: the",
+    "catalogue refuses to be built otherwise. The names are the ones the",
+    "catalogue carried for it, which is what its users last read. No sentence",
+    "goes here: the application says what a withdrawal means in its own words,",
+    "translated, and the catalogue carries only the fact and its date."
+  ],
+  "withdrawn": [
+    {
+      "id": "donkey-prignitz",
+      "displayName": "Donkey Prignitz",
+      "mainCity": "Wittenberge",
+      "withdrawnOn": "2026-10-06"
+    },
+    {
+      "id": "donkey-republic-aalborg",
+      "displayName": "Donkey Republic",
+      "mainCity": "Aalborg",
+      "withdrawnOn": "2026-10-06"
+    },
+    {
+      "id": "donkey-republic-budapest",
+      "displayName": "Donkey Republic",
+      "mainCity": "Budapest",
+      "withdrawnOn": "2026-10-06"
+    },
+    {
+      "id": "donkey-republic-malmo",
+      "displayName": "Donkey Republic",
+      "mainCity": "Malmö",
+      "withdrawnOn": "2026-10-06"
+    },
+    {
+      "id": "donkey-republic-odense",
+      "displayName": "Donkey Republic",
+      "mainCity": "Odense",
+      "withdrawnOn": "2026-10-06"
+    },
+    {
+      "id": "donkey-republic-porvoo",
+      "displayName": "Donkey Republic",
+      "mainCity": "Porvoo",
+      "withdrawnOn": "2026-10-06"
+    },
+    {
+      "id": "idecycle",
+      "displayName": "IDEcycle",
+      "mainCity": "Pau",
+      "withdrawnOn": "2026-10-06"
+    },
+    {
+      "id": "pruszkowski-rower-miejski",
+      "displayName": "Pruszkowski Rower Miejski",
+      "mainCity": "Pruszków",
+      "withdrawnOn": "2026-10-06"
+    },
+    {
+      "id": "tarnowski-rower-miejski",
+      "displayName": "Tarnowski Rower Miejski",
+      "mainCity": "Tarnów",
+      "withdrawnOn": "2026-10-06"
+    }
+  ]
+}

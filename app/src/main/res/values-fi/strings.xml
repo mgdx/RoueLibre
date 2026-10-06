@@ -215,6 +215,10 @@
     <string name="map_needs_tiles_message">Asenna kartta-aineisto Tallennustila-näytöltä. Sillä välin asemalista pysyy käytettävissä.</string>
     <string name="map_needs_city_title">Mikä kaupunki?</string>
     <string name="map_needs_city_message">Valitse kaupunkiseutu, jota haluat käyttää. Sen aineistot ladataan sen jälkeen, kerran ja lopullisesti.</string>
+    <string name="map_city_withdrawn_title">Verkosto ei ole enää saatavilla</string>
+    <string name="map_city_withdrawn_message">Verkosto ”%1$s” ei ole enää saatavilla, eikä sen asemia enää näytetä. Valitse toinen kaupunki. Sen tähän laitteeseen jättämät tiedot voi poistaa kaupunkiluettelosta.</string>
+    <string name="map_city_withdrawn_message_unnamed">Valitsemasi verkosto ei ole enää saatavilla, eikä sen asemia enää näytetä. Valitse toinen kaupunki. Sen tähän laitteeseen jättämät tiedot voi poistaa kaupunkiluettelosta.</string>
+    <string name="city_choose_another">Valitse toinen kaupunki</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Suuntaa pohjoiseen ja tasaa kartta</string>
@@ -556,6 +560,8 @@
     <string name="city_delete_description">Poista aineistot: %1$s</string>
     <string name="city_delete_title">Poistetaanko nämä aineistot?</string>
     <string name="city_delete_body">Kaikki verkoston ”%1$s” offline-aineistot poistetaan. Ne on ladattava uudelleen, jotta niitä voi käyttää.</string>
+    <string name="city_withdrawn">Ei enää saatavilla</string>
+    <string name="city_withdrawn_delete_body">Kaikki verkoston ”%1$s” offline-aineistot poistetaan. Verkosto ei ole enää saatavilla, joten aineistoista ei ole enää hyötyä.</string>
     <string name="city_delete_confirm">Poista</string>
     <string name="city_deleted">Aineistot poistettu: %1$s</string>
     <string name="city_search_hint">Hae kaupunkia</string>
@@ -590,6 +596,7 @@
     <string name="storage_total">%1$s käytössä tällä laitteella</string>
     <string name="storage_nothing_installed">Aineistoja ei ole asennettu</string>
     <string name="storage_no_city">Kaupunkia ei ole valittu</string>
+    <string name="storage_city_withdrawn">%1$s · ei enää saatavilla</string>
 
     <string name="dataset_tiles">Kartta-aineisto</string>
     <string name="dataset_tiles_purpose">Piirtää kartan ilman verkkoa</string>

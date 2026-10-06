@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.DataError
+import io.github.mgdx.rouelibre.core.config.ActiveCity
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.message.MessageSubject
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
@@ -36,6 +37,7 @@ import io.github.mgdx.rouelibre.ui.backStackEntryNames
 import io.github.mgdx.rouelibre.ui.city.CityFragment
 import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.map.MapFragment
+import io.github.mgdx.rouelibre.ui.noLongerServedMessage
 import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
@@ -469,13 +471,21 @@ class StationListFragment : Fragment() {
                     } else {
                         R.string.action_retry to { viewModel.refresh(force = true) }
                     }
+                    // Served by none may be a city chosen and since withdrawn,
+                    // which "no city is selected" would deny (SPEC §15.1).
+                    val gone = if (error == DataError.NoCityChosen) {
+                        container.activeCityState() as? ActiveCity.NoLongerServed
+                    } else {
+                        null
+                    }
                     host.showMessage(
-                        error.toUserMessage(
-                            requireContext(),
-                            hasKnownAvailability = viewModel.state.value.fetchedAt != null,
-                        ),
+                        gone?.let { requireContext().noLongerServedMessage(it) }
+                            ?: error.toUserMessage(
+                                requireContext(),
+                                hasKnownAvailability = viewModel.state.value.fetchedAt != null,
+                            ),
                         MessageSubject.Refresh,
-                        actionLabel = label,
+                        actionLabel = if (gone != null) R.string.city_choose_another else label,
                     ) {
                         // The banner belongs to the activity and outlives this
                         // screen: a press landing after it is gone would ask a

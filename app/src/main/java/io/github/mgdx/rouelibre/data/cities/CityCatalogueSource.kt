@@ -4,11 +4,14 @@ import android.content.Context
 import android.content.res.AssetManager
 import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.Outcome
+import io.github.mgdx.rouelibre.core.config.ActiveCity
 import io.github.mgdx.rouelibre.core.config.CityCatalogue
 import io.github.mgdx.rouelibre.core.config.CityCatalogueReader
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.CityConfigurationReader
+import io.github.mgdx.rouelibre.core.config.WithdrawnCity
 import io.github.mgdx.rouelibre.core.config.isUsableCityId
+import io.github.mgdx.rouelibre.core.config.resolveActiveCity
 import io.github.mgdx.rouelibre.data.network.MAXIMUM_DOCUMENT_BYTES
 import io.github.mgdx.rouelibre.data.network.textUpTo
 import kotlinx.coroutines.CoroutineDispatcher
@@ -181,6 +184,42 @@ class CityCatalogueSource(
     }
 
     /**
+     * The networks served once and no more, as the catalogues on the device
+     * name them (SPEC §15.1).
+     *
+     * **Both catalogues are read, and not only the one in force.** The
+     * downloaded copy outlives an application update, so the first launch of a
+     * build that dropped a network usually reads a catalogue published before
+     * the withdrawal was written into any — and the user it most concerns would
+     * be the one left unable to read their network's name. The shipped catalogue
+     * was built with this release's configurations, which is what lets it be
+     * trusted on that point: `tools/build_catalogue.py` refuses to list as
+     * withdrawn a network it still ships. The downloaded one comes first, being
+     * the more recent of the two.
+     */
+    suspend fun withdrawnCities(): List<WithdrawnCity> = withContext(ioDispatcher) {
+        val downloaded = cache.document()?.let(CityCatalogueReader::readWithdrawn).orEmpty()
+        val shipped = CityCatalogueReader.readWithdrawn(embeddedDocument())
+        (downloaded + shipped).distinctBy { it.id }
+    }
+
+    /**
+     * Where the city [cityId] stands, between not chosen, served and gone.
+     *
+     * The configuration answers whether this build can serve it, the
+     * catalogues whether it has been withdrawn — which overrides the first
+     * (see [resolveActiveCity]).
+     */
+    suspend fun activeCity(cityId: String?): ActiveCity {
+        if (cityId == null) return ActiveCity.None
+        return resolveActiveCity(
+            id = cityId,
+            configuration = configuration(cityId),
+            withdrawal = withdrawnCities().firstOrNull { it.id == cityId },
+        )
+    }
+
+    /**
      * Where each city's configuration begins in `cities.json`, and how long it
      * is.
      *
@@ -241,15 +280,15 @@ class CityCatalogueSource(
         return (CityCatalogueReader.read(document) as? Outcome.Success)?.value
     }
 
-    private fun embeddedCatalogue(): CityCatalogue {
-        val document = context.assets.open(CATALOGUE_ASSET)
-            .bufferedReader()
-            .use { it.readText() }
-        return when (val outcome = CityCatalogueReader.read(document)) {
+    private fun embeddedDocument(): String = context.assets.open(CATALOGUE_ASSET)
+        .bufferedReader()
+        .use { it.readText() }
+
+    private fun embeddedCatalogue(): CityCatalogue =
+        when (val outcome = CityCatalogueReader.read(embeddedDocument())) {
             is Outcome.Success -> outcome.value
             is Outcome.Failure -> error("Catalogue unreadable in the APK: ${outcome.error}")
         }
-    }
 
     /**
      * The [length] bytes of `cities.json` that start at [offset].

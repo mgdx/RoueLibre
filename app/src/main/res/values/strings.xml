@@ -209,6 +209,14 @@
     <string name="map_needs_tiles_message">Install the map data from the storage screen. In the meantime, the station list stays usable.</string>
     <string name="map_needs_city_title">Which city?</string>
     <string name="map_needs_city_message">Pick the conurbation you want to use. Its data is downloaded afterwards, once and for all.</string>
+    <!-- Shown in place of the map when the city chosen is one this version
+         no longer serves: its network was withdrawn from the catalogue, or
+         this build no longer ships it (SPEC §15.1). The second message is for
+         when no catalogue on the device can still name the network. -->
+    <string name="map_city_withdrawn_title">Network no longer available</string>
+    <string name="map_city_withdrawn_message">%1$s is no longer available, and its stations are no longer shown. Choose another city. The data it left on this device can be deleted from the list of cities.</string>
+    <string name="map_city_withdrawn_message_unnamed">The network you chose is no longer available, and its stations are no longer shown. Choose another city. The data it left on this device can be deleted from the list of cities.</string>
+    <string name="city_choose_another">Choose another city</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). The descriptions say
          which of the two it is, the button being the only sign of either. -->
@@ -560,6 +568,10 @@
     <string name="city_delete_description">Delete the data for %1$s</string>
     <string name="city_delete_title">Delete this data?</string>
     <string name="city_delete_body">All offline data for %1$s will be erased. You will have to download it again to use it.</string>
+    <!-- Said on the row of a network served once and withdrawn since, shown
+         only while its data is still on the device so it can be deleted. -->
+    <string name="city_withdrawn">No longer available</string>
+    <string name="city_withdrawn_delete_body">All offline data for %1$s will be erased. The network is no longer available, so this data is of no further use.</string>
     <string name="city_delete_confirm">Delete</string>
     <string name="city_deleted">Data for %1$s deleted</string>
     <string name="city_search_hint">Search for a city</string>
@@ -593,6 +605,7 @@
     <string name="storage_total">%1$s used on this device</string>
     <string name="storage_nothing_installed">No data installed</string>
     <string name="storage_no_city">No city selected</string>
+    <string name="storage_city_withdrawn">%1$s · no longer available</string>
 
     <string name="dataset_tiles">Map data</string>
     <string name="dataset_tiles_purpose">Draws the map with no network</string>

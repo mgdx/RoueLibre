@@ -227,6 +227,10 @@
     <string name="map_needs_tiles_message">Instalējiet kartes datus krātuves ekrānā. Pa to laiku staciju saraksts paliek lietojams.</string>
     <string name="map_needs_city_title">Kura pilsēta?</string>
     <string name="map_needs_city_message">Izvēlieties aglomerāciju, kuru vēlaties lietot. Tās dati tiek lejupielādēti pēc tam, vienu reizi uz visiem laikiem.</string>
+    <string name="map_city_withdrawn_title">Tīkls vairs nav pieejams</string>
+    <string name="map_city_withdrawn_message">Tīkls „%1$s“ vairs nav pieejams, un tā stacijas vairs netiek rādītas. Izvēlieties citu pilsētu. Šajā ierīcē palikušos datus var izdzēst pilsētu sarakstā.</string>
+    <string name="map_city_withdrawn_message_unnamed">Jūsu izvēlētais tīkls vairs nav pieejams, un tā stacijas vairs netiek rādītas. Izvēlieties citu pilsētu. Šajā ierīcē palikušos datus var izdzēst pilsētu sarakstā.</string>
+    <string name="city_choose_another">Izvēlēties citu pilsētu</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Pagriezt uz ziemeļiem un izlīdzināt karti</string>
@@ -553,6 +557,8 @@
     <string name="city_delete_description">Dzēst datus: %1$s</string>
     <string name="city_delete_title">Vai dzēst šos datus?</string>
     <string name="city_delete_body">Visi tīkla „%1$s“ bezsaistes dati tiks izdzēsti. Lai tos atkal lietotu, tie būs jālejupielādē no jauna.</string>
+    <string name="city_withdrawn">Vairs nav pieejama</string>
+    <string name="city_withdrawn_delete_body">Visi tīkla „%1$s“ bezsaistes dati tiks izdzēsti. Tīkls vairs nav pieejams, tāpēc šie dati vairs nav nekam noderīgi.</string>
     <string name="city_delete_confirm">Dzēst</string>
     <string name="city_deleted">Dati izdzēsti: %1$s</string>
     <string name="city_search_hint">Meklēt pilsētu</string>
@@ -586,6 +592,7 @@
     <string name="storage_total">Šajā ierīcē izmantotā krātuve: %1$s</string>
     <string name="storage_nothing_installed">Nav instalētu datu</string>
     <string name="storage_no_city">Nav izvēlēta pilsēta</string>
+    <string name="storage_city_withdrawn">„%1$s“ · vairs nav pieejama</string>
 
     <string name="dataset_tiles">Kartes dati</string>
     <string name="dataset_tiles_purpose">Zīmē karti bez tīkla</string>

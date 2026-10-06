@@ -327,7 +327,9 @@ class StationRepository(
      * auto-discovery document goes too, since it describes the feeds of the
      * network being left.
      */
-    suspend fun forget(): Unit = refreshLock.withLock {
+    suspend fun forget(): Unit = refreshLock.withLock { forgetHoldingTheLock() }
+
+    private suspend fun forgetHoldingTheLock() {
         dao.clearAvailabilities()
         dao.clearStations()
         cachedDiscovery = null
@@ -345,9 +347,18 @@ class StationRepository(
      * The auto-discovery document, re-read only if the URL has changed.
      */
     private suspend fun discovery(): Outcome<GbfsDiscovery> {
-        // No URL: no city is chosen. There is nothing to retry, and saying so
+        // No URL: no city is served. There is nothing to retry, and saying so
         // this way avoids showing a network failure that does not exist.
-        val url = discoveryUrlProvider() ?: return Outcome.Failure(DataError.NoCityChosen)
+        val url = discoveryUrlProvider()
+        if (url == null) {
+            // Served by none is not only "none chosen": the city chosen may be
+            // one this build serves no more (SPEC §15.1). Its stations would
+            // then sit in the cache with nothing ever to refresh them, and be
+            // shown as a living network's counts gone stale, when no network
+            // is behind them at all.
+            forgetHoldingTheLock()
+            return Outcome.Failure(DataError.NoCityChosen)
+        }
         cachedDiscovery?.let { cached ->
             if (cachedDiscoveryUrl == url) return Outcome.Success(cached)
         }

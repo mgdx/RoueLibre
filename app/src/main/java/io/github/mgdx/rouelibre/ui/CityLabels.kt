@@ -2,6 +2,7 @@ package io.github.mgdx.rouelibre.ui
 
 import android.content.Context
 import io.github.mgdx.rouelibre.R
+import io.github.mgdx.rouelibre.core.config.ActiveCity
 
 /**
  * Names a network together with the conurbation it runs in.
@@ -25,3 +26,23 @@ fun Context.cityLabel(network: String, city: String?): String = when {
     network.isBlank() -> city
     else -> getString(R.string.city_label, network, city)
 }
+
+/**
+ * Names a network the catalogue withdrew, as it was last named.
+ *
+ * @return the label, or `null` when no catalogue on the device names it.
+ */
+fun Context.withdrawnCityLabel(city: ActiveCity.NoLongerServed): String? =
+    city.withdrawal?.let { cityLabel(it.displayName, it.mainCity) }
+
+/**
+ * Tells somebody that the network they chose is served no more (SPEC §15.1).
+ *
+ * The sentence names it whenever a catalogue still can, says that its stations
+ * are no longer shown — they are not stale, there is nothing behind them — and
+ * where the data it left can be deleted.
+ */
+fun Context.noLongerServedMessage(city: ActiveCity.NoLongerServed): String =
+    withdrawnCityLabel(city)
+        ?.let { getString(R.string.map_city_withdrawn_message, it) }
+        ?: getString(R.string.map_city_withdrawn_message_unnamed)

@@ -265,6 +265,10 @@
          (SPEC §15.1). -->
     <string name="map_needs_city_title">Které město?</string>
     <string name="map_needs_city_message">Vyberte aglomeraci, kterou chcete používat. Její data se stáhnou potom, jednou provždy.</string>
+    <string name="map_city_withdrawn_title">Síť už není k dispozici</string>
+    <string name="map_city_withdrawn_message">„%1$s“ už není k dispozici a jeho stanice se už nezobrazují. Vyberte jiné město. Data, která v tomto zařízení zůstala, můžete smazat ze seznamu měst.</string>
+    <string name="map_city_withdrawn_message_unnamed">Síť, kterou jste vybrali, už není k dispozici a její stanice se už nezobrazují. Vyberte jiné město. Data, která v tomto zařízení zůstala, můžete smazat ze seznamu měst.</string>
+    <string name="city_choose_another">Vybrat jiné město</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Otočit k severu a narovnat mapu</string>
@@ -698,6 +702,8 @@
     <string name="city_delete_description">Smazat data: %1$s</string>
     <string name="city_delete_title">Smazat tato data?</string>
     <string name="city_delete_body">Všechna offline data „%1$s“ budou vymazána. Abyste je mohli používat, budete je muset znovu stáhnout.</string>
+    <string name="city_withdrawn">Už není k dispozici</string>
+    <string name="city_withdrawn_delete_body">Všechna offline data „%1$s“ budou vymazána. Síť už není k dispozici, takže tato data už k ničemu neslouží.</string>
     <string name="city_delete_confirm">Smazat</string>
     <string name="city_deleted">Data „%1$s“ byla smazána</string>
     <string name="city_search_hint">Hledat město</string>
@@ -737,6 +743,7 @@
     <string name="storage_total">%1$s zabráno v tomto zařízení</string>
     <string name="storage_nothing_installed">Nejsou nainstalovaná žádná data</string>
     <string name="storage_no_city">Není vybráno žádné město</string>
+    <string name="storage_city_withdrawn">„%1$s“ · už není k dispozici</string>
 
     <!-- Each purpose line agrees with the dataset it stands under: „mapová
          data“ and „data pro výpočet tras“ are neuter plurals, „rejstřík

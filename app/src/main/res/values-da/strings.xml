@@ -197,6 +197,10 @@
     <string name="map_needs_tiles_message">Installer kortdataene fra skærmen Lagerplads. Indtil da er stationslisten stadig brugbar.</string>
     <string name="map_needs_city_title">Hvilken by?</string>
     <string name="map_needs_city_message">Vælg det byområde, du vil bruge. Dets data hentes bagefter, én gang for alle.</string>
+    <string name="map_city_withdrawn_title">Netværket er ikke længere tilgængeligt</string>
+    <string name="map_city_withdrawn_message">%1$s er ikke længere tilgængeligt, og stationerne vises ikke længere. Vælg en anden by. De data, det har efterladt på denne enhed, kan slettes fra listen over byer.</string>
+    <string name="map_city_withdrawn_message_unnamed">Det netværk, du valgte, er ikke længere tilgængeligt, og stationerne vises ikke længere. Vælg en anden by. De data, det har efterladt på denne enhed, kan slettes fra listen over byer.</string>
+    <string name="city_choose_another">Vælg en anden by</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Vend mod nord, og læg kortet fladt</string>
@@ -524,6 +528,8 @@
     <string name="city_delete_description">Slet dataene for %1$s</string>
     <string name="city_delete_title">Vil du slette disse data?</string>
     <string name="city_delete_body">Alle offlinedata for %1$s slettes. Du skal hente dem igen for at kunne bruge dem.</string>
+    <string name="city_withdrawn">Ikke længere tilgængelig</string>
+    <string name="city_withdrawn_delete_body">Alle offlinedata for %1$s slettes. Netværket er ikke længere tilgængeligt, så dataene kan ikke længere bruges til noget.</string>
     <string name="city_delete_confirm">Slet</string>
     <string name="city_deleted">Data for %1$s slettet</string>
     <string name="city_search_hint">Søg efter en by</string>
@@ -554,6 +560,7 @@
     <string name="storage_total">%1$s brugt på denne enhed</string>
     <string name="storage_nothing_installed">Ingen data installeret</string>
     <string name="storage_no_city">Ingen by valgt</string>
+    <string name="storage_city_withdrawn">%1$s · ikke længere tilgængelig</string>
 
     <string name="dataset_tiles">Kortdata</string>
     <string name="dataset_tiles_purpose">Tegner kortet uden internet</string>

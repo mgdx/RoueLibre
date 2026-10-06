@@ -191,6 +191,10 @@
     <string name="map_needs_tiles_message">Installeer de kaartgegevens via het scherm Opslag. Ondertussen blijft de stationslijst bruikbaar.</string>
     <string name="map_needs_city_title">Welke stad?</string>
     <string name="map_needs_city_message">Kies de agglomeratie die je wilt gebruiken. De gegevens worden daarna gedownload, eens en voorgoed.</string>
+    <string name="map_city_withdrawn_title">Netwerk niet meer beschikbaar</string>
+    <string name="map_city_withdrawn_message">%1$s is niet meer beschikbaar en de stations worden niet meer getoond. Kies een andere stad. De gegevens die op dit apparaat zijn achtergebleven, kun je wissen via de lijst met steden.</string>
+    <string name="map_city_withdrawn_message_unnamed">Het netwerk dat je koos is niet meer beschikbaar en de stations worden niet meer getoond. Kies een andere stad. De gegevens die op dit apparaat zijn achtergebleven, kun je wissen via de lijst met steden.</string>
+    <string name="city_choose_another">Kies een andere stad</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Op het noorden richten en de kaart vlak leggen</string>
@@ -513,6 +517,8 @@
     <string name="city_delete_description">De gegevens van %1$s verwijderen</string>
     <string name="city_delete_title">Deze gegevens verwijderen?</string>
     <string name="city_delete_body">Alle offlinegegevens van %1$s worden gewist. Je moet ze opnieuw downloaden om ze te gebruiken.</string>
+    <string name="city_withdrawn">Niet meer beschikbaar</string>
+    <string name="city_withdrawn_delete_body">Alle offlinegegevens van %1$s worden gewist. Het netwerk is niet meer beschikbaar, dus deze gegevens hebben geen nut meer.</string>
     <string name="city_delete_confirm">Verwijderen</string>
     <string name="city_deleted">Gegevens van %1$s verwijderd</string>
     <string name="city_search_hint">Zoek een stad</string>
@@ -543,6 +549,7 @@
     <string name="storage_total">%1$s gebruikt op dit apparaat</string>
     <string name="storage_nothing_installed">Geen gegevens geïnstalleerd</string>
     <string name="storage_no_city">Geen stad gekozen</string>
+    <string name="storage_city_withdrawn">%1$s · niet meer beschikbaar</string>
 
     <string name="dataset_tiles">Kaartgegevens</string>
     <string name="dataset_tiles_purpose">Tekent de kaart zonder netwerk</string>

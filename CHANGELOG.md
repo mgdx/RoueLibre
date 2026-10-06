@@ -31,6 +31,27 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **A city chosen and since withdrawn says so, instead of greeting its user
+  as a first installation** (`SPEC.md` §15.1). A network this build no longer
+  serves was read as no city at all: "Which city?" over the user's own tiles,
+  the dead feed's stations shown as merely frozen, and the storage screen
+  saying "No city selected" above the 10.8 MB it listed — invisible for good
+  once another city was chosen. The application now tells three states apart.
+  A network served no more is named when a catalogue can still name it, its
+  stations are no longer shown (the station cache is emptied whenever no
+  network is served), another city is offered, and its data stays listed for
+  deletion — on the storage screen while it is still the one chosen, and in
+  the city list, as a row of its own, for as long as anything of it is on the
+  device. Nothing is deleted unasked.
+- **The catalogue lists the networks it withdrew** (`SPEC.md` §15.1), under a
+  new `withdrawnCities` key — identifier, name, conurbation and `withdrawnOn`
+  — built by `tools/build_catalogue.py` from the new
+  `config/withdrawn-cities.json`, which holds the nine networks withdrawn on
+  6 October 2026. The key sits beside `cities`, never inside it: every build
+  in the field ignores keys it does not know, so none of them can be offered
+  a withdrawn network again, and `catalogueVersion` stays at 1. A withdrawal
+  outweighs a configuration the build still ships. The script refuses a
+  network both withdrawn and configured.
 - **The fleet survey reads BCycle's breakdown of bikes by kind** (`SPEC.md`
   §15). `tools/read_fleet.py` read `num_bikes_available_types` in Vélib's
   shape alone, a list of single-key objects, and stopped on BCycle's single

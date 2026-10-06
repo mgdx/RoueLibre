@@ -6,6 +6,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
+import io.github.mgdx.rouelibre.core.config.ActiveCity
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
@@ -33,6 +34,8 @@ import io.github.mgdx.rouelibre.data.network.HttpsOnlyRedirectInterceptor
 import io.github.mgdx.rouelibre.data.network.SystemConnectionCost
 import io.github.mgdx.rouelibre.data.routing.OfflineRouter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import okhttp3.OkHttpClient
 import java.io.File
 import java.time.Duration
@@ -58,29 +61,41 @@ class AppContainer(private val context: Context) {
     }
 
     /**
-     * The active city's configuration, or `null` if none is chosen.
+     * The active city's configuration, or `null` if none is served.
      *
      * The application assumes no default conurbation: until the welcome screen
      * has proposed one and it has been accepted, there is neither a map to
-     * frame nor a feed to query.
+     * frame nor a feed to query. A city chosen and no longer served answers
+     * `null` too, there being no feed to query either; the screens that must
+     * tell the two apart ask [activeCityState].
+     */
+    suspend fun activeCity(): CityConfiguration? =
+        (activeCityState() as? ActiveCity.Served)?.configuration
+
+    /**
+     * Where the application stands with the city the settings name: none, one
+     * it serves, or one it serves no more (SPEC §15.1).
      *
      * The result is held in memory, keyed by the identifier read from the
      * settings: changing city therefore invalidates the cache by itself,
-     * without any screen having to remember to clear it.
+     * without any screen having to remember to clear it. Settled under a lock,
+     * because a launch asks from several screens at once and settling it reads
+     * the catalogues as well as the configuration.
      */
-    suspend fun activeCity(): CityConfiguration? {
+    suspend fun activeCityState(): ActiveCity {
         val identifier = preferences.activeCityId()
         // Put into service here rather than only by watching the setting: a
         // screen that asks for the city and then reads its files in the same
         // breath must not depend on the order two coroutines happen to run in.
+        // A city no longer served stays in service for its files: they are
+        // what the storage screen lists, and offers to delete.
         datasetStore.useCity(identifier)
-        if (identifier == null) return null
-        cachedCity?.let { (cachedId, configuration) ->
-            if (cachedId == identifier) return configuration
+        if (identifier == null) return ActiveCity.None
+        return cityResolution.withLock {
+            cachedCity?.takeIf { it.first == identifier }?.second
+                ?: cityCatalogueSource.activeCity(identifier)
+                    .also { cachedCity = identifier to it }
         }
-        val configuration = cityCatalogueSource.configuration(identifier) ?: return null
-        cachedCity = identifier to configuration
-        return configuration
     }
 
     /**
@@ -252,13 +267,16 @@ class AppContainer(private val context: Context) {
     }
 
     /**
-     * The active city as of the last call to [activeCity].
+     * The active city as of the last call to [activeCityState].
      *
      * `@Volatile` because the read comes from the main thread and the write
      * from the IO dispatcher.
      */
     @Volatile
-    private var cachedCity: Pair<String, CityConfiguration>? = null
+    private var cachedCity: Pair<String, ActiveCity>? = null
+
+    /** Settles the active city once per identifier, see [activeCityState]. */
+    private val cityResolution = Mutex()
 
     private val httpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()

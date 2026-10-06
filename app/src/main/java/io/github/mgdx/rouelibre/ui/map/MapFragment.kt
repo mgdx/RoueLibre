@@ -27,6 +27,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.DataError
+import io.github.mgdx.rouelibre.core.config.ActiveCity
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.CityEntry
 import io.github.mgdx.rouelibre.core.config.FleetDescription
@@ -57,6 +58,7 @@ import io.github.mgdx.rouelibre.ui.city.CityFragment
 import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
+import io.github.mgdx.rouelibre.ui.noLongerServedMessage
 import io.github.mgdx.rouelibre.ui.prefersReducedMotion
 import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
@@ -573,11 +575,12 @@ class MapFragment : Fragment() {
         // The active city is read from disk: the map is therefore drawn when
         // that read returns, not during it.
         viewLifecycleOwner.lifecycleScope.launch {
-            loadTilesFor(container.activeCity())
+            loadTilesFor(container.activeCityState())
         }
     }
 
-    private fun loadTilesFor(configuration: CityConfiguration?) {
+    private fun loadTilesFor(city: ActiveCity) {
+        val configuration = (city as? ActiveCity.Served)?.configuration
         // Noted before anything may return early: the served area is what
         // "locate me" measures itself against, and it is known here even when
         // the style has already been loaded.
@@ -637,7 +640,15 @@ class MapFragment : Fragment() {
         // Without a city it is not data that is missing but the choice of
         // conurbation: offering to install tiles would make no sense while we
         // do not know whose tiles they would be.
-        if (configuration == null) {
+        if (city is ActiveCity.NoLongerServed) {
+            // Not the first launch's question: this user chose, and what they
+            // chose went away. Asking "Which city?" over their own tiles read
+            // as the application having forgotten them (SPEC §15.1).
+            views.missingTilesTitle.setText(R.string.map_city_withdrawn_title)
+            views.missingTilesMessage.text = requireContext().noLongerServedMessage(city)
+            views.missingTilesStorage.setText(R.string.city_choose_another)
+            views.missingTilesStorage.setOnClickListener { show(CityFragment()) }
+        } else if (configuration == null) {
             views.missingTilesTitle.setText(R.string.map_needs_city_title)
             views.missingTilesMessage.setText(R.string.map_needs_city_message)
             views.missingTilesStorage.setText(R.string.city_choose)
@@ -2046,7 +2057,7 @@ class MapFragment : Fragment() {
                 container.datasetStore.installed
                     .map { it[DatasetKind.Tiles]?.sha256 }
                     .distinctUntilChanged()
-                    .collect { loadTilesFor(container.activeCity()) }
+                    .collect { loadTilesFor(container.activeCityState()) }
             }
         }
     }

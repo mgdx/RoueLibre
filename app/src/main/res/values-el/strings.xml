@@ -235,6 +235,10 @@
     <string name="map_needs_tiles_message">Εγκαταστήστε τα δεδομένα του χάρτη από την οθόνη αποθηκευτικού χώρου. Στο μεταξύ, η λίστα των σταθμών παραμένει χρησιμοποιήσιμη.</string>
     <string name="map_needs_city_title">Ποια πόλη;</string>
     <string name="map_needs_city_message">Διαλέξτε την αστική περιοχή που θέλετε να χρησιμοποιήσετε. Τα δεδομένα της κατεβαίνουν μετά, μία φορά και για πάντα.</string>
+    <string name="map_city_withdrawn_title">Το δίκτυο δεν είναι πλέον διαθέσιμο</string>
+    <string name="map_city_withdrawn_message">Το %1$s δεν είναι πλέον διαθέσιμο και οι σταθμοί του δεν εμφανίζονται πια. Επιλέξτε άλλη πόλη. Τα δεδομένα που άφησε σε αυτή τη συσκευή μπορούν να διαγραφούν από τη λίστα των πόλεων.</string>
+    <string name="map_city_withdrawn_message_unnamed">Το δίκτυο που επιλέξατε δεν είναι πλέον διαθέσιμο και οι σταθμοί του δεν εμφανίζονται πια. Επιλέξτε άλλη πόλη. Τα δεδομένα που άφησε σε αυτή τη συσκευή μπορούν να διαγραφούν από τη λίστα των πόλεων.</string>
+    <string name="city_choose_another">Επιλογή άλλης πόλης</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Προσανατολισμός στον βορρά και επίπεδη προβολή</string>
@@ -580,6 +584,8 @@
     <string name="city_delete_description">Διαγραφή των δεδομένων για %1$s</string>
     <string name="city_delete_title">Να διαγραφούν αυτά τα δεδομένα;</string>
     <string name="city_delete_body">Όλα τα δεδομένα εκτός σύνδεσης για %1$s θα σβηστούν. Θα πρέπει να τα κατεβάσετε ξανά για να τα χρησιμοποιήσετε.</string>
+    <string name="city_withdrawn">Δεν είναι πλέον διαθέσιμη</string>
+    <string name="city_withdrawn_delete_body">Όλα τα δεδομένα εκτός σύνδεσης για %1$s θα σβηστούν. Το δίκτυο δεν είναι πλέον διαθέσιμο, οπότε αυτά τα δεδομένα δεν χρησιμεύουν πια σε τίποτα.</string>
     <string name="city_delete_confirm">Διαγραφή</string>
     <string name="city_deleted">Τα δεδομένα για %1$s διαγράφηκαν</string>
     <string name="city_search_hint">Αναζήτηση πόλης</string>
@@ -613,6 +619,7 @@
     <string name="storage_total">Σύνολο: %1$s σε αυτή τη συσκευή</string>
     <string name="storage_nothing_installed">Δεν υπάρχουν εγκατεστημένα δεδομένα</string>
     <string name="storage_no_city">Δεν έχει επιλεγεί πόλη</string>
+    <string name="storage_city_withdrawn">%1$s · δεν είναι πλέον διαθέσιμη</string>
 
     <string name="dataset_tiles">Δεδομένα χάρτη</string>
     <string name="dataset_tiles_purpose">Σχεδιάζει τον χάρτη χωρίς δίκτυο</string>

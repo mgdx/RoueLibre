@@ -227,6 +227,70 @@ public object CityCatalogueReader {
             DataError.MalformedResponse(error.message ?: "unreadable city catalogue"),
         )
     }
+
+    /**
+     * The networks a catalogue says are served no more (SPEC §15.1).
+     *
+     * They sit under a key of their own, `withdrawnCities`, and never among the
+     * cities: a build older than the key skips it like any key it does not
+     * know, and one that still ships such a network's configuration would
+     * otherwise list it as choosable again.
+     *
+     * Read apart from [read] because it is asked for apart: once per city put
+     * into service, to tell a network gone from a network served. Decoding only
+     * this key skips the three hundred and sixty cities instead of building
+     * them, and a catalogue carrying no such key — every one published before
+     * it — simply withdraws nothing.
+     *
+     * @return the withdrawn networks, empty if the document names none or
+     *   cannot be read. A record that cannot be used is dropped alone.
+     */
+    public fun readWithdrawn(document: String): List<WithdrawnCity> = try {
+        json.decodeFromString(WithdrawnCitiesDocument.serializer(), document)
+            .withdrawnCities
+            .mapNotNull { it.toDomainOrNull() }
+    } catch (_: SerializationException) {
+        emptyList()
+    }
+}
+
+/**
+ * A network the catalogue no longer serves, named as it last was.
+ *
+ * Only what is needed to tell its users what happened: no box, no feed, no
+ * data address — nothing that could put it back into service.
+ */
+public data class WithdrawnCity(
+    /** The identifier it was served under, which still names its data on disk. */
+    public val id: String,
+    public val displayName: String,
+    /** The conurbation it ran in, `null` when the catalogue did not name one. */
+    public val mainCity: String?,
+)
+
+@Serializable
+private data class WithdrawnCitiesDocument(
+    val withdrawnCities: List<WithdrawnCityDocument> = emptyList(),
+)
+
+/**
+ * One record of `withdrawnCities`.
+ *
+ * The record also carries `withdrawnOn`, the day the network went, for whoever
+ * reads the catalogue; the application says nothing about the date and so does
+ * not read it.
+ */
+@Serializable
+private data class WithdrawnCityDocument(
+    val id: String = "",
+    val displayName: String = "",
+    val mainCity: String? = null,
+) {
+    fun toDomainOrNull(): WithdrawnCity? = WithdrawnCity(
+        id = id.takeIf(::isUsableCityId) ?: return null,
+        displayName = displayName.takeIf { it.isNotBlank() } ?: return null,
+        mainCity = mainCity?.takeIf { it.isNotBlank() },
+    )
 }
 
 @Serializable

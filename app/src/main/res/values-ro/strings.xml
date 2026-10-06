@@ -246,6 +246,10 @@
     <string name="map_needs_tiles_message">Instalează fondul cartografic din ecranul de stocare. Între timp, lista stațiilor rămâne utilizabilă.</string>
     <string name="map_needs_city_title">Care oraș?</string>
     <string name="map_needs_city_message">Alege zona urbană pe care vrei să o folosești. Datele ei se descarcă apoi, o dată pentru totdeauna.</string>
+    <string name="map_city_withdrawn_title">Rețea indisponibilă</string>
+    <string name="map_city_withdrawn_message">%1$s nu mai este disponibil, iar stațiile sale nu mai sunt afișate. Alege alt oraș. Datele rămase pe acest dispozitiv pot fi șterse din lista orașelor.</string>
+    <string name="map_city_withdrawn_message_unnamed">Rețeaua pe care ai ales-o nu mai este disponibilă, iar stațiile sale nu mai sunt afișate. Alege alt oraș. Datele rămase pe acest dispozitiv pot fi șterse din lista orașelor.</string>
+    <string name="city_choose_another">Alege alt oraș</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Orientează spre nord și aplatizează harta</string>
@@ -596,6 +600,8 @@
     <string name="city_delete_description">Șterge datele pentru %1$s</string>
     <string name="city_delete_title">Ștergi aceste date?</string>
     <string name="city_delete_body">Toate datele offline pentru %1$s vor fi șterse. Va trebui să le descarci din nou ca să le poți folosi.</string>
+    <string name="city_withdrawn">Nu mai este disponibil</string>
+    <string name="city_withdrawn_delete_body">Toate datele offline pentru %1$s vor fi șterse. Rețeaua nu mai este disponibilă, așa că aceste date nu mai folosesc la nimic.</string>
     <string name="city_delete_confirm">Șterge</string>
     <string name="city_deleted">Datele pentru %1$s au fost șterse</string>
     <string name="city_search_hint">Caută un oraș</string>
@@ -630,6 +636,7 @@
     <string name="storage_total">Ocupă %1$s pe acest dispozitiv</string>
     <string name="storage_nothing_installed">Niciun set de date instalat</string>
     <string name="storage_no_city">Niciun oraș ales</string>
+    <string name="storage_city_withdrawn">%1$s · nu mai este disponibil</string>
 
     <!-- The three dataset names. All three are masculine singular, which is
          what lets `dataset_imported` and `dataset_deleted` be one string each

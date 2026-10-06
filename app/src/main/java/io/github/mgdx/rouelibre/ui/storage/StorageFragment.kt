@@ -20,11 +20,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
+import io.github.mgdx.rouelibre.core.config.ActiveCity
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.data.datasets.DownloadProgress
 import io.github.mgdx.rouelibre.databinding.FragmentStorageBinding
 import io.github.mgdx.rouelibre.ui.ConfirmationDialogFragment
 import io.github.mgdx.rouelibre.ui.cityLabel
+import io.github.mgdx.rouelibre.ui.withdrawnCityLabel
 import kotlinx.coroutines.launch
 
 /**
@@ -358,10 +360,19 @@ class StorageFragment : Fragment() {
      */
     private fun showServedCity(views: FragmentStorageBinding) {
         viewLifecycleOwner.lifecycleScope.launch {
-            views.toolbar.subtitle = container.activeCity()?.network?.let {
-                requireContext().cityLabel(it.displayName, it.city)
+            val context = requireContext()
+            views.toolbar.subtitle = when (val city = container.activeCityState()) {
+                is ActiveCity.Served -> city.configuration.network.let {
+                    context.cityLabel(it.displayName, it.city)
+                }
+                // The sets listed below are that network's, still on the device
+                // and still deletable from here: "No city selected" above them
+                // contradicted the list it headed (SPEC §15.1).
+                is ActiveCity.NoLongerServed -> context.withdrawnCityLabel(city)
+                    ?.let { getString(R.string.storage_city_withdrawn, it) }
+                    ?: getString(R.string.map_city_withdrawn_title)
+                ActiveCity.None -> getString(R.string.storage_no_city)
             }
-                ?: getString(R.string.storage_no_city)
         }
     }
 

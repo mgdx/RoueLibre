@@ -45,7 +45,7 @@ class StationRepositoryTest {
     private var now: Instant = Instant.parse("2026-08-09T12:00:00Z")
 
     /** The auto-discovery document in force, which a change of city moves. */
-    private var discoveryPath: String = "/gbfs.json"
+    private var discoveryPath: String? = "/gbfs.json"
 
     @Before
     fun startServer() {
@@ -73,7 +73,7 @@ class StationRepositoryTest {
         ),
         dao = dao,
         refreshTimestamps = timestamps,
-        discoveryUrlProvider = { server.url(discoveryPath).toString() },
+        discoveryUrlProvider = { discoveryPath?.let { server.url(it).toString() } },
         recordFleet = recordFleet,
         clock = object : Clock() {
             override fun getZone() = ZoneOffset.UTC
@@ -172,6 +172,25 @@ class StationRepositoryTest {
         assertEquals(3, server.requestCount)
         assertEquals(2, dao.stations.value.size)
         assertEquals(7, dao.availabilities.value.single().bikesAvailable)
+    }
+
+    @Test
+    fun `a city served no more leaves no station behind to be shown as stale`() = runTest {
+        // IDEcycle, Pau: withdrawn while chosen. Its stations stayed in the
+        // cache, and the map offered them as frozen data of a living network.
+        enqueueDiscovery()
+        enqueueInformation()
+        enqueueStatus(bikesAtFirstStation = 7)
+        val repository = repository()
+        repository.refresh()
+
+        discoveryPath = null
+        val outcome = repository.refresh(force = true)
+
+        assertEquals(Outcome.Failure(DataError.NoCityChosen), outcome)
+        val snapshot = repository.observeStations().first()
+        assertTrue(snapshot.stations.isEmpty())
+        assertNull(snapshot.fetchedAt)
     }
 
     @Test

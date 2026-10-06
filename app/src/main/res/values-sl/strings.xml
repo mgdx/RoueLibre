@@ -266,6 +266,10 @@
     <string name="map_needs_tiles_message">Namestite podatke zemljevida na zaslonu s shrambo. Do takrat ostane seznam postaj uporaben.</string>
     <string name="map_needs_city_title">Katero mesto?</string>
     <string name="map_needs_city_message">Izberite mestno območje, ki ga želite uporabljati. Njegovi podatki se prenesejo pozneje, enkrat za vselej.</string>
+    <string name="map_city_withdrawn_title">Omrežje ni več na voljo</string>
+    <string name="map_city_withdrawn_message">„%1$s“ ni več na voljo in njegove postaje niso več prikazane. Izberite drugo mesto. Podatke, ki so ostali v tej napravi, lahko izbrišete na seznamu mest.</string>
+    <string name="map_city_withdrawn_message_unnamed">Omrežje, ki ste ga izbrali, ni več na voljo in njegove postaje niso več prikazane. Izberite drugo mesto. Podatke, ki so ostali v tej napravi, lahko izbrišete na seznamu mest.</string>
+    <string name="city_choose_another">Izberi drugo mesto</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
     <string name="map_face_north">Obrni proti severu in poravnaj zemljevid</string>
@@ -609,6 +613,8 @@
     <string name="city_delete_description">Izbriši podatke: %1$s</string>
     <string name="city_delete_title">Želite izbrisati te podatke?</string>
     <string name="city_delete_body">Vsi podatki za „%1$s“, shranjeni v napravi, bodo izbrisani. Za uporabo jih bo treba znova prenesti.</string>
+    <string name="city_withdrawn">Ni več na voljo</string>
+    <string name="city_withdrawn_delete_body">Vsi podatki za „%1$s“, shranjeni v napravi, bodo izbrisani. Omrežje ni več na voljo, zato ti podatki niso več uporabni.</string>
     <string name="city_delete_confirm">Izbriši</string>
     <string name="city_deleted">Podatki izbrisani: %1$s</string>
     <string name="city_search_hint">Iskanje mesta</string>
@@ -641,6 +647,7 @@
     <string name="storage_total">Uporabljeno v tej napravi: %1$s</string>
     <string name="storage_nothing_installed">Ni nameščenih podatkov</string>
     <string name="storage_no_city">Nobeno mesto ni izbrano</string>
+    <string name="storage_city_withdrawn">„%1$s“ · ni več na voljo</string>
 
     <string name="dataset_tiles">Podatki zemljevida</string>
     <string name="dataset_tiles_purpose">Izriše zemljevid brez omrežja</string>
