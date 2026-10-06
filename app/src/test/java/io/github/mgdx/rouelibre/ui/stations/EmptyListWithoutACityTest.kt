@@ -49,6 +49,33 @@ class EmptyListWithoutACityTest {
     }
 
     @Test
+    fun `an empty list of a withdrawn city offers another city, not a refresh`() {
+        // IDEcycle, Pau, on 6 October 2026: "Refresh" could only fail, and the
+        // withdrawal was said in a banner cut short over it (SPEC §15.1).
+        assertEquals(
+            EmptyListOffer.ChooseAnotherCity,
+            offerForEmptyList(Emptiness.NothingLoaded, cityChosen = true, cityWithdrawn = true),
+        )
+    }
+
+    @Test
+    fun `a withdrawn city outranks the search, there being nothing to search`() {
+        assertEquals(
+            EmptyListOffer.ChooseAnotherCity,
+            offerForEmptyList(Emptiness.NoMatch, cityChosen = true, cityWithdrawn = true),
+        )
+    }
+
+    @Test
+    fun `a withdrawn city's list with stations still in it offers nothing`() {
+        // The instant before the first refresh empties the cache.
+        assertEquals(
+            EmptyListOffer.None,
+            offerForEmptyList(Emptiness.None, cityChosen = true, cityWithdrawn = true),
+        )
+    }
+
+    @Test
     fun `a list with stations in it offers nothing at all`() {
         listOf(true, false).forEach { chosen ->
             assertEquals(

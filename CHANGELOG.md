@@ -42,7 +42,12 @@ also records what has no visible effect.
   network is served), another city is offered, and its data stays listed for
   deletion — on the storage screen while it is still the one chosen, and in
   the city list, as a row of its own, for as long as anything of it is on the
-  device. Nothing is deleted unasked.
+  device. Nothing is deleted unasked. The station list's empty state says it in
+  full and offers another city, with no pull-to-refresh, no "Refresh" and no
+  banner repeating it; the map panel drops its way to that empty list; the
+  settings' city row names the network as no longer available; the storage
+  screen no longer offers an update check that could only answer "No city
+  selected".
 - **The catalogue lists the networks it withdrew** (`SPEC.md` §15.1), under a
   new `withdrawnCities` key — identifier, name, conurbation and `withdrawnOn`
   — built by `tools/build_catalogue.py` from the new

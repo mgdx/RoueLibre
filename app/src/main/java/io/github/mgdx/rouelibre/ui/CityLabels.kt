@@ -46,3 +46,12 @@ fun Context.noLongerServedMessage(city: ActiveCity.NoLongerServed): String =
     withdrawnCityLabel(city)
         ?.let { getString(R.string.map_city_withdrawn_message, it) }
         ?: getString(R.string.map_city_withdrawn_message_unnamed)
+
+/**
+ * Names the city chosen and served no more, where a screen names the city in
+ * service — "IDEcycle — Pau · no longer available" — so that it reads neither as
+ * served nor as no choice at all (SPEC §15.1).
+ */
+fun Context.noLongerServedLabel(city: ActiveCity.NoLongerServed): String = withdrawnCityLabel(city)
+    ?.let { getString(R.string.city_withdrawn_label, it) }
+    ?: getString(R.string.map_city_withdrawn_title)

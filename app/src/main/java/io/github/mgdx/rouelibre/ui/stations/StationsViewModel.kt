@@ -129,6 +129,12 @@ enum class EmptyListOffer {
     /** No conurbation is in service, so there is no network to fetch from. */
     ChooseCity,
 
+    /**
+     * The city chosen is one this build serves no more (SPEC §15.1): there is
+     * nothing to fetch, and nothing to search either.
+     */
+    ChooseAnotherCity,
+
     /** A city is in service and its availability has still to be fetched. */
     Refresh,
 
@@ -149,14 +155,30 @@ enum class EmptyListOffer {
  *
  * The refresh invitation stays exactly where it belongs: a city is chosen, and
  * its availability has not been fetched yet.
+ *
+ * A city chosen and since withdrawn outranks both the refresh and the search:
+ * no press can bring its stations back, so the list says what happened and
+ * offers another city, whatever is typed in the field.
  */
-fun offerForEmptyList(emptiness: Emptiness, cityChosen: Boolean): EmptyListOffer =
-    when (emptiness) {
-        Emptiness.None -> EmptyListOffer.None
-        Emptiness.NoMatch -> EmptyListOffer.ClearSearch
-        Emptiness.NothingLoaded ->
-            if (cityChosen) EmptyListOffer.Refresh else EmptyListOffer.ChooseCity
-    }
+fun offerForEmptyList(
+    emptiness: Emptiness,
+    cityChosen: Boolean,
+    cityWithdrawn: Boolean = false,
+): EmptyListOffer = when {
+    emptiness == Emptiness.None -> EmptyListOffer.None
+    cityWithdrawn -> EmptyListOffer.ChooseAnotherCity
+    else -> offerForEmptyListOfAServedCity(emptiness, cityChosen)
+}
+
+private fun offerForEmptyListOfAServedCity(
+    emptiness: Emptiness,
+    cityChosen: Boolean,
+): EmptyListOffer = when (emptiness) {
+    Emptiness.None -> EmptyListOffer.None
+    Emptiness.NoMatch -> EmptyListOffer.ClearSearch
+    Emptiness.NothingLoaded ->
+        if (cityChosen) EmptyListOffer.Refresh else EmptyListOffer.ChooseCity
+}
 
 /**
  * Presents the stations and drives their refreshing.

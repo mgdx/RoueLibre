@@ -665,6 +665,10 @@ class MapFragment : Fragment() {
         // to do about it. The message about the city, itself, holds in both
         // roles.
         views.missingTilesMessage.isVisible = configuration == null || !isPicking()
+        // The way to the station list leads nowhere once the network is gone:
+        // there is nothing left to list. In the picker the same button is the
+        // way back, and it stays.
+        views.missingTilesList.isVisible = isPicking() || city !is ActiveCity.NoLongerServed
 
         // Nothing stays laid over the map while that panel covers the screen:
         // a control hidden behind it is invisible without ceasing to be
