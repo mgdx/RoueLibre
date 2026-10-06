@@ -227,6 +227,16 @@ internal data class GbfsStationInformation(
      */
     val address: String? = null,
     @SerialName("post_code") val postCode: String? = null,
+    /**
+     * Whether the station is a parking zone rather than a physical rack.
+     *
+     * Optional in the format, and false when absent, which is what the
+     * standard says it defaults to. Read leniently like the status flags: a
+     * feed writing `1` for a virtual station means the same thing.
+     */
+    @SerialName("is_virtual_station")
+    @Serializable(with = LenientBooleanSerializer::class)
+    val isVirtualStation: Boolean = false,
 )
 
 /**

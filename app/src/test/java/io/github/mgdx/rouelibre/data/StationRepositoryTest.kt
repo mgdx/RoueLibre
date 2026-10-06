@@ -4,6 +4,7 @@ import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
 import io.github.mgdx.rouelibre.core.station.FleetReading
+import io.github.mgdx.rouelibre.core.station.ServiceState
 import io.github.mgdx.rouelibre.data.local.StationAvailabilityEntity
 import io.github.mgdx.rouelibre.data.local.StationDao
 import io.github.mgdx.rouelibre.data.local.StationEntity
@@ -204,6 +205,83 @@ class StationRepositoryTest {
     }
 
     @Test
+    fun `a virtual station stays in service across a restart that reads no static data`() =
+        runTest {
+            // Pony's Limoges feed: every station virtual and "not installed",
+            // renting all the same. The static data is read once a day, so the
+            // flag must come back from the cache for the minute-by-minute state.
+            val information = """
+            {"version":"3.0","data":{"stations":[
+              {"station_id":"p1","name":"Place Jourdan","lat":45.83,"lon":1.264,
+               "is_virtual_station":true}
+            ]}}
+            """.trimIndent()
+            val status = """
+            {"version":"3.0","data":{"stations":[
+              {"station_id":"p1","num_vehicles_available":4,"num_docks_available":0,
+               "is_installed":false,"is_renting":true,"is_returning":true}
+            ]}}
+            """.trimIndent()
+            enqueueDiscovery()
+            server.enqueue(MockResponse(body = information))
+            server.enqueue(MockResponse(body = status))
+            repository().refresh()
+
+            now += Duration.ofMinutes(5)
+            enqueueDiscovery()
+            server.enqueue(MockResponse(body = status))
+            val restarted = repository()
+            restarted.refresh()
+
+            assertEquals("no second read of the static data", 5, server.requestCount)
+            val station = restarted.observeStations().first().stations.single()
+            assertEquals(ServiceState.InService, station.serviceState)
+            assertTrue(station.availability!!.canLendBike)
+            assertEquals(
+                "stored as the feed sent it",
+                false,
+                dao.availabilities.value.single().isInstalled,
+            )
+        }
+
+    @Test
+    fun `stations carried over from before the virtual flag have their static data read again`() =
+        runTest {
+            // The 2 → 3 migration leaves the flag unread. Without a read at the
+            // next refresh, Limoges would stay closed after the update for up
+            // to a day — the static data being otherwise read once a day.
+            val information = """
+            {"version":"3.0","data":{"stations":[
+              {"station_id":"p1","name":"Place Jourdan","lat":45.83,"lon":1.264,
+               "is_virtual_station":true}
+            ]}}
+            """.trimIndent()
+            val status = """
+            {"version":"3.0","data":{"stations":[
+              {"station_id":"p1","num_vehicles_available":4,"num_docks_available":0,
+               "is_installed":false,"is_renting":true,"is_returning":true}
+            ]}}
+            """.trimIndent()
+            enqueueDiscovery()
+            server.enqueue(MockResponse(body = information))
+            server.enqueue(MockResponse(body = status))
+            repository().refresh()
+            dao.stations.value = dao.stations.value.map { it.copy(isVirtual = null) }
+
+            now += Duration.ofMinutes(5)
+            enqueueDiscovery()
+            server.enqueue(MockResponse(body = information))
+            server.enqueue(MockResponse(body = status))
+            val updated = repository()
+            updated.refresh()
+
+            assertEquals("the static data read again", 6, server.requestCount)
+            val station = updated.observeStations().first().stations.single()
+            assertEquals(ServiceState.InService, station.serviceState)
+            assertEquals(true, dao.stations.value.single().isVirtual)
+        }
+
+    @Test
     fun `changing city leaves none of the previous city's stations`() = runTest {
         // They have no business on another conurbation's map, and offline
         // nothing would come to replace them (SPEC §15.1).
@@ -302,7 +380,7 @@ class StationRepositoryTest {
         // The cache already holds the stations: their momentary unavailability
         // must not deprive the user of fresh availability.
         dao.stations.value = listOf(
-            StationEntity("1", "Rue Nationale", 50.633, 3.053, 20, "59000"),
+            StationEntity("1", "Rue Nationale", 50.633, 3.053, 20, "59000", isVirtual = false),
         )
         timestamps.fetchedAt = null
         enqueueDiscovery()
@@ -532,6 +610,10 @@ private class FakeStationDao : StationDao {
         availabilities.value.maxOfOrNull { it.fetchedAtEpochSeconds }
 
     override suspend fun stationCount(): Int = stations.value.size
+
+    override suspend fun unreadVirtualFlagCount(): Int = stations.value.count {
+        it.isVirtual == null
+    }
 
     override suspend fun insertStations(stations: List<StationEntity>) {
         val merged = this.stations.value.associateBy { it.id }.toMutableMap()

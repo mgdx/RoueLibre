@@ -98,8 +98,8 @@ public fun StationWithAvailability.displayFor(
     // "Out of service" applies to the service asked for, not to the station as
     // a whole: a station that no longer takes returns can still lend.
     val serviceRefused = when (mode) {
-        AvailabilityMode.Bikes -> !current.isInstalled || !current.isRenting
-        AvailabilityMode.Docks -> !current.isInstalled || !current.isReturning
+        AvailabilityMode.Bikes -> !current.isDeployed || !current.isRenting
+        AvailabilityMode.Docks -> !current.isDeployed || !current.isReturning
     }
     if (serviceRefused) {
         return AvailabilityDisplay(

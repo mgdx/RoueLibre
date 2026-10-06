@@ -15,6 +15,10 @@ import java.time.Instant
  * @property capacity the total number of docking points, if the feed publishes
  *   it.
  * @property postalCode the postcode, if the feed publishes it.
+ * @property isVirtual the station is a zone marked out for parking rather than
+ *   a rack standing on the pavement — GBFS's `is_virtual_station`. Such a
+ *   station has nothing to install, and its `is_installed` is no closure: see
+ *   [StationAvailability.isDeployed].
  */
 public data class Station(
     public val id: String,
@@ -22,6 +26,7 @@ public data class Station(
     public val position: Coordinates,
     public val capacity: Int?,
     public val postalCode: String?,
+    public val isVirtual: Boolean = false,
 )
 
 /**
@@ -35,11 +40,16 @@ public data class Station(
  *   takes the network's table to turn them into mechanical and electric, which
  *   is what [splitByKind] does.
  * @property docksAvailable free docks to return a bike to.
- * @property isInstalled the station is deployed on the ground.
+ * @property isInstalled the station is deployed on the ground, exactly as the
+ *   feed says it. Never read alone to decide a closure: [isDeployed] is.
  * @property isRenting the station accepts rentals.
  * @property isReturning the station accepts returns.
  * @property reportedAt when the measurement was taken, as declared by the
  *   producer.
+ * @property isAtVirtualStation the station described is virtual
+ *   ([Station.isVirtual]). Not a field of `station_status`: it is carried over
+ *   from the station by [joinStationsWithAvailability], so that the state
+ *   stored stays the one the feed sent.
  */
 public data class StationAvailability(
     public val stationId: String,
@@ -50,14 +60,30 @@ public data class StationAvailability(
     public val isRenting: Boolean,
     public val isReturning: Boolean,
     public val reportedAt: Instant?,
+    public val isAtVirtualStation: Boolean = false,
 ) {
+    /**
+     * True if the station is there to be used, as far as its installation
+     * goes.
+     *
+     * A virtual station has no rack to put on the pavement, so its
+     * `is_installed` says nothing about whether it works: Pony's Limoges
+     * network publishes every one of its 265 stations as virtual and not
+     * installed, while renting, returning and holding 269 bikes between them.
+     * Read alone, the flag closed the whole city. `is_renting` and
+     * `is_returning` still decide for such a station; for a physical one,
+     * `is_installed` keeps its full weight (SPEC §4.1).
+     */
+    public val isDeployed: Boolean
+        get() = isInstalled || isAtVirtualStation
+
     /** True if the station can actually lend a bike right now. */
     public val canLendBike: Boolean
-        get() = isInstalled && isRenting && bikesAvailable > 0
+        get() = isDeployed && isRenting && bikesAvailable > 0
 
     /** True if the station can actually take a bike right now. */
     public val canAcceptBike: Boolean
-        get() = isInstalled && isReturning && docksAvailable > 0
+        get() = isDeployed && isReturning && docksAvailable > 0
 }
 
 /**
@@ -76,7 +102,7 @@ public data class StationWithAvailability(
     public val serviceState: ServiceState
         get() = when {
             availability == null -> ServiceState.Unknown
-            !availability.isInstalled -> ServiceState.OutOfService
+            !availability.isDeployed -> ServiceState.OutOfService
             !availability.isRenting && !availability.isReturning -> ServiceState.OutOfService
             else -> ServiceState.InService
         }
@@ -95,7 +121,8 @@ public data class StationWithAvailability(
      * is off the pavement.
      *
      * **The silence qualifies a closure, it never decides one.** The service
-     * state is settled by `is_installed`, `is_renting` and `is_returning`
+     * state is settled by `is_installed` (see
+     * [StationAvailability.isDeployed]), `is_renting` and `is_returning`
      * alone, which is why a station lending bikes gets no mark here however
      * old its measurement is.
      *
@@ -140,6 +167,9 @@ public enum class ServiceState {
  * orphan state — describing a station absent from `station_information` — is
  * ignored, for want of knowing where to place it on the map.
  *
+ * The join is also where a state learns that its station is virtual, which
+ * `station_status` does not say and [StationAvailability.isDeployed] needs.
+ *
  * @return one entry per known station, in the order received.
  */
 public fun joinStationsWithAvailability(
@@ -148,6 +178,10 @@ public fun joinStationsWithAvailability(
 ): List<StationWithAvailability> {
     val byStationId = availabilities.associateBy { it.stationId }
     return stations.map { station ->
-        StationWithAvailability(station, byStationId[station.id])
+        val availability = byStationId[station.id]
+        StationWithAvailability(
+            station = station,
+            availability = availability?.copy(isAtVirtualStation = station.isVirtual),
+        )
     }
 }

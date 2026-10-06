@@ -116,6 +116,7 @@ public class GbfsParser {
                     // A postcode is written beside the name, and it arrives
                     // from the same feed with the same liberties taken.
                     postalCode = entry.postCode?.trim()?.takeIf { it.isNotEmpty() },
+                    isVirtual = entry.isVirtualStation,
                 )
             }
             StationInformationFeed(

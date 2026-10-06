@@ -65,6 +65,7 @@ class StationDaoReplaceStationsTest {
             longitude = 2.35,
             capacity = null,
             postalCode = null,
+            isVirtual = false,
         )
     }
 
@@ -87,6 +88,10 @@ private class VariableLimitedStationDao : StationDao {
         throw UnsupportedOperationException()
     override suspend fun mostRecentFetchTime(): Long? = null
     override suspend fun stationCount(): Int = stations.value.size
+
+    override suspend fun unreadVirtualFlagCount(): Int = stations.value.values.count {
+        it.isVirtual == null
+    }
 
     override suspend fun insertStations(stations: List<StationEntity>) {
         // Room inserts row by row with one prepared statement: a handful of

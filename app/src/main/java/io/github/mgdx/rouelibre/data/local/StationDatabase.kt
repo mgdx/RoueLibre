@@ -33,6 +33,20 @@ data class StationEntity(
     val longitude: Double,
     val capacity: Int?,
     val postalCode: String?,
+    /**
+     * The station is virtual — a parking zone, not a rack (GBFS
+     * `is_virtual_station`).
+     *
+     * Kept with the static data because that is the only feed saying it, and
+     * it is read once a day while the state comes every minute: without it in
+     * the cache, a restart would close every station of a network such as
+     * Pony's in Limoges until the next daily read (`Station.isVirtual`).
+     *
+     * `null` on a row carried over from before the flag was kept: nobody has
+     * read it yet, and that is what makes the static data read again at the
+     * next refresh rather than up to a day later ([StationDao.unreadVirtualFlagCount]).
+     */
+    val isVirtual: Boolean?,
 )
 
 /**
@@ -95,6 +109,13 @@ interface StationDao {
     /** How many stations are cached, to know whether to download them. */
     @Query("SELECT COUNT(*) FROM station")
     suspend fun stationCount(): Int
+
+    /**
+     * How many cached stations predate the virtual flag, whose static data
+     * must therefore be read again without waiting for the day to run out.
+     */
+    @Query("SELECT COUNT(*) FROM station WHERE isVirtual IS NULL")
+    suspend fun unreadVirtualFlagCount(): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStations(stations: List<StationEntity>)
@@ -180,7 +201,7 @@ object VehicleTypeCountsConverter {
 /** The local database of stations and their last known state. */
 @Database(
     entities = [StationEntity::class, StationAvailabilityEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = true,
 )
 @TypeConverters(VehicleTypeCountsConverter::class)
@@ -204,6 +225,25 @@ abstract class StationDatabase : RoomDatabase() {
                 connection.execSQL(
                     "ALTER TABLE station_availability " +
                         "ADD COLUMN bikesByVehicleType TEXT NOT NULL DEFAULT ''",
+                )
+            }
+        }
+
+        /**
+         * Adds the virtual flag to the cached stations.
+         *
+         * Migrated rather than rebuilt, for the same reason as [MIGRATION_1_2].
+         * The existing rows are left without a value rather than marked
+         * physical: marked physical, a network such as Pony's in Limoges would
+         * stay closed after the update until the next daily read of the static
+         * data, up to a day. Left unread, they make that read happen at the
+         * very next refresh, and meanwhile they are read as physical — how they
+         * were read before.
+         */
+        val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+            override fun migrate(connection: SQLiteConnection) {
+                connection.execSQL(
+                    "ALTER TABLE station ADD COLUMN isVirtual INTEGER",
                 )
             }
         }

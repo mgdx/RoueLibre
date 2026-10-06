@@ -9,6 +9,20 @@ also records what has no visible effect.
 
 ## [Unreleased]
 
+### Fixed
+
+- **A virtual station is no longer closed by `is_installed`** (`SPEC.md`
+  §4.1). Pony's Limoges network publishes every one of its 265 stations as
+  virtual and "not installed" while renting and returning — 269 electric bikes
+  across 111 stations on 6 October 2026 — and the whole city showed out of
+  service with no bike to take. `is_virtual_station` is now read from
+  `station_information`, and for such a station only `is_renting` and
+  `is_returning` decide; a physical station not installed, as at Cergy and
+  Mulhouse, stays out of service. The flag is cached with the stations, the
+  database going to version 3 through a migration that leaves the existing
+  rows unread, so that the static data is read again at the first refresh
+  after the update rather than up to a day later.
+
 ## [1.5.0]
 
 The home and the work a user names now stand on the map, each with a button
