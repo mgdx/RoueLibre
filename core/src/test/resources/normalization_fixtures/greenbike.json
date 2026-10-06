@@ -1,0 +1,797 @@
+{
+  "language": "en",
+  "cases": [
+    {
+      "input": "Abbey Rd",
+      "normalized": "abbey road",
+      "type": null,
+      "name": "abbey road"
+    },
+    {
+      "input": "Baker Street",
+      "normalized": "baker street",
+      "type": null,
+      "name": "baker street"
+    },
+    {
+      "input": "St James's Park",
+      "normalized": "saint james south park",
+      "type": null,
+      "name": "saint james south park"
+    },
+    {
+      "input": "Queen's Crescent",
+      "normalized": "queen south crescent",
+      "type": null,
+      "name": "queen south crescent"
+    },
+    {
+      "input": "Kensington High St",
+      "normalized": "kensington high st",
+      "type": null,
+      "name": "kensington high st"
+    },
+    {
+      "input": "Dr Martin Luther King Jr Blvd",
+      "normalized": "doctor martin luther king jr boulevard",
+      "type": null,
+      "name": "doctor martin luther king jr boulevard"
+    },
+    {
+      "input": "N Michigan Ave",
+      "normalized": "north michigan avenue",
+      "type": null,
+      "name": "north michigan avenue"
+    },
+    {
+      "input": "The Mall",
+      "normalized": "the mall",
+      "type": null,
+      "name": "the mall"
+    },
+    {
+      "input": "Hyde Park Corner",
+      "normalized": "hyde park corner",
+      "type": null,
+      "name": "hyde park corner"
+    },
+    {
+      "input": "Cherry Ln",
+      "normalized": "cherry lane",
+      "type": null,
+      "name": "cherry lane"
+    },
+    {
+      "input": "Mt Pleasant Ter",
+      "normalized": "mount pleasant terrace",
+      "type": null,
+      "name": "mount pleasant terrace"
+    },
+    {
+      "input": "Fifth Avenue",
+      "normalized": "fifth avenue",
+      "type": null,
+      "name": "fifth avenue"
+    },
+    {
+      "input": "10 West",
+      "normalized": "10 west",
+      "type": null,
+      "name": "10 west"
+    },
+    {
+      "input": "285 West",
+      "normalized": "285 west",
+      "type": null,
+      "name": "285 west"
+    },
+    {
+      "input": "East 1200 South",
+      "normalized": "east 1200 south",
+      "type": null,
+      "name": "east 1200 south"
+    },
+    {
+      "input": "East Golf Course Circle",
+      "normalized": "east golf course circle",
+      "type": null,
+      "name": "east golf course circle"
+    },
+    {
+      "input": "Maple Ridge Drive",
+      "normalized": "maple ridge drive",
+      "type": null,
+      "name": "maple ridge drive"
+    },
+    {
+      "input": "South 1000 East",
+      "normalized": "south 1000 east",
+      "type": null,
+      "name": "south 1000 east"
+    },
+    {
+      "input": "South Fred's Place",
+      "normalized": "south fred south place",
+      "type": null,
+      "name": "south fred south place"
+    },
+    {
+      "input": "West 1200 North",
+      "normalized": "west 1200 north",
+      "type": null,
+      "name": "west 1200 north"
+    },
+    {
+      "input": "Cave Hollow Circle South",
+      "normalized": "cave hollow circle south",
+      "type": null,
+      "name": "cave hollow circle south"
+    },
+    {
+      "input": "East 735 South",
+      "normalized": "east 735 south",
+      "type": null,
+      "name": "east 735 south"
+    },
+    {
+      "input": "North 500 West",
+      "normalized": "north 500 west",
+      "type": null,
+      "name": "north 500 west"
+    },
+    {
+      "input": "South 600 East",
+      "normalized": "south 600 east",
+      "type": null,
+      "name": "south 600 east"
+    },
+    {
+      "input": "West Milky Way",
+      "normalized": "west milky way",
+      "type": null,
+      "name": "west milky way"
+    },
+    {
+      "input": "Babbling Brook Court",
+      "normalized": "babbling brook court",
+      "type": null,
+      "name": "babbling brook court"
+    },
+    {
+      "input": "50 North",
+      "normalized": "50 north",
+      "type": null,
+      "name": "50 north"
+    },
+    {
+      "input": "North 1750 West",
+      "normalized": "north 1750 west",
+      "type": null,
+      "name": "north 1750 west"
+    },
+    {
+      "input": "South 1025 West",
+      "normalized": "south 1025 west",
+      "type": null,
+      "name": "south 1025 west"
+    },
+    {
+      "input": "West 1440 North",
+      "normalized": "west 1440 north",
+      "type": null,
+      "name": "west 1440 north"
+    },
+    {
+      "input": "West Oakridge Park Drive",
+      "normalized": "west oakridge park drive",
+      "type": null,
+      "name": "west oakridge park drive"
+    },
+    {
+      "input": "East Terrace Drive",
+      "normalized": "east terrace drive",
+      "type": null,
+      "name": "east terrace drive"
+    },
+    {
+      "input": "Talbot Drive",
+      "normalized": "talbot drive",
+      "type": null,
+      "name": "talbot drive"
+    },
+    {
+      "input": "1500 South",
+      "normalized": "1500 south",
+      "type": null,
+      "name": "1500 south"
+    },
+    {
+      "input": "East 1550 South",
+      "normalized": "east 1550 south",
+      "type": null,
+      "name": "east 1550 south"
+    },
+    {
+      "input": "Flint Street",
+      "normalized": "flint street",
+      "type": null,
+      "name": "flint street"
+    },
+    {
+      "input": "North Brookshire Drive",
+      "normalized": "north brookshire drive",
+      "type": null,
+      "name": "north brookshire drive"
+    },
+    {
+      "input": "South 50 East",
+      "normalized": "south 50 east",
+      "type": null,
+      "name": "south 50 east"
+    },
+    {
+      "input": "South Teresa Street",
+      "normalized": "south teresa street",
+      "type": null,
+      "name": "south teresa street"
+    },
+    {
+      "input": "West Cottage Way",
+      "normalized": "west cottage way",
+      "type": null,
+      "name": "west cottage way"
+    },
+    {
+      "input": "Spencer Circle",
+      "normalized": "spencer circle",
+      "type": null,
+      "name": "spencer circle"
+    },
+    {
+      "input": "725 North",
+      "normalized": "725 north",
+      "type": null,
+      "name": "725 north"
+    },
+    {
+      "input": "Demetro Drive",
+      "normalized": "demetro drive",
+      "type": null,
+      "name": "demetro drive"
+    },
+    {
+      "input": "East 3575 North",
+      "normalized": "east 3575 north",
+      "type": null,
+      "name": "east 3575 north"
+    },
+    {
+      "input": "E Elm St",
+      "normalized": "east elm st",
+      "type": null,
+      "name": "east elm st"
+    },
+    {
+      "input": "E Prowe Cir",
+      "normalized": "east prowe cir",
+      "type": null,
+      "name": "east prowe cir"
+    },
+    {
+      "input": "Horseman Cir",
+      "normalized": "horseman cir",
+      "type": null,
+      "name": "horseman cir"
+    },
+    {
+      "input": "North 1285 East",
+      "normalized": "north 1285 east",
+      "type": null,
+      "name": "north 1285 east"
+    },
+    {
+      "input": "North 2625 East",
+      "normalized": "north 2625 east",
+      "type": null,
+      "name": "north 2625 east"
+    },
+    {
+      "input": "North Blue Horizon Boulevard",
+      "normalized": "north blue horizon boulevard",
+      "type": null,
+      "name": "north blue horizon boulevard"
+    },
+    {
+      "input": "N King St",
+      "normalized": "north king st",
+      "type": null,
+      "name": "north king st"
+    },
+    {
+      "input": "Owens Street",
+      "normalized": "owens street",
+      "type": null,
+      "name": "owens street"
+    },
+    {
+      "input": "South 2775 East",
+      "normalized": "south 2775 east",
+      "type": null,
+      "name": "south 2775 east"
+    },
+    {
+      "input": "S Sweet Briar Cir",
+      "normalized": "south sweet briar cir",
+      "type": null,
+      "name": "south sweet briar cir"
+    },
+    {
+      "input": "West 1900 North",
+      "normalized": "west 1900 north",
+      "type": null,
+      "name": "west 1900 north"
+    },
+    {
+      "input": "West Cook Drive North",
+      "normalized": "west cook drive north",
+      "type": null,
+      "name": "west cook drive north"
+    },
+    {
+      "input": "Glen Street West",
+      "normalized": "glen street west",
+      "type": null,
+      "name": "glen street west"
+    },
+    {
+      "input": "Blaine Avenue",
+      "normalized": "blaine avenue",
+      "type": null,
+      "name": "blaine avenue"
+    },
+    {
+      "input": "East Lincoln Oaks Court",
+      "normalized": "east lincoln oaks court",
+      "type": null,
+      "name": "east lincoln oaks court"
+    },
+    {
+      "input": "Lincoln Oaks Court",
+      "normalized": "lincoln oaks court",
+      "type": null,
+      "name": "lincoln oaks court"
+    },
+    {
+      "input": "South 945 East",
+      "normalized": "south 945 east",
+      "type": null,
+      "name": "south 945 east"
+    },
+    {
+      "input": "100 South",
+      "normalized": "100 south",
+      "type": null,
+      "name": "100 south"
+    },
+    {
+      "input": "850 West",
+      "normalized": "850 west",
+      "type": null,
+      "name": "850 west"
+    },
+    {
+      "input": "Cynthia Way",
+      "normalized": "cynthia way",
+      "type": null,
+      "name": "cynthia way"
+    },
+    {
+      "input": "East Sable Circle",
+      "normalized": "east sable circle",
+      "type": null,
+      "name": "east sable circle"
+    },
+    {
+      "input": "Kettering Drive",
+      "normalized": "kettering drive",
+      "type": null,
+      "name": "kettering drive"
+    },
+    {
+      "input": "North Eaglewood Drive",
+      "normalized": "north eaglewood drive",
+      "type": null,
+      "name": "north eaglewood drive"
+    },
+    {
+      "input": "Robinson Drive",
+      "normalized": "robinson drive",
+      "type": null,
+      "name": "robinson drive"
+    },
+    {
+      "input": "Stallion Lane",
+      "normalized": "stallion lane",
+      "type": null,
+      "name": "stallion lane"
+    },
+    {
+      "input": "West Stonehenge Drive",
+      "normalized": "west stonehenge drive",
+      "type": null,
+      "name": "west stonehenge drive"
+    },
+    {
+      "input": "Set Court",
+      "normalized": "set court",
+      "type": null,
+      "name": "set court"
+    },
+    {
+      "input": "26th Street;Gramercy Avenue",
+      "normalized": "26th street gramercy avenue",
+      "type": null,
+      "name": "26th street gramercy avenue"
+    },
+    {
+      "input": "Grant Avenue",
+      "normalized": "grant avenue",
+      "type": null,
+      "name": "grant avenue"
+    },
+    {
+      "input": "Shoshone Drive",
+      "normalized": "shoshone drive",
+      "type": null,
+      "name": "shoshone drive"
+    },
+    {
+      "input": "12th Avenue",
+      "normalized": "12th avenue",
+      "type": null,
+      "name": "12th avenue"
+    },
+    {
+      "input": "East 24th Street",
+      "normalized": "east 24th street",
+      "type": null,
+      "name": "east 24th street"
+    },
+    {
+      "input": "South 1000 West",
+      "normalized": "south 1000 west",
+      "type": null,
+      "name": "south 1000 west"
+    },
+    {
+      "input": "Wilson Lane",
+      "normalized": "wilson lane",
+      "type": null,
+      "name": "wilson lane"
+    },
+    {
+      "input": "Evelyn Street",
+      "normalized": "evelyn street",
+      "type": null,
+      "name": "evelyn street"
+    },
+    {
+      "input": "Riverwalk Drive",
+      "normalized": "riverwalk drive",
+      "type": null,
+      "name": "riverwalk drive"
+    },
+    {
+      "input": "West Highland Drive",
+      "normalized": "west highland drive",
+      "type": null,
+      "name": "west highland drive"
+    },
+    {
+      "input": "1950 West",
+      "normalized": "1950 west",
+      "type": null,
+      "name": "1950 west"
+    },
+    {
+      "input": "Albermarle Avenue",
+      "normalized": "albermarle avenue",
+      "type": null,
+      "name": "albermarle avenue"
+    },
+    {
+      "input": "Chandler Drive",
+      "normalized": "chandler drive",
+      "type": null,
+      "name": "chandler drive"
+    },
+    {
+      "input": "East 500 South",
+      "normalized": "east 500 south",
+      "type": null,
+      "name": "east 500 south"
+    },
+    {
+      "input": "East Gilmer Drive",
+      "normalized": "east gilmer drive",
+      "type": null,
+      "name": "east gilmer drive"
+    },
+    {
+      "input": "East Stratford Drive",
+      "normalized": "east stratford drive",
+      "type": null,
+      "name": "east stratford drive"
+    },
+    {
+      "input": "Gertie Avenue",
+      "normalized": "gertie avenue",
+      "type": null,
+      "name": "gertie avenue"
+    },
+    {
+      "input": "Kilby Court",
+      "normalized": "kilby court",
+      "type": null,
+      "name": "kilby court"
+    },
+    {
+      "input": "North 1200 West",
+      "normalized": "north 1200 west",
+      "type": null,
+      "name": "north 1200 west"
+    },
+    {
+      "input": "North Grandridge Drive",
+      "normalized": "north grandridge drive",
+      "type": null,
+      "name": "north grandridge drive"
+    },
+    {
+      "input": "North Victoria Way",
+      "normalized": "north victoria way",
+      "type": null,
+      "name": "north victoria way"
+    },
+    {
+      "input": "Reeves Terrace",
+      "normalized": "reeves terrace",
+      "type": null,
+      "name": "reeves terrace"
+    },
+    {
+      "input": "South 3480 West",
+      "normalized": "south 3480 west",
+      "type": null,
+      "name": "south 3480 west"
+    },
+    {
+      "input": "South Garn Way",
+      "normalized": "south garn way",
+      "type": null,
+      "name": "south garn way"
+    },
+    {
+      "input": "South Sandrun Road",
+      "normalized": "south sandrun road",
+      "type": null,
+      "name": "south sandrun road"
+    },
+    {
+      "input": "Victoria Place",
+      "normalized": "victoria place",
+      "type": null,
+      "name": "victoria place"
+    },
+    {
+      "input": "West California Avenue",
+      "normalized": "west california avenue",
+      "type": null,
+      "name": "west california avenue"
+    },
+    {
+      "input": "West Nebula Way",
+      "normalized": "west nebula way",
+      "type": null,
+      "name": "west nebula way"
+    },
+    {
+      "input": "Bella Vista Court",
+      "normalized": "bella vista court",
+      "type": null,
+      "name": "bella vista court"
+    },
+    {
+      "input": "43rd Street",
+      "normalized": "43rd street",
+      "type": null,
+      "name": "43rd street"
+    },
+    {
+      "input": "Healy Street",
+      "normalized": "healy street",
+      "type": null,
+      "name": "healy street"
+    },
+    {
+      "input": "East 2700 South",
+      "normalized": "east 2700 south",
+      "type": null,
+      "name": "east 2700 south"
+    },
+    {
+      "input": "540 East",
+      "normalized": "540 east",
+      "type": null,
+      "name": "540 east"
+    },
+    {
+      "input": "East Front Avenue",
+      "normalized": "east front avenue",
+      "type": null,
+      "name": "east front avenue"
+    },
+    {
+      "input": "Little Oak Drive",
+      "normalized": "little oak drive",
+      "type": null,
+      "name": "little oak drive"
+    },
+    {
+      "input": "South 900 West",
+      "normalized": "south 900 west",
+      "type": null,
+      "name": "south 900 west"
+    },
+    {
+      "input": "Woodland Avenue",
+      "normalized": "woodland avenue",
+      "type": null,
+      "name": "woodland avenue"
+    },
+    {
+      "input": "East Bateman Way",
+      "normalized": "east bateman way",
+      "type": null,
+      "name": "east bateman way"
+    },
+    {
+      "input": "Redwood Road",
+      "normalized": "redwood road",
+      "type": null,
+      "name": "redwood road"
+    },
+    {
+      "input": "Lagoon Trail",
+      "normalized": "lagoon trail",
+      "type": null,
+      "name": "lagoon trail"
+    },
+    {
+      "input": "Sunset Drive",
+      "normalized": "sunset drive",
+      "type": null,
+      "name": "sunset drive"
+    },
+    {
+      "input": "Melanie Lane",
+      "normalized": "melanie lane",
+      "type": null,
+      "name": "melanie lane"
+    },
+    {
+      "input": "150 West",
+      "normalized": "150 west",
+      "type": null,
+      "name": "150 west"
+    },
+    {
+      "input": "East 5285 South",
+      "normalized": "east 5285 south",
+      "type": null,
+      "name": "east 5285 south"
+    },
+    {
+      "input": "South Pointe Drive",
+      "normalized": "south pointe drive",
+      "type": null,
+      "name": "south pointe drive"
+    },
+    {
+      "input": "810 North",
+      "normalized": "810 north",
+      "type": null,
+      "name": "810 north"
+    },
+    {
+      "input": "West 2100 North",
+      "normalized": "west 2100 north",
+      "type": null,
+      "name": "west 2100 north"
+    },
+    {
+      "input": "2960 South",
+      "normalized": "2960 south",
+      "type": null,
+      "name": "2960 south"
+    },
+    {
+      "input": "4880 West",
+      "normalized": "4880 west",
+      "type": null,
+      "name": "4880 west"
+    },
+    {
+      "input": "Derbyshire Lane",
+      "normalized": "derbyshire lane",
+      "type": null,
+      "name": "derbyshire lane"
+    },
+    {
+      "input": "Milestone Drive",
+      "normalized": "milestone drive",
+      "type": null,
+      "name": "milestone drive"
+    },
+    {
+      "input": "South 3085 West",
+      "normalized": "south 3085 west",
+      "type": null,
+      "name": "south 3085 west"
+    },
+    {
+      "input": "South Festival Drive",
+      "normalized": "south festival drive",
+      "type": null,
+      "name": "south festival drive"
+    },
+    {
+      "input": "South Summer Trail Drive",
+      "normalized": "south summer trail drive",
+      "type": null,
+      "name": "south summer trail drive"
+    },
+    {
+      "input": "West 3080 South",
+      "normalized": "west 3080 south",
+      "type": null,
+      "name": "west 3080 south"
+    },
+    {
+      "input": "West Heron Way",
+      "normalized": "west heron way",
+      "type": null,
+      "name": "west heron way"
+    },
+    {
+      "input": "Westlake Drive",
+      "normalized": "westlake drive",
+      "type": null,
+      "name": "westlake drive"
+    },
+    {
+      "input": "Lorl Lane",
+      "normalized": "lorl lane",
+      "type": null,
+      "name": "lorl lane"
+    },
+    {
+      "input": "North Parkway Drive West",
+      "normalized": "north parkway drive west",
+      "type": null,
+      "name": "north parkway drive west"
+    },
+    {
+      "input": "South 925 West",
+      "normalized": "south 925 west",
+      "type": null,
+      "name": "south 925 west"
+    },
+    {
+      "input": "1295 West",
+      "normalized": "1295 west",
+      "type": null,
+      "name": "1295 west"
+    }
+  ]
+}

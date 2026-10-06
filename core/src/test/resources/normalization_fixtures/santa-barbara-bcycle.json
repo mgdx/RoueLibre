@@ -1,0 +1,797 @@
+{
+  "language": "en",
+  "cases": [
+    {
+      "input": "Abbey Rd",
+      "normalized": "abbey road",
+      "type": null,
+      "name": "abbey road"
+    },
+    {
+      "input": "Baker Street",
+      "normalized": "baker street",
+      "type": null,
+      "name": "baker street"
+    },
+    {
+      "input": "St James's Park",
+      "normalized": "saint james south park",
+      "type": null,
+      "name": "saint james south park"
+    },
+    {
+      "input": "Queen's Crescent",
+      "normalized": "queen south crescent",
+      "type": null,
+      "name": "queen south crescent"
+    },
+    {
+      "input": "Kensington High St",
+      "normalized": "kensington high st",
+      "type": null,
+      "name": "kensington high st"
+    },
+    {
+      "input": "Dr Martin Luther King Jr Blvd",
+      "normalized": "doctor martin luther king jr boulevard",
+      "type": null,
+      "name": "doctor martin luther king jr boulevard"
+    },
+    {
+      "input": "N Michigan Ave",
+      "normalized": "north michigan avenue",
+      "type": null,
+      "name": "north michigan avenue"
+    },
+    {
+      "input": "The Mall",
+      "normalized": "the mall",
+      "type": null,
+      "name": "the mall"
+    },
+    {
+      "input": "Hyde Park Corner",
+      "normalized": "hyde park corner",
+      "type": null,
+      "name": "hyde park corner"
+    },
+    {
+      "input": "Cherry Ln",
+      "normalized": "cherry lane",
+      "type": null,
+      "name": "cherry lane"
+    },
+    {
+      "input": "Mt Pleasant Ter",
+      "normalized": "mount pleasant terrace",
+      "type": null,
+      "name": "mount pleasant terrace"
+    },
+    {
+      "input": "Fifth Avenue",
+      "normalized": "fifth avenue",
+      "type": null,
+      "name": "fifth avenue"
+    },
+    {
+      "input": "Atasco Drive",
+      "normalized": "atasco drive",
+      "type": null,
+      "name": "atasco drive"
+    },
+    {
+      "input": "Calle Caridad",
+      "normalized": "calle caridad",
+      "type": null,
+      "name": "calle caridad"
+    },
+    {
+      "input": "Calle Verde",
+      "normalized": "calle verde",
+      "type": null,
+      "name": "calle verde"
+    },
+    {
+      "input": "Jake Boysel Multipurpose Pathway",
+      "normalized": "jake boysel multipurpose pathway",
+      "type": null,
+      "name": "jake boysel multipurpose pathway"
+    },
+    {
+      "input": "Shadow Hills Boulevard South",
+      "normalized": "shadow hills boulevard south",
+      "type": null,
+      "name": "shadow hills boulevard south"
+    },
+    {
+      "input": "Via Senda",
+      "normalized": "via senda",
+      "type": null,
+      "name": "via senda"
+    },
+    {
+      "input": "Victoria Street",
+      "normalized": "victoria street",
+      "type": null,
+      "name": "victoria street"
+    },
+    {
+      "input": "Porter Trail",
+      "normalized": "porter trail",
+      "type": null,
+      "name": "porter trail"
+    },
+    {
+      "input": "Amapola Lane",
+      "normalized": "amapola lane",
+      "type": null,
+      "name": "amapola lane"
+    },
+    {
+      "input": "Edison Access",
+      "normalized": "edison access",
+      "type": null,
+      "name": "edison access"
+    },
+    {
+      "input": "Lower Hyde",
+      "normalized": "lower hyde",
+      "type": null,
+      "name": "lower hyde"
+    },
+    {
+      "input": "San Ysidro Trail",
+      "normalized": "san ysidro trail",
+      "type": null,
+      "name": "san ysidro trail"
+    },
+    {
+      "input": "Condor Express Whale Watching",
+      "normalized": "condor express whale watching",
+      "type": null,
+      "name": "condor express whale watching"
+    },
+    {
+      "input": "Quail Grove",
+      "normalized": "quail grove",
+      "type": null,
+      "name": "quail grove"
+    },
+    {
+      "input": "Museum Of Contemporary Art Santa Barbara",
+      "normalized": "museum of contemporary art santa barbara",
+      "type": null,
+      "name": "museum of contemporary art santa barbara"
+    },
+    {
+      "input": "Eastside Branch Santa Barbara Public Library",
+      "normalized": "eastside branch santa barbara public library",
+      "type": null,
+      "name": "eastside branch santa barbara public library"
+    },
+    {
+      "input": "Alan Road",
+      "normalized": "alan road",
+      "type": null,
+      "name": "alan road"
+    },
+    {
+      "input": "Alston Lane",
+      "normalized": "alston lane",
+      "type": null,
+      "name": "alston lane"
+    },
+    {
+      "input": "Antone Road",
+      "normalized": "antone road",
+      "type": null,
+      "name": "antone road"
+    },
+    {
+      "input": "Arroqui Street",
+      "normalized": "arroqui street",
+      "type": null,
+      "name": "arroqui street"
+    },
+    {
+      "input": "Avila Way",
+      "normalized": "avila way",
+      "type": null,
+      "name": "avila way"
+    },
+    {
+      "input": "Barranca Lane",
+      "normalized": "barranca lane",
+      "type": null,
+      "name": "barranca lane"
+    },
+    {
+      "input": "Bond Avenue",
+      "normalized": "bond avenue",
+      "type": null,
+      "name": "bond avenue"
+    },
+    {
+      "input": "Broadmoor Plaza",
+      "normalized": "broadmoor plaza",
+      "type": null,
+      "name": "broadmoor plaza"
+    },
+    {
+      "input": "Calle Almonte",
+      "normalized": "calle almonte",
+      "type": null,
+      "name": "calle almonte"
+    },
+    {
+      "input": "Calle Corte",
+      "normalized": "calle corte",
+      "type": null,
+      "name": "calle corte"
+    },
+    {
+      "input": "Calle Linares",
+      "normalized": "calle linares",
+      "type": null,
+      "name": "calle linares"
+    },
+    {
+      "input": "Calle Rinconada",
+      "normalized": "calle rinconada",
+      "type": null,
+      "name": "calle rinconada"
+    },
+    {
+      "input": "Camino Del Remed",
+      "normalized": "camino del remed",
+      "type": null,
+      "name": "camino del remed"
+    },
+    {
+      "input": "Canon Perdido Street",
+      "normalized": "canon perdido street",
+      "type": null,
+      "name": "canon perdido street"
+    },
+    {
+      "input": "Carriage Hill Drive",
+      "normalized": "carriage hill drive",
+      "type": null,
+      "name": "carriage hill drive"
+    },
+    {
+      "input": "Celine Drive",
+      "normalized": "celine drive",
+      "type": null,
+      "name": "celine drive"
+    },
+    {
+      "input": "Chino Street",
+      "normalized": "chino street",
+      "type": null,
+      "name": "chino street"
+    },
+    {
+      "input": "Claremont Road",
+      "normalized": "claremont road",
+      "type": null,
+      "name": "claremont road"
+    },
+    {
+      "input": "Coast Bicycle Route",
+      "normalized": "coast bicycle route",
+      "type": null,
+      "name": "coast bicycle route"
+    },
+    {
+      "input": "Consuelo Drive",
+      "normalized": "consuelo drive",
+      "type": null,
+      "name": "consuelo drive"
+    },
+    {
+      "input": "Cortez Way",
+      "normalized": "cortez way",
+      "type": null,
+      "name": "cortez way"
+    },
+    {
+      "input": "Coyote Road",
+      "normalized": "coyote road",
+      "type": null,
+      "name": "coyote road"
+    },
+    {
+      "input": "Cuesta Road",
+      "normalized": "cuesta road",
+      "type": null,
+      "name": "cuesta road"
+    },
+    {
+      "input": "De Paul Drive",
+      "normalized": "de paul drive",
+      "type": null,
+      "name": "de paul drive"
+    },
+    {
+      "input": "Diana Lane",
+      "normalized": "diana lane",
+      "type": null,
+      "name": "diana lane"
+    },
+    {
+      "input": "Duncan Road",
+      "normalized": "duncan road",
+      "type": null,
+      "name": "duncan road"
+    },
+    {
+      "input": "East Carrillo Road",
+      "normalized": "east carrillo road",
+      "type": null,
+      "name": "east carrillo road"
+    },
+    {
+      "input": "East Mason Street",
+      "normalized": "east mason street",
+      "type": null,
+      "name": "east mason street"
+    },
+    {
+      "input": "East Quinientos Street",
+      "normalized": "east quinientos street",
+      "type": null,
+      "name": "east quinientos street"
+    },
+    {
+      "input": "Edgewater Way",
+      "normalized": "edgewater way",
+      "type": null,
+      "name": "edgewater way"
+    },
+    {
+      "input": "El Monte Drive",
+      "normalized": "el monte drive",
+      "type": null,
+      "name": "el monte drive"
+    },
+    {
+      "input": "Ennisbrook Drive",
+      "normalized": "ennisbrook drive",
+      "type": null,
+      "name": "ennisbrook drive"
+    },
+    {
+      "input": "Exeter Place",
+      "normalized": "exeter place",
+      "type": null,
+      "name": "exeter place"
+    },
+    {
+      "input": "Ferrelo Place",
+      "normalized": "ferrelo place",
+      "type": null,
+      "name": "ferrelo place"
+    },
+    {
+      "input": "Freemont Place",
+      "normalized": "freemont place",
+      "type": null,
+      "name": "freemont place"
+    },
+    {
+      "input": "Glen Albyn Drive",
+      "normalized": "glen albyn drive",
+      "type": null,
+      "name": "glen albyn drive"
+    },
+    {
+      "input": "Green Meadows Road",
+      "normalized": "green meadows road",
+      "type": null,
+      "name": "green meadows road"
+    },
+    {
+      "input": "Halcyon Lane",
+      "normalized": "halcyon lane",
+      "type": null,
+      "name": "halcyon lane"
+    },
+    {
+      "input": "Hermosillo Drive",
+      "normalized": "hermosillo drive",
+      "type": null,
+      "name": "hermosillo drive"
+    },
+    {
+      "input": "Hodges Lane",
+      "normalized": "hodges lane",
+      "type": null,
+      "name": "hodges lane"
+    },
+    {
+      "input": "Hutash Street",
+      "normalized": "hutash street",
+      "type": null,
+      "name": "hutash street"
+    },
+    {
+      "input": "Jesmary Lane",
+      "normalized": "jesmary lane",
+      "type": null,
+      "name": "jesmary lane"
+    },
+    {
+      "input": "Kimball Street",
+      "normalized": "kimball street",
+      "type": null,
+      "name": "kimball street"
+    },
+    {
+      "input": "La Coronilla Drive",
+      "normalized": "la coronilla drive",
+      "type": null,
+      "name": "la coronilla drive"
+    },
+    {
+      "input": "La Ladera Road",
+      "normalized": "la ladera road",
+      "type": null,
+      "name": "la ladera road"
+    },
+    {
+      "input": "La Senda Drive",
+      "normalized": "la senda drive",
+      "type": null,
+      "name": "la senda drive"
+    },
+    {
+      "input": "Laguna Blanca Drive",
+      "normalized": "laguna blanca drive",
+      "type": null,
+      "name": "laguna blanca drive"
+    },
+    {
+      "input": "Las Encinas Lane",
+      "normalized": "las encinas lane",
+      "type": null,
+      "name": "las encinas lane"
+    },
+    {
+      "input": "Lasuen Road",
+      "normalized": "lasuen road",
+      "type": null,
+      "name": "lasuen road"
+    },
+    {
+      "input": "Lighthouse Place",
+      "normalized": "lighthouse place",
+      "type": null,
+      "name": "lighthouse place"
+    },
+    {
+      "input": "Live Oaks Road",
+      "normalized": "live oaks road",
+      "type": null,
+      "name": "live oaks road"
+    },
+    {
+      "input": "Los Alamos",
+      "normalized": "los alamos",
+      "type": null,
+      "name": "los alamos"
+    },
+    {
+      "input": "Louisa Avenue",
+      "normalized": "louisa avenue",
+      "type": null,
+      "name": "louisa avenue"
+    },
+    {
+      "input": "Malaga Circle",
+      "normalized": "malaga circle",
+      "type": null,
+      "name": "malaga circle"
+    },
+    {
+      "input": "Marilyn Way",
+      "normalized": "marilyn way",
+      "type": null,
+      "name": "marilyn way"
+    },
+    {
+      "input": "Meigs Road",
+      "normalized": "meigs road",
+      "type": null,
+      "name": "meigs road"
+    },
+    {
+      "input": "Mimosa Lane",
+      "normalized": "mimosa lane",
+      "type": null,
+      "name": "mimosa lane"
+    },
+    {
+      "input": "Miramar Lane",
+      "normalized": "miramar lane",
+      "type": null,
+      "name": "miramar lane"
+    },
+    {
+      "input": "Monarch Lane",
+      "normalized": "monarch lane",
+      "type": null,
+      "name": "monarch lane"
+    },
+    {
+      "input": "Morada Lane",
+      "normalized": "morada lane",
+      "type": null,
+      "name": "morada lane"
+    },
+    {
+      "input": "Murrell Road",
+      "normalized": "murrell road",
+      "type": null,
+      "name": "murrell road"
+    },
+    {
+      "input": "Nogales Avenue",
+      "normalized": "nogales avenue",
+      "type": null,
+      "name": "nogales avenue"
+    },
+    {
+      "input": "North Nopal Street",
+      "normalized": "north nopal street",
+      "type": null,
+      "name": "north nopal street"
+    },
+    {
+      "input": "Northview Road",
+      "normalized": "northview road",
+      "type": null,
+      "name": "northview road"
+    },
+    {
+      "input": "Old Coast Highway",
+      "normalized": "old coast highway",
+      "type": null,
+      "name": "old coast highway"
+    },
+    {
+      "input": "Oliver Road",
+      "normalized": "oliver road",
+      "type": null,
+      "name": "oliver road"
+    },
+    {
+      "input": "Orizaba Road",
+      "normalized": "orizaba road",
+      "type": null,
+      "name": "orizaba road"
+    },
+    {
+      "input": "Pala Lane",
+      "normalized": "pala lane",
+      "type": null,
+      "name": "pala lane"
+    },
+    {
+      "input": "Para Grande Lane",
+      "normalized": "para grande lane",
+      "type": null,
+      "name": "para grande lane"
+    },
+    {
+      "input": "Paseo del Ocaso",
+      "normalized": "paseo del ocaso",
+      "type": null,
+      "name": "paseo del ocaso"
+    },
+    {
+      "input": "Pepper Lane",
+      "normalized": "pepper lane",
+      "type": null,
+      "name": "pepper lane"
+    },
+    {
+      "input": "Pine Spring Lane",
+      "normalized": "pine spring lane",
+      "type": null,
+      "name": "pine spring lane"
+    },
+    {
+      "input": "Por La Mar Drive",
+      "normalized": "por la mar drive",
+      "type": null,
+      "name": "por la mar drive"
+    },
+    {
+      "input": "Puente Dr",
+      "normalized": "puente dr",
+      "type": null,
+      "name": "puente dr"
+    },
+    {
+      "input": "Ramona Lane",
+      "normalized": "ramona lane",
+      "type": null,
+      "name": "ramona lane"
+    },
+    {
+      "input": "Ricardo Avenue",
+      "normalized": "ricardo avenue",
+      "type": null,
+      "name": "ricardo avenue"
+    },
+    {
+      "input": "Roble Drive",
+      "normalized": "roble drive",
+      "type": null,
+      "name": "roble drive"
+    },
+    {
+      "input": "Rossier Lane",
+      "normalized": "rossier lane",
+      "type": null,
+      "name": "rossier lane"
+    },
+    {
+      "input": "San Andres Street",
+      "normalized": "san andres street",
+      "type": null,
+      "name": "san andres street"
+    },
+    {
+      "input": "San Julian Place",
+      "normalized": "san julian place",
+      "type": null,
+      "name": "san julian place"
+    },
+    {
+      "input": "San Pedro Lane",
+      "normalized": "san pedro lane",
+      "type": null,
+      "name": "san pedro lane"
+    },
+    {
+      "input": "Santa Catalina Avenue",
+      "normalized": "santa catalina avenue",
+      "type": null,
+      "name": "santa catalina avenue"
+    },
+    {
+      "input": "Santa Rosa Place",
+      "normalized": "santa rosa place",
+      "type": null,
+      "name": "santa rosa place"
+    },
+    {
+      "input": "Schulte Lane",
+      "normalized": "schulte lane",
+      "type": null,
+      "name": "schulte lane"
+    },
+    {
+      "input": "Shadow Hills",
+      "normalized": "shadow hills",
+      "type": null,
+      "name": "shadow hills"
+    },
+    {
+      "input": "Sierra Vista Road",
+      "normalized": "sierra vista road",
+      "type": null,
+      "name": "sierra vista road"
+    },
+    {
+      "input": "South Calle Cesar Chavez",
+      "normalized": "south calle cesar chavez",
+      "type": null,
+      "name": "south calle cesar chavez"
+    },
+    {
+      "input": "South Ontare Road",
+      "normalized": "south ontare road",
+      "type": null,
+      "name": "south ontare road"
+    },
+    {
+      "input": "State Street",
+      "normalized": "state street",
+      "type": null,
+      "name": "state street"
+    },
+    {
+      "input": "Sunset Drive",
+      "normalized": "sunset drive",
+      "type": null,
+      "name": "sunset drive"
+    },
+    {
+      "input": "Terrace Vista Lane",
+      "normalized": "terrace vista lane",
+      "type": null,
+      "name": "terrace vista lane"
+    },
+    {
+      "input": "Transfer Avenue",
+      "normalized": "transfer avenue",
+      "type": null,
+      "name": "transfer avenue"
+    },
+    {
+      "input": "Vales Street",
+      "normalized": "vales street",
+      "type": null,
+      "name": "vales street"
+    },
+    {
+      "input": "Veronica Springs Road",
+      "normalized": "veronica springs road",
+      "type": null,
+      "name": "veronica springs road"
+    },
+    {
+      "input": "Via Chaparral",
+      "normalized": "via chaparral",
+      "type": null,
+      "name": "via chaparral"
+    },
+    {
+      "input": "Via Glorieta",
+      "normalized": "via glorieta",
+      "type": null,
+      "name": "via glorieta"
+    },
+    {
+      "input": "Via Presada",
+      "normalized": "via presada",
+      "type": null,
+      "name": "via presada"
+    },
+    {
+      "input": "Via Tranquila",
+      "normalized": "via tranquila",
+      "type": null,
+      "name": "via tranquila"
+    },
+    {
+      "input": "Virginia Lane",
+      "normalized": "virginia lane",
+      "type": null,
+      "name": "virginia lane"
+    },
+    {
+      "input": "Vista Elevada",
+      "normalized": "vista elevada",
+      "type": null,
+      "name": "vista elevada"
+    },
+    {
+      "input": "Wentworth Avenue",
+      "normalized": "wentworth avenue",
+      "type": null,
+      "name": "wentworth avenue"
+    },
+    {
+      "input": "West Cota Street",
+      "normalized": "west cota street",
+      "type": null,
+      "name": "west cota street"
+    },
+    {
+      "input": "West Montectio Street",
+      "normalized": "west montectio street",
+      "type": null,
+      "name": "west montectio street"
+    },
+    {
+      "input": "Westmont Road",
+      "normalized": "westmont road",
+      "type": null,
+      "name": "westmont road"
+    }
+  ]
+}

@@ -1,0 +1,575 @@
+{
+  "language": "sl",
+  "cases": [
+    {
+      "input": "Slovenska cesta",
+      "normalized": "slovenska cesta",
+      "type": null,
+      "name": "slovenska cesta"
+    },
+    {
+      "input": "Trubarjeva ulica",
+      "normalized": "trubarjeva ulica",
+      "type": null,
+      "name": "trubarjeva ulica"
+    },
+    {
+      "input": "Trg republike",
+      "normalized": "trg republike",
+      "type": "trg",
+      "name": "republike"
+    },
+    {
+      "input": "Prešernov trg",
+      "normalized": "presernov trg",
+      "type": null,
+      "name": "presernov trg"
+    },
+    {
+      "input": "Dunajska c.",
+      "normalized": "dunajska c",
+      "type": null,
+      "name": "dunajska c"
+    },
+    {
+      "input": "Poljanski nasip",
+      "normalized": "poljanski nasip",
+      "type": null,
+      "name": "poljanski nasip"
+    },
+    {
+      "input": "Tržaška cesta",
+      "normalized": "trzaska cesta",
+      "type": null,
+      "name": "trzaska cesta"
+    },
+    {
+      "input": "Pot na Fužine",
+      "normalized": "pot na fuzine",
+      "type": "pot",
+      "name": "na fuzine"
+    },
+    {
+      "input": "Brdinje",
+      "normalized": "brdinje",
+      "type": null,
+      "name": "brdinje"
+    },
+    {
+      "input": "Suhi Vrh",
+      "normalized": "suhi vrh",
+      "type": null,
+      "name": "suhi vrh"
+    },
+    {
+      "input": "Bike park Poseka",
+      "normalized": "bike park poseka",
+      "type": null,
+      "name": "bike park poseka"
+    },
+    {
+      "input": "Kot pri Prevaljah",
+      "normalized": "kot pri prevaljah",
+      "type": null,
+      "name": "kot pri prevaljah"
+    },
+    {
+      "input": "Prevalje",
+      "normalized": "prevalje",
+      "type": null,
+      "name": "prevalje"
+    },
+    {
+      "input": "Črneče",
+      "normalized": "crnece",
+      "type": null,
+      "name": "crnece"
+    },
+    {
+      "input": "Meža",
+      "normalized": "meza",
+      "type": null,
+      "name": "meza"
+    },
+    {
+      "input": "Dobrova pri Dravogradu",
+      "normalized": "dobrova pri dravogradu",
+      "type": null,
+      "name": "dobrova pri dravogradu"
+    },
+    {
+      "input": "Podklanc",
+      "normalized": "podklanc",
+      "type": null,
+      "name": "podklanc"
+    },
+    {
+      "input": "Tolsti Vrh pri Ravnah na Koroškem - del",
+      "normalized": "tolsti vrh pri ravnah na koroskem del",
+      "type": null,
+      "name": "tolsti vrh pri ravnah na koroskem del"
+    },
+    {
+      "input": "Brdinje",
+      "normalized": "brdinje",
+      "type": null,
+      "name": "brdinje"
+    },
+    {
+      "input": "Kotlje",
+      "normalized": "kotlje",
+      "type": null,
+      "name": "kotlje"
+    },
+    {
+      "input": "Podgora",
+      "normalized": "podgora",
+      "type": null,
+      "name": "podgora"
+    },
+    {
+      "input": "Podkraj",
+      "normalized": "podkraj",
+      "type": null,
+      "name": "podkraj"
+    },
+    {
+      "input": "Preški Vrh",
+      "normalized": "preski vrh",
+      "type": null,
+      "name": "preski vrh"
+    },
+    {
+      "input": "Uršlja gora",
+      "normalized": "urslja gora",
+      "type": null,
+      "name": "urslja gora"
+    },
+    {
+      "input": "Plat",
+      "normalized": "plat",
+      "type": null,
+      "name": "plat"
+    },
+    {
+      "input": "Podklanc",
+      "normalized": "podklanc",
+      "type": null,
+      "name": "podklanc"
+    },
+    {
+      "input": "Dobrije",
+      "normalized": "dobrije",
+      "type": null,
+      "name": "dobrije"
+    },
+    {
+      "input": "Ravne na Koroškem",
+      "normalized": "ravne na koroskem",
+      "type": null,
+      "name": "ravne na koroskem"
+    },
+    {
+      "input": "Prevalje",
+      "normalized": "prevalje",
+      "type": null,
+      "name": "prevalje"
+    },
+    {
+      "input": "Position 1963",
+      "normalized": "position 1963",
+      "type": null,
+      "name": "position 1963"
+    },
+    {
+      "input": "Position 1958",
+      "normalized": "position 1958",
+      "type": null,
+      "name": "position 1958"
+    },
+    {
+      "input": "Podgora",
+      "normalized": "podgora",
+      "type": null,
+      "name": "podgora"
+    },
+    {
+      "input": "Sele - del",
+      "normalized": "sele del",
+      "type": null,
+      "name": "sele del"
+    },
+    {
+      "input": "Breznica",
+      "normalized": "breznica",
+      "type": null,
+      "name": "breznica"
+    },
+    {
+      "input": "Dobja vas",
+      "normalized": "dobja vas",
+      "type": null,
+      "name": "dobja vas"
+    },
+    {
+      "input": "Dolga Brda",
+      "normalized": "dolga brda",
+      "type": null,
+      "name": "dolga brda"
+    },
+    {
+      "input": "Glavarstvo",
+      "normalized": "glavarstvo",
+      "type": null,
+      "name": "glavarstvo"
+    },
+    {
+      "input": "Kot pri Prevaljah",
+      "normalized": "kot pri prevaljah",
+      "type": null,
+      "name": "kot pri prevaljah"
+    },
+    {
+      "input": "Leše",
+      "normalized": "lese",
+      "type": null,
+      "name": "lese"
+    },
+    {
+      "input": "Na Fari",
+      "normalized": "na fari",
+      "type": null,
+      "name": "na fari"
+    },
+    {
+      "input": "Na Produ",
+      "normalized": "na produ",
+      "type": null,
+      "name": "na produ"
+    },
+    {
+      "input": "Nicina",
+      "normalized": "nicina",
+      "type": null,
+      "name": "nicina"
+    },
+    {
+      "input": "Ob Meži",
+      "normalized": "ob mezi",
+      "type": null,
+      "name": "ob mezi"
+    },
+    {
+      "input": "Perzonali",
+      "normalized": "perzonali",
+      "type": null,
+      "name": "perzonali"
+    },
+    {
+      "input": "Pod gonjami",
+      "normalized": "pod gonjami",
+      "type": null,
+      "name": "pod gonjami"
+    },
+    {
+      "input": "Poljana",
+      "normalized": "poljana",
+      "type": null,
+      "name": "poljana"
+    },
+    {
+      "input": "Polje",
+      "normalized": "polje",
+      "type": null,
+      "name": "polje"
+    },
+    {
+      "input": "Pri Brančurniku",
+      "normalized": "pri brancurniku",
+      "type": null,
+      "name": "pri brancurniku"
+    },
+    {
+      "input": "Pri postaji",
+      "normalized": "pri postaji",
+      "type": null,
+      "name": "pri postaji"
+    },
+    {
+      "input": "Prisoje",
+      "normalized": "prisoje",
+      "type": null,
+      "name": "prisoje"
+    },
+    {
+      "input": "Šentanel",
+      "normalized": "sentanel",
+      "type": null,
+      "name": "sentanel"
+    },
+    {
+      "input": "Spodnji kraj",
+      "normalized": "spodnji kraj",
+      "type": null,
+      "name": "spodnji kraj"
+    },
+    {
+      "input": "Stare sledi",
+      "normalized": "stare sledi",
+      "type": null,
+      "name": "stare sledi"
+    },
+    {
+      "input": "Stražišče",
+      "normalized": "strazisce",
+      "type": null,
+      "name": "strazisce"
+    },
+    {
+      "input": "Trg",
+      "normalized": "trg",
+      "type": null,
+      "name": "trg"
+    },
+    {
+      "input": "Ugasle peči",
+      "normalized": "ugasle peci",
+      "type": null,
+      "name": "ugasle peci"
+    },
+    {
+      "input": "Zagrad",
+      "normalized": "zagrad",
+      "type": null,
+      "name": "zagrad"
+    },
+    {
+      "input": "Zgornji kraj",
+      "normalized": "zgornji kraj",
+      "type": null,
+      "name": "zgornji kraj"
+    },
+    {
+      "input": "Na Gradu",
+      "normalized": "na gradu",
+      "type": null,
+      "name": "na gradu"
+    },
+    {
+      "input": "Brdinje",
+      "normalized": "brdinje",
+      "type": null,
+      "name": "brdinje"
+    },
+    {
+      "input": "Breznica",
+      "normalized": "breznica",
+      "type": null,
+      "name": "breznica"
+    },
+    {
+      "input": "Čečovje",
+      "normalized": "cecovje",
+      "type": null,
+      "name": "cecovje"
+    },
+    {
+      "input": "Ditingerjeva ulica",
+      "normalized": "ditingerjeva ulica",
+      "type": null,
+      "name": "ditingerjeva ulica"
+    },
+    {
+      "input": "Dobja vas",
+      "normalized": "dobja vas",
+      "type": null,
+      "name": "dobja vas"
+    },
+    {
+      "input": "Dobrije",
+      "normalized": "dobrije",
+      "type": null,
+      "name": "dobrije"
+    },
+    {
+      "input": "Gačnikova pot",
+      "normalized": "gacnikova pot",
+      "type": null,
+      "name": "gacnikova pot"
+    },
+    {
+      "input": "Gledališka pot",
+      "normalized": "gledaliska pot",
+      "type": null,
+      "name": "gledaliska pot"
+    },
+    {
+      "input": "Gozdarska pot",
+      "normalized": "gozdarska pot",
+      "type": null,
+      "name": "gozdarska pot"
+    },
+    {
+      "input": "Janeče",
+      "normalized": "janece",
+      "type": null,
+      "name": "janece"
+    },
+    {
+      "input": "Javornik",
+      "normalized": "javornik",
+      "type": null,
+      "name": "javornik"
+    },
+    {
+      "input": "Koroška cesta",
+      "normalized": "koroska cesta",
+      "type": null,
+      "name": "koroska cesta"
+    },
+    {
+      "input": "Malagajeva pot",
+      "normalized": "malagajeva pot",
+      "type": null,
+      "name": "malagajeva pot"
+    },
+    {
+      "input": "Malgajeva cesta",
+      "normalized": "malgajeva cesta",
+      "type": null,
+      "name": "malgajeva cesta"
+    },
+    {
+      "input": "Na Šancah",
+      "normalized": "na sancah",
+      "type": null,
+      "name": "na sancah"
+    },
+    {
+      "input": "Navrški Vrh",
+      "normalized": "navrski vrh",
+      "type": null,
+      "name": "navrski vrh"
+    },
+    {
+      "input": "Ob Meži",
+      "normalized": "ob mezi",
+      "type": null,
+      "name": "ob mezi"
+    },
+    {
+      "input": "Ob Suhi",
+      "normalized": "ob suhi",
+      "type": null,
+      "name": "ob suhi"
+    },
+    {
+      "input": "Partizanska cesta",
+      "normalized": "partizanska cesta",
+      "type": null,
+      "name": "partizanska cesta"
+    },
+    {
+      "input": "Podkraj",
+      "normalized": "podkraj",
+      "type": null,
+      "name": "podkraj"
+    },
+    {
+      "input": "Preški Vrh",
+      "normalized": "preski vrh",
+      "type": null,
+      "name": "preski vrh"
+    },
+    {
+      "input": "Prežihova ulica",
+      "normalized": "prezihova ulica",
+      "type": null,
+      "name": "prezihova ulica"
+    },
+    {
+      "input": "Stara ulica",
+      "normalized": "stara ulica",
+      "type": null,
+      "name": "stara ulica"
+    },
+    {
+      "input": "Stražišče",
+      "normalized": "strazisce",
+      "type": null,
+      "name": "strazisce"
+    },
+    {
+      "input": "Strojna",
+      "normalized": "strojna",
+      "type": null,
+      "name": "strojna"
+    },
+    {
+      "input": "Tolsti Vrh",
+      "normalized": "tolsti vrh",
+      "type": null,
+      "name": "tolsti vrh"
+    },
+    {
+      "input": "Tolsti Vrh p. R. na K. - del",
+      "normalized": "tolsti vrh p r na k del",
+      "type": null,
+      "name": "tolsti vrh p r na k del"
+    },
+    {
+      "input": "Tolsti Vrh pri Ravnah na Koroškem - del",
+      "normalized": "tolsti vrh pri ravnah na koroskem del",
+      "type": null,
+      "name": "tolsti vrh pri ravnah na koroskem del"
+    },
+    {
+      "input": "Trg svobode",
+      "normalized": "trg svobode",
+      "type": "trg",
+      "name": "svobode"
+    },
+    {
+      "input": "Zelen Breg",
+      "normalized": "zelen breg",
+      "type": null,
+      "name": "zelen breg"
+    },
+    {
+      "input": "Sele",
+      "normalized": "sele",
+      "type": null,
+      "name": "sele"
+    },
+    {
+      "input": "Sele",
+      "normalized": "sele",
+      "type": null,
+      "name": "sele"
+    },
+    {
+      "input": "Uršlja gora",
+      "normalized": "urslja gora",
+      "type": null,
+      "name": "urslja gora"
+    },
+    {
+      "input": "Vrhe",
+      "normalized": "vrhe",
+      "type": null,
+      "name": "vrhe"
+    },
+    {
+      "input": "Plat",
+      "normalized": "plat",
+      "type": null,
+      "name": "plat"
+    },
+    {
+      "input": "Zagrad",
+      "normalized": "zagrad",
+      "type": null,
+      "name": "zagrad"
+    }
+  ]
+}

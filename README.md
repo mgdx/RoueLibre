@@ -11,7 +11,7 @@
 <p align="center">
   <a href="LICENSE"><img alt="Licence: GPLv3" src="https://img.shields.io/badge/licence-GPLv3-0F6E56?style=flat-square"></a>
   <img alt="Android 8.0 and later" src="https://img.shields.io/badge/Android-8.0%2B-0F6E56?style=flat-square">
-  <a href="docs/networks.md"><img alt="340 networks in 39 countries" src="https://img.shields.io/badge/networks-340%20in%2039%20countries-0F6E56?style=flat-square"></a>
+  <a href="docs/networks.md"><img alt="360 networks in 39 countries" src="https://img.shields.io/badge/networks-360%20in%2039%20countries-0F6E56?style=flat-square"></a>
   <img alt="No tracker" src="https://img.shields.io/badge/trackers-none-0F6E56?style=flat-square">
   <img alt="APK: 7.9 MB" src="https://img.shields.io/badge/APK-7.9%20MB-0F6E56?style=flat-square">
   <a href="https://liberapay.com/mgdx"><img alt="Donate on Liberapay" src="https://img.shields.io/badge/donate-Liberapay-0F6E56?style=flat-square&logo=liberapay&logoColor=white"></a>
@@ -49,7 +49,7 @@ but the live availability of the bikes runs on your phone.
 
 ## Features
 
-- 🚲 **340 bike-share networks in 39 countries**, 69,234 stations, from Vélib'
+- 🚲 **360 bike-share networks in 39 countries**, 71,176 stations, from Vélib'
   to Auch's ten, by way of New York, Montréal, Prague, Barcelona, Dubai, Buenos
   Aires and Pristina. No city is a default: the application proposes the one
   matching your position, measured on where its stations actually are, and you
@@ -78,7 +78,7 @@ but the live availability of the bikes runs on your phone.
   later.
 
 - 🔒 **Private, and local.** Everything happens on the device:
-  - the map, streets and routing data are downloaded **once** — 10.7 MB for a
+  - the map, streets and routing data are downloaded **once** — 10.9 MB for a
     median city — from the releases of
     [`RoueLibre-data`](https://github.com/mgdx/RoueLibre-data), a repository of
     this project, and that is it. What comes down is **static files and nothing

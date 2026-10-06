@@ -1,0 +1,797 @@
+{
+  "language": "en",
+  "cases": [
+    {
+      "input": "Abbey Rd",
+      "normalized": "abbey road",
+      "type": null,
+      "name": "abbey road"
+    },
+    {
+      "input": "Baker Street",
+      "normalized": "baker street",
+      "type": null,
+      "name": "baker street"
+    },
+    {
+      "input": "St James's Park",
+      "normalized": "saint james south park",
+      "type": null,
+      "name": "saint james south park"
+    },
+    {
+      "input": "Queen's Crescent",
+      "normalized": "queen south crescent",
+      "type": null,
+      "name": "queen south crescent"
+    },
+    {
+      "input": "Kensington High St",
+      "normalized": "kensington high st",
+      "type": null,
+      "name": "kensington high st"
+    },
+    {
+      "input": "Dr Martin Luther King Jr Blvd",
+      "normalized": "doctor martin luther king jr boulevard",
+      "type": null,
+      "name": "doctor martin luther king jr boulevard"
+    },
+    {
+      "input": "N Michigan Ave",
+      "normalized": "north michigan avenue",
+      "type": null,
+      "name": "north michigan avenue"
+    },
+    {
+      "input": "The Mall",
+      "normalized": "the mall",
+      "type": null,
+      "name": "the mall"
+    },
+    {
+      "input": "Hyde Park Corner",
+      "normalized": "hyde park corner",
+      "type": null,
+      "name": "hyde park corner"
+    },
+    {
+      "input": "Cherry Ln",
+      "normalized": "cherry lane",
+      "type": null,
+      "name": "cherry lane"
+    },
+    {
+      "input": "Mt Pleasant Ter",
+      "normalized": "mount pleasant terrace",
+      "type": null,
+      "name": "mount pleasant terrace"
+    },
+    {
+      "input": "Fifth Avenue",
+      "normalized": "fifth avenue",
+      "type": null,
+      "name": "fifth avenue"
+    },
+    {
+      "input": "Abernathy Street",
+      "normalized": "abernathy street",
+      "type": null,
+      "name": "abernathy street"
+    },
+    {
+      "input": "Brogan Drive",
+      "normalized": "brogan drive",
+      "type": null,
+      "name": "brogan drive"
+    },
+    {
+      "input": "Concord Street",
+      "normalized": "concord street",
+      "type": null,
+      "name": "concord street"
+    },
+    {
+      "input": "Elder Road",
+      "normalized": "elder road",
+      "type": null,
+      "name": "elder road"
+    },
+    {
+      "input": "Hood Road",
+      "normalized": "hood road",
+      "type": null,
+      "name": "hood road"
+    },
+    {
+      "input": "Manor Place",
+      "normalized": "manor place",
+      "type": null,
+      "name": "manor place"
+    },
+    {
+      "input": "North Little Flower Road",
+      "normalized": "north little flower road",
+      "type": null,
+      "name": "north little flower road"
+    },
+    {
+      "input": "Rose Lane",
+      "normalized": "rose lane",
+      "type": null,
+      "name": "rose lane"
+    },
+    {
+      "input": "Stubing Place",
+      "normalized": "stubing place",
+      "type": null,
+      "name": "stubing place"
+    },
+    {
+      "input": "Winslow Road",
+      "normalized": "winslow road",
+      "type": null,
+      "name": "winslow road"
+    },
+    {
+      "input": "Calle Constitución",
+      "normalized": "calle constitucion",
+      "type": null,
+      "name": "calle constitucion"
+    },
+    {
+      "input": "Calle General Carlos Pacheco",
+      "normalized": "calle general carlos pacheco",
+      "type": null,
+      "name": "calle general carlos pacheco"
+    },
+    {
+      "input": "Calle Isla Curazao",
+      "normalized": "calle isla curazao",
+      "type": null,
+      "name": "calle isla curazao"
+    },
+    {
+      "input": "Calle Isla Samoa",
+      "normalized": "calle isla samoa",
+      "type": null,
+      "name": "calle isla samoa"
+    },
+    {
+      "input": "Calle Manuel Rodríguez Carrasco",
+      "normalized": "calle manuel rodriguez carrasco",
+      "type": null,
+      "name": "calle manuel rodriguez carrasco"
+    },
+    {
+      "input": "Calle Salvador Martínez",
+      "normalized": "calle salvador martinez",
+      "type": null,
+      "name": "calle salvador martinez"
+    },
+    {
+      "input": "Privada Francisco Pimentel",
+      "normalized": "privada francisco pimentel",
+      "type": null,
+      "name": "privada francisco pimentel"
+    },
+    {
+      "input": "Abraham González",
+      "normalized": "abraham gonzalez",
+      "type": null,
+      "name": "abraham gonzalez"
+    },
+    {
+      "input": "Boulevard Tomás Fernández",
+      "normalized": "boulevard tomas fernandez",
+      "type": "boulevard",
+      "name": "tomas fernandez"
+    },
+    {
+      "input": "Calle Argentina",
+      "normalized": "calle argentina",
+      "type": null,
+      "name": "calle argentina"
+    },
+    {
+      "input": "Calle Carlos Villareal",
+      "normalized": "calle carlos villareal",
+      "type": null,
+      "name": "calle carlos villareal"
+    },
+    {
+      "input": "Calle Décima Cuarta",
+      "normalized": "calle decima cuarta",
+      "type": null,
+      "name": "calle decima cuarta"
+    },
+    {
+      "input": "Calle Estocolmo",
+      "normalized": "calle estocolmo",
+      "type": null,
+      "name": "calle estocolmo"
+    },
+    {
+      "input": "Calle Guadalupe Victoria",
+      "normalized": "calle guadalupe victoria",
+      "type": null,
+      "name": "calle guadalupe victoria"
+    },
+    {
+      "input": "Calle Ingeniero David Herrera Jordan",
+      "normalized": "calle ingeniero david herrera jordan",
+      "type": null,
+      "name": "calle ingeniero david herrera jordan"
+    },
+    {
+      "input": "Calle Juan N. Zubiran",
+      "normalized": "calle juan north zubiran",
+      "type": null,
+      "name": "calle juan north zubiran"
+    },
+    {
+      "input": "Calle Manuel Bernal Alarcón",
+      "normalized": "calle manuel bernal alarcon",
+      "type": null,
+      "name": "calle manuel bernal alarcon"
+    },
+    {
+      "input": "Calle Niños Héroes",
+      "normalized": "calle ninos heroes",
+      "type": null,
+      "name": "calle ninos heroes"
+    },
+    {
+      "input": "Calle Pirules",
+      "normalized": "calle pirules",
+      "type": null,
+      "name": "calle pirules"
+    },
+    {
+      "input": "Calle Revolución",
+      "normalized": "calle revolucion",
+      "type": null,
+      "name": "calle revolucion"
+    },
+    {
+      "input": "Calle Río Guadalquivir",
+      "normalized": "calle rio guadalquivir",
+      "type": null,
+      "name": "calle rio guadalquivir"
+    },
+    {
+      "input": "Calle Río Sena",
+      "normalized": "calle rio sena",
+      "type": null,
+      "name": "calle rio sena"
+    },
+    {
+      "input": "Calle Sebastian Bermudez",
+      "normalized": "calle sebastian bermudez",
+      "type": null,
+      "name": "calle sebastian bermudez"
+    },
+    {
+      "input": "Calle Viaducto Díaz Ordaz",
+      "normalized": "calle viaducto diaz ordaz",
+      "type": null,
+      "name": "calle viaducto diaz ordaz"
+    },
+    {
+      "input": "de los Viñedos",
+      "normalized": "de los vinedos",
+      "type": null,
+      "name": "de los vinedos"
+    },
+    {
+      "input": "Privada F. Olmedo",
+      "normalized": "privada f olmedo",
+      "type": null,
+      "name": "privada f olmedo"
+    },
+    {
+      "input": "Privada Río Volga",
+      "normalized": "privada rio volga",
+      "type": null,
+      "name": "privada rio volga"
+    },
+    {
+      "input": "Bandera Way",
+      "normalized": "bandera way",
+      "type": null,
+      "name": "bandera way"
+    },
+    {
+      "input": "West San Antonio Avenue",
+      "normalized": "west san antonio avenue",
+      "type": null,
+      "name": "west san antonio avenue"
+    },
+    {
+      "input": "North Virginia Street",
+      "normalized": "north virginia street",
+      "type": null,
+      "name": "north virginia street"
+    },
+    {
+      "input": "Wiggins Way",
+      "normalized": "wiggins way",
+      "type": null,
+      "name": "wiggins way"
+    },
+    {
+      "input": "Calle Doctor Mariano Samaniego",
+      "normalized": "calle doctor mariano samaniego",
+      "type": null,
+      "name": "calle doctor mariano samaniego"
+    },
+    {
+      "input": "Calle Miguel Hidalgo",
+      "normalized": "calle miguel hidalgo",
+      "type": null,
+      "name": "calle miguel hidalgo"
+    },
+    {
+      "input": "Privada José Casavantes",
+      "normalized": "privada jose casavantes",
+      "type": null,
+      "name": "privada jose casavantes"
+    },
+    {
+      "input": "Avenida Rafael Pérez Serna",
+      "normalized": "avenida rafael perez serna",
+      "type": null,
+      "name": "avenida rafael perez serna"
+    },
+    {
+      "input": "Commerce Avenue",
+      "normalized": "commerce avenue",
+      "type": null,
+      "name": "commerce avenue"
+    },
+    {
+      "input": "East Missouri Avenue",
+      "normalized": "east missouri avenue",
+      "type": null,
+      "name": "east missouri avenue"
+    },
+    {
+      "input": "Gateway East",
+      "normalized": "gateway east",
+      "type": null,
+      "name": "gateway east"
+    },
+    {
+      "input": "Humble Place",
+      "normalized": "humble place",
+      "type": null,
+      "name": "humble place"
+    },
+    {
+      "input": "Murchison Drive",
+      "normalized": "murchison drive",
+      "type": null,
+      "name": "murchison drive"
+    },
+    {
+      "input": "North Lee Street",
+      "normalized": "north lee street",
+      "type": null,
+      "name": "north lee street"
+    },
+    {
+      "input": "Park Street",
+      "normalized": "park street",
+      "type": "park",
+      "name": "street"
+    },
+    {
+      "input": "South Estrella Street",
+      "normalized": "south estrella street",
+      "type": null,
+      "name": "south estrella street"
+    },
+    {
+      "input": "Stephenson Avenue",
+      "normalized": "stephenson avenue",
+      "type": null,
+      "name": "stephenson avenue"
+    },
+    {
+      "input": "West Schuster Avenue",
+      "normalized": "west schuster avenue",
+      "type": null,
+      "name": "west schuster avenue"
+    },
+    {
+      "input": "Calle Amapolas",
+      "normalized": "calle amapolas",
+      "type": null,
+      "name": "calle amapolas"
+    },
+    {
+      "input": "Calle Berenjena",
+      "normalized": "calle berenjena",
+      "type": null,
+      "name": "calle berenjena"
+    },
+    {
+      "input": "Calle Coronel S. Tavares",
+      "normalized": "calle coronel south tavares",
+      "type": null,
+      "name": "calle coronel south tavares"
+    },
+    {
+      "input": "Calle Gardenias",
+      "normalized": "calle gardenias",
+      "type": null,
+      "name": "calle gardenias"
+    },
+    {
+      "input": "Calle Jatas",
+      "normalized": "calle jatas",
+      "type": null,
+      "name": "calle jatas"
+    },
+    {
+      "input": "Calle Morelia",
+      "normalized": "calle morelia",
+      "type": null,
+      "name": "calle morelia"
+    },
+    {
+      "input": "Calle Petunias",
+      "normalized": "calle petunias",
+      "type": null,
+      "name": "calle petunias"
+    },
+    {
+      "input": "Calle Sodio",
+      "normalized": "calle sodio",
+      "type": null,
+      "name": "calle sodio"
+    },
+    {
+      "input": "Calle Violetas",
+      "normalized": "calle violetas",
+      "type": null,
+      "name": "calle violetas"
+    },
+    {
+      "input": "Privada Bellavista",
+      "normalized": "privada bellavista",
+      "type": null,
+      "name": "privada bellavista"
+    },
+    {
+      "input": "Privada Quelite",
+      "normalized": "privada quelite",
+      "type": null,
+      "name": "privada quelite"
+    },
+    {
+      "input": "Cassidy Road",
+      "normalized": "cassidy road",
+      "type": null,
+      "name": "cassidy road"
+    },
+    {
+      "input": "Sheridan Road",
+      "normalized": "sheridan road",
+      "type": null,
+      "name": "sheridan road"
+    },
+    {
+      "input": "Argentina Street",
+      "normalized": "argentina street",
+      "type": null,
+      "name": "argentina street"
+    },
+    {
+      "input": "Av. Insurgentes",
+      "normalized": "avenue insurgentes",
+      "type": "avenue",
+      "name": "insurgentes"
+    },
+    {
+      "input": "Bradley Road",
+      "normalized": "bradley road",
+      "type": null,
+      "name": "bradley road"
+    },
+    {
+      "input": "Calle Antonio Canaleto",
+      "normalized": "calle antonio canaleto",
+      "type": null,
+      "name": "calle antonio canaleto"
+    },
+    {
+      "input": "Calle Campesinos",
+      "normalized": "calle campesinos",
+      "type": null,
+      "name": "calle campesinos"
+    },
+    {
+      "input": "Calle Del Márquez",
+      "normalized": "calle del marquez",
+      "type": null,
+      "name": "calle del marquez"
+    },
+    {
+      "input": "Calle Florida",
+      "normalized": "calle florida",
+      "type": null,
+      "name": "calle florida"
+    },
+    {
+      "input": "Calle Ingenieros",
+      "normalized": "calle ingenieros",
+      "type": null,
+      "name": "calle ingenieros"
+    },
+    {
+      "input": "Calle Lago de Zapopan",
+      "normalized": "calle lago de zapopan",
+      "type": null,
+      "name": "calle lago de zapopan"
+    },
+    {
+      "input": "Calle Laguna Verde",
+      "normalized": "calle laguna verde",
+      "type": null,
+      "name": "calle laguna verde"
+    },
+    {
+      "input": "Calle Mineros",
+      "normalized": "calle mineros",
+      "type": null,
+      "name": "calle mineros"
+    },
+    {
+      "input": "Calle Parque De Chapultepec",
+      "normalized": "calle parque de chapultepec",
+      "type": null,
+      "name": "calle parque de chapultepec"
+    },
+    {
+      "input": "Calle Paseo De Las Flores Sur",
+      "normalized": "calle paseo de las flores sur",
+      "type": null,
+      "name": "calle paseo de las flores sur"
+    },
+    {
+      "input": "Calle Río Del Valle Poniente",
+      "normalized": "calle rio del valle poniente",
+      "type": null,
+      "name": "calle rio del valle poniente"
+    },
+    {
+      "input": "Calle Sor Juana Inés De la Cruz",
+      "normalized": "calle sor juana ines de la cruz",
+      "type": null,
+      "name": "calle sor juana ines de la cruz"
+    },
+    {
+      "input": "Calle Valle De Las Peñas",
+      "normalized": "calle valle de las penas",
+      "type": null,
+      "name": "calle valle de las penas"
+    },
+    {
+      "input": "Calle Vicente Guerrero",
+      "normalized": "calle vicente guerrero",
+      "type": null,
+      "name": "calle vicente guerrero"
+    },
+    {
+      "input": "Canal de la Mancha",
+      "normalized": "canal de la mancha",
+      "type": null,
+      "name": "canal de la mancha"
+    },
+    {
+      "input": "Corbin Place",
+      "normalized": "corbin place",
+      "type": null,
+      "name": "corbin place"
+    },
+    {
+      "input": "Edwards Street",
+      "normalized": "edwards street",
+      "type": null,
+      "name": "edwards street"
+    },
+    {
+      "input": "Galgódromo de las Américas",
+      "normalized": "galgodromo de las americas",
+      "type": null,
+      "name": "galgodromo de las americas"
+    },
+    {
+      "input": "Hermanos Escobar",
+      "normalized": "hermanos escobar",
+      "type": null,
+      "name": "hermanos escobar"
+    },
+    {
+      "input": "Lake Street",
+      "normalized": "lake street",
+      "type": null,
+      "name": "lake street"
+    },
+    {
+      "input": "Mc Affee Place",
+      "normalized": "mc affee place",
+      "type": null,
+      "name": "mc affee place"
+    },
+    {
+      "input": "Paden Street",
+      "normalized": "paden street",
+      "type": null,
+      "name": "paden street"
+    },
+    {
+      "input": "Ponce Drive",
+      "normalized": "ponce drive",
+      "type": null,
+      "name": "ponce drive"
+    },
+    {
+      "input": "Privada Parque De Chapultepec",
+      "normalized": "privada parque de chapultepec",
+      "type": null,
+      "name": "privada parque de chapultepec"
+    },
+    {
+      "input": "R E Thomason Loop",
+      "normalized": "r east thomason loop",
+      "type": null,
+      "name": "r east thomason loop"
+    },
+    {
+      "input": "Saint John's Drive",
+      "normalized": "saint john south drive",
+      "type": null,
+      "name": "saint john south drive"
+    },
+    {
+      "input": "South Little Flower Road",
+      "normalized": "south little flower road",
+      "type": null,
+      "name": "south little flower road"
+    },
+    {
+      "input": "Trinity Place",
+      "normalized": "trinity place",
+      "type": null,
+      "name": "trinity place"
+    },
+    {
+      "input": "Via La Baronesa Sur",
+      "normalized": "via la baronesa sur",
+      "type": null,
+      "name": "via la baronesa sur"
+    },
+    {
+      "input": "Altura Avenue",
+      "normalized": "altura avenue",
+      "type": null,
+      "name": "altura avenue"
+    },
+    {
+      "input": "Brighton Lane",
+      "normalized": "brighton lane",
+      "type": null,
+      "name": "brighton lane"
+    },
+    {
+      "input": "Chariot Way",
+      "normalized": "chariot way",
+      "type": null,
+      "name": "chariot way"
+    },
+    {
+      "input": "Dakota Street",
+      "normalized": "dakota street",
+      "type": null,
+      "name": "dakota street"
+    },
+    {
+      "input": "Fanner Road",
+      "normalized": "fanner road",
+      "type": null,
+      "name": "fanner road"
+    },
+    {
+      "input": "Hawley Circle",
+      "normalized": "hawley circle",
+      "type": null,
+      "name": "hawley circle"
+    },
+    {
+      "input": "Krupp Drive",
+      "normalized": "krupp drive",
+      "type": null,
+      "name": "krupp drive"
+    },
+    {
+      "input": "Marr Street",
+      "normalized": "marr street",
+      "type": null,
+      "name": "marr street"
+    },
+    {
+      "input": "Murray Place",
+      "normalized": "murray place",
+      "type": null,
+      "name": "murray place"
+    },
+    {
+      "input": "North Stevens Street",
+      "normalized": "north stevens street",
+      "type": null,
+      "name": "north stevens street"
+    },
+    {
+      "input": "Pittsburgh Avenue",
+      "normalized": "pittsburgh avenue",
+      "type": null,
+      "name": "pittsburgh avenue"
+    },
+    {
+      "input": "Rowena Way",
+      "normalized": "rowena way",
+      "type": null,
+      "name": "rowena way"
+    },
+    {
+      "input": "Smith Road",
+      "normalized": "smith road",
+      "type": null,
+      "name": "smith road"
+    },
+    {
+      "input": "Vin Paz Drive",
+      "normalized": "vin paz drive",
+      "type": null,
+      "name": "vin paz drive"
+    },
+    {
+      "input": "Winter Drive",
+      "normalized": "winter drive",
+      "type": null,
+      "name": "winter drive"
+    },
+    {
+      "input": "Five Points Transit Center",
+      "normalized": "five points transit center",
+      "type": null,
+      "name": "five points transit center"
+    },
+    {
+      "input": "Calle Chiapas",
+      "normalized": "calle chiapas",
+      "type": null,
+      "name": "calle chiapas"
+    },
+    {
+      "input": "Calle Héroe De Nacozari",
+      "normalized": "calle heroe de nacozari",
+      "type": null,
+      "name": "calle heroe de nacozari"
+    },
+    {
+      "input": "Calle Nardos",
+      "normalized": "calle nardos",
+      "type": null,
+      "name": "calle nardos"
+    },
+    {
+      "input": "Calle Telurio",
+      "normalized": "calle telurio",
+      "type": null,
+      "name": "calle telurio"
+    }
+  ]
+}
