@@ -26,6 +26,7 @@ import io.github.mgdx.rouelibre.data.cities.CatalogueRefresh
 import io.github.mgdx.rouelibre.data.cities.CityCatalogueSource
 import io.github.mgdx.rouelibre.data.datasets.DatasetDownloader
 import io.github.mgdx.rouelibre.data.datasets.DatasetStore
+import io.github.mgdx.rouelibre.data.datasets.DatasetTransfer
 import io.github.mgdx.rouelibre.data.local.StationDatabase
 import io.github.mgdx.rouelibre.data.location.AutomaticLocationRequest
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
@@ -35,7 +36,9 @@ import io.github.mgdx.rouelibre.data.network.HttpsOnlyInterceptor
 import io.github.mgdx.rouelibre.data.network.HttpsOnlyRedirectInterceptor
 import io.github.mgdx.rouelibre.data.network.SystemConnectionCost
 import io.github.mgdx.rouelibre.data.routing.OfflineRouter
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 import java.io.File
 import java.time.Duration
@@ -119,6 +122,9 @@ class AppContainer(private val context: Context) {
      */
     suspend fun switchToCity(id: String?) {
         if (preferences.activeCityId() == id) return
+        // Before the city changes, and waited for: a set arriving after it would
+        // be installed into the new city's directory.
+        datasetTransfer.abandon()
         preferences.setActiveCityId(id)
         activeCityMemo.forget()
         datasetStore.useCity(id)
@@ -364,8 +370,28 @@ class AppContainer(private val context: Context) {
     }
 
     /** Where to drop what is being downloaded, before verification. */
-    val downloadWorkDirectory: File
+    private val downloadWorkDirectory: File
         get() = File(context.cacheDir, "downloads")
+
+    /**
+     * The dataset transfer, held here so that it outlives the storage screen
+     * that starts it (SPEC §4.4).
+     *
+     * Leaving that screen used to cancel the download it had just started, with
+     * nothing said. Started by a press, it now carries on until it ends, and
+     * only the storage screen starts one — nothing here does of its own accord.
+     */
+    val datasetTransfer: DatasetTransfer by lazy {
+        DatasetTransfer(
+            // No screen cancels this scope: it lasts as long as the process.
+            scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
+            download = datasetDownloader::download,
+            install = datasetStore::install,
+            workDirectory = downloadWorkDirectory,
+            connectionCost = connectionCost,
+            unmeteredOnly = preferences.downloadOnUnmeteredOnly,
+        )
+    }
 
     /**
      * What the connection in use bills, which decides whether a dataset may

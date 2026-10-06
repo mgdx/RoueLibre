@@ -219,6 +219,8 @@
 
     <string name="map_needs_tiles_title">Le fond de carte n’est pas installé</string>
     <string name="map_needs_tiles_message">Installe-le depuis l’écran de stockage. En attendant, la liste des stations reste utilisable.</string>
+    <string name="map_downloading_title">Le fond de carte est en cours de téléchargement</string>
+    <string name="map_downloading_message">Il s’affichera ici dès qu’il sera installé. En attendant, la liste des stations reste utilisable.</string>
     <!-- The same screen, but before a city has even been designated: it is
          not a file that is missing but the frame for everything else
          (SPEC §15.1). -->

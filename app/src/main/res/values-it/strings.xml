@@ -235,6 +235,8 @@
 
     <string name="map_needs_tiles_title">Lo sfondo cartografico non è installato</string>
     <string name="map_needs_tiles_message">Installalo dalla schermata di archiviazione. Nel frattempo l’elenco delle stazioni resta utilizzabile.</string>
+    <string name="map_downloading_title">Download della mappa in corso</string>
+    <string name="map_downloading_message">Apparirà qui non appena sarà installata. Nel frattempo l’elenco delle stazioni resta utilizzabile.</string>
     <!-- The same screen, but before a city has even been designated: it is
          not a file that is missing but the frame for everything else
          (SPEC §15.1). -->

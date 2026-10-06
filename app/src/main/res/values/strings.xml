@@ -207,6 +207,8 @@
     <string name="map_outside_city_brief">Your position falls outside the area %1$s covers.</string>
     <string name="map_needs_tiles_title">The map needs its offline tiles</string>
     <string name="map_needs_tiles_message">Install the map data from the storage screen. In the meantime, the station list stays usable.</string>
+    <string name="map_downloading_title">The map is downloading</string>
+    <string name="map_downloading_message">It appears here as soon as it is installed. In the meantime, the station list stays usable.</string>
     <string name="map_needs_city_title">Which city?</string>
     <string name="map_needs_city_message">Pick the conurbation you want to use. Its data is downloaded afterwards, once and for all.</string>
     <!-- Shown in place of the map when the city chosen is one this version

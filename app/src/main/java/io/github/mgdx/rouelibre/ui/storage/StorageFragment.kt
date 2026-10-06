@@ -50,8 +50,8 @@ class StorageFragment : Fragment() {
         StorageViewModel.Factory(
             store = container.datasetStore,
             downloader = container.datasetDownloader,
+            transfer = container.datasetTransfer,
             manifestUrl = { container.dataManifestUrl() },
-            workDirectory = container.downloadWorkDirectory,
             supportedFormatVersion = { container.activeCity()?.dataRelease?.formatVersion },
             servedNetwork = { container.activeCity()?.network?.id },
             connectionCost = container.connectionCost,

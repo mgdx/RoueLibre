@@ -216,6 +216,8 @@
 
     <string name="map_needs_tiles_title">Die Kartendaten fehlen</string>
     <string name="map_needs_tiles_message">Installiere sie unter „Speicher“. Bis dahin bleibt die Stationsliste nutzbar.</string>
+    <string name="map_downloading_title">Die Kartendaten werden heruntergeladen</string>
+    <string name="map_downloading_message">Die Karte erscheint hier, sobald sie installiert ist. Bis dahin bleibt die Stationsliste nutzbar.</string>
     <!-- The same screen, but before a city has even been designated: it is
          not a file that is missing but the frame for everything else
          (SPEC §15.1). -->

@@ -212,6 +212,8 @@
 
     <string name="map_needs_tiles_title">地図データがインストールされていません</string>
     <string name="map_needs_tiles_message">ストレージ画面から地図データをインストールしてください。それまでの間も、ステーションの一覧は使えます。</string>
+    <string name="map_downloading_title">地図データをダウンロードしています</string>
+    <string name="map_downloading_message">インストールが終わるとすぐにここに表示されます。それまでの間も、ステーションの一覧は使えます。</string>
     <!-- The same screen, but before a city has even been designated: it is
          not a file that is missing but the frame for everything else
          (SPEC §15.1). -->
