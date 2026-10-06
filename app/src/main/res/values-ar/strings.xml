@@ -704,13 +704,13 @@
          transfer failed rather than an availability refresh. The server is the
          one hosting the files, not the bike network's, and those files come
          down resumably (SPEC §4.4). -->
-    <string name="error_offline_download">لا يتوفّر اتصال. يستأنف التنزيل من حيث توقّف.</string>
-    <string name="error_timeout_download">لا يستجيب الخادم. يستأنف التنزيل من حيث توقّف.</string>
+    <string name="error_offline_download">لا يتوفّر اتصال. بعد عودة الاتصال، اضغط «تنزيل» لاستئناف التنزيل من حيث توقّف.</string>
+    <string name="error_timeout_download">لا يستجيب الخادم. اضغط «تنزيل» لاحقًا لاستئناف التنزيل من حيث توقّف.</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_download">خطأ في الخادم (%1$d). يستأنف التنزيل من حيث توقّف.</string>
-    <string name="error_untrusted_server_download">شهادة أمان غير صالحة. يستأنف التنزيل بمجرّد تجديدها.</string>
-    <string name="error_malformed_download">وصل ملف غير قابل للقراءة. يستأنف التنزيل من حيث توقّف.</string>
-    <string name="error_local_storage_download">تعذّر حفظ الملف. حرّر بعض المساحة ليستأنف التنزيل.</string>
+    <string name="error_server_refused_download">خطأ في الخادم (%1$d). اضغط «تنزيل» لاحقًا لاستئناف التنزيل من حيث توقّف.</string>
+    <string name="error_untrusted_server_download">شهادة أمان غير صالحة. بعد تجديدها، اضغط «تنزيل» لاستئناف التنزيل.</string>
+    <string name="error_malformed_download">وصل ملف غير قابل للقراءة. اضغط «تنزيل» لاحقًا لاستئناف التنزيل من حيث توقّف.</string>
+    <string name="error_local_storage_download">تعذّر حفظ الملف. حرّر بعض المساحة، ثم اضغط «تنزيل» لاستئناف التنزيل.</string>
     <!-- The same failures again, read after a press on "Check for updates",
          which is a third gesture: it reads the published manifest and
          transfers nothing, so there is no download to pick up where it
@@ -749,6 +749,7 @@
     <!-- %1$s is a size. -->
     <string name="download_waiting_for_unmetered">في انتظار شبكة Wi-Fi لتنزيل %1$s.</string>
     <string name="download_can_resume">لم يعد هذا الاتصال شبكة جوّال. ابدأ التنزيل من جديد: يتابع من حيث توقّف.</string>
+    <string name="download_connection_back">عاد الاتصال. اضغط «تنزيل» لاستئناف التنزيل من حيث توقّف.</string>
 
     <string name="settings_opening_title">فتح التطبيق تلقائيًا على:</string>
     <!-- Read aloud in place of the two buttons beside it. -->

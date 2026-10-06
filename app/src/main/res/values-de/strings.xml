@@ -724,13 +724,13 @@
          technical codes (SPEC §7 and §14). -->
     <string name="error_offline">Keine Verbindung. Die zuletzt bekannte Verfügbarkeit bleibt angezeigt.</string>
     <string name="error_offline_no_availability">Keine Verbindung. Es ist noch keine Verfügbarkeit eingegangen, es gibt also nichts anzuzeigen.</string>
-    <string name="error_offline_download">Keine Verbindung. Der Download wird dort fortgesetzt, wo er stehen geblieben ist.</string>
-    <string name="error_timeout_download">Der Server antwortet nicht. Der Download wird dort fortgesetzt, wo er stehen geblieben ist.</string>
+    <string name="error_offline_download">Keine Verbindung. Tippe wieder online auf „Herunterladen“: Der Download wird dort fortgesetzt, wo er stehen geblieben ist.</string>
+    <string name="error_timeout_download">Der Server antwortet nicht. Tippe später auf „Herunterladen“: Der Download wird dort fortgesetzt, wo er stehen geblieben ist.</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_download">Serverfehler (%1$d). Der Download wird dort fortgesetzt, wo er stehen geblieben ist.</string>
-    <string name="error_untrusted_server_download">Ungültiges Sicherheitszertifikat. Der Download wird fortgesetzt, sobald es erneuert ist.</string>
-    <string name="error_malformed_download">Unlesbare Datei empfangen. Der Download wird dort fortgesetzt, wo er stehen geblieben ist.</string>
-    <string name="error_local_storage_download">Die Datei konnte nicht gespeichert werden. Gib Speicherplatz frei, dann wird der Download fortgesetzt.</string>
+    <string name="error_server_refused_download">Serverfehler (%1$d). Tippe später auf „Herunterladen“: Der Download wird dort fortgesetzt, wo er stehen geblieben ist.</string>
+    <string name="error_untrusted_server_download">Ungültiges Sicherheitszertifikat. Tippe auf „Herunterladen“, sobald es erneuert ist: Der Download wird fortgesetzt.</string>
+    <string name="error_malformed_download">Unlesbare Datei empfangen. Tippe später auf „Herunterladen“: Der Download wird dort fortgesetzt, wo er stehen geblieben ist.</string>
+    <string name="error_local_storage_download">Die Datei konnte nicht gespeichert werden. Gib Speicherplatz frei und tippe auf „Herunterladen“, um fortzufahren.</string>
     <!-- The same failures again, read after a press on "Check for updates",
          which is a third gesture: it reads the published manifest and
          transfers nothing, so there is no download to pick up where it
@@ -775,6 +775,7 @@
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_waiting_for_unmetered">Warten auf WLAN, um %1$s herunterzuladen.</string>
     <string name="download_can_resume">Diese Verbindung ist kein Mobilfunknetz mehr. Starte den Download erneut: Er wird dort fortgesetzt, wo er stehen geblieben ist.</string>
+    <string name="download_connection_back">Die Verbindung ist wieder da. Tippe auf „Herunterladen“: Der Download wird dort fortgesetzt, wo er stehen geblieben ist.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">App standardmäßig starten mit</string>

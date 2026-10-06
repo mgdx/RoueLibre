@@ -651,13 +651,13 @@
     <!-- The same failures read on the storage screen, where a dataset
          transfer failed rather than an availability refresh. Those files come
          down resumably (SPEC §4.4). -->
-    <string name="error_offline_download">Nav savienojuma. Lejupielāde turpināsies no vietas, kur apstājās.</string>
-    <string name="error_timeout_download">Serveris neatbild. Lejupielāde turpināsies no vietas, kur apstājās.</string>
+    <string name="error_offline_download">Nav savienojuma. Kad atkal būsiet tiešsaistē, pieskarieties „Lejupielādēt“, un lejupielāde turpināsies no vietas, kur apstājās.</string>
+    <string name="error_timeout_download">Serveris neatbild. Vēlāk pieskarieties „Lejupielādēt“, un lejupielāde turpināsies no vietas, kur apstājās.</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_download">Servera kļūda (%1$d). Lejupielāde turpināsies no vietas, kur apstājās.</string>
-    <string name="error_untrusted_server_download">Nederīgs drošības sertifikāts. Lejupielāde turpināsies, tiklīdz tas būs atjaunots.</string>
-    <string name="error_malformed_download">Saņemts nenolasāms fails. Lejupielāde turpināsies no vietas, kur apstājās.</string>
-    <string name="error_local_storage_download">Failu neizdevās saglabāt. Atbrīvojiet vietu, un lejupielāde turpināsies.</string>
+    <string name="error_server_refused_download">Servera kļūda (%1$d). Vēlāk pieskarieties „Lejupielādēt“, un lejupielāde turpināsies no vietas, kur apstājās.</string>
+    <string name="error_untrusted_server_download">Nederīgs drošības sertifikāts. Kad tas būs atjaunots, pieskarieties „Lejupielādēt“, un lejupielāde turpināsies.</string>
+    <string name="error_malformed_download">Saņemts nenolasāms fails. Vēlāk pieskarieties „Lejupielādēt“, un lejupielāde turpināsies no vietas, kur apstājās.</string>
+    <string name="error_local_storage_download">Failu neizdevās saglabāt. Atbrīvojiet vietu un pieskarieties „Lejupielādēt“, lai turpinātu.</string>
     <!-- The same failures again, read after a press on "Check for updates",
          which is a third gesture: it reads the published manifest and
          transfers nothing, so there is no download to pick up where it
@@ -699,6 +699,7 @@
     <!-- %1$s is a size. -->
     <string name="download_waiting_for_unmetered">Gaida Wi-Fi, lai lejupielādētu %1$s.</string>
     <string name="download_can_resume">Šis savienojums vairs nav mobilais tīkls. Sāciet lejupielādi vēlreiz: tā turpināsies no vietas, kur apstājās.</string>
+    <string name="download_connection_back">Savienojums ir atjaunots. Pieskarieties „Lejupielādēt“, un lejupielāde turpināsies no vietas, kur apstājās.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <!-- The English governs its two buttons — „open on the map“ — where

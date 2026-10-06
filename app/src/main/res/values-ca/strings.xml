@@ -732,13 +732,13 @@
          is the one hosting the files, not the bike network's, and those
          files come down resumably (SPEC §4.4) — which is what each of
          these says will happen next. -->
-    <string name="error_offline_download">Sense connexió. La baixada es reprèn on s’havia aturat.</string>
-    <string name="error_timeout_download">El servidor no respon. La baixada es reprèn on s’havia aturat.</string>
+    <string name="error_offline_download">Sense connexió. Quan tornis a estar en línia, toca «Baixa» per reprendre-la on s’havia aturat.</string>
+    <string name="error_timeout_download">El servidor no respon. Més tard, toca «Baixa» per reprendre la baixada on s’havia aturat.</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_download">Error del servidor (%1$d). La baixada es reprèn on s’havia aturat.</string>
-    <string name="error_untrusted_server_download">Certificat de seguretat no vàlid. La baixada es reprèn quan es renovi.</string>
-    <string name="error_malformed_download">El fitxer rebut és il·legible. La baixada es reprèn on s’havia aturat.</string>
-    <string name="error_local_storage_download">No s’ha pogut desar el fitxer. Allibera espai i la baixada es reprendrà.</string>
+    <string name="error_server_refused_download">Error del servidor (%1$d). Més tard, toca «Baixa» per reprendre la baixada on s’havia aturat.</string>
+    <string name="error_untrusted_server_download">Certificat de seguretat no vàlid. Quan es renovi, toca «Baixa» per reprendre la baixada.</string>
+    <string name="error_malformed_download">El fitxer rebut és il·legible. Més tard, toca «Baixa» per reprendre la baixada on s’havia aturat.</string>
+    <string name="error_local_storage_download">No s’ha pogut desar el fitxer. Allibera espai i toca «Baixa» per reprendre la baixada.</string>
     <!-- The same failures again, read after a press on "Cerca
          actualitzacions", which is a third gesture: it reads the published
          manifest and transfers nothing, so there is no download to pick up
@@ -783,6 +783,7 @@
     <!-- %1$s is a size, "340 MB" for instance. -->
     <string name="download_waiting_for_unmetered">S’espera una xarxa Wi-Fi per baixar %1$s.</string>
     <string name="download_can_resume">Aquesta connexió ja no és una xarxa mòbil. Torna a iniciar la baixada: es reprèn on s’havia aturat.</string>
+    <string name="download_connection_back">La connexió ha tornat. Toca «Baixa» per reprendre la baixada on s’havia aturat.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Obre l’aplicació per defecte a</string>

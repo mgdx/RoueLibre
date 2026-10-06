@@ -13,6 +13,7 @@ import io.github.mgdx.rouelibre.core.data.DatasetRejection
 import io.github.mgdx.rouelibre.core.data.DatasetUpdate
 import io.github.mgdx.rouelibre.core.data.InstalledDataset
 import io.github.mgdx.rouelibre.core.data.MeteredTransferGate
+import io.github.mgdx.rouelibre.core.data.ReconnectionWatch
 import io.github.mgdx.rouelibre.core.data.compareWithInstalled
 import io.github.mgdx.rouelibre.data.datasets.DatasetDownloader
 import io.github.mgdx.rouelibre.data.datasets.DatasetStore
@@ -41,6 +42,9 @@ import java.io.File
  *   the row rather than only announced in passing: a snackbar goes away after
  *   a few seconds and left the row saying "Not installed", which is word for
  *   word what a set nobody ever asked for says.
+ * @property connectionBack the [failure] was the connection, and it has come
+ *   back since: the row offers the resumption instead of repeating that the
+ *   device is offline. An offer only — the press stays the user's (SPEC §4.4).
  */
 data class DatasetRow(
     val kind: DatasetKind,
@@ -48,6 +52,7 @@ data class DatasetRow(
     val update: DatasetUpdate? = null,
     val publishedSizeBytes: Long? = null,
     val failure: DataError? = null,
+    val connectionBack: Boolean = false,
 )
 
 /**
@@ -143,6 +148,12 @@ sealed interface StorageMessage {
 
     /** The connection no longer bills: what was held back can start again. */
     data object CanResumeOnUnmetered : StorageMessage
+
+    /**
+     * The connection a transfer failed for want of has come back: it can start
+     * again, from where it stopped, on a press (SPEC §4.4).
+     */
+    data object CanResumeOnReconnection : StorageMessage
 }
 
 /** What the line above the button is saying, if anything. */
@@ -190,7 +201,20 @@ fun StorageUiState.withFailure(kind: DatasetKind, error: DataError): StorageUiSt
 
 /** The same state, the failures of the previous attempt forgotten. */
 fun StorageUiState.withoutFailures(): StorageUiState =
-    copy(datasets = datasets.map { it.copy(failure = null) })
+    copy(datasets = datasets.map { it.copy(failure = null, connectionBack = false) })
+
+/**
+ * The same state, with the rows that failed offline told whether the connection
+ * has come back since.
+ *
+ * Only those rows: a set refused by its server is not answered by a connection,
+ * and offering it again on that ground would be offering the wrong remedy.
+ */
+fun StorageUiState.withConnectionBack(back: Boolean): StorageUiState = copy(
+    datasets = datasets.map {
+        it.copy(connectionBack = back && it.failure == DataError.Offline)
+    },
+)
 
 /**
  * Why a manifest that has been read may not be acted on, or `null` to act on it.
@@ -336,6 +360,9 @@ class StorageViewModel(
     /** Whether opening the screen still has a check to ask for. */
     private val openingCheck = OpeningCheck()
 
+    /** Whether a transfer that failed offline can now be offered again. */
+    private val reconnection = ReconnectionWatch()
+
     init {
         viewModelScope.launch {
             unmeteredOnly.collect { only ->
@@ -347,6 +374,15 @@ class StorageViewModel(
             connectionCost.metered.collect { metered ->
                 mutableState.update { it.copy(isMetered = metered) }
                 applyBillingRule()
+            }
+        }
+        viewModelScope.launch {
+            connectionCost.connected.collect { connected ->
+                // The return is said at once, and the transfer is only offered:
+                // nothing starts again from the background (SPEC §4.1, §4.4).
+                val returned = reconnection.connectionChanged(connected)
+                mutableState.update { it.withConnectionBack(reconnection.isReadyToResume) }
+                if (returned) messageChannel.send(StorageMessage.CanResumeOnReconnection)
             }
         }
         viewModelScope.launch {
@@ -369,6 +405,8 @@ class StorageViewModel(
                                 // arrived.
                                 failure = previous?.failure
                                     ?.takeIf { installed[kind] == previous.installed },
+                                connectionBack = previous?.connectionBack == true &&
+                                    installed[kind] == previous.installed,
                             )
                         },
                         totalBytes = installed.values
@@ -499,6 +537,7 @@ class StorageViewModel(
         // Before the first request goes out, and on the pressing thread: the
         // screen has to change on the press itself, whatever the network then
         // does with the ten seconds it has to answer in.
+        reconnection.transferStarted()
         mutableState.update {
             it.copy(heldBackByMetering = false, isDownloading = true).withoutFailures()
         }
@@ -520,6 +559,7 @@ class StorageViewModel(
                             // too, ten seconds at a time — and the button below
                             // still reads "Download …" for the whole of what is
                             // left, which is the way back in.
+                            reconnection.transferFailed(outcome.error)
                             mutableState.update { it.withFailure(row.kind, outcome.error) }
                             messageChannel.send(
                                 StorageMessage.DownloadFailed(row.kind, outcome.error),

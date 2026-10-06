@@ -808,13 +808,13 @@
          technical codes (SPEC §7 and §14). -->
     <string name="error_offline">Žádné připojení. Na obrazovce zůstává poslední známá dostupnost.</string>
     <string name="error_offline_no_availability">Žádné připojení. Zatím nedorazila žádná dostupnost, není tedy co zobrazit.</string>
-    <string name="error_offline_download">Žádné připojení. Stahování bude pokračovat tam, kde skončilo.</string>
-    <string name="error_timeout_download">Server neodpovídá. Stahování bude pokračovat tam, kde skončilo.</string>
+    <string name="error_offline_download">Žádné připojení. Až budete online, klepněte na „Stáhnout“ a stahování bude pokračovat tam, kde skončilo.</string>
+    <string name="error_timeout_download">Server neodpovídá. Později klepněte na „Stáhnout“ a stahování bude pokračovat tam, kde skončilo.</string>
     <!-- %1$d is the HTTP code the server returned. -->
-    <string name="error_server_refused_download">Chyba serveru (%1$d). Stahování bude pokračovat tam, kde skončilo.</string>
-    <string name="error_untrusted_server_download">Neplatný bezpečnostní certifikát. Stahování bude pokračovat, jakmile bude obnoven.</string>
-    <string name="error_malformed_download">Přijat nečitelný soubor. Stahování bude pokračovat tam, kde skončilo.</string>
-    <string name="error_local_storage_download">Soubor se nepodařilo uložit. Uvolněte místo a stahování bude pokračovat.</string>
+    <string name="error_server_refused_download">Chyba serveru (%1$d). Později klepněte na „Stáhnout“ a stahování bude pokračovat tam, kde skončilo.</string>
+    <string name="error_untrusted_server_download">Neplatný bezpečnostní certifikát. Až bude obnoven, klepněte na „Stáhnout“ a stahování bude pokračovat.</string>
+    <string name="error_malformed_download">Přijat nečitelný soubor. Později klepněte na „Stáhnout“ a stahování bude pokračovat tam, kde skončilo.</string>
+    <string name="error_local_storage_download">Soubor se nepodařilo uložit. Uvolněte místo a klepněte na „Stáhnout“, stahování bude pokračovat.</string>
     <!-- The same failures again, read after a press on "Check for updates",
          which is a third gesture: it reads the published manifest and
          transfers nothing, so there is no download to pick up where it
@@ -858,6 +858,7 @@
     <!-- %1$s is a size, „340 MB“ for instance. -->
     <string name="download_waiting_for_unmetered">Čeká se na Wi-Fi, aby se stáhlo %1$s.</string>
     <string name="download_can_resume">Toto připojení už není mobilní síť. Spusťte stahování znovu: bude pokračovat tam, kde skončilo.</string>
+    <string name="download_connection_back">Připojení je zpět. Klepněte na „Stáhnout“ a stahování bude pokračovat tam, kde skončilo.</string>
     <!-- Opening screen, large numbers, own bike kind -->
 
     <string name="settings_opening_title">Výchozí obrazovka po spuštění</string>
