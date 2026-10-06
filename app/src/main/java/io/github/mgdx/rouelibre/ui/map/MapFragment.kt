@@ -654,6 +654,13 @@ class MapFragment : Fragment() {
             views.missingTilesMessage.setText(R.string.map_needs_city_message)
             views.missingTilesStorage.setText(R.string.city_choose)
             views.missingTilesStorage.setOnClickListener { show(CityFragment()) }
+        } else if (container.datasetTransfer.state.value.isRunning) {
+            // The city's data is on its way: "needs its offline tiles" over a
+            // download already under way read as a city that was broken.
+            views.missingTilesTitle.setText(R.string.map_downloading_title)
+            views.missingTilesMessage.setText(R.string.map_downloading_message)
+            views.missingTilesStorage.setText(R.string.storage_open)
+            views.missingTilesStorage.setOnClickListener { show(StorageFragment()) }
         } else {
             views.missingTilesTitle.setText(R.string.map_needs_tiles_title)
             views.missingTilesMessage.setText(R.string.map_needs_tiles_message)
@@ -2046,21 +2053,24 @@ class MapFragment : Fragment() {
     }
 
     /**
-     * Rebuilds the map when the city's base map is replaced under the screen.
+     * Rebuilds the map when the city's base map is replaced under the screen,
+     * and says so while it is on its way.
      *
      * A download started from the storage screen runs on after the user has
-     * left it: that screen stays on the back stack, so its view model — and
-     * the job it holds — outlive its view. The install can therefore land
-     * while the map is the screen in front, and nothing about coming back to
-     * the map would then reload it; it would draw the version that was
-     * replaced until the application was killed, which is what Washington's
-     * update did.
+     * left it: the transfer belongs to the application, not to that screen.
+     * The install can therefore land while the map is the screen in front, and
+     * nothing about coming back to the map would then reload it; it would draw
+     * the version that was replaced until the application was killed, which is
+     * what Washington's update did. The transfer starting and ending is
+     * followed too, for the panel shown while there are no tiles yet.
      */
     private fun followTheInstalledMap() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                container.datasetStore.installed
-                    .map { it[DatasetKind.Tiles]?.sha256 }
+                combine(
+                    container.datasetStore.installed.map { it[DatasetKind.Tiles]?.sha256 },
+                    container.datasetTransfer.state.map { it.isRunning },
+                ) { tiles, running -> tiles to running }
                     .distinctUntilChanged()
                     .collect { loadTilesFor(container.activeCityState()) }
             }

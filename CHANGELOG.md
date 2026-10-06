@@ -31,6 +31,24 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **A download carries on when the storage screen is left** (`SPEC.md` §4.4).
+  Pressing "Download 7.6 MB" and then Back a second later stopped the
+  transfer without a word, the `.partial` frozen where it stood, and the city
+  just chosen opened onto a station list with no map, no journeys and no
+  addresses. The transfer ran in the storage screen's view model, and leaving
+  the screen cancelled it. It now belongs to the application
+  (`DatasetTransfer`, held by `AppContainer`): the screen starts it on a press
+  and shows it, and a screen opened again in the middle of it finds its
+  progress, the manifest it carries out and any failure on its row. The
+  billing rule and the "Download anyway" exemption moved with it, so a
+  connection that starts billing still stops a transfer nobody is watching.
+  Changing city abandons the transfer before the new city is put into
+  service, so one city's map cannot land in another's folder. The map's
+  missing-tiles panel says the map is downloading while it is
+  (`map_downloading_title`, `map_downloading_message`, in every language).
+  Nothing starts without a press, and a process killed in the background
+  still ends the transfer: the next press resumes it from its offset.
+  `DatasetTransferTest` holds it.
 - **A download cut by a lost connection is offered again when it comes back**
   (`SPEC.md` §4.4). The storage screen kept saying "No connection. The
   download picks up where it stopped." more than three minutes after the

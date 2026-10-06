@@ -227,6 +227,8 @@
 
     <string name="map_needs_tiles_title">El mapa base no está instalado</string>
     <string name="map_needs_tiles_message">Instálalo desde la pantalla de almacenamiento. Mientras tanto, la lista de estaciones sigue siendo utilizable.</string>
+    <string name="map_downloading_title">Descargando el mapa</string>
+    <string name="map_downloading_message">Aparecerá aquí en cuanto esté instalado. Mientras tanto, la lista de estaciones sigue siendo utilizable.</string>
     <!-- The same screen, but before a city has even been designated: it is
          not a file that is missing but the frame for everything else
          (SPEC §15.1). -->
