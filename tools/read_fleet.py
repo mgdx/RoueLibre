@@ -78,10 +78,19 @@ MECHANICAL = "mechanical"
 ELECTRIC = "electric"
 OTHER = "other"
 
-# The keys of the Vélib' extension, which carries no vehicle type identifier.
-# Naming them here is what lets the application read that feed through the very
-# same table as every other network, with no special case in the code.
-VELIB_KINDS = {"mechanical": MECHANICAL, "ebike": ELECTRIC}
+# The keys of the num_bikes_available_types extension, which carries no vehicle
+# type identifier: Vélib' names "mechanical" and "ebike", BCycle "classic",
+# "smart" and "electric" — a smart bike being a pedalled one whose lock rides
+# on the frame. Naming them here is what lets the application read those feeds
+# through the very same table as every other network, with no special case in
+# the code.
+INLINE_KINDS = {
+    "mechanical": MECHANICAL,
+    "ebike": ELECTRIC,
+    "classic": MECHANICAL,
+    "smart": MECHANICAL,
+    "electric": ELECTRIC,
+}
 
 # Below this share of the bikes counted, a kind is a residue rather than an
 # offer, and announcing a mixed fleet would promise something the user will
@@ -160,12 +169,15 @@ def read_vehicle_types(discovery: dict) -> tuple[dict[str, str], bool]:
     return kinds, ELECTRIC in kinds.values()
 
 
-def count_bikes(discovery: dict, kinds: dict[str, str]) -> dict[str, int]:
+def count_bikes(discovery: dict, kinds: dict[str, str]) -> tuple[dict[str, int], set[str]]:
     """Count the bikes actually available, by kind, over the whole network.
 
     Identifiers absent from the declaration are ignored rather than guessed:
     five networks publish at their stations a type they never declared, and a
     bike of unknown propulsion belongs in neither column.
+
+    Returns:
+        the bikes counted by kind, and the inline kind names the feed used.
 
     Raises:
         urllib.error.URLError: on any network or HTTP failure.
@@ -173,17 +185,33 @@ def count_bikes(discovery: dict, kinds: dict[str, str]) -> dict[str, int]:
     """
     document = fetch_json(resolve_feed_url(discovery, "station_status"))
     seen = {MECHANICAL: 0, ELECTRIC: 0}
+    names: set[str] = set()
     for station in document.get("data", {}).get("stations") or []:
         for entry in station.get("vehicle_types_available") or []:
             kind = kinds.get(str(entry.get("vehicle_type_id")))
             if kind in seen:
                 seen[kind] += entry.get("count") or 0
-        for entry in station.get("num_bikes_available_types") or []:
-            for name, count in entry.items():
-                kind = VELIB_KINDS.get(name)
-                if kind in seen:
-                    seen[kind] += count or 0
-    return {kind: count for kind, count in seen.items() if count > 0}
+        for name, count in inline_counts(station.get("num_bikes_available_types")):
+            kind = INLINE_KINDS.get(name)
+            if kind in seen:
+                names.add(name)
+                seen[kind] += count or 0
+    return {kind: count for kind, count in seen.items() if count > 0}, names
+
+
+def inline_counts(breakdown: object) -> list[tuple[str, int]]:
+    """Read num_bikes_available_types in either of the shapes published.
+
+    Vélib' sends a list of single-key objects, [{"mechanical": 3}, {"ebike": 0}],
+    BCycle one object naming every kind, {"electric": 1, "classic": 0}. The
+    application reads both, and a script reading one would leave the cities of
+    the other with no fleet at all.
+    """
+    if isinstance(breakdown, dict):
+        return list(breakdown.items())
+    if isinstance(breakdown, list):
+        return [item for entry in breakdown if isinstance(entry, dict) for item in entry.items()]
+    return []
 
 
 def read_fleet(discovery_url: str) -> FleetReading:
@@ -195,12 +223,12 @@ def read_fleet(discovery_url: str) -> FleetReading:
     """
     discovery = fetch_json(discovery_url)
     kinds, declares_electric = read_vehicle_types(discovery)
-    bikes = count_bikes(discovery, kinds)
-    # The Vélib' keys earn their place in the table only once seen in the
+    bikes, inline_names = count_bikes(discovery, kinds)
+    # The inline keys earn their place in the table only once seen in the
     # feed: writing them everywhere would suggest a breakdown that no other
     # network publishes under those names.
-    if any(name in bikes for name in (MECHANICAL, ELECTRIC)) and not kinds:
-        kinds = dict(VELIB_KINDS)
+    if inline_names and not kinds:
+        kinds = {name: INLINE_KINDS[name] for name in sorted(inline_names)}
     return FleetReading(
         vehicle_types=kinds,
         declares_electric=declares_electric,

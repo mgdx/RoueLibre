@@ -19,6 +19,40 @@
     "city": "Las Vegas",
     "defaultLanguage": "en"
   },
+  "fleet": {
+    "$comment": [
+      "What the network lends, counted from its own feeds (§4.1).",
+      "Never written by hand, and never taken from the vehicle_types",
+      "declaration alone: a third of the networks declaring a mixed fleet",
+      "have not a single bike of one of the two kinds in circulation.",
+      "tools/read_fleet.py therefore counts the bikes actually available",
+      "at the stations, and writes what it saw.",
+      "This block SEEDS the answer, it does not settle it: the",
+      "application counts again from the live feeds on every refresh,",
+      "and a reading only ever adds to what is written here. What this",
+      "block is for is the launch that reaches no network -- the first",
+      "one, and every one made with no connection.",
+      "\"electricBikes\" marks every bike glyph drawn for this city with a",
+      "bolt (§7); \"mixed\" is what allows the station sheet to split its",
+      "count into mechanical and electric; \"vehicleTypes\" translates the",
+      "identifiers the status feed counts by into the two kinds.",
+      "A network whose feeds let nothing be counted keeps whatever its",
+      "declaration says and is never called mixed: the application draws",
+      "one plain figure rather than a split nobody verified."
+    ],
+    "electricBikes": true,
+    "mixed": true,
+    "vehicleTypes": {
+      "classic": "mechanical",
+      "electric": "electric",
+      "smart": "mechanical"
+    },
+    "bikesSeen": {
+      "mechanical": 162,
+      "electric": 14
+    },
+    "surveyedAt": "2026-10-06T10:07:38Z"
+  },
   "gbfs": {
     "$comment": [
       "URL of the auto-discovery file, and of that alone (§4.1).",

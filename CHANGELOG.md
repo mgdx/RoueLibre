@@ -11,6 +11,15 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **The fleet survey reads BCycle's breakdown of bikes by kind** (`SPEC.md`
+  §15). `tools/read_fleet.py` read `num_bikes_available_types` in Vélib's
+  shape alone, a list of single-key objects, and stopped on BCycle's single
+  object naming every kind — the shape the application had read since 1.4.0.
+  Philadelphia, Las Vegas and Bentonville therefore shipped with no `fleet`
+  block, so no bolt on a launch that reaches no network, and twenty-three
+  more BCycle and Lyft networks would have joined them. "classic" and
+  "smart" are read as mechanical, "electric" as electric.
+
 - **A virtual station is no longer closed by `is_installed`** (`SPEC.md`
   §4.1). Pony's Limoges network publishes every one of its 265 stations as
   virtual and "not installed" while renting and returning — 269 electric bikes
