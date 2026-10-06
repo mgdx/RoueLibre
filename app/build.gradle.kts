@@ -94,6 +94,7 @@ val publishedVersionNames = mapOf(
     12 to "1.4.0",
     13 to "1.4.1",
     14 to "1.5.0",
+    15 to "1.5.1",
 )
 
 /**
@@ -133,16 +134,14 @@ android {
         // leaves it unable to tell one release from the next. The
         // architectures derive their own codes from it below, so the value is
         // still written once.
-        versionCode = 14
-        // The home and the work the user names are marked on the map, each
-        // with a button bringing the map onto it. Two streets of one name in
-        // two municipalities are no longer merged in the OpenStreetMap address
-        // indexes, which have been regenerated for every city drawing on them.
-        // A designated point no longer outlives its city, the storage screen
-        // of a city with nothing installed checks as it opens, and a large
-        // network's stations arrive with their state. A donation link joins
-        // the settings. See CHANGELOG.md.
-        versionName = "1.5.0"
+        versionCode = 15
+        // Twenty-nine networks join the catalogue and nine dead ones leave it;
+        // a city chosen and since withdrawn says so instead of greeting its
+        // user as a first installation. A download carries on when the
+        // storage screen is left, and one cut offline is offered again when
+        // the connection returns. Limoges's virtual stations and Metz's
+        // GraouLib' show their bikes again. See CHANGELOG.md.
+        versionName = "1.5.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
