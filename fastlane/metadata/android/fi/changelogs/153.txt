@@ -1,0 +1,8 @@
+Kaksikymmentäyhdeksän verkostoa lisää ja lataus, joka ei enää pysähdy selkäsi takana.
+
+• Uudet verkostot: Oslo, Trondheim, Long Beach, Vitoria-Gasteiz, Uničov, Ravne na Koroškem ja kaksikymmentäkolme pohjoisamerikkalaista verkostoa, muun muassa Los Angeles, Milwaukee, Cincinnati, Salt Lake City, Nashville ja San Antonio. Yhdeksän verkostoa, jotka eivät enää julkaise asemiaan, on poistettu.
+• Jos valitsemasi verkosto on poistettu, sovellus kertoo sen nyt ja ehdottaa toista kaupunkia sen sijaan, että kysyisi kaupunkiasi kuin ensiasennuksessa. Sen ladatut aineistot pysyvät luettelossa, joten voit poistaa ne milloin haluat.
+• Korjattu: Tallennustila-näytöltä poistuminen kaupungin latauksen aikana pysäytti latauksen sanaakaan sanomatta. Lataus jatkuu nyt, ja kartta kertoo, että sitä ladataan.
+• Korjattu: kun lataus katkesi yhteyden menetyksen vuoksi, mitään ei tapahtunut yhteyden palattua. Tallennustila-näyttö kertoo sen nyt, ja ”Lataa” jatkaa siitä, mihin lataus jäi.
+• Korjattu: Limogesissa kaikki Ponyn asemat näytettiin poissa käytöstä, vaikka niistä pystyi ottamaan pyöriä.
+• Korjattu: GraouLib’ Metzissä ei näyttänyt yhtään asemaa sen jälkeen, kun verkosto siirsi tietonsa.
