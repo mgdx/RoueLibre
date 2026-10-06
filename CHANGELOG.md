@@ -9,6 +9,16 @@ also records what has no visible effect.
 
 ## [Unreleased]
 
+### Fixed
+
+- **GraouLib', in Metz, shows its stations again** (`SPEC.md` §4.1). Fifteen
+  moved the network to a new host and kept listing its feeds on the old one,
+  which answers 500 to everything. The configuration takes the discovery
+  address now published on transport.data.gouv.fr, and a feed whose announced
+  host fails is read once more, on the same path, from the host the discovery
+  document came from — which serves the next producer to move without
+  rewriting its links, with no release needed.
+
 ## [1.5.0]
 
 The home and the work a user names now stand on the map, each with a button
