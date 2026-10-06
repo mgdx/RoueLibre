@@ -236,6 +236,7 @@
     <string name="map_city_withdrawn_title">Sieć nie jest już dostępna</string>
     <string name="map_city_withdrawn_message">„%1$s” nie jest już dostępne, a jego stacje nie są już wyświetlane. Wybierz inne miasto. Dane pozostawione na tym urządzeniu można usunąć z listy miast.</string>
     <string name="map_city_withdrawn_message_unnamed">Wybrana sieć nie jest już dostępna, a jej stacje nie są już wyświetlane. Wybierz inne miasto. Dane pozostawione na tym urządzeniu można usunąć z listy miast.</string>
+    <string name="map_city_newer_version_message">„%1$s” jest dostępne w nowszej wersji aplikacji, a jego stacje nie są wyświetlane w tej wersji. Zaktualizuj aplikację albo wybierz inne miasto.</string>
     <string name="city_choose_another">Wybierz inne miasto</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -615,6 +616,7 @@
     <string name="storage_nothing_installed">Brak zainstalowanych danych</string>
     <string name="storage_no_city">Nie wybrano miasta</string>
     <string name="city_withdrawn_label">„%1$s” · już niedostępne</string>
+    <string name="city_newer_version_label">„%1$s” · wymaga aktualizacji</string>
 
     <string name="dataset_tiles">Dane mapy</string>
     <string name="dataset_tiles_purpose">Rysują mapę bez sieci</string>

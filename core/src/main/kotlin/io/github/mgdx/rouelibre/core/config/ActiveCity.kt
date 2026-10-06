@@ -25,32 +25,14 @@ public sealed interface ActiveCity {
      *   directory its data sits in.
      * @property withdrawal what the catalogue says of it, or `null` when no
      *   catalogue on the device names it — the network can then not be named.
+     * @property servedByNewerVersion the catalogue's entry when the catalogue
+     *   in force still serves the network and only this build lacks its
+     *   configuration — a newer version of the application serves it, which is
+     *   not the same news as a network gone. `null` otherwise.
      */
     public data class NoLongerServed(
         public val id: String,
         public val withdrawal: WithdrawnCity?,
+        public val servedByNewerVersion: CityEntry? = null,
     ) : ActiveCity
-}
-
-/**
- * Settles which of the three [ActiveCity] answers holds.
- *
- * **A withdrawal outweighs a configuration.** Retiring a network is a catalogue
- * matter and no release is waited for, so a build still carrying the
- * configuration of a network the catalogue has since withdrawn must say it is
- * gone rather than keep querying a feed that answers nothing.
- *
- * @param id the city the settings name, `null` if none.
- * @param configuration its configuration in this build, `null` if there is none.
- * @param withdrawal the catalogue's record of its withdrawal, if any.
- */
-public fun resolveActiveCity(
-    id: String?,
-    configuration: CityConfiguration?,
-    withdrawal: WithdrawnCity?,
-): ActiveCity = when {
-    id == null -> ActiveCity.None
-    withdrawal != null -> ActiveCity.NoLongerServed(id, withdrawal)
-    configuration != null -> ActiveCity.Served(configuration)
-    else -> ActiveCity.NoLongerServed(id, withdrawal = null)
 }

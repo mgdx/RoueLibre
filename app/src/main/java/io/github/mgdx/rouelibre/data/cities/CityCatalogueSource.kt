@@ -9,9 +9,11 @@ import io.github.mgdx.rouelibre.core.config.CityCatalogue
 import io.github.mgdx.rouelibre.core.config.CityCatalogueReader
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.CityConfigurationReader
+import io.github.mgdx.rouelibre.core.config.HeldCatalogue
+import io.github.mgdx.rouelibre.core.config.HeldCatalogues
 import io.github.mgdx.rouelibre.core.config.WithdrawnCity
+import io.github.mgdx.rouelibre.core.config.downloadedCatalogueOutranks
 import io.github.mgdx.rouelibre.core.config.isUsableCityId
-import io.github.mgdx.rouelibre.core.config.resolveActiveCity
 import io.github.mgdx.rouelibre.data.network.MAXIMUM_DOCUMENT_BYTES
 import io.github.mgdx.rouelibre.data.network.textUpTo
 import kotlinx.coroutines.CoroutineDispatcher
@@ -27,10 +29,11 @@ import java.net.SocketTimeoutException
 /**
  * The catalogue of cities served, and the configurations that go with them.
  *
- * Two sources, in this order: the downloaded catalogue if there is one, the one
- * shipped in the APK otherwise. The first allows adding a city without
- * publishing a release; the second guarantees that a first launch without a
- * network shows something rather than an empty list.
+ * Two sources, and the more recent of the two by its `generatedAt` is in
+ * force (see [HeldCatalogues]): the downloaded catalogue allows adding a city
+ * without publishing a release; the one shipped in the APK guarantees that a
+ * first launch without a network shows something rather than an empty list,
+ * and outranks a downloaded copy older than the release reading it.
  *
  * Nothing is downloaded of its own accord: [refresh] is only called by a
  * screen, on an explicit action or when the city list is opened.
@@ -54,13 +57,22 @@ class CityCatalogueSource(
      *
      * A downloaded catalogue that cannot be read — a truncated file, the format
      * of a later version — is ignored in favour of the APK's, rather than
-     * making the application unusable.
+     * making the application unusable; so is one older than the APK's, which
+     * would hide the cities this release added.
      *
      * @throws IllegalStateException if even the shipped catalogue is
      *   unreadable. That is not a user situation but a manufacturing defect.
      */
     suspend fun catalogue(): CityCatalogue = withContext(ioDispatcher) {
-        downloadedCatalogue() ?: embeddedCatalogue()
+        val downloaded = downloadedCatalogue()
+        val shipped = embeddedCatalogue()
+        if (downloaded != null &&
+            downloadedCatalogueOutranks(downloaded.generatedAt, shipped.generatedAt)
+        ) {
+            downloaded
+        } else {
+            shipped
+        }
     }
 
     /**
@@ -86,20 +98,29 @@ class CityCatalogueSource(
      * for us: the HTTP client is built with `cache(null)` on purpose, so that
      * the freshness policy is read here rather than guessed at (SPEC §4.1).
      *
-     * @return the catalogue that just arrived, [CatalogueRefresh.Unchanged] if
-     *   the copy held is still current, or the reason nothing came. The caller
-     *   keeps showing the one in force in both of the last two cases.
+     * **A document older than the shipped catalogue is kept but not put in
+     * force.** It is the host's, so it still replaces the copy held; it simply
+     * outranks nothing. The answer then says what is in force: the shipped
+     * catalogue if the copy it replaced was, [CatalogueRefresh.Unchanged]
+     * otherwise.
+     *
+     * @return the catalogue now in force, [CatalogueRefresh.Unchanged] if
+     *   the catalogue in force is still current, or the reason nothing came.
+     *   The caller keeps showing the one in force in both of the last two cases.
      */
     suspend fun refresh(): CatalogueRefresh = withContext(ioDispatcher) {
-        val url = embeddedCatalogue().catalogueUrl
+        val shipped = embeddedCatalogue()
+        val url = shipped.catalogueUrl
             ?: return@withContext CatalogueRefresh.Failed(
                 DataError.MalformedResponse("no publication address in the shipped catalogue"),
             )
         // Read before the request goes out, and parsed rather than merely looked
         // for: a validator is only worth offering while the document it
-        // describes can still be shown. Offered without that, a `304` would
-        // leave the screen with nothing the server has vouched for.
+        // describes is the one shown. Offered for a copy that cannot be read,
+        // or one the shipped catalogue outranks, a `304` would leave the screen
+        // with nothing the server has vouched for.
         val held = downloadedCatalogue()
+            ?.takeIf { downloadedCatalogueOutranks(it.generatedAt, shipped.generatedAt) }
         val validators = if (held == null) null else cache.validators()
         val request = try {
             Request.Builder()
@@ -156,7 +177,15 @@ class CityCatalogueSource(
                             etag = response.header("ETag"),
                             lastModified = response.header("Last-Modified"),
                         )
-                        CatalogueRefresh.Updated(outcome.value)
+                        val arrived = outcome.value
+                        when {
+                            downloadedCatalogueOutranks(arrived.generatedAt, shipped.generatedAt) ->
+                                CatalogueRefresh.Updated(arrived)
+                            // The copy that was in force gave way to an older
+                            // one, and the shipped catalogue takes over.
+                            held != null -> CatalogueRefresh.Updated(shipped)
+                            else -> CatalogueRefresh.Unchanged
+                        }
                     }
                 }
             }
@@ -187,35 +216,42 @@ class CityCatalogueSource(
      * The networks served once and no more, as the catalogues on the device
      * name them (SPEC §15.1).
      *
-     * **Both catalogues are read, and not only the one in force.** The
+     * **The catalogue in force decides, and the other only names.** The
      * downloaded copy outlives an application update, so the first launch of a
-     * build that dropped a network usually reads a catalogue published before
-     * the withdrawal was written into any — and the user it most concerns would
-     * be the one left unable to read their network's name. The shipped catalogue
-     * was built with this release's configurations, which is what lets it be
-     * trusted on that point: `tools/build_catalogue.py` refuses to list as
-     * withdrawn a network it still ships. The downloaded one comes first, being
-     * the more recent of the two.
+     * build that dropped a network may read a copy published before the
+     * withdrawal was written into any — the shipped catalogue, built with this
+     * release's configurations, then names it. But a network the catalogue in
+     * force serves again is not withdrawn because an older one said so (see
+     * [HeldCatalogues.withdrawnCities]).
      */
-    suspend fun withdrawnCities(): List<WithdrawnCity> = withContext(ioDispatcher) {
-        val downloaded = cache.document()?.let(CityCatalogueReader::readWithdrawn).orEmpty()
-        val shipped = CityCatalogueReader.readWithdrawn(embeddedDocument())
-        (downloaded + shipped).distinctBy { it.id }
-    }
+    suspend fun withdrawnCities(): List<WithdrawnCity> =
+        heldCatalogues().withdrawnCities(servable = knownCityIds())
 
     /**
      * Where the city [cityId] stands, between not chosen, served and gone.
      *
-     * The configuration answers whether this build can serve it, the
-     * catalogues whether it has been withdrawn — which overrides the first
-     * (see [resolveActiveCity]).
+     * The configuration answers whether this build can serve it, the catalogue
+     * in force whether it has been withdrawn or brought back (see
+     * [HeldCatalogues.resolve]).
      */
     suspend fun activeCity(cityId: String?): ActiveCity {
         if (cityId == null) return ActiveCity.None
-        return resolveActiveCity(
-            id = cityId,
-            configuration = configuration(cityId),
-            withdrawal = withdrawnCities().firstOrNull { it.id == cityId },
+        return heldCatalogues().resolve(cityId, configuration(cityId))
+    }
+
+    /** Both catalogues on the device, with what each withdrew. */
+    private suspend fun heldCatalogues(): HeldCatalogues = withContext(ioDispatcher) {
+        val downloaded = cache.document()?.let { document ->
+            (CityCatalogueReader.read(document) as? Outcome.Success)?.value
+                ?.let { HeldCatalogue(it, CityCatalogueReader.readWithdrawn(document)) }
+        }
+        val shippedDocument = embeddedDocument()
+        HeldCatalogues(
+            downloaded = downloaded,
+            shipped = HeldCatalogue(
+                catalogue = embeddedCatalogue(shippedDocument),
+                withdrawnCities = CityCatalogueReader.readWithdrawn(shippedDocument),
+            ),
         )
     }
 
@@ -284,8 +320,8 @@ class CityCatalogueSource(
         .bufferedReader()
         .use { it.readText() }
 
-    private fun embeddedCatalogue(): CityCatalogue =
-        when (val outcome = CityCatalogueReader.read(embeddedDocument())) {
+    private fun embeddedCatalogue(document: String = embeddedDocument()): CityCatalogue =
+        when (val outcome = CityCatalogueReader.read(document)) {
             is Outcome.Success -> outcome.value
             is Outcome.Failure -> error("Catalogue unreadable in the APK: ${outcome.error}")
         }

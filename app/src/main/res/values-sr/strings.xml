@@ -262,6 +262,7 @@
     <string name="map_city_withdrawn_title">Мрежа више није доступна</string>
     <string name="map_city_withdrawn_message">„%1$s“ више није доступно и његове станице се више не приказују. Изаберите други град. Податке који су остали на овом уређају можете да избришете са листе градова.</string>
     <string name="map_city_withdrawn_message_unnamed">Мрежа коју сте изабрали више није доступна и њене станице се више не приказују. Изаберите други град. Податке који су остали на овом уређају можете да избришете са листе градова.</string>
+    <string name="map_city_newer_version_message">„%1$s“ је доступно у новијој верзији апликације и његове станице се не приказују у овој верзији. Ажурирајте апликацију или изаберите други град.</string>
     <string name="city_choose_another">Изабери други град</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). One press gives back
@@ -651,6 +652,7 @@
     <string name="storage_nothing_installed">Нема инсталираних података</string>
     <string name="storage_no_city">Није изабран ниједан град</string>
     <string name="city_withdrawn_label">„%1$s“ · више није доступно</string>
+    <string name="city_newer_version_label">„%1$s“ · потребно ажурирање</string>
 
     <string name="dataset_tiles">Подаци мапе</string>
     <string name="dataset_tiles_purpose">Исцртава мапу без мреже</string>

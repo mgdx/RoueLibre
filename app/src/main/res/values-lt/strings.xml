@@ -255,6 +255,7 @@
     <string name="map_city_withdrawn_title">Tinklas nebepasiekiamas</string>
     <string name="map_city_withdrawn_message">„%1$s“ nebepasiekiamas, o jo stotelės nebeberodomos. Pasirinkite kitą miestą. Šiame įrenginyje likusius duomenis galima ištrinti miestų sąraše.</string>
     <string name="map_city_withdrawn_message_unnamed">Jūsų pasirinktas tinklas nebepasiekiamas, o jo stotelės nebeberodomos. Pasirinkite kitą miestą. Šiame įrenginyje likusius duomenis galima ištrinti miestų sąraše.</string>
+    <string name="map_city_newer_version_message">„%1$s“ pasiekiamas naujesnėje programos versijoje, o jo stotelės šioje versijoje nerodomos. Atnaujinkite programą arba pasirinkite kitą miestą.</string>
     <string name="city_choose_another">Pasirinkti kitą miestą</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -642,6 +643,7 @@
     <string name="storage_nothing_installed">Duomenų neįdiegta</string>
     <string name="storage_no_city">Miestas nepasirinktas</string>
     <string name="city_withdrawn_label">„%1$s“ · nebepasiekiama</string>
+    <string name="city_newer_version_label">„%1$s“ · reikia atnaujinti</string>
 
     <string name="dataset_tiles">Žemėlapio duomenys</string>
     <string name="dataset_tiles_purpose">Piešia žemėlapį be tinklo</string>

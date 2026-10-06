@@ -224,6 +224,7 @@
     <string name="map_city_withdrawn_title">Netz nicht mehr verfügbar</string>
     <string name="map_city_withdrawn_message">%1$s ist nicht mehr verfügbar, und die Stationen werden nicht mehr angezeigt. Wähle eine andere Stadt. Die Daten, die auf diesem Gerät zurückgeblieben sind, kannst du in der Liste der Städte löschen.</string>
     <string name="map_city_withdrawn_message_unnamed">Das gewählte Netz ist nicht mehr verfügbar, und die Stationen werden nicht mehr angezeigt. Wähle eine andere Stadt. Die Daten, die auf diesem Gerät zurückgeblieben sind, kannst du in der Liste der Städte löschen.</string>
+    <string name="map_city_newer_version_message">%1$s ist in einer neueren Version der App verfügbar, und die Stationen werden in dieser Version nicht angezeigt. Aktualisiere die App oder wähle eine andere Stadt.</string>
     <string name="city_choose_another">Andere Stadt wählen</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -665,6 +666,7 @@
     <string name="storage_nothing_installed">Keine Daten installiert</string>
     <string name="storage_no_city">Keine Stadt gewählt</string>
     <string name="city_withdrawn_label">%1$s · nicht mehr verfügbar</string>
+    <string name="city_newer_version_label">%1$s · Update erforderlich</string>
 
     <string name="dataset_tiles">Kartendaten</string>
     <string name="dataset_tiles_purpose">Zeichnet die Karte ohne Netz</string>

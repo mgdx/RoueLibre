@@ -194,6 +194,7 @@
     <string name="map_city_withdrawn_title">Netwerk niet meer beschikbaar</string>
     <string name="map_city_withdrawn_message">%1$s is niet meer beschikbaar en de stations worden niet meer getoond. Kies een andere stad. De gegevens die op dit apparaat zijn achtergebleven, kun je wissen via de lijst met steden.</string>
     <string name="map_city_withdrawn_message_unnamed">Het netwerk dat je koos is niet meer beschikbaar en de stations worden niet meer getoond. Kies een andere stad. De gegevens die op dit apparaat zijn achtergebleven, kun je wissen via de lijst met steden.</string>
+    <string name="map_city_newer_version_message">%1$s is beschikbaar in een nieuwere versie van de app, en de stations worden in deze versie niet getoond. Werk de app bij of kies een andere stad.</string>
     <string name="city_choose_another">Kies een andere stad</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -550,6 +551,7 @@
     <string name="storage_nothing_installed">Geen gegevens geïnstalleerd</string>
     <string name="storage_no_city">Geen stad gekozen</string>
     <string name="city_withdrawn_label">%1$s · niet meer beschikbaar</string>
+    <string name="city_newer_version_label">%1$s · update nodig</string>
 
     <string name="dataset_tiles">Kaartgegevens</string>
     <string name="dataset_tiles_purpose">Tekent de kaart zonder netwerk</string>

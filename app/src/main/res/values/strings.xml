@@ -212,10 +212,14 @@
     <!-- Shown in place of the map when the city chosen is one this version
          no longer serves: its network was withdrawn from the catalogue, or
          this build no longer ships it (SPEC §15.1). The second message is for
-         when no catalogue on the device can still name the network. -->
+         when no catalogue on the device can still name the network. The third
+         is for a network the catalogue serves again while this build lacks
+         it: an update brings it back, under the title the city list gives the
+         rows it refuses (city_needs_newer_version). -->
     <string name="map_city_withdrawn_title">Network no longer available</string>
     <string name="map_city_withdrawn_message">%1$s is no longer available, and its stations are no longer shown. Choose another city. The data it left on this device can be deleted from the list of cities.</string>
     <string name="map_city_withdrawn_message_unnamed">The network you chose is no longer available, and its stations are no longer shown. Choose another city. The data it left on this device can be deleted from the list of cities.</string>
+    <string name="map_city_newer_version_message">%1$s is available in a newer version of the application, and its stations are not shown in this one. Update the application, or choose another city.</string>
     <string name="city_choose_another">Choose another city</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). The descriptions say
@@ -606,6 +610,7 @@
     <string name="storage_nothing_installed">No data installed</string>
     <string name="storage_no_city">No city selected</string>
     <string name="city_withdrawn_label">%1$s · no longer available</string>
+    <string name="city_newer_version_label">%1$s · needs an update</string>
 
     <string name="dataset_tiles">Map data</string>
     <string name="dataset_tiles_purpose">Draws the map with no network</string>

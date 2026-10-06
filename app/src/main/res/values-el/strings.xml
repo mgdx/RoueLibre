@@ -238,6 +238,7 @@
     <string name="map_city_withdrawn_title">Το δίκτυο δεν είναι πλέον διαθέσιμο</string>
     <string name="map_city_withdrawn_message">Το %1$s δεν είναι πλέον διαθέσιμο και οι σταθμοί του δεν εμφανίζονται πια. Επιλέξτε άλλη πόλη. Τα δεδομένα που άφησε σε αυτή τη συσκευή μπορούν να διαγραφούν από τη λίστα των πόλεων.</string>
     <string name="map_city_withdrawn_message_unnamed">Το δίκτυο που επιλέξατε δεν είναι πλέον διαθέσιμο και οι σταθμοί του δεν εμφανίζονται πια. Επιλέξτε άλλη πόλη. Τα δεδομένα που άφησε σε αυτή τη συσκευή μπορούν να διαγραφούν από τη λίστα των πόλεων.</string>
+    <string name="map_city_newer_version_message">Το %1$s είναι διαθέσιμο σε νεότερη έκδοση της εφαρμογής και οι σταθμοί του δεν εμφανίζονται σε αυτή την έκδοση. Ενημερώστε την εφαρμογή ή επιλέξτε άλλη πόλη.</string>
     <string name="city_choose_another">Επιλογή άλλης πόλης</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -620,6 +621,7 @@
     <string name="storage_nothing_installed">Δεν υπάρχουν εγκατεστημένα δεδομένα</string>
     <string name="storage_no_city">Δεν έχει επιλεγεί πόλη</string>
     <string name="city_withdrawn_label">%1$s · δεν είναι πλέον διαθέσιμη</string>
+    <string name="city_newer_version_label">%1$s · απαιτείται ενημέρωση</string>
 
     <string name="dataset_tiles">Δεδομένα χάρτη</string>
     <string name="dataset_tiles_purpose">Σχεδιάζει τον χάρτη χωρίς δίκτυο</string>

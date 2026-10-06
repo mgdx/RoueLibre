@@ -31,6 +31,23 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **The more recent catalogue decides, not the downloaded one** (`SPEC.md`
+  §15.1). The copy downloaded into the application's files outlives an
+  update, and it replaced the shipped catalogue however old it was: a phone
+  keeping a copy of 28 September and updated to a build shipping the catalogue
+  of 6 October found neither Oslo nor Trondheim, whose configurations the APK
+  carried. The two catalogues are now compared by `generatedAt`, the
+  downloaded copy winning a tie; an older copy is set aside, not deleted — the
+  next refresh replaces it — and its `ETag` and `Last-Modified` are no longer
+  offered, so a `304` can never vouch for a catalogue that is not shown. The
+  same rule settles a network brought back: the catalogue in force decides
+  whether it is served, withdrawn or named nowhere, an older copy only lending
+  its name, so a network listed again no longer reads "no longer available"
+  because an older copy still withdrew it. A network listed again that this
+  build lacks says it needs a newer version of the application, in two new
+  strings. The active city's verdict is settled again whenever a refresh puts
+  a new catalogue in force, instead of being held until the application
+  restarts.
 - **A city chosen and since withdrawn says so, instead of greeting its user
   as a first installation** (`SPEC.md` §15.1). A network this build no longer
   serves was read as no city at all: "Which city?" over the user's own tiles,

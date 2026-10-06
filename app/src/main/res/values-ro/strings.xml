@@ -249,6 +249,7 @@
     <string name="map_city_withdrawn_title">Rețea indisponibilă</string>
     <string name="map_city_withdrawn_message">%1$s nu mai este disponibil, iar stațiile sale nu mai sunt afișate. Alege alt oraș. Datele rămase pe acest dispozitiv pot fi șterse din lista orașelor.</string>
     <string name="map_city_withdrawn_message_unnamed">Rețeaua pe care ai ales-o nu mai este disponibilă, iar stațiile sale nu mai sunt afișate. Alege alt oraș. Datele rămase pe acest dispozitiv pot fi șterse din lista orașelor.</string>
+    <string name="map_city_newer_version_message">%1$s este disponibil într-o versiune mai nouă a aplicației, iar stațiile sale nu sunt afișate în aceasta. Actualizează aplicația sau alege alt oraș.</string>
     <string name="city_choose_another">Alege alt oraș</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -637,6 +638,7 @@
     <string name="storage_nothing_installed">Niciun set de date instalat</string>
     <string name="storage_no_city">Niciun oraș ales</string>
     <string name="city_withdrawn_label">%1$s · nu mai este disponibil</string>
+    <string name="city_newer_version_label">%1$s · necesită actualizare</string>
 
     <!-- The three dataset names. All three are masculine singular, which is
          what lets `dataset_imported` and `dataset_deleted` be one string each

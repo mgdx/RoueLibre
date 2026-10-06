@@ -224,6 +224,7 @@
     <string name="map_city_withdrawn_title">Rrjeti nuk është më i disponueshëm</string>
     <string name="map_city_withdrawn_message">%1$s nuk është më i disponueshëm dhe stacionet e tij nuk shfaqen më. Zgjidh një qytet tjetër. Të dhënat që la në këtë pajisje mund të fshihen nga lista e qyteteve.</string>
     <string name="map_city_withdrawn_message_unnamed">Rrjeti që zgjodhe nuk është më i disponueshëm dhe stacionet e tij nuk shfaqen më. Zgjidh një qytet tjetër. Të dhënat që la në këtë pajisje mund të fshihen nga lista e qyteteve.</string>
+    <string name="map_city_newer_version_message">%1$s është i disponueshëm në një version më të ri të aplikacionit, dhe stacionet e tij nuk shfaqen në këtë. Përditëso aplikacionin ose zgjidh një qytet tjetër.</string>
     <string name="city_choose_another">Zgjidh një qytet tjetër</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -583,6 +584,7 @@
     <string name="storage_nothing_installed">Nuk ka të dhëna të instaluara</string>
     <string name="storage_no_city">Nuk është zgjedhur asnjë qytet</string>
     <string name="city_withdrawn_label">%1$s · jo më e disponueshme</string>
+    <string name="city_newer_version_label">%1$s · kërkon përditësim</string>
 
     <!-- The three datasets. All three names are singular, so that the verb of
          `dataset_imported`, `dataset_deleted` and `dataset_delete_body` agrees

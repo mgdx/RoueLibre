@@ -268,6 +268,7 @@
     <string name="map_city_withdrawn_title">Rede xa non dispoñible</string>
     <string name="map_city_withdrawn_message">%1$s xa non está dispoñible e as súas estacións xa non se amosan. Escolle outra cidade. Os datos que deixou neste dispositivo pódense borrar desde a lista de cidades.</string>
     <string name="map_city_withdrawn_message_unnamed">A rede que escolliches xa non está dispoñible e as súas estacións xa non se amosan. Escolle outra cidade. Os datos que deixou neste dispositivo pódense borrar desde a lista de cidades.</string>
+    <string name="map_city_newer_version_message">%1$s está dispoñible nunha versión máis recente da aplicación, e as súas estacións non se amosan nesta. Actualiza a aplicación ou escolle outra cidade.</string>
     <string name="city_choose_another">Escoller outra cidade</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). The descriptions say
@@ -664,6 +665,7 @@
     <string name="storage_nothing_installed">Non hai datos instalados</string>
     <string name="storage_no_city">Non hai ningunha cidade escollida</string>
     <string name="city_withdrawn_label">%1$s · xa non dispoñible</string>
+    <string name="city_newer_version_label">%1$s · require actualización</string>
 
     <!-- The three datasets. All three names are masculine singular — "mapa
          base", "grafo de rutas", "índice de enderezos" — which is what lets

@@ -277,6 +277,7 @@
     <string name="map_city_withdrawn_title">الشبكة لم تعد متاحة</string>
     <string name="map_city_withdrawn_message">لم تعد %1$s متاحة، ولم تعد محطاتها تُعرض. اختر مدينة أخرى. يمكن حذف البيانات التي تركتها على هذا الجهاز من قائمة المدن.</string>
     <string name="map_city_withdrawn_message_unnamed">الشبكة التي اخترتها لم تعد متاحة، ولم تعد محطاتها تُعرض. اختر مدينة أخرى. يمكن حذف البيانات التي تركتها على هذا الجهاز من قائمة المدن.</string>
+    <string name="map_city_newer_version_message">%1$s متاحة في إصدار أحدث من التطبيق، ولا تُعرض محطاتها في هذا الإصدار. حدّث التطبيق أو اختر مدينة أخرى.</string>
     <string name="city_choose_another">اختيار مدينة أخرى</string>
     <!-- The compass, shown while the map is turned or tilted, and gone once
          both are back as the screen opened (SPEC §7.1). -->
@@ -654,6 +655,7 @@
     <string name="storage_nothing_installed">لا بيانات مثبّتة</string>
     <string name="storage_no_city">لم تُختَر أي مدينة</string>
     <string name="city_withdrawn_label">%1$s · لم تعد متاحة</string>
+    <string name="city_newer_version_label">%1$s · يلزم التحديث</string>
 
     <string name="dataset_tiles">بيانات الخريطة</string>
     <string name="dataset_tiles_purpose">لرسم الخريطة بلا شبكة</string>
