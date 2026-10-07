@@ -211,6 +211,15 @@ class DatasetStore(private val context: Context, private val ioDispatcher: Corou
             ?: return@withContext DatasetImportResult.Rejected(
                 DatasetRejection.TransferFailed("file name not found"),
             )
+        // The fixed names are ours; a routing segment's is the document
+        // provider's, and any application can be one. It becomes a path in the
+        // dataset's directory, so it is held to the rule a manifest's names
+        // are, before a byte is copied under it.
+        if (kind.fileName == null && !DatasetKind.isRoutingSegmentName(targetName)) {
+            return@withContext DatasetImportResult.Rejected(
+                DatasetRejection.TransferFailed("unusable routing file name: \"$targetName\""),
+            )
+        }
         val staged = File(destination, "$targetName$STAGING_SUFFIX")
         try {
             val digest = try {

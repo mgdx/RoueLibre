@@ -13,6 +13,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import java.io.File
 import java.io.IOException
 import java.io.InterruptedIOException
@@ -171,7 +172,7 @@ class DatasetDownloader(
 
         // A partial file larger than what is announced is not a resumable one:
         // it is the leftover of another download.
-        if (alreadyReceived > file.sizeBytes && file.sizeBytes > 0) {
+        if (alreadyReceived > file.sizeBytes) {
             partial.delete()
         }
 
@@ -237,6 +238,17 @@ class DatasetDownloader(
             val resuming = response.code == HTTP_PARTIAL_CONTENT
             var written = if (resuming) alreadyReceived else 0L
 
+            // Checked before the first byte is read: a host whose headers
+            // already announce more than the manifest does is refused without a
+            // byte written. Headers are only a promise, though, and the loop
+            // below holds the bound whatever they said.
+            val refusal = headerRefusal(response, file, written)
+            if (refusal != null) {
+                partial.delete()
+                return Outcome.Failure(DataError.MalformedResponse(refusal))
+            }
+
+            var overflowed = false
             response.body.byteStream().use { source ->
                 java.io.FileOutputStream(partial, resuming).use { sink ->
                     val buffer = ByteArray(COPY_BUFFER_BYTES)
@@ -264,11 +276,31 @@ class DatasetDownloader(
                             throw ConnectionLost(error)
                         }
                         if (read < 0) break
+                        // The digest is only compared once the stream ends,
+                        // and a stream need never end: without this bound, a
+                        // compromised host could fill the device's storage
+                        // before anything judged what it sent. Nothing beyond
+                        // the size the manifest announced is ever written.
+                        if (written + read > file.sizeBytes) {
+                            overflowed = true
+                            break
+                        }
                         sink.write(buffer, 0, read)
                         written += read
                         onProgress(DownloadProgress(file.name, written, file.sizeBytes))
                     }
                 }
+            }
+            if (overflowed) {
+                // Deleted once the sink is closed. Not kept for a resumption: a
+                // file longer than announced is not the one announced, and
+                // resuming it would only ask the same host for more of it.
+                partial.delete()
+                return Outcome.Failure(
+                    DataError.MalformedResponse(
+                        "${file.name} is larger than the ${file.sizeBytes} bytes announced",
+                    ),
+                )
             }
         }
         Outcome.Success(Unit)
@@ -299,6 +331,39 @@ class DatasetDownloader(
         // escaping this coroutine closes the application, and no address in a
         // document produced elsewhere is worth that.
         Outcome.Failure(DataError.MalformedResponse(error.message ?: "invalid address"))
+    }
+
+    /**
+     * Why the headers of [response] already rule out the file announced, or
+     * `null` if nothing in them does.
+     *
+     * Both headers are optional — a chunked body has no `Content-Length` — and
+     * an absent one is no refusal: the copy loop holds the bound on its own.
+     * What is refused is a header that is present and contradicts the manifest.
+     *
+     * @param alreadyKept the bytes already in place, which the body continues.
+     */
+    private fun headerRefusal(response: Response, file: ManifestFile, alreadyKept: Long): String? {
+        val remaining = file.sizeBytes - alreadyKept
+        val length = response.body.contentLength()
+        if (length > remaining) {
+            return "${file.name} announced as $length bytes where $remaining remain"
+        }
+        if (response.code != HTTP_PARTIAL_CONTENT) return null
+        val range = response.header("Content-Range") ?: return null
+        // `bytes first-last/total`, with a total the server may leave as `*`.
+        // A range starting elsewhere than where the partial file stops would be
+        // appended at the wrong offset; one ending past the announced size, or
+        // a total other than it, is another file.
+        val match = CONTENT_RANGE.matchEntire(range.trim())
+        val first = match?.groupValues?.get(1)?.toLongOrNull()
+        val last = match?.groupValues?.get(2)?.toLongOrNull()
+        val total = match?.groupValues?.get(3)
+        val consistent = first == alreadyKept &&
+            last != null &&
+            last < file.sizeBytes &&
+            (total == "*" || total?.toLongOrNull() == file.sizeBytes)
+        return if (consistent) null else "${file.name} sent as range \"$range\""
     }
 
     /**
@@ -360,5 +425,8 @@ class DatasetDownloader(
         const val PARTIAL_SUFFIX = ".partial"
         const val COPY_BUFFER_BYTES = 1 shl 16
         const val HTTP_PARTIAL_CONTENT = 206
+
+        /** A `Content-Range` header, its first, last and total captured. */
+        val CONTENT_RANGE = Regex("""bytes (\d+)-(\d+)/(\d+|\*)""")
     }
 }

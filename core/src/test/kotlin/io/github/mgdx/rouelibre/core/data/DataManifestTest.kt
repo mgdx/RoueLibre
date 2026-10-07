@@ -198,6 +198,23 @@ class DataManifestTest {
     }
 
     @Test
+    fun `a file announced without a size has the manifest refused`() {
+        // The size is the bound on what the download writes; optional, it would
+        // be optional for whoever writes the manifest. An absent field reads
+        // as zero, which is why zero is refused with the negative sizes.
+        for (size in listOf("0", "-1")) {
+            val forged = document.replace("\"sizeBytes\": 34992128", "\"sizeBytes\": $size")
+
+            assertTrue(
+                "the size $size should have been refused",
+                DataManifestReader.read(forged) is Outcome.Failure,
+            )
+        }
+        val absent = document.replace("\"sizeBytes\": 34992128", "\"weight\": 34992128")
+        assertTrue(DataManifestReader.read(absent) is Outcome.Failure)
+    }
+
+    @Test
     fun `a set absent from the device is to be downloaded`() {
         val states = compareWithInstalled(manifest(), installedFingerprints = emptyMap())
 

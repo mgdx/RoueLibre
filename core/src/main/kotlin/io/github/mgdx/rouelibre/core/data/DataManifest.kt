@@ -79,12 +79,14 @@ public data class ManifestDataset(
  *   under. It must be a plain file name — see [requirePlainFileName].
  * @property url where to get it. It must be an address a client can fetch —
  *   see [requireFetchableUrl].
- * @property sizeBytes the announced size, shown before asking for confirmation.
+ * @property sizeBytes the announced size, shown before asking for confirmation
+ *   and never exceeded by what the download writes. It is required — see
+ *   [requireAnnouncedSize].
  * @property sha256 the digest, re-verified after download (SPEC §4.4). It is
  *   required — see [requireDigest].
  * @throws IllegalArgumentException if [name] is not a plain file name, if [url]
- *   cannot be fetched, or if [sha256] is not a digest. The reader turns that
- *   into a refusal of the whole manifest.
+ *   cannot be fetched, if [sizeBytes] is not a size, or if [sha256] is not a
+ *   digest. The reader turns that into a refusal of the whole manifest.
  */
 public data class ManifestFile(
     public val name: String,
@@ -95,6 +97,7 @@ public data class ManifestFile(
     init {
         requirePlainFileName(name)
         requireFetchableUrl(url, name)
+        requireAnnouncedSize(sizeBytes, name)
         requireDigest(sha256, name)
     }
 }
@@ -115,10 +118,26 @@ public data class ManifestFile(
  * it is one to be rejected — and it must be rejected whole, unlike a dataset of
  * an unknown category, which a later release may legitimately describe.
  *
- * What is refused is a separator, the two names that designate a directory, and
- * the null character, which truncates a path in the layers underneath. Nothing
- * more: what matters is that the name designate a file *here*, not that it look
- * the way today's generation script writes it. A legitimate name may well hold a
+ * What is refused is what [isPlainFileName] refuses.
+ */
+private fun requirePlainFileName(name: String) {
+    require(isPlainFileName(name)) { "unusable file name in the manifest: \"$name\"" }
+}
+
+/**
+ * Whether [name] can only designate a file in the directory it is put in.
+ *
+ * The one rule for every name that reaches the device from elsewhere and becomes
+ * a path component there: a file named by a downloaded manifest, and a file
+ * imported from a document provider, whose name is whatever that provider
+ * chooses to report. Two definitions would be two rules, and the day one of them
+ * is tightened the other would be the way round it.
+ *
+ * What is refused is a separator, the two names that designate a directory, the
+ * null character, which truncates a path in the layers underneath, and a name
+ * longer than the 255 bytes a file system holds in one component. Nothing more:
+ * what matters is that the name designate a file *here*, not that it look the
+ * way today's generation script writes it. A legitimate name may well hold a
  * space or an accent, and refusing those would be inventing a rule the property
  * to be held does not need.
  *
@@ -126,16 +145,16 @@ public data class ManifestFile(
  * Android, but this module compiles and is tested on the JVM, and a rule that
  * depends on the platform it runs on is a rule one has to think about twice.
  */
-private fun requirePlainFileName(name: String) {
-    require(
-        name.isNotEmpty() &&
-            name != "." &&
-            name != ".." &&
-            '/' !in name &&
-            '\\' !in name &&
-            '\u0000' !in name,
-    ) { "unusable file name in the manifest: \"$name\"" }
-}
+public fun isPlainFileName(name: String): Boolean = name.isNotEmpty() &&
+    name != "." &&
+    name != ".." &&
+    '/' !in name &&
+    '\\' !in name &&
+    '\u0000' !in name &&
+    name.toByteArray(Charsets.UTF_8).size <= MAXIMUM_FILE_NAME_BYTES
+
+/** The length of one path component on the file systems Android uses. */
+private const val MAXIMUM_FILE_NAME_BYTES = 255
 
 /**
  * Refuses a file whose address no client can fetch.
@@ -199,6 +218,27 @@ private fun requireDigest(sha256: String, name: String) {
 }
 
 private const val SHA256_LENGTH = 64
+
+/**
+ * Refuses a file announced without a size.
+ *
+ * The digest says what a file is only once the last byte has come down, and
+ * until then nothing bounds what a host may send: one compromised, or reached
+ * through a redirection, could fill the device's storage before the comparison
+ * ever ran. The announced size is that bound — the download writes no byte
+ * beyond it — and it holds only if every file carries one. Left optional, it
+ * would be optional for whoever writes the manifest, the same party the digest
+ * protects against, which is why it is refused here exactly as a missing digest
+ * is.
+ *
+ * Zero is refused along with the negative sizes: the reader takes an absent
+ * field for zero, and no published file is empty.
+ *
+ * @param name the file concerned, so the refusal says which one.
+ */
+private fun requireAnnouncedSize(sizeBytes: Long, name: String) {
+    require(sizeBytes > 0) { "unusable size for \"$name\": $sizeBytes" }
+}
 
 private fun Char.isHexadecimal(): Boolean = this in '0'..'9' ||
     this in 'a'..'f' ||

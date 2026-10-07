@@ -61,6 +61,8 @@ class DatasetDownloaderTest {
 
     @Test
     fun `downloads a set and verifies its digest`() = runTest {
+        // Exactly the announced size: the bound on what is written must let
+        // its last byte through.
         server.enqueue(MockResponse.Builder().code(200).body(okio.Buffer().write(content)).build())
 
         val outcome = downloader.download(datasetOf(sha256 = sha256Of(content)), workDirectory)
@@ -150,6 +152,13 @@ class DatasetDownloaderTest {
         server.enqueue(
             MockResponse.Builder()
                 .code(206)
+                // Headers that agree with the manifest, as a real host sends
+                // them: the bound on the size must not be what stops a
+                // legitimate resumption.
+                .addHeader(
+                    "Content-Range",
+                    "bytes $alreadyReceived-${content.size - 1}/${content.size}",
+                )
                 .body(okio.Buffer().write(content.copyOfRange(alreadyReceived, content.size)))
                 .build(),
         )
@@ -160,6 +169,72 @@ class DatasetDownloaderTest {
             ?: throw AssertionError("failure: $outcome")
         assertEquals(content.size.toLong(), files.first().length())
         assertEquals("bytes=$alreadyReceived-", server.takeRequest().headers["Range"])
+    }
+
+    @Test
+    fun `a body longer than announced is cut at the announced size and refused`() = runTest {
+        // A compromised host need not stop sending: the digest is compared only
+        // once the stream ends, so without a bound it could fill the device
+        // first. Sent chunked, with no length to refuse up front, so that what
+        // is under test is the copy itself.
+        val longer = content + ByteArray(COPY_BUFFER_BYTES * 3)
+        server.enqueue(
+            MockResponse.Builder()
+                .code(200)
+                .chunkedBody(okio.Buffer().write(longer), 8_192)
+                .build(),
+        )
+        val progress = mutableListOf<Long>()
+
+        val outcome = downloader.download(datasetOf(sha256 = sha256Of(longer)), workDirectory) {
+            progress.add(it.downloadedBytes)
+        }
+
+        assertRefusedForSize(outcome)
+        assertTrue("written past the announced size", progress.all { it <= content.size })
+    }
+
+    @Test
+    fun `a body announced too long is refused before a byte is written`() = runTest {
+        val longer = content + ByteArray(1)
+        server.enqueue(
+            MockResponse.Builder().code(200).body(okio.Buffer().write(longer)).build(),
+        )
+        var written = false
+
+        val outcome = downloader.download(datasetOf(sha256 = sha256Of(longer)), workDirectory) {
+            written = true
+        }
+
+        assertRefusedForSize(outcome)
+        assertTrue("bytes were written despite the announced length", !written)
+    }
+
+    @Test
+    fun `a resumption whose range starts elsewhere is refused`() = runTest {
+        // Appended at the wrong offset, the bytes would make a file only the
+        // digest would catch — after the whole remainder had come down.
+        File(workDirectory, "$FILE_NAME.partial").writeBytes(content.copyOfRange(0, 120_000))
+        server.enqueue(
+            MockResponse.Builder()
+                .code(206)
+                .addHeader("Content-Range", "bytes 100000-${content.size - 1}/${content.size}")
+                .body(okio.Buffer().write(content.copyOfRange(100_000, content.size)))
+                .build(),
+        )
+
+        val outcome = downloader.download(datasetOf(sha256 = sha256Of(content)), workDirectory)
+
+        assertRefusedForSize(outcome)
+    }
+
+    private fun assertRefusedForSize(outcome: Outcome<List<File>>) {
+        assertTrue("expected a failure, got: $outcome", outcome is Outcome.Failure)
+        val error = (outcome as Outcome.Failure).error
+        assertTrue("expected MalformedResponse, got $error", error is DataError.MalformedResponse)
+        assertTrue("the file is not named: $error", FILE_NAME in error.toString())
+        assertTrue("the partial file must be gone", partialFiles().isEmpty())
+        assertTrue("nothing must be installed", !File(workDirectory, FILE_NAME).exists())
     }
 
     @Test
@@ -344,5 +419,6 @@ class DatasetDownloaderTest {
 
     private companion object {
         const val FILE_NAME = "tiles.mbtiles"
+        const val COPY_BUFFER_BYTES = 1 shl 16
     }
 }
