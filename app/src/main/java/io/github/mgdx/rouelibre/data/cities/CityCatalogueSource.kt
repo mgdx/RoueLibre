@@ -14,7 +14,9 @@ import io.github.mgdx.rouelibre.core.config.HeldCatalogues
 import io.github.mgdx.rouelibre.core.config.WithdrawnCity
 import io.github.mgdx.rouelibre.core.config.downloadedCatalogueOutranks
 import io.github.mgdx.rouelibre.core.config.isUsableCityId
+import io.github.mgdx.rouelibre.core.network.RedirectScope
 import io.github.mgdx.rouelibre.data.network.MAXIMUM_DOCUMENT_BYTES
+import io.github.mgdx.rouelibre.data.network.RefusedRedirectException
 import io.github.mgdx.rouelibre.data.network.textUpTo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -126,6 +128,7 @@ class CityCatalogueSource(
             Request.Builder()
                 .url(url)
                 .header("User-Agent", userAgent)
+                .tag(RedirectScope::class.java, RedirectScope.PUBLICATION)
                 .apply {
                     // Both when both are known: RFC 9110 §13.1.3 has the server
                     // ignore the date as soon as an entity tag is present, and
@@ -191,6 +194,8 @@ class CityCatalogueSource(
             }
         } catch (error: SocketTimeoutException) {
             CatalogueRefresh.Failed(DataError.Timeout)
+        } catch (error: RefusedRedirectException) {
+            CatalogueRefresh.Failed(DataError.UntrustedServer(error.message ?: "redirect refused"))
         } catch (_: IOException) {
             CatalogueRefresh.Failed(DataError.Offline)
         }

@@ -110,7 +110,11 @@ file imported by hand rather than a host typed in — see
 
 Everything goes out over TLS. An address in cleartext — a producer's typo in an
 auto-discovery document — is rewritten to `https://` by `HttpsOnlyInterceptor`
-rather than failing, since the application declares no cleartext exception. The
+rather than failing, since the application declares no cleartext exception.
+Redirections are followed by `RedirectFollowingInterceptor` rather than by
+OkHttp, and only where `RedirectPolicy` (`:core`) finds they contact nobody new:
+the same host, the same registrable domain for a GBFS feed, `github.com` to
+`githubusercontent.com` for the data releases (`SPEC.md` §4.1). The
 `User-Agent` names the application and its version, and nothing else: no
 identifier of the device or of the user.
 

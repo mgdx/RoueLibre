@@ -9,6 +9,19 @@ also records what has no visible effect.
 
 ## [Unreleased]
 
+### Security
+
+- **A redirection is followed only where it contacts nobody new** (`SPEC.md`
+  §4.1, security audit V1). OkHttp followed any `Location` to any host, twenty
+  times over: a GBFS operator, or a compromised catalogue or data host, could
+  make the phone contact a server no configuration named. The client now
+  follows none, and `RedirectFollowingInterceptor` follows at most three, on
+  the same host, within the same registrable domain for a GBFS feed, or from
+  `github.com` to `githubusercontent.com` for the publication files; anything
+  else is announced as an untrusted server. `HttpsOnlyRedirectInterceptor`
+  goes, the new interceptor securing each `Location` itself. A live check of
+  every network, `-PliveNetworks`, is added beside the unit tests.
+
 ## [1.5.1]
 
 Twenty-nine networks join the catalogue and nine dead ones leave it, and a

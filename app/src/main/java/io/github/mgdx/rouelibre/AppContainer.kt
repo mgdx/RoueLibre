@@ -32,16 +32,14 @@ import io.github.mgdx.rouelibre.data.location.AutomaticLocationRequest
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.data.network.ConnectionCost
 import io.github.mgdx.rouelibre.data.network.GbfsRemoteSource
-import io.github.mgdx.rouelibre.data.network.HttpsOnlyInterceptor
-import io.github.mgdx.rouelibre.data.network.HttpsOnlyRedirectInterceptor
 import io.github.mgdx.rouelibre.data.network.SystemConnectionCost
+import io.github.mgdx.rouelibre.data.network.roueLibreHttpClient
 import io.github.mgdx.rouelibre.data.routing.OfflineRouter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 import java.io.File
-import java.time.Duration
 
 private val Context.preferencesDataStore: DataStore<Preferences> by preferencesDataStore(
     name = "settings",
@@ -283,25 +281,7 @@ class AppContainer(private val context: Context) {
     /** The active city as last settled, see [activeCityState]. */
     private val activeCityMemo = ActiveCityMemo()
 
-    private val httpClient: OkHttpClient by lazy {
-        OkHttpClient.Builder()
-            .connectTimeout(CONNECT_TIMEOUT)
-            .readTimeout(READ_TIMEOUT)
-            // Every address the application calls goes out in TLS, whatever
-            // scheme it was published with (SPEC §4.1). Two interceptors for
-            // one rule because OkHttp shows each of them a different half of
-            // the call: the application one is run once, on the address asked
-            // for, before a redirection has been followed; the network one is
-            // run for every request that really goes out, and is the only
-            // place from which a `301` towards cleartext can be corrected.
-            .addInterceptor(HttpsOnlyInterceptor())
-            .addNetworkInterceptor(HttpsOnlyRedirectInterceptor())
-            // No disk cache: the freshness policy is the repository's
-            // (SPEC §4.1), and an HTTP cache on top would make it impossible to
-            // reason about.
-            .cache(null)
-            .build()
-    }
+    private val httpClient: OkHttpClient by lazy { roueLibreHttpClient() }
 
     /** Settings and favourites, shared by the screens that read them. */
     val preferences: AppPreferences by lazy {
@@ -494,7 +474,5 @@ class AppContainer(private val context: Context) {
 
     private companion object {
         const val REPOSITORY_URL = "https://github.com/mgdx/RoueLibre"
-        val CONNECT_TIMEOUT: Duration = Duration.ofSeconds(10)
-        val READ_TIMEOUT: Duration = Duration.ofSeconds(20)
     }
 }
