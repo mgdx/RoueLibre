@@ -32,7 +32,9 @@ public enum class RedirectScope {
  * Hosts are compared as the HTTP client hands them over, canonical and in lower
  * case. The registrable domains are computed by the caller, who holds the
  * public suffix list, and are `null` where there is none — an IP address,
- * `localhost`.
+ * `localhost`. They are asked for only when the answer turns on them — a GBFS
+ * request leaving its host — so that whatever goes wrong in reading that list
+ * can never touch the same-host case or the publication path.
  */
 public object RedirectPolicy {
 
@@ -61,22 +63,24 @@ public object RedirectPolicy {
      * @param scope what the request is for; `null` for a request nobody
      *   labelled, which only ever stays on its own host — a forgotten label
      *   must fall into the strictest answer, not the widest.
-     * @param originDomain the registrable domain of [originHost], or `null`.
-     * @param targetDomain the registrable domain of [targetHost], or `null`.
+     * @param originDomain the registrable domain of [originHost], or `null`;
+     *   called only when needed.
+     * @param targetDomain the registrable domain of [targetHost], or `null`;
+     *   called only when needed.
      */
     public fun allows(
         scope: RedirectScope?,
         originHost: String,
-        originDomain: String?,
+        originDomain: () -> String?,
         targetHost: String,
-        targetDomain: String?,
+        targetDomain: () -> String?,
     ): Boolean {
         if (targetHost == originHost) return true
         return when (scope) {
             // An operator moving a feed between its own servers is still the
             // operator: `gbfs.example.com` to `api.example.com` contacts nobody
             // new. Another registrable domain is somebody else.
-            RedirectScope.GBFS -> originDomain != null && originDomain == targetDomain
+            RedirectScope.GBFS -> originDomain()?.let { it == targetDomain() } ?: false
             RedirectScope.PUBLICATION ->
                 originHost == PUBLICATION_HOST && isPublicationStorage(targetHost)
             null -> false

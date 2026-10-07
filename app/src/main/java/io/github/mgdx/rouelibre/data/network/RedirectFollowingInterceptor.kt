@@ -58,9 +58,9 @@ class RedirectFollowingInterceptor(private val registrableDomain: (HttpUrl) -> S
                 RedirectPolicy.allows(
                     scope = scope,
                     originHost = origin.url.host,
-                    originDomain = registrableDomain(origin.url),
+                    originDomain = { domainOrNull(origin.url) },
                     targetHost = target.host,
-                    targetDomain = registrableDomain(target),
+                    targetDomain = { domainOrNull(target) },
                 )
             if (!allowed) throw RefusedRedirectException(target.host)
             request = request.newBuilder().url(target).build()
@@ -68,6 +68,21 @@ class RedirectFollowingInterceptor(private val registrableDomain: (HttpUrl) -> S
             hops++
         }
         return response
+    }
+
+    /**
+     * [registrableDomain], or `null` when it cannot be read.
+     *
+     * OkHttp reads its public suffix list from the APK's assets once its
+     * initialiser has run, and throws an unchecked exception otherwise — one
+     * no caller catches, which would close the application on a redirection.
+     * An unknown domain makes the policy refuse a GBFS hop off its host, the
+     * strictest answer: never a crash, and never a door opened.
+     */
+    private fun domainOrNull(url: HttpUrl): String? = try {
+        registrableDomain(url)
+    } catch (_: RuntimeException) {
+        null
     }
 
     private companion object {

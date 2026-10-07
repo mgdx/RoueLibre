@@ -19,7 +19,33 @@ class RedirectPolicyTest {
         originDomain: String?,
         target: String,
         targetDomain: String?,
-    ) = RedirectPolicy.allows(scope, origin, originDomain, target, targetDomain)
+    ) = RedirectPolicy.allows(scope, origin, { originDomain }, target, { targetDomain })
+
+    @Test
+    fun `a domain is only asked for when the answer turns on it`() {
+        // Reading the public suffix list can fail on a device; the same-host
+        // case and the publication path must not depend on it.
+        val unreadable: () -> String? = { error("public suffix list not loaded") }
+        assertTrue(
+            RedirectPolicy.allows(
+                RedirectScope.GBFS,
+                "a.example",
+                unreadable,
+                "a.example",
+                unreadable,
+            ),
+        )
+        assertTrue(
+            RedirectPolicy.allows(
+                RedirectScope.PUBLICATION,
+                "github.com",
+                unreadable,
+                "release-assets.githubusercontent.com",
+                unreadable,
+            ),
+        )
+        assertFalse(RedirectPolicy.allows(null, "a.example", unreadable, "b.example", unreadable))
+    }
 
     @Test
     fun `the same host is always followed, whatever the request is for`() {

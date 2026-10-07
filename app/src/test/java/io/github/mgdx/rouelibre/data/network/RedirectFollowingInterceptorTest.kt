@@ -43,20 +43,27 @@ class RedirectFollowingInterceptorTest {
     /** Every address the client was about to call, in TLS as the application asked. */
     private val called = mutableListOf<HttpUrl>()
 
-    private val client: OkHttpClient = roueLibreHttpClient(::jvmRegistrableDomain).newBuilder()
-        .dns(
-            object : Dns {
-                override fun lookup(hostname: String) = listOf(InetAddress.getByName("localhost"))
-            },
-        )
-        .addInterceptor { chain ->
-            val url = chain.request().url
-            called += url
-            chain.proceed(
-                chain.request().newBuilder().url(url.newBuilder().scheme("http").build()).build(),
+    private val client: OkHttpClient = clientWith(::jvmRegistrableDomain)
+
+    /** The application's client, on the loopback and in cleartext, as above. */
+    private fun clientWith(registrableDomain: (HttpUrl) -> String?): OkHttpClient =
+        roueLibreHttpClient(registrableDomain).newBuilder()
+            .dns(
+                object : Dns {
+                    override fun lookup(hostname: String) =
+                        listOf(InetAddress.getByName("localhost"))
+                },
             )
-        }
-        .build()
+            .addInterceptor { chain ->
+                val url = chain.request().url
+                called += url
+                chain.proceed(
+                    chain.request().newBuilder().url(
+                        url.newBuilder().scheme("http").build(),
+                    ).build(),
+                )
+            }
+            .build()
 
     @Before
     fun start() {
@@ -77,14 +84,18 @@ class RedirectFollowingInterceptorTest {
     private fun redirect(to: String, code: Int = 302) =
         MockResponse(code = code, headers = headersOf("Location", to))
 
-    private fun get(url: String, scope: RedirectScope?, vararg headers: Pair<String, String>) =
-        client.newCall(
-            Request.Builder()
-                .url(url)
-                .apply { headers.forEach { (name, value) -> header(name, value) } }
-                .apply { if (scope != null) tag(RedirectScope::class.java, scope) }
-                .build(),
-        ).execute()
+    private fun get(
+        url: String,
+        scope: RedirectScope?,
+        vararg headers: Pair<String, String>,
+        through: OkHttpClient = client,
+    ) = through.newCall(
+        Request.Builder()
+            .url(url)
+            .apply { headers.forEach { (name, value) -> header(name, value) } }
+            .apply { if (scope != null) tag(RedirectScope::class.java, scope) }
+            .build(),
+    ).execute()
 
     @Test
     fun `a feed sent to another host is refused before anything reaches it`() = runTest {
@@ -215,6 +226,30 @@ class RedirectFollowingInterceptorTest {
             "https://localhost:${first.port}/opendata/gbfs.json".toHttpUrl(),
             called.last(),
         )
+    }
+
+    @Test
+    fun `an unreadable public suffix list refuses only what needs it`() {
+        // On a device whose list is not loaded yet, OkHttp throws: the
+        // publication path and the same host must not notice, and a GBFS hop
+        // off its host is refused rather than crashing the application.
+        val unreadable = clientWith { error("public suffix list not loaded") }
+
+        first.enqueue(redirect(address(second, "release-assets.githubusercontent.com")))
+        second.enqueue(MockResponse(code = 200, body = "data"))
+        get(address(first, "github.com"), RedirectScope.PUBLICATION, through = unreadable)
+            .use { assertEquals(200, it.code) }
+
+        first.enqueue(redirect("/moved"))
+        first.enqueue(MockResponse(code = 200, body = "{}"))
+        get(address(first, "gbfs.example.com"), RedirectScope.GBFS, through = unreadable)
+            .use { assertEquals(200, it.code) }
+
+        first.enqueue(redirect(address(second, "api.example.com")))
+        assertRefused {
+            get(address(first, "gbfs.example.com"), RedirectScope.GBFS, through = unreadable)
+        }
+        assertEquals(1, second.requestCount)
     }
 
     private fun assertRefused(call: () -> Unit) {
