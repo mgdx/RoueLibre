@@ -37,6 +37,24 @@ public enum class DatasetKind(public val id: String, public val fileName: String
     public companion object {
         /** Finds a set by its manifest identifier, or `null`. */
         public fun fromId(id: String): DatasetKind? = entries.firstOrNull { it.id == id }
+
+        /**
+         * Whether [name] may be what an imported routing segment is stored
+         * under.
+         *
+         * [Routing] keeps the name the file came with, and on an import that
+         * name is reported by the document provider the user picked — a party
+         * whose word is all there is to go on. It must be a plain file name
+         * ([isPlainFileName]) and end in `.rd5`, the only files the engine reads
+         * from the segment directory: anything else would sit there unread, and
+         * have been written there on a stranger's say-so. The case counts, as
+         * it does for the engine, which asks for `E0_N50.rd5` and nothing else.
+         */
+        public fun isRoutingSegmentName(name: String): Boolean = isPlainFileName(name) &&
+            name.length > ROUTING_SEGMENT_SUFFIX.length &&
+            name.endsWith(ROUTING_SEGMENT_SUFFIX)
+
+        private const val ROUTING_SEGMENT_SUFFIX = ".rd5"
     }
 }
 

@@ -118,10 +118,26 @@ public data class ManifestFile(
  * it is one to be rejected — and it must be rejected whole, unlike a dataset of
  * an unknown category, which a later release may legitimately describe.
  *
- * What is refused is a separator, the two names that designate a directory, and
- * the null character, which truncates a path in the layers underneath. Nothing
- * more: what matters is that the name designate a file *here*, not that it look
- * the way today's generation script writes it. A legitimate name may well hold a
+ * What is refused is what [isPlainFileName] refuses.
+ */
+private fun requirePlainFileName(name: String) {
+    require(isPlainFileName(name)) { "unusable file name in the manifest: \"$name\"" }
+}
+
+/**
+ * Whether [name] can only designate a file in the directory it is put in.
+ *
+ * The one rule for every name that reaches the device from elsewhere and becomes
+ * a path component there: a file named by a downloaded manifest, and a file
+ * imported from a document provider, whose name is whatever that provider
+ * chooses to report. Two definitions would be two rules, and the day one of them
+ * is tightened the other would be the way round it.
+ *
+ * What is refused is a separator, the two names that designate a directory, the
+ * null character, which truncates a path in the layers underneath, and a name
+ * longer than the 255 bytes a file system holds in one component. Nothing more:
+ * what matters is that the name designate a file *here*, not that it look the
+ * way today's generation script writes it. A legitimate name may well hold a
  * space or an accent, and refusing those would be inventing a rule the property
  * to be held does not need.
  *
@@ -129,16 +145,16 @@ public data class ManifestFile(
  * Android, but this module compiles and is tested on the JVM, and a rule that
  * depends on the platform it runs on is a rule one has to think about twice.
  */
-private fun requirePlainFileName(name: String) {
-    require(
-        name.isNotEmpty() &&
-            name != "." &&
-            name != ".." &&
-            '/' !in name &&
-            '\\' !in name &&
-            '\u0000' !in name,
-    ) { "unusable file name in the manifest: \"$name\"" }
-}
+public fun isPlainFileName(name: String): Boolean = name.isNotEmpty() &&
+    name != "." &&
+    name != ".." &&
+    '/' !in name &&
+    '\\' !in name &&
+    '\u0000' !in name &&
+    name.toByteArray(Charsets.UTF_8).size <= MAXIMUM_FILE_NAME_BYTES
+
+/** The length of one path component on the file systems Android uses. */
+private const val MAXIMUM_FILE_NAME_BYTES = 255
 
 /**
  * Refuses a file whose address no client can fetch.
