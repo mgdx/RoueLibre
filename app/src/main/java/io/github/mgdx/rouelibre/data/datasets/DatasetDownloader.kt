@@ -6,7 +6,9 @@ import io.github.mgdx.rouelibre.core.data.DataManifest
 import io.github.mgdx.rouelibre.core.data.DataManifestReader
 import io.github.mgdx.rouelibre.core.data.ManifestDataset
 import io.github.mgdx.rouelibre.core.data.ManifestFile
+import io.github.mgdx.rouelibre.core.network.RedirectScope
 import io.github.mgdx.rouelibre.data.network.MAXIMUM_DOCUMENT_BYTES
+import io.github.mgdx.rouelibre.data.network.RefusedRedirectException
 import io.github.mgdx.rouelibre.data.network.textUpTo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
@@ -75,7 +77,11 @@ class DatasetDownloader(
     }
 
     private fun get(url: String): Outcome<String> = try {
-        val request = Request.Builder().url(url).header("User-Agent", userAgent).build()
+        val request = Request.Builder()
+            .url(url)
+            .header("User-Agent", userAgent)
+            .tag(RedirectScope::class.java, RedirectScope.PUBLICATION)
+            .build()
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) {
                 Outcome.Failure(DataError.ServerRefused(response.code))
@@ -119,6 +125,8 @@ class DatasetDownloader(
         // announcing an unreadable manifest would send the reader looking for a
         // fault in a file we never received.
         Outcome.Failure(DataError.UntrustedServer(error.message ?: "TLS handshake refused"))
+    } catch (error: RefusedRedirectException) {
+        Outcome.Failure(DataError.UntrustedServer(error.message ?: "redirect refused"))
     } catch (error: IOException) {
         Outcome.Failure(DataError.MalformedResponse(error.message ?: "unreadable manifest"))
     } catch (error: IllegalArgumentException) {
@@ -225,6 +233,7 @@ class DatasetDownloader(
         val request = Request.Builder()
             .url(file.url)
             .header("User-Agent", userAgent)
+            .tag(RedirectScope::class.java, RedirectScope.PUBLICATION)
             .apply { if (alreadyReceived > 0) header("Range", "bytes=$alreadyReceived-") }
             .build()
 
@@ -290,6 +299,8 @@ class DatasetDownloader(
         // The partial file stays, like any other interruption: the transfer can
         // resume once the host is trustworthy again.
         Outcome.Failure(DataError.UntrustedServer(error.message ?: "TLS handshake refused"))
+    } catch (error: RefusedRedirectException) {
+        Outcome.Failure(DataError.UntrustedServer(error.message ?: "redirect refused"))
     } catch (error: IOException) {
         Outcome.Failure(DataError.MalformedResponse(error.message ?: "transfer interrupted"))
     } catch (error: IllegalArgumentException) {

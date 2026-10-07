@@ -404,6 +404,15 @@ tasks.withType<Test>().configureEach {
         "rouelibre.locales",
         file("src/main/res").absolutePath,
     )
+    // The public suffix list the redirection tests read: OkHttp's sits in the
+    // APK's assets, out of a JVM test's reach, and the JDK's is behind an
+    // internal package (SPEC §4.1).
+    jvmArgs("--add-exports=java.base/sun.security.util=ALL-UNNAMED")
+    // The check of every network's real redirections goes out to three hundred
+    // hosts, so it only runs when asked: `-PliveNetworks`, or
+    // `-PliveNetworks=aachen,velov` for a few cities (SPEC §4.1).
+    systemProperty("rouelibre.config", rootProject.file("config").absolutePath)
+    findProperty("liveNetworks")?.let { systemProperty("rouelibre.liveNetworks", it.toString()) }
 }
 
 kotlin {

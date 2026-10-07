@@ -11,6 +11,7 @@ import io.github.mgdx.rouelibre.core.gbfs.StationStatusFeed
 import io.github.mgdx.rouelibre.core.gbfs.VehicleStatusFeed
 import io.github.mgdx.rouelibre.core.gbfs.VehicleTypesFeed
 import io.github.mgdx.rouelibre.core.map
+import io.github.mgdx.rouelibre.core.network.RedirectScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -181,6 +182,7 @@ class GbfsRemoteSource(
             Request.Builder()
                 .url(url)
                 .header("User-Agent", userAgent)
+                .tag(RedirectScope::class.java, RedirectScope.GBFS)
                 .get()
                 .build()
         } catch (_: IllegalArgumentException) {
@@ -225,6 +227,10 @@ class GbfsRemoteSource(
             Outcome.Failure(
                 DataError.UntrustedServer(error.message ?: "TLS handshake refused"),
             )
+        } catch (error: RefusedRedirectException) {
+            // The server tried to send the phone to a host nobody chose
+            // (SPEC §4.1): nothing was received, so nothing is malformed.
+            Outcome.Failure(DataError.UntrustedServer(error.message ?: "redirect refused"))
         } catch (error: IOException) {
             Outcome.Failure(
                 DataError.MalformedResponse(error.message ?: "network failure"),
