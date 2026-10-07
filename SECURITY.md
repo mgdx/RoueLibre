@@ -19,6 +19,10 @@ application do**. Those are the reports this page is for.
   component, an intent, a provider, a link opening more than it should.
 - Anything that weakens the transport: a request leaving in cleartext, a
   certificate not checked, a redirect followed off the host it started on.
+  The application follows redirections itself, at most three hops, and only
+  on the same host, within the same registrable domain for a network's own
+  feed, or from `github.com` to `githubusercontent.com` for the project's
+  data releases — `SPEC.md` §4.1. Anything beyond that is a report.
 - A dependency shipped in the APK with a known vulnerability that this
   application actually reaches.
 
