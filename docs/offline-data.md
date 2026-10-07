@@ -243,7 +243,11 @@ mechanism of a partial update: what is installed is compared against it, and onl
 what differs comes down again. `formatVersion` must equal the `formatVersion` of
 the city's configuration, failing which the application says the format is one it
 cannot read and invites an update, rather than failing later when it opens a
-file. `network` must be the configuration's network identifier, and `releaseTag`
+file. `sizeBytes` is required and positive, like `sha256`: it is the bound on
+what a download writes. A host whose `Content-Length` or `Content-Range` already
+contradicts it is refused before a byte is written, and a body that runs past it
+is cut at the first byte too many — the partial file deleted, the manifest's
+digest never reached. `network` must be the configuration's network identifier, and `releaseTag`
 is free text shown for what it is.
 
 Everything served is static: an MBTiles archive, one or more `rd5` graphs, a

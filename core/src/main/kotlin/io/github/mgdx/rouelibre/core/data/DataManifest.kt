@@ -79,12 +79,14 @@ public data class ManifestDataset(
  *   under. It must be a plain file name — see [requirePlainFileName].
  * @property url where to get it. It must be an address a client can fetch —
  *   see [requireFetchableUrl].
- * @property sizeBytes the announced size, shown before asking for confirmation.
+ * @property sizeBytes the announced size, shown before asking for confirmation
+ *   and never exceeded by what the download writes. It is required — see
+ *   [requireAnnouncedSize].
  * @property sha256 the digest, re-verified after download (SPEC §4.4). It is
  *   required — see [requireDigest].
  * @throws IllegalArgumentException if [name] is not a plain file name, if [url]
- *   cannot be fetched, or if [sha256] is not a digest. The reader turns that
- *   into a refusal of the whole manifest.
+ *   cannot be fetched, if [sizeBytes] is not a size, or if [sha256] is not a
+ *   digest. The reader turns that into a refusal of the whole manifest.
  */
 public data class ManifestFile(
     public val name: String,
@@ -95,6 +97,7 @@ public data class ManifestFile(
     init {
         requirePlainFileName(name)
         requireFetchableUrl(url, name)
+        requireAnnouncedSize(sizeBytes, name)
         requireDigest(sha256, name)
     }
 }
@@ -199,6 +202,27 @@ private fun requireDigest(sha256: String, name: String) {
 }
 
 private const val SHA256_LENGTH = 64
+
+/**
+ * Refuses a file announced without a size.
+ *
+ * The digest says what a file is only once the last byte has come down, and
+ * until then nothing bounds what a host may send: one compromised, or reached
+ * through a redirection, could fill the device's storage before the comparison
+ * ever ran. The announced size is that bound — the download writes no byte
+ * beyond it — and it holds only if every file carries one. Left optional, it
+ * would be optional for whoever writes the manifest, the same party the digest
+ * protects against, which is why it is refused here exactly as a missing digest
+ * is.
+ *
+ * Zero is refused along with the negative sizes: the reader takes an absent
+ * field for zero, and no published file is empty.
+ *
+ * @param name the file concerned, so the refusal says which one.
+ */
+private fun requireAnnouncedSize(sizeBytes: Long, name: String) {
+    require(sizeBytes > 0) { "unusable size for \"$name\": $sizeBytes" }
+}
 
 private fun Char.isHexadecimal(): Boolean = this in '0'..'9' ||
     this in 'a'..'f' ||
