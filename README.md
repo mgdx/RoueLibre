@@ -107,6 +107,8 @@ but the live availability of the bikes runs on your phone.
 
 ## Installing
 
+From [Google Play](https://play.google.com/store/apps/details?id=io.github.mgdx.rouelibre), for those who prefer the usual store. Google Play signs the application with its own key, so an installation from there cannot replace one from F-Droid or from the releases page, or the other way round, without removing the application first.
+
 From [F-Droid](https://f-droid.org/packages/io.github.mgdx.rouelibre/), which
 rebuilds the application from this source and updates it along with the rest of
 the store. What it serves carries F-Droid's own signature, so an installation
@@ -124,6 +126,7 @@ repository's releases and downloads the APK matching your phone, with no
 account and no store in between.
 
 <p align="center">
+    <a href="https://play.google.com/store/apps/details?id=io.github.mgdx.rouelibre"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="100"></a>
   <a href="https://f-droid.org/packages/io.github.mgdx.rouelibre/"><img alt="Get it on F-Droid" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="100"></a>
   <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22io.github.mgdx.rouelibre%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fmgdx%2FRoueLibre%22%2C%22author%22%3A%22mgdx%22%2C%22name%22%3A%22Roue%20Libre%22%7D"><img alt="Get it on Obtainium" src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" height="100"></a>
 </p>
