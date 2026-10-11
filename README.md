@@ -110,9 +110,10 @@ From [Google Play](https://play.google.com/store/apps/details?id=io.github.mgdx.
 
 From [F-Droid](https://f-droid.org/packages/io.github.mgdx.rouelibre/), which
 rebuilds the application from this source and updates it along with the rest of
-the store. What it serves carries F-Droid's own signature, so an installation
-coming from there and one coming from the releases page cannot replace one
-another without removing the application first
+the store. It checks that its rebuild is identical to the APK published here,
+then serves that very APK, signed by this project rather than by F-Droid: the
+releases page and F-Droid are one installation, and an update passes from
+either to either without removing the application
 ([why](docs/release.md#f-droid)).
 
 Or from the [releases page](https://github.com/mgdx/RoueLibre/releases/latest):
