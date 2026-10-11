@@ -3,20 +3,11 @@ package io.github.mgdx.rouelibre.ui.map
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.content.Context
-import android.graphics.PointF
-import android.graphics.RectF
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat
-import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
@@ -29,67 +20,42 @@ import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.config.ActiveCity
 import io.github.mgdx.rouelibre.core.config.CityConfiguration
-import io.github.mgdx.rouelibre.core.config.CityEntry
 import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
-import io.github.mgdx.rouelibre.core.geo.PositionFix
 import io.github.mgdx.rouelibre.core.message.MessageSubject
-import io.github.mgdx.rouelibre.core.station.AvailabilityMode
-import io.github.mgdx.rouelibre.core.station.BikeKindFilter
 import io.github.mgdx.rouelibre.core.station.StationFilter
-import io.github.mgdx.rouelibre.core.station.StreetBike
-import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.core.station.stationsShownOnMap
-import io.github.mgdx.rouelibre.data.SavedPlace
 import io.github.mgdx.rouelibre.data.SavedPlaceKind
-import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
-import io.github.mgdx.rouelibre.ui.ConfirmationDialogFragment
 import io.github.mgdx.rouelibre.ui.MAP_BACK_STACK_ENTRY
 import io.github.mgdx.rouelibre.ui.MainActivity
 import io.github.mgdx.rouelibre.ui.STATION_LIST_BACK_STACK_ENTRY
 import io.github.mgdx.rouelibre.ui.ScreenBehind
 import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
 import io.github.mgdx.rouelibre.ui.backStackEntryNames
-import io.github.mgdx.rouelibre.ui.city.CityFragment
-import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
-import io.github.mgdx.rouelibre.ui.noLongerServedMessage
-import io.github.mgdx.rouelibre.ui.noLongerServedTitle
-import io.github.mgdx.rouelibre.ui.prefersReducedMotion
 import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
-import io.github.mgdx.rouelibre.ui.stations.StationDetailSheet
 import io.github.mgdx.rouelibre.ui.stations.StationListFragment
 import io.github.mgdx.rouelibre.ui.stations.StationsUiState
 import io.github.mgdx.rouelibre.ui.stations.StationsViewModel
-import io.github.mgdx.rouelibre.ui.stations.StreetBikeSheet
-import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.maplibre.android.MapLibre
-import org.maplibre.android.camera.CameraPosition
-import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.Style
-import org.maplibre.android.style.sources.GeoJsonOptions
-import org.maplibre.android.style.sources.GeoJsonSource
-import org.maplibre.geojson.FeatureCollection
-import org.maplibre.geojson.Point
 import java.io.File
 import java.time.Instant
 
@@ -130,10 +96,9 @@ class MapFragment : Fragment() {
 
     private var binding: FragmentMapBinding? = null
     private var mapLibreMap: MapLibreMap? = null
-    private var stationSource: GeoJsonSource? = null
-    private var streetBikeSource: GeoJsonSource? = null
-    private var pickedPlaceSource: GeoJsonSource? = null
-    private var savedPlaceSource: GeoJsonSource? = null
+
+    /** The sources of the style in place, which go with it. */
+    private var layers: MainMapLayers? = null
     private var styleLoaded = false
 
     /**
@@ -148,76 +113,6 @@ class MapFragment : Fragment() {
     private var loadedTilesPath: String? = null
 
     /**
-     * The address found by the search, until it is cleared.
-     *
-     * A designated point, never a history: SPEC §8 forbids keeping a
-     * destination, and this one does not outlive the screen.
-     */
-    private var pickedPlace: PickedPlace? = null
-
-    /**
-     * The network identifier of the city [pickedPlace] was designated in.
-     *
-     * Held beside the point, and laid down whenever the point is, so that the
-     * one question [designatedPlaceSurvives] asks — does this point belong to
-     * the city we serve now? — can be put where a city is applied to the map,
-     * without anything having to be read back from disk to answer it.
-     *
-     * `null` when no point is designated, and when the point came from a state
-     * bundle written before this was recorded.
-     */
-    private var pickedPlaceCity: String? = null
-
-    /**
-     * The framing to restore when the view is rebuilt.
-     *
-     * Going through the list, the storage screen or the search destroys the
-     * map's view without destroying the fragment: without this, coming back
-     * brought the opening framing, and the user lost the place they were
-     * looking at.
-     *
-     * A turn of the phone destroys the fragment as well, and this field with
-     * it: it is therefore saved in the state too, or the map came back up on
-     * the position of the user rather than on the address they had just gone
-     * looking for.
-     */
-    private var lastCamera: CameraPosition? = null
-
-    /**
-     * A point the camera must reach as soon as the map exists.
-     *
-     * The chosen address is returned by the search screen **before** the map is
-     * rebuilt: the move therefore has to wait.
-     */
-    private var pendingCameraTarget: LatLng? = null
-
-    /** A point found by the address search, and its label. */
-    private data class PickedPlace(val position: LatLng, val label: String)
-
-    /**
-     * The limits that pen the camera inside the served area.
-     *
-     * Kept to hand because a move the screen orders — an address found, a
-     * cluster opened — has to stand them down while it runs, or they cut it
-     * short (see [moveCameraTo]).
-     */
-    private var servedAreaCamera: ServedAreaCamera? = null
-
-    /**
-     * The room the system bars take at the bottom, and the room the banner
-     * takes above them — see [holdTheBottomEdge].
-     *
-     * Both are held because both push the same edge up and neither knows about
-     * the other: the insets arrive from the window, the banner's room from the
-     * activity, and either may change while the other stands.
-     */
-    private var barsAtTheBottom = 0
-    private var roomForTheBanner = 0
-
-    /** Draws the user's point, gliding it between fixes — see [UserPositionDisplay]. */
-    private var userPosition: UserPositionDisplay? = null
-
-    /**
      * The city this map is drawn for, as soon as it is known.
      *
      * Kept to hand because "locate me" has to know where the served area stops:
@@ -226,55 +121,6 @@ class MapFragment : Fragment() {
      * off as where the user stands.
      */
     private var servedCity: CityConfiguration? = null
-
-    /**
-     * The last fix shown, held in memory for the session only.
-     *
-     * It survives a rebuild of the view — going through the list and coming
-     * back must not make the point vanish — and nothing else: it is written
-     * nowhere (SPEC §2, C3).
-     *
-     * The fix and not its coordinates alone: the circle of uncertainty has to
-     * come back with the point it belongs to.
-     */
-    private var lastKnownPosition: PositionFix? = null
-
-    /**
-     * Whether the point may follow the device: the permission as it stands.
-     *
-     * A flow rather than a call, because the answer changes while the map is
-     * up — granted from the button, or from the Android settings while the
-     * application was away — and the following has to start on that answer.
-     * Asking again on every return to the screen would mean subscribing again
-     * on every return, and stacking one subscription per visit.
-     */
-    private val locationPermitted = MutableStateFlow(false)
-
-    /**
-     * Requests the location permissions, and never insists.
-     *
-     * SPEC §10 is explicit: a refusal must neither block a screen nor trigger a
-     * second prompt. A user who says no keeps a fully usable application, in
-     * which they designate their points by hand.
-     */
-    private val requestLocationPermission = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions(),
-    ) { granted ->
-        if (granted.values.any { it }) {
-            locateMe()
-            // Only now may the point start following: before this answer there
-            // was nothing to follow it with (SPEC §10).
-            locationPermitted.value = true
-        } else {
-            // Written down for good: after this, nothing asks unprompted
-            // again — here or on any other screen, this launch or the next
-            // (SPEC §10). The buttons remain the way to change one's mind.
-            viewLifecycleOwner.lifecycleScope.launch {
-                container.automaticLocationRequest.noteRefused()
-            }
-            showMessage(R.string.map_location_denied)
-        }
-    }
 
     private val viewModel: StationsViewModel by viewModels {
         StationsViewModel.Factory(
@@ -287,24 +133,91 @@ class MapFragment : Fragment() {
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
 
-    private var mode: AvailabilityMode = AvailabilityMode.Bikes
+    /** Keeps the controls clear of the system bars and of the banner. */
+    private val bottomEdge = MapBottomEdge(binding = { binding })
 
-    /**
-     * The kind of bike the markers count, or `null` for all of them (SPEC §7.1).
-     *
-     * Its own control, owing nothing to the journey screen's: what is filtered
-     * here changes no journey, and a kind chosen for a journey filters nothing
-     * here. It lives as long as the screen does, like [mode] beside it and for
-     * the same reason — it is a way of looking at the map right now, not a fact
-     * about the rider, so nothing of it is written down.
-     */
-    private var bikeKind: WantedBikeKind? = null
+    /** Where the map opens, where it is sent, and what it remembers. */
+    private val camera = MainMapCamera(
+        map = { mapLibreMap },
+        isReady = { styleLoaded },
+        context = { requireContext() },
+    )
+
+    /** The address found by the search, and the city it belongs to. */
+    private val pickedPlace = PickedPlaceController(
+        pill = { binding?.pickedPlace },
+        cityNowServed = { servedCity?.network?.id },
+        bringIntoView = { camera.moveTo(it) },
+    )
+
+    /** The user's point, and the permission it takes. */
+    private val userPosition = UserPositionOnMap(
+        fragment = this,
+        display = { layers?.userPosition },
+        locate = ::locateMe,
+        onMessage = ::showMessage,
+    )
+
+    /** What is said, and offered, to somebody standing outside the city. */
+    private val elsewhere = CityElsewhereOffer(
+        fragment = this,
+        container = { container },
+        servedCity = { servedCity },
+        isPicking = ::isPicking,
+        onMessage = ::showMessage,
+        open = ::show,
+    )
+
+    /** The turn and the tilt of the map, and the compass that gives both back. */
+    private val attitude = MapAttitudeController(
+        button = { binding?.faceNorth },
+        map = { mapLibreMap },
+    )
+
+    /** Bikes or free docks, and which kind of bike: the map's two filters. */
+    private val filters = MapFilterControls(
+        modeToggle = { binding?.modeToggle },
+        bikeKindButton = { binding?.bikeKindFilter },
+        controlsUp = { showsMapControls },
+        lentFleet = { lentFleet },
+        onChanged = ::publishStations,
+    )
+
+    /** The bikes outside stations, while the settings have them drawn. */
+    private val streetBikes = StreetBikesOnMap(
+        source = { layers?.streetBikes },
+        vehicleTypes = { lentFleet?.vehicleTypes.orEmpty() },
+        container = { container },
+    )
+
+    /** The places the user has named: their markers and their buttons. */
+    private val savedPlaces = SavedPlacesOnMap(
+        source = { layers?.savedPlaces },
+        button = { kind ->
+            when (kind) {
+                SavedPlaceKind.Home -> binding?.centreOnHome
+                SavedPlaceKind.Work -> binding?.centreOnWork
+            }
+        },
+        controlsUp = { showsMapControls },
+        servedArea = { servedCity?.boundingBox },
+        bringIntoView = { camera.moveTo(it) },
+    )
+
+    /** What a touch on a marker opens. */
+    private val touches = MarkerTouches(
+        map = { mapLibreMap },
+        mapHeight = { binding?.map?.height },
+        isPicking = ::isPicking,
+        moveTo = camera::moveTo,
+        sheets = { parentFragmentManager },
+    )
 
     /**
      * Which stations the map leaves out, and at rest it leaves out none.
      *
      * Read from the settings and settled there alone (SPEC §7.1, §7.6), unlike
-     * [mode] and [bikeKind] beside it: those two are ways of looking at the map
+     * the two of [MapFilterControls]: those are ways of looking at the map
      * for a minute, this is an answer kept from one session to the next. **The
      * screen says nothing about it** — no badge, no count, no lit control — which
      * is the accepted compromise SPEC §7.1 names: the settings are the only place
@@ -324,25 +237,6 @@ class MapFragment : Fragment() {
     private var lentFleet: FleetDescription? = null
 
     /**
-     * The bikes outside stations last read, and empty while they are not shown.
-     *
-     * Held because two things settle what is drawn and they arrive apart: the
-     * feed, and the vehicle type table that says which of those bikes bear the
-     * bolt (SPEC §4.1). Whichever lands second redraws from this.
-     */
-    private var streetBikes: List<StreetBike> = emptyList()
-
-    /**
-     * Whether the setting of SPEC §7.6 has the bikes outside stations drawn.
-     *
-     * Read from the settings and followed, like the two station filters. What
-     * it decides here is not only the markers but whether the feed is asked for
-     * at all: it weighs twenty times the station feed, and a map that is not
-     * showing those bikes has no business fetching them.
-     */
-    private var showsStreetBikes = false
-
-    /**
      * Whether the controls laid over the map are up at all.
      *
      * False until the base map is known to be installed, and false while a point
@@ -352,47 +246,6 @@ class MapFragment : Fragment() {
      * finish.
      */
     private var showsMapControls = false
-
-    /**
-     * Whether the compass is allowed on the screen at all (SPEC §7.1).
-     *
-     * Being allowed is not being shown: the button only appears once the map
-     * has been turned. Held like [showsMapControls], and for the same reason —
-     * the base map's arrival and the map's bearing are settled apart from each
-     * other, and each has to be able to decide without reading the other.
-     */
-    private var showsCompass = false
-
-    /**
-     * The listener that follows the map's bearing while it turns.
-     *
-     * Kept so that it can be taken off the map with the view, as the other
-     * listeners of this screen are.
-     */
-    private var bearingListener: MapLibreMap.OnCameraMoveListener? = null
-
-    /**
-     * The places the user has named, as the settings last said, with whether
-     * the map marks them and whether it offers a button for each (SPEC §7.1).
-     *
-     * Held because the markers are drawn into a style that may not exist yet,
-     * and the buttons hang on a served area that is learnt apart: whichever
-     * arrives second redraws from this.
-     */
-    private var savedPlaces = SavedPlacesOnMap()
-
-    /** What the settings say of the named places, as far as the map cares. */
-    private data class SavedPlacesOnMap(
-        val home: SavedPlace? = null,
-        val work: SavedPlace? = null,
-        val markers: Boolean = false,
-        val buttons: Boolean = false,
-    ) {
-        fun of(kind: SavedPlaceKind): SavedPlace? = when (kind) {
-            SavedPlaceKind.Home -> home
-            SavedPlaceKind.Work -> work
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -415,28 +268,16 @@ class MapFragment : Fragment() {
         views.openSettings.setOnClickListener { show(SettingsFragment()) }
         views.openList.setOnClickListener { showTheList() }
         views.openSearch.setOnClickListener { openAddressSearch() }
-        views.locateMe.setOnClickListener { onLocateMeClicked() }
-        views.faceNorth.setOnClickListener { faceNorthAndLayFlat() }
-        // What the press does, said apart from the description: that one is
-        // spent saying how far the map is turned, and a screen reader would
-        // otherwise announce a bare "activate" over it.
-        ViewCompat.replaceAccessibilityAction(
-            views.faceNorth,
-            AccessibilityActionCompat.ACTION_CLICK,
-            getString(R.string.map_face_north),
-            null,
-        )
+        views.locateMe.setOnClickListener { userPosition.onLocateMeClicked() }
+        attitude.bind()
         views.openJourney.setOnClickListener { show(JourneySearchFragment()) }
-        views.modeToggle.setOnClickListener { toggleMode() }
-        views.bikeKindFilter.setOnClickListener { toggleBikeKind() }
         views.pickedPlace.setOnClickListener { openPickedPlaceSheet() }
-        views.centreOnHome.setOnClickListener { centreOn(SavedPlaceKind.Home) }
-        views.centreOnWork.setOnClickListener { centreOn(SavedPlaceKind.Work) }
-        applyModeLabel()
-        applyBikeKindLabel()
+        views.centreOnHome.setOnClickListener { savedPlaces.centreOn(SavedPlaceKind.Home) }
+        views.centreOnWork.setOnClickListener { savedPlaces.centreOn(SavedPlaceKind.Work) }
+        filters.bind()
         followStationFilters()
-        followStreetBikes()
-        followSavedPlaces()
+        streetBikes.follow(viewLifecycleOwner)
+        savedPlaces.follow(viewLifecycleOwner, container.preferences)
         // The button that opens the journey search carries the bike of the
         // network served: with a bolt where that network lends pedal-assist
         // bikes (SPEC §15).
@@ -449,11 +290,11 @@ class MapFragment : Fragment() {
         // without the map being rebuilt.
         withFleet { lent ->
             lentFleet = lent
-            showBikeKindFilter()
+            filters.showBikeKindFilter()
             publishStations()
             // The same reading says which bikes outside stations bear the
             // bolt, and it may arrive after they are drawn.
-            publishStreetBikes()
+            streetBikes.publish()
         }
 
         // The target depends on what is missing, and it is set together with
@@ -461,103 +302,26 @@ class MapFragment : Fragment() {
         views.missingTilesList.setOnClickListener { showTheList() }
 
         applyPickingMode(views)
-        restoreCamera(savedInstanceState)
-        restorePickedPlace(savedInstanceState)
+        camera.restore(savedInstanceState)
+        pickedPlace.restore(savedInstanceState)
         showRequestedPlace(savedInstanceState)
         listenForPickedAddress()
         listenForPlaceActions()
-        listenForAnswers()
-        applySystemInsets(views)
-        standClearOfTheBanner()
+        elsewhere.listenForAnswers()
+        bottomEdge.applySystemInsets(views)
+        bottomEdge.standClearOfTheBanner(viewLifecycleOwner, activity as? MainActivity)
         views.map.getMapAsync(::onMapReady)
 
         observeStations()
         observeErrors()
         followTheInstalledMap()
         keepAvailabilityFresh()
-        followUserPosition()
-        askForLocation()
+        userPosition.follow()
+        // Asked for when the map opens, the point that follows the device
+        // being what this screen is for. After a refusal the map stays whole,
+        // without a point, and the "locate me" button is the way back.
+        userPosition.askUnprompted()
     }
-
-    /**
-     * Keeps the controls clear of the system bars.
-     *
-     * The map fills the whole screen, bars included — that is what gives it its
-     * sweep. The controls laid on top, however, must stay reachable: without
-     * this inset, the freshness label slid under the clock and the list button
-     * under the navigation bar.
-     */
-    private fun applySystemInsets(views: FragmentMapBinding) {
-        ViewCompat.setOnApplyWindowInsetsListener(views.root) { _, windowInsets ->
-            val insets = windowInsets.getInsets(
-                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout(),
-            )
-            views.freshness.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = insets.top + baseMargin
-            }
-            views.openSettings.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = insets.top + baseMargin
-            }
-            barsAtTheBottom = insets.bottom
-            holdTheBottomEdge()
-            windowInsets
-        }
-    }
-
-    /**
-     * Keeps the controls laid along the bottom clear of the banner, as well as
-     * of the system bars.
-     *
-     * The whole bottom of this screen hangs off the attribution — the toggles
-     * and the place found from it, the four buttons up the right-hand edge
-     * from it in turn — so raising that one view raises them all, and the
-     * constraints keep them in their order. That is the only handle there is:
-     * a `translationY` moves the view it is set on and leaves everything
-     * constrained to it where it was.
-     *
-     * The room the banner takes is added to the bars' rather than replacing
-     * it: the banner clears the bars on its own, and this margin is counted
-     * from the window's edge.
-     */
-    private fun holdTheBottomEdge() {
-        val attribution = binding?.attribution ?: return
-        // How tall the banner stands is read from the banner's own layout, so
-        // this is called in the middle of the window's layout pass. A view that
-        // asks for a new layout during one makes Android throw the pass away
-        // and run it again — `requestLayout() improperly called ... running
-        // second layout pass`. Waiting for the pass to end costs the one frame
-        // the banner spends sliding in, and nothing is drawn differently.
-        if (attribution.isInLayout) {
-            attribution.post { holdTheBottomEdge() }
-            return
-        }
-        attribution.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            bottomMargin = barsAtTheBottom + roomForTheBanner
-        }
-    }
-
-    /**
-     * Follows the room the banner takes, so the controls under it rise rather
-     * than be covered (SPEC §7.1).
-     *
-     * The banner belongs to the activity and is laid over the whole window, so
-     * nothing shifts these controls out of its way by itself — see
-     * `MainActivity.roomTakenByTheBanner`.
-     */
-    private fun standClearOfTheBanner() {
-        val host = activity as? MainActivity ?: return
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                host.roomTakenByTheBanner.collect { room ->
-                    roomForTheBanner = room
-                    holdTheBottomEdge()
-                }
-            }
-        }
-    }
-
-    private val baseMargin: Int
-        get() = resources.getDimensionPixelSize(R.dimen.space_m)
 
     private fun onMapReady(map: MapLibreMap) {
         mapLibreMap = map
@@ -580,6 +344,15 @@ class MapFragment : Fragment() {
         }
     }
 
+    /**
+     * Applies a city to the map: what survives it, how much of the map is
+     * rebuilt for it, the panel when there is no base map, and the map itself
+     * when there is one.
+     *
+     * Reached both when the city changes under a map that is up and when a
+     * first configuration is applied to a screen just built — after a turn of
+     * the phone, or after the process was killed.
+     */
     private fun loadTilesFor(city: ActiveCity) {
         val configuration = (city as? ActiveCity.Served)?.configuration
         // Noted before anything may return early: the served area is what
@@ -603,9 +376,7 @@ class MapFragment : Fragment() {
         //
         // Before every early return below: whether the point still has a right
         // to be there has nothing to do with there being a style to redraw.
-        if (!designatedPlaceSurvives(pickedPlaceCity, configuration?.network?.id)) {
-            showPickedPlace(null)
-        }
+        pickedPlace.keepOnlyFor(configuration?.network?.id)
         val views = binding ?: return
         val map = mapLibreMap ?: return
 
@@ -616,73 +387,54 @@ class MapFragment : Fragment() {
         } else {
             container.datasetStore.fileOf(DatasetKind.Tiles)
         }
-        // A style already built over this very file: there is nothing to do,
-        // and this is the common case, every return to the screen going
-        // through here. A style built over ANOTHER file is a city whose data
-        // has been updated since, and it has to be built again — MapLibre
-        // holds the MBTiles it opened for as long as the process lives, so a
-        // map left pointing at the old one goes on drawing it.
-        if (styleLoaded && tiles?.path == loadedTilesPath) return
-        if (styleLoaded &&
-            tiles != null &&
-            configuration?.network?.id == previousCity?.network?.id
-        ) {
-            // Everything below has been done once already, and doing it twice
-            // would register a second click listener and move the camera out
-            // from under the user. Only the style is built again.
-            //
-            // The same city, though: another one brings its own framing, its
-            // own zoom limits and its own served area, and those are set below.
-            applyStyle(map, tiles)
-            return
-        }
-        views.missingTiles.isVisible = tiles == null
-        views.attribution.isVisible = tiles != null
-        // Without a city it is not data that is missing but the choice of
-        // conurbation: offering to install tiles would make no sense while we
-        // do not know whose tiles they would be.
-        if (city is ActiveCity.NoLongerServed) {
-            // Not the first launch's question: this user chose, and what they
-            // chose went away. Asking "Which city?" over their own tiles read
-            // as the application having forgotten them (SPEC §15.1).
-            views.missingTilesTitle.setText(noLongerServedTitle(city))
-            views.missingTilesMessage.text = requireContext().noLongerServedMessage(city)
-            views.missingTilesStorage.setText(R.string.city_choose_another)
-            views.missingTilesStorage.setOnClickListener { show(CityFragment()) }
-        } else if (configuration == null) {
-            views.missingTilesTitle.setText(R.string.map_needs_city_title)
-            views.missingTilesMessage.setText(R.string.map_needs_city_message)
-            views.missingTilesStorage.setText(R.string.city_choose)
-            views.missingTilesStorage.setOnClickListener { show(CityFragment()) }
-        } else if (container.datasetTransfer.state.value.isRunning) {
-            // The city's data is on its way: "needs its offline tiles" over a
-            // download already under way read as a city that was broken.
-            views.missingTilesTitle.setText(R.string.map_downloading_title)
-            views.missingTilesMessage.setText(R.string.map_downloading_message)
-            views.missingTilesStorage.setText(R.string.storage_open)
-            views.missingTilesStorage.setOnClickListener { show(StorageFragment()) }
-        } else {
-            views.missingTilesTitle.setText(R.string.map_needs_tiles_title)
-            views.missingTilesMessage.setText(R.string.map_needs_tiles_message)
-            views.missingTilesStorage.setText(R.string.storage_open)
-            views.missingTilesStorage.setOnClickListener { show(StorageFragment()) }
-        }
-        // That last message ends by sending the reader to the station list,
-        // which is no answer to somebody designating an end of a journey: in
-        // the picker the title says what is missing and the buttons say what
-        // to do about it. The message about the city, itself, holds in both
-        // roles.
-        views.missingTilesMessage.isVisible = configuration == null || !isPicking()
-        // The way to the station list leads nowhere once the network is gone:
-        // there is nothing left to list. In the picker the same button is the
-        // way back, and it stays.
-        views.missingTilesList.isVisible = isPicking() || city !is ActiveCity.NoLongerServed
+        // Nothing, the style alone, or everything — see mapRebuildFor, which
+        // says why a style already built and the same city leave the framing
+        // where the user put it.
+        val rebuild = mapRebuildFor(
+            styleLoaded = styleLoaded,
+            loadedTilesPath = loadedTilesPath,
+            tilesPath = tiles?.path,
+            previousCityId = previousCity?.network?.id,
+            cityId = configuration?.network?.id,
+        )
+        when (rebuild) {
+            MapRebuild.Nothing -> return
 
-        // Nothing stays laid over the map while that panel covers the screen:
-        // a control hidden behind it is invisible without ceasing to be
-        // clickable, and the crosshair and "Choose this point" were being
-        // pressed blind under the panel that asked for a city.
-        val controls = mapControls(hasBaseMap = tiles != null, isPicking = isPicking())
+            MapRebuild.StyleOnly -> {
+                applyStyle(map, checkNotNull(tiles))
+                return
+            }
+
+            MapRebuild.Everything -> Unit
+        }
+        views.showMissingTiles(
+            city = city,
+            panel = missingTilesPanel(
+                city = city,
+                transferRunning = container.datasetTransfer.state.value.isRunning,
+                isPicking = isPicking(),
+            ),
+            hasTiles = tiles != null,
+            open = ::show,
+        )
+        showControls(views, hasBaseMap = tiles != null)
+        if (tiles == null || configuration == null) return
+
+        setUpTheMap(views, map, configuration)
+        applyStyle(map, tiles)
+    }
+
+    /**
+     * Puts up the controls laid over the map for the role it serves, or none
+     * of them without a base map.
+     *
+     * Nothing stays laid over the map while the panel saying it is missing
+     * covers the screen: a control hidden behind it is invisible without
+     * ceasing to be clickable, and the crosshair and "Choose this point" were
+     * being pressed blind under the panel that asked for a city.
+     */
+    private fun showControls(views: FragmentMapBinding, hasBaseMap: Boolean) {
+        val controls = mapControls(hasBaseMap = hasBaseMap, isPicking = isPicking())
         showsMapControls = controls.browsing
         views.modeToggle.isVisible = controls.browsing
         // Without a base map, an address found would have nowhere to land: the
@@ -694,56 +446,35 @@ class MapFragment : Fragment() {
         views.pickCrosshair.isVisible = controls.picking
         views.pickConfirm.isVisible = controls.picking
         views.locateMe.isVisible = controls.locateMe
-        showsCompass = controls.compass
-        showTheBearing()
-        showBikeKindFilter()
-        showSavedPlaceButtons()
-        if (tiles == null || configuration == null) return
+        attitude.isAllowed = controls.compass
+        attitude.showTheBearing()
+        filters.showBikeKindFilter()
+        savedPlaces.showButtons()
+    }
 
-        map.uiSettings.isAttributionEnabled = false
-        map.uiSettings.isLogoEnabled = false
-        // The library's own compass, off: ours is the one in the column of
-        // controls (SPEC §7.1). MapLibre's is on by default and fades itself
-        // away while the map faces north, so it lay hidden for as long as the
-        // map could not be turned and appeared the day it could — a black disc
-        // in the top right corner, half under the status bar and over the
-        // settings button, where nothing in the layout expects a view. It is
-        // refused for the reason DescribedMapView exists: a view of the
-        // library describes itself in the library's languages and not in ours,
-        // and the screen reader read out its sentence beside ours.
-        map.uiSettings.isCompassEnabled = false
-        // The map turns under two fingers and tilts under two more, and our
-        // compass gives back both (SPEC §7.1). Said rather than left to the
-        // library's defaults, so that both are read as decisions — a default
-        // is not one, as the compass above has just proved.
-        //
-        // The tilt was refused between 7 September 2026 and the same day, on
-        // the grounds that the base map is drawn flat and its labels are laid
-        // flat on it, so a tilt reveals no relief and only makes the names
-        // harder to read. That is true of the drawing and it was not true of
-        // the use: it is how somebody riding reads the street ahead of them,
-        // and it was in daily use before it was taken away.
-        map.uiSettings.isRotateGesturesEnabled = true
-        map.uiSettings.isTiltGesturesEnabled = true
-        // How far it may tilt, and the figure is derived rather than chosen —
-        // see MAX_PITCH_DEGREES. A tilt looks towards the horizon, so it
-        // lengthens what the screen covers of the ground, and the served
-        // area's edge, which SPEC §7.1 forbids showing, comes into view for
-        // far less panning than on a flat map.
-        map.setMaxPitchPreference(MAX_PITCH_DEGREES)
+    /**
+     * Gives the map the city's limits and framing, and the listeners it keeps
+     * for as long as the view lives.
+     *
+     * Done once per view and per city — see [mapRebuildFor] — since doing it
+     * twice would register a second click listener and move the camera out
+     * from under the user.
+     */
+    private fun setUpTheMap(
+        views: FragmentMapBinding,
+        map: MapLibreMap,
+        configuration: CityConfiguration,
+    ) {
+        attitude.configure(map)
         map.setMinZoomPreference(configuration.map.minZoom.toDouble())
         // Past the tiles' maximum zoom, MapLibre scales up the last ones it
         // has. Allowing one step lets the user come a little closer without the
         // text turning illegible.
         map.setMaxZoomPreference(configuration.map.maxZoom.toDouble() + 1)
-        map.cameraPosition = lastCamera?.takeIf { it.suits(configuration) }
-            ?: openingCamera(configuration)
-        holdCameraOverServedArea(map, configuration)
+        camera.open(views.map, map, configuration) { positionToOpenOn(configuration) }
 
-        map.addOnMapClickListener(::onMapClicked)
-        followTheBearing(map)
-
-        applyStyle(map, tiles)
+        map.addOnMapClickListener(touches::onMapClicked)
+        attitude.follow(map)
     }
 
     /**
@@ -758,339 +489,38 @@ class MapFragment : Fragment() {
         ) { style ->
             styleLoaded = true
             loadedTilesPath = tiles.path
-            addStationLayers(style)
+            layers = MainMapLayers.addTo(style, requireContext(), pickedPlace)
+            // The view may have been rebuilt over bikes already read, places
+            // already named and a position already known: they are put back
+            // without the feed, the settings or the system being asked again.
+            streetBikes.publish()
+            savedPlaces.publish()
+            userPosition.showLastKnown()
             publishStations()
             // An address chosen while the map did not exist: now is when it
             // can be reached.
-            pendingCameraTarget?.let { target ->
-                pendingCameraTarget = null
-                moveCameraTo(target)
-            }
+            camera.reachPendingTarget()
         }
     }
 
     /**
-     * Pens the camera inside the served area (SPEC §7.1).
-     *
-     * The city without a bounding box is the city whose configuration does not
-     * declare one: there is then nothing to hold the camera to, and the map
-     * stays as free as it was.
-     *
-     * The limits are read off the visible region, which the map only has once
-     * it has been measured — hence the wait for the layout pass rather than an
-     * application on the spot.
-     */
-    private fun holdCameraOverServedArea(map: MapLibreMap, configuration: CityConfiguration) {
-        val area = configuration.boundingBox?.takeIf { it.isUsable } ?: return
-        val view = binding?.map ?: return
-        val camera = ServedAreaCamera(
-            view = view,
-            map = map,
-            area = area,
-            widestZoom = configuration.map.minZoom.toDouble(),
-            closestZoom = configuration.map.maxZoom.toDouble() + 1,
-        )
-        // Known to the screen before the layout, not only after it: the style
-        // becomes ready in between, and the move it sets off — the address the
-        // search has just returned — must be able to stand these limits down
-        // before they are laid on top of it.
-        servedAreaCamera = camera
-        view.doOnLayout { camera.hold() }
-    }
-
-    /**
-     * Follows the map's bearing, so that the compass says what the map does.
-     *
-     * `addOnCameraMoveListener` and not `addOnCameraIdleListener`: the needle
-     * is a reading of the map's own state, and one that only caught up at the
-     * end of the gesture would point at a north the map had already left —
-     * for the whole length of the turn, which is exactly when it is being
-     * looked at. What each frame costs is a comparison and two view
-     * properties, beside the frame the map is drawing anyway.
-     *
-     * A move the screen orders itself is followed by its own callback rather
-     * than by this listener (see [faceNorth]): the listener hears the
-     * gestures, and the callback guarantees the state the map settles in.
-     */
-    private fun followTheBearing(map: MapLibreMap) {
-        // The tiles are loaded again on every return to the screen, on the same
-        // map: without this the same map would carry a second listener, and a
-        // third, each turn of the map costing what they all add up to.
-        bearingListener?.let(map::removeOnCameraMoveListener)
-        val listener = MapLibreMap.OnCameraMoveListener { showTheBearing() }
-        bearingListener = listener
-        map.addOnCameraMoveListener(listener)
-    }
-
-    /**
-     * Shows the compass for the bearing the map now has, or takes it away.
-     *
-     * The whole button turns rather than the drawing inside it: its ground is
-     * a disc, so the needle is the only thing that can be seen to move, and
-     * turning the view spares a second drawable and a redraw of the icon.
-     *
-     * The description says how far the map is turned and not only what the
-     * button does. This button is the one sign that the map is off north, so
-     * a reader who cannot see it turned would learn nothing from "face north"
-     * alone (SPEC §11).
-     */
-    private fun showTheBearing() = showAttitude(mapAttitude())
-
-    /**
-     * Shows the compass for an attitude of the map, or takes it away.
-     *
-     * The sentence follows the state and not the deed: the turn is given in
-     * degrees, the tilt is named, and what the press does is said once as the
-     * button's accessibility action rather than at the end of every reading
-     * (SPEC §11).
-     *
-     * @param attitude how the map is held. It comes from the map while the map
-     *   is the only one who knows, and from what the screen ordered once the
-     *   screen knows better — see [attitudeAfterOrderingNorthAndFlat].
-     */
-    private fun showAttitude(attitude: MapAttitude) {
-        val views = binding ?: return
-        val needle = compassNeedle(attitude)
-        views.faceNorth.isVisible = showsCompass && needle.isShown
-        views.faceNorth.rotation = needle.iconRotationDegrees
-        views.faceNorth.contentDescription = when {
-            needle.isTurned && needle.isTilted -> resources.getQuantityString(
-                R.plurals.map_bearing_tilted_description,
-                needle.degreesFromNorth,
-                needle.degreesFromNorth,
-            )
-
-            needle.isTilted -> getString(R.string.map_tilted_description)
-
-            else -> resources.getQuantityString(
-                R.plurals.map_bearing_description,
-                needle.degreesFromNorth,
-                needle.degreesFromNorth,
-            )
-        }
-    }
-
-    /** How the map reports itself held, or the opening attitude for want of a map. */
-    private fun mapAttitude(): MapAttitude {
-        val camera = mapLibreMap?.cameraPosition ?: return NORTH_AND_FLAT
-        return MapAttitude(bearingDegrees = camera.bearing, pitchDegrees = camera.tilt)
-    }
-
-    /** Shows what [attitudeAfterOrderingNorthAndFlat] says the attitude now is. */
-    private fun showAttitudeAfterOrdering(theOrderStands: Boolean) = showAttitude(
-        attitudeAfterOrderingNorthAndFlat(
-            theOrderStands = theOrderStands,
-            mapAttitude = mapAttitude(),
-        ),
-    )
-
-    /**
-     * Puts the map back the way it opened (SPEC §7.1).
-     *
-     * Turned rather than snapped: a map that jumps to north leaves the reader
-     * to find again where they were looking, where one that turns carries
-     * their place round with it. Under "remove animations" it snaps, as every
-     * other camera move on this screen does.
-     *
-     * The limits penning the camera are not stood down for it, unlike
-     * [moveCameraTo]: the target does not move, and coming back to north can
-     * only shrink what the screen covers of the served area.
-     */
-    private fun faceNorthAndLayFlat() {
-        val map = mapLibreMap ?: return
-        // The button goes at the press and not at the end of the move: from
-        // here on the map is bound for north and flat, so the compass has
-        // nothing left to undo, and the screen has no reason to read back an
-        // order it gave itself (see [attitudeAfterOrderingNorthAndFlat]).
-        showAttitudeAfterOrdering(theOrderStands = true)
-        // One update carrying both, rather than two moves racing each other:
-        // a position whose target and zoom are left unset keeps the ones the
-        // map has, which is what `bearingTo` was already doing on its own.
-        val update = CameraUpdateFactory.newCameraPosition(
-            CameraPosition.Builder().bearing(NORTH_BEARING).tilt(FLAT_PITCH).build(),
-        )
-        if (requireContext().prefersReducedMotion()) {
-            map.moveCamera(update)
-            return
-        }
-        map.animateCamera(
-            update,
-            FACE_NORTH_ANIMATION_MILLIS,
-            object : MapLibreMap.CancelableCallback {
-                override fun onFinish() = showAttitudeAfterOrdering(theOrderStands = true)
-
-                // A move cut short by a finger back on the map leaves the map
-                // wherever it stopped, and the needle has to come back and say
-                // so. This is the one case where the map knows and we do not.
-                override fun onCancel() = showAttitudeAfterOrdering(theOrderStands = false)
-            },
-        )
-    }
-
-    /**
-     * Says whether a remembered framing still holds for this city.
-     *
-     * The camera survives the destruction of the view, so a trip to another
-     * screen does not lose everything. But it also survives a change of city:
-     * taken as is, it would reopen the map of Paris over Lille, outside the
-     * tiles, on a grey screen that nothing explains.
-     */
-    private fun CameraPosition.suits(configuration: CityConfiguration): Boolean {
-        val box = configuration.boundingBox ?: return true
-        val centre = target ?: return false
-        return Coordinates(centre.latitude, centre.longitude) in box
-    }
-
-    /**
-     * The opening framing, for want of a known position.
-     *
-     * Location permission is not requested at launch (SPEC §10): the map
-     * therefore opens on the centre declared in the city configuration, never
-     * on a position obtained without the user's knowledge.
-     */
-    /**
-     * How the map is framed when nothing is remembered.
+     * The position the map may open on, when the system already holds one.
      *
      * On the user's position when it is already known, since that is what they
-     * came to see: the stations around them, not the middle of the
-     * conurbation. Only what the system already holds is read — no fix is
-     * requested and no permission is asked for (SPEC §10). Without a position,
-     * or with one outside the served city, the configured centring stands.
+     * came to see (see [openingFraming]). Only what the system already holds is
+     * read — no fix is requested and no permission is asked for (SPEC §10) —
+     * and only a position inside the served city is taken.
      */
-    private fun openingCamera(configuration: CityConfiguration): CameraPosition {
+    private fun positionToOpenOn(configuration: CityConfiguration): Coordinates? {
         val here = container.deviceLocation
             .takeIf { it.isPermitted() }
             ?.lastKnown()
-            ?.takeIf { fix -> configuration.boundingBox?.let { fix.coordinates in it } == true }
-        if (here != null) {
-            // Shown as well as framed: a map centred on nothing would leave the
-            // user guessing which point it settled on.
-            lastKnownPosition = here
-            return CameraPosition.Builder()
-                .target(LatLng(here.coordinates.latitude, here.coordinates.longitude))
-                .zoom(USER_POSITION_ZOOM)
-                .build()
-        }
-        return CameraPosition.Builder()
-            .target(
-                LatLng(
-                    configuration.map.centre.latitude,
-                    configuration.map.centre.longitude,
-                ),
-            )
-            .zoom(configuration.map.defaultZoom)
-            .build()
-    }
-
-    /**
-     * Installs the station source and its four layers.
-     *
-     * Clustering is left to MapLibre (SPEC §7.1): past the zoom given, nearby
-     * stations merge into a cluster bearing their count.
-     */
-    private fun addStationLayers(style: Style) {
-        val source = GeoJsonSource(
-            StationMarkers.SOURCE_ID,
-            FeatureCollection.fromFeatures(emptyList()),
-            GeoJsonOptions()
-                .withCluster(true)
-                .withClusterRadius(CLUSTER_RADIUS)
-                .withClusterMaxZoom(CLUSTER_MAX_ZOOM),
-        )
-        stationSource = source
-        style.addSource(source)
-
-        val context = requireContext()
-        // The bikes outside stations go down FIRST, so the stations are drawn
-        // over them: a rack of bikes is what this map is for, and a marker
-        // standing for one bike must never hide one standing for twenty.
-        addStreetBikeLayers(style, context)
-        style.addLayer(StationMarkers.circleLayer(context))
-        style.addLayer(StationMarkers.countLayer(context))
-        style.addLayer(StationMarkers.clusterLayer(context))
-        style.addLayer(StationMarkers.clusterCountLayer(context))
-
-        // The named places go over the stations, and under the point searched
-        // for: that one is what the user has just asked for.
-        val saved = GeoJsonSource(
-            SavedPlaceMarkers.SOURCE_ID,
-            SavedPlaceMarkers.featuresFor(emptyMap()),
-        )
-        savedPlaceSource = saved
-        style.addSource(saved)
-        SavedPlaceMarkers.registerImages(context, style)
-        style.addLayer(SavedPlaceMarkers.layer())
-        publishSavedPlaces()
-
-        // The searched point is laid down AFTER the stations: it is what the
-        // user has just asked for, so it goes in front.
-        val picked = GeoJsonSource(
-            PickedPlaceMarker.SOURCE_ID,
-            PickedPlaceMarker.featureFor(null),
-        )
-        pickedPlaceSource = picked
-        style.addSource(picked)
-        PickedPlaceMarker.registerImage(context, style)
-        style.addLayer(PickedPlaceMarker.layer())
-        publishPickedPlace()
-
-        // The circle of uncertainty goes down before the disc: it is the ground
-        // the point may be standing on, and the point stands on top of it.
-        val userAccuracy = GeoJsonSource(
-            UserPositionMarker.ACCURACY_SOURCE_ID,
-            UserPositionMarker.accuracyFeatureFor(null),
-        )
-        style.addSource(userAccuracy)
-        style.addLayer(UserPositionMarker.accuracyLayer(context))
-
-        val userPoint = GeoJsonSource(
-            UserPositionMarker.SOURCE_ID,
-            UserPositionMarker.featureFor(null),
-        )
-        style.addSource(userPoint)
-        // The direction cone goes under the disc: its tip peeks out, its base
-        // is the disc's business.
-        UserPositionMarker.registerImage(context, style)
-        style.addLayer(UserPositionMarker.bearingLayer())
-        style.addLayer(UserPositionMarker.layer(context))
-        userPosition = UserPositionDisplay(userPoint, userAccuracy)
-        // The known position is shown again after the view is rebuilt, without
-        // asking the system afresh.
-        showPosition(lastKnownPosition)
-    }
-
-    /**
-     * Installs the source and the layers of the bikes outside stations.
-     *
-     * They are installed whatever the setting says, and the source is simply
-     * left empty while the bikes are not shown: that is one state of one
-     * object, where layers coming and going with a switch set on another
-     * screen would be a style rebuilt from under the map.
-     *
-     * Clustering is MapLibre's, with the stations' own radius and zoom
-     * (SPEC §7.1): the two kinds of marker collapse at the same moment, so the
-     * map does not read as two maps laid on each other.
-     */
-    private fun addStreetBikeLayers(style: Style, context: Context) {
-        val source = GeoJsonSource(
-            StreetBikeMarkers.SOURCE_ID,
-            FeatureCollection.fromFeatures(emptyList()),
-            GeoJsonOptions()
-                .withCluster(true)
-                .withClusterRadius(CLUSTER_RADIUS)
-                .withClusterMaxZoom(CLUSTER_MAX_ZOOM),
-        )
-        streetBikeSource = source
-        style.addSource(source)
-
-        style.addLayer(StreetBikeMarkers.circleLayer(context))
-        StreetBikeMarkers.registerImage(context, style)
-        style.addLayer(StreetBikeMarkers.boltLayer())
-        style.addLayer(StreetBikeMarkers.clusterLayer(context))
-        style.addLayer(StreetBikeMarkers.clusterCountLayer(context))
-        // The view may have been rebuilt over bikes already read: they are put
-        // back without the feed being asked again.
-        publishStreetBikes()
+            ?.takeIf { fix -> opensOnThePosition(fix.coordinates, configuration.boundingBox) }
+            ?: return null
+        // Shown as well as framed: a map centred on nothing would leave the
+        // user guessing which point it settled on.
+        userPosition.remember(here)
+        return here.coordinates
     }
 
     /**
@@ -1101,79 +531,11 @@ class MapFragment : Fragment() {
      * entries and is replayed at every refresh.
      */
     private fun publishStations() {
-        val kind = bikeKindFilter()
+        val kind = filters.bikeKindFilter()
+        val mode = filters.mode
         val shown = stationsShownOnMap(viewModel.state.value.stations, mapFilter, mode, kind)
-        val source = stationSource ?: return
+        val source = layers?.stations ?: return
         source.setGeoJson(StationMarkers.toFeatureCollection(shown, mode, kind))
-    }
-
-    /**
-     * Redraws the bikes outside stations, or clears them.
-     *
-     * They answer to no filter of this screen — neither the two station
-     * filters nor the kind, nor the Bikes / Free docks toggle. Those act on
-     * counts, and there is no count here to hide or to narrow: a marker
-     * standing for one bike of one kind is either drawn or not, and the
-     * setting alone decides (SPEC §7.1).
-     */
-    private fun publishStreetBikes() {
-        val source = streetBikeSource ?: return
-        source.setGeoJson(
-            StreetBikeMarkers.toFeatureCollection(
-                streetBikes,
-                lentFleet?.vehicleTypes.orEmpty(),
-            ),
-        )
-    }
-
-    /**
-     * Follows the setting that draws the bikes outside stations (SPEC §7.6).
-     *
-     * Switched on, the feed is asked for on the spot — coming back from the
-     * settings must find the bikes already on the map — and then followed;
-     * switched off, the markers go and nothing is fetched again. The
-     * one-minute gate between two reads is the repository's, not this
-     * screen's (SPEC §4.1).
-     */
-    private fun followStreetBikes() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                container.preferences.showStreetBikes.collectLatest { show ->
-                    showsStreetBikes = show
-                    if (!show) {
-                        streetBikes = emptyList()
-                        publishStreetBikes()
-                        return@collectLatest
-                    }
-                    // Asked for beside the following rather than before it: the
-                    // stream never ends, so a read awaited here would be a read
-                    // the markers wait on.
-                    launch { refreshStreetBikes() }
-                    container.stationRepository.observeStreetBikes().collect { snapshot ->
-                        streetBikes = snapshot.bikes
-                        publishStreetBikes()
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Asks for the bikes outside stations, while they are being shown.
-     *
-     * The outcome is deliberately not raised on the banner. A network that
-     * cannot be reached is already being said by the station refresh made in
-     * the same breath, and a network publishing no such feed is an ordinary
-     * answer the repository remembers for the session rather than a failure
-     * (SPEC §4.1) — the map says that one by drawing nothing, which is the
-     * whole of what the setting promises there.
-     *
-     * @param force ignores the one-minute gate. Reserved for the refresh
-     *   asked for by hand, as it is for the stations.
-     */
-    private suspend fun refreshStreetBikes(force: Boolean = false) {
-        if (!showsStreetBikes) return
-        container.stationRepository.refreshStreetBikes(force = force)
     }
 
     /**
@@ -1202,147 +564,6 @@ class MapFragment : Fragment() {
                     }
             }
         }
-    }
-
-    /**
-     * Follows the places the user has named and the two settings that say how
-     * the map shows them (SPEC §7.1, §7.6).
-     *
-     * Followed rather than read once: a home named or forgotten in the settings
-     * must be on the map — or off it — on the way back, without a rebuild.
-     */
-    private fun followSavedPlaces() {
-        val preferences = container.preferences
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                combine(
-                    preferences.homePlace,
-                    preferences.workPlace,
-                    preferences.showSavedPlacesOnMap,
-                    preferences.savedPlaceButtonsOnMap,
-                    ::SavedPlacesOnMap,
-                )
-                    .distinctUntilChanged()
-                    .collect { places ->
-                        savedPlaces = places
-                        publishSavedPlaces()
-                        showSavedPlaceButtons()
-                    }
-            }
-        }
-    }
-
-    /** Draws the named places, or clears them where the setting says so. */
-    private fun publishSavedPlaces() {
-        val source = savedPlaceSource ?: return
-        val shown = if (savedPlaces.markers) {
-            SavedPlaceKind.entries.mapNotNull { kind ->
-                savedPlaces.of(kind)?.let { kind to it }
-            }.toMap()
-        } else {
-            emptyMap()
-        }
-        source.setGeoJson(SavedPlaceMarkers.featuresFor(shown))
-    }
-
-    /** Puts up the button of each named place the map can bring itself onto. */
-    private fun showSavedPlaceButtons() {
-        val views = binding ?: return
-        for (kind in SavedPlaceKind.entries) {
-            val button = when (kind) {
-                SavedPlaceKind.Home -> views.centreOnHome
-                SavedPlaceKind.Work -> views.centreOnWork
-            }
-            button.isVisible = offersCentringOn(
-                place = savedPlaces.of(kind)?.position,
-                wanted = savedPlaces.buttons,
-                browsing = showsMapControls,
-                servedArea = servedCity?.boundingBox,
-            )
-        }
-    }
-
-    /**
-     * Brings the map onto a named place, at the zoom of an address found: it
-     * is one, and the stations around it are what one came to see.
-     */
-    private fun centreOn(kind: SavedPlaceKind) {
-        val place = savedPlaces.of(kind) ?: return
-        moveCameraTo(LatLng(place.position.latitude, place.position.longitude))
-    }
-
-    /**
-     * Opens the detail of the station touched, or zooms into a cluster.
-     *
-     * The sensitive area is widened around the finger: a marker is some fifteen
-     * pixels across, which is less than the pad of a thumb. Without this
-     * margin, one would have to aim.
-     *
-     * @return true if the gesture was consumed, so the map does not handle it
-     *   in turn.
-     */
-    private fun onMapClicked(point: LatLng): Boolean {
-        val map = mapLibreMap ?: return false
-        val screenPoint = map.projection.toScreenLocation(point)
-        val touchArea = RectF(
-            screenPoint.x - TOUCH_SLOP_PIXELS,
-            screenPoint.y - TOUCH_SLOP_PIXELS,
-            screenPoint.x + TOUCH_SLOP_PIXELS,
-            screenPoint.y + TOUCH_SLOP_PIXELS,
-        )
-        val touched = map.queryRenderedFeatures(
-            touchArea,
-            StationMarkers.STATION_CIRCLE_LAYER,
-            StationMarkers.CLUSTER_CIRCLE_LAYER,
-            StreetBikeMarkers.CIRCLE_LAYER,
-            StreetBikeMarkers.CLUSTER_CIRCLE_LAYER,
-        ).firstOrNull() ?: return false
-
-        // A cluster describes no station in particular: touching it zooms in,
-        // which eventually resolves it into distinct markers.
-        if (touched.hasProperty(CLUSTER_COUNT_PROPERTY)) {
-            moveCameraTo(point, map.cameraPosition.zoom + CLUSTER_ZOOM_STEP)
-            return true
-        }
-
-        // In "pick a point" mode, opening a sheet of either kind would divert
-        // the gesture from what the user came to do.
-        val bikeId = touched.getStringProperty(StreetBikeMarkers.BIKE_ID_PROPERTY)
-        if (bikeId != null) {
-            if (isPicking()) return false
-            (touched.geometry() as? Point)?.let { centreOnStation(map, it) }
-            StreetBikeSheet.newInstance(bikeId)
-                .show(parentFragmentManager, StreetBikeSheet.TAG)
-            return true
-        }
-
-        val stationId = touched.getStringProperty(StationMarkers.STATION_ID_PROPERTY)
-            ?: return false
-        if (isPicking()) return false
-        (touched.geometry() as? Point)?.let { centreOnStation(map, it) }
-        StationDetailSheet.newInstance(stationId)
-            .show(parentFragmentManager, StationDetailSheet.TAG)
-        return true
-    }
-
-    /**
-     * Brings the touched station to the middle of what stays visible.
-     *
-     * Not to the middle of the map: the detail sheet rises over the lower part
-     * of the screen, and a station centred there would be behind it. The camera
-     * therefore aims a little below the marker, which leaves the marker in the
-     * visible half — the eye follows what it has just touched.
-     *
-     * The zoom is left alone. Touching a marker says "show me this one", not
-     * "take me closer", and a zoom that changed under the finger would lose the
-     * neighbouring stations one was comparing.
-     */
-    private fun centreOnStation(map: MapLibreMap, station: Point) {
-        val target = LatLng(station.latitude(), station.longitude())
-        val height = binding?.map?.height ?: return
-        val onScreen = map.projection.toScreenLocation(target)
-        val below = PointF(onScreen.x, onScreen.y + height * SHEET_CLEARANCE_FRACTION)
-        moveCameraTo(map.projection.fromScreenLocation(below), map.cameraPosition.zoom)
     }
 
     // ------------------------------------------------ picking a point (§7.3) --
@@ -1402,44 +623,6 @@ class MapFragment : Fragment() {
     // ----------------------------------------------------------- location --
 
     /**
-     * Asks for the location permission when the map opens (SPEC §7.1).
-     *
-     * **Once per session, only if it has never been granted, and not at all
-     * once a refusal has been recorded — this session or any earlier one.**
-     * The point that follows the device is what this screen is for; asking
-     * again at each return to the map, or at the launch after a "no", is the
-     * insistence SPEC §10 forbids. After a refusal the map stays whole,
-     * without a point, and the "locate me" button is the way back.
-     */
-    private fun askForLocation() {
-        if (container.deviceLocation.isPermitted()) return
-        viewLifecycleOwner.lifecycleScope.launch {
-            if (container.automaticLocationRequest.mayAskUnprompted()) {
-                requestLocationPermission.launch(DeviceLocation.PERMISSIONS)
-            }
-        }
-    }
-
-    /**
-     * Answers the "locate me" button (SPEC §7.1).
-     *
-     * The other of the two moments where the permission is requested, and the
-     * one that comes back: after a refusal at opening, this is what the user
-     * has left to change their mind (SPEC §10).
-     */
-    private fun onLocateMeClicked() {
-        val location = container.deviceLocation
-        when {
-            !location.isPermitted() ->
-                requestLocationPermission.launch(DeviceLocation.PERMISSIONS)
-
-            !location.isAvailable() -> showMessage(R.string.map_location_unavailable)
-
-            else -> locateMe()
-        }
-    }
-
-    /**
      * Looks for the position and brings the map to it.
      *
      * The position is neither kept nor written: it serves to frame the map,
@@ -1468,18 +651,17 @@ class MapFragment : Fragment() {
                 return@launch
             }
             val position = fix.coordinates
-            lastKnownPosition = fix
-            showPosition(fix)
+            userPosition.show(fix)
             // Outside the city served there is nothing to move to: the camera
             // is held inside that city's box, so it would stop at the edge
             // nearest the user and show that as their position — a point on a
             // street they are a hundred kilometres from, with nothing saying
             // so. What the moment calls for is the other city, not a framing.
-            if (isOutsideServedArea(position)) {
-                sayWeAreElsewhere(position)
+            if (liesOutside(position, servedCity?.boundingBox)) {
+                elsewhere.sayWeAreElsewhere(position)
                 return@launch
             }
-            moveCameraTo(LatLng(position.latitude, position.longitude), USER_POSITION_ZOOM)
+            camera.moveTo(LatLng(position.latitude, position.longitude), USER_POSITION_ZOOM)
         }
     }
 
@@ -1502,203 +684,6 @@ class MapFragment : Fragment() {
             repeatCount = ValueAnimator.INFINITE
             start()
         }
-    }
-
-    /**
-     * Says whether [position] falls outside the area this map covers.
-     *
-     * The city whose configuration declares no bounding box covers everything
-     * as far as this screen is concerned: nothing pens its camera either, so
-     * nothing is being passed off as anything.
-     */
-    private fun isOutsideServedArea(position: Coordinates): Boolean {
-        val area = servedCity?.boundingBox?.takeIf { it.isUsable } ?: return false
-        return position !in area
-    }
-
-    /**
-     * Tells the user their position is off this map, and offers the way out.
-     *
-     * The way out is the network of the conurbation they are actually in, when
-     * the catalogue knows one and its data is published — the same offer
-     * §15.1 makes on opening the application, asked for here rather than
-     * volunteered. Failing that, the city list, which is where one changes map.
-     *
-     * The catalogue read is the one already on the device: no request goes out,
-     * and the position serves this single question before being forgotten
-     * (SPEC §2, C3).
-     *
-     * A city already offered and turned down is not offered again: the press
-     * is answered in one line instead. Reopening the dialogue on every press
-     * was what made "locate me" unusable to anybody who meant to keep the city
-     * they had chosen.
-     */
-    private suspend fun sayWeAreElsewhere(position: Coordinates) {
-        val served = servedCity ?: return
-        val servedLabel = requireContext()
-            .cityLabel(served.network.displayName, served.network.city)
-        // Designating a point is composing a journey in the city served:
-        // changing map there would throw away the endpoint already chosen. All
-        // that is left to do is say where we are.
-        if (isPicking()) {
-            showMessage(getString(R.string.map_outside_city_brief, servedLabel))
-            return
-        }
-        val here = cityAround(position)
-        // Asked before the answer is chosen: standing outside the network one
-        // declined is what forgets that refusal, whatever is said next.
-        val mayPropose = container.rememberCityProposal(here?.id)
-        if (here != null && !mayPropose) {
-            // Where we are is still worth saying: the press asked a question,
-            // and silence would read as a button that does nothing.
-            showMessage(getString(R.string.map_outside_city_brief, servedLabel))
-            return
-        }
-        if (here == null) {
-            ConfirmationDialogFragment.ask(
-                manager = childFragmentManager,
-                requestKey = ELSEWHERE_ANSWER,
-                title = R.string.map_outside_city_title,
-                message = getString(R.string.map_outside_city_message, servedLabel),
-                confirm = R.string.city_choose,
-            )
-            return
-        }
-        val installed = container.datasetStore.occupiedBytesOf(here.id) > 0
-        ConfirmationDialogFragment.ask(
-            manager = childFragmentManager,
-            requestKey = CITY_HERE_ANSWER,
-            title = R.string.city_here_title,
-            message = getString(
-                if (installed) R.string.city_here_installed_body else R.string.city_here_body,
-                requireContext().cityLabel(here.displayName, here.mainCity),
-            ),
-            confirm = if (installed) R.string.city_here_use else R.string.city_here_install,
-            payload = Bundle().apply {
-                putString(CITY_ID, here.id)
-                putBoolean(CITY_INSTALLED, installed)
-            },
-        )
-    }
-
-    /**
-     * Collects the answers to the two questions this screen asks.
-     *
-     * Registered as the screen is built, and not where each question is put:
-     * a question the phone turned over on is already back up by then, and its
-     * answer would arrive with nobody listening for it.
-     *
-     * Refusing the city one is standing in is an answer like the other, and is
-     * remembered as such: a "no" that lasted only until the screen was rebuilt
-     * would put the same question again at the next press.
-     */
-    private fun listenForAnswers() {
-        ConfirmationDialogFragment.onAnswer(
-            childFragmentManager,
-            viewLifecycleOwner,
-            ELSEWHERE_ANSWER,
-        ) { confirmed, _ ->
-            if (confirmed) show(CityFragment())
-        }
-        ConfirmationDialogFragment.onAnswer(
-            childFragmentManager,
-            viewLifecycleOwner,
-            CITY_HERE_ANSWER,
-        ) { confirmed, payload ->
-            val cityId = payload.getString(CITY_ID) ?: return@onAnswer
-            if (confirmed) {
-                serve(cityId, payload.getBoolean(CITY_INSTALLED))
-            } else {
-                declineCity(cityId)
-            }
-        }
-    }
-
-    /**
-     * Takes note that the offer was turned down.
-     *
-     * Kept beyond the session, like the one the application makes on opening: a
-     * refusal forgotten at the next launch is a question asked again.
-     */
-    private fun declineCity(cityId: String) {
-        viewLifecycleOwner.lifecycleScope.launch { container.rememberCityRefusal(cityId) }
-    }
-
-    /**
-     * The network serving where the user stands, if it is worth proposing.
-     *
-     * A proposal made on its own account is only worth making where the weight
-     * can be named, so a city the catalogue announces none for is left out; the
-     * city already in service is not a change of map, and is left out too. The
-     * list of cities is less strict, because there the user asked.
-     */
-    private suspend fun cityAround(position: Coordinates): CityEntry? =
-        container.cityCatalogueSource.catalogue()
-            .suggestionFor(position)
-            ?.takeIf { it.hasAnnouncedSize && it.id != servedCity?.network?.id }
-
-    /**
-     * Serves the city the user accepted.
-     *
-     * Its data already there, the map has everything it needs and is built
-     * again on it — this screen loads its style once and keeps it, so the new
-     * city's tiles need a new screen. Otherwise the storage screen takes over:
-     * it announces the weight before fetching anything (SPEC §4.4).
-     */
-    private fun serve(cityId: String, installed: Boolean) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            container.switchToCity(cityId)
-            if (installed) {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.content, MapFragment())
-                    .commit()
-            } else {
-                show(StorageFragment.checkingForUpdates())
-            }
-        }
-    }
-
-    /**
-     * Moves the point as the device moves (SPEC §7.1).
-     *
-     * **The point follows, the map does not.** Recentring at every fix would
-     * take the map back from under the user each time they looked a street
-     * further on; the framing stays theirs, and "locate me" is what brings it
-     * back to the point.
-     *
-     * Only if the permission is granted: opening the map asks for nothing, and
-     * a user who has refused keeps a map without a point rather than a second
-     * prompt (SPEC §10). The permission granted later — from the button, or
-     * from the Android settings — opens the gate, and the following starts
-     * there and then.
-     *
-     * Subscribed once for the life of the view, and following the screen —
-     * `repeatOnLifecycle` drops it as soon as the map is no longer displayed,
-     * so nothing listens to the satellites in the background — and the position
-     * is written nowhere (SPEC §2, C3).
-     */
-    private fun followUserPosition() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                locationPermitted.collectLatest { permitted ->
-                    if (!permitted) return@collectLatest
-                    container.deviceLocation.positions().collect { fix ->
-                        lastKnownPosition = fix
-                        showPosition(fix)
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Draws the point and, when the fix is a coarse one, the circle around it.
-     *
-     * Point and circle move together, and they glide rather than jump — see
-     * [UserPositionDisplay] (SPEC §7.1).
-     */
-    private fun showPosition(fix: PositionFix?) {
-        userPosition?.show(fix)
     }
 
     private fun showMessage(message: Int) {
@@ -1736,14 +721,12 @@ class MapFragment : Fragment() {
             AddressSearchFragment.REQUEST_KEY,
             viewLifecycleOwner,
         ) { _, result ->
-            showPickedPlace(
-                PickedPlace(
-                    position = LatLng(
-                        result.getDouble(AddressSearchFragment.RESULT_LATITUDE),
-                        result.getDouble(AddressSearchFragment.RESULT_LONGITUDE),
-                    ),
-                    label = result.getString(AddressSearchFragment.RESULT_LABEL).orEmpty(),
+            pickedPlace.designate(
+                position = Coordinates(
+                    result.getDouble(AddressSearchFragment.RESULT_LATITUDE),
+                    result.getDouble(AddressSearchFragment.RESULT_LONGITUDE),
                 ),
+                label = result.getString(AddressSearchFragment.RESULT_LABEL).orEmpty(),
             )
         }
     }
@@ -1764,11 +747,8 @@ class MapFragment : Fragment() {
      */
     private fun openPickedPlaceSheet() {
         if (isPicking()) return
-        val place = pickedPlace ?: return
-        val endpoint = JourneyEndpoint(
-            label = place.label,
-            position = Coordinates(place.position.latitude, place.position.longitude),
-        )
+        val place = pickedPlace.place ?: return
+        val endpoint = JourneyEndpoint(label = place.label, position = place.position)
         PlaceDetailSheet.newInstance(endpoint).show(childFragmentManager, PlaceDetailSheet.TAG)
     }
 
@@ -1791,7 +771,7 @@ class MapFragment : Fragment() {
             val place = JourneyEndpoint.readFrom(result, PlaceDetailSheet.RESULT_PLACE)
                 ?: return@setFragmentResultListener
             when (result.getString(PlaceDetailSheet.RESULT_ACTION)) {
-                PlaceAction.Clear.name -> showPickedPlace(null)
+                PlaceAction.Clear.name -> pickedPlace.clear()
                 PlaceAction.LeaveFromHere.name ->
                     show(JourneySearchFragment.newInstance(origin = place))
 
@@ -1799,99 +779,6 @@ class MapFragment : Fragment() {
                     show(JourneySearchFragment.newInstance(destination = place))
             }
         }
-    }
-
-    /**
-     * Lays the point found on the map, or clears it.
-     *
-     * @param place the chosen address, or `null` to remove the marker.
-     */
-    private fun showPickedPlace(place: PickedPlace?) {
-        pickedPlace = place
-        // Noted as the point is laid down, from the city the map is serving at
-        // that moment: asking later which city an address came from would mean
-        // asking after the answer has changed.
-        pickedPlaceCity = place?.let { servedCity?.network?.id }
-        publishPickedPlace()
-        showPickedPlaceLabel(place)
-        if (place != null) moveCameraTo(place.position)
-    }
-
-    /**
-     * Shows the label of the point found.
-     *
-     * The label is part of what a screen reader must speak: replacing the text
-     * with the action alone would make the address vanish for anyone who only
-     * has the voice. The action named beside it is what a press now does —
-     * open the sheet of §7.2 — and not what the pill used to do on its own.
-     */
-    private fun showPickedPlaceLabel(place: PickedPlace?) {
-        val pill = binding?.pickedPlace ?: return
-        pill.isVisible = place != null
-        pill.text = place?.label.orEmpty()
-        pill.contentDescription = place?.let {
-            getString(R.string.map_picked_place_description, it.label)
-        }
-    }
-
-    private fun publishPickedPlace() {
-        pickedPlaceSource?.setGeoJson(
-            PickedPlaceMarker.featureFor(
-                pickedPlace?.let { Coordinates(it.position.latitude, it.position.longitude) },
-            ),
-        )
-    }
-
-    /**
-     * Brings the map onto a point.
-     *
-     * The move is animated so one understands where one came from — unless the
-     * device asks for reduced animations, in which case the map jumps straight
-     * to the destination (SPEC §7).
-     *
-     * The limits over the served area stand down for its length: laying one
-     * down cancels the move in flight, and this one was dying to the limits
-     * being measured a few milliseconds after it started. They are taken up
-     * again on arrival, where they are measured on the framing that landed.
-     */
-    private fun moveCameraTo(target: LatLng, zoom: Double = PICKED_PLACE_ZOOM) {
-        val map = mapLibreMap
-        if (map == null || !styleLoaded) {
-            pendingCameraTarget = target
-            return
-        }
-        val update = CameraUpdateFactory.newLatLngZoom(target, zoom)
-        val servedArea = servedAreaCamera
-        servedArea?.releaseForMove()
-        if (requireContext().prefersReducedMotion()) {
-            map.moveCamera(update)
-            servedArea?.holdAgain()
-            return
-        }
-        map.animateCamera(
-            update,
-            CAMERA_ANIMATION_MILLIS,
-            object : MapLibreMap.CancelableCallback {
-                override fun onFinish() = holdOverServedAreaAgain(servedArea)
-
-                // A move cut short — by a finger on the map, or by another
-                // move — leaves the camera somewhere legitimate all the same:
-                // what matters is that the limits come back, wherever it is.
-                override fun onCancel() = holdOverServedAreaAgain(servedArea)
-            },
-        )
-    }
-
-    /**
-     * Takes the limits up again once a move of ours has ended.
-     *
-     * The screen may have gone in the meantime — one leaves for the list while
-     * the map is still travelling — and the limits are then measured on a map
-     * whose view no longer exists.
-     */
-    private fun holdOverServedAreaAgain(servedArea: ServedAreaCamera?) {
-        if (mapLibreMap == null) return
-        servedArea?.holdAgain()
     }
 
     /**
@@ -1905,151 +792,7 @@ class MapFragment : Fragment() {
     private fun showRequestedPlace(savedInstanceState: Bundle?) {
         if (savedInstanceState != null) return
         val requested = JourneyEndpoint.readFrom(arguments, ARGUMENT_SHOWN_PLACE) ?: return
-        showPickedPlace(
-            PickedPlace(
-                position = LatLng(requested.position.latitude, requested.position.longitude),
-                label = requested.label,
-            ),
-        )
-    }
-
-    /**
-     * Takes back the framing the screen had before the phone was turned.
-     *
-     * Only the target and the zoom. The map can be turned and tilted now
-     * (SPEC §7.1), and neither the bearing nor the pitch is saved all the
-     * same. A screen rebuilt from this bundle is one the phone was turned
-     * under, or one the system had thrown away in the meantime: a map found
-     * lying askew, or leaning, by somebody who does not remember setting it
-     * that way reads as a map that has broken and not as one they set. It
-     * comes back facing north and flat, and the compass goes with it.
-     */
-    private fun restoreCamera(savedInstanceState: Bundle?) {
-        val saved = savedInstanceState ?: return
-        if (!saved.containsKey(STATE_CAMERA_LATITUDE)) return
-        lastCamera = CameraPosition.Builder()
-            .target(
-                LatLng(
-                    saved.getDouble(STATE_CAMERA_LATITUDE),
-                    saved.getDouble(STATE_CAMERA_LONGITUDE),
-                ),
-            )
-            .zoom(saved.getDouble(STATE_CAMERA_ZOOM))
-            .build()
-    }
-
-    /**
-     * Lays down again the point the screen was designating when it went away.
-     *
-     * A reading of the bundle and nothing else, decided synchronously with the
-     * rest of the screen's rebuilding: whether the point has a right to be
-     * there is asked once, in [loadTilesFor], where the city being served is
-     * known without waiting. The city the point was designated in comes back
-     * with it, which is what lets that question be put to a screen rebuilt
-     * from scratch.
-     */
-    private fun restorePickedPlace(savedInstanceState: Bundle?) {
-        val saved = savedInstanceState ?: return
-        if (!saved.containsKey(STATE_PICKED_LATITUDE)) return
-        pickedPlace = PickedPlace(
-            position = LatLng(
-                saved.getDouble(STATE_PICKED_LATITUDE),
-                saved.getDouble(STATE_PICKED_LONGITUDE),
-            ),
-            label = saved.getString(STATE_PICKED_LABEL).orEmpty(),
-        )
-        pickedPlaceCity = saved.getString(STATE_PICKED_CITY)
-        showPickedPlaceLabel(pickedPlace)
-    }
-
-    private fun toggleMode() {
-        mode = when (mode) {
-            AvailabilityMode.Bikes -> AvailabilityMode.Docks
-            AvailabilityMode.Docks -> AvailabilityMode.Bikes
-        }
-        applyModeLabel()
-        // The kind filter has nothing to say about free docks, so it goes while
-        // they are being shown. The choice itself is kept: coming back to the
-        // bikes finds it again, rather than silently reset.
-        showBikeKindFilter()
-        publishStations()
-    }
-
-    /**
-     * Passes to the next kind counted: all bikes, then mechanical, then
-     * electric.
-     *
-     * A button labelled by what is shown rather than by what a press would do,
-     * exactly like the toggle beside it. Three states on one button rather than
-     * a row of three: the map is scenery for the stations (SPEC §7), and every
-     * control laid over it is taken from them.
-     */
-    private fun toggleBikeKind() {
-        bikeKind = when (bikeKind) {
-            null -> WantedBikeKind.Mechanical
-            WantedBikeKind.Mechanical -> WantedBikeKind.Electric
-            WantedBikeKind.Electric -> null
-        }
-        applyBikeKindLabel()
-        publishStations()
-    }
-
-    private fun applyBikeKindLabel() {
-        val button = binding?.bikeKindFilter ?: return
-        button.setText(
-            when (bikeKind) {
-                null -> R.string.map_bikes_all_kinds
-                WantedBikeKind.Mechanical -> R.string.map_bikes_mechanical
-                WantedBikeKind.Electric -> R.string.map_bikes_electric
-            },
-        )
-        button.contentDescription = getString(
-            when (bikeKind) {
-                null -> R.string.map_bikes_all_kinds_description
-                WantedBikeKind.Mechanical -> R.string.map_bikes_mechanical_description
-                WantedBikeKind.Electric -> R.string.map_bikes_electric_description
-            },
-        )
-    }
-
-    /**
-     * Shows the kind filter where it has something to filter.
-     *
-     * It follows the toggle beside it — gone without a base map, and gone while
-     * a point is being designated — and needs two more things of its own: a
-     * network that really lends both kinds (SPEC §15), since offering to sort
-     * bikes into two piles where there is one would promise something nobody can
-     * collect, and the bikes being what is counted, a kind having nothing to say
-     * about a free dock.
-     */
-    private fun showBikeKindFilter() {
-        val views = binding ?: return
-        views.bikeKindFilter.isVisible = showsMapControls &&
-            mode == AvailabilityMode.Bikes &&
-            lentFleet?.isMixed == true
-    }
-
-    /**
-     * The kind the markers count, or `null` — all of them.
-     *
-     * Silent wherever the filter itself is: a network lending one kind, or a
-     * reading not landed yet, leaves the markers counting whole stations.
-     */
-    private fun bikeKindFilter(): BikeKindFilter? {
-        val wanted = bikeKind ?: return null
-        val lent = lentFleet?.takeIf { it.isMixed } ?: return null
-        return BikeKindFilter(wanted, lent.vehicleTypes)
-    }
-
-    private fun applyModeLabel() {
-        // The button is named after what is SHOWN, not after what a press
-        // would do: it is a state label, like the list's own toggle.
-        binding?.modeToggle?.setText(
-            when (mode) {
-                AvailabilityMode.Bikes -> R.string.mode_bikes
-                AvailabilityMode.Docks -> R.string.mode_docks
-            },
-        )
+        pickedPlace.designate(requested.position, requested.label)
     }
 
     /**
@@ -2119,7 +862,7 @@ class MapFragment : Fragment() {
                         // Asked for by hand: the gate that spares the feed is
                         // stood down, as it is for the stations.
                         viewLifecycleOwner.lifecycleScope.launch {
-                            refreshStreetBikes(force = true)
+                            streetBikes.refresh(force = true)
                         }
                     }
                 }
@@ -2136,7 +879,7 @@ class MapFragment : Fragment() {
                     // The same tick asks for the vehicle feed, which the
                     // repository serves from memory until the same minute is
                     // up (SPEC §4.1).
-                    refreshStreetBikes()
+                    streetBikes.refresh()
                     showFreshness(viewModel.state.value)
                     delay(FRESHNESS_TICK_MILLIS)
                 }
@@ -2208,10 +951,7 @@ class MapFragment : Fragment() {
         super.onResume()
         binding?.map?.onResume()
         loadTilesIfInstalled()
-        // The permission may have been granted, or withdrawn, from the Android
-        // settings while the application was away: the point starts or stops
-        // following on the way back, without a detour through the button.
-        locationPermitted.value = container.deviceLocation.isPermitted()
+        userPosition.readPermission()
     }
 
     override fun onPause() {
@@ -2227,28 +967,8 @@ class MapFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding?.map?.onSaveInstanceState(outState)
-        // Where the map was looking, so that turning the phone shows the same
-        // place in the other shape rather than starting the screen over.
-        val camera = mapLibreMap?.cameraPosition ?: lastCamera
-        camera?.target?.let { target ->
-            outState.putDouble(STATE_CAMERA_LATITUDE, target.latitude)
-            outState.putDouble(STATE_CAMERA_LONGITUDE, target.longitude)
-            outState.putDouble(STATE_CAMERA_ZOOM, camera.zoom)
-        }
-        // The chosen point survives a rotation, and nothing else: it is
-        // written nowhere on disk (SPEC §8).
-        //
-        // The city it belongs to travels with it, and is no more a history
-        // than the point itself: this bundle dies with the task, and what it
-        // serves is the opposite of keeping anything — it is how a point
-        // designated in another city is recognised and thrown away when the
-        // process comes back (see [loadTilesFor]).
-        pickedPlace?.let { place ->
-            outState.putDouble(STATE_PICKED_LATITUDE, place.position.latitude)
-            outState.putDouble(STATE_PICKED_LONGITUDE, place.position.longitude)
-            outState.putString(STATE_PICKED_LABEL, place.label)
-            outState.putString(STATE_PICKED_CITY, pickedPlaceCity)
-        }
+        camera.save(outState)
+        pickedPlace.save(outState)
     }
 
     override fun onLowMemory() {
@@ -2257,17 +977,12 @@ class MapFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        lastCamera = mapLibreMap?.cameraPosition
-        bearingListener?.let { mapLibreMap?.removeOnCameraMoveListener(it) }
-        bearingListener = null
+        camera.rememberAndRelease()
+        attitude.stopFollowing()
         binding?.map?.onDestroy()
-        stationSource = null
-        streetBikeSource = null
-        pickedPlaceSource = null
-        savedPlaceSource = null
-        userPosition?.cancel()
-        userPosition = null
-        servedAreaCamera = null
+        pickedPlace.detach()
+        layers?.userPosition?.cancel()
+        layers = null
         mapLibreMap = null
         styleLoaded = false
         loadedTilesPath = null
@@ -2285,14 +1000,6 @@ class MapFragment : Fragment() {
         private const val ARGUMENT_PICKING = "picking-mode"
         private const val ARGUMENT_SHOWN_PLACE = "place-to-show"
 
-        /** The keys the two questions of this screen answer under. */
-        private const val ELSEWHERE_ANSWER = "map-outside-city"
-        private const val CITY_HERE_ANSWER = "map-city-here"
-
-        /** What a question carries across a rebuild about the city it names. */
-        private const val CITY_ID = "city-id"
-        private const val CITY_INSTALLED = "city-installed"
-
         /** Opens the map to designate a point on it (SPEC §7.3). */
         fun forPicking(): MapFragment = MapFragment().apply {
             arguments = Bundle().apply { putBoolean(ARGUMENT_PICKING, true) }
@@ -2307,59 +1014,6 @@ class MapFragment : Fragment() {
         fun showing(place: JourneyEndpoint): MapFragment = MapFragment().apply {
             arguments = Bundle().apply { place.writeTo(this, ARGUMENT_SHOWN_PLACE) }
         }
-
-        /** The zoom the map settles at on a found address: the street. */
-        const val PICKED_PLACE_ZOOM = 16.0
-
-        /**
-         * The margin around the finger on a touch, in pixels. A marker is some
-         * fifteen pixels across: without this margin, one would have to aim.
-         */
-        const val TOUCH_SLOP_PIXELS = 32f
-
-        /** The zoom the map settles at on the user's position. */
-        const val USER_POSITION_ZOOM = 16.0
-
-        /** How much a touch on a cluster zooms the map in. */
-        const val CLUSTER_ZOOM_STEP = 2.0
-
-        /**
-         * How far below a touched station the camera aims, as a fraction of the
-         * map's height. A quarter puts the marker halfway up the part the
-         * detail sheet leaves visible.
-         */
-        const val SHEET_CLEARANCE_FRACTION = 0.25f
-
-        /** The property MapLibre adds to the clusters it forms itself. */
-        const val CLUSTER_COUNT_PROPERTY = "point_count"
-
-        /** The camera move's duration, short enough not to keep anyone waiting. */
-        const val CAMERA_ANIMATION_MILLIS = 600
-
-        const val STATE_CAMERA_LATITUDE = "camera-latitude"
-        const val STATE_CAMERA_LONGITUDE = "camera-longitude"
-        const val STATE_CAMERA_ZOOM = "camera-zoom"
-
-        const val STATE_PICKED_LATITUDE = "picked-latitude"
-        const val STATE_PICKED_LONGITUDE = "picked-longitude"
-        const val STATE_PICKED_LABEL = "picked-label"
-
-        /**
-         * The city the saved point was designated in — see
-         * [MapFragment.onSaveInstanceState] for why an identifier travels with
-         * it, and why that is not a history.
-         */
-        const val STATE_PICKED_CITY = "picked-city"
-
-        /**
-         * The clustering radius, in pixels. Fifty keeps the stations of central
-         * Lille distinct as soon as one comes near, without making the overview
-         * swarm.
-         */
-        const val CLUSTER_RADIUS = 50
-
-        /** Past this, every station takes back its own marker. */
-        const val CLUSTER_MAX_ZOOM = 13
 
         const val FRESHNESS_TICK_MILLIS = 10_000L
 

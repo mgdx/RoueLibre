@@ -39,6 +39,9 @@ class MapDescriptionTest {
         "ui/journey/JourneyResultFragment.kt",
     )
 
+    /** Where both of them have their map's handling said, once for the two. */
+    private val attitudeController = "ui/map/MapAttitudeController.kt"
+
     /** The three layouts that show a map: the map screen and both journey results. */
     private val layoutsShowingAMap = listOf(
         "layout/fragment_map.xml",
@@ -91,26 +94,27 @@ class MapDescriptionTest {
      *
      * Nothing on the JVM can raise a `MapView`, so what is pinned here is the
      * line itself: a screen that lets its map turn is a screen that turns the
-     * library's compass off. The check is on the source, as the one above is.
+     * library's compass off — both screens do it through MapAttitudeController,
+     * and it is there the lines are looked for. The check is on the source, as
+     * the one above is.
      */
     @Test
     fun `a map that can be turned turns off the library's own compass`() {
-        for (path in screensWithATurnableMap) {
-            val fragment = File(sources, path).readText()
-            assertTrue(
-                "$path lets its map be turned",
-                fragment.contains("uiSettings.isRotateGesturesEnabled = true"),
-            )
-            assertTrue(
-                "$path turns off the compass the library would draw for it",
-                fragment.contains("uiSettings.isCompassEnabled = false"),
-            )
-            assertTrue(
-                "$path draws none of the library's other views either",
-                fragment.contains("uiSettings.isAttributionEnabled = false") &&
-                    fragment.contains("uiSettings.isLogoEnabled = false"),
-            )
-        }
+        assertEveryTurnableMapIsConfigured()
+        val controller = File(sources, attitudeController).readText()
+        assertTrue(
+            "$attitudeController lets the map be turned",
+            controller.contains("uiSettings.isRotateGesturesEnabled = true"),
+        )
+        assertTrue(
+            "$attitudeController turns off the compass the library would draw",
+            controller.contains("uiSettings.isCompassEnabled = false"),
+        )
+        assertTrue(
+            "$attitudeController draws none of the library's other views either",
+            controller.contains("uiSettings.isAttributionEnabled = false") &&
+                controller.contains("uiSettings.isLogoEnabled = false"),
+        )
     }
 
     /**
@@ -125,15 +129,24 @@ class MapDescriptionTest {
      */
     @Test
     fun `a map that can be turned can be tilted, and never past the ceiling`() {
+        assertEveryTurnableMapIsConfigured()
+        val controller = File(sources, attitudeController).readText()
+        assertTrue(
+            "$attitudeController lets the map be tilted, and says so",
+            controller.contains("uiSettings.isTiltGesturesEnabled = true"),
+        )
+        assertTrue(
+            "$attitudeController holds the tilt to the derived ceiling",
+            controller.contains("setMaxPitchPreference(MAX_PITCH_DEGREES)"),
+        )
+    }
+
+    /** Each turnable map hands itself to the one place its handling is said. */
+    private fun assertEveryTurnableMapIsConfigured() {
         for (path in screensWithATurnableMap) {
-            val fragment = File(sources, path).readText()
             assertTrue(
-                "$path lets its map be tilted, and says so",
-                fragment.contains("uiSettings.isTiltGesturesEnabled = true"),
-            )
-            assertTrue(
-                "$path holds the tilt to the derived ceiling",
-                fragment.contains("setMaxPitchPreference(MAX_PITCH_DEGREES)"),
+                "$path has its map's handling said by $attitudeController",
+                File(sources, path).readText().contains("attitude.configure(map)"),
             )
         }
     }

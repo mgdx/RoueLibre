@@ -1,5 +1,6 @@
 package io.github.mgdx.rouelibre.ui.map
 
+import io.github.mgdx.rouelibre.core.geo.Coordinates
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -67,5 +68,29 @@ class PickedPlaceOwnershipTest {
     @Test
     fun `a point does not survive the city being given up`() {
         assertFalse(designatedPlaceSurvives("capital-bikeshare", null))
+    }
+
+    /**
+     * The point and its city are one value: the question is put to the city
+     * the point carries, and to nothing the screen could have let drift apart.
+     */
+    @Test
+    fun `a designated place answers for the city it carries`() {
+        val inWashington = DesignatedPlace(A_POINT, "Pennsylvania Avenue", "capital-bikeshare")
+        assertTrue(inWashington.survivesUnder("capital-bikeshare"))
+        assertFalse(inWashington.survivesUnder("vlille"))
+        assertFalse(inWashington.survivesUnder(null))
+    }
+
+    /** A point restored from a bundle written before cities were noted stands. */
+    @Test
+    fun `a designated place of no known city stands under any`() {
+        val unknown = DesignatedPlace(A_POINT, "Rue Nationale", city = null)
+        assertTrue(unknown.survivesUnder("vlille"))
+        assertTrue(unknown.survivesUnder(null))
+    }
+
+    private companion object {
+        val A_POINT = Coordinates(50.6365, 3.0635)
     }
 }

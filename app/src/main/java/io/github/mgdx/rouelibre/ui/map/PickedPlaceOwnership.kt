@@ -1,5 +1,7 @@
 package io.github.mgdx.rouelibre.ui.map
 
+import io.github.mgdx.rouelibre.core.geo.Coordinates
+
 /**
  * Whether the point designated on the map still belongs to the city served.
  *
@@ -29,3 +31,24 @@ internal fun designatedPlaceSurvives(
     cityOfTheDesignatedPlace: String?,
     cityNowServed: String?,
 ): Boolean = cityOfTheDesignatedPlace == null || cityOfTheDesignatedPlace == cityNowServed
+
+/**
+ * A point designated on the map, and the city it was designated in.
+ *
+ * One value rather than two fields, so that neither can be changed without the
+ * other: a point laid down without its city, or a city left behind by a point
+ * cleared, is how the rule of [designatedPlaceSurvives] was once side-stepped.
+ *
+ * @property city the network identifier of the city the point was designated
+ *   in, or `null` when the state bundle the point came from was written before
+ *   this was recorded.
+ */
+internal data class DesignatedPlace(
+    val position: Coordinates,
+    val label: String,
+    val city: String?,
+) {
+    /** Whether the point still has a right to be on the map of [cityNowServed]. */
+    fun survivesUnder(cityNowServed: String?): Boolean =
+        designatedPlaceSurvives(city, cityNowServed)
+}
