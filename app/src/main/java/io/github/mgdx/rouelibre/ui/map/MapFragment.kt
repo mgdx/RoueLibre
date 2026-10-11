@@ -29,11 +29,8 @@ import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.message.MessageSubject
-import io.github.mgdx.rouelibre.core.station.AvailabilityMode
-import io.github.mgdx.rouelibre.core.station.BikeKindFilter
 import io.github.mgdx.rouelibre.core.station.StationFilter
 import io.github.mgdx.rouelibre.core.station.StreetBike
-import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.core.station.stationsShownOnMap
 import io.github.mgdx.rouelibre.data.SavedPlace
@@ -196,24 +193,20 @@ class MapFragment : Fragment() {
         map = { mapLibreMap },
     )
 
-    private var mode: AvailabilityMode = AvailabilityMode.Bikes
-
-    /**
-     * The kind of bike the markers count, or `null` for all of them (SPEC §7.1).
-     *
-     * Its own control, owing nothing to the journey screen's: what is filtered
-     * here changes no journey, and a kind chosen for a journey filters nothing
-     * here. It lives as long as the screen does, like [mode] beside it and for
-     * the same reason — it is a way of looking at the map right now, not a fact
-     * about the rider, so nothing of it is written down.
-     */
-    private var bikeKind: WantedBikeKind? = null
+    /** Bikes or free docks, and which kind of bike: the map's two filters. */
+    private val filters = MapFilterControls(
+        modeToggle = { binding?.modeToggle },
+        bikeKindButton = { binding?.bikeKindFilter },
+        controlsUp = { showsMapControls },
+        lentFleet = { lentFleet },
+        onChanged = ::publishStations,
+    )
 
     /**
      * Which stations the map leaves out, and at rest it leaves out none.
      *
      * Read from the settings and settled there alone (SPEC §7.1, §7.6), unlike
-     * [mode] and [bikeKind] beside it: those two are ways of looking at the map
+     * the two of [MapFilterControls]: those are ways of looking at the map
      * for a minute, this is an answer kept from one session to the next. **The
      * screen says nothing about it** — no badge, no count, no lit control — which
      * is the accepted compromise SPEC §7.1 names: the settings are the only place
@@ -309,13 +302,10 @@ class MapFragment : Fragment() {
         views.locateMe.setOnClickListener { userPosition.onLocateMeClicked() }
         attitude.bind()
         views.openJourney.setOnClickListener { show(JourneySearchFragment()) }
-        views.modeToggle.setOnClickListener { toggleMode() }
-        views.bikeKindFilter.setOnClickListener { toggleBikeKind() }
         views.pickedPlace.setOnClickListener { openPickedPlaceSheet() }
         views.centreOnHome.setOnClickListener { centreOn(SavedPlaceKind.Home) }
         views.centreOnWork.setOnClickListener { centreOn(SavedPlaceKind.Work) }
-        applyModeLabel()
-        applyBikeKindLabel()
+        filters.bind()
         followStationFilters()
         followStreetBikes()
         followSavedPlaces()
@@ -331,7 +321,7 @@ class MapFragment : Fragment() {
         // without the map being rebuilt.
         withFleet { lent ->
             lentFleet = lent
-            showBikeKindFilter()
+            filters.showBikeKindFilter()
             publishStations()
             // The same reading says which bikes outside stations bear the
             // bolt, and it may arrive after they are drawn.
@@ -569,7 +559,7 @@ class MapFragment : Fragment() {
         views.locateMe.isVisible = controls.locateMe
         attitude.isAllowed = controls.compass
         attitude.showTheBearing()
-        showBikeKindFilter()
+        filters.showBikeKindFilter()
         showSavedPlaceButtons()
     }
 
@@ -652,7 +642,8 @@ class MapFragment : Fragment() {
      * entries and is replayed at every refresh.
      */
     private fun publishStations() {
-        val kind = bikeKindFilter()
+        val kind = filters.bikeKindFilter()
+        val mode = filters.mode
         val shown = stationsShownOnMap(viewModel.state.value.stations, mapFilter, mode, kind)
         val source = layers?.stations ?: return
         source.setGeoJson(StationMarkers.toFeatureCollection(shown, mode, kind))
@@ -1123,96 +1114,6 @@ class MapFragment : Fragment() {
         if (savedInstanceState != null) return
         val requested = JourneyEndpoint.readFrom(arguments, ARGUMENT_SHOWN_PLACE) ?: return
         pickedPlace.designate(requested.position, requested.label)
-    }
-
-    private fun toggleMode() {
-        mode = when (mode) {
-            AvailabilityMode.Bikes -> AvailabilityMode.Docks
-            AvailabilityMode.Docks -> AvailabilityMode.Bikes
-        }
-        applyModeLabel()
-        // The kind filter has nothing to say about free docks, so it goes while
-        // they are being shown. The choice itself is kept: coming back to the
-        // bikes finds it again, rather than silently reset.
-        showBikeKindFilter()
-        publishStations()
-    }
-
-    /**
-     * Passes to the next kind counted: all bikes, then mechanical, then
-     * electric.
-     *
-     * A button labelled by what is shown rather than by what a press would do,
-     * exactly like the toggle beside it. Three states on one button rather than
-     * a row of three: the map is scenery for the stations (SPEC §7), and every
-     * control laid over it is taken from them.
-     */
-    private fun toggleBikeKind() {
-        bikeKind = when (bikeKind) {
-            null -> WantedBikeKind.Mechanical
-            WantedBikeKind.Mechanical -> WantedBikeKind.Electric
-            WantedBikeKind.Electric -> null
-        }
-        applyBikeKindLabel()
-        publishStations()
-    }
-
-    private fun applyBikeKindLabel() {
-        val button = binding?.bikeKindFilter ?: return
-        button.setText(
-            when (bikeKind) {
-                null -> R.string.map_bikes_all_kinds
-                WantedBikeKind.Mechanical -> R.string.map_bikes_mechanical
-                WantedBikeKind.Electric -> R.string.map_bikes_electric
-            },
-        )
-        button.contentDescription = getString(
-            when (bikeKind) {
-                null -> R.string.map_bikes_all_kinds_description
-                WantedBikeKind.Mechanical -> R.string.map_bikes_mechanical_description
-                WantedBikeKind.Electric -> R.string.map_bikes_electric_description
-            },
-        )
-    }
-
-    /**
-     * Shows the kind filter where it has something to filter.
-     *
-     * It follows the toggle beside it — gone without a base map, and gone while
-     * a point is being designated — and needs two more things of its own: a
-     * network that really lends both kinds (SPEC §15), since offering to sort
-     * bikes into two piles where there is one would promise something nobody can
-     * collect, and the bikes being what is counted, a kind having nothing to say
-     * about a free dock.
-     */
-    private fun showBikeKindFilter() {
-        val views = binding ?: return
-        views.bikeKindFilter.isVisible = showsMapControls &&
-            mode == AvailabilityMode.Bikes &&
-            lentFleet?.isMixed == true
-    }
-
-    /**
-     * The kind the markers count, or `null` — all of them.
-     *
-     * Silent wherever the filter itself is: a network lending one kind, or a
-     * reading not landed yet, leaves the markers counting whole stations.
-     */
-    private fun bikeKindFilter(): BikeKindFilter? {
-        val wanted = bikeKind ?: return null
-        val lent = lentFleet?.takeIf { it.isMixed } ?: return null
-        return BikeKindFilter(wanted, lent.vehicleTypes)
-    }
-
-    private fun applyModeLabel() {
-        // The button is named after what is SHOWN, not after what a press
-        // would do: it is a state label, like the list's own toggle.
-        binding?.modeToggle?.setText(
-            when (mode) {
-                AvailabilityMode.Bikes -> R.string.mode_bikes
-                AvailabilityMode.Docks -> R.string.mode_docks
-            },
-        )
     }
 
     /**
