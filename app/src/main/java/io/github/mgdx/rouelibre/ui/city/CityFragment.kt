@@ -28,6 +28,9 @@ import io.github.mgdx.rouelibre.databinding.FragmentCityBinding
 import io.github.mgdx.rouelibre.ui.ConfirmationDialogFragment
 import io.github.mgdx.rouelibre.ui.cityLabel
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
+import io.github.mgdx.rouelibre.ui.textLocale
+import io.github.mgdx.rouelibre.ui.withCountryFlag
+import io.github.mgdx.rouelibre.ui.withoutCountryFlag
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -62,6 +65,18 @@ class CityFragment : Fragment() {
      * no ordinary keyboard, two of them to no ASCII typing at all (SPEC §4.3).
      */
     private var letterFolds: Map<Char, String> = emptyMap()
+
+    /**
+     * The country the list is narrowed to, `null` for every one.
+     *
+     * Kept as chosen even while the catalogue on show does not offer it: the
+     * shipped catalogue shows before the downloaded one, and a choice restored
+     * after the death of the process must survive that first, older list.
+     */
+    private var chosenCountry: String? = null
+
+    /** The countries the filter offers, as last shown on the screen. */
+    private var offeredCountries: List<CountryChoice> = emptyList()
 
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
@@ -105,6 +120,16 @@ class CityFragment : Fragment() {
             // question nobody asked on the screen where one chooses a city.
             showMessage(getString(R.string.city_location_denied))
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        chosenCountry = savedInstanceState?.getString(STATE_COUNTRY)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(STATE_COUNTRY, chosenCountry)
     }
 
     override fun onCreateView(
@@ -180,6 +205,9 @@ class CityFragment : Fragment() {
     override fun onDestroyView() {
         binding?.cities?.adapter = null
         binding = null
+        // The filter's views go with the screen's: a return from the back
+        // stack must build them again rather than take them as already shown.
+        offeredCountries = emptyList()
         super.onDestroyView()
     }
 
@@ -238,6 +266,11 @@ class CityFragment : Fragment() {
             // Listed only for what there is to delete, or to say why the city
             // still chosen is no longer served.
             .filter { it.isActive || it.installedBytes > 0 }
+        val offered = countriesOffered(loaded.cities, requireContext().textLocale())
+        if (offered != offeredCountries) {
+            offeredCountries = offered
+            showCountries()
+        }
         showRows()
     }
 
@@ -250,11 +283,14 @@ class CityFragment : Fragment() {
     private fun showRows() {
         val views = binding ?: return
         val byIdentifier = rows.associateBy { it.entry.id }
-        val shown = filterCities(rows.map { it.entry }, query, letterFolds)
+        val country = countryStillOffered(chosenCountry, offeredCountries)
+        val inCountry = filterByCountry(rows.map { it.entry }, country)
+        val shown = filterCities(inCountry, query, letterFolds)
             .mapNotNull { byIdentifier[it.id] }
         adapter.submitList(shown)
-        // A search looks for a city to choose, and these cannot be chosen.
-        val withdrawn = withdrawnRows.takeIf { query.isBlank() }.orEmpty()
+        // A search looks for a city to choose, and these cannot be chosen; nor
+        // can they be placed in a country, the catalogue no longer naming them.
+        val withdrawn = withdrawnRows.takeIf { query.isBlank() && country == null }.orEmpty()
         chosenWithdrawnAdapter.submitList(withdrawn.filter { it.isActive })
         otherWithdrawnAdapter.submitList(withdrawn.filterNot { it.isActive })
 
@@ -262,6 +298,34 @@ class CityFragment : Fragment() {
         // screen still loading, and there would be nothing to clear.
         views.emptyState.isVisible = rows.isNotEmpty() && shown.isEmpty()
         views.emptyMessage.text = getString(R.string.city_no_match_message, query)
+    }
+
+    /**
+     * Fills the country menu: every country first, then each one offered.
+     *
+     * The menu stays in sight during a search: it narrows the very list the
+     * search does, and a country chosen out of sight would leave a search
+     * coming up empty with nothing on the screen to say why.
+     */
+    private fun showCountries() {
+        val views = binding ?: return
+        val choices = listOf(null) + offeredCountries
+        val labels = choices.map { choice ->
+            choice?.let { withCountryFlag(it.name, it.code) }
+                ?: getString(R.string.city_country_all)
+        }
+        val chosen = countryStillOffered(chosenCountry, offeredCountries)
+        val menu = views.countryMenu
+        menu.setAdapter(CountryMenuAdapter(requireContext(), labels))
+        // Without filtering: the field's own text is not a search here.
+        menu.setText(labels[choices.indexOfFirst { it?.code == chosen }], false)
+        menu.contentDescription = withoutCountryFlag(menu.text)
+        menu.setOnItemClickListener { _, _, position, _ ->
+            chosenCountry = choices[position]?.code
+            menu.contentDescription = withoutCountryFlag(labels[position])
+            showRows()
+        }
+        views.countryFilter.isVisible = offeredCountries.isNotEmpty()
     }
 
     // ----------------------------------------------------------- location --
@@ -431,6 +495,9 @@ class CityFragment : Fragment() {
         private const val CITY_NAME = "city-name"
 
         private const val ARGUMENT_FROM_WELCOME = "from-welcome"
+
+        /** The country chosen, across a rotation and the death of the process. */
+        private const val STATE_COUNTRY = "country"
 
         /**
          * The city choice as the welcome sequence opens it (SPEC §7.9).
