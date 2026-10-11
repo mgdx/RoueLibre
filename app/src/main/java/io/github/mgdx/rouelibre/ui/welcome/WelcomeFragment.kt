@@ -97,7 +97,7 @@ class WelcomeFragment : Fragment() {
         // to fetch. The map goes underneath rather than being replaced by it —
         // going back from the city then lands on the application, not outside
         // it.
-        finish(MapFragment(), then = CityFragment())
+        finish(MapFragment(), then = CityFragment.inWelcomeSequence())
     }
 
     private fun onSkip() {

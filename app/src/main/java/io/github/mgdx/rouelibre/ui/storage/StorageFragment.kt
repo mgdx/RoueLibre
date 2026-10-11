@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +27,7 @@ import io.github.mgdx.rouelibre.data.datasets.DownloadProgress
 import io.github.mgdx.rouelibre.databinding.FragmentStorageBinding
 import io.github.mgdx.rouelibre.ui.ConfirmationDialogFragment
 import io.github.mgdx.rouelibre.ui.cityLabel
+import io.github.mgdx.rouelibre.ui.map.MapFragment
 import io.github.mgdx.rouelibre.ui.noLongerServedLabel
 import kotlinx.coroutines.launch
 
@@ -58,6 +60,19 @@ class StorageFragment : Fragment() {
             unmeteredOnly = container.preferences.downloadOnUnmeteredOnly,
         )
     }
+
+    /**
+     * Whether the welcome sequence opened this screen (SPEC §7.9).
+     *
+     * Read from the arguments, which the system keeps across a rotation and the
+     * death of the process: a sequence interrupted there is still the same
+     * sequence when the screen comes back.
+     */
+    private val openedFromWelcome: Boolean
+        get() = arguments?.getBoolean(ARGUMENT_FROM_WELCOME) == true
+
+    /** The map has been asked for: a second state arriving must not ask again. */
+    private var leftForTheMap = false
 
     /** The set awaiting a file, between the press and the chooser's return. */
     private var awaitingImportFor: DatasetKind? = null
@@ -289,6 +304,7 @@ class StorageFragment : Fragment() {
 
     companion object {
         private const val ARGUMENT_CHECK_ON_OPEN = "check-on-open"
+        private const val ARGUMENT_FROM_WELCOME = "from-welcome"
 
         /** The keys the two questions of this screen answer under. */
         private const val DELETION_ANSWER = "dataset-deletion"
@@ -307,10 +323,18 @@ class StorageFragment : Fragment() {
          * the check stays triggered by a press — unless the city has nothing
          * installed, in which case opening the screen checks on its own,
          * whatever the way in (see `OpeningCheck`).
+         *
+         * @param fromWelcome the welcome sequence is opening it: once every set
+         *   is installed, the screen hands over to the map on its own (see
+         *   [handsOverToTheMap]).
          */
-        fun checkingForUpdates(): StorageFragment = StorageFragment().apply {
-            arguments = Bundle().apply { putBoolean(ARGUMENT_CHECK_ON_OPEN, true) }
-        }
+        fun checkingForUpdates(fromWelcome: Boolean = false): StorageFragment =
+            StorageFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(ARGUMENT_CHECK_ON_OPEN, true)
+                    putBoolean(ARGUMENT_FROM_WELCOME, fromWelcome)
+                }
+            }
     }
 
     private fun observeState() {
@@ -347,9 +371,35 @@ class StorageFragment : Fragment() {
                             )
                         }
                         ?: getString(R.string.storage_nothing_installed)
+                    if (state.handsOverToTheMap(openedFromWelcome)) openTheMap()
                 }
             }
         }
+    }
+
+    /**
+     * Ends the welcome sequence on the map (SPEC §7.9).
+     *
+     * The screens of the sequence are dropped, as the welcome screen drops its
+     * own on the way out: Back from the map leaves the application rather than
+     * bringing the city list up again. A new map rather than the one left
+     * underneath: the map loads its city's style once and keeps it, and that
+     * one was put there before any city was chosen.
+     *
+     * Not while the state is saved: on the older versions of Android that save it
+     * before stopping, the collection still runs for that instant and a
+     * transaction would be refused. The state is replayed when the screen comes
+     * back to the front, and the map is opened then.
+     */
+    private fun openTheMap() {
+        val manager = parentFragmentManager
+        if (leftForTheMap || manager.isStateSaved) return
+        leftForTheMap = true
+        manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        manager.beginTransaction()
+            .setReorderingAllowed(true)
+            .replace(R.id.content, MapFragment())
+            .commit()
     }
 
     /**

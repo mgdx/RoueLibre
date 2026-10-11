@@ -195,6 +195,31 @@ fun StorageUiState.transferLine(): TransferLine = when {
     else -> TransferLine.None
 }
 
+/**
+ * Whether the storage screen should hand over to the map on its own (SPEC §7.9).
+ *
+ * Only at the end of the welcome sequence: there the user has just chosen a
+ * city in order to use it, and leaving them before "Up to date" with nothing to
+ * press but Back made the last step of the sequence one they had to find. Opened
+ * from anywhere else — another city added, an update fetched — the screen is
+ * where the user meant to be, and stays.
+ *
+ * **Every set the manifest announces, and nothing still moving.** A transfer
+ * installs its files one after the other, so the moment one set arrives is not
+ * the moment to leave; a set that failed keeps its row out of date, and the
+ * screen stays to say why and to offer the resumption. Read from the state alone,
+ * so that a rotation or a screen coming back to the front answers the same way.
+ *
+ * @param openedFromWelcome the screen was opened by the welcome sequence.
+ */
+fun StorageUiState.handsOverToTheMap(openedFromWelcome: Boolean): Boolean {
+    if (!openedFromWelcome || manifest == null) return false
+    if (isChecking || isDownloading || isImporting || heldBackByMetering) return false
+    val announced = datasets.filter { it.update != null }
+    return announced.isNotEmpty() &&
+        announced.all { it.update == DatasetUpdate.UpToDate && it.failure == null }
+}
+
 /** The same state, with why a set did not arrive written on its row. */
 fun StorageUiState.withFailure(kind: DatasetKind, error: DataError): StorageUiState =
     copy(datasets = datasets.map { if (it.kind == kind) it.copy(failure = error) else it })
