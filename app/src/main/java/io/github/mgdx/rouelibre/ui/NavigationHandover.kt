@@ -3,11 +3,11 @@ package io.github.mgdx.rouelibre.ui
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
-import android.net.Uri
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.intent.geoUri
 
 /**
  * Opens a point in whichever application answers `geo:` — but this one.
@@ -47,11 +47,7 @@ fun Fragment.handOverToNavigation(
     onNoNavigationApp: (String) -> Unit,
 ) {
     val context = requireContext()
-    val point = "${position.latitude},${position.longitude}"
-    // A place's name holds spaces, and sometimes an ampersand: encoded, or the
-    // receiving application reads a truncated label.
-    val label = Uri.encode(place)
-    val target = Intent(Intent.ACTION_VIEW, "geo:$point?q=$point($label)".toUri())
+    val target = Intent(Intent.ACTION_VIEW, geoUri(position, place).toUri())
 
     val guides = context.packageManager.queryIntentActivities(target, 0)
         .any { it.activityInfo.packageName != context.packageName }
