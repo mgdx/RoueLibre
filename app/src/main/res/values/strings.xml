@@ -28,9 +28,11 @@
         <item quantity="other">%1$d bikes</item>
     </plurals>
 
+    <!-- Read beside docks_total on the journey's detail, "14 free docks ·
+         33 docks", so the free ones have to say they are free. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d dock</item>
-        <item quantity="other">%1$d docks</item>
+        <item quantity="one">%1$d free dock</item>
+        <item quantity="other">%1$d free docks</item>
     </plurals>
 
     <string name="station_content_description">%1$s, %2$s, %3$s</string>

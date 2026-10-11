@@ -30,9 +30,9 @@
 
     <!-- The number of free docks to return a bike to. -->
     <plurals name="docks_available">
-        <item quantity="one">%1$d place</item>
-        <item quantity="many">%1$d de places</item>
-        <item quantity="other">%1$d places</item>
+        <item quantity="one">%1$d place libre</item>
+        <item quantity="many">%1$d de places libres</item>
+        <item quantity="other">%1$d places libres</item>
     </plurals>
 
     <!-- Spoken by screen readers on a station's indicator.

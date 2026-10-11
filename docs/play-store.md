@@ -92,7 +92,7 @@ certificate as the one it expects uploads from.
 | Short description | `fastlane/metadata/android/<lang>/short_description.txt`, already under Play's eighty characters |
 | Full description | `fastlane/metadata/android/<lang>/full_description.txt`, already under four thousand |
 | Icon | `fastlane/metadata/android/en-US/images/icon.png`, 512×512 |
-| Feature graphic | 1024×500, composed by `tools/make_play_assets.py` |
+| Feature graphic | 1024×500, composed by `tools/make_play_assets.py` in every language |
 | Screenshots | composed by the same script, 1080×1920 |
 | Category | Maps & Navigation |
 | Privacy policy | `docs/privacy-policy.md`, served by GitHub |
@@ -107,12 +107,38 @@ The descriptions link to no other store and to no downloadable APK, which Play
 forbids in a listing. Keep it that way when they are next edited.
 
 **The screenshots cannot be uploaded as taken.** Play refuses an image whose
-long side is more than twice its short one, and a telephone screen is taller
-than that — the Fairphone 5's is 1224×2700. `tools/make_play_assets.py` lays
-each screenshot whole on a captioned card instead of cropping the attribution
-line off the map, and writes the feature graphic in the same colours. It reads
-the screenshots of `fastlane/metadata/`, which stay exactly as they are:
-F-Droid shows the raw screen, and should.
+long side is more than twice its short one, and a telephone screen is at that
+limit or past it — the Fairphone 3's is 1080×2160, the Fairphone 5's 1224×2700.
+`tools/make_play_assets.py` lays each screenshot whole on a plain green card
+of 1080×1920 instead of cropping the attribution line off the map — no caption,
+nothing written on it, only the screen — and writes the feature graphic in the
+same colours. By default it reads the screenshots of `fastlane/metadata/`,
+which stay exactly as they are: F-Droid shows the raw screen, and should.
+
+**The feature banner is drawn in every language too.** Its top third is a
+band of the map with its stations, `tools/assets/map-band.png`, cut from a
+landscape capture of the application over central Paris at the zoom where
+every station is a green disc of its own, with no out-of-service station in
+the frame; under it the icon, the name and the listing's own
+short description, so the banner says what the listing says; and along the
+bottom how many cities and countries the catalogue serves, read from
+`config/catalogue.json` at composition time and rounded down to the nearest
+fifty, so the line says "more than 350 cities in 39 countries" and never
+overstates. The thirty-one wordings of that line live in the script. The
+interface's typeface writes Latin only; Greek, Cyrillic, Arabic and the
+ideographic scripts fall back on the system's Noto and Droid fonts, and the
+script names the file it misses rather than drawing boxes.
+
+**Play takes the screenshots in every language the interface speaks**, where
+F-Droid's metadata carries only English and French. The full set is taken on
+the telephone with the application's per-application language switched for
+each one, into a directory of `<language>/<n>.png` outside the repository, and
+composed from there with `--source`. The four screens are the same in every
+language: the map around the Eiffel Tower, the sheet of the station
+« Octave Gréard - Tour Eiffel », the journey from 14 avenue des Champs-Élysées
+to avenue Gustave Eiffel, and that journey's detail. The departure is that
+number because it is the one on the avenue farthest from any station, so the
+walk to the departure station is long enough to be seen on the map.
 
 **The release notes are Play's, not F-Droid's.** Play caps them at five hundred
 characters where `changelogs/<versionCode>.txt` runs to several thousand. The
@@ -163,6 +189,7 @@ publication date, not the code.
 2. `./gradlew bundleRelease`, and check the certificate as above.
 3. Upload the bundle, paste the headline line of the release's changelog as the
    notes, in English and in French.
-4. Re-run `tools/make_play_assets.py` only if the screenshots changed.
+4. Re-run `tools/make_play_assets.py` only if the screenshots changed, with
+   `--source` pointing at the full set of languages.
 5. Roll out. Play staggers the release itself; the releases page and F-Droid do
    not wait for it.
