@@ -35,10 +35,10 @@ class BottomEdgeOutsideTheLayoutTest {
     private val sources = File(resources.parentFile, "java/io/github/mgdx/rouelibre")
 
     private val holdTheBottomEdge by lazy {
-        val fragment = File(sources, "ui/map/MapFragment.kt").readText()
-        val declared = fragment.indexOf("private fun holdTheBottomEdge()")
+        val edge = File(sources, "ui/map/MapBottomEdge.kt").readText()
+        val declared = edge.indexOf("private fun holdTheBottomEdge()")
         assertTrue("The map still holds its bottom edge", declared > 0)
-        fragment.substring(declared, fragment.indexOf("\n    }", declared))
+        edge.substring(declared, edge.indexOf("\n    }", declared))
     }
 
     @Test
