@@ -132,7 +132,6 @@ class MapFragment : Fragment() {
     private var mapLibreMap: MapLibreMap? = null
     private var stationSource: GeoJsonSource? = null
     private var streetBikeSource: GeoJsonSource? = null
-    private var pickedPlaceSource: GeoJsonSource? = null
     private var savedPlaceSource: GeoJsonSource? = null
     private var styleLoaded = false
 
@@ -146,27 +145,6 @@ class MapFragment : Fragment() {
      * holds still describes what is on disk.
      */
     private var loadedTilesPath: String? = null
-
-    /**
-     * The address found by the search, until it is cleared.
-     *
-     * A designated point, never a history: SPEC §8 forbids keeping a
-     * destination, and this one does not outlive the screen.
-     */
-    private var pickedPlace: PickedPlace? = null
-
-    /**
-     * The network identifier of the city [pickedPlace] was designated in.
-     *
-     * Held beside the point, and laid down whenever the point is, so that the
-     * one question [designatedPlaceSurvives] asks — does this point belong to
-     * the city we serve now? — can be put where a city is applied to the map,
-     * without anything having to be read back from disk to answer it.
-     *
-     * `null` when no point is designated, and when the point came from a state
-     * bundle written before this was recorded.
-     */
-    private var pickedPlaceCity: String? = null
 
     /**
      * The framing to restore when the view is rebuilt.
@@ -190,9 +168,6 @@ class MapFragment : Fragment() {
      * rebuilt: the move therefore has to wait.
      */
     private var pendingCameraTarget: LatLng? = null
-
-    /** A point found by the address search, and its label. */
-    private data class PickedPlace(val position: LatLng, val label: String)
 
     /**
      * The limits that pen the camera inside the served area.
@@ -286,6 +261,13 @@ class MapFragment : Fragment() {
 
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
+
+    /** The address found by the search, and the city it belongs to. */
+    private val pickedPlace = PickedPlaceController(
+        pill = { binding?.pickedPlace },
+        cityNowServed = { servedCity?.network?.id },
+        bringIntoView = { moveCameraTo(it) },
+    )
 
     private var mode: AvailabilityMode = AvailabilityMode.Bikes
 
@@ -462,7 +444,7 @@ class MapFragment : Fragment() {
 
         applyPickingMode(views)
         restoreCamera(savedInstanceState)
-        restorePickedPlace(savedInstanceState)
+        pickedPlace.restore(savedInstanceState)
         showRequestedPlace(savedInstanceState)
         listenForPickedAddress()
         listenForPlaceActions()
@@ -603,9 +585,7 @@ class MapFragment : Fragment() {
         //
         // Before every early return below: whether the point still has a right
         // to be there has nothing to do with there being a style to redraw.
-        if (!designatedPlaceSurvives(pickedPlaceCity, configuration?.network?.id)) {
-            showPickedPlace(null)
-        }
+        pickedPlace.keepOnlyFor(configuration?.network?.id)
         val views = binding ?: return
         val map = mapLibreMap ?: return
 
@@ -1024,15 +1004,7 @@ class MapFragment : Fragment() {
 
         // The searched point is laid down AFTER the stations: it is what the
         // user has just asked for, so it goes in front.
-        val picked = GeoJsonSource(
-            PickedPlaceMarker.SOURCE_ID,
-            PickedPlaceMarker.featureFor(null),
-        )
-        pickedPlaceSource = picked
-        style.addSource(picked)
-        PickedPlaceMarker.registerImage(context, style)
-        style.addLayer(PickedPlaceMarker.layer())
-        publishPickedPlace()
+        pickedPlace.addTo(style, context)
 
         // The circle of uncertainty goes down before the disc: it is the ground
         // the point may be standing on, and the point stands on top of it.
@@ -1736,14 +1708,12 @@ class MapFragment : Fragment() {
             AddressSearchFragment.REQUEST_KEY,
             viewLifecycleOwner,
         ) { _, result ->
-            showPickedPlace(
-                PickedPlace(
-                    position = LatLng(
-                        result.getDouble(AddressSearchFragment.RESULT_LATITUDE),
-                        result.getDouble(AddressSearchFragment.RESULT_LONGITUDE),
-                    ),
-                    label = result.getString(AddressSearchFragment.RESULT_LABEL).orEmpty(),
+            pickedPlace.designate(
+                position = Coordinates(
+                    result.getDouble(AddressSearchFragment.RESULT_LATITUDE),
+                    result.getDouble(AddressSearchFragment.RESULT_LONGITUDE),
                 ),
+                label = result.getString(AddressSearchFragment.RESULT_LABEL).orEmpty(),
             )
         }
     }
@@ -1764,11 +1734,8 @@ class MapFragment : Fragment() {
      */
     private fun openPickedPlaceSheet() {
         if (isPicking()) return
-        val place = pickedPlace ?: return
-        val endpoint = JourneyEndpoint(
-            label = place.label,
-            position = Coordinates(place.position.latitude, place.position.longitude),
-        )
+        val place = pickedPlace.place ?: return
+        val endpoint = JourneyEndpoint(label = place.label, position = place.position)
         PlaceDetailSheet.newInstance(endpoint).show(childFragmentManager, PlaceDetailSheet.TAG)
     }
 
@@ -1791,7 +1758,7 @@ class MapFragment : Fragment() {
             val place = JourneyEndpoint.readFrom(result, PlaceDetailSheet.RESULT_PLACE)
                 ?: return@setFragmentResultListener
             when (result.getString(PlaceDetailSheet.RESULT_ACTION)) {
-                PlaceAction.Clear.name -> showPickedPlace(null)
+                PlaceAction.Clear.name -> pickedPlace.clear()
                 PlaceAction.LeaveFromHere.name ->
                     show(JourneySearchFragment.newInstance(origin = place))
 
@@ -1799,47 +1766,6 @@ class MapFragment : Fragment() {
                     show(JourneySearchFragment.newInstance(destination = place))
             }
         }
-    }
-
-    /**
-     * Lays the point found on the map, or clears it.
-     *
-     * @param place the chosen address, or `null` to remove the marker.
-     */
-    private fun showPickedPlace(place: PickedPlace?) {
-        pickedPlace = place
-        // Noted as the point is laid down, from the city the map is serving at
-        // that moment: asking later which city an address came from would mean
-        // asking after the answer has changed.
-        pickedPlaceCity = place?.let { servedCity?.network?.id }
-        publishPickedPlace()
-        showPickedPlaceLabel(place)
-        if (place != null) moveCameraTo(place.position)
-    }
-
-    /**
-     * Shows the label of the point found.
-     *
-     * The label is part of what a screen reader must speak: replacing the text
-     * with the action alone would make the address vanish for anyone who only
-     * has the voice. The action named beside it is what a press now does —
-     * open the sheet of §7.2 — and not what the pill used to do on its own.
-     */
-    private fun showPickedPlaceLabel(place: PickedPlace?) {
-        val pill = binding?.pickedPlace ?: return
-        pill.isVisible = place != null
-        pill.text = place?.label.orEmpty()
-        pill.contentDescription = place?.let {
-            getString(R.string.map_picked_place_description, it.label)
-        }
-    }
-
-    private fun publishPickedPlace() {
-        pickedPlaceSource?.setGeoJson(
-            PickedPlaceMarker.featureFor(
-                pickedPlace?.let { Coordinates(it.position.latitude, it.position.longitude) },
-            ),
-        )
     }
 
     /**
@@ -1905,12 +1831,7 @@ class MapFragment : Fragment() {
     private fun showRequestedPlace(savedInstanceState: Bundle?) {
         if (savedInstanceState != null) return
         val requested = JourneyEndpoint.readFrom(arguments, ARGUMENT_SHOWN_PLACE) ?: return
-        showPickedPlace(
-            PickedPlace(
-                position = LatLng(requested.position.latitude, requested.position.longitude),
-                label = requested.label,
-            ),
-        )
+        pickedPlace.designate(requested.position, requested.label)
     }
 
     /**
@@ -1936,30 +1857,6 @@ class MapFragment : Fragment() {
             )
             .zoom(saved.getDouble(STATE_CAMERA_ZOOM))
             .build()
-    }
-
-    /**
-     * Lays down again the point the screen was designating when it went away.
-     *
-     * A reading of the bundle and nothing else, decided synchronously with the
-     * rest of the screen's rebuilding: whether the point has a right to be
-     * there is asked once, in [loadTilesFor], where the city being served is
-     * known without waiting. The city the point was designated in comes back
-     * with it, which is what lets that question be put to a screen rebuilt
-     * from scratch.
-     */
-    private fun restorePickedPlace(savedInstanceState: Bundle?) {
-        val saved = savedInstanceState ?: return
-        if (!saved.containsKey(STATE_PICKED_LATITUDE)) return
-        pickedPlace = PickedPlace(
-            position = LatLng(
-                saved.getDouble(STATE_PICKED_LATITUDE),
-                saved.getDouble(STATE_PICKED_LONGITUDE),
-            ),
-            label = saved.getString(STATE_PICKED_LABEL).orEmpty(),
-        )
-        pickedPlaceCity = saved.getString(STATE_PICKED_CITY)
-        showPickedPlaceLabel(pickedPlace)
     }
 
     private fun toggleMode() {
@@ -2235,20 +2132,7 @@ class MapFragment : Fragment() {
             outState.putDouble(STATE_CAMERA_LONGITUDE, target.longitude)
             outState.putDouble(STATE_CAMERA_ZOOM, camera.zoom)
         }
-        // The chosen point survives a rotation, and nothing else: it is
-        // written nowhere on disk (SPEC §8).
-        //
-        // The city it belongs to travels with it, and is no more a history
-        // than the point itself: this bundle dies with the task, and what it
-        // serves is the opposite of keeping anything — it is how a point
-        // designated in another city is recognised and thrown away when the
-        // process comes back (see [loadTilesFor]).
-        pickedPlace?.let { place ->
-            outState.putDouble(STATE_PICKED_LATITUDE, place.position.latitude)
-            outState.putDouble(STATE_PICKED_LONGITUDE, place.position.longitude)
-            outState.putString(STATE_PICKED_LABEL, place.label)
-            outState.putString(STATE_PICKED_CITY, pickedPlaceCity)
-        }
+        pickedPlace.save(outState)
     }
 
     override fun onLowMemory() {
@@ -2263,7 +2147,7 @@ class MapFragment : Fragment() {
         binding?.map?.onDestroy()
         stationSource = null
         streetBikeSource = null
-        pickedPlaceSource = null
+        pickedPlace.detach()
         savedPlaceSource = null
         userPosition?.cancel()
         userPosition = null
@@ -2339,17 +2223,6 @@ class MapFragment : Fragment() {
         const val STATE_CAMERA_LATITUDE = "camera-latitude"
         const val STATE_CAMERA_LONGITUDE = "camera-longitude"
         const val STATE_CAMERA_ZOOM = "camera-zoom"
-
-        const val STATE_PICKED_LATITUDE = "picked-latitude"
-        const val STATE_PICKED_LONGITUDE = "picked-longitude"
-        const val STATE_PICKED_LABEL = "picked-label"
-
-        /**
-         * The city the saved point was designated in — see
-         * [MapFragment.onSaveInstanceState] for why an identifier travels with
-         * it, and why that is not a history.
-         */
-        const val STATE_PICKED_CITY = "picked-city"
 
         /**
          * The clustering radius, in pixels. Fifty keeps the stations of central
