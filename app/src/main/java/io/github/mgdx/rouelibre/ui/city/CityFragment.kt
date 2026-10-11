@@ -339,10 +339,11 @@ class CityFragment : Fragment() {
      * left the application altogether.
      */
     private fun choose(cityId: String) {
+        val fromWelcome = arguments?.getBoolean(ARGUMENT_FROM_WELCOME) == true
         viewLifecycleOwner.lifecycleScope.launch {
             container.switchToCity(cityId)
             parentFragmentManager.beginTransaction()
-                .replace(R.id.content, StorageFragment.checkingForUpdates())
+                .replace(R.id.content, StorageFragment.checkingForUpdates(fromWelcome))
                 .addToBackStack(null)
                 .commit()
         }
@@ -420,13 +421,26 @@ class CityFragment : Fragment() {
             .hide(WindowInsetsCompat.Type.ime())
     }
 
-    private companion object {
+    companion object {
         /** The keys the two questions of this screen answer under. */
-        const val PROPOSAL_ANSWER = "city-proposal"
-        const val DELETION_ANSWER = "city-deletion"
+        private const val PROPOSAL_ANSWER = "city-proposal"
+        private const val DELETION_ANSWER = "city-deletion"
 
         /** What a question carries across a rebuild about the city it names. */
-        const val CITY_ID = "city-id"
-        const val CITY_NAME = "city-name"
+        private const val CITY_ID = "city-id"
+        private const val CITY_NAME = "city-name"
+
+        private const val ARGUMENT_FROM_WELCOME = "from-welcome"
+
+        /**
+         * The city choice as the welcome sequence opens it (SPEC §7.9).
+         *
+         * The city chosen here leads to a storage screen that hands over to the
+         * map once its sets are installed. Carried in the arguments, so that it
+         * survives a rotation and the death of the process.
+         */
+        fun inWelcomeSequence(): CityFragment = CityFragment().apply {
+            arguments = Bundle().apply { putBoolean(ARGUMENT_FROM_WELCOME, true) }
+        }
     }
 }
