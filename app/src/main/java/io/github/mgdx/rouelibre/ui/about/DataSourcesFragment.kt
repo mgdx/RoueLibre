@@ -22,6 +22,7 @@ import io.github.mgdx.rouelibre.core.config.filterCities
 import io.github.mgdx.rouelibre.databinding.FragmentDataSourcesBinding
 import io.github.mgdx.rouelibre.databinding.ItemCitySourceBinding
 import io.github.mgdx.rouelibre.ui.cityLabel
+import io.github.mgdx.rouelibre.ui.flaggedText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -136,7 +137,8 @@ class DataSourcesFragment : Fragment() {
         for (entry in catalogue.cities) {
             val configuration = container.cityCatalogueSource.configuration(entry.id) ?: continue
             val row = ItemCitySourceBinding.inflate(inflater, views.cities, false)
-            row.cityName.text = requireContext().cityLabel(entry.displayName, entry.mainCity)
+            row.cityName.flaggedText =
+                requireContext().cityLabel(entry.displayName, entry.mainCity, entry.country)
             row.attribution.text = configuration.gbfs.attribution
             row.attribution.isVisible = configuration.gbfs.attribution.isNotBlank()
             val address = configuration.gbfs.attributionUrl

@@ -1,7 +1,10 @@
 package io.github.mgdx.rouelibre.ui
 
 import android.content.Context
+import android.widget.TextView
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.children
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.config.ActiveCity
 
@@ -19,14 +22,64 @@ import io.github.mgdx.rouelibre.core.config.ActiveCity
  * out — but the catalogue is downloaded, and a row arriving without a name must
  * not be shown as a dash with nothing before it.
  *
+ * Where the name stands as a label — a list row, a subtitle — the country's
+ * flag goes before it: the catalogue spans several countries, and a flag is
+ * read at a glance where a country name would lengthen every row. A sentence
+ * that names the network, a dialogue or a snackbar, leaves [country] out: a
+ * flag in the middle of a sentence is decoration the sentence does not need.
+ * A view showing a flagged label is set through [flaggedText] or
+ * [flaggedSubtitle], so that a screen reader says the name alone.
+ *
  * @param network the network's name, as the catalogue publishes it.
  * @param city the conurbation, or `null` if unknown.
+ * @param country the ISO 3166-1 alpha-2 code of its country, or `null` for no
+ *   flag.
  */
-fun Context.cityLabel(network: String, city: String?): String = when {
-    city.isNullOrBlank() -> network
-    network.isBlank() -> city
-    else -> getString(R.string.city_label, network, city)
-}
+fun Context.cityLabel(network: String, city: String?, country: String? = null): String =
+    withCountryFlag(
+        when {
+            city.isNullOrBlank() -> network
+            network.isBlank() -> city
+            else -> getString(R.string.city_label, network, city)
+        },
+        country,
+    )
+
+/**
+ * The text of a view that may show a label carrying a country's flag.
+ *
+ * The view is read aloud without the flag: TalkBack would otherwise announce
+ * "flag: France" before every network of a list. A content description is what
+ * every screen reader honours, where a [android.text.style.TtsSpan] is left to
+ * the speech engine — and the engines found on phones without Google services
+ * may ignore it.
+ */
+var TextView.flaggedText: CharSequence?
+    get() = text
+    set(value) {
+        text = value
+        contentDescription = spokenWithoutFlag(value)
+    }
+
+/**
+ * The subtitle of a toolbar that may carry a country's flag, read aloud
+ * without it for the reason [flaggedText] gives.
+ *
+ * A toolbar offers no handle on the view that shows its subtitle: it is found
+ * among the toolbar's children by its text, once set.
+ */
+var Toolbar.flaggedSubtitle: CharSequence?
+    get() = subtitle
+    set(value) {
+        subtitle = value
+        children.filterIsInstance<TextView>()
+            .firstOrNull { it.text.toString() == value?.toString() }
+            ?.contentDescription = spokenWithoutFlag(value)
+    }
+
+/** What is to be said of [label], or `null` when it is said as it is shown. */
+private fun spokenWithoutFlag(label: CharSequence?): CharSequence? =
+    label?.let(::withoutCountryFlag)?.takeIf { it.length != label.length }
 
 /**
  * Names a network this build no longer serves, as a catalogue last named it.
@@ -76,6 +129,10 @@ fun Context.noLongerServedMessage(city: ActiveCity.NoLongerServed): String {
  * service — "IDEcycle — Pau · no longer available" — so that it reads neither as
  * served nor as no choice at all (SPEC §15.1). A network a newer version of
  * the application serves says that instead.
+ *
+ * A label and not a sentence, so it carries the country's flag when the
+ * catalogue still names the country — set it through [flaggedText] or
+ * [flaggedSubtitle].
  */
 fun Context.noLongerServedLabel(city: ActiveCity.NoLongerServed): String = withdrawnCityLabel(city)
     ?.let {
@@ -84,6 +141,8 @@ fun Context.noLongerServedLabel(city: ActiveCity.NoLongerServed): String = withd
         } else {
             R.string.city_withdrawn_label
         }
-        getString(label, it)
+        // A withdrawal record names no country; the catalogue entry of a
+        // network a newer version serves does.
+        withCountryFlag(getString(label, it), city.servedByNewerVersion?.country)
     }
     ?: getString(R.string.map_city_withdrawn_title)

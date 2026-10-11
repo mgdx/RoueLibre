@@ -10,6 +10,7 @@ import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.config.CityEntry
 import io.github.mgdx.rouelibre.databinding.ItemCityBinding
 import io.github.mgdx.rouelibre.ui.cityLabel
+import io.github.mgdx.rouelibre.ui.flaggedText
 import io.github.mgdx.rouelibre.ui.storage.formatBytes
 import io.github.mgdx.rouelibre.ui.textLocale
 
@@ -69,7 +70,8 @@ class CityAdapter(
             val locale = context.textLocale()
             val city = row.entry
 
-            binding.cityName.text = context.cityLabel(city.displayName, city.mainCity)
+            binding.cityName.flaggedText =
+                context.cityLabel(city.displayName, city.mainCity, city.country)
             binding.cityActive.isVisible = row.isActive
 
             // A city this build does not know is shown and refused, never

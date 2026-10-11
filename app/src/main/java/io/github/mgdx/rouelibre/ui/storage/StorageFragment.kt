@@ -27,6 +27,7 @@ import io.github.mgdx.rouelibre.data.datasets.DownloadProgress
 import io.github.mgdx.rouelibre.databinding.FragmentStorageBinding
 import io.github.mgdx.rouelibre.ui.ConfirmationDialogFragment
 import io.github.mgdx.rouelibre.ui.cityLabel
+import io.github.mgdx.rouelibre.ui.flaggedSubtitle
 import io.github.mgdx.rouelibre.ui.map.MapFragment
 import io.github.mgdx.rouelibre.ui.noLongerServedLabel
 import kotlinx.coroutines.launch
@@ -417,9 +418,9 @@ class StorageFragment : Fragment() {
             // button could only answer that no city is selected, which is
             // false. Its sets stay listed, and deletable, below.
             views.checkUpdates.isVisible = city !is ActiveCity.NoLongerServed
-            views.toolbar.subtitle = when (city) {
+            views.toolbar.flaggedSubtitle = when (city) {
                 is ActiveCity.Served -> city.configuration.network.let {
-                    context.cityLabel(it.displayName, it.city)
+                    context.cityLabel(it.displayName, it.city, city.configuration.country)
                 }
                 // The sets listed below are that network's, still on the device
                 // and still deletable from here: "No city selected" above them
