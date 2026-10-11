@@ -26,7 +26,7 @@ space** (U+00A0), so the mark never starts a line on its own.
 | ride | trajet à vélo | The bike leg alone, inside a journey. Distinct from the journey, which is why "trajet" is left free for it. |
 | route | chemin | Only in "no practicable route": the line on the ground, not the planned journey. |
 | station | station | A bike-share station. A railway station is a *gare* — which is what `address_search_prompt_message` means by "stations". |
-| dock (free) | place libre, place | What one returns a bike into, counted as available. |
+| dock (free) | place libre | What one returns a bike into, counted as available. The adjective stays in `docks_available` too, not only in `mode_docks`: the journey detail prints that count beside the capacity, « 14 places libres · 33 points d’attache », and a bare *places* there read as a second total. |
 | dock (capacity) | point d’attache | The same object counted as a total, which is a different figure on the screen: "12 places libres · 30 points d’attache". English says "dock" for both; French does not have to. |
 | dock | *never* « borne » | A *borne* is the terminal one pays at, not the point a bike attaches to. |
 | Settings | Paramètres | Android's own word. The app already wrote "Paramètres" when it quoted the system path in `about_links_body`, and "Réglages" for its own screen. |
