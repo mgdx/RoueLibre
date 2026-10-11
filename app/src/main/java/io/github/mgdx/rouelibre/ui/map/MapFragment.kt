@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
@@ -59,7 +58,6 @@ import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.noLongerServedMessage
 import io.github.mgdx.rouelibre.ui.noLongerServedTitle
-import io.github.mgdx.rouelibre.ui.prefersReducedMotion
 import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
 import io.github.mgdx.rouelibre.ui.stations.StationDetailSheet
@@ -80,8 +78,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.maplibre.android.MapLibre
-import org.maplibre.android.camera.CameraPosition
-import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.Style
@@ -144,38 +140,6 @@ class MapFragment : Fragment() {
      * holds still describes what is on disk.
      */
     private var loadedTilesPath: String? = null
-
-    /**
-     * The framing to restore when the view is rebuilt.
-     *
-     * Going through the list, the storage screen or the search destroys the
-     * map's view without destroying the fragment: without this, coming back
-     * brought the opening framing, and the user lost the place they were
-     * looking at.
-     *
-     * A turn of the phone destroys the fragment as well, and this field with
-     * it: it is therefore saved in the state too, or the map came back up on
-     * the position of the user rather than on the address they had just gone
-     * looking for.
-     */
-    private var lastCamera: CameraPosition? = null
-
-    /**
-     * A point the camera must reach as soon as the map exists.
-     *
-     * The chosen address is returned by the search screen **before** the map is
-     * rebuilt: the move therefore has to wait.
-     */
-    private var pendingCameraTarget: LatLng? = null
-
-    /**
-     * The limits that pen the camera inside the served area.
-     *
-     * Kept to hand because a move the screen orders — an address found, a
-     * cluster opened — has to stand them down while it runs, or they cut it
-     * short (see [moveCameraTo]).
-     */
-    private var servedAreaCamera: ServedAreaCamera? = null
 
     /**
      * The room the system bars take at the bottom, and the room the banner
@@ -261,11 +225,18 @@ class MapFragment : Fragment() {
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
 
+    /** Where the map opens, where it is sent, and what it remembers. */
+    private val camera = MainMapCamera(
+        map = { mapLibreMap },
+        isReady = { styleLoaded },
+        context = { requireContext() },
+    )
+
     /** The address found by the search, and the city it belongs to. */
     private val pickedPlace = PickedPlaceController(
         pill = { binding?.pickedPlace },
         cityNowServed = { servedCity?.network?.id },
-        bringIntoView = { moveCameraTo(it) },
+        bringIntoView = { camera.moveTo(it) },
     )
 
     /** The turn and the tilt of the map, and the compass that gives both back. */
@@ -421,7 +392,7 @@ class MapFragment : Fragment() {
         views.missingTilesList.setOnClickListener { showTheList() }
 
         applyPickingMode(views)
-        restoreCamera(savedInstanceState)
+        camera.restore(savedInstanceState)
         pickedPlace.restore(savedInstanceState)
         showRequestedPlace(savedInstanceState)
         listenForPickedAddress()
@@ -574,25 +545,25 @@ class MapFragment : Fragment() {
         } else {
             container.datasetStore.fileOf(DatasetKind.Tiles)
         }
-        // A style already built over this very file: there is nothing to do,
-        // and this is the common case, every return to the screen going
-        // through here. A style built over ANOTHER file is a city whose data
-        // has been updated since, and it has to be built again — MapLibre
-        // holds the MBTiles it opened for as long as the process lives, so a
-        // map left pointing at the old one goes on drawing it.
-        if (styleLoaded && tiles?.path == loadedTilesPath) return
-        if (styleLoaded &&
-            tiles != null &&
-            configuration?.network?.id == previousCity?.network?.id
-        ) {
-            // Everything below has been done once already, and doing it twice
-            // would register a second click listener and move the camera out
-            // from under the user. Only the style is built again.
-            //
-            // The same city, though: another one brings its own framing, its
-            // own zoom limits and its own served area, and those are set below.
-            applyStyle(map, tiles)
-            return
+        // Nothing, the style alone, or everything — see mapRebuildFor, which
+        // says why a style already built and the same city leave the framing
+        // where the user put it.
+        val rebuild = mapRebuildFor(
+            styleLoaded = styleLoaded,
+            loadedTilesPath = loadedTilesPath,
+            tilesPath = tiles?.path,
+            previousCityId = previousCity?.network?.id,
+            cityId = configuration?.network?.id,
+        )
+        when (rebuild) {
+            MapRebuild.Nothing -> return
+
+            MapRebuild.StyleOnly -> {
+                applyStyle(map, checkNotNull(tiles))
+                return
+            }
+
+            MapRebuild.Everything -> Unit
         }
         views.missingTiles.isVisible = tiles == null
         views.attribution.isVisible = tiles != null
@@ -664,9 +635,7 @@ class MapFragment : Fragment() {
         // has. Allowing one step lets the user come a little closer without the
         // text turning illegible.
         map.setMaxZoomPreference(configuration.map.maxZoom.toDouble() + 1)
-        map.cameraPosition = lastCamera?.takeIf { it.suits(configuration) }
-            ?: openingCamera(configuration)
-        holdCameraOverServedArea(map, configuration)
+        camera.open(views.map, map, configuration) { positionToOpenOn(configuration) }
 
         map.addOnMapClickListener(::onMapClicked)
         attitude.follow(map)
@@ -690,95 +659,28 @@ class MapFragment : Fragment() {
             publishStations()
             // An address chosen while the map did not exist: now is when it
             // can be reached.
-            pendingCameraTarget?.let { target ->
-                pendingCameraTarget = null
-                moveCameraTo(target)
-            }
+            camera.reachPendingTarget()
         }
     }
 
     /**
-     * Pens the camera inside the served area (SPEC §7.1).
-     *
-     * The city without a bounding box is the city whose configuration does not
-     * declare one: there is then nothing to hold the camera to, and the map
-     * stays as free as it was.
-     *
-     * The limits are read off the visible region, which the map only has once
-     * it has been measured — hence the wait for the layout pass rather than an
-     * application on the spot.
-     */
-    private fun holdCameraOverServedArea(map: MapLibreMap, configuration: CityConfiguration) {
-        val area = configuration.boundingBox?.takeIf { it.isUsable } ?: return
-        val view = binding?.map ?: return
-        val camera = ServedAreaCamera(
-            view = view,
-            map = map,
-            area = area,
-            widestZoom = configuration.map.minZoom.toDouble(),
-            closestZoom = configuration.map.maxZoom.toDouble() + 1,
-        )
-        // Known to the screen before the layout, not only after it: the style
-        // becomes ready in between, and the move it sets off — the address the
-        // search has just returned — must be able to stand these limits down
-        // before they are laid on top of it.
-        servedAreaCamera = camera
-        view.doOnLayout { camera.hold() }
-    }
-
-    /**
-     * Says whether a remembered framing still holds for this city.
-     *
-     * The camera survives the destruction of the view, so a trip to another
-     * screen does not lose everything. But it also survives a change of city:
-     * taken as is, it would reopen the map of Paris over Lille, outside the
-     * tiles, on a grey screen that nothing explains.
-     */
-    private fun CameraPosition.suits(configuration: CityConfiguration): Boolean {
-        val box = configuration.boundingBox ?: return true
-        val centre = target ?: return false
-        return Coordinates(centre.latitude, centre.longitude) in box
-    }
-
-    /**
-     * The opening framing, for want of a known position.
-     *
-     * Location permission is not requested at launch (SPEC §10): the map
-     * therefore opens on the centre declared in the city configuration, never
-     * on a position obtained without the user's knowledge.
-     */
-    /**
-     * How the map is framed when nothing is remembered.
+     * The position the map may open on, when the system already holds one.
      *
      * On the user's position when it is already known, since that is what they
-     * came to see: the stations around them, not the middle of the
-     * conurbation. Only what the system already holds is read — no fix is
-     * requested and no permission is asked for (SPEC §10). Without a position,
-     * or with one outside the served city, the configured centring stands.
+     * came to see (see [openingFraming]). Only what the system already holds is
+     * read — no fix is requested and no permission is asked for (SPEC §10) —
+     * and only a position inside the served city is taken.
      */
-    private fun openingCamera(configuration: CityConfiguration): CameraPosition {
+    private fun positionToOpenOn(configuration: CityConfiguration): Coordinates? {
         val here = container.deviceLocation
             .takeIf { it.isPermitted() }
             ?.lastKnown()
-            ?.takeIf { fix -> configuration.boundingBox?.let { fix.coordinates in it } == true }
-        if (here != null) {
-            // Shown as well as framed: a map centred on nothing would leave the
-            // user guessing which point it settled on.
-            lastKnownPosition = here
-            return CameraPosition.Builder()
-                .target(LatLng(here.coordinates.latitude, here.coordinates.longitude))
-                .zoom(USER_POSITION_ZOOM)
-                .build()
-        }
-        return CameraPosition.Builder()
-            .target(
-                LatLng(
-                    configuration.map.centre.latitude,
-                    configuration.map.centre.longitude,
-                ),
-            )
-            .zoom(configuration.map.defaultZoom)
-            .build()
+            ?.takeIf { fix -> opensOnThePosition(fix.coordinates, configuration.boundingBox) }
+            ?: return null
+        // Shown as well as framed: a map centred on nothing would leave the
+        // user guessing which point it settled on.
+        lastKnownPosition = here
+        return here.coordinates
     }
 
     /**
@@ -1059,7 +961,7 @@ class MapFragment : Fragment() {
      */
     private fun centreOn(kind: SavedPlaceKind) {
         val place = savedPlaces.of(kind) ?: return
-        moveCameraTo(LatLng(place.position.latitude, place.position.longitude))
+        camera.moveTo(LatLng(place.position.latitude, place.position.longitude))
     }
 
     /**
@@ -1092,7 +994,7 @@ class MapFragment : Fragment() {
         // A cluster describes no station in particular: touching it zooms in,
         // which eventually resolves it into distinct markers.
         if (touched.hasProperty(CLUSTER_COUNT_PROPERTY)) {
-            moveCameraTo(point, map.cameraPosition.zoom + CLUSTER_ZOOM_STEP)
+            camera.moveTo(point, map.cameraPosition.zoom + CLUSTER_ZOOM_STEP)
             return true
         }
 
@@ -1133,7 +1035,7 @@ class MapFragment : Fragment() {
         val height = binding?.map?.height ?: return
         val onScreen = map.projection.toScreenLocation(target)
         val below = PointF(onScreen.x, onScreen.y + height * SHEET_CLEARANCE_FRACTION)
-        moveCameraTo(map.projection.fromScreenLocation(below), map.cameraPosition.zoom)
+        camera.moveTo(map.projection.fromScreenLocation(below), map.cameraPosition.zoom)
     }
 
     // ------------------------------------------------ picking a point (§7.3) --
@@ -1270,7 +1172,7 @@ class MapFragment : Fragment() {
                 sayWeAreElsewhere(position)
                 return@launch
             }
-            moveCameraTo(LatLng(position.latitude, position.longitude), USER_POSITION_ZOOM)
+            camera.moveTo(LatLng(position.latitude, position.longitude), USER_POSITION_ZOOM)
         }
     }
 
@@ -1588,58 +1490,6 @@ class MapFragment : Fragment() {
     }
 
     /**
-     * Brings the map onto a point.
-     *
-     * The move is animated so one understands where one came from — unless the
-     * device asks for reduced animations, in which case the map jumps straight
-     * to the destination (SPEC §7).
-     *
-     * The limits over the served area stand down for its length: laying one
-     * down cancels the move in flight, and this one was dying to the limits
-     * being measured a few milliseconds after it started. They are taken up
-     * again on arrival, where they are measured on the framing that landed.
-     */
-    private fun moveCameraTo(target: LatLng, zoom: Double = PICKED_PLACE_ZOOM) {
-        val map = mapLibreMap
-        if (map == null || !styleLoaded) {
-            pendingCameraTarget = target
-            return
-        }
-        val update = CameraUpdateFactory.newLatLngZoom(target, zoom)
-        val servedArea = servedAreaCamera
-        servedArea?.releaseForMove()
-        if (requireContext().prefersReducedMotion()) {
-            map.moveCamera(update)
-            servedArea?.holdAgain()
-            return
-        }
-        map.animateCamera(
-            update,
-            CAMERA_ANIMATION_MILLIS,
-            object : MapLibreMap.CancelableCallback {
-                override fun onFinish() = holdOverServedAreaAgain(servedArea)
-
-                // A move cut short — by a finger on the map, or by another
-                // move — leaves the camera somewhere legitimate all the same:
-                // what matters is that the limits come back, wherever it is.
-                override fun onCancel() = holdOverServedAreaAgain(servedArea)
-            },
-        )
-    }
-
-    /**
-     * Takes the limits up again once a move of ours has ended.
-     *
-     * The screen may have gone in the meantime — one leaves for the list while
-     * the map is still travelling — and the limits are then measured on a map
-     * whose view no longer exists.
-     */
-    private fun holdOverServedAreaAgain(servedArea: ServedAreaCamera?) {
-        if (mapLibreMap == null) return
-        servedArea?.holdAgain()
-    }
-
-    /**
      * Lays down the point received from another application, if there is one
      * (SPEC §7.8).
      *
@@ -1651,31 +1501,6 @@ class MapFragment : Fragment() {
         if (savedInstanceState != null) return
         val requested = JourneyEndpoint.readFrom(arguments, ARGUMENT_SHOWN_PLACE) ?: return
         pickedPlace.designate(requested.position, requested.label)
-    }
-
-    /**
-     * Takes back the framing the screen had before the phone was turned.
-     *
-     * Only the target and the zoom. The map can be turned and tilted now
-     * (SPEC §7.1), and neither the bearing nor the pitch is saved all the
-     * same. A screen rebuilt from this bundle is one the phone was turned
-     * under, or one the system had thrown away in the meantime: a map found
-     * lying askew, or leaning, by somebody who does not remember setting it
-     * that way reads as a map that has broken and not as one they set. It
-     * comes back facing north and flat, and the compass goes with it.
-     */
-    private fun restoreCamera(savedInstanceState: Bundle?) {
-        val saved = savedInstanceState ?: return
-        if (!saved.containsKey(STATE_CAMERA_LATITUDE)) return
-        lastCamera = CameraPosition.Builder()
-            .target(
-                LatLng(
-                    saved.getDouble(STATE_CAMERA_LATITUDE),
-                    saved.getDouble(STATE_CAMERA_LONGITUDE),
-                ),
-            )
-            .zoom(saved.getDouble(STATE_CAMERA_ZOOM))
-            .build()
     }
 
     private fun toggleMode() {
@@ -1943,14 +1768,7 @@ class MapFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding?.map?.onSaveInstanceState(outState)
-        // Where the map was looking, so that turning the phone shows the same
-        // place in the other shape rather than starting the screen over.
-        val camera = mapLibreMap?.cameraPosition ?: lastCamera
-        camera?.target?.let { target ->
-            outState.putDouble(STATE_CAMERA_LATITUDE, target.latitude)
-            outState.putDouble(STATE_CAMERA_LONGITUDE, target.longitude)
-            outState.putDouble(STATE_CAMERA_ZOOM, camera.zoom)
-        }
+        camera.save(outState)
         pickedPlace.save(outState)
     }
 
@@ -1960,7 +1778,7 @@ class MapFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        lastCamera = mapLibreMap?.cameraPosition
+        camera.rememberAndRelease()
         attitude.stopFollowing()
         binding?.map?.onDestroy()
         stationSource = null
@@ -1969,7 +1787,6 @@ class MapFragment : Fragment() {
         savedPlaceSource = null
         userPosition?.cancel()
         userPosition = null
-        servedAreaCamera = null
         mapLibreMap = null
         styleLoaded = false
         loadedTilesPath = null
@@ -2010,17 +1827,11 @@ class MapFragment : Fragment() {
             arguments = Bundle().apply { place.writeTo(this, ARGUMENT_SHOWN_PLACE) }
         }
 
-        /** The zoom the map settles at on a found address: the street. */
-        const val PICKED_PLACE_ZOOM = 16.0
-
         /**
          * The margin around the finger on a touch, in pixels. A marker is some
          * fifteen pixels across: without this margin, one would have to aim.
          */
         const val TOUCH_SLOP_PIXELS = 32f
-
-        /** The zoom the map settles at on the user's position. */
-        const val USER_POSITION_ZOOM = 16.0
 
         /** How much a touch on a cluster zooms the map in. */
         const val CLUSTER_ZOOM_STEP = 2.0
@@ -2034,13 +1845,6 @@ class MapFragment : Fragment() {
 
         /** The property MapLibre adds to the clusters it forms itself. */
         const val CLUSTER_COUNT_PROPERTY = "point_count"
-
-        /** The camera move's duration, short enough not to keep anyone waiting. */
-        const val CAMERA_ANIMATION_MILLIS = 600
-
-        const val STATE_CAMERA_LATITUDE = "camera-latitude"
-        const val STATE_CAMERA_LONGITUDE = "camera-longitude"
-        const val STATE_CAMERA_ZOOM = "camera-zoom"
 
         /**
          * The clustering radius, in pixels. Fifty keeps the stations of central
