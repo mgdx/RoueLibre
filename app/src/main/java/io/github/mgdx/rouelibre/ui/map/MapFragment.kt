@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -29,7 +28,6 @@ import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
-import io.github.mgdx.rouelibre.core.geo.PositionFix
 import io.github.mgdx.rouelibre.core.message.MessageSubject
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.BikeKindFilter
@@ -40,7 +38,6 @@ import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.core.station.stationsShownOnMap
 import io.github.mgdx.rouelibre.data.SavedPlace
 import io.github.mgdx.rouelibre.data.SavedPlaceKind
-import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
 import io.github.mgdx.rouelibre.ui.MAP_BACK_STACK_ENTRY
@@ -63,7 +60,6 @@ import io.github.mgdx.rouelibre.ui.toUserMessage
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -151,55 +147,6 @@ class MapFragment : Fragment() {
      */
     private var servedCity: CityConfiguration? = null
 
-    /**
-     * The last fix shown, held in memory for the session only.
-     *
-     * It survives a rebuild of the view — going through the list and coming
-     * back must not make the point vanish — and nothing else: it is written
-     * nowhere (SPEC §2, C3).
-     *
-     * The fix and not its coordinates alone: the circle of uncertainty has to
-     * come back with the point it belongs to.
-     */
-    private var lastKnownPosition: PositionFix? = null
-
-    /**
-     * Whether the point may follow the device: the permission as it stands.
-     *
-     * A flow rather than a call, because the answer changes while the map is
-     * up — granted from the button, or from the Android settings while the
-     * application was away — and the following has to start on that answer.
-     * Asking again on every return to the screen would mean subscribing again
-     * on every return, and stacking one subscription per visit.
-     */
-    private val locationPermitted = MutableStateFlow(false)
-
-    /**
-     * Requests the location permissions, and never insists.
-     *
-     * SPEC §10 is explicit: a refusal must neither block a screen nor trigger a
-     * second prompt. A user who says no keeps a fully usable application, in
-     * which they designate their points by hand.
-     */
-    private val requestLocationPermission = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions(),
-    ) { granted ->
-        if (granted.values.any { it }) {
-            locateMe()
-            // Only now may the point start following: before this answer there
-            // was nothing to follow it with (SPEC §10).
-            locationPermitted.value = true
-        } else {
-            // Written down for good: after this, nothing asks unprompted
-            // again — here or on any other screen, this launch or the next
-            // (SPEC §10). The buttons remain the way to change one's mind.
-            viewLifecycleOwner.lifecycleScope.launch {
-                container.automaticLocationRequest.noteRefused()
-            }
-            showMessage(R.string.map_location_denied)
-        }
-    }
-
     private val viewModel: StationsViewModel by viewModels {
         StationsViewModel.Factory(
             (requireActivity().application as RoueLibreApplication)
@@ -223,6 +170,14 @@ class MapFragment : Fragment() {
         pill = { binding?.pickedPlace },
         cityNowServed = { servedCity?.network?.id },
         bringIntoView = { camera.moveTo(it) },
+    )
+
+    /** The user's point, and the permission it takes. */
+    private val userPosition = UserPositionOnMap(
+        fragment = this,
+        display = { layers?.userPosition },
+        locate = ::locateMe,
+        onMessage = ::showMessage,
     )
 
     /** What is said, and offered, to somebody standing outside the city. */
@@ -351,7 +306,7 @@ class MapFragment : Fragment() {
         views.openSettings.setOnClickListener { show(SettingsFragment()) }
         views.openList.setOnClickListener { showTheList() }
         views.openSearch.setOnClickListener { openAddressSearch() }
-        views.locateMe.setOnClickListener { onLocateMeClicked() }
+        views.locateMe.setOnClickListener { userPosition.onLocateMeClicked() }
         attitude.bind()
         views.openJourney.setOnClickListener { show(JourneySearchFragment()) }
         views.modeToggle.setOnClickListener { toggleMode() }
@@ -402,8 +357,11 @@ class MapFragment : Fragment() {
         observeErrors()
         followTheInstalledMap()
         keepAvailabilityFresh()
-        followUserPosition()
-        askForLocation()
+        userPosition.follow()
+        // Asked for when the map opens, the point that follows the device
+        // being what this screen is for. After a refusal the map stays whole,
+        // without a point, and the "locate me" button is the way back.
+        userPosition.askUnprompted()
     }
 
     /**
@@ -658,7 +616,7 @@ class MapFragment : Fragment() {
             // without the feed, the settings or the system being asked again.
             publishStreetBikes()
             publishSavedPlaces()
-            showPosition(lastKnownPosition)
+            userPosition.showLastKnown()
             publishStations()
             // An address chosen while the map did not exist: now is when it
             // can be reached.
@@ -682,7 +640,7 @@ class MapFragment : Fragment() {
             ?: return null
         // Shown as well as framed: a map centred on nothing would leave the
         // user guessing which point it settled on.
-        lastKnownPosition = here
+        userPosition.remember(here)
         return here.coordinates
     }
 
@@ -995,44 +953,6 @@ class MapFragment : Fragment() {
     // ----------------------------------------------------------- location --
 
     /**
-     * Asks for the location permission when the map opens (SPEC §7.1).
-     *
-     * **Once per session, only if it has never been granted, and not at all
-     * once a refusal has been recorded — this session or any earlier one.**
-     * The point that follows the device is what this screen is for; asking
-     * again at each return to the map, or at the launch after a "no", is the
-     * insistence SPEC §10 forbids. After a refusal the map stays whole,
-     * without a point, and the "locate me" button is the way back.
-     */
-    private fun askForLocation() {
-        if (container.deviceLocation.isPermitted()) return
-        viewLifecycleOwner.lifecycleScope.launch {
-            if (container.automaticLocationRequest.mayAskUnprompted()) {
-                requestLocationPermission.launch(DeviceLocation.PERMISSIONS)
-            }
-        }
-    }
-
-    /**
-     * Answers the "locate me" button (SPEC §7.1).
-     *
-     * The other of the two moments where the permission is requested, and the
-     * one that comes back: after a refusal at opening, this is what the user
-     * has left to change their mind (SPEC §10).
-     */
-    private fun onLocateMeClicked() {
-        val location = container.deviceLocation
-        when {
-            !location.isPermitted() ->
-                requestLocationPermission.launch(DeviceLocation.PERMISSIONS)
-
-            !location.isAvailable() -> showMessage(R.string.map_location_unavailable)
-
-            else -> locateMe()
-        }
-    }
-
-    /**
      * Looks for the position and brings the map to it.
      *
      * The position is neither kept nor written: it serves to frame the map,
@@ -1061,14 +981,13 @@ class MapFragment : Fragment() {
                 return@launch
             }
             val position = fix.coordinates
-            lastKnownPosition = fix
-            showPosition(fix)
+            userPosition.show(fix)
             // Outside the city served there is nothing to move to: the camera
             // is held inside that city's box, so it would stop at the edge
             // nearest the user and show that as their position — a point on a
             // street they are a hundred kilometres from, with nothing saying
             // so. What the moment calls for is the other city, not a framing.
-            if (isOutsideServedArea(position)) {
+            if (liesOutside(position, servedCity?.boundingBox)) {
                 elsewhere.sayWeAreElsewhere(position)
                 return@launch
             }
@@ -1095,61 +1014,6 @@ class MapFragment : Fragment() {
             repeatCount = ValueAnimator.INFINITE
             start()
         }
-    }
-
-    /**
-     * Says whether [position] falls outside the area this map covers.
-     *
-     * The city whose configuration declares no bounding box covers everything
-     * as far as this screen is concerned: nothing pens its camera either, so
-     * nothing is being passed off as anything.
-     */
-    private fun isOutsideServedArea(position: Coordinates): Boolean {
-        val area = servedCity?.boundingBox?.takeIf { it.isUsable } ?: return false
-        return position !in area
-    }
-
-    /**
-     * Moves the point as the device moves (SPEC §7.1).
-     *
-     * **The point follows, the map does not.** Recentring at every fix would
-     * take the map back from under the user each time they looked a street
-     * further on; the framing stays theirs, and "locate me" is what brings it
-     * back to the point.
-     *
-     * Only if the permission is granted: opening the map asks for nothing, and
-     * a user who has refused keeps a map without a point rather than a second
-     * prompt (SPEC §10). The permission granted later — from the button, or
-     * from the Android settings — opens the gate, and the following starts
-     * there and then.
-     *
-     * Subscribed once for the life of the view, and following the screen —
-     * `repeatOnLifecycle` drops it as soon as the map is no longer displayed,
-     * so nothing listens to the satellites in the background — and the position
-     * is written nowhere (SPEC §2, C3).
-     */
-    private fun followUserPosition() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                locationPermitted.collectLatest { permitted ->
-                    if (!permitted) return@collectLatest
-                    container.deviceLocation.positions().collect { fix ->
-                        lastKnownPosition = fix
-                        showPosition(fix)
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Draws the point and, when the fix is a coarse one, the circle around it.
-     *
-     * Point and circle move together, and they glide rather than jump — see
-     * [UserPositionDisplay] (SPEC §7.1).
-     */
-    private fun showPosition(fix: PositionFix?) {
-        layers?.userPosition?.show(fix)
     }
 
     private fun showMessage(message: Int) {
@@ -1507,10 +1371,7 @@ class MapFragment : Fragment() {
         super.onResume()
         binding?.map?.onResume()
         loadTilesIfInstalled()
-        // The permission may have been granted, or withdrawn, from the Android
-        // settings while the application was away: the point starts or stops
-        // following on the way back, without a detour through the button.
-        locationPermitted.value = container.deviceLocation.isPermitted()
+        userPosition.readPermission()
     }
 
     override fun onPause() {

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat
 import androidx.core.view.doOnLayout
@@ -23,7 +22,6 @@ import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.BoundingBox
-import io.github.mgdx.rouelibre.core.geo.PositionFix
 import io.github.mgdx.rouelibre.core.journey.JourneyMinutes
 import io.github.mgdx.rouelibre.core.journey.JourneyOption
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
@@ -33,7 +31,6 @@ import io.github.mgdx.rouelibre.core.journey.shownMinutes
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.data.OwnBikeKind
-import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyResultBinding
 import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.cityLabel
@@ -45,11 +42,12 @@ import io.github.mgdx.rouelibre.ui.map.MapStyleLoader
 import io.github.mgdx.rouelibre.ui.map.ServedAreaCamera
 import io.github.mgdx.rouelibre.ui.map.UserPositionDisplay
 import io.github.mgdx.rouelibre.ui.map.UserPositionMarker
+import io.github.mgdx.rouelibre.ui.map.UserPositionOnMap
+import io.github.mgdx.rouelibre.ui.map.liesOutside
 import io.github.mgdx.rouelibre.ui.toUserMessage
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -80,7 +78,7 @@ class JourneyResultFragment : Fragment() {
     private var markerSource: GeoJsonSource? = null
 
     /** Draws the user's point, gliding it between fixes — see [UserPositionDisplay]. */
-    private var userPosition: UserPositionDisplay? = null
+    private var userPositionDisplay: UserPositionDisplay? = null
     private var styleLoaded = false
 
     /**
@@ -105,26 +103,6 @@ class JourneyResultFragment : Fragment() {
      * where the served area stops, since the camera may not leave it.
      */
     private var servedCity: CityConfiguration? = null
-
-    /**
-     * The last fix shown, held for the life of the screen only.
-     *
-     * It survives a rebuild of the view — a rotation must not make the point,
-     * nor the circle around it, vanish until the next fix — and nothing else:
-     * it is written nowhere (SPEC §2, C3).
-     */
-    private var lastKnownPosition: PositionFix? = null
-
-    /**
-     * Whether the point may follow the device: the permission as it stands.
-     *
-     * A flow rather than a call, for the map screen's own reason: the answer
-     * changes while the screen is up — granted from the button, or from the
-     * Android settings while the application was away — and the one
-     * subscription has to start on that answer rather than be stacked again
-     * at each return.
-     */
-    private val locationPermitted = MutableStateFlow(false)
 
     /**
      * Whether the network served lends pedal-assist bikes (SPEC §15).
@@ -230,26 +208,16 @@ class JourneyResultFragment : Fragment() {
     private val shownJourney: ShownJourneyViewModel by activityViewModels()
 
     /**
-     * Requests the location permissions for the "locate me" button, and never
-     * insists: a refusal leaves the journey and its map whole (SPEC §10).
+     * The user's point, and the permission it takes — asked for from the
+     * "locate me" button alone: opening this screen asks for nothing
+     * (SPEC §10), and a refusal leaves the journey and its map whole.
      */
-    private val requestLocationPermission = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions(),
-    ) { granted ->
-        if (granted.values.any { it }) {
-            locateMe()
-            // Only now may the point start following: before this answer there
-            // was nothing to follow it with (SPEC §10).
-            locationPermitted.value = true
-        } else {
-            // Written down for good: a refusal pronounced here must also keep
-            // the map from asking unprompted when it opens next (SPEC §10).
-            viewLifecycleOwner.lifecycleScope.launch {
-                container.automaticLocationRequest.noteRefused()
-            }
-            showMessage(getString(R.string.map_location_denied))
-        }
-    }
+    private val userPosition = UserPositionOnMap(
+        fragment = this,
+        display = { userPositionDisplay },
+        locate = ::locateMe,
+        onMessage = { showMessage(getString(it)) },
+    )
 
     private val viewModel: JourneyViewModel by viewModels {
         JourneyViewModel.Factory(
@@ -333,7 +301,7 @@ class JourneyResultFragment : Fragment() {
         views.destination.setOnClickListener { picker.choose(false, origin.position) }
         views.swap.setOnClickListener { swapEndpoints() }
         lockTheOriginOnTheBike()
-        views.locateMe.setOnClickListener { onLocateMeClicked() }
+        views.locateMe.setOnClickListener { userPosition.onLocateMeClicked() }
         // The way back from wherever the map has been taken to. Animated, unlike
         // the framing the screen lays by itself: this one answers a press, and
         // the move is what says the press was heard.
@@ -363,7 +331,7 @@ class JourneyResultFragment : Fragment() {
 
         picker.listen(viewLifecycleOwner)
         showEndpoints()
-        followUserPosition()
+        userPosition.follow()
         readBikeFleet()
         readLentFleet()
         readOwnBikeKind()
@@ -568,8 +536,8 @@ class JourneyResultFragment : Fragment() {
             UserPositionMarker.registerImage(requireContext(), style)
             style.addLayer(UserPositionMarker.bearingLayer())
             style.addLayer(UserPositionMarker.layer(requireContext()))
-            userPosition = UserPositionDisplay(userPoint, userAccuracy)
-            showPosition(lastKnownPosition)
+            userPositionDisplay = UserPositionDisplay(userPoint, userAccuracy)
+            userPosition.showLastKnown()
 
             styleLoaded = true
             drawJourney(viewModel.state.value)
@@ -619,26 +587,6 @@ class JourneyResultFragment : Fragment() {
     }
 
     /**
-     * Answers the "locate me" button.
-     *
-     * The three cases are told apart: no permission yet, location switched off,
-     * or a position to go and get. Only the first asks for anything, and asks
-     * once (SPEC §10).
-     */
-    private fun onLocateMeClicked() {
-        val location = container.deviceLocation
-        when {
-            !location.isPermitted() ->
-                requestLocationPermission.launch(DeviceLocation.PERMISSIONS)
-
-            !location.isAvailable() ->
-                showMessage(getString(R.string.map_location_unavailable))
-
-            else -> locateMe()
-        }
-    }
-
-    /**
      * Brings the map down onto the walker, as close as the tiles allow.
      *
      * On this screen the map is small and framed on the whole journey: getting
@@ -661,17 +609,13 @@ class JourneyResultFragment : Fragment() {
                 return@launch
             }
             val position = fix.coordinates
-            lastKnownPosition = fix
-            showPosition(fix)
+            userPosition.show(fix)
             // Outside the served area the camera cannot follow — it is penned
             // inside the city's box — and it would settle at the edge nearest
             // the user, passing that off as where they stand. This screen shows
             // one journey in one city: saying so is all it can usefully do,
             // changing city here throwing that journey away.
-            val outside = servedCity?.boundingBox
-                ?.takeIf { it.isUsable }
-                ?.let { position !in it } == true
-            if (outside) {
+            if (liesOutside(position, servedCity?.boundingBox)) {
                 val city = checkNotNull(servedCity).network
                 showMessage(
                     getString(
@@ -694,44 +638,6 @@ class JourneyResultFragment : Fragment() {
     private fun showMessage(message: String) {
         val views = binding ?: return
         Snackbar.make(views.root, message, Snackbar.LENGTH_LONG).show()
-    }
-
-    /**
-     * Follows the position and moves the point on the map (SPEC §7.4).
-     *
-     * Only if the permission has been granted: opening this screen asks for
-     * nothing (SPEC §10). Without the permission, or with location switched
-     * off, no point is shown and nothing says otherwise — the "locate me"
-     * button, once answered, opens the gate, and so does a permission granted
-     * from the Android settings while the application was away, which the
-     * resume re-reads (see [onResume]).
-     *
-     * Subscribed once for the life of the view, like the map screen's own
-     * following, and the position is written nowhere: it lives in the display
-     * source, for as long as it is displayed (SPEC §2, C3).
-     */
-    private fun followUserPosition() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                locationPermitted.collectLatest { permitted ->
-                    if (!permitted) return@collectLatest
-                    container.deviceLocation.positions().collect { fix ->
-                        lastKnownPosition = fix
-                        showPosition(fix)
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Draws the point and, when the fix is a coarse one, the circle around it.
-     *
-     * Point and circle move together, and they glide rather than jump — see
-     * [UserPositionDisplay] (SPEC §7.4).
-     */
-    private fun showPosition(fix: PositionFix?) {
-        userPosition?.show(fix)
     }
 
     private fun show(state: JourneyUiState) {
@@ -1083,7 +989,7 @@ class JourneyResultFragment : Fragment() {
         // The permission may have been granted from the Android settings while
         // the application was away: the following then starts on this answer,
         // exactly as on the map screen's own resume (SPEC §7.4, §10).
-        locationPermitted.value = container.deviceLocation.isPermitted()
+        userPosition.readPermission()
     }
 
     override fun onPause() {
@@ -1120,8 +1026,8 @@ class JourneyResultFragment : Fragment() {
         walkSource = null
         rideSource = null
         markerSource = null
-        userPosition?.cancel()
-        userPosition = null
+        userPositionDisplay?.cancel()
+        userPositionDisplay = null
         servedArea = null
         mapLibreMap = null
         styleLoaded = false
