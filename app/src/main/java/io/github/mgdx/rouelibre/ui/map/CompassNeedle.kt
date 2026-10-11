@@ -54,6 +54,28 @@ internal data class CompassNeedle(
 }
 
 /**
+ * Which of the three sentences the compass button is read out with (SPEC §11).
+ *
+ * The turn is given in degrees, the tilt is named, and a map both turned and
+ * tilted says both: a reader who cannot see the needle learns from this alone
+ * what pressing it would undo.
+ */
+internal enum class CompassSentence { TurnedAndTilted, Tilted, Turned }
+
+/**
+ * The sentence for this needle.
+ *
+ * A needle neither turned nor tilted is hidden, and keeps the sentence of the
+ * turn — nought degrees — for the moment it is on its way out.
+ */
+internal val CompassNeedle.sentence: CompassSentence
+    get() = when {
+        isTurned && isTilted -> CompassSentence.TurnedAndTilted
+        isTilted -> CompassSentence.Tilted
+        else -> CompassSentence.Turned
+    }
+
+/**
  * Reads a map's attitude into the state of the compass button.
  *
  * Held here rather than in the fragment so that the rule can be read, and

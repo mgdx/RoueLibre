@@ -142,6 +142,22 @@ class CompassNeedleTest {
         assertEquals(compassNeedle(turned(350.0)), compassNeedle(turned(-10.0)))
     }
 
+    @Test
+    fun `the button is read out with the sentence of what it would undo`() {
+        assertEquals(CompassSentence.Turned, compassNeedle(turned(90.0)).sentence)
+        assertEquals(CompassSentence.Tilted, compassNeedle(tilted(30.0)).sentence)
+        assertEquals(
+            CompassSentence.TurnedAndTilted,
+            compassNeedle(MapAttitude(bearingDegrees = 90.0, pitchDegrees = 30.0)).sentence,
+        )
+    }
+
+    @Test
+    fun `a tilt too slight to count leaves the sentence of the turn`() {
+        val barely = MapAttitude(bearingDegrees = 90.0, pitchDegrees = 1.0)
+        assertEquals(CompassSentence.Turned, compassNeedle(barely).sentence)
+    }
+
     private fun turned(bearingDegrees: Double) =
         MapAttitude(bearingDegrees = bearingDegrees, pitchDegrees = FLAT_PITCH)
 
