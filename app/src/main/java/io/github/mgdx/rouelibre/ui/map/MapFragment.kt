@@ -3,8 +3,6 @@ package io.github.mgdx.rouelibre.ui.map
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.graphics.PointF
-import android.graphics.RectF
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,10 +28,8 @@ import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.message.MessageSubject
 import io.github.mgdx.rouelibre.core.station.StationFilter
-import io.github.mgdx.rouelibre.core.station.StreetBike
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.core.station.stationsShownOnMap
-import io.github.mgdx.rouelibre.data.SavedPlace
 import io.github.mgdx.rouelibre.data.SavedPlaceKind
 import io.github.mgdx.rouelibre.databinding.FragmentMapBinding
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
@@ -47,17 +43,14 @@ import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
-import io.github.mgdx.rouelibre.ui.stations.StationDetailSheet
 import io.github.mgdx.rouelibre.ui.stations.StationListFragment
 import io.github.mgdx.rouelibre.ui.stations.StationsUiState
 import io.github.mgdx.rouelibre.ui.stations.StationsViewModel
-import io.github.mgdx.rouelibre.ui.stations.StreetBikeSheet
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -66,7 +59,6 @@ import org.maplibre.android.MapLibre
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.Style
-import org.maplibre.geojson.Point
 import java.io.File
 import java.time.Instant
 
@@ -202,6 +194,36 @@ class MapFragment : Fragment() {
         onChanged = ::publishStations,
     )
 
+    /** The bikes outside stations, while the settings have them drawn. */
+    private val streetBikes = StreetBikesOnMap(
+        source = { layers?.streetBikes },
+        vehicleTypes = { lentFleet?.vehicleTypes.orEmpty() },
+        container = { container },
+    )
+
+    /** The places the user has named: their markers and their buttons. */
+    private val savedPlaces = SavedPlacesOnMap(
+        source = { layers?.savedPlaces },
+        button = { kind ->
+            when (kind) {
+                SavedPlaceKind.Home -> binding?.centreOnHome
+                SavedPlaceKind.Work -> binding?.centreOnWork
+            }
+        },
+        controlsUp = { showsMapControls },
+        servedArea = { servedCity?.boundingBox },
+        bringIntoView = { camera.moveTo(it) },
+    )
+
+    /** What a touch on a marker opens. */
+    private val touches = MarkerTouches(
+        map = { mapLibreMap },
+        mapHeight = { binding?.map?.height },
+        isPicking = ::isPicking,
+        moveTo = camera::moveTo,
+        sheets = { parentFragmentManager },
+    )
+
     /**
      * Which stations the map leaves out, and at rest it leaves out none.
      *
@@ -226,25 +248,6 @@ class MapFragment : Fragment() {
     private var lentFleet: FleetDescription? = null
 
     /**
-     * The bikes outside stations last read, and empty while they are not shown.
-     *
-     * Held because two things settle what is drawn and they arrive apart: the
-     * feed, and the vehicle type table that says which of those bikes bear the
-     * bolt (SPEC §4.1). Whichever lands second redraws from this.
-     */
-    private var streetBikes: List<StreetBike> = emptyList()
-
-    /**
-     * Whether the setting of SPEC §7.6 has the bikes outside stations drawn.
-     *
-     * Read from the settings and followed, like the two station filters. What
-     * it decides here is not only the markers but whether the feed is asked for
-     * at all: it weighs twenty times the station feed, and a map that is not
-     * showing those bikes has no business fetching them.
-     */
-    private var showsStreetBikes = false
-
-    /**
      * Whether the controls laid over the map are up at all.
      *
      * False until the base map is known to be installed, and false while a point
@@ -254,29 +257,6 @@ class MapFragment : Fragment() {
      * finish.
      */
     private var showsMapControls = false
-
-    /**
-     * The places the user has named, as the settings last said, with whether
-     * the map marks them and whether it offers a button for each (SPEC §7.1).
-     *
-     * Held because the markers are drawn into a style that may not exist yet,
-     * and the buttons hang on a served area that is learnt apart: whichever
-     * arrives second redraws from this.
-     */
-    private var savedPlaces = SavedPlacesOnMap()
-
-    /** What the settings say of the named places, as far as the map cares. */
-    private data class SavedPlacesOnMap(
-        val home: SavedPlace? = null,
-        val work: SavedPlace? = null,
-        val markers: Boolean = false,
-        val buttons: Boolean = false,
-    ) {
-        fun of(kind: SavedPlaceKind): SavedPlace? = when (kind) {
-            SavedPlaceKind.Home -> home
-            SavedPlaceKind.Work -> work
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -303,12 +283,12 @@ class MapFragment : Fragment() {
         attitude.bind()
         views.openJourney.setOnClickListener { show(JourneySearchFragment()) }
         views.pickedPlace.setOnClickListener { openPickedPlaceSheet() }
-        views.centreOnHome.setOnClickListener { centreOn(SavedPlaceKind.Home) }
-        views.centreOnWork.setOnClickListener { centreOn(SavedPlaceKind.Work) }
+        views.centreOnHome.setOnClickListener { savedPlaces.centreOn(SavedPlaceKind.Home) }
+        views.centreOnWork.setOnClickListener { savedPlaces.centreOn(SavedPlaceKind.Work) }
         filters.bind()
         followStationFilters()
-        followStreetBikes()
-        followSavedPlaces()
+        streetBikes.follow(viewLifecycleOwner)
+        savedPlaces.follow(viewLifecycleOwner, container.preferences)
         // The button that opens the journey search carries the bike of the
         // network served: with a bolt where that network lends pedal-assist
         // bikes (SPEC §15).
@@ -325,7 +305,7 @@ class MapFragment : Fragment() {
             publishStations()
             // The same reading says which bikes outside stations bear the
             // bolt, and it may arrive after they are drawn.
-            publishStreetBikes()
+            streetBikes.publish()
         }
 
         // The target depends on what is missing, and it is set together with
@@ -560,7 +540,7 @@ class MapFragment : Fragment() {
         attitude.isAllowed = controls.compass
         attitude.showTheBearing()
         filters.showBikeKindFilter()
-        showSavedPlaceButtons()
+        savedPlaces.showButtons()
     }
 
     /**
@@ -584,7 +564,7 @@ class MapFragment : Fragment() {
         map.setMaxZoomPreference(configuration.map.maxZoom.toDouble() + 1)
         camera.open(views.map, map, configuration) { positionToOpenOn(configuration) }
 
-        map.addOnMapClickListener(::onMapClicked)
+        map.addOnMapClickListener(touches::onMapClicked)
         attitude.follow(map)
     }
 
@@ -604,8 +584,8 @@ class MapFragment : Fragment() {
             // The view may have been rebuilt over bikes already read, places
             // already named and a position already known: they are put back
             // without the feed, the settings or the system being asked again.
-            publishStreetBikes()
-            publishSavedPlaces()
+            streetBikes.publish()
+            savedPlaces.publish()
             userPosition.showLastKnown()
             publishStations()
             // An address chosen while the map did not exist: now is when it
@@ -650,75 +630,6 @@ class MapFragment : Fragment() {
     }
 
     /**
-     * Redraws the bikes outside stations, or clears them.
-     *
-     * They answer to no filter of this screen — neither the two station
-     * filters nor the kind, nor the Bikes / Free docks toggle. Those act on
-     * counts, and there is no count here to hide or to narrow: a marker
-     * standing for one bike of one kind is either drawn or not, and the
-     * setting alone decides (SPEC §7.1).
-     */
-    private fun publishStreetBikes() {
-        val source = layers?.streetBikes ?: return
-        source.setGeoJson(
-            StreetBikeMarkers.toFeatureCollection(
-                streetBikes,
-                lentFleet?.vehicleTypes.orEmpty(),
-            ),
-        )
-    }
-
-    /**
-     * Follows the setting that draws the bikes outside stations (SPEC §7.6).
-     *
-     * Switched on, the feed is asked for on the spot — coming back from the
-     * settings must find the bikes already on the map — and then followed;
-     * switched off, the markers go and nothing is fetched again. The
-     * one-minute gate between two reads is the repository's, not this
-     * screen's (SPEC §4.1).
-     */
-    private fun followStreetBikes() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                container.preferences.showStreetBikes.collectLatest { show ->
-                    showsStreetBikes = show
-                    if (!show) {
-                        streetBikes = emptyList()
-                        publishStreetBikes()
-                        return@collectLatest
-                    }
-                    // Asked for beside the following rather than before it: the
-                    // stream never ends, so a read awaited here would be a read
-                    // the markers wait on.
-                    launch { refreshStreetBikes() }
-                    container.stationRepository.observeStreetBikes().collect { snapshot ->
-                        streetBikes = snapshot.bikes
-                        publishStreetBikes()
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Asks for the bikes outside stations, while they are being shown.
-     *
-     * The outcome is deliberately not raised on the banner. A network that
-     * cannot be reached is already being said by the station refresh made in
-     * the same breath, and a network publishing no such feed is an ordinary
-     * answer the repository remembers for the session rather than a failure
-     * (SPEC §4.1) — the map says that one by drawing nothing, which is the
-     * whole of what the setting promises there.
-     *
-     * @param force ignores the one-minute gate. Reserved for the refresh
-     *   asked for by hand, as it is for the stations.
-     */
-    private suspend fun refreshStreetBikes(force: Boolean = false) {
-        if (!showsStreetBikes) return
-        container.stationRepository.refreshStreetBikes(force = force)
-    }
-
-    /**
      * Follows the two filters set in the settings (SPEC §7.1, §7.6).
      *
      * The screen obeys and reports nothing: the markers go and come back, and
@@ -744,147 +655,6 @@ class MapFragment : Fragment() {
                     }
             }
         }
-    }
-
-    /**
-     * Follows the places the user has named and the two settings that say how
-     * the map shows them (SPEC §7.1, §7.6).
-     *
-     * Followed rather than read once: a home named or forgotten in the settings
-     * must be on the map — or off it — on the way back, without a rebuild.
-     */
-    private fun followSavedPlaces() {
-        val preferences = container.preferences
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                combine(
-                    preferences.homePlace,
-                    preferences.workPlace,
-                    preferences.showSavedPlacesOnMap,
-                    preferences.savedPlaceButtonsOnMap,
-                    ::SavedPlacesOnMap,
-                )
-                    .distinctUntilChanged()
-                    .collect { places ->
-                        savedPlaces = places
-                        publishSavedPlaces()
-                        showSavedPlaceButtons()
-                    }
-            }
-        }
-    }
-
-    /** Draws the named places, or clears them where the setting says so. */
-    private fun publishSavedPlaces() {
-        val source = layers?.savedPlaces ?: return
-        val shown = if (savedPlaces.markers) {
-            SavedPlaceKind.entries.mapNotNull { kind ->
-                savedPlaces.of(kind)?.let { kind to it }
-            }.toMap()
-        } else {
-            emptyMap()
-        }
-        source.setGeoJson(SavedPlaceMarkers.featuresFor(shown))
-    }
-
-    /** Puts up the button of each named place the map can bring itself onto. */
-    private fun showSavedPlaceButtons() {
-        val views = binding ?: return
-        for (kind in SavedPlaceKind.entries) {
-            val button = when (kind) {
-                SavedPlaceKind.Home -> views.centreOnHome
-                SavedPlaceKind.Work -> views.centreOnWork
-            }
-            button.isVisible = offersCentringOn(
-                place = savedPlaces.of(kind)?.position,
-                wanted = savedPlaces.buttons,
-                browsing = showsMapControls,
-                servedArea = servedCity?.boundingBox,
-            )
-        }
-    }
-
-    /**
-     * Brings the map onto a named place, at the zoom of an address found: it
-     * is one, and the stations around it are what one came to see.
-     */
-    private fun centreOn(kind: SavedPlaceKind) {
-        val place = savedPlaces.of(kind) ?: return
-        camera.moveTo(LatLng(place.position.latitude, place.position.longitude))
-    }
-
-    /**
-     * Opens the detail of the station touched, or zooms into a cluster.
-     *
-     * The sensitive area is widened around the finger: a marker is some fifteen
-     * pixels across, which is less than the pad of a thumb. Without this
-     * margin, one would have to aim.
-     *
-     * @return true if the gesture was consumed, so the map does not handle it
-     *   in turn.
-     */
-    private fun onMapClicked(point: LatLng): Boolean {
-        val map = mapLibreMap ?: return false
-        val screenPoint = map.projection.toScreenLocation(point)
-        val touchArea = RectF(
-            screenPoint.x - TOUCH_SLOP_PIXELS,
-            screenPoint.y - TOUCH_SLOP_PIXELS,
-            screenPoint.x + TOUCH_SLOP_PIXELS,
-            screenPoint.y + TOUCH_SLOP_PIXELS,
-        )
-        val touched = map.queryRenderedFeatures(
-            touchArea,
-            StationMarkers.STATION_CIRCLE_LAYER,
-            StationMarkers.CLUSTER_CIRCLE_LAYER,
-            StreetBikeMarkers.CIRCLE_LAYER,
-            StreetBikeMarkers.CLUSTER_CIRCLE_LAYER,
-        ).firstOrNull() ?: return false
-
-        // A cluster describes no station in particular: touching it zooms in,
-        // which eventually resolves it into distinct markers.
-        if (touched.hasProperty(CLUSTER_COUNT_PROPERTY)) {
-            camera.moveTo(point, map.cameraPosition.zoom + CLUSTER_ZOOM_STEP)
-            return true
-        }
-
-        // In "pick a point" mode, opening a sheet of either kind would divert
-        // the gesture from what the user came to do.
-        val bikeId = touched.getStringProperty(StreetBikeMarkers.BIKE_ID_PROPERTY)
-        if (bikeId != null) {
-            if (isPicking()) return false
-            (touched.geometry() as? Point)?.let { centreOnStation(map, it) }
-            StreetBikeSheet.newInstance(bikeId)
-                .show(parentFragmentManager, StreetBikeSheet.TAG)
-            return true
-        }
-
-        val stationId = touched.getStringProperty(StationMarkers.STATION_ID_PROPERTY)
-            ?: return false
-        if (isPicking()) return false
-        (touched.geometry() as? Point)?.let { centreOnStation(map, it) }
-        StationDetailSheet.newInstance(stationId)
-            .show(parentFragmentManager, StationDetailSheet.TAG)
-        return true
-    }
-
-    /**
-     * Brings the touched station to the middle of what stays visible.
-     *
-     * Not to the middle of the map: the detail sheet rises over the lower part
-     * of the screen, and a station centred there would be behind it. The camera
-     * therefore aims a little below the marker, which leaves the marker in the
-     * visible half — the eye follows what it has just touched.
-     *
-     * The zoom is left alone. Touching a marker says "show me this one", not
-     * "take me closer", and a zoom that changed under the finger would lose the
-     * neighbouring stations one was comparing.
-     */
-    private fun centreOnStation(map: MapLibreMap, station: Point) {
-        val target = LatLng(station.latitude(), station.longitude())
-        val height = binding?.map?.height ?: return
-        val onScreen = map.projection.toScreenLocation(target)
-        val below = PointF(onScreen.x, onScreen.y + height * SHEET_CLEARANCE_FRACTION)
-        camera.moveTo(map.projection.fromScreenLocation(below), map.cameraPosition.zoom)
     }
 
     // ------------------------------------------------ picking a point (§7.3) --
@@ -1183,7 +953,7 @@ class MapFragment : Fragment() {
                         // Asked for by hand: the gate that spares the feed is
                         // stood down, as it is for the stations.
                         viewLifecycleOwner.lifecycleScope.launch {
-                            refreshStreetBikes(force = true)
+                            streetBikes.refresh(force = true)
                         }
                     }
                 }
@@ -1200,7 +970,7 @@ class MapFragment : Fragment() {
                     // The same tick asks for the vehicle feed, which the
                     // repository serves from memory until the same minute is
                     // up (SPEC §4.1).
-                    refreshStreetBikes()
+                    streetBikes.refresh()
                     showFreshness(viewModel.state.value)
                     delay(FRESHNESS_TICK_MILLIS)
                 }
@@ -1335,25 +1105,6 @@ class MapFragment : Fragment() {
         fun showing(place: JourneyEndpoint): MapFragment = MapFragment().apply {
             arguments = Bundle().apply { place.writeTo(this, ARGUMENT_SHOWN_PLACE) }
         }
-
-        /**
-         * The margin around the finger on a touch, in pixels. A marker is some
-         * fifteen pixels across: without this margin, one would have to aim.
-         */
-        const val TOUCH_SLOP_PIXELS = 32f
-
-        /** How much a touch on a cluster zooms the map in. */
-        const val CLUSTER_ZOOM_STEP = 2.0
-
-        /**
-         * How far below a touched station the camera aims, as a fraction of the
-         * map's height. A quarter puts the marker halfway up the part the
-         * detail sheet leaves visible.
-         */
-        const val SHEET_CLEARANCE_FRACTION = 0.25f
-
-        /** The property MapLibre adds to the clusters it forms itself. */
-        const val CLUSTER_COUNT_PROPERTY = "point_count"
 
         const val FRESHNESS_TICK_MILLIS = 10_000L
 
