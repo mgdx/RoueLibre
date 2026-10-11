@@ -41,6 +41,7 @@ import io.github.mgdx.rouelibre.ui.offeredLanguages
 import io.github.mgdx.rouelibre.ui.speakLanguage
 import io.github.mgdx.rouelibre.ui.stations.StreetBikeIntroDialogFragment
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
+import io.github.mgdx.rouelibre.ui.withoutCountryFlag
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -241,7 +242,7 @@ class SettingsFragment : Fragment() {
                 return
             }
             is ActiveCity.Served -> city.configuration.network.let {
-                requireContext().cityLabel(it.displayName, it.city)
+                requireContext().cityLabel(it.displayName, it.city, city.configuration.country)
             }
             // A choice was made, and "Choose my city" denied it (SPEC §15.1).
             is ActiveCity.NoLongerServed -> requireContext().noLongerServedLabel(city)
@@ -250,7 +251,7 @@ class SettingsFragment : Fragment() {
         // The row reads as a bare network name otherwise — "V'lille — Lille"
         // alone, with nothing saying what it settles.
         views.openCity.contentDescription =
-            getString(R.string.settings_city_description, name)
+            getString(R.string.settings_city_description, withoutCountryFlag(name))
     }
 
     /**
