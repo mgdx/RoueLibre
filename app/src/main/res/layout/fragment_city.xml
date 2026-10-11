@@ -80,6 +80,43 @@
             android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!--
+        Narrows the catalogue to one country, once it spans several. A menu
+        rather than a row of choices: it takes one field's height however many
+        countries the catalogue comes to span.
+    -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/country_filter"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_s"
+        android:layout_marginEnd="@dimen/space_l"
+        android:hint="@string/city_country_filter"
+        android:textColorHint="@color/ink_soft"
+        android:visibility="gone"
+        app:boxBackgroundColor="@color/surface"
+        app:boxStrokeColor="@color/field_stroke"
+        app:boxStrokeWidth="@dimen/stroke"
+        app:endIconTint="@color/ink_soft"
+        app:hintTextColor="@color/signal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_field"
+        tools:visibility="visible">
+
+        <!-- Its state is the fragment's to keep: restored on its own, the
+             field would narrow its menu to the one country it was showing. -->
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/country_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:saveEnabled="false"
+            android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cities"
         android:layout_width="0dp"
@@ -90,7 +127,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_field"
+        app:layout_constraintTop_toBottomOf="@id/country_filter"
         tools:itemCount="3"
         tools:listitem="@layout/item_city" />
 

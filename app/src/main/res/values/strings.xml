@@ -584,6 +584,10 @@
     <string name="city_deleted">Data for %1$s deleted</string>
     <string name="city_search_hint">Search for a city</string>
     <string name="city_search_clear">Clear the search</string>
+    <!-- Narrows the city list to one country; offered only when the
+         catalogue spans several. -->
+    <string name="city_country_filter">Country</string>
+    <string name="city_country_all">All countries</string>
     <string name="city_no_match_title">No city found</string>
     <string name="city_no_match_message">Nothing matches “%1$s”. Check the spelling, or clear the search.</string>
     <string name="city_proposal_title">Your city</string>
