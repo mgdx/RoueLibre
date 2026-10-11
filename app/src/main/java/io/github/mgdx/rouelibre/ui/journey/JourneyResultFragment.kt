@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat
-import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -22,29 +21,17 @@ import io.github.mgdx.rouelibre.core.config.CityConfiguration
 import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.BoundingBox
-import io.github.mgdx.rouelibre.core.journey.JourneyMinutes
-import io.github.mgdx.rouelibre.core.journey.JourneyOption
-import io.github.mgdx.rouelibre.core.journey.JourneyPlan
-import io.github.mgdx.rouelibre.core.journey.NoBikeJourney
-import io.github.mgdx.rouelibre.core.journey.inShownMinutes
-import io.github.mgdx.rouelibre.core.journey.shownMinutes
-import io.github.mgdx.rouelibre.core.routing.RouteLeg
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyResultBinding
 import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.cityLabel
-import io.github.mgdx.rouelibre.ui.formatDistance
-import io.github.mgdx.rouelibre.ui.formatDuration
-import io.github.mgdx.rouelibre.ui.formatMinutes
 import io.github.mgdx.rouelibre.ui.map.MapAttitudeController
 import io.github.mgdx.rouelibre.ui.map.MapStyleLoader
-import io.github.mgdx.rouelibre.ui.map.ServedAreaCamera
 import io.github.mgdx.rouelibre.ui.map.UserPositionDisplay
 import io.github.mgdx.rouelibre.ui.map.UserPositionMarker
 import io.github.mgdx.rouelibre.ui.map.UserPositionOnMap
 import io.github.mgdx.rouelibre.ui.map.liesOutside
-import io.github.mgdx.rouelibre.ui.toUserMessage
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
 import kotlinx.coroutines.flow.Flow
@@ -54,7 +41,6 @@ import kotlinx.coroutines.launch
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
-import org.maplibre.android.geometry.LatLngBounds
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.Style
 import org.maplibre.android.style.sources.GeoJsonSource
@@ -73,28 +59,10 @@ class JourneyResultFragment : Fragment() {
 
     private var binding: FragmentJourneyResultBinding? = null
     private var mapLibreMap: MapLibreMap? = null
-    private var walkSource: GeoJsonSource? = null
-    private var rideSource: GeoJsonSource? = null
-    private var markerSource: GeoJsonSource? = null
 
     /** Draws the user's point, gliding it between fixes — see [UserPositionDisplay]. */
     private var userPositionDisplay: UserPositionDisplay? = null
     private var styleLoaded = false
-
-    /**
-     * The track the camera must show, kept for as long as it is displayed.
-     *
-     * The map is not always the size it will end up being when the journey is
-     * drawn: holding the framing lets it be laid again once it is.
-     */
-    private var frame: LatLngBounds? = null
-
-    /**
-     * The limit penning the camera inside the served area, kept so that the
-     * framing can stand it down for the length of its own move and have it
-     * measured again on the map as it then stands.
-     */
-    private var servedArea: ServedAreaCamera? = null
 
     /**
      * The city this map is drawn for, once it has been read from disk.
@@ -134,6 +102,19 @@ class JourneyResultFragment : Fragment() {
 
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
+
+    /** The journey drawn on the map, and the camera framed on it. */
+    private val track = JourneyTrackOnMap(
+        binding = { binding },
+        map = { mapLibreMap },
+    )
+
+    /** The card under the map: how long, what makes it up, and its shape. */
+    private val summary = JourneySummaryCard(
+        detail = { binding?.detail },
+        lentFleet = { lentFleet },
+        ownBikeKind = { ownBikeKind },
+    )
 
     /**
      * The turn and the tilt of the map, and the compass that gives both back —
@@ -305,7 +286,7 @@ class JourneyResultFragment : Fragment() {
         // The way back from wherever the map has been taken to. Animated, unlike
         // the framing the screen lays by itself: this one answers a press, and
         // the move is what says the press was heard.
-        views.frameJourney.setOnClickListener { applyFrame(animated = true) }
+        views.frameJourney.setOnClickListener { track.applyFrame(animated = true) }
         attitude.bind()
 
         views.map.onCreate(savedInstanceState)
@@ -326,7 +307,7 @@ class JourneyResultFragment : Fragment() {
             ->
             val changed = right - left != oldRight - oldLeft ||
                 bottom - top != oldBottom - oldTop
-            if (changed) applyFrame()
+            if (changed) track.applyFrame()
         }
 
         picker.listen(viewLifecycleOwner)
@@ -376,7 +357,7 @@ class JourneyResultFragment : Fragment() {
     private fun readLentFleet() {
         withFleet { lent ->
             lentFleet = lent
-            viewModel.state.value.chosen?.let(::showSummary)
+            viewModel.state.value.chosen?.let(summary::showSummary)
         }
     }
 
@@ -407,9 +388,7 @@ class JourneyResultFragment : Fragment() {
                     JourneyMarkers.registerImages(requireContext(), it, fleet, declared)
                 }
             }
-            (viewModel.state.value.plan as? JourneyPlan.OwnBike)?.let {
-                views.detail.summary.text = requireContext().ownBikeSummary(it.ride, declared)
-            }
+            summary.showOwnBikeSentence(viewModel.state.value.plan)
         }
     }
 
@@ -504,22 +483,7 @@ class JourneyResultFragment : Fragment() {
         map.setStyle(
             Style.Builder().fromJson(MapStyleLoader.load(requireContext(), tiles)),
         ) { style ->
-            val walk = GeoJsonSource(JourneyLines.WALK_SOURCE_ID)
-            val ride = GeoJsonSource(JourneyLines.RIDE_SOURCE_ID)
-            walkSource = walk
-            rideSource = ride
-            style.addSource(walk)
-            style.addSource(ride)
-            style.addLayer(JourneyLines.rideLayer(requireContext()))
-            style.addLayer(JourneyLines.walkLayer(requireContext()))
-
-            // The four points come after the tracks: a marker sitting under
-            // the line it belongs to would be half hidden by it.
-            val markers = GeoJsonSource(JourneyMarkers.SOURCE_ID)
-            markerSource = markers
-            style.addSource(markers)
-            JourneyMarkers.registerImages(requireContext(), style, fleet, ownBikeKind)
-            style.addLayer(JourneyMarkers.layer())
+            track.addTo(style, requireContext(), fleet, ownBikeKind)
 
             // The user's position comes last of all, and therefore on top:
             // where one IS beats what one has planned, and the two coincide
@@ -540,49 +504,19 @@ class JourneyResultFragment : Fragment() {
             userPosition.showLastKnown()
 
             styleLoaded = true
-            drawJourney(viewModel.state.value)
+            track.draw(viewModel.state.value, origin.position, destination.position)
         }
     }
 
     /**
-     * Bounds where the camera may go, at the tiles' own limits.
-     *
-     * Past their maximum zoom MapLibre scales the last ones it has: one step is
-     * allowed, which lets "locate me" come right down onto the pavement without
-     * the labels turning to mush. The city is read from disk, so the cap
-     * arrives a moment after the map — before any gesture, in practice.
-     *
-     * With a base map underneath, the camera is also penned inside the served
-     * area, as on the main screen: the edge of the data must not show here
-     * either. It costs the framing of a journey crossing the conurbation from
-     * end to end, which then loses its margins — a fair trade against a screen
-     * half empty. Without tiles there is no edge to hide, and nothing to gain
-     * from holding a track that is drawn on bare background.
+     * Bounds where the camera may go, once the city is read from disk — see
+     * [JourneyTrackOnMap.limitTo].
      */
     private fun limitCamera(map: MapLibreMap, hasTiles: Boolean) {
         viewLifecycleOwner.lifecycleScope.launch {
             val city = container.activeCity() ?: return@launch
             servedCity = city
-            val closestZoom = city.map.maxZoom.toDouble() + 1
-            map.setMaxZoomPreference(closestZoom)
-            val area = city.boundingBox?.takeIf { it.isUsable } ?: return@launch
-            if (!hasTiles) return@launch
-            // The visible region is only measurable once the map view has been
-            // laid out, and the limits are read off it.
-            val view = binding?.map ?: return@launch
-            view.doOnLayout {
-                servedArea = ServedAreaCamera(
-                    view = view,
-                    map = map,
-                    area = area,
-                    widestZoom = city.map.minZoom.toDouble(),
-                    closestZoom = closestZoom,
-                ).apply { hold() }
-                // The limit was measured on the map as it was when it was laid
-                // out; the framing waiting for it was computed for that same
-                // moment. Laying it again now puts the two back in step.
-                applyFrame()
-            }
+            track.limitTo(map, city, hasTiles)
         }
     }
 
@@ -646,91 +580,8 @@ class JourneyResultFragment : Fragment() {
         views.detail.root.isVisible = !state.isComputing
         if (state.isComputing) return
 
-        drawJourney(state)
-        showWaysOn(state)
-        val option = state.chosen
-        if (option == null) {
-            showJourneyWithoutStations(state)
-            return
-        }
-
-        // Rounded once for the three figures the card carries: the total, the
-        // sentence beside it and the band underneath describe the same journey,
-        // and each rounding its own legs made them disagree by a minute or two
-        // (see JourneyMinutes).
-        val minutes = option.shownMinutes()
-        showTotal(requireContext().formatMinutes(minutes.total))
-        showSummary(option)
-        showShape(option, minutes)
-    }
-
-    /**
-     * Writes what stands where the total time goes.
-     *
-     * **A figure is one line, whatever digits the locale counts it in.** On a
-     * device set to `ar` the total read "٦ min" — an Arabic-Indic six, then a
-     * Latin word, two runs of opposite direction — and broke in two inside a
-     * view measured at 143 px, which is the width that very text asks for: the
-     * line's runs need a hair more than the width the measurement had promised,
-     * and the wrap follows. The block then stood twice as tall, with the
-     * chevron — centred on this view — beside the middle of the summary rather
-     * than beside the figure, and the map lost the height. One line is also
-     * what a figure is: it is read at a glance, and a duration split across two
-     * lines is not read at all.
-     *
-     * A sentence is another matter and may take the lines it needs: "No
-     * journey" is the one thing this view holds that is not a figure, and at
-     * the largest text sizes it needs them.
-     *
-     * `setSingleLine` rather than `maxLines`, and the difference is the whole
-     * repair: a maximum of one line still breaks the text and then shows the
-     * first line alone — "٦" without its unit — where a single line is laid out
-     * as one run and kept whole.
-     *
-     * @param figure true when the view is being handed a duration.
-     */
-    private fun showTotal(text: CharSequence, figure: Boolean = true) {
-        val views = binding ?: return
-        views.detail.totalTime.setSingleLine(figure)
-        views.detail.totalTime.text = text
-    }
-
-    /**
-     * What makes the total up, and what waits at the departure station.
-     *
-     * The two kinds are counted apart where the city lends both: it is what
-     * decides whether the walk to the station is the one wanted (SPEC §7.4),
-     * and the counts are the frozen ones the journey was worked out on, like
-     * the total time beside them.
-     */
-    private fun showSummary(option: JourneyOption) {
-        val views = binding ?: return
-        views.detail.summary.text = requireContext().journeySummary(
-            option,
-            minutes = option.shownMinutes(),
-            atDeparture = requireContext()
-                .bikesAtDeparture(option.bikeSplitAtDeparture(lentFleet)),
-        )
-    }
-
-    /**
-     * The two ways on the screen offers, shown only when there is a journey.
-     *
-     * The summary block opens the journey in full, and the button hands a leg
-     * of it to a navigation application. An impossible journey has neither a
-     * detail to open nor a point to hand over: the chevron and the button go,
-     * and the block stops answering to a press rather than opening an empty
-     * screen.
-     */
-    private fun showWaysOn(state: JourneyUiState) {
-        val views = binding ?: return
-        val hasJourney = state.plan is JourneyPlan.Found ||
-            state.plan is JourneyPlan.WalkOnly ||
-            state.plan is JourneyPlan.OwnBike
-        views.detail.summaryBlock.isClickable = hasJourney
-        views.detail.summaryBlock.isFocusable = hasJourney
-        views.detail.detailChevron.isVisible = hasJourney
-        views.detail.navigate.isVisible = hasJourney
+        track.draw(state, origin.position, destination.position)
+        summary.show(state)
     }
 
     /**
@@ -757,224 +608,6 @@ class JourneyResultFragment : Fragment() {
 
     private fun journeyToShow(): ShownJourney? = viewModel.state.value.plan
         ?.let { ShownJourney(origin, destination, it) }
-
-    /**
-     * Draws the journey's shape, with how long each leg takes and how far it
-     * runs.
-     *
-     * The step list reads one line at a time, and is folded away besides; this
-     * is the whole journey seen at once, in the drawing the search screen uses
-     * for it.
-     */
-    private fun showShape(option: JourneyOption, minutes: JourneyMinutes) {
-        val views = binding ?: return
-        // Either walk may be missing, and the drawing then holds two strokes
-        // and three discs. No access walk on a journey begun at a bike outside
-        // the stations — the bike, the arrival station, the destination
-        // (SPEC §7.4); no final walk where the destination is the arrival
-        // station itself, where the last disc is an end of the journey and is
-        // drawn as one (SPEC §7.4.1).
-        views.detail.shape.departureMarker = JourneyMarkers.departureMarkerOf(option.departure)
-        views.detail.shape.legs = listOfNotNull(
-            option.walkToStation?.let { legOf(it, minutes.walkToStation, isRide = false) },
-            legOf(option.ride, minutes.ride, isRide = true),
-            option.walkToDestination?.let {
-                legOf(it, minutes.walkToDestination, isRide = false)
-            },
-        )
-    }
-
-    private fun legOf(leg: RouteLeg, minutes: Int, isRide: Boolean) = JourneyShapeView.Leg(
-        isRide = isRide,
-        duration = requireContext().formatMinutes(minutes),
-        distance = distanceOf(leg),
-    )
-
-    private fun distanceOf(leg: RouteLeg): String =
-        requireContext().formatDistance(leg.distanceMetres.toDouble())
-
-    /**
-     * Shows a journey with no station in it, or says what is missing.
-     *
-     * Two of them run from one end to the other in a single leg: the walk that
-     * SPEC §6 requires when no nearby station has a bike — or when walking is
-     * quicker than fetching one — and the ride of somebody on their own bike,
-     * which never had a station in it to begin with (SPEC §7.3). What is left
-     * is a journey that could not be composed at all, which says why.
-     */
-    private fun showJourneyWithoutStations(state: JourneyUiState) {
-        val views = binding ?: return
-        val plan = state.plan
-        val ownBike = plan as? JourneyPlan.OwnBike
-        val walkOnly = plan as? JourneyPlan.WalkOnly
-        val soleLeg = ownBike?.ride ?: walkOnly?.directWalk
-        val total = soleLeg?.let { requireContext().formatDuration(it.duration) }
-        showTotal(total ?: getString(R.string.journey_none_title), figure = total != null)
-        views.detail.summary.text = when {
-            ownBike != null -> requireContext().ownBikeSummary(ownBike.ride, ownBikeKind)
-            !state.hasStations -> getString(R.string.journey_no_stations)
-            walkOnly != null -> requireContext().walkSummary(
-                walkOnly.directWalk,
-                isQuickerThanTheBike = walkOnly.reason == NoBikeJourney.WalkingIsQuicker,
-            )
-            else -> reasonOf(plan)
-        }
-        // One stroke between two ends — dotted for the walk, unbroken for the
-        // ride: the journey there is, with no station on the way. A single leg
-        // is its own total, so there is nothing to apportion here.
-        views.detail.shape.departureMarker = null
-        views.detail.shape.legs = soleLeg
-            ?.let {
-                listOf(legOf(it, it.duration.inShownMinutes(), isRide = ownBike != null))
-            }
-            .orEmpty()
-    }
-
-    /**
-     * Why there is no journey, in words.
-     *
-     * The wording lives with the other user-facing failures (`ErrorMessages`),
-     * where SPEC §14 wants it: a plan with no reason at all — which does not
-     * happen — falls back on the plainest of them.
-     */
-    private fun reasonOf(plan: JourneyPlan?): String {
-        val reason = when (plan) {
-            is JourneyPlan.Impossible -> plan.reason
-            is JourneyPlan.WalkOnly -> plan.reason
-            else -> null
-        }
-        return reason?.toUserMessage(requireContext()) ?: getString(R.string.journey_no_route)
-    }
-
-    /** Draws the chosen option and frames the map on it. */
-    private fun drawJourney(state: JourneyUiState) {
-        if (!styleLoaded) return
-        val option = state.chosen
-        val walk = walkSource ?: return
-        val ride = rideSource ?: return
-
-        // The two ends are drawn even when no journey was composed: they say
-        // what was asked for, which is worth showing when the answer is empty.
-        markerSource?.setGeoJson(
-            JourneyMarkers.featuresFor(
-                origin.position,
-                destination.position,
-                option,
-                isRidden = state.plan is JourneyPlan.OwnBike,
-            ),
-        )
-
-        if (option == null) {
-            // A journey with no station runs in one leg, and which of the two
-            // sources carries it is the whole difference between them: dotted
-            // for the walk, unbroken for the ride on one's own bike.
-            val directWalk = (state.plan as? JourneyPlan.WalkOnly)?.directWalk
-            val ownRide = (state.plan as? JourneyPlan.OwnBike)?.ride
-            walk.setGeoJson(JourneyLines.featuresOf(directWalk))
-            ride.setGeoJson(JourneyLines.featuresOf(ownRide))
-            frameOn(
-                (directWalk ?: ownRide)?.geometry.orEmpty()
-                    .map { LatLng(it.latitude, it.longitude) },
-            )
-            return
-        }
-        walk.setGeoJson(JourneyLines.walkFeatures(option))
-        ride.setGeoJson(JourneyLines.rideFeatures(option))
-        frameOn(
-            (
-                option.walkToStation?.geometry.orEmpty() + option.ride.geometry +
-                    option.walkToDestination?.geometry.orEmpty()
-                )
-                .map { LatLng(it.latitude, it.longitude) },
-        )
-    }
-
-    /**
-     * Frames the map on the whole track, with a comfortable margin.
-     *
-     * A journey of fewer than two points has no extent to frame — an impossible
-     * one, most often. The framing is then dropped rather than kept from the
-     * previous answer, and the button offering to come back to it goes with it:
-     * there is nothing left to come back to.
-     */
-    private fun frameOn(points: List<LatLng>) {
-        frame = points.takeIf { it.size >= 2 }?.let { LatLngBounds.Builder().includes(it).build() }
-        binding?.frameJourney?.isVisible = frame != null
-        applyFrame()
-    }
-
-    /**
-     * Brings the camera onto the track, for the map as it stands right now.
-     *
-     * The detail underneath is as tall as the journey it describes, and it is
-     * absent while the journey is being worked out: the map fills the screen
-     * then, and shrinks by half when the answer arrives. A framing computed
-     * before that layout fits the track into a viewport that no longer exists —
-     * one or two zoom steps too close, which cuts a journey running north-south
-     * while leaving a wide one apparently right. Hence the framing is kept and
-     * laid again at the map's real size, whenever that size changes.
-     *
-     * @param animated true when a press asked for it, so the map travels back
-     * rather than jumping: the movement is what tells where one has been taken
-     * from. The screen's own re-framings stay abrupt — they follow a layout
-     * change nobody asked for, and animating them would draw the eye to it.
-     */
-    private fun applyFrame(animated: Boolean = false) {
-        val views = binding ?: return
-        val map = mapLibreMap ?: return
-        val bounds = frame ?: return
-        // The band of attribution lies over the map: the track is framed above
-        // it, not underneath.
-        val band = views.attribution.height
-        val width = views.map.width
-        val height = views.map.height - band
-        if (width <= 0 || height <= 0) return
-
-        // A margin wide enough for the markers, which are drawn centred on
-        // their point and would otherwise be cut in half at the edge. MapLibre
-        // counts it in screen pixels and divides by the density itself, so it
-        // is stated in dp: the same margin on every screen. And it never eats
-        // more than a quarter of the map — on a short one it gives way rather
-        // than leaving the framing nothing to work with.
-        val margin = (FRAME_PADDING_DP * resources.displayMetrics.density).toInt()
-            .coerceAtMost(minOf(width, height) / 4)
-
-        // The camera limit stands down for the length of the move, and is
-        // measured again on arrival: it was laid down for the framing being
-        // left, and this screen leaves a very different one — the map fills the
-        // screen while the answer is worked out, so the box in force pens the
-        // camera as a viewport twice this height requires, and the framing that
-        // arrives is clamped short of where it belongs. The zoom floor is
-        // brought up to date rather than lifted, so nothing here can uncover
-        // the edge of the served area (SPEC §7.1).
-        //
-        // That floor does not buy a journey right across the conurbation its
-        // margins, and nothing here can: the base map holds no tile below zoom
-        // 10, so on a phone the widest possible view spans some twenty
-        // kilometres and a thirty-kilometre track cannot be shown whole. That
-        // ceiling is in the data, not in the camera.
-        val limits = servedArea
-        limits?.releaseForMove()
-        val update = CameraUpdateFactory
-            .newLatLngBounds(bounds, margin, margin, margin, margin + band)
-        if (!animated) {
-            map.moveCamera(update)
-            limits?.holdAgain()
-            return
-        }
-        // The limits stay down for the whole flight, not just its start: laying
-        // them again mid-move jumps the camera inside the box and kills the
-        // animation where it stands. They are taken up on arrival, however the
-        // move ends — a gesture during it cancels the animation, and a camera
-        // left unpenned is what lets the edge of the served area show.
-        map.animateCamera(
-            update,
-            object : MapLibreMap.CancelableCallback {
-                override fun onCancel() = limits?.holdAgain() ?: Unit
-                override fun onFinish() = limits?.holdAgain() ?: Unit
-            },
-        )
-    }
 
     // ---------------------------------------------------- map lifecycle --
 
@@ -1023,12 +656,9 @@ class JourneyResultFragment : Fragment() {
     override fun onDestroyView() {
         attitude.stopFollowing()
         binding?.map?.onDestroy()
-        walkSource = null
-        rideSource = null
-        markerSource = null
+        track.detach()
         userPositionDisplay?.cancel()
         userPositionDisplay = null
-        servedArea = null
         mapLibreMap = null
         styleLoaded = false
         binding = null
@@ -1046,9 +676,6 @@ class JourneyResultFragment : Fragment() {
         private const val STATE_OWN_BIKE = "state-own-bike"
         private const val STATE_WANTED_BIKE_KIND = "state-wanted-bike-kind"
         private const val STATE_STREET_BIKE = "state-street-bike"
-
-        /** The margin around the track, in dp, so it does not touch the edges. */
-        private const val FRAME_PADDING_DP = 32
 
         /**
          * Opens the result for a pair of points already designated.
