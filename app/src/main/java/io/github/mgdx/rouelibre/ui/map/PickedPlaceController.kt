@@ -118,7 +118,8 @@ internal class PickedPlaceController(
     }
 
     /**
-     * Lays down again the point the screen was designating when it went away.
+     * Lays down again the point the screen was designating when its view went
+     * away, and shows its pill on the view just built.
      *
      * A reading of the bundle and nothing else, decided synchronously with the
      * rest of the screen's rebuilding: whether the point has a right to be
@@ -126,11 +127,20 @@ internal class PickedPlaceController(
      * known without waiting. The city the point was designated in comes back
      * with it, which is what lets that question be put to a screen rebuilt
      * from scratch.
+     *
+     * The pill is shown even when there is no bundle: coming back from the
+     * list or the search rebuilds the view without one, the point still held
+     * here, and the new pill starts hidden. Leaving it so put the marker back
+     * on the map with no way left to open its sheet or clear it.
      */
     fun restore(savedInstanceState: Bundle?) {
-        val saved = savedInstanceState ?: return
-        if (!saved.containsKey(STATE_PICKED_LATITUDE)) return
-        place = DesignatedPlace(
+        place = placeOnRebuiltView(held = place, saved = savedInstanceState?.let(::readPlace))
+        showLabel()
+    }
+
+    private fun readPlace(saved: Bundle): DesignatedPlace? {
+        if (!saved.containsKey(STATE_PICKED_LATITUDE)) return null
+        return DesignatedPlace(
             position = Coordinates(
                 saved.getDouble(STATE_PICKED_LATITUDE),
                 saved.getDouble(STATE_PICKED_LONGITUDE),
@@ -138,7 +148,6 @@ internal class PickedPlaceController(
             label = saved.getString(STATE_PICKED_LABEL).orEmpty(),
             city = saved.getString(STATE_PICKED_CITY),
         )
-        showLabel()
     }
 
     private fun lay(designated: DesignatedPlace?) {
@@ -181,3 +190,14 @@ internal class PickedPlaceController(
         const val STATE_PICKED_CITY = "picked-city"
     }
 }
+
+/**
+ * The point a freshly built map view shows.
+ *
+ * The one in the state bundle when there is one — a fragment rebuilt from
+ * scratch after a rotation or the process dying holds nothing yet — or else the
+ * one the fragment kept while only its view was gone, on the way back from
+ * another screen.
+ */
+internal fun placeOnRebuiltView(held: DesignatedPlace?, saved: DesignatedPlace?): DesignatedPlace? =
+    saved ?: held
