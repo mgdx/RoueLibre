@@ -186,7 +186,6 @@ class CityFragment : Fragment() {
                 false
             }
         }
-        views.emptyAction.setOnClickListener { views.searchInput.text?.clear() }
 
         listenForAnswers()
         showCatalogue()
@@ -330,7 +329,38 @@ class CityFragment : Fragment() {
         // Only once the catalogue has arrived: an empty list before that is a
         // screen still loading, and there would be nothing to clear.
         views.emptyState.isVisible = rows.isNotEmpty() && shown.isEmpty()
-        views.emptyMessage.text = getString(R.string.city_no_match_message, query)
+        if (views.emptyState.isVisible) showNoMatch(country)
+    }
+
+    /**
+     * Says why the list is empty, and offers what would fill it.
+     *
+     * When the country chosen is what leaves the cities out, the way out is
+     * every country, the search kept: it was right, and clearing it would
+     * leave the person to type it again once they had found the country menu
+     * themselves.
+     */
+    private fun showNoMatch(country: String?) {
+        val views = binding ?: return
+        val reason = noMatchReason(rows.map { it.entry }, query, country, letterFolds)
+        val countryName = offeredCountries.firstOrNull { it.code == country }?.name
+        if (reason == NoMatchReason.COUNTRY && countryName != null) {
+            views.emptyMessage.text =
+                getString(R.string.city_no_match_in_country, query, countryName)
+            views.emptyAction.setText(R.string.city_country_all)
+            views.emptyAction.setOnClickListener { showEveryCountry() }
+        } else {
+            views.emptyMessage.text = getString(R.string.city_no_match_message, query)
+            views.emptyAction.setText(R.string.action_clear_search)
+            views.emptyAction.setOnClickListener { views.searchInput.text?.clear() }
+        }
+    }
+
+    /** Widens the list to every country, the menu saying so as well. */
+    private fun showEveryCountry() {
+        chosenCountry = null
+        showCountries()
+        showRows()
     }
 
     /**
