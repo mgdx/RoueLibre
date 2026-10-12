@@ -9,6 +9,77 @@ also records what has no visible effect.
 
 ## [Unreleased]
 
+## [1.5.2]
+
+Every network now carries its country's flag, and the city list, which spans
+thirty-nine countries, can be narrowed to one. The welcome sequence ends on
+the map once the chosen city is in. The security audit of 7 October is
+answered on three points: redirections, the size of a download, and the name
+of an imported routing file. A point near Greenwich or the equator reaches the
+navigation app as a point. Underneath, `MapFragment` and
+`JourneyResultFragment` are taken apart into controllers whose decisions are
+pure and tested on the JVM, behaviour unchanged.
+
+### Added
+
+- **A country's flag before a network's name.** Spelt from the catalogue's
+  two-letter code with regional indicator symbols, so no image ships and a
+  country added to the catalogue has its flag without a release; a missing or
+  malformed code gives no flag. It prefixes the name where the name stands as
+  a label — the city list, Data sources, the settings row and the storage
+  screen's subtitle — and stays out of sentences that name the network. Screen
+  readers are given the label without it, so TalkBack does not say "flag:
+  France" before every network.
+- **The city list narrowed to one country** (`SPEC.md` §15.1). An exposed
+  dropdown under the search field, "All countries" then one entry per country,
+  named and ordered in the interface's language, offered only when the
+  catalogue spans two countries or more. It combines with the search, survives
+  a rotation and the death of the process, and a remembered country no longer
+  offered is forgotten. A search the chosen country empties says so
+  (`city_no_match_in_country`) instead of asking to check the spelling, and a
+  new filter or search shows the list from its head.
+
+### Changed
+
+- **The welcome sequence ends on the map once the city is in** (`SPEC.md`
+  §7.9). Coming from the welcome screen, the storage screen opens the map by
+  itself once every set the manifest announces is installed and nothing is
+  still moving; a download started later from the storage screen stays there,
+  and a set that fails keeps the screen, which says why. The origin travels in
+  the fragments' arguments, so it survives a rotation and the death of the
+  process.
+- **The window is laid edge to edge by AndroidX on every version.** Play
+  flagged `Window.setStatusBarColor` and `setNavigationBarColor`, deprecated
+  in Android 15; `enableEdgeToEdge()` makes the bars transparent below 15 too,
+  and the opening's view reaches under them as it already did on 15.
+- **`MapFragment` and `JourneyResultFragment` taken apart**, behaviour
+  unchanged. The designated point and its city are one `DesignatedPlace`
+  owned by `PickedPlaceController`; the camera is `MainMapCamera`; the compass
+  and tilt of both maps are one `MapAttitudeController`; "locate me" shares
+  `UserPositionOnMap`; the filters are `MapFilterControls`; named places,
+  street bikes and marker touches, and the bottom edge, have classes of their
+  own; the journey result splits into `JourneySummaryCard` and
+  `JourneyTrackOnMap`. The decisions among them are pure functions tested on
+  the JVM.
+
+### Fixed
+
+- **A point near Greenwich or the equator reaches the navigation app as a
+  point.** `Double.toString` wrote `1.0E-4` below 0.001 in absolute value, and
+  OsmAnd ran a text search for `geo:51.5007,1.0E-4`. The URI is now built in
+  `:core`, coordinates in fixed six-decimal notation under `Locale.ROOT`, the
+  label percent-encoded so a parenthesis no longer closes `q=lat,lon(label)`
+  early.
+- **A count of free docks says the docks are free.** The journey's detail read
+  "14 docks · 33 docks" in English, French and German; `docks_available`
+  carries the adjective its `mode_docks` label already had, as the
+  twenty-eight other languages already did.
+- **The picked place's pill comes back with the map view.** Back from the
+  station list or the search, the marker was redrawn and the pill stayed
+  hidden.
+- **"Locate me" stays above the confirm bar while picking a point**, where it
+  had dropped to the bottom of the screen once the search button left.
+
 ### Security
 
 - **A redirection is followed only where it contacts nobody new** (`SPEC.md`
@@ -21,6 +92,17 @@ also records what has no visible effect.
   else is announced as an untrusted server. `HttpsOnlyRedirectInterceptor`
   goes, the new interceptor securing each `Location` itself. A live check of
   every network, `-PliveNetworks`, is added beside the unit tests.
+- **A dataset download stops at the size its manifest announces** (security
+  audit V2). The copy ran for as long as the host kept sending, and only the
+  digest, computed at the end, could reject it: a compromised or redirected
+  host could fill the storage first. `Content-Length`, and `Content-Range` on a
+  206, are checked before the first byte; the copy refuses the first byte past
+  the size and deletes the partial file. The manifest reader refuses a file
+  announced with no positive size.
+- **An imported routing file's name is held to the manifest's rule** (security
+  audit R1). Any application can be the document provider that names it; the
+  name must now pass `isPlainFileName`, bounded to 255 UTF-8 bytes, and end in
+  `.rd5`, or the import is refused before anything is copied.
 
 ## [1.5.1]
 

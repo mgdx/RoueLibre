@@ -160,7 +160,7 @@ It needs `osmium-tool`, `tippecanoe` and Python 3. The whole procedure, the
 sizes obtained and the way to add a network are in
 [`docs/offline-data.md`](docs/offline-data.md).
 
-The release APK weighs **7.99 MB on arm64-v8a** and 7.45 MB on armeabi-v7a,
+The release APK weighs **8.00 MB on arm64-v8a** and 7.46 MB on armeabi-v7a,
 map, routing, address search and journeys included, against a ceiling of 12 MB
 per architecture.
 

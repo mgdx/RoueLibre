@@ -1,0 +1,7 @@
+Una bandera per a cada xarxa, i una llista de ciutats que pots limitar a un país.
+
+• Cada xarxa mostra ara la bandera del seu país davant del nom: a la llista de ciutats, a la configuració, a la pantalla Emmagatzematge i a Fonts de les dades.
+• La llista de ciutats es pot limitar a un país amb el nou menú «País», sol o juntament amb la cerca.
+• En el primer ús, quan la teva ciutat s’ha acabat de baixar, el mapa s’obre tot sol.
+• Corregit: un lloc proper al meridià de Greenwich o a l’equador s’enviava a l’aplicació de navegació com una cerca de text i no com un punt.
+• Seguretat: l’aplicació només segueix una redirecció que es queda al lloc contactat, i una baixada ja no pot superar la mida anunciada.

@@ -1,0 +1,8 @@
+Un drapeau pour chaque réseau, et une liste des villes que tu peux limiter à un pays.
+
+• Chaque réseau affiche désormais le drapeau de son pays devant son nom : dans la liste des villes, les paramètres, l’écran Stockage et Sources des données.
+• La liste des villes peut se limiter à un pays avec le nouveau menu « Pays », seul ou avec la recherche.
+• À la première utilisation, une fois ta ville téléchargée, la carte s’ouvre d’elle-même.
+• Corrigé : le détail du trajet affichait les places libres à la station d’arrivée sous la forme « 14 places · 33 points d’attache ». Il indique maintenant « 14 places libres · 33 points d’attache ».
+• Corrigé : un lieu proche du méridien de Greenwich ou de l’équateur était transmis à l’application de navigation comme une recherche de texte plutôt que comme un point.
+• Sécurité : l’application ne suit plus qu’une redirection qui reste sur le site contacté, et un téléchargement ne peut plus dépasser la taille annoncée pour lui.

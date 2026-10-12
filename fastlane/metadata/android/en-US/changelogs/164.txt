@@ -1,0 +1,8 @@
+A flag for every network, and a city list you can narrow to one country.
+
+• Each network now shows its country's flag before its name: in the city list, the settings, the Storage screen and Data sources.
+• The city list can be narrowed to one country with the new "Country" menu, alone or together with the search.
+• On first use, once your city has finished downloading, the map opens by itself.
+• Fixed: the journey detail showed the free docks at the arrival station as "14 docks · 33 docks". It now reads "14 free docks · 33 docks".
+• Fixed: a place close to the Greenwich meridian or the equator was handed to the navigation app as a text search rather than as a point.
+• Security: the application only follows a redirection that stays with the site it contacted, and a download can no longer grow beyond the size announced for it.
