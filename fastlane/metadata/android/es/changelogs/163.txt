@@ -1,0 +1,7 @@
+Una bandera para cada red, y una lista de ciudades que puedes limitar a un país.
+
+• Cada red muestra ahora la bandera de su país delante de su nombre: en la lista de ciudades, en los ajustes, en la pantalla Almacenamiento y en Fuentes de los datos.
+• La lista de ciudades se puede limitar a un país con el nuevo menú «País», solo o junto con la búsqueda.
+• En el primer uso, en cuanto termina de descargarse tu ciudad, el mapa se abre solo.
+• Corregido: un lugar cercano al meridiano de Greenwich o al ecuador se enviaba a la aplicación de navegación como una búsqueda de texto y no como un punto.
+• Seguridad: la aplicación solo sigue una redirección que se queda en el sitio contactado, y una descarga ya no puede superar el tamaño anunciado para ella.

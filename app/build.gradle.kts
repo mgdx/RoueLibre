@@ -95,6 +95,7 @@ val publishedVersionNames = mapOf(
     13 to "1.4.1",
     14 to "1.5.0",
     15 to "1.5.1",
+    16 to "1.5.2",
 )
 
 /**
@@ -134,14 +135,14 @@ android {
         // leaves it unable to tell one release from the next. The
         // architectures derive their own codes from it below, so the value is
         // still written once.
-        versionCode = 15
-        // Twenty-nine networks join the catalogue and nine dead ones leave it;
-        // a city chosen and since withdrawn says so instead of greeting its
-        // user as a first installation. A download carries on when the
-        // storage screen is left, and one cut offline is offered again when
-        // the connection returns. Limoges's virtual stations and Metz's
-        // GraouLib' show their bikes again. See CHANGELOG.md.
-        versionName = "1.5.1"
+        versionCode = 16
+        // A flag before every network's name and a city list narrowed to one
+        // country; the welcome sequence ends on the map once the city is in.
+        // Redirections are followed only where they contact nobody new, and a
+        // download stops at the size its manifest announces. A point near
+        // Greenwich or the equator reaches the navigation app as a point. See
+        // CHANGELOG.md.
+        versionName = "1.5.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
