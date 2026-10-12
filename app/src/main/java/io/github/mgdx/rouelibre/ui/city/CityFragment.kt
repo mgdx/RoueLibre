@@ -78,6 +78,23 @@ class CityFragment : Fragment() {
     /** The countries the filter offers, as last shown on the screen. */
     private var offeredCountries: List<CountryChoice> = emptyList()
 
+    /** The filter the rows on show were drawn with, `null` before the first. */
+    private var shownFilter: CityListFilter? = null
+
+    /**
+     * Whether the list still owes a return to its head after a new filter.
+     *
+     * Kept apart from the rows submitted: a row's progress submitted before the
+     * new filter's rows have landed replaces them, and their callback with them.
+     */
+    private var returnToTopPending = false
+
+    /** Counts the submissions to the three lists, so that only the last one's landing counts. */
+    private var submission = 0
+
+    /** How many of the three lists have yet to show the last submission. */
+    private var listsAwaited = 0
+
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
 
@@ -169,7 +186,6 @@ class CityFragment : Fragment() {
                 false
             }
         }
-        views.emptyAction.setOnClickListener { views.searchInput.text?.clear() }
 
         listenForAnswers()
         showCatalogue()
@@ -208,6 +224,8 @@ class CityFragment : Fragment() {
         // The filter's views go with the screen's: a return from the back
         // stack must build them again rather than take them as already shown.
         offeredCountries = emptyList()
+        shownFilter = null
+        returnToTopPending = false
         super.onDestroyView()
     }
 
@@ -287,17 +305,62 @@ class CityFragment : Fragment() {
         val inCountry = filterByCountry(rows.map { it.entry }, country)
         val shown = filterCities(inCountry, query, letterFolds)
             .mapNotNull { byIdentifier[it.id] }
-        adapter.submitList(shown)
+        val filter = CityListFilter(query, chosenCountry)
+        if (shouldReturnToTop(shownFilter, filter)) returnToTopPending = true
+        shownFilter = filter
+        // Once all three lists have landed: their differences are worked out
+        // apart and in no set order, and the withdrawn network heading the list
+        // may be the last to arrive.
+        val generation = ++submission
+        listsAwaited = LIST_COUNT
+        val returnToTop = Runnable {
+            if (generation == submission && --listsAwaited == 0 && returnToTopPending) {
+                returnToTopPending = false
+                binding?.cities?.scrollToPosition(0)
+            }
+        }
+        adapter.submitList(shown, returnToTop)
         // A search looks for a city to choose, and these cannot be chosen; nor
         // can they be placed in a country, the catalogue no longer naming them.
         val withdrawn = withdrawnRows.takeIf { query.isBlank() && country == null }.orEmpty()
-        chosenWithdrawnAdapter.submitList(withdrawn.filter { it.isActive })
-        otherWithdrawnAdapter.submitList(withdrawn.filterNot { it.isActive })
+        chosenWithdrawnAdapter.submitList(withdrawn.filter { it.isActive }, returnToTop)
+        otherWithdrawnAdapter.submitList(withdrawn.filterNot { it.isActive }, returnToTop)
 
         // Only once the catalogue has arrived: an empty list before that is a
         // screen still loading, and there would be nothing to clear.
         views.emptyState.isVisible = rows.isNotEmpty() && shown.isEmpty()
-        views.emptyMessage.text = getString(R.string.city_no_match_message, query)
+        if (views.emptyState.isVisible) showNoMatch(country)
+    }
+
+    /**
+     * Says why the list is empty, and offers what would fill it.
+     *
+     * When the country chosen is what leaves the cities out, the way out is
+     * every country, the search kept: it was right, and clearing it would
+     * leave the person to type it again once they had found the country menu
+     * themselves.
+     */
+    private fun showNoMatch(country: String?) {
+        val views = binding ?: return
+        val reason = noMatchReason(rows.map { it.entry }, query, country, letterFolds)
+        val countryName = offeredCountries.firstOrNull { it.code == country }?.name
+        if (reason == NoMatchReason.COUNTRY && countryName != null) {
+            views.emptyMessage.text =
+                getString(R.string.city_no_match_in_country, query, countryName)
+            views.emptyAction.setText(R.string.city_country_all)
+            views.emptyAction.setOnClickListener { showEveryCountry() }
+        } else {
+            views.emptyMessage.text = getString(R.string.city_no_match_message, query)
+            views.emptyAction.setText(R.string.action_clear_search)
+            views.emptyAction.setOnClickListener { views.searchInput.text?.clear() }
+        }
+    }
+
+    /** Widens the list to every country, the menu saying so as well. */
+    private fun showEveryCountry() {
+        chosenCountry = null
+        showCountries()
+        showRows()
     }
 
     /**
@@ -498,6 +561,9 @@ class CityFragment : Fragment() {
 
         /** The country chosen, across a rotation and the death of the process. */
         private const val STATE_COUNTRY = "country"
+
+        /** The lists the screen joins end to end: two of withdrawn networks around the cities. */
+        private const val LIST_COUNT = 3
 
         /**
          * The city choice as the welcome sequence opens it (SPEC §7.9).

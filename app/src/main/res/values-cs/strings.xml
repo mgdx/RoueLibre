@@ -715,6 +715,7 @@
     <string name="city_country_all">Všechny země</string>
     <string name="city_no_match_title">Žádné město nenalezeno</string>
     <string name="city_no_match_message">Dotazu „%1$s“ nic neodpovídá. Zkontrolujte pravopis, nebo hledání smažte.</string>
+    <string name="city_no_match_in_country">Dotazu „%1$s“ neodpovídá žádné město ve zvolené zemi, %2$s. Jiné země takové mají.</string>
     <string name="city_proposal_title">Vaše město</string>
     <!-- Shown when the position says one is in another served conurbation than
          the one installed. %1$s is a network and its city, whose gender is
