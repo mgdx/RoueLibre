@@ -210,8 +210,26 @@
         app:backgroundTint="@color/surface"
         app:icon="@drawable/ic_my_location"
         app:iconTint="@color/ink"
-        app:layout_constraintBottom_toTopOf="@id/open_search"
+        app:layout_constraintBottom_toTopOf="@id/locate_me_floor"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <!--
+        What "locate me" stands on: the search button while browsing, the
+        confirm bar while picking (SPEC §7.3) — the only two roles it serves,
+        and never both at once. Gone widgets are left out of the barrier, so
+        it is the top of whichever of the two is up. Hung on the search button
+        alone, the button followed the collapsed column down to the
+        attribution while picking and sat under the confirm bar, a press on it
+        confirming the point. While browsing the bar is gone and the barrier is
+        the search button's top, the very edge it hung from before.
+    -->
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/locate_me_floor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierAllowsGoneWidgets="false"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="open_search,pick_confirm" />
 
     <!-- Address search (SPEC §4.3), within thumb reach like the other main
          controls. -->
