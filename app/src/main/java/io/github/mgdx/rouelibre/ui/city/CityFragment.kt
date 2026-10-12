@@ -78,6 +78,23 @@ class CityFragment : Fragment() {
     /** The countries the filter offers, as last shown on the screen. */
     private var offeredCountries: List<CountryChoice> = emptyList()
 
+    /** The filter the rows on show were drawn with, `null` before the first. */
+    private var shownFilter: CityListFilter? = null
+
+    /**
+     * Whether the list still owes a return to its head after a new filter.
+     *
+     * Kept apart from the rows submitted: a row's progress submitted before the
+     * new filter's rows have landed replaces them, and their callback with them.
+     */
+    private var returnToTopPending = false
+
+    /** Counts the submissions to the three lists, so that only the last one's landing counts. */
+    private var submission = 0
+
+    /** How many of the three lists have yet to show the last submission. */
+    private var listsAwaited = 0
+
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
 
@@ -208,6 +225,8 @@ class CityFragment : Fragment() {
         // The filter's views go with the screen's: a return from the back
         // stack must build them again rather than take them as already shown.
         offeredCountries = emptyList()
+        shownFilter = null
+        returnToTopPending = false
         super.onDestroyView()
     }
 
@@ -287,12 +306,26 @@ class CityFragment : Fragment() {
         val inCountry = filterByCountry(rows.map { it.entry }, country)
         val shown = filterCities(inCountry, query, letterFolds)
             .mapNotNull { byIdentifier[it.id] }
-        adapter.submitList(shown)
+        val filter = CityListFilter(query, chosenCountry)
+        if (shouldReturnToTop(shownFilter, filter)) returnToTopPending = true
+        shownFilter = filter
+        // Once all three lists have landed: their differences are worked out
+        // apart and in no set order, and the withdrawn network heading the list
+        // may be the last to arrive.
+        val generation = ++submission
+        listsAwaited = LIST_COUNT
+        val returnToTop = Runnable {
+            if (generation == submission && --listsAwaited == 0 && returnToTopPending) {
+                returnToTopPending = false
+                binding?.cities?.scrollToPosition(0)
+            }
+        }
+        adapter.submitList(shown, returnToTop)
         // A search looks for a city to choose, and these cannot be chosen; nor
         // can they be placed in a country, the catalogue no longer naming them.
         val withdrawn = withdrawnRows.takeIf { query.isBlank() && country == null }.orEmpty()
-        chosenWithdrawnAdapter.submitList(withdrawn.filter { it.isActive })
-        otherWithdrawnAdapter.submitList(withdrawn.filterNot { it.isActive })
+        chosenWithdrawnAdapter.submitList(withdrawn.filter { it.isActive }, returnToTop)
+        otherWithdrawnAdapter.submitList(withdrawn.filterNot { it.isActive }, returnToTop)
 
         // Only once the catalogue has arrived: an empty list before that is a
         // screen still loading, and there would be nothing to clear.
@@ -498,6 +531,9 @@ class CityFragment : Fragment() {
 
         /** The country chosen, across a rotation and the death of the process. */
         private const val STATE_COUNTRY = "country"
+
+        /** The lists the screen joins end to end: two of withdrawn networks around the cities. */
+        private const val LIST_COUNT = 3
 
         /**
          * The city choice as the welcome sequence opens it (SPEC §7.9).
