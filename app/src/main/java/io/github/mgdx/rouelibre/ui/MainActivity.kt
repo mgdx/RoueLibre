@@ -3,10 +3,11 @@ package io.github.mgdx.rouelibre.ui
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.WindowManager
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.doOnPreDraw
@@ -196,13 +197,7 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.Theme_RoueLibre)
         super.onCreate(savedInstanceState)
         handOverSplashWithoutFading()
-        // The content runs under the system bars, which are left transparent
-        // so that the screen reads as one piece. AndroidX does this the same
-        // way on every version: below Android 15 the window would otherwise
-        // paint opaque bands of its own over the content — the theme's
-        // `paper`, across the opening's green (SPEC §7.0) — and the only way
-        // round them by hand is the bar-colour API Android 15 deprecates.
-        enableEdgeToEdge()
+        layOutEdgeToEdge()
 
         val created = ActivityMainBinding.inflate(layoutInflater)
         binding = created
@@ -411,6 +406,32 @@ class MainActivity : AppCompatActivity() {
         lightIconsBeforeIntro = controller.isAppearanceLightStatusBars
         controller.isAppearanceLightStatusBars = false
         controller.isAppearanceLightNavigationBars = false
+    }
+
+    /**
+     * Lets the content run under the system bars, so the screen reads as one
+     * piece.
+     *
+     * Not AndroidX's `enableEdgeToEdge()`, although it does the same: below
+     * Android 15 it paints the bars through `Window.setStatusBarColor` and
+     * `setNavigationBarColor` and asks for the `SHORT_EDGES` cutout mode, all
+     * three deprecated by Android 15, and Play flags them in our APK whatever
+     * version guards them. The bars' transparency is declared by the theme
+     * instead, which no Android version deprecates; what is left for code is
+     * the layout flag and the cutout mode. Android 15 and later lay out edge
+     * to edge on their own and ignore both.
+     */
+    private fun layOutEdgeToEdge() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Landscape too: without it the window stops short of the cutout
+            // and leaves a black band along that side.
+            window.attributes =
+                window.attributes.apply {
+                    layoutInDisplayCutoutMode =
+                        WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
+                }
+        }
     }
 
     /**

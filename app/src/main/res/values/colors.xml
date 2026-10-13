@@ -132,4 +132,10 @@
          reason as the water labels. -->
     <color name="map_greenery_label">#3D5B3B</color>
 
+    <!-- Behind the navigation bar, Android 8.0 only. It is the one version
+         where content runs under that bar but its buttons cannot be turned
+         dark, so over a light screen they would vanish: AndroidX's own
+         edge-to-edge puts this same dim veil there. From 8.1 on the bar is
+         transparent (values-v27). -->
+    <color name="navigation_bar_scrim">#801B1B1B</color>
 </resources>
