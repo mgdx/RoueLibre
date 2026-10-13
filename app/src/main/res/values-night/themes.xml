@@ -49,8 +49,11 @@
         <item name="colorOnSurfaceInverse">@color/ink_inverse</item>
         <item name="colorPrimaryInverse">@color/signal_inverse</item>
 
-        <item name="android:statusBarColor">@color/paper</item>
-        <item name="android:navigationBarColor">@color/paper</item>
+        <!-- Transparent: the content runs under the bars (see
+             MainActivity.layOutEdgeToEdge), and the view drawn there gives
+             them their colour. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/navigation_bar_scrim</item>
         <!-- Status bar icons in light on a dark background. -->
         <item name="android:windowLightStatusBar">false</item>
 

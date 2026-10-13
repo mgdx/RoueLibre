@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From Android 8.1 the navigation buttons follow the screen's
+         lightness, so the bar needs no veil to stay readable. -->
+    <color name="navigation_bar_scrim">@android:color/transparent</color>
+</resources>
