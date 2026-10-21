@@ -23,18 +23,38 @@ also records what has no visible effect.
 
 ### Fixed
 
-- **Journeys end again in Munich and the networks built like it** (issue #8,
-  `SPEC.md` §4.1, §6, §7.1). A station publishing no `num_docks_available` —
-  which GBFS reserves for unlimited docking — was read as nought free docks,
-  and so was the nought nextbike derives for a virtual station without a
-  capacity: MyRadl's 800 zones were all full, and every journey answered "no
-  free dock nearby". `StationAvailability.hasUnlimitedDocks` now reads both
-  cases as a station taking back any bike: an arrival candidate, with no
-  dock risk penalty, shown as ∞ on the discs and as "Free docks: unlimited" in
-  words. The cached count becomes nullable (Room migration 3 → 4, the table
-  rebuilt and its rows kept). `tools/discover_networks.py` now applies its
-  frozen-free-dock check behind a declared capacity too, without counting
-  those stations as frozen.
+- **Journeys end again in Munich, Düsseldorf and the networks built like
+  them** (issue #8, `SPEC.md` §4.1, §6, §7.1). A station publishing no
+  `num_docks_available` — which GBFS reserves for unlimited docking — was read
+  as nought free docks, and so was the nought nextbike derives wherever it has
+  no capacity to subtract the bikes from: MyRadl's 800 zones and Düsseldorf's
+  345 racks were all full, and every journey answered "no free dock nearby".
+  `StationAvailability.hasUnlimitedDocks` now reads both cases as a station
+  taking back any bike — an arrival candidate, with no dock risk penalty,
+  shown as ∞ on the discs and as "Free docks: unlimited" in words. A nought
+  without a capacity is still believed where the feed measures it, at a
+  virtual station never: in a feed where at most half the racks without a
+  capacity say nought (Philadelphia's Indego, 4 in 321; Milwaukee, 7 in 172),
+  those noughts are full racks. A station refusing returns is shown as it
+  always was. The cached count becomes nullable (Room migration 3 → 4, the
+  table rebuilt and its rows kept). `tools/discover_networks.py` mirrors the
+  rule (`takes_any_bike_back`, same tests on both sides, negative counts and
+  capacities and string flags read alike), now applies its frozen-free-dock
+  check behind a declared capacity too, and counts as frozen only a figure
+  the station's own capacity cannot explain — an empty fleet reading its
+  capacity, or a full one nought at night, is a measurement.
+- **Zürich keeps its bike-share operators alone** (issue #8, `SPEC.md` §15).
+  sharedmobility.ch publishes every operator of Switzerland in one feed, and
+  Zürich's map counted car-sharing spots, minibus stops and scooter zones as
+  stations — 1,743 car-sharing spots were already arrival candidates, and
+  7,731 stations once an absent free-dock count took any bike. The city
+  configuration gains an optional `gbfs.providerIds`, the GBFS `provider_id`
+  of each operator kept, applied to the stations, their states and the street
+  bikes before anything is stored (3,043 stations of 12,702 kept, 2,867
+  arrival candidates). The station cache records each station's operator
+  (Room migration 4 → 5) so that a cache written under another list is read
+  again at the next refresh. `compute_bbox.py`, `sample_stations.py`,
+  `read_fleet.py` and `add_city.py --overwrite` read the same list.
 - **Turning the phone no longer resets the map's two filters.** The
   "bikes" / "docks" mode and the kind of bike were fields of
   `MapFilterControls` and went with the fragment; they now travel in its saved
