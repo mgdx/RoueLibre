@@ -23,6 +23,18 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **Journeys end again in Munich and the networks built like it** (issue #8,
+  `SPEC.md` §4.1, §6, §7.1). A station publishing no `num_docks_available` —
+  which GBFS reserves for unlimited docking — was read as nought free docks,
+  and so was the nought nextbike derives for a virtual station without a
+  capacity: MyRadl's 800 zones were all full, and every journey answered "no
+  free dock nearby". `StationAvailability.hasUnlimitedDocks` now reads both
+  cases as a station taking back any bike: an arrival candidate, with no
+  dock risk penalty, shown as ∞ on the discs and as "Free docks: unlimited" in
+  words. The cached count becomes nullable (Room migration 3 → 4, the table
+  rebuilt and its rows kept). `tools/discover_networks.py` now applies its
+  frozen-free-dock check behind a declared capacity too, without counting
+  those stations as frozen.
 - **Turning the phone no longer resets the map's two filters.** The
   "bikes" / "docks" mode and the kind of bike were fields of
   `MapFilterControls` and went with the fragment; they now travel in its saved
