@@ -14,6 +14,7 @@ import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.StreetBike
 import io.github.mgdx.rouelibre.core.station.VehicleKind
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
+import io.github.mgdx.rouelibre.core.station.joinStationsWithAvailability
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -251,7 +252,7 @@ class JourneyPlannerTest {
         val plan = planner.plan(origin, destination, stations) as JourneyPlan.Found
 
         assertEquals("with-docks", plan.best.arrivalStation.id)
-        assertTrue(plan.best.docksAtArrival >= 1)
+        assertEquals(7, plan.best.docksAtArrival)
     }
 
     @Test
@@ -300,6 +301,126 @@ class JourneyPlannerTest {
             NoBikeJourney.NoDockNearby,
             (plan as JourneyPlan.WalkOnly).reason,
         )
+    }
+
+    // ------------------------------------------------ unlimited free docks --
+
+    /**
+     * A station whose free docks may limit nothing, joined to its state the way
+     * the repository joins them, so that what reaches the planner is what the
+     * application really hands it (SPEC §4.1).
+     *
+     * @param docks the free docks the feed published, `null` for none at all.
+     * @param capacity the capacity the station publishes, `null` for none —
+     *   which is what nextbike's virtual stations publish.
+     */
+    private fun zone(
+        id: String,
+        position: Coordinates,
+        docks: Int?,
+        capacity: Int? = null,
+        virtual: Boolean = true,
+        returning: Boolean = true,
+    ) = joinStationsWithAvailability(
+        listOf(Station(id, "Zone $id", position, capacity, "80000", isVirtual = virtual)),
+        listOf(
+            StationAvailability(
+                stationId = id,
+                bikesAvailable = 3,
+                docksAvailable = docks,
+                isInstalled = true,
+                isRenting = true,
+                isReturning = returning,
+                reportedAt = null,
+            ),
+        ),
+    ).single()
+
+    @Test
+    fun `a station publishing no free-dock count is an arrival candidate`() = runTest {
+        // GBFS leaves the count out for a station with unlimited docking: the
+        // only station near the destination is such a one, and the journey ends
+        // there rather than in "no free dock nearby".
+        val stations = listOf(
+            station("depart", at(0.0, 100.0), docks = 0),
+            zone("sans-compte", at(0.0, 3900.0), docks = null, virtual = false),
+        )
+
+        val plan = JourneyPlanner(FakeRouter()).plan(origin, destination, stations)
+
+        assertTrue("expected a journey, got $plan", plan is JourneyPlan.Found)
+        val best = (plan as JourneyPlan.Found).best
+        assertEquals("sans-compte", best.arrivalStation.id)
+        // Nothing was counted, and nothing is carried as if it had been.
+        assertEquals(null, best.docksAtArrival)
+    }
+
+    @Test
+    fun `a virtual station without capacity at nought free docks takes the bike`() = runTest {
+        // MyRadl, Munich, 21 October 2026: 800 virtual stations, no capacity,
+        // and nought free docks at every one of them — nextbike's capacity less
+        // the bikes, with no capacity to subtract from. Every journey in the
+        // city ended in "no free dock nearby".
+        val stations = listOf(
+            station("depart", at(0.0, 100.0), docks = 0),
+            zone("myradl", at(0.0, 3900.0), docks = 0),
+        )
+
+        val plan = JourneyPlanner(FakeRouter()).plan(origin, destination, stations)
+
+        assertTrue("expected a journey, got $plan", plan is JourneyPlan.Found)
+        assertEquals("myradl", (plan as JourneyPlan.Found).best.arrivalStation.id)
+    }
+
+    @Test
+    fun `an unlimited station carries no risk of filling up`() = runTest {
+        // From a bike in the street the departure end weighs nothing, so the
+        // whole penalty is the arrival's: nought at a station that cannot fill,
+        // and above nought at a rack holding one free dock.
+        suspend fun penaltyAt(arrival: StationWithAvailability): Duration {
+            val plan = JourneyPlanner(FakeRouter()).planFromStreetBike(
+                bike = streetBike(origin),
+                kind = VehicleKind.Mechanical,
+                destination = destination,
+                stations = listOf(arrival),
+            )
+            return (plan as JourneyPlan.Found).best.riskPenalty
+        }
+
+        assertEquals(Duration.ZERO, penaltyAt(zone("zone", at(0.0, 3900.0), docks = 0)))
+        assertTrue(penaltyAt(station("un-seul-dock", at(0.0, 3900.0), docks = 1)) > Duration.ZERO)
+    }
+
+    @Test
+    fun `a zone slightly further beats a rack with one free dock`() = runTest {
+        // The same arbitration as against a rack holding a dozen: one free dock
+        // can be gone by the time one rides up, a zone cannot be full.
+        val stations = listOf(
+            station("depart", at(0.0, 100.0), docks = 0),
+            station("un-seul-dock", at(0.0, 3900.0), docks = 1),
+            zone("zone", at(0.0, 3780.0), docks = 0),
+        )
+
+        val plan = JourneyPlanner(FakeRouter()).plan(origin, destination, stations)
+
+        assertEquals("zone", (plan as JourneyPlan.Found).best.arrivalStation.id)
+    }
+
+    @Test
+    fun `a full station stays refused whatever else it is`() = runTest {
+        // The nought is believed wherever the producer could have measured it:
+        // at a virtual station that declares a capacity, at a physical rack, and
+        // at a station that has stopped taking bikes back.
+        val stations = listOf(
+            station("depart", at(0.0, 100.0), docks = 0),
+            zone("virtuelle-avec-capacite", at(0.0, 3900.0), docks = 0, capacity = 12),
+            zone("borne-pleine", at(0.0, 3850.0), docks = 0, virtual = false),
+            zone("ne-reprend-plus", at(0.0, 3800.0), docks = 0, returning = false),
+        )
+
+        val plan = JourneyPlanner(FakeRouter()).plan(origin, destination, stations)
+
+        assertEquals(NoBikeJourney.NoDockNearby, (plan as JourneyPlan.WalkOnly).reason)
     }
 
     // ------------------------------------------ reach of the access walk --

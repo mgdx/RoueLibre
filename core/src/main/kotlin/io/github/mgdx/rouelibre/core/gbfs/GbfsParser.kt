@@ -204,7 +204,7 @@ public class GbfsParser {
                 // A negative count makes no sense; it is brought back to zero
                 // rather than displaying "-1 bike".
                 bikesAvailable = entry.bikesAvailable.coerceAtLeast(0),
-                docksAvailable = entry.docksAvailable.coerceAtLeast(0),
+                docksAvailable = entry.docksAvailable?.coerceAtLeast(0),
                 bikesByVehicleType = bikesByVehicleType(entry),
                 isInstalled = entry.isInstalled,
                 isRenting = entry.isRenting,

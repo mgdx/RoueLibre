@@ -42,7 +42,9 @@ public data class StationFilter(
      * [hideEmpty], because hiding it would assert on the strength of a silence
      * something the application has not read. The same silence is not
      * [AvailabilityDisplay.isOutOfService] either, so it survives
-     * [hideOutOfService] as well.
+     * [hideOutOfService] as well. A station whose free docks are unlimited
+     * ([AvailabilityDisplay.isUnlimited]) has no count either, and is the
+     * opposite of empty: it survives too.
      */
     public fun keeps(display: AvailabilityDisplay): Boolean = when {
         hideOutOfService && display.isOutOfService -> false

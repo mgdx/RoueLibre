@@ -15,6 +15,8 @@ import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.displayFor
 import io.github.mgdx.rouelibre.core.station.isBeyondCoveredArea
 import io.github.mgdx.rouelibre.databinding.ItemStationBinding
+import io.github.mgdx.rouelibre.ui.UNLIMITED_FIGURE
+import io.github.mgdx.rouelibre.ui.UNLIMITED_PLURAL_QUANTITY
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.inServedDigits
 
@@ -146,15 +148,22 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
             binding.detail.isGone = binding.detail.text.isNullOrBlank()
 
             // The counterpart count: docks when the indicator shows bikes, and
-            // the other way round.
+            // the other way round. Free docks that limit nothing are written
+            // with the sign the discs use, never as the nought a feed may
+            // carry for them (SPEC §4.1).
+            val docksUnlimited = mode == AvailabilityMode.Bikes &&
+                entry.availability?.hasUnlimitedDocks == true
             val counterpart = entry.availability?.let {
                 when (mode) {
                     AvailabilityMode.Bikes -> it.docksAvailable
                     AvailabilityMode.Docks -> it.bikesAvailable
                 }
             }
-            binding.counterpart.text = counterpart?.let { context.inServedDigits(it) }
-                ?: context.getString(R.string.counterpart_none)
+            binding.counterpart.text = when {
+                docksUnlimited -> UNLIMITED_FIGURE
+                counterpart != null -> context.inServedDigits(counterpart)
+                else -> context.getString(R.string.counterpart_none)
+            }
             // The label agrees with the figure beside it, and carries no number
             // of its own: the count is passed as a quantity, not as an
             // argument. An unknown count reads as the plural, the form the pair
@@ -164,7 +173,7 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
                     AvailabilityMode.Bikes -> R.plurals.counterpart_docks
                     AvailabilityMode.Docks -> R.plurals.counterpart_bikes
                 },
-                counterpart ?: 0,
+                if (docksUnlimited) UNLIMITED_PLURAL_QUANTITY else counterpart ?: 0,
             )
 
             // A screen reader must hear the same thing an eye sees: the name,

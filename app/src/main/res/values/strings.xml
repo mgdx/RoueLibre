@@ -35,6 +35,15 @@
         <item quantity="other">%1$d free docks</item>
     </plurals>
 
+    <!-- Stands for the count of free docks at a station that takes back any
+         bike: GBFS publishes no count for a station with unlimited docking,
+         and nextbike's parking zones publish a nought that was never
+         measured. Read on the journey's detail, where the count would be, and
+         by a screen reader after the bikes: "Marienplatz, 4 bikes, Free
+         docks: unlimited". The discs show the sign ∞ instead, which needs no
+         translation. -->
+    <string name="docks_available_unlimited">Free docks: unlimited</string>
+
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
     <string name="station_out_of_service">Out of service</string>
     <!-- A closure that has lasted says so, since a station shut this morning

@@ -294,7 +294,16 @@ internal data class GbfsStationStatus(
      */
     @SerialName("num_bikes_available_types")
     val legacyBikesByKind: JsonElement? = null,
-    @SerialName("num_docks_available") val docksAvailable: Int = 0,
+    /**
+     * The free docks, and `null` when the producer publishes no count.
+     *
+     * **Absent is not nought.** GBFS makes the field required "except for
+     * stations that have unlimited docking capacity" — valet stations in 2.3,
+     * virtual stations in 3.0 — so its silence is the standard's own way of
+     * saying that nothing limits returns. Defaulted to zero, it was read as a
+     * station that is always full (SPEC §4.1).
+     */
+    @SerialName("num_docks_available") val docksAvailable: Int? = null,
     @SerialName("is_installed")
     @Serializable(with = LenientBooleanSerializer::class)
     val isInstalled: Boolean = true,

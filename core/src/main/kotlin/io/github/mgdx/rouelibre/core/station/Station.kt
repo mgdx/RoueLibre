@@ -39,7 +39,11 @@ public data class Station(
  *   nothing. The identifiers are the producer's own and mean nothing here: it
  *   takes the network's table to turn them into mechanical and electric, which
  *   is what [splitByKind] does.
- * @property docksAvailable free docks to return a bike to.
+ * @property docksAvailable free docks to return a bike to, exactly as the feed
+ *   counted them, and `null` where it published no count — which GBFS reserves
+ *   for a station with unlimited docking. Never read alone to decide whether a
+ *   bike can be returned: [hasUnlimitedDocks] says when the figure limits
+ *   nothing.
  * @property isInstalled the station is deployed on the ground, exactly as the
  *   feed says it. Never read alone to decide a closure: [isDeployed] is.
  * @property isRenting the station accepts rentals.
@@ -50,17 +54,21 @@ public data class Station(
  *   ([Station.isVirtual]). Not a field of `station_status`: it is carried over
  *   from the station by [joinStationsWithAvailability], so that the state
  *   stored stays the one the feed sent.
+ * @property isAtStationWithCapacity the station described publishes a
+ *   capacity ([Station.capacity]). Carried over by the join for the same
+ *   reason, and read by [hasUnlimitedDocks] alone.
  */
 public data class StationAvailability(
     public val stationId: String,
     public val bikesAvailable: Int,
-    public val docksAvailable: Int,
+    public val docksAvailable: Int?,
     public val bikesByVehicleType: Map<String, Int> = emptyMap(),
     public val isInstalled: Boolean,
     public val isRenting: Boolean,
     public val isReturning: Boolean,
     public val reportedAt: Instant?,
     public val isAtVirtualStation: Boolean = false,
+    public val isAtStationWithCapacity: Boolean = false,
 ) {
     /**
      * True if the station is there to be used, as far as its installation
@@ -81,9 +89,37 @@ public data class StationAvailability(
     public val canLendBike: Boolean
         get() = isDeployed && isRenting && bikesAvailable > 0
 
+    /**
+     * True if no count of free docks limits what the station takes back.
+     *
+     * Two cases, and both come from what the standard says rather than from
+     * a network's name (SPEC §4.1, §15):
+     *
+     *  · **no count at all.** GBFS requires `num_docks_available` "except for
+     *    stations that have unlimited docking capacity", so a station
+     *    publishing none is one of those;
+     *  · **a nought derived from nothing**: a virtual station, publishing no
+     *    capacity, said to have no free dock. nextbike writes the free docks as
+     *    the capacity less the bikes, floored at nought, and writes nought where
+     *    there is no capacity to subtract from — 804 of the 805 stations of
+     *    MyRadl in Munich on 21 October 2026, 800 of them virtual and three
+     *    with a capacity. That nought was never measured: a painted zone has no
+     *    dock to fill, and read as a count it made every journey in the city
+     *    end in "no free dock nearby".
+     *
+     * A virtual station **with** a capacity keeps its count, the producer
+     * having said how many bikes it holds; and a physical rack at nought is
+     * full, whatever it publishes or not as a capacity. Whether the station
+     * takes returns at all is not decided here: `is_returning` still refuses
+     * them, through [canAcceptBike].
+     */
+    public val hasUnlimitedDocks: Boolean
+        get() = docksAvailable == null ||
+            (isAtVirtualStation && !isAtStationWithCapacity && docksAvailable == 0)
+
     /** True if the station can actually take a bike right now. */
     public val canAcceptBike: Boolean
-        get() = isDeployed && isReturning && docksAvailable > 0
+        get() = isDeployed && isReturning && (hasUnlimitedDocks || (docksAvailable ?: 0) > 0)
 }
 
 /**
@@ -167,8 +203,10 @@ public enum class ServiceState {
  * orphan state — describing a station absent from `station_information` — is
  * ignored, for want of knowing where to place it on the map.
  *
- * The join is also where a state learns that its station is virtual, which
- * `station_status` does not say and [StationAvailability.isDeployed] needs.
+ * The join is also where a state learns that its station is virtual, and
+ * whether it publishes a capacity: `station_status` says neither, and
+ * [StationAvailability.isDeployed] and [StationAvailability.hasUnlimitedDocks]
+ * need them.
  *
  * @return one entry per known station, in the order received.
  */
@@ -181,7 +219,10 @@ public fun joinStationsWithAvailability(
         val availability = byStationId[station.id]
         StationWithAvailability(
             station = station,
-            availability = availability?.copy(isAtVirtualStation = station.isVirtual),
+            availability = availability?.copy(
+                isAtVirtualStation = station.isVirtual,
+                isAtStationWithCapacity = station.capacity != null,
+            ),
         )
     }
 }

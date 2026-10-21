@@ -71,3 +71,29 @@ internal fun inDigitsOf(text: String, zero: Char): String {
 
 private const val LATIN_ZERO = '0'
 private const val LATIN_NINE = '9'
+
+/**
+ * What stands in for the count of free docks at a station that takes back any
+ * bike (SPEC §7.1) — wherever a figure would otherwise be written, the discs
+ * and the list's second column alike.
+ *
+ * A sign rather than a word, because it sits where a figure sits: inside a disc
+ * a word would not fit, and beside one it would not read as the count it
+ * replaces. It is the same in every language and every numeration, which a
+ * figure is not. Not a nought — that would call the station full — and not the
+ * question mark of a station the feed says nothing about: the feed said exactly
+ * this.
+ */
+const val UNLIMITED_FIGURE: String = "\u221E"
+
+/**
+ * The quantity a label's plural is chosen with beside [UNLIMITED_FIGURE].
+ *
+ * The labels agree with the figure in their disc (SPEC §9), and there is no
+ * figure here to agree with; what is meant is "as many as you like", which every
+ * language says with the form it gives a large count. A hundred selects it
+ * everywhere the application is translated: "other" in English, French, Arabic
+ * and Czech, "many" in Polish — where nought would have picked French's
+ * singular, "place libre", under a sign promising room for any bike.
+ */
+const val UNLIMITED_PLURAL_QUANTITY: Int = 100

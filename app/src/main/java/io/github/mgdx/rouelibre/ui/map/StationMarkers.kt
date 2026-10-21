@@ -8,6 +8,7 @@ import io.github.mgdx.rouelibre.core.station.AvailabilityMode
 import io.github.mgdx.rouelibre.core.station.BikeKindFilter
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.displayFor
+import io.github.mgdx.rouelibre.ui.UNLIMITED_FIGURE
 import org.maplibre.android.style.expressions.Expression
 import org.maplibre.android.style.layers.CircleLayer
 import org.maplibre.android.style.layers.PropertyFactory
@@ -67,6 +68,17 @@ object StationMarkers {
     private val DIGIT_FONT = arrayOf("Bricolage Grotesque Bold")
 
     /**
+     * The typeface of the sign standing for unlimited free docks.
+     *
+     * Not the figures' one: Bricolage's glyphs ship in the first range of 256
+     * characters alone, and the sign lies outside it — asked of that stack, it
+     * would reach the renderer as a range that does not exist, which empties
+     * the tile. Atkinson Hyperlegible ships every range, holds the sign, and is
+     * the face the list's indicator paints it in.
+     */
+    private val UNLIMITED_FONT = arrayOf("Atkinson Hyperlegible Bold")
+
+    /**
      * Turns the stations into GeoJSON features for the map.
      *
      * @param stations the known stations and their last state.
@@ -120,9 +132,17 @@ object StationMarkers {
                 // from `point_count_abbreviated`, out of reach of any locale.
                 // Moving the map to the served digits is a decision about the
                 // font shipped, not about this line.
+                //
+                // A station taking back any bike shows a sign rather than no
+                // figure at all: the disc is coloured as the best level, and
+                // colour alone must never carry the information (SPEC §7.1).
                 addStringProperty(
                     COUNT_PROPERTY,
-                    display.count?.takeIf { !display.isOutOfService }?.toString().orEmpty(),
+                    when {
+                        display.isOutOfService -> ""
+                        display.isUnlimited -> UNLIMITED_FIGURE
+                        else -> display.count?.toString().orEmpty()
+                    },
                 )
             }
         }
@@ -150,7 +170,13 @@ object StationMarkers {
     fun countLayer(context: Context): SymbolLayer = SymbolLayer(STATION_COUNT_LAYER, SOURCE_ID)
         .withProperties(
             PropertyFactory.textField(Expression.get(COUNT_PROPERTY)),
-            PropertyFactory.textFont(DIGIT_FONT),
+            PropertyFactory.textFont(
+                Expression.switchCase(
+                    Expression.eq(Expression.get(COUNT_PROPERTY), UNLIMITED_FIGURE),
+                    Expression.literal(UNLIMITED_FONT),
+                    Expression.literal(DIGIT_FONT),
+                ),
+            ),
             PropertyFactory.textSize(
                 Expression.interpolate(
                     Expression.linear(),

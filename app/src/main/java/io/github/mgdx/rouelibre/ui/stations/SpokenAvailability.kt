@@ -50,10 +50,9 @@ fun Context.spokenAvailability(entry: StationWithAvailability, isOutOfService: B
             availability.bikesAvailable,
             availability.bikesAvailable,
         ),
-        resources.getQuantityString(
-            R.plurals.docks_available,
-            availability.docksAvailable,
-            availability.docksAvailable,
-        ),
+        availability.docksAvailable
+            ?.takeUnless { availability.hasUnlimitedDocks }
+            ?.let { resources.getQuantityString(R.plurals.docks_available, it, it) }
+            ?: getString(R.string.docks_available_unlimited),
     )
 }

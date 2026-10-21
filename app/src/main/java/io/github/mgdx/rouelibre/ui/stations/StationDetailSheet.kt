@@ -32,6 +32,7 @@ import io.github.mgdx.rouelibre.core.station.displayFor
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.core.station.isBeyondCoveredArea
 import io.github.mgdx.rouelibre.databinding.SheetStationDetailBinding
+import io.github.mgdx.rouelibre.ui.UNLIMITED_PLURAL_QUANTITY
 import io.github.mgdx.rouelibre.ui.address.toTitle
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.handOverToNavigation
@@ -183,8 +184,10 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         // no count settles it.
         views.bikesLabel.text =
             resources.getQuantityString(R.plurals.counterpart_bikes, bikes.count ?: 0)
-        views.docksLabel.text =
-            resources.getQuantityString(R.plurals.counterpart_docks, docks.count ?: 0)
+        views.docksLabel.text = resources.getQuantityString(
+            R.plurals.counterpart_docks,
+            if (docks.isUnlimited) UNLIMITED_PLURAL_QUANTITY else docks.count ?: 0,
+        )
 
         // Both discs are painted onto a canvas, and a painted figure reaches no
         // screen reader: the sheet announced "BIKES" and "FREE DOCKS" and

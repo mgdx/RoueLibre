@@ -154,6 +154,9 @@ public class JourneyPlanner(
             near = destination,
             limit = settings.arrivalCandidates,
             countOf = { it.availability?.takeIf { state -> state.canAcceptBike }?.docksAvailable },
+            servesWithoutLimit = { entry ->
+                entry.availability?.let { it.canAcceptBike && it.hasUnlimitedDocks } == true
+            },
         )
 
         if (departures.isEmpty()) return giveUp(origin, destination, noBikeToLend())
@@ -321,6 +324,9 @@ public class JourneyPlanner(
             near = destination,
             limit = settings.arrivalCandidates,
             countOf = { it.availability?.takeIf { state -> state.canAcceptBike }?.docksAvailable },
+            servesWithoutLimit = { entry ->
+                entry.availability?.let { it.canAcceptBike && it.hasUnlimitedDocks } == true
+            },
         )
         if (arrivals.isEmpty()) return giveUp(origin, destination, NoBikeJourney.NoDockNearby)
 
@@ -506,20 +512,32 @@ public class JourneyPlanner(
      * therefore edge out one that is nearer on foot — accepted: measuring the
      * real walk to every station in town would cost more route computations
      * than the journey itself.
+     *
+     * @param countOf what the station holds of the side we need, or `null`
+     *   where it cannot serve.
+     * @param servesWithoutLimit whether the station serves with no count to
+     *   limit it — free docks that are unlimited (SPEC §4.1). Such a station is
+     *   a candidate without a count, and no risk is weighed against it: there
+     *   is nothing that could run out while one rides there.
      */
     private fun candidates(
         stations: List<StationWithAvailability>,
         near: Coordinates,
         limit: Int,
         countOf: (StationWithAvailability) -> Int?,
+        servesWithoutLimit: (StationWithAvailability) -> Boolean = { false },
         atRisk: (StationWithAvailability, Int) -> Int = { _, count -> count },
     ): List<Candidate> = stations
         .mapNotNull { entry ->
-            val count = countOf(entry)?.takeIf { it > 0 } ?: return@mapNotNull null
+            val count = if (servesWithoutLimit(entry)) {
+                null
+            } else {
+                countOf(entry)?.takeIf { it > 0 } ?: return@mapNotNull null
+            }
             Candidate(
                 station = entry.station,
                 count = count,
-                countAtRisk = atRisk(entry, count),
+                countAtRisk = count?.let { atRisk(entry, it) },
                 bikesByVehicleType = entry.availability?.bikesByVehicleType.orEmpty(),
                 straightLineMetres = near.distanceInMetresTo(entry.station.position),
             )
@@ -670,7 +688,7 @@ public class JourneyPlanner(
                 travelLowerBound = travel,
                 lowerBound = travel +
                     riskOf(
-                        departure.countAtRisk,
+                        checkNotNull(departure.countAtRisk),
                         arrival.countAtRisk,
                         walkTo.duration,
                         fastestRide,
@@ -771,14 +789,14 @@ public class JourneyPlanner(
                 JourneyOption(
                     departure = DeparturePoint.AtStation(pair.departure.station),
                     arrivalStation = pair.arrival.station,
-                    bikesAtDeparture = pair.departure.count,
+                    bikesAtDeparture = checkNotNull(pair.departure.count),
                     bikesByVehicleTypeAtDeparture = pair.departure.bikesByVehicleType,
                     docksAtArrival = pair.arrival.count,
                     walkToStation = pair.walkToStation,
                     ride = ride,
                     walkToDestination = pair.walkToDestination.takeIfItCoversGround(),
                     riskPenalty = riskOf(
-                        pair.departure.countAtRisk,
+                        checkNotNull(pair.departure.countAtRisk),
                         pair.arrival.countAtRisk,
                         pair.walkToStation.duration,
                         ride.duration,
@@ -803,13 +821,20 @@ public class JourneyPlanner(
      * exposure is nil and the penalty with it (SPEC §6). Nobody can take the
      * bike one is already standing beside.
      *
+     * **A station whose free docks are unlimited pays nothing at the arrival
+     * end** (SPEC §4.1, §6). The penalty prices the chance of a station filling
+     * up before one gets there, and one that takes back any bike cannot fill:
+     * there is no scarcity to weigh, and inventing one would push riders away
+     * from the very stations that are surest to take their bike.
+     *
      * @param bikesAtRisk the stock the departure end is weighed on, which is
      *   one for a single bike outside stations.
-     * @param docksAtRisk the free docks the arrival station was seen holding.
+     * @param docksAtRisk the free docks the arrival station was seen holding,
+     *   or `null` where nothing limits them.
      */
     private fun riskOf(
         bikesAtRisk: Int,
-        docksAtRisk: Int,
+        docksAtRisk: Int?,
         walkToStation: Duration,
         ride: Duration,
     ): Duration {
@@ -818,11 +843,13 @@ public class JourneyPlanner(
             exposure = walkToStation,
             settings = settings,
         )
-        val arrivalRisk = availabilityRiskPenalty(
-            count = docksAtRisk,
-            exposure = walkToStation + ride,
-            settings = settings,
-        )
+        val arrivalRisk = docksAtRisk?.let {
+            availabilityRiskPenalty(
+                count = it,
+                exposure = walkToStation + ride,
+                settings = settings,
+            )
+        } ?: Duration.ZERO
         return departureRisk + arrivalRisk
     }
 
@@ -919,10 +946,12 @@ public class JourneyPlanner(
      * @property count what it holds of the side we need: bikes at the departure
      *   end, free docks at the arrival end. It is the figure the journey carries
      *   and the interface shows, and a kind asked for never narrows it
-     *   (SPEC §7.4).
+     *   (SPEC §7.4). `null` at the arrival end for a station whose free docks
+     *   are unlimited, and never at the departure end: no feed lends bikes
+     *   without counting them.
      * @property countAtRisk what the reliability penalty is measured on — see
      *   [countAtRisk]. The same figure as [count], except at the departure end
-     *   when a kind was asked for.
+     *   when a kind was asked for; `null` where [count] is.
      * @property bikesByVehicleType how its bikes divide between the network's
      *   own vehicle type identifiers. Read at both ends, since it comes with
      *   the state the count itself is read from, and only used at the departure
@@ -930,8 +959,8 @@ public class JourneyPlanner(
      */
     private data class Candidate(
         val station: Station,
-        val count: Int,
-        val countAtRisk: Int,
+        val count: Int?,
+        val countAtRisk: Int?,
         val bikesByVehicleType: Map<String, Int>,
         val straightLineMetres: Double,
     )

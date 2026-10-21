@@ -590,11 +590,11 @@ class JourneyDetailFragment : Fragment() {
             station = option.arrivalStation,
             address = addresses[option.arrivalStation.id],
             availability = availabilityOf(
-                counted = resources.getQuantityString(
-                    R.plurals.docks_available,
-                    option.docksAtArrival,
-                    option.docksAtArrival,
-                ),
+                // No count where the station takes back any bike: the journey
+                // carried none, and the line says why (SPEC §4.1).
+                counted = option.docksAtArrival
+                    ?.let { resources.getQuantityString(R.plurals.docks_available, it, it) }
+                    ?: getString(R.string.docks_available_unlimited),
                 station = option.arrivalStation,
             ),
         )
