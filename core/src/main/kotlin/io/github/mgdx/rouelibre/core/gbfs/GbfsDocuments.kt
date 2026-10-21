@@ -237,6 +237,15 @@ internal data class GbfsStationInformation(
     @SerialName("is_virtual_station")
     @Serializable(with = LenientBooleanSerializer::class)
     val isVirtualStation: Boolean = false,
+    /**
+     * The operator the station belongs to, where one feed carries several —
+     * a national aggregator such as sharedmobility.ch. Not GBFS 2.x's own
+     * field: its `providers` extension, read so that a city can keep its
+     * bike-share operators alone (SPEC §15).
+     */
+    @SerialName("provider_id")
+    @Serializable(with = FlexibleIdSerializer::class)
+    val providerId: String? = null,
 )
 
 /**
@@ -396,6 +405,10 @@ internal data class GbfsVehicleStatus(
      * not be refused over the way one figure is written.
      */
     @SerialName("current_range_meters") val currentRangeMetres: Double? = null,
+    /** The operator, as for a station ([GbfsStationInformation.providerId]). */
+    @SerialName("provider_id")
+    @Serializable(with = FlexibleIdSerializer::class)
+    val providerId: String? = null,
 )
 
 /** The contents of `vehicle_types`. */

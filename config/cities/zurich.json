@@ -52,11 +52,34 @@
       "Answered GBFS 2.0 on 2026-08-10, with 12879 stations.",
       "Source: MobilityData. Declared versions: 2.0.",
       "The station_information and station_status URLs are NEVER",
-      "hard-coded: they are read from this auto-discovery file."
+      "hard-coded: they are read from this auto-discovery file.",
+      "sharedmobility.ch is a national aggregator: one feed carries every",
+      "operator of Switzerland, bike-share or not. 'providerIds' keeps the",
+      "bike-share operators alone (§15), by their GBFS provider_id, chosen",
+      "on 22 October 2026 from providers.json and the vehicles each one",
+      "publishes: Velospot, nextbike, invia BikeShare, Donkey Republic,",
+      "LIEmobil, EPFL and PubliBike (no station that day). Left out:",
+      "Voi, Bolt, Dott, Lime and Bird (scooter and parking zones), pickebike",
+      "(mopeds), carvelo2go and QuickRent (bikes returned where they were",
+      "taken), and the car and minibus services."
     ],
     "discoveryUrl": "https://www.sharedmobility.ch/gbfs.json",
     "attribution": "Data sharedmobility.ch — Swiss Federal Office of Energy, licence not stated by the operator",
-    "attributionUrl": "https://www.sharedmobility.ch/info"
+    "attributionUrl": "https://www.sharedmobility.ch/info",
+    "providerIds": [
+      "donkey_ge",
+      "donkey_kreuzlingen",
+      "donkey_neuchatel",
+      "donkey_sion",
+      "donkey_thun",
+      "donkey_yverdon-les-bains",
+      "epfl_lausanne",
+      "liemobil_liechtenstein",
+      "nextbike_ch",
+      "nextbike_ms",
+      "publibike",
+      "velospot"
+    ]
   },
   "boundingBox": {
     "$comment": [

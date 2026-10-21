@@ -128,6 +128,22 @@ public data class GbfsSettings(
     public val discoveryUrl: String,
     public val attribution: String,
     public val attributionUrl: String?,
+    /**
+     * The operators whose stations and bikes the city keeps, by their GBFS
+     * `provider_id`; empty — the rule everywhere but on an aggregator — keeps
+     * everything the feed publishes.
+     *
+     * A national aggregator publishes every operator of a country under one
+     * discovery document: sharedmobility.ch carries Velospot and nextbike
+     * beside Voi's scooter zones, a minibus service and four car-sharing
+     * fleets. Read whole, Zürich's map drew 2,118 minibus stops as bike
+     * stations, and once a station publishing no free-dock count took any bike
+     * back (SPEC §4.1), journeys ended at them. The operators kept are named
+     * here, in the city's configuration, because which of them lends bikes is
+     * a fact about that feed, not a rule the application could read in it
+     * (SPEC §15).
+     */
+    public val providerIds: Set<String> = emptySet(),
 )
 
 /** How the map is framed on opening, for want of a known position. */
@@ -222,6 +238,7 @@ private data class CityConfigurationDocument(
             discoveryUrl = gbfs.discoveryUrl,
             attribution = gbfs.attribution,
             attributionUrl = gbfs.attributionUrl,
+            providerIds = gbfs.providerIds.map(String::trim).filter(String::isNotEmpty).toSet(),
         ),
         boundingBox = boundingBox.toDomain(),
         map = MapDefaults(
@@ -263,6 +280,7 @@ private data class GbfsDocument(
     val discoveryUrl: String,
     val attribution: String = "",
     val attributionUrl: String? = null,
+    val providerIds: List<String> = emptyList(),
 )
 
 @Serializable

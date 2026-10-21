@@ -31,7 +31,7 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from city_config import DEFAULT_CITY_CONFIG, CityConfig, sample_positions
+from city_config import DEFAULT_CITY_CONFIG, CityConfig, kept_by_providers, sample_positions
 from compute_bbox import load_stations, positioned_stations
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -51,7 +51,9 @@ def survey(path: Path) -> tuple[Path, list[list[float]] | None, str | None]:
     """
     try:
         config = CityConfig.load(path)
-        stations = positioned_stations(load_stations(config.gbfs_discovery_url, None))
+        stations = positioned_stations(
+            kept_by_providers(load_stations(config.gbfs_discovery_url, None), config.provider_ids)
+        )
         return path, sample_positions(stations), None
     except Exception as error:  # noqa: BLE001 — every failure is reportable
         return path, None, f"{type(error).__name__}: {error}"

@@ -19,6 +19,9 @@ import java.time.Instant
  *   a rack standing on the pavement — GBFS's `is_virtual_station`. Such a
  *   station has nothing to install, and its `is_installed` is no closure: see
  *   [StationAvailability.isDeployed].
+ * @property providerId the operator the station belongs to, where the feed
+ *   names one — an aggregator carries several (SPEC §15) — and `null` where it
+ *   does not.
  */
 public data class Station(
     public val id: String,
@@ -27,6 +30,7 @@ public data class Station(
     public val capacity: Int?,
     public val postalCode: String?,
     public val isVirtual: Boolean = false,
+    public val providerId: String? = null,
 )
 
 /**

@@ -47,6 +47,13 @@ data class StationEntity(
      * next refresh rather than up to a day later ([StationDao.unreadVirtualFlagCount]).
      */
     val isVirtual: Boolean?,
+    /**
+     * The operator the station belongs to (`Station.providerId`), kept so that
+     * a cache written before the city named its operators — or under another
+     * list of them — is noticed and read again at the next refresh rather
+     * than shown for up to a day ([StationDao.stationsOutsideProviderCount]).
+     */
+    val providerId: String? = null,
 )
 
 /**
@@ -123,6 +130,17 @@ interface StationDao {
      */
     @Query("SELECT COUNT(*) FROM station WHERE isVirtual IS NULL")
     suspend fun unreadVirtualFlagCount(): Int
+
+    /**
+     * How many cached stations belong to none of [providerIds], which a
+     * city keeping some operators alone must read again without waiting for
+     * the day to run out. A row without an operator counts: it was written
+     * before the operator was kept, or by a feed that names none.
+     */
+    @Query(
+        "SELECT COUNT(*) FROM station WHERE providerId IS NULL OR providerId NOT IN (:providerIds)",
+    )
+    suspend fun stationsOutsideProviderCount(providerIds: List<String>): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStations(stations: List<StationEntity>)
@@ -208,7 +226,7 @@ object VehicleTypeCountsConverter {
 /** The local database of stations and their last known state. */
 @Database(
     entities = [StationEntity::class, StationAvailabilityEntity::class],
-    version = 4,
+    version = 5,
     exportSchema = true,
 )
 @TypeConverters(VehicleTypeCountsConverter::class)
@@ -293,6 +311,20 @@ abstract class StationDatabase : RoomDatabase() {
                 connection.execSQL(
                     "ALTER TABLE `station_availability_new` RENAME TO `station_availability`",
                 )
+            }
+        }
+
+        /**
+         * Adds the operator to the cached stations.
+         *
+         * Migrated rather than rebuilt, for the same reason as [MIGRATION_1_2].
+         * The rows carried over have none, which only matters to a city that
+         * keeps some operators alone: its stations are then read again at the
+         * next refresh.
+         */
+        val MIGRATION_4_5: Migration = object : Migration(4, 5) {
+            override fun migrate(connection: SQLiteConnection) {
+                connection.execSQL("ALTER TABLE station ADD COLUMN providerId TEXT")
             }
         }
     }

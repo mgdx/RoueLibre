@@ -43,6 +43,9 @@ import java.time.Instant
  * @property discoveryUrlProvider gives the auto-discovery document's URL, or
  *   `null` if no city is chosen. It is a function and not a value because the
  *   setting is user-editable (SPEC §4.1) and changes with the active city.
+ * @property providerIdsProvider gives the operators the city keeps, empty to
+ *   keep everything the feed publishes (SPEC §15). Read with the URL, for the
+ *   same reason.
  * @property recordFleet takes what the bikes just fetched say the network
  *   lends. Reported rather than stored here: this repository counts, and what
  *   is made of the count — remembered, merged with earlier readings, shown — is
@@ -54,6 +57,7 @@ class StationRepository(
     private val dao: StationDao,
     private val refreshTimestamps: RefreshTimestampStore,
     private val discoveryUrlProvider: suspend () -> String?,
+    private val providerIdsProvider: suspend () -> Set<String> = { emptySet() },
     private val recordFleet: suspend (FleetReading) -> Unit = {},
     private val clock: Clock = Clock.systemUTC(),
 ) {
@@ -156,7 +160,11 @@ class StationRepository(
                     if (dao.stationCount() == 0) return@withLock outcome
                 }
 
-                is Outcome.Success -> receivedStations = outcome.value.stations
+                // Only the operators the city keeps: what is not written is
+                // on no map, in no list and before no journey (SPEC §15).
+                is Outcome.Success ->
+                    receivedStations = outcome.value.stations
+                        .filter { station -> keepsProvider(station.providerId) }
             }
         }
 
@@ -178,11 +186,12 @@ class StationRepository(
                 // the age shown is that of the counts on screen, and a slow
                 // download must not make them look older than they are.
                 val fetchedAt = clock.instant()
+                val availabilities = statesOfKeptStations(status.value.availabilities)
                 dao.replaceAvailabilities(
-                    status.value.availabilities.map { it.toEntity(fetchedAt = fetchedAt) },
+                    availabilities.map { it.toEntity(fetchedAt = fetchedAt) },
                 )
                 lastStatusRefresh = now
-                countFleetFrom(discovery, status.value.availabilities)
+                countFleetFrom(discovery, availabilities)
             }
         }
 
@@ -238,7 +247,7 @@ class StationRepository(
             is Outcome.Success -> {
                 streetBikes.value = StreetBikesSnapshot(
                     bikes = streetBikesShown(
-                        outcome.value.bikes,
+                        outcome.value.bikes.filter { bike -> keepsProvider(bike.providerId) },
                         vehicleTypes(discovery).kinds,
                     ),
                     dockedBikes = outcome.value.dockedBikes.groupBy { it.stationId },
@@ -382,9 +391,32 @@ class StationRepository(
         return Duration.between(last, now) >= STATUS_MINIMUM_INTERVAL
     }
 
+    /** Whether the city keeps what [providerId] publishes (SPEC §15). */
+    private suspend fun keepsProvider(providerId: String?): Boolean {
+        val kept = providerIdsProvider()
+        return kept.isEmpty() || providerId in kept
+    }
+
+    /**
+     * The states of the stations the cache holds, where the city keeps some
+     * operators alone; every state otherwise. A state left over would count
+     * another operator's vehicles into what the network lends.
+     */
+    private suspend fun statesOfKeptStations(
+        availabilities: List<StationAvailability>,
+    ): List<StationAvailability> {
+        if (providerIdsProvider().isEmpty()) return availabilities
+        val kept = dao.stationIds().toSet()
+        return availabilities.filter { it.stationId in kept }
+    }
+
     private suspend fun stationInformationRefreshIsDue(now: Instant): Boolean {
         if (dao.stationCount() == 0) return true
         if (dao.unreadVirtualFlagCount() > 0) return true
+        val providers = providerIdsProvider()
+        if (providers.isNotEmpty() && dao.stationsOutsideProviderCount(providers.toList()) > 0) {
+            return true
+        }
         val last = refreshTimestamps.stationInformationFetchedAt() ?: return true
         return Duration.between(last, now) >= STATION_INFORMATION_MAXIMUM_AGE
     }
@@ -473,6 +505,7 @@ private fun StationEntity.toDomain() = Station(
     capacity = capacity,
     postalCode = postalCode,
     isVirtual = isVirtual ?: false,
+    providerId = providerId,
 )
 
 private fun Station.toEntity() = StationEntity(
@@ -483,6 +516,7 @@ private fun Station.toEntity() = StationEntity(
     capacity = capacity,
     postalCode = postalCode,
     isVirtual = isVirtual,
+    providerId = providerId,
 )
 
 private fun StationAvailabilityEntity.toDomain() = StationAvailability(

@@ -33,6 +33,25 @@ class CityConfigurationTest {
     }
 
     @Test
+    fun `an aggregator's city names the operators it keeps, and no other city does`() {
+        // sharedmobility.ch carries every operator of Switzerland; Zürich keeps
+        // its bike-share ones alone (SPEC §15). Everywhere else the empty set
+        // keeps the whole feed, which is what every city did before.
+        val configurations = publishedConfigurations().toMap()
+
+        val zurich = configurations.getValue("zurich.json").gbfs.providerIds
+        assertTrue("velospot" in zurich)
+        assertFalse("voiscooters.com" in zurich)
+        assertTrue(
+            configurations.filterKeys {
+                it != "zurich.json"
+            }.values.all { it.gbfs.providerIds.isEmpty() },
+        )
+        val minimal = CityConfigurationReader.read(MINIMAL_CONFIGURATION) as Outcome.Success
+        assertTrue(minimal.value.gbfs.providerIds.isEmpty())
+    }
+
+    @Test
     fun `a city whose feed declares pedal-assist bikes says so`() {
         // The bolt on the bike glyphs (SPEC §7) hangs on this single field, and
         // tools/read_fleet.py writes it from the network's own vehicle_types

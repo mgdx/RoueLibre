@@ -117,6 +117,7 @@ public class GbfsParser {
                     // from the same feed with the same liberties taken.
                     postalCode = entry.postCode?.trim()?.takeIf { it.isNotEmpty() },
                     isVirtual = entry.isVirtualStation,
+                    providerId = entry.providerId,
                 )
             }
             StationInformationFeed(
@@ -325,6 +326,7 @@ public class GbfsParser {
             vehicleTypeId = entry.vehicleTypeId,
             chargeRatio = entry.currentFuelPercent?.takeIf { it in 0.0..1.0 },
             rangeMetres = positiveMetresOrNull(entry.currentRangeMetres),
+            providerId = entry.providerId,
         )
     }
 

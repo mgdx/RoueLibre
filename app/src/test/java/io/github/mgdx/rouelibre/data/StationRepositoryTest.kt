@@ -60,6 +60,9 @@ class StationRepositoryTest {
         server.close()
     }
 
+    /** The operators the city keeps, which only an aggregator's city names. */
+    private var providerIds: Set<String> = emptySet()
+
     private fun repository(
         recordFleet: suspend (FleetReading) -> Unit = {},
         streetBikesMinimumInterval: suspend () -> Duration = { Duration.ofMinutes(5) },
@@ -74,6 +77,7 @@ class StationRepositoryTest {
         dao = dao,
         refreshTimestamps = timestamps,
         discoveryUrlProvider = { discoveryPath?.let { server.url(it).toString() } },
+        providerIdsProvider = { providerIds },
         recordFleet = recordFleet,
         clock = object : Clock() {
             override fun getZone() = ZoneOffset.UTC
@@ -299,6 +303,64 @@ class StationRepositoryTest {
             assertEquals(ServiceState.InService, station.serviceState)
             assertEquals(true, dao.stations.value.single().isVirtual)
         }
+
+    /** sharedmobility.ch, cut down: a Velospot station and a Voi zone. */
+    private val aggregatorInformation = """
+        {"version":"2.0","data":{"stations":[
+          {"station_id":"velospot:168","name":"Lindenplatz","lat":47.38,"lon":8.49,
+           "capacity":40,"provider_id":"velospot"},
+          {"station_id":"voiscooters.com:312","name":"312","lat":47.37,"lon":8.54,
+           "provider_id":"voiscooters.com"}
+        ]}}
+    """.trimIndent()
+
+    private val aggregatorStatus = """
+        {"version":"2.0","data":{"stations":[
+          {"station_id":"velospot:168","num_bikes_available":3,"is_installed":true,
+           "is_renting":true,"is_returning":true,"provider_id":"velospot"},
+          {"station_id":"voiscooters.com:312","num_bikes_available":5,"is_installed":true,
+           "is_renting":true,"is_returning":true,"provider_id":"voiscooters.com"}
+        ]}}
+    """.trimIndent()
+
+    @Test
+    fun `a city keeping some operators shows their stations alone`() = runTest {
+        // Zürich reads sharedmobility.ch, where Voi's scooter zones publish no
+        // free-dock count and would take any bike back (SPEC §4.1, §15).
+        providerIds = setOf("velospot")
+        enqueueDiscovery()
+        server.enqueue(MockResponse(body = aggregatorInformation))
+        server.enqueue(MockResponse(body = aggregatorStatus))
+        val repository = repository()
+
+        repository.refresh()
+
+        val stations = repository.observeStations().first().stations
+        assertEquals(listOf("velospot:168"), stations.map { it.station.id })
+        assertEquals(listOf("velospot:168"), dao.availabilities.value.map { it.stationId })
+    }
+
+    @Test
+    fun `a cache holding another operator's stations has its static data read again`() = runTest {
+        // Written before the city named its operators: shown as they are,
+        // the other operators' stations would stay on the map for up to a
+        // day, the static data being otherwise read once a day.
+        enqueueDiscovery()
+        server.enqueue(MockResponse(body = aggregatorInformation))
+        server.enqueue(MockResponse(body = aggregatorStatus))
+        repository().refresh()
+        assertEquals(2, dao.stations.value.size)
+
+        providerIds = setOf("velospot")
+        now += Duration.ofMinutes(5)
+        enqueueDiscovery()
+        server.enqueue(MockResponse(body = aggregatorInformation))
+        server.enqueue(MockResponse(body = aggregatorStatus))
+        repository().refresh()
+
+        assertEquals("the static data read again", 6, server.requestCount)
+        assertEquals(listOf("velospot:168"), dao.stations.value.map { it.id })
+    }
 
     @Test
     fun `changing city leaves none of the previous city's stations`() = runTest {
@@ -633,6 +695,9 @@ private class FakeStationDao : StationDao {
     override suspend fun unreadVirtualFlagCount(): Int = stations.value.count {
         it.isVirtual == null
     }
+
+    override suspend fun stationsOutsideProviderCount(providerIds: List<String>): Int =
+        stations.value.count { it.providerId == null || it.providerId !in providerIds }
 
     override suspend fun insertStations(stations: List<StationEntity>) {
         val merged = this.stations.value.associateBy { it.id }.toMutableMap()
