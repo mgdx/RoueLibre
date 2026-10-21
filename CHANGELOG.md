@@ -20,6 +20,19 @@ also records what has no visible effect.
   point, the kept kind is ignored without being erased, as the journey's is.
   The "bikes" / "docks" toggle is still written nowhere: every launch opens on
   the bikes.
+- **Free docks are no longer talked about where nearly every station takes
+  back any bike** (`SPEC.md` §7.1). Past 90 % of a network's deployed stations
+  with a live status reading as unlimited (`freeDocksAreWorthShowing` in
+  `:core`), the Bikes / Free docks toggle goes from the map and the list, the
+  map goes back to the bikes, the rows (favourites included) lose their free
+  docks, the station sheet its free docks' disc, the journey's detail the
+  arrival station's free docks; the screen reader, the "no dock nearby"
+  failure and the "nothing to offer" hint speak of bikes alone. The verdict is
+  settled once per city and per session by `StationRepository` and is `true`
+  until the stations can be weighed. On the live feeds of 22 October 2026 it
+  reaches MyRadl, nextbike Bratislava and Pony; Düsseldorf and Cologne keep
+  their toggle. Display only: the planner is untouched. Four strings added and
+  translated into the 30 languages.
 
 ### Fixed
 
