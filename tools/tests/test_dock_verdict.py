@@ -16,6 +16,7 @@ from discover_networks import (
     PLACEHOLDER_DOCK_SHARE,
     VIRTUAL_STATION_SHARE,
     dock_verdict,
+    takes_any_bike_back,
 )
 
 
@@ -129,6 +130,65 @@ class FreeDocksThatNeverMove(unittest.TestCase):
         # 60% is Mława, 93.8% the least frozen of the frozen feeds.
         self.assertLess(0.6, FROZEN_FREE_DOCK_SHARE)
         self.assertLess(FROZEN_FREE_DOCK_SHARE, 0.938)
+
+
+class FrozenDespiteADeclaredCapacity(unittest.TestCase):
+    """A capacity says how many docks there are, never how many are free (#8)."""
+
+    def test_a_declared_capacity_no_longer_hides_a_frozen_nought(self) -> None:
+        # A nought at every station the application would believe: no journey
+        # could ever end there, whatever capacity the producer declares.
+        self.assertEqual(
+            "frozen-free-docks", dock_verdict(survey(143, capacity=1200, frozen=1.0))
+        )
+
+    def test_myradl_munich_is_kept_once_its_zones_take_any_bike(self) -> None:
+        # 21 October 2026: 805 stations, 3 declaring a capacity, 800 zones
+        # without one at nought. The zones weigh in the share as stations where
+        # a journey can end, and are never the frozen figure: what is left is
+        # at most 5 counted stations in 805.
+        self.assertIsNone(dock_verdict(survey(805, capacity=19, frozen=5 / 805)))
+
+    def test_donkey_republic_counting_its_zones_stays_served(self) -> None:
+        self.assertIsNone(dock_verdict(survey(199, capacity=1108, virtual=1.0, frozen=0.3)))
+
+
+class UnlimitedReturns(unittest.TestCase):
+    """The mirror of `StationAvailability.hasUnlimitedDocks` in `:core`."""
+
+    def test_no_count_at_all_is_unlimited(self) -> None:
+        self.assertTrue(takes_any_bike_back({"num_bikes_available": 2}, None))
+
+    def test_a_virtual_station_without_capacity_at_nought(self) -> None:
+        # nextbike: capacity less bikes, floored at nought, with no capacity.
+        self.assertTrue(
+            takes_any_bike_back({"num_docks_available": 0}, {"is_virtual_station": True})
+        )
+        self.assertTrue(
+            takes_any_bike_back({"num_docks_available": 0}, {"is_virtual_station": 1})
+        )
+
+    def test_a_virtual_station_declaring_a_capacity_keeps_its_count(self) -> None:
+        self.assertFalse(
+            takes_any_bike_back(
+                {"num_docks_available": 0}, {"is_virtual_station": True, "capacity": 12}
+            )
+        )
+        self.assertFalse(
+            takes_any_bike_back(
+                {"num_docks_available": 0},
+                {"is_virtual_station": True, "vehicle_docks_capacity": [{"count": 4}]},
+            )
+        )
+
+    def test_a_virtual_station_counting_free_docks_keeps_them(self) -> None:
+        self.assertFalse(
+            takes_any_bike_back({"num_docks_available": 3}, {"is_virtual_station": True})
+        )
+
+    def test_a_physical_rack_at_nought_is_full(self) -> None:
+        self.assertFalse(takes_any_bike_back({"num_docks_available": 0}, {}))
+        self.assertFalse(takes_any_bike_back({"num_docks_available": 0}, None))
 
 
 class StationsTheProducerCallsPaintedZones(unittest.TestCase):

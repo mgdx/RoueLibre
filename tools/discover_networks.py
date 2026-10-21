@@ -642,14 +642,27 @@ def probe_feeds(candidate: dict) -> dict:
             # The free docks on their own, which is the figure §6 reads to
             # promise the bike can be returned. A feed can publish it frozen
             # while the sum above still moves, the bikes moving underneath it.
+            #
+            # A station the application reads as taking back any bike is not
+            # counted as frozen, whatever it publishes: its nought limits
+            # nothing. It still weighs in the share, as a station where a
+            # journey can end, so that a network made of such zones — MyRadl
+            # in Munich, 800 of 805 — is not withdrawn over the handful of
+            # counted racks beside them.
+            information = {str(station.get("station_id")): station for station in stations}
+            unlimited = [
+                takes_any_bike_back(station, information.get(str(station.get("station_id"))))
+                for station in live
+            ]
             free = [
                 station["num_docks_available"]
-                for station in live
-                if station.get("num_docks_available") is not None
+                for station, limitless in zip(live, unlimited)
+                if not limitless
             ]
+            survey["unlimitedDockStations"] = sum(unlimited)
             if free:
                 commonest = collections.Counter(free).most_common(1)[0][1]
-                survey["commonestFreeDockShare"] = round(commonest / len(free), 4)
+                survey["commonestFreeDockShare"] = round(commonest / len(live), 4)
         except Exception:  # noqa: BLE001 — optional enrichment
             pass
 
@@ -758,6 +771,40 @@ def is_motor_vehicle(declared: dict) -> bool:
     return declared.get("propulsion_type") not in PEDALLED_PROPULSIONS
 
 
+def takes_any_bike_back(status: dict, information: dict | None) -> bool:
+    """Whether a station's free docks limit nothing, as the application reads them.
+
+    **This mirrors `StationAvailability.hasUnlimitedDocks` in `:core`, and the
+    two must agree** (SPEC §4.1): a station the tool calls frozen while the
+    application sends journeys to it, or the other way round, is a network
+    withdrawn or kept for a reason the application does not share. Two cases.
+    No `num_docks_available` at all, which GBFS reserves for a station with
+    unlimited docking. And a nought at a virtual station that publishes no
+    capacity — neither `capacity` nor `vehicle_docks_capacity` — which is what
+    nextbike derives where it has no capacity to subtract the bikes from.
+    `is_returning` is not read here, nor there: it refuses returns on its own.
+    """
+    docks = status.get("num_docks_available")
+    if docks is None:
+        return True
+    if information is None or not lenient_flag(information.get("is_virtual_station")):
+        return False
+    publishes_capacity = (
+        bool(information.get("vehicle_docks_capacity"))
+        or information.get("capacity") is not None
+    )
+    return not publishes_capacity and whole_number(docks) == 0
+
+
+def lenient_flag(value) -> bool:
+    """A GBFS flag read as `:core` reads it: a boolean, or a number other than nought."""
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return value != 0
+    return False
+
+
 def dock_verdict(survey: dict) -> str | None:
     """Say what is wrong with a network's docks, or nothing if they are real.
 
@@ -784,14 +831,25 @@ def dock_verdict(survey: dict) -> str | None:
     `FROZEN_FREE_DOCK_SHARE` catches — the sharpest of the three, since a
     frozen nought makes every journey in the network impossible to plan.
 
-    All four of those readings are skipped where a capacity is declared, and
-    that is what leaves the networks already served exactly where they were:
-    Donkey Republic publishes nothing but virtual stations and gives each one a
-    capacity, and that declared figure has always been the thing believed.
+    The first three are skipped where a capacity is declared, and that is what
+    leaves the networks already served exactly where they were: Donkey Republic
+    publishes nothing but virtual stations and gives each one a capacity, and
+    that declared figure has always been the thing believed.
+
+    The frozen check is not skipped, since 22 October 2026 (#8). A declared
+    capacity says how many docks there are, never how many are free, and
+    MyRadl in Munich went through on the capacity of 3 stations of 805 while
+    804 of them answered nought free docks, on 21 October 2026. 800 of those
+    were zones without a capacity, which the application now reads as taking
+    any bike back (`takes_any_bike_back`), so they are never counted as frozen;
+    what the line still catches is a nought, or a one, that the application
+    would believe.
     """
     if not survey.get("dockedStations"):
         return "no-docks"
     if survey.get("capacityTotal", 0) > 0:
+        if survey.get("commonestFreeDockShare", 0.0) >= FROZEN_FREE_DOCK_SHARE:
+            return "frozen-free-docks"
         return None
     if survey.get("virtualStationShare", 0.0) > VIRTUAL_STATION_SHARE:
         return "no-docks"
