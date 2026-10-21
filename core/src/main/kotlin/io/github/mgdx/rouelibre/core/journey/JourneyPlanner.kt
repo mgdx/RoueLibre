@@ -154,9 +154,7 @@ public class JourneyPlanner(
             near = destination,
             limit = settings.arrivalCandidates,
             countOf = { it.availability?.takeIf { state -> state.canAcceptBike }?.docksAvailable },
-            servesWithoutLimit = { entry ->
-                entry.availability?.let { it.canAcceptBike && it.hasUnlimitedDocks } == true
-            },
+            servesWithoutLimit = { it.availability?.acceptsAnyBike == true },
         )
 
         if (departures.isEmpty()) return giveUp(origin, destination, noBikeToLend())
@@ -324,9 +322,7 @@ public class JourneyPlanner(
             near = destination,
             limit = settings.arrivalCandidates,
             countOf = { it.availability?.takeIf { state -> state.canAcceptBike }?.docksAvailable },
-            servesWithoutLimit = { entry ->
-                entry.availability?.let { it.canAcceptBike && it.hasUnlimitedDocks } == true
-            },
+            servesWithoutLimit = { it.availability?.acceptsAnyBike == true },
         )
         if (arrivals.isEmpty()) return giveUp(origin, destination, NoBikeJourney.NoDockNearby)
 

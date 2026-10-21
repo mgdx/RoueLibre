@@ -57,6 +57,12 @@ public data class Station(
  * @property isAtStationWithCapacity the station described publishes a
  *   capacity ([Station.capacity]). Carried over by the join for the same
  *   reason, and read by [hasUnlimitedDocks] alone.
+ * @property isInFeedCountingWithoutCapacity the racks of the same feed that
+ *   publish no capacity count their free docks: at most half of them say
+ *   nought. Virtual stations are left out of it, their nought never being
+ *   believed. In such a feed a nought without a capacity is a measurement.
+ *   Settled by the join over the whole feed, and `true` until then: a state
+ *   nobody has joined reads its nought as full, as it always did.
  */
 public data class StationAvailability(
     public val stationId: String,
@@ -69,6 +75,7 @@ public data class StationAvailability(
     public val reportedAt: Instant?,
     public val isAtVirtualStation: Boolean = false,
     public val isAtStationWithCapacity: Boolean = false,
+    public val isInFeedCountingWithoutCapacity: Boolean = true,
 ) {
     /**
      * True if the station is there to be used, as far as its installation
@@ -98,28 +105,54 @@ public data class StationAvailability(
      *  · **no count at all.** GBFS requires `num_docks_available` "except for
      *    stations that have unlimited docking capacity", so a station
      *    publishing none is one of those;
-     *  · **a nought derived from nothing**: a virtual station, publishing no
+     *  · **a nought measured against nothing**: a station publishing no
      *    capacity, said to have no free dock. nextbike writes the free docks as
      *    the capacity less the bikes, floored at nought, and writes nought where
-     *    there is no capacity to subtract from — 804 of the 805 stations of
-     *    MyRadl in Munich on 21 October 2026, 800 of them virtual and three
-     *    with a capacity. That nought was never measured: a painted zone has no
-     *    dock to fill, and read as a count it made every journey in the city
-     *    end in "no free dock nearby".
+     *    there is no capacity to subtract from — virtual or not. 804 of the 805
+     *    stations of MyRadl in Munich on 21 October 2026, 800 of them virtual;
+     *    359 of the 360 of Düsseldorf on 22 October, 345 of them racks. Read as
+     *    a count, that nought made every journey in those cities end in "no
+     *    free dock nearby".
      *
-     * A virtual station **with** a capacity keeps its count, the producer
-     * having said how many bikes it holds; and a physical rack at nought is
-     * full, whatever it publishes or not as a capacity. Whether the station
-     * takes returns at all is not decided here: `is_returning` still refuses
-     * them, through [canAcceptBike].
+     * **A nought is believed wherever it can have been measured.** At a
+     * station publishing a capacity, it is the capacity less the bikes, and the
+     * station is full. Without a capacity, the feed itself says whether it
+     * measures ([isInFeedCountingWithoutCapacity]). Indego, in Philadelphia,
+     * publishes no capacity anywhere and counts its free docks at every rack:
+     * 317 stations above nought and 4 at nought on 22 October 2026, which are
+     * full racks, and Milwaukee 165 against 7. Where nextbike derives the
+     * figure, the noughts are nearly all there is — every one of Düsseldorf's
+     * 359, and 38 of Sarajevo's 42, whose four others stand at real docks. A
+     * network where most racks are full at once is not one anybody measured,
+     * so the line is half: a feed whose stations without a capacity say
+     * nought at most half the time is believed, and one where they say it
+     * more is not. It sits far from both families, 1.2 and 4 per cent against
+     * 90 and 100. A virtual station without a capacity is a zone with no dock
+     * to fill, and its nought is never believed.
+     *
+     * Whether the station takes returns at all is not decided here:
+     * `is_returning` still refuses them, through [canAcceptBike].
      */
     public val hasUnlimitedDocks: Boolean
         get() = docksAvailable == null ||
-            (isAtVirtualStation && !isAtStationWithCapacity && docksAvailable == 0)
+            (
+                docksAvailable == 0 &&
+                    !isAtStationWithCapacity &&
+                    (isAtVirtualStation || !isInFeedCountingWithoutCapacity)
+                )
 
     /** True if the station can actually take a bike right now. */
     public val canAcceptBike: Boolean
         get() = isDeployed && isReturning && (hasUnlimitedDocks || (docksAvailable ?: 0) > 0)
+
+    /**
+     * True if the station takes a bike back right now, with no count to limit
+     * it: [hasUnlimitedDocks] at a station that is deployed and returning.
+     * What every screen asks before writing "unlimited" — a station refusing
+     * returns is refused, however its docks read.
+     */
+    public val acceptsAnyBike: Boolean
+        get() = canAcceptBike && hasUnlimitedDocks
 }
 
 /**
@@ -206,7 +239,9 @@ public enum class ServiceState {
  * The join is also where a state learns that its station is virtual, and
  * whether it publishes a capacity: `station_status` says neither, and
  * [StationAvailability.isDeployed] and [StationAvailability.hasUnlimitedDocks]
- * need them.
+ * need them. And it is the one place that sees the whole feed at once, so it
+ * settles [StationAvailability.isInFeedCountingWithoutCapacity] for every
+ * state.
  *
  * @return one entry per known station, in the order received.
  */
@@ -215,6 +250,11 @@ public fun joinStationsWithAvailability(
     availabilities: List<StationAvailability>,
 ): List<StationWithAvailability> {
     val byStationId = availabilities.associateBy { it.stationId }
+    val countedWithoutCapacity = stations
+        .filter { it.capacity == null && !it.isVirtual }
+        .mapNotNull { byStationId[it.id]?.docksAvailable }
+    val countsWithoutCapacity = countedWithoutCapacity.count { it == 0 } * 2 <=
+        countedWithoutCapacity.size
     return stations.map { station ->
         val availability = byStationId[station.id]
         StationWithAvailability(
@@ -222,6 +262,7 @@ public fun joinStationsWithAvailability(
             availability = availability?.copy(
                 isAtVirtualStation = station.isVirtual,
                 isAtStationWithCapacity = station.capacity != null,
+                isInFeedCountingWithoutCapacity = countsWithoutCapacity,
             ),
         )
     }

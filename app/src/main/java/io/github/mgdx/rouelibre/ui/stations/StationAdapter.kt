@@ -150,12 +150,14 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
             // The counterpart count: docks when the indicator shows bikes, and
             // the other way round. Free docks that limit nothing are written
             // with the sign the discs use, never as the nought a feed may
-            // carry for them (SPEC §4.1).
+            // carry for them (SPEC §4.1) — at a station that takes bikes back.
+            // One refusing returns shows the count it published, nought where
+            // it published none, as it always has.
             val docksUnlimited = mode == AvailabilityMode.Bikes &&
-                entry.availability?.hasUnlimitedDocks == true
+                entry.availability?.acceptsAnyBike == true
             val counterpart = entry.availability?.let {
                 when (mode) {
-                    AvailabilityMode.Bikes -> it.docksAvailable
+                    AvailabilityMode.Bikes -> it.docksAvailable ?: 0
                     AvailabilityMode.Docks -> it.bikesAvailable
                 }
             }

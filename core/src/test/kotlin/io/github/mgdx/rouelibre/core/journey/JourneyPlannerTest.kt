@@ -409,12 +409,12 @@ class JourneyPlannerTest {
     @Test
     fun `a full station stays refused whatever else it is`() = runTest {
         // The nought is believed wherever the producer could have measured it:
-        // at a virtual station that declares a capacity, at a physical rack, and
-        // at a station that has stopped taking bikes back.
+        // at a virtual station that declares a capacity, at a rack beside its
+        // capacity, and at a station that has stopped taking bikes back.
         val stations = listOf(
             station("depart", at(0.0, 100.0), docks = 0),
             zone("virtuelle-avec-capacite", at(0.0, 3900.0), docks = 0, capacity = 12),
-            zone("borne-pleine", at(0.0, 3850.0), docks = 0, virtual = false),
+            zone("borne-pleine", at(0.0, 3850.0), docks = 0, capacity = 10, virtual = false),
             zone("ne-reprend-plus", at(0.0, 3800.0), docks = 0, returning = false),
         )
 

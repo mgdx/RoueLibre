@@ -50,9 +50,13 @@ fun Context.spokenAvailability(entry: StationWithAvailability, isOutOfService: B
             availability.bikesAvailable,
             availability.bikesAvailable,
         ),
-        availability.docksAvailable
-            ?.takeUnless { availability.hasUnlimitedDocks }
-            ?.let { resources.getQuantityString(R.plurals.docks_available, it, it) }
-            ?: getString(R.string.docks_available_unlimited),
+        // "Unlimited" only where a bike can be returned: a station refusing
+        // returns is said to hold what it published, as the row shows it.
+        if (availability.acceptsAnyBike) {
+            getString(R.string.docks_available_unlimited)
+        } else {
+            val docks = availability.docksAvailable ?: 0
+            resources.getQuantityString(R.plurals.docks_available, docks, docks)
+        },
     )
 }

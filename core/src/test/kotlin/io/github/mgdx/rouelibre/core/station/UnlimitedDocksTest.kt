@@ -15,7 +15,9 @@ import org.junit.Test
  * on 21 October 2026 — 805 stations, 800 of them virtual, three publishing a
  * capacity, and nought free docks at 804 — with the cases around it added: a
  * station leaving the count out, as GBFS asks of one with unlimited docking, a
- * physical rack at nought, and a zone that has stopped taking bikes back.
+ * physical rack at nought beside its capacity, and a zone that has stopped
+ * taking bikes back. The feeds of Düsseldorf and Philadelphia, built station by
+ * station further down, settle the nought of a rack publishing no capacity.
  */
 class UnlimitedDocksTest {
 
@@ -28,7 +30,8 @@ class UnlimitedDocksTest {
            "is_virtual_station":true},
           {"station_id":"zone-with-capacity","name":"Hauptbahnhof","lat":48.1402,
            "lon":11.5600,"is_virtual_station":true,"capacity":12},
-          {"station_id":"rack","name":"Sendlinger Tor","lat":48.1339,"lon":11.5668},
+          {"station_id":"rack","name":"Sendlinger Tor","lat":48.1339,"lon":11.5668,
+           "capacity":9},
           {"station_id":"uncounted","name":"Odeonsplatz","lat":48.1428,"lon":11.5770},
           {"station_id":"closed-zone","name":"Isartor","lat":48.1355,"lon":11.5822,
            "is_virtual_station":true},
@@ -124,7 +127,7 @@ class UnlimitedDocksTest {
     }
 
     @Test
-    fun `a physical rack at nought is full`() {
+    fun `a physical rack at nought beside its capacity is full`() {
         val state = stateOf("rack")
 
         assertFalse(state.hasUnlimitedDocks)
@@ -174,5 +177,152 @@ class UnlimitedDocksTest {
         assertTrue("zone" in kept)
         assertTrue("uncounted" in kept)
         assertFalse("rack" in kept)
+    }
+
+    // ------------------------------------- a nought without a capacity --
+
+    private fun rack(id: String, capacity: Int? = null, virtual: Boolean = false) = Station(
+        id = id,
+        name = id,
+        position = io.github.mgdx.rouelibre.core.geo.Coordinates(51.22, 6.77),
+        capacity = capacity,
+        postalCode = null,
+        isVirtual = virtual,
+    )
+
+    private fun counted(id: String, docks: Int?, returning: Boolean = true) = StationAvailability(
+        stationId = id,
+        bikesAvailable = 4,
+        docksAvailable = docks,
+        isInstalled = true,
+        isRenting = true,
+        isReturning = returning,
+        reportedAt = null,
+    )
+
+    private fun feed(vararg pairs: kotlin.Pair<Station, StationAvailability>) =
+        joinStationsWithAvailability(pairs.map { it.first }, pairs.map { it.second })
+            .associate { it.station.id to checkNotNull(it.availability) }
+
+    @Test
+    fun `a rack without a capacity at nought takes any bike where nothing is counted`() {
+        // Düsseldorf, 22 October 2026: 359 of 360 stations at nought, 345 of
+        // them racks rather than zones, and no capacity to subtract the bikes
+        // from. The nought is nextbike's derivation, not a full rack.
+        val states = feed(
+            rack("Burgplatz") to counted("Burgplatz", 0),
+            rack("Hauptbahnhof") to counted("Hauptbahnhof", 0),
+            rack("Zone", virtual = true) to counted("Zone", 0),
+        )
+
+        assertTrue(states.getValue("Burgplatz").hasUnlimitedDocks)
+        assertTrue(states.getValue("Burgplatz").acceptsAnyBike)
+    }
+
+    @Test
+    fun `a rack without a capacity at nought is full where the feed counts`() {
+        // Indego, Philadelphia, 22 October 2026: no capacity anywhere, 317
+        // racks counted above nought and 4 at nought — full racks, measured.
+        val states = feed(
+            rack("Rittenhouse") to counted("Rittenhouse", 0),
+            rack("City Hall") to counted("City Hall", 7),
+            rack("Zone", virtual = true) to counted("Zone", 0),
+        )
+
+        assertFalse(states.getValue("Rittenhouse").hasUnlimitedDocks)
+        assertFalse(states.getValue("Rittenhouse").canAcceptBike)
+        // A zone has no dock to fill, whatever the racks beside it count.
+        assertTrue(states.getValue("Zone").hasUnlimitedDocks)
+    }
+
+    @Test
+    fun `a few real docks among derived noughts leave the noughts unlimited`() {
+        // Sarajevo, 22 October 2026: 38 of the 42 stations without a capacity
+        // at nought, four counting real docks. The noughts are nextbike's.
+        val racks = (1..10).map { index -> rack("rack-" + index) to counted("rack-" + index, 0) }
+        val states = feed(*racks.toTypedArray(), rack("Bascarsija") to counted("Bascarsija", 6))
+
+        assertTrue(states.getValue("rack-1").hasUnlimitedDocks)
+        assertFalse(states.getValue("Bascarsija").hasUnlimitedDocks)
+    }
+
+    @Test
+    fun `a capacity elsewhere in the feed proves nothing about a rack without one`() {
+        // Munich's three capacities, and racks at nought beside them: only a
+        // count above nought at a station without a capacity says the feed
+        // measures such stations.
+        val states = feed(
+            rack("Odeonsplatz") to counted("Odeonsplatz", 0),
+            rack("Hauptbahnhof", capacity = 12) to counted("Hauptbahnhof", 5),
+        )
+
+        assertTrue(states.getValue("Odeonsplatz").hasUnlimitedDocks)
+        assertFalse(states.getValue("Hauptbahnhof").hasUnlimitedDocks)
+    }
+
+    @Test
+    fun `a state nobody joined reads its nought as full`() {
+        assertFalse(counted("seul", 0).hasUnlimitedDocks)
+        assertTrue(counted("seul", null).hasUnlimitedDocks)
+    }
+
+    @Test
+    fun `a station refusing returns accepts no bike, however its docks read`() {
+        val states = feed(rack("Burgplatz") to counted("Burgplatz", 0, returning = false))
+        val state = states.getValue("Burgplatz")
+
+        assertTrue(state.hasUnlimitedDocks)
+        assertFalse(state.acceptsAnyBike)
+    }
+
+    // ----------------------------------------- edge cases of the feed --
+
+    private fun parsedState(stationFields: String, statusFields: String): StationAvailability {
+        val information = """
+            {"last_updated":1792569600,"ttl":60,"version":"2.3","data":{"stations":[
+             {"station_id":"s","name":"S","lat":48.1,"lon":11.5$stationFields}]}}
+        """.trimIndent()
+        val status = """
+            {"last_updated":1792569600,"ttl":60,"version":"2.3","data":{"stations":[
+             {"station_id":"s","num_bikes_available":2,"is_installed":true,
+              "is_renting":true,"is_returning":true$statusFields}]}}
+        """.trimIndent()
+        return checkNotNull(
+            joinStationsWithAvailability(
+                success(parser.parseStationInformation(information)).stations,
+                success(parser.parseStationStatus(status)).availabilities,
+            ).single().availability,
+        )
+    }
+
+    @Test
+    fun `a negative free-dock count is read as nought`() {
+        // A count below nought is malformed; the parser has always brought it
+        // back to nought, and the rule then reads it as any nought. The
+        // discovery tool does the same (test_dock_verdict.py).
+        val withCapacity = parsedState(""","capacity":10""", ""","num_docks_available":-2""")
+        val withoutCapacity = parsedState("", ""","num_docks_available":-2""")
+
+        assertEquals(0, withCapacity.docksAvailable)
+        assertFalse(withCapacity.hasUnlimitedDocks)
+        assertTrue(withoutCapacity.hasUnlimitedDocks)
+    }
+
+    @Test
+    fun `a negative capacity is no capacity`() {
+        val state = parsedState(""","capacity":-1""", ""","num_docks_available":0""")
+
+        assertFalse(state.isAtStationWithCapacity)
+        assertTrue(state.hasUnlimitedDocks)
+    }
+
+    @Test
+    fun `a flag written as a string is read as the boolean it spells`() {
+        val zone = parsedState(
+            ""","is_virtual_station":"true","capacity":4""",
+            ""","num_docks_available":1""",
+        )
+
+        assertTrue(zone.isAtVirtualStation)
     }
 }
