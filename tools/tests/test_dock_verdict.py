@@ -15,7 +15,12 @@ from discover_networks import (
     FROZEN_FREE_DOCK_SHARE,
     PLACEHOLDER_DOCK_SHARE,
     VIRTUAL_STATION_SHARE,
+    capacity_of,
     dock_verdict,
+    explained_by_capacity,
+    feed_counts_without_capacity,
+    free_docks,
+    lenient_flag,
     takes_any_bike_back,
 )
 
@@ -154,41 +159,159 @@ class FrozenDespiteADeclaredCapacity(unittest.TestCase):
 
 
 class UnlimitedReturns(unittest.TestCase):
-    """The mirror of `StationAvailability.hasUnlimitedDocks` in `:core`."""
+    """The mirror of `StationAvailability.hasUnlimitedDocks` in `:core`.
+
+    Each case here has its twin in `UnlimitedDocksTest.kt`; the two must agree.
+    """
 
     def test_no_count_at_all_is_unlimited(self) -> None:
-        self.assertTrue(takes_any_bike_back({"num_bikes_available": 2}, None))
+        self.assertTrue(takes_any_bike_back({"num_bikes_available": 2}, None, True))
 
     def test_a_virtual_station_without_capacity_at_nought(self) -> None:
         # nextbike: capacity less bikes, floored at nought, with no capacity.
-        self.assertTrue(
-            takes_any_bike_back({"num_docks_available": 0}, {"is_virtual_station": True})
-        )
-        self.assertTrue(
-            takes_any_bike_back({"num_docks_available": 0}, {"is_virtual_station": 1})
+        # A zone has no dock to fill, even in a feed that counts its racks.
+        for flag in (True, 1, "true", "1"):
+            self.assertTrue(
+                takes_any_bike_back({"num_docks_available": 0}, {"is_virtual_station": flag}, True)
+            )
+
+    def test_a_rack_without_capacity_at_nought_where_nothing_is_counted(self) -> None:
+        # Düsseldorf: 345 racks at nought and no capacity anywhere among them.
+        self.assertTrue(takes_any_bike_back({"num_docks_available": 0}, {}, False))
+        self.assertTrue(takes_any_bike_back({"num_docks_available": 0}, None, False))
+
+    def test_a_rack_without_capacity_at_nought_is_full_where_the_feed_counts(self) -> None:
+        # Indego, Philadelphia: 317 racks counted above nought, 4 at nought.
+        self.assertFalse(takes_any_bike_back({"num_docks_available": 0}, {}, True))
+
+    def test_a_station_declaring_a_capacity_keeps_its_count(self) -> None:
+        for information in (
+            {"is_virtual_station": True, "capacity": 12},
+            {"capacity": 12},
+            {"is_virtual_station": True, "vehicle_docks_capacity": [{"count": 4}]},
+        ):
+            self.assertFalse(takes_any_bike_back({"num_docks_available": 0}, information, False))
+
+    def test_a_count_above_nought_is_kept(self) -> None:
+        self.assertFalse(
+            takes_any_bike_back({"num_docks_available": 3}, {"is_virtual_station": True}, False)
         )
 
-    def test_a_virtual_station_declaring_a_capacity_keeps_its_count(self) -> None:
-        self.assertFalse(
-            takes_any_bike_back(
-                {"num_docks_available": 0}, {"is_virtual_station": True, "capacity": 12}
+    def test_a_negative_count_is_nought(self) -> None:
+        self.assertEqual(0, free_docks({"num_docks_available": -2}))
+        self.assertTrue(takes_any_bike_back({"num_docks_available": -2}, {}, False))
+        self.assertFalse(takes_any_bike_back({"num_docks_available": -2}, {"capacity": 10}, False))
+
+    def test_a_negative_capacity_is_no_capacity(self) -> None:
+        self.assertIsNone(capacity_of({"capacity": -1}))
+        self.assertTrue(takes_any_bike_back({"num_docks_available": 0}, {"capacity": -1}, False))
+
+    def test_an_unreadable_flag_is_no_flag(self) -> None:
+        # The application refuses to read the document; here, no flag at all.
+        for flag in ("yes", "True", None, [1]):
+            self.assertFalse(lenient_flag(flag))
+        self.assertFalse(lenient_flag("false"))
+        self.assertFalse(lenient_flag("0"))
+
+    def test_only_a_count_above_nought_without_capacity_proves_counting(self) -> None:
+        information = {"a": {}, "b": {"capacity": 12}, "c": {}}
+        live_derived = [
+            {"station_id": "a", "num_docks_available": 0},
+            {"station_id": "b", "num_docks_available": 5},
+            {"station_id": "c"},
+        ]
+        self.assertFalse(feed_counts_without_capacity(live_derived, information))
+        live_counted = live_derived + [{"station_id": "c", "num_docks_available": 7}]
+        self.assertTrue(feed_counts_without_capacity(live_counted, information))
+
+
+class NoughtsThatAreMostOfTheFeed(unittest.TestCase):
+    """A feed where most racks without a capacity say nought measured none of them."""
+
+    def test_sarajevo_four_real_docks_among_derived_noughts(self) -> None:
+        information = {str(index): {} for index in range(42)}
+        live = [{"station_id": str(index), "num_docks_available": 0} for index in range(38)]
+        live += [{"station_id": str(index), "num_docks_available": 6} for index in range(38, 42)]
+        self.assertFalse(feed_counts_without_capacity(live, information))
+
+    def test_virtual_stations_say_nothing_of_the_racks(self) -> None:
+        # Their nought is never believed, so it cannot outvote the racks'.
+        information = {"rack": {}, "zone-1": {"is_virtual_station": True},
+                       "zone-2": {"is_virtual_station": True}}
+        live = [
+            {"station_id": "rack", "num_docks_available": 7},
+            {"station_id": "zone-1", "num_docks_available": 0},
+            {"station_id": "zone-2", "num_docks_available": 0},
+        ]
+        self.assertTrue(feed_counts_without_capacity(live, information))
+
+    def test_philadelphia_four_full_racks_among_counted_ones(self) -> None:
+        information = {str(index): {} for index in range(321)}
+        live = [{"station_id": str(index), "num_docks_available": 0} for index in range(4)]
+        live += [{"station_id": str(index), "num_docks_available": 7} for index in range(4, 321)]
+        self.assertTrue(feed_counts_without_capacity(live, information))
+
+
+class CountsTheCapacityExplains(unittest.TestCase):
+    """A repeated value is not frozen when every station's capacity accounts for it."""
+
+    def test_an_empty_fleet_reads_its_capacity(self) -> None:
+        # Agen: no bike out, five free docks at five-dock stations.
+        self.assertTrue(
+            explained_by_capacity(
+                {"num_bikes_available": 0, "num_docks_available": 5}, {"capacity": 5}
             )
         )
-        self.assertFalse(
-            takes_any_bike_back(
-                {"num_docks_available": 0},
-                {"is_virtual_station": True, "vehicle_docks_capacity": [{"count": 4}]},
+
+    def test_a_full_station_at_night(self) -> None:
+        # Calais: nought free docks, the bikes filling the capacity.
+        self.assertTrue(
+            explained_by_capacity(
+                {"num_bikes_available": 9, "num_docks_available": 0}, {"capacity": 9}
             )
         )
 
-    def test_a_virtual_station_counting_free_docks_keeps_them(self) -> None:
-        self.assertFalse(
-            takes_any_bike_back({"num_docks_available": 3}, {"is_virtual_station": True})
+    def test_docks_and_bikes_out_of_service_make_up_the_difference(self) -> None:
+        self.assertTrue(
+            explained_by_capacity(
+                {
+                    "num_bikes_available": 6,
+                    "num_docks_available": 0,
+                    "num_bikes_disabled": 1,
+                    "num_docks_disabled": 1,
+                },
+                {"capacity": 8},
+            )
         )
 
-    def test_a_physical_rack_at_nought_is_full(self) -> None:
-        self.assertFalse(takes_any_bike_back({"num_docks_available": 0}, {}))
-        self.assertFalse(takes_any_bike_back({"num_docks_available": 0}, None))
+    def test_more_bikes_than_docks_reads_nought(self) -> None:
+        # Mława: two-dock stations holding three to five bikes, nought free.
+        self.assertTrue(
+            explained_by_capacity(
+                {"num_bikes_available": 4, "num_docks_available": 0}, {"capacity": 2}
+            )
+        )
+
+    def test_free_docks_frozen_at_the_capacity(self) -> None:
+        # Auch: four bikes at a five-dock station, and five free docks.
+        self.assertFalse(
+            explained_by_capacity(
+                {"num_vehicles_available": 4, "num_docks_available": 5}, {"capacity": 5}
+            )
+        )
+
+    def test_a_nought_the_capacity_does_not_explain(self) -> None:
+        # Gothenburg's frozen nought: two bikes in a twenty-dock rack.
+        self.assertFalse(
+            explained_by_capacity(
+                {"num_bikes_available": 2, "num_docks_available": 0}, {"capacity": 20}
+            )
+        )
+
+    def test_no_capacity_explains_nothing(self) -> None:
+        self.assertFalse(
+            explained_by_capacity({"num_bikes_available": 0, "num_docks_available": 1}, {})
+        )
 
 
 class StationsTheProducerCallsPaintedZones(unittest.TestCase):

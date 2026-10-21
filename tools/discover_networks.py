@@ -643,21 +643,30 @@ def probe_feeds(candidate: dict) -> dict:
             # promise the bike can be returned. A feed can publish it frozen
             # while the sum above still moves, the bikes moving underneath it.
             #
-            # A station the application reads as taking back any bike is not
-            # counted as frozen, whatever it publishes: its nought limits
-            # nothing. It still weighs in the share, as a station where a
-            # journey can end, so that a network made of such zones — MyRadl
-            # in Munich, 800 of 805 — is not withdrawn over the handful of
-            # counted racks beside them.
+            # Two kinds of station are never counted as frozen, and both still
+            # weigh in the share, as stations where a journey can end or a
+            # count that was really taken. A station the application reads as
+            # taking back any bike: its nought limits nothing, and a network
+            # made of such zones — MyRadl in Munich, 800 of 805 — is not
+            # withdrawn over the handful of counted racks beside them. And a
+            # station whose count its own capacity explains: an empty fleet
+            # reads its capacity in free docks at every rack, and a full one
+            # nought, and both are measurements (`explained_by_capacity`).
             information = {str(station.get("station_id")): station for station in stations}
+            counting = feed_counts_without_capacity(live, information)
             unlimited = [
-                takes_any_bike_back(station, information.get(str(station.get("station_id"))))
+                takes_any_bike_back(
+                    station, information.get(str(station.get("station_id"))), counting
+                )
                 for station in live
             ]
             free = [
-                station["num_docks_available"]
+                free_docks(station)
                 for station, limitless in zip(live, unlimited)
                 if not limitless
+                and not explained_by_capacity(
+                    station, information.get(str(station.get("station_id")))
+                )
             ]
             survey["unlimitedDockStations"] = sum(unlimited)
             if free:
@@ -771,7 +780,9 @@ def is_motor_vehicle(declared: dict) -> bool:
     return declared.get("propulsion_type") not in PEDALLED_PROPULSIONS
 
 
-def takes_any_bike_back(status: dict, information: dict | None) -> bool:
+def takes_any_bike_back(
+    status: dict, information: dict | None, feed_counts_without_capacity: bool
+) -> bool:
     """Whether a station's free docks limit nothing, as the application reads them.
 
     **This mirrors `StationAvailability.hasUnlimitedDocks` in `:core`, and the
@@ -779,29 +790,124 @@ def takes_any_bike_back(status: dict, information: dict | None) -> bool:
     application sends journeys to it, or the other way round, is a network
     withdrawn or kept for a reason the application does not share. Two cases.
     No `num_docks_available` at all, which GBFS reserves for a station with
-    unlimited docking. And a nought at a virtual station that publishes no
-    capacity — neither `capacity` nor `vehicle_docks_capacity` — which is what
-    nextbike derives where it has no capacity to subtract the bikes from.
+    unlimited docking. And a nought at a station that publishes no capacity —
+    neither `capacity` nor `vehicle_docks_capacity` — which is what nextbike
+    derives where it has no capacity to subtract the bikes from: always at a
+    virtual station, a zone having no dock to fill, and at a rack unless the
+    feed proves it measures such stations (`feed_counts_without_capacity`).
     `is_returning` is not read here, nor there: it refuses returns on its own.
     """
-    docks = status.get("num_docks_available")
-    if docks is None:
+    if status.get("num_docks_available") is None:
         return True
-    if information is None or not lenient_flag(information.get("is_virtual_station")):
+    if free_docks(status) != 0 or capacity_of(information) is not None:
         return False
-    publishes_capacity = (
-        bool(information.get("vehicle_docks_capacity"))
-        or information.get("capacity") is not None
+    virtual = information is not None and lenient_flag(information.get("is_virtual_station"))
+    return virtual or not feed_counts_without_capacity
+
+
+def feed_counts_without_capacity(live: list[dict], information: dict[str, dict]) -> bool:
+    """Whether the stations without a capacity count their free docks.
+
+    The mirror of `isInFeedCountingWithoutCapacity` in `:core`: they do when at
+    most half of them say nought. Indego, in Philadelphia, publishes no
+    capacity and counts every rack — 4 noughts in 321, full racks; nextbike's
+    derivation writes nought wherever there is no capacity — all of
+    Düsseldorf's 359, and 38 of Sarajevo's 42. Only racks are weighed — a
+    virtual station's nought is never believed, so it says nothing of the
+    racks — and only those `station_information` describes, as the application
+    joins no others.
+    """
+    counted = []
+    for station in live:
+        described = information.get(str(station.get("station_id")))
+        if (
+            described is None
+            or station.get("num_docks_available") is None
+            or capacity_of(described) is not None
+            or lenient_flag(described.get("is_virtual_station"))
+        ):
+            continue
+        counted.append(free_docks(station))
+    return sum(1 for docks in counted if docks == 0) * 2 <= len(counted)
+
+
+def free_docks(status: dict) -> int:
+    """The free docks as `:core` reads them: a count below nought is nought."""
+    return max(0, whole_number(status.get("num_docks_available")))
+
+
+def capacity_of(information: dict | None) -> int | None:
+    """A station's capacity as `:core` reads it (`GbfsParser.capacityOf`).
+
+    `vehicle_docks_capacity` itemised wins when it adds up to a count; otherwise
+    the plain `capacity`, and a figure below nought is no capacity at all.
+    """
+    if information is None:
+        return None
+    itemised = information.get("vehicle_docks_capacity")
+    if isinstance(itemised, list) and itemised:
+        total = sum(
+            whole_number(entry.get("count")) for entry in itemised if isinstance(entry, dict)
+        )
+        if total >= 0:
+            return total
+    capacity = information.get("capacity")
+    if capacity is None or isinstance(capacity, bool):
+        return None
+    try:
+        value = int(float(capacity))
+    except (TypeError, ValueError):
+        return None
+    return value if value >= 0 else None
+
+
+def explained_by_capacity(status: dict, information: dict | None) -> bool:
+    """Whether a station's free docks are what its own capacity says they are.
+
+    The capacity less the bikes standing there, floored at nought — the very
+    derivation nextbike writes — with the docks and bikes out of service
+    allowed to take some of it. Such a count was taken, whatever value it
+    repeats: Agen's empty fleet reads five free docks at 13 of 16 stations,
+    Calais at night nought at 73 of 80, 660 bikes standing in some 693 docks,
+    and Mława nought at two-dock stations holding three to five bikes. Read as
+    frozen they withdrew healthy networks depending on the hour of the survey.
+    A count the capacity does not explain stays a candidate: Auch reads its
+    capacity in free docks at every station, the four bikes standing at a
+    five-dock one included.
+    """
+    capacity = capacity_of(information)
+    if capacity is None or status.get("num_docks_available") is None:
+        return False
+    standing = whole_number(
+        status.get("num_bikes_available") or status.get("num_vehicles_available")
     )
-    return not publishes_capacity and whole_number(docks) == 0
+    out_of_service = (
+        whole_number(status.get("num_bikes_disabled") or status.get("num_vehicles_disabled"))
+        + whole_number(status.get("num_docks_disabled"))
+    )
+    most = max(0, capacity - standing)
+    least = max(0, most - out_of_service)
+    return least <= free_docks(status) <= most
 
 
 def lenient_flag(value) -> bool:
-    """A GBFS flag read as `:core` reads it: a boolean, or a number other than nought."""
+    """A GBFS flag read as `:core` reads it (`LenientBooleanSerializer`).
+
+    A boolean; a number other than nought; and, as kotlinx reads a primitive's
+    content, the strings "true" and "false" and a string holding a number.
+    Anything else the application refuses to read, which is no flag here.
+    """
     if isinstance(value, bool):
         return value
     if isinstance(value, (int, float)):
         return value != 0
+    if isinstance(value, str):
+        if value in ("true", "false"):
+            return value == "true"
+        try:
+            return int(value) != 0
+        except ValueError:
+            return False
     return False
 
 
