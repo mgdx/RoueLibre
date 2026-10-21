@@ -75,6 +75,7 @@
     <!-- Spoken by screen readers on a station's indicator.
          Example: "Avinguda Diagonal, 6 bicis, 26 espais lliures". -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <string name="station_out_of_service">Fora de servei</string>
     <!-- A closure that has lasted says so, since a station shut this morning
          and one silent for months do not call for the same decision. %1$s is
@@ -486,6 +487,7 @@
     <!-- The counts shown are the ones the journey was worked out on: a station
          empties while one walks to it (SPEC §6). -->
     <string name="journey_detail_availability_note">Bicis i espais lliures tal com eren en calcular la ruta.</string>
+    <string name="journey_detail_availability_note_bikes">Bicis tal com eren en calcular la ruta.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Obre en una aplicació de navegació</string>
@@ -510,6 +512,7 @@
     <string name="journey_no_mechanical_nearby">Ara mateix cap estació propera no té cap bici mecànica. Demana qualsevol bici o torna-ho a provar més tard.</string>
     <string name="journey_no_electric_nearby">Ara mateix cap estació propera no té cap bici elèctrica. Demana qualsevol bici o torna-ho a provar més tard.</string>
     <string name="journey_no_dock_nearby">Cap estació amb espais lliures a prop de la destinació. Torna-ho a provar més tard o tria una altra destinació.</string>
+    <string name="journey_no_return_nearby">Cap estació a prop de la destinació no admet bicis ara mateix. Torna-ho a provar més tard o tria una altra destinació.</string>
     <string name="journey_no_route">No hi ha cap camí practicable entre aquests dos punts.</string>
     <string name="journey_graph_missing">El graf de rutes no està instal·lat. Afegeix-lo des de la pantalla d’emmagatzematge.</string>
     <string name="journey_outside_coverage">Aquest punt és fora de la zona que cobreixen les dades instal·lades.</string>
@@ -814,6 +817,7 @@
     <string name="settings_map_filters_hide_empty">Amaga les estacions que no tenen res a oferir</string>
     <!-- Under the switch, saying what "res" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">«Res» es llegeix segons el que compta el mapa: cap bici quan compta bicis, cap espai lliure quan compta espais lliures.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">«Res» vol dir cap bici: en aquesta xarxa el mapa només compta bicis.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Les estacions de què la xarxa no diu res es queden al mapa: un recompte que ningú no ha pogut llegir no és un recompte de zero.</string>

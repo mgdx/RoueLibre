@@ -72,6 +72,7 @@
     <string name="docks_available_unlimited">Leku libreak: mugagabeak</string>
 
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <string name="station_out_of_service">Zerbitzuz kanpo</string>
     <!-- A closure that has lasted says so, since a station shut this morning
          and one silent for months do not call for the same decision. %1$s is
@@ -505,6 +506,7 @@
     <!-- The counts shown are the ones the journey was worked out on: a station
          empties while one walks to it (SPEC §6). -->
     <string name="journey_detail_availability_note">Bizikletak eta leku libreak ibilbidea kalkulatu zeneko unekoak dira.</string>
+    <string name="journey_detail_availability_note_bikes">Bizikletak ibilbidea kalkulatu zeneko unekoak dira.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Ireki nabigazio-aplikazio batean</string>
@@ -535,6 +537,7 @@
     <string name="journey_no_mechanical_nearby">Inguruko geltokietan ez dago bizikleta arruntik une honetan. Eskatu edozein bizikleta, edo saiatu geroago.</string>
     <string name="journey_no_electric_nearby">Inguruko geltokietan ez dago bizikleta elektrikorik une honetan. Eskatu edozein bizikleta, edo saiatu geroago.</string>
     <string name="journey_no_dock_nearby">Ez dago leku librerik duen geltokirik helmugatik gertu. Saiatu geroago, edo jo beste toki batera.</string>
+    <string name="journey_no_return_nearby">Helmugatik gertu ez dago une honetan bizikletak hartzen dituen geltokirik. Saiatu geroago, edo jo beste toki batera.</string>
     <!-- "Bide" and not "ibilbide": the line on the ground, not the planned
          journey. That is why "ibilbide" is left to the journey everywhere
          else in this file. -->
@@ -847,6 +850,7 @@
     <string name="settings_map_filters_hide_empty">Ezkutatu ezer eskaintzen ez duten geltokiak</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">«Ezer ez» mapak zenbatzen duenaren araberakoa da: bizikletarik ez bizikletak zenbatzen dituenean, leku librerik ez leku libreak zenbatzen dituenean.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">«Ezer ez» bizikletarik ez da: sare honetan mapak bizikletak baino ez ditu zenbatzen.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Sareak ezer esaten ez duen geltokiak mapan geratzen dira: inork irakurri ezin duen kontaketa ez da hutsaren kontaketa.</string>

@@ -34,6 +34,7 @@ import io.github.mgdx.rouelibre.ui.map.UserPositionOnMap
 import io.github.mgdx.rouelibre.ui.map.liesOutside
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
+import io.github.mgdx.rouelibre.ui.withFreeDocksShown
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -100,6 +101,12 @@ class JourneyResultFragment : Fragment() {
      */
     private var ownBikeKind: OwnBikeKind = OwnBikeKind.Mechanical
 
+    /**
+     * Whether the network's free docks are worth showing (SPEC §7.1), `true`
+     * until the stations say otherwise.
+     */
+    private var freeDocksShown = true
+
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
 
@@ -114,6 +121,7 @@ class JourneyResultFragment : Fragment() {
         detail = { binding?.detail },
         lentFleet = { lentFleet },
         ownBikeKind = { ownBikeKind },
+        freeDocksShown = { freeDocksShown },
     )
 
     /**
@@ -316,6 +324,7 @@ class JourneyResultFragment : Fragment() {
         readBikeFleet()
         readLentFleet()
         readOwnBikeKind()
+        readFreeDocksShown()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -389,6 +398,23 @@ class JourneyResultFragment : Fragment() {
                 }
             }
             summary.showOwnBikeSentence(viewModel.state.value.plan)
+        }
+    }
+
+    /**
+     * Follows whether the network's free docks are worth showing (SPEC §7.1),
+     * for the one sentence on this screen that could name them: why no
+     * journey could end near the destination.
+     *
+     * Only a journey with no station is written again, for the reason
+     * [readLentFleet] gives: that sentence is all there is to rewrite, and the
+     * card holding it frames nothing.
+     */
+    private fun readFreeDocksShown() {
+        withFreeDocksShown { shown ->
+            freeDocksShown = shown
+            val state = viewModel.state.value
+            if (!state.isComputing && state.chosen == null) summary.show(state)
         }
     }
 

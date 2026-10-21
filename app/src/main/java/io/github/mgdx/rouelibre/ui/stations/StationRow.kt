@@ -136,6 +136,9 @@ class StationRow @JvmOverloads constructor(context: Context, attributes: Attribu
      * from a safeguard, not a reason to remove it.
      */
     private fun countCanStandBesideTheNameIn(room: Int): Boolean {
+        // No count at all — a network whose free docks are not worth showing
+        // (SPEC §7.1) — leaves nothing to step below, and the name the width.
+        if (count.isGone) return true
         // Everything the row puts around the name: the indicator, the count, and
         // the two margins holding the three apart. Written out rather than as
         // `room - leftToTheName` so that the comparison below reads as the

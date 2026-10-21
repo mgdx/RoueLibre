@@ -91,6 +91,7 @@
     <string name="docks_available_unlimited">Слободна места: неограничено</string>
 
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <string name="station_out_of_service">Не ради</string>
     <!-- A closure that has lasted says so. %1$s is the line above, %2$s the
          age of the station's own last measurement. -->
@@ -473,6 +474,7 @@
     <!-- The counts shown are the ones the journey was worked out on: a station
          empties while one walks to it (SPEC §6). -->
     <string name="journey_detail_availability_note">Бицикли и слободна места какви су били у тренутку израчунавања путовања.</string>
+    <string name="journey_detail_availability_note_bikes">Бицикли какви су били у тренутку израчунавања путовања.</string>
     <!-- Hands one leg of the journey to another application. -->
     <string name="journey_navigate">Отвори у апликацији за навигацију</string>
     <string name="journey_navigate_which">Који део путовања?</string>
@@ -498,6 +500,7 @@
     <string name="journey_no_mechanical_nearby">Ниједна станица у близини тренутно нема класични бицикл. Затражите било који бицикл или пробајте касније.</string>
     <string name="journey_no_electric_nearby">Ниједна станица у близини тренутно нема електрични бицикл. Затражите било који бицикл или пробајте касније.</string>
     <string name="journey_no_dock_nearby">У близини одредишта нема станице са слободним местом. Пробајте касније или изаберите друго одредиште.</string>
+    <string name="journey_no_return_nearby">Ниједна станица у близини одредишта тренутно не прима бицикле. Пробајте касније или изаберите друго одредиште.</string>
     <string name="journey_no_route">Између ове две тачке нема проходне руте.</string>
     <string name="journey_graph_missing">Подаци за руте нису инсталирани. Додајте их са екрана Меморијски простор.</string>
     <string name="journey_outside_coverage">Ова тачка је изван подручја које покривају инсталирани подаци.</string>
@@ -790,6 +793,7 @@
     <string name="settings_map_filters_hide_empty">Сакриј станице које немају шта да понуде</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Ништа“ прати оно што мапа броји: ниједан бицикл док броји бицикле, ниједно слободно место док броји слободна места.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">„Ништа“ значи ниједан бицикл: на овој мрежи мапа броји само бицикле.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Станице о којима мрежа ништа не каже остају на мапи: број који нико није могао да прочита није број нула.</string>

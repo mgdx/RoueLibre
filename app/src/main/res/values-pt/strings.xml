@@ -71,6 +71,7 @@
     <!-- Spoken by screen readers on a station's indicator.
          Example: "Rua Augusta, 6 bicicletas, 26 lugares livres". -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
 
     <string name="station_out_of_service">Fora de serviço</string>
     <string name="station_out_of_service_since">%1$s · último dado %2$s</string>
@@ -501,6 +502,7 @@
          highest. -->
     <string name="journey_detail_profile_description_no_climb">O trajeto de bicicleta decorre entre %1$s e %2$s de altitude.</string>
     <string name="journey_detail_availability_note">Bicicletas e lugares livres tal como estavam quando o percurso foi calculado.</string>
+    <string name="journey_detail_availability_note_bikes">Bicicletas tal como estavam quando o percurso foi calculado.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Abrir numa aplicação de navegação</string>
@@ -532,6 +534,7 @@
     <string name="journey_no_mechanical_nearby">Nenhuma estação próxima tem uma bicicleta mecânica neste momento. Peça qualquer bicicleta ou tente novamente mais tarde.</string>
     <string name="journey_no_electric_nearby">Nenhuma estação próxima tem uma bicicleta elétrica neste momento. Peça qualquer bicicleta ou tente novamente mais tarde.</string>
     <string name="journey_no_dock_nearby">Nenhuma estação com um lugar livre perto do destino. Tente novamente mais tarde ou escolha outro destino.</string>
+    <string name="journey_no_return_nearby">Nenhuma estação perto do destino está a aceitar bicicletas neste momento. Tente novamente mais tarde ou escolha outro destino.</string>
     <string name="journey_no_route">Não há nenhum caminho praticável entre estes dois pontos.</string>
     <string name="journey_graph_missing">O grafo de percursos não está instalado. Adicione-o a partir do ecrã de armazenamento.</string>
     <string name="journey_outside_coverage">Este ponto fica fora da área que os dados instalados cobrem.</string>
@@ -863,6 +866,7 @@
     <string name="settings_map_filters_hide_empty">Ocultar as estações que não têm nada a oferecer</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">«Nada» lê-se conforme o que o mapa está a contar: nenhuma bicicleta quando conta bicicletas, nenhum lugar livre quando conta lugares livres.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">«Nada» quer dizer nenhuma bicicleta: nesta rede o mapa só conta bicicletas.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">As estações sobre as quais a rede nada diz permanecem no mapa: uma contagem que ninguém conseguiu ler não é uma contagem de zero.</string>

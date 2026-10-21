@@ -264,7 +264,11 @@
                 android:text="@string/settings_map_filters_hide_empty"
                 android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
 
+            <!-- Worded for bikes alone in a network whose free docks are not
+                 worth showing (SPEC §7.1): the map has no free docks to count
+                 there. -->
             <TextView
+                android:id="@+id/hide_empty_stations_hint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_xs"

@@ -18,6 +18,7 @@ import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.databinding.FragmentFavouritesBinding
+import io.github.mgdx.rouelibre.ui.withFreeDocksShown
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -73,6 +74,9 @@ class FavouriteStationsFragment : Fragment() {
         views.stations.addItemDecoration(
             DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL),
         )
+        // The rows are the list's own, and lose their free docks where the
+        // list's do (SPEC §7.1, §7.5).
+        withFreeDocksShown { adapter.freeDocksShown = it }
         ItemTouchHelper(DragToReorder(::onMoved, ::onDropped)).attachToRecyclerView(views.stations)
 
         viewLifecycleOwner.lifecycleScope.launch {

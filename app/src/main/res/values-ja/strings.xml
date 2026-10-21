@@ -48,6 +48,7 @@
     <!-- Spoken by screen readers on a station's indicator.
          Example: 「駅前通り、自転車6台、空きラック26台」. -->
     <string name="station_content_description">%1$s、%2$s、%3$s</string>
+    <string name="station_content_description_bikes_only">%1$s、%2$s</string>
 
     <!-- A station the network has taken out of service. Not 圏外, which is
          Android's word for a radio blackspot and says nothing about a rack. -->
@@ -456,6 +457,7 @@
          highest. -->
     <string name="journey_detail_profile_description_no_climb">走行区間の標高は%1$sから%2$sです。</string>
     <string name="journey_detail_availability_note">自転車と空きラックの数は、経路を計算した時点のものです。</string>
+    <string name="journey_detail_availability_note_bikes">自転車の数は、経路を計算した時点のものです。</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">ナビアプリで開く</string>
@@ -487,6 +489,7 @@
     <string name="journey_no_mechanical_nearby">近くのステーションに、今は一般自転車がありません。種類を問わずに探すか、時間をおいてお試しください。</string>
     <string name="journey_no_electric_nearby">近くのステーションに、今は電動アシスト自転車がありません。種類を問わずに探すか、時間をおいてお試しください。</string>
     <string name="journey_no_dock_nearby">目的地の近くに、空きラックのあるステーションがありません。時間をおくか、別の場所を目指してください。</string>
+    <string name="journey_no_return_nearby">目的地の近くに、いま自転車を返却できるステーションがありません。時間をおくか、別の場所を目指してください。</string>
     <string name="journey_no_route">この2地点を結ぶ通行可能な道がありません。</string>
     <string name="journey_graph_missing">経路データがインストールされていません。ストレージ画面から追加してください。</string>
     <string name="journey_outside_coverage">この地点は、インストール済みのデータが対象とする範囲の外にあります。</string>
@@ -814,6 +817,7 @@
     <string name="settings_map_filters_hide_empty">提供できるものがないステーションを隠す</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">「ない」の意味は、地図が何を数えているかで決まります。自転車を数えているときは自転車が0台、空きラックを数えているときは空きラックが0台ということです。</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">「ない」は自転車が0台ということです。このネットワークでは、地図は自転車だけを数えます。</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">サービスが何も伝えていないステーションは、地図に残ります。誰も読み取れなかった数は、0という数ではありません。</string>

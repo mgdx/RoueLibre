@@ -69,6 +69,7 @@
     <!-- Spoken by screen readers on a station's indicator.
          Example: "Katedra, 6 dviračiai, 26 laisvos vietos". -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <string name="station_out_of_service">Paslaugos neteikiamos</string>
     <string name="station_out_of_service_since">%1$s · paskutinis pranešimas %2$s</string>
     <string name="station_availability_unknown">Nežinomas prieinamumas</string>
@@ -464,6 +465,7 @@
          highest. -->
     <string name="journey_detail_profile_description_no_climb">Važiuojama nuo %1$s iki %2$s virš jūros lygio.</string>
     <string name="journey_detail_availability_note">Dviračių ir laisvų vietų skaičiai – tokie, kokie buvo skaičiuojant kelionę.</string>
+    <string name="journey_detail_availability_note_bikes">Dviračių skaičiai – tokie, kokie buvo skaičiuojant kelionę.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Atidaryti navigacijos programoje</string>
@@ -491,6 +493,7 @@
     <string name="journey_no_mechanical_nearby">Netoliese nėra stotelės, kurioje dabar būtų mechaninis dviratis. Paprašykite bet kokio dviračio arba pabandykite vėliau.</string>
     <string name="journey_no_electric_nearby">Netoliese nėra stotelės, kurioje dabar būtų elektrinis dviratis. Paprašykite bet kokio dviračio arba pabandykite vėliau.</string>
     <string name="journey_no_dock_nearby">Netoli tikslo nėra stotelės su laisva vieta. Pabandykite vėliau arba rinkitės kitą tikslą.</string>
+    <string name="journey_no_return_nearby">Šiuo metu nė viena stotelė netoli tikslo nepriima dviračių. Pabandykite vėliau arba rinkitės kitą tikslą.</string>
     <string name="journey_no_route">Tarp šių dviejų taškų nėra tinkamo kelio.</string>
     <string name="journey_graph_missing">Maršrutų duomenys neįdiegti. Pridėkite juos saugyklos ekrane.</string>
     <string name="journey_outside_coverage">Šis taškas yra už teritorijos, kurią apima įdiegti duomenys.</string>
@@ -771,6 +774,7 @@
     <string name="settings_map_filters_hide_empty">Slėpti stoteles, kurios nieko nesiūlo</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Nieko“ priklauso nuo to, ką žemėlapis skaičiuoja: nė vieno dviračio, kai skaičiuojami dviračiai, ir nė vienos laisvos vietos, kai skaičiuojamos laisvos vietos.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">„Nieko“ reiškia nė vieno dviračio: šiame tinkle žemėlapis skaičiuoja tik dviračius.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stotelės, apie kurias tinklas nieko nesako, lieka žemėlapyje: skaičius, kurio niekas negalėjo perskaityti, nėra nulis.</string>

@@ -45,6 +45,7 @@
     <!-- Spoken by screen readers on a station's indicator.
          Example: "Nørrebrogade, 6 cykler, 26 ledige pladser". -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <string name="station_out_of_service">Ude af drift</string>
     <string name="station_out_of_service_since">%1$s · sidst meldt %2$s</string>
     <string name="station_availability_unknown">Ukendt tilgængelighed</string>
@@ -398,6 +399,7 @@
          highest. -->
     <string name="journey_detail_profile_description_no_climb">Cykelturen forløber mellem %1$s og %2$s over havets overflade.</string>
     <string name="journey_detail_availability_note">Cykler og ledige pladser, som de var, da rejsen blev beregnet.</string>
+    <string name="journey_detail_availability_note_bikes">Cykler, som de var, da rejsen blev beregnet.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Åbn i en navigationsapp</string>
@@ -421,6 +423,7 @@
     <string name="journey_no_mechanical_nearby">Ingen station i nærheden har en mekanisk cykel lige nu. Vælg »Enhver cykel«, eller prøv igen senere.</string>
     <string name="journey_no_electric_nearby">Ingen station i nærheden har en elektrisk cykel lige nu. Vælg »Enhver cykel«, eller prøv igen senere.</string>
     <string name="journey_no_dock_nearby">Ingen station med en ledig plads i nærheden af destinationen. Prøv igen senere, eller vælg en anden destination.</string>
+    <string name="journey_no_return_nearby">Ingen station i nærheden af destinationen tager imod cykler lige nu. Prøv igen senere, eller vælg en anden destination.</string>
     <!-- The line on the ground, not the planned journey: "rute" and never
          "rejse". -->
     <string name="journey_no_route">Ingen farbar rute mellem disse to punkter.</string>
@@ -692,6 +695,7 @@
     <string name="settings_map_filters_hide_empty">Skjul stationer, der intet byder på</string>
     <!-- Under the switch, saying what "intet" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">»Intet« følger det, kortet tæller: ingen cykel, mens det tæller cykler, ingen ledig plads, mens det tæller ledige pladser.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">»Intet« betyder ingen cykel: på dette netværk tæller kortet kun cykler.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stationer, som netværket intet siger om, bliver på kortet: en optælling, ingen kunne læse, er ikke en optælling af ingenting.</string>
 

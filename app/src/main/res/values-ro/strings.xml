@@ -68,6 +68,7 @@
     <string name="docks_available_unlimited">Locuri libere: nelimitate</string>
 
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <!-- Not Android's "În afara ariei de acoperire", which is about radio
          coverage: a station out of service is one that does not work. -->
     <string name="station_out_of_service">Nefuncțională</string>
@@ -463,6 +464,7 @@
          highest. -->
     <string name="journey_detail_profile_description_no_climb">Etapa cu bicicleta se desfășoară între %1$s și %2$s deasupra nivelului mării.</string>
     <string name="journey_detail_availability_note">Bicicletele și locurile libere, așa cum erau când s-a calculat traseul.</string>
+    <string name="journey_detail_availability_note_bikes">Bicicletele, așa cum erau când s-a calculat traseul.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Deschide într-o aplicație de navigație</string>
@@ -489,6 +491,7 @@
     <string name="journey_no_mechanical_nearby">Nicio stație din apropiere nu are acum o bicicletă mecanică. Cere orice bicicletă sau încearcă mai târziu.</string>
     <string name="journey_no_electric_nearby">Nicio stație din apropiere nu are acum o bicicletă electrică. Cere orice bicicletă sau încearcă mai târziu.</string>
     <string name="journey_no_dock_nearby">Nicio stație cu loc liber lângă destinație. Încearcă mai târziu sau alege altă destinație.</string>
+    <string name="journey_no_return_nearby">Nicio stație de lângă destinație nu primește biciclete acum. Încearcă mai târziu sau alege altă destinație.</string>
     <string name="journey_no_route">Nicio rută practicabilă între aceste două puncte.</string>
     <string name="journey_graph_missing">Graful de trasee nu este instalat. Adaugă-l din ecranul de stocare.</string>
     <string name="journey_outside_coverage">Acest punct se află în afara zonei acoperite de datele instalate.</string>
@@ -770,6 +773,7 @@
     <string name="settings_map_filters_hide_empty">Ascunde stațiile care nu au nimic de oferit</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Nimic” urmează ce numără harta: nicio bicicletă cât timp numără biciclete, niciun loc liber cât timp numără locuri libere.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">„Nimic” înseamnă nicio bicicletă: în această rețea harta numără doar bicicletele.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stațiile despre care rețeaua nu spune nimic rămân pe hartă: un număr pe care nimeni nu l-a putut citi nu este un număr egal cu zero.</string>

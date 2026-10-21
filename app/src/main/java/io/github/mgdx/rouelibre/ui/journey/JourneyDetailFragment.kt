@@ -44,6 +44,7 @@ import io.github.mgdx.rouelibre.ui.formatMinutes
 import io.github.mgdx.rouelibre.ui.inServedDigits
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
+import io.github.mgdx.rouelibre.ui.withFreeDocksShown
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -156,6 +157,14 @@ class JourneyDetailFragment : Fragment() {
      * opens from (SPEC §7.4.1).
      */
     private var ownBikeKind: OwnBikeKind = OwnBikeKind.Mechanical
+
+    /**
+     * Whether the network's free docks are worth showing (SPEC §7.1), `true`
+     * until the stations say otherwise. Where they are not, the arrival station
+     * is named and placed without a word about its free docks, and the note
+     * under the steps speaks of the bikes alone.
+     */
+    private var freeDocksShown = true
 
     /**
      * Takes back the two ends of the journey described.
@@ -308,6 +317,10 @@ class JourneyDetailFragment : Fragment() {
             ownBikeKind = declared
             binding?.shape?.ownBikeKind = declared
             showTotal(journey)
+            showJourney(journey, viewModel.addresses.value)
+        }
+        withFreeDocksShown { shown ->
+            freeDocksShown = shown
             showJourney(journey, viewModel.addresses.value)
         }
         viewModel.locate(stationsOf(journey.plan))
@@ -533,6 +546,13 @@ class JourneyDetailFragment : Fragment() {
         // ago from being taken for a promise (SPEC §6). Only a bike journey has
         // a station to count anything at.
         views.availabilityNote.isVisible = journey.plan is JourneyPlan.Found
+        views.availabilityNote.setText(
+            if (freeDocksShown) {
+                R.string.journey_detail_availability_note
+            } else {
+                R.string.journey_detail_availability_note_bikes
+            },
+        )
     }
 
     /**
@@ -589,14 +609,22 @@ class JourneyDetailFragment : Fragment() {
             role = getString(R.string.journey_detail_arrival_station),
             station = option.arrivalStation,
             address = addresses[option.arrivalStation.id],
-            availability = availabilityOf(
-                // No count where the station takes back any bike: the journey
-                // carried none, and the line says why (SPEC §4.1).
-                counted = option.docksAtArrival
-                    ?.let { resources.getQuantityString(R.plurals.docks_available, it, it) }
-                    ?: getString(R.string.docks_available_unlimited),
-                station = option.arrivalStation,
-            ),
+            // Nothing at all where the network's free docks are not worth
+            // showing (SPEC §7.1): the free docks are what this line counts,
+            // and a capacity left on its own — "12 docks" under "Arrival
+            // station" — would read as the very count it replaces.
+            availability = if (freeDocksShown) {
+                availabilityOf(
+                    // No count where the station takes back any bike: the
+                    // journey carried none, and the line says why (SPEC §4.1).
+                    counted = option.docksAtArrival
+                        ?.let { resources.getQuantityString(R.plurals.docks_available, it, it) }
+                        ?: getString(R.string.docks_available_unlimited),
+                    station = option.arrivalStation,
+                )
+            } else {
+                null
+            },
         )
         // Nothing follows the arrival station where the destination is that
         // station: the journey is over, and a row saying "walk to the
@@ -654,12 +682,14 @@ class JourneyDetailFragment : Fragment() {
      *
      * The marker is the map's own, so the row and the point drawn on the
      * previous screen are recognised as the same thing.
+     *
+     * @param availability what it held, or `null` for no line at all.
      */
     private fun addStation(
         role: String,
         station: Station,
         address: AddressResult?,
-        availability: String,
+        availability: String?,
     ) {
         val views = binding ?: return
         val place = ItemJourneyPlaceBinding.inflate(layoutInflater, views.steps, false)
@@ -668,6 +698,7 @@ class JourneyDetailFragment : Fragment() {
         place.name.text = station.name
         place.address.isGone = address == null
         address?.let { place.address.text = addressLineOf(it) }
+        place.availability.isGone = availability == null
         place.availability.text = availability
         views.steps.addView(place.root)
     }

@@ -17,6 +17,7 @@ import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.databinding.SheetFavouriteStationsBinding
 import io.github.mgdx.rouelibre.ui.stations.FavouriteStationsViewModel
 import io.github.mgdx.rouelibre.ui.stations.StationAdapter
+import io.github.mgdx.rouelibre.ui.withFreeDocksShown
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -68,6 +69,9 @@ class FavouriteStationSheet : BottomSheetDialogFragment() {
         views.stations.addItemDecoration(
             DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL),
         )
+        // The rows are the list's own, and lose their free docks where the
+        // list's do (SPEC §7.1, §7.5).
+        withFreeDocksShown { adapter.freeDocksShown = it }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {

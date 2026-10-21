@@ -13,6 +13,7 @@ import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.StreetBike
 import io.github.mgdx.rouelibre.core.station.countFleet
 import io.github.mgdx.rouelibre.core.station.joinStationsWithAvailability
+import io.github.mgdx.rouelibre.core.station.settleFreeDocksWorthShowing
 import io.github.mgdx.rouelibre.core.station.streetBikesShown
 import io.github.mgdx.rouelibre.data.local.StationAvailabilityEntity
 import io.github.mgdx.rouelibre.data.local.StationDao
@@ -21,6 +22,10 @@ import io.github.mgdx.rouelibre.data.network.GbfsRemoteSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.time.Clock
@@ -126,6 +131,41 @@ class StationRepository(
                 ?.let(Instant::ofEpochSecond),
         )
     }
+
+    /**
+     * Whether the free docks of the network in service are worth showing, as
+     * settled this session (see [settleFreeDocksWorthShowing]); `null` while
+     * nothing could be weighed.
+     *
+     * Held here rather than in a screen's model: the map, the list, the
+     * favourites, a station's sheet and a journey's detail must all give the
+     * same answer, and a verdict settled once per screen would be settled on
+     * whatever snapshot each screen happened to open on.
+     */
+    private val freeDocksVerdict = MutableStateFlow<Boolean?>(null)
+
+    /**
+     * Whether the free docks of the network in service are shown at all
+     * (SPEC §7.1), re-emitted when that changes.
+     *
+     * `false` for a network where nearly every station takes back any bike:
+     * the screens then stop talking about free docks — no toggle, no figure,
+     * no word. `true` everywhere else, and **until the stations can be weighed**:
+     * withdrawing a control is the decision that needs evidence, and the
+     * networks it is for are a handful of the hundreds served.
+     *
+     * A verdict already settled is handed over at once, before the cache has
+     * been read again: a screen opened in Munich must not show the toggle for
+     * the few milliseconds the database takes to answer.
+     */
+    fun observeFreeDocksShown(): Flow<Boolean> = observeStations()
+        .map { snapshot ->
+            freeDocksVerdict.updateAndGet { settled ->
+                settleFreeDocksWorthShowing(settled, snapshot.stations)
+            } ?: true
+        }
+        .onStart { freeDocksVerdict.value?.let { emit(it) } }
+        .distinctUntilChanged()
 
     /**
      * Updates the data from the network if the policy allows it.

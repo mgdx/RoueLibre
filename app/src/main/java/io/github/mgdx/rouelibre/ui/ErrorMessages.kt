@@ -170,25 +170,37 @@ fun DataError.toUpdateCheckMessage(context: Context): String = when (this) {
  *
  * [NoBikeJourney.WalkingIsQuicker] is not a failure and never reaches here: it
  * comes with a walk of its own, which the summary describes (SPEC §6).
+ *
+ * **No arrival is said without a free dock where free docks are not shown**
+ * (SPEC §7.1). In a network where nearly every station takes back any bike,
+ * the rider has been shown no free dock to run short of, and what stopped the
+ * journey is stations refusing returns: that is what is said.
+ *
+ * @param freeDocksShown whether the network's free docks are worth showing.
  */
-fun NoBikeJourney.toUserMessage(context: Context): String = context.getString(
-    when (this) {
-        NoBikeJourney.NoBikeNearby -> R.string.journey_no_bike_nearby
-        is NoBikeJourney.NoWantedBikeNearby -> when (wanted) {
-            WantedBikeKind.Mechanical -> R.string.journey_no_mechanical_nearby
-            WantedBikeKind.Electric -> R.string.journey_no_electric_nearby
-        }
+fun NoBikeJourney.toUserMessage(context: Context, freeDocksShown: Boolean): String =
+    context.getString(
+        when (this) {
+            NoBikeJourney.NoBikeNearby -> R.string.journey_no_bike_nearby
+            is NoBikeJourney.NoWantedBikeNearby -> when (wanted) {
+                WantedBikeKind.Mechanical -> R.string.journey_no_mechanical_nearby
+                WantedBikeKind.Electric -> R.string.journey_no_electric_nearby
+            }
 
-        NoBikeJourney.NoDockNearby -> R.string.journey_no_dock_nearby
-        NoBikeJourney.NoRouteBetweenStations -> R.string.journey_no_route
-        NoBikeJourney.GraphMissing -> R.string.journey_graph_missing
-        is NoBikeJourney.OutsideCoverage -> when (uncovered) {
-            UncoveredEnds.Origin -> R.string.journey_outside_coverage_start
-            UncoveredEnds.Destination -> R.string.journey_outside_coverage_destination
-            UncoveredEnds.BothEnds -> R.string.journey_outside_coverage_both
-            null -> R.string.journey_outside_coverage
-        }
+            NoBikeJourney.NoDockNearby -> when {
+                freeDocksShown -> R.string.journey_no_dock_nearby
+                else -> R.string.journey_no_return_nearby
+            }
 
-        NoBikeJourney.WalkingIsQuicker -> R.string.journey_no_route
-    },
-)
+            NoBikeJourney.NoRouteBetweenStations -> R.string.journey_no_route
+            NoBikeJourney.GraphMissing -> R.string.journey_graph_missing
+            is NoBikeJourney.OutsideCoverage -> when (uncovered) {
+                UncoveredEnds.Origin -> R.string.journey_outside_coverage_start
+                UncoveredEnds.Destination -> R.string.journey_outside_coverage_destination
+                UncoveredEnds.BothEnds -> R.string.journey_outside_coverage_both
+                null -> R.string.journey_outside_coverage
+            }
+
+            NoBikeJourney.WalkingIsQuicker -> R.string.journey_no_route
+        },
+    )

@@ -86,6 +86,7 @@
     <!-- Spoken by screen readers on a station's indicator.
          Example: "Trubarjeva cesta, 6 koles, 26 prostih mest". -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <!-- Android's own wording, `settings:radioInfo_service_out`. -->
     <string name="station_out_of_service">Ne deluje</string>
     <string name="station_out_of_service_since">%1$s · zadnji podatek %2$s</string>
@@ -469,6 +470,7 @@
          highest. -->
     <string name="journey_detail_profile_description_no_climb">Vožnja poteka med %1$s in %2$s nadmorske višine.</string>
     <string name="journey_detail_availability_note">Kolesa in prosta mesta, kakršna so bila ob izračunu poti.</string>
+    <string name="journey_detail_availability_note_bikes">Kolesa, kakršna so bila ob izračunu poti.</string>
     <!-- Hands one leg of the journey to another application. -->
     <string name="journey_navigate">Odpri v navigacijski aplikaciji</string>
     <string name="journey_navigate_which">Kateri del poti?</string>
@@ -493,6 +495,7 @@
     <string name="journey_no_mechanical_nearby">Nobena postaja v bližini trenutno nima navadnega kolesa. Zahtevajte katero koli kolo ali pa poskusite pozneje.</string>
     <string name="journey_no_electric_nearby">Nobena postaja v bližini trenutno nima električnega kolesa. Zahtevajte katero koli kolo ali pa poskusite pozneje.</string>
     <string name="journey_no_dock_nearby">V bližini cilja ni postaje s prostim mestom. Poskusite pozneje ali pa izberite drug cilj.</string>
+    <string name="journey_no_return_nearby">Nobena postaja v bližini cilja trenutno ne sprejema koles. Poskusite pozneje ali pa izberite drug cilj.</string>
     <!-- The line on the ground, not the journey that was planned over it. -->
     <string name="journey_no_route">Med tema točkama ni prevozne poti.</string>
     <string name="journey_graph_missing">Podatki za izračun poti niso nameščeni. Dodajte jih na zaslonu s shrambo.</string>
@@ -786,6 +789,7 @@
     <string name="settings_map_filters_hide_empty">Skrij postaje, ki nimajo česa ponuditi</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Nič“ sledi temu, kar zemljevid šteje: nobenega kolesa, dokler šteje kolesa, in nobenega prostega mesta, dokler šteje prosta mesta.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">„Nič“ pomeni nobenega kolesa: v tem omrežju zemljevid šteje samo kolesa.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Postaje, o katerih omrežje ne pove ničesar, ostanejo na zemljevidu: število, ki ga nihče ni mogel prebrati, ni število nič.</string>
 

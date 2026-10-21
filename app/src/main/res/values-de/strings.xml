@@ -47,6 +47,7 @@
     <!-- Spoken by screen readers on a station's indicator.
          Example: "Bahnhofstraße, 6 Räder, 26 freie Plätze". -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
 
     <string name="station_out_of_service">Außer Betrieb</string>
     <string name="station_out_of_service_since">%1$s · zuletzt gemeldet %2$s</string>
@@ -461,6 +462,7 @@
          highest. -->
     <string name="journey_detail_profile_description_no_climb">Die Radfahrt verläuft zwischen %1$s und %2$s über dem Meeresspiegel.</string>
     <string name="journey_detail_availability_note">Räder und Plätze, wie sie bei der Berechnung der Route waren.</string>
+    <string name="journey_detail_availability_note_bikes">Räder, wie sie bei der Berechnung der Route waren.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">In einer Navigations-App öffnen</string>
@@ -492,6 +494,7 @@
     <string name="journey_no_mechanical_nearby">Keine Station in der Nähe hat gerade ein mechanisches Rad. Frag nach irgendeinem Rad oder versuch es später noch einmal.</string>
     <string name="journey_no_electric_nearby">Keine Station in der Nähe hat gerade ein elektrisches Rad. Frag nach irgendeinem Rad oder versuch es später noch einmal.</string>
     <string name="journey_no_dock_nearby">Keine Station mit einem freien Platz in der Nähe des Ziels. Versuch es später noch einmal oder wähle ein anderes Ziel.</string>
+    <string name="journey_no_return_nearby">Keine Station in der Nähe des Ziels nimmt gerade Räder zurück. Versuch es später noch einmal oder wähle ein anderes Ziel.</string>
     <string name="journey_no_route">Kein befahrbarer Weg zwischen diesen beiden Punkten.</string>
     <string name="journey_graph_missing">Die Routendaten sind nicht installiert. Füge sie unter „Speicher“ hinzu.</string>
     <string name="journey_outside_coverage">Dieser Punkt liegt außerhalb des Gebiets, das die installierten Daten abdecken.</string>
@@ -806,6 +809,7 @@
     <string name="settings_map_filters_hide_empty">Stationen ausblenden, die nichts zu bieten haben</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Nichts“ richtet sich danach, was die Karte zählt: kein Rad, solange sie Räder zählt, kein freier Platz, solange sie freie Plätze zählt.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">„Nichts“ heißt kein Rad: In diesem Netz zählt die Karte nur Räder.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stationen, über die das Netz nichts sagt, bleiben auf der Karte: Ein Zählstand, den niemand lesen konnte, ist kein Zählstand von null.</string>

@@ -43,6 +43,7 @@ import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
+import io.github.mgdx.rouelibre.ui.withFreeDocksShown
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -223,6 +224,7 @@ class StationListFragment : Fragment() {
                 else -> AvailabilityMode.Bikes
             }
         }
+        followFreeDocksShown()
 
         // The nearest station first, when the position allows it (SPEC §7.6).
         // What the system holds orders the list at once, then a fix is asked
@@ -237,6 +239,24 @@ class StationListFragment : Fragment() {
         observeErrors()
         keepAvailabilityFresh()
         showCoveredArea()
+    }
+
+    /**
+     * Offers the Bikes / Free docks toggle only where the network's free docks
+     * are worth showing (SPEC §7.1).
+     *
+     * Where nearly every station takes back any bike, the toggle would switch
+     * the list to a column of ∞: it goes, the list goes back to the bikes if
+     * it was counting free docks, and the rows lose their second column. The
+     * list below closes up under the search field.
+     */
+    private fun followFreeDocksShown() {
+        withFreeDocksShown { shown ->
+            val views = binding ?: return@withFreeDocksShown
+            views.modeToggle.isVisible = shown
+            if (!shown) views.modeToggle.check(R.id.mode_bikes)
+            adapter.freeDocksShown = shown
+        }
     }
 
     /**

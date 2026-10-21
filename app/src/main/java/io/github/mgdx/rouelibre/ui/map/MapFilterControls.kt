@@ -13,6 +13,10 @@ import io.github.mgdx.rouelibre.core.station.WantedBikeKind
  * The two filters laid over the main map, and their buttons: bikes or free
  * docks, and which kind of bike (SPEC §7.1).
  *
+ * The first is offered only where the network's free docks are worth showing,
+ * since 22 October 2026: where nearly every station takes back any bike, its
+ * button goes and the map counts bikes (see `freeDocksAreWorthShowing`).
+ *
  * They do not last as long as each other, since 21 October 2026. Bikes or
  * docks is what one is about to do right now — borrow or return — so it lasts
  * as long as the screen, a turned phone and a killed process included, and no
@@ -52,6 +56,12 @@ internal class MapFilterControls(
     private var bikeKind: WantedBikeKind? = null
 
     /**
+     * Whether the network's free docks are worth showing, `true` until the
+     * stations say otherwise — see `StationRepository.observeFreeDocksShown`.
+     */
+    private var freeDocksShown = true
+
+    /**
      * Sets both filters back as they stood, on a screen just created.
      *
      * The saved state wins when there is one: a turned phone, or a process the
@@ -85,6 +95,32 @@ internal class MapFilterControls(
         bikeKindButton()?.setOnClickListener { toggleBikeKind() }
         applyModeLabel()
         applyBikeKindLabel()
+    }
+
+    /**
+     * Takes whether the network's free docks are worth showing, and puts the
+     * toggle up or takes it away accordingly.
+     *
+     * A map counting free docks when they stop being shown goes back to the
+     * bikes and redraws: the toggle that would have brought it back is gone.
+     */
+    fun showFreeDocks(shown: Boolean) {
+        freeDocksShown = shown
+        val previous = mode
+        mode = mode.where(freeDocksShown = shown)
+        showModeToggle()
+        if (mode == previous) return
+        applyModeLabel()
+        showBikeKindFilter()
+        onChanged()
+    }
+
+    /**
+     * Shows the Bikes / Free docks toggle with the screen's other controls,
+     * and only where the network's free docks are worth showing.
+     */
+    fun showModeToggle() {
+        modeToggle()?.isVisible = controlsUp() && freeDocksShown
     }
 
     /** Shows the kind filter where it has something to filter — see [showsBikeKindFilter]. */

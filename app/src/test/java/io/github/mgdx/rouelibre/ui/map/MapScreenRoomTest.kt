@@ -84,17 +84,26 @@ class MapScreenRoomTest {
     }
 
     /**
-     * The kind filter stands beside the toggle and is constrained on it, so a
-     * toggle grown by the text size takes it along instead of leaving it
-     * behind.
+     * The kind filter stands beside the toggle on the same ground, so a toggle
+     * grown by the text size grows upwards from the line the filter stands on
+     * instead of leaving it behind.
+     *
+     * The ground is the attribution and not the toggle itself, since
+     * 22 October 2026: in a network whose free docks are not worth showing the
+     * toggle is gone (SPEC §7.1), and a filter centred on a gone view sat
+     * astride the attribution — see `RowWithoutTheModeToggleTest`.
      */
     @Test
-    fun `the kind filter follows the toggle it stands beside`() {
-        val attributes = attributesOf("bike_kind_filter")
-        for (constraint in listOf("Top_toTopOf", "Bottom_toBottomOf")) {
+    fun `the kind filter stands on the ground the toggle stands on`() {
+        for (button in listOf("mode_toggle", "bike_kind_filter")) {
+            val attributes = attributesOf(button)
             assertTrue(
-                "The kind filter is held to the toggle by $constraint",
-                attributes.contains("""app:layout_constraint$constraint="@id/mode_toggle""""),
+                "$button no longer stands on the attribution",
+                attributes.contains("""app:layout_constraintBottom_toTopOf="@id/attribution""""),
+            )
+            assertTrue(
+                "$button no longer keeps the row's margin above the attribution",
+                attributes.contains("""android:layout_marginBottom="@dimen/space_m""""),
             )
         }
     }

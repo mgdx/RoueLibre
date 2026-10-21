@@ -269,11 +269,30 @@
         android:textAppearance="@style/TextAppearance.RoueLibre.Body"
         android:visibility="gone"
         app:drawableStartCompat="@drawable/ic_place"
-        app:layout_constraintBottom_toTopOf="@id/mode_toggle"
+        app:layout_constraintBottom_toTopOf="@id/filters_top"
         app:layout_constraintEnd_toStartOf="@id/open_search"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="12 bis Rue Nationale"
         tools:visibility="visible" />
+
+    <!--
+        What the searched point stands on: the row of the two filters, whichever
+        of them is up, and the attribution when neither is. The toggle is gone
+        while a point is designated, and since 22 October 2026 in a network
+        whose free docks are not worth showing (SPEC §7.1), where the kind
+        filter may still be up on its own. Hung on the toggle alone, the pill
+        followed it down to the attribution and lay over the kind filter.
+        Gone widgets are left out of the barrier; the attribution is always
+        there and always lowest, so it only counts when the row is empty — the
+        very place the pill reached when the toggle was gone before.
+    -->
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/filters_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierAllowsGoneWidgets="false"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="mode_toggle,bike_kind_filter,attribution" />
 
     <!--
         Bikes against free docks (SPEC §7.1). Its height is a floor and not a
@@ -315,6 +334,12 @@
         Filled like the toggle it stands beside, and for that toggle's reason:
         the two are one row over the map, and one of them left see-through
         would read as the broken half of a pair.
+
+        It stands on the attribution as the toggle does, rather than being
+        centred on the toggle, and takes the toggle's margin from the edge when
+        that one is gone: in a network whose free docks are not worth showing
+        (SPEC §7.1) it is the only button of the row, and centred on a gone
+        toggle it sat astride the attribution.
     -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bike_kind_filter"
@@ -322,12 +347,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_s"
+        android:layout_marginBottom="@dimen/space_m"
         android:minHeight="@dimen/touch_target_min"
         android:visibility="gone"
         app:backgroundTint="@color/surface"
-        app:layout_constraintBottom_toBottomOf="@id/mode_toggle"
+        app:layout_constraintBottom_toTopOf="@id/attribution"
         app:layout_constraintStart_toEndOf="@id/mode_toggle"
-        app:layout_constraintTop_toTopOf="@id/mode_toggle"
+        app:layout_goneMarginStart="@dimen/space_m"
         tools:text="Électriques"
         tools:visibility="visible" />
 

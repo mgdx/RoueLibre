@@ -68,6 +68,7 @@
     <!-- Spoken by screen readers on a station's indicator.
          Example: "Rruga B, 6 biçikleta, 26 vende të lira". -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <string name="station_out_of_service">Jashtë shërbimit</string>
     <string name="station_out_of_service_since">%1$s · të dhënat e fundit %2$s</string>
     <string name="station_availability_unknown">Disponueshmëria nuk dihet</string>
@@ -421,6 +422,7 @@
          highest. -->
     <string name="journey_detail_profile_description_no_climb">Ngasja zhvillohet mes %1$s dhe %2$s mbi nivelin e detit.</string>
     <string name="journey_detail_availability_note">Biçikletat dhe vendet e lira ashtu siç ishin kur u llogarit udhëtimi.</string>
+    <string name="journey_detail_availability_note_bikes">Biçikletat ashtu siç ishin kur u llogarit udhëtimi.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Hap në një aplikacion navigimi</string>
@@ -445,6 +447,7 @@
     <string name="journey_no_mechanical_nearby">Asnjë stacion këtu afër nuk ka biçikletë mekanike tani. Kërko çfarëdo biçiklete ose provo më vonë.</string>
     <string name="journey_no_electric_nearby">Asnjë stacion këtu afër nuk ka biçikletë elektrike tani. Kërko çfarëdo biçiklete ose provo më vonë.</string>
     <string name="journey_no_dock_nearby">Asnjë stacion me vend të lirë pranë destinacionit. Provo më vonë ose zgjidh një destinacion tjetër.</string>
+    <string name="journey_no_return_nearby">Asnjë stacion pranë destinacionit nuk po pranon biçikleta tani. Provo më vonë ose zgjidh një destinacion tjetër.</string>
     <string name="journey_no_route">Nuk ka rrugë të kalueshme mes këtyre dy pikave.</string>
     <string name="journey_graph_missing">Grafi i itinerarëve nuk është i instaluar. Shtoje nga ekrani i hapësirës ruajtëse.</string>
     <string name="journey_outside_coverage">Kjo pikë ndodhet jashtë zonës që mbulojnë të dhënat e instaluara.</string>
@@ -714,6 +717,7 @@
     <string name="settings_map_filters_hide_empty">Fshih stacionet që nuk kanë çfarë të ofrojnë</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Asgjë“ ndjek atë që numëron harta: asnjë biçikletë kur numërohen biçikletat, asnjë vend i lirë kur numërohen vendet e lira.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">„Asgjë“ do të thotë asnjë biçikletë: në këtë rrjet harta numëron vetëm biçikletat.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stacionet për të cilat rrjeti nuk thotë asgjë mbeten në hartë: një numër që askush nuk mund ta lexojë nuk do të thotë zero.</string>
 
