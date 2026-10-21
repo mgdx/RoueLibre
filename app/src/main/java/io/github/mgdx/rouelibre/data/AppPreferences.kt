@@ -578,6 +578,46 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * The kind of bike the map's markers count, or `null` for all of them
+     * (SPEC §7.1).
+     *
+     * **This is not [wantedBikeKind]**, and it is written under a key of its
+     * own so that the two can never be taken for one another: that one is the
+     * kind a journey is worked out for, this one a way of looking at the map,
+     * and SPEC §7.1 keeps them apart — a kind filtered here changes no journey,
+     * and a kind asked for a journey filters nothing here.
+     *
+     * Kept from one launch to the next because somebody who opens the
+     * application again in the same city mostly wants the same kind of bike as
+     * yesterday, and finding the map back on all of them meant pressing the
+     * same button at every launch. `null` — nothing written — is the state on a
+     * fresh installation, and a word this build cannot read means the same
+     * thing (see [WantedBikeKind.ofWireName]): a guess would hide bikes from
+     * somebody who never asked for it. Like [wantedBikeKind], it is ignored —
+     * never erased — in a conurbation lending one kind only.
+     *
+     * **A word about equipment, not a journey.** What is written is
+     * "mechanical", "electric", or nothing at all (SPEC §2, C3).
+     *
+     * A flow, read once by the map when it is built: the button on the map is
+     * the only place it is changed, so nothing else needs to follow it.
+     */
+    val mapBikeKind: Flow<WantedBikeKind?> = dataStore.data.map {
+        WantedBikeKind.ofWireName(it[MAP_BIKE_KIND])
+    }
+
+    /** Remembers the kind the map's markers count, or that they count all. */
+    suspend fun setMapBikeKind(kind: WantedBikeKind?) {
+        dataStore.edit { preferences ->
+            if (kind == null) {
+                preferences.remove(MAP_BIKE_KIND)
+            } else {
+                preferences[MAP_BIKE_KIND] = kind.wireName
+            }
+        }
+    }
+
+    /**
      * How fast the user walks, which the journey is worked out for (SPEC §6, §7.6).
      *
      * [WalkingPace.Normal] by default, and for any value that cannot be read
@@ -804,6 +844,9 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         val DOWNLOAD_ON_UNMETERED_ONLY = booleanPreferencesKey("download_on_unmetered_only")
         val USES_OWN_BIKE = booleanPreferencesKey("uses_own_bike")
         val WANTED_BIKE_KIND = stringPreferencesKey("wanted_bike_kind")
+
+        /** The map's kind filter, which is not [WANTED_BIKE_KIND] above (SPEC §7.1). */
+        val MAP_BIKE_KIND = stringPreferencesKey("map_bike_kind")
         val WALKING_PACE = stringPreferencesKey("walking_pace")
         val OPENING_SCREEN = stringPreferencesKey("opening_screen")
 

@@ -9,6 +9,26 @@ also records what has no visible effect.
 
 ## [Unreleased]
 
+### Changed
+
+- **The map's kind of bike is kept from one launch to the next** (issue #9,
+  `SPEC.md` §7.1). All bikes, mechanical or electric is written to DataStore
+  under `map_bike_kind`, a key of its own beside the journey's
+  `wanted_bike_kind`, and neither moves the other. It is read synchronously
+  when the map fragment is created, so a launch never draws every bike before
+  narrowing them. In a network lending one kind, and on the map that picks a
+  point, the kept kind is ignored without being erased, as the journey's is.
+  The "bikes" / "docks" toggle is still written nowhere: every launch opens on
+  the bikes.
+
+### Fixed
+
+- **Turning the phone no longer resets the map's two filters.** The
+  "bikes" / "docks" mode and the kind of bike were fields of
+  `MapFilterControls` and went with the fragment; they now travel in its saved
+  state, so a rotation and the death of the process both find them as they
+  were.
+
 ## [1.5.2]
 
 Every network now carries its country's flag, and the city list, which spans

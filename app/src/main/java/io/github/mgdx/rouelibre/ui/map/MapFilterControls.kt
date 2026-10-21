@@ -1,5 +1,6 @@
 package io.github.mgdx.rouelibre.ui.map
 
+import android.os.Bundle
 import androidx.core.view.isVisible
 import com.google.android.material.button.MaterialButton
 import io.github.mgdx.rouelibre.R
@@ -12,15 +13,20 @@ import io.github.mgdx.rouelibre.core.station.WantedBikeKind
  * The two filters laid over the main map, and their buttons: bikes or free
  * docks, and which kind of bike (SPEC §7.1).
  *
- * Both live as long as the screen does — they are ways of looking at the map
- * right now, not facts about the rider — so nothing of them is written down.
- * Each button is labelled by what is shown rather than by what a press would
- * do: they are state labels, like the list's own toggle.
+ * They do not last as long as each other, since 21 October 2026. Bikes or
+ * docks is what one is about to do right now — borrow or return — so it lasts
+ * as long as the screen, a turned phone and a killed process included, and no
+ * longer: the next launch starts on the bikes. The kind of bike is written
+ * down and found again at the next launch, because somebody who opens the
+ * application again in the same city mostly wants the same kind of bike as
+ * last time (SPEC §7.1). Each button is labelled by what is shown rather than
+ * by what a press would do: they are state labels, like the list's own toggle.
  *
  * @param modeToggle the Bikes / Free docks button, while the view exists.
  * @param bikeKindButton the kind filter's button, while the view exists.
  * @param controlsUp whether the main screen's controls are up at all.
  * @param lentFleet what the network lends, `null` until the reading lands.
+ * @param rememberBikeKind writes the kind just chosen down for the next launch.
  * @param onChanged redraws the stations for the filters as they now stand.
  */
 internal class MapFilterControls(
@@ -28,6 +34,7 @@ internal class MapFilterControls(
     private val bikeKindButton: () -> MaterialButton?,
     private val controlsUp: () -> Boolean,
     private val lentFleet: () -> FleetDescription?,
+    private val rememberBikeKind: (WantedBikeKind?) -> Unit,
     private val onChanged: () -> Unit,
 ) {
 
@@ -43,6 +50,34 @@ internal class MapFilterControls(
      * here.
      */
     private var bikeKind: WantedBikeKind? = null
+
+    /**
+     * Sets both filters back as they stood, on a screen just created.
+     *
+     * The saved state wins when there is one: a turned phone, or a process the
+     * system killed in the background, comes back to exactly what was on the
+     * screen, free docks included. Only a screen started afresh asks for
+     * [storedBikeKind], and it then starts on the bikes, the mode being a
+     * question of the moment rather than one kept from one launch to the next.
+     *
+     * @param savedInstanceState what [save] wrote, or `null` on a fresh start.
+     * @param storedBikeKind the kind written down at an earlier launch.
+     */
+    fun restore(savedInstanceState: Bundle?, storedBikeKind: () -> WantedBikeKind?) {
+        if (savedInstanceState == null) {
+            bikeKind = storedBikeKind()
+            return
+        }
+        val savedMode = savedInstanceState.getString(STATE_MODE)
+        mode = AvailabilityMode.entries.find { it.name == savedMode } ?: AvailabilityMode.Bikes
+        bikeKind = WantedBikeKind.ofWireName(savedInstanceState.getString(STATE_BIKE_KIND))
+    }
+
+    /** Writes both filters into the state the system keeps for the screen. */
+    fun save(outState: Bundle) {
+        outState.putString(STATE_MODE, mode.name)
+        outState.putString(STATE_BIKE_KIND, bikeKind?.wireName)
+    }
 
     /** Wires both buttons and labels them, on a view just built. */
     fun bind() {
@@ -73,6 +108,7 @@ internal class MapFilterControls(
 
     private fun toggleBikeKind() {
         bikeKind = bikeKind.nextOnTheMap()
+        rememberBikeKind(bikeKind)
         applyBikeKindLabel()
         onChanged()
     }
@@ -102,5 +138,10 @@ internal class MapFilterControls(
                 WantedBikeKind.Electric -> R.string.map_bikes_electric_description
             },
         )
+    }
+
+    private companion object {
+        const val STATE_MODE = "map-filter-mode"
+        const val STATE_BIKE_KIND = "map-filter-bike-kind"
     }
 }
