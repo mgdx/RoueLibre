@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.withStyledAttributes
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -162,11 +163,25 @@ class MainActivity : AppCompatActivity() {
     /**
      * The bar icon polarity the interface's theme wants — see [openIntro].
      *
+     * **Read from the theme, and not from the window.** It used to be copied
+     * off the window as the opening found it, which holds only for a window
+     * built for this activity. A recreated activity is handed its
+     * predecessor's window as it stands, and the bar flags are read from the
+     * theme only when a window's decor is first built: an activity recreated
+     * while the opening was up copied the opening's light icons as the
+     * interface's own, and gave them back over a light screen (issue #16).
+     *
      * The colour behind the icons needs no such note: it belongs to whatever
      * view is drawn under the bars, and changes on its own when the opening
      * goes.
      */
-    private var lightIconsBeforeIntro: Boolean? = null
+    private val lightIconsOfTheTheme by lazy {
+        var light = false
+        withStyledAttributes(attrs = intArrayOf(android.R.attr.windowLightStatusBar)) {
+            light = getBoolean(0, false)
+        }
+        light
+    }
 
     /**
      * Whether the minimum stay is already counting — see [holdIntro].
@@ -209,7 +224,20 @@ class MainActivity : AppCompatActivity() {
         // On recreation — rotation, theme change — the fragments are restored
         // by the system; replacing them would erase their state, and replaying
         // the intent would reopen a screen the user has left.
-        if (savedInstanceState == null) {
+        //
+        // **What decides is the screen being there, not the bundle.** The
+        // first screen is committed a frame after this, so a recreation can
+        // fall in between — a theme or units applied during the opening, or
+        // anything else that rebuilds the activity — and come back with a
+        // bundle and no fragment in it. Trusting the bundle, that activity
+        // waited for a restoration that had nothing to restore, and the screen
+        // stayed empty for good (issue #16). Such an instance is opened as a
+        // fresh one, in full: its predecessor was cut off before its opening
+        // went, so the green is still what the user is looking at and the
+        // opening goes on over it; and the intent is replayed, because the
+        // instance that received it was gone before it handled it, which is
+        // exactly the case the rule above does not cover.
+        if (supportFragmentManager.findFragmentById(R.id.content) == null) {
             openIntro()
             // Everything below is deferred by one frame, and that is the whole
             // reason the opening is ever seen. Committed here and now, the map
@@ -256,6 +284,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+        } else {
+            // Restored over the window a predecessor left, which may still
+            // carry the opening's light icons if it went before its opening
+            // did: nothing here would ever hand them back.
+            restoreSystemBars()
         }
     }
 
@@ -399,11 +432,6 @@ class MainActivity : AppCompatActivity() {
             veil.postDelayed({ holdIntro() }, INTRO_HANDOVER_DEADLINE_MILLIS)
         }
         val controller = WindowInsetsControllerCompat(window, views.root)
-        // Noted as the theme has just left it. What the opening gives back has
-        // to be exactly what it borrowed, and taking a copy is surer than
-        // reading the theme again later — where the light and dark variants
-        // would drift apart.
-        lightIconsBeforeIntro = controller.isAppearanceLightStatusBars
         controller.isAppearanceLightStatusBars = false
         controller.isAppearanceLightNavigationBars = false
     }
@@ -471,7 +499,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Hands the system bars back as the opening found them.
+     * Hands the system bars back to the interface's theme.
      *
      * Only the icons are handed back: the bars are transparent, so the green
      * goes when the opening's view goes, of itself, the screen underneath
@@ -481,10 +509,9 @@ class MainActivity : AppCompatActivity() {
      */
     private fun restoreSystemBars() {
         val views = binding ?: return
-        val lightIcons = lightIconsBeforeIntro ?: return
         WindowInsetsControllerCompat(window, views.root).run {
-            isAppearanceLightStatusBars = lightIcons
-            isAppearanceLightNavigationBars = lightIcons
+            isAppearanceLightStatusBars = lightIconsOfTheTheme
+            isAppearanceLightNavigationBars = lightIconsOfTheTheme
         }
     }
 
