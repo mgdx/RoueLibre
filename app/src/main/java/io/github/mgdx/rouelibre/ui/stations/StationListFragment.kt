@@ -245,7 +245,7 @@ class StationListFragment : Fragment() {
      * Offers the Bikes / Free docks toggle only where the network's free docks
      * are worth showing (SPEC §7.1).
      *
-     * Where nearly every station takes back any bike, the toggle would switch
+     * Where most stations take back any bike, the toggle would switch
      * the list to a column of ∞: it goes, the list goes back to the bikes if
      * it was counting free docks, and the rows lose their second column. The
      * list below closes up under the search field.

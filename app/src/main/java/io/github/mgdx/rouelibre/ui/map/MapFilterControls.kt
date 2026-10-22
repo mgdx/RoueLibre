@@ -14,7 +14,7 @@ import io.github.mgdx.rouelibre.core.station.WantedBikeKind
  * docks, and which kind of bike (SPEC §7.1).
  *
  * The first is offered only where the network's free docks are worth showing,
- * since 22 October 2026: where nearly every station takes back any bike, its
+ * since 22 October 2026: where most stations take back any bike, its
  * button goes and the map counts bikes (see `freeDocksAreWorthShowing`).
  *
  * They do not last as long as each other, since 21 October 2026. Bikes or

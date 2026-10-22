@@ -148,11 +148,11 @@ class StationRepository(
      * Whether the free docks of the network in service are shown at all
      * (SPEC §7.1), re-emitted when that changes.
      *
-     * `false` for a network where nearly every station takes back any bike:
+     * `false` for a network where most stations take back any bike:
      * the screens then stop talking about free docks — no toggle, no figure,
      * no word. `true` everywhere else, and **until the stations can be weighed**:
      * withdrawing a control is the decision that needs evidence, and the
-     * networks it is for are a handful of the hundreds served.
+     * networks it is for are a few dozen of the hundreds served.
      *
      * A verdict already settled is handed over at once, before the cache has
      * been read again: a screen opened in Munich must not show the toggle for

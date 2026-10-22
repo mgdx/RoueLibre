@@ -164,7 +164,7 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
             binding.detail.isGone = binding.detail.text.isNullOrBlank()
 
             // No second column where the network's free docks are not worth
-            // showing: it would be a ∞ on nearly every row (SPEC §7.1), and the
+            // showing: it would be a ∞ on most rows (SPEC §7.1), and the
             // list then counts bikes alone. The row gives the name its width.
             binding.counterpartBlock.isGone = !freeDocksShown
 

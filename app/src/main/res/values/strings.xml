@@ -45,8 +45,8 @@
     <string name="docks_available_unlimited">Free docks: unlimited</string>
 
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
-    <!-- The same sentence without the free docks, in a network where nearly
-         every station takes back any bike and free docks are not shown
+    <!-- The same sentence without the free docks, in a network where most
+         stations take back any bike and free docks are not shown
          (SPEC 7.1). %1$s is the station's name, %2$s its bikes. -->
     <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <string name="station_out_of_service">Out of service</string>
@@ -479,8 +479,9 @@
     <string name="journey_no_electric_nearby">No station nearby has an electric bike right now. Ask for any bike, or try again later.</string>
     <string name="journey_no_dock_nearby">No station with a free dock near the destination. Try again later, or aim somewhere else.</string>
     <!-- The same failure in a network whose free docks are not shown
-         (SPEC 7.1): nearly every station there takes back any bike, so what
-         stopped the journey is stations refusing returns. -->
+         (SPEC 7.1): the rider was shown no free dock to run short of, so
+         what stopped the journey is said as stations not taking bikes
+         back. -->
     <string name="journey_no_return_nearby">No station near the destination is taking bikes back right now. Try again later, or aim somewhere else.</string>
     <string name="journey_no_route">No practicable route between these two points.</string>
     <string name="journey_graph_missing">The routing data is not installed. Add it from the storage screen.</string>

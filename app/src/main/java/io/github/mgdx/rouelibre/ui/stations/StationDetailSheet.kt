@@ -190,7 +190,7 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         views.bikesIndicator.display = bikes
         views.docksIndicator.display = docks
         // The free docks' disc goes where they are not worth showing: it would
-        // read ∞ at nearly every station of such a network (SPEC §7.1), and the
+        // read ∞ at most stations of such a network (SPEC §7.1), and the
         // bikes' disc then stands alone, the row having nothing to stack.
         views.docksPair.isVisible = freeDocksShown
         // The label agrees with the figure standing in the disc beside it: the

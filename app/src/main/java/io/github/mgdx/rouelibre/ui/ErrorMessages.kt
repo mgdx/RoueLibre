@@ -172,9 +172,9 @@ fun DataError.toUpdateCheckMessage(context: Context): String = when (this) {
  * comes with a walk of its own, which the summary describes (SPEC §6).
  *
  * **No arrival is said without a free dock where free docks are not shown**
- * (SPEC §7.1). In a network where nearly every station takes back any bike,
- * the rider has been shown no free dock to run short of, and what stopped the
- * journey is stations refusing returns: that is what is said.
+ * (SPEC §7.1). In a network where most stations take back any bike, the
+ * rider has been shown no free dock to run short of, and what stopped the
+ * journey is said as stations not taking bikes back.
  *
  * @param freeDocksShown whether the network's free docks are worth showing.
  */

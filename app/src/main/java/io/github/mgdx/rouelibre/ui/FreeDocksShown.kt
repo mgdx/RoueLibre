@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
  * Says whether the network in service has free docks worth talking about
  * (SPEC §7.1), and again whenever that changes.
  *
- * Where nearly every station takes back any bike, every screen stops talking
+ * Where most stations take back any bike, every screen stops talking
  * about free docks — no Bikes / Free docks toggle, no figure, no "∞", no word —
  * and a screen that shows them asks here first. The answer is the one the
  * station repository settles once per city and per session, so the map, the
