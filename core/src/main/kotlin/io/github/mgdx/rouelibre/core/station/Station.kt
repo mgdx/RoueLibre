@@ -67,11 +67,12 @@ public data class Station(
  *   believed. In such a feed a nought without a capacity is a measurement.
  *   Settled by the join over the whole feed, and `true` until then: a state
  *   nobody has joined reads its nought as full, as it always did.
- * @property isInFeedRepeatingCapacity the feed's free docks are its stations'
- *   capacities written again rather than counted: most of the stations where
- *   bikes stand announce their whole capacity free, which no dock can do.
- *   Settled by the join over the whole feed, and `false` until then: a state
- *   nobody has joined keeps its count.
+ * @property isInFeedWritingDocksFromCapacity the feed's free docks are written
+ *   from its stations' capacities — the whole of it, or half — rather than
+ *   counted: most of the stations where bikes stand announce such a figure,
+ *   which the bikes standing there do not explain. Settled by the join over
+ *   the whole feed, and `false` until then: a state nobody has joined keeps
+ *   its count.
  */
 public data class StationAvailability(
     public val stationId: String,
@@ -85,7 +86,7 @@ public data class StationAvailability(
     public val isAtVirtualStation: Boolean = false,
     public val isAtStationWithCapacity: Boolean = false,
     public val isInFeedCountingWithoutCapacity: Boolean = true,
-    public val isInFeedRepeatingCapacity: Boolean = false,
+    public val isInFeedWritingDocksFromCapacity: Boolean = false,
 ) {
     /**
      * True if the station is there to be used, as far as its installation
@@ -123,15 +124,15 @@ public data class StationAvailability(
      *    359 of the 360 of Düsseldorf on 22 October, 345 of them racks. Read as
      *    a count, that nought made every journey in those cities end in "no
      *    free dock nearby";
-     *  · **a count that is the capacity written again**, in a feed where most
-     *    stations holding bikes announce their whole capacity free
-     *    ([isInFeedRepeatingCapacity]). A dock holding a bike is not free, so
-     *    such a figure was never measured, and the bikes have their own lock.
-     *    Ecovelo's Auch-Vélo'c, on 22 October 2026: 9 of its 9 stations
-     *    holding bikes read their capacity in free docks — 10 free beside 10
-     *    bikes at a ten-dock station, 5 free beside 7 bikes at a five-dock one,
-     *    which also shows returns going past the capacity. Read as a count, it
-     *    promised "5 free docks" everywhere, whatever stood there.
+     *  · **a count written from the capacity**, in a feed where most stations
+     *    holding bikes announce their whole capacity free, or half of it,
+     *    whatever stands there ([isInFeedWritingDocksFromCapacity]). A dock
+     *    holding a bike is not free, so such a figure was never measured, and
+     *    the bikes have their own lock. Ecovelo's Auch-Vélo'c, on 22 October
+     *    2026: 9 of its 9 stations holding bikes read their capacity in free
+     *    docks — 10 free beside 10 bikes at a ten-dock station, 5 free beside
+     *    7 bikes at a five-dock one, which also shows returns going past the
+     *    capacity. Read as a count, it promised "5 free docks" everywhere.
      *
      * **A nought is believed wherever it can have been measured.** At a
      * station publishing a capacity, it is the capacity less the bikes, and the
@@ -154,7 +155,7 @@ public data class StationAvailability(
      */
     public val hasUnlimitedDocks: Boolean
         get() = docksAvailable == null ||
-            isInFeedRepeatingCapacity ||
+            isInFeedWritingDocksFromCapacity ||
             (
                 docksAvailable == 0 &&
                     !isAtStationWithCapacity &&
@@ -261,7 +262,7 @@ public enum class ServiceState {
  * [StationAvailability.isDeployed] and [StationAvailability.hasUnlimitedDocks]
  * need them. And it is the one place that sees the whole feed at once, so it
  * settles [StationAvailability.isInFeedCountingWithoutCapacity] and
- * [StationAvailability.isInFeedRepeatingCapacity] for every state.
+ * [StationAvailability.isInFeedWritingDocksFromCapacity] for every state.
  *
  * @return one entry per known station, in the order received.
  */
@@ -275,7 +276,7 @@ public fun joinStationsWithAvailability(
         .mapNotNull { byStationId[it.id]?.docksAvailable }
     val countsWithoutCapacity = countedWithoutCapacity.count { it == 0 } * 2 <=
         countedWithoutCapacity.size
-    val repeatsCapacity = repeatsCapacity(stations, byStationId)
+    val writesDocksFromCapacity = writesDocksFromCapacity(stations, byStationId)
     return stations.map { station ->
         val availability = byStationId[station.id]
         StationWithAvailability(
@@ -284,39 +285,54 @@ public fun joinStationsWithAvailability(
                 isAtVirtualStation = station.isVirtual,
                 isAtStationWithCapacity = station.capacity != null,
                 isInFeedCountingWithoutCapacity = countsWithoutCapacity,
-                isInFeedRepeatingCapacity = repeatsCapacity,
+                isInFeedWritingDocksFromCapacity = writesDocksFromCapacity,
             ),
         )
     }
 }
 
 /**
- * Whether a feed's free docks are its stations' capacities written again
- * rather than counted ([StationAvailability.isInFeedRepeatingCapacity]).
+ * Whether a feed's free docks are written from its stations' capacities
+ * rather than counted ([StationAvailability.isInFeedWritingDocksFromCapacity]).
  *
  * **What is weighed: the stations holding bikes**, among those publishing
  * both a capacity above nought and a count of free docks. Only there does the
  * figure betray itself — a bike standing in a dock takes it, so a station
  * holding one cannot have its whole capacity free. An empty station reading
  * its capacity is simply empty, and every network has them: Agen's empty
- * fleet reads five free docks at five-dock racks, and that is a count. The
- * bikes and docks out of service are not read, and need not be: at a real
- * dock they only ever take free docks away, never bring the figure up to the
- * capacity. Nor does a station holding more bikes than docks, which reads
- * nought. What leaves a few real docks reading their capacity beside a bike
- * is a capacity the producer has not updated, or a bike left beside the rack,
- * and it stays a minority: 2 of Berlin's 704 such stations on 22 October
- * 2026, 5 of Manchester's 198.
+ * fleet reads five free docks at five-dock racks, and that is a count.
+ *
+ * **Two figures are written from the capacity, the whole of it and half.**
+ * Ecovelo writes the first at the stations of Auch, Riom and Villefranche,
+ * and the two side by side elsewhere — Niort, on 22 October 2026, read 10
+ * free docks at nearly every twenty-dock station and 7 at every fourteen-dock
+ * one, whatever stood there, and the whole capacity at its eight-dock ones.
+ * Half of an odd capacity is read rounded either way, as both are written:
+ * 8 at a fifteen-dock station of Cherbourg holding 6 bikes, 3 at a
+ * seven-dock one of Soissons holding 1.
+ *
+ * **A figure the bikes explain is a count, whichever it is**: the capacity
+ * less the bikes, floored at nought ([readsAsCounted]). Twenty docks holding
+ * ten bikes do have ten free, and such a station is never weighed against the
+ * feed. The bikes and docks out of service would widen that allowance, as the
+ * discovery tool's frozen check does, but the state does not carry them, so
+ * the count must be exact; on the live feeds it moved no network across the
+ * line.
+ *
+ * What leaves a few real docks reading such a figure beside a bike is a
+ * capacity the producer has not updated, a bike out of service, or a
+ * coincidence, and it stays a minority: 34 of Manchester's 198 stations
+ * holding bikes on 22 October 2026, 135 of Chicago's 1,191, 2 of Berlin's 704.
  *
  * **The line is a strict majority**, as for the noughts of
  * [StationAvailability.isInFeedCountingWithoutCapacity]: a network where most
- * docks holding a bike are also all free is not one anybody measured. Ecovelo
- * writes the capacity at every station of Auch (9 of 9 holding bikes, on
- * 22 October 2026), Riom (13 of 13), Villefranche-sur-Saône (16 of 18) and
- * Nîmes (33 of 46), and De Lijn's Blue-bike in Brussels at 308 of 308. Past
- * Ecovelo's own feeds, whose other stations mostly read a fixed half of their
- * capacity, the highest share stands at 36 per cent, Beryl's Canterbury at
- * 8 of 22, and every docked network is near nought.
+ * docks holding a bike announce a figure no count gives is not one anybody
+ * measured. Every Ecovelo feed then lands well above it — Niort at 49 of 56,
+ * Cherbourg at 36 of 41, Tarbes at 18 of 18, Agen and Brive at all of theirs
+ * — and De Lijn's Blue-bike in Brussels reads its capacity at 308 of 308.
+ * Troyes, at 11 of 20, is the nearest above. Under it stand Beryl's
+ * Canterbury at 11 of 22, its free docks reading four nearly everywhere,
+ * Norwich at 59 of 160, and every network of physical docks under a fifth.
  *
  * **Below [MINIMUM_OCCUPIED_STATIONS_TO_JUDGE] stations holding bikes, the
  * feed is read as counting**, as it always was: two stations whose capacity
@@ -324,22 +340,32 @@ public fun joinStationsWithAvailability(
  * Five keeps the decision at three stations agreeing, and still reaches Auch,
  * whose ten stations hold bikes at nine on an ordinary morning.
  */
-private fun repeatsCapacity(
+private fun writesDocksFromCapacity(
     stations: List<Station>,
     byStationId: Map<String, StationAvailability>,
 ): Boolean {
-    val readsWholeCapacity = stations.mapNotNull { station ->
+    val writtenFromCapacity = stations.mapNotNull { station ->
         val capacity = station.capacity?.takeIf { it > 0 } ?: return@mapNotNull null
-        val state = byStationId[station.id] ?: return@mapNotNull null
+        val state = byStationId[station.id]?.takeIf { it.bikesAvailable > 0 }
+            ?: return@mapNotNull null
         val docks = state.docksAvailable ?: return@mapNotNull null
-        (docks == capacity).takeIf { state.bikesAvailable > 0 }
+        !readsAsCounted(capacity, state.bikesAvailable, docks) &&
+            (docks == capacity || docks == capacity / 2 || docks == (capacity + 1) / 2)
     }
-    return readsWholeCapacity.size >= MINIMUM_OCCUPIED_STATIONS_TO_JUDGE &&
-        readsWholeCapacity.count { it } * 2 > readsWholeCapacity.size
+    return writtenFromCapacity.size >= MINIMUM_OCCUPIED_STATIONS_TO_JUDGE &&
+        writtenFromCapacity.count { it } * 2 > writtenFromCapacity.size
 }
 
 /**
- * The stations holding bikes a feed needs before [repeatsCapacity] decides
+ * Whether free docks are what a station's capacity less its bikes gives,
+ * floored at nought — the figure a count would give, so nothing to hold
+ * against the feed.
+ */
+private fun readsAsCounted(capacity: Int, bikes: Int, docks: Int): Boolean =
+    docks == (capacity - bikes).coerceAtLeast(0)
+
+/**
+ * The stations holding bikes a feed needs before [writesDocksFromCapacity] decides
  * anything; see there for the figure.
  */
 private const val MINIMUM_OCCUPIED_STATIONS_TO_JUDGE = 5

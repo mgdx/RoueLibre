@@ -310,7 +310,7 @@ class UnlimitedDocksTest {
             listOf(rack("empty", capacity = 5) to holding("empty", 0, 5))
         val states = statesOf(auch)
 
-        assertTrue(states.values.all { it.isInFeedRepeatingCapacity })
+        assertTrue(states.values.all { it.isInFeedWritingDocksFromCapacity })
         assertTrue(states.values.all { it.hasUnlimitedDocks })
         assertTrue(states.getValue("c5-0").acceptsAnyBike)
         assertEquals(false, freeDocksAreWorthShowing(joinedFeed(auch)))
@@ -335,7 +335,7 @@ class UnlimitedDocksTest {
         val docked = stationsOf(20, { 20 - it }, 3, 7, 12, 15) + stationsOf(10, { 10 }, 2, 4)
         val states = statesOf(docked)
 
-        assertFalse(states.values.any { it.isInFeedRepeatingCapacity })
+        assertFalse(states.values.any { it.isInFeedWritingDocksFromCapacity })
         assertFalse(states.getValue("c20-0").hasUnlimitedDocks)
         assertEquals(17, states.getValue("c20-0").docksAvailable)
     }
@@ -344,7 +344,7 @@ class UnlimitedDocksTest {
     fun `half the stations holding bikes is no majority`() {
         val tied = stationsOf(10, { 10 }, 2, 4, 6) + stationsOf(20, { 20 - it }, 1, 2, 3)
 
-        assertFalse(statesOf(tied).values.any { it.isInFeedRepeatingCapacity })
+        assertFalse(statesOf(tied).values.any { it.isInFeedWritingDocksFromCapacity })
     }
 
     @Test
@@ -353,7 +353,7 @@ class UnlimitedDocksTest {
         // in them is exactly what a count says.
         val agen = stationsOf(5, { 5 }, 0, 0, 0, 0, 0, 0, 0) + stationsOf(6, { 6 - it }, 2)
 
-        assertFalse(statesOf(agen).values.any { it.isInFeedRepeatingCapacity })
+        assertFalse(statesOf(agen).values.any { it.isInFeedWritingDocksFromCapacity })
     }
 
     @Test
@@ -361,8 +361,8 @@ class UnlimitedDocksTest {
         val small = stationsOf(5, { 5 }, 1, 2, 3, 4) + stationsOf(6, { 6 }, 0, 0, 0)
         val enough = stationsOf(5, { 5 }, 1, 2, 3, 4, 5)
 
-        assertFalse(statesOf(small).values.any { it.isInFeedRepeatingCapacity })
-        assertTrue(statesOf(enough).values.all { it.isInFeedRepeatingCapacity })
+        assertFalse(statesOf(small).values.any { it.isInFeedWritingDocksFromCapacity })
+        assertTrue(statesOf(enough).values.all { it.isInFeedWritingDocksFromCapacity })
     }
 
     @Test
@@ -375,13 +375,48 @@ class UnlimitedDocksTest {
             rack("uncounted", capacity = 5) to holding("uncounted", 3, null),
         ) + stationsOf(8, { 8 }, 1, 2) + stationsOf(9, { 9 - it }, 1, 2, 3)
 
-        assertFalse(statesOf(unweighed).values.any { it.isInFeedRepeatingCapacity })
+        assertFalse(statesOf(unweighed).values.any { it.isInFeedWritingDocksFromCapacity })
     }
 
     @Test
     fun `a state nobody joined keeps its count`() {
-        assertFalse(holding("seul", 3, 5).isInFeedRepeatingCapacity)
+        assertFalse(holding("seul", 3, 5).isInFeedWritingDocksFromCapacity)
         assertFalse(holding("seul", 3, 5).hasUnlimitedDocks)
+    }
+
+    @Test
+    fun `a feed writing half the capacity beside the whole of it takes any bike`() {
+        // Niort, 22 October 2026: 10 free at twenty-dock stations and 7 at
+        // fourteen-dock ones whatever stands there, 8 at the eight-dock ones.
+        val niort = stationsOf(20, { 10 }, 1, 3, 2) +
+            stationsOf(14, { 7 }, 1, 4) +
+            stationsOf(8, { 8 }, 2, 5) +
+            stationsOf(22, { 13 }, 4)
+        val states = statesOf(niort)
+
+        assertTrue(states.values.all { it.isInFeedWritingDocksFromCapacity })
+        assertTrue(states.getValue("c22-0").hasUnlimitedDocks)
+    }
+
+    @Test
+    fun `half an odd capacity is read rounded either way`() {
+        // Cherbourg: 8 free at fifteen docks holding 6. Soissons: 3 free at
+        // seven docks holding 1.
+        val odd = stationsOf(15, { 8 }, 6, 2, 3) + stationsOf(7, { 3 }, 1, 2) +
+            stationsOf(30, { 30 - it }, 4, 5, 6)
+
+        assertTrue(statesOf(odd).values.all { it.isInFeedWritingDocksFromCapacity })
+    }
+
+    @Test
+    fun `half the capacity left by as many bikes is a count`() {
+        // Twenty docks holding ten bikes do have ten free: a docked network
+        // at half its fill is measured, not written from its capacity.
+        val halfFull = stationsOf(20, { 20 - it }, 10, 11, 9) +
+            stationsOf(14, { 14 - it }, 7, 7) +
+            stationsOf(16, { 8 }, 3)
+
+        assertFalse(statesOf(halfFull).values.any { it.isInFeedWritingDocksFromCapacity })
     }
 
     // ----------------------------------------- edge cases of the feed --
