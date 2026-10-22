@@ -360,6 +360,22 @@ public fun settleWritingDocksFromCapacity(
  * 8 at a fifteen-dock station of Cherbourg holding 6 bikes, 3 at a
  * seven-dock one of Soissons holding 1.
  *
+ * **Half is read only from [MINIMUM_CAPACITY_FOR_HALF] docks.** At a small
+ * rack half the capacity is one or two docks, a figure a real count reaches
+ * with a dock or a bike out of service, which the state does not carry:
+ * nextbike's LoveSharing in Las Palmas, four- and six-dock racks, read half
+ * at 5 of its 11 stations holding bikes on every reading of 22 October 2026,
+ * one station from the line, and held there for a session it would have sent
+ * riders to full racks. Six is the widest margin both ways, measured on two
+ * readings of the 360 cities: it takes Las Palmas down to 3 of 11 and keeps
+ * all 27 Ecovelo feeds above the line, Troyes the nearest at 10 of 19 and
+ * untouched, Carcassonne at 6 and 7 of 11. Eight takes La Roche-sur-Yon from 16 of
+ * 19 to 7, whose racks are of six and seven; ten loses Troyes, Charleville
+ * and La Roche-sur-Yon. Beryl's Canterbury, the highest under the line at
+ * 10 of 21, reads half at eight-dock bays, and no minimum up to eight moves it.
+ * The whole capacity needs no such floor: it is a figure no rack holding a
+ * bike reads, however small.
+ *
  * **A figure the bikes explain is a count, whichever it is**: the capacity
  * less the bikes, floored at nought ([readsAsCounted]). Twenty docks holding
  * ten bikes do have ten free, and such a station is never weighed against the
@@ -399,8 +415,9 @@ private fun writesDocksFromCapacity(
         val state = byStationId[station.id]?.takeIf { it.bikesAvailable > 0 }
             ?: return@mapNotNull null
         val docks = state.docksAvailable ?: return@mapNotNull null
-        !readsAsCounted(capacity, state.bikesAvailable, docks) &&
-            (docks == capacity || docks == capacity / 2 || docks == (capacity + 1) / 2)
+        val readsHalf = capacity >= MINIMUM_CAPACITY_FOR_HALF &&
+            (docks == capacity / 2 || docks == (capacity + 1) / 2)
+        !readsAsCounted(capacity, state.bikesAvailable, docks) && (docks == capacity || readsHalf)
     }
     return writtenFromCapacity.size >= MINIMUM_OCCUPIED_STATIONS_TO_JUDGE &&
         writtenFromCapacity.count { it } * 2 > writtenFromCapacity.size
@@ -419,3 +436,9 @@ private fun readsAsCounted(capacity: Int, bikes: Int, docks: Int): Boolean =
  * anything; see there for the figure.
  */
 private const val MINIMUM_OCCUPIED_STATIONS_TO_JUDGE = 5
+
+/**
+ * The capacity from which [writesDocksFromCapacity] reads half of it as a
+ * figure written rather than counted; see there for the figure.
+ */
+private const val MINIMUM_CAPACITY_FOR_HALF = 6

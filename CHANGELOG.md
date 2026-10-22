@@ -49,14 +49,16 @@ also records what has no visible effect.
   now settles `StationAvailability.isInFeedWritingDocksFromCapacity`: of the
   stations holding a bike that publish a capacity above nought and a count,
   more than half read the whole capacity or half of it (an odd one rounded
-  either way) in a figure the capacity less their bikes does not give, with
-  at least five such stations to decide. In such a feed `hasUnlimitedDocks`
+  either way, half only from six docks, which keeps LoveSharing's small racks
+  in Las Palmas at 3 of 11) in a figure the capacity less their bikes does not
+  give, with at least five such stations to decide. In such a feed `hasUnlimitedDocks`
   is true at every station (returns still need `is_returning`), so the
   planner applies no dock risk, ∞ is shown, and the 60 % rule silences free
   docks. Once found so, a feed stays so for the session
   (`settleWritingDocksFromCapacity`, held by `StationRepository` and handed
-  to the join, so the planner and the screens read one answer); an empty
-  station cache forgets it. Over the 360 cities that day it reaches all 27
+  to the join, so the planner and the screens read one answer); leaving the
+  city (`forget`) clears it and the display verdict with the station cache,
+  whether or not a screen is collecting. Over the 360 cities that day it reaches all 27
   Ecovelo networks (Troyes the nearest, at 10 of 19) and Brussels'
   Blue-bike (308 of 308). Under the line the highest is Beryl's Canterbury at
   10 of 21, and no network of physical docks passes 14 % (Detroit 8 of 57,

@@ -15,6 +15,7 @@ import discover_networks
 from discover_networks import (
     EMPTY_DOCK_SHARE,
     FROZEN_FREE_DOCK_SHARE,
+    MINIMUM_CAPACITY_FOR_HALF,
     MINIMUM_OCCUPIED_STATIONS_TO_JUDGE,
     PLACEHOLDER_DOCK_SHARE,
     VIRTUAL_STATION_SHARE,
@@ -367,6 +368,22 @@ class FreeDocksRepeatingTheCapacity(unittest.TestCase):
             stations_of(15, lambda _: 8, 6, 2, 3),
             stations_of(7, lambda _: 3, 1, 2),
             stations_of(30, lambda held: 30 - held, 4, 5, 6),
+        )
+        self.assertTrue(feed_writes_docks_from_capacity(live, information))
+
+    def test_half_a_small_rack_is_not_read_as_written(self) -> None:
+        # LoveSharing, Las Palmas: small racks reading half their docks. Below
+        # six docks, half is left alone; the whole capacity is not.
+        self.assertEqual(6, MINIMUM_CAPACITY_FOR_HALF)
+        information, live = merged(
+            stations_of(4, lambda _: 2, 1, 1),
+            stations_of(5, lambda _: 2, 1, 2),
+            stations_of(10, lambda held: 10 - held, 1, 2),
+        )
+        self.assertFalse(feed_writes_docks_from_capacity(live, information))
+        information, live = merged(
+            stations_of(4, lambda _: 4, 1, 2, 3),
+            stations_of(10, lambda held: 10 - held, 1, 2),
         )
         self.assertTrue(feed_writes_docks_from_capacity(live, information))
 

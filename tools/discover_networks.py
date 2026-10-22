@@ -188,6 +188,15 @@ FROZEN_FREE_DOCK_SHARE = 0.8
 # morning.
 MINIMUM_OCCUPIED_STATIONS_TO_JUDGE = 5
 
+# The capacity from which `feed_writes_docks_from_capacity` reads half of it as
+# written rather than counted; `MINIMUM_CAPACITY_FOR_HALF` in `:core`, and the
+# two must agree. At a smaller rack half is one or two docks, which a real
+# count reaches with a dock or a bike out of service: nextbike's LoveSharing in
+# Las Palmas read half at 5 of its 11 stations holding bikes on 22 October
+# 2026, one from the line, and six takes it to 3 while keeping all 27 Ecovelo
+# feeds above the line; eight drops La Roche-sur-Yon, ten two more.
+MINIMUM_CAPACITY_FOR_HALF = 6
+
 # A free-dock count repeated at nearly every station of a network was written
 # once for all of them rather than counted at each. MobiData BW publishes forty
 # docks at 1,620 of Call a Bike's 1,621 stations, and at every RegioRad
@@ -855,7 +864,8 @@ def feed_writes_docks_from_capacity(live: list[dict], information: dict[str, dic
     The mirror of `isInFeedWritingDocksFromCapacity` in `:core`. Of the
     stations holding a bike that publish a capacity above nought and a count
     of free docks, a strict majority read the whole capacity or half of it —
-    an odd one rounded either way — in a figure their bikes do not explain
+    an odd one rounded either way, and half only from
+    `MINIMUM_CAPACITY_FOR_HALF` docks — in a figure their bikes do not explain
     (`reads_as_counted`), and there are at least
     `MINIMUM_OCCUPIED_STATIONS_TO_JUDGE` of them. Ecovelo writes the capacity
     at all 9 of Auch's stations holding bikes on 22 October 2026, 5 free docks
@@ -874,7 +884,13 @@ def feed_writes_docks_from_capacity(live: list[dict], information: dict[str, dic
         docks = free_docks(station)
         weighed.append(
             not reads_as_counted(capacity, bikes, docks)
-            and docks in (capacity, capacity // 2, (capacity + 1) // 2)
+            and (
+                docks == capacity
+                or (
+                    capacity >= MINIMUM_CAPACITY_FOR_HALF
+                    and docks in (capacity // 2, (capacity + 1) // 2)
+                )
+            )
         )
     return (
         len(weighed) >= MINIMUM_OCCUPIED_STATIONS_TO_JUDGE

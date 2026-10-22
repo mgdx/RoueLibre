@@ -431,6 +431,19 @@ class UnlimitedDocksTest {
     }
 
     @Test
+    fun `half a small rack is not read as written from its capacity`() {
+        // LoveSharing, Las Palmas: small racks reading half their docks, a
+        // dock or a bike out of service away from a real count. Below six
+        // docks, half is left alone; the whole capacity is not.
+        val small = stationsOf(4, { 2 }, 1, 1) + stationsOf(5, { 2 }, 1, 2) +
+            stationsOf(10, { 10 - it }, 1, 2)
+
+        assertFalse(statesOf(small).values.any { it.isInFeedWritingDocksFromCapacity })
+        val whole = stationsOf(4, { 4 }, 1, 2, 3) + stationsOf(10, { 10 - it }, 1, 2)
+        assertTrue(statesOf(whole).values.all { it.isInFeedWritingDocksFromCapacity })
+    }
+
+    @Test
     fun `half the capacity left by as many bikes is a count`() {
         // Twenty docks holding ten bikes do have ten free: a docked network
         // at half its fill is measured, not written from its capacity.
