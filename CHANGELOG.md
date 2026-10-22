@@ -40,6 +40,26 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **Auch and the feeds that write their capacity in place of free docks no
+  longer promise docks nobody counted** (`SPEC.md` §4.1, §7.1). Ecovelo's
+  Auch-Vélo'c publishes each station's capacity as its free docks whatever
+  stands there — 9 of its 9 stations holding bikes on 22 October 2026, 5 free
+  beside 7 bikes at a five-dock one — and the application showed "5 free
+  docks" everywhere. `joinStationsWithAvailability` now settles
+  `StationAvailability.isInFeedRepeatingCapacity`: of the stations holding a
+  bike that publish a capacity above nought and a count, more than half read
+  exactly their capacity, with at least five such stations to decide. In such
+  a feed `hasUnlimitedDocks` is true at every station (returns still need
+  `is_returning`), so the planner applies no dock risk, ∞ is shown, and the
+  60 % rule silences free docks. Over the 360 cities on 22 October 2026 it
+  reaches Auch, Riom, Villefranche-sur-Saône, Nîmes, Niort, Nantes' Naolib
+  Micromob' and Brussels' Blue-bike, and no network of physical docks (Berlin
+  2 of 704, Manchester 5 of 198). Derived where states meet stations: nothing
+  new is stored. `tools/discover_networks.py` mirrors it
+  (`feed_repeats_capacity`, same tests on both sides), and Auch, withdrawn as
+  "frozen-free-docks", is eligible again, as is Ecovelo's BreizhGo, not yet
+  a city; no other verdict of the 1,528 catalogue entries moves.
+
 - **Journeys end again in Munich, Düsseldorf and the networks built like
   them** (issue #8, `SPEC.md` §4.1, §6, §7.1). A station publishing no
   `num_docks_available` — which GBFS reserves for unlimited docking — was read
