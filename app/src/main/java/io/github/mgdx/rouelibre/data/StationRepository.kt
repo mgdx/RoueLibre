@@ -398,6 +398,15 @@ class StationRepository(
     private suspend fun forgetHoldingTheLock() {
         dao.clearAvailabilities()
         dao.clearStations()
+        // Both verdicts describe the stations just cleared, and go with them.
+        // An empty snapshot forgets them too, but only for a screen that
+        // happens to be collecting: with none, Auch's verdict would reach
+        // the next city and read every Vélib' dock as taking any bike. They
+        // are not keyed by the city's address instead: the address changes
+        // before the cache does, and a snapshot of the old stations read
+        // under the new address would carry the verdict over all the same.
+        docksWrittenFromCapacity.value = false
+        freeDocksVerdict.value = null
         cachedDiscovery = null
         cachedDiscoveryUrl = null
         cachedVehicleTypes = null

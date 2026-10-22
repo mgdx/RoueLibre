@@ -422,6 +422,31 @@ class StationRepositoryTest {
     }
 
     @Test
+    fun `a city left takes its settled verdicts with it, whoever was watching`() = runTest {
+        // Niort, then Lille's docks, with no screen collecting in between:
+        // Niort's verdict must not read Lille's docks as taking any bike.
+        enqueueDiscovery()
+        enqueueTwentyDockStations()
+        enqueueHalfCapacityStatus(written = 4)
+        val repository = repository()
+        repository.refresh()
+        val niort = repository.observeStations().first().stations
+        assertTrue(niort.all { it.availability!!.hasUnlimitedDocks })
+        assertEquals(false, repository.observeFreeDocksShown().first())
+
+        repository.forget()
+        enqueueDiscovery()
+        enqueueInformation()
+        enqueueStatus(bikesAtFirstStation = 7)
+        repository.refresh()
+
+        val lille = repository.observeStations().first().stations.mapNotNull { it.availability }
+        assertTrue(lille.isNotEmpty())
+        assertTrue(lille.none { it.hasUnlimitedDocks })
+        assertEquals(true, repository.observeFreeDocksShown().first())
+    }
+
+    @Test
     fun `the User-Agent header names the application without a device identifier`() = runTest {
         enqueueDiscovery()
         enqueueInformation()
