@@ -399,6 +399,28 @@ class UnlimitedDocksTest {
     }
 
     @Test
+    fun `a feed found writing its docks from its capacity stays so until emptied`() {
+        val above = stationsOf(20, { 10 }, 1, 2, 3) + stationsOf(14, { 14 - it }, 1, 2)
+        val below = stationsOf(20, { 10 }, 1, 2) + stationsOf(14, { 14 - it }, 1, 2, 3)
+        fun settle(settled: Boolean, pairs: List<kotlin.Pair<Station, StationAvailability>>) =
+            settleWritingDocksFromCapacity(settled, pairs.map { it.first }, pairs.map { it.second })
+
+        val first = settle(false, above)
+        val second = settle(first, below)
+
+        assertTrue(first)
+        assertTrue(second)
+        assertFalse(settle(false, below))
+        assertFalse(settle(true, emptyList()))
+        val states = joinStationsWithAvailability(
+            below.map { it.first },
+            below.map { it.second },
+            writesDocksFromCapacitySettled = second,
+        )
+        assertTrue(states.all { it.availability!!.hasUnlimitedDocks })
+    }
+
+    @Test
     fun `half an odd capacity is read rounded either way`() {
         // Cherbourg: 8 free at fifteen docks holding 6. Soissons: 3 free at
         // seven docks holding 1.

@@ -378,6 +378,49 @@ class StationRepositoryTest {
         assertEquals(0, dao.availabilities.value.size)
     }
 
+    /** Six twenty-dock stations, as an Ecovelo network publishes them. */
+    private fun enqueueTwentyDockStations() {
+        val stations = (1..6).joinToString(",") { index ->
+            """{"station_id":"$index","name":"S$index","lat":46.32,"lon":-0.46,"capacity":20}"""
+        }
+        server.enqueue(MockResponse(body = """{"version":"2.3","data":{"stations":[$stations]}}"""))
+    }
+
+    /** Two bikes at each station: [written] of them read 10 free, the others 18. */
+    private fun enqueueHalfCapacityStatus(written: Int) {
+        val states = (1..6).joinToString(",") { index ->
+            val docks = if (index <= written) 10 else 18
+            """{"station_id":"$index","num_bikes_available":2,"num_docks_available":$docks,
+               "is_installed":true,"is_renting":true,"is_returning":true}"""
+        }
+        server.enqueue(MockResponse(body = """{"version":"2.3","data":{"stations":[$states]}}"""))
+    }
+
+    @Test
+    fun `a feed found writing its docks from its capacity stays so for the session`() = runTest {
+        // Niort sat at 51.8 % on one reading and under half on another: one
+        // station decided whether the planner weighed a dock risk.
+        enqueueDiscovery()
+        enqueueTwentyDockStations()
+        enqueueHalfCapacityStatus(written = 4)
+        val repository = repository()
+        repository.refresh()
+        val above = repository.observeStations().first().stations
+        assertTrue(above.all { it.availability!!.hasUnlimitedDocks })
+
+        now += Duration.ofMinutes(2)
+        enqueueHalfCapacityStatus(written = 2)
+        repository.refresh(force = true)
+
+        val below = repository.observeStations().first().stations
+        assertTrue(below.all { it.availability!!.hasUnlimitedDocks })
+        assertEquals(false, repository.observeFreeDocksShown().first())
+        // A session that never saw it above the line reads the same snapshot
+        // as counting.
+        val fresh = repository().observeStations().first().stations
+        assertTrue(fresh.none { it.availability!!.hasUnlimitedDocks })
+    }
+
     @Test
     fun `the User-Agent header names the application without a device identifier`() = runTest {
         enqueueDiscovery()

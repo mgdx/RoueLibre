@@ -264,11 +264,16 @@ public enum class ServiceState {
  * settles [StationAvailability.isInFeedCountingWithoutCapacity] and
  * [StationAvailability.isInFeedWritingDocksFromCapacity] for every state.
  *
+ * @param writesDocksFromCapacitySettled the feed was already found writing
+ *   its free docks from its capacities this session
+ *   ([settleWritingDocksFromCapacity]); the join then reads it so whatever
+ *   this snapshot says, and otherwise judges the snapshot alone.
  * @return one entry per known station, in the order received.
  */
 public fun joinStationsWithAvailability(
     stations: List<Station>,
     availabilities: List<StationAvailability>,
+    writesDocksFromCapacitySettled: Boolean = false,
 ): List<StationWithAvailability> {
     val byStationId = availabilities.associateBy { it.stationId }
     val countedWithoutCapacity = stations
@@ -276,7 +281,8 @@ public fun joinStationsWithAvailability(
         .mapNotNull { byStationId[it.id]?.docksAvailable }
     val countsWithoutCapacity = countedWithoutCapacity.count { it == 0 } * 2 <=
         countedWithoutCapacity.size
-    val writesDocksFromCapacity = writesDocksFromCapacity(stations, byStationId)
+    val writesDocksFromCapacity = writesDocksFromCapacitySettled ||
+        writesDocksFromCapacity(stations, byStationId)
     return stations.map { station ->
         val availability = byStationId[station.id]
         StationWithAvailability(
@@ -289,6 +295,49 @@ public fun joinStationsWithAvailability(
             ),
         )
     }
+}
+
+/**
+ * Whether the feed writes its free docks from its capacities
+ * ([StationAvailability.isInFeedWritingDocksFromCapacity]), **settled once
+ * judged so, for the session**: a feed found writing them stays read that way
+ * until the stations are emptied, which is what changing city looks like.
+ *
+ * The share is taken on the live feed, and a feed near the line crosses it
+ * from one reading to the next — one station decides: Niort read the whole
+ * capacity at 51.8 and 51.9 per cent of its stations holding bikes on two
+ * readings of 22 October 2026, and Cherbourg at 46 and then exactly 50,
+ * before half the capacity was read as well. Troyes, the nearest feed above
+ * the line since, stood at 10 of 19. Judged afresh at each refresh, the planner would
+ * weigh a dock risk at one minute and none the next, and the ∞ would come and
+ * go on the map.
+ *
+ * **Why it holds in that direction, and not the other**: a reading above the
+ * line is evidence, one below it is only the absence of it. A docked network
+ * never puts most of its stations holding bikes at such a figure — none
+ * reached a quarter of them on the 360 networks surveyed — while a feed writing it
+ * falls under the line whenever enough of its bikes happen to stand where the
+ * capacity less the bikes gives the same figure, or at a station whose figure
+ * is neither. Holding the verdict where the evidence was seen costs a network
+ * that really counts nothing it has been seen doing; holding the other one
+ * would undo the evidence. It is the same once-per-session settling as
+ * [settleFreeDocksWorthShowing], which reads the stations this verdict has
+ * already shaped, so the planner and every screen read the same answer.
+ *
+ * @param settled whether the feed was already found writing them this
+ *   session.
+ * @return the verdict to hold from now on, to hand to
+ *   [joinStationsWithAvailability]: `false` for an empty snapshot, which
+ *   forgets it.
+ */
+public fun settleWritingDocksFromCapacity(
+    settled: Boolean,
+    stations: List<Station>,
+    availabilities: List<StationAvailability>,
+): Boolean = when {
+    stations.isEmpty() -> false
+    settled -> true
+    else -> writesDocksFromCapacity(stations, availabilities.associateBy { it.stationId })
 }
 
 /**

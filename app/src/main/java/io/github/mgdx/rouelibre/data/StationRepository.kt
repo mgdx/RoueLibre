@@ -14,6 +14,7 @@ import io.github.mgdx.rouelibre.core.station.StreetBike
 import io.github.mgdx.rouelibre.core.station.countFleet
 import io.github.mgdx.rouelibre.core.station.joinStationsWithAvailability
 import io.github.mgdx.rouelibre.core.station.settleFreeDocksWorthShowing
+import io.github.mgdx.rouelibre.core.station.settleWritingDocksFromCapacity
 import io.github.mgdx.rouelibre.core.station.streetBikesShown
 import io.github.mgdx.rouelibre.data.local.StationAvailabilityEntity
 import io.github.mgdx.rouelibre.data.local.StationDao
@@ -112,6 +113,16 @@ class StationRepository(
     private var lastStreetBikesRefresh: Instant? = null
 
     /**
+     * Whether the network in service writes its free docks from its stations'
+     * capacities, as settled this session (see [settleWritingDocksFromCapacity]).
+     *
+     * Held here for the reason [freeDocksVerdict] is: the planner and every
+     * screen read their stations through [observeStations], and must all read
+     * a feed near the line the same way, from one refresh to the next.
+     */
+    private val docksWrittenFromCapacity = MutableStateFlow(false)
+
+    /**
      * The stations and their last known state, re-emitted on every change.
      *
      * Emits the cache's contents immediately, offline included. An empty cache
@@ -121,13 +132,19 @@ class StationRepository(
     fun observeStations(): Flow<StationsSnapshot> = combine(
         dao.observeStations(),
         dao.observeAvailabilities(),
-    ) { stations, availabilities ->
+    ) { stationEntities, availabilityEntities ->
+        val stations = stationEntities.map(StationEntity::toDomain)
+        val availabilities = availabilityEntities.map(StationAvailabilityEntity::toDomain)
+        val writesDocksFromCapacity = docksWrittenFromCapacity.updateAndGet { settled ->
+            settleWritingDocksFromCapacity(settled, stations, availabilities)
+        }
         StationsSnapshot(
             stations = joinStationsWithAvailability(
-                stations.map(StationEntity::toDomain),
-                availabilities.map(StationAvailabilityEntity::toDomain),
+                stations,
+                availabilities,
+                writesDocksFromCapacitySettled = writesDocksFromCapacity,
             ),
-            fetchedAt = availabilities.maxOfOrNull { it.fetchedAtEpochSeconds }
+            fetchedAt = availabilityEntities.maxOfOrNull { it.fetchedAtEpochSeconds }
                 ?.let(Instant::ofEpochSecond),
         )
     }
