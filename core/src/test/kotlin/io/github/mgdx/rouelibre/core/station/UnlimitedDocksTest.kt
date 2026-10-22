@@ -275,6 +275,115 @@ class UnlimitedDocksTest {
         assertFalse(state.acceptsAnyBike)
     }
 
+    // ------------------------------ free docks repeating the capacity --
+
+    private fun holding(id: String, bikes: Int, docks: Int?, returning: Boolean = true) =
+        StationAvailability(
+            stationId = id,
+            bikesAvailable = bikes,
+            docksAvailable = docks,
+            isInstalled = true,
+            isRenting = true,
+            isReturning = returning,
+            reportedAt = null,
+        )
+
+    /** Stations of [capacity] docks, one per count of [bikes], reading [docks] free. */
+    private fun stationsOf(capacity: Int, docks: (Int) -> Int, vararg bikes: Int) =
+        bikes.mapIndexed { index, held ->
+            val id = "c$capacity-$index"
+            rack(id, capacity = capacity) to holding(id, held, docks(held))
+        }
+
+    private fun joinedFeed(pairs: List<kotlin.Pair<Station, StationAvailability>>) =
+        joinStationsWithAvailability(pairs.map { it.first }, pairs.map { it.second })
+
+    private fun statesOf(pairs: List<kotlin.Pair<Station, StationAvailability>>) =
+        joinedFeed(pairs).associate { it.station.id to checkNotNull(it.availability) }
+
+    @Test
+    fun `a feed writing the capacity at every station holding bikes takes any bike`() {
+        // Ecovelo's Auch-Vélo'c, 22 October 2026: 10 free beside 10 bikes at a
+        // ten-dock station, 5 free beside 7 bikes at a five-dock one.
+        val auch = stationsOf(10, { 10 }, 10, 2, 8) +
+            stationsOf(5, { 5 }, 7, 4, 1, 2, 6) +
+            listOf(rack("empty", capacity = 5) to holding("empty", 0, 5))
+        val states = statesOf(auch)
+
+        assertTrue(states.values.all { it.isInFeedRepeatingCapacity })
+        assertTrue(states.values.all { it.hasUnlimitedDocks })
+        assertTrue(states.getValue("c5-0").acceptsAnyBike)
+        assertEquals(false, freeDocksAreWorthShowing(joinedFeed(auch)))
+    }
+
+    @Test
+    fun `a station refusing returns stays refused in a feed repeating its capacity`() {
+        val auch = stationsOf(5, { 5 }, 7, 4, 1, 2, 6) +
+            listOf(rack("closed", capacity = 5) to holding("closed", 3, 5, returning = false))
+        val closed = statesOf(auch).getValue("closed")
+
+        assertTrue(closed.hasUnlimitedDocks)
+        assertFalse(closed.canAcceptBike)
+        assertFalse(closed.acceptsAnyBike)
+    }
+
+    @Test
+    fun `a docked feed keeps its counts beside a few stations reading their capacity`() {
+        // Berlin, 22 October 2026: 2 of 704 stations holding bikes read their
+        // whole capacity free — a capacity lagging behind the rack, not a
+        // feed that never counts.
+        val docked = stationsOf(20, { 20 - it }, 3, 7, 12, 15) + stationsOf(10, { 10 }, 2, 4)
+        val states = statesOf(docked)
+
+        assertFalse(states.values.any { it.isInFeedRepeatingCapacity })
+        assertFalse(states.getValue("c20-0").hasUnlimitedDocks)
+        assertEquals(17, states.getValue("c20-0").docksAvailable)
+    }
+
+    @Test
+    fun `half the stations holding bikes is no majority`() {
+        val tied = stationsOf(10, { 10 }, 2, 4, 6) + stationsOf(20, { 20 - it }, 1, 2, 3)
+
+        assertFalse(statesOf(tied).values.any { it.isInFeedRepeatingCapacity })
+    }
+
+    @Test
+    fun `empty stations reading their capacity are counted, not repeated`() {
+        // Agen's empty fleet: five free docks at five-dock racks with no bike
+        // in them is exactly what a count says.
+        val agen = stationsOf(5, { 5 }, 0, 0, 0, 0, 0, 0, 0) + stationsOf(6, { 6 - it }, 2)
+
+        assertFalse(statesOf(agen).values.any { it.isInFeedRepeatingCapacity })
+    }
+
+    @Test
+    fun `too few stations holding bikes decide nothing`() {
+        val small = stationsOf(5, { 5 }, 1, 2, 3, 4) + stationsOf(6, { 6 }, 0, 0, 0)
+        val enough = stationsOf(5, { 5 }, 1, 2, 3, 4, 5)
+
+        assertFalse(statesOf(small).values.any { it.isInFeedRepeatingCapacity })
+        assertTrue(statesOf(enough).values.all { it.isInFeedRepeatingCapacity })
+    }
+
+    @Test
+    fun `a station without a capacity or a count weighs nothing`() {
+        // Nought at a capacity of nought is a full station, never the whole
+        // capacity free; no capacity or no count leaves nothing to compare.
+        val unweighed = listOf(
+            rack("zero", capacity = 0) to holding("zero", 3, 0),
+            rack("none") to holding("none", 3, 4),
+            rack("uncounted", capacity = 5) to holding("uncounted", 3, null),
+        ) + stationsOf(8, { 8 }, 1, 2) + stationsOf(9, { 9 - it }, 1, 2, 3)
+
+        assertFalse(statesOf(unweighed).values.any { it.isInFeedRepeatingCapacity })
+    }
+
+    @Test
+    fun `a state nobody joined keeps its count`() {
+        assertFalse(holding("seul", 3, 5).isInFeedRepeatingCapacity)
+        assertFalse(holding("seul", 3, 5).hasUnlimitedDocks)
+    }
+
     // ----------------------------------------- edge cases of the feed --
 
     private fun parsedState(stationFields: String, statusFields: String): StationAvailability {
