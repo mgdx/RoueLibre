@@ -15,6 +15,8 @@ import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.displayFor
 import io.github.mgdx.rouelibre.core.station.isBeyondCoveredArea
 import io.github.mgdx.rouelibre.databinding.ItemStationBinding
+import io.github.mgdx.rouelibre.ui.UNLIMITED_FIGURE
+import io.github.mgdx.rouelibre.ui.UNLIMITED_PLURAL_QUANTITY
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.inServedDigits
 
@@ -30,6 +32,19 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
 
     /** What the indicator counts: the bikes, or the docks. */
     var mode: AvailabilityMode = AvailabilityMode.Bikes
+        set(value) {
+            if (field == value) return
+            field = value
+            notifyItemRangeChanged(0, itemCount)
+        }
+
+    /**
+     * Whether the network's free docks are worth showing (SPEC §7.1).
+     *
+     * Where they are not, the rows lose the second column — the free docks
+     * beside the bikes — and their spoken sentence loses the words for them.
+     */
+    var freeDocksShown: Boolean = true
         set(value) {
             if (field == value) return
             field = value
@@ -74,7 +89,7 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: StationViewHolder, position: Int) {
-        holder.bind(getItem(position), mode, origin, coveredArea)
+        holder.bind(getItem(position), mode, origin, coveredArea, freeDocksShown)
     }
 
     /** One station row. */
@@ -90,12 +105,15 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
          * @param mode what the indicator is to count.
          * @param origin where to measure the distance from, or `null`.
          * @param coveredArea the area the installed data covers, or `null`.
+         * @param freeDocksShown whether the network's free docks are worth
+         *   showing at all.
          */
         fun bind(
             entry: StationWithAvailability,
             mode: AvailabilityMode,
             origin: Coordinates?,
             coveredArea: BoundingBox?,
+            freeDocksShown: Boolean,
         ) {
             val context = binding.root.context
             val resources = context.resources
@@ -145,16 +163,30 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
             }
             binding.detail.isGone = binding.detail.text.isNullOrBlank()
 
+            // No second column where the network's free docks are not worth
+            // showing: it would be a ∞ on most rows (SPEC §7.1), and the
+            // list then counts bikes alone. The row gives the name its width.
+            binding.counterpartBlock.isGone = !freeDocksShown
+
             // The counterpart count: docks when the indicator shows bikes, and
-            // the other way round.
+            // the other way round. Free docks that limit nothing are written
+            // with the sign the discs use, never as the nought a feed may
+            // carry for them (SPEC §4.1) — at a station that takes bikes back.
+            // One refusing returns shows the count it published, nought where
+            // it published none, as it always has.
+            val docksUnlimited = mode == AvailabilityMode.Bikes &&
+                entry.availability?.acceptsAnyBike == true
             val counterpart = entry.availability?.let {
                 when (mode) {
-                    AvailabilityMode.Bikes -> it.docksAvailable
+                    AvailabilityMode.Bikes -> it.docksAvailable ?: 0
                     AvailabilityMode.Docks -> it.bikesAvailable
                 }
             }
-            binding.counterpart.text = counterpart?.let { context.inServedDigits(it) }
-                ?: context.getString(R.string.counterpart_none)
+            binding.counterpart.text = when {
+                docksUnlimited -> UNLIMITED_FIGURE
+                counterpart != null -> context.inServedDigits(counterpart)
+                else -> context.getString(R.string.counterpart_none)
+            }
             // The label agrees with the figure beside it, and carries no number
             // of its own: the count is passed as a quantity, not as an
             // argument. An unknown count reads as the plural, the form the pair
@@ -164,7 +196,7 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
                     AvailabilityMode.Bikes -> R.plurals.counterpart_docks
                     AvailabilityMode.Docks -> R.plurals.counterpart_bikes
                 },
-                counterpart ?: 0,
+                if (docksUnlimited) UNLIMITED_PLURAL_QUANTITY else counterpart ?: 0,
             )
 
             // A screen reader must hear the same thing an eye sees: the name,
@@ -172,7 +204,11 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
             // outside this class because the station's sheet draws the same two
             // figures and owes the same words (see [spokenAvailability]).
             binding.root.contentDescription =
-                context.spokenAvailability(entry, isOutOfService = display.isOutOfService)
+                context.spokenAvailability(
+                    entry,
+                    isOutOfService = display.isOutOfService,
+                    freeDocksShown = freeDocksShown,
+                )
             binding.root.setOnClickListener { onOpen(entry) }
         }
     }

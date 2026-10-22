@@ -58,7 +58,9 @@
         The gap between the two is carried by the name's end margin, not by
         this block's start margin: a margin on a side that carries no
         constraint is ignored, which showed up in Arabic, where name and label
-        ended up flush against one another.
+        ended up flush against one another. The name drops that margin when
+        the block is gone, which is the whole row in a network whose free
+        docks are not worth showing (SPEC §7.1): the gap would face nothing.
     -->
     <LinearLayout
         android:id="@+id/counterpart_block"
@@ -116,6 +118,7 @@
         app:layout_constraintEnd_toStartOf="@id/counterpart_block"
         app:layout_constraintStart_toEndOf="@id/indicator"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginEnd="0dp"
         tools:text="Gare Lille Flandres" />
 
     <TextView

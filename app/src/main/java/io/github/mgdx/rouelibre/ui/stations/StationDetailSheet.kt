@@ -32,6 +32,7 @@ import io.github.mgdx.rouelibre.core.station.displayFor
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.core.station.isBeyondCoveredArea
 import io.github.mgdx.rouelibre.databinding.SheetStationDetailBinding
+import io.github.mgdx.rouelibre.ui.UNLIMITED_PLURAL_QUANTITY
 import io.github.mgdx.rouelibre.ui.address.toTitle
 import io.github.mgdx.rouelibre.ui.formatDistance
 import io.github.mgdx.rouelibre.ui.handOverToNavigation
@@ -40,6 +41,7 @@ import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.toRelativeText
 import io.github.mgdx.rouelibre.ui.toStatusLine
+import io.github.mgdx.rouelibre.ui.withFreeDocksShown
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -64,6 +66,13 @@ class StationDetailSheet : BottomSheetDialogFragment() {
      * ours can reach it (see [isBeyondCoveredArea]).
      */
     private var coveredArea: BoundingBox? = null
+
+    /**
+     * Whether the network's free docks are worth showing (SPEC §7.1), `true`
+     * until the stations say otherwise. Where they are not, the sheet carries
+     * the bikes' disc alone and says nothing of free docks aloud either.
+     */
+    private var freeDocksShown = true
 
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
@@ -137,6 +146,10 @@ class StationDetailSheet : BottomSheetDialogFragment() {
             show(viewModel.state.value)
         }
         askForBikesDetail()
+        withFreeDocksShown { shown ->
+            freeDocksShown = shown
+            show(viewModel.state.value)
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -176,6 +189,10 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         val docks = entry.displayFor(AvailabilityMode.Docks)
         views.bikesIndicator.display = bikes
         views.docksIndicator.display = docks
+        // The free docks' disc goes where they are not worth showing: it would
+        // read ∞ at most stations of such a network (SPEC §7.1), and the
+        // bikes' disc then stands alone, the row having nothing to stack.
+        views.docksPair.isVisible = freeDocksShown
         // The label agrees with the figure standing in the disc beside it: the
         // count is passed as a quantity and never as an argument, the plural
         // holding the word alone. A disc with no figure — unknown, or out of
@@ -183,8 +200,10 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         // no count settles it.
         views.bikesLabel.text =
             resources.getQuantityString(R.plurals.counterpart_bikes, bikes.count ?: 0)
-        views.docksLabel.text =
-            resources.getQuantityString(R.plurals.counterpart_docks, docks.count ?: 0)
+        views.docksLabel.text = resources.getQuantityString(
+            R.plurals.counterpart_docks,
+            if (docks.isUnlimited) UNLIMITED_PLURAL_QUANTITY else docks.count ?: 0,
+        )
 
         // Both discs are painted onto a canvas, and a painted figure reaches no
         // screen reader: the sheet announced "BIKES" and "FREE DOCKS" and
@@ -197,6 +216,7 @@ class StationDetailSheet : BottomSheetDialogFragment() {
         views.counts.contentDescription = requireContext().spokenAvailability(
             entry,
             isOutOfService = entry.serviceState == ServiceState.OutOfService,
+            freeDocksShown = freeDocksShown,
         )
         showBikeSplit(state.bikeSplit)
         showBikesDetail(state.bikesDetail)

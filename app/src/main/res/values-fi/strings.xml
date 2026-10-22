@@ -53,10 +53,12 @@
         <item quantity="one">%1$d vapaa paikka</item>
         <item quantity="other">%1$d vapaata paikkaa</item>
     </plurals>
+    <string name="docks_available_unlimited">Vapaat paikat: rajattomasti</string>
 
     <!-- Spoken by screen readers on a station's indicator.
          Example: ”Mannerheimintie, 6 pyörää, 26 vapaata paikkaa”. -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <string name="station_out_of_service">Poissa käytöstä</string>
     <string name="station_out_of_service_since">%1$s · viimeisin tieto %2$s</string>
     <string name="station_availability_unknown">Saatavuus tuntematon</string>
@@ -422,6 +424,7 @@
          highest. -->
     <string name="journey_detail_profile_description_no_climb">Pyöräosuus kulkee korkeudella %1$s–%2$s merenpinnan yläpuolella.</string>
     <string name="journey_detail_availability_note">Pyörät ja paikat sellaisina kuin ne olivat reittiä laskettaessa.</string>
+    <string name="journey_detail_availability_note_bikes">Pyörät sellaisina kuin ne olivat reittiä laskettaessa.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Avaa navigointisovelluksessa</string>
@@ -448,6 +451,7 @@
     <string name="journey_no_mechanical_nearby">Lähistön asemilla ei ole juuri nyt tavallista pyörää. Pyydä mitä tahansa pyörää tai yritä myöhemmin uudelleen.</string>
     <string name="journey_no_electric_nearby">Lähistön asemilla ei ole juuri nyt sähköpyörää. Pyydä mitä tahansa pyörää tai yritä myöhemmin uudelleen.</string>
     <string name="journey_no_dock_nearby">Määränpään lähellä ei ole asemaa, jolla olisi vapaa paikka. Yritä myöhemmin uudelleen tai valitse toinen määränpää.</string>
+    <string name="journey_no_return_nearby">Mikään määränpään lähellä oleva asema ei ota juuri nyt pyöriä vastaan. Yritä myöhemmin uudelleen tai valitse toinen määränpää.</string>
     <string name="journey_no_route">Näiden kahden pisteen välillä ei ole kuljettavaa reittiä.</string>
     <string name="journey_graph_missing">Reittiaineistoa ei ole asennettu. Lisää se Tallennustila-näytöltä.</string>
     <string name="journey_outside_coverage">Tämä piste on asennettujen aineistojen kattaman alueen ulkopuolella.</string>
@@ -724,6 +728,7 @@
     <string name="settings_map_filters_hide_empty">Piilota asemat, joilla ei ole mitään tarjottavaa</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">”Ei mitään” seuraa sitä, mitä kartta laskee: ei pyörää, kun se laskee pyöriä, ei vapaata paikkaa, kun se laskee vapaita paikkoja.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">”Ei mitään” tarkoittaa, ettei pyörää ole: tässä verkossa kartta laskee vain pyöriä.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Asemat, joista verkosto ei kerro mitään, jäävät kartalle: lukema, jota kukaan ei voinut lukea, ei ole sama kuin nolla.</string>

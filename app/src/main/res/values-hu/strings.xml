@@ -56,10 +56,12 @@
         <item quantity="one">%1$d szabad hely</item>
         <item quantity="other">%1$d szabad hely</item>
     </plurals>
+    <string name="docks_available_unlimited">Szabad hely: korlátlan</string>
 
     <!-- Spoken by screen readers on a station's indicator.
          Example: „Batthyány tér, 6 kerékpár, 26 szabad hely”. -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <string name="station_out_of_service">Nem működik</string>
     <string name="station_out_of_service_since">%1$s · utolsó jelzés %2$s</string>
     <string name="station_availability_unknown">Ismeretlen elérhetőség</string>
@@ -434,6 +436,7 @@
          highest. -->
     <string name="journey_detail_profile_description_no_climb">A kerékpáros szakasz legalacsonyabb pontja %1$s, a legmagasabb %2$s tengerszint felett.</string>
     <string name="journey_detail_availability_note">A kerékpárok és a szabad helyek állapota az útvonalterv kiszámításának pillanatában.</string>
+    <string name="journey_detail_availability_note_bikes">A kerékpárok állapota az útvonalterv kiszámításának pillanatában.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Megnyitás navigációs alkalmazásban</string>
@@ -462,6 +465,7 @@
     <string name="journey_no_mechanical_nearby">A közelben egyetlen állomáson sincs most hagyományos kerékpár. Kérj bármelyik fajtát, vagy próbáld újra később.</string>
     <string name="journey_no_electric_nearby">A közelben egyetlen állomáson sincs most elektromos kerékpár. Kérj bármelyik fajtát, vagy próbáld újra később.</string>
     <string name="journey_no_dock_nearby">A cél közelében nincs szabad helyet kínáló állomás. Próbáld újra később, vagy válassz másik célt.</string>
+    <string name="journey_no_return_nearby">A cél közelében most egyetlen állomás sem fogad kerékpárt. Próbáld újra később, vagy válassz másik célt.</string>
     <!-- *Útvonal* here is the line on the ground, not the planned journey,
          which is *útvonalterv* everywhere else in this file. -->
     <string name="journey_no_route">Nincs járható útvonal a két pont között.</string>
@@ -745,6 +749,7 @@
     <string name="settings_map_filters_hide_empty">A semmit nem kínáló állomások elrejtése</string>
     <!-- Under the switch, saying what „semmi” is read against. -->
     <string name="settings_map_filters_hide_empty_hint">A „semmi” ahhoz igazodik, amit a térkép éppen számol: nincs kerékpár, amíg kerékpárokat számol, és nincs szabad hely, amíg szabad helyeket.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">A „semmi” itt azt jelenti, hogy nincs kerékpár: ezen a hálózaton a térkép csak kerékpárokat számol.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Azok az állomások, amelyekről a hálózat nem mond semmit, a térképen maradnak: az ismeretlen darabszám nem ugyanaz, mint a nulla.</string>

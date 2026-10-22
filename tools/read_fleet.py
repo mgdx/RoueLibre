@@ -50,7 +50,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 
-from city_config import DEFAULT_CITY_CONFIG, CityConfig
+from city_config import DEFAULT_CITY_CONFIG, CityConfig, kept_by_providers
 from compute_bbox import fetch_json, resolve_feed_url
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -169,7 +169,9 @@ def read_vehicle_types(discovery: dict) -> tuple[dict[str, str], bool]:
     return kinds, ELECTRIC in kinds.values()
 
 
-def count_bikes(discovery: dict, kinds: dict[str, str]) -> tuple[dict[str, int], set[str]]:
+def count_bikes(
+    discovery: dict, kinds: dict[str, str], provider_ids: frozenset[str] = frozenset()
+) -> tuple[dict[str, int], set[str]]:
     """Count the bikes actually available, by kind, over the whole network.
 
     Identifiers absent from the declaration are ignored rather than guessed:
@@ -186,7 +188,8 @@ def count_bikes(discovery: dict, kinds: dict[str, str]) -> tuple[dict[str, int],
     document = fetch_json(resolve_feed_url(discovery, "station_status"))
     seen = {MECHANICAL: 0, ELECTRIC: 0}
     names: set[str] = set()
-    for station in document.get("data", {}).get("stations") or []:
+    stations = document.get("data", {}).get("stations") or []
+    for station in kept_by_providers(stations, provider_ids):
         for entry in station.get("vehicle_types_available") or []:
             kind = kinds.get(str(entry.get("vehicle_type_id")))
             if kind in seen:
@@ -214,8 +217,11 @@ def inline_counts(breakdown: object) -> list[tuple[str, int]]:
     return []
 
 
-def read_fleet(discovery_url: str) -> FleetReading:
+def read_fleet(discovery_url: str, provider_ids: frozenset[str] = frozenset()) -> FleetReading:
     """Ask a network what it lends, and count what it has out.
+
+    Only at the stations of the operators the city keeps, where it names some
+    (§15): another operator's scooters are not what this city lends.
 
     Raises:
         urllib.error.URLError: on any network or HTTP failure.
@@ -223,7 +229,7 @@ def read_fleet(discovery_url: str) -> FleetReading:
     """
     discovery = fetch_json(discovery_url)
     kinds, declares_electric = read_vehicle_types(discovery)
-    bikes, inline_names = count_bikes(discovery, kinds)
+    bikes, inline_names = count_bikes(discovery, kinds, provider_ids)
     # The inline keys earn their place in the table only once seen in the
     # feed: writing them everywhere would suggest a breakdown that no other
     # network publishes under those names.
@@ -244,7 +250,7 @@ def survey(path: Path) -> tuple[Path, FleetReading | None, str | None]:
     """
     try:
         config = CityConfig.load(path)
-        return path, read_fleet(config.gbfs_discovery_url), None
+        return path, read_fleet(config.gbfs_discovery_url, config.provider_ids), None
     except Exception as error:  # noqa: BLE001 — every failure is reportable
         return path, None, f"{type(error).__name__}: {error}"
 

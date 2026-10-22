@@ -25,12 +25,22 @@ import io.github.mgdx.rouelibre.core.station.StationWithAvailability
  * twenty-eight languages nobody has translated it into yet, and the name spoken
  * twice costs a word where that would cost the sentence.
  *
+ * **The free docks are left out where the network's are not worth showing**
+ * (SPEC §7.1): the eye is given no figure for them there, and the ear is given
+ * no word. The sentence then has two parts in place of three, in a resource of
+ * its own so that each language keeps its own way of joining them.
+ *
  * @param entry the station and its last known state.
  * @param isOutOfService whether the service being counted is refused. The row
  *   asks it of the single count it shows, the sheet of the station as a whole:
  *   a station that has stopped lending may still be taking bikes back.
+ * @param freeDocksShown whether the network's free docks are worth showing.
  */
-fun Context.spokenAvailability(entry: StationWithAvailability, isOutOfService: Boolean): String {
+fun Context.spokenAvailability(
+    entry: StationWithAvailability,
+    isOutOfService: Boolean,
+    freeDocksShown: Boolean,
+): String {
     val availability = entry.availability
     if (isOutOfService || availability == null) {
         val state = getString(
@@ -42,18 +52,25 @@ fun Context.spokenAvailability(entry: StationWithAvailability, isOutOfService: B
         )
         return "${entry.station.name}, $state"
     }
+    val bikes = resources.getQuantityString(
+        R.plurals.bikes_available,
+        availability.bikesAvailable,
+        availability.bikesAvailable,
+    )
+    if (!freeDocksShown) {
+        return getString(R.string.station_content_description_bikes_only, entry.station.name, bikes)
+    }
     return getString(
         R.string.station_content_description,
         entry.station.name,
-        resources.getQuantityString(
-            R.plurals.bikes_available,
-            availability.bikesAvailable,
-            availability.bikesAvailable,
-        ),
-        resources.getQuantityString(
-            R.plurals.docks_available,
-            availability.docksAvailable,
-            availability.docksAvailable,
-        ),
+        bikes,
+        // "Unlimited" only where a bike can be returned: a station refusing
+        // returns is said to hold what it published, as the row shows it.
+        if (availability.acceptsAnyBike) {
+            getString(R.string.docks_available_unlimited)
+        } else {
+            val docks = availability.docksAvailable ?: 0
+            resources.getQuantityString(R.plurals.docks_available, docks, docks)
+        },
     )
 }

@@ -58,18 +58,25 @@ public enum class AvailabilityMode {
 /**
  * What is to be shown for a station, in the requested mode.
  *
- * @property count the number to write in the indicator, or `null` if unknown.
+ * @property count the number to write in the indicator, or `null` if unknown —
+ *   or if there is no number to write, which [isUnlimited] tells apart.
  * @property level the matching level, or `null` if unknown.
  * @property isOutOfService the station does not provide the service asked for.
  * @property filledFraction the share of the capacity this count occupies,
  *   between 0 and 1, or `null` if the capacity is not published. It feeds the
  *   indicator's arc: the figure says how many, the arc says out of how many.
+ * @property isUnlimited the free docks being counted limit nothing, the
+ *   station taking back any bike ([StationAvailability.hasUnlimitedDocks]).
+ *   There is then no figure, and none may be written: a nought would call the
+ *   station full, and a question mark would say the feed was silent when it
+ *   said exactly this.
  */
 public data class AvailabilityDisplay(
     public val count: Int?,
     public val level: AvailabilityLevel?,
     public val isOutOfService: Boolean,
     public val filledFraction: Float?,
+    public val isUnlimited: Boolean = false,
 )
 
 /**
@@ -123,12 +130,29 @@ public fun StationWithAvailability.displayFor(
             )
         } ?: current.bikesAvailable
 
-        AvailabilityMode.Docks -> current.docksAvailable
+        // Nothing to count and nothing to fear: the best level, so that the
+        // disc reads as room to spare, and no arc, there being no "out of how
+        // many" to draw it against.
+        AvailabilityMode.Docks ->
+            current.docksAvailable
+                ?.takeUnless { current.hasUnlimitedDocks }
+                ?: return AvailabilityDisplay(
+                    count = null,
+                    level = AvailabilityLevel.Good,
+                    isOutOfService = false,
+                    filledFraction = null,
+                    isUnlimited = true,
+                )
     }
     // The published capacity is preferred to the sum of bikes plus docks, which
-    // varies while a bike is being taken out; failing that, the sum stands in.
+    // varies while a bike is being taken out; failing that, the sum stands in —
+    // except where the docks are unlimited, whose sum would be the bikes alone
+    // and draw every such station full.
     val total = station.capacity?.takeIf { it > 0 }
-        ?: (current.bikesAvailable + current.docksAvailable).takeIf { it > 0 }
+        ?: current.docksAvailable
+            ?.takeUnless { current.hasUnlimitedDocks }
+            ?.let { docks -> current.bikesAvailable + docks }
+            ?.takeIf { it > 0 }
 
     return AvailabilityDisplay(
         count = count,

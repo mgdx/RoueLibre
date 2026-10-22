@@ -14,6 +14,7 @@ import androidx.core.content.res.ResourcesCompat
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.station.AvailabilityDisplay
 import io.github.mgdx.rouelibre.core.station.AvailabilityLevel
+import io.github.mgdx.rouelibre.ui.UNLIMITED_FIGURE
 import io.github.mgdx.rouelibre.ui.inDigitsOf
 import io.github.mgdx.rouelibre.ui.textLocale
 import io.github.mgdx.rouelibre.ui.zeroDigitOf
@@ -56,10 +57,24 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
     }
+    private val figureTypeface = ResourcesCompat.getFont(context, R.font.bricolage_bold)
+        ?: Typeface.DEFAULT_BOLD
+
+    /**
+     * The face the sign of unlimited free docks is painted in.
+     *
+     * Bricolage is shipped cut down to its figures, so it has no such sign, and
+     * leaving the system to fall back on a face of its choosing would paint it
+     * in one face here and another on the map. Atkinson Hyperlegible holds it,
+     * is the interface's own text face, and is the one the map's markers draw it
+     * with (see `StationMarkers`).
+     */
+    private val unlimitedTypeface = ResourcesCompat.getFont(context, R.font.atkinson_bold)
+        ?: Typeface.DEFAULT_BOLD
+
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
-        typeface = ResourcesCompat.getFont(context, R.font.bricolage_bold)
-            ?: Typeface.DEFAULT_BOLD
+        typeface = figureTypeface
         // Fixed pitch: without it the column of indicators jitters from one
         // refresh to the next depending on the figures shown.
         fontFeatureSettings = "tnum"
@@ -220,9 +235,11 @@ class AvailabilityIndicatorView @JvmOverloads constructor(
             return
         }
 
-        val label = display.count
-            ?.let { inDigitsOf(it.toString(), figureZero) }
-            ?: UNKNOWN_LABEL
+        val label = when {
+            display.isUnlimited -> UNLIMITED_FIGURE
+            else -> display.count?.let { inDigitsOf(it.toString(), figureZero) } ?: UNKNOWN_LABEL
+        }
+        textPaint.typeface = if (display.isUnlimited) unlimitedTypeface else figureTypeface
         textPaint.color = palette.inkColour
         textPaint.textSize = figureSize
         // Optical centring: `descent` and `ascent` bracket the text's real

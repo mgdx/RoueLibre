@@ -20,6 +20,17 @@ internal fun AvailabilityMode.toggled(): AvailabilityMode = when (this) {
 }
 
 /**
+ * The mode the markers count in, once the network has said whether its free
+ * docks are worth showing (SPEC §7.1).
+ *
+ * Where they are not, the toggle is gone and the map counts bikes: a map left
+ * counting free docks when the network crosses the line would be a column of ∞
+ * with no button left to leave it by.
+ */
+internal fun AvailabilityMode.where(freeDocksShown: Boolean): AvailabilityMode =
+    if (freeDocksShown) this else AvailabilityMode.Bikes
+
+/**
  * The kind a press on the filter passes to: all bikes, then mechanical, then
  * electric, then all again.
  *

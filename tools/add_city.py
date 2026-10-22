@@ -32,7 +32,13 @@ import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 
-from city_config import FLEET_COMMENT, BoundingBox, CityConfig, OpeningView
+from city_config import (
+    FLEET_COMMENT,
+    BoundingBox,
+    CityConfig,
+    OpeningView,
+    kept_by_providers,
+)
 from compute_bbox import bounding_box_of_stations, load_stations, survey_stations
 from discover_networks import Extracts, display_name_of
 
@@ -507,8 +513,19 @@ def main() -> int:
             taken_files.add(file_name)
             continue
 
+        # A configuration rewritten in place keeps the operators its city was
+        # narrowed to: they are a decision about the feed, not a survey result,
+        # and the box must be drawn around those operators alone (§15).
+        provider_ids = (
+            CityConfig(configurations[served_by]["path"], configurations[served_by]["document"])
+            .provider_ids
+            if served_by
+            else frozenset()
+        )
         try:
-            surveyed = survey_stations(load_stations(network["discoveryUrl"], None))
+            surveyed = survey_stations(
+                kept_by_providers(load_stations(network["discoveryUrl"], None), provider_ids)
+            )
             stations = surveyed.stations
             box = bounding_box_of_stations(stations).expanded_by_metres(
                 DEFAULT_MARGIN_METRES
@@ -526,6 +543,8 @@ def main() -> int:
         document = build_document(
             network, identifier, box, len(stations), opening, extracts
         )
+        if provider_ids:
+            document["gbfs"]["providerIds"] = sorted(provider_ids)
         path = arguments.cities_dir / f"{file_name}.json"
         with path.open("w", encoding="utf-8") as stream:
             json.dump(document, stream, ensure_ascii=False, indent=2)

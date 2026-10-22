@@ -33,6 +33,7 @@ from city_config import (
     BoundingBox,
     CityConfig,
     OpeningView,
+    kept_by_providers,
     spread_through,
 )
 
@@ -478,7 +479,10 @@ def main() -> int:
     )
 
     survey = survey_stations(
-        load_stations(config.gbfs_discovery_url, arguments.stations_file)
+        kept_by_providers(
+            load_stations(config.gbfs_discovery_url, arguments.stations_file),
+            config.provider_ids,
+        )
     )
     stations = survey.stations
     tight_box = bounding_box_of_stations(stations)

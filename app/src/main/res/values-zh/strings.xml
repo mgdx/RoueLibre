@@ -70,8 +70,10 @@
     <plurals name="docks_available">
         <item quantity="other">%1$d 个空位</item>
     </plurals>
+    <string name="docks_available_unlimited">空位：无限</string>
 
     <string name="station_content_description">%1$s、%2$s、%3$s</string>
+    <string name="station_content_description_bikes_only">%1$s、%2$s</string>
     <string name="station_out_of_service">暂停服务</string>
     <string name="station_out_of_service_since">%1$s · %2$s上报</string>
     <string name="station_availability_unknown">可用情况未知</string>
@@ -411,6 +413,7 @@
          highest. -->
     <string name="journey_detail_profile_description_no_climb">骑行段海拔在 %1$s 到 %2$s 之间。</string>
     <string name="journey_detail_availability_note">车辆和空位为计算路线时的数量。</string>
+    <string name="journey_detail_availability_note_bikes">车辆为计算路线时的数量。</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">在导航应用中打开</string>
@@ -435,6 +438,7 @@
     <string name="journey_no_mechanical_nearby">附近的站点目前都没有普通车。可以不限车型，或稍后重试。</string>
     <string name="journey_no_electric_nearby">附近的站点目前都没有助力车。可以不限车型，或稍后重试。</string>
     <string name="journey_no_dock_nearby">终点附近没有空位可还的站点。请稍后重试，或换个地方前往。</string>
+    <string name="journey_no_return_nearby">终点附近暂时没有可以还车的站点。请稍后重试，或换个地方前往。</string>
     <string name="journey_no_route">这两点之间没有可通行的道路。</string>
     <string name="journey_graph_missing">未安装路线数据。请在存储空间界面添加。</string>
     <string name="journey_outside_coverage">该点位于已安装数据覆盖的范围之外。</string>
@@ -690,6 +694,7 @@
     <string name="settings_map_filters_hide_empty">隐藏可用数为零的站点</string>
     <!-- Under the switch, saying what "可用数" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">“可用数”随地图当前统计的内容而定：统计车辆时是没有车可借，统计空位时是没有位可还。</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">“可用数为零”即没有车可借：在这个网络中，地图只统计车辆。</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">该系统没有说明情况的站点仍留在地图上：谁都读不到的数量，不等于数量为零。</string>

@@ -35,7 +35,20 @@
         <item quantity="other">%1$d free docks</item>
     </plurals>
 
+    <!-- Stands for the count of free docks at a station that takes back any
+         bike: GBFS publishes no count for a station with unlimited docking,
+         and nextbike's parking zones publish a nought that was never
+         measured. Read on the journey's detail, where the count would be, and
+         by a screen reader after the bikes: "Marienplatz, 4 bikes, Free
+         docks: unlimited". The discs show the sign ∞ instead, which needs no
+         translation. -->
+    <string name="docks_available_unlimited">Free docks: unlimited</string>
+
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <!-- The same sentence without the free docks, in a network where most
+         stations take back any bike and free docks are not shown
+         (SPEC 7.1). %1$s is the station's name, %2$s its bikes. -->
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <string name="station_out_of_service">Out of service</string>
     <!-- A closure that has lasted says so, since a station shut this morning
          and one silent for months do not call for the same decision. %1$s is
@@ -438,6 +451,9 @@
     <!-- The counts shown are the ones the journey was worked out on: a station
          empties while one walks to it (SPEC §6). -->
     <string name="journey_detail_availability_note">Bikes and docks as they were when the journey was worked out.</string>
+    <!-- The same note in a network whose free docks are not shown (SPEC 7.1),
+         where the bikes are the only count on the screen. -->
+    <string name="journey_detail_availability_note_bikes">Bikes as they were when the journey was worked out.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Open in a navigation app</string>
@@ -462,6 +478,11 @@
     <string name="journey_no_mechanical_nearby">No station nearby has a mechanical bike right now. Ask for any bike, or try again later.</string>
     <string name="journey_no_electric_nearby">No station nearby has an electric bike right now. Ask for any bike, or try again later.</string>
     <string name="journey_no_dock_nearby">No station with a free dock near the destination. Try again later, or aim somewhere else.</string>
+    <!-- The same failure in a network whose free docks are not shown
+         (SPEC 7.1): the rider was shown no free dock to run short of, so
+         what stopped the journey is said as stations not taking bikes
+         back. -->
+    <string name="journey_no_return_nearby">No station near the destination is taking bikes back right now. Try again later, or aim somewhere else.</string>
     <string name="journey_no_route">No practicable route between these two points.</string>
     <string name="journey_graph_missing">The routing data is not installed. Add it from the storage screen.</string>
     <!-- An end of the journey falls outside the box the city's data was cut
@@ -762,6 +783,9 @@
     <string name="settings_map_filters_hide_empty">Hide the stations with nothing to offer</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">“Nothing” follows what the map is counting: no bike while it counts bikes, no free dock while it counts free docks.</string>
+    <!-- The same line in a network whose free docks are not shown (SPEC 7.1),
+         where the map counts bikes alone. -->
+    <string name="settings_map_filters_hide_empty_hint_bikes">“Nothing” means no bike: the map counts bikes alone on this network.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stations the network says nothing about stay on the map: a count nobody could read is not a count of nothing.</string>

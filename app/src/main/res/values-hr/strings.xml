@@ -59,8 +59,10 @@
         <item quantity="few">%1$d slobodna mjesta</item>
         <item quantity="other">%1$d slobodnih mjesta</item>
     </plurals>
+    <string name="docks_available_unlimited">Slobodna mjesta: neograničeno</string>
 
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <string name="station_out_of_service">Ne radi</string>
     <string name="station_out_of_service_since">%1$s · posljednji podatak %2$s</string>
     <string name="station_availability_unknown">Dostupnost nije poznata</string>
@@ -422,6 +424,7 @@
          highest. -->
     <string name="journey_detail_profile_description_no_climb">Vožnja se odvija između %1$s i %2$s nadmorske visine.</string>
     <string name="journey_detail_availability_note">Bicikli i slobodna mjesta kakvi su bili u trenutku izračuna putovanja.</string>
+    <string name="journey_detail_availability_note_bikes">Bicikli kakvi su bili u trenutku izračuna putovanja.</string>
     <!-- Hands one leg of the journey to another application. -->
     <string name="journey_navigate">Otvori u navigacijskoj aplikaciji</string>
     <string name="journey_navigate_which">Koji dio putovanja?</string>
@@ -447,6 +450,7 @@
     <string name="journey_no_mechanical_nearby">Nijedna stanica u blizini trenutačno nema klasični bicikl. Zatražite bilo koji bicikl ili pokušajte poslije.</string>
     <string name="journey_no_electric_nearby">Nijedna stanica u blizini trenutačno nema električni bicikl. Zatražite bilo koji bicikl ili pokušajte poslije.</string>
     <string name="journey_no_dock_nearby">Blizu odredišta nema stanice sa slobodnim mjestom. Pokušajte poslije ili odaberite drugo odredište.</string>
+    <string name="journey_no_return_nearby">Nijedna stanica blizu odredišta trenutno ne prima bicikle. Pokušajte poslije ili odaberite drugo odredište.</string>
     <string name="journey_no_route">Između ovih dviju točaka nema prohodne rute.</string>
     <string name="journey_graph_missing">Podaci za rute nisu instalirani. Dodajte ih sa zaslona za pohranu.</string>
     <string name="journey_outside_coverage">Ova točka leži izvan područja koje pokrivaju instalirani podaci.</string>
@@ -722,6 +726,7 @@
     <string name="settings_map_filters_hide_empty">Sakrij stanice koje nemaju što ponuditi</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Ništa“ prati ono što karta broji: nijedan bicikl dok broji bicikle, nijedno slobodno mjesto dok broji slobodna mjesta.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">„Ništa“ znači nijedan bicikl: na ovoj mreži karta broji samo bicikle.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stanice o kojima mreža ne kaže ništa ostaju na karti: broj koji se nije mogao pročitati nije broj nula.</string>

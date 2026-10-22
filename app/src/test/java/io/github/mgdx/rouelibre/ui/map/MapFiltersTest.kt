@@ -21,6 +21,20 @@ class MapFiltersTest {
     }
 
     @Test
+    fun `a network whose free docks are not shown is counted in bikes`() {
+        // Left on free docks with the toggle gone, the map would be a column of
+        // ∞ with no button to leave it by (SPEC §7.1).
+        assertEquals(AvailabilityMode.Bikes, AvailabilityMode.Docks.where(freeDocksShown = false))
+        assertEquals(AvailabilityMode.Bikes, AvailabilityMode.Bikes.where(freeDocksShown = false))
+    }
+
+    @Test
+    fun `a network whose free docks are shown keeps the mode chosen`() {
+        assertEquals(AvailabilityMode.Docks, AvailabilityMode.Docks.where(freeDocksShown = true))
+        assertEquals(AvailabilityMode.Bikes, AvailabilityMode.Bikes.where(freeDocksShown = true))
+    }
+
+    @Test
     fun `the kind filter runs all, mechanical, electric, and back to all`() {
         val allKinds: WantedBikeKind? = null
         assertEquals(WantedBikeKind.Mechanical, allKinds.nextOnTheMap())

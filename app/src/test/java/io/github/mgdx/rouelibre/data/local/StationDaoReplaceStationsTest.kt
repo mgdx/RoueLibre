@@ -66,6 +66,7 @@ class StationDaoReplaceStationsTest {
             capacity = null,
             postalCode = null,
             isVirtual = false,
+            providerId = null,
         )
     }
 
@@ -92,6 +93,9 @@ private class VariableLimitedStationDao : StationDao {
     override suspend fun unreadVirtualFlagCount(): Int = stations.value.values.count {
         it.isVirtual == null
     }
+
+    override suspend fun stationsOutsideProviderCount(providerIds: List<String>): Int =
+        stations.value.values.count { it.providerId == null || it.providerId !in providerIds }
 
     override suspend fun insertStations(stations: List<StationEntity>) {
         // Room inserts row by row with one prepared statement: a handful of

@@ -29,11 +29,14 @@ import io.github.mgdx.rouelibre.ui.toUserMessage
  * @param detail the card's views, while they exist.
  * @param lentFleet what the network lends, `null` until the reading lands.
  * @param ownBikeKind what the rider said their own bike is.
+ * @param freeDocksShown whether the network's free docks are worth showing,
+ *   which words the reason a journey could not end (SPEC §7.1).
  */
 internal class JourneySummaryCard(
     private val detail: () -> ViewJourneyResultDetailBinding?,
     private val lentFleet: () -> FleetDescription?,
     private val ownBikeKind: () -> OwnBikeKind,
+    private val freeDocksShown: () -> Boolean,
 ) {
 
     /** Writes the card for a journey worked out. */
@@ -220,6 +223,6 @@ internal class JourneySummaryCard(
             is JourneyPlan.WalkOnly -> plan.reason
             else -> null
         }
-        return reason?.toUserMessage(this) ?: getString(R.string.journey_no_route)
+        return reason?.toUserMessage(this, freeDocksShown()) ?: getString(R.string.journey_no_route)
     }
 }

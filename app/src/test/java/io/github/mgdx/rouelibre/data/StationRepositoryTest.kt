@@ -60,6 +60,9 @@ class StationRepositoryTest {
         server.close()
     }
 
+    /** The operators the city keeps, which only an aggregator's city names. */
+    private var providerIds: Set<String> = emptySet()
+
     private fun repository(
         recordFleet: suspend (FleetReading) -> Unit = {},
         streetBikesMinimumInterval: suspend () -> Duration = { Duration.ofMinutes(5) },
@@ -74,6 +77,7 @@ class StationRepositoryTest {
         dao = dao,
         refreshTimestamps = timestamps,
         discoveryUrlProvider = { discoveryPath?.let { server.url(it).toString() } },
+        providerIdsProvider = { providerIds },
         recordFleet = recordFleet,
         clock = object : Clock() {
             override fun getZone() = ZoneOffset.UTC
@@ -300,6 +304,64 @@ class StationRepositoryTest {
             assertEquals(true, dao.stations.value.single().isVirtual)
         }
 
+    /** sharedmobility.ch, cut down: a Velospot station and a Voi zone. */
+    private val aggregatorInformation = """
+        {"version":"2.0","data":{"stations":[
+          {"station_id":"velospot:168","name":"Lindenplatz","lat":47.38,"lon":8.49,
+           "capacity":40,"provider_id":"velospot"},
+          {"station_id":"voiscooters.com:312","name":"312","lat":47.37,"lon":8.54,
+           "provider_id":"voiscooters.com"}
+        ]}}
+    """.trimIndent()
+
+    private val aggregatorStatus = """
+        {"version":"2.0","data":{"stations":[
+          {"station_id":"velospot:168","num_bikes_available":3,"is_installed":true,
+           "is_renting":true,"is_returning":true,"provider_id":"velospot"},
+          {"station_id":"voiscooters.com:312","num_bikes_available":5,"is_installed":true,
+           "is_renting":true,"is_returning":true,"provider_id":"voiscooters.com"}
+        ]}}
+    """.trimIndent()
+
+    @Test
+    fun `a city keeping some operators shows their stations alone`() = runTest {
+        // Zürich reads sharedmobility.ch, where Voi's scooter zones publish no
+        // free-dock count and would take any bike back (SPEC §4.1, §15).
+        providerIds = setOf("velospot")
+        enqueueDiscovery()
+        server.enqueue(MockResponse(body = aggregatorInformation))
+        server.enqueue(MockResponse(body = aggregatorStatus))
+        val repository = repository()
+
+        repository.refresh()
+
+        val stations = repository.observeStations().first().stations
+        assertEquals(listOf("velospot:168"), stations.map { it.station.id })
+        assertEquals(listOf("velospot:168"), dao.availabilities.value.map { it.stationId })
+    }
+
+    @Test
+    fun `a cache holding another operator's stations has its static data read again`() = runTest {
+        // Written before the city named its operators: shown as they are,
+        // the other operators' stations would stay on the map for up to a
+        // day, the static data being otherwise read once a day.
+        enqueueDiscovery()
+        server.enqueue(MockResponse(body = aggregatorInformation))
+        server.enqueue(MockResponse(body = aggregatorStatus))
+        repository().refresh()
+        assertEquals(2, dao.stations.value.size)
+
+        providerIds = setOf("velospot")
+        now += Duration.ofMinutes(5)
+        enqueueDiscovery()
+        server.enqueue(MockResponse(body = aggregatorInformation))
+        server.enqueue(MockResponse(body = aggregatorStatus))
+        repository().refresh()
+
+        assertEquals("the static data read again", 6, server.requestCount)
+        assertEquals(listOf("velospot:168"), dao.stations.value.map { it.id })
+    }
+
     @Test
     fun `changing city leaves none of the previous city's stations`() = runTest {
         // They have no business on another conurbation's map, and offline
@@ -314,6 +376,74 @@ class StationRepositoryTest {
 
         assertEquals(0, dao.stations.value.size)
         assertEquals(0, dao.availabilities.value.size)
+    }
+
+    /** Six twenty-dock stations, as an Ecovelo network publishes them. */
+    private fun enqueueTwentyDockStations() {
+        val stations = (1..6).joinToString(",") { index ->
+            """{"station_id":"$index","name":"S$index","lat":46.32,"lon":-0.46,"capacity":20}"""
+        }
+        server.enqueue(MockResponse(body = """{"version":"2.3","data":{"stations":[$stations]}}"""))
+    }
+
+    /** Two bikes at each station: [written] of them read 10 free, the others 18. */
+    private fun enqueueHalfCapacityStatus(written: Int) {
+        val states = (1..6).joinToString(",") { index ->
+            val docks = if (index <= written) 10 else 18
+            """{"station_id":"$index","num_bikes_available":2,"num_docks_available":$docks,
+               "is_installed":true,"is_renting":true,"is_returning":true}"""
+        }
+        server.enqueue(MockResponse(body = """{"version":"2.3","data":{"stations":[$states]}}"""))
+    }
+
+    @Test
+    fun `a feed found writing its docks from its capacity stays so for the session`() = runTest {
+        // Niort sat at 51.8 % on one reading and under half on another: one
+        // station decided whether the planner weighed a dock risk.
+        enqueueDiscovery()
+        enqueueTwentyDockStations()
+        enqueueHalfCapacityStatus(written = 4)
+        val repository = repository()
+        repository.refresh()
+        val above = repository.observeStations().first().stations
+        assertTrue(above.all { it.availability!!.hasUnlimitedDocks })
+
+        now += Duration.ofMinutes(2)
+        enqueueHalfCapacityStatus(written = 2)
+        repository.refresh(force = true)
+
+        val below = repository.observeStations().first().stations
+        assertTrue(below.all { it.availability!!.hasUnlimitedDocks })
+        assertEquals(false, repository.observeFreeDocksShown().first())
+        // A session that never saw it above the line reads the same snapshot
+        // as counting.
+        val fresh = repository().observeStations().first().stations
+        assertTrue(fresh.none { it.availability!!.hasUnlimitedDocks })
+    }
+
+    @Test
+    fun `a city left takes its settled verdicts with it, whoever was watching`() = runTest {
+        // Niort, then Lille's docks, with no screen collecting in between:
+        // Niort's verdict must not read Lille's docks as taking any bike.
+        enqueueDiscovery()
+        enqueueTwentyDockStations()
+        enqueueHalfCapacityStatus(written = 4)
+        val repository = repository()
+        repository.refresh()
+        val niort = repository.observeStations().first().stations
+        assertTrue(niort.all { it.availability!!.hasUnlimitedDocks })
+        assertEquals(false, repository.observeFreeDocksShown().first())
+
+        repository.forget()
+        enqueueDiscovery()
+        enqueueInformation()
+        enqueueStatus(bikesAtFirstStation = 7)
+        repository.refresh()
+
+        val lille = repository.observeStations().first().stations.mapNotNull { it.availability }
+        assertTrue(lille.isNotEmpty())
+        assertTrue(lille.none { it.hasUnlimitedDocks })
+        assertEquals(true, repository.observeFreeDocksShown().first())
     }
 
     @Test
@@ -633,6 +763,9 @@ private class FakeStationDao : StationDao {
     override suspend fun unreadVirtualFlagCount(): Int = stations.value.count {
         it.isVirtual == null
     }
+
+    override suspend fun stationsOutsideProviderCount(providerIds: List<String>): Int =
+        stations.value.count { it.providerId == null || it.providerId !in providerIds }
 
     override suspend fun insertStations(stations: List<StationEntity>) {
         val merged = this.stations.value.associateBy { it.id }.toMutableMap()

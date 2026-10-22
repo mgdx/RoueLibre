@@ -293,8 +293,12 @@ class AppContainer(private val context: Context) {
             context,
             StationDatabase::class.java,
             StationDatabase.FILE_NAME,
-        ).addMigrations(StationDatabase.MIGRATION_1_2, StationDatabase.MIGRATION_2_3)
-            .build()
+        ).addMigrations(
+            StationDatabase.MIGRATION_1_2,
+            StationDatabase.MIGRATION_2_3,
+            StationDatabase.MIGRATION_3_4,
+            StationDatabase.MIGRATION_4_5,
+        ).build()
     }
 
     /**
@@ -446,6 +450,9 @@ class AppContainer(private val context: Context) {
             // Read on every call rather than captured: changing the city must
             // take effect without a restart (SPEC §4.1).
             discoveryUrlProvider = { activeCity()?.gbfs?.discoveryUrl },
+            // The operators the city keeps, read with the URL and for the same
+            // reason (SPEC §15).
+            providerIdsProvider = { activeCity()?.gbfs?.providerIds.orEmpty() },
             recordFleet = { fleetRepository.record(it) },
         )
     }

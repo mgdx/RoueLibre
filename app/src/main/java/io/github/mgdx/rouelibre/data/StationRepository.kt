@@ -13,6 +13,8 @@ import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.StreetBike
 import io.github.mgdx.rouelibre.core.station.countFleet
 import io.github.mgdx.rouelibre.core.station.joinStationsWithAvailability
+import io.github.mgdx.rouelibre.core.station.settleFreeDocksWorthShowing
+import io.github.mgdx.rouelibre.core.station.settleWritingDocksFromCapacity
 import io.github.mgdx.rouelibre.core.station.streetBikesShown
 import io.github.mgdx.rouelibre.data.local.StationAvailabilityEntity
 import io.github.mgdx.rouelibre.data.local.StationDao
@@ -21,6 +23,10 @@ import io.github.mgdx.rouelibre.data.network.GbfsRemoteSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.time.Clock
@@ -43,6 +49,9 @@ import java.time.Instant
  * @property discoveryUrlProvider gives the auto-discovery document's URL, or
  *   `null` if no city is chosen. It is a function and not a value because the
  *   setting is user-editable (SPEC §4.1) and changes with the active city.
+ * @property providerIdsProvider gives the operators the city keeps, empty to
+ *   keep everything the feed publishes (SPEC §15). Read with the URL, for the
+ *   same reason.
  * @property recordFleet takes what the bikes just fetched say the network
  *   lends. Reported rather than stored here: this repository counts, and what
  *   is made of the count — remembered, merged with earlier readings, shown — is
@@ -54,6 +63,7 @@ class StationRepository(
     private val dao: StationDao,
     private val refreshTimestamps: RefreshTimestampStore,
     private val discoveryUrlProvider: suspend () -> String?,
+    private val providerIdsProvider: suspend () -> Set<String> = { emptySet() },
     private val recordFleet: suspend (FleetReading) -> Unit = {},
     private val clock: Clock = Clock.systemUTC(),
 ) {
@@ -103,6 +113,16 @@ class StationRepository(
     private var lastStreetBikesRefresh: Instant? = null
 
     /**
+     * Whether the network in service writes its free docks from its stations'
+     * capacities, as settled this session (see [settleWritingDocksFromCapacity]).
+     *
+     * Held here for the reason [freeDocksVerdict] is: the planner and every
+     * screen read their stations through [observeStations], and must all read
+     * a feed near the line the same way, from one refresh to the next.
+     */
+    private val docksWrittenFromCapacity = MutableStateFlow(false)
+
+    /**
      * The stations and their last known state, re-emitted on every change.
      *
      * Emits the cache's contents immediately, offline included. An empty cache
@@ -112,16 +132,57 @@ class StationRepository(
     fun observeStations(): Flow<StationsSnapshot> = combine(
         dao.observeStations(),
         dao.observeAvailabilities(),
-    ) { stations, availabilities ->
+    ) { stationEntities, availabilityEntities ->
+        val stations = stationEntities.map(StationEntity::toDomain)
+        val availabilities = availabilityEntities.map(StationAvailabilityEntity::toDomain)
+        val writesDocksFromCapacity = docksWrittenFromCapacity.updateAndGet { settled ->
+            settleWritingDocksFromCapacity(settled, stations, availabilities)
+        }
         StationsSnapshot(
             stations = joinStationsWithAvailability(
-                stations.map(StationEntity::toDomain),
-                availabilities.map(StationAvailabilityEntity::toDomain),
+                stations,
+                availabilities,
+                writesDocksFromCapacitySettled = writesDocksFromCapacity,
             ),
-            fetchedAt = availabilities.maxOfOrNull { it.fetchedAtEpochSeconds }
+            fetchedAt = availabilityEntities.maxOfOrNull { it.fetchedAtEpochSeconds }
                 ?.let(Instant::ofEpochSecond),
         )
     }
+
+    /**
+     * Whether the free docks of the network in service are worth showing, as
+     * settled this session (see [settleFreeDocksWorthShowing]); `null` while
+     * nothing could be weighed.
+     *
+     * Held here rather than in a screen's model: the map, the list, the
+     * favourites, a station's sheet and a journey's detail must all give the
+     * same answer, and a verdict settled once per screen would be settled on
+     * whatever snapshot each screen happened to open on.
+     */
+    private val freeDocksVerdict = MutableStateFlow<Boolean?>(null)
+
+    /**
+     * Whether the free docks of the network in service are shown at all
+     * (SPEC §7.1), re-emitted when that changes.
+     *
+     * `false` for a network where most stations take back any bike:
+     * the screens then stop talking about free docks — no toggle, no figure,
+     * no word. `true` everywhere else, and **until the stations can be weighed**:
+     * withdrawing a control is the decision that needs evidence, and the
+     * networks it is for are a few dozen of the hundreds served.
+     *
+     * A verdict already settled is handed over at once, before the cache has
+     * been read again: a screen opened in Munich must not show the toggle for
+     * the few milliseconds the database takes to answer.
+     */
+    fun observeFreeDocksShown(): Flow<Boolean> = observeStations()
+        .map { snapshot ->
+            freeDocksVerdict.updateAndGet { settled ->
+                settleFreeDocksWorthShowing(settled, snapshot.stations)
+            } ?: true
+        }
+        .onStart { freeDocksVerdict.value?.let { emit(it) } }
+        .distinctUntilChanged()
 
     /**
      * Updates the data from the network if the policy allows it.
@@ -156,7 +217,11 @@ class StationRepository(
                     if (dao.stationCount() == 0) return@withLock outcome
                 }
 
-                is Outcome.Success -> receivedStations = outcome.value.stations
+                // Only the operators the city keeps: what is not written is
+                // on no map, in no list and before no journey (SPEC §15).
+                is Outcome.Success ->
+                    receivedStations = outcome.value.stations
+                        .filter { station -> keepsProvider(station.providerId) }
             }
         }
 
@@ -178,11 +243,12 @@ class StationRepository(
                 // the age shown is that of the counts on screen, and a slow
                 // download must not make them look older than they are.
                 val fetchedAt = clock.instant()
+                val availabilities = statesOfKeptStations(status.value.availabilities)
                 dao.replaceAvailabilities(
-                    status.value.availabilities.map { it.toEntity(fetchedAt = fetchedAt) },
+                    availabilities.map { it.toEntity(fetchedAt = fetchedAt) },
                 )
                 lastStatusRefresh = now
-                countFleetFrom(discovery, status.value.availabilities)
+                countFleetFrom(discovery, availabilities)
             }
         }
 
@@ -238,7 +304,7 @@ class StationRepository(
             is Outcome.Success -> {
                 streetBikes.value = StreetBikesSnapshot(
                     bikes = streetBikesShown(
-                        outcome.value.bikes,
+                        outcome.value.bikes.filter { bike -> keepsProvider(bike.providerId) },
                         vehicleTypes(discovery).kinds,
                     ),
                     dockedBikes = outcome.value.dockedBikes.groupBy { it.stationId },
@@ -332,6 +398,15 @@ class StationRepository(
     private suspend fun forgetHoldingTheLock() {
         dao.clearAvailabilities()
         dao.clearStations()
+        // Both verdicts describe the stations just cleared, and go with them.
+        // An empty snapshot forgets them too, but only for a screen that
+        // happens to be collecting: with none, Auch's verdict would reach
+        // the next city and read every Vélib' dock as taking any bike. They
+        // are not keyed by the city's address instead: the address changes
+        // before the cache does, and a snapshot of the old stations read
+        // under the new address would carry the verdict over all the same.
+        docksWrittenFromCapacity.value = false
+        freeDocksVerdict.value = null
         cachedDiscovery = null
         cachedDiscoveryUrl = null
         cachedVehicleTypes = null
@@ -382,9 +457,32 @@ class StationRepository(
         return Duration.between(last, now) >= STATUS_MINIMUM_INTERVAL
     }
 
+    /** Whether the city keeps what [providerId] publishes (SPEC §15). */
+    private suspend fun keepsProvider(providerId: String?): Boolean {
+        val kept = providerIdsProvider()
+        return kept.isEmpty() || providerId in kept
+    }
+
+    /**
+     * The states of the stations the cache holds, where the city keeps some
+     * operators alone; every state otherwise. A state left over would count
+     * another operator's vehicles into what the network lends.
+     */
+    private suspend fun statesOfKeptStations(
+        availabilities: List<StationAvailability>,
+    ): List<StationAvailability> {
+        if (providerIdsProvider().isEmpty()) return availabilities
+        val kept = dao.stationIds().toSet()
+        return availabilities.filter { it.stationId in kept }
+    }
+
     private suspend fun stationInformationRefreshIsDue(now: Instant): Boolean {
         if (dao.stationCount() == 0) return true
         if (dao.unreadVirtualFlagCount() > 0) return true
+        val providers = providerIdsProvider()
+        if (providers.isNotEmpty() && dao.stationsOutsideProviderCount(providers.toList()) > 0) {
+            return true
+        }
         val last = refreshTimestamps.stationInformationFetchedAt() ?: return true
         return Duration.between(last, now) >= STATION_INFORMATION_MAXIMUM_AGE
     }
@@ -473,6 +571,7 @@ private fun StationEntity.toDomain() = Station(
     capacity = capacity,
     postalCode = postalCode,
     isVirtual = isVirtual ?: false,
+    providerId = providerId,
 )
 
 private fun Station.toEntity() = StationEntity(
@@ -483,6 +582,7 @@ private fun Station.toEntity() = StationEntity(
     capacity = capacity,
     postalCode = postalCode,
     isVirtual = isVirtual,
+    providerId = providerId,
 )
 
 private fun StationAvailabilityEntity.toDomain() = StationAvailability(

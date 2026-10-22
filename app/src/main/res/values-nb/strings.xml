@@ -43,10 +43,12 @@
         <item quantity="one">%1$d ledig plass</item>
         <item quantity="other">%1$d ledige plasser</item>
     </plurals>
+    <string name="docks_available_unlimited">Ledige plasser: ubegrenset</string>
 
     <!-- Spoken by screen readers on a station's indicator.
          Example: "Karl Johans gate, 6 sykler, 26 ledige plasser". -->
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <string name="station_out_of_service">Ute av drift</string>
     <string name="station_out_of_service_since">%1$s · sist meldt %2$s</string>
     <string name="station_availability_unknown">Ukjent tilgjengelighet</string>
@@ -421,6 +423,7 @@
          highest. -->
     <string name="journey_detail_profile_description_no_climb">Sykkelturen går mellom %1$s og %2$s over havet.</string>
     <string name="journey_detail_availability_note">Sykler og ledige plasser slik de var da reisen ble beregnet.</string>
+    <string name="journey_detail_availability_note_bikes">Sykler slik de var da reisen ble beregnet.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Åpne i en navigasjonsapp</string>
@@ -447,6 +450,7 @@
     <string name="journey_no_mechanical_nearby">Ingen stasjon i nærheten har en mekanisk sykkel akkurat nå. Velg «Enhver sykkel», eller prøv igjen senere.</string>
     <string name="journey_no_electric_nearby">Ingen stasjon i nærheten har en elektrisk sykkel akkurat nå. Velg «Enhver sykkel», eller prøv igjen senere.</string>
     <string name="journey_no_dock_nearby">Ingen stasjon med en ledig plass i nærheten av destinasjonen. Prøv igjen senere, eller velg et annet mål.</string>
+    <string name="journey_no_return_nearby">Ingen stasjon i nærheten av destinasjonen tar imot sykler akkurat nå. Prøv igjen senere, eller velg et annet mål.</string>
     <!-- The line on the ground, not the planned journey: "rute" and never
          "reise". -->
     <string name="journey_no_route">Ingen farbar rute mellom disse to punktene.</string>
@@ -722,6 +726,7 @@
          with a single word English can isolate, so the hint quotes the phrase
          the switch above it uses. -->
     <string name="settings_map_filters_hide_empty_hint">«Uten noe å tilby» følger det kartet teller: ingen sykkel mens det teller sykler, ingen ledig plass mens det teller ledige plasser.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">«Uten noe å tilby» betyr uten sykkel: på dette nettverket teller kartet bare sykler.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stasjoner nettverket ikke sier noe om, blir stående på kartet: en telling ingen kunne lese, er ikke en telling av ingenting.</string>
 

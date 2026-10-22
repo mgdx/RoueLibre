@@ -47,6 +47,13 @@ data class StationEntity(
      * next refresh rather than up to a day later ([StationDao.unreadVirtualFlagCount]).
      */
     val isVirtual: Boolean?,
+    /**
+     * The operator the station belongs to (`Station.providerId`), kept so that
+     * a cache written before the city named its operators — or under another
+     * list of them — is noticed and read again at the next refresh rather
+     * than shown for up to a day ([StationDao.stationsOutsideProviderCount]).
+     */
+    val providerId: String? = null,
 )
 
 /**
@@ -71,7 +78,14 @@ data class StationAvailabilityEntity(
      * reading. Empty for the feeds that publish no breakdown.
      */
     val bikesByVehicleType: Map<String, Int>,
-    val docksAvailable: Int,
+    /**
+     * The free docks, and `null` where the feed published no count — which
+     * GBFS reserves for a station with unlimited docking (SPEC §4.1). Stored
+     * as the feed said it, the nought nextbike derives for its zones included:
+     * whether a count limits anything is decided when the state meets its
+     * station, never written here.
+     */
+    val docksAvailable: Int?,
     val isInstalled: Boolean,
     val isRenting: Boolean,
     val isReturning: Boolean,
@@ -116,6 +130,17 @@ interface StationDao {
      */
     @Query("SELECT COUNT(*) FROM station WHERE isVirtual IS NULL")
     suspend fun unreadVirtualFlagCount(): Int
+
+    /**
+     * How many cached stations belong to none of [providerIds], which a
+     * city keeping some operators alone must read again without waiting for
+     * the day to run out. A row without an operator counts: it was written
+     * before the operator was kept, or by a feed that names none.
+     */
+    @Query(
+        "SELECT COUNT(*) FROM station WHERE providerId IS NULL OR providerId NOT IN (:providerIds)",
+    )
+    suspend fun stationsOutsideProviderCount(providerIds: List<String>): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStations(stations: List<StationEntity>)
@@ -201,7 +226,7 @@ object VehicleTypeCountsConverter {
 /** The local database of stations and their last known state. */
 @Database(
     entities = [StationEntity::class, StationAvailabilityEntity::class],
-    version = 3,
+    version = 5,
     exportSchema = true,
 )
 @TypeConverters(VehicleTypeCountsConverter::class)
@@ -245,6 +270,61 @@ abstract class StationDatabase : RoomDatabase() {
                 connection.execSQL(
                     "ALTER TABLE station ADD COLUMN isVirtual INTEGER",
                 )
+            }
+        }
+
+        /**
+         * Lets the cached free docks be absent.
+         *
+         * A station publishing no count was stored as nought and read as full,
+         * when GBFS leaves the count out precisely for a station that cannot
+         * be full (SPEC §4.1). SQLite cannot drop a `NOT NULL` from a column, so
+         * the table is rebuilt and its rows copied across — migrated rather
+         * than emptied, for the same reason as [MIGRATION_1_2]. The rows carried
+         * over keep the nought they were stored with: what the feed really
+         * said is not known any more, and the next refresh, a minute away
+         * online, writes it again.
+         */
+        val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+            override fun migrate(connection: SQLiteConnection) {
+                connection.execSQL(
+                    "CREATE TABLE `station_availability_new` (" +
+                        "`stationId` TEXT NOT NULL, " +
+                        "`bikesAvailable` INTEGER NOT NULL, " +
+                        "`bikesByVehicleType` TEXT NOT NULL, " +
+                        "`docksAvailable` INTEGER, " +
+                        "`isInstalled` INTEGER NOT NULL, " +
+                        "`isRenting` INTEGER NOT NULL, " +
+                        "`isReturning` INTEGER NOT NULL, " +
+                        "`reportedAtEpochSeconds` INTEGER, " +
+                        "`fetchedAtEpochSeconds` INTEGER NOT NULL, " +
+                        "PRIMARY KEY(`stationId`))",
+                )
+                connection.execSQL(
+                    "INSERT INTO `station_availability_new` SELECT " +
+                        "`stationId`, `bikesAvailable`, `bikesByVehicleType`, " +
+                        "`docksAvailable`, `isInstalled`, `isRenting`, `isReturning`, " +
+                        "`reportedAtEpochSeconds`, `fetchedAtEpochSeconds` " +
+                        "FROM `station_availability`",
+                )
+                connection.execSQL("DROP TABLE `station_availability`")
+                connection.execSQL(
+                    "ALTER TABLE `station_availability_new` RENAME TO `station_availability`",
+                )
+            }
+        }
+
+        /**
+         * Adds the operator to the cached stations.
+         *
+         * Migrated rather than rebuilt, for the same reason as [MIGRATION_1_2].
+         * The rows carried over have none, which only matters to a city that
+         * keeps some operators alone: its stations are then read again at the
+         * next refresh.
+         */
+        val MIGRATION_4_5: Migration = object : Migration(4, 5) {
+            override fun migrate(connection: SQLiteConnection) {
+                connection.execSQL("ALTER TABLE station ADD COLUMN providerId TEXT")
             }
         }
     }

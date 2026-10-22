@@ -58,8 +58,10 @@
         <item quantity="one">%1$d ελεύθερη θέση</item>
         <item quantity="other">%1$d ελεύθερες θέσεις</item>
     </plurals>
+    <string name="docks_available_unlimited">Ελεύθερες θέσεις: απεριόριστες</string>
 
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <string name="station_out_of_service">Εκτός υπηρεσίας</string>
     <string name="station_out_of_service_since">%1$s · τελευταία ενημέρωση %2$s</string>
     <string name="station_availability_unknown">Άγνωστη διαθεσιμότητα</string>
@@ -447,6 +449,7 @@
     <!-- Greek: the figures beside this note are `bikes_available` and
          `docks_available`, so the docks named here are the free ones. -->
     <string name="journey_detail_availability_note">Ποδήλατα και ελεύθερες θέσεις όπως ήταν τη στιγμή που υπολογίστηκε η διαδρομή.</string>
+    <string name="journey_detail_availability_note_bikes">Ποδήλατα όπως ήταν τη στιγμή που υπολογίστηκε η διαδρομή.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Άνοιγμα σε εφαρμογή πλοήγησης</string>
@@ -473,6 +476,7 @@
     <string name="journey_no_mechanical_nearby">Κανένας κοντινός σταθμός δεν έχει μηχανικό ποδήλατο αυτή τη στιγμή. Ζητήστε οποιοδήποτε ποδήλατο ή δοκιμάστε αργότερα.</string>
     <string name="journey_no_electric_nearby">Κανένας κοντινός σταθμός δεν έχει ηλεκτρικό ποδήλατο αυτή τη στιγμή. Ζητήστε οποιοδήποτε ποδήλατο ή δοκιμάστε αργότερα.</string>
     <string name="journey_no_dock_nearby">Κανένας σταθμός με ελεύθερη θέση κοντά στον προορισμό. Δοκιμάστε αργότερα ή στοχεύστε αλλού.</string>
+    <string name="journey_no_return_nearby">Κανένας σταθμός κοντά στον προορισμό δεν δέχεται ποδήλατα αυτή τη στιγμή. Δοκιμάστε αργότερα ή στοχεύστε αλλού.</string>
     <!-- Greek: «δρόμος» is the line on the ground. Here it stands in for
          «διαδρομή», which this screen is about to use for the journey it
          could not work out — the two would read as one refusal twice. -->
@@ -756,6 +760,7 @@
     <string name="settings_map_filters_hide_empty">Απόκρυψη των σταθμών που δεν έχουν τίποτα να προσφέρουν</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">Το «τίποτα» ακολουθεί αυτό που μετράει ο χάρτης: κανένα ποδήλατο όσο μετράει ποδήλατα, καμία ελεύθερη θέση όσο μετράει ελεύθερες θέσεις.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">Το «τίποτα» σημαίνει κανένα ποδήλατο: σε αυτό το δίκτυο ο χάρτης μετράει μόνο ποδήλατα.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Οι σταθμοί για τους οποίους το δίκτυο δεν λέει τίποτα μένουν στον χάρτη: μια μέτρηση που κανείς δεν μπόρεσε να διαβάσει δεν είναι μέτρηση του μηδενός.</string>

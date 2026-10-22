@@ -48,6 +48,7 @@ import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
 import io.github.mgdx.rouelibre.ui.withBikeFleet
 import io.github.mgdx.rouelibre.ui.withFleet
+import io.github.mgdx.rouelibre.ui.withFreeDocksShown
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -337,6 +338,9 @@ class MapFragment : Fragment() {
             // bolt, and it may arrive after they are drawn.
             streetBikes.publish()
         }
+        // Whether the network's free docks are worth a toggle at all is known
+        // once its stations are read, the cache at the latest (SPEC §7.1).
+        withFreeDocksShown(filters::showFreeDocks)
 
         // The target depends on what is missing, and it is set together with
         // the label, once we know whether there is a city — see loadTilesFor.
@@ -477,7 +481,7 @@ class MapFragment : Fragment() {
     private fun showControls(views: FragmentMapBinding, hasBaseMap: Boolean) {
         val controls = mapControls(hasBaseMap = hasBaseMap, isPicking = isPicking())
         showsMapControls = controls.browsing
-        views.modeToggle.isVisible = controls.browsing
+        filters.showModeToggle()
         // Without a base map, an address found would have nowhere to land: the
         // search opens from the map, and presumes one.
         views.openSearch.isVisible = controls.browsing

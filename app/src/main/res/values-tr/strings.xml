@@ -56,8 +56,10 @@
         <item quantity="one">%1$d boş yuva</item>
         <item quantity="other">%1$d boş yuva</item>
     </plurals>
+    <string name="docks_available_unlimited">Boş yuva: sınırsız</string>
 
     <string name="station_content_description">%1$s, %2$s, %3$s</string>
+    <string name="station_content_description_bikes_only">%1$s, %2$s</string>
     <string name="station_out_of_service">Hizmet dışı</string>
     <string name="station_out_of_service_since">%1$s · son bildirim %2$s</string>
     <string name="station_availability_unknown">Durum bilinmiyor</string>
@@ -392,6 +394,7 @@
          highest. -->
     <string name="journey_detail_profile_description_no_climb">Sürüş, deniz seviyesinden %1$s ile %2$s arasında ilerliyor.</string>
     <string name="journey_detail_availability_note">Bisiklet ve boş yuva sayıları, yolculuğun hesaplandığı andaki haliyle.</string>
+    <string name="journey_detail_availability_note_bikes">Bisiklet sayıları, yolculuğun hesaplandığı andaki haliyle.</string>
     <!-- Hands one leg of the journey to another application: this one computes
          journeys, it does not guide along them. -->
     <string name="journey_navigate">Bir navigasyon uygulamasında aç</string>
@@ -423,6 +426,7 @@
     <string name="journey_no_mechanical_nearby">Yakındaki hiçbir istasyonda şu an klasik bisiklet yok. “Fark etmez” seçeneğini seç ya da daha sonra tekrar dene.</string>
     <string name="journey_no_electric_nearby">Yakındaki hiçbir istasyonda şu an elektrikli bisiklet yok. “Fark etmez” seçeneğini seç ya da daha sonra tekrar dene.</string>
     <string name="journey_no_dock_nearby">Hedefin yakınında boş yuvası olan istasyon yok. Daha sonra tekrar dene ya da başka bir yeri hedefle.</string>
+    <string name="journey_no_return_nearby">Hedefin yakınında şu anda bisiklet kabul eden istasyon yok. Daha sonra tekrar dene ya da başka bir yeri hedefle.</string>
     <string name="journey_no_route">Bu iki nokta arasında geçilebilir bir rota yok.</string>
     <string name="journey_graph_missing">Rota verileri yüklü değil. Depolama ekranından ekle.</string>
     <string name="journey_outside_coverage">Bu nokta, yüklü verilerin kapsadığı alanın dışında kalıyor.</string>
@@ -685,6 +689,7 @@
     <string name="settings_map_filters_hide_empty">Sunacak bir şeyi olmayan istasyonları gizle</string>
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">“Bir şey”, haritanın o an neyi saydığına göre değişir: bisiklet sayarken bisikleti olmayan, boş yuva sayarken boş yuvası olmayan istasyon.</string>
+    <string name="settings_map_filters_hide_empty_hint_bikes">“Bir şey” burada bisiklet demek: bu ağda harita yalnızca bisikletleri sayar.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Ağın haklarında bir şey söylemediği istasyonlar haritada kalır: kimsenin okuyamadığı bir sayı, sıfır demek değildir.</string>
 

@@ -20,9 +20,88 @@ also records what has no visible effect.
   point, the kept kind is ignored without being erased, as the journey's is.
   The "bikes" / "docks" toggle is still written nowhere: every launch opens on
   the bikes.
+- **Free docks are no longer talked about where most stations take back any
+  bike** (`SPEC.md` §7.1). From 60 % of a network's deployed stations with a
+  live status reading as unlimited (`hasUnlimitedDocks`, through
+  `freeDocksAreWorthShowing` in `:core`), the Bikes / Free docks toggle goes
+  from the map and the list, the map goes back to the bikes, the rows
+  (favourites included) lose their free docks, the station sheet its free
+  docks' disc, the journey's detail the arrival station's free docks; the
+  screen reader, the "no dock nearby" failure and the "nothing to offer" hint
+  speak of bikes alone. The verdict is settled once per city and per session
+  by `StationRepository` and is `true` until the stations can be weighed.
+  Over the 357 cities surveyed on 22 October 2026 it reaches 43 networks of
+  zones and capacity-less racks (Munich, Düsseldorf, Cologne's KVB,
+  Bratislava, Limoges, Zürich's bike operators…), every one between 60 and
+  90 % a nextbike network; every network of physical docks stands under 25 %,
+  and Mannheim, at 59.2 %, is the nearest to keep its toggle. Display only:
+  the planner is untouched. Four strings added and translated into the 30
+  languages.
 
 ### Fixed
 
+- **Auch, Niort and every Ecovelo network no longer promise docks nobody
+  counted** (`SPEC.md` §4.1, §7.1). Ecovelo writes each station's free docks
+  from its capacity whatever stands there — the whole of it at Auch's 9
+  stations holding bikes on 22 October 2026, 5 free beside 7 bikes at a
+  five-dock one; the whole or half of it at 48 of Niort's 55 — and the
+  application showed "5 free docks" everywhere. `joinStationsWithAvailability`
+  now settles `StationAvailability.isInFeedWritingDocksFromCapacity`: of the
+  stations holding a bike that publish a capacity above nought and a count,
+  more than half read the whole capacity or half of it (an odd one rounded
+  either way, half only from six docks, which keeps LoveSharing's small racks
+  in Las Palmas at 3 of 11) in a figure the capacity less their bikes does not
+  give, with at least five such stations to decide. In such a feed `hasUnlimitedDocks`
+  is true at every station (returns still need `is_returning`), so the
+  planner applies no dock risk, ∞ is shown, and the 60 % rule silences free
+  docks. Once found so, a feed stays so for the session
+  (`settleWritingDocksFromCapacity`, held by `StationRepository` and handed
+  to the join, so the planner and the screens read one answer); leaving the
+  city (`forget`) clears it and the display verdict with the station cache,
+  whether or not a screen is collecting. Over the 360 cities that day it reaches all 27
+  Ecovelo networks (Troyes the nearest, at 10 of 19) and Brussels'
+  Blue-bike (308 of 308). Under the line the highest is Beryl's Canterbury at
+  10 of 21, and no network of physical docks passes 14 % (Detroit 8 of 57,
+  Chicago 137 of 1,194, Vélib' 42 of 1,369). Derived where states meet
+  stations: nothing new is stored. `tools/discover_networks.py` mirrors it
+  (`feed_writes_docks_from_capacity`, `reads_as_counted`, same tests on both
+  sides), and no frozen-free-docks check counts those stations again: Auch,
+  withdrawn as "frozen-free-docks" when five free docks were its commonest
+  figure at 8 stations of 10, is eligible again, as is Ecovelo's BreizhGo,
+  not yet a city; no other verdict of the 1,528 catalogue entries moves.
+
+- **Journeys end again in Munich, Düsseldorf and the networks built like
+  them** (issue #8, `SPEC.md` §4.1, §6, §7.1). A station publishing no
+  `num_docks_available` — which GBFS reserves for unlimited docking — was read
+  as nought free docks, and so was the nought nextbike derives wherever it has
+  no capacity to subtract the bikes from: MyRadl's 800 zones and Düsseldorf's
+  345 racks were all full, and every journey answered "no free dock nearby".
+  `StationAvailability.hasUnlimitedDocks` now reads both cases as a station
+  taking back any bike — an arrival candidate, with no dock risk penalty,
+  shown as ∞ on the discs and as "Free docks: unlimited" in words. A nought
+  without a capacity is still believed where the feed measures it, at a
+  virtual station never: in a feed where at most half the racks without a
+  capacity say nought (Philadelphia's Indego, 4 in 321; Milwaukee, 7 in 172),
+  those noughts are full racks. A station refusing returns is shown as it
+  always was. The cached count becomes nullable (Room migration 3 → 4, the
+  table rebuilt and its rows kept). `tools/discover_networks.py` mirrors the
+  rule (`takes_any_bike_back`, same tests on both sides, negative counts and
+  capacities and string flags read alike), now applies its frozen-free-dock
+  check behind a declared capacity too, and counts as frozen only a figure
+  the station's own capacity cannot explain — an empty fleet reading its
+  capacity, or a full one nought at night, is a measurement.
+- **Zürich keeps its bike-share operators alone** (issue #8, `SPEC.md` §15).
+  sharedmobility.ch publishes every operator of Switzerland in one feed, and
+  Zürich's map counted car-sharing spots, minibus stops and scooter zones as
+  stations — 1,743 car-sharing spots were already arrival candidates, and
+  7,731 stations once an absent free-dock count took any bike. The city
+  configuration gains an optional `gbfs.providerIds`, the GBFS `provider_id`
+  of each operator kept, applied to the stations, their states and the street
+  bikes before anything is stored (3,043 stations of 12,702 kept, 2,867
+  arrival candidates). The station cache records each station's operator
+  (Room migration 4 → 5) so that a cache written under another list is read
+  again at the next refresh. `compute_bbox.py`, `sample_stations.py`,
+  `read_fleet.py` and `add_city.py --overwrite` read the same list.
 - **Turning the phone no longer resets the map's two filters.** The
   "bikes" / "docks" mode and the kind of bike were fields of
   `MapFilterControls` and went with the fragment; they now travel in its saved

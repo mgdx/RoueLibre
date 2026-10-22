@@ -237,6 +237,15 @@ internal data class GbfsStationInformation(
     @SerialName("is_virtual_station")
     @Serializable(with = LenientBooleanSerializer::class)
     val isVirtualStation: Boolean = false,
+    /**
+     * The operator the station belongs to, where one feed carries several —
+     * a national aggregator such as sharedmobility.ch. Not GBFS 2.x's own
+     * field: its `providers` extension, read so that a city can keep its
+     * bike-share operators alone (SPEC §15).
+     */
+    @SerialName("provider_id")
+    @Serializable(with = FlexibleIdSerializer::class)
+    val providerId: String? = null,
 )
 
 /**
@@ -294,7 +303,16 @@ internal data class GbfsStationStatus(
      */
     @SerialName("num_bikes_available_types")
     val legacyBikesByKind: JsonElement? = null,
-    @SerialName("num_docks_available") val docksAvailable: Int = 0,
+    /**
+     * The free docks, and `null` when the producer publishes no count.
+     *
+     * **Absent is not nought.** GBFS makes the field required "except for
+     * stations that have unlimited docking capacity" — valet stations in 2.3,
+     * virtual stations in 3.0 — so its silence is the standard's own way of
+     * saying that nothing limits returns. Defaulted to zero, it was read as a
+     * station that is always full (SPEC §4.1).
+     */
+    @SerialName("num_docks_available") val docksAvailable: Int? = null,
     @SerialName("is_installed")
     @Serializable(with = LenientBooleanSerializer::class)
     val isInstalled: Boolean = true,
@@ -387,6 +405,10 @@ internal data class GbfsVehicleStatus(
      * not be refused over the way one figure is written.
      */
     @SerialName("current_range_meters") val currentRangeMetres: Double? = null,
+    /** The operator, as for a station ([GbfsStationInformation.providerId]). */
+    @SerialName("provider_id")
+    @Serializable(with = FlexibleIdSerializer::class)
+    val providerId: String? = null,
 )
 
 /** The contents of `vehicle_types`. */

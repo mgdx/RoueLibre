@@ -331,6 +331,19 @@ class OpeningView:
         return self.distance_to_nearest_metres(positions) <= reach
 
 
+def kept_by_providers(entries: list[dict], provider_ids: frozenset[str]) -> list[dict]:
+    """The stations, statuses or vehicles of the operators a city keeps (§15).
+
+    Every entry when the city names none, which is every city but an
+    aggregator's. The mirror of what ``StationRepository`` keeps in the
+    application: an entry is kept by its GBFS ``provider_id``, and one naming no
+    operator is not kept once the city names some.
+    """
+    if not provider_ids:
+        return entries
+    return [entry for entry in entries if str(entry.get("provider_id")) in provider_ids]
+
+
 class CityConfig:
     """A loaded city configuration file, editable and writable back to disk."""
 
@@ -362,6 +375,21 @@ class CityConfig:
     @property
     def gbfs_discovery_url(self) -> str:
         return self.document["gbfs"]["discoveryUrl"]
+
+    @property
+    def provider_ids(self) -> frozenset[str]:
+        """The operators the city keeps, empty to keep the whole feed (§15).
+
+        Read from ``gbfs.providerIds``, which only an aggregator's city sets:
+        the application keeps those operators' stations and bikes alone, and so
+        must every tool that reads them for this city — the box, the samples
+        and the fleet would otherwise be drawn around other operators' zones.
+        """
+        return frozenset(
+            identifier.strip()
+            for identifier in self.document["gbfs"].get("providerIds", [])
+            if identifier.strip()
+        )
 
     @property
     def default_language(self) -> str:

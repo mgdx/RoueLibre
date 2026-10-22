@@ -150,7 +150,10 @@
                     tools:text="bikes" />
             </LinearLayout>
 
+            <!-- Gone in a network whose free docks are not worth showing
+                 (SPEC §7.1). -->
             <LinearLayout
+                android:id="@+id/docks_pair"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space_xl"

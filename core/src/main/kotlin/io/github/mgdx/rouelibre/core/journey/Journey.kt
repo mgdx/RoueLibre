@@ -85,7 +85,9 @@ public sealed interface DeparturePoint {
  *   identifiers into kinds takes the network's table, which this algorithm has
  *   no business knowing (SPEC §15): it is the interface that reads it, to say
  *   how many of the bikes waiting are electric (SPEC §7.4).
- * @property docksAtArrival free docks when the journey was computed.
+ * @property docksAtArrival free docks when the journey was computed, and
+ *   `null` at a station whose free docks are unlimited: there was nothing to
+ *   count, and a figure would be one we made up (SPEC §4.1).
  * @property walkToStation the access walk to the departure station, and
  *   `null` on a journey beginning at a bike outside stations: the rider is
  *   standing in front of the bike they chose, so there is no walk to it and
@@ -108,7 +110,7 @@ public data class JourneyOption(
     public val arrivalStation: Station,
     public val bikesAtDeparture: Int,
     public val bikesByVehicleTypeAtDeparture: Map<String, Int> = emptyMap(),
-    public val docksAtArrival: Int,
+    public val docksAtArrival: Int?,
     public val walkToStation: RouteLeg?,
     public val ride: RouteLeg,
     public val walkToDestination: RouteLeg?,

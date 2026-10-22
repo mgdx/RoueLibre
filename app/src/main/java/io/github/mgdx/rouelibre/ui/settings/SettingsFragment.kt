@@ -41,6 +41,7 @@ import io.github.mgdx.rouelibre.ui.offeredLanguages
 import io.github.mgdx.rouelibre.ui.speakLanguage
 import io.github.mgdx.rouelibre.ui.stations.StreetBikeIntroDialogFragment
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
+import io.github.mgdx.rouelibre.ui.withFreeDocksShown
 import io.github.mgdx.rouelibre.ui.withoutCountryFlag
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -792,6 +793,20 @@ class SettingsFragment : Fragment() {
                     isFilling = false
                 }
             }
+        }
+
+        // The line under "nothing to offer" says what "nothing" is read
+        // against, and names free docks only where the map can count them: in
+        // a network whose free docks are not worth showing the map counts bikes
+        // alone (SPEC §7.1), and the line says so.
+        withFreeDocksShown { shown ->
+            binding?.hideEmptyStationsHint?.setText(
+                if (shown) {
+                    R.string.settings_map_filters_hide_empty_hint
+                } else {
+                    R.string.settings_map_filters_hide_empty_hint_bikes
+                },
+            )
         }
     }
 

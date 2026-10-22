@@ -32,6 +32,7 @@ public data class StreetBike(
     public val vehicleTypeId: String?,
     public val chargeRatio: Double?,
     public val rangeMetres: Int?,
+    public val providerId: String? = null,
 )
 
 /**
