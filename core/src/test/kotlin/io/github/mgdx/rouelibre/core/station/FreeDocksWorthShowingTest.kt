@@ -9,7 +9,7 @@ import org.junit.Test
 
 /**
  * Tests of the decision to stop talking about free docks in a network where
- * nearly every station takes back any bike (SPEC §7.1).
+ * most stations take back any bike (SPEC §7.1).
  */
 class FreeDocksWorthShowingTest {
 
@@ -51,26 +51,56 @@ class FreeDocksWorthShowingTest {
     // ------------------------------------------------------- the threshold --
 
     @Test
-    fun `free docks go silent past ninety per cent of unlimited stations`() {
-        // MyRadl, Munich, 22 October 2026: 797 of 805.
+    fun `free docks go silent from sixty per cent of unlimited stations`() {
+        // MyRadl, Munich: a ∞ at nearly every one of 805 stations.
         assertEquals(false, freeDocksAreWorthShowing(network(zones = 797, racks = 8)))
-        assertEquals(false, freeDocksAreWorthShowing(network(zones = 91, racks = 9)))
+        // Zürich, kept to its bike operators: about 77 %.
+        assertEquals(false, freeDocksAreWorthShowing(network(zones = 77, racks = 23)))
+        assertEquals(false, freeDocksAreWorthShowing(network(zones = 61, racks = 39)))
     }
 
     @Test
-    fun `exactly ninety per cent is not more than ninety`() {
-        // "More than 90 %", the owner's words, and in whole numbers so that ten
+    fun `exactly sixty per cent goes silent`() {
+        // "At least 60 %", the owner's words, and in whole numbers so that ten
         // stations and a thousand are cut at the same place.
-        assertEquals(true, freeDocksAreWorthShowing(network(zones = 90, racks = 10)))
-        assertEquals(true, freeDocksAreWorthShowing(network(zones = 9, racks = 1)))
-        assertEquals(false, freeDocksAreWorthShowing(network(zones = 901, racks = 99)))
+        assertEquals(false, freeDocksAreWorthShowing(network(zones = 60, racks = 40)))
+        assertEquals(false, freeDocksAreWorthShowing(network(zones = 6, racks = 4)))
+        assertEquals(true, freeDocksAreWorthShowing(network(zones = 599, racks = 401)))
+    }
+
+    @Test
+    fun `a network just under the line keeps its free docks`() {
+        // Mannheim, the nearest network under the line: 59.2 %.
+        assertEquals(true, freeDocksAreWorthShowing(network(zones = 592, racks = 408)))
     }
 
     @Test
     fun `a docked network with a few zones keeps its free docks`() {
-        // Cologne, 22 October 2026: 121 of 314.
-        assertEquals(true, freeDocksAreWorthShowing(network(zones = 121, racks = 193)))
+        // Every network of physical docks surveyed stood under a quarter.
+        assertEquals(true, freeDocksAreWorthShowing(network(zones = 24, racks = 76)))
         assertEquals(true, freeDocksAreWorthShowing(network(zones = 0, racks = 40)))
+    }
+
+    @Test
+    fun `racks whose nought measures nothing count as unlimited`() {
+        // Düsseldorf: racks without a capacity, nearly all at nought, which
+        // nextbike derives rather than measures (SPEC §4.1).
+        val stations =
+            List(19) { station("rack-$it", virtual = false, docks = 0) } +
+                station("counting", virtual = false, docks = 3)
+
+        assertEquals(false, freeDocksAreWorthShowing(stations))
+    }
+
+    @Test
+    fun `full racks in a feed that counts are not unlimited`() {
+        // Indego, Philadelphia: no capacity anywhere, a few full racks at
+        // nought among hundreds counting. Those noughts are measured.
+        val stations =
+            List(4) { station("full-$it", virtual = false, docks = 0) } +
+                List(96) { station("rack-$it", virtual = false, docks = 5) }
+
+        assertEquals(true, freeDocksAreWorthShowing(stations))
     }
 
     @Test
@@ -84,7 +114,7 @@ class FreeDocksWorthShowingTest {
 
     @Test
     fun `a station without a live status is not weighed`() {
-        // Nine zones and one rack: silent. A hundred stations the real-time
+        // Nineteen zones and one rack: silent. A hundred stations the real-time
         // feed says nothing about change nothing — they have no free docks to
         // read, limited or not.
         val stations = network(zones = 19, racks = 1) +
@@ -143,10 +173,10 @@ class FreeDocksWorthShowingTest {
 
     @Test
     fun `a settled verdict outlives a share crossing the threshold`() {
-        // A network sitting at the edge: one refresh at 91 %, the next at 89 %.
+        // A network sitting at the edge: one refresh at 61 %, the next at 59 %.
         // The toggle does not come back under the rider's thumb.
-        val first = settleFreeDocksWorthShowing(null, network(zones = 91, racks = 9))
-        val second = settleFreeDocksWorthShowing(first, network(zones = 89, racks = 11))
+        val first = settleFreeDocksWorthShowing(null, network(zones = 61, racks = 39))
+        val second = settleFreeDocksWorthShowing(first, network(zones = 59, racks = 41))
 
         assertFalse(checkNotNull(first))
         assertFalse(checkNotNull(second))
