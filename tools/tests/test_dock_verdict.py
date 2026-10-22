@@ -9,16 +9,21 @@ threshold nobody can re-derive is a threshold nobody can move.
 from __future__ import annotations
 
 import unittest
+from unittest import mock
 
+import discover_networks
 from discover_networks import (
     EMPTY_DOCK_SHARE,
     FROZEN_FREE_DOCK_SHARE,
+    MINIMUM_OCCUPIED_STATIONS_TO_JUDGE,
     PLACEHOLDER_DOCK_SHARE,
     VIRTUAL_STATION_SHARE,
+    bikes_available,
     capacity_of,
     dock_verdict,
     explained_by_capacity,
     feed_counts_without_capacity,
+    feed_repeats_capacity,
     free_docks,
     lenient_flag,
     takes_any_bike_back,
@@ -250,6 +255,127 @@ class NoughtsThatAreMostOfTheFeed(unittest.TestCase):
         live = [{"station_id": str(index), "num_docks_available": 0} for index in range(4)]
         live += [{"station_id": str(index), "num_docks_available": 7} for index in range(4, 321)]
         self.assertTrue(feed_counts_without_capacity(live, information))
+
+
+def stations_of(capacity: int, docks, *bikes: int) -> tuple[dict, list[dict]]:
+    """Stations of `capacity` docks, one per count of bikes, reading `docks(bikes)` free."""
+    information = {}
+    live = []
+    for index, held in enumerate(bikes):
+        identifier = f"c{capacity}-{index}"
+        information[identifier] = {"station_id": identifier, "capacity": capacity}
+        live.append(
+            {
+                "station_id": identifier,
+                "num_vehicles_available": held,
+                "num_docks_available": docks(held),
+            }
+        )
+    return information, live
+
+
+def merged(*parts: tuple[dict, list[dict]]) -> tuple[dict, list[dict]]:
+    information, live = {}, []
+    for part_information, part_live in parts:
+        information.update(part_information)
+        live += part_live
+    return information, live
+
+
+class FreeDocksRepeatingTheCapacity(unittest.TestCase):
+    """The mirror of `isInFeedRepeatingCapacity` in `:core`.
+
+    Each case here has its twin in `UnlimitedDocksTest.kt`; the two must agree.
+    """
+
+    def test_auch_writes_the_capacity_at_every_station_holding_bikes(self) -> None:
+        # Ecovelo, 22 October 2026: 10 free beside 10 bikes at a ten-dock
+        # station, 5 free beside 7 bikes at a five-dock one.
+        information, live = merged(
+            stations_of(10, lambda _: 10, 10, 2, 8),
+            stations_of(5, lambda _: 5, 7, 4, 1, 2, 6, 0),
+        )
+        self.assertTrue(feed_repeats_capacity(live, information))
+        for station in live:
+            self.assertTrue(
+                takes_any_bike_back(station, information[station["station_id"]], True, True)
+            )
+
+    def test_a_docked_feed_keeps_its_counts_beside_a_few_capacities(self) -> None:
+        # Berlin: 2 of 704 stations holding bikes read their whole capacity.
+        information, live = merged(
+            stations_of(20, lambda held: 20 - held, 3, 7, 12, 15),
+            stations_of(10, lambda _: 10, 2, 4),
+        )
+        self.assertFalse(feed_repeats_capacity(live, information))
+        self.assertFalse(takes_any_bike_back(live[0], information["c20-0"], True, False))
+
+    def test_half_the_stations_holding_bikes_is_no_majority(self) -> None:
+        information, live = merged(
+            stations_of(10, lambda _: 10, 2, 4, 6),
+            stations_of(20, lambda held: 20 - held, 1, 2, 3),
+        )
+        self.assertFalse(feed_repeats_capacity(live, information))
+
+    def test_empty_stations_reading_their_capacity_are_counted(self) -> None:
+        # Agen's empty fleet: five free docks at five-dock racks holding nothing.
+        information, live = merged(
+            stations_of(5, lambda _: 5, 0, 0, 0, 0, 0, 0, 0),
+            stations_of(6, lambda held: 6 - held, 2),
+        )
+        self.assertFalse(feed_repeats_capacity(live, information))
+
+    def test_too_few_stations_holding_bikes_decide_nothing(self) -> None:
+        self.assertEqual(5, MINIMUM_OCCUPIED_STATIONS_TO_JUDGE)
+        information, live = merged(
+            stations_of(5, lambda _: 5, 1, 2, 3, 4), stations_of(6, lambda _: 6, 0, 0, 0)
+        )
+        self.assertFalse(feed_repeats_capacity(live, information))
+        information, live = stations_of(5, lambda _: 5, 1, 2, 3, 4, 5)
+        self.assertTrue(feed_repeats_capacity(live, information))
+
+    def test_a_station_without_a_capacity_or_a_count_weighs_nothing(self) -> None:
+        information, live = merged(
+            stations_of(8, lambda _: 8, 1, 2), stations_of(9, lambda held: 9 - held, 1, 2, 3)
+        )
+        information.update({"zero": {"capacity": 0}, "none": {}, "uncounted": {"capacity": 5}})
+        live += [
+            {"station_id": "zero", "num_bikes_available": 3, "num_docks_available": 0},
+            {"station_id": "none", "num_bikes_available": 3, "num_docks_available": 4},
+            {"station_id": "uncounted", "num_bikes_available": 3},
+            {"station_id": "undescribed", "num_bikes_available": 3, "num_docks_available": 5},
+        ]
+        self.assertFalse(feed_repeats_capacity(live, information))
+
+    def test_the_bikes_are_read_as_the_application_reads_them(self) -> None:
+        self.assertEqual(0, bikes_available({"num_bikes_available": 0, "num_vehicles_available": 4}))
+        self.assertEqual(4, bikes_available({"num_vehicles_available": 4}))
+        self.assertEqual(0, bikes_available({"num_bikes_available": -3}))
+
+    def test_auch_is_eligible_again(self) -> None:
+        # The whole survey, on a feed shaped like Auch's: rejected as
+        # "frozen-free-docks" while its stations' capacity was believed, five
+        # free docks being the commonest figure at 8 of its 10 stations.
+        information, live = merged(
+            stations_of(10, lambda _: 10, 10),
+            stations_of(5, lambda _: 5, 7, 4, 1, 2, 6, 3, 5, 2, 0),
+        )
+        for index, station in enumerate(information.values()):
+            station.update({"name": station["station_id"], "lat": 43.64 + index / 1000,
+                            "lon": 0.58 + index / 1000})
+        documents = {
+            "gbfs": {"version": "3.0", "data": {"feeds": [
+                {"name": "station_information", "url": "information"},
+                {"name": "station_status", "url": "status"},
+            ]}},
+            "information": {"data": {"stations": list(information.values())}},
+            "status": {"data": {"stations": live}},
+        }
+        with mock.patch.object(discover_networks, "fetch_json", documents.__getitem__):
+            survey = discover_networks.probe_feeds({"discoveryUrls": ["gbfs"]})
+        self.assertEqual(len(live), survey["unlimitedDockStations"])
+        self.assertNotIn("commonestFreeDockShare", survey)
+        self.assertEqual("eligible", survey["verdict"])
 
 
 class CountsTheCapacityExplains(unittest.TestCase):
