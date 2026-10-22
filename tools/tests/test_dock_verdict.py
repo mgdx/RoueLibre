@@ -23,9 +23,10 @@ from discover_networks import (
     dock_verdict,
     explained_by_capacity,
     feed_counts_without_capacity,
-    feed_repeats_capacity,
+    feed_writes_docks_from_capacity,
     free_docks,
     lenient_flag,
+    reads_as_counted,
     takes_any_bike_back,
 )
 
@@ -283,7 +284,7 @@ def merged(*parts: tuple[dict, list[dict]]) -> tuple[dict, list[dict]]:
 
 
 class FreeDocksRepeatingTheCapacity(unittest.TestCase):
-    """The mirror of `isInFeedRepeatingCapacity` in `:core`.
+    """The mirror of `isInFeedWritingDocksFromCapacity` in `:core`.
 
     Each case here has its twin in `UnlimitedDocksTest.kt`; the two must agree.
     """
@@ -295,7 +296,7 @@ class FreeDocksRepeatingTheCapacity(unittest.TestCase):
             stations_of(10, lambda _: 10, 10, 2, 8),
             stations_of(5, lambda _: 5, 7, 4, 1, 2, 6, 0),
         )
-        self.assertTrue(feed_repeats_capacity(live, information))
+        self.assertTrue(feed_writes_docks_from_capacity(live, information))
         for station in live:
             self.assertTrue(
                 takes_any_bike_back(station, information[station["station_id"]], True, True)
@@ -307,7 +308,7 @@ class FreeDocksRepeatingTheCapacity(unittest.TestCase):
             stations_of(20, lambda held: 20 - held, 3, 7, 12, 15),
             stations_of(10, lambda _: 10, 2, 4),
         )
-        self.assertFalse(feed_repeats_capacity(live, information))
+        self.assertFalse(feed_writes_docks_from_capacity(live, information))
         self.assertFalse(takes_any_bike_back(live[0], information["c20-0"], True, False))
 
     def test_half_the_stations_holding_bikes_is_no_majority(self) -> None:
@@ -315,7 +316,7 @@ class FreeDocksRepeatingTheCapacity(unittest.TestCase):
             stations_of(10, lambda _: 10, 2, 4, 6),
             stations_of(20, lambda held: 20 - held, 1, 2, 3),
         )
-        self.assertFalse(feed_repeats_capacity(live, information))
+        self.assertFalse(feed_writes_docks_from_capacity(live, information))
 
     def test_empty_stations_reading_their_capacity_are_counted(self) -> None:
         # Agen's empty fleet: five free docks at five-dock racks holding nothing.
@@ -323,16 +324,16 @@ class FreeDocksRepeatingTheCapacity(unittest.TestCase):
             stations_of(5, lambda _: 5, 0, 0, 0, 0, 0, 0, 0),
             stations_of(6, lambda held: 6 - held, 2),
         )
-        self.assertFalse(feed_repeats_capacity(live, information))
+        self.assertFalse(feed_writes_docks_from_capacity(live, information))
 
     def test_too_few_stations_holding_bikes_decide_nothing(self) -> None:
         self.assertEqual(5, MINIMUM_OCCUPIED_STATIONS_TO_JUDGE)
         information, live = merged(
             stations_of(5, lambda _: 5, 1, 2, 3, 4), stations_of(6, lambda _: 6, 0, 0, 0)
         )
-        self.assertFalse(feed_repeats_capacity(live, information))
+        self.assertFalse(feed_writes_docks_from_capacity(live, information))
         information, live = stations_of(5, lambda _: 5, 1, 2, 3, 4, 5)
-        self.assertTrue(feed_repeats_capacity(live, information))
+        self.assertTrue(feed_writes_docks_from_capacity(live, information))
 
     def test_a_station_without_a_capacity_or_a_count_weighs_nothing(self) -> None:
         information, live = merged(
@@ -345,10 +346,46 @@ class FreeDocksRepeatingTheCapacity(unittest.TestCase):
             {"station_id": "uncounted", "num_bikes_available": 3},
             {"station_id": "undescribed", "num_bikes_available": 3, "num_docks_available": 5},
         ]
-        self.assertFalse(feed_repeats_capacity(live, information))
+        self.assertFalse(feed_writes_docks_from_capacity(live, information))
+
+    def test_niort_writes_half_the_capacity_beside_the_whole_of_it(self) -> None:
+        # 22 October 2026: 10 free at twenty-dock stations and 7 at
+        # fourteen-dock ones whatever stands there, 8 at the eight-dock ones.
+        information, live = merged(
+            stations_of(20, lambda _: 10, 1, 3, 2),
+            stations_of(14, lambda _: 7, 1, 4),
+            stations_of(8, lambda _: 8, 2, 5),
+            stations_of(22, lambda _: 13, 4),
+        )
+        self.assertTrue(feed_writes_docks_from_capacity(live, information))
+        self.assertTrue(takes_any_bike_back(live[-1], information["c22-0"], True, True))
+
+    def test_half_an_odd_capacity_is_read_rounded_either_way(self) -> None:
+        # Cherbourg: 8 free at fifteen docks holding 6. Soissons: 3 free at
+        # seven docks holding 1.
+        information, live = merged(
+            stations_of(15, lambda _: 8, 6, 2, 3),
+            stations_of(7, lambda _: 3, 1, 2),
+            stations_of(30, lambda held: 30 - held, 4, 5, 6),
+        )
+        self.assertTrue(feed_writes_docks_from_capacity(live, information))
+
+    def test_half_the_capacity_left_by_as_many_bikes_is_a_count(self) -> None:
+        # Twenty docks holding ten bikes do have ten free.
+        self.assertTrue(reads_as_counted(20, 10, 10))
+        self.assertTrue(reads_as_counted(2, 4, 0))
+        self.assertFalse(reads_as_counted(20, 3, 10))
+        information, live = merged(
+            stations_of(20, lambda held: 20 - held, 10, 11, 9),
+            stations_of(14, lambda held: 14 - held, 7, 7),
+            stations_of(16, lambda _: 8, 3),
+        )
+        self.assertFalse(feed_writes_docks_from_capacity(live, information))
 
     def test_the_bikes_are_read_as_the_application_reads_them(self) -> None:
-        self.assertEqual(0, bikes_available({"num_bikes_available": 0, "num_vehicles_available": 4}))
+        self.assertEqual(
+            0, bikes_available({"num_bikes_available": 0, "num_vehicles_available": 4})
+        )
         self.assertEqual(4, bikes_available({"num_vehicles_available": 4}))
         self.assertEqual(0, bikes_available({"num_bikes_available": -3}))
 

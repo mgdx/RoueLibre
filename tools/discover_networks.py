@@ -179,8 +179,8 @@ EMPTY_DOCK_SHARE = 0.1
 # and 27% of Tokyo's, against 94% to 100% for every frozen feed.
 FROZEN_FREE_DOCK_SHARE = 0.8
 
-# The stations holding bikes a feed needs before `feed_repeats_capacity` says
-# its free docks are the capacities written again; the same figure as
+# The stations holding bikes a feed needs before `feed_writes_docks_from_capacity`
+# says its free docks are written from the capacities; the same figure as
 # `MINIMUM_OCCUPIED_STATIONS_TO_JUDGE` in `:core`, and the two must agree.
 # Below it two stations whose capacity lags behind their rack would decide a
 # small network for good; five keeps the decision at three stations agreeing,
@@ -663,7 +663,7 @@ def probe_feeds(candidate: dict) -> dict:
             # nought, and both are measurements (`explained_by_capacity`).
             information = {str(station.get("station_id")): station for station in stations}
             counting = feed_counts_without_capacity(live, information)
-            repeating = feed_repeats_capacity(live, information)
+            repeating = feed_writes_docks_from_capacity(live, information)
             unlimited = [
                 takes_any_bike_back(
                     station,
@@ -797,7 +797,7 @@ def takes_any_bike_back(
     status: dict,
     information: dict | None,
     feed_counts_without_capacity: bool,
-    feed_repeats_capacity: bool = False,
+    feed_writes_docks_from_capacity: bool = False,
 ) -> bool:
     """Whether a station's free docks limit nothing, as the application reads them.
 
@@ -806,16 +806,16 @@ def takes_any_bike_back(
     application sends journeys to it, or the other way round, is a network
     withdrawn or kept for a reason the application does not share. Three
     cases. No `num_docks_available` at all, which GBFS reserves for a station
-    with unlimited docking. Any count in a feed that writes its capacities in
-    place of free docks (`feed_repeats_capacity`), Auch's for one. And a
-    nought at a station that publishes no capacity — neither `capacity` nor
+    with unlimited docking. Any count in a feed that writes its free docks
+    from its capacities (`feed_writes_docks_from_capacity`), Auch's and
+    Niort's for two. And a nought at a station that publishes no capacity — neither `capacity` nor
     `vehicle_docks_capacity` — which is what nextbike derives where it has no
     capacity to subtract the bikes from: always at a virtual station, a zone
     having no dock to fill, and at a rack unless the feed proves it measures
     such stations (`feed_counts_without_capacity`). `is_returning` is not read
     here, nor there: it refuses returns on its own.
     """
-    if status.get("num_docks_available") is None or feed_repeats_capacity:
+    if status.get("num_docks_available") is None or feed_writes_docks_from_capacity:
         return True
     if free_docks(status) != 0 or capacity_of(information) is not None:
         return False
@@ -849,31 +849,47 @@ def feed_counts_without_capacity(live: list[dict], information: dict[str, dict])
     return sum(1 for docks in counted if docks == 0) * 2 <= len(counted)
 
 
-def feed_repeats_capacity(live: list[dict], information: dict[str, dict]) -> bool:
-    """Whether a feed writes its stations' capacities in place of free docks.
+def feed_writes_docks_from_capacity(live: list[dict], information: dict[str, dict]) -> bool:
+    """Whether a feed writes its free docks from its stations' capacities.
 
-    The mirror of `isInFeedRepeatingCapacity` in `:core`: it does when, of the
+    The mirror of `isInFeedWritingDocksFromCapacity` in `:core`. Of the
     stations holding a bike that publish a capacity above nought and a count
-    of free docks, a strict majority read their whole capacity free — which a
-    dock holding a bike cannot be — and there are at least
+    of free docks, a strict majority read the whole capacity or half of it —
+    an odd one rounded either way — in a figure their bikes do not explain
+    (`reads_as_counted`), and there are at least
     `MINIMUM_OCCUPIED_STATIONS_TO_JUDGE` of them. Ecovelo writes the capacity
     at all 9 of Auch's stations holding bikes on 22 October 2026, 5 free docks
-    beside 7 bikes at a five-dock one; Berlin's docks read it at 2 of 704. The
-    bikes and docks out of service are not read, at a real dock they only ever
-    lower the figure. Only stations `station_information` describes are
-    weighed, as the application joins no others.
+    beside 7 bikes at a five-dock one, and the whole or half of it at 49 of
+    Niort's 56, 36 of Cherbourg's 41 and all 18 of Tarbes'; Manchester's docks
+    read such a figure at 34 of 198, Chicago's at 135 of 1,191. Only stations
+    `station_information` describes are weighed, as the application joins no
+    others.
     """
     weighed = []
     for station in live:
         capacity = capacity_of(information.get(str(station.get("station_id"))))
-        if not capacity or station.get("num_docks_available") is None:
+        bikes = bikes_available(station)
+        if not capacity or station.get("num_docks_available") is None or bikes <= 0:
             continue
-        if bikes_available(station) > 0:
-            weighed.append(free_docks(station) == capacity)
+        docks = free_docks(station)
+        weighed.append(
+            not reads_as_counted(capacity, bikes, docks)
+            and docks in (capacity, capacity // 2, (capacity + 1) // 2)
+        )
     return (
         len(weighed) >= MINIMUM_OCCUPIED_STATIONS_TO_JUDGE
         and sum(weighed) * 2 > len(weighed)
     )
+
+
+def reads_as_counted(capacity: int, bikes: int, docks: int) -> bool:
+    """Whether free docks are the capacity less the bikes, floored at nought.
+
+    The mirror of `readsAsCounted` in `:core`: twenty docks holding ten bikes
+    do have ten free. Exact, unlike `explained_by_capacity`, because the
+    application's state carries no bike or dock out of service to allow for.
+    """
+    return docks == max(0, capacity - bikes)
 
 
 def bikes_available(status: dict) -> int:
@@ -930,8 +946,8 @@ def explained_by_capacity(status: dict, information: dict | None) -> bool:
     A count the capacity does not explain stays a candidate: Auch reads its
     capacity in free docks at every station, the four bikes standing at a
     five-dock one included. Such a feed is caught before it gets here, its
-    stations taking any bike back (`feed_repeats_capacity`); what is left is a
-    repeated figure in a feed that mostly counts.
+    stations taking any bike back (`feed_writes_docks_from_capacity`); what is
+    left is a repeated figure in a feed that mostly counts.
     """
     capacity = capacity_of(information)
     if capacity is None or status.get("num_docks_available") is None:
