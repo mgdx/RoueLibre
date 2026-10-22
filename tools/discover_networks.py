@@ -859,9 +859,9 @@ def feed_writes_docks_from_capacity(live: list[dict], information: dict[str, dic
     (`reads_as_counted`), and there are at least
     `MINIMUM_OCCUPIED_STATIONS_TO_JUDGE` of them. Ecovelo writes the capacity
     at all 9 of Auch's stations holding bikes on 22 October 2026, 5 free docks
-    beside 7 bikes at a five-dock one, and the whole or half of it at 49 of
-    Niort's 56, 36 of Cherbourg's 41 and all 18 of Tarbes'; Manchester's docks
-    read such a figure at 34 of 198, Chicago's at 135 of 1,191. Only stations
+    beside 7 bikes at a five-dock one, and the whole or half of it at 48 of
+    Niort's 55, 36 of Cherbourg's 42 and all 14 of Tarbes'; Chicago's docks
+    read such a figure at 137 of 1,194, Berlin's at 16 of 694. Only stations
     `station_information` describes are weighed, as the application joins no
     others.
     """

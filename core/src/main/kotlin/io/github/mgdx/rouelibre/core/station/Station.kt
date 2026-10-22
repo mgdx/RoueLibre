@@ -370,18 +370,19 @@ public fun settleWritingDocksFromCapacity(
  *
  * What leaves a few real docks reading such a figure beside a bike is a
  * capacity the producer has not updated, a bike out of service, or a
- * coincidence, and it stays a minority: 34 of Manchester's 198 stations
- * holding bikes on 22 October 2026, 135 of Chicago's 1,191, 2 of Berlin's 704.
+ * coincidence, and it stays a minority: 137 of Chicago's 1,194 stations
+ * holding bikes on 22 October 2026, 42 of Vélib's 1,369, 16 of Berlin's 694,
+ * and no network of physical docks above Detroit's 8 of 57.
  *
  * **The line is a strict majority**, as for the noughts of
  * [StationAvailability.isInFeedCountingWithoutCapacity]: a network where most
  * docks holding a bike announce a figure no count gives is not one anybody
- * measured. Every Ecovelo feed then lands well above it — Niort at 49 of 56,
- * Cherbourg at 36 of 41, Tarbes at 18 of 18, Agen and Brive at all of theirs
- * — and De Lijn's Blue-bike in Brussels reads its capacity at 308 of 308.
- * Troyes, at 11 of 20, is the nearest above. Under it stand Beryl's
- * Canterbury at 11 of 22, its free docks reading four nearly everywhere,
- * Norwich at 59 of 160, and every network of physical docks under a fifth.
+ * measured. All 27 Ecovelo feeds then land above it — Niort at 48 of 55,
+ * Cherbourg at 36 of 42, Tarbes at 14 of 14, Agen and Brive at nearly all of
+ * theirs, Troyes the nearest at 10 of 19 — and De Lijn's Blue-bike in
+ * Brussels reads its capacity at 308 of 308. Under it, the highest is Beryl's
+ * Canterbury at 10 of 21, its free docks reading four nearly everywhere, then
+ * Norwich, Guildford and nextbike's LoveSharing near a third or more.
  *
  * **Below [MINIMUM_OCCUPIED_STATIONS_TO_JUDGE] stations holding bikes, the
  * feed is read as counting**, as it always was: two stations whose capacity
