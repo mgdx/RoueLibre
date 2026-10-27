@@ -515,6 +515,8 @@
     <string name="station_address_nearby">Near %1$s</string>
     <string name="station_favourite_add">Add to favourites</string>
     <string name="station_favourite_remove">Remove from favourites</string>
+    <!-- Shared by the station sheet and the place sheet (SPEC §7.1): one gesture,
+         one wording, whichever kind of point it is aimed at. -->
     <string name="station_as_origin">Start here</string>
     <string name="station_as_destination">Go here</string>
     <string name="station_open_in_navigation">Open in a navigation app</string>
@@ -544,10 +546,9 @@
 
     <!-- The sheet a place found on the map opens (SPEC §7.2, §7.3). It is the station
          sheet's counterpart for a point no network put a stand on, so the wording stays
-         as plain as that one's. -->
+         as plain as that one's. Its origin and destination buttons take that sheet's
+         very strings, station_as_origin and station_as_destination (SPEC §7.1). -->
     <string name="place_sheet_title">This place</string>
-    <string name="place_go_there">Go there</string>
-    <string name="place_leave_from_here">Leave from here</string>
     <string name="place_clear">Clear this point</string>
 
     <!-- Distances, formatted through the localisation APIs (SPEC §9). In all
