@@ -11,6 +11,20 @@ also records what has no visible effect.
 
 ### Added
 
+- **Full stations taking bikes back can be turned on by hand too** (issue
+  #8, `SPEC.md` §4.1). The settings switch, shown only for a network
+  detected or turned off, becomes a row of three answers under the city —
+  Automatic, Always, Never — shown for every network served: the reading
+  misses networks of zones under its line (Prague's nextbike at 2.1 %), and
+  their riders can now say their full stations take bikes. `:core` gains
+  `BikesPastCapacityAnswer`, handed to the join in place of the
+  `takesBikesPastCapacityAllowed` flag; DataStore gains
+  `bikes_past_capacity_turned_on` beside `bikes_past_capacity_turned_off`,
+  read as before. The line under the row says what the feed showed for
+  Automatic and warns, for Always, that a journey may end at a station that
+  refuses the bike. The window is no longer shown for a network settled by
+  hand. Seven strings, translated into the 30 languages; the switch's line
+  is gone.
 - **A network found taking bikes back at full stations says so, once, and
   can be refused** (issue #8, `SPEC.md` §4.1). The first time a network's feed
   is found taking bikes past its capacities, `BikesPastCapacityDialogFragment`
