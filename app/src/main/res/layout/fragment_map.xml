@@ -269,6 +269,7 @@
         android:textAppearance="@style/TextAppearance.RoueLibre.Body"
         android:visibility="gone"
         app:drawableStartCompat="@drawable/ic_place"
+        app:drawableTint="@color/ink"
         app:layout_constraintBottom_toTopOf="@id/filters_top"
         app:layout_constraintEnd_toStartOf="@id/open_search"
         app:layout_constraintStart_toStartOf="parent"
