@@ -34,11 +34,17 @@ import kotlinx.coroutines.launch
  * @property isComputing a computation is under way.
  * @property hasStations false when no station is known: the network has to be
  *   fetched first, which is not the same thing as an impossible journey.
+ * @property rideKind the kind of bike the journey through the stations was
+ *   worked out for, or `null` for any. The kind the computation applied, not
+ *   the one asked for: a network that cannot honour a kind drops it (see
+ *   `bikeKindFilter`), and its journey must not be drawn as made on a bike it
+ *   was never narrowed to (SPEC §7.4).
  */
 data class JourneyUiState(
     val plan: JourneyPlan? = null,
     val isComputing: Boolean = true,
     val hasStations: Boolean = true,
+    val rideKind: WantedBikeKind? = null,
 ) {
     /** The journey shown, or `null` when none could be composed. */
     val chosen: JourneyOption?
@@ -225,7 +231,12 @@ class JourneyViewModel(
             )
             val plan = planner.plan(origin, destination, stations)
             mutableState.update {
-                it.copy(plan = plan, isComputing = false, hasStations = true)
+                it.copy(
+                    plan = plan,
+                    isComputing = false,
+                    hasStations = true,
+                    rideKind = filter?.wanted,
+                )
             }
         }
     }

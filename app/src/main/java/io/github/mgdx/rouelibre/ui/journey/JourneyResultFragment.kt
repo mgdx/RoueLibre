@@ -632,8 +632,10 @@ class JourneyResultFragment : Fragment() {
         handover.offer(journey)
     }
 
-    private fun journeyToShow(): ShownJourney? = viewModel.state.value.plan
-        ?.let { ShownJourney(origin, destination, it) }
+    private fun journeyToShow(): ShownJourney? {
+        val state = viewModel.state.value
+        return state.plan?.let { ShownJourney(origin, destination, it, state.rideKind) }
+    }
 
     // ---------------------------------------------------- map lifecycle --
 
