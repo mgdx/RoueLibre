@@ -463,6 +463,35 @@ class StationRepositoryTest {
     }
 
     @Test
+    fun `a network found taking bikes past its docks mid-session is shown as the rider answers`() =
+        runTest {
+            // Frelo opened by day, its racks merely full, then refreshed in
+            // the evening with bikes piled beside them: the window opens then,
+            // and whichever answer it gets must reach the screens at once.
+            val answer = MutableStateFlow(FullStationAnswer.Automatic)
+            enqueueDiscovery()
+            enqueueTwentyDockStations()
+            enqueueFullStatus(overflowing = 0)
+            val repository = repository(fullStationAnswer = answer)
+            repository.refresh()
+            assertEquals(true, repository.observeFreeDocksShown().first())
+
+            now += Duration.ofMinutes(2)
+            enqueueFullStatus(overflowing = 3)
+            repository.refresh(force = true)
+
+            val evening = repository.observeStations().first().stations
+            assertTrue(evening.all { it.availability!!.acceptsAnyBike })
+            assertTrue(repository.bikesPastCapacityDetected.value)
+            assertEquals(false, repository.observeFreeDocksShown().first())
+
+            answer.value = FullStationAnswer.Never
+            val turnedOff = repository.observeStations().first().stations
+            assertTrue(turnedOff.none { it.availability!!.canAcceptBike })
+            assertEquals(true, repository.observeFreeDocksShown().first())
+        }
+
+    @Test
     fun `a rider turning the reading on sees full stations take bikes the feed never showed`() =
         runTest {
             // Full racks with nothing beside them: the feed shows nothing, and

@@ -166,17 +166,25 @@ class StationRepository(
     ) { stationEntities, availabilityEntities, answer ->
         val stations = stationEntities.map(StationEntity::toDomain)
         val availabilities = availabilityEntities.map(StationAvailabilityEntity::toDomain)
+        val wroteDocksFromCapacity = docksWrittenFromCapacity.value
         val writesDocksFromCapacity = docksWrittenFromCapacity.updateAndGet { settled ->
             settleWritingDocksFromCapacity(settled, stations, availabilities)
         }
+        val tookBikesPastCapacity = bikesTakenPastCapacity.value
         val takesBikesPastCapacity = bikesTakenPastCapacity.updateAndGet { settled ->
             settleTakingBikesPastCapacity(settled, stations, availabilities)
         }
-        // Settled once per session on stations read under one answer, the
-        // display verdict would keep the free docks hidden after the rider
-        // changed the answer: it is weighed again on the next snapshot.
+        // Settled once per session on stations read one way, the display
+        // verdict would outlive that reading: the free docks stayed hidden
+        // after the rider changed the answer, and stayed shown when Frelo,
+        // opened by day, was found taking bikes past its docks that evening —
+        // the window saying they were gone over a list still showing them.
+        // It is weighed again on this snapshot whenever either changed.
         val previousAnswer = answerReadUnder.getAndUpdate { answer }
-        if (previousAnswer != null && previousAnswer != answer) freeDocksVerdict.value = null
+        val answerChanged = previousAnswer != null && previousAnswer != answer
+        val readingChanged = wroteDocksFromCapacity != writesDocksFromCapacity ||
+            tookBikesPastCapacity != takesBikesPastCapacity
+        if (answerChanged || readingChanged) freeDocksVerdict.value = null
         StationsSnapshot(
             stations = joinStationsWithAvailability(
                 stations,
