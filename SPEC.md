@@ -212,7 +212,7 @@ Associated rules:
 
 In every case, two safeguards are **mandatory**, so that the application survives the disappearance of its host: the local file import (§4.2), and the regeneration scripts versioned in the repository. The default URL must never be a single point of failure — someone whose host has vanished regenerates the files and imports them, or edits the city configuration and rebuilds.
 
-A "storage" screen must list every dataset with its size, its date, an update button and a delete button. The user must always know what the application occupies and be able to reclaim it.
+A "storage" screen must list every dataset with its size, its date, an update button and a delete button. The user must always know what the application occupies and be able to reclaim it. *(27 October 2026)* **The button that checks then downloads stands at the top of that screen**, under the total and above the list, with what the transfer is doing beneath it; the list scrolls under it. Pinned at the foot, below three rows each carrying a button, it was the last thing read, and users pressed the rows' import in its place. **Each row's import is a text button of the delete button's weight, and says it takes a file** — "Import a file", "Replace with a file": it is the path by hand this section requires, never to be mistaken for the download.
 
 ### 4.5 Attribution (mandatory)
 

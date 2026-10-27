@@ -41,6 +41,17 @@ also records what has no visible effect.
 
 ### Changed
 
+- **The storage screen's download button stands at the top, and the rows'
+  import steps back** (issue #13, `SPEC.md` §4.4). `check_updates`, with the
+  transfer's state line and bar under it, moves from the foot of
+  `fragment_storage.xml` to just under the total, above the list, which now
+  runs to the bottom and scrolls under it; the indeterminate `importing` bar
+  sits at the list's top edge. The snackbar loses its anchor on the button,
+  which would have put it over the header. Each row's import becomes a text
+  button like Delete rather than a `Widget.RoueLibre.Toggle` dressed like the
+  download, and says what it takes: "Import a file", "Replace with a file",
+  in the 30 languages.
+
 - **The map's kind of bike is kept from one launch to the next** (issue #9,
   `SPEC.md` §7.1). All bikes, mechanical or electric is written to DataStore
   under `map_bike_kind`, a key of its own beside the journey's
