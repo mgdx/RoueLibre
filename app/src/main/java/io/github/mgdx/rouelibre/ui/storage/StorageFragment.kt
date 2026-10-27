@@ -215,9 +215,10 @@ class StorageFragment : Fragment() {
      */
     private fun showMessage(message: CharSequence) {
         val views = binding ?: return
+        // At the foot of the screen, unanchored: the download button it once
+        // stood above has moved to the top (issue #13), and anchored there the
+        // message would have covered the header it comments on.
         val bar = Snackbar.make(views.root, message, Snackbar.LENGTH_LONG)
-            // Not over a button that is gone, as it is for a withdrawn network.
-            .setAnchorView(views.checkUpdates.takeIf { it.isVisible })
         bar.view
             .findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
             .maxLines = MESSAGE_LINES

@@ -49,18 +49,28 @@
         app:layout_constraintTop_toBottomOf="@id/storage_intro"
         tools:text="42,5 Mo occupés sur cet appareil" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/datasets"
+    <!--
+        Above the list, the first action the eye meets (issue #13): pinned at
+        the foot of the screen, under three rows each carrying a button, it
+        was the last thing read, and the rows' import was pressed for it time
+        and again. Outside the list, so a long one scrolls under it and never
+        carries it away. The state and the bar come after it rather than
+        before, so that what appears on a press never pushes the button out
+        from under the finger that pressed it.
+    -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/check_updates"
+        style="@style/Widget.RoueLibre.Toggle"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/touch_target_min"
+        android:layout_marginStart="@dimen/space_l"
         android:layout_marginTop="@dimen/space_m"
-        android:background="?attr/colorSurface"
-        app:layout_constraintBottom_toTopOf="@id/check_updates"
+        android:layout_marginEnd="@dimen/space_l"
+        android:text="@string/storage_check_updates"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/storage_total"
-        tools:itemCount="3"
-        tools:listitem="@layout/item_dataset" />
+        app:layout_constraintTop_toBottomOf="@id/storage_total" />
 
     <!--
         What the download in progress is doing (SPEC §4.4). A determinate bar,
@@ -73,12 +83,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_s"
         android:layout_marginEnd="@dimen/space_l"
         android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/download_progress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/check_updates"
         tools:text="tiles.mbtiles · 12,4 Mo sur 35,0 Mo"
         tools:visibility="visible" />
 
@@ -90,26 +101,28 @@
         android:layout_marginTop="@dimen/space_xs"
         android:layout_marginEnd="@dimen/space_l"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/check_updates"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/download_state"
         app:trackColor="@color/outline"
         tools:visibility="visible" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/check_updates"
-        style="@style/Widget.RoueLibre.Toggle"
+    <!-- Hung under the last of the views above, whichever are shown: a gone
+         view keeps its place in the chain at no height, so a withdrawn
+         network, which has no button, lists its data straight under the
+         total. -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/datasets"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/touch_target_min"
-        android:layout_marginStart="@dimen/space_l"
-        android:layout_marginTop="@dimen/space_s"
-        android:layout_marginEnd="@dimen/space_l"
-        android:layout_marginBottom="@dimen/space_l"
-        android:text="@string/storage_check_updates"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/space_m"
+        android:background="?attr/colorSurface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/download_progress"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_dataset" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/importing"
@@ -117,9 +130,9 @@
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/datasets"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/storage_total"
         app:trackColor="@color/outline"
         tools:visibility="visible" />
 
