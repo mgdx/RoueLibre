@@ -810,6 +810,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Nichts“ richtet sich danach, was die Karte zählt: kein Rad, solange sie Räder zählt, kein freier Platz, solange sie freie Plätze zählt.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">„Nichts“ heißt kein Rad: In diesem Netz zählt die Karte nur Räder.</string>
+    <string name="settings_bikes_past_capacity">Volle Stationen nehmen Räder zurück</string>
+    <string name="settings_bikes_past_capacity_hint">Erkannt an den Rädern, die dieses Netz neben seinen vollen Stationen stehen lässt. Ausgeschaltet gilt eine volle Station wieder als voll.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stationen, über die das Netz nichts sagt, bleiben auf der Karte: Ein Zählstand, den niemand lesen konnte, ist kein Zählstand von null.</string>
@@ -836,6 +838,11 @@
     <string name="street_bike_intro_title">Räder außerhalb der Stationen</string>
     <string name="street_bike_intro_body">Das Netz meldet diese Räder abseits seiner Stationen. Manche hat ein Nutzer dort stehen lassen, andere warten im Depot des Betreibers.\n\nRoue Libre weiß nicht, ob du eines dort nehmen darfst, wo es steht: das sagen die Regeln des Netzes, und manche Netze verlangen eine Gebühr für ein Rad, das außerhalb einer Station abgestellt wird.\n\nEine Route, die von einem Rad ausgeht, endet immer an einer Station.</string>
     <string name="street_bike_intro_dismiss">Verstanden</string>
+
+    <string name="bikes_past_capacity_title">%1$s nimmt Räder auch an vollen Stationen zurück</string>
+    <string name="bikes_past_capacity_body">An vielen Stationen dieses Netzes stehen mehr Räder, als es Stellplätze gibt: Nutzer stellen ihres neben eine volle Station, und das Netz nimmt es zurück.\n\nRoue Libre zählt eine volle Station daher als eine, an der du dein Rad noch zurückgeben kannst, und zeigt für dieses Netz keine freien Plätze mehr an.\n\nWenn eine volle Station dein Rad nicht annimmt, schalte das aus. Du kannst es jederzeit in den Einstellungen ändern.</string>
+    <string name="bikes_past_capacity_keep">Beibehalten</string>
+    <string name="bikes_past_capacity_turn_off">Ausschalten</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

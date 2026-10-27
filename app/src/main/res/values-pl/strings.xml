@@ -749,6 +749,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Nic” zależy od tego, co liczy mapa: żadnego roweru, gdy liczy rowery, żadnego wolnego miejsca, gdy liczy wolne miejsca.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">„Nic” oznacza brak roweru: w tej sieci mapa liczy tylko rowery.</string>
+    <string name="settings_bikes_past_capacity">Pełne stacje przyjmują rowery</string>
+    <string name="settings_bikes_past_capacity_hint">Wywnioskowane z rowerów, które ta sieć zostawia obok swoich pełnych stacji. Po wyłączeniu pełna stacja znów liczy się jako pełna.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stacje, o których sieć nic nie mówi, zostają na mapie: brak odczytu nie oznacza zera.</string>
@@ -775,6 +777,11 @@
     <string name="street_bike_intro_title">Rowery poza stacjami</string>
     <string name="street_bike_intro_body">Sieć zgłasza te rowery z dala od swoich stacji. Jedne zostawił tam użytkownik, inne czekają w zajezdni operatora.\n\nRoue Libre nie wie, czy wolno ci wziąć rower tam, gdzie stoi: mówią o tym zasady sieci, a niektóre sieci naliczają karę za rower zwrócony poza stacją.\n\nTrasa proponowana od roweru zawsze kończy się na stacji.</string>
     <string name="street_bike_intro_dismiss">Rozumiem</string>
+
+    <string name="bikes_past_capacity_title">%1$s przyjmuje rowery na pełnych stacjach</string>
+    <string name="bikes_past_capacity_body">Na wielu stacjach tej sieci stoi więcej rowerów, niż jest stojaków: użytkownicy zostawiają swój obok pełnej stacji, a sieć go przyjmuje.\n\nDlatego Roue Libre traktuje pełną stację jako taką, na której nadal możesz zwrócić rower, i nie pokazuje już wolnych miejsc w tej sieci.\n\nJeśli pełna stacja nie przyjmie twojego roweru, wyłącz tę opcję. Możesz to zmienić w każdej chwili w ustawieniach.</string>
+    <string name="bikes_past_capacity_keep">Zachowaj</string>
+    <string name="bikes_past_capacity_turn_off">Wyłącz</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

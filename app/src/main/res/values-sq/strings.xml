@@ -718,6 +718,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Asgjë“ ndjek atë që numëron harta: asnjë biçikletë kur numërohen biçikletat, asnjë vend i lirë kur numërohen vendet e lira.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">„Asgjë“ do të thotë asnjë biçikletë: në këtë rrjet harta numëron vetëm biçikletat.</string>
+    <string name="settings_bikes_past_capacity">Stacionet plot i pranojnë biçikletat</string>
+    <string name="settings_bikes_past_capacity_hint">Nxjerrë nga biçikletat që ky rrjet lë pranë stacioneve të veta plot. Kur është çaktivizuar, një stacion plot llogaritet sërish si plot.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stacionet për të cilat rrjeti nuk thotë asgjë mbeten në hartë: një numër që askush nuk mund ta lexojë nuk do të thotë zero.</string>
 
@@ -743,6 +745,11 @@
     <string name="street_bike_intro_title">Biçikleta jashtë stacioneve</string>
     <string name="street_bike_intro_body">Rrjeti i raporton këto biçikleta larg stacioneve të veta. Disa i ka lënë aty një përdorues, të tjerat presin në depon e operatorit.\n\nRoue Libre nuk e di nëse ke të drejtë ta marrësh një aty ku është: këtë e thonë rregullat e rrjetit, dhe disa rrjete vendosin gjobë për një biçikletë të kthyer jashtë stacionit.\n\nUdhëtimi i propozuar nga një biçikletë përfundon gjithmonë në një stacion.</string>
     <string name="street_bike_intro_dismiss">E kuptova</string>
+
+    <string name="bikes_past_capacity_title">%1$s i pranon biçikletat edhe në stacionet plot</string>
+    <string name="bikes_past_capacity_body">Në shumë stacione të këtij rrjeti qëndrojnë më shumë biçikleta se vende parkimi: përdoruesit e lënë të tyren pranë një stacioni plot, dhe rrjeti e merr.\n\nPrandaj Roue Libre e llogarit një stacion plot si një stacion ku mund ta kthesh ende biçikletën, dhe nuk shfaq më vende të lira për këtë rrjet.\n\nNëse një stacion plot ta refuzon biçikletën, çaktivizoje këtë. Mund ta ndryshosh në çdo kohë te cilësimet.</string>
+    <string name="bikes_past_capacity_keep">Mbaje</string>
+    <string name="bikes_past_capacity_turn_off">Çaktivizo</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

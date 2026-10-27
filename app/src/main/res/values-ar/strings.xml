@@ -783,6 +783,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">يتبع «لا شيء» ما تحتسبه الخريطة: لا دراجة حين تحتسب الدراجات، ولا موقف شاغر حين تحتسب المواقف الشاغرة.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">«لا شيء» يعني لا دراجة: لا تحتسب الخريطة في هذه الشبكة إلا الدراجات.</string>
+    <string name="settings_bikes_past_capacity">المحطات الممتلئة تستقبل الدراجات</string>
+    <string name="settings_bikes_past_capacity_hint">استُنتج ذلك من الدراجات التي تتركها هذه الشبكة بجوار محطاتها الممتلئة. عند الإيقاف، تُعدّ المحطة الممتلئة ممتلئةً من جديد.</string>
     <!-- Under both switches. -->
     <string name="settings_map_filters_keeps_unknown">تبقى على الخريطة المحطات التي لا تقول عنها شبكة الدراجات شيئًا: عدد لا يستطيع أحد قراءته ليس عددًا معدومًا.</string>
 
@@ -808,6 +810,11 @@
     <string name="street_bike_intro_title">دراجات خارج المحطات</string>
     <string name="street_bike_intro_body">تشير شبكة الدراجات إلى هذه الدراجات بعيدًا عن محطاتها. بعضها تركه مستخدم هناك، وبعضها ينتظر في مستودع المشغّل.\n\nلا تعرف Roue Libre إن كان يحقّ لك أخذ واحدة حيث هي: قواعد شبكة الدراجات هي التي تقول ذلك، وبعض الشبكات تفرض غرامة على دراجة تُعاد خارج محطة.\n\nالرحلة المقترحة انطلاقًا من دراجة تنتهي دائمًا عند محطة.</string>
     <string name="street_bike_intro_dismiss">فهمت</string>
+
+    <string name="bikes_past_capacity_title">تستقبل %1$s الدراجات حتى في المحطات الممتلئة</string>
+    <string name="bikes_past_capacity_body">في كثير من محطات هذه الشبكة تقف دراجات أكثر من عدد المواقف: يترك المستخدمون دراجاتهم بجوار محطة ممتلئة، فتستعيدها الشبكة.\n\nلذا تَعُدّ Roue Libre المحطة الممتلئة محطةً لا يزال بإمكانك أن تعيد فيها دراجتك، ولم تعد تعرض المواقف الشاغرة لهذه الشبكة.\n\nإذا رفضت محطة ممتلئة دراجتك، فأوقف هذا الخيار. يمكنك تغييره في أي وقت من الإعدادات.</string>
+    <string name="bikes_past_capacity_keep">إبقاء</string>
+    <string name="bikes_past_capacity_turn_off">إيقاف</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

@@ -727,6 +727,8 @@
          the switch above it uses. -->
     <string name="settings_map_filters_hide_empty_hint">«Uten noe å tilby» følger det kartet teller: ingen sykkel mens det teller sykler, ingen ledig plass mens det teller ledige plasser.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">«Uten noe å tilby» betyr uten sykkel: på dette nettverket teller kartet bare sykler.</string>
+    <string name="settings_bikes_past_capacity">Fulle stasjoner tar imot sykler</string>
+    <string name="settings_bikes_past_capacity_hint">Sett ut fra syklene dette nettverket etterlater ved siden av de fulle stasjonene sine. Slått av teller en full stasjon som full igjen.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stasjoner nettverket ikke sier noe om, blir stående på kartet: en telling ingen kunne lese, er ikke en telling av ingenting.</string>
 
@@ -752,6 +754,11 @@
     <string name="street_bike_intro_title">Sykler utenfor stasjonene</string>
     <string name="street_bike_intro_body">Nettverket melder disse syklene langt fra stasjonene sine. Noen er satt igjen av en bruker, andre venter på operatørens depot.\n\nRoue Libre vet ikke om du får ta en der den står: det sier nettverkets regler, og noen nettverk tar gebyr for en sykkel som leveres utenfor en stasjon.\n\nEn reise som foreslås fra en sykkel, ender alltid ved en stasjon.</string>
     <string name="street_bike_intro_dismiss">Forstått</string>
+
+    <string name="bikes_past_capacity_title">%1$s tar imot sykler ved fulle stasjoner</string>
+    <string name="bikes_past_capacity_body">På mange av nettverkets stasjoner står det flere sykler enn det er stativplasser: brukerne setter sin ved siden av en full stasjon, og nettverket tar den tilbake.\n\nRoue Libre regner derfor en full stasjon som en der du fortsatt kan levere sykkelen, og viser ikke lenger ledige plasser for dette nettverket.\n\nHvis en full stasjon avviser sykkelen din, slå av dette. Du kan endre det når som helst i innstillingene.</string>
+    <string name="bikes_past_capacity_keep">Behold</string>
+    <string name="bikes_past_capacity_turn_off">Slå av</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

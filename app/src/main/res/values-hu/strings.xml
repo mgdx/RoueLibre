@@ -750,6 +750,8 @@
     <!-- Under the switch, saying what „semmi” is read against. -->
     <string name="settings_map_filters_hide_empty_hint">A „semmi” ahhoz igazodik, amit a térkép éppen számol: nincs kerékpár, amíg kerékpárokat számol, és nincs szabad hely, amíg szabad helyeket.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">A „semmi” itt azt jelenti, hogy nincs kerékpár: ezen a hálózaton a térkép csak kerékpárokat számol.</string>
+    <string name="settings_bikes_past_capacity">A tele állomások is fogadnak kerékpárt</string>
+    <string name="settings_bikes_past_capacity_hint">A hálózat által a tele állomásai mellett hagyott kerékpárokból megállapítva. Kikapcsolva a tele állomás ismét telinek számít.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Azok az állomások, amelyekről a hálózat nem mond semmit, a térképen maradnak: az ismeretlen darabszám nem ugyanaz, mint a nulla.</string>
@@ -776,6 +778,11 @@
     <string name="street_bike_intro_title">Állomásokon kívüli kerékpárok</string>
     <string name="street_bike_intro_body">A hálózat ezeket a kerékpárokat az állomásaitól távol jelzi. Némelyiket egy felhasználó hagyta ott, mások az üzemeltető telephelyén várakoznak.\n\nA Roue Libre nem tudja, elviheted-e onnan, ahol áll: ezt a hálózat szabályai mondják meg, és egyes hálózatok büntetést számítanak fel az állomáson kívül leadott kerékpárért.\n\nA kerékpártól javasolt útvonal mindig egy állomáson ér véget.</string>
     <string name="street_bike_intro_dismiss">Értem</string>
+
+    <string name="bikes_past_capacity_title">%1$s: a tele állomások is fogadnak kerékpárt</string>
+    <string name="bikes_past_capacity_body">A hálózat sok állomásán több kerékpár áll, mint ahány dokkoló van: a felhasználók a tele állomás mellé teszik a sajátjukat, és a hálózat visszaveszi.\n\nEzért a Roue Libre a tele állomást olyannak tekinti, ahol még leadhatod a kerékpárodat, és ennél a hálózatnál már nem mutat szabad helyeket.\n\nHa egy tele állomás nem fogadja a kerékpárodat, kapcsold ki ezt. Bármikor módosíthatod a beállításokban.</string>
+    <string name="bikes_past_capacity_keep">Megtartás</string>
+    <string name="bikes_past_capacity_turn_off">Kikapcsolás</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

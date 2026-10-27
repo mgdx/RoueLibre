@@ -893,6 +893,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Nic“ se řídí tím, co mapa počítá: žádné kolo, když počítá kola, žádné volné místo, když počítá volná místa.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">„Nic“ znamená žádné kolo: v této síti mapa počítá jen kola.</string>
+    <string name="settings_bikes_past_capacity">Plné stanice přijímají kola</string>
+    <string name="settings_bikes_past_capacity_hint">Zjištěno podle kol, která tato síť nechává vedle svých plných stanic. Po vypnutí se plná stanice opět počítá jako plná.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stanice, o kterých síť nic neříká, zůstávají na mapě: počet, který nikdo nemohl přečíst, není počet nula.</string>
@@ -919,6 +921,11 @@
     <string name="street_bike_intro_title">Kola mimo stanice</string>
     <string name="street_bike_intro_body">Síť hlásí tato kola mimo své stanice. Některá tam nechal uživatel, jiná čekají v depu provozovatele.\n\nRoue Libre neví, zda si smíte kolo vzít tam, kde stojí: říkají to pravidla sítě a některé sítě účtují pokutu za kolo vrácené mimo stanici.\n\nTrasa navržená od kola vždy končí na stanici.</string>
     <string name="street_bike_intro_dismiss">Rozumím</string>
+
+    <string name="bikes_past_capacity_title">%1$s přijímá kola i na plných stanicích</string>
+    <string name="bikes_past_capacity_body">Na mnoha stanicích této sítě stojí víc kol, než je stojanů: uživatelé nechávají své kolo vedle plné stanice a síť ho přijme.\n\nRoue Libre proto počítá plnou stanici jako stanici, kde ještě můžete kolo vrátit, a pro tuto síť už nezobrazuje volná místa.\n\nPokud plná stanice vaše kolo odmítne, tuto možnost vypněte. Můžete ji kdykoli změnit v nastavení.</string>
+    <string name="bikes_past_capacity_keep">Ponechat</string>
+    <string name="bikes_past_capacity_turn_off">Vypnout</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

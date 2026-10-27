@@ -38,6 +38,7 @@ import io.github.mgdx.rouelibre.data.routing.OfflineRouter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.combine
 import okhttp3.OkHttpClient
 import java.io.File
 
@@ -454,6 +455,12 @@ class AppContainer(private val context: Context) {
             // reason (SPEC §15).
             providerIdsProvider = { activeCity()?.gbfs?.providerIds.orEmpty() },
             recordFleet = { fleetRepository.record(it) },
+            // The rider's answer for the city in service (SPEC §4.1, fourth
+            // case), followed so that turning it off reads the stations again.
+            bikesPastCapacityAllowed = combine(
+                preferences.activeCityIdFlow,
+                preferences.bikesPastCapacityTurnedOff,
+            ) { cityId, turnedOff -> cityId !in turnedOff },
         )
     }
 

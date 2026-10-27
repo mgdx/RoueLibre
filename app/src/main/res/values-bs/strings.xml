@@ -739,6 +739,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Ništa“ prati ono što karta broji: nijedan bicikl dok broji bicikle, nijedno slobodno mjesto dok broji slobodna mjesta.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">„Ništa“ znači nijedan bicikl: na ovoj mreži karta broji samo bicikle.</string>
+    <string name="settings_bikes_past_capacity">Pune stanice primaju bicikle</string>
+    <string name="settings_bikes_past_capacity_hint">Utvrđeno prema biciklima koje ova mreža ostavlja pored svojih punih stanica. Kad je isključeno, puna stanica se opet računa kao puna.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stanice o kojima mreža ne kaže ništa ostaju na karti: broj koji niko nije mogao pročitati nije broj nula.</string>
 
@@ -764,6 +766,11 @@
     <string name="street_bike_intro_title">Bicikli izvan stanica</string>
     <string name="street_bike_intro_body">Mreža prijavljuje ove bicikle daleko od svojih stanica. Neke je tu ostavio korisnik, a drugi čekaju u skladištu operatera.\n\nRoue Libre ne zna smijete li uzeti bicikl tu gdje jeste: to određuju pravila mreže, a neke mreže naplaćuju kaznu za bicikl vraćen izvan stanice.\n\nPutovanje predloženo od bicikla uvijek završava na stanici.</string>
     <string name="street_bike_intro_dismiss">Razumijem</string>
+
+    <string name="bikes_past_capacity_title">%1$s prima bicikle i na punim stanicama</string>
+    <string name="bikes_past_capacity_body">Na mnogim stanicama ove mreže stoji više bicikala nego što ima stalaka: korisnici ostavljaju svoj bicikl pored pune stanice, a mreža ga preuzima.\n\nZato Roue Libre punu stanicu računa kao stanicu na koju još možete vratiti bicikl i za ovu mrežu više ne prikazuje slobodna mjesta.\n\nAko puna stanica odbije vaš bicikl, isključite ovo. To možete promijeniti bilo kada u postavkama.</string>
+    <string name="bikes_past_capacity_keep">Zadrži</string>
+    <string name="bikes_past_capacity_turn_off">Isključi</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

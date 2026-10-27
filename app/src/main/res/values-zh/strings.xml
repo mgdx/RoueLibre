@@ -695,6 +695,8 @@
     <!-- Under the switch, saying what "可用数" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">“可用数”随地图当前统计的内容而定：统计车辆时是没有车可借，统计空位时是没有位可还。</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">“可用数为零”即没有车可借：在这个网络中，地图只统计车辆。</string>
+    <string name="settings_bikes_past_capacity">满站也可还车</string>
+    <string name="settings_bikes_past_capacity_hint">根据该系统停放在满站旁的车辆判断。关闭后，满站重新视为已满。</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">该系统没有说明情况的站点仍留在地图上：谁都读不到的数量，不等于数量为零。</string>
@@ -721,6 +723,11 @@
     <string name="street_bike_intro_title">站点外的自行车</string>
     <string name="street_bike_intro_body">该系统报告这些自行车不在它的站点上。有的是用户随手停在那里的，有的在运营方的车库里等待。\n\nRoue Libre 无法判断您是否可以就地取用：这由该系统的规定决定，有的系统还会对停在站点外归还的车收取罚金。\n\n从一辆车出发的路线，终点始终是一个站点。</string>
     <string name="street_bike_intro_dismiss">知道了</string>
+
+    <string name="bikes_past_capacity_title">%1$s 的满站也可还车</string>
+    <string name="bikes_past_capacity_body">该系统的许多站点上，车辆数多于车位数：用户把车停在满站旁边，系统会将其收回。\n\n因此，Roue Libre 将满站视为仍可还车的站点，并且不再显示该系统的空位。\n\n如果满站拒收您的车，请关闭此选项。您可以随时在设置中更改。</string>
+    <string name="bikes_past_capacity_keep">保留</string>
+    <string name="bikes_past_capacity_turn_off">关闭</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

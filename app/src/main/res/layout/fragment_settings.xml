@@ -80,6 +80,30 @@
                 android:gravity="start|center_vertical"
                 android:minHeight="@dimen/touch_target_min" />
 
+            <!-- Under the network, and about it alone: whether its full
+                 stations are read as taking bikes back (SPEC §4.1, fourth
+                 case). Shown only where the feed was found doing so, or where
+                 the rider turned that off — elsewhere it would be a switch
+                 that changes nothing. -->
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/bikes_past_capacity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:minHeight="@dimen/touch_target_min"
+                android:text="@string/settings_bikes_past_capacity"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Body"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/bikes_past_capacity_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="@string/settings_bikes_past_capacity_hint"
+                android:textAppearance="@style/TextAppearance.RoueLibre.Secondary"
+                android:visibility="gone" />
+
             <!-- Display: what the interface looks like and what it writes in.
                  Neither touches the data nor the journeys (SPEC §14). It comes
                  before the journey section because what one settles on arriving

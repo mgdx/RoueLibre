@@ -40,6 +40,7 @@ import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneyResultFragment
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.map.MapFragment
+import io.github.mgdx.rouelibre.ui.stations.BikesPastCapacityDialogFragment
 import io.github.mgdx.rouelibre.ui.stations.StationListFragment
 import io.github.mgdx.rouelibre.ui.storage.StorageFragment
 import io.github.mgdx.rouelibre.ui.welcome.WelcomeFragment
@@ -48,6 +49,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -218,6 +220,7 @@ class MainActivity : AppCompatActivity() {
         binding = created
         setContentView(created.root)
         followUnits()
+        tellOfBikesPastCapacity()
         listenForTheCityAnswer()
         listenForTheAddressChosen()
 
@@ -302,6 +305,37 @@ class MainActivity : AppCompatActivity() {
      * place received from another application opens its journey over it too
      * (SPEC §7.8): an explicit intention beats a preference.
      */
+    /**
+     * Tells the rider, once per network, that its full stations are read as
+     * taking bikes back (SPEC §4.1, fourth case) — see
+     * [BikesPastCapacityDialogFragment].
+     *
+     * Here rather than on a screen: the reading is found wherever the stations
+     * are first read — the map, the list, a journey — and the window belongs
+     * over whichever it is. The city is read when the verdict turns true, and
+     * not followed alongside it: the city changes a moment before the
+     * stations are forgotten, and a verdict still describing the city left
+     * must not be announced under the name of the one arrived in.
+     */
+    private fun tellOfBikesPastCapacity() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                container.stationRepository.bikesPastCapacityDetected
+                    .filter { it }
+                    .collect {
+                        val cityId = container.preferences.activeCityId() ?: return@collect
+                        if (container.preferences.bikesPastCapacityExplained(cityId)) return@collect
+                        val name = container.activeCity()?.network?.displayName ?: return@collect
+                        BikesPastCapacityDialogFragment.explain(
+                            supportFragmentManager,
+                            cityId,
+                            name,
+                        )
+                    }
+            }
+        }
+    }
+
     private fun openingFragment(opening: OpeningScreen): Fragment = when (opening) {
         OpeningScreen.Map -> MapFragment()
         OpeningScreen.StationList -> StationListFragment()

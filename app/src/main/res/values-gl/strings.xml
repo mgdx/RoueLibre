@@ -810,6 +810,8 @@
     <!-- Under the switch, saying what "nada" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">«Nada» lese segundo o que conta o mapa: ningunha bici cando conta bicis, ningún espazo libre cando conta espazos libres.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">«Nada» quere dicir ningunha bici: nesta rede o mapa só conta bicis.</string>
+    <string name="settings_bikes_past_capacity">As estacións cheas admiten bicis</string>
+    <string name="settings_bikes_past_capacity_hint">Detectado polas bicis que esta rede deixa ao lado das súas estacións cheas. Desactivado, unha estación chea volve contar como chea.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">As estacións das que a rede non di nada seguen no mapa: unha conta que ninguén puido ler non é unha conta de cero.</string>
@@ -836,6 +838,11 @@
     <string name="street_bike_intro_title">Bicis fóra de estación</string>
     <string name="street_bike_intro_body">A rede sinala estas bicis lonxe das súas estacións. Algunhas deixounas alí un usuario; outras agardan no depósito do operador.\n\nRoue Libre non sabe se podes coller unha onde está: dino as normas da rede, e algunhas redes cobran unha penalización por unha bici devolta fóra de estación.\n\nA ruta proposta desde unha bici sempre remata nunha estación.</string>
     <string name="street_bike_intro_dismiss">Entendido</string>
+
+    <string name="bikes_past_capacity_title">%1$s admite bicis nas estacións cheas</string>
+    <string name="bikes_past_capacity_body">En moitas estacións desta rede hai máis bicis ca ancoraxes: os usuarios deixan a súa ao lado dunha estación chea, e a rede recóllea.\n\nPor iso Roue Libre conta unha estación chea como unha onde aínda podes devolver a bici, e xa non mostra espazos libres para esta rede.\n\nSe unha estación chea rexeita a túa bici, desactiva esta opción. Podes cambialo en calquera momento na configuración.</string>
+    <string name="bikes_past_capacity_keep">Manter</string>
+    <string name="bikes_past_capacity_turn_off">Desactivar</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

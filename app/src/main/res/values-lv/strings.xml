@@ -737,6 +737,8 @@
     <!-- Under the switch, saying what „nothing“ is read against. -->
     <string name="settings_map_filters_hide_empty_hint">To, kas skaitās „nekas“, nosaka tas, ko karte skaita: neviena velosipēda, kamēr tā skaita velosipēdus, un nevienas brīvas vietas, kamēr tā skaita brīvās vietas.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">„Nekas“ nozīmē neviena velosipēda: šajā tīklā karte skaita tikai velosipēdus.</string>
+    <string name="settings_bikes_past_capacity">Pilnas stacijas pieņem velosipēdus</string>
+    <string name="settings_bikes_past_capacity_hint">Noteikts pēc velosipēdiem, ko šis tīkls atstāj blakus savām pilnajām stacijām. Kad izslēgts, pilna stacija atkal skaitās pilna.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stacijas, par kurām tīkls neko nesaka, paliek kartē: skaits, ko neviens nevarēja nolasīt, nav nulle.</string>
@@ -763,6 +765,11 @@
     <string name="street_bike_intro_title">Velosipēdi ārpus stacijām</string>
     <string name="street_bike_intro_body">Tīkls ziņo par šiem velosipēdiem tālu no savām stacijām. Dažus tur atstājis lietotājs, citi gaida operatora noliktavā.\n\nRoue Libre nezina, vai drīkstat paņemt velosipēdu turpat, kur tas stāv: to nosaka tīkla noteikumi, un daži tīkli piemēro soda maksu par velosipēdu, kas atdots ārpus stacijas.\n\nNo velosipēda piedāvātais maršruts vienmēr beidzas stacijā.</string>
     <string name="street_bike_intro_dismiss">Sapratu</string>
+
+    <string name="bikes_past_capacity_title">%1$s pieņem velosipēdus arī pilnās stacijās</string>
+    <string name="bikes_past_capacity_body">Daudzās šī tīkla stacijās stāv vairāk velosipēdu, nekā ir statīvu: lietotāji atstāj savu velosipēdu blakus pilnai stacijai, un tīkls to pieņem.\n\nTāpēc Roue Libre pilnu staciju uzskata par tādu, kur joprojām varat atdot velosipēdu, un šim tīklam vairs nerāda brīvās vietas.\n\nJa pilna stacija jūsu velosipēdu nepieņem, izslēdziet šo. To var jebkurā laikā mainīt iestatījumos.</string>
+    <string name="bikes_past_capacity_keep">Paturēt</string>
+    <string name="bikes_past_capacity_turn_off">Izslēgt</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

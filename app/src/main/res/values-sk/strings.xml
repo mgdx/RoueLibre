@@ -904,6 +904,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Nič“ sa riadi tým, čo mapa počíta: žiadny bicykel, keď počíta bicykle, žiadne voľné miesto, keď počíta voľné miesta.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">„Nič“ znamená žiadny bicykel: v tejto sieti mapa počíta iba bicykle.</string>
+    <string name="settings_bikes_past_capacity">Plné stanice prijímajú bicykle</string>
+    <string name="settings_bikes_past_capacity_hint">Zistené podľa bicyklov, ktoré táto sieť necháva vedľa svojich plných staníc. Po vypnutí sa plná stanica opäť počíta ako plná.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stanice, o ktorých sieť nič nehovorí, zostávajú na mape: počet, ktorý nikto nemohol prečítať, nie je počet nula.</string>
@@ -930,6 +932,11 @@
     <string name="street_bike_intro_title">Bicykle mimo staníc</string>
     <string name="street_bike_intro_body">Sieť hlási tieto bicykle mimo svojich staníc. Niektoré tam nechal používateľ, iné čakajú v depe prevádzkovateľa.\n\nRoue Libre nevie, či si smiete bicykel vziať tam, kde stojí: hovoria to pravidlá siete a niektoré siete účtujú pokutu za bicykel vrátený mimo stanice.\n\nTrasa navrhnutá od bicykla vždy končí na stanici.</string>
     <string name="street_bike_intro_dismiss">Rozumiem</string>
+
+    <string name="bikes_past_capacity_title">%1$s prijíma bicykle aj na plných staniciach</string>
+    <string name="bikes_past_capacity_body">Na mnohých staniciach tejto siete stojí viac bicyklov, než je stojanov: používatelia nechávajú svoj bicykel vedľa plnej stanice a sieť ho prijme.\n\nRoue Libre preto počíta plnú stanicu ako stanicu, kde ešte môžete bicykel vrátiť, a pre túto sieť už nezobrazuje voľné miesta.\n\nAk plná stanica váš bicykel odmietne, túto možnosť vypnite. Môžete ju kedykoľvek zmeniť v nastaveniach.</string>
+    <string name="bikes_past_capacity_keep">Ponechať</string>
+    <string name="bikes_past_capacity_turn_off">Vypnúť</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

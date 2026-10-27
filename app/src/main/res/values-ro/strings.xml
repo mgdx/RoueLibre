@@ -774,6 +774,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Nimic” urmează ce numără harta: nicio bicicletă cât timp numără biciclete, niciun loc liber cât timp numără locuri libere.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">„Nimic” înseamnă nicio bicicletă: în această rețea harta numără doar bicicletele.</string>
+    <string name="settings_bikes_past_capacity">Stațiile pline primesc biciclete</string>
+    <string name="settings_bikes_past_capacity_hint">Dedus din bicicletele pe care această rețea le lasă lângă stațiile sale pline. Dezactivat, o stație plină contează din nou ca plină.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stațiile despre care rețeaua nu spune nimic rămân pe hartă: un număr pe care nimeni nu l-a putut citi nu este un număr egal cu zero.</string>
@@ -800,6 +802,11 @@
     <string name="street_bike_intro_title">Biciclete în afara stațiilor</string>
     <string name="street_bike_intro_body">Rețeaua semnalează aceste biciclete departe de stațiile sale. Unele au fost lăsate acolo de un utilizator, altele așteaptă în depoul operatorului.\n\nRoue Libre nu știe dacă ai voie să iei una de acolo unde se află: regulile rețelei o spun, iar unele rețele percep o penalizare pentru o bicicletă predată în afara unei stații.\n\nTraseul propus de la o bicicletă se termină întotdeauna la o stație.</string>
     <string name="street_bike_intro_dismiss">Am înțeles</string>
+
+    <string name="bikes_past_capacity_title">%1$s primește biciclete și la stațiile pline</string>
+    <string name="bikes_past_capacity_body">La multe stații ale acestei rețele stau mai multe biciclete decât docuri: utilizatorii o lasă pe a lor lângă o stație plină, iar rețeaua o preia.\n\nDe aceea, Roue Libre consideră o stație plină drept una unde încă îți poți preda bicicleta și nu mai afișează locuri libere pentru această rețea.\n\nDacă o stație plină îți refuză bicicleta, dezactivează această opțiune. O poți schimba oricând din setări.</string>
+    <string name="bikes_past_capacity_keep">Păstrează</string>
+    <string name="bikes_past_capacity_turn_off">Dezactivează</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is
