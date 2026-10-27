@@ -74,7 +74,7 @@ class WithdrawnCityTest {
         val withdrawn = CityCatalogueReader.readWithdrawn(document).map { it.id }
         val cities = (CityCatalogueReader.read(document) as Outcome.Success).value.cities
 
-        assertTrue("idecycle is not listed as withdrawn", "idecycle" in withdrawn)
+        assertTrue("donkey-prignitz is not listed as withdrawn", "donkey-prignitz" in withdrawn)
         assertEquals(emptySet<String>(), cities.map { it.id }.toSet() intersect withdrawn.toSet())
     }
 
