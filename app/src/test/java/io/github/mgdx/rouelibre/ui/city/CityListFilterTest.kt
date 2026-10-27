@@ -43,6 +43,28 @@ class CityListFilterTest {
         assertTrue(shouldReturnToTop(CityListFilter("Ber", null), CityListFilter("Berg", null)))
     }
 
+    @Test
+    fun `the first rows shown keep the list where it is, whatever city is in service`() {
+        assertFalse(activeCityMoved(null, ActiveCity("lille")))
+        assertFalse(activeCityMoved(null, ActiveCity(null)))
+    }
+
+    @Test
+    fun `rows rebuilt for the same city in service keep the list where it is`() {
+        assertFalse(activeCityMoved(ActiveCity("lille"), ActiveCity("lille")))
+        assertFalse(activeCityMoved(ActiveCity(null), ActiveCity(null)))
+    }
+
+    @Test
+    fun `choosing another city goes back to the head`() {
+        assertTrue(activeCityMoved(ActiveCity("lille"), ActiveCity("berlin")))
+    }
+
+    @Test
+    fun `choosing a first city goes back to the head`() {
+        assertTrue(activeCityMoved(ActiveCity(null), ActiveCity("berlin")))
+    }
+
     private val cities = listOf(city("lille", "Lille", "FR"), city("berlin", "Berlin", "DE"))
 
     @Test

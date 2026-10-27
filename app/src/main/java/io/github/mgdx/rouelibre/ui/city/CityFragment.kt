@@ -89,6 +89,17 @@ class CityFragment : Fragment() {
      */
     private var returnToTopPending = false
 
+    /**
+     * The city in service as the rows on show were drawn, `null` before any.
+     *
+     * Unlike the filter shown, kept when the view goes: the screen comes back
+     * from the storage screen with its adapter still holding the rows drawn
+     * before the choice, and only this tells that another city now heads them.
+     * A rotation builds a new screen, which starts without it and so keeps the
+     * place restored.
+     */
+    private var shownActiveCity: ActiveCity? = null
+
     /** Counts the submissions to the three lists, so that only the last one's landing counts. */
     private var submission = 0
 
@@ -284,6 +295,9 @@ class CityFragment : Fragment() {
             // Listed only for what there is to delete, or to say why the city
             // still chosen is no longer served.
             .filter { it.isActive || it.installedBytes > 0 }
+        val active = ActiveCity(activeId)
+        if (activeCityMoved(shownActiveCity, active)) returnToTopPending = true
+        shownActiveCity = active
         val offered = countriesOffered(loaded.cities, requireContext().textLocale())
         if (offered != offeredCountries) {
             offeredCountries = offered
