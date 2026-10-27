@@ -784,7 +784,13 @@
     <string name="settings_map_filters_hide_empty_hint">يتبع «لا شيء» ما تحتسبه الخريطة: لا دراجة حين تحتسب الدراجات، ولا موقف شاغر حين تحتسب المواقف الشاغرة.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">«لا شيء» يعني لا دراجة: لا تحتسب الخريطة في هذه الشبكة إلا الدراجات.</string>
     <string name="settings_bikes_past_capacity">المحطات الممتلئة تستقبل الدراجات</string>
-    <string name="settings_bikes_past_capacity_hint">استُنتج ذلك من الدراجات التي تتركها هذه الشبكة بجوار محطاتها الممتلئة. عند الإيقاف، تُعدّ المحطة الممتلئة ممتلئةً من جديد.</string>
+    <string name="settings_bikes_past_capacity_automatic">تلقائي</string>
+    <string name="settings_bikes_past_capacity_always">دائمًا</string>
+    <string name="settings_bikes_past_capacity_never">أبدًا</string>
+    <string name="settings_bikes_past_capacity_hint_detected">تلقائي: تترك هذه الشبكة دراجات بجوار محطاتها الممتلئة، لذا تُعَدّ المحطة الممتلئة محطةً يمكنك أن تعيد فيها دراجتك.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">تلقائي: لا شيء في بيانات هذه الشبكة يُظهر دراجات متروكة بجوار محطات ممتلئة، لذا تُعَدّ المحطة الممتلئة ممتلئة.</string>
+    <string name="settings_bikes_past_capacity_hint_always">تُعَدّ المحطة الممتلئة محطةً يمكنك أن تعيد فيها دراجتك. إذا كانت هذه الشبكة لا تسمح بذلك، فقد تنتهي الرحلة عند محطة ترفضها.</string>
+    <string name="settings_bikes_past_capacity_hint_never">تُعَدّ المحطة الممتلئة ممتلئة، أيًّا كان ما تُظهره بيانات هذه الشبكة.</string>
     <!-- Under both switches. -->
     <string name="settings_map_filters_keeps_unknown">تبقى على الخريطة المحطات التي لا تقول عنها شبكة الدراجات شيئًا: عدد لا يستطيع أحد قراءته ليس عددًا معدومًا.</string>
 

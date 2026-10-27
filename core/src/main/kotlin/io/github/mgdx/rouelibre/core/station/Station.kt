@@ -288,10 +288,10 @@ public enum class ServiceState {
  * @param takesBikesPastCapacitySettled the feed was already found taking
  *   bikes past its capacities this session ([settleTakingBikesPastCapacity]),
  *   read the same way.
- * @param takesBikesPastCapacityAllowed the rider has not turned that reading
- *   off for this network (SPEC §4.1, fourth case). `false` reads every state
- *   as if the feed were never found taking bikes past its capacities, whatever
- *   was settled: the rider knows the network's rule better than its feed.
+ * @param bikesPastCapacityAnswer what the rider chose for this network
+ *   (SPEC §4.1, fourth case): left to the feed, or settled by hand either
+ *   way, whatever the feed says — the rider knows the network's rule better
+ *   than its feed does.
  * @return one entry per known station, in the order received.
  */
 public fun joinStationsWithAvailability(
@@ -299,7 +299,7 @@ public fun joinStationsWithAvailability(
     availabilities: List<StationAvailability>,
     writesDocksFromCapacitySettled: Boolean = false,
     takesBikesPastCapacitySettled: Boolean = false,
-    takesBikesPastCapacityAllowed: Boolean = true,
+    bikesPastCapacityAnswer: BikesPastCapacityAnswer = BikesPastCapacityAnswer.Automatic,
 ): List<StationWithAvailability> {
     val byStationId = availabilities.associateBy { it.stationId }
     val countedWithoutCapacity = stations
@@ -309,8 +309,12 @@ public fun joinStationsWithAvailability(
         countedWithoutCapacity.size
     val writesDocksFromCapacity = writesDocksFromCapacitySettled ||
         writesDocksFromCapacity(stations, byStationId)
-    val takesBikesPastCapacity = takesBikesPastCapacityAllowed &&
-        (takesBikesPastCapacitySettled || takesBikesPastCapacity(stations, byStationId))
+    val takesBikesPastCapacity = when (bikesPastCapacityAnswer) {
+        BikesPastCapacityAnswer.Always -> true
+        BikesPastCapacityAnswer.Never -> false
+        BikesPastCapacityAnswer.Automatic ->
+            takesBikesPastCapacitySettled || takesBikesPastCapacity(stations, byStationId)
+    }
     return stations.map { station ->
         val availability = byStationId[station.id]
         StationWithAvailability(
@@ -367,6 +371,26 @@ public fun settleWritingDocksFromCapacity(
     stations.isEmpty() -> false
     settled -> true
     else -> writesDocksFromCapacity(stations, availabilities.associateBy { it.stationId })
+}
+
+/**
+ * What the rider chose about a network's full stations taking bikes back
+ * (SPEC §4.1, fourth case), one answer per network.
+ *
+ * The reading of the feed is an inference, and it misses as well as it may
+ * err: a network of zones under the line — Prague's nextbike at 2.1 % on
+ * 23 October 2026 — takes bikes at its full stations all the same, and only
+ * its riders know it. So the answer goes both ways.
+ */
+public enum class BikesPastCapacityAnswer {
+    /** The feed decides ([StationAvailability.isInFeedTakingBikesPastCapacity]). */
+    Automatic,
+
+    /** Every full station takes a bike back, whatever the feed shows. */
+    Always,
+
+    /** A full station is full, whatever the feed shows. */
+    Never,
 }
 
 /**

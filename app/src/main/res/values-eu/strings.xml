@@ -852,7 +852,13 @@
     <string name="settings_map_filters_hide_empty_hint">«Ezer ez» mapak zenbatzen duenaren araberakoa da: bizikletarik ez bizikletak zenbatzen dituenean, leku librerik ez leku libreak zenbatzen dituenean.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">«Ezer ez» bizikletarik ez da: sare honetan mapak bizikletak baino ez ditu zenbatzen.</string>
     <string name="settings_bikes_past_capacity">Geltoki beteek bizikletak onartzen dituzte</string>
-    <string name="settings_bikes_past_capacity_hint">Sare honek bere geltoki beteen ondoan uzten dituen bizikletetatik ondorioztatua. Desaktibatuta, geltoki betea betetzat hartzen da berriro.</string>
+    <string name="settings_bikes_past_capacity_automatic">Automatikoa</string>
+    <string name="settings_bikes_past_capacity_always">Beti</string>
+    <string name="settings_bikes_past_capacity_never">Inoiz ez</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Automatikoa: sare honek bizikletak uzten ditu bere geltoki beteen ondoan; beraz, geltoki betea bizikleta itzul dezakezun geltokitzat hartzen da.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Automatikoa: sare honen datuetan ez da ageri geltoki beteen ondoan utzitako bizikletarik; beraz, geltoki betea betetzat hartzen da.</string>
+    <string name="settings_bikes_past_capacity_hint_always">Geltoki betea bizikleta itzul dezakezun geltokitzat hartzen da. Sare honek ez badu onartzen, ibilbide bat onartzen ez duen geltoki batean amai daiteke.</string>
+    <string name="settings_bikes_past_capacity_hint_never">Geltoki betea betetzat hartzen da, sare honen datuek edozer erakutsita ere.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Sareak ezer esaten ez duen geltokiak mapan geratzen dira: inork irakurri ezin duen kontaketa ez da hutsaren kontaketa.</string>

@@ -13,6 +13,7 @@ import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.WalkingPace
 import io.github.mgdx.rouelibre.core.measure.UnitChoice
+import io.github.mgdx.rouelibre.core.station.BikesPastCapacityAnswer
 import io.github.mgdx.rouelibre.core.station.VehicleKind
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import kotlinx.coroutines.flow.Flow
@@ -418,27 +419,40 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
-     * The networks where the rider turned off reading full stations as taking
-     * bikes back (SPEC §4.1, fourth case), by network identifier.
+     * What the rider chose, network by network, about full stations taking
+     * bikes back (SPEC §4.1, fourth case); a network absent from the map is
+     * left to the feed, [BikesPastCapacityAnswer.Automatic].
      *
-     * Empty by default: the reading is the application's best understanding
-     * of the feed, and the rider is told of it once ([bikesPastCapacityExplained])
-     * with the means to refuse it. A flow, so the stations are read again the
-     * moment the answer changes.
+     * Automatic by default: the reading is the application's best
+     * understanding of the feed, the rider is told of it once
+     * ([bikesPastCapacityExplained]), and the settings settle it by hand
+     * either way — "never" where the feed misleads, "always" where it misses
+     * a network whose riders know better. A flow, so the stations are read
+     * again the moment the answer changes.
      *
      * **A declaration, not an observation** (SPEC §2, C3): a network lands
-     * here only by a press on "Turn off", and leaves it by the switch in the
-     * settings or with the city's data ([forgetBikesPastCapacity]).
+     * here only by the rider's press, and leaves it by another, or with the
+     * city's data ([forgetBikesPastCapacity]). Kept as two sets, the networks
+     * turned off and those turned on: the first was written alone by the
+     * version before, and is read the same way.
      */
-    val bikesPastCapacityTurnedOff: Flow<Set<String>> =
-        dataStore.data.map { it.readSet(BIKES_PAST_CAPACITY_TURNED_OFF) }
+    val bikesPastCapacityAnswers: Flow<Map<String, BikesPastCapacityAnswer>> =
+        dataStore.data.map { preferences ->
+            preferences.readSet(BIKES_PAST_CAPACITY_TURNED_ON)
+                .associateWith { BikesPastCapacityAnswer.Always } +
+                preferences.readSet(BIKES_PAST_CAPACITY_TURNED_OFF)
+                    .associateWith { BikesPastCapacityAnswer.Never }
+        }
 
-    /** Turns the reading on or off for the network [cityId]. */
-    suspend fun setBikesPastCapacityKept(cityId: String, kept: Boolean) {
+    /** Records the rider's [answer] for the network [cityId]. */
+    suspend fun setBikesPastCapacityAnswer(cityId: String, answer: BikesPastCapacityAnswer) {
         dataStore.edit { preferences ->
-            val current = preferences.readSet(BIKES_PAST_CAPACITY_TURNED_OFF)
+            val turnedOn = preferences.readSet(BIKES_PAST_CAPACITY_TURNED_ON) - cityId
+            val turnedOff = preferences.readSet(BIKES_PAST_CAPACITY_TURNED_OFF) - cityId
+            preferences[BIKES_PAST_CAPACITY_TURNED_ON] =
+                if (answer == BikesPastCapacityAnswer.Always) turnedOn + cityId else turnedOn
             preferences[BIKES_PAST_CAPACITY_TURNED_OFF] =
-                if (kept) current - cityId else current + cityId
+                if (answer == BikesPastCapacityAnswer.Never) turnedOff + cityId else turnedOff
         }
     }
 
@@ -472,6 +486,8 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
                 preferences.readSet(BIKES_PAST_CAPACITY_EXPLAINED) - cityId
             preferences[BIKES_PAST_CAPACITY_TURNED_OFF] =
                 preferences.readSet(BIKES_PAST_CAPACITY_TURNED_OFF) - cityId
+            preferences[BIKES_PAST_CAPACITY_TURNED_ON] =
+                preferences.readSet(BIKES_PAST_CAPACITY_TURNED_ON) - cityId
         }
     }
 
@@ -907,6 +923,8 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
         val STREET_BIKES_EXPLAINED = booleanPreferencesKey("street_bikes_explained")
         val BIKES_PAST_CAPACITY_TURNED_OFF =
             stringSetPreferencesKey("bikes_past_capacity_turned_off")
+        val BIKES_PAST_CAPACITY_TURNED_ON =
+            stringSetPreferencesKey("bikes_past_capacity_turned_on")
         val BIKES_PAST_CAPACITY_EXPLAINED =
             stringSetPreferencesKey("bikes_past_capacity_explained")
         val UNITS = stringPreferencesKey("units")

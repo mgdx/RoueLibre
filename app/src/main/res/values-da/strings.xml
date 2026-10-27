@@ -697,7 +697,13 @@
     <string name="settings_map_filters_hide_empty_hint">»Intet« følger det, kortet tæller: ingen cykel, mens det tæller cykler, ingen ledig plads, mens det tæller ledige pladser.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">»Intet« betyder ingen cykel: på dette netværk tæller kortet kun cykler.</string>
     <string name="settings_bikes_past_capacity">Fyldte stationer tager imod cykler</string>
-    <string name="settings_bikes_past_capacity_hint">Set ud fra de cykler, som dette netværk efterlader ved siden af sine fyldte stationer. Slået fra tæller en fyldt station igen som fuld.</string>
+    <string name="settings_bikes_past_capacity_automatic">Automatisk</string>
+    <string name="settings_bikes_past_capacity_always">Altid</string>
+    <string name="settings_bikes_past_capacity_never">Aldrig</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Automatisk: dette netværk lader cykler stå ved siden af sine fyldte stationer, så en fyldt station regnes som en, hvor du kan aflevere din cykel.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Automatisk: intet i netværkets data viser cykler stillet ved siden af fyldte stationer, så en fyldt station regnes som fyldt.</string>
+    <string name="settings_bikes_past_capacity_hint_always">En fyldt station regnes som en, hvor du kan aflevere din cykel. Hvis netværket ikke tillader det, kan en tur ende ved en station, der afviser den.</string>
+    <string name="settings_bikes_past_capacity_hint_never">En fyldt station regnes som fyldt, uanset hvad netværkets data viser.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stationer, som netværket intet siger om, bliver på kortet: en optælling, ingen kunne læse, er ikke en optælling af ingenting.</string>
 

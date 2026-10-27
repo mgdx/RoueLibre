@@ -728,7 +728,13 @@
     <string name="settings_map_filters_hide_empty_hint">«Uten noe å tilby» følger det kartet teller: ingen sykkel mens det teller sykler, ingen ledig plass mens det teller ledige plasser.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">«Uten noe å tilby» betyr uten sykkel: på dette nettverket teller kartet bare sykler.</string>
     <string name="settings_bikes_past_capacity">Fulle stasjoner tar imot sykler</string>
-    <string name="settings_bikes_past_capacity_hint">Sett ut fra syklene dette nettverket etterlater ved siden av de fulle stasjonene sine. Slått av teller en full stasjon som full igjen.</string>
+    <string name="settings_bikes_past_capacity_automatic">Automatisk</string>
+    <string name="settings_bikes_past_capacity_always">Alltid</string>
+    <string name="settings_bikes_past_capacity_never">Aldri</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Automatisk: dette nettverket lar sykler stå ved siden av sine fulle stasjoner, så en full stasjon regnes som en der du kan levere sykkelen.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Automatisk: ingenting i nettverkets data viser sykler satt ved siden av fulle stasjoner, så en full stasjon regnes som full.</string>
+    <string name="settings_bikes_past_capacity_hint_always">En full stasjon regnes som en der du kan levere sykkelen. Hvis nettverket ikke tillater det, kan en tur ende ved en stasjon som avviser den.</string>
+    <string name="settings_bikes_past_capacity_hint_never">En full stasjon regnes som full, uansett hva nettverkets data viser.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stasjoner nettverket ikke sier noe om, blir stående på kartet: en telling ingen kunne lese, er ikke en telling av ingenting.</string>
 

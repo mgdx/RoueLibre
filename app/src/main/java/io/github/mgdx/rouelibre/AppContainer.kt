@@ -15,6 +15,7 @@ import io.github.mgdx.rouelibre.core.journey.Router
 import io.github.mgdx.rouelibre.core.routing.DrivingSide
 import io.github.mgdx.rouelibre.core.routing.RouteResult
 import io.github.mgdx.rouelibre.core.routing.TravelMode
+import io.github.mgdx.rouelibre.core.station.BikesPastCapacityAnswer
 import io.github.mgdx.rouelibre.data.AppPreferences
 import io.github.mgdx.rouelibre.data.CityFleet
 import io.github.mgdx.rouelibre.data.FleetRepository
@@ -456,11 +457,11 @@ class AppContainer(private val context: Context) {
             providerIdsProvider = { activeCity()?.gbfs?.providerIds.orEmpty() },
             recordFleet = { fleetRepository.record(it) },
             // The rider's answer for the city in service (SPEC §4.1, fourth
-            // case), followed so that turning it off reads the stations again.
-            bikesPastCapacityAllowed = combine(
+            // case), followed so that changing it reads the stations again.
+            bikesPastCapacityAnswer = combine(
                 preferences.activeCityIdFlow,
-                preferences.bikesPastCapacityTurnedOff,
-            ) { cityId, turnedOff -> cityId !in turnedOff },
+                preferences.bikesPastCapacityAnswers,
+            ) { cityId, answers -> answers[cityId] ?: BikesPastCapacityAnswer.Automatic },
         )
     }
 

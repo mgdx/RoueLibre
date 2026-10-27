@@ -905,7 +905,13 @@
     <string name="settings_map_filters_hide_empty_hint">„Nič“ sa riadi tým, čo mapa počíta: žiadny bicykel, keď počíta bicykle, žiadne voľné miesto, keď počíta voľné miesta.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">„Nič“ znamená žiadny bicykel: v tejto sieti mapa počíta iba bicykle.</string>
     <string name="settings_bikes_past_capacity">Plné stanice prijímajú bicykle</string>
-    <string name="settings_bikes_past_capacity_hint">Zistené podľa bicyklov, ktoré táto sieť necháva vedľa svojich plných staníc. Po vypnutí sa plná stanica opäť počíta ako plná.</string>
+    <string name="settings_bikes_past_capacity_automatic">Automaticky</string>
+    <string name="settings_bikes_past_capacity_always">Vždy</string>
+    <string name="settings_bikes_past_capacity_never">Nikdy</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Automaticky: táto sieť necháva bicykle vedľa svojich plných staníc, takže plná stanica sa počíta ako stanica, kde môžete bicykel vrátiť.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Automaticky: nič v údajoch tejto siete neukazuje bicykle ponechané vedľa plných staníc, takže plná stanica sa počíta ako plná.</string>
+    <string name="settings_bikes_past_capacity_hint_always">Plná stanica sa počíta ako stanica, kde môžete bicykel vrátiť. Ak to táto sieť nedovoľuje, cesta môže skončiť na stanici, ktorá bicykel odmietne.</string>
+    <string name="settings_bikes_past_capacity_hint_never">Plná stanica sa počíta ako plná bez ohľadu na to, čo ukazujú údaje tejto siete.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stanice, o ktorých sieť nič nehovorí, zostávajú na mape: počet, ktorý nikto nemohol prečítať, nie je počet nula.</string>

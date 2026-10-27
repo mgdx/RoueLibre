@@ -811,7 +811,13 @@
     <string name="settings_map_filters_hide_empty_hint">„Nichts“ richtet sich danach, was die Karte zählt: kein Rad, solange sie Räder zählt, kein freier Platz, solange sie freie Plätze zählt.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">„Nichts“ heißt kein Rad: In diesem Netz zählt die Karte nur Räder.</string>
     <string name="settings_bikes_past_capacity">Volle Stationen nehmen Räder zurück</string>
-    <string name="settings_bikes_past_capacity_hint">Erkannt an den Rädern, die dieses Netz neben seinen vollen Stationen stehen lässt. Ausgeschaltet gilt eine volle Station wieder als voll.</string>
+    <string name="settings_bikes_past_capacity_automatic">Automatisch</string>
+    <string name="settings_bikes_past_capacity_always">Immer</string>
+    <string name="settings_bikes_past_capacity_never">Nie</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Automatisch: Dieses Netz lässt Räder neben seinen vollen Stationen stehen, daher zählt eine volle Station als eine, an der du dein Rad zurückgeben kannst.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Automatisch: Nichts in den Daten dieses Netzes zeigt Räder neben vollen Stationen, daher zählt eine volle Station als voll.</string>
+    <string name="settings_bikes_past_capacity_hint_always">Eine volle Station zählt als eine, an der du dein Rad zurückgeben kannst. Erlaubt dieses Netz das nicht, kann eine Route an einer Station enden, die es nicht annimmt.</string>
+    <string name="settings_bikes_past_capacity_hint_never">Eine volle Station zählt als voll, egal was die Daten dieses Netzes zeigen.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stationen, über die das Netz nichts sagt, bleiben auf der Karte: Ein Zählstand, den niemand lesen konnte, ist kein Zählstand von null.</string>

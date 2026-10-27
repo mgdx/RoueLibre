@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
+import io.github.mgdx.rouelibre.core.station.BikesPastCapacityAnswer
 import kotlinx.coroutines.launch
 
 /**
@@ -22,7 +23,7 @@ import kotlinx.coroutines.launch
  * inference, and the rider may know the network's rule better: so the window
  * says what changed and lets them refuse it for this network. **Keeping is
  * the default**, the reading being already in force when the window opens;
- * the switch under the city in the settings changes either answer later.
+ * the choice under the city in the settings changes either answer later.
  *
  * A [DialogFragment] for the reason
  * [io.github.mgdx.rouelibre.ui.ConfirmationDialogFragment] gives: put back
@@ -64,7 +65,7 @@ class BikesPastCapacityDialogFragment : DialogFragment() {
         val preferences = application.container.preferences
         requireActivity().lifecycleScope.launch {
             preferences.setBikesPastCapacityExplained(cityId)
-            if (!kept) preferences.setBikesPastCapacityKept(cityId, kept = false)
+            if (!kept) preferences.setBikesPastCapacityAnswer(cityId, BikesPastCapacityAnswer.Never)
         }
     }
 

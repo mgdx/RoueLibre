@@ -819,7 +819,13 @@
     <string name="settings_map_filters_hide_empty_hint">«Res» es llegeix segons el que compta el mapa: cap bici quan compta bicis, cap espai lliure quan compta espais lliures.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">«Res» vol dir cap bici: en aquesta xarxa el mapa només compta bicis.</string>
     <string name="settings_bikes_past_capacity">Les estacions plenes admeten bicis</string>
-    <string name="settings_bikes_past_capacity_hint">Detectat per les bicis que aquesta xarxa deixa al costat de les seves estacions plenes. Desactivat, una estació plena torna a comptar com a plena.</string>
+    <string name="settings_bikes_past_capacity_automatic">Automàtic</string>
+    <string name="settings_bikes_past_capacity_always">Sempre</string>
+    <string name="settings_bikes_past_capacity_never">Mai</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Automàtic: aquesta xarxa deixa bicis al costat de les seves estacions plenes, així que una estació plena compta com una on pots retornar la bici.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Automàtic: res a les dades d’aquesta xarxa no mostra bicis deixades al costat d’estacions plenes, així que una estació plena compta com a plena.</string>
+    <string name="settings_bikes_past_capacity_hint_always">Una estació plena compta com una on pots retornar la bici. Si aquesta xarxa no ho permet, un trajecte pot acabar en una estació que no l’accepta.</string>
+    <string name="settings_bikes_past_capacity_hint_never">Una estació plena compta com a plena, mostrin el que mostrin les dades d’aquesta xarxa.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Les estacions de què la xarxa no diu res es queden al mapa: un recompte que ningú no ha pogut llegir no és un recompte de zero.</string>

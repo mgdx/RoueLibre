@@ -551,12 +551,29 @@ class UnlimitedDocksTest {
             evening.map { it.first },
             evening.map { it.second },
             takesBikesPastCapacitySettled = true,
-            takesBikesPastCapacityAllowed = false,
+            bikesPastCapacityAnswer = BikesPastCapacityAnswer.Never,
         ).associate { it.station.id to checkNotNull(it.availability) }
 
         assertFalse(states.values.any { it.isInFeedTakingBikesPastCapacity })
         assertFalse(states.getValue("full-0").canAcceptBike)
         assertTrue(states.getValue("counted-0").canAcceptBike)
+    }
+
+    @Test
+    fun `a rider turning the reading on reads full racks as taking any bike`() {
+        // Prague's nextbike, 2.1 % on 23 October 2026: under the line, and its
+        // riders know its full stations take bikes back.
+        val prague = fullRacks("over", 1, 9) + fullRacks("full", 3, 6) + countedRacks(40)
+        fun join(answer: BikesPastCapacityAnswer) = joinStationsWithAvailability(
+            prague.map { it.first },
+            prague.map { it.second },
+            bikesPastCapacityAnswer = answer,
+        ).associate { it.station.id to checkNotNull(it.availability) }
+
+        assertFalse(join(BikesPastCapacityAnswer.Automatic).getValue("full-0").canAcceptBike)
+        val always = join(BikesPastCapacityAnswer.Always)
+        assertTrue(always.values.all { it.isInFeedTakingBikesPastCapacity })
+        assertTrue(always.getValue("full-0").acceptsAnyBike)
     }
 
     // ----------------------------------------- edge cases of the feed --

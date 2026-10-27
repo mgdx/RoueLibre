@@ -722,7 +722,13 @@
     <string name="settings_map_filters_hide_empty_hint">”Utan något att erbjuda” följer det som kartan räknar: ingen cykel medan den räknar cyklar, ingen ledig plats medan den räknar lediga platser.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">”Utan något att erbjuda” betyder utan cykel: i det här nätverket räknar kartan bara cyklar.</string>
     <string name="settings_bikes_past_capacity">Fulla stationer tar emot cyklar</string>
-    <string name="settings_bikes_past_capacity_hint">Utläst från cyklarna som det här nätverket lämnar bredvid sina fulla stationer. Avstängt räknas en full station som full igen.</string>
+    <string name="settings_bikes_past_capacity_automatic">Automatiskt</string>
+    <string name="settings_bikes_past_capacity_always">Alltid</string>
+    <string name="settings_bikes_past_capacity_never">Aldrig</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Automatiskt: det här nätverket låter cyklar stå bredvid sina fulla stationer, så en full station räknas som en där du kan lämna tillbaka cykeln.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Automatiskt: inget i nätverkets data visar cyklar som ställts bredvid fulla stationer, så en full station räknas som full.</string>
+    <string name="settings_bikes_past_capacity_hint_always">En full station räknas som en där du kan lämna tillbaka cykeln. Om nätverket inte tillåter det kan en resa sluta vid en station som inte tar emot den.</string>
+    <string name="settings_bikes_past_capacity_hint_never">En full station räknas som full, oavsett vad nätverkets data visar.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stationer som nätverket inte säger något om stannar kvar på kartan: ett antal som ingen kunnat läsa är inte ett antal på noll.</string>
 
