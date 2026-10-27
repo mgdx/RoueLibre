@@ -13,7 +13,7 @@
   <img alt="Android 8.0 and later" src="https://img.shields.io/badge/Android-8.0%2B-0F6E56?style=flat-square">
   <a href="docs/networks.md"><img alt="362 networks in 39 countries" src="https://img.shields.io/badge/networks-362%20in%2039%20countries-0F6E56?style=flat-square"></a>
   <img alt="No tracker" src="https://img.shields.io/badge/trackers-none-0F6E56?style=flat-square">
-  <img alt="APK: 8.0 MB" src="https://img.shields.io/badge/APK-8.0%20MB-0F6E56?style=flat-square">
+  <img alt="APK: 8.1 MB" src="https://img.shields.io/badge/APK-8.1%20MB-0F6E56?style=flat-square">
   <a href="https://liberapay.com/mgdx"><img alt="Donate on Liberapay" src="https://img.shields.io/badge/donate-Liberapay-0F6E56?style=flat-square&logo=liberapay&logoColor=white"></a>
 </p>
 
@@ -74,7 +74,7 @@ but the live availability of the bikes runs on your phone.
   - the route follows the cycle ways;
   - the climb is counted and named, because a bike-share bike is heavy.
 
-- 🪶 **Light and frugal.** 8.0 MB of APK, no background service, Android 8 and
+- 🪶 **Light and frugal.** 8.1 MB of APK, no background service, Android 8 and
   later.
 
 - 🔒 **Private, and local.** Everything happens on the device:
@@ -160,7 +160,7 @@ It needs `osmium-tool`, `tippecanoe` and Python 3. The whole procedure, the
 sizes obtained and the way to add a network are in
 [`docs/offline-data.md`](docs/offline-data.md).
 
-The release APK weighs **8.00 MB on arm64-v8a** and 7.46 MB on armeabi-v7a,
+The release APK weighs **8.09 MB on arm64-v8a** and 7.55 MB on armeabi-v7a,
 map, routing, address search and journeys included, against a ceiling of 12 MB
 per architecture.
 
