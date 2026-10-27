@@ -22,6 +22,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.DataError
@@ -125,8 +126,17 @@ class StationListFragment : Fragment() {
         )
     }
 
-    /** Every station of the network, under the favourites when there are any. */
-    private val adapter = StationAdapter(::openStation)
+    /**
+     * Every station of the network, under the favourites when there are any.
+     *
+     * The position the list was scrolled to is kept for these rows to arrive:
+     * after the process has died they come from disk a moment after the
+     * screen, and the first layout of a list still empty would otherwise
+     * spend the position on nothing and show the list from its top.
+     */
+    private val adapter = StationAdapter(::openStation).apply {
+        stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+    }
 
     /**
      * The favourites heading the list, in the order the user gave them
@@ -394,7 +404,12 @@ class StationListFragment : Fragment() {
         // landed out of sight, the very rows this heading exists to show
         // first. Read before anything is inserted, since an insertion above
         // is precisely what makes the list scrollable upwards.
-        val wasAtTheTop = binding?.stations?.canScrollVertically(-1) == false
+        val list = binding?.stations
+        val wasAtTheTop = list != null &&
+            listShowsItsTop(
+                laidOutRows = list.childCount,
+                canScrollUp = list.canScrollVertically(-1),
+            )
         val shown = state.favourites.isNotEmpty()
         favouritesHeading.shown = shown
         favouritesHeading.folded = favouritesFolded
