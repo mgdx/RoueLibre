@@ -28,6 +28,28 @@ data class CityListFilter(val query: String, val country: String?)
 fun shouldReturnToTop(previous: CityListFilter?, current: CityListFilter): Boolean =
     previous != null && previous != current
 
+/**
+ * The city in service as the rows on show were drawn: the row heading them.
+ *
+ * @property id the identifier of that city, `null` when none is in service.
+ */
+data class ActiveCity(val id: String?)
+
+/**
+ * Whether choosing another city must send the list back to its head.
+ *
+ * The city in service is sorted to the top, so choosing one lower down moves
+ * its row above every other. The list's differ then keeps the row that headed
+ * the list in place, and the city just chosen sat out of sight above it on the
+ * way back from the storage screen. The new head is the row to show.
+ *
+ * @param previous the city in service as the rows on show were drawn, `null`
+ *   before any: a screen rebuilt after a rotation has no earlier choice to
+ *   compare with, and must keep the place restored.
+ */
+fun activeCityMoved(previous: ActiveCity?, current: ActiveCity): Boolean =
+    previous != null && previous != current
+
 /** Why the city list came up empty, which settles what the screen says and offers. */
 enum class NoMatchReason {
     /** Nothing anywhere answers to the search: its spelling is what to look at. */
