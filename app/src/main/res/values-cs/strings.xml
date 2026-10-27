@@ -94,8 +94,6 @@
     <!-- Toggle between borrowing a bike and returning one (SPEC §7.1). -->
     <string name="mode_bikes">Kola</string>
     <string name="mode_docks">Volná místa</string>
-    <string name="mode_bikes_description">Zobrazit dostupná kola</string>
-    <string name="mode_docks_description">Zobrazit volná místa</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it.
@@ -335,7 +333,10 @@
 
     <!-- Favourites (SPEC §7.5). -->
     <string name="favourites_title">Oblíbené</string>
-    <string name="favourites_open">Zobrazit oblíbené</string>
+    <string name="stations_all_title">Všechny stanice</string>
+    <string name="stations_favourites_reorder">Změnit pořadí</string>
+    <string name="stations_favourites_fold">Skrýt oblíbené</string>
+    <string name="stations_favourites_unfold">Zobrazit oblíbené</string>
     <string name="favourites_reorder_hint">Řádek přesunete stisknutím a podržením.</string>
 
     <!-- Settings (SPEC §7.6). -->

@@ -96,8 +96,6 @@
          one in. -->
     <string name="mode_bikes">Dviračiai</string>
     <string name="mode_docks">Laisvos vietos</string>
-    <string name="mode_bikes_description">Rodyti laisvus dviračius</string>
-    <string name="mode_docks_description">Rodyti laisvas vietas</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
@@ -312,7 +310,10 @@
     <string name="incoming_unreadable_link">Ši nuoroda nenurodo, kur eiti: jos vietos nepavyko perskaityti.</string>
 
     <string name="favourites_title">Mėgstamiausios stotelės</string>
-    <string name="favourites_open">Žiūrėti mėgstamiausias stoteles</string>
+    <string name="stations_all_title">Visos stotelės</string>
+    <string name="stations_favourites_reorder">Pertvarkyti</string>
+    <string name="stations_favourites_fold">Slėpti mėgstamiausias</string>
+    <string name="stations_favourites_unfold">Rodyti mėgstamiausias</string>
     <string name="favourites_reorder_hint">Palieskite ir laikykite eilutę, kad ją perkeltumėte.</string>
 
     <string name="settings_title">Nustatymai</string>

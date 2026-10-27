@@ -70,8 +70,6 @@
 
     <string name="mode_bikes">Cyklar</string>
     <string name="mode_docks">Lediga platser</string>
-    <string name="mode_bikes_description">Visa lediga cyklar</string>
-    <string name="mode_docks_description">Visa lediga platser</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
@@ -262,7 +260,10 @@
     <string name="incoming_unreadable_link">Den här länken säger inte vart du ska: platsen i den gick inte att läsa.</string>
 
     <string name="favourites_title">Favoriter</string>
-    <string name="favourites_open">Visa favoriter</string>
+    <string name="stations_all_title">Alla stationer</string>
+    <string name="stations_favourites_reorder">Ändra ordning</string>
+    <string name="stations_favourites_fold">Dölj favoriter</string>
+    <string name="stations_favourites_unfold">Visa favoriter</string>
     <string name="favourites_reorder_hint">Tryck och håll ned en rad för att flytta den.</string>
 
     <string name="settings_title">Inställningar</string>

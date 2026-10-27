@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.Collator
@@ -39,6 +40,9 @@ import java.time.Instant
  * @property orderingOrigin where the distances are measured from when the list
  *   is ordered by proximity, `null` when it is alphabetical. The rows show it,
  *   so that an order that is not alphabetical says what it rests on.
+ * @property favourites the stations marked as favourites, in the order the
+ *   user gave them, that head the list (SPEC §7.6) — none while a search is
+ *   typed, see [favouritesHeadingTheList].
  */
 data class StationsUiState(
     val stations: List<StationWithAvailability> = emptyList(),
@@ -47,6 +51,7 @@ data class StationsUiState(
     val fetchedAt: Instant? = null,
     val hasLoadedOnce: Boolean = false,
     val orderingOrigin: Coordinates? = null,
+    val favourites: List<StationWithAvailability> = emptyList(),
 ) {
     /**
      * Why the list is empty, if it is.
@@ -181,6 +186,30 @@ private fun offerForEmptyListOfAServedCity(
 }
 
 /**
+ * The favourites that head the station list, in the order the user gave them
+ * (SPEC §7.5, §7.6).
+ *
+ * **None while a search is typed.** A search asks the list for the stations
+ * whose name matches, and the favourites among them are already in the
+ * answer: kept above it as well, they would be the same station twice on a
+ * list of three, and the one that matches no letter typed would sit at the
+ * top of what was asked for.
+ *
+ * A favourite the network no longer lists is left out rather than shown
+ * empty: the favourites' own screen is where it can still be seen and
+ * dropped, this heading is for choosing a station to walk to.
+ */
+internal fun favouritesHeadingTheList(
+    stations: List<StationWithAvailability>,
+    favouriteIds: List<String>,
+    query: String,
+): List<StationWithAvailability> {
+    if (query.isNotBlank() || favouriteIds.isEmpty()) return emptyList()
+    val known = stations.associateBy { it.station.id }
+    return favouriteIds.mapNotNull(known::get)
+}
+
+/**
  * Presents the stations and drives their refreshing.
  *
  * Shared by the map and the list: both screens show the same stations, with the
@@ -194,6 +223,8 @@ private fun offerForEmptyListOfAServedCity(
  *   would file "ÉPINETTES" after "TINQUEUX". It defaults to the process's
  *   locale, which is the language the interface speaks wherever the system
  *   carries the choice; a screen that knows better hands its own over.
+ * @param favouriteIds the favourites' identifiers in the order the user gave
+ *   them, followed for the heading of the list.
  */
 class StationsViewModel(
     private val repository: StationRepository,
@@ -201,6 +232,7 @@ class StationsViewModel(
     private val positionForOrdering: suspend () -> Coordinates? = { null },
     private val readLetterFolds: suspend () -> Map<Char, String> = { emptyMap() },
     private val nameOrder: Collator = Collator.getInstance(),
+    private val favouriteIds: Flow<List<String>> = emptyFlow(),
 ) : ViewModel() {
 
     private val mutableState = MutableStateFlow(StationsUiState())
@@ -257,6 +289,9 @@ class StationsViewModel(
      */
     private var letterFolds: Map<Char, String> = emptyMap()
 
+    /** The favourites' identifiers, in the order the user gave them. */
+    private var favouriteIdList: List<String> = emptyList()
+
     init {
         viewModelScope.launch {
             letterFolds = readLetterFolds()
@@ -273,6 +308,28 @@ class StationsViewModel(
                         stations = visibleStations(current.query),
                         fetchedAt = snapshot.fetchedAt,
                         hasLoadedOnce = true,
+                        favourites = favouritesHeadingTheList(
+                            allStations,
+                            favouriteIdList,
+                            current.query,
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            favouriteIds.collect { identifiers ->
+                favouriteIdList = identifiers
+                mutableState.update { current ->
+                    current.copy(
+                        favourites = favouritesHeadingTheList(
+                            allStations,
+                            identifiers,
+                            current.query,
+                        ),
                     )
                 }
             }
@@ -354,7 +411,11 @@ class StationsViewModel(
             if (!current.searchWouldChangeTheList(query)) {
                 current
             } else {
-                current.copy(query = query, stations = visibleStations(query))
+                current.copy(
+                    query = query,
+                    stations = visibleStations(query),
+                    favourites = favouritesHeadingTheList(allStations, favouriteIdList, query),
+                )
             }
         }
     }
@@ -391,6 +452,7 @@ class StationsViewModel(
         private val positionForOrdering: suspend () -> Coordinates? = { null },
         private val readLetterFolds: suspend () -> Map<Char, String> = { emptyMap() },
         private val nameOrder: Collator = Collator.getInstance(),
+        private val favouriteIds: Flow<List<String>> = emptyFlow(),
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -403,6 +465,7 @@ class StationsViewModel(
                 positionForOrdering,
                 readLetterFolds,
                 nameOrder,
+                favouriteIds,
             ) as T
         }
     }

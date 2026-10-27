@@ -67,8 +67,6 @@
 
     <string name="mode_bikes">Cykler</string>
     <string name="mode_docks">Ledige pladser</string>
-    <string name="mode_bikes_description">Vis ledige cykler</string>
-    <string name="mode_docks_description">Vis ledige pladser</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
@@ -255,7 +253,10 @@
     <string name="incoming_unreadable_link">Dette link siger ikke, hvor man skal hen: stedet i det kunne ikke læses.</string>
 
     <string name="favourites_title">Favoritter</string>
-    <string name="favourites_open">Se favoritter</string>
+    <string name="stations_all_title">Alle stationer</string>
+    <string name="stations_favourites_reorder">Omarranger</string>
+    <string name="stations_favourites_fold">Skjul favoritter</string>
+    <string name="stations_favourites_unfold">Vis favoritter</string>
     <string name="favourites_reorder_hint">Hold en række nede for at flytte den.</string>
 
     <string name="settings_title">Indstillinger</string>

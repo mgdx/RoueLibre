@@ -94,8 +94,6 @@
 
     <string name="mode_bikes">الدراجات</string>
     <string name="mode_docks">المواقف الشاغرة</string>
-    <string name="mode_bikes_description">إظهار الدراجات المتاحة</string>
-    <string name="mode_docks_description">إظهار المواقف الشاغرة</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). -->
@@ -338,7 +336,10 @@
     <string name="incoming_unreadable_link">لا يقول هذا الرابط إلى أين نذهب: تعذّرت قراءة المكان الوارد فيه.</string>
 
     <string name="favourites_title">المفضّلة</string>
-    <string name="favourites_open">عرض المفضّلة</string>
+    <string name="stations_all_title">كل المحطات</string>
+    <string name="stations_favourites_reorder">إعادة الترتيب</string>
+    <string name="stations_favourites_fold">إخفاء المفضّلة</string>
+    <string name="stations_favourites_unfold">إظهار المفضّلة</string>
     <string name="favourites_reorder_hint">اضغط مطوّلاً على صفّ لتحريكه.</string>
 
     <string name="settings_title">الإعدادات</string>

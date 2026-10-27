@@ -80,8 +80,6 @@
          one in. -->
     <string name="mode_bikes">Rowery</string>
     <string name="mode_docks">Wolne miejsca</string>
-    <string name="mode_bikes_description">Pokaż dostępne rowery</string>
-    <string name="mode_docks_description">Pokaż wolne miejsca</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
@@ -295,7 +293,10 @@
     <string name="incoming_unreadable_link">Ten odnośnik nie mówi, dokąd iść: nie udało się odczytać jego miejsca.</string>
 
     <string name="favourites_title">Ulubione</string>
-    <string name="favourites_open">Zobacz ulubione</string>
+    <string name="stations_all_title">Wszystkie stacje</string>
+    <string name="stations_favourites_reorder">Zmień kolejność</string>
+    <string name="stations_favourites_fold">Ukryj ulubione</string>
+    <string name="stations_favourites_unfold">Pokaż ulubione</string>
     <string name="favourites_reorder_hint">Naciśnij i przytrzymaj wiersz, aby go przenieść.</string>
 
     <string name="settings_title">Ustawienia</string>

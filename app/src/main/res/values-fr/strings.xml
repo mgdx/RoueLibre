@@ -72,8 +72,6 @@
     <!-- Toggle between borrowing a bike and returning one (SPEC §7.1). -->
     <string name="mode_bikes">Vélos</string>
     <string name="mode_docks">Places libres</string>
-    <string name="mode_bikes_description">Afficher les vélos disponibles</string>
-    <string name="mode_docks_description">Afficher les places libres</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
@@ -294,7 +292,10 @@
 
     <!-- Favourites (SPEC §7.5). -->
     <string name="favourites_title">Favoris</string>
-    <string name="favourites_open">Voir les favoris</string>
+    <string name="stations_all_title">Toutes les stations</string>
+    <string name="stations_favourites_reorder">Réorganiser</string>
+    <string name="stations_favourites_fold">Masquer les favoris</string>
+    <string name="stations_favourites_unfold">Afficher les favoris</string>
     <string name="favourites_reorder_hint">Appuie longuement sur une ligne pour la déplacer.</string>
 
     <!-- Settings (SPEC §7.6). -->

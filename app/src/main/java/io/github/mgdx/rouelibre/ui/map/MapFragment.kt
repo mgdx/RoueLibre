@@ -25,7 +25,6 @@ import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.message.MessageSubject
 import io.github.mgdx.rouelibre.core.station.StationFilter
-import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.core.station.stationsShownOnMap
 import io.github.mgdx.rouelibre.data.SavedPlaceKind
@@ -41,9 +40,12 @@ import io.github.mgdx.rouelibre.ui.journey.JourneyEndpoint
 import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
+import io.github.mgdx.rouelibre.ui.stations.SharedStationFilters
+import io.github.mgdx.rouelibre.ui.stations.StationFilterButtons
 import io.github.mgdx.rouelibre.ui.stations.StationListFragment
 import io.github.mgdx.rouelibre.ui.stations.StationsUiState
 import io.github.mgdx.rouelibre.ui.stations.StationsViewModel
+import io.github.mgdx.rouelibre.ui.stations.sharedStationFilters
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
 import io.github.mgdx.rouelibre.ui.withBikeFleet
@@ -52,10 +54,8 @@ import io.github.mgdx.rouelibre.ui.withFreeDocksShown
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.maplibre.android.MapLibre
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.maps.MapLibreMap
@@ -179,15 +179,25 @@ class MapFragment : Fragment() {
         map = { mapLibreMap },
     )
 
-    /** Bikes or free docks, and which kind of bike: the map's two filters. */
-    private val filters = MapFilterControls(
+    /**
+     * Bikes or free docks, and which kind of bike: the two filters this map
+     * shares with the station list (SPEC §7.1).
+     *
+     * A map picking a point counts every bike and asks nothing of them: it
+     * shows neither button, and markers counting one kind with nothing on the
+     * screen to say so would be bikes hidden without a word.
+     */
+    private val filters = StationFilterButtons(
         modeToggle = { binding?.modeToggle },
         bikeKindButton = { binding?.bikeKindFilter },
         controlsUp = { showsMapControls },
         lentFleet = { lentFleet },
-        rememberBikeKind = ::rememberMapBikeKind,
+        shared = { if (isPicking()) null else sharedFilters },
         onChanged = ::publishStations,
     )
+
+    /** The filters the map and the station list count the stations through. */
+    private val sharedFilters: SharedStationFilters by sharedStationFilters()
 
     /** The bikes outside stations, while the settings have them drawn. */
     private val streetBikes = StreetBikesOnMap(
@@ -223,7 +233,7 @@ class MapFragment : Fragment() {
      * Which stations the map leaves out, and at rest it leaves out none.
      *
      * Read from the settings and settled there alone (SPEC §7.1, §7.6), unlike
-     * the two of [MapFilterControls], which are pressed on the map itself:
+     * the two of [StationFilterButtons], which are pressed on the map itself:
      * those are ways of looking at it, this is an answer one gives once. **The
      * screen says nothing about it** — no badge, no count, no lit control — which
      * is the accepted compromise SPEC §7.1 names: the settings are the only place
@@ -253,43 +263,6 @@ class MapFragment : Fragment() {
      */
     private var showsMapControls = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // Once per fragment rather than per view: coming back from another
-        // screen rebuilds the view on a fragment that still holds both filters.
-        filters.restore(savedInstanceState, storedBikeKind = ::storedMapBikeKind)
-    }
-
-    /**
-     * The kind the map's markers counted at the last launch, or `null`.
-     *
-     * **Read synchronously**, like the units at start-up and for a kindred
-     * reason: read late, the map would first draw every bike and then take
-     * some away, a flicker of figures that are not the ones asked for. The
-     * read costs next to nothing — the application keeps its settings in
-     * memory from the moment it starts, following the units — and happens once
-     * per screen created, never on a turned phone, which has its saved state.
-     *
-     * Never read on a screen picking a point: the kind filter has no button
-     * there, and markers counting one kind with nothing on the screen to say
-     * so would be bikes hidden without a word.
-     */
-    private fun storedMapBikeKind(): WantedBikeKind? {
-        if (isPicking()) return null
-        return runBlocking { container.preferences.mapBikeKind.first() }
-    }
-
-    /**
-     * Writes the kind just chosen down for the next launch.
-     *
-     * In the fragment's own scope rather than its view's: a press followed at
-     * once by opening another screen, which takes the view away, is still
-     * written down.
-     */
-    private fun rememberMapBikeKind(kind: WantedBikeKind?) {
-        lifecycleScope.launch { container.preferences.setMapBikeKind(kind) }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -318,6 +291,7 @@ class MapFragment : Fragment() {
         views.centreOnHome.setOnClickListener { savedPlaces.centreOn(SavedPlaceKind.Home) }
         views.centreOnWork.setOnClickListener { savedPlaces.centreOn(SavedPlaceKind.Work) }
         filters.bind()
+        filters.follow(viewLifecycleOwner)
         followStationFilters()
         streetBikes.follow(viewLifecycleOwner)
         savedPlaces.follow(viewLifecycleOwner, container.preferences)
@@ -1028,7 +1002,6 @@ class MapFragment : Fragment() {
         binding?.map?.onSaveInstanceState(outState)
         camera.save(outState)
         pickedPlace.save(outState)
-        filters.save(outState)
     }
 
     override fun onLowMemory() {

@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
@@ -17,18 +19,22 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
 import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.config.ActiveCity
+import io.github.mgdx.rouelibre.core.config.FleetDescription
+import io.github.mgdx.rouelibre.core.data.DatasetKind
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.message.MessageSubject
-import io.github.mgdx.rouelibre.core.station.AvailabilityMode
+import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.freshnessOf
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.databinding.FragmentStationListBinding
+import io.github.mgdx.rouelibre.ui.BikeGlyphs
 import io.github.mgdx.rouelibre.ui.MAP_BACK_STACK_ENTRY
 import io.github.mgdx.rouelibre.ui.MainActivity
 import io.github.mgdx.rouelibre.ui.STATION_LIST_BACK_STACK_ENTRY
@@ -36,6 +42,7 @@ import io.github.mgdx.rouelibre.ui.ScreenBehind
 import io.github.mgdx.rouelibre.ui.backStackEntryNames
 import io.github.mgdx.rouelibre.ui.city.CityFragment
 import io.github.mgdx.rouelibre.ui.cityLabel
+import io.github.mgdx.rouelibre.ui.journey.JourneySearchFragment
 import io.github.mgdx.rouelibre.ui.map.MapFragment
 import io.github.mgdx.rouelibre.ui.noLongerServedMessage
 import io.github.mgdx.rouelibre.ui.noLongerServedTitle
@@ -43,10 +50,14 @@ import io.github.mgdx.rouelibre.ui.screenBehind
 import io.github.mgdx.rouelibre.ui.settings.SettingsFragment
 import io.github.mgdx.rouelibre.ui.toStatusLine
 import io.github.mgdx.rouelibre.ui.toUserMessage
+import io.github.mgdx.rouelibre.ui.withBikeFleet
+import io.github.mgdx.rouelibre.ui.withFleet
 import io.github.mgdx.rouelibre.ui.withFreeDocksShown
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
@@ -110,13 +121,63 @@ class StationListFragment : Fragment() {
                     container.addressNormalizers.searchLetterFolds()
                 }
             },
+            favouriteIds = container.preferences.favouriteStationIds,
         )
     }
 
-    private val adapter = StationAdapter { entry ->
-        StationDetailSheet.newInstance(entry.station.id)
-            .show(parentFragmentManager, StationDetailSheet.TAG)
-    }
+    /** Every station of the network, under the favourites when there are any. */
+    private val adapter = StationAdapter(::openStation)
+
+    /**
+     * The favourites heading the list, in the order the user gave them
+     * (SPEC §7.5, §7.6) — the same rows as the rest of the list, since they
+     * are the same stations.
+     */
+    private val favouritesAdapter = StationAdapter(::openStation)
+
+    /** The heading over the favourites: their name, "Reorder", and folding them. */
+    private val favouritesHeading = StationSectionAdapter(
+        title = R.string.favourites_title,
+        onReorder = ::openFavourites,
+        onFold = ::foldOrUnfoldFavourites,
+    )
+
+    /**
+     * The heading over the whole list, there only under favourites: without
+     * it the last favourite and the first station of the network would read
+     * as one list, a station appearing twice in it.
+     */
+    private val allStationsHeading = StationSectionAdapter(title = R.string.stations_all_title)
+
+    /** Both lists of rows, which every filter and every distance applies to alike. */
+    private val stationAdapters
+        get() = listOf(favouritesAdapter, adapter)
+
+    /** Whether the favourites heading the list are folded away. */
+    private var favouritesFolded = false
+
+    /** The filters the map and this list count the stations through (SPEC §7.1). */
+    private val sharedFilters: SharedStationFilters by sharedStationFilters()
+
+    /**
+     * What the network in service lends, so that the rows can be counted by
+     * kind: `null` until the reading lands, and the kind filter is offered
+     * only once it says both kinds are lent.
+     */
+    private var lentFleet: FleetDescription? = null
+
+    /** The two buttons saying what the stations count, the map's own. */
+    private val filterButtons = StationFilterButtons(
+        modeToggle = { binding?.modeToggle },
+        bikeKindButton = { binding?.bikeKindFilter },
+        controlsUp = { true },
+        lentFleet = { lentFleet },
+        shared = { sharedFilters },
+        onChanged = ::countThroughTheFilters,
+    )
+
+    /** Slides the floating controls away while the list is read downwards. */
+    private var controlsOutOfTheWay: ControlsOutOfTheWay? = null
 
     private val container
         get() = (requireActivity().application as RoueLibreApplication).container
@@ -159,7 +220,12 @@ class StationListFragment : Fragment() {
         val views = requireBinding()
 
         views.stations.layoutManager = LinearLayoutManager(requireContext())
-        views.stations.adapter = adapter
+        // Four parts, each of which comes and goes on its own: the
+        // favourites' heading, the favourites, the heading of the whole list,
+        // the whole list. The two lists of rows keep their own view types, so
+        // neither learns that headings exist.
+        views.stations.adapter =
+            ConcatAdapter(favouritesHeading, favouritesAdapter, allStationsHeading, adapter)
         views.stations.addItemDecoration(
             DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL),
         )
@@ -175,12 +241,23 @@ class StationListFragment : Fragment() {
         }
         views.locateMe.setOnClickListener { onLocateMeClicked() }
         showWayToTheMap(views)
-        views.openFavourites.setOnClickListener {
+        views.openSearch.setOnClickListener { goToTheSearchField() }
+        views.openJourney.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.content, FavouriteStationsFragment())
+                .replace(R.id.content, JourneySearchFragment())
                 .addToBackStack(null)
                 .commit()
         }
+        // The bike of the network served, as on the map's own button: with a
+        // bolt where the network lends pedal-assist bikes (SPEC §15).
+        withBikeFleet { fleet -> binding?.openJourney?.setIconResource(BikeGlyphs.icon(fleet)) }
+        followTheBaseMap()
+        controlsOutOfTheWay = ControlsOutOfTheWay(
+            list = views.stations,
+            controls = ::floatingControls,
+            ground = views.root,
+        ).also { it.attach() }
+        followTheKeyboard(views)
         views.swipeRefresh.setOnRefreshListener { viewModel.refresh(force = true) }
 
         // Filtering on every keystroke: a few hundred entries already in
@@ -214,16 +291,16 @@ class StationListFragment : Fragment() {
             }
         }
 
-        views.modeBikes.contentDescription = getString(R.string.mode_bikes_description)
-        views.modeDocks.contentDescription = getString(R.string.mode_docks_description)
-        views.modeToggle.check(R.id.mode_bikes)
-        views.modeToggle.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            if (!isChecked) return@addOnButtonCheckedListener
-            adapter.mode = when (checkedId) {
-                R.id.mode_docks -> AvailabilityMode.Docks
-                else -> AvailabilityMode.Bikes
-            }
+        filterButtons.bind()
+        filterButtons.follow(viewLifecycleOwner)
+        // The kind filter exists only where both kinds are lent, and the
+        // reading that says so arrives after the screen (SPEC §4.1).
+        withFleet { lent ->
+            lentFleet = lent
+            filterButtons.showBikeKindFilter()
+            countThroughTheFilters()
         }
+        followFavouritesFolded()
         followFreeDocksShown()
 
         // The nearest station first, when the position allows it (SPEC §7.6).
@@ -252,23 +329,172 @@ class StationListFragment : Fragment() {
      */
     private fun followFreeDocksShown() {
         withFreeDocksShown { shown ->
-            val views = binding ?: return@withFreeDocksShown
-            views.modeToggle.isVisible = shown
-            if (!shown) views.modeToggle.check(R.id.mode_bikes)
-            adapter.freeDocksShown = shown
+            filterButtons.showFreeDocks(shown)
+            stationAdapters.forEach { it.freeDocksShown = shown }
+            countThroughTheFilters()
+        }
+    }
+
+    /** Has every row count what the two filters say, wherever they were set. */
+    private fun countThroughTheFilters() {
+        val mode = filterButtons.mode
+        val kind = filterButtons.bikeKindFilter()
+        stationAdapters.forEach {
+            it.mode = mode
+            it.bikeKind = kind
+        }
+    }
+
+    /** Opens a station's sheet, from the favourites as from the whole list. */
+    private fun openStation(entry: StationWithAvailability) {
+        StationDetailSheet.newInstance(entry.station.id)
+            .show(parentFragmentManager, StationDetailSheet.TAG)
+    }
+
+    /**
+     * Opens the favourites' own screen, which is where they are put in order
+     * (SPEC §7.5): rows that move under the finger are no list to choose a
+     * station from, so the dragging is kept there.
+     */
+    private fun openFavourites() {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.content, FavouriteStationsFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+
+    /** Folds the favourites away, or brings them back, and remembers which. */
+    private fun foldOrUnfoldFavourites() {
+        val folded = !favouritesFolded
+        lifecycleScope.launch { container.preferences.setFavouritesFolded(folded) }
+    }
+
+    /** Follows whether the favourites are folded, and shows them accordingly. */
+    private fun followFavouritesFolded() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                container.preferences.favouritesFolded.collect { folded ->
+                    favouritesFolded = folded
+                    showFavourites(viewModel.state.value)
+                }
+            }
         }
     }
 
     /**
-     * Keeps "nearest station first" clear of the banner, and the last row
-     * clear of the button (SPEC §7.2).
+     * Puts the favourites at the head of the list, with their heading and the
+     * heading of the whole list, or takes all three away where there is none
+     * to show — no favourite, or a search typed (SPEC §7.6).
+     */
+    private fun showFavourites(state: StationsUiState) {
+        // **A list at its top stays at its top.** Rows inserted above the
+        // first one on screen are inserted above the screen: the list keeps
+        // its eye on the row it was showing, so favourites arriving a moment
+        // after the stations — which is the order they come in at launch —
+        // landed out of sight, the very rows this heading exists to show
+        // first. Read before anything is inserted, since an insertion above
+        // is precisely what makes the list scrollable upwards.
+        val wasAtTheTop = binding?.stations?.canScrollVertically(-1) == false
+        val shown = state.favourites.isNotEmpty()
+        favouritesHeading.shown = shown
+        favouritesHeading.folded = favouritesFolded
+        allStationsHeading.shown = shown
+        favouritesAdapter.submitList(if (favouritesFolded) emptyList() else state.favourites) {
+            if (wasAtTheTop) binding?.stations?.scrollToPosition(0)
+        }
+    }
+
+    /**
+     * Takes the reader to the search field and opens the keyboard on it.
+     *
+     * The field is at the top of the screen, out of the thumb's reach; the
+     * button is where the map keeps its own search. The controls come back
+     * too, for whoever pressed it from a list scrolled halfway down.
+     */
+    private fun goToTheSearchField() {
+        val views = binding ?: return
+        controlsOutOfTheWay?.bringBack()
+        views.searchInput.requestFocus()
+        val manager = requireContext().getSystemService(InputMethodManager::class.java)
+        manager?.showSoftInput(views.searchInput, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    /**
+     * The controls floating over the rows: the thumb's column, its ring, and
+     * the two filters where they float too — in portrait they stand at the
+     * bottom start, lying down they sit in the header's column, out of the
+     * rows' way, and stay put.
+     */
+    private fun floatingControls(): List<View?> {
+        val views = binding ?: return emptyList()
+        val column = listOf(
+            views.openMap,
+            views.openSearch,
+            views.locateMe,
+            views.locating,
+            views.openJourney,
+        )
+        return if (filtersFloat(views)) column + views.modeToggle + views.bikeKindFilter else column
+    }
+
+    /**
+     * Puts the floating controls away while the keyboard is up.
+     *
+     * Asked at every layout of the screen rather than through an insets
+     * listener: the keyboard resizes the window, so its coming and going is a
+     * layout of this screen, and the insets have already been consumed by the
+     * time a listener here would be told — one was tried, and never heard of
+     * the keyboard. The question is cheap and only acted on when the answer
+     * changes.
+     */
+    private fun followTheKeyboard(views: FragmentStationListBinding) {
+        var keyboardUp = false
+        views.root.addOnLayoutChangeListener { root, _, _, _, _, _, _, _, _ ->
+            val up = ViewCompat.getRootWindowInsets(root)
+                ?.isVisible(WindowInsetsCompat.Type.ime()) == true
+            if (up == keyboardUp) return@addOnLayoutChangeListener
+            keyboardUp = up
+            controlsOutOfTheWay?.followKeyboard(up)
+        }
+    }
+
+    /**
+     * Shows the journey button only once the base map is installed — see
+     * [listOffersTheJourney] — and follows the datasets, so that the button
+     * appears the moment a download started from here ends.
+     *
+     * The first read puts the city's datasets into service, which nothing else
+     * may have done yet on a list the application opened on.
+     */
+    private fun followTheBaseMap() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding?.openJourney?.isVisible = listOffersTheJourney(container.hasBaseMap())
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                container.datasetStore.installed
+                    .map { DatasetKind.Tiles in it }
+                    .distinctUntilChanged()
+                    .collect { tiles ->
+                        binding?.openJourney?.isVisible = listOffersTheJourney(hasBaseMap = tiles)
+                    }
+            }
+        }
+    }
+
+    /** Whether the two filters float over the rows rather than sit in a header. */
+    private fun filtersFloat(views: FragmentStationListBinding): Boolean =
+        views.modeToggle.parent === views.root
+
+    /**
+     * Keeps the floating controls clear of the banner, and the last row clear
+     * of the controls (SPEC §7.6).
      *
      * The banner belongs to the activity and is laid over the whole window, so
-     * nothing shifts this button out of its way by itself — see
-     * `MainActivity.roomTakenByTheBanner`. It stood exactly over it, and with
-     * no network a refresh raises one every ten seconds.
+     * nothing shifts the controls out of its way by themselves — see
+     * `MainActivity.roomTakenByTheBanner`. It stood exactly over "nearest
+     * station first" when that button had the corner, and with no network a
+     * refresh raises one every ten seconds.
      *
-     * The room under the last row rises with the button, for the reason it
+     * The room under the last row rises with the controls, for the reason it
      * exists at all: the last station of the network must stay something one
      * can scroll into view.
      */
@@ -293,12 +519,21 @@ class StationListFragment : Fragment() {
         }
     }
 
-    /** Lifts the button and the last row by [room], the banner's height. */
+    /** Lifts the floating controls and the last row by [room], the banner's height. */
     private fun makeRoomForTheBanner(room: Int) {
         val views = binding ?: return
         val roomUnderTheLastRow = R.dimen.list_room_under_the_last_row
-        views.locateMe.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            bottomMargin = resources.getDimensionPixelSize(R.dimen.space_m) + room
+        // The bottom of the thumb's column, which the rest of it stands on,
+        // and the two filters level with it where they float beside it.
+        val bottomRow = if (filtersFloat(views)) {
+            listOf(views.openMap, views.modeToggle, views.bikeKindFilter)
+        } else {
+            listOf(views.openMap)
+        }
+        bottomRow.forEach { control ->
+            control.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = resources.getDimensionPixelSize(R.dimen.space_m) + room
+            }
         }
         views.stations.updatePadding(
             bottom = resources.getDimensionPixelSize(roomUnderTheLastRow) + room,
@@ -424,7 +659,7 @@ class StationListFragment : Fragment() {
                 .container
                 .activeCity()
                 ?.boundingBox
-            adapter.coveredArea = area
+            stationAdapters.forEach { it.coveredArea = area }
         }
     }
 
@@ -432,6 +667,7 @@ class StationListFragment : Fragment() {
         // The RecyclerView outlives the view through its adapter; detaching it
         // avoids holding on to the destroyed view.
         binding?.stations?.adapter = null
+        controlsOutOfTheWay = null
         binding = null
         super.onDestroyView()
     }
@@ -441,7 +677,8 @@ class StationListFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collectLatest { state ->
                     val views = binding ?: return@collectLatest
-                    adapter.origin = state.orderingOrigin
+                    stationAdapters.forEach { it.origin = state.orderingOrigin }
+                    showFavourites(state)
                     adapter.submitList(state.stations) {
                         if (!showFromTheTop) return@submitList
                         showFromTheTop = false

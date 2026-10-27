@@ -680,8 +680,9 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
      * **A word about equipment, not a journey.** What is written is
      * "mechanical", "electric", or nothing at all (SPEC §2, C3).
      *
-     * A flow, read once by the map when it is built: the button on the map is
-     * the only place it is changed, so nothing else needs to follow it.
+     * A flow, read once per session by `SharedStationFilters`, which the map
+     * and the station list both count through since 27 October 2026: the
+     * button on either screen changes it, and that model is what they follow.
      */
     val mapBikeKind: Flow<WantedBikeKind?> = dataStore.data.map {
         WantedBikeKind.ofWireName(it[MAP_BIKE_KIND])
@@ -696,6 +697,25 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
                 preferences[MAP_BIKE_KIND] = kind.wireName
             }
         }
+    }
+
+    /**
+     * Whether the favourites heading the station list are folded away
+     * (SPEC §7.5, §7.6).
+     *
+     * Unfolded by default and for anything unreadable: somebody who marked a
+     * station as a favourite asked to find it first. Kept from one launch to
+     * the next because folding them is a way of using the list rather than a
+     * question of the moment — somebody who folds them once mostly wants them
+     * folded tomorrow. It is a yes or a no about a heading, and says nothing
+     * about any station or any journey (SPEC §2, C3).
+     */
+    val favouritesFolded: Flow<Boolean> =
+        dataStore.data.map { it.readFlag(FAVOURITES_FOLDED, ifUnanswered = false) }
+
+    /** Remembers whether the favourites heading the station list are folded away. */
+    suspend fun setFavouritesFolded(folded: Boolean) {
+        dataStore.edit { it[FAVOURITES_FOLDED] = folded }
     }
 
     /**
@@ -934,6 +954,9 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
 
         /** The map's kind filter, which is not [WANTED_BIKE_KIND] above (SPEC §7.1). */
         val MAP_BIKE_KIND = stringPreferencesKey("map_bike_kind")
+
+        /** Whether the favourites heading the station list are folded away. */
+        val FAVOURITES_FOLDED = booleanPreferencesKey("favourites_folded")
         val WALKING_PACE = stringPreferencesKey("walking_pace")
         val OPENING_SCREEN = stringPreferencesKey("opening_screen")
 

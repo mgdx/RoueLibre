@@ -105,8 +105,6 @@
 
     <string name="mode_bikes">Bicis</string>
     <string name="mode_docks">Espais lliures</string>
-    <string name="mode_bikes_description">Mostra les bicis disponibles</string>
-    <string name="mode_docks_description">Mostra els espais lliures</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it.
@@ -329,7 +327,10 @@
     <string name="incoming_unreadable_link">Aquest enllaç no diu on anar: no s’ha pogut llegir el lloc que indica.</string>
 
     <string name="favourites_title">Preferits</string>
-    <string name="favourites_open">Mostra els preferits</string>
+    <string name="stations_all_title">Totes les estacions</string>
+    <string name="stations_favourites_reorder">Reordena</string>
+    <string name="stations_favourites_fold">Amaga els preferits</string>
+    <string name="stations_favourites_unfold">Mostra els preferits</string>
     <string name="favourites_reorder_hint">Mantén premuda una fila per moure-la.</string>
 
     <string name="settings_title">Configuració</string>

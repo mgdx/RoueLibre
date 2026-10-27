@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    The provisional main screen: the station list.
+    The station list (SPEC §7.6).
 
     Stage (1) of SPEC §16 — "fetching and displaying GBFS data as a list". The
-    map takes its place at stage (3); this list stays reachable, notably when
-    the offline datasets are not installed yet and the application is limited to
-    availability (SPEC §4.4).
+    map took its place as the main screen at stage (3); this list stays
+    reachable, notably when the offline datasets are not installed yet and the
+    application is limited to availability (SPEC §4.4).
+
+    **Its controls stand where the map keeps them**, since 27 October 2026
+    (issue #12): the settings at the top end, and down the bottom end, from
+    the bottom up, the way to the other screen, the search, the position and
+    the journey, with what the stations count at the bottom start. The way
+    back to the map used to be the innermost of three icons beside the title,
+    while the way to this list sits under the thumb on the map: one did not
+    come back with the gesture one had come by. Each role now has one place,
+    counted from the edge, on both screens.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,20 +32,16 @@
         android:layout_marginTop="@dimen/space_l"
         android:text="@string/stations_title"
         android:textAppearance="@style/TextAppearance.RoueLibre.Title"
-        app:layout_constraintEnd_toStartOf="@id/open_map"
+        app:layout_constraintEnd_toStartOf="@id/open_settings"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- The title stops at the innermost icon, not at the outermost: the three
-         icons sit side by side, and a title box running under the first of
-         them only looks harmless while the text is left-aligned. In Arabic it
-         is right-aligned, and "Stations" was printed under the star. -->
-
     <!-- The settings, at the edge where the map keeps them too (SPEC §7.1), so
-         one gesture finds them from either screen. They are also the way to the
-         offline data, which is why no fourth icon leads there: their own "manage
-         offline data" line does (SPEC §4.4), and four controls beside the title
-         leave the title nothing. -->
+         one gesture finds them from either screen, and the one control left
+         beside the title: the title's box stops at it, a box running under an
+         icon only looking harmless while the text is left-aligned. They are
+         also the way to the offline data, which is why no icon here leads
+         there: their own "manage offline data" line does (SPEC §4.4). -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/open_settings"
         style="@style/Widget.Material3.Button.IconButton"
@@ -48,40 +53,6 @@
         app:iconTint="@color/ink"
         app:layout_constraintBottom_toBottomOf="@id/title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/title" />
-
-    <!-- Favourites (SPEC §7.5): beside the complete list, since they are an
-         extract of it. -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/open_favourites"
-        style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="@dimen/touch_target_min"
-        android:layout_height="@dimen/touch_target_min"
-        android:contentDescription="@string/favourites_open"
-        app:icon="@drawable/ic_favourite"
-        app:iconTint="@color/ink"
-        app:layout_constraintBottom_toBottomOf="@id/title"
-        app:layout_constraintEnd_toStartOf="@id/open_settings"
-        app:layout_constraintTop_toTopOf="@id/title" />
-
-    <!-- The way to the map, here whatever is behind this list (SPEC §7.6). It
-         used to be shown only where this list was the screen the application
-         opened on, and it vanished the moment one came back to the list from the
-         map — which stacks a second list — leaving the map reachable by nothing
-         but repeated back gestures. A way out that appears and disappears with
-         the depth of the back stack cannot be learnt. Pressed, it returns to the
-         map behind rather than building another: see StationListFragment. The
-         title's box stops here, this being the innermost of the three. -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/open_map"
-        style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="@dimen/touch_target_min"
-        android:layout_height="@dimen/touch_target_min"
-        android:contentDescription="@string/stations_open_map"
-        app:icon="@drawable/ic_map_place"
-        app:iconTint="@color/ink"
-        app:layout_constraintBottom_toBottomOf="@id/title"
-        app:layout_constraintEnd_toStartOf="@id/open_favourites"
         app:layout_constraintTop_toTopOf="@id/title" />
 
     <!-- The data's age, required by SPEC §4.1. Not justified, for the reason
@@ -134,31 +105,6 @@
             android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- The "bikes" / "docks" toggle (SPEC §7.1). -->
-    <io.github.mgdx.rouelibre.ui.ToggleRow
-        android:id="@+id/mode_toggle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_l"
-        android:layout_marginTop="@dimen/space_m"
-        android:layout_marginEnd="@dimen/space_l"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_field"
-        app:selectionRequired="true"
-        app:singleSelection="true">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mode_bikes"
-            style="@style/Widget.RoueLibre.Toggle.Choice"
-            android:text="@string/mode_bikes" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mode_docks"
-            style="@style/Widget.RoueLibre.Toggle.Choice"
-            android:text="@string/mode_docks" />
-    </io.github.mgdx.rouelibre.ui.ToggleRow>
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="0dp"
@@ -167,7 +113,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mode_toggle">
+        app:layout_constraintTop_toBottomOf="@id/search_field">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/stations"
@@ -225,34 +171,137 @@
     </LinearLayout>
 
     <!--
-        Nearest station first (SPEC §7.2), where the thumb is: over the list,
-        at the bottom edge, as the map keeps its own controls (SPEC §7.1). It
-        is the only thing this screen offers to do to the list under it — the
-        three icons beside the title lead away from it — so it stands alone
-        and away from them.
+        The way to the map (SPEC §7.6), at the bottom of the thumb's column:
+        the very place the map keeps its way to this list, so that one comes
+        back with the gesture one came by (issue #12). It is the one control
+        of the column that leads away, and it is the lowest for that reason on
+        both screens — it is what a thumb reaches for to change screens, the
+        three above it act on the screen in front of it.
 
-        It is the map's "locate me" in shape and in gesture, and not in colour:
-        that one is a pale disc because it sits on a map, and a pale disc on
-        this screen would be a white circle on a white list. It takes the
-        signal green, which no other control on this screen wears.
+        Pressed, it returns to the map behind rather than building another:
+        see StationListFragment.
 
-        Last in the layout, so it draws over the rows: nothing is constrained
-        to it, and the list carries a bottom padding of its own so the last row
-        can be scrolled clear of it.
+        The discs of this column are filled with the page's ground and
+        outlined, where the map's are filled with the surface: a disc of the
+        surface over rows of the surface would be an icon floating over a
+        station's name with nothing around it.
+    -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/open_map"
+        style="@style/Widget.RoueLibre.ListRailButton"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_m"
+        android:contentDescription="@string/stations_open_map"
+        app:icon="@drawable/ic_map_place"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- The search, where the map keeps its own: the map's finds an address,
+         this one a station, and both find a place by its name. It takes the
+         reader to the field over the list and opens the keyboard, which is
+         at the top of a screen a thumb cannot reach without a second hand. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/open_search"
+        style="@style/Widget.RoueLibre.ListRailButton"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_s"
+        android:contentDescription="@string/search_stations_hint"
+        app:icon="@drawable/ic_search"
+        app:layout_constraintBottom_toTopOf="@id/open_map"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!--
+        Nearest station first (SPEC §7.6), where the map keeps "locate me":
+        the same icon, the same gesture, and a press answered the same way.
+        It used to stand alone in the bottom corner; the corner is now the way
+        to the map, as it is on the map the way here.
     -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/locate_me"
-        style="@style/Widget.Material3.Button.IconButton.Filled"
-        android:layout_width="@dimen/touch_target_min"
-        android:layout_height="@dimen/touch_target_min"
+        style="@style/Widget.RoueLibre.ListRailButton"
         android:layout_marginEnd="@dimen/space_m"
-        android:layout_marginBottom="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_s"
         android:contentDescription="@string/stations_order_by_distance"
-        app:backgroundTint="@color/signal"
         app:icon="@drawable/ic_my_location"
-        app:iconTint="@color/surface_on_signal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/open_search"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- The journey search (SPEC §7.3), at the head of the column and in the
+         signal green, as on the map. A list one opens the application on had
+         no way to it but through the map, which asks for the position on
+         arriving (SPEC §10). Gone until the base map is known to be
+         installed, by the map's own rule: see `listOffersTheJourney`. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/open_journey"
+        style="@style/Widget.RoueLibre.ListRailButton"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_s"
+        android:contentDescription="@string/journey_open"
+        android:visibility="gone"
+        app:backgroundTint="@color/signal"
+        app:icon="@drawable/ic_bike"
+        app:iconTint="@color/surface_on_signal"
+        app:layout_constraintBottom_toTopOf="@id/locate_me"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:strokeWidth="0dp"
+        tools:visibility="visible" />
+
+    <!--
+        Bikes against free docks (SPEC §7.1), at the bottom start where the map
+        keeps it, and the same button: one press swaps what the discs count,
+        and its label says what they count now. It used to be a row of two
+        buttons across the whole width under the search field — a station's
+        row of height spent on swapping two figures (issue #10).
+
+        Its height is a floor and not a measurement, as on the map: the label
+        is written in `sp` and grows with the system text size. Filled with
+        the surface, for the map's reason: it stands over rows, and a station's
+        name ran through a transparent one.
+    -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mode_toggle"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_m"
+        android:minHeight="@dimen/touch_target_min"
+        app:backgroundTint="@color/surface"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Vélos" />
+
+    <!--
+        Which bikes the discs count (SPEC §7.1), beside the toggle as on the
+        map, and only where the network lends both kinds and bikes are being
+        counted. It is the map's own filter, shared: what is chosen here is
+        found on the map, and the other way round.
+
+        It stops at the way to the map rather than running under it, and
+        wraps its label if it must: at the largest text sizes the two buttons
+        of this row are wider than what the column leaves them. It takes the
+        toggle's margin from the edge when that one is gone — a network whose
+        free docks are not worth showing.
+    -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bike_kind_filter"
+        style="@style/Widget.RoueLibre.Toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_s"
+        android:layout_marginEnd="@dimen/space_s"
+        android:layout_marginBottom="@dimen/space_m"
+        android:minHeight="@dimen/touch_target_min"
+        android:visibility="gone"
+        app:backgroundTint="@color/surface"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/open_map"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/mode_toggle"
+        app:layout_goneMarginStart="@dimen/space_m"
+        tools:text="Électriques"
+        tools:visibility="visible" />
 
     <!--
         That the button is working, while the fix is waited for. The press can
@@ -265,8 +314,8 @@
         A ring around the button rather than a banner: it lasts exactly as long
         as the wait, where a banner fades after three seconds and a half in the
         middle of one, and it sits under the thumb that has just pressed —
-        which is where the eye is. It takes the green button's own foreground,
-        so the pressed control reads as one thing rather than two.
+        which is where the eye is. It takes the button's own ink, so the
+        pressed control reads as one thing rather than two.
 
         **It never flashes for a wait too short to need it.** A fix obtained
         seconds ago and precise enough comes back on the spot, and something
@@ -287,7 +336,7 @@
         android:importantForAccessibility="no"
         android:indeterminate="true"
         android:visibility="gone"
-        app:indicatorColor="@color/surface_on_signal"
+        app:indicatorColor="@color/ink"
         app:indicatorInset="0dp"
         app:layout_constraintBottom_toBottomOf="@id/locate_me"
         app:layout_constraintEnd_toEndOf="@id/locate_me"
