@@ -93,6 +93,11 @@
                 android:text="@string/settings_bikes_past_capacity"
                 android:visibility="gone" />
 
+            <!-- Its buttons keep no state of their own: the answer belongs to
+                 the city in service, and the fragment fills it in. Restored
+                 by the view on coming back from the city screen, the previous
+                 city's answer was checked again under the new one — and
+                 written down for it, Frelo inheriting AMBici's "never". -->
             <io.github.mgdx.rouelibre.ui.ToggleRow
                 android:id="@+id/bikes_past_capacity"
                 android:layout_width="match_parent"
@@ -105,16 +110,19 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/bikes_past_capacity_automatic"
                     style="@style/Widget.RoueLibre.Toggle.Choice"
+                    android:saveEnabled="false"
                     android:text="@string/settings_bikes_past_capacity_automatic" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/bikes_past_capacity_always"
                     style="@style/Widget.RoueLibre.Toggle.Choice"
+                    android:saveEnabled="false"
                     android:text="@string/settings_bikes_past_capacity_always" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/bikes_past_capacity_never"
                     style="@style/Widget.RoueLibre.Toggle.Choice"
+                    android:saveEnabled="false"
                     android:text="@string/settings_bikes_past_capacity_never" />
             </io.github.mgdx.rouelibre.ui.ToggleRow>
 
