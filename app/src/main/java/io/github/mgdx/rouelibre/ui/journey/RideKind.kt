@@ -7,6 +7,7 @@ import io.github.mgdx.rouelibre.core.journey.DeparturePoint
 import io.github.mgdx.rouelibre.core.station.VehicleKind
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.ui.BikeFleet
+import io.github.mgdx.rouelibre.ui.BikeGlyphs
 
 /**
  * The kind of bike a journey's ride is known to be made on, or `null` where
@@ -40,8 +41,7 @@ internal fun rideKindOf(departure: DeparturePoint, computedFor: WantedBikeKind?)
  * The kind worth saying of the ride, or `null` to keep the network's own bike.
  *
  * Only a network lending both kinds has a choice to report. Where it lends one
- * kind, the bike it draws everywhere already says which, and a second mark on
- * the ride would say it twice (SPEC §15).
+ * kind, the bike it draws everywhere already says which (SPEC §15).
  */
 internal fun shownRideKind(fleet: BikeFleet, rideKind: WantedBikeKind?): WantedBikeKind? =
     rideKind.takeIf { fleet == BikeFleet.Mixed }
@@ -56,6 +56,18 @@ internal fun rideIconOf(kind: WantedBikeKind): Int = when (kind) {
     WantedBikeKind.Electric -> R.drawable.ic_bike_electric
     WantedBikeKind.Mechanical -> R.drawable.ic_bike
 }
+
+/**
+ * The disc standing for a station of the journey's drawing: the bike taken
+ * where [shownRideKind] names it, the network's own badge otherwise.
+ */
+@DrawableRes
+internal fun stationMarkerOf(fleet: BikeFleet, rideKind: WantedBikeKind?): Int =
+    when (shownRideKind(fleet, rideKind)) {
+        WantedBikeKind.Electric -> BikeGlyphs.stationMarker(BikeFleet.Electric)
+        WantedBikeKind.Mechanical -> BikeGlyphs.stationMarker(BikeFleet.Mechanical)
+        null -> BikeGlyphs.stationMarker(fleet)
+    }
 
 /** What a screen reader says of a ride of a known kind, given its arrival station. */
 @StringRes

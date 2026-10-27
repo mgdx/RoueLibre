@@ -1,5 +1,6 @@
 package io.github.mgdx.rouelibre.ui.journey
 
+import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.DeparturePoint
 import io.github.mgdx.rouelibre.core.station.Station
@@ -90,5 +91,29 @@ class RideKindTest {
         // Its bike already says which, and a street bike there is that kind.
         assertNull(shownRideKind(BikeFleet.Electric, WantedBikeKind.Electric))
         assertNull(shownRideKind(BikeFleet.Mechanical, WantedBikeKind.Mechanical))
+    }
+
+    @Test
+    fun `the station discs bear the bike taken in a network lending both`() {
+        assertEquals(
+            R.drawable.marker_journey_station_electric,
+            stationMarkerOf(BikeFleet.Mixed, WantedBikeKind.Electric),
+        )
+        assertEquals(
+            R.drawable.marker_journey_station,
+            stationMarkerOf(BikeFleet.Mixed, WantedBikeKind.Mechanical),
+        )
+    }
+
+    @Test
+    fun `the station discs keep the network's badge where the bike is not named`() {
+        assertEquals(
+            R.drawable.marker_journey_station_mixed,
+            stationMarkerOf(BikeFleet.Mixed, rideKind = null),
+        )
+        assertEquals(
+            R.drawable.marker_journey_station_electric,
+            stationMarkerOf(BikeFleet.Electric, WantedBikeKind.Mechanical),
+        )
     }
 }
