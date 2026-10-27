@@ -751,7 +751,13 @@
     <string name="settings_map_filters_hide_empty_hint">A „semmi” ahhoz igazodik, amit a térkép éppen számol: nincs kerékpár, amíg kerékpárokat számol, és nincs szabad hely, amíg szabad helyeket.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">A „semmi” itt azt jelenti, hogy nincs kerékpár: ezen a hálózaton a térkép csak kerékpárokat számol.</string>
     <string name="settings_bikes_past_capacity">A tele állomások is fogadnak kerékpárt</string>
-    <string name="settings_bikes_past_capacity_hint">A hálózat által a tele állomásai mellett hagyott kerékpárokból megállapítva. Kikapcsolva a tele állomás ismét telinek számít.</string>
+    <string name="settings_bikes_past_capacity_automatic">Automatikus</string>
+    <string name="settings_bikes_past_capacity_always">Mindig</string>
+    <string name="settings_bikes_past_capacity_never">Soha</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Automatikus: ez a hálózat a tele állomásai mellett is hagy kerékpárokat, így a tele állomás olyannak számít, ahol leadhatod a kerékpárodat.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Automatikus: a hálózat adataiban semmi sem mutat tele állomások mellé tett kerékpárokat, így a tele állomás telének számít.</string>
+    <string name="settings_bikes_past_capacity_hint_always">A tele állomás olyannak számít, ahol leadhatod a kerékpárodat. Ha ez a hálózat nem engedi, az útvonal olyan állomáson érhet véget, amely nem fogadja.</string>
+    <string name="settings_bikes_past_capacity_hint_never">A tele állomás telének számít, bármit mutatnak is a hálózat adatai.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Azok az állomások, amelyekről a hálózat nem mond semmit, a térképen maradnak: az ismeretlen darabszám nem ugyanaz, mint a nulla.</string>

@@ -819,7 +819,13 @@
     <string name="settings_map_filters_hide_empty_hint">「ない」の意味は、地図が何を数えているかで決まります。自転車を数えているときは自転車が0台、空きラックを数えているときは空きラックが0台ということです。</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">「ない」は自転車が0台ということです。このネットワークでは、地図は自転車だけを数えます。</string>
     <string name="settings_bikes_past_capacity">満車のステーションでも返却できる</string>
-    <string name="settings_bikes_past_capacity_hint">このサービスが満車のステーションの横に置いている自転車から判断しました。オフにすると、満車のステーションは再び満車として扱われます。</string>
+    <string name="settings_bikes_past_capacity_automatic">自動</string>
+    <string name="settings_bikes_past_capacity_always">常に</string>
+    <string name="settings_bikes_past_capacity_never">しない</string>
+    <string name="settings_bikes_past_capacity_hint_detected">自動：このサービスでは満車のステーションの横に自転車が置かれているため、満車のステーションも返却できる場所として扱います。</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">自動：このサービスのデータには満車のステーションの横に置かれた自転車が見られないため、満車のステーションは満車として扱います。</string>
+    <string name="settings_bikes_past_capacity_hint_always">満車のステーションも返却できる場所として扱います。このサービスで認められていない場合、返却を断られるステーションでルートが終わることがあります。</string>
+    <string name="settings_bikes_past_capacity_hint_never">このサービスのデータにかかわらず、満車のステーションは満車として扱います。</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">サービスが何も伝えていないステーションは、地図に残ります。誰も読み取れなかった数は、0という数ではありません。</string>

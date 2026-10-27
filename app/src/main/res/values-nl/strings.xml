@@ -682,7 +682,13 @@
     <string name="settings_map_filters_hide_empty_hint">“Niets” volgt wat de kaart telt: geen fiets zolang ze fietsen telt, geen vrije plaats zolang ze vrije plaatsen telt.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">“Niets” betekent geen fiets: op dit netwerk telt de kaart alleen fietsen.</string>
     <string name="settings_bikes_past_capacity">Volle stations nemen fietsen terug</string>
-    <string name="settings_bikes_past_capacity_hint">Afgeleid uit de fietsen die dit netwerk naast zijn volle stations laat staan. Uitgeschakeld telt een vol station weer als vol.</string>
+    <string name="settings_bikes_past_capacity_automatic">Automatisch</string>
+    <string name="settings_bikes_past_capacity_always">Altijd</string>
+    <string name="settings_bikes_past_capacity_never">Nooit</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Automatisch: dit netwerk laat fietsen naast zijn volle stations staan, dus een vol station telt als een station waar je je fiets kunt inleveren.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Automatisch: niets in de gegevens van dit netwerk toont fietsen die naast volle stations zijn gezet, dus een vol station telt als vol.</string>
+    <string name="settings_bikes_past_capacity_hint_always">Een vol station telt als een station waar je je fiets kunt inleveren. Als dit netwerk dat niet toestaat, kan een route eindigen bij een station dat hem weigert.</string>
+    <string name="settings_bikes_past_capacity_hint_never">Een vol station telt als vol, wat de gegevens van dit netwerk ook tonen.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stations waarover het netwerk niets zegt blijven op de kaart: een telling die niemand kon lezen is geen telling van niets.</string>
 

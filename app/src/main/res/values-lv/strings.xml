@@ -738,7 +738,13 @@
     <string name="settings_map_filters_hide_empty_hint">To, kas skaitās „nekas“, nosaka tas, ko karte skaita: neviena velosipēda, kamēr tā skaita velosipēdus, un nevienas brīvas vietas, kamēr tā skaita brīvās vietas.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">„Nekas“ nozīmē neviena velosipēda: šajā tīklā karte skaita tikai velosipēdus.</string>
     <string name="settings_bikes_past_capacity">Pilnas stacijas pieņem velosipēdus</string>
-    <string name="settings_bikes_past_capacity_hint">Noteikts pēc velosipēdiem, ko šis tīkls atstāj blakus savām pilnajām stacijām. Kad izslēgts, pilna stacija atkal skaitās pilna.</string>
+    <string name="settings_bikes_past_capacity_automatic">Automātiski</string>
+    <string name="settings_bikes_past_capacity_always">Vienmēr</string>
+    <string name="settings_bikes_past_capacity_never">Nekad</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Automātiski: šis tīkls atstāj velosipēdus blakus savām pilnajām stacijām, tāpēc pilna stacija tiek uzskatīta par tādu, kur varat atdot velosipēdu.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Automātiski: nekas šī tīkla datos neliecina par velosipēdiem, kas atstāti blakus pilnām stacijām, tāpēc pilna stacija tiek uzskatīta par pilnu.</string>
+    <string name="settings_bikes_past_capacity_hint_always">Pilna stacija tiek uzskatīta par tādu, kur varat atdot velosipēdu. Ja šis tīkls to neatļauj, brauciens var beigties stacijā, kas velosipēdu nepieņem.</string>
+    <string name="settings_bikes_past_capacity_hint_never">Pilna stacija tiek uzskatīta par pilnu neatkarīgi no tā, ko rāda šī tīkla dati.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stacijas, par kurām tīkls neko nesaka, paliek kartē: skaits, ko neviens nevarēja nolasīt, nav nulle.</string>

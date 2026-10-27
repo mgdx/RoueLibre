@@ -854,7 +854,13 @@
     <string name="settings_map_filters_hide_empty_hint">«Nulla» si legge in base a quello che la mappa conta: nessuna bici quando conta le bici, nessun posto libero quando conta i posti liberi.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">«Nulla» vuol dire nessuna bici: su questa rete la mappa conta solo le bici.</string>
     <string name="settings_bikes_past_capacity">Le stazioni piene accettano le bici</string>
-    <string name="settings_bikes_past_capacity_hint">Rilevato dalle bici che questa rete lascia accanto alle sue stazioni piene. Se disattivato, una stazione piena torna a contare come piena.</string>
+    <string name="settings_bikes_past_capacity_automatic">Automatico</string>
+    <string name="settings_bikes_past_capacity_always">Sempre</string>
+    <string name="settings_bikes_past_capacity_never">Mai</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Automatico: questa rete lascia bici accanto alle sue stazioni piene, quindi una stazione piena conta come una in cui puoi riconsegnare la bici.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Automatico: nulla nei dati di questa rete mostra bici lasciate accanto a stazioni piene, quindi una stazione piena conta come piena.</string>
+    <string name="settings_bikes_past_capacity_hint_always">Una stazione piena conta come una in cui puoi riconsegnare la bici. Se questa rete non lo consente, un percorso può finire in una stazione che la rifiuta.</string>
+    <string name="settings_bikes_past_capacity_hint_never">Una stazione piena conta come piena, qualunque cosa mostrino i dati di questa rete.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Le stazioni di cui la rete non dice nulla restano sulla mappa: un conteggio che nessuno ha potuto leggere non è un conteggio di zero.</string>

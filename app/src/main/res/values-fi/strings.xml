@@ -730,7 +730,13 @@
     <string name="settings_map_filters_hide_empty_hint">”Ei mitään” seuraa sitä, mitä kartta laskee: ei pyörää, kun se laskee pyöriä, ei vapaata paikkaa, kun se laskee vapaita paikkoja.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">”Ei mitään” tarkoittaa, ettei pyörää ole: tässä verkossa kartta laskee vain pyöriä.</string>
     <string name="settings_bikes_past_capacity">Täydet asemat ottavat pyöriä vastaan</string>
-    <string name="settings_bikes_past_capacity_hint">Päätelty pyöristä, joita tämä verkosto jättää täysien asemiensa viereen. Pois päältä täysi asema lasketaan taas täydeksi.</string>
+    <string name="settings_bikes_past_capacity_automatic">Automaattinen</string>
+    <string name="settings_bikes_past_capacity_always">Aina</string>
+    <string name="settings_bikes_past_capacity_never">Ei koskaan</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Automaattinen: tämä verkosto jättää pyöriä täysien asemiensa viereen, joten täysi asema lasketaan asemaksi, jolle voit palauttaa pyöräsi.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Automaattinen: mikään tämän verkoston tiedoissa ei näytä täysien asemien viereen jätettyjä pyöriä, joten täysi asema lasketaan täydeksi.</string>
+    <string name="settings_bikes_past_capacity_hint_always">Täysi asema lasketaan asemaksi, jolle voit palauttaa pyöräsi. Jos tämä verkosto ei salli sitä, matka voi päättyä asemalle, joka ei ota pyörää vastaan.</string>
+    <string name="settings_bikes_past_capacity_hint_never">Täysi asema lasketaan täydeksi, näyttivätpä tämän verkoston tiedot mitä tahansa.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Asemat, joista verkosto ei kerro mitään, jäävät kartalle: lukema, jota kukaan ei voinut lukea, ei ole sama kuin nolla.</string>

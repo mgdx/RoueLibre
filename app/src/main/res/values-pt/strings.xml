@@ -868,7 +868,13 @@
     <string name="settings_map_filters_hide_empty_hint">«Nada» lê-se conforme o que o mapa está a contar: nenhuma bicicleta quando conta bicicletas, nenhum lugar livre quando conta lugares livres.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">«Nada» quer dizer nenhuma bicicleta: nesta rede o mapa só conta bicicletas.</string>
     <string name="settings_bikes_past_capacity">As estações cheias aceitam bicicletas</string>
-    <string name="settings_bikes_past_capacity_hint">Detetado pelas bicicletas que esta rede deixa junto às suas estações cheias. Desativado, uma estação cheia volta a contar como cheia.</string>
+    <string name="settings_bikes_past_capacity_automatic">Automático</string>
+    <string name="settings_bikes_past_capacity_always">Sempre</string>
+    <string name="settings_bikes_past_capacity_never">Nunca</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Automático: esta rede deixa bicicletas junto às suas estações cheias, por isso uma estação cheia conta como uma onde pode devolver a bicicleta.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Automático: nada nos dados desta rede mostra bicicletas deixadas junto a estações cheias, por isso uma estação cheia conta como cheia.</string>
+    <string name="settings_bikes_past_capacity_hint_always">Uma estação cheia conta como uma onde pode devolver a bicicleta. Se esta rede não o permitir, um trajeto pode terminar numa estação que a recuse.</string>
+    <string name="settings_bikes_past_capacity_hint_never">Uma estação cheia conta como cheia, mostrem o que mostrarem os dados desta rede.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">As estações sobre as quais a rede nada diz permanecem no mapa: uma contagem que ninguém conseguiu ler não é uma contagem de zero.</string>

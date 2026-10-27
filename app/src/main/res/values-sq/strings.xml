@@ -719,7 +719,13 @@
     <string name="settings_map_filters_hide_empty_hint">„Asgjë“ ndjek atë që numëron harta: asnjë biçikletë kur numërohen biçikletat, asnjë vend i lirë kur numërohen vendet e lira.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">„Asgjë“ do të thotë asnjë biçikletë: në këtë rrjet harta numëron vetëm biçikletat.</string>
     <string name="settings_bikes_past_capacity">Stacionet plot i pranojnë biçikletat</string>
-    <string name="settings_bikes_past_capacity_hint">Nxjerrë nga biçikletat që ky rrjet lë pranë stacioneve të veta plot. Kur është çaktivizuar, një stacion plot llogaritet sërish si plot.</string>
+    <string name="settings_bikes_past_capacity_automatic">Automatik</string>
+    <string name="settings_bikes_past_capacity_always">Gjithmonë</string>
+    <string name="settings_bikes_past_capacity_never">Asnjëherë</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Automatik: ky rrjet lë biçikleta pranë stacioneve të veta plot, prandaj një stacion plot llogaritet si stacion ku mund ta kthesh biçikletën.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Automatik: asgjë në të dhënat e këtij rrjeti nuk tregon biçikleta të lëna pranë stacioneve plot, prandaj një stacion plot llogaritet si plot.</string>
+    <string name="settings_bikes_past_capacity_hint_always">Një stacion plot llogaritet si stacion ku mund ta kthesh biçikletën. Nëse ky rrjet nuk e lejon, një udhëtim mund të përfundojë në një stacion që e refuzon.</string>
+    <string name="settings_bikes_past_capacity_hint_never">Një stacion plot llogaritet si plot, çfarëdo që të tregojnë të dhënat e këtij rrjeti.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stacionet për të cilat rrjeti nuk thotë asgjë mbeten në hartë: një numër që askush nuk mund ta lexojë nuk do të thotë zero.</string>
 

@@ -696,7 +696,13 @@
     <string name="settings_map_filters_hide_empty_hint">“可用数”随地图当前统计的内容而定：统计车辆时是没有车可借，统计空位时是没有位可还。</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">“可用数为零”即没有车可借：在这个网络中，地图只统计车辆。</string>
     <string name="settings_bikes_past_capacity">满站也可还车</string>
-    <string name="settings_bikes_past_capacity_hint">根据该系统停放在满站旁的车辆判断。关闭后，满站重新视为已满。</string>
+    <string name="settings_bikes_past_capacity_automatic">自动</string>
+    <string name="settings_bikes_past_capacity_always">始终</string>
+    <string name="settings_bikes_past_capacity_never">从不</string>
+    <string name="settings_bikes_past_capacity_hint_detected">自动：该系统会在满站旁停放车辆，因此满站被视为可以还车的站点。</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">自动：该系统的数据中没有显示满站旁停放的车辆，因此满站被视为已满。</string>
+    <string name="settings_bikes_past_capacity_hint_always">满站被视为可以还车的站点。如果该系统不允许这样做，行程可能会在拒收车辆的站点结束。</string>
+    <string name="settings_bikes_past_capacity_hint_never">无论该系统的数据显示什么，满站都被视为已满。</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">该系统没有说明情况的站点仍留在地图上：谁都读不到的数量，不等于数量为零。</string>

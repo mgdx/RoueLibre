@@ -795,7 +795,13 @@
     <string name="settings_map_filters_hide_empty_hint">„Ништа“ прати оно што мапа броји: ниједан бицикл док броји бицикле, ниједно слободно место док броји слободна места.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">„Ништа“ значи ниједан бицикл: на овој мрежи мапа броји само бицикле.</string>
     <string name="settings_bikes_past_capacity">Пуне станице примају бицикле</string>
-    <string name="settings_bikes_past_capacity_hint">Утврђено према бициклима које ова мрежа оставља поред својих пуних станица. Када је искључено, пуна станица се поново рачуна као пуна.</string>
+    <string name="settings_bikes_past_capacity_automatic">Аутоматски</string>
+    <string name="settings_bikes_past_capacity_always">Увек</string>
+    <string name="settings_bikes_past_capacity_never">Никад</string>
+    <string name="settings_bikes_past_capacity_hint_detected">Аутоматски: ова мрежа оставља бицикле поред својих пуних станица, па се пуна станица рачуна као станица на коју можете да вратите бицикл.</string>
+    <string name="settings_bikes_past_capacity_hint_not_detected">Аутоматски: ништа у подацима ове мреже не показује бицикле остављене поред пуних станица, па се пуна станица рачуна као пуна.</string>
+    <string name="settings_bikes_past_capacity_hint_always">Пуна станица се рачуна као станица на коју можете да вратите бицикл. Ако ова мрежа то не дозвољава, путовање може да се заврши на станици која га одбија.</string>
+    <string name="settings_bikes_past_capacity_hint_never">Пуна станица се рачуна као пуна, без обзира на то шта показују подаци ове мреже.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Станице о којима мрежа ништа не каже остају на мапи: број који нико није могао да прочита није број нула.</string>

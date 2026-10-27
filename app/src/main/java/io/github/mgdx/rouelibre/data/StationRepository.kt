@@ -5,6 +5,7 @@ import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.gbfs.GbfsDiscovery
 import io.github.mgdx.rouelibre.core.gbfs.VehicleTypesFeed
 import io.github.mgdx.rouelibre.core.geo.Coordinates
+import io.github.mgdx.rouelibre.core.station.BikesPastCapacityAnswer
 import io.github.mgdx.rouelibre.core.station.DockedBike
 import io.github.mgdx.rouelibre.core.station.FleetReading
 import io.github.mgdx.rouelibre.core.station.Station
@@ -70,7 +71,8 @@ class StationRepository(
     private val discoveryUrlProvider: suspend () -> String?,
     private val providerIdsProvider: suspend () -> Set<String> = { emptySet() },
     private val recordFleet: suspend (FleetReading) -> Unit = {},
-    private val bikesPastCapacityAllowed: Flow<Boolean> = flowOf(true),
+    private val bikesPastCapacityAnswer: Flow<BikesPastCapacityAnswer> =
+        flowOf(BikesPastCapacityAnswer.Automatic),
     private val clock: Clock = Clock.systemUTC(),
 ) {
 
@@ -137,9 +139,9 @@ class StationRepository(
 
     /**
      * Whether the network in service was found taking bikes back past its
-     * stations' capacities this session, **whether or not the rider lets
-     * that reading apply** — what the window telling them so, and the switch
-     * in the settings, are shown on.
+     * stations' capacities this session, **whatever the rider answered** —
+     * what the window telling them so is shown on, and what the settings
+     * say "automatic" would give.
      */
     val bikesPastCapacityDetected: StateFlow<Boolean> = bikesTakenPastCapacity.asStateFlow()
 
@@ -148,7 +150,7 @@ class StationRepository(
      * first reading: a change of answer changes which stations take any bike,
      * and with it the display verdict settled on them.
      */
-    private val bikesPastCapacityAnswer = MutableStateFlow<Boolean?>(null)
+    private val answerReadUnder = MutableStateFlow<BikesPastCapacityAnswer?>(null)
 
     /**
      * The stations and their last known state, re-emitted on every change.
@@ -160,8 +162,8 @@ class StationRepository(
     fun observeStations(): Flow<StationsSnapshot> = combine(
         dao.observeStations(),
         dao.observeAvailabilities(),
-        bikesPastCapacityAllowed,
-    ) { stationEntities, availabilityEntities, allowed ->
+        bikesPastCapacityAnswer,
+    ) { stationEntities, availabilityEntities, answer ->
         val stations = stationEntities.map(StationEntity::toDomain)
         val availabilities = availabilityEntities.map(StationAvailabilityEntity::toDomain)
         val writesDocksFromCapacity = docksWrittenFromCapacity.updateAndGet { settled ->
@@ -172,16 +174,16 @@ class StationRepository(
         }
         // Settled once per session on stations read under one answer, the
         // display verdict would keep the free docks hidden after the rider
-        // turned the reading off: it is weighed again on the next snapshot.
-        val previousAnswer = bikesPastCapacityAnswer.getAndUpdate { allowed }
-        if (previousAnswer != null && previousAnswer != allowed) freeDocksVerdict.value = null
+        // changed the answer: it is weighed again on the next snapshot.
+        val previousAnswer = answerReadUnder.getAndUpdate { answer }
+        if (previousAnswer != null && previousAnswer != answer) freeDocksVerdict.value = null
         StationsSnapshot(
             stations = joinStationsWithAvailability(
                 stations,
                 availabilities,
                 writesDocksFromCapacitySettled = writesDocksFromCapacity,
                 takesBikesPastCapacitySettled = takesBikesPastCapacity,
-                takesBikesPastCapacityAllowed = allowed,
+                bikesPastCapacityAnswer = answer,
             ),
             fetchedAt = availabilityEntities.maxOfOrNull { it.fetchedAtEpochSeconds }
                 ?.let(Instant::ofEpochSecond),

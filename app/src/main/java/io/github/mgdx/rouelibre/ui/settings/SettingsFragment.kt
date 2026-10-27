@@ -23,6 +23,7 @@ import io.github.mgdx.rouelibre.core.geo.BoundingBox
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.WalkingPace
 import io.github.mgdx.rouelibre.core.measure.UnitChoice
+import io.github.mgdx.rouelibre.core.station.BikesPastCapacityAnswer
 import io.github.mgdx.rouelibre.data.AppTheme
 import io.github.mgdx.rouelibre.data.OpeningScreen
 import io.github.mgdx.rouelibre.data.OwnBikeKind
@@ -219,20 +220,27 @@ class SettingsFragment : Fragment() {
 
     /**
      * Whether the network in service has its full stations read as taking
-     * bikes back (SPEC §4.1, fourth case): the place to change the answer
-     * given in [io.github.mgdx.rouelibre.ui.stations.BikesPastCapacityDialogFragment].
+     * bikes back (SPEC §4.1, fourth case): left to the feed, or settled by
+     * hand either way — the place to change the answer given in
+     * [io.github.mgdx.rouelibre.ui.stations.BikesPastCapacityDialogFragment].
      *
-     * Shown only for a network found doing so this session, or one where the
-     * rider turned it off — whose stations may not have been read yet, and
-     * whose answer must stay reachable all the same. Elsewhere the switch
-     * would change nothing, and is not there.
+     * Shown for every network served, not only those the feed gave away: the
+     * reading misses networks of zones under its line, whose riders know their
+     * full stations take bikes, and "always" is theirs. The line under the row
+     * says what the choice gives here — for "automatic", what the feed showed
+     * this session; for "always", the risk it takes on a network of real docks.
      */
     private fun setUpBikesPastCapacity(views: FragmentSettingsBinding) {
-        views.bikesPastCapacity.setOnCheckedChangeListener { _, isChecked ->
-            if (isFilling) return@setOnCheckedChangeListener
+        views.bikesPastCapacity.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked || isFilling) return@addOnButtonCheckedListener
+            val answer = when (checkedId) {
+                R.id.bikes_past_capacity_always -> BikesPastCapacityAnswer.Always
+                R.id.bikes_past_capacity_never -> BikesPastCapacityAnswer.Never
+                else -> BikesPastCapacityAnswer.Automatic
+            }
             viewLifecycleOwner.lifecycleScope.launch {
                 val cityId = preferences.activeCityId() ?: return@launch
-                preferences.setBikesPastCapacityKept(cityId, kept = isChecked)
+                preferences.setBikesPastCapacityAnswer(cityId, answer)
             }
         }
 
@@ -241,17 +249,40 @@ class SettingsFragment : Fragment() {
                 combine(
                     container.stationRepository.bikesPastCapacityDetected,
                     preferences.activeCityIdFlow,
-                    preferences.bikesPastCapacityTurnedOff,
-                ) { detected, cityId, turnedOff ->
-                    val kept = cityId !in turnedOff
-                    (cityId != null && (detected || !kept)) to kept
-                }.collect { (shown, kept) ->
+                    preferences.bikesPastCapacityAnswers,
+                ) { detected, cityId, answers ->
+                    Triple(
+                        cityId != null,
+                        answers[cityId] ?: BikesPastCapacityAnswer.Automatic,
+                        detected,
+                    )
+                }.collect { (shown, answer, detected) ->
                     val current = binding ?: return@collect
+                    current.bikesPastCapacityTitle.isVisible = shown
                     current.bikesPastCapacity.isVisible = shown
                     current.bikesPastCapacityHint.isVisible = shown
                     isFilling = true
-                    current.bikesPastCapacity.isChecked = kept
+                    current.bikesPastCapacity.check(
+                        when (answer) {
+                            BikesPastCapacityAnswer.Automatic -> R.id.bikes_past_capacity_automatic
+                            BikesPastCapacityAnswer.Always -> R.id.bikes_past_capacity_always
+                            BikesPastCapacityAnswer.Never -> R.id.bikes_past_capacity_never
+                        },
+                    )
                     isFilling = false
+                    current.bikesPastCapacityHint.setText(
+                        when (answer) {
+                            BikesPastCapacityAnswer.Always ->
+                                R.string.settings_bikes_past_capacity_hint_always
+                            BikesPastCapacityAnswer.Never ->
+                                R.string.settings_bikes_past_capacity_hint_never
+                            BikesPastCapacityAnswer.Automatic -> if (detected) {
+                                R.string.settings_bikes_past_capacity_hint_detected
+                            } else {
+                                R.string.settings_bikes_past_capacity_hint_not_detected
+                            }
+                        },
+                    )
                 }
             }
         }
