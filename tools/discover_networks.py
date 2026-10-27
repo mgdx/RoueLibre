@@ -197,6 +197,19 @@ MINIMUM_OCCUPIED_STATIONS_TO_JUDGE = 5
 # feeds above the line; eight drops La Roche-sur-Yon, ten two more.
 MINIMUM_CAPACITY_FOR_HALF = 6
 
+# The stations reading nought beside more bikes than their capacity a feed
+# needs before `feed_takes_bikes_past_capacity` decides anything, and their
+# share of the stations weighed; `MINIMUM_STATIONS_PAST_CAPACITY` and
+# `MINIMUM_PER_CENT_PAST_CAPACITY` in `:core`, and the two must agree. On the
+# 357 feeds read late on 23 October 2026 every network of physical docks stood
+# at 1% or under — Biketown 3 of 308, Chicago 13 of 2,076 — and the nextbike,
+# Donkey Republic and Inurba networks from there to 62%, Frelo in Freiburg at
+# 44 of 157; five per cent is five times the highest docked network. Three
+# stations keep one or two capacities lagging behind their racks from deciding
+# a small network.
+MINIMUM_STATIONS_PAST_CAPACITY = 3
+MINIMUM_SHARE_PAST_CAPACITY = 0.05
+
 # A free-dock count repeated at nearly every station of a network was written
 # once for all of them rather than counted at each. MobiData BW publishes forty
 # docks at 1,620 of Call a Bike's 1,621 stations, and at every RegioRad
@@ -673,12 +686,14 @@ def probe_feeds(candidate: dict) -> dict:
             information = {str(station.get("station_id")): station for station in stations}
             counting = feed_counts_without_capacity(live, information)
             repeating = feed_writes_docks_from_capacity(live, information)
+            overflowing = feed_takes_bikes_past_capacity(live, information)
             unlimited = [
                 takes_any_bike_back(
                     station,
                     information.get(str(station.get("station_id"))),
                     counting,
                     repeating,
+                    overflowing,
                 )
                 for station in live
             ]
@@ -807,24 +822,31 @@ def takes_any_bike_back(
     information: dict | None,
     feed_counts_without_capacity: bool,
     feed_writes_docks_from_capacity: bool = False,
+    feed_takes_bikes_past_capacity: bool = False,
 ) -> bool:
     """Whether a station's free docks limit nothing, as the application reads them.
 
     **This mirrors `StationAvailability.hasUnlimitedDocks` in `:core`, and the
     two must agree** (SPEC §4.1): a station the tool calls frozen while the
     application sends journeys to it, or the other way round, is a network
-    withdrawn or kept for a reason the application does not share. Three
+    withdrawn or kept for a reason the application does not share. Four
     cases. No `num_docks_available` at all, which GBFS reserves for a station
     with unlimited docking. Any count in a feed that writes its free docks
     from its capacities (`feed_writes_docks_from_capacity`), Auch's and
-    Niort's for two. And a nought at a station that publishes no capacity — neither `capacity` nor
+    Niort's for two. Any count in a feed taking bikes back past its
+    capacities (`feed_takes_bikes_past_capacity`), Frelo's in Freiburg. And a
+    nought at a station that publishes no capacity — neither `capacity` nor
     `vehicle_docks_capacity` — which is what nextbike derives where it has no
     capacity to subtract the bikes from: always at a virtual station, a zone
     having no dock to fill, and at a rack unless the feed proves it measures
     such stations (`feed_counts_without_capacity`). `is_returning` is not read
     here, nor there: it refuses returns on its own.
     """
-    if status.get("num_docks_available") is None or feed_writes_docks_from_capacity:
+    if (
+        status.get("num_docks_available") is None
+        or feed_writes_docks_from_capacity
+        or feed_takes_bikes_past_capacity
+    ):
         return True
     if free_docks(status) != 0 or capacity_of(information) is not None:
         return False
@@ -895,6 +917,33 @@ def feed_writes_docks_from_capacity(live: list[dict], information: dict[str, dic
     return (
         len(weighed) >= MINIMUM_OCCUPIED_STATIONS_TO_JUDGE
         and sum(weighed) * 2 > len(weighed)
+    )
+
+
+def feed_takes_bikes_past_capacity(live: list[dict], information: dict[str, dict]) -> bool:
+    """Whether a feed's stations take bikes back past their capacity.
+
+    The mirror of `isInFeedTakingBikesPastCapacity` in `:core`. Of the
+    stations publishing a capacity above nought and a count of free docks, at
+    least `MINIMUM_SHARE_PAST_CAPACITY` read nought while holding more bikes
+    than their capacity, and there are at least `MINIMUM_STATIONS_PAST_CAPACITY`
+    of them. A dock holds one bike, so the others were returned beside a full
+    rack: Frelo, 23 October 2026, 44 of 157, 15 bikes at a six-dock station.
+    A station past its capacity still reading free docks is a capacity
+    lagging behind its rack, Vélib's 49 bikes and 8 free docks at a declared
+    42, and is weighed as any other. Only stations `station_information`
+    describes are weighed, as the application joins no others.
+    """
+    weighed = []
+    for station in live:
+        capacity = capacity_of(information.get(str(station.get("station_id"))))
+        if not capacity or station.get("num_docks_available") is None:
+            continue
+        weighed.append(free_docks(station) == 0 and bikes_available(station) > capacity)
+    past_capacity = sum(weighed)
+    return (
+        past_capacity >= MINIMUM_STATIONS_PAST_CAPACITY
+        and past_capacity >= MINIMUM_SHARE_PAST_CAPACITY * len(weighed)
     )
 
 

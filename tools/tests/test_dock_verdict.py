@@ -17,6 +17,8 @@ from discover_networks import (
     FROZEN_FREE_DOCK_SHARE,
     MINIMUM_CAPACITY_FOR_HALF,
     MINIMUM_OCCUPIED_STATIONS_TO_JUDGE,
+    MINIMUM_SHARE_PAST_CAPACITY,
+    MINIMUM_STATIONS_PAST_CAPACITY,
     PLACEHOLDER_DOCK_SHARE,
     VIRTUAL_STATION_SHARE,
     bikes_available,
@@ -24,6 +26,7 @@ from discover_networks import (
     dock_verdict,
     explained_by_capacity,
     feed_counts_without_capacity,
+    feed_takes_bikes_past_capacity,
     feed_writes_docks_from_capacity,
     free_docks,
     lenient_flag,
@@ -430,6 +433,63 @@ class FreeDocksRepeatingTheCapacity(unittest.TestCase):
         self.assertEqual(len(live), survey["unlimitedDockStations"])
         self.assertNotIn("commonestFreeDockShare", survey)
         self.assertEqual("eligible", survey["verdict"])
+
+
+class BikesPastTheCapacity(unittest.TestCase):
+    """The mirror of `isInFeedTakingBikesPastCapacity` in `:core`.
+
+    Each case here has its twin in `UnlimitedDocksTest.kt`; the two must agree.
+    """
+
+    @staticmethod
+    def full_racks(count: int, bikes: int) -> tuple[dict, list[dict]]:
+        """Six-dock racks read full beside `bikes` bikes, nextbike's derivation."""
+        return stations_of(6, lambda held: max(0, 6 - held), *([bikes] * count))
+
+    @staticmethod
+    def counted_racks(count: int) -> tuple[dict, list[dict]]:
+        """Ten-dock racks counted honestly, holding four bikes each."""
+        return stations_of(10, lambda held: 10 - held, *([4] * count))
+
+    def test_frelo_takes_bikes_past_its_full_racks(self) -> None:
+        # Frelo, 23 October 2026: 44 of 157 at nought beside more bikes than
+        # their capacity, 15 at a six-dock one.
+        information, live = merged(
+            stations_of(6, lambda _: 0, 15, 15, 15),
+            stations_of(7, lambda _: 0, 7, 7, 7, 7),
+            self.counted_racks(10),
+        )
+        self.assertTrue(feed_takes_bikes_past_capacity(live, information))
+        for station in live:
+            self.assertTrue(
+                takes_any_bike_back(station, information[station["station_id"]], True, False, True)
+            )
+
+    def test_a_docked_feed_keeps_its_full_racks_under_the_line(self) -> None:
+        # Chicago, 13 of 2,076 that evening: three past their capacity among
+        # sixty-one is under five per cent, three among sixty is on it.
+        information, live = merged(self.full_racks(3, 8), self.counted_racks(58))
+        self.assertFalse(feed_takes_bikes_past_capacity(live, information))
+        self.assertFalse(takes_any_bike_back(live[0], information["c6-0"], True, False, False))
+        information, live = merged(self.full_racks(3, 8), self.counted_racks(57))
+        self.assertTrue(feed_takes_bikes_past_capacity(live, information))
+
+    def test_bikes_past_the_capacity_beside_free_docks_say_nothing(self) -> None:
+        # Vélib': 49 bikes and 8 free docks at a station declaring 42.
+        information, live = merged(
+            stations_of(42, lambda _: 8, 49, 49, 49, 49, 49), self.counted_racks(5)
+        )
+        self.assertFalse(feed_takes_bikes_past_capacity(live, information))
+
+    def test_fewer_than_three_stations_decide_nothing(self) -> None:
+        information, live = merged(self.full_racks(2, 9), stations_of(7, lambda _: 0, 7))
+        self.assertFalse(feed_takes_bikes_past_capacity(live, information))
+        information, live = self.full_racks(3, 9)
+        self.assertTrue(feed_takes_bikes_past_capacity(live, information))
+
+    def test_the_lines_agree_with_core(self) -> None:
+        self.assertEqual(3, MINIMUM_STATIONS_PAST_CAPACITY)
+        self.assertEqual(0.05, MINIMUM_SHARE_PAST_CAPACITY)
 
 
 class CountsTheCapacityExplains(unittest.TestCase):
