@@ -42,19 +42,25 @@ internal class ControlsOutOfTheWay(
 
     private var away = false
 
+    /** Whether the keyboard is up, as last told by [followKeyboard]. */
+    private var keyboardUp = false
+
     /** Starts following the list. */
     fun attach() {
         list.addOnScrollListener(this)
     }
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-        when {
-            // Back at the top there is nothing more to read upwards, and a
-            // list too short to scroll never brings them back otherwise.
-            !recyclerView.canScrollVertically(-1) -> bringBack()
-            readerExploresByTouch() -> bringBack()
-            dy > 0 -> putAway()
-            dy < 0 -> bringBack()
+        val move = controlsMoveOnScroll(
+            dy = dy,
+            atTheTop = !recyclerView.canScrollVertically(-1),
+            keyboardUp = keyboardUp,
+            readerExploresByTouch = readerExploresByTouch(),
+        )
+        when (move) {
+            ControlsMove.AWAY -> putAway()
+            ControlsMove.BACK -> bringBack()
+            ControlsMove.STAY -> Unit
         }
     }
 
@@ -67,6 +73,7 @@ internal class ControlsOutOfTheWay(
      * them, for the reason the class gives.
      */
     fun followKeyboard(up: Boolean) {
+        keyboardUp = up
         if (up && !readerExploresByTouch()) putAway() else bringBack()
     }
 
@@ -103,4 +110,49 @@ internal class ControlsOutOfTheWay(
     private fun readerExploresByTouch(): Boolean =
         list.context.getSystemService(AccessibilityManager::class.java)
             ?.isTouchExplorationEnabled == true
+}
+
+/** What the floating controls over the station list do after a scroll. */
+internal enum class ControlsMove {
+    /** They slide out of the way. */
+    AWAY,
+
+    /** They come back. */
+    BACK,
+
+    /** They stay as they are, in or out of the way. */
+    STAY,
+}
+
+/**
+ * What a scroll of the station list does to its floating controls (SPEC §7.6).
+ *
+ * **Nothing while the keyboard is up.** The list scrolls without being
+ * touched while one types: every keystroke commits another list, and the
+ * commit reports a scroll — of nothing, at the top of a list of four matches
+ * or of none. Read as the reader going back up, it brought the whole column
+ * and the filters back over the very matches being typed for. The keyboard
+ * folding away is what brings them back, through
+ * [ControlsOutOfTheWay.followKeyboard].
+ *
+ * @param dy how far the list moved, positive downwards through it.
+ * @param atTheTop whether the list can scroll no further towards its start.
+ * @param keyboardUp whether the keyboard is up.
+ * @param readerExploresByTouch whether a screen reader explores by touch, in
+ *   which case the controls never leave (see [ControlsOutOfTheWay]).
+ */
+internal fun controlsMoveOnScroll(
+    dy: Int,
+    atTheTop: Boolean,
+    keyboardUp: Boolean,
+    readerExploresByTouch: Boolean,
+): ControlsMove = when {
+    readerExploresByTouch -> ControlsMove.BACK
+    keyboardUp -> ControlsMove.STAY
+    // Back at the top there is nothing more to read upwards, and a list too
+    // short to scroll never brings them back otherwise.
+    atTheTop -> ControlsMove.BACK
+    dy > 0 -> ControlsMove.AWAY
+    dy < 0 -> ControlsMove.BACK
+    else -> ControlsMove.STAY
 }
