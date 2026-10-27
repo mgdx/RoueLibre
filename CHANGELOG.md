@@ -12,14 +12,15 @@ also records what has no visible effect.
 ### Added
 
 - **The ride of a journey names its bike where the kind is settled** (issue
-  #15, `SPEC.md` §7.4). In a network lending both kinds, the ride's stroke in
-  `JourneyShapeView` parts around the bolt bike or the plain one when the
-  journey was worked out for that kind, or set off from a bike outside the
-  stations; the detail's ride row draws the same icon and its label reads
-  the kind to a screen reader. `JourneyUiState` and `ShownJourney` carry
-  `rideKind`, the kind the computation applied (`filter?.wanted`), never the
-  switch's; `RideKind.kt` holds the rule, tested in `RideKindTest`. Two
-  strings, translated into the 30 languages.
+  #15, `SPEC.md` §7.4). In a network lending both kinds, the two station
+  discs of `JourneyShapeView` bear the bolt bike or the plain one in place of
+  the cog and bolt when the journey was worked out for that kind, or set off
+  from a bike outside the stations (`stationMarkerOf`); the ride's stroke
+  stays one unbroken line. The detail's ride row draws the same icon and its
+  label reads the kind to a screen reader. `JourneyUiState` and
+  `ShownJourney` carry `rideKind`, the kind the computation applied
+  (`filter?.wanted`), never the switch's; `RideKind.kt` holds the rule,
+  tested in `RideKindTest`. Two strings, translated into the 30 languages.
 - **Full stations taking bikes back can be turned on by hand too** (issue
   #8, `SPEC.md` §4.1). The settings switch, shown only for a network
   detected or turned off, becomes a row of three answers under the city —
