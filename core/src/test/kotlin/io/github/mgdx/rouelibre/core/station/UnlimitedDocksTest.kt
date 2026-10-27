@@ -454,6 +454,111 @@ class UnlimitedDocksTest {
         assertFalse(statesOf(halfFull).values.any { it.isInFeedWritingDocksFromCapacity })
     }
 
+    // ------------------------------------- bikes past the capacity --
+
+    /** [count] six-dock racks read full beside [bikes] bikes, nextbike's derivation. */
+    private fun fullRacks(prefix: String, count: Int, bikes: Int) = (0 until count).map { index ->
+        val id = "$prefix-$index"
+        rack(id, capacity = 6) to holding(id, bikes, (6 - bikes).coerceAtLeast(0))
+    }
+
+    /** [count] ten-dock racks counted honestly, holding four bikes each. */
+    private fun countedRacks(count: Int) = (0 until count).map { index ->
+        val id = "counted-$index"
+        rack(id, capacity = 10) to holding(id, 4, 6)
+    }
+
+    @Test
+    fun `a feed taking bikes past its full racks takes any bike`() {
+        // Frelo, Freiburg, 23 October 2026: 44 of its 157 stations read
+        // nought free docks beside more bikes than their capacity — 15 at a
+        // six-dock one.
+        val frelo = fullRacks("over", 3, 15) + fullRacks("full", 4, 6) + countedRacks(10)
+        val states = statesOf(frelo)
+
+        assertTrue(states.values.all { it.isInFeedTakingBikesPastCapacity })
+        assertTrue(states.getValue("full-0").acceptsAnyBike)
+        assertTrue(states.getValue("counted-0").hasUnlimitedDocks)
+        assertEquals(false, freeDocksAreWorthShowing(joinedFeed(frelo)))
+    }
+
+    @Test
+    fun `a docked feed keeps its full racks beside a few past their capacity`() {
+        // Under five per cent: Chicago, 13 of 2,076 that evening, a capacity
+        // lagging behind its rack here and there.
+        val docked = fullRacks("over", 3, 8) + fullRacks("full", 7, 6) + countedRacks(51)
+        val states = statesOf(docked)
+
+        assertFalse(states.values.any { it.isInFeedTakingBikesPastCapacity })
+        assertFalse(states.getValue("full-0").canAcceptBike)
+        val atTheLine = fullRacks("over", 3, 8) + countedRacks(57)
+        assertTrue(statesOf(atTheLine).values.all { it.isInFeedTakingBikesPastCapacity })
+    }
+
+    @Test
+    fun `bikes past the capacity beside free docks say nothing of a full rack`() {
+        // Vélib', that evening: 49 bikes and 8 free docks at a station
+        // declaring 42, a capacity lagging behind the rack.
+        val lagging = (0 until 5).map { index ->
+            val id = "lagging-$index"
+            rack(id, capacity = 42) to holding(id, 49, 8)
+        } + countedRacks(5)
+
+        assertFalse(statesOf(lagging).values.any { it.isInFeedTakingBikesPastCapacity })
+    }
+
+    @Test
+    fun `fewer than three stations past their capacity decide nothing`() {
+        // nextbike's one-station towns, Třebíč and Uherské Hradiště: one
+        // full rack holding seven bikes is the whole feed.
+        val two = fullRacks("over", 2, 9) + fullRacks("full", 1, 6)
+        val three = fullRacks("over", 3, 9)
+
+        assertFalse(statesOf(two).values.any { it.isInFeedTakingBikesPastCapacity })
+        assertTrue(statesOf(three).values.all { it.isInFeedTakingBikesPastCapacity })
+    }
+
+    @Test
+    fun `a feed found taking bikes past its capacity stays so until emptied`() {
+        // The evening's reading decides the day's: bikes spread again in the
+        // morning, and the full racks still take any bike.
+        val evening = fullRacks("over", 4, 12) + countedRacks(20)
+        val morning = fullRacks("full", 4, 6) + countedRacks(20)
+        fun settle(settled: Boolean, pairs: List<kotlin.Pair<Station, StationAvailability>>) =
+            settleTakingBikesPastCapacity(settled, pairs.map { it.first }, pairs.map { it.second })
+
+        val first = settle(false, evening)
+        val second = settle(first, morning)
+
+        assertTrue(first)
+        assertTrue(second)
+        assertFalse(settle(false, morning))
+        assertFalse(settle(true, emptyList()))
+        val states = joinStationsWithAvailability(
+            morning.map { it.first },
+            morning.map { it.second },
+            takesBikesPastCapacitySettled = second,
+        )
+        assertTrue(states.all { it.availability!!.acceptsAnyBike })
+    }
+
+    @Test
+    fun `a rider turning the reading off keeps the full racks full`() {
+        // The rider knows the network's rule better than its feed: off, the
+        // evening's settled verdict and the snapshot's own both give way.
+        val evening = fullRacks("over", 4, 12) + fullRacks("full", 2, 6) + countedRacks(20)
+        val states = joinStationsWithAvailability(
+            evening.map { it.first },
+            evening.map { it.second },
+            takesBikesPastCapacitySettled = true,
+            takesBikesPastCapacityAllowed = false,
+        ).associate { it.station.id to checkNotNull(it.availability) }
+
+        assertFalse(states.values.any { it.isInFeedTakingBikesPastCapacity })
+        assertFalse(states.getValue("full-0").canAcceptBike)
+        assertTrue(states.getValue("counted-0").canAcceptBike)
+    }
+
     // ----------------------------------------- edge cases of the feed --
 
     private fun parsedState(stationFields: String, statusFields: String): StationAvailability {
