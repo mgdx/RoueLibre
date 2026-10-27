@@ -775,6 +775,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">„Nieko“ priklauso nuo to, ką žemėlapis skaičiuoja: nė vieno dviračio, kai skaičiuojami dviračiai, ir nė vienos laisvos vietos, kai skaičiuojamos laisvos vietos.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">„Nieko“ reiškia nė vieno dviračio: šiame tinkle žemėlapis skaičiuoja tik dviračius.</string>
+    <string name="settings_bikes_past_capacity">Pilnos stotelės priima dviračius</string>
+    <string name="settings_bikes_past_capacity_hint">Nustatyta pagal dviračius, kuriuos šis tinklas palieka šalia savo pilnų stotelių. Išjungus pilna stotelė vėl laikoma pilna.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stotelės, apie kurias tinklas nieko nesako, lieka žemėlapyje: skaičius, kurio niekas negalėjo perskaityti, nėra nulis.</string>
@@ -801,6 +803,11 @@
     <string name="street_bike_intro_title">Dviračiai ne stotelėse</string>
     <string name="street_bike_intro_body">Tinklas praneša apie šiuos dviračius toli nuo savo stotelių. Vienus ten paliko naudotojas, kiti laukia operatoriaus sandėlyje.\n\nRoue Libre nežino, ar galite paimti dviratį ten, kur jis stovi: tai nusako tinklo taisyklės, o kai kurie tinklai ima baudą už ne stotelėje grąžintą dviratį.\n\nNuo dviračio siūloma kelionė visada baigiasi stotelėje.</string>
     <string name="street_bike_intro_dismiss">Supratau</string>
+
+    <string name="bikes_past_capacity_title">%1$s priima dviračius ir pilnose stotelėse</string>
+    <string name="bikes_past_capacity_body">Daugelyje šio tinklo stotelių stovi daugiau dviračių, nei yra stovų: naudotojai palieka savo dviratį šalia pilnos stotelės, o tinklas jį priima.\n\nTodėl Roue Libre pilną stotelę laiko tokia, kurioje dar galite grąžinti dviratį, ir šiam tinklui neberodo laisvų vietų.\n\nJei pilna stotelė jūsų dviračio nepriima, tai išjunkite. Tai galite bet kada pakeisti nustatymuose.</string>
+    <string name="bikes_past_capacity_keep">Palikti</string>
+    <string name="bikes_past_capacity_turn_off">Išjungti</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

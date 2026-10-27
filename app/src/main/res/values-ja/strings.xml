@@ -818,6 +818,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">「ない」の意味は、地図が何を数えているかで決まります。自転車を数えているときは自転車が0台、空きラックを数えているときは空きラックが0台ということです。</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">「ない」は自転車が0台ということです。このネットワークでは、地図は自転車だけを数えます。</string>
+    <string name="settings_bikes_past_capacity">満車のステーションでも返却できる</string>
+    <string name="settings_bikes_past_capacity_hint">このサービスが満車のステーションの横に置いている自転車から判断しました。オフにすると、満車のステーションは再び満車として扱われます。</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">サービスが何も伝えていないステーションは、地図に残ります。誰も読み取れなかった数は、0という数ではありません。</string>
@@ -844,6 +846,11 @@
     <string name="street_bike_intro_title">ステーション外の自転車</string>
     <string name="street_bike_intro_body">サービスは、これらの自転車をステーションから離れた場所にあるものとして知らせています。利用者が置いていったものもあれば、運営者の車庫で待っているものもあります。\n\nその場で借りてよいかどうかを Roue Libre は判断できません。決めるのはサービスの規則で、ステーション外に返した自転車に違約金を課すサービスもあります。\n\n自転車から提案される経路は、かならずステーションで終わります。</string>
     <string name="street_bike_intro_dismiss">わかりました</string>
+
+    <string name="bikes_past_capacity_title">%1$s では満車のステーションでも返却できます</string>
+    <string name="bikes_past_capacity_body">このサービスの多くのステーションでは、ラックの数より多くの自転車が置かれています。利用者が満車のステーションの横に自転車を置き、サービスがそれを引き取っているためです。\n\nそのため Roue Libre は、満車のステーションもまだ自転車を返却できる場所として扱い、このサービスでは空きラックを表示しません。\n\n満車のステーションで返却を断られた場合は、この設定をオフにしてください。設定からいつでも変更できます。</string>
+    <string name="bikes_past_capacity_keep">維持する</string>
+    <string name="bikes_past_capacity_turn_off">オフにする</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

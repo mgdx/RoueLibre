@@ -9,6 +9,22 @@ also records what has no visible effect.
 
 ## [Unreleased]
 
+### Added
+
+- **A network found taking bikes back at full stations says so, once, and
+  can be refused** (issue #8, `SPEC.md` §4.1). The first time a network's feed
+  is found taking bikes past its capacities, `BikesPastCapacityDialogFragment`
+  names it and offers "Keep" or "Turn off"; it is put up by `MainActivity`
+  when `StationRepository.bikesPastCapacityDetected` turns true, and not
+  again for that network (`bikes_past_capacity_explained`, a set of network
+  identifiers). Turned off (`bikes_past_capacity_turned_off`), the repository
+  hands `takesBikesPastCapacityAllowed = false` to the join, whose full
+  stations read full again, and the free docks verdict of §7.1 is weighed
+  again; the detection goes on, and a switch under the city in the settings,
+  shown for a network detected or turned off, changes the answer. Both sets
+  are dropped with the city's data. Six strings, translated into the 30
+  languages.
+
 ### Changed
 
 - **The map's kind of bike is kept from one launch to the next** (issue #9,
@@ -40,6 +56,25 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **Frelo's full racks take bikes back again** (issue #8, `SPEC.md` §4.1,
+  §7.1). nextbike writes free docks as the capacity less the bikes, floored at
+  nought, so a rack where bikes are returned beside the full docks reads full
+  whatever stands there, and the planner struck it off the arrivals: Frelo, in
+  Freiburg, read nought at 44 of its 157 stations publishing a capacity late
+  on 23 October 2026, each holding more bikes than its capacity — 15 at a
+  six-dock one. `joinStationsWithAvailability` now settles
+  `StationAvailability.isInFeedTakingBikesPastCapacity`: at least 5 % of the
+  stations publishing a capacity above nought and a count, and at least three,
+  read nought while holding more bikes than their capacity. Every network of
+  physical docks stood at 1 % or under that evening (Biketown 3 of 308, Chicago
+  13 of 2,076, Vélib' 1 of 1,516); a station past its capacity still reading
+  free docks is a lagging capacity and does not count. In such a feed
+  `hasUnlimitedDocks` holds at every station. The verdict is held for the
+  session (`settleTakingBikesPastCapacity`, held by `StationRepository` beside
+  the capacity-writing one and forgotten with the city), the share moving with
+  the hour. 66 feeds cross the line, nearly all nextbike ones; 57 of them also
+  lose the free docks toggle, Mannheim included. The discovery tool mirrors it
+  (`feed_takes_bikes_past_capacity`, same tests on both sides).
 - **Auch, Niort and every Ecovelo network no longer promise docks nobody
   counted** (`SPEC.md` §4.1, §7.1). Ecovelo writes each station's free docks
   from its capacity whatever stands there — the whole of it at Auch's 9

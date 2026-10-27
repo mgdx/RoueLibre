@@ -696,6 +696,8 @@
     <!-- Under the switch, saying what "intet" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">»Intet« følger det, kortet tæller: ingen cykel, mens det tæller cykler, ingen ledig plads, mens det tæller ledige pladser.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">»Intet« betyder ingen cykel: på dette netværk tæller kortet kun cykler.</string>
+    <string name="settings_bikes_past_capacity">Fyldte stationer tager imod cykler</string>
+    <string name="settings_bikes_past_capacity_hint">Set ud fra de cykler, som dette netværk efterlader ved siden af sine fyldte stationer. Slået fra tæller en fyldt station igen som fuld.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stationer, som netværket intet siger om, bliver på kortet: en optælling, ingen kunne læse, er ikke en optælling af ingenting.</string>
 
@@ -721,6 +723,11 @@
     <string name="street_bike_intro_title">Cykler uden for stationerne</string>
     <string name="street_bike_intro_body">Netværket melder disse cykler langt fra sine stationer. Nogle er efterladt af en bruger, andre venter på operatørens depot.\n\nRoue Libre ved ikke, om du må tage en, hvor den står: det siger netværkets regler, og nogle netværk opkræver et gebyr for en cykel, der afleveres uden for en station.\n\nEn rejse, der foreslås fra en cykel, ender altid ved en station.</string>
     <string name="street_bike_intro_dismiss">Forstået</string>
+
+    <string name="bikes_past_capacity_title">%1$s tager imod cykler ved fyldte stationer</string>
+    <string name="bikes_past_capacity_body">På mange af netværkets stationer står der flere cykler, end der er stativpladser: brugerne stiller deres ved siden af en fyldt station, og netværket tager den tilbage.\n\nRoue Libre regner derfor en fyldt station som en, hvor du stadig kan aflevere din cykel, og viser ikke længere ledige pladser for dette netværk.\n\nHvis en fyldt station afviser din cykel, så slå dette fra. Du kan ændre det når som helst i indstillingerne.</string>
+    <string name="bikes_past_capacity_keep">Behold</string>
+    <string name="bikes_past_capacity_turn_off">Slå fra</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

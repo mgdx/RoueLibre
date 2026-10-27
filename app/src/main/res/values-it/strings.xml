@@ -853,6 +853,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">«Nulla» si legge in base a quello che la mappa conta: nessuna bici quando conta le bici, nessun posto libero quando conta i posti liberi.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">«Nulla» vuol dire nessuna bici: su questa rete la mappa conta solo le bici.</string>
+    <string name="settings_bikes_past_capacity">Le stazioni piene accettano le bici</string>
+    <string name="settings_bikes_past_capacity_hint">Rilevato dalle bici che questa rete lascia accanto alle sue stazioni piene. Se disattivato, una stazione piena torna a contare come piena.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Le stazioni di cui la rete non dice nulla restano sulla mappa: un conteggio che nessuno ha potuto leggere non è un conteggio di zero.</string>
@@ -879,6 +881,11 @@
     <string name="street_bike_intro_title">Bici fuori stazione</string>
     <string name="street_bike_intro_body">La rete segnala queste bici lontano dalle sue stazioni. Alcune le ha lasciate lì un utente, altre aspettano nel deposito dell’operatore.\n\nRoue Libre non sa se puoi prenderne una dov’è: lo dicono le regole della rete, e alcune reti applicano una penale per una bici riconsegnata fuori stazione.\n\nL’itinerario proposto da una bici finisce sempre in una stazione.</string>
     <string name="street_bike_intro_dismiss">Ho capito</string>
+
+    <string name="bikes_past_capacity_title">%1$s accetta le bici nelle stazioni piene</string>
+    <string name="bikes_past_capacity_body">In molte stazioni di questa rete ci sono più bici che stalli: gli utenti lasciano la loro accanto a una stazione piena e la rete la riprende.\n\nPer questo Roue Libre considera una stazione piena come una in cui puoi ancora riconsegnare la bici, e non mostra più i posti liberi per questa rete.\n\nSe una stazione piena rifiuta la tua bici, disattiva questa opzione. Puoi cambiarla in qualsiasi momento nelle impostazioni.</string>
+    <string name="bikes_past_capacity_keep">Mantieni</string>
+    <string name="bikes_past_capacity_turn_off">Disattiva</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

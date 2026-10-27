@@ -66,6 +66,7 @@ class StationRepositoryTest {
     private fun repository(
         recordFleet: suspend (FleetReading) -> Unit = {},
         streetBikesMinimumInterval: suspend () -> Duration = { Duration.ofMinutes(5) },
+        bikesPastCapacityAllowed: Flow<Boolean> = MutableStateFlow(true),
     ): StationRepository = StationRepository(
         remote = GbfsRemoteSource(
             client = OkHttpClient(),
@@ -79,6 +80,7 @@ class StationRepositoryTest {
         discoveryUrlProvider = { discoveryPath?.let { server.url(it).toString() } },
         providerIdsProvider = { providerIds },
         recordFleet = recordFleet,
+        bikesPastCapacityAllowed = bikesPastCapacityAllowed,
         clock = object : Clock() {
             override fun getZone() = ZoneOffset.UTC
             override fun withZone(zone: java.time.ZoneId) = this
@@ -419,6 +421,43 @@ class StationRepositoryTest {
         // as counting.
         val fresh = repository().observeStations().first().stations
         assertTrue(fresh.none { it.availability!!.hasUnlimitedDocks })
+    }
+
+    /**
+     * Frelo's evening: the first [overflowing] stations read no free dock beside
+     * 25 bikes, the others are full with their 20.
+     */
+    private fun enqueueFullStatus(overflowing: Int) {
+        val states = (1..6).joinToString(",") { index ->
+            val bikes = if (index <= overflowing) 25 else 20
+            """{"station_id":"$index","num_bikes_available":$bikes,"num_docks_available":0,
+               "is_installed":true,"is_renting":true,"is_returning":true}"""
+        }
+        server.enqueue(MockResponse(body = """{"version":"2.3","data":{"stations":[$states]}}"""))
+    }
+
+    @Test
+    fun `a rider turning the reading off sees the full stations full again`() = runTest {
+        // Detected all the same, so the window and the switch can be shown;
+        // applied only while the rider keeps it, and the free docks weighed
+        // again on the answer.
+        val allowed = MutableStateFlow(true)
+        enqueueDiscovery()
+        enqueueTwentyDockStations()
+        enqueueFullStatus(overflowing = 3)
+        val repository = repository(bikesPastCapacityAllowed = allowed)
+        repository.refresh()
+
+        val kept = repository.observeStations().first().stations
+        assertTrue(kept.all { it.availability!!.acceptsAnyBike })
+        assertEquals(false, repository.observeFreeDocksShown().first())
+        assertTrue(repository.bikesPastCapacityDetected.value)
+
+        allowed.value = false
+        val turnedOff = repository.observeStations().first().stations
+        assertTrue(turnedOff.none { it.availability!!.canAcceptBike })
+        assertEquals(true, repository.observeFreeDocksShown().first())
+        assertTrue(repository.bikesPastCapacityDetected.value)
     }
 
     @Test

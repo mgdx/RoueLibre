@@ -108,8 +108,11 @@ public fun settleFreeDocksWorthShowing(
  *    control of their own. Zürich, kept to its bike operators, stands near 77.
  *
  * Sixty sits above the docked networks and below that cluster; the nearest
- * case under it is Mannheim at 59.2 %, one of three networks between 50 and
- * 59, which keeps its toggle.
+ * case under it was Mannheim at 59.2 %, one of three networks between 50 and
+ * 59. Since 23 October 2026 the feeds taking bikes past their capacities
+ * ([StationAvailability.isInFeedTakingBikesPastCapacity]) stand at 100 %, as
+ * those writing their free docks from them do: 57 more networks that evening,
+ * Mannheim among them, nearly all nextbike ones.
  */
 public const val UNLIMITED_PERCENT_SILENCING_FREE_DOCKS: Int = 60
 

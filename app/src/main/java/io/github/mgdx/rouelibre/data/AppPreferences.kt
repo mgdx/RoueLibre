@@ -418,6 +418,71 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     }
 
     /**
+     * The networks where the rider turned off reading full stations as taking
+     * bikes back (SPEC §4.1, fourth case), by network identifier.
+     *
+     * Empty by default: the reading is the application's best understanding
+     * of the feed, and the rider is told of it once ([bikesPastCapacityExplained])
+     * with the means to refuse it. A flow, so the stations are read again the
+     * moment the answer changes.
+     *
+     * **A declaration, not an observation** (SPEC §2, C3): a network lands
+     * here only by a press on "Turn off", and leaves it by the switch in the
+     * settings or with the city's data ([forgetBikesPastCapacity]).
+     */
+    val bikesPastCapacityTurnedOff: Flow<Set<String>> =
+        dataStore.data.map { it.readSet(BIKES_PAST_CAPACITY_TURNED_OFF) }
+
+    /** Turns the reading on or off for the network [cityId]. */
+    suspend fun setBikesPastCapacityKept(cityId: String, kept: Boolean) {
+        dataStore.edit { preferences ->
+            val current = preferences.readSet(BIKES_PAST_CAPACITY_TURNED_OFF)
+            preferences[BIKES_PAST_CAPACITY_TURNED_OFF] =
+                if (kept) current - cityId else current + cityId
+        }
+    }
+
+    /**
+     * Whether the rider was told that the network [cityId] takes bikes back at
+     * full stations — the window shown once per network.
+     *
+     * Closing the window is what writes it, as for [streetBikesExplained]:
+     * a fact the rider declared by answering, about a city they chose, and
+     * dropped with that city's data ([forgetBikesPastCapacity]) so that what
+     * is kept never outlives what the rider keeps.
+     */
+    suspend fun bikesPastCapacityExplained(cityId: String): Boolean =
+        cityId in dataStore.data.first().readSet(BIKES_PAST_CAPACITY_EXPLAINED)
+
+    /** Records that the network [cityId] was explained. */
+    suspend fun setBikesPastCapacityExplained(cityId: String) {
+        dataStore.edit { preferences ->
+            preferences[BIKES_PAST_CAPACITY_EXPLAINED] =
+                preferences.readSet(BIKES_PAST_CAPACITY_EXPLAINED) + cityId
+        }
+    }
+
+    /**
+     * Forgets both answers about the network [cityId], when its data is
+     * deleted: a rider removing a city removes what was written about it.
+     */
+    suspend fun forgetBikesPastCapacity(cityId: String) {
+        dataStore.edit { preferences ->
+            preferences[BIKES_PAST_CAPACITY_EXPLAINED] =
+                preferences.readSet(BIKES_PAST_CAPACITY_EXPLAINED) - cityId
+            preferences[BIKES_PAST_CAPACITY_TURNED_OFF] =
+                preferences.readSet(BIKES_PAST_CAPACITY_TURNED_OFF) - cityId
+        }
+    }
+
+    /**
+     * Reads a set of identifiers, anything unreadable counting as empty, for
+     * the reason [readFlag] gives.
+     */
+    private fun Preferences.readSet(key: Preferences.Key<Set<String>>): Set<String> =
+        (asMap()[key] as? Set<*>)?.filterIsInstance<String>()?.toSet().orEmpty()
+
+    /**
      * Reads a yes-or-no setting, anything else counting as "never answered".
      *
      * Screens are built on these settings, and a settings file holding something
@@ -840,6 +905,10 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
 
         /** The explanation of those bikes was shown once; it is not shown again unprompted. */
         val STREET_BIKES_EXPLAINED = booleanPreferencesKey("street_bikes_explained")
+        val BIKES_PAST_CAPACITY_TURNED_OFF =
+            stringSetPreferencesKey("bikes_past_capacity_turned_off")
+        val BIKES_PAST_CAPACITY_EXPLAINED =
+            stringSetPreferencesKey("bikes_past_capacity_explained")
         val UNITS = stringPreferencesKey("units")
         val DOWNLOAD_ON_UNMETERED_ONLY = booleanPreferencesKey("download_on_unmetered_only")
         val USES_OWN_BIKE = booleanPreferencesKey("uses_own_bike")

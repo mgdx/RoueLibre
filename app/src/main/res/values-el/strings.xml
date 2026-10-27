@@ -761,6 +761,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">Το «τίποτα» ακολουθεί αυτό που μετράει ο χάρτης: κανένα ποδήλατο όσο μετράει ποδήλατα, καμία ελεύθερη θέση όσο μετράει ελεύθερες θέσεις.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">Το «τίποτα» σημαίνει κανένα ποδήλατο: σε αυτό το δίκτυο ο χάρτης μετράει μόνο ποδήλατα.</string>
+    <string name="settings_bikes_past_capacity">Οι γεμάτοι σταθμοί δέχονται ποδήλατα</string>
+    <string name="settings_bikes_past_capacity_hint">Διαπιστώθηκε από τα ποδήλατα που αφήνει αυτό το δίκτυο δίπλα στους γεμάτους σταθμούς του. Όταν είναι απενεργοποιημένο, ένας γεμάτος σταθμός μετράει ξανά ως γεμάτος.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Οι σταθμοί για τους οποίους το δίκτυο δεν λέει τίποτα μένουν στον χάρτη: μια μέτρηση που κανείς δεν μπόρεσε να διαβάσει δεν είναι μέτρηση του μηδενός.</string>
@@ -787,6 +789,11 @@
     <string name="street_bike_intro_title">Ποδήλατα εκτός σταθμών</string>
     <string name="street_bike_intro_body">Το δίκτυο δηλώνει αυτά τα ποδήλατα μακριά από τους σταθμούς του. Άλλα τα άφησε εκεί κάποιος χρήστης, άλλα περιμένουν στην αποθήκη του φορέα του δικτύου.\n\nΤο Roue Libre δεν γνωρίζει αν επιτρέπεται να πάρετε ένα εκεί που βρίσκεται: αυτό το λένε οι κανόνες του δικτύου, και ορισμένα δίκτυα χρεώνουν πρόστιμο για ποδήλατο που επιστρέφεται εκτός σταθμού.\n\nΗ διαδρομή που προτείνεται από ένα ποδήλατο καταλήγει πάντα σε σταθμό.</string>
     <string name="street_bike_intro_dismiss">Κατάλαβα</string>
+
+    <string name="bikes_past_capacity_title">%1$s: οι γεμάτοι σταθμοί δέχονται ποδήλατα</string>
+    <string name="bikes_past_capacity_body">Σε πολλούς σταθμούς αυτού του δικτύου υπάρχουν περισσότερα ποδήλατα από θέσεις: οι χρήστες αφήνουν το δικό τους δίπλα σε έναν γεμάτο σταθμό και το δίκτυο το παραλαμβάνει.\n\nΓι’ αυτό το Roue Libre θεωρεί έναν γεμάτο σταθμό ως σταθμό όπου μπορείτε ακόμη να επιστρέψετε το ποδήλατό σας και δεν εμφανίζει πλέον ελεύθερες θέσεις για αυτό το δίκτυο.\n\nΑν ένας γεμάτος σταθμός αρνηθεί το ποδήλατό σας, απενεργοποιήστε αυτή τη ρύθμιση. Μπορείτε να την αλλάξετε οποιαδήποτε στιγμή στις ρυθμίσεις.</string>
+    <string name="bikes_past_capacity_keep">Διατήρηση</string>
+    <string name="bikes_past_capacity_turn_off">Απενεργοποίηση</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

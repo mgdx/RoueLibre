@@ -786,6 +786,12 @@
     <!-- The same line in a network whose free docks are not shown (SPEC 7.1),
          where the map counts bikes alone. -->
     <string name="settings_map_filters_hide_empty_hint_bikes">“Nothing” means no bike: the map counts bikes alone on this network.</string>
+
+    <!-- Under the city in the settings, shown only for a network found taking
+         bikes back past its capacity, or one where the rider turned that off:
+         the place to change the answer given in the window above. -->
+    <string name="settings_bikes_past_capacity">Full stations take bikes back</string>
+    <string name="settings_bikes_past_capacity_hint">Seen from the bikes this network leaves beside its full stations. Turned off, a full station counts as full again.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stations the network says nothing about stay on the map: a count nobody could read is not a count of nothing.</string>
@@ -812,6 +818,17 @@
     <string name="street_bike_intro_title">Bikes outside stations</string>
     <string name="street_bike_intro_body">The network reports these bikes away from its stations. Some were left there by a rider, others are waiting at the operator\'s depot.\n\nRoue Libre cannot tell whether you may take one where it stands: the network\'s rules say so, and some networks charge a penalty for a bike returned outside a station.\n\nA journey proposed from a bike always ends at a station.</string>
     <string name="street_bike_intro_dismiss">Got it</string>
+
+    <!-- Shown once per network, the first time its feed is found taking bikes
+         back past its stations' capacity (SPEC §4.1, fourth case): its full
+         stations are then read as taking any bike, and its free docks are no
+         longer shown (§7.1). It says what was seen and lets the rider refuse
+         it for this network; the switch under the city in the settings says
+         the same thing and undoes either answer. %1$s is the network's name. -->
+    <string name="bikes_past_capacity_title">%1$s takes bikes back at full stations</string>
+    <string name="bikes_past_capacity_body">At many of this network\'s stations, more bikes stand than there are docks: riders leave theirs beside a full station, and the network takes them back.\n\nRoue Libre therefore counts a full station as one where you can still return your bike, and no longer shows free docks for this network.\n\nIf a full station refuses your bike, turn this off. You can change it at any time in the settings.</string>
+    <string name="bikes_past_capacity_keep">Keep</string>
+    <string name="bikes_past_capacity_turn_off">Turn off</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

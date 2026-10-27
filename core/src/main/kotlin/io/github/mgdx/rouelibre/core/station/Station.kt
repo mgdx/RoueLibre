@@ -73,6 +73,11 @@ public data class Station(
  *   which the bikes standing there do not explain. Settled by the join over
  *   the whole feed, and `false` until then: a state nobody has joined keeps
  *   its count.
+ * @property isInFeedTakingBikesPastCapacity the feed's stations take bikes
+ *   back past their capacity: enough of them read nought free docks beside
+ *   more bikes than their capacity holds, which only a return beside a full
+ *   rack puts there. Settled by the join over the whole feed, and `false`
+ *   until then.
  */
 public data class StationAvailability(
     public val stationId: String,
@@ -87,6 +92,7 @@ public data class StationAvailability(
     public val isAtStationWithCapacity: Boolean = false,
     public val isInFeedCountingWithoutCapacity: Boolean = true,
     public val isInFeedWritingDocksFromCapacity: Boolean = false,
+    public val isInFeedTakingBikesPastCapacity: Boolean = false,
 ) {
     /**
      * True if the station is there to be used, as far as its installation
@@ -110,7 +116,7 @@ public data class StationAvailability(
     /**
      * True if no count of free docks limits what the station takes back.
      *
-     * Three cases, and none of them comes from a network's name
+     * Four cases, and none of them comes from a network's name
      * (SPEC §4.1, §15):
      *
      *  · **no count at all.** GBFS requires `num_docks_available` "except for
@@ -132,11 +138,20 @@ public data class StationAvailability(
      *    2026: 9 of its 9 stations holding bikes read their capacity in free
      *    docks — 10 free beside 10 bikes at a ten-dock station, 5 free beside
      *    7 bikes at a five-dock one, which also shows returns going past the
-     *    capacity. Read as a count, it promised "5 free docks" everywhere.
+     *    capacity. Read as a count, it promised "5 free docks" everywhere;
+     *  · **any count in a feed taking bikes past its capacity**, where enough
+     *    stations read nought free docks beside more bikes than their capacity
+     *    ([isInFeedTakingBikesPastCapacity]). A dock cannot hold two bikes, so
+     *    those were returned beside a full rack, and the network took them:
+     *    Frelo, in Freiburg, on 23 October 2026, read nought at 44 of its 157
+     *    stations publishing a capacity while holding more bikes than it — 15
+     *    at a six-dock one. Read as a count, every one of its full racks was
+     *    struck off the journey's arrivals.
      *
      * **A nought is believed wherever it can have been measured.** At a
      * station publishing a capacity, it is the capacity less the bikes, and the
-     * station is full. Without a capacity, the feed itself says whether it
+     * station is full — unless its feed is one taking bikes past their
+     * capacity. Without a capacity, the feed itself says whether it
      * measures ([isInFeedCountingWithoutCapacity]). Indego, in Philadelphia,
      * publishes no capacity anywhere and counts its free docks at every rack:
      * 317 stations above nought and 4 at nought on 22 October 2026, which are
@@ -156,6 +171,7 @@ public data class StationAvailability(
     public val hasUnlimitedDocks: Boolean
         get() = docksAvailable == null ||
             isInFeedWritingDocksFromCapacity ||
+            isInFeedTakingBikesPastCapacity ||
             (
                 docksAvailable == 0 &&
                     !isAtStationWithCapacity &&
@@ -261,19 +277,29 @@ public enum class ServiceState {
  * whether it publishes a capacity: `station_status` says neither, and
  * [StationAvailability.isDeployed] and [StationAvailability.hasUnlimitedDocks]
  * need them. And it is the one place that sees the whole feed at once, so it
- * settles [StationAvailability.isInFeedCountingWithoutCapacity] and
- * [StationAvailability.isInFeedWritingDocksFromCapacity] for every state.
+ * settles [StationAvailability.isInFeedCountingWithoutCapacity],
+ * [StationAvailability.isInFeedWritingDocksFromCapacity] and
+ * [StationAvailability.isInFeedTakingBikesPastCapacity] for every state.
  *
  * @param writesDocksFromCapacitySettled the feed was already found writing
  *   its free docks from its capacities this session
  *   ([settleWritingDocksFromCapacity]); the join then reads it so whatever
  *   this snapshot says, and otherwise judges the snapshot alone.
+ * @param takesBikesPastCapacitySettled the feed was already found taking
+ *   bikes past its capacities this session ([settleTakingBikesPastCapacity]),
+ *   read the same way.
+ * @param takesBikesPastCapacityAllowed the rider has not turned that reading
+ *   off for this network (SPEC §4.1, fourth case). `false` reads every state
+ *   as if the feed were never found taking bikes past its capacities, whatever
+ *   was settled: the rider knows the network's rule better than its feed.
  * @return one entry per known station, in the order received.
  */
 public fun joinStationsWithAvailability(
     stations: List<Station>,
     availabilities: List<StationAvailability>,
     writesDocksFromCapacitySettled: Boolean = false,
+    takesBikesPastCapacitySettled: Boolean = false,
+    takesBikesPastCapacityAllowed: Boolean = true,
 ): List<StationWithAvailability> {
     val byStationId = availabilities.associateBy { it.stationId }
     val countedWithoutCapacity = stations
@@ -283,6 +309,8 @@ public fun joinStationsWithAvailability(
         countedWithoutCapacity.size
     val writesDocksFromCapacity = writesDocksFromCapacitySettled ||
         writesDocksFromCapacity(stations, byStationId)
+    val takesBikesPastCapacity = takesBikesPastCapacityAllowed &&
+        (takesBikesPastCapacitySettled || takesBikesPastCapacity(stations, byStationId))
     return stations.map { station ->
         val availability = byStationId[station.id]
         StationWithAvailability(
@@ -292,6 +320,7 @@ public fun joinStationsWithAvailability(
                 isAtStationWithCapacity = station.capacity != null,
                 isInFeedCountingWithoutCapacity = countsWithoutCapacity,
                 isInFeedWritingDocksFromCapacity = writesDocksFromCapacity,
+                isInFeedTakingBikesPastCapacity = takesBikesPastCapacity,
             ),
         )
     }
@@ -338,6 +367,88 @@ public fun settleWritingDocksFromCapacity(
     stations.isEmpty() -> false
     settled -> true
     else -> writesDocksFromCapacity(stations, availabilities.associateBy { it.stationId })
+}
+
+/**
+ * Whether the feed takes bikes past its capacities
+ * ([StationAvailability.isInFeedTakingBikesPastCapacity]), **settled once
+ * judged so, for the session**, as [settleWritingDocksFromCapacity] is and for
+ * the same reason: a reading above the line is evidence, one below it only
+ * its absence.
+ *
+ * Here the share moves with the hour, not only with a station: bikes pile up
+ * beside full racks in the evening, when riders come home, and spread again
+ * by day. Frelo read 44 of 157 at eleven at night on 23 October 2026. A
+ * verdict judged afresh at each refresh would strike its full racks off the
+ * journey's arrivals by day and put them back at night.
+ *
+ * @param settled whether the feed was already found taking them this session.
+ * @return the verdict to hold from now on, to hand to
+ *   [joinStationsWithAvailability]: `false` for an empty snapshot, which
+ *   forgets it.
+ */
+public fun settleTakingBikesPastCapacity(
+    settled: Boolean,
+    stations: List<Station>,
+    availabilities: List<StationAvailability>,
+): Boolean = when {
+    stations.isEmpty() -> false
+    settled -> true
+    else -> takesBikesPastCapacity(stations, availabilities.associateBy { it.stationId })
+}
+
+/**
+ * Whether a feed's stations take bikes back past their capacity
+ * ([StationAvailability.isInFeedTakingBikesPastCapacity]).
+ *
+ * **What betrays it: a station reading nought free docks while holding more
+ * bikes than its capacity.** A dock holds one bike, so the bikes past the
+ * capacity stand beside a full rack, and the network took them back there —
+ * its bikes have their own lock. nextbike writes the free docks as the
+ * capacity less the bikes, floored at nought, so such a station reads full
+ * whatever stands beside it. On the 357 feeds read on 23 October 2026, late in
+ * the evening: Frelo in Freiburg 44 of its 157 stations publishing a capacity
+ * and a count, Mannheim 44 of 158, Vienna 50 of 202, Warsaw 134 of 348,
+ * Katowice 583 of 943, Berlin's nextbike 83 of 1,074.
+ *
+ * **Only a nought counts.** A station holding more bikes than its capacity and
+ * still reading free docks is a capacity lagging behind its rack, or a figure
+ * written rather than counted, and neither says a bike was returned beside a
+ * full rack: Vélib' had three such stations that evening, 49 bikes and 8 free
+ * docks at a station declaring 42; Beryl writes four free docks at its bays
+ * whatever stands there, and the case of a figure written from the capacity
+ * is [writesDocksFromCapacity]'s.
+ *
+ * **The line is [MINIMUM_PER_CENT_PAST_CAPACITY] per cent of the stations
+ * weighed**, those publishing a capacity above nought and a count. Every
+ * network of physical docks stood at 1 % or under: Portland's Biketown 3 of
+ * 308, Épinal 1 of 106, Chicago 13 of 2,076, Vélib' 1 of 1,516, New York none
+ * of 2,483. The nextbike, Donkey Republic and Inurba networks spread from
+ * there to 62 %, Katowice; five times the highest docked network leaves its
+ * margin to a reading by day, when fewer bikes stand beside full racks than
+ * late in the evening. Under it stay a few zone networks
+ * the rule gives up on — Prague at 2.1 %, Copenhagen's Donkey Republic at 3 —
+ * whose full racks are read as full, as they always were.
+ *
+ * **Below [MINIMUM_STATIONS_PAST_CAPACITY] such stations, nothing is decided**:
+ * one or two capacities lagging behind their racks would otherwise decide a
+ * small network for good. Three is the floor of [writesDocksFromCapacity],
+ * stations agreeing; it leaves out nextbike's single-station towns, Třebíč and
+ * Uherské Hradiště, and keeps Rüsselsheim's 5 of 6.
+ */
+private fun takesBikesPastCapacity(
+    stations: List<Station>,
+    byStationId: Map<String, StationAvailability>,
+): Boolean {
+    val weighed = stations.mapNotNull { station ->
+        val capacity = station.capacity?.takeIf { it > 0 } ?: return@mapNotNull null
+        val state = byStationId[station.id]?.takeIf { it.docksAvailable != null }
+            ?: return@mapNotNull null
+        state.docksAvailable == 0 && state.bikesAvailable > capacity
+    }
+    val pastCapacity = weighed.count { it }
+    return pastCapacity >= MINIMUM_STATIONS_PAST_CAPACITY &&
+        pastCapacity * PER_CENT >= weighed.size * MINIMUM_PER_CENT_PAST_CAPACITY
 }
 
 /**
@@ -442,3 +553,19 @@ private const val MINIMUM_OCCUPIED_STATIONS_TO_JUDGE = 5
  * figure written rather than counted; see there for the figure.
  */
 private const val MINIMUM_CAPACITY_FOR_HALF = 6
+
+/**
+ * The stations reading nought beside more bikes than their capacity a feed
+ * needs before [takesBikesPastCapacity] decides anything; see there for the
+ * figure.
+ */
+private const val MINIMUM_STATIONS_PAST_CAPACITY = 3
+
+/**
+ * The share of a feed's stations, in per cent, reading nought beside more
+ * bikes than their capacity from which [takesBikesPastCapacity] reads the
+ * feed as taking bikes past it; see there for the figure.
+ */
+private const val MINIMUM_PER_CENT_PAST_CAPACITY = 5
+
+private const val PER_CENT = 100

@@ -832,6 +832,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">«Nada» se lee según lo que cuenta el mapa: ninguna bici cuando cuenta bicis, ningún espacio libre cuando cuenta espacios libres.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">«Nada» significa ninguna bici: en esta red el mapa solo cuenta bicis.</string>
+    <string name="settings_bikes_past_capacity">Las estaciones llenas admiten bicis</string>
+    <string name="settings_bikes_past_capacity_hint">Detectado por las bicis que esta red deja junto a sus estaciones llenas. Desactivado, una estación llena vuelve a contar como llena.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Las estaciones de las que la red no dice nada siguen en el mapa: un recuento que nadie ha podido leer no es un recuento de cero.</string>
@@ -858,6 +860,11 @@
     <string name="street_bike_intro_title">Bicis fuera de estación</string>
     <string name="street_bike_intro_body">La red señala estas bicis lejos de sus estaciones. Algunas las ha dejado ahí un usuario; otras esperan en el depósito del operador.\n\nRoue Libre no sabe si puedes coger una donde está: lo dicen las normas de la red, y algunas redes cobran una penalización por una bici devuelta fuera de estación.\n\nLa ruta propuesta desde una bici siempre termina en una estación.</string>
     <string name="street_bike_intro_dismiss">Entendido</string>
+
+    <string name="bikes_past_capacity_title">%1$s admite bicis en estaciones llenas</string>
+    <string name="bikes_past_capacity_body">En muchas estaciones de esta red hay más bicis que anclajes: los usuarios dejan la suya junto a una estación llena y la red la recoge.\n\nPor eso Roue Libre cuenta una estación llena como una donde aún puedes devolver tu bici, y ya no muestra espacios libres para esta red.\n\nSi una estación llena rechaza tu bici, desactiva esta opción. Puedes cambiarlo en cualquier momento en los ajustes.</string>
+    <string name="bikes_past_capacity_keep">Mantener</string>
+    <string name="bikes_past_capacity_turn_off">Desactivar</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

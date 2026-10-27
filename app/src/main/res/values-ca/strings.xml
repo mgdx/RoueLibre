@@ -818,6 +818,8 @@
     <!-- Under the switch, saying what "res" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">«Res» es llegeix segons el que compta el mapa: cap bici quan compta bicis, cap espai lliure quan compta espais lliures.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">«Res» vol dir cap bici: en aquesta xarxa el mapa només compta bicis.</string>
+    <string name="settings_bikes_past_capacity">Les estacions plenes admeten bicis</string>
+    <string name="settings_bikes_past_capacity_hint">Detectat per les bicis que aquesta xarxa deixa al costat de les seves estacions plenes. Desactivat, una estació plena torna a comptar com a plena.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Les estacions de què la xarxa no diu res es queden al mapa: un recompte que ningú no ha pogut llegir no és un recompte de zero.</string>
@@ -844,6 +846,11 @@
     <string name="street_bike_intro_title">Bicis fora d’estació</string>
     <string name="street_bike_intro_body">La xarxa informa d’aquestes bicis lluny de les seves estacions. Algunes les hi ha deixades un usuari; altres esperen al dipòsit de l’operador.\n\nRoue Libre no sap si tens dret a agafar-ne una allà on és: ho diuen les normes de la xarxa, i algunes xarxes cobren una penalització per una bici retornada fora d’estació.\n\nLa ruta proposada des d’una bici sempre acaba en una estació.</string>
     <string name="street_bike_intro_dismiss">Entesos</string>
+
+    <string name="bikes_past_capacity_title">%1$s admet bicis a les estacions plenes</string>
+    <string name="bikes_past_capacity_body">A moltes estacions d’aquesta xarxa hi ha més bicis que ancoratges: els usuaris deixen la seva al costat d’una estació plena, i la xarxa la recull.\n\nPer això Roue Libre compta una estació plena com una on encara pots retornar la bici, i ja no mostra espais lliures per a aquesta xarxa.\n\nSi una estació plena no t’accepta la bici, desactiva aquesta opció. Pots canviar-ho en qualsevol moment a la configuració.</string>
+    <string name="bikes_past_capacity_keep">Mantenir</string>
+    <string name="bikes_past_capacity_turn_off">Desactivar</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

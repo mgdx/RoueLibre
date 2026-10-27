@@ -520,6 +520,8 @@ class CityFragment : Fragment() {
     private fun delete(cityId: String, displayName: String) {
         viewLifecycleOwner.lifecycleScope.launch {
             container.datasetStore.deleteCity(cityId)
+            // What the rider answered about this network goes with its data.
+            container.preferences.forgetBikesPastCapacity(cityId)
             // Deleting the data of the city in service means serving none:
             // keeping it active would leave an empty map with nothing to
             // explain why.

@@ -681,6 +681,8 @@
     <!-- Under the switch, saying what "niets" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">“Niets” volgt wat de kaart telt: geen fiets zolang ze fietsen telt, geen vrije plaats zolang ze vrije plaatsen telt.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">“Niets” betekent geen fiets: op dit netwerk telt de kaart alleen fietsen.</string>
+    <string name="settings_bikes_past_capacity">Volle stations nemen fietsen terug</string>
+    <string name="settings_bikes_past_capacity_hint">Afgeleid uit de fietsen die dit netwerk naast zijn volle stations laat staan. Uitgeschakeld telt een vol station weer als vol.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stations waarover het netwerk niets zegt blijven op de kaart: een telling die niemand kon lezen is geen telling van niets.</string>
 
@@ -706,6 +708,11 @@
     <string name="street_bike_intro_title">Fietsen buiten de stations</string>
     <string name="street_bike_intro_body">Het netwerk meldt deze fietsen ver van zijn stations. Sommige zijn daar door een gebruiker achtergelaten, andere wachten in het depot van de beheerder.\n\nRoue Libre weet niet of je er een mag meenemen waar hij staat: dat zeggen de regels van het netwerk, en sommige netwerken rekenen een boete voor een fiets die buiten een station wordt ingeleverd.\n\nEen reis die vanaf een fiets wordt voorgesteld, eindigt altijd bij een station.</string>
     <string name="street_bike_intro_dismiss">Begrepen</string>
+
+    <string name="bikes_past_capacity_title">%1$s neemt fietsen terug bij volle stations</string>
+    <string name="bikes_past_capacity_body">Bij veel stations van dit netwerk staan meer fietsen dan er stallingsplaatsen zijn: gebruikers zetten hun fiets naast een vol station, en het netwerk neemt hem terug.\n\nRoue Libre telt een vol station daarom als een station waar je je fiets nog kunt inleveren, en toont voor dit netwerk geen vrije plaatsen meer.\n\nAls een vol station je fiets weigert, schakel dit dan uit. Je kunt het altijd wijzigen in de instellingen.</string>
+    <string name="bikes_past_capacity_keep">Behouden</string>
+    <string name="bikes_past_capacity_turn_off">Uitschakelen</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

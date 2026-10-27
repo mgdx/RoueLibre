@@ -820,6 +820,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">« Rien » se lit selon ce que la carte compte : aucun vélo quand elle compte les vélos, aucune place libre quand elle compte les places.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">« Rien » veut dire aucun vélo : sur ce réseau, la carte ne compte que les vélos.</string>
+    <string name="settings_bikes_past_capacity">Les stations pleines reprennent les vélos</string>
+    <string name="settings_bikes_past_capacity_hint">Constaté d’après les vélos que ce réseau laisse à côté de ses stations pleines. Désactivé, une station pleine compte de nouveau comme pleine.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Les stations dont le réseau ne dit rien restent affichées : un compte que personne n’a pu lire n’est pas un compte nul.</string>
@@ -846,6 +848,11 @@
     <string name="street_bike_intro_title">Vélos hors station</string>
     <string name="street_bike_intro_body">Le réseau signale ces vélos loin de ses stations. Certains ont été laissés là par un usager, d’autres attendent au dépôt de l’exploitant.\n\nRoue Libre ne sait pas si tu as le droit d’en prendre un là où il est : ce sont les règles du réseau qui le disent, et certains réseaux facturent une pénalité pour un vélo rendu hors station.\n\nLe trajet proposé depuis un vélo se termine toujours à une station.</string>
     <string name="street_bike_intro_dismiss">Compris</string>
+
+    <string name="bikes_past_capacity_title">%1$s reprend les vélos aux stations pleines</string>
+    <string name="bikes_past_capacity_body">À beaucoup de stations de ce réseau, il y a plus de vélos que de points d’attache : les usagers laissent le leur à côté d’une station pleine, et le réseau le reprend.\n\nRoue Libre compte donc une station pleine comme une station où tu peux encore rendre ton vélo, et n’affiche plus les places libres pour ce réseau.\n\nSi une station pleine refuse ton vélo, désactive ce réglage. Tu peux le changer à tout moment dans les paramètres.</string>
+    <string name="bikes_past_capacity_keep">Garder</string>
+    <string name="bikes_past_capacity_turn_off">Désactiver</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

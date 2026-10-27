@@ -115,6 +115,7 @@ class SettingsFragment : Fragment() {
         // In the order the screen reads them (SPEC §7.6): city, display,
         // journey, offline data, then the donation and the way to "about".
         setUpCity(views)
+        setUpBikesPastCapacity(views)
         setUpLanguage(views)
         setUpTheme(views)
         setUpUnits(views)
@@ -214,6 +215,46 @@ class SettingsFragment : Fragment() {
     private fun setUpCity(views: FragmentSettingsBinding) {
         views.openCity.setOnClickListener { show(CityFragment()) }
         viewLifecycleOwner.lifecycleScope.launch { showCity(container.activeCityState()) }
+    }
+
+    /**
+     * Whether the network in service has its full stations read as taking
+     * bikes back (SPEC §4.1, fourth case): the place to change the answer
+     * given in [io.github.mgdx.rouelibre.ui.stations.BikesPastCapacityDialogFragment].
+     *
+     * Shown only for a network found doing so this session, or one where the
+     * rider turned it off — whose stations may not have been read yet, and
+     * whose answer must stay reachable all the same. Elsewhere the switch
+     * would change nothing, and is not there.
+     */
+    private fun setUpBikesPastCapacity(views: FragmentSettingsBinding) {
+        views.bikesPastCapacity.setOnCheckedChangeListener { _, isChecked ->
+            if (isFilling) return@setOnCheckedChangeListener
+            viewLifecycleOwner.lifecycleScope.launch {
+                val cityId = preferences.activeCityId() ?: return@launch
+                preferences.setBikesPastCapacityKept(cityId, kept = isChecked)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                combine(
+                    container.stationRepository.bikesPastCapacityDetected,
+                    preferences.activeCityIdFlow,
+                    preferences.bikesPastCapacityTurnedOff,
+                ) { detected, cityId, turnedOff ->
+                    val kept = cityId !in turnedOff
+                    (cityId != null && (detected || !kept)) to kept
+                }.collect { (shown, kept) ->
+                    val current = binding ?: return@collect
+                    current.bikesPastCapacity.isVisible = shown
+                    current.bikesPastCapacityHint.isVisible = shown
+                    isFilling = true
+                    current.bikesPastCapacity.isChecked = kept
+                    isFilling = false
+                }
+            }
+        }
     }
 
     /**

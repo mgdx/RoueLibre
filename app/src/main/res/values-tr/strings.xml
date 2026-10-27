@@ -690,6 +690,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">“Bir şey”, haritanın o an neyi saydığına göre değişir: bisiklet sayarken bisikleti olmayan, boş yuva sayarken boş yuvası olmayan istasyon.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">“Bir şey” burada bisiklet demek: bu ağda harita yalnızca bisikletleri sayar.</string>
+    <string name="settings_bikes_past_capacity">Dolu istasyonlar bisiklet kabul ediyor</string>
+    <string name="settings_bikes_past_capacity_hint">Bu ağın dolu istasyonlarının yanına bıraktığı bisikletlerden anlaşıldı. Kapatıldığında dolu istasyon yeniden dolu sayılır.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Ağın haklarında bir şey söylemediği istasyonlar haritada kalır: kimsenin okuyamadığı bir sayı, sıfır demek değildir.</string>
 
@@ -715,6 +717,11 @@
     <string name="street_bike_intro_title">İstasyon dışındaki bisikletler</string>
     <string name="street_bike_intro_body">Ağ bu bisikletleri istasyonlarının uzağında bildiriyor. Bir kısmını oraya bir kullanıcı bırakmış, bir kısmı işletmecinin deposunda bekliyor.\n\nRoue Libre, bisikleti durduğu yerden alma hakkın olup olmadığını bilemez: bunu ağın kuralları söyler ve bazı ağlar istasyon dışına bırakılan bisiklet için ceza uygular.\n\nBir bisikletten önerilen yolculuk her zaman bir istasyonda biter.</string>
     <string name="street_bike_intro_dismiss">Anladım</string>
+
+    <string name="bikes_past_capacity_title">%1$s dolu istasyonlarda da bisiklet kabul ediyor</string>
+    <string name="bikes_past_capacity_body">Bu ağın birçok istasyonunda yuvadan çok bisiklet duruyor: kullanıcılar bisikletlerini dolu bir istasyonun yanına bırakıyor ve ağ onu teslim alıyor.\n\nBu yüzden Roue Libre dolu bir istasyonu bisikletini hâlâ iade edebileceğin bir istasyon olarak sayar ve bu ağ için artık boş yuva göstermez.\n\nDolu bir istasyon bisikletini kabul etmezse bunu kapat. Bunu istediğin zaman ayarlardan değiştirebilirsin.</string>
+    <string name="bikes_past_capacity_keep">Koru</string>
+    <string name="bikes_past_capacity_turn_off">Kapat</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is

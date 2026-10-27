@@ -729,6 +729,8 @@
     <!-- Under the switch, saying what "nothing" is read against. -->
     <string name="settings_map_filters_hide_empty_hint">”Ei mitään” seuraa sitä, mitä kartta laskee: ei pyörää, kun se laskee pyöriä, ei vapaata paikkaa, kun se laskee vapaita paikkoja.</string>
     <string name="settings_map_filters_hide_empty_hint_bikes">”Ei mitään” tarkoittaa, ettei pyörää ole: tässä verkossa kartta laskee vain pyöriä.</string>
+    <string name="settings_bikes_past_capacity">Täydet asemat ottavat pyöriä vastaan</string>
+    <string name="settings_bikes_past_capacity_hint">Päätelty pyöristä, joita tämä verkosto jättää täysien asemiensa viereen. Pois päältä täysi asema lasketaan taas täydeksi.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Asemat, joista verkosto ei kerro mitään, jäävät kartalle: lukema, jota kukaan ei voinut lukea, ei ole sama kuin nolla.</string>
@@ -755,6 +757,11 @@
     <string name="street_bike_intro_title">Asemien ulkopuoliset pyörät</string>
     <string name="street_bike_intro_body">Verkosto ilmoittaa nämä pyörät kaukana asemistaan. Osan on jättänyt siihen käyttäjä, osa odottaa operaattorin varikolla.\n\nRoue Libre ei tiedä, saatko ottaa pyörän siitä, missä se seisoo: sen sanovat verkoston säännöt, ja jotkin verkostot perivät maksun aseman ulkopuolelle palautetusta pyörästä.\n\nPyörältä ehdotettu reitti päättyy aina asemalle.</string>
     <string name="street_bike_intro_dismiss">Selvä</string>
+
+    <string name="bikes_past_capacity_title">%1$s ottaa pyöriä vastaan täysillä asemilla</string>
+    <string name="bikes_past_capacity_body">Monilla tämän verkoston asemilla on enemmän pyöriä kuin telineitä: käyttäjät jättävät pyöränsä täyden aseman viereen, ja verkosto ottaa sen vastaan.\n\nSiksi Roue Libre laskee täyden aseman asemaksi, jolle voit yhä palauttaa pyöräsi, eikä näytä enää vapaita paikkoja tälle verkostolle.\n\nJos täysi asema ei ota pyörääsi vastaan, poista tämä käytöstä. Voit muuttaa sitä milloin tahansa asetuksissa.</string>
+    <string name="bikes_past_capacity_keep">Säilytä</string>
+    <string name="bikes_past_capacity_turn_off">Poista käytöstä</string>
 
     <!-- The sheet a bike outside stations opens (SPEC §7.2.1), in the station
          sheet's shape and with less to say: a bike is one bike, and nothing is
