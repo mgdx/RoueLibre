@@ -26,3 +26,20 @@ import io.github.mgdx.rouelibre.ui.map.mapControls
  */
 internal fun listOffersTheJourney(hasBaseMap: Boolean): Boolean =
     mapControls(hasBaseMap = hasBaseMap, isPicking = false).browsing
+
+/**
+ * Whether the station list is showing its first row, for the favourites to be
+ * kept in sight as they arrive above it (SPEC §7.6, issue #11).
+ *
+ * **A list with nothing laid out is not at its top: it has no place yet.** It
+ * is what a list looks like just after the screen turned over, or after the
+ * process died, and what it is about to show is the position it was scrolled
+ * to, restored at its first layout. Taken for a list at its top, it was sent
+ * back there the moment the favourites came, and the reader three screens down
+ * found themselves on the favourites' heading at every turn of the phone.
+ *
+ * @param laidOutRows the rows the list has on screen.
+ * @param canScrollUp whether the list can still be scrolled towards its start.
+ */
+internal fun listShowsItsTop(laidOutRows: Int, canScrollUp: Boolean): Boolean =
+    laidOutRows > 0 && !canScrollUp
