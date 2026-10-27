@@ -34,9 +34,10 @@ import kotlinx.coroutines.launch
  * @property isComputing a computation is under way.
  * @property hasStations false when no station is known: the network has to be
  *   fetched first, which is not the same thing as an impossible journey.
- * @property rideKind the kind of bike the journey through the stations was
- *   worked out for, or `null` for any. The kind the computation applied, not
- *   the one asked for: a network that cannot honour a kind drops it (see
+ * @property rideKind the kind of bike the journey is being, or was, worked out
+ *   for — see [rideKindAsked] — or `null` for any. Set as soon as a computation
+ *   starts, so the wait can draw it. The kind the computation applies, not the
+ *   one asked for: a network that cannot honour a kind drops it (see
  *   `bikeKindFilter`), and its journey must not be drawn as made on a bike it
  *   was never narrowed to (SPEC §7.4).
  */
@@ -153,6 +154,17 @@ class JourneyViewModel(
         computation?.cancel()
         computation = viewModelScope.launch {
             mutableState.update { it.copy(isComputing = true) }
+            // The filter is read once and used twice: what the algorithm was
+            // narrowed by must be what the ride is timed on. A kind the network
+            // cannot honour is dropped here (see below), and a journey open to
+            // every station must not be worked out on a bike it was not
+            // promised (SPEC §6). Read before anything is computed, so the bike
+            // crossing the screen meanwhile is already the one being looked for
+            // (SPEC §7.4).
+            val filter = if (streetBike == null && !usesOwnBike) bikeKindFilter() else null
+            mutableState.update {
+                it.copy(rideKind = rideKindAsked(streetBike?.kind, filter?.wanted))
+            }
             // On one's own bike the network is not consulted at all: no station
             // is chosen, so an empty station list is not a reason to give up on
             // the journey — a user who has never refreshed the feed still gets
@@ -214,12 +226,6 @@ class JourneyViewModel(
                 }
                 return@launch
             }
-            // The filter is read once and used twice: what the algorithm was
-            // narrowed by must be what the ride is timed on. A kind the network
-            // cannot honour is dropped here (see below), and a journey open to
-            // every station must not be worked out on a bike it was not
-            // promised (SPEC §6).
-            val filter = bikeKindFilter()
             val planner = JourneyPlanner(
                 router = router,
                 settings = JourneySettings(
@@ -231,12 +237,7 @@ class JourneyViewModel(
             )
             val plan = planner.plan(origin, destination, stations)
             mutableState.update {
-                it.copy(
-                    plan = plan,
-                    isComputing = false,
-                    hasStations = true,
-                    rideKind = filter?.wanted,
-                )
+                it.copy(plan = plan, isComputing = false, hasStations = true)
             }
         }
     }

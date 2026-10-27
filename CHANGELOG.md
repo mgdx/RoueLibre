@@ -16,7 +16,11 @@ also records what has no visible effect.
   discs of `JourneyShapeView` bear the bolt bike or the plain one in place of
   the cog and bolt when the journey was worked out for that kind, or set off
   from a bike outside the stations (`stationMarkerOf`); the ride's stroke
-  stays one unbroken line. The detail's ride row draws the same icon and its
+  stays one unbroken line. `ComputingBikeView` draws the same disc while the
+  journey is worked out: `JourneyUiState.rideKind` is now set as the
+  computation starts (`rideKindAsked`), and the detail screen keeps the kind
+  across a killed process and asks it again when it works the journey out
+  anew, where it used to ask for any bike. The detail's ride row draws the same icon and its
   label reads the kind to a screen reader. `JourneyUiState` and
   `ShownJourney` carry `rideKind`, the kind the computation applied
   (`filter?.wanted`), never the switch's; `RideKind.kt` holds the rule,

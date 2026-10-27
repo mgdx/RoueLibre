@@ -112,6 +112,16 @@ class JourneyDetailFragment : Fragment() {
     private var streetBike: StreetBikeHandle? = null
 
     /**
+     * The kind of bike the journey described was worked out for, or `null` for
+     * any (SPEC §7.3).
+     *
+     * Kept for the reason [streetBike] is: worked out again after a kill
+     * without it, a journey narrowed to electric bikes would come back as one
+     * open to any — another journey than the one being read.
+     */
+    private var rideKind: WantedBikeKind? = null
+
+    /**
      * Works the journey out again, on the one path that needs it.
      *
      * Built only when it is asked for, so arriving here the ordinary way — from
@@ -125,6 +135,8 @@ class JourneyDetailFragment : Fragment() {
             origin = checkNotNull(origin).position,
             destination = checkNotNull(destination).position,
             usesOwnBike = usesOwnBike,
+            wantedBikeKind = rideKind,
+            fleet = container.fleetRepository.fleet,
             walkingPace = container.preferences.walkingPace,
             ownBikeKind = container.preferences.ownBikeKind,
             coveredArea = container.coveredArea(),
@@ -189,6 +201,11 @@ class JourneyDetailFragment : Fragment() {
         // it, as the point it sets off from (SPEC §7.2.1).
         streetBike = shown?.plan?.streetBikeDeparture()
             ?: StreetBikeHandle.readFrom(savedInstanceState, STATE_STREET_BIKE)
+        rideKind = if (shown != null) {
+            shown.rideKind
+        } else {
+            WantedBikeKind.ofWireName(savedInstanceState?.getString(STATE_RIDE_KIND))
+        }
     }
 
     override fun onCreateView(
@@ -234,6 +251,7 @@ class JourneyDetailFragment : Fragment() {
         destination?.writeTo(outState, STATE_DESTINATION)
         outState.putBoolean(STATE_OWN_BIKE, usesOwnBike)
         streetBike?.writeTo(outState, STATE_STREET_BIKE)
+        outState.putString(STATE_RIDE_KIND, rideKind?.wireName)
     }
 
     /**
@@ -258,6 +276,12 @@ class JourneyDetailFragment : Fragment() {
         withBikeFleet { lent ->
             fleet = lent
             binding?.computingBike?.fleet = lent
+        }
+        // The bike the computation is actually looking for, which it says as
+        // soon as it starts: the one that was asked, unless the network can no
+        // longer honour it (SPEC §7.4).
+        viewLifecycleOwner.lifecycleScope.launch {
+            plannedAgain.state.collect { binding?.computingBike?.rideKind = it.rideKind }
         }
         viewLifecycleOwner.lifecycleScope.launch {
             val settled = plannedAgain.state.first { !it.isComputing }
@@ -795,6 +819,7 @@ class JourneyDetailFragment : Fragment() {
         private const val STATE_DESTINATION = "state-destination"
         private const val STATE_OWN_BIKE = "state-own-bike"
         private const val STATE_STREET_BIKE = "state-street-bike"
+        private const val STATE_RIDE_KIND = "state-ride-kind"
 
         /**
          * The ground a reading of the profile is averaged over.

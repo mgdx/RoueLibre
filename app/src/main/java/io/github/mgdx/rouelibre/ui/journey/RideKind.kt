@@ -29,13 +29,31 @@ import io.github.mgdx.rouelibre.ui.BikeGlyphs
 internal fun rideKindOf(departure: DeparturePoint, computedFor: WantedBikeKind?): WantedBikeKind? =
     when (departure) {
         is DeparturePoint.AtStation -> computedFor
-        is DeparturePoint.AtStreetBike -> when (departure.kind) {
-            VehicleKind.Electric -> WantedBikeKind.Electric
-            VehicleKind.Mechanical -> WantedBikeKind.Mechanical
-            // A scooter, or a type the table could not read: no bike to name.
-            VehicleKind.Other -> null
-        }
+        is DeparturePoint.AtStreetBike -> bikeKindOf(departure.kind)
     }
+
+/**
+ * The kind of bike a computation sets out to ride, known before it has found
+ * anything: the same two settlements as [rideKindOf], read off the question
+ * rather than off the answer. A journey on one's own bike asks neither, and
+ * draws the network's bike while it waits, as it always has.
+ *
+ * @param streetBikeKind what the table read the bike chosen outside the
+ *   stations as, or `null` for a journey that sets off from none.
+ * @param applied the kind the computation narrows the stations to, or `null`.
+ */
+internal fun rideKindAsked(
+    streetBikeKind: VehicleKind?,
+    applied: WantedBikeKind?,
+): WantedBikeKind? = if (streetBikeKind != null) bikeKindOf(streetBikeKind) else applied
+
+/** A vehicle type's kind as a bike one rides, `null` for what is no bike to name. */
+private fun bikeKindOf(kind: VehicleKind): WantedBikeKind? = when (kind) {
+    VehicleKind.Electric -> WantedBikeKind.Electric
+    VehicleKind.Mechanical -> WantedBikeKind.Mechanical
+    // A scooter, or a type the table could not read.
+    VehicleKind.Other -> null
+}
 
 /**
  * The kind worth saying of the ride, or `null` to keep the network's own bike.

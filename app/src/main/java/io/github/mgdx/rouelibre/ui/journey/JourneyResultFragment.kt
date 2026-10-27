@@ -604,6 +604,7 @@ class JourneyResultFragment : Fragment() {
         val views = binding ?: return
         views.computing.isVisible = state.isComputing
         views.detail.root.isVisible = !state.isComputing
+        views.computingBike.rideKind = state.rideKind
         if (state.isComputing) return
 
         track.draw(state, origin.position, destination.position)
