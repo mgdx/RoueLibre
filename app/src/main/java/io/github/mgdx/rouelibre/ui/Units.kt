@@ -1,12 +1,12 @@
 package io.github.mgdx.rouelibre.ui
 
-import android.content.res.Resources
+import android.content.Context
 import android.icu.util.LocaleData
 import android.icu.util.LocaleData.MeasurementSystem
 import android.icu.util.ULocale
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.core.os.ConfigurationCompat
+import androidx.core.app.LocaleManagerCompat
 import io.github.mgdx.rouelibre.core.measure.UnitChoice
 import io.github.mgdx.rouelibre.core.measure.UnitSystem
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,7 +29,10 @@ import java.util.Locale
  */
 object DisplayedUnits {
 
-    private val state = MutableStateFlow(regionUnitSystem())
+    // Metric only until the application's start applies the stored choice,
+    // which it does before any screen exists: the region cannot be read here,
+    // since reading it takes a context (see `deviceLocale`).
+    private val state = MutableStateFlow(UnitSystem.Metric)
 
     /** What is being written in right now, and its changes. */
     val system: StateFlow<UnitSystem> = state.asStateFlow()
@@ -44,8 +47,8 @@ object DisplayedUnits {
      * region changes while the application is running must be followed by
      * whoever asked to follow it.
      */
-    fun follow(choice: UnitChoice) {
-        state.value = choice.resolve(regionUnitSystem())
+    fun follow(context: Context, choice: UnitChoice) {
+        state.value = choice.resolve(regionUnitSystem(context))
     }
 }
 
@@ -83,8 +86,8 @@ object DisplayedUnits {
  * application where somebody has to act to be shown what their region measures
  * in.
  */
-fun regionUnitSystem(): UnitSystem {
-    val locale = deviceLocale()
+fun regionUnitSystem(context: Context): UnitSystem {
+    val locale = deviceLocale(context)
     if (locale.country.isNullOrEmpty()) return UnitSystem.Metric
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         return icuUnitSystem(ULocale.forLocale(locale))
@@ -102,15 +105,27 @@ fun regionUnitSystem(): UnitSystem {
  * device's own, which is kept behind it — and a language carries no country:
  * the tag stored is `fr`, never `fr-FR`. Read there, somebody in Boston who
  * puts the interface into French would find their miles turned into kilometres
- * by a setting about words. `Resources.getSystem()` carries the device's
- * configuration, which no per-application language overrides, on every release
- * served.
+ * by a setting about words.
+ *
+ * **Nor is `Resources.getSystem()` the device's, whatever its name says.**
+ * From Android 13 the framework holds the per-application language itself and
+ * merges it into the configuration it hands the process — the global one
+ * included, which `Resources.getSystem()` reflects. A language with no country
+ * hid this behind the rule on regionless locales; one carrying a country did
+ * not: a device in fr-FR whose application language was set to `en-US` from
+ * Android's own settings wrote miles (Fairphone 5, Android 16).
+ * `LocaleManager.getSystemLocales` is the framework's answer to exactly this
+ * question, and `LocaleManagerCompat` asks it from Android 13 on. Below that,
+ * the framework knows no per-application language: AppCompat applies the one
+ * chosen to the activities' own contexts and leaves the process configuration
+ * alone, so `Resources.getSystem()` — which is what the compat class reads
+ * there — still carries the device's.
  *
  * With no language chosen the two answer the same thing, which is why nothing
  * changes for whoever never opens that setting.
  */
-private fun deviceLocale(): Locale =
-    ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0]
+private fun deviceLocale(context: Context): Locale =
+    LocaleManagerCompat.getSystemLocales(context)[0]
         ?: Locale.getDefault()
 
 /** What ICU says of a locale, where the platform is new enough to be asked. */

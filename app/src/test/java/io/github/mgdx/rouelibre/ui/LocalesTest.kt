@@ -296,7 +296,7 @@ class LocalesTest {
      * list, so units read off the language the interface speaks could only ever
      * answer "metric", and somebody in Boston who put the interface into French
      * would have lost their miles to a setting about words. `regionUnitSystem`
-     * therefore reads the device's own configuration, which no per-application
+     * therefore reads the device's own locales, which no per-application
      * language overrides. What this test pins is the shape of that reading: a
      * region decides, and no language names one.
      */
