@@ -44,9 +44,11 @@ class RoueLibreApplication : Application() {
      * does not use.
      */
     private fun applyChosenUnits() {
-        DisplayedUnits.follow(runBlocking { container.preferences.units.first() })
+        DisplayedUnits.follow(this, runBlocking { container.preferences.units.first() })
         CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate).launch {
-            container.preferences.units.collect(DisplayedUnits::follow)
+            container.preferences.units.collect {
+                DisplayedUnits.follow(this@RoueLibreApplication, it)
+            }
         }
     }
 
