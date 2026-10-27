@@ -9,6 +9,18 @@ also records what has no visible effect.
 
 ## [Unreleased]
 
+## [1.6.0]
+
+The release of networks without docks. Wherever a network takes bikes back
+beside full stations or in zones — Munich, Düsseldorf, Frelo, every Ecovelo
+network — journeys end again, free docks are no longer promised or talked
+about, and a row of three answers in the settings lets a rider settle the
+question by hand. Mainz is served and Pau comes back. The station list gains
+the map's controls, its filters and the favourites at its head; the kind of
+bike is kept across launches and named on the journey's ride; the point
+picker opens where the map was. Most of it answers issues #8 to #16, all
+reported by @zklmtfr.
+
 ### Added
 
 - **Mainz is served, and Pau comes back.** The survey of 27 October 2026
@@ -64,6 +76,27 @@ also records what has no visible effect.
   shown for a network detected or turned off, changes the answer. Both sets
   are dropped with the city's data. Six strings, translated into the 30
   languages.
+- **The station list carries the map's controls, its filters and the
+  favourites at its head** (issues
+  [#10](https://github.com/mgdx/RoueLibre/issues/10),
+  [#11](https://github.com/mgdx/RoueLibre/issues/11) and
+  [#12](https://github.com/mgdx/RoueLibre/issues/12), reported by @zklmtfr;
+  `SPEC.md` §7.1, §7.5, §7.6). The way back to the map stood at the top of
+  the list and at the bottom of the map; the list now keeps its controls
+  where the map does — settings at the top end, the other view, search,
+  nearest first and journey at the bottom end, the kind of bike and the
+  compact bikes / docks button at the bottom start, shared with the map for
+  the session (`SharedStationFilters`). The floating controls step aside
+  while the list is read downwards and come back on the first move upwards,
+  never under TalkBack, and stay away while a search is typed, the keyboard
+  folding away being what brings them back (`ControlsOutOfTheWay`). The
+  journey button waits for the city's data, as on the map. The favourites
+  head the list under a foldable heading (`StationSectionAdapter`) and are
+  still found in their place in the full list; their own screen is now where
+  they are put in order. A turn of the phone, or the death of the process,
+  keeps the list where it was read rather than bringing it back to the
+  favourites. `MapFilterControls` goes, split into `StationFilterButtons`
+  and `ListControls`. Four strings, translated into the 30 languages.
 
 ### Changed
 
@@ -110,6 +143,17 @@ also records what has no visible effect.
   and Mannheim, at 59.2 %, is the nearest to keep its toggle. Display only:
   the planner is untouched. Four strings added and translated into the 30
   languages.
+
+- **The window is laid edge to edge without AndroidX's helper.** Play still
+  flagged `Window.setStatusBarColor`, `setNavigationBarColor` and the
+  `SHORT_EDGES` cutout mode after 1.5.2: all of them sit inside
+  `enableEdgeToEdge()`, behind version checks its scan does not read. The
+  bars' transparency now comes from the theme, with the dim veil AndroidX
+  puts behind the navigation bar on Android 8.0; code keeps only the layout
+  flag and, from Android 11, the `ALWAYS` cutout mode, neither deprecated.
+- **The place sheet speaks as the station sheet does** (`SPEC.md` §7.1). Its
+  buttons take `station_as_origin` and `station_as_destination`;
+  `place_leave_from_here` and `place_go_there` go from every language.
 
 ### Fixed
 
@@ -207,6 +251,26 @@ also records what has no visible effect.
   (Room migration 4 → 5) so that a cache written under another list is read
   again at the next refresh. `compute_bbox.py`, `sample_stations.py`,
   `read_fleet.py` and `add_city.py --overwrite` read the same list.
+- **The first screen is never left empty after an early recreation**
+  ([issue #16](https://github.com/mgdx/RoueLibre/issues/16), reported by
+  @zklmtfr). A theme other than the system's was read in the background and
+  applied by recreating the activity; landing before the first fragment was
+  committed, it left a blank screen in the theme's colour. The theme is now
+  read synchronously in `Application.onCreate`, as the units are;
+  `MainActivity` opens in full whenever it holds no fragment, whatever its
+  saved state says; and the bars' icon polarity is read from the theme rather
+  than copied off an inherited window.
+- **"System" units follow the device's region, not the application's
+  language.** From Android 13 the per-application language is merged into
+  `Resources.getSystem()` too, so a phone in fr-FR with the application set
+  to English wrote miles and feet. The region is read through
+  `LocaleManagerCompat.getSystemLocales`.
+- **The searched place's pin shows in the light theme.** `ic_place` is drawn
+  white and the map's pill did not tint it, so it vanished against the white
+  surface; it takes the ink of the pill's text.
+- **The city list comes back to its head once another city is chosen.**
+  Back from the storage screen, it stayed anchored on the row that headed it
+  before, the city just chosen sorted out of sight above.
 - **Turning the phone no longer resets the map's two filters.** The
   "bikes" / "docks" mode and the kind of bike were fields of
   `MapFilterControls` and went with the fragment; they now travel in its saved

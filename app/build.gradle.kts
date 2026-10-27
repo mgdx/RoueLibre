@@ -96,6 +96,7 @@ val publishedVersionNames = mapOf(
     14 to "1.5.0",
     15 to "1.5.1",
     16 to "1.5.2",
+    17 to "1.6.0",
 )
 
 /**
@@ -135,14 +136,12 @@ android {
         // leaves it unable to tell one release from the next. The
         // architectures derive their own codes from it below, so the value is
         // still written once.
-        versionCode = 16
-        // A flag before every network's name and a city list narrowed to one
-        // country; the welcome sequence ends on the map once the city is in.
-        // Redirections are followed only where they contact nobody new, and a
-        // download stops at the size its manifest announces. A point near
-        // Greenwich or the equator reaches the navigation app as a point. See
-        // CHANGELOG.md.
-        versionName = "1.5.2"
+        versionCode = 17
+        // Networks without docks: journeys end again where full stations or
+        // zones take bikes back, and the rider can settle it by hand. The
+        // station list gains the map's controls and the favourites at its
+        // head; Mainz is served and Pau comes back. See CHANGELOG.md.
+        versionName = "1.6.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
