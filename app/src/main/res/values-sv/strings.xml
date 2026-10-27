@@ -727,8 +727,11 @@
     <string name="settings_bikes_past_capacity_never">Aldrig</string>
     <string name="settings_bikes_past_capacity_hint_detected">Automatiskt: det här nätverket låter cyklar stå bredvid sina fulla stationer, så en full station räknas som en där du kan lämna tillbaka cykeln.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Automatiskt: inget i nätverkets data visar cyklar som ställts bredvid fulla stationer, så en full station räknas som full.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Automatiskt: enligt nätverkets data tar dess stationer emot cyklar även utan ledig plats.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Automatiskt: avgörs utifrån nätverkets data så snart dess stationer har lästs in.</string>
     <string name="settings_bikes_past_capacity_hint_always">En full station räknas som en där du kan lämna tillbaka cykeln. Om nätverket inte tillåter det kan en resa sluta vid en station som inte tar emot den.</string>
     <string name="settings_bikes_past_capacity_hint_never">En full station räknas som full, oavsett vad nätverkets data visar.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">En station utan ledig plats räknas som full. I det här nätverket visar nästan ingen station lediga platser, så bara få resor är möjliga.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stationer som nätverket inte säger något om stannar kvar på kartan: ett antal som ingen kunnat läsa är inte ett antal på noll.</string>
 

@@ -800,8 +800,11 @@
     <string name="settings_bikes_past_capacity_never">Никад</string>
     <string name="settings_bikes_past_capacity_hint_detected">Аутоматски: ова мрежа оставља бицикле поред својих пуних станица, па се пуна станица рачуна као станица на коју можете да вратите бицикл.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Аутоматски: ништа у подацима ове мреже не показује бицикле остављене поред пуних станица, па се пуна станица рачуна као пуна.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Аутоматски: према подацима ове мреже, њене станице примају бицикле чак и без слободног места.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Аутоматски: одређује се из података ове мреже чим се њене станице учитају.</string>
     <string name="settings_bikes_past_capacity_hint_always">Пуна станица се рачуна као станица на коју можете да вратите бицикл. Ако ова мрежа то не дозвољава, путовање може да се заврши на станици која га одбија.</string>
     <string name="settings_bikes_past_capacity_hint_never">Пуна станица се рачуна као пуна, без обзира на то шта показују подаци ове мреже.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">Станица без слободног места се рачуна као пуна. На овој мрежи готово ниједна станица не показује слободно место, па је могуће тек мало путовања.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Станице о којима мрежа ништа не каже остају на мапи: број који нико није могао да прочита није број нула.</string>

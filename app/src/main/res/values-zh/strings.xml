@@ -701,8 +701,11 @@
     <string name="settings_bikes_past_capacity_never">从不</string>
     <string name="settings_bikes_past_capacity_hint_detected">自动：该系统会在满站旁停放车辆，因此满站被视为可以还车的站点。</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">自动：该系统的数据中没有显示满站旁停放的车辆，因此满站被视为已满。</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">自动：根据该系统的数据，其站点即使没有空位也可还车。</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">自动：站点加载后，根据该系统的数据判断。</string>
     <string name="settings_bikes_past_capacity_hint_always">满站被视为可以还车的站点。如果该系统不允许这样做，行程可能会在拒收车辆的站点结束。</string>
     <string name="settings_bikes_past_capacity_hint_never">无论该系统的数据显示什么，满站都被视为已满。</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">没有空位的站点被视为已满。该系统几乎所有站点都不显示空位，因此可行的行程很少。</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">该系统没有说明情况的站点仍留在地图上：谁都读不到的数量，不等于数量为零。</string>

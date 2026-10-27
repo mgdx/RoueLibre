@@ -326,7 +326,7 @@ class MainActivity : AppCompatActivity() {
                         val cityId = container.preferences.activeCityId() ?: return@collect
                         if (container.preferences.bikesPastCapacityExplained(cityId)) return@collect
                         // Settled by hand already, either way: there is nothing to tell.
-                        val answer = container.preferences.bikesPastCapacityAnswers.first()[cityId]
+                        val answer = container.preferences.fullStationAnswers.first()[cityId]
                         if (answer != null) return@collect
                         val name = container.activeCity()?.network?.displayName ?: return@collect
                         BikesPastCapacityDialogFragment.explain(

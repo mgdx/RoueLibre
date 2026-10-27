@@ -702,8 +702,11 @@
     <string name="settings_bikes_past_capacity_never">Aldrig</string>
     <string name="settings_bikes_past_capacity_hint_detected">Automatisk: dette netværk lader cykler stå ved siden af sine fyldte stationer, så en fyldt station regnes som en, hvor du kan aflevere din cykel.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Automatisk: intet i netværkets data viser cykler stillet ved siden af fyldte stationer, så en fyldt station regnes som fyldt.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Automatisk: ifølge netværkets data tager dets stationer imod cykler, også uden ledig plads.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Automatisk: afgøres ud fra netværkets data, så snart dets stationer er indlæst.</string>
     <string name="settings_bikes_past_capacity_hint_always">En fyldt station regnes som en, hvor du kan aflevere din cykel. Hvis netværket ikke tillader det, kan en tur ende ved en station, der afviser den.</string>
     <string name="settings_bikes_past_capacity_hint_never">En fyldt station regnes som fyldt, uanset hvad netværkets data viser.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">En station uden ledig plads regnes som fyldt. På dette netværk viser næsten ingen stationer ledig plads, så kun få ture er mulige.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Stationer, som netværket intet siger om, bliver på kortet: en optælling, ingen kunne læse, er ikke en optælling af ingenting.</string>
 

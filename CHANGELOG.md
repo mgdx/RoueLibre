@@ -17,7 +17,7 @@ also records what has no visible effect.
   Automatic, Always, Never — shown for every network served: the reading
   misses networks of zones under its line (Prague's nextbike at 2.1 %), and
   their riders can now say their full stations take bikes. `:core` gains
-  `BikesPastCapacityAnswer`, handed to the join in place of the
+  `FullStationAnswer`, handed to the join in place of the
   `takesBikesPastCapacityAllowed` flag; DataStore gains
   `bikes_past_capacity_turned_on` beside `bikes_past_capacity_turned_off`,
   read as before. The line under the row says what the feed showed for
@@ -70,6 +70,19 @@ also records what has no visible effect.
 
 ### Fixed
 
+- **Munich's setting about full stations works, and "Automatic" tells the
+  truth** (issue #8, `SPEC.md` §4.1). The answer governed the fourth case
+  alone: in Munich, whose zones take any bike by the second, "Never" changed
+  nothing and the line under "Automatic" called the zones full. The answer,
+  renamed `FullStationAnswer`, now sits on each `StationAvailability` and
+  governs `hasUnlimitedDocks` over every case; `readsUnlimitedFromFeed`
+  keeps what the feed gives alone. The settings read the cached stations
+  themselves (`feedTakesAnyBikeAtMostStations`, the 60 % line of §7.1) and
+  say which of four things the feed gives: bikes beside full stations,
+  stations taking any bike, full meaning full, or nothing loaded yet — which
+  also ends the false "nothing shows" right after a change of city. "Never"
+  warns where it leaves few journeys. Three strings, translated into the 30
+  languages.
 - **Frelo's full racks take bikes back again** (issue #8, `SPEC.md` §4.1,
   §7.1). nextbike writes free docks as the capacity less the bikes, floored at
   nought, so a rack where bikes are returned beside the full docks reads full

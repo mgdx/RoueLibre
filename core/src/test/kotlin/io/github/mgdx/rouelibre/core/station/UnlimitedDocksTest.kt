@@ -551,10 +551,13 @@ class UnlimitedDocksTest {
             evening.map { it.first },
             evening.map { it.second },
             takesBikesPastCapacitySettled = true,
-            bikesPastCapacityAnswer = BikesPastCapacityAnswer.Never,
+            fullStationAnswer = FullStationAnswer.Never,
         ).associate { it.station.id to checkNotNull(it.availability) }
 
-        assertFalse(states.values.any { it.isInFeedTakingBikesPastCapacity })
+        // What the feed shows stays what it shows; the rider's answer wins.
+        assertTrue(states.values.all { it.isInFeedTakingBikesPastCapacity })
+        assertTrue(states.values.all { it.readsUnlimitedFromFeed })
+        assertFalse(states.values.any { it.hasUnlimitedDocks })
         assertFalse(states.getValue("full-0").canAcceptBike)
         assertTrue(states.getValue("counted-0").canAcceptBike)
     }
@@ -564,16 +567,65 @@ class UnlimitedDocksTest {
         // Prague's nextbike, 2.1 % on 23 October 2026: under the line, and its
         // riders know its full stations take bikes back.
         val prague = fullRacks("over", 1, 9) + fullRacks("full", 3, 6) + countedRacks(40)
-        fun join(answer: BikesPastCapacityAnswer) = joinStationsWithAvailability(
+        fun join(answer: FullStationAnswer) = joinStationsWithAvailability(
             prague.map { it.first },
             prague.map { it.second },
-            bikesPastCapacityAnswer = answer,
+            fullStationAnswer = answer,
         ).associate { it.station.id to checkNotNull(it.availability) }
 
-        assertFalse(join(BikesPastCapacityAnswer.Automatic).getValue("full-0").canAcceptBike)
-        val always = join(BikesPastCapacityAnswer.Always)
-        assertTrue(always.values.all { it.isInFeedTakingBikesPastCapacity })
+        assertFalse(join(FullStationAnswer.Automatic).getValue("full-0").canAcceptBike)
+        val always = join(FullStationAnswer.Always)
+        assertFalse(always.values.any { it.isInFeedTakingBikesPastCapacity })
+        assertTrue(always.values.all { it.hasUnlimitedDocks })
         assertTrue(always.getValue("full-0").acceptsAnyBike)
+    }
+
+    @Test
+    fun `the rider's answer governs zones too, not the fourth case alone`() {
+        // Munich's MyRadl: zones with no capacity at nought take any bike by
+        // the second case. "Never" changed nothing there, and the settings
+        // called them full under "automatic": the answer now governs them.
+        val zones = joined()
+        val munich = listOf("zone", "zone-with-capacity", "counted-zone").map { zones.getValue(it) }
+        fun read(answer: FullStationAnswer) = joinStationsWithAvailability(
+            munich.map { it.station },
+            munich.map { checkNotNull(it.availability) },
+            fullStationAnswer = answer,
+        ).associate { it.station.id to checkNotNull(it.availability) }
+
+        assertTrue(read(FullStationAnswer.Automatic).getValue("zone").acceptsAnyBike)
+        val never = read(FullStationAnswer.Never).getValue("zone")
+        assertTrue(never.readsUnlimitedFromFeed)
+        assertFalse(never.canAcceptBike)
+        assertTrue(read(FullStationAnswer.Never).getValue("counted-zone").canAcceptBike)
+    }
+
+    @Test
+    fun `most stations taking any bike by the feed alone is read whatever the answer`() {
+        // What the settings describe under "automatic": Munich's zones above
+        // the line, Lille's docks under it, and the rider's answer moves
+        // neither.
+        // Munich on 21 October 2026: 800 of its 805 stations were zones at
+        // nought; nine zones and a counted rack keep that proportion.
+        val zones = joinStationsWithAvailability(
+            (0 until 9).map { rack("zone-$it", virtual = true) } + rack("rack", capacity = 9),
+            (0 until 9).map { holding("zone-$it", 2, 0) } + holding("rack", 3, 6),
+        )
+        val docked = statesOf(countedRacks(10)).let { states ->
+            countedRacks(10).map { (station, _) ->
+                StationWithAvailability(station, states.getValue(station.id))
+            }
+        }
+
+        assertEquals(true, feedTakesAnyBikeAtMostStations(zones))
+        assertEquals(false, feedTakesAnyBikeAtMostStations(docked))
+        assertNull(feedTakesAnyBikeAtMostStations(emptyList()))
+        val turnedOff = zones.map {
+            it.copy(
+                availability = it.availability?.copy(fullStationAnswer = FullStationAnswer.Never),
+            )
+        }
+        assertEquals(true, feedTakesAnyBikeAtMostStations(turnedOff))
     }
 
     // ----------------------------------------- edge cases of the feed --

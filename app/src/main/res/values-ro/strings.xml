@@ -780,8 +780,11 @@
     <string name="settings_bikes_past_capacity_never">Niciodată</string>
     <string name="settings_bikes_past_capacity_hint_detected">Automat: această rețea lasă biciclete lângă stațiile sale pline, așa că o stație plină contează ca una unde îți poți preda bicicleta.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Automat: nimic din datele acestei rețele nu arată biciclete lăsate lângă stații pline, așa că o stație plină contează ca plină.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Automat: conform datelor acestei rețele, stațiile sale primesc biciclete chiar și fără niciun loc liber.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Automat: se decide din datele acestei rețele imediat ce stațiile sale sunt încărcate.</string>
     <string name="settings_bikes_past_capacity_hint_always">O stație plină contează ca una unde îți poți preda bicicleta. Dacă această rețea nu permite asta, un traseu se poate încheia la o stație care o refuză.</string>
     <string name="settings_bikes_past_capacity_hint_never">O stație plină contează ca plină, orice ar arăta datele acestei rețele.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">O stație fără niciun loc liber contează ca plină. În această rețea aproape nicio stație nu arată locuri libere, așa că rămân puține trasee posibile.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stațiile despre care rețeaua nu spune nimic rămân pe hartă: un număr pe care nimeni nu l-a putut citi nu este un număr egal cu zero.</string>

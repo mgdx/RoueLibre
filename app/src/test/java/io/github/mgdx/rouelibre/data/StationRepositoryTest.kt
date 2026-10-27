@@ -3,8 +3,8 @@ package io.github.mgdx.rouelibre.data
 import io.github.mgdx.rouelibre.core.DataError
 import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.gbfs.GbfsParser
-import io.github.mgdx.rouelibre.core.station.BikesPastCapacityAnswer
 import io.github.mgdx.rouelibre.core.station.FleetReading
+import io.github.mgdx.rouelibre.core.station.FullStationAnswer
 import io.github.mgdx.rouelibre.core.station.ServiceState
 import io.github.mgdx.rouelibre.data.local.StationAvailabilityEntity
 import io.github.mgdx.rouelibre.data.local.StationDao
@@ -67,8 +67,8 @@ class StationRepositoryTest {
     private fun repository(
         recordFleet: suspend (FleetReading) -> Unit = {},
         streetBikesMinimumInterval: suspend () -> Duration = { Duration.ofMinutes(5) },
-        bikesPastCapacityAnswer: Flow<BikesPastCapacityAnswer> =
-            MutableStateFlow(BikesPastCapacityAnswer.Automatic),
+        fullStationAnswer: Flow<FullStationAnswer> =
+            MutableStateFlow(FullStationAnswer.Automatic),
     ): StationRepository = StationRepository(
         remote = GbfsRemoteSource(
             client = OkHttpClient(),
@@ -82,7 +82,7 @@ class StationRepositoryTest {
         discoveryUrlProvider = { discoveryPath?.let { server.url(it).toString() } },
         providerIdsProvider = { providerIds },
         recordFleet = recordFleet,
-        bikesPastCapacityAnswer = bikesPastCapacityAnswer,
+        fullStationAnswer = fullStationAnswer,
         clock = object : Clock() {
             override fun getZone() = ZoneOffset.UTC
             override fun withZone(zone: java.time.ZoneId) = this
@@ -443,11 +443,11 @@ class StationRepositoryTest {
         // Detected all the same, so the window and the switch can be shown;
         // applied only while the rider keeps it, and the free docks weighed
         // again on the answer.
-        val answer = MutableStateFlow(BikesPastCapacityAnswer.Automatic)
+        val answer = MutableStateFlow(FullStationAnswer.Automatic)
         enqueueDiscovery()
         enqueueTwentyDockStations()
         enqueueFullStatus(overflowing = 3)
-        val repository = repository(bikesPastCapacityAnswer = answer)
+        val repository = repository(fullStationAnswer = answer)
         repository.refresh()
 
         val kept = repository.observeStations().first().stations
@@ -455,7 +455,7 @@ class StationRepositoryTest {
         assertEquals(false, repository.observeFreeDocksShown().first())
         assertTrue(repository.bikesPastCapacityDetected.value)
 
-        answer.value = BikesPastCapacityAnswer.Never
+        answer.value = FullStationAnswer.Never
         val turnedOff = repository.observeStations().first().stations
         assertTrue(turnedOff.none { it.availability!!.canAcceptBike })
         assertEquals(true, repository.observeFreeDocksShown().first())
@@ -467,18 +467,18 @@ class StationRepositoryTest {
         runTest {
             // Full racks with nothing beside them: the feed shows nothing, and
             // the rider who knows the network answers "always".
-            val answer = MutableStateFlow(BikesPastCapacityAnswer.Automatic)
+            val answer = MutableStateFlow(FullStationAnswer.Automatic)
             enqueueDiscovery()
             enqueueTwentyDockStations()
             enqueueFullStatus(overflowing = 0)
-            val repository = repository(bikesPastCapacityAnswer = answer)
+            val repository = repository(fullStationAnswer = answer)
             repository.refresh()
 
             val automatic = repository.observeStations().first().stations
             assertTrue(automatic.none { it.availability!!.canAcceptBike })
             assertEquals(false, repository.bikesPastCapacityDetected.value)
 
-            answer.value = BikesPastCapacityAnswer.Always
+            answer.value = FullStationAnswer.Always
             val always = repository.observeStations().first().stations
             assertTrue(always.all { it.availability!!.acceptsAnyBike })
             assertEquals(false, repository.observeFreeDocksShown().first())

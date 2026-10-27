@@ -756,8 +756,11 @@
     <string name="settings_bikes_past_capacity_never">Soha</string>
     <string name="settings_bikes_past_capacity_hint_detected">Automatikus: ez a hálózat a tele állomásai mellett is hagy kerékpárokat, így a tele állomás olyannak számít, ahol leadhatod a kerékpárodat.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Automatikus: a hálózat adataiban semmi sem mutat tele állomások mellé tett kerékpárokat, így a tele állomás telének számít.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Automatikus: a hálózat adatai szerint az állomásai szabad hely nélkül is fogadnak kerékpárt.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Automatikus: a hálózat adatai alapján dől el, amint betöltődnek az állomásai.</string>
     <string name="settings_bikes_past_capacity_hint_always">A tele állomás olyannak számít, ahol leadhatod a kerékpárodat. Ha ez a hálózat nem engedi, az útvonal olyan állomáson érhet véget, amely nem fogadja.</string>
     <string name="settings_bikes_past_capacity_hint_never">A tele állomás telének számít, bármit mutatnak is a hálózat adatai.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">A szabad hely nélküli állomás telének számít. Ezen a hálózaton szinte egyik állomás sem mutat szabad helyet, így kevés útvonal marad lehetséges.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Azok az állomások, amelyekről a hálózat nem mond semmit, a térképen maradnak: az ismeretlen darabszám nem ugyanaz, mint a nulla.</string>

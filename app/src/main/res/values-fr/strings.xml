@@ -826,8 +826,11 @@
     <string name="settings_bikes_past_capacity_never">Jamais</string>
     <string name="settings_bikes_past_capacity_hint_detected">Automatique : ce réseau laisse des vélos à côté de ses stations pleines, donc une station pleine compte comme une station où tu peux rendre ton vélo.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Automatique : rien dans les données de ce réseau ne montre de vélos laissés à côté de stations pleines, donc une station pleine compte comme pleine.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Automatique : d’après les données de ce réseau, ses stations reprennent les vélos même sans place libre.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Automatique : décidé d’après les données de ce réseau dès que ses stations sont chargées.</string>
     <string name="settings_bikes_past_capacity_hint_always">Une station pleine compte comme une station où tu peux rendre ton vélo. Si ce réseau ne le permet pas, un trajet peut finir à une station qui le refuse.</string>
     <string name="settings_bikes_past_capacity_hint_never">Une station pleine compte comme pleine, quoi que montrent les données de ce réseau.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">Une station sans place libre compte comme pleine. Sur ce réseau, presque toutes les stations n’en affichent aucune : peu de trajets restent possibles.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Les stations dont le réseau ne dit rien restent affichées : un compte que personne n’a pu lire n’est pas un compte nul.</string>

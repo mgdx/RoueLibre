@@ -77,7 +77,10 @@ public data class Station(
  *   back past their capacity: enough of them read nought free docks beside
  *   more bikes than their capacity holds, which only a return beside a full
  *   rack puts there. Settled by the join over the whole feed, and `false`
- *   until then.
+ *   until then — whatever the rider answered: it is what the feed shows.
+ * @property fullStationAnswer what the rider chose for the network's full
+ *   stations ([FullStationAnswer]). Carried over by the join, and read by
+ *   [hasUnlimitedDocks] alone.
  */
 public data class StationAvailability(
     public val stationId: String,
@@ -93,6 +96,7 @@ public data class StationAvailability(
     public val isInFeedCountingWithoutCapacity: Boolean = true,
     public val isInFeedWritingDocksFromCapacity: Boolean = false,
     public val isInFeedTakingBikesPastCapacity: Boolean = false,
+    public val fullStationAnswer: FullStationAnswer = FullStationAnswer.Automatic,
 ) {
     /**
      * True if the station is there to be used, as far as its installation
@@ -165,10 +169,28 @@ public data class StationAvailability(
      * 90 and 100. A virtual station without a capacity is a zone with no dock
      * to fill, and its nought is never believed.
      *
+     * **The rider has the last word** ([fullStationAnswer]): "always" reads
+     * every station as taking any bike, "never" none — a station with no count
+     * or at nought is then full, zones included. Left automatic, the four
+     * cases above decide, as [readsUnlimitedFromFeed] gives them.
+     *
      * Whether the station takes returns at all is not decided here:
      * `is_returning` still refuses them, through [canAcceptBike].
      */
     public val hasUnlimitedDocks: Boolean
+        get() = when (fullStationAnswer) {
+            FullStationAnswer.Always -> true
+            FullStationAnswer.Never -> false
+            FullStationAnswer.Automatic -> readsUnlimitedFromFeed
+        }
+
+    /**
+     * Whether the feed alone says no count of free docks limits what the
+     * station takes back — the four cases of [hasUnlimitedDocks], before the
+     * rider's answer. What "automatic" gives, and so what the settings
+     * describe under that answer whatever the rider chose.
+     */
+    public val readsUnlimitedFromFeed: Boolean
         get() = docksAvailable == null ||
             isInFeedWritingDocksFromCapacity ||
             isInFeedTakingBikesPastCapacity ||
@@ -288,10 +310,10 @@ public enum class ServiceState {
  * @param takesBikesPastCapacitySettled the feed was already found taking
  *   bikes past its capacities this session ([settleTakingBikesPastCapacity]),
  *   read the same way.
- * @param bikesPastCapacityAnswer what the rider chose for this network
- *   (SPEC §4.1, fourth case): left to the feed, or settled by hand either
- *   way, whatever the feed says — the rider knows the network's rule better
- *   than its feed does.
+ * @param fullStationAnswer what the rider chose for this network's full
+ *   stations (SPEC §4.1): left to the feed, or settled by hand either way,
+ *   whatever the feed says — the rider knows the network's rule better than
+ *   its feed does.
  * @return one entry per known station, in the order received.
  */
 public fun joinStationsWithAvailability(
@@ -299,7 +321,7 @@ public fun joinStationsWithAvailability(
     availabilities: List<StationAvailability>,
     writesDocksFromCapacitySettled: Boolean = false,
     takesBikesPastCapacitySettled: Boolean = false,
-    bikesPastCapacityAnswer: BikesPastCapacityAnswer = BikesPastCapacityAnswer.Automatic,
+    fullStationAnswer: FullStationAnswer = FullStationAnswer.Automatic,
 ): List<StationWithAvailability> {
     val byStationId = availabilities.associateBy { it.stationId }
     val countedWithoutCapacity = stations
@@ -309,12 +331,8 @@ public fun joinStationsWithAvailability(
         countedWithoutCapacity.size
     val writesDocksFromCapacity = writesDocksFromCapacitySettled ||
         writesDocksFromCapacity(stations, byStationId)
-    val takesBikesPastCapacity = when (bikesPastCapacityAnswer) {
-        BikesPastCapacityAnswer.Always -> true
-        BikesPastCapacityAnswer.Never -> false
-        BikesPastCapacityAnswer.Automatic ->
-            takesBikesPastCapacitySettled || takesBikesPastCapacity(stations, byStationId)
-    }
+    val takesBikesPastCapacity = takesBikesPastCapacitySettled ||
+        takesBikesPastCapacity(stations, byStationId)
     return stations.map { station ->
         val availability = byStationId[station.id]
         StationWithAvailability(
@@ -325,6 +343,7 @@ public fun joinStationsWithAvailability(
                 isInFeedCountingWithoutCapacity = countsWithoutCapacity,
                 isInFeedWritingDocksFromCapacity = writesDocksFromCapacity,
                 isInFeedTakingBikesPastCapacity = takesBikesPastCapacity,
+                fullStationAnswer = fullStationAnswer,
             ),
         )
     }
@@ -375,21 +394,26 @@ public fun settleWritingDocksFromCapacity(
 
 /**
  * What the rider chose about a network's full stations taking bikes back
- * (SPEC §4.1, fourth case), one answer per network.
+ * (SPEC §4.1), one answer per network, over every case of
+ * [StationAvailability.hasUnlimitedDocks].
  *
  * The reading of the feed is an inference, and it misses as well as it may
- * err: a network of zones under the line — Prague's nextbike at 2.1 % on
- * 23 October 2026 — takes bikes at its full stations all the same, and only
- * its riders know it. So the answer goes both ways.
+ * err: a network of zones under the line of the fourth case — Prague's
+ * nextbike at 2.1 % on 23 October 2026 — takes bikes at its full stations
+ * all the same, and only its riders know it; a network the feed reads as
+ * taking any bike may refuse one where its riders have seen it. So the
+ * answer goes both ways, and governs every case, not the fourth alone:
+ * an answer that changed nothing in Munich, whose zones take any bike by
+ * the second case, was a control that lied.
  */
-public enum class BikesPastCapacityAnswer {
-    /** The feed decides ([StationAvailability.isInFeedTakingBikesPastCapacity]). */
+public enum class FullStationAnswer {
+    /** The feed decides ([StationAvailability.readsUnlimitedFromFeed]). */
     Automatic,
 
-    /** Every full station takes a bike back, whatever the feed shows. */
+    /** Every station takes a bike back, whatever the feed shows. */
     Always,
 
-    /** A full station is full, whatever the feed shows. */
+    /** A station at nought, or with no count, is full, whatever the feed shows. */
     Never,
 }
 

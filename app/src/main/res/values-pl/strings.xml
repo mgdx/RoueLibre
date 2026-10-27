@@ -755,8 +755,11 @@
     <string name="settings_bikes_past_capacity_never">Nigdy</string>
     <string name="settings_bikes_past_capacity_hint_detected">Automatycznie: ta sieć zostawia rowery obok swoich pełnych stacji, więc pełna stacja liczy się jako taka, na której możesz zwrócić rower.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Automatycznie: nic w danych tej sieci nie wskazuje rowerów zostawionych obok pełnych stacji, więc pełna stacja liczy się jako pełna.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Automatycznie: według danych tej sieci jej stacje przyjmują rowery nawet bez wolnego miejsca.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Automatycznie: ustalane na podstawie danych tej sieci, gdy tylko wczytają się jej stacje.</string>
     <string name="settings_bikes_past_capacity_hint_always">Pełna stacja liczy się jako taka, na której możesz zwrócić rower. Jeśli ta sieć na to nie pozwala, trasa może skończyć się na stacji, która go nie przyjmie.</string>
     <string name="settings_bikes_past_capacity_hint_never">Pełna stacja liczy się jako pełna, niezależnie od tego, co pokazują dane tej sieci.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">Stacja bez wolnego miejsca liczy się jako pełna. W tej sieci prawie żadna stacja nie pokazuje wolnych miejsc, więc możliwych tras zostaje niewiele.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stacje, o których sieć nic nie mówi, zostają na mapie: brak odczytu nie oznacza zera.</string>

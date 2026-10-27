@@ -873,8 +873,11 @@
     <string name="settings_bikes_past_capacity_never">Nunca</string>
     <string name="settings_bikes_past_capacity_hint_detected">Automático: esta rede deixa bicicletas junto às suas estações cheias, por isso uma estação cheia conta como uma onde pode devolver a bicicleta.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Automático: nada nos dados desta rede mostra bicicletas deixadas junto a estações cheias, por isso uma estação cheia conta como cheia.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Automático: segundo os dados desta rede, as suas estações aceitam bicicletas mesmo sem nenhum lugar livre.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Automático: decidido a partir dos dados desta rede assim que as suas estações forem carregadas.</string>
     <string name="settings_bikes_past_capacity_hint_always">Uma estação cheia conta como uma onde pode devolver a bicicleta. Se esta rede não o permitir, um trajeto pode terminar numa estação que a recuse.</string>
     <string name="settings_bikes_past_capacity_hint_never">Uma estação cheia conta como cheia, mostrem o que mostrarem os dados desta rede.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">Uma estação sem nenhum lugar livre conta como cheia. Nesta rede quase nenhuma estação mostra lugares livres, por isso restam poucos trajetos possíveis.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">As estações sobre as quais a rede nada diz permanecem no mapa: uma contagem que ninguém conseguiu ler não é uma contagem de zero.</string>

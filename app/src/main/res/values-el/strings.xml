@@ -767,8 +767,11 @@
     <string name="settings_bikes_past_capacity_never">Ποτέ</string>
     <string name="settings_bikes_past_capacity_hint_detected">Αυτόματα: αυτό το δίκτυο αφήνει ποδήλατα δίπλα στους γεμάτους σταθμούς του, οπότε ένας γεμάτος σταθμός θεωρείται σταθμός όπου μπορείτε να επιστρέψετε το ποδήλατό σας.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Αυτόματα: τίποτα στα δεδομένα αυτού του δικτύου δεν δείχνει ποδήλατα αφημένα δίπλα σε γεμάτους σταθμούς, οπότε ένας γεμάτος σταθμός θεωρείται γεμάτος.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Αυτόματα: σύμφωνα με τα δεδομένα αυτού του δικτύου, οι σταθμοί του δέχονται ποδήλατα ακόμη και χωρίς ελεύθερη θέση.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Αυτόματα: αποφασίζεται από τα δεδομένα αυτού του δικτύου μόλις φορτωθούν οι σταθμοί του.</string>
     <string name="settings_bikes_past_capacity_hint_always">Ένας γεμάτος σταθμός θεωρείται σταθμός όπου μπορείτε να επιστρέψετε το ποδήλατό σας. Αν αυτό το δίκτυο δεν το επιτρέπει, μια διαδρομή μπορεί να καταλήξει σε σταθμό που το αρνείται.</string>
     <string name="settings_bikes_past_capacity_hint_never">Ένας γεμάτος σταθμός θεωρείται γεμάτος, ό,τι κι αν δείχνουν τα δεδομένα αυτού του δικτύου.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">Ένας σταθμός χωρίς ελεύθερη θέση θεωρείται γεμάτος. Σε αυτό το δίκτυο σχεδόν κανένας σταθμός δεν δείχνει ελεύθερη θέση, οπότε λίγες διαδρομές παραμένουν δυνατές.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Οι σταθμοί για τους οποίους το δίκτυο δεν λέει τίποτα μένουν στον χάρτη: μια μέτρηση που κανείς δεν μπόρεσε να διαβάσει δεν είναι μέτρηση του μηδενός.</string>

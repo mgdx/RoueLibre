@@ -13,7 +13,7 @@ import io.github.mgdx.rouelibre.core.config.FleetDescription
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.WalkingPace
 import io.github.mgdx.rouelibre.core.measure.UnitChoice
-import io.github.mgdx.rouelibre.core.station.BikesPastCapacityAnswer
+import io.github.mgdx.rouelibre.core.station.FullStationAnswer
 import io.github.mgdx.rouelibre.core.station.VehicleKind
 import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import kotlinx.coroutines.flow.Flow
@@ -421,7 +421,7 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
     /**
      * What the rider chose, network by network, about full stations taking
      * bikes back (SPEC §4.1, fourth case); a network absent from the map is
-     * left to the feed, [BikesPastCapacityAnswer.Automatic].
+     * left to the feed, [FullStationAnswer.Automatic].
      *
      * Automatic by default: the reading is the application's best
      * understanding of the feed, the rider is told of it once
@@ -436,23 +436,23 @@ class AppPreferences(private val dataStore: DataStore<Preferences>) :
      * turned off and those turned on: the first was written alone by the
      * version before, and is read the same way.
      */
-    val bikesPastCapacityAnswers: Flow<Map<String, BikesPastCapacityAnswer>> =
+    val fullStationAnswers: Flow<Map<String, FullStationAnswer>> =
         dataStore.data.map { preferences ->
             preferences.readSet(BIKES_PAST_CAPACITY_TURNED_ON)
-                .associateWith { BikesPastCapacityAnswer.Always } +
+                .associateWith { FullStationAnswer.Always } +
                 preferences.readSet(BIKES_PAST_CAPACITY_TURNED_OFF)
-                    .associateWith { BikesPastCapacityAnswer.Never }
+                    .associateWith { FullStationAnswer.Never }
         }
 
     /** Records the rider's [answer] for the network [cityId]. */
-    suspend fun setBikesPastCapacityAnswer(cityId: String, answer: BikesPastCapacityAnswer) {
+    suspend fun setFullStationAnswer(cityId: String, answer: FullStationAnswer) {
         dataStore.edit { preferences ->
             val turnedOn = preferences.readSet(BIKES_PAST_CAPACITY_TURNED_ON) - cityId
             val turnedOff = preferences.readSet(BIKES_PAST_CAPACITY_TURNED_OFF) - cityId
             preferences[BIKES_PAST_CAPACITY_TURNED_ON] =
-                if (answer == BikesPastCapacityAnswer.Always) turnedOn + cityId else turnedOn
+                if (answer == FullStationAnswer.Always) turnedOn + cityId else turnedOn
             preferences[BIKES_PAST_CAPACITY_TURNED_OFF] =
-                if (answer == BikesPastCapacityAnswer.Never) turnedOff + cityId else turnedOff
+                if (answer == FullStationAnswer.Never) turnedOff + cityId else turnedOff
         }
     }
 

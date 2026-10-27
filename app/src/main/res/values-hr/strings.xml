@@ -733,8 +733,11 @@
     <string name="settings_bikes_past_capacity_never">Nikad</string>
     <string name="settings_bikes_past_capacity_hint_detected">Automatski: ova mreža ostavlja bicikle pokraj svojih punih stanica, pa se puna stanica računa kao stanica na koju možete vratiti bicikl.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Automatski: ništa u podacima ove mreže ne pokazuje bicikle ostavljene pokraj punih stanica, pa se puna stanica računa kao puna.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Automatski: prema podacima ove mreže, njezine stanice primaju bicikle čak i bez slobodnog mjesta.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Automatski: određuje se iz podataka ove mreže čim se njezine stanice učitaju.</string>
     <string name="settings_bikes_past_capacity_hint_always">Puna stanica računa se kao stanica na koju možete vratiti bicikl. Ako ova mreža to ne dopušta, putovanje može završiti na stanici koja ga odbija.</string>
     <string name="settings_bikes_past_capacity_hint_never">Puna stanica računa se kao puna, bez obzira na to što pokazuju podaci ove mreže.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">Stanica bez slobodnog mjesta računa se kao puna. Na ovoj mreži gotovo nijedna stanica ne pokazuje slobodno mjesto, pa je moguće tek malo putovanja.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stanice o kojima mreža ne kaže ništa ostaju na karti: broj koji se nije mogao pročitati nije broj nula.</string>
