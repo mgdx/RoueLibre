@@ -26,11 +26,14 @@ import org.maplibre.android.maps.MapView
  *   waits for it.
  * @param context the screen's context, for whether the device asks for
  *   reduced animations.
+ * @param handedOver the framing whoever opened this map asked it to open on,
+ *   `null` when nobody did.
  */
 internal class MainMapCamera(
     private val map: () -> MapLibreMap?,
     private val isReady: () -> Boolean,
     private val context: () -> Context,
+    private val handedOver: () -> Framing? = { null },
 ) {
 
     /**
@@ -69,7 +72,8 @@ internal class MainMapCamera(
      * Frames a map that has just been given a city, and pens it there.
      *
      * The framing remembered from before the view was rebuilt, if it suits
-     * the city; otherwise the opening one.
+     * the city; otherwise the one handed over, if that suits it; otherwise the
+     * opening one.
      *
      * @param positionToOpenOn the position the system already holds, inside
      *   the city — asked for only when nothing remembered suits, since that is
@@ -85,7 +89,12 @@ internal class MainMapCamera(
             rememberedFramingSuits(it.target?.toCoordinates(), configuration.boundingBox)
         }
         map.cameraPosition = remembered
-            ?: openingFraming(positionToOpenOn(), configuration.map).toCameraPosition()
+            ?: framingToOpenOn(
+                handedOver(),
+                configuration.boundingBox,
+                configuration.map,
+                positionToOpenOn,
+            ).toCameraPosition()
         holdOverServedArea(view, map, configuration)
     }
 
@@ -184,6 +193,13 @@ internal class MainMapCamera(
     fun rememberAndRelease() {
         lastCamera = map()?.cameraPosition
         servedAreaCamera = null
+    }
+
+    /** Where the map was last looking, `null` while it has looked nowhere. */
+    fun lastFraming(): Framing? {
+        val camera = lastCamera ?: return null
+        val target = camera.target ?: return null
+        return Framing(target.toCoordinates(), camera.zoom)
     }
 
     /**

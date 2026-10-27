@@ -41,6 +41,14 @@ also records what has no visible effect.
 
 ### Changed
 
+- **Picking a point on the map opens where the main map was looking** (issue
+  #14, `SPEC.md` §7.3). The main map leaves its last centre and zoom in
+  `LastMainMapFraming`, held in memory only, when its view goes; the journey
+  screen hands it to `MapFragment.forPicking` as arguments, so a turn of the
+  phone keeps it. `framingToOpenOn` sets it aside when it lies outside the
+  city served, and the picking map then opens as before; it does the same
+  when the main map has not been shown since the process started.
+
 - **The map's kind of bike is kept from one launch to the next** (issue #9,
   `SPEC.md` §7.1). All bikes, mechanical or electric is written to DataStore
   under `map_bike_kind`, a key of its own beside the journey's

@@ -66,6 +66,40 @@ class MainMapFramingTest {
         assertEquals(Framing(LILLE_CENTRE, 12.5), openingFraming(null, DEFAULTS))
     }
 
+    /** Issue #14: the street zoomed on the main map is still there to pick from. */
+    @Test
+    fun `a framing handed over inside the city is opened on`() {
+        val street = Framing(IN_LILLE, 17.5)
+        assertEquals(street, framingToOpenOn(street, LILLE, DEFAULTS) { LILLE_CENTRE })
+    }
+
+    @Test
+    fun `a framing handed over asks for no position`() {
+        val street = Framing(IN_LILLE, 17.5)
+        framingToOpenOn(street, LILLE, DEFAULTS) { error("the position was asked for") }
+    }
+
+    @Test
+    fun `a framing handed over from another city gives way to the opening one`() {
+        assertEquals(
+            Framing(IN_LILLE, USER_POSITION_ZOOM),
+            framingToOpenOn(Framing(IN_PARIS, 17.5), LILLE, DEFAULTS) { IN_LILLE },
+        )
+        assertEquals(
+            Framing(LILLE_CENTRE, 12.5),
+            framingToOpenOn(Framing(IN_PARIS, 17.5), LILLE, DEFAULTS) { null },
+        )
+    }
+
+    /** The list as the opening screen: the main map has never been shown. */
+    @Test
+    fun `nothing handed over opens on the opening framing`() {
+        assertEquals(
+            Framing(LILLE_CENTRE, 12.5),
+            framingToOpenOn(null, LILLE, DEFAULTS) { null },
+        )
+    }
+
     @Test
     fun `a style built over the very file has nothing to do`() {
         assertEquals(

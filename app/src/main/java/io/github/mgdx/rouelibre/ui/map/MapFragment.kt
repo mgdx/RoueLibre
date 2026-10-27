@@ -145,6 +145,7 @@ class MapFragment : Fragment() {
         map = { mapLibreMap },
         isReady = { styleLoaded },
         context = { requireContext() },
+        handedOver = ::handedOverFraming,
     )
 
     /** The address found by the search, and the city it belongs to. */
@@ -642,6 +643,19 @@ class MapFragment : Fragment() {
 
     private fun isPicking(): Boolean = arguments?.getBoolean(ARGUMENT_PICKING) == true
 
+    /** The framing [forPicking] was handed, `null` when it was handed none. */
+    private fun handedOverFraming(): Framing? {
+        val arguments = arguments ?: return null
+        if (!arguments.containsKey(ARGUMENT_FRAMING_LATITUDE)) return null
+        return Framing(
+            target = Coordinates(
+                arguments.getDouble(ARGUMENT_FRAMING_LATITUDE),
+                arguments.getDouble(ARGUMENT_FRAMING_LONGITUDE),
+            ),
+            zoom = arguments.getDouble(ARGUMENT_FRAMING_ZOOM),
+        )
+    }
+
     /**
      * Returns the point aimed at, with its address when the index knows it.
      *
@@ -1024,6 +1038,9 @@ class MapFragment : Fragment() {
 
     override fun onDestroyView() {
         camera.rememberAndRelease()
+        // The picking map's framing is its own: what a later pick is handed
+        // is what the main map was showing (issue #14).
+        if (!isPicking()) LastMainMapFraming.framing = camera.lastFraming()
         attitude.stopFollowing()
         binding?.map?.onDestroy()
         pickedPlace.detach()
@@ -1045,10 +1062,28 @@ class MapFragment : Fragment() {
 
         private const val ARGUMENT_PICKING = "picking-mode"
         private const val ARGUMENT_SHOWN_PLACE = "place-to-show"
+        private const val ARGUMENT_FRAMING_LATITUDE = "framing-latitude"
+        private const val ARGUMENT_FRAMING_LONGITUDE = "framing-longitude"
+        private const val ARGUMENT_FRAMING_ZOOM = "framing-zoom"
 
-        /** Opens the map to designate a point on it (SPEC §7.3). */
-        fun forPicking(): MapFragment = MapFragment().apply {
-            arguments = Bundle().apply { putBoolean(ARGUMENT_PICKING, true) }
+        /**
+         * Opens the map to designate a point on it (SPEC §7.3).
+         *
+         * @param framing where to open, if it suits the city: the main map's
+         *   last framing, so the street one was looking at is still there
+         *   (issue #14). Carried in the arguments rather than read on opening,
+         *   so that a picker the system rebuilds after its process died still
+         *   opens where it was asked to.
+         */
+        internal fun forPicking(framing: Framing?): MapFragment = MapFragment().apply {
+            arguments = Bundle().apply {
+                putBoolean(ARGUMENT_PICKING, true)
+                framing?.let {
+                    putDouble(ARGUMENT_FRAMING_LATITUDE, it.target.latitude)
+                    putDouble(ARGUMENT_FRAMING_LONGITUDE, it.target.longitude)
+                    putDouble(ARGUMENT_FRAMING_ZOOM, it.zoom)
+                }
+            }
         }
 
         /**

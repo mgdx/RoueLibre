@@ -12,6 +12,7 @@ import io.github.mgdx.rouelibre.data.SavedPlaceKind
 import io.github.mgdx.rouelibre.data.location.DeviceLocation
 import io.github.mgdx.rouelibre.ui.address.AddressSearchFragment
 import io.github.mgdx.rouelibre.ui.address.SearchShortcut
+import io.github.mgdx.rouelibre.ui.map.LastMainMapFraming
 import io.github.mgdx.rouelibre.ui.map.MapFragment
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -123,7 +124,8 @@ class JourneyEndpointPicker(
                 SearchShortcut.Home.name -> useSavedPlace(SavedPlaceKind.Home)
                 SearchShortcut.Work.name -> useSavedPlace(SavedPlaceKind.Work)
                 SearchShortcut.MyPosition.name -> askForMyPosition()
-                SearchShortcut.OnMap.name -> show(MapFragment.forPicking())
+                SearchShortcut.OnMap.name ->
+                    show(MapFragment.forPicking(LastMainMapFraming.framing))
                 SearchShortcut.Favourite.name -> openFavourites()
             }
         }

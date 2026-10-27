@@ -70,6 +70,28 @@ internal fun openingFraming(position: Coordinates?, defaults: MapDefaults): Fram
         Framing(defaults.centre, defaults.defaultZoom)
     }
 
+/**
+ * The framing a map opens on when it remembers nothing of its own.
+ *
+ * The map that picks a point is handed the main map's last framing (issue
+ * #14): one zooms onto a street, goes to name an end of a journey, and the
+ * street is there. A framing handed over is held to the same rule as one
+ * remembered, since it may be of a city given up since; failing it, the
+ * opening framing stands, as it does for a main map seen for the first time.
+ *
+ * @param handedOver the framing passed by whoever opened the map, `null`
+ *   when there is none.
+ * @param position the position to open on, asked for only when the handed
+ *   framing does not hold — that is the only case it is used in.
+ */
+internal fun framingToOpenOn(
+    handedOver: Framing?,
+    servedArea: BoundingBox?,
+    defaults: MapDefaults,
+    position: () -> Coordinates?,
+): Framing = handedOver?.takeIf { rememberedFramingSuits(it.target, servedArea) }
+    ?: openingFraming(position(), defaults)
+
 /** How much of the main map a city reaching the screen rebuilds. */
 internal enum class MapRebuild {
     /** The style in place was built over this very file: nothing to do. */
