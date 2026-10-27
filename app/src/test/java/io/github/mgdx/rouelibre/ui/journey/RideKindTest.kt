@@ -116,4 +116,20 @@ class RideKindTest {
             stationMarkerOf(BikeFleet.Electric, WantedBikeKind.Mechanical),
         )
     }
+
+    @Test
+    fun `a computation looks for the kind it applies from the start`() {
+        assertEquals(WantedBikeKind.Electric, rideKindAsked(null, WantedBikeKind.Electric))
+        assertNull(rideKindAsked(streetBikeKind = null, applied = null))
+    }
+
+    @Test
+    fun `a computation from a street bike looks for that bike's kind`() {
+        assertEquals(WantedBikeKind.Mechanical, rideKindAsked(VehicleKind.Mechanical, null))
+        assertEquals(
+            WantedBikeKind.Electric,
+            rideKindAsked(VehicleKind.Electric, WantedBikeKind.Mechanical),
+        )
+        assertNull(rideKindAsked(VehicleKind.Other, WantedBikeKind.Electric))
+    }
 }

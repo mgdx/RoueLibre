@@ -10,8 +10,8 @@ import android.view.animation.LinearInterpolator
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.withScale
 import io.github.mgdx.rouelibre.R
+import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.ui.BikeFleet
-import io.github.mgdx.rouelibre.ui.BikeGlyphs
 import io.github.mgdx.rouelibre.ui.prefersReducedMotion
 
 /**
@@ -56,12 +56,29 @@ class ComputingBikeView @JvmOverloads constructor(
         set(value) {
             if (field == value) return
             field = value
-            bike = AppCompatResources.getDrawable(
-                context,
-                BikeGlyphs.stationMarker(value),
-            )
-            invalidate()
+            loadBike()
         }
+
+    /**
+     * The kind of bike the computation is looking for, or `null` for any
+     * (SPEC §7.4).
+     *
+     * In a network lending both, it takes the place of the cog and the bolt,
+     * exactly as on the station discs of the journey this wait leads to — a
+     * search narrowed to electric bikes waits under the bolt alone. Known from
+     * the moment the computation starts (see `JourneyUiState.rideKind`).
+     */
+    var rideKind: WantedBikeKind? = null
+        set(value) {
+            if (field == value) return
+            field = value
+            loadBike()
+        }
+
+    private fun loadBike() {
+        bike = AppCompatResources.getDrawable(context, stationMarkerOf(fleet, rideKind))
+        invalidate()
+    }
 
     private val bikeSize = resources.getDimensionPixelSize(R.dimen.computing_bike_size)
 
