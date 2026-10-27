@@ -1,7 +1,7 @@
 {
   "catalogueVersion": 1,
   "catalogueUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/catalogue.json",
-  "generatedAt": "2026-10-06T14:50:45Z",
+  "generatedAt": "2026-10-27T21:50:41Z",
   "cities": [
     {
       "id": "aar-bike",
@@ -7562,6 +7562,60 @@
       "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-hunedoara.json",
       "dataSizeBytes": 1164561,
       "releaseTag": "data-2026-08-ro"
+    },
+    {
+      "id": "idecycle",
+      "displayName": "IDEcycle",
+      "operator": "Fifteen / Pau Béarn Pyrénées Mobilités",
+      "mainCity": "Pau",
+      "country": "FR",
+      "stationCount": 40,
+      "stationSamples": [
+        [
+          43.2984,
+          -0.36668
+        ],
+        [
+          43.29339,
+          -0.37138
+        ],
+        [
+          43.30129,
+          -0.35823
+        ],
+        [
+          43.30664,
+          -0.32711
+        ],
+        [
+          43.29639,
+          -0.37303
+        ],
+        [
+          43.30987,
+          -0.38821
+        ],
+        [
+          43.33072,
+          -0.43503
+        ],
+        [
+          43.29066,
+          -0.31073
+        ]
+      ],
+      "boundingBox": {
+        "south": 43.253151,
+        "west": -0.475535,
+        "north": 43.363359,
+        "east": -0.262415
+      },
+      "centreLatitude": 43.304065,
+      "centreLongitude": -0.36918,
+      "gbfsDiscoveryUrl": "https://gbfs.partners.fifteen.eu/gbfs/2.2/pau/en/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-idecycle.json",
+      "dataSizeBytes": 10842932,
+      "releaseTag": "data-2026-08-fr"
     },
     {
       "id": "impulsyon",
@@ -15556,6 +15610,60 @@
       "releaseTag": "data-2026-08-us"
     },
     {
+      "id": "meinrad",
+      "displayName": "meinRad",
+      "operator": "MVGmeinRad GmbH",
+      "mainCity": "Mainz",
+      "country": "DE",
+      "stationCount": 204,
+      "stationSamples": [
+        [
+          50.03132,
+          8.26254
+        ],
+        [
+          49.98996,
+          8.28967
+        ],
+        [
+          49.9757,
+          8.29642
+        ],
+        [
+          49.98334,
+          8.23999
+        ],
+        [
+          49.95514,
+          8.19607
+        ],
+        [
+          50.02263,
+          8.22469
+        ],
+        [
+          49.99202,
+          8.25929
+        ],
+        [
+          50.01651,
+          8.23979
+        ]
+      ],
+      "boundingBox": {
+        "south": 49.883859,
+        "west": 8.104959,
+        "north": 50.058268,
+        "east": 8.404586
+      },
+      "centreLatitude": 49.995677,
+      "centreLongitude": 8.259658,
+      "gbfsDiscoveryUrl": "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_mz/gbfs.json",
+      "manifestUrl": "https://github.com/mgdx/RoueLibre-data/releases/latest/download/manifest-meinrad.json",
+      "dataSizeBytes": 22017152,
+      "releaseTag": "data-2026-08-de"
+    },
+    {
       "id": "mobic",
       "displayName": "mobic",
       "operator": "nextbike GmbH",
@@ -19479,12 +19587,6 @@
       "id": "donkey-republic-porvoo",
       "displayName": "Donkey Republic",
       "mainCity": "Porvoo",
-      "withdrawnOn": "2026-10-06"
-    },
-    {
-      "id": "idecycle",
-      "displayName": "IDEcycle",
-      "mainCity": "Pau",
       "withdrawnOn": "2026-10-06"
     },
     {

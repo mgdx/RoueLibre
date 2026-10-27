@@ -11,6 +11,18 @@ also records what has no visible effect.
 
 ### Added
 
+- **Mainz is served, and Pau comes back.** The survey of 27 October 2026
+  admits meinRad, Mainz's nextbike network — 204 stations over 417 km², from
+  Hochheim to Nieder-Olm, 22.0 MB of data — and IDEcycle, withdrawn on
+  6 October at seven stations none of them renting, now at 40 stations all
+  renting, 10.8 MB of data. Pau keeps its identifier, `idecycle`, and leaves
+  `config/withdrawn-cities.json`, so a phone still holding it reads it as
+  served again (§15.1); `WithdrawnCityTest` takes Donkey Prignitz as its
+  withdrawn witness instead. The same survey admits MV-Rad, 67 stations over
+  the whole of Mecklenburg-Vorpommern, and BreizhGo, 11 stations over
+  Brittany, which are not served for now; HELLO CYCLING and docomo still cover the whole of
+  Japan. The catalogue holds 362 networks; the survey report, the README
+  figures and the catalogue are derived again.
 - **The ride of a journey names its bike where the kind is settled** (issue
   #15, `SPEC.md` §7.4). In a network lending both kinds, the two station
   discs of `JourneyShapeView` bear the bolt bike or the plain one in place of
