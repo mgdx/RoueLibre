@@ -681,8 +681,8 @@
 
     <string name="dataset_absent">Ni nameščeno</string>
     <string name="dataset_installed">%1$s · %2$s</string>
-    <string name="dataset_import">Uvozi</string>
-    <string name="dataset_replace">Zamenjaj</string>
+    <string name="dataset_import">Uvozi datoteko</string>
+    <string name="dataset_replace">Zamenjaj z datoteko</string>
     <string name="dataset_delete">Izbriši</string>
     <!-- A label with a colon, for the same reason as `dataset_imported` below:
          `DatasetAdapter` hands this line a dataset's name in the nominative,

@@ -98,9 +98,12 @@
         app:layout_constraintTop_toBottomOf="@id/dataset_purpose"
         tools:text="35,0 Mo · 9 août 2026" />
 
+    <!-- A text button, of the delete button's weight: a file obtained by hand
+         is the secondary path (SPEC §4.4), and dressed like the download
+         button it was pressed in its place (issue #13). -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/dataset_import"
-        style="@style/Widget.RoueLibre.Toggle"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/touch_target_min"
         android:layout_marginTop="@dimen/space_m"
