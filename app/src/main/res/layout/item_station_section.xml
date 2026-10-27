@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    A heading inside the station list (SPEC §7.6): "Favourites" over the
+    stations marked as such, "All stations" over the rest.
+
+    Written like the labels of the settings screen, in capitals and small:
+    it names a part of the list and is not a row one can open, so it must not
+    be read as one more station.
+
+    The favourites' heading carries two buttons, the "All stations" one none:
+    "Reorder" opens the favourites' own screen, where rows are dragged — the
+    list itself is for choosing a station, and a row that moves under the
+    finger is not something one can choose from — and the fold button puts
+    the favourites away for somebody who wants the whole list first.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/touch_target_min"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/space_l"
+    android:paddingTop="@dimen/space_s"
+    android:paddingEnd="@dimen/space_s">
+
+    <!-- A heading for a screen reader too: a reader can then jump from the
+         favourites to the whole list without hearing every favourite. Set in
+         code, the attribute that says so arriving in API 28. -->
+    <TextView
+        android:id="@+id/section_title"
+        style="@style/Widget.RoueLibre.SettingsLabel"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        tools:text="Favoris" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/reorder"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/touch_target_min"
+        android:text="@string/stations_favourites_reorder"
+        android:textColor="@color/signal" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/fold"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="@dimen/touch_target_min"
+        android:layout_height="@dimen/touch_target_min"
+        app:icon="@drawable/ic_fold"
+        app:iconTint="@color/ink"
+        tools:contentDescription="@string/stations_favourites_fold" />
+</LinearLayout>

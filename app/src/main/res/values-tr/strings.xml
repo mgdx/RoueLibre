@@ -77,8 +77,6 @@
 
     <string name="mode_bikes">Bisikletler</string>
     <string name="mode_docks">Boş yuvalar</string>
-    <string name="mode_bikes_description">Kullanılabilir bisikletleri göster</string>
-    <string name="mode_docks_description">Boş yuvaları göster</string>
 
     <string name="map_bikes_all_kinds">Tüm bisikletler</string>
     <string name="map_bikes_mechanical">Klasik</string>
@@ -253,7 +251,10 @@
     <string name="incoming_unreadable_link">Bu bağlantı nereye gidileceğini söylemiyor: içindeki yer okunamadı.</string>
 
     <string name="favourites_title">Favoriler</string>
-    <string name="favourites_open">Favorileri gör</string>
+    <string name="stations_all_title">Tüm istasyonlar</string>
+    <string name="stations_favourites_reorder">Yeniden sırala</string>
+    <string name="stations_favourites_fold">Favorileri gizle</string>
+    <string name="stations_favourites_unfold">Favorileri göster</string>
     <string name="favourites_reorder_hint">Taşımak için bir satıra dokunup basılı tut.</string>
 
     <string name="settings_title">Ayarlar</string>

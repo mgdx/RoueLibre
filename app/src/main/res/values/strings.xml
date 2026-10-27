@@ -77,8 +77,6 @@
 
     <string name="mode_bikes">Bikes</string>
     <string name="mode_docks">Free docks</string>
-    <string name="mode_bikes_description">Show available bikes</string>
-    <string name="mode_docks_description">Show free docks</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
@@ -299,7 +297,13 @@
     <string name="incoming_unreadable_link">This link does not say where to go: its place could not be read.</string>
 
     <string name="favourites_title">Favourites</string>
-    <string name="favourites_open">See favourites</string>
+    <!-- The headings of the station list: the favourites at its head,
+         then the whole network. "Reorder" opens the favourites' own
+         screen; the two last are spoken labels of the fold button. -->
+    <string name="stations_all_title">All stations</string>
+    <string name="stations_favourites_reorder">Reorder</string>
+    <string name="stations_favourites_fold">Hide favourites</string>
+    <string name="stations_favourites_unfold">Show favourites</string>
     <string name="favourites_reorder_hint">Press and hold a row to move it.</string>
 
     <string name="settings_title">Settings</string>

@@ -64,8 +64,6 @@
 
     <string name="mode_bikes">Fietsen</string>
     <string name="mode_docks">Vrije plaatsen</string>
-    <string name="mode_bikes_description">Beschikbare fietsen tonen</string>
-    <string name="mode_docks_description">Vrije plaatsen tonen</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
@@ -249,7 +247,10 @@
     <string name="incoming_unreadable_link">Deze link zegt niet waar je heen moet: de plek erin kon niet worden gelezen.</string>
 
     <string name="favourites_title">Favorieten</string>
-    <string name="favourites_open">Bekijk favorieten</string>
+    <string name="stations_all_title">Alle stations</string>
+    <string name="stations_favourites_reorder">Volgorde wijzigen</string>
+    <string name="stations_favourites_fold">Favorieten verbergen</string>
+    <string name="stations_favourites_unfold">Favorieten tonen</string>
     <string name="favourites_reorder_hint">Houd een rij ingedrukt om die te verplaatsen.</string>
 
     <string name="settings_title">Instellingen</string>

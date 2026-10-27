@@ -106,8 +106,6 @@
 
     <string name="mode_bikes">Bizikletak</string>
     <string name="mode_docks">Leku libreak</string>
-    <string name="mode_bikes_description">Erakutsi bizikleta erabilgarriak</string>
-    <string name="mode_docks_description">Erakutsi leku libreak</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it.
@@ -338,7 +336,10 @@
     <string name="incoming_unreadable_link">Esteka honek ez du esaten nora joan: haren tokia ezin izan da irakurri.</string>
 
     <string name="favourites_title">Gogokoak</string>
-    <string name="favourites_open">Ikusi gogokoak</string>
+    <string name="stations_all_title">Geltoki guztiak</string>
+    <string name="stations_favourites_reorder">Berrantolatu</string>
+    <string name="stations_favourites_fold">Ezkutatu gogokoak</string>
+    <string name="stations_favourites_unfold">Erakutsi gogokoak</string>
     <string name="favourites_reorder_hint">Eduki sakatuta lerro bat lekuz aldatzeko.</string>
 
     <string name="settings_title">Ezarpenak</string>

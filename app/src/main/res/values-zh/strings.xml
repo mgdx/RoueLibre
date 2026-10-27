@@ -95,8 +95,6 @@
 
     <string name="mode_bikes">可借车辆</string>
     <string name="mode_docks">可还空位</string>
-    <string name="mode_bikes_description">显示可借的车辆</string>
-    <string name="mode_docks_description">显示可还的空位</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it.
@@ -262,7 +260,10 @@
     <string name="incoming_unreadable_link">该链接没有说明去往何处：其中的地点无法读取。</string>
 
     <string name="favourites_title">收藏</string>
-    <string name="favourites_open">查看收藏</string>
+    <string name="stations_all_title">所有站点</string>
+    <string name="stations_favourites_reorder">重新排序</string>
+    <string name="stations_favourites_fold">隐藏收藏</string>
+    <string name="stations_favourites_unfold">显示收藏</string>
     <string name="favourites_reorder_hint">长按某一行即可移动它。</string>
 
     <string name="settings_title">设置</string>

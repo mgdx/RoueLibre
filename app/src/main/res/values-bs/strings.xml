@@ -99,8 +99,6 @@
 
     <string name="mode_bikes">Bicikli</string>
     <string name="mode_docks">Slobodna mjesta</string>
-    <string name="mode_bikes_description">Prikaži dostupne bicikle</string>
-    <string name="mode_docks_description">Prikaži slobodna mjesta</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
@@ -296,7 +294,10 @@
     <string name="incoming_unreadable_link">Ovaj link ne kaže kuda ići: njegovo mjesto nije bilo moguće pročitati.</string>
 
     <string name="favourites_title">Favoriti</string>
-    <string name="favourites_open">Prikaži favorite</string>
+    <string name="stations_all_title">Sve stanice</string>
+    <string name="stations_favourites_reorder">Promijeni redoslijed</string>
+    <string name="stations_favourites_fold">Sakrij favorite</string>
+    <string name="stations_favourites_unfold">Prikaži favorite</string>
     <string name="favourites_reorder_hint">Pritisnite i držite red da biste ga premjestili.</string>
 
     <string name="settings_title">Postavke</string>

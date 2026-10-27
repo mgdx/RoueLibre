@@ -9,20 +9,22 @@ import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
 /**
- * The header of the station list: what it offers, and in which order
- * (SPEC §7.2, §7.6).
+ * The header and the thumb's column of the station list: what they offer, and
+ * where (SPEC §7.2, §7.6).
  *
  * The way to the map used to be hidden unless this list was the screen the
- * application opened on, which left it gone on the very list one reaches from the
- * map. It is now unconditional, so nothing in the layout may take it away again.
- * The order matters as much: the title's box stops at the innermost icon, and a
- * box running under an icon is only harmless while the text is left-aligned.
+ * application opened on, which left it gone on the very list one reaches from
+ * the map. It is unconditional, so nothing in the layout may take it away
+ * again.
  *
- * The header holds the three ways out and nothing else. "Nearest station first"
- * is not among them — it acts on the list rather than leading away from it, and
- * it lives where the thumb is, floating over the bottom corner as the map keeps
- * its own controls. What is checked here is that it stays out of the header and
- * that the list leaves room under its last row for it.
+ * **Since 27 October 2026 the list keeps its controls where the map keeps
+ * them** (issue #12): the settings at the top end, and down the bottom end,
+ * from the bottom up, the way to the other screen, the search, the position
+ * and the journey, with the filters at the bottom start. The way back to the
+ * map used to be the innermost of three icons beside the title while the way
+ * here is under the thumb on the map, and one did not come back with the
+ * gesture one had come by. What is checked here is that each role keeps the
+ * place the map gives it.
  *
  * The layout and the drawable are read from the files the build ships, as
  * `IndicatorScaleTest` reads the dimensions: what is checked is what the
@@ -40,30 +42,61 @@ class StationListHeaderTest {
     }
 
     @Test
-    fun `three icons, settings at the edge and the map innermost`() {
-        // From the parent's end inwards. The settings sit outermost because that
-        // is where the map screen keeps them, so one gesture finds them on both.
+    fun `the header holds the settings at the edge and nothing else`() {
+        // Where the map screen keeps them, so one gesture finds them on both.
         assertEquals("parent", viewOf("open_settings").endConstraint())
-        assertEquals("@id/open_settings", viewOf("open_favourites").endConstraint())
-        assertEquals("@id/open_favourites", viewOf("open_map").endConstraint())
+        assertEquals(
+            "@id/open_settings",
+            viewOf("title").getAttribute("app:layout_constraintEnd_toStartOf"),
+        )
+        assertNull("open_favourites is back in the header", views()["open_favourites"])
     }
 
     @Test
-    fun `the ordering button floats over the bottom corner, not in the header`() {
-        val button = viewOf("locate_me")
+    fun `the way to the map is at the bottom of the thumb column, as on the map`() {
+        val button = viewOf("open_map")
         assertEquals("parent", button.getAttribute("app:layout_constraintBottom_toBottomOf"))
         assertEquals("parent", button.getAttribute("app:layout_constraintEnd_toEndOf"))
-        assertEquals("@drawable/ic_my_location", button.getAttribute("app:icon"))
-        assertEquals(
-            "@string/stations_order_by_distance",
-            button.getAttribute("android:contentDescription"),
-        )
-        // Nothing anchors it to the title's row: it is not a fourth way out,
-        // and a fourth icon beside the title would leave the title nothing.
         assertNull(
-            "locate_me joined the header row",
+            "open_map joined the header row again",
             button.getAttribute("app:layout_constraintTop_toTopOf").ifEmpty { null },
         )
+    }
+
+    @Test
+    fun `the column climbs in the map's order`() {
+        // From the bottom up, as `fragment_map.xml` stacks its own: the other
+        // screen, the search, the position, the journey.
+        assertEquals("@id/open_map", viewOf("open_search").bottomConstraint())
+        assertEquals("@id/open_search", viewOf("locate_me").bottomConstraint())
+        assertEquals("@id/locate_me", viewOf("open_journey").bottomConstraint())
+        listOf("open_search", "locate_me", "open_journey").forEach { id ->
+            assertEquals("$id left the end edge", "parent", viewOf(id).endConstraint())
+        }
+        assertEquals(
+            "@string/stations_order_by_distance",
+            viewOf("locate_me").getAttribute("android:contentDescription"),
+        )
+        assertEquals("@drawable/ic_my_location", viewOf("locate_me").getAttribute("app:icon"))
+        assertEquals(
+            "@string/journey_open",
+            viewOf("open_journey").getAttribute("android:contentDescription"),
+        )
+    }
+
+    @Test
+    fun `what the stations count is said at the bottom start, by the map's own buttons`() {
+        val toggle = viewOf("mode_toggle")
+        assertTrue(
+            "the toggle is a row of buttons across the width again",
+            toggle.tagName.endsWith("MaterialButton"),
+        )
+        assertEquals("parent", toggle.getAttribute("app:layout_constraintStart_toStartOf"))
+        assertEquals("parent", toggle.getAttribute("app:layout_constraintBottom_toBottomOf"))
+        val kind = viewOf("bike_kind_filter")
+        assertEquals("@id/mode_toggle", kind.getAttribute("app:layout_constraintStart_toEndOf"))
+        // It stops at the way to the map rather than running under it.
+        assertEquals("@id/open_map", kind.getAttribute("app:layout_constraintEnd_toStartOf"))
     }
 
     @Test
@@ -75,15 +108,6 @@ class StationListHeaderTest {
             viewOf("stations").getAttribute("android:paddingBottom"),
         )
         assertEquals("false", viewOf("stations").getAttribute("android:clipToPadding"))
-    }
-
-    @Test
-    fun `the title stops at the innermost icon`() {
-        assertEquals(
-            "the title's box has to stop at the first icon it meets",
-            "@id/open_map",
-            viewOf("title").getAttribute("app:layout_constraintEnd_toStartOf"),
-        )
     }
 
     @Test
@@ -155,6 +179,12 @@ class StationListHeaderTest {
 
     private fun viewOf(id: String): Element =
         checkNotNull(views()[id]) { "$id is not in fragment_station_list.xml" }
+
+    /** What this view's bottom is pinned to, whether the parent or another view. */
+    private fun Element.bottomConstraint(): String =
+        getAttribute("app:layout_constraintBottom_toBottomOf")
+            .takeIf { it == "parent" }
+            ?: getAttribute("app:layout_constraintBottom_toTopOf")
 
     /** What this view's end is pinned to, whether the parent or another view. */
     private fun Element.endConstraint(): String = getAttribute("app:layout_constraintEnd_toEndOf")

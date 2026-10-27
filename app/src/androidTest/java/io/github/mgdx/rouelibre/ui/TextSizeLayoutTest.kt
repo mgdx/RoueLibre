@@ -87,11 +87,6 @@ class TextSizeLayoutTest {
         }
     }
 
-    @Test
-    fun stationListModeRowKeepsItsLabelsWhole() {
-        assertLabelsWhole(R.layout.fragment_station_list, R.id.mode_toggle)
-    }
-
     /**
      * The other shape a setting takes: a label on the left and the control it
      * settles on the right, on one line.

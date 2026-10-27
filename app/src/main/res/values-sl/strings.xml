@@ -110,8 +110,6 @@
 
     <string name="mode_bikes">Kolesa</string>
     <string name="mode_docks">Prosta mesta</string>
-    <string name="mode_bikes_description">Prikaži razpoložljiva kolesa</string>
-    <string name="mode_docks_description">Prikaži prosta mesta</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). The three labels are neuter plural adjectives agreeing
@@ -326,7 +324,10 @@
     <string name="incoming_unreadable_link">Ta povezava ne pove, kam iti: kraja v njej ni bilo mogoče prebrati.</string>
 
     <string name="favourites_title">Priljubljene</string>
-    <string name="favourites_open">Prikaži priljubljene</string>
+    <string name="stations_all_title">Vse postaje</string>
+    <string name="stations_favourites_reorder">Prerazporedi</string>
+    <string name="stations_favourites_fold">Skrij priljubljene</string>
+    <string name="stations_favourites_unfold">Prikaži priljubljene</string>
     <string name="favourites_reorder_hint">Dotaknite se vrstice in jo pridržite, da jo premaknete.</string>
 
     <string name="settings_title">Nastavitve</string>

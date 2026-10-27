@@ -12,8 +12,10 @@
     had nothing to do with, half covering the cross that clears it.
 
     So the header and the rows share the width instead of the height, and the
-    whole header — the title, the data's age, the three ways out, the field and
-    the toggle — lives in the column on the start side. Nothing spans both:
+    whole header — the title, the data's age, the settings, the field and the
+    two buttons saying what the stations count — lives in the column on the
+    start side. The thumb's column of portrait (SPEC §7.6) floats over the
+    rows' column, in the order portrait gives it. Nothing spans both:
     the rows start at the top of the screen and end at the bottom of it, and
     the button hangs from a column as tall as the window.
 
@@ -75,18 +77,16 @@
             android:paddingTop="@dimen/space_s"
             android:paddingBottom="@dimen/space_m">
 
-            <!-- The title, the data's age and the three ways out on one row,
-                 which portrait gives three. The row wraps its tallest child:
-                 the icons are 48 dp of touch target and the two texts are
-                 written in `sp`, so at the ordinary sizes the row is the
-                 icons' and at ×2.0 it is the freshness's. Nothing is centred
-                 in a height it cannot have, which is the defect this file was
-                 rewritten for.
+            <!-- The title, the data's age and the settings on one row, which
+                 portrait gives three. The row wraps its tallest child: the
+                 icon is 48 dp of touch target and the two texts are written
+                 in `sp`, so at the ordinary sizes the row is the icon's and at
+                 ×2.0 it is the freshness's. Nothing is centred in a height it
+                 cannot have, which is the defect this file was rewritten for.
 
-                 The three keep the order they have in portrait — settings
-                 outermost, the map innermost — and a row lays its children out
-                 from the start, so the order mirrors with the language on its
-                 own. -->
+                 A row lays its children out from the start, so the settings
+                 end up at the end edge, as in portrait, in either direction of
+                 reading. -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,24 +123,6 @@
                     tools:text="Mis à jour il y a 12 secondes" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/open_map"
-                    style="@style/Widget.Material3.Button.IconButton"
-                    android:layout_width="@dimen/touch_target_min"
-                    android:layout_height="@dimen/touch_target_min"
-                    android:contentDescription="@string/stations_open_map"
-                    app:icon="@drawable/ic_map_place"
-                    app:iconTint="@color/ink" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/open_favourites"
-                    style="@style/Widget.Material3.Button.IconButton"
-                    android:layout_width="@dimen/touch_target_min"
-                    android:layout_height="@dimen/touch_target_min"
-                    android:contentDescription="@string/favourites_open"
-                    app:icon="@drawable/ic_favourite"
-                    app:iconTint="@color/ink" />
-
-                <com.google.android.material.button.MaterialButton
                     android:id="@+id/open_settings"
                     style="@style/Widget.Material3.Button.IconButton"
                     android:layout_width="@dimen/touch_target_min"
@@ -175,29 +157,41 @@
                     android:textAppearance="@style/TextAppearance.RoueLibre.Body" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- The "bikes" / "docks" toggle (SPEC §7.1), under the field: the
-                 two of them are what one does to the list, and they stay
-                 together. -->
-            <io.github.mgdx.rouelibre.ui.ToggleRow
-                android:id="@+id/mode_toggle"
+            <!-- What the stations count (SPEC §7.1), under the field: the two
+                 of them are what one does to the list, and they stay
+                 together. The map's two buttons, as in portrait, but in the
+                 header's column rather than floating over the rows: lying
+                 down, the rows' column is half a screen wide, and two buttons
+                 at its bottom start would sit on the discs of its last rows. -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space_l"
                 android:layout_marginTop="@dimen/space_m"
                 android:layout_marginEnd="@dimen/space_l"
-                app:selectionRequired="true"
-                app:singleSelection="true">
+                android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/mode_bikes"
-                    style="@style/Widget.RoueLibre.Toggle.Choice"
-                    android:text="@string/mode_bikes" />
+                    android:id="@+id/mode_toggle"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/space_s"
+                    android:minHeight="@dimen/touch_target_min"
+                    tools:text="Vélos" />
 
+                <!-- Measured against what the toggle leaves, so a large text
+                     size wraps its label rather than run it off the column. -->
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/mode_docks"
-                    style="@style/Widget.RoueLibre.Toggle.Choice"
-                    android:text="@string/mode_docks" />
-            </io.github.mgdx.rouelibre.ui.ToggleRow>
+                    android:id="@+id/bike_kind_filter"
+                    style="@style/Widget.RoueLibre.Toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:visibility="gone"
+                    tools:text="Électriques"
+                    tools:visibility="visible" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -205,9 +199,10 @@
          of it. Nothing costs them height any more, so what the keyboard gives
          back is theirs.
 
-         The room under the last row is kept, and has to be: the button floats
-         over this column's bottom corner, and `StationListFragment` still
-         raises both by the height of the banner when there is one. -->
+         The room under the last row is kept, and has to be: the thumb's
+         column floats over this column's bottom corner, and
+         `StationListFragment` still raises both by the height of the banner
+         when there is one. -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="0dp"
@@ -276,32 +271,65 @@
     </LinearLayout>
 
     <!--
-        Nearest station first (SPEC §7.2), over the bottom corner of the rows'
-        column as in portrait — of the column, not of the screen, and the column
-        runs the whole height of the window. That is what settles where it
-        lands: hanging from a column a header had shortened to 302 px, it sat
-        239 px down and bit into the first station's name; over a column that
-        starts at the top of the screen it is back among the last rows, where
-        the padding under the last one is what lets them be scrolled clear of
-        it.
+        The thumb's column of portrait (SPEC §7.6) — the way to the map at the
+        bottom, then the search, nearest station first and the journey — over
+        the bottom corner of the rows' column, of the column and not of the
+        screen, and the column runs the whole height of the window. That is
+        what settles where it lands: hanging from a column a header had
+        shortened to 302 px, "nearest station first" sat 239 px down and bit
+        into the first station's name; over a column that starts at the top of
+        the screen it is back among the last rows, where the padding under the
+        last one is what lets them be scrolled clear of it.
 
         It is still the screen's own end edge, the columns being laid out with
         the rows against it, so the thumb finds it where it found it. Last in
-        the layout, so it draws over the rows; nothing is constrained to it.
+        the layout, so it draws over the rows. Portrait says why each disc is
+        where it is and why it is filled as it is.
     -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/locate_me"
-        style="@style/Widget.Material3.Button.IconButton.Filled"
-        android:layout_width="@dimen/touch_target_min"
-        android:layout_height="@dimen/touch_target_min"
+        android:id="@+id/open_map"
+        style="@style/Widget.RoueLibre.ListRailButton"
         android:layout_marginEnd="@dimen/space_m"
         android:layout_marginBottom="@dimen/space_m"
-        android:contentDescription="@string/stations_order_by_distance"
-        app:backgroundTint="@color/signal"
-        app:icon="@drawable/ic_my_location"
-        app:iconTint="@color/surface_on_signal"
+        android:contentDescription="@string/stations_open_map"
+        app:icon="@drawable/ic_map_place"
         app:layout_constraintBottom_toBottomOf="@id/swipe_refresh"
         app:layout_constraintEnd_toEndOf="@id/swipe_refresh" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/open_search"
+        style="@style/Widget.RoueLibre.ListRailButton"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_s"
+        android:contentDescription="@string/search_stations_hint"
+        app:icon="@drawable/ic_search"
+        app:layout_constraintBottom_toTopOf="@id/open_map"
+        app:layout_constraintEnd_toEndOf="@id/swipe_refresh" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/locate_me"
+        style="@style/Widget.RoueLibre.ListRailButton"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_s"
+        android:contentDescription="@string/stations_order_by_distance"
+        app:icon="@drawable/ic_my_location"
+        app:layout_constraintBottom_toTopOf="@id/open_search"
+        app:layout_constraintEnd_toEndOf="@id/swipe_refresh" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/open_journey"
+        style="@style/Widget.RoueLibre.ListRailButton"
+        android:layout_marginEnd="@dimen/space_m"
+        android:layout_marginBottom="@dimen/space_s"
+        android:contentDescription="@string/journey_open"
+        android:visibility="gone"
+        app:backgroundTint="@color/signal"
+        app:icon="@drawable/ic_bike"
+        app:iconTint="@color/surface_on_signal"
+        app:layout_constraintBottom_toTopOf="@id/locate_me"
+        app:layout_constraintEnd_toEndOf="@id/swipe_refresh"
+        app:strokeWidth="0dp"
+        tools:visibility="visible" />
 
     <!-- That the button is working, while the fix is waited for. Over the
          button and taking its foreground, for the reasons written in the
@@ -313,7 +341,7 @@
         android:importantForAccessibility="no"
         android:indeterminate="true"
         android:visibility="gone"
-        app:indicatorColor="@color/surface_on_signal"
+        app:indicatorColor="@color/ink"
         app:indicatorInset="0dp"
         app:layout_constraintBottom_toBottomOf="@id/locate_me"
         app:layout_constraintEnd_toEndOf="@id/locate_me"

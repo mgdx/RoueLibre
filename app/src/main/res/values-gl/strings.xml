@@ -117,8 +117,6 @@
     <!-- The map's toggle: what the markers count. -->
     <string name="mode_bikes">Bicis</string>
     <string name="mode_docks">Espazos libres</string>
-    <string name="mode_bikes_description">Mostrar as bicis dispoñibles</string>
-    <string name="mode_docks_description">Mostrar os espazos libres</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it.
@@ -335,7 +333,10 @@
     <string name="incoming_unreadable_link">Esta ligazón non di a onde ir: non se puido ler o lugar que indica.</string>
 
     <string name="favourites_title">Favoritos</string>
-    <string name="favourites_open">Ver os favoritos</string>
+    <string name="stations_all_title">Todas as estacións</string>
+    <string name="stations_favourites_reorder">Reordenar</string>
+    <string name="stations_favourites_fold">Agochar os favoritos</string>
+    <string name="stations_favourites_unfold">Amosar os favoritos</string>
     <string name="favourites_reorder_hint">Mantén premida unha fila para movela.</string>
 
     <string name="settings_title">Configuración</string>

@@ -2,7 +2,9 @@ package io.github.mgdx.rouelibre.ui.stations
 
 import android.content.Context
 import io.github.mgdx.rouelibre.R
+import io.github.mgdx.rouelibre.core.station.BikeKindFilter
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
+import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 
 /**
  * What a screen reader is told a station holds (SPEC §7.1).
@@ -35,14 +37,20 @@ import io.github.mgdx.rouelibre.core.station.StationWithAvailability
  *   asks it of the single count it shows, the sheet of the station as a whole:
  *   a station that has stopped lending may still be taking bikes back.
  * @param freeDocksShown whether the network's free docks are worth showing.
+ * @param bikeKind the kind of bike the disc beside the sentence counts, or
+ *   `null` where it counts them all. The ear is then told the count the eye is
+ *   shown — "3 electric" — and a breakdown that could not be read is said as
+ *   unknown, which is how the disc draws it (SPEC §7.1).
  */
 fun Context.spokenAvailability(
     entry: StationWithAvailability,
     isOutOfService: Boolean,
     freeDocksShown: Boolean,
+    bikeKind: BikeKindFilter? = null,
 ): String {
     val availability = entry.availability
-    if (isOutOfService || availability == null) {
+    val bikesOfTheKind = bikeKind?.bikesAt(availability)
+    if (isOutOfService || availability == null || (bikeKind != null && bikesOfTheKind == null)) {
         val state = getString(
             if (isOutOfService) {
                 R.string.station_out_of_service
@@ -52,11 +60,22 @@ fun Context.spokenAvailability(
         )
         return "${entry.station.name}, $state"
     }
-    val bikes = resources.getQuantityString(
-        R.plurals.bikes_available,
-        availability.bikesAvailable,
-        availability.bikesAvailable,
-    )
+    val bikes = when {
+        bikesOfTheKind == null -> resources.getQuantityString(
+            R.plurals.bikes_available,
+            availability.bikesAvailable,
+            availability.bikesAvailable,
+        )
+
+        bikeKind?.wanted == WantedBikeKind.Electric ->
+            resources.getQuantityString(R.plurals.bikes_electric, bikesOfTheKind, bikesOfTheKind)
+
+        else -> resources.getQuantityString(
+            R.plurals.bikes_mechanical,
+            bikesOfTheKind,
+            bikesOfTheKind,
+        )
+    }
     if (!freeDocksShown) {
         return getString(R.string.station_content_description_bikes_only, entry.station.name, bikes)
     }

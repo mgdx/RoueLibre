@@ -84,8 +84,6 @@
 
     <string name="mode_bikes">Kerékpárok</string>
     <string name="mode_docks">Szabad helyek</string>
-    <string name="mode_bikes_description">Az elérhető kerékpárok megjelenítése</string>
-    <string name="mode_docks_description">A szabad helyek megjelenítése</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
@@ -281,7 +279,10 @@
     <string name="incoming_unreadable_link">Ez a hivatkozás nem mondja meg, hová kell menni: a benne lévő helyet nem sikerült beolvasni.</string>
 
     <string name="favourites_title">Kedvencek</string>
-    <string name="favourites_open">A kedvencek megtekintése</string>
+    <string name="stations_all_title">Összes állomás</string>
+    <string name="stations_favourites_reorder">Átrendezés</string>
+    <string name="stations_favourites_fold">Kedvencek elrejtése</string>
+    <string name="stations_favourites_unfold">Kedvencek megjelenítése</string>
     <string name="favourites_reorder_hint">Tartsd nyomva a sort az áthelyezéséhez.</string>
 
     <string name="settings_title">Beállítások</string>

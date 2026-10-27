@@ -267,28 +267,33 @@ class SearchLandscapeTest {
     }
 
     /**
-     * "Nearest station first" hangs from the list's column, not from a corner
-     * the header can reach.
+     * The thumb's column hangs from the list's column, not from a corner the
+     * header can reach.
      *
      * Sideways, the screen's own bottom corner is a place the header reaches
      * the moment the keyboard takes the rest of the window — which is how the
      * button came to sit over the search field and half cover the cross that
      * clears it. Anchored to the column the rows are in, there is nothing
-     * under it but rows, however far the bottom edge is pushed up.
+     * under it but rows, however far the bottom edge is pushed up. Since
+     * 27 October 2026 that button stands in a column of four, the way to the
+     * map at its bottom (SPEC §7.6), and the whole column hangs from the rows.
      */
     @Test
-    fun `the ordering button floats over the rows and over nothing else`() {
-        val button = viewOf("layout-land", "fragment_station_list.xml", "locate_me")
+    fun `the thumb's column floats over the rows and over nothing else`() {
+        val bottom = viewOf("layout-land", "fragment_station_list.xml", "open_map")
         assertEquals(
-            "locate_me hangs from the window again rather than from the list",
+            "the column hangs from the window again rather than from the list",
             "@id/swipe_refresh",
-            button.getAttribute("app:layout_constraintBottom_toBottomOf"),
+            bottom.getAttribute("app:layout_constraintBottom_toBottomOf"),
         )
-        assertEquals(
-            "locate_me is back over the column the search field is in",
-            "@id/swipe_refresh",
-            button.getAttribute("app:layout_constraintEnd_toEndOf"),
-        )
+        listOf("open_map", "open_search", "locate_me", "open_journey").forEach { id ->
+            assertEquals(
+                "$id is back over the column the search field is in",
+                "@id/swipe_refresh",
+                viewOf("layout-land", "fragment_station_list.xml", id)
+                    .getAttribute("app:layout_constraintEnd_toEndOf"),
+            )
+        }
         // The room under the last row rises with the button, and the fragment
         // raises both again by the height of a banner: without it the last
         // station of the network sits under the control for good.
@@ -356,10 +361,9 @@ class SearchLandscapeTest {
                 "title",
                 "freshness",
                 "open_settings",
-                "open_favourites",
-                "open_map",
                 "search_field",
                 "mode_toggle",
+                "bike_kind_filter",
             ),
         )
 

@@ -11,6 +11,7 @@ import io.github.mgdx.rouelibre.core.geo.BoundingBox
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.geo.distanceInMetresTo
 import io.github.mgdx.rouelibre.core.station.AvailabilityMode
+import io.github.mgdx.rouelibre.core.station.BikeKindFilter
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
 import io.github.mgdx.rouelibre.core.station.displayFor
 import io.github.mgdx.rouelibre.core.station.isBeyondCoveredArea
@@ -32,6 +33,17 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
 
     /** What the indicator counts: the bikes, or the docks. */
     var mode: AvailabilityMode = AvailabilityMode.Bikes
+        set(value) {
+            if (field == value) return
+            field = value
+            notifyItemRangeChanged(0, itemCount)
+        }
+
+    /**
+     * The kind of bike the indicator counts, or `null` for all of them
+     * (SPEC §7.1) — the filter the map and the list share.
+     */
+    var bikeKind: BikeKindFilter? = null
         set(value) {
             if (field == value) return
             field = value
@@ -89,7 +101,7 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: StationViewHolder, position: Int) {
-        holder.bind(getItem(position), mode, origin, coveredArea, freeDocksShown)
+        holder.bind(getItem(position), mode, origin, coveredArea, freeDocksShown, bikeKind)
     }
 
     /** One station row. */
@@ -107,6 +119,7 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
          * @param coveredArea the area the installed data covers, or `null`.
          * @param freeDocksShown whether the network's free docks are worth
          *   showing at all.
+         * @param bikeKind the kind of bike counted, or `null` for all of them.
          */
         fun bind(
             entry: StationWithAvailability,
@@ -114,10 +127,11 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
             origin: Coordinates?,
             coveredArea: BoundingBox?,
             freeDocksShown: Boolean,
+            bikeKind: BikeKindFilter? = null,
         ) {
             val context = binding.root.context
             val resources = context.resources
-            val display = entry.displayFor(mode)
+            val display = entry.displayFor(mode, bikeKind)
 
             binding.indicator.display = display
             binding.name.text = entry.station.name
@@ -208,6 +222,7 @@ class StationAdapter(private val onOpen: (StationWithAvailability) -> Unit) :
                     entry,
                     isOutOfService = display.isOutOfService,
                     freeDocksShown = freeDocksShown,
+                    bikeKind = bikeKind.takeIf { mode == AvailabilityMode.Bikes },
                 )
             binding.root.setOnClickListener { onOpen(entry) }
         }

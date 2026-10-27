@@ -92,8 +92,6 @@
 
     <string name="mode_bikes">Biciclete</string>
     <string name="mode_docks">Locuri libere</string>
-    <string name="mode_bikes_description">Afișează bicicletele disponibile</string>
-    <string name="mode_docks_description">Afișează locurile libere</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it.
@@ -304,7 +302,10 @@
     <string name="incoming_unreadable_link">Acest link nu spune unde să mergi: locul din el nu a putut fi citit.</string>
 
     <string name="favourites_title">Favorite</string>
-    <string name="favourites_open">Vezi favoritele</string>
+    <string name="stations_all_title">Toate stațiile</string>
+    <string name="stations_favourites_reorder">Reordonează</string>
+    <string name="stations_favourites_fold">Ascunde favoritele</string>
+    <string name="stations_favourites_unfold">Afișează favoritele</string>
     <string name="favourites_reorder_hint">Ține apăsat un rând ca să îl muți.</string>
 
     <string name="settings_title">Setări</string>

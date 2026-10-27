@@ -83,8 +83,6 @@
 
     <string name="mode_bikes">Pyörät</string>
     <string name="mode_docks">Vapaat paikat</string>
-    <string name="mode_bikes_description">Näytä vapaat pyörät</string>
-    <string name="mode_docks_description">Näytä vapaat paikat</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
@@ -271,7 +269,10 @@
     <string name="incoming_unreadable_link">Tämä linkki ei kerro, minne mennä: sen paikkaa ei voitu lukea.</string>
 
     <string name="favourites_title">Suosikit</string>
-    <string name="favourites_open">Näytä suosikit</string>
+    <string name="stations_all_title">Kaikki asemat</string>
+    <string name="stations_favourites_reorder">Järjestä</string>
+    <string name="stations_favourites_fold">Piilota suosikit</string>
+    <string name="stations_favourites_unfold">Näytä suosikit</string>
     <string name="favourites_reorder_hint">Siirrä riviä koskettamalla sitä pitkään.</string>
 
     <string name="settings_title">Asetukset</string>

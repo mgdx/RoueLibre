@@ -186,6 +186,23 @@
     </style>
 
     <!--
+        A disc of the station list's thumb column (SPEC §7.6): the shape, the
+        size and the icon of the map's own, and another fill. The map's discs
+        take the surface because they stand on a map; this column stands on
+        rows of the surface, where a surface disc is no disc at all — an icon
+        floating over a station's name. So it takes the page's ground, one step
+        darker than the rows in both themes, and an outline to close it.
+    -->
+    <style name="Widget.RoueLibre.ListRailButton" parent="Widget.Material3.Button.IconButton.Filled">
+        <item name="android:layout_width">@dimen/touch_target_min</item>
+        <item name="android:layout_height">@dimen/touch_target_min</item>
+        <item name="backgroundTint">@color/paper</item>
+        <item name="iconTint">@color/ink</item>
+        <item name="strokeColor">@color/outline</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <!--
         The bikes / docks toggle. The default Material style colours the
         active state with `colorSecondaryContainer`, a role the project's token
         set does not use: rather than divert that role for the whole theme, the

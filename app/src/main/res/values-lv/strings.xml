@@ -76,8 +76,6 @@
 
     <string name="mode_bikes">Velosipēdi</string>
     <string name="mode_docks">Brīvās vietas</string>
-    <string name="mode_bikes_description">Rādīt pieejamos velosipēdus</string>
-    <string name="mode_docks_description">Rādīt brīvās vietas</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it. -->
@@ -285,7 +283,10 @@
     <string name="incoming_unreadable_link">Šī saite nenorāda, kurp doties: tajā minēto vietu neizdevās nolasīt.</string>
 
     <string name="favourites_title">Izlase</string>
-    <string name="favourites_open">Skatīt izlasi</string>
+    <string name="stations_all_title">Visas stacijas</string>
+    <string name="stations_favourites_reorder">Pārkārtot</string>
+    <string name="stations_favourites_fold">Paslēpt izlasi</string>
+    <string name="stations_favourites_unfold">Rādīt izlasi</string>
     <string name="favourites_reorder_hint">Turiet rindu nospiestu, lai to pārvietotu.</string>
 
     <string name="settings_title">Iestatījumi</string>

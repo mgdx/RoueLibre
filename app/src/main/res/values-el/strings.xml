@@ -86,8 +86,6 @@
 
     <string name="mode_bikes">Ποδήλατα</string>
     <string name="mode_docks">Ελεύθερες θέσεις</string>
-    <string name="mode_bikes_description">Εμφάνιση των διαθέσιμων ποδηλάτων</string>
-    <string name="mode_docks_description">Εμφάνιση των ελεύθερων θέσεων</string>
 
     <!-- Which bikes the markers count, where the network lends both kinds
          (SPEC §7.1). Named after what is shown, like the toggle beside it.
@@ -291,7 +289,10 @@
     <string name="incoming_unreadable_link">Αυτός ο σύνδεσμος δεν λέει πού να πάτε: δεν ήταν δυνατή η ανάγνωση του τόπου του.</string>
 
     <string name="favourites_title">Αγαπημένα</string>
-    <string name="favourites_open">Δείτε τα αγαπημένα</string>
+    <string name="stations_all_title">Όλοι οι σταθμοί</string>
+    <string name="stations_favourites_reorder">Αναδιάταξη</string>
+    <string name="stations_favourites_fold">Απόκρυψη αγαπημένων</string>
+    <string name="stations_favourites_unfold">Εμφάνιση αγαπημένων</string>
     <string name="favourites_reorder_hint">Πατήστε παρατεταμένα μια γραμμή για να τη μετακινήσετε.</string>
 
     <string name="settings_title">Ρυθμίσεις</string>
