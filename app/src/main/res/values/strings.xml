@@ -788,18 +788,24 @@
     <string name="settings_map_filters_hide_empty_hint_bikes">“Nothing” means no bike: the map counts bikes alone on this network.</string>
 
     <!-- Under the city in the settings, for every network served: whether
-         its full stations take bikes back (SPEC §4.1, fourth case). Automatic
-         leaves it to the feed, and its line says what the feed showed; Always
-         and Never settle it by hand, Always with the warning it needs on a
-         network of real docks. -->
+         its full stations take bikes back (SPEC §4.1, every case). Automatic
+         leaves it to the feed, and its line says what the feed gives: bikes
+         beside full stations, stations taking any bike (zones with no dock),
+         full meaning full, or nothing loaded yet. Always and Never settle it
+         by hand, Always with the warning it needs on a network of real docks,
+         Never with the one it needs where nearly every station shows no free
+         dock. -->
     <string name="settings_bikes_past_capacity">Full stations take bikes back</string>
     <string name="settings_bikes_past_capacity_automatic">Automatic</string>
     <string name="settings_bikes_past_capacity_always">Always</string>
     <string name="settings_bikes_past_capacity_never">Never</string>
     <string name="settings_bikes_past_capacity_hint_detected">Automatic: this network leaves bikes beside its full stations, so a full station counts as one where you can return your bike.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Automatic: nothing in this network\'s data shows bikes left beside full stations, so a full station counts as full.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Automatic: according to this network\'s data, its stations take bikes back even with no free dock.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Automatic: decided from this network\'s data once its stations are loaded.</string>
     <string name="settings_bikes_past_capacity_hint_always">A full station counts as one where you can return your bike. If this network does not allow it, a journey may end at a station that refuses it.</string>
     <string name="settings_bikes_past_capacity_hint_never">A full station counts as full, whatever this network\'s data shows.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">A station with no free dock counts as full. On this network nearly every station shows none, so few journeys remain possible.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stations the network says nothing about stay on the map: a count nobody could read is not a count of nothing.</string>

@@ -789,8 +789,11 @@
     <string name="settings_bikes_past_capacity_never">أبدًا</string>
     <string name="settings_bikes_past_capacity_hint_detected">تلقائي: تترك هذه الشبكة دراجات بجوار محطاتها الممتلئة، لذا تُعَدّ المحطة الممتلئة محطةً يمكنك أن تعيد فيها دراجتك.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">تلقائي: لا شيء في بيانات هذه الشبكة يُظهر دراجات متروكة بجوار محطات ممتلئة، لذا تُعَدّ المحطة الممتلئة ممتلئة.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">تلقائي: بحسب بيانات هذه الشبكة، تستقبل محطاتها الدراجات حتى دون موقف شاغر.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">تلقائي: يُحدَّد من بيانات هذه الشبكة بمجرد تحميل محطاتها.</string>
     <string name="settings_bikes_past_capacity_hint_always">تُعَدّ المحطة الممتلئة محطةً يمكنك أن تعيد فيها دراجتك. إذا كانت هذه الشبكة لا تسمح بذلك، فقد تنتهي الرحلة عند محطة ترفضها.</string>
     <string name="settings_bikes_past_capacity_hint_never">تُعَدّ المحطة الممتلئة ممتلئة، أيًّا كان ما تُظهره بيانات هذه الشبكة.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">تُعَدّ المحطة التي لا موقف شاغر فيها ممتلئة. في هذه الشبكة لا تكاد أي محطة تُظهر موقفًا شاغرًا، لذا تبقى رحلات قليلة ممكنة.</string>
     <!-- Under both switches. -->
     <string name="settings_map_filters_keeps_unknown">تبقى على الخريطة المحطات التي لا تقول عنها شبكة الدراجات شيئًا: عدد لا يستطيع أحد قراءته ليس عددًا معدومًا.</string>
 

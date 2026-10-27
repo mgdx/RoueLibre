@@ -52,6 +52,26 @@ public fun freeDocksAreWorthShowing(stations: List<StationWithAvailability>): Bo
 }
 
 /**
+ * Whether the feed alone has most of a network's stations take back any bike
+ * ([StationAvailability.readsUnlimitedFromFeed]), whatever the rider
+ * answered — what the settings say "automatic" gives (SPEC §4.1).
+ *
+ * The same stations and the same line as [freeDocksAreWorthShowing], read
+ * before the rider's answer: Munich's zones and Frelo's full racks are above
+ * it, Lille's docks far under, so "automatic" is described from what the
+ * application would do rather than from the fourth case alone, which missed
+ * Munich and called its zones full.
+ *
+ * @return `null` when no station could be weighed.
+ */
+public fun feedTakesAnyBikeAtMostStations(stations: List<StationWithAvailability>): Boolean? {
+    val weighed = stations.mapNotNull { it.availability }.filter { it.isDeployed }
+    if (weighed.isEmpty()) return null
+    val unlimited = weighed.count { it.readsUnlimitedFromFeed }
+    return unlimited * PER_CENT >= weighed.size * UNLIMITED_PERCENT_SILENCING_FREE_DOCKS
+}
+
+/**
  * The verdict of [freeDocksAreWorthShowing], **settled once per city and per
  * session**: the first snapshot that can be weighed decides, and every later
  * one is read under that decision.

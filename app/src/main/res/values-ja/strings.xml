@@ -824,8 +824,11 @@
     <string name="settings_bikes_past_capacity_never">しない</string>
     <string name="settings_bikes_past_capacity_hint_detected">自動：このサービスでは満車のステーションの横に自転車が置かれているため、満車のステーションも返却できる場所として扱います。</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">自動：このサービスのデータには満車のステーションの横に置かれた自転車が見られないため、満車のステーションは満車として扱います。</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">自動：このサービスのデータによると、空きラックがなくてもステーションで返却できます。</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">自動：ステーションの読み込み後に、このサービスのデータから判断します。</string>
     <string name="settings_bikes_past_capacity_hint_always">満車のステーションも返却できる場所として扱います。このサービスで認められていない場合、返却を断られるステーションでルートが終わることがあります。</string>
     <string name="settings_bikes_past_capacity_hint_never">このサービスのデータにかかわらず、満車のステーションは満車として扱います。</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">空きラックがないステーションは満車として扱います。このサービスではほとんどのステーションに空きラックが表示されないため、可能なルートはわずかです。</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">サービスが何も伝えていないステーションは、地図に残ります。誰も読み取れなかった数は、0という数ではありません。</string>

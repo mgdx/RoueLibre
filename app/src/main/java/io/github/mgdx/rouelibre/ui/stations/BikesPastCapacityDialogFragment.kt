@@ -10,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.mgdx.rouelibre.R
 import io.github.mgdx.rouelibre.RoueLibreApplication
-import io.github.mgdx.rouelibre.core.station.BikesPastCapacityAnswer
+import io.github.mgdx.rouelibre.core.station.FullStationAnswer
 import kotlinx.coroutines.launch
 
 /**
@@ -65,7 +65,7 @@ class BikesPastCapacityDialogFragment : DialogFragment() {
         val preferences = application.container.preferences
         requireActivity().lifecycleScope.launch {
             preferences.setBikesPastCapacityExplained(cityId)
-            if (!kept) preferences.setBikesPastCapacityAnswer(cityId, BikesPastCapacityAnswer.Never)
+            if (!kept) preferences.setFullStationAnswer(cityId, FullStationAnswer.Never)
         }
     }
 

@@ -23,7 +23,9 @@ import io.github.mgdx.rouelibre.core.geo.BoundingBox
 import io.github.mgdx.rouelibre.core.geo.Coordinates
 import io.github.mgdx.rouelibre.core.journey.WalkingPace
 import io.github.mgdx.rouelibre.core.measure.UnitChoice
-import io.github.mgdx.rouelibre.core.station.BikesPastCapacityAnswer
+import io.github.mgdx.rouelibre.core.station.FullStationAnswer
+import io.github.mgdx.rouelibre.core.station.StationWithAvailability
+import io.github.mgdx.rouelibre.core.station.feedTakesAnyBikeAtMostStations
 import io.github.mgdx.rouelibre.data.AppTheme
 import io.github.mgdx.rouelibre.data.OpeningScreen
 import io.github.mgdx.rouelibre.data.OwnBikeKind
@@ -220,70 +222,121 @@ class SettingsFragment : Fragment() {
 
     /**
      * Whether the network in service has its full stations read as taking
-     * bikes back (SPEC §4.1, fourth case): left to the feed, or settled by
+     * bikes back (SPEC §4.1, every case): left to the feed, or settled by
      * hand either way — the place to change the answer given in
      * [io.github.mgdx.rouelibre.ui.stations.BikesPastCapacityDialogFragment].
      *
      * Shown for every network served, not only those the feed gave away: the
      * reading misses networks of zones under its line, whose riders know their
      * full stations take bikes, and "always" is theirs. The line under the row
-     * says what the choice gives here — for "automatic", what the feed showed
-     * this session; for "always", the risk it takes on a network of real docks.
+     * says what the choice gives here — for "automatic", what the feed gives
+     * alone; for "never", what it costs where the feed has the
+     * stations take any bike; for "always", the risk on a network of real docks.
      */
     private fun setUpBikesPastCapacity(views: FragmentSettingsBinding) {
         views.bikesPastCapacity.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (!isChecked || isFilling) return@addOnButtonCheckedListener
             val answer = when (checkedId) {
-                R.id.bikes_past_capacity_always -> BikesPastCapacityAnswer.Always
-                R.id.bikes_past_capacity_never -> BikesPastCapacityAnswer.Never
-                else -> BikesPastCapacityAnswer.Automatic
+                R.id.bikes_past_capacity_always -> FullStationAnswer.Always
+                R.id.bikes_past_capacity_never -> FullStationAnswer.Never
+                else -> FullStationAnswer.Automatic
             }
             viewLifecycleOwner.lifecycleScope.launch {
                 val cityId = preferences.activeCityId() ?: return@launch
-                preferences.setBikesPastCapacityAnswer(cityId, answer)
+                preferences.setFullStationAnswer(cityId, answer)
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 combine(
-                    container.stationRepository.bikesPastCapacityDetected,
+                    container.stationRepository.observeStations(),
                     preferences.activeCityIdFlow,
-                    preferences.bikesPastCapacityAnswers,
-                ) { detected, cityId, answers ->
-                    Triple(
-                        cityId != null,
-                        answers[cityId] ?: BikesPastCapacityAnswer.Automatic,
-                        detected,
+                    preferences.fullStationAnswers,
+                ) { snapshot, cityId, answers ->
+                    FullStationRow(
+                        shown = cityId != null,
+                        answer = answers[cityId] ?: FullStationAnswer.Automatic,
+                        feed = feedReadingOf(snapshot.stations),
                     )
-                }.collect { (shown, answer, detected) ->
+                }.collect { row ->
                     val current = binding ?: return@collect
-                    current.bikesPastCapacityTitle.isVisible = shown
-                    current.bikesPastCapacity.isVisible = shown
-                    current.bikesPastCapacityHint.isVisible = shown
+                    current.bikesPastCapacityTitle.isVisible = row.shown
+                    current.bikesPastCapacity.isVisible = row.shown
+                    current.bikesPastCapacityHint.isVisible = row.shown
                     isFilling = true
                     current.bikesPastCapacity.check(
-                        when (answer) {
-                            BikesPastCapacityAnswer.Automatic -> R.id.bikes_past_capacity_automatic
-                            BikesPastCapacityAnswer.Always -> R.id.bikes_past_capacity_always
-                            BikesPastCapacityAnswer.Never -> R.id.bikes_past_capacity_never
+                        when (row.answer) {
+                            FullStationAnswer.Automatic -> R.id.bikes_past_capacity_automatic
+                            FullStationAnswer.Always -> R.id.bikes_past_capacity_always
+                            FullStationAnswer.Never -> R.id.bikes_past_capacity_never
                         },
                     )
                     isFilling = false
-                    current.bikesPastCapacityHint.setText(
-                        when (answer) {
-                            BikesPastCapacityAnswer.Always ->
-                                R.string.settings_bikes_past_capacity_hint_always
-                            BikesPastCapacityAnswer.Never ->
-                                R.string.settings_bikes_past_capacity_hint_never
-                            BikesPastCapacityAnswer.Automatic -> if (detected) {
-                                R.string.settings_bikes_past_capacity_hint_detected
-                            } else {
-                                R.string.settings_bikes_past_capacity_hint_not_detected
-                            }
-                        },
-                    )
+                    current.bikesPastCapacityHint.setText(row.hint())
                 }
+            }
+        }
+    }
+
+    /**
+     * What the feed alone says of the network's full stations, read from the
+     * stations the application holds — the cache, so offline too — rather than
+     * from a verdict some other screen may not have settled yet: opened right
+     * after a change of city, this screen said Frelo showed nothing.
+     */
+    private fun feedReadingOf(stations: List<StationWithAvailability>): FeedReading = when {
+        stations.any { it.availability?.isInFeedTakingBikesPastCapacity == true } ->
+            FeedReading.BikesBesideFullStations
+        else -> when (feedTakesAnyBikeAtMostStations(stations)) {
+            true -> FeedReading.TakesAnyBike
+            false -> FeedReading.FullMeansFull
+            null -> FeedReading.NotRead
+        }
+    }
+
+    /** What the feed alone says of a network's full stations (SPEC §4.1). */
+    private enum class FeedReading {
+        /** Bikes stand beside its full stations: the fourth case. */
+        BikesBesideFullStations,
+
+        /** Most stations take any bike by another case — Munich's zones. */
+        TakesAnyBike,
+
+        /** A full station is full. */
+        FullMeansFull,
+
+        /** No station read yet for this network. */
+        NotRead,
+    }
+
+    /** The row under the city, as [setUpBikesPastCapacity] shows it. */
+    private data class FullStationRow(
+        val shown: Boolean,
+        val answer: FullStationAnswer,
+        val feed: FeedReading,
+    ) {
+        /**
+         * The line under the three answers: for "automatic", what the feed
+         * shows; for "never", the cost on a network whose stations take any
+         * bike, nearly every journey failing there; for "always", the risk on
+         * a network of real docks.
+         */
+        @StringRes
+        fun hint(): Int = when (answer) {
+            FullStationAnswer.Always -> R.string.settings_bikes_past_capacity_hint_always
+            FullStationAnswer.Never -> when (feed) {
+                FeedReading.BikesBesideFullStations, FeedReading.TakesAnyBike ->
+                    R.string.settings_bikes_past_capacity_hint_never_takes_bikes
+                else -> R.string.settings_bikes_past_capacity_hint_never
+            }
+            FullStationAnswer.Automatic -> when (feed) {
+                FeedReading.BikesBesideFullStations ->
+                    R.string.settings_bikes_past_capacity_hint_detected
+                FeedReading.TakesAnyBike -> R.string.settings_bikes_past_capacity_hint_takes_bikes
+                FeedReading.FullMeansFull ->
+                    R.string.settings_bikes_past_capacity_hint_not_detected
+                FeedReading.NotRead -> R.string.settings_bikes_past_capacity_hint_not_read
             }
         }
     }

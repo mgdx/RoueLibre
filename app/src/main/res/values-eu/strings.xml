@@ -857,8 +857,11 @@
     <string name="settings_bikes_past_capacity_never">Inoiz ez</string>
     <string name="settings_bikes_past_capacity_hint_detected">Automatikoa: sare honek bizikletak uzten ditu bere geltoki beteen ondoan; beraz, geltoki betea bizikleta itzul dezakezun geltokitzat hartzen da.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Automatikoa: sare honen datuetan ez da ageri geltoki beteen ondoan utzitako bizikletarik; beraz, geltoki betea betetzat hartzen da.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Automatikoa: sare honen datuen arabera, bere geltokiek bizikletak onartzen dituzte leku librerik ez dagoenean ere.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Automatikoa: sare honen datuen arabera erabakitzen da, bere geltokiak kargatu bezain laster.</string>
     <string name="settings_bikes_past_capacity_hint_always">Geltoki betea bizikleta itzul dezakezun geltokitzat hartzen da. Sare honek ez badu onartzen, ibilbide bat onartzen ez duen geltoki batean amai daiteke.</string>
     <string name="settings_bikes_past_capacity_hint_never">Geltoki betea betetzat hartzen da, sare honen datuek edozer erakutsita ere.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">Leku librerik gabeko geltokia betetzat hartzen da. Sare honetan ia geltoki batek ere ez du leku librerik erakusten; beraz, ibilbide gutxi dira posible.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Sareak ezer esaten ez duen geltokiak mapan geratzen dira: inork irakurri ezin duen kontaketa ez da hutsaren kontaketa.</string>

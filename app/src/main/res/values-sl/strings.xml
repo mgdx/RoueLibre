@@ -796,8 +796,11 @@
     <string name="settings_bikes_past_capacity_never">Nikoli</string>
     <string name="settings_bikes_past_capacity_hint_detected">Samodejno: to omrežje pušča kolesa ob svojih polnih postajah, zato polna postaja šteje kot postaja, kjer lahko vrnete kolo.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Samodejno: nič v podatkih tega omrežja ne kaže koles, puščenih ob polnih postajah, zato polna postaja šteje kot polna.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Samodejno: glede na podatke tega omrežja njegove postaje sprejemajo kolesa tudi brez prostega mesta.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Samodejno: odloči se po podatkih tega omrežja, takoj ko se naložijo njegove postaje.</string>
     <string name="settings_bikes_past_capacity_hint_always">Polna postaja šteje kot postaja, kjer lahko vrnete kolo. Če tega omrežje ne dovoljuje, se lahko pot konča na postaji, ki kolesa ne sprejme.</string>
     <string name="settings_bikes_past_capacity_hint_never">Polna postaja šteje kot polna, ne glede na to, kaj kažejo podatki tega omrežja.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">Postaja brez prostega mesta šteje kot polna. V tem omrežju skoraj nobena postaja ne kaže prostih mest, zato je mogočih le malo poti.</string>
     <!-- Under both switches. The most important rule of the two filters. -->
     <string name="settings_map_filters_keeps_unknown">Postaje, o katerih omrežje ne pove ničesar, ostanejo na zemljevidu: število, ki ga nihče ni mogel prebrati, ni število nič.</string>
 

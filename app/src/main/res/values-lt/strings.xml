@@ -781,8 +781,11 @@
     <string name="settings_bikes_past_capacity_never">Niekada</string>
     <string name="settings_bikes_past_capacity_hint_detected">Automatiškai: šis tinklas palieka dviračius šalia savo pilnų stotelių, todėl pilna stotelė laikoma tokia, kurioje galite grąžinti dviratį.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Automatiškai: šio tinklo duomenyse nematyti dviračių, paliktų šalia pilnų stotelių, todėl pilna stotelė laikoma pilna.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Automatiškai: pagal šio tinklo duomenis jo stotelės priima dviračius net ir be laisvos vietos.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Automatiškai: nusprendžiama pagal šio tinklo duomenis, kai tik įkeliamos jo stotelės.</string>
     <string name="settings_bikes_past_capacity_hint_always">Pilna stotelė laikoma tokia, kurioje galite grąžinti dviratį. Jei šis tinklas to neleidžia, kelionė gali baigtis stotelėje, kuri dviračio nepriima.</string>
     <string name="settings_bikes_past_capacity_hint_never">Pilna stotelė laikoma pilna, nesvarbu, ką rodo šio tinklo duomenys.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">Stotelė be laisvos vietos laikoma pilna. Šiame tinkle beveik nė viena stotelė nerodo laisvų vietų, todėl galimų kelionių lieka nedaug.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stotelės, apie kurias tinklas nieko nesako, lieka žemėlapyje: skaičius, kurio niekas negalėjo perskaityti, nėra nulis.</string>

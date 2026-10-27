@@ -816,8 +816,11 @@
     <string name="settings_bikes_past_capacity_never">Nie</string>
     <string name="settings_bikes_past_capacity_hint_detected">Automatisch: Dieses Netz lässt Räder neben seinen vollen Stationen stehen, daher zählt eine volle Station als eine, an der du dein Rad zurückgeben kannst.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Automatisch: Nichts in den Daten dieses Netzes zeigt Räder neben vollen Stationen, daher zählt eine volle Station als voll.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Automatisch: Laut den Daten dieses Netzes nehmen seine Stationen Räder auch ohne freien Platz zurück.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Automatisch: Wird anhand der Daten dieses Netzes entschieden, sobald seine Stationen geladen sind.</string>
     <string name="settings_bikes_past_capacity_hint_always">Eine volle Station zählt als eine, an der du dein Rad zurückgeben kannst. Erlaubt dieses Netz das nicht, kann eine Route an einer Station enden, die es nicht annimmt.</string>
     <string name="settings_bikes_past_capacity_hint_never">Eine volle Station zählt als voll, egal was die Daten dieses Netzes zeigen.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">Eine Station ohne freien Platz zählt als voll. In diesem Netz zeigt fast keine Station einen freien Platz, daher bleiben nur wenige Routen möglich.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stationen, über die das Netz nichts sagt, bleiben auf der Karte: Ein Zählstand, den niemand lesen konnte, ist kein Zählstand von null.</string>

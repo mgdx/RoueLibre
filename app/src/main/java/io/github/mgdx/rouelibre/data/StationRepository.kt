@@ -5,9 +5,9 @@ import io.github.mgdx.rouelibre.core.Outcome
 import io.github.mgdx.rouelibre.core.gbfs.GbfsDiscovery
 import io.github.mgdx.rouelibre.core.gbfs.VehicleTypesFeed
 import io.github.mgdx.rouelibre.core.geo.Coordinates
-import io.github.mgdx.rouelibre.core.station.BikesPastCapacityAnswer
 import io.github.mgdx.rouelibre.core.station.DockedBike
 import io.github.mgdx.rouelibre.core.station.FleetReading
+import io.github.mgdx.rouelibre.core.station.FullStationAnswer
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.StationAvailability
 import io.github.mgdx.rouelibre.core.station.StationWithAvailability
@@ -71,8 +71,8 @@ class StationRepository(
     private val discoveryUrlProvider: suspend () -> String?,
     private val providerIdsProvider: suspend () -> Set<String> = { emptySet() },
     private val recordFleet: suspend (FleetReading) -> Unit = {},
-    private val bikesPastCapacityAnswer: Flow<BikesPastCapacityAnswer> =
-        flowOf(BikesPastCapacityAnswer.Automatic),
+    private val fullStationAnswer: Flow<FullStationAnswer> =
+        flowOf(FullStationAnswer.Automatic),
     private val clock: Clock = Clock.systemUTC(),
 ) {
 
@@ -150,7 +150,7 @@ class StationRepository(
      * first reading: a change of answer changes which stations take any bike,
      * and with it the display verdict settled on them.
      */
-    private val answerReadUnder = MutableStateFlow<BikesPastCapacityAnswer?>(null)
+    private val answerReadUnder = MutableStateFlow<FullStationAnswer?>(null)
 
     /**
      * The stations and their last known state, re-emitted on every change.
@@ -162,7 +162,7 @@ class StationRepository(
     fun observeStations(): Flow<StationsSnapshot> = combine(
         dao.observeStations(),
         dao.observeAvailabilities(),
-        bikesPastCapacityAnswer,
+        fullStationAnswer,
     ) { stationEntities, availabilityEntities, answer ->
         val stations = stationEntities.map(StationEntity::toDomain)
         val availabilities = availabilityEntities.map(StationAvailabilityEntity::toDomain)
@@ -183,7 +183,7 @@ class StationRepository(
                 availabilities,
                 writesDocksFromCapacitySettled = writesDocksFromCapacity,
                 takesBikesPastCapacitySettled = takesBikesPastCapacity,
-                bikesPastCapacityAnswer = answer,
+                fullStationAnswer = answer,
             ),
             fetchedAt = availabilityEntities.maxOfOrNull { it.fetchedAtEpochSeconds }
                 ?.let(Instant::ofEpochSecond),

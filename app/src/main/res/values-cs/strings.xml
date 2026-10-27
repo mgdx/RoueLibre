@@ -899,8 +899,11 @@
     <string name="settings_bikes_past_capacity_never">Nikdy</string>
     <string name="settings_bikes_past_capacity_hint_detected">Automaticky: tato síť nechává kola vedle svých plných stanic, takže plná stanice se počítá jako stanice, kde můžete kolo vrátit.</string>
     <string name="settings_bikes_past_capacity_hint_not_detected">Automaticky: nic v datech této sítě neukazuje kola ponechaná vedle plných stanic, takže plná stanice se počítá jako plná.</string>
+    <string name="settings_bikes_past_capacity_hint_takes_bikes">Automaticky: podle dat této sítě přijímají její stanice kola i bez volného místa.</string>
+    <string name="settings_bikes_past_capacity_hint_not_read">Automaticky: rozhodne se podle dat této sítě, jakmile se načtou její stanice.</string>
     <string name="settings_bikes_past_capacity_hint_always">Plná stanice se počítá jako stanice, kde můžete kolo vrátit. Pokud to tato síť nedovoluje, cesta může skončit na stanici, která kolo odmítne.</string>
     <string name="settings_bikes_past_capacity_hint_never">Plná stanice se počítá jako plná, ať data této sítě ukazují cokoli.</string>
+    <string name="settings_bikes_past_capacity_hint_never_takes_bikes">Stanice bez volného místa se počítá jako plná. V této síti téměř žádná stanice volné místo neukazuje, takže možných cest zbývá málo.</string>
     <!-- Under both switches. The most important rule of the two filters, and
          the only place it is now written. -->
     <string name="settings_map_filters_keeps_unknown">Stanice, o kterých síť nic neříká, zůstávají na mapě: počet, který nikdo nemohl přečíst, není počet nula.</string>
