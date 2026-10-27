@@ -30,6 +30,7 @@ import io.github.mgdx.rouelibre.core.routing.elevationProfile
 import io.github.mgdx.rouelibre.core.routing.smoothedOver
 import io.github.mgdx.rouelibre.core.station.Station
 import io.github.mgdx.rouelibre.core.station.VehicleKind
+import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.databinding.FragmentJourneyDetailBinding
 import io.github.mgdx.rouelibre.databinding.ItemJourneyPlaceBinding
@@ -281,7 +282,7 @@ class JourneyDetailFragment : Fragment() {
             parentFragmentManager.popBackStack()
             return
         }
-        val journey = ShownJourney(from, to, plan)
+        val journey = ShownJourney(from, to, plan, state.rideKind)
         // Left where the result screen underneath reads it too: it is the
         // journey being shown, whichever of the two screens shows it.
         shownJourney.journey = journey
@@ -389,6 +390,7 @@ class JourneyDetailFragment : Fragment() {
         // drawing, exactly as it does on the screen this one opens from
         // (SPEC §7.4).
         views.shape.departureMarker = option?.departure?.let(JourneyMarkers::departureMarkerOf)
+        views.shape.rideKind = option?.let { rideKindOf(it.departure, journey.rideKind) }
         views.shape.legs = legsOf(plan).mapIndexed { index, leg ->
             JourneyShapeView.Leg(
                 isRide = leg.isRide,
@@ -517,7 +519,7 @@ class JourneyDetailFragment : Fragment() {
         // at the top of the screen this one was opened from. A row repeating
         // one of them said nothing the reader had not just read.
         when (val plan = journey.plan) {
-            is JourneyPlan.Found -> addRide(plan.best, minutes, addresses)
+            is JourneyPlan.Found -> addRide(plan.best, journey.rideKind, minutes, addresses)
             is JourneyPlan.WalkOnly -> addLeg(
                 icon = R.drawable.ic_walk,
                 label = getString(R.string.journey_step_walk_all),
@@ -558,10 +560,13 @@ class JourneyDetailFragment : Fragment() {
     /**
      * The three legs, and the two stations they run between.
      *
+     * @param computedFor the kind of bike the journey was worked out for, or
+     *   `null` for any.
      * @param minutes the three legs' apportioned minutes, in that same order.
      */
     private fun addRide(
         option: JourneyOption,
+        computedFor: WantedBikeKind?,
         minutes: List<Int>,
         addresses: Map<String, AddressResult>,
     ) {
@@ -599,11 +604,18 @@ class JourneyDetailFragment : Fragment() {
                 ),
             )
         }
+        // The kind the drawing above names on the ride, said too: the icon
+        // alone is lost on a screen reader, which reads this row and skips the
+        // drawing (SPEC §7.4).
+        val kind = shownRideKind(fleet, rideKindOf(option.departure, computedFor))
         addLeg(
-            icon = rideIcon(option.departure),
+            icon = rideIcon(option.departure, kind),
             label = getString(R.string.journey_step_ride, option.arrivalStation.name),
             leg = option.ride,
             minutes = minutes[if (accessWalk == null) 0 else 1],
+            description = kind?.let {
+                getString(rideDescriptionOf(it), option.arrivalStation.name)
+            },
         )
         addStation(
             role = getString(R.string.journey_detail_arrival_station),
@@ -649,11 +661,14 @@ class JourneyDetailFragment : Fragment() {
      * bike and never the fleet: it takes the bolt where the type table reads it
      * as electric, and never the cog, one bike being of one kind. It is the
      * same move the row of a ride on one's own bike makes with the rider's
-     * declaration in place of the fleet.
+     * declaration in place of the fleet. A journey between two stations that
+     * was worked out for one kind is settled the same way, and draws that kind.
+     *
+     * @param kind the ride's kind where it is worth saying (see [shownRideKind]).
      */
     @DrawableRes
-    private fun rideIcon(departure: DeparturePoint): Int = when (departure) {
-        is DeparturePoint.AtStation -> BikeGlyphs.icon(fleet)
+    private fun rideIcon(departure: DeparturePoint, kind: WantedBikeKind?): Int = when (departure) {
+        is DeparturePoint.AtStation -> kind?.let(::rideIconOf) ?: BikeGlyphs.icon(fleet)
         is DeparturePoint.AtStreetBike -> when (departure.kind) {
             VehicleKind.Electric -> R.drawable.ic_bike_electric
             VehicleKind.Mechanical, VehicleKind.Other -> R.drawable.ic_bike
@@ -740,12 +755,21 @@ class JourneyDetailFragment : Fragment() {
      * @param minutes what this leg was apportioned out of the journey's total,
      *   rather than its own rounding: the rows are read against the total above
      *   them, and have to add up to it.
+     * @param description what a screen reader says in place of [label], where
+     *   the icon carries something the label does not.
      */
-    private fun addLeg(icon: Int, label: String, leg: RouteLeg, minutes: Int) {
+    private fun addLeg(
+        icon: Int,
+        label: String,
+        leg: RouteLeg,
+        minutes: Int,
+        description: String? = null,
+    ) {
         val views = binding ?: return
         val step = ItemJourneyStepBinding.inflate(layoutInflater, views.steps, false)
         step.modeIcon.setImageResource(icon)
         step.label.text = label
+        step.label.contentDescription = description
         step.duration.text = requireContext().formatMinutes(minutes)
         step.detail.text = listOfNotNull(distanceOf(leg), climbOf(leg))
             .reduce { read, next -> getString(R.string.address_detail, read, next) }

@@ -11,6 +11,7 @@ import io.github.mgdx.rouelibre.core.journey.NoBikeJourney
 import io.github.mgdx.rouelibre.core.journey.inShownMinutes
 import io.github.mgdx.rouelibre.core.journey.shownMinutes
 import io.github.mgdx.rouelibre.core.routing.RouteLeg
+import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.databinding.ViewJourneyResultDetailBinding
 import io.github.mgdx.rouelibre.ui.formatDistance
@@ -56,7 +57,7 @@ internal class JourneySummaryCard(
         val views = detail() ?: return
         showTotal(views.root.context.formatMinutes(minutes.total))
         showSummary(option)
-        showShape(option, minutes)
+        showShape(option, minutes, state.rideKind)
     }
 
     /**
@@ -144,10 +145,18 @@ internal class JourneySummaryCard(
      * The step list reads one line at a time, and is folded away besides; this
      * is the whole journey seen at once, in the drawing the search screen uses
      * for it.
+     *
+     * @param computedFor the kind of bike the journey was worked out for, which
+     *   the ride's stroke then names (SPEC §7.4).
      */
-    private fun showShape(option: JourneyOption, minutes: JourneyMinutes) {
+    private fun showShape(
+        option: JourneyOption,
+        minutes: JourneyMinutes,
+        computedFor: WantedBikeKind?,
+    ) {
         val views = detail() ?: return
         val context = views.root.context
+        views.shape.rideKind = rideKindOf(option.departure, computedFor)
         // Either walk may be missing, and the drawing then holds two strokes
         // and three discs. No access walk on a journey begun at a bike outside
         // the stations — the bike, the arrival station, the destination
@@ -203,6 +212,7 @@ internal class JourneySummaryCard(
         // ride: the journey there is, with no station on the way. A single leg
         // is its own total, so there is nothing to apportion here.
         views.shape.departureMarker = null
+        views.shape.rideKind = null
         views.shape.legs = soleLeg
             ?.let {
                 listOf(context.legOf(it, it.duration.inShownMinutes(), isRide = ownBike != null))

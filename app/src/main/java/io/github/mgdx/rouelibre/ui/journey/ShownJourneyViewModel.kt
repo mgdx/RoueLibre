@@ -2,6 +2,7 @@ package io.github.mgdx.rouelibre.ui.journey
 
 import androidx.lifecycle.ViewModel
 import io.github.mgdx.rouelibre.core.journey.JourneyPlan
+import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 
 /**
  * The journey on screen, as the detail screen needs to read it back.
@@ -10,11 +11,14 @@ import io.github.mgdx.rouelibre.core.journey.JourneyPlan
  *   user gave it.
  * @property destination where it was asked to end.
  * @property plan what the algorithm composed between the two.
+ * @property rideKind the kind of bike [plan] was worked out for, or `null` for
+ *   any (see [JourneyUiState.rideKind]).
  */
 data class ShownJourney(
     val origin: JourneyEndpoint,
     val destination: JourneyEndpoint,
     val plan: JourneyPlan,
+    val rideKind: WantedBikeKind? = null,
 )
 
 /**

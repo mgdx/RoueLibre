@@ -75,6 +75,10 @@
     <dimen name="journey_shape_ride_stroke">3dp</dimen>
     <dimen name="journey_shape_dash">2dp</dimen>
     <dimen name="journey_shape_dash_gap">5dp</dimen>
+    <!-- The bike standing on the ride's stroke where its kind is known: the
+         size the bike is drawn at inside a disc, so the two read as one glyph
+         and the mark never outweighs the stations it runs between. -->
+    <dimen name="journey_shape_ride_mark">16dp</dimen>
     <!-- How far a label stands off the disc it is level with. Measured from the
          disc, but read against the stroke it labels, which runs half a disc
          further in: a gap that looks tight here still leaves the label a

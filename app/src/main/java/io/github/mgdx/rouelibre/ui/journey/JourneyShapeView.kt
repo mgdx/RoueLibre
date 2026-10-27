@@ -11,6 +11,7 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import io.github.mgdx.rouelibre.R
+import io.github.mgdx.rouelibre.core.station.WantedBikeKind
 import io.github.mgdx.rouelibre.data.OwnBikeKind
 import io.github.mgdx.rouelibre.ui.BikeFleet
 import io.github.mgdx.rouelibre.ui.BikeGlyphs
@@ -22,7 +23,9 @@ import io.github.mgdx.rouelibre.ui.BikeGlyphs
  * a walking figure at either end, filled disc bearing a bike at each station,
  * dotted strokes for the walks and an unbroken one for the ride — except that
  * this one carries the journey actually computed, and writes on each stroke how
- * far it runs above and how long it takes below.
+ * far it runs above and how long it takes below. Where the ride's kind of bike
+ * is known in a network lending both, its stroke parts around that bike — the
+ * bolt for a pedal-assist one, the plain bike otherwise (SPEC §7.4).
  *
  * The two lines are not interchangeable: it is the minutes one leaves the
  * drawing with, so they sit on the side the reading goes on towards, and the
@@ -169,6 +172,31 @@ class JourneyShapeView @JvmOverloads constructor(
             invalidate()
         }
 
+    /**
+     * The kind of bike the ride is known to be made on, or `null` where
+     * nothing settles it — see [rideKindOf].
+     *
+     * Named on the ride's own stroke rather than on the station discs: those
+     * bear what the network lends, as the map's markers do, and a station
+     * lending both kinds still lends both whichever one this journey takes.
+     * Drawn only where [fleet] lends both kinds ([shownRideKind]): elsewhere
+     * the discs already say which bike it is.
+     */
+    var rideKind: WantedBikeKind? = null
+        set(value) {
+            if (field == value) return
+            field = value
+            invalidate()
+        }
+
+    /** The mark on the ride's stroke, rebuilt only when the bike it names changes. */
+    private var rideMark: Drawable? = null
+
+    @DrawableRes
+    private var rideMarkIcon: Int? = null
+
+    private val rideMarkSize = resources.getDimensionPixelSize(R.dimen.journey_shape_ride_mark)
+
     private val nodeSize = resources.getDimensionPixelSize(R.dimen.journey_shape_node)
 
     private val labelGap = resources.getDimensionPixelSize(R.dimen.journey_shape_label_gap)
@@ -225,7 +253,27 @@ class JourneyShapeView @JvmOverloads constructor(
             val start = minOf(before, after) + nodeSize + strokeInset
             val end = maxOf(before, after) - strokeInset
             val middle = (start + end) / 2f
-            canvas.drawLine(start, centreY, end, centreY, if (leg.isRide) ridePaint else walkPaint)
+            val mark = if (leg.isRide) rideMarkFor(end - start) else null
+            if (mark == null) {
+                canvas.drawLine(
+                    start,
+                    centreY,
+                    end,
+                    centreY,
+                    if (leg.isRide) ridePaint else walkPaint,
+                )
+            } else {
+                // The stroke parts around the bike, held off it by the gap it
+                // keeps from the discs: the mark reads as standing on the line,
+                // not as crossed out by it.
+                val half = rideMarkSize / 2f
+                canvas.drawLine(start, centreY, middle - half - strokeInset, centreY, ridePaint)
+                canvas.drawLine(middle + half + strokeInset, centreY, end, centreY, ridePaint)
+                val left = (middle - half).toInt()
+                val markTop = (centreY - half).toInt()
+                mark.setBounds(left, markTop, left + rideMarkSize, markTop + rideMarkSize)
+                mark.draw(canvas)
+            }
             canvas.drawText(leg.distance, middle, distanceBaseline, textPaint)
             canvas.drawText(leg.duration, middle, timeBaseline, durationPaint)
         }
@@ -256,6 +304,27 @@ class JourneyShapeView @JvmOverloads constructor(
             marker?.setBounds(left, top, left + nodeSize, top + nodeSize)
             marker?.draw(canvas)
         }
+    }
+
+    /**
+     * The bike to stand on a ride stroke [length] long, or `null` for none.
+     *
+     * None on a stroke too short to part around it: a bike squeezed between two
+     * stubs reads as neither, and the discs still say what the network lends.
+     */
+    private fun rideMarkFor(length: Float): Drawable? {
+        val kind = shownRideKind(fleet, rideKind) ?: return null
+        if (length < rideMarkSize + 4 * strokeInset) return null
+        val icon = rideIconOf(kind)
+        if (icon != rideMarkIcon) {
+            rideMarkIcon = icon
+            // Mutated, so the tint stays on this drawing: the same resource is
+            // tinted ink on the detail screen's rows.
+            rideMark = AppCompatResources.getDrawable(context, icon)?.mutate()?.apply {
+                setTint(ridePaint.color)
+            }
+        }
+        return rideMark
     }
 
     /**
