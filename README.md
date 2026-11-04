@@ -54,7 +54,9 @@ but the live availability of the bikes runs on your phone.
   to Auch's ten, by way of New York, Montréal, Prague, Barcelona, Dubai, Buenos
   Aires and Pristina. No city is a default: the application proposes the one
   matching your position, measured on where its stations actually are, and you
-  choose. The full list is in [`docs/networks.md`](docs/networks.md).
+  choose. The full list is in [`docs/networks.md`](docs/networks.md), and
+  [which networks can be served](#which-networks) is set by the data they
+  publish.
 
 - 🗺️ **A map that shows what a cyclist needs:**
   - cycle ways, drawn apart from the streets;
@@ -104,6 +106,33 @@ but the live availability of the bikes runs on your phone.
     having nobody in the middle
     ([why we say so](docs/architecture.md#what-the-operator-sees));
   - no telemetry, no tracker, no identifier, no history.
+
+## Which networks
+
+Roue Libre serves **only the networks that publish a GBFS feed**, and only a
+feed that is **public and needs no key**. A city is not missing from the list
+because nobody added it: it is missing because its network publishes no such
+feed, or publishes one the application cannot use.
+
+**GBFS**, the [General Bikeshare Feed Specification](https://gbfs.org), is the
+open standard bike-share networks use to publish their data: a handful of JSON
+files on the operator's server saying where the stations are, how many bikes
+and free docks each one holds right now, and what kinds of bike the network
+lends. It is maintained by [MobilityData](https://mobilitydata.org), which also
+keeps the public [catalogue of the feeds](https://github.com/MobilityData/gbfs/blob/master/systems.csv),
+the main one Roue Libre reads its networks from.
+
+A network also has to fit what the application promises: docked stations,
+bicycles rather than scooters or cars, at least ten stations. The rules, and
+every network set aside with the reason why, are in
+[`docs/networks.md`](docs/networks.md).
+
+Why public and without a key: the application talks to each operator's server
+directly, with no Roue Libre server in between, so a key would have to ship
+inside the APK for anyone to read, and a private agreement would put a third
+party between you and your bike. If your city is not served, the people to ask
+are its network and its transport authority: once they publish an open GBFS
+feed, it can be added.
 
 ## Installing
 
@@ -181,8 +210,9 @@ an issue before a large change.
   Thirty languages are translated, each with its glossary in
   [`docs/glossary/`](docs/glossary/); keeping one current as the English file
   grows is worth as much as starting a thirty-first.
-- 🏙️ **Add a network,** or teach the address search the abbreviations of your
-  language — one JSON file each, no code. See
+- 🏙️ **Add a network** that publishes a public GBFS feed
+  ([which ones can be served](#which-networks)), or teach the address search
+  the abbreviations of your language — one JSON file each, no code. See
   [`docs/offline-data.md`](docs/offline-data.md).
 - 🐛 **Report a bug** with the device, the Android version and the way to
   reproduce it. The application sends no log anywhere; if you attach one, read
