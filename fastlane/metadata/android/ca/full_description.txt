@@ -1,26 +1,33 @@
-Roue Libre mostra les estacions de bicis compartides en un mapa i calcula una ruta porta a porta que combina caminar i pedalar.
+Roue Libre mostra en un mapa les estacions de bicis compartides i calcula la millor ruta porta a porta: a peu, en bici, a peu.
 
-Tot funciona al dispositiu: el mapa, la cerca d’adreces i el càlcul de rutes no necessiten cap connexió. Només la disponibilitat de bicis en temps real surt a la xarxa.
+Tot passa al telèfon: el mapa, la cerca d’adreces i el càlcul de rutes no necessiten cap connexió. Només la disponibilitat de bicis en temps real passa per la xarxa, i es llegeix directament al servidor de l’operador.
 
-<b>El que la distingeix</b>
+<b>La millor ruta, no l’estació més propera</b>
 
-• Cap servei de Google: ni Play Services, ni Firebase, ni Maps SDK. Funciona en qualsevol Android sense els serveis de Google.
-• Sense telemetria, sense rastrejadors, sense identificador únic, sense compte.
-• No es conserva cap dada de les teves rutes: ni historial, ni ubicacions, ni destinacions. El que cerques no surt del telèfon.
-• No s’imposa cap ciutat: al dispositiu conviuen diverses àrees metropolitanes, i les dades d’una s’esborren sense tocar les de les altres.
-• La ruta optimitza la <i>parella</i> d’estacions — la de sortida i la d’arribada — en lloc de quedar-se amb la més propera, i té en compte el risc que una estació poc proveïda es buidi mentre hi vas a peu.
+• Les estacions de sortida i d’arribada es trien juntes, segons la disponibilitat en directe: bicis per agafar en un extrem, espais lliures per tornar-la a l’altre.
+• Una estació gairebé buida compta menys, perquè es pot buidar mentre camines.
+• On la xarxa ofereix bicis mecàniques i elèctriques, tries quina vols, i només compten les estacions que de debò en tenen una.
+• La ruta segueix els carrils bici i té en compte el desnivell.
 
-<b>Convé saber-ho abans d’instal·lar-la</b>
+<b>Un mapa fet per a la bici</b>
 
-El mapa base, el graf de rutes i l’índex d’adreces no són dins de l’aplicació: es baixen una vegada, des de la pantalla d’emmagatzematge, o s’instal·len a mà des de fitxers que produeixes tu mateix. El seu pes depèn de la ciutat — unes desenes de megabytes per a una àrea metropolitana mitjana, més per a una capital — i s’anuncia abans de baixar-los.
+Els carrils bici traçats a part dels carrers, els edificis públics i els punts de referència per orientar-se a cop d’ull, i a cada estació el que ofereix la xarxa: bicis mecàniques, elèctriques o totes dues.
+
+<b>Res no et rastreja</b>
+
+• Cap servei de Google: ni Play Services, ni Firebase, ni Maps SDK.
+• Sense telemetria, sense rastrejadors, sense identificador, sense compte.
+• Cap historial: ni ubicacions ni destinacions. El que cerques no surt del telèfon.
 
 <b>Les ciutats servides</b>
 
-Prop de tres-centes xarxes, en una trentena de països: totes les que publiquen les seves estacions en dades obertes i els ancoratges de les quals permeten garantir la devolució de la bici — de Vélib’ a París a Citi Bike a Nova York, passant per Praga, Barcelona, Copenhaguen, Tòquio i Buenos Aires. L’aplicació et proposa la teva a partir de la teva ubicació, si l’hi demanes, i en pots mantenir diverses instal·lades i passar d’una a l’altra.
+Més de 350 xarxes en prop de 40 països, des de Vélib’ a París fins a Citi Bike a Nova York, passant per Mont-real, Praga, Barcelona, Dubai i Buenos Aires. No s’imposa cap ciutat: l’aplicació et proposa la teva segons la teva ubicació, i en pots conservar diverses.
 
-De moment, els conjunts de dades sense connexió només existeixen per a unes poques. Per a les altres, l’aplicació ho diu en lloc de dissimular: la llista mostra el que hi ha, i els fitxers es poden produir amb els scripts del repositori.
+Roue Libre només serveix les xarxes que publiquen les seves estacions en format GBFS, l’estàndard obert de les bicis compartides, en un flux públic i sense clau. Si hi falta la teva ciutat, és que la seva xarxa no publica un flux així: és a la xarxa o a l’autoritat del transport que cal demanar-l’hi.
 
-No està lligada a cap xarxa en particular: la llista de ciutats s’actualitza sola, i cada ciutat porta l’adreça del seu propi flux GBFS, cosa que la fa utilitzable amb qualsevol xarxa GBFS del món.
+<b>Convé saber-ho abans d’instal·lar-la</b>
+
+El mapa, el graf de rutes i l’índex d’adreces no són dins de l’aplicació: es baixen una sola vegada, quan tu ho decideixis, i se n’indica el pes abans (una desena de megabytes per a una ciutat mitjana, més per a una capital). Són fitxers de dades i res més, que també pots generar tu mateix amb els scripts del repositori.
 
 Roue Libre és una aplicació independent, sense cap vincle amb les xarxes que serveix ni amb els seus operadors.
 

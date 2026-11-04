@@ -1,26 +1,33 @@
-A Roue Libre térképen mutatja a közösségi kerékpáros állomásokat, és háztól házig tartó, gyaloglást és kerékpározást ötvöző útvonaltervet készít.
+A Roue Libre térképen mutatja a közösségi kerékpáros állomásokat, és kiszámítja a legjobb háztól házig tartó útvonalat: gyalog, kerékpárral, gyalog.
 
-Minden az eszközön fut: a térképhez, a címkereséshez és az útvonalszámításhoz semmilyen kapcsolat nem kell. Csak a kerékpárok valós idejű elérhetősége megy ki a hálózatra.
+Minden a telefonon történik: a térképhez, a címkereséshez és az útvonaltervezéshez semmilyen kapcsolat nem kell. Csak a kerékpárok valós idejű elérhetősége megy a hálózaton át, közvetlenül az üzemeltető szerveréről.
 
-<b>Amiben más</b>
+<b>A legjobb útvonal, nem a legközelebbi állomás</b>
 
-• Semmilyen Google-szolgáltatás: nincs Play Services, nincs Firebase, nincs Maps SDK. Bármilyen, Google-szolgáltatások nélküli Android rendszeren fut.
-• Nincs telemetria, nincs nyomkövető, nincs egyedi azonosító, nincs fiók.
-• Az útvonaltervekről semmilyen adat nem marad meg: nincs előzmény, nincsenek pozíciók, nincsenek úti célok. Amit keresel, nem hagyja el a telefont.
-• Egyetlen város sincs rád erőltetve: több agglomeráció is megfér egymás mellett az eszközön, és az egyik város adatai a többi érintése nélkül törölhetők.
-• Az útvonalterv az állomások <i>párját</i> optimalizálja – az indulásit és az érkezésit –, ahelyett hogy beérné a legközelebbivel, és mérlegeli annak kockázatát, hogy egy gyengén ellátott állomás kiürül, amíg odagyalogolsz.
+• Az indulási és az érkezési állomást együtt választja ki, az élő elérhetőség alapján: az egyik oldalon felvehető kerékpár kell, a másikon szabad hely a leadáshoz.
+• Egy majdnem üres állomás kisebb súllyal számít, mert kiürülhet, amíg odagyalogolsz.
+• Ahol a hálózat hagyományos és elektromos kerékpárt is kölcsönöz, te választod ki, melyiket szeretnéd, és csak azok az állomások számítanak, ahol valóban van ilyen.
+• Az útvonal követi a kerékpárutakat, és figyelembe veszi a szintkülönbséget.
 
-<b>Amit telepítés előtt érdemes tudni</b>
+<b>Kerékpárra szabott térkép</b>
 
-A térkép, az útvonalgráf és a címindex nincs benne az alkalmazásban: egyszer töltődnek le a Tárhely képernyőről, vagy kézzel telepíthetők az általad előállított fájlokból. A méretük a várostól függ – egy közepes méretű agglomerációnál néhány tíz megabájt, egy fővárosnál több –, és a letöltés előtt kiderül.
+Az utcáktól külön rajzolt kerékpárutak, a középületek és a szemmel való tájékozódást segítő nevezetes pontok, és minden állomáson az, amit a hálózat kölcsönöz: hagyományos, elektromos kerékpár vagy mindkettő.
+
+<b>Semmi sem követ</b>
+
+• Semmilyen Google-szolgáltatás: se Play Services, se Firebase, se Maps SDK.
+• Nincs telemetria, nincs nyomkövető, nincs azonosító, nincs fiók.
+• Nincs előzmény: se pozíciók, se úti célok. Amit keresel, nem hagyja el a telefont.
 
 <b>A kiszolgált városok</b>
 
-Közel háromszáz hálózat, mintegy harminc országban: mindegyik, amely nyílt adatként teszi közzé az állomásait, és amelynek dokkolóira az útvonalterv támaszkodhat – a párizsi Vélib’-től a New York-i Citi Bike-ig, Prágán, Barcelonán, Koppenhágán, Tokión és Buenos Airesen át. Az alkalmazás a pozíciód alapján felajánlja a tiédet, ha kéred, és többet is telepítve tarthatsz, váltogatva köztük.
+Több mint 350 hálózat közel 40 országban, a párizsi Vélib’-től a New York-i Citi Bike-ig, Montréalon, Prágán, Barcelonán, Dubajon és Buenos Airesen át. Egyetlen város sincs rád erőltetve: az alkalmazás a pozíciód alapján felajánlja a tiédet, és többet is megtarthatsz.
 
-Az offline adatkészletek eddig egy maréknyi városhoz készültek el. A többinél az alkalmazás ezt megmondja, ahelyett hogy úgy tenne, mintha: a lista megmutatja, mi létezik, a fájlok pedig előállíthatók a projekt szkriptjeivel.
+A Roue Libre csak azokat a hálózatokat szolgálja ki, amelyek GBFS formátumban – a közösségi kerékpározás nyílt szabványában – teszik közzé az állomásaikat, nyilvános és kulcs nélküli adatfolyamban. Ha a városod hiányzik, akkor a hálózata nem tesz közzé ilyen adatfolyamot: ezt tőle vagy a közlekedési hatóságtól kell kérni.
 
-Egyetlen hálózathoz sem kötődik: a városok listája magától frissül, és minden város a saját GBFS-adatfolyamának címét hordozza, ami a világ bármely GBFS-hálózatával használhatóvá teszi az alkalmazást.
+<b>Amit telepítés előtt érdemes tudni</b>
+
+A térkép, az útvonalgráf és a címindex nincs benne az alkalmazásban: csak egyszer töltődnek le, akkor, amikor te döntesz úgy, és a méretük előre kiderül (egy közepes városnál nagyjából tíz megabájt, egy fővárosnál több). Ezek adatfájlok, semmi más, és a projekt szkriptjeivel magad is előállíthatod őket.
 
 A Roue Libre független alkalmazás, amely semmilyen kapcsolatban nem áll az általa kiszolgált hálózatokkal, sem azok üzemeltetőivel.
 

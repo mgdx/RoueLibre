@@ -1,26 +1,33 @@
-Roue Libre shows bike-share stations on a map and computes a door-to-door journey combining walking and cycling.
+Roue Libre shows bike-share stations on a map and computes the best door-to-door journey: walk, bike, walk.
 
-Everything runs on the device: the map, the address search and the route computation need no connection at all. Only real-time bike availability goes out on the network.
+Everything happens on the phone: the map, the address search and the route computation need no connection at all. Only real-time bike availability goes over the network, read straight from the operator’s server.
 
-<b>What sets it apart</b>
+<b>The best journey, not the nearest station</b>
 
-• No Google service: no Play Services, no Firebase, no Maps SDK. It runs on any Android OS without Google services.
-• No telemetry, no tracker, no unique identifier, no account.
-• No journey data kept: no history, no positions, no destinations. What you search for does not leave the phone.
-• No city is imposed: several conurbations coexist on the device, and one city's data can be deleted without touching the others.
-• The journey optimises the <i>pair</i> of stations — departure and arrival — rather than settling for the nearest, and weighs the risk of a poorly stocked station emptying while you walk to it.
+• The departure and arrival stations are chosen together, from live availability: bikes to take at one end, free docks to return one at the other.
+• A nearly empty station counts for less, because it may run out while you walk to it.
+• Where the network lends both mechanical and electric bikes, you choose which you want, and only the stations that actually have one count.
+• The route follows cycle lanes and takes the climb into account.
 
-<b>Worth knowing before installing</b>
+<b>A map made for cycling</b>
 
-The map, the routing graph and the address index are not in the application: they are downloaded once, from the storage screen, or installed by hand from files you produce yourself. Their weight follows the city — a few tens of megabytes for a medium-sized conurbation, more for a capital — and it is announced before downloading.
+Cycle lanes drawn apart from the streets, public buildings and landmarks to find your way by sight, and on each station what the network lends: mechanical bikes, electric ones, or both.
+
+<b>Nothing tracks you</b>
+
+• No Google service: no Play Services, no Firebase, no Maps SDK.
+• No telemetry, no tracker, no identifier, no account.
+• No history: no positions, no destinations. What you search for does not leave the phone.
 
 <b>The cities served</b>
 
-Close to three hundred networks, in some thirty countries: every one that publishes its stations as open data and whose docks the journey can rely on — from Vélib' in Paris to Citi Bike in New York, by way of Prague, Barcelona, Copenhagen, Tokyo and Buenos Aires. The application proposes yours from your position, if you ask it to, and you can keep several installed and switch between them.
+More than 350 networks in nearly 40 countries, from Vélib’ in Paris to Citi Bike in New York, by way of Montreal, Prague, Barcelona, Dubai and Buenos Aires. No city is imposed: the application proposes yours from your position, and you can keep several.
 
-The offline datasets have been produced for a handful of them so far. For the others, the application says so rather than pretending: the list shows what exists, and the files can be produced with the repository's scripts.
+Roue Libre serves only the networks that publish their stations in GBFS, the open standard for bike sharing, in a public feed that needs no key. If your city is missing, its network publishes no such feed: it is the network, or the transport authority, that has to be asked for one.
 
-It is tied to no network in particular: the list of cities updates itself, and every city carries the address of its own GBFS feed, which makes the application usable with any GBFS network in the world.
+<b>Worth knowing before installing</b>
+
+The map, the routing graph and the address index are not in the application: they are downloaded once, when you decide, and their size is announced beforehand (around ten megabytes for a medium-sized city, more for a capital). They are data files and nothing else, which you can also produce yourself with the repository’s scripts.
 
 Roue Libre is an independent application, with no link to the networks it serves or their operators.
 

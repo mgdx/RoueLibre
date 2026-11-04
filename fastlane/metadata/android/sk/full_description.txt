@@ -1,26 +1,33 @@
-Roue Libre ukazuje stanice zdieľaných bicyklov na mape a počíta trasu od dverí k dverám, ktorá spája chôdzu a jazdu na bicykli.
+Roue Libre ukazuje na mape stanice zdieľaných bicyklov a počíta najlepšiu trasu od dverí k dverám: pešo, na bicykli, pešo.
 
-Všetko beží v zariadení: mapa, hľadanie adries aj výpočet trasy sa zaobídu úplne bez pripojenia. Do siete odchádza len dostupnosť bicyklov v reálnom čase.
+Všetko beží v telefóne: mapa, hľadanie adries aj výpočet trasy sa zaobídu úplne bez pripojenia. Pripojenie potrebuje len dostupnosť bicyklov v reálnom čase, ktorá sa načítava priamo zo servera prevádzkovateľa.
 
-<b>Čím sa líši</b>
+<b>Najlepšia trasa, nie najbližšia stanica</b>
 
-• Žiadna služba Google: žiadne Play Services, žiadny Firebase, žiadne Maps SDK. Beží na akomkoľvek Androide bez služieb Google.
-• Žiadna telemetria, žiadny sledovací nástroj, žiadny jedinečný identifikátor, žiadny účet.
-• Neuchováva sa nič o vašich cestách: žiadna história, žiadne polohy, žiadne ciele. To, čo hľadáte, telefón neopustí.
-• Žiadne mesto nie je vnútené: v zariadení môže byť niekoľko aglomerácií vedľa seba a dáta jedného mesta možno odstrániť bez toho, aby sa to dotklo ostatných.
-• Trasa optimalizuje <i>dvojicu</i> staníc – východiskovú a cieľovú – namiesto toho, aby sa uspokojila s tou najbližšou, a zvažuje riziko, že sa zle zásobená stanica vyprázdni skôr, než k nej dôjdete.
+• Východisková a cieľová stanica sa vyberajú spoločne podľa aktuálnej dostupnosti: na jednej strane bicykle na vypožičanie, na druhej voľné miesta, kam bicykel vrátiť.
+• Takmer prázdna stanica má menšiu váhu, pretože sa môže vyprázdniť skôr, než k nej dôjdete.
+• Kde sieť požičiava mechanické aj elektrické bicykle, vyberiete si, ktorý chcete, a rátajú sa len stanice, kde taký bicykel naozaj je.
+• Trasa vedie po cyklochodníkoch a zohľadňuje prevýšenie.
 
-<b>Čo je dobré vedieť pred inštaláciou</b>
+<b>Mapa stvorená pre bicykel</b>
 
-Mapa, graf na výpočet trás a register adries nie sú súčasťou aplikácie: stiahnu sa raz z obrazovky úložiska, alebo sa ručne nainštalujú zo súborov, ktoré si vytvoríte sami. Ich veľkosť závisí od mesta – niekoľko desiatok megabajtov pri stredne veľkej aglomerácii, viac pri hlavnom meste – a oznámi sa pred stiahnutím.
+Cyklochodníky zakreslené oddelene od ulíc, verejné budovy a orientačné body, podľa ktorých sa zorientujete pohľadom, a pri každej stanici to, čo sieť požičiava: mechanické bicykle, elektrické alebo oboje.
+
+<b>Nič vás nesleduje</b>
+
+• Žiadne služby Google: žiadne Play Services, žiadny Firebase, žiadne Maps SDK.
+• Žiadna telemetria, žiadny sledovací nástroj, žiadny identifikátor, žiadny účet.
+• Žiadna história: ani polohy, ani ciele. To, čo hľadáte, telefón neopustí.
 
 <b>Obsluhované mestá</b>
 
-Takmer tristo sietí v zhruba tridsiatich krajinách: každá, ktorá zverejňuje svoje stanice ako otvorené dáta a na ktorej stojany sa trasa môže spoľahnúť – od Vélib’ v Paríži po Citi Bike v New Yorku, cez Prahu, Barcelonu, Kodaň, Tokio a Buenos Aires. Aplikácia vám tú vašu navrhne podľa polohy, ak o to požiadate, a môžete mať nainštalovaných niekoľko miest a prepínať medzi nimi.
+Viac ako 350 sietí v takmer 40 krajinách, od Vélib’ v Paríži po Citi Bike v New Yorku, cez Montreal, Prahu, Barcelonu, Dubaj a Buenos Aires. Žiadne mesto nie je vnútené: aplikácia vám podľa polohy navrhne to vaše a môžete si ich ponechať aj niekoľko.
 
-Offline dátové sady sú zatiaľ vytvorené pre hŕstku z nich. Pri ostatných to aplikácia povie rovno, namiesto toho, aby predstierala: zoznam ukazuje, čo existuje, a súbory možno vytvoriť skriptami z repozitára.
+Roue Libre obsluhuje len siete, ktoré zverejňujú svoje stanice vo formáte GBFS, otvorenom štandarde pre zdieľané bicykle, vo verejnom dátovom kanáli bez kľúča. Ak vaše mesto chýba, jeho sieť taký kanál nezverejňuje: požiadať oň treba ju samotnú alebo organizátora dopravy.
 
-Nie je viazaná na žiadnu konkrétnu sieť: zoznam miest sa aktualizuje sám a každé mesto si nesie adresu svojho vlastného kanála GBFS, vďaka čomu je aplikácia použiteľná s akoukoľvek sieťou GBFS na svete.
+<b>Čo je dobré vedieť pred inštaláciou</b>
+
+Mapa, graf na výpočet trás a register adries nie sú súčasťou aplikácie: stiahnu sa iba raz, keď sa tak rozhodnete, a ich veľkosť sa oznámi vopred (zhruba desať megabajtov pri priemernom meste, viac pri hlavnom meste). Sú to dátové súbory a nič iné; môžete si ich vytvoriť aj sami skriptami z repozitára.
 
 Roue Libre je nezávislá aplikácia a nemá žiadnu väzbu na siete, ktoré obsluhuje, ani na ich prevádzkovateľov.
 

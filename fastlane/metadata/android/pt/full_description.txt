@@ -1,26 +1,33 @@
-O Roue Libre mostra as estações de bicicletas partilhadas num mapa e calcula um percurso porta a porta que combina caminhar e pedalar.
+A Roue Libre mostra num mapa as estações de bicicletas partilhadas e calcula o melhor percurso porta a porta: a pé, de bicicleta, a pé.
 
-Tudo funciona no dispositivo: o mapa, a pesquisa de endereços e o cálculo de percursos não precisam de ligação nenhuma. Só a disponibilidade das bicicletas em tempo real sai para a rede.
+Tudo acontece no telefone: o mapa, a pesquisa de endereços e o cálculo de percursos não precisam de ligação nenhuma. Só a disponibilidade das bicicletas em tempo real passa pela rede, lida diretamente no servidor do operador.
 
-<b>O que a distingue</b>
+<b>O melhor percurso, não a estação mais próxima</b>
 
-• Nenhum serviço da Google: nem Play Services, nem Firebase, nem Maps SDK. Funciona em qualquer Android sem os serviços da Google.
-• Sem telemetria, sem rastreadores, sem identificador único, sem conta.
-• Não é guardado nenhum dado dos seus percursos: nem histórico, nem posições, nem destinos. O que pesquisa não sai do telefone.
-• Nenhuma cidade é imposta: várias áreas metropolitanas convivem no dispositivo, e os dados de uma podem ser apagados sem tocar nos das outras.
-• O percurso otimiza o <i>par</i> de estações — a de partida e a de chegada — em vez de se ficar pela mais próxima, e pesa o risco de uma estação mal abastecida se esvaziar enquanto caminha até ela.
+• As estações de partida e de chegada são escolhidas em conjunto, com base na disponibilidade em direto: bicicletas para retirar de um lado, lugares livres para a devolver do outro.
+• Uma estação quase vazia pesa menos, porque pode esvaziar-se enquanto caminha.
+• Onde a rede disponibiliza bicicletas mecânicas e elétricas, escolhe a que prefere, e só contam as estações que têm mesmo uma.
+• O percurso segue as ciclovias e tem em conta o desnível.
 
-<b>Convém saber antes de instalar</b>
+<b>Um mapa feito para a bicicleta</b>
 
-O mapa, o grafo de percursos e o índice de endereços não estão dentro da aplicação: são transferidos uma vez, a partir do ecrã de armazenamento, ou instalados à mão a partir de ficheiros que pode produzir por si. O peso depende da cidade — algumas dezenas de megabytes para uma área metropolitana média, mais para uma capital — e é anunciado antes de transferir.
+As ciclovias desenhadas à parte das ruas, os edifícios públicos e os pontos de referência para se orientar à vista, e em cada estação o que a rede disponibiliza: bicicletas mecânicas, elétricas ou ambas.
+
+<b>Nenhum rastreio</b>
+
+• Nenhum serviço da Google: nem Play Services, nem Firebase, nem Maps SDK.
+• Sem telemetria, sem rastreadores, sem identificador, sem conta.
+• Sem histórico: nem posições, nem destinos. O que pesquisa não sai do telefone.
 
 <b>As cidades servidas</b>
 
-Perto de trezentas redes, em cerca de trinta países: todas as que publicam as suas estações em dados abertos e cujas docas permitem contar com a devolução da bicicleta — do Vélib' em Paris ao Citi Bike em Nova Iorque, passando por Praga, Barcelona, Copenhaga, Tóquio e Buenos Aires. A aplicação propõe-lhe a sua a partir da sua posição, se assim o pedir, e pode manter várias instaladas e alternar entre elas.
+Mais de 350 redes em quase 40 países, do Vélib’ em Paris ao Citi Bike em Nova Iorque, passando por Montreal, Praga, Barcelona, Dubai e Buenos Aires. Nenhuma cidade é imposta: a aplicação propõe-lhe a sua a partir da sua posição, e pode guardar várias.
 
-Por agora, os conjuntos de dados offline só existem para algumas delas. Para as restantes, a aplicação não o esconde: a lista mostra o que existe, e os ficheiros podem ser produzidos com os scripts do repositório.
+A Roue Libre só serve as redes que publicam as suas estações no formato GBFS, o padrão aberto das bicicletas partilhadas, num fluxo público e sem chave. Se a sua cidade não aparece, é porque a rede dessa cidade não publica um fluxo assim: é à rede ou à autoridade de transportes que o tem de pedir.
 
-Não está ligada a nenhuma rede em particular: a lista de cidades atualiza-se sozinha, e cada cidade traz o endereço do seu próprio fluxo GBFS, o que a torna utilizável com qualquer rede GBFS do mundo.
+<b>Convém saber antes de instalar</b>
+
+O mapa, o grafo de percursos e o índice de endereços não estão dentro da aplicação: são transferidos uma única vez, quando o decidir, e o seu peso é indicado antes (uma dezena de megabytes para uma cidade média, mais para uma capital). São ficheiros de dados e nada mais, que também pode produzir por si com os scripts do repositório.
 
 A Roue Libre é uma aplicação independente, sem qualquer vínculo com as redes que serve nem com os seus operadores.
 

@@ -1,26 +1,33 @@
-Roue Libre pokazuje stacje rowerów miejskich na mapie i wyznacza trasę od drzwi do drzwi, łączącą marsz z jazdą rowerem.
+Roue Libre pokazuje na mapie stacje rowerów miejskich i wyznacza najlepszą trasę od drzwi do drzwi: pieszo, rowerem i znowu pieszo.
 
-Wszystko dzieje się na urządzeniu: mapa, wyszukiwanie adresów i wyznaczanie trasy nie potrzebują żadnego połączenia. Do sieci wychodzi tylko bieżąca dostępność rowerów.
+Wszystko dzieje się w telefonie: mapa, wyszukiwanie adresów i wyznaczanie trasy nie potrzebują żadnego połączenia. Połączenia wymaga tylko bieżąca dostępność rowerów, odczytywana prosto z serwera operatora.
 
-<b>Co ją wyróżnia</b>
+<b>Najlepsza trasa, a nie najbliższa stacja</b>
 
-• Żadnej usługi Google: bez Play Services, bez Firebase, bez Maps SDK. Działa na każdym Androidzie pozbawionym usług Google.
-• Bez telemetrii, bez śledzenia, bez unikalnego identyfikatora, bez konta.
-• Bez zapisywania przejazdów: żadnej historii, żadnych pozycji, żadnych celów. To, czego szukasz, nie opuszcza telefonu.
-• Żadne miasto nie jest narzucone: kilka aglomeracji może stać obok siebie na urządzeniu, a dane jednego miasta usuniesz bez ruszania pozostałych.
-• Trasa dobiera <i>parę</i> stacji — początkową i docelową — zamiast poprzestawać na najbliższej, i waży ryzyko, że słabo zaopatrzona stacja opustoszeje, zanim do niej dojdziesz.
+• Stacja początkowa i docelowa są dobierane razem, na podstawie dostępności na żywo: po jednej stronie rowery do wypożyczenia, po drugiej wolne miejsca, żeby rower oddać.
+• Prawie pusta stacja liczy się mniej, bo może opustoszeć, zanim do niej dojdziesz.
+• Tam, gdzie sieć wypożycza rowery zwykłe i elektryczne, wybierasz, którym chcesz jechać, a liczą się tylko stacje, które naprawdę taki mają.
+• Trasa prowadzi ścieżkami rowerowymi i uwzględnia przewyższenia.
 
-<b>Warto wiedzieć przed instalacją</b>
+<b>Mapa stworzona z myślą o rowerze</b>
 
-Mapa, graf tras i indeks adresów nie są dołączone do aplikacji: pobiera się je raz, na ekranie „Pamięć”, albo instaluje ręcznie z plików przygotowanych samodzielnie. Ich rozmiar zależy od miasta — kilkadziesiąt megabajtów dla średniej aglomeracji, więcej dla stolicy — i jest podawany przed pobraniem.
+Ścieżki rowerowe narysowane osobno od ulic, budynki użyteczności publicznej i punkty orientacyjne, po których rozpoznasz okolicę wzrokiem, a przy każdej stacji to, co wypożycza sieć: rowery zwykłe, elektryczne albo oba rodzaje.
+
+<b>Nic cię nie śledzi</b>
+
+• Żadnej usługi Google: bez Play Services, bez Firebase, bez Maps SDK.
+• Bez telemetrii, bez śledzenia, bez identyfikatora, bez konta.
+• Bez historii: ani pozycji, ani celów. To, czego szukasz, nie opuszcza telefonu.
 
 <b>Obsługiwane miasta</b>
 
-Blisko trzysta sieci w około trzydziestu krajach: każda, która publikuje swoje stacje jako otwarte dane i na której stojakach trasa może polegać — od Vélib’ w Paryżu po Citi Bike w Nowym Jorku, przez Pragę, Barcelonę, Kopenhagę, Tokio i Buenos Aires. Aplikacja podpowie Twoje miasto na podstawie pozycji, jeśli ją o to poprosisz, a kilka miast możesz trzymać zainstalowanych naraz i przełączać się między nimi.
+Ponad 350 sieci w prawie 40 krajach, od Vélib’ w Paryżu po Citi Bike w Nowym Jorku, przez Montreal, Pragę, Barcelonę, Dubaj i Buenos Aires. Żadne miasto nie jest narzucone: aplikacja podpowie Twoje na podstawie pozycji, a zachować możesz ich kilka.
 
-Zestawy danych offline powstały jak dotąd dla garstki z nich. Dla pozostałych aplikacja mówi to wprost, zamiast udawać: lista pokazuje, co istnieje, a pliki można wytworzyć skryptami z repozytorium.
+Roue Libre obsługuje tylko sieci, które publikują swoje stacje w formacie GBFS — otwartym standardzie rowerów miejskich — w publicznym kanale, bez klucza. Jeśli brakuje Twojego miasta, to znaczy, że jego sieć nie publikuje takiego kanału: trzeba o to poprosić ją samą albo zarząd transportu.
 
-Aplikacja nie jest związana z żadną konkretną siecią: lista miast aktualizuje się sama, a każde miasto niesie adres własnego kanału GBFS, co pozwala używać jej z dowolną siecią GBFS na świecie.
+<b>Warto wiedzieć przed instalacją</b>
+
+Mapa, graf tras i indeks adresów nie są dołączone do aplikacji: pobiera się je jeden raz, wtedy, gdy zdecydujesz, a ich rozmiar jest podawany z góry (rzędu dziesięciu megabajtów dla średniego miasta, więcej dla stolicy). To pliki z danymi i nic więcej; możesz je też wytworzyć samodzielnie skryptami z repozytorium.
 
 Roue Libre jest niezależną aplikacją, niezwiązaną z sieciami, które obsługuje, ani z ich operatorami.
 

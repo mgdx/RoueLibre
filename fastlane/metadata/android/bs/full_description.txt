@@ -1,26 +1,33 @@
-Roue Libre prikazuje stanice javnih bicikala na karti i računa putovanje od vrata do vrata koje spaja hodanje i vožnju biciklom.
+Roue Libre prikazuje stanice javnih bicikala na karti i računa najbolje putovanje od vrata do vrata: pješke, biciklom, pješke.
 
-Sve radi na uređaju: karta, pretraga adresa i računanje rute ne trebaju nikakvu vezu. Na mrežu izlazi samo dostupnost bicikala u stvarnom vremenu.
+Sve se odvija na telefonu: karta, pretraga adresa i računanje rute ne trebaju nikakvu vezu. Vezu treba samo dostupnost bicikala u stvarnom vremenu, koja se čita direktno sa servera operatera.
 
-<b>Po čemu se razlikuje</b>
+<b>Najbolje putovanje, a ne najbliža stanica</b>
 
-• Bez ijedne Googleove usluge: bez Play Servicesa, bez Firebasea, bez Maps SDK-a. Radi na svakom Androidu bez Googleovih usluga.
-• Bez telemetrije, bez alata za praćenje, bez jedinstvenog identifikatora, bez računa.
-• Ne čuvaju se podaci o putovanjima: ni historija, ni pozicije, ni odredišta. Ono što tražite ne napušta telefon.
-• Nijedan grad nije nametnut: više gradskih područja može stajati jedno uz drugo na uređaju, a podaci jednog grada mogu se izbrisati bez diranja ostalih.
-• Putovanje optimizira <i>par</i> stanica – polaznu i dolaznu – umjesto da se zadovolji najbližom, i vaga rizik da se slabo popunjena stanica isprazni dok do nje hodate.
+• Polazna i dolazna stanica biraju se zajedno, prema trenutnoj dostupnosti: na jednoj strani bicikli za posudbu, na drugoj slobodna mjesta za vraćanje.
+• Gotovo prazna stanica ima manju težinu jer se može isprazniti dok do nje hodate.
+• Gdje mreža posuđuje klasične i električne bicikle, birate koji želite, a računaju se samo stanice koje ga zaista imaju.
+• Ruta prati biciklističke staze i uzima u obzir uspone.
 
-<b>Vrijedi znati prije instalacije</b>
+<b>Karta po mjeri biciklista</b>
 
-Karta, graf za računanje ruta i indeks adresa nisu u aplikaciji: preuzimaju se jednom, s ekrana za pohranu, ili se ručno instaliraju iz fajlova koje sami proizvedete. Njihova težina zavisi od grada – nekoliko desetina megabajta za srednje veliko gradsko područje, više za glavni grad – i najavljuje se prije preuzimanja.
+Biciklističke staze ucrtane odvojeno od ulica, javne zgrade i orijentiri po kojima se snalazite pogledom, a uz svaku stanicu ono što mreža posuđuje: klasične bicikle, električne ili oboje.
+
+<b>Ništa vas ne prati</b>
+
+• Bez ijedne Googleove usluge: bez Play Servicesa, bez Firebasea, bez Maps SDK-a.
+• Bez telemetrije, bez alata za praćenje, bez identifikatora, bez računa.
+• Bez historije: ni pozicija, ni odredišta. Ono što tražite ne napušta telefon.
 
 <b>Obuhvaćeni gradovi</b>
 
-Blizu tri stotine mreža u tridesetak zemalja: svaka koja svoje stanice objavljuje kao otvorene podatke i na čije se stalke putovanje može osloniti – od pariškog Vélib’a do njujorškog Citi Bikea, preko Praga, Barcelone, Kopenhagena, Tokija i Buenos Airesa. Aplikacija vam prema poziciji predlaže vaš grad, ako to zatražite, a možete držati instalirano više njih i prebacivati se između njih.
+Više od 350 mreža u gotovo 40 zemalja, od Vélib’ u Parizu do Citi Bike u New Yorku, preko Montreala, Praga, Barcelone, Dubaija i Buenos Airesa. Nijedan grad nije nametnut: aplikacija vam prema poziciji predlaže vaš, a možete ih zadržati i više.
 
-Skupovi podataka za rad van mreže dosad su proizvedeni tek za nekoliko njih. Za ostale aplikacija to i kaže umjesto da se pretvara: lista pokazuje šta postoji, a fajlovi se mogu proizvesti skriptama iz repozitorija.
+Roue Libre obuhvata samo mreže koje svoje stanice objavljuju u formatu GBFS, otvorenom standardu za javne bicikle, u javnom kanalu podataka bez ključa. Ako vašeg grada nema, njegova mreža ne objavljuje takav kanal: to treba tražiti od same mreže ili od nadležnog organa za saobraćaj.
 
-Nije vezana ni za jednu mrežu posebno: lista gradova se sama ažurira, a svaki grad nosi adresu vlastitog GBFS kanala podataka, što aplikaciju čini upotrebljivom sa svakom GBFS mrežom na svijetu.
+<b>Vrijedi znati prije instalacije</b>
+
+Karta, graf za računanje ruta i indeks adresa nisu u aplikaciji: preuzimaju se samo jednom, kada vi odlučite, a njihova se veličina najavljuje unaprijed (desetak megabajta za srednje veliki grad, više za glavni grad). To su fajlovi s podacima i ništa drugo, a možete ih i sami proizvesti skriptama iz repozitorija.
 
 Roue Libre je nezavisna aplikacija i nije povezana ni s mrežama koje obuhvata ni s njihovim operaterima.
 

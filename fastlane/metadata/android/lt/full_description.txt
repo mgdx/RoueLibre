@@ -1,27 +1,34 @@
-„Roue Libre“ rodo dalijimosi dviračių stoteles žemėlapyje ir apskaičiuoja kelionę nuo durų iki durų, derindama ėjimą pėsčiomis ir važiavimą dviračiu.
+„Roue Libre“ rodo dalijimosi dviračių stoteles žemėlapyje ir apskaičiuoja geriausią kelionę nuo durų iki durų: pėsčiomis, dviračiu, vėl pėsčiomis.
 
-Viskas veikia pačiame įrenginyje: žemėlapiui, adresų paieškai ir maršruto skaičiavimui ryšio nereikia visai. Į tinklą iškeliauja tik užklausa apie tai, kiek dviračių yra laisvų dabar.
+Viskas vyksta telefone: žemėlapiui, adresų paieškai ir maršruto skaičiavimui ryšio visai nereikia. Ryšio reikia tik dviračių prieinamumui realiuoju laiku, o jis skaitomas tiesiai iš operatoriaus serverio.
 
-<b>Kuo ji skiriasi</b>
+<b>Geriausia kelionė, o ne artimiausia stotelė</b>
 
-• Jokių „Google“ paslaugų: nei „Play Services“, nei „Firebase“, nei „Maps SDK“. Ji veikia bet kokioje „Android“ operacinėje sistemoje be „Google“ paslaugų.
-• Jokios telemetrijos, jokių sekimo priemonių, jokio unikalaus identifikatoriaus, jokios paskyros.
-• Jokie kelionių duomenys nesaugomi: nei istorija, nei buvimo vietos, nei tikslai. Tai, ko ieškote, neišeina iš telefono.
-• Joks miestas nėra primetamas: įrenginyje gali sugyventi kelios aglomeracijos, o vieno miesto duomenis galima ištrinti nepaliečiant kitų.
-• Kelionė parenka geriausią stotelių <i>porą</i> – išvykimo ir atvykimo – užuot tenkinusis artimiausia, ir įvertina riziką, kad menkai užpildyta stotelė ištuštės, kol iki jos einate.
+• Išvykimo ir atvykimo stotelės parenkamos kartu, pagal dabartinį prieinamumą: vienoje turi būti dviračių paimti, kitoje – laisvų vietų jam grąžinti.
+• Beveik tuščia stotelė sveria mažiau, nes ji gali ištuštėti, kol iki jos einate.
+• Ten, kur tinklas siūlo mechaninius ir elektrinius dviračius, pasirenkate, kurio norite, ir skaičiuojamos tik tos stotelės, kuriose jis tikrai yra.
+• Maršrutas veda dviračių takais ir įvertina aukščių skirtumą.
 
-<b>Verta žinoti prieš įdiegiant</b>
+<b>Žemėlapis, sukurtas dviračiui</b>
 
-Žemėlapio, maršrutų grafo ir adresų rodyklės programoje nėra: jie atsisiunčiami vieną kartą saugyklos ekrane arba įdiegiami ranka iš failų, kuriuos parengiate patys. Jų dydis priklauso nuo miesto – vidutinio dydžio aglomeracijai keliasdešimt megabaitų, sostinei daugiau – ir nurodomas prieš atsisiunčiant.
+Atskirai nuo gatvių nubrėžti dviračių takai, viešieji pastatai ir orientyrai, padedantys susigaudyti iš akies, o prie kiekvienos stotelės – ką siūlo tinklas: mechaninius, elektrinius ar abiejų rūšių dviračius.
+
+<b>Niekas jūsų neseka</b>
+
+• Jokių „Google“ paslaugų: nei „Play Services“, nei „Firebase“, nei „Maps SDK“.
+• Jokios telemetrijos, jokių sekimo priemonių, jokio identifikatoriaus, jokios paskyros.
+• Jokios istorijos: nei buvimo vietų, nei tikslų. Tai, ko ieškote, neišeina iš telefono.
 
 <b>Aptarnaujami miestai</b>
 
-Beveik trys šimtai tinklų maždaug trisdešimtyje šalių: visi, kurie skelbia savo stoteles kaip atviruosius duomenis ir kurių stovais kelionė gali pasikliauti – nuo „Vélib’“ Paryžiuje iki „Citi Bike“ Niujorke, per Prahą, Barseloną, Kopenhagą, Tokiją ir Buenos Aires. Paprašyta programa pasiūlo jūsų miestą pagal buvimo vietą, o įdiegtų miestų galima laikyti kelis ir tarp jų persijungti.
+Daugiau nei 350 tinklų iš beveik 40 šalių – nuo „Vélib’“ Paryžiuje iki „Citi Bike“ Niujorke, per Monrealį, Prahą, Barseloną, Dubajų ir Buenos Aires. Joks miestas nėra primetamas: programa pasiūlo jūsų miestą pagal buvimo vietą, o laikyti galite ir kelis.
 
-Įrenginyje saugomi duomenų rinkiniai kol kas parengti tik keliems iš jų. Apie kitus programa taip ir sako, o ne apsimeta: sąraše matyti, kas jau yra, o failus galima parengti projekto scenarijais.
+„Roue Libre“ aptarnauja tik tuos tinklus, kurie savo stoteles skelbia GBFS formatu – atviruoju dalijimosi dviračiais standartu – viešame duomenų sraute be rakto. Jei jūsų miesto nėra, vadinasi, jo tinklas tokio srauto neskelbia: to reikia prašyti paties tinklo arba transporto institucijos.
 
-Ji nesusieta su jokiu konkrečiu tinklu: miestų sąrašas atsinaujina pats, o kiekvienas miestas nešasi savo GBFS duomenų srauto adresą – todėl programa tinka bet kuriam GBFS tinklui pasaulyje.
+<b>Verta žinoti prieš įdiegiant</b>
 
-„Roue Libre“ yra nepriklausoma programa, neturinti jokio ryšio nei su aptarnaujamais tinklais, nei su jų operatoriais.
+Žemėlapio, maršrutų grafo ir adresų rodyklės programoje nėra: jie atsisiunčiami vieną kartą, kai patys nuspręsite, o jų dydis nurodomas iš anksto (apie dešimt megabaitų vidutiniam miestui, daugiau – sostinei). Tai tik duomenų failai ir nieko daugiau; juos galite parengti ir patys projekto scenarijais.
+
+„Roue Libre“ yra nepriklausoma programa, nesusijusi nei su aptarnaujamais tinklais, nei su jų operatoriais.
 
 Laisva programinė įranga pagal GNU GPL v3 licenciją.

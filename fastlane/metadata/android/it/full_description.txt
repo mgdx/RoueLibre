@@ -1,26 +1,33 @@
-Roue Libre mostra le stazioni di bike sharing su una mappa e calcola un itinerario da porta a porta che unisce tratti a piedi e tratti in bici.
+Roue Libre mostra su una mappa le stazioni di bike sharing e calcola il miglior itinerario da porta a porta: a piedi, in bici, a piedi.
 
-Tutto funziona sul dispositivo: la mappa, la ricerca degli indirizzi e il calcolo dei percorsi non hanno bisogno di nessuna connessione. Solo la disponibilità delle bici in tempo reale esce in rete.
+Tutto avviene sul telefono: la mappa, la ricerca degli indirizzi e il calcolo degli itinerari non hanno bisogno di nessuna connessione. Solo la disponibilità delle bici in tempo reale passa dalla rete, letta direttamente sul server dell’operatore.
 
-<b>Cosa la distingue</b>
+<b>L’itinerario migliore, non la stazione più vicina</b>
 
-• Nessun servizio Google: né Play Services, né Firebase, né Maps SDK. Funziona su qualsiasi Android senza i servizi Google.
-• Nessuna telemetria, nessun tracker, nessun identificatore unico, nessun account.
-• Nessun dato sui tuoi itinerari viene conservato: né cronologia, né posizioni, né destinazioni. Quello che cerchi non esce dal telefono.
-• Nessuna città è imposta: sul dispositivo convivono più aree urbane, e i dati di una si eliminano senza toccare quelli delle altre.
-• L’itinerario ottimizza la <i>coppia</i> di stazioni — quella di partenza e quella di arrivo — invece di accontentarsi della più vicina, e tiene conto del rischio che una stazione poco fornita si svuoti mentre la raggiungi a piedi.
+• Le stazioni di partenza e di arrivo vengono scelte insieme, in base alla disponibilità in diretta: bici da prendere da una parte, posti liberi per riconsegnarla dall’altra.
+• Una stazione quasi vuota pesa meno, perché potrebbe svuotarsi mentre cammini.
+• Dove la rete mette a disposizione bici meccaniche ed elettriche, scegli quale vuoi, e contano solo le stazioni che ne hanno davvero una.
+• L’itinerario segue le piste ciclabili e tiene conto del dislivello.
 
-<b>Da sapere prima di installare</b>
+<b>Una mappa fatta per la bici</b>
 
-Lo sfondo cartografico, il grafo dei percorsi e l’indice degli indirizzi non sono dentro l’app: si scaricano una volta, dalla schermata di archiviazione, oppure si installano a mano da file che produci tu. Il loro peso dipende dalla città — qualche decina di megabyte per un’area urbana di media grandezza, di più per una capitale — e viene annunciato prima del download.
+Le piste ciclabili tracciate separatamente dalle strade, gli edifici pubblici e i punti di riferimento per orientarsi a vista, e su ogni stazione quello che la rete mette a disposizione: bici meccaniche, elettriche o entrambe.
+
+<b>Nessuno ti segue</b>
+
+• Nessun servizio Google: né Play Services, né Firebase, né Maps SDK.
+• Nessuna telemetria, nessun tracker, nessun identificatore, nessun account.
+• Nessuna cronologia: né posizioni, né destinazioni. Quello che cerchi non esce dal telefono.
 
 <b>Le città servite</b>
 
-Quasi trecento reti, in una trentina di paesi: tutte quelle che pubblicano le loro stazioni in dati aperti e i cui stalli permettono di garantire la restituzione della bici — da Vélib’ di Parigi a Citi Bike di New York, passando per Praga, Barcellona, Copenaghen, Tokyo e Buenos Aires. L’app ti propone la tua a partire dalla tua posizione, se glielo chiedi, e puoi tenerne installate più di una e passare dall’una all’altra.
+Più di 350 reti in quasi 40 paesi, da Vélib’ a Parigi a Citi Bike a New York, passando per Montréal, Praga, Barcellona, Dubai e Buenos Aires. Nessuna città è imposta: l’app ti propone la tua in base alla tua posizione, e puoi tenerne più di una.
 
-Per ora i set di dati offline esistono solo per una manciata di città. Per le altre, l’app lo dice invece di fingere: l’elenco mostra quello che c’è, e i file si possono produrre con gli script del repository.
+Roue Libre serve solo le reti che pubblicano le loro stazioni in formato GBFS, lo standard aperto del bike sharing, in un flusso pubblico e senza chiave. Se la tua città manca, è perché la sua rete non pubblica un flusso del genere: è alla rete o all’autorità dei trasporti che va chiesto.
 
-Non è legata a nessuna rete in particolare: l’elenco delle città si aggiorna da solo, e ogni città porta con sé l’indirizzo del proprio flusso GBFS, il che rende l’app utilizzabile con qualsiasi rete GBFS al mondo.
+<b>Da sapere prima di installare</b>
+
+La mappa, il grafo dei percorsi e l’indice degli indirizzi non sono dentro l’app: si scaricano una sola volta, quando decidi tu, e il loro peso viene indicato prima (una decina di megabyte per una città media, di più per una capitale). Sono file di dati e nient’altro, che puoi anche produrre da te con gli script del repository.
 
 Roue Libre è un’app indipendente, senza alcun legame con le reti che serve né con i loro operatori.
 

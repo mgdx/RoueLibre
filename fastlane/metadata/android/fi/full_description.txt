@@ -1,26 +1,33 @@
-Roue Libre näyttää kaupunkipyöräasemat kartalla ja laskee ovelta ovelle ulottuvan reitin, jossa kävely ja pyöräily yhdistyvät.
+Roue Libre näyttää kaupunkipyöräasemat kartalla ja laskee parhaan reitin ovelta ovelle: kävellen, pyörällä, kävellen.
 
-Kaikki tapahtuu laitteessa: kartta, osoitehaku ja reitinlaskenta eivät tarvitse yhteyttä lainkaan. Vain pyörien reaaliaikainen saatavuus haetaan verkosta.
+Kaikki tapahtuu puhelimessa: kartta, osoitehaku ja reitinlaskenta eivät tarvitse yhteyttä lainkaan. Vain pyörien reaaliaikainen saatavuus haetaan verkosta, suoraan operaattorin palvelimelta.
 
-<b>Mikä tekee siitä erilaisen</b>
+<b>Paras reitti, ei lähin asema</b>
 
-• Ei yhtään Google-palvelua: ei Play-palveluita, ei Firebasea, ei Maps SDK:ta. Se toimii millä tahansa Android-käyttöjärjestelmällä ilman Google-palveluita.
-• Ei telemetriaa, ei seurantaa, ei yksilöivää tunnistetta, ei tiliä.
-• Matkoista ei säilytetä mitään: ei historiaa, ei sijainteja, ei määränpäitä. Se, mitä haet, ei lähde puhelimesta.
-• Mitään kaupunkia ei pakoteta: laitteella voi olla useita kaupunkiseutuja rinnakkain, ja yhden kaupungin aineistot voi poistaa muihin koskematta.
-• Reitti optimoi asemien <i>parin</i> – lähtö- ja saapumisaseman – sen sijaan, että tyytyisi lähimpään, ja punnitsee riskin, että asema, jolla on vähän pyöriä, ehtii tyhjentyä sinne kävellessäsi.
+• Lähtö- ja saapumisasema valitaan yhdessä ajantasaisen saatavuuden perusteella: toisessa päässä pyöriä otettavaksi, toisessa vapaita paikkoja palautusta varten.
+• Lähes tyhjä asema painaa vähemmän, koska se voi tyhjentyä sillä aikaa, kun kävelet.
+• Siellä, missä verkosto lainaa sekä tavallisia pyöriä että sähköpyöriä, valitset itse, kumman haluat, ja mukaan lasketaan vain asemat, joilla sellainen todella on.
+• Reitti seuraa pyöräteitä ja ottaa korkeuserot huomioon.
 
-<b>Hyvä tietää ennen asennusta</b>
+<b>Pyöräilyyn tehty kartta</b>
 
-Kartta, reitinlaskennan verkko ja osoitehakemisto eivät ole sovelluksen sisällä: ne ladataan kerran Tallennustila-näytöltä tai asennetaan käsin tiedostoista, jotka voit tuottaa itse. Niiden koko riippuu kaupungista – muutamia kymmeniä megatavuja keskikokoisella kaupunkiseudulla, pääkaupungissa enemmän – ja koko kerrotaan ennen latausta.
+Kaduista erillään piirretyt pyörätiet, julkiset rakennukset ja maamerkit, joiden avulla suunnistat silmämääräisesti, ja jokaisella asemalla se, mitä verkosto lainaa: tavallisia pyöriä, sähköpyöriä tai molempia.
+
+<b>Mikään ei seuraa sinua</b>
+
+• Ei yhtään Google-palvelua: ei Play-palveluita, ei Firebasea, ei Maps SDK:ta.
+• Ei telemetriaa, ei seurantaa, ei tunnisteita, ei tiliä.
+• Ei historiaa: ei sijainteja, ei määränpäitä. Se, mitä haet, ei lähde puhelimesta.
 
 <b>Palvellut kaupungit</b>
 
-Lähes kolmesataa verkostoa noin kolmessakymmenessä maassa: kaikki ne, jotka julkaisevat asemansa avoimena datana ja joiden telineisiin reitinlaskenta voi luottaa – Pariisin Vélib’istä New Yorkin Citi Bikeen, Prahan, Barcelonan, Kööpenhaminan, Tokion ja Buenos Airesin kautta. Sovellus ehdottaa sinulle omaasi sijaintisi perusteella, jos pyydät, ja voit pitää useita asennettuina ja vaihdella niiden välillä.
+Yli 350 verkostoa lähes 40 maassa, Pariisin Vélib’istä New Yorkin Citi Bikeen, Montrealin, Prahan, Barcelonan, Dubain ja Buenos Airesin kautta. Mitään kaupunkia ei pakoteta: sovellus ehdottaa sinulle omaasi sijaintisi perusteella, ja voit pitää useita.
 
-Offline-aineistot on toistaiseksi tuotettu vain kourallisesta niistä. Muiden osalta sovellus sanoo sen suoraan sen sijaan, että teeskentelisi: lista näyttää, mitä on olemassa, ja tiedostot voi tuottaa lähdekoodivaraston skripteillä.
+Roue Libre palvelee vain verkostoja, jotka julkaisevat asemansa GBFS-muodossa, kaupunkipyörien avoimen standardin mukaisesti, julkisena syötteenä ilman avainta. Jos kaupunkisi puuttuu, sen verkosto ei julkaise tällaista syötettä: sitä kannattaa pyytää verkostolta itseltään tai liikenneviranomaiselta.
 
-Sovellus ei ole sidottu mihinkään yksittäiseen verkostoon: kaupunkilista päivittyy itse, ja jokainen kaupunki kantaa oman GBFS-syötteensä osoitteen, mikä tekee sovelluksesta käyttökelpoisen minkä tahansa maailman GBFS-verkoston kanssa.
+<b>Hyvä tietää ennen asennusta</b>
+
+Kartta-aineisto, reittiaineisto ja osoitehakemisto eivät ole sovelluksen sisällä: ne ladataan vain kerran, silloin kun itse päätät, ja niiden koko kerrotaan etukäteen (noin kymmenen megatavua keskikokoiselle kaupungille, pääkaupungille enemmän). Ne ovat datatiedostoja eivätkä mitään muuta, ja voit tuottaa ne myös itse lähdekoodivaraston skripteillä.
 
 Roue Libre on riippumaton sovellus, joka ei ole sidoksissa palvelemiinsa verkostoihin eikä niiden operaattoreihin.
 

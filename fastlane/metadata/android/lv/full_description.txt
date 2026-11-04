@@ -1,26 +1,33 @@
-Roue Libre rāda koplietošanas velosipēdu stacijas kartē un aprēķina maršrutu no durvīm līdz durvīm, kurā apvienota iešana ar kājām un braukšana ar velosipēdu.
+Roue Libre rāda koplietošanas velosipēdu stacijas kartē un aprēķina labāko maršrutu no durvīm līdz durvīm: ar kājām, ar velosipēdu, atkal ar kājām.
 
-Viss darbojas pašā ierīcē: kartei, adrešu meklēšanai un maršrutu aprēķinam nav vajadzīgs nekāds savienojums. Uz tīklu aiziet tikai velosipēdu pieejamība reāllaikā.
+Viss notiek tālrunī: kartei, adrešu meklēšanai un maršruta aprēķinam nav vajadzīgs nekāds savienojums. Tīklā tiek saņemta tikai velosipēdu pieejamība reāllaikā, un to nolasa tieši no operatora servera.
 
-<b>Kas to atšķir</b>
+<b>Labākais maršruts, nevis tuvākā stacija</b>
 
-• Nav neviena Google pakalpojuma: ne Play Services, ne Firebase, ne Maps SDK. Tā darbojas jebkurā Android sistēmā bez Google pakalpojumiem.
-• Bez telemetrijas, bez izsekotājiem, bez unikāla identifikatora, bez konta.
-• Netiek saglabāti nekādi maršrutu dati: ne vēsture, ne atrašanās vietas, ne galamērķi. Meklētais neaiziet no tālruņa.
-• Neviena pilsēta netiek uzspiesta: ierīcē līdzās var pastāvēt vairākas aglomerācijas, un vienas pilsētas datus var izdzēst, neaiztiekot pārējās.
-• Maršruts optimizē staciju <i>pāri</i> — izbraukšanas un ierašanās staciju — nevis apmierinās ar tuvāko, un ņem vērā risku, ka slikti apgādāta stacija paliks tukša, kamēr jūs līdz tai aizejat.
+• Izbraukšanas un ierašanās stacijas tiek izvēlētas kopā, pēc pieejamības reāllaikā: vienā jābūt velosipēdiem, ko paņemt, otrā — brīvām vietām, kur to nolikt.
+• Gandrīz tukšai stacijai ir mazāks svars, jo tā var iztukšoties, kamēr jūs līdz tai ejat.
+• Kur tīkls piedāvā gan parastos, gan elektriskos velosipēdus, jūs izvēlaties, kuru vēlaties, un tiek ņemtas vērā tikai tās stacijas, kurās tāds tiešām ir.
+• Maršruts ved pa velosipēdu ceļiem un ņem vērā augstuma starpību.
 
-<b>Ko ir vērts zināt pirms instalēšanas</b>
+<b>Karte, kas veidota velosipēdam</b>
 
-Karte, maršrutēšanas grafs un adrešu rādītājs nav iekļauti lietotnē: tie tiek vienreiz lejupielādēti krātuves ekrānā vai instalēti ar roku no failiem, ko izveidojat jūs. To lielums ir atkarīgs no pilsētas — daži desmiti megabaitu vidēji lielai aglomerācijai, vairāk galvaspilsētai — un tas tiek paziņots pirms lejupielādes.
+Velosipēdu ceļi, kas iezīmēti atsevišķi no ielām, sabiedriskās ēkas un orientieri, kas palīdz atrast ceļu, vienkārši paskatoties apkārt, un pie katras stacijas — ko tīkls piedāvā: parastos, elektriskos vai abu veidu velosipēdus.
+
+<b>Nekas jūs neizseko</b>
+
+• Neviena Google pakalpojuma: ne Play Services, ne Firebase, ne Maps SDK.
+• Bez telemetrijas, bez izsekotājiem, bez identifikatora, bez konta.
+• Bez vēstures: ne atrašanās vietu, ne galamērķu. Meklētais neaiziet no tālruņa.
 
 <b>Apkalpotās pilsētas</b>
 
-Gandrīz trīssimt tīklu aptuveni trīsdesmit valstīs: visi, kas publicē savas stacijas kā atvērtos datus un kuru statīviem maršruts var uzticēties — no Vélib’ Parīzē līdz Citi Bike Ņujorkā, caur Prāgu, Barselonu, Kopenhāgenu, Tokiju un Buenosairesu. Lietotne pēc jūsu atrašanās vietas piedāvās jūsējo, ja to palūgsiet, un vairākas pilsētas var paturēt instalētas un pārslēgties starp tām.
+Vairāk nekā 350 tīklu gandrīz 40 valstīs — no Vélib’ Parīzē līdz Citi Bike Ņujorkā, caur Monreālu, Prāgu, Barselonu, Dubaju un Buenosairesu. Neviena pilsēta netiek uzspiesta: lietotne piedāvā jūsējo pēc jūsu atrašanās vietas, un varat paturēt vairākas.
 
-Bezsaistes datu kopas līdz šim ir sagatavotas nedaudzām no tām. Par pārējām lietotne to godīgi pasaka, nevis izliekas: sarakstā ir redzams, kas ir pieejams, un failus var izveidot ar repozitorija skriptiem.
+Roue Libre apkalpo tikai tos tīklus, kas publicē savas stacijas GBFS formātā — atvērtajā koplietošanas velosipēdu standartā — publiskā datu plūsmā bez atslēgas. Ja jūsu pilsētas nav, tās tīkls šādu plūsmu nepublicē: tā jālūdz pašam tīklam vai transporta iestādei.
 
-Tā nav piesaistīta nevienam konkrētam tīklam: pilsētu saraksts atjaunojas pats, un katrai pilsētai ir sava GBFS datu plūsmas adrese, kas ļauj lietotni izmantot ar jebkuru GBFS tīklu pasaulē.
+<b>Ko ir vērts zināt pirms instalēšanas</b>
+
+Karte, maršrutēšanas grafs un adrešu rādītājs nav iekļauti lietotnē: tie tiek lejupielādēti vienreiz, kad jūs to izlemjat, un to lielums tiek paziņots iepriekš (ap desmit megabaitiem vidēji lielai pilsētai, vairāk galvaspilsētai). Tie ir tikai datu faili un nekas cits; tos varat izveidot arī paši ar repozitorija skriptiem.
 
 Roue Libre ir neatkarīga lietotne, kas nav saistīta ne ar tīkliem, ko tā apkalpo, ne ar to operatoriem.
 

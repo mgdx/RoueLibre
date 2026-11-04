@@ -1,26 +1,33 @@
-Roue Librek bizikleta partekatuen geltokiak erakusten ditu mapa batean, eta atez ateko ibilbidea kalkulatzen du, oinez eta bizikletaz konbinatuta.
+Roue Librek bizikleta partekatuen geltokiak erakusten ditu mapa batean, eta atez ateko ibilbiderik onena kalkulatzen du: oinez, bizikletaz, oinez.
 
-Dena gailuan bertan gertatzen da: mapak, helbideen bilaketak eta ibilbideen kalkuluak ez dute inolako konexiorik behar. Bizikleten erabilgarritasuna baino ez da sarera ateratzen, denbora errealean.
+Dena telefonoan bertan gertatzen da: mapak, helbideen bilaketak eta ibilbideen kalkuluak ez dute inolako konexiorik behar. Bizikleten denbora errealeko erabilgarritasunak baino ez du sarea erabiltzen, eta operadorearen zerbitzaritik zuzenean irakurtzen da.
 
-<b>Zerk bereizten duen</b>
+<b>Ibilbiderik onena, ez geltokirik hurbilena</b>
 
-• Google-ren zerbitzurik ez: ez Play Services, ez Firebase, ez Maps SDK. Google-ren zerbitzurik gabeko edozein Android sistematan funtzionatzen du.
-• Telemetriarik ez, jarraipen-tresnarik ez, identifikatzaile bakarrik ez, konturik ez.
-• Ez da bidaien daturik gordetzen: ez historiarik, ez kokapenik, ez helmugarik. Bilatzen duzunak ez du telefonoa uzten.
-• Ez da hiririk inposatzen: hainbat hiri-eremu bizi daitezke batera gailuan, eta hiri baten datuak ezaba daitezke besteei ukitu gabe.
-• Ibilbideak geltoki <i>bikotea</i> optimizatzen du — irteerakoa eta iritsierakoa — hurbilenarekin konformatu beharrean, eta kontuan hartzen du gutxi hornitutako geltoki bat hustu daitekeela zu oinez bertaraino zoazen bitartean.
+• Irteerako eta iritsierako geltokiak batera aukeratzen dira, zuzeneko erabilgarritasunaren arabera: alde batean hartzeko bizikletak, bestean itzultzeko leku libreak.
+• Ia hutsik dagoen geltoki batek pisu txikiagoa du, oinez zoazen bitartean hustu baitaiteke.
+• Sareak bizikleta arruntak eta elektrikoak eskaintzen dituen lekuetan, zuk aukeratzen duzu zein nahi duzun, eta benetan halakorik duten geltokiak baino ez dira kontuan hartzen.
+• Ibilbideak bidegorriei jarraitzen die, eta igoerak ere kontuan hartzen ditu.
 
-<b>Instalatu aurretik jakitea komeni dena</b>
+<b>Bizikletarako egindako mapa</b>
 
-Mapa, ibilbideak kalkulatzeko grafoa eta helbideen aurkibidea ez daude aplikazioaren barruan: behin deskargatzen dira, Memoria pantailatik, edo eskuz instalatzen dira zeuk sortutako fitxategietatik. Haien pisua hiriaren araberakoa da — hamarnaka megabyte tamaina ertaineko hiri-eremu batentzat, gehiago hiriburu batentzat — eta deskargatu aurretik jakinarazten da.
+Bidegorriak kaleetatik bereizita marraztuta, eraikin publikoak eta begiz orientatzeko erreferentzia-puntuak, eta geltoki bakoitzean sareak eskaintzen duena: bizikleta arruntak, elektrikoak edo biak.
+
+<b>Inork ez zaitu jarraitzen</b>
+
+• Google-ren zerbitzurik ez: ez Play Services, ez Firebase, ez Maps SDK.
+• Telemetriarik ez, jarraipen-tresnarik ez, identifikatzailerik ez, konturik ez.
+• Historiarik ez: ez kokapenik, ez helmugarik. Bilatzen duzunak ez du telefonoa uzten.
 
 <b>Zerbitzatzen diren hiriak</b>
 
-Hirurehun bat sare, hogeita hamar bat herrialdetan: beren geltokiak datu ireki gisa argitaratzen dituzten guztiak, ibilbidearen kalkulua haien ainguralekuetan fida daitekeenak — Parisko Vélib’ eta New Yorkeko Citi Bike barne, Praga, Bartzelona, Kopenhage, Tokio eta Buenos Aires tarteko. Aplikazioak zeurea proposatzen dizu zure kokapenetik abiatuta, hala eskatzen badiozu, eta hainbat eduki ditzakezu instalatuta, batetik bestera aldatuz.
+350 sare baino gehiago, ia 40 herrialdetan: Parisko Vélib’ eta New Yorkeko Citi Bike, eta tartean Montreal, Praga, Bartzelona, Dubai eta Buenos Aires. Ez da hiririk inposatzen: aplikazioak zurea proposatzen dizu zure kokapenaren arabera, eta hainbat gorde ditzakezu.
 
-Lineaz kanpoko datu-multzoak eskukada batentzat sortu dira oraingoz. Gainerakoen kasuan, aplikazioak hala esaten du itxurak egin beharrean: zerrendak zer dagoen erakusten du, eta fitxategiak biltegiko scriptekin sor daitezke.
+Roue Librek sare jakin batzuk baino ez ditu zerbitzatzen: beren geltokiak GBFS formatuan —bizikleta partekatuen estandar irekia— argitaratzen dituztenak, jario publiko batean eta gakorik gabe. Zure hiria falta bada, haren sareak ez duelako halako jariorik argitaratzen da: sareari berari edo garraio-agintaritzari eskatu behar zaio.
 
-Ez dago inongo sare jakini lotuta: hirien zerrenda bera eguneratzen da, eta hiri bakoitzak bere GBFS jarioaren helbidea darama; horrek munduko edozein GBFS sarerekin erabilgarri bihurtzen du aplikazioa.
+<b>Instalatu aurretik jakitea komeni dena</b>
+
+Mapa, ibilbideak kalkulatzeko grafoa eta helbideen aurkibidea ez daude aplikazioaren barruan: behin bakarrik deskargatzen dira, zuk erabakitzen duzunean, eta haien pisua aurretik jakinarazten da (hamar bat megabyte tamaina ertaineko hiri batentzat, gehiago hiriburu batentzat). Datu-fitxategiak dira, besterik ez, eta zeuk ere sor ditzakezu biltegiko scriptekin.
 
 Roue Libre aplikazio independentea da, eta ez du loturarik zerbitzatzen dituen sareekin, ezta haien operadoreekin ere.
 
